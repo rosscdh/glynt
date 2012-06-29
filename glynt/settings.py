@@ -118,6 +118,7 @@ BASE_APP = (
 
 HELPER_APPS = (
     'templatetag_handlebars',
+    'django_markdown',
 )
 
 INSTALLED_APPS = BASE_APP + HELPER_APPS + (

@@ -5,3 +5,4 @@ django-extensions
 markup
 
 -e git+https://github.com/stard0g101/django-templatetag-handlebars.git#egg=django-templatetag-handlebars
+-e git+https://github.com/klen/django_markdown.git#egg=django_markdown
