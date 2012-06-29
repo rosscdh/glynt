@@ -8,12 +8,24 @@
 	<input type="text" class="md-updater" data-hb-name="contractor" placeholder="Your Name" name="" id="" value=""/>
 	<input type="text" class="md-updater" data-hb-name="target" placeholder="Who you want to assasinate" name="" id="" value=""/>
 	<input type="text" class="md-updater" data-hb-name="date_by" placeholder="By when?" name="" id="" value=""/>
+	<select class="md-updater" data-hb-name="currency">
+	   <option value="&euro;">&euro;</option>
+	   <option value="$">$</option>
+	   <option value="&pound;">&pound;</option>
+	</select>
 	<input type="text" class="md-updater" data-hb-name="willing_to_pay" placeholder="1000.00" name="" id="" value=""/>
+	<select class="md-updater" data-hb-name="other_targets" multiple="true">
+	   <option value="Bob">Bob</option>
+	   <option value="Rich">Rich</option>
+	   <option value="Carl">Carl</option>
+	</select>
+	<label>I Confirm this contract</label>
+	<input type="checkbox" class="md-updater" data-hb-name="is_confirmed" placeholder="" name="" id="" />
 </form>
 {% endblock %}
 
 {% block document %}
-<span id="document-md" data-bind="with: App"></span>
+<span id="document-md" data-bind="html: App.documentModel.renderedHTML()"></span>
 {% endblock %}
 
 
@@ -27,13 +39,51 @@ $(document).ready(function(){
 	function DocumentModel() {
 		var self = this;
 
+        self.textElementsList = ['text','textarea','hidden','select'];
 		self.handlebarsElementId = ko.observable('script#js-{{ doc }}');
 		self.documentTemplate = ko.observable($(self.handlebarsElementId()).html());
+		self.renderedHTML = ko.observable('');
 
-		self.context = ko.observable({});
+		self.context = ko.observable({
+		    'company': {
+		        'name': 'RuleNo1',
+		        'url':'http://www.ruleno1.com'
+		    },
+		    'document': {
+		        'title': 'Asassination Contract'
+		    }
+		});
 
-		self.setContextItem = function setContextItem(key,value) {
+        self.determineValue = function determineValue(input) {
+			var value = null;
+			var is_placeholder_value = true;
+			if (input.val() != 'undefined' && input.val() != '') {
+			    value = input.val();
+			    is_placeholder_value = false;
+			}else{
+			    value = input.attr('placeholder');
+		    }
+            if (self.textElementsList.indexOf(input.attr('type')) >= 0) {
+                //if (is_placeholder_value === true) {
+                    value = '**' + value.toString() + '**';
+                //}
+            }
+            if (self.textElementsList.indexOf(input.attr('type')) == -1) {
+                
+                if (input.attr('type') == 'checkbox') {
+                    value = (input.attr('checked') == 'checked') ? true : false ;
+                }
+            }
+            return value;
+        }
+
+		self.setContextItem = function setContextItem(input) {
 			var context = self.context();
+			var key = name = input.attr('data-hb-name');
+			var value = self.determineValue(input);
+
+            console.log(value)
+
         	context[key] = value;
         	self.context(context);
 		}
@@ -64,12 +114,10 @@ $(document).ready(function(){
 
         	var name = null;
         	var value = null;
+
         	$.each($('form.bind-document'), function(index, form) {
         		$.each($(this).find('input'), function(index, input) {
-        			name = $(input).attr('data-hb-name');
-        			value = $(input).attr('placeholder');
-        			value = '**' + value.toString() + '**';
-        			self.documentModel.setContextItem(name, value);
+        			self.documentModel.setContextItem($(input));
         		});
         	});
 
@@ -80,11 +128,17 @@ $(document).ready(function(){
         	var md = self.documentModel.render();
         	var html = self.renderMarkdown(md);
 
-        	$(self.targetDocumentId()).html(html);
+        	//$(self.targetDocumentId()).html(html);
+        	self.documentModel.renderedHTML(html)
 
         }
         self.renderMarkdown = function render(md) {
         	return self.markdownConverter.makeHtml(md);
+        }
+
+        self.changeContext = function changeContext(input) {
+            self.documentModel.setContextItem(input);
+            self.render();
         }
 
         self.init();
@@ -95,11 +149,10 @@ $(document).ready(function(){
     // ----- KO Bindings -----
     ko.applyBindings(App);
 
-    $('input.md-updater').live('change', function(event){
+    $('.md-updater').live('change', function(event){
     	var name = $(this).attr('data-hb-name');
     	var value = $(this).val();
-    	App.documentModel.setContextItem(name, value);
-    	App.render();
+        App.changeContext($(this));
     })
 });
 </script>
