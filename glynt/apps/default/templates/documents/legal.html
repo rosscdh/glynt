@@ -4,21 +4,23 @@
 
 I, {{contractor}}
 
-Hereby declare that I am willing to pay {{currency}}{{willing_to_pay}}.
+Hereby declare that I am willing to pay {{currency}}{{cost}}.
 
 For the assassination of {{target}} before the date of {{date_by}}.
 
+{{#if has_other_targets}}
 {{#each other_targets}}
-And Ill take {{this}} out as well!
+* And Ill take {{this}} out as well!
 {{/each}}
+{{/if}}
 
-{% lorem 4 b %}
+{% lorem 1 b %}
 
-{{#if is_confirmed}}
+{{#if confirmed}}
 ## Awesome, your going to make me rich! Thanks ##
 {{/if}}
 
-Copyright {{company.name}} 2012
+Copyright {{company.name}} 2012  
 {{company.url}}
 
 {% endtplhandlebars %}

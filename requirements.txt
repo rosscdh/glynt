@@ -4,8 +4,11 @@ Werkzeug
 django-extensions
 markup
 
+-e git+https://github.com/chrisglass/xhtml2pdf.git#egg=xhtml2pdf
 -e git+https://github.com/stard0g101/django-templatetag-handlebars.git#egg=django-templatetag-handlebars
 -e git+https://github.com/klen/django_markdown.git#egg=django_markdown
 
 # javascript markdown
 # hg clone https://code.google.com/p/pagedown/
+# possible multi format 
+# https://github.com/NetAngels/django-webodt.git

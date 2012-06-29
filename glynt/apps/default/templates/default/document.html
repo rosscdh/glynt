@@ -4,23 +4,17 @@
 
 {% block form %}
 <form class="bind-document">
-	<input type="hidden" class="md-updater" data-hb-name="title" placeholder="Contract for Assassination" name="" id="" value=""/>
-	<input type="text" class="md-updater" data-hb-name="contractor" placeholder="Your Name" name="" id="" value=""/>
-	<input type="text" class="md-updater" data-hb-name="target" placeholder="Who you want to assasinate" name="" id="" value=""/>
-	<input type="text" class="md-updater" data-hb-name="date_by" placeholder="By when?" name="" id="" value=""/>
-	<select class="md-updater" data-hb-name="currency">
-	   <option value="&euro;">&euro;</option>
-	   <option value="$">$</option>
-	   <option value="&pound;">&pound;</option>
-	</select>
-	<input type="text" class="md-updater" data-hb-name="willing_to_pay" placeholder="1000.00" name="" id="" value=""/>
-	<select class="md-updater" data-hb-name="other_targets" multiple="true">
-	   <option value="Bob">Bob</option>
-	   <option value="Rich">Rich</option>
-	   <option value="Carl">Carl</option>
-	</select>
-	<label>I Confirm this contract</label>
-	<input type="checkbox" class="md-updater" data-hb-name="is_confirmed" placeholder="" name="" id="" />
+
+    {% for form in form_set %}
+    <div id="form-group-{{ forloop.counter }}" class="form-group {% if not forloop.first %}hidden{% endif %}">
+    {{form}}
+    </div>
+    {% endfor %}
+    <div class="controls pull-right">
+        <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-primary btn-mini btn-prev" type="button" data-bind="click: App.formControls.prev">Previous</button></span>
+        <span data-bind="visible: App.formControls.showNext()"><button id="btn-next" class="btn btn-primary btn-mini btn-next" type="button" data-bind="click: App.formControls.next">Next</button></span>
+    </div>
+
 </form>
 {% endblock %}
 
@@ -28,6 +22,13 @@
 <span id="document-md" data-bind="html: App.documentModel.renderedHTML()"></span>
 {% endblock %}
 
+{% block css %}
+<style>
+.hidden {
+    display:none;
+}
+</style>
+{% endblock %}
 
 {% block js %}
 
@@ -100,6 +101,53 @@ $(document).ready(function(){
         }
 	}
 
+    function FormControls() {
+        var self = this;
+
+        self.maxFormSteps = ko.observable({{form_set|length}});
+        self.currentFormStep = ko.observable(1);
+
+        self.showNext = function showNext() {
+            return (self.currentFormStep() == self.maxFormSteps())? false : true ;
+        }
+        self.showPrev = function showPrev() {
+            return (self.currentFormStep() == 1)? false : true ;
+        }
+
+        self.determineStepVisibility = function determineStepVisibility(step) {
+
+            $.each($('div.form-group'), function(index,form_group){
+                form_group = $(form_group);
+
+                if ((index+1) == step) {
+                    form_group.css('display', 'block');
+                    form_group.removeClass('hidden');
+                }else{
+                    form_group.css('display', 'none');
+                    form_group.addClass('hidden');
+                }
+            });
+
+        }
+
+        self.next = function next() {
+            var current = self.currentFormStep();
+            var next = current+1;
+
+            self.determineStepVisibility(next);
+
+            self.currentFormStep(next);
+        }
+        self.prev = function prev() {
+            var current = self.currentFormStep();
+            var prev = current-1;
+
+            self.determineStepVisibility(prev);
+
+            self.currentFormStep(prev);
+        }
+    }
+
     /**
     * Primary view acts as a holder for the other views
     */
@@ -109,6 +157,7 @@ $(document).ready(function(){
         self.markdownConverter = new Markdown.Converter();
         self.targetDocumentId = ko.observable('span#document-md');
         self.documentModel = new DocumentModel();
+        self.formControls = new FormControls();
 
         self.init = function init() {
 
@@ -119,6 +168,9 @@ $(document).ready(function(){
         		$.each($(this).find('input'), function(index, input) {
         			self.documentModel.setContextItem($(input));
         		});
+                $.each($(this).find('select'), function(index, input) {
+                    self.documentModel.setContextItem($(input));
+                });
         	});
 
         	self.render();
