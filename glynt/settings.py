@@ -111,11 +111,16 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 )
 
+
 BASE_APP = (
     'glynt.apps.default',
 )
 
-INSTALLED_APPS = BASE_APP + (
+HELPER_APPS = (
+    'templatetag_handlebars',
+)
+
+INSTALLED_APPS = BASE_APP + HELPER_APPS + (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -123,6 +128,7 @@ INSTALLED_APPS = BASE_APP + (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+    'django.contrib.markup',
 )
 
 # A sample logging configuration. The only tangible logging
