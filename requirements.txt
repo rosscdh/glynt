@@ -1,0 +1,7 @@
+Django
+Markdown
+Werkzeug
+django-extensions
+markup
+
+-e git+https://github.com/stard0g101/django-templatetag-handlebars.git#egg=django-templatetag-handlebars
