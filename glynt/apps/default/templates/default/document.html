@@ -9,6 +9,11 @@
     <div id="form-group-{{ forloop.counter }}" class="form-group {% if not forloop.first %}hidden{% endif %}">
     {{form}}
     </div>
+    {% if forloop.last %}
+    <span data-bind="visible: App.formControls.isLastStep()">
+        <button id="btn-post-pdf" class="btn btn-primary btn-mini" type="button" data-bind="click: App.postDocument">Get Contract</button>
+    </span>
+    {% endif %}
     {% endfor %}
     <div class="controls pull-right">
         <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-primary btn-mini btn-prev" type="button" data-bind="click: App.formControls.prev">Previous</button></span>
@@ -66,7 +71,7 @@ $(document).ready(function(){
 		    }
             if (self.textElementsList.indexOf(input.attr('type')) >= 0) {
                 //if (is_placeholder_value === true) {
-                    value = '**' + value.toString() + '**';
+                    value = '_**' + value.toString() + '**_';
                 //}
             }
             if (self.textElementsList.indexOf(input.attr('type')) == -1) {
@@ -82,8 +87,6 @@ $(document).ready(function(){
 			var context = self.context();
 			var key = name = input.attr('data-hb-name');
 			var value = self.determineValue(input);
-
-            console.log(value)
 
         	context[key] = value;
         	self.context(context);
@@ -112,6 +115,9 @@ $(document).ready(function(){
         }
         self.showPrev = function showPrev() {
             return (self.currentFormStep() == 1)? false : true ;
+        }
+        self.isLastStep = function isLastStep() {
+            return (self.maxFormSteps() == self.currentFormStep()) ? true : false ;
         }
 
         self.determineStepVisibility = function determineStepVisibility(step) {
@@ -191,6 +197,20 @@ $(document).ready(function(){
         self.changeContext = function changeContext(input) {
             self.documentModel.setContextItem(input);
             self.render();
+        }
+
+        self.postDocument = function postDocument() {
+            $.ajax({
+              type: 'POST',
+              url: "{% url 'document:export' doc=doc %}",
+              data: {},
+              dataType: 'json'
+            })
+            .success(function(data, textStatus, jqXHR) {
+            })
+            .error(function() { 
+            })
+            .complete(function() {});
         }
 
         self.init();

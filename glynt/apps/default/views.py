@@ -15,12 +15,6 @@ from forms import AssassinStep1, AssassinStep2
 from reportlab.pdfgen import canvas
 
 
-class AssassinFormWizardView(SessionWizardView):
-    def done(self, form_list, **kwargs):
-        do_something_with_the_form_data(form_list)
-        return HttpResponseRedirect('/page-to-redirect-to-when-done/')
-
-
 class DocumentView(TemplateView):
 
     def get_context_data(self, **kwargs):
