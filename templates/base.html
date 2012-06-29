@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n templatetag_handlebars %}
 {% load url from future %}
 <!DOCTYPE html>
 <html lang="en">
@@ -22,13 +22,8 @@
     <!--[if lt IE 9]> 
       <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <script src="{{ STATIC_URL }}js/jquery.min.js"></script>
-    <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
-
-    <script type="text/javascript" src="{{ STATIC_URL }}knockoutjs/js/knockout-2.1.0.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}pagedown/Markdown.Converter.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}pagedown/Markdown.Sanitizer.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}pagedown/Markdown.Editor.js"></script>
+    <!-- <script src="{{ STATIC_URL }}js/jquery.min.js"></script> -->
+    <!-- <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script> -->
 
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="{{ STATIC_URL }}img/favicon.ico">
@@ -47,6 +42,13 @@
 	{% block body %}{% endblock %}
 	</div>
 
+    <script src="{{ STATIC_URL }}js/jquery.min.js"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}knockoutjs/js/knockout-2.1.0.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}pagedown/Markdown.Converter.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}pagedown/Markdown.Sanitizer.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}pagedown/Markdown.Editor.js"></script>
+    {% handlebars_js %}
 	{% block js %}{% endblock %}
 
   </body>

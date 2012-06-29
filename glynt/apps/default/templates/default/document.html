@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block document %}
-{{ document|markdown }}
+<span id="document-md" data-bind="with: App"></span>
 {% endblock %}
 
 
@@ -18,9 +18,22 @@
 $(document).ready(function(){
 
 	function DocumentModel() {
-		self.documentTemplate = ko.observable($("script#js-{{ doc }}").html())
+		var self = this;
+
+		self.handlebarsElementId = ko.observable('script#js-{{ doc }}');
+		self.documentTemplate = ko.observable($(self.handlebarsElementId()).html());
 
 		self.context = ko.observable({});
+
+		self.setContextItem = function setContextItem(key,value) {
+			var context = self.context();
+        	context[key] = value;
+        	self.context(context);
+		}
+
+		self.getContext = function getContext() {
+			return self.context();
+		}
 
         self.render = function render() {
         	var context = self.context();
@@ -33,21 +46,37 @@ $(document).ready(function(){
     /**
     * Primary view acts as a holder for the other views
     */
-    function DocumentPage() {
+    function PageDocumentController() {
         var self = this;
 
-        self.document = new DocumentModel();
+        self.markdownConverter = new Markdown.Converter();
+        self.targetDocumentId = ko.observable('span#document-md');
+        self.documentModel = new DocumentModel();
 
         self.init = function init() {
-
+        	self.render();
         }
 
+        self.render = function render() {
+        	
+        	self.documentModel.setContextItem('title', 'test title');
+        	self.documentModel.setContextItem('title_2', 'So freaking awesome');
 
+        	var md = self.documentModel.render();
+        	var html = self.renderMarkdown(md);
 
-		self.init();
+        	$(self.targetDocumentId()).html(html);
+
+        }
+        self.renderMarkdown = function render(md) {
+        	return self.markdownConverter.makeHtml(md);
+        }
+
+        self.init();
     }
+
     // ----- KO Instance -----
-    App = new DocumentPage()
+    App = new PageDocumentController()
     // ----- KO Bindings -----
     ko.applyBindings(App);
 
