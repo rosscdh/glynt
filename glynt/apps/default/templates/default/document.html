@@ -1,0 +1,57 @@
+{% extends 'default/base.html' %}
+{% load i18n markup templatetag_handlebars %}
+{% load url from future %}
+
+{% block form %}
+{% endblock %}
+
+{% block document %}
+{{ document|markdown }}
+{% endblock %}
+
+
+{% block js %}
+
+{% include document %}
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+	function DocumentModel() {
+		self.documentTemplate = ko.observable($("script#js-{{ doc }}").html())
+
+		self.context = ko.observable({});
+
+        self.render = function render() {
+        	var context = self.context();
+		    var source   = self.documentTemplate();
+			var template = Handlebars.compile(source);
+			return template(context);
+        }
+	}
+
+    /**
+    * Primary view acts as a holder for the other views
+    */
+    function DocumentPage() {
+        var self = this;
+
+        self.document = new DocumentModel();
+
+        self.init = function init() {
+
+        }
+
+
+
+		self.init();
+    }
+    // ----- KO Instance -----
+    App = new DocumentPage()
+    // ----- KO Bindings -----
+    ko.applyBindings(App);
+
+});
+</script>
+
+{% endblock %}

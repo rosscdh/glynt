@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load i18n markup %}
+
+{% block body %}
+<div class="row">
+
+	<div class="span3">
+	<h2>{% trans 'Details Form' %}</h2>
+	{% block form %}{% endblock %}
+	</div>
+
+	<div class="span5 pull-right">
+	<h2>{% trans 'Document to complete' %}</h2>
+	<blockquote>
+		{% block document %}{% endblock %}
+	</blockquote>
+	</div>
+
+</div>
+{% endblock %}
