@@ -3,6 +3,13 @@
 {% load url from future %}
 
 {% block form %}
+<form class="bind-document">
+	<input type="hidden" class="md-updater" data-hb-name="title" placeholder="Contract for Assassination" name="" id="" value=""/>
+	<input type="text" class="md-updater" data-hb-name="contractor" placeholder="Your Name" name="" id="" value=""/>
+	<input type="text" class="md-updater" data-hb-name="target" placeholder="Who you want to assasinate" name="" id="" value=""/>
+	<input type="text" class="md-updater" data-hb-name="date_by" placeholder="By when?" name="" id="" value=""/>
+	<input type="text" class="md-updater" data-hb-name="willing_to_pay" placeholder="1000.00" name="" id="" value=""/>
+</form>
 {% endblock %}
 
 {% block document %}
@@ -54,14 +61,22 @@ $(document).ready(function(){
         self.documentModel = new DocumentModel();
 
         self.init = function init() {
+
+        	var name = null;
+        	var value = null;
+        	$.each($('form.bind-document'), function(index, form) {
+        		$.each($(this).find('input'), function(index, input) {
+        			name = $(input).attr('data-hb-name');
+        			value = $(input).attr('placeholder');
+        			value = '**' + value.toString() + '**';
+        			self.documentModel.setContextItem(name, value);
+        		});
+        	});
+
         	self.render();
         }
 
         self.render = function render() {
-        	
-        	self.documentModel.setContextItem('title', 'test title');
-        	self.documentModel.setContextItem('title_2', 'So freaking awesome');
-
         	var md = self.documentModel.render();
         	var html = self.renderMarkdown(md);
 
@@ -80,6 +95,12 @@ $(document).ready(function(){
     // ----- KO Bindings -----
     ko.applyBindings(App);
 
+    $('input.md-updater').live('change', function(event){
+    	var name = $(this).attr('data-hb-name');
+    	var value = $(this).val();
+    	App.documentModel.setContextItem(name, value);
+    	App.render();
+    })
 });
 </script>
 
