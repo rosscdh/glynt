@@ -7,7 +7,10 @@
 
     {% for form in form_set %}
     <div id="form-group-{{ forloop.counter }}" class="form-group {% if not forloop.first %}hidden{% endif %}">
-    {{form}}
+        <h4>Step {{ forloop.counter }}. of {{form_set|length }}</h4>
+        <h4><span class="step-title"></span></h4>
+        <br/>
+        {{form}}
     </div>
     {% if forloop.last %}
     {% endif %}
@@ -143,12 +146,14 @@ $(document).ready(function(){
         }
 
 		self.setContextItem = function setContextItem(input) {
-			var context = self.context();
-			var key = name = input.attr('data-hb-name');
-			var value = self.determineValue(input);
+            if (input.attr('data-step-title') == 'undefined') {
+    			var context = self.context();
+    			var key = name = input.attr('data-hb-name');
+    			var value = self.determineValue(input);
 
-        	context[key] = value;
-        	self.context(context);
+            	context[key] = value;
+            	self.context(context);
+            }
 		}
 
         self.setContextItemByForce = function setContextItemByForce(key,value) {
@@ -299,6 +304,11 @@ $(document).ready(function(){
     $('.md-updater').live('mouseover', function(event){
     });
     $('.md-updater').live('mouseout', function(event){
+    });
+
+    $('form.bind-document span.step-title').each(function() {
+        var element = $(this).closest('div').find('input[data-step-title]');
+        $(this).text(element.attr('data-step-title'));
     });
 
     $('.md-updater').live('change', function(event){
