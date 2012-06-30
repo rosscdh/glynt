@@ -12,3 +12,5 @@ markup
 # hg clone https://code.google.com/p/pagedown/
 # possible multi format 
 # https://github.com/NetAngels/django-webodt.git
+# event pubsub
+#http://davidwalsh.name/snackjs

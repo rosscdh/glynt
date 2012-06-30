@@ -13,3 +13,30 @@ class AssassinStep2(forms.Form):
     other_targets = forms.MultipleChoiceField(choices=(('Mark','Mark'),('James','James'),('John','John'),('Paul','Paul')),widget=forms.SelectMultiple(attrs={'placeholder':'','class':'md-updater','data-hb-name':'other_targets'}))
     confirmed = forms.BooleanField(widget=forms.CheckboxInput(attrs={'placeholder':'','class':'md-updater','data-hb-name':'confirmed'}))
 
+# ----- WILLS -----
+
+class WillStep1(forms.Form):
+    gender = forms.ChoiceField(label='Are you male or female?',choices=(('female','Female'),('male','Male')),initial='female',widget=forms.RadioSelect(attrs={'placeholder':'Currency','class':'md-updater','data-hb-name':'gender'}))
+    partnership = forms.ChoiceField(label='Are you married or are you in a civil partnership?',choices=((False,'Not Married'),('married','Married'),('civil_partnership','Civil Partnership')),initial=False,widget=forms.RadioSelect(attrs={'placeholder':'Partnership Type','class':'md-updater','data-hb-name':'partnership'}))
+    executor =  forms.ChoiceField(label='Will you be appointing an Executor for this will other than your Partner (if any)',choices=((False,'No Executor'),(True,'Appoint Executor')),initial=False,widget=forms.RadioSelect(attrs={'placeholder':'Executor','class':'md-updater','data-hb-name':'executor'}))
+
+class WillStep2(forms.Form):
+    domicile = forms.ChoiceField(label='Where are you domiciled?',choices=(('england_wales','England and Wales'),('north_ireland','Northern Ireland')),widget=forms.RadioSelect(attrs={'placeholder':'Currency','class':'md-updater','data-hb-name':'domicile'}))
+    partner_domicile = forms.ChoiceField(label='Where is your partner domiciled?',choices=(('england_wales','England and Wales'),('north_ireland','Northern Ireland')),widget=forms.RadioSelect(attrs={'placeholder':'Currency','class':'md-updater','data-hb-name':'partner_domicile'}))
+
+class WillStep3(forms.Form):
+    private_pension = forms.ChoiceField(label='Do you or your wife have a pension, other than a state pension, and/or a life assurance policy?',choices=(('yes','Yes'),('no','No')),widget=forms.RadioSelect(attrs={'placeholder':'Currency','class':'md-updater','data-hb-name':'private_pension'}))
+    landowner = forms.ChoiceField(label='Do you and/or your wife own land or a property built on land (e.g. a house or flat)?',choices=(('yes','Yes'),('no','No')),widget=forms.RadioSelect(attrs={'placeholder':'Currency','class':'md-updater','data-hb-name':'landowner'}))
+
+class WillStep4(forms.Form):
+    full_name = forms.CharField(label='What is your full name?',max_length=100, widget=forms.TextInput(attrs={'placeholder':'Your Full Name','class':'md-updater','data-hb-name':'full_name'}))
+    alias = forms.CharField(label='If you are known by any other name, enter it here.',max_length=100, widget=forms.TextInput(attrs={'placeholder':'Your Alias','class':'md-updater','data-hb-name':'alias'}))
+    home_address = forms.CharField(label='What is your current home address?',widget=forms.Textarea(attrs={'placeholder':'Your Home Address','class':'md-updater','data-hb-name':'home_address'}))
+
+class WillStep5(forms.Form):
+    partner_full_name = forms.CharField(label='What is your partners full name?',max_length=100, widget=forms.TextInput(attrs={'placeholder':'Your Partner\'s Full Name','class':'md-updater','data-hb-name':'partner_full_name'}))
+    partner_home_address = forms.CharField(label='What is your partners current home address?',widget=forms.Textarea(attrs={'placeholder':'Your Partner\'s Home Address','class':'md-updater','data-hb-name':'partner_home_address'}))
+
+class WillStep6(forms.Form):
+    executor_full_name = forms.CharField(label='What is full name of the executor you would like to appoint?',max_length=100, widget=forms.TextInput(attrs={'placeholder':'Full Name of Executor','class':'md-updater','data-hb-name':'executor_full_name'}))
+    executor_address = forms.CharField(label='What is your partners current home address?',widget=forms.Textarea(attrs={'placeholder':'Address of the Executor','class':'md-updater','data-hb-name':'executor_address'}))

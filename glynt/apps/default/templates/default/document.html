@@ -45,6 +45,7 @@ $(document).ready(function(){
 		var self = this;
 
         self.textElementsList = ['text','textarea','hidden','select'];
+        self.FalseValuesList = ['False',false,null,void 0,''];
 		self.handlebarsElementId = ko.observable('script#js-{{ doc }}');
 		self.documentTemplate = ko.observable($(self.handlebarsElementId()).html());
 		self.renderedHTML = ko.observable('');
@@ -55,9 +56,20 @@ $(document).ready(function(){
 		        'url':'http://www.ruleno1.com'
 		    },
 		    'document': {
-		        'title': 'Asassination Contract'
+		        'title': '{{ object.name }}'
 		    }
 		});
+
+        self.slugify = function slugify(text) {
+            if (typeof text == 'boolean') {
+                text = (text === true)?'true':'false';
+            }else{
+                text = text.replace(/[^_-a-zA-Z0-9,&\s]+/ig, '');
+                //text = text.replace(/-/gi, "_");
+                text = text.replace(/\s/gi, "-");
+            }
+            return text.toLowerCase();
+        }
 
         self.determineValue = function determineValue(input) {
 			var value = null;
@@ -68,15 +80,34 @@ $(document).ready(function(){
 			}else{
 			    value = input.attr('placeholder');
 		    }
+
             if (self.textElementsList.indexOf(input.attr('type')) >= 0) {
                 //if (is_placeholder_value === true) {
                     value = '_**' + value.toString() + '**_';
                 //}
             }
+
             if (self.textElementsList.indexOf(input.attr('type')) == -1) {
                 
                 if (input.attr('type') == 'checkbox') {
                     value = (input.attr('checked') == 'checked') ? true : false ;
+                }
+                if (input.attr('type') == 'radio') {
+                    value = false;
+                    if (input.attr('checked') == 'checked') {
+                        value = input.val();
+                    }
+
+                    // set custom
+                    var slug = self.slugify(input.attr('data-hb-name'));
+                    var value_slug = self.slugify(value);
+                    key = 'this_'+ slug + '_' + value_slug;
+                    custom_slug_value = value
+                    self.setContextItemByForce(key, custom_slug_value);
+
+                    key = 'has_' + input.attr('data-hb-name');
+                    custom_bool_value = (self.FalseValuesList.indexOf(value) >= 0)? false : true ;
+                    self.setContextItemByForce(key, custom_bool_value);
                 }
             }
             return value;
@@ -90,6 +121,13 @@ $(document).ready(function(){
         	context[key] = value;
         	self.context(context);
 		}
+
+        self.setContextItemByForce = function setContextItemByForce(key,value) {
+            var context = self.context();
+            context[key] = value;
+            console.log('Force - key: '+key+' value:'+value)
+            self.context(context);
+        }
 
 		self.getContext = function getContext() {
 			return self.context();
@@ -173,6 +211,9 @@ $(document).ready(function(){
         		$.each($(this).find('input'), function(index, input) {
         			self.documentModel.setContextItem($(input));
         		});
+                $.each($(this).find('textarea'), function(index, input) {
+                    self.documentModel.setContextItem($(input));
+                });
                 $.each($(this).find('select'), function(index, input) {
                     self.documentModel.setContextItem($(input));
                 });
