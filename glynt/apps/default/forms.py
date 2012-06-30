@@ -16,8 +16,8 @@ class AssassinStep2(forms.Form):
 # ----- WILLS -----
 
 class WillStep1(forms.Form):
-    gender = forms.ChoiceField(label='Are you male or female?',choices=(('female','Female'),('male','Male')),initial='female',widget=forms.RadioSelect(attrs={'placeholder':'Currency','class':'md-updater','data-hb-name':'gender'}))
-    partnership = forms.ChoiceField(label='Are you married or are you in a civil partnership?',choices=(('false','Not Married'),('married','Married'),('civil_partnership','Civil Partnership')),initial='false',widget=forms.RadioSelect(attrs={'placeholder':'Partnership Type','class':'md-updater','data-hb-name':'partnership'}))
+    gender = forms.ChoiceField(label='Are you male or female?',help_text='You should select a Gender',choices=(('female','Female'),('male','Male')),initial='female',widget=forms.RadioSelect(attrs={'placeholder':'Currency','class':'md-updater','data-hb-name':'gender'}))
+    partnership = forms.ChoiceField(label='Are you married or are you in a civil partnership?',help_text='Should defacto not be here?',choices=(('false','Not Married'),('married','Married'),('civil_partnership','Civil Partnership')),initial='false',widget=forms.RadioSelect(attrs={'placeholder':'Partnership Type','class':'md-updater','data-hb-name':'partnership'}))
     executor =  forms.ChoiceField(label='Will you be appointing an Executor for this will other than your Partner (if any)',choices=(('false','No Executor'),('appoint_executor','Appoint Executor')),initial='false',widget=forms.RadioSelect(attrs={'placeholder':'Executor','class':'md-updater','data-hb-name':'executor'}))
 
 class WillStep2(forms.Form):
@@ -30,7 +30,7 @@ class WillStep3(forms.Form):
 
 class WillStep4(forms.Form):
     full_name = forms.CharField(label='What is your full name?',max_length=100, widget=forms.TextInput(attrs={'placeholder':'Your Full Name','class':'md-updater','data-hb-name':'full_name'}))
-    alias = forms.CharField(label='If you are known by any other name, enter it here.',max_length=100, widget=forms.TextInput(attrs={'placeholder':'Your Alias','class':'md-updater','data-hb-name':'alias'}))
+    other_alias = forms.CharField(label='If you are known by any other name, enter it here.',max_length=100, widget=forms.TextInput(attrs={'placeholder':'Your Alias','class':'md-updater','data-hb-name':'other_alias'}))
     home_address = forms.CharField(label='What is your current home address?',widget=forms.Textarea(attrs={'placeholder':'Your Home Address','class':'md-updater','data-hb-name':'home_address'}))
 
 class WillStep5(forms.Form):

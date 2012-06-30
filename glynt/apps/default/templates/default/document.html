@@ -31,6 +31,9 @@
 .hidden {
     display:none;
 }
+span.helptext {
+display:none;
+}
 </style>
 {% endblock %}
 
@@ -40,6 +43,8 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
+
+    $('span.helptext').tooltip({});
 
 	function DocumentModel() {
 		var self = this;
@@ -100,10 +105,17 @@ $(document).ready(function(){
                         self.setTemplateHelperValues(input);
                     }
                 }
-
             }
 
+            self.setTemplateHasHelperValues(input, value, is_placeholder_value);
+
             return value;
+        }
+
+        self.setTemplateHasHelperValues = function setTemplateHasHelperValues(input, value, is_placeholder_value) {
+            var key = 'has_' + input.attr('data-hb-name');
+            var has_this_value = (self.FalseValuesList.indexOf(value) >= 0 || is_placeholder_value === true)? false : true ;
+            self.setContextItemByForce(key, has_this_value);
         }
 
         self.setTemplateHelperValues = function setTemplateHelperValues(input) {
@@ -124,10 +136,6 @@ $(document).ready(function(){
                     }
                 }
             }
-
-            key = 'has_' + input.attr('data-hb-name');
-            has_this_value = (self.FalseValuesList.indexOf(value) >= 0)? false : true ;
-            self.setContextItemByForce(key, has_this_value);
         }
 
 		self.setContextItem = function setContextItem(input) {
@@ -283,6 +291,11 @@ $(document).ready(function(){
     App = new PageDocumentController()
     // ----- KO Bindings -----
     ko.applyBindings(App);
+
+    $('.md-updater').live('mouseover', function(event){
+    });
+    $('.md-updater').live('mouseout', function(event){
+    });
 
     $('.md-updater').live('change', function(event){
     	var name = $(this).attr('data-hb-name');
