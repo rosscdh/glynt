@@ -3,23 +3,22 @@
 {% load url from future %}
 
 {% block form %}
-<form class="bind-document">
+<form class="bind-document">{% csrf_token %}
 
     {% for form in form_set %}
     <div id="form-group-{{ forloop.counter }}" class="form-group {% if not forloop.first %}hidden{% endif %}">
     {{form}}
     </div>
     {% if forloop.last %}
-    <span data-bind="visible: App.formControls.isLastStep()">
-        <button id="btn-post-pdf" class="btn btn-primary btn-mini" type="button" data-bind="click: App.postDocument">Get Contract</button>
-    </span>
     {% endif %}
     {% endfor %}
     <div class="controls pull-right">
         <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-primary btn-mini btn-prev" type="button" data-bind="click: App.formControls.prev">Previous</button></span>
         <span data-bind="visible: App.formControls.showNext()"><button id="btn-next" class="btn btn-primary btn-mini btn-next" type="button" data-bind="click: App.formControls.next">Next</button></span>
     </div>
-
+    <div class="span3" data-bind="visible: App.formControls.isLastStep()">
+        <button id="btn-post-pdf" class="btn btn-success" type="button" data-bind="click: App.postDocument">Get Contract</button>
+    </div>
 </form>
 {% endblock %}
 
@@ -200,11 +199,17 @@ $(document).ready(function(){
         }
 
         self.postDocument = function postDocument() {
+
+            var csrf_token = $('form.bind-document:first').find('input[type=hidden]:first')
+            var data = {
+                csrfmiddlewaretoken: csrf_token.val(),
+                md: self.documentModel.render()
+            };
+            console.log(data)
             $.ajax({
               type: 'POST',
               url: "{% url 'document:export' doc=doc %}",
-              data: {},
-              dataType: 'json'
+              data: data,
             })
             .success(function(data, textStatus, jqXHR) {
             })

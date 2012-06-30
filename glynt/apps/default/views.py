@@ -5,7 +5,7 @@ from django.shortcuts import render_to_response, redirect
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.template import loader, Context
-from django.views.generic.base import TemplateView
+from django.views.generic.base import View, TemplateView
 
 from django.http import HttpResponseRedirect
 from django.contrib.formtools.wizard.views import SessionWizardView
@@ -32,9 +32,8 @@ class DocumentView(TemplateView):
         return context
 
 
-class DocumentExportView(TemplateView):
+class DocumentExportView(View):
     def post(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
         response = HttpResponse(mimetype='application/pdf')
         response['Content-Disposition'] = 'attachment; filename=somefilename.pdf'
 
