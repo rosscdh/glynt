@@ -2,7 +2,7 @@
 {% tplhandlebars "js-legal-will" %}
 ## {{document.title}} ##
 
-This is the last Will  testament of me, "{{full_name}}"" also known as "{{alias}}"" of _{{home_address}}_ {{#if has_partnership}} {{#if this_partnership_married}}married{{/if}} to "{{partner_full_name}}" of _{{partner_home_address}}_.{{/if}}
+This is the last Will  testament of me, "{{full_name}}"" also known as "{{alias}}"" of _"{{home_address}}"_. {{#if has_partnership}}Who is {{#if _partnership_married}}Married to{{/if}}{{#if _partnership_civil_partnership}}in a Civil Partnership with{{/if}} "{{partner_full_name}}" of _"{{partner_home_address}}"_.{{/if}}
 
 ### 1. DECLARATION ###
 
@@ -25,7 +25,7 @@ I   body to be cremated.
  appoint  the s and s of this my Will:
 
 {{#if has_partnership}}
-4.4. My wife {{partner_full_name}} of {{partner_home_address}}; {{#if has_executor}}and{{/if}}
+4.4. My {{#if _partnership_married}}Wife{{/if}}{{#if _partnership_civil_partnership}}Partner{{/if}} "{{partner_full_name}}" of {{partner_home_address}}; {{#if has_executor}}and{{/if}}
 {{/if}}
 {{#if has_executor}}
 4.4. {{executor_full_name}} of {{executor_address}}

@@ -17,8 +17,8 @@ class AssassinStep2(forms.Form):
 
 class WillStep1(forms.Form):
     gender = forms.ChoiceField(label='Are you male or female?',choices=(('female','Female'),('male','Male')),initial='female',widget=forms.RadioSelect(attrs={'placeholder':'Currency','class':'md-updater','data-hb-name':'gender'}))
-    partnership = forms.ChoiceField(label='Are you married or are you in a civil partnership?',choices=((False,'Not Married'),('married','Married'),('civil_partnership','Civil Partnership')),initial=False,widget=forms.RadioSelect(attrs={'placeholder':'Partnership Type','class':'md-updater','data-hb-name':'partnership'}))
-    executor =  forms.ChoiceField(label='Will you be appointing an Executor for this will other than your Partner (if any)',choices=((False,'No Executor'),(True,'Appoint Executor')),initial=False,widget=forms.RadioSelect(attrs={'placeholder':'Executor','class':'md-updater','data-hb-name':'executor'}))
+    partnership = forms.ChoiceField(label='Are you married or are you in a civil partnership?',choices=(('false','Not Married'),('married','Married'),('civil_partnership','Civil Partnership')),initial='false',widget=forms.RadioSelect(attrs={'placeholder':'Partnership Type','class':'md-updater','data-hb-name':'partnership'}))
+    executor =  forms.ChoiceField(label='Will you be appointing an Executor for this will other than your Partner (if any)',choices=(('false','No Executor'),('appoint_executor','Appoint Executor')),initial='false',widget=forms.RadioSelect(attrs={'placeholder':'Executor','class':'md-updater','data-hb-name':'executor'}))
 
 class WillStep2(forms.Form):
     domicile = forms.ChoiceField(label='Where are you domiciled?',choices=(('england_wales','England and Wales'),('north_ireland','Northern Ireland')),widget=forms.RadioSelect(attrs={'placeholder':'Currency','class':'md-updater','data-hb-name':'domicile'}))

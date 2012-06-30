@@ -45,7 +45,7 @@ $(document).ready(function(){
 		var self = this;
 
         self.textElementsList = ['text','textarea','hidden','select'];
-        self.FalseValuesList = ['False',false,null,void 0,''];
+        self.FalseValuesList = ['False','false',false,null,void 0,''];
 		self.handlebarsElementId = ko.observable('script#js-{{ doc }}');
 		self.documentTemplate = ko.observable($(self.handlebarsElementId()).html());
 		self.renderedHTML = ko.observable('');
@@ -91,26 +91,43 @@ $(document).ready(function(){
                 
                 if (input.attr('type') == 'checkbox') {
                     value = (input.attr('checked') == 'checked') ? true : false ;
+                    self.setTemplateHelperValues(input);
                 }
                 if (input.attr('type') == 'radio') {
                     value = false;
                     if (input.attr('checked') == 'checked') {
                         value = input.val();
+                        self.setTemplateHelperValues(input);
                     }
+                }
 
-                    // set custom
-                    var slug = self.slugify(input.attr('data-hb-name'));
-                    var value_slug = self.slugify(value);
-                    key = 'this_'+ slug + '_' + value_slug;
-                    custom_slug_value = value
-                    self.setContextItemByForce(key, custom_slug_value);
+            }
 
-                    key = 'has_' + input.attr('data-hb-name');
-                    custom_bool_value = (self.FalseValuesList.indexOf(value) >= 0)? false : true ;
-                    self.setContextItemByForce(key, custom_bool_value);
+            return value;
+        }
+
+        self.setTemplateHelperValues = function setTemplateHelperValues(input) {
+            // set custom
+            var value = input.val();
+            var slug = self.slugify(input.attr('data-hb-name'));
+            var value_slug = self.slugify(value);
+            var key = '_' + slug + '_' + value_slug;
+            var found = false;
+
+            self.setContextItemByForce(key, true);
+
+            for (context_key in self.context()) {
+                if (context_key.indexOf(slug) >= 0) {
+                    // found it
+                    if (context_key != key) {
+                        self.setContextItemByForce(context_key, false);
+                    }
                 }
             }
-            return value;
+
+            key = 'has_' + input.attr('data-hb-name');
+            has_this_value = (self.FalseValuesList.indexOf(value) >= 0)? false : true ;
+            self.setContextItemByForce(key, has_this_value);
         }
 
 		self.setContextItem = function setContextItem(input) {
@@ -125,7 +142,7 @@ $(document).ready(function(){
         self.setContextItemByForce = function setContextItemByForce(key,value) {
             var context = self.context();
             context[key] = value;
-            console.log('Force - key: '+key+' value:'+value)
+            //console.log('Force - key: '+key+' value:'+value)
             self.context(context);
         }
 
@@ -246,7 +263,7 @@ $(document).ready(function(){
                 csrfmiddlewaretoken: csrf_token.val(),
                 md: self.documentModel.render()
             };
-            console.log(data)
+
             $.ajax({
               type: 'POST',
               url: "{% url 'document:export' doc=doc %}",
@@ -271,6 +288,7 @@ $(document).ready(function(){
     	var name = $(this).attr('data-hb-name');
     	var value = $(this).val();
         App.changeContext($(this));
+        console.log(App.documentModel.context())
     })
 });
 </script>
