@@ -4,7 +4,12 @@
 
 {% block form %}
 <form class="bind-document">{% csrf_token %}
-
+    <div class="row">
+    <div class="controls pull-right">
+        <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-primary btn-mini btn-prev" type="button" data-bind="click: App.formControls.prev">Previous</button></span>
+        <span data-bind="visible: App.formControls.showNext()"><button id="btn-next" class="btn btn-primary btn-mini btn-next" type="button" data-bind="click: App.formControls.next">Next</button></span>
+    </div>
+    </div>
     {% for form in form_set %}
     <div id="form-group-{{ forloop.counter }}" class="form-group {% if not forloop.first %}hidden{% endif %}">
         <h4>Step {{ forloop.counter }}. of {{form_set|length }}</h4>
@@ -15,10 +20,6 @@
     {% if forloop.last %}
     {% endif %}
     {% endfor %}
-    <div class="controls pull-right">
-        <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-primary btn-mini btn-prev" type="button" data-bind="click: App.formControls.prev">Previous</button></span>
-        <span data-bind="visible: App.formControls.showNext()"><button id="btn-next" class="btn btn-primary btn-mini btn-next" type="button" data-bind="click: App.formControls.next">Next</button></span>
-    </div>
     <div class="span3" data-bind="visible: App.formControls.isLastStep()">
         <button id="btn-post-pdf" class="btn btn-success" type="button" data-bind="click: App.postDocument">Get Contract</button>
     </div>
@@ -81,6 +82,18 @@ $(document).ready(function(){
                 text = text.replace(/\s/gi, "-");
             }
             return text.toLowerCase();
+        }
+
+        self.assertContextIsVisbleWhen = function assertContextIsVisbleWhen(key, value) {
+            if (key in self.context()) {
+                var context_value = self.context()[key];
+                if (context_value == value) {
+                    return true;
+                }else{
+                    // hide the relavant object
+                }
+            }
+            return false;
         }
 
         self.determineValue = function determineValue(input) {
@@ -146,7 +159,8 @@ $(document).ready(function(){
         }
 
 		self.setContextItem = function setContextItem(input) {
-            if (input.attr('data-step-title') == 'undefined') {
+            // only allow if the data-hb-name is set
+            if (typeof input.attr('data-hb-name') == 'string') {
     			var context = self.context();
     			var key = name = input.attr('data-hb-name');
     			var value = self.determineValue(input);
@@ -315,7 +329,7 @@ $(document).ready(function(){
     	var name = $(this).attr('data-hb-name');
     	var value = $(this).val();
         App.changeContext($(this));
-        console.log(App.documentModel.context())
+        //console.log(App.documentModel.context())
     })
 });
 </script>

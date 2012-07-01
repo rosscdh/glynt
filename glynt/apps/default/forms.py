@@ -32,13 +32,13 @@ class WillStep3(forms.Form):
     landowner = forms.ChoiceField(label='Do you and/or your wife own land or a property built on land (e.g. a house or flat)?',choices=(('yes','Yes'),('no','No')),widget=forms.RadioSelect(attrs={'placeholder':'Currency','class':'md-updater','data-hb-name':'landowner'}))
 
 class WillStep4(forms.Form):
-    step_title = forms.CharField(max_length=100, widget=forms.HiddenInput(attrs={'data-step-title':'Your name and stuff'}))
+    step_title = forms.CharField(max_length=100, widget=forms.HiddenInput(attrs={'data-step-title':'Your name & alias'}))
     full_name = forms.CharField(label='What is your full name?',max_length=100, widget=forms.TextInput(attrs={'placeholder':'Your Full Name','class':'md-updater','data-hb-name':'full_name'}))
     other_alias = forms.CharField(label='If you are known by any other name, enter it here.',max_length=100, widget=forms.TextInput(attrs={'placeholder':'Your Alias','class':'md-updater','data-hb-name':'other_alias'}))
     home_address = forms.CharField(label='What is your current home address?',widget=forms.Textarea(attrs={'placeholder':'Your Home Address','class':'md-updater','data-hb-name':'home_address'}))
 
 class WillStep5(forms.Form):
-    step_title = forms.CharField(max_length=100, widget=forms.HiddenInput(attrs={'data-step-title':'Partner Details'}))
+    step_title = forms.CharField(max_length=100, widget=forms.HiddenInput(attrs={'data-step-title':'Partner Details', 'data-bind':"visible: App.documentModel.assertContextIsVisbleWhen('has_partnership',true)"}))
     partner_full_name = forms.CharField(label='What is your partners full name?',max_length=100, widget=forms.TextInput(attrs={'placeholder':'Your Partner\'s Full Name','class':'md-updater','data-hb-name':'partner_full_name'}))
     partner_home_address = forms.CharField(label='What is your partners current home address?',widget=forms.Textarea(attrs={'placeholder':'Your Partner\'s Home Address','class':'md-updater','data-hb-name':'partner_home_address'}))
 
