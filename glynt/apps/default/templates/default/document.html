@@ -99,7 +99,6 @@ $(document).ready(function(){
                         }
                     }
                 }
-                
             }
             return next_step;
         }
@@ -325,9 +324,23 @@ $(document).ready(function(){
 
         // @TODO apply rulesets
         self.applyGlyntRuleset = function applyGlyntRuleset() {
+            var current_context = self.documentModel.context();
             var ruleset = self.documentModel.getRuleByType('show_step_when');
-            for (i in ruleset) {
-                console.log(ruleset)
+            ruleset = ruleset[0];
+            var target_element = $(ruleset.target_element);
+            var target_element_step_id = target_element.attr('id').replace(/[^\d]+/ig, '');
+
+            for (var i=0; i < ruleset.ruleset.length; i++) {
+                for (context_var_name in ruleset.ruleset[i]) {
+                    var required_value = ruleset.ruleset[i][context_var_name];
+                    if (context_var_name in current_context) {
+                        var current_context_value = current_context[context_var_name];
+
+                        if (required_value == current_context_value) {
+                            // apply callback
+                        }
+                    }
+                }
             }
         }
 
