@@ -6,8 +6,8 @@ from time import gmtime, strftime
 
 debug = True
 
-PROJECT = 'cartvine'
-PROJECT_PATH = '/home/rossc/Projects/Personal/%s' % (PROJECT,)
+PROJECT = 'glynt'
+PROJECT_PATH = '/home/rossc/Projects/Personal/RuleNumberOne/%s' % (PROJECT,)
 PROJECT_DEPLOY_INSTANCE = ( ('glynt', 'cartvine_shoppers'),)
 
 REMOTE_PROJECT_PATHS = []
