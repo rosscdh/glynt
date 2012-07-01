@@ -323,6 +323,14 @@ $(document).ready(function(){
             });
         }
 
+        // @TODO apply rulesets
+        self.applyGlyntRuleset = function applyGlyntRuleset() {
+            var ruleset = self.documentModel.getRuleByType('show_step_when');
+            for (i in ruleset) {
+                console.log(ruleset)
+            }
+        }
+
         self.setContext = function setContext() {
             // loop over all valid form elements and set them in the context
             var name = null;
@@ -345,6 +353,7 @@ $(document).ready(function(){
             // main initializer
             self.setContext();
             self.setGlyntRuleset();
+            self.applyGlyntRuleset();
         	self.render();
         }
 
