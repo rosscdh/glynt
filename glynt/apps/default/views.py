@@ -15,7 +15,7 @@ from models import Document
 from forms import AssassinStep1, AssassinStep2
 from forms import WillStep1, WillStep2, WillStep3, WillStep4, WillStep5, WillStep6
 
-from reportlab.pdfgen import canvas
+#from reportlab.pdfgen import canvas
 
 FORM_GROUPS = {
     'legal': [AssassinStep1, AssassinStep2],
@@ -48,11 +48,11 @@ class DocumentExportView(View):
         response = HttpResponse(mimetype='application/pdf')
         response['Content-Disposition'] = 'attachment; filename=somefilename.pdf'
 
-        p = canvas.Canvas(response)
+        # p = canvas.Canvas(response)
 
-        p.drawString(100, 100, "Hello world.")
-        p.showPage()
-        p.save()
+        # p.drawString(100, 100, "Hello world.")
+        # p.showPage()
+        # p.save()
 
         return response
 

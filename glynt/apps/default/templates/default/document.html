@@ -12,7 +12,7 @@
     </div>
     {% for form in form_set %}
     <div id="form-group-{{ forloop.counter }}" class="form-group {% if not forloop.first %}hidden{% endif %}">
-        <h4>Step {{ forloop.counter }}. of {{form_set|length }}</h4>
+        <h4>Step {{ forloop.counter }}. of {{ form_set|length }}</h4>
         <h4><span class="step-title"></span></h4>
         <br/>
         {{form}}
@@ -20,8 +20,10 @@
     {% if forloop.last %}
     {% endif %}
     {% endfor %}
-    <div class="span3" data-bind="visible: App.formControls.isLastStep()">
-        <button id="btn-post-pdf" class="btn btn-success" type="button" data-bind="click: App.postDocument">Get Contract</button>
+    <div id="form-group-{{ form_set|length }}" class="form-group hidden" data-bind="visible: App.formControls.isLastStep()">
+        <div class="span3">
+            <button id="btn-post-pdf" class="btn btn-success" type="button" data-bind="click: App.postDocument">Get Contract</button>
+        </div>
     </div>
 </form>
 {% endblock %}
@@ -52,7 +54,90 @@ display:none;
 <script type="text/javascript">
 $(document).ready(function(){
 
-    $('span.helptext').tooltip({});
+    function FormControls() {
+        var self = this;
+
+        self.actualFormSteps = ({{form_set|length}}+1);// account for end form
+        self.maxFormSteps = ko.observable(({{form_set|length}}+1));// account for end form
+        self.currentFormStep = ko.observable(1);
+
+        self.showNext = function showNext() {
+            return (self.currentFormStep() == self.maxFormSteps())? false : true ;
+        }
+        self.showPrev = function showPrev() {
+            return (self.currentFormStep() == 1)? false : true ;
+        }
+        self.isLastStep = function isLastStep() {
+            return (self.maxFormSteps() == self.currentFormStep()) ? true : false ;
+        }
+
+        self.determineNextStepIndex = function determineNextStepIndex(direction,next_step) {
+            var ruleset = App.documentModel.getRuleByType('show_step_when');
+            ruleset = ruleset[0];
+            var target_element = $(ruleset.target_element);
+            var target_element_step_id = target_element.attr('id').replace(/[^\d]+/ig, '');
+
+            //@TODO basis for the ruleset evaluation routine
+            for (var i=0; i < ruleset.ruleset.length; i++) {
+                for (context_var_name in ruleset.ruleset[i]) {
+                    var required_value = ruleset.ruleset[i][context_var_name];
+                    if (context_var_name in App.documentModel.context()) {
+                        var current_context_value = App.documentModel.context()[context_var_name];
+
+                        //console.log(context_var_name+': '+required_value +'=='+ current_context_value)
+
+                        if (required_value != current_context_value && target_element_step_id == next_step) {
+                            
+                            if (direction == 'next') {
+                                next_step++;
+                            }else{
+                                next_step = next_step - 1;
+                            }
+                            // the ruleset matches 1 or more of the rules
+                            // and the step about to be shown is indeed the target step
+                            return next_step;
+                        }
+                    }
+                }
+                
+            }
+            return next_step;
+        }
+
+        self.determineStepVisibility = function determineStepVisibility(direction,step) {
+
+            step = self.determineNextStepIndex(direction,step);
+
+            $.each($('div.form-group'), function(index,form_group){
+                form_group = $(form_group);
+
+                if ((index+1) == step) {
+                    form_group.css('display', 'block');
+                    form_group.removeClass('hidden');
+                }else{
+                    form_group.css('display', 'none');
+                    form_group.addClass('hidden');
+                }
+            });
+            return step;
+        }
+
+        self.next = function next() {
+            var current = self.currentFormStep();
+            var next = current+1;
+
+            next = self.determineStepVisibility('next',next);
+            self.currentFormStep(next);
+        }
+        self.prev = function prev() {
+            var current = self.currentFormStep();
+            var prev = current-1;
+
+            prev = self.determineStepVisibility('prev',prev);
+
+            self.currentFormStep(prev);
+        }
+    }
 
 	function DocumentModel() {
 		var self = this;
@@ -62,6 +147,19 @@ $(document).ready(function(){
 		self.handlebarsElementId = ko.observable('script#js-{{ doc }}');
 		self.documentTemplate = ko.observable($(self.handlebarsElementId()).html());
 		self.renderedHTML = ko.observable('');
+        self.visibilityRuleset = ko.observableArray([]);
+
+        function Rule(element,target_element,ruleset){
+            var self = this;
+            self.element = (element != undefined)?element:null,
+            self.target_element = (target_element != undefined)?target_element:null,
+            self.ruleset = (ruleset != undefined)?ruleset:[]
+        };
+
+        self.ruleSet = ko.observable({
+            'show_step_when': [],
+            'show_element_when': []
+        });
 
 		self.context = ko.observable({
 		    'company': {
@@ -72,6 +170,26 @@ $(document).ready(function(){
 		        'title': '{{ object.name }}'
 		    }
 		});
+
+        self.getRuleByType = function getRuleByType(ruleset_type) {
+            if (ruleset_type in self.ruleSet()) {
+                return self.ruleSet()[ruleset_type];
+            }
+            return false;
+        }
+
+        self.setRule = function setRule(element,ruleset) {
+            var rule = new Rule(element);
+            for (r in self.ruleSet()) {
+                if (r in ruleset) {
+                    if (r == 'show_step_when') {
+                        rule.target_element = $(element.closest('div.form-group')[0]);
+                    }
+                    rule.ruleset.push(ruleset[r]);
+                    self.ruleSet()[r].push(rule);
+                }
+            };
+        }
 
         self.slugify = function slugify(text) {
             if (typeof text == 'boolean') {
@@ -84,7 +202,7 @@ $(document).ready(function(){
             return text.toLowerCase();
         }
 
-        self.assertContextIsVisbleWhen = function assertContextIsVisbleWhen(key, value) {
+        self.assertElementIsVisibleWhen = function assertElementIsVisibleWhen(key, value) {
             if (key in self.context()) {
                 var context_value = self.context()[key];
                 if (context_value == value) {
@@ -177,10 +295,6 @@ $(document).ready(function(){
             self.context(context);
         }
 
-		self.getContext = function getContext() {
-			return self.context();
-		}
-
         self.render = function render() {
         	var context = self.context();
 		    var source   = self.documentTemplate();
@@ -188,56 +302,6 @@ $(document).ready(function(){
 			return template(context);
         }
 	}
-
-    function FormControls() {
-        var self = this;
-
-        self.maxFormSteps = ko.observable({{form_set|length}});
-        self.currentFormStep = ko.observable(1);
-
-        self.showNext = function showNext() {
-            return (self.currentFormStep() == self.maxFormSteps())? false : true ;
-        }
-        self.showPrev = function showPrev() {
-            return (self.currentFormStep() == 1)? false : true ;
-        }
-        self.isLastStep = function isLastStep() {
-            return (self.maxFormSteps() == self.currentFormStep()) ? true : false ;
-        }
-
-        self.determineStepVisibility = function determineStepVisibility(step) {
-
-            $.each($('div.form-group'), function(index,form_group){
-                form_group = $(form_group);
-
-                if ((index+1) == step) {
-                    form_group.css('display', 'block');
-                    form_group.removeClass('hidden');
-                }else{
-                    form_group.css('display', 'none');
-                    form_group.addClass('hidden');
-                }
-            });
-
-        }
-
-        self.next = function next() {
-            var current = self.currentFormStep();
-            var next = current+1;
-
-            self.determineStepVisibility(next);
-
-            self.currentFormStep(next);
-        }
-        self.prev = function prev() {
-            var current = self.currentFormStep();
-            var prev = current-1;
-
-            self.determineStepVisibility(prev);
-
-            self.currentFormStep(prev);
-        }
-    }
 
     /**
     * Primary view acts as a holder for the other views
@@ -250,23 +314,37 @@ $(document).ready(function(){
         self.documentModel = new DocumentModel();
         self.formControls = new FormControls();
 
-        self.init = function init() {
+        self.setGlyntRuleset = function setGlyntRuleset() {
+            // loop over lements looking for rulesets
+            $('form.bind-document input[data-glynt-rule]').each(function(index,element){
+                var rules = eval($(element).attr('data-glynt-rule'));
+                rules = rules[0];// javascript json weirdness
+                self.documentModel.setRule($(element), rules);
+            });
+        }
 
-        	var name = null;
-        	var value = null;
+        self.setContext = function setContext() {
+            // loop over all valid form elements and set them in the context
+            var name = null;
+            var value = null;
 
-        	$.each($('form.bind-document'), function(index, form) {
-        		$.each($(this).find('input'), function(index, input) {
-        			self.documentModel.setContextItem($(input));
-        		});
+            $.each($('form.bind-document'), function(index, form) {
+                $.each($(this).find('input'), function(index, input) {
+                    self.documentModel.setContextItem($(input));
+                });
                 $.each($(this).find('textarea'), function(index, input) {
                     self.documentModel.setContextItem($(input));
                 });
                 $.each($(this).find('select'), function(index, input) {
                     self.documentModel.setContextItem($(input));
                 });
-        	});
+            });
+        }
 
+        self.init = function init() {
+            // main initializer
+            self.setContext();
+            self.setGlyntRuleset();
         	self.render();
         }
 
@@ -315,8 +393,6 @@ $(document).ready(function(){
     // ----- KO Bindings -----
     ko.applyBindings(App);
 
-    $('.md-updater').live('mouseover', function(event){
-    });
     $('.md-updater').live('mouseout', function(event){
     });
 
