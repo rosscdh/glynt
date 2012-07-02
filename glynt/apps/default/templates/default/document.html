@@ -220,6 +220,34 @@ $(document).ready(function(){
             };
         }
 
+        function LoopStep(form_fieldset, hide_from_element){
+            var self = this;
+            self.form_fieldset = (form_fieldset != undefined)?form_fieldset:null,
+            self.hide_from_element = (hide_from_element != undefined)?hide_from_element:null,
+
+            self.init = function init(){
+                var found = false;
+                var repeatable_fieldset = []
+                self.form_fieldset.children().each(function(index,element){
+                    if ($(element).attr('id') == $(hide_from_element).attr('id')) {
+                        found = true;
+                    }else{
+                        if (found == true) {
+                            $(element).hide();
+                            repeatable_fieldset.push($(element));
+                        }
+                    }
+
+                });
+            }
+
+            self.init();
+        };
+
+        self.setLoopStep = function setLoopStep(form_fieldset, hide_from_element) {
+            var loopset = new LoopStep(form_fieldset, hide_from_element);
+        }
+
         self.slugify = function slugify(text) {
             if (typeof text == 'boolean') {
                 text = (text === true)?'true':'false';
@@ -349,6 +377,14 @@ $(document).ready(function(){
                 var rules = eval($(element).attr('data-glynt-rule'));
                 rules = rules[0];// javascript json weirdness
                 self.documentModel.setRule($(element), rules);
+            });
+            $('form.bind-document input[data-glynt-loop_step]').each(function(index,element){
+                var form_fieldset = $(element).closest('div.form-group');
+                var data = eval($(element).attr('data-glynt-loop_step'))[0];
+                var hide_from_element = $('input[name='+ data['hide_from'] +']')[0];
+                
+                // loopset = loopset[0];// javascript json weirdness
+                self.documentModel.setLoopStep(form_fieldset, hide_from_element);
             });
         }
 

@@ -13,13 +13,13 @@ from django.contrib.formtools.wizard.views import SessionWizardView
 from models import Document
 
 from forms import AssassinStep1, AssassinStep2
-from forms import WillStep1, WillStep2, WillStep3, WillStep4, WillStep5, WillStep6
+from forms import WillStep1, WillStep2, WillStep3, WillStep4, WillStep5, WillStep6, WillStep7
 
 #from reportlab.pdfgen import canvas
 
 FORM_GROUPS = {
     'legal': [AssassinStep1, AssassinStep2],
-    'legal-will': [WillStep1, WillStep2, WillStep3, WillStep4, WillStep5, WillStep6],
+    'legal-will': [WillStep7, WillStep1, WillStep2, WillStep3, WillStep4, WillStep5, WillStep6],
 }
 
 class DocumentView(TemplateView):

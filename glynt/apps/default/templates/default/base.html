@@ -2,6 +2,22 @@
 {% load i18n markup %}
 
 {% block body %}
+<div class="row">
+
+	<div class="span3">
+	<h2>{% trans 'Questionaire' %}</h2>
+	<p>Please complete the following questionaire.</p>
+
+	{% block form %}{% endblock %}
+	</div>
+
+	<div class="span8 pull-right">
+
+		{% block document %}{% endblock %}
+
+	</div>
+
+</div>
 <div class="hero-unit">
 	<h2>Glynt - Document Automation for the 21st century</h2>
 	<em>Example of a partial Legal Will generator</em>
@@ -18,21 +34,5 @@
 		<li>Defined and standardised interface to user data and storage thereof</li>
 		<li>Still in development... but we only started on it this weekend ;)</li>
 	</ol>
-</div>
-<div class="row">
-
-	<div class="span3">
-	<h2>{% trans 'Questionaire' %}</h2>
-	<p>Please complete the following questionaire.</p>
-
-	{% block form %}{% endblock %}
-	</div>
-
-	<div class="span8 pull-right">
-
-		{% block document %}{% endblock %}
-
-	</div>
-
 </div>
 {% endblock %}

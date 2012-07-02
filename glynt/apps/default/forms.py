@@ -47,3 +47,10 @@ class WillStep6(forms.Form):
     executor_full_name = forms.CharField(label='What is full name of the executor you would like to appoint?',max_length=100, widget=forms.TextInput(attrs={'placeholder':'Full Name of Executor','class':'md-updater','data-hb-name':'executor_full_name'}))
     executor_address = forms.CharField(label='What is your partners current home address?',widget=forms.Textarea(attrs={'placeholder':'Address of the Executor','class':'md-updater','data-hb-name':'executor_address'}))
 
+class WillStep7(forms.Form):
+    step_title = forms.CharField(max_length=100, widget=forms.HiddenInput(attrs={'data-step-title':'Number of Shareholders', 'data-glynt-loop_step':"[{hide_from:'num_shareholders'}]"}))
+    num_shareholders = forms.IntegerField()
+    shareholder_name = forms.CharField(max_length=255)
+    shareholder_address = forms.CharField(max_length=255,widget=forms.Textarea())
+
+
