@@ -43,6 +43,7 @@ class WillStep5(forms.Form):
     partner_home_address = forms.CharField(label='What is your partners current home address?',widget=forms.Textarea(attrs={'placeholder':'Your Partner\'s Home Address','class':'md-updater','data-hb-name':'partner_home_address'}))
 
 class WillStep6(forms.Form):
-    step_title = forms.CharField(max_length=100, widget=forms.HiddenInput(attrs={'data-step-title':'Executor Details', 'data-glynt-rule':'[{show_step_when:{has_executor:true}}]'}))
+    step_title = forms.CharField(max_length=100, widget=forms.HiddenInput(attrs={'data-step-title':'Executor Details', 'data-glynt-rule':'[{show_step_when:{has_executor:true,callback:window.document.testCallback}}]'}))
     executor_full_name = forms.CharField(label='What is full name of the executor you would like to appoint?',max_length=100, widget=forms.TextInput(attrs={'placeholder':'Full Name of Executor','class':'md-updater','data-hb-name':'executor_full_name'}))
     executor_address = forms.CharField(label='What is your partners current home address?',widget=forms.Textarea(attrs={'placeholder':'Address of the Executor','class':'md-updater','data-hb-name':'executor_address'}))
+

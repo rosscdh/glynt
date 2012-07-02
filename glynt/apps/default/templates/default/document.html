@@ -73,29 +73,41 @@ $(document).ready(function(){
 
         self.determineNextStepIndex = function determineNextStepIndex(direction,next_step) {
             var ruleset = App.documentModel.getRuleByType('show_step_when');
-            ruleset = ruleset[0];
-            var target_element = $(ruleset.target_element);
-            var target_element_step_id = target_element.attr('id').replace(/[^\d]+/ig, '');
+
+            var target_element = null;
+            var target_element_step_id = null;
 
             //@TODO basis for the ruleset evaluation routine
-            for (var i=0; i < ruleset.ruleset.length; i++) {
-                for (context_var_name in ruleset.ruleset[i]) {
-                    var required_value = ruleset.ruleset[i][context_var_name];
-                    if (context_var_name in App.documentModel.context()) {
-                        var current_context_value = App.documentModel.context()[context_var_name];
+            for (var x=0; x < ruleset.length; x++) {
 
-                        //console.log(context_var_name+': '+required_value +'=='+ current_context_value)
+                if (ruleset[x].target_element != 'undefined') {
+                    target_element = $(ruleset[x].target_element);
+                    target_element_step_id = target_element.attr('id').replace(/[^\d]+/ig, '');
+                }else{
+                    target_element = null;
+                    target_element_step_id = null;
+                }
 
-                        if (required_value != current_context_value && target_element_step_id == next_step) {
-                            
-                            if (direction == 'next') {
-                                next_step++;
-                            }else{
-                                next_step = next_step - 1;
+                for (var i=0; i < ruleset[x].ruleset.length; i++) {
+                    for (context_var_name in ruleset[x].ruleset[i]) {
+                        var required_value = ruleset[x].ruleset[i][context_var_name];
+
+                        if (context_var_name in App.documentModel.context()) {
+                            var current_context_value = App.documentModel.context()[context_var_name];
+
+                            // console.log(context_var_name+': '+required_value +'=='+ current_context_value)
+                            // console.log(target_element_step_id +'=='+ next_step)
+                            if (required_value != current_context_value && target_element_step_id == next_step) {
+
+                                if (direction == 'next') {
+                                    next_step = next_step + 1;
+                                }else{
+                                    next_step = next_step - 1;
+                                }
+                                // the ruleset matches 1 or more of the rules
+                                // and the step about to be shown is indeed the target step
+                                return next_step;
                             }
-                            // the ruleset matches 1 or more of the rules
-                            // and the step about to be shown is indeed the target step
-                            return next_step;
                         }
                     }
                 }
@@ -105,7 +117,25 @@ $(document).ready(function(){
 
         self.determineStepVisibility = function determineStepVisibility(direction,step) {
 
-            step = self.determineNextStepIndex(direction,step);
+            new_step = self.determineNextStepIndex(direction,step);
+
+            // if (new_step != step) {
+            //     // reevaluate
+            //     while(new_step != new_step) {
+            //         new_step = self.determineNextStepIndex(direction,new_step);
+            //         if (direction == 'next') {
+            //             if (new_step >= self.actualFormSteps) {
+            //                 break;
+            //             }
+            //         }else{
+            //             if (new_step <= 1) {
+            //                 break;
+            //             }
+            //         }
+            //     }
+            // }
+
+            step = new_step;
 
             $.each($('div.form-group'), function(index,form_group){
                 form_group = $(form_group);
@@ -326,18 +356,36 @@ $(document).ready(function(){
         self.applyGlyntRuleset = function applyGlyntRuleset() {
             var current_context = self.documentModel.context();
             var ruleset = self.documentModel.getRuleByType('show_step_when');
-            ruleset = ruleset[0];
-            var target_element = $(ruleset.target_element);
-            var target_element_step_id = target_element.attr('id').replace(/[^\d]+/ig, '');
 
-            for (var i=0; i < ruleset.ruleset.length; i++) {
-                for (context_var_name in ruleset.ruleset[i]) {
-                    var required_value = ruleset.ruleset[i][context_var_name];
-                    if (context_var_name in current_context) {
-                        var current_context_value = current_context[context_var_name];
+            var target_element = null;
+            var target_element_step_id = null;
 
-                        if (required_value == current_context_value) {
-                            // apply callback
+            var callback = null;
+            var required_value = null;
+            var current_context_value = null;
+
+            for (var x=0; x < ruleset.length; x++) {
+
+                if (ruleset[x].target_element == 'undefined') {
+                    target_element = $(ruleset[x].target_element);
+                    target_element_step_id = target_element.attr('id').replace(/[^\d]+/ig, '');
+                }else{
+                    target_element = null;
+                    target_element_step_id = null;
+                }
+
+                for (var i=0; i < ruleset[x].ruleset.length; i++) {
+                    callback = (ruleset[x].ruleset[i]['callback'] == 'undefined')? null : ruleset[x].ruleset[i]['callback'] ;
+                    console.log(callback)
+                    for (var context_var_name in ruleset[x].ruleset[i]) {
+
+                        required_value = ruleset[x].ruleset[i][context_var_name];    
+                        if (context_var_name in current_context) {
+                            current_context_value = current_context[context_var_name];
+                            if (required_value == current_context_value) {
+                                // apply callback
+                                console.log(callback)
+                            }
                         }
                     }
                 }
@@ -414,6 +462,10 @@ $(document).ready(function(){
     App = new PageDocumentController()
     // ----- KO Bindings -----
     ko.applyBindings(App);
+
+    testCallback = function() {
+alert('fdafds')
+    }
 
     $('.md-updater').live('mouseout', function(event){
     });
