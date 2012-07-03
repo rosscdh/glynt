@@ -222,14 +222,14 @@ $(document).ready(function(){
             };
         }
 
-        function LoopStep(form_fieldset, hide_from_element){
+        function LoopStep(form_fieldset, hide_from_element, iteration_title){
             var self = this;
             self.form_fieldset = (form_fieldset != undefined)?form_fieldset:null;
             self.hide_from_element = (hide_from_element != undefined)?hide_from_element:null;
+            self.iteration_title = (iteration_title != undefined)?iteration_title:'Item';
             self.valid_fieldtypes = ['text','select','textarea','radio','checkbox']
             self.repeatable_fields = [];
             self.repeatable_fieldset = null;
-            self.currentFieldsetLength = 0;
             self.currentLoopSet = {}
 
             self.showIteration = function showIteration(index) {
@@ -247,30 +247,20 @@ $(document).ready(function(){
                 // @TODO remove redundant items from the list, to allow fro increase and decrease of index
                 // ruleset if they reduce ie.. 5 to 2 then 3,4,5 are deleted
                 // @TODO make methods
-                var found_counter = 1;
-
-                if (index < self.currentFieldsetLength) {
-                    self.form_fieldset = self.form_fieldset.slice(0,index+1)
-                    var fieldsets = self.form_fieldset.find('fieldset');
-                    for (var c=index; c <= fieldsets.length; c++) {
-                        // hide these elements
-                        // $(fieldsets[c]).remove();
-                        $(fieldsets[c]).css('display','none');
-                        self.currentFieldsetLength--;
-                    }
-                }
+                var found_counter = 0;
+                var fieldsets = self.form_fieldset.find('fieldset');            
 
                 for (var c=1; c <= index; c++) {
                     if (c in self.currentLoopSet) {
                         // make it visible again
+                        self.form_fieldset.find('#set-'+c).css('display','');
                     }else{
                         fieldset = self.repeatable_fieldset.clone();
 
                         fieldset.css('display','block');
-                        fieldset.attr('id', '-set-'+c)
+                        fieldset.attr('id', 'set-'+c)
                         legend = fieldset.find('legend');
-                        legend.html('Step : ' + c);
-
+                        legend.html(self.iteration_title + '&nbsp;' + c); // @TODO need to put real title name here
 
                         fieldset.children().each(function(index,element){
                             element = $(element);
@@ -285,13 +275,18 @@ $(document).ready(function(){
                                 element.attr('name', new_name);
 
                                 found_counter++;
-                                self.currentFieldsetLength = found_counter;
                             }
                         });
-
                         self.form_fieldset.append(fieldset);
                         self.currentLoopSet[c] = true;
                     }
+                }
+
+                // @TODO make method
+                for (var c=index; c <= fieldsets.length; c++) {
+                    // hide these elements
+                    // $(fieldsets[c]).remove();
+                    $(fieldsets[c]).css('display','none');
                 }
             }
 
@@ -319,14 +314,13 @@ $(document).ready(function(){
         };
 
         self.showLoopStep = function showLoopStep(element, num) {
-console.log('number to create: ' + num); 
             var formset_id = $($(element).closest('div.form-group')[0]).attr('id');
             self.loopStepList()[formset_id].showIteration(num);
         }
 
-        self.setLoopStep = function setLoopStep(form_fieldset, hide_from_element) {
+        self.setLoopStep = function setLoopStep(form_fieldset, hide_from_element, iteration_title) {
             var formset_id = $($(hide_from_element).closest('div.form-group')[0]).attr('id');
-            self.loopStepList()[formset_id] = new LoopStep(form_fieldset, hide_from_element);
+            self.loopStepList()[formset_id] = new LoopStep(form_fieldset, hide_from_element, iteration_title);
         }
 
         self.slugify = function slugify(text) {
@@ -459,12 +453,13 @@ console.log('number to create: ' + num);
                 rules = rules[0];// javascript json weirdness
                 self.documentModel.setRule($(element), rules);
             });
-            $('form.bind-document input[data-glynt-loop_step]').each(function(index,element){
+            $('form.bind-document [data-glynt-loop_step]').each(function(index,element){
                 var form_fieldset = $(element).closest('div.form-group');
                 var data = eval($(element).attr('data-glynt-loop_step'))[0];
                 var hide_from_element = $('[name='+ data['hide_from'] +']')[0];
+                var iteration_title = data['iteration_title'];
                 
-                self.documentModel.setLoopStep(form_fieldset, hide_from_element);
+                self.documentModel.setLoopStep(form_fieldset, hide_from_element, iteration_title);
             });
         }
 
@@ -492,7 +487,6 @@ console.log('number to create: ' + num);
 
                 for (var i=0; i < ruleset[x].ruleset.length; i++) {
                     callback = (ruleset[x].ruleset[i]['callback'] == 'undefined')? null : ruleset[x].ruleset[i]['callback'] ;
-                    console.log(callback)
                     for (var context_var_name in ruleset[x].ruleset[i]) {
 
                         required_value = ruleset[x].ruleset[i][context_var_name];    
