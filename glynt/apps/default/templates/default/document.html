@@ -227,7 +227,7 @@ $(document).ready(function(){
             self.form_fieldset = (form_fieldset != undefined)?form_fieldset:null;
             self.hide_from_element = (hide_from_element != undefined)?hide_from_element:null;
             self.iteration_title = (iteration_title != undefined)?iteration_title:'Item';
-            self.valid_fieldtypes = ['text','select','textarea','radio','checkbox']
+            self.valid_fieldtypes = ['input', 'text','select','textarea','radio','checkbox']
             self.repeatable_fields = [];
             self.repeatable_fieldset = null;
             self.currentLoopSet = {}
@@ -247,7 +247,6 @@ $(document).ready(function(){
                 // @TODO remove redundant items from the list, to allow fro increase and decrease of index
                 // ruleset if they reduce ie.. 5 to 2 then 3,4,5 are deleted
                 // @TODO make methods
-                var found_counter = 1;
                 var fieldsets = self.form_fieldset.find('fieldset');            
 
                 for (var c=1; c <= index; c++) {
@@ -255,31 +254,36 @@ $(document).ready(function(){
                         // make it visible again
                         self.form_fieldset.find('#set-'+c).css('display','');
                     }else{
+                        // deep copy the set
                         fieldset = self.repeatable_fieldset.clone();
-
+                        // set element attribs
                         fieldset.css('display','block');
                         fieldset.attr('id', 'set-'+c)
                         legend = fieldset.find('legend');
                         legend.html(self.iteration_title + '&nbsp;' + c); // @TODO need to put real title name here
-
+                        // loop over element set of inputs (that are valid)
                         fieldset.children().each(function(index,element){
                             element = $(element);
                             element_type = element.attr('type');
+                            if (element_type == undefined) {
+                                // textarea?
+                                element_type = element.prop('type');
+                            }
                             
                             if ($.inArray(element_type, self.valid_fieldtypes) != -1) {
+                                // update id to be unique
                                 old_id = element.attr('id');
-                                new_id = old_id + '_' + found_counter;
+                                new_id = old_id + '_' + c;
                                 element.attr('id', new_id);
+                                // update name to be unique
                                 old_name = element.attr('name');
-                                new_name = old_name + '_' + found_counter;
+                                new_name = old_name + '_' + c;
                                 element.attr('name', new_name);
-
+                                // update hb-name so that we get correct context variables
                                 element.attr('data-hb-name', new_name);
 
                                 // set the context params
                                 App.documentModel.setContextItem(element);
-
-                                found_counter++;
                             }
                         });
                         self.form_fieldset.append(fieldset);
