@@ -71,19 +71,47 @@ $(document).ready(function(){
             return (self.maxFormSteps() == self.currentFormStep()) ? true : false ;
         }
 
-        self.determineNextStepIndex = function determineNextStepIndex(direction,next_step) {
+        self.determineNextStepIndex = function determineNextStepIndex(direction, next_step) {
             var ruleset = App.documentModel.getRuleByType('show_step_when');
 
             var target_element = null;
             var target_element_step_id = null;
 
             //@TODO basis for the ruleset evaluation routine
-            for (var x=0; x < ruleset.length; x++) {
+            if (direction == 'next') {
+                return self.determineNextStep(next_step);
+            } else {
+                return self.determinePrevStep(next_step);
+            }
+        }
 
+        self.determinePrevStep = function determinePrevStep(current_step) {
+            for(var step = current_step; step > 0; step--) {
+                if(self.validateStep(step)) {
+                    return step;
+                }
+            }
+
+            return 1;
+        };
+
+        self.determineNextStep = function determineNextStep(current_step) {
+            for(var step = current_step; step < self.maxFormSteps() ; step++) {
+                if(self.validateStep(step)) {
+                    return step;
+                }
+            }
+
+            return self.maxFormSteps();
+        };
+
+        self.validateStep = function validateStep(step) {
+            var ruleset = App.documentModel.getRuleByType('show_step_when');
+            for (var x=0; x < ruleset.length; x++) {
                 if (ruleset[x].target_element != 'undefined') {
                     target_element = $(ruleset[x].target_element);
                     target_element_step_id = target_element.attr('id').replace(/[^\d]+/ig, '');
-                }else{
+                } else {
                     target_element = null;
                     target_element_step_id = null;
                 }
@@ -95,24 +123,14 @@ $(document).ready(function(){
                         if (context_var_name in App.documentModel.context()) {
                             var current_context_value = App.documentModel.context()[context_var_name];
 
-                            // console.log(context_var_name+': '+required_value +'=='+ current_context_value)
-                            // console.log(target_element_step_id +'=='+ next_step)
-                            if (required_value != current_context_value && target_element_step_id == next_step) {
-
-                                if (direction == 'next') {
-                                    next_step = next_step + 1;
-                                }else{
-                                    next_step = next_step - 1;
-                                }
-                                // the ruleset matches 1 or more of the rules
-                                // and the step about to be shown is indeed the target step
-                                return next_step;
+                            if (required_value != current_context_value && target_element_step_id == step) {
+                                return false;
                             }
                         }
                     }
                 }
             }
-            return next_step;
+            return true;
         }
 
         self.determineStepVisibility = function determineStepVisibility(direction,step) {
@@ -127,7 +145,7 @@ $(document).ready(function(){
             //             if (new_step >= self.actualFormSteps) {
             //                 break;
             //             }
-            //         }else{
+            //         } else {
             //             if (new_step <= 1) {
             //                 break;
             //             }
@@ -143,7 +161,7 @@ $(document).ready(function(){
                 if ((index+1) == step) {
                     form_group.css('display', 'block');
                     form_group.removeClass('hidden');
-                }else{
+                } else {
                     form_group.css('display', 'none');
                     form_group.addClass('hidden');
                 }
@@ -155,14 +173,14 @@ $(document).ready(function(){
             var current = self.currentFormStep();
             var next = current+1;
 
-            next = self.determineStepVisibility('next',next);
+            next = self.determineStepVisibility('next', next);
             self.currentFormStep(next);
         }
         self.prev = function prev() {
             var current = self.currentFormStep();
             var prev = current-1;
 
-            prev = self.determineStepVisibility('prev',prev);
+            prev = self.determineStepVisibility('prev', prev);
 
             self.currentFormStep(prev);
         }
@@ -350,7 +368,7 @@ $(document).ready(function(){
                 self.form_fieldset.children().each(function(index,element){
                     if ($(element).attr('id') == $(hide_from_element).attr('id')) {
                         found = true;
-                    }else{
+                    } else {
                         if (found == true) {
                             $(element).hide();
                             self.repeatable_fields.push($(element));
@@ -376,7 +394,7 @@ $(document).ready(function(){
         self.slugify = function slugify(text) {
             if (typeof text == 'boolean') {
                 text = (text === true)?'true':'false';
-            }else{
+            } else {
                 text = text.replace(/[^_-a-zA-Z0-9,&\s]+/ig, '');
                 //text = text.replace(/-/gi, "_");
                 text = text.replace(/\s/gi, "-");
@@ -389,7 +407,7 @@ $(document).ready(function(){
                 var context_value = self.context()[key];
                 if (context_value == value) {
                     return true;
-                }else{
+                } else {
                     // hide the relavant object
                 }
             }
@@ -402,7 +420,7 @@ $(document).ready(function(){
 			if (input.val() != 'undefined' && input.val() != '') {
 			    value = input.val();
 			    is_placeholder_value = false;
-			}else{
+			} else {
 			    value = input.attr('placeholder');
 		    }
 
@@ -528,7 +546,7 @@ $(document).ready(function(){
                 if (ruleset[x].target_element == 'undefined') {
                     target_element = $(ruleset[x].target_element);
                     target_element_step_id = target_element.attr('id').replace(/[^\d]+/ig, '');
-                }else{
+                } else {
                     target_element = null;
                     target_element_step_id = null;
                 }
