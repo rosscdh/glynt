@@ -270,7 +270,24 @@ $(document).ready(function(){
                 for (var c=1; c <= index; c++) {
                     if (c in self.currentLoopSet) {
                         // make it visible again
-                        self.form_fieldset.find('#set-'+c).css('display','');
+                        fieldset = self.form_fieldset.find('#set-'+c);
+                        fieldset.css('display','');
+                        legend = fieldset.find('legend');
+                        legend.html(self.iteration_title + '&nbsp;' + c); // @TODO need to put real title name here
+
+                        // loop over element set of inputs (that are valid)
+                        hb_ob = $.extend({}, hb_base_ob);
+                        hb_ob['id'] = self.iteration_title.toLowerCase() +'_'+ c;
+                        fieldset.children().each(function(index,element){
+                            element = $(element);
+                            element_type = self.getElementType(element);
+                            
+                            if (self.isValidInputType(element_type) === true) {
+                                App.documentModel.setContextItem(element);
+                                hb_ob[element.attr('name')] = element.val();
+                            }
+                        })
+                        self.hb_loop_ob_container()[c] = hb_ob;
                     }else{
                         // deep copy the set
                         fieldset = self.repeatable_fieldset.clone();
@@ -317,6 +334,8 @@ $(document).ready(function(){
                     // hide these elements
                     // $(fieldsets[c]).remove();
                     $(fieldsets[c]).css('display','none');
+                    // @FIXME hack
+                    //delete self.hb_loop_ob_container()[c];
                 }
 
                 // set array grouping context variable to allow handlebarsjs to loop
