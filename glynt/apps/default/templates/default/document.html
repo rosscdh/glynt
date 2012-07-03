@@ -249,11 +249,28 @@ $(document).ready(function(){
             self.repeatable_fields = [];
             self.repeatable_fieldset = null;
             self.currentLoopSet = {}
+            self.hb_loop_ob_container = ko.observableArray([]);
+
+            self.isValidInputType = function isValidInputType(element_type) {
+                if ($.inArray(element_type, self.valid_fieldtypes) != -1) {
+                    return true;
+                }
+                return false;
+            }
+
+            self.getElementType = function getElementType(element) {
+                var element_type = element.attr('type');
+                if (element_type == undefined) {
+                    // textarea?
+                    element_type = element.prop('type');
+                }
+                return element_type;
+            }
 
             self.showIteration = function showIteration(index) {
                 if (self.repeatable_fieldset === null) {
                     // not exists create it
-                    fieldset = $('<fieldset style="display:none;"><legend>&nbsp;</legend>');
+                    fieldset = $('<fieldset class="loop" style="display:none;"><legend>&nbsp;</legend>');
                     for (f in self.repeatable_fields) {
                         field = $(self.repeatable_fields[f]);
                         field.css('display','');
@@ -265,7 +282,8 @@ $(document).ready(function(){
                 // @TODO remove redundant items from the list, to allow fro increase and decrease of index
                 // ruleset if they reduce ie.. 5 to 2 then 3,4,5 are deleted
                 // @TODO make methods
-                var fieldsets = self.form_fieldset.find('fieldset');            
+                var fieldsets = self.form_fieldset.find('fieldset');
+                var hb_base_ob = {};
 
                 for (var c=1; c <= index; c++) {
                     if (c in self.currentLoopSet) {
@@ -279,16 +297,16 @@ $(document).ready(function(){
                         fieldset.attr('id', 'set-'+c)
                         legend = fieldset.find('legend');
                         legend.html(self.iteration_title + '&nbsp;' + c); // @TODO need to put real title name here
+
                         // loop over element set of inputs (that are valid)
+                        hb_ob = $.extend({}, hb_base_ob);
+                        hb_ob['id'] = self.iteration_title.toLowerCase() +'_'+ c;
+
                         fieldset.children().each(function(index,element){
                             element = $(element);
-                            element_type = element.attr('type');
-                            if (element_type == undefined) {
-                                // textarea?
-                                element_type = element.prop('type');
-                            }
+                            element_type = self.getElementType(element);
                             
-                            if ($.inArray(element_type, self.valid_fieldtypes) != -1) {
+                            if (self.isValidInputType(element_type) === true) {
                                 // update id to be unique
                                 old_id = element.attr('id');
                                 new_id = old_id + '_' + c;
@@ -302,10 +320,13 @@ $(document).ready(function(){
 
                                 // set the context params
                                 App.documentModel.setContextItem(element);
+
+                                hb_ob[old_name] = element.val();
                             }
                         });
                         self.form_fieldset.append(fieldset);
                         self.currentLoopSet[c] = true;
+                        self.hb_loop_ob_container().push(hb_ob);
                     }
                 }
 
@@ -315,10 +336,11 @@ $(document).ready(function(){
                     // $(fieldsets[c]).remove();
                     $(fieldsets[c]).css('display','none');
                 }
-            }
 
-            self.delIteration = function delIteration(index) {
-
+                // set array grouping context variable to allow handlebarsjs to loop
+                var hb_loop_key = 'loop_' + self.iteration_title.toLowerCase();
+                App.documentModel.setContextItemByForce(hb_loop_key, self.hb_loop_ob_container());
+                App.render();
             }
 
             self.init = function init(){
@@ -383,10 +405,8 @@ $(document).ready(function(){
 			    value = input.attr('placeholder');
 		    }
 
-            if (self.textElementsList.indexOf(input.attr('type')) >= 0) {
-                //if (is_placeholder_value === true) {
+            if (self.textElementsList.indexOf(input.attr('type')) >= 0 || self.textElementsList.indexOf(input.prop('type')) >= 0) {
                     value = '_**' + value.toString() + '**_';
-                //}
             }
 
             if (self.textElementsList.indexOf(input.attr('type')) == -1) {
@@ -610,16 +630,40 @@ $(document).ready(function(){
         }
     });
 
+    $('form.bind-document fieldset.loop').live('change', function(event){
+        var id_index = $(this).attr('id');
+        $(this).find('input,textarea').each(function(index,element){
+            var target_id = $(element).attr('id');
+            var target_value = $(element).val();
+            var tmp = target_id.split('_');
+            target_id = parseInt(tmp[tmp.length-1]);
+            var target_name = $(element).attr('data-hb-name');
+            if (target_name != undefined) {
+                target_name = target_name.replace('_'+target_id,'')
+            }
+            if (typeof target_id == 'number' && target_name != undefined) {
+                $.each(App.documentModel.loopStepList(), function(index,loopstep){
+                    $.each(loopstep.hb_loop_ob_container(), function(index,element){
+                        var item_id = element['id'].split('_');
+                        item_id = parseInt(item_id[item_id.length-1]);
+                        //console.log(target_value)
+                        if (item_id === target_id) {
+                            element[target_name] = target_value;
+                        }
+                    });
+                })
+            }
+        })
+        App.render();
+    });
+
     $('form.bind-document span.step-title').each(function() {
         var element = $(this).closest('div').find('input[data-step-title]');
         $(this).text(element.attr('data-step-title'));
     });
 
     $('.md-updater').live('change', function(event){
-    	var name = $(this).attr('data-hb-name');
-    	var value = $(this).val();
         App.changeContext($(this));
-        //console.log(App.documentModel.context())
     })
 });
 </script>
