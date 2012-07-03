@@ -176,7 +176,9 @@ $(document).ready(function(){
 		self.handlebarsElementId = ko.observable('script#js-{{ doc }}');
 		self.documentTemplate = ko.observable($(self.handlebarsElementId()).html());
 		self.renderedHTML = ko.observable('');
+
         self.visibilityRuleset = ko.observableArray([]);
+        self.loopStepList = ko.observable({});
 
         function Rule(element,target_element,ruleset){
             var self = this;
@@ -222,19 +224,91 @@ $(document).ready(function(){
 
         function LoopStep(form_fieldset, hide_from_element){
             var self = this;
-            self.form_fieldset = (form_fieldset != undefined)?form_fieldset:null,
-            self.hide_from_element = (hide_from_element != undefined)?hide_from_element:null,
+            self.form_fieldset = (form_fieldset != undefined)?form_fieldset:null;
+            self.hide_from_element = (hide_from_element != undefined)?hide_from_element:null;
+            self.valid_fieldtypes = ['text','select','textarea','radio','checkbox']
+            self.repeatable_fields = [];
+            self.repeatable_fieldset = null;
+            self.currentFieldsetLength = 0;
+            self.currentLoopSet = {}
+
+            self.showIteration = function showIteration(index) {
+                if (self.repeatable_fieldset === null) {
+                    // not exists create it
+                    fieldset = $('<fieldset style="display:none;"><legend>&nbsp;</legend>');
+                    for (f in self.repeatable_fields) {
+                        field = $(self.repeatable_fields[f]);
+                        field.css('display','');
+                        fieldset.append(field);
+                    }
+                    self.repeatable_fieldset = fieldset;
+                }
+
+                // @TODO remove redundant items from the list, to allow fro increase and decrease of index
+                // ruleset if they reduce ie.. 5 to 2 then 3,4,5 are deleted
+                // @TODO make methods
+                var found_counter = 1;
+
+                if (index < self.currentFieldsetLength) {
+                    self.form_fieldset = self.form_fieldset.slice(0,index+1)
+                    var fieldsets = self.form_fieldset.find('fieldset');
+                    for (var c=index; c <= fieldsets.length; c++) {
+                        // hide these elements
+                        // $(fieldsets[c]).remove();
+                        $(fieldsets[c]).css('display','none');
+                        self.currentFieldsetLength--;
+                    }
+                }
+
+                for (var c=1; c <= index; c++) {
+                    if (c in self.currentLoopSet) {
+                        // make it visible again
+                    }else{
+                        fieldset = self.repeatable_fieldset.clone();
+
+                        fieldset.css('display','block');
+                        fieldset.attr('id', '-set-'+c)
+                        legend = fieldset.find('legend');
+                        legend.html('Step : ' + c);
+
+
+                        fieldset.children().each(function(index,element){
+                            element = $(element);
+                            element_type = element.attr('type');
+                            
+                            if ($.inArray(element_type, self.valid_fieldtypes) != -1) {
+                                old_id = element.attr('id');
+                                new_id = old_id + '_' + found_counter;
+                                element.attr('id', new_id);
+                                old_name = element.attr('name');
+                                new_name = old_name + '_' + found_counter;
+                                element.attr('name', new_name);
+
+                                found_counter++;
+                                self.currentFieldsetLength = found_counter;
+                            }
+                        });
+
+                        self.form_fieldset.append(fieldset);
+                        self.currentLoopSet[c] = true;
+                    }
+                }
+            }
+
+            self.delIteration = function delIteration(index) {
+
+            }
 
             self.init = function init(){
+            // loop over form elements find the from element and hide all those after
                 var found = false;
-                var repeatable_fieldset = []
                 self.form_fieldset.children().each(function(index,element){
                     if ($(element).attr('id') == $(hide_from_element).attr('id')) {
                         found = true;
                     }else{
                         if (found == true) {
                             $(element).hide();
-                            repeatable_fieldset.push($(element));
+                            self.repeatable_fields.push($(element));
                         }
                     }
 
@@ -244,8 +318,15 @@ $(document).ready(function(){
             self.init();
         };
 
+        self.showLoopStep = function showLoopStep(element, num) {
+console.log('number to create: ' + num); 
+            var formset_id = $($(element).closest('div.form-group')[0]).attr('id');
+            self.loopStepList()[formset_id].showIteration(num);
+        }
+
         self.setLoopStep = function setLoopStep(form_fieldset, hide_from_element) {
-            var loopset = new LoopStep(form_fieldset, hide_from_element);
+            var formset_id = $($(hide_from_element).closest('div.form-group')[0]).attr('id');
+            self.loopStepList()[formset_id] = new LoopStep(form_fieldset, hide_from_element);
         }
 
         self.slugify = function slugify(text) {
@@ -381,9 +462,8 @@ $(document).ready(function(){
             $('form.bind-document input[data-glynt-loop_step]').each(function(index,element){
                 var form_fieldset = $(element).closest('div.form-group');
                 var data = eval($(element).attr('data-glynt-loop_step'))[0];
-                var hide_from_element = $('input[name='+ data['hide_from'] +']')[0];
+                var hide_from_element = $('[name='+ data['hide_from'] +']')[0];
                 
-                // loopset = loopset[0];// javascript json weirdness
                 self.documentModel.setLoopStep(form_fieldset, hide_from_element);
             });
         }
@@ -499,11 +579,13 @@ $(document).ready(function(){
     // ----- KO Bindings -----
     ko.applyBindings(App);
 
-    testCallback = function() {
-alert('fdafds')
-    }
 
-    $('.md-updater').live('mouseout', function(event){
+    $('form.bind-document [data-glynt-loop_length]').live('change', function(event){
+        var num = parseInt($(this).val());
+        
+        if (typeof num == 'number'){
+            App.documentModel.showLoopStep($(this), num);
+        }
     });
 
     $('form.bind-document span.step-title').each(function() {
