@@ -13,16 +13,21 @@ middleware here, or combine a Django application with an application of another
 framework.
 
 """
-import os
+import os, sys, site
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "glynt.settings")
+# Tell wsgi to add the Python site-packages to its path. 
+site.addsitedir('/home/stard0g101/.virtualenvs/cartvine_shoppers/lib/python2.6/site-packages')
+site.addsitedir('/home/stard0g101/webapps/cartvine_shoppers/glynt')
 
-# This application object is used by any WSGI server configured to use this
-# file. This includes Django's development server, if the WSGI_APPLICATION
-# setting points here.
-from django.core.wsgi import get_wsgi_application
-application = get_wsgi_application()
+os.environ['DJANGO_SETTINGS_MODULE'] = 'glynt.settings'
 
-# Apply WSGI middleware here.
-# from helloworld.wsgi import HelloWorldApplication
-# application = HelloWorldApplication(application)
+activate_this = os.path.expanduser("~/.virtualenvs/cartvine_shoppers/bin/activate_this.py")
+execfile(activate_this, dict(__file__=activate_this))
+
+# Calculate the path based on the location of the WSGI script
+project = '/home/stard0g101/webapps/cartvine_shoppers/glynt/glynt/'
+workspace = os.path.dirname(project)
+sys.path.append(workspace)
+
+from django.core.handlers.wsgi import WSGIHandler
+application = WSGIHandler()
