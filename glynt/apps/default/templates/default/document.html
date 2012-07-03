@@ -247,7 +247,7 @@ $(document).ready(function(){
                 // @TODO remove redundant items from the list, to allow fro increase and decrease of index
                 // ruleset if they reduce ie.. 5 to 2 then 3,4,5 are deleted
                 // @TODO make methods
-                var found_counter = 0;
+                var found_counter = 1;
                 var fieldsets = self.form_fieldset.find('fieldset');            
 
                 for (var c=1; c <= index; c++) {
@@ -273,6 +273,11 @@ $(document).ready(function(){
                                 old_name = element.attr('name');
                                 new_name = old_name + '_' + found_counter;
                                 element.attr('name', new_name);
+
+                                element.attr('data-hb-name', new_name);
+
+                                // set the context params
+                                App.documentModel.setContextItem(element);
 
                                 found_counter++;
                             }
