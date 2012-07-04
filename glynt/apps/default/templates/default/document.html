@@ -5,6 +5,7 @@
 {% block form %}
 
     <div class="row">
+    <div id="messages" data-bind="html: App.message"></div>
     <div class="controls pull-right">
         <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-primary btn-mini btn-prev" type="button" data-bind="click: App.formControls.prev">Previous</button></span>
         <span data-bind="visible: App.formControls.showNext()"><button id="btn-next" class="btn btn-primary btn-mini btn-next" type="button" data-bind="click: App.formControls.next">Next</button></span>
@@ -153,15 +154,21 @@ $(document).ready(function(){
             var current = self.currentFormStep();
             var next = current+1;
 
+            // async cant wait for valid or not
+            App.submitForm(current, $('form#glynt-doc-' + current));
+
             next = self.determineStepVisibility('next', next);
             self.currentFormStep(next);
+
         }
         self.prev = function prev() {
             var current = self.currentFormStep();
             var prev = current-1;
 
+            // async cant wait for valid or not
+            App.submitForm(current, $('form#glynt-doc-' + current));
+            
             prev = self.determineStepVisibility('prev', prev);
-
             self.currentFormStep(prev);
         }
     }
@@ -493,6 +500,7 @@ $(document).ready(function(){
         self.targetDocumentId = ko.observable('span#document-md');
         self.documentModel = new DocumentModel();
         self.formControls = new FormControls();
+        self.message = ko.observable(null);
 
         self.setGlyntRuleset = function setGlyntRuleset() {
             // loop over lements looking for rulesets
@@ -593,33 +601,43 @@ $(document).ready(function(){
             self.render();
         }
 
-        self.validateForms = function validateForms() {
+        self.validateAllForms = function validateAllForms() {
             // working on the debug
             //return true;
             var errorList = [];
             var is_valid = false;
-
             $('form.bind-document').each(function(step, form){
-                var form = $(form);
-                $.ajax({
-                  type: 'POST',
-                  url: "{% url 'document:generic' doc=doc %}?step="+step,
-                  data: form.serialize(),
-                })
-                .success(function(data, textStatus, jqXHR) {
-                    //var data = eval(data);
-                    console.log(data)
-                    is_valid = true;
-                })
-                .error(function() { 
-                    console.log('error');
-                    is_valid = false;
-                })
-                .complete(function() {});
-            })
-
+                form = $(form);
+                self.submitForm(step, form);
+            });
 
             return is_valid;
+        }
+
+        self.submitForm = function submitForm(step, form) {
+            var is_valid = false;
+            $.ajax({
+              type: 'POST',
+              url: "{% url 'document:generic' doc=doc %}?step="+step,
+              data: form.serialize(),
+            })
+            .success(function(data, textStatus, jqXHR) {
+                //var data = eval(data);
+                console.log('Valid Data')
+                //self.message('<ul><li>Submit Success for step '+step+'</li></ul>')
+                is_valid = true;
+            })
+            .error(function() { 
+                console.log('error');
+                self.message('<ul><li>An error ocurred</li></ul>')
+                is_valid = false;
+            })
+            .complete(function() {});
+            return is_valid;
+        }
+
+        self.showErrorMessage = function showErrorMessage(msg) {
+
         }
 
         self.postDocument = function postDocument() {
@@ -702,7 +720,7 @@ $(document).ready(function(){
     })
     $('button#btn-post-pdf').live('click', function(event){
         event.preventDefault();
-        if (App.validateForms() == true) {
+        if (App.validateAllForms() == true) {
             App.postDocument();
         }
     });
