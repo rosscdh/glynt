@@ -22,7 +22,7 @@
     {% endfor %}
     <div id="form-group-{{ form_set|length }}" class="form-group hidden" data-bind="visible: App.formControls.isLastStep()">
         <div class="span3">
-            <button id="btn-post-pdf" class="btn btn-success" type="button" data-bind="click: App.postDocument">Get Contract</button>
+            <button id="btn-post-pdf" class="btn btn-success" type="button">Get Contract</button>
         </div>
     </div>
 </form>
@@ -136,22 +136,6 @@ $(document).ready(function(){
         self.determineStepVisibility = function determineStepVisibility(direction,step) {
 
             new_step = self.determineNextStepIndex(direction,step);
-
-            // if (new_step != step) {
-            //     // reevaluate
-            //     while(new_step != new_step) {
-            //         new_step = self.determineNextStepIndex(direction,new_step);
-            //         if (direction == 'next') {
-            //             if (new_step >= self.actualFormSteps) {
-            //                 break;
-            //             }
-            //         } else {
-            //             if (new_step <= 1) {
-            //                 break;
-            //             }
-            //         }
-            //     }
-            // }
 
             step = new_step;
 
@@ -627,10 +611,15 @@ $(document).ready(function(){
               data: data,
             })
             .success(function(data, textStatus, jqXHR) {
+                var data = eval(data);
+                var filename = data[0].filename;
+                window.open(filename, 'pdf');
             })
             .error(function() { 
+                alert('error')
             })
-            .complete(function() {});
+            .complete(function() {
+            });
         }
 
         self.init();
@@ -686,6 +675,11 @@ $(document).ready(function(){
     $('.md-updater').live('change', function(event){
         App.changeContext($(this));
     })
+    $('button#btn-post-pdf').live('click', function(event){
+        event.preventDefault();
+        App.postDocument();
+    });
+    
 });
 </script>
 

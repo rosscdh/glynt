@@ -10,7 +10,15 @@ from django.template.defaultfilters import slugify
 from django.http import HttpResponseRedirect
 from django.contrib.formtools.wizard.views import SessionWizardView
 
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+
 from models import Document
+
+import markdown
+import xhtml2pdf.pisa as pisa
+import cStringIO as StringIO
+import datetime
 
 from forms import AssassinStep1, AssassinStep2
 from forms import WillStep1, WillStep2, WillStep3, WillStep4, WillStep5, WillStep6, WillStep7
@@ -45,14 +53,18 @@ class DocumentView(TemplateView):
 
 class DocumentExportView(View):
     def post(self, request, *args, **kwargs):
-        response = HttpResponse(mimetype='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename=somefilename.pdf'
+        content_markdown = request.POST.get('md')
 
-        # p = canvas.Canvas(response)
+        html = markdown.markdown(content_markdown)
 
-        # p.drawString(100, 100, "Hello world.")
-        # p.showPage()
-        # p.save()
+        result = StringIO.StringIO()
+        pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result)
 
+        file_name = 'doc_gen/%ssome_pdf_customized_name.pdf' %(datetime.datetime.utcnow(),)
+
+        if not pdf.err:
+            pdf_file = default_storage.save(file_name, ContentFile(result.getvalue()))
+
+        response = HttpResponse('[{"filename":"%s%s"}]'%(settings.MEDIA_URL,file_name), status=200, content_type="text/json")
         return response
 
