@@ -3,7 +3,7 @@
 {% load url from future %}
 
 {% block form %}
-<form class="bind-document">{% csrf_token %}
+<form id="glynt-doc" class="bind-document">{% csrf_token %}
     <div class="row">
     <div class="controls pull-right">
         <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-primary btn-mini btn-prev" type="button" data-bind="click: App.formControls.prev">Previous</button></span>
@@ -591,6 +591,30 @@ $(document).ready(function(){
             self.render();
         }
 
+        self.validateForm = function validateForm() {
+            // working on the debug
+            return true;
+
+            var is_valid = false;
+
+            $.ajax({
+              type: 'POST',
+              url: "{% url 'document:generic' doc=doc %}?step="+step,
+              data: $('form#glynt-doc').serialize(),
+            })
+            .success(function(data, textStatus, jqXHR) {
+                var data = eval(data);
+                console.log(data)
+                is_valid = true;
+            })
+            .error(function() { 
+                console.log('error');
+                is_valid = false;
+            })
+            .complete(function() {});
+            return is_valid;
+        }
+
         self.postDocument = function postDocument() {
 
             var csrf_token = $('form.bind-document:first').find('input[type=hidden]:first')
@@ -671,7 +695,9 @@ $(document).ready(function(){
     })
     $('button#btn-post-pdf').live('click', function(event){
         event.preventDefault();
-        App.postDocument();
+        if (App.validateForm() == true) {
+            App.postDocument();
+        }
     });
     
 });

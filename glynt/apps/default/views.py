@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.template import loader, Context
 from django.views.generic.base import View, TemplateView
+from django.views.generic.edit import FormMixin
 from django.template.defaultfilters import slugify
 from django.http import HttpResponseRedirect
 from django.contrib.formtools.wizard.views import SessionWizardView
@@ -30,7 +31,7 @@ FORM_GROUPS = {
     'legal-will': [WillStep7, WillStep1, WillStep2, WillStep3, WillStep4, WillStep5, WillStep6],
 }
 
-class DocumentView(TemplateView):
+class DocumentView(TemplateView, FormMixin):
 
     def get_context_data(self, **kwargs):
         context = super(DocumentView, self).get_context_data(**kwargs)
@@ -49,6 +50,20 @@ class DocumentView(TemplateView):
         context['form_set'] = FORM_GROUPS[document_slug]
 
         return context
+
+    def get_form(self):
+        """
+        Returns the form class to use in this view
+        """
+        step = self.request.GET.get('step')
+        return FORM_GROUPS[self.kwargs['doc']][step-1]
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form(form_class)
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
 
 class DocumentExportView(View):
