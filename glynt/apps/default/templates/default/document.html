@@ -306,6 +306,7 @@ $(document).ready(function(){
                         //console.log('new element')
                         hb_ob = $.extend({}, hb_base_ob);
                         hb_ob['id'] = self.iteration_title.toLowerCase() +'_'+ c;
+                        hb_ob['index'] = c;
                         // new so create it based on default
                         // deep copy the set
                         fieldset = self.repeatable_fieldset.clone();
