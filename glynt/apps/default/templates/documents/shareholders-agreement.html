@@ -1,0 +1,45 @@
+{% load i18n webdesign templatetag_handlebars %}
+{% tplhandlebars "js-shareholders-agreement" %}
+## {{document.title}} ##
+
+This is the last Will  testament of me, "{{full_name}}"" {{#if has_other_alias}}also known as "{{other_alias}}""{{/if}} of _"{{home_address}}"_. {{#if has_partnership}}Who is {{#if _partnership_married}}Married to{{/if}}{{#if _partnership_civil_partnership}}in a Civil Partnership with{{/if}} "{{partner_full_name}}" of _"{{partner_home_address}}"_.{{/if}}
+
+### 1. DECLARATION ###
+
+{{#if has_partnership}}
+I  that although {{partner_full_name}} and I are making Wills in terms similar to the terms of this Will,  two Wills are  intended to be mutually irrevocable  we are both free to  the     in any way and  any time without reference to the other.
+{{else}}
+Decleration about other partnership
+{{/if}}
+
+### 1a. SHAREHOLDERS ###
+{{#each loop_shareholder}}
+**Shareholder {{this.index}}:**  
+> **Name**: {{this.shareholder_name}}  
+> **Address**: {{this.shareholder_address}}
+
+{{/each}}
+### 2. REVOCATION ###
+
+ hereby   former  and  dispositions made by me.
+
+### 3. CREMATION ###
+
+I   body to be cremated.
+
+### 4. APPOINTMENT OF EXECUTORS ###
+
+ appoint  the s and s of this my Will:
+
+{{#if has_partnership}}
+4.4. My {{#if _partnership_married}}Wife{{/if}}{{#if _partnership_civil_partnership}}Partner{{/if}} "{{partner_full_name}}" of {{partner_home_address}}; {{#if has_executor}}and{{/if}}
+{{/if}}
+{{#if has_executor}}
+4.4. {{executor_full_name}} of {{executor_address}}
+{{/if}}
+
+### 5. RESIDUE ###
+
+... etc
+
+{% endtplhandlebars %}
