@@ -35,12 +35,12 @@ class DocumentView(TemplateView, FormMixin):
 
     def get_context_data(self, **kwargs):
         context = super(DocumentView, self).get_context_data(**kwargs)
-        context['doc'] = kwargs['doc']
+        context['doc'] = self.kwargs['doc']
 
         # the context that will render the requested documents inner details
         document_context = Context(context)
-        document_template = 'documents/%s.html' %(kwargs['doc'],)
-        document_slug = slugify(kwargs['doc'])
+        document_template = 'documents/%s.html' %(self.kwargs['doc'],)
+        document_slug = slugify(self.kwargs['doc'])
 
         document = Document.objects.get(slug=document_slug)
         context['object'] = document
@@ -51,15 +51,22 @@ class DocumentView(TemplateView, FormMixin):
 
         return context
 
-    def get_form(self):
+    def get_form_class(self):
         """
         Returns the form class to use in this view
         """
-        step = self.request.GET.get('step')
-        return FORM_GROUPS[self.kwargs['doc']][step-1]
+        step = int(self.request.GET.get('step', 0))
+        if step > 0:
+            step = step - 1
+        print step
+        print self.kwargs['doc']
+
+        return FORM_GROUPS[self.kwargs['doc']][step]
 
     def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
         form = self.get_form(form_class)
+
         if form.is_valid():
             return self.form_valid(form)
         else:

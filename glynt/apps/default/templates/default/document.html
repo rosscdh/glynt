@@ -3,7 +3,7 @@
 {% load url from future %}
 
 {% block form %}
-<form id="glynt-doc" class="bind-document">{% csrf_token %}
+
     <div class="row">
     <div class="controls pull-right">
         <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-primary btn-mini btn-prev" type="button" data-bind="click: App.formControls.prev">Previous</button></span>
@@ -11,12 +11,14 @@
     </div>
     </div>
     {% for form in form_set %}
+    <form id="glynt-doc-{{ forloop.counter }}" class="bind-document">{% csrf_token %}
     <div id="form-group-{{ forloop.counter }}" class="form-group {% if not forloop.first %}hidden{% endif %}">
         <h4>Step {{ forloop.counter }}. of {{ form_set|length }}</h4>
         <h4><span class="step-title"></span></h4>
         <br/>
         {{form}}
     </div>
+    </form>
     {% if forloop.last %}
     {% endif %}
     {% endfor %}
@@ -25,7 +27,7 @@
             <button id="btn-post-pdf" class="btn btn-success" type="button">Get Contract</button>
         </div>
     </div>
-</form>
+
 {% endblock %}
 
 {% block document %}
@@ -591,27 +593,32 @@ $(document).ready(function(){
             self.render();
         }
 
-        self.validateForm = function validateForm() {
+        self.validateForms = function validateForms() {
             // working on the debug
-            return true;
-
+            //return true;
+            var errorList = [];
             var is_valid = false;
 
-            $.ajax({
-              type: 'POST',
-              url: "{% url 'document:generic' doc=doc %}?step="+step,
-              data: $('form#glynt-doc').serialize(),
+            $('form.bind-document').each(function(step, form){
+                var form = $(form);
+                $.ajax({
+                  type: 'POST',
+                  url: "{% url 'document:generic' doc=doc %}?step="+step,
+                  data: form.serialize(),
+                })
+                .success(function(data, textStatus, jqXHR) {
+                    //var data = eval(data);
+                    console.log(data)
+                    is_valid = true;
+                })
+                .error(function() { 
+                    console.log('error');
+                    is_valid = false;
+                })
+                .complete(function() {});
             })
-            .success(function(data, textStatus, jqXHR) {
-                var data = eval(data);
-                console.log(data)
-                is_valid = true;
-            })
-            .error(function() { 
-                console.log('error');
-                is_valid = false;
-            })
-            .complete(function() {});
+
+
             return is_valid;
         }
 
@@ -695,7 +702,7 @@ $(document).ready(function(){
     })
     $('button#btn-post-pdf').live('click', function(event){
         event.preventDefault();
-        if (App.validateForm() == true) {
+        if (App.validateForms() == true) {
             App.postDocument();
         }
     });

@@ -33,9 +33,9 @@ class WillStep3(forms.Form):
 
 class WillStep4(forms.Form):
     step_title = forms.CharField(max_length=100, widget=forms.HiddenInput(attrs={'data-step-title':'Your name & alias'}))
-    full_name = forms.CharField(label='What is your full name?',max_length=100, widget=forms.TextInput(attrs={'placeholder':'Your Full Name','class':'md-updater','data-hb-name':'full_name'}))
+    full_name = forms.CharField(label='What is your full name?',required=True,max_length=100, widget=forms.TextInput(attrs={'placeholder':'Your Full Name','class':'md-updater','data-hb-name':'full_name'}))
     other_alias = forms.CharField(label='If you are known by any other name, enter it here.',max_length=100, widget=forms.TextInput(attrs={'placeholder':'Your Alias','class':'md-updater','data-hb-name':'other_alias'}))
-    home_address = forms.CharField(label='What is your current home address?',widget=forms.Textarea(attrs={'placeholder':'Your Home Address','class':'md-updater','data-hb-name':'home_address'}))
+    home_address = forms.CharField(label='What is your current home address?',required=True,widget=forms.Textarea(attrs={'placeholder':'Your Home Address','class':'md-updater','data-hb-name':'home_address'}))
 
 class WillStep5(forms.Form):
     step_title = forms.CharField(max_length=100, widget=forms.HiddenInput(attrs={'data-step-title':'Partner Details', 'data-glynt-rule':'[{show_step_when:{has_partnership:true}}]'}))
