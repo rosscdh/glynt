@@ -3,13 +3,8 @@
 {% load url from future %}
 
 {% block form %}
-
     <div class="row">
-    <div id="messages" data-bind="html: App.message"></div>
-    <div class="controls pull-right">
-        <div class="span1 pull-left">&nbsp;<span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-primary btn-mini btn-prev" type="button" data-bind="click: App.formControls.prev">Previous</button></span></div>
-        <div class="span1 pull-right">&nbsp;<span data-bind="visible: App.formControls.showNext()"><button id="btn-next" class="btn btn-primary btn-mini btn-next" type="button" data-bind="click: App.formControls.next">Next</button></span></div>
-    </div>
+        <div id="messages" data-bind="html: App.message"></div>
     </div>
     {% for form in form_set %}
     <form id="glynt-doc-{{ forloop.counter }}" class="bind-document">{% csrf_token %}
@@ -23,6 +18,12 @@
     {% if forloop.last %}
     {% endif %}
     {% endfor %}
+    <div class="row">
+        <div class="controls pull-right">
+            <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-primary btn-small btn-prev" type="button" data-bind="click: App.formControls.prev">Previous</button></span>
+            <span data-bind="visible: App.formControls.showNext()"><button id="btn-next" class="btn btn-success btn-small btn-next" type="button" data-bind="click: App.formControls.next">Next</button></span>
+        </div>
+    </div>
     <div id="form-group-{{ form_set|length }}" class="form-group hidden" data-bind="visible: App.formControls.isLastStep()">
         <div class="span3">
             <button id="btn-post-pdf" class="btn btn-success" type="button">Get Contract</button>
@@ -414,7 +415,7 @@ $(document).ready(function(){
 		    }
 
             if (self.textElementsList.indexOf(input.attr('type')) >= 0 || self.textElementsList.indexOf(input.prop('type')) >= 0) {
-                    value = '_**' + value.toString() + '**_';
+                    value = '[' + value.toString() + ']';
             }
 
             if (self.textElementsList.indexOf(input.attr('type')) == -1) {
