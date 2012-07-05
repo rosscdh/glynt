@@ -3,7 +3,7 @@
 {% load url from future %}
 
 {% block form %}
-    <div class="row">
+    <div id="docu-form-head" class="row">
         <div id="messages" data-bind="html: App.message"></div>
     </div>
     {% for form in form_set %}
@@ -24,9 +24,9 @@
             <span data-bind="visible: App.formControls.showNext()"><button id="btn-next" class="btn btn-success btn-small btn-next" type="button" data-bind="click: App.formControls.next">Next</button></span>
         </div>
     </div>
-    <div id="form-group-{{ form_set|length }}" class="form-group hidden" data-bind="visible: App.formControls.isLastStep()">
+    <div id="form-group-{{ form_set|length }}" class="form-group hidden row" data-bind="visible: App.formControls.isLastStep()">
         <div class="span3">
-            <button id="btn-post-pdf" class="btn btn-success" type="button">Get Contract</button>
+            <button id="btn-post-pdf" class="btn btn-success" type="button">Generate PDF</button>
         </div>
     </div>
 
