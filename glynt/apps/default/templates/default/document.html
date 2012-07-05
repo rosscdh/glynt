@@ -627,9 +627,10 @@ $(document).ready(function(){
                 //self.message('<ul><li>Submit Success for step '+step+'</li></ul>')
                 is_valid = true;
             })
-            .error(function() { 
-                console.log('error');
-                self.message('<ul><li>An error ocurred</li></ul>')
+            .error(function(jqXHR, textStatus, errorThrown) { 
+                console.log('error: ');
+                console.log(jqXHR)
+                self.message('<ul><li>An error ocurred: '+ jqXHR +' '+ textStatus +'</li></ul>')
                 is_valid = false;
             })
             .complete(function() {});
