@@ -28,7 +28,7 @@ class WillStep1(forms.Form):
 class WillStep2(forms.Form):
     step_title = forms.CharField(max_length=100, widget=forms.HiddenInput(attrs={'data-step-title':'Number of Shareholders', 'data-glynt-loop_step':"[{hide_from:'num_shareholders',iteration_title:'Shareholder'}]"}))
     num_shareholders = forms.ChoiceField(label='How many shareholders are there in your company?',choices=(('0','-----'),('1','1'),('2','2'),('3','3'),('4','4'),),initial=0, widget=forms.Select(attrs={'data-glynt-loop_length':''}))
-    shareholder_type = forms.ChoiceField(label='Is the shareholder a company?',choices=(('company','Yes'),('Person','No')),widget=forms.RadioSelect(attrs={'class':'md-updater','data-hb-name':'shareholder_type'}))
+    shareholder_type = forms.ChoiceField(label='Is the shareholder a company?',choices=(('company','Yes'),('person','No')),widget=forms.RadioSelect(attrs={'class':'md-updater','data-hb-name':'shareholder_type'}))
     shareholder_name = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'placeholder':'Shareholder Name','class':'md-updater','data-hb-name':'shareholder_name'}))
     shareholder_address = forms.CharField(max_length=255,widget=forms.Textarea(attrs={'placeholder':'Shareholder Address including Zip','class':'md-updater','data-hb-name':'shareholder_address'}))
     shareholder_shares = forms.CharField(max_length=255,widget=forms.TextInput(attrs={'placeholder':'Number of shares held','class':'md-updater','data-hb-name':'shareholder_shares'}))

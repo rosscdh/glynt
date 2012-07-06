@@ -4,12 +4,6 @@
 
 {% block form %}
 <form id="glynt-doc" class="bind-document">{% csrf_token %}
-    <div class="row">
-        <div class="controls pull-right">
-            <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-primary btn-mini btn-prev" type="button" data-bind="click: App.formControls.prev">Previous</button></span>
-            <span data-bind="visible: App.formControls.showNext()"><button id="btn-next" class="btn btn-primary btn-mini btn-next" type="button" data-bind="click: App.formControls.next">Next</button></span>
-        </div>
-    </div>
     {% for form in form_set %}
     <div id="form-group-{{ forloop.counter }}" class="form-group {% if not forloop.first %}hidden{% endif %}">
         <h4>Step {{ forloop.counter }}. of {{ form_set|length }}</h4>
@@ -705,7 +699,11 @@ $(document).ready(function(){
             App.postDocument();
         }
     });
-    
+
+    Handlebars.registerHelper('get', function(obj, prop) {
+      return obj[prop];
+    });
+
 });
 </script>
 
