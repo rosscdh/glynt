@@ -251,23 +251,21 @@ $(document).ready(function(){
                 // console.log(element.attr('type'))
                 
                 if (element.attr('type') == 'radio' || element.attr('type') == 'checkbox') {
-                    for (o in element) {
-                        console.log(o)
+                    var helper = App.documentModel.getTemplateHelperKey(element);
+                    var slug = helper['slug'];
+                    var key = helper['id_free_key'];
+
+                    local_context[key] = true;
+
+                    for (context_key in App.documentModel.context()) {
+                        if (context_key.indexOf(slug) >= 0) {
+                            // found it
+                            if (context_key != key) {
+                                local_context[key] = false;
+                            }
+                        }
                     }
                 }
-                // var key = template_helper['key']
-                // // set the base key value for this input
-                // self.setContextItemByForce(key, true);
-
-                // // then reset the _ and has attributes for items that have the same slug but not the same value ie are in teh same radio/checkbox group
-                // for (context_key in self.context()) {
-                //     if (context_key.indexOf(slug) >= 0) {
-                //         // found it
-                //         if (context_key != key) {
-                //             self.setContextItemByForce(context_key, false);
-                //         }
-                //     }
-                // }
                 return local_context;
             }
 
@@ -467,11 +465,13 @@ $(document).ready(function(){
             var slug = self.slugify(input.attr('data-hb-name'));
             var value_slug = self.slugify(value);
             var key = '_' + slug + '_' + value_slug;
+            var id_free_key = key.replace(/_[\d]+/ig, '');
 
             return {
                 'value': value,
                 'slug': slug,
                 'value_slug': value_slug,
+                'id_free_key': id_free_key,
                 'key': key,
             }
 
