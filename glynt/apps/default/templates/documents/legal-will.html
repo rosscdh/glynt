@@ -103,9 +103,13 @@
     <li>5.2.	Each Shareholder may nominate {{company_director_noms}} board member(s).</li>
     <li>
     <ol>
-	  {{#each loop_shareholder_noms}}
-      <li>5.2.1.	{{shareholder_nom_name}} may appoint {{shareholder_nom_allowed}} additional Director(s)</li>
-    {{/each}}
+  {{#if loop_shareholder_noms}}
+    <ol>
+    {{#each loop_shareholder_noms}}
+      <li>5.2.1.  {{shareholder_nom_name}} may appoint {{shareholder_nom_allowed}} additional Director(s)</li>
+      {{/each}}
+    </ol>
+  {{/if}}
     </ol>
 	</li>
   </ol>
