@@ -102,13 +102,11 @@
     <li>5.1.	The maximum number of Directors holding office at any time shall be {{company_max_directors}}.</li>
     <li>5.2.	Each Shareholder may nominate {{company_director_noms}} board member(s).</li>
     <li>
-	
     <ol>
 	  {{#each loop_shareholder_noms}}
       <li>5.2.1.	{{shareholder_nom_name}} may appoint {{shareholder_nom_allowed}} additional Director(s)</li>
-      {{/each}}
+    {{/each}}
     </ol>
-  
 	</li>
   </ol>
 
@@ -224,8 +222,7 @@
 <table cellspacing="0" cellpadding="0" class="t1">
   <tbody>
 	{{#each loop_shareholder}}
-	
-	{% if this.shareholder_type == company %}
+	{{#if shareholder_type_company}}
 	{{this.shareholder_name}}
 	<!--ROSS : Couple of bugs 
 		Issue 1 : For the Shareholders block in the form, if you select two shareholders then click that radio boxes on each, only one radio box set will work. They are not independent. 
@@ -242,7 +239,7 @@
 		<br />
       </td>
     </tr>
-	{% else %}
+	{{else}}
 	<tr>
       <td>
         <p class="p11">Signed as a deed by:</p>
@@ -270,9 +267,7 @@
 		<br />
       </td>
     </tr>
-
-
-	{% endif %}
+	{{/if}}
 	{{/each}}
   </tbody>
 </table>
