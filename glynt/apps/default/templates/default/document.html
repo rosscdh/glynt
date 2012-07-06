@@ -219,7 +219,7 @@ $(document).ready(function(){
         }
 
         function LoopStep(form_fieldset, hide_from_element, iteration_title){
-            var self = this;
+            var self = this; 
             self.form_fieldset = (form_fieldset != undefined)?form_fieldset:null;
             self.hide_from_element = (hide_from_element != undefined)?hide_from_element:null;
             self.iteration_title = (iteration_title != undefined)?iteration_title:'Item';
@@ -231,6 +231,7 @@ $(document).ready(function(){
 
             self.isValidInputType = function isValidInputType(element) {
                 var element_type = self.getElementType(element);
+                var found = false;
                 if ($.inArray(element_type, self.valid_fieldtypes) != -1) {
                     return true;
                 }
@@ -244,6 +245,30 @@ $(document).ready(function(){
                     element_type = element.prop('type');
                 }
                 return element_type;
+            }
+
+            self.setHBObjectHelperValues = function setHBObjectHelperValues(element,local_context) {
+                // console.log(element.attr('type'))
+                
+                if (element.attr('type') == 'radio' || element.attr('type') == 'checkbox') {
+                    for (o in element) {
+                        console.log(o)
+                    }
+                }
+                // var key = template_helper['key']
+                // // set the base key value for this input
+                // self.setContextItemByForce(key, true);
+
+                // // then reset the _ and has attributes for items that have the same slug but not the same value ie are in teh same radio/checkbox group
+                // for (context_key in self.context()) {
+                //     if (context_key.indexOf(slug) >= 0) {
+                //         // found it
+                //         if (context_key != key) {
+                //             self.setContextItemByForce(context_key, false);
+                //         }
+                //     }
+                // }
+                return local_context;
             }
 
             self.showIteration = function showIteration(index) {
@@ -273,8 +298,9 @@ $(document).ready(function(){
                         fieldset = self.form_fieldset.find('#set-'+c);
                         fieldset.css('display','');
 
-                        fieldset.children().each(function(index,element){
+                        fieldset.children().find(self.valid_fieldtypes.join(',')).each(function(index,element){
                             element = $(element);
+
                             if (self.isValidInputType(element) === true) {
                                 var key = element.attr('name').replace(/(_(\d+))?/ig, '');
                                 hb_ob[key] = element.val();
@@ -297,7 +323,7 @@ $(document).ready(function(){
                     legend.html(self.iteration_title + '&nbsp;' + c); // @TODO need to put real title name here
 
                     // loop over element set of inputs (that are valid)
-                    fieldset.children().each(function(index,element){
+                    fieldset.children().find(self.valid_fieldtypes.join(',')).each(function(index,element){
                         element = $(element);
                         if (self.hb_loop_ob_container()[c] == undefined) {
                             if (self.isValidInputType(element) === true) {
@@ -309,17 +335,21 @@ $(document).ready(function(){
                                 old_name = element.attr('name');
                                 new_name = old_name + '_' + c;
                                 element.attr('name', new_name);
+                                slug_with_no_id = old_name.replace(/(_(\d+))?/ig, '');
                                 // update hb-name so that we get correct context variables
                                 element.attr('data-hb-name', new_name);
 
                                 // set the context params
                                 App.documentModel.setContextItem(element);
 
-                                hb_ob[old_name.replace(/(_(\d+))?/ig, '')] = element.val();
+                                hb_ob[slug_with_no_id] = element.val();
+                                // @TODO hmm antipattern
+                                hb_ob = self.setHBObjectHelperValues(element,hb_ob);
                             }
                         }
                     });
                     self.form_fieldset.append(fieldset);
+
                     self.hb_loop_ob_container()[c] = hb_ob;
                 }
 
@@ -335,7 +365,6 @@ $(document).ready(function(){
                     self.loopContainerForContext().push(self.hb_loop_ob_container()[i]);
                 }
                 
-
                 // set array grouping context variable to allow handlebarsjs to loop
                 var hb_loop_key = 'loop_' + self.iteration_title.toLowerCase();
                 App.documentModel.setContextItemByForce(hb_loop_key, self.loopContainerForContext());
@@ -343,7 +372,7 @@ $(document).ready(function(){
             }
 
             self.init = function init(){
-            // loop over form elements find the from element and hide all those after
+            // loop over ALL form elements (including labels and other helper items) find the from element and hide all those after
                 var found = false;
                 self.form_fieldset.children().each(function(index,element){
                     if ($(element).attr('id') == $(hide_from_element).attr('id')) {
@@ -407,20 +436,19 @@ $(document).ready(function(){
             if (self.textElementsList.indexOf(input.attr('type')) >= 0 || self.textElementsList.indexOf(input.prop('type')) >= 0) {
                     value = '[' + value.toString() + ']';
             }
-
+            // if the textElementsList has no type of this type.. it could be a checkbox or radio
             if (self.textElementsList.indexOf(input.attr('type')) == -1) {
                 
                 if (input.attr('type') == 'checkbox') {
                     value = (input.attr('checked') == 'checked') ? true : false ;
-                    self.setTemplateHelperValues(input);
                 }
                 if (input.attr('type') == 'radio') {
                     value = false;
                     if (input.attr('checked') == 'checked') {
                         value = input.val();
-                        self.setTemplateHelperValues(input);
                     }
                 }
+                self.setTemplateHelperValues(input);
             }
 
             self.setTemplateHasHelperValues(input, value, is_placeholder_value);
@@ -434,16 +462,34 @@ $(document).ready(function(){
             self.setContextItemByForce(key, has_this_value);
         }
 
-        self.setTemplateHelperValues = function setTemplateHelperValues(input) {
-            // set custom
+        self.getTemplateHelperKey = function getTemplateHelperKey(input) {
             var value = input.val();
             var slug = self.slugify(input.attr('data-hb-name'));
             var value_slug = self.slugify(value);
             var key = '_' + slug + '_' + value_slug;
-            var found = false;
 
+            return {
+                'value': value,
+                'slug': slug,
+                'value_slug': value_slug,
+                'key': key,
+            }
+
+        }
+
+        self.setTemplateHelperValues = function setTemplateHelperValues(input) {
+            // set custom
+            helper = self.getTemplateHelperKey(input);
+
+            var value = helper['value'];
+            var slug = helper['slug'];
+            var value_slug = helper['value_slug'];
+            var key = helper['key'];
+
+            // set the base key value for this input
             self.setContextItemByForce(key, true);
 
+            // then reset the _ and has attributes for items that have the same slug but not the same value ie are in teh same radio/checkbox group
             for (context_key in self.context()) {
                 if (context_key.indexOf(slug) >= 0) {
                     // found it
