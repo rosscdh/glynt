@@ -306,7 +306,7 @@ $(document).ready(function(){
                         fieldset = self.form_fieldset.find('#set-'+c);
                         fieldset.css('display','');
 
-                        fieldset.children().find(self.valid_fieldtypes.join(',')).each(function(index,element){
+                        fieldset.children().each(function(index,element){
                             element = $(element);
 
                             if (self.isValidInputType(element) === true) {
@@ -331,7 +331,7 @@ $(document).ready(function(){
                     legend.html(self.iteration_title + '&nbsp;' + c); // @TODO need to put real title name here
 
                     // loop over element set of inputs (that are valid)
-                    fieldset.children().find(self.valid_fieldtypes.join(',')).each(function(index,element){
+                    fieldset.children().each(function(index,element){
                         element = $(element);
                         if (self.hb_loop_ob_container()[c] == undefined) {
                             if (self.isValidInputType(element) === true) {
