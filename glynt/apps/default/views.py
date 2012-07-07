@@ -57,8 +57,6 @@ class DocumentView(TemplateView, FormMixin):
         step = int(self.request.GET.get('step', 0))
         if step > 0:
             step = step - 1
-        print step
-        print self.kwargs['doc']
 
         return FORM_GROUPS[self.kwargs['doc']][step]
 

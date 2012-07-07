@@ -210,36 +210,6 @@ $(document).ready(function(){
             return element_type;
         }
 
-        self.setHBObjectHelperValues = function setHBObjectHelperValues(element,local_context) {
-            // console.log(element.attr('type'))
-            
-            if (element.attr('type') == 'radio' || element.attr('type') == 'checkbox') {
-                var helper = App.documentModel.getTemplateHelperKey(element);
-                var slug = helper['slug'];
-                var key = helper['id_free_key'];
-
-                local_context[key] = true;
-
-                for (context_key in local_context) {
-                    if (context_key.indexOf(slug) >= 0) {
-                        // found it
-                        if (context_key != key) {
-                            local_context[key] = false;
-                        }
-                    }
-                }
-                for (context_key in App.documentModel.context()) {
-                    if (context_key.indexOf(slug) >= 0) {
-                        // found it
-                        if (context_key != key) {
-                            local_context[key] = false;
-                        }
-                    }
-                }
-            }
-            return local_context;
-        }
-
         self.showIteration = function showIteration(index) {
             if (self.repeatable_fieldset === null) {
                 // not exists create it
@@ -255,6 +225,7 @@ $(document).ready(function(){
             // @TODO remove redundant items from the list, to allow fro increase and decrease of index
             // ruleset if they reduce ie.. 5 to 2 then 3,4,5 are deleted
             // @TODO make methods
+            // @CODESMELL
             var fieldsets = self.form_fieldset.find('fieldset');
             var hb_base_ob = {};
 
@@ -312,8 +283,6 @@ $(document).ready(function(){
                             App.documentModel.setContextItem(element);
 
                             hb_ob[slug_with_no_id] = element.val();
-                            // @TODO hmm antipattern
-                            hb_ob = self.setHBObjectHelperValues(element,hb_ob);
                         }
                     }
                 });
@@ -413,25 +382,23 @@ $(document).ready(function(){
 
         self.getLoopStepByChildElement = function getLoopStepByChildElement(requested_element) {
             var found = false;
-            $.each(self.loopStepList(), function(step_index,loopstep){
-                if (found === false) {
-                    $.each(loopstep.hb_loop_ob_container(), function(index,element){
-                        if (found === false) {
-                            var requested_id = parseInt(requested_element.attr('id').replace(/[^\d]+/ig, ''));
-                            var item_id = parseInt(element['id'].replace(/[^\d]+/ig, ''));
+            var requested_id = parseInt(requested_element.attr('id').replace(/[^\d]+/ig, ''));
+            var formset_id = $($(requested_element).closest('div.form-group')[0]).attr('id');
 
-                            if (item_id === requested_id) {
-                                found = {
-                                    'loopstep': self.loopStepList()[step_index],
-                                    'fieldset': loopstep.hb_loop_ob_container()[index],
-                                    'element_requested': requested_element,
-                                    'element_found': element,
-                                }
-                            };
+            $.each(self.loopStepList()[formset_id].hb_loop_ob_container(), function(index,element){
+                if (found === false) {
+
+                    var item_id = parseInt(element['id'].replace(/[^\d]+/ig, ''));
+
+                    if (item_id === requested_id) {
+                        found = {
+                            'loopstep': self.loopStepList()[formset_id],
+                            'fieldset': element,
                         }
-                    });
+                    };
                 }
             });
+
             return found;
         }
 
@@ -479,21 +446,15 @@ $(document).ready(function(){
             // if the textElementsList has no type of this type.. it could be a checkbox or radio
             if (self.textElementsList.indexOf(input.attr('type')) == -1) {
                 
-                if (input.attr('type') == 'checkbox') {
+                if (input.attr('type') == 'radio' || input.attr('type') == 'checkbox') {
                     value = (input.attr('checked') == 'checked') ? true : false ;
                 }
-                if (input.attr('type') == 'radio') {
-                    value = false;
-                    if (input.attr('checked') == 'checked') {
-                        value = input.val();
-                    }
-                }
-                self.setTemplateHelperValues(input);
             }
 
-            self.setTemplateHasHelperValues(input, value, is_placeholder_value);
-
-            return value;
+            return {
+                'value': value,
+                'is_placeholder_value': is_placeholder_value
+            };
         }
 
         self.setTemplateHasHelperValues = function setTemplateHasHelperValues(input, value, is_placeholder_value) {
@@ -502,6 +463,7 @@ $(document).ready(function(){
             self.setContextItemByForce(key, has_this_value);
         }
 
+        // method to set the _value values of the specified item
         self.getTemplateHelperKey = function getTemplateHelperKey(input) {
             var value = input.val();
             var slug = self.slugify(input.attr('data-hb-name'));
@@ -519,61 +481,91 @@ $(document).ready(function(){
 
         }
 
+        self.ensureElementContextRadioCheckboxOptionsPresent = function ensureElementContextRadioCheckboxOptionsPresent(input,local_context) {
+            var required_name = input.attr('name');
+            $('form.bind-document input[type=radio], form.bind-document input[type=checkbox]').each(function(index,element){
+                element = $(element);
+
+                if (element.attr('type') == 'radio' || element.attr('type') == 'checkbox') {
+                    if (element.attr('name') == required_name) {
+                        // found the name of the lement so ensure the key exists
+                        // @TODO these variables need to be commmon make a method
+                        var slug = self.slugify(element.attr('data-hb-name'));
+                        var value_slug = self.slugify(element.val());
+                        var key = '_' + slug + '_' + value_slug;
+                        if (key in local_context) {
+                            // exists move along these are not the droids your looking for
+                        }else{
+//console.log('did not find '+key+' so creating it ')
+                            local_context[key] = false;
+                        }
+                    }
+                };
+            });
+            return helper;
+        }
+
+        // This is where radio and checkboxes in a loop are handled
         self.setTemplateHelperValues = function setTemplateHelperValues(input,local_context) {
             // set custom
             helper = self.getTemplateHelperKey(input);
 
-            var value = helper['value'];
+            var context = (local_context == undefined) ? self.context() : local_context ;
             var slug = helper['slug'];
-            var value_slug = helper['value_slug'];
             var key = helper['key'];
+
+            helper = self.ensureElementContextRadioCheckboxOptionsPresent(input,helper);
+            context = $.merge(helper,context);
 
             if (local_context == undefined) {
                 // set the base key value for this input
                 self.setContextItemByForce(key, true);
-                // then reset the _ and has attributes for items that have the same slug but not the same value ie are in teh same radio/checkbox group
-                for (context_key in self.context()) {
-                    if (context_key.indexOf(slug+'_') >= 0) {
-                        // found it
-                        if (context_key != key) {
-                            self.setContextItemByForce(context_key, false);
-                        }
-                    }
-                }
-
             }else{
-                local_context[key] = true;
-console.log(key)
-                // then reset the _ and has attributes for items that have the same slug but not the same value ie are in teh same radio/checkbox group
-                for (context_key in local_context) {
-                    if (context_key.indexOf(slug+'_') >= 0) {
-                        // found it
-                        if (context_key != key) {
-                            local_context[context_key] = false;
+                context[key] = true;
+            }
+            // then reset the _ and has attributes for items that have the same slug but not the same value ie are in teh same radio/checkbox group
+            for (context_key in context) {
+                if (context_key.indexOf(slug) >= 0) {
+                    // found it
+                    if (context_key != key) {
+                        if (local_context == undefined) {
+                            self.setContextItemByForce(context_key, false);
+                        }else{
+                    console.log(context_key)
+                            context[key] = false;
                         }
                     }
                 }
-                return local_context;
             }
-
+            return context;
         }
 
-		self.setContextItem = function setContextItem(input) {
+		self.setContextItem = function setContextItem(input,local_context) {
             // only allow if the data-hb-name is set
             if (typeof input.attr('data-hb-name') == 'string') {
-    			var context = self.context();
+    			var context = (local_context == undefined) ? self.context() : local_context ;
     			var key = name = input.attr('data-hb-name');
-    			var value = self.determineValue(input);
+    			var value_ob = self.determineValue(input);
+                var value = value_ob['value'];
+                var is_placeholder_value = value_ob['is_placeholder_value'];
+
+                // set the helper values
+                self.setTemplateHelperValues(input);
+                // set the has_attrib values
+                self.setTemplateHasHelperValues(input, value, is_placeholder_value);
 
             	context[key] = value;
-            	self.context(context);
+                if (local_context == undefined) {
+            	   self.context(context);
+                }
+                return context
             }
+            return false;
 		}
 
         self.setContextItemByForce = function setContextItemByForce(key,value) {
             var context = self.context();
             context[key] = value;
-            //console.log('Force - key: '+key+' value:'+value)
             self.context(context);
         }
 
@@ -781,7 +773,7 @@ console.log(key)
 
     $('form.bind-document fieldset.loop').live('change', function(event){
         var id_index = $(this).attr('id');
-        $(this).find('input,textarea').each(function(index,element){
+        $(this).find('input,textarea,radio,checkbox,select').each(function(index,element){
             element = $(element);
             var target_id = element.attr('id');
             var target_value = element.val();
@@ -791,15 +783,11 @@ console.log(key)
             if (target_name != undefined) {
                 target_name = target_name.replace('_'+target_id,'')
             }
-
+            // if is in loop object
             var applicableLoopObject = App.documentModel.getLoopStepByChildElement(element);
             if (applicableLoopObject) {
                 applicableLoopObject['element_found'][target_name] = target_value;
-                hb_ob_a = applicableLoopObject['loopstep'].setHBObjectHelperValues(element,applicableLoopObject['element_found']);
-                hb_ob_b = App.documentModel.setTemplateHelperValues(element,hb_ob);
-                applicableLoopObject['element_found'] = $.merge(applicableLoopObject['element_found'], hb_ob_a, hb_ob_b);
-                console.log(applicableLoopObject['element_found'])
-                
+                applicableLoopObject['fieldset'] = App.documentModel.setTemplateHelperValues(element, applicableLoopObject['element_found']);
             }
         })
         App.render();

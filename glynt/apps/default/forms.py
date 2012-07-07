@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from django import forms
+import datetime
+
 
 class AssassinStep1(forms.Form):
     contractor = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'placeholder':'Your Name','class':'md-updater','data-hb-name':'contractor'}))
@@ -14,16 +16,18 @@ class AssassinStep2(forms.Form):
     confirmed = forms.BooleanField(widget=forms.CheckboxInput(attrs={'placeholder':'','class':'md-updater','data-hb-name':'confirmed'}))
 
 # ----- WILLS -----
+def _get_date_today():
+    return datetime.date.today()
 
 class WillStep1(forms.Form):
     step_title = forms.CharField(max_length=100, widget=forms.HiddenInput(attrs={'data-step-title':'Company Information'}))
     company_name = forms.CharField(label='What is the company name?',max_length=100, widget=forms.TextInput(attrs={'placeholder':'Full Company Name','class':'md-updater','data-hb-name':'full_company_name'}))
-    date_start = forms.DateField(label='Date of this agreement',widget=forms.DateInput(attrs={'placeholder':'23rd March 2013','class':'md-updater','data-hb-name':'date_start'}))
+    date_start = forms.DateField(label='Date of this agreement',widget=forms.DateInput(attrs={'placeholder':_get_date_today(),'class':'md-updater','data-hb-name':'date_start'}))
     company_street_address = forms.CharField(label='What is your street address of the company?',widget=forms.Textarea(attrs={'placeholder':'Your companies registered address','class':'md-updater','data-hb-name':'company_street_address','rows':'4'}))
     company_city = forms.CharField(label='What is the city of the company?',widget=forms.TextInput(attrs={'placeholder':'Your company registered city','class':'md-updater','data-hb-name':'company_city'}))
     company_state = forms.CharField(label='What is the state of the company?',widget=forms.TextInput(attrs={'placeholder':'State','class':'md-updater','data-hb-name':'company_state'}))
     company_zip = forms.CharField(label='What is the Zip code of the company?',widget=forms.TextInput(attrs={'placeholder':'Zip','class':'md-updater','data-hb-name':'company_zip'}))
-    company_date_incorp = forms.CharField(label='When was the company incorporated?',widget=forms.TextInput(attrs={'placeholder':'21st March 2012','class':'md-updater','data-hb-name':'company_date_incorp'}))
+    company_date_incorp = forms.CharField(label='When was the company incorporated?',widget=forms.TextInput(attrs={'placeholder':_get_date_today(),'class':'md-updater','data-hb-name':'company_date_incorp'}))
 
 class WillStep2(forms.Form):
     step_title = forms.CharField(max_length=100, widget=forms.HiddenInput(attrs={'data-step-title':'Number of Shareholders', 'data-glynt-loop_step':"[{hide_from:'num_shareholders',iteration_title:'Shareholder'}]"}))
