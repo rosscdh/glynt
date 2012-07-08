@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load i18n markup %}
+{% load url from future %}
+
+{% block body %}
+<div class="hero-unit">
+	<h2>Glynt - Document Automation for the 21st century</h2>
+	<em>Example of a partial Legal Will generator</em>
+	<ol>
+		<li>Multi-step Dynamic forms</li>
+		<li>Automatic form generation</li>
+		<li>Step display rulsets</li>
+		<li>Simple best practice templating, systems proven in production (django templates/handlebarsjs)</li>
+		<li>Easily integrated into existing data store</li>
+		<li>Best practice implementation using modern proven frameworks and technologies</li>
+		<li>PDF/doc/rtf generation using proven in production open source technology</li>
+		<li>Currently db driven document store</li>
+		<li>Easily hooked up to social/single sign in tools</li>
+		<li>Defined and standardised interface to user data and storage thereof</li>
+		<li>Still in development... but we only started on it this weekend ;)</li>
+	</ol>
+</div>
+<div class="row">
+<h3>Basic Examples</h3>
+<p>Please bear in mind this Document Automation framework is a work in progress</p>
+<ul>
+	<li><a href="{% url 'document:generic' doc='legal-will' %}">Shareholders agreement</a></li>
+</ul>
+
+</div>
+{% endblock %}

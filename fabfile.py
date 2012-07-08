@@ -7,7 +7,11 @@ from time import gmtime, strftime
 debug = True
 
 PROJECT = 'glynt'
+<<<<<<< HEAD
 PROJECT_PATH = '/home/rossc/Projects/Personal/RuleNumberOne/%s' % (PROJECT,)
+=======
+PROJECT_PATH = '/home/rossc/Projects/Personal/%s' % (PROJECT,)
+>>>>>>> f30985cfb9bfb9ac18f2a86405649dcfd2f85ccc
 PROJECT_DEPLOY_INSTANCE = ( ('glynt', 'cartvine_shoppers'),)
 
 REMOTE_PROJECT_PATHS = []

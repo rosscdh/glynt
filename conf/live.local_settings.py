@@ -10,6 +10,8 @@ TEMPLATE_DEBUG = DEBUG
 
 USE_ETAGS = True
 
+MEDIA_URL = '/media/'
+
 STATIC_URL = '/static/'
 
 STATIC_ROOT = '/home/stard0g101/webapps/cartvine_static/'

@@ -13,20 +13,6 @@ middleware here, or combine a Django application with an application of another
 framework.
 
 """
-import os
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "glynt.settings")
-
-# This application object is used by any WSGI server configured to use this
-# file. This includes Django's development server, if the WSGI_APPLICATION
-# setting points here.
-from django.core.wsgi import get_wsgi_application
-application = get_wsgi_application()
-
-# Apply WSGI middleware here.
-# from helloworld.wsgi import HelloWorldApplication
-# application = HelloWorldApplication(application)
-
 import os, sys, site
 
 # Tell wsgi to add the Python site-packages to its path. 
@@ -45,4 +31,3 @@ sys.path.append(workspace)
 
 from django.core.handlers.wsgi import WSGIHandler
 application = WSGIHandler()
-

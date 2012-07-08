@@ -6,23 +6,31 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.template import loader, Context
 from django.views.generic.base import View, TemplateView
+from django.views.generic.edit import FormMixin
 from django.template.defaultfilters import slugify
 from django.http import HttpResponseRedirect
 from django.contrib.formtools.wizard.views import SessionWizardView
 
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+
 from models import Document
 
-from forms import AssassinStep1, AssassinStep2
-from forms import WillStep1, WillStep2, WillStep3, WillStep4, WillStep5, WillStep6
+import markdown
+import xhtml2pdf.pisa as pisa
+import cStringIO as StringIO
+import datetime
 
-from reportlab.pdfgen import canvas
+from forms import AssassinStep1, AssassinStep2
+from forms import WillStep1, WillStep2, WillStep3, WillStep4, WillStep5, WillStep6, WillStep7
+#from reportlab.pdfgen import canvas
 
 FORM_GROUPS = {
     'legal': [AssassinStep1, AssassinStep2],
-    'legal-will': [WillStep1, WillStep2, WillStep3, WillStep4, WillStep5, WillStep6],
+    'legal-will': [WillStep1, WillStep2, WillStep3, WillStep4, WillStep5, WillStep6, WillStep7]
 }
 
-class DocumentView(TemplateView):
+class DocumentView(TemplateView, FormMixin):
 
     def get_context_data(self, **kwargs):
         context = super(DocumentView, self).get_context_data(**kwargs)
@@ -42,17 +50,35 @@ class DocumentView(TemplateView):
 
         return context
 
+    def get_form(self):
+        """
+        Returns the form class to use in this view
+        """
+        step = self.request.GET.get('step')
+        return FORM_GROUPS[self.kwargs['doc']][step-1]
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form(form_class)
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
 
 class DocumentExportView(View):
     def post(self, request, *args, **kwargs):
-        response = HttpResponse(mimetype='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename=somefilename.pdf'
+        content_markdown = request.POST.get('md')
 
-        p = canvas.Canvas(response)
+        html = markdown.markdown(content_markdown)
 
-        p.drawString(100, 100, "Hello world.")
-        p.showPage()
-        p.save()
+        result = StringIO.StringIO()
+        pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result)
 
+        file_name = 'doc_gen/%ssome_pdf_customized_name.pdf' %(datetime.datetime.utcnow(),)
+
+        if not pdf.err:
+            pdf_file = default_storage.save(file_name, ContentFile(result.getvalue()))
+
+        response = HttpResponse('[{"filename":"%s%s"}]'%(settings.MEDIA_URL,file_name), status=200, content_type="text/json")
         return response
 

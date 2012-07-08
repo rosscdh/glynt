@@ -19,6 +19,7 @@
 	6. Widget / .widget
 	7. Error / .error-container
 	8. Miscellaneous
+	9. Glynt
 
 -------------------------------------------------------------------*/
 
@@ -630,4 +631,34 @@ table.table-condensed th, table.table-condensed td{
 }
 table .cen {
 	text-align:center;
+}
+
+
+/*------------------------------------------------------------------
+[9. Glynt]
+*/
+
+.draft-document {
+	background-color:#fff;
+	padding:70px 70px;
+	font-family:Helvetica, Arial;
+	margin:20px;
+	border:1px solid #CCC;
+}
+.draft-document li, .draft-document ol ,.draft-document ul {
+	list-style-type:none;
+	margin-left:0px;
+	padding-left:0px;
+}
+.draft-document ol {
+}
+.draft-document ol ol{
+	margin-left:15px;
+}
+.draft-document td {
+	border:1px solid #ccc;
+}
+.document-questions {
+	padding-right:10px;
+	font-family:Helvetica;
 }

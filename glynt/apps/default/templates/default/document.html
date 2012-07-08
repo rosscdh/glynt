@@ -3,16 +3,10 @@
 {% load url from future %}
 
 {% block form %}
-<form class="bind-document">{% csrf_token %}
-    <div class="row">
-    <div class="controls pull-right">
-        <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-primary btn-mini btn-prev" type="button" data-bind="click: App.formControls.prev">Previous</button></span>
-        <span data-bind="visible: App.formControls.showNext()"><button id="btn-next" class="btn btn-primary btn-mini btn-next" type="button" data-bind="click: App.formControls.next">Next</button></span>
-    </div>
-    </div>
+<form id="glynt-doc" class="bind-document">{% csrf_token %}
     {% for form in form_set %}
     <div id="form-group-{{ forloop.counter }}" class="form-group {% if not forloop.first %}hidden{% endif %}">
-        <h4>Step {{ forloop.counter }}. of {{form_set|length }}</h4>
+        <h4>Step {{ forloop.counter }}. of {{ form_set|length }}</h4>
         <h4><span class="step-title"></span></h4>
         <br/>
         {{form}}
@@ -20,8 +14,16 @@
     {% if forloop.last %}
     {% endif %}
     {% endfor %}
-    <div class="span3" data-bind="visible: App.formControls.isLastStep()">
-        <button id="btn-post-pdf" class="btn btn-success" type="button" data-bind="click: App.postDocument">Get Contract</button>
+    <div class="row">
+    <div class="controls pull-right">
+        <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-primary btn-small btn-prev" type="button" data-bind="click: App.formControls.prev">Previous</button></span>
+        <span data-bind="visible: App.formControls.showNext()"><button id="btn-next" class="btn btn-success btn-small btn-next" type="button" data-bind="click: App.formControls.next">Next</button></span>
+    </div>
+    </div>
+    <div id="form-group-{{ form_set|length }}" class="form-group hidden" data-bind="visible: App.formControls.isLastStep()">
+        <div class="span3">
+            <button id="btn-post-pdf" class="btn btn-success" type="button">Get Contract</button>
+        </div>
     </div>
 </form>
 {% endblock %}
@@ -52,7 +54,115 @@ display:none;
 <script type="text/javascript">
 $(document).ready(function(){
 
-    $('span.helptext').tooltip({});
+    function FormControls() {
+        var self = this;
+
+        self.actualFormSteps = ({{form_set|length}}+1);// account for end form
+        self.maxFormSteps = ko.observable(({{form_set|length}}+1));// account for end form
+        self.currentFormStep = ko.observable(1);
+
+        self.showNext = function showNext() {
+            return (self.currentFormStep() == self.maxFormSteps())? false : true ;
+        }
+        self.showPrev = function showPrev() {
+            return (self.currentFormStep() == 1)? false : true ;
+        }
+        self.isLastStep = function isLastStep() {
+            return (self.maxFormSteps() == self.currentFormStep()) ? true : false ;
+        }
+
+        self.determineNextStepIndex = function determineNextStepIndex(direction, next_step) {
+            //@TODO basis for the ruleset evaluation routine
+            if (direction == 'next') {
+                return self.determineNextStep(next_step);
+            } else {
+                return self.determinePrevStep(next_step);
+            }
+        }
+
+        self.determinePrevStep = function determinePrevStep(current_step) {
+            for(var step = current_step; step > 0; step--) {
+                if(self.validateStep(step)) {
+                    return step;
+                }
+            }
+
+            return 1;
+        };
+
+        self.determineNextStep = function determineNextStep(current_step) {
+            for(var step = current_step; step < self.maxFormSteps() ; step++) {
+                if(self.validateStep(step)) {
+                    return step;
+                }
+            }
+
+            return self.maxFormSteps();
+        };
+
+        self.validateStep = function validateStep(step) {
+            var ruleset = App.documentModel.getRuleByType('show_step_when');
+            for (var x=0; x < ruleset.length; x++) {
+                if (ruleset[x].target_element != 'undefined') {
+                    target_element = $(ruleset[x].target_element);
+                    target_element_step_id = target_element.attr('id').replace(/[^\d]+/ig, '');
+                } else {
+                    target_element = null;
+                    target_element_step_id = null;
+                }
+
+                for (var i=0; i < ruleset[x].ruleset.length; i++) {
+                    for (context_var_name in ruleset[x].ruleset[i]) {
+                        var required_value = ruleset[x].ruleset[i][context_var_name];
+
+                        if (context_var_name in App.documentModel.context()) {
+                            var current_context_value = App.documentModel.context()[context_var_name];
+                            if (required_value != current_context_value && target_element_step_id == step) {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+        self.determineStepVisibility = function determineStepVisibility(direction,step) {
+
+            new_step = self.determineNextStepIndex(direction,step);
+
+            step = new_step;
+
+            $.each($('div.form-group'), function(index,form_group){
+                form_group = $(form_group);
+
+                if ((index+1) == step) {
+                    form_group.css('display', 'block');
+                    form_group.removeClass('hidden');
+                } else {
+                    form_group.css('display', 'none');
+                    form_group.addClass('hidden');
+                }
+            });
+            return step;
+        }
+
+        self.next = function next() {
+            var current = self.currentFormStep();
+            var next = current+1;
+
+            next = self.determineStepVisibility('next', next);
+            self.currentFormStep(next);
+        }
+        self.prev = function prev() {
+            var current = self.currentFormStep();
+            var prev = current-1;
+
+            prev = self.determineStepVisibility('prev', prev);
+
+            self.currentFormStep(prev);
+        }
+    }
 
 	function DocumentModel() {
 		var self = this;
@@ -62,6 +172,21 @@ $(document).ready(function(){
 		self.handlebarsElementId = ko.observable('script#js-{{ doc }}');
 		self.documentTemplate = ko.observable($(self.handlebarsElementId()).html());
 		self.renderedHTML = ko.observable('');
+
+        self.visibilityRuleset = ko.observableArray([]);
+        self.loopStepList = ko.observable({});
+
+        function Rule(element,target_element,ruleset){
+            var self = this;
+            self.element = (element != undefined)?element:null,
+            self.target_element = (target_element != undefined)?target_element:null,
+            self.ruleset = (ruleset != undefined)?ruleset:[]
+        };
+
+        self.ruleSet = ko.observable({
+            'show_step_when': [],
+            'show_element_when': []
+        });
 
 		self.context = ko.observable({
 		    'company': {
@@ -73,10 +198,210 @@ $(document).ready(function(){
 		    }
 		});
 
+        self.getRuleByType = function getRuleByType(ruleset_type) {
+            if (ruleset_type in self.ruleSet()) {
+                return self.ruleSet()[ruleset_type];
+            }
+            return false;
+        }
+
+        self.setRule = function setRule(element,ruleset) {
+            var rule = new Rule(element);
+            for (r in self.ruleSet()) {
+                if (r in ruleset) {
+                    if (r == 'show_step_when') {
+                        rule.target_element = $(element.closest('div.form-group')[0]);
+                    }
+                    rule.ruleset.push(ruleset[r]);
+                    self.ruleSet()[r].push(rule);
+                }
+            };
+        }
+
+        function LoopStep(form_fieldset, hide_from_element, iteration_title){
+            var self = this; 
+            self.form_fieldset = (form_fieldset != undefined)?form_fieldset:null;
+            self.hide_from_element = (hide_from_element != undefined)?hide_from_element:null;
+            self.iteration_title = (iteration_title != undefined)?iteration_title:'Item';
+            self.valid_fieldtypes = ['input', 'text','select','textarea','radio','checkbox']
+            self.repeatable_fields = [];
+            self.repeatable_fieldset = null;
+            self.hb_loop_ob_container = ko.observable({});
+            self.loopContainerForContext = ko.observableArray([]);
+
+            self.isValidInputType = function isValidInputType(element) {
+                var element_type = self.getElementType(element);
+                var found = false;
+                if ($.inArray(element_type, self.valid_fieldtypes) != -1) {
+                    return true;
+                }
+                return false;
+            }
+
+            self.getElementType = function getElementType(element) {
+                var element_type = element.attr('type');
+                if (element_type == undefined) {
+                    // textarea?
+                    element_type = element.prop('type');
+                }
+                return element_type;
+            }
+
+            self.setHBObjectHelperValues = function setHBObjectHelperValues(element,local_context) {
+                // console.log(element.attr('type'))
+                
+                if (element.attr('type') == 'radio' || element.attr('type') == 'checkbox') {
+                    var helper = App.documentModel.getTemplateHelperKey(element);
+                    var slug = helper['slug'];
+                    var key = helper['id_free_key'];
+
+                    local_context[key] = true;
+
+                    for (context_key in App.documentModel.context()) {
+                        if (context_key.indexOf(slug) >= 0) {
+                            // found it
+                            if (context_key != key) {
+                                local_context[key] = false;
+                            }
+                        }
+                    }
+                }
+                return local_context;
+            }
+
+            self.showIteration = function showIteration(index) {
+                if (self.repeatable_fieldset === null) {
+                    // not exists create it
+                    fieldset = $('<fieldset class="loop" style="display:none;"><legend>&nbsp;</legend>');
+                    for (f in self.repeatable_fields) {
+                        field = $(self.repeatable_fields[f]);
+                        field.css('display','');
+                        fieldset.append(field);
+                    }
+                    self.repeatable_fieldset = fieldset;
+                }
+
+                // @TODO remove redundant items from the list, to allow fro increase and decrease of index
+                // ruleset if they reduce ie.. 5 to 2 then 3,4,5 are deleted
+                // @TODO make methods
+                var fieldsets = self.form_fieldset.find('fieldset');
+                var hb_base_ob = {};
+
+                for (var c=1; c <= index; c++) {
+
+                    if (self.hb_loop_ob_container()[c] != undefined) {
+                        // exists already
+                        //console.log('existing element')
+                        hb_ob = self.hb_loop_ob_container()[c];
+                        fieldset = self.form_fieldset.find('#set-'+c);
+                        fieldset.css('display','');
+
+                        fieldset.children().find(self.valid_fieldtypes.join(',')).each(function(index,element){
+                            element = $(element);
+
+                            if (self.isValidInputType(element) === true) {
+                                var key = element.attr('name').replace(/(_(\d+))?/ig, '');
+                                hb_ob[key] = element.val();
+                            }
+                        });
+                    }else{
+                        //console.log('new element')
+                        hb_ob = $.extend({}, hb_base_ob);
+                        hb_ob['id'] = self.iteration_title.toLowerCase() +'_'+ c;
+                        hb_ob['index'] = c;
+                        // new so create it based on default
+                        // deep copy the set
+                        fieldset = self.repeatable_fieldset.clone();
+                        // set element attribs
+                        fieldset.attr('id', 'set-'+c)
+                        fieldset.css('display','');
+                    }
+
+                    legend = fieldset.find('legend');
+                    legend.html(self.iteration_title + '&nbsp;' + c); // @TODO need to put real title name here
+
+                    // loop over element set of inputs (that are valid)
+                    fieldset.children().find(self.valid_fieldtypes.join(',')).each(function(index,element){
+                        element = $(element);
+                        if (self.hb_loop_ob_container()[c] == undefined) {
+                            if (self.isValidInputType(element) === true) {
+                                // update id to be unique
+                                old_id = element.attr('id');
+                                new_id = old_id + '_' + c;
+                                element.attr('id', new_id);
+                                // update name to be unique
+                                old_name = element.attr('name');
+                                new_name = old_name + '_' + c;
+                                element.attr('name', new_name);
+                                slug_with_no_id = old_name.replace(/(_(\d+))?/ig, '');
+                                // update hb-name so that we get correct context variables
+                                element.attr('data-hb-name', new_name);
+
+                                // set the context params
+                                App.documentModel.setContextItem(element);
+
+                                hb_ob[slug_with_no_id] = element.val();
+                                // @TODO hmm antipattern
+                                hb_ob = self.setHBObjectHelperValues(element,hb_ob);
+                            }
+                        }
+                    });
+                    self.form_fieldset.append(fieldset);
+
+                    self.hb_loop_ob_container()[c] = hb_ob;
+                }
+
+                // @TODO DELETE HACK
+                for (var c=index+1; c <= fieldsets.length; c++) {
+                    // hide these elements
+                    $(fieldsets[c]).remove();
+                    self.form_fieldset.find('#set-'+c).remove();
+                    delete self.hb_loop_ob_container()[c];
+                }
+                self.loopContainerForContext([]);//reset
+                for (i in self.hb_loop_ob_container()) {
+                    self.loopContainerForContext().push(self.hb_loop_ob_container()[i]);
+                }
+                
+                // set array grouping context variable to allow handlebarsjs to loop
+                var hb_loop_key = 'loop_' + self.iteration_title.toLowerCase();
+                App.documentModel.setContextItemByForce(hb_loop_key, self.loopContainerForContext());
+                App.render();
+            }
+
+            self.init = function init(){
+            // loop over ALL form elements (including labels and other helper items) find the from element and hide all those after
+                var found = false;
+                self.form_fieldset.children().each(function(index,element){
+                    if ($(element).attr('id') == $(hide_from_element).attr('id')) {
+                        found = true;
+                    } else {
+                        if (found == true) {
+                            $(element).hide();
+                            self.repeatable_fields.push($(element));
+                        }
+                    }
+
+                });
+            }
+
+            self.init();
+        };
+
+        self.showLoopStep = function showLoopStep(element, num) {
+            var formset_id = $($(element).closest('div.form-group')[0]).attr('id');
+            self.loopStepList()[formset_id].showIteration(num);
+        }
+
+        self.setLoopStep = function setLoopStep(form_fieldset, hide_from_element, iteration_title) {
+            var formset_id = $($(hide_from_element).closest('div.form-group')[0]).attr('id');
+            self.loopStepList()[formset_id] = new LoopStep(form_fieldset, hide_from_element, iteration_title);
+        }
+
         self.slugify = function slugify(text) {
             if (typeof text == 'boolean') {
                 text = (text === true)?'true':'false';
-            }else{
+            } else {
                 text = text.replace(/[^_-a-zA-Z0-9,&\s]+/ig, '');
                 //text = text.replace(/-/gi, "_");
                 text = text.replace(/\s/gi, "-");
@@ -84,12 +409,12 @@ $(document).ready(function(){
             return text.toLowerCase();
         }
 
-        self.assertContextIsVisbleWhen = function assertContextIsVisbleWhen(key, value) {
+        self.assertElementIsVisibleWhen = function assertElementIsVisibleWhen(key, value) {
             if (key in self.context()) {
                 var context_value = self.context()[key];
                 if (context_value == value) {
                     return true;
-                }else{
+                } else {
                     // hide the relavant object
                 }
             }
@@ -102,29 +427,26 @@ $(document).ready(function(){
 			if (input.val() != 'undefined' && input.val() != '') {
 			    value = input.val();
 			    is_placeholder_value = false;
-			}else{
+			} else {
 			    value = input.attr('placeholder');
 		    }
 
-            if (self.textElementsList.indexOf(input.attr('type')) >= 0) {
-                //if (is_placeholder_value === true) {
-                    value = '_**' + value.toString() + '**_';
-                //}
+            if (self.textElementsList.indexOf(input.attr('type')) >= 0 || self.textElementsList.indexOf(input.prop('type')) >= 0) {
+                    value = '[' + value.toString() + ']';
             }
-
+            // if the textElementsList has no type of this type.. it could be a checkbox or radio
             if (self.textElementsList.indexOf(input.attr('type')) == -1) {
                 
                 if (input.attr('type') == 'checkbox') {
                     value = (input.attr('checked') == 'checked') ? true : false ;
-                    self.setTemplateHelperValues(input);
                 }
                 if (input.attr('type') == 'radio') {
                     value = false;
                     if (input.attr('checked') == 'checked') {
                         value = input.val();
-                        self.setTemplateHelperValues(input);
                     }
                 }
+                self.setTemplateHelperValues(input);
             }
 
             self.setTemplateHasHelperValues(input, value, is_placeholder_value);
@@ -138,16 +460,36 @@ $(document).ready(function(){
             self.setContextItemByForce(key, has_this_value);
         }
 
-        self.setTemplateHelperValues = function setTemplateHelperValues(input) {
-            // set custom
+        self.getTemplateHelperKey = function getTemplateHelperKey(input) {
             var value = input.val();
             var slug = self.slugify(input.attr('data-hb-name'));
             var value_slug = self.slugify(value);
             var key = '_' + slug + '_' + value_slug;
-            var found = false;
+            var id_free_key = key.replace(/_[\d]+/ig, '');
 
+            return {
+                'value': value,
+                'slug': slug,
+                'value_slug': value_slug,
+                'id_free_key': id_free_key,
+                'key': key,
+            }
+
+        }
+
+        self.setTemplateHelperValues = function setTemplateHelperValues(input) {
+            // set custom
+            helper = self.getTemplateHelperKey(input);
+
+            var value = helper['value'];
+            var slug = helper['slug'];
+            var value_slug = helper['value_slug'];
+            var key = helper['key'];
+
+            // set the base key value for this input
             self.setContextItemByForce(key, true);
 
+            // then reset the _ and has attributes for items that have the same slug but not the same value ie are in teh same radio/checkbox group
             for (context_key in self.context()) {
                 if (context_key.indexOf(slug) >= 0) {
                     // found it
@@ -177,10 +519,6 @@ $(document).ready(function(){
             self.context(context);
         }
 
-		self.getContext = function getContext() {
-			return self.context();
-		}
-
         self.render = function render() {
         	var context = self.context();
 		    var source   = self.documentTemplate();
@@ -188,56 +526,6 @@ $(document).ready(function(){
 			return template(context);
         }
 	}
-
-    function FormControls() {
-        var self = this;
-
-        self.maxFormSteps = ko.observable({{form_set|length}});
-        self.currentFormStep = ko.observable(1);
-
-        self.showNext = function showNext() {
-            return (self.currentFormStep() == self.maxFormSteps())? false : true ;
-        }
-        self.showPrev = function showPrev() {
-            return (self.currentFormStep() == 1)? false : true ;
-        }
-        self.isLastStep = function isLastStep() {
-            return (self.maxFormSteps() == self.currentFormStep()) ? true : false ;
-        }
-
-        self.determineStepVisibility = function determineStepVisibility(step) {
-
-            $.each($('div.form-group'), function(index,form_group){
-                form_group = $(form_group);
-
-                if ((index+1) == step) {
-                    form_group.css('display', 'block');
-                    form_group.removeClass('hidden');
-                }else{
-                    form_group.css('display', 'none');
-                    form_group.addClass('hidden');
-                }
-            });
-
-        }
-
-        self.next = function next() {
-            var current = self.currentFormStep();
-            var next = current+1;
-
-            self.determineStepVisibility(next);
-
-            self.currentFormStep(next);
-        }
-        self.prev = function prev() {
-            var current = self.currentFormStep();
-            var prev = current-1;
-
-            self.determineStepVisibility(prev);
-
-            self.currentFormStep(prev);
-        }
-    }
 
     /**
     * Primary view acts as a holder for the other views
@@ -250,23 +538,85 @@ $(document).ready(function(){
         self.documentModel = new DocumentModel();
         self.formControls = new FormControls();
 
-        self.init = function init() {
+        self.setGlyntRuleset = function setGlyntRuleset() {
+            // loop over lements looking for rulesets
+            $('form.bind-document input[data-glynt-rule]').each(function(index,element){
+                var rules = eval($(element).attr('data-glynt-rule'));
+                rules = rules[0];// javascript json weirdness
+                self.documentModel.setRule($(element), rules);
+            });
+            $('form.bind-document [data-glynt-loop_step]').each(function(index,element){
+                var form_fieldset = $(element).closest('div.form-group');
+                var data = eval($(element).attr('data-glynt-loop_step'))[0];
+                var hide_from_element = $('[name='+ data['hide_from'] +']')[0];
+                var iteration_title = data['iteration_title'];
+                
+                self.documentModel.setLoopStep(form_fieldset, hide_from_element, iteration_title);
+            });
+        }
 
-        	var name = null;
-        	var value = null;
+        // @TODO apply rulesets
+        self.applyGlyntRuleset = function applyGlyntRuleset() {
+            var current_context = self.documentModel.context();
+            var ruleset = self.documentModel.getRuleByType('show_step_when');
 
-        	$.each($('form.bind-document'), function(index, form) {
-        		$.each($(this).find('input'), function(index, input) {
-        			self.documentModel.setContextItem($(input));
-        		});
+            var target_element = null;
+            var target_element_step_id = null;
+
+            var callback = null;
+            var required_value = null;
+            var current_context_value = null;
+
+            for (var x=0; x < ruleset.length; x++) {
+
+                if (ruleset[x].target_element == 'undefined') {
+                    target_element = $(ruleset[x].target_element);
+                    target_element_step_id = target_element.attr('id').replace(/[^\d]+/ig, '');
+                } else {
+                    target_element = null;
+                    target_element_step_id = null;
+                }
+
+                for (var i=0; i < ruleset[x].ruleset.length; i++) {
+                    callback = (ruleset[x].ruleset[i]['callback'] == 'undefined')? null : ruleset[x].ruleset[i]['callback'] ;
+                    for (var context_var_name in ruleset[x].ruleset[i]) {
+
+                        required_value = ruleset[x].ruleset[i][context_var_name];    
+                        if (context_var_name in current_context) {
+                            current_context_value = current_context[context_var_name];
+                            if (required_value == current_context_value) {
+                                // apply callback
+                                console.log(callback)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        self.setContext = function setContext() {
+            // loop over all valid form elements and set them in the context
+            var name = null;
+            var value = null;
+
+            $.each($('form.bind-document'), function(index, form) {
+                $.each($(this).find('input'), function(index, input) {
+                    self.documentModel.setContextItem($(input));
+                });
                 $.each($(this).find('textarea'), function(index, input) {
                     self.documentModel.setContextItem($(input));
                 });
                 $.each($(this).find('select'), function(index, input) {
                     self.documentModel.setContextItem($(input));
                 });
-        	});
+            });
+        }
 
+        self.init = function init() {
+            // main initializer
+            self.setContext();
+            self.setGlyntRuleset();
+            self.applyGlyntRuleset();
         	self.render();
         }
 
@@ -287,6 +637,30 @@ $(document).ready(function(){
             self.render();
         }
 
+        self.validateForm = function validateForm() {
+            // working on the debug
+            return true;
+
+            var is_valid = false;
+
+            $.ajax({
+              type: 'POST',
+              url: "{% url 'document:generic' doc=doc %}?step="+step,
+              data: $('form#glynt-doc').serialize(),
+            })
+            .success(function(data, textStatus, jqXHR) {
+                var data = eval(data);
+                console.log(data)
+                is_valid = true;
+            })
+            .error(function() { 
+                console.log('error');
+                is_valid = false;
+            })
+            .complete(function() {});
+            return is_valid;
+        }
+
         self.postDocument = function postDocument() {
 
             var csrf_token = $('form.bind-document:first').find('input[type=hidden]:first')
@@ -301,10 +675,15 @@ $(document).ready(function(){
               data: data,
             })
             .success(function(data, textStatus, jqXHR) {
+                var data = eval(data);
+                var filename = data[0].filename;
+                window.open(filename, 'pdf');
             })
             .error(function() { 
+                alert('error')
             })
-            .complete(function() {});
+            .complete(function() {
+            });
         }
 
         self.init();
@@ -315,9 +694,41 @@ $(document).ready(function(){
     // ----- KO Bindings -----
     ko.applyBindings(App);
 
-    $('.md-updater').live('mouseover', function(event){
+
+    $('form.bind-document [data-glynt-loop_length]').live('change', function(event){
+        var num = parseInt($(this).val());
+        if (typeof num == 'number'){
+            App.documentModel.showLoopStep($(this), num);
+            // update knockoout bindings for new div
+            //ko.applyBindings(App);// Causes pagination bug
+        }
     });
-    $('.md-updater').live('mouseout', function(event){
+
+    $('form.bind-document fieldset.loop').live('change', function(event){
+        var id_index = $(this).attr('id');
+        $(this).find('input,textarea').each(function(index,element){
+            var target_id = $(element).attr('id');
+            var target_value = $(element).val();
+            var tmp = target_id.split('_');
+            target_id = parseInt(tmp[tmp.length-1]);
+            var target_name = $(element).attr('data-hb-name');
+            if (target_name != undefined) {
+                target_name = target_name.replace('_'+target_id,'')
+            }
+            if (typeof target_id == 'number' && target_name != undefined) {
+                $.each(App.documentModel.loopStepList(), function(index,loopstep){
+                    $.each(loopstep.hb_loop_ob_container(), function(index,element){
+                        var item_id = element['id'].split('_');
+                        item_id = parseInt(item_id[item_id.length-1]);
+                        //console.log(target_value)
+                        if (item_id === target_id) {
+                            element[target_name] = target_value;
+                        }
+                    });
+                })
+            }
+        })
+        App.render();
     });
 
     $('form.bind-document span.step-title').each(function() {
@@ -326,11 +737,19 @@ $(document).ready(function(){
     });
 
     $('.md-updater').live('change', function(event){
-    	var name = $(this).attr('data-hb-name');
-    	var value = $(this).val();
         App.changeContext($(this));
-        //console.log(App.documentModel.context())
     })
+    $('button#btn-post-pdf').live('click', function(event){
+        event.preventDefault();
+        if (App.validateForm() == true) {
+            App.postDocument();
+        }
+    });
+
+    Handlebars.registerHelper('get', function(obj, prop) {
+      return obj[prop];
+    });
+
 });
 </script>
 
