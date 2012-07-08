@@ -223,7 +223,7 @@ $(document).ready(function(){
 
                 if (self.hb_loop_ob_container()[c] != undefined) {
                     // exists already
-                    //console.log('existing element')
+//console.log('existing element')
                     hb_ob = self.hb_loop_ob_container()[c];
                     fieldset = self.form_fieldset.find('#set-'+c);
                     fieldset.css('display','');
@@ -237,7 +237,7 @@ $(document).ready(function(){
                         }
                     });
                 }else{
-                    //console.log('new element')
+//console.log('new element')
                     hb_ob = $.extend({}, hb_base_ob);
                     hb_ob['id'] = self.iteration_title.toLowerCase() +'_'+ c;
                     hb_ob['index'] = c;
@@ -625,7 +625,7 @@ $(document).ready(function(){
                             current_context_value = current_context[context_var_name];
                             if (required_value == current_context_value) {
                                 // apply callback
-                                console.log(callback)
+//console.log(callback)
                             }
                         }
                     }
@@ -698,13 +698,13 @@ $(document).ready(function(){
             })
             .success(function(data, textStatus, jqXHR) {
                 //var data = eval(data);
-                console.log('Valid Data')
+//console.log('Valid Data')
                 //self.message('<ul><li>Submit Success for step '+step+'</li></ul>')
                 is_valid = true;
             })
             .error(function(jqXHR, textStatus, errorThrown) { 
-                console.log('error: ');
-                console.log(jqXHR)
+//console.log('error: ');
+//console.log(jqXHR)
                 self.message('<ul><li>An error ocurred: '+ jqXHR +' '+ textStatus +'</li></ul>')
                 is_valid = false;
             })
@@ -810,7 +810,7 @@ $(document).ready(function(){
                     target_name = '_' + slug + '_' + value_slug;
 
                     if (requested_target_name == target_name && element.attr('checked') == 'checked') {
-                        console.log(target_name+' == true')
+//console.log(target_name+' == true')
                         applicableLoopObject['container_context'][target_name] = true;
                         found = true;
                     }else{
