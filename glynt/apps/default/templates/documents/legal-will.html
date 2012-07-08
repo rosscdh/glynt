@@ -226,8 +226,7 @@
 <table cellspacing="0" cellpadding="0" class="t1">
   <tbody>
 	{{#each loop_shareholder}}
-	{{#if shareholder_type_company}}
-	{{this.shareholder_name}}
+	{{#if this._shareholder_type_company}}
 	<!--ROSS : Couple of bugs 
 		Issue 1 : For the Shareholders block in the form, if you select two shareholders then click that radio boxes on each, only one radio box set will work. They are not independent. 
 		Issue 2 : For each shareholder, i need to show a signature box at the end of the form. If they are a company it is of one type and if they are an individual then it is another type. I am doing an If statement here but for some reason, from inside the if statement, i can't access the this.x variables so i cant get this to work. Perhaps there is another way to do it.   

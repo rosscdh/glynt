@@ -17,7 +17,8 @@ class AssassinStep2(forms.Form):
 
 # ----- WILLS -----
 def _get_date_today():
-    return datetime.date.today()
+
+    return datetime.date.today().strftime("%a, %d %b %Y")
 
 class WillStep1(forms.Form):
     step_title = forms.CharField(max_length=100, widget=forms.HiddenInput(attrs={'data-step-title':'Company Information'}))
