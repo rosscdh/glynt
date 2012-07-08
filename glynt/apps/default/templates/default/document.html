@@ -3,29 +3,31 @@
 {% load url from future %}
 
 {% block form %}
-<form id="glynt-doc" class="bind-document">{% csrf_token %}
+    <div id="docu-form-head" class="row">
+        <div id="messages" data-bind="html: App.message"></div>
+    </div>
     {% for form in form_set %}
+    <form id="glynt-doc-{{ forloop.counter }}" class="bind-document">{% csrf_token %}
     <div id="form-group-{{ forloop.counter }}" class="form-group {% if not forloop.first %}hidden{% endif %}">
         <h4>Step {{ forloop.counter }}. of {{ form_set|length }}</h4>
         <h4><span class="step-title"></span></h4>
         <br/>
         {{form}}
     </div>
-    {% if forloop.last %}
-    {% endif %}
+    </form>
     {% endfor %}
     <div class="row">
-    <div class="controls pull-right">
-        <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-primary btn-small btn-prev" type="button" data-bind="click: App.formControls.prev">Previous</button></span>
-        <span data-bind="visible: App.formControls.showNext()"><button id="btn-next" class="btn btn-success btn-small btn-next" type="button" data-bind="click: App.formControls.next">Next</button></span>
-    </div>
-    </div>
-    <div id="form-group-{{ form_set|length }}" class="form-group hidden" data-bind="visible: App.formControls.isLastStep()">
-        <div class="span3">
-            <button id="btn-post-pdf" class="btn btn-success" type="button">Get Contract</button>
+        <div class="controls pull-right">
+            <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-primary btn-small btn-prev" type="button" data-bind="click: App.formControls.prev">Previous</button></span>
+            <span data-bind="visible: App.formControls.showNext()"><button id="btn-next" class="btn btn-success btn-small btn-next" type="button" data-bind="click: App.formControls.next">Next</button></span>
         </div>
     </div>
-</form>
+    <div id="form-group-{{ form_set|length }}" class="form-group hidden row" data-bind="visible: App.formControls.isLastStep()">
+        <div class="span3">
+            <button id="btn-post-pdf" class="btn btn-success" type="button">Generate PDF</button>
+        </div>
+    </div>
+
 {% endblock %}
 
 {% block document %}
@@ -151,18 +153,173 @@ $(document).ready(function(){
             var current = self.currentFormStep();
             var next = current+1;
 
+            // async cant wait for valid or not
+            App.submitForm(current, $('form#glynt-doc-' + current));
+
             next = self.determineStepVisibility('next', next);
             self.currentFormStep(next);
+
         }
         self.prev = function prev() {
             var current = self.currentFormStep();
             var prev = current-1;
 
+            // async cant wait for valid or not
+            App.submitForm(current, $('form#glynt-doc-' + current));
+            
             prev = self.determineStepVisibility('prev', prev);
-
             self.currentFormStep(prev);
         }
     }
+
+    function Rule(element,target_element,ruleset){
+        var self = this;
+        self.element = (element != undefined)?element:null,
+        self.target_element = (target_element != undefined)?target_element:null,
+        self.ruleset = (ruleset != undefined)?ruleset:[]
+    };
+
+    function LoopStep(form_fieldset, hide_from_element, iteration_title){
+        var self = this; 
+        self.form_fieldset = (form_fieldset != undefined)?form_fieldset:null;
+        self.hide_from_element = (hide_from_element != undefined)?hide_from_element:null;
+        self.iteration_title = (iteration_title != undefined)?iteration_title:'Item';
+        self.valid_fieldtypes = ['input', 'text','select','textarea','select-one','radio','checkbox']
+        self.repeatable_fields = [];
+        self.repeatable_fieldset = null;
+        self.hb_loop_ob_container = ko.observable({});
+        self.loopContainerForContext = ko.observableArray([]);
+
+        self.isValidInputType = function isValidInputType(element) {
+            var element_type = App.getElementType(element);
+            var found = false;
+            if ($.inArray(element_type, self.valid_fieldtypes) != -1) {
+                return true;
+            }
+            return false;
+        }
+
+        self.showIteration = function showIteration(index) {
+            if (self.repeatable_fieldset === null) {
+                // not exists create it
+                fieldset = $('<fieldset class="loop" style="display:none;"><legend>&nbsp;</legend>');
+                for (f in self.repeatable_fields) {
+                    field = $(self.repeatable_fields[f]);
+                    field.css('display','');
+                    fieldset.append(field);
+                }
+                self.repeatable_fieldset = fieldset;
+            }
+
+            // @TODO remove redundant items from the list, to allow fro increase and decrease of index
+            // ruleset if they reduce ie.. 5 to 2 then 3,4,5 are deleted
+            // @TODO make methods
+            // @CODESMELL
+            var fieldsets = self.form_fieldset.find('fieldset');
+            var hb_base_ob = {};
+
+            for (var c=1; c <= index; c++) {
+                var fieldset = false;
+
+                if (self.hb_loop_ob_container()[c] != undefined) {
+                    // exists already
+                    //console.log('existing element')
+                    hb_ob = self.hb_loop_ob_container()[c];
+                    fieldset = self.form_fieldset.find('#set-'+c);
+                    fieldset.css('display','');
+
+                    fieldset.children().each(function(index,element){
+                        element = $(element);
+
+                        if (self.isValidInputType(element) === true) {
+                            var key = element.attr('name').replace(/(_(\d+))?/ig, '');
+                            hb_ob[key] = element.val();
+                        }
+                    });
+                }else{
+                    //console.log('new element')
+                    hb_ob = $.extend({}, hb_base_ob);
+                    hb_ob['id'] = self.iteration_title.toLowerCase() +'_'+ c;
+                    hb_ob['index'] = c;
+                    // new so create it based on default
+                    // deep copy the set
+                    fieldset = self.repeatable_fieldset.clone();
+                    // set element attribs
+                    fieldset.attr('id', 'set-'+c)
+                    fieldset.css('display','');
+                }
+
+                legend = fieldset.find('legend');
+                legend.html(self.iteration_title + '&nbsp;' + c); // @TODO need to put real title name here
+
+                // loop over element set of inputs (that are valid)
+                if (fieldset !== null) {
+                    fieldset.find(self.valid_fieldtypes.join(',')).each(function(index,element){
+                        element = $(element);
+                        if (self.hb_loop_ob_container()[c] == undefined) {
+                            if (self.isValidInputType(element) === true) {
+                                // update id to be unique
+                                old_id = element.attr('id');
+                                new_id = old_id + '_' + c;
+                                element.attr('id', new_id);
+                                // update name to be unique
+                                old_name = element.attr('name');
+                                new_name = old_name + '_' + c;
+                                element.attr('name', new_name);
+                                slug_with_no_id = old_name.replace(/(_(\d+))?/ig, '');
+
+                                // update hb-name so that we get correct context variables
+                                element.attr('data-hb-name', old_name);
+
+                                // set the context params
+                                hb_ob = App.documentModel.ensureElementContextRadioCheckboxOptionsPresent(element,hb_ob);
+                                hb_ob[slug_with_no_id] = element.val();
+
+                                App.documentModel.setContextItem(element);
+                            }
+                        }
+                    });
+                }
+                self.form_fieldset.append(fieldset);
+                self.hb_loop_ob_container()[c] = hb_ob;
+            }
+
+            // @TODO DELETE HACK
+            for (var c=index+1; c <= fieldsets.length; c++) {
+                // hide these elements
+                $(fieldsets[c]).remove();
+                self.form_fieldset.find('#set-'+c).remove();
+                delete self.hb_loop_ob_container()[c];
+            }
+            self.loopContainerForContext([]);//reset
+            for (i in self.hb_loop_ob_container()) {
+                self.loopContainerForContext().push(self.hb_loop_ob_container()[i]);
+            }
+            
+            // set array grouping context variable to allow handlebarsjs to loop
+            var hb_loop_key = 'loop_' + self.iteration_title.toLowerCase();
+            App.documentModel.setContextItemByForce(hb_loop_key, self.loopContainerForContext());
+            App.render();
+        }
+
+        self.init = function init(){
+        // loop over ALL form elements (including labels and other helper items) find the from element and hide all those after
+            var found = false;
+            self.form_fieldset.children().each(function(index,element){
+                if ($(element).attr('id') == $(hide_from_element).attr('id')) {
+                    found = true;
+                } else {
+                    if (found == true) {
+                        $(element).hide();
+                        self.repeatable_fields.push($(element));
+                    }
+                }
+
+            });
+        }
+
+        self.init();
+    };
 
 	function DocumentModel() {
 		var self = this;
@@ -175,13 +332,6 @@ $(document).ready(function(){
 
         self.visibilityRuleset = ko.observableArray([]);
         self.loopStepList = ko.observable({});
-
-        function Rule(element,target_element,ruleset){
-            var self = this;
-            self.element = (element != undefined)?element:null,
-            self.target_element = (target_element != undefined)?target_element:null,
-            self.ruleset = (ruleset != undefined)?ruleset:[]
-        };
 
         self.ruleSet = ko.observable({
             'show_step_when': [],
@@ -218,179 +368,31 @@ $(document).ready(function(){
             };
         }
 
-        function LoopStep(form_fieldset, hide_from_element, iteration_title){
-            var self = this; 
-            self.form_fieldset = (form_fieldset != undefined)?form_fieldset:null;
-            self.hide_from_element = (hide_from_element != undefined)?hide_from_element:null;
-            self.iteration_title = (iteration_title != undefined)?iteration_title:'Item';
-            self.valid_fieldtypes = ['input', 'text','select','textarea','radio','checkbox']
-            self.repeatable_fields = [];
-            self.repeatable_fieldset = null;
-            self.hb_loop_ob_container = ko.observable({});
-            self.loopContainerForContext = ko.observableArray([]);
-
-            self.isValidInputType = function isValidInputType(element) {
-                var element_type = self.getElementType(element);
-                var found = false;
-                if ($.inArray(element_type, self.valid_fieldtypes) != -1) {
-                    return true;
-                }
-                return false;
-            }
-
-            self.getElementType = function getElementType(element) {
-                var element_type = element.attr('type');
-                if (element_type == undefined) {
-                    // textarea?
-                    element_type = element.prop('type');
-                }
-                return element_type;
-            }
-
-            self.setHBObjectHelperValues = function setHBObjectHelperValues(element,local_context) {
-                // console.log(element.attr('type'))
-                
-                if (element.attr('type') == 'radio' || element.attr('type') == 'checkbox') {
-                    var helper = App.documentModel.getTemplateHelperKey(element);
-                    var slug = helper['slug'];
-                    var key = helper['id_free_key'];
-
-                    local_context[key] = true;
-
-                    for (context_key in App.documentModel.context()) {
-                        if (context_key.indexOf(slug) >= 0) {
-                            // found it
-                            if (context_key != key) {
-                                local_context[key] = false;
-                            }
-                        }
-                    }
-                }
-                return local_context;
-            }
-
-            self.showIteration = function showIteration(index) {
-                if (self.repeatable_fieldset === null) {
-                    // not exists create it
-                    fieldset = $('<fieldset class="loop" style="display:none;"><legend>&nbsp;</legend>');
-                    for (f in self.repeatable_fields) {
-                        field = $(self.repeatable_fields[f]);
-                        field.css('display','');
-                        fieldset.append(field);
-                    }
-                    self.repeatable_fieldset = fieldset;
-                }
-
-                // @TODO remove redundant items from the list, to allow fro increase and decrease of index
-                // ruleset if they reduce ie.. 5 to 2 then 3,4,5 are deleted
-                // @TODO make methods
-                var fieldsets = self.form_fieldset.find('fieldset');
-                var hb_base_ob = {};
-
-                for (var c=1; c <= index; c++) {
-
-                    if (self.hb_loop_ob_container()[c] != undefined) {
-                        // exists already
-                        //console.log('existing element')
-                        hb_ob = self.hb_loop_ob_container()[c];
-                        fieldset = self.form_fieldset.find('#set-'+c);
-                        fieldset.css('display','');
-
-                        fieldset.children().find(self.valid_fieldtypes.join(',')).each(function(index,element){
-                            element = $(element);
-
-                            if (self.isValidInputType(element) === true) {
-                                var key = element.attr('name').replace(/(_(\d+))?/ig, '');
-                                hb_ob[key] = element.val();
-                            }
-                        });
-                    }else{
-                        //console.log('new element')
-                        hb_ob = $.extend({}, hb_base_ob);
-                        hb_ob['id'] = self.iteration_title.toLowerCase() +'_'+ c;
-                        hb_ob['index'] = c;
-                        // new so create it based on default
-                        // deep copy the set
-                        fieldset = self.repeatable_fieldset.clone();
-                        // set element attribs
-                        fieldset.attr('id', 'set-'+c)
-                        fieldset.css('display','');
-                    }
-
-                    legend = fieldset.find('legend');
-                    legend.html(self.iteration_title + '&nbsp;' + c); // @TODO need to put real title name here
-
-                    // loop over element set of inputs (that are valid)
-                    fieldset.children().find(self.valid_fieldtypes.join(',')).each(function(index,element){
-                        element = $(element);
-                        if (self.hb_loop_ob_container()[c] == undefined) {
-                            if (self.isValidInputType(element) === true) {
-                                // update id to be unique
-                                old_id = element.attr('id');
-                                new_id = old_id + '_' + c;
-                                element.attr('id', new_id);
-                                // update name to be unique
-                                old_name = element.attr('name');
-                                new_name = old_name + '_' + c;
-                                element.attr('name', new_name);
-                                slug_with_no_id = old_name.replace(/(_(\d+))?/ig, '');
-                                // update hb-name so that we get correct context variables
-                                element.attr('data-hb-name', new_name);
-
-                                // set the context params
-                                App.documentModel.setContextItem(element);
-
-                                hb_ob[slug_with_no_id] = element.val();
-                                // @TODO hmm antipattern
-                                hb_ob = self.setHBObjectHelperValues(element,hb_ob);
-                            }
-                        }
-                    });
-                    self.form_fieldset.append(fieldset);
-
-                    self.hb_loop_ob_container()[c] = hb_ob;
-                }
-
-                // @TODO DELETE HACK
-                for (var c=index+1; c <= fieldsets.length; c++) {
-                    // hide these elements
-                    $(fieldsets[c]).remove();
-                    self.form_fieldset.find('#set-'+c).remove();
-                    delete self.hb_loop_ob_container()[c];
-                }
-                self.loopContainerForContext([]);//reset
-                for (i in self.hb_loop_ob_container()) {
-                    self.loopContainerForContext().push(self.hb_loop_ob_container()[i]);
-                }
-                
-                // set array grouping context variable to allow handlebarsjs to loop
-                var hb_loop_key = 'loop_' + self.iteration_title.toLowerCase();
-                App.documentModel.setContextItemByForce(hb_loop_key, self.loopContainerForContext());
-                App.render();
-            }
-
-            self.init = function init(){
-            // loop over ALL form elements (including labels and other helper items) find the from element and hide all those after
-                var found = false;
-                self.form_fieldset.children().each(function(index,element){
-                    if ($(element).attr('id') == $(hide_from_element).attr('id')) {
-                        found = true;
-                    } else {
-                        if (found == true) {
-                            $(element).hide();
-                            self.repeatable_fields.push($(element));
-                        }
-                    }
-
-                });
-            }
-
-            self.init();
-        };
-
         self.showLoopStep = function showLoopStep(element, num) {
             var formset_id = $($(element).closest('div.form-group')[0]).attr('id');
             self.loopStepList()[formset_id].showIteration(num);
+        }
+
+        self.getLoopStepByChildElement = function getLoopStepByChildElement(requested_element) {
+            var found = false;
+            var requested_id = parseInt(requested_element.attr('id').replace(/[^\d]+/ig, ''));
+            var formset_id = $($(requested_element).closest('div.form-group')[0]).attr('id');
+
+            $.each(self.loopStepList()[formset_id].hb_loop_ob_container(), function(index,element){
+                if (found === false && element['id'] != undefined) {
+                    var item_id = parseInt(element['id'].replace(/[^\d]+/ig, ''));
+
+                    if (item_id === requested_id) {
+                        found = {
+                            'formset_id': formset_id,
+                            'context_index': index,
+                            'container_context': element,
+                        }
+                    };
+                }
+            });
+
+            return found;
         }
 
         self.setLoopStep = function setLoopStep(form_fieldset, hide_from_element, iteration_title) {
@@ -437,21 +439,15 @@ $(document).ready(function(){
             // if the textElementsList has no type of this type.. it could be a checkbox or radio
             if (self.textElementsList.indexOf(input.attr('type')) == -1) {
                 
-                if (input.attr('type') == 'checkbox') {
+                if (input.attr('type') == 'radio' || input.attr('type') == 'checkbox') {
                     value = (input.attr('checked') == 'checked') ? true : false ;
                 }
-                if (input.attr('type') == 'radio') {
-                    value = false;
-                    if (input.attr('checked') == 'checked') {
-                        value = input.val();
-                    }
-                }
-                self.setTemplateHelperValues(input);
             }
 
-            self.setTemplateHasHelperValues(input, value, is_placeholder_value);
-
-            return value;
+            return {
+                'value': value,
+                'is_placeholder_value': is_placeholder_value
+            };
         }
 
         self.setTemplateHasHelperValues = function setTemplateHasHelperValues(input, value, is_placeholder_value) {
@@ -460,6 +456,7 @@ $(document).ready(function(){
             self.setContextItemByForce(key, has_this_value);
         }
 
+        // method to set the _value values of the specified item
         self.getTemplateHelperKey = function getTemplateHelperKey(input) {
             var value = input.val();
             var slug = self.slugify(input.attr('data-hb-name'));
@@ -477,45 +474,86 @@ $(document).ready(function(){
 
         }
 
-        self.setTemplateHelperValues = function setTemplateHelperValues(input) {
+        self.ensureElementContextRadioCheckboxOptionsPresent = function ensureElementContextRadioCheckboxOptionsPresent(element,local_context) {
+            var required_name = element.attr('name');
+
+            if (element.attr('type') == 'radio' || element.attr('type') == 'checkbox') {
+                if (element.attr('name') == required_name) {
+                    // found the name of the lement so ensure the key exists
+                    // @TODO these variables need to be commmon make a method
+                    var slug = self.slugify(element.attr('data-hb-name')).replace(/(_[\d]+)/ig, '');
+                    var value_slug = self.slugify(element.val());
+                    var key = '_' + slug + '_' + value_slug;
+
+                    if ((key in local_context) == false) {
+                        local_context[key] = false;
+                    }else{
+                        for (context_key in local_context) {
+                            if (context_key.indexOf(slug) >= 0) {
+                                // found it
+                                if (element.attr('checked') == 'checked') {
+                                    // exists 
+                                    local_context[key] = true;
+                                }else{
+                                    local_context[key] = false;
+                                }
+                            }
+                        }
+                    }
+
+                }
+            };
+            return local_context;
+        }
+
+        // This is where radio and checkboxes in a loop are handled
+        self.setTemplateHelperValues = function setTemplateHelperValues(input,local_context) {
             // set custom
             helper = self.getTemplateHelperKey(input);
 
-            var value = helper['value'];
+            var context = (local_context == undefined) ? self.context() : local_context ;
             var slug = helper['slug'];
-            var value_slug = helper['value_slug'];
             var key = helper['key'];
 
-            // set the base key value for this input
-            self.setContextItemByForce(key, true);
-
-            // then reset the _ and has attributes for items that have the same slug but not the same value ie are in teh same radio/checkbox group
-            for (context_key in self.context()) {
-                if (context_key.indexOf(slug) >= 0) {
-                    // found it
-                    if (context_key != key) {
-                        self.setContextItemByForce(context_key, false);
-                    }
-                }
+            if (input.attr('type') == 'radio') {
+                helper = self.ensureElementContextRadioCheckboxOptionsPresent(input,helper);
+                context = $.merge(context,helper);
             }
+
+            if (local_context == undefined) {
+                // set the base key value for this input
+                self.setContextItemByForce(key, true);
+            }
+
+            return context;
         }
 
-		self.setContextItem = function setContextItem(input) {
+		self.setContextItem = function setContextItem(input,local_context) {
             // only allow if the data-hb-name is set
             if (typeof input.attr('data-hb-name') == 'string') {
-    			var context = self.context();
+    			var context = (local_context == undefined) ? self.context() : local_context ;
     			var key = name = input.attr('data-hb-name');
-    			var value = self.determineValue(input);
+    			var value_ob = self.determineValue(input);
+                var value = value_ob['value'];
+                var is_placeholder_value = value_ob['is_placeholder_value'];
+
+                // set the helper values
+                self.setTemplateHelperValues(input);
+                // set the has_attrib values
+                self.setTemplateHasHelperValues(input, value, is_placeholder_value);
 
             	context[key] = value;
-            	self.context(context);
+                if (local_context == undefined) {
+            	   self.context(context);
+                }
+                return context
             }
+            return false;
 		}
 
         self.setContextItemByForce = function setContextItemByForce(key,value) {
             var context = self.context();
             context[key] = value;
-            //console.log('Force - key: '+key+' value:'+value)
             self.context(context);
         }
 
@@ -537,6 +575,7 @@ $(document).ready(function(){
         self.targetDocumentId = ko.observable('span#document-md');
         self.documentModel = new DocumentModel();
         self.formControls = new FormControls();
+        self.message = ko.observable(null);
 
         self.setGlyntRuleset = function setGlyntRuleset() {
             // loop over lements looking for rulesets
@@ -637,28 +676,44 @@ $(document).ready(function(){
             self.render();
         }
 
-        self.validateForm = function validateForm() {
+        self.validateAllForms = function validateAllForms() {
             // working on the debug
-            return true;
-
+            //return true;
+            var errorList = [];
             var is_valid = false;
+            $('form.bind-document').each(function(step, form){
+                form = $(form);
+                self.submitForm(step, form);
+            });
 
+            return is_valid;
+        }
+
+        self.submitForm = function submitForm(step, form) {
+            var is_valid = false;
             $.ajax({
               type: 'POST',
               url: "{% url 'document:generic' doc=doc %}?step="+step,
-              data: $('form#glynt-doc').serialize(),
+              data: form.serialize(),
             })
             .success(function(data, textStatus, jqXHR) {
-                var data = eval(data);
-                console.log(data)
+                //var data = eval(data);
+                console.log('Valid Data')
+                //self.message('<ul><li>Submit Success for step '+step+'</li></ul>')
                 is_valid = true;
             })
-            .error(function() { 
-                console.log('error');
+            .error(function(jqXHR, textStatus, errorThrown) { 
+                console.log('error: ');
+                console.log(jqXHR)
+                self.message('<ul><li>An error ocurred: '+ jqXHR +' '+ textStatus +'</li></ul>')
                 is_valid = false;
             })
             .complete(function() {});
             return is_valid;
+        }
+
+        self.showErrorMessage = function showErrorMessage(msg) {
+
         }
 
         self.postDocument = function postDocument() {
@@ -686,6 +741,15 @@ $(document).ready(function(){
             });
         }
 
+        self.getElementType = function getElementType(element) {
+            var element_type = element.attr('type');
+            if (element_type == undefined) {
+                // textarea?
+                element_type = element.prop('type');
+            }
+            return element_type;
+        }
+
         self.init();
     }
 
@@ -706,28 +770,57 @@ $(document).ready(function(){
 
     $('form.bind-document fieldset.loop').live('change', function(event){
         var id_index = $(this).attr('id');
-        $(this).find('input,textarea').each(function(index,element){
-            var target_id = $(element).attr('id');
-            var target_value = $(element).val();
-            var tmp = target_id.split('_');
-            target_id = parseInt(tmp[tmp.length-1]);
-            var target_name = $(element).attr('data-hb-name');
-            if (target_name != undefined) {
-                target_name = target_name.replace('_'+target_id,'')
-            }
-            if (typeof target_id == 'number' && target_name != undefined) {
-                $.each(App.documentModel.loopStepList(), function(index,loopstep){
-                    $.each(loopstep.hb_loop_ob_container(), function(index,element){
-                        var item_id = element['id'].split('_');
-                        item_id = parseInt(item_id[item_id.length-1]);
-                        //console.log(target_value)
-                        if (item_id === target_id) {
-                            element[target_name] = target_value;
+        var fieldset = $(this);
+
+        var applicableLoopObject = App.documentModel.getLoopStepByChildElement(fieldset.find('input:first'));
+
+        if (applicableLoopObject) {
+            fieldset.find('input,textarea,select').each(function(index,element){
+                element = $(element);
+                var target_id = parseInt(element.attr('id').replace(/[^\d]+/ig, ''));
+                var target_value = element.val();
+                var target_name = $(element).attr('data-hb-name');
+
+                if (target_name != undefined) {
+                    target_name = target_name.replace(/(_\d+)/ig, '');
+                    if (applicableLoopObject) {
+                        applicableLoopObject['container_context'][target_name] = target_value;
+                    }
+                }
+            });
+
+            var found = false;
+            fieldset.find('input[type=radio], input[type=checkbox]').each(function(index,element){
+                element = $(element);
+                var element_type = element.attr('type');
+                var target_id = parseInt(element.attr('id').replace(/[^\d]+/ig, ''));
+                var target_value = element.val();
+                var target_name = $(element).attr('data-hb-name');
+
+                // because its a iteratable(radio,cehckbox) within a loop object we need to itereate
+                requested_slug = App.documentModel.slugify(element.attr('data-hb-name')).replace(/(_[\d]+)/ig, '');
+                requested_value_slug = App.documentModel.slugify(element.val());
+                requested_target_name = '_' + requested_slug + '_' + requested_value_slug;
+
+                fieldset.find('input[type='+ element_type +']').each(function(index,element){
+                    element = $(element);
+
+                    slug = App.documentModel.slugify(element.attr('data-hb-name')).replace(/(_[\d]+)/ig, '');
+                    value_slug = App.documentModel.slugify(element.val());
+                    target_name = '_' + slug + '_' + value_slug;
+
+                    if (requested_target_name == target_name && element.attr('checked') == 'checked') {
+                        console.log(target_name+' == true')
+                        applicableLoopObject['container_context'][target_name] = true;
+                        found = true;
+                    }else{
+                        if (found == false){
+                            applicableLoopObject['container_context'][target_name] = false;
                         }
-                    });
-                })
-            }
-        })
+                    }
+                });
+            });
+        }
         App.render();
     });
 
@@ -741,7 +834,7 @@ $(document).ready(function(){
     })
     $('button#btn-post-pdf').live('click', function(event){
         event.preventDefault();
-        if (App.validateForm() == true) {
+        if (App.validateAllForms() == true) {
             App.postDocument();
         }
     });
