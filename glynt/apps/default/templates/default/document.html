@@ -845,9 +845,9 @@ $(document).ready(function(){
     })
     $('button#btn-post-pdf').live('click', function(event){
         event.preventDefault();
-        if (App.validateAllForms() == true) {
+        //if (App.validateAllForms() == true) {
             App.postDocument();
-        }
+        //}
     });
 
     $("input.datepicker").datepicker({dateFormat:"D, dd MM yy"});
