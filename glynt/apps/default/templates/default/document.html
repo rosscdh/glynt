@@ -691,24 +691,27 @@ $(document).ready(function(){
 
         self.submitForm = function submitForm(step, form) {
             var is_valid = false;
-            $.ajax({
-              type: 'POST',
-              url: "{% url 'document:generic' doc=doc %}?step="+step,
-              data: form.serialize(),
-            })
-            .success(function(data, textStatus, jqXHR) {
-                //var data = eval(data);
-                console.log('Valid Data')
-                //self.message('<ul><li>Submit Success for step '+step+'</li></ul>')
-                is_valid = true;
-            })
-            .error(function(jqXHR, textStatus, errorThrown) { 
-                console.log('error: ');
-                console.log(jqXHR)
-                self.message('<ul><li>An error ocurred: '+ jqXHR +' '+ textStatus +'</li></ul>')
-                is_valid = false;
-            })
-            .complete(function() {});
+            if (self.message() == null) {
+                $.ajax({
+                  type: 'POST',
+                  url: "{% url 'document:generic' doc=doc %}?step="+step,
+                  data: form.serialize(),
+                })
+                .success(function(data, textStatus, jqXHR) {
+                    var data = $.parseJSON(data);
+                    is_valid = true;
+                })
+                .error(function(jqXHR, textStatus, errorThrown) { 
+                    var data = $.parseJSON(jqXHR.responseText);
+                    //console.log(data)
+                    self.message(data['message'])
+                    is_valid = false;
+                    App.formControls.prev();
+                })
+                .complete(function() {});
+            }else{
+                is_valid = true; // bit of a trip here; if we have 1 set of errors then they are going back to that error
+            }
             return is_valid;
         }
 
@@ -827,6 +830,11 @@ $(document).ready(function(){
     $('form.bind-document span.step-title').each(function() {
         var element = $(this).closest('div').find('input[data-step-title]');
         $(this).text(element.attr('data-step-title'));
+    });
+
+    $('.fix-errors').live('click', function(event){
+        event.preventDefault;
+        App.formControls.prev();
     });
 
     $('.md-updater').live('change', function(event){

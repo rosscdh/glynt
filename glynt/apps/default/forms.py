@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django import forms
+from django.utils.translation import ugettext_lazy as _
 import datetime
 
 
@@ -17,34 +18,33 @@ class AssassinStep2(forms.Form):
 
 # ----- WILLS -----
 def _get_date_today():
-
     return datetime.date.today().strftime("%a, %d %b %Y")
 
 class WillStep1(forms.Form):
-    step_title = forms.CharField(max_length=100, widget=forms.HiddenInput(attrs={'data-step-title':'Company Information'}))
-    company_name = forms.CharField(label='What is the company name?',max_length=100, widget=forms.TextInput(attrs={'placeholder':'Full Company Name','class':'md-updater','data-hb-name':'full_company_name'}))
-    date_start = forms.DateField(label='Date of this agreement',widget=forms.DateInput(attrs={'placeholder':_get_date_today(),'class':'md-updater','data-hb-name':'date_start'}))
-    company_street_address = forms.CharField(label='What is your street address of the company?',widget=forms.Textarea(attrs={'placeholder':'Your companies registered address','class':'md-updater','data-hb-name':'company_street_address','rows':'4'}))
-    company_city = forms.CharField(label='What is the city of the company?',widget=forms.TextInput(attrs={'placeholder':'Your company registered city','class':'md-updater','data-hb-name':'company_city'}))
-    company_state = forms.CharField(label='What is the state of the company?',widget=forms.TextInput(attrs={'placeholder':'State','class':'md-updater','data-hb-name':'company_state'}))
-    company_zip = forms.CharField(label='What is the Zip code of the company?',widget=forms.TextInput(attrs={'placeholder':'Zip','class':'md-updater','data-hb-name':'company_zip'}))
-    company_date_incorp = forms.CharField(label='When was the company incorporated?',widget=forms.TextInput(attrs={'placeholder':_get_date_today(),'class':'md-updater','data-hb-name':'company_date_incorp'}))
+    step_title = forms.CharField(max_length=100, required=False,widget=forms.HiddenInput(attrs={'data-step-title':'Company Information'}))
+    company_name = forms.CharField(label=_('Company Name'), required=True,max_length=100, widget=forms.TextInput(attrs={'placeholder':'Full Company Name','class':'md-updater','data-hb-name':'full_company_name'}))
+    date_start = forms.DateField(required=True,label='Date of this agreement',widget=forms.DateInput(attrs={'placeholder':_get_date_today(),'class':'md-updater','data-hb-name':'date_start'}))
+    company_street_address = forms.CharField(required=True,label='What is your street address of the company?',widget=forms.Textarea(attrs={'placeholder':'Your companies registered address','class':'md-updater','data-hb-name':'company_street_address','rows':'4'}))
+    company_city = forms.CharField(required=True,label='What is the city of the company?',widget=forms.TextInput(attrs={'placeholder':'Your company registered city','class':'md-updater','data-hb-name':'company_city'}))
+    company_state = forms.CharField(required=True,label='What is the state of the company?',widget=forms.TextInput(attrs={'placeholder':'State','class':'md-updater','data-hb-name':'company_state'}))
+    company_zip = forms.CharField(required=True,label='What is the Zip code of the company?',widget=forms.TextInput(attrs={'placeholder':'Zip','class':'md-updater','data-hb-name':'company_zip'}))
+    company_date_incorp = forms.CharField(required=True,label='When was the company incorporated?',widget=forms.TextInput(attrs={'placeholder':_get_date_today(),'class':'md-updater','data-hb-name':'company_date_incorp'}))
 
 class WillStep2(forms.Form):
-    step_title = forms.CharField(max_length=100, widget=forms.HiddenInput(attrs={'data-step-title':'Number of Shareholders', 'data-glynt-loop_step':"[{hide_from:'num_shareholders',iteration_title:'Shareholder'}]"}))
-    num_shareholders = forms.ChoiceField(label='How many shareholders are there in your company?',choices=(('0','-----'),('1','1'),('2','2'),('3','3'),('4','4'),),initial=0, widget=forms.Select(attrs={'data-glynt-loop_length':''}))
-    shareholder_type = forms.ChoiceField(label='Is the shareholder a company?',choices=(('company','Yes'),('person','No')),widget=forms.RadioSelect(attrs={'class':'md-updater','data-hb-name':'shareholder_type'}))
-    shareholder_name = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'placeholder':'Shareholder Name','class':'md-updater','data-hb-name':'shareholder_name'}))
-    shareholder_address = forms.CharField(max_length=255,widget=forms.Textarea(attrs={'placeholder':'Shareholder Address including Zip','class':'md-updater','data-hb-name':'shareholder_address'}))
-    shareholder_shares = forms.CharField(max_length=255,widget=forms.TextInput(attrs={'placeholder':'Number of shares held','class':'md-updater','data-hb-name':'shareholder_shares'}))
+    step_title = forms.CharField(max_length=100,required=False,widget=forms.HiddenInput(attrs={'data-step-title':'Number of Shareholders', 'data-glynt-loop_step':"[{hide_from:'num_shareholders',iteration_title:'Shareholder'}]"}))
+    num_shareholders = forms.ChoiceField(required=True,label='How many shareholders are there in your company?',choices=(('0','-----'),('1','1'),('2','2'),('3','3'),('4','4'),),initial=0, widget=forms.Select(attrs={'data-glynt-loop_length':''}))
+    shareholder_type = forms.ChoiceField(required=False,initial='person',label='Is the shareholder a company?',choices=(('company','Yes'),('person','No')),widget=forms.RadioSelect(attrs={'class':'md-updater','data-hb-name':'shareholder_type'}))
+    shareholder_name = forms.CharField(required=False,max_length=255, widget=forms.TextInput(attrs={'placeholder':'Shareholder Name','class':'md-updater','data-hb-name':'shareholder_name'}))
+    shareholder_address = forms.CharField(required=False,max_length=255,widget=forms.Textarea(attrs={'placeholder':'Shareholder Address including Zip','class':'md-updater','data-hb-name':'shareholder_address'}))
+    shareholder_shares = forms.CharField(required=False,max_length=255,widget=forms.TextInput(attrs={'placeholder':'Number of shares held','class':'md-updater','data-hb-name':'shareholder_shares'}))
 
 class WillStep3(forms.Form):
-    step_title = forms.CharField(max_length=100, widget=forms.HiddenInput(attrs={'data-step-title':'About the company'}))
+    step_title = forms.CharField(max_length=100,required=False,widget=forms.HiddenInput(attrs={'data-step-title':'About the company'}))
     company_country = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'placeholder':'Company country','class':'md-updater','data-hb-name':'company_country'}))
     company_activites = forms.CharField(max_length=255,widget=forms.Textarea(attrs={'placeholder':'Main activities of the company','class':'md-updater','data-hb-name':'company_activites'}))
 
 class WillStep4(forms.Form):
-    step_title = forms.CharField(max_length=100, widget=forms.HiddenInput(attrs={'data-step-title':'Appointed Directors'}))
+    step_title = forms.CharField(max_length=100,required=False,widget=forms.HiddenInput(attrs={'data-step-title':'Appointed Directors'}))
     company_director_noms = forms.CharField(label='How many directors may each shareholder nominate?',max_length=255, widget=forms.TextInput(attrs={'placeholder':'2','class':'md-updater','data-hb-name':'company_director_noms'}))
     company_max_directors = forms.CharField(label='What is the maximum number of Directors that can hold office at any one time?',max_length=255,widget=forms.TextInput(attrs={'placeholder':'e.g. 5','class':'md-updater','data-hb-name':'company_max_directors'}))
     company_management_account_freq = forms.CharField(label='How often are the management accounts to be prepared and sent to directors?',max_length=255,widget=forms.TextInput(attrs={'placeholder':'Quarterly','class':'md-updater','data-hb-name':'company_management_account_freq'}))
@@ -52,20 +52,20 @@ class WillStep4(forms.Form):
 
 
 class WillStep5(forms.Form):
-    step_title = forms.CharField(max_length=100, widget=forms.HiddenInput(attrs={'data-step-title':'Shareholder Nominations', 'data-glynt-loop_step':"[{hide_from:'num_direct_noms_from_shareholders',iteration_title:'Shareholder nom'}]"}))
+    step_title = forms.CharField(max_length=100,required=False,widget=forms.HiddenInput(attrs={'data-step-title':'Shareholder Nominations', 'data-glynt-loop_step':"[{hide_from:'num_direct_noms_from_shareholders',iteration_title:'Shareholder nom'}]"}))
     num_direct_noms_from_shareholders = forms.ChoiceField(label='Many any shareholders nominate additional directors?',choices=(('0','None'),('1','1'),('2','2'),('3','3'),('4','4'),),initial=0, widget=forms.Select(attrs={'data-glynt-loop_length':''}))
     shareholder_nom_name = forms.CharField(label='Shareholder name',max_length=255, widget=forms.TextInput(attrs={'placeholder':'Shareholder Name','class':'md-updater','data-hb-name':'shareholder_nom_name'}))
     shareholder_nom_allowed = forms.CharField(label='How many directors may they nominate?',max_length=255,widget=forms.TextInput(attrs={'placeholder':'1','class':'md-updater','data-hb-name':'shareholder_nom_allowed'}))
 
 
 class WillStep6(forms.Form):
-    step_title = forms.CharField(max_length=100, widget=forms.HiddenInput(attrs={'data-step-title':'Share Allocation'}))
+    step_title = forms.CharField(max_length=100,required=False,widget=forms.HiddenInput(attrs={'data-step-title':'Share Allocation'}))
     shares_in_issue = forms.CharField(label='How many shares were in issue?',max_length=255, widget=forms.TextInput(attrs={'placeholder':'100','class':'md-updater','data-hb-name':'shares_in_issue'}))
     share_value = forms.CharField(label='What is the nominal share value?',max_length=255, widget=forms.TextInput(attrs={'placeholder':'$5','class':'md-updater','data-hb-name':'share_value'}))
 
 
 class WillStep7(forms.Form):
-    step_title = forms.CharField(max_length=100, widget=forms.HiddenInput(attrs={'data-step-title':'Misc Details'}))
+    step_title = forms.CharField(max_length=100,required=False,widget=forms.HiddenInput(attrs={'data-step-title':'Misc Details'}))
     max_cap = forms.CharField(label='What is the maximum amount of capital expenditure that may be incurred before there must be unanimous agreement by the shareholders?',max_length=255, widget=forms.TextInput(attrs={'placeholder':'$500','class':'md-updater','data-hb-name':'max_cap'}))
     how_many_days = forms.CharField(label='How many days do the Shareholders have to make an offer for the shares?',max_length=255, widget=forms.TextInput(attrs={'placeholder':'28','class':'md-updater','data-hb-name':'how_many_days'}))
     how_many_days_sealed = forms.CharField(label='How many days shall the Shareholders have in which to make a sealed bid?',max_length=255, widget=forms.TextInput(attrs={'placeholder':'28','class':'md-updater','data-hb-name':'how_many_days_sealed'}))
