@@ -43,8 +43,8 @@ class WillStep2(forms.Form):
 
 class WillStep3(forms.Form):
     step_title = forms.CharField(max_length=100,required=False,widget=forms.HiddenInput(attrs={'data-step-title':'About the company'}))
-    company_country = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'placeholder':'Company country','class':'md-updater','data-hb-name':'company_country'}))
-    company_activites = forms.CharField(max_length=255,widget=forms.Textarea(attrs={'placeholder':'Main activities of the company','class':'md-updater','data-hb-name':'company_activites'}))
+    company_country = forms.CharField(required=False,max_length=255, widget=forms.TextInput(attrs={'placeholder':'Company country','class':'md-updater','data-hb-name':'company_country'}))
+    company_activites = forms.CharField(required=False,max_length=255,widget=forms.Textarea(attrs={'placeholder':'Main activities of the company','class':'md-updater','data-hb-name':'company_activites'}))
 
 class WillStep4(forms.Form):
     step_title = forms.CharField(max_length=100,required=False,widget=forms.HiddenInput(attrs={'data-step-title':'Appointed Directors'}))
