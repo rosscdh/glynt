@@ -15,6 +15,7 @@ MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
 
 STATIC_ROOT = '/home/stard0g101/webapps/cartvine_static/'
+MEDIA_ROOT = '/home/stard0g101/webapps/cartvine_static/media/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
