@@ -42,7 +42,7 @@ USE_I18N = True
 
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale.
-USE_L10N = True
+USE_L10N = False
 
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
@@ -102,7 +102,6 @@ TEMPLATE_DIRS = (
     os.path.join(SITE_ROOT, 'templates'),
 )
 
-
 BASE_APP = (
     'glynt.apps.default',
 )
@@ -123,6 +122,10 @@ INSTALLED_APPS = BASE_APP + HELPER_APPS + (
     'django.contrib.admin',
     'django.contrib.markup',
 )
+
+DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d %Y',
+'%b %d, %Y', '%d %b %Y', '%d %b, %Y', '%B %d %Y',
+'%B %d, %Y', '%d %B %Y', '%d %B, %Y')
 
 if DEBUG:
     INSTALLED_APPS = INSTALLED_APPS + (

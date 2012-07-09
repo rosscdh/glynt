@@ -1,5 +1,6 @@
 {% extends 'default/base.html' %}
 {% load i18n markup templatetag_handlebars %}
+{% load glynt_helpers %}
 {% load url from future %}
 
 {% block form %}
@@ -691,27 +692,28 @@ $(document).ready(function(){
 
         self.submitForm = function submitForm(step, form) {
             var is_valid = false;
-            if (self.message() == null) {
+            //if (self.message() == null) {
                 $.ajax({
                   type: 'POST',
                   url: "{% url 'document:generic' doc=doc %}?step="+step,
                   data: form.serialize(),
                 })
                 .success(function(data, textStatus, jqXHR) {
-                    var data = $.parseJSON(data);
+                    //var data = $.parseJSON(data);
+                    //self.message();
                     is_valid = true;
                 })
                 .error(function(jqXHR, textStatus, errorThrown) { 
                     var data = $.parseJSON(jqXHR.responseText);
                     //console.log(data)
-                    self.message(data['message'])
+                    self.message(data['message']);
                     is_valid = false;
                     App.formControls.prev();
                 })
                 .complete(function() {});
-            }else{
-                is_valid = true; // bit of a trip here; if we have 1 set of errors then they are going back to that error
-            }
+            //}else{
+              //  is_valid = true; // bit of a trip here; if we have 1 set of errors then they are going back to that error
+            //}
             return is_valid;
         }
 
@@ -847,7 +849,7 @@ $(document).ready(function(){
         }
     });
 
-    $("input.datepicker").datepicker({dateFormat:"DD, d MM, yy"});
+    $("input.datepicker").datepicker({dateFormat:"D, dd MM yy"});
 
     Handlebars.registerHelper('get', function(obj, prop) {
       return obj[prop];

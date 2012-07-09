@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
@@ -18,18 +19,19 @@ class AssassinStep2(forms.Form):
     confirmed = forms.BooleanField(widget=forms.CheckboxInput(attrs={'placeholder':'','class':'md-updater','data-hb-name':'confirmed'}))
 
 # ----- WILLS -----
+DATE_FORMAT = "%a, %d %b %Y"
 def _get_date_today():
-    return datetime.date.today().strftime("%a, %d %b %Y")
+    return datetime.date.today().strftime(DATE_FORMAT)
 
 class WillStep1(forms.Form):
     step_title = forms.CharField(max_length=100, required=False,widget=forms.HiddenInput(attrs={'data-step-title':'Company Information'}))
     company_name = forms.CharField(label=_('Company Name'), required=True,max_length=100, widget=forms.TextInput(attrs={'placeholder':'Full Company Name','class':'md-updater','data-hb-name':'full_company_name'}))
-    date_start = forms.DateField(required=True,label='Date of this agreement',widget=forms.DateInput(attrs={'placeholder':_get_date_today(),'class':'md-updater datepicker','data-hb-name':'date_start'}))
+    date_start = forms.CharField(required=True,label='Date of this agreement',widget=forms.DateInput(format=settings.DATE_INPUT_FORMATS,attrs={'placeholder':_get_date_today(),'class':'md-updater datepicker','data-hb-name':'date_start'}))
     company_street_address = forms.CharField(required=True,label='What is your street address of the company?',widget=forms.Textarea(attrs={'placeholder':'Your companies registered address','class':'md-updater','data-hb-name':'company_street_address','rows':'4'}))
     company_city = forms.CharField(required=True,label='What is the city of the company?',widget=forms.TextInput(attrs={'placeholder':'Your company registered city','class':'md-updater','data-hb-name':'company_city'}))
     company_state = forms.CharField(required=True,label='What is the state of the company?',widget=forms.TextInput(attrs={'placeholder':'State','class':'md-updater','data-hb-name':'company_state'}))
     company_zip = forms.CharField(required=True,label='What is the Zip code of the company?',widget=forms.TextInput(attrs={'placeholder':'Zip','class':'md-updater','data-hb-name':'company_zip'}))
-    company_date_incorp = forms.CharField(required=True,label='When was the company incorporated?',widget=forms.TextInput(attrs={'placeholder':_get_date_today(),'class':'md-updater datepicker','data-hb-name':'company_date_incorp'}))
+    company_date_incorp = forms.CharField(required=True,label='When was the company incorporated?',widget=forms.DateInput(format=settings.DATE_INPUT_FORMATS,attrs={'placeholder':_get_date_today(),'class':'md-updater datepicker','data-hb-name':'company_date_incorp'}))
 
 class WillStep2(forms.Form):
     step_title = forms.CharField(max_length=100,required=False,widget=forms.HiddenInput(attrs={'data-step-title':'Number of Shareholders', 'data-glynt-loop_step':"[{hide_from:'num_shareholders',iteration_title:'Shareholder'}]"}))
