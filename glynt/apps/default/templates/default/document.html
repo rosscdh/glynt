@@ -847,6 +847,8 @@ $(document).ready(function(){
         }
     });
 
+    $("input.datepicker").datepicker({dateFormat:"DD, d MM, yy"});
+
     Handlebars.registerHelper('get', function(obj, prop) {
       return obj[prop];
     });
