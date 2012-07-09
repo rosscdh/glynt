@@ -24,7 +24,7 @@ def _get_date_today():
     return datetime.date.today().strftime(DATE_FORMAT)
 
 class WillStep1(forms.Form):
-    step_title = forms.CharField(max_length=100, required=False,widget=forms.HiddenInput(attrs={'data-step-title':'Company Information'}))
+    step_title = forms.CharField(max_length=100,required=False,widget=forms.HiddenInput(attrs={'data-step-title':'Company Information'}))
     company_name = forms.CharField(label=_('Company Name'), required=True,max_length=100, widget=forms.TextInput(attrs={'placeholder':'Full Company Name','class':'md-updater','data-hb-name':'full_company_name'}))
     date_start = forms.CharField(required=True,label='Date of this agreement',widget=forms.DateInput(format=settings.DATE_INPUT_FORMATS,attrs={'placeholder':_get_date_today(),'class':'md-updater datepicker','data-hb-name':'date_start'}))
     company_street_address = forms.CharField(required=True,label='What is your street address of the company?',widget=forms.Textarea(attrs={'placeholder':'Your companies registered address','class':'md-updater','data-hb-name':'company_street_address','rows':'4'}))
@@ -48,28 +48,28 @@ class WillStep3(forms.Form):
 
 class WillStep4(forms.Form):
     step_title = forms.CharField(max_length=100,required=False,widget=forms.HiddenInput(attrs={'data-step-title':'Appointed Directors'}))
-    company_director_noms = forms.CharField(label='How many directors may each shareholder nominate?',max_length=255, widget=forms.TextInput(attrs={'placeholder':'2','class':'md-updater','data-hb-name':'company_director_noms'}))
-    company_max_directors = forms.CharField(label='What is the maximum number of Directors that can hold office at any one time?',max_length=255,widget=forms.TextInput(attrs={'placeholder':'e.g. 5','class':'md-updater','data-hb-name':'company_max_directors'}))
-    company_management_account_freq = forms.CharField(label='How often are the management accounts to be prepared and sent to directors?',max_length=255,widget=forms.TextInput(attrs={'placeholder':'Quarterly','class':'md-updater','data-hb-name':'company_management_account_freq'}))
-    company_meeting_freq = forms.CharField(label='How often must a director hold a meeting?',max_length=255,widget=forms.TextInput(attrs={'placeholder':'Monthly','class':'md-updater','data-hb-name':'company_meeting_freq'}))
+    company_director_noms = forms.CharField(required=False,label='How many directors may each shareholder nominate?',max_length=255, widget=forms.TextInput(attrs={'placeholder':'2','class':'md-updater','data-hb-name':'company_director_noms'}))
+    company_max_directors = forms.CharField(required=False,label='What is the maximum number of Directors that can hold office at any one time?',max_length=255,widget=forms.TextInput(attrs={'placeholder':'e.g. 5','class':'md-updater','data-hb-name':'company_max_directors'}))
+    company_management_account_freq = forms.CharField(required=False,label='How often are the management accounts to be prepared and sent to directors?',max_length=255,widget=forms.TextInput(attrs={'placeholder':'Quarterly','class':'md-updater','data-hb-name':'company_management_account_freq'}))
+    company_meeting_freq = forms.CharField(required=False,label='How often must a director hold a meeting?',max_length=255,widget=forms.TextInput(attrs={'placeholder':'Monthly','class':'md-updater','data-hb-name':'company_meeting_freq'}))
 
 
 class WillStep5(forms.Form):
     step_title = forms.CharField(max_length=100,required=False,widget=forms.HiddenInput(attrs={'data-step-title':'Shareholder Nominations', 'data-glynt-loop_step':"[{hide_from:'num_direct_noms_from_shareholders',iteration_title:'Shareholder nom'}]"}))
-    num_direct_noms_from_shareholders = forms.ChoiceField(label='Many any shareholders nominate additional directors?',choices=(('0','None'),('1','1'),('2','2'),('3','3'),('4','4'),),initial=0, widget=forms.Select(attrs={'data-glynt-loop_length':''}))
-    shareholder_nom_name = forms.CharField(label='Shareholder name',max_length=255, widget=forms.TextInput(attrs={'placeholder':'Shareholder Name','class':'md-updater','data-hb-name':'shareholder_nom_name'}))
-    shareholder_nom_allowed = forms.CharField(label='How many directors may they nominate?',max_length=255,widget=forms.TextInput(attrs={'placeholder':'1','class':'md-updater','data-hb-name':'shareholder_nom_allowed'}))
+    num_direct_noms_from_shareholders = forms.ChoiceField(required=False,label='Many any shareholders nominate additional directors?',choices=(('0','None'),('1','1'),('2','2'),('3','3'),('4','4'),),initial=0, widget=forms.Select(attrs={'data-glynt-loop_length':''}))
+    shareholder_nom_name = forms.CharField(required=False,label='Shareholder name',max_length=255, widget=forms.TextInput(attrs={'placeholder':'Shareholder Name','class':'md-updater','data-hb-name':'shareholder_nom_name'}))
+    shareholder_nom_allowed = forms.CharField(required=False,label='How many directors may they nominate?',max_length=255,widget=forms.TextInput(attrs={'placeholder':'1','class':'md-updater','data-hb-name':'shareholder_nom_allowed'}))
 
 
 class WillStep6(forms.Form):
     step_title = forms.CharField(max_length=100,required=False,widget=forms.HiddenInput(attrs={'data-step-title':'Share Allocation'}))
-    shares_in_issue = forms.CharField(label='How many shares were in issue?',max_length=255, widget=forms.TextInput(attrs={'placeholder':'100','class':'md-updater','data-hb-name':'shares_in_issue'}))
-    share_value = forms.CharField(label='What is the nominal share value?',max_length=255, widget=forms.TextInput(attrs={'placeholder':'$5','class':'md-updater','data-hb-name':'share_value'}))
+    shares_in_issue = forms.CharField(required=False,label='How many shares were in issue?',max_length=255, widget=forms.TextInput(attrs={'placeholder':'100','class':'md-updater','data-hb-name':'shares_in_issue'}))
+    share_value = forms.CharField(required=False,label='What is the nominal share value?',max_length=255, widget=forms.TextInput(attrs={'placeholder':'$5','class':'md-updater','data-hb-name':'share_value'}))
 
 
 class WillStep7(forms.Form):
     step_title = forms.CharField(max_length=100,required=False,widget=forms.HiddenInput(attrs={'data-step-title':'Misc Details'}))
-    max_cap = forms.CharField(label='What is the maximum amount of capital expenditure that may be incurred before there must be unanimous agreement by the shareholders?',max_length=255, widget=forms.TextInput(attrs={'placeholder':'$500','class':'md-updater','data-hb-name':'max_cap'}))
+    max_cap = forms.CharField(required=False,label='What is the maximum amount of capital expenditure that may be incurred before there must be unanimous agreement by the shareholders?',max_length=255, widget=forms.TextInput(attrs={'placeholder':'$500','class':'md-updater','data-hb-name':'max_cap'}))
     how_many_days = forms.CharField(label='How many days do the Shareholders have to make an offer for the shares?',max_length=255, widget=forms.TextInput(attrs={'placeholder':'28','class':'md-updater','data-hb-name':'how_many_days'}))
-    how_many_days_sealed = forms.CharField(label='How many days shall the Shareholders have in which to make a sealed bid?',max_length=255, widget=forms.TextInput(attrs={'placeholder':'28','class':'md-updater','data-hb-name':'how_many_days_sealed'}))
-    how_many_days_to_pay = forms.CharField(label='Within how many days does the money for the shares have to be paid??',max_length=255, widget=forms.TextInput(attrs={'placeholder':'60','class':'md-updater','data-hb-name':'how_many_days_pay'}))
+    how_many_days_sealed = forms.CharField(required=False,label='How many days shall the Shareholders have in which to make a sealed bid?',max_length=255, widget=forms.TextInput(attrs={'placeholder':'28','class':'md-updater','data-hb-name':'how_many_days_sealed'}))
+    how_many_days_to_pay = forms.CharField(required=False,label='Within how many days does the money for the shares have to be paid??',max_length=255, widget=forms.TextInput(attrs={'placeholder':'60','class':'md-updater','data-hb-name':'how_many_days_pay'}))
