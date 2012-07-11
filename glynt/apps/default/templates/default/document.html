@@ -307,12 +307,13 @@ $(document).ready(function(){
         // loop over ALL form elements (including labels and other helper items) find the from element and hide all those after
             var found = false;
             self.form_fieldset.children().each(function(index,element){
-                if ($(element).attr('id') == $(hide_from_element).attr('id')) {
+                element = $(element);
+                if (element.attr('id') == $(hide_from_element).attr('id')) {
                     found = true;
                 } else {
                     if (found == true) {
-                        $(element).hide();
-                        self.repeatable_fields.push($(element));
+                        element.hide();
+                        self.repeatable_fields.push(element);
                     }
                 }
 
@@ -652,8 +653,26 @@ $(document).ready(function(){
             });
         }
 
+        self.initializeValuesFromCookie = function initializeValuesFromCookie() {
+            var cookie_value = $.parseJSON($.cookie('glynt-{{ doc }}'));
+            if (cookie_value) {
+                cookie_value = $(cookie_value);
+            }
+
+            if (cookie_value.length >= 0) {
+                $.each($('form.bind-document').find('input,textarea,select'), function(index, element) {
+                    element = $(element);
+                    element_name = element.attr('name');
+                    if (element_name != undefined && cookie_value.attr(element_name) != undefined) {
+                        element.val(cookie_value.attr(element.attr('name')));
+                    }
+                });
+            }
+        }
+
         self.init = function init() {
             // main initializer
+            self.initializeValuesFromCookie();
             self.setContext();
             self.setGlyntRuleset();
             self.applyGlyntRuleset();
@@ -692,30 +711,43 @@ $(document).ready(function(){
 
         self.submitForm = function submitForm(step, form) {
             var is_valid = false;
-            //if (self.message() == null) {
-                $.ajax({
-                  type: 'POST',
-                  url: "{% url 'document:generic' doc=doc %}?step="+step,
-                  data: form.serialize(),
-                })
-                .success(function(data, textStatus, jqXHR) {
-                    //var data = $.parseJSON(data);
-                    //self.message();
-                    is_valid = true;
-                })
-                .error(function(jqXHR, textStatus, errorThrown) { 
-                    var data = $.parseJSON(jqXHR.responseText);
-                    //console.log(data)
-                    self.message(data['message']);
-                    is_valid = false;
-                    App.formControls.prev();
-                })
-                .complete(function() {});
-            //}else{
-              //  is_valid = true; // bit of a trip here; if we have 1 set of errors then they are going back to that error
-            //}
+            var form_data_serialized = form.serialize();
+            $.ajax({
+              type: 'POST',
+              url: "{% url 'document:generic' doc=doc %}?step="+step,
+              data: form_data_serialized,
+            })
+            .success(function(data, textStatus, jqXHR) {
+                var response_data = $.parseJSON(data);
+                //self.message();
+                is_valid = true;
+                self.persistFormData(form.serializeArray(), response_data);
+            })
+            .error(function(jqXHR, textStatus, errorThrown) { 
+                var data = $.parseJSON(jqXHR.responseText);
+                //console.log(data)
+                self.message(data['message']);
+                is_valid = false;
+                App.formControls.prev();
+            })
+            .complete(function() {});
 
             return is_valid;
+        }
+
+        self.persistFormData = function persistFormData(serialized_form_data, response_data) {
+            // console.log(serialized_form_data)
+            // console.log(response_data)
+            var cookie_value = $.parseJSON($.cookie('glynt-{{ doc }}'));
+
+            for (i in serialized_form_data) {
+                name = serialized_form_data[i].name;
+                value = serialized_form_data[i].value;
+                if (name != 'csrfmiddlewaretoken') {
+                    cookie_value[name] = value;
+                }
+            }
+            $.cookie('glynt-{{ doc }}', JSON.stringify(cookie_value));
         }
 
         self.showErrorMessage = function showErrorMessage(msg) {
@@ -736,7 +768,7 @@ $(document).ready(function(){
               data: data,
             })
             .success(function(data, textStatus, jqXHR) {
-                var data = eval(data);
+                var data = $.parseJSON(data);
                 var filename = data[0].filename;
                 window.open(filename, 'pdf');
             })
@@ -851,6 +883,10 @@ $(document).ready(function(){
     });
 
     $("input.datepicker").datepicker({dateFormat:"D, dd MM yy"});
+
+    if ($.cookie('glynt-{{ doc }}') == null) {
+        $.cookie('glynt-{{ doc }}', JSON.stringify({}));
+    }
 
     Handlebars.registerHelper('get', function(obj, prop) {
       return obj[prop];
