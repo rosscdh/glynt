@@ -657,16 +657,15 @@ $(document).ready(function(){
             var cookie_value = $.parseJSON($.cookie('glynt-{{ doc }}'));
             if (cookie_value) {
                 cookie_value = $(cookie_value);
-            }
-
-            if (cookie_value.length >= 0) {
-                $.each($('form.bind-document').find('input,textarea,select'), function(index, element) {
-                    element = $(element);
-                    element_name = element.attr('name');
-                    if (element_name != undefined && cookie_value.attr(element_name) != undefined) {
-                        element.val(cookie_value.attr(element.attr('name')));
-                    }
-                });
+                if (cookie_value.length >= 0) {
+                    $.each($('form.bind-document').find('input,textarea,select'), function(index, element) {
+                        element = $(element);
+                        element_name = element.attr('name');
+                        if (element_name != undefined && cookie_value.attr(element_name) != undefined) {
+                            element.val(cookie_value.attr(element.attr('name')));
+                        }
+                    });
+                }
             }
         }
 
