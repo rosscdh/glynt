@@ -98,6 +98,24 @@ ROOT_URLCONF = 'glynt.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'glynt.wsgi.application'
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'socialregistration.contrib.facebook.auth.FacebookAuth',
+)
+
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+"django.contrib.auth.context_processors.auth",
+"django.core.context_processors.debug",
+"django.core.context_processors.i18n",
+"django.core.context_processors.media",
+"django.core.context_processors.static",
+"django.core.context_processors.tz",
+"django.contrib.messages.context_processors.messages",
+"django.core.context_processors.request",
+)
+
+
 TEMPLATE_DIRS = (
     os.path.join(SITE_ROOT, 'templates'),
 )
@@ -110,6 +128,9 @@ HELPER_APPS = (
     'django_extensions',
     'templatetag_handlebars',
     'django_markdown',
+    'socialregistration',
+    'socialregistration.contrib.facebook',
+    'south',
 )
 
 INSTALLED_APPS = BASE_APP + HELPER_APPS + (
@@ -122,6 +143,12 @@ INSTALLED_APPS = BASE_APP + HELPER_APPS + (
     'django.contrib.admin',
     'django.contrib.markup',
 )
+
+
+FACEBOOK_API_KEY = '209234305864956'
+FACEBOOK_SECRET_KEY = 'd0875d1310c3708181b5b9d2092593d8'
+FACEBOOK_REQUEST_PERMISSIONS = 'email,user_about_me,read_stream'
+
 
 DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d %Y',
 '%b %d, %Y', '%d %b %Y', '%d %b, %Y', '%B %d %Y',

@@ -7,6 +7,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Examples:
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^social/', include('socialregistration.urls', namespace='socialregistration')),
     url(r'^', include('glynt.apps.default.urls', namespace='document')),
 )
 

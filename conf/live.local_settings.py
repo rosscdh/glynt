@@ -21,3 +21,6 @@ MEDIA_ROOT = '/home/stard0g101/webapps/cartvine_static/media/'
 STATICFILES_DIRS = (
     '/home/stard0g101/webapps/cartvine_static/base/',
 )
+
+FACEBOOK_API_KEY = '238947626217872'
+FACEBOOK_SECRET_KEY = '8a2b5757c513965faff0de2c35dcdbf2'
