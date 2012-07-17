@@ -41,25 +41,24 @@
   <body data-spy="scroll" data-target=".subnav" data-offset="50">
 
 	<div class="navbar navbar-fixed-top">
-
         <div class="navbar-inner">
-
             <div class="container">
 
                 <a class="brand" href="./">
                     <img src="{{ STATIC_URL }}img/logo-nav.png">
                 </a>
-                <div class="pull-right">{% facebook_button %}</div>
 
-        </div> <!-- /container -->
+                <img id="fb-profile-image" src=""/>
+                <span id="fb-profile-name"/>
+                <div class="fb-login-button" scope="{{ FACEBOOK_REQUEST_PERMISSIONS }}">Login with Facebook</div>
 
-    </div> <!-- /navbar-inner -->
-
-	</div> <!-- /navbar -->
-
-  	<div class="container">
-	{% block body %}{% endblock %}
-	</div>
+            </div> <!-- /container -->
+        </div> <!-- /navbar-inner -->
+    </div> <!-- /navbar -->
+{{request.LANGUAGE_CODE}}
+    <div class="container">
+    {% block body %}{% endblock %}
+    </div>
 
     <script src="{{ STATIC_URL }}js/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
@@ -71,7 +70,8 @@
     <script type="text/javascript" src="{{ STATIC_URL }}pagedown/Markdown.Sanitizer.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}pagedown/Markdown.Editor.js"></script>
     {% handlebars_js %}
-	{% block js %}{% endblock %}
+    {% block js %}{% endblock %}
+    {% facebook_button %}
 
   </body>
 </html>

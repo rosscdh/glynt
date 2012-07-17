@@ -100,7 +100,7 @@ WSGI_APPLICATION = 'glynt.wsgi.application'
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'socialregistration.contrib.facebook.auth.FacebookAuth',
+    'socialregistration.contrib.facebook_js.auth.FacebookAuth',
 )
 
 
@@ -113,6 +113,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 "django.core.context_processors.tz",
 "django.contrib.messages.context_processors.messages",
 "django.core.context_processors.request",
+"socialregistration.contrib.facebook_js.context_processors.FacebookTemplateVars"
 )
 
 
@@ -129,7 +130,7 @@ HELPER_APPS = (
     'templatetag_handlebars',
     'django_markdown',
     'socialregistration',
-    'socialregistration.contrib.facebook',
+    'socialregistration.contrib.facebook_js',
     'south',
 )
 
