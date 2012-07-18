@@ -50,9 +50,9 @@
                 <ul class="nav">
                     {% if request.user.is_authenticated %}
                     <li><a href="{% url 'client:dashboard' %}">{% trans 'Dashboard' %}</a></li>
-                    <li><a href="{% url 'socialregistration:logout' %}">{% trans 'Logout' %}</a></li>
+                    <li><a class="logout" href="{% url 'socialregistration:logout' %}">{% trans 'Logout' %}</a></li>
                     {% else %}
-                    <li><div class="fb-login-button" scope="{{ FACEBOOK_REQUEST_PERMISSIONS }}">Login with Facebook</div></li>
+                    <li><div id="fb-login-button" scope="{{ FACEBOOK_REQUEST_PERMISSIONS }}">Login with Facebook</div></li>
                     {% endif %}
                 </ul>
                 <img id="fb-profile-image" src=""/>

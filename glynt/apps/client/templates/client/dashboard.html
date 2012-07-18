@@ -11,7 +11,37 @@
     </p>
 </div>
 <div class="row">
-    <div class="span6 pull-left">
+
+    <div class="span7 pull-left">
+        <h3>{% trans 'Documents' %}</h3>
+        <input type="button" class="btn btn-primary" value="{% trans 'New Doc' %}"/>
+        <dl class="dl-horizontal">
+        <dt>{% trans 'Draft' %}</dt>
+        <dd>
+            <i>{% blocktrans %}Documents that you are currently still working on{% endblocktrans %}</i>
+            <ul>
+                <li><a href="">Loop document name here</a> - last edited: 2012-10-20, status: 20% complete</li>
+            </ul>
+        </dd>
+        <dt>{% trans 'Submitted' %}</dt>
+        <dd>
+            <i>{% blocktrans %}Documents that you have submitted for review{% endblocktrans %}</i>
+            <ul>
+                <li><a href="">Loop document name here</a> - submitted: 2012-09-23, status: in-progress, <a class="btn btn-small btn-danger" href="#"><i class="icon-fire icon-white"></i> Response</a></li>
+            </ul>
+        </dd>
+        <dt>{% trans 'Archive' %}</dt>
+        <dd>
+            <i>{% blocktrans %}All older documents{% endblocktrans %}</i>
+            <ul>
+                <li><a href="">Loop document name here</a> - submitted: 2011-03-13, status: confirmed</li>
+            </ul>
+        </dd>
+        </dl>
+
+    </div>
+
+    <div class="span5 pull-right">
         <h3>{% trans 'Messages' %}</h3>
 
         <dl class="dl-horizontal">
@@ -19,48 +49,21 @@
         <dd>
             <i>{% blocktrans %}System Announcements, Please NB{% endblocktrans %}</i>
             <ul>
-                <li>Yay for the monkies</li>
+                <li><b>Yay for the monkies</b> - today</li>
+                <li><b>Are Monkies Hairy?</b> - yesterday</li>
+                <li><b>What do you mean there are no Monkies?</b> - 2012-08-14</li>
             </ul>
         </dd>
-        <dt>{% trans 'Recent interesting articles' %}</dt>
+        <dt>{% trans 'Recent articles' %}</dt>
         <dd>
             <i>{% blocktrans %}Blog posts, and items relating to documents you have created (semantic association){% endblocktrans %}</i>
             <ul>
-                <li>Interesting article found on cnn, about shareholder agreements</li>
-                <li>Interesting article found on slashdot, about wills</li>
+                <li><b>Interesting article found on cnn, about shareholder agreements</b> - 2012-10-01</li>
+                <li><b>Article found on slashdot, about wills</b> - 2012-09-23</li>
             </ul>
         </dd>
         </dl>
-
     </div>
 
-    <div class="span6 pull-right">
-        <h3>{% trans 'Documents' %}</h3>
-
-        <dl class="dl-horizontal">
-        <dt>{% trans 'Draft' %}</dt>
-        <dd>
-            <i>{% blocktrans %}Documents that you are currently still working on{% endblocktrans %}</i>
-            <ul>
-                <li>Loop document name here</li>
-            </ul>
-        </dd>
-        <dt>{% trans 'Submitted' %}</dt>
-        <dd>
-            <i>{% blocktrans %}Documents that you have submitted for review{% endblocktrans %}</i>
-            <ul>
-                <li>Loop document name here</li>
-            </ul>
-        </dd>
-        <dt>{% trans 'Archive' %}</dt>
-        <dd>
-            <i>{% blocktrans %}All older documents{% endblocktrans %}</i>
-            <ul>
-                <li>Loop document name here</li>
-            </ul>
-        </dd>
-        </dl>
-
-    </div>
 </div>
 {% endblock %}
