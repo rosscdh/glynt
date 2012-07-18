@@ -123,6 +123,9 @@ TEMPLATE_DIRS = (
 
 BASE_APP = (
     'glynt.apps.default',
+    # The End User - Client, those that consume the documents
+    'glynt.apps.client',
+    # The Customer, those that produce/validate documents
 )
 
 HELPER_APPS = (
@@ -148,7 +151,7 @@ INSTALLED_APPS = BASE_APP + HELPER_APPS + (
 
 FACEBOOK_API_KEY = '209234305864956'
 FACEBOOK_SECRET_KEY = 'd0875d1310c3708181b5b9d2092593d8'
-FACEBOOK_REQUEST_PERMISSIONS = 'email,user_about_me,read_stream'
+FACEBOOK_REQUEST_PERMISSIONS = 'email,user_likes,user_about_me,read_stream'
 
 
 DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d %Y',

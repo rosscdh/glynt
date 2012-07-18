@@ -8,6 +8,7 @@ urlpatterns = patterns('',
     # Examples:
     url(r'^admin/', include(admin.site.urls)),
     url(r'^social/', include('socialregistration.urls', namespace='socialregistration')),
+    url(r'^client/', include('glynt.apps.client.urls', namespace='client')),
     url(r'^', include('glynt.apps.default.urls', namespace='document')),
 )
 

@@ -47,10 +47,17 @@
                 <a class="brand" href="./">
                     <img src="{{ STATIC_URL }}img/logo-nav.png">
                 </a>
-
+                <ul class="nav">
+                    {% if request.user.is_authenticated %}
+                    <li><a href="{% url 'client:dashboard' %}">{% trans 'Dashboard' %}</a></li>
+                    <li><a href="{% url 'socialregistration:logout' %}">{% trans 'Logout' %}</a></li>
+                    {% else %}
+                    <li><div class="fb-login-button" scope="{{ FACEBOOK_REQUEST_PERMISSIONS }}">Login with Facebook</div></li>
+                    {% endif %}
+                </ul>
                 <img id="fb-profile-image" src=""/>
-                <span id="fb-profile-name"/>
-                <div class="fb-login-button" scope="{{ FACEBOOK_REQUEST_PERMISSIONS }}">Login with Facebook</div>
+                <span id="fb-profile-name"></span>
+
 
             </div> <!-- /container -->
         </div> <!-- /navbar-inner -->

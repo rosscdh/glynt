@@ -1,0 +1,66 @@
+{% extends 'client/base.html' %}
+{% load i18n %}
+
+{% block body %}
+<div class="hero-unit">
+    <h2>{% trans 'My Dashboard view' %}</h2>
+    <p>
+    {% blocktrans %}
+    On this page, you should see a list of documents as well as any other statistical,graphic or system messages that apply to you
+    {% endblocktrans %}
+    </p>
+</div>
+<div class="row">
+    <div class="span6 pull-left">
+        <h3>{% trans 'Messages' %}</h3>
+
+        <dl class="dl-horizontal">
+        <dt>{% trans 'Announcements' %}</dt>
+        <dd>
+            <i>{% blocktrans %}System Announcements, Please NB{% endblocktrans %}</i>
+            <ul>
+                <li>Yay for the monkies</li>
+            </ul>
+        </dd>
+        <dt>{% trans 'Recent interesting articles' %}</dt>
+        <dd>
+            <i>{% blocktrans %}Blog posts, and items relating to documents you have created (semantic association){% endblocktrans %}</i>
+            <ul>
+                <li>Interesting article found on cnn, about shareholder agreements</li>
+                <li>Interesting article found on slashdot, about wills</li>
+            </ul>
+        </dd>
+        </dl>
+
+    </div>
+
+    <div class="span6 pull-right">
+        <h3>{% trans 'Documents' %}</h3>
+
+        <dl class="dl-horizontal">
+        <dt>{% trans 'Draft' %}</dt>
+        <dd>
+            <i>{% blocktrans %}Documents that you are currently still working on{% endblocktrans %}</i>
+            <ul>
+                <li>Loop document name here</li>
+            </ul>
+        </dd>
+        <dt>{% trans 'Submitted' %}</dt>
+        <dd>
+            <i>{% blocktrans %}Documents that you have submitted for review{% endblocktrans %}</i>
+            <ul>
+                <li>Loop document name here</li>
+            </ul>
+        </dd>
+        <dt>{% trans 'Archive' %}</dt>
+        <dd>
+            <i>{% blocktrans %}All older documents{% endblocktrans %}</i>
+            <ul>
+                <li>Loop document name here</li>
+            </ul>
+        </dd>
+        </dl>
+
+    </div>
+</div>
+{% endblock %}
