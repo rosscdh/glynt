@@ -118,6 +118,8 @@ TEMPLATE_DIRS = (
 
 BASE_APP = (
     'glynt.apps.default',
+    # The primary document view system
+    'glynt.apps.document',
     # The End User - Client, those that consume the documents
     'glynt.apps.client',
     # The Customer, those that produce/validate documents
