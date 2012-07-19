@@ -50,14 +50,9 @@ USE_TZ = True
 USE_ETAGS = True
 
 MEDIA_ROOT = os.path.join(SITE_ROOT, 'media')
-
-
 MEDIA_URL = '/m/'
 
 STATIC_ROOT = os.path.join(SITE_ROOT, 'static')
-
-# URL prefix for static files.
-# Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
 
 # Additional locations of static files
@@ -153,6 +148,8 @@ FACEBOOK_API_KEY = '209234305864956'
 FACEBOOK_SECRET_KEY = 'd0875d1310c3708181b5b9d2092593d8'
 FACEBOOK_REQUEST_PERMISSIONS = 'email,user_likes,user_about_me,read_stream'
 
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_URL = '/social/logout/'
 
 DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d %Y',
 '%b %d, %Y', '%d %b %Y', '%d %b, %Y', '%B %d %Y',
