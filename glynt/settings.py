@@ -129,6 +129,7 @@ HELPER_APPS = (
     'django_extensions',
     'templatetag_handlebars',
     'django_markdown',
+    'taggit',
     'socialregistration',
     'socialregistration.contrib.facebook_js',
     'south',
