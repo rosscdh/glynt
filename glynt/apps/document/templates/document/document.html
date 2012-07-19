@@ -28,7 +28,6 @@
             <button id="btn-post-pdf" class="btn btn-success" type="button">Generate PDF</button>
         </div>
     </div>
-
 {% endblock %}
 
 {% block document %}
@@ -51,20 +50,18 @@ display:none;
 {% endblock %}
 
 {% block js %}
-
-
-{% tplhandlebars 'js-document' %}
+<script id="js-document" type="text/x-handlebars-template">
 {{ object.body|safe }}
-{% endtplhandlebars %}
+</script>
 
-<script type="text/javascript">
+<script id="document-controls" type="text/javascript">
 $(document).ready(function(){
 
     function FormControls() {
         var self = this;
 
-        self.actualFormSteps = ({{form_set|length}}+1);// account for end form
-        self.maxFormSteps = ko.observable(({{form_set|length}}+1));// account for end form
+        self.actualFormSteps = ({{ form_set|length }}+1);// account for end form
+        self.maxFormSteps = ko.observable(({{ form_set|length }}+1));// account for end form
         self.currentFormStep = ko.observable(1);
 
         self.showNext = function showNext() {
