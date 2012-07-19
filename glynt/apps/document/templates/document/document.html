@@ -52,7 +52,10 @@ display:none;
 
 {% block js %}
 
-{% include document %}
+
+{% tplhandlebars 'js-document' %}
+{{ object.body|safe }}
+{% endtplhandlebars %}
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -328,7 +331,7 @@ $(document).ready(function(){
 
         self.textElementsList = ['text','textarea','hidden','select'];
         self.FalseValuesList = ['False','false',false,null,void 0,''];
-		self.handlebarsElementId = ko.observable('script#js-{{ doc }}');
+		self.handlebarsElementId = ko.observable('script#js-document');
 		self.documentTemplate = ko.observable($(self.handlebarsElementId()).html());
 		self.renderedHTML = ko.observable('');
 

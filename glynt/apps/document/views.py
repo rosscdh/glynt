@@ -53,15 +53,10 @@ class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
         context = super(DocumentView, self).get_context_data(**kwargs)
         context['doc'] = self.kwargs['doc']
 
-        # the context that will render the requested documents inner details
-        document_context = Context(context)
-        document_template = 'documents/%s.html' %(self.kwargs['doc'],)
         document_slug = slugify(self.kwargs['doc'])
-
         document = Document.objects.get(slug=document_slug)
         context['object'] = document
-        #prepared_document = loader.get_template(document_template)#.render(document_context)
-        context['document'] = document_template
+        context['document'] = document.body
 
         context['form_set'] = FORM_GROUPS[document_slug]
 

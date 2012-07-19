@@ -1,7 +1,6 @@
 {% load i18n webdesign templatetag_handlebars %}
 {% tplhandlebars "js-legal-will" %}
 
-<!-- ## {{document.title}} ## -->
 <h2>Shareholders Agreement</h2>
 
 <p>THIS AGREEMENT is made on {{date_start}} between the shareholders:</p>
@@ -214,11 +213,11 @@
   </ol>
 </ol>
 <hr />
-<p class="p9"><b>Schedule</b></p>
-<p class="p10">{{company_activites}}</p>
+<p><b>Schedule</b></p>
+<p>{{company_activites}}</p>
 <hr />
-<p class="p10"></p>
-<p class="p11">IN WITNESS whereof the Company and the Shareholders have executed as a deed the day and year first before written.</p>
+<p></p>
+<p>IN WITNESS whereof the Company and the Shareholders have executed as a deed the day and year first before written.</p>
 <p><br></p>
 
 <table cellspacing="0" cellpadding="0" class="t1">
@@ -231,11 +230,11 @@
 	-->
    <tr>
       <td >
-        <p class="p11">The COMMON SEAL of {{this.shareholder_name}} was affixed in the presence of</p>
-        <p class="p12">___________________________</p>
-        <p class="p10">Director</p>
-        <p class="p12">___________________________</p>
-        <p class="p10">Secretary</p>
+        <p>The COMMON SEAL of {{this.shareholder_name}} was affixed in the presence of</p>
+        <p>___________________________</p>
+        <p>Director</p>
+        <p>___________________________</p>
+        <p>Secretary</p>
 		<br />
 		<br />
       </td>
@@ -243,27 +242,27 @@
 	{{else}}
 	<tr>
       <td>
-        <p class="p11">Signed as a deed by:</p>
-        <p class="p12">{{this.shareholder_name}}</p>
-        <p class="p11">in the presence of:</p>
-        <p class="p11">Name of witness</p>
-        <p class="p11">Address of witness</p>
-        <p class="p13"><br></p>
-        <p class="p13"><br></p>
-        <p class="p11">Occupation of witness</p>
-        <p class="p11">Signature of witness</p>
+        <p>Signed as a deed by:</p>
+        <p>{{this.shareholder_name}}</p>
+        <p>in the presence of:</p>
+        <p>Name of witness</p>
+        <p>Address of witness</p>
+        <p><br></p>
+        <p><br></p>
+        <p>Occupation of witness</p>
+        <p>Signature of witness</p>
         <p><br></p>
       </td>
       <td >
-        <p class="p13"><br></p>
-        <p class="p12">__________________________</p>
-        <p class="p11">__________________________</p>
-        <p class="p11">__________________________</p>
-        <p class="p11">__________________________</p>
-        <p class="p11">__________________________</p>
-        <p class="p11">__________________________</p>
-        <p class="p11">__________________________</p>
-        <p class="p11">__________________________</p>
+        <p><br></p>
+        <p>__________________________</p>
+        <p>__________________________</p>
+        <p>__________________________</p>
+        <p>__________________________</p>
+        <p>__________________________</p>
+        <p>__________________________</p>
+        <p>__________________________</p>
+        <p>__________________________</p>
         <br />
 		<br />
       </td>
@@ -272,8 +271,6 @@
 	{{/each}}
   </tbody>
 </table>
-<p class="p14"><br></p>
-
 
 
 {% endtplhandlebars %}

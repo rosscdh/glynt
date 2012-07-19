@@ -15,6 +15,7 @@ class Document(models.Model):
     name = models.CharField(max_length=128,blank=False)
     slug = models.SlugField(blank=False)
     summary = models.TextField(blank=True,null=True)
+    body = models.TextField(blank=True,null=True)
     doc_status = models.IntegerField(choices=DOC_STATUS,blank=False)
 
     tags = TaggableManager()
