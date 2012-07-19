@@ -17,6 +17,7 @@ class Document(models.Model):
     summary = models.TextField(blank=True,null=True)
     body = models.TextField(blank=True,null=True)
     doc_status = models.IntegerField(choices=DOC_STATUS,blank=False)
+    is_public = models.BooleanField(default=True)
 
     tags = TaggableManager()
 

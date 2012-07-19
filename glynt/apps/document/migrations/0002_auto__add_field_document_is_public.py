@@ -8,14 +8,16 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Adding field 'Document.is_public'
+        db.add_column('document_document', 'is_public',
+                      self.gf('django.db.models.fields.BooleanField')(default=True),
+                      keep_default=False)
 
-        # Changing field 'Document.summary'
-        db.alter_column('document_document', 'summary', self.gf('django.db.models.fields.TextField')(null=True))
 
     def backwards(self, orm):
+        # Deleting field 'Document.is_public'
+        db.delete_column('document_document', 'is_public')
 
-        # Changing field 'Document.summary'
-        db.alter_column('document_document', 'summary', self.gf('django.db.models.fields.CharField')(max_length=255, null=True))
 
     models = {
         'auth.group': {
@@ -56,8 +58,10 @@ class Migration(SchemaMigration):
         },
         'document.document': {
             'Meta': {'object_name': 'Document'},
+            'body': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'doc_status': ('django.db.models.fields.IntegerField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'is_public': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50'}),
