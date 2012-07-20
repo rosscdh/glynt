@@ -11,7 +11,7 @@ south
 -e git+https://github.com/alex/django-taggit.git#egg=django-taggit
 # model record versioning for documents
 -e git+https://github.com/etianen/django-reversion.git#egg=django-reversion
--e git+https://github.com/stephenmcd/django-forms-builder.git#egg=django-forms-builder
+-e git+https://github.com/stard0g101/django-forms-builder.git#egg=django-forms-builder
 # javascript markdown
 # hg clone https://code.google.com/p/pagedown/
 # possible multi format 
