@@ -130,6 +130,7 @@ HELPER_APPS = (
     'templatetag_handlebars',
     'django_markdown',
     'taggit',
+    'forms_builder.forms',
     'socialregistration',
     'socialregistration.contrib.facebook_js',
     'south',
