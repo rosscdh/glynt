@@ -18,3 +18,4 @@ south
 # https://github.com/NetAngels/django-webodt.git
 # event pubsub
 #http://davidwalsh.name/snackjs
+#https://github.com/seatgeek/fuzzywuzzy/
