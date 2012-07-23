@@ -658,7 +658,7 @@ $(document).ready(function(){
         }
 
         self.initializeValuesFromCookie = function initializeValuesFromCookie() {
-            var cookie_value = $.parseJSON($.cookie('glynt-{{ doc }}'));
+            var cookie_value = $.parseJSON($.cookie('glynt-{{ object.slug }}'));
             if (cookie_value) {
                 cookie_value = $(cookie_value);
                 if (cookie_value.length >= 0) {
@@ -717,7 +717,7 @@ $(document).ready(function(){
             var form_data_serialized = form.serialize();
             $.ajax({
               type: 'POST',
-              url: "{% url 'document:generic' doc=doc %}?step="+step,
+              url: "{% url 'document:view' slug=object.slug %}?step="+step,
               data: form_data_serialized,
             })
             .success(function(data, textStatus, jqXHR) {
@@ -741,7 +741,7 @@ $(document).ready(function(){
         self.persistFormData = function persistFormData(serialized_form_data, response_data) {
             // console.log(serialized_form_data)
             // console.log(response_data)
-            var cookie_value = $.parseJSON($.cookie('glynt-{{ doc }}'));
+            var cookie_value = $.parseJSON($.cookie('glynt-{{ object.slug }}'));
 
             for (i in serialized_form_data) {
                 name = serialized_form_data[i].name;
@@ -750,7 +750,7 @@ $(document).ready(function(){
                     cookie_value[name] = value;
                 }
             }
-            $.cookie('glynt-{{ doc }}', JSON.stringify(cookie_value));
+            $.cookie('glynt-{{ object.slug }}', JSON.stringify(cookie_value));
         }
 
         self.showErrorMessage = function showErrorMessage(msg) {
@@ -767,7 +767,7 @@ $(document).ready(function(){
 
             $.ajax({
               type: 'POST',
-              url: "{% url 'document:export' doc=doc %}",
+              url: "{% url 'document:view' slug=object.slug %}",
               data: data,
             })
             .success(function(data, textStatus, jqXHR) {
@@ -887,8 +887,8 @@ $(document).ready(function(){
 
     $("input.datepicker").datepicker({dateFormat:"D, dd MM yy"});
 
-    if ($.cookie('glynt-{{ doc }}') == null) {
-        $.cookie('glynt-{{ doc }}', JSON.stringify({}));
+    if ($.cookie('glynt-{{ object.slug }}') == null) {
+        $.cookie('glynt-{{ object.slug }}', JSON.stringify({}));
     }
 
     Handlebars.registerHelper('get', function(obj, prop) {

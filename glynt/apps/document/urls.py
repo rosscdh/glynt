@@ -6,6 +6,6 @@ from views import DocumentView, DocumentExportView
 
 
 urlpatterns = patterns('',
-    url(r'^(?P<doc>.+)/export/$', DocumentExportView.as_view(), name='export'),
-    url(r'^(?P<doc>.+)/$', DocumentView.as_view(template_name='document/document.html'), name='generic'),
+    url(r'^(?P<slug>.+)/export/$', DocumentExportView.as_view(), name='export'),
+    url(r'^(?P<slug>.+)/$', DocumentView.as_view(template_name='document/document.html'), name='view'),
 )

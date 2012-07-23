@@ -51,9 +51,8 @@ class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
 
     def get_context_data(self, **kwargs):
         context = super(DocumentView, self).get_context_data(**kwargs)
-        context['doc'] = self.kwargs['doc']
 
-        document_slug = slugify(self.kwargs['doc'])
+        document_slug = slugify(self.kwargs['slug'])
         document = Document.objects.get(slug=document_slug)
         context['object'] = document
         context['document'] = document.body
