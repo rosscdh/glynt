@@ -439,7 +439,8 @@ $(document).ready(function(){
 		    }
 
             if (self.textElementsList.indexOf(input.attr('type')) >= 0 || self.textElementsList.indexOf(input.prop('type')) >= 0) {
-                    value = '[' + value.toString() + ']';
+                    //value = '[' + value.toString() + ']';
+                    value = value.toString();
             }
             // if the textElementsList has no type of this type.. it could be a checkbox or radio
             if (self.textElementsList.indexOf(input.attr('type')) == -1) {
