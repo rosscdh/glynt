@@ -3,6 +3,12 @@
 {% load glynt_helpers %}
 {% load url from future %}
 
+
+{% block owner_info %}
+<h3>{{ object.name }}</h3>
+<h4>{{ object.owner.get_full_name }}</h4>
+{% endblock %}
+
 {% block form %}
     <div id="docu-form-head" class="row">
         <div id="messages" data-bind="html: App.message"></div>
