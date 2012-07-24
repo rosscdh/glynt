@@ -1,0 +1,16 @@
+[
+{
+    "steps": [
+                "step_title"
+                "fields" [
+                    "name": ""
+                    "help_text": ""
+                    "placeholder": ""
+                    "field_type": {
+                    }
+                    "widget": {
+                    },
+                ]
+    ]
+}
+]

@@ -12,6 +12,7 @@ south
 # model record versioning for documents
 -e git+https://github.com/etianen/django-reversion.git#egg=django-reversion
 -e git+https://github.com/stard0g101/django-forms-builder.git#egg=django-forms-builder
+-e git+https://github.com/bread-and-pepper/django-userena.git#egg=django-userena
 # javascript markdown
 # hg clone https://code.google.com/p/pagedown/
 # possible multi format 
