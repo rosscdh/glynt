@@ -47,6 +47,9 @@ class JsonErrorResponseMixin(object):
             'object': None,
         }
 
+class CreateDocumentView(TemplateView, FormMixin):
+    template_name = 'document/create.html'
+
 class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
 
     def get_context_data(self, **kwargs):

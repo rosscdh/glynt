@@ -15,7 +15,7 @@
 
     <div class="span7 pull-left">
         <h3>{% trans 'Documents' %}</h3>
-        <input type="button" class="btn btn-primary" value="{% trans 'New Doc' %}"/>
+        <a href="{% url 'document:create' %}" class="btn btn-primary">{% trans 'New Doc' %}</a>
         <dl class="dl-horizontal">
         <dt>{% trans 'My Documents' %}</dt>
         <dd>
