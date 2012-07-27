@@ -1,16 +1,16 @@
 """
-This file demonstrates writing tests using the unittest module. These will pass
-when you run "manage.py test".
-
-Replace this with more appropriate tests for your application.
+Test the default app views
 """
-
+from django.test.client import Client
 from django.test import TestCase
 
+from django.core.urlresolvers import reverse
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.assertEqual(1 + 1, 2)
+login_required_urls = [
+		reverse('glynt:default'), 
+		]
+
+
+class DefaultAppTest(TestCase):
+	def setUp(self):
+		self.client = Client()

@@ -13,6 +13,8 @@ from django.contrib.formtools.wizard.views import SessionWizardView
 from django.utils import simplejson as json
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
+from django.contrib.auth.decorators import user_passes_test
+from django.http import Http404
 
 from models import Document
 
@@ -26,9 +28,23 @@ from forms import WillStep1, WillStep2, WillStep3, WillStep4, WillStep5, WillSte
 #from reportlab.pdfgen import canvas
 
 FORM_GROUPS = {
+    'no_steps': [],
     'legal': [AssassinStep1, AssassinStep2],
     'legal-will': [WillStep1, WillStep2, WillStep3, WillStep4, WillStep5, WillStep6, WillStep7]
 }
+
+def user_can_view_document(context, user):
+    """ Helper method for testing a users access to this document """
+    document = context['object']
+    if user.is_superuser or user.is_staff:
+        return True
+    if document.owner == user and document.doc_status not in [Document.DOC_STATUS.deleted]:
+        return True
+    if document.is_public == False:
+        raise Http404
+    if document.doc_status in [Document.DOC_STATUS.deleted, Document.DOC_STATUS.draft]:
+        raise Http404
+
 
 class JsonErrorResponseMixin(object):
     def get_response_json(self, form):
@@ -50,6 +66,11 @@ class JsonErrorResponseMixin(object):
 class CreateDocumentView(TemplateView, FormMixin):
     template_name = 'document/create.html'
 
+
+class EditDocumentView(TemplateView, FormMixin):
+    template_name = 'document/create.html'
+
+
 class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
 
     def get_context_data(self, **kwargs):
@@ -60,7 +81,12 @@ class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
         context['object'] = document
         context['document'] = document.body
 
-        context['form_set'] = FORM_GROUPS[document_slug]
+        try:
+            context['form_set'] = FORM_GROUPS[document_slug]
+        except KeyError:
+            context['form_set'] = FORM_GROUPS['no_steps']
+
+        user_can_view_document(context, self.request.user)
 
         return context
 

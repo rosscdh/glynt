@@ -108,7 +108,7 @@ TEMPLATE_DIRS = (
     os.path.join(SITE_ROOT, 'templates'),
 )
 
-BASE_APP = (
+PROJECT_APPS = (
     'glynt.apps.default',
     # The primary document view system
     'glynt.apps.document',
@@ -125,10 +125,10 @@ HELPER_APPS = (
     'forms_builder.forms',
     'socialregistration',
     'socialregistration.contrib.facebook_js',
-    'south',
+#    'south',
 )
 
-INSTALLED_APPS = BASE_APP + HELPER_APPS + (
+INSTALLED_APPS = PROJECT_APPS + HELPER_APPS + (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -155,6 +155,10 @@ if DEBUG:
     INSTALLED_APPS = INSTALLED_APPS + (
     'django.contrib.webdesign',
     )
+
+# Custom test runner for this project
+TEST_RUNNER = 'glynt.test_runner.GlyntAppTestRunner'
+
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
