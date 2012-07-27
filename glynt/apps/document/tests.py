@@ -24,7 +24,7 @@ invalid_method_urls = [
 ]
 
 invalid_status_docs = ['deleted', 'draft']
-restricted_status_docs = ['draft']
+restricted_status_docs = ['private','draft']
 
 class DocumentTest(TestCase):
 	def setUp(self):
@@ -81,11 +81,12 @@ class DocumentTest(TestCase):
 			u = reverse('document:view', kwargs={'slug': '%s-test-doc'%(t,)})
 			self.check_response_token_helper(u, 404, [])
 
-	# def test_anonymous_cannot_access_private_doc(self):
-	# 	u = reverse('document:view', kwargs={'slug': 'private-test-doc'})
-	# 	response = self.client.get(u, follow=True)
-	# 	self.assertEqual(response.status_code, 405)
-	# 	self.assertEqual(response.redirect_chain, [])
+	def test_anonymous_cannot_access_private_doc(self):
+		for t in restricted_status_docs:
+			u = reverse('document:view', kwargs={'slug': '%s-test-doc'%(t,)})
+			response = self.client.get(u, follow=True)
+			self.assertEqual(response.status_code, 404)
+			self.assertEqual(response.redirect_chain, [])
 
 			
 
