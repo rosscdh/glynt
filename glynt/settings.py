@@ -125,7 +125,7 @@ HELPER_APPS = (
     'forms_builder.forms',
     'socialregistration',
     'socialregistration.contrib.facebook_js',
-#    'south',
+    'south',
 )
 
 INSTALLED_APPS = PROJECT_APPS + HELPER_APPS + (
@@ -140,8 +140,8 @@ INSTALLED_APPS = PROJECT_APPS + HELPER_APPS + (
 )
 
 
-FACEBOOK_API_KEY = '209234305864956'
-FACEBOOK_SECRET_KEY = 'd0875d1310c3708181b5b9d2092593d8'
+FACEBOOK_API_KEY = '419217318130542'
+FACEBOOK_SECRET_KEY = 'a8a6359a83c2af62c0aadb8e507bd15f'
 FACEBOOK_REQUEST_PERMISSIONS = 'email,user_likes,user_about_me,read_stream'
 
 LOGIN_REDIRECT_URL = '/'
