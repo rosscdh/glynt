@@ -27,10 +27,10 @@ class FeatureContext extends MinkContext
      *
      * @param array $parameters context parameters (set them up through behat.yml)
      */
-//    public function __construct(array $parameters)
-//    {
+    public function __construct(array $parameters)
+    {
         // Initialize your context here
-//    }
+    }
 
 //
 // Place your definition and hook methods here:

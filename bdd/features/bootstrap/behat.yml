@@ -1,6 +1,18 @@
-# behat.yml
 default:
-    extensions:
-        Behat\MinkExtension\Extension:
-            goutte: ~
-            selenium2: ~
+  extensions:
+    Behat\MinkExtension\Extension:
+      base_url: http://local.weareml.com
+      goutte: ~
+      sahi: ~
+
+  paths:
+    features:  features
+    bootstrap: features/bootstrap
+
+annotations:
+  paths:
+    features: features/annotations
+
+closures:
+  paths:
+    features: features/closures

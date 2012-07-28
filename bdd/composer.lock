@@ -1,5 +1,5 @@
 {
-    "hash": "de669a16f36025d3870fc6475ec3ca75",
+    "hash": "d132eb60bb5f49537699a787eb0af266",
     "packages": [
         {
             "package": "behat/behat",
@@ -216,6 +216,7 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": {
-        "behat/behat": 0
+        "behat/behat": 0,
+        "behat/mink": 0
     }
 }
