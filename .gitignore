@@ -12,6 +12,7 @@ tags
 :2e_*
 ._*
 .DS_Store
+/bdd/vendor/
 /media/*
 /static/*
 /log/*.log
