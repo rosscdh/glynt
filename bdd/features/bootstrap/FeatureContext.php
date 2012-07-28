@@ -9,6 +9,8 @@ use Behat\Gherkin\Node\PyStringNode,
 
 use Behat\MinkExtension\Context\MinkContext;
 
+$driver = new \Behat\Mink\Driver\SahiDriver('chrome');
+
 //
 // Require 3rd-party libraries here:
 //
@@ -32,15 +34,11 @@ class FeatureContext extends MinkContext
         // Initialize your context here
     }
 
-//
-// Place your definition and hook methods here:
-//
-//    /**
-//     * @Given /^I have done something with "([^"]*)"$/
-//     */
-//    public function iHaveDoneSomethingWith($argument)
-//    {
-//        doSomethingWith($argument);
-//    }
-//
+    /**
+     * @Given /^Logged in as "([^"]*)"$/
+     */
+    public function loggedInAs($arg1)
+    {
+        throw new PendingException();
+    }
 }

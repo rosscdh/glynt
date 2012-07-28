@@ -1,9 +1,9 @@
 {
-    "hash": "d132eb60bb5f49537699a787eb0af266",
+    "hash": "6791af2eb465e2eee98a93a981e2b0a1",
     "packages": [
         {
             "package": "behat/behat",
-            "version": "v2.4.2"
+            "version": "v2.4.3"
         },
         {
             "package": "behat/gherkin",
@@ -38,12 +38,6 @@
             "commit-date": "1341477311"
         },
         {
-            "package": "behat/mink-selenium2-driver",
-            "version": "dev-master",
-            "source-reference": "v1.0.2",
-            "commit-date": "1341477123"
-        },
-        {
             "package": "behat/sahi-client",
             "version": "v1.0.1"
         },
@@ -64,12 +58,6 @@
         {
             "package": "guzzle/parser",
             "version": "v2.8.2"
-        },
-        {
-            "package": "instaclick/php-webdriver",
-            "version": "dev-master",
-            "source-reference": "v1.0",
-            "commit-date": "1337727558"
         },
         {
             "package": "kriswallsmith/buzz",

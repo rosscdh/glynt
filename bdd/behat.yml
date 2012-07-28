@@ -1,5 +1,6 @@
 default:
   extensions:
     Behat\MinkExtension\Extension:
-      base_url: http://en.wikipedia.org/
+      base_url: http://local.weareml.com/
       goutte:   ~
+      sahi:   ~
