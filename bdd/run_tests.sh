@@ -3,7 +3,7 @@ PROJECT_DIR=$PWD/../
 BDD_DIR=$PWD
 SAHI_DIR=$HOME/sahi/bin
 
-#source $WORKON_HOME/glynt/bin/activate
+source $WORKON_HOME/glynt/bin/activate
 
 echo "Kill Previous Servers"
 # Kill previously running testserver_plus server
@@ -13,19 +13,17 @@ kill -9 `ps -aef | grep "glynt/bin/python manage.py testserver" | grep -v grep |
 
 cd $PROJECT_DIR
 # Run the project unit tests
-$WORKON_HOME/glynt/bin/python manage.py jenkins
+python manage.py jenkins
 
 # Run the testserver so that behat can find and use it
-$WORKON_HOME/glynt/bin/python manage.py testserver &
+python manage.py testserver &
 
 # echo "Starting Sahi Server"
 # cd $SAHI_DIR
 # ./sahi.sh &
 
 echo "Starting Behat Tests"
-echo $BDD_DIR
-cd $BDD_DIR
-./bin/behat -f junit --out ../reports
+./bdd/bin/behat -f junit --out ../reports
 
 echo "Kill Servers"
 # Kill the testserver_plus server
