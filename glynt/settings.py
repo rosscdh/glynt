@@ -2,7 +2,7 @@ import os
 import sys
 
 IS_TESTING = False
-for test_app in ['jenkins','test']:
+for test_app in ['jenkins','testserver','test']:
     if test_app in sys.argv[1:2]:
      IS_TESTING = True
 
