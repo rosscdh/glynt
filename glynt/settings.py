@@ -1,4 +1,8 @@
 import os
+import sys
+
+IS_TESTING = sys.argv[1:2] == ['test']
+
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__+ '/../'))
 
 DEBUG = True
@@ -125,8 +129,11 @@ HELPER_APPS = (
     'forms_builder.forms',
     'socialregistration',
     'socialregistration.contrib.facebook_js',
-#    'south',
 )
+
+# Handle south and its breaking tests
+if not IS_TESTING:
+    HELPER_APPS = HELPER_APPS + ('south')
 
 INSTALLED_APPS = PROJECT_APPS + HELPER_APPS + (
     'django.contrib.auth',

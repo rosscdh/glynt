@@ -13,6 +13,7 @@ tags
 ._*
 .DS_Store
 /bdd/vendor/*
+/bdd/results/*
 /media/*
 /static/*
 /log/*.log
