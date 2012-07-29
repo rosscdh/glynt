@@ -1,7 +1,10 @@
 import os
 import sys
 
-IS_TESTING = sys.argv[1:2] == ['test']
+IS_TESTING = False
+for test_app in ['jenkins','test']:
+    if test_app in sys.argv[1:2]:
+     IS_TESTING = True
 
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__+ '/../'))
 
@@ -126,6 +129,7 @@ HELPER_APPS = (
     'templatetag_handlebars',
     'django_markdown',
     'taggit',
+    'django_jenkins',
     'forms_builder.forms',
     'socialregistration',
     'socialregistration.contrib.facebook_js',
@@ -133,7 +137,7 @@ HELPER_APPS = (
 
 # Handle south and its breaking tests
 if not IS_TESTING:
-    HELPER_APPS = HELPER_APPS + ('south')
+    HELPER_APPS = HELPER_APPS + ('south',)
 
 INSTALLED_APPS = PROJECT_APPS + HELPER_APPS + (
     'django.contrib.auth',

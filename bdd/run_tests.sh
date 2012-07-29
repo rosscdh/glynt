@@ -5,6 +5,10 @@ source $WORKON_HOME/glynt/bin/activate
 kill -9 `ps -aef | grep "glynt/bin/python manage.py testserver" | grep -v grep | awk '{print $2}'`
 
 cd ../
+# Run the project unit tests
+$WORKON_HOME/glynt/bin/python manage.py test
+
+# Run the testserver so that behat can find and use it
 $WORKON_HOME/glynt/bin/python manage.py testserver &
 
 cd bdd/
