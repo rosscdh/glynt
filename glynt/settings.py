@@ -125,7 +125,7 @@ HELPER_APPS = (
     'forms_builder.forms',
     'socialregistration',
     'socialregistration.contrib.facebook_js',
-    'south',
+#    'south',
 )
 
 INSTALLED_APPS = PROJECT_APPS + HELPER_APPS + (

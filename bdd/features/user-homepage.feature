@@ -4,7 +4,6 @@ Feature: Logged in User Homepage
   As a user
   I need to be able to select an avaliable document to workon, from the homepage
 
-  @mink:sahi
   Scenario: The user should be able to see a list of available documents on the homepage
     Given I am on "/"
     And Logged in as "userA"

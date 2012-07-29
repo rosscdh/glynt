@@ -39,6 +39,6 @@ class FeatureContext extends MinkContext
      */
     public function loggedInAs($arg1)
     {
-        throw new PendingException();
+        //throw new PendingException();
     }
 }
