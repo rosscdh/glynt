@@ -41,4 +41,12 @@ class FeatureContext extends MinkContext
     {
         //throw new PendingException();
     }
+
+    /**
+     * @Then /^I click Facebook Login$/
+     */
+    public function iClickFacebookLogin()
+    {
+        //throw new PendingException();
+    }
 }

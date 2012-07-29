@@ -53,7 +53,7 @@
                     <li><a class="logout" href="{% url 'socialregistration:logout' %}">{% trans 'Logout' %}</a></li>
                     {% else %}
                     <li>
-                    <fb:login-button size="medium" scope="{{ FACEBOOK_REQUEST_PERMISSIONS }}" onlogin="SocialFBLogin();">Connect with Facebook</fb:login-button>
+                    <fb:login-button id="fb_login-button" size="medium" scope="{{ FACEBOOK_REQUEST_PERMISSIONS }}" onlogin="SocialFBLogin();">Connect with Facebook</fb:login-button>
                     </li>
                     {% endif %}
                 </ul>

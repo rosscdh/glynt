@@ -3,7 +3,7 @@ PROJECT_DIR=$PWD/../
 BDD_DIR=$PWD
 SAHI_DIR=$HOME/sahi/bin
 
-source $WORKON_HOME/glynt/bin/activate
+#source $WORKON_HOME/glynt/bin/activate
 
 echo "Kill Previous Servers"
 # Kill previously running testserver_plus server
