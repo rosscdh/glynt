@@ -7,7 +7,7 @@ local_settings.py
 *.db
 *.sqlite
 tags
-
+composer.lock
 .AppleDouble
 :2e_*
 ._*
