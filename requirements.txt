@@ -15,6 +15,8 @@ facebook
 -e git+https://github.com/stard0g101/django-forms-builder.git#egg=django-forms-builder
 -e git+https://github.com/bread-and-pepper/django-userena.git#egg=django-userena
 -e git+https://github.com/kmmbvnr/django-jenkins.git#egg=django-jenkins
+-e git+https://github.com/callowayproject/django-categories.git#egg=django-categories
+
 # javascript markdown
 # hg clone https://code.google.com/p/pagedown/
 # possible multi format 

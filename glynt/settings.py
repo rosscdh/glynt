@@ -131,6 +131,8 @@ HELPER_APPS = (
     'taggit',
     'django_jenkins',
     'forms_builder.forms',
+    'categories',
+    'categories.editor',
     'socialregistration',
     'socialregistration.contrib.facebook_js',
 )
