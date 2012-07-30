@@ -1,4 +1,11 @@
 import os
+import sys
+
+IS_TESTING = False
+for test_app in ['jenkins','testserver','test']:
+    if test_app in sys.argv[1:2]:
+     IS_TESTING = True
+
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__+ '/../'))
 
 DEBUG = True
@@ -21,13 +28,6 @@ DATABASES = {
     }
 }
 
-# Local time zone for this installation. Choices can be found here:
-# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
-# although not all choices may be available on all operating systems.
-# On Unix systems, a value of None will cause Django to use the same
-# timezone as the operating system.
-# If running in a Windows environment this must be set to the same as your
-# system time zone.
 TIME_ZONE = 'America/Chicago'
 
 # Language code for this installation. All choices can be found here:
@@ -75,7 +75,6 @@ SECRET_KEY = 'i6=)1=4in#zyp&amp;g)^j2nl1abaeu)@2)^$ox5w7ac*uhml!uy-5'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -116,7 +115,7 @@ TEMPLATE_DIRS = (
     os.path.join(SITE_ROOT, 'templates'),
 )
 
-BASE_APP = (
+PROJECT_APPS = (
     'glynt.apps.default',
     # The primary document view system
     'glynt.apps.document',
@@ -129,12 +128,18 @@ HELPER_APPS = (
     'django_extensions',
     'templatetag_handlebars',
     'django_markdown',
+    'taggit',
+    'django_jenkins',
+    'forms_builder.forms',
     'socialregistration',
     'socialregistration.contrib.facebook_js',
-    'south',
 )
 
-INSTALLED_APPS = BASE_APP + HELPER_APPS + (
+# Handle south and its breaking tests
+if not IS_TESTING:
+    HELPER_APPS = HELPER_APPS + ('south',)
+
+INSTALLED_APPS = PROJECT_APPS + HELPER_APPS + (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -146,8 +151,8 @@ INSTALLED_APPS = BASE_APP + HELPER_APPS + (
 )
 
 
-FACEBOOK_API_KEY = '209234305864956'
-FACEBOOK_SECRET_KEY = 'd0875d1310c3708181b5b9d2092593d8'
+FACEBOOK_API_KEY = '419217318130542'
+FACEBOOK_SECRET_KEY = 'a8a6359a83c2af62c0aadb8e507bd15f'
 FACEBOOK_REQUEST_PERMISSIONS = 'email,user_likes,user_about_me,read_stream'
 
 LOGIN_REDIRECT_URL = '/'
@@ -161,6 +166,10 @@ if DEBUG:
     INSTALLED_APPS = INSTALLED_APPS + (
     'django.contrib.webdesign',
     )
+
+# Custom test runner for this project
+TEST_RUNNER = 'glynt.test_runner.GlyntAppTestRunner'
+
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

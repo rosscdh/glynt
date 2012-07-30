@@ -1,2 +1,2 @@
-glynt
-=====
+# The Glynt Project
+

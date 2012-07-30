@@ -1,4 +1,5 @@
 {% extends 'client/base.html' %}
+{% load url from future %}
 {% load i18n %}
 
 {% block body %}
@@ -14,8 +15,17 @@
 
     <div class="span7 pull-left">
         <h3>{% trans 'Documents' %}</h3>
-        <input type="button" class="btn btn-primary" value="{% trans 'New Doc' %}"/>
+        <a href="{% url 'document:create' %}" class="btn btn-primary">{% trans 'New Doc' %}</a>
         <dl class="dl-horizontal">
+        <dt>{% trans 'My Documents' %}</dt>
+        <dd>
+            <i>{% blocktrans %}Documents{% endblocktrans %}</i>
+            <ul>
+                {% for d in document_list %}
+                <li><a href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a> - last edited: 2012-10-20, status: 20% complete</li>
+                {% endfor %}
+            </ul>
+        </dd>
         <dt>{% trans 'Draft' %}</dt>
         <dd>
             <i>{% blocktrans %}Documents that you are currently still working on{% endblocktrans %}</i>

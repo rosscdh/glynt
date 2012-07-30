@@ -3,6 +3,13 @@
 {% load glynt_helpers %}
 {% load url from future %}
 
+
+{% block owner_info %}
+<h3>{{ object.name }}</h3>
+{% trans 'shared by' %}
+<h4>{{ object.owner.get_full_name }}</h4>
+{% endblock %}
+
 {% block form %}
     <div id="docu-form-head" class="row">
         <div id="messages" data-bind="html: App.message"></div>
@@ -28,7 +35,6 @@
             <button id="btn-post-pdf" class="btn btn-success" type="button">Generate PDF</button>
         </div>
     </div>
-
 {% endblock %}
 
 {% block document %}
@@ -44,6 +50,9 @@ form div.form-group ul{
     list-style-type: none;
     list-style: none;
 }
+.doc-var{
+    background-color:#ccc;
+}
 span.helptext {
 display:none;
 }
@@ -51,17 +60,18 @@ display:none;
 {% endblock %}
 
 {% block js %}
+<script id="js-document" type="text/x-handlebars-template">
+{{ object.body|safe }}
+</script>
 
-{% include document %}
-
-<script type="text/javascript">
+<script id="document-controls" type="text/javascript">
 $(document).ready(function(){
 
     function FormControls() {
         var self = this;
 
-        self.actualFormSteps = ({{form_set|length}}+1);// account for end form
-        self.maxFormSteps = ko.observable(({{form_set|length}}+1));// account for end form
+        self.actualFormSteps = ({{ form_set|length }}+1);// account for end form
+        self.maxFormSteps = ko.observable(({{ form_set|length }}+1));// account for end form
         self.currentFormStep = ko.observable(1);
 
         self.showNext = function showNext() {
@@ -328,7 +338,7 @@ $(document).ready(function(){
 
         self.textElementsList = ['text','textarea','hidden','select'];
         self.FalseValuesList = ['False','false',false,null,void 0,''];
-		self.handlebarsElementId = ko.observable('script#js-{{ doc }}');
+		self.handlebarsElementId = ko.observable('script#js-document');
 		self.documentTemplate = ko.observable($(self.handlebarsElementId()).html());
 		self.renderedHTML = ko.observable('');
 
@@ -436,7 +446,8 @@ $(document).ready(function(){
 		    }
 
             if (self.textElementsList.indexOf(input.attr('type')) >= 0 || self.textElementsList.indexOf(input.prop('type')) >= 0) {
-                    value = '[' + value.toString() + ']';
+                    //value = '[' + value.toString() + ']';
+                    value = value.toString();
             }
             // if the textElementsList has no type of this type.. it could be a checkbox or radio
             if (self.textElementsList.indexOf(input.attr('type')) == -1) {
@@ -654,7 +665,7 @@ $(document).ready(function(){
         }
 
         self.initializeValuesFromCookie = function initializeValuesFromCookie() {
-            var cookie_value = $.parseJSON($.cookie('glynt-{{ doc }}'));
+            var cookie_value = $.parseJSON($.cookie('glynt-{{ object.slug }}'));
             if (cookie_value) {
                 cookie_value = $(cookie_value);
                 if (cookie_value.length >= 0) {
@@ -713,7 +724,7 @@ $(document).ready(function(){
             var form_data_serialized = form.serialize();
             $.ajax({
               type: 'POST',
-              url: "{% url 'document:generic' doc=doc %}?step="+step,
+              url: "{% url 'document:view' slug=object.slug %}?step="+step,
               data: form_data_serialized,
             })
             .success(function(data, textStatus, jqXHR) {
@@ -737,7 +748,7 @@ $(document).ready(function(){
         self.persistFormData = function persistFormData(serialized_form_data, response_data) {
             // console.log(serialized_form_data)
             // console.log(response_data)
-            var cookie_value = $.parseJSON($.cookie('glynt-{{ doc }}'));
+            var cookie_value = $.parseJSON($.cookie('glynt-{{ object.slug }}'));
 
             for (i in serialized_form_data) {
                 name = serialized_form_data[i].name;
@@ -746,7 +757,7 @@ $(document).ready(function(){
                     cookie_value[name] = value;
                 }
             }
-            $.cookie('glynt-{{ doc }}', JSON.stringify(cookie_value));
+            $.cookie('glynt-{{ object.slug }}', JSON.stringify(cookie_value));
         }
 
         self.showErrorMessage = function showErrorMessage(msg) {
@@ -763,7 +774,7 @@ $(document).ready(function(){
 
             $.ajax({
               type: 'POST',
-              url: "{% url 'document:export' doc=doc %}",
+              url: "{% url 'document:view' slug=object.slug %}",
               data: data,
             })
             .success(function(data, textStatus, jqXHR) {
@@ -883,8 +894,8 @@ $(document).ready(function(){
 
     $("input.datepicker").datepicker({dateFormat:"D, dd MM yy"});
 
-    if ($.cookie('glynt-{{ doc }}') == null) {
-        $.cookie('glynt-{{ doc }}', JSON.stringify({}));
+    if ($.cookie('glynt-{{ object.slug }}') == null) {
+        $.cookie('glynt-{{ object.slug }}', JSON.stringify({}));
     }
 
     Handlebars.registerHelper('get', function(obj, prop) {

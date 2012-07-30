@@ -2,7 +2,7 @@
 *.sqlite3
 *.swp
 *.swo
-dev.db
+*.db
 local_settings.py
 *.db
 *.sqlite
@@ -12,6 +12,9 @@ tags
 :2e_*
 ._*
 .DS_Store
+/reports/*
+/bdd/vendor/*
+/bdd/results/*
 /media/*
 /static/*
 /log/*.log
