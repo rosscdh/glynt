@@ -15,8 +15,8 @@
 
     <div class="span7 pull-left">
         <h3>{% trans 'Documents' %}</h3>
-        <a href="{% url 'document:create' %}" class="btn btn-primary">{% trans 'New Doc' %}</a>
-        <dl class="dl-horizontal">
+        <a id="create-document" href="{% url 'document:create' %}" class="btn btn-primary">{% trans 'New Doc' %}</a>
+        <dl id="available-document-list" class="dl-horizontal">
         <dt>{% trans 'My Documents' %}</dt>
         <dd>
             <i>{% blocktrans %}Documents{% endblocktrans %}</i>

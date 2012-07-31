@@ -4,18 +4,16 @@ Feature: Logged in User Dashboard
   As a user
   I need to be able to beable to view documentsI have created and their status'
 
-  @mink:sahi
   Scenario: The user should be able to see a list of their created documents
-    Given I am on "/dashboard"
-    And Logged in as "userA"
-    And I should see a "ul#available-document-list" element
-    And I should see 3 "ul#available-document-list li" elements
+    Given I am on "/client"
+    And I am logged in as "userA"
+    And I should see a "dl#available-document-list" element
+    And I should see 4 "dl#available-document-list dt" elements
 
-  @mink:sahi
   Scenario: The user should be able to create a new document
-    Given I am on "/dashboard"
-    And Logged in as "userA"
-    And I should see a "a#create-document" element
+    Given I am on "/client"
+    And I am logged in as "userA"
+    Then I should see a "a#create-document" element
 
     When I follow "a#create-document"
     Then the response status code should be 200

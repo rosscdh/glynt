@@ -35,7 +35,7 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     * @Given /^Logged in as "([^"]*)"$/
+     * @Given /^(?:|I )am logged in as "([^"]*)"$/
      */
     public function loggedInAs($arg1)
     {

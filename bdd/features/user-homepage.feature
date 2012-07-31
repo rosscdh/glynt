@@ -6,6 +6,6 @@ Feature: Logged in User Homepage
 
   Scenario: The user should be able to see a list of available documents on the homepage
     Given I am on "/"
-    And Logged in as "userA"
+    And I am logged in as "userA"
     And I should see a "ul#available-document-list" element
     And I should see 3 "ul#available-document-list li" elements
