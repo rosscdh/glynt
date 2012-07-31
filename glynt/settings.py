@@ -28,6 +28,9 @@ DATABASES = {
     }
 }
 
+if IS_TESTING:
+    DATABASES['default']['TEST_NAME'] = '/tmp/testserver.db'
+
 TIME_ZONE = 'America/Chicago'
 
 # Language code for this installation. All choices can be found here:
@@ -181,6 +184,10 @@ if DEBUG:
     MIDDLEWARE_CLASSES += (
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     )
+
+    DEBUG_TOOLBAR_CONFIG = {
+    'INTERCEPT_REDIRECTS': False
+    }
 
     INSTALLED_APPS = INSTALLED_APPS + (
     'debug_toolbar',

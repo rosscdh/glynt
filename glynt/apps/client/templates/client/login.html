@@ -1,0 +1,13 @@
+{% extends 'client/base.html' %}
+{% load url from future %}
+{% load i18n %}
+
+{% block body %}
+
+<form id="" action="{% url 'client:login' %}" method="post">{% csrf_token %}
+{{ form }}
+<br/>
+<input type="submit" class="btn btn-primary" name="" value="Login"/>
+</form>
+
+{% endblock %}

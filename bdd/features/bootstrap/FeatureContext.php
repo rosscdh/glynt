@@ -9,8 +9,7 @@ use Behat\Gherkin\Node\PyStringNode,
 
 use Behat\MinkExtension\Context\MinkContext;
 
-$driver = new \Behat\Mink\Driver\SahiDriver('chrome');
-
+use Behat\Behat\Context\Step;
 //
 // Require 3rd-party libraries here:
 //
@@ -21,8 +20,11 @@ $driver = new \Behat\Mink\Driver\SahiDriver('chrome');
 /**
  * Features context.
  */
-class FeatureContext extends MinkContext
-{
+class FeatureContext extends MinkContext {
+
+    private 
+        $loginUrl = '/client/login/';
+
     /**
      * Initializes context.
      * Every scenario gets it's own context object.
@@ -34,12 +36,22 @@ class FeatureContext extends MinkContext
         // Initialize your context here
     }
 
+    private function getUserPassword($username) {
+        return 'test';
+    }
+
     /**
      * @Given /^(?:|I )am logged in as "([^"]*)"$/
      */
-    public function loggedInAs($arg1)
+    public function loggedInAs($username)
     {
-        //throw new PendingException();
+        return array(
+            new Step\Given(sprintf('I am on "%s"', $this->loginUrl)),
+            new Step\When(sprintf('I fill in "username" with "%s"', $username)),
+            new Step\When(sprintf('I fill in "password" with "%s"', $this->getUserPassword($username))),
+            new Step\When('I press "Login"'),
+            new Step\Then('the response status code should be 200')
+        );
     }
 
     /**
