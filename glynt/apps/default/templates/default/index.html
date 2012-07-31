@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n markup %}
 {% load url from future %}
+{% load document_tags %}
 
 {% block body %}
 <div class="hero-unit">
@@ -26,6 +27,12 @@
 <ul>
 	<li><a href="{% url 'document:view' slug='legal-will' %}">Shareholders agreement</a></li>
 </ul>
-
 </div>
+
+<div class="row">
+{% block doc_cats %}
+{% document_categories_home %}
+{% endblock %}
+</div>
+
 {% endblock %}

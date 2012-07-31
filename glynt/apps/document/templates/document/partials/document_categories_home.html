@@ -1,0 +1,15 @@
+{% load i18n markup %}
+{% load category_tags %}
+
+<ul>
+    {% recursetree objects %}
+        <li>
+            {{ node.name }}
+            {% if not node.is_leaf_node %}
+                <ul>
+                    {{ children }}
+                </ul>
+            {% endif %}
+        </li>
+    {% endrecursetree %}
+</ul>

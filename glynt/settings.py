@@ -164,6 +164,10 @@ DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d
 '%b %d, %Y', '%d %b %Y', '%d %b, %Y', '%B %d %Y',
 '%B %d, %Y', '%d %B %Y', '%d %B, %Y')
 
+CATEGORIES_SETTINGS = {
+    'RELATION_MODELS': ['document.DocumentCategory'],
+}
+
 if DEBUG:
     INSTALLED_APPS = INSTALLED_APPS + (
     'django.contrib.webdesign',
