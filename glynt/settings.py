@@ -133,7 +133,6 @@ HELPER_APPS = (
     'django_markdown',
     'taggit',
     'django_jenkins',
-    'forms_builder.forms',
     'categories',
     'categories.editor',
     'mptt',
