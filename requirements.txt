@@ -9,6 +9,7 @@ south
 -e git+https://github.com/klen/django_markdown.git#egg=django_markdown
 -e git+https://github.com/stard0g101/django-socialregistration.git#egg=django-socialregistration
 facebook
+-e git+https://github.com/Julian/jsonschema.git#egg=jsonschema
 -e git+https://github.com/alex/django-taggit.git#egg=django-taggit
 # model record versioning for documents
 -e git+https://github.com/etianen/django-reversion.git#egg=django-reversion
