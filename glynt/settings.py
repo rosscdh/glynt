@@ -133,6 +133,7 @@ HELPER_APPS = (
     'forms_builder.forms',
     'categories',
     'categories.editor',
+    'mptt',
     'socialregistration',
     'socialregistration.contrib.facebook_js',
 )
@@ -165,13 +166,28 @@ DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d
 '%B %d, %Y', '%d %B %Y', '%d %B, %Y')
 
 CATEGORIES_SETTINGS = {
-    'RELATION_MODELS': ['document.DocumentCategory'],
+    'ALLOW_SLUG_CHANGE': False,
+    'CACHE_VIEW_LENGTH': 0,
+    'RELATION_MODELS': ["document.DocumentCategory"],
+    'M2M_REGISTRY': {},
+    'FK_REGISTRY': {},
+    'THUMBNAIL_UPLOAD_PATH': 'uploads/categories/thumbnails',
+    'THUMBNAIL_STORAGE': 'django.core.files.storage.FileSystemStorage',
+    'SLUG_TRANSLITERATOR': lambda x: x,
 }
 
 if DEBUG:
+
+    MIDDLEWARE_CLASSES += (
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    )
+
     INSTALLED_APPS = INSTALLED_APPS + (
+    'debug_toolbar',
     'django.contrib.webdesign',
     )
+
+    INTERNAL_IPS = ('127.0.0.1',)
 
 # Custom test runner for this project
 TEST_RUNNER = 'glynt.test_runner.GlyntAppTestRunner'

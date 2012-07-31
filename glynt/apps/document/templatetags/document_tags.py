@@ -8,7 +8,6 @@ register = template.Library()
 
 @register.inclusion_tag('document/partials/document_categories_home.html')
 def document_categories_home():
-    objects = DocumentCategory.objects.filter(active=True)
     return {
-    'objects': objects
+    'objects': DocumentCategory.objects.filter(active=True)
     }

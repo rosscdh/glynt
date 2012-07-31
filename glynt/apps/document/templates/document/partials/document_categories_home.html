@@ -1,15 +1,22 @@
 {% load i18n markup %}
 {% load category_tags %}
+{% load mptt_tags %}
+{% load url from future %}
 
+{% full_tree_for_model document.DocumentCategory as cats %}
 <ul>
-    {% recursetree objects %}
+    {% for cat in cats %}
+    {% if not cat.is_leaf_node %}
         <li>
-            {{ node.name }}
-            {% if not node.is_leaf_node %}
+            <h3>{{ cat.name }}</h3>
+            {% if cat.children %}
                 <ul>
-                    {{ children }}
+                {% for sub in cat.children.all %}
+                    <li><a href="{% url 'document:category_list' type=cat.slug category=sub.slug %}">{{ sub.name }}</a></li>
+                {% endfor %}
                 </ul>
             {% endif %}
         </li>
-    {% endrecursetree %}
+    {% endif %}
+    {% endfor %}
 </ul>

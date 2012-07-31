@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.template import loader, Context
 from django.views.generic.base import View, TemplateView
+from django.views.generic.list import ListView
 from django.views.generic.edit import FormMixin
 from django.template.defaultfilters import slugify
 from django.http import HttpResponseRedirect
@@ -16,7 +17,7 @@ from django.core.files.base import ContentFile
 from django.contrib.auth.decorators import user_passes_test
 from django.http import Http404
 
-from models import Document
+from models import Document, DocumentCategory
 
 import markdown
 import xhtml2pdf.pisa as pisa
@@ -62,6 +63,30 @@ class JsonErrorResponseMixin(object):
             'message': msg,
             'object': None,
         }
+
+class DocumentByCategoryListView(ListView):
+    model = Document
+    template_name = 'document/documentcategory_list.html'
+
+    def get_queryset(self):
+        """
+        Get the list of items for this view. This must be an interable, and may
+        be a queryset (in which qs-specific behavior will be enabled).
+        """
+        self.doc_type = self.kwargs.get('type', None)
+        self.category = self.kwargs.get('category', None)
+
+        queryset = self.model.objects.filter(doc_cats__slug=self.category)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(DocumentByCategoryListView, self).get_context_data(**kwargs)
+
+        context['category'] = DocumentCategory.objects.get(slug=self.category)
+        context['doc_type'] = self.doc_type
+
+        return context
 
 class CreateDocumentView(TemplateView, FormMixin):
     template_name = 'document/create.html'
