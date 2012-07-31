@@ -188,7 +188,7 @@ if DEBUG:
         'INTERCEPT_REDIRECTS': False
         }
         INSTALLED_APPS = INSTALLED_APPS + (
-        'debug_toolbar'
+        'debug_toolbar',
         )
 
     INSTALLED_APPS = INSTALLED_APPS + (
