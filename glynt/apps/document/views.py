@@ -64,6 +64,7 @@ class JsonErrorResponseMixin(object):
             'object': None,
         }
 
+
 class DocumentByCategoryListView(ListView):
     model = Document
     template_name = 'document/documentcategory_list.html'

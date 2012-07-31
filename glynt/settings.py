@@ -180,20 +180,22 @@ CATEGORIES_SETTINGS = {
 
 if DEBUG:
 
-    MIDDLEWARE_CLASSES += (
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
-    )
-
-    DEBUG_TOOLBAR_CONFIG = {
-    'INTERCEPT_REDIRECTS': False
-    }
+    if not IS_TESTING:
+        MIDDLEWARE_CLASSES += (
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+        )
+        DEBUG_TOOLBAR_CONFIG = {
+        'INTERCEPT_REDIRECTS': False
+        }
+        INSTALLED_APPS = INSTALLED_APPS + (
+        'debug_toolbar'
+        )
 
     INSTALLED_APPS = INSTALLED_APPS + (
-    'debug_toolbar',
     'django.contrib.webdesign',
     )
 
-    INTERNAL_IPS = ('127.0.0.1',)
+INTERNAL_IPS = ('127.0.0.1',)
 
 # Custom test runner for this project
 TEST_RUNNER = 'glynt.test_runner.GlyntAppTestRunner'
