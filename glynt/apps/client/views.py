@@ -15,8 +15,25 @@ from socialregistration.contrib.facebook_js.models import FacebookProfile
 from glynt.apps.document.models import Document
 
 
-class SignupView(TemplateView):
+class SignupView(FormView):
     template_name = 'client/signup.html'
+    success_url = '/'
+    form_class = AuthenticationForm
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+
+        user = authenticate(username=request.POST.get('username',None), password=request.POST.get('password',None))
+
+        if user is not None:
+          if user.is_active:
+            login(request, user)
+            return self.form_valid(form)
+          else:
+            return self.form_invalid(form)
+        else:
+          return self.form_invalid(form)
 
 
 class LoginView(FormView):

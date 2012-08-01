@@ -98,8 +98,9 @@ WSGI_APPLICATION = 'glynt.wsgi.application'
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'socialregistration.contrib.facebook_js.auth.FacebookAuth',
+    'userena.backends.UserenaAuthenticationBackend',
+    'guardian.backends.ObjectPermissionBackend',
 )
-
 
 TEMPLATE_CONTEXT_PROCESSORS = (
 "django.contrib.auth.context_processors.auth",
@@ -113,9 +114,21 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 "socialregistration.contrib.facebook_js.context_processors.FacebookTemplateVars"
 )
 
-
 TEMPLATE_DIRS = (
     os.path.join(SITE_ROOT, 'templates'),
+)
+
+EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+
+DJANGO_APPS = (
+'django.contrib.auth',
+'django.contrib.contenttypes',
+'django.contrib.sessions',
+'django.contrib.sites',
+'django.contrib.messages',
+'django.contrib.staticfiles',
+'django.contrib.admin',
+'django.contrib.markup',
 )
 
 PROJECT_APPS = (
@@ -138,30 +151,32 @@ HELPER_APPS = (
     'mptt',
     'socialregistration',
     'socialregistration.contrib.facebook_js',
+    # Userena
+    'userena',
+    'guardian',
+    'easy_thumbnails',
 )
 
 # Handle south and its breaking tests
 if not IS_TESTING:
     HELPER_APPS = HELPER_APPS + ('south',)
 
-INSTALLED_APPS = PROJECT_APPS + HELPER_APPS + (
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.sites',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django.contrib.admin',
-    'django.contrib.markup',
-)
+INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + HELPER_APPS
 
+ANONYMOUS_USER_ID = -1
+AUTH_PROFILE_MODULE = 'client.ClientProfile'
+USERENA_WITHOUT_USERNAMES = True
+USERENA_HIDE_EMAIL = True
 
 FACEBOOK_API_KEY = '419217318130542'
 FACEBOOK_SECRET_KEY = 'a8a6359a83c2af62c0aadb8e507bd15f'
 FACEBOOK_REQUEST_PERMISSIONS = 'email,user_likes,user_about_me,read_stream'
 
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_URL = '/social/logout/'
+# LOGIN_REDIRECT_URL = '/'
+# LOGOUT_URL = '/social/logout/'
+LOGIN_REDIRECT_URL = '/accounts/%(username)s/'
+LOGIN_URL = '/accounts/signin/'
+LOGOUT_URL = '/accounts/signout/'
 
 DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d %Y',
 '%b %d, %Y', '%d %b %Y', '%d %b, %Y', '%B %d %Y',
