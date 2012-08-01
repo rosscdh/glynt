@@ -18,6 +18,7 @@ facebook
 -e git+https://github.com/kmmbvnr/django-jenkins.git#egg=django-jenkins
 -e git+https://github.com/callowayproject/django-categories.git#egg=django-categories
 -e git+https://github.com/django-debug-toolbar/django-debug-toolbar.git#egg=django-debug-toolbar
+-e git+https://github.com/bradjasper/django-jsonfield.git#egg=django-jsonfield
 # javascript markdown
 # hg clone https://code.google.com/p/pagedown/
 # possible multi format 
