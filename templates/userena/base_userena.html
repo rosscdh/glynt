@@ -1,0 +1,11 @@
+{% extends 'client/base.html' %}
+{% load i18n %}
+
+{% block body %}
+<div class="hero-unit">
+    <h2>{% block title %}{% endblock %}</h2>
+</div>
+<div class="row">
+{% block content %}{% endblock %}
+</div>
+{% endblock %}

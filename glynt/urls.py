@@ -11,7 +11,7 @@ urlpatterns = patterns('',
     # Examples:
     url(r'^admin/', include(admin.site.urls)),
     url(r'^social/', include('socialregistration.urls', namespace='socialregistration')),
-    url(r'^accounts/', include('userena.urls', namespace='userena')),
+    url(r'^accounts/', include('userena.urls')),
     url(r'^client/', include('glynt.apps.client.urls', namespace='client')),
     # Forms for the documents
     url(r'^doc/forms/', include(forms_builder.forms.urls)),
