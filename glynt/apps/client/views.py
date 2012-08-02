@@ -13,16 +13,23 @@ from django.contrib.auth import authenticate, login
 
 from socialregistration.contrib.facebook_js.models import FacebookProfile
 from glynt.apps.document.models import Document
+from forms import SignupForm
 
 
 class SignupView(FormView):
-    template_name = 'client/signup.html'
+    template_name = 'userena/signup_form.html'
     success_url = '/'
-    form_class = AuthenticationForm
+    form_class = SignupForm
 
     def post(self, request, *args, **kwargs):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
+
+        if form.is_valid():
+            form.save()
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
         user = authenticate(username=request.POST.get('username',None), password=request.POST.get('password',None))
 
