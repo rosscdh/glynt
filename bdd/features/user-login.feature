@@ -23,11 +23,11 @@ Feature: Allow user to login to the system, using a username password
       Given I am on "/client/signup/"
       Then I should see a "form#user-login" element
       And I should see a "form#user-login input[name=username]" element
-        Then I fill in "form#user-login input[name=username]" with "userA"
+        When I fill in "form#user-login input[name=username]" with "userA"
 #      And I should see a "form#user-login input[name=email]" element
-#      Then I fill in "form#user-login input[name=email]" with "userA@weareml.com"
+#      When I fill in "form#user-login input[name=email]" with "userA@weareml.com"
       And I should see a "form#user-login input[name=password]" element
-        Then I fill in "form#user-login input[name=password]" with "test"
+        When I fill in "form#user-login input[name=password]" with "test"
       And I should see a "form#user-login input[type=button].submit" element
 
       When I press "form#user-login input[type=button].submit"
