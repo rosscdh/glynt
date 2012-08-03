@@ -50,6 +50,7 @@
                 <ul class="nav">
                     {% if request.user.is_authenticated %}
                     <li><a href="{% url 'client:dashboard' %}">{% trans 'Dashboard' %}</a></li>
+                    <li><a href="{% url 'userena_profile_detail' username=request.user.username %}">{% trans 'Profile' %}</a></li>
                     <li><a class="logout" href="{% url 'socialregistration:logout' %}">{% trans 'Logout' %}</a></li>
                     {% else %}
                     <li>
