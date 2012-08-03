@@ -27,10 +27,22 @@ Feature: Allow user to sign up manually
       Given I am on "/accounts/signup/"
       Then I should see a "form#user-signup" element
       And I should see a "form#user-signup input[name=firstname]" element
+        Then I fill in "form#user-login input[name=firstname]" with "Test"
       And I should see a "form#user-signup input[name=lastname]" element
+        Then I fill in "form#user-login input[name=lastname]" with "User"
       And I should see a "form#user-signup input[name=email]" element
+        Then I fill in "form#user-login input[name=email]" with "userC@weareml.com"
       And I should see a "form#user-signup input[name=password]" element
+        Then I fill in "form#user-login input[name=password]" with "test"
       And I should see a "form#user-signup input[name=confirmpassword]" element
+        Then I fill in "form#user-login input[name=confirmpassword]" with "test"
       And I should see a "form#user-signup select[name=country]" element
+        Then I select the "US" option of "form#user-signup select[name=country]"
       And I should see a "form#user-signup input[name=state]" element
+        Then I fill in "form#user-login input[name=state]" with "AL"
       And I should see a "form#user-signup input[type=button].submit" element
+
+      When I press "form#user-login input[type=button].submit"
+        Then the response status code should be 200
+        And the url should match "/"
+        And I should see "Congratulations, you have signed up successfully"
