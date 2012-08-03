@@ -13,9 +13,7 @@ from managers import GlyntUserManager as UserManager
 
 
 class UserSignup(UserenaSignup):
-  country = CountryField()
-  state = models.CharField(max_length=64)
-
+  """ Override the manager as we do some funky things """
   objects = UserManager()
 
 

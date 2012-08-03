@@ -8,6 +8,8 @@ from models import UserSignup
 
 
 class SignupForm(SignupFormOnlyEmail):
+  """ The signup form overrides the Userena save method and hooks it up 
+  to our own UserSignup model and process allowing us to expand on fields saved """
   country = forms.ChoiceField(choices=COUNTRIES_PLUS, initial='US')
   state = forms.CharField(max_length=128)
 
@@ -33,7 +35,7 @@ class SignupForm(SignupFormOnlyEmail):
                                                   password,
                                                   not userena_settings.USERENA_ACTIVATION_REQUIRED,
                                                   userena_settings.USERENA_ACTIVATION_REQUIRED,
-                                                  country,
-                                                  state)
+                                                  country=country,
+                                                  state=state)
 
     return new_user

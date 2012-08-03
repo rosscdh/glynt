@@ -18,7 +18,7 @@ import re, datetime
 
 class GlyntUserManager(UserenaManager):
 
-  def create_user(self, username, email, password, active=False, send_email=True, country='US', state=''):
+  def create_user(self, username, email, password, active=False, send_email=True, *args, **kwargs):
     """
     A simple wrapper that creates a new :class:`User`.
 
@@ -40,11 +40,9 @@ class GlyntUserManager(UserenaManager):
         set this to ``False`` when you want to create a user in your own
         code, but don't want the user to activate through email.
 
-    :param country:
-        String defning the users selected country.
-
-    :param state:
-        String defining the users state.
+    :**kwargs *:
+        Pass named arguments into the method to save those fields to the 
+        corresponding model
 
     :return: :class:`User` instance representing the new user.
 
@@ -64,7 +62,13 @@ class GlyntUserManager(UserenaManager):
         new_profile = new_user.get_profile()
     except profile_model.DoesNotExist:
         new_profile = profile_model(user=new_user)
-        new_profile.save(using=self._db)
+
+    # Set the values of the model should they be passed in
+    # This is the primary custommisation to this method
+    for key,value in kwargs.iteritems():
+      if hasattr(new_profile, key):
+        setattr(new_profile, key, value)
+    new_profile.save(using=self._db)
 
     # Give permissions to view and change profile
     for perm in ASSIGNED_PERMISSIONS['profile']:

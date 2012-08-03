@@ -11,8 +11,6 @@ class Migration(SchemaMigration):
         # Adding model 'UserSignup'
         db.create_table('client_usersignup', (
             ('userenasignup_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['userena.UserenaSignup'], unique=True, primary_key=True)),
-            ('country', self.gf('django_countries.fields.CountryField')(max_length=2)),
-            ('state', self.gf('django.db.models.fields.CharField')(max_length=64)),
         ))
         db.send_create_signal('client', ['UserSignup'])
 
@@ -86,8 +84,6 @@ class Migration(SchemaMigration):
         },
         'client.usersignup': {
             'Meta': {'object_name': 'UserSignup', '_ormbases': ['userena.UserenaSignup']},
-            'country': ('django_countries.fields.CountryField', [], {'max_length': '2'}),
-            'state': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
             'userenasignup_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['userena.UserenaSignup']", 'unique': 'True', 'primary_key': 'True'})
         },
         'contenttypes.contenttype': {
