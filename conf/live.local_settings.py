@@ -5,13 +5,13 @@ SITE_ROOT = os.path.dirname(os.path.realpath(__file__+ '/../'))
 
 SITE_ID = 2
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': os.path.join(SITE_ROOT, '/../dev.db'),
+        'NAME': os.path.join(SITE_ROOT, '/../data/dev.db'),
         'USER': '',
         'PASSWORD': '',
         'HOST': '',
