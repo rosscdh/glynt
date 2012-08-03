@@ -1,5 +1,6 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.forms import AuthenticationForm
 
 from userena.forms import SignupFormOnlyEmail
 from userena import settings as userena_settings
@@ -39,3 +40,7 @@ class SignupForm(SignupFormOnlyEmail):
                                                   state=state)
 
     return new_user
+
+class AuthenticationForm(AuthenticationForm):
+  #email = forms.EmailField(required=True)
+  pass

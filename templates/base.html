@@ -1,5 +1,6 @@
 {% load i18n templatetag_handlebars %}
 {% load facebook %}
+{% load thumbnail %}
 {% load url from future %}
 <!DOCTYPE html>
 <html lang="en">
@@ -51,16 +52,17 @@
                     {% if request.user.is_authenticated %}
                     <li><a href="{% url 'client:dashboard' %}">{% trans 'Dashboard' %}</a></li>
                     <li><a href="{% url 'userena_profile_detail' username=request.user.username %}">{% trans 'Profile' %}</a></li>
-                    <li><a class="logout" href="{% url 'socialregistration:logout' %}">{% trans 'Logout' %}</a></li>
+                    <li><a id="user-logout" class="" href="{% url 'socialregistration:logout' %}">{% trans 'Logout' %}</a></li>
                     {% else %}
+                    <li><a id="user-signup" class="" href="{% url 'client:signup' %}">{% trans 'Sign Up' %}</a></li>
+                    <li><a id="user-login" class="" href="{% url 'client:login' %}">{% trans 'Login' %}</a></li>
                     <li>
                     <fb:login-button id="fb_login-button" size="medium" scope="{{ FACEBOOK_REQUEST_PERMISSIONS }}" on-login="console.log(arguments);SocialFBLogin();">Connect with Facebook</fb:login-button>
                     </li>
                     {% endif %}
                 </ul>
-                <img id="fb-profile-image" src=""/>
-                <span id="fb-profile-name"></span>
-
+                <img id="fb-profile-image" src="{% thumbnail request.user.get_profile.mugshot 50x50 crop %}"/>
+                <span id="fb-profile-name">{{ request.user.get_full_name }}</span>
 
             </div> <!-- /container -->
         </div> <!-- /navbar-inner -->
@@ -81,7 +83,9 @@
     <script type="text/javascript" src="{{ STATIC_URL }}pagedown/Markdown.Editor.js"></script>
     {% handlebars_js %}
     {% block js %}{% endblock %}
-    {% facebook_button %}
+    {% if not request.user.is_authenticated %}
+        {% facebook_button %}
+    {% endif %}
 
   </body>
 </html>

@@ -7,13 +7,12 @@ from django.views.generic.edit import FormView, ProcessFormView
 from django.views.generic.detail import BaseDetailView
 from django.template.defaultfilters import slugify
 from django.http import HttpResponseRedirect, HttpResponse, Http404
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
 
 
 from socialregistration.contrib.facebook_js.models import FacebookProfile
 from glynt.apps.document.models import Document
-from forms import SignupForm
+from forms import SignupForm, AuthenticationForm
 
 
 class SignupView(FormView):
