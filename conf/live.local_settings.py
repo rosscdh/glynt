@@ -3,7 +3,7 @@ import os
 
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__+ '/../'))
 
-SITE_ID = 1
+SITE_ID = 2
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
