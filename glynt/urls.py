@@ -13,8 +13,6 @@ urlpatterns = patterns('',
     url(r'^social/', include('socialregistration.urls', namespace='socialregistration')),
     url(r'^accounts/', include('userena.urls')),
     url(r'^client/', include('glynt.apps.client.urls', namespace='client')),
-    # Forms for the documents
-    url(r'^doc/forms/', include(forms_builder.forms.urls)),
     # The documents
     url(r'^doc/', include('glynt.apps.document.urls', namespace='document')),
     url(r'^', include('glynt.apps.default.urls', namespace='glynt')),
