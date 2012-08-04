@@ -8,7 +8,7 @@ from django.views.generic.detail import BaseDetailView
 from django.template.defaultfilters import slugify
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.contrib.auth import authenticate, login
-
+from django.contrib import messages
 
 from socialregistration.contrib.facebook_js.models import FacebookProfile
 from glynt.apps.document.models import Document
@@ -35,6 +35,7 @@ class SignupView(FormView):
         if user is not None:
           if user.is_active:
             login(request, user)
+            messages.info(request, _('Welcome, you have successfully signed up. Please remember to check your email and activate yoru account once you recieve our welcome email.'))
             return self.form_valid(form)
           else:
             return self.form_invalid(form)
@@ -57,6 +58,7 @@ class LoginView(FormView):
         if user is not None:
           if user.is_active:
             login(request, user)
+            messages.success(request, _('Welcome, you have successfully logged in.'))
             return self.form_valid(form)
           else:
             return self.form_invalid(form)

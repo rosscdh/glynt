@@ -4,10 +4,10 @@
 
 {% block body %}
 
-<form id="" action="{% url 'client:login' %}" method="post">{% csrf_token %}
+<form id="user-login" action="{% url 'client:login' %}" method="post">{% csrf_token %}
 {{ form }}
 <br/>
-<input type="submit" class="btn btn-primary" name="" value="Login"/>
+<button class="submit" id="user-login-submit">{% trans "Login"%}</button>
 </form>
 
 {% endblock %}

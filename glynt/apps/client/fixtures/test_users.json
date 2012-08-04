@@ -3,6 +3,24 @@
       "pk":1,
       "model":"auth.user",
       "fields":{
+         "username":"admin",
+         "first_name":"Test",
+         "last_name":"Admin",
+         "is_active":true,
+         "is_superuser":true,
+         "is_staff":true,
+         "last_login":"2012-07-31T06:03:59.544Z",
+         "groups":[],
+         "user_permissions":[],
+         "password":"pbkdf2_sha256$10000$iT74wXbqP02X$p5afWekJs5wksiF3QSFVR9DD/2RDMvOPWikve+3A1GA=",
+         "email":"userA@weareml.com",
+         "date_joined":"2012-07-31T06:03:59.544Z"
+      }
+   },
+   {
+      "pk":2,
+      "model":"auth.user",
+      "fields":{
          "username":"userA",
          "first_name":"Test",
          "last_name":"UserA",
@@ -18,7 +36,7 @@
       }
    },
    {
-      "pk":2,
+      "pk":3,
       "model":"auth.user",
       "fields":{
          "username":"userB",
@@ -36,7 +54,7 @@
       }
    },
    {
-      "pk":3,
+      "pk":4,
       "model":"auth.user",
       "fields":{
          "username":"userC",

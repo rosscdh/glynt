@@ -10,7 +10,6 @@ from userena.utils import generate_sha1, get_profile_model, get_datetime_now
 from userena import signals as userena_signals
 
 from userena.managers import UserenaManager, SHA1_RE, ASSIGNED_PERMISSIONS
-
 from guardian.shortcuts import assign, get_perms
 
 import re, datetime
@@ -65,6 +64,12 @@ class GlyntUserManager(UserenaManager):
 
     # Set the values of the model should they be passed in
     # This is the primary custommisation to this method
+    # The User object
+    for key,value in kwargs.iteritems():
+      if hasattr(new_user, key):
+        setattr(new_user, key, value)
+    new_user.save(using=self._db)
+    # The user.profile object
     for key,value in kwargs.iteritems():
       if hasattr(new_profile, key):
         setattr(new_profile, key, value)

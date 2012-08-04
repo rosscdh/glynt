@@ -4,7 +4,7 @@
 {% block title %}{% trans "Signup" %}{% endblock %}
 
 {% block content %}
-<form action="" method="post">
+<form id="user-signup" action="" method="post">
   {% csrf_token %}
   <fieldset>
     <legend>{% trans "Signup" %}</legend>
@@ -24,6 +24,6 @@
     {% endif %}
     {% endfor %}
   </fieldset>
-  <input type="submit" value="{% trans "Signup"%}" />
+  <button class="submit" id="user-signup-submit">{% trans "Signup"%}</button>
 </form>
 {% endblock %}

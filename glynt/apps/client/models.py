@@ -8,6 +8,9 @@ from socialregistration.signals import connect, profile_data
 from jsonfield import JSONField
 
 from userena.models import UserenaSignup, UserenaBaseProfile
+from userena.managers import ASSIGNED_PERMISSIONS
+from guardian.shortcuts import assign, get_perms
+
 from django_countries import CountryField
 from managers import GlyntUserManager as UserManager
 
@@ -26,21 +29,28 @@ class ClientProfile(UserenaBaseProfile):
   profile_data = JSONField(blank=True, null=True)
   country = CountryField(default='US')
   state = models.CharField(max_length=64, null=True)
-  # company = models.CharField(_('Company'), max_length=5)
-  # position = models.CharField(_('Position'), max_length=5)
 
 
 @receiver(connect)
 def create_client_profile(sender, **kwargs):
   user = kwargs['user']
   profile, is_new = ClientProfile.objects.get_or_create(user=user)
+  # @TODO turn this process into a signal so it can be called for other signup types
+  if is_new:
+    # Give permissions to view and change profile
+    for perm in ASSIGNED_PERMISSIONS['profile']:
+        assign(perm[0], user, profile)
+
+    # Give permissions to view and change itself
+    for perm in ASSIGNED_PERMISSIONS['user']:
+        assign(perm[0], user, user)
 
 
 @receiver(connect)
 def populate_profile_data(sender, **kwargs):
   user = kwargs['user']
-  profile_data = kwargs['profile_data']
   profile, is_new = ClientProfile.objects.get_or_create(user=user)
-  profile.profile_data = profile_data
+  if 'profile_data' in kwargs:
+    profile.profile_data = kwargs['profile_data']
   profile.save()
 

@@ -11,6 +11,8 @@ from models import UserSignup
 class SignupForm(SignupFormOnlyEmail):
   """ The signup form overrides the Userena save method and hooks it up 
   to our own UserSignup model and process allowing us to expand on fields saved """
+  first_name = forms.CharField(max_length=24)
+  last_name = forms.CharField(max_length=24)
   country = forms.ChoiceField(choices=COUNTRIES_PLUS, initial='US')
   state = forms.CharField(max_length=128)
 
@@ -25,9 +27,11 @@ class SignupForm(SignupFormOnlyEmail):
 
   def save(self):
     """ Creates a new user and account. Returns the newly created user. """
-    username, email, password, country, state = (self.cleaned_data['username'] if 'username' in self.cleaned_data else self.__generate_username_from_email(self.cleaned_data['email']),
+    username, email, password, first_name, last_name, country, state = (self.cleaned_data['username'] if 'username' in self.cleaned_data else self.__generate_username_from_email(self.cleaned_data['email']),
                                   self.cleaned_data['email'],
                                   self.cleaned_data['password1'],
+                                  self.cleaned_data['first_name'],
+                                  self.cleaned_data['last_name'],
                                   self.cleaned_data['country'],
                                   self.cleaned_data['state'])
 
@@ -36,6 +40,8 @@ class SignupForm(SignupFormOnlyEmail):
                                                   password,
                                                   not userena_settings.USERENA_ACTIVATION_REQUIRED,
                                                   userena_settings.USERENA_ACTIVATION_REQUIRED,
+                                                  first_name=first_name,
+                                                  last_name=last_name,
                                                   country=country,
                                                   state=state)
 

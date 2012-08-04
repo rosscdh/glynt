@@ -13,7 +13,10 @@ Feature: View Documents by Category
     Then I should see a "ul#document-category-list li ul.document-category li a.document-link" element
 
   Scenario: The user should be able to click on a sub-category
-    Given I am on "/"
-    When I follow "a.document-link:first"
+    When I am logged in as "userA"
+    And I am on "/"
+    Then I should see "Commercial"
+    And I should see "Personal"
+    When I follow "contracts"
     Then the response status code should be 200
     And the url should match "/doc/category/"
