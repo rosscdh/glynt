@@ -1,4 +1,5 @@
 <?php
+use Idiorm\ORM;
 
 use Behat\Behat\Context\ClosuredContextInterface,
     Behat\Behat\Context\TranslatedContextInterface,
@@ -33,6 +34,7 @@ class FeatureContext extends MinkContext {
      */
     public function __construct(array $parameters)
     {
+        ORM::configure('sqlite:/tmp/testserver.db');
         // Initialize your context here
     }
 
