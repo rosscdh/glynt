@@ -11,7 +11,7 @@ TEMPLATE_DEBUG = DEBUG
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': os.path.join(SITE_ROOT, '/../data/dev.db'),
+        'NAME': '/home/stard0g101/webapps/cartvine_shoppers/data/dev.db',
         'USER': '',
         'PASSWORD': '',
         'HOST': '',
