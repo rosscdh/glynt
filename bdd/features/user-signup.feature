@@ -5,6 +5,9 @@ Feature: Allow user to sign up manually
   I need to be able to complete a signup process and be registered
 
   Scenario: The user should see the signup link
+    Given there is no "userD@weareml.com" user
+
+  Scenario: The user should see the signup link
     Given I am on "/"
     Then I should see a "a#user-signup" element
 
@@ -43,7 +46,5 @@ Feature: Allow user to sign up manually
       And I should see a "form#user-signup button#user-signup-submit" element
 
       When I press "user-signup-submit"
-        Then the response status code should be 200
         And the url should match "/"
-        And print last response
-        And I should see "Welcome, you have successfully signed up. Please remember to check your email and activate yoru account once you recieve our welcome email."
+        And I should see "Welcome, you have successfully signed up. Please remember to check your email and activate your account once you recieve our welcome email."

@@ -35,7 +35,48 @@ class FeatureContext extends MinkContext {
     public function __construct(array $parameters)
     {
         ORM::configure('sqlite:/tmp/testserver.db');
+        // setup guardian missing table permissions
+        $this->setupGuardianDynamicPermissions();
         // Initialize your context here
+    }
+
+    private function setupGuardianDynamicPermissions() {
+        // get content object type
+        // 
+        //ContentType.objects.get_for_model(model_obj)
+        $ASSIGNED_PERMISSIONS = array(
+            'profile' => array(
+                'view_profile' => 'Can view profile',
+                'change_profile' => 'Can change profile',
+                'delete_profile' => 'Can delete profile',
+            ),
+            'user' => array(
+                'change_user' => 'Can change user',
+                'delete_user'=> 'Can delete user',
+            ),
+        );
+        foreach ($ASSIGNED_PERMISSIONS as $model => $perms) {
+            if ($model == 'profile') {
+                $table = ORM::for_table('django_content_type')->where('model', 'clientprofile')->where('app_label', 'client')->find_one();
+            }else{
+                $table = ORM::for_table('django_content_type')->where('model', 'user')->where('app_label', 'auth')->find_one();
+            }
+
+            foreach ($perms as $perm => $name) {
+                $permission = ORM::for_table('auth_permission')->where('codename', $perm)->where('content_type_id', $table->id)->find_one();
+
+                if (!$permission) {
+                    echo sprintf('Could not find permission %s so creating it as content_type_id %d',$perm, $table->id);
+                    $permission = ORM::for_table('auth_permission')->create();
+                    $permission->name = $name;
+                    $permission->codename = $perm;
+                    $permission->content_type_id = $table->id;
+                    $permission->save();
+                }else{
+                    echo sprintf('Found permission %s under content_type_id %d',$perm, $table->id);
+                }
+            }
+        }
     }
 
     private function getUserPassword($username) {
@@ -54,6 +95,24 @@ class FeatureContext extends MinkContext {
             new Step\When('I press "Login"'),
             new Step\Then('the response status code should be 200')
         );
+    }
+
+    /**
+     * @Given /^there is no "([^"]*)" user$/
+     */
+    public function thereIsNoUser($username_or_email)
+    {
+        if (strpos($username_or_email,'@') !== false) {
+            $users = ORM::for_table('auth_user')->where('email', $username_or_email)->find_many();
+        }else{
+            $users = ORM::for_table('auth_user')->where('username', $username_or_email)->find_many();
+        }
+
+        if (count($users) >= 1) {
+            foreach($users as $user) {
+                $user->delete();
+            }
+        }
     }
 
     /**

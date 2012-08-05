@@ -25,22 +25,23 @@ class SignupView(FormView):
         form = self.get_form(form_class)
 
         if form.is_valid():
+            messages.info(request, _('Welcome, you have successfully signed up. Please remember to check your email and activate your account once you recieve our welcome email.'))
             form.save()
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
 
-        user = authenticate(username=request.POST.get('username',None), password=request.POST.get('password',None))
+        # user = authenticate(username=request.POST.get('username',None), password=request.POST.get('password',None))
 
-        if user is not None:
-          if user.is_active:
-            login(request, user)
-            messages.info(request, _('Welcome, you have successfully signed up. Please remember to check your email and activate yoru account once you recieve our welcome email.'))
-            return self.form_valid(form)
-          else:
-            return self.form_invalid(form)
-        else:
-          return self.form_invalid(form)
+        # if user is not None:
+        #   if user.is_active:
+        #     login(request, user)
+        #     messages.info(request, _('Welcome, you have successfully signed up. Please remember to check your email and activate yoru account once you recieve our welcome email.'))
+        #     return self.form_valid(form)
+        #   else:
+        #     return self.form_invalid(form)
+        # else:
+        #   return self.form_invalid(form)
 
 
 class LoginView(FormView):

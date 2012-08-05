@@ -1,10 +1,11 @@
 {% extends 'userena/base_userena.html' %}
 {% load i18n %}
+{% load url from future %}
 
 {% block title %}{% trans "Signup" %}{% endblock %}
 
 {% block content %}
-<form id="user-signup" action="" method="post">
+<form id="user-signup" action="{% url 'client:signup' %}" method="post">
   {% csrf_token %}
   <fieldset>
     <legend>{% trans "Signup" %}</legend>
