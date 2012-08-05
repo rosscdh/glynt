@@ -19,7 +19,7 @@ class FacebookLoginTest(TestCase):
 
     def test_presence_of_facebook_button(self):
         response = self.client.get(reverse('glynt:default'), follow=True)
-        fb_button_login = '<fb:login-button id="fb_login-button" size="medium" scope="%s" onlogin="SocialFBLogin();">Connect with Facebook</fb:login-button>' \
+        fb_button_login = '<fb:login-button id="fb_login-button" size="medium" scope="%s" on-login="SocialFBLogin();">Connect with Facebook</fb:login-button>' \
         % (FACEBOOK_REQUEST_PERMISSIONS,)
         self.assertContains( response, fb_button_login, status_code=200 )
 

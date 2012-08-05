@@ -1,5 +1,13 @@
 <?php
+/**
+* Please add: 
+*    'Monolog' => $vendorDir . '/monolog/monolog/src/',
+*    'Idiorm' => $vendorDir . '/Idiorm/',
+* to the array found in vendor/composer/autoload_namespaces.php
+*/
 use Idiorm\ORM;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 use Behat\Behat\Context\ClosuredContextInterface,
     Behat\Behat\Context\TranslatedContextInterface,
@@ -24,8 +32,8 @@ use Behat\Behat\Context\Step;
 class FeatureContext extends MinkContext {
 
     private 
-        $loginUrl = '/client/login/';
-
+        $loginUrl = '/client/login/',
+        $logger;
     /**
      * Initializes context.
      * Every scenario gets it's own context object.
@@ -35,6 +43,9 @@ class FeatureContext extends MinkContext {
     public function __construct(array $parameters)
     {
         ORM::configure('sqlite:/tmp/testserver.db');
+        // setup logging
+        $this->logger = new Logger('name');
+        $this->logger->pushHandler(new StreamHandler('/tmp/behat.log', Logger::DEBUG));
         // setup guardian missing table permissions
         $this->setupGuardianDynamicPermissions();
         // Initialize your context here
@@ -66,14 +77,14 @@ class FeatureContext extends MinkContext {
                 $permission = ORM::for_table('auth_permission')->where('codename', $perm)->where('content_type_id', $table->id)->find_one();
 
                 if (!$permission) {
-                    echo sprintf('Could not find permission %s so creating it as content_type_id %d',$perm, $table->id);
+                    $this->logger->addWarning(sprintf('Could not find permission %s so creating it as content_type_id %d',$perm, $table->id));
                     $permission = ORM::for_table('auth_permission')->create();
                     $permission->name = $name;
                     $permission->codename = $perm;
                     $permission->content_type_id = $table->id;
                     $permission->save();
                 }else{
-                    echo sprintf('Found permission %s under content_type_id %d',$perm, $table->id);
+                    $this->logger->addInfo(sprintf('Found permission %s under content_type_id %d',$perm, $table->id));
                 }
             }
         }

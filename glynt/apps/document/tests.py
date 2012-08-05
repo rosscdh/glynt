@@ -51,12 +51,12 @@ class DocumentTest(TestCase):
 
   def test_anonymous_cannot_access_logged_in_urls(self):
     for u in login_required_urls:
-      self.check_response_token_helper(u, 404, [('http://testserver/accounts/login/?next=%s'%(u,), 302)])
+      self.check_response_token_helper(u, 200, [('http://testserver/client/login/?next=%s'%(u,), 302)])
 
   def test_anonymous_cannot_access_invalid_method_urls(self):
     """ Certain urls can only be post/put/patched to so test them """
     for u in invalid_method_urls:
-      self.check_response_token_helper(u, 404, [('http://testserver/accounts/login/?next=%s'%(u,), 302)])
+      self.check_response_token_helper(u, 200, [('http://testserver/client/login/?next=%s'%(u,), 302)])
 
   def test_auth_user_cannot_access_invalid_method_urls(self):
     """ Certain urls can only be post/put/patched to so test them """

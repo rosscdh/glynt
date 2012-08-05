@@ -4,7 +4,8 @@
         "behat/mink": "1.4.*@stable",
         "behat/mink-extension": "*",
         "behat/mink-goutte-driver": "*",
-        "behat/mink-sahi-driver": "*"
+        "behat/mink-sahi-driver": "*",
+        "monolog/monolog": "1.0.0"
     },
     "minimum-stability": "dev",
     "config": {

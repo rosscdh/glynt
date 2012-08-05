@@ -14,10 +14,10 @@ cd $PROJECT_DIR
 # Run the project unit tests
 python manage.py jenkins
 
-rm /tmp/testserver.db
-
 # Run the testserver so that behat can find and use it
 python manage.py testserver --noinput --addrport 127.0.0.1:8001 sites.json test_users.json guardian_permissions.json document_category.json &
+
+sleep 5
 
 # echo "Starting Sahi Server"
 $BDD_DIR/sahi.sh start

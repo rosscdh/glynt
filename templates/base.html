@@ -57,7 +57,7 @@
                     <li><a id="user-signup" class="" href="{% url 'client:signup' %}">{% trans 'Sign Up' %}</a></li>
                     <li><a id="user-login" class="" href="{% url 'client:login' %}">{% trans 'Login' %}</a></li>
                     <li>
-                    <fb:login-button id="fb_login-button" size="medium" scope="{{ FACEBOOK_REQUEST_PERMISSIONS }}" on-login="console.log(arguments);SocialFBLogin();">Connect with Facebook</fb:login-button>
+                    <fb:login-button id="fb_login-button" size="medium" scope="{{ FACEBOOK_REQUEST_PERMISSIONS }}" on-login="SocialFBLogin();">Connect with Facebook</fb:login-button>
                     </li>
                     {% endif %}
                 </ul>
