@@ -1,8 +1,22 @@
 # BDD Testing with Behat
 
-1. Readit : behat.org
+1. Read-it : behat.org
 2. Understand what behat and mink are
 3. Learn and Love Gherkin language
+
+# Installing the files
+
+1. /glynt
+2. git submodule init --recursive
+3. git submodule update
+4. cd bdd/
+5. php composer.phar install or update
+6. Add the following to the bdd/vendor/composer/autoload_namespaces.php
+
+>    'Monolog' => $vendorDir . '/monolog/monolog/src/',
+>    'Idiorm' => $vendorDir . '/Idiorm/',_
+
+7. ./bin/behat
 
 # Running the tests
 
