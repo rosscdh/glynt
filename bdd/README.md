@@ -14,7 +14,7 @@
 6. Add the following to the bdd/vendor/composer/autoload_namespaces.php
 
 >    'Monolog' => $vendorDir . '/monolog/monolog/src/',
->    'Idiorm' => $vendorDir . '/Idiorm/',_
+>    'Idiorm' => $vendorDir . '/Idiorm/',
 
 7. ./bin/behat
 

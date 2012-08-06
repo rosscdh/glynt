@@ -1,1 +1,1 @@
-[{"pk": 2, "model": "sites.site", "fields": {"domain": "dev.weareml.com", "name": "Demo WeAreML"}}, {"pk": 1, "model": "sites.site", "fields": {"domain": "local.weareml.com", "name": "Local Development WeAreML"}}]
+[{"pk": 3, "model": "sites.site", "fields": {"domain": "local.weareml.com:8001", "name": "Testing WeAreML"}}, {"pk": 2, "model": "sites.site", "fields": {"domain": "dev.weareml.com", "name": "Demo WeAreML"}}, {"pk": 1, "model": "sites.site", "fields": {"domain": "local.weareml.com:8000", "name": "Local Development WeAreML"}}]
