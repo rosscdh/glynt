@@ -100,6 +100,7 @@ ROOT_URLCONF = 'glynt.urls'
 WSGI_APPLICATION = 'glynt.wsgi.application'
 
 AUTHENTICATION_BACKENDS = (
+    'glynt.backends.EmailOrUsernameBackend',
     'django.contrib.auth.backends.ModelBackend',
     'socialregistration.contrib.facebook_js.auth.FacebookAuth',
     'userena.backends.UserenaAuthenticationBackend',
