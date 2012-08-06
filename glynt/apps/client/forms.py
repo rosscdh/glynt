@@ -17,14 +17,14 @@ class SignupForm(SignupFormOnlyEmail):
   country = forms.ChoiceField(choices=COUNTRIES_PLUS, initial='US')
   state = forms.CharField(max_length=128)
 
-  def __generate_username_from_email(self, email):
+  def generate_username_from_email(self, email):
     username = slugify(email)
 
     return '%s' % (username[0:30])
 
   def save(self):
     """ Creates a new user and account. Returns the newly created user. """
-    username, email, password, first_name, last_name, country, state = (self.cleaned_data['username'] if 'username' in self.cleaned_data else self.__generate_username_from_email(self.cleaned_data['email']),
+    username, email, password, first_name, last_name, country, state = (self.cleaned_data['username'] if 'username' in self.cleaned_data else self.generate_username_from_email(self.cleaned_data['email']),
                                   self.cleaned_data['email'],
                                   self.cleaned_data['password1'],
                                   self.cleaned_data['first_name'],
@@ -45,5 +45,5 @@ class SignupForm(SignupFormOnlyEmail):
     return new_user
 
 class AuthenticationForm(AuthenticationForm):
-  username = forms.CharField(label=_("Email or Username"), max_length=30, widget=forms.TextInput(attrs={'placeholder': _('username@example.com')}))
+  username = forms.CharField(label=_("Email or Username"), max_length=30, widget=forms.TextInput(attrs={'placeholder': 'username@example.com'}))
   pass
