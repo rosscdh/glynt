@@ -1,1 +1,26 @@
-[{"pk": 3, "model": "sites.site", "fields": {"domain": "local.weareml.com:8001", "name": "Testing WeAreML"}}, {"pk": 2, "model": "sites.site", "fields": {"domain": "dev.weareml.com", "name": "Demo WeAreML"}}, {"pk": 1, "model": "sites.site", "fields": {"domain": "local.weareml.com:8000", "name": "Local Development WeAreML"}}]
+[
+    {
+        "fields": {
+            "domain": "local.weareml.com:8001", 
+            "name": "Testing WeAreML"
+        }, 
+        "model": "sites.site", 
+        "pk": 3
+    }, 
+    {
+        "fields": {
+            "domain": "dev.weareml.com", 
+            "name": "Demo WeAreML"
+        }, 
+        "model": "sites.site", 
+        "pk": 2
+    }, 
+    {
+        "fields": {
+            "domain": "local.weareml.com:8000", 
+            "name": "Local Development WeAreML"
+        }, 
+        "model": "sites.site", 
+        "pk": 1
+    }
+]
