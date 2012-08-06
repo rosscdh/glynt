@@ -16,7 +16,7 @@ class Migration(SchemaMigration):
 
         # Adding field 'ClientProfile.country'
         db.add_column('client_clientprofile', 'country',
-                      self.gf('django_countries.fields.CountryField')(default='US', max_length=2),
+                      self.gf('django_countries.fields.CountryField')(default='US', max_length=2, null=True),
                       keep_default=False)
 
         # Adding field 'ClientProfile.state'

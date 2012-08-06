@@ -69,6 +69,7 @@ class GlyntUserManager(UserenaManager):
       if hasattr(new_user, key):
         setattr(new_user, key, value)
     new_user.save(using=self._db)
+
     # The user.profile object
     for key,value in kwargs.iteritems():
       if hasattr(new_profile, key):

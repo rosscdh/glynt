@@ -27,7 +27,7 @@ class ClientProfile(UserenaBaseProfile):
                               verbose_name=_('user'),
                               related_name='my_profile')
   profile_data = JSONField(blank=True, null=True)
-  country = CountryField(default='US')
+  country = CountryField(default='US', null=True)
   state = models.CharField(max_length=64, null=True)
 
 

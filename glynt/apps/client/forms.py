@@ -1,6 +1,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.forms import AuthenticationForm
+from django.template.defaultfilters import slugify
 
 from userena.forms import SignupFormOnlyEmail
 from userena import settings as userena_settings
@@ -17,13 +18,9 @@ class SignupForm(SignupFormOnlyEmail):
   state = forms.CharField(max_length=128)
 
   def __generate_username_from_email(self, email):
-    """ @TODO very rough make nicer """
-    tmp = email.replace('@','_')
-    tmp = tmp.replace('.','_')
-    tmp = tmp.replace('+','_')
-    username = tmp.replace('-','_')
+    username = slugify(email)
 
-    return '%s' % (username)
+    return '%s' % (username[0:30])
 
   def save(self):
     """ Creates a new user and account. Returns the newly created user. """
@@ -48,5 +45,5 @@ class SignupForm(SignupFormOnlyEmail):
     return new_user
 
 class AuthenticationForm(AuthenticationForm):
-  #email = forms.EmailField(required=True)
+  username = forms.CharField(label=_("Email or Username"), max_length=30, widget=forms.TextInput(attrs={'placeholder': _('username@example.com')}))
   pass
