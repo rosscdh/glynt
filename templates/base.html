@@ -12,12 +12,12 @@
     <meta name="author" content="">
 
     <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
-    <!-- <link href="{{ STATIC_URL }}css/bootstrap-responsive.css" rel="stylesheet"> -->
+    <link href="{{ STATIC_URL }}css/ml.css" rel="stylesheet">
+
 
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600" rel="stylesheet">
     <link href="{{ STATIC_URL }}css/font-awesome.css" rel="stylesheet">
 
-    <link href="{{ STATIC_URL }}css/base-admin.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}css/errors.css" rel="stylesheet">
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
 
@@ -39,14 +39,13 @@
     {% block head_js %}{% endblock %}
   </head>
 
-  <body data-spy="scroll" data-target=".subnav" data-offset="50">
+  <body data-spy="scroll" data-target=".subnav" data-offset="50" class="preview">
 
 	<div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
             <div class="container">
-
-                <a class="brand" href="./">
-                    <img src="{{ STATIC_URL }}img/logo-nav.png">
+                <a class="brand" href="/">
+                    MyLawyer
                 </a>
                 <ul class="nav">
                     {% if request.user.is_authenticated %}
@@ -56,14 +55,13 @@
                     {% else %}
                     <li><a id="user-signup" class="" href="{% url 'client:signup' %}">{% trans 'Sign Up' %}</a></li>
                     <li><a id="user-login" class="" href="{% url 'client:login' %}">{% trans 'Login' %}</a></li>
-                    <li>
-                    <fb:login-button id="fb_login-button" size="medium" scope="{{ FACEBOOK_REQUEST_PERMISSIONS }}" on-login="SocialFBLogin();">Connect with Facebook</fb:login-button>
-                    </li>
                     {% endif %}
                 </ul>
-                <img id="fb-profile-image" src="{% thumbnail request.user.get_profile.mugshot 50x50 crop %}"/>
-                <span id="fb-profile-name">{{ request.user.get_full_name }}</span>
-
+				<div class="span5 pull-right" style="height:40px;overflow:hidden;padding-top:6px">
+                    <fb:login-button id="fb_login-button" size="medium" scope="{{ FACEBOOK_REQUEST_PERMISSIONS }}" on-login="SocialFBLogin();">Connect with Facebook</fb:login-button>
+                	<img id="fb-profile-image" src="{% thumbnail request.user.get_profile.mugshot small crop %}" width="25" height="25" />
+                	<span id="fb-profile-name">{{ request.user.get_full_name }}</span>
+				</div>
             </div> <!-- /container -->
         </div> <!-- /navbar-inner -->
     </div> <!-- /navbar -->
@@ -77,8 +75,14 @@
     </ul>
     {% endif %}
     {% block body %}{% endblock %}
+		<div class="row" id="footer">
+			<div class="span12">
+				<hr />
+				<p class="pull-right">Copyright 2012 WeAreML</p>
+			</div>
+		<div>
     </div>
-
+	
     <script src="{{ STATIC_URL }}js/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
     <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
