@@ -113,6 +113,7 @@ class BaseFlyForm(forms.Form):
       widget = w()
       widget.attrs = {
         'class': field_dict['class'],
+        'placeholder': field_dict['placeholder'],
         'data-hb-name': field_dict['data-hb-name'] if field_dict['data-hb-name'] else field_instance.name,
       }
       return widget
