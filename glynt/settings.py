@@ -137,12 +137,14 @@ DJANGO_APPS = (
 )
 
 PROJECT_APPS = (
+    # The default app that handles the basics
     'glynt.apps.default',
     # The primary document view system
     'glynt.apps.document',
     # The End User - Client, those that consume the documents
     'glynt.apps.client',
-    # The Customer, those that produce/validate documents
+    # The Form Generator
+    'glynt.apps.flyform',
 )
 
 HELPER_APPS = (
