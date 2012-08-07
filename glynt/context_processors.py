@@ -1,6 +1,6 @@
 from django.conf import settings
 
-PROJECT_NAME = getattr(settings, PROJECT_NAME, 'MyLawyer')
+PROJECT_NAME = getattr(settings, 'PROJECT_NAME', 'MyLawyer')
 
 def project_info(request):
     return {
