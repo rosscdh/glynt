@@ -43,6 +43,8 @@ if not IS_TESTING:
 else:
     SITE_ID = 3
 
+PROJECT_NAME = 'MyLawyer'
+
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
 USE_I18N = True
@@ -116,7 +118,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 "django.core.context_processors.tz",
 "django.contrib.messages.context_processors.messages",
 "django.core.context_processors.request",
-"socialregistration.contrib.facebook_js.context_processors.FacebookTemplateVars"
+"socialregistration.contrib.facebook_js.context_processors.FacebookTemplateVars",
+"glynt.context_processors.project_info",
 )
 
 TEMPLATE_DIRS = (
