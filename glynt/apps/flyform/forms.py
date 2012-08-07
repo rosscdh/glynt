@@ -76,7 +76,7 @@ class BaseFlyForm(forms.Form):
           fld.help_text = f['help_text'] if len(f['help_text']) > 0 else None
           fld.required = bool(f['required']) if f['required'] in ['true',True,'false','False'] else False
           if hasattr(forms.fields, f['widget']):
-            new_widget = getattr(forms.fields, f['widget'])
+            new_widget = getattr(forms.widgets, f['widget'])
             fld.widget = new_widget()
             widget_attrs = {
               'class': f['class'],
