@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 This file demonstrates writing tests using the unittest module. These will pass
 when you run "manage.py test".
@@ -6,6 +7,8 @@ Replace this with more appropriate tests for your application.
 """
 from django.utils import simplejson as json
 from django.test import TestCase
+from django.forms import fields
+from django.forms import widgets
 from forms import BaseFlyForm
 
 
@@ -13,9 +16,16 @@ class BaseFlyFormTest(TestCase):
   def setUp(self):
     pass
 
-  def test_basic_structure(self):
-    """
-    """
+  def test_flyform_slugify(self):
+    form = BaseFlyForm()
+    self.assertEqual(form.slugify('test 123'), 'test_123')
+    self.assertEqual(form.slugify('test-123'), 'test_123')
+    self.assertEqual(form.slugify('test_123'), 'test_123')
+    self.assertEqual(form.slugify(' test 123 '), 'test_123')
+    self.assertEqual(form.slugify('test *** 123'), 'test_123')
+    self.assertEqual(form.slugify('test üöä 123'), u'test_uoa_123')
+
+  def test_basic_step_form(self):
     json_form = {
       "type": "step",
       "properties": {
@@ -37,7 +47,37 @@ class BaseFlyFormTest(TestCase):
       ]
     }
     json_form_string = json.dumps(json_form)
+    form = BaseFlyForm(json_form_string)
 
-    self.form = BaseFlyForm(json_form_string)
+    self.assertEqual(type(form.fields['test_field']), fields.CharField)
+    self.assertEqual(type(form.fields['test_field'].widget), widgets.TextInput)
+    self.assertEqual(form.as_ul(), '<li><label for="id_test_field">Test:</label> <input id="id_test_field" type="text" class="md-updater" name="test_field" data-hb-name="test_field" /> <span class="helptext">My Test Field</span><input id="id_step_title" type="hidden" data-step-title="Step No. 1" name="step_title" /></li>')
 
-    self.assertEqual(1 + 1, 2)
+
+  def test_basic_loopstep(self):
+    json_form = {
+      "type": "loop-step",
+      "properties": {
+        "step_title": "Step No. 1",
+        "hide_from": "Test Field",
+        "hide_to": "",
+        "iteration_title": "",
+      },
+      "fields": [
+          {"field": "CharField",
+          "widget": "TextInput",
+          "name": "Test Field",
+          "label": "Test",
+          "required": "true",
+          "help_text": "My Test Field",
+          "placeholder": "tester",
+          "class": "md-updater",
+          "data-hb-name": "test_field"}
+      ]
+    }
+    json_form_string = json.dumps(json_form)
+    form = BaseFlyForm(json_form_string)
+
+    self.assertEqual(type(form.fields['test_field']), fields.CharField)
+    self.assertEqual(type(form.fields['test_field'].widget), widgets.TextInput)
+    self.assertEqual(form.as_ul(), '<li><label for="id_test_field">Test:</label> <input id="id_test_field" type="text" class="md-updater" name="test_field" data-hb-name="test_field" /> <span class="helptext">My Test Field</span><input id="id_step_title" type="hidden" data-step-title="Step No. 1" name="step_title" data-glynt-loop_step="[{hide_from:test_field,iteration_title:Step No. 1}]" /></li>')
