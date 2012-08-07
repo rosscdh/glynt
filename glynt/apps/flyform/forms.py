@@ -45,6 +45,15 @@ class BaseFlyForm(forms.Form):
   def slugify(self, text):
     return '%s' %(slugify(text).replace('-','_'),)
 
+  def string_attribs(self, attribs):
+    """ convert flat dict into string version """
+    attribs_as_s = ''
+    for k,v in attribs.iteritems():
+      attribs_as_s += '"%s": "%s",' % (k, v, )
+    # remove last , and return
+    return '[{%s}]' % (attribs_as_s[0:-1], )
+
+
   def setup_form(self, json_form):
     schema = json.loads(json_form)
 
