@@ -53,13 +53,19 @@ class BaseFlyFormTest(TestCase):
     self.assertEqual(result, '[{"my_key2": "my_value2","my_key": "my_value"}]')
 
   def test_basic_step_form(self):
-    json_form = self.base_json
-    json_form_string = json.dumps(json_form)
-    form = BaseFlyForm(json_form_string)
-
+    form = BaseFlyForm(json.dumps(self.base_json))
     self.assertEqual(type(form.fields['test_field']), fields.CharField)
     self.assertEqual(type(form.fields['test_field'].widget), widgets.TextInput)
     self.assertEqual(form.as_ul(), '<li><label for="id_test_field">Test:</label> <input id="id_test_field" type="text" class="md-updater" name="test_field" data-hb-name="test_field" /> <span class="helptext">My Test Field</span><input id="id_step_title" type="hidden" data-step-title="Step No. 1" name="step_title" /></li>')
+
+  def test_setup_step_title(self):
+    form = BaseFlyForm(json.dumps(self.base_json))
+    self.assertEqual(type(form.fields['step_title'].widget), widgets.HiddenInput)
+    self.assertEqual(form.fields['step_title'].widget.attrs, {'data-step-title': u'Step No. 1'})
+
+  def test_define_loopstep_attribs(self):
+    form = BaseFlyForm(json.dumps(self.base_json))
+    self.assertEqual(form.define_loopstep_attribs(self.base_json), '[{"iteration_title": "Step No. 1"}]')
 
   def test_basic_loopstep(self):
     json_form = {
@@ -87,4 +93,4 @@ class BaseFlyFormTest(TestCase):
 
     self.assertEqual(type(form.fields['test_field']), fields.CharField)
     self.assertEqual(type(form.fields['test_field'].widget), widgets.TextInput)
-    self.assertEqual(form.as_ul(), '<li><label for="id_test_field">Test:</label> <input id="id_test_field" type="text" class="md-updater" name="test_field" data-hb-name="test_field" /> <span class="helptext">My Test Field</span><input id="id_step_title" type="hidden" data-step-title="Step No. 1" name="step_title" data-glynt-loop_step="[{hide_from:test_field,iteration_title:Step No. 1}]" /></li>')
+    self.assertEqual(form.as_ul(), '<li><label for="id_test_field">Test:</label> <input id="id_test_field" type="text" class="md-updater" name="test_field" data-hb-name="test_field" /> <span class="helptext">My Test Field</span><input id="id_step_title" type="hidden" data-step-title="Step No. 1" name="step_title" data-glynt-loop_step="[{"iteration_title": "Step No. 1","hide_from": "test_field"}]" /></li>')
