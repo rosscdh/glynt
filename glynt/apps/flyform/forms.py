@@ -5,6 +5,7 @@ from django.forms.util import ErrorList
 from django.utils.translation import ugettext_lazy as _
 from django.utils import simplejson as json
 from django.template.defaultfilters import slugify
+from django.utils import safestring
 
 
 class BaseFlyForm(forms.Form):
@@ -42,55 +43,78 @@ class BaseFlyForm(forms.Form):
     if json_form is not None:
       self.setup_form(json_form)
 
+  def setup_form(self, json_form):
+    """ Main form setup method used to generate the base form fields """
+    schema = json.loads(json_form)
+    #@TODO
+    #self.validate_schema(schema)
+    self.setup_step_title(schema)
+    self.setup_fields(schema['fields'])
+
   def slugify(self, text):
+    """ Modified slugify replaced - with _ """
     return '%s' %(slugify(text).replace('-','_'),)
 
   def string_attribs(self, attribs):
     """ convert flat dict into string version """
     attribs_as_s = ''
     for k,v in attribs.iteritems():
-      attribs_as_s += '"%s": "%s",' % (k, v, )
+      if v:
+        attribs_as_s += '"%s": "%s",' % (k, v, )
     # remove last , and return
-    return '[{%s}]' % (attribs_as_s[0:-1], )
+    if attribs_as_s != '':
+      return '[{%s}]' % (attribs_as_s[0:-1], )
+    else:
+      return None
 
-
-  def setup_form(self, json_form):
-    schema = json.loads(json_form)
-
+  def setup_step_title(self, step_schema):
+    """ Setup the step info field """
+    loop_step_attrs = None
     # setup step title
     step_attrs = {
-      'data-step-title': schema['properties']['step_title'],
+      'data-step-title': step_schema['properties']['step_title'],
     }
 
-    loop_step_attrs = None
-    if schema['type'] == 'loop-step':
-      schema['properties']['iteration_title'] = schema['properties']['iteration_title'] if 'iteration_title' in schema['properties'] and len(schema['properties']['iteration_title']) > 0 else schema['properties']['step_title']
-      ## @TODO make this a string
-      loop_step_attrs = {
-        'iteration_title': schema['properties']['iteration_title'] if schema['properties']['iteration_title'] else '',
-        'hide_from': self.slugify(schema['properties']['hide_from']) if schema['properties']['hide_from'] else '',
+    if step_schema['type'] == 'loop-step':
+      step_attrs['data-glynt-loop_step'] = self.define_loopstep_attribs(step_schema)
+
+    self.fields['step_title'] = forms.CharField(max_length=128, required=False, widget=forms.HiddenInput(attrs=step_attrs))
+
+  def define_loopstep_attribs(self, step_schema):
+    """ Make the appropriate changes should a loop-step present itself """
+    step_schema['properties']['iteration_title'] = step_schema['properties']['iteration_title'] if 'iteration_title' in step_schema['properties'] and step_schema['properties']['iteration_title'] else step_schema['properties']['step_title']
+    loop_step_attrs = {
+      'iteration_title': step_schema['properties']['iteration_title'],
+      'hide_from': self.slugify(step_schema['properties']['hide_from']),
+    }
+    return safestring.mark_safe(self.string_attribs(loop_step_attrs).replace('""', "'"))
+
+  def setup_fields(self, schema_fields):
+    if len(schema_fields) > 0:
+      for field in schema_fields:
+        f = getattr(forms.fields, field['field'], None)
+        if f:
+          field_instance = f()
+          field_instance.name = self.slugify(field['name'])
+          field_instance.label = field['label']
+          field_instance.help_text = field['help_text']
+          field_instance.required = True if field['required'] in ['true',True,'1', 1] else False
+
+          widget = self.setup_field_widget(field_instance, field)
+          if widget:
+            field_instance.widget = widget
+
+          # Append the field
+          self.fields[field_instance.name] = field_instance
+
+  def setup_field_widget(self, field_instance, field_dict):
+    w = getattr(forms.widgets, field_dict['widget'], None)
+    if w:
+      widget = w()
+      widget.attrs = {
+        'class': field_dict['class'],
+        'data-hb-name': field_dict['data-hb-name'] if field_dict['data-hb-name'] else field_instance.name,
       }
-      loop_step_attrs = '[%s]' %(json.dumps(loop_step_attrs),)
-      step_attrs['data-glynt-loop_step'] = loop_step_attrs
-
-    self.fields['step_title'] = forms.CharField(max_length=100,required=False,widget=forms.HiddenInput(attrs=step_attrs))
-
-    if len(schema['fields']) > 0:
-      for f in schema['fields']:
-        if hasattr(forms.fields, f['field']):
-          new_field = getattr(forms.fields, f['field'])
-          fld = new_field()
-          fld.name = self.slugify(f['name'])
-          fld.label = f['label']
-          fld.help_text = f['help_text'] if len(f['help_text']) > 0 else None
-          fld.required = bool(f['required']) if f['required'] in ['true',True,'false','False'] else False
-          if hasattr(forms.fields, f['widget']):
-            new_widget = getattr(forms.widgets, f['widget'])
-            fld.widget = new_widget()
-            widget_attrs = {
-              'class': f['class'],
-              'data-hb-name': f['data-hb-name'] if f['data-hb-name'] else fld.name,
-            }
-            fld.widget.attrs = widget_attrs
-        self.fields[fld.name] = fld
+      return widget
+    return None
 
