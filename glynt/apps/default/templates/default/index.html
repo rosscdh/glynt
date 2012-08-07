@@ -4,7 +4,55 @@
 {% load document_tags %}
 
 {% block body %}
-<div class="hero-unit">
+<!-- Masthead
+================================================== -->
+
+
+<div class="container">
+	<div class="row">
+		<div class="span6">
+			<img src="http://placehold.it/460x375&text=Happy+customer+images">
+		</div>
+		<div class="span6">
+			<div class="hero-unit" style="padding:60px 40px;">
+				<h2>
+					Your HR docs sorted.
+				</h2>
+				<br />
+				<p>Welcome to MyLawyer. The free, easy and quick way to generate all of your HR documents. </p>
+				<p>Join thousands of people saving time and money with MyLawyer.</p>
+				<br />
+				<div style="text-align:center">
+					<a class="btn btn-success btn-large" href="#" style="font-size:25px">
+						Join for free now
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="span12">
+			<hr/>
+			<div class="well">
+		        <h3>MyLawyer has changed the world and will continue to do so. <small>- Mother Teresa</h3>
+		    </div>		
+			<hr />
+		</div>
+	</div>
+	<div class="row">
+		<div class="span6">
+			<h2>Available Documents</h2>
+			<br />
+			<ul>
+				<li>Shareholders agreement</li>
+				<li>Employment contract</li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+
+<!-- <div class="hero-unit">
 	<h2>Glynt - Document Automation for the 21st century</h2>
 	<em>Example of a partial Legal Will generator</em>
 	<ol>
@@ -27,12 +75,12 @@
 <ul>
 	<li><a href="{% url 'document:view' slug='legal-will' %}">Shareholders agreement</a></li>
 </ul>
-</div>
+</div> -->
 
-<div class="row">
+<!-- <div class="row">
 {% block doc_cats %}
 {% document_categories_home %}
 {% endblock %}
-</div>
+</div> -->
 
 {% endblock %}
