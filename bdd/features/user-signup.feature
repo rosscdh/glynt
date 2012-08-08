@@ -48,3 +48,8 @@ Feature: Allow user to sign up manually
       When I press "user-signup-submit"
         And the url should match "/"
         And I should see "Welcome, you have successfully signed up. Please remember to check your email and activate your account once you recieve our welcome email."
+
+    Scenario: Once logged in the user should not be able to see the login form again and should be redirected to /
+      Given I am logged in as "userD"
+      And I am on "/client/signup/"
+      Then the url should match "/"

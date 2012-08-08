@@ -1,5 +1,4 @@
 {% load i18n templatetag_handlebars %}
-{% load facebook %}
 {% load thumbnail %}
 {% load url from future %}
 <!DOCTYPE html>
@@ -57,11 +56,6 @@
                     <li><a id="user-login" class="" href="{% url 'client:login' %}">{% trans 'Login' %}</a></li>
                     {% endif %}
                 </ul>
-				<div class="span5 pull-right" style="height:40px;overflow:hidden;padding-top:6px">
-                    <fb:login-button id="fb_login-button" size="medium" scope="{{ FACEBOOK_REQUEST_PERMISSIONS }}" on-login="SocialFBLogin();">Connect with Facebook</fb:login-button>
-                	<img id="fb-profile-image" src="{% thumbnail request.user.get_profile.mugshot small crop %}" width="25" height="25" />
-                	<span id="fb-profile-name">{{ request.user.get_full_name }}</span>
-				</div>
             </div> <!-- /container -->
         </div> <!-- /navbar-inner -->
     </div> <!-- /navbar -->
@@ -94,9 +88,5 @@
     <script type="text/javascript" src="{{ STATIC_URL }}pagedown/Markdown.Editor.js"></script>
     {% handlebars_js %}
     {% block js %}{% endblock %}
-    {% if not request.user.is_authenticated %}
-        {% facebook_button %}
-    {% endif %}
-
   </body>
 </html>

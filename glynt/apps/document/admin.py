@@ -3,6 +3,7 @@ from django.contrib import admin
 from categories.admin import CategoryBaseAdmin
 
 from models import Document, DocumentCategory
+from glynt.apps.flyform.models import FlyForm
 
 
 class DocumentAdmin(admin.ModelAdmin):
@@ -15,3 +16,4 @@ class DocumentCategoryAdmin(CategoryBaseAdmin):
 
 admin.site.register(Document, DocumentAdmin)
 admin.site.register(DocumentCategory, DocumentCategoryAdmin)
+admin.site.register([FlyForm])
