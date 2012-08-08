@@ -161,6 +161,7 @@ HELPER_APPS = (
     'mptt',
     'socialregistration',
     'socialregistration.contrib.facebook_js',
+    'bootstrap',
     # Userena
     'userena',
     'guardian',

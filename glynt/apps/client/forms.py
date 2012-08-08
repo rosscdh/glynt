@@ -3,19 +3,28 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.forms import AuthenticationForm
 from django.template.defaultfilters import slugify
 
+from bootstrap.forms import BootstrapMixin, Fieldset
+
 from userena.forms import SignupFormOnlyEmail
 from userena import settings as userena_settings
 from django_countries.countries import COUNTRIES_PLUS
+
 from models import UserSignup
 
 
-class SignupForm(SignupFormOnlyEmail):
+class SignupForm(BootstrapMixin, SignupFormOnlyEmail):
   """ The signup form overrides the Userena save method and hooks it up 
   to our own UserSignup model and process allowing us to expand on fields saved """
   first_name = forms.CharField(max_length=24)
   last_name = forms.CharField(max_length=24)
   country = forms.ChoiceField(choices=COUNTRIES_PLUS, initial='US')
   state = forms.CharField(max_length=128)
+
+  class Meta:
+    layout = (
+      Fieldset("Please enter your login", "email", "password1", "password2"),
+      Fieldset("Please enter your basic details", "first_name", "last_name", "country", "state")
+    )
 
   def generate_username_from_email(self, email):
     username = slugify(email)
@@ -44,6 +53,12 @@ class SignupForm(SignupFormOnlyEmail):
 
     return new_user
 
-class AuthenticationForm(AuthenticationForm):
+class AuthenticationForm(BootstrapMixin, AuthenticationForm):
   username = forms.CharField(label=_("Email or Username"), max_length=30, widget=forms.TextInput(attrs={'placeholder': 'username@example.com'}))
-  pass
+
+  class Meta:
+    layout = (
+      Fieldset("Please Login", "username", "password"),
+    )
+
+
