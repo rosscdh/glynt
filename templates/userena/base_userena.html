@@ -2,10 +2,11 @@
 {% load i18n %}
 
 {% block body %}
-<div class="hero-unit">
-    <h2>{% block title %}{% endblock %}</h2>
-</div>
 <div class="row">
-{% block content %}{% endblock %}
+	<div class="span12">
+    	<h1>{% block title %}{% endblock %}</h1>
+		<hr/>
+		{% block content %}{% endblock %}
+	</div>
 </div>
 {% endblock %}

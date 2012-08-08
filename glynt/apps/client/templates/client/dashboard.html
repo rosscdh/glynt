@@ -3,6 +3,10 @@
 {% load i18n %}
 
 {% block body %}
+
+
+
+
 <div class="hero-unit">
     <h2>{% trans 'My Dashboard view' %}</h2>
     <p>
@@ -11,6 +15,10 @@
     {% endblocktrans %}
     </p>
 </div>
+
+
+
+
 <div class="row">
 
     <div class="span7 pull-left">
@@ -76,4 +84,63 @@
     </div>
 
 </div>
+
+
+<div class="row">
+	<div class="span12">
+		<table class="table table-bordered table-striped">
+		    <thead>
+		      <tr>
+		        <th></th>
+		        <th>Name</th>
+		        <th>Class</th>
+		        <th>Description</th>
+		      </tr>
+		    </thead>
+		    <tbody>
+		      <tr>
+		        <td><img src="http://s3.amazonaws.com/bestvendor-paperclip/categories/148/icons/optimal.png?1341525750"></td>
+		        <th>
+					<h3>Employment contract</h3>
+					<p>
+						<span class="label label-warning">Incomplete</span>
+					</p>
+				</th>
+		        <td>dsa
+			        <div class="btn-group">
+			          <button class="btn dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
+			          <ul class="dropdown-menu">
+			            <li><a href="#">Action</a></li>
+			            <li><a href="#">Another action</a></li>
+			            <li><a href="#">Something else here</a></li>
+			            <li class="divider"></li>
+			            <li><a href="#">Separated link</a></li>
+			          </ul>
+			        </div><!-- /btn-group -->
+				</td>
+		        <td>Stacked, left-aligned labels over controls</td>
+		      </tr>
+		      <tr>
+		        <td><img src="http://s3.amazonaws.com/bestvendor-paperclip/categories/145/icons/optimal.png?1340294782"></td>
+		        <th>Inline</th>
+		        <td><code>.form-inline</code></td>
+		        <td>Left-aligned label and inline-block controls for compact style</td>
+		      </tr>
+		      <tr>
+		        <td><img src="http://s3.amazonaws.com/bestvendor-paperclip/categories/142/icons/optimal.png?1341525763"></td>
+		        <th>Search</th>
+		        <td><code>.form-search</code></td>
+		        <td>Extra-rounded text input for a typical search aesthetic</td>
+		      </tr>
+		      <tr>
+		        <td>x</td>
+		        <th>Horizontal</th>
+		        <td><code>.form-horizontal</code></td>
+		        <td>Float left, right-aligned labels on same line as controls</td>
+		      </tr>
+		    </tbody>
+		  </table>
+	</div>
+</div>
+
 {% endblock %}
