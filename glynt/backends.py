@@ -20,7 +20,7 @@ class EmailOrUsernameBackend(ModelBackend):
                 # and many users have a habit of typing them in mixed
                 # cases, we will normalize them to lower case. This assumes
                 # that the database has done the same thing.
-                user = User.objects.get(email=username.lower())
+                user = User.objects.get(email=username)
             else:
                 user = User.objects.get(username=username)
         except User.DoesNotExist:

@@ -18,7 +18,7 @@ Feature: Allow user to login to the system, using a username password
     And I should see a "form#user-login input[name=password]" element
     And I should see a "form#user-login button#user-login-submit" element
 
-    Scenario: The user should be able to complete and then submit the login form using a username
+    Scenario: The user should be able to complete and then submit the login form using an email address
       Given I am on "/client/login/"
       Then I should see a "form#user-login" element
       And I should see a "form#user-login input[name=username]" element
@@ -47,3 +47,4 @@ Feature: Allow user to login to the system, using a username password
         And the url should match "/"
         And I should see a "ul#messages li.success" element
         And I should see "Welcome, you have successfully logged in."
+
