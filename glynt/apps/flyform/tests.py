@@ -14,6 +14,7 @@ from forms import BaseFlyForm, VALID_FIELD_TYPES
 
 import inspect
 import re
+import copy
 
 
 class BaseFlyFormTest(TestCase):
@@ -123,7 +124,7 @@ class BaseFlyFormTest(TestCase):
     step_set = self.base_json.copy()
     for index, name in enumerate(VALID_FIELD_TYPES):
       step = step_set.copy()
-      step['properties']['step_title'] = 'Multiple Field Type Test Step %d' % (index,)
+      step['properties']['step_title'] = 'Multiple Field Type Test Step %d' % (index+1,)
 
       field = step_set['fields'][0].copy()
       field['field'] = name
@@ -135,11 +136,9 @@ class BaseFlyFormTest(TestCase):
 
       step['fields'].append(field)
       del(step['fields'][0])
-      print step['properties']
-      steps.append(step)
+      steps.append(copy.deepcopy(step))
 
     for s in steps:
-      print s
       form = BaseFlyForm(json.dumps(s))
-#      print form.as_ul()
-#    form = BaseFlyForm(json.dumps(steps))
+      print form.as_ul()
+
