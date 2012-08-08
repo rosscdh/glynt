@@ -9,7 +9,11 @@ from django.utils import simplejson as json
 from django.test import TestCase
 from django.forms import fields
 from django.forms import widgets
-from forms import BaseFlyForm
+
+from forms import BaseFlyForm, VALID_FIELD_TYPES
+
+import inspect
+import re
 
 
 class BaseFlyFormTest(TestCase):
@@ -97,3 +101,45 @@ class BaseFlyFormTest(TestCase):
     self.assertEqual(type(form.fields['test_field']), fields.CharField)
     self.assertEqual(type(form.fields['test_field'].widget), widgets.TextInput)
     self.assertEqual(form.as_ul(), '<li><label for="id_test_field">Test:</label> <input name="test_field" id="id_test_field" placeholder="tester" type="text" class="md-updater" data-hb-name="test_field" /> <span class="helptext">My Test Field</span><input id="id_step_title" type="hidden" data-step-title="Step No. 1" name="step_title" data-glynt-loop_step="[{"iteration_title": "Step No. 1","hide_from": "test_field"}]" /></li>')
+
+  def test_basic_fields(self):
+    multi_field = self.base_json
+    multi_field['properties']['step_title'] = 'Multiple Step Test Form'
+    for name in VALID_FIELD_TYPES:
+      field = multi_field['fields'][0].copy()
+      field['field'] = name
+      field['name'] = '%s Field' % (name.replace('Field',''),)
+      field['placeholder'] = 'input for type %s' % (name,)
+      field['widget'] = ''
+      field['label'] = ''
+      field['help_text'] = 'Help for my %s Field' % (name.replace('Field',''),)
+      multi_field['fields'].append(field)
+
+    del(multi_field['fields'][0])
+    form = BaseFlyForm(json.dumps(multi_field))
+
+  def test_multi_step_form(self):
+    steps = []
+    step_set = self.base_json.copy()
+    for index, name in enumerate(VALID_FIELD_TYPES):
+      step = step_set.copy()
+      step['properties']['step_title'] = 'Multiple Field Type Test Step %d' % (index,)
+
+      field = step_set['fields'][0].copy()
+      field['field'] = name
+      field['name'] = '%s Field' % (name.replace('Field',''),)
+      field['placeholder'] = 'input for type %s' % (name,)
+      field['widget'] = ''
+      field['label'] = ''
+      field['help_text'] = 'Help for my %s Field' % (name.replace('Field',''),)
+
+      step['fields'].append(field)
+      del(step['fields'][0])
+      print step['properties']
+      steps.append(step)
+
+    for s in steps:
+      print s
+      form = BaseFlyForm(json.dumps(s))
+#      print form.as_ul()
+#    form = BaseFlyForm(json.dumps(steps))

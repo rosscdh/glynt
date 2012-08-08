@@ -8,6 +8,9 @@ from django.template.defaultfilters import slugify
 from django.utils import safestring
 
 
+VALID_FIELD_TYPES = ['BooleanField', 'CharField', 'ChoiceField', 'DateField', 'DateTimeField', 'DecimalField', 'EmailField', 'FloatField', 'ImageField', 'IntegerField', 'MultiValueField', 'MultipleChoiceField', 'SlugField', 'TimeField', 'URLField', ]
+
+
 class BaseFlyForm(forms.Form):
   """ This form is the basis for the self generating form representations
   it requires that a valid json_object be passed in which adheres to the following schema
@@ -92,12 +95,12 @@ class BaseFlyForm(forms.Form):
   def setup_fields(self, schema_fields):
     if len(schema_fields) > 0:
       for field in schema_fields:
-        f = getattr(forms.fields, field['field'], None)
+        f = getattr(forms.fields, field['field'], None) if field['field'] else None
         if f:
           field_instance = f()
           field_instance.name = self.slugify(field['name'])
-          field_instance.label = field['label']
-          field_instance.help_text = field['help_text']
+          field_instance.label = field['label'] if field['label'] else field['name']
+          field_instance.help_text = field['help_text'] if field['help_text'] else None
           field_instance.required = True if field['required'] in ['true',True,'1', 1] else False
 
           widget = self.setup_field_widget(field_instance, field)
@@ -108,7 +111,7 @@ class BaseFlyForm(forms.Form):
           self.fields[field_instance.name] = field_instance
 
   def setup_field_widget(self, field_instance, field_dict):
-    w = getattr(forms.widgets, field_dict['widget'], None)
+    w = getattr(forms.widgets, field_dict['widget'], None) if field_dict['widget'] else None
     if w:
       widget = w()
       widget.attrs = {
