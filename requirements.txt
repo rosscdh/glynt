@@ -4,6 +4,7 @@ Werkzeug
 django-extensions
 markup
 south
+psycopg2
 -e git+https://github.com/chrisglass/xhtml2pdf.git#egg=xhtml2pdf
 -e git+https://github.com/stard0g101/django-templatetag-handlebars.git#egg=django-templatetag-handlebars
 -e git+https://github.com/klen/django_markdown.git#egg=django_markdown

@@ -10,12 +10,12 @@ TEMPLATE_DEBUG = DEBUG
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '/home/stard0g101/webapps/cartvine_shoppers/data/dev.db',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'stard0g101_glynt',
+        'USER': 'stard0g101_glynt',
+        'PASSWORD': '1003507b',
+        'HOST': 'web48.webfaction.com',
+        # 'PORT': '',
     }
 }
 
