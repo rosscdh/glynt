@@ -48,3 +48,7 @@ Feature: Allow user to login to the system, using a username password
         And I should see a "ul#messages li.success" element
         And I should see "Welcome, you have successfully logged in."
 
+    Scenario: Once logged in the user should not be able to see the login form again and should be redirected to /
+      Given I am logged in as "userA"
+      And I am on "/client/login/"
+      Then the url should match "/"
