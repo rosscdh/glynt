@@ -17,6 +17,7 @@ from django.core.files.base import ContentFile
 from django.contrib.auth.decorators import user_passes_test
 from django.http import Http404
 
+from glynt.apps.flyform.forms import BaseFlyForm
 from models import Document, DocumentCategory
 
 import markdown
@@ -103,12 +104,12 @@ class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
         context = super(DocumentView, self).get_context_data(**kwargs)
 
         document_slug = slugify(self.kwargs['slug'])
-        document = Document.objects.get(slug=document_slug)
-        context['object'] = document
-        context['document'] = document.body
+        self.document = Document.objects.get(slug=document_slug)
+        context['object'] = self.document
+        context['document'] = self.document.body
 
         try:
-            context['form_set'] = FORM_GROUPS[document_slug]
+            context['form_set'] = [BaseFlyForm(json.dumps(s)) for s in self.document.flyform.body]
         except KeyError:
             context['form_set'] = FORM_GROUPS['no_steps']
 
@@ -120,13 +121,25 @@ class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
         """
         Returns the form class to use in this view
         """
+        return BaseFlyForm
+
+    def get_form(self, form_class):
+        """
+        Returns an instance of the form to be used in this view.
+        """
+        kwargs = self.get_form_kwargs()
+
         self.step = int(self.request.GET.get('step', 0))
         if self.step > 0:
             self.step = self.step - 1
 
-        return FORM_GROUPS[self.kwargs['doc']][self.step]
+        kwargs['json_form'] = json.dumps(self.document.flyform.body[self.step])
+
+        return form_class(**kwargs)
 
     def post(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+
         form_class = self.get_form_class()
         form = self.get_form(form_class)
 

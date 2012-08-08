@@ -136,9 +136,11 @@ class BaseFlyFormTest(TestCase):
 
       step['fields'].append(field)
       del(step['fields'][0])
+
       steps.append(copy.deepcopy(step))
 
     for s in steps:
+      print s
       form = BaseFlyForm(json.dumps(s))
-      print form.as_ul()
+      form.as_ul()
 

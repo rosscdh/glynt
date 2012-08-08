@@ -1,8 +1,9 @@
 from django.db import models
+from jsonfield import JSONField
 
 
 class FlyForm(models.Model):
     """ Flyform model used to store teh JSON representation of a form """
-    body = models.TextField(blank=False,null=False)
+    body = JSONField(blank=False,null=False)
 
 
