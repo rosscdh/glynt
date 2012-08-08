@@ -10,27 +10,12 @@
 
 {% include 'socialregistration/facebook_js/facebook_button.html' %}
 
-<form id="user-signup" action="{% url 'client:signup' %}" method="post">
-  {% csrf_token %}
-  <fieldset>
-    <legend>{% trans "Signup" %}</legend>
-    {{ form.non_field_errors }}
-    {% for field in form %}
-    {{ field.errors }}
-    {% comment %} Displaying checkboxes differently {% endcomment %}
-    {% if field.name == 'tos' %}
-    <p class="checkbox">
-    <label for="id_{{ field.name }}">{{ field }} {{ field.label }}</label>
-    </p>
-    {% else %}
-    <p>
-    {{ field.label_tag }} 
-    {{ field }}
-    </p>
-    {% endif %}
-    {% endfor %}
-  </fieldset>
-  <button class="submit" id="user-signup-submit">{% trans "Signup"%}</button>
+<form id="user-signup" class="form-horizontal" action="{% url 'client:signup' %}" method="post">{% csrf_token %}
+  {{ form }}
+  <br/>
+  <div class="form-actions">
+      <button id="user-signup-submit" type="submit" class="submit btn btn-primary">{% trans "Signup" %}</button>
+  </div>
 </form>
 {% endblock %}
 

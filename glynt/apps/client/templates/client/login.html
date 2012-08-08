@@ -7,10 +7,12 @@
 
 {% include 'socialregistration/facebook_js/facebook_button.html' %}
 
-<form id="user-login" action="{% url 'client:login' %}" method="post">{% csrf_token %}
+<form id="user-login" class="form-horizontal" action="{% url 'client:login' %}" method="post">{% csrf_token %}
 {{ form }}
 <br/>
-<button class="submit" id="user-login-submit">{% trans "Login"%}</button>
+<div class="form-actions">
+    <button id="user-login-submit" type="submit" class="submit btn btn-primary">{% trans "Login" %}</button>
+</div>
 </form>
 
 {% endblock %}
