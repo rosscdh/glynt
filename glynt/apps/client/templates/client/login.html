@@ -5,12 +5,7 @@
 
 {% block body %}
 
-<div class="" style="height:40px;overflow:hidden;padding-top:6px">
-    <fb:login-button id="fb_login-button" size="medium" scope="{{ FACEBOOK_REQUEST_PERMISSIONS }}" on-login="SocialFBLogin();">Connect with Facebook</fb:login-button>
-    <img id="fb-profile-image" src="" width="25" height="25" />
-    <img id="fb-profile-image" src="" style="display:none;" width="25" height="25" />
-    <span id="fb-profile-name"></span>
-</div>
+{% include 'socialregistration/facebook_js/facebook_button.html' %}
 
 <form id="user-login" action="{% url 'client:login' %}" method="post">{% csrf_token %}
 {{ form }}
