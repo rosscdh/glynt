@@ -7,8 +7,13 @@ from django.utils import simplejson as json
 from django.template.defaultfilters import slugify
 from django.utils import safestring
 
+from django_countries import CountryFormField as CountryField
 
-VALID_FIELD_TYPES = ['BooleanField', 'CharField', 'ChoiceField', 'DateField', 'DateTimeField', 'DecimalField', 'EmailField', 'FloatField', 'ImageField', 'IntegerField', 'MultiValueField', 'MultipleChoiceField', 'SlugField', 'TimeField', 'URLField', ]
+
+CUSTOM_VALID_FIELD_TYPES = ['CountryField']
+VALID_FIELD_TYPES = CUSTOM_VALID_FIELD_TYPES + ['BooleanField', 'CharField', 'ChoiceField', 'DateField', 'DateTimeField', 'DecimalField', 'EmailField', 'FloatField', 'ImageField', 'IntegerField', 'MultiValueField', 'MultipleChoiceField', 'SlugField', 'TimeField', 'URLField', ]
+
+import sys
 
 
 class BaseFlyForm(forms.Form):
@@ -96,6 +101,11 @@ class BaseFlyForm(forms.Form):
     if len(schema_fields) > 0:
       for field in schema_fields:
         f = getattr(forms.fields, field['field'], None) if field['field'] else None
+
+        # Is custom imported field
+        if f is None:
+          f = getattr(sys.modules[__name__], field['field'], None)
+
         if f:
           field_instance = f()
           field_instance.name = self.slugify(field['name'])
@@ -114,11 +124,18 @@ class BaseFlyForm(forms.Form):
     w = getattr(forms.widgets, field_dict['widget'], None) if field_dict['widget'] else None
     if w:
       widget = w()
-      widget.attrs = {
-        'class': field_dict['class'],
-        'placeholder': field_dict['placeholder'],
-        'data-hb-name': field_dict['data-hb-name'] if field_dict['data-hb-name'] else field_instance.name,
-      }
-      return widget
-    return None
+    else:
+      widget = field_instance.widget
 
+    widget.attrs = {
+      'class': field_dict['class'],
+      'placeholder': field_dict['placeholder'],
+      'data-hb-name': field_dict['data-hb-name'] if field_dict['data-hb-name'] else field_instance.name,
+    }
+
+    return widget
+
+
+
+class TmpStepCreator(forms.Form):
+  pass
