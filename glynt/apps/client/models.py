@@ -8,7 +8,7 @@ from django.core.exceptions import ValidationError
 from django.utils import safestring
 from jsonfield import JSONField
 
-from socialregistration.signals import connect, profile_data
+from socialregistration.signals import login, connect, profile_data
 from userena.models import UserenaSignup, UserenaBaseProfile
 from userena.managers import ASSIGNED_PERMISSIONS
 from guardian.shortcuts import assign, get_perms
@@ -65,6 +65,7 @@ def create_client_profile(sender, **kwargs):
         assign(perm[0], user, user)
 
 
+@receiver(login)
 @receiver(connect)
 def populate_profile_data(sender, **kwargs):
   user = kwargs['user']
