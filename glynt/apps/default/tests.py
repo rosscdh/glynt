@@ -19,7 +19,7 @@ class FacebookLoginTest(TestCase):
 
   def test_lack_of_presence_of_facebook_button_on_root(self):
     response = self.client.get(reverse('glynt:default'), follow=True)
-    fb_button_login = '<fb:login-button id="fb_login-button" size="medium" scope="%s" on-login="SocialFBLogin();">Connect with Facebook</fb:login-button>' \
+    fb_button_login = '<fb:login-button id="fb_login-button" size="large" scope="%s" on-login="SocialFBLogin();">Connect with Facebook</fb:login-button>' \
     % (FACEBOOK_REQUEST_PERMISSIONS,)
     self.assertNotContains( response, fb_button_login, status_code=200 )
 
@@ -28,7 +28,7 @@ class FacebookLoginTest(TestCase):
     urls = [reverse('client:login'), reverse('client:signup')]
     for u in urls:
       response = self.client.get(u, follow=True)
-      fb_button_login = '<fb:login-button id="fb_login-button" size="medium" scope="%s" on-login="SocialFBLogin();">Connect with Facebook</fb:login-button>' \
+      fb_button_login = '<fb:login-button id="fb_login-button" size="large" scope="%s" on-login="SocialFBLogin();">Connect with Facebook</fb:login-button>' \
       % (FACEBOOK_REQUEST_PERMISSIONS,)
       self.assertContains( response, fb_button_login, status_code=200 )
 

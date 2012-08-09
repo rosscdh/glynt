@@ -37,7 +37,7 @@ class DocumentTest(TestCase):
     self.userA, is_new = User.objects.get_or_create(username='testA', password=password, email='testA@weareml.com')
     self.userB, is_new = User.objects.get_or_create(username='testB', password=password, email='testB@weareml.com')
 
-    self.test_flyform, is_new = FlyForm.objects.get_or_create(body=BASE_JSON)
+    self.test_flyform, is_new = FlyForm.objects.get_or_create(body=[BASE_JSON])
 
     self.public_doc, is_new = Document.objects.get_or_create(owner=self.userA, name='Test Document', slug='test-doc', summary='This is a test doc', body='test', doc_status=Document.DOC_STATUS.active, is_public=True, flyform=self.test_flyform)
     self.private_doc, is_new = Document.objects.get_or_create(owner=self.userA, name='Private Test Document', slug='private-test-doc', summary='This is a private test doc', body='private test', doc_status=Document.DOC_STATUS.active, is_public=False, flyform=self.test_flyform)

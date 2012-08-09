@@ -48,7 +48,7 @@ class BaseFlyForm(forms.Form):
 
   def setup_form(self, json_form):
     """ Main form setup method used to generate the base form fields """
-    schema = json.loads(json_form)
+    schema = json_form if isinstance(json_form, dict) else json.loads(json_form)
     #@TODO
     #self.validate_schema(schema)
     self.setup_step_title(schema)
