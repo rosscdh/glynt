@@ -7,11 +7,11 @@
             <field type="TextField" name="summary">Joke Assassination Contract</field>
             <field type="TextField" name="body">Hi my name is {{customer_name}}
 
-    And I come from {{customer_country}}
+And I come from {{customer_country}}
 
-    I would like to spend {{budget}} and take out
+I would like to spend {{budget}} and take out
 
-    ###{{target_name}} to be found in {{target_country}}###</field>
+###{{target_name}} to be found in {{target_country}}###</field>
             <field to="flyform.flyform" name="flyform" rel="OneToOneRel">1</field>
             <field type="IntegerField" name="doc_status">1</field>
             <field type="BooleanField" name="is_public">True</field>
