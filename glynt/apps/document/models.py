@@ -19,12 +19,12 @@ class Document(models.Model):
         
     ))
 
-    owner = models.ForeignKey(User)
+    owner = models.OneToOneField(User)
     name = models.CharField(max_length=128,blank=False)
     slug = models.SlugField(blank=False)
     summary = models.TextField(blank=True,null=True)
     body = models.TextField(blank=True,null=True)
-    flyform = models.ForeignKey(FlyForm)
+    flyform = models.OneToOneField(FlyForm)
     doc_status = models.IntegerField(choices=DOC_STATUS.get_choices(),blank=False)
     is_public = models.BooleanField(default=True)
 
