@@ -13,6 +13,8 @@ from django_countries import CountryFormField as CountryField
 CUSTOM_VALID_FIELD_TYPES = ['CountryField']
 VALID_FIELD_TYPES = CUSTOM_VALID_FIELD_TYPES + ['BooleanField', 'CharField', 'ChoiceField', 'DateField', 'DateTimeField', 'DecimalField', 'EmailField', 'FloatField', 'ImageField', 'IntegerField', 'MultiValueField', 'MultipleChoiceField', 'SlugField', 'TimeField', 'URLField', ]
 
+VALID_WIDGETS = ['TextInput', 'PasswordInput', 'HiddenInput', 'MultipleHiddenInput', 'FileInput', 'ClearableFileInput', 'DateInput', 'DateTimeInput', 'TimeInput', 'Textarea', 'CheckboxInput', 'Select', 'RadioSelect', 'SelectMultiple', 'CheckboxSelectMultiple', 'SplitDateTimeWidget', 'SelectDateWidget',]
+
 import sys
 
 
@@ -23,9 +25,9 @@ class BaseFlyForm(forms.Form):
     "type" : "step",
     "properties" : {
       "step_title" : {"type" : "string"},
-      "hide_from": "",
-      "hide_to": "",
-      "iteration_title": "",
+      hide_from = forms.CharField(),
+      hide_to = forms.CharField(),
+      iteration_title = forms.CharField(),
     },
     "fields": [
         "field" : {"type" : "number"},
@@ -68,7 +70,7 @@ class BaseFlyForm(forms.Form):
     attribs_as_s = ''
     for k,v in attribs.iteritems():
       if v:
-        attribs_as_s += '"%s": "%s",' % (k, v, )
+        attribs_as_s += '%s = forms.CharField(),' % (k, v, )
     # remove last , and return
     if attribs_as_s != '':
       return '[{%s}]' % (attribs_as_s[0:-1], )
@@ -138,4 +140,16 @@ class BaseFlyForm(forms.Form):
 
 
 class TmpStepCreator(forms.Form):
-  pass
+  updater_class = forms.CharField(initial='md-updater', widget=forms.widgets.HiddenInput())
+  #data-hb-name = forms.CharField()
+  name = forms.CharField(label='slugify version of label', help_text='a slugified version of the label used as template variables', required=True, widget=forms.widgets.HiddenInput())
+  label = forms.CharField(label='Field Name', help_text='This name becomes the variable name for use in the doc.. i.e. First Name becomes first_name', required=False)
+  help_text = forms.CharField(label='Help', help_text='This is the extended help text, that is abde available via a tooltip', required=False)
+  placeholder = forms.CharField(label='Placeholder', help_text='A prompt for the value that the field expects i.e. if the field is Email then the prompt would be your_name@example.com', required=False)
+  required = forms.BooleanField(label='Is Required', help_text='Is this a required value; can the user progress without filling it in', initial=True)
+  field_type = forms.ChoiceField(label='Type of Field', help_text='What kind of data does this field expect?', choices=tuple((i,i) for i in sorted(VALID_FIELD_TYPES)), initial='CharField')
+  widget = forms.ChoiceField(label='Widget', help_text='How should the value this Field be captured? i.e. SelectBox for a dropdown or TextArea for lots of text or other', choices=tuple((i,i) for i in sorted(VALID_WIDGETS)), initial='TextInput')
+
+
+
+
