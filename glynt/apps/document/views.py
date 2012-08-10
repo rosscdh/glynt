@@ -16,9 +16,10 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.contrib.auth.decorators import user_passes_test
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 
 from glynt.apps.flyform.forms import BaseFlyForm
-from models import Document, DocumentCategory
+from models import Document, DocumentCategory, ClientCreatedDocument
 
 import markdown
 import xhtml2pdf.pisa as pisa
@@ -147,6 +148,20 @@ class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
         response = self.get_response_json(form)
 
         return HttpResponse(json.dumps(response), status=response['status'], content_type='text/json')
+
+
+class DocumentSaveProgressView(View):
+  def post(self, request, *args, **kwargs):
+
+    document_slug = slugify(self.kwargs['slug'])
+    document = get_object_or_404(Document, slug=document_slug)
+    progress, is_new = ClientCreatedDocument.objects.get_or_create(owner=request.user, source_document=document)
+    progress.body = request.POST.get('md', None)
+    progress.data = request.POST.get('current_progress', None)
+    progress.save()
+
+    response = HttpResponse('[{"status":"%s", "message":"%s"}]' % ('success', unicode(_('Progress Saved'))), status=200, content_type="text/json")
+    return response
 
 
 class DocumentExportView(View):
