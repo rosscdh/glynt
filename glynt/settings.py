@@ -185,7 +185,7 @@ FACEBOOK_REQUEST_PERMISSIONS = 'email,user_likes,user_about_me,read_stream'
 
 # LOGIN_REDIRECT_URL = '/'
 # LOGOUT_URL = '/social/logout/'
-LOGIN_REDIRECT_URL = '/'#/accounts/%(username)s/'
+LOGIN_REDIRECT_URL = '/client/'#/accounts/%(username)s/'
 LOGIN_URL = '/client/login/'
 LOGOUT_URL = '/social/logout/'
 
