@@ -24,9 +24,9 @@ class FlyFormInline(admin.TabularInline):
 
 class DocumentAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
-    inlines = [
-      FlyFormInline
-    ]
+    # inlines = [
+    #   FlyFormInline
+    # ]
 
 
 class DocumentCategoryAdmin(CategoryBaseAdmin):
