@@ -19,7 +19,7 @@ class Document(models.Model):
         
     ))
 
-    owner = models.OneToOneField(User)
+    owner = models.ForeignKey(User)
     name = models.CharField(max_length=128,blank=False)
     slug = models.SlugField(blank=False)
     summary = models.TextField(blank=True,null=True)
