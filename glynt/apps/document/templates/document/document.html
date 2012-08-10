@@ -7,13 +7,16 @@
 {% block owner_info %}
 <h3>{{ object.name }}</h3>
 {% trans 'shared by' %}
-<h4>{{ object.owner.get_full_name }}</h4>
+<h4>{{ object.owner.get_full_name|default:object.owner.username }}</h4>
 {% endblock %}
 
 {% block form %}
     <div id="docu-form-head" class="row">
         <div id="messages" data-bind="html: App.message"></div>
     </div>
+
+    <div id="save"><button id="btn-save-progress" class="btn btn-inverse btn-mini" type="button">{% trans 'Save Now' %}</button></div>
+
     {% for form in form_set %}
     <form id="glynt-doc-{{ forloop.counter }}" class="bind-document">{% csrf_token %}
     <div id="form-group-{{ forloop.counter }}" class="form-group {% if not forloop.first %}hidden{% endif %}">
@@ -789,6 +792,31 @@ $(document).ready(function(){
             });
         }
 
+        self.saveProgress = function saveProgress() {
+
+            var csrf_token = $('form.bind-document:first').find('input[type=hidden]:first')
+            var data = {
+                csrfmiddlewaretoken: csrf_token.val(),
+                current_progress: $.cookie('glynt-{{ object.slug }}'),
+                md: self.documentModel.render()
+            };
+
+            $.ajax({
+              type: 'POST',
+              url: "{% url 'document:save_progress' slug=object.slug %}",
+              data: data,
+            })
+            .success(function(data, textStatus, jqXHR) {
+//                var data = $.parseJSON(data);
+                console.log(data[0].message)
+            })
+            .error(function() { 
+                alert('error')
+            })
+            .complete(function() {
+            });
+        }
+
         self.getElementType = function getElementType(element) {
             var element_type = element.attr('type');
             if (element_type == undefined) {
@@ -890,6 +918,11 @@ $(document).ready(function(){
         //if (App.validateAllForms() == true) {
             App.postDocument();
         //}
+    });
+
+    $('button#btn-save-progress').live('click', function(event){
+        event.preventDefault();
+        App.saveProgress();
     });
 
     $("input.datepicker").datepicker({dateFormat:"D, dd MM yy"});

@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.utils.translation import gettext as _
 from categories.admin import CategoryBaseAdmin
 from glynt.apps.flyform.models import FlyForm
-from models import Document, DocumentCategory
+from models import Document, DocumentCategory, ClientCreatedDocument
 
 
 class FlyFormInline(admin.TabularInline):
@@ -35,3 +35,4 @@ class DocumentCategoryAdmin(CategoryBaseAdmin):
 
 admin.site.register(Document, DocumentAdmin)
 admin.site.register(DocumentCategory, DocumentCategoryAdmin)
+admin.site.register([ClientCreatedDocument])
