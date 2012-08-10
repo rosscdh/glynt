@@ -106,6 +106,6 @@ class DashboardView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
 
-        context['document_list'] = Document.objects.filter(owner=self.request.user)
+        context['public_document_list'] = Document.public_objects.all()
 
         return context
