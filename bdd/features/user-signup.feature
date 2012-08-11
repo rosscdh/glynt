@@ -9,11 +9,11 @@ Feature: Allow user to sign up manually
 
   Scenario: The user should see the signup link
     Given I am on "/"
-    Then I should see a "a#user-signup" element
+    Then I should see a "a#user-signup-link" element
 
   Scenario: The user should be able to click the signup button and be taken to a signup form
     Given I am on "/"
-    When I follow "user-signup"
+    When I follow "user-signup-link"
     Then the response status code should be 200
     And the url should match "/client/signup/"
     And I should see a "form#user-signup" element

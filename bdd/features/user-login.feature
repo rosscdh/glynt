@@ -6,11 +6,11 @@ Feature: Allow user to login to the system, using a username password
 
   Scenario: The user should see the login link
     Given I am on "/"
-    Then I should see a "a#user-login" element
+    Then I should see a "a#user-login-link" element
 
   Scenario: The user should be able to click the login button and be taken to a login form
     Given I am on "/"
-    When I follow "user-login"
+    When I follow "user-login-link"
     Then the response status code should be 200
     And the url should match "/client/login/"
     And I should see a "form#user-login" element
