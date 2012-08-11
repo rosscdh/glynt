@@ -22,8 +22,8 @@ class SignupForm(BootstrapMixin, SignupFormOnlyEmail):
 
   class Meta:
     layout = (
-      Fieldset("Please enter your login", "email", "password1", "password2"),
-      Fieldset("Please enter your basic details", "first_name", "last_name", "country", "state")
+      Fieldset("Login Details", "email", "password1", "password2"),
+      Fieldset("Your Account Details", "first_name", "last_name", "country", "state")
     )
 
   def generate_username_from_email(self, email):

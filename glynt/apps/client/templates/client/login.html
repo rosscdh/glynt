@@ -16,3 +16,12 @@
 </form>
 
 {% endblock %}
+
+
+{% block js %}
+
+{% if not request.user.is_authenticated %}
+	{% include 'socialregistration/facebook_js/facebook_js.html' %}
+{% endif %}
+
+{% endblock %}

@@ -3,10 +3,6 @@
 {#% linkedin %#}
 
 <div class="well">
-	{% facebook_button %}
+	{% include 'socialregistration/facebook_js/facebook_button.html' %}
 	{#% linkedin_button %#}
 </div>
-
-{% if not request.user.is_authenticated %}
-    {% facebook_button %}
-{% endif %}
