@@ -37,12 +37,10 @@ class DocumentTest(TestCase):
     self.userA, is_new = User.objects.get_or_create(username='testA', password=password, email='testA@weareml.com')
     self.userB, is_new = User.objects.get_or_create(username='testB', password=password, email='testB@weareml.com')
 
-    self.test_flyform, is_new = FlyForm.objects.get_or_create(body=[BASE_JSON])
-
-    self.public_doc, is_new = Document.objects.get_or_create(owner=self.userA, name='Test Document', slug='test-doc', summary='This is a test doc', body='test', doc_status=Document.DOC_STATUS.active, is_public=True, flyform=self.test_flyform)
-    self.private_doc, is_new = Document.objects.get_or_create(owner=self.userA, name='Private Test Document', slug='private-test-doc', summary='This is a private test doc', body='private test', doc_status=Document.DOC_STATUS.active, is_public=False, flyform=self.test_flyform)
-    self.deleted_doc, is_new = Document.objects.get_or_create(owner=self.userA, name='Deleted Test Document', slug='deleted-test-doc', summary='This is a deleted test doc', body='deleted test', doc_status=Document.DOC_STATUS.deleted, is_public=True, flyform=self.test_flyform)
-    self.draft_doc, is_new = Document.objects.get_or_create(owner=self.userA, name='Draft Test Document', slug='draft-test-doc', summary='This is a draft test doc', body='draft test', doc_status=Document.DOC_STATUS.draft, is_public=True, flyform=self.test_flyform)
+    self.public_doc, is_new = Document.objects.get_or_create(owner=self.userA, name='Test Document', slug='test-doc', summary='This is a test doc', body='test', doc_status=Document.DOC_STATUS.active, is_public=True, flyform=FlyForm.objects.create(body=[BASE_JSON]))
+    self.private_doc, is_new = Document.objects.get_or_create(owner=self.userA, name='Private Test Document', slug='private-test-doc', summary='This is a private test doc', body='private test', doc_status=Document.DOC_STATUS.active, is_public=False, flyform=FlyForm.objects.create(body=[BASE_JSON]))
+    self.deleted_doc, is_new = Document.objects.get_or_create(owner=self.userA, name='Deleted Test Document', slug='deleted-test-doc', summary='This is a deleted test doc', body='deleted test', doc_status=Document.DOC_STATUS.deleted, is_public=True, flyform=FlyForm.objects.create(body=[BASE_JSON]))
+    self.draft_doc, is_new = Document.objects.get_or_create(owner=self.userA, name='Draft Test Document', slug='draft-test-doc', summary='This is a draft test doc', body='draft test', doc_status=Document.DOC_STATUS.draft, is_public=True, flyform=FlyForm.objects.create(body=[BASE_JSON]))
 
   def check_response_token_helper(self,url,expected_status_code,expected_redirect_chain):
     """ Method to check response status code and redirect chain """

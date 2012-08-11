@@ -94,10 +94,10 @@ class BaseFlyForm(forms.Form):
     """ Make the appropriate changes should a loop-step present itself """
     step_schema['properties']['iteration_title'] = step_schema['properties']['iteration_title'] if 'iteration_title' in step_schema['properties'] and step_schema['properties']['iteration_title'] else step_schema['properties']['step_title']
     loop_step_attrs = {
-      'iteration_title': step_schema['properties']['iteration_title'],
-      'hide_from': self.slugify(step_schema['properties']['hide_from']),
+      "iteration_title": step_schema['properties']['iteration_title'],
+      "hide_from": self.slugify(step_schema['properties']['hide_from']),
     }
-    return safestring.mark_safe(self.string_attribs(loop_step_attrs).replace('""', "'"))
+    return safestring.mark_safe(self.string_attribs(loop_step_attrs))
 
   def setup_fields(self, schema_fields):
     if len(schema_fields) > 0:
