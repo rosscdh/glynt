@@ -115,7 +115,8 @@ class BaseFlyForm(forms.Form):
           field_instance.help_text = field['help_text'] if field['help_text'] else None
           field_instance.required = True if field['required'] in ['true',True,'1', 1] else False
 
-          if hasattr(f, 'choices'):
+          if hasattr(f, 'choices') and 'choices' in field:
+            # Add log here as sometimes choices may be present but not specified
             field_instance.choices = self.valid_choice_options(field['choices'])
 
           widget = self.setup_field_widget(field_instance, field)

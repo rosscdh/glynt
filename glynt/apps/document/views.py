@@ -26,14 +26,14 @@ import xhtml2pdf.pisa as pisa
 import cStringIO as StringIO
 import datetime
 
-from forms import AssassinStep1, AssassinStep2
-from forms import WillStep1, WillStep2, WillStep3, WillStep4, WillStep5, WillStep6, WillStep7
-#from reportlab.pdfgen import canvas
+# from forms import AssassinStep1, AssassinStep2
+# from forms import WillStep1, WillStep2, WillStep3, WillStep4, WillStep5, WillStep6, WillStep7
+# #from reportlab.pdfgen import canvas
 
 FORM_GROUPS = {
     'no_steps': [],
-    'legal': [AssassinStep1, AssassinStep2],
-    'legal-will': [WillStep1, WillStep2, WillStep3, WillStep4, WillStep5, WillStep6, WillStep7]
+    # 'legal': [AssassinStep1, AssassinStep2],
+    # 'legal-will': [WillStep1, WillStep2, WillStep3, WillStep4, WillStep5, WillStep6, WillStep7]
 }
 
 def user_can_view_document(context, user):
@@ -111,7 +111,7 @@ class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
         context['document'] = self.document.body
 
         try:
-            context['form_set'] = [BaseFlyForm(json.dumps(s)) for s in self.document.flyform.body]
+            context['form_set'] = [BaseFlyForm(json.dumps(step)) for step in self.document.flyform.body]
         except KeyError:
             context['form_set'] = FORM_GROUPS['no_steps']
 
