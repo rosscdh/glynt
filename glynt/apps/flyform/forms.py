@@ -126,7 +126,8 @@ class BaseFlyForm(forms.Form):
           self.fields[field_instance.name] = field_instance
 
   def valid_choice_options(self, choices):
-    """ expects JSON format tuple in form:
+    """ Converts JSON fomrat tuple into python tuple 
+    expects JSON format tuple in form:
     [[k,v],[k,v]]
     """
     return tuple(tuple(c) for c in choices)
@@ -143,6 +144,11 @@ class BaseFlyForm(forms.Form):
       'placeholder': field_dict['placeholder'],
       'data-hb-name': field_dict['data-hb-name'] if field_dict['data-hb-name'] else field_instance.name,
     }
+
+    # Handle loop step loop length fields, required to make the loop function
+    if 'data-glynt-loop_length' in field_dict:
+      widget.attrs['data-glynt-loop_length'] = len(field_instance.choices) if hasattr(field_instance, 'choices') else ''
+
 
     return widget
 
