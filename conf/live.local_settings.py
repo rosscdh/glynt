@@ -36,6 +36,9 @@ STATICFILES_DIRS = (
 FACEBOOK_API_KEY = '343632075713954'
 FACEBOOK_SECRET_KEY = '4f9854b8fe8f5ccf27ac1ffcf5051b79'
 
+LINKEDIN_CONSUMER_KEY = 'gnesv6zvhzgn'
+LINKEDIN_CONSUMER_SECRET_KEY = '3eTYERhJZd4UJSjM'
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.webfaction.com'
 EMAIL_HOST_USER = 'glynt'

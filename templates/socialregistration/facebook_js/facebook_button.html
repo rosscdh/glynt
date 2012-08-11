@@ -1,6 +1,2 @@
-<div class="well">
-    <fb:login-button id="fb_login-button" size="large" scope="{{ FACEBOOK_REQUEST_PERMISSIONS }}" on-login="SocialFBLogin();">Connect with Facebook</fb:login-button>
-    <!-- <img id="fb-profile-image" src="" width="25" height="25" /> -->
-    <!-- <img id="fb-profile-image" src="" style="display:none;" width="25" height="25" />
-    <span id="fb-profile-name"></span> -->
-</div>
+{% load i18n %}
+<fb:login-button id="fb_login-button" size="large" scope="{{ FACEBOOK_REQUEST_PERMISSIONS }}" on-login="SocialFBLogin();">{% trans 'Connect with Facebook' %}</fb:login-button>

@@ -23,10 +23,10 @@ class DocumentInline(admin.TabularInline):
   # the following is necessary if 'link' method is also used in list_display
   link.allow_tags = True
 
-class FlyFormAdmin(admin.ModelAdmin):
-    inlines = [
-      DocumentInline
-    ]
+# class FlyFormAdmin(admin.ModelAdmin):
+#     inlines = [
+#       DocumentInline
+#     ]
 
 
-admin.site.register(FlyForm, FlyFormAdmin)
+admin.site.register([FlyForm])

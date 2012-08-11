@@ -1,0 +1,12 @@
+{% load i18n %}
+{% load facebook %}
+{#% linkedin %#}
+
+<div class="well">
+	{% facebook_button %}
+	{#% linkedin_button %#}
+</div>
+
+{% if not request.user.is_authenticated %}
+    {% facebook_button %}
+{% endif %}
