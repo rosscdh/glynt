@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from taggit.managers import TaggableManager
 
 from categories.models import CategoryBase
-from glynt.apps.flyform.models import FlyForm
 
 from glynt.apps.utils import get_namedtuple_choices
 from jsonfield import JSONField
@@ -26,7 +25,7 @@ class Document(models.Model):
     slug = models.SlugField(blank=False)
     summary = models.TextField(blank=True,null=True)
     body = models.TextField(blank=True,null=True)
-    flyform = models.OneToOneField(FlyForm)
+    flyform = models.OneToOneField('flyform.FlyForm')
     doc_status = models.IntegerField(choices=DOC_STATUS.get_choices(),blank=False)
     is_public = models.BooleanField(default=True)
     doc_cats = models.ManyToManyField('DocumentCategory')

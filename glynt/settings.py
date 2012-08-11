@@ -105,6 +105,7 @@ AUTHENTICATION_BACKENDS = (
     'glynt.backends.EmailOrUsernameBackend',
     'django.contrib.auth.backends.ModelBackend',
     'socialregistration.contrib.facebook_js.auth.FacebookAuth',
+    #'socialregistration.contrib.linkedin.auth.LinkedInAuth',
     'userena.backends.UserenaAuthenticationBackend',
     'guardian.backends.ObjectPermissionBackend',
 )
@@ -161,6 +162,7 @@ HELPER_APPS = (
     'mptt',
     'socialregistration',
     'socialregistration.contrib.facebook_js',
+    #'socialregistration.contrib.linkedin_js',
     'bootstrap',
     # Userena
     'userena',
@@ -182,6 +184,9 @@ USERENA_HIDE_EMAIL = True
 FACEBOOK_API_KEY = '419217318130542'
 FACEBOOK_SECRET_KEY = 'a8a6359a83c2af62c0aadb8e507bd15f'
 FACEBOOK_REQUEST_PERMISSIONS = 'email,user_likes,user_about_me,read_stream'
+
+LINKEDIN_CONSUMER_KEY = '1uh2ns1cn9tm'
+LINKEDIN_CONSUMER_SECRET_KEY = 'MnrqdbtmM10gkz27'
 
 # LOGIN_REDIRECT_URL = '/'
 # LOGOUT_URL = '/social/logout/'
