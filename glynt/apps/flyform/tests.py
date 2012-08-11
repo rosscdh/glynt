@@ -53,10 +53,10 @@ class BaseFlyFormTest(TestCase):
   def test_string_attribs(self):
     form = BaseFlyForm(self.base_json)
     result = form.string_attribs({'my_key': 'my_value'})
-    self.assertEqual(result, '[{"my_key": "my_value"}]')
+    self.assertEqual(result, "[{'my_key': 'my_value'}]")
 
     result = form.string_attribs({'my_key': 'my_value', 'my_key2': 'my_value2'})
-    self.assertEqual(result, '[{"my_key2": "my_value2","my_key": "my_value"}]')
+    self.assertEqual(result, "[{'my_key2': 'my_value2','my_key': 'my_value'}]")
 
   def test_basic_step_form(self):
     form = BaseFlyForm(self.base_json)
@@ -74,7 +74,7 @@ class BaseFlyFormTest(TestCase):
     loop_step['properties']['type'] = 'loop-step'
     loop_step['properties']['hide_from'] = 'Test Field'
     form = BaseFlyForm(json.dumps(loop_step))
-    self.assertEqual(form.define_loopstep_attribs(loop_step), '[{"iteration_title": "Step No. 1","hide_from": "test_field"}]')
+    self.assertEqual(form.define_loopstep_attribs(loop_step), "[{'iteration_title': 'Step No. 1','hide_from': 'test_field'}]")
 
   def test_basic_loopstep(self):
     json_form = {
@@ -101,7 +101,7 @@ class BaseFlyFormTest(TestCase):
 
     self.assertEqual(type(form.fields['test_field']), fields.CharField)
     self.assertEqual(type(form.fields['test_field'].widget), widgets.TextInput)
-    self.assertEqual(form.as_ul(), '<li><label for="id_test_field">Test:</label> <input name="test_field" id="id_test_field" placeholder="tester" type="text" class="md-updater" data-hb-name="test_field" /> <span class="helptext">My Test Field</span><input id="id_step_title" type="hidden" data-step-title="Step No. 1" name="step_title" data-glynt-loop_step="[{"iteration_title": "Step No. 1","hide_from": "test_field"}]" /></li>')
+    self.assertEqual(form.as_ul(), '<li><label for="id_test_field">Test:</label> <input name="test_field" id="id_test_field" placeholder="tester" type="text" class="md-updater" data-hb-name="test_field" /> <span class="helptext">My Test Field</span><input id="id_step_title" type="hidden" data-step-title="Step No. 1" name="step_title" data-glynt-loop_step="[{\'iteration_title\': \'Step No. 1\',\'hide_from\': \'test_field\'}]" /></li>')
 
   def test_basic_fields(self):
     multi_field = copy.deepcopy(BASE_JSON)
