@@ -15,7 +15,7 @@ cd $PROJECT_DIR
 python manage.py jenkins
 
 # Run the testserver so that behat can find and use it
-python manage.py testserver --noinput --addrport 127.0.0.1:8001 sites.json test_users.json guardian_permissions.json document_category.json &
+python manage.py testserver --noinput --addrport 127.0.0.1:8001 sites.json test_users.json guardian_permissions.json document_category.json document_flyform.xml &
 
 sleep 5
 
