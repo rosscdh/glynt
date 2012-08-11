@@ -6,11 +6,30 @@
 
 {% block body %}
 
-{{ form }}
+<div class="span5">
+    <form id="field-creator" class="form-horizontal" action="{% url 'client:signup' %}" method="post">{% csrf_token %}
+      {{ form }}
+      <br/>
+      <div class="form-actions">
+          <button id="add-field" type="submit" class="btn btn-primary">{% trans "Add Field" %}</button>
+      </div>
+    </form>
+</div>
+
+<div class="span5 pull-right">
+    <textarea id="step-list"></textarea>
+</div>
+
 
 {% endblock %}
 
 {% block css %}
+<style>
+textarea#step-list {
+    width:100%;
+    min-height:640px;
+}
+</style>
 {% endblock %}
 
 {% block js %}
