@@ -8,7 +8,7 @@ Feature: Logged in User Dashboard
     When I am logged in as "userA"
     Then I am on "/client"
     And I should see a "dl#available-document-list" element
-    And I should see 4 "dl#available-document-list dt" elements
+    And I should see a "dl#available-document-list ul li" element
 
   Scenario: The user should be able to create a new document
     When I am logged in as "userA"
