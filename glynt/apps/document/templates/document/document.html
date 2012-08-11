@@ -418,12 +418,12 @@ $(document).ready(function(){
         self.slugify = function slugify(text) {
             if (typeof text == 'boolean') {
                 text = (text === true)?'true':'false';
-            } else {
+            } else if (text != undefined && text != null) {
                 text = text.replace(/[^_-a-zA-Z0-9,&\s]+/ig, '');
                 //text = text.replace(/-/gi, "_");
-                text = text.replace(/\s/gi, "-");
+                text = text.replace(/\s/gi, "-").toLowerCase();
             }
-            return text.toLowerCase();
+            return text;
         }
 
         self.assertElementIsVisibleWhen = function assertElementIsVisibleWhen(key, value) {

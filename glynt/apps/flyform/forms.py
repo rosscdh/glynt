@@ -70,7 +70,7 @@ class BaseFlyForm(forms.Form):
     attribs_as_s = ''
     for k,v in attribs.iteritems():
       if v:
-        attribs_as_s += '%s = forms.CharField(),' % (k, v, )
+        attribs_as_s += "'%s': '%s'," % (k, v, )
     # remove last , and return
     if attribs_as_s != '':
       return '[{%s}]' % (attribs_as_s[0:-1], )
@@ -115,12 +115,21 @@ class BaseFlyForm(forms.Form):
           field_instance.help_text = field['help_text'] if field['help_text'] else None
           field_instance.required = True if field['required'] in ['true',True,'1', 1] else False
 
+          if hasattr(f, 'choices'):
+            field_instance.choices = self.valid_choice_options(field['choices'])
+
           widget = self.setup_field_widget(field_instance, field)
           if widget:
             field_instance.widget = widget
 
           # Append the field
           self.fields[field_instance.name] = field_instance
+
+  def valid_choice_options(self, choices):
+    """ expects JSON format tuple in form:
+    [[k,v],[k,v]]
+    """
+    return tuple(tuple(c) for c in choices)
 
   def setup_field_widget(self, field_instance, field_dict):
     w = getattr(forms.widgets, field_dict['widget'], None) if field_dict['widget'] else None
@@ -148,7 +157,7 @@ class TmpStepCreator(forms.Form):
   placeholder = forms.CharField(label='Placeholder', help_text='A prompt for the value that the field expects i.e. if the field is Email then the prompt would be your_name@example.com', required=False)
   required = forms.BooleanField(label='Is Required', help_text='Is this a required value; can the user progress without filling it in', initial=True)
   field_type = forms.ChoiceField(label='Type of Field', help_text='What kind of data does this field expect?', choices=tuple((i,i) for i in sorted(VALID_FIELD_TYPES)), initial='CharField')
-  widget = forms.ChoiceField(label='Widget', help_text='How should the value this Field be captured? i.e. SelectBox for a dropdown or TextArea for lots of text or other', choices=tuple((i,i) for i in sorted(VALID_WIDGETS)), initial='TextInput')
+  widget = forms.ChoiceField(label='Widget', help_text='How should the value this Field be captured? i.e. SelectBox for a dropdown or TextArea for lots of text or other', choices=tuple((i,i) for i in sorted([""] + VALID_WIDGETS)), initial='TextInput')
 
 
 
