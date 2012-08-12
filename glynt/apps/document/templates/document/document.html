@@ -5,17 +5,25 @@
 
 
 {% block owner_info %}
-<h3>{{ object.name }}</h3>
-{% trans 'shared by' %}
-<h4>{{ object.owner.get_full_name|default:object.owner.username }}</h4>
+
 {% endblock %}
 
 {% block form %}
+
+<div class="swapout" data-target="form#userdoc-name-form">
+<h3 id="document-title">{{ userdoc.name }}</h3>
+</div>
+{% trans 'shared by' %}
+<h4 id="userdoc-name">{{ object.owner.get_full_name|default:object.owner.username }}</h4>
+
+<form id="userdoc-name-form" class="hidden" data-target="h4#userdoc-name">
+    {{ userdoc_form }}
+</form>
+
+
     <div id="docu-form-head" class="row">
         <div id="messages" data-bind="html: App.message"></div>
     </div>
-
-    <div id="save"><button id="btn-save-progress" class="btn btn-inverse btn-mini" type="button">{% trans 'Save Now' %}</button></div>
 
     {% for form in form_set %}
     <form id="glynt-doc-{{ forloop.counter }}" class="bind-document">{% csrf_token %}
@@ -798,7 +806,9 @@ $(document).ready(function(){
             var data = {
                 csrfmiddlewaretoken: csrf_token.val(),
                 current_progress: $.cookie('glynt-{{ object.slug }}'),
-                md: self.documentModel.render()
+                md: self.documentModel.render(),
+                name: $('form#userdoc-name-form input#id_name').val(),
+                id: $('form#userdoc-name-form input#id_pk').val()
             };
 
             $.ajax({
@@ -807,11 +817,12 @@ $(document).ready(function(){
               data: data,
             })
             .success(function(data, textStatus, jqXHR) {
-//                var data = $.parseJSON(data);
-                console.log(data[0].message)
+                var data = data[0];
+                $('input#id_pk').val(data.userdoc_id);
+                $('#document-title').html($('form#userdoc-name-form input#id_name').val());
             })
-            .error(function() { 
-                alert('error')
+            .error(function(jqXHR, textStatus, errorThrown) { 
+                console.log(jqXHR)
             })
             .complete(function() {
             });
@@ -935,6 +946,25 @@ $(document).ready(function(){
       return obj[prop];
     });
 
+    swapin = {
+        target: null,
+        current: null
+    }
+    $('div.swapout').live('click', function(event){
+        target = $($($(this).attr('data-target'))[0]);
+        swapin.current = $(this).html();
+        $(this).removeClass('swapout');
+        target.toggle();
+        $(this).html(target);
+        swapin.target = target.html();
+    });
+    $('input.swapin').live('change', function(event){
+        target = $(this).closest('div')
+        callback = $(this).attr('data-swapin-callback')
+        target.addClass('swapout');
+        target.html(swapin.current);
+        eval(callback)();
+    });
 });
 </script>
 
