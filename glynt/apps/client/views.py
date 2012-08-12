@@ -16,96 +16,84 @@ from forms import SignupForm, AuthenticationForm
 
 
 class SignupView(FormView):
-    template_name = 'userena/signup_form.html'
-    success_url = '/'
-    form_class = SignupForm
+  template_name = 'userena/signup_form.html'
+  success_url = '/'
+  form_class = SignupForm
 
-    def post(self, request, *args, **kwargs):
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
+  def post(self, request, *args, **kwargs):
+    form_class = self.get_form_class()
+    form = self.get_form(form_class)
 
-        if form.is_valid():
-            messages.info(request, _('Welcome, you have successfully signed up. Please remember to check your email and activate your account once you recieve our welcome email.'))
-            form.save()
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
-
-        # user = authenticate(username=request.POST.get('username',None), password=request.POST.get('password',None))
-
-        # if user is not None:
-        #   if user.is_active:
-        #     login(request, user)
-        #     messages.info(request, _('Welcome, you have successfully signed up. Please remember to check your email and activate yoru account once you recieve our welcome email.'))
-        #     return self.form_valid(form)
-        #   else:
-        #     return self.form_invalid(form)
-        # else:
-        #   return self.form_invalid(form)
+    if form.is_valid():
+      messages.info(request, _('Welcome, you have successfully signed up. Please remember to check your email and activate your account once you recieve our welcome email.'))
+      form.save()
+      return self.form_valid(form)
+    else:
+      return self.form_invalid(form)
 
 
 class LoginView(FormView):
-    """ Primative login """
-    template_name = 'client/login.html'
-    success_url = '/'
-    form_class = AuthenticationForm
+  """ Primative login """
+  template_name = 'client/login.html'
+  success_url = '/'
+  form_class = AuthenticationForm
 
-    def post(self, request, *args, **kwargs):
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
+  def post(self, request, *args, **kwargs):
+    form_class = self.get_form_class()
+    form = self.get_form(form_class)
 
-        user = authenticate(username=request.POST.get('username',None), password=request.POST.get('password',None))
+    user = authenticate(username=request.POST.get('username',None), password=request.POST.get('password',None))
 
-        if user is not None:
-          if user.is_active:
-            login(request, user)
-            messages.success(request, _('Welcome, you have successfully logged in.'))
-            return self.form_valid(form)
-          else:
-            return self.form_invalid(form)
-        else:
-          return self.form_invalid(form)
+    if user is not None:
+      if user.is_active:
+        login(request, user)
+        messages.success(request, _('Welcome, you have successfully logged in.'))
+        return self.form_valid(form)
+      else:
+        return self.form_invalid(form)
+    else:
+      return self.form_invalid(form)
 
 
 class HasLocalFacebookAccountView(BaseDetailView):
-    """ Used to evaluate if the facebook user exists in our system or not @TODO move to socialregistration? """
-    def get_queryset(self):
-        return FacebookProfile.objects.all()
+  """ Used to evaluate if the facebook user exists in our system or not @TODO move to socialregistration? """
+  def get_queryset(self):
+    return FacebookProfile.objects.all()
 
-    def get_object(self, queryset=None):
-        """
-        Returns the object the view is displaying.
-        By default this requires `self.queryset` and a `pk` or `slug` argument
-        in the URLconf, but subclasses can override this to return any object.
-        """
-        # Use a custom queryset if provided; this is required for subclasses
-        # like DateDetailView
-        if queryset is None:
-            queryset = self.get_queryset()
-        # Next, try looking up by primary key.
-        uid = self.request.GET.get('uid', None)
+  def get_object(self, queryset=None):
+    """
+    Returns the object the view is displaying.
+    By default this requires `self.queryset` and a `pk` or `slug` argument
+    in the URLconf, but subclasses can override this to return any object.
+    """
+    # Use a custom queryset if provided; this is required for subclasses
+    # like DateDetailView
+    if queryset is None:
+      queryset = self.get_queryset()
+    # Next, try looking up by primary key.
+    uid = self.request.GET.get('uid', None)
 
-        if uid is None:
-            raise Http404("Facebook uid does not exist")
-        
-        try:
-            obj = queryset.get(uid=uid)
-        except FacebookProfile.DoesNotExist:
-            raise Http404("Facebook %(uid)s could not be found" % {'uid': uid})
-        return obj
+    if uid is None:
+      raise Http404("Facebook uid does not exist")
+    
+    try:
+      obj = queryset.get(uid=uid)
+    except FacebookProfile.DoesNotExist:
+      raise Http404("Facebook %(uid)s could not be found" % {'uid': uid})
+    return obj
 
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        context = self.get_context_data(object=self.object)
-        return HttpResponse('[{"exists":true, "is_authenticated": %s}]' %(str(request.user.is_authenticated()).lower()), status=200)
+  def get(self, request, *args, **kwargs):
+    self.object = self.get_object()
+    context = self.get_context_data(object=self.object)
+    return HttpResponse('[{"exists":true, "is_authenticated": %s}]' %(str(request.user.is_authenticated()).lower()), status=200)
 
 
 class DashboardView(TemplateView):
-    template_name = 'client/dashboard.html'
+  template_name = 'client/dashboard.html'
 
-    def get_context_data(self, **kwargs):
-        context = super(DashboardView, self).get_context_data(**kwargs)
+  def get_context_data(self, **kwargs):
+    context = super(DashboardView, self).get_context_data(**kwargs)
 
-        context['public_document_list'] = Document.public_objects.all()
+    context['public_document_list'] = Document.public_objects.all()
 
-        return context
+    return context
