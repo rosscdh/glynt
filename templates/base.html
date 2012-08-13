@@ -43,9 +43,15 @@
 	<div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
             <div class="container">
-                <a class="brand" href="/">
-                    WeAreML
-                </a>
+				{% if request.user.is_authenticated %}
+	                <a class="brand" href="/client">
+	                    MyLawyer
+	                </a>
+				{% else %}
+	                <a class="brand" href="/">
+	                    MyLawyer
+	                </a>
+				{% endif %}
 				<form class="navbar-search pull-left" action="">
 					<input type="text" class="search-query span2" placeholder="Search">
 		        </form>
@@ -95,6 +101,9 @@
     <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
     <script src="{{ STATIC_URL }}js/bootstrap-tooltip.js"></script>
     <script src="{{ STATIC_URL }}js/jquery.cookie.js"></script>
+    <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-collapse.js"></script>
+    <script src="http://twitter.github.com/bootstrap/assets/js/bootstrap-transition.js"></script>
+
     <script type="text/javascript" src="{{ STATIC_URL }}knockoutjs/js/knockout-2.1.0.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}pagedown/Markdown.Converter.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}pagedown/Markdown.Sanitizer.js"></script>
