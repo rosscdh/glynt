@@ -5,10 +5,12 @@
 
 
 {% block owner_info %}
-<h3 id="document-title" class="editable">{{ userdoc.name }}</h3>
-<form id="userdoc-name-form" class="hidden">
-    {{ userdoc_form }}
-</form>
+<div class="span12">
+	<h2 id="document-title" class="editable">{{ userdoc.name }}</h2>
+	<form id="userdoc-name-form" class="hidden">
+	    {{ userdoc_form }}
+	</form>
+</div>
 {% endblock %}
 
 {% block form %}
@@ -20,6 +22,7 @@
     <form id="glynt-doc-{{ forloop.counter }}" class="bind-document">{% csrf_token %}
     <div id="form-group-{{ forloop.counter }}" class="form-group {% if not forloop.first %}hidden{% endif %}">
         <h4>Step {{ forloop.counter }}. of {{ form_set|length }}</h4>
+
         <h4><span class="step-title"></span></h4>
         <br/>
         {{form}}

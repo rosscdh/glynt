@@ -40,7 +40,31 @@ body {
 -------------------------------------------------- */
 a#user-signup-link {color: #51A351; }
 h1 {font-weight:normal; font-size:40px;}
-
+div.contracts div {
+	background-color:#F9F9F9;
+	height:80px!important;
+	border:1px solid #F1F1F1;
+	padding:10px;
+	font-size:16px;
+	color:#888;
+	line-height:20px;
+	cursor:hand;
+}
+div.contracts div:hover {
+	background-color:#F1F1F1;
+	border:1px solid #F9F9F9;
+	color:#222;
+	line-height:20px;
+}
+div.draft-document {
+	padding:20px 50px;
+	margin-left:50px;
+	box-shadow:20px;
+	border:1px solid #F9F9F9;
+	-moz-box-shadow: 5px 5px 14px #757575;
+	-webkit-box-shadow: 5px 5px 14px #757575;
+	box-shadow: 5px 5px 14px #757575;
+}
 
 /* Space out sub-sections more
 -------------------------------------------------- */

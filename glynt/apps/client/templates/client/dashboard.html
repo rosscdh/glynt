@@ -4,106 +4,113 @@
 
 {% block body %}
 
+<!-- <h3>{% trans 'Documents' %}</h3>
+<a id="create-document" href="{% url 'document:create' %}" class="btn btn-primary">{% trans 'New Doc' %}</a>
+<dl id="available-document-list" class="dl-horizontal">
+<dt>{% trans 'Available Documents' %}</dt>
+<dd>
+    <i>{% blocktrans %}Documents{% endblocktrans %}</i>
+    <ul id="public-documents">
 
-
-
-<div class="hero-unit">
-    <h2>{% trans 'My Dashboard view' %}</h2>
-    <p>
-    {% blocktrans %}
-    On this page, you should see a list of documents as well as any other statistical,graphic or system messages that apply to you
-    {% endblocktrans %}
-    </p>
-</div>
-
-
+    </ul>
+</dd> -->
 
 
 <div class="row">
+	<div class="span12">
+		<h2>New Document
+			<small>Documents available to create</small>
+			</h2>
+			<br />
+			<div class="accordion" id="accordion2">
+	            <div class="accordion-group">
+	            	<div class="accordion-heading">
+	                	<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+		                  New Starter Documents
+		                </a>
+	              	</div>
+	              	<div id="collapseOne" class="accordion-body collapse in">
+	                	<div class="accordion-inner">
+		                	<div class="row contracts">
+								<div class="span2">Employment Contract</div>
+								<div class="span2">Employment Offer Letter</div>
+								<div class="span2">Independent contractor agreement</div>
+								<div class="span2">Company handbook</div>
+								<div class="span2">Employment Agreement</div>
+							</div>
+		                </div>
+	              	</div>
+	            </div>
+	            <div class="accordion-group">
+	              <div class="accordion-heading">
+	                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+	                  All HR Documents
+	                </a>
+	              </div>
+	              <div id="collapseTwo" class="accordion-body collapse">
+	                	<div class="accordion-inner">
+		                	<div class="row contracts">
+								<div class="span2">Employment Contract</div>
+								<div class="span2">Employment Offer Letter</div>
+								<div class="span2">Independent contractor agreement</div>
+								<div class="span2">Company handbook</div>
+								<div class="span2">Employment Agreement</div>
+							</div>
+						</div>
+	              </div>
+	            </div>
+				 <div class="accordion-group">
+		              <div class="accordion-heading">
+		                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
+		                  Beta Documents
+		                </a>
+		              </div>
+		              <div id="collapseThree" class="accordion-body collapse">
+		                	<div class="accordion-inner">
+				                {% for d in public_document_list %}
+				                <a href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a>, 
+				                {% endfor %}
 
-    <div class="">
-        <h3>{% trans 'Documents' %}</h3>
-        <a id="create-document" href="{% url 'document:create' %}" class="btn btn-primary">{% trans 'New Doc' %}</a>
-        <dl id="available-document-list" class="dl-horizontal">
-        <dt>{% trans 'Available Documents' %}</dt>
-        <dd>
-            <i>{% blocktrans %}Documents{% endblocktrans %}</i>
-            <ul id="public-documents">
-                {% for d in public_document_list %}
-                <li><a href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a></li>
-                {% endfor %}
-            </ul>
-        </dd>
-
-        <dt>{% trans 'My Documents' %}</dt>
-        <dd>
-            <i>{% blocktrans %}Documents I've created{% endblocktrans %}</i>
-            <ul id="my-documents">
-                {% for d in my_document_list %}
-                <li><a href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a></li>
-                {% endfor %}
-            </ul>
-        </dd>
-    </div>
-
+							</div>
+		              </div>
+		            </div>
+	          </div>
+	</div>
 </div>
-
-
+<hr/>
 <div class="row">
-    <div class="span12">
-        <table class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th></th>
-                <th>Name</th>
-                <th>Class</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><img src="http://s3.amazonaws.com/bestvendor-paperclip/categories/148/icons/optimal.png?1341525750"></td>
-                <th>
-                    <h3>Employment contract</h3>
-                    <p>
-                        <span class="label label-warning">Incomplete</span>
-                    </p>
-                </th>
-                <td>dsa
-                    <div class="btn-group">
-                      <button class="btn dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></button>
-                      <ul class="dropdown-menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
-                      </ul>
-                    </div><!-- /btn-group -->
-                </td>
-                <td>Stacked, left-aligned labels over controls</td>
-              </tr>
-              <tr>
-                <td><img src="http://s3.amazonaws.com/bestvendor-paperclip/categories/145/icons/optimal.png?1340294782"></td>
-                <th>Inline</th>
-                <td><code>.form-inline</code></td>
-                <td>Left-aligned label and inline-block controls for compact style</td>
-              </tr>
-              <tr>
-                <td><img src="http://s3.amazonaws.com/bestvendor-paperclip/categories/142/icons/optimal.png?1341525763"></td>
-                <th>Search</th>
-                <td><code>.form-search</code></td>
-                <td>Extra-rounded text input for a typical search aesthetic</td>
-              </tr>
-              <tr>
-                <td>x</td>
-                <th>Horizontal</th>
-                <td><code>.form-horizontal</code></td>
-                <td>Float left, right-aligned labels on same line as controls</td>
-              </tr>
-            </tbody>
-          </table>
-    </div>
+        <div class="span12">
+                <h2>Your Documents
+                        <small>All of your generated documents</small>
+                </h2>
+                <br />
+                <ul class="nav nav-tabs">
+                  <li class="active">
+                    <a href="#">All Documents</a>
+                  </li>
+                  <li><a href="#">Index Ventures</a></li>
+                  <li><a href="#">Personal</a></li>
+                  <li class="pull-right"><a href="#">Add Category</a></li>
+                </ul>
+                <br />
+                <div class="row">
+                        <div class="span12">
+                            <ul class="thumbnails">
+				                {% for d in my_document_list %}
+                                <li class="span3">
+                                  <div class="thumbnail">
+                                    <img src="http://placehold.it/260x40" alt="">
+                                    <div class="caption">
+                                      <h5>{{ d.name }}</h5>
+                                      <p>Between x and y.</p>
+                                      <p><a href="{% url 'document:view' slug=d.slug %}" class="btn btn-info">Edit</a></p>
+                                    </div>
+                                  </div>
+                                </li>
+								{% endfor %}
+                            </ul>
+                        </div>
+                </div>
+        </div>
 </div>
-
 {% endblock %}
