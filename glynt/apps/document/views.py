@@ -106,8 +106,11 @@ class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
     try:
       self.document = Document.objects.get(slug=document_slug)
     except Document.DoesNotExist:
-      user_document = ClientCreatedDocument.objects.get(slug=document_slug)
-      self.document = user_document.source_document
+      try:
+        user_document = ClientCreatedDocument.objects.get(slug=document_slug)
+        self.document = user_document.source_document
+      except ClientCreatedDocument.DoesNotExist:
+        raise Http404
 
     context['object'] = self.document
     context['document'] = self.document.body
