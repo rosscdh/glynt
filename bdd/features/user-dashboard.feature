@@ -4,11 +4,16 @@ Feature: Logged in User Dashboard
   As a user
   I need to be able to beable to view documentsI have created and their status'
 
+  Scenario: The user should be able to see a list of public documents
+    When I am logged in as "userA"
+    Then I am on "/client"
+    And I should see a "ul#public-documents" element
+    And I should see a "ul#public-documents li" element
+
   Scenario: The user should be able to see a list of their created documents
     When I am logged in as "userA"
     Then I am on "/client"
-    And I should see a "dl#available-document-list" element
-    And I should see a "dl#available-document-list ul li" element
+    And I should see a "ul#my-documents" element
 
   Scenario: The user should be able to create a new document
     When I am logged in as "userA"
@@ -18,7 +23,6 @@ Feature: Logged in User Dashboard
 
     When I follow "create-document"
     Then the response status code should be 200
-    And I should see "Create a document"
     And I should see "Create a document"
     And I should see "Doc Variables"
     And I should see "Steps"
