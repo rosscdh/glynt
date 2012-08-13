@@ -13,7 +13,7 @@ def _get_date_today():
 
 
 class ClientCreatedDocumentForm(forms.ModelForm):
-  name = forms.CharField(label='', required=True, max_length=100, widget=forms.TextInput(attrs={'class':'swapin', 'data-swapin-callback':'App.saveProgress'}))
+  name = forms.CharField(label='', required=True, max_length=128, widget=forms.HiddenInput)
   pk = forms.IntegerField(required=False, widget=forms.HiddenInput)
   class Meta:
     model = ClientCreatedDocument
