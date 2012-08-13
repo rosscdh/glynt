@@ -34,6 +34,16 @@
                 {% endfor %}
             </ul>
         </dd>
+
+        <dt>{% trans 'My Documents' %}</dt>
+        <dd>
+            <i>{% blocktrans %}Documents I've created{% endblocktrans %}</i>
+            <ul>
+                {% for d in my_document_list %}
+                <li><a href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </dd>
     </div>
 
 </div>

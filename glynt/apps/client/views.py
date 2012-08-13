@@ -11,7 +11,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 
 from socialregistration.contrib.facebook_js.models import FacebookProfile
-from glynt.apps.document.models import Document
+from glynt.apps.document.models import Document, ClientCreatedDocument
 from forms import SignupForm, AuthenticationForm
 
 
@@ -95,5 +95,6 @@ class DashboardView(TemplateView):
     context = super(DashboardView, self).get_context_data(**kwargs)
 
     context['public_document_list'] = Document.public_objects.all()
+    context['my_document_list'] = ClientCreatedDocument.objects.filter(owner=self.request.user)
 
     return context
