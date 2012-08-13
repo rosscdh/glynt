@@ -736,6 +736,7 @@ $(document).ready(function(){
                 var response_data = $.parseJSON(data);
                 //self.message();
                 is_valid = true;
+                self.message('');
                 self.persistFormData(form.serializeArray(), response_data);
             })
             .error(function(jqXHR, textStatus, errorThrown) { 
