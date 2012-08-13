@@ -734,17 +734,14 @@ $(document).ready(function(){
             })
             .success(function(data, textStatus, jqXHR) {
                 var response_data = $.parseJSON(data);
-                //self.message();
-                is_valid = true;
                 self.message('');
+                is_valid = true;
                 self.persistFormData(form.serializeArray(), response_data);
             })
             .error(function(jqXHR, textStatus, errorThrown) { 
                 var data = $.parseJSON(jqXHR.responseText);
-                //console.log(data)
-                self.message(data['message']);
+                self.message(data.message);
                 is_valid = false;
-                App.formControls.prev();
             })
             .complete(function() {});
 

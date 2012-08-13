@@ -52,7 +52,7 @@ class JsonErrorResponseMixin(object):
       msg = None
       status = 200
     else:
-      msg = str(form.errors)
+      msg = '%s <div class="info"><a href="javascript:App.formControls.prev();">%s</a></div>' % (str(form.errors), unicode(_('Click here to fix the error')))
       status = 400
 
     return {
