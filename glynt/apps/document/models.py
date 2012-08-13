@@ -67,3 +67,22 @@ class ClientCreatedDocument(models.Model):
     return 'Return a diff against the self.source_document.body value'
 
 
+class DocumentCategory(CategoryBase):
+    """
+    Basic Categories for document Model
+    """
+    class Meta:
+        verbose_name_plural = 'Document Categories'
+
+
+class ClientCreatedDocument(models.Model):
+  owner = models.ForeignKey(User)
+  source_document = models.ForeignKey(Document)
+  body = models.TextField(blank=True,null=True)
+  data = JSONField(blank=True, null=True)
+  created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
+  last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
+
+  def diff_source(self):
+    return 'Return a diff against the self.source_document.body value'
+
