@@ -28,7 +28,7 @@
         <dt>{% trans 'Available Documents' %}</dt>
         <dd>
             <i>{% blocktrans %}Documents{% endblocktrans %}</i>
-            <ul>
+            <ul id="public-documents">
                 {% for d in public_document_list %}
                 <li><a href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a></li>
                 {% endfor %}
@@ -38,7 +38,7 @@
         <dt>{% trans 'My Documents' %}</dt>
         <dd>
             <i>{% blocktrans %}Documents I've created{% endblocktrans %}</i>
-            <ul>
+            <ul id="my-documents">
                 {% for d in my_document_list %}
                 <li><a href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a></li>
                 {% endfor %}
