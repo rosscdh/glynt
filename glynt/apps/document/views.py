@@ -103,7 +103,12 @@ class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
     context = super(DocumentView, self).get_context_data(**kwargs)
 
     document_slug = slugify(self.kwargs['slug'])
-    self.document = Document.objects.get(slug=document_slug)
+    try:
+      self.document = Document.objects.get(slug=document_slug)
+    except Document.DoesNotExist:
+      user_document = ClientCreatedDocument.objects.get(slug=document_slug)
+      self.document = user_document.source_document
+
     context['object'] = self.document
     context['document'] = self.document.body
 
