@@ -25,6 +25,7 @@ import markdown
 import xhtml2pdf.pisa as pisa
 import cStringIO as StringIO
 import datetime
+import random
 
 from forms import ClientCreatedDocumentForm
 
@@ -249,7 +250,9 @@ class DocumentExportView(View):
       result = StringIO.StringIO()
       pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result)
 
-      file_name = 'doc_gen/%s-%s.pdf' %(request.user.username, slugify(progress.name),)
+      rnd = random.random()
+      rnd = '%s' % (str(rnd)[2:4])
+      file_name = 'doc_gen/%s-%s-%s.pdf' %(request.user.username, rnd, slugify(progress.name),)
 
       if pdf.err:
         response = HttpResponse('[{"message":"%s"}]'%(pdf.err), status=401, content_type="text/json")
