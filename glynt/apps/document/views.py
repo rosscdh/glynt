@@ -107,13 +107,16 @@ class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
     context['object'] = self.document
     context['document'] = self.document.body
 
-    try:
-      context['userdoc'] = ClientCreatedDocument.objects.get(owner=self.request.user, source_document=self.document)
-    except ClientCreatedDocument.DoesNotExist:
-      context['userdoc'] = ClientCreatedDocument()
-      context['userdoc'].name = '%s by %s' % (self.document.name, self.request.user.username)
+    if not self.request.user.is_authenticated():
+      context['userdoc_form'] = None
+    else:
+      try:
+        context['userdoc'] = ClientCreatedDocument.objects.get(owner=self.request.user, source_document=self.document)
+      except ClientCreatedDocument.DoesNotExist:
+        context['userdoc'] = ClientCreatedDocument()
+        context['userdoc'].name = '%s by %s' % (self.document.name, self.request.user.username)
 
-    context['userdoc_form'] = ClientCreatedDocumentForm(instance=context['userdoc'])
+      context['userdoc_form'] = ClientCreatedDocumentForm(instance=context['userdoc'])
 
     try:
       context['form_set'] = [BaseFlyForm(json.dumps(step)) for step in self.document.flyform.body]

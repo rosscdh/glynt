@@ -943,14 +943,16 @@ $(document).ready(function(){
       return obj[prop];
     });
 
-     $('#document-title.editable').editable(function(value, settings) { 
-         $('form#userdoc-name-form input#id_name').val(value);
-         App.saveProgress()
-         return(value);
-      }, { 
-         type    : 'textarea',
-         submit  : '{% trans "Save" %}',
-     });
+    {% if userdoc_form %}
+    $('#document-title.editable').editable(function(value, settings) { 
+     $('form#userdoc-name-form input#id_name').val(value);
+     App.saveProgress()
+     return(value);
+    }, { 
+     type    : 'textarea',
+     submit  : '{% trans "Save" %}',
+    });
+    {% endif %}
 
 });
 </script>
