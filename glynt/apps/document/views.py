@@ -122,7 +122,7 @@ class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
         context['userdoc'] = ClientCreatedDocument.objects.get(owner=self.request.user, source_document=self.document)
       except ClientCreatedDocument.DoesNotExist:
         context['userdoc'] = ClientCreatedDocument()
-        context['userdoc'].name = '%s by %s' % (self.document.name, self.request.user.username)
+        context['userdoc'].name = 'New %s by %s' % (self.document.name, self.request.user.username)
 
       context['userdoc_form'] = ClientCreatedDocumentForm(instance=context['userdoc'])
 
@@ -197,6 +197,18 @@ class DocumentSaveProgressView(View):
       return HttpResponse('[{"userdoc_id": %d, "status":"%s", "message":"%s"}]' % (progress.pk, 'success', unicode(_('Progress Saved'))), status=200, content_type="application/json")
 
 
+def userdoc_from_request(user, source_doc, pk=None):
+  if pk and type(pk) is int:
+    userdoc = get_object_or_404(ClientCreatedDocument, pk=pk, owner=user, source_document=source_doc)
+    is_new = False
+  else:
+    userdoc, is_new = ClientCreatedDocument.objects.get_or_create(owner=user, source_document=source_doc)
+    # just set the body the first time the object is created
+    userdoc.body = source_doc.body
+    userdoc.slug = source_doc.slug
+  return userdoc, is_new
+
+
 class DocumentSaveProgressView(View):
   """ Save the users progress through the form """
   def post(self, request, *args, **kwargs):
@@ -211,13 +223,7 @@ class DocumentSaveProgressView(View):
       document_slug = slugify(self.kwargs['slug'])
       document = get_object_or_404(Document, slug=document_slug)
 
-      if userdoc_pk and type(userdoc_pk) is int:
-        progress = get_object_or_404(ClientCreatedDocument, pk=userdoc_pk, owner=request.user, source_document=document)
-      else:
-        progress, is_new = ClientCreatedDocument.objects.get_or_create(owner=request.user, source_document=document)
-        # just set the body the first time the object is created
-        progress.body = document.body
-
+      progress, is_new = userdoc_from_request(request.user, document, userdoc_pk)
       if is_new:
         progress.slug = slugify(form.cleaned_data['name'])
 
@@ -230,18 +236,26 @@ class DocumentSaveProgressView(View):
 
 class DocumentExportView(View):
     def post(self, request, *args, **kwargs):
+      userdoc_pk = request.POST.get('id', None)
       content_markdown = request.POST.get('md')
+
+      document_slug = slugify(self.kwargs['slug'])
+      document = get_object_or_404(Document, slug=document_slug)
+
+      progress, is_new = userdoc_from_request(request.user, document, userdoc_pk)
 
       html = markdown.markdown(content_markdown)
 
       result = StringIO.StringIO()
       pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result)
 
-      file_name = 'doc_gen/%ssome_pdf_customized_name.pdf' %(datetime.datetime.utcnow(),)
+      file_name = 'doc_gen/%s-%s.pdf' %(request.user.username, slugify(progress.name),)
 
-      if not pdf.err:
+      if pdf.err:
+        response = HttpResponse('[{"message":"%s"}]'%(pdf.err), status=401, content_type="text/json")
+      else:
         pdf_file = default_storage.save(file_name, ContentFile(result.getvalue()))
+        response = HttpResponse('[{"filename":"%s%s"}]'%(settings.MEDIA_URL,file_name), status=200, content_type="text/json")
 
-      response = HttpResponse('[{"filename":"%s%s"}]'%(settings.MEDIA_URL,file_name), status=200, content_type="text/json")
       return response
 

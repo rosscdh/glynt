@@ -775,17 +775,18 @@ $(document).ready(function(){
             var csrf_token = $('form.bind-document:first').find('input[type=hidden]:first')
             var data = {
                 csrfmiddlewaretoken: csrf_token.val(),
-                md: self.documentModel.render()
+                md: self.documentModel.render(),
+                id: $('form#userdoc-name-form input#id_pk').val()
             };
 
             $.ajax({
               type: 'POST',
-              url: "{% url 'document:view' slug=object.slug %}",
+              url: "{% url 'document:export' slug=object.slug %}",
               data: data,
             })
             .success(function(data, textStatus, jqXHR) {
-                var data = $.parseJSON(data);
-                var filename = data[0].filename;
+                data = data[0];
+                var filename = data.filename;
                 window.open(filename, 'pdf');
             })
             .error(function() { 
