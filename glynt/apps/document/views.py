@@ -190,17 +190,34 @@ class DocumentSaveProgressView(View):
 
 
 class DocumentSaveProgressView(View):
+  """ Save the users progress through the form """
   def post(self, request, *args, **kwargs):
+    userdoc_pk = request.POST.get('id', None)
+    userdoc_name = request.POST.get('name', None)
 
-    document_slug = slugify(self.kwargs['slug'])
-    document = get_object_or_404(Document, slug=document_slug)
-    progress, is_new = ClientCreatedDocument.objects.get_or_create(owner=request.user, source_document=document)
-    progress.body = request.POST.get('md', None)
-    progress.data = request.POST.get('current_progress', None)
-    progress.save()
+    form = ClientCreatedDocumentForm(request.POST)
 
-    response = HttpResponse('[{"status":"%s", "message":"%s"}]' % ('success', unicode(_('Progress Saved'))), status=200, content_type="text/json")
-    return response
+    if not form.is_valid():
+      return HttpResponse('[{"status":"%s", "message":"%s"}]' % (progress.pk, 'error', unicode(_('The form was not valid; please check your data'))), status=400, content_type="application/json")
+    else:
+      document_slug = slugify(self.kwargs['slug'])
+      document = get_object_or_404(Document, slug=document_slug)
+
+      if userdoc_pk and type(userdoc_pk) is int:
+        progress = get_object_or_404(ClientCreatedDocument, pk=userdoc_pk, owner=request.user, source_document=document)
+      else:
+        progress, is_new = ClientCreatedDocument.objects.get_or_create(owner=request.user, source_document=document)
+        # just set the body the first time the object is created
+        progress.body = document.body
+
+      if is_new:
+        progress.slug = slugify(form.cleaned_data['name'])
+
+      progress.name = form.cleaned_data['name']
+      progress.data = request.POST.get('current_progress', None)
+      progress.save()
+
+      return HttpResponse('[{"userdoc_id": %d, "status":"%s", "message":"%s"}]' % (progress.pk, 'success', unicode(_('Progress Saved'))), status=200, content_type="application/json")
 
 
 class DocumentExportView(View):
