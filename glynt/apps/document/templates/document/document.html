@@ -576,10 +576,8 @@ $(document).ready(function(){
         }
 
         self.render = function render() {
-        	var context = self.context();
-		    var source   = self.documentTemplate();
-			var template = Handlebars.compile(source);
-			return template(context);
+            var template = Handlebars.compile(self.documentTemplate());
+            return template(self.context());
         }
 	}
 

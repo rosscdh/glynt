@@ -114,6 +114,8 @@ class BaseFlyForm(forms.Form):
           field_instance.label = field['label'] if field['label'] else field['name']
           field_instance.help_text = field['help_text'] if field['help_text'] else None
           field_instance.required = True if field['required'] in ['true',True,'1', 1] else False
+          if 'initial' in field:
+            field_instance.initial = field['initial']
 
           if hasattr(f, 'choices') and 'choices' in field:
             # Add log here as sometimes choices may be present but not specified
