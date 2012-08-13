@@ -7,16 +7,20 @@ from django.utils import simplejson as json
 from django.template.defaultfilters import slugify
 from django.utils import safestring
 
+from django.contrib.localflavor.us.forms import USStateField, USZipCodeField
 from django_countries import CountryFormField as CountryField
 
 
-CUSTOM_VALID_FIELD_TYPES = ['CountryField']
+CUSTOM_VALID_FIELD_TYPES = ['CountryField', 'USStateField', 'USZipCodeField']
 VALID_FIELD_TYPES = CUSTOM_VALID_FIELD_TYPES + ['BooleanField', 'CharField', 'ChoiceField', 'DateField', 'DateTimeField', 'DecimalField', 'EmailField', 'FloatField', 'ImageField', 'IntegerField', 'MultiValueField', 'MultipleChoiceField', 'SlugField', 'TimeField', 'URLField', ]
 
 VALID_WIDGETS = ['TextInput', 'PasswordInput', 'HiddenInput', 'MultipleHiddenInput', 'FileInput', 'ClearableFileInput', 'DateInput', 'DateTimeInput', 'TimeInput', 'Textarea', 'CheckboxInput', 'Select', 'RadioSelect', 'SelectMultiple', 'CheckboxSelectMultiple', 'SplitDateTimeWidget', 'SelectDateWidget',]
 
 import sys
 
+def customFields(fieldTypeName):
+  if fieldTypeName in CUSTOM_VALID_FIELD_TYPES:
+    retr
 
 class BaseFlyForm(forms.Form):
   """ This form is the basis for the self generating form representations
