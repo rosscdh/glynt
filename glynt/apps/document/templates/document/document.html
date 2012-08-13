@@ -935,7 +935,7 @@ $(document).ready(function(){
         App.saveProgress();
     });
 
-    $("input.datepicker").datepicker({dateFormat:"D, dd MM yy"});
+    $("input.datepicker").datepicker({dateFormat:"D, dd MM yy",changeYear:true,changeMonth:true});
 
     if ($.cookie('glynt-{{ object.slug }}') == null) {
         $.cookie('glynt-{{ object.slug }}', JSON.stringify({}));
