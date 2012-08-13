@@ -60,6 +60,9 @@ class ClientCreatedDocument(models.Model):
   created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
   last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
 
+  def __unicode__(self):
+    return u'%s' % (self.name)
+
   def diff_source(self):
     return 'Return a diff against the self.source_document.body value'
 

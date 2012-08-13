@@ -5,22 +5,13 @@
 
 
 {% block owner_info %}
-
+<h3 id="document-title" class="editable">{{ userdoc.name }}</h3>
+<form id="userdoc-name-form" class="hidden">
+    {{ userdoc_form }}
+</form>
 {% endblock %}
 
 {% block form %}
-
-<div class="swapout" data-target="form#userdoc-name-form">
-<h3 id="document-title">{{ userdoc.name }}</h3>
-</div>
-{% trans 'shared by' %}
-<h4 id="userdoc-name">{{ object.owner.get_full_name|default:object.owner.username }}</h4>
-
-<form id="userdoc-name-form" class="hidden" data-target="h4#userdoc-name">
-    {{ userdoc_form }}
-</form>
-
-
     <div id="docu-form-head" class="row">
         <div id="messages" data-bind="html: App.message"></div>
     </div>
@@ -67,14 +58,21 @@ form div.form-group ul{
 span.helptext {
 display:none;
 }
+.editable{
+    cursor: pointer;
+    background-color:transparent;
+}
+.editable:hover{
+    background-color:#f5f5f5;
+}
 </style>
 {% endblock %}
 
 {% block js %}
 <script id="js-document" type="text/x-handlebars-template">
-{{ object.body|safe }}
+{{ userdoc.body|default:object.body|safe }}
 </script>
-
+<script src="{{ STATIC_URL }}js/jquery.jeditable.mini.js"></script>
 <script id="document-controls" type="text/javascript">
 $(document).ready(function(){
 
@@ -362,13 +360,9 @@ $(document).ready(function(){
         });
 
 		self.context = ko.observable({
-		    'company': {
-		        'name': 'RuleNo1',
-		        'url':'http://www.ruleno1.com'
-		    },
-		    'document': {
-		        'title': '{{ object.name }}'
-		    }
+		    'user_company_name': 'RuleNo1',
+            'user_company_url': 'http://www.ruleno1.com',
+		    'document_title': '{{ userdoc.name|default:object.name }}'
 		});
 
         self.getRuleByType = function getRuleByType(ruleset_type) {
@@ -806,7 +800,6 @@ $(document).ready(function(){
             var data = {
                 csrfmiddlewaretoken: csrf_token.val(),
                 current_progress: $.cookie('glynt-{{ object.slug }}'),
-                md: self.documentModel.render(),
                 name: $('form#userdoc-name-form input#id_name').val(),
                 id: $('form#userdoc-name-form input#id_pk').val()
             };
@@ -819,7 +812,11 @@ $(document).ready(function(){
             .success(function(data, textStatus, jqXHR) {
                 var data = data[0];
                 $('input#id_pk').val(data.userdoc_id);
-                $('#document-title').html($('form#userdoc-name-form input#id_name').val());
+                document_title = $('form#userdoc-name-form input#id_name').val();
+                $('#document-title').html(document_title);
+                //self.DocumentModel.context.document.title = document_title;
+                App.documentModel.setContextItemByForce('document_title', document_title);
+                App.render();
             })
             .error(function(jqXHR, textStatus, errorThrown) { 
                 console.log(jqXHR)
@@ -946,25 +943,15 @@ $(document).ready(function(){
       return obj[prop];
     });
 
-    swapin = {
-        target: null,
-        current: null
-    }
-    $('div.swapout').live('click', function(event){
-        target = $($($(this).attr('data-target'))[0]);
-        swapin.current = $(this).html();
-        $(this).removeClass('swapout');
-        target.toggle();
-        $(this).html(target);
-        swapin.target = target.html();
-    });
-    $('input.swapin').live('change', function(event){
-        target = $(this).closest('div')
-        callback = $(this).attr('data-swapin-callback')
-        target.addClass('swapout');
-        target.html(swapin.current);
-        eval(callback)();
-    });
+     $('#document-title.editable').editable(function(value, settings) { 
+         $('form#userdoc-name-form input#id_name').val(value);
+         App.saveProgress()
+         return(value);
+      }, { 
+         type    : 'textarea',
+         submit  : '{% trans "Save" %}',
+     });
+
 });
 </script>
 

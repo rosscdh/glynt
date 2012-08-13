@@ -162,25 +162,28 @@ class DocumentSaveProgressView(View):
     userdoc_name = request.POST.get('name', None)
 
     form = ClientCreatedDocumentForm(request.POST)
-    form.is_valid()
 
-    document_slug = slugify(self.kwargs['slug'])
-    document = get_object_or_404(Document, slug=document_slug)
-
-    if userdoc_pk:
-      progress = get_object_or_404(ClientCreatedDocument, pk=userdoc_pk, owner=request.user, source_document=document)
+    if not form.is_valid():
+      return HttpResponse('[{"status":"%s", "message":"%s"}]' % (progress.pk, 'error', unicode(_('The form was not valid; please check your data'))), status=400, content_type="application/json")
     else:
-      progress, is_new = ClientCreatedDocument.objects.get_or_create(owner=request.user, source_document=document)
+      document_slug = slugify(self.kwargs['slug'])
+      document = get_object_or_404(Document, slug=document_slug)
 
-    if is_new:
-      progress.slug = slugify(form.cleaned_data['name'])
+      if userdoc_pk and type(userdoc_pk) is int:
+        progress = get_object_or_404(ClientCreatedDocument, pk=userdoc_pk, owner=request.user, source_document=document)
+      else:
+        progress, is_new = ClientCreatedDocument.objects.get_or_create(owner=request.user, source_document=document)
+        # just set the body the first time the object is created
+        progress.body = document.body
 
-    progress.name = form.cleaned_data['name']
-    progress.body = request.POST.get('md', None)
-    progress.data = request.POST.get('current_progress', None)
-    progress.save()
+      if is_new:
+        progress.slug = slugify(form.cleaned_data['name'])
 
-    return HttpResponse('[{"userdoc_id": %d, "status":"%s", "message":"%s"}]' % (progress.pk, 'success', unicode(_('Progress Saved'))), status=200, content_type="application/json")
+      progress.name = form.cleaned_data['name']
+      progress.data = request.POST.get('current_progress', None)
+      progress.save()
+
+      return HttpResponse('[{"userdoc_id": %d, "status":"%s", "message":"%s"}]' % (progress.pk, 'success', unicode(_('Progress Saved'))), status=200, content_type="application/json")
 
 
 class DocumentExportView(View):
