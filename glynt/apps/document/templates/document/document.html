@@ -352,6 +352,7 @@ $(document).ready(function(){
         self.FalseValuesList = ['False','false',false,null,void 0,''];
 		self.handlebarsElementId = ko.observable('script#js-document');
 		self.documentTemplate = ko.observable($(self.handlebarsElementId()).html());
+        self.compiledTemplate = false; // must not be ko.observable
 		self.renderedHTML = ko.observable('');
 
         self.visibilityRuleset = ko.observableArray([]);
@@ -579,8 +580,8 @@ $(document).ready(function(){
         }
 
         self.render = function render() {
-            var template = Handlebars.compile(self.documentTemplate());
-            return template(self.context());
+            self.compiledTemplate = (self.compiledTemplate == false) ? Handlebars.compile(self.documentTemplate()) : self.compiledTemplate ;
+            return self.compiledTemplate(self.context());
         }
 	}
 
