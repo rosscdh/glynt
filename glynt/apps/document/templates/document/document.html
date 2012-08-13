@@ -696,12 +696,7 @@ $(document).ready(function(){
         }
 
         self.render = function render() {
-        	var md = self.documentModel.render();
-        	var html = self.renderMarkdown(md);
-
-        	//$(self.targetDocumentId()).html(html);
-        	self.documentModel.renderedHTML(html)
-
+            self.documentModel.renderedHTML(self.renderMarkdown(self.documentModel.render()))
         }
         self.renderMarkdown = function render(md) {
         	return self.markdownConverter.makeHtml(md);
