@@ -101,9 +101,9 @@
                                   <div class="thumbnail">
                                     <img src="http://placehold.it/260x40" alt="">
                                     <div class="caption">
-                                      <h5>{{ d.name }}</h5>
+                                      <h5><a href="{% url 'document:my_view' slug=d.slug %}">{{ d.name }}</a></h5>
                                       <p>Between x and y.</p>
-                                      <p><a href="{% url 'document:view' slug=d.slug %}" class="btn btn-info">Edit</a></p>
+                                      <p><a href="{% url 'document:my_view' slug=d.slug %}" class="btn btn-info">Edit</a></p>
                                     </div>
                                   </div>
                                 </li>
