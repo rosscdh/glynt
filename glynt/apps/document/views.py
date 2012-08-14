@@ -115,10 +115,11 @@ class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
 
     document_slug = slugify(self.kwargs['slug'])
 
-    self.document = get_object_or_404(Document, slug=document_slug)
+    self.document = get_object_or_404(Document.objects.select_related('flyform'), slug=document_slug)
 
     context['object'] = self.document
     context['document'] = self.document.body
+    context['default_data'] = self.document.flyform.defaults
     context['userdoc_form'] = ClientCreatedDocumentForm()
 
     try:
@@ -169,21 +170,16 @@ class MyDocumentView(DocumentView):
 
     document_slug = slugify(self.kwargs['slug'])
 
-    self.user_document, is_new = ClientCreatedDocument.objects.get_or_create(slug=document_slug, owner=self.request.user)
+    self.user_document = get_object_or_404(ClientCreatedDocument.objects.select_related(), slug=document_slug, owner=self.request.user)
     context['userdoc'] = self.user_document
 
-    if is_new:
-      context['userdoc'].name = 'New %s by %s' % (self.document.name, self.request.user.username)
-
-    if not self.request.user.is_authenticated():
-      context['userdoc_form'] = None
-    else:
-      context['userdoc_form'] = ClientCreatedDocumentForm(instance=context['userdoc'])
+    context['userdoc_form'] = ClientCreatedDocumentForm(instance=context['userdoc'])
 
     # Setup the document based on teh source_document of the viewed doc
     self.document = self.user_document.source_document
     context['object'] = self.document
     context['document'] = self.document.body
+    context['default_data'] = self.user_document.data
 
     try:
       context['form_set'] = [BaseFlyForm(json.dumps(step)) for step in self.document.flyform.body]

@@ -8,6 +8,8 @@ from django.template.defaultfilters import slugify
 from django.utils import safestring
 
 from django.contrib.localflavor.us.forms import USStateField, USZipCodeField
+from django.contrib.localflavor.us.us_states import US_STATES
+
 from django_countries import CountryFormField as CountryField
 
 
@@ -136,8 +138,16 @@ class BaseFlyForm(forms.Form):
     """ Converts JSON fomrat tuple into python tuple 
     expects JSON format tuple in form:
     [[k,v],[k,v]]
+    Also accepts String which must equate to a locally availabel variable
     """
-    return tuple(tuple(c) for c in choices)
+    if type(choices) in [unicode, str]:
+      local_choice = getattr(sys.modules[__name__], choices, None)
+      if local_choice is not None:
+        return local_choice
+    elif type(choices) is list:
+      return tuple(tuple(c) for c in choices)
+    else:
+      return tuple()
 
   def setup_field_widget(self, field_instance, field_dict):
     w = getattr(forms.widgets, field_dict['widget'], None) if field_dict['widget'] else None

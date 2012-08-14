@@ -44,6 +44,7 @@
 
 {% block document %}
 <span id="document-md" data-bind="html: App.documentModel.renderedHTML()"></span>
+<span id="document-data">{{ default_data|default:''|safe }}</span>
 {% endblock %}
 
 {% block css %}
