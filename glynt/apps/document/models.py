@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
-from taggit.managers import TaggableManager
+from django.core.urlresolvers import reverse
 
+from taggit.managers import TaggableManager
 from categories.models import CategoryBase
 
 from glynt.apps.utils import get_namedtuple_choices
@@ -63,32 +64,8 @@ class ClientCreatedDocument(models.Model):
   def __unicode__(self):
     return u'%s' % (self.name)
 
-  def diff_source(self):
-    return 'Return a diff against the self.source_document.body value'
-
-
-class DocumentCategory(CategoryBase):
-  """
-  Basic Categories for document Model
-  """
-  class Meta:
-    verbose_name_plural = 'Document Categories'
-
-
-class ClientCreatedDocument(models.Model):
-  """ Model to store the user generate document based on a source document 
-  but associated with a specific creating user """
-  owner = models.ForeignKey(User)
-  source_document = models.ForeignKey(Document)
-  name = models.CharField(max_length=128, blank=True, null=True)
-  slug = models.SlugField(blank=False, null=True)
-  body = models.TextField(blank=True, null=True)
-  data = JSONField(blank=True, null=True)
-  created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
-  last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
-
-  def __unicode__(self):
-    return u'%s' % (self.name)
+  def get_absolute_url(self):
+    return reverse('document:my_view', kwargs={'slug': self.slug})
 
   def diff_source(self):
     return 'Return a diff against the self.source_document.body value'

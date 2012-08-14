@@ -34,17 +34,27 @@ FORM_GROUPS = {
   'no_steps': [],
 }
 
-def user_can_view_document(context, user):
+def user_can_view_document(document, user):
   """ Helper method for testing a users access to this document """
-  document = context['object']
-  if user.is_superuser or user.is_staff:
-    return True
-  if document.owner == user and document.doc_status not in [Document.DOC_STATUS.deleted]:
-    return True
-  if document.is_public == False:
-    raise Http404
-  if document.doc_status in [Document.DOC_STATUS.deleted, Document.DOC_STATUS.draft]:
-    raise Http404
+  
+  if type(document) == Document:
+    if user.is_superuser or user.is_staff:
+      return True
+    if document.owner == user and document.doc_status not in [Document.DOC_STATUS.deleted]:
+      return True
+    if document.is_public == False:
+      raise Http404
+    if document.doc_status in [Document.DOC_STATUS.deleted, Document.DOC_STATUS.draft]:
+      raise Http404
+
+  elif type(document) == ClientCreatedDocument:
+    if user.is_superuser or user.is_staff:
+      return True
+    if document.owner == user:
+      return True
+    else:
+      raise Http404
+
 
 
 class JsonErrorResponseMixin(object):
@@ -104,35 +114,19 @@ class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
     context = super(DocumentView, self).get_context_data(**kwargs)
 
     document_slug = slugify(self.kwargs['slug'])
-    try:
-      self.document = Document.objects.get(slug=document_slug)
-    except Document.DoesNotExist:
-      try:
-        user_document = ClientCreatedDocument.objects.get(slug=document_slug)
-        self.document = user_document.source_document
-      except ClientCreatedDocument.DoesNotExist:
-        raise Http404
+
+    self.document = get_object_or_404(Document, slug=document_slug)
 
     context['object'] = self.document
     context['document'] = self.document.body
-
-    if not self.request.user.is_authenticated():
-      context['userdoc_form'] = None
-    else:
-      try:
-        context['userdoc'] = ClientCreatedDocument.objects.get(owner=self.request.user, source_document=self.document)
-      except ClientCreatedDocument.DoesNotExist:
-        context['userdoc'] = ClientCreatedDocument()
-        context['userdoc'].name = 'New %s by %s' % (self.document.name, self.request.user.username)
-
-      context['userdoc_form'] = ClientCreatedDocumentForm(instance=context['userdoc'])
+    context['userdoc_form'] = ClientCreatedDocumentForm()
 
     try:
       context['form_set'] = [BaseFlyForm(json.dumps(step)) for step in self.document.flyform.body]
     except KeyError:
       context['form_set'] = FORM_GROUPS['no_steps']
 
-    user_can_view_document(context, self.request.user)
+    user_can_view_document(self.document, self.request.user)
 
     return context
 
@@ -167,36 +161,38 @@ class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
     return HttpResponse(json.dumps(response), status=response['status'], content_type='text/json')
 
 
-class DocumentSaveProgressView(View):
-  """ Save the users progress through the form """
-  def post(self, request, *args, **kwargs):
-    userdoc_pk = request.POST.get('id', None)
-    userdoc_name = request.POST.get('name', None)
+class MyDocumentView(DocumentView):
+  """ Used when viewing a users own documents """
+  def get_context_data(self, **kwargs):
+    # call the parent dirctly and skip what the parent would do
+    context = super(DocumentView, self).get_context_data(**kwargs)
 
-    form = ClientCreatedDocumentForm(request.POST)
+    document_slug = slugify(self.kwargs['slug'])
 
-    if not form.is_valid():
-      return HttpResponse('[{"status":"%s", "message":"%s"}]' % (progress.pk, 'error', unicode(_('The form was not valid; please check your data'))), status=400, content_type="application/json")
+    self.user_document, is_new = ClientCreatedDocument.objects.get_or_create(slug=document_slug, owner=self.request.user)
+    context['userdoc'] = self.user_document
+
+    if is_new:
+      context['userdoc'].name = 'New %s by %s' % (self.document.name, self.request.user.username)
+
+    if not self.request.user.is_authenticated():
+      context['userdoc_form'] = None
     else:
-      document_slug = slugify(self.kwargs['slug'])
-      document = get_object_or_404(Document, slug=document_slug)
+      context['userdoc_form'] = ClientCreatedDocumentForm(instance=context['userdoc'])
 
-      if userdoc_pk and type(userdoc_pk) is int:
-        progress = get_object_or_404(ClientCreatedDocument, pk=userdoc_pk, owner=request.user, source_document=document)
-      else:
-        progress, is_new = ClientCreatedDocument.objects.get_or_create(owner=request.user, source_document=document)
-        # just set the body the first time the object is created
-        progress.body = document.body
+    # Setup the document based on teh source_document of the viewed doc
+    self.document = self.user_document.source_document
+    context['object'] = self.document
+    context['document'] = self.document.body
 
-      if is_new:
-        progress.slug = slugify(form.cleaned_data['name'])
+    try:
+      context['form_set'] = [BaseFlyForm(json.dumps(step)) for step in self.document.flyform.body]
+    except KeyError:
+      context['form_set'] = FORM_GROUPS['no_steps']
 
-      progress.name = form.cleaned_data['name']
-      progress.data = request.POST.get('current_progress', None)
-      progress.save()
+    user_can_view_document(self.user_document, self.request.user)
 
-      return HttpResponse('[{"userdoc_id": %d, "status":"%s", "message":"%s"}]' % (progress.pk, 'success', unicode(_('Progress Saved'))), status=200, content_type="application/json")
-
+    return context
 
 def userdoc_from_request(user, source_doc, pk=None):
   if pk and type(pk) is int:
@@ -232,7 +228,7 @@ class DocumentSaveProgressView(View):
       progress.data = request.POST.get('current_progress', None)
       progress.save()
 
-      return HttpResponse('[{"userdoc_id": %d, "status":"%s", "message":"%s"}]' % (progress.pk, 'success', unicode(_('Progress Saved'))), status=200, content_type="application/json")
+      return HttpResponse('[{"userdoc_id": %d, "url": "%s", "status":"%s", "message":"%s"}]' % (progress.pk, progress.get_absolute_url(), 'success', unicode(_('Progress Saved'))), status=200, content_type="application/json")
 
 
 class DocumentExportView(View):

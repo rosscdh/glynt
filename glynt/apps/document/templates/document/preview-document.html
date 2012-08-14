@@ -14,32 +14,7 @@
 {% endblock %}
 
 {% block form %}
-    <div id="docu-form-head" class="row">
-        <div id="messages" data-bind="html: App.message"></div>
-    </div>
-
-    {% for form in form_set %}
-    <form id="glynt-doc-{{ forloop.counter }}" class="bind-document">{% csrf_token %}
-    <div id="form-group-{{ forloop.counter }}" class="form-group {% if not forloop.first %}hidden{% endif %}">
-        <h4>Step {{ forloop.counter }}. of {{ form_set|length }}</h4>
-
-        <h4><span class="step-title"></span></h4>
-        <br/>
-        {{form}}
-    </div>
-    </form>
-    {% endfor %}
-    <div class="row">
-        <div class="controls pull-right">
-            <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-primary btn-small btn-prev" type="button" data-bind="click: App.formControls.prev">Previous</button></span>
-            <span data-bind="visible: App.formControls.showNext()"><button id="btn-next" class="btn btn-success btn-small btn-next" type="button" data-bind="click: App.formControls.next">Next</button></span>
-        </div>
-    </div>
-    <div id="form-group-{{ form_set|length }}" class="form-group hidden row" data-bind="visible: App.formControls.isLastStep()">
-        <div class="span3">
-            <button id="btn-post-pdf" class="btn btn-success" type="button">Generate PDF</button>
-        </div>
-    </div>
+&nbsp;
 {% endblock %}
 
 {% block document %}
@@ -931,16 +906,17 @@ $(document).ready(function(){
         $.cookie('glynt-{{ object.slug }}', JSON.stringify({}));
     }
 
+
     {% if userdoc_form %}
     $('#document-title.editable').editable(function(value, settings) { 
-     $('form#userdoc-name-form input#id_name').val(value);
-     App.saveProgress()
-     return(value);
-    }, { 
+        $('form#userdoc-name-form input#id_name').val(value);
+            App.saveProgress()
+            return(value);
+    }, {
         indicator : 'Saving...',
         tooltip   : 'Click to create new document...',
-        type    : 'textarea',
-        submit  : '{% trans "Save" %}',
+        type      : 'textarea',
+        submit    : '{% trans "Save" %}',
     });
     {% endif %}
 

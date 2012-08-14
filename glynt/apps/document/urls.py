@@ -4,7 +4,7 @@ from django.views.generic.edit import FormView
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 
-from views import DocumentView, CreateDocumentView, EditDocumentView, DocumentSaveProgressView, DocumentExportView
+from views import DocumentView, MyDocumentView, CreateDocumentView, EditDocumentView, DocumentSaveProgressView, DocumentExportView
 from views import DocumentByCategoryListView
 
 from glynt.apps.flyform.forms import TmpStepCreator
@@ -18,6 +18,6 @@ urlpatterns = patterns('',
     url(r'^(?P<slug>.+)/edit/$', login_required(EditDocumentView.as_view()), name='edit'),
     url(r'^(?P<slug>.+)/export/$', login_required(DocumentExportView.as_view()), name='export'),
     url(r'^(?P<slug>.+)/save/$', login_required(DocumentSaveProgressView.as_view()), name='save_progress'),
-    url(r'^my/(?P<slug>.+)/$', DocumentView.as_view(template_name='document/document.html'), name='my_view'),
-    url(r'^(?P<slug>.+)/$', DocumentView.as_view(template_name='document/document.html'), name='view'),
+    url(r'^my/(?P<slug>.+)/$', MyDocumentView.as_view(template_name='document/document.html'), name='my_view'),
+    url(r'^(?P<slug>.+)/$', DocumentView.as_view(template_name='document/preview-document.html'), name='view'),
 )
