@@ -963,10 +963,9 @@ $(document).ready(function(){
     {% endif %}
 
     facebookCallbackTest = function(q,callBack) {
-        FB.api('/me/friends?access_token={{ request.user.get_profile.profile_data.accessToken }}', function(friends) {
-            for (f in friends) {
-                friend = friends[f];
-                console.log(friend)
+        FB.api('/me/friends?access_token={{ request.user.get_profile.profile_data.accessToken }}', function(response) {
+            for (var i = 0; i < Math.min(response.data.length, 100); i++) {
+                friend = response.data[i];
                 result = {
                     'name': friend.name,
                     'picture': 'http://graph.facebook.com/' + friend.id + '/picture',
