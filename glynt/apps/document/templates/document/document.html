@@ -72,7 +72,7 @@ display:none;
 {% endblock %}
 
 {% block js %}
-<script id="document-data" type="text/javascript">{{ default_data|default:''|safe }}</script>
+<script id="document-default_data" type="text/javascript">{{ default_data|default:''|safe }}</script>
 <script id="js-document" type="text/x-handlebars-template">
 {{ userdoc.body|default:object.body|safe }}
 </script>
@@ -672,8 +672,23 @@ $(document).ready(function(){
             });
         }
 
+        self.initializeValuesFromDefaultData = function initializeValuesFromDefaultData() {
+            var data = $.parseJSON($('document-default_data').html());
+            if (data) {
+                if (data.length >= 0) {
+                    $.each($('form.bind-document').find('input,textarea,select'), function(index, element) {
+                        element = $(element);
+                        element_name = element.attr('name');
+                        if (element_name != undefined && data.attr(element_name) != undefined) {
+                            element.val(data.attr(element.attr('name')));
+                        }
+                    });
+                }
+            }
+        }
+
         self.initializeValuesFromCookie = function initializeValuesFromCookie() {
-            var cookie_value = $.parseJSON($.cookie('glynt-{{ object.slug }}'));
+            var cookie_value = $.parseJSON($.cookie('glynt-{{ userdoc.slug }}'));
             if (cookie_value) {
                 cookie_value = $(cookie_value);
                 if (cookie_value.length >= 0) {
@@ -690,7 +705,7 @@ $(document).ready(function(){
 
         self.init = function init() {
             // main initializer
-            self.initializeValuesFromCookie();
+            self.initializeValuesFromDefaultData();
             self.setContext();
             self.setGlyntRuleset();
             self.applyGlyntRuleset();
@@ -727,7 +742,7 @@ $(document).ready(function(){
             var form_data_serialized = form.serialize();
             $.ajax({
               type: 'POST',
-              url: "{% url 'document:view' slug=object.slug %}?step="+step,
+              url: "{% url 'document:view' slug=userdoc.slug %}?step="+step,
               data: form_data_serialized,
             })
             .success(function(data, textStatus, jqXHR) {
@@ -749,7 +764,7 @@ $(document).ready(function(){
         self.persistFormData = function persistFormData(serialized_form_data, response_data) {
             // console.log(serialized_form_data)
             // console.log(response_data)
-            var cookie_value = $.parseJSON($.cookie('glynt-{{ object.slug }}'));
+            var cookie_value = $.parseJSON($.cookie('glynt-{{ userdoc.slug }}'));
 
             for (i in serialized_form_data) {
                 name = serialized_form_data[i].name;
@@ -758,7 +773,7 @@ $(document).ready(function(){
                     cookie_value[name] = value;
                 }
             }
-            $.cookie('glynt-{{ object.slug }}', JSON.stringify(cookie_value));
+            $.cookie('glynt-{{ userdoc.slug }}', JSON.stringify(cookie_value));
         }
 
         self.showErrorMessage = function showErrorMessage(msg) {
@@ -776,7 +791,7 @@ $(document).ready(function(){
 
             $.ajax({
               type: 'POST',
-              url: "{% url 'document:export' slug=object.slug %}",
+              url: "{% url 'document:export' slug=userdoc.slug %}",
               data: data,
             })
             .success(function(data, textStatus, jqXHR) {
@@ -796,14 +811,14 @@ $(document).ready(function(){
             var csrf_token = $('form.bind-document:first').find('input[type=hidden]:first')
             var data = {
                 csrfmiddlewaretoken: csrf_token.val(),
-                current_progress: $.cookie('glynt-{{ object.slug }}'),
+                current_progress: $.cookie('glynt-{{ userdoc.slug }}'),
                 name: $('form#userdoc-name-form input#id_name').val(),
                 id: $('form#userdoc-name-form input#id_pk').val()
             };
 
             $.ajax({
               type: 'POST',
-              url: "{% url 'document:save_progress' slug=object.slug %}",
+              url: "{% url 'document:save_progress' slug=userdoc.slug %}",
               data: data,
             })
             .success(function(data, textStatus, jqXHR) {
@@ -928,8 +943,8 @@ $(document).ready(function(){
 
     $("input.datepicker").datepicker({dateFormat:"D, dd MM yy",changeYear:true,changeMonth:true});
 
-    if ($.cookie('glynt-{{ object.slug }}') == null) {
-        $.cookie('glynt-{{ object.slug }}', JSON.stringify({}));
+    if ($.cookie('glynt-{{ userdoc.slug }}') == null) {
+        $.cookie('glynt-{{ userdoc.slug }}', JSON.stringify({}));
     }
 
     {% if userdoc_form %}
