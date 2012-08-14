@@ -72,11 +72,12 @@ display:none;
 {% endblock %}
 
 {% block js %}
-<script id="document-default_data" type="text/javascript">{{ default_data|default:''|safe }}</script>
+<!-- <script id="document-default_data" type="text/javascript">{{ default_data|default:''|safe }}</script> -->
 <script id="js-document" type="text/x-handlebars-template">
 {{ userdoc.body|default:object.body|safe }}
 </script>
 <script src="{{ STATIC_URL }}js/jquery.jeditable.mini.js"></script>
+<script src="{{ STATIC_URL }}js/contactObserver.js"></script>
 <script id="document-controls" type="text/javascript">
 $(document).ready(function(){
 
@@ -955,12 +956,39 @@ $(document).ready(function(){
     }, { 
         indicator : 'Saving...',
         tooltip   : 'Click to create new document...',
-        type    : 'textarea',
-        submit  : '{% trans "Save" %}',
+        placeholder : 'Click to create new document...',
+        type      : 'textarea',
+        submit    : '{% trans "Save" %}',
     });
     {% endif %}
 
+    facebookCallbackTest = function(q,callBack) {
+        FB.api('/me/friends?access_token={{ request.user.get_profile.profile_data.accessToken }}', function(friends) {
+            for (f in friends) {
+                friend = friends[f];
+                console.log(friend)
+                result = {
+                    'name': friend.name,
+                    'picture': 'http://graph.facebook.com/' + friend.id + '/picture',
+                    'extra': {},
+                }
+                callBack(result.name, result.picture, result.extra);
+            }
+        });
+    }
+    linkedInCallbackTest = function(q,callBack) {
+        result = {
+            'name': 'Bob',
+            'picture': 'http://linkedin.com/my/pic.jpg'
+        }
+        for (var i = 0; i < 5; i++) {
+            callBack(result.name + ' ' + i, result.picture, result.extra);
+        }
+    }
+    co = new contactObserver([facebookCallbackTest], {});
 });
 </script>
+
+{% include 'socialregistration/facebook_js/facebook_js.html' %}
 
 {% endblock %}
