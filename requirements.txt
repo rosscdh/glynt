@@ -33,3 +33,4 @@ facebook
 # -e git+https://github.com/stard0g101/django-forms-builder.git#egg=django-forms-builder
 # Handlebars helpers
 # https://github.com/danharper/Handlebars-Helpers.git
+# https://github.com/ivaynberg/select2.git
