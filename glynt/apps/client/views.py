@@ -9,6 +9,7 @@ from django.template.defaultfilters import slugify
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
+from django.middleware.csrf import get_token
 
 from socialregistration.contrib.facebook_js.models import FacebookProfile
 from glynt.apps.document.models import Document, ClientCreatedDocument
@@ -96,5 +97,7 @@ class DashboardView(TemplateView):
 
     context['public_document_list'] = Document.public_objects.all()
     context['my_document_list'] = ClientCreatedDocument.objects.filter(owner=self.request.user)
+
+    context['csrf_raw_token'] = get_token(self.request)
 
     return context

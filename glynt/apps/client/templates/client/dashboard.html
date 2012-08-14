@@ -104,6 +104,7 @@
                                       <h5><a href="{% url 'document:my_view' slug=d.slug %}">{{ d.name }}</a></h5>
                                       <p>Between x and y.</p>
                                       <p><a href="{% url 'document:my_view' slug=d.slug %}" class="btn btn-info">Edit</a></p>
+                                      <p><a href="#export" data-url="{% url 'document:export' slug=d.slug %}" data-pk="{{ d.pk }}" class="export-pdf btn btn-info">Download PDF</a></p>
                                     </div>
                                   </div>
                                 </li>
@@ -113,4 +114,38 @@
                 </div>
         </div>
 </div>
+{% endblock %}
+
+
+{% block js %}
+<script id="document-controls" type="text/javascript">
+$(document).ready(function(){
+
+	$('a.export-pdf').live('click', function(event){
+		event.preventDefault();
+		var data = {
+		    csrfmiddlewaretoken: '{{ csrf_raw_token }}',
+		    md: '',
+		    id: $(this).attr('data-pk')
+		};
+		console.log($(this).attr('data-url'))
+		$.ajax({
+		  type: 'POST',
+		  url: $(this).attr('data-url'),
+		  data: data,
+		})
+		.success(function(data, textStatus, jqXHR) {
+		    data = data[0];
+		    var filename = data.filename;
+		    window.open(filename, 'pdf');
+		})
+		.error(function() { 
+		    alert('error')
+		})
+		.complete(function() {
+		});
+	});
+
+});
+</script>
 {% endblock %}

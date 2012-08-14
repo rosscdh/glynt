@@ -233,9 +233,7 @@ class DocumentExportView(View):
       content_markdown = request.POST.get('md')
 
       document_slug = slugify(self.kwargs['slug'])
-      document = get_object_or_404(Document, slug=document_slug)
-
-      progress, is_new = userdoc_from_request(request.user, document, userdoc_pk)
+      document = get_object_or_404(ClientCreatedDocument, slug=document_slug, owner=request.user)
 
       html = markdown.markdown(content_markdown)
 
@@ -243,8 +241,8 @@ class DocumentExportView(View):
       pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result)
 
       rnd = random.random()
-      rnd = '%s' % (str(rnd)[2:4])
-      file_name = 'doc_gen/%s-%s-%s.pdf' %(request.user.username, rnd, slugify(progress.name),)
+      rnd = '%s' % (str(rnd)[2:6])
+      file_name = 'doc_gen/%s-%s-%s.pdf' %(request.user.username, rnd, slugify(document.name),)
 
       if pdf.err:
         response = HttpResponse('[{"message":"%s"}]'%(pdf.err), status=401, content_type="text/json")
