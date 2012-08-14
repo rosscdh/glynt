@@ -984,7 +984,23 @@ $(document).ready(function(){
             callBack(result.name + ' ' + i, result.picture, result.extra);
         }
     }
+    // friend observer
     co = new contactObserver([facebookCallbackTest], {});
+
+    $(".contact-list").select2({
+        data: function(query) {
+            co.query(query.term);
+            var data = {results: co.itemSet, item: function(item){
+                console.log(item)
+                return item.id;
+            }};
+            console.log(data)
+        },
+        width: 'element',
+        minimumInputLength: 3
+        // formatSelection: format,
+        // formatResult: format
+    });
 });
 </script>
 

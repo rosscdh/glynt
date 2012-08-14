@@ -2,6 +2,7 @@ contactObserver = function contactObserver(callbacks, params) {
   var self = this;
   self.q = null;
   self.callBacks = [];
+  self.itemSet = [];
   self.params = {
   } + params;
 
@@ -35,9 +36,14 @@ contactObserver = function contactObserver(callbacks, params) {
   * @result void
   */
   self.recieverCallback = function recieverCallback(name, picture, extra) {
-    console.log('name:' + name)
-    console.log('picture:' + picture)
-    console.log('extra:' + extra)
+    // console.log('name:' + name)
+    // console.log('picture:' + picture)
+    // console.log('extra:' + extra)
+    self.itemSet.push({
+      'name': name,
+      'picture': picture,
+      'extra': extra
+    });
   };
 
   /** 
