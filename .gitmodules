@@ -3,4 +3,4 @@
 	url = https://github.com/stard0g101/idiorm.git 
 [submodule "glynt/apps/default/static/js/select2"]
 	path = glynt/apps/default/static/js/select2
-	url = https://github.com/applegrew/django-select2
+	url = https://github.com/ivaynberg/select2.git
