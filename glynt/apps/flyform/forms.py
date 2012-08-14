@@ -8,7 +8,7 @@ from django.template.defaultfilters import slugify
 from django.utils import safestring
 
 from django.contrib.localflavor.us.forms import USStateField, USZipCodeField
-from django.contrib.localflavor.us.us_states import US_STATES
+from django.contrib.localflavor.us.us_states import US_STATES, USPS_CHOICES
 
 from django_countries import CountryFormField as CountryField
 

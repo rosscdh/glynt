@@ -19,7 +19,6 @@
 
 {% block document %}
 <span id="document-md" data-bind="html: App.documentModel.renderedHTML()"></span>
-<span id="document-data">{{ default_data|default:''|safe }}</span>
 {% endblock %}
 
 {% block css %}
@@ -48,6 +47,7 @@ display:none;
 {% endblock %}
 
 {% block js %}
+<script id="document-data" type="text/javascript">{{ default_data|default:''|safe }}</script>
 <script id="js-document" type="text/x-handlebars-template">
 {{ userdoc.body|default:object.body|safe }}
 </script>
