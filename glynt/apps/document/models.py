@@ -9,7 +9,7 @@ from glynt.apps.utils import get_namedtuple_choices
 from jsonfield import JSONField
 
 from managers import DocumentManager, PublicDocumentManager, PrivateDocumentManager
-
+from managers import ClientCreatedDocumentManager, DeletedClientCreatedDocumentManager
 
 class Document(models.Model):
   """ Base Document Class """
@@ -60,6 +60,10 @@ class ClientCreatedDocument(models.Model):
   data = JSONField(blank=True, null=True)
   created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
   last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
+  is_deleted = models.BooleanField(default=False)
+
+  objects = ClientCreatedDocumentManager()
+  deleted_objects = DeletedClientCreatedDocumentManager()
 
   def __unicode__(self):
     return u'%s' % (self.name)
