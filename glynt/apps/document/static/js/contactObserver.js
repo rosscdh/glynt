@@ -91,12 +91,11 @@ contactObserver = function contactObserver(callbacks, params) {
       callbackId = MD5(String(self.callBacks[m]));
       if ( self.itemSetCallbackIds.hasOwnProperty(callbackId) == false ) {
         // record this callback being issued
-        console.log('fdafdsa')
         self.itemSetCallbackIds[callbackId] = false;
         // call watcher callback and supply our callback
         self.callBacks[m](self.q, callbackId, self.recieverCallback);
       } else {
-        //self.resultCallback(self.filterItemSet());
+        self.resultCallback(self.filterItemSet());
       };
     }
     // waiting
