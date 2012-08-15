@@ -5,7 +5,7 @@ contactObserver = function contactObserver(callbacks, params) {
   self.resultCallback = null;
   self.callBacks = [];
   self.itemSet = [];
-  self.itemSetIds = [];
+  self.itemSetCallbackIds = [];
   self.params = {
   } + params;
 
@@ -36,29 +36,22 @@ contactObserver = function contactObserver(callbacks, params) {
   * @param results List a list of objects in format {name, picture, extra}
   * @result void
   */
-  self.recieverCallback = function recieverCallback(results) {
+  self.recieverCallback = function recieverCallback(results,callbackId) {
     // console.log('name:' + name)
     // console.log('picture:' + picture)
     // console.log('extra:' + extra)
-    console.log(MD5(self.resultCallback))
     for (r in results) {
       item = results[r];
+      self.itemSet.push({
+        'name': item.name,
+        'picture': item.picture,
+        'extra': item.extra
+      });
+    };
 
-      if (self.itemSetIds.indexOf(self.resultCallback) == -1) {
-
-        self.itemSet.push({
-          'name': item.name,
-          'picture': item.picture,
-          'extra': item.extra
-        });
-
-      };
-
-    }
-
-    self.itemSetIds.push(self.resultCallback);
+    self.itemSetCallbackIds[callbackId] = true;
     // callback to the requestor with the resultset as it currently stands
-    self.resultCallback(self.itemSet);
+    self.resultCallback(self.filterItemSet());
   };
 
   /** 
@@ -67,9 +60,21 @@ contactObserver = function contactObserver(callbacks, params) {
   * @result void
   */
   self.queryBase = function queryBase(q) {
-    self.q = q;
+    self.q = q.toLowerCase();
   };
 
+  /** 
+  * Method to provider a filtered set of the local list of contacts
+  * @param itemSet List *optional
+  * @result List
+  */
+  self.filterItemSet = function filterItemSet(itemSet) {
+    var filterSet = (itemSet == undefined) ? self.itemSet : itemSet ;
+    filterSet = $.grep(filterSet, function (a) {
+      return a.name.toLowerCase().indexOf(self.q) >= 0;
+    });
+    return filterSet;
+  }
   /** 
   * Primary query call, accessed externally to start the process
   * @param q String
@@ -83,8 +88,16 @@ contactObserver = function contactObserver(callbacks, params) {
 
     // callbacks
     for (m in self.callBacks) {
-      // call watcher callback and supply our callback
-      self.callBacks[m](self.q, self.recieverCallback);
+      callbackId = MD5(String(self.callBacks[m]));
+      if ( self.itemSetCallbackIds.hasOwnProperty(callbackId) == false ) {
+        // record this callback being issued
+        console.log('fdafdsa')
+        self.itemSetCallbackIds[callbackId] = false;
+        // call watcher callback and supply our callback
+        self.callBacks[m](self.q, callbackId, self.recieverCallback);
+      } else {
+        //self.resultCallback(self.filterItemSet());
+      };
     }
     // waiting
     self.waiting();

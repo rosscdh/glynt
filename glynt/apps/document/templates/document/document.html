@@ -965,7 +965,7 @@ $(document).ready(function(){
     });
     {% endif %}
 
-    facebookCallbackTest = function(q,callBack) {
+    facebookCallbackTest = function(q,callbackId,callBack) {
         FB.api('/me/friends?access_token={{ request.user.get_profile.profile_data.accessToken }}', function(response) {
             var results = []
             for (var i = 0; i < Math.min(response.data.length, 100); i++) {
@@ -976,16 +976,16 @@ $(document).ready(function(){
                     'extra': {'id': friend.id, 'service': 'facebook', 'data_type': 'friends'},
                 });
             }
-            callBack(results);
+            callBack(results,callbackId);
         });
     }
-    linkedInCallbackTest = function(q,callBack) {
+    linkedInCallbackTest = function(q,callbackId,callBack) {
         result = {
             'name': 'Bob',
             'picture': 'http://linkedin.com/my/pic.jpg'
         }
         for (var i = 0; i < 5; i++) {
-            callBack(result.name + ' ' + i, result.picture, result.extra);
+            // callBack(result.name + ' ' + i, result.picture, result.extra);
         }
     }
     // friend observer
@@ -994,22 +994,28 @@ $(document).ready(function(){
     $(".contact-list").select2({
         query: function(query) {
             var data = {results: []};
+            var template = Handlebars.compile($('#contact-list-item').html());
+
             co.query(query.term, function(results){
                 for (r in results) {
                     item = results[r];
-                    data.results.push({'id': item.extra.id , 'text': item.name});
+                    data.results.push({'id': item.name , 'text': template(item)});
                 }
-                console.log(data)
                 query.callback(data);
             });
         },
         width: 'element',
-        minimumInputLength: 3
-        // formatSelection: format,
+        minimumInputLength: 2
+        //formatSelection: formatSelection
         // formatResult: format
     });
 });
 </script>
+
+{% tplhandlebars "contact-list-item" %}
+    <img src="{{picture}}" width="45" height="45" />
+    {{name}}
+{% endtplhandlebars %}
 
 {% include 'socialregistration/facebook_js/facebook_js.html' %}
 
