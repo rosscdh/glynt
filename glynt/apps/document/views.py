@@ -268,7 +268,7 @@ class DeleteClientCreatedDocumentView(View):
   def post(self, request, *args, **kwargs):
     client_document = get_object_or_404(ClientCreatedDocument, pk=self.kwargs['pk'])
     client_document.is_deleted = True
-#    client_document.save()
+    client_document.save()
     message = _("Deleted %s, <a class='undelete-my-document' href='%s'>undo</a>") % (client_document.name, reverse('document:my_undelete', kwargs={'pk':client_document.pk}),)
 
     return HttpResponse('[{"userdoc_id": %d, "status":"%s", "message":"%s"}]' % (client_document.pk, 'deleted', unicode(message),), status=200, content_type="application/json")
@@ -277,6 +277,6 @@ class UndoDeleteClientCreatedDocumentView(View):
   def post(self, request, *args, **kwargs):
     client_document = get_object_or_404(ClientCreatedDocument, pk=self.kwargs['pk'])
     client_document.is_deleted = False
-#    client_document.save()
+    client_document.save()
     message = __("Reactivated '%s'") % (client_document.name,)
     return HttpResponse('[{"userdoc_id": %d, "status":"%s", "message":"%s"}]' % (client_document.pk, 'deleted', message,), status=200, content_type="application/json")
