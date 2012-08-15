@@ -95,6 +95,7 @@ contactObserver = function contactObserver(callbacks, params) {
         // call watcher callback and supply our callback
         self.callBacks[m](self.q, callbackId, self.recieverCallback);
       } else {
+        // default filter
         self.resultCallback(self.filterItemSet());
       };
     }

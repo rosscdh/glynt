@@ -965,7 +965,7 @@ $(document).ready(function(){
     });
     {% endif %}
 
-    facebookCallbackTest = function(q,callbackId,callBack) {
+    facebookCallback = function(q,callbackId,callBack) {
         FB.api('/me/friends?access_token={{ request.user.get_profile.profile_data.accessToken }}', function(response) {
             var results = []
             for (var i = 0; i < Math.min(response.data.length, 100); i++) {
@@ -989,7 +989,7 @@ $(document).ready(function(){
         }
     }
     // friend observer
-    co = new contactObserver([facebookCallbackTest], {});
+    co = new contactObserver([facebookCallback], {});
 
     $(".contact-list").select2({
         query: function(query) {
