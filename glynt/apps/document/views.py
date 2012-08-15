@@ -219,15 +219,21 @@ class DocumentSaveProgressView(View):
       document_slug = slugify(self.kwargs['slug'])
       document = get_object_or_404(Document, slug=document_slug)
 
-      progress, is_new = userdoc_from_request(request.user, document, userdoc_pk)
-      if is_new:
-        progress.slug = slugify(form.cleaned_data['name'])
+      if not request.user.is_authenticated():
+        redirect_url = '%s?next=%s' % (settings.LOGIN_URL, reverse('document:view', kwargs={'slug':document_slug}))
+        return HttpResponse('[{"userdoc_id": null, "url": "%s", "status":"%s", "message":"%s"}]' % (redirect_url, 'login_required', unicode(_('Login Required'))), status=200, content_type="application/json")
+      else:
+        progress, is_new = userdoc_from_request(request.user, document, userdoc_pk)
+        if is_new:
+          progress.slug = slugify(form.cleaned_data['name'])
 
-      progress.name = form.cleaned_data['name']
-      progress.data = request.POST.get('current_progress', None)
-      progress.save()
+        progress.name = form.cleaned_data['name']
+        progress.data = request.POST.get('current_progress', None)
+        progress.save()
 
-      return HttpResponse('[{"userdoc_id": %d, "url": "%s", "status":"%s", "message":"%s"}]' % (progress.pk, progress.get_absolute_url(), 'success', unicode(_('Progress Saved'))), status=200, content_type="application/json")
+        redirect_url = progress.get_absolute_url()
+
+        return HttpResponse('[{"userdoc_id": %d, "url": "%s", "status":"%s", "message":"%s"}]' % (progress.pk, redirect_url, 'success', unicode(_('Progress Saved'))), status=200, content_type="application/json")
 
 
 class DocumentExportView(View):

@@ -17,7 +17,8 @@ urlpatterns = patterns('',
     url(r'^create/$', login_required(CreateDocumentView.as_view()), name='create'),
     url(r'^(?P<slug>.+)/edit/$', login_required(EditDocumentView.as_view()), name='edit'),
     url(r'^(?P<slug>.+)/export/$', login_required(DocumentExportView.as_view()), name='export'),
-    url(r'^(?P<slug>.+)/save/$', login_required(DocumentSaveProgressView.as_view()), name='save_progress'),
+    # is not login_required as we want users to be redirected to login
+    url(r'^(?P<slug>.+)/save/$', DocumentSaveProgressView.as_view(), name='save_progress'),
     url(r'^my/(?P<slug>.+)/$', MyDocumentView.as_view(template_name='document/document.html'), name='my_view'),
     url(r'^(?P<slug>.+)/$', DocumentView.as_view(template_name='document/preview-document.html'), name='view'),
 )
