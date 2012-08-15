@@ -5,16 +5,15 @@
 
 
 {% block owner_info %}
-
-{% endblock %}
-
-{% block form %}
 <div class="span12">
     <h2 id="document-title" class="editable">{{ userdoc.name }}</h2>
     <form id="userdoc-name-form" class="hidden">
         {{ userdoc_form }}
     </form>
 </div>
+{% endblock %}
+
+{% block form %}
 &nbsp;
 {% endblock %}
 
