@@ -181,11 +181,13 @@ $(document).ready(function(){
             var current = self.currentFormStep();
             var next = current+1;
 
-            // async cant wait for valid or not
-            App.submitForm(current, $('form#glynt-doc-' + current));
-
-            next = self.determineStepVisibility('next', next);
-            self.currentFormStep(next);
+            // synchronous request
+            App.submitForm(current, $('form#glynt-doc-' + current), function(textStatus, message) {
+              if (textStatus != 'error') {
+                next = self.determineStepVisibility('next', next);
+                self.currentFormStep(next);
+              }
+            });
 
         }
         self.prev = function prev() {
@@ -193,10 +195,12 @@ $(document).ready(function(){
             var prev = current-1;
 
             // async cant wait for valid or not
-            App.submitForm(current, $('form#glynt-doc-' + current));
-            
-            prev = self.determineStepVisibility('prev', prev);
-            self.currentFormStep(prev);
+            App.submitForm(current, $('form#glynt-doc-' + current), function(textStatus, message) {
+              if (textStatus != 'error') {
+                prev = self.determineStepVisibility('prev', prev);
+                self.currentFormStep(prev);
+              }
+            });
         }
     }
 
@@ -734,13 +738,15 @@ $(document).ready(function(){
             var is_valid = false;
             $('form.bind-document').each(function(step, form){
                 form = $(form);
-                self.submitForm(step, form);
+                self.submitForm(step, form, function(message) {
+                  console.log(message)
+                });
             });
 
             return is_valid;
         }
 
-        self.submitForm = function submitForm(step, form) {
+        self.submitForm = function submitForm(step, form, callback) {
             var is_valid = false;
             var form_data_serialized = form.serialize();
             $.ajax({
@@ -759,7 +765,12 @@ $(document).ready(function(){
                 self.message(data.message);
                 is_valid = false;
             })
-            .complete(function() {});
+            .complete(function(jqXHR, textStatus) {
+              // issue callback
+              if (callback != undefined) {
+                callback(textStatus, self.message());
+              }
+            });
 
             return is_valid;
         }
