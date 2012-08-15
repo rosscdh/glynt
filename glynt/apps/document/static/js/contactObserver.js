@@ -1,8 +1,11 @@
+
 contactObserver = function contactObserver(callbacks, params) {
   var self = this;
   self.q = null;
+  self.resultCallback = null;
   self.callBacks = [];
   self.itemSet = [];
+  self.itemSetIds = [];
   self.params = {
   } + params;
 
@@ -30,20 +33,32 @@ contactObserver = function contactObserver(callbacks, params) {
 
   /** 
   * Primary reciever Callback, which will take the data and append it to our list
-  * @param name String
-  * @param picture Url
-  * @param extra Hash
+  * @param results List a list of objects in format {name, picture, extra}
   * @result void
   */
-  self.recieverCallback = function recieverCallback(name, picture, extra) {
+  self.recieverCallback = function recieverCallback(results) {
     // console.log('name:' + name)
     // console.log('picture:' + picture)
     // console.log('extra:' + extra)
-    self.itemSet.push({
-      'name': name,
-      'picture': picture,
-      'extra': extra
-    });
+    console.log(MD5(self.resultCallback))
+    for (r in results) {
+      item = results[r];
+
+      if (self.itemSetIds.indexOf(self.resultCallback) == -1) {
+
+        self.itemSet.push({
+          'name': item.name,
+          'picture': item.picture,
+          'extra': item.extra
+        });
+
+      };
+
+    }
+
+    self.itemSetIds.push(self.resultCallback);
+    // callback to the requestor with the resultset as it currently stands
+    self.resultCallback(self.itemSet);
   };
 
   /** 
@@ -58,11 +73,13 @@ contactObserver = function contactObserver(callbacks, params) {
   /** 
   * Primary query call, accessed externally to start the process
   * @param q String
+  * @param resultCallback Object
   * @result void
   */
-  self.query = function query(q) {
+  self.query = function query(q,resultCallback) {
     // call base
     self.queryBase(q);
+    self.resultCallback = resultCallback;
 
     // callbacks
     for (m in self.callBacks) {
