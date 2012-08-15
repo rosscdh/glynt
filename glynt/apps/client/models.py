@@ -28,7 +28,6 @@ class ClientProfile(UserenaBaseProfile):
   """ Base User Profile, where we store all the interesting information about users """
   user = models.OneToOneField(User,
                               unique=True,
-                              verbose_name=_('user'),
                               related_name='my_profile')
   profile_data = JSONField(blank=True, null=True)
   country = CountryField(default='US', null=True)
@@ -49,6 +48,19 @@ class ClientProfile(UserenaBaseProfile):
       pass
 
     return url
+
+
+class ClientContactsList(models.Model):
+  """ Model to store a list of the clients contacts in the form:
+  {
+  'name': '',
+  'picture': '',
+  'extra': {'id': <int>id, 'service': 'facebook', 'data_type': 'friends'}
+  }
+  """
+  user = models.OneToOneField(User)
+  data = JSONField(blank=True, null=True)
+
 
 @receiver(connect)
 def create_client_profile(sender, **kwargs):
