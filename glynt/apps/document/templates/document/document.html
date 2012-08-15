@@ -745,7 +745,7 @@ $(document).ready(function(){
             var form_data_serialized = form.serialize();
             $.ajax({
               type: 'POST',
-              url: "{% url 'document:view' slug=userdoc.slug %}?step="+step,
+              url: "{% url 'document:my_view' slug=userdoc.slug %}?step="+step,
               data: form_data_serialized,
             })
             .success(function(data, textStatus, jqXHR) {
