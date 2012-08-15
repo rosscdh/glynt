@@ -5,15 +5,16 @@
 
 
 {% block owner_info %}
-<div class="span12">
-	<h2 id="document-title" class="editable">{{ userdoc.name }}</h2>
-	<form id="userdoc-name-form" class="hidden">
-	    {{ userdoc_form }}
-	</form>
-</div>
+
 {% endblock %}
 
 {% block form %}
+<div class="span12">
+    <h2 id="document-title" class="editable">{{ userdoc.name }}</h2>
+    <form id="userdoc-name-form" class="hidden">
+        {{ userdoc_form }}
+    </form>
+</div>
 &nbsp;
 {% endblock %}
 
@@ -770,7 +771,7 @@ $(document).ready(function(){
 
             var csrf_token = $('form.bind-document:first').find('input[type=hidden]:first')
             var data = {
-                csrfmiddlewaretoken: csrf_token.val(),
+                csrfmiddlewaretoken: '{{ csrf_raw_token }}',
                 current_progress: $.cookie('glynt-{{ object.slug }}'),
                 name: $('form#userdoc-name-form input#id_name').val(),
                 id: $('form#userdoc-name-form input#id_pk').val()
@@ -783,15 +784,12 @@ $(document).ready(function(){
             })
             .success(function(data, textStatus, jqXHR) {
                 var data = data[0];
-
-                if (data.url != undefined && data.url != document.location)
+                if (data.url != undefined && data.url != document.location) {
                     document.location = data.url;
+                } else {
+                    console.log('Missing URL to redirect to')
+                }
 
-                $('input#id_pk').val(data.userdoc_id);
-                document_title = $('form#userdoc-name-form input#id_name').val();
-                $('#document-title').html(document_title);
-                App.documentModel.setContextItemByForce('document_title', document_title);
-                App.render();
             })
             .error(function(jqXHR, textStatus, errorThrown) { 
                 console.log(jqXHR)

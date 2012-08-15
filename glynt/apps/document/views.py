@@ -17,6 +17,7 @@ from django.core.files.base import ContentFile
 from django.contrib.auth.decorators import user_passes_test
 from django.http import Http404
 from django.shortcuts import get_object_or_404
+from django.middleware.csrf import get_token
 
 from glynt.apps.flyform.forms import BaseFlyForm
 from models import Document, DocumentCategory, ClientCreatedDocument
@@ -116,6 +117,8 @@ class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
     document_slug = slugify(self.kwargs['slug'])
 
     self.document = get_object_or_404(Document.objects.select_related('flyform'), slug=document_slug)
+
+    context['csrf_raw_token'] = get_token(self.request)
 
     context['object'] = self.document
     context['document'] = self.document.body
