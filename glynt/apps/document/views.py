@@ -122,7 +122,7 @@ class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
 
     context['object'] = self.document
     context['document'] = self.document.body
-    context['default_data'] = self.document.flyform.defaults
+    context['default_data'] = json.dumps(self.document.flyform.defaults)
     context['userdoc_form'] = ClientCreatedDocumentForm()
 
     try:
@@ -182,7 +182,7 @@ class MyDocumentView(DocumentView):
     self.document = self.user_document.source_document
     context['object'] = self.document
     context['document'] = self.document.body
-    context['default_data'] = self.user_document.data
+    context['default_data'] = json.dumps(self.user_document.data)
 
     try:
       context['form_set'] = [BaseFlyForm(json.dumps(step)) for step in self.document.flyform.body]

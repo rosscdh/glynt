@@ -47,7 +47,7 @@ display:none;
 {% endblock %}
 
 {% block js %}
-<script id="document-data" type="text/javascript">{{ default_data|default:''|safe }}</script>
+<script id="document-default_data" type="text/javascript">[{{ default_data|default:''|safe }}]</script>
 <script id="js-document" type="text/x-handlebars-template">
 {{ userdoc.body|default:object.body|safe }}
 </script>
@@ -647,17 +647,14 @@ $(document).ready(function(){
             });
         }
 
-        self.initializeValuesFromCookie = function initializeValuesFromCookie() {
-            var cookie_value = $.parseJSON($.cookie('glynt-{{ object.slug }}'));
-            if (cookie_value) {
-                cookie_value = $(cookie_value);
-                if (cookie_value.length >= 0) {
-                    $.each($('form.bind-document').find('input,textarea,select'), function(index, element) {
-                        element = $(element);
-                        element_name = element.attr('name');
-                        if (element_name != undefined && cookie_value.attr(element_name) != undefined) {
-                            element.val(cookie_value.attr(element.attr('name')));
-                        }
+        self.initializeValuesFromDefaultData = function initializeValuesFromDefaultData() {
+            var data = $.parseJSON($('script#document-default_data').html());
+
+            if (data) {
+                data = data[0];
+                if (data) {
+                    $.each(data, function(key, value) {
+                        self.documentModel.setContextItemByForce(key, value)
                     });
                 }
             }
@@ -665,7 +662,7 @@ $(document).ready(function(){
 
         self.init = function init() {
             // main initializer
-            self.initializeValuesFromCookie();
+            self.initializeValuesFromDefaultData();
             self.setContext();
             self.setGlyntRuleset();
             self.applyGlyntRuleset();
@@ -677,93 +674,6 @@ $(document).ready(function(){
         }
         self.renderMarkdown = function renderMarkdown(md) {
         	return self.markdownConverter.makeHtml(md);
-        }
-
-        self.changeContext = function changeContext(input) {
-            self.documentModel.setContextItem(input);
-            self.render();
-        }
-
-        self.validateAllForms = function validateAllForms() {
-            // working on the debug
-            //return true;
-            var errorList = [];
-            var is_valid = false;
-            $('form.bind-document').each(function(step, form){
-                form = $(form);
-                self.submitForm(step, form);
-            });
-
-            return is_valid;
-        }
-
-        self.submitForm = function submitForm(step, form) {
-            var is_valid = false;
-            var form_data_serialized = form.serialize();
-            $.ajax({
-              type: 'POST',
-              url: "{% url 'document:view' slug=object.slug %}?step="+step,
-              data: form_data_serialized,
-            })
-            .success(function(data, textStatus, jqXHR) {
-                var response_data = $.parseJSON(data);
-                self.message('');
-                is_valid = true;
-                self.persistFormData(form.serializeArray(), response_data);
-            })
-            .error(function(jqXHR, textStatus, errorThrown) { 
-                var data = $.parseJSON(jqXHR.responseText);
-                self.message(data.message);
-                is_valid = false;
-            })
-            .complete(function() {});
-
-            return is_valid;
-        }
-
-        self.persistFormData = function persistFormData(serialized_form_data, response_data) {
-            // console.log(serialized_form_data)
-            // console.log(response_data)
-            var cookie_value = $.parseJSON($.cookie('glynt-{{ object.slug }}'));
-
-            for (i in serialized_form_data) {
-                name = serialized_form_data[i].name;
-                value = serialized_form_data[i].value;
-                if (name != 'csrfmiddlewaretoken') {
-                    cookie_value[name] = value;
-                }
-            }
-            $.cookie('glynt-{{ object.slug }}', JSON.stringify(cookie_value));
-        }
-
-        self.showErrorMessage = function showErrorMessage(msg) {
-
-        }
-
-        self.postDocument = function postDocument() {
-
-            var csrf_token = $('form.bind-document:first').find('input[type=hidden]:first')
-            var data = {
-                csrfmiddlewaretoken: csrf_token.val(),
-                md: self.documentModel.render(),
-                id: $('form#userdoc-name-form input#id_pk').val()
-            };
-
-            $.ajax({
-              type: 'POST',
-              url: "{% url 'document:export' slug=object.slug %}",
-              data: data,
-            })
-            .success(function(data, textStatus, jqXHR) {
-                data = data[0];
-                var filename = data.filename;
-                window.open(filename, 'pdf');
-            })
-            .error(function() { 
-                alert('error')
-            })
-            .complete(function() {
-            });
         }
 
         self.saveProgress = function saveProgress() {
@@ -813,96 +723,6 @@ $(document).ready(function(){
     App = new PageDocumentController()
     // ----- KO Bindings -----
     ko.applyBindings(App);
-
-
-    $('form.bind-document [data-glynt-loop_length]').live('change', function(event){
-        var num = parseInt($(this).val());
-        if (typeof num == 'number'){
-            App.documentModel.showLoopStep($(this), num);
-            // update knockoout bindings for new div
-            //ko.applyBindings(App);// Causes pagination bug
-        }
-    });
-
-    $('form.bind-document fieldset.loop').live('change', function(event){
-        var id_index = $(this).attr('id');
-        var fieldset = $(this);
-
-        var applicableLoopObject = App.documentModel.getLoopStepByChildElement(fieldset.find('input:first'));
-
-        if (applicableLoopObject) {
-            fieldset.find('input,textarea,select').each(function(index,element){
-                element = $(element);
-                var target_id = parseInt(element.attr('id').replace(/[^\d]+/ig, ''));
-                var target_value = element.val();
-                var target_name = $(element).attr('data-hb-name');
-
-                if (target_name != undefined) {
-                    target_name = target_name.replace(/(_\d+)/ig, '');
-                    if (applicableLoopObject) {
-                        applicableLoopObject['container_context'][target_name] = target_value;
-                    }
-                }
-            });
-
-            var found = false;
-            fieldset.find('input[type=radio], input[type=checkbox]').each(function(index,element){
-                element = $(element);
-                var element_type = element.attr('type');
-                var target_id = parseInt(element.attr('id').replace(/[^\d]+/ig, ''));
-                var target_value = element.val();
-                var target_name = $(element).attr('data-hb-name');
-
-                // because its a iteratable(radio,cehckbox) within a loop object we need to itereate
-                requested_slug = App.documentModel.slugify(element.attr('data-hb-name')).replace(/(_[\d]+)/ig, '');
-                requested_value_slug = App.documentModel.slugify(element.val());
-                requested_target_name = '_' + requested_slug + '_' + requested_value_slug;
-
-                fieldset.find('input[type='+ element_type +']').each(function(index,element){
-                    element = $(element);
-
-                    slug = App.documentModel.slugify(element.attr('data-hb-name')).replace(/(_[\d]+)/ig, '');
-                    value_slug = App.documentModel.slugify(element.val());
-                    target_name = '_' + slug + '_' + value_slug;
-
-                    if (requested_target_name == target_name && element.attr('checked') == 'checked') {
-//console.log(target_name+' == true')
-                        applicableLoopObject['container_context'][target_name] = true;
-                        found = true;
-                    }else{
-                        if (found == false){
-                            applicableLoopObject['container_context'][target_name] = false;
-                        }
-                    }
-                });
-            });
-        }
-        App.render();
-    });
-
-    $('form.bind-document span.step-title').each(function() {
-        var element = $(this).closest('div').find('input[data-step-title]');
-        $(this).text(element.attr('data-step-title'));
-    });
-
-    $('.fix-errors').live('click', function(event){
-        event.preventDefault;
-        App.formControls.prev();
-    });
-
-    $('.md-updater').live('change', function(event){
-        App.changeContext($(this));
-    })
-    $('button#btn-post-pdf').live('click', function(event){
-        event.preventDefault();
-        App.postDocument();
-    });
-
-    $("input.datepicker").datepicker({dateFormat:"D, dd MM yy",changeYear:true,changeMonth:true});
-
-    if ($.cookie('glynt-{{ object.slug }}') == null) {
-        $.cookie('glynt-{{ object.slug }}', JSON.stringify({}));
-    }
 
 
     {% if userdoc_form %}
