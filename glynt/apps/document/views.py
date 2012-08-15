@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext as __
 from django.shortcuts import render_to_response, redirect
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseBadRequest
@@ -18,6 +19,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.middleware.csrf import get_token
+from django.utils.safestring import mark_safe
 
 from glynt.apps.flyform.forms import BaseFlyForm
 from models import Document, DocumentCategory, ClientCreatedDocument
@@ -266,6 +268,15 @@ class DeleteClientCreatedDocumentView(View):
   def post(self, request, *args, **kwargs):
     client_document = get_object_or_404(ClientCreatedDocument, pk=self.kwargs['pk'])
     client_document.is_deleted = True
-    client_document.save()
+#    client_document.save()
+    message = _("Deleted %s, <a class='undelete-my-document' href='%s'>undo</a>") % (client_document.name, reverse('document:my_undelete', kwargs={'pk':client_document.pk}),)
 
-    return HttpResponse('[{"userdoc_id": %d, "status":"%s", "message":"%s"}]' % (client_document.pk, 'success', unicode(_('Deleted Your documents "%s"'%(client_document.name,)))), status=200, content_type="application/json")
+    return HttpResponse('[{"userdoc_id": %d, "status":"%s", "message":"%s"}]' % (client_document.pk, 'deleted', unicode(message),), status=200, content_type="application/json")
+
+class UndoDeleteClientCreatedDocumentView(View):
+  def post(self, request, *args, **kwargs):
+    client_document = get_object_or_404(ClientCreatedDocument, pk=self.kwargs['pk'])
+    client_document.is_deleted = False
+#    client_document.save()
+    message = __("Reactivated '%s'") % (client_document.name,)
+    return HttpResponse('[{"userdoc_id": %d, "status":"%s", "message":"%s"}]' % (client_document.pk, 'deleted', message,), status=200, content_type="application/json")

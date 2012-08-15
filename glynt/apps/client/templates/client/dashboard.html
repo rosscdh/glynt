@@ -109,7 +109,7 @@
                                     </div>
                                   </div>
                                 </li>
-                {% endfor %}
+                        {% endfor %}
                             </ul>
                         </div>
                 </div>
@@ -147,29 +147,70 @@ $(document).ready(function(){
     });
   });
 
+  deleted_doc = null;
+
   $('a.delete-my-document').live('click', function(event){
     event.preventDefault();
-    var self = this;
+    var self = $(this);
     var data = {
         csrfmiddlewaretoken: '{{ csrf_raw_token }}'
     };
-
     $.ajax({
       type: 'POST',
       url: $(this).attr('data-url'),
       data: data,
     })
     .success(function(data, textStatus, jqXHR) {
-        data = data[0];
-        self.closest('li').remove();
+      data = data[0];
+      var li = self.closest('li');
+      var div = li.find('div');
+      deleted_doc = div;
+      div.fadeOut('slow', function(){
+        $(this).remove();
+        li.html(data.message);
+      });
+
     })
-        .error(function(jqXHR, textStatus, errorThrown) { 
-          console.log(textStatus)
-        console.log('Error in Javascript event')
+    .error(function(jqXHR, textStatus, errorThrown) { 
+      console.log(jqXHR)
+      console.log(textStatus)
+      console.log(errorThrown)
+      console.log('Error in Javascript event')
     })
     .complete(function() {
     });
   });
+
+  $('a.undelete-my-document').live('click', function(event){
+    event.preventDefault();
+
+    var self = $(this);
+    var data = {
+        csrfmiddlewaretoken: '{{ csrf_raw_token }}'
+    };
+    $.ajax({
+      type: 'POST',
+      url: $(this).attr('href'),
+      data: data,
+    })
+    .success(function(data, textStatus, jqXHR) {
+      data = data;
+      var li = self.closest('li');
+      li.html($(deleted_doc).show());
+      $(deleted_doc).children().show();
+      console.log(deleted_doc)
+
+    })
+    .error(function(jqXHR, textStatus, errorThrown) { 
+      console.log(jqXHR)
+      console.log(textStatus)
+      console.log(errorThrown)
+      console.log('Error in Javascript event')
+    })
+    .complete(function() {
+    });
+  });
+
 
 });
 </script>
