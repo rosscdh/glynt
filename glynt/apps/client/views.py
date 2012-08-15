@@ -96,7 +96,7 @@ class DashboardView(TemplateView):
     context = super(DashboardView, self).get_context_data(**kwargs)
 
     context['public_document_list'] = Document.public_objects.all()
-    context['my_document_list'] = ClientCreatedDocument.objects.filter(owner=self.request.user)
+    context['my_document_list'] = ClientCreatedDocument.public_objects.filter(owner=self.request.user)
 
     context['csrf_raw_token'] = get_token(self.request)
 

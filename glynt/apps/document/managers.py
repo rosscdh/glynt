@@ -9,13 +9,13 @@ class DocumentManager(models.Manager):
 class PublicDocumentManager(DocumentManager):
   """ Manager for documents that are public """
   def get_query_set(self):
-      return super(PublicDocumentManager, self).get_query_set().filter(is_public=True, is_deleted=False)
+      return super(PublicDocumentManager, self).get_query_set().filter(is_public=True)
 
 
 class PrivateDocumentManager(DocumentManager):
   """ Manager for documents that are public """
   def get_query_set(self):
-      return super(PrivateDocumentManager, self).get_query_set().filter(is_public=False, is_deleted=False)
+      return super(PrivateDocumentManager, self).get_query_set().filter(is_public=False)
 
 
 class ClientCreatedDocumentManager(models.Manager):
@@ -23,6 +23,11 @@ class ClientCreatedDocumentManager(models.Manager):
   def by_user(self, user):
     return self.get_query_set().filter(owner=user)
 
+
+class PublicClientCreatedDocumentManager(ClientCreatedDocumentManager):
+  """ Default handler of clientdocuments objects """
+  def get_query_set(self):
+      return super(ClientCreatedDocumentManager, self).get_query_set().filter(is_deleted=False)
 
 class DeletedClientCreatedDocumentManager(ClientCreatedDocumentManager):
   """ Manager for clientdocuments that are deleted """

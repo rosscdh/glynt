@@ -17,65 +17,65 @@
 
 
 <div class="row">
-	<div class="span12">
-		<h2>New Document
-			<small>Documents available to create</small>
-			</h2>
-			<br />
-			<div class="accordion" id="accordion2">
-	            <div class="accordion-group">
-	            	<div class="accordion-heading">
-	                	<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-		                  New Starter Documents
-		                </a>
-	              	</div>
-	              	<div id="collapseOne" class="accordion-body collapse in">
-	                	<div class="accordion-inner">
-		                	<div class="row contracts">
-								<div class="span2">Employment Contract</div>
-								<div class="span2">Employment Offer Letter</div>
-								<div class="span2">Independent contractor agreement</div>
-								<div class="span2">Company handbook</div>
-								<div class="span2">Employment Agreement</div>
-							</div>
-		                </div>
-	              	</div>
-	            </div>
-	            <div class="accordion-group">
-	              <div class="accordion-heading">
-	                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-	                  All HR Documents
-	                </a>
-	              </div>
-	              <div id="collapseTwo" class="accordion-body collapse">
-	                	<div class="accordion-inner">
-		                	<div class="row contracts">
-								<div class="span2">Employment Contract</div>
-								<div class="span2">Employment Offer Letter</div>
-								<div class="span2">Independent contractor agreement</div>
-								<div class="span2">Company handbook</div>
-								<div class="span2">Employment Agreement</div>
-							</div>
-						</div>
-	              </div>
-	            </div>
-				 <div class="accordion-group">
-		              <div class="accordion-heading">
-		                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-		                  Beta Documents
-		                </a>
-		              </div>
-		              <div id="collapseThree" class="accordion-body collapse">
-		                	<div class="accordion-inner">
-				                {% for d in public_document_list %}
-				                <a href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a>, 
-				                {% endfor %}
+  <div class="span12">
+    <h2>New Document
+      <small>Documents available to create</small>
+      </h2>
+      <br />
+      <div class="accordion" id="accordion2">
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+                      New Starter Documents
+                    </a>
+                  </div>
+                  <div id="collapseOne" class="accordion-body collapse in">
+                    <div class="accordion-inner">
+                      <div class="row contracts">
+                <div class="span2">Employment Contract</div>
+                <div class="span2">Employment Offer Letter</div>
+                <div class="span2">Independent contractor agreement</div>
+                <div class="span2">Company handbook</div>
+                <div class="span2">Employment Agreement</div>
+              </div>
+                    </div>
+                  </div>
+              </div>
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                    All HR Documents
+                  </a>
+                </div>
+                <div id="collapseTwo" class="accordion-body collapse">
+                    <div class="accordion-inner">
+                      <div class="row contracts">
+                <div class="span2">Employment Contract</div>
+                <div class="span2">Employment Offer Letter</div>
+                <div class="span2">Independent contractor agreement</div>
+                <div class="span2">Company handbook</div>
+                <div class="span2">Employment Agreement</div>
+              </div>
+            </div>
+                </div>
+              </div>
+         <div class="accordion-group">
+                  <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
+                      Beta Documents
+                    </a>
+                  </div>
+                  <div id="collapseThree" class="accordion-body collapse">
+                      <div class="accordion-inner">
+                        {% for d in public_document_list %}
+                        <a href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a>, 
+                        {% endfor %}
 
-							</div>
-		              </div>
-		            </div>
-	          </div>
-	</div>
+              </div>
+                  </div>
+                </div>
+            </div>
+  </div>
 </div>
 <hr/>
 <div class="row">
@@ -96,7 +96,7 @@
                 <div class="row">
                         <div class="span12">
                             <ul class="thumbnails">
-				                {% for d in my_document_list %}
+                        {% for d in my_document_list %}
                                 <li class="span3">
                                   <div class="thumbnail">
                                     <img src="http://placehold.it/260x40" alt="">
@@ -105,10 +105,11 @@
                                       <p>Between x and y.</p>
                                       <p><a href="{% url 'document:my_view' slug=d.slug %}" class="btn btn-info">Edit</a></p>
                                       <p><a href="#export" data-url="{% url 'document:export' slug=d.slug %}" data-pk="{{ d.pk }}" class="export-pdf btn btn-info">Download PDF</a></p>
+                                      <p><a href="#export" data-url="{% url 'document:my_delete' pk=d.pk %}" data-pk="{{ d.pk }}" class="delete-my-document btn btn-warning">Delete</a></p>
                                     </div>
                                   </div>
                                 </li>
-								{% endfor %}
+                {% endfor %}
                             </ul>
                         </div>
                 </div>
@@ -121,30 +122,54 @@
 <script id="document-controls" type="text/javascript">
 $(document).ready(function(){
 
-	$('a.export-pdf').live('click', function(event){
-		event.preventDefault();
-		var data = {
-		    csrfmiddlewaretoken: '{{ csrf_raw_token }}',
-		    md: '',
-		    id: $(this).attr('data-pk')
-		};
-		console.log($(this).attr('data-url'))
-		$.ajax({
-		  type: 'POST',
-		  url: $(this).attr('data-url'),
-		  data: data,
-		})
-		.success(function(data, textStatus, jqXHR) {
-		    data = data[0];
-		    var filename = data.filename;
-		    window.open(filename, 'pdf');
-		})
-		.error(function() { 
-		    alert('error')
-		})
-		.complete(function() {
-		});
-	});
+  $('a.export-pdf').live('click', function(event){
+    event.preventDefault();
+    var data = {
+        csrfmiddlewaretoken: '{{ csrf_raw_token }}',
+        md: '',
+        id: $(this).attr('data-pk')
+    };
+    console.log($(this).attr('data-url'))
+    $.ajax({
+      type: 'POST',
+      url: $(this).attr('data-url'),
+      data: data,
+    })
+    .success(function(data, textStatus, jqXHR) {
+        data = data[0];
+        var filename = data.filename;
+        window.open(filename, 'pdf');
+    })
+    .error(function() { 
+        console.log('Error in Javascript event')
+    })
+    .complete(function() {
+    });
+  });
+
+  $('a.delete-my-document').live('click', function(event){
+    event.preventDefault();
+    var self = this;
+    var data = {
+        csrfmiddlewaretoken: '{{ csrf_raw_token }}'
+    };
+
+    $.ajax({
+      type: 'POST',
+      url: $(this).attr('data-url'),
+      data: data,
+    })
+    .success(function(data, textStatus, jqXHR) {
+        data = data[0];
+        self.closest('li').remove();
+    })
+        .error(function(jqXHR, textStatus, errorThrown) { 
+          console.log(textStatus)
+        console.log('Error in Javascript event')
+    })
+    .complete(function() {
+    });
+  });
 
 });
 </script>

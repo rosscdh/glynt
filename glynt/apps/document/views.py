@@ -261,3 +261,11 @@ class DocumentExportView(View):
 
       return response
 
+
+class DeleteClientCreatedDocumentView(View):
+  def post(self, request, *args, **kwargs):
+    client_document = get_object_or_404(ClientCreatedDocument, pk=self.kwargs['pk'])
+    client_document.is_deleted = True
+    client_document.save()
+
+    return HttpResponse('[{"userdoc_id": %d, "status":"%s", "message":"%s"}]' % (client_document.pk, 'success', unicode(_('Deleted Your documents "%s"'%(client_document.name,)))), status=200, content_type="application/json")
