@@ -20,6 +20,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.middleware.csrf import get_token
 from django.utils.safestring import mark_safe
+from django.db.utils import IntegrityError
 
 from glynt.apps.flyform.forms import BaseFlyForm
 from models import Document, DocumentCategory, ClientCreatedDocument
@@ -264,10 +265,32 @@ class DocumentExportView(View):
       return response
 
 
+class CloneClientCreatedDocumentView(View):
+  def post(self, request, *args, **kwargs):
+    client_document = get_object_or_404(ClientCreatedDocument, pk=self.kwargs['pk'])
+    client_document.pk = None # set the pk to null which will cause the ORM to save as a new object
+    saved = False
+    while saved is not True:
+      try:
+        client_document.name = 'Copy of %s' % (client_document.name,)
+        client_document.slug = slugify(client_document.name)
+        client_document.save()
+        saved = True
+      except IntegrityError:
+        saved = False
+
+
+    url = reverse('document:my_view', kwargs={'slug':client_document.slug})
+    message = _("Cloned %s") % (client_document.name,)
+
+    return HttpResponse('[{"userdoc_id": %d, "url":"%s", "status":"%s", "message":"%s"}]' % (client_document.pk, url, 'cloned', unicode(message),), status=200, content_type="application/json")
+
+
 class DeleteClientCreatedDocumentView(View):
   def post(self, request, *args, **kwargs):
     client_document = get_object_or_404(ClientCreatedDocument, pk=self.kwargs['pk'])
     client_document.is_deleted = True
+    client_document.slug = 'deleted-%d-%s' % (client_document.pk, client_document.slug,)
     client_document.save()
     message = _("Deleted %s, <a class='undelete-my-document' href='%s'>undo</a>") % (client_document.name, reverse('document:my_undelete', kwargs={'pk':client_document.pk}),)
 
@@ -278,6 +301,7 @@ class UndoDeleteClientCreatedDocumentView(View):
     client_document = get_object_or_404(ClientCreatedDocument, pk=self.kwargs['pk'])
     if client_document.is_deleted is True:
       client_document.is_deleted = False
+      client_document.slug = client_document.slug.replace('deleted-%d'%(client_document.pk,), '')
       client_document.save()
     message = __("Reactivated '%s'") % (client_document.name,)
     return HttpResponse('[{"userdoc_id": %d, "status":"%s", "message":"%s"}]' % (client_document.pk, 'deleted', message,), status=200, content_type="application/json")

@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 
 from views import DocumentView, MyDocumentView, CreateDocumentView, EditDocumentView, DocumentByCategoryListView
-from views import DocumentSaveProgressView, DocumentExportView, DeleteClientCreatedDocumentView, UndoDeleteClientCreatedDocumentView
+from views import DocumentSaveProgressView, CloneClientCreatedDocumentView, DocumentExportView, DeleteClientCreatedDocumentView, UndoDeleteClientCreatedDocumentView
 
 from glynt.apps.flyform.forms import TmpStepCreator
 
@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     # Client Created Documents
     url(r'^my/(?P<pk>\d+)/delete/$', DeleteClientCreatedDocumentView.as_view(), name='my_delete'),
     url(r'^my/(?P<pk>\d+)/undelete/$', UndoDeleteClientCreatedDocumentView.as_view(), name='my_undelete'),
+    url(r'^my/(?P<pk>\d+)/clone/$', CloneClientCreatedDocumentView.as_view(), name='my_clone'),
     url(r'^my/(?P<slug>.+)/$', MyDocumentView.as_view(template_name='document/document.html'), name='my_view'),
 
     url(r'^tmp/step/creator/$', login_required(FormView.as_view(form_class=TmpStepCreator, template_name='document/tmp_step_creator.html')), name='step_creator'),

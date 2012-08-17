@@ -103,9 +103,10 @@
                                     <div class="caption">
                                       <h5><a href="{% url 'document:my_view' slug=d.slug %}">{{ d.name }}</a></h5>
                                       <p>Between x and y.</p>
-                                      <p><a href="{% url 'document:my_view' slug=d.slug %}" class="btn btn-info">Edit</a></p>
-                                      <p><a href="#export" data-url="{% url 'document:export' slug=d.slug %}" data-pk="{{ d.pk }}" class="export-pdf btn btn-info">Download PDF</a></p>
-                                      <p><a href="#export" data-url="{% url 'document:my_delete' pk=d.pk %}" data-pk="{{ d.pk }}" class="delete-my-document btn btn-warning">Delete</a></p>
+                                      <p><a href="{% url 'document:my_view' slug=d.slug %}" class="btn btn-info">{% trans 'Edit' %}</a></p>
+                                      <p><a href="#clone" data-url="{% url 'document:my_clone' pk=d.pk %}" data-pk="{{ d.pk }}" class="clone-my-document btn btn-inverse">{% trans 'Clone' %}</a></p>
+                                      <p><a href="#export" data-url="{% url 'document:export' slug=d.slug %}" data-pk="{{ d.pk }}" class="export-pdf btn btn-info">{% trans 'Download PDF' %}</a></p>
+                                      <p><a href="#delete" data-url="{% url 'document:my_delete' pk=d.pk %}" data-pk="{{ d.pk }}" class="delete-my-document btn btn-warning">{% trans 'Delete' %}</a></p>
                                     </div>
                                   </div>
                                 </li>
@@ -170,6 +171,31 @@ $(document).ready(function(){
         li.html(data.message);
       });
 
+    })
+    .error(function(jqXHR, textStatus, errorThrown) { 
+      console.log(jqXHR)
+      console.log(textStatus)
+      console.log(errorThrown)
+      console.log('Error in Javascript event')
+    })
+    .complete(function() {
+    });
+  });
+
+  $('a.clone-my-document').live('click', function(event){
+    event.preventDefault();
+    var self = $(this);
+    var data = {
+        csrfmiddlewaretoken: '{{ csrf_raw_token }}'
+    };
+    $.ajax({
+      type: 'POST',
+      url: $(this).attr('data-url'),
+      data: data,
+    })
+    .success(function(data, textStatus, jqXHR) {
+      data = data[0];
+      window.location = data.url
     })
     .error(function(jqXHR, textStatus, errorThrown) { 
       console.log(jqXHR)
