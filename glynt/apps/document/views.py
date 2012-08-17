@@ -227,12 +227,22 @@ class DocumentSaveProgressView(View):
       document = get_object_or_404(Document, slug=document_slug)
 
       progress, is_new = userdoc_from_request(request.user, document, form.cleaned_data['id'])
-      if is_new:
-        progress.slug = slugify(form.cleaned_data['name'])
 
       progress.name = form.cleaned_data['name']
       progress.data = request.POST.get('current_progress', None)
-      progress.save()
+
+      saved = False
+      slug = base_slug = slugify(form.cleaned_data['name'])
+      count = 1
+      while saved is not True:
+        try:
+          progress.slug = slug
+          progress.save()
+          saved = True
+        except IntegrityError:
+          slug = '%s-%d' %(base_slug, count,)
+          count = count+1
+          saved = False
 
       redirect_url = progress.get_absolute_url()
 
