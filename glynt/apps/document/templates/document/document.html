@@ -976,19 +976,59 @@ $(document).ready(function(){
     {% endif %}
 
     facebookCallback = function(q,callbackId,callBack) {
-        FB.api('/me/friends?access_token={{ request.user.get_profile.profile_data.accessToken }}', function(response) {
-            var results = []
-            for (var i = 0; i < Math.min(response.data.length, 100); i++) {
-                friend = response.data[i];
-                results.push({
-                    'name': friend.name,
-                    'picture': 'http://graph.facebook.com/' + friend.id + '/picture',
-                    'extra': {'id': friend.id, 'service': 'facebook', 'data_type': 'friends'},
-                });
+      var results = []
+
+      processFriends = function(friends) {
+        for (var i = 0; i < Math.min(friends.length, 2000); i++) {
+            friend = friends[i];
+            results.push({
+                'name': friend.name,
+                'picture': 'http://graph.facebook.com/' + friend.id + '/picture',
+                'extra': {'id': friend.id, 'service': 'facebook', 'data_type': 'friends'},
+            });
+        };
+      };
+
+      getFBFriends = function(next_url) {
+        $.ajax({
+          type: 'GET',
+          url: next_url,
+          dataType: "jsonp"
+        })
+        .success(function(data, textStatus, jqXHR) {
+          var response = data;
+
+          if (response.data != undefined && response.data.length > 0) {
+            processFriends(response.data);
+            if (response.paging != undefined && response.paging.next != undefined) {
+              getFBFriends(response.paging.next);
             }
-            callBack(results,callbackId);
+          } else {
+            // console.log('End of friends list');
+            sendData();
+          }
+        })
+        .error(function(jqXHR, textStatus, errorThrown) { 
+          // console.log(errorThrown);
+          sendData();// send what we have
+        })
+        .complete(function(jqXHR, textStatus) {
         });
-    }
+      };
+
+      sendData = function(current_results) {
+        callBack(results,callbackId);
+      };
+
+      FB.api('/me/friends?access_token={{ request.user.get_profile.profile_data.accessToken }}', function(response) {
+          processFriends(response.data); // process initial set
+          if (response.paging != undefined && response.paging.next != undefined) {
+            // handle pagination of friends
+            getFBFriends(response.paging.next);
+          }
+      });
+    };
+
     linkedInCallbackTest = function(q,callbackId,callBack) {
         result = {
             'name': 'Bob',
