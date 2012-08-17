@@ -300,7 +300,7 @@ class DeleteClientCreatedDocumentView(View):
   def post(self, request, *args, **kwargs):
     client_document = get_object_or_404(ClientCreatedDocument, pk=self.kwargs['pk'])
     client_document.is_deleted = True
-    client_document.slug = 'deleted-%d-%s' % (client_document.pk, client_document.slug,)
+    client_document.slug = '%d-%s' % (client_document.pk, client_document.slug[0:45],)
     client_document.save()
     message = _("Deleted %s, <a class='undelete-my-document' href='%s'>undo</a>") % (client_document.name, reverse('document:my_undelete', kwargs={'pk':client_document.pk}),)
 
@@ -313,7 +313,7 @@ class UndoDeleteClientCreatedDocumentView(View):
     if client_document.is_deleted is True:
       client_document.is_deleted = False
 
-      slug = base_slug = client_document.slug.replace('deleted-%d-'%(client_document.pk,), '')
+      slug = base_slug = client_document.slug.replace('%d-'%(client_document.pk,), '')
       saved = False
       count = 1
       while saved is not True:
