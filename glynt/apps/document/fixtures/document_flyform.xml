@@ -2,20 +2,20 @@
 <django-objects version="1.0">
         <object pk="1" model="document.document">
             <field to="auth.user" name="owner" rel="ManyToOneRel">1</field>
-            <field type="CharField" name="name">Joke Assassination Contract</field>
-            <field type="SlugField" name="slug">joke-contract</field>
-            <field type="TextField" name="summary">Joke Assassination Contract</field>
+            <field type="CharField" name="name">Test Buy a Gift Contract</field>
+            <field type="SlugField" name="slug">test-buy-a-gift-contract</field>
+            <field type="TextField" name="summary">A Basic test of fields and experimental items</field>
             <field type="TextField" name="body"># {{document_title}} #
 
 <br/><br/>
-Hi my name is {{customer_name}}; I am based in {{customer_country}}. And I have a nasty grudge against **{{target_name}}**
+Hi my name is {{customer_name}}; I am based in {{customer_country}}. And I have a great friend called **{{target_name}}**
 
-I would like to spend {{budget}} and ensure that  **{{target_name}}** Can never disturb me again.
+I would like to spend {{budget}} on a gift that would ensure that **{{target_name}}** is happy and will love me forever.
 
-I believe that {{target_name}} can be found, somewhere in {{target_country}}.. however just remember...
+My Friend {{target_name}} can be found, somewhere in {{target_country}}.. however just remember...
 
 <br/>
-### One does not simply assassinate {{target_name}} ###</field>
+### One does not simply give gifts to {{target_name}} ###</field>
             <field to="flyform.flyform" name="flyform" rel="OneToOneRel">1</field>
             <field type="IntegerField" name="doc_status">1</field>
             <field type="BooleanField" name="is_public">True</field>

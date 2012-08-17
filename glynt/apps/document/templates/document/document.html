@@ -979,14 +979,18 @@ $(document).ready(function(){
       var results = []
 
       processFriends = function(friends) {
-        for (var i = 0; i < Math.min(friends.length, 2000); i++) {
-            friend = friends[i];
-            results.push({
-                'name': friend.name,
-                'picture': 'http://graph.facebook.com/' + friend.id + '/picture',
-                'extra': {'id': friend.id, 'service': 'facebook', 'data_type': 'friends'},
-            });
-        };
+        if (friends != undefined) {
+            for (var i = 0; i < Math.min(friends.length, 2000); i++) {
+                friend = friends[i];
+                results.push({
+                    'name': friend.name,
+                    'picture': 'http://graph.facebook.com/' + friend.id + '/picture',
+                    'extra': {'id': friend.id, 'service': 'facebook', 'data_type': 'friends'},
+                });
+            };
+        } else {
+            console.log('No Friends were passed in')
+        }
       };
 
       getFBFriends = function(next_url) {
@@ -1050,6 +1054,10 @@ $(document).ready(function(){
                 for (r in results) {
                     item = results[r];
                     data.results.push({'id': item.name , 'text': template(item)});
+                }
+                // if no results // add search term
+                if (data.results.length == 0) {
+                    data.results.push({'id': query.term , 'text': query.term});
                 }
                 query.callback(data);
             });
