@@ -55,7 +55,7 @@ class ClientCreatedDocument(models.Model):
   owner = models.ForeignKey(User)
   source_document = models.ForeignKey(Document)
   name = models.CharField(max_length=128, blank=True, null=True)
-  slug = models.SlugField(blank=False, null=True)
+  slug = models.SlugField(unique=False, blank=False, null=True)
   body = models.TextField(blank=True, null=True)
   data = JSONField(blank=True, null=True)
   created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
@@ -65,6 +65,9 @@ class ClientCreatedDocument(models.Model):
   objects = ClientCreatedDocumentManager()
   public_objects = PublicClientCreatedDocumentManager()
   deleted_objects = DeletedClientCreatedDocumentManager()
+
+  class Meta:
+    unique_together = ('slug', 'owner',)
 
   def __unicode__(self):
     return u'%s' % (self.name)
