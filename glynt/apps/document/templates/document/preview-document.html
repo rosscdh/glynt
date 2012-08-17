@@ -683,7 +683,7 @@ $(document).ready(function(){
                 csrfmiddlewaretoken: '{{ csrf_raw_token }}',
                 current_progress: $.cookie('glynt-{{ object.slug }}'),
                 name: $('form#userdoc-name-form input#id_name').val(),
-                id: $('form#userdoc-name-form input#id_pk').val()
+                id: $('form#userdoc-name-form input#id_id').val()
             };
 
             $.ajax({

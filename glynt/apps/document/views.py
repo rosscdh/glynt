@@ -198,10 +198,10 @@ class MyDocumentView(DocumentView):
 
 def userdoc_from_request(user, source_doc, pk=None):
   if pk and type(pk) is int:
-    userdoc = get_object_or_404(ClientCreatedDocument, pk=pk, owner=user, source_document=source_doc)
+    userdoc = get_object_or_404(ClientCreatedDocument, pk=pk)
     is_new = False
   else:
-    userdoc, is_new = ClientCreatedDocument.objects.get_or_create(owner=user, source_document=source_doc)
+    userdoc, is_new = ClientCreatedDocument.objects.get_or_create(owner=user, source_document=source_doc, is_deleted=False)
     # just set the body the first time the object is created
     userdoc.body = source_doc.body
     userdoc.slug = source_doc.slug
@@ -219,24 +219,24 @@ class DocumentSaveProgressView(View):
     if not form.is_valid():
       return HttpResponse('[{"status":"%s", "message":"%s"}]' % (progress.pk, 'error', unicode(_('The form was not valid; please check your data "%s"' %(form.errors,) ))), status=400, content_type="application/json")
     else:
-      document_slug = slugify(self.kwargs['slug'])
-      document = get_object_or_404(Document, slug=document_slug)
-
       if not request.user.is_authenticated():
         redirect_url = '%s?next=%s' % (settings.LOGIN_URL, reverse('document:view', kwargs={'slug':document_slug}))
         return HttpResponse('[{"userdoc_id": null, "url": "%s", "status":"%s", "message":"%s"}]' % (redirect_url, 'login_required', unicode(_('Login Required'))), status=200, content_type="application/json")
-      else:
-        progress, is_new = userdoc_from_request(request.user, document, userdoc_pk)
-        if is_new:
-          progress.slug = slugify(form.cleaned_data['name'])
 
-        progress.name = form.cleaned_data['name']
-        progress.data = request.POST.get('current_progress', None)
-        progress.save()
+      document_slug = slugify(self.kwargs['slug'])
+      document = get_object_or_404(Document, slug=document_slug)
 
-        redirect_url = progress.get_absolute_url()
+      progress, is_new = userdoc_from_request(request.user, document, form.cleaned_data['id'])
+      if is_new:
+        progress.slug = slugify(form.cleaned_data['name'])
 
-        return HttpResponse('[{"userdoc_id": %d, "url": "%s", "status":"%s", "message":"%s"}]' % (progress.pk, redirect_url, 'success', unicode(_('Progress Saved'))), status=200, content_type="application/json")
+      progress.name = form.cleaned_data['name']
+      progress.data = request.POST.get('current_progress', None)
+      progress.save()
+
+      redirect_url = progress.get_absolute_url()
+
+      return HttpResponse('[{"userdoc_id": %d, "url": "%s", "status":"%s", "message":"%s"}]' % (progress.pk, redirect_url, 'success', unicode(_('Progress Saved'))), status=200, content_type="application/json")
 
 
 class DocumentExportView(View):
@@ -296,12 +296,25 @@ class DeleteClientCreatedDocumentView(View):
 
     return HttpResponse('[{"userdoc_id": %d, "status":"%s", "message":"%s"}]' % (client_document.pk, 'deleted', unicode(message),), status=200, content_type="application/json")
 
+
 class UndoDeleteClientCreatedDocumentView(View):
   def post(self, request, *args, **kwargs):
     client_document = get_object_or_404(ClientCreatedDocument, pk=self.kwargs['pk'])
     if client_document.is_deleted is True:
       client_document.is_deleted = False
-      client_document.slug = client_document.slug.replace('deleted-%d'%(client_document.pk,), '')
-      client_document.save()
+
+      slug = base_slug = client_document.slug.replace('deleted-%d-'%(client_document.pk,), '')
+      saved = False
+      count = 1
+      while saved is not True:
+        try:
+          client_document.slug = slug
+          client_document.save()
+          saved = True
+        except IntegrityError:
+          slug = '%s-%d' %(base_slug, count,)
+          count = count+1
+          saved = False
     message = __("Reactivated '%s'") % (client_document.name,)
     return HttpResponse('[{"userdoc_id": %d, "status":"%s", "message":"%s"}]' % (client_document.pk, 'deleted', message,), status=200, content_type="application/json")
+

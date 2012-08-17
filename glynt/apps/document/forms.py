@@ -13,11 +13,12 @@ def _get_date_today():
 
 
 class ClientCreatedDocumentForm(forms.ModelForm):
+  id = forms.IntegerField(required=False, widget=forms.HiddenInput)
   name = forms.CharField(label='', required=True, max_length=128, widget=forms.HiddenInput)
-  pk = forms.IntegerField(required=False, widget=forms.HiddenInput)
+
   class Meta:
     model = ClientCreatedDocument
-    fields = ('pk', 'name')
+    fields = ('id', 'name')
 
 
 # class AssassinStep1(forms.Form):

@@ -800,7 +800,7 @@ $(document).ready(function(){
             var data = {
                 csrfmiddlewaretoken: csrf_token.val(),
                 md: self.documentModel.render(),
-                id: $('form#userdoc-name-form input#id_pk').val()
+                id: $('form#userdoc-name-form input#id_id').val()
             };
 
             $.ajax({
@@ -827,21 +827,18 @@ $(document).ready(function(){
                 csrfmiddlewaretoken: csrf_token.val(),
                 current_progress: $.cookie('glynt-{{ userdoc.slug }}'),
                 name: $('form#userdoc-name-form input#id_name').val(),
-                id: $('form#userdoc-name-form input#id_pk').val()
+                id: $('form#userdoc-name-form input#id_id').val()
             };
 
             $.ajax({
               type: 'POST',
-              url: "{% url 'document:save_progress' slug=userdoc.slug %}",
+              url: "{% url 'document:save_progress' slug=object.slug %}",
               data: data,
             })
             .success(function(data, textStatus, jqXHR) {
                 var data = data[0];
 
-                if (data.url != undefined && data.url != document.location)
-                    document.location = data.url;
-
-                $('input#id_pk').val(data.userdoc_id);
+                $('input#id_id').val(data.userdoc_id);
                 document_title = $('form#userdoc-name-form input#id_name').val();
                 $('#document-title').html(document_title);
                 App.documentModel.setContextItemByForce('document_title', document_title);
