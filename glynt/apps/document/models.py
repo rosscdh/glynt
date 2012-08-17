@@ -75,6 +75,10 @@ class ClientCreatedDocument(models.Model):
   def get_absolute_url(self):
     return reverse('document:my_view', kwargs={'slug': self.slug})
 
+  @property
+  def cookie_name(self):
+    return 'glynt-%s' %(self.pk)
+
   def diff_source(self):
     return 'Return a diff against the self.source_document.body value'
 

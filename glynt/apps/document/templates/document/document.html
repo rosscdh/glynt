@@ -154,6 +154,9 @@ $(document).ready(function(){
                     }
                 }
             }
+            // persiste the cookie progress
+            App.persistProgress();
+
             return true;
         }
 
@@ -694,7 +697,7 @@ $(document).ready(function(){
         }
 
         self.initializeValuesFromCookie = function initializeValuesFromCookie() {
-            var cookie_value = $.parseJSON($.cookie('glynt-{{ userdoc.slug }}'));
+            var cookie_value = $.parseJSON($.cookie('{{ userdoc.cookie_name }}'));
             if (cookie_value) {
                 cookie_value = $(cookie_value);
                 if (cookie_value.length >= 0) {
@@ -752,7 +755,7 @@ $(document).ready(function(){
             $.ajax({
               type: 'POST',
               url: "{% url 'document:my_view' slug=userdoc.slug %}?step="+step,
-              data: form_data_serialized,
+              data: form_data_serialized
             })
             .success(function(data, textStatus, jqXHR) {
                 var response_data = $.parseJSON(data);
@@ -778,7 +781,7 @@ $(document).ready(function(){
         self.persistFormData = function persistFormData(serialized_form_data, response_data) {
             // console.log(serialized_form_data)
             // console.log(response_data)
-            var cookie_value = $.parseJSON($.cookie('glynt-{{ userdoc.slug }}'));
+            var cookie_value = $.parseJSON($.cookie('{{ userdoc.cookie_name }}'));
 
             for (i in serialized_form_data) {
                 name = serialized_form_data[i].name;
@@ -787,7 +790,7 @@ $(document).ready(function(){
                     cookie_value[name] = value;
                 }
             }
-            $.cookie('glynt-{{ userdoc.slug }}', JSON.stringify(cookie_value));
+            $.cookie('{{ userdoc.cookie_name }}', JSON.stringify(cookie_value));
         }
 
         self.showErrorMessage = function showErrorMessage(msg) {
@@ -820,12 +823,37 @@ $(document).ready(function(){
             });
         }
 
+        // method to persist the cookie data
+        self.persistProgress = function persistProgress() {
+
+            var csrf_token = $('form.bind-document:first').find('input[type=hidden]:first')
+            var data = {
+                csrfmiddlewaretoken: csrf_token.val(),
+                current_progress: $.cookie('{{ userdoc.cookie_name }}'),
+            };
+
+            $.ajax({
+              type: 'POST',
+              url: "{% url 'document:my_persist' pk=userdoc.pk %}",
+              data: data,
+            })
+            .success(function(data, textStatus, jqXHR) {
+                var data = data[0];
+            })
+            .error(function(jqXHR, textStatus, errorThrown) { 
+                console.log(jqXHR)
+            })
+            .complete(function() {
+            });
+        }
+
+        // Method to actual save the document:title
         self.saveProgress = function saveProgress() {
 
             var csrf_token = $('form.bind-document:first').find('input[type=hidden]:first')
             var data = {
                 csrfmiddlewaretoken: csrf_token.val(),
-                current_progress: $.cookie('glynt-{{ userdoc.slug }}'),
+                current_progress: $.cookie('{{ userdoc.cookie_name }}'),
                 name: $('form#userdoc-name-form input#id_name').val(),
                 id: $('form#userdoc-name-form input#id_id').val()
             };
@@ -953,14 +981,14 @@ $(document).ready(function(){
 
     $("input.datepicker").datepicker({dateFormat:"D, dd MM yy",changeYear:true,changeMonth:true});
 
-    if ($.cookie('glynt-{{ userdoc.slug }}') == null) {
-        $.cookie('glynt-{{ userdoc.slug }}', JSON.stringify({}));
+    if ($.cookie('{{ userdoc.cookie_name }}') == null) {
+        $.cookie('{{ userdoc.cookie_name }}', JSON.stringify({}));
     }
 
     {% if userdoc_form %}
     $('#document-title.editable').editable(function(value, settings) { 
      $('form#userdoc-name-form input#id_name').val(value);
-     App.saveProgress()
+     App.saveProgress();
      return(value);
     }, { 
         indicator : 'Saving...',

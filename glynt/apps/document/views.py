@@ -5,7 +5,7 @@ from django.utils.translation import ugettext as __
 from django.shortcuts import render_to_response, redirect
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseBadRequest
-from django.template import loader, Context
+from django.template import Context, Template
 from django.views.generic.base import View, TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.edit import FormMixin
@@ -196,7 +196,7 @@ class MyDocumentView(DocumentView):
 
     return context
 
-def userdoc_from_request(user, source_doc, pk=None):
+def userdoc_from_request(user, source_doc=None, pk=None):
   if pk and type(pk) is int:
     userdoc = get_object_or_404(ClientCreatedDocument, pk=pk)
     is_new = False
@@ -209,7 +209,7 @@ def userdoc_from_request(user, source_doc, pk=None):
 
 
 class DocumentSaveProgressView(View):
-  """ Save the users progress through the form """
+  """ Save the user form """
   def post(self, request, *args, **kwargs):
     userdoc_pk = request.POST.get('id', None)
     userdoc_name = request.POST.get('name', None)
@@ -249,15 +249,37 @@ class DocumentSaveProgressView(View):
       return HttpResponse('[{"userdoc_id": %d, "url": "%s", "status":"%s", "message":"%s"}]' % (progress.pk, redirect_url, 'success', unicode(_('Progress Saved'))), status=200, content_type="application/json")
 
 
+class PersistClientCreatedDocumentProgressView(View):
+  """ Persist a clients cookie data as they progress through form """
+  def post(self, request, *args, **kwargs):
+    userdoc_pk = request.POST.get('id', None)
+    userdoc_name = request.POST.get('name', None)
+
+    # is never new
+    progress, is_new = userdoc_from_request(user=request.user, source_doc=None, pk=int(self.kwargs['pk']))
+
+    cookie_data = request.COOKIES.get(progress.cookie_name)
+
+    if cookie_data:
+      progress.data = cookie_data
+      progress.save()
+
+    return HttpResponse('[{"userdoc_id": %d, "status":"%s", "message":"%s"}]' % (progress.pk, 'success_persisted', unicode(_('Progress Persisted'))), status=200, content_type="application/json")
+
+
 class DocumentExportView(View):
     def post(self, request, *args, **kwargs):
       userdoc_pk = request.POST.get('id', None)
-      content_markdown = request.POST.get('md')
+      content_markdown = request.POST.get('md', None)
 
       document_slug = slugify(self.kwargs['slug'])
       document = get_object_or_404(ClientCreatedDocument, slug=document_slug, owner=request.user)
 
-      html = markdown.markdown(content_markdown)
+      if content_markdown not in [None,'']:
+        html = markdown.markdown(content_markdown)
+      else:
+        template = Template(document.body)
+        html = markdown.markdown(template.render(Context(document.data)))
 
       result = StringIO.StringIO()
       pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result)
