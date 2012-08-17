@@ -217,7 +217,7 @@ class DocumentSaveProgressView(View):
     form = ClientCreatedDocumentForm(request.POST)
 
     if not form.is_valid():
-      return HttpResponse('[{"status":"%s", "message":"%s"}]' % (progress.pk, 'error', unicode(_('The form was not valid; please check your data'))), status=400, content_type="application/json")
+      return HttpResponse('[{"status":"%s", "message":"%s"}]' % (progress.pk, 'error', unicode(_('The form was not valid; please check your data "%s"' %(form.errors,) ))), status=400, content_type="application/json")
     else:
       document_slug = slugify(self.kwargs['slug'])
       document = get_object_or_404(Document, slug=document_slug)
