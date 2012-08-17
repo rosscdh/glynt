@@ -6,10 +6,10 @@
 
 {% block owner_info %}
 <div class="span12">
-	<h2 id="document-title" class="editable">{{ userdoc.name }}</h2>
-	<form id="userdoc-name-form" class="hidden">
-	    {{ userdoc_form }}
-	</form>
+  <h2 id="document-title" class="editable">{{ userdoc.name }}</h2>
+  <form id="userdoc-name-form" class="hidden">
+      {{ userdoc_form }}
+  </form>
 </div>
 {% endblock %}
 
@@ -354,15 +354,15 @@ $(document).ready(function(){
         self.init();
     };
 
-	function DocumentModel() {
-		var self = this;
+  function DocumentModel() {
+    var self = this;
 
         self.textElementsList = ['text','textarea','hidden','select'];
         self.FalseValuesList = ['False','false',false,null,void 0,''];
-		self.handlebarsElementId = ko.observable('script#js-document');
-		self.documentTemplate = ko.observable($(self.handlebarsElementId()).html());
+    self.handlebarsElementId = ko.observable('script#js-document');
+    self.documentTemplate = ko.observable($(self.handlebarsElementId()).html());
         self.compiledTemplate = false; // must not be ko.observable
-		self.renderedHTML = ko.observable('');
+    self.renderedHTML = ko.observable('');
 
         self.visibilityRuleset = ko.observableArray([]);
         self.loopStepList = ko.observable({});
@@ -372,11 +372,11 @@ $(document).ready(function(){
             'show_element_when': []
         });
 
-		self.context = ko.observable({
-		    'user_company_name': 'RuleNo1',
+    self.context = ko.observable({
+        'user_company_name': 'RuleNo1',
             'user_company_url': 'http://www.ruleno1.com',
-		    'document_title': '{{ userdoc.name|default:object.name }}'
-		});
+        'document_title': '{{ userdoc.name|default:object.name }}'
+    });
 
         self.getRuleByType = function getRuleByType(ruleset_type) {
             if (ruleset_type in self.ruleSet()) {
@@ -454,14 +454,14 @@ $(document).ready(function(){
         }
 
         self.determineValue = function determineValue(input) {
-			var value = null;
-			var is_placeholder_value = true;
-			if (input.val() != 'undefined' && input.val() != '') {
-			    value = input.val();
-			    is_placeholder_value = false;
-			} else {
-			    value = input.attr('placeholder');
-		    }
+      var value = null;
+      var is_placeholder_value = true;
+      if (input.val() != 'undefined' && input.val() != '') {
+          value = input.val();
+          is_placeholder_value = false;
+      } else {
+          value = input.attr('placeholder');
+        }
 
             if (self.textElementsList.indexOf(input.attr('type')) >= 0 || self.textElementsList.indexOf(input.prop('type')) >= 0) {
                     //value = '[' + value.toString() + ']';
@@ -559,12 +559,12 @@ $(document).ready(function(){
             return context;
         }
 
-		self.setContextItem = function setContextItem(input,local_context) {
+    self.setContextItem = function setContextItem(input,local_context) {
             // only allow if the data-hb-name is set
             if (typeof input.attr('data-hb-name') == 'string') {
-    			var context = (local_context == undefined) ? self.context() : local_context ;
-    			var key = name = input.attr('data-hb-name');
-    			var value_ob = self.determineValue(input);
+          var context = (local_context == undefined) ? self.context() : local_context ;
+          var key = name = input.attr('data-hb-name');
+          var value_ob = self.determineValue(input);
                 var value = value_ob['value'];
                 var is_placeholder_value = value_ob['is_placeholder_value'];
 
@@ -573,14 +573,14 @@ $(document).ready(function(){
                 // set the has_attrib values
                 self.setTemplateHasHelperValues(input, value, is_placeholder_value);
 
-            	context[key] = value;
+              context[key] = value;
                 if (local_context == undefined) {
-            	   self.context(context);
+                 self.context(context);
                 }
                 return context
             }
             return false;
-		}
+    }
 
         self.setContextItemByForce = function setContextItemByForce(key,value) {
             var context = self.context();
@@ -592,7 +592,7 @@ $(document).ready(function(){
             self.compiledTemplate = (self.compiledTemplate == false) ? Handlebars.compile(self.documentTemplate()) : self.compiledTemplate ;
             return self.compiledTemplate(self.context());
         }
-	}
+  }
 
     /**
     * Primary view acts as a holder for the other views
@@ -716,14 +716,14 @@ $(document).ready(function(){
             self.setContext();
             self.setGlyntRuleset();
             self.applyGlyntRuleset();
-        	self.render();
+          self.render();
         }
 
         self.render = function render() {
             self.documentModel.renderedHTML(self.renderMarkdown(self.documentModel.render()))
         }
         self.renderMarkdown = function renderMarkdown(md) {
-        	return self.markdownConverter.makeHtml(md);
+          return self.markdownConverter.makeHtml(md);
         }
 
         self.changeContext = function changeContext(input) {
@@ -1024,11 +1024,16 @@ $(document).ready(function(){
         callBack(results,callbackId);
       };
 
-      FB.api('/me/friends?access_token={{ request.user.get_profile.profile_data.accessToken }}', function(response) {
-          processFriends(response.data); // process initial set
-          if (response.paging != undefined && response.paging.next != undefined) {
-            // handle pagination of friends
-            getFBFriends(response.paging.next);
+      // Only perform IF we have a FB connected account
+      FB.getLoginStatus(function(response) {
+          if (response.status === 'connected') {
+            FB.api('/me/friends', function(response) {
+                processFriends(response.data); // process initial set
+                if (response.paging != undefined && response.paging.next != undefined) {
+                  // handle pagination of friends
+                  getFBFriends(response.paging.next);
+                }
+            });
           }
       });
     };
