@@ -23,7 +23,7 @@ facebook
 -e git+https://github.com/bradjasper/django-jsonfield.git#egg=django-jsonfield
 -e git+https://github.com/stard0g101/django-countries.git#egg=django-countries
 -e git+https://github.com/stard0g101/django-bootstrap.git#egg=bootstrap
-
+-e git+https://github.com/brack3t/django-braces.git#egg=django-braces
 # javascript markdown
 # hg clone https://code.google.com/p/pagedown/
 # possible multi format 
