@@ -21,7 +21,7 @@ class Document(models.Model):
   ))
   owner = models.ForeignKey(User)
   name = models.CharField(max_length=128,blank=False)
-  slug = models.SlugField(blank=False)
+  slug = models.SlugField(blank=False, max_length=255)
   summary = models.TextField(blank=True,null=True)
   body = models.TextField(blank=True,null=True)
   flyform = models.OneToOneField('flyform.FlyForm')
@@ -55,7 +55,7 @@ class ClientCreatedDocument(models.Model):
   owner = models.ForeignKey(User)
   source_document = models.ForeignKey(Document)
   name = models.CharField(max_length=128, blank=True, null=True)
-  slug = models.SlugField(unique=False, blank=False, null=True)
+  slug = models.SlugField(unique=False, blank=False, null=True, max_length=255)
   body = models.TextField(blank=True, null=True)
   data = JSONField(blank=True, null=True)
   created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
@@ -74,6 +74,10 @@ class ClientCreatedDocument(models.Model):
 
   def get_absolute_url(self):
     return reverse('document:my_view', kwargs={'slug': self.slug})
+
+  @property
+  def cookie_name(self):
+    return 'glynt-%s' %(self.pk)
 
   def diff_source(self):
     return 'Return a diff against the self.source_document.body value'
