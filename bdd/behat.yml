@@ -3,5 +3,7 @@ default:
     Behat\MinkExtension\Extension:
       base_url: http://127.0.0.1:8001/
       browser_name: chrome
+      show_cmd: open %s
       goutte:   ~
+      zombie: ~
       sahi:   ~

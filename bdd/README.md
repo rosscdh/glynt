@@ -23,6 +23,17 @@
 1. glynt/bdd/run_tests.sh
 2. this will become a django manage command
 
+# Install Homebrew on Mac OSX
+
+1. ruby <(curl -fsSkL raw.github.com/mxcl/homebrew/go)
+
+# Install Zombie
+
+1. brew install node
+2. brew install nodejs
+3. curl https://npmjs.org/install.sh | sh
+4. npm install zombie
+
 # Install and Start sahi
 
 What is sahi: http://sahi.co.in/w/sahi
@@ -39,3 +50,7 @@ Remember to prefex javascript required scenarios with:
 > @mink:sahi
 > Scenario: This test uses javascript via a real browser and the sahi driver (chrome by default)
 
+Remember to add to vendor/composer/autoload_namespaces.php
+
+> *    'Monolog' => $vendorDir . '/monolog/monolog/src/',
+> *    'Idiorm' => $vendorDir . '/Idiorm/',

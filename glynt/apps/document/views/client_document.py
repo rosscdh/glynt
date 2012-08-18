@@ -1,181 +1,46 @@
-# -*- coding: utf-8 -*-
-from django.conf import settings
-from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import ugettext as __
-from django.shortcuts import render_to_response, redirect
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseBadRequest
-from django.template import Context, Template
-from django.views.generic.base import View, TemplateView
-from django.views.generic.list import ListView
-from django.views.generic.edit import FormMixin
-from django.template.defaultfilters import slugify
-from django.http import HttpResponseRedirect
-from django.contrib.formtools.wizard.views import SessionWizardView
-from django.utils import simplejson as json
-from django.core.files.storage import default_storage
-from django.core.files.base import ContentFile
-from django.contrib.auth.decorators import user_passes_test
-from django.http import Http404
-from django.shortcuts import get_object_or_404
-from django.middleware.csrf import get_token
-from django.utils.safestring import mark_safe
-from django.db.utils import IntegrityError
-from django.utils.encoding import smart_unicode
 
-from pybars import Compiler
+from django.http import HttpResponse, HttpResponseBadRequest
+from django.template.defaultfilters import slugify
+from django.shortcuts import get_object_or_404
+from django.views.generic.base import View, TemplateView
+from django.utils import simplejson as json
+from django.db.utils import IntegrityError
+
+from glynt.apps.document.models import Document, ClientCreatedDocument
+from glynt.apps.document.forms import ClientCreatedDocumentForm
 
 from glynt.apps.flyform.forms import BaseFlyForm
-from models import Document, DocumentCategory, ClientCreatedDocument
-from forms import ClientCreatedDocumentForm
+
+from document import DocumentView
+from utils import user_can_view_document
 
 import markdown
 import xhtml2pdf.pisa as pisa
 import cStringIO as StringIO
-import datetime
 import random
 
 import logging
 logger = logging.getLogger(__name__)
 
-
 FORM_GROUPS = {
   'no_steps': [],
 }
 
-def user_can_view_document(document, user):
-  """ Helper method for testing a users access to this document """
-  
-  if type(document) == Document:
-    if user.is_superuser or user.is_staff:
-      return True
-    if document.owner == user and document.doc_status not in [Document.DOC_STATUS.deleted]:
-      return True
-    if document.is_public == False:
-      raise Http404
-    if document.doc_status in [Document.DOC_STATUS.deleted, Document.DOC_STATUS.draft]:
-      raise Http404
 
-  elif type(document) == ClientCreatedDocument:
-    if user.is_superuser or user.is_staff:
-      return True
-    if document.owner == user:
-      return True
-    else:
-      raise Http404
-
-
-
-class JsonErrorResponseMixin(object):
-  def get_response_json(self, form):
-    if form.is_valid():
-      msg = None
-      status = 200
-    else:
-      msg = ''
-      for key,field in form.fields.iteritems():
-        if key in form.errors:
-          label = form.fields[key].label
-          msg += '%s' % (str(form.errors[key]).replace('<li>','<li>%s - '%(label,)), )
-      status = 400
-
-    return {
-        'pk': self.pk if hasattr(self, 'pk') else None,
-        'step': self.step,
-        'status': status,
-        'message': msg,
-        'object': None,
-    }
-
-
-class DocumentByCategoryListView(ListView):
-  model = Document
-  template_name = 'document/documentcategory_list.html'
-
-  def get_queryset(self):
-    """
-    Get the list of items for this view. This must be an interable, and may
-    be a queryset (in which qs-specific behavior will be enabled).
-    """
-    self.doc_type = self.kwargs.get('type', None)
-    self.category = self.kwargs.get('category', None)
-
-    queryset = self.model.objects.filter(doc_cats__slug=self.category)
-
-    return queryset
-
-  def get_context_data(self, **kwargs):
-    context = super(DocumentByCategoryListView, self).get_context_data(**kwargs)
-
-    context['category'] = DocumentCategory.objects.get(slug=self.category)
-    context['doc_type'] = self.doc_type
-
-    return context
-
-
-class CreateDocumentView(TemplateView, FormMixin):
-  template_name = 'document/create.html'
-
-
-class EditDocumentView(TemplateView, FormMixin):
-  template_name = 'document/create.html'
-
-
-class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
-
-  def get_context_data(self, **kwargs):
-    context = super(DocumentView, self).get_context_data(**kwargs)
-
-    document_slug = slugify(self.kwargs['slug'])
-
-    self.document = get_object_or_404(Document.objects.select_related('flyform'), slug=document_slug)
-
-    context['csrf_raw_token'] = get_token(self.request)
-
-    context['object'] = self.document
-    context['document'] = self.document.body
-    context['default_data'] = json.dumps(self.document.flyform.defaults)
-    context['userdoc_form'] = ClientCreatedDocumentForm()
-
-    try:
-      context['form_set'] = [BaseFlyForm(json.dumps(step)) for step in self.document.flyform.body]
-    except KeyError:
-      context['form_set'] = FORM_GROUPS['no_steps']
-
-    user_can_view_document(self.document, self.request.user)
-
-    return context
-
-  def get_form_class(self):
-    """
-    Returns the form class to use in this view
-    """
-    return BaseFlyForm
-
-  def get_form(self, form_class):
-    """
-    Returns an instance of the form to be used in this view.
-    """
-    kwargs = self.get_form_kwargs()
-
-    self.step = int(self.request.GET.get('step', 0))
-    if self.step > 0:
-      self.step = self.step - 1
-
-    kwargs['json_form'] = self.document.flyform.body[self.step]
-
-    return form_class(**kwargs)
-
-  def post(self, request, *args, **kwargs):
-    context = self.get_context_data(**kwargs)
-
-    form_class = self.get_form_class()
-    form = self.get_form(form_class)
-
-    response = self.get_response_json(form)
-
-    return HttpResponse(json.dumps(response), status=response['status'], content_type='text/json')
+def userdoc_from_request(user, source_doc=None, pk=None):
+  if pk and type(pk) is int:
+    logger.debug('got pk so can get ClientCreatedDocument directly')
+    userdoc = get_object_or_404(ClientCreatedDocument, pk=pk)
+    is_new = False
+  else:
+    userdoc, is_new = ClientCreatedDocument.objects.get_or_create(owner=user, source_document=source_doc, is_deleted=False)
+    logger.debug('got no pk so must get ClientCreatedDocument based on user source_document and is_deleted=False: document:%s is_new:%s'%(userdoc, is_new,))
+    # just set the body the first time the object is created
+    userdoc.body = source_doc.body
+    userdoc.slug = source_doc.slug
+  return userdoc, is_new
 
 
 class MyDocumentView(DocumentView):
@@ -206,20 +71,8 @@ class MyDocumentView(DocumentView):
 
     return context
 
-def userdoc_from_request(user, source_doc=None, pk=None):
-  if pk and type(pk) is int:
-    logger.debug('got pk so can get ClientCreatedDocument directly')
-    userdoc = get_object_or_404(ClientCreatedDocument, pk=pk)
-    is_new = False
-  else:
-    userdoc, is_new = ClientCreatedDocument.objects.get_or_create(owner=user, source_document=source_doc, is_deleted=False)
-    logger.debug('got no pk so must get ClientCreatedDocument based on user source_document and is_deleted=False: document:%s is_new:%s'%(userdoc, is_new,))
-    # just set the body the first time the object is created
-    userdoc.body = source_doc.body
-    userdoc.slug = source_doc.slug
-  return userdoc, is_new
 
-
+# @TODO rename to ClientCreatedDocumentSaveProgressView
 class DocumentSaveProgressView(View):
   """ Save the user form """
   def post(self, request, *args, **kwargs):
@@ -277,6 +130,7 @@ class PersistClientCreatedDocumentProgressView(View):
     return HttpResponse('[{"userdoc_id": %d, "status":"%s", "message":"%s"}]' % (progress.pk, 'success_persisted', unicode(_('Progress Persisted'))), status=200, content_type="application/json")
 
 
+# @TODO rename to ClientCreatedDocumentExportView
 class DocumentExportView(View):
     def post(self, request, *args, **kwargs):
       userdoc_pk = request.POST.get('id', None)
@@ -291,16 +145,16 @@ class DocumentExportView(View):
         logger.debug('markdown was provided: %s'%(content_markdown,))
       else:
         logger.debug('no markdown was provided generate based on default_data and pybars')
-        handlebars_compiler = Compiler()
-        template = handlebars_compiler.compile(document.body)
         if type(document.source_document.flyform.defaults) is dict:
-          data = document.source_document.flyform.defaults + document.body
+          data = dict(document.source_document.flyform.defaults.items() + document.data.items())
           logger.debug('flyform.defaults was combined with document.body')
         else:
-          data = document.body
+          data = document.data
           logger.debug('flyform.defaults was not specified')
 
-        html = template(data)
+        t = Template(document.body)
+        c = Context(data)
+        html = t.render(c)
         # html = markdown.markdown(template.render(Context(document.data)))
         print html
 
@@ -370,6 +224,6 @@ class UndoDeleteClientCreatedDocumentView(View):
           slug = '%s-%d' %(base_slug, count,)
           count = count+1
           saved = False
-    message = __("Reactivated '%s'") % (client_document.name,)
+    message = _("Reactivated '%s'") % (client_document.name,)
     return HttpResponse('[{"userdoc_id": %d, "status":"%s", "message":"%s"}]' % (client_document.pk, 'deleted', message,), status=200, content_type="application/json")
 

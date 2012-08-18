@@ -4,18 +4,6 @@
 
 {% block body %}
 
-<!-- <h3>{% trans 'Documents' %}</h3>
-<a id="create-document" href="{% url 'document:create' %}" class="btn btn-primary">{% trans 'New Doc' %}</a>
-<dl id="available-document-list" class="dl-horizontal">
-<dt>{% trans 'Available Documents' %}</dt>
-<dd>
-    <i>{% blocktrans %}Documents{% endblocktrans %}</i>
-    <ul id="public-documents">
-
-    </ul>
-</dd> -->
-
-
 <div class="row">
   <div class="span12">
     <h2>New Document
@@ -66,9 +54,9 @@
                     </a>
                   </div>
                   <div id="collapseThree" class="accordion-body collapse">
-                      <div class="accordion-inner">
+                      <div id="public-documents" class="accordion-inner">
                         {% for d in public_document_list %}
-                        <a href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a>, 
+                        <a class="template-document" href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a>, 
                         {% endfor %}
 
               </div>
@@ -95,7 +83,7 @@
                 <br />
                 <div class="row">
                         <div class="span12">
-                            <ul class="thumbnails">
+                            <ul id="my-documents" class="thumbnails">
                         {% for d in my_document_list %}
                                 <li class="span3">
                                   <div class="thumbnail">

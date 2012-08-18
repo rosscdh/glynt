@@ -14,7 +14,9 @@ use Behat\Behat\Context\ClosuredContextInterface,
     Behat\Behat\Context\BehatContext,
     Behat\Behat\Exception\PendingException;
 use Behat\Gherkin\Node\PyStringNode,
-    Behat\Gherkin\Node\TableNode;
+    Behat\Gherkin\Node\TableNode,
+    Behat\Mink\Driver\ZombieDriver,
+    Behat\Mink\Driver\NodeJS\Server\ZombieServer;
 
 use Behat\MinkExtension\Context\MinkContext;
 
@@ -132,5 +134,13 @@ class FeatureContext extends MinkContext {
     public function iClickFacebookLogin()
     {
         //throw new PendingException();
+    }
+
+    /**
+     * @Given /^I click "([^"]*)"$/
+     */
+    public function iClick($element)
+    {
+        $this->getSession()->wait(500, '$("'.$element.'").trigger("click")');
     }
 }
