@@ -53,6 +53,7 @@ class SignupForm(BootstrapMixin, SignupFormOnlyEmail):
 
     return new_user
 
+
 class AuthenticationForm(BootstrapMixin, AuthenticationForm):
   username = forms.CharField(label=_("Email or Username"), max_length=30, widget=forms.TextInput(attrs={'placeholder': 'username@example.com'}))
 

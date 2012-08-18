@@ -6,11 +6,14 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils import simplejson as json
 from django.template.defaultfilters import slugify
 from django.utils import safestring
+from bootstrap.forms import BootstrapMixin, Fieldset
 
 from django.contrib.localflavor.us.forms import USStateField, USZipCodeField
-from django.contrib.localflavor.us.us_states import US_STATES, USPS_CHOICES
-
+from django.contrib.localflavor.us.us_states import US_STATES as SHORT_US_STATES, USPS_CHOICES as SHORT_USPS_CHOICES
 from django_countries import CountryFormField as CountryField
+
+US_STATES = [(v,v) for k,v in SHORT_US_STATES]
+USPS_CHOICES = [(v,v) for k,v in SHORT_USPS_CHOICES]
 
 
 CUSTOM_VALID_FIELD_TYPES = ['CountryField', 'USStateField', 'USZipCodeField']
@@ -24,7 +27,7 @@ def customFields(fieldTypeName):
   if fieldTypeName in CUSTOM_VALID_FIELD_TYPES:
     retr
 
-class BaseFlyForm(forms.Form):
+class BaseFlyForm(forms.Form, BootstrapMixin):
   """ This form is the basis for the self generating form representations
   it requires that a valid json_object be passed in which adheres to the following schema
   schema = {
