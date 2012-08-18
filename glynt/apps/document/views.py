@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.conf import settings
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
@@ -21,9 +22,13 @@ from django.shortcuts import get_object_or_404
 from django.middleware.csrf import get_token
 from django.utils.safestring import mark_safe
 from django.db.utils import IntegrityError
+from django.utils.encoding import smart_unicode
+
+from pybars import Compiler
 
 from glynt.apps.flyform.forms import BaseFlyForm
 from models import Document, DocumentCategory, ClientCreatedDocument
+from forms import ClientCreatedDocumentForm
 
 import markdown
 import xhtml2pdf.pisa as pisa
@@ -31,7 +36,8 @@ import cStringIO as StringIO
 import datetime
 import random
 
-from forms import ClientCreatedDocumentForm
+import logging
+logger = logging.getLogger(__name__)
 
 
 FORM_GROUPS = {
@@ -67,7 +73,11 @@ class JsonErrorResponseMixin(object):
       msg = None
       status = 200
     else:
-      msg = str(form.errors)
+      msg = ''
+      for key,field in form.fields.iteritems():
+        if key in form.errors:
+          label = form.fields[key].label
+          msg += '%s' % (str(form.errors[key]).replace('<li>','<li>%s - '%(label,)), )
       status = 400
 
     return {
@@ -198,10 +208,12 @@ class MyDocumentView(DocumentView):
 
 def userdoc_from_request(user, source_doc=None, pk=None):
   if pk and type(pk) is int:
+    logger.debug('got pk so can get ClientCreatedDocument directly')
     userdoc = get_object_or_404(ClientCreatedDocument, pk=pk)
     is_new = False
   else:
     userdoc, is_new = ClientCreatedDocument.objects.get_or_create(owner=user, source_document=source_doc, is_deleted=False)
+    logger.debug('got no pk so must get ClientCreatedDocument based on user source_document and is_deleted=False: document:%s is_new:%s'%(userdoc, is_new,))
     # just set the body the first time the object is created
     userdoc.body = source_doc.body
     userdoc.slug = source_doc.slug
@@ -252,16 +264,14 @@ class DocumentSaveProgressView(View):
 class PersistClientCreatedDocumentProgressView(View):
   """ Persist a clients cookie data as they progress through form """
   def post(self, request, *args, **kwargs):
-    userdoc_pk = request.POST.get('id', None)
-    userdoc_name = request.POST.get('name', None)
+    userdoc_current_progress = request.POST.get('current_progress', None)
+    userdoc_pk = int(self.kwargs['pk'])
 
     # is never new
-    progress, is_new = userdoc_from_request(user=request.user, source_doc=None, pk=int(self.kwargs['pk']))
+    progress, is_new = userdoc_from_request(user=request.user, source_doc=None, pk=userdoc_pk)
 
-    cookie_data = request.COOKIES.get(progress.cookie_name)
-
-    if cookie_data:
-      progress.data = cookie_data
+    if userdoc_current_progress:
+      progress.data = userdoc_current_progress
       progress.save()
 
     return HttpResponse('[{"userdoc_id": %d, "status":"%s", "message":"%s"}]' % (progress.pk, 'success_persisted', unicode(_('Progress Persisted'))), status=200, content_type="application/json")
@@ -273,13 +283,26 @@ class DocumentExportView(View):
       content_markdown = request.POST.get('md', None)
 
       document_slug = slugify(self.kwargs['slug'])
-      document = get_object_or_404(ClientCreatedDocument, slug=document_slug, owner=request.user)
+      document = get_object_or_404(ClientCreatedDocument.objects.select_related('source_document','source_document__flyform'), slug=document_slug, owner=request.user)
+      logger.debug('got document: %s'%(document,))
 
       if content_markdown not in [None,'']:
         html = markdown.markdown(content_markdown)
+        logger.debug('markdown was provided: %s'%(content_markdown,))
       else:
-        template = Template(document.body)
-        html = markdown.markdown(template.render(Context(document.data)))
+        logger.debug('no markdown was provided generate based on default_data and pybars')
+        handlebars_compiler = Compiler()
+        template = handlebars_compiler.compile(document.body)
+        if type(document.source_document.flyform.defaults) is dict:
+          data = document.source_document.flyform.defaults + document.body
+          logger.debug('flyform.defaults was combined with document.body')
+        else:
+          data = document.body
+          logger.debug('flyform.defaults was not specified')
+
+        html = template(data)
+        # html = markdown.markdown(template.render(Context(document.data)))
+        print html
 
       result = StringIO.StringIO()
       pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result)

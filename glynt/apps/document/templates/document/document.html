@@ -797,7 +797,7 @@ $(document).ready(function(){
 
         }
 
-        self.postDocument = function postDocument() {
+        self.generatePDF = function generatePDF() {
 
             var csrf_token = $('form.bind-document:first').find('input[type=hidden]:first')
             var data = {
@@ -848,7 +848,7 @@ $(document).ready(function(){
         }
 
         // Method to actual save the document:title
-        self.saveProgress = function saveProgress() {
+        self.saveDocument = function saveDocument() {
 
             var csrf_token = $('form.bind-document:first').find('input[type=hidden]:first')
             var data = {
@@ -976,7 +976,7 @@ $(document).ready(function(){
     })
     $('button#btn-post-pdf').live('click', function(event){
         event.preventDefault();
-        App.postDocument();
+        App.generatePDF();
     });
 
     $("input.datepicker").datepicker({dateFormat:"D, dd MM yy",changeYear:true,changeMonth:true});
@@ -987,9 +987,9 @@ $(document).ready(function(){
 
     {% if userdoc_form %}
     $('#document-title.editable').editable(function(value, settings) { 
-     $('form#userdoc-name-form input#id_name').val(value);
-     App.saveProgress();
-     return(value);
+        $('form#userdoc-name-form input#id_name').val(value);
+        App.saveDocument();
+        return(value);
     }, { 
         indicator : 'Saving...',
         tooltip   : 'Click to create new document...',
