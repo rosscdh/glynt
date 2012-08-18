@@ -1,7 +1,7 @@
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import Http404, HttpResponse, HttpResponseBadRequest
 
 from glynt.apps.document.models import Document, ClientCreatedDocument
 
