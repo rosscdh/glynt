@@ -685,12 +685,15 @@ $(document).ready(function(){
 
         self.initializeValuesFromDefaultData = function initializeValuesFromDefaultData() {
             var data = $.parseJSON($('script#document-default_data').html());
-
             if (data) {
                 data = data[0];
                 if (data) {
-                    $.each(data, function(key, value) {
-                        self.documentModel.setContextItemByForce(key, value)
+                    $.each($('form.bind-document').find('input,textarea,select'), function(index, element) {
+                        element = $(element);
+                        element_name = element.attr('name');
+                        if (element_name != undefined && element_name in data) {
+                            element.val(data[element_name]);
+                        }
                     });
                 }
             }
@@ -713,9 +716,8 @@ $(document).ready(function(){
         }
 
         self.init = function init() {
-            // main initializer
-            self.initializeValuesFromDefaultData();
             self.initializeValuesFromCookie();// cookie overrides default saved data
+            self.initializeValuesFromDefaultData();// main initializer
             self.setContext();
             self.setGlyntRuleset();
             self.applyGlyntRuleset();
