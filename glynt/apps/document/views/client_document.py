@@ -206,7 +206,7 @@ class DeleteClientCreatedDocumentView(View):
     client_document.is_deleted = True
     client_document.slug = '%d-%s' % (client_document.pk, client_document.slug[0:45],)
     client_document.save()
-    message = _("Deleted %s, <a id='undelete-%d' class='undelete-my-document' href='%s'>undo</a>") % (client_document.pk, client_document.name, reverse('document:my_undelete', kwargs={'pk':client_document.pk}),)
+    message = _("Deleted %s, <a id='undelete-%d' class='undelete-my-document' href='%s'>undo</a>") % (client_document.name, client_document.pk, reverse('document:my_undelete', kwargs={'pk':client_document.pk}),)
 
     return HttpResponse('[{"userdoc_id": %d, "status":"%s", "message":"%s"}]' % (client_document.pk, 'deleted', unicode(message),), status=200, content_type="application/json")
 
