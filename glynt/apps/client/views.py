@@ -48,6 +48,8 @@ class LoginView(FormView):
     if user is not None:
       if user.is_active:
         login(request, user)
+        if request.GET.get('next') is not None:
+          self.success_url = request.GET.get('next')
         messages.success(request, _('Welcome, you have successfully logged in.'))
         return self.form_valid(form)
       else:

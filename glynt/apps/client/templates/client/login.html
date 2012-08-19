@@ -7,7 +7,7 @@
 
 {% include 'client/partials/signin_providers.html' %}
 
-<form id="user-login" class="form-horizontal" action="{% url 'client:login' %}" method="post">{% csrf_token %}
+<form id="user-login" class="form-horizontal" action="{% url 'client:login' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}" method="post">{% csrf_token %}
 {{ form }}
 <br/>
 <div class="form-actions">

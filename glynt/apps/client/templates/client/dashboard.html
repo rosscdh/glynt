@@ -92,9 +92,9 @@
                                       <h5><a href="{% url 'document:my_view' slug=d.slug %}">{{ d.name }}</a></h5>
                                       <p>Between x and y.</p>
                                       <p><a href="{% url 'document:my_view' slug=d.slug %}" class="btn btn-info">{% trans 'Edit' %}</a></p>
-                                      <p><a href="#clone" data-url="{% url 'document:my_clone' pk=d.pk %}" data-pk="{{ d.pk }}" class="clone-my-document btn btn-inverse">{% trans 'Clone' %}</a></p>
-                                      <p><a href="#export" data-url="{% url 'document:export' slug=d.slug %}" data-pk="{{ d.pk }}" class="export-pdf btn btn-info">{% trans 'Download PDF' %}</a></p>
-                                      <p><a href="#delete" data-url="{% url 'document:my_delete' pk=d.pk %}" data-pk="{{ d.pk }}" class="delete-my-document btn btn-warning">{% trans 'Delete' %}</a></p>
+                                      <p><a id="clone-{{ d.pk }}" href="#clone" data-url="{% url 'document:my_clone' pk=d.pk %}" data-pk="{{ d.pk }}" class="clone-my-document btn btn-inverse">{% trans 'Clone' %}</a></p>
+                                      <p><a id="export-{{ d.pk }}" href="#export" data-url="{% url 'document:export' slug=d.slug %}" data-pk="{{ d.pk }}" class="export-pdf btn btn-info">{% trans 'Download PDF' %}</a></p>
+                                      <p><a id="delete-{{ d.pk }}" href="#delete" data-url="{% url 'document:my_delete' pk=d.pk %}" data-pk="{{ d.pk }}" class="delete-my-document btn btn-warning">{% trans 'Delete' %}</a></p>
                                     </div>
                                   </div>
                                 </li>

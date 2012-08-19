@@ -141,6 +141,6 @@ class FeatureContext extends MinkContext {
      */
     public function iClick($element)
     {
-        $this->getSession()->wait(500, '$("'.$element.'").trigger("click")');
+        $this->getSession()->wait(2000, '$("'.$element.'").trigger("click")');
     }
 }

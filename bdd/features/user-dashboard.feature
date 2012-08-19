@@ -32,11 +32,32 @@ Feature: Logged in User Dashboard
   @mink:zombie
   Scenario: The user should be able to edit their new document
     When I am logged in as "userA"
-    Then I am on "/doc/my/gift-for-a-friend/"
-    Then I should see "Gift for a Friend"
+    And I am on "/client/"
+    Then I should see a "a[href='/doc/my/gift-for-a-friend/']" element
+    When I follow "Gift For a Friend"
+    Then the url should match "/doc/my/gift-for-a-friend/"
+    And I should see "Gift for a Friend"
     And I should see "Your Name:"
     And I should see "Your Country:"
     And I should see a "span#document-md" element
+
+  @mink:zombie
+  Scenario: The user should be able to clone their new document
+    When I am logged in as "userA"
+    And I am on "/client/"
+    Then I should see "Gift for a Friend"
+    And I should see a "a[href='#clone']" element
+    When I follow "clone-1"
+    Then the url should match "/doc/my/copy-of-gift-for-a-friend/"
+
+  @mink:zombie
+  Scenario: The user should be able to delete their cloned document
+    When I am logged in as "userA"
+    And I am on "/client/"
+    Then I should see "Copy of Gift For a Friend"
+    And I should see a "a#delete-2[href='#delete']" element
+    When I click "a#delete-2"
+    Then I should see a "a#undelete-2" element
 
 #  Scenario: The user should be able to create a new document
 #    When I am logged in as "userA"
