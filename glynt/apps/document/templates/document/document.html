@@ -197,13 +197,19 @@ $(document).ready(function(){
             var current = self.currentFormStep();
             var prev = current-1;
 
-            // async cant wait for valid or not
-            App.submitForm(current, $('form#glynt-doc-' + current), function(textStatus, message) {
-              if (textStatus != 'error') {
+            // synchronous request
+            if (current != self.maxFormSteps()) {
+                App.submitForm(current, $('form#glynt-doc-' + current), function(textStatus, message) {
+                  if (textStatus != 'error') {
+                    prev = self.determineStepVisibility('prev', prev);
+                    self.currentFormStep(prev);
+                  }
+                });
+            } else {
+                // allow step back when on last page
                 prev = self.determineStepVisibility('prev', prev);
                 self.currentFormStep(prev);
-              }
-            });
+            };
         }
     }
 
