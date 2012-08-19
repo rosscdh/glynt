@@ -27,7 +27,7 @@ class ClientCreatedDocumentManager(models.Manager):
 class PublicClientCreatedDocumentManager(ClientCreatedDocumentManager):
   """ Default handler of clientdocuments objects """
   def get_query_set(self):
-      return super(ClientCreatedDocumentManager, self).get_query_set().filter(is_deleted=False)
+      return super(PublicClientCreatedDocumentManager, self).get_query_set().filter(is_deleted=False)
 
 class DeletedClientCreatedDocumentManager(ClientCreatedDocumentManager):
   """ Manager for clientdocuments that are deleted """

@@ -1,9 +1,11 @@
 # -*- coding: UTF-8 -*-
 from django.contrib import admin
 from django.utils.translation import gettext as _
+from django.core.urlresolvers import reverse
+from django.utils.safestring import mark_safe
 from categories.admin import CategoryBaseAdmin
 from glynt.apps.flyform.models import FlyForm
-from models import Document, DocumentCategory, ClientCreatedDocument
+from glynt.apps.document.models import Document, DocumentCategory, ClientCreatedDocument
 
 
 class FlyFormInline(admin.TabularInline):

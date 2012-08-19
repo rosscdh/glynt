@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from django.conf import settings
+from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 
@@ -7,6 +10,8 @@ from django.shortcuts import get_object_or_404
 from django.views.generic.base import View, TemplateView
 from django.utils import simplejson as json
 from django.db.utils import IntegrityError
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
 
 from glynt.apps.document.models import Document, ClientCreatedDocument
 from glynt.apps.document.forms import ClientCreatedDocumentForm

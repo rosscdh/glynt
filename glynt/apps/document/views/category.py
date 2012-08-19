@@ -1,7 +1,6 @@
-from django.utils.translation import ugettext_lazy as _
 from django.views.generic.list import ListView
 
-from glynt.apps.document.models import Document
+from glynt.apps.document.models import Document, DocumentCategory
 
 import logging
 logger = logging.getLogger(__name__)

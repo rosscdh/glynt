@@ -8,8 +8,8 @@ from categories.models import CategoryBase
 from glynt.apps.utils import get_namedtuple_choices
 from jsonfield import JSONField
 
-from managers import DocumentManager, PublicDocumentManager, PrivateDocumentManager
-from managers import ClientCreatedDocumentManager, PublicClientCreatedDocumentManager, DeletedClientCreatedDocumentManager
+from glynt.apps.document.managers import DocumentManager, PublicDocumentManager, PrivateDocumentManager
+from glynt.apps.document.managers import ClientCreatedDocumentManager, PublicClientCreatedDocumentManager, DeletedClientCreatedDocumentManager
 
 class Document(models.Model):
   """ Base Document Class """
@@ -20,12 +20,12 @@ class Document(models.Model):
       
   ))
   owner = models.ForeignKey(User)
-  name = models.CharField(max_length=128,blank=False)
+  name = models.CharField(max_length=128, blank=False)
   slug = models.SlugField(blank=False, max_length=255)
-  summary = models.TextField(blank=True,null=True)
-  body = models.TextField(blank=True,null=True)
+  summary = models.TextField(blank=True, null=True)
+  body = models.TextField(blank=True, null=True)
   flyform = models.OneToOneField('flyform.FlyForm')
-  doc_status = models.IntegerField(choices=DOC_STATUS.get_choices(),blank=False)
+  doc_status = models.IntegerField(choices=DOC_STATUS.get_choices(), blank=False)
   is_public = models.BooleanField(default=True)
   doc_cats = models.ManyToManyField('DocumentCategory')
   tags = TaggableManager()
@@ -38,7 +38,7 @@ class Document(models.Model):
     ordering = ['name']
 
   def __unicode__(self):
-    return u'%s' %(self.name)
+    return u'%s' % (self.name, )
 
 
 class DocumentCategory(CategoryBase):
@@ -77,7 +77,7 @@ class ClientCreatedDocument(models.Model):
 
   @property
   def cookie_name(self):
-    return 'glynt-%s' %(self.pk)
+    return 'glynt-%s' % (self.pk, )
 
   def diff_source(self):
     return 'Return a diff against the self.source_document.body value'

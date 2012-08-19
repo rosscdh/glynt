@@ -1,10 +1,9 @@
 from django.conf import settings
 from django import template
-from django.utils.safestring import mark_safe
 
 register = template.Library()
 
 @register.simple_tag
-def CURRENT_DATE_FORMAT():
+def current_date_format():
     return settings.DATE_FORMAT
-CURRENT_DATE_FORMAT.is_safe = True
+current_date_format.is_safe = True

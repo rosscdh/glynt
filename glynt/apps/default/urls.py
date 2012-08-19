@@ -1,6 +1,5 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import patterns, url
 from django.views.generic import TemplateView
-from django.views.decorators.csrf import csrf_exempt
 
 
 urlpatterns = patterns('',

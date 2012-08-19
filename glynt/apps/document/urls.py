@@ -1,12 +1,10 @@
-from django.conf.urls import patterns, include, url
-from django.views.generic import TemplateView
+from django.conf.urls import patterns, url
 from django.views.generic.edit import FormView
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 
-from views import DocumentView, MyDocumentView, CreateDocumentView, EditDocumentView, DocumentByCategoryListView
-from views import DocumentExportView, CloneClientCreatedDocumentView, DeleteClientCreatedDocumentView, UndoDeleteClientCreatedDocumentView
-from views import DocumentSaveProgressView, PersistClientCreatedDocumentProgressView 
+from glynt.apps.document.views import DocumentView, MyDocumentView, CreateDocumentView, EditDocumentView, DocumentByCategoryListView
+from glynt.apps.document.views import DocumentExportView, CloneClientCreatedDocumentView, DeleteClientCreatedDocumentView, UndoDeleteClientCreatedDocumentView
+from glynt.apps.document.views import DocumentSaveProgressView, PersistClientCreatedDocumentProgressView 
 
 from glynt.apps.flyform.forms import TmpStepCreator
 

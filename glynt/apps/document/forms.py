@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
-from django.conf import settings
 from django import forms
-from django.utils.translation import ugettext_lazy as _
 
-from models import ClientCreatedDocument
+from glynt.apps.document.models import ClientCreatedDocument
 
 import datetime
 
