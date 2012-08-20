@@ -77,8 +77,8 @@ class MyDocumentView(DocumentView):
     return context
 
 
-# @TODO rename to ClientCreatedDocumentSaveProgressView
-class DocumentSaveProgressView(View):
+# @TODO rename to ClientCreatedClientCreatedDocumentSaveProgressView
+class ClientCreatedDocumentSaveProgressView(View):
   """ Save the user form """
   def post(self, request, *args, **kwargs):
     userdoc_pk = request.POST.get('id', None)
