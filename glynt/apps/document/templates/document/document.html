@@ -1007,8 +1007,42 @@ $(document).ready(function(){
     });
     {% endif %}
 
+    /**
+    * Handler for fields that have show-when and hide when callbacks
+    */
+    conditionalCallbackSets = function() {
+      var self = this;
+      var showWhen = [];
+      var hideWhen = [];
+
+      self.init = function init() {
+        // find show-when elements and hide them by default
+        self.showWhen = self.showWhenItems();
+        console.log(self.showWhen)
+        // find hiden-when elements and show if their status is correct
+        self.hideWhen = self.hideWhenItems();
+        console.log(self.hideWhen)
+      };
+      self.showWhenItems = function showWhenItems() {
+        return $('[data-show-when="*"]');
+      };
+      self.evaluateShowWhenItem = function evaluateShowWhenItem(element) {
+      };
+      self.hideWhenItems = function hideWhenItems() {
+        return $('[data-hide-when="*"]');
+      };
+      self.evaluateHideWhenItem = function evaluateHideWhenItem(element) {
+      };
+
+      self.init();
+    }
+
+    ccs = conditionalCallbackSets();
+
+    // ----- FACEBOOK CALLBACK -----
     facebookCallback = function(q,callbackId,callBack) {
-      var results = []
+      var self = this;
+      var results = [];
 
       processFriends = function(friends) {
         if (friends != undefined) {
@@ -1047,8 +1081,6 @@ $(document).ready(function(){
         .error(function(jqXHR, textStatus, errorThrown) { 
           // console.log(errorThrown);
           sendData();// send what we have
-        })
-        .complete(function(jqXHR, textStatus) {
         });
       };
 
@@ -1070,15 +1102,15 @@ $(document).ready(function(){
       });
     };
 
-    linkedInCallbackTest = function(q,callbackId,callBack) {
-        result = {
-            'name': 'Bob',
-            'picture': 'http://linkedin.com/my/pic.jpg'
-        }
-        for (var i = 0; i < 5; i++) {
-            // callBack(result.name + ' ' + i, result.picture, result.extra);
-        }
-    }
+    // linkedInCallbackTest = function(q,callbackId,callBack) {
+    //     result = {
+    //         'name': 'Bob',
+    //         'picture': 'http://linkedin.com/my/pic.jpg'
+    //     }
+    //     for (var i = 0; i < 5; i++) {
+    //         // callBack(result.name + ' ' + i, result.picture, result.extra);
+    //     }
+    // }
     // friend observer
     co = new contactObserver([facebookCallback], {});
 
