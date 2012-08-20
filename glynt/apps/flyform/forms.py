@@ -47,7 +47,9 @@ class BaseFlyForm(forms.Form, BootstrapMixin):
         "help_text" : {"type" : "string"},
         "placeholder" : {"type" : "string"},
         "class" : {"type" : "string"},
-        "data-hb-name" : {"type" : "string"}
+        "data-hb-name" : {"type" : "string"},
+        "data-show_when":"customer_country == 'United States'",
+        "data-hide_when":"function(){ customer_country == 'Germany' }"
       ]
   }
   """
@@ -164,6 +166,11 @@ class BaseFlyForm(forms.Form, BootstrapMixin):
       'placeholder': field_dict['placeholder'],
       'data-hb-name': field_dict['data-hb-name'] if field_dict['data-hb-name'] else field_instance.name,
     }
+
+    if 'data-show_when' in field_dict:
+      widget.attrs['data-show_when'] = safestring.mark_safe(field_dict['data-show_when'])
+    if 'data-hide_when' in field_dict:
+      widget.attrs['data-hide_when'] = safestring.mark_safe(field_dict['data-hide_when'])
 
     # Handle loop step loop length fields, required to make the loop function
     if 'data-glynt-loop_length' in field_dict:

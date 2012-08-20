@@ -40,7 +40,8 @@ def userdoc_from_request(user, source_doc=None, pk=None):
     userdoc = get_object_or_404(ClientCreatedDocument, pk=pk)
     is_new = False
   else:
-    userdoc, is_new = ClientCreatedDocument.objects.get_or_create(owner=user, source_document=source_doc, is_deleted=False)
+    userdoc = ClientCreatedDocument.objects.create(owner=user, source_document=source_doc, is_deleted=False)
+    is_new = True
     logger.debug('got no pk so must get ClientCreatedDocument based on user source_document and is_deleted=False: document:%s is_new:%s'%(userdoc, is_new,))
     # just set the body the first time the object is created
     userdoc.body = source_doc.body

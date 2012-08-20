@@ -368,10 +368,10 @@ $(document).ready(function(){
 
         self.textElementsList = ['text','textarea','hidden','select'];
         self.FalseValuesList = ['False','false',false,null,void 0,''];
-    self.handlebarsElementId = ko.observable('script#js-document');
-    self.documentTemplate = ko.observable($(self.handlebarsElementId()).html());
+        self.handlebarsElementId = ko.observable('script#js-document');
+        self.documentTemplate = ko.observable($(self.handlebarsElementId()).html());
         self.compiledTemplate = false; // must not be ko.observable
-    self.renderedHTML = ko.observable('');
+        self.renderedHTML = ko.observable('');
 
         self.visibilityRuleset = ko.observableArray([]);
         self.loopStepList = ko.observable({});
@@ -463,14 +463,14 @@ $(document).ready(function(){
         }
 
         self.determineValue = function determineValue(input) {
-      var value = null;
-      var is_placeholder_value = true;
-      if (input.val() != 'undefined' && input.val() != '') {
-          value = input.val();
-          is_placeholder_value = false;
-      } else {
-          value = input.attr('placeholder');
-        }
+            var value = null;
+            var is_placeholder_value = true;
+            if (input.val() != 'undefined' && input.val() != '') {
+              value = input.val();
+              is_placeholder_value = false;
+            } else {
+              value = input.attr('placeholder');
+            }
 
             if (self.textElementsList.indexOf(input.attr('type')) >= 0 || self.textElementsList.indexOf(input.prop('type')) >= 0) {
                     //value = '[' + value.toString() + ']';
@@ -488,13 +488,13 @@ $(document).ready(function(){
                 'value': value,
                 'is_placeholder_value': is_placeholder_value
             };
-        }
+        };
 
         self.setTemplateHasHelperValues = function setTemplateHasHelperValues(input, value, is_placeholder_value) {
             var key = 'has_' + input.attr('data-hb-name');
             var has_this_value = (self.FalseValuesList.indexOf(value) >= 0 || is_placeholder_value === true)? false : true ;
             self.setContextItemByForce(key, has_this_value);
-        }
+        };
 
         // method to set the _value values of the specified item
         self.getTemplateHelperKey = function getTemplateHelperKey(input) {
@@ -503,16 +503,14 @@ $(document).ready(function(){
             var value_slug = self.slugify(value);
             var key = '_' + slug + '_' + value_slug;
             var id_free_key = key.replace(/_[\d]+/ig, '');
-
             return {
                 'value': value,
                 'slug': slug,
                 'value_slug': value_slug,
                 'id_free_key': id_free_key,
                 'key': key,
-            }
-
-        }
+            };
+        };
 
         self.ensureElementContextRadioCheckboxOptionsPresent = function ensureElementContextRadioCheckboxOptionsPresent(element,local_context) {
             var required_name = element.attr('name');
@@ -571,9 +569,9 @@ $(document).ready(function(){
     self.setContextItem = function setContextItem(input,local_context) {
             // only allow if the data-hb-name is set
             if (typeof input.attr('data-hb-name') == 'string') {
-          var context = (local_context == undefined) ? self.context() : local_context ;
-          var key = name = input.attr('data-hb-name');
-          var value_ob = self.determineValue(input);
+                var context = (local_context == undefined) ? self.context() : local_context ;
+                var key = name = input.attr('data-hb-name');
+                var value_ob = self.determineValue(input);
                 var value = value_ob['value'];
                 var is_placeholder_value = value_ob['is_placeholder_value'];
 
@@ -719,15 +717,6 @@ $(document).ready(function(){
                     });
                 }
             }
-        }
-
-        self.init = function init() {
-            self.initializeValuesFromCookie();// cookie basics
-            self.initializeValuesFromDefaultData();// main initializer
-            self.setContext();
-            self.setGlyntRuleset();
-            self.applyGlyntRuleset();
-          self.render();
         }
 
         self.render = function render() {
@@ -884,7 +873,7 @@ $(document).ready(function(){
             })
             .complete(function() {
             });
-        }
+        };
 
         self.getElementType = function getElementType(element) {
             var element_type = element.attr('type');
@@ -893,15 +882,87 @@ $(document).ready(function(){
                 element_type = element.prop('type');
             }
             return element_type;
-        }
+        };
+
+        self.init = function init() {
+            self.initializeValuesFromCookie();// cookie basics
+            self.initializeValuesFromDefaultData();// main initializer
+            self.setContext();
+            self.setGlyntRuleset();
+            self.applyGlyntRuleset();
+            self.render();
+        };
 
         self.init();
     }
 
+    /**
+    * Handler for fields that have show-when and hide when callbacks
+    */
+    conditionalCallbackSets = function(documentModel) {
+      var self = this;
+      var showWhen = [];
+      var hideWhen = [];
+
+      self.init = function init() {
+        // find show-when elements and hide them by default
+        self.showWhen = self.showWhenItems();
+        // find hiden-when elements and show if their status is correct
+        self.hideWhen = self.hideWhenItems();
+        self.parseCallbacks();
+      };
+
+      self.showWhenItems = function showWhenItems() {
+        return $('*[data-show_when]');
+      };
+
+      self.evaluateShowWhenItem = function evaluateShowWhenItem(element) {
+      };
+
+      self.hideWhenItems = function hideWhenItems() {
+        return $('*[data-hide_when]');
+      };
+
+      self.evaluateHideWhenItem = function evaluateHideWhenItem(element) {
+      };
+
+      self.parseCallbacks = function parseCallbacks() {
+        $.each(self.hideWhen, function(i,item) {
+          item = $(item);
+          if (self.inlineCallBack(item.attr('data-hide_when')) == true) {
+            item.hide();
+          };
+        });
+        $.each(self.showWhen, function(i,item) {
+          item = $(item);
+          if (self.inlineCallBack(item.attr('data-show_when')) == true) {
+            item.show();
+          };
+        });
+      };
+
+      self.inlineCallBack = function inlineCallBack(callback) {
+          re = new RegExp("^(.+) ([\={1,2}\!]+) ([\'\"]?.+?[\'\"]?)$",'ig');
+          var match = re.exec(callback)
+          //console.log(match)
+          var variable = match[1].replace(/[\'\"]/gi,'');
+          var comparison = match[2];
+          var operator = match[3].replace(/[\'\"]/gi,'');
+          //console.log(operator)
+
+          expression = '"' + documentModel.context()[variable] + '"' + comparison + '"' + operator + '"';
+          //console.log(expression)
+          return eval(expression);
+      };
+
+      self.init();
+    };
+
     // ----- KO Instance -----
-    App = new PageDocumentController()
+    App = new PageDocumentController();
     // ----- KO Bindings -----
     ko.applyBindings(App);
+    ccbs = new conditionalCallbackSets(App.documentModel);
 
 
     $('form.bind-document [data-glynt-loop_length]').live('change', function(event){
@@ -981,7 +1042,9 @@ $(document).ready(function(){
 
     $('.md-updater').live('change', function(event){
         App.changeContext($(this));
-    })
+        ccbs.parseCallbacks();
+    });
+console.log(ccbs)
     $('button#btn-post-pdf').live('click', function(event){
         event.preventDefault();
         App.generatePDF();
@@ -1007,37 +1070,6 @@ $(document).ready(function(){
     });
     {% endif %}
 
-    /**
-    * Handler for fields that have show-when and hide when callbacks
-    */
-    conditionalCallbackSets = function() {
-      var self = this;
-      var showWhen = [];
-      var hideWhen = [];
-
-      self.init = function init() {
-        // find show-when elements and hide them by default
-        self.showWhen = self.showWhenItems();
-        console.log(self.showWhen)
-        // find hiden-when elements and show if their status is correct
-        self.hideWhen = self.hideWhenItems();
-        console.log(self.hideWhen)
-      };
-      self.showWhenItems = function showWhenItems() {
-        return $('[data-show-when="*"]');
-      };
-      self.evaluateShowWhenItem = function evaluateShowWhenItem(element) {
-      };
-      self.hideWhenItems = function hideWhenItems() {
-        return $('[data-hide-when="*"]');
-      };
-      self.evaluateHideWhenItem = function evaluateHideWhenItem(element) {
-      };
-
-      self.init();
-    }
-
-    ccs = conditionalCallbackSets();
 
     // ----- FACEBOOK CALLBACK -----
     facebookCallback = function(q,callbackId,callBack) {
