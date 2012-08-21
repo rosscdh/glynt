@@ -121,8 +121,8 @@ class BaseFlyForm(forms.Form, BootstrapMixin):
 
         if f:
           field_instance = f()
-          field_instance.name = self.slugify(field['name'])
           field_instance.label = field['label'] if field['label'] else field['name']
+          field_instance.name = self.slugify(field['name']) if field['name'] else self.slugify(field_instance.label)
           field_instance.help_text = field['help_text'] if field['help_text'] else None
           field_instance.required = True if field['required'] in ['true',True,'1', 1] else False
           if 'initial' in field:
