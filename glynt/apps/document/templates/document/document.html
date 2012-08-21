@@ -25,7 +25,9 @@
 
         <h4><span class="step-title"></span></h4>
         <br/>
-        {{form}}
+        <ul class="form-fields">
+        {{ form.as_ul }}
+        <ul>
     </div>
     </form>
     {% endfor %}
@@ -48,6 +50,9 @@
 
 {% block css %}
 <style>
+ul.form-fields{
+  list-style-type: none;
+}
 .hidden {
     display:none;
 }
@@ -930,27 +935,39 @@ $(document).ready(function(){
         $.each(self.hideWhen, function(i,item) {
           item = $(item);
           if (self.inlineCallBack(item.attr('data-hide_when')) == true) {
-            item.hide();
+            item.closest('li').hide();
           };
         });
         $.each(self.showWhen, function(i,item) {
           item = $(item);
           if (self.inlineCallBack(item.attr('data-show_when')) == true) {
-            item.show();
+            item.closest('li').show();
           };
         });
       };
 
+      self.parseVariable = function parseVariable(variable) {
+        if (variable.indexOf('"') != -1 || variable.indexOf("'") != -1) {
+          variable = variable.replace(/[\'\"]/gi,'');
+          variable = '"' + variable + '"';
+        } else {
+          variable = variable.replace(/[\'\"]/gi,'"');
+          variable = documentModel.context()[variable];
+          variable = '"' + variable + '"';
+        }
+        return variable;
+      };
+
       self.inlineCallBack = function inlineCallBack(callback) {
-          re = new RegExp("^(.+) ([\={1,2}\!]+) ([\'\"]?.+?[\'\"]?)$",'ig');
+          re = new RegExp("^(.+) ([\={1,2}\!\>\<]+) ([\'\"]?.+?[\'\"]?)$",'ig');
           var match = re.exec(callback)
-          //console.log(match)
-          var variable = match[1].replace(/[\'\"]/gi,'');
+          console.log(match)
+          var variable = self.parseVariable(match[1]);
           var comparison = match[2];
-          var operator = match[3].replace(/[\'\"]/gi,'');
+          var operator = self.parseVariable(match[3]);
           //console.log(operator)
 
-          expression = '"' + documentModel.context()[variable] + '"' + comparison + '"' + operator + '"';
+          expression = variable + comparison + operator;
           //console.log(expression)
           return eval(expression);
       };
@@ -1044,7 +1061,7 @@ $(document).ready(function(){
         App.changeContext($(this));
         ccbs.parseCallbacks();
     });
-console.log(ccbs)
+
     $('button#btn-post-pdf').live('click', function(event){
         event.preventDefault();
         App.generatePDF();
