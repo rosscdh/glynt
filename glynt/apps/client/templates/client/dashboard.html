@@ -10,98 +10,62 @@
       <small>Documents available to create</small>
       </h2>
       <br />
-      <div class="accordion" id="accordion2">
-              <div class="accordion-group">
-                <div class="accordion-heading">
-                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-                      New Starter Documents
-                    </a>
-                  </div>
-                  <div id="collapseOne" class="accordion-body collapse in">
-                    <div class="accordion-inner">
-                      <div class="row contracts">
-                <div class="span2">Employment Contract</div>
-                <div class="span2">Employment Offer Letter</div>
-                <div class="span2">Independent contractor agreement</div>
-                <div class="span2">Company handbook</div>
-                <div class="span2">Employment Agreement</div>
-              </div>
-                    </div>
-                  </div>
-              </div>
-              <div class="accordion-group">
-                <div class="accordion-heading">
-                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-                    All HR Documents
-                  </a>
-                </div>
-                <div id="collapseTwo" class="accordion-body collapse">
-                    <div class="accordion-inner">
-                      <div class="row contracts">
-                <div class="span2">Employment Contract</div>
-                <div class="span2">Employment Offer Letter</div>
-                <div class="span2">Independent contractor agreement</div>
-                <div class="span2">Company handbook</div>
-                <div class="span2">Employment Agreement</div>
-              </div>
-            </div>
-                </div>
-              </div>
-         <div class="accordion-group">
-                  <div class="accordion-heading">
-                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-                      Beta Documents
-                    </a>
-                  </div>
-                  <div id="collapseThree" class="accordion-body collapse">
-                      <div id="public-documents" class="accordion-inner">
-                        {% for d in public_document_list %}
-                        <a class="template-document" href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a>, 
-                        {% endfor %}
 
-              </div>
-                  </div>
-                </div>
-            </div>
+	<div id="myCarousel" class="carousel slide">
+	  <!-- Carousel items -->
+	  <div class="carousel-inner offset1">
+		<div class="active item row contracts">
+			{% for d in public_document_list %}
+	            <div class="span2" style="background-color:#{% cycle 'fbd534' '58c4ea' '76c58c' 'f098a4' '5bcaf8' 'c0d72f' %}"><a class="template-document" href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a></div>
+				{% cycle '' '' '' '</div><div class="item row contracts">' %}
+            {% endfor %}
+
+        </div>
+	  </div>
+	  <!-- Carousel nav -->
+	  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+	  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+	</div>
   </div>
 </div>
 <hr/>
 <div class="row">
         <div class="span12">
                 <h2>Your Documents
-                        <small>All of your generated documents</small>
+                    <small>All of your generated documents</small>
                 </h2>
                 <br />
-                <ul class="nav nav-tabs">
-                  <li class="active">
-                    <a href="#">All Documents</a>
-                  </li>
-                  <li><a href="#">Index Ventures</a></li>
-                  <li><a href="#">Personal</a></li>
-                  <li class="pull-right"><a href="#">Add Category</a></li>
-                </ul>
-                <br />
-                <div class="row">
-                        <div class="span12">
-                            <ul id="my-documents" class="thumbnails">
-                        {% for d in my_document_list %}
-                                <li class="span3">
-                                  <div class="thumbnail">
-                                    <img src="http://placehold.it/260x40" alt="">
-                                    <div class="caption">
-                                      <h5><a href="{% url 'document:my_view' slug=d.slug %}">{{ d.name }}</a></h5>
-                                      <p>Between x and y.</p>
-                                      <p><a href="{% url 'document:my_view' slug=d.slug %}" class="btn btn-info">{% trans 'Edit' %}</a></p>
-                                      <p><a id="clone-{{ d.pk }}" href="#clone" data-url="{% url 'document:my_clone' pk=d.pk %}" data-pk="{{ d.pk }}" class="clone-my-document btn btn-inverse">{% trans 'Clone' %}</a></p>
-                                      <p><a id="export-{{ d.pk }}" href="#export" data-url="{% url 'document:export' slug=d.slug %}" data-pk="{{ d.pk }}" class="export-pdf btn btn-info">{% trans 'Download PDF' %}</a></p>
-                                      <p><a id="delete-{{ d.pk }}" href="#delete" data-url="{% url 'document:my_delete' pk=d.pk %}" data-pk="{{ d.pk }}" class="delete-my-document btn btn-warning">{% trans 'Delete' %}</a></p>
-                                    </div>
-                                  </div>
-                                </li>
-                        {% endfor %}
-                            </ul>
-                        </div>
-                </div>
+				<div class="row">
+					<div class="span3">
+	                	<ul class="nav nav-list">
+		                  <li class="active">
+		                    <a href="#">All Documents</a>
+		                  </li>
+		                  <li><a href="#">Index Ventures</a></li>
+		                  <li><a href="#">Personal</a></li>
+		                  <li class="pull-right"><a href="#">Add Category</a></li>
+		                </ul>
+					</div>
+					<div class="span9">
+                         <table id="my-documents" class="table table-stripped table-border table-hover">
+                     		{% for d in my_document_list %}
+                             <tr>
+								<td class="span5">
+                                  <h3><a href="{% url 'document:my_view' slug=d.slug %}">{{ d.name }}</a></h3>
+                                </td>
+								<td>
+									<div class="btn-group">
+	                                   <a href="{% url 'document:my_view' slug=d.slug %}" class="btn btn-info">{% trans 'Edit' %}</a>
+	                                   <a id="clone-{{ d.pk }}" href="#clone" data-url="{% url 'document:my_clone' pk=d.pk %}" data-pk="{{ d.pk }}" class="clone-my-document btn btn-info">{% trans 'Clone' %}</a>
+	                                   <a id="export-{{ d.pk }}" href="#export" data-url="{% url 'document:export' slug=d.slug %}" data-pk="{{ d.pk }}" class="export-pdf btn btn-success">{% trans 'Download PDF' %}</a>
+                                   		<a id="delete-{{ d.pk }}" href="#delete" data-url="{% url 'document:my_delete' pk=d.pk %}" data-pk="{{ d.pk }}" class="delete-my-document btn btn-error">{% trans 'Delete' %}</a>
+							        </div>                                 
+							   </td>
+                             </tr>
+                          {% endfor %}
+                         </table>
+					</div>
+				</div>
         </div>
 </div>
 {% endblock %}

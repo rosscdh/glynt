@@ -46,6 +46,7 @@ div.contracts div {
 	border:1px solid #F1F1F1;
 	padding:10px;
 	font-size:16px;
+	font-weight:bold;
 	color:#888;
 	line-height:20px;
 	cursor:hand;
@@ -64,6 +65,14 @@ div.draft-document {
 	-moz-box-shadow: 5px 5px 14px #757575;
 	-webkit-box-shadow: 5px 5px 14px #757575;
 	box-shadow: 5px 5px 14px #757575;
+}
+div.contracts a {
+	color:white;
+	opacity:0.9;
+}
+div.contracts div  {
+	vertical-align:bottom;
+	border-radius:5px;
 }
 
 /* Space out sub-sections more
