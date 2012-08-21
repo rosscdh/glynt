@@ -181,24 +181,30 @@ class DocumentExportView(View):
 
 
 class CloneClientCreatedDocumentView(View):
+  """ Clone a specified document
+  Structured strangely due to postgres not accepting catches by integrity error or databaseerror
+  """
   def post(self, request, *args, **kwargs):
     client_document = get_object_or_404(ClientCreatedDocument, pk=self.kwargs['pk'])
     client_document.pk = None # set the pk to null which will cause the ORM to save as a new object
     saved = False
     counter = 1
     while saved is not True:
+      # try to create a new documetn with updated name
       name = 'Copy of %s' % (client_document.name,)
-      try:
-        client_document.name = name
-        if counter > 1:
-          name = '%s %s' % (name, counter,)
+      if counter > 1:
+        name = '%s %s' % (name, counter,)
+      slug = slugify(name)
 
-        client_document.slug = slugify(name)
-        client_document.save()
-        saved = True
-      except IntegrityError, DatabaseError:
+      try:
+        ClientCreatedDocument.objects.get(owner=request.user, slug=slug, name=name)
         counter = counter + 1
         saved = False
+      except ClientCreatedDocument.DoesNotExist:
+        client_document.name = name
+        client_document.slug = slug
+        client_document.save()
+        saved = True
 
 
     url = reverse('document:my_view', kwargs={'slug':client_document.slug})
