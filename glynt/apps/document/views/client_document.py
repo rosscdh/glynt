@@ -185,13 +185,19 @@ class CloneClientCreatedDocumentView(View):
     client_document = get_object_or_404(ClientCreatedDocument, pk=self.kwargs['pk'])
     client_document.pk = None # set the pk to null which will cause the ORM to save as a new object
     saved = False
+    counter = 1
     while saved is not True:
+      name = 'Copy of %s' % (client_document.name,)
       try:
-        client_document.name = 'Copy of %s' % (client_document.name,)
-        client_document.slug = slugify(client_document.name)
+        client_document.name = name
+        if counter > 1:
+          name = '%s %s' % (name, counter,)
+
+        client_document.slug = slugify(name)
         client_document.save()
         saved = True
       except IntegrityError, DatabaseError:
+        counter = counter + 1
         saved = False
 
 
