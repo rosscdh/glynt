@@ -57,7 +57,6 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         'document.clientcreateddocument': {
-            'Meta': {'unique_together': "(('slug', 'owner'),)", 'object_name': 'ClientCreatedDocument'},
             'body': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'data': ('jsonfield.fields.JSONField', [], {'null': 'True', 'blank': 'True'}),

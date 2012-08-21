@@ -9,7 +9,7 @@ from django.template.defaultfilters import slugify
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import View, TemplateView
 from django.utils import simplejson as json
-from django.db.utils import IntegrityError
+from django.db.utils import IntegrityError, DatabaseError
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 
@@ -191,7 +191,7 @@ class CloneClientCreatedDocumentView(View):
         client_document.slug = slugify(client_document.name)
         client_document.save()
         saved = True
-      except IntegrityError:
+      except IntegrityError, DatabaseError:
         saved = False
 
 
