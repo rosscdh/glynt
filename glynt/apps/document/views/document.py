@@ -49,7 +49,7 @@ class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
     context['userdoc_form'] = ClientCreatedDocumentForm()
 
     try:
-      context['form_set'] = [BaseFlyForm(json.dumps(step)) for step in self.document.flyform.body]
+      context['form_set'] = self.document.flyform.flyformset()
     except KeyError:
       context['form_set'] = FORM_GROUPS['no_steps']
 

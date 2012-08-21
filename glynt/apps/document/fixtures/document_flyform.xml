@@ -12,6 +12,13 @@ Hi my name is {{customer_name}}; I am based in {{customer_country}}. And I have 
 
 I would like to spend {{budget}} on a gift that would ensure that **{{target_name}}** is happy and will love me forever.
 
+{{#unless_gteq 1000 compare=budget}}
+### Congratulations ###
+You are our 100,000,000th generous user and qualify for packet of monkey nuts!
+And a customized message:
+**"{{message}}"**
+{{/unless_gteq}}
+
 My Friend {{target_name}} can be found, somewhere in {{target_country}}.. however just remember...
 
 <br/>
@@ -247,8 +254,8 @@ My Friend {{target_name}} can be found, somewhere in {{target_country}}.. howeve
     </field>
   </object>
     <object pk="1" model="flyform.flyform">
-        <field type="TextField" name="body">[{"fields": [{"widget": "", "name": "Customer Name", "required": "true", "label": "Your Name", "field": "CharField", "help_text": "Please enter your name", "placeholder": "Bob Jenkins", "class": "md-updater", "data-hb-name": ""}, {"widget": "", "name": "Customer Country", "required": "true", "label": "Your Country", "field": "CountryField", "help_text": "Where in the world are you?", "placeholder": "Timbucktoo...", "class": "md-updater", "data-hb-name": ""}], "type": "step", "properties": {"step_title": "Your Details"}}, {"fields": [{"widget": "", "name": "Target Name", "required": "true", "label": "Target Name", "field": "CharField", "help_text": "Please enter the targets name", "placeholder": "Simple Simon", "class": "md-updater contact-list", "data-hb-name": ""}, {"widget": "", "name": "Target Country", "required": "true", "label": "Target Country", "field": "CountryField", "help_text": "Where in the world is the target?", "placeholder": "United States", "class": "md-updater", "data-hb-name": ""}], "type": "step", "properties": {"step_title": "Target Details"}}, {"fields": [{"widget": "", "name": "Budget", "required": "true", "label": "Budget", "field": "DecimalField", "help_text": "How much are you gonna spend on this?", "placeholder": "10000.00", "class": "md-updater", "data-hb-name": ""}], "type": "step", "properties": {"step_title": "Budget"}}]</field>
-        <field type="TextField" name="defaults">{"target_name": "Justin Beiber", "customer_country": "United States", "target_country": "United States", "budget": "$100.00", "customer_name": "Billy Bob Thornton"}</field>
+        <field type="TextField" name="body">[{"fields": [{"widget": "", "name": "Customer Name", "required": "true", "label": "Your Name", "field": "CharField", "help_text": "Please enter your name", "placeholder": "Bob Jenkins", "class": "md-updater", "data-hb-name": ""}, {"widget": "", "name": "Customer Country", "required": "true", "label": "Your Country", "field": "CountryField", "help_text": "Where in the world are you?", "placeholder": "Timbucktoo...", "class": "md-updater", "data-hb-name": ""}], "type": "step", "properties": {"step_title": "Your Details"}}, {"fields": [{"widget": "", "name": "Friend Name", "required": "true", "label": "Target Name", "field": "CharField", "help_text": "Please enter the name of your friend name", "placeholder": "Simple Simon", "class": "md-updater contact-list", "data-hb-name": ""}, {"widget": "", "name": "Friend Country", "required": "true", "label": "Friend Country", "field": "CountryField", "help_text": "Where in the world is your friend?", "placeholder": "United States", "class": "md-updater", "data-hb-name": ""}], "type": "step", "properties": {"step_title": "Target Details"}}, {"fields": [{"widget": "", "name": "Budget", "required": "true", "label": "Budget", "field": "DecimalField", "help_text": "Remember: if you spend more than 1000 on this gift you get the option for a special message!", "placeholder": "100.00", "class": "md-updater", "data-hb-name": ""}, {"widget": "Textarea", "name": "", "data-show_when": "budget > 1000", "required": "false", "label": "Message", "field": "CharField", "help_text": "Your Personal Message", "placeholder": "Enter some personal words", "class": "md-updater", "data-hb-name": ""}], "type": "step", "properties": {"step_title": "Budget"}}]</field>
+        <field type="TextField" name="defaults">{"target_name": "Justin Beiber", "customer_country": "United States", "target_country": "United States", "budget": "100.00", "message": "","customer_name": "Billy Bob Thornton"}</field>
     </object>
     <object pk="2" model="flyform.flyform">
         <field type="TextField" name="body">[]</field>

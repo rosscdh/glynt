@@ -9,14 +9,12 @@ from django.template.defaultfilters import slugify
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import View, TemplateView
 from django.utils import simplejson as json
-from django.db.utils import IntegrityError
+from django.db.utils import IntegrityError, DatabaseError
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 
 from glynt.apps.document.models import Document, ClientCreatedDocument
 from glynt.apps.document.forms import ClientCreatedDocumentForm
-
-from glynt.apps.flyform.forms import BaseFlyForm
 
 from document import DocumentView
 from utils import user_can_view_document
@@ -40,7 +38,8 @@ def userdoc_from_request(user, source_doc=None, pk=None):
     userdoc = get_object_or_404(ClientCreatedDocument, pk=pk)
     is_new = False
   else:
-    userdoc, is_new = ClientCreatedDocument.objects.get_or_create(owner=user, source_document=source_doc, is_deleted=False)
+    userdoc = ClientCreatedDocument.objects.create(owner=user, source_document=source_doc, is_deleted=False)
+    is_new = True
     logger.debug('got no pk so must get ClientCreatedDocument based on user source_document and is_deleted=False: document:%s is_new:%s'%(userdoc, is_new,))
     # just set the body the first time the object is created
     userdoc.body = source_doc.body
@@ -68,7 +67,7 @@ class MyDocumentView(DocumentView):
     context['default_data'] = json.dumps(self.user_document.data)
 
     try:
-      context['form_set'] = [BaseFlyForm(json.dumps(step)) for step in self.document.flyform.body]
+      context['form_set'] = self.document.flyform.flyformset()
     except KeyError:
       context['form_set'] = FORM_GROUPS['no_steps']
 
@@ -77,7 +76,6 @@ class MyDocumentView(DocumentView):
     return context
 
 
-# @TODO rename to ClientCreatedClientCreatedDocumentSaveProgressView
 class ClientCreatedDocumentSaveProgressView(View):
   """ Save the user form """
   def post(self, request, *args, **kwargs):
@@ -95,28 +93,35 @@ class ClientCreatedDocumentSaveProgressView(View):
 
       document_slug = slugify(self.kwargs['slug'])
       document = get_object_or_404(Document, slug=document_slug)
+      userdoc_pk = form.cleaned_data['id']
 
-      progress, is_new = userdoc_from_request(request.user, document, form.cleaned_data['id'])
+      client_document, is_new = userdoc_from_request(request.user, document, userdoc_pk)
 
-      progress.name = form.cleaned_data['name']
-      progress.data = request.POST.get('current_progress', None)
+      client_document.name = form.cleaned_data['name']
+      client_document.data = request.POST.get('current_progress', None)
 
       saved = False
-      slug = base_slug = slugify(form.cleaned_data['name'])
-      count = 1
-      while saved is not True:
+      counter = 1
+      while saved is not True and counter < 15:
+        # try to create a new documetn with updated name
+        name = client_document.name
+        if counter > 1:
+          name = '%s %s' % (name, counter,)
+        slug = slugify(name)
+
         try:
-          progress.slug = slug
-          progress.save()
-          saved = True
-        except IntegrityError:
-          slug = '%s-%d' %(base_slug, count,)
-          count = count+1
+          ClientCreatedDocument.objects.exclude(pk=userdoc_pk).get(owner=request.user, slug=slug, name=name)
+          counter = counter + 1
           saved = False
+        except ClientCreatedDocument.DoesNotExist:
+          client_document.name = name
+          client_document.slug = slug
+          client_document.save()
+          saved = True
 
-      redirect_url = progress.get_absolute_url()
+      redirect_url = client_document.get_absolute_url()
 
-      return HttpResponse('[{"userdoc_id": %d, "url": "%s", "status":"%s", "message":"%s"}]' % (progress.pk, redirect_url, 'success', unicode(_('Progress Saved'))), status=200, content_type="application/json")
+      return HttpResponse('[{"userdoc_id": %d, "url": "%s", "status":"%s", "message":"%s"}]' % (client_document.pk, redirect_url, 'success', unicode(_('Document Saved'))), status=200, content_type="application/json")
 
 
 class PersistClientCreatedDocumentProgressView(View):
@@ -180,18 +185,30 @@ class DocumentExportView(View):
 
 
 class CloneClientCreatedDocumentView(View):
+  """ Clone a specified document
+  Structured strangely due to postgres not accepting catches by integrity error or databaseerror
+  """
   def post(self, request, *args, **kwargs):
     client_document = get_object_or_404(ClientCreatedDocument, pk=self.kwargs['pk'])
     client_document.pk = None # set the pk to null which will cause the ORM to save as a new object
     saved = False
-    while saved is not True:
+    counter = 1
+    while saved is not True and counter < 15:
+      # try to create a new documetn with updated name
+      name = 'Copy of %s' % (client_document.name,)
+      if counter > 1:
+        name = '%s %s' % (name, counter,)
+      slug = slugify(name)
+
       try:
-        client_document.name = 'Copy of %s' % (client_document.name,)
-        client_document.slug = slugify(client_document.name)
+        ClientCreatedDocument.objects.get(owner=request.user, slug=slug, name=name)
+        counter = counter + 1
+        saved = False
+      except ClientCreatedDocument.DoesNotExist:
+        client_document.name = name
+        client_document.slug = slug
         client_document.save()
         saved = True
-      except IntegrityError:
-        saved = False
 
 
     url = reverse('document:my_view', kwargs={'slug':client_document.slug})

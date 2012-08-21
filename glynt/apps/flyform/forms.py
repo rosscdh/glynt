@@ -47,11 +47,16 @@ class BaseFlyForm(forms.Form, BootstrapMixin):
         "help_text" : {"type" : "string"},
         "placeholder" : {"type" : "string"},
         "class" : {"type" : "string"},
-        "data-hb-name" : {"type" : "string"}
+        "data-hb-name" : {"type" : "string"},
+        "data-show_when":"customer_country == 'United States'",
+        "data-hide_when":"function(){ customer_country == 'Germany' }"
       ]
   }
   """
-  def __init__(self, json_form=None, data=None, files=None, auto_id='id_%s', prefix=None,
+  class Meta:
+    layout = ()
+
+  def __init__(self, step_num=None, json_form=None, data=None, files=None, auto_id='id_%s', prefix=None,
                initial=None, error_class=ErrorList, label_suffix=':',
                empty_permitted=False):
 
@@ -59,8 +64,17 @@ class BaseFlyForm(forms.Form, BootstrapMixin):
                             initial, error_class, label_suffix,
                             empty_permitted)
 
+    self.step_num = step_num if step_num > 0 else 1
+
     if json_form is not None:
       self.setup_form(json_form)
+
+    self.bootstrap_layout()
+
+  def bootstrap_layout(self):
+    step_title = "Step %d" % (self.step_num,)
+    layout_keys = [step_title] + self.fields.keys()
+    self.Meta.layout = self.Meta.layout + ( Fieldset(*layout_keys), )
 
   def setup_form(self, json_form):
     """ Main form setup method used to generate the base form fields """
@@ -119,8 +133,8 @@ class BaseFlyForm(forms.Form, BootstrapMixin):
 
         if f:
           field_instance = f()
-          field_instance.name = self.slugify(field['name'])
           field_instance.label = field['label'] if field['label'] else field['name']
+          field_instance.name = self.slugify(field['name']) if field['name'] else self.slugify(field_instance.label)
           field_instance.help_text = field['help_text'] if field['help_text'] else None
           field_instance.required = True if field['required'] in ['true',True,'1', 1] else False
           if 'initial' in field:
@@ -164,6 +178,11 @@ class BaseFlyForm(forms.Form, BootstrapMixin):
       'placeholder': field_dict['placeholder'],
       'data-hb-name': field_dict['data-hb-name'] if field_dict['data-hb-name'] else field_instance.name,
     }
+
+    if 'data-show_when' in field_dict:
+      widget.attrs['data-show_when'] = safestring.mark_safe(field_dict['data-show_when'])
+    if 'data-hide_when' in field_dict:
+      widget.attrs['data-hide_when'] = safestring.mark_safe(field_dict['data-hide_when'])
 
     # Handle loop step loop length fields, required to make the loop function
     if 'data-glynt-loop_length' in field_dict:
