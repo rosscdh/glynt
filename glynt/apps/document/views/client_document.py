@@ -16,8 +16,6 @@ from django.core.files.base import ContentFile
 from glynt.apps.document.models import Document, ClientCreatedDocument
 from glynt.apps.document.forms import ClientCreatedDocumentForm
 
-from glynt.apps.flyform.forms import BaseFlyForm
-
 from document import DocumentView
 from utils import user_can_view_document
 
@@ -69,7 +67,7 @@ class MyDocumentView(DocumentView):
     context['default_data'] = json.dumps(self.user_document.data)
 
     try:
-      context['form_set'] = [BaseFlyForm(step_num, json.dumps(step)) for step_num, step in enumerate(self.document.flyform.body)]
+      context['form_set'] = self.document.flyform.flyformset()
     except KeyError:
       context['form_set'] = FORM_GROUPS['no_steps']
 
