@@ -9,12 +9,14 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         # Delete the unique constraint
-        db.delete_unique('document_clientcreateddocument', ['slug'])
+        #db.delete_unique('document_clientcreateddocument', ['slug'])
+        pass
 
 
     def backwards(self, orm):
         # Create unique constraint on slug
-        db.create_unique('document_clientcreateddocument', ['slug'])
+        #db.create_unique('document_clientcreateddocument', ['slug'])
+        pass
 
 
     models = {
