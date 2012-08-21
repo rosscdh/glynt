@@ -936,12 +936,16 @@ $(document).ready(function(){
           item = $(item);
           if (self.inlineCallBack(item.attr('data-hide_when')) == true) {
             item.closest('li').hide();
+          }else{
+            item.closest('li').show();
           };
         });
         $.each(self.showWhen, function(i,item) {
           item = $(item);
           if (self.inlineCallBack(item.attr('data-show_when')) == true) {
             item.closest('li').show();
+          }else{
+            item.closest('li').hide();
           };
         });
       };
@@ -952,8 +956,10 @@ $(document).ready(function(){
           variable = '"' + variable + '"';
         } else {
           variable = variable.replace(/[\'\"]/gi,'"');
-          variable = documentModel.context()[variable];
-          variable = '"' + variable + '"';
+          if (isNaN(variable)) {
+            variable = documentModel.context()[variable];
+            variable = '"' + variable + '"';
+          }
         }
         return variable;
       };
@@ -968,7 +974,7 @@ $(document).ready(function(){
           //console.log(operator)
 
           expression = variable + comparison + operator;
-          //console.log(expression)
+          console.log('expression is: ' + eval(expression))
           return eval(expression);
       };
 
