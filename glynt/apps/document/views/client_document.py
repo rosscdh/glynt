@@ -69,7 +69,7 @@ class MyDocumentView(DocumentView):
     context['default_data'] = json.dumps(self.user_document.data)
 
     try:
-      context['form_set'] = [BaseFlyForm(json.dumps(step)) for step in self.document.flyform.body]
+      context['form_set'] = [BaseFlyForm(step_num, json.dumps(step)) for step_num, step in enumerate(self.document.flyform.body)]
     except KeyError:
       context['form_set'] = FORM_GROUPS['no_steps']
 

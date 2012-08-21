@@ -19,15 +19,12 @@
     </div>
 
     {% for form in form_set %}
-    <form id="glynt-doc-{{ forloop.counter }}" class="bind-document">{% csrf_token %}
+    <form id="glynt-doc-{{ forloop.counter }}"  class="form-horizontal bind-document">{% csrf_token %}
     <div id="form-group-{{ forloop.counter }}" class="form-group {% if not forloop.first %}hidden{% endif %}">
         <h4>Step {{ forloop.counter }}. of {{ form_set|length }}</h4>
-
         <h4><span class="step-title"></span></h4>
         <br/>
-        <ul class="form-fields">
-        {{ form.as_ul }}
-        <ul>
+        {{ form }}
     </div>
     </form>
     {% endfor %}

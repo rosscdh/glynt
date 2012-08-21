@@ -53,7 +53,10 @@ class BaseFlyForm(forms.Form, BootstrapMixin):
       ]
   }
   """
-  def __init__(self, json_form=None, data=None, files=None, auto_id='id_%s', prefix=None,
+  class Meta:
+    layout = ()
+
+  def __init__(self, step_num=None, json_form=None, data=None, files=None, auto_id='id_%s', prefix=None,
                initial=None, error_class=ErrorList, label_suffix=':',
                empty_permitted=False):
 
@@ -61,8 +64,17 @@ class BaseFlyForm(forms.Form, BootstrapMixin):
                             initial, error_class, label_suffix,
                             empty_permitted)
 
+    self.step_num = step_num if step_num > 0 else 1
+
     if json_form is not None:
       self.setup_form(json_form)
+
+    self.bootstrap_layout()
+
+  def bootstrap_layout(self):
+    step_title = "Step %d" % (self.step_num,)
+    layout_keys = [step_title] + self.fields.keys()
+    self.Meta.layout = self.Meta.layout + ( Fieldset(*layout_keys), )
 
   def setup_form(self, json_form):
     """ Main form setup method used to generate the base form fields """
