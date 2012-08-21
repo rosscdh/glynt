@@ -24,7 +24,9 @@
         <h4>Step {{ forloop.counter }}. of {{ form_set|length }}</h4>
         <h4><span class="step-title"></span></h4>
         <br/>
-        {{ form }}
+        <ul>
+        {{ form.as_ul }}
+        </ul>
     </div>
     </form>
     {% endfor %}
@@ -570,7 +572,7 @@ $(document).ready(function(){
 
     self.setContextItem = function setContextItem(input,local_context) {
             // only allow if the data-hb-name is set
-            console.log(input)
+//            console.log(input)
             if (typeof input.attr('data-hb-name') == 'string') {
                 var context = (local_context == undefined) ? self.context() : local_context ;
                 var key = name = input.attr('data-hb-name');
@@ -965,14 +967,14 @@ $(document).ready(function(){
       self.inlineCallBack = function inlineCallBack(callback) {
           re = new RegExp("^(.+) ([\={1,2}\!\>\<]+) ([\'\"]?.+?[\'\"]?)$",'ig');
           var match = re.exec(callback)
-          console.log(match)
+//          console.log(match)
           var variable = self.parseVariable(match[1]);
           var comparison = match[2];
           var operator = self.parseVariable(match[3]);
           //console.log(operator)
 
           expression = variable + comparison + operator;
-          console.log('expression is: ' + eval(expression))
+//          console.log('expression is: ' + eval(expression))
           return eval(expression);
       };
 
@@ -1189,12 +1191,42 @@ $(document).ready(function(){
         //formatSelection: formatSelection
         // formatResult: format
     });
+    
+    var hb_popover_template = Handlebars.compile($('#hb-popover').html());
+    $('.md-updater').popover({
+      title: function() {
+        return $(this).closest('li').find('label:first').html();
+      },
+      content: function() {
+        item = {
+          'field_label': $(this).closest('li').find('label:first').html(),
+          'explain': $(this).closest('li').find('span.helptext:first').html(),
+          'example': $(this).attr('placeholder')
+        }
+        return hb_popover_template(item);
+      },
+    });
 });
 </script>
 
 {% tplhandlebars "contact-list-item" %}
     <img src="{{picture}}" width="45" height="45" />
     {{name}}
+{% endtplhandlebars %}
+
+{% tplhandlebars "hb-popover" %}
+    <p>
+    {{#if explain}}
+    {{explain}}
+    {{else}}
+    Please enter a value for "{{field_label}}"
+    {{/if}}
+    {{#if example}}
+    <br/><br/>
+    <i>i.e:</i><br/>
+    {{example}}
+    {{/if}}
+    </p>
 {% endtplhandlebars %}
 
 {% include 'socialregistration/facebook_js/facebook_js.html' %}
