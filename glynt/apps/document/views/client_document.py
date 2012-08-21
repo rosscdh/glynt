@@ -78,7 +78,6 @@ class MyDocumentView(DocumentView):
     return context
 
 
-# @TODO rename to ClientCreatedClientCreatedDocumentSaveProgressView
 class ClientCreatedDocumentSaveProgressView(View):
   """ Save the user form """
   def post(self, request, *args, **kwargs):
@@ -96,28 +95,35 @@ class ClientCreatedDocumentSaveProgressView(View):
 
       document_slug = slugify(self.kwargs['slug'])
       document = get_object_or_404(Document, slug=document_slug)
+      userdoc_pk = form.cleaned_data['id']
 
-      progress, is_new = userdoc_from_request(request.user, document, form.cleaned_data['id'])
+      client_document, is_new = userdoc_from_request(request.user, document, userdoc_pk)
 
-      progress.name = form.cleaned_data['name']
-      progress.data = request.POST.get('current_progress', None)
+      client_document.name = form.cleaned_data['name']
+      client_document.data = request.POST.get('current_progress', None)
 
       saved = False
-      slug = base_slug = slugify(form.cleaned_data['name'])
-      count = 1
-      while saved is not True:
+      counter = 1
+      while saved is not True and counter < 15:
+        # try to create a new documetn with updated name
+        name = client_document.name
+        if counter > 1:
+          name = '%s %s' % (name, counter,)
+        slug = slugify(name)
+
         try:
-          progress.slug = slug
-          progress.save()
-          saved = True
-        except IntegrityError:
-          slug = '%s-%d' %(base_slug, count,)
-          count = count+1
+          ClientCreatedDocument.objects.exclude(pk=userdoc_pk).get(owner=request.user, slug=slug, name=name)
+          counter = counter + 1
           saved = False
+        except ClientCreatedDocument.DoesNotExist:
+          client_document.name = name
+          client_document.slug = slug
+          client_document.save()
+          saved = True
 
-      redirect_url = progress.get_absolute_url()
+      redirect_url = client_document.get_absolute_url()
 
-      return HttpResponse('[{"userdoc_id": %d, "url": "%s", "status":"%s", "message":"%s"}]' % (progress.pk, redirect_url, 'success', unicode(_('Progress Saved'))), status=200, content_type="application/json")
+      return HttpResponse('[{"userdoc_id": %d, "url": "%s", "status":"%s", "message":"%s"}]' % (client_document.pk, redirect_url, 'success', unicode(_('Document Saved'))), status=200, content_type="application/json")
 
 
 class PersistClientCreatedDocumentProgressView(View):
@@ -189,7 +195,7 @@ class CloneClientCreatedDocumentView(View):
     client_document.pk = None # set the pk to null which will cause the ORM to save as a new object
     saved = False
     counter = 1
-    while saved is not True:
+    while saved is not True and counter < 15:
       # try to create a new documetn with updated name
       name = 'Copy of %s' % (client_document.name,)
       if counter > 1:

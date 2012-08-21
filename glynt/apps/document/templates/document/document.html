@@ -848,7 +848,7 @@ $(document).ready(function(){
         }
 
         // Method to actual save the document:title
-        self.saveDocument = function saveDocument() {
+        self.saveDocumentNameChange = function saveDocumentNameChange() {
 
             var csrf_token = $('form.bind-document:first').find('input[type=hidden]:first')
             var data = {
@@ -1080,7 +1080,7 @@ $(document).ready(function(){
     {% if userdoc_form %}
     $('#document-title.editable').editable(function(value, settings) { 
         $('form#userdoc-name-form input#id_name').val(value);
-        App.saveDocument();
+        App.saveDocumentNameChange();
         return(value);
     }, { 
         indicator : 'Saving...',
