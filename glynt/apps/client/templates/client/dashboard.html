@@ -41,9 +41,7 @@
 		                  <li class="active">
 		                    <a href="#">All Documents</a>
 		                  </li>
-		                  <li><a href="#">Index Ventures</a></li>
-		                  <li><a href="#">Personal</a></li>
-		                  <li class="pull-right"><a href="#">Add Category</a></li>
+		                  <li><a href="#">Incomplete Documents</a></li>
 		                </ul>
 					</div>
 					<div class="span9">
@@ -54,7 +52,7 @@
                                   <h3><a href="{% url 'document:my_view' slug=d.slug %}">{{ d.name }}</a></h3>
                                 </td>
 								<td>
-									<div class="btn-group">
+									<div class="btn-group pull-right">
 	                                   <a href="{% url 'document:my_view' slug=d.slug %}" class="btn btn-info">{% trans 'Edit' %}</a>
 	                                   <a id="clone-{{ d.pk }}" href="#clone" data-url="{% url 'document:my_clone' pk=d.pk %}" data-pk="{{ d.pk }}" class="clone-my-document btn btn-info">{% trans 'Clone' %}</a>
 	                                   <a id="export-{{ d.pk }}" href="#export" data-url="{% url 'document:export' slug=d.slug %}" data-pk="{{ d.pk }}" class="export-pdf btn btn-success">{% trans 'Download PDF' %}</a>
