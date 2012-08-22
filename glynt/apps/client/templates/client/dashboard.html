@@ -113,14 +113,47 @@ $(document).ready(function(){
     })
     .success(function(data, textStatus, jqXHR) {
       data = data[0];
-      var li = self.closest('tr');
-      console.log(data)
-      console.log(li)
-      deleted_doc = li;
-      li.fadeOut('slow', function(){
+      var div = self.closest('div');
+      var td = self.closest('td');
+      var tr = self.closest('tr');
+      deleted_doc = td.html()
+      div.fadeOut('slow', function(){
         $(this).remove();
-        li.html(data.message);
+        td.html(data.message);
       });
+
+    })
+    .error(function(jqXHR, textStatus, errorThrown) { 
+      console.log(jqXHR)
+      console.log(textStatus)
+      console.log(errorThrown)
+      console.log('Error in Javascript event')
+    })
+    .complete(function() {
+    });
+  });
+
+  $('a.undelete-my-document').live('click', function(event){
+    event.preventDefault();
+
+    var self = $(this);
+    var data = {
+        csrfmiddlewaretoken: '{{ csrf_raw_token }}'
+    };
+    $.ajax({
+      type: 'POST',
+      url: $(this).attr('href'),
+      data: data,
+    })
+    .success(function(data, textStatus, jqXHR) {
+      data = data;
+
+      var div = self.closest('div');
+      var td = self.closest('td');
+      var tr = self.closest('tr');
+
+      td.html(deleted_doc);
+      $(deleted_doc).children().show();
 
     })
     .error(function(jqXHR, textStatus, errorThrown) { 
@@ -157,37 +190,6 @@ $(document).ready(function(){
     .complete(function() {
     });
   });
-
-  $('a.undelete-my-document').live('click', function(event){
-    event.preventDefault();
-
-    var self = $(this);
-    var data = {
-        csrfmiddlewaretoken: '{{ csrf_raw_token }}'
-    };
-    $.ajax({
-      type: 'POST',
-      url: $(this).attr('href'),
-      data: data,
-    })
-    .success(function(data, textStatus, jqXHR) {
-      data = data;
-      var li = self.closest('li');
-      li.html($(deleted_doc).show());
-      $(deleted_doc).children().show();
-      console.log(deleted_doc)
-
-    })
-    .error(function(jqXHR, textStatus, errorThrown) { 
-      console.log(jqXHR)
-      console.log(textStatus)
-      console.log(errorThrown)
-      console.log('Error in Javascript event')
-    })
-    .complete(function() {
-    });
-  });
-
 
 });
 </script>
