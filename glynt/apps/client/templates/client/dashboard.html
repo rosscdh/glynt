@@ -45,23 +45,23 @@
 		                </ul>
 					</div>
 					<div class="span9">
-                         <table id="my-documents" class="table table-stripped table-border table-hover">
-                     		{% for d in my_document_list %}
-                             <tr>
-								<td class="span5">
-                                  <h3><a href="{% url 'document:my_view' slug=d.slug %}">{{ d.name }}</a></h3>
-                                </td>
-								<td>
-									<div class="btn-group pull-right">
-	                                   <a href="{% url 'document:my_view' slug=d.slug %}" class="btn btn-info">{% trans 'Edit' %}</a>
-	                                   <a id="clone-{{ d.pk }}" href="#clone" data-url="{% url 'document:my_clone' pk=d.pk %}" data-pk="{{ d.pk }}" class="clone-my-document btn btn-info">{% trans 'Clone' %}</a>
-	                                   <a id="export-{{ d.pk }}" href="#export" data-url="{% url 'document:export' slug=d.slug %}" data-pk="{{ d.pk }}" class="export-pdf btn btn-success">{% trans 'Download PDF' %}</a>
-                                   		<a id="delete-{{ d.pk }}" href="#delete" data-url="{% url 'document:my_delete' pk=d.pk %}" data-pk="{{ d.pk }}" class="delete-my-document btn btn-error">{% trans 'Delete' %}</a>
-							        </div>                                 
-							   </td>
-                             </tr>
-                          {% endfor %}
-                         </table>
+            <table id="my-documents" class="table table-stripped table-border table-hover">
+            {% for d in my_document_list %}
+            <tr>
+              <td class="span5">
+                <h3><a href="{% url 'document:my_view' slug=d.slug %}">{{ d.name }}</a></h3>
+              </td>
+              <td>
+                <div class="btn-group pull-right">
+                <a href="{% url 'document:my_view' slug=d.slug %}" class="btn btn-info">{% trans 'Edit' %}</a>
+                <a id="clone-{{ d.pk }}" href="#clone" data-url="{% url 'document:my_clone' pk=d.pk %}" data-pk="{{ d.pk }}" class="clone-my-document btn btn-info">{% trans 'Clone' %}</a>
+                <a id="export-{{ d.pk }}" href="#export" data-url="{% url 'document:export' slug=d.slug %}" data-pk="{{ d.pk }}" class="export-pdf btn btn-success">{% trans 'Download PDF' %}</a>
+                <a id="delete-{{ d.pk }}" href="#delete" data-url="{% url 'document:my_delete' pk=d.pk %}" data-pk="{{ d.pk }}" class="delete-my-document btn btn-error">{% trans 'Delete' %}</a>
+                </div>                                 
+              </td>
+            </tr>
+            {% endfor %}
+            </table>
 					</div>
 				</div>
         </div>
@@ -113,10 +113,11 @@ $(document).ready(function(){
     })
     .success(function(data, textStatus, jqXHR) {
       data = data[0];
-      var li = self.closest('li');
-      var div = li.find('div');
-      deleted_doc = div;
-      div.fadeOut('slow', function(){
+      var li = self.closest('tr');
+      console.log(data)
+      console.log(li)
+      deleted_doc = li;
+      li.fadeOut('slow', function(){
         $(this).remove();
         li.html(data.message);
       });
