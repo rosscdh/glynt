@@ -1,34 +1,56 @@
 {% extends 'client/base.html' %}
 {% load url from future %}
 {% load i18n %}
+{% load templatetag_handlebars %}
 
 {% block body %}
 
 <div class="row">
   <div class="span12">
-    <h2>New Document
-      <small>Documents available to create</small>
-      </h2>
-      <br />
-
-	<div id="myCarousel" class="carousel slide">
-	  <!-- Carousel items -->
-	  <div class="carousel-inner offset1">
-		<div class="active item row contracts">
-			{% for d in public_document_list %}
-	            <div class="span2" style="background-color:#{% cycle 'fbd534' '58c4ea' '76c58c' 'f098a4' '5bcaf8' 'c0d72f' %}"><a class="template-document" href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a></div>
-				{% cycle '' '' '' '</div><div class="item row contracts">' %}
-            {% endfor %}
-
+    <h2>New Document<br/><small>Available Document Templates</small></h2>
+    <br />
+    <div id="" class="">
+  	  <!-- Select2 items -->
+  	  <input type="hidden" id="document-template-search" name="" value=""/>
+  	  <div class="">
+    		<div class="contracts">
+        {% for d in public_document_list %}
+        <div class="span2" style="background-color:#{% cycle 'fbd534' '58c4ea' '76c58c' 'f098a4' '5bcaf8' 'c0d72f' %}"><a class="template-document" href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a></div>
+        {% endfor %}
         </div>
-	  </div>
-	  <!-- Carousel nav -->
-	  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-	  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
-	</div>
+  	  </div>
+  	  <!-- Carousel nav -->
+  	  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+  	  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+  	</div>
   </div>
 </div>
+
 <hr/>
+
+<div class="row">
+  <div class="span12">
+    <h2>New Document<br/><small>Available Document Templates</small></h2>
+    <br />
+    <div id="myCarousel" class="carousel slide">
+  	  <!-- Carousel items -->
+  	  <div class="carousel-inner offset1">
+    		<div class="active item row contracts">
+        {% for d in public_document_list %}
+        <div class="span2" style="background-color:#{% cycle 'fbd534' '58c4ea' '76c58c' 'f098a4' '5bcaf8' 'c0d72f' %}"><a class="template-document" href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a></div>
+        {% cycle '' '' '' '</div><div class="item row contracts">' %}
+        {% endfor %}
+        </div>
+  	  </div>
+  	  <!-- Carousel nav -->
+  	  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+  	  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+  	</div>
+  </div>
+</div>
+
+<hr/>
+
 <div class="row">
         <div class="span12">
                 <h2>Your Documents
@@ -70,9 +92,39 @@
 
 
 {% block js %}
+<script id="document-templates" type="text/javascript">
+[{% for d in public_document_list %}{"id": "{{ d.slug }}", "text": "{{ d.name }}"}{% if not forloop.last %}, {% endif %}{% endfor %}]
+</script>
+
+{% tplhandlebars "document-template-item" %}
+<div class="span2" style="background-color:{{color}}"><a class="template-document" href="{{url}}">{{name}}</a></div>
+{% endtplhandlebars %}
+
 <script id="document-controls" type="text/javascript">
 $(document).ready(function(){
+// ----- Document Template Select -----
 
+$("#document-template-search").select2({
+    formatResult: function(object) {
+      if (this.template == undefined) {
+        this.template = Handlebars.compile($('#document-template-item').html());
+      }
+      console.log(object)
+      item = {
+        color: '#ccc',
+        name: object.text,
+        url: 'fdafsd'
+      }
+      console.log(this.template(item))
+      return this.template(item);
+    },
+    width: 'element',
+    minimumInputLength: 2,
+    multiple: false,
+    data: $.parseJSON($('#document-templates').html())
+});
+
+// ----- My Document list options -----
   $('a.export-pdf').live('click', function(event){
     event.preventDefault();
     var data = {
