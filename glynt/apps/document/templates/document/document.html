@@ -88,6 +88,43 @@ display:none;
 
 $(document).ready(function(){
 
+  initSelect2 = function initSelect2(App) {
+    {% if request.user.is_authenticated %}
+    $(".contact-list").select2({
+        query: function(query) {
+            var data = {results: []};
+            var template = Handlebars.compile($('#contact-list-item').html());
+
+            co.query(query.term, function(results){
+                for (r in results) {
+                    item = results[r];
+                    data.results.push({'id': item.name , 'text': template(item)});
+                }
+                // if no results // add search term
+                if (data.results.length == 0) {
+                    data.results.push({'id': query.term , 'text': query.term});
+                }
+                query.callback(data);
+            });
+        },
+        width: 'element',
+        minimumInputLength: 2
+        //formatSelection: formatSelection
+        // formatResult: format
+    });
+
+    $.each($(".contact-list"), function(index, item){
+      var var_name = $(this).attr('data-hb-name');
+      if (var_name != undefined) {
+        var var_value = App.documentModel.context()[var_name];
+        if (var_value != undefined) {
+          $(this).select2('data', {id:var_value, text: var_value});
+        };
+      }
+    });
+    {% endif %}
+  };
+
     function FormControls() {
         var self = this;
 
@@ -888,6 +925,11 @@ $(document).ready(function(){
             }
             return element_type;
         };
+        // method to initialize 3rd part widgets that need to load after
+        // our js events happen
+        self.initializeWidgets = function initializeWidgets() {
+          initSelect2(self);
+        };
 
         self.init = function init() {
             self.initializeValuesFromCookie();// cookie basics
@@ -895,6 +937,7 @@ $(document).ready(function(){
             self.setContext();
             self.setGlyntRuleset();
             self.applyGlyntRuleset();
+            self.initializeWidgets();
             self.render();
         };
 
@@ -1169,29 +1212,6 @@ $(document).ready(function(){
     // friend observer
     co = new contactObserver([facebookCallback], {});
 
-    $(".contact-list").select2({
-        query: function(query) {
-            var data = {results: []};
-            var template = Handlebars.compile($('#contact-list-item').html());
-
-            co.query(query.term, function(results){
-                for (r in results) {
-                    item = results[r];
-                    data.results.push({'id': item.name , 'text': template(item)});
-                }
-                // if no results // add search term
-                if (data.results.length == 0) {
-                    data.results.push({'id': query.term , 'text': query.term});
-                }
-                query.callback(data);
-            });
-        },
-        width: 'element',
-        minimumInputLength: 2
-        //formatSelection: formatSelection
-        // formatResult: format
-    });
-    
     var hb_popover_template = Handlebars.compile($('#hb-popover').html());
     $('.md-updater').popover({
       title: function() {
@@ -1229,6 +1249,9 @@ $(document).ready(function(){
     </p>
 {% endtplhandlebars %}
 
-{% include 'socialregistration/facebook_js/facebook_js.html' %}
+
+{% if request.user.is_authenticated %}
+	{% include 'socialregistration/facebook_js/facebook_js.html' %}
+{% endif %}
 
 {% endblock %}
