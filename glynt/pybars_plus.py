@@ -13,7 +13,10 @@ class PybarsPlus(object):
 
   def render(self, context):
     template = self.compiler.compile(self.source)
-    return ''.join(template(context))
+    if template:
+      html = template(context)
+      return ''.join(html)
+    return ''
 
   def helper_if_eq(self, this, *args, **kwargs):
     options = args[0]

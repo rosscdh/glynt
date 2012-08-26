@@ -12,12 +12,14 @@ from django.utils import simplejson as json
 from django.db.utils import IntegrityError, DatabaseError
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
+from django.template.loader import render_to_string
 
 from glynt.apps.document.models import Document, ClientCreatedDocument
 from glynt.apps.document.forms import ClientCreatedDocumentForm
 
 from document import DocumentView
 from utils import user_can_view_document
+from glynt.pybars_plus import PybarsPlus
 
 import markdown
 import xhtml2pdf.pisa as pisa
@@ -148,25 +150,17 @@ class DocumentExportView(View):
 
       document_slug = slugify(self.kwargs['slug'])
       document = get_object_or_404(ClientCreatedDocument.objects.select_related('source_document','source_document__flyform'), slug=document_slug, owner=request.user)
-      logger.debug('got document: %s'%(document,))
 
-      if content_markdown not in [None,'']:
-        html = markdown.markdown(content_markdown)
-        logger.debug('markdown was provided: %s'%(content_markdown,))
-      else:
-        logger.debug('no markdown was provided generate based on default_data and pybars')
-        if type(document.source_document.flyform.defaults) is dict:
-          data = dict(document.source_document.flyform.defaults.items() + document.data.items())
-          logger.debug('flyform.defaults was combined with document.body')
-        else:
-          data = document.data
-          logger.debug('flyform.defaults was not specified')
+      data = dict(document.source_document.flyform.defaults.items() + document.data.items())
 
-        t = Template(document.body)
-        c = Context(data)
-        html = t.render(c)
-        # html = markdown.markdown(template.render(Context(document.data)))
-        print html
+      pybars_plus = PybarsPlus(document.body)
+      handlebars_template_body = pybars_plus.render(data)
+
+      html = render_to_string('document/export/base.html', {
+        'base_css': '/static/css/bootstrap.css',
+        'body': handlebars_template_body
+      })
+      html = markdown.markdown(html)
 
       result = StringIO.StringIO()
       pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result)
