@@ -144,7 +144,7 @@ class PersistClientCreatedDocumentProgressView(View):
 
 # @TODO rename to ClientCreatedDocumentExportView
 class DocumentExportView(View):
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
       userdoc_pk = request.POST.get('id', None)
       content_markdown = request.POST.get('md', None)
 
