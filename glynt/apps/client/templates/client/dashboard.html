@@ -6,7 +6,7 @@
 {% block body %}
 <div class="row">
   <div class="span12">
-    <h2>New Document<br/><small>Search for a Document Template</small></h2>
+    <h2>{% trans 'Template Documents' %}<br/><small>{% trans 'Search for a Document Template to use' %}</small></h2>
     <br />
     <!-- Select2 items -->
     <input type="hidden" multiple id="document-template-search" name="" value=""/>
@@ -33,17 +33,16 @@
 
 <div class="row">
   <div class="span12">
-    <h2>Your Documents
-        <small>All of your generated documents</small>
+    <h2>{% trans 'Your Document Templates' %} <small>{% trans 'All of your Documents Templates' %}</small>
     </h2>
     <br />
     <div class="row">
     <div class="span3">
       <ul class="nav nav-list">
         <li class="active">
-          <a href="#">All Documents</a>
+          <a href="#">{% trans 'All Documents' %}</a>
         </li>
-        <li><a href="#">Incomplete Documents</a></li>
+        <li><a href="#">{% trans 'Incomplete Documents' %}</a></li>
       </ul>
     </div>
     <div class="span9">
@@ -55,7 +54,6 @@
         </td>
         <td>
           <div class="btn-group pull-right">
-          <a href="{% url 'document:my_view' slug=d.slug %}" class="btn btn-info">{% trans 'Edit' %}</a>
           <a id="clone-{{ d.pk }}" href="#clone" data-url="{% url 'document:my_clone' pk=d.pk %}" data-pk="{{ d.pk }}" class="clone-my-document btn btn-info">{% trans 'Clone' %}</a>
           <a id="export-{{ d.pk }}" href="{% url 'document:export' slug=d.slug %}" target="_BLANK" data-url="{% url 'document:export' slug=d.slug %}" data-pk="{{ d.pk }}" class="btn btn-success">{% trans 'Download PDF' %}</a>
           <a id="delete-{{ d.pk }}" href="#delete" data-url="{% url 'document:my_delete' pk=d.pk %}" data-pk="{{ d.pk }}" class="delete-my-document btn btn-error">{% trans 'Delete' %}</a>
