@@ -144,10 +144,10 @@ class PersistClientCreatedDocumentProgressView(View):
 
 # @TODO rename to ClientCreatedDocumentExportView
 class DocumentExportView(View):
-    def get(self, request, *args, **kwargs):
-      userdoc_pk = request.POST.get('id', None)
-      content_markdown = request.POST.get('md', None)
+    def post(self, request, *args, **kwargs):
+      return self.get(request, args, kwargs)
 
+    def get(self, request, *args, **kwargs):
       document_slug = slugify(self.kwargs['slug'])
       document = get_object_or_404(ClientCreatedDocument.objects.select_related('source_document','source_document__flyform'), slug=document_slug, owner=request.user)
 

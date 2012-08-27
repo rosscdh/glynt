@@ -837,29 +837,8 @@ $(document).ready(function(){
         }
 
         self.generatePDF = function generatePDF() {
-
-            var csrf_token = $('form.bind-document:first').find('input[type=hidden]:first')
-            var data = {
-                csrfmiddlewaretoken: csrf_token.val(),
-                md: self.documentModel.render(),
-                id: $('form#userdoc-name-form input#id_id').val()
-            };
-
-            $.ajax({
-              type: 'POST',
-              url: "{% url 'document:export' slug=userdoc.slug %}",
-              data: data,
-            })
-            .success(function(data, textStatus, jqXHR) {
-                data = data[0];
-                var filename = data.filename;
-                window.open(filename, 'pdf');
-            })
-            .error(function() { 
-                alert('error')
-            })
-            .complete(function() {
-            });
+            var url = "{% url 'document:export' slug=userdoc.slug %}";
+            document.location = url;
         }
 
         // method to persist the cookie data
