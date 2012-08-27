@@ -151,7 +151,9 @@ class DocumentExportView(View):
       document_slug = slugify(self.kwargs['slug'])
       document = get_object_or_404(ClientCreatedDocument.objects.select_related('source_document','source_document__flyform'), slug=document_slug, owner=request.user)
 
+      # @TODO Move all of this into a model method on ClientCreatedDocument
       data = dict(document.source_document.flyform.defaults.items() + document.data.items())
+      data['document_title'] = document.name
 
       pybars_plus = PybarsPlus(document.body)
       handlebars_template_body = pybars_plus.render(data)
@@ -162,18 +164,16 @@ class DocumentExportView(View):
       })
       html = markdown.markdown(html)
 
-      result = StringIO.StringIO()
-      pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result)
+      filename = '%s.pdf' % (document_slug,)
+      pdf = StringIO.StringIO()
+      result = pisa.CreatePDF(StringIO.StringIO(html.encode("UTF-8")), pdf)
 
-      rnd = random.random()
-      rnd = '%s' % (str(rnd)[2:6])
-      file_name = 'doc_gen/%s-%s-%s.pdf' %(request.user.username, rnd, slugify(document.name),)
-
-      if pdf.err:
+      if result.err:
         response = HttpResponse('[{"message":"%s"}]'%(pdf.err), status=401, content_type="text/json")
       else:
-        pdf_file = default_storage.save(file_name, ContentFile(result.getvalue()))
-        response = HttpResponse('[{"filename":"%s%s"}]'%(settings.MEDIA_URL,file_name), status=200, content_type="text/json")
+        response = HttpResponse(pdf.getvalue(), status=200, content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename=%s' % (filename,)
+        return response
 
       return response
 

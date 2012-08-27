@@ -117,16 +117,14 @@ $("#document-template-search").select2({
         md: '',
         id: $(this).attr('data-pk')
     };
-    console.log($(this).attr('data-url'))
+
     $.ajax({
       type: 'POST',
       url: $(this).attr('data-url'),
       data: data,
     })
     .success(function(data, textStatus, jqXHR) {
-        data = data[0];
-        var filename = data.filename;
-        window.open(filename, 'pdf');
+      console.log(data)
     })
     .error(function() { 
         console.log('Error in Javascript event')
