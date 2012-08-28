@@ -92,6 +92,10 @@ ul#step-list li.current_step{
   background-color:#0c0;
   border:solid #aaa 1px;
 }
+ul#step-list li.last_step{
+  background-color:#00c;
+  border:solid #aaa 1px;
+}
 </style>
 {% endblock %}
 
@@ -172,10 +176,15 @@ $(document).ready(function(){
           }
           return self.goto_step_list(context);
         }
+        self.renderSteps = function renderSteps() {
+            App.stepListDisplay(self.stepList());
+        }
         self.showNext = function showNext() {
+            self.renderSteps();
             return (self.currentFormStep() == self.maxFormSteps())? false : true ;
         }
         self.showPrev = function showPrev() {
+            self.renderSteps();
             return (self.currentFormStep() == 1)? false : true ;
         }
         self.isLastStep = function isLastStep() {
@@ -237,7 +246,6 @@ $(document).ready(function(){
             }
             // persiste the cookie progress
             App.persistProgress();
-
             return true;
         }
 
@@ -259,6 +267,13 @@ $(document).ready(function(){
                 }
             });
             return step;
+        }
+
+        self.goToStep = function goToStep(step) {
+            var current = self.currentFormStep();
+            next = self.determineStepVisibility('next', step);
+            self.currentFormStep(next);
+            window.location.hash = '#step-'+next;
         }
 
         self.next = function next() {
@@ -1138,6 +1153,13 @@ $(document).ready(function(){
 
     $("input.datepicker").datepicker({dateFormat:"D, dd MM yy",changeYear:true,changeMonth:true});
 
+    $('ul#step-list li').live('click', function(event){
+      event.preventDefault();
+      var step = $(this).attr('data-goto_step');
+      console.log('goToStep:' + step);
+      App.formControls.goToStep(step);
+    });
+
     if ($.cookie('{{ userdoc.cookie_name }}') == null) {
         $.cookie('{{ userdoc.cookie_name }}', JSON.stringify({}));
     }
@@ -1252,8 +1274,9 @@ $(document).ready(function(){
 {% tplhandlebars "goto-step-list" %}
 <ul id="step-list">
   {{#each step_list}}
-  <li data-goto_step="{{step}}" class="{{#if is_current}}current_step{{/if}}"><a class="goto-step" href="#step-{{step}}">{{text}}</a></li>
+  <li data-goto_step="{{step}}" class="{{#if is_current}}current_step{{/if}}">{{text}}</li>
   {{/each}}
+  <li data-goto_step="{{last}}" class="last_step">{{text}}</li>
 <ul>
 {% endtplhandlebars %}
 
