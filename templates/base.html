@@ -41,44 +41,44 @@
 
   <body data-spy="scroll" data-target=".subnav" data-offset="50" class="preview">
 
-	<div class="navbar navbar-fixed-top">
+  <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
-            <div class="container">
-				{% if request.user.is_authenticated %}
-	                <a class="brand" href="/client">
-	                    <img src="/static/img/logo-nav.png">
-	                </a>
-				{% else %}
-	                <a class="brand" href="/">
-	                    <img src="/static/img/logo-nav.png">
-	                </a>
-				{% endif %}
-				<form class="navbar-search pull-left" action="">
-					<input type="text" class="search-query span2" placeholder="Search">
-		        </form>
-				<p class="pull-right">
-               	 	<ul class="nav pull-right">
-	                    {% if request.user.is_authenticated %}
-	                    <li><a href="{% url 'client:dashboard' %}">{% trans 'Dashboard' %}</a></li>
-						<li class="divider-vertical"></li>                    
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="{{ request.user.get_profile.get_mugshot_url }}" width="22" height="22"> {{request.user.first_name}} {{request.user.last_name}}<b class="caret"></b></a>
-							<ul class="dropdown-menu">
-						        <li><a id="user-profile" class="" href="{% url 'userena_profile_detail' username=request.user.username %}">{% trans 'Profile' %}</a></li>
-						        <li><a id="user-logout" class="" href="{% url 'socialregistration:logout' %}">{% trans 'Logout' %}</a></li>
-			              	</ul>
-						</li>
-	                    {% else %}
-	                    <li class=""><a id="user-signup-link" class="" href="{% url 'client:signup' %}">{% trans 'Sign Up' %}</a></li>
-	                    <li><a id="user-explore-link" class="" href="#">{% trans 'Explore' %}</a></li>
-	                    <li><a id="user-blog-link" class="" href="#">{% trans 'Blog' %}</a></li>
-	                    <li><a id="user-login-link" class="" href="{% url 'client:login' %}">{% trans 'Sign In' %}</a></li>
-	                    {% endif %}
-	                </ul>
-				</p>
-            </div> <!-- /container -->
-        </div> <!-- /navbar-inner -->
-    </div> <!-- /navbar -->
+          <div class="container">
+            {% if request.user.is_authenticated %}
+              <a class="brand" href="/client">
+                  <img src="/static/img/logo-nav.png">
+              </a>
+            {% else %}
+              <a class="brand" href="/">
+                  <img src="/static/img/logo-nav.png">
+              </a>
+            {% endif %}
+            <form class="navbar-search pull-left" action="">
+              <input type="text" class="search-query span2" placeholder="Search">
+            </form>
+            <p class="pull-right">
+            <ul class="nav pull-right">
+                {% if request.user.is_authenticated %}
+                <li><a href="{% url 'client:dashboard' %}">{% trans 'Dashboard' %}</a></li>
+                <li class="divider-vertical"></li>                    
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="{{ request.user.get_profile.get_mugshot_url }}" width="22" height="22"> {{request.user.first_name}} {{request.user.last_name}}<b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                        <li><a id="user-profile" class="" href="{% url 'userena_profile_detail' username=request.user.username %}">{% trans 'Profile' %}</a></li>
+                        <li><a id="user-logout" class="" href="{% url 'socialregistration:logout' %}">{% trans 'Logout' %}</a></li>
+                  </ul>
+                </li>
+                {% else %}
+                <li class=""><a id="user-signup-link" class="" href="{% url 'client:signup' %}">{% trans 'Sign Up' %}</a></li>
+                <li><a id="user-explore-link" class="" href="#">{% trans 'Explore' %}</a></li>
+                <li><a id="user-blog-link" class="" href="#">{% trans 'Blog' %}</a></li>
+                <li><a id="user-login-link" class="" href="{% url 'client:login' %}">{% trans 'Sign In' %}</a></li>
+                {% endif %}
+            </ul>
+            </p>
+          </div> <!-- /container -->
+      </div> <!-- /navbar-inner -->
+  </div> <!-- /navbar -->
 
     <div class="container">
     {% if messages %}
@@ -89,14 +89,14 @@
     </ul>
     {% endif %}
     {% block body %}{% endblock %}
-		<div class="row" id="footer">
-			<div class="span12">
-				<hr />
-				<p class="pull-right">Copyright 2012 WeAreML</p>
-			</div>
-		<div>
+    <div class="row" id="footer">
+      <div class="span12">
+        <hr />
+        <p class="pull-right">Copyright 2012 WeAreML</p>
+      </div>
+    <div>
     </div>
-	
+  
     <script src="{{ STATIC_URL }}js/jquery.min.js"></script>
     <script src="{{ STATIC_URL }}js/jquery-ui-1.8.18.min.js"></script>
     <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>

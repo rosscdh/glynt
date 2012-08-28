@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
-from django.utils import safestring
 from jsonfield import JSONField
 
 from socialregistration.signals import login, connect, profile_data

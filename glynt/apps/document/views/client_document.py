@@ -13,6 +13,7 @@ from django.db.utils import IntegrityError, DatabaseError
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.template.loader import render_to_string
+from django.utils.safestring import mark_safe
 
 from glynt.apps.document.models import Document, ClientCreatedDocument
 from glynt.apps.document.forms import ClientCreatedDocumentForm
@@ -156,13 +157,12 @@ class DocumentExportView(View):
       data['document_title'] = document.name
 
       pybars_plus = PybarsPlus(document.body)
-      handlebars_template_body = pybars_plus.render(data)
+      body = pybars_plus.render(data)
+      handlebars_template_body = mark_safe(markdown.markdown(body))
 
       html = render_to_string('document/export/base.html', {
-        'base_css': '/static/css/bootstrap.css',
         'body': handlebars_template_body
       })
-      html = markdown.markdown(html)
 
       filename = '%s.pdf' % (document_slug,)
       pdf = StringIO.StringIO()

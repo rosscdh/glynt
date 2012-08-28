@@ -339,11 +339,11 @@ $(document).ready(function(){
         self.showIteration = function showIteration(index) {
             if (self.repeatable_fieldset === null) {
                 // not exists create it
-                fieldset = $('<fieldset class="loop" style="display:none;"><legend>&nbsp;</legend>');
+                fieldset = $('<fieldset class="loop" style="display:none;"><legend>&nbsp;</legend><ul class="injected"></ul>');
                 for (f in self.repeatable_fields) {
                     field = $(self.repeatable_fields[f]);
                     field.css('display','');
-                    fieldset.append(field);
+                    fieldset.find('ul.injected').append(field);
                 }
                 self.repeatable_fieldset = fieldset;
             }
@@ -442,12 +442,14 @@ $(document).ready(function(){
         self.init = function init(){
         // loop over ALL form elements (including labels and other helper items) find the from element and hide all those after
             var found = false;
-            self.form_fieldset.children().each(function(index,element){
+            selectors = self.valid_fieldtypes.join(',');
+            self.form_fieldset.find(selectors).each(function(index,element){
                 element = $(element);
                 if (element.attr('id') == $(hide_from_element).attr('id')) {
                     found = true;
                 } else {
                     if (found == true) {
+                        element = element.closest('li');//is we are using fo
                         element.hide();
                         self.repeatable_fields.push(element);
                     }
