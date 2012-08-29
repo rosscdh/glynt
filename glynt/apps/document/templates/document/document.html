@@ -240,12 +240,13 @@ $(document).ready(function(){
         self.stepList = function stepList() {
           steps = function(text){
             steps = [];
-            for (i=1; i < self.maxFormSteps(); i++) {
-              is_current = self.currentFormStep() == i;
-              step_text = (text == undefined || text == 'numeric') ? i : text ;
-              step_name = 'fieldset name';
-              steps.push({index:i-1, text: step_text, step_name: step_name, step: i, is_current: is_current});
-            }
+            $.each($('form.bind-document input[data-step-title]'), function(index,element){
+              index++;
+              is_current = self.currentFormStep() == index;
+              step_text = (text == undefined || text == 'numeric') ? index : text ;
+              step_name = $(this).attr('data-step-title');
+              steps.push({index:index-1, text: step_text, step_name: step_name, step: index, is_current: is_current});
+            });
             return steps;
           };
           context = {
