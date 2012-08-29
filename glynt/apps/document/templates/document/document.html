@@ -21,9 +21,7 @@
     {% for form in form_set %}
     <form id="glynt-doc-{{ forloop.counter }}"  class="form-horizontal bind-document">{% csrf_token %}
     <div id="form-group-{{ forloop.counter }}" class="form-group {% if not forloop.first %}hidden{% endif %}">
-        <h4>Step {{ forloop.counter }}. of {{ form_set|length }}</h4>
-        <h4><span class="step-title"></span></h4>
-        <br/>
+        <h3><span class="step-title"></span></h3>
         <ul>
         {{ form.as_ul }}
         </ul>
@@ -236,18 +234,35 @@ $(document).ready(function(){
         self.actualFormSteps = ({{ form_set|length }}+1);// account for end form
         self.maxFormSteps = ko.observable(({{ form_set|length }}+1));// account for end form
         self.currentFormStep = ko.observable(1);
+        self.steps = ko.observableArray([]);
+
+        self.init = function init() {
+
+          // happens just 1 time
+          // obtain step header info for building accurate list of steps
+          $('span.step-title').each(function() {
+              var element = $(this).closest('div').find('input[data-step-title]'), step_title = element.attr('data-step-title');
+              var form = $(this).closest('div.form-group');
+              $(this).text(step_title);
+              self.steps.push({title: step_title, form_set: form})
+          });
+
+          self.stepVisibility(1);
+        }
 
         self.stepList = function stepList() {
           steps = function(text){
-            steps = [];
-            $.each($('form.bind-document input[data-step-title]'), function(index,element){
-              index++;
-              is_current = self.currentFormStep() == index;
-              step_text = (text == undefined || text == 'numeric') ? index : text ;
-              step_name = $(this).attr('data-step-title');
-              steps.push({index:index-1, text: step_text, step_name: step_name, step: index, is_current: is_current});
+            step_list = [];
+            i = 1;
+            $.each(self.steps(), function(index,element){
+              is_current = self.currentFormStep() == i;
+              step_text = (text == undefined || text == 'numeric') ? i : text ;
+              step_name = element.title;
+
+              step_list.push({index:i-1, text: step_text, step_name: step_name, step: i, is_current: is_current});
+              i++;
             });
-            return steps;
+            return step_list;
           };
           context = {
             'current': self.currentFormStep(),
@@ -331,23 +346,23 @@ $(document).ready(function(){
             return true;
         }
 
+        self.stepVisibility = function stepVisibility(step) {
+          $.each(self.steps(), function(index,form_group){
+              form_group = $(form_group.form_set);
+              if ((index+1) == step) {
+                  form_group.css('display', 'block');
+//                  form_group.removeClass('hidden');
+              } else {
+                  form_group.css('display', 'none');
+//                  form_group.addClass('hidden');
+              }
+          });
+        }
+
         self.determineStepVisibility = function determineStepVisibility(direction,step) {
-
             new_step = self.determineNextStepIndex(direction,step);
-
             step = new_step;
-
-            $.each($('div.form-group'), function(index,form_group){
-                form_group = $(form_group);
-
-                if ((index+1) == step) {
-                    form_group.css('display', 'block');
-                    form_group.removeClass('hidden');
-                } else {
-                    form_group.css('display', 'none');
-                    form_group.addClass('hidden');
-                }
-            });
+            self.stepVisibility(step);
             return step;
         }
 
@@ -389,6 +404,8 @@ $(document).ready(function(){
                 self.currentFormStep(prev);
             };
         }
+        
+        self.init();
     }
 
     function Rule(element,target_element,ruleset){
@@ -1061,6 +1078,7 @@ $(document).ready(function(){
             self.setGlyntRuleset();
             self.applyGlyntRuleset();
             self.initializeWidgets();
+
             self.render();
         };
 
@@ -1214,11 +1232,6 @@ $(document).ready(function(){
             });
         }
         App.render();
-    });
-
-    $('form.bind-document span.step-title').each(function() {
-        var element = $(this).closest('div').find('input[data-step-title]');
-        $(this).text(element.attr('data-step-title'));
     });
 
     $('.fix-errors').live('click', function(event){
