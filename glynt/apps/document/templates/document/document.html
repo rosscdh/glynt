@@ -17,9 +17,6 @@
     <div id="docu-form-head" class="row">
         <div id="messages" data-bind="html: App.message"></div>
     </div>
-    <div id="step-set" class="row">
-        <div id="messages" data-bind="html: App.stepListDisplay()"></div>
-    </div>
 
     {% for form in form_set %}
     <form id="glynt-doc-{{ forloop.counter }}"  class="form-horizontal bind-document">{% csrf_token %}
@@ -44,6 +41,10 @@
             <button id="btn-post-pdf" class="btn btn-success" type="button">Generate PDF</button>
         </div>
     </div>
+{% endblock %}
+
+{% block document_head %}
+<div id="step-set" class="pull-right" data-bind="html: App.stepListDisplay()"></div>
 {% endblock %}
 
 {% block document %}
@@ -112,6 +113,87 @@ ul#step-list li.last_step{
 
 $(document).ready(function(){
 
+  initConditionalCallback = function initConditionalCallback(App) {
+    App.widgets.ccbs = new conditionalCallbackSets(App.documentModel);
+  };
+
+  initContactList = function initContactList(App) {
+    // ----- FACEBOOK CALLBACK -----
+    facebookCallback = function(q,callbackId,callBack) {
+      var self = this;
+      var results = [];
+
+      processFriends = function(friends) {
+        if (friends != undefined) {
+            for (var i = 0; i < Math.min(friends.length, 2000); i++) {
+                friend = friends[i];
+                results.push({
+                    'name': friend.name,
+                    'picture': 'http://graph.facebook.com/' + friend.id + '/picture',
+                    'extra': {'id': friend.id, 'service': 'facebook', 'data_type': 'friends'},
+                });
+            };
+        } else {
+            console.log('No Friends were passed in')
+        }
+      };
+
+      getFBFriends = function(next_url) {
+        $.ajax({
+          type: 'GET',
+          url: next_url,
+          dataType: "jsonp"
+        })
+        .success(function(data, textStatus, jqXHR) {
+          var response = data;
+
+          if (response.data != undefined && response.data.length > 0) {
+            processFriends(response.data);
+            if (response.paging != undefined && response.paging.next != undefined) {
+              getFBFriends(response.paging.next);
+            }
+          } else {
+            // console.log('End of friends list');
+            sendData();
+          }
+        })
+        .error(function(jqXHR, textStatus, errorThrown) { 
+          // console.log(errorThrown);
+          sendData();// send what we have
+        });
+      };
+
+      sendData = function(current_results) {
+        callBack(results,callbackId);
+      };
+
+      // Only perform IF we have a FB connected account
+      FB.getLoginStatus(function(response) {
+          if (response.status === 'connected') {
+            FB.api('/me/friends', function(response) {
+                processFriends(response.data); // process initial set
+                if (response.paging != undefined && response.paging.next != undefined) {
+                  // handle pagination of friends
+                  getFBFriends(response.paging.next);
+                }
+            });
+          }
+      });
+    };
+
+    // linkedInCallbackTest = function(q,callbackId,callBack) {
+    //     result = {
+    //         'name': 'Bob',
+    //         'picture': 'http://linkedin.com/my/pic.jpg'
+    //     }
+    //     for (var i = 0; i < 5; i++) {
+    //         // callBack(result.name + ' ' + i, result.picture, result.extra);
+    //     }
+    // }
+    // friend observer
+    App.widgets.co = new contactObserver([facebookCallback], {});
+  };
+
   initSelect2 = function initSelect2(App) {
     {% if request.user.is_authenticated %}
     $(".contact-list").select2({
@@ -119,7 +201,7 @@ $(document).ready(function(){
             var data = {results: []};
             var template = Handlebars.compile($('#contact-list-item').html());
 
-            co.query(query.term, function(results){
+            App.widgets.co.query(query.term, function(results){
                 for (r in results) {
                     item = results[r];
                     data.results.push({'id': item.name , 'text': template(item)});
@@ -133,8 +215,6 @@ $(document).ready(function(){
         },
         width: 'element',
         minimumInputLength: 2
-        //formatSelection: formatSelection
-        // formatResult: format
     });
 
     $.each($(".contact-list"), function(index, item){
@@ -163,7 +243,8 @@ $(document).ready(function(){
             for (i=1; i < self.maxFormSteps(); i++) {
               is_current = self.currentFormStep() == i;
               step_text = (text == undefined || text == 'numeric') ? i : text ;
-              steps.push({index:i-1, text: step_text, step: i, is_current: is_current});
+              step_name = 'fieldset name';
+              steps.push({index:i-1, text: step_text, step_name: step_name, step: i, is_current: is_current});
             }
             return steps;
           };
@@ -713,6 +794,7 @@ $(document).ready(function(){
         self.formControls = new FormControls();
         self.stepListDisplay = ko.observable(self.formControls.stepList());
         self.message = ko.observable(null);
+        self.widgets = {};
 
         self.setGlyntRuleset = function setGlyntRuleset() {
             // loop over lements looking for rulesets
@@ -966,6 +1048,8 @@ $(document).ready(function(){
         // method to initialize 3rd part widgets that need to load after
         // our js events happen
         self.initializeWidgets = function initializeWidgets() {
+          initContactList(self);
+          initConditionalCallback(self);
           initSelect2(self);
         };
 
@@ -1066,15 +1150,12 @@ $(document).ready(function(){
     App = new PageDocumentController();
     // ----- KO Bindings -----
     ko.applyBindings(App);
-    ccbs = new conditionalCallbackSets(App.documentModel);
 
 
     $('form.bind-document [data-glynt-loop_length]').live('change', function(event){
         var num = parseInt($(this).val());
         if (typeof num == 'number'){
             App.documentModel.showLoopStep($(this), num);
-            // update knockoout bindings for new div
-            //ko.applyBindings(App);// Causes pagination bug
         }
     });
 
@@ -1146,7 +1227,7 @@ $(document).ready(function(){
 
     $('.md-updater').live('change', function(event){
         App.changeContext($(this));
-        ccbs.parseCallbacks();
+        App.widgets.ccbs.parseCallbacks();
     });
 
     $('button#btn-post-pdf').live('click', function(event){
@@ -1182,81 +1263,6 @@ $(document).ready(function(){
     {% endif %}
 
 
-    // ----- FACEBOOK CALLBACK -----
-    facebookCallback = function(q,callbackId,callBack) {
-      var self = this;
-      var results = [];
-
-      processFriends = function(friends) {
-        if (friends != undefined) {
-            for (var i = 0; i < Math.min(friends.length, 2000); i++) {
-                friend = friends[i];
-                results.push({
-                    'name': friend.name,
-                    'picture': 'http://graph.facebook.com/' + friend.id + '/picture',
-                    'extra': {'id': friend.id, 'service': 'facebook', 'data_type': 'friends'},
-                });
-            };
-        } else {
-            console.log('No Friends were passed in')
-        }
-      };
-
-      getFBFriends = function(next_url) {
-        $.ajax({
-          type: 'GET',
-          url: next_url,
-          dataType: "jsonp"
-        })
-        .success(function(data, textStatus, jqXHR) {
-          var response = data;
-
-          if (response.data != undefined && response.data.length > 0) {
-            processFriends(response.data);
-            if (response.paging != undefined && response.paging.next != undefined) {
-              getFBFriends(response.paging.next);
-            }
-          } else {
-            // console.log('End of friends list');
-            sendData();
-          }
-        })
-        .error(function(jqXHR, textStatus, errorThrown) { 
-          // console.log(errorThrown);
-          sendData();// send what we have
-        });
-      };
-
-      sendData = function(current_results) {
-        callBack(results,callbackId);
-      };
-
-      // Only perform IF we have a FB connected account
-      FB.getLoginStatus(function(response) {
-          if (response.status === 'connected') {
-            FB.api('/me/friends', function(response) {
-                processFriends(response.data); // process initial set
-                if (response.paging != undefined && response.paging.next != undefined) {
-                  // handle pagination of friends
-                  getFBFriends(response.paging.next);
-                }
-            });
-          }
-      });
-    };
-
-    // linkedInCallbackTest = function(q,callbackId,callBack) {
-    //     result = {
-    //         'name': 'Bob',
-    //         'picture': 'http://linkedin.com/my/pic.jpg'
-    //     }
-    //     for (var i = 0; i < 5; i++) {
-    //         // callBack(result.name + ' ' + i, result.picture, result.extra);
-    //     }
-    // }
-    // friend observer
-    co = new contactObserver([facebookCallback], {});
-
     var hb_popover_template = Handlebars.compile($('#hb-popover').html());
     $('.md-updater').popover({
       title: function() {
@@ -1271,13 +1277,19 @@ $(document).ready(function(){
         return hb_popover_template(item);
       },
     });
+
+    $('ul#step-list li.pagination_tooltip').tooltip({
+      placement: 'bottom'
+    });
 });
 </script>
 
 {% tplhandlebars "goto-step-list" %}
 <ul id="step-list">
   {{#each step_list}}
-  <li data-goto_step="{{step}}" class="{{#if is_current}}current_step{{/if}}">{{text}}</li>
+  <li data-goto_step="{{step}}" title="{{step_name}}" class="pagination_tooltip {{#if is_current}}current_step{{/if}}">
+    <span class="page_num">{{text}}</span>
+  </li>
   {{/each}}
   <li data-goto_step="{{last}}" class="last_step">{{text}}</li>
 <ul>
