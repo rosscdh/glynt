@@ -35,8 +35,7 @@
         </div>
     </div>
     <form id="glynt-doc-{{ final_step_index }}"  class="form-horizontal row" data-bind="visible: App.formControls.isLastStep()">
-      <div id="form-group-{{ final_step_index }}" class="form-group hidden">
-          <input id="id_step_title" type="hidden" data-step-title="Company Information" name="step_title" />
+      <div id="form-group-{{ final_step_index }}" class="form-group">
           <div class="span3 border">
               <button id="btn-post-pdf" class="btn btn-success" type="button">Generate PDF</button>
           </div>
@@ -47,7 +46,6 @@
 {% block document_head %}
 <div class="row">
   <div id="step-set" data-bind="html: App.stepListDisplay()"></div>
-  <div id="step-title" data-bind="html: App.formControls.stepPaginationTitle()"></div>
 </div>
 {% endblock %}
 
@@ -241,7 +239,6 @@ $(document).ready(function(){
         self.maxFormSteps = ko.observable(({{ form_set|length }}+1));// account for end form
         self.currentFormStep = ko.observable(1);
         self.steps = ko.observableArray([]);
-        self.stepPaginationTitle = ko.observable('');
 
         self.init = function init() {
 
@@ -254,8 +251,11 @@ $(document).ready(function(){
               self.steps.push({title: step_title, form_set: form})
           });
 
-          $('ul#step-list li').live('mouseover mouseout', function(event){
-            self.stepPaginationTitle($(this).attr('title'));
+          $('body').tooltip({
+            selector: '[rel=pagination-tooltip]',
+            placement: 'bottom',
+            animation: false,
+            delay: { show: 50, hide: 5 }
           });
 
           self.stepVisibility(1);
@@ -282,6 +282,9 @@ $(document).ready(function(){
             'last': self.maxFormSteps(),
             'step_list': steps('&nbsp;')
           }
+          $.each($('ul#step-list li'), function(index,item){
+            $(item).tooltip('hide');
+          });
           return self.goto_step_list(context);
         }
         self.renderSteps = function renderSteps() {
@@ -361,7 +364,6 @@ $(document).ready(function(){
           $.each(self.steps(), function(index,item){
               form_group = $(item.form_set);
               if ((index+1) == step) {
-                  self.stepPaginationTitle(item.title);
                   form_group.css('display', 'block');
                   form_group.removeClass('hidden');
               } else {
@@ -1290,7 +1292,8 @@ $(document).ready(function(){
 
 
     var hb_popover_template = Handlebars.compile($('#hb-popover').html());
-    $('.md-updater').popover({
+    $('body').popover({
+      selector: '.md-updater',
       title: function() {
         return $(this).closest('li').find('label:first').html();
       },
@@ -1309,7 +1312,7 @@ $(document).ready(function(){
 {% tplhandlebars "goto-step-list" %}
 <ul id="step-list">
   {{#each step_list}}
-  <li data-goto_step="{{step}}" title="{{step_name}}" class="{{#if is_current}}current_step{{/if}}">
+  <li data-goto_step="{{step}}" rel="pagination-tooltip" title="{{step_name}}" class="{{#if is_current}}current_step{{/if}}">
     <span class="page_num">{{text}}</span>
   </li>
   {{/each}}
