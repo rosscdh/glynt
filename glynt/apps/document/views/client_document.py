@@ -74,6 +74,8 @@ class MyDocumentView(DocumentView):
     except KeyError:
       context['form_set'] = FORM_GROUPS['no_steps']
 
+    context['final_step_index'] = len(context['form_set']) + 1
+
     user_can_view_document(self.user_document, self.request.user)
 
     return context

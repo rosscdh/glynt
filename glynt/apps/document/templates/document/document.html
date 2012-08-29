@@ -20,7 +20,7 @@
 
     {% for form in form_set %}
     <form id="glynt-doc-{{ forloop.counter }}"  class="form-horizontal bind-document">{% csrf_token %}
-    <div id="form-group-{{ forloop.counter }}" class="form-group {% if not forloop.first %}hidden{% endif %}">
+    <div id="form-group-{{ forloop.counter }}" class="form-group hidden">
         <h3><span class="step-title"></span></h3>
         <ul>
         {{ form.as_ul }}
@@ -34,15 +34,21 @@
             <span data-bind="visible: App.formControls.showNext()"><button id="btn-next" class="btn btn-success btn-small btn-next" type="button" data-bind="click: App.formControls.next">Next</button></span>
         </div>
     </div>
-    <div id="form-group-{{ form_set|length }}" class="form-group hidden row" data-bind="visible: App.formControls.isLastStep()">
-        <div class="span3">
-            <button id="btn-post-pdf" class="btn btn-success" type="button">Generate PDF</button>
-        </div>
-    </div>
+    <form id="glynt-doc-{{ final_step_index }}"  class="form-horizontal row" data-bind="visible: App.formControls.isLastStep()">
+      <div id="form-group-{{ final_step_index }}" class="form-group hidden">
+          <input id="id_step_title" type="hidden" data-step-title="Company Information" name="step_title" />
+          <div class="span3 border">
+              <button id="btn-post-pdf" class="btn btn-success" type="button">Generate PDF</button>
+          </div>
+      </div>
+    </form>
 {% endblock %}
 
 {% block document_head %}
-<div id="step-set" class="pull-right" data-bind="html: App.stepListDisplay()"></div>
+<div class="row">
+  <div id="step-set" data-bind="html: App.stepListDisplay()"></div>
+  <div id="step-title" data-bind="html: App.formControls.stepPaginationTitle()"></div>
+</div>
 {% endblock %}
 
 {% block document %}
@@ -227,7 +233,7 @@ $(document).ready(function(){
     {% endif %}
   };
 
-    function FormControls() {
+    function FormControls(App) {
         var self = this;
 
         self.goto_step_list = Handlebars.compile($('#goto-step-list').html());
@@ -235,6 +241,7 @@ $(document).ready(function(){
         self.maxFormSteps = ko.observable(({{ form_set|length }}+1));// account for end form
         self.currentFormStep = ko.observable(1);
         self.steps = ko.observableArray([]);
+        self.stepPaginationTitle = ko.observable('');
 
         self.init = function init() {
 
@@ -245,6 +252,10 @@ $(document).ready(function(){
               var form = $(this).closest('div.form-group');
               $(this).text(step_title);
               self.steps.push({title: step_title, form_set: form})
+          });
+
+          $('ul#step-list li').live('mouseover mouseout', function(event){
+            self.stepPaginationTitle($(this).attr('title'));
           });
 
           self.stepVisibility(1);
@@ -347,14 +358,15 @@ $(document).ready(function(){
         }
 
         self.stepVisibility = function stepVisibility(step) {
-          $.each(self.steps(), function(index,form_group){
-              form_group = $(form_group.form_set);
+          $.each(self.steps(), function(index,item){
+              form_group = $(item.form_set);
               if ((index+1) == step) {
+                  self.stepPaginationTitle(item.title);
                   form_group.css('display', 'block');
-//                  form_group.removeClass('hidden');
+                  form_group.removeClass('hidden');
               } else {
                   form_group.css('display', 'none');
-//                  form_group.addClass('hidden');
+                  form_group.addClass('hidden');
               }
           });
         }
@@ -370,6 +382,7 @@ $(document).ready(function(){
             var current = self.currentFormStep();
             next = self.determineStepVisibility('next', step);
             self.currentFormStep(next);
+            App.message(''); // clear the message
             window.location.hash = '#step-'+next;
         }
 
@@ -561,7 +574,7 @@ $(document).ready(function(){
         self.init();
     };
 
-  function DocumentModel() {
+  function DocumentModel(App) {
     var self = this;
 
         self.textElementsList = ['text','textarea','hidden','select'];
@@ -808,8 +821,8 @@ $(document).ready(function(){
 
         self.markdownConverter = new Markdown.Converter();
         self.targetDocumentId = ko.observable('span#document-md');
-        self.documentModel = new DocumentModel();
-        self.formControls = new FormControls();
+        self.documentModel = new DocumentModel(self);
+        self.formControls = new FormControls(self);
         self.stepListDisplay = ko.observable(self.formControls.stepList());
         self.message = ko.observable(null);
         self.widgets = {};
@@ -1254,7 +1267,6 @@ $(document).ready(function(){
     $('ul#step-list li').live('click', function(event){
       event.preventDefault();
       var step = $(this).attr('data-goto_step');
-      console.log('goToStep:' + step);
       App.formControls.goToStep(step);
     });
 
@@ -1291,17 +1303,13 @@ $(document).ready(function(){
         return hb_popover_template(item);
       },
     });
-
-    $('ul#step-list li.pagination_tooltip').tooltip({
-      placement: 'bottom'
-    });
 });
 </script>
 
 {% tplhandlebars "goto-step-list" %}
 <ul id="step-list">
   {{#each step_list}}
-  <li data-goto_step="{{step}}" title="{{step_name}}" class="pagination_tooltip {{#if is_current}}current_step{{/if}}">
+  <li data-goto_step="{{step}}" title="{{step_name}}" class="{{#if is_current}}current_step{{/if}}">
     <span class="page_num">{{text}}</span>
   </li>
   {{/each}}
