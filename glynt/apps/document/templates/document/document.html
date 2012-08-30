@@ -431,11 +431,10 @@ $(document).ready(function(){
     };
 
     function LoopStep(App, form_fieldset, hide_from_element, iteration_title){
-        var self = this; 
+        var self = this;
         self.form_fieldset = (form_fieldset != undefined)?form_fieldset:null;
         self.hide_from_element = (hide_from_element != undefined)?hide_from_element:null;
         self.iteration_title = (iteration_title != undefined)?iteration_title:'Item';
-        self.valid_fieldtypes = ['input', 'text','select','textarea','select-one','radio','checkbox']
         self.repeatable_fields = [];
         self.repeatable_fieldset = null;
         self.hb_loop_ob_container = ko.observable({});
@@ -444,7 +443,7 @@ $(document).ready(function(){
         self.isValidInputType = function isValidInputType(element) {
             var element_type = App.getElementType(element);
             var found = false;
-            if ($.inArray(element_type, self.valid_fieldtypes) != -1) {
+            if ($.inArray(element_type, App.valid_fieldtypes) != -1) {
                 return true;
             }
             return false;
@@ -504,7 +503,7 @@ $(document).ready(function(){
 
                 // loop over element set of inputs (that are valid)
                 if (fieldset !== null) {
-                    fieldset.find(self.valid_fieldtypes.join(',')).each(function(index,element){
+                    fieldset.find(App.valid_fieldtypes.join(',')).each(function(index,element){
                         element = $(element);
                         if (self.hb_loop_ob_container()[c] == undefined) {
                             if (self.isValidInputType(element) === true) {
@@ -555,7 +554,7 @@ $(document).ready(function(){
         self.init = function init(){
         // loop over ALL form elements (including labels and other helper items) find the from element and hide all those after
             var found = false;
-            self.form_fieldset.find(self.valid_fieldtypes.join(',')).each(function(index,element){
+            self.form_fieldset.find(App.valid_fieldtypes.join(',')).each(function(index,element){
                 element = $(element);
                 if (element.attr('id') == $(hide_from_element).attr('id')) {
                     found = true;
