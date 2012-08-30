@@ -468,6 +468,8 @@ $(document).ready(function(){
             // @CODESMELL
             var fieldsets = self.form_fieldset.find('fieldset');
             var hb_base_ob = {};
+            // set array grouping context variable to allow handlebarsjs to loop
+            var loop_name = 'loop_' + App.documentModel.slugify(self.iteration_title).toLowerCase();
 
             for (var c=1; c <= index; c++) {
                 var fieldset = false;
@@ -519,12 +521,12 @@ $(document).ready(function(){
 
                                 // update hb-name so that we get correct context variables
                                 element.attr('data-hb-name', old_name);
+                                element.attr('data-loop_name', loop_name);
 
                                 // set the context params
                                 hb_ob = App.documentModel.ensureElementContextRadioCheckboxOptionsPresent(element,hb_ob);
                                 hb_ob[slug_with_no_id] = element.val();
 
-                                App.documentModel.setContextItem(element);
                             }
                         }
                     });
@@ -544,10 +546,8 @@ $(document).ready(function(){
             for (i in self.hb_loop_ob_container()) {
                 self.loopContainerForContext().push(self.hb_loop_ob_container()[i]);
             }
-            
-            // set array grouping context variable to allow handlebarsjs to loop
-            var hb_loop_key = 'loop_' + self.iteration_title.toLowerCase();
-            App.documentModel.setContextItemByForce(hb_loop_key, self.loopContainerForContext());
+
+            App.documentModel.setContextItemByForce(loop_name, self.loopContainerForContext());
             App.render();
         }
 
@@ -755,7 +755,7 @@ $(document).ready(function(){
     }
 
     // This is where radio and checkboxes in a loop are handled
-    self.setTemplateHelperValues = function setTemplateHelperValues(input,local_context) {
+    self.setTemplateHelperValues = function setTemplateHelperValues(input, local_context) {
         // set custom
         helper = self.getTemplateHelperKey(input);
 
@@ -776,25 +776,44 @@ $(document).ready(function(){
         return context;
     }
 
+    self.setTemplateHelperValuesForLoopStep = function setTemplateHelperValuesForLoopStep(name, value, loop_index, loop_name) {
+      var context = self.context();
+      loop_index = parseInt(loop_index) - 1;
+      context[loop_name][loop_index][name] = value;
+      self.context(context);
+    }
+
     self.setContextItem = function setContextItem(input,local_context) {
             // only allow if the data-hb-name is set
             if (typeof input.attr('data-hb-name') == 'string') {
                 var context = (local_context == undefined) ? self.context() : local_context ;
                 var key = name = input.attr('data-hb-name');
+                var loop_name = input.attr('data-loop_name');
+
                 var value_ob = self.determineValue(input);
                 var value = value_ob['value'];
                 var is_placeholder_value = value_ob['is_placeholder_value'];
 
-                // set the helper values
-                self.setTemplateHelperValues(input);
+                if (loop_name != undefined) {
+                  // loopstep input
+                  loop_index = input.attr('id').replace(/[^\d]+/ig, '');
+                  self.setTemplateHelperValuesForLoopStep(name, value, loop_index, loop_name);
+                } else {
+                  // normal input
+                  // set the helper values
+                  self.setTemplateHelperValues(input);
+                  context[key] = value;
+                }
+
                 // set the has_attrib values
                 self.setTemplateHasHelperValues(input, value, is_placeholder_value);
 
-                context[key] = value;
                 if (local_context == undefined) {
-                 self.context(context);
+                  self.context(context);
+                } else {
+                  return context
                 }
-                return context
+                
             }
             return false;
     }
@@ -962,7 +981,7 @@ $(document).ready(function(){
                 var response_data = $.parseJSON(data);
                 self.message('');
                 is_valid = true;
-                self.persistFormData(form.serializeArray(), response_data);
+                self.persistFormDataToCookie(form.serializeArray());
             })
             .error(function(jqXHR, textStatus, errorThrown) { 
                 var data = $.parseJSON(jqXHR.responseText);
@@ -979,11 +998,8 @@ $(document).ready(function(){
             return is_valid;
         }
 
-        self.persistFormData = function persistFormData(serialized_form_data, response_data) {
-            // console.log(serialized_form_data)
-            // console.log(response_data)
+        self.persistFormDataToCookie = function persistFormDataToCookie(serialized_form_data) {
             var cookie_value = $.parseJSON($.cookie('{{ userdoc.cookie_name }}'));
-
             for (i in serialized_form_data) {
                 name = serialized_form_data[i].name;
                 value = serialized_form_data[i].value;
@@ -992,9 +1008,6 @@ $(document).ready(function(){
                 }
             }
             $.cookie('{{ userdoc.cookie_name }}', JSON.stringify(cookie_value));
-        }
-
-        self.showErrorMessage = function showErrorMessage(msg) {
         }
 
         self.generatePDF = function generatePDF() {
@@ -1081,6 +1094,7 @@ $(document).ready(function(){
           });
         }
 
+        // @TODO CODESMELL clean this up
         self.bindLoopStepContextData = function bindLoopStepContextData(fieldset) {
           fieldset = (fieldset == undefined) ? $('form.bind-document fieldset.loop') : fieldset ;
 
@@ -1096,10 +1110,7 @@ $(document).ready(function(){
                     var target_name = $(element).attr('data-hb-name');
 
                     if (target_name != undefined) {
-                        target_name = target_name.replace(/(_\d+)/ig, '');
-                        if (applicableLoopObject) {
-                            applicableLoopObject['container_context'][target_name] = target_value;
-                        }
+                      applicableLoopObject['container_context'][target_name] = target_value;
                     }
                 });
 
@@ -1136,7 +1147,7 @@ $(document).ready(function(){
             }
           });
 
-//          self.render();
+          self.render();
         }
 
         // method to initialize 3rd part widgets that need to load after
@@ -1148,16 +1159,18 @@ $(document).ready(function(){
         };
 
         self.init = function init() {
-            self.initializeValuesFromCookie();// cookie basics
-            self.initializeValuesFromDefaultData();// main initializer
-            self.setContext();
-            self.setGlyntRuleset();
-            self.applyGlyntRuleset();
-            self.initializeLoopSteps();
-            self.bindLoopStepContextData();
-            self.initializeWidgets();
+          self.initializeValuesFromCookie();// cookie basics
 
-            self.render();
+          self.setGlyntRuleset();
+          self.applyGlyntRuleset();
+          self.initializeLoopSteps();
+          self.bindLoopStepContextData();
+
+          self.initializeValuesFromDefaultData();// main initializer
+
+          self.initializeWidgets();
+          self.setContext();
+          self.render();
         };
 
         self.init();
@@ -1256,10 +1269,6 @@ $(document).ready(function(){
         }
     });
 
-    $('form.bind-document fieldset.loop').live('change', function(event){
-        var fieldset = $(this);
-        App.bindLoopStepContextData(fieldset);
-    });
 
     $('.fix-errors').live('click', function(event){
         event.preventDefault;
