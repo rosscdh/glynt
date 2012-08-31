@@ -277,8 +277,6 @@ $(document).ready(function(){
           };
           context = {
             'current': self.currentFormStep(),
-            'prev': self.determineNextStepIndex('prev'),
-            'next': self.determineNextStepIndex('next'),
             'last': self.maxFormSteps(),
             'step_list': steps('&nbsp;')
           }
@@ -303,7 +301,6 @@ $(document).ready(function(){
         }
 
         self.determineNextStepIndex = function determineNextStepIndex(direction, next_step) {
-            //@TODO basis for the ruleset evaluation routine
             if (direction == 'next') {
                 return self.determineNextStep(next_step);
             } else {
@@ -323,6 +320,7 @@ $(document).ready(function(){
 
         self.determineNextStep = function determineNextStep(current_step) {
             for(var step = current_step; step < self.maxFormSteps() ; step++) {
+
                 if(self.validateStep(step)) {
                     return step;
                 }
@@ -333,29 +331,7 @@ $(document).ready(function(){
 
         self.validateStep = function validateStep(step) {
             var ruleset = App.documentModel.getRuleByType('show_step_when');
-            for (var x=0; x < ruleset.length; x++) {
-                if (ruleset[x].target_element != 'undefined') {
-                    target_element = $(ruleset[x].target_element);
-                    target_element_step_id = target_element.attr('id').replace(/[^\d]+/ig, '');
-                } else {
-                    target_element = null;
-                    target_element_step_id = null;
-                }
-
-                for (var i=0; i < ruleset[x].ruleset.length; i++) {
-                    for (context_var_name in ruleset[x].ruleset[i]) {
-                        var required_value = ruleset[x].ruleset[i][context_var_name];
-
-                        if (context_var_name in App.documentModel.context()) {
-                            var current_context_value = App.documentModel.context()[context_var_name];
-                            if (required_value != current_context_value && target_element_step_id == step) {
-                                return false;
-                            }
-                        }
-                    }
-                }
-            }
-            // persiste the cookie progress
+            // persist the cookie progress
             App.persistProgress();
             return true;
         }
@@ -381,7 +357,6 @@ $(document).ready(function(){
         }
 
         self.goToStep = function goToStep(step) {
-            var current = self.currentFormStep();
             next = self.determineStepVisibility('next', step);
             self.currentFormStep(next);
             App.message(''); // clear the message
@@ -548,7 +523,6 @@ $(document).ready(function(){
             }
 
             App.documentModel.setContextItemByForce(loop_name, self.loopContainerForContext());
-            App.render();
         }
 
         self.init = function init(){
@@ -777,6 +751,9 @@ $(document).ready(function(){
     }
 
     self.setTemplateHelperValuesForLoopStep = function setTemplateHelperValuesForLoopStep(name, value, loop_index, loop_name) {
+      var cookie_key = name + '_' + loop_index;// cookie_name
+      App.persistKeyValueToCookie(cookie_key, value);
+
       var context = self.context();
       loop_index = parseInt(loop_index) - 1;
       context[loop_name][loop_index][name] = value;
@@ -784,38 +761,38 @@ $(document).ready(function(){
     }
 
     self.setContextItem = function setContextItem(input,local_context) {
-            // only allow if the data-hb-name is set
-            if (typeof input.attr('data-hb-name') == 'string') {
-                var context = (local_context == undefined) ? self.context() : local_context ;
-                var key = name = input.attr('data-hb-name');
-                var loop_name = input.attr('data-loop_name');
+      // only allow if the data-hb-name is set
+      if (typeof input.attr('data-hb-name') == 'string') {
+          var context = (local_context == undefined) ? self.context() : local_context ;
+          var key = input.attr('data-hb-name');
+          var loop_name = input.attr('data-loop_name');
 
-                var value_ob = self.determineValue(input);
-                var value = value_ob['value'];
-                var is_placeholder_value = value_ob['is_placeholder_value'];
+          var value_ob = self.determineValue(input);
+          var value = value_ob['value'];
+          var is_placeholder_value = value_ob['is_placeholder_value'];
 
-                if (loop_name != undefined) {
-                  // loopstep input
-                  loop_index = input.attr('id').replace(/[^\d]+/ig, '');
-                  self.setTemplateHelperValuesForLoopStep(name, value, loop_index, loop_name);
-                } else {
-                  // normal input
-                  // set the helper values
-                  self.setTemplateHelperValues(input);
-                  context[key] = value;
-                }
+          if (loop_name != undefined) {
+            // loopstep input
+            loop_index = input.attr('id').replace(/[^\d]+/ig, '');
+            self.setTemplateHelperValuesForLoopStep(key, value, loop_index, loop_name);
+          } else {
+            // normal input
+            // set the helper values
+            self.setTemplateHelperValues(input);
+            context[key] = value;
+            App.persistKeyValueToCookie(key, value);
+          }
 
-                // set the has_attrib values
-                self.setTemplateHasHelperValues(input, value, is_placeholder_value);
+          // set the has_attrib values
+          self.setTemplateHasHelperValues(input, value, is_placeholder_value);
 
-                if (local_context == undefined) {
-                  self.context(context);
-                } else {
-                  return context
-                }
-                
-            }
-            return false;
+          if (local_context == undefined) {
+            self.context(context);
+          } else {
+            return context
+          }
+      }
+      return false;
     }
 
     self.setContextItemByForce = function setContextItemByForce(key,value) {
@@ -998,6 +975,12 @@ $(document).ready(function(){
             return is_valid;
         }
 
+        self.persistKeyValueToCookie = function persistKeyValueToCookie(key,value) {
+            var cookie_value = $.parseJSON($.cookie('{{ userdoc.cookie_name }}'));
+            cookie_value[key] = value;
+            $.cookie('{{ userdoc.cookie_name }}', JSON.stringify(cookie_value));
+        };
+
         self.persistFormDataToCookie = function persistFormDataToCookie(serialized_form_data) {
             var cookie_value = $.parseJSON($.cookie('{{ userdoc.cookie_name }}'));
             for (i in serialized_form_data) {
@@ -1147,7 +1130,6 @@ $(document).ready(function(){
             }
           });
 
-          self.render();
         }
 
         // method to initialize 3rd part widgets that need to load after
