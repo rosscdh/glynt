@@ -239,16 +239,18 @@ $(document).ready(function(){
         self.maxFormSteps = ko.observable(({{ form_set|length }}+1));// account for end form
         self.currentFormStep = ko.observable(1);
         self.steps = ko.observableArray([]);
+        self.stepIsValid = {};
 
         self.init = function init() {
 
           // happens just 1 time
           // obtain step header info for building accurate list of steps
-          $('span.step-title').each(function() {
+          $('span.step-title').each(function(index,element) {
               var element = $(this).closest('div').find('input[data-step-title]'), step_title = element.attr('data-step-title');
               var form = $(this).closest('div.form-group');
               $(this).text(step_title);
               self.steps.push({title: step_title, form_set: form})
+              self.stepIsValid[index+1] = false;
           });
 
           $('body').tooltip({
@@ -305,6 +307,8 @@ $(document).ready(function(){
           for(var step = current_step; step > 0; step--) {
               if(self.validateStep(step)) {
                   self.stepVisibility(step);
+                  // persist the cookie progress
+                  self.persistProgressToCookie(step);                  
                   return step;
               }
           }
@@ -316,6 +320,8 @@ $(document).ready(function(){
           for(var step = current_step; step < self.maxFormSteps() ; step++) {
               if(self.validateStep(step)) {
                   self.stepVisibility(step);
+                  // persist the cookie progress
+                  self.persistProgressToCookie(step);
                   return step;
               }
           }
@@ -324,9 +330,21 @@ $(document).ready(function(){
 
         self.validateStep = function validateStep(step) {
             var ruleset = App.documentModel.getRuleByType('show_step_when');
-            // persist the cookie progress
-            App.persistProgress();
             return true;
+        }
+
+        self.persistProgressToCookie = function persistProgressToCookie(step) {
+          element = self.steps()[step]
+
+          element.form_set.find(App.valid_fieldtypes.join(',')).each(function(index,element){
+            element = $(element);
+            var cookie_key = element.attr('name') + '_' + index+1;// cookie_name
+            var value = element.val();
+            App.persistKeyValueToCookie(cookie_key, value);
+          });
+
+          App.persistKeyValueToCookie('stepIsValid', self.stepIsValid);
+
         }
 
         self.stepVisibility = function stepVisibility(step) {
@@ -356,8 +374,10 @@ $(document).ready(function(){
             // synchronous request
             App.submitForm(current, $('form#glynt-doc-' + current), function(textStatus, message) {
               if (textStatus == 'error') {
+                self.stepIsValid[current] = false;
                 self.currentFormStep(current);
               }else{
+                self.stepIsValid[current] = true;
                 self.initNextStep(next);
                 App.message(''); // clear the message
               }
@@ -372,8 +392,10 @@ $(document).ready(function(){
             if (current != self.maxFormSteps()) {
                 App.submitForm(current, $('form#glynt-doc-' + current), function(textStatus, message) {
                   if (textStatus == 'error') {
+                    self.stepIsValid[current] = false;
                     self.currentFormStep(current);
                   }else{
+                    self.stepIsValid[current] = true;
                     self.initPrevStep(prev);
                     App.message(''); // clear the message
                   }
