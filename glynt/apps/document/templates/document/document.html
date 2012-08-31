@@ -358,7 +358,8 @@ $(document).ready(function(){
               if (textStatus == 'error') {
                 self.currentFormStep(current);
               }else{
-                step = self.initNextStep(next);
+                self.initNextStep(next);
+                App.message(''); // clear the message
               }
             });
         }
@@ -374,6 +375,7 @@ $(document).ready(function(){
                     self.currentFormStep(current);
                   }else{
                     self.initPrevStep(prev);
+                    App.message(''); // clear the message
                   }
                 });
             };
