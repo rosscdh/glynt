@@ -300,33 +300,26 @@ $(document).ready(function(){
             return (self.maxFormSteps() == self.currentFormStep()) ? true : false ;
         }
 
-        self.determineNextStepIndex = function determineNextStepIndex(direction, next_step) {
-            if (direction == 'next') {
-                return self.determineNextStep(next_step);
-            } else {
-                return self.determinePrevStep(next_step);
-            }
-        }
-
-        self.determinePrevStep = function determinePrevStep(current_step) {
-            for(var step = current_step; step > 0; step--) {
-                if(self.validateStep(step)) {
-                    return step;
-                }
-            }
-
-            return 1;
+        self.initPrevStep = function initPrevStep(current_step) {
+          default_step = 1;
+          for(var step = current_step; step > 0; step--) {
+              if(self.validateStep(step)) {
+                  self.stepVisibility(step);
+                  return step;
+              }
+          }
+          self.stepVisibility(default_step);
         };
 
-        self.determineNextStep = function determineNextStep(current_step) {
-            for(var step = current_step; step < self.maxFormSteps() ; step++) {
-
-                if(self.validateStep(step)) {
-                    return step;
-                }
-            }
-
-            return self.maxFormSteps();
+        self.initNextStep = function initNextStep(current_step) {
+          default_step = self.maxFormSteps();
+          for(var step = current_step; step < self.maxFormSteps() ; step++) {
+              if(self.validateStep(step)) {
+                  self.stepVisibility(step);
+                  return step;
+              }
+          }
+          self.stepVisibility(default_step);
         };
 
         self.validateStep = function validateStep(step) {
@@ -342,25 +335,18 @@ $(document).ready(function(){
               if ((index+1) == step) {
                   form_group.css('display', 'block');
                   form_group.removeClass('hidden');
+                  window.location.hash = '#step-'+step;
               } else {
                   form_group.css('display', 'none');
                   form_group.addClass('hidden');
               }
           });
-        }
-
-        self.determineStepVisibility = function determineStepVisibility(direction,step) {
-            new_step = self.determineNextStepIndex(direction,step);
-            step = new_step;
-            self.stepVisibility(step);
-            return step;
+          self.currentFormStep(step);
         }
 
         self.goToStep = function goToStep(step) {
-            next = self.determineStepVisibility('next', step);
-            self.currentFormStep(next);
+            self.initNextStep(step);
             App.message(''); // clear the message
-            window.location.hash = '#step-'+next;
         }
 
         self.next = function next() {
@@ -369,13 +355,14 @@ $(document).ready(function(){
 
             // synchronous request
             App.submitForm(current, $('form#glynt-doc-' + current), function(textStatus, message) {
-              if (textStatus != 'error') {
-                next = self.determineStepVisibility('next', next);
-                self.currentFormStep(next);
+              if (textStatus == 'error') {
+                self.currentFormStep(current);
+              }else{
+                step = self.initNextStep(next);
               }
             });
-
         }
+
         self.prev = function prev() {
             var current = self.currentFormStep();
             var prev = current-1;
@@ -383,15 +370,12 @@ $(document).ready(function(){
             // synchronous request
             if (current != self.maxFormSteps()) {
                 App.submitForm(current, $('form#glynt-doc-' + current), function(textStatus, message) {
-                  if (textStatus != 'error') {
-                    prev = self.determineStepVisibility('prev', prev);
-                    self.currentFormStep(prev);
+                  if (textStatus == 'error') {
+                    self.currentFormStep(current);
+                  }else{
+                    self.initPrevStep(prev);
                   }
                 });
-            } else {
-                // allow step back when on last page
-                prev = self.determineStepVisibility('prev', prev);
-                self.currentFormStep(prev);
             };
         }
         
