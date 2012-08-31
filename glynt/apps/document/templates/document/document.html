@@ -977,6 +977,7 @@ $(document).ready(function(){
 
         self.persistKeyValueToCookie = function persistKeyValueToCookie(key,value) {
             var cookie_value = $.parseJSON($.cookie('{{ userdoc.cookie_name }}'));
+            cookie_value = (cookie_value == undefined) ? {} : cookie_value ;
             cookie_value[key] = value;
             $.cookie('{{ userdoc.cookie_name }}', JSON.stringify(cookie_value));
         };
