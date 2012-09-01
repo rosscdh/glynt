@@ -304,7 +304,8 @@ $(document).ready(function(){
 
         self.initPrevStep = function initPrevStep(current_step) {
           default_step = 1;
-          for(var step = current_step; step > 0; step--) {
+
+          for(var step = current_step; step >= 1; step--) {
               if(self.validateStep(step)) {
                   self.stepVisibility(step);
                   // persist the cookie progress
@@ -312,12 +313,14 @@ $(document).ready(function(){
                   return step;
               }
           }
+          console.log('error has not caught valid step: '+current_step)
           self.stepVisibility(default_step);
         };
 
         self.initNextStep = function initNextStep(current_step) {
-          default_step = self.maxFormSteps();
-          for(var step = current_step; step < self.maxFormSteps() ; step++) {
+          default_step = parseInt(self.maxFormSteps());
+
+          for(var step = current_step; step <= default_step ; step++) {
               if(self.validateStep(step)) {
                   self.stepVisibility(step);
                   // persist the cookie progress
@@ -325,6 +328,7 @@ $(document).ready(function(){
                   return step;
               }
           }
+          console.log('error has not caught valid step: '+current_step)
           self.stepVisibility(default_step);
         };
 
@@ -335,15 +339,16 @@ $(document).ready(function(){
 
         self.persistProgressToCookie = function persistProgressToCookie(step) {
           element = self.steps()[step]
+          if (element != undefined) {
+            element.form_set.find(App.valid_fieldtypes.join(',')).each(function(index,element){
+              element = $(element);
+              var cookie_key = element.attr('name') + '_' + index+1;// cookie_name
+              var value = element.val();
+              App.persistKeyValueToCookie(cookie_key, value);
+            });
 
-          element.form_set.find(App.valid_fieldtypes.join(',')).each(function(index,element){
-            element = $(element);
-            var cookie_key = element.attr('name') + '_' + index+1;// cookie_name
-            var value = element.val();
-            App.persistKeyValueToCookie(cookie_key, value);
-          });
-
-          App.persistKeyValueToCookie('stepIsValid', self.stepIsValid);
+            App.persistKeyValueToCookie('stepIsValid', self.stepIsValid);
+          }
 
         }
 
@@ -368,7 +373,7 @@ $(document).ready(function(){
         }
 
         self.next = function next() {
-            var current = self.currentFormStep();
+            var current = parseInt(self.currentFormStep()); //have to parseint as knockout seems to have int problems
             var next = current+1;
 
             // synchronous request
@@ -385,11 +390,11 @@ $(document).ready(function(){
         }
 
         self.prev = function prev() {
-            var current = self.currentFormStep();
+            var current = parseInt(self.currentFormStep()); //have to parseint as knockout seems to have int problems
             var prev = current-1;
 
             // synchronous request
-            if (current != self.maxFormSteps()) {
+            if (current < self.maxFormSteps()) {
                 App.submitForm(current, $('form#glynt-doc-' + current), function(textStatus, message) {
                   if (textStatus == 'error') {
                     self.stepIsValid[current] = false;
@@ -400,7 +405,11 @@ $(document).ready(function(){
                     App.message(''); // clear the message
                   }
                 });
-            };
+            } else {
+              // we are on or less than the last page
+              self.initPrevStep(prev);
+              App.message(''); // clear the message
+            }
         }
         
         self.init();
