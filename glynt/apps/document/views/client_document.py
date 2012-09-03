@@ -155,8 +155,16 @@ class DocumentExportView(View):
       document = get_object_or_404(ClientCreatedDocument.objects.select_related('source_document','source_document__flyform'), slug=document_slug, owner=request.user)
 
       # @TODO Move all of this into a model method on ClientCreatedDocument
-      data = dict(document.source_document.flyform.defaults.items() + document.data.items())
-      data['document_title'] = document.name
+      data = []
+      if type(document.source_document.flyform.defaults) is dict:
+        data = document.source_document.flyform.defaults.items()
+      if type(document.data) is dict:
+        data = data + document.data.items()
+      data = dict(data)
+      if 'document_title' in data:
+        data['document_title'] = document.name
+      else:
+        data['document_title'] = ''
 
       pybars_plus = PybarsPlus(document.body)
       body = pybars_plus.render(data)

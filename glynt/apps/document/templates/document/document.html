@@ -17,7 +17,12 @@
     <div id="docu-form-head" class="row">
         <div id="messages" data-bind="html: App.message"></div>
     </div>
-
+    <div class="row">
+        <div class="controls pull-right">
+            <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-primary btn-small btn-prev" type="button" data-bind="click: App.formControls.prev">{% trans 'Previous' %}</button></span>
+            <span data-bind="visible: App.formControls.showNext()"><button id="btn-next" class="btn btn-success btn-small btn-next" type="button" data-bind="click: App.formControls.next">{% trans 'Save Step' %}</button></span>
+        </div>
+    </div>
     {% for form in form_set %}
     <form id="glynt-doc-{{ forloop.counter }}"  class="form-horizontal bind-document">{% csrf_token %}
     <div id="form-group-{{ forloop.counter }}" class="form-group hidden">
@@ -29,18 +34,18 @@
     </form>
     {% endfor %}
     <div class="row">
-        <div class="controls pull-right">
-            <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-primary btn-small btn-prev" type="button" data-bind="click: App.formControls.prev">Previous</button></span>
-            <span data-bind="visible: App.formControls.showNext()"><button id="btn-next" class="btn btn-success btn-small btn-next" type="button" data-bind="click: App.formControls.next">Next</button></span>
-        </div>
-    </div>
-    <form id="glynt-doc-{{ final_step_index }}"  class="form-horizontal row" data-bind="visible: App.formControls.isLastStep()">
-      <div id="form-group-{{ final_step_index }}" class="form-group">
-          <div class="span3 border">
+      <div id="form-group-{{ final_step_index }}" class="form-group" data-bind="visible: App.formControls.isLastStep()">
+          <div id="formCompleteOptions" class="span3 border">
               <button id="btn-post-pdf" class="btn btn-success" type="button">Generate PDF</button>
           </div>
       </div>
-    </form>
+    </div>
+    <div class="row">
+        <div class="controls pull-right">
+            <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-primary btn-small btn-prev" type="button" data-bind="click: App.formControls.prev">{% trans 'Previous' %}</button></span>
+            <span data-bind="visible: App.formControls.showNext()"><button id="btn-next" class="btn btn-success btn-small btn-next" type="button" data-bind="click: App.formControls.next">{% trans 'Save Step' %}</button></span>
+        </div>
+    </div>
 {% endblock %}
 
 {% block document_head %}
@@ -240,6 +245,8 @@ $(document).ready(function(){
         self.currentFormStep = ko.observable(1);
         self.steps = ko.observableArray([]);
         self.stepIsValid = {};
+        self.isComplete = ko.observable(false);
+        self.formCompleteOptions = $('div#formCompleteOptions');
 
         self.init = function init() {
 
@@ -300,6 +307,16 @@ $(document).ready(function(){
         }
         self.isLastStep = function isLastStep() {
             return (self.maxFormSteps() == self.currentFormStep()) ? true : false ;
+        }
+        self.areAllStepsComplete = function areAllStepsComplete() {
+          var complete = true;
+          for (var i in self.stepIsValid) {
+            value = self.stepIsValid[i];
+            if (value == false) {
+              return false;
+            }
+          };
+          return complete;
         }
 
         self.initPrevStep = function initPrevStep(current_step) {
