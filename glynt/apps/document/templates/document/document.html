@@ -326,7 +326,7 @@ $(document).ready(function(){
               if(self.validateStep(step)) {
                   self.stepVisibility(step);
                   // persist the cookie progress
-                  self.persistProgressToCookie(step);                  
+                  self.persistProgressToCookie(step);
                   return step;
               }
           }
@@ -357,13 +357,9 @@ $(document).ready(function(){
         self.persistProgressToCookie = function persistProgressToCookie(step) {
           element = self.steps()[step]
           if (element != undefined) {
-            element.form_set.find(App.valid_fieldtypes.join(',')).each(function(index,element){
-              element = $(element);
-              var cookie_key = element.attr('name') + '_' + index+1;// cookie_name
-              var value = element.val();
-              App.persistKeyValueToCookie(cookie_key, value);
+            $.each(App.documentModel.context(), function(key, value){
+              App.persistKeyValueToCookie(key, value);
             });
-
             App.persistKeyValueToCookie('stepIsValid', self.stepIsValid);
           }
 
@@ -385,6 +381,8 @@ $(document).ready(function(){
         }
 
         self.goToStep = function goToStep(step) {
+            self.persistProgressToCookie();// catch changes made to current step without pressing next
+            App.persistCookieProgress(); // save the cahnged data
             self.initNextStep(step);
             App.message(''); // clear the message
         }
@@ -392,9 +390,10 @@ $(document).ready(function(){
         self.next = function next() {
             var current = parseInt(self.currentFormStep()); //have to parseint as knockout seems to have int problems
             var next = current+1;
+            self.persistProgressToCookie();// catch changes made to current step without pressing next
 
             // synchronous request
-            App.submitForm(current, $('form#glynt-doc-' + current), function(textStatus, message) {
+            App.validateForm(current, $('form#glynt-doc-' + current), function(textStatus, message) {
               if (textStatus == 'error') {
                 self.stepIsValid[current] = false;
                 self.currentFormStep(current);
@@ -409,17 +408,18 @@ $(document).ready(function(){
         self.prev = function prev() {
             var current = parseInt(self.currentFormStep()); //have to parseint as knockout seems to have int problems
             var prev = current-1;
+            self.persistProgressToCookie();// catch changes made to current step without pressing next
 
             // synchronous request
             if (current < self.maxFormSteps()) {
-                App.submitForm(current, $('form#glynt-doc-' + current), function(textStatus, message) {
+                App.validateForm(current, $('form#glynt-doc-' + current), function(textStatus, message) {
                   if (textStatus == 'error') {
                     self.stepIsValid[current] = false;
                     self.currentFormStep(current);
                   }else{
                     self.stepIsValid[current] = true;
-                    self.initPrevStep(prev);
                     App.message(''); // clear the message
+                    self.initPrevStep(prev);
                   }
                 });
             } else {
@@ -965,22 +965,7 @@ $(document).ready(function(){
             self.render();
         }
 
-        self.validateAllForms = function validateAllForms() {
-            // working on the debug
-            //return true;
-            var errorList = [];
-            var is_valid = false;
-            $('form.bind-document').each(function(step, form){
-                form = $(form);
-                self.submitForm(step, form, function(message) {
-                  console.log(message)
-                });
-            });
-
-            return is_valid;
-        }
-
-        self.submitForm = function submitForm(step, form, callback) {
+        self.validateForm = function validateForm(step, form, callback) {
             var is_valid = false;
             var form_data_serialized = form.serialize();
             $.ajax({
@@ -992,7 +977,8 @@ $(document).ready(function(){
                 var response_data = $.parseJSON(data);
                 self.message('');
                 is_valid = true;
-                self.persistFormDataToCookie(form.serializeArray());
+                // Actual data save takes palce here; validateForm is just a validation
+                self.persistCookieProgress(); // save the changed data
             })
             .error(function(jqXHR, textStatus, errorThrown) { 
                 var data = $.parseJSON(jqXHR.responseText);
@@ -1009,37 +995,9 @@ $(document).ready(function(){
             return is_valid;
         }
 
-        self.persistKeyValueToCookie = function persistKeyValueToCookie(key,value) {
-            var cookie_value = $.parseJSON($.cookie('{{ userdoc.cookie_name }}'));
-            cookie_value = (cookie_value == undefined) ? {} : cookie_value ;
-            cookie_value[key] = value;
-            $.cookie('{{ userdoc.cookie_name }}', JSON.stringify(cookie_value));
-        };
-
-        self.persistFormDataToCookie = function persistFormDataToCookie(serialized_form_data) {
-            var cookie_value = $.parseJSON($.cookie('{{ userdoc.cookie_name }}'));
-            for (i in serialized_form_data) {
-                name = serialized_form_data[i].name;
-                value = serialized_form_data[i].value;
-                if (name != 'csrfmiddlewaretoken') {
-                    cookie_value[name] = value;
-                }
-            }
-            $.cookie('{{ userdoc.cookie_name }}', JSON.stringify(cookie_value));
-        }
-
-        self.generatePDF = function generatePDF() {
-            var url = "{% url 'document:export' slug=userdoc.slug %}";
-            document.location = url;
-        }
-
-        self.getCSRFToken = function getCSRFToken() {
-          var csrf_token = $('form.bind-document:first').find('input[type=hidden]:first')
-          return csrf_token;
-        }
 
         // method to persist the cookie data
-        self.persistProgress = function persistProgress() {
+        self.persistCookieProgress = function persistCookieProgress() {
 
             var csrf_token = self.getCSRFToken();
             var data = {
@@ -1060,6 +1018,23 @@ $(document).ready(function(){
             })
             .complete(function() {
             });
+        }
+
+        self.persistKeyValueToCookie = function persistKeyValueToCookie(key,value) {
+            var cookie_value = $.parseJSON($.cookie('{{ userdoc.cookie_name }}'));
+            cookie_value = (cookie_value == undefined) ? {} : cookie_value ;
+            cookie_value[key] = value;
+            $.cookie('{{ userdoc.cookie_name }}', JSON.stringify(cookie_value));
+        };
+
+        self.generatePDF = function generatePDF() {
+            var url = "{% url 'document:export' slug=userdoc.slug %}";
+            document.location = url;
+        }
+
+        self.getCSRFToken = function getCSRFToken() {
+          var csrf_token = $('form.bind-document:first').find('input[type=hidden]:first')
+          return csrf_token;
         }
 
         // Method to actual save the document:title

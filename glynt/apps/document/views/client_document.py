@@ -81,8 +81,9 @@ class MyDocumentView(DocumentView):
     return context
 
 
-class ClientCreatedDocumentSaveProgressView(View):
-  """ Save the user form """
+class ClientCreatedDocumentValidateFormView(View):
+  """ A View to Simply Validate teh current form and return errors if any
+  Does not actually save data, saving data is done via the cookie """
   def post(self, request, *args, **kwargs):
     userdoc_pk = request.POST.get('id', None)
     userdoc_name = request.POST.get('name', None)
@@ -103,7 +104,6 @@ class ClientCreatedDocumentSaveProgressView(View):
       client_document, is_new = userdoc_from_request(request.user, document, userdoc_pk)
 
       client_document.name = form.cleaned_data['name']
-      client_document.data = request.POST.get('current_progress', None)
 
       saved = False
       counter = 1
