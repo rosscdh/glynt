@@ -588,7 +588,7 @@ $(document).ready(function(){
     self.FalseValuesList = ['False','false',false,null,void 0,''];
     self.handlebarsElementId = ko.observable('script#js-document');
     self.documentTemplate = ko.observable($(self.handlebarsElementId()).html());
-    self.compiledTemplate = false; // must not be ko.observable
+    self.compiledTemplate = Handlebars.compile(self.documentTemplate()); // must not be ko.observable
     self.renderedHTML = ko.observable('');
 
     self.visibilityRuleset = ko.observableArray([]);
@@ -836,7 +836,6 @@ $(document).ready(function(){
     }
 
     self.render = function render() {
-        self.compiledTemplate = (self.compiledTemplate == false) ? Handlebars.compile(self.documentTemplate()) : self.compiledTemplate ;
         return self.compiledTemplate(self.context());
     }
   }
@@ -1268,6 +1267,7 @@ $(document).ready(function(){
     });
 
     $('.md-updater').live('change', function(event){
+        event.preventDefault();
         App.changeContext($(this));
         App.widgets.ccbs.parseCallbacks();
     });
