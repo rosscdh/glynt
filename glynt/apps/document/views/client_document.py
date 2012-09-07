@@ -18,8 +18,8 @@ from django.utils.safestring import mark_safe
 from glynt.apps.document.models import Document, ClientCreatedDocument
 from glynt.apps.document.forms import ClientCreatedDocumentForm
 
-from document import DocumentView
-from utils import user_can_view_document
+from glynt.apps.document.views.document import DocumentView
+from glynt.apps.document.views.utils import user_can_view_document, userdoc_from_request, FORM_GROUPS
 from glynt.pybars_plus import PybarsPlus
 
 import markdown
@@ -29,25 +29,6 @@ import random
 
 import logging
 logger = logging.getLogger(__name__)
-
-FORM_GROUPS = {
-  'no_steps': [],
-}
-
-
-def userdoc_from_request(user, source_doc=None, pk=None):
-  if pk and type(pk) is int:
-    logger.debug('got pk so can get ClientCreatedDocument directly')
-    userdoc = get_object_or_404(ClientCreatedDocument, pk=pk)
-    is_new = False
-  else:
-    userdoc = ClientCreatedDocument.objects.create(owner=user, source_document=source_doc, is_deleted=False)
-    is_new = True
-    logger.debug('got no pk so must get ClientCreatedDocument based on user source_document and is_deleted=False: document:%s is_new:%s'%(userdoc, is_new,))
-    # just set the body the first time the object is created
-    userdoc.body = source_doc.body
-    userdoc.slug = source_doc.slug
-  return userdoc, is_new
 
 
 class MyDocumentView(DocumentView):
@@ -80,7 +61,8 @@ class MyDocumentView(DocumentView):
 
     return context
 
-
+# TODO this view represents both the create and the form validate (edit) views
+# need to seperate them into two views
 class ClientCreatedDocumentValidateFormView(View):
   """ A View to Simply Validate teh current form and return errors if any
   Does not actually save data, saving data is done via the cookie """

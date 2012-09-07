@@ -9,6 +9,26 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+FORM_GROUPS = {
+  'no_steps': [],
+}
+
+
+def userdoc_from_request(user, source_doc=None, pk=None):
+  if pk and type(pk) is int:
+    logger.debug('got pk so can get ClientCreatedDocument directly')
+    userdoc = get_object_or_404(ClientCreatedDocument, pk=pk)
+    is_new = False
+  else:
+    userdoc = ClientCreatedDocument.objects.create(owner=user, source_document=source_doc, is_deleted=False)
+    is_new = True
+    logger.debug('got no pk so must get ClientCreatedDocument based on user source_document and is_deleted=False: document:%s is_new:%s'%(userdoc, is_new,))
+    # just set the body the first time the object is created
+    userdoc.body = source_doc.body
+    userdoc.slug = source_doc.slug
+  return userdoc, is_new
+
+
 def user_can_view_document(document, user):
   """ Helper method for testing a users access to this document """
   
