@@ -150,6 +150,8 @@ PROJECT_APPS = (
     'glynt.apps.client',
     # The Form Generator
     'glynt.apps.flyform',
+    # The Document Signing system
+    'glynt.apps.sign',
 )
 
 HELPER_APPS = (

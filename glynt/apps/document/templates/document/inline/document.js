@@ -1244,6 +1244,15 @@ $(document).ready(function(){
     </p>
 {% endtplhandlebars %}
 
+{% tplhandlebars "hb-invite-signatories" %}
+<div id="invite-signatories">
+  <ul id="invitees">
+  {{#each invitee}}
+  <li><img src="" data-postload_src="{{profile_picture}}" />{{name}}</li>
+  {{/each}}
+  </ul>
+</div>
+{% endtplhandlebars %}
 
 {% if request.user.is_authenticated %}
 	{% include 'socialregistration/facebook_js/facebook_js.html' %}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block body %}
+<div id="owner_info" class="row">
+{% block owner_info %}{% endblock %}
+</div>
+<br/></br>
+<div class="row">
+  <div id="form">
+    {% block form %}{% endblock %}
+  </div>
+</div>
+{% endblock %}
