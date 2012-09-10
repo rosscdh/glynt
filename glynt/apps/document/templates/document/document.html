@@ -1,5 +1,6 @@
 {% extends 'document/base.html' %}
 {% load i18n markup %}
+{% load sign_tags %}
 {% load url from future %}
 
 
@@ -34,6 +35,7 @@
     {% endfor %}
     <div class="row">
       <div id="form-group-{{ final_step_index }}" class="form-group" data-bind="visible: App.formControls.isLastStep()">
+          <div id="invite-to-sign">&nbsp;</div>
           <div id="formCompleteOptions" class="span3 border">
               <button id="btn-post-pdf" class="btn btn-success" type="button">{% trans 'Download PDF' %}</button>
           </div>
@@ -108,4 +110,5 @@ ul#step-list li.last_step{
 
 {% block js %}
 {% include 'document/inline/document.js' %}
+{% invite_to_sign '#invite-to-sign' %}
 {% endblock %}

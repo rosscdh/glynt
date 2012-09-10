@@ -1,0 +1,88 @@
+{% load i18n markup templatetag_handlebars %}
+{% load url from future %}
+
+{% tplhandlebars "signatory-detail" %}
+<div id="signatory-detail">
+  {{#with invitee}}
+  <label for="detail-name">Name:</label> <input type="text" id="id_detail-name" name="detail-name" value="{{name}}" />
+  <label for="detail-email">Email:</label> <input type="text" id="id_detail-email" name="detail-email" value="{{email}}" />
+  {{/with}}
+</div>
+{% endtplhandlebars %}
+
+{% tplhandlebars "invite-signatories" %}
+<div id="invite-signatories">
+  <button id="" class="btn btn-inverse btn-mini">Add</button>
+  <ul id="invitees">
+  {{#each invitees}}
+  <li>
+    {{#if profile_picture}}<img src="" data-postload_src="{{profile_picture}}" />{{/if}}
+    <a class="signatory_detail" data-index_lookup="{{email}}" href="">{{name}}</a> (<a class="signatory_detail" data-index_lookup="{{email}}" href="">{{email}}</a>) 
+    <button class="btn btn-danger btn-mini signatory_remove" data-index_lookup="{{email}}"><i class="icon-remove icon-white"></i></button>
+  </li>
+  {{/each}}
+  </ul>
+  <button id="" class="btn btn-success btn-mini">Invite</button>
+</div>
+{% endtplhandlebars %}
+
+<script type="text/javascript">
+$(document).ready(function(){
+//  console.log('{{target_element}}')
+
+  inviteToSignWidget = function inviteToSignWidget(params) {
+    var self = this;
+    self.target_element = params['target_element'];
+    self.compiledTemplate = Handlebars.compile($('#invite-signatories').html());
+    self.compiledDetailTemplate = Handlebars.compile($('#signatory-detail').html());
+    self.context = params;
+    self.context['invitees'] = (params['invitees'] != undefined) ? params['invitees']: [];
+
+    self.add = function add(email, name, profile_picture) {
+      self.context['invitees'].push({'email': email, 'name': name, 'profile_picture': profile_picture})
+      self.render();
+    };
+
+    self.edit = function edit(email) {
+      $.each(self.context['invitees'], function(index, item){
+        if (item.email == email) {
+          console.log(self.compiledDetailTemplate({'invitee': item}));
+          return false;
+        }
+      });
+    };
+
+    self.remove = function remove(email) {
+      $.each(self.context['invitees'], function(index, item){
+        if (item.email == email) {
+          self.context['invitees'].splice(index, 1);
+          return false;
+        }
+      });
+      self.render();
+    };
+
+    self.render = function render() {
+      self.target_element.html(self.compiledTemplate(self.context));
+    };
+
+    self.init = function init(params) {
+      self.target_element = params['target_element'];
+      self.render();
+    };
+
+    self.init(params);
+  };
+
+  inviteToSign = new inviteToSignWidget({'target_element': $('{{ target_element }}')});
+  inviteToSign.add('fdas','fdafsd','fdsafd')
+
+  $('a.signatory_detail').live('click', function(event){
+      event.preventDefault();
+      inviteToSign.edit($(this).attr('data-index_lookup'));
+  });
+  $('button.signatory_remove').live('click', function(event){
+      inviteToSign.remove($(this).attr('data-index_lookup'));
+  });
+});
+</script>
