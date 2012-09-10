@@ -11,7 +11,8 @@ class DocumentSignature(models.Model):
   http://thomasjbradley.ca/lab/signature-pad/#database
   """
   document = models.ForeignKey(ClientCreatedDocument)
-  user = models.ForeignKey(User)
+  key_hash = models.CharField(blank=False, max_length=32, unique=True)
+  user = models.ForeignKey(User, blank=True, null=True)
   signature = JSONField(blank=True, null=True)
   is_signed = models.BooleanField(default=False)
   date_signed = models.DateTimeField(auto_now=False, auto_now_add=True)
