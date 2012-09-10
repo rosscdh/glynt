@@ -7,5 +7,5 @@ from glynt.apps.sign.views import DocumentSignatureView
 
 urlpatterns = patterns('',
   url(r'^(?P<pk>\d+)/complete/$', DocumentSignatureView.as_view(template_name='sign/complete.html'), name='complete'),
-  url(r'^(?P<pk>\d+)/$', DocumentSignatureView.as_view(), name='default'),
+  url(r'^(?P<pk>\d+)/(?P<hash>\w+)/$', DocumentSignatureView.as_view(), name='default'),
 )

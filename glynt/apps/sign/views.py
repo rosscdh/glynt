@@ -27,7 +27,7 @@ class DocumentSignatureView(UpdateView):
     """ return the signature by related document pk and the invited signatory user """
     pk = self.kwargs.get(self.pk_url_kwarg, None)
     if pk is not None:
-        ob = get_object_or_404(self.model, document=pk, user=self.request.user)
+        ob = get_object_or_404(self.model, document=pk, key_hash=self.kwargs['hash'])
         return ob
     else:
         raise AttributeError(u"You must specify a document pk for this view")

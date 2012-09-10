@@ -12,6 +12,7 @@ class DocumentSignature(models.Model):
   """
   document = models.ForeignKey(ClientCreatedDocument)
   key_hash = models.CharField(blank=False, max_length=32, unique=True)
+  hash_data = models.CharField(blank=False, max_length=255)
   user = models.ForeignKey(User, blank=True, null=True)
   signature = JSONField(blank=True, null=True)
   is_signed = models.BooleanField(default=False)
