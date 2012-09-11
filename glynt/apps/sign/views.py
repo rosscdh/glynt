@@ -23,9 +23,16 @@ class DocumentSignatureInviteToSignView(BaseFormView):
   def post(self, request, *args, **kwargs):
     # Create new model based on list passed in
     doc = get_object_or_404(ClientCreatedDocument, pk=kwargs['pk'])
-    print request.POST
-    key_hash, hash_data = encode_data([doc.pk, doc.name])
-    form = DocumentSignatureForm(initial={'document': doc, 'key_hash': key_hash})
+
+    names = request.POST.getlist('name')
+    emails = request.POST.getlist('email')
+    invitees = [(emails[index], name) for index, name in enumerate(names)]
+    for email, name in invitees:
+      key_hash, hash_data = encode_data([doc.pk, email])
+      form = DocumentSignatureForm(initial={'document': doc, 'key_hash': key_hash, 'hash_data': hash_data})
+      print form.is_valid()
+      print form.errors
+
     return HttpResponse('[{"key_hash":%s, "hash_data": %s}]' % (key_hash, hash_data), status=200)
     # if form.is_valid():
     #   return self.form_valid(form)

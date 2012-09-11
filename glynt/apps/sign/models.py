@@ -17,4 +17,4 @@ class DocumentSignature(models.Model):
   signature = JSONField(blank=True, null=True)
   is_signed = models.BooleanField(default=False)
   date_invited = models.DateTimeField(auto_now=False, auto_now_add=True)
-  date_signed = models.DateTimeField(auto_now=False, auto_now_add=False)
+  date_signed = models.DateTimeField(null=True, auto_now=False, auto_now_add=False)
