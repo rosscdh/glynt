@@ -1,28 +1,36 @@
 {% load i18n markup templatetag_handlebars %}
 {% load url from future %}
 
-{% tplhandlebars "signatory-detail" %}
-<div id="signatory-detail">
+{% tplhandlebars "hb-signatory-detail" %}
+<form class="form-horizontal">
+  <fieldset class="Invitee"><legend>Invitee</legend>
+  <div id="" class="control-group">
   {{#with invitee}}
+  <input type="hidden" id="id_detail-index" name="detail-index" value="{{index}}" />
   <label for="detail-name">Name:</label> <input type="text" id="id_detail-name" name="detail-name" value="{{name}}" />
   <label for="detail-email">Email:</label> <input type="text" id="id_detail-email" name="detail-email" value="{{email}}" />
   {{/with}}
-</div>
+  </div>
+  </fieldset>
+  <div class="form-actions">
+      <button id="detail-done" type="button" class="submit btn btn-primary">Done</button>
+  </div>
+</form>
 {% endtplhandlebars %}
 
-{% tplhandlebars "invite-signatories" %}
+{% tplhandlebars "hb-invite-signatories" %}
 <div id="invite-signatories">
-  <button id="" class="btn btn-inverse btn-mini">Add</button>
+  <a id="" class="signatory_add">invite another</a>
   <ul id="invitees">
   {{#each invitees}}
   <li>
     {{#if profile_picture}}<img src="" data-postload_src="{{profile_picture}}" />{{/if}}
-    <a class="signatory_detail" data-index_lookup="{{email}}" href="">{{name}}</a> (<a class="signatory_detail" data-index_lookup="{{email}}" href="">{{email}}</a>) 
+    <a class="signatory_detail" data-index_lookup="{{email}}" title="{{email}}" href="">{{name}}</a> 
     <button class="btn btn-danger btn-mini signatory_remove" data-index_lookup="{{email}}"><i class="icon-remove icon-white"></i></button>
   </li>
   {{/each}}
   </ul>
-  <button id="" class="btn btn-success btn-mini">Invite</button>
+  <button id="" class="btn btn-success btn-mini">Send Invitations</button>
 </div>
 {% endtplhandlebars %}
 
@@ -33,8 +41,8 @@ $(document).ready(function(){
   inviteToSignWidget = function inviteToSignWidget(params) {
     var self = this;
     self.target_element = params['target_element'];
-    self.compiledTemplate = Handlebars.compile($('#invite-signatories').html());
-    self.compiledDetailTemplate = Handlebars.compile($('#signatory-detail').html());
+    self.compiledTemplate = Handlebars.compile($('#hb-invite-signatories').html());
+    self.compiledDetailTemplate = Handlebars.compile($('#hb-signatory-detail').html());
     self.context = params;
     self.context['invitees'] = (params['invitees'] != undefined) ? params['invitees']: [];
 
@@ -42,14 +50,32 @@ $(document).ready(function(){
       self.context['invitees'].push({'email': email, 'name': name, 'profile_picture': profile_picture})
       self.render();
     };
+    self.update = function update(index, name, email) {
+      item = self.context['invitees'][index];
+      if (item == undefined) {
+        // new
+        profile_picture = '';// url to grayman
+        self.context['invitees'].push({'email': email, 'name': name, 'profile_picture': profile_picture})
+      } else {
+        // old
+        self.context['invitees'][index] = {'email': email, 'name': name, 'profile_picture': item.profile_picture};
+      }
+      self.render();
+    };
 
-    self.edit = function edit(email) {
-      $.each(self.context['invitees'], function(index, item){
-        if (item.email == email) {
-          console.log(self.compiledDetailTemplate({'invitee': item}));
-          return false;
-        }
-      });
+    self.showDetailView = function showDetailView(email) {
+      var selectedItem = {};
+      if (email != undefined) {
+        $.each(self.context['invitees'], function(index, item){
+          if (item.email == email) {
+            item['index'] = index;
+            selectedItem = item;
+            return false;
+          }
+        });
+      };
+      $( "#signatory-detail" ).html(self.compiledDetailTemplate({'invitee': selectedItem}));
+      $( "#signatory-detail" ).dialog('open');
     };
 
     self.remove = function remove(email) {
@@ -66,8 +92,37 @@ $(document).ready(function(){
       self.target_element.html(self.compiledTemplate(self.context));
     };
 
+    self.setupInterface = function setupInterface() {
+      $('a.signatory_add').live('click', function(event){
+          event.preventDefault();
+          self.showDetailView();
+      });
+      $('a.signatory_detail').live('click', function(event){
+          event.preventDefault();
+          self.showDetailView($(this).attr('data-index_lookup'));
+      });
+      $('button.signatory_remove').live('click', function(event){
+          event.preventDefault();
+          self.remove($(this).attr('data-index_lookup'));
+      });
+      $("div#signatory-detail").dialog({
+        height: 240,
+        modal: true
+      });
+      $('button#detail-done').live('click', function(event){
+          event.preventDefault();
+          var control_group = $(this).closest('form');
+          index = control_group.find('[name=detail-index]').val();
+          name = control_group.find('[name=detail-name]').val();
+          email = control_group.find('[name=detail-email]').val();
+          self.update(index, name, email);
+          $("div#signatory-detail").dialog('close');
+      });
+    };
+
     self.init = function init(params) {
       self.target_element = params['target_element'];
+      self.setupInterface();
       self.render();
     };
 
@@ -75,14 +130,7 @@ $(document).ready(function(){
   };
 
   inviteToSign = new inviteToSignWidget({'target_element': $('{{ target_element }}')});
-  inviteToSign.add('fdas','fdafsd','fdsafd')
+  inviteToSign.add('ross@weareml.com','Ross Crawford','')
 
-  $('a.signatory_detail').live('click', function(event){
-      event.preventDefault();
-      inviteToSign.edit($(this).attr('data-index_lookup'));
-  });
-  $('button.signatory_remove').live('click', function(event){
-      inviteToSign.remove($(this).attr('data-index_lookup'));
-  });
 });
 </script>
