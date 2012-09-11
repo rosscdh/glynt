@@ -25,8 +25,8 @@
   {{#each invitees}}
   <li>
     {{#if profile_picture}}<img src="" data-postload_src="{{profile_picture}}" />{{/if}}
+    <i class="icon-remove icon-black signatory_remove" data-index_lookup="{{email}}"></i>
     <a class="signatory_detail" data-index_lookup="{{email}}" title="{{email}}" href="">{{name}}</a> 
-    <button class="btn btn-danger btn-mini signatory_remove" data-index_lookup="{{email}}"><i class="icon-remove icon-white"></i></button>
   </li>
   {{/each}}
   </ul>
@@ -93,15 +93,15 @@ $(document).ready(function(){
     };
 
     self.setupInterface = function setupInterface() {
-      $('a.signatory_add').live('click', function(event){
+      $('.signatory_add').live('click', function(event){
           event.preventDefault();
           self.showDetailView();
       });
-      $('a.signatory_detail').live('click', function(event){
+      $('.signatory_detail').live('click', function(event){
           event.preventDefault();
           self.showDetailView($(this).attr('data-index_lookup'));
       });
-      $('button.signatory_remove').live('click', function(event){
+      $('.signatory_remove').live('click', function(event){
           event.preventDefault();
           self.remove($(this).attr('data-index_lookup'));
       });
