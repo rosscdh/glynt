@@ -11,10 +11,10 @@ class DocumentSignatureForm(forms.ModelForm):
 
   def clean_key_hash(self):
     """ dont allow hashes tobe used more than once, and dont (yet) rely on db exceptions"""
-      key_hash = self.cleaned_data.get('key_hash')
-      try:
-          signature = DocumentSignature.objects.get(key_hash=key_hash)
-      except DocumentSignature.DoesNotExist:
-          return key_hash
-      else:
-          raise forms.ValidationError(_('This hash %s has already been issued'%(key_hash,)))
+    key_hash = self.cleaned_data.get('key_hash')
+    try:
+        signature = DocumentSignature.objects.get(key_hash=key_hash)
+    except DocumentSignature.DoesNotExist:
+        return key_hash
+    else:
+        raise forms.ValidationError(_('This hash %s has already been issued'%(key_hash,)))
