@@ -43,7 +43,7 @@ if not IS_TESTING:
 else:
     SITE_ID = 3
 
-PROJECT_NAME = 'LawPal'
+PROJECT_NAME = 'DOCS.HR'
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.

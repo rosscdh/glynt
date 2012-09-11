@@ -4,16 +4,30 @@
 
 
 {% block body %}
-
-{% include 'client/partials/signin_providers.html' %}
-
-<form id="user-login" class="form-horizontal" action="{% url 'client:login' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}" method="post">{% csrf_token %}
-{{ form }}
-<br/>
-<div class="form-actions">
-    <button id="user-login-submit" type="submit" class="submit btn btn-primary">{% trans "Login" %}</button>
+<div class="container">
+	<div class="row">
+		<div class="span12">
+			<h1>Sign In</h1>
+			<hr />
+		</div>
+		<div class="span5 offset1">
+			<form id="user-login" class="form-horizontal" action="{% url 'client:login' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}" method="post">{% csrf_token %}
+			{{ form }}
+			<br/>
+			<div class="form-actions">
+			    <button id="user-login-submit" type="submit" class="submit btn btn-primary">{% trans "Login" %}</button>
+			</div>
+			</form>
+		
+		</div>
+		<div class="span4 offset1">
+			<fieldset>
+				<legend>Social Sign In</legend>
+				{% include 'client/partials/signin_providers.html' %}
+			</fieldset>
+		</div>			
+	</div>
 </div>
-</form>
 
 {% endblock %}
 

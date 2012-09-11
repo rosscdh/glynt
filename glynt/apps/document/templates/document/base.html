@@ -3,8 +3,8 @@
 
 {% block body %}
 <div class="row">
-{% block owner_info %}{% endblock %}
-<div class="span9">{% block document_head %}{% endblock %}</div>
+	{% block owner_info %}{% endblock %}
+	<div class="span9">{% block document_head %}{% endblock %}</div>
 </div>
 <br/></br>
 <div class="row">
@@ -13,12 +13,10 @@
       {% block form %}{% endblock %}
     </div>
   </div>
-
   <div class="span9 pull-right">
     <div class="draft-document">
       {% block document %}{% endblock %}
     </div>
   </div>
-
 </div>
 {% endblock %}
