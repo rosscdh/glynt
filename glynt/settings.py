@@ -166,6 +166,7 @@ HELPER_APPS = (
     'socialregistration',
     'socialregistration.contrib.facebook_js',
     #'socialregistration.contrib.linkedin_js',
+    'djcelery',
     'bootstrap',
     # Userena
     'userena',
@@ -263,6 +264,11 @@ LOGGING = {
         },
     }
 }
+
+BROKER_URL = 'amqp://guest:guest@localhost:5672/'
+
+import djcelery
+djcelery.setup_loader()
 
 try:
     from local_settings import *
