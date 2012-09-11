@@ -15,6 +15,10 @@ from glynt.apps.sign.forms import DocumentSignatureForm
 
 from glynt.apps.sign.utils import encode_data, decode_data
 
+doc = ClientCreatedDocument.objects.get(pk=7)
+email = 'ross@weareml.com'
+key_hash, hash_data = encode_data([doc.pk, email])
+form = DocumentSignatureForm({'document': doc.pk, 'key_hash': key_hash, 'hash_data': hash_data})
 
 class DocumentSignatureInviteToSignView(BaseFormView):
   """ Process the invitation submission"""
@@ -27,11 +31,17 @@ class DocumentSignatureInviteToSignView(BaseFormView):
     names = request.POST.getlist('name')
     emails = request.POST.getlist('email')
     invitees = [(emails[index], name) for index, name in enumerate(names)]
+
     for email, name in invitees:
       key_hash, hash_data = encode_data([doc.pk, email])
-      form = DocumentSignatureForm(initial={'document': doc, 'key_hash': key_hash, 'hash_data': hash_data})
-      print form.is_valid()
-      print form.errors
+      meta = {
+        'name': email,
+        'email': name,
+        'invited_by': request.user.get_full_name()
+      }
+      form = DocumentSignatureForm({'document': doc.pk, 'key_hash': key_hash, 'hash_data': hash_data, 'meta': meta})
+      if form.is_valid():
+        form.save()
 
     return HttpResponse('[{"key_hash":%s, "hash_data": %s}]' % (key_hash, hash_data), status=200)
     # if form.is_valid():
