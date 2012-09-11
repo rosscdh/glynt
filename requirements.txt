@@ -6,6 +6,7 @@ markup
 south
 #psycopg2
 django-celery
+django-templated-email
 -e git+https://github.com/stard0g101/pybars.git#egg=pybars
 -e git+https://github.com/chrisglass/xhtml2pdf.git#egg=xhtml2pdf
 -e git+https://github.com/stard0g101/django-templatetag-handlebars.git#egg=django-templatetag-handlebars
