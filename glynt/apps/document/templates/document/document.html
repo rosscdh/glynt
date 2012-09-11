@@ -35,13 +35,13 @@
     {% endfor %}
     <div class="row">
       <div id="form-group-{{ final_step_index }}" class="form-group" data-bind="visible: App.formControls.isLastStep()">
-
-          <div id="invite-to-sign">&nbsp;</div>
-          <div id="signatory-detail">&nbsp;</div>
-
           <div id="formCompleteOptions" class="span3 border">
               <button id="btn-post-pdf" class="btn btn-success" type="button">{% trans 'Download PDF' %}</button>
           </div>
+      </div>
+      <div data-bind="visible: App.formControls.isLastStep()">
+        <div id="invite-to-sign">&nbsp;</div>
+        <div id="signatory-detail">&nbsp;</div>
       </div>
     </div>
     <div class="row">
@@ -113,5 +113,5 @@ ul#step-list li.last_step{
 
 {% block js %}
 {% include 'document/inline/document.js' %}
-{% invite_to_sign '#invite-to-sign' %}
+{% invite_to_sign userdoc '#invite-to-sign' %}
 {% endblock %}

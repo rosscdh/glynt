@@ -4,11 +4,33 @@ from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
+from django.http import HttpResponse
 
 from django.views.generic import UpdateView
+from django.views.generic.edit import BaseFormView
 
+from glynt.apps.document.models import ClientCreatedDocument
 from glynt.apps.sign.models import DocumentSignature
 from glynt.apps.sign.forms import DocumentSignatureForm
+
+from glynt.apps.sign.utils import encode_data, decode_data
+
+
+class DocumentSignatureInviteToSignView(BaseFormView):
+  """ Process the invitation submission"""
+  http_method_names = ['post', 'delete']
+
+  def post(self, request, *args, **kwargs):
+    # Create new model based on list passed in
+    doc = get_object_or_404(ClientCreatedDocument, pk=kwargs['pk'])
+    print request.POST
+    key_hash, hash_data = encode_data([doc.pk, doc.name])
+    form = DocumentSignatureForm(initial={'document': doc, 'key_hash': key_hash})
+    return HttpResponse('[{"key_hash":%s, "hash_data": %s}]' % (key_hash, hash_data), status=200)
+    # if form.is_valid():
+    #   return self.form_valid(form)
+    # else:
+    #   return self.form_invalid(form)
 
 
 class DocumentSignatureView(UpdateView):
