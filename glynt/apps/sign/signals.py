@@ -8,5 +8,7 @@ from glynt.apps.sign.tasks import send_signature_invite_email
 
 
 @receiver(post_save, sender=DocumentSignature)
-def send_signature_invite_handler(sender, **kwargs):
-    send_signature_invite_email.delay(sender)
+def save_document_signature_signal(sender, **kwargs):
+  # send an email to the invited person
+  send_signature_invite_email.delay(document=sender.document, date_invited=sender.date_invited, \
+    key_hash=sender.key_hash, **sender.meta)

@@ -214,7 +214,6 @@ CATEGORIES_SETTINGS = {
 }
 
 if DEBUG:
-
     if not IS_TESTING:
         MIDDLEWARE_CLASSES += (
         'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -263,6 +262,14 @@ LOGGING = {
             'propagate': True,
         },
     }
+}
+
+# You can also use a class directly
+from templated_email.backends.vanilla_django import TemplateBackend
+TEMPLATED_EMAIL_BACKEND = TemplateBackend
+TEMPLATED_EMAIL_TEMPLATE_DIR = 'email/'
+TEMPLATED_EMAIL_DJANGO_SUBJECTS = {
+    'invite_to_sign': 'You have been invited to sign',
 }
 
 BROKER_URL = 'amqp://guest:guest@localhost:5672/'
