@@ -1,8 +1,66 @@
 {% extends 'sign/base.html' %}
 {% load i18n markup %}
+{% load glynt_helpers %}
 {% load url from future %}
 
 
-{% block owner_info %}{% endblock %}
+{% block owner_info %}
+<p>You have been invited to sign this document.</p>
+<p><b>Created By</b>: {{ userdoc.owner.get_full_name|default:userdoc.owner.username }}</p>
+<p><b>Created</b>: {{ userdoc.created_at }}</p>
+<p><b>Last Edited</b>: {{ userdoc.last_modified }}</p>
+{% endblock %}
 
-{% block form %}{% endblock %}
+{% block document %}
+<span id="document-md"></span>
+{% endblock %}
+
+{% block form %}
+signature form here
+{% endblock %}
+
+{% block js %}
+<script id="document-data" type="text/javascript">[{{ document_data|default:''|safe }}]</script>
+<script id="js-document" type="text/x-handlebars-template">
+{{ userdoc.body|default:userdoc.source_document.body|safe }}
+</script>
+<script id="document-controls" type="text/javascript">
+// use strict;
+// use warnings;
+$(document).ready(function(){
+    /**
+    * Primary view acts as a holder for the other views
+    */
+    function PageDocumentController() {
+        var self = this;
+
+        self.markdownConverter = new Markdown.Converter();
+        self.targetDocumentId = 'span#document-md';
+        self.compiledTemplate = Handlebars.compile($('#js-document').html()); // must not be ko.observable
+
+        self.render = function render() {
+            var data = $.parseJSON($('script#document-data').html());
+            data = data[0];
+            html = self.renderMarkdown(self.compiledTemplate(data));
+            $(self.targetDocumentId).html(html);
+        }
+
+        self.renderMarkdown = function renderMarkdown(md) {
+          return self.markdownConverter.makeHtml(md);
+        }
+
+
+        self.init = function init() {
+          self.render();
+        };
+
+        self.init();
+    }
+
+    // ----- KO Instance -----
+    App = new PageDocumentController();
+    // ----- KO Bindings -----
+    ko.applyBindings(App);
+});
+</script>
+{% endblock %}

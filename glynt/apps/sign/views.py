@@ -62,7 +62,14 @@ class DocumentSignatureView(UpdateView):
     """ return the signature by related document pk and the invited signatory user """
     pk = self.kwargs.get(self.pk_url_kwarg, None)
     if pk is not None:
-        ob = get_object_or_404(self.model, document=pk, key_hash=self.kwargs['hash'])
+        ob = get_object_or_404(self.model.objects.select_related('document', 'document__source_document', 'document__source_document__flyform'), document=pk, key_hash=self.kwargs['hash'])
         return ob
     else:
         raise AttributeError(u"You must specify a document pk for this view")
+
+  def get_context_data(self, **kwargs):
+    context = super(DocumentSignatureView, self).get_context_data(**kwargs)
+    context['userdoc'] = self.object.document
+    context['document_data'] = self.object.document.data_as_json()
+
+    return context

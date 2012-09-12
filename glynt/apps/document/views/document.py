@@ -45,7 +45,7 @@ class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
 
     context['object'] = self.document
     context['document'] = self.document.body
-    context['default_data'] = json.dumps(self.document.flyform.defaults)
+    context['default_data'] = self.document.default_data_as_json()
     context['userdoc_form'] = ClientCreatedDocumentForm()
 
     try:
