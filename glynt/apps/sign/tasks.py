@@ -8,12 +8,14 @@ from templated_email import send_templated_mail
 from celery import task
 
 @task()
-def send_signature_invite_email(document, date_invited, key_hash, **kwargs):
+def send_signature_invite_email(**kwargs):
   """
   """
   # get document info
   # get email
   # process email
+  document = kwargs['document']
+  key_hash = kwargs['key_hash']
   from_name, from_email = settings.ADMINS[0]
   to_name, to_email = (kwargs['to_name'], kwargs['to_email'],)
   kwargs['from_name'] = from_name
@@ -21,7 +23,7 @@ def send_signature_invite_email(document, date_invited, key_hash, **kwargs):
   kwargs['document_name'] = document.name
 
   site = Site.objects.get_current()
-  kwargs['sign_url'] = 'http://%s%s' % (site.domain, reverse('sign:invite', kwargs={'pk': document.pk}),)
+  kwargs['sign_url'] = 'http://%s%s' % (site.domain, reverse('sign:default', kwargs={'hash': key_hash, 'pk': document.pk}),)
 
   send_templated_mail(
           template_name = 'invite_to_sign',
