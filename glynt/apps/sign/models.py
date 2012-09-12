@@ -20,6 +20,8 @@ class DocumentSignature(models.Model):
   date_invited = models.DateTimeField(auto_now=False, auto_now_add=True)
   date_signed = models.DateTimeField(blank=True, null=True, auto_now=False, auto_now_add=False)
 
+  def __unicode__(self):
+    return u'%s - %s (%s)' % (self.key_hash, self.meta['to_name'], self.meta['to_email'])
 
 # import signals here as they need to be initialized with the models
 from glynt.apps.sign.signals import *

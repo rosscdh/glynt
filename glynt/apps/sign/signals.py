@@ -10,4 +10,10 @@ import datetime
 @receiver(post_save, sender=DocumentSignature)
 def save_document_signature_signal(sender, **kwargs):
   # send an email to the invited person
-  send_signature_invite_email.delay(document=sender.document, date_invited=datetime.datetime.now(), key_hash=sender.key_hash, **sender.meta)
+  is_new = kwargs['created']
+  document = kwargs['instance']
+  if is_new:
+    try:
+      send_signature_invite_email.delay(document=document.document, date_invited=document.date_invited, key_hash=document.key_hash, **document.meta)
+    except:
+      send_signature_invite_email(document=document.document, date_invited=document.date_invited, key_hash=document.key_hash, **document.meta)

@@ -1,9 +1,15 @@
-{% block plain %}
-Hi {{to_name}},
+{% load glynt_helpers %}
 
-  {{invited_by}} has invited you to sign a document called "{{document_name}}" that they have created.
-Please go to {{sign_url}} to do this.
+{% block plain %}
+Hi {{ to_name }},
+{% if invited_by %}
+  {{ invited_by }} has invited you to sign a document called "{{ document_name }}" that they have created.
+{% else %}
+  we are happy to say that you have been invited to sign a document called "{{ document_name }}".
+{% endif %}
+Please go to {% current_site_domain %}{{ sign_url }} to do this.
 
 Regards
-{{from_name}}
+{{ from_name }}
+{{ PROJECT_NAME }}
 {% endblock %}

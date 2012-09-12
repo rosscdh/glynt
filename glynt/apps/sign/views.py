@@ -15,10 +15,10 @@ from glynt.apps.sign.forms import DocumentSignatureForm
 
 from glynt.apps.sign.utils import encode_data, decode_data
 
-doc = ClientCreatedDocument.objects.get(pk=7)
-email = 'ross@weareml.com'
-key_hash, hash_data = encode_data([doc.pk, email])
-form = DocumentSignatureForm({'document': doc.pk, 'key_hash': key_hash, 'hash_data': hash_data})
+# doc = ClientCreatedDocument.objects.get(pk=1)
+# email = 'ross@weareml.com'
+# key_hash, hash_data = encode_data([doc.pk, email])
+# form = DocumentSignatureForm({'document': doc.pk, 'key_hash': key_hash, 'hash_data': hash_data})
 
 class DocumentSignatureInviteToSignView(BaseFormView):
   """ Process the invitation submission"""
@@ -35,19 +35,15 @@ class DocumentSignatureInviteToSignView(BaseFormView):
     for email, name in invitees:
       key_hash, hash_data = encode_data([doc.pk, email])
       meta = {
-        'to_name': email,
-        'to_email': name,
-        'invited_by': request.user.get_full_name()
+        'to_name': name,
+        'to_email': email,
+        'invited_by': request.user.get_full_name() if request.user.get_full_name() else request.user.username
       }
       form = DocumentSignatureForm({'document': doc.pk, 'key_hash': key_hash, 'hash_data': hash_data, 'meta': meta})
       if form.is_valid():
         form.save()
 
     return HttpResponse('[{"key_hash":%s, "hash_data": %s}]' % (key_hash, hash_data), status=200)
-    # if form.is_valid():
-    #   return self.form_valid(form)
-    # else:
-    #   return self.form_invalid(form)
 
 
 class DocumentSignatureView(UpdateView):

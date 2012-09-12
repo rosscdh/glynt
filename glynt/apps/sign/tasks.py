@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # tasks to handle the sending of signature invitations
 from django.conf import settings
-from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 
 from templated_email import send_templated_mail
@@ -22,8 +21,7 @@ def send_signature_invite_email(**kwargs):
   kwargs['from_email'] = from_email
   kwargs['document_name'] = document.name
 
-  site = Site.objects.get_current()
-  kwargs['sign_url'] = 'http://%s%s' % (site.domain, reverse('sign:default', kwargs={'hash': key_hash, 'pk': document.pk}),)
+  kwargs['sign_url'] = reverse('sign:default', kwargs={'hash': key_hash, 'pk': document.pk})
 
   send_templated_mail(
           template_name = 'invite_to_sign',

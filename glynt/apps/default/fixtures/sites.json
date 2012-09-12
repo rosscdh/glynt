@@ -1,7 +1,7 @@
 [
     {
         "fields": {
-            "domain": "local.weareml.com:8001", 
+            "domain": "http://local.weareml.com:8001", 
             "name": "Testing WeAreML"
         }, 
         "model": "sites.site", 
@@ -9,7 +9,7 @@
     }, 
     {
         "fields": {
-            "domain": "dev.weareml.com", 
+            "domain": "http://dev.weareml.com", 
             "name": "Demo WeAreML"
         }, 
         "model": "sites.site", 
@@ -17,7 +17,7 @@
     }, 
     {
         "fields": {
-            "domain": "local.weareml.com:8000", 
+            "domain": "http://local.weareml.com:8000", 
             "name": "Local Development WeAreML"
         }, 
         "model": "sites.site", 
