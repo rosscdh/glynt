@@ -4,17 +4,14 @@
 {% load templatetag_handlebars %}
 
 {% block body %}
-
-<div class="row">
+<!-- <div class="row">
   <div class="span12">
     <h2>{% trans 'Template Documents' %}<br/><small>{% trans 'Search for a Document Template to use' %}</small></h2>
     <br />
-    <!-- Select2 items -->
     <input type="hidden" multiple id="document-template-search" name="" value=""/>
     <br /><br /><br /><br />
     <div id="template-list" class="row contracts hidden"></div>
     <div id="carousel" class="carousel slide">
-      <!-- Carousel items -->
       <div class="carousel-inner offset1">
         <div class="active item row contracts">
         {% for d in public_document_list %}
@@ -23,22 +20,20 @@
         {% endfor %}
         </div>
       </div>
-      <!-- Carousel nav -->
       <a class="carousel-control left" href="#carousel" data-slide="prev">&lsaquo;</a>
       <a class="carousel-control right" href="#carousel" data-slide="next">&rsaquo;</a>
     </div>
   </div>
 </div>
 
-<hr/>
+<hr/> -->
 
 <div class="row">
   <div class="span12">
-    <h2>{% trans 'Your Document Templates' %} <small>{% trans 'All of your Documents Templates' %}</small>
-    </h2>
-    <br />
     <div class="row">
     <div class="span3">
+	  <a href="#" class="btn btn-blue">New Document</a>
+	  <br /><br />
       <ul class="nav nav-list">
         <li class="active">
           <a href="#">{% trans 'All Documents' %}</a>
