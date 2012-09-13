@@ -56,8 +56,17 @@ $(document).ready(function(){
     self.context['invitees'] = (params['invitees'] != undefined) ? params['invitees']: [];
 
     self.add = function add(email, name, profile_picture, has_signed) {
-      self.context['invitees'].push({'email': email, 'name': name, 'profile_picture': profile_picture, 'has_signed': has_signed})
-      self.render();
+      found = false;
+      $.each(self.context['invitees'], function(index, item) {
+        if (item['email'] == email) {
+          found = true;
+          return true;
+        }
+      });
+      if (!found){
+        self.context['invitees'].push({'email': email, 'name': name, 'profile_picture': profile_picture, 'has_signed': has_signed})
+        self.render();
+      };
     };
 
     self.update = function update(index, name, email) {
