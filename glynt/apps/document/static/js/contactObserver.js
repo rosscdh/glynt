@@ -1,5 +1,60 @@
+/**
+* Observer to manage callbacks for widgets
+* Register an event_name and a callback with the class 
+* and then dispatch the event_name and an object which will be inserted into the callback
+* i.e.
+* observer = argosPanOptia();
+* function myCallbackFunction(callback_object) { console.log(callback_object); };
+* observer.registerCallback('invitee.add', myCallbackFunction);
+* observer.dispatch('invitee.add', {'profile_picture': 'http://monkies.com/the-biggest-one.jpg', 'name': 'Callback Ross', 'email': 'ross@weareml.com'});
+* 
+* Observer pattern
+*/
+argosPanOptia = function argosPanOptia() {
+  var self = this;
 
-contactObserver = function contactObserver(callbacks, params) {
+  // dict of events {'<event_name>': [<event callbackFunction>, <event callbackFunction>]}
+  self.events = {};
+  self.registeredCallbackList = {};
+
+  self.registerEvent = function registerEvent(event_name) {
+    if (self.events[event_name] == undefined) {
+      self.events[event_name] = [];
+    };
+  };
+  self.deRegisterEvent = function deRegisterEvent(event_name) {
+    if (self.events[event_name] != undefined) {
+      self.events[event_name] = [];
+    };
+  };
+
+  self.registerCallback = function registerCallback(event_name, callback) {
+    if (self.events[event_name] == undefined) self.registerEvent(event_name);
+    var callbackId = MD5(String(callback));
+    // allow only 1 instance of each callback in
+    if (self.registeredCallbackList[callbackId] == undefined) {
+      self.events[event_name].push(callback);
+      self.registeredCallbackList[callbackId] = true;
+    };
+  };
+
+  self.dispatch = function dispatch(event_name, value) {
+    var event_callbacks = self.events[event_name];
+    if (event_callbacks != undefined && event_callbacks.length > 0) {
+      $.each(event_callbacks, function(index, callback){
+        eval(callback(value));
+      });
+    }
+  };
+
+};
+
+/**
+* ContactsWidget: Allows for multiple contact types to be hooked up (facebook,linkedin,google)
+* and managed according to our particular formatting requirements
+* Oberserver pattern
+*/
+contactsWidget = function contactsWidget(callbacks, params) {
   var self = this;
   self.q = null;
   self.resultCallback = null;

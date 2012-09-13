@@ -13,6 +13,10 @@
 // use warnings;
 $(document).ready(function(){
 
+  initArgosPanOptia = function initArgosPanOptia(App) {
+    App.widgets.observer = new argosPanOptia();
+  };
+
   initConditionalCallback = function initConditionalCallback(App) {
     App.widgets.ccbs = new conditionalCallbackSets(App.documentModel);
   };
@@ -81,7 +85,7 @@ $(document).ready(function(){
       });
     };
 
-    App.widgets.co = new contactObserver([facebookCallback], {});
+    App.widgets.co = new contactsWidget([facebookCallback], {});
   };
 
   initSelect2 = function initSelect2(App) {
@@ -105,6 +109,10 @@ $(document).ready(function(){
         },
         width: 'element',
         minimumInputLength: 2
+    });
+    // connect with the App.observer
+    $(".contact-list").bind("change", function(event) {
+      App.dispatch('invitee.add', {'profile_picture': '', 'name': 'Callback Ross', 'email': 'ross@weareml.com'});
     });
 
     $.each($(".contact-list"), function(index, item){
@@ -1031,9 +1039,17 @@ $(document).ready(function(){
 
         }
 
+        self.registerCallback = function registerCallback(event_name, callback) {
+          self.widgets.observer.registerCallback(event_name, callback);
+        };
+        self.dispatch = function dispatch(event_name, value) {
+          self.widgets.observer.dispatch(event_name, value);
+        };
+
         // method to initialize 3rd part widgets that need to load after
         // our js events happen
         self.initializeWidgets = function initializeWidgets() {
+          initArgosPanOptia(self);
           initContactList(self);
           initConditionalCallback(self);
           initSelect2(self);

@@ -173,9 +173,16 @@ $(document).ready(function(){
 
     };
 
+    self.argosPanOptiaCallback = function argosPanOptiaCallback(contact_ob) {
+      self.add(contact_ob.email, contact_ob.name, contact_ob.profile_picture, false);
+    };
+
     self.init = function init(params) {
       self.target_element = params['target_element'];
       self.setupInterface();
+
+      App.registerCallback('invitee.add', self.argosPanOptiaCallback);
+
       self.render();
     };
 
