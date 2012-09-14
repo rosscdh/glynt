@@ -23,5 +23,11 @@ class DocumentSignature(models.Model):
   def __unicode__(self):
     return u'%s - %s (%s)' % (self.key_hash, self.meta['to_name'], self.meta['to_email'])
 
+  def signee_name(self):
+    return u'%s' % (self.meta['to_name'],)
+
+  def signee_email(self):
+    return u'%s' % (self.meta['to_email'],)
+
 # import signals here as they need to be initialized with the models
 from glynt.apps.sign.signals import *

@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 
 from django.views.generic import UpdateView
-from django.views.generic.edit import BaseFormView
+from django.views.generic.edit import BaseFormView, ProcessFormView
 
 from glynt.apps.document.models import ClientCreatedDocument
 from glynt.apps.sign.models import DocumentSignature
@@ -20,9 +20,13 @@ from glynt.apps.sign.utils import encode_data, decode_data
 # key_hash, hash_data = encode_data([doc.pk, email])
 # form = DocumentSignatureForm({'document': doc.pk, 'key_hash': key_hash, 'hash_data': hash_data})
 
-class DocumentSignatureInviteToSignView(BaseFormView):
-  """ Process the invitation submission"""
-  http_method_names = ['post', 'delete']
+
+class ProcessInviteToSignView(BaseFormView):
+  """ Process the invitation submission
+  The "view" that posts to this Process is a javascript widget
+  and not a normal django view
+  """
+  http_method_names = ['post']
 
   def post(self, request, *args, **kwargs):
     # Create new model based on list passed in
@@ -46,16 +50,16 @@ class DocumentSignatureInviteToSignView(BaseFormView):
     return HttpResponse('[{"key_hash":%s, "hash_data": %s}]' % (key_hash, hash_data), status=200)
 
 
-class DocumentSignatureView(UpdateView):
+class SignDocumentView(UpdateView):
   """
-  View to allow an invited signatory to sign a document
+  View to allow an invited signatory to sign and review a document
   """
   form_class = DocumentSignatureForm
   model = DocumentSignature
   template_name = 'sign/sign_document.html'
 
   def get_success_url(self):
-    url = reverse('sign:complete', kwargs={'pk': self.object.document.pk})
+    url = reverse('sign:invite_complete', kwargs={'pk': self.object.document.pk})
     return url
 
   def get_object(self, queryset=None):
@@ -68,8 +72,21 @@ class DocumentSignatureView(UpdateView):
         raise AttributeError(u"You must specify a document pk for this view")
 
   def get_context_data(self, **kwargs):
-    context = super(DocumentSignatureView, self).get_context_data(**kwargs)
+    context = super(SignDocumentView, self).get_context_data(**kwargs)
     context['userdoc'] = self.object.document
     context['document_data'] = self.object.document.data_as_json()
 
     return context
+
+class ProcessSignDocumentView(ProcessFormView):
+  """ View to accept the invitees signature and congratulate them on success """
+  http_method_names = ['post']
+
+  def post(self, request, *args, **kwargs):
+      form_class = self.get_form_class()
+      form = self.get_form(form_class)
+      if form.is_valid():
+          return self.form_valid(form)
+      else:
+          return self.form_invalid(form)
+  
