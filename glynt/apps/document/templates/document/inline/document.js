@@ -72,20 +72,22 @@ $(document).ready(function(){
       };
 
       // Only perform IF we have a FB connected account
-      FB.getLoginStatus(function(response) {
-          if (response.status === 'connected') {
-            FB.api('/me/friends', function(response) {
-                processFriends(response.data); // process initial set
-                if (response.paging != undefined && response.paging.next != undefined) {
-                  // handle pagination of friends
-                  getFBFriends(response.paging.next);
-                }
-            });
-          }
-      });
+      if (FB) {
+        FB.getLoginStatus(function(response) {
+            if (response.status === 'connected') {
+              FB.api('/me/friends', function(response) {
+                  processFriends(response.data); // process initial set
+                  if (response.paging != undefined && response.paging.next != undefined) {
+                    // handle pagination of friends
+                    getFBFriends(response.paging.next);
+                  }
+              });
+            }
+        });
+      }
     };
 
-    App.widgets.co = new contactsWidget([facebookCallback], {});
+    App.widgets.contactsWidget = new contactsWidget([facebookCallback], {});
   };
 
   initSelect2 = function initSelect2(App) {
@@ -95,15 +97,16 @@ $(document).ready(function(){
             var data = {results: []};
             var template = Handlebars.compile($('#contact-list-item').html());
 
-            App.widgets.co.query(query.term, function(results){
+            App.widgets.contactsWidget.query(query.term, function(results){
                 for (r in results) {
                     item = results[r];
-                    data.results.push({'id': item.name , 'text': template(item)});
+                    data.results.push({'id': item.name , 'text': template(item), 'contact': item});
                 }
                 // if no results // add search term
                 if (data.results.length == 0) {
-                    data.results.push({'id': query.term , 'text': query.term});
+                    data.results.push({'id': query.term , 'text': query.term, 'contact': {'is_query': true, 'name': query.term, 'picture': false, 'extra': {'id': MD5(String(query.term))}}});
                 }
+                // send data to expecting callback
                 query.callback(data);
             });
         },
@@ -112,7 +115,15 @@ $(document).ready(function(){
     });
     // connect with the App.observer
     $(".contact-list").bind("change", function(event) {
-      App.dispatch('invitee.add', {'profile_picture': '', 'name': 'Callback Ross', 'email': 'ross@weareml.com'});
+      var data = $(this).select2('data');
+console.log(data)
+      var contact = data['contact'];
+      if (contact['is_query'] == true) {
+      } else {
+        var email = (contact['extra']['email'] == undefined)? false : contact['email'];
+      }
+console.log('invitee.add for contact-list')
+      App.dispatch('invitee.add', {'id': contact['extra']['id'], 'profile_picture': contact['picture'], 'name': contact['name'], 'email': email});
     });
 
     $.each($(".contact-list"), function(index, item){

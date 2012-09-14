@@ -136,7 +136,7 @@ contactsWidget = function contactsWidget(callbacks, params) {
   * @param resultCallback Object
   * @result void
   */
-  self.query = function query(q,resultCallback) {
+  self.query = function query(q, resultCallback) {
     // call base
     self.queryBase(q);
     self.resultCallback = resultCallback;

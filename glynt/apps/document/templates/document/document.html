@@ -39,11 +39,10 @@
               <button id="btn-post-pdf" class="btn btn-success" type="button">{% trans 'Download PDF' %}</button>
           </div>
       </div>
-      <div data-bind="visible: App.formControls.isLastStep()">
-        <div id="invite-to-sign">&nbsp;</div>
-        <div id="signatory-detail">&nbsp;</div>
-      </div>
     </div>
+
+    <div id="invite-to-sign" class="row" data-bind="visible: App.formControls.isLastStep()">&nbsp;</div>
+
     <div class="row">
         <div class="controls pull-right">
             <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-primary btn-small btn-prev" type="button" data-bind="click: App.formControls.prev">{% trans 'Previous' %}</button></span>

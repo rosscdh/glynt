@@ -1,18 +1,21 @@
 {% load i18n markup templatetag_handlebars %}
 {% load url from future %}
 
+<div id="signatory-detail">&nbsp;</div>
+
 {% tplhandlebars "hb-signatory-detail" %}
 <form class="form-horizontal">
   <fieldset class="Invitee">
   <div id="" class="control-group">
   {{#with invitee}}
-  <input type="hidden" id="id_detail-index" name="detail-index" value="{{index}}" />
+  <input type="hidden" id="id_detail-id" name="detail-id" value="{{id}}" />
   <label for="detail-name">{% trans 'Name' %}:</label> <input type="text" id="id_detail-name" name="detail-name" value="{{name}}" />
   <label for="detail-email">{% trans 'Email' %}:</label> <input type="text" id="id_detail-email" name="detail-email" value="{{email}}" />
   {{/with}}
   </div>
   </fieldset>
   <div class="form-actions">
+      <button id="detail-close" type="button" class="submit btn btn-warning">{% trans 'Close' %}</button>
       <button id="detail-done" type="button" class="submit btn btn-primary">{% trans 'Done' %}</button>
   </div>
 </form>
@@ -20,22 +23,25 @@
 
 {% tplhandlebars "hb-invite-signatories" %}
 <div id="invite-signatories">
-  <a id="" class="signatory_add">invite another</a>
+  <h4>{% trans 'Invite People to Sign' %}</h4>
+  <a id="" href="#invitee-add" class="signatory_add">{% trans 'Add Invitee' %}</a>
   <span class="message">{{message}}</span>
   <form id="send-invite" class="form-horizontal">
     <input type="hidden" name="csrfmiddlewaretoken" value="{{csrf_token}}" />
     <ul id="invitees">
     {{#each invitees}}
-    <li class="{{#if has_signed}}has_signed{{/if}}">
+    <li class="{{#if has_signed}}has_signed{{/if}}{{#unless email}} no_email{{/unless}}">
       <input type="hidden" id="id_list-name" name="name" value="{{name}}" />
       <input type="hidden" id="id_list-email" name="email" value="{{email}}" />
       {{#if profile_picture}}<img class="{{#if has_signed}}has_signed{{/if}}" src="" data-postload_src="{{profile_picture}}" />{{/if}}
-      <i class="icon-remove signatory_remove" data-index_lookup="{{email}}"></i>
-      <a class="signatory_detail" data-index_lookup="{{email}}" title="{{email}}" href="">{{name}}</a> 
+      <i class="icon-remove signatory_remove" data-index_lookup="{{id}}"></i>
+      <a class="signatory_detail" data-index_lookup="{{id}}" title="{{email}}" href="">{{name}}</a> 
     </li>
     {{/each}}
     </ul>
-    <button id="submit-invitation" type="submit" class="btn btn-success btn-mini">{% trans 'Send Invitation' %}</button>
+    {{#if invitees}}
+    <button id="submit-invitation" type="submit" class="btn btn-success btn-mini">{% trans 'Invite' %}</button>
+    {{/if}}
   </form>
 </div>
 {% endtplhandlebars %}
@@ -43,7 +49,12 @@
 <script type="text/javascript">
 $(document).ready(function(){
 //  console.log('{{target_element}}')
-
+  /**
+  * Invite To Sign Widget - Allows a list of signatories tobe generated
+  * this list is then posted and the backend sends an invite email
+  * and unique hash to the invitee list; those invitees are then invited
+  * to sign this document
+  */
   inviteToSignWidget = function inviteToSignWidget(params) {
     var self = this;
     self.csrf_token = App.getCSRFToken();
@@ -55,51 +66,64 @@ $(document).ready(function(){
     self.context['csrf_token'] = self.csrf_token.val();
     self.context['invitees'] = (params['invitees'] != undefined) ? params['invitees']: [];
 
-    self.add = function add(email, name, profile_picture, has_signed) {
-      found = false;
-      $.each(self.context['invitees'], function(index, item) {
-        if (item['email'] == email) {
-          found = true;
-          return true;
-        }
-      });
-      if (!found){
-        self.context['invitees'].push({'email': email, 'name': name, 'profile_picture': profile_picture, 'has_signed': has_signed})
+    self.findInvitee = function findInvitee(id) {
+      invitee = false;
+      found_index = false;
+      if (id) {
+        $.each(self.context['invitees'], function(index, item) {
+          if (item['id'] == id) {
+            invitee = item;
+            found_index = index;
+            return true;
+          }
+        });
+      };
+      return {'invitee': invitee, 'index': found_index};
+    };
+
+    self.add = function add(id, email, name, profile_picture, has_signed) {
+      var item = self.findInvitee(id);
+      if (item.index === false){
+        self.context['invitees'].push({'id': id, 'email': email, 'name': name, 'profile_picture': profile_picture, 'has_signed': has_signed})
         self.render();
       };
     };
 
-    self.update = function update(index, name, email) {
-      item = self.context['invitees'][index];
-      if (item == undefined) {
-        // new
+    self.update = function update(id, name, email) {
+      var item = self.findInvitee(id);
+      if (item.index === false) {
+        // new invitee
+        id = MD5(String(email));
+        has_signed = false;
         profile_picture = '';// url to grayman
-        self.context['invitees'].push({'email': email, 'name': name, 'profile_picture': profile_picture})
+        self.add(id, email, name, profile_picture, has_signed);
       } else {
-        // old
-        self.context['invitees'][index] = {'email': email, 'name': name, 'profile_picture': item.profile_picture};
+        // existing invitee
+        // merge hashes
+        $.extend(item.invitee, {'email': email, 'name': name});
+        self.context['invitees'][item.index] = item.invitee;
       }
       self.render();
     };
 
-    self.showDetailView = function showDetailView(email) {
+    self.showDetailView = function showDetailView(id) {
       var selectedItem = {};
-      if (email != undefined) {
-        $.each(self.context['invitees'], function(index, item){
-          if (item.email == email) {
-            item['index'] = index;
-            selectedItem = item;
-            return false;
-          }
-        });
-      };
+
+      $.each(self.context['invitees'], function(index, item){
+        if (item.id == id) {
+          item['index'] = index;
+          selectedItem = item;
+          return false;
+        }
+      });
+
       $( "#signatory-detail" ).html(self.compiledDetailTemplate({'invitee': selectedItem}));
       $( "#signatory-detail" ).dialog('open');
     };
 
-    self.remove = function remove(email) {
+    self.remove = function remove(id) {
       $.each(self.context['invitees'], function(index, item){
-        if (item.email == email) {
+        if (item.id == id) {
           self.context['invitees'].splice(index, 1);
           return false;
         }
@@ -140,6 +164,8 @@ $(document).ready(function(){
     };
 
     self.setupInterface = function setupInterface() {
+      $(self.target_element).addClass('invitee-vehicle');
+
       $('#submit-invitation').live('click', function(event){
           event.preventDefault();
           self.sendInvitation();
@@ -163,16 +189,23 @@ $(document).ready(function(){
         modal: true
       });
       $("div#signatory-detail").dialog('close');
+      $('button#detail-close').live('click', function(event){
+          event.preventDefault();
+          $("div#signatory-detail").dialog('close');
+      });
       $('button#detail-done').live('click', function(event){
           event.preventDefault();
           var control_group = $(this).closest('form');
-          index = control_group.find('[name=detail-index]').val();
+          // set values
+          id = control_group.find('[name=detail-id]').val();
           name = control_group.find('[name=detail-name]').val();
           email = control_group.find('[name=detail-email]').val();
+          // validate email
           if (name != '' && email != '' && self.isValidEmail(email)) {
-            self.update(index, name, email);
+            self.update(id, name, email);
             $("div#signatory-detail").dialog('close');
           } else {
+            // allow for use cases
             if (name == '' && email == '') {
               $("div#signatory-detail").dialog('close');
             }
@@ -183,13 +216,14 @@ $(document).ready(function(){
     };
 
     self.argosPanOptiaCallback = function argosPanOptiaCallback(contact_ob) {
-      self.add(contact_ob.email, contact_ob.name, contact_ob.profile_picture, false);
+      self.add(contact_ob.id, contact_ob.email, contact_ob.name, contact_ob.profile_picture, false);
     };
 
     self.init = function init(params) {
       self.target_element = params['target_element'];
       self.setupInterface();
 
+      // register our callback with the App observer
       App.registerCallback('invitee.add', self.argosPanOptiaCallback);
 
       self.render();
@@ -197,9 +231,32 @@ $(document).ready(function(){
 
     self.init(params);
   };
-
-  inviteToSign = new inviteToSignWidget({'target_element': $('{{ target_element }}')});
-  inviteToSign.add('ross@weareml.com','Ross Crawford','')
+{% if target_element %}
+  // if we have a target_element specified then instantiate the invite widget
+  var inviteToSign = new inviteToSignWidget({'target_element': $('{{ target_element }}')});
+{% endif %}
 
 });
 </script>
+
+<style>
+  .invitee-vehicle {
+    margin:10px 0px;
+    padding:0px 10px 10px 10px;
+    border:solid #ccc 2px;
+  }
+  ul#invitees {
+    list-style:none;
+    margin:10px 0px;
+    padding:0px;
+  }
+  ul#invitees li {
+    border:solid #ccc 2px;
+  }
+  ul#invitees li.no_email {
+    border:solid #c00 2px;
+  }
+  ul#invitees li.has_signed {
+    border:solid #0c0 2px;
+  }
+</style>
