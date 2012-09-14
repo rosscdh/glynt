@@ -15,10 +15,7 @@ from glynt.apps.sign.forms import DocumentSignatureForm
 
 from glynt.apps.sign.utils import encode_data, decode_data
 
-# doc = ClientCreatedDocument.objects.get(pk=1)
-# email = 'ross@weareml.com'
-# key_hash, hash_data = encode_data([doc.pk, email])
-# form = DocumentSignatureForm({'document': doc.pk, 'key_hash': key_hash, 'hash_data': hash_data})
+import datetime
 
 
 class ProcessInviteToSignView(BaseFormView):
@@ -81,12 +78,21 @@ class SignDocumentView(UpdateView):
 class ProcessSignDocumentView(ProcessFormView):
   """ View to accept the invitees signature and congratulate them on success """
   http_method_names = ['post']
+  model = DocumentSignature
 
   def post(self, request, *args, **kwargs):
-      form_class = self.get_form_class()
-      form = self.get_form(form_class)
-      if form.is_valid():
-          return self.form_valid(form)
-      else:
-          return self.form_invalid(form)
-  
+    document_signature = get_object_or_404(self.model.objects.select_related('document', 'document__source_document', 'document__source_document__flyform'), pk=self.kwargs['pk'], key_hash=self.kwargs['hash'])
+
+    print request.POST
+    signature = request.POST.get('output',None)
+    document_signature.signature = signature
+    document_signature.meta['signed_at'] = datetime.datetime.utcnow()
+    document_signature.save()
+    # form_class = self.get_form_class()
+    # form = self.get_form(form_class)
+    # if form.is_valid():
+    #     return self.form_valid(form)
+    # else:
+    #     return self.form_invalid(form)
+    #   
+    return HttpResponse('[{"yay":"test"}]',status=200)
