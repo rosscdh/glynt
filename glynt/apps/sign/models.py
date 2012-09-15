@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.utils import simplejson as json
 from jsonfield import JSONField
 from glynt.apps.document.models import ClientCreatedDocument
 
@@ -22,6 +22,9 @@ class DocumentSignature(models.Model):
 
   def __unicode__(self):
     return u'%s - %s (%s)' % (self.key_hash, self.meta['to_name'], self.meta['to_email'])
+
+  def signature_as_string(self):
+    return json.dumps(self.signature)
 
   def signee_name(self):
     return u'%s' % (self.meta['to_name'],)

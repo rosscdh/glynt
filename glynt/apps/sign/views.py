@@ -2,18 +2,22 @@
 from django.conf import settings
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
+from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponse
 
 from django.views.generic import UpdateView
 from django.views.generic.edit import BaseFormView, ProcessFormView
+from django.views.generic.detail import BaseDetailView
 
 from glynt.apps.document.models import ClientCreatedDocument
 from glynt.apps.sign.models import DocumentSignature
 from glynt.apps.sign.forms import DocumentSignatureForm
 
 from glynt.apps.sign.utils import encode_data, decode_data
+
+from signpad2image.signpad2image import s2i
 
 import datetime
 
@@ -83,16 +87,28 @@ class ProcessSignDocumentView(ProcessFormView):
   def post(self, request, *args, **kwargs):
     document_signature = get_object_or_404(self.model.objects.select_related('document', 'document__source_document', 'document__source_document__flyform'), pk=self.kwargs['pk'], key_hash=self.kwargs['hash'])
 
-    print request.POST
-    signature = request.POST.get('output',None)
-    document_signature.signature = signature
-    document_signature.meta['signed_at'] = datetime.datetime.utcnow()
-    document_signature.save()
-    # form_class = self.get_form_class()
-    # form = self.get_form(form_class)
-    # if form.is_valid():
-    #     return self.form_valid(form)
-    # else:
-    #     return self.form_invalid(form)
-    #   
-    return HttpResponse('[{"yay":"test"}]',status=200)
+    if not document_signature.is_signed:
+      signature = request.POST.get('output',None)
+      document_signature.signature = signature
+      document_signature.is_signed = True
+      document_signature.meta['signed_at'] = datetime.datetime.utcnow()
+      document_signature.save()
+
+    return redirect(reverse('sign:process_signature_complete', kwargs={'pk': document_signature.pk, 'hash': document_signature.key_hash}))
+
+class RenderSignatureImageView(BaseDetailView):
+  http_method_names = ['get']
+  model = DocumentSignature
+
+  def get(self, request, *args, **kwargs):
+    self.object = self.get_object()
+    response = HttpResponse(mimetype="image/png")
+    try:
+      #build the new image
+      image = s2i(json.dumps(self.object.signature), input_image=settings.BLANK_SIG_IMAGE[0])
+    except(self.object.DoesNotExist):
+      #If it wasn't in the database, then return the nosig image
+      image = s2i("", force_no_sig_image=True, nosig_image=settings.NO_SIG_IMAGE[0])
+    #return the HttpResponse object to the client.
+    image.save(response, "PNG")
+    return response

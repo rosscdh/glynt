@@ -264,6 +264,10 @@ LOGGING = {
     }
 }
 
+# Signature Image generator
+BLANK_SIG_IMAGE = os.path.join(STATIC_ROOT, 'signature/blank_sig.png'),
+NO_SIG_IMAGE = os.path.join(STATIC_ROOT, 'signature/no_sig.png'),
+
 # You can also use a class directly
 from templated_email.backends.vanilla_django import TemplateBackend
 TEMPLATED_EMAIL_BACKEND = TemplateBackend
