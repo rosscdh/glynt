@@ -11,9 +11,23 @@ import datetime
 def save_document_signature_signal(sender, **kwargs):
   # send an email to the invited person
   is_new = kwargs['created']
-  document = kwargs['instance']
-  if is_new:
-    try:
-      send_signature_invite_email.delay(document=document.document, date_invited=document.date_invited, key_hash=document.key_hash, **document.meta)
-    except:
-      send_signature_invite_email(document=document.document, date_invited=document.date_invited, key_hash=document.key_hash, **document.meta)
+
+  signature = kwargs['instance']
+  document = signature.signature
+
+  if signature.is_signed == True:
+    # update meta
+    document.meta_data['total_signatures'] = document.meta_data['total_signatures'] + 1 if 'total_signatures' in document.meta_data else 1
+    document.save()
+  else:
+    # Newly created document send invites
+    # TODO abstract into another signal?
+    if is_new:
+      try:
+        send_signature_invite_email.delay(document=signature.document, date_invited=signature.date_invited, key_hash=signature.key_hash, **signature.meta_data)
+      except:
+        send_signature_invite_email(document=signature.document, date_invited=signature.date_invited, key_hash=signature.key_hash, **signature.meta_data)
+
+      # update meta
+      document.meta_data['total_invited_signees'] = document.meta_data['total_invited_signees'] + 1 if 'total_invited_signees' in document.meta_data else 1
+      document.save()

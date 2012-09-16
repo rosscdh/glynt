@@ -15,22 +15,22 @@ class DocumentSignature(models.Model):
   hash_data = models.CharField(blank=False, max_length=255)
   user = models.ForeignKey(User, blank=True, null=True)
   signature = JSONField(blank=True, null=True)
-  meta = JSONField(blank=True, null=True)
+  meta_data = JSONField(blank=True, null=True)
   is_signed = models.BooleanField(default=False)
   date_invited = models.DateTimeField(auto_now=False, auto_now_add=True)
   date_signed = models.DateTimeField(blank=True, null=True, auto_now=False, auto_now_add=False)
 
   def __unicode__(self):
-    return u'%s - %s (%s)' % (self.key_hash, self.meta['to_name'], self.meta['to_email'])
+    return u'%s - %s (%s)' % (self.key_hash, self.meta_data['to_name'], self.meta_data['to_email'])
 
   def signature_as_string(self):
     return json.dumps(self.signature)
 
   def signee_name(self):
-    return u'%s' % (self.meta['to_name'],)
+    return u'%s' % (self.meta_data['to_name'],)
 
   def signee_email(self):
-    return u'%s' % (self.meta['to_email'],)
+    return u'%s' % (self.meta_data['to_email'],)
 
 # import signals here as they need to be initialized with the models
 from glynt.apps.sign.signals import *

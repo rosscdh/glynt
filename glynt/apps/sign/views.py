@@ -91,7 +91,7 @@ class ProcessSignDocumentView(ProcessFormView):
       signature = request.POST.get('output',None)
       document_signature.signature = signature
       document_signature.is_signed = True
-      document_signature.meta['signed_at'] = datetime.datetime.utcnow()
+      document_signature.meta_data['signed_at'] = datetime.datetime.utcnow()
       document_signature.save()
 
     return redirect(reverse('sign:process_signature_complete', kwargs={'pk': document_signature.pk, 'hash': document_signature.key_hash}))

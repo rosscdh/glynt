@@ -8,15 +8,21 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'DocumentSignature.meta'
-        db.add_column('sign_documentsignature', 'meta',
+        # Adding field 'ClientCreatedDocument.meta'
+        db.add_column('document_clientcreateddocument', 'meta_data',
                       self.gf('jsonfield.fields.JSONField')(null=True, blank=True),
                       keep_default=False)
 
+        # Adding unique constraint on 'ClientCreatedDocument', fields ['slug']
+        db.create_unique('document_clientcreateddocument', ['slug'])
+
 
     def backwards(self, orm):
-        # Deleting field 'DocumentSignature.meta'
-        db.delete_column('sign_documentsignature', 'meta')
+        # Removing unique constraint on 'ClientCreatedDocument', fields ['slug']
+        db.delete_unique('document_clientcreateddocument', ['slug'])
+
+        # Deleting field 'ClientCreatedDocument.meta'
+        db.delete_column('document_clientcreateddocument', 'meta_data')
 
 
     models = {
@@ -64,6 +70,7 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'last_modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'auto_now_add': 'True', 'blank': 'True'}),
+            'meta_data': ('jsonfield.fields.JSONField', [], {'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255', 'unique': 'True', 'null': 'True'}),
@@ -100,19 +107,6 @@ class Migration(SchemaMigration):
             'defaults': ('jsonfield.fields.JSONField', [], {'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
-        'sign.documentsignature': {
-            'Meta': {'object_name': 'DocumentSignature'},
-            'date_invited': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'date_signed': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
-            'document': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['document.ClientCreatedDocument']"}),
-            'hash_data': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_signed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'key_hash': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '32'}),
-            'meta': ('jsonfield.fields.JSONField', [], {'null': 'True', 'blank': 'True'}),
-            'signature': ('jsonfield.fields.JSONField', [], {'null': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'})
-        },
         'taggit.tag': {
             'Meta': {'object_name': 'Tag'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -128,4 +122,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['sign']
+    complete_apps = ['document']
