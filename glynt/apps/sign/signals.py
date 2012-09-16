@@ -13,7 +13,7 @@ def save_document_signature_signal(sender, **kwargs):
   is_new = kwargs['created']
 
   signature = kwargs['instance']
-  document = signature.signature
+  document = signature.document
 
   if signature.is_signed == True:
     # update meta

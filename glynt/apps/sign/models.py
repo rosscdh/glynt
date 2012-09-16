@@ -21,7 +21,7 @@ class DocumentSignature(models.Model):
   date_signed = models.DateTimeField(blank=True, null=True, auto_now=False, auto_now_add=False)
 
   def __unicode__(self):
-    return u'%s - %s (%s)' % (self.key_hash, self.meta_data['to_name'], self.meta_data['to_email'])
+    return u'%s - to: %s (%s)' % (self.key_hash, self.meta_data['to_name'], self.meta_data['to_email'])
 
   def signature_as_string(self):
     return json.dumps(self.signature)
