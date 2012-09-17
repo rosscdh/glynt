@@ -23,8 +23,8 @@ body {
 	padding-bottom:0px;
 }
 
-h1 { font-size: 40px; }
-h2 { font-size: 32px; }
+h1 { font-size: 35px;letter-spacing:0.03em; }
+h2 { font-size: 28px; }
 
 /* Homepage bits */
 .leader {
@@ -95,10 +95,13 @@ div.sidebar {
 	margin-top:-30px;
 	padding-top:42px;
 }
-div.sidebar .nav-list .active a, div.sidebar .nav-list > .active > a:hover
-{
+div.sidebar .nav-list .active a, div.sidebar .nav-list > .active > a:hover {
 	background-color:#69c3e5;
 }
+div#doc-list{
+	display:none;
+}
+
 
 
 /* Buttons */

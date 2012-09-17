@@ -33,7 +33,7 @@
     <div class="row">
 	    <div class="span3 sidebar">
 			<div style="text-align:center;">
-				<a href="#" class="btn btn-red btn-large"><i class="icon-plus icon-white"></i> New Document</a>
+				<a href="#" class="btn btn-green" id="toggle-docs">Create New</a>
 		  	</div>
 			  <br />
 		      <ul class="nav nav-list">
@@ -43,15 +43,19 @@
 		          <a href="#"> {% trans 'All Documents' %}</a>
 		        </li>
 		        <li><a href="#">{% trans 'Incomplete Documents' %}</a></li>
-		    <li class="divider"></li>
-				  <li class="nav-header">Recent Documents</li>
-		          {% for d in public_document_list %}
-		          <li><a class="template-document" href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a></li>
-		          {% endfor %}
+
 		      </ul>
 			  
 	    </div>
-	    <div class="span9">
+		<div class="span9" id="doc-list">
+		  	<h3 class="">Choose Document</h3>
+				<ul>
+		          {% for d in public_document_list %}
+		          <li><a class="template-document" href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a></li>
+		          {% endfor %}
+				</ul>
+		</div>
+	    <div class="span9" id="file-list">
 		  <h3 class="span5">All Documents</h3>
 			  <div class="doccount">3</div>
 		  
@@ -243,6 +247,12 @@ $("#document-template-search").select2({
     })
     .complete(function() {
     });
+  });
+  $('a#toggle-docs').live('click', function(event){
+	$('div#file-list').toggle();
+	$('div#doc-list').toggle();
+	// $('a#toggle-docs').toggleClass('btn-red');
+	$('a#toggle-docs').toggleClass('active');
   });
 
 });
