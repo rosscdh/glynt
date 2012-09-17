@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-
+from django.utils import simplejson as json
 from taggit.managers import TaggableManager
 from categories.models import CategoryBase
 
@@ -40,6 +40,9 @@ class Document(models.Model):
   def __unicode__(self):
     return u'%s' % (self.name, )
 
+  def default_data_as_json(self):
+    return json.dumps(self.flyform.defaults)
+
 
 class DocumentCategory(CategoryBase):
   """
@@ -58,12 +61,13 @@ class ClientCreatedDocument(models.Model):
   slug = models.SlugField(unique=True, blank=False, null=True, max_length=255)
   body = models.TextField(blank=True, null=True)
   data = JSONField(blank=True, null=True)
+  meta_data = JSONField(blank=True, null=True, default={}) # Stores data on num_signatures vs total signatures
   created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
   last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
   is_deleted = models.BooleanField(default=False)
 
   objects = ClientCreatedDocumentManager()
-  public_objects = PublicClientCreatedDocumentManager()
+  active_objects = PublicClientCreatedDocumentManager()
   deleted_objects = DeletedClientCreatedDocumentManager()
 
   class Meta:
@@ -71,6 +75,14 @@ class ClientCreatedDocument(models.Model):
 
   def __unicode__(self):
     return u'%s' % (self.name)
+
+  def signatories(self):
+    """ Get list of people invited to sign """
+    return self.documentsignature_set.all()
+
+  def signed_signatories(self):
+    """ Get list of people who have signed """
+    return self.documentsignature_set.filter(is_signed=True)
 
   def get_absolute_url(self):
     return reverse('document:my_view', kwargs={'slug': self.slug})
@@ -82,3 +94,5 @@ class ClientCreatedDocument(models.Model):
   def diff_source(self):
     return 'Return a diff against the self.source_document.body value'
 
+  def data_as_json(self):
+    return json.dumps(self.data)

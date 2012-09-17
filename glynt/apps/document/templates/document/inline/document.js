@@ -2,6 +2,7 @@
 {% load glynt_helpers %}
 {% load url from future %}
 
+<script id="inviteeList">{{ invitee_list|default:""|safe }}</script>
 <script id="document-default_data" type="text/javascript">[{{ default_data|default:''|safe }}]</script>
 <script id="js-document" type="text/x-handlebars-template">
 {{ userdoc.body|default:object.body|safe }}
@@ -11,8 +12,11 @@
 <script id="document-controls" type="text/javascript">
 // use strict;
 // use warnings;
-
 $(document).ready(function(){
+
+  initArgosPanOptia = function initArgosPanOptia(App) {
+    App.widgets.observer = new argosPanOptia();
+  };
 
   initConditionalCallback = function initConditionalCallback(App) {
     App.widgets.ccbs = new conditionalCallbackSets(App.documentModel);
@@ -69,20 +73,22 @@ $(document).ready(function(){
       };
 
       // Only perform IF we have a FB connected account
-      FB.getLoginStatus(function(response) {
-          if (response.status === 'connected') {
-            FB.api('/me/friends', function(response) {
-                processFriends(response.data); // process initial set
-                if (response.paging != undefined && response.paging.next != undefined) {
-                  // handle pagination of friends
-                  getFBFriends(response.paging.next);
-                }
-            });
-          }
-      });
+      if (FB) {
+        FB.getLoginStatus(function(response) {
+            if (response.status === 'connected') {
+              FB.api('/me/friends', function(response) {
+                  processFriends(response.data); // process initial set
+                  if (response.paging != undefined && response.paging.next != undefined) {
+                    // handle pagination of friends
+                    getFBFriends(response.paging.next);
+                  }
+              });
+            }
+        });
+      }
     };
 
-    App.widgets.co = new contactObserver([facebookCallback], {});
+    App.widgets.contactsWidget = new contactsWidget([facebookCallback], {});
   };
 
   initSelect2 = function initSelect2(App) {
@@ -92,20 +98,33 @@ $(document).ready(function(){
             var data = {results: []};
             var template = Handlebars.compile($('#contact-list-item').html());
 
-            App.widgets.co.query(query.term, function(results){
+            App.widgets.contactsWidget.query(query.term, function(results){
                 for (r in results) {
                     item = results[r];
-                    data.results.push({'id': item.name , 'text': template(item)});
+                    data.results.push({'id': item.name , 'text': template(item), 'contact': item});
                 }
                 // if no results // add search term
                 if (data.results.length == 0) {
-                    data.results.push({'id': query.term , 'text': query.term});
+                    data.results.push({'id': query.term , 'text': query.term, 'contact': {'is_query': true, 'name': query.term, 'picture': false, 'extra': {'id': MD5(String(query.term))}}});
                 }
+                // send data to expecting callback
                 query.callback(data);
             });
         },
         width: 'element',
         minimumInputLength: 2
+    });
+    // connect with the App.observer
+    $(".contact-list").bind("change", function(event) {
+      var data = $(this).select2('data');
+
+      var contact = data['contact'];
+      if (contact['is_query'] == true) {
+      } else {
+        var email = (contact['extra']['email'] == undefined)? false : contact['email'];
+      }
+
+      App.dispatch('invitee.add', {'id': contact['extra']['id'], 'profile_picture': contact['picture'], 'name': contact['name'], 'email': email});
     });
 
     $.each($(".contact-list"), function(index, item){
@@ -1032,6 +1051,13 @@ $(document).ready(function(){
 
         }
 
+        self.registerCallback = function registerCallback(event_name, callback) {
+          self.widgets.observer.registerCallback(event_name, callback);
+        };
+        self.dispatch = function dispatch(event_name, value) {
+          self.widgets.observer.dispatch(event_name, value);
+        };
+
         // method to initialize 3rd part widgets that need to load after
         // our js events happen
         self.initializeWidgets = function initializeWidgets() {
@@ -1041,6 +1067,7 @@ $(document).ready(function(){
         };
 
         self.init = function init() {
+          initArgosPanOptia(self);
           self.initializeValuesFromCookie();// cookie basics
 
           self.setGlyntRuleset();
@@ -1244,15 +1271,6 @@ $(document).ready(function(){
     </p>
 {% endtplhandlebars %}
 
-{% tplhandlebars "hb-invite-signatories" %}
-<div id="invite-signatories">
-  <ul id="invitees">
-  {{#each invitee}}
-  <li><img src="" data-postload_src="{{profile_picture}}" />{{name}}</li>
-  {{/each}}
-  </ul>
-</div>
-{% endtplhandlebars %}
 
 {% if request.user.is_authenticated %}
 	{% include 'socialregistration/facebook_js/facebook_js.html' %}

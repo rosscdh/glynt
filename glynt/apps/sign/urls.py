@@ -1,11 +1,18 @@
 from django.conf.urls import patterns, url
-from django.views.generic.edit import FormView
+from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 
-from glynt.apps.sign.views import DocumentSignatureView
+from glynt.apps.sign.views import ProcessInviteToSignView, SignDocumentView, ProcessSignDocumentView, RenderSignatureImageView
 
 
 urlpatterns = patterns('',
-  url(r'^(?P<pk>\d+)/complete/$', DocumentSignatureView.as_view(template_name='sign/complete.html'), name='complete'),
-  url(r'^(?P<pk>\d+)/$', DocumentSignatureView.as_view(), name='default'),
+  # Invitation view, posted to from javascript widget
+  url(r'^(?P<pk>\d+)/invite/$', ProcessInviteToSignView.as_view(), name='invite'),
+  url(r'^(?P<pk>\d+)/invite/complete/$', TemplateView.as_view(template_name='sign/invite_complete.html'), name='invite_complete'),
+
+  # Invitee pages, where the invitee has the option to sign the document
+  url(r'^(?P<pk>\d+)/(?P<hash>\w+)/sign/$', ProcessSignDocumentView.as_view(), name='process_signature'),
+  url(r'^(?P<pk>\d+)/(?P<hash>\w+)/sign/complete/$', TemplateView.as_view(template_name='sign/process_signature_complete.html'), name='process_signature_complete'),
+  url(r'^(?P<pk>\d+)/signature/$', RenderSignatureImageView.as_view(), name='signature_pic'),
+  url(r'^(?P<pk>\d+)/(?P<hash>\w+)/$', SignDocumentView.as_view(), name='default'),
 )

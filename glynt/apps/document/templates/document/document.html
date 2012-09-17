@@ -1,5 +1,6 @@
 {% extends 'document/base.html' %}
 {% load i18n markup %}
+{% load sign_tags %}
 {% load url from future %}
 
 
@@ -39,6 +40,9 @@
           </div>
       </div>
     </div>
+
+    <div id="invite-to-sign" class="row" data-bind="visible: App.formControls.isLastStep()">&nbsp;</div>
+
     <div class="row">
         <div class="controls pull-right">
             <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-primary btn-small btn-prev" type="button" data-bind="click: App.formControls.prev">{% trans 'Previous' %}</button></span>
@@ -108,4 +112,5 @@ ul#step-list li.last_step{
 
 {% block js %}
 {% include 'document/inline/document.js' %}
+{% invite_to_sign userdoc '#invite-to-sign' %}
 {% endblock %}

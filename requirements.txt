@@ -5,6 +5,9 @@ django-extensions
 markup
 south
 #psycopg2
+django-celery
+django-templated-email
+PIL
 -e git+https://github.com/stard0g101/pybars.git#egg=pybars
 -e git+https://github.com/chrisglass/xhtml2pdf.git#egg=xhtml2pdf
 -e git+https://github.com/stard0g101/django-templatetag-handlebars.git#egg=django-templatetag-handlebars
@@ -24,14 +27,13 @@ facebook
 -e git+https://github.com/stard0g101/django-countries.git#egg=django-countries
 -e git+https://github.com/stard0g101/django-bootstrap.git#egg=bootstrap
 -e git+https://github.com/brack3t/django-braces.git#egg=django-braces
+-e git+https://github.com/videntity/python-signpad2image.git#egg=python-signpad2image
 # javascript markdown
 # hg clone https://code.google.com/p/pagedown/
 # possible multi format 
 # https://github.com/NetAngels/django-webodt.git
 # event pubsub
-#http://davidwalsh.name/snackjs
-#https://github.com/seatgeek/fuzzywuzzy/
-# -e git+https://github.com/stard0g101/django-forms-builder.git#egg=django-forms-builder
 # Handlebars helpers
 # https://github.com/danharper/Handlebars-Helpers.git
 # https://github.com/ivaynberg/select2.git
+

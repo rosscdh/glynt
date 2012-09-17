@@ -5,9 +5,12 @@
 <div id="owner_info" class="row">
 {% block owner_info %}{% endblock %}
 </div>
-<br/></br>
+<br/>
 <div class="row">
-  <div id="form">
+  <div id="doc" class="span7">
+    {% block document %}{% endblock %}
+  </div>
+  <div id="form" class="span4">
     {% block form %}{% endblock %}
   </div>
 </div>

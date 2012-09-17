@@ -1,8 +1,114 @@
 {% extends 'sign/base.html' %}
 {% load i18n markup %}
+{% load glynt_helpers %}
 {% load url from future %}
 
 
-{% block owner_info %}{% endblock %}
+{% block owner_info %}
+<p>Hi there {{ object.signee_name }}, please type your name below; or sign the document using the drawing pad made available if your browser supports it.</p>
+<p><b>Created By</b>: {{ userdoc.owner.get_full_name|default:userdoc.owner.username }}</p>
+<p><b>Created</b>: {{ userdoc.created_at }}</p>
+<p><b>Last Edited</b>: {{ userdoc.last_modified }}</p>
+{% endblock %}
 
-{% block form %}{% endblock %}
+{% block document %}
+<span id="document-md"></span>
+{% endblock %}
+
+{% block form %}
+{% if object.is_signed %}
+  <h3>{{ object.signee_name }} has signed, this document</h3>
+  <script id="signature-json" type="text/javascript">{{ object.signature_as_string|default:''|safe }}</script>
+  <div class="signaturePad">
+    <div class="sig sigWrapper">
+      <canvas class="pad" width="198" height="120"></canvas>
+    </div>
+    <b>Signed on:</b> {{ object.date_signed }}
+  </div>
+{% else %}
+  <form method="post" action="{% url 'sign:process_signature' pk=object.pk hash=object.key_hash %}" class="signaturePad">{% csrf_token %}
+    <label for="name">Print your name</label>
+    <input type="text" name="name" id="name" class="name" value="" />
+    <p class="typeItDesc">Review your signature</p>
+    <p class="drawItDesc">Draw your signature</p>
+    <ul class="sigNav">
+      <li class="typeIt"><a href="#type-it" class="current">Type It</a></li>
+      <li class="drawIt"><a href="#draw-it" >Draw It</a></li>
+      <li class="clearButton"><a href="#clear">Clear</a></li>
+    </ul>
+    <div class="sig sigWrapper">
+      <div class="typed"></div>
+      <canvas class="pad" width="198" height="120"></canvas>
+      <input type="hidden" name="output" class="output">
+    </div>
+    <div>
+      I hereby assert that this is a true and valid representation of my signature
+      and that I "{{ invitee_name }}" have read and affirm the document in question.
+    </div>
+    <button type="submit">I accept the terms of this agreement.</button>
+  </form>
+{% endif %}
+{% endblock %}
+
+{% block css %}
+<link href="{{ STATIC_URL }}css/jquery.signaturepad.css" rel="stylesheet">
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="{{ STATIC_URL }}/js/flashcanvas.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.signaturepad.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}/js/json2.min.js"></script>
+
+<script id="document-data" type="text/javascript">[{{ document_data|default:''|safe }}]</script>
+<script id="js-document" type="text/x-handlebars-template">
+{{ userdoc.body|default:userdoc.source_document.body|safe }}
+</script>
+<script id="document-controls" type="text/javascript">
+// use strict;
+// use warnings;
+$(document).ready(function(){
+    /**
+    * Primary view acts as a holder for the other views
+    */
+    function PageDocumentController() {
+        var self = this;
+
+        self.markdownConverter = new Markdown.Converter();
+        self.targetDocumentId = 'span#document-md';
+        self.compiledTemplate = Handlebars.compile($('#js-document').html()); // must not be ko.observable
+
+        self.render = function render() {
+            var data = $.parseJSON($('script#document-data').html());
+            data = data[0];
+            html = self.renderMarkdown(self.compiledTemplate(data));
+            $(self.targetDocumentId).html(html);
+        }
+
+        self.renderMarkdown = function renderMarkdown(md) {
+          return self.markdownConverter.makeHtml(md);
+        }
+
+
+        self.init = function init() {
+          self.render();
+        };
+
+        self.init();
+    }
+
+    // ----- KO Instance -----
+    App = new PageDocumentController();
+    // ----- KO Bindings -----
+    ko.applyBindings(App);
+
+    {% if object.is_signed %}
+      sig = $('#signature-json').html();
+      $('.signaturePad').signaturePad({displayOnly:true}).regenerate(sig);
+    {% else %}
+      signPad = $('.signaturePad').signaturePad();
+    {% endif %}
+
+
+});
+</script>
+{% endblock %}

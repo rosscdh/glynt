@@ -166,6 +166,7 @@ HELPER_APPS = (
     'socialregistration',
     'socialregistration.contrib.facebook_js',
     #'socialregistration.contrib.linkedin_js',
+    'djcelery',
     'bootstrap',
     # Userena
     'userena',
@@ -213,7 +214,6 @@ CATEGORIES_SETTINGS = {
 }
 
 if DEBUG:
-
     if not IS_TESTING:
         MIDDLEWARE_CLASSES += (
         'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -263,6 +263,23 @@ LOGGING = {
         },
     }
 }
+
+# Signature Image generator
+BLANK_SIG_IMAGE = os.path.join(STATIC_ROOT, 'signature/blank_sig.png'),
+NO_SIG_IMAGE = os.path.join(STATIC_ROOT, 'signature/no_sig.png'),
+
+# You can also use a class directly
+from templated_email.backends.vanilla_django import TemplateBackend
+TEMPLATED_EMAIL_BACKEND = TemplateBackend
+TEMPLATED_EMAIL_TEMPLATE_DIR = 'email/'
+TEMPLATED_EMAIL_DJANGO_SUBJECTS = {
+    'invite_to_sign': 'You have been invited to sign',
+}
+
+BROKER_URL = 'amqp://guest:guest@localhost:5672/'
+
+import djcelery
+djcelery.setup_loader()
 
 try:
     from local_settings import *
