@@ -2,6 +2,7 @@
 {% load glynt_helpers %}
 {% load url from future %}
 
+<script id="inviteeList">{{ invitee_list|default:""|safe }}</script>
 <script id="document-default_data" type="text/javascript">[{{ default_data|default:''|safe }}]</script>
 <script id="js-document" type="text/x-handlebars-template">
 {{ userdoc.body|default:object.body|safe }}
@@ -116,13 +117,13 @@ $(document).ready(function(){
     // connect with the App.observer
     $(".contact-list").bind("change", function(event) {
       var data = $(this).select2('data');
-console.log(data)
+
       var contact = data['contact'];
       if (contact['is_query'] == true) {
       } else {
         var email = (contact['extra']['email'] == undefined)? false : contact['email'];
       }
-console.log('invitee.add for contact-list')
+
       App.dispatch('invitee.add', {'id': contact['extra']['id'], 'profile_picture': contact['picture'], 'name': contact['name'], 'email': email});
     });
 
@@ -1060,13 +1061,13 @@ console.log('invitee.add for contact-list')
         // method to initialize 3rd part widgets that need to load after
         // our js events happen
         self.initializeWidgets = function initializeWidgets() {
-          initArgosPanOptia(self);
           initContactList(self);
           initConditionalCallback(self);
           initSelect2(self);
         };
 
         self.init = function init() {
+          initArgosPanOptia(self);
           self.initializeValuesFromCookie();// cookie basics
 
           self.setGlyntRuleset();

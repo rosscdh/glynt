@@ -49,6 +49,7 @@ class MyDocumentView(DocumentView):
     context['object'] = self.document
     context['document'] = self.document.body
     context['default_data'] = json.dumps(self.user_document.data)
+    context['invitee_list'] = json.dumps([{'id': i.pk, 'name': i.meta_data['to_name'], 'email': i.meta_data['to_email'], 'is_signed': i.is_signed} for i in self.user_document.documentsignature_set.all()])
 
     try:
       context['form_set'] = self.document.flyform.flyformset()
@@ -64,7 +65,7 @@ class MyDocumentView(DocumentView):
 # TODO this view represents both the create and the form validate (edit) views
 # need to seperate them into two views
 class ClientCreatedDocumentValidateFormView(View):
-  """ A View to Simply Validate teh current form and return errors if any
+  """ A View to Simply Validate the current form and return errors if any
   Does not actually save data, saving data is done via the cookie """
   def post(self, request, *args, **kwargs):
     userdoc_pk = request.POST.get('id', None)

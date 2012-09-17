@@ -15,7 +15,7 @@ class DocumentSignature(models.Model):
   hash_data = models.CharField(blank=False, max_length=255)
   user = models.ForeignKey(User, blank=True, null=True)
   signature = JSONField(blank=True, null=True)
-  meta_data = JSONField(blank=True, null=True)
+  meta_data = JSONField(blank=True, null=True, default={})
   is_signed = models.BooleanField(default=False)
   date_invited = models.DateTimeField(auto_now=False, auto_now_add=True)
   date_signed = models.DateTimeField(blank=True, null=True, auto_now=False, auto_now_add=False)

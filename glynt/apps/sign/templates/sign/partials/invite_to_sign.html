@@ -30,7 +30,7 @@
     <input type="hidden" name="csrfmiddlewaretoken" value="{{csrf_token}}" />
     <ul id="invitees">
     {{#each invitees}}
-    <li class="{{#if has_signed}}has_signed{{/if}}{{#unless email}} no_email{{/unless}}">
+    <li class="{{#unless has_signed}}has_not_signed{{^}}has_signed{{/unless}} {{#unless email}}no_email{{/unless}}">
       <input type="hidden" id="id_list-name" name="name" value="{{name}}" />
       <input type="hidden" id="id_list-email" name="email" value="{{email}}" />
       {{#if profile_picture}}<img class="{{#if has_signed}}has_signed{{/if}}" src="" data-postload_src="{{profile_picture}}" />{{/if}}
@@ -219,12 +219,26 @@ $(document).ready(function(){
       self.add(contact_ob.id, contact_ob.email, contact_ob.name, contact_ob.profile_picture, false);
     };
 
+    self.argosPanOptiaData = function argosPanOptiaData(invitee_list) {
+      invitee_list = $.parseJSON(invitee_list);
+
+      $.each(invitee_list, function(index, contact_ob) {
+        if (contact_ob.id && contact_ob.name) {
+          self.add(contact_ob.id, contact_ob.email, contact_ob.name, contact_ob.profile_picture, contact_ob.is_signed);
+        };
+      });
+    };
+
     self.init = function init(params) {
       self.target_element = params['target_element'];
       self.setupInterface();
 
       // register our callback with the App observer
+      App.registerCallback('invitee.data', self.argosPanOptiaData);
       App.registerCallback('invitee.add', self.argosPanOptiaCallback);
+
+      // send the data to the invite widget
+      App.dispatch('invitee.data', $('script#inviteeList').html());
 
       self.render();
     };
@@ -256,7 +270,11 @@ $(document).ready(function(){
   ul#invitees li.no_email {
     border:solid #c00 2px;
   }
+  ul#invitees li.has_not_signed {
+    background-color:#fca;
+  }
   ul#invitees li.has_signed {
     border:solid #0c0 2px;
+    background-color:#0c0;
   }
 </style>

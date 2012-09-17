@@ -36,6 +36,7 @@ class ProcessInviteToSignView(BaseFormView):
     names = request.POST.getlist('name')
     emails = request.POST.getlist('email')
     invitees = [(emails[index], name) for index, name in enumerate(names)]
+    invitee_created_list = []
 
     for email, name in invitees:
       key_hash, hash_data = encode_data([doc.pk, email])
@@ -46,9 +47,10 @@ class ProcessInviteToSignView(BaseFormView):
       }
       form = DocumentSignatureForm({'document': doc.pk, 'key_hash': key_hash, 'hash_data': hash_data, 'meta_data': meta_data})
       if form.is_valid():
-        form.save()
+        invitee = form.save()
+        invitee_created_list.append({'pk': invitee.pk, 'email': invitee.meta_data['to_email'], 'name': invitee.meta_data['to_name'], 'key_hash': key_hash})
 
-    return HttpResponse('[{"key_hash":%s, "hash_data": %s}]' % (key_hash, hash_data), status=200)
+    return HttpResponse('%s' % (invitee_created_list), status=200)
 
 
 class SignDocumentView(UpdateView):

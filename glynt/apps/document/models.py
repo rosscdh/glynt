@@ -61,7 +61,7 @@ class ClientCreatedDocument(models.Model):
   slug = models.SlugField(unique=True, blank=False, null=True, max_length=255)
   body = models.TextField(blank=True, null=True)
   data = JSONField(blank=True, null=True)
-  meta_data = JSONField(blank=True, null=True) # Stores data on num_signatures vs total signatures
+  meta_data = JSONField(blank=True, null=True, default={}) # Stores data on num_signatures vs total signatures
   created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
   last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
   is_deleted = models.BooleanField(default=False)
