@@ -78,6 +78,20 @@ h2 { font-size: 28px; }
 }
 
 /* Dashboard */
+table#my-documents td{
+	padding-top:10px;
+}
+table#my-documents td.created{
+	font-size:11px;
+	color:#AAA;
+}
+table#my-documents td input {
+	margin-top:-3px;
+}
+table#my-documents td a.doc-title{
+	font-size:16px;
+	padding-left:5px;
+}
 body.dashboard{
 	background-color:#f2f7f9;
 }
@@ -134,7 +148,12 @@ ul.add-active{
 }
 
 
-/* Authoring Screens  */
+/* Assembly Screen  */
+/*.document-questions {
+	position:fixed;
+	top:60px;
+}*/
+
 .document-questions h3 {
 	font-size:20px;
 }
@@ -256,4 +275,7 @@ ul.add-active{
 .btn {
 	font-size:16px;
 	font-weight:;
+}
+.btn-mini {
+	font-size:13px;
 }
