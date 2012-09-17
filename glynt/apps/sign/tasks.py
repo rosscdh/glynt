@@ -4,7 +4,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 
 from templated_email import send_templated_mail
-from celery import task
+from celery.task import task
 
 @task()
 def send_signature_invite_email(**kwargs):
