@@ -7,7 +7,7 @@
             <field type="TextField" name="summary">A Basic test of fields and experimental items</field>
             <field type="TextField" name="body">##{{document_title}}##
 
-<br/><br/>
+
 Hi my name is {{customer_name}}; I am based in {{customer_country}}. And I have a great friend called **{{friend_name}}**
 
 I would like to spend {{budget}} on a gift that would ensure that **{{friend_name}}** is happy and will love me forever.

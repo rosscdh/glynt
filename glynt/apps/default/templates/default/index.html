@@ -9,77 +9,42 @@
 
 <div class="container">
 	<div class="row">
-		<div class="span6">
-			<img src="/static/img/homeimg.jpg">
+		<div class="leader one span12">
 		</div>
-		<div class="span6">
-			<div class="hero-unit" style="padding:60px 40px;">
-				<h2>
-					Your HR docs sorted.
-				</h2>
-				<br />
-				<p>Welcome to {{ PROJECT_NAME }}. The free, easy and quick way to generate all of your HR documents. </p>
-				<p>Join thousands of people saving time and money with {{ PROJECT_NAME }}.</p>
-				<br />
-				<div style="text-align:center">
-					<a class="btn btn-success btn-large" href="#" style="font-size:25px">
-						Join for free now
-					</a>
-				</div>
+	</div>
+	<div class="row">
+		<div class="span12 desc">
+			<br />
+			<h1>Your people matter.</h1>
+	        <h4>Create, sign and store all your Human Resources documents in one place.</h4>
+			<div class="s">
+				<a href="" class="btn btn-green btn-large">Sign In</a>  <a href="" class="btn btn-lgrey btn-large">Learn More</a> <!-- <small>It's totally free</small> --></h3>
 			</div>
+			<br />
+			<br />
+		</div>
+	</div>
+	<div class="row">
+		<div class="leader two span12">
 		</div>
 	</div>
 	<div class="row">
 		<div class="span12">
-			<hr/>
-			<div class="well">
-		        <h3>{{ PROJECT_NAME }} has changed the legal document space forever. <small>- Richard Granat</h3>
-		    </div>		
-			<hr />
+			<br />
+			<div class="ball"></div>
+			<br />
 		</div>
+		<br />
 	</div>
 	<div class="row">
-		<div class="span6">
-			<h2>Available Documents</h2>
+		<div class="span12 pagination-centered">
+			<h1>Create your HR Docs in minutes</h1>
 			<br />
-			<ul>
-				<li>Shareholders agreement</li>
-				<li>Employment contract</li>
-			</ul>
+			<p>{{ PROJECT_NAME }} is the easiest way to generate, sign and store your complete suite of human <br/> resource documents.  Lorem ipsum, dollar ismit.</p>
+			<br />
+			<img src="http://placehold.it/640x480">
 		</div>
 	</div>
 </div>
-
-
-<!-- <div class="hero-unit">
-	<h2>Glynt - Document Automation for the 21st century</h2>
-	<em>Example of a partial Legal Will generator</em>
-	<ol>
-		<li>Multi-step Dynamic forms</li>
-		<li>Automatic form generation</li>
-		<li>Step display rulsets</li>
-		<li>Simple best practice templating, systems proven in production (django templates/handlebarsjs)</li>
-		<li>Easily integrated into existing data store</li>
-		<li>Best practice implementation using modern proven frameworks and technologies</li>
-		<li>PDF/doc/rtf generation using proven in production open source technology</li>
-		<li>Currently db driven document store</li>
-		<li>Easily hooked up to social/single sign in tools</li>
-		<li>Defined and standardised interface to user data and storage thereof</li>
-		<li>Still in development... but we only started on it this weekend ;)</li>
-	</ol>
-</div>
-<div class="row">
-<h3>Basic Examples</h3>
-<p>Please bear in mind this Document Automation framework is a work in progress</p>
-<ul>
-	<li><a href="{% url 'document:view' slug='legal-will' %}">Shareholders agreement</a></li>
-</ul>
-</div> -->
-
-<!-- <div class="row">
-{% block doc_cats %}
-{% document_categories_home %}
-{% endblock %}
-</div> -->
 
 {% endblock %}
