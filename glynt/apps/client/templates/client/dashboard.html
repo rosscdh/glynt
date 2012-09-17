@@ -3,6 +3,9 @@
 {% load i18n %}
 {% load templatetag_handlebars %}
 
+{% block bodyclass %}dashboard{% endblock %}
+
+
 {% block body %}
 <!-- <div class="row">
   <div class="span12">
@@ -32,63 +35,61 @@
   <div class="span12">
     <div class="row">
 	    <div class="span3 sidebar">
-			<div style="text-align:center;">
-				<a href="#" class="btn btn-green" id="toggle-docs">Create New</a>
-		  	</div>
 			  <br />
+				<a href="#" class="btn btn-green" id="toggle-docs" style="margin-left:13px">Create New Doc</a>
+				<br />
+				<br />
 		      <ul class="nav nav-list">
-				  <li class="nav-header">Your Documents</li>
-				  
-		        <li class="active">
-		          <a href="#"> {% trans 'All Documents' %}</a>
-		        </li>
-		        <li><a href="#">{% trans 'Incomplete Documents' %}</a></li>
-
+				  <li class="nav-header">All Documents</li>
+		          <li class="active"><a href="#"> {% trans 'All Documents' %}</a></li>
+		          <li><a href="#">{% trans 'Incomplete Documents' %}</a></li>
+				  <li class="divider"></li>
+				  <li class="nav-header">By Filter</li>
+		          <li class=""><a href="#"> {% trans 'Out for signing' %}</a></li>
+		          <li><a href="#">{% trans 'Recently signed' %}</a></li>
+		          <li><a href="#">{% trans 'Awaiting your signature' %}</a></li>
 		      </ul>
-			  
 	    </div>
 		<div class="span9" id="doc-list">
-		  	<h3 class="">Choose Document</h3>
+		  	<div class="doc-body">
+				<h3 class="">Choose Document</h3>
 				<ul>
 		          {% for d in public_document_list %}
 		          <li><a class="template-document" href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a></li>
 		          {% endfor %}
 				</ul>
+			</div>
 		</div>
 	    <div class="span9" id="file-list">
-		  <h3 class="span5">All Documents</h3>
-			  <div class="doccount">3</div>
-		  
-		  
-	      <table id="my-documents" class="table table-stripped table-border table-hover">
-		   <tr>
-			 <th>Document Name</th>
-
-			 <th>Action</th>
-		   </tr>
-	      {% for d in my_document_list %}
-	      <tr>
-	        <td class="span5">
-	          <input type="checkbox"></input> <a href="{% url 'document:my_view' slug=d.slug %}">{{ d.name }}</a>
-	        </td>
-	        <td>
-    
-
-		      <div class="btn-group pull-right">
-				  <button class="btn dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i> <span class="caret"></span></button>
-				  <ul class="dropdown-menu">
-			                  
-				      <li><a id="clone-{{ d.pk }}" href="#clone" data-url="{% url 'document:my_clone' pk=d.pk %}" data-pk="{{ d.pk }}" class="clone-my-document">{% trans 'Clone' %}</a></li>
-			          <li><a id="export-{{ d.pk }}" href="{% url 'document:export' slug=d.slug %}" target="_BLANK" data-url="{% url 'document:export' slug=d.slug %}" data-pk="{{ d.pk }}" class="">{% trans 'Download PDF' %}</a></li>
-			          <li><a id="delete-{{ d.pk }}" href="#delete" data-url="{% url 'document:my_delete' pk=d.pk %}" data-pk="{{ d.pk }}" class="delete-my-document">{% trans 'Delete' %}</a></li>
-		          </ul>
-			  </div>                                 
-	        </td>
-	      </tr>
-	      {% endfor %}
-	      </table>
-	    </div>
-	  </div>
+		    <div class="doc-body">
+			    <h3 class="">All Documents</h3>
+				    <!-- <div class="doccount">3</div> -->
+		  		      <table id="my-documents" class="table table-stripped table-border table-hover">
+						  <tr>
+							 <th>Document Name</th>
+							 <th>Action</th>
+						   </tr>
+					      {% for d in my_document_list %}
+					      <tr>
+					        <td class="span5">
+					          <input type="checkbox"></input> <a href="{% url 'document:my_view' slug=d.slug %}">{{ d.name }}</a>
+					        </td>
+					        <td>
+						      <div class="btn-group pull-right">
+								  <button class="btn dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i> <span class="caret"></span></button>
+								  <ul class="dropdown-menu">
+								      <li><a id="clone-{{ d.pk }}" href="#clone" data-url="{% url 'document:my_clone' pk=d.pk %}" data-pk="{{ d.pk }}" class="clone-my-document">{% trans 'Clone' %}</a></li>
+							          <li><a id="export-{{ d.pk }}" href="{% url 'document:export' slug=d.slug %}" target="_BLANK" data-url="{% url 'document:export' slug=d.slug %}" data-pk="{{ d.pk }}" class="">{% trans 'Download PDF' %}</a></li>
+							          <li><a id="delete-{{ d.pk }}" href="#delete" data-url="{% url 'document:my_delete' pk=d.pk %}" data-pk="{{ d.pk }}" class="delete-my-document">{% trans 'Delete' %}</a></li>
+						          </ul>
+							  </div>                                 
+					        </td>
+					      </tr>
+		      			 {% endfor %}
+		      	   	</table>
+		  	  	</div>
+	    	</div>
+	  	</div>
   </div>
 </div>
 {% endblock %}
@@ -253,6 +254,7 @@ $("#document-template-search").select2({
 	$('div#doc-list').toggle();
 	// $('a#toggle-docs').toggleClass('btn-red');
 	$('a#toggle-docs').toggleClass('active');
+	$('ul.nav-list').toggleClass('add-active');
   });
 
 });

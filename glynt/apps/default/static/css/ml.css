@@ -20,9 +20,11 @@ body {
 	font-size:22px;
 	font-family:"HelveticaNeue-Light";
 	font-weight:100;
-	padding-bottom:0px;
+	padding-bottom:10px;
+	padding-left:27px;
+	margin-left:0px;
+	background:url('/static/img/logo-nav.png') no-repeat 0px 14px;
 }
-
 h1 { font-size: 35px;letter-spacing:0.03em; }
 h2 { font-size: 28px; }
 
@@ -76,6 +78,9 @@ h2 { font-size: 28px; }
 }
 
 /* Dashboard */
+body.dashboard{
+	background-color:#f2f7f9;
+}
 div.doccount {
 	width:50px;
 	height:40px;
@@ -90,16 +95,60 @@ div.doccount {
 	margin-bottom:10px;
 }
 div.sidebar {
-	background-color:#dae8ed;
-	min-height:600px;
 	margin-top:-30px;
 	padding-top:42px;
 }
+div.sidebar .nav-list a{
+	font-size:14px;
+	padding-top:7px;
+	padding-bottom:7px;
+
+}
 div.sidebar .nav-list .active a, div.sidebar .nav-list > .active > a:hover {
-	background-color:#69c3e5;
+	background-color:#c0d6dd;
+	color:#FFF;
+	text-shadow: none;
+	border:1px solid #c0d6dd;
+	border-right:none;
+	z-index:1;
+	border-radius:5px 0px 0px 5px;
+}
+div.doc-body{
+	background-color:#FFF;
+	margin-left:0px;
+	padding:10px 25px;
+	width:680px;
+	border:1px solid #d9e5e9;
+	z-index:2;
+	border-radius:8px;
+	min-height:500px;
 }
 div#doc-list{
 	display:none;
+}
+div#doc-list, div#file-list{
+	margin-left:0px;
+}
+ul.add-active{
+	opacity:0.6;
+}
+
+
+/* Authoring Screens  */
+.document-questions h3 {
+	font-size:20px;
+}
+.document-questions label {
+	margin-top:10px;
+}
+.document-questions ul, .document-questions li {
+	margin-left:0px;
+}
+.draft-document {
+	margin-left:50px;
+	border:1px solid #ccc;
+	padding:30px 50px;
+	font:Courier!important;
 }
 
 
