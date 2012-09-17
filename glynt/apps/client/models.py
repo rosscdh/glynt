@@ -32,6 +32,11 @@ class ClientProfile(UserenaBaseProfile):
   country = CountryField(default='US', null=True)
   state = models.CharField(max_length=64, null=True)
 
+  def short_name(self):
+    """ Returns A. LastName """
+    user = self.user
+    return u'%s. %s' % (user.first_name[0], user.last_name,)
+
   def get_mugshot_url(self):
     """ Override the default """
     # @TODO on save to thumbnail image; write a task that

@@ -1214,8 +1214,8 @@ $(document).ready(function(){
         return(value);
     }, { 
         indicator : 'Saving...',
-        tooltip   : 'Click to create new document...',
-        placeholder : 'Click to create new document...',
+        tooltip   : 'Click to create your new document...',
+        placeholder : 'Click to create your new document...',
         type      : 'textarea',
         submit    : '{% trans "Save" %}',
     });

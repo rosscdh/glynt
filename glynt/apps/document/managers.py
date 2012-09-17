@@ -21,7 +21,7 @@ class PrivateDocumentManager(DocumentManager):
 class ClientCreatedDocumentManager(models.Manager):
   """ Default handler of clientdocuments objects """
   def by_user(self, user):
-    return self.get_query_set().filter(owner=user)
+    return self.get_query_set().select_related('owner', 'source_document').filter(owner=user)
 
 
 class PublicClientCreatedDocumentManager(ClientCreatedDocumentManager):

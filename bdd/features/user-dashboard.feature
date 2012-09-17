@@ -20,7 +20,7 @@ Feature: Logged in User Dashboard
     When I am logged in as "userA"
     Then I am on "/client"
     And I follow "Test Buy a Gift Contract"
-    Then I should see "Click to create new document..."
+    Then I should see "Click to create your new document..."
     And I click "h2#document-title"
     Then I should see a "h2#document-title form textarea" element
     And I should see a "h2#document-title form button" element
