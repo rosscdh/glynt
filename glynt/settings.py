@@ -269,8 +269,7 @@ BLANK_SIG_IMAGE = os.path.join(STATIC_ROOT, 'signature/blank_sig.png'),
 NO_SIG_IMAGE = os.path.join(STATIC_ROOT, 'signature/no_sig.png'),
 
 # You can also use a class directly
-from templated_email.backends.vanilla_django import TemplateBackend
-TEMPLATED_EMAIL_BACKEND = TemplateBackend
+TEMPLATED_EMAIL_BACKEND = 'templated_email.backends.vanilla_django.TemplateBackend'
 TEMPLATED_EMAIL_TEMPLATE_DIR = 'email/'
 TEMPLATED_EMAIL_DJANGO_SUBJECTS = {
     'invite_to_sign': 'You have been invited to sign',

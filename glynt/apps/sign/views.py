@@ -48,9 +48,24 @@ class ProcessInviteToSignView(BaseFormView):
       form = DocumentSignatureForm({'document': doc.pk, 'key_hash': key_hash, 'hash_data': hash_data, 'meta_data': meta_data})
       if form.is_valid():
         invitee = form.save()
-        invitee_created_list.append({'pk': invitee.pk, 'email': invitee.meta_data['to_email'], 'name': invitee.meta_data['to_name'], 'key_hash': key_hash})
+        invitee_created_list.append({"pk": invitee.pk, "email": invitee.meta_data['to_email'], "name": invitee.meta_data['to_name'], "key_hash": key_hash})
 
-    return HttpResponse('%s' % (invitee_created_list), status=200)
+    return HttpResponse('%s' % (json.dumps(invitee_created_list)), status=200)
+
+
+class DeleteInviteToSignView(BaseFormView):
+  http_method_names = ['delete']
+
+  def delete(self, request, *args, **kwargs):
+    """ Delete the specified signature object """
+    pk = kwargs['invitation_pk']
+    document_signature = get_object_or_404(DocumentSignature, pk=pk)
+
+    try:
+      document_signature.delete()
+      return HttpResponse('%s' % json.dumps({'id': pk, 'deleted': True}), status=200)
+    except:
+      return HttpResponse('%s' % json.dumps({'id': pk, 'deleted': False}), status=501)
 
 
 class SignDocumentView(UpdateView):
@@ -81,6 +96,7 @@ class SignDocumentView(UpdateView):
 
     return context
 
+
 class ProcessSignDocumentView(ProcessFormView):
   """ View to accept the invitees signature and congratulate them on success """
   http_method_names = ['post']
@@ -97,6 +113,7 @@ class ProcessSignDocumentView(ProcessFormView):
       document_signature.save()
 
     return redirect(reverse('sign:process_signature_complete', kwargs={'pk': document_signature.pk, 'hash': document_signature.key_hash}))
+
 
 class RenderSignatureImageView(BaseDetailView):
   http_method_names = ['get']

@@ -905,7 +905,7 @@ $(document).ready(function(){
 
             var csrf_token = self.getCSRFToken();
             var data = {
-                csrfmiddlewaretoken: csrf_token.val(),
+                csrfmiddlewaretoken: csrf_token,
                 current_progress: $.cookie('{{ userdoc.cookie_name }}'),
             };
 
@@ -942,7 +942,7 @@ $(document).ready(function(){
         {% endif %}
 
         self.getCSRFToken = function getCSRFToken() {
-          var csrf_token = $('form.bind-document:first').find('input[type=hidden]:first')
+          var csrf_token = $.cookie('csrftoken');
           return csrf_token;
         }
 
@@ -951,7 +951,7 @@ $(document).ready(function(){
 
             var csrf_token = self.getCSRFToken();
             var data = {
-                csrfmiddlewaretoken: csrf_token.val(),
+                csrfmiddlewaretoken: csrf_token,
                 current_progress: $.cookie('{{ userdoc.cookie_name }}'),
                 name: $('form#userdoc-name-form input#id_name').val(),
                 id: $('form#userdoc-name-form input#id_id').val()

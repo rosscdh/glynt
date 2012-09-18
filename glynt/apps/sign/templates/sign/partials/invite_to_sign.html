@@ -57,21 +57,24 @@ $(document).ready(function(){
   */
   inviteToSignWidget = function inviteToSignWidget(params) {
     var self = this;
-    self.csrf_token = App.getCSRFToken();
+
     self.target_element = params['target_element'];
     self.compiledTemplate = Handlebars.compile($('#hb-invite-signatories').html());
     self.compiledDetailTemplate = Handlebars.compile($('#hb-signatory-detail').html());
     self.inviteForm = 'form#send-invite';
     self.context = params;
-    self.context['csrf_token'] = self.csrf_token.val();
+    self.context['csrf_token'] = $.cookie('csrftoken');;
     self.context['invitees'] = (params['invitees'] != undefined) ? params['invitees']: [];
 
-    self.findInvitee = function findInvitee(id) {
+    self.findInvitee = function findInvitee(id, find_by_key) {
       invitee = false;
       found_index = false;
+      if (find_by_key == undefined) {
+        find_by_key = 'id';
+      }
       if (id) {
         $.each(self.context['invitees'], function(index, item) {
-          if (item['id'] == id) {
+          if (item[find_by_key] == id) {
             invitee = item;
             found_index = index;
             return true;
@@ -125,6 +128,7 @@ $(document).ready(function(){
       $.each(self.context['invitees'], function(index, item){
         if (item.id == id) {
           self.context['invitees'].splice(index, 1);
+          self.removeInvitation(item.id);
           return false;
         }
       });
@@ -141,19 +145,44 @@ $(document).ready(function(){
     };
 
     self.render = function render() {
+      self.context['csrf_token'] =  $.cookie('csrftoken'); // update the csrf token and make it current
       self.target_element.html(self.compiledTemplate(self.context));
+    };
+
+    self.removeInvitation = function removeInvitation(id) {
+      self.processRequest("{% url 'sign:delete_invite' pk=document.pk invitation_pk=0 %}".replace('/0/', '/'+ id +'/'), {}, 'DELETE', function(data, textStatus, jqXHR){ return null; }, function(xhrObj){ xhrObj.setRequestHeader("X-CSRFToken", $.cookie('csrftoken')); });
     };
 
     self.sendInvitation = function sendInvitation() {
       var form = $(self.inviteForm);
+      self.processRequest("{% url 'sign:process_invite' pk=document.pk %}", form.serialize(), 'POST', function(data, textStatus, jqXHR){
+        // need to update the local invitees with their new pk values
+        $.each(data, function(index, item){
+          invitee = self.findInvitee(item.email, 'email')
+          if (invitee) {
+            self.context['invitees'][invitee.index].id = item.pk;
+          }
+        });
+      });
+    };
+
+    self.processRequest = function processRequest(url, data, type, successCallback, beforeSendCallback) {
+      if (beforeSendCallback == undefined) {
+        beforeSendCallback = null;
+      }
+      var form = $(self.inviteForm);
       $.ajax({
-        type: 'POST',
-        url: "{% url 'sign:invite' pk=document.pk %}",
-        data: form.serialize(),
+        type: type,
+        beforeSend: beforeSendCallback,
+        url: url,
+        data: data,
       })
       .success(function(data, textStatus, jqXHR) {
           var response_data = $.parseJSON(data);
-        self.context['message'] = 'success';
+          self.context['message'] = 'success';
+          if (successCallback != undefined) {
+            successCallback(response_data, textStatus, jqXHR);
+          }
       })
       .error(function(jqXHR, textStatus, errorThrown) { 
         self.context['message'] = 'Error: ' + errorThrown;
