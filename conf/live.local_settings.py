@@ -40,10 +40,10 @@ LINKEDIN_CONSUMER_KEY = 'gnesv6zvhzgn'
 LINKEDIN_CONSUMER_SECRET_KEY = '3eTYERhJZd4UJSjM'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.webfaction.com'
-EMAIL_HOST_USER = 'glynt'
-EMAIL_HOST_PASSWORD = 'test2007'
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'lawpal'
+EMAIL_HOST_PASSWORD = '0113633alex'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'glynt@dev.weareml.com'
 SERVER_EMAIL = 'glynt@dev.weareml.com'
-# EMAIL_PORT = ''
-# EMAIL_USE_TLS = ''

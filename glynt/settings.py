@@ -278,6 +278,14 @@ TEMPLATED_EMAIL_DJANGO_SUBJECTS = {
 
 BROKER_URL = 'amqp://guest:guest@localhost:5672/'
 
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'lawpal'
+EMAIL_HOST_PASSWORD = '0113633alex'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'glynt@dev.weareml.com'
+SERVER_EMAIL = 'glynt@dev.weareml.com'
+
 import djcelery
 djcelery.setup_loader()
 
