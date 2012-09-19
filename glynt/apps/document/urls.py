@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 
 from glynt.apps.document.views import DocumentView, MyDocumentView, CreateDocumentView, EditDocumentView, DocumentByCategoryListView
 from glynt.apps.document.views import DocumentExportView, CloneClientCreatedDocumentView, DeleteClientCreatedDocumentView, UndoDeleteClientCreatedDocumentView
-from glynt.apps.document.views import ClientCreatedDocumentValidateFormView, PersistClientCreatedDocumentProgressView 
+from glynt.apps.document.views import ValidateClientCreatedDocumentFormView, PersistClientCreatedDocumentProgressView 
 
 from glynt.apps.flyform.forms import TmpStepCreator
 
@@ -24,6 +24,6 @@ urlpatterns = patterns('',
     url(r'^(?P<slug>.+)/edit/$', login_required(EditDocumentView.as_view()), name='edit'),
     url(r'^(?P<slug>.+)/export/$', login_required(DocumentExportView.as_view()), name='export'),
     # is not login_required as we want users to be redirected to login
-    url(r'^(?P<slug>.+)/save/$', ClientCreatedDocumentValidateFormView.as_view(), name='save_progress'),
+    url(r'^(?P<slug>.+)/save/$', ValidateClientCreatedDocumentFormView.as_view(), name='validate_form'),
     url(r'^(?P<slug>.+)/$', DocumentView.as_view(template_name='document/preview-document.html'), name='view'),
 )

@@ -959,7 +959,7 @@ $(document).ready(function(){
 
             $.ajax({
               type: 'POST',
-              url: "{% url 'document:save_progress' slug=object.slug %}",
+              url: "{% url 'document:validate_form' slug=object.slug %}",
               data: data,
             })
             .success(function(data, textStatus, jqXHR) {

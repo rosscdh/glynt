@@ -63,7 +63,7 @@ class MyDocumentView(DocumentView):
 
 # TODO this view represents both the create and the form validate (edit) views
 # need to seperate them into two views
-class ClientCreatedDocumentValidateFormView(View):
+class ValidateClientCreatedDocumentFormView(View):
   """ A View to Simply Validate the current form and return errors if any
   Does not actually save data, saving data is done via the cookie """
   def post(self, request, *args, **kwargs):

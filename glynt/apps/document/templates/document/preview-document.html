@@ -676,7 +676,7 @@ $(document).ready(function(){
         	return self.markdownConverter.makeHtml(md);
         }
 
-        self.saveProgress = function saveProgress() {
+        self.validateStepForm = function validateStepForm() {
 
             var csrf_token = $('form.bind-document:first').find('input[type=hidden]:first')
             var data = {
@@ -688,7 +688,7 @@ $(document).ready(function(){
 
             $.ajax({
               type: 'POST',
-              url: "{% url 'document:save_progress' slug=object.slug %}",
+              url: "{% url 'document:validate_form' slug=object.slug %}",
               data: data,
             })
             .success(function(data, textStatus, jqXHR) {
@@ -727,7 +727,7 @@ $(document).ready(function(){
     {% if userdoc_form %}
     $('#document-title.editable').editable(function(value, settings) { 
         $('form#userdoc-name-form input#id_name').val(value);
-            App.saveProgress()
+            App.validateStepForm()
             return(value);
     }, {
         indicator : 'Saving...',
