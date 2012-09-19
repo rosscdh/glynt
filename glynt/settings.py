@@ -172,6 +172,7 @@ HELPER_APPS = (
     'userena',
     'guardian',
     'easy_thumbnails',
+    'notification',
 )
 
 # Handle south and its breaking tests
