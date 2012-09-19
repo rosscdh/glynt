@@ -268,22 +268,15 @@ LOGGING = {
 BLANK_SIG_IMAGE = os.path.join(STATIC_ROOT, 'signature/blank_sig.png'),
 NO_SIG_IMAGE = os.path.join(STATIC_ROOT, 'signature/no_sig.png'),
 
-# You can also use a class directly
 TEMPLATED_EMAIL_BACKEND = 'templated_email.backends.vanilla_django.TemplateBackend'
 TEMPLATED_EMAIL_TEMPLATE_DIR = 'email/'
+TEMPLATED_EMAIL_FILE_EXTENSION = 'email'
 TEMPLATED_EMAIL_DJANGO_SUBJECTS = {
     'invite_to_sign': 'You have been invited to sign',
 }
 
 BROKER_URL = 'amqp://guest:guest@localhost:5672/'
 
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'lawpal'
-EMAIL_HOST_PASSWORD = '0113633alex'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'glynt@dev.weareml.com'
-SERVER_EMAIL = 'glynt@dev.weareml.com'
 
 import djcelery
 djcelery.setup_loader()

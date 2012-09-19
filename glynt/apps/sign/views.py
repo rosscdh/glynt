@@ -59,7 +59,7 @@ class DeleteInviteToSignView(BaseFormView):
   def delete(self, request, *args, **kwargs):
     """ Delete the specified signature object """
     pk = kwargs['invitation_pk']
-    document_signature = get_object_or_404(DocumentSignature, pk=pk)
+    document_signature = get_object_or_404(DocumentSignature, pk=pk, document__owner=request.user)
 
     try:
       document_signature.delete()
@@ -111,8 +111,9 @@ class ProcessSignDocumentView(ProcessFormView):
       document_signature.is_signed = True
       document_signature.meta_data['signed_at'] = datetime.datetime.utcnow()
       document_signature.save()
+      messages.success(_('You have successfully signed this document'))
 
-    return redirect(reverse('sign:process_signature_complete', kwargs={'pk': document_signature.pk, 'hash': document_signature.key_hash}))
+    return redirect(reverse('sign:process_signature', kwargs={'pk': document_signature.pk, 'hash': document_signature.key_hash}))
 
 
 class RenderSignatureImageView(BaseDetailView):
