@@ -172,7 +172,8 @@ HELPER_APPS = (
     'userena',
     'guardian',
     'easy_thumbnails',
-    'notification',
+    'user_streams',
+    'user_streams.backends.user_streams_single_table_backend',
 )
 
 # Handle south and its breaking tests
@@ -180,6 +181,9 @@ if not IS_TESTING:
     HELPER_APPS = HELPER_APPS + ('south',)
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + HELPER_APPS
+
+USER_STREAMS_BACKEND = 'user_streams.backends.user_streams_single_table_backend.SingleTableDatabaseBackend'
+USER_STREAMS_USE_UTC = True
 
 ANONYMOUS_USER_ID = -1
 AUTH_PROFILE_MODULE = 'client.ClientProfile'

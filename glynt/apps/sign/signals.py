@@ -17,8 +17,9 @@ def save_document_signature_signal(sender, **kwargs):
 
   if signature.is_signed == True:
     # update meta
-    document.meta_data['total_signatures'] = document.meta_data['total_signatures'] + 1 if 'total_signatures' in document.meta_data else 1
-    document.save()
+    # document.meta_data['total_signatures'] = document.meta_data['total_signatures'] + 1 if 'total_signatures' in document.meta_data else 1
+    # document.save()
+    pass
   else:
     # Newly created document send invites
     # TODO abstract into another signal?

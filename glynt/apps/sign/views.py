@@ -43,7 +43,9 @@ class ProcessInviteToSignView(BaseFormView):
       meta_data = {
         'to_name': name,
         'to_email': email,
-        'invited_by': request.user.get_full_name() if request.user.get_full_name() else request.user.username
+        'invited_by_pk': request.user.pk,
+        'invited_by_name': request.user.get_full_name() if request.user.get_full_name() else request.user.username,
+        'invited_by_email': request.user.email
       }
       form = DocumentSignatureForm({'document': doc.pk, 'key_hash': key_hash, 'hash_data': hash_data, 'meta_data': meta_data})
       if form.is_valid():
