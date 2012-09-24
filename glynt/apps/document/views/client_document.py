@@ -16,6 +16,7 @@ from django.utils.safestring import mark_safe
 
 from glynt.apps.document.models import Document, ClientCreatedDocument
 from glynt.apps.document.forms import ClientCreatedDocumentForm
+from glynt.apps.document import tasks
 
 from glynt.apps.document.views.document import DocumentView
 from glynt.apps.document.views.utils import user_can_view_document, userdoc_from_request, FORM_GROUPS
@@ -176,6 +177,11 @@ class CloneClientCreatedDocumentView(View):
   """
   def post(self, request, *args, **kwargs):
     client_document = get_object_or_404(ClientCreatedDocument, pk=self.kwargs['pk'])
+    # used in notfication
+    source_client_document = get_object_or_404(ClientCreatedDocument, pk=self.kwargs['pk'])
+
+
+    client_document
     client_document.pk = None # set the pk to null which will cause the ORM to save as a new object
     saved = False
     counter = 1
@@ -198,7 +204,10 @@ class CloneClientCreatedDocumentView(View):
 
 
     url = reverse('document:my_view', kwargs={'slug':client_document.slug})
-    message = _("Cloned %s") % (client_document.name,)
+    message = _("Cloned %s as %s") % (source_client_document.name, client_document.name,)
+
+    # Notification
+    tasks.document_cloned(source_document=source_client_document, document=client_document)
 
     return HttpResponse('[{"userdoc_id": %d, "url":"%s", "status":"%s", "message":"%s"}]' % (client_document.pk, url, 'cloned', unicode(message),), status=200, content_type="application/json")
 
@@ -210,6 +219,9 @@ class DeleteClientCreatedDocumentView(View):
     client_document.slug = '%d-%s' % (client_document.pk, client_document.slug[0:45],)
     client_document.save()
     message = _("Deleted %s, <a id='undelete-%d' class='undelete-my-document' href='%s'>undo</a>") % (client_document.name, client_document.pk, reverse('document:my_undelete', kwargs={'pk':client_document.pk}),)
+
+    # Notification
+    tasks.document_deleted(document=client_document)
 
     return HttpResponse('[{"userdoc_id": %d, "status":"%s", "message":"%s"}]' % (client_document.pk, 'deleted', unicode(message),), status=200, content_type="application/json")
 
@@ -233,5 +245,9 @@ class UndoDeleteClientCreatedDocumentView(View):
           count = count+1
           saved = False
     message = _("Reactivated '%s'") % (client_document.name,)
+
+    # Notification
+    tasks.document_restored(document=client_document)
+
     return HttpResponse('[{"userdoc_id": %d, "status":"%s", "message":"%s"}]' % (client_document.pk, 'deleted', message,), status=200, content_type="application/json")
 

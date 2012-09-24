@@ -1,5 +1,6 @@
 {% extends 'client/base.html' %}
 {% load i18n humanize %}
+{% load activity %}
 {% load templatetag_handlebars %}
 {% load url from future %}
 
@@ -50,6 +51,7 @@
               <li><a href="#">{% trans 'Awaiting your signature' %}</a></li>
           </ul>
       </div>
+
     <div class="span9" id="doc-list">
         <div class="doc-body">
         <h3 class="">Choose Document</h3>
@@ -60,41 +62,49 @@
         </ul>
       </div>
     </div>
-      <div class="span9" id="file-list">
-        <div class="doc-body">
-          <h3 class="">All Documents</h3>
-            <!-- <div class="doccount">3</div> -->
-                <table id="my-documents" class="table table-stripped table-border table-hover">
-              <tr>
-               <th>Document Name</th>
-               <th>Created</th>
-               <th>Status</th>
-               <th>Action</th>
-               </tr>
-                {% for d in my_document_list %}
-                <tr>
-                  <td class="">
-                    <input type="checkbox"></input> <a href="{% url 'document:my_view' slug=d.slug %}" class="doc-title">{{ d.name }}</a><span class="label" style="float:right;margin-top:3px;opacity:0.6">{{ d.owner.get_profile.short_name|default:d.owner.username }}</span>
-                  </td>
-                  <td class="created">Created {{ d.created_at|naturaltime }}</td>
-                  <td>
-                    {% cycle '<a href="#" class="btn btn-mini"><i class="icon-repeat"></i> Out for signing' '<a href="#" class="btn btn-mini btn-green"><i class="icon-ok icon-white"></i> Signed' '<a href="#" class="btn btn-red btn-mini"><i class="icon-pencil icon-white"></i> Please sign' %}</a></td>
-                      <td>
-                      <div class="btn-group pull-right">
-                      <button class="btn dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i> <span class="caret"></span></button>
-                      <ul class="dropdown-menu">
-                          <li><a id="clone-{{ d.pk }}" href="#clone" data-url="{% url 'document:my_clone' pk=d.pk %}" data-pk="{{ d.pk }}" class="clone-my-document">{% trans 'Clone' %}</a></li>
-                            <li><a id="export-{{ d.pk }}" href="{% url 'document:export' slug=d.slug %}" target="_BLANK" data-url="{% url 'document:export' slug=d.slug %}" data-pk="{{ d.pk }}" class="">{% trans 'Download PDF' %}</a></li>
-                            <li><a id="delete-{{ d.pk }}" href="#delete" data-url="{% url 'document:my_delete' pk=d.pk %}" data-pk="{{ d.pk }}" class="delete-my-document">{% trans 'Delete' %}</a></li>
-                          </ul>
-                    </div>
-                  </td>
-                </tr>
-                 {% endfor %}
-                </table>
-            </div>
-        </div>
+
+    <div class="span9" id="activity-list">
+        <h3 class="">Activity</h3>
+        <ul>
+        {% user_activity_stream request.user %}
+        </ul>
+    </div>
+
+    <div class="span9" id="file-list">
+      <div class="doc-body">
+        <h3 class="">All Documents</h3>
+          <!-- <div class="doccount">3</div> -->
+            <table id="my-documents" class="table table-stripped table-border table-hover">
+            <tr>
+                <th>Document Name</th>
+                <th>Created</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+              {% for d in my_document_list %}
+            <tr>
+                <td class="">
+                  <input type="checkbox"></input> <a href="{% url 'document:my_view' slug=d.slug %}" class="doc-title">{{ d.name }}</a><span class="label" style="float:right;margin-top:3px;opacity:0.6">{{ d.owner.get_profile.short_name|default:d.owner.username }}</span>
+                </td>
+                <td class="created">Created {{ d.created_at|naturaltime }}</td>
+                <td>
+                  {% cycle '<a href="#" class="btn btn-mini"><i class="icon-repeat"></i> Out for signing' '<a href="#" class="btn btn-mini btn-green"><i class="icon-ok icon-white"></i> Signed' '<a href="#" class="btn btn-red btn-mini"><i class="icon-pencil icon-white"></i> Please sign' %}</a></td>
+                <td>
+                  <div class="btn-group pull-right">
+                    <button class="btn dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i> <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                      <li><a id="clone-{{ d.pk }}" href="#clone" data-url="{% url 'document:my_clone' pk=d.pk %}" data-pk="{{ d.pk }}" class="clone-my-document">{% trans 'Clone' %}</a></li>
+                      <li><a id="export-{{ d.pk }}" href="{% url 'document:export' slug=d.slug %}" target="_BLANK" data-url="{% url 'document:export' slug=d.slug %}" data-pk="{{ d.pk }}" class="">{% trans 'Download PDF' %}</a></li>
+                      <li><a id="delete-{{ d.pk }}" href="#delete" data-url="{% url 'document:my_delete' pk=d.pk %}" data-pk="{{ d.pk }}" class="delete-my-document">{% trans 'Delete' %}</a></li>
+                    </ul>
+                  </div>
+                </td>
+            </tr>
+            {% endfor %}
+            </table>
+          </div>
       </div>
+    </div>
   </div>
 </div>
 {% endblock %}

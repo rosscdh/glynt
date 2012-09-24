@@ -1,0 +1,7 @@
+{% load humanize %}
+
+{% for a in object_list %}
+<li>
+{{ a.content|safe }}, {{ a.created_at|naturaltime }}
+</li>
+{% endfor %}
