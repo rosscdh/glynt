@@ -19,6 +19,7 @@ from glynt.apps.sign.utils import encode_data, decode_data
 
 from signpad2image.signpad2image import s2i
 
+import user_streams
 import datetime
 
 
@@ -113,7 +114,7 @@ class ProcessSignDocumentView(ProcessFormView):
       document_signature.is_signed = True
       document_signature.meta_data['signed_at'] = datetime.datetime.utcnow()
       document_signature.save()
-      messages.success(_('You have successfully signed this document'))
+      messages.success(request, _('You have successfully signed this document'))
 
     return redirect(reverse('sign:process_signature', kwargs={'pk': document_signature.pk, 'hash': document_signature.key_hash}))
 

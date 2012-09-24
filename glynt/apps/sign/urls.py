@@ -15,6 +15,7 @@ urlpatterns = patterns('',
   # Invitee pages, where the invitee has the option to sign the document
   url(r'^(?P<pk>\d+)/(?P<hash>\w+)/sign/$', ProcessSignDocumentView.as_view(), name='process_signature'),
   url(r'^(?P<pk>\d+)/(?P<hash>\w+)/sign/complete/$', TemplateView.as_view(template_name='sign/process_signature_complete.html'), name='process_signature_complete'),
+  url(r'^(?P<pk>\d+)/signatures/review/$', RenderSignatureImageView.as_view(), name='signature_review'),
   url(r'^(?P<pk>\d+)/signature/$', RenderSignatureImageView.as_view(), name='signature_pic'),
   url(r'^(?P<pk>\d+)/(?P<hash>\w+)/$', SignDocumentView.as_view(), name='default'),
 )
