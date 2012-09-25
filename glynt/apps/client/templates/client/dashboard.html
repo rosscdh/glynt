@@ -88,6 +88,7 @@
                 </td>
                 <td class="created">Created {{ d.created_at|naturaltime }}</td>
                 <td>
+                  {{ d.num_signed }} / {{ d.num_invited }}
                   {% cycle '<a href="#" class="btn btn-mini"><i class="icon-repeat"></i> Out for signing' '<a href="#" class="btn btn-mini btn-green"><i class="icon-ok icon-white"></i> Signed' '<a href="#" class="btn btn-red btn-mini"><i class="icon-pencil icon-white"></i> Please sign' %}</a></td>
                 <td>
                   <div class="btn-group pull-right">
