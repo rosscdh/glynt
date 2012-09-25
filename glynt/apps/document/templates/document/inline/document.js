@@ -209,7 +209,13 @@ $(document).ready(function(){
             return (self.currentFormStep() == 1)? false : true ;
         }
         self.isLastStep = function isLastStep() {
-            return (self.maxFormSteps() == self.currentFormStep()) ? true : false ;
+            is_last_step = (self.maxFormSteps() == self.currentFormStep()) ? true : false ;
+            if (is_last_step == true) {
+              $('#last-step').show();
+            }else{
+              $('#last-step').hide();
+            }
+            return is_last_step
         }
         self.areAllStepsComplete = function areAllStepsComplete() {
           var complete = true;
@@ -1169,7 +1175,6 @@ $(document).ready(function(){
     App = new PageDocumentController();
     // ----- KO Bindings -----
     ko.applyBindings(App);
-
 
     $('form.bind-document [data-glynt-loop_length]').live('change', function(event){
         var num = parseInt($(this).val());

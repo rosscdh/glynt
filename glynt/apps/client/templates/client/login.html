@@ -5,32 +5,30 @@
 
 {% block body %}
 <div class="container">
-	<div class="row">
-		<!-- <div class="span12">
-			<h1>Sign In</h1>
-			<hr />
-		</div> -->
-		<br />
-		<br />
-		<br />
-		<div class="span5 offset1">
-			<form id="user-login" class="form-horizontal" action="{% url 'client:login' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}" method="post">{% csrf_token %}
-			{{ form }}
-			<br/>
-			<div class="form-actions">
-			    <button id="user-login-submit" type="submit" class="submit btn btn-primary">{% trans "Login" %}</button>
-			</div>
-			</form>
-		
-		</div>
-		<div class="span4 offset1">
-			<fieldset>
-				<legend>Social Sign In</legend>
-				{% include 'client/partials/signin_providers.html' %}
-			</fieldset><em></em>
-		</div>			
-	</div>
+  <div class="row">
+    <br />
+    <br />
+    <br />
+    <div class="span5 offset1">
+      <form id="user-login" class="form-horizontal" action="{% url 'client:login' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}" method="post">{% csrf_token %}
+      {{ form }}
+      <br/>
+      <div class="form-actions">
+          <button id="user-login-submit" type="submit" class="submit btn btn-primary">{% trans "Login" %}</button>
+      </div>
+      </form>
+    
+    </div>
+    <div class="span4 offset1">
+      <fieldset>
+        <legend>Social Sign In</legend>
+        {% include 'client/partials/signin_providers.html' %}
+      </fieldset><em></em>
+    </div>      
+  </div>
 </div>
+
+{% include 'pleasewait/loading.html' %}
 
 {% endblock %}
 
@@ -38,7 +36,17 @@
 {% block js %}
 
 {% if not request.user.is_authenticated %}
-	{% include 'socialregistration/facebook_js/facebook_js.html' %}
+  {% include 'socialregistration/facebook_js/facebook_js.html' %}
 {% endif %}
+
+<script id="login-controls" type="text/javascript">
+$(document).ready(function(){
+  $('#connect-facebook').live('click', function(event){
+    event.preventDefault();
+    $('div#loader').modal({keyboard: false}, 'show');
+    SocialFBLogin();
+  });
+});
+</script>
 
 {% endblock %}

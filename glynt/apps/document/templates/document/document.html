@@ -1,6 +1,7 @@
 {% extends 'document/base.html' %}
 {% load i18n markup %}
 {% load sign_tags %}
+{% load glynt_helpers %}
 {% load url from future %}
 
 
@@ -17,12 +18,6 @@
     <div id="docu-form-head" class="row">
         <div id="messages" data-bind="html: App.message"></div>
     </div>
-    <div class="row">
-        <div class="controls pull-right">
-            <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-blue btn-primary btn-prev" type="button" data-bind="click: App.formControls.prev">{% trans 'Previous' %}</button></span>
-            <!-- <span data-bind="visible: App.formControls.showNext()"><button id="btn-next" class="btn btn-blue btn-success btn-small btn-next" type="button" data-bind="click: App.formControls.next">{% trans 'Save Step' %}</button></span> -->
-        </div>
-    </div>
     {% for form in form_set %}
     <form id="glynt-doc-{{ forloop.counter }}"  class="form-horizontal bind-document">{% csrf_token %}
     <div id="form-group-{{ forloop.counter }}" class="form-group hidden">
@@ -33,21 +28,20 @@
     </div>
     </form>
     {% endfor %}
-    <div class="row">
-      <div id="form-group-{{ final_step_index }}" class="form-group" data-bind="visible: App.formControls.isLastStep()">
+
+    <div id="last-step" class="row hide" data-bind="visible: App.formControls.isLastStep()">
+      <div id="form-group-{{ final_step_index }}" class="form-group">
           <div id="formCompleteOptions" class="span3 border">
               <button id="btn-post-pdf" class="btn btn-green btn-success" type="button">{% trans 'Download PDF' %}</button>
           </div>
       </div>
-    </div>
 
-    <div id="invite-to-sign" class="row" data-bind="visible: App.formControls.isLastStep()">&nbsp;</div>
+      <div id="invite-to-sign" class="row" data-bind="visible: App.formControls.isLastStep()">&nbsp;</div>
 
-    <div class="row">
-        <div class="controls pull-right">
-            <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-primary btn-small btn-prev" type="button" data-bind="click: App.formControls.prev">{% trans 'Previous' %}</button></span>
-            <span data-bind="visible: App.formControls.showNext()"><button id="btn-next" class="btn btn-success btn-small btn-next" type="button" data-bind="click: App.formControls.next">{% trans 'Save Step' %}</button></span>
-        </div>
+      <div class="controls pull-right">
+          <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-primary btn-small btn-prev" type="button" data-bind="click: App.formControls.prev">{% trans 'Previous' %}</button></span>
+          <span data-bind="visible: App.formControls.showNext()"><button id="btn-next" class="btn btn-success btn-small btn-next" type="button" data-bind="click: App.formControls.next">{% trans 'Save Step' %}</button></span>
+      </div>
     </div>
 {% endblock %}
 
@@ -58,7 +52,7 @@
 {% endblock %}
 
 {% block document %}
-<span id="document-md" data-bind="html: App.documentModel.renderedHTML()"></span>
+<span id="document-md" data-bind="html: App.documentModel.renderedHTML()">{% show_loading modal=False header=False body=False %}</span>
 {% endblock %}
 
 {% block css %}
@@ -118,6 +112,7 @@ ul#step-list li.last_step{
  
 }
 </style>
+
 {% endblock %}
 
 {% block js %}

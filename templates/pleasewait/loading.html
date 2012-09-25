@@ -1,0 +1,24 @@
+{% load i18n %}
+
+{% if not just_image %}
+<div class="{% if modal %}modal hide{% endif %}" id="loader" tabindex="-1" role="dialog">
+  {% if header %}
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">{% trans 'Loading...' %}</h3>
+  </div>
+  {% endif %}
+  {% if body %}
+  <div class="modal-body">
+    <p>{% trans 'Please wait...' %}</p>
+  </div>
+  {% endif %}
+  {% if footer %}
+  <div class="modal-footer">
+    <img src="{{ STATIC_URL }}img/loader.gif" alt="{% trans 'Loading' %}" border="0" />
+  </div>
+  {% endif %}
+</div>
+{% else %}
+<img src="{{ STATIC_URL }}img/loader.gif" alt="{% trans 'Loading' %}" border="0" />
+{% endif %}
