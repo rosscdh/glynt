@@ -1176,16 +1176,12 @@ $(document).ready(function(){
     App = new PageDocumentController();
     // ----- KO Bindings -----
     ko.applyBindings(App);
-
-
     $('form.bind-document [data-glynt-loop_length]').live('change', function(event){
         var num = parseInt($(this).val());
         if (typeof num == 'number'){
             App.documentModel.showLoopStep($(this), num);
         }
     });
-
-
     $('.fix-errors').live('click', function(event){
         event.preventDefault;
         App.formControls.prev();
