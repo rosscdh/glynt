@@ -14,6 +14,7 @@
 // use warnings;
 $(document).ready(function(){
 
+  
   initArgosPanOptia = function initArgosPanOptia(App) {
     App.widgets.observer = new argosPanOptia();
   };
@@ -745,9 +746,15 @@ $(document).ready(function(){
     /**
     * Primary view acts as a holder for the other views
     */
+	$(window).scroll(function(){
+	    $(".document-questions").css("top",Math.max(45,130-$(this).scrollTop()));
+	});
+	$(window).resize(function() {
+		$(".document-questions").height($(window).height());
+	});
+	
     function PageDocumentController() {
         var self = this;
-
         self.valid_fieldtypes = ['input', 'text','select','textarea','select-one','radio','checkbox']
         self.markdownConverter = new Markdown.Converter();
         self.targetDocumentId = ko.observable('span#document-md');
@@ -1216,7 +1223,7 @@ $(document).ready(function(){
         indicator : 'Saving...',
         tooltip   : 'Click to create your new document...',
         placeholder : 'Click to create your new document...',
-        type      : 'textarea',
+        type      : 'text',
         submit    : '{% trans "Save" %}',
     });
     {% endif %}

@@ -85,15 +85,48 @@ table#my-documents td.created{
 	font-size:11px;
 	color:#AAA;
 }
+table#my-documents td.created i{
+    opacity:0.4;
+}
 table#my-documents td input {
 	margin-top:-3px;
 }
-table#my-documents td a.doc-title{
+table#my-documents td a.doc-title {
 	font-size:16px;
 	padding-left:5px;
 }
+table#my-documents td ul.sign-status {
+	margin-left:0px;
+}
+table#my-documents td ul.sign-status li {
+	list-style-type:none;
+	margin-left:0px;
+	width:18px;
+	height:18px;
+	float:left;
+	background-color:#e67145;
+	border-radius:9px;
+	margin-top:3px;
+	margin-right:2px;
+}
+table#my-documents td ul.sign-status li.signed {
+	background-color:#bfd630;
+	
+}
 body.dashboard{
 	background-color:#f2f7f9;
+}
+div#activity-list li span {
+	color:#bbb;
+	color:#CCC;
+}
+div#activity-list {
+	font-size:12px;
+	color:#666;
+}
+div#activity-list li {
+	border-bottom:1px solid #F9F9F9;
+	padding:4px;
 }
 div.doccount {
 	width:50px;
@@ -153,23 +186,63 @@ ul.add-active{
 	position:fixed;
 	top:60px;
 }*/
+body.assembly {
+	background-color:#f3fafc;
+}
+h2#document-title input {
+	background-color:none;
+	line-height:18px;
+	padding:0px;
+	border:0px;
+	font-size:28px;
+	border-bottom:1px dotted grey;
+    outline: none;
+	
+}
+.document-questions {
+	position:fixed;
+	overflow-y:scroll;
+	overflow-x:hidden;
 
+}
+.document-questions .step-title {
+	border-bottom:1px solid #000;
+	font-size:20px;
+}
+.document-questions-inner {
+	padding-bottom:60px;
+}
 .document-questions h3 {
 	font-size:20px;
 }
+.document-questions.stick {
+    position: fixed;
+    top: 0;
+}
 .document-questions label {
 	margin-top:10px;
+	font-size:12px;
+	margin-bottom:2px;
 }
 .document-questions ul, .document-questions li {
 	margin-left:0px;
+	padding-right:10px;
+}
+.document-questions ul li input, .document-questions ul li textarea  {
+	width:200px;
 }
 .draft-document {
 	margin-left:50px;
 	border:1px solid #ccc;
 	padding:30px 50px;
-	font:Courier!important;
+	background-color:#FFF;
+	color:#A1A1A1;
 }
-
+.draft-document, .draft-document *{
+	font-family:"Courier New", Courier!important;
+	font-size:14px;
+	cursor:pointer;
+}
 
 
 /* Buttons */

@@ -1,19 +1,22 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% block bodyclass %}assembly{% endblock %}
 
 {% block body %}
 <div class="row">
 	<div>
-		{% block owner_info %}{% endblock %}
-		<div class="span9">{% block document_head %}{% endblock %}</div>
+		<div class="span5">{% block owner_info %}{% endblock %}</div>
+		<div class="span4 pull-right">{% block document_head %}{% endblock %}</div>
 	</div>
 </div>
-<br/>
 <div class="row">
-  <div class="span3">
-    <div class="document-questions">
-      {% block form %}{% endblock %}
-    </div>
+  <div class="span3 document-questions">
+    <div class="">
+	    <div class="document-questions-inner">
+
+			{% block form %}{% endblock %}
+		</div>
+	</div>
   </div>
   <div class="span9 pull-right">
     <div class="draft-document">

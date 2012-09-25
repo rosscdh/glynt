@@ -5,7 +5,7 @@
 
 
 {% block owner_info %}
-<div class="span12">
+<div class="">
   <h2 id="document-title" class="editable">{{ userdoc.name }}</h2>
   <form id="userdoc-name-form" class="hidden">
       {{ userdoc_form }}
@@ -19,7 +19,7 @@
     </div>
     <div class="row">
         <div class="controls pull-right">
-            <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-blue btn-primary btn-prev" type="button" data-bind="click: App.formControls.prev">{% trans 'Previous' %}</button></span>
+            <!-- <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-link" type="button" data-bind="click: App.formControls.prev">{% trans 'Previous' %}</button></span> -->
             <!-- <span data-bind="visible: App.formControls.showNext()"><button id="btn-next" class="btn btn-blue btn-success btn-small btn-next" type="button" data-bind="click: App.formControls.next">{% trans 'Save Step' %}</button></span> -->
         </div>
     </div>
@@ -45,7 +45,7 @@
 
     <div class="row">
         <div class="controls pull-right">
-            <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-primary btn-small btn-prev" type="button" data-bind="click: App.formControls.prev">{% trans 'Previous' %}</button></span>
+            <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-link btn-small btn-prev" type="button" data-bind="click: App.formControls.prev">{% trans 'Previous' %}</button></span>
             <span data-bind="visible: App.formControls.showNext()"><button id="btn-next" class="btn btn-success btn-small btn-next" type="button" data-bind="click: App.formControls.next">{% trans 'Save Step' %}</button></span>
         </div>
     </div>

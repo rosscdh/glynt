@@ -2,6 +2,6 @@
 
 {% for a in object_list %}
 <li>
-{{ a.content|safe }}, {{ a.created_at|naturaltime }}
+{{ a.content|safe }} <span>{{ a.created_at|naturaltime }}</span>
 </li>
 {% endfor %}

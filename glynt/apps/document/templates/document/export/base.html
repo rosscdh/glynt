@@ -1,18 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <title></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+	<style>
+	@media print {
 
+		@page {
+
+			-pdf-page-orientation: portrait;
+			-pdf-page-size: a4;
+
+			/* background-image: url(background.pdf); */
+
+			margin-top: 2cm;
+			margin-left: 2cm;
+			margin-right: 2cm;
+			margin-bottom: 3cm;
+			font-family:Times,Serif;
+		}
+
+		@page regular {
+
+			-pdf-page-orientation: portrait;
+			-pdf-page-size: a4;
+
+			background-image: url(http://a248.e.akamai.net/assets.github.com/images/modules/about_page/github_logo.png?1338945074); 
+
+			margin-top: 2cm;
+			margin-left: 2cm;
+			margin-right: 2cm;
+			margin-bottom: 3cm;
+
+			@frame footer {
+				-pdf-frame-content: footer;
+				bottom: 2cm;
+				left: 2cm;
+				right: 2cm;
+				height: 1cm;
+			}
+			font-family:Times,Serif;
+			
+
+		}
+
+	}
+	</style>
   </head>
 
-  <body data-spy="scroll" data-target=".subnav" data-offset="50" class="preview">
-    <div class="container">
-      {{ STATIC_URL}}
-    {{body}}
-    </div>
+  <body>
+      {{body}}
   </body>
 </html>

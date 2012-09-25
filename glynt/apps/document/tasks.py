@@ -19,7 +19,7 @@ def document_created(**kwargs):
     document = kwargs['document']
     doc_type = document.source_document.name
     user = document.owner
-    user_streams.add_stream_item(user, _('You created a "%s" document "<a href="%s">%s</a>"' % (doc_type, document.get_absolute_url(), document.name,)))
+    user_streams.add_stream_item(user, _('You created a %s document <a href="%s">%s</a>' % (doc_type, document.get_absolute_url(), document.name,)))
 
 
 @task()
