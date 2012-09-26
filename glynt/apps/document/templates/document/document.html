@@ -36,12 +36,14 @@
     <div class="row">
       <div id="form-group-{{ final_step_index }}" class="form-group" data-bind="visible: App.formControls.isLastStep()">
           <div id="formCompleteOptions" class="span3 border">
+			  <h3>Document Created</h3>
+			  <p>Your document has been created. You can now review it on the right, download a copy or invite people to sign it.</p>
               <button id="btn-post-pdf" class="btn btn-green btn-success" type="button">{% trans 'Download PDF' %}</button>
           </div>
       </div>
     </div>
 
-    <div id="invite-to-sign" class="row" data-bind="visible: App.formControls.isLastStep()">&nbsp;</div>
+    <div id="invite-to-sign" data-bind="visible: App.formControls.isLastStep()">&nbsp;</div>
 
     <div class="row">
         <div class="controls pull-right">

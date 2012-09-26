@@ -284,10 +284,18 @@ $(document).ready(function(){
 
 <style>
   .invitee-vehicle {
-    margin:10px 0px;
-    padding:0px 10px 10px 10px;
-    border:solid #ccc 2px;
-  }
+	  background-color:#79c68b;
+	margin-top:20px;
+    padding:10px 10px 10px 10px;
+  /*  border:solid #ccc 2px;
+*/  
+	}
+    .invitee-vehicle *,   .invitee-vehicle *:hover {
+		color:white;
+	}
+    .invitee-vehicle a {
+		text-decoration:underline;
+	}
   ul#invitees {
     list-style:none;
     margin:10px 0px;
@@ -300,8 +308,14 @@ $(document).ready(function(){
     border:solid #c00 2px;
   }
   ul#invitees li.has_not_signed {
-    background-color:#fca;
+    background-color:#f6d02d;
+	border:none;
+	padding:3px;
+	border-radius:3px;
   }
+   ul#invitees li.has_not_signed a {
+	   color:#000;
+   }
   ul#invitees li.has_signed {
     border:solid #0c0 2px;
     background-color:#0c0;
