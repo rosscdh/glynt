@@ -197,23 +197,23 @@ h2#document-title input {
 	font-size:28px;
 	border-bottom:1px dotted gray;
     outline: none;
-	
 }
 .document-questions {
 	position:fixed;
-	overflow-y:scroll;
-	overflow-x:hidden;
-
+    overflow-y:scroll;
 }
 .document-questions .step-title {
-	border-bottom:1px solid #000;
 	font-size:20px;
+	font-weight:bold;
+	line-height:25px;
+	
 }
 .document-questions-inner {
 	padding-bottom:60px;
 }
 .document-questions h3 {
 	font-size:20px;
+	line-height:20px;
 }
 .document-questions.stick {
     position: fixed;
@@ -229,10 +229,9 @@ h2#document-title input {
 	padding-right:10px;
 }
 .document-questions ul li input, .document-questions ul li textarea  {
-	width:200px;
 }
 .draft-document {
-	margin-left:50px;
+	margin-left:25px;
 	border:1px solid #ccc;
 	padding:30px 50px;
 	background-color:#FFF;

@@ -3,7 +3,7 @@
 {% block plain %}
 Hi {{ invited_by_name }},
 
-we are happy to say that {{ to_name }} has signed the document named "{{ document_name }}".
+we are happy to say that {{ to_name }} has signed the document named "{{ document_name }}"
 
 To review the signature, please go to {% current_site_domain %}{{ review_signatures_url }}.
 
