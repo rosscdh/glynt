@@ -1,7 +1,7 @@
 {% extends 'userena/base_userena.html' %}
-{% load url from future %}
 {% load i18n %}
-
+{% load glynt_helpers %}
+{% load url from future %}
 
 {% block title %}{% trans "Signup" %}{% endblock %}
 
@@ -16,6 +16,9 @@
       <button id="user-signup-submit" type="submit" class="submit btn btn-primary">{% trans "Signup" %}</button>
   </div>
 </form>
+
+{% show_loading %}
+
 {% endblock %}
 
 {% block js %}
@@ -23,5 +26,15 @@
 {% if not request.user.is_authenticated %}
 	{% include 'socialregistration/facebook_js/facebook_js.html' %}
 {% endif %}
+
+<script id="login-controls" type="text/javascript">
+$(document).ready(function(){
+  $('#connect-facebook').live('click', function(event){
+    event.preventDefault();
+    $('div#loader').modal({keyboard: false}, 'show');
+    SocialFBLogin();
+  });
+});
+</script>
 
 {% endblock %}
