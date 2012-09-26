@@ -28,7 +28,7 @@ facebook
 -e git+https://github.com/stard0g101/django-countries.git#egg=django-countries
 -e git+https://github.com/stard0g101/django-bootstrap.git#egg=bootstrap
 -e git+https://github.com/brack3t/django-braces.git#egg=django-braces
--e git+https://github.com/videntity/python-signpad2image.git#egg=python-signpad2image
+-e git+https://github.com/stard0g101/python-signpad2image.git#egg=python-signpad2image
 -e git+https://github.com/stard0g101/django-user-streams.git@extended_templates#egg=django-user-streams
 # javascript markdown
 # hg clone https://code.google.com/p/pagedown/

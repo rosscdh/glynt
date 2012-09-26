@@ -107,7 +107,7 @@ class ProcessSignDocumentView(ProcessFormView):
 
   def post(self, request, *args, **kwargs):
     document_signature = get_object_or_404(self.model.objects.select_related('document', 'document__source_document', 'document__source_document__flyform'), pk=self.kwargs['pk'], key_hash=self.kwargs['hash'])
-
+    assert False
     if not document_signature.is_signed:
       signature = request.POST.get('output',None)
       document_signature.signature = signature
@@ -116,7 +116,7 @@ class ProcessSignDocumentView(ProcessFormView):
       document_signature.save()
       messages.success(request, _('You have successfully signed this document'))
 
-    return redirect(reverse('sign:process_signature', kwargs={'pk': document_signature.pk, 'hash': document_signature.key_hash}))
+    return redirect(reverse('sign:process_signature', kwargs={'pk': document_signature.document.pk, 'hash': document_signature.key_hash}))
 
 
 class RenderSignatureImageView(BaseDetailView):
@@ -126,10 +126,11 @@ class RenderSignatureImageView(BaseDetailView):
   def get(self, request, *args, **kwargs):
     self.object = self.get_object()
     response = HttpResponse(mimetype="image/png")
+
     try:
       #build the new image
       image = s2i(json.dumps(self.object.signature), input_image=settings.BLANK_SIG_IMAGE[0])
-    except(self.object.DoesNotExist):
+    except:
       #If it wasn't in the database, then return the nosig image
       image = s2i("", force_no_sig_image=True, nosig_image=settings.NO_SIG_IMAGE[0])
     #return the HttpResponse object to the client.
