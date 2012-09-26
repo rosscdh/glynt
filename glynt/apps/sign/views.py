@@ -5,11 +5,11 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, redirect
-from django.http import HttpResponse
-
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import UpdateView
-from django.views.generic.edit import BaseFormView, ProcessFormView
+from django.views.generic.edit import BaseFormView, ProcessFormView, FormMixin
 from django.views.generic.detail import BaseDetailView
+
 
 from glynt.apps.document.models import ClientCreatedDocument
 from glynt.apps.sign.models import DocumentSignature
@@ -100,23 +100,37 @@ class SignDocumentView(UpdateView):
     return context
 
 
-class ProcessSignDocumentView(ProcessFormView):
+class ProcessSignDocumentView(UpdateView):
   """ View to accept the invitees signature and congratulate them on success """
   http_method_names = ['post']
   model = DocumentSignature
+  form_class = DocumentSignatureForm
+
+  def get_success_url(self):
+    return reverse('sign:default', kwargs={'pk': self.object.document.pk, 'hash': self.object.key_hash})
+
+  def get_object(self):
+    return get_object_or_404(self.model.objects.select_related('document', 'document__source_document', 'document__source_document__flyform'), pk=self.kwargs['pk'], key_hash=self.kwargs['hash'])
+
+  def form_valid(self, form=None):
+    return HttpResponseRedirect(self.get_success_url())
 
   def post(self, request, *args, **kwargs):
-    document_signature = get_object_or_404(self.model.objects.select_related('document', 'document__source_document', 'document__source_document__flyform'), pk=self.kwargs['pk'], key_hash=self.kwargs['hash'])
-    assert False
-    if not document_signature.is_signed:
+    self.object = self.get_object()
+
+    form_class = self.get_form_class()
+    form = self.get_form(form_class)
+
+    if not self.object.is_signed:
       signature = request.POST.get('output',None)
-      document_signature.signature = signature
-      document_signature.is_signed = True
-      document_signature.meta_data['signed_at'] = datetime.datetime.utcnow()
-      document_signature.save()
+      self.object.signature = signature
+      self.object.is_signed = True
+      self.object.meta_data['signed_at'] = datetime.datetime.utcnow()
+      self.object.save()
       messages.success(request, _('You have successfully signed this document'))
 
-    return redirect(reverse('sign:process_signature', kwargs={'pk': document_signature.document.pk, 'hash': document_signature.key_hash}))
+    return self.form_valid(form)
+
 
 
 class RenderSignatureImageView(BaseDetailView):
