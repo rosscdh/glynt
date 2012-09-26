@@ -1,5 +1,6 @@
 {% extends 'client/base.html' %}
 {% load url from future %}
+{% load glynt_helpers %}
 {% load i18n %}
 
 
@@ -28,7 +29,7 @@
   </div>
 </div>
 
-{% include 'pleasewait/loading.html' %}
+{% show_loading %}
 
 {% endblock %}
 

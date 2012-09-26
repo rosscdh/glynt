@@ -52,7 +52,7 @@
 {% endblock %}
 
 {% block document %}
-<span id="document-md" data-bind="html: App.documentModel.renderedHTML()">{% show_loading modal=False header=False body=False %}</span>
+<span id="document-md" data-bind="html: App.documentModel.renderedHTML()">{% show_loading modal='False' footer='False' %}</span>
 {% endblock %}
 
 {% block css %}

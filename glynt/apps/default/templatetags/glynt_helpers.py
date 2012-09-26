@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django import template
+import ast
 
 register = template.Library()
 
@@ -20,10 +21,12 @@ current_site_domain.is_safe = True
 
 @register.inclusion_tag('pleasewait/loading.html')
 def show_loading(**kwargs):
+    true_eval = (True, 'True')
+    false_eval = (False, 'False')
     kwargs['STATIC_URL'] = settings.STATIC_URL
-    kwargs['just_image'] = kwargs['just_image'] if 'just_image' in kwargs else False
-    kwargs['modal'] = kwargs['modal'] if 'modal' in kwargs else True
-    kwargs['header'] = kwargs['header'] if 'header' in kwargs else True
-    kwargs['body'] = kwargs['body'] if 'body' in kwargs else True
-    kwargs['footer'] = kwargs['footer'] if 'footer' in kwargs else True
+    kwargs['just_image'] = True if 'just_image' in kwargs and kwargs['just_image'] in true_eval else False
+    kwargs['modal'] = False if 'modal' in kwargs and kwargs['modal'] in false_eval else True
+    kwargs['header'] = False if 'header' in kwargs and kwargs['header'] in false_eval else True
+    kwargs['body'] = False if 'body' in kwargs and kwargs['body'] in false_eval else True
+    kwargs['footer'] = False if 'footer' in kwargs and kwargs['footer'] in false_eval else True
     return kwargs
