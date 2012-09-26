@@ -13,6 +13,7 @@
 // use strict;
 // use warnings;
 $(document).ready(function(){
+  $('#progress-buttons').hide();
 
   initArgosPanOptia = function initArgosPanOptia(App) {
     App.widgets.observer = new argosPanOptia();
@@ -1086,6 +1087,8 @@ $(document).ready(function(){
           self.initializeWidgets();
           self.setContext();
           self.render();
+          // show the buttons which are hidden by default
+          $('#progress-buttons').show();
         };
 
         self.init();

@@ -30,18 +30,17 @@
     {% endfor %}
 
     <div id="last-step" class="row hide" data-bind="visible: App.formControls.isLastStep()">
-      <div id="form-group-{{ final_step_index }}" class="form-group">
+      <div id="form-group-{{ final_step_index }}" class="row form-group">
           <div id="formCompleteOptions" class="span3 border">
               <button id="btn-post-pdf" class="btn btn-green btn-success" type="button">{% trans 'Download PDF' %}</button>
           </div>
       </div>
-
+      
       <div id="invite-to-sign" class="row" data-bind="visible: App.formControls.isLastStep()">&nbsp;</div>
-
-      <div class="controls pull-right">
-          <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-primary btn-small btn-prev" type="button" data-bind="click: App.formControls.prev">{% trans 'Previous' %}</button></span>
-          <span data-bind="visible: App.formControls.showNext()"><button id="btn-next" class="btn btn-success btn-small btn-next" type="button" data-bind="click: App.formControls.next">{% trans 'Save Step' %}</button></span>
-      </div>
+    </div>
+    <div id="progress-buttons" class="hide controls pull-right">
+        <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-primary btn-small btn-prev" type="button" data-bind="click: App.formControls.prev">{% trans 'Previous' %}</button></span>
+        <span data-bind="visible: App.formControls.showNext()"><button id="btn-next" class="btn btn-success btn-small btn-next" type="button" data-bind="click: App.formControls.next">{% trans 'Save Step' %}</button></span>
     </div>
 {% endblock %}
 
