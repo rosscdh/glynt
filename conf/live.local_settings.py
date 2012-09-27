@@ -19,6 +19,8 @@ DATABASES = {
     }
 }
 
+TIME_ZONE = 'Europe/London'
+
 USE_ETAGS = True
 
 MEDIA_URL = '/media/'

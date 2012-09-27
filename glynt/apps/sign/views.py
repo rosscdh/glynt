@@ -125,7 +125,7 @@ class ProcessSignDocumentView(UpdateView):
       signature = request.POST.get('output',None)
       self.object.signature = signature
       self.object.is_signed = True
-      self.object.meta_data['signed_at'] = datetime.datetime.utcnow()
+      self.object.meta_data['signed_at'] = datetime.datetime.utcnow
       self.object.save()
       messages.success(request, _('You have successfully signed this document'))
 
