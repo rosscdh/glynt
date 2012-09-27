@@ -9,8 +9,12 @@ $(document).ready(function(){
     var t = new Date($(item).attr('data-humanize-date')*1000)
     // convert the date to urc
     var d = moment.utc(Date.UTC(t.getUTCFullYear(), t.getUTCMonth(), t.getUTCDate(), t.getUTCHours(), t.getUTCMinutes(), t.getUTCSeconds()));
+    // revert to local time
+    d.local();
+    // set the title to local time
+    $(item).attr('title', d.format('LLL'))
     // set its value
-    $(item).html(c.from(d));
+    $(item).html(d.calendar(c));
   });
 });
 </script>
