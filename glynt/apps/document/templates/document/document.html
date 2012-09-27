@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block form %}
-    <div id="docu-form-head" class="row">
+    <div id="docu-form-head" class="">
         <div id="messages" data-bind="html: App.message"></div>
     </div>
     {% for form in form_set %}
@@ -29,7 +29,7 @@
     </form>
     {% endfor %}
 
-    <div id="last-step" class="row hide" data-bind="visible: App.formControls.isLastStep()">
+    <div id="last-step" class=" hide" data-bind="visible: App.formControls.isLastStep()">
       <div id="form-group-{{ final_step_index }}" class="row form-group">
           <div id="formCompleteOptions" class="span3 border">
 			  <h3>Document Created</h3>
@@ -38,7 +38,7 @@
           </div>
       </div>
       
-      <div id="invite-to-sign" class="row" data-bind="visible: App.formControls.isLastStep()">&nbsp;</div>
+      <div id="invite-to-sign" class="" data-bind="visible: App.formControls.isLastStep()">&nbsp;</div>
     </div>
 
     <div id="invite-to-sign" data-bind="visible: App.formControls.isLastStep()">&nbsp;</div>
