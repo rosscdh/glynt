@@ -1,6 +1,4 @@
-{% load i18n templatetag_handlebars %}
-{% load thumbnail %}
-{% load url from future %}
+{% load i18n templatetag_handlebars glynt_helpers %}{% load thumbnail %}{% load url from future %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -106,12 +104,14 @@
     <script src="{{ STATIC_URL }}js/bootstrap-transition.js"></script>
     <script src="{{ STATIC_URL }}js/select2/select2.js"></script>
     <script src="{{ STATIC_URL }}js/md5.js"></script>
+    <script src="{{ STATIC_URL }}js/moment/moment.min.js"></script>
 
     <script type="text/javascript" src="{{ STATIC_URL }}knockoutjs/js/knockout-2.1.0.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}pagedown/Markdown.Converter.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}pagedown/Markdown.Sanitizer.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}pagedown/Markdown.Editor.js"></script>
     {% handlebars_js %}
+    {% moment_js %}
     <script src="{{ STATIC_URL }}handlebars-helpers.js"></script>
     {% block js %}{% endblock %}
   </body>

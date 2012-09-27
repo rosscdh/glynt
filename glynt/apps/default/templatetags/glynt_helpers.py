@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django import template
+import time
 import ast
 
 register = template.Library()
@@ -17,6 +18,25 @@ def current_site_domain():
     site = Site.objects.get_current()
     return site.domain
 current_site_domain.is_safe = True
+
+
+@register.inclusion_tag('moment/moment.js')
+def moment_js(selector=None):
+  selector = '[data-humanize-date]' if selector is None else selector
+  return {
+    'selector': selector
+  }
+
+
+@register.inclusion_tag('moment/moment.html')
+def moment(date_object, default_date):
+  if type(date_object) == str:
+    date_object = time.strptime(date_object)
+
+  return {
+    'unix_timestamp': date_object.strftime("%s"),
+    'default_date': default_date
+  }
 
 
 @register.inclusion_tag('pleasewait/loading.html')

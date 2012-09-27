@@ -5,19 +5,26 @@
 
 {% tplhandlebars "hb-signatory-detail" %}
 <form class="form-horizontal">
-  <fieldset class="Invitee">
-  <div id="" class="control-group">
-  {{#with invitee}}
-  <input type="hidden" id="id_detail-id" name="detail-id" value="{{id}}" />
-  <label for="detail-name">{% trans 'Name' %}:</label> <input type="text" id="id_detail-name" name="detail-name" value="{{name}}" />
-  <label for="detail-email">{% trans 'Email' %}:</label> <input type="text" id="id_detail-email" name="detail-email" value="{{email}}" />
-  {{/with}}
+<div id="modal-signatory-detail" class="modal hide" tabindex="-1" role="dialog">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">{% trans 'Invitee' %}</h3>
   </div>
-  </fieldset>
-  <div class="form-actions">
-      <button id="detail-close" type="button" class="submit btn btn-warning">{% trans 'Close' %}</button>
-      <button id="detail-done" type="button" class="submit btn btn-primary">{% trans 'Done' %}</button>
+  <div class="modal-body">
+    {{#with invitee}}
+    <input type="hidden" id="id_detail-id" name="detail-id" value="{{id}}"/>
+    <div class="control-group">
+      <div class="controls"><input class="input-large" type="text" id="id_detail-name" name="detail-name" value="{{name}}" placeholder="{% trans 'Name' %}" /></div>
+    </div>
+    <div class="control-group">
+        <div class="controls"><div class="input-prepend"><span class="add-on">@</span><input class="input-large" type="text" id="id_detail-email" name="detail-email" value="{{email}}" placeholder="{% trans 'Email' %}" /></div></div>
+    </div>
+    {{/with}}
   </div>
+  <div class="modal-footer">
+    <button id="detail-done" type="button" class="submit btn btn-primary">{% trans 'Done' %}</button>
+  </div>
+</div>
 </form>
 {% endtplhandlebars %}
 
@@ -121,7 +128,7 @@ $(document).ready(function(){
       });
 
       $( "#signatory-detail" ).html(self.compiledDetailTemplate({'invitee': selectedItem}));
-      $( "#signatory-detail" ).dialog('open');
+      $('div#modal-signatory-detail').modal('show');
     };
 
     self.remove = function remove(id) {
@@ -211,17 +218,7 @@ $(document).ready(function(){
           event.preventDefault();
           self.remove($(this).attr('data-index_lookup'));
       });
-      $("div#signatory-detail").dialog({
-        title: '{% trans "Invitee" %}',
-        width: 440,
-        height: 330,
-        modal: true
-      });
-      $("div#signatory-detail").dialog('close');
-      $('button#detail-close').live('click', function(event){
-          event.preventDefault();
-          $("div#signatory-detail").dialog('close');
-      });
+      $('div#modal-signatory-detail"').modal('hide');
       $('button#detail-done').live('click', function(event){
           event.preventDefault();
           var control_group = $(this).closest('form');
@@ -232,11 +229,11 @@ $(document).ready(function(){
           // validate email
           if (name != '' && email != '' && self.isValidEmail(email)) {
             self.update(id, name, email);
-            $("div#signatory-detail").dialog('close');
+            $('div#modal-signatory-detail"').modal('hide');
           } else {
             // allow for use cases
             if (name == '' && email == '') {
-              $("div#signatory-detail").dialog('close');
+              $('div#modal-signatory-detail"').modal('hide');
             }
           }
 

@@ -4,7 +4,7 @@
 <div class="{% if modal %}modal hide{% endif %}" id="loader" tabindex="-1" role="dialog">
   {% if header %}
   <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    {% if modal %}<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>{% endif %}
     <h3 id="myModalLabel">{% trans 'Loading...' %}</h3>
   </div>
   {% endif %}

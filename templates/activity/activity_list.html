@@ -1,7 +1,6 @@
-{% load humanize %}
-
+{% load humanize glynt_helpers %}
 {% for a in object_list %}
 <li>
-{{ a.content|safe }} <span>{{ a.created_at|naturaltime }}</span>
+{{ a.content|safe }} - {% moment a.created_at a.created_at %}
 </li>
 {% endfor %}
