@@ -32,7 +32,7 @@ DATABASES = {
 if IS_TESTING:
     DATABASES['default']['TEST_NAME'] = '/tmp/testserver.db'
 
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'Europe/London'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
