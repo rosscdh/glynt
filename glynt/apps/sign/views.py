@@ -17,8 +17,6 @@ from glynt.apps.sign.forms import DocumentSignatureForm
 
 from glynt.apps.sign.utils import encode_data, decode_data
 
-from signpad2image.signpad2image import s2i
-
 import user_streams
 import datetime
 
@@ -125,7 +123,7 @@ class ProcessSignDocumentView(UpdateView):
       signature = request.POST.get('output',None)
       self.object.signature = signature
       self.object.is_signed = True
-      self.object.meta_data['signed_at'] = datetime.datetime.utcnow
+      self.object.meta_data['signed_at'] = datetime.datetime.utcnow()
       self.object.save()
       messages.success(request, _('You have successfully signed this document'))
 
@@ -137,16 +135,13 @@ class RenderSignatureImageView(BaseDetailView):
   http_method_names = ['get']
   model = DocumentSignature
 
+  def get_object(self):
+    return get_object_or_404(self.model, document__pk=self.kwargs['pk'], key_hash=self.kwargs['hash'])
+
   def get(self, request, *args, **kwargs):
     self.object = self.get_object()
     response = HttpResponse(mimetype="image/png")
 
-    try:
-      #build the new image
-      image = s2i(json.dumps(self.object.signature), input_image=settings.BLANK_SIG_IMAGE[0])
-    except:
-      #If it wasn't in the database, then return the nosig image
-      image = s2i("", force_no_sig_image=True, nosig_image=settings.NO_SIG_IMAGE[0])
-    #return the HttpResponse object to the client.
+    image = self.object.signature_as_image()
     image.save(response, "PNG")
     return response

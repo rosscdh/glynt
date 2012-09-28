@@ -11,6 +11,9 @@ from jsonfield import JSONField
 from glynt.apps.document.managers import DocumentManager, PublicDocumentManager, PrivateDocumentManager
 from glynt.apps.document.managers import ClientCreatedDocumentManager, PublicClientCreatedDocumentManager, DeletedClientCreatedDocumentManager
 
+import qrcode
+
+
 class Document(models.Model):
     """ Base Document Class """
     DOC_STATUS = get_namedtuple_choices('DOC_STATUS', (
@@ -81,6 +84,17 @@ class ClientCreatedDocument(models.Model):
       if 'num_signed' in self.meta_data:
         return int(self.meta_data['num_signed'])
       return 0
+
+    def get_qr_code(self):
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(self.get_absolute_url())
+        qr.make(fit=True)
+        return qr.make_image()
 
     def increment_num_signed(self, signature_id):
       """ Save the number of signers, save the signature_id for uniqueness """
