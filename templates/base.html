@@ -113,6 +113,9 @@
     {% handlebars_js %}
     {% moment_js %}
     <script src="{{ STATIC_URL }}handlebars-helpers.js"></script>
+    <script src="{{ STATIC_URL }}js/sammyjs/sammy.js"></script>
+    <script src="{{ STATIC_URL }}js/sammyjs/plugins/sammy.handlebars.js"></script>
+    <script src="{{ STATIC_URL }}js/sammyjs/plugins/sammy.json.js"></script>
     {% block js %}{% endblock %}
   </body>
 </html>
