@@ -15,9 +15,8 @@ from glynt.apps.document.models import ClientCreatedDocument
 from glynt.apps.sign.models import DocumentSignature
 from glynt.apps.sign.forms import DocumentSignatureForm
 
-from glynt.apps.sign.utils import encode_data, decode_data
+from glynt.apps.sign.utils import encode_data
 
-import user_streams
 import datetime
 
 
@@ -120,15 +119,19 @@ class ProcessSignDocumentView(UpdateView):
     form = self.get_form(form_class)
 
     if not self.object.is_signed:
-      signature = request.POST.get('output',None)
+      signature = request.POST.get('output', None)
       self.object.signature = signature
       self.object.is_signed = True
       self.object.meta_data['signed_at'] = datetime.datetime.utcnow()
+      self.object.meta_data['signee_ip'] = request.META.get('REMOTE_ADDR')
+      self.object.meta_data['signee_host'] = request.META.get('REMOTE_HOST')
+      self.object.meta_data['signee_useragent'] = request.META.get('HTTP_USER_AGENT')
+      self.object.meta_data['signee_referer'] = request.META.get('HTTP_REFERER') # should not have one? security check?
+
       self.object.save()
       messages.success(request, _('You have successfully signed this document'))
 
     return self.form_valid(form)
-
 
 
 class RenderSignatureImageView(BaseDetailView):

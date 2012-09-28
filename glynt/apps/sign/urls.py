@@ -13,6 +13,7 @@ urlpatterns = patterns('',
   url(r'^(?P<pk>\d+)/(?P<invitation_pk>\d+)/delete/$', DeleteInviteToSignView.as_view(), name='delete_invite'),
 
   # Invitee pages, where the invitee has the option to sign the document
+  # pk here refers to the document_pk and not the signature_pk @TODO double check this
   url(r'^(?P<pk>\d+)/(?P<hash>\w+)/sign/$', ProcessSignDocumentView.as_view(), name='process_signature'),
   url(r'^(?P<pk>\d+)/(?P<hash>\w+)/signature/$', RenderSignatureImageView.as_view(), name='signature_pic'),
   url(r'^(?P<pk>\d+)/(?P<hash>\w+)/$', SignDocumentView.as_view(), name='default'),
