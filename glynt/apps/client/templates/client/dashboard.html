@@ -7,7 +7,6 @@
 
 {% block bodyclass %}dashboard{% endblock %}
 
-
 {% block body %}
 <div class="row">
 
@@ -32,9 +31,9 @@
           <h2 class="title">{% trans 'Your Documents' %}</h2>
           <table id="my-documents" class="table table-stripped table-border table-hover">
           <tr>
-              <th>Document Name</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th>{% trans 'Document Name' %}</th>
+              <th>{% trans 'Status' %}</th>
+              <th>{% trans 'Action' %}</th>
           </tr>
           {% for d in my_document_list %}
           <tr>
@@ -154,7 +153,7 @@ var app = $.sammy(function() {
     });
 
     this.hide_all = function hide_all() {
-        self.nav.removeClass('active');
+        self.nav.removeClass('selected');
         $.each(self.views, function(index, item) {
             $(item).hide();
         });
@@ -164,7 +163,7 @@ var app = $.sammy(function() {
             view_list = [view_list];
         }
         self.hide_all();
-        $('ul.nav-list li a [href="'+window.location.hash+'"]').addClass('active');
+        $('[href="'+window.location.hash+'"]').addClass('selected');
         $.each(view_list, function(index, item) {
             item.show();
         });

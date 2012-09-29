@@ -115,9 +115,8 @@ div.sidebar .nav-list a{
 	font-size:14px;
 	padding-top:7px;
 	padding-bottom:7px;
-
 }
-div.sidebar .nav-list .active a, div.sidebar .nav-list > .active > a:hover {
+a.selected, div.sidebar .nav-list .active a, div.sidebar .nav-list > .active > a:hover {
 	background-color:#c0d6dd;
 	color:#FFF;
 	text-shadow: none;
@@ -126,6 +125,7 @@ div.sidebar .nav-list .active a, div.sidebar .nav-list > .active > a:hover {
 	z-index:1;
 	border-radius:5px 0px 0px 5px;
 }
+
 div.doc-body{
 	background-color:#FFF;
 	margin-left:0px;
