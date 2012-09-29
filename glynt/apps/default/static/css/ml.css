@@ -78,19 +78,18 @@ h2 { font-size: 28px; }
 }
 
 /* Dashboard */
-table#my-documents td{
-	padding-top:10px;
-}
-table#my-documents td.created{
+.created{
 	font-size:11px;
 	color:#AAA;
 }
+a.doc-title{
+	font-size:16px;
+}
+table#my-documents td{
+	padding-top:10px;
+}
 table#my-documents td input {
 	margin-top:-3px;
-}
-table#my-documents td a.doc-title{
-	font-size:16px;
-	padding-left:5px;
 }
 body.dashboard{
 	background-color:#f2f7f9;

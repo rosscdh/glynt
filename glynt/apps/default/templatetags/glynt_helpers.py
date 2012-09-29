@@ -20,6 +20,26 @@ def current_site_domain():
 current_site_domain.is_safe = True
 
 
+@register.inclusion_tag('document/partials/document_status.html')
+def document_status(document):
+  status = None
+  if document.num_signed == 0 and document.num_invited == 0:
+    status = 'no_invites'
+  elif document.num_invited in [0,None,'']:
+    status = 'no_invites'
+  elif document.num_signed == document.num_invited:
+    status = 'signed'
+  elif document.num_signed != document.num_invited:
+    status = 'out'
+
+  return {
+    'status': status,
+    'num_invited': document.num_invited,
+    'num_signed': document.num_signed,
+    'meta': document.meta_data,
+  }
+
+
 @register.inclusion_tag('moment/moment.js')
 def moment_js(selector=None):
   selector = '[data-humanize-date]' if selector is None else selector

@@ -1,5 +1,6 @@
 {% extends 'client/base.html' %}
 {% load i18n humanize %}
+{% load glynt_helpers %}
 {% load activity %}
 {% load templatetag_handlebars %}
 {% load url from future %}
@@ -32,19 +33,17 @@
           <table id="my-documents" class="table table-stripped table-border table-hover">
           <tr>
               <th>Document Name</th>
-              <th>Created</th>
               <th>Status</th>
               <th>Action</th>
           </tr>
           {% for d in my_document_list %}
           <tr>
               <td class="">
-                <input type="checkbox"></input> <a href="{% url 'document:my_view' slug=d.slug %}" class="doc-title">{{ d.name }}</a><span class="label" style="float:right;margin-top:3px;opacity:0.6">{{ d.owner.get_profile.short_name|default:d.owner.username }}</span>
+                <a href="{% url 'document:my_view' slug=d.slug %}" rel="tooltip" title="{% trans 'Created by' %} {{ d.owner.get_profile.short_name|default:d.owner.username }}" class="doc-title">{{ d.name }}</a>
+                <br/><span class="created">{% trans 'Created' %} {% moment d.created_at d.created_at %}</span>
               </td>
-              <td class="created">Created {{ d.created_at|naturaltime }}</td>
               <td>
-                {{ d.num_signed }} / {{ d.num_invited }}
-                {% cycle '<a href="#" class="btn btn-mini"><i class="icon-repeat"></i> Out for signing' '<a href="#" class="btn btn-mini btn-green"><i class="icon-ok icon-white"></i> Signed' '<a href="#" class="btn btn-red btn-mini"><i class="icon-pencil icon-white"></i> Please sign' %}</a></td>
+                {% document_status d %}
               <td>
                 <div class="btn-group pull-right">
                   <button class="btn dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i> <span class="caret"></span></button>
@@ -176,6 +175,16 @@ var app = $.sammy(function() {
 // start the application
 app.run('#/');
 
+$('body').tooltip({
+  selector: '[rel=tooltip]',
+  placement: 'top',
+  animation: true,
+  delay: { show: 50, hide: 5 }
+});
+$('body').popover({
+  selector: '[rel=popover]',
+  trigger: 'hover',
+})
 
 // ----- My Document list options -----
   $('a.export-pdf').live('click', function(event){
