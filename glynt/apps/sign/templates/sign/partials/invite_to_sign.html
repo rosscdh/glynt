@@ -129,6 +129,7 @@ $(document).ready(function(){
 
       $( "#signatory-detail" ).html(self.compiledDetailTemplate({'invitee': selectedItem}));
       $('div#modal-signatory-detail').modal('show');
+      $('div#modal-signatory-detail').find('#id_detail-name').select();
     };
 
     self.remove = function remove(id) {
