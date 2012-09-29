@@ -110,9 +110,6 @@ ul.activity li:last{
 {% endblock %}
 
 {% block js %}
-<script id="document-templates" type="text/javascript">
-[{% for d in public_document_list %}{"id": "{{ d.slug }}", "text": "{{ d.name }}", "url":"{% url 'document:view' slug=d.slug %}", "color": "#{% cycle 'fbd534' '58c4ea' '76c58c' 'f098a4' '5bcaf8' 'c0d72f' %}"}{% if not forloop.last %}, {% endif %}{% endfor %}]
-</script>
 
 {% tplhandlebars "document-template-item" %}
 <div class="span2" style="background-color:{{color}}"><a class="template-document" href="{{url}}">{{text}}</a></div>
@@ -126,8 +123,8 @@ var app = $.sammy(function() {
     self.views = $('div.view');
     self.nav = $('ul.nav-list li a');
 
-    // var hb_source   = $("#people").html();
-    // var hb_template = Handlebars.compile(hb_source);
+    var hb_templates_source   = $("script#template_list").html();
+    var hb_templates_list = Handlebars.compile(hb_templates_source);
 
     this.get('#/', function() {
         this.redirect('#/list/my_documents/all');
@@ -179,30 +176,6 @@ var app = $.sammy(function() {
 // start the application
 app.run('#/');
 
-$("#document-template-search").select2({
-    query: function(options) {
-      if (this.template == undefined) {
-        this.template = Handlebars.compile($('#document-template-item').html());
-      }
-      $('#carousel').hide();
-      $('#template-list').html('');
-      for (i in this.data) {
-        object = this.data[i];
-        if (object.text.toLowerCase().indexOf(options.term.toLowerCase()) != -1) {
-          result = this.template(object);
-          result = $(result);
-          result.hide();
-          $('#template-list').append(result);
-          result.fadeIn('slow');
-        }
-      };
-      return null;
-    },
-    width: '100%',
-    minimumInputLength: 2,
-    multiple: false,
-    data: $.parseJSON($('#document-templates').html())
-});
 
 // ----- My Document list options -----
   $('a.export-pdf').live('click', function(event){

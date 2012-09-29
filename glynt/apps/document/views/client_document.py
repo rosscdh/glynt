@@ -107,6 +107,9 @@ class ValidateClientCreatedDocumentFormView(View):
           client_document.save()
           saved = True
 
+          # Notification
+          tasks.document_created(document=client_document)
+
       redirect_url = client_document.get_absolute_url()
 
       return HttpResponse('[{"userdoc_id": %d, "url": "%s", "status":"%s", "message":"%s"}]' % (client_document.pk, redirect_url, 'success', unicode(_('Document Saved'))), status=200, content_type="application/json")

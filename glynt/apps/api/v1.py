@@ -9,9 +9,9 @@ from tastypie.serializers import Serializer
 from tastypie import fields, utils
 from tastypie.resources import Resource
 from tastypie.cache import SimpleCache
+from tastypie.authentication import SessionAuthentication
+from tastypie.authorization import DjangoAuthorization
 
-from authentication import OAuthAuthentication
-from authorization import OAuthAuthorization
 
 from glynt.apps.document.models import Document, ClientCreatedDocument
 from glynt.apps.sign.models import DocumentSignature
@@ -29,13 +29,13 @@ class BaseApiModelResource(ModelResource):
     """
     class Meta:
         serializer = Serializer(formats=available_formats)
-        authentication = OAuthAuthentication()
-        authorization = OAuthAuthorization()
+        cache = SimpleCache(timeout=30)
+        authentication = SessionAuthentication()
 
     def get_object_list(self, request):
         """ Test for a set of catch field names 
         These keys relate to references to models that need to be filtered by
-        the current users company/customer id """
+        the current user"""
         try:
             self._meta.queryset = self._meta.queryset.model.objects.apply_api_user_filter(request.user)
         except AttributeError:
@@ -45,19 +45,18 @@ class BaseApiModelResource(ModelResource):
 
 
 class DocumentResource(BaseApiModelResource):
-    class Meta:
+    class Meta(BaseApiModelResource.Meta):
         list_allowed_methods = ['get']
         queryset = Document.objects.all()
-        resource_name = 'templates'
-        serializer = Serializer(formats=available_formats)
+        resource_name = 'document/templates'
+        excludes = ['body']
 
 
 class ClientCreatedDocumentResource(BaseApiModelResource):
-    class Meta:
+    class Meta(BaseApiModelResource.Meta):
         list_allowed_methods = ['get']
         queryset = ClientCreatedDocument.objects.all()
-        resource_name = 'documents'
-        serializer = Serializer(formats=available_formats)
+        resource_name = 'client/documents'
         excludes = ['body', 'data']
         include_absolute_url = True
 
@@ -67,12 +66,12 @@ class ClientCreatedDocumentResource(BaseApiModelResource):
         del(bundle.data['meta_data'])
         return bundle
 
+
 class SignatureResource(BaseApiModelResource):
-    class Meta:
+    class Meta(BaseApiModelResource.Meta):
         list_allowed_methods = ['get']
         queryset = DocumentSignature.objects.all()
-        resource_name = 'signatures'
-        serializer = Serializer(formats=available_formats)
+        resource_name = 'client/signatures'
         excludes = ['key_hash', 'hash_data', 'signature']
         include_absolute_url = True
 

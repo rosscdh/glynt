@@ -144,6 +144,3 @@ class ClientCreatedDocument(models.Model):
 
     def data_as_json(self):
       return json.dumps(self.data)
-
-
-from glynt.apps.document.signals import *
