@@ -1,18 +1,101 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+<!-- 
+This is intended to be rendered to a PDF using pisa, not in a browser.
+Therefore, the HTML and CSS here can look a bit fishy. Please refer to 
+http://www.htmltopdf.org/doc/pisa-en.html for reference 
+-->
+<html>
+<link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
+<link href="{{ STATIC_URL }}css/ml.css" rel="stylesheet">
+<style>
+/*Custom fonts*/
+/*@font-face {
+    font-family: Weird, "Weird Font";
+    src: url(test/weird.ttf)
+}
+@font-face {
+    font-family: Akkurat;
+    src: url(test/Akkurat.ttf)
+}
+@font-face {
+    font-family: Akk;
+    src: url(test/akk.otf)
+}*/
+/* Page layout */
+@page {
+    @frame {
+        -pdf-frame-content: company_logo;
+        /*-pdf-frame-border: 1;*/
+        right: 3cm;
+        width: 5cm;
+        top: 1cm;
+        height: 1cm;
+    }
+    @frame {
+        -pdf-frame-content: address_sender;
+        /*-pdf-frame-border: 1;*/
+        right: 4cm;
+        width: 5cm;
+        top: 4cm;
+        height: 3cm;
+    }
+    @frame {
+        -pdf-frame-content: address_receiver;
+        /*-pdf-frame-border: 1;*/
+        left: 2cm;
+        width: 5cm;
+        top: 4cm;
+        height: 3cm;
+    }
+    @frame {
+        -pdf-frame-content: main_text;
+        /*-pdf-frame-border: 1;*/
+        right: 2cm;
+        left: 2cm;
+        top: 7cm;
+        bottom: 5cm;
+    }
+    @frame {
+        -pdf-frame-content: signature_left;
+        /*-pdf-frame-border: 1;*/
+        left: 2cm;
+        width: 5cm;
+        bottom: 1cm;
+        height: 3cm;
+    }
+    @frame {
+        -pdf-frame-content: signature_right;
+        /*-pdf-frame-border: 1;*/
+        right: 2cm;
+        width: 5cm;
+        bottom: 1cm;
+        height: 3cm;
+    }
+}
 
-  </head>
+h1, h2, h3, h4 { /* Don't add an outline to the document */
+    -pdf-outline: false;
+}
 
-  <body data-spy="scroll" data-target=".subnav" data-offset="50" class="preview">
-    <div class="container">
-      {{ STATIC_URL}}
-    {{body}}
-    </div>
-  </body>
+.border {
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    
+    border-top-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-right-style: solid;
+}
+
+.top_image {
+    zoom: 80%;
+}
+
+</style>
+<body>
+  <div class="container">
+  {{body}}
+  </div>
+</body>
 </html>

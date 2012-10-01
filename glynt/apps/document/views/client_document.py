@@ -137,41 +137,45 @@ class DocumentExportView(View):
       return self.get(request, args, kwargs)
 
     def get(self, request, *args, **kwargs):
-      document_slug = slugify(self.kwargs['slug'])
-      document = get_object_or_404(ClientCreatedDocument.objects.select_related('source_document','source_document__flyform'), slug=document_slug, owner=request.user)
+        from django.template import RequestContext
+        from django_xhtml2pdf.utils import fetch_resources
 
-      # @TODO Move all of this into a model method on ClientCreatedDocument
-      data = []
-      if type(document.source_document.flyform.defaults) is dict:
-        data = document.source_document.flyform.defaults.items()
-      if type(document.data) is dict:
-        data = data + document.data.items()
-      data = dict(data)
-      if 'document_title' in data:
-        data['document_title'] = document.name
-      else:
-        data['document_title'] = ''
+        document_slug = slugify(self.kwargs['slug'])
+        document = get_object_or_404(ClientCreatedDocument.objects.select_related('source_document','source_document__flyform'), slug=document_slug, owner=request.user)
 
-      pybars_plus = PybarsPlus(document.body)
-      body = pybars_plus.render(data)
-      handlebars_template_body = mark_safe(markdown.markdown(body))
+        # @TODO Move all of this into a model method on ClientCreatedDocument
+        data = []
+        if type(document.source_document.flyform.defaults) is dict:
+            data = document.source_document.flyform.defaults.items()
+        if type(document.data) is dict:
+            data = data + document.data.items()
+            data = dict(data)
+        if 'document_title' in data:
+            data['document_title'] = document.name
+        else:
+            data['document_title'] = ''
 
-      html = render_to_string('document/export/base.html', {
-        'body': handlebars_template_body
-      })
+        pybars_plus = PybarsPlus(document.body)
+        body = pybars_plus.render(data)
+        handlebars_template_body = mark_safe(markdown.markdown(body))
 
-      filename = '%s.pdf' % (document_slug,)
-      pdf = StringIO.StringIO()
-      result = pisa.CreatePDF(StringIO.StringIO(html.encode("UTF-8")), pdf)
+        context = RequestContext(request, {
+            'body': handlebars_template_body
+        })
+        html = render_to_string('document/export/base.html', context)
 
-      if result.err:
-        response = HttpResponse('[{"message":"%s"}]'%(pdf.err), status=401, content_type="text/json")
-      else:
-        response = HttpResponse(pdf.getvalue(), status=200, content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename=%s' % (filename,)
+        filename = '%s.pdf' % (document_slug,)
+        pdf = StringIO.StringIO()
+        result = pisa.CreatePDF(StringIO.StringIO(html.encode("UTF-8")), pdf, encoding='UTF-8', link_callback=fetch_resources)
+
+        if result.err:
+            response = HttpResponse('[{"message":"%s"}]'%(pdf.err), status=401, content_type="text/json")
+        else:
+            response = HttpResponse(pdf.getvalue(), status=200, content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename=%s' % (filename,)
+            return response
+
         return response
-
-      return response
 
 
 class CloneClientCreatedDocumentView(View):
