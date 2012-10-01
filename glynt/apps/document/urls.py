@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 
 from glynt.apps.document.views import DocumentView, MyDocumentView, CreateDocumentView, EditDocumentView, DocumentByCategoryListView
 from glynt.apps.document.views import DocumentExportView, CloneClientCreatedDocumentView, DeleteClientCreatedDocumentView, UndoDeleteClientCreatedDocumentView
-from glynt.apps.document.views import ValidateClientCreatedDocumentFormView, PersistClientCreatedDocumentProgressView 
+from glynt.apps.document.views import ReviewClientCreatedView, ValidateClientCreatedDocumentFormView, PersistClientCreatedDocumentProgressView 
 
 from glynt.apps.flyform.forms import TmpStepCreator
 
@@ -17,6 +17,7 @@ urlpatterns = patterns('',
     url(r'^my/(?P<pk>\d+)/undelete/$', login_required(UndoDeleteClientCreatedDocumentView.as_view()), name='my_undelete'),
     url(r'^my/(?P<pk>\d+)/clone/$', login_required(CloneClientCreatedDocumentView.as_view()), name='my_clone'),
     url(r'^my/(?P<pk>\d+)/persist/$', login_required(PersistClientCreatedDocumentProgressView.as_view()), name='my_persist'),
+    url(r'^my/(?P<slug>.+)/review/$', login_required(ReviewClientCreatedView.as_view()), name='my_review'),
     url(r'^my/(?P<slug>.+)/$', login_required(MyDocumentView.as_view(template_name='document/document.html')), name='my_view'),
 
     url(r'^tmp/step/creator/$', login_required(FormView.as_view(form_class=TmpStepCreator, template_name='document/tmp_step_creator.html')), name='step_creator'),

@@ -38,7 +38,7 @@
           {% for d in my_document_list %}
           <tr>
               <td class="">
-                <a href="{% url 'document:my_view' slug=d.slug %}" rel="tooltip" title="{% trans 'Created by' %} {{ d.owner.get_profile.short_name|default:d.owner.username }}" class="doc-title">{{ d.name }}</a>
+                <a href="{% url 'document:my_review' slug=d.slug %}" rel="tooltip" title="{% trans 'Created by' %} {{ d.owner.get_profile.short_name|default:d.owner.username }}" class="doc-title">{{ d.name }}</a>
                 <br/><span class="created">{% trans 'Created' %} {% moment d.created_at d.created_at %}</span>
               </td>
               <td>

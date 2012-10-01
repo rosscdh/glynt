@@ -1,0 +1,68 @@
+{% extends 'document/base.html' %}
+{% load i18n markup %}
+{% load sign_tags %}
+{% load glynt_helpers %}
+{% load comments comments_xtd %}
+{% load url from future %}
+
+
+{% block owner_info %}
+<div class="span12">
+  <h2 id="document-title">{{ userdoc.name }}</h2>
+</div>
+{% endblock %}
+
+{% block form %}
+<div id="invite-to-sign" class="row">&nbsp;</div>
+<div class="comments">
+<div id="comment-form" class="row">
+  {% get_comment_form for userdoc as comment_form %}
+  <form action="{% comment_form_target %}" method="POST">
+  {% csrf_token %}
+  {% if comment_form.comment.errors %}{{ comment_form.comment.errors }}{% endif %}
+  {{ comment_form.comment.label }}{{ comment_form.comment }}
+  {{ comment_form.honeypot }}
+  {{ comment_form.content_type }}
+  {{ comment_form.object_pk }}
+  {{ comment_form.timestamp }}
+  {{ comment_form.security_hash }}
+  <input type="hidden" name="next" value="{% url 'document:my_review' slug=userdoc.slug %}" />
+  <div id="save-comment" class="controls">
+    <button id="btn-save_comment" class="btn btn-primary btn-small" type="submit">{% trans 'Comment' %}</button>
+  </div>
+  </form>
+</div>
+<div class="comment-list">
+  {% get_comment_list for userdoc as comment_list %}
+  <ul>
+  {% for comment in comment_list %}
+    <li{% if comment.last %} class="last"{% endif %}>
+    {{ comment }}
+    </li>
+  {% endfor %}
+  </ul>
+</div>
+</div>
+{% endblock %}
+
+{% block document_head %}{% endblock %}
+
+{% block document %}
+<span id="document-md" data-bind="html: App.documentModel.renderedHTML()">{% show_loading modal='False' %}</span>
+{% endblock %}
+
+{% block css %}
+<style>
+#id_honeypot {
+  display: none;
+}
+  .border{
+    border:solid #c00 1px;
+  }
+</style>
+{% endblock %}
+
+{% block js %}
+{% include 'document/inline/document.js' %}
+{% invite_to_sign userdoc '#invite-to-sign' %}
+{% endblock %}

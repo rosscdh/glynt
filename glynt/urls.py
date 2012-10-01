@@ -16,6 +16,8 @@ urlpatterns = patterns('',
     url(r'^social/', include('socialregistration.urls', namespace='socialregistration')),
     url(r'^accounts/', include('userena.urls')),
     url(r'^client/', include('glynt.apps.client.urls', namespace='client')),
+    # Document Comments
+    url(r'^doc/comments/', include('django.contrib.comments.urls')),
     # The Documents
     url(r'^doc/', include('glynt.apps.document.urls', namespace='document')),
     # The Document Signatures

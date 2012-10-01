@@ -139,6 +139,7 @@ DJANGO_APPS = (
 'django.contrib.admin',
 'django.contrib.markup',
 'django.contrib.humanize',
+'django.contrib.comments',
 )
 
 PROJECT_APPS = (
@@ -177,6 +178,8 @@ HELPER_APPS = (
     'easy_thumbnails',
     'user_streams',
     'user_streams.backends.user_streams_single_table_backend',
+    'django_comments_xtd',
+    'django_markup',
 )
 
 # Handle south and its breaking tests
@@ -205,6 +208,8 @@ LINKEDIN_CONSUMER_SECRET_KEY = 'MnrqdbtmM10gkz27'
 LOGIN_REDIRECT_URL = '/client/'#/accounts/%(username)s/'
 LOGIN_URL = '/client/login/'
 LOGOUT_URL = '/social/logout/'
+
+COMMENTS_XTD_CONFIRM_EMAIL = False
 
 DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d %Y',
 '%b %d, %Y', '%d %b %Y', '%d %b, %Y', '%B %d %Y',

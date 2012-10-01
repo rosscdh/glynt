@@ -41,7 +41,6 @@ class MyDocumentView(DocumentView):
 
     self.user_document = get_object_or_404(ClientCreatedDocument.objects.select_related(), slug=document_slug, owner=self.request.user)
     context['userdoc'] = self.user_document
-
     context['userdoc_form'] = ClientCreatedDocumentForm(instance=context['userdoc'])
 
     # Setup the document based on teh source_document of the viewed doc
@@ -61,6 +60,12 @@ class MyDocumentView(DocumentView):
     user_can_view_document(self.user_document, self.request.user)
 
     return context
+
+
+class ReviewClientCreatedView(MyDocumentView):
+    template_name = 'document/review.html'
+
+
 
 # TODO this view represents both the create and the form validate (edit) views
 # need to seperate them into two views
