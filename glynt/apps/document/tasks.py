@@ -52,3 +52,19 @@ def document_cloned(**kwargs):
     user = document.owner
     user_streams.add_stream_item(user, _('You Cloned the document "<a href="%s">%s</a>" as "<a href="%s">%s</a>"' % (source_document.get_absolute_url(), source_document.name, document.get_absolute_url(), document.name,)))
 
+
+@task()
+def document_comment(**kwargs):
+    """
+    When a user Comments ona  document
+    """
+    # Send notification
+    document = kwargs['document']
+    source_document = kwargs['source_document']
+    commenting_user = kwargs['commenting_user']
+    commenting_user_name = kwargs['commenting_user_name']
+    username = commenting_user.get_full_name() if commenting_user else commenting_user_name
+    comment = kwargs['comment']
+    user = document.owner
+    user_streams.add_stream_item(user, _('%s commented on "<a href="%s">%s</a>" - "%s"' % (username, document.get_absolute_url(), document.name, comment,)))
+

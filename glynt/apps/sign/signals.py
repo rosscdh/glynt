@@ -31,3 +31,4 @@ def save_document_signature_signal(sender, **kwargs):
           send_signature_invite_email.delay(document=signature.document, date_invited=signature.date_invited, key_hash=signature.key_hash, **meta_data)
         except:
           send_signature_invite_email(document=signature.document, date_invited=signature.date_invited, key_hash=signature.key_hash, **meta_data)
+

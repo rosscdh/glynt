@@ -209,6 +209,7 @@ LOGIN_URL = '/client/login/'
 LOGOUT_URL = '/social/logout/'
 
 COMMENTS_XTD_CONFIRM_EMAIL = False
+#COMMENTS_APP = 'django_comments_xtd'
 
 DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d %Y',
 '%b %d, %Y', '%d %b %Y', '%d %b, %Y', '%B %d %Y',

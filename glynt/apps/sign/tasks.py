@@ -57,7 +57,7 @@ def send_signature_acquired_email(**kwargs):
   kwargs['from_email'] = invited_by_email
   kwargs['document_name'] = document.name
 
-  kwargs['review_signatures_url'] = reverse('sign:default', kwargs={'pk': document.source_document.pk, 'hash': key_hash})
+  kwargs['review_signatures_url'] = reverse('sign:default', kwargs={'pk': document.pk, 'hash': key_hash})
 
   send_templated_mail(
           template_name = 'signature_acquired',
