@@ -47,6 +47,7 @@
                 <div class="btn-group pull-right">
                   <button class="btn dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i> <span class="caret"></span></button>
                   <ul class="dropdown-menu">
+                    <li><a id="edit-{{ d.pk }}" class="small" href="{% url 'document:my_view' slug=d.slug %}">{% trans 'Edit' %}</a></li>
                     <li><a id="clone-{{ d.pk }}" href="#clone" data-url="{% url 'document:my_clone' pk=d.pk %}" data-pk="{{ d.pk }}" class="clone-my-document">{% trans 'Clone' %}</a></li>
                     <li><a id="export-{{ d.pk }}" href="{% url 'document:export' slug=d.slug %}" target="_BLANK" data-url="{% url 'document:export' slug=d.slug %}" data-pk="{{ d.pk }}" class="">{% trans 'Download PDF' %}</a></li>
                     <li><a id="delete-{{ d.pk }}" href="#delete" data-url="{% url 'document:my_delete' pk=d.pk %}" data-pk="{{ d.pk }}" class="delete-my-document">{% trans 'Delete' %}</a></li>
@@ -173,17 +174,6 @@ var app = $.sammy(function() {
 
 // start the application
 app.run('#/');
-
-$('body').tooltip({
-  selector: '[rel=tooltip]',
-  placement: 'top',
-  animation: true,
-  delay: { show: 50, hide: 5 }
-});
-$('body').popover({
-  selector: '[rel=popover]',
-  trigger: 'hover',
-})
 
 // ----- My Document list options -----
   $('a.export-pdf').live('click', function(event){

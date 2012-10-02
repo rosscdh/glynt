@@ -117,5 +117,19 @@
     <script src="{{ STATIC_URL }}js/sammyjs/plugins/sammy.handlebars.js"></script>
     <script src="{{ STATIC_URL }}js/sammyjs/plugins/sammy.json.js"></script>
     {% block js %}{% endblock %}
+    <script>
+    $(document).ready(function(){
+      $('body').tooltip({
+        selector: '[rel=tooltip]',
+        placement: 'top',
+        animation: true,
+        delay: { show: 50, hide: 5 }
+      });
+      $('body').popover({
+        selector: '[rel=popover]',
+        trigger: 'hover',
+      });
+    });
+    </script>
   </body>
 </html>

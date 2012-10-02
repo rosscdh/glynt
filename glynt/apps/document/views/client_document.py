@@ -64,7 +64,11 @@ class MyDocumentView(DocumentView):
 
 class ReviewClientCreatedView(MyDocumentView):
     template_name = 'document/review.html'
-
+    def get_context_data(self, **kwargs):
+      # call the parent dirctly and skip what the parent would do
+      context = super(ReviewClientCreatedView, self).get_context_data(**kwargs)
+      context['next'] = reverse('document:my_review', kwargs={'slug':self.user_document.slug})
+      return context
 
 
 # TODO this view represents both the create and the form validate (edit) views

@@ -153,7 +153,6 @@ PROJECT_APPS = (
     'glynt.apps.flyform',
     # The Document Signing system
     'glynt.apps.sign',
-
     # The Api
     'glynt.apps.api',
 )

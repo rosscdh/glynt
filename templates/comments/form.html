@@ -1,0 +1,15 @@
+{% load comments i18n %}
+<form action="{% comment_form_target %}" method="POST">
+{% csrf_token %}
+{% if form.comment.errors %}{{ form.comment.errors }}{% endif %}
+{{ form.comment.label }}{{ form.comment }}
+{{ form.honeypot }}
+{{ form.content_type }}
+{{ form.object_pk }}
+{{ form.timestamp }}
+{{ form.security_hash }}
+{% if next %}<div><input type="hidden" name="next" value="{{ next }}" /></div>{% endif %}
+<div id="save-comment" class="controls">
+  <button id="btn-save_comment" class="btn btn-primary btn-small" type="submit">{% trans 'Post' %}</button>
+</div>
+</form>

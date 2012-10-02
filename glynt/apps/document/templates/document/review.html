@@ -2,46 +2,39 @@
 {% load i18n markup %}
 {% load sign_tags %}
 {% load glynt_helpers %}
-{% load comments comments_xtd %}
+{% load comments %}
 {% load url from future %}
 
 
 {% block owner_info %}
 <div class="span12">
   <h2 id="document-title">{{ userdoc.name }}</h2>
+  <a href="{% url 'document:my_view' slug=userdoc.slug %}">{% trans 'Edit' %}</a>
 </div>
 {% endblock %}
 
 {% block form %}
 <div id="invite-to-sign" class="row">&nbsp;</div>
-<div class="comments">
-<div id="comment-form" class="row">
-  {% get_comment_form for userdoc as comment_form %}
-  <form action="{% comment_form_target %}" method="POST">
-  {% csrf_token %}
-  {% if comment_form.comment.errors %}{{ comment_form.comment.errors }}{% endif %}
-  {{ comment_form.comment.label }}{{ comment_form.comment }}
-  {{ comment_form.honeypot }}
-  {{ comment_form.content_type }}
-  {{ comment_form.object_pk }}
-  {{ comment_form.timestamp }}
-  {{ comment_form.security_hash }}
-  <input type="hidden" name="next" value="{% url 'document:my_review' slug=userdoc.slug %}" />
-  <div id="save-comment" class="controls">
-    <button id="btn-save_comment" class="btn btn-primary btn-small" type="submit">{% trans 'Comment' %}</button>
+<div id="document-comments" class="comments">
+  <div id="comment-form" class="row">
+    {% get_comment_form for userdoc as comment_form %}
+    {% comment_form comment_form next %}
   </div>
-  </form>
-</div>
-<div class="comment-list">
-  {% get_comment_list for userdoc as comment_list %}
-  <ul>
-  {% for comment in comment_list %}
-    <li{% if comment.last %} class="last"{% endif %}>
-    {{ comment }}
-    </li>
-  {% endfor %}
-  </ul>
-</div>
+  <div class="comment-list">
+    {% get_comment_list for userdoc as comment_list %}
+    <dl id="comments">
+      {% for comment in comment_list reversed %}
+        <dt id="c{{ comment.id }}">
+            <span class="created">{% moment comment.submit_date comment.submit_date %}</span>
+        </dt>
+        <dd>
+            <div>{{ comment.comment }}</div>
+            <span class="created pull-right">{{ comment.name }}</span>
+            <br/>
+        </dd>
+      {% endfor %}
+    </dl>
+  </div>
 </div>
 {% endblock %}
 

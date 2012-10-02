@@ -59,6 +59,14 @@ def moment(date_object, default_date):
   }
 
 
+@register.inclusion_tag('comments/form.html')
+def comment_form(form, next):
+    return {
+      'form': form,
+      'next': next
+    }
+
+
 @register.inclusion_tag('pleasewait/loading.html')
 def show_loading(**kwargs):
     true_eval = (True, 'True')
