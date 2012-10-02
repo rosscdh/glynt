@@ -56,6 +56,33 @@
 {% endblock %}
 
 {% block js %}
+<script>
+$(document).ready(function(){
+  $('.submit_comment').live('click', function(event){
+    event.preventDefault();
+    var self = $(this);
+    var form = $(this).closest('form');
+    console.log(form)
+    $.ajax({
+      type: 'POST',
+      url: form.attr('action'),
+      data: form.serialize(),
+    })
+    .success(function(data, textStatus, jqXHR) {
+      data = data[0];
+      window.location = data.url
+    })
+    .error(function(jqXHR, textStatus, errorThrown) { 
+      console.log(jqXHR)
+      console.log(textStatus)
+      console.log(errorThrown)
+      console.log('Error in Javascript event')
+    })
+    .complete(function() {
+    });
+  });
+});
+</script>
 {% include 'document/inline/document.js' %}
 {% invite_to_sign userdoc '#invite-to-sign' %}
 {% endblock %}
