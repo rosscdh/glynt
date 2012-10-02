@@ -34,6 +34,7 @@ facebook
 -e git+https://github.com/lincolnloop/python-qrcode.git#egg=python-qrcode
 -e git+https://github.com/stard0g101/django-user-streams.git@extended_templates#egg=django-user-streams
 -e git+https://github.com/stard0g101/django-comments-xtd.git#egg=django-comments-xtd
+django_markup
 # javascript markdown
 # hg clone https://code.google.com/p/pagedown/
 # possible multi format 
