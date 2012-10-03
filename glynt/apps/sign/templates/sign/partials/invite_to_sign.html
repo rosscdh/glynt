@@ -30,8 +30,7 @@
 
 {% tplhandlebars "hb-invite-signatories" %}
 <div id="invite-signatories">
-  <h4>{% trans 'Invite People to Sign' %}</h4>
-  <a id="" href="#invitee-add" class="signatory_add">{% trans 'Invite Someone' %}</a>
+  <a id="" href="#invitee-add" class="signatory_add">{% trans 'Create Invite' %}</a>
   <span class="message">{{message}}</span>
   <form id="send-invite" class="form-horizontal">
     <input type="hidden" name="csrfmiddlewaretoken" value="{{csrf_token}}" />
@@ -47,7 +46,7 @@
     {{/each}}
     </ul>
     {{#if invitees}}
-    <button id="submit-invitation" type="submit" class="btn btn-success btn-mini">{% trans 'Invite' %}</button>
+    <button id="submit-invitation" type="submit" class="btn btn-success btn-mini">{% trans 'Send Invites' %}</button>
     {{/if}}
   </form>
 </div>
@@ -282,9 +281,8 @@ $(document).ready(function(){
 
 <style>
   .invitee-vehicle {
-    margin:10px 0px;
-    padding:0px 10px 10px 10px;
-    border:solid #ccc 2px;
+    margin:5px 0px;
+    padding:0px 5px 5px 5px;
   }
   ul#invitees {
     list-style:none;

@@ -1,86 +1,118 @@
 {% extends 'document/base.html' %}
 {% load i18n markup %}
 {% load sign_tags %}
-{% load glynt_helpers %}
-{% load comments %}
+{% load glynt_helpers document_tags %}
 {% load url from future %}
-
 
 {% block owner_info %}
 <div class="span12">
   <h2 id="document-title">{{ userdoc.name }}</h2>
-  <a href="{% url 'document:my_view' slug=userdoc.slug %}">{% trans 'Edit' %}</a>
 </div>
 {% endblock %}
 
 {% block form %}
-<div id="invite-to-sign" class="row">&nbsp;</div>
-<div id="document-comments" class="row doc-body">
-  <div id="comment-form" class="row">
-    {% get_comment_form for userdoc as comment_form %}
-    {% comment_form comment_form next %}
-  </div>
-  <div class="comment-list">
-    {% get_comment_list for userdoc as comment_list %}
-    <ul id="comments">
-      {% for comment in comment_list reversed %}
-        <li id="c{{ comment.id }}">
-            <span class="created">{% moment comment.submit_date comment.submit_date %}</span>
-            <div>{{ comment.comment }}</div>
-            <span class="created pull-right">{{ comment.name }}</span>
-            <br/>
-        </li>
-      {% endfor %}
-    </ul>
-  </div>
+
+<div class="span3 sidebar">
+  <ul class="nav nav-list">
+    <li><a href="{% url 'document:my_view' slug=userdoc.slug %}" class="btn btn-green">{% trans 'Edit Doc' %}</a></li>
+    <li class="divider"></li>
+      <li><a href="#/review"> {% trans 'Review Document' %}</a></li>
+    <li class="divider"></li>
+      <li><a href="#/review/signatories"> {% trans 'Signature Details' %}</a></li>
+    <li class="divider"></li>
+      <li><a href="#/review/comments"> {% trans 'Comments' %}</a></li>
+    <li class="divider"></li>
+      <li><a href="#/review/activity"> {% trans 'Activity' %}</a></li>
+    <li class="nav-header">{% trans 'Signature Invites' %}</li>
+      <li><div id="invite-to-sign" class="">&nbsp;</div></li>
+  </ul>
 </div>
+
 {% endblock %}
 
 {% block document_head %}{% endblock %}
 
 {% block document %}
-<span id="document-md" data-bind="html: App.documentModel.renderedHTML()">{% show_loading modal='False' %}</span>
+<div id="review" class="span7 view default">
+    <h2 class="title">{% trans 'Review' %}</h2>
+    <div class="doc-body">
+        <span id="document-md" data-bind="html: App.documentModel.renderedHTML()">{% show_loading modal='False' %}</span>
+    </div>
+</div>
+
+<div id="signatories" class="span7 view hide">
+    <h2 class="title">{% trans 'Signatories' %}</h2>
+    <div class="doc-body">
+        
+    </div>
+</div>
+
+<div id="comments" class="span7 view hide">
+    <h2 class="title">{% trans 'Comments' %}</h2>
+    <div class="doc-body">
+        <div id="document-comments">
+        {% show_comments_for_object userdoc next %}
+        </div>
+    </div>
+</div>
+
+<div id="activity" class="span7 view hide">
+    <h2 class="title">{% trans 'Activity' %}</h2>
+    <div class="doc-body">
+    </div>
+</div>
 {% endblock %}
 
-{% block css %}
-<style>
-#id_honeypot {
-  display: none;
-}
-  .border{
-    border:solid #c00 1px;
-  }
-</style>
-{% endblock %}
+{% block css %}{% endblock %}
 
 {% block js %}
 <script>
-$(document).ready(function(){
-  $('.submit_comment').live('click', function(event){
-    event.preventDefault();
-    var self = $(this);
-    var form = $(this).closest('form');
+var app = $.sammy(function() {
+    var self = this;
+    self.views = $('div.view');
+    self.nav = $('ul.nav-list li a');
 
-    $.ajax({
-      type: 'POST',
-      url: form.attr('action'),
-      data: form.serialize(),
-    })
-    .success(function(data, textStatus, jqXHR) {
-      var base_form = self.closest('div#comment-form');
-      var base_comment_ul = $('ul#comments');
-      var comment_ul = $(data).find('ul#comments');
-      var new_li = comment_ul.find('li:first');
-      base_comment_ul.prepend(new_li);
-      base_form.find('#id_comment').val('')
-      base_form.find('#id_comment').select();
-    })
-    .error(function(jqXHR, textStatus, errorThrown) { 
-    })
-    .complete(function() {
+    var hb_templates_source   = $("script#template_list").html();
+    var hb_templates_list = Handlebars.compile(hb_templates_source);
+
+    this.get('#/', function() {
+        this.redirect('#/review');
     });
-  });
+
+    this.get('#/review', function() {
+        self.show($('div#review'));
+    });
+    this.get('#/review/signatories', function() {
+        self.show($('div#signatories'));
+    });
+    this.get('#/review/comments', function() {
+        self.show($('div#comments'));
+    });
+    this.get('#/review/activity', function() {
+        self.show($('div#activity'));
+    });
+    
+    this.hide_all = function hide_all() {
+        self.nav.removeClass('selected');
+        $.each(self.views, function(index, item) {
+            $(item).hide();
+        });
+    };
+    this.show = function show_view(view_list) {
+        if ($.isArray(view_list) == false) {
+            view_list = [view_list];
+        }
+        self.hide_all();
+        $('[href="'+window.location.hash+'"]').addClass('selected');
+        $.each(view_list, function(index, item) {
+            item.show();
+        });
+    }
+    
 });
+
+// start the application
+app.run('#/');
 </script>
 {% include 'document/inline/document.js' %}
 {% invite_to_sign userdoc '#invite-to-sign' %}

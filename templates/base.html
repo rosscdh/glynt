@@ -1,4 +1,4 @@
-{% load i18n templatetag_handlebars glynt_helpers %}{% load thumbnail %}{% load url from future %}
+{% load i18n templatetag_handlebars glynt_helpers document_tags %}{% load thumbnail %}{% load url from future %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -116,6 +116,7 @@
     <script src="{{ STATIC_URL }}js/sammyjs/sammy.js"></script>
     <script src="{{ STATIC_URL }}js/sammyjs/plugins/sammy.handlebars.js"></script>
     <script src="{{ STATIC_URL }}js/sammyjs/plugins/sammy.json.js"></script>
+    {% comments_js %}
     {% block js %}{% endblock %}
     <script>
     $(document).ready(function(){
