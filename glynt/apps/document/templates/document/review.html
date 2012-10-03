@@ -33,21 +33,21 @@
 {% block document_head %}{% endblock %}
 
 {% block document %}
-<div id="review" class="span7 view default">
+<div id="review" class="span9 view default">
     <h2 class="title">{% trans 'Review' %}</h2>
     <div class="doc-body">
         <span id="document-md" data-bind="html: App.documentModel.renderedHTML()">{% show_loading modal='False' %}</span>
     </div>
 </div>
 
-<div id="signatories" class="span7 view hide">
+<div id="signatories" class="span9 view hide">
     <h2 class="title">{% trans 'Signatories' %}</h2>
     <div class="doc-body">
         
     </div>
 </div>
 
-<div id="comments" class="span7 view hide">
+<div id="comments" class="span9 view hide">
     <h2 class="title">{% trans 'Comments' %}</h2>
     <div class="doc-body">
         <div id="document-comments">
@@ -56,7 +56,7 @@
     </div>
 </div>
 
-<div id="activity" class="span7 view hide">
+<div id="activity" class="span9 view hide">
     <h2 class="title">{% trans 'Activity' %}</h2>
     <div class="doc-body">
     </div>
