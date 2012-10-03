@@ -51,7 +51,9 @@
 {% endblock %}
 
 {% block document %}
+<div class="doc-body">
 <span id="document-md" data-bind="html: App.documentModel.renderedHTML()">{% show_loading modal='False' %}</span>
+</div>
 {% endblock %}
 
 {% block css %}
