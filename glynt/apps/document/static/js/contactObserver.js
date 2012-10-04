@@ -39,12 +39,14 @@ argosPanOptia = function argosPanOptia() {
   };
 
   self.dispatch = function dispatch(event_name, value) {
-    var event_callbacks = self.events[event_name];
-    if (event_callbacks != undefined && event_callbacks.length > 0) {
-      $.each(event_callbacks, function(index, callback){
-        eval(callback(value));
-      });
-    }
+    if (self.events[event_name] != undefined) {
+        var event_callbacks = self.events[event_name];
+        if (event_callbacks.length > 0) {
+            $.each(event_callbacks, function(index, callback){
+                eval(callback(value));
+            });
+        };
+    };
   };
 
 };

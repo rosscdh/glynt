@@ -8,7 +8,6 @@
 {{ userdoc.body|default:object.body|safe }}
 </script>
 <script src="{{ STATIC_URL }}js/jquery.jeditable.mini.js"></script>
-<script src="{{ STATIC_URL }}js/contactObserver.js"></script>
 <script id="document-controls" type="text/javascript">
 // use strict;
 // use warnings;

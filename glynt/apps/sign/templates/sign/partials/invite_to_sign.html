@@ -247,12 +247,13 @@ $(document).ready(function(){
 
     self.argosPanOptiaData = function argosPanOptiaData(invitee_list) {
       invitee_list = $.parseJSON(invitee_list);
-
-      $.each(invitee_list, function(index, contact_ob) {
-        if (contact_ob.id && contact_ob.name) {
-          self.add(contact_ob.id, contact_ob.email, contact_ob.name, contact_ob.profile_picture, contact_ob.is_signed);
-        };
-      });
+      if (invitee_list) {
+        $.each(invitee_list, function(index, contact_ob) {
+          if (contact_ob.id && contact_ob.name) {
+            self.add(contact_ob.id, contact_ob.email, contact_ob.name, contact_ob.profile_picture, contact_ob.is_signed);
+          };
+        });
+      };
     };
 
     self.init = function init(params) {

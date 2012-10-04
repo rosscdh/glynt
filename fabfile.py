@@ -36,6 +36,7 @@ def prepare_deploy():
 def conclude_deploy():
     run('unlink /tmp/%s.zip'%(PROJECT,))
 
+
 def deploy(hard_deploy, env, app_name, project_name, remote_project_path):
 
     if hard_deploy == True:

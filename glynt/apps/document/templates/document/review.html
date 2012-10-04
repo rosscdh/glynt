@@ -60,6 +60,9 @@
 <div id="activity" class="span9 view hide">
     <h2 class="title">{% trans 'Activity' %}</h2>
     <div class="doc-body">
+      <ul class="activity activity-large">
+      {% document_activity_stream document=userdoc limit=50 %}
+      </ul>
     </div>
 </div>
 {% endblock %}
@@ -140,8 +143,16 @@ $(document).ready(function(){
           return self.markdownConverter.makeHtml(md);
         }
 
+        self.registerCallback = function registerCallback(event_name, callback) {
+          self.observer.registerCallback(event_name, callback);
+        };
+        self.dispatch = function dispatch(event_name, value) {
+          self.observer.dispatch(event_name, value);
+        };
+
         self.init = function init() {
           self.render();
+          self.observer = new argosPanOptia();
         };
 
         self.init();
@@ -152,12 +163,7 @@ $(document).ready(function(){
     // ----- KO Bindings -----
     ko.applyBindings(App);
 
-    {% if object.is_signed %}
-      sig = $('#signature-json').html();
-      $('.signaturePad').signaturePad({displayOnly:true}).regenerate(sig);
-    {% else %}
-      signPad = $('.signaturePad').signaturePad();
-    {% endif %}
+
 
 
 });
