@@ -8,6 +8,7 @@
 {% block owner_info %}
 <div class="span12">
   <h2 id="document-title" class="editable">{{ userdoc.name }}</h2>
+  <a href="{% url 'document:my_review' slug=userdoc.slug %}" rel="tooltip" title="">{% trans 'Review Document' %}</a>
   <form id="userdoc-name-form" class="hidden">
       {{ userdoc_form }}
   </form>

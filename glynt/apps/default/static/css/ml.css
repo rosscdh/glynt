@@ -91,7 +91,7 @@ table#my-documents td{
 table#my-documents td input {
 	margin-top:-3px;
 }
-body.dashboard{
+body.dashboard, body.review, body.sign{
 	background-color:#f2f7f9;
 }
 div.doccount {

@@ -67,6 +67,7 @@ class ReviewClientCreatedView(MyDocumentView):
     def get_context_data(self, **kwargs):
       # call the parent dirctly and skip what the parent would do
       context = super(ReviewClientCreatedView, self).get_context_data(**kwargs)
+      context['document_data'] = self.user_document.data_as_json()
       context['next'] = reverse('document:my_review', kwargs={'slug':self.user_document.slug})
       return context
 

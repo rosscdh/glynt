@@ -3,8 +3,13 @@
 {% load glynt_helpers document_tags %}
 {% load url from future %}
 
+{% block bodyclass %}sign{% endblock %}
 
-{% block owner_info %}{% endblock %}
+{% block owner_info %}
+<div class="span12">
+  <h2 id="document-title">{% trans 'Sign:' %} {{ userdoc.name }}</h2>
+</div>
+{% endblock %}
 
 {% block form %}
 <div class="span3 sidebar">
@@ -26,14 +31,13 @@
 {% endblock %}
 
 {% block document %}
-<div id="review" class="span7 view default">
-    <h2 class="title">{% trans 'Review the Document' %}</h2>
-    <div class="doc-body">
-        <span id="document-md"></span>
-    </div>
+<div id="review" class="span9 view default">
+  <div class="doc-body">
+      <span id="document-md">{% show_loading modal='False' %}</span>
+  </div>
 </div>
 
-<div id="details" class="span7 view hide">
+<div id="details" class="span9 view hide">
     <h2 class="title">{% trans 'The Document Details' %}</h2>
     <div class="doc-body">
         <p>Hi there {{ object.signee_name }}, please type your name below; or sign the document using the drawing pad made available if your browser supports it.</p>
@@ -43,7 +47,7 @@
     </div>
 </div>
 
-<div id="sign" class="span7 view hide">
+<div id="sign" class="span9 view hide">
     <h2 class="title">{% trans 'Sign the Document' %}</h2>
     <div class="doc-body">
         {% if object.is_signed %}
@@ -81,7 +85,7 @@
     </div>
 </div>
 
-<div id="comments" class="span7 view hide">
+<div id="comments" class="span9 view hide">
     <h2 class="title">{% trans 'Comments' %}</h2>
     <div class="doc-body">
         <div id="document-comments">
@@ -90,7 +94,7 @@
     </div>
 </div>
 
-<div id="activity" class="span7 view hide">
+<div id="activity" class="span9 view hide">
     <h2 class="title">{% trans 'Activity' %}</h2>
     <div class="doc-body">
     </div>
@@ -108,9 +112,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}/js/json2.min.js"></script>
 
 <script id="document-data" type="text/javascript">[{{ document_data|default:''|safe }}]</script>
-<script id="js-document" type="text/x-handlebars-template">
-{{ userdoc.body|default:userdoc.source_document.body|safe }}
-</script>
+<script id="js-document" type="text/x-handlebars-template">{{ userdoc.body|default:userdoc.source_document.body|safe }}</script>
 <script>
 var app = $.sammy(function() {
     var self = this;
