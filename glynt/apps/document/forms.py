@@ -27,11 +27,11 @@ class CreateStepForm(forms.Form, BootstrapMixin):
         ('loop-step', 'Loop Step')
     )
     step_type = forms.ChoiceField(choices=STEP_TYPES)
-    step_type = forms.ChoiceField(choices=STEP_TYPES)
+    step_title = forms.CharField(max_length=32)
 
     class Meta:
         layout = (
-            Fieldset("Login Details", "email", "password1", "password2"),
+            Fieldset("Step Details", "step_type", "step_title"),
         )
 
 

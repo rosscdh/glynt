@@ -26,13 +26,12 @@
 {% block js %}
 
 {% tplhandlebars "hb-steps" %}
-    <a href="#/step/add" class="btn btn-mini btn-success" id="add_step"><i class="icon-plus icon-white"></i> Create Step</a>
-{{#each steps}}
+{{#each_with_key steps key="index"}}
 <div class="step">
-
   <form class="">
+    {{form_steps}}
     <fieldset>
-    <legend>Step</legend>
+    <legend>Step Details</legend>
 
     <div class="control-group">
       <label for="">Type of Step</label>
@@ -52,16 +51,17 @@
   </form>
   <div class="form-actions control-group">
     <div class="pull-right controls">
-      <a href="#step/delete" class="btn btn-danger btn-mini delete_step" data-step_index="0"><i class="icon-remove icon-white"></i> Delete Step</a>
-      <a href="#/field/add" class="btn btn-mini btn-success" id="add_field" data-step_index="0"><i class="icon-plus icon-white"></i> Add Field</a>
+      <a href="#step/delete" class="btn btn-danger btn-mini delete_step" data-step_index="{{index}}"><i class="icon-remove icon-white"></i> Delete Step</a>
+      <a href="#/field/add" class="btn btn-mini btn-success" id="add_field" data-step_index="{{index}}"><i class="icon-plus icon-white"></i> Add Field</a>
     </div>
   </div>
 </div>
-{{/each}}
+{{/each_with_key}}
+<a href="#/step/add" class="btn btn-mini btn-success" id="add_step"><i class="icon-plus icon-white"></i> Create Step</a>
 {% endtplhandlebars %}
 
 {% tplhandlebars "hb-fields" %}
-{{#each step.fields}}
+{{#each_with_key step.fields key="index"}}
 <div class="field">
   <form>
     <fieldset>
@@ -77,7 +77,7 @@
     </fieldset>
   </form>
 </div>
-{{/each}}
+{{/each_with_key}}
 {% endtplhandlebars %}
 
 <script>
