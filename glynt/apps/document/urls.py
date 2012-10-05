@@ -6,8 +6,6 @@ from glynt.apps.document.views import AuthorToolView, DocumentView, MyDocumentVi
 from glynt.apps.document.views import DocumentExportView, CloneClientCreatedDocumentView, DeleteClientCreatedDocumentView, UndoDeleteClientCreatedDocumentView
 from glynt.apps.document.views import ReviewClientCreatedView, ValidateClientCreatedDocumentFormView, PersistClientCreatedDocumentProgressView 
 
-from glynt.apps.flyform.forms import TmpStepCreator
-
 
 urlpatterns = patterns('',
     url(r'^category/(?P<type>.+)/(?P<category>.+)/$', DocumentByCategoryListView.as_view(), name='category_list'),

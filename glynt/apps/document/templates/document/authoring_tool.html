@@ -25,60 +25,40 @@
 
 {% block js %}
 
-{% tplhandlebars "hb-steps" %}
+<script type="text/x-handlebars" id="hb-steps">
+{% verbatim %}
 {{#each_with_key steps key="index"}}
 <div class="step" data-step_index="{{index}}">
+{% endverbatim %}
   <form class="">
-    {{index}}
-    <fieldset>
-    <legend>Step Details</legend>
-
-    <div class="control-group">
-      <label for="">Type of Step</label>
-      <div class="controls">
-      <input type="radio" name="type" value="step" /> Standard Step<br/>
-      <input type="radio" name="type" value="loop-step" /> Loop Step
-      </div>
-    </div>
-
-    <div class="control-group">
-      <label for="">Title</label>
-      <div class="controls">
-      <input type="input" name="properties.step_title" value="" />
-      </div>
-    </div>
-    </fieldset>
+    {{ form_steps }}
   </form>
+  {% verbatim %}
   <div class="form-actions control-group">
     <div class="pull-right controls">
       <a href="#step/delete" class="btn btn-danger btn-mini delete_step" data-step_index="{{index}}"><i class="icon-remove icon-white"></i> Delete Step</a>
       <a href="#/field/add" class="btn btn-mini btn-success" id="add_field" data-step_index="{{index}}"><i class="icon-plus icon-white"></i> Add Field</a>
     </div>
   </div>
+  {% endverbatim %}
 </div>
-{{/each_with_key}}
+{% verbatim %}{{/each_with_key}}{% endverbatim %}
 <a href="#/step/add" class="btn btn-mini btn-success" id="add_step"><i class="icon-plus icon-white"></i> Create Step</a>
-{% endtplhandlebars %}
+</script>
 
-{% tplhandlebars "hb-fields" %}
+<script type="text/x-handlebars" id="hb-fields">
+{% verbatim %}
 {{#each_with_key step.fields key="index"}}
+{% endverbatim %}
 <div class="field">
-  <form>
-    <fieldset>
-    <legend>Basics</legend>
-    <label for="">Type of Step</label>
-    <input type="radio" name="type" value="step" /> Standard Step<br/>
-    <input type="radio" name="type" value="loop-step" /> Loop Step
-    </fieldset>
-    <fieldset>
-    <legend>Properties</legend>
-    <label for="">Title</label>
-    <input type="input" name="properties.step_title" value="" />
-    </fieldset>
+  <form class="">
+    {{ form_fields }}
   </form>
 </div>
+{% verbatim %}
 {{/each_with_key}}
-{% endtplhandlebars %}
+{% endverbatim %}
+</script>
 
 <script>
 $(document).ready(function(){
