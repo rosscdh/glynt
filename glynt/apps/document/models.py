@@ -81,7 +81,7 @@ class ClientCreatedDocument(models.Model):
 
     @property
     def num_signed(self):
-      if 'num_signed' in self.meta_data:
+      if self.meta_data and 'num_signed' in self.meta_data:
         return int(self.meta_data['num_signed'])
       return 0
 
@@ -109,7 +109,7 @@ class ClientCreatedDocument(models.Model):
 
     @property
     def num_invited(self):
-      if 'num_invited' in self.meta_data:
+      if self.meta_data and 'num_invited' in self.meta_data:
         return int(self.meta_data['num_invited'])
       return 0
 
