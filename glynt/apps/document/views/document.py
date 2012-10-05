@@ -23,14 +23,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class CreateDocumentView(TemplateView, FormMixin):
-  template_name = 'document/create.html'
-
-
-class EditDocumentView(TemplateView, FormMixin):
-  template_name = 'document/create.html'
-
-
 class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
   """ Default view of the document """
   def get_context_data(self, **kwargs):
