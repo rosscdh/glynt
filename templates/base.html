@@ -33,6 +33,7 @@
     <link rel="apple-touch-icon" sizes="72x72" href="{{ STATIC_URL }}img/apple-touch-icon-72x72.png">
     <link rel="apple-touch-icon" sizes="114x114" href="{{ STATIC_URL }}img/apple-touch-icon-114x114.png">
     {% block extrahead %}{% endblock %}
+    <link href="{{ STATIC_URL }}css/jquery.signaturepad.css" rel="stylesheet">
     {% block css %}{% endblock %}
     {% block head_js %}{% endblock %}
   </head>
@@ -117,6 +118,10 @@
     <script src="{{ STATIC_URL }}js/sammyjs/plugins/sammy.handlebars.js"></script>
     <script src="{{ STATIC_URL }}js/sammyjs/plugins/sammy.json.js"></script>
     <script src="{{ STATIC_URL }}js/contactObserver.js"></script>
+
+    <script type="text/javascript" src="{{ STATIC_URL }}js/flashcanvas.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.signaturepad.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/json2.min.js"></script>
     {% comments_js %}
     {% block js %}{% endblock %}
     <script>

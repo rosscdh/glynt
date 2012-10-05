@@ -48,7 +48,9 @@ class MyDocumentView(DocumentView):
     context['object'] = self.document
     context['document'] = self.document.body
     context['default_data'] = json.dumps(self.user_document.data)
-    context['invitee_list'] = json.dumps([{'id': i.pk, 'name': i.meta_data['to_name'], 'email': i.meta_data['to_email'], 'is_signed': i.is_signed} for i in self.user_document.documentsignature_set.all()])
+    invitee_list = self.user_document.documentsignature_set.all()
+    context['invitee_list'] = invitee_list
+    context['invitee_list_json'] = json.dumps([{'id': i.pk, 'name': i.meta_data['to_name'], 'email': i.meta_data['to_email'], 'is_signed': i.is_signed} for i in invitee_list])
 
     try:
       context['form_set'] = self.document.flyform.flyformset()
@@ -65,7 +67,6 @@ class MyDocumentView(DocumentView):
 class ReviewClientCreatedView(MyDocumentView):
     template_name = 'document/review.html'
     def get_context_data(self, **kwargs):
-      # call the parent dirctly and skip what the parent would do
       context = super(ReviewClientCreatedView, self).get_context_data(**kwargs)
       context['document_data'] = self.user_document.data_as_json()
       context['next'] = reverse('document:my_review', kwargs={'slug':self.user_document.slug})

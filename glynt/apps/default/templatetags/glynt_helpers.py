@@ -50,13 +50,16 @@ def moment_js(selector=None):
 
 @register.inclusion_tag('moment/moment.html')
 def moment(date_object, default_date):
-  if type(date_object) == str:
-    date_object = time.strptime(date_object)
+    unix_timestamp = None
+    if type(date_object) == str:
+        date_object = time.strptime(date_object)
+    if date_object:
+        unix_timestamp = date_object.strftime("%s")
 
-  return {
-    'unix_timestamp': date_object.strftime("%s"),
-    'default_date': default_date
-  }
+    return {
+        'unix_timestamp': unix_timestamp,
+        'default_date': default_date
+    }
 
 
 @register.inclusion_tag('comments/form.html')

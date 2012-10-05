@@ -44,7 +44,7 @@
 <div id="signatories" class="span9 view hide">
     <h2 class="title">{% trans 'Signatories' %}</h2>
     <div class="doc-body">
-        
+        {% invitee_detail_list invitee_list %}
     </div>
 </div>
 
@@ -52,7 +52,7 @@
     <h2 class="title">{% trans 'Comments' %}</h2>
     <div class="doc-body">
         <div id="document-comments">
-        {% show_comments_for_object userdoc next %}
+        {% comments_for_object userdoc next %}
         </div>
     </div>
 </div>
@@ -163,7 +163,11 @@ $(document).ready(function(){
     // ----- KO Bindings -----
     ko.applyBindings(App);
 
-
+    $.each($('.signaturePad'), function(index, item) {
+      item = $(item);
+      var sig = $('#' + item.attr('rel'))
+      item.signaturePad({displayOnly:true}).regenerate(sig.html());
+    });
 
 
 });

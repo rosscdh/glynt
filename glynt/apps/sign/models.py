@@ -24,6 +24,9 @@ class DocumentSignature(models.Model):
     date_invited = models.DateTimeField(auto_now=False, auto_now_add=True)
     date_signed = models.DateTimeField(blank=True, null=True, auto_now=False, auto_now_add=False)
 
+    class Meta:
+        ordering = ['-date_invited', '-date_signed']
+
     def __unicode__(self):
       return u'%s - to: %s (%s)' % (self.key_hash, self.meta_data['to_name'], self.meta_data['to_email'])
 

@@ -51,7 +51,7 @@
     <h2 class="title">{% trans 'Sign the Document' %}</h2>
     <div class="doc-body">
         {% if object.is_signed %}
-          <h3>{{ object.signee_name }} has signed, this document</h3>
+          <h3>{{ object.signee_name }} has signed this document</h3>
           <script id="signature-json" type="text/javascript">{{ object.signature_as_string|default:''|safe }}</script>
           <div class="signaturePad">
             <div class="sig sigWrapper">
@@ -89,7 +89,7 @@
     <h2 class="title">{% trans 'Comments' %}</h2>
     <div class="doc-body">
         <div id="document-comments">
-        {% show_comments_for_object userdoc next %}
+        {% comments_for_object userdoc next %}
         </div>
     </div>
 </div>
@@ -102,15 +102,7 @@
 {% endblock %}
 
 
-{% block css %}
-<link href="{{ STATIC_URL }}css/jquery.signaturepad.css" rel="stylesheet">
-{% endblock %}
-
 {% block js %}
-<script type="text/javascript" src="{{ STATIC_URL }}/js/flashcanvas.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.signaturepad.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}/js/json2.min.js"></script>
-
 <script id="document-data" type="text/javascript">[{{ document_data|default:''|safe }}]</script>
 <script id="js-document" type="text/x-handlebars-template">{{ userdoc.body|default:userdoc.source_document.body|safe }}</script>
 <script>

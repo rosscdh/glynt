@@ -15,7 +15,7 @@ def document_categories_home():
 
 
 @register.inclusion_tag('document/comments/base.html')
-def show_comments_for_object(obj, next):
+def comments_for_object(obj, next):
     return {
     'object': obj,
     'next': next
@@ -32,3 +32,5 @@ def document_activity_stream(document, user=None, limit=10):
   return {
     'object_list': user_streams.get_object_stream_items(document, user)[:limit]
   }
+
+
