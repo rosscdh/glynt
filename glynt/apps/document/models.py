@@ -61,7 +61,7 @@ class ClientCreatedDocument(models.Model):
     owner = models.ForeignKey(User)
     source_document = models.ForeignKey(Document)
     name = models.CharField(max_length=128, blank=True, null=True)
-    slug = models.SlugField(unique=True, blank=False, null=True, max_length=255)
+    slug = models.SlugField(unique=False, blank=False, null=True, max_length=255)
     body = models.TextField(blank=True, null=True)
     data = JSONField(blank=True, null=True)
     meta_data = JSONField(blank=True, null=True, default={}) # Stores data on num_signatures vs total signatures
