@@ -27,9 +27,9 @@
 
 {% tplhandlebars "hb-steps" %}
 {{#each_with_key steps key="index"}}
-<div class="step">
+<div class="step" data-step_index="{{index}}">
   <form class="">
-    {{form_steps}}
+    {{index}}
     <fieldset>
     <legend>Step Details</legend>
 
@@ -110,28 +110,33 @@ $(document).ready(function(){
         self.input_json = {
           'field': 'CharField',
           'widget': 'TextInput',
-          'name': 'Test Field',
-          'label': 'Test',
+          'label': '',
+          'name': '',
+          'help_text': '',
+          'placeholder': '',
+          'data-hb-name': '',
           'required': 'true',
-          'help_text': 'My Test Field',
-          'placeholder': 'tester',
-          'class': 'md-updater',
-          'data-hb-name': 'test_field'
+          'class': 'md-updater'
+        };
+
+        self.clone = function clone(obj) {
+            return $.extend(true, {}, obj);
         };
 
         self.add_step = function add_step(data) {
-          data = (data == undefined) ? self.step_json: data;
+          data = (data == undefined) ? self.clone(self.step_json): data;
           self.steps.push(data);
           self.render_steps();
         };
-        self.remove_step = function remove_step(index) {
-          self.render_steps();
+        self.delete_step = function delete_step(index) {
+            self.steps.splice(index,1);
+            self.render_steps();
         };
         self.add_field = function add_field(step_index) {
           self.steps[step_index].fields.push(self.input_json);
           self.render_fields(step_index);
         };
-        self.remove_field = function remove_field(step_index, field_index) {
+        self.delete_field = function delete_field(step_index, field_index) {
         };
 
         self.render = function render() {
@@ -141,32 +146,45 @@ $(document).ready(function(){
         self.render_steps = function render_steps() {
           $( "div#steps_list" ).html(self.steps_view({'steps': self.steps}));
         };
-        self.render_fields = function render_fields(selected_step) {
-          console.log(selected_step)
-          console.log(self.steps)
-          $( "div#fields_list" ).html(self.fields_view({'step': self.steps[selected_step]}));
+        self.render_fields = function render_fields(step_index) {
+            console.log(step_index)
+            console.log(self.steps[step_index])
+          $( "div#fields_list" ).html(self.fields_view({'step': self.steps[step_index]}));
         };
 
         self.init_interface = function init_interface() {
           $('.step').live('click', function(event){
-              event.preventDefault();
-              $(this).addClass('selected');
-              console.log($(this))
+                event.preventDefault();
+                step = $(this).attr('data-step_index');
+                if (self.current_step != step) {
+                    $(this).addClass('selected');
+                    self.current_step = step;
+console.log('step click:'+self.current_step)
+                    self.render_fields(self.current_step);
+                }
           });
           $('.field').live('click', function(event){
               event.preventDefault();
-              console.log($(this))
           });
           $('a#add_step').live('click', function(event){
               event.preventDefault();
-              console.log($(this).attr('id'))
               self.add_step();
+          });
+          $('a.delete_step').live('click', function(event){
+              event.preventDefault();
+              step = $(this).attr('data-step_index');
+              self.delete_step(step);
           });
           $('a#add_field').live('click', function(event){
               event.preventDefault();
-              console.log($(this).attr('data-step_index'))
               self.current_step = $(this).attr('data-step_index');
               self.add_field(self.current_step);
+          });
+          $('a.delete_field').live('click', function(event){
+              event.preventDefault();
+              step = $(this).attr('data-step_index');
+              field = $(this).attr('data-field_index');
+              self.delete_field(step, field);
           });
         };
 
