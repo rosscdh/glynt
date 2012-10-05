@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, url
-from django.views.generic.edit import FormView
+from django.views.generic.base import TemplateView
 from django.contrib.auth.decorators import login_required
 
 from glynt.apps.document.views import DocumentView, MyDocumentView, CreateDocumentView, EditDocumentView, DocumentByCategoryListView
@@ -20,7 +20,7 @@ urlpatterns = patterns('',
     url(r'^my/(?P<slug>.+)/review/$', login_required(ReviewClientCreatedView.as_view()), name='my_review'),
     url(r'^my/(?P<slug>.+)/$', login_required(MyDocumentView.as_view(template_name='document/document.html')), name='my_view'),
 
-    url(r'^tmp/step/creator/$', login_required(FormView.as_view(form_class=TmpStepCreator, template_name='document/tmp_step_creator.html')), name='step_creator'),
+    url(r'^tmp/step/creator/$', login_required(TemplateView.as_view(template_name='document/authoring_tool.html')), name='step_creator'),
     url(r'^create/$', login_required(CreateDocumentView.as_view()), name='create'),
     url(r'^(?P<slug>.+)/edit/$', login_required(EditDocumentView.as_view()), name='edit'),
     url(r'^(?P<slug>.+)/export/$', login_required(DocumentExportView.as_view()), name='export'),

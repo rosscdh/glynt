@@ -12,6 +12,10 @@
 
       <div class="span2 sidebar">
           <ul class="nav nav-list">
+            {% if user.is_staff %}
+            <li><a href="{% url 'document:step_creator' %}" class="btn btn-warning" id="toggle-docs">{% trans 'Create Doc' %}</a></li>
+            <li class="divider"></li>
+            {% endif %}
             <li><a href="#/list/templates/create_new" class="btn btn-green" id="toggle-docs">{% trans 'New Doc' %}</a></li>
             <li class="divider"></li>
               <li><a href="#/list/my_documents/all"> {% trans 'All Documents' %}</a></li>
