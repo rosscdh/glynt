@@ -23,11 +23,11 @@
 
 <div id="authoring" class="row view default">
     <div id="steps" class="span4">
-        <div id="steps_list" class="doc-body"></div>
+        <div id="steps_list"></div>
     </div>
 
     <div id="fields" class="span5">
-        <div id="fields_list" class="doc-body"></div>
+        <div id="fields_list"></div>
     </div>
 </div>
 
@@ -47,7 +47,7 @@
 <script type="text/x-handlebars" id="hb-steps">
 {% verbatim %}
 {{#each_with_key steps key="index"}}
-<div class="step info" data-step_index="{{index}}">
+<div class="doc-body step info" data-step_index="{{index}}">
   <form id="step-{{index}}" data-step_index="{{index}}" class="form-step">
 {% endverbatim %}
     {{ form_steps }}
@@ -61,6 +61,7 @@
   </div>
   {% endverbatim %}
 </div>
+<br/>
 {% verbatim %}{{/each_with_key}}{% endverbatim %}
 <a href="#/step/add" class="btn btn-mini btn-success" id="add_step"><i class="icon-plus icon-white"></i> Create Step</a>
 </script>
@@ -70,13 +71,14 @@
 <div class="info" data-step_index="{{step.index}}">
     {{#each_with_key step.fields key="index"}}
     {% endverbatim %}
-    <div class="field">
+    <div class="doc-body field">
       {% verbatim %}
       <form id="field-{{index}}" data-field_index="{{index}}" class="form-field">
       {% endverbatim %}
         {{ form_fields }}
       </form>
     </div>
+    <br/>
     {% verbatim %}
     {{/each_with_key}}
     {% endverbatim %}
@@ -240,11 +242,11 @@ $(document).ready(function(){
               self.delete_field(step, field);
           });
           // Forms
-          $('form.form-step input').live('change', function(event){
+          $('form.form-step input, form.form-step textarea, form.form-step select').live('change', function(event){
               event.preventDefault();
               self.updateStep($(this));
           });
-          $('form.form-field input').live('change', function(event){
+          $('form.form-field input, form.form-field textarea, form.form-field select').live('change', function(event){
               event.preventDefault();
               self.updateField($(this));
           });

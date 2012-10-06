@@ -29,9 +29,9 @@ class CreateStepForm(BootstrapForm):
     )
     class Meta:
         layout = (
-            Fieldset("Step Details", "step_type", "step_title", "hide_from",),
+            Fieldset("Step Details", "type", "step_title", "hide_from",),
         )
-    step_type = forms.ChoiceField(choices=STEP_TYPES, initial='step')
+    type = forms.ChoiceField(choices=STEP_TYPES, initial='step')
     step_title = forms.CharField(max_length=32)
     hide_from = forms.CharField(max_length=32, widget=forms.Select)
 
@@ -42,10 +42,11 @@ class CreateStepFieldForm(BootstrapForm):
     WIDGETS = [(v, v) for v in sorted(VALID_WIDGETS)]
     class Meta:
         layout = (
-            Fieldset("Basic", "label", "help_text", "required",),
+            Fieldset("Basic", "label", "placeholder", "help_text", "required",),
             Fieldset("Extra", "field", "widget", "css_class",),
         )
     label = forms.CharField()
+    placeholder = forms.CharField()
     help_text = forms.CharField()
     required = forms.BooleanField()
     field = forms.ChoiceField(choices=FIELDS, initial='CharField')
