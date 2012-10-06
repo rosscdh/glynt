@@ -60,12 +60,14 @@
   {% endverbatim %}
 </div>
 {% verbatim %}{{/each_with_key}}{% endverbatim %}
+<div class="form-actions">
 <a href="#/step/add" class="btn btn-mini btn-success" id="add_step"><i class="icon-plus icon-white"></i> Create Step</a>
+</div>
 </script>
 
 <script type="text/x-handlebars" id="hb-fields">
 {% verbatim %}
-<h3>Fieldset for {{step.properties.step_title}}</h3>
+{{#unless_eq step.properties.step_title compare=null}}<h3>Fieldset for {{step.properties.step_title}}</h3>{{/unless_eq}}
 <div class="info" data-step_index="{{step.index}}">
     {{#each_with_key step.fields key="index"}}
     {% endverbatim %}
@@ -170,8 +172,14 @@ $(document).ready(function(){
         self.add_step = function add_step(data) {
           data = (data == undefined) ? self.clone(self.step_json): data;
           self.steps.push(data);
+          var new_step_index = self.steps.length - 1;
+          self.current_step = new_step_index;
+
           self.render();
           self.update_json();
+    
+          console.log($('form#step-'+ new_step_index))
+          self.dispatch('change_steptype', {'selected_type': 'step', 'form': $('form#step-'+ new_step_index)});
         };
         self.delete_step = function delete_step(index) {
             self.steps.splice(index,1);
