@@ -18,6 +18,9 @@
     <li class="divider"></li>
     <li class="nav-header">{% trans 'Coming Eventually' %}</li>
       <li><a href="#/review/doc"> {% trans 'Review Document' %}</a></li>
+    <li class="nav-header">{% trans 'Actions' %}</li>
+    <li class="divider"></li>
+      <li><a id="reset" href="#/reset" class="btn btn-danger"> {% trans 'Reset' %}</a></li>
   </ul>
 </div>
 
@@ -178,7 +181,6 @@ $(document).ready(function(){
           self.render();
           self.update_json();
     
-          console.log($('form#step-'+ new_step_index))
           self.dispatch('change_steptype', {'selected_type': 'step', 'form': $('form#step-'+ new_step_index)});
         };
         self.delete_step = function delete_step(index) {
@@ -195,6 +197,13 @@ $(document).ready(function(){
             self.steps[step_index].fields.splice(field_index,1);
             self.render_fields(step_index);
             self.update_json();
+        };
+        // ---- RESET -----
+        self.reset = function reset() {
+            $.cookie('auth_tool', '');
+            // self.json_output.val();
+            // self.render();
+            window.location.reload();
         };
         // ---- UPDATE JSON -----
         self.update_json = function update_json() {
@@ -337,6 +346,10 @@ $(document).ready(function(){
             event.preventDefault();
             var form = $(this).closest('form.form-step');
             self.dispatch('change_steptype', {'selected_type': $(this).val(), 'form': form});
+          });
+          $('#reset').live('click', function(event){
+            event.preventDefault();
+            self.reset();
           });
           self.json_output.live('change', function(event){
             event.preventDefault();
