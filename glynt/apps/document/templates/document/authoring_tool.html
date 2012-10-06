@@ -194,7 +194,11 @@ $(document).ready(function(){
             var form = field.closest('form.form-step');
             var step_index = $(form).attr('data-step_index');
             var attr_name = field.attr('name');
-            self.steps[step_index][attr_name] = field.val();
+            if (attr_name == 'type') {
+                self.steps[step_index][attr_name] = field.val();
+            } else {
+                self.steps[step_index].properties[attr_name] = field.val();
+            }
             self.update_json();
         };
         self.updateField = function updateField(field) {
