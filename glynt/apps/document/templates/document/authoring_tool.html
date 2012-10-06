@@ -306,7 +306,7 @@ $(document).ready(function(){
                 if (self.current_step != step) {
                     $(this).addClass('selected');
                     self.current_step = step;
-                    self.render_fields(self.current_step);
+                    self.render();
                 }
           });
           $('.field').live('click', function(event){
