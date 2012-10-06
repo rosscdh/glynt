@@ -10,14 +10,33 @@
   <h2>Document Author tool</h2>
 </div>
 
-<div id="steps" class="span4">
-    <div id="steps_list" class="doc-body">
+<div class="span2 sidebar">
+  <ul class="nav nav-list">
+      <li><a href="#/"> {% trans 'Authoring' %}</a></li>
+    <li class="divider"></li>
+      <li><a href="#/review/json"> {% trans 'Review JSON' %}</a></li>
+    <li class="divider"></li>
+    <li class="nav-header">{% trans 'Coming Eventually' %}</li>
+      <li><a href="#/review/doc"> {% trans 'Review Document' %}</a></li>
+  </ul>
+</div>
+
+<div id="authoring" class="row view default">
+    <div id="steps" class="span4">
+        <div id="steps_list" class="doc-body"></div>
+    </div>
+
+    <div id="fields" class="span5">
+        <div id="fields_list" class="doc-body"></div>
     </div>
 </div>
 
-<div id="fields" class="span7">
-    <div id="fields_list" class="doc-body">
-    </div>
+<div id="json" class="row span9 view hide">
+    <textarea id="json-output" class="span9" style="height:640px;"></textarea>
+</div>
+
+<div id="doc" class="row span7 view hide">
+    Document coming soon
 </div>
 {% endblock %}
 
@@ -65,8 +84,12 @@ $(document).ready(function(){
     app = $.sammy(function() {
         var self = this;
 
+        self.views = $('div.view');
+        self.nav = $('ul.nav-list li a');
+
         self.steps_view = Handlebars.compile($('script#hb-steps').html());
         self.fields_view = Handlebars.compile($('script#hb-fields').html());
+        self.json_output = $('#json-output');
 
         self.steps = [];
         self.current_step = 0;
@@ -74,8 +97,31 @@ $(document).ready(function(){
         self.current_field = null;
 
         this.get('#/', function() {
+            self.show($('div#authoring'));
+        });
+        this.get('#/review/json', function() {
+            self.show($('div#json'));
+        });
+        this.get('#/review/doc', function() {
+            self.show($('div#doc'));
         });
 
+        this.hide_all = function hide_all() {
+            self.nav.removeClass('selected');
+            $.each(self.views, function(index, item) {
+                $(item).hide();
+            });
+        };
+        this.show = function show(view_list) {
+            if ($.isArray(view_list) == false) {
+                view_list = [view_list];
+            }
+            self.hide_all();
+            $('[href="'+window.location.hash+'"]').addClass('selected');
+            $.each(view_list, function(index, item) {
+                item.show();
+            });
+        }
 
         self.step_json = {
           'type': 'step',
@@ -106,17 +152,22 @@ $(document).ready(function(){
         self.add_step = function add_step(data) {
           data = (data == undefined) ? self.clone(self.step_json): data;
           self.steps.push(data);
-          self.render_steps();
+          self.render();
         };
         self.delete_step = function delete_step(index) {
             self.steps.splice(index,1);
-            self.render_steps();
+            self.render();
         };
         self.add_field = function add_field(step_index) {
           self.steps[step_index].fields.push(self.input_json);
           self.render_fields(step_index);
+          self.update_json();
         };
         self.delete_field = function delete_field(step_index, field_index) {
+        };
+
+        self.update_json = function update_json() {
+            self.json_output.val(JSON.stringify(self.steps, null, "\t"));
         };
 
         self.render = function render() {
@@ -169,10 +220,10 @@ console.log('step click:'+self.current_step)
         };
 
         self.init = function init() {
-          self.init_interface();
-          self.add_step();
-          self.render_steps();
-          self.current_step = 0;
+            self.current_step = 0;
+            self.init_interface();
+            self.add_step();
+            self.render();
         };
 
        self.init();
