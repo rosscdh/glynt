@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.utils.translation import ugettext_lazy as _
 from django import forms
 from bootstrap.forms import BootstrapForm, BootstrapMixin, Fieldset
 
@@ -29,11 +30,11 @@ class CreateStepForm(BootstrapForm):
     )
     class Meta:
         layout = (
-            Fieldset("Step Details", "type", "step_title", "hide_from",),
+            Fieldset("Step Details", "type", "hide_from", "step_title",),
         )
     type = forms.ChoiceField(choices=STEP_TYPES, initial='step')
-    step_title = forms.CharField(max_length=32)
     hide_from = forms.CharField(max_length=32, widget=forms.Select)
+    step_title = forms.CharField(max_length=32, initial=_('Step No. 1'))
 
 
 class CreateStepFieldForm(BootstrapForm):

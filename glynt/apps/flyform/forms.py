@@ -23,9 +23,11 @@ VALID_WIDGETS = ['TextInput', 'PasswordInput', 'HiddenInput', 'MultipleHiddenInp
 
 import sys
 
+
 def customFields(fieldTypeName):
   if fieldTypeName in CUSTOM_VALID_FIELD_TYPES:
     retr
+
 
 class BaseFlyForm(forms.Form, BootstrapMixin):
   """ This form is the basis for the self generating form representations
@@ -46,7 +48,7 @@ class BaseFlyForm(forms.Form, BootstrapMixin):
         "required" : {"type" : "boolean"},
         "help_text" : {"type" : "string"},
         "placeholder" : {"type" : "string"},
-        "class" : {"type" : "string"},
+        "class" : {"type" : "string"}, # *md-updater, contact-list
         "data-hb-name" : {"type" : "string"},
         "data-show_when":"customer_country == 'United States'",
         "data-hide_when":"function(){ customer_country == 'Germany' }"

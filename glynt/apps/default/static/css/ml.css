@@ -133,7 +133,7 @@ div.doc-body{
 	border:1px solid #d9e5e9;
 	z-index:2;
 	border-radius:8px;
-	min-height:500px;
+	/*min-height:500px;*/
 }
 div#doc-list{
 	display:none;
