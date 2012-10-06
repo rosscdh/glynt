@@ -47,9 +47,9 @@
 <script type="text/x-handlebars" id="hb-steps">
 {% verbatim %}
 {{#each_with_key steps key="index"}}
-<div class="step" data-step_index="{{index}}">
+<div class="step info" data-step_index="{{index}}">
+  <form id="step-{{index}}" data-step_index="{{index}}" class="form-step">
 {% endverbatim %}
-  <form class="">
     {{ form_steps }}
   </form>
   {% verbatim %}
@@ -67,16 +67,20 @@
 
 <script type="text/x-handlebars" id="hb-fields">
 {% verbatim %}
-{{#each_with_key step.fields key="index"}}
-{% endverbatim %}
-<div class="field">
-  <form class="">
-    {{ form_fields }}
-  </form>
+<div class="info" data-step_index="{{step.index}}">
+    {{#each_with_key step.fields key="index"}}
+    {% endverbatim %}
+    <div class="field">
+      {% verbatim %}
+      <form id="field-{{index}}" data-field_index="{{index}}" class="form-field">
+      {% endverbatim %}
+        {{ form_fields }}
+      </form>
+    </div>
+    {% verbatim %}
+    {{/each_with_key}}
+    {% endverbatim %}
 </div>
-{% verbatim %}
-{{/each_with_key}}
-{% endverbatim %}
 </script>
 
 <script>
@@ -148,7 +152,7 @@ $(document).ready(function(){
         self.clone = function clone(obj) {
             return $.extend(true, {}, obj);
         };
-
+        // ---- VIEW CRUD -----
         self.add_step = function add_step(data) {
           data = (data == undefined) ? self.clone(self.step_json): data;
           self.steps.push(data);
@@ -165,11 +169,11 @@ $(document).ready(function(){
         };
         self.delete_field = function delete_field(step_index, field_index) {
         };
-
+        // ---- UPDATE JSON -----
         self.update_json = function update_json() {
             self.json_output.val(JSON.stringify(self.steps, null, "\t"));
         };
-
+        // ---- RENDER VIEWS -----
         self.render = function render() {
           self.render_steps();
           self.render_steps(self.selected_step);
@@ -183,6 +187,25 @@ $(document).ready(function(){
           $( "div#fields_list" ).html(self.fields_view({'step': self.steps[step_index]}));
         };
 
+        // ---- UPDATE JSON FROM FORMS -----
+        self.updateStep = function updateStep(field) {
+            var form = field.closest('form.form-step');
+            var step_index = $(form).attr('data-step_index');
+            var attr_name = field.attr('name');
+            self.steps[step_index][attr_name] = field.val();
+            self.update_json();
+        };
+        self.updateField = function updateField(field) {
+            var form = field.closest('form.form-field');
+            var field_index = $(form).attr('data-field_index');
+            var info = form.closest('div.info');
+            var step_index = $(info).attr('data-step_index');
+
+            var attr_name = field.attr('name');
+            self.steps[step_index].fields[field_index][attr_name] = field.val();
+            self.update_json();
+        };
+
         self.init_interface = function init_interface() {
           $('.step').live('click', function(event){
                 event.preventDefault();
@@ -190,7 +213,6 @@ $(document).ready(function(){
                 if (self.current_step != step) {
                     $(this).addClass('selected');
                     self.current_step = step;
-console.log('step click:'+self.current_step)
                     self.render_fields(self.current_step);
                 }
           });
@@ -216,6 +238,15 @@ console.log('step click:'+self.current_step)
               step = $(this).attr('data-step_index');
               field = $(this).attr('data-field_index');
               self.delete_field(step, field);
+          });
+          // Forms
+          $('form.form-step input').live('change', function(event){
+              event.preventDefault();
+              self.updateStep($(this));
+          });
+          $('form.form-field input').live('change', function(event){
+              event.preventDefault();
+              self.updateField($(this));
           });
         };
 
