@@ -189,7 +189,7 @@ $(document).ready(function(){
             self.update_json();
         };
         self.add_field = function add_field(step_index) {
-          self.steps[step_index].fields.push(self.input_json);
+          self.steps[step_index].fields.push(self.clone(self.input_json));
           self.render_fields(step_index);
           self.update_json();
         };
