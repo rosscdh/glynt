@@ -14,7 +14,7 @@
     <div class="row">
       <div class="span3 sidebar">
         <br />
-        <a href="#" class="btn btn-green" id="toggle-docs" style="margin-left:13px">Create New Doc</a>
+        <a href="#" class="btn btn-blue btn-large" id="toggle-docs" style="margin-left:13px">Create New Doc</a>
         <br />
         <br />
           <ul class="nav nav-list">
@@ -24,68 +24,63 @@
               <li><a href="#">{% trans 'Documents by employee' %}</a></li>
           </ul>
       </div>
-
     <div class="span9" id="doc-list">
-        <div class="doc-body">
+      <div class="doc-body">
         <h3 class="">Choose Document</h3>
         <ul>
-              {% for d in public_document_list %}
-              <li><a class="template-document" href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a></li>
-              {% endfor %}
+		  {% for d in public_document_list %}
+      		<li><a class="template-document" href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a></li>
+      	  {% endfor %}
         </ul>
       </div>
     </div>
-
-
-
     <div class="span9" id="file-list">
       <div class="doc-body">
-	      <div  id="activity-list">
-	          <h3 class="">Recent</h3>
-	          <ul class="unstyled">
-	          {% user_activity_stream request.user %}
-	          </ul>
-	      </div> 
-		  <hr />
-		  
         <h3 class="">All Documents</h3>
           <!-- <div class="doccount">3</div> -->
             <table id="my-documents" class="table table-stripped table-border table-hover">
-            <tr>
-                <th>Document Name</th>
-                <th>Created</th>
-                <th>Signing</th>
-                <th>Action</th>
-            </tr>
-              {% for d in my_document_list %}
-            <tr>
-                <td class="">
-                  <a href="{% url 'document:my_view' slug=d.slug %}" class="doc-title">{{ d.name }}</a><span class="label" style="float:right;margin-top:3px;opacity:0.6">{{ d.owner.get_profile.short_name|default:d.owner.username }}</span>
-                </td>
-                <td class="created"><i class="icon-time"></i> {{ d.created_at|naturaltime }} &middot; <i class="icon-comment"></i> 4 Comments</td>
-                <td>
-					<ul class="sign-status">
-						<li class="" rel="tooltip" title="first tooltip"></li>
-						<li class=""></li>
-						<li class="signed"></li>
-					</ul>
-					 <!--{{ d.num_signed }} / {{ d.num_invited }}
-	                  {% cycle '<a href="#" class="btn btn-mini"><i class="icon-repeat"></i> Out for signing' '<a href="#" class="btn btn-mini btn-green"><i class="icon-ok icon-white"></i> Signed' '<a href="#" class="btn btn-red btn-mini"><i class="icon-pencil icon-white"></i> Please sign' %}</a>
-					  -->
-				</td>
-	            <td>
-                  <div class="btn-group pull-right">
-                    <button class="btn dropdown-toggle btn-small" data-toggle="dropdown"><i class="icon-cog"></i> <span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                      <li><a id="clone-{{ d.pk }}" href="#clone" data-url="{% url 'document:my_clone' pk=d.pk %}" data-pk="{{ d.pk }}" class="clone-my-document">{% trans 'Clone' %}</a></li>
-                      <li><a id="export-{{ d.pk }}" href="{% url 'document:export' slug=d.slug %}" target="_BLANK" data-url="{% url 'document:export' slug=d.slug %}" data-pk="{{ d.pk }}" class="">{% trans 'Download PDF' %}</a></li>
-                      <li><a id="delete-{{ d.pk }}" href="#delete" data-url="{% url 'document:my_delete' pk=d.pk %}" data-pk="{{ d.pk }}" class="delete-my-document">{% trans 'Delete' %}</a></li>
-                    </ul>
-                  </div>
-                </td>
-            </tr>
+	            <tr>
+	                <th>Document Name</th>
+	                <th>Created</th>
+	                <th>Signing</th>
+	                <th>Action</th>
+	            </tr>
+	              {% for d in my_document_list %}
+	            <tr>
+	                <td class="">
+	                  <a href="{% url 'document:my_view' slug=d.slug %}" class="doc-title">{{ d.name }}</a><span class="label" style="float:right;margin-top:3px;opacity:0.6">{{ d.owner.get_profile.short_name|default:d.owner.username }}</span>
+	                </td>
+	                <td class="created"><i class="icon-time"></i> {{ d.created_at|naturaltime }} &middot; <i class="icon-comment"></i> 4 Comments</td>
+	                <td>
+						<ul class="sign-status">
+							<li class="" rel="tooltip" title="first tooltip"></li>
+							<li class=""></li>
+							<li class="signed"></li>
+						</ul>
+						 <!--{{ d.num_signed }} / {{ d.num_invited }}
+		                  {% cycle '<a href="#" class="btn btn-mini"><i class="icon-repeat"></i> Out for signing' '<a href="#" class="btn btn-mini btn-green"><i class="icon-ok icon-white"></i> Signed' '<a href="#" class="btn btn-red btn-mini"><i class="icon-pencil icon-white"></i> Please sign' %}</a>
+						  -->
+					</td>
+		            <td>
+	                  <div class="btn-group pull-right">
+	                    <button class="btn dropdown-toggle btn-small" data-toggle="dropdown"><i class="icon-cog"></i> <span class="caret"></span></button>
+	                    <ul class="dropdown-menu">
+	                      <li><a id="clone-{{ d.pk }}" href="#clone" data-url="{% url 'document:my_clone' pk=d.pk %}" data-pk="{{ d.pk }}" class="clone-my-document">{% trans 'Clone' %}</a></li>
+	                      <li><a id="export-{{ d.pk }}" href="{% url 'document:export' slug=d.slug %}" target="_BLANK" data-url="{% url 'document:export' slug=d.slug %}" data-pk="{{ d.pk }}" class="">{% trans 'Download PDF' %}</a></li>
+	                      <li><a id="delete-{{ d.pk }}" href="#delete" data-url="{% url 'document:my_delete' pk=d.pk %}" data-pk="{{ d.pk }}" class="delete-my-document">{% trans 'Delete' %}</a></li>
+	                    </ul>
+	                  </div>
+	                </td>
+	            </tr>
             {% endfor %}
             </table>
+	  	      <div  id="activity-list">
+	  	          <h3 class="">Account Activity</h3>
+	  	          <ul class="unstyled">
+	  	          {% user_activity_stream request.user %}
+	  	          </ul>
+	  	      </div> 
+	  		  <hr />
           </div>
       </div>
     </div>

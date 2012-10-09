@@ -26,7 +26,6 @@ body {
 	background:url('/static/img/logo-nav.png') no-repeat 0px 14px;
 }
 h1 { font-size: 35px;letter-spacing:0.03em; font-weight:bold; }
-h2 { font-size: 28px; font-weight:bold; }
 h3 { font-weight:bold; }
 
 /* Homepage bits */
@@ -115,7 +114,7 @@ table#my-documents td ul.sign-status li.signed {
 	
 }
 body.dashboard{
-	background-color:#f2f7f9;
+	background-color:#fdfdfd;
 }
 div#activity-list li span {
 	color:#bbb;
@@ -164,7 +163,8 @@ div.sidebar .nav-list .active a, div.sidebar .nav-list > .active > a:hover {
 div.doc-body{
 	background-color:#FFF;
 	margin-left:0px;
-	padding:10px 25px;
+	margin-top:10px;
+	padding:5px 25px;
 	width:680px;
 	border:1px solid #d9e5e9;
 	z-index:2;
@@ -188,7 +188,11 @@ ul.add-active{
 	top:60px;
 }*/
 body.assembly {
-	background-color:#f3fafc;
+	background-color:#fdfdfd;
+}
+body.assembly h2.editable {
+	color:#666;
+	font-size:23px;
 }
 h2#document-title input {
 	background-color:none;
@@ -204,7 +208,8 @@ h2#document-title input {
     overflow-y:scroll;
 }
 .document-questions .step-title {
-	font-size:20px;
+	font-size:18px;
+	color:#555;
 	font-weight:bold;
 	line-height:25px;
 	
@@ -239,9 +244,10 @@ h2#document-title input {
 	color:#A1A1A1;
 }
 .draft-document, .draft-document *{
-	font-family:"Helvetica Neue";
-	font-size:14px;
+	font-family:"Helvetica Neue", Helvetica;
+	font-size:13px;
 	cursor:pointer;
+	color:#333;
 }
 
 
@@ -343,11 +349,10 @@ h2#document-title input {
   -webkit-font-smoothing: antialiased;
 }
 .btn-large {
-	font-size:18px;
+	font-size:20px;
 }
 .btn {
 	font-size:16px;
-	font-weight:;
 }
 .btn-mini {
 	font-size:13px;
