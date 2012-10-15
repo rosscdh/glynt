@@ -160,6 +160,7 @@ $(document).ready(function(){
           $('span.step-title').each(function(index,element) {
               var element = $(this).closest('div').find('input[data-step-title]'), step_title = element.attr('data-step-title');
               var form = $(this).closest('div.form-group');
+			  element.hide();
               $(this).text(step_title);
               self.steps.push({title: step_title, form_set: form})
               self.stepIsValid[index+1] = false;
@@ -1135,17 +1136,17 @@ $(document).ready(function(){
         $.each(self.hideWhen, function(i,item) {
           item = $(item);
           if (self.inlineCallBack(item.attr('data-hide_when')) == true) {
-            item.closest('li').hide();
+            item.closest('.control-group').hide();
           }else{
-            item.closest('li').show();
+            item.closest('.control-group').fadeIn('slow');
           };
         });
         $.each(self.showWhen, function(i,item) {
           item = $(item);
           if (self.inlineCallBack(item.attr('data-show_when')) == true) {
-            item.closest('li').show();
+            item.closest('.control-group').fadeIn('slow');
           }else{
-            item.closest('li').hide();
+            item.closest('.control-group').hide();
           };
         });
       };

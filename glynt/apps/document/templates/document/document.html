@@ -13,6 +13,9 @@
   </form>
 </div>
 {% endblock %}
+{% block navbar %}{%endblock%}
+
+
 
 {% block form %}
     <div id="docu-form-head" class="row">
@@ -22,9 +25,20 @@
     <form id="glynt-doc-{{ forloop.counter }}"  class="form-horizontal bind-document">{% csrf_token %}
     <div id="form-group-{{ forloop.counter }}" class="form-group hidden">
         <h3><span class="step-title"></span></h3>
-        <ul>
-        {{ form.as_ul }}
-        </ul>
+        <div>
+			{% for field in form %}
+		        <div class="control-group">
+					{% if  field.is_hidden %}
+						{{ field }}
+					{% else %}
+						{{ field.label_tag }}
+						<div class="controls">
+							{{ field }}
+						</div>
+					{% endif %}
+		        </div>
+		    {% endfor %} 
+        </div>
     </div>
     </form>
     {% endfor %}
