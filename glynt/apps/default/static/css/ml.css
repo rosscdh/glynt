@@ -212,18 +212,20 @@ h2#document-title input {
 .document-questions-inner {
 	padding-bottom:60px;
 }
-.document-questions h3 {
-	font-size:20px;
-	line-height:20px;
-}
-.document-questions.stick {
-    position: fixed;
-    top: 0;
-}
 .document-questions label {
 	margin-top:10px;
-	font-size:12px;
-	margin-bottom:2px;
+	  float: left;
+	  width: 50%;
+	  padding-top: 5px;
+	  text-align: right;
+}
+.document-questions .control-group{
+	margin-bottom:10px;
+}
+.document-questions .controls{
+	width:48%;
+	float:right;
+	margin-top:10px;
 }
 .document-questions ul, .document-questions li {
 	margin-left:0px;
