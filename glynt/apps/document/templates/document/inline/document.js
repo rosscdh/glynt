@@ -1230,8 +1230,8 @@ $(document).ready(function(){
 
 
     var hb_popover_template = Handlebars.compile($('#hb-popover').html());
-    $('body').popover({
-      selector: '.md-updater',
+    $('.md-updater').popover({
+      trigger: 'hover',
       title: function() {
         return $(this).closest('li').find('label:first').html();
       },
