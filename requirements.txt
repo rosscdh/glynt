@@ -9,8 +9,10 @@ django-celery
 django-templated-email
 PIL
 sh
+-e git+https://github.com/toastdriven/django-tastypie.git#egg=django-tastypie
 -e git+https://github.com/stard0g101/pybars.git#egg=pybars
 -e git+https://github.com/chrisglass/xhtml2pdf.git#egg=xhtml2pdf
+-e git+https://github.com/stard0g101/django-xhtml2pdf.git#egg=django-xhtml2pdf
 -e git+https://github.com/stard0g101/django-templatetag-handlebars.git#egg=django-templatetag-handlebars
 -e git+https://github.com/klen/django_markdown.git#egg=django_markdown
 -e git+https://github.com/stard0g101/django-socialregistration.git@linkedin#egg=django-socialregistration
@@ -29,7 +31,10 @@ facebook
 -e git+https://github.com/stard0g101/django-bootstrap.git#egg=bootstrap
 -e git+https://github.com/brack3t/django-braces.git#egg=django-braces
 -e git+https://github.com/stard0g101/python-signpad2image.git#egg=python-signpad2image
+-e git+https://github.com/lincolnloop/python-qrcode.git#egg=python-qrcode
 -e git+https://github.com/stard0g101/django-user-streams.git@extended_templates#egg=django-user-streams
+-e git+https://github.com/stard0g101/django-comments-xtd.git#egg=django-comments-xtd
+django_markup
 # javascript markdown
 # hg clone https://code.google.com/p/pagedown/
 # possible multi format 

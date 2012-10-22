@@ -1,67 +1,160 @@
 {% extends 'sign/base.html' %}
 {% load i18n markup %}
-{% load glynt_helpers %}
+{% load glynt_helpers document_tags %}
 {% load url from future %}
 
+{% block bodyclass %}sign{% endblock %}
 
 {% block owner_info %}
-<p>Hi there {{ object.signee_name }}, please type your name below; or sign the document using the drawing pad made available if your browser supports it.</p>
-<p><b>Created By</b>: {{ userdoc.owner.get_full_name|default:userdoc.owner.username }}</p>
-<p><b>Created</b>: {{ userdoc.created_at }}</p>
-<p><b>Last Edited</b>: {{ userdoc.last_modified }}</p>
-{% endblock %}
-
-{% block document %}
-<span id="document-md"></span>
+<div class="span12">
+  <h2 id="document-title">{% trans 'Sign:' %} {{ userdoc.name }}</h2>
+</div>
 {% endblock %}
 
 {% block form %}
-{% if object.is_signed %}
-  <h3>{{ object.signee_name }} has signed, this document</h3>
-  <script id="signature-json" type="text/javascript">{{ object.signature_as_string|default:''|safe }}</script>
-  <div class="signaturePad">
-    <div class="sig sigWrapper">
-      <canvas class="pad" width="198" height="120"></canvas>
-    </div>
-    <b>Signed on:</b> {{ object.date_signed }}
-  </div>
-{% else %}
-  <form method="post" action="{% url 'sign:process_signature' pk=object.pk hash=object.key_hash %}" class="signaturePad">{% csrf_token %}
-    <label for="name">Print your name</label>
-    <input type="text" name="name" id="name" class="name" value="" />
-    <p class="typeItDesc">Review your signature</p>
-    <p class="drawItDesc">Draw your signature</p>
-    <ul class="sigNav">
-      <li class="typeIt"><a href="#type-it" class="current">Type It</a></li>
-      <li class="drawIt"><a href="#draw-it" >Draw It</a></li>
-      <li class="clearButton"><a href="#clear">Clear</a></li>
-    </ul>
-    <div class="sig sigWrapper">
-      <div class="typed"></div>
-      <canvas class="pad" width="198" height="120"></canvas>
-      <input type="hidden" name="output" class="output">
-    </div>
-    <div>
-      I hereby assert that this is a true and valid representation of my signature
-      and that I "{{ invitee_name }}" have read and affirm the document in question.
-    </div>
-    <button type="submit">I accept the terms of this agreement.</button>
-  </form>
-{% endif %}
+<div class="span3 sidebar">
+  <ul class="nav nav-list">
+    <li class="nav-header">{% trans 'Review the Document' %}</li>
+    <li><a href="#/review" class="btn btn-inverse">{% trans 'Review Document' %}</a></li>
+    <li class="divider"></li>
+      <li><a href="#/review/details"> {% trans 'Document Details' %}</a></li>
+    <li class="divider"></li>
+    <li class="nav-header">{% trans 'Sign the Document' %}</li>
+        <li><a href="#/sign" class="btn btn-green">{% trans 'Sign Document' %}</a></li>
+    <li class="divider"></li>
+    <li class="nav-header">{% trans 'Document Interaction & Info' %}</li>
+      <li><a href="#/review/comments"> {% trans 'Comments' %}</a></li>
+    <li class="divider"></li>
+      <li><a href="#/review/activity"> {% trans 'Activity' %}</a></li>
+  </ul>
+</div>
 {% endblock %}
 
-{% block css %}
-<link href="{{ STATIC_URL }}css/jquery.signaturepad.css" rel="stylesheet">
+{% block document %}
+<div id="review" class="span9 view default">
+  <div class="doc-body">
+      <span id="document-md">{% show_loading modal='False' %}</span>
+  </div>
+</div>
+
+<div id="details" class="span9 view hide">
+    <h2 class="title">{% trans 'The Document Details' %}</h2>
+    <div class="doc-body">
+        <p>Hi there {{ object.signee_name }}, please type your name below; or sign the document using the drawing pad made available if your browser supports it.</p>
+        <p><b>Created By</b>: {{ userdoc.owner.get_full_name|default:userdoc.owner.username }}</p>
+        <p><b>Created</b>: {{ userdoc.created_at }}</p>
+        <p><b>Last Edited</b>: {{ userdoc.last_modified }}</p>
+    </div>
+</div>
+
+<div id="sign" class="span9 view hide">
+    <h2 class="title">{% trans 'Sign the Document' %}</h2>
+    <div class="doc-body">
+        {% if object.is_signed %}
+          <h3>{{ object.signee_name }} has signed this document</h3>
+          <script id="signature-json" type="text/javascript">{{ object.signature_as_string|default:''|safe }}</script>
+          <div class="signaturePad">
+            <div class="sig sigWrapper">
+              <canvas class="pad" width="198" height="120"></canvas>
+            </div>
+            <b>Signed on:</b> {{ object.date_signed }}
+          </div>
+        {% else %}
+          <form method="post" action="{% url 'sign:process_signature' pk=object.pk hash=object.key_hash %}" class="signaturePad">{% csrf_token %}
+            <label for="name">Print your name</label>
+            <input type="text" name="name" id="name" class="name" value="" />
+            <p class="typeItDesc">Review your signature</p>
+            <p class="drawItDesc">Draw your signature</p>
+            <ul class="sigNav">
+              <li class="typeIt"><a href="#type-it" class="current">Type It</a></li>
+              <li class="drawIt"><a href="#draw-it" >Draw It</a></li>
+              <li class="clearButton"><a href="#clear">Clear</a></li>
+            </ul>
+            <div class="sig sigWrapper">
+              <div class="typed"></div>
+              <canvas class="pad" width="198" height="120"></canvas>
+              <input type="hidden" name="output" class="output">
+            </div>
+            <div>
+              I hereby assert that this is a true and valid representation of my signature
+              and that I "{{ invitee_name }}" have read and affirm the document in question.
+            </div>
+            <button type="submit">I accept the terms of this agreement.</button>
+          </form>
+        {% endif %}
+    </div>
+</div>
+
+<div id="comments" class="span9 view hide">
+    <h2 class="title">{% trans 'Comments' %}</h2>
+    <div class="doc-body">
+        <div id="document-comments">
+        {% comments_for_object userdoc next %}
+        </div>
+    </div>
+</div>
+
+<div id="activity" class="span9 view hide">
+    <h2 class="title">{% trans 'Activity' %}</h2>
+    <div class="doc-body">
+    </div>
+</div>
 {% endblock %}
+
 
 {% block js %}
-<script type="text/javascript" src="{{ STATIC_URL }}/js/flashcanvas.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.signaturepad.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}/js/json2.min.js"></script>
-
 <script id="document-data" type="text/javascript">[{{ document_data|default:''|safe }}]</script>
-<script id="js-document" type="text/x-handlebars-template">
-{{ userdoc.body|default:userdoc.source_document.body|safe }}
+<script id="js-document" type="text/x-handlebars-template">{{ userdoc.body|default:userdoc.source_document.body|safe }}</script>
+<script>
+var app = $.sammy(function() {
+    var self = this;
+    self.views = $('div.view');
+    self.nav = $('ul.nav-list li a');
+
+    var hb_templates_source   = $("script#template_list").html();
+    var hb_templates_list = Handlebars.compile(hb_templates_source);
+
+    this.get('#/', function() {
+        this.redirect('#/review');
+    });
+
+    this.get('#/review', function() {
+        self.show($('div#review'));
+    });
+    this.get('#/review/details', function() {
+        self.show($('div#details'));
+    });
+    this.get('#/sign', function() {
+        self.show($('div#sign'));
+    });
+    this.get('#/review/comments', function() {
+        self.show($('div#comments'));
+    });
+    this.get('#/review/activity', function() {
+        self.show($('div#activity'));
+    });
+    
+    this.hide_all = function hide_all() {
+        self.nav.removeClass('selected');
+        $.each(self.views, function(index, item) {
+            $(item).hide();
+        });
+    };
+    this.show = function show_view(view_list) {
+        if ($.isArray(view_list) == false) {
+            view_list = [view_list];
+        }
+        self.hide_all();
+        $('[href="'+window.location.hash+'"]').addClass('selected');
+        $.each(view_list, function(index, item) {
+            item.show();
+        });
+    }
+    
+});
+
+// start the application
+app.run('#/');
 </script>
 <script id="document-controls" type="text/javascript">
 // use strict;

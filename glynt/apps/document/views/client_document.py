@@ -41,7 +41,6 @@ class MyDocumentView(DocumentView):
 
     self.user_document = get_object_or_404(ClientCreatedDocument.objects.select_related(), slug=document_slug, owner=self.request.user)
     context['userdoc'] = self.user_document
-
     context['userdoc_form'] = ClientCreatedDocumentForm(instance=context['userdoc'])
 
     # Setup the document based on teh source_document of the viewed doc
@@ -49,7 +48,9 @@ class MyDocumentView(DocumentView):
     context['object'] = self.document
     context['document'] = self.document.body
     context['default_data'] = json.dumps(self.user_document.data)
-    context['invitee_list'] = json.dumps([{'id': i.pk, 'name': i.meta_data['to_name'], 'email': i.meta_data['to_email'], 'is_signed': i.is_signed} for i in self.user_document.documentsignature_set.all()])
+    invitee_list = self.user_document.documentsignature_set.all()
+    context['invitee_list'] = invitee_list
+    context['invitee_list_json'] = json.dumps([{'id': i.pk, 'name': i.meta_data['to_name'], 'email': i.meta_data['to_email'], 'is_signed': i.is_signed} for i in invitee_list])
 
     try:
       context['form_set'] = self.document.flyform.flyformset()
@@ -61,6 +62,16 @@ class MyDocumentView(DocumentView):
     user_can_view_document(self.user_document, self.request.user)
 
     return context
+
+
+class ReviewClientCreatedView(MyDocumentView):
+    template_name = 'document/review.html'
+    def get_context_data(self, **kwargs):
+      context = super(ReviewClientCreatedView, self).get_context_data(**kwargs)
+      context['document_data'] = self.user_document.data_as_json()
+      context['next'] = reverse('document:my_review', kwargs={'slug':self.user_document.slug})
+      return context
+
 
 # TODO this view represents both the create and the form validate (edit) views
 # need to seperate them into two views
@@ -107,6 +118,9 @@ class ValidateClientCreatedDocumentFormView(View):
           client_document.save()
           saved = True
 
+          # Notification
+          tasks.document_created(document=client_document)
+
       redirect_url = client_document.get_absolute_url()
 
       return HttpResponse('[{"userdoc_id": %d, "url": "%s", "status":"%s", "message":"%s"}]' % (client_document.pk, redirect_url, 'success', unicode(_('Document Saved'))), status=200, content_type="application/json")
@@ -134,41 +148,45 @@ class DocumentExportView(View):
       return self.get(request, args, kwargs)
 
     def get(self, request, *args, **kwargs):
-      document_slug = slugify(self.kwargs['slug'])
-      document = get_object_or_404(ClientCreatedDocument.objects.select_related('source_document','source_document__flyform'), slug=document_slug, owner=request.user)
+        from django.template import RequestContext
+        from django_xhtml2pdf.utils import fetch_resources
 
-      # @TODO Move all of this into a model method on ClientCreatedDocument
-      data = []
-      if type(document.source_document.flyform.defaults) is dict:
-        data = document.source_document.flyform.defaults.items()
-      if type(document.data) is dict:
-        data = data + document.data.items()
-      data = dict(data)
-      if 'document_title' in data:
-        data['document_title'] = document.name
-      else:
-        data['document_title'] = ''
+        document_slug = slugify(self.kwargs['slug'])
+        document = get_object_or_404(ClientCreatedDocument.objects.select_related('source_document','source_document__flyform'), slug=document_slug, owner=request.user)
 
-      pybars_plus = PybarsPlus(document.body)
-      body = pybars_plus.render(data)
-      handlebars_template_body = mark_safe(markdown.markdown(body))
+        # @TODO Move all of this into a model method on ClientCreatedDocument
+        data = []
+        if type(document.source_document.flyform.defaults) is dict:
+            data = document.source_document.flyform.defaults.items()
+        if type(document.data) is dict:
+            data = data + document.data.items()
+            data = dict(data)
+        if 'document_title' in data:
+            data['document_title'] = document.name
+        else:
+            data['document_title'] = ''
 
-      html = render_to_string('document/export/base.html', {
-        'body': handlebars_template_body
-      })
+        pybars_plus = PybarsPlus(document.body)
+        body = pybars_plus.render(data)
+        handlebars_template_body = mark_safe(markdown.markdown(body))
 
-      filename = '%s.pdf' % (document_slug,)
-      pdf = StringIO.StringIO()
-      result = pisa.CreatePDF(StringIO.StringIO(html.encode("UTF-8")), pdf)
+        context = RequestContext(request, {
+            'body': handlebars_template_body
+        })
+        html = render_to_string('document/export/base.html', context)
 
-      if result.err:
-        response = HttpResponse('[{"message":"%s"}]'%(pdf.err), status=401, content_type="text/json")
-      else:
-        response = HttpResponse(pdf.getvalue(), status=200, content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename=%s' % (filename,)
+        filename = '%s.pdf' % (document_slug,)
+        pdf = StringIO.StringIO()
+        result = pisa.CreatePDF(StringIO.StringIO(html.encode("UTF-8")), pdf, encoding='UTF-8', link_callback=fetch_resources)
+
+        if result.err:
+            response = HttpResponse('[{"message":"%s"}]'%(pdf.err), status=401, content_type="text/json")
+        else:
+            response = HttpResponse(pdf.getvalue(), status=200, content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename=%s' % (filename,)
+            return response
+
         return response
-
-      return response
 
 
 class CloneClientCreatedDocumentView(View):

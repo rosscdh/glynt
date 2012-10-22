@@ -30,8 +30,7 @@
 
 {% tplhandlebars "hb-invite-signatories" %}
 <div id="invite-signatories">
-  <h4>{% trans 'Invite People to Sign' %}</h4>
-  <a id="" href="#invitee-add" class="signatory_add">{% trans 'Invite Someone' %}</a>
+  <a id="" href="#invitee-add" class="signatory_add">{% trans 'Add Invitation' %}</a>
   <span class="message">{{message}}</span>
   <form id="send-invite" class="form-horizontal">
     <input type="hidden" name="csrfmiddlewaretoken" value="{{csrf_token}}" />
@@ -47,7 +46,7 @@
     {{/each}}
     </ul>
     {{#if invitees}}
-    <button id="submit-invitation" type="submit" class="btn btn-success btn-mini">{% trans 'Invite' %}</button>
+    <button id="submit-invitation" type="submit" class="btn btn-success btn-mini">{% trans 'Send Invites' %}</button>
     {{/if}}
   </form>
 </div>
@@ -129,6 +128,7 @@ $(document).ready(function(){
 
       $( "#signatory-detail" ).html(self.compiledDetailTemplate({'invitee': selectedItem}));
       $('div#modal-signatory-detail').modal('show');
+      $('div#modal-signatory-detail').find('#id_detail-name').select();
     };
 
     self.remove = function remove(id) {
@@ -247,12 +247,13 @@ $(document).ready(function(){
 
     self.argosPanOptiaData = function argosPanOptiaData(invitee_list) {
       invitee_list = $.parseJSON(invitee_list);
-
-      $.each(invitee_list, function(index, contact_ob) {
-        if (contact_ob.id && contact_ob.name) {
-          self.add(contact_ob.id, contact_ob.email, contact_ob.name, contact_ob.profile_picture, contact_ob.is_signed);
-        };
-      });
+      if (invitee_list) {
+        $.each(invitee_list, function(index, contact_ob) {
+          if (contact_ob.id && contact_ob.name) {
+            self.add(contact_ob.id, contact_ob.email, contact_ob.name, contact_ob.profile_picture, contact_ob.is_signed);
+          };
+        });
+      };
     };
 
     self.init = function init(params) {
@@ -264,7 +265,7 @@ $(document).ready(function(){
       App.registerCallback('invitee.add', self.argosPanOptiaCallback);
 
       // send the data to the invite widget
-      App.dispatch('invitee.data', $('script#inviteeList').html());
+      App.dispatch('invitee.data', $('script#inviteeListJSON').html());
 
       self.render();
     };
@@ -281,17 +282,9 @@ $(document).ready(function(){
 
 <style>
   .invitee-vehicle {
-	  background-color:#79c68b;
-	margin-top:20px;
-  /*  border:solid #ccc 2px;
-*/  
-	}
-    .invitee-vehicle *,   .invitee-vehicle *:hover {
-		color:white;
-	}
-    .invitee-vehicle a {
-		text-decoration:underline;
-	}
+    margin:5px 0px;
+    padding:0px 5px 5px 5px;
+  }
   ul#invitees {
     list-style:none;
     margin:10px 0px;
@@ -304,14 +297,8 @@ $(document).ready(function(){
     border:solid #c00 2px;
   }
   ul#invitees li.has_not_signed {
-    background-color:#f6d02d;
-	border:none;
-	padding:3px;
-	border-radius:3px;
+    background-color:#fca;
   }
-   ul#invitees li.has_not_signed a {
-	   color:#000;
-   }
   ul#invitees li.has_signed {
     border:solid #0c0 2px;
     background-color:#0c0;

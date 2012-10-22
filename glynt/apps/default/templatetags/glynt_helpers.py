@@ -20,6 +20,26 @@ def current_site_domain():
 current_site_domain.is_safe = True
 
 
+@register.inclusion_tag('document/partials/document_status.html')
+def document_status(document):
+  status = None
+  if document.num_signed == 0 and document.num_invited == 0:
+    status = 'no_invites'
+  elif document.num_invited in [0,None,'']:
+    status = 'no_invites'
+  elif document.num_signed == document.num_invited:
+    status = 'signed'
+  elif document.num_signed != document.num_invited:
+    status = 'out'
+
+  return {
+    'status': status,
+    'num_invited': document.num_invited,
+    'num_signed': document.num_signed,
+    'meta': document.meta_data,
+  }
+
+
 @register.inclusion_tag('moment/moment.js')
 def moment_js(selector=None):
   selector = '[data-humanize-date]' if selector is None else selector
@@ -30,13 +50,24 @@ def moment_js(selector=None):
 
 @register.inclusion_tag('moment/moment.html')
 def moment(date_object, default_date):
-  if type(date_object) == str:
-    date_object = time.strptime(date_object)
+    unix_timestamp = None
+    if type(date_object) == str:
+        date_object = time.strptime(date_object)
+    if date_object:
+        unix_timestamp = date_object.strftime("%s")
 
-  return {
-    'unix_timestamp': date_object.strftime("%s"),
-    'default_date': default_date
-  }
+    return {
+        'unix_timestamp': unix_timestamp,
+        'default_date': default_date
+    }
+
+
+@register.inclusion_tag('comments/form.html')
+def comment_form(form, next):
+    return {
+      'form': form,
+      'next': next
+    }
 
 
 @register.inclusion_tag('pleasewait/loading.html')

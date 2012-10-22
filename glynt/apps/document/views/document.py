@@ -16,19 +16,22 @@ from utils import JsonErrorResponseMixin, user_can_view_document
 
 from glynt.apps.flyform.forms import BaseFlyForm
 
-from glynt.apps.document.forms import ClientCreatedDocumentForm
+from glynt.apps.document.forms import ClientCreatedDocumentForm, CreateStepForm, CreateStepFieldForm
 from glynt.apps.document.models import Document
 
 import logging
 logger = logging.getLogger(__name__)
 
 
-class CreateDocumentView(TemplateView, FormMixin):
-  template_name = 'document/create.html'
+class AuthorToolView(TemplateView):
+    template_name='document/authoring_tool.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(AuthorToolView, self).get_context_data(**kwargs)
+        context['form_steps'] = CreateStepForm()
+        context['form_fields'] = CreateStepFieldForm()
 
-class EditDocumentView(TemplateView, FormMixin):
-  template_name = 'document/create.html'
+        return context
 
 
 class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):

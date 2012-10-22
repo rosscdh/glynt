@@ -1,4 +1,4 @@
-{% load i18n templatetag_handlebars glynt_helpers %}{% load thumbnail %}{% load url from future %}
+{% load i18n templatetag_handlebars glynt_helpers document_tags %}{% load thumbnail %}{% load url from future %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -33,6 +33,7 @@
     <link rel="apple-touch-icon" sizes="72x72" href="{{ STATIC_URL }}img/apple-touch-icon-72x72.png">
     <link rel="apple-touch-icon" sizes="114x114" href="{{ STATIC_URL }}img/apple-touch-icon-114x114.png">
     {% block extrahead %}{% endblock %}
+    <link href="{{ STATIC_URL }}css/jquery.signaturepad.css" rel="stylesheet">
     {% block css %}{% endblock %}
     {% block head_js %}{% endblock %}
   </head>
@@ -114,6 +115,29 @@
     {% handlebars_js %}
     {% moment_js %}
     <script src="{{ STATIC_URL }}handlebars-helpers.js"></script>
+    <script src="{{ STATIC_URL }}js/sammyjs/sammy.js"></script>
+    <script src="{{ STATIC_URL }}js/sammyjs/plugins/sammy.handlebars.js"></script>
+    <script src="{{ STATIC_URL }}js/sammyjs/plugins/sammy.json.js"></script>
+    <script src="{{ STATIC_URL }}js/contactObserver.js"></script>
+
+    <script type="text/javascript" src="{{ STATIC_URL }}js/flashcanvas.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.signaturepad.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/json2.min.js"></script>
+    {% comments_js %}
     {% block js %}{% endblock %}
+    <script>
+    $(document).ready(function(){
+      $('body').tooltip({
+        selector: '[rel=tooltip]',
+        placement: 'top',
+        animation: true,
+        delay: { show: 50, hide: 5 }
+      });
+      $('body').popover({
+        selector: '[rel=popover]',
+        trigger: 'hover',
+      });
+    });
+    </script>
   </body>
 </html>

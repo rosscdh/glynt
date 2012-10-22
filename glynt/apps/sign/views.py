@@ -15,11 +15,8 @@ from glynt.apps.document.models import ClientCreatedDocument
 from glynt.apps.sign.models import DocumentSignature
 from glynt.apps.sign.forms import DocumentSignatureForm
 
-from glynt.apps.sign.utils import encode_data, decode_data
+from glynt.apps.sign.utils import encode_data
 
-from signpad2image.signpad2image import s2i
-
-import user_streams
 import datetime
 
 
@@ -122,31 +119,32 @@ class ProcessSignDocumentView(UpdateView):
     form = self.get_form(form_class)
 
     if not self.object.is_signed:
-      signature = request.POST.get('output',None)
+      signature = request.POST.get('output', None)
       self.object.signature = signature
       self.object.is_signed = True
-      self.object.meta_data['signed_at'] = datetime.datetime.utcnow
+      self.object.meta_data['signed_at'] = datetime.datetime.utcnow()
+      self.object.meta_data['signee_ip'] = request.META.get('REMOTE_ADDR')
+      self.object.meta_data['signee_host'] = request.META.get('REMOTE_HOST')
+      self.object.meta_data['signee_useragent'] = request.META.get('HTTP_USER_AGENT')
+      self.object.meta_data['signee_referer'] = request.META.get('HTTP_REFERER') # should not have one? security check?
+
       self.object.save()
       messages.success(request, _('You have successfully signed this document'))
 
     return self.form_valid(form)
 
 
-
 class RenderSignatureImageView(BaseDetailView):
   http_method_names = ['get']
   model = DocumentSignature
+
+  def get_object(self):
+    return get_object_or_404(self.model, document__pk=self.kwargs['pk'], key_hash=self.kwargs['hash'])
 
   def get(self, request, *args, **kwargs):
     self.object = self.get_object()
     response = HttpResponse(mimetype="image/png")
 
-    try:
-      #build the new image
-      image = s2i(json.dumps(self.object.signature), input_image=settings.BLANK_SIG_IMAGE[0])
-    except:
-      #If it wasn't in the database, then return the nosig image
-      image = s2i("", force_no_sig_image=True, nosig_image=settings.NO_SIG_IMAGE[0])
-    #return the HttpResponse object to the client.
+    image = self.object.signature_as_image()
     image.save(response, "PNG")
     return response

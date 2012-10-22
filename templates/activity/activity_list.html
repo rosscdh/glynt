@@ -1,6 +1,7 @@
 {% load humanize glynt_helpers %}
 {% for a in object_list %}
 <li>
-{{ a.content|safe }} - {% moment a.created_at a.created_at %}
+<div class="">{{ a.content|safe }}</div>
+<div class="created">{% moment a.created_at a.created_at %}</div>
 </li>
 {% endfor %}

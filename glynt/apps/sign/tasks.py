@@ -38,7 +38,7 @@ def send_signature_invite_email(**kwargs):
   )
   # Send notification
   user = User.objects.get(pk=invited_by_pk)
-  user_streams.add_stream_item(user, _('You invited %s to sign "<a href="%s">%s</a>"' % (to_name, document.get_absolute_url(), document.name,)))
+  user_streams.add_stream_item(user, _('You invited %s to sign "<a href="%s">%s</a>"' % (to_name, document.get_absolute_url(), document.name,)), document)
 
 
 @task()
@@ -57,7 +57,7 @@ def send_signature_acquired_email(**kwargs):
   kwargs['from_email'] = invited_by_email
   kwargs['document_name'] = document.name
 
-  kwargs['review_signatures_url'] = reverse('sign:default', kwargs={'pk': document.source_document.pk, 'hash': key_hash})
+  kwargs['review_signatures_url'] = reverse('sign:default', kwargs={'pk': document.pk, 'hash': key_hash})
 
   send_templated_mail(
           template_name = 'signature_acquired',
@@ -68,4 +68,4 @@ def send_signature_acquired_email(**kwargs):
   )
   # Send notification
   user = User.objects.get(pk=invited_by_pk)
-  user_streams.add_stream_item(user, _('%s has signed "<a href="%s">%s</a>"' % (to_name, document.get_absolute_url(), document.name,)))
+  user_streams.add_stream_item(user, _('%s has signed "<a href="%s">%s</a>"' % (to_name, document.get_absolute_url(), document.name,)), document)

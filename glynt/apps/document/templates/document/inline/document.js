@@ -2,13 +2,12 @@
 {% load glynt_helpers %}
 {% load url from future %}
 
-<script id="inviteeList">{{ invitee_list|default:""|safe }}</script>
+<script id="inviteeListJSON">{{ invitee_list_json|default:""|safe }}</script>
 <script id="document-default_data" type="text/javascript">[{{ default_data|default:''|safe }}]</script>
 <script id="js-document" type="text/x-handlebars-template">
 {{ userdoc.body|default:object.body|safe }}
 </script>
 <script src="{{ STATIC_URL }}js/jquery.jeditable.mini.js"></script>
-<script src="{{ STATIC_URL }}js/contactObserver.js"></script>
 <script id="document-controls" type="text/javascript">
 // use strict;
 // use warnings;

@@ -1,0 +1,381 @@
+{% extends 'base.html' %}
+{% load i18n markup templatetag_handlebars %}
+{% load url from future %}
+
+{% block bodyclass %}review{% endblock %}
+
+
+{% block body %}
+<div class="span12">
+  <h2>Document Author tool</h2>
+</div>
+
+<div class="span2 sidebar">
+  <ul class="nav nav-list">
+      <li><a href="#/"> {% trans 'Authoring' %}</a></li>
+    <li class="divider"></li>
+      <li><a href="#/review/json"> {% trans 'Review JSON' %}</a></li>
+    <li class="divider"></li>
+    <li class="nav-header">{% trans 'Coming Eventually' %}</li>
+      <li><a href="#/review/doc"> {% trans 'Review Document' %}</a></li>
+    <li class="nav-header">{% trans 'Actions' %}</li>
+    <li class="divider"></li>
+      <li><a id="reset" href="#/reset" class="btn btn-danger"> {% trans 'Reset' %}</a></li>
+  </ul>
+</div>
+
+<div id="authoring" class="row view default">
+    <div id="steps" class="span4">
+        <div id="steps_list"></div>
+    </div>
+
+    <div id="fields" class="span5">
+        <div id="fields_list"></div>
+    </div>
+</div>
+
+<div id="json" class="row span9 view hide">
+    <textarea id="json-output" class="span9" style="height:640px;"></textarea>
+</div>
+
+<div id="doc" class="row span7 view hide">
+    Document coming soon
+</div>
+{% endblock %}
+
+{% block css %}{% endblock %}
+
+{% block js %}
+
+<script type="text/x-handlebars" id="hb-steps">
+{% verbatim %}
+{{#each_with_key steps key="index"}}
+<div class="doc-body step info" data-step_index="{{index}}">
+  <form id="step-{{index}}" data-step_index="{{index}}" class="form-step">
+{% endverbatim %}
+    {{ form_steps }}
+  </form>
+  {% verbatim %}
+  <div class="form-actions">
+      {{#unless_eq index compare=0}}<a href="#step/delete" class="btn btn-danger btn-mini delete_step" data-step_index="{{index}}"><i class="icon-remove icon-white"></i> Delete Step</a>{{/unless_eq}}
+      <a href="#/field/add" class="btn btn-mini btn-success" id="add_field" data-step_index="{{index}}"><i class="icon-plus icon-white"></i> Add Field</a>
+  </div>
+  {% endverbatim %}
+</div>
+{% verbatim %}{{/each_with_key}}{% endverbatim %}
+<div class="form-actions">
+<a href="#/step/add" class="btn btn-mini btn-success" id="add_step"><i class="icon-plus icon-white"></i> Create Step</a>
+</div>
+</script>
+
+<script type="text/x-handlebars" id="hb-fields">
+{% verbatim %}
+{{#unless_eq step.properties.step_title compare=null}}<h3>Fieldset for {{step.properties.step_title}}</h3>{{/unless_eq}}
+<div class="info" data-step_index="{{step.index}}">
+    {{#each_with_key step.fields key="index"}}
+    {% endverbatim %}
+    <div class="doc-body field">
+      {% verbatim %}
+      <form id="field-{{index}}" data-field_index="{{index}}" class="form-field">
+      {% endverbatim %}
+        {{ form_fields }}
+      </form>
+      <div class="form-actions">
+          {% verbatim %}
+          <a href="#field/delete" class="btn btn-danger btn-mini delete_field" data-field_index="{{index}}"><i class="icon-remove icon-white"></i> Delete Field</a>
+          {% endverbatim %}
+      </div>
+    </div>
+    <br/>
+    {% verbatim %}
+    {{/each_with_key}}
+    {% endverbatim %}
+</div>
+</script>
+
+<script>
+$(document).ready(function(){
+    app = $.sammy(function() {
+        var self = this;
+
+        // ---- OBSERVER -----
+        self.observer = new argosPanOptia();
+        self.registerCallback = function registerCallback(event_name, callback) {
+          self.observer.registerCallback(event_name, callback);
+        };
+        self.dispatch = function dispatch(event_name, value) {
+          self.observer.dispatch(event_name, value);
+        };
+
+        self.views = $('div.view');
+        self.nav = $('ul.nav-list li a');
+
+        self.steps_view = Handlebars.compile($('script#hb-steps').html());
+        self.fields_view = Handlebars.compile($('script#hb-fields').html());
+        self.json_output = $('#json-output');
+
+        self.steps = [];
+        self.current_step = 0;
+        self.fields = [];
+        self.current_field = null;
+
+        this.get('#/', function() {
+            self.show($('div#authoring'));
+        });
+        this.get('#/review/json', function() {
+            self.show($('div#json'));
+        });
+        this.get('#/review/doc', function() {
+            self.show($('div#doc'));
+        });
+
+        this.hide_all = function hide_all() {
+            self.nav.removeClass('selected');
+            $.each(self.views, function(index, item) {
+                $(item).hide();
+            });
+        };
+        this.show = function show(view_list) {
+            if ($.isArray(view_list) == false) {
+                view_list = [view_list];
+            }
+            self.hide_all();
+            $('[href="'+window.location.hash+'"]').addClass('selected');
+            $.each(view_list, function(index, item) {
+                item.show();
+            });
+        }
+
+        self.step_json = {
+          'type': 'step',
+          'properties': {
+            'step_title': 'Step No. 1',
+            'hide_from': '',
+            'hide_to': ''
+            //'iteration_title': ''
+          },
+          'fields': []
+        };
+        self.input_json = {
+          'field': 'CharField',
+          'widget': 'TextInput',
+          'label': '',
+          'name': '',
+          'help_text': '',
+          'placeholder': '',
+          'data-hb-name': '',
+          'required': 'true',
+          'class': 'md-updater'
+        };
+
+        self.clone = function clone(obj) {
+            return $.extend(true, {}, obj);
+        };
+        // ---- VIEW CRUD -----
+        self.add_step = function add_step(data) {
+          data = (data == undefined) ? self.clone(self.step_json): data;
+          self.steps.push(data);
+          var new_step_index = self.steps.length - 1;
+          self.current_step = new_step_index;
+
+          self.render();
+          self.update_json();
+    
+          self.dispatch('change_steptype', {'selected_type': 'step', 'form': $('form#step-'+ new_step_index)});
+        };
+        self.delete_step = function delete_step(index) {
+            self.steps.splice(index,1);
+            self.render();
+            self.update_json();
+        };
+        self.add_field = function add_field(step_index) {
+          self.steps[step_index].fields.push(self.clone(self.input_json));
+          self.render_fields(step_index);
+          self.update_json();
+        };
+        self.delete_field = function delete_field(step_index, field_index) {
+            self.steps[step_index].fields.splice(field_index,1);
+            self.render_fields(step_index);
+            self.update_json();
+        };
+        // ---- RESET -----
+        self.reset = function reset() {
+            $.cookie('auth_tool', '');
+            // self.json_output.val();
+            // self.render();
+            window.location.reload();
+        };
+        // ---- UPDATE JSON -----
+        self.update_json = function update_json() {
+            self.json_output.val(JSON.stringify(self.steps, null, "\t"));
+            self.bind_forms_to_data();
+            $.cookie('auth_tool', JSON.stringify(self.steps));
+        };
+        self.load_data_from_source = function load_data_from_source() {
+            //preloaded_data = $.parseJSON(self.json_output.val());
+            cookie_data = $.parseJSON($.cookie('auth_tool'));
+            if (cookie_data != null) {
+                self.steps = cookie_data;
+                self.json_output.val(JSON.stringify(self.steps, null, "\t"));
+            }
+        };
+
+        // ---- RENDER VIEWS -----
+        self.render = function render() {
+          self.render_steps();
+          self.render_fields(self.current_step);
+          self.dispatch('bind_data', {});
+        };
+        self.render_steps = function render_steps() {
+          $( "div#steps_list" ).html(self.steps_view({'steps': self.steps}));
+        };
+        self.render_fields = function render_fields(step_index) {
+          $( "div#fields_list" ).html(self.fields_view({'step': self.steps[step_index]}));
+        };
+
+        // ---- UPDATE JSON FROM FORMS -----
+        self.updateStep = function updateStep(field) {
+            var form = field.closest('form.form-step');
+            var step_index = $(form).attr('data-step_index');
+            var attr_name = field.attr('name');
+            if (attr_name == 'type') {
+                self.steps[step_index][attr_name] = field.val();
+            } else {
+                self.steps[step_index].properties[attr_name] = field.val();
+            }
+            self.update_json();
+        };
+        self.updateField = function updateField(field) {
+            var form = field.closest('form.form-field');
+            var field_index = $(form).attr('data-field_index');
+            var info = form.closest('div.info');
+            var step_index = $(info).attr('data-step_index');
+
+            var attr_name = field.attr('name');
+            self.steps[step_index].fields[field_index][attr_name] = field.val();
+            self.update_json();
+        };
+
+        // ----- BIND DATA TO FORM VIEWS -----
+        self.bind_forms_to_data = function bind_forms_to_data() {
+            // bind step data to form value
+            $.each($('form.form-step'), function(step_index, form_step){
+                form_step = $(form_step);
+                var form_id = form_step.attr('id');
+                var step_type = self.steps[step_index].type;
+                form_step.find('form#'+ form_id +' [name=type]').val(step_type);
+                var step_attribs = self.steps[step_index].properties;
+                for(var attrib_key in step_attribs){
+                    attrib_value = step_attribs[attrib_key];
+                    $('body').find('form#'+ form_id +' [name='+ attrib_key +']').val(attrib_value);
+                }
+            });
+            // bind field element data from json to form field value
+            $.each($('form.form-field'), function(field_index, form_field){
+                form_field = $(form_field);
+                var form_id = form_field.attr('id');
+                step_index = form_field.closest('div.info').attr('data-step_index');
+                var field_attribs = self.steps[step_index].fields[field_index];
+
+                for(var attrib_key in field_attribs){
+                    attrib_value = field_attribs[attrib_key];
+                    $('body').find('form#'+ form_id +' [name='+ attrib_key +']').val(attrib_value);
+                }
+            });
+        }
+
+        /**
+        * When the step type changes from normal to loop or vice versa
+        * perform this event
+        */
+        self.on_steptype_change = function on_steptype_change(type_form_hash) {
+            step_type = type_form_hash.selected_type;
+            step_form = type_form_hash.form;
+            control_group = step_form.find('#id_hide_from').closest('.control-group');
+            if (step_type == 'loop-step') {
+                control_group.show();
+            } else {
+                control_group.hide();
+            }
+        };
+
+        self.init_interface = function init_interface() {
+          $('.step').live('click', function(event){
+                event.preventDefault();
+                step = $(this).attr('data-step_index');
+                if (self.current_step != step) {
+                    $(this).addClass('selected');
+                    self.current_step = step;
+                    self.render();
+                }
+          });
+          $('.field').live('click', function(event){
+              event.preventDefault();
+          });
+          $('a#add_step').live('click', function(event){
+              event.preventDefault();
+              self.add_step();
+          });
+          $('a.delete_step').live('click', function(event){
+              event.preventDefault();
+              step = $(this).attr('data-step_index');
+              self.delete_step(step);
+          });
+          $('a#add_field').live('click', function(event){
+              event.preventDefault();
+              self.current_step = $(this).attr('data-step_index');
+              self.add_field(self.current_step);
+          });
+          $('a.delete_field').live('click', function(event){
+              event.preventDefault();
+              step = $(this).closest('div.info').attr('data-step_index');
+              field = $(this).attr('data-field_index');
+              console.log(field)
+              self.delete_field(step, field);
+          });
+          // Forms
+          $('form.form-step input, form.form-step textarea, form.form-step select').live('change', function(event){
+              event.preventDefault();
+              self.updateStep($(this));
+          });
+          $('form.form-field input, form.form-field textarea, form.form-field select').live('change', function(event){
+              event.preventDefault();
+              self.updateField($(this));
+          });
+          $('#id_type').live('change', function(event){
+            event.preventDefault();
+            var form = $(this).closest('form.form-step');
+            self.dispatch('change_steptype', {'selected_type': $(this).val(), 'form': form});
+          });
+          $('#reset').live('click', function(event){
+            event.preventDefault();
+            self.reset();
+          });
+          self.json_output.live('change', function(event){
+            event.preventDefault();
+            self.dispatch('bind_data', {});
+          });
+        };
+
+        self.init = function init() {
+            self.current_step = 0;
+
+            self.registerCallback('bind_data', self.bind_forms_to_data);
+            self.registerCallback('change_steptype', self.on_steptype_change);
+
+            self.load_data_from_source();
+            self.init_interface();
+            self.render();
+
+            // defaults
+            self.dispatch('change_steptype', {'selected_type': 'step', 'form': $('form.form-step:first')});
+        };
+
+       self.init();
+    });
+
+    // start the application
+    app.run('#/');
+});
+</script>
+{% endblock %}

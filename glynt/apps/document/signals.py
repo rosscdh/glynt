@@ -1,28 +1,22 @@
 # -*- coding: utf-8 -*-
-from django.db.models.signals import post_save, post_delete
+# signals to handle the sending of signature invitations, when a new DocumentSignature model is created
+from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.template.defaultfilters import truncatewords
+from django.contrib.comments.models import Comment
 
+from glynt.apps.document import tasks
 from glynt.apps.document.models import ClientCreatedDocument
-from glynt.apps.document.tasks import document_created
+
 import datetime
 
-@receiver(post_save, sender=ClientCreatedDocument)
-def save_document_signal(sender, **kwargs):
-    is_created = kwargs['created']
-    document = kwargs['instance']
-
-    if is_created:
-        try:
-          document_created.delay(document=document)
-        except:
-          document_created(document=document)
 
 
-# @receiver(post_delete, sender=ClientCreatedDocument)
-# def delete_document_signature_signal(sender, **kwargs):
-#     document = kwargs['instance']
-# 
-#     try:
-#       document_created.delay(document=document)
-#     except:
-#       document_created(document=document)
+@receiver(post_save, sender=Comment)
+def save_document_comment_signal(sender, **kwargs):
+    comment = kwargs['instance']
+    client_document = ClientCreatedDocument.objects.get(pk=comment.object_pk)
+    source_document = client_document.source_document
+    comment_text = truncatewords(comment.comment, 15)
+    # Notification
+    tasks.document_comment(source_document=source_document, document=client_document, commenting_user=comment.user, commenting_user_name=comment.user_name, comment=comment_text)

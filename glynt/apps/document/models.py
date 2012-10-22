@@ -11,6 +11,9 @@ from jsonfield import JSONField
 from glynt.apps.document.managers import DocumentManager, PublicDocumentManager, PrivateDocumentManager
 from glynt.apps.document.managers import ClientCreatedDocumentManager, PublicClientCreatedDocumentManager, DeletedClientCreatedDocumentManager
 
+import qrcode
+
+
 class Document(models.Model):
     """ Base Document Class """
     DOC_STATUS = get_namedtuple_choices('DOC_STATUS', (
@@ -58,7 +61,7 @@ class ClientCreatedDocument(models.Model):
     owner = models.ForeignKey(User)
     source_document = models.ForeignKey(Document)
     name = models.CharField(max_length=128, blank=True, null=True)
-    slug = models.SlugField(unique=True, blank=False, null=True, max_length=255)
+    slug = models.SlugField(unique=False, blank=False, null=True, max_length=255)
     body = models.TextField(blank=True, null=True)
     data = JSONField(blank=True, null=True)
     meta_data = JSONField(blank=True, null=True, default={}) # Stores data on num_signatures vs total signatures
@@ -78,9 +81,20 @@ class ClientCreatedDocument(models.Model):
 
     @property
     def num_signed(self):
-      if 'num_signed' in self.meta_data:
+      if self.meta_data and 'num_signed' in self.meta_data:
         return int(self.meta_data['num_signed'])
       return 0
+
+    def get_qr_code(self):
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(self.get_absolute_url())
+        qr.make(fit=True)
+        return qr.make_image()
 
     def increment_num_signed(self, signature_id):
       """ Save the number of signers, save the signature_id for uniqueness """
@@ -95,7 +109,7 @@ class ClientCreatedDocument(models.Model):
 
     @property
     def num_invited(self):
-      if 'num_invited' in self.meta_data:
+      if self.meta_data and 'num_invited' in self.meta_data:
         return int(self.meta_data['num_invited'])
       return 0
 
@@ -131,5 +145,5 @@ class ClientCreatedDocument(models.Model):
     def data_as_json(self):
       return json.dumps(self.data)
 
-
+# import signals
 from glynt.apps.document.signals import *

@@ -8,6 +8,7 @@
 {% block owner_info %}
 <div class="">
   <h2 id="document-title" class="editable">{{ userdoc.name }}</h2>
+  <a href="{% url 'document:my_review' slug=userdoc.slug %}" rel="tooltip" title="">{% trans 'Review Document' %}</a>
   <form id="userdoc-name-form" class="hidden">
       {{ userdoc_form }}
   </form>
@@ -65,7 +66,9 @@
 {% endblock %}
 
 {% block document %}
+<div class="doc-body">
 <span id="document-md" data-bind="html: App.documentModel.renderedHTML()">{% show_loading modal='False' %}</span>
+</div>
 {% endblock %}
 
 {% block css %}
