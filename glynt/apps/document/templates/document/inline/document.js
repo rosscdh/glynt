@@ -844,7 +844,25 @@ $(document).ready(function(){
             }
         }
 
+        /**
+        * Method is required to delete other cookie docs and save space in the cookie
+        * to prevent the 400 error that occurs when we run out of cookie mem space
+        */
+        self.deleteOtherDocCookies = function deleteOtherDocCookies() {
+            arrCookieDocs = document.cookie.split(';');
+            for (var i = 0; i < arrCookieDocs.length; i++) {
+                var name_value = arrCookieDocs[i].split("=");
+                if (name_value[0].indexOf('glynt-') != -1) {
+                    if (name_value[0] != '{{ userdoc.cookie_name }}') {
+                        // expire these other cookie docs
+                        $.cookie(name_value[0], null);
+                    }
+                }
+            }
+        };
+
         self.initializeValuesFromCookie = function initializeValuesFromCookie() {
+            self.deleteOtherDocCookies();
             var cookie_value = $.parseJSON($.cookie('{{ userdoc.cookie_name }}'));
             if (cookie_value) {
                 cookie_value = $(cookie_value);
