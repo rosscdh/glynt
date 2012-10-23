@@ -165,12 +165,12 @@ $(document).ready(function(){
               self.stepIsValid[index+1] = false;
           });
 
-          $('body').tooltip({
-            selector: '[rel=pagination-tooltip]',
-            placement: 'bottom',
-            animation: false,
-            delay: { show: 50, hide: 5 }
-          });
+          // $('body').tooltip({
+          //   selector: '[rel=pagination-tooltip]',
+          //   placement: 'bottom',
+          //   animation: false,
+          //   delay: { show: 50, hide: 5 }
+          // });
 
           self.stepVisibility(1);
         }
@@ -194,9 +194,9 @@ $(document).ready(function(){
             'last': self.maxFormSteps(),
             'step_list': steps('&nbsp;')
           }
-          $.each($('ul#step-list li'), function(index,item){
-            $(item).tooltip('hide');
-          });
+          // $.each($('ul#step-list li'), function(index,item){
+          //   $(item).tooltip('hide');
+          // });
           return self.goto_step_list(context);
         }
         self.renderSteps = function renderSteps() {
@@ -386,7 +386,7 @@ $(document).ready(function(){
             // ruleset if they reduce ie.. 5 to 2 then 3,4,5 are deleted
             // @TODO make methods
             // @CODESMELL
-            var fieldsets = self.form_fieldset.find('fieldset');
+            var fieldsets = self.form_fieldset.find('fieldset.loop');
             var hb_base_ob = {};
             // set array grouping context variable to allow handlebarsjs to loop
             var loop_name = 'loop_' + App.documentModel.slugify(self.iteration_title).toLowerCase();
@@ -479,7 +479,7 @@ $(document).ready(function(){
                     found = true;
                 } else {
                     if (found == true) {
-                        element = element.closest('li');//is we are using fo
+                        element = element.closest('div.control-group'); //is we are using fo
                         element.hide();
                         self.repeatable_fields.push(element);
                         element.remove();
@@ -1274,7 +1274,7 @@ $(document).ready(function(){
 {% tplhandlebars "goto-step-list" %}
 <ul id="step-list" class="nav nav-tabs">
   {{#each step_list}}
-  <li data-goto_step="{{step}}" rel="paginatiosn-toolsstip" title="{{step_name}}" class="{{#if is_current}}active{{/if}}">
+  <li data-goto_step="{{step}}" rel="pagination-tooltip" title="{{step_name}}" class="{{#if is_current}}active{{/if}}">
   <a href="#">{{step_name}}	<span class="page_num" style="display:hidden">{{text}}</span>
 </a>
   </li>
