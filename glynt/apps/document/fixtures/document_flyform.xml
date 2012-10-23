@@ -41,7 +41,7 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
             <None/>
         </field>
         <field to="flyform.flyform" name="flyform" rel="OneToOneRel">2</field>
-        <field type="IntegerField" name="doc_status">1</field>
+        <field type="IntegerField" name="doc_status">0</field>
         <field type="BooleanField" name="is_public">True</field>
         <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"/>
     </object>
@@ -56,7 +56,7 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
             <None/>
         </field>
         <field to="flyform.flyform" name="flyform" rel="OneToOneRel">3</field>
-        <field type="IntegerField" name="doc_status">1</field>
+        <field type="IntegerField" name="doc_status">0</field>
         <field type="BooleanField" name="is_public">True</field>
         <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"/>
     </object>
@@ -71,7 +71,7 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
             <None/>
         </field>
         <field to="flyform.flyform" name="flyform" rel="OneToOneRel">4</field>
-        <field type="IntegerField" name="doc_status">1</field>
+        <field type="IntegerField" name="doc_status">0</field>
         <field type="BooleanField" name="is_public">True</field>
         <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"/>
     </object>
@@ -86,7 +86,7 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
             <None/>
         </field>
         <field to="flyform.flyform" name="flyform" rel="OneToOneRel">5</field>
-        <field type="IntegerField" name="doc_status">1</field>
+        <field type="IntegerField" name="doc_status">0</field>
         <field type="BooleanField" name="is_public">True</field>
         <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"/>
     </object>
@@ -101,7 +101,7 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
             <None/>
         </field>
         <field to="flyform.flyform" name="flyform" rel="OneToOneRel">6</field>
-        <field type="IntegerField" name="doc_status">1</field>
+        <field type="IntegerField" name="doc_status">0</field>
         <field type="BooleanField" name="is_public">True</field>
         <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"/>
     </object>
@@ -116,7 +116,7 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
             <None/>
         </field>
         <field to="flyform.flyform" name="flyform" rel="OneToOneRel">7</field>
-        <field type="IntegerField" name="doc_status">1</field>
+        <field type="IntegerField" name="doc_status">0</field>
         <field type="BooleanField" name="is_public">True</field>
         <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"/>
     </object>
@@ -131,7 +131,7 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
             <None/>
         </field>
         <field to="flyform.flyform" name="flyform" rel="OneToOneRel">8</field>
-        <field type="IntegerField" name="doc_status">1</field>
+        <field type="IntegerField" name="doc_status">0</field>
         <field type="BooleanField" name="is_public">True</field>
         <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"/>
     </object>
@@ -146,7 +146,7 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
             <None/>
         </field>
         <field to="flyform.flyform" name="flyform" rel="OneToOneRel">9</field>
-        <field type="IntegerField" name="doc_status">1</field>
+        <field type="IntegerField" name="doc_status">0</field>
         <field type="BooleanField" name="is_public">True</field>
         <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"/>
     </object>
@@ -161,7 +161,7 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
             <None/>
         </field>
         <field to="flyform.flyform" name="flyform" rel="OneToOneRel">10</field>
-        <field type="IntegerField" name="doc_status">1</field>
+        <field type="IntegerField" name="doc_status">0</field>
         <field type="BooleanField" name="is_public">True</field>
         <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"/>
     </object>
@@ -176,7 +176,7 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
             <None/>
         </field>
         <field to="flyform.flyform" name="flyform" rel="OneToOneRel">11</field>
-        <field type="IntegerField" name="doc_status">1</field>
+        <field type="IntegerField" name="doc_status">0</field>
         <field type="BooleanField" name="is_public">True</field>
         <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"/>
     </object>
@@ -191,7 +191,7 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
             <None/>
         </field>
         <field to="flyform.flyform" name="flyform" rel="OneToOneRel">12</field>
-        <field type="IntegerField" name="doc_status">1</field>
+        <field type="IntegerField" name="doc_status">0</field>
         <field type="BooleanField" name="is_public">True</field>
         <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"/>
     </object>
@@ -206,7 +206,7 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
             <None/>
         </field>
         <field to="flyform.flyform" name="flyform" rel="OneToOneRel">13</field>
-        <field type="IntegerField" name="doc_status">1</field>
+        <field type="IntegerField" name="doc_status">0</field>
         <field type="BooleanField" name="is_public">True</field>
         <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"/>
     </object>
@@ -221,7 +221,7 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
             <None/>
         </field>
         <field to="flyform.flyform" name="flyform" rel="OneToOneRel">14</field>
-        <field type="IntegerField" name="doc_status">1</field>
+        <field type="IntegerField" name="doc_status">0</field>
         <field type="BooleanField" name="is_public">True</field>
         <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"/>
     </object>
@@ -236,7 +236,7 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
             <None/>
         </field>
         <field to="flyform.flyform" name="flyform" rel="OneToOneRel">15</field>
-        <field type="IntegerField" name="doc_status">1</field>
+        <field type="IntegerField" name="doc_status">0</field>
         <field type="BooleanField" name="is_public">True</field>
         <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"/>
     </object>

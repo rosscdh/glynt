@@ -9,13 +9,13 @@ class DocumentManager(models.Manager):
 class PublicDocumentManager(DocumentManager):
   """ Manager for documents that are public """
   def get_query_set(self):
-      return super(PublicDocumentManager, self).get_query_set().filter(is_public=True)
+      return super(PublicDocumentManager, self).get_query_set().filter(doc_status=1, is_public=True)
 
 
 class PrivateDocumentManager(DocumentManager):
   """ Manager for documents that are public """
   def get_query_set(self):
-      return super(PrivateDocumentManager, self).get_query_set().filter(is_public=False)
+      return super(PrivateDocumentManager, self).get_query_set().filter(doc_status=1, is_public=False)
 
 
 class ClientCreatedDocumentManager(models.Manager):
