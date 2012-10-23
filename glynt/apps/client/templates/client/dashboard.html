@@ -8,8 +8,8 @@
 {% block bodyclass %}dashboard{% endblock %}
 
 {% block body %}
-<div class="row">
 
+<div class="row">
       <div class="span3 sidebar">
           <ul class="nav nav-list">
             {% if user.is_staff %}
@@ -18,7 +18,6 @@
             {% endif %}
             <li style="margin-left:15px"><a href="#/list/templates/create_new" class="btn btn-green btn-block" id="toggle-docs">{% trans 'New Doc' %}</a></li>
             <li class="divider"></li>
-
               <li><a href="#/list/my_documents/all"> {% trans 'All Documents' %}</a></li>
               <li><a href="#/list/activity"> {% trans 'Activity' %}</a></li>
           </ul>

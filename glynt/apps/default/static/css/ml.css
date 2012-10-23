@@ -160,18 +160,25 @@ ul.add-active{
 	opacity:0.6;
 }
 
-
 /* Assembly Screen  */
-/*.document-questions {
-	position:fixed;
-	top:60px;
-}*/
-
 .document-questions h3 {
-	font-size:20px;
+	font-size:24px;
+	line-height:24px;
+	text-align:center;
 }
 .document-questions label {
-	margin-top:10px;
+}
+.document-questions .control-group label {
+	width:48%;
+	float:left;
+}
+.document-questions .control-group input, .document-questions .control-group textarea {
+	width:245px;
+}
+.document-questions .control-group .controls {
+	width:50%;
+	float:right;
+	margin-left:0px;
 }
 .document-questions ul, .document-questions li {
 	margin-left:0px;
@@ -179,8 +186,18 @@ ul.add-active{
 .draft-document {
 	font:Courier!important;
 }
-
-
+#progress-buttons{
+	height:66px;
+}
+#progress-buttons .next-button{
+	width:50%;
+	float:right;
+}
+#progress-buttons .previous-button{
+	width:48%;
+	float:left;
+	text-align:right;
+}
 
 /* Buttons */
 .btn-green, .btn-primary  {

@@ -230,10 +230,10 @@ $(document).ready(function(){
           return complete;
         }
 
-        self.initPrevStep = function initPrevStep(current_step) {
+        self.initPrevStep = function initPrevStep(active) {
           default_step = 1;
 
-          for(var step = current_step; step >= 1; step--) {
+          for(var step = active; step >= 1; step--) {
               if(self.validateStep(step)) {
                   self.stepVisibility(step);
                   // persist the cookie progress
@@ -241,14 +241,14 @@ $(document).ready(function(){
                   return step;
               }
           }
-          console.log('error has not caught valid step: '+current_step)
+          console.log('error has not caught valid step: '+active)
           self.stepVisibility(default_step);
         };
 
-        self.initNextStep = function initNextStep(current_step) {
+        self.initNextStep = function initNextStep(active) {
           default_step = parseInt(self.maxFormSteps());
 
-          for(var step = current_step; step <= default_step ; step++) {
+          for(var step = active; step <= default_step ; step++) {
               if(self.validateStep(step)) {
                   self.stepVisibility(step);
                   // persist the cookie progress
@@ -256,7 +256,7 @@ $(document).ready(function(){
                   return step;
               }
           }
-          console.log('error has not caught valid step: '+current_step)
+          console.log('error has not caught valid step: '+active)
           self.stepVisibility(default_step);
         };
 
@@ -1254,10 +1254,11 @@ $(document).ready(function(){
 </script>
 
 {% tplhandlebars "goto-step-list" %}
-<ul id="step-list">
+<ul id="step-list" class="nav nav-tabs">
   {{#each step_list}}
-  <li data-goto_step="{{step}}" rel="pagination-tooltip" title="{{step_name}}" class="{{#if is_current}}current_step{{/if}}">
-    <span class="page_num">{{text}}</span>
+  <li data-goto_step="{{step}}" rel="paginatiosn-toolsstip" title="{{step_name}}" class="{{#if is_current}}active{{/if}}">
+  <a href="#">{{step_name}}	<span class="page_num" style="display:hidden">{{text}}</span>
+</a>
   </li>
   {{/each}}
   <li data-goto_step="{{last}}" class="last_step">{{text}}</li>
