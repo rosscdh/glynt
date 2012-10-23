@@ -10,44 +10,38 @@
 {% block body %}
 <div class="row">
 
-      <div class="span2 sidebar">
+      <div class="span3 sidebar">
           <ul class="nav nav-list">
             {% if user.is_staff %}
             <li><a href="{% url 'document:author_doc' %}" class="btn btn-warning" id="toggle-docs">{% trans 'Create Doc' %}</a></li>
             <li class="divider"></li>
             {% endif %}
-            <li><a href="#/list/templates/create_new" class="btn btn-green" id="toggle-docs">{% trans 'New Doc' %}</a></li>
+            <li style="margin-left:15px"><a href="#/list/templates/create_new" class="btn btn-green btn-block" id="toggle-docs">{% trans 'New Doc' %}</a></li>
             <li class="divider"></li>
+
               <li><a href="#/list/my_documents/all"> {% trans 'All Documents' %}</a></li>
-            <li class="divider"></li>
               <li><a href="#/list/activity"> {% trans 'Activity' %}</a></li>
-            <li class="divider"></li>
-            <li class="nav-header">{% trans 'Your Document Filters' %}</li>
-              <li><a href="#/list/my_documents/incomplete">{% trans 'Incomplete Documents' %}</a></li>
-              <li><a href="#/list/my_documents/out_for_signing"> {% trans 'Out for signing' %}</a></li>
-              <li><a href="#/list/my_documents/recently_signed">{% trans 'Recently signed' %}</a></li>
-              <li><a href="#/list/my_documents/awaiting_your_signature">{% trans 'Awaiting your signature' %}</a></li>
           </ul>
       </div>
 
-      <div id="my_docs_list" class="span7 view default">
+      <div id="my_docs_list" class="span9 view default">
         <div class="doc-body">
           <h2 class="title">{% trans 'Your Documents' %}</h2>
-          <table id="my-documents" class="table table-stripped table-border table-hover">
+          <table id="my-documents" class="table table-stripped table-border table-hover ">
           <tr>
               <th>{% trans 'Document Name' %}</th>
               <th>{% trans 'Status' %}</th>
-              <th>{% trans 'Action' %}</th>
+              <th><span class="pull-right">{% trans 'Action' %}</span></th>
           </tr>
           {% for d in my_document_list %}
           <tr>
-              <td class="">
+              <td class="document-title">
                 <a href="{% url 'document:my_review' slug=d.slug %}" rel="tooltip" title="{% trans 'Created by' %} {{ d.owner.get_profile.short_name|default:d.owner.username }}" class="doc-title">{{ d.name }}</a>
                 <br/><span class="created">{% trans 'Created' %} {% moment d.created_at d.created_at %}</span>
               </td>
-              <td>
+              <td class="document-status">
                 {% document_status d %}
-              <td>
+              <td class="document-action">
                 <div class="btn-group pull-right">
                   <button class="btn dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i> <span class="caret"></span></button>
                   <ul class="dropdown-menu">
@@ -64,7 +58,7 @@
         </div>
       </div>
 
-      <div id="activity_list" class="span7 view hide">
+      <div id="activity_list" class="span9 view hide">
         <div class="doc-body">
           <h3>{% trans 'Activity' %}</h3>
           <ul class="activity activity-large">
@@ -73,22 +67,13 @@
         </div>
       </div>
 
-      <div id="templates_list" class="span7 view hide">
+      <div id="templates_list" class="span9 view hide">
         <div class="doc-body">
           <h2>{% trans 'New Document' %}</h2>
           <ul>
             {% for d in public_document_list %}
             <li><a class="template-document" href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a></li>
             {% endfor %}
-          </ul>
-        </div>
-      </div>
-
-      <div class="span3 pull-right">
-        <div class="doc-body">
-          <h4>{% trans 'Recent Activity' %}</h4>
-          <ul class="activity activity-small">
-          {% user_activity_stream request.user 3 %}
           </ul>
         </div>
       </div>

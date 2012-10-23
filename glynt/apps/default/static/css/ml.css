@@ -26,7 +26,7 @@ body {
 	background:url('/static/img/logo-nav.png') no-repeat 0px 14px;
 }
 h1 { font-size: 35px;letter-spacing:0.03em; }
-h2 { font-size: 28px; }
+h2 { font-size: 24px; }
 
 /* Homepage bits */
 .leader {
@@ -79,11 +79,20 @@ h2 { font-size: 28px; }
 
 /* Dashboard */
 .created{
-	font-size:11px;
+	font-size:13px;
 	color:#AAA;
 }
 a.doc-title{
 	font-size:16px;
+}
+table#my-documents th {
+	background-color:#38abd8;
+	color:#FFF;
+	border:1px 0px 1px 0px;
+	border-color:#38abd8;
+}
+table#my-documents tr:second {
+	border-top:0px;
 }
 table#my-documents td{
 	padding-top:10px;
@@ -92,7 +101,7 @@ table#my-documents td input {
 	margin-top:-3px;
 }
 body.dashboard, body.review, body.sign{
-	background-color:#f2f7f9;
+	background-color:#fafbfb;
 }
 div.doccount {
 	width:50px;
@@ -108,7 +117,7 @@ div.doccount {
 	margin-bottom:10px;
 }
 div.sidebar {
-	margin-top:-30px;
+	margin-top:-35px;
 	padding-top:42px;
 }
 div.sidebar .nav-list a{
@@ -116,20 +125,17 @@ div.sidebar .nav-list a{
 	padding-top:7px;
 	padding-bottom:7px;
 }
+div.sidebar .nav-list a.btn.selected{
+opacity:0.6
+}
 a.selected, div.sidebar .nav-list .active a, div.sidebar .nav-list > .active > a:hover {
-	background-color:#c0d6dd;
-	color:#FFF;
-	text-shadow: none;
-	border:1px solid #c0d6dd;
-	border-right:none;
-	z-index:1;
-	border-radius:5px 0px 0px 5px;
+	font-weight:bold;
 }
 
 div.doc-body{
 	background-color:#FFF;
 	margin-left:0px;
-	padding:10px 25px;
+	padding:8px 25px;
 	border:1px solid #d9e5e9;
 	z-index:2;
 	border-radius:8px;
@@ -137,6 +143,15 @@ div.doc-body{
 }
 div#doc-list{
 	display:none;
+}
+table#my-documents .document-status{
+	padding-top:19px;
+}
+table#my-documents .document-action{
+	padding-top:15px;
+}
+table#my-documents th {
+
 }
 div#doc-list, div#file-list{
 	margin-left:0px;

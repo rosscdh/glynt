@@ -1208,7 +1208,7 @@ $(document).ready(function(){
         App.generatePDF();
     });
 
-    $("input.datepicker").datepicker({dateFormat:"D, dd MM yy",changeYear:true,changeMonth:true});
+    $("input.datepicker").datepicker({dateFormat:"dd MM yy",changeYear:true,changeMonth:true});
 
     $('ul#step-list li').live('click', function(event){
       event.preventDefault();
