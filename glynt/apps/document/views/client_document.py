@@ -142,7 +142,6 @@ class PersistClientCreatedDocumentProgressView(View):
     return HttpResponse('[{"userdoc_id": %d, "status":"%s", "message":"%s"}]' % (progress.pk, 'success_persisted', unicode(_('Progress Persisted'))), status=200, content_type="application/json")
 
 
-# @TODO rename to ClientCreatedDocumentExportView
 class DocumentExportView(View):
     def post(self, request, *args, **kwargs):
       return self.get(request, args, kwargs)

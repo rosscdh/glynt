@@ -106,14 +106,15 @@ class BaseFlyForm(forms.Form, BootstrapMixin):
     """ Setup the step info field """
     loop_step_attrs = None
     # setup step title
-    step_attrs = {
+    step_title_attrs = {
       'data-step-title': step_schema['properties']['step_title'],
     }
 
     if step_schema['type'] == 'loop-step':
-      step_attrs['data-glynt-loop_step'] = self.define_loopstep_attribs(step_schema)
+      step_title_attrs['data-glynt-loop_step'] = self.define_loopstep_attribs(step_schema)
 
-    self.fields['step_title'] = forms.CharField(max_length=128, required=False, widget=forms.HiddenInput(attrs=step_attrs))
+    self.fields['step_title'] = forms.CharField(max_length=128, required=False, widget=forms.HiddenInput(attrs=step_title_attrs))
+    self.fields['step_props'] = forms.CharField(required=False, widget=forms.HiddenInput)# used to store properties about required but hidden fields
 
   def define_loopstep_attribs(self, step_schema):
     """ Make the appropriate changes should a loop-step present itself """
