@@ -93,6 +93,7 @@ class BaseFlyForm(forms.Form, BootstrapMixin):
     https://docs.djangoproject.com/en/dev/topics/forms/formsets/ """
     if self.form_type == 'loop-step':
       # custom validation based on many of same value
+      print self.data
       print "validate the loop step fields"
     else:
       super(BaseFlyForm, self)._clean_fields()
@@ -125,7 +126,6 @@ class BaseFlyForm(forms.Form, BootstrapMixin):
       step_title_attrs['data-glynt-loop_step'] = self.define_loopstep_attribs(step_schema)
 
     self.fields['step_title'] = forms.CharField(max_length=128, required=False, widget=forms.HiddenInput(attrs=step_title_attrs))
-    self.fields['step_props'] = forms.CharField(required=False, widget=forms.HiddenInput)# used to store properties about required but hidden fields
 
   def define_loopstep_attribs(self, step_schema):
     """ Make the appropriate changes should a loop-step present itself """
