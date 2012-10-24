@@ -14,6 +14,7 @@
 $(document).ready(function(){
   $('#progress-buttons').hide();
 
+  
   initArgosPanOptia = function initArgosPanOptia(App) {
     App.widgets.observer = new argosPanOptia();
   };
@@ -158,17 +159,18 @@ $(document).ready(function(){
           $('span.step-title').each(function(index,element) {
               var element = $(this).closest('div').find('input[data-step-title]'), step_title = element.attr('data-step-title');
               var form = $(this).closest('div.form-group');
+			  element.hide();
               $(this).text(step_title);
               self.steps.push({title: step_title, form_set: form})
               self.stepIsValid[index+1] = false;
           });
 
-          $('body').tooltip({
-            selector: '[rel=pagination-tooltip]',
-            placement: 'bottom',
-            animation: false,
-            delay: { show: 50, hide: 5 }
-          });
+          // $('body').tooltip({
+          //   selector: '[rel=pagination-tooltip]',
+          //   placement: 'bottom',
+          //   animation: false,
+          //   delay: { show: 50, hide: 5 }
+          // });
 
           self.stepVisibility(1);
         }
@@ -192,9 +194,9 @@ $(document).ready(function(){
             'last': self.maxFormSteps(),
             'step_list': steps('&nbsp;')
           }
-          $.each($('ul#step-list li'), function(index,item){
-            $(item).tooltip('hide');
-          });
+          // $.each($('ul#step-list li'), function(index,item){
+          //   $(item).tooltip('hide');
+          // });
           return self.goto_step_list(context);
         }
         self.renderSteps = function renderSteps() {
@@ -228,10 +230,10 @@ $(document).ready(function(){
           return complete;
         }
 
-        self.initPrevStep = function initPrevStep(current_step) {
+        self.initPrevStep = function initPrevStep(active) {
           default_step = 1;
 
-          for(var step = current_step; step >= 1; step--) {
+          for(var step = active; step >= 1; step--) {
               if(self.validateStep(step)) {
                   self.stepVisibility(step);
                   // persist the cookie progress
@@ -239,14 +241,14 @@ $(document).ready(function(){
                   return step;
               }
           }
-          console.log('error has not caught valid step: '+current_step)
+          console.log('error has not caught valid step: '+active)
           self.stepVisibility(default_step);
         };
 
-        self.initNextStep = function initNextStep(current_step) {
+        self.initNextStep = function initNextStep(active) {
           default_step = parseInt(self.maxFormSteps());
 
-          for(var step = current_step; step <= default_step ; step++) {
+          for(var step = active; step <= default_step ; step++) {
               if(self.validateStep(step)) {
                   self.stepVisibility(step);
                   // persist the cookie progress
@@ -254,7 +256,7 @@ $(document).ready(function(){
                   return step;
               }
           }
-          console.log('error has not caught valid step: '+current_step)
+          console.log('error has not caught valid step: '+active)
           self.stepVisibility(default_step);
         };
 
@@ -384,7 +386,7 @@ $(document).ready(function(){
             // ruleset if they reduce ie.. 5 to 2 then 3,4,5 are deleted
             // @TODO make methods
             // @CODESMELL
-            var fieldsets = self.form_fieldset.find('fieldset');
+            var fieldsets = self.form_fieldset.find('fieldset.loop');
             var hb_base_ob = {};
             // set array grouping context variable to allow handlebarsjs to loop
             var loop_name = 'loop_' + App.documentModel.slugify(self.iteration_title).toLowerCase();
@@ -477,7 +479,7 @@ $(document).ready(function(){
                     found = true;
                 } else {
                     if (found == true) {
-                        element = element.closest('li');//is we are using fo
+                        element = element.closest('div.control-group'); //is we are using fo
                         element.hide();
                         self.repeatable_fields.push(element);
                         element.remove();
@@ -751,9 +753,15 @@ $(document).ready(function(){
     /**
     * Primary view acts as a holder for the other views
     */
+	$(window).scroll(function(){
+	    $(".document-questions").css("top",Math.max(45,130-$(this).scrollTop()));
+	});
+	$(window).resize(function() {
+		$(".document-questions").height($(window).height());
+	});
+	
     function PageDocumentController() {
         var self = this;
-
         self.valid_fieldtypes = ['input', 'text','select','textarea','select-one','radio','checkbox']
         self.markdownConverter = new Markdown.Converter();
         self.targetDocumentId = ko.observable('span#document-md');
@@ -1145,17 +1153,17 @@ $(document).ready(function(){
         $.each(self.hideWhen, function(i,item) {
           item = $(item);
           if (self.inlineCallBack(item.attr('data-hide_when')) == true) {
-            item.closest('li').hide();
+            item.closest('.control-group').hide();
           }else{
-            item.closest('li').show();
+            item.closest('.control-group').fadeIn('slow');
           };
         });
         $.each(self.showWhen, function(i,item) {
           item = $(item);
           if (self.inlineCallBack(item.attr('data-show_when')) == true) {
-            item.closest('li').show();
+            item.closest('.control-group').fadeIn('slow');
           }else{
-            item.closest('li').hide();
+            item.closest('.control-group').hide();
           };
         });
       };
@@ -1202,8 +1210,6 @@ $(document).ready(function(){
             App.documentModel.showLoopStep($(this), num);
         }
     });
-
-
     $('.fix-errors').live('click', function(event){
         event.preventDefault;
         App.formControls.prev();
@@ -1220,7 +1226,7 @@ $(document).ready(function(){
         App.generatePDF();
     });
 
-    $("input.datepicker").datepicker({dateFormat:"D, dd MM yy",changeYear:true,changeMonth:true});
+    $("input.datepicker").datepicker({dateFormat:"dd MM yy",changeYear:true,changeMonth:true});
 
     $('ul#step-list li').live('click', function(event){
       event.preventDefault();
@@ -1241,7 +1247,7 @@ $(document).ready(function(){
         indicator : 'Saving...',
         tooltip   : 'Click to create your new document...',
         placeholder : 'Click to create your new document...',
-        type      : 'textarea',
+        type      : 'text',
         submit    : '{% trans "Save" %}',
     });
     {% endif %}
@@ -1266,13 +1272,13 @@ $(document).ready(function(){
 </script>
 
 {% tplhandlebars "goto-step-list" %}
-<ul id="step-list">
+<ul id="step-list" class="nav nav-tabs">
   {{#each step_list}}
-  <li data-goto_step="{{step}}" rel="pagination-tooltip" title="{{step_name}}" class="{{#if is_current}}current_step{{/if}}">
-    <span class="page_num">{{text}}</span>
+  <li data-goto_step="{{step}}" rel="pagination-tooltip" title="{{step_name}}" class="{{#if is_current}}active{{/if}}">
+  	<a href="#">{{step_name}}	<span class="page_num" style="display:hidden">{{text}}</span></a>
   </li>
   {{/each}}
-  <li data-goto_step="{{last}}" class="last_step">{{text}}</li>
+  <li data-goto_step="{{last}}" class="last_step" title="{{step_name}}"><a href="#">Finalize</a></li>
 <ul>
 {% endtplhandlebars %}
 

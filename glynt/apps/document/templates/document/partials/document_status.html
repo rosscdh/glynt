@@ -9,5 +9,5 @@
 <a href="#" rel="tooltip" title="{% trans 'You have been invited to sign this document' %}" class="btn btn-red btn-mini"><i class="icon-pencil icon-white"></i> {% trans 'Please sign' %}</a>
 {% endif %}
 {% if status == 'no_invites' %}
-<a href="#" rel="popover" title="{% trans 'No invitees' %}" data-content="{% trans 'Looks like you need to invite people to sign this document' %}" class="btn btn-red btn-mini"><i class="icon-off icon-white"></i> {% trans 'No Invites' %}</a>
+<a href="#" rel="popover" title="{% trans 'No invitees' %}" data-content="{% trans 'Looks like you need to invite people to sign this document' %}" class="btn btn-grey disabled btn-mini"><i class="icon-off icon-white"></i> {% trans 'No Invites' %}</a>
 {% endif %}

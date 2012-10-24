@@ -39,7 +39,7 @@
   </head>
 
   <body data-spy="scroll" data-target=".subnav" data-offset="50" class="preview {% block bodyclass %}{% endblock %}">
-
+  {% block navbar %}
   <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
           <div class="container">
@@ -78,6 +78,7 @@
           </div> <!-- /container -->
       </div> <!-- /navbar-inner -->
   </div> <!-- /navbar -->
+  {% endblock %}
 
     <div class="container">
       {% if messages %}
