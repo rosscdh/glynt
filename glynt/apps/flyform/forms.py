@@ -84,7 +84,18 @@ class BaseFlyForm(forms.Form, BootstrapMixin):
     #@TODO
     #self.validate_schema(schema)
     self.setup_step_title(schema)
+    self.form_type = schema['type']
     self.setup_fields(schema['fields'])
+
+  def _clean_fields(self):
+    """ need to handle loop-step forms slightly differently
+    as they are repitions of a single form, similar to django formsets
+    https://docs.djangoproject.com/en/dev/topics/forms/formsets/ """
+    if self.form_type == 'loop-step':
+      # custom validation based on many of same value
+      print "validate the loop step fields"
+    else:
+      super(BaseFlyForm, self)._clean_fields()
 
   def slugify(self, text):
     """ Modified slugify replaced - with _ """
