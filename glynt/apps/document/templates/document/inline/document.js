@@ -1275,11 +1275,10 @@ $(document).ready(function(){
 <ul id="step-list" class="nav nav-tabs">
   {{#each step_list}}
   <li data-goto_step="{{step}}" rel="pagination-tooltip" title="{{step_name}}" class="{{#if is_current}}active{{/if}}">
-  <a href="#">{{step_name}}	<span class="page_num" style="display:hidden">{{text}}</span>
-</a>
+  	<a href="#">{{step_name}}	<span class="page_num" style="display:hidden">{{text}}</span></a>
   </li>
   {{/each}}
-  <li data-goto_step="{{last}}" class="last_step">{{text}}</li>
+  <li data-goto_step="{{last}}" class="last_step" title="{{step_name}}"><a href="#">Finalize</a></li>
 <ul>
 {% endtplhandlebars %}
 

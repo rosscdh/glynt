@@ -4,3 +4,6 @@
 [submodule "glynt/apps/default/static/js/select2"]
 	path = glynt/apps/default/static/js/select2
 	url = https://github.com/ivaynberg/select2.git
+[submodule "httpie"]
+	path = httpie
+	url = https://github.com/jkbr/httpie.git
