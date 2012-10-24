@@ -4,8 +4,8 @@ from django import forms
 from django.forms.util import ErrorList
 from django.utils.translation import ugettext_lazy as _
 from django.utils import simplejson as json
-from django.template.defaultfilters import slugify
 from django.utils import safestring
+from django.template.defaultfilters import slugify
 from bootstrap.forms import BootstrapMixin, Fieldset
 
 from django.contrib.localflavor.us.forms import USStateField, USZipCodeField
@@ -22,6 +22,8 @@ VALID_FIELD_TYPES = CUSTOM_VALID_FIELD_TYPES + ['BooleanField', 'CharField', 'Ch
 VALID_WIDGETS = ['TextInput', 'PasswordInput', 'HiddenInput', 'MultipleHiddenInput', 'FileInput', 'ClearableFileInput', 'DateInput', 'DateTimeInput', 'TimeInput', 'Textarea', 'CheckboxInput', 'Select', 'RadioSelect', 'SelectMultiple', 'CheckboxSelectMultiple', 'SplitDateTimeWidget', 'SelectDateWidget',]
 
 import sys
+import re
+import copy
 
 
 def customFields(fieldTypeName):
@@ -29,11 +31,44 @@ def customFields(fieldTypeName):
     retr
 
 
-class BaseFlyForm(forms.Form, BootstrapMixin):
+class LoopStepCleanFieldsMixin(object):
+    """ need to handle loop-step forms slightly differently
+    as they are repitions of a single form, similar to django formsets
+    https://docs.djangoproject.com/en/dev/topics/forms/formsets/ """
+    def process_loopstep(self):
+        steps = {}
+
+        for k, v in self.data.iteritems():
+            match = re.findall(r'(.+)_(\d+)$', k)
+
+            if len(match) >= 1:
+                key,index = match[0]
+                index = int(index)
+                if index not in steps:
+                    steps[index] = {}
+                steps[index][key] = v
+
+        self.validate_loopstep(steps)
+        #assert False
+
+    def validate_loopstep(self, steps):
+        original_data = self.data.copy()
+        for k, data in steps.iteritems():
+            form = copy.deepcopy(self)
+            original_data.update(data)
+            form.__init__(None, self.schema, original_data)
+            form.form_type = 'step'
+            #form.data.update(data)
+            if not form.is_valid():
+                self._errors = form._errors
+
+
+
+class BaseFlyForm(forms.Form, LoopStepCleanFieldsMixin, BootstrapMixin):
   """ This form is the basis for the self generating form representations
   it requires that a valid json_object be passed in which adheres to the following schema
   schema = {
-    "type" : "step",
+    "type" : "step", # step, loop-step
     "properties" : {
       "step_title" : {"type" : "string"},
       hide_from = forms.CharField(),
@@ -73,6 +108,13 @@ class BaseFlyForm(forms.Form, BootstrapMixin):
 
     self.bootstrap_layout()
 
+  def _clean_fields(self):
+    if self.form_type == 'loop-step':
+      # custom validation based on many of same value
+      self.process_loopstep()
+    else:
+      super(BaseFlyForm, self)._clean_fields()
+
   def bootstrap_layout(self):
     step_title = "Step %d" % (self.step_num,)
     layout_keys = [step_title] + self.fields.keys()
@@ -80,23 +122,12 @@ class BaseFlyForm(forms.Form, BootstrapMixin):
 
   def setup_form(self, json_form):
     """ Main form setup method used to generate the base form fields """
-    schema = json_form if isinstance(json_form, dict) else json.loads(json_form)
+    self.schema = json_form if isinstance(json_form, dict) else json.loads(json_form)
     #@TODO
     #self.validate_schema(schema)
-    self.setup_step_title(schema)
-    self.form_type = schema['type']
-    self.setup_fields(schema['fields'])
-
-  def _clean_fields(self):
-    """ need to handle loop-step forms slightly differently
-    as they are repitions of a single form, similar to django formsets
-    https://docs.djangoproject.com/en/dev/topics/forms/formsets/ """
-    if self.form_type == 'loop-step':
-      # custom validation based on many of same value
-      print self.data
-      print "validate the loop step fields"
-    else:
-      super(BaseFlyForm, self)._clean_fields()
+    self.setup_step_title(self.schema)
+    self.form_type = self.schema['type']
+    self.setup_fields(self.schema['fields'])
 
   def slugify(self, text):
     """ Modified slugify replaced - with _ """
