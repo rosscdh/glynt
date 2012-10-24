@@ -47,16 +47,20 @@ class LoopStepCleanFieldsMixin(object):
                 if index not in steps:
                     steps[index] = {}
                 steps[index][key] = v
-                # print v
 
         self.validate_loopstep(steps)
-        assert False
+        #assert False
 
     def validate_loopstep(self, steps):
+        original_data = self.data.copy()
         for k, data in steps.iteritems():
             form = copy.deepcopy(self)
+            original_data.update(data)
+            form.__init__(None, self.schema, original_data)
             form.form_type = 'step'
-            form.data.update(data)
+            #form.data.update(data)
+            if not form.is_valid():
+                self._errors = form._errors
 
 
 
@@ -118,12 +122,12 @@ class BaseFlyForm(forms.Form, LoopStepCleanFieldsMixin, BootstrapMixin):
 
   def setup_form(self, json_form):
     """ Main form setup method used to generate the base form fields """
-    schema = json_form if isinstance(json_form, dict) else json.loads(json_form)
+    self.schema = json_form if isinstance(json_form, dict) else json.loads(json_form)
     #@TODO
     #self.validate_schema(schema)
-    self.setup_step_title(schema)
-    self.form_type = schema['type']
-    self.setup_fields(schema['fields'])
+    self.setup_step_title(self.schema)
+    self.form_type = self.schema['type']
+    self.setup_fields(self.schema['fields'])
 
   def slugify(self, text):
     """ Modified slugify replaced - with _ """
