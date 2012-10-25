@@ -35,6 +35,16 @@ class LoopStepCleanFieldsMixin(object):
     """ need to handle loop-step forms slightly differently
     as they are repitions of a single form, similar to django formsets
     https://docs.djangoproject.com/en/dev/topics/forms/formsets/ """
+    def is_valid_loopstep_count(self, value):
+        value_type = type(value)
+        if (value_type is int or value.isdigit()) and value > 0:
+            return True
+        if value_type is bool and value in [True]:
+            return True
+        if value_type is str and value.lowercase() in ['yes', 'y', '1', 'true']:
+            return True
+        return False
+
     def process_loopstep(self):
         steps = {}
 
@@ -110,8 +120,11 @@ class BaseFlyForm(forms.Form, LoopStepCleanFieldsMixin, BootstrapMixin):
 
   def _clean_fields(self):
     if self.form_type == 'loop-step':
-      # custom validation based on many of same value
-      self.process_loopstep()
+      hide_from_name = self.schema['properties']['hide_from']
+      hide_from_value = self.data[hide_from_name]
+      if self.is_valid_loopstep_count(hide_from_value):
+        # custom validation based on many of same value
+        self.process_loopstep()
     else:
       super(BaseFlyForm, self)._clean_fields()
 
