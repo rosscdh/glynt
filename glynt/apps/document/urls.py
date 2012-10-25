@@ -21,6 +21,6 @@ urlpatterns = patterns('',
     url(r'^author/$', login_required(AuthorToolView.as_view()), name='author_doc'),
     url(r'^(?P<slug>.+)/export/$', login_required(DocumentExportView.as_view()), name='export'),
     # is not login_required as we want users to be redirected to login
-    url(r'^(?P<slug>.+)/save/$', ValidateClientCreatedDocumentFormView.as_view(), name='validate_form'),
+    url(r'^(?P<slug>.+)/save/$', login_required(ValidateClientCreatedDocumentFormView.as_view()), name='validate_form'),
     url(r'^(?P<slug>.+)/$', DocumentView.as_view(template_name='document/preview-document.html'), name='view'),
 )
