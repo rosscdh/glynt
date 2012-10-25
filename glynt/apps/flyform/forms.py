@@ -37,7 +37,7 @@ class LoopStepCleanFieldsMixin(object):
     https://docs.djangoproject.com/en/dev/topics/forms/formsets/ """
     def is_valid_loopstep_count(self, value):
         value_type = type(value)
-        if (value_type is int or value.isdigit()) and value > 0:
+        if (value_type is int or value.isdigit()) and int(value) > 0:
             return True
         if value_type is bool and value in [True]:
             return True
