@@ -28,28 +28,35 @@ class CreateStepForm(BootstrapForm):
         ('step', 'Normal Step'),
         ('loop-step', 'Loop Step')
     )
+
+    type = forms.ChoiceField(choices=STEP_TYPES, initial='step')
+    hide_from = forms.CharField(max_length=32, widget=forms.Select)
+    step_title = forms.CharField(max_length=32, initial=_('Step No. 1'))
+
     class Meta:
         layout = (
             Fieldset("Step Details", "type", "hide_from", "step_title",),
         )
-    type = forms.ChoiceField(choices=STEP_TYPES, initial='step')
-    hide_from = forms.CharField(max_length=32, widget=forms.Select)
-    step_title = forms.CharField(max_length=32, initial=_('Step No. 1'))
+
 
 
 class CreateStepFieldForm(BootstrapForm):
     """ The template form used to help the authoring tool """
     FIELDS = [(v, v) for v in sorted(VALID_FIELD_TYPES)]
     WIDGETS = [(v, v) for v in sorted(VALID_WIDGETS)]
-    class Meta:
-        layout = (
-            Fieldset("Basic", "label", "placeholder", "help_text", "required",),
-            Fieldset("Extra", "field", "widget", "css_class",),
-        )
+
     label = forms.CharField()
-    placeholder = forms.CharField()
+    placeholder = forms.CharField(help_text=_('A Hint which is not submittable'))
     help_text = forms.CharField()
+    initial = forms.CharField(label=_('Inital Value'), help_text=_('The initial submittable Value of this field - not required'))
     required = forms.BooleanField()
     field = forms.ChoiceField(choices=FIELDS, initial='CharField')
     widget = forms.ChoiceField(choices=WIDGETS, initial='TextInput')
+    choices = forms.CharField(widget=forms.Textarea, help_text=_('In the form [["a","Alpha"], [1,"One"], [1,1]]'))
     css_class = forms.CharField(initial='md-updater')
+
+    class Meta:
+        layout = (
+            Fieldset("Basic", "label", "placeholder", "help_text", "initial", "required",),
+            Fieldset("Extra", "field", "widget", "choices", "css_class",),
+        )

@@ -8,6 +8,10 @@
 {% block body %}
 <div class="span12">
   <h2>Document Author tool</h2>
+  {% if object %}
+  <h1>Editing {{ object.name }}</h1>
+  {% else %}
+  {% endif %}
 </div>
 
 <div class="span2 sidebar">
@@ -19,6 +23,8 @@
     <li class="nav-header">{% trans 'Coming Eventually' %}</li>
       <li><a href="#/review/doc"> {% trans 'Review Document' %}</a></li>
     <li class="nav-header">{% trans 'Actions' %}</li>
+    <li class="divider"></li>
+        <li><a href="{% url 'document:author_edit_doc' pk=object.pk %}" class="btn btn-success" id="save-json">{% trans 'Save' %}</a></li>
     <li class="divider"></li>
       <li><a id="reset" href="#/reset" class="btn btn-danger"> {% trans 'Reset' %}</a></li>
   </ul>
@@ -35,7 +41,7 @@
 </div>
 
 <div id="json" class="row span9 view hide">
-    <textarea id="json-output" class="span9" style="height:640px;"></textarea>
+    <textarea id="json-output" class="span9" style="height:640px;">{{ json|default:""|safe }}</textarea>
 </div>
 
 <div id="doc" class="row span7 view hide">
@@ -212,10 +218,10 @@ $(document).ready(function(){
             $.cookie('auth_tool', JSON.stringify(self.steps));
         };
         self.load_data_from_source = function load_data_from_source() {
-            //preloaded_data = $.parseJSON(self.json_output.val());
-            cookie_data = $.parseJSON($.cookie('auth_tool'));
-            if (cookie_data != null) {
-                self.steps = cookie_data;
+            data = $.parseJSON(self.json_output.val());
+            //data = $.parseJSON($.cookie('auth_tool'));
+            if (data != null) {
+                self.steps = data;
                 self.json_output.val(JSON.stringify(self.steps, null, "\t"));
             }
         };
@@ -300,7 +306,27 @@ $(document).ready(function(){
         };
 
         self.init_interface = function init_interface() {
-          $('.step').live('click', function(event){
+            $('a#save-json').live('click', function(event){
+                event.preventDefault();
+                data = {
+                    json: self.json_output.val(),
+                    csrfmiddlewaretoken: "{{ csrf_raw_token }}"
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: $(this).attr('href'),
+                    data: data,
+                })
+                .success(function(data, textStatus, jqXHR) {
+                    console.log(data)
+                })
+                .error(function() { 
+                    console.log('Error in Javascript event')
+                })
+                .complete(function() {
+                });
+            });
+            $('.step').live('click', function(event){
                 event.preventDefault();
                 step = $(this).attr('data-step_index');
                 if (self.current_step != step) {
@@ -308,53 +334,53 @@ $(document).ready(function(){
                     self.current_step = step;
                     self.render();
                 }
-          });
-          $('.field').live('click', function(event){
-              event.preventDefault();
-          });
-          $('a#add_step').live('click', function(event){
-              event.preventDefault();
-              self.add_step();
-          });
-          $('a.delete_step').live('click', function(event){
-              event.preventDefault();
-              step = $(this).attr('data-step_index');
-              self.delete_step(step);
-          });
-          $('a#add_field').live('click', function(event){
-              event.preventDefault();
-              self.current_step = $(this).attr('data-step_index');
-              self.add_field(self.current_step);
-          });
-          $('a.delete_field').live('click', function(event){
-              event.preventDefault();
-              step = $(this).closest('div.info').attr('data-step_index');
-              field = $(this).attr('data-field_index');
-              console.log(field)
-              self.delete_field(step, field);
-          });
-          // Forms
-          $('form.form-step input, form.form-step textarea, form.form-step select').live('change', function(event){
+            });
+            $('.field').live('click', function(event){
+                event.preventDefault();
+            });
+            $('a#add_step').live('click', function(event){
+                event.preventDefault();
+                self.add_step();
+            });
+            $('a.delete_step').live('click', function(event){
+                event.preventDefault();
+                step = $(this).attr('data-step_index');
+                self.delete_step(step);
+            });
+            $('a#add_field').live('click', function(event){
+                event.preventDefault();
+                self.current_step = $(this).attr('data-step_index');
+                self.add_field(self.current_step);
+            });
+            $('a.delete_field').live('click', function(event){
+                event.preventDefault();
+                step = $(this).closest('div.info').attr('data-step_index');
+                field = $(this).attr('data-field_index');
+                console.log(field)
+                self.delete_field(step, field);
+            });
+            // Forms
+            $('form.form-step input, form.form-step textarea, form.form-step select').live('change', function(event){
               event.preventDefault();
               self.updateStep($(this));
-          });
-          $('form.form-field input, form.form-field textarea, form.form-field select').live('change', function(event){
+            });
+            $('form.form-field input, form.form-field textarea, form.form-field select').live('change', function(event){
               event.preventDefault();
               self.updateField($(this));
-          });
-          $('#id_type').live('change', function(event){
-            event.preventDefault();
-            var form = $(this).closest('form.form-step');
-            self.dispatch('change_steptype', {'selected_type': $(this).val(), 'form': form});
-          });
-          $('#reset').live('click', function(event){
-            event.preventDefault();
-            self.reset();
-          });
-          self.json_output.live('change', function(event){
-            event.preventDefault();
-            self.dispatch('bind_data', {});
-          });
+            });
+            $('#id_type').live('change', function(event){
+                event.preventDefault();
+                var form = $(this).closest('form.form-step');
+                self.dispatch('change_steptype', {'selected_type': $(this).val(), 'form': form});
+            });
+            $('#reset').live('click', function(event){
+                event.preventDefault();
+                self.reset();
+            });
+            self.json_output.live('change', function(event){
+                event.preventDefault();
+                self.dispatch('bind_data', {});
+            });
         };
 
         self.init = function init() {

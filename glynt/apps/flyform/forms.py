@@ -107,6 +107,7 @@ class BaseFlyForm(forms.Form, LoopStepCleanFieldsMixin, StepHiddenFieldsMixin, B
         "placeholder" : {"type" : "string"},
         "class" : {"type" : "string"}, # *md-updater, contact-list
         "data-hb-name" : {"type" : "string"},
+        "choices": [['a','a'], [1,1]]
         "data-show_when":"customer_country == 'United States'",
         "data-hide_when":"function(){ customer_country == 'Germany' }"
       ]

@@ -1281,8 +1281,8 @@ $(document).ready(function(){
       },
       content: function() {
         item = {
-          'field_label': $(this).closest('li').find('label:first').html(),
-          'explain': $(this).closest('li').find('span.helptext:first').html(),
+          'field_label': $(this).closest('div.control-group').find('label:first').html(),
+          'explain': $(this).closest('div.control-group').find('span.helptext:first').html(),
           'example': $(this).attr('placeholder')
         }
         return hb_popover_template(item);
