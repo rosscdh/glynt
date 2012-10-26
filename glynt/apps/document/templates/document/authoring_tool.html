@@ -33,12 +33,19 @@
 </div>
 
 <div id="authoring" class="row view default">
-    <div id="steps" class="span4">
+    <div id="steps" class="span9">
         <div id="steps_list"></div>
     </div>
 
-    <div id="fields" class="span5">
-        <div id="fields_list"></div>
+    <div id="fields" class="span9 modal hide fade">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3 id="modal-header">&nbsp;</h3>
+        </div>
+        <div id="fields_list" class="modal-body"></div>
+        <div class="modal-footer">
+            &nbsp;
+        </div>
     </div>
 </div>
 
@@ -51,26 +58,42 @@
 </div>
 {% endblock %}
 
-{% block css %}{% endblock %}
+{% block css %}
+<style>
+.modal{
+   width:800px;
+   margin-left:-400px;
+}
+ol.step-field-list li {
+    margin:10px 0px;
+}
+</style>
+{% endblock %}
 
 {% block js %}
 
 <script type="text/x-handlebars" id="hb-steps">
 {% verbatim %}
 {{#each_with_key steps key="index"}}
-<div class="doc-body step info" data-step_index="{{index}}">
-  <form id="step-{{index}}" data-step_index="{{index}}" class="form-step">
+<div class="doc-body step info row" data-step_index="{{index}}">
+
+  <form id="step-{{index}}" data-step_index="{{index}}" class="form-step span4">
 {% endverbatim %}
     {{ form_steps }}
   </form>
+
+  <ol class="step-field-list span4"></ol>
+
   {% verbatim %}
-  <div class="form-actions">
-      {{#unless_eq index compare=0}}<a href="#step/delete" class="btn btn-danger btn-mini delete_step" data-step_index="{{index}}"><i class="icon-remove icon-white"></i> Delete Step</a>{{/unless_eq}}
-      <a href="#/field/add" class="btn btn-mini btn-success" id="add_field" data-step_index="{{index}}"><i class="icon-plus icon-white"></i> Add Field</a>
+  <div class="">
+    {{#unless_eq index compare=0}}<a href="#step/delete" class="btn btn-danger btn-mini delete_step" data-step_index="{{index}}"><i class="icon-remove icon-white"></i> Delete Step</a>{{/unless_eq}}
+    <a href="#/fields/view" class="pull-right btn btn-mini btn-success" id="view_fields" data-step_index="{{index}}"><i class="icon-list icon-white"></i> Show Fields</a>
   </div>
   {% endverbatim %}
 </div>
-<br/>{% verbatim %}{{/each_with_key}}{% endverbatim %}
+<br/>
+{% verbatim %}{{/each_with_key}}{% endverbatim %}
+
 <div class="form-actions">
 <a href="#/step/add" class="btn btn-mini btn-success" id="add_step"><i class="icon-plus icon-white"></i> Create Step</a>
 </div>
@@ -78,13 +101,18 @@
 
 <script type="text/x-handlebars" id="hb-fields">
 {% verbatim %}
-{{#unless_eq step.properties.step_title compare=null}}<h3>Fieldset for {{step.properties.step_title}}</h3>{{/unless_eq}}
+<div class="control-group">
+    <div class="controls">
+    <a href="#/field/add" class="btn btn-mini btn-success pull-right" id="add_field" data-step_index="{{step.index}}"><i class="icon-plus icon-white"></i> Add Field</a>
+    </div>
+</div>
+
 <div class="info" data-step_index="{{step.index}}">
     {{#each_with_key step.fields key="index"}}
     {% endverbatim %}
     <div class="doc-body field">
       {% verbatim %}
-      <form id="field-{{index}}" data-field_index="{{index}}" class="form-field">
+      <form id="field-{{index}}" data-field_index="{{index}}" class="form-field form-horizontal">
       {% endverbatim %}
         {{ form_fields }}
       </form>
@@ -284,14 +312,17 @@ $(document).ready(function(){
                     form_step.find('legend').html(step_attribs['step_title']);
                 }
 
+                step_field_list = $('body').find('form#'+ form_id).closest('div.doc-body').find('ol.step-field-list');
                 hide_from_field = $('body').find('form#'+ form_id +' [name=hide_from]');
                 if (step_attribs.type != 'loop-step') {
                     hide_from_field.closest('.control-group').hide();
                 }
                 // populate hide from
                 hide_from_field.empty();
+                step_field_list.empty();
                 $.each(self.steps[step_index].fields, function(index, field){
                     hide_from_field.append($("<option/>", {value: field.name, text: field.label }));
+                    step_field_list.append($('<li/>',{class: 'modal-scrollto', rel: 'field-' + index, html: '<a href="">'+ field.label +'</a>'}))
                 });
 
                 for(var attrib_key in step_attribs){
@@ -353,15 +384,6 @@ $(document).ready(function(){
                 .complete(function() {
                 });
             });
-            $('.step').live('click', function(event){
-                event.preventDefault();
-                step = $(this).attr('data-step_index');
-                if (self.current_step != step) {
-                    $(this).addClass('selected');
-                    self.current_step = step;
-                    self.render();
-                }
-            });
             $('[name=label]').live('change', function(event){
                 event.preventDefault();
                 target_name_field = $(this).closest('fieldset').find('input[name=name]');
@@ -372,6 +394,19 @@ $(document).ready(function(){
                     self.updateField(target_name_field);
                     self.updateField($(this));
                     self.update_json();
+                }
+            });
+            $('a#view_fields').live('click', function(event){
+                event.preventDefault();
+                step = $(this).attr('data-step_index');
+
+                $('div#fields').modal('toggle')
+                if (self.current_step != step) {
+                    $(this).addClass('selected');
+                    self.current_step = step;
+                    //step.properties.step_title
+                    $('#modal-header').html(self.steps[step].properties.step_title);
+                    self.render();
                 }
             });
             $('.field').live('click', function(event){
@@ -415,6 +450,14 @@ $(document).ready(function(){
             $('#reset').live('click', function(event){
                 event.preventDefault();
                 self.reset();
+            });
+            // modal scrollto
+            $('li.modal-scrollto').live('click', function(event){
+                event.preventDefault();
+                var destination = $(this).attr('rel');
+                $('div#fields').modal('toggle');
+                modal_body = $('div#fields').find('.modal-body');
+                modal_body.find('#'+destination).scroll();
             });
             // if the user changes the json manually then update our form
             self.json_output.live('change', function(event){

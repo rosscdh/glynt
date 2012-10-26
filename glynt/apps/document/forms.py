@@ -58,6 +58,6 @@ class CreateStepFieldForm(BootstrapForm):
 
     class Meta:
         layout = (
-            Fieldset("Basic", "label", "name", "placeholder", "help_text", "initial", "required",),
-            Fieldset("Extra", "field", "widget", "choices", "css_class",),
+            Fieldset("Data", "label", "name", "placeholder", "help_text", "initial", "required",),
+            Fieldset("Fields", "field", "widget", "choices", "css_class",),
         )
