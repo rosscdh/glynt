@@ -23,8 +23,10 @@
     <li class="nav-header">{% trans 'Coming Eventually' %}</li>
       <li><a href="#/review/doc"> {% trans 'Review Document' %}</a></li>
     <li class="nav-header">{% trans 'Actions' %}</li>
+    {% if object %}
     <li class="divider"></li>
         <li><a href="{% url 'document:author_edit_doc' pk=object.pk %}" class="btn btn-success" id="save-json">{% trans 'Save' %}</a></li>
+    {% endif %}
     <li class="divider"></li>
       <li><a id="reset" href="#/reset" class="btn btn-danger"> {% trans 'Reset' %}</a></li>
   </ul>
