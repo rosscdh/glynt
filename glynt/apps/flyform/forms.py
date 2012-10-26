@@ -73,8 +73,20 @@ class LoopStepCleanFieldsMixin(object):
                 self._errors = form._errors
 
 
+class StepHiddenFieldsMixin(object):
+    """ uses the step.hidden_fields field which is populated by javascript
+    with a list of fields in the step that are not visible, and thus should not be validated """
+    def process_hidden_fields(self):
+        hidden_fields = json.loads(self.data['hidden_fields'])
+        for f in hidden_fields:
+            if f in self.fields:
+                # init any calls on the is_required false
+                self.fields[f].is_required = False
+                # delete the field form the form
+                del(self.fields[f])
 
-class BaseFlyForm(forms.Form, LoopStepCleanFieldsMixin, BootstrapMixin):
+
+class BaseFlyForm(forms.Form, LoopStepCleanFieldsMixin, StepHiddenFieldsMixin, BootstrapMixin):
   """ This form is the basis for the self generating form representations
   it requires that a valid json_object be passed in which adheres to the following schema
   schema = {
@@ -120,13 +132,14 @@ class BaseFlyForm(forms.Form, LoopStepCleanFieldsMixin, BootstrapMixin):
 
   def _clean_fields(self):
     if self.form_type == 'loop-step':
-      hide_from_name = self.schema['properties']['hide_from']
-      hide_from_value = self.data[hide_from_name]
-      if self.is_valid_loopstep_count(hide_from_value):
-        # custom validation based on many of same value
-        self.process_loopstep()
+        hide_from_name = self.schema['properties']['hide_from']
+        hide_from_value = self.data[hide_from_name]
+        if self.is_valid_loopstep_count(hide_from_value):
+            # custom validation based on many of same value
+            self.process_loopstep()
     else:
-      super(BaseFlyForm, self)._clean_fields()
+        self.process_hidden_fields()
+        super(BaseFlyForm, self)._clean_fields()
 
   def bootstrap_layout(self):
     step_title = "Step %d" % (self.step_num,)
@@ -170,6 +183,9 @@ class BaseFlyForm(forms.Form, LoopStepCleanFieldsMixin, BootstrapMixin):
       step_title_attrs['data-glynt-loop_step'] = self.define_loopstep_attribs(step_schema)
 
     self.fields['step_title'] = forms.CharField(max_length=128, required=False, widget=forms.HiddenInput(attrs=step_title_attrs))
+
+    # hidden field that stores set of fields not visible to the user; and this should not be validated
+    self.fields['hidden_fields'] = forms.CharField(required=False, widget=forms.HiddenInput)
 
   def define_loopstep_attribs(self, step_schema):
     """ Make the appropriate changes should a loop-step present itself """

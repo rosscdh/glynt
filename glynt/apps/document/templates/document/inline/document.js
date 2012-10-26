@@ -1153,19 +1153,39 @@ $(document).ready(function(){
         $.each(self.hideWhen, function(i,item) {
           item = $(item);
           if (self.inlineCallBack(item.attr('data-hide_when')) == true) {
+            self.recordHiddenField(item, true);
             item.closest('.control-group').hide();
           }else{
+            self.recordHiddenField(item, false);
             item.closest('.control-group').fadeIn('slow');
           };
         });
         $.each(self.showWhen, function(i,item) {
           item = $(item);
           if (self.inlineCallBack(item.attr('data-show_when')) == true) {
+            self.recordHiddenField(item, false);
             item.closest('.control-group').fadeIn('slow');
           }else{
+            self.recordHiddenField(item, true);
             item.closest('.control-group').hide();
           };
         });
+      };
+      /**
+      * populate the step input#hidden_fields field with the names of items affected
+      */
+      self.recordHiddenField = function recordHiddenField(field, is_hidden) {
+        field = $(field);
+        target_field = field.closest('form').find('input[name=hidden_fields]:first')[0];
+        target_field = $(target_field);
+
+        val = (target_field.val() != '') ? target_field.val() : '[]' ;
+        data = $.parseJSON(val);
+        // perform union or intersect to add or remove name from list
+        data = (is_hidden === true) ? data.union([field.attr('name')]) : data.subtract([field.attr('name')]) ;
+        // set the value in the hidden field
+        target_field.val(JSON.stringify(data));
+        
       };
 
       self.parseVariable = function parseVariable(variable) {
