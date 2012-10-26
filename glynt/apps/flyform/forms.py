@@ -111,7 +111,7 @@ class BaseFlyForm(forms.Form, LoopStepCleanFieldsMixin, StepHiddenFieldsMixin, B
         "placeholder" : {"type" : "string"},
         "class" : {"type" : "string"}, # *md-updater, contact-list
         "data-hb-name" : {"type" : "string"},
-        "choices": [['a','a'], [1,1]]
+        "choices": [['a','a'], [1,1]],
         "data-show_when":"customer_country == 'United States'",
         "data-hide_when":"function(){ customer_country == 'Germany' }"
       ]
@@ -219,13 +219,13 @@ class BaseFlyForm(forms.Form, LoopStepCleanFieldsMixin, StepHiddenFieldsMixin, B
           if 'initial' in field:
             field_instance.initial = field['initial']
 
-          if hasattr(f, 'choices') and 'choices' in field:
-            # Add log here as sometimes choices may be present but not specified
-            field_instance.choices = self.valid_choice_options(field['choices'])
-
           widget = self.setup_field_widget(field_instance, field)
           if widget:
             field_instance.widget = widget
+
+          if hasattr(f, 'choices') and 'choices' in field:
+            # Add log here as sometimes choices may be present but not specified
+            field_instance.choices = self.valid_choice_options(field['choices'])
 
           # Append the field
           self.fields[field_instance.name] = field_instance
@@ -246,7 +246,7 @@ class BaseFlyForm(forms.Form, LoopStepCleanFieldsMixin, StepHiddenFieldsMixin, B
       return tuple()
 
   def setup_field_widget(self, field_instance, field_dict):
-    w = getattr(forms.widgets, field_dict['widget'], None) if field_dict['widget'] else None
+    w = getattr(forms.widgets, field_dict['widget'], None) if 'widget' in field_dict else None
     if w:
       widget = w()
     else:
