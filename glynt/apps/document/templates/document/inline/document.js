@@ -156,13 +156,14 @@ $(document).ready(function(){
 
           // happens just 1 time
           // obtain step header info for building accurate list of steps
-          $('span.step-title').each(function(index,element) {
-              var element = $(this).closest('div').find('input[data-step-title]'), step_title = element.attr('data-step-title');
-              var form = $(this).closest('div.form-group');
-			  element.hide();
-              $(this).text(step_title);
-              self.steps.push({title: step_title, form_set: form})
-              self.stepIsValid[index+1] = false;
+          $('input[data-step-title]').each(function(index, element) {
+                element = $(element);
+                var step_title = element.attr('data-step-title');
+                var form = element.closest('div.form-group');
+                element.hide();
+                $(this).text(step_title);
+                self.steps.push({title: step_title, form_set: form})
+                self.stepIsValid[index+1] = false;
           });
 
           // $('body').tooltip({
@@ -179,6 +180,7 @@ $(document).ready(function(){
           steps = function(text){
             step_list = [];
             i = 1;
+
             $.each(self.steps(), function(index,element){
               is_current = self.currentFormStep() == i;
               step_text = (text == undefined || text == 'numeric') ? i : text ;
@@ -187,6 +189,7 @@ $(document).ready(function(){
               step_list.push({index:i-1, text: step_text, step_name: step_name, step: i, is_current: is_current});
               i++;
             });
+
             return step_list;
           };
           context = {
@@ -1299,7 +1302,7 @@ $(document).ready(function(){
   </li>
   {{/each}}
   <li data-goto_step="{{last}}" class="last_step" title="{{step_name}}"><a href="#">Finalize</a></li>
-<ul>
+</ul>
 {% endtplhandlebars %}
 
 {% tplhandlebars "contact-list-item" %}
