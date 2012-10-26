@@ -77,7 +77,11 @@ class StepHiddenFieldsMixin(object):
     """ uses the step.hidden_fields field which is populated by javascript
     with a list of fields in the step that are not visible, and thus should not be validated """
     def process_hidden_fields(self):
-        hidden_fields = json.loads(self.data['hidden_fields'])
+        try:
+            hidden_fields = json.loads(self.data['hidden_fields'])
+        except ValueError:
+            hidden_fields = []
+
         for f in hidden_fields:
             if f in self.fields:
                 # init any calls on the is_required false
