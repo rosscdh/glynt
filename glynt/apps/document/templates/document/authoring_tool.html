@@ -87,7 +87,7 @@ ol.step-field-list li {
   {% verbatim %}
   <div class="">
     {{#unless_eq index compare=0}}<a href="#step/delete" class="btn btn-danger btn-mini delete_step" data-step_index="{{index}}"><i class="icon-remove icon-white"></i> Delete Step</a>{{/unless_eq}}
-    <a href="#/fields/view" class="pull-right btn btn-mini btn-success" id="view_fields" data-step_index="{{index}}"><i class="icon-list icon-white"></i> Show Fields</a>
+    <a href="#/fields/view" class="pull-right btn btn-mini btn-success" id="show_fields" data-step_index="{{index}}"><i class="icon-list icon-white"></i> Show Fields</a>
   </div>
   {% endverbatim %}
 </div>
@@ -322,7 +322,7 @@ $(document).ready(function(){
                 step_field_list.empty();
                 $.each(self.steps[step_index].fields, function(index, field){
                     hide_from_field.append($("<option/>", {value: field.name, text: field.label }));
-                    step_field_list.append($('<li/>',{class: 'modal-scrollto', rel: 'field-' + index, html: '<a href="">'+ field.label +'</a>'}))
+                    step_field_list.append($('<li/>',{class: 'modal-scrollto', 'data-step_index': step_index, rel: 'field-' + index, html: '<a href="">'+ field.label +'</a>'}))
                 });
 
                 for(var attrib_key in step_attribs){
@@ -396,7 +396,7 @@ $(document).ready(function(){
                     self.update_json();
                 }
             });
-            $('a#view_fields').live('click', function(event){
+            $('a#show_fields, li.modal-scrollto').live('click', function(event){
                 event.preventDefault();
                 step = $(this).attr('data-step_index');
 
@@ -450,14 +450,6 @@ $(document).ready(function(){
             $('#reset').live('click', function(event){
                 event.preventDefault();
                 self.reset();
-            });
-            // modal scrollto
-            $('li.modal-scrollto').live('click', function(event){
-                event.preventDefault();
-                var destination = $(this).attr('rel');
-                $('div#fields').modal('toggle');
-                modal_body = $('div#fields').find('.modal-body');
-                modal_body.find('#'+destination).scroll();
             });
             // if the user changes the json manually then update our form
             self.json_output.live('change', function(event){
