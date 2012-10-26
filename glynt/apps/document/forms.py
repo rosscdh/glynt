@@ -35,7 +35,7 @@ class CreateStepForm(BootstrapForm):
 
     class Meta:
         layout = (
-            Fieldset("Step Details", "type", "hide_from", "step_title",),
+            Fieldset("Step Details", "step_title", "type", "hide_from",),
         )
 
 
@@ -46,6 +46,7 @@ class CreateStepFieldForm(BootstrapForm):
     WIDGETS = [(v, v) for v in sorted(VALID_WIDGETS)]
 
     label = forms.CharField()
+    name = forms.CharField(label=_('Doc. Variable'), help_text=_('The Variable to use in the document'))
     placeholder = forms.CharField(help_text=_('A Hint which is not submittable'))
     help_text = forms.CharField()
     initial = forms.CharField(label=_('Inital Value'), help_text=_('The initial submittable Value of this field - not required'))
@@ -57,6 +58,6 @@ class CreateStepFieldForm(BootstrapForm):
 
     class Meta:
         layout = (
-            Fieldset("Basic", "label", "placeholder", "help_text", "initial", "required",),
+            Fieldset("Basic", "label", "name", "placeholder", "help_text", "initial", "required",),
             Fieldset("Extra", "field", "widget", "choices", "css_class",),
         )

@@ -166,3 +166,14 @@ Handlebars.registerHelper("each_with_key", function(obj, fn) {
 
     return buffer;
 });
+
+function slugify(text) {
+    if (typeof text == 'boolean') {
+        text = (text === true)?'true':'false';
+    } else if (text != undefined && text != null) {
+        text = text.replace(/[^_-a-zA-Z0-9,&\s]+/ig, '');
+        //text = text.replace(/-/gi, "_");
+        text = text.replace(/\s/gi, "_").toLowerCase();
+    }
+    return text;
+};

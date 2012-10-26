@@ -70,7 +70,7 @@
   </div>
   {% endverbatim %}
 </div>
-{% verbatim %}{{/each_with_key}}{% endverbatim %}
+<br/>{% verbatim %}{{/each_with_key}}{% endverbatim %}
 <div class="form-actions">
 <a href="#/step/add" class="btn btn-mini btn-success" id="add_step"><i class="icon-plus icon-white"></i> Create Step</a>
 </div>
@@ -99,6 +99,7 @@
     {{/each_with_key}}
     {% endverbatim %}
 </div>
+<br/>
 </script>
 
 <script>
@@ -260,8 +261,11 @@ $(document).ready(function(){
             var step_index = $(info).attr('data-step_index');
 
             var attr_name = field.attr('name');
-            self.steps[step_index].fields[field_index][attr_name] = field.val();
-            self.update_json();
+            value = field.val();
+            if (attr_name == 'choices') {
+                value = $.parseJSON(value);
+            }
+            self.steps[step_index].fields[field_index][attr_name] = value;
         };
 
         // ----- BIND DATA TO FORM VIEWS -----
@@ -270,9 +274,26 @@ $(document).ready(function(){
             $.each($('form.form-step'), function(step_index, form_step){
                 form_step = $(form_step);
                 var form_id = form_step.attr('id');
-                var step_type = self.steps[step_index].type;
-                form_step.find('form#'+ form_id +' [name=type]').val(step_type);
+                
                 var step_attribs = self.steps[step_index].properties;
+                // put type in there so we can set it in the form
+                step_attribs.type = self.steps[step_index].type;
+
+                // set step legend
+                if (step_attribs['step_title'] != '') {
+                    form_step.find('legend').html(step_attribs['step_title']);
+                }
+
+                hide_from_field = $('body').find('form#'+ form_id +' [name=hide_from]');
+                if (step_attribs.type != 'loop-step') {
+                    hide_from_field.closest('.control-group').hide();
+                }
+                // populate hide from
+                hide_from_field.empty();
+                $.each(self.steps[step_index].fields, function(index, field){
+                    hide_from_field.append($("<option/>", {value: field.name, text: field.label }));
+                });
+
                 for(var attrib_key in step_attribs){
                     attrib_value = step_attribs[attrib_key];
                     $('body').find('form#'+ form_id +' [name='+ attrib_key +']').val(attrib_value);
@@ -287,6 +308,10 @@ $(document).ready(function(){
 
                 for(var attrib_key in field_attribs){
                     attrib_value = field_attribs[attrib_key];
+                    
+                    if (attrib_key == 'choices') {
+                        attrib_value = JSON.stringify(attrib_value);
+                    }
                     $('body').find('form#'+ form_id +' [name='+ attrib_key +']').val(attrib_value);
                 }
             });
@@ -337,6 +362,18 @@ $(document).ready(function(){
                     self.render();
                 }
             });
+            $('[name=label]').live('change', function(event){
+                event.preventDefault();
+                target_name_field = $(this).closest('fieldset').find('input[name=name]');
+                if (target_name_field.val() == '') {
+                    var slug = slugify($(this).val());
+                    target_name_field.val(slug);
+                    // must be called at each change event specific to a field
+                    self.updateField(target_name_field);
+                    self.updateField($(this));
+                    self.update_json();
+                }
+            });
             $('.field').live('click', function(event){
                 event.preventDefault();
             });
@@ -358,7 +395,6 @@ $(document).ready(function(){
                 event.preventDefault();
                 step = $(this).closest('div.info').attr('data-step_index');
                 field = $(this).attr('data-field_index');
-                console.log(field)
                 self.delete_field(step, field);
             });
             // Forms
@@ -369,6 +405,7 @@ $(document).ready(function(){
             $('form.form-field input, form.form-field textarea, form.form-field select').live('change', function(event){
               event.preventDefault();
               self.updateField($(this));
+              self.update_json();
             });
             $('#id_type').live('change', function(event){
                 event.preventDefault();
@@ -379,6 +416,7 @@ $(document).ready(function(){
                 event.preventDefault();
                 self.reset();
             });
+            // if the user changes the json manually then update our form
             self.json_output.live('change', function(event){
                 event.preventDefault();
                 self.dispatch('bind_data', {});
