@@ -915,15 +915,31 @@ $(document).ready(function(){
                 var response_data = $.parseJSON(data);
                 self.message('');
                 is_valid = true;
+                self.clearInjectedErrors();
                 // Actual data save takes palce here; validateForm is just a validation
                 self.persistCookieProgress(); // save the changed data
             })
             .error(function(jqXHR, textStatus, errorThrown) { 
                 var data = $.parseJSON(jqXHR.responseText);
+                self.clearInjectedErrors();
+                console.log(data)
                 self.message(data.message);
-                console.log(data.errors)
+
                 $.each(data.errors, function(key, errors){
-                    self.injectError($('#id_'+key), errors);
+                    var intKey = parseInt(key);
+                    if (typeof intKey == 'number' && form.find('[name=step_title]').attr('data-glynt-loop_step') != undefined) {
+                        // loop-step
+                        $.each(errors, function(index, error){
+                            field = form.find('#id_'+index+'_'+key);
+                            self.injectError(field, error);
+                        });
+                        
+                    } else {
+                        // normal step
+                        field = $('#id_' + key);
+                        self.injectError(field, errors);
+                    }
+                    
                 });
                 is_valid = false;
             })
@@ -947,6 +963,11 @@ $(document).ready(function(){
             
             $(control_element).prepend(error_list);
         };
+        self.clearInjectedErrors = function clearInjectedErrors() {
+            $.each($('body').find('.errorlist'), function(index, item){
+                $(item).remove();
+            });
+        }
         {% endif %}
 
         {% if userdoc %}

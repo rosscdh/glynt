@@ -70,7 +70,7 @@ class LoopStepCleanFieldsMixin(object):
             form.form_type = 'step'
             #form.data.update(data)
             if not form.is_valid():
-                self._errors = form._errors
+                self._errors[k] = form._errors
 
 
 class StepHiddenFieldsMixin(object):
