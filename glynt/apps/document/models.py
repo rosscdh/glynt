@@ -75,6 +75,7 @@ class ClientCreatedDocument(models.Model):
 
     class Meta:
       unique_together = ('slug', 'owner',)
+      ordering = ['-created_at', 'name']
 
     def __unicode__(self):
       return u'%s' % (self.name)

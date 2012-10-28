@@ -69,6 +69,7 @@ class JsonErrorResponseMixin(object):
         'step': self.step,
         'status': status,
         'message': msg,
+        'errors': dict(form.errors.items()),
         'object': None,
     }
 

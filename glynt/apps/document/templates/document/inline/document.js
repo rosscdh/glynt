@@ -921,6 +921,10 @@ $(document).ready(function(){
             .error(function(jqXHR, textStatus, errorThrown) { 
                 var data = $.parseJSON(jqXHR.responseText);
                 self.message(data.message);
+                console.log(data.errors)
+                $.each(data.errors, function(key, errors){
+                    self.injectError($('#id_'+key), errors);
+                });
                 is_valid = false;
             })
             .complete(function(jqXHR, textStatus) {
@@ -931,7 +935,18 @@ $(document).ready(function(){
             });
 
             return is_valid;
-        }
+        };
+        // inject an error into a field control-group -> controls
+        self.injectError = function injectError(field, errors) {
+            var control_element = field.closest('.controls');
+
+            var error_list = $('<ul/>',{ class: 'errorlist'});
+            $.each(errors, function(index, error){
+                error_list.append($('<li/>',{html: error}))
+            });
+            
+            $(control_element).prepend(error_list);
+        };
         {% endif %}
 
         {% if userdoc %}
