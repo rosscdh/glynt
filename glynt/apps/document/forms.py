@@ -43,7 +43,7 @@ class CreateStepForm(BootstrapForm):
 class CreateStepFieldForm(BootstrapForm):
     """ The template form used to help the authoring tool """
     FIELDS = [(v, v) for v in sorted(VALID_FIELD_TYPES)]
-    WIDGETS = [(v, v) for v in sorted(VALID_WIDGETS)]
+    WIDGETS = [('', 'Default')] + [(v, v) for v in sorted(VALID_WIDGETS)]
 
     label = forms.CharField()
     name = forms.CharField(label=_('Doc. Variable'), help_text=_('The Variable to use in the document'))
