@@ -1,21 +1,16 @@
 # -*- coding: utf-8 -*-
-from django.conf import settings
-
-from django.utils.translation import ugettext_lazy as _
-from django.core.urlresolvers import reverse
-
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse
 from django.middleware.csrf import get_token
 from django.template.defaultfilters import slugify
 from django.shortcuts import get_object_or_404
 from django.utils import simplejson as json
-from django.views.generic.base import View, TemplateView
+from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormMixin, BaseUpdateView
 
 from utils import JsonErrorResponseMixin, user_can_view_document
 
 from glynt.apps.flyform.forms import BaseFlyForm
-
+from glynt.apps.document.views.utils import FORM_GROUPS
 from glynt.apps.document.forms import ClientCreatedDocumentForm, CreateStepForm, CreateStepFieldForm
 from glynt.apps.document.models import Document
 

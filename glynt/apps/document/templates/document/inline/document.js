@@ -21,6 +21,7 @@ $(document).ready(function(){
 
   initConditionalCallback = function initConditionalCallback(App) {
     App.widgets.ccbs = new conditionalCallbackSets(App.documentModel);
+    App.widgets.ccbs.parseCallbacks();
   };
 
   initContactList = function initContactList(App) {
@@ -1007,7 +1008,7 @@ $(document).ready(function(){
 
         {% if userdoc %}
         self.generatePDF = function generatePDF() {
-            var url = "{% url 'document:export' slug=userdoc.slug %}";
+            var url = "{% url 'export:as_pdf' slug=userdoc.slug %}";
             document.location = url;
         }
         {% endif %}

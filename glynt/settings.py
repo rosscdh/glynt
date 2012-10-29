@@ -153,6 +153,8 @@ PROJECT_APPS = (
     'glynt.apps.flyform',
     # The Document Signing system
     'glynt.apps.sign',
+    # The Document Export system
+    'glynt.apps.export',
     # The Api
     'glynt.apps.api',
 )
@@ -166,6 +168,7 @@ HELPER_APPS = (
     'categories',
     'categories.editor',
     'mptt',
+    'django_xhtml2pdf',
     'socialregistration',
     'socialregistration.contrib.facebook_js',
     #'socialregistration.contrib.linkedin_js',

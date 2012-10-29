@@ -3,7 +3,7 @@ from django.views.generic.base import TemplateView
 from django.contrib.auth.decorators import login_required
 
 from glynt.apps.document.views import AuthorToolView, DocumentView, MyDocumentView, DocumentByCategoryListView
-from glynt.apps.document.views import DocumentExportView, CloneClientCreatedDocumentView, DeleteClientCreatedDocumentView, UndoDeleteClientCreatedDocumentView
+from glynt.apps.document.views import CloneClientCreatedDocumentView, DeleteClientCreatedDocumentView, UndoDeleteClientCreatedDocumentView
 from glynt.apps.document.views import ReviewClientCreatedView, ValidateClientCreatedDocumentFormView, PersistClientCreatedDocumentProgressView 
 
 
@@ -21,9 +21,6 @@ urlpatterns = patterns('',
     # Authoring
     url(r'^author/$', login_required(AuthorToolView.as_view()), name='author_doc'),
     url(r'^(?P<pk>\d+)/author/$', login_required(AuthorToolView.as_view()), name='author_edit_doc'),
-
-    # Export
-    url(r'^(?P<slug>.+)/export/$', login_required(DocumentExportView.as_view()), name='export'),
 
     # is not login_required as we want users to be redirected to login
     url(r'^(?P<slug>.+)/save/$', login_required(ValidateClientCreatedDocumentFormView.as_view()), name='validate_form'),
