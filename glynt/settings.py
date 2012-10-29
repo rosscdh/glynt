@@ -147,6 +147,8 @@ PROJECT_APPS = (
     'glynt.apps.default',
     # The primary document view system
     'glynt.apps.document',
+    # The document authoring system
+    'glynt.apps.author',
     # The End User - Client, those that consume the documents
     'glynt.apps.client',
     # The Form Generator

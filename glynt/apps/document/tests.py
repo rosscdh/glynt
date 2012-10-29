@@ -22,7 +22,7 @@ login_required_urls = [
     reverse('document:my_persist', kwargs={'pk': 1}),
     reverse('document:my_review', kwargs={'slug': 'test-doc'}),
     reverse('document:my_view', kwargs={'slug': 'test-doc'}),
-    reverse('document:author_doc'),
+    reverse('author:create'),
     reverse('export:as_pdf', kwargs={'slug': 'test-doc'}),
     reverse('document:validate_form', kwargs={'slug': 'test-doc'}),
 ]
