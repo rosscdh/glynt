@@ -77,7 +77,7 @@ ol.step-field-list li {
 {{#each_with_key steps key="index"}}
 <div class="doc-body step info row" data-step_index="{{index}}">
 
-  <form id="step-{{index}}" data-step_index="{{index}}" class="form-step span4">
+  <form id="step-{{index}}" data-step_index="{{index}}" class="form-step span4 form-horizontal">
 {% endverbatim %}
     {{ form_steps }}
   </form>
@@ -434,11 +434,11 @@ $(document).ready(function(){
                 self.delete_field(step, field);
             });
             // Forms
-            $('form.form-step input, form.form-step textarea, form.form-step select').live('change', function(event){
+            $('form.form-step input, form.form-step textarea, form.form-step select, form.form-step radio, form.form-step checkbox').live('change', function(event){
               event.preventDefault();
               self.updateStep($(this));
             });
-            $('form.form-field input, form.form-field textarea, form.form-field select').live('change', function(event){
+            $('form.form-field input, form.form-field textarea, form.form-field select, form.form-field radio, form.form-field checkbox').live('change', function(event){
               event.preventDefault();
               self.updateField($(this));
               self.update_json();

@@ -6,7 +6,7 @@ from django.views.generic.base import TemplateView
 from django.views.generic.edit import BaseUpdateView
 
 
-from glynt.apps.document.forms import CreateStepForm, CreateStepFieldForm
+from glynt.apps.author.forms import CreateStepForm, CreateStepFieldForm
 from glynt.apps.document.models import Document
 
 import logging
