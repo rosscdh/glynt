@@ -41,8 +41,8 @@ def deploy(hard_deploy, env, app_name, project_name, remote_project_path):
 
     if hard_deploy == True:
       print 'IS A HARD DEPLOY'
-      # run('rm -Rf %s/%s' %(remote_project_path, PROJECT,))
-      # run('mkdir -p %s/%s' %(remote_project_path, PROJECT,))
+      run('rm -Rf %s/%s' %(remote_project_path, PROJECT,))
+      run('mkdir -p %s/%s' %(remote_project_path, PROJECT,))
     else:
       print 'IS A SOFT DEPLOY'
 
@@ -58,7 +58,7 @@ def deploy(hard_deploy, env, app_name, project_name, remote_project_path):
 
 
 @hosts(live_hosts)
-def deploy_live(hard=True):
+def deploy_live(hard=False):
   if hard in ['True', 'true', True]:
     hard_deploy = True
   else:
