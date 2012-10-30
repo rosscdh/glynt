@@ -437,6 +437,23 @@ $(document).ready(function(){
                     self.render();
                 }
             });
+            $('[name=hide_from]').live('change', function(event){
+                var target_field = $(this).val();
+                var form = $(this).closest('form');
+                var step_index = form.attr('data-step_index')
+
+                // set the data-glynt-loop_length which indicates that this field is the loop length
+                $.each(self.steps[step_index].fields, function(index, element){
+                    if (element.name == target_field) {
+                        // is not blank therefore its the loop length
+                        element['data-glynt-loop_length'] = '';
+                    } else {
+                        if (element['data-glynt-loop_length'] != undefined) {
+                            delete element['data-glynt-loop_length'];
+                        }
+                    }
+                });
+            });
             $('.field').live('click', function(event){
                 event.preventDefault();
             });
