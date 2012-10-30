@@ -516,7 +516,7 @@ $(document).ready(function(){
     self.context = ko.observable({
         'user_company_name': 'RuleNo1',
             'user_company_url': 'http://www.ruleno1.com',
-        'document_title': '{{ userdoc.name|default:object.name }}'
+        'document_title': '{{ userdoc.name|default:object.name|escapejs }}'
     });
 
     self.getRuleByType = function getRuleByType(ruleset_type) {

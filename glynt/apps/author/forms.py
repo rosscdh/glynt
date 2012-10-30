@@ -40,7 +40,7 @@ class CreateStepFieldForm(BootstrapForm):
     placeholder = forms.CharField(help_text=_('A Hint which is not submittable'))
     help_text = forms.CharField()
     initial = forms.CharField(label=_('Inital Value'), help_text=_('The initial submittable Value of this field - not required'))
-    required = forms.BooleanField()
+    required = forms.ChoiceField(choices=((True,_('Yes')), (False,_('No'))), initial=False, required=False)
     field = forms.ChoiceField(choices=FIELDS, initial='CharField')
     widget = forms.ChoiceField(choices=WIDGETS, initial='TextInput')
     choices = forms.CharField(widget=forms.Textarea, help_text=_('In the form [["a","Alpha"], [1,"One"], [1,1]]'))

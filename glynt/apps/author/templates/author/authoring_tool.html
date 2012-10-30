@@ -252,9 +252,12 @@ $(document).ready(function(){
         self.load_data_from_source = function load_data_from_source() {
             data = $.parseJSON(self.json_output.val());
             //data = $.parseJSON($.cookie('auth_tool'));
-            if (typeof data == 'object' && data[0].type != undefined) {
+            if (data && typeof data == 'object' && data[0].type != undefined) {
                 self.steps = data;
                 self.json_output.val(JSON.stringify(self.steps, null, "\t"));
+            }else{
+              self.steps[0] = self.step_json;
+//              self.steps[0].fields.push(self.input_json);
             }
         };
 

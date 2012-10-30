@@ -216,16 +216,17 @@ class BaseFlyForm(forms.Form, LoopStepCleanFieldsMixin, StepHiddenFieldsMixin, B
           field_instance.name = self.slugify(field['name']) if field['name'] else self.slugify(field_instance.label)
           field_instance.help_text = field['help_text'] if field['help_text'] else None
           field_instance.required = True if field['required'] in ['true',True,'1', 1] else False
-          if 'initial' in field:
-            field_instance.initial = field['initial']
 
           widget = self.setup_field_widget(field_instance, field)
           if widget:
             field_instance.widget = widget
 
-          if hasattr(f, 'choices') and 'choices' in field:
+          if hasattr(f, 'choices') and 'choices' in field and type(field['choices']) is dict:
             # Add log here as sometimes choices may be present but not specified
             field_instance.choices = self.valid_choice_options(field['choices'])
+
+          if 'initial' in field:
+            field_instance.initial = field['initial']
 
           # Append the field
           self.fields[field_instance.name] = field_instance
