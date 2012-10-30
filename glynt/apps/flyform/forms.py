@@ -25,7 +25,7 @@ VALID_WIDGETS_CUSTOM = ['SocialContactWidget']
 
 
 # Custom Widgets
-forms.widgets.SocialContactWidget = forms.TextInput(attrs={"class": "contact-list"})
+forms.widgets.SocialContactWidget = forms.TextInput(attrs={"class": "md-updater contact-list"})
 
 
 import sys
@@ -267,7 +267,11 @@ class BaseFlyForm(forms.Form, LoopStepCleanFieldsMixin, StepHiddenFieldsMixin, B
       'placeholder': field_dict['placeholder'],
       'data-hb-name': field_dict['data-hb-name'] if field_dict['data-hb-name'] else field_instance.name,
     })
-    widget.attrs['class'] = ' '.join(widget.attrs['class'].split(' ') + field_dict['class'].split(' '))
+    if 'class' in widget.attrs:
+        # join with custom widget attrs
+        widget.attrs['class'] = ' '.join(widget.attrs['class'].split(' ') + field_dict['class'].split(' '))
+    else:
+        widget.attrs['class'] = field_dict['class']
 
     if 'data-show_when' in field_dict:
       widget.attrs['data-show_when'] = safestring.mark_safe(field_dict['data-show_when'])
