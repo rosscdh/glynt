@@ -2,15 +2,18 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.utils import simplejson as json
+from django.utils.safestring import mark_safe
+
 from taggit.managers import TaggableManager
 from categories.models import CategoryBase
-
-from glynt.apps.utils import get_namedtuple_choices
 from jsonfield import JSONField
 
+from glynt.apps.utils import get_namedtuple_choices
 from glynt.apps.document.managers import DocumentManager, PublicDocumentManager, PrivateDocumentManager
 from glynt.apps.document.managers import ClientCreatedDocumentManager, PublicClientCreatedDocumentManager, DeletedClientCreatedDocumentManager
 
+from glynt.pybars_plus import PybarsPlus
+import markdown
 import qrcode
 
 
@@ -96,6 +99,18 @@ class ClientCreatedDocument(models.Model):
         qr.add_data(self.get_absolute_url())
         qr.make(fit=True)
         return qr.make_image()
+
+    def rendered_body(self):
+        data = []
+        if type(self.source_document.flyform.defaults) is dict:
+            data = self.source_document.flyform.defaults.items()
+        if type(self.data) is dict:
+            data = data + self.data.items()
+            data = dict(data)
+        data['document_title'] = self.name if 'document_title' in data else ''
+
+        pybars_plus = PybarsPlus(self.body)
+        return mark_safe(markdown.markdown(pybars_plus.render(data)))
 
     def increment_num_signed(self, signature_id):
       """ Save the number of signers, save the signature_id for uniqueness """
