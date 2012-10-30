@@ -50,7 +50,6 @@ def fetch_resources(uri, rel):
     elif uri.startswith(settings.STATIC_URL):
         filename = uri.replace(settings.STATIC_URL, "")
         path = os.path.join(settings.STATIC_ROOT, filename)
-        print path
         if not os.path.exists(path):
             for d in settings.STATICFILES_DIRS:
                 path = os.path.join(d, filename)

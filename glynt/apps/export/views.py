@@ -24,6 +24,7 @@ class ExportAsPDFView(View):
 
         filename = '%s.pdf' % (document.slug,)
         context = RequestContext(request, {
+            'title': document.name,
             'body': document.rendered_body()
         })
 
