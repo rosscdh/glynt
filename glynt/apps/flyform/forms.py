@@ -228,7 +228,7 @@ class BaseFlyForm(forms.Form, LoopStepCleanFieldsMixin, StepHiddenFieldsMixin, B
           if widget:
             field_instance.widget = widget
 
-          if hasattr(f, 'choices') and 'choices' in field and type(field['choices']) is dict:
+          if hasattr(f, 'choices') and 'choices' in field and type(field['choices']) is list:
             # Add log here as sometimes choices may be present but not specified
             field_instance.choices = self.valid_choice_options(field['choices'])
 
