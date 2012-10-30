@@ -44,7 +44,7 @@ class CreateStepFieldForm(BootstrapForm):
     field = forms.ChoiceField(choices=FIELDS, initial='CharField')
     widget = forms.ChoiceField(choices=WIDGETS, initial='TextInput')
     choices = forms.CharField(widget=forms.Textarea, help_text=_('In the form [["a","Alpha"], [1,"One"], [1,1]]'))
-    css_class = forms.CharField(initial='md-updater')
+    css_class = forms.CharField(initial='md-updater', help_text=_('*md-updater, contact-list'))
 
     class Meta:
         layout = (

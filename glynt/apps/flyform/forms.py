@@ -19,7 +19,14 @@ USPS_CHOICES = [(v,v) for k,v in SHORT_USPS_CHOICES]
 CUSTOM_VALID_FIELD_TYPES = ['CountryField', 'USStateField', 'USZipCodeField']
 VALID_FIELD_TYPES = CUSTOM_VALID_FIELD_TYPES + ['BooleanField', 'CharField', 'ChoiceField', 'DateField', 'DateTimeField', 'DecimalField', 'EmailField', 'FloatField', 'ImageField', 'IntegerField', 'MultiValueField', 'MultipleChoiceField', 'SlugField', 'TimeField', 'URLField', ]
 
-VALID_WIDGETS = ['TextInput', 'PasswordInput', 'HiddenInput', 'MultipleHiddenInput', 'FileInput', 'ClearableFileInput', 'DateInput', 'DateTimeInput', 'TimeInput', 'Textarea', 'CheckboxInput', 'Select', 'RadioSelect', 'SelectMultiple', 'CheckboxSelectMultiple', 'SplitDateTimeWidget', 'SelectDateWidget',]
+
+VALID_WIDGETS = ['TextInput', 'PasswordInput', 'HiddenInput', 'MultipleHiddenInput', 'FileInput', 'ClearableFileInput', 'DateInput', 'DateTimeInput', 'TimeInput', 'Textarea', 'CheckboxInput', 'Select', 'RadioSelect', 'SelectMultiple', 'CheckboxSelectMultiple', 'SplitDateTimeWidget', 'SelectDateWidget', 'SocialContactWidget']
+VALID_WIDGETS_CUSTOM = ['SocialContactWidget']
+
+
+# Custom Widgets
+forms.widgets.SocialContactWidget = forms.TextInput(attrs={"class": "contact-list"})
+
 
 import sys
 import re
@@ -247,17 +254,20 @@ class BaseFlyForm(forms.Form, LoopStepCleanFieldsMixin, StepHiddenFieldsMixin, B
       return tuple()
 
   def setup_field_widget(self, field_instance, field_dict):
-    w = getattr(forms.widgets, field_dict['widget'], None) if 'widget' in field_dict else None
-    if w:
-      widget = w()
+    if 'widget' in field_dict and field_dict['widget'] in VALID_WIDGETS_CUSTOM:
+        widget = getattr(forms.widgets, field_dict['widget'], None)
     else:
-      widget = field_instance.widget
+        w = getattr(forms.widgets, field_dict['widget'], None) if 'widget' in field_dict else None
+        if w:
+          widget = w()
+        else:
+          widget = field_instance.widget
 
-    widget.attrs = {
-      'class': field_dict['class'],
+    widget.attrs.update({
       'placeholder': field_dict['placeholder'],
       'data-hb-name': field_dict['data-hb-name'] if field_dict['data-hb-name'] else field_instance.name,
-    }
+    })
+    widget.attrs['class'] = ' '.join(widget.attrs['class'].split(' ') + field_dict['class'].split(' '))
 
     if 'data-show_when' in field_dict:
       widget.attrs['data-show_when'] = safestring.mark_safe(field_dict['data-show_when'])
