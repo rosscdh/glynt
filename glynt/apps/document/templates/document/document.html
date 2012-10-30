@@ -31,6 +31,9 @@
             {{ field.label_tag }}
             <div class="controls">
             {{ field }}
+            {% if field.help_text %}
+            <span class="helptext">{{ field.help_text }}</span>
+            {% endif %}
             </div>
           </div>
           {% endif %}

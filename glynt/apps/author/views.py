@@ -31,5 +31,6 @@ class AuthorToolView(TemplateView, BaseUpdateView):
     def post(self, request, *args, **kwargs):
         context = self.get_context_data()
         context['object'].flyform.body = json.dumps(json.loads(request.POST.get('json')))
-        result = context['object'].flyform.save()
-        return HttpResponse(result, status=200, content_type='text/json')
+        context['object'].flyform.save()
+        result = [{'pk':context['object'].pk }]
+        return HttpResponse(json.dumps(result), status=200, content_type='text/json')

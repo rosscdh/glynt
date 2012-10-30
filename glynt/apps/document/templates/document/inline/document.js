@@ -1317,12 +1317,13 @@ $(document).ready(function(){
     $('.md-updater').popover({
       trigger: 'hover',
       title: function() {
-        return $(this).closest('li').find('label:first').html();
+        return $(this).closest('div.control-group').find('label:first').html();
       },
       content: function() {
+          var control_group = $(this).closest('div.control-group');
         item = {
-          'field_label': $(this).closest('div.control-group').find('label:first').html(),
-          'explain': $(this).closest('div.control-group').find('span.helptext:first').html(),
+          'field_label': control_group.find('label').html(),
+          'explain': control_group.find('span.helptext').html(),
           'example': $(this).attr('placeholder')
         }
         return hb_popover_template(item);
@@ -1350,14 +1351,10 @@ $(document).ready(function(){
 {% tplhandlebars "hb-popover" %}
     <p>
     {{#if explain}}
-    {{explain}}
-    {{else}}
-    Please enter a value for "{{field_label}}"
+    {{explain}}<br/>
     {{/if}}
     {{#if example}}
-    <br/><br/>
-    <i>i.e:</i><br/>
-    {{example}}
+    <i>i.e:</i>&nbsp;{{example}}
     {{/if}}
     </p>
 {% endtplhandlebars %}

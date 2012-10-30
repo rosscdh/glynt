@@ -77,7 +77,7 @@ ol.step-field-list li {
 {{#each_with_key steps key="index"}}
 <div class="doc-body step info row" data-step_index="{{index}}">
 
-  <form id="step-{{index}}" data-step_index="{{index}}" class="form-step span4 form-horizontal">
+  <form id="step-{{index}}" data-step_index="{{index}}" class="form-step span4">
 {% endverbatim %}
     {{ form_steps }}
   </form>
@@ -196,7 +196,7 @@ $(document).ready(function(){
         self.input_json = {
           'field': 'CharField',
           'widget': 'TextInput',
-          "choices": null,
+          "choices": '',
           'label': '',
           'name': '',
           'help_text': '',
@@ -211,7 +211,7 @@ $(document).ready(function(){
         };
         // ---- VIEW CRUD -----
         self.add_step = function add_step(data) {
-          data = (data == undefined) ? self.clone(self.step_json): data;
+          data = (data == undefined || data == '') ? self.clone(self.step_json): data;
           self.steps.push(data);
           var new_step_index = self.steps.length - 1;
           self.current_step = new_step_index;
@@ -252,7 +252,7 @@ $(document).ready(function(){
         self.load_data_from_source = function load_data_from_source() {
             data = $.parseJSON(self.json_output.val());
             //data = $.parseJSON($.cookie('auth_tool'));
-            if (data != null) {
+            if (typeof data == 'object' && data[0].type != undefined) {
                 self.steps = data;
                 self.json_output.val(JSON.stringify(self.steps, null, "\t"));
             }
@@ -292,9 +292,15 @@ $(document).ready(function(){
             var attr_name = field.attr('name');
             value = field.val();
             if (attr_name == 'choices') {
-                value = $.parseJSON(value);
+                if (value != '' && value != 'null' && value != null) {
+                  value = $.parseJSON(value);
+                } else {
+                  value = undefined;
+                }
             }
-            self.steps[step_index].fields[field_index][attr_name] = value;
+            if (value != undefined) {
+              self.steps[step_index].fields[field_index][attr_name] = value;
+            }
         };
 
         // ----- BIND DATA TO FORM VIEWS -----
@@ -342,9 +348,15 @@ $(document).ready(function(){
                     attrib_value = field_attribs[attrib_key];
                     
                     if (attrib_key == 'choices') {
-                        attrib_value = JSON.stringify(attrib_value);
+                        if (attrib_value != '' && attrib_value != 'null' && attrib_value != null) {
+                          attrib_value = JSON.stringify(attrib_value);
+                        } else {
+                          attrib_value = undefined;
+                        }
                     }
-                    $('body').find('form#'+ form_id +' [name='+ attrib_key +']').val(attrib_value);
+                    if (attrib_value != undefined) {
+                      $('body').find('form#'+ form_id +' [name='+ attrib_key +']').val(attrib_value);
+                    }
                 }
             });
         }
@@ -379,8 +391,9 @@ $(document).ready(function(){
                 .success(function(data, textStatus, jqXHR) {
                     console.log(data)
                 })
-                .error(function() { 
+                .error(function(event) { 
                     console.log('Error in Javascript event')
+                    console.log(event)
                 })
                 .complete(function() {
                 });
