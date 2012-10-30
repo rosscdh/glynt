@@ -188,8 +188,8 @@ $(document).ready(function(){
           'properties': {
             'step_title': 'Step No. 1',
             'hide_from': '',
-            'hide_to': ''
-            //'iteration_title': ''
+            'iteration_title': ''
+            //'hide_to': ''
           },
           'fields': []
         };
@@ -324,11 +324,15 @@ $(document).ready(function(){
 
                 step_field_list = $('body').find('form#'+ form_id).closest('div.doc-body').find('ol.step-field-list');
                 hide_from_field = $('body').find('form#'+ form_id +' [name=hide_from]');
+                iteration_title_field = $('body').find('form#'+ form_id +' [name=iteration_title]');
                 if (step_attribs.type != 'loop-step') {
                     hide_from_field.closest('.control-group').hide();
+                    iteration_title_field.closest('.control-group').hide();
                 }
                 // populate hide from
                 hide_from_field.empty();
+                hide_from_field.append($("<option/>", {value: '', text: '' }));
+
                 step_field_list.empty();
                 $.each(self.steps[step_index].fields, function(index, field){
                     hide_from_field.append($("<option/>", {value: field.name, text: field.label }));
@@ -371,11 +375,18 @@ $(document).ready(function(){
         self.on_steptype_change = function on_steptype_change(type_form_hash) {
             step_type = type_form_hash.selected_type;
             step_form = type_form_hash.form;
-            control_group = step_form.find('#id_hide_from').closest('.control-group');
+            control_groups = []
+            control_groups.push(step_form.find('[name=hide_from]').closest('.control-group'));
+            control_groups.push(step_form.find('[name=iteration_title]').closest('.control-group'));
+
             if (step_type == 'loop-step') {
-                control_group.show();
+                $.each(control_groups, function(index,element){
+                    $(element).show();
+                });
             } else {
-                control_group.hide();
+                $.each(control_groups, function(index,element){
+                    $(element).hide();
+                });
             }
         };
 

@@ -22,10 +22,11 @@ class CreateStepForm(BootstrapForm):
     type = forms.ChoiceField(choices=STEP_TYPES, initial='step')
     hide_from = forms.CharField(max_length=32, widget=forms.Select)
     step_title = forms.CharField(max_length=32, initial=_('Step No. 1'))
+    iteration_title = forms.CharField(max_length=32)
 
     class Meta:
         layout = (
-            Fieldset("Step Details", "step_title", "type", "hide_from",),
+            Fieldset("Step Details", "step_title", "type", "hide_from", "iteration_title", ),
         )
 
 
