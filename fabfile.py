@@ -25,7 +25,7 @@ FILENAME_TIMESTAMP = strftime("%m-%d-%Y-%H:%M:%S", gmtime())
 @hosts(['localhost'])
 def git_export():
   cd(PROJECT_PATH)
-  local('git archive --format zip --output /tmp/%s.zip --prefix=%s/ master'%(PROJECT, PROJECT,), capture=False)
+  local('git archive --format zip --output /tmp/%s.zip --prefix=%s/ master' % (PROJECT, PROJECT,), capture=False)
 
 
 def prepare_deploy():
@@ -34,7 +34,7 @@ def prepare_deploy():
 
 
 def conclude_deploy():
-    run('unlink /tmp/%s.zip'%(PROJECT,))
+    run('unlink /tmp/%s.zip' % (PROJECT,))
 
 
 def deploy(hard_deploy, env, app_name, project_name, remote_project_path):
@@ -46,15 +46,19 @@ def deploy(hard_deploy, env, app_name, project_name, remote_project_path):
     else:
       print 'IS A SOFT DEPLOY'
 
+    # Activate virtualenv
+    run('source /home/stard0g101/.virtualenvs/cartvine_shoppers/bin/activate')
+
     # extract project zip file
-    with cd('%s/'%(remote_project_path,)):
-      run('unzip /tmp/%s.zip'%(PROJECT,))
-      cd( '%s/%s'%(remote_project_path, project_name,))
-      run('cp %s/%s/conf/%s.local_settings.py %s/%s/%s/local_settings.py'%(remote_project_path, PROJECT, env, remote_project_path, PROJECT, app_name,))
-      run('cp %s/%s/conf/%s.wsgi.py %s/%s/%s/wsgi.py'%(remote_project_path, PROJECT, env, remote_project_path, PROJECT, app_name,))
-      run('%s/apache2/bin/restart'%(remote_project_path,))
-      # run('rm -Rf %s/%s/media'%(remote_project_path, project_name,))
-      # run('rm -Rf %s/%s/static'%(remote_project_path, project_name,))
+    with cd('%s/' % (remote_project_path,)):
+      run('unzip /tmp/%s.zip' % (PROJECT,))
+      cd( '%s/%s' % (remote_project_path, project_name,))
+      run('cp %s/%s/conf/%s.local_settings.py %s/%s/%s/local_settings.py' % (remote_project_path, PROJECT, env, remote_project_path, PROJECT, app_name,))
+      run('cp %s/%s/conf/%s.wsgi.py %s/%s/%s/wsgi.py' % (remote_project_path, PROJECT, env, remote_project_path, PROJECT, app_name,))
+
+      run('python %s/%s/manage.py compress' % (remote_project_path, PROJECT,))
+
+      run('%s/apache2/bin/restart' % (remote_project_path,))
 
 
 @hosts(live_hosts)
