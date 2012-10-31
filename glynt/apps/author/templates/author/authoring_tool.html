@@ -443,14 +443,12 @@ $(document).ready(function(){
                     data: data,
                 })
                 .success(function(data, textStatus, jqXHR) {
-                    console.log(data)
-                    $('ul#messages li').fadeOut().remove();
-                    $('ul#messages').append($('<li/>', {class: 'success', html: 'Success, Saved Form'})).fadeIn('slow')
+                    $('ul#messages li').remove();
+                    $('ul#messages').hide().append($('<li/>', {class: 'success', html: 'Success, Saved Form'})).fadeIn('slow')
                 })
                 .error(function(jqXHR, textStatus, errorThrown) { 
-                    console.log('Error in Javascript event')
                     $('ul#messages li').fadeOut().remove();
-                    $('ul#messages').append($('<li/>', {class: 'error', html: 'Error, Could Not Save<br/>' + textStatus})).fadeIn('slow')
+                    $('ul#messages').hide().append($('<li/>', {class: 'error', html: 'Error, Could Not Save<br/>' + textStatus})).fadeIn('slow')
                 })
                 .complete(function() {
                 });
