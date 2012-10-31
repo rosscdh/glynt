@@ -20,12 +20,14 @@ CUSTOM_VALID_FIELD_TYPES = ['CountryField', 'USStateField', 'USZipCodeField']
 VALID_FIELD_TYPES = CUSTOM_VALID_FIELD_TYPES + ['BooleanField', 'CharField', 'ChoiceField', 'DateField', 'DateTimeField', 'DecimalField', 'EmailField', 'FloatField', 'ImageField', 'IntegerField', 'MultiValueField', 'MultipleChoiceField', 'SlugField', 'TimeField', 'URLField', ]
 
 
-VALID_WIDGETS = ['TextInput', 'PasswordInput', 'HiddenInput', 'MultipleHiddenInput', 'FileInput', 'ClearableFileInput', 'DateInput', 'DateTimeInput', 'TimeInput', 'Textarea', 'CheckboxInput', 'Select', 'RadioSelect', 'SelectMultiple', 'CheckboxSelectMultiple', 'SplitDateTimeWidget', 'SelectDateWidget', 'SocialContactWidget']
-VALID_WIDGETS_CUSTOM = ['SocialContactWidget']
+VALID_WIDGETS_CUSTOM = ['SocialContactWidget', 'InviteeWidget']
+VALID_WIDGETS = ['TextInput', 'PasswordInput', 'HiddenInput', 'MultipleHiddenInput', 'FileInput', 'ClearableFileInput', 'DateInput', 'DateTimeInput', 'TimeInput', 'Textarea', 'CheckboxInput', 'Select', 'RadioSelect', 'SelectMultiple', 'CheckboxSelectMultiple', 'SplitDateTimeWidget', 'SelectDateWidget'] + VALID_WIDGETS_CUSTOM
 
 
 # Custom Widgets
+forms.widgets.InviteeWidget = forms.TextInput(attrs={"class": "md-updater is_invitee"})
 forms.widgets.SocialContactWidget = forms.TextInput(attrs={"class": "md-updater contact-list"})
+
 
 
 import sys

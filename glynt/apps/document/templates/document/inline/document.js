@@ -1281,6 +1281,15 @@ $(document).ready(function(){
         App.widgets.ccbs.parseCallbacks();
     });
 
+    $('.is_invitee').live('change', function(event){
+        var field = $(this);
+        var id = slugify(field.val());
+        var name = field.val();
+        var email = null;
+        var picture = null;
+        App.dispatch('invitee.add', {'id': id, 'profile_picture': picture, 'name': name, 'email': email});
+    });
+
     $('button#btn-post-pdf').live('click', function(event){
         event.preventDefault();
         App.generatePDF();
