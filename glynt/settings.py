@@ -75,6 +75,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    'compressor.finders.CompressorFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -184,6 +185,7 @@ HELPER_APPS = (
     'user_streams.backends.user_streams_single_table_backend',
     'django_comments_xtd',
     'django_markup',
+    'compressor',
 )
 
 # Handle south and its breaking tests
@@ -230,6 +232,9 @@ CATEGORIES_SETTINGS = {
     'THUMBNAIL_STORAGE': 'django.core.files.storage.FileSystemStorage',
     'SLUG_TRANSLITERATOR': lambda x: x,
 }
+
+COMPRESS_ENABLED = True
+COMPRESS_OFFLINE = True
 
 if DEBUG:
     if not IS_TESTING:
