@@ -44,7 +44,7 @@
         </div>
         <div id="fields_list" class="modal-body"></div>
         <div class="modal-footer">
-            &nbsp;
+            <a href="#/field/add" class="btn btn-mini btn-success pull-right" id="add_field" data-step_index=""><i class="icon-plus icon-white"></i> Add Field</a>
         </div>
     </div>
 </div>
@@ -101,12 +101,6 @@ ol.step-field-list li {
 
 <script type="text/x-handlebars" id="hb-fields">
 {% verbatim %}
-<div class="control-group">
-    <div class="controls">
-    <a href="#/field/add" class="btn btn-mini btn-success pull-right" id="add_field" data-step_index="{{step.index}}"><i class="icon-plus icon-white"></i> Add Field</a>
-    </div>
-</div>
-
 <div class="info" data-step_index="{{step.index}}">
     {{#each_with_key step.fields key="index"}}
     {% endverbatim %}
@@ -477,7 +471,8 @@ $(document).ready(function(){
             });
             $('a#add_field').live('click', function(event){
                 event.preventDefault();
-                self.current_step = $(this).attr('data-step_index');
+                var step_index = $(this).closest('div#fields').find('div#fields_list').find('div.info').attr('data-step_index')
+                self.current_step = step_index;
                 self.add_field(self.current_step);
             });
             $('a.delete_field').live('click', function(event){
