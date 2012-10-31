@@ -30,7 +30,6 @@ class CreateStepForm(BootstrapForm):
         )
 
 
-
 class CreateStepFieldForm(BootstrapForm):
     """ The template form used to help the authoring tool """
     FIELDS = [(v, v) for v in sorted(VALID_FIELD_TYPES)]
@@ -50,4 +49,14 @@ class CreateStepFieldForm(BootstrapForm):
     class Meta:
         layout = (
             Fieldset("Question", "label", "name", "initial", "placeholder", "help_text", "required", "field", "widget", "choices", "css_class"),
+        )
+
+
+class DocumentMetaForm(BootstrapForm):
+    """ The template form used to help the authoring tool document meta """
+    can_add_invite = forms.ChoiceField(choices=((True,'Yes'),(False,'No')), initial=False)
+
+    class Meta:
+        layout = (
+            Fieldset("Document Meta", "can_add_invite", ),
         )

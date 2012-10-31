@@ -16,12 +16,13 @@
 
 <div class="span2 sidebar">
   <ul class="nav nav-list">
-      <li><a href="#/"> {% trans 'Authoring' %}</a></li>
-    <li class="divider"></li>
-      <li><a href="#/review/json"> {% trans 'Review JSON' %}</a></li>
-    <li class="divider"></li>
-    <li class="nav-header">{% trans 'Coming Eventually' %}</li>
-      <li><a href="#/review/doc"> {% trans 'Review Document' %}</a></li>
+    <li class="nav-header">{% trans 'Authoring' %}</li>
+      <li><a href="#/"> {% trans 'Steps & Variables' %}</a></li>
+      <li><a href="#/meta"> {% trans 'Properties' %}</a></li>
+    <li class="nav-header">{% trans 'Document' %}</li>
+      <li><a href="#/doc"> {% trans 'Document' %}</a></li>
+    <li class="nav-header">{% trans 'Review' %}</li>
+      <li><a href="#/review/json"> {% trans 'Raw JSON' %}</a></li>
     <li class="nav-header">{% trans 'Actions' %}</li>
     {% if object %}
     <li class="divider"></li>
@@ -47,6 +48,10 @@
             <a href="#/field/add" class="btn btn-mini btn-success pull-right" id="add_field" data-step_index=""><i class="icon-plus icon-white"></i> Add Field</a>
         </div>
     </div>
+</div>
+
+<div id="meta" class="row span7 view hide">
+  Document Meta Properties
 </div>
 
 <div id="json" class="row span9 view hide">
@@ -124,6 +129,15 @@ ol.step-field-list li {
 <br/>
 </script>
 
+<script type="text/x-handlebars" id="hb-meta">
+<div id="meta">
+  <form id="form-meta" class="form-meta form-horizontal">
+    {{ form_document_meta }}
+  </form>
+</div>
+<br/>
+</script>
+
 <script>
 $(document).ready(function(){
     app = $.sammy(function() {
@@ -143,6 +157,7 @@ $(document).ready(function(){
 
         self.steps_view = Handlebars.compile($('script#hb-steps').html());
         self.fields_view = Handlebars.compile($('script#hb-fields').html());
+        self.meta_view = Handlebars.compile($('script#hb-meta').html());
         self.json_output = $('#json-output');
 
         self.flyform_schema_json = {
@@ -182,10 +197,13 @@ $(document).ready(function(){
         this.get('#/', function() {
             self.show($('div#authoring'));
         });
+        this.get('#/meta', function() {
+            self.show($('div#meta'));
+        });
         this.get('#/review/json', function() {
             self.show($('div#json'));
         });
-        this.get('#/review/doc', function() {
+        this.get('#/doc', function() {
             self.show($('div#doc'));
         });
 
@@ -268,6 +286,7 @@ $(document).ready(function(){
         self.render = function render() {
           self.render_steps();
           self.render_fields(self.current_step);
+          self.render_meta();
           self.dispatch('bind_data', {});
         };
         self.render_steps = function render_steps() {
@@ -276,16 +295,20 @@ $(document).ready(function(){
         self.render_fields = function render_fields(step_index) {
           $( "div#fields_list" ).html(self.fields_view({'step': self.flyform_schema.steps[step_index]}));
         };
+        self.render_meta = function render_meta() {
+          $( "div#meta" ).html(self.meta_view({}));
+        };
 
         // ---- UPDATE JSON FROM FORMS -----
         self.updateStep = function updateStep(field) {
             var form = field.closest('form.form-step');
             var step_index = $(form).attr('data-step_index');
             var attr_name = field.attr('name');
+            var value = field.val();
             if (attr_name == 'type') {
-                self.flyform_schema.steps[step_index][attr_name] = field.val();
+                self.flyform_schema.steps[step_index][attr_name] = self.ensureValue(value);
             } else {
-                self.flyform_schema.steps[step_index].properties[attr_name] = field.val();
+                self.flyform_schema.steps[step_index].properties[attr_name] = self.ensureValue(value);
             }
             self.update_json();
         };
@@ -305,10 +328,23 @@ $(document).ready(function(){
                 }
             }
             if (value != undefined) {
-              self.flyform_schema.steps[step_index].fields[field_index][attr_name] = value;
+              self.flyform_schema.steps[step_index].fields[field_index][attr_name] = self.ensureValue(value);
             }
         };
+        self.updateMetaField = function updateMetaField(field) {
+            var form = field.closest('form.form-meta');
+            var attr_name = field.attr('name');
+            var value = field.val();
+            self.flyform_schema.meta[attr_name] = self.ensureValue(value);
+            self.update_json();
+        };
 
+        self.ensureValue = function ensureValue(value) {
+          if (['True','true',1,'False','false',0].indexOf(value) != -1) {
+            value = (['True','true',1].indexOf(value) >= 0) ? true: false;
+          }
+          return value;
+        };
         // ----- BIND DATA TO FORM VIEWS -----
         self.bind_forms_to_data = function bind_forms_to_data() {
             // bind step data to form value
@@ -356,7 +392,7 @@ $(document).ready(function(){
 
                 for(var attrib_key in field_attribs){
                     attrib_value = field_attribs[attrib_key];
-                    
+
                     if (attrib_key == 'choices') {
                         if (attrib_value != '' && attrib_value != 'null' && attrib_value != null) {
                           attrib_value = JSON.stringify(attrib_value);
@@ -489,6 +525,11 @@ $(document).ready(function(){
             $('form.form-field input, form.form-field textarea, form.form-field select, form.form-field radio, form.form-field checkbox').live('change', function(event){
               event.preventDefault();
               self.updateField($(this));
+              self.update_json();
+            });
+            $('form.form-meta input, form.form-meta textarea, form.form-meta select, form.form-meta radio, form.form-meta checkbox').live('change', function(event){
+              event.preventDefault();
+              self.updateMetaField($(this));
               self.update_json();
             });
             $('#id_type').live('change', function(event){
