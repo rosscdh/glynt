@@ -55,7 +55,8 @@ def deploy(hard_deploy, env, app_name, project_name, remote_project_path):
 
         # Activate virtualenv
         with prefix('workon %s' % (project_name,)):
-            run('python %s/%s/manage.py compress' % (remote_project_path, PROJECT,))
+            #run('python %s/%s/manage.py compress' % (remote_project_path, PROJECT,))
+            run('python %s/%s/manage.py collectstatic --noinput' % (remote_project_path, PROJECT,))
 
         run('%s/apache2/bin/restart' % (remote_project_path,))
 
