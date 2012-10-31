@@ -9,9 +9,10 @@
 <div class="span12">
   <h2>Document Author tool</h2>
   {% if object %}
-  <h1>Editing {{ object.name }}</h1>
+  <h3>Editing {{ object.name }}</h3>
   {% else %}
   {% endif %}
+  <div id="message" class="row"></div>
 </div>
 
 <div class="span2 sidebar">
@@ -443,10 +444,13 @@ $(document).ready(function(){
                 })
                 .success(function(data, textStatus, jqXHR) {
                     console.log(data)
+                    $('ul#messages li').fadeOut().remove();
+                    $('ul#messages').append($('<li/>', {class: 'success', html: 'Success, Saved Form'})).fadeIn('slow')
                 })
-                .error(function(event) { 
+                .error(function(jqXHR, textStatus, errorThrown) { 
                     console.log('Error in Javascript event')
-                    console.log(event)
+                    $('ul#messages li').fadeOut().remove();
+                    $('ul#messages').append($('<li/>', {class: 'error', html: 'Error, Could Not Save<br/>' + textStatus})).fadeIn('slow')
                 })
                 .complete(function() {
                 });

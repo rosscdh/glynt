@@ -81,13 +81,13 @@
   {% endblock %}
 
     <div class="container">
-      {% if messages %}
       <ul id="messages">
+          {% if messages %}
           {% for message in messages %}
           <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
           {% endfor %}
+          {% endif %}
       </ul>
-      {% endif %}
       {% block body %}{% endblock %}
       <div class="row" id="footer">
         <div class="span12">

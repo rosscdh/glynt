@@ -41,26 +41,23 @@
     </div>
     </form>
     {% endfor %}
-	<div class="row">
-	    <div id="last-step" class="span12 hide form-horizontal" data-bind="visible: App.formControls.isLastStep()">
-	      <h3><span class="step-title">Document Complete</span></h3>
-		  <br />
-		  <div id="form-group-{{ final_step_index }}" class="control-group">
-	          <label>Download a PDF of the document</label>
-			  <div id="formCompleteOptions" class="controls">
-	            <button id="btn-post-pdf" class="btn btn-green btn-success" type="button">{% trans 'Download PDF' %}</button>
-	          </div>
-	      </div>
-		  <div id="form-group-{{ final_step_index }}" class="control-group">
-		        {% if can_add_invite %}
-	          <label>Invite people to review and sign</label>
-			      <div id="formCompleteOptions" class="controls">
-	            <div id="invite-to-sign" class="row" data-bind="visible: App.formControls.isLastStep()">&nbsp;</div>
-	          </div>
-	          {% endif %}
-	      </div>
-	    </div>
-	</div>
+  <div class="row">
+      <div id="last-step" class="span12 hide form-horizontal" data-bind="visible: App.formControls.isLastStep()">
+        <h3><span class="step-title">Document Complete</span></h3>
+      <br />
+      <div id="form-group-{{ final_step_index }}" class="control-group">
+            <label>Download a PDF of the document</label>
+        <div id="formCompleteOptions" class="controls">
+              <button id="btn-post-pdf" class="btn btn-green btn-success" type="button">{% trans 'Download PDF' %}</button>
+            </div>
+        </div>
+      <div id="form-group-{{ final_step_index }}" class="control-group">
+            <div id="formCompleteOptions" class="controls">
+              <div id="invite-to-sign" data-can_add_invite="{% if can_add_invite %}{{ can_add_invite }}{% endif %}" class="row" data-bind="visible: App.formControls.isLastStep()">&nbsp;</div>
+            </div>
+        </div>
+      </div>
+  </div>
     <div id="progress-buttons" class="hide controls">
         <div class="previous-button">
         <span data-bind="visible: App.formControls.showPrev()"><button id="btn-prev" class="btn btn-grey btn-large btn-prev" type="button" data-bind="click: App.formControls.prev">{% trans 'Previous' %}</button></span>
