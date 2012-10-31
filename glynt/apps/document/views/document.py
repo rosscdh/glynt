@@ -59,7 +59,7 @@ class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
     if self.step > 0:
       self.step = self.step - 1
 
-    kwargs['json_form'] = self.document.flyform.body[self.step]
+    kwargs['json_form'] = self.document.flyform.flyform_steps[self.step]
 
     return form_class(**kwargs)
 
