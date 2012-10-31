@@ -99,7 +99,14 @@ class StepHiddenFieldsMixin(object):
 
 class BaseFlyForm(forms.Form, LoopStepCleanFieldsMixin, StepHiddenFieldsMixin, BootstrapMixin):
   """ This form is the basis for the self generating form representations
-  it requires that a valid json_object be passed in which adheres to the following schema
+  the base structure is
+  {
+    "meta": {
+        "can_add_invite": True|False
+    },
+    "steps": []
+  }
+  the steps propery requires that a valid json_object be passed in which adheres to the following schema
   schema = {
     "type" : "step", # step, loop-step
     "properties" : {

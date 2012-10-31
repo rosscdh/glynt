@@ -30,7 +30,7 @@
 
 {% tplhandlebars "hb-invite-signatories" %}
 <div id="invite-signatories">
-  <a id="" href="#invitee-add" class="signatory_add">{% trans 'Add Invitation' %}</a>
+  {{#if can_add_invite}}<a id="" href="#invitee-add" class="signatory_add">{% trans 'Add Invitation' %}</a>{{/if}}
   <span class="message">{{message}}</span>
   <form id="send-invite" class="form-horizontal">
     <input type="hidden" name="csrfmiddlewaretoken" value="{{csrf_token}}" />
@@ -71,6 +71,8 @@ $(document).ready(function(){
     self.context = params;
     self.context['csrf_token'] = $.cookie('csrftoken');;
     self.context['invitees'] = (params['invitees'] != undefined) ? params['invitees']: [];
+    self.context['can_add_invite'] = (params['can_add_invite'] != undefined) ? params['can_add_invite']: true;
+    
 
     self.findInvitee = function findInvitee(id, find_by_key) {
       invitee = false;
@@ -274,7 +276,7 @@ $(document).ready(function(){
   };
 {% if target_element %}
   // if we have a target_element specified then instantiate the invite widget
-  var inviteToSign = new inviteToSignWidget({'target_element': $('{{ target_element }}')});
+  var inviteToSign = new inviteToSignWidget({'target_element': $('{{ target_element }}'), 'can_add_invite': {{ can_add_invite|default:'false' }} });
 {% endif %}
 
 });

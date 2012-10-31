@@ -17,7 +17,17 @@ class FlyForm(models.Model):
       except Document.DoesNotExist:
         return u'FlyForm for %s' % ('New Document',)
 
+    @property
+    def flyform_meta(self):
+        """ Return the Meta component of new forms otherwise its an old form"""
+        return self.body["meta"] if type(self.body) is dict and "meta" in self.body else {}
+
+    @property
+    def flyform_steps(self):
+        """ Return the Form component of new forms otherwise its an old form"""
+        return self.body["steps"] if type(self.body) is dict and "steps" in self.body else self.body
+
     def flyformset(self):
       """ return a list of FlyForms based on the models steps """
-      return [BaseFlyForm(step_num, json.dumps(step)) for step_num, step in enumerate(self.body)]
+      return [BaseFlyForm(step_num, json.dumps(step)) for step_num, step in enumerate(self.flyform_steps)]
 

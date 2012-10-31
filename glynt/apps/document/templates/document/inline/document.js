@@ -1317,7 +1317,7 @@ $(document).ready(function(){
     $('.md-updater').popover({
       trigger: 'hover',
       title: function() {
-        return $(this).closest('div.control-group').find('label:first').html();
+        return 'Info';//$(this).closest('div.control-group').find('label:first').html();
       },
       content: function() {
           var control_group = $(this).closest('div.control-group');
@@ -1326,6 +1326,7 @@ $(document).ready(function(){
           'explain': control_group.find('span.helptext').html(),
           'example': $(this).attr('placeholder')
         }
+
         return hb_popover_template(item);
       },
     });

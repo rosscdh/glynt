@@ -151,10 +151,39 @@ $(document).ready(function(){
         self.fields_view = Handlebars.compile($('script#hb-fields').html());
         self.json_output = $('#json-output');
 
-        self.steps = [];
+        self.flyform_schema_json = {
+          "meta": {
+            "can_add_invite": true
+          },
+          "steps": []
+        };
+        self.step_json = {
+          'type': 'step',
+          'properties': {
+            'step_title': 'Step No. 1',
+            'hide_from': '',
+            'iteration_title': ''
+            //'hide_to': ''
+          },
+          'fields': []
+        };
+        self.input_json = {
+          'field': 'CharField',
+          'widget': '',
+          "choices": '',
+          'label': '',
+          'name': '',
+          'help_text': '',
+          'placeholder': '',
+          'data-hb-name': '',
+          'required': 'true',
+          'class': 'md-updater'
+        };
+
+        self.flyform_schema = self.flyform_schema_json;
         self.current_step = 0;
-        self.fields = [];
         self.current_field = null;
+
 
         this.get('#/', function() {
             self.show($('div#authoring'));
@@ -181,39 +210,15 @@ $(document).ready(function(){
             $.each(view_list, function(index, item) {
                 item.show();
             });
-        }
-
-        self.step_json = {
-          'type': 'step',
-          'properties': {
-            'step_title': 'Step No. 1',
-            'hide_from': '',
-            'iteration_title': ''
-            //'hide_to': ''
-          },
-          'fields': []
         };
-        self.input_json = {
-          'field': 'CharField',
-          'widget': '',
-          "choices": '',
-          'label': '',
-          'name': '',
-          'help_text': '',
-          'placeholder': '',
-          'data-hb-name': '',
-          'required': 'true',
-          'class': 'md-updater'
-        };
-
         self.clone = function clone(obj) {
             return $.extend(true, {}, obj);
         };
         // ---- VIEW CRUD -----
         self.add_step = function add_step(data) {
           data = (data == undefined || data == '') ? self.clone(self.step_json): data;
-          self.steps.push(data);
-          var new_step_index = self.steps.length - 1;
+          self.flyform_schema.steps.push(data);
+          var new_step_index = self.flyform_schema.steps.length - 1;
           self.current_step = new_step_index;
 
           self.render();
@@ -222,17 +227,17 @@ $(document).ready(function(){
           self.dispatch('change_steptype', {'selected_type': 'step', 'form': $('form#step-'+ new_step_index)});
         };
         self.delete_step = function delete_step(index) {
-            self.steps.splice(index,1);
+            self.flyform_schema.steps.splice(index,1);
             self.render();
             self.update_json();
         };
         self.add_field = function add_field(step_index) {
-          self.steps[step_index].fields.push(self.clone(self.input_json));
+          self.flyform_schema.steps[step_index].fields.push(self.clone(self.input_json));
           self.render_fields(step_index);
           self.update_json();
         };
         self.delete_field = function delete_field(step_index, field_index) {
-            self.steps[step_index].fields.splice(field_index,1);
+            self.flyform_schema.steps[step_index].fields.splice(field_index,1);
             self.render_fields(step_index);
             self.update_json();
         };
@@ -245,19 +250,23 @@ $(document).ready(function(){
         };
         // ---- UPDATE JSON -----
         self.update_json = function update_json() {
-            self.json_output.val(JSON.stringify(self.steps, null, "\t"));
+            self.json_output.val(JSON.stringify(self.flyform_schema, null, "\t"));
             self.bind_forms_to_data();
-            $.cookie('auth_tool', JSON.stringify(self.steps));
+            $.cookie('auth_tool', JSON.stringify(self.flyform_schema));
         };
         self.load_data_from_source = function load_data_from_source() {
             data = $.parseJSON(self.json_output.val());
             //data = $.parseJSON($.cookie('auth_tool'));
             if (data && typeof data == 'object' && data[0] != undefined && data[0].type != undefined) {
-                self.steps = data;
-                self.json_output.val(JSON.stringify(self.steps, null, "\t"));
+                // is in the old format; wrap in the new @TODO.. phase this out before launch
+                self.flyform_schema.steps = data;
+                self.json_output.val(JSON.stringify(self.flyform_schema, null, "\t"));
+            } else if (data && typeof data == 'object' && data.meta != undefined && data.steps != undefined) {
+              // is a valid new construct with meta and steps
+              self.flyform_schema = data;
+              self.json_output.val(JSON.stringify(self.flyform_schema, null, "\t"));
             }else{
-              self.steps[0] = self.step_json;
-//              self.steps[0].fields.push(self.input_json);
+              self.flyform_schema.steps[0] = self.step_json;
             }
         };
 
@@ -268,10 +277,10 @@ $(document).ready(function(){
           self.dispatch('bind_data', {});
         };
         self.render_steps = function render_steps() {
-          $( "div#steps_list" ).html(self.steps_view({'steps': self.steps}));
+          $( "div#steps_list" ).html(self.steps_view({'steps': self.flyform_schema.steps}));
         };
         self.render_fields = function render_fields(step_index) {
-          $( "div#fields_list" ).html(self.fields_view({'step': self.steps[step_index]}));
+          $( "div#fields_list" ).html(self.fields_view({'step': self.flyform_schema.steps[step_index]}));
         };
 
         // ---- UPDATE JSON FROM FORMS -----
@@ -280,9 +289,9 @@ $(document).ready(function(){
             var step_index = $(form).attr('data-step_index');
             var attr_name = field.attr('name');
             if (attr_name == 'type') {
-                self.steps[step_index][attr_name] = field.val();
+                self.flyform_schema.steps[step_index][attr_name] = field.val();
             } else {
-                self.steps[step_index].properties[attr_name] = field.val();
+                self.flyform_schema.steps[step_index].properties[attr_name] = field.val();
             }
             self.update_json();
         };
@@ -302,7 +311,7 @@ $(document).ready(function(){
                 }
             }
             if (value != undefined) {
-              self.steps[step_index].fields[field_index][attr_name] = value;
+              self.flyform_schema.steps[step_index].fields[field_index][attr_name] = value;
             }
         };
 
@@ -313,9 +322,9 @@ $(document).ready(function(){
                 form_step = $(form_step);
                 var form_id = form_step.attr('id');
                 
-                var step_attribs = self.steps[step_index].properties;
+                var step_attribs = self.flyform_schema.steps[step_index].properties;
                 // put type in there so we can set it in the form
-                step_attribs.type = self.steps[step_index].type;
+                step_attribs.type = self.flyform_schema.steps[step_index].type;
 
                 // set step legend
                 if (step_attribs['step_title'] != '') {
@@ -334,7 +343,7 @@ $(document).ready(function(){
                 hide_from_field.append($("<option/>", {value: '', text: '' }));
 
                 step_field_list.empty();
-                $.each(self.steps[step_index].fields, function(index, field){
+                $.each(self.flyform_schema.steps[step_index].fields, function(index, field){
                     hide_from_field.append($("<option/>", {value: field.name, text: field.label }));
                     step_field_list.append($('<li/>',{class: 'modal-scrollto', 'data-step_index': step_index, rel: 'field-' + index, html: '<a href="">'+ field.label +'</a>'}))
                 });
@@ -349,7 +358,7 @@ $(document).ready(function(){
                 form_field = $(form_field);
                 var form_id = form_field.attr('id');
                 step_index = form_field.closest('div.info').attr('data-step_index');
-                var field_attribs = self.steps[step_index].fields[field_index];
+                var field_attribs = self.flyform_schema.steps[step_index].fields[field_index];
 
                 for(var attrib_key in field_attribs){
                     attrib_value = field_attribs[attrib_key];
@@ -433,7 +442,7 @@ $(document).ready(function(){
                     $(this).addClass('selected');
                     self.current_step = step;
                     //step.properties.step_title
-                    $('#modal-header').html(self.steps[step].properties.step_title);
+                    $('#modal-header').html(self.flyform_schema.steps[step].properties.step_title);
                     self.render();
                 }
             });
@@ -443,7 +452,7 @@ $(document).ready(function(){
                 var step_index = form.attr('data-step_index')
 
                 // set the data-glynt-loop_length which indicates that this field is the loop length
-                $.each(self.steps[step_index].fields, function(index, element){
+                $.each(self.flyform_schema.steps[step_index].fields, function(index, element){
                     if (element.name == target_field) {
                         // is not blank therefore its the loop length
                         element['data-glynt-loop_length'] = '';

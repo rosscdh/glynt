@@ -52,10 +52,12 @@
 	          </div>
 	      </div>
 		  <div id="form-group-{{ final_step_index }}" class="control-group">
+		        {% if can_add_invite %}
 	          <label>Invite people to review and sign</label>
-			  <div id="formCompleteOptions" class="controls">
+			      <div id="formCompleteOptions" class="controls">
 	            <div id="invite-to-sign" class="row" data-bind="visible: App.formControls.isLastStep()">&nbsp;</div>
 	          </div>
+	          {% endif %}
 	      </div>
 	    </div>
 	</div>

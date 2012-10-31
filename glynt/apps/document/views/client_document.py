@@ -40,6 +40,7 @@ class MyDocumentView(DocumentView):
     context['document'] = self.document.body
     context['default_data'] = json.dumps(self.user_document.data)
     invitee_list = self.user_document.documentsignature_set.all()
+    context['can_add_invite'] = self.user_document.data
     context['invitee_list'] = invitee_list
     context['invitee_list_json'] = json.dumps([{'id': i.pk, 'name': i.meta_data['to_name'], 'email': i.meta_data['to_email'], 'is_signed': i.is_signed} for i in invitee_list])
 
