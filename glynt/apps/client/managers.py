@@ -12,8 +12,6 @@ from userena import signals as userena_signals
 from userena.managers import UserenaManager, SHA1_RE, ASSIGNED_PERMISSIONS
 from guardian.shortcuts import assign, get_perms
 
-import re, datetime
-
 
 class GlyntUserManager(UserenaManager):
 

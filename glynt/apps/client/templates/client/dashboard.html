@@ -13,7 +13,7 @@
       <div class="span3 sidebar">
           <ul class="nav nav-list">
             {% if user.is_staff %}
-            <li><a href="{% url 'document:author_doc' %}" class="btn btn-warning" id="toggle-docs">{% trans 'Create Doc' %}</a></li>
+            <li><a href="{% url 'author:create' %}" class="admin btn btn-warning" id="toggle-docs">{% trans 'Create Doc' %}</a></li>
             <li class="divider"></li>
             {% endif %}
             <li style="margin-left:15px"><a href="#/list/templates/create_new" class="btn btn-green btn-block" id="toggle-docs">{% trans 'New Doc' %}</a></li>
@@ -46,7 +46,7 @@
                   <ul class="dropdown-menu">
                     <li><a id="edit-{{ d.pk }}" class="small" href="{% url 'document:my_view' slug=d.slug %}">{% trans 'Edit' %}</a></li>
                     <li><a id="clone-{{ d.pk }}" href="#clone" data-url="{% url 'document:my_clone' pk=d.pk %}" data-pk="{{ d.pk }}" class="clone-my-document">{% trans 'Clone' %}</a></li>
-                    <li><a id="export-{{ d.pk }}" href="{% url 'document:export' slug=d.slug %}" target="_BLANK" data-url="{% url 'document:export' slug=d.slug %}" data-pk="{{ d.pk }}" class="">{% trans 'Download PDF' %}</a></li>
+                    <li><a id="export-{{ d.pk }}" href="{% url 'export:as_pdf' slug=d.slug %}" target="_BLANK" data-url="{% url 'export:as_pdf' slug=d.slug %}" data-pk="{{ d.pk }}" class="">{% trans 'Download PDF' %}</a></li>
                     <li><a id="delete-{{ d.pk }}" href="#delete" data-url="{% url 'document:my_delete' pk=d.pk %}" data-pk="{{ d.pk }}" class="delete-my-document">{% trans 'Delete' %}</a></li>
                   </ul>
                 </div>
@@ -71,7 +71,10 @@
           <h2>{% trans 'New Document' %}</h2>
           <ul>
             {% for d in public_document_list %}
-            <li><a class="template-document" href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a></li>
+            <li>
+                <a class="template-document" href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a>
+                {% if user.is_staff %}- <a class="admin author_edit-document" href="{% url 'author:edit' pk=d.pk %}">edit</a>{% endif %}
+            </li>
             {% endfor %}
           </ul>
         </div>

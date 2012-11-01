@@ -26,8 +26,7 @@ class FacebookLoginTest(TestCase):
     urls = [reverse('client:login'), reverse('client:signup')]
     for url in urls:
       response = self.client.get(url, follow=True)
-      fb_button_login = '<fb:login-button id="fb_login-button" size="large" scope="%s" on-login="SocialFBLogin();">Connect with Facebook</fb:login-button>' \
-      % (FACEBOOK_REQUEST_PERMISSIONS,)
+      fb_button_login = '<img src="http://static.ak.fbcdn.net/images/fbconnect/login-buttons/connect_light_large_short.gif" style="cursor:pointer;" id="connect-facebook" border="0" />'
       self.assertContains( response, fb_button_login, status_code=200 )
 
   def test_facebook_request_permissions(self):

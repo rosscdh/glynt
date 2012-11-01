@@ -75,6 +75,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    'compressor.finders.CompressorFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -147,12 +148,16 @@ PROJECT_APPS = (
     'glynt.apps.default',
     # The primary document view system
     'glynt.apps.document',
+    # The document authoring system
+    'glynt.apps.author',
     # The End User - Client, those that consume the documents
     'glynt.apps.client',
     # The Form Generator
     'glynt.apps.flyform',
     # The Document Signing system
     'glynt.apps.sign',
+    # The Document Export system
+    'glynt.apps.export',
     # The Api
     'glynt.apps.api',
 )
@@ -166,6 +171,7 @@ HELPER_APPS = (
     'categories',
     'categories.editor',
     'mptt',
+    'django_xhtml2pdf',
     'socialregistration',
     'socialregistration.contrib.facebook_js',
     #'socialregistration.contrib.linkedin_js',
@@ -179,6 +185,7 @@ HELPER_APPS = (
     'user_streams.backends.user_streams_single_table_backend',
     'django_comments_xtd',
     'django_markup',
+    'compressor',
 )
 
 # Handle south and its breaking tests
@@ -225,6 +232,9 @@ CATEGORIES_SETTINGS = {
     'THUMBNAIL_STORAGE': 'django.core.files.storage.FileSystemStorage',
     'SLUG_TRANSLITERATOR': lambda x: x,
 }
+
+COMPRESS_ENABLED = True
+COMPRESS_OFFLINE = False
 
 if DEBUG:
     if not IS_TESTING:

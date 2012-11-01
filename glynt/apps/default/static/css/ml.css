@@ -306,3 +306,23 @@ ul.add-active{
 .btn-mini {
 	font-size:13px;
 }
+
+.small {
+    font-size: 11px;
+}
+
+.tiny {
+    font-size: 10px;
+}
+
+p.tiny {
+    margin-top: -2px;
+}
+
+.mini {
+    font-size: 9px;
+}
+
+p.mini {
+    margin-top: -3px;
+}

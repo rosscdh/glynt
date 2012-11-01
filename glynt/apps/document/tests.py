@@ -16,12 +16,19 @@ public_urls = [
 ]
 
 login_required_urls = [
-  reverse('document:create'),
-  reverse('document:edit', kwargs={'slug': 'test-doc'}),
+    reverse('document:my_delete', kwargs={'pk': 1}),
+    reverse('document:my_undelete', kwargs={'pk': 1}),
+    reverse('document:my_clone', kwargs={'pk': 1}),
+    reverse('document:my_persist', kwargs={'pk': 1}),
+    reverse('document:my_review', kwargs={'slug': 'test-doc'}),
+    reverse('document:my_view', kwargs={'slug': 'test-doc'}),
+    reverse('author:create'),
+    reverse('export:as_pdf', kwargs={'slug': 'test-doc'}),
+    reverse('document:validate_form', kwargs={'slug': 'test-doc'}),
 ]
 
 invalid_method_urls = [
-  reverse('document:export', kwargs={'slug': 'test-doc'}),
+  reverse('export:as_pdf', kwargs={'slug': 'test-doc'}),
 ]
 
 invalid_status_docs = ['deleted', 'draft']
@@ -43,6 +50,12 @@ class DocumentTest(TestCase):
   def check_response_token_helper(self, url, expected_status_code, expected_redirect_chain):
     """ Method to check response status code and redirect chain """
     response = self.client.get(url, follow=True)
+
+    if response.status_code != expected_status_code:
+        print "\n"
+        print url
+        print "%s %s" % (response.status_code, expected_status_code,)
+        print "\n"
     self.assertEqual(response.status_code, expected_status_code)
     self.assertEqual(response.redirect_chain, expected_redirect_chain)
 
@@ -51,11 +64,14 @@ class DocumentTest(TestCase):
       self.check_response_token_helper(url, 200, [])
 
   def test_anonymous_cannot_access_logged_in_urls(self):
+    """ status 200 as the system redirects """
+    self.client.logout()
     for url in login_required_urls:
       self.check_response_token_helper(url, 200, [('http://testserver/client/login/?next=%s'%(url, ), 302)])
 
   def test_anonymous_cannot_access_invalid_method_urls(self):
     """ Certain urls can only be post/put/patched to so test them """
+    self.client.logout()
     for url in invalid_method_urls:
       self.check_response_token_helper(url, 200, [('http://testserver/client/login/?next=%s'%(url, ), 302)])
 
@@ -63,7 +79,7 @@ class DocumentTest(TestCase):
     """ Certain urls can only be post/put/patched to so test them """
     user = self.client.login(username='test_a', password='test')
     for url in invalid_method_urls:
-      self.check_response_token_helper(url, 405, [])
+      self.check_response_token_helper(url, 404, [])
 
   def test_anonymous_cannot_access_invalid_status_docs(self):
     for name in invalid_status_docs:

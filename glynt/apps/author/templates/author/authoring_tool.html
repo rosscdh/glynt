@@ -1,0 +1,574 @@
+{% extends 'base.html' %}
+{% load i18n markup templatetag_handlebars %}
+{% load url from future %}
+
+{% block bodyclass %}review{% endblock %}
+
+
+{% block body %}
+<div class="span12">
+  <h2>Document Author tool</h2>
+  {% if object %}
+  <h3>Editing {{ object.name }}</h3>
+  {% else %}
+  {% endif %}
+  <div id="message" class="row"></div>
+</div>
+
+<div class="span2 sidebar">
+  <ul class="nav nav-list">
+    <li class="nav-header">{% trans 'Authoring' %}</li>
+      <li><a href="#/"> {% trans 'Steps & Variables' %}</a></li>
+      <li><a href="#/meta"> {% trans 'Properties' %}</a></li>
+    <li class="nav-header">{% trans 'Document' %}</li>
+      <li><a href="#/doc"> {% trans 'Document' %}</a></li>
+    <li class="nav-header">{% trans 'Review' %}</li>
+      <li><a href="#/review/json"> {% trans 'Raw JSON' %}</a></li>
+    <li class="nav-header">{% trans 'Actions' %}</li>
+    {% if object %}
+    <li class="divider"></li>
+        <li><a href="{% url 'author:edit' pk=object.pk %}" class="btn btn-success" id="save-json">{% trans 'Save' %}</a></li>
+    {% endif %}
+    <li class="divider"></li>
+      <li><a id="reset" href="#/reset" class="btn btn-danger"> {% trans 'Reset' %}</a></li>
+  </ul>
+</div>
+
+<div id="authoring" class="row view default">
+    <div id="steps" class="span9">
+        <div id="steps_list"></div>
+    </div>
+
+    <div id="fields" class="span9 modal hide fade">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3 id="modal-header">&nbsp;</h3>
+        </div>
+        <div id="fields_list" class="modal-body"></div>
+        <div class="modal-footer">
+            <a href="#/field/add" class="btn btn-mini btn-success pull-right" id="add_field" data-step_index=""><i class="icon-plus icon-white"></i> Add Field</a>
+        </div>
+    </div>
+</div>
+
+<div id="meta" class="row span7 view hide">
+  Document Meta Properties
+</div>
+
+<div id="json" class="row span9 view hide">
+    <textarea id="json-output" class="span9" style="height:640px;">{{ json|default:""|safe }}</textarea>
+</div>
+
+<div id="doc" class="row span7 view hide">
+    Document coming soon
+</div>
+{% endblock %}
+
+{% block css %}
+<style>
+.modal{
+   width:800px;
+   margin-left:-400px;
+}
+ol.step-field-list li {
+    margin:10px 0px;
+}
+</style>
+{% endblock %}
+
+{% block js %}
+
+<script type="text/x-handlebars" id="hb-steps">
+{% verbatim %}
+{{#each_with_key steps key="index"}}
+<div class="doc-body step info row" data-step_index="{{index}}">
+
+  <form id="step-{{index}}" data-step_index="{{index}}" class="form-step span4">
+{% endverbatim %}
+    {{ form_steps }}
+  </form>
+
+  <ol class="step-field-list span4"></ol>
+
+  {% verbatim %}
+  <div class="">
+    {{#unless_eq index compare=0}}<a href="#step/delete" class="btn btn-danger btn-mini delete_step" data-step_index="{{index}}"><i class="icon-remove icon-white"></i> Delete Step</a>{{/unless_eq}}
+    <a href="#/fields/view" class="pull-right btn btn-mini btn-success" id="show_fields" data-step_index="{{index}}"><i class="icon-list icon-white"></i> Show Fields</a>
+  </div>
+  {% endverbatim %}
+</div>
+<br/>
+{% verbatim %}{{/each_with_key}}{% endverbatim %}
+
+<div class="form-actions">
+<a href="#/step/add" class="btn btn-mini btn-success" id="add_step"><i class="icon-plus icon-white"></i> Create Step</a>
+</div>
+</script>
+
+<script type="text/x-handlebars" id="hb-fields">
+{% verbatim %}
+<div class="info" data-step_index="{{step.index}}">
+    {{#each_with_key step.fields key="index"}}
+    {% endverbatim %}
+    <div class="doc-body field">
+      {% verbatim %}
+      <form id="field-{{index}}" data-field_index="{{index}}" class="form-field form-horizontal">
+      {% endverbatim %}
+        {{ form_fields }}
+      </form>
+      <div class="form-actions">
+          {% verbatim %}
+          <a href="#field/delete" class="btn btn-danger btn-mini delete_field" data-field_index="{{index}}"><i class="icon-remove icon-white"></i> Delete Field</a>
+          {% endverbatim %}
+      </div>
+    </div>
+    <br/>
+    {% verbatim %}
+    {{/each_with_key}}
+    {% endverbatim %}
+</div>
+<br/>
+</script>
+
+<script type="text/x-handlebars" id="hb-meta">
+<div id="meta">
+  <form id="form-meta" class="form-meta form-horizontal">
+    {{ form_document_meta }}
+  </form>
+</div>
+<br/>
+</script>
+
+<script>
+$(document).ready(function(){
+    app = $.sammy(function() {
+        var self = this;
+
+        // ---- OBSERVER -----
+        self.observer = new argosPanOptia();
+        self.registerCallback = function registerCallback(event_name, callback) {
+          self.observer.registerCallback(event_name, callback);
+        };
+        self.dispatch = function dispatch(event_name, value) {
+          self.observer.dispatch(event_name, value);
+        };
+
+        self.views = $('div.view');
+        self.nav = $('ul.nav-list li a');
+
+        self.steps_view = Handlebars.compile($('script#hb-steps').html());
+        self.fields_view = Handlebars.compile($('script#hb-fields').html());
+        self.meta_view = Handlebars.compile($('script#hb-meta').html());
+        self.json_output = $('#json-output');
+
+        self.flyform_schema_json = {
+          "meta": {
+            "can_add_invite": true
+          },
+          "steps": []
+        };
+        self.step_json = {
+          'type': 'step',
+          'properties': {
+            'step_title': 'Step No. 1',
+            'hide_from': '',
+            'iteration_title': ''
+            //'hide_to': ''
+          },
+          'fields': []
+        };
+        self.input_json = {
+          'field': 'CharField',
+          'widget': '',
+          "choices": '',
+          'label': '',
+          'name': '',
+          'help_text': '',
+          'placeholder': '',
+          'data-hb-name': '',
+          'required': 'true',
+          'class': 'md-updater'
+        };
+
+        self.flyform_schema = self.flyform_schema_json;
+        self.current_step = 0;
+        self.current_field = null;
+
+
+        this.get('#/', function() {
+            self.show($('div#authoring'));
+        });
+        this.get('#/meta', function() {
+            self.show($('div#meta'));
+        });
+        this.get('#/review/json', function() {
+            self.show($('div#json'));
+        });
+        this.get('#/doc', function() {
+            self.show($('div#doc'));
+        });
+
+        this.hide_all = function hide_all() {
+            self.nav.removeClass('selected');
+            $.each(self.views, function(index, item) {
+                $(item).hide();
+            });
+        };
+        this.show = function show(view_list) {
+            if ($.isArray(view_list) == false) {
+                view_list = [view_list];
+            }
+            self.hide_all();
+            $('[href="'+window.location.hash+'"]').addClass('selected');
+            $.each(view_list, function(index, item) {
+                item.show();
+            });
+        };
+        self.clone = function clone(obj) {
+            return $.extend(true, {}, obj);
+        };
+        // ---- VIEW CRUD -----
+        self.add_step = function add_step(data) {
+          data = (data == undefined || data == '') ? self.clone(self.step_json): data;
+          self.flyform_schema.steps.push(data);
+          var new_step_index = self.flyform_schema.steps.length - 1;
+          self.current_step = new_step_index;
+
+          self.render();
+          self.update_json();
+    
+          self.dispatch('change_steptype', {'selected_type': 'step', 'form': $('form#step-'+ new_step_index)});
+        };
+        self.delete_step = function delete_step(index) {
+            self.flyform_schema.steps.splice(index,1);
+            self.render();
+            self.update_json();
+        };
+        self.add_field = function add_field(step_index) {
+          self.flyform_schema.steps[step_index].fields.push(self.clone(self.input_json));
+          self.render_fields(step_index);
+          self.update_json();
+        };
+        self.delete_field = function delete_field(step_index, field_index) {
+            self.flyform_schema.steps[step_index].fields.splice(field_index,1);
+            self.render_fields(step_index);
+            self.update_json();
+        };
+        // ---- RESET -----
+        self.reset = function reset() {
+            $.cookie('auth_tool', '');
+            // self.json_output.val();
+            // self.render();
+            window.location.reload();
+        };
+        // ---- UPDATE JSON -----
+        self.update_json = function update_json() {
+            self.json_output.val(JSON.stringify(self.flyform_schema, null, "\t"));
+            self.bind_forms_to_data();
+            $.cookie('auth_tool', JSON.stringify(self.flyform_schema));
+        };
+        self.load_data_from_source = function load_data_from_source() {
+            data = $.parseJSON(self.json_output.val());
+            //data = $.parseJSON($.cookie('auth_tool'));
+            if (data && typeof data == 'object' && data[0] != undefined && data[0].type != undefined) {
+                // is in the old format; wrap in the new @TODO.. phase this out before launch
+                self.flyform_schema.steps = data;
+                self.json_output.val(JSON.stringify(self.flyform_schema, null, "\t"));
+            } else if (data && typeof data == 'object' && data.meta != undefined && data.steps != undefined) {
+              // is a valid new construct with meta and steps
+              self.flyform_schema = data;
+              self.json_output.val(JSON.stringify(self.flyform_schema, null, "\t"));
+            }else{
+              self.flyform_schema.steps[0] = self.step_json;
+            }
+        };
+
+        // ---- RENDER VIEWS -----
+        self.render = function render() {
+          self.render_steps();
+          self.render_fields(self.current_step);
+          self.render_meta();
+          self.dispatch('bind_data', {});
+        };
+        self.render_steps = function render_steps() {
+          $( "div#steps_list" ).html(self.steps_view({'steps': self.flyform_schema.steps}));
+        };
+        self.render_fields = function render_fields(step_index) {
+          $( "div#fields_list" ).html(self.fields_view({'step': self.flyform_schema.steps[step_index]}));
+        };
+        self.render_meta = function render_meta() {
+          $( "div#meta" ).html(self.meta_view({}));
+        };
+
+        // ---- UPDATE JSON FROM FORMS -----
+        self.updateStep = function updateStep(field) {
+            var form = field.closest('form.form-step');
+            var step_index = $(form).attr('data-step_index');
+            var attr_name = field.attr('name');
+            var value = field.val();
+            if (attr_name == 'type') {
+                self.flyform_schema.steps[step_index][attr_name] = self.ensureValue(value);
+            } else {
+                self.flyform_schema.steps[step_index].properties[attr_name] = self.ensureValue(value);
+            }
+            self.update_json();
+        };
+        self.updateField = function updateField(field) {
+            var form = field.closest('form.form-field');
+            var field_index = $(form).attr('data-field_index');
+            var info = form.closest('div.info');
+            var step_index = $(info).attr('data-step_index');
+
+            var attr_name = field.attr('name');
+            value = field.val();
+            if (attr_name == 'choices') {
+                if (value != '' && value != 'null' && value != null) {
+                  value = $.parseJSON(value);
+                } else {
+                  value = undefined;
+                }
+            }
+            if (value != undefined) {
+              self.flyform_schema.steps[step_index].fields[field_index][attr_name] = self.ensureValue(value);
+            }
+        };
+        self.updateMetaField = function updateMetaField(field) {
+            var form = field.closest('form.form-meta');
+            var attr_name = field.attr('name');
+            var value = field.val();
+            self.flyform_schema.meta[attr_name] = self.ensureValue(value);
+            self.update_json();
+        };
+
+        self.ensureValue = function ensureValue(value) {
+          if (['True','true',1,'False','false',0].indexOf(value) != -1) {
+            value = (['True','true',1].indexOf(value) >= 0) ? true: false;
+          }
+          return value;
+        };
+        // ----- BIND DATA TO FORM VIEWS -----
+        self.bind_forms_to_data = function bind_forms_to_data() {
+            // bind step data to form value
+            $.each($('form.form-step'), function(step_index, form_step){
+                form_step = $(form_step);
+                var form_id = form_step.attr('id');
+                
+                var step_attribs = self.flyform_schema.steps[step_index].properties;
+                // put type in there so we can set it in the form
+                step_attribs.type = self.flyform_schema.steps[step_index].type;
+
+                // set step legend
+                if (step_attribs['step_title'] != '') {
+                    form_step.find('legend').html(step_attribs['step_title']);
+                }
+
+                step_field_list = $('body').find('form#'+ form_id).closest('div.doc-body').find('ol.step-field-list');
+                hide_from_field = $('body').find('form#'+ form_id +' [name=hide_from]');
+                iteration_title_field = $('body').find('form#'+ form_id +' [name=iteration_title]');
+                if (step_attribs.type != 'loop-step') {
+                    hide_from_field.closest('.control-group').hide();
+                    iteration_title_field.closest('.control-group').hide();
+                }
+                // populate hide from
+                hide_from_field.empty();
+                hide_from_field.append($("<option/>", {value: '', text: '' }));
+
+                step_field_list.empty();
+                $.each(self.flyform_schema.steps[step_index].fields, function(index, field){
+                    hide_from_field.append($("<option/>", {value: field.name, text: field.label }));
+                    step_field_list.append($('<li/>',{class: 'modal-scrollto', 'data-step_index': step_index, rel: 'field-' + index, html: '<a href="">'+ field.label +'</a>'}))
+                });
+
+                for(var attrib_key in step_attribs){
+                    attrib_value = step_attribs[attrib_key];
+                    $('body').find('form#'+ form_id +' [name='+ attrib_key +']').val(attrib_value);
+                }
+            });
+            // bind field element data from json to form field value
+            $.each($('form.form-field'), function(field_index, form_field){
+                form_field = $(form_field);
+                var form_id = form_field.attr('id');
+                step_index = form_field.closest('div.info').attr('data-step_index');
+                var field_attribs = self.flyform_schema.steps[step_index].fields[field_index];
+
+                for(var attrib_key in field_attribs){
+                    attrib_value = field_attribs[attrib_key];
+
+                    if (attrib_key == 'choices') {
+                        if (attrib_value != '' && attrib_value != 'null' && attrib_value != null) {
+                          attrib_value = JSON.stringify(attrib_value);
+                        } else {
+                          attrib_value = undefined;
+                        }
+                    }
+                    if (attrib_value != undefined) {
+                      $('body').find('form#'+ form_id +' [name='+ attrib_key +']').val(attrib_value);
+                    }
+                }
+            });
+        }
+
+        /**
+        * When the step type changes from normal to loop or vice versa
+        * perform this event
+        */
+        self.on_steptype_change = function on_steptype_change(type_form_hash) {
+            step_type = type_form_hash.selected_type;
+            step_form = type_form_hash.form;
+            control_groups = []
+            control_groups.push(step_form.find('[name=hide_from]').closest('.control-group'));
+            control_groups.push(step_form.find('[name=iteration_title]').closest('.control-group'));
+
+            if (step_type == 'loop-step') {
+                $.each(control_groups, function(index,element){
+                    $(element).show();
+                });
+            } else {
+                $.each(control_groups, function(index,element){
+                    $(element).hide();
+                });
+            }
+        };
+
+        self.init_interface = function init_interface() {
+            $('a#save-json').live('click', function(event){
+                event.preventDefault();
+                data = {
+                    json: self.json_output.val(),
+                    csrfmiddlewaretoken: "{{ csrf_raw_token }}"
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: $(this).attr('href'),
+                    data: data,
+                })
+                .success(function(data, textStatus, jqXHR) {
+                    $('ul#messages li').remove();
+                    $('ul#messages').hide().append($('<li/>', {class: 'success', html: 'Success, Saved Form'})).fadeIn('slow')
+                })
+                .error(function(jqXHR, textStatus, errorThrown) { 
+                    $('ul#messages li').fadeOut().remove();
+                    $('ul#messages').hide().append($('<li/>', {class: 'error', html: 'Error, Could Not Save<br/>' + textStatus})).fadeIn('slow')
+                })
+                .complete(function() {
+                });
+            });
+            $('[name=label]').live('change', function(event){
+                event.preventDefault();
+                target_name_field = $(this).closest('fieldset').find('input[name=name]');
+                if (target_name_field.val() == '') {
+                    var slug = slugify($(this).val());
+                    target_name_field.val(slug);
+                    // must be called at each change event specific to a field
+                    self.updateField(target_name_field);
+                    self.updateField($(this));
+                    self.update_json();
+                }
+            });
+            $('a#show_fields, li.modal-scrollto').live('click', function(event){
+                event.preventDefault();
+                step = $(this).attr('data-step_index');
+
+                $('div#fields').modal('toggle')
+                if (self.current_step != step) {
+                    $(this).addClass('selected');
+                    self.current_step = step;
+                    //step.properties.step_title
+                    $('#modal-header').html(self.flyform_schema.steps[step].properties.step_title);
+                    self.render();
+                }
+            });
+            $('[name=hide_from]').live('change', function(event){
+                var target_field = $(this).val();
+                var form = $(this).closest('form');
+                var step_index = form.attr('data-step_index')
+
+                // set the data-glynt-loop_length which indicates that this field is the loop length
+                $.each(self.flyform_schema.steps[step_index].fields, function(index, element){
+                    if (element.name == target_field) {
+                        // is not blank therefore its the loop length
+                        element['data-glynt-loop_length'] = '';
+                    } else {
+                        if (element['data-glynt-loop_length'] != undefined) {
+                            delete element['data-glynt-loop_length'];
+                        }
+                    }
+                });
+            });
+            $('.field').live('click', function(event){
+                event.preventDefault();
+            });
+            $('a#add_step').live('click', function(event){
+                event.preventDefault();
+                self.add_step();
+            });
+            $('a.delete_step').live('click', function(event){
+                event.preventDefault();
+                step = $(this).attr('data-step_index');
+                self.delete_step(step);
+            });
+            $('a#add_field').live('click', function(event){
+                event.preventDefault();
+                var step_index = $(this).closest('div#fields').find('div#fields_list').find('div.info').attr('data-step_index')
+                self.current_step = step_index;
+                self.add_field(self.current_step);
+            });
+            $('a.delete_field').live('click', function(event){
+                event.preventDefault();
+                step = $(this).closest('div.info').attr('data-step_index');
+                field = $(this).attr('data-field_index');
+                self.delete_field(step, field);
+            });
+            // Forms
+            $('form.form-step input, form.form-step textarea, form.form-step select, form.form-step radio, form.form-step checkbox').live('change', function(event){
+              event.preventDefault();
+              self.updateStep($(this));
+            });
+            $('form.form-field input, form.form-field textarea, form.form-field select, form.form-field radio, form.form-field checkbox').live('change', function(event){
+              event.preventDefault();
+              self.updateField($(this));
+              self.update_json();
+            });
+            $('form.form-meta input, form.form-meta textarea, form.form-meta select, form.form-meta radio, form.form-meta checkbox').live('change', function(event){
+              event.preventDefault();
+              self.updateMetaField($(this));
+              self.update_json();
+            });
+            $('#id_type').live('change', function(event){
+                event.preventDefault();
+                var form = $(this).closest('form.form-step');
+                self.dispatch('change_steptype', {'selected_type': $(this).val(), 'form': form});
+            });
+            $('#reset').live('click', function(event){
+                event.preventDefault();
+                self.reset();
+            });
+            // if the user changes the json manually then update our form
+            self.json_output.live('change', function(event){
+                event.preventDefault();
+                self.dispatch('bind_data', {});
+            });
+        };
+
+        self.init = function init() {
+            self.current_step = 0;
+
+            self.registerCallback('bind_data', self.bind_forms_to_data);
+            self.registerCallback('change_steptype', self.on_steptype_change);
+
+            self.load_data_from_source();
+            self.init_interface();
+            self.render();
+
+            // defaults
+            self.dispatch('change_steptype', {'selected_type': 'step', 'form': $('form.form-step:first')});
+        };
+
+       self.init();
+    });
+
+    // start the application
+    app.run('#/');
+});
+</script>
+{% endblock %}

@@ -21,6 +21,7 @@ $(document).ready(function(){
 
   initConditionalCallback = function initConditionalCallback(App) {
     App.widgets.ccbs = new conditionalCallbackSets(App.documentModel);
+    App.widgets.ccbs.parseCallbacks();
   };
 
   initContactList = function initContactList(App) {
@@ -156,13 +157,14 @@ $(document).ready(function(){
 
           // happens just 1 time
           // obtain step header info for building accurate list of steps
-          $('span.step-title').each(function(index,element) {
-              var element = $(this).closest('div').find('input[data-step-title]'), step_title = element.attr('data-step-title');
-              var form = $(this).closest('div.form-group');
-			  element.hide();
-              $(this).text(step_title);
-              self.steps.push({title: step_title, form_set: form})
-              self.stepIsValid[index+1] = false;
+          $('input[data-step-title]').each(function(index, element) {
+                element = $(element);
+                var step_title = element.attr('data-step-title');
+                var form = element.closest('div.form-group');
+                element.hide();
+                $(this).text(step_title);
+                self.steps.push({title: step_title, form_set: form})
+                self.stepIsValid[index+1] = false;
           });
 
           // $('body').tooltip({
@@ -179,6 +181,7 @@ $(document).ready(function(){
           steps = function(text){
             step_list = [];
             i = 1;
+
             $.each(self.steps(), function(index,element){
               is_current = self.currentFormStep() == i;
               step_text = (text == undefined || text == 'numeric') ? i : text ;
@@ -187,6 +190,7 @@ $(document).ready(function(){
               step_list.push({index:i-1, text: step_text, step_name: step_name, step: i, is_current: is_current});
               i++;
             });
+
             return step_list;
           };
           context = {
@@ -512,7 +516,7 @@ $(document).ready(function(){
     self.context = ko.observable({
         'user_company_name': 'RuleNo1',
             'user_company_url': 'http://www.ruleno1.com',
-        'document_title': '{{ userdoc.name|default:object.name }}'
+        'document_title': '{{ userdoc.name|default:object.name|escapejs }}'
     });
 
     self.getRuleByType = function getRuleByType(ruleset_type) {
@@ -912,12 +916,32 @@ $(document).ready(function(){
                 var response_data = $.parseJSON(data);
                 self.message('');
                 is_valid = true;
+                self.clearInjectedErrors();
                 // Actual data save takes palce here; validateForm is just a validation
                 self.persistCookieProgress(); // save the changed data
             })
             .error(function(jqXHR, textStatus, errorThrown) { 
                 var data = $.parseJSON(jqXHR.responseText);
+                self.clearInjectedErrors();
+                console.log(data)
                 self.message(data.message);
+
+                $.each(data.errors, function(key, errors){
+                    var intKey = parseInt(key);
+                    if (typeof intKey == 'number' && form.find('[name=step_title]').attr('data-glynt-loop_step') != undefined) {
+                        // loop-step
+                        $.each(errors, function(index, error){
+                            field = form.find('#id_'+index+'_'+key);
+                            self.injectError(field, error);
+                        });
+                        
+                    } else {
+                        // normal step
+                        field = $('#id_' + key);
+                        self.injectError(field, errors);
+                    }
+                    
+                });
                 is_valid = false;
             })
             .complete(function(jqXHR, textStatus) {
@@ -928,6 +952,22 @@ $(document).ready(function(){
             });
 
             return is_valid;
+        };
+        // inject an error into a field control-group -> controls
+        self.injectError = function injectError(field, errors) {
+            var control_element = field.closest('.controls');
+
+            var error_list = $('<ul/>',{ class: 'errorlist'});
+            $.each(errors, function(index, error){
+                error_list.append($('<li/>',{html: error}))
+            });
+            
+            $(control_element).prepend(error_list);
+        };
+        self.clearInjectedErrors = function clearInjectedErrors() {
+            $.each($('body').find('.errorlist'), function(index, item){
+                $(item).remove();
+            });
         }
         {% endif %}
 
@@ -968,7 +1008,7 @@ $(document).ready(function(){
 
         {% if userdoc %}
         self.generatePDF = function generatePDF() {
-            var url = "{% url 'document:export' slug=userdoc.slug %}";
+            var url = "{% url 'export:as_pdf' slug=userdoc.slug %}";
             document.location = url;
         }
         {% endif %}
@@ -1153,19 +1193,39 @@ $(document).ready(function(){
         $.each(self.hideWhen, function(i,item) {
           item = $(item);
           if (self.inlineCallBack(item.attr('data-hide_when')) == true) {
+            self.recordHiddenField(item, true);
             item.closest('.control-group').hide();
           }else{
+            self.recordHiddenField(item, false);
             item.closest('.control-group').fadeIn('slow');
           };
         });
         $.each(self.showWhen, function(i,item) {
           item = $(item);
           if (self.inlineCallBack(item.attr('data-show_when')) == true) {
+            self.recordHiddenField(item, false);
             item.closest('.control-group').fadeIn('slow');
           }else{
+            self.recordHiddenField(item, true);
             item.closest('.control-group').hide();
           };
         });
+      };
+      /**
+      * populate the step input#hidden_fields field with the names of items affected
+      */
+      self.recordHiddenField = function recordHiddenField(field, is_hidden) {
+        field = $(field);
+        target_field = field.closest('form').find('input[name=hidden_fields]:first')[0];
+        target_field = $(target_field);
+
+        val = (target_field.val() != '') ? target_field.val() : '[]' ;
+        data = $.parseJSON(val);
+        // perform union or intersect to add or remove name from list
+        data = (is_hidden === true) ? data.union([field.attr('name')]) : data.subtract([field.attr('name')]) ;
+        // set the value in the hidden field
+        target_field.val(JSON.stringify(data));
+        
       };
 
       self.parseVariable = function parseVariable(variable) {
@@ -1221,6 +1281,15 @@ $(document).ready(function(){
         App.widgets.ccbs.parseCallbacks();
     });
 
+    $('.is_invitee').live('change', function(event){
+        var field = $(this);
+        var id = slugify(field.val());
+        var name = field.val();
+        var email = null;
+        var picture = null;
+        App.dispatch('invitee.add', {'id': id, 'profile_picture': picture, 'name': name, 'email': email});
+    });
+
     $('button#btn-post-pdf').live('click', function(event){
         event.preventDefault();
         App.generatePDF();
@@ -1257,14 +1326,16 @@ $(document).ready(function(){
     $('.md-updater').popover({
       trigger: 'hover',
       title: function() {
-        return $(this).closest('li').find('label:first').html();
+        return 'Info';//$(this).closest('div.control-group').find('label:first').html();
       },
       content: function() {
+          var control_group = $(this).closest('div.control-group');
         item = {
-          'field_label': $(this).closest('li').find('label:first').html(),
-          'explain': $(this).closest('li').find('span.helptext:first').html(),
+          'field_label': control_group.find('label').html(),
+          'explain': control_group.find('span.helptext').html(),
           'example': $(this).attr('placeholder')
         }
+
         return hb_popover_template(item);
       },
     });
@@ -1279,7 +1350,7 @@ $(document).ready(function(){
   </li>
   {{/each}}
   <li data-goto_step="{{last}}" class="last_step" title="{{step_name}}"><a href="#">Finalize</a></li>
-<ul>
+</ul>
 {% endtplhandlebars %}
 
 {% tplhandlebars "contact-list-item" %}
@@ -1290,14 +1361,10 @@ $(document).ready(function(){
 {% tplhandlebars "hb-popover" %}
     <p>
     {{#if explain}}
-    {{explain}}
-    {{else}}
-    Please enter a value for "{{field_label}}"
+    {{explain}}<br/>
     {{/if}}
     {{#if example}}
-    <br/><br/>
-    <i>i.e:</i><br/>
-    {{example}}
+    <i>i.e:</i>&nbsp;{{example}}
     {{/if}}
     </p>
 {% endtplhandlebars %}

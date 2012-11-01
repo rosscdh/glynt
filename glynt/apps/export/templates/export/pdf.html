@@ -1,0 +1,53 @@
+<!-- 
+This is intended to be rendered to a PDF using pisa, not in a browser.
+Therefore, the HTML and CSS here can look a bit fishy. Please refer to 
+http://www.htmltopdf.org/doc/pisa-en.html for reference 
+-->
+<document pagesize='letter'>
+<head>
+    <title>{{ title }}</title>
+    <style type="text/css">
+        @page {
+            size: letter portrait;
+            margin: 1.0in 0.25in 0.5in 0.25in;
+            padding: 0;
+
+            @frame header {
+                -pdf-frame-content: headerContent;
+                width: 8in;
+                top: 0.5in;
+                margin-left: 0.5in;
+                margin-right: 0.5in;
+                height: 1.0in;
+            }
+            @frame footer {
+                -pdf-frame-content: footerContent;
+                width: 8in;
+                bottom: 0in;
+                margin-left: 2cm;
+                margin-right: 2cm;
+                height: 1cm;
+            }
+        }
+
+        <!-- add content styles here -->
+        h1 { text-align: middle; font-size: 18px; }
+    </style>
+</head>
+<body>
+<div id='headerContent'>
+    <!-- header content -->
+    <img src="{{ STATIC_URL }}img/homeimg.jpg"/>
+</div>
+<div>
+    <keepinframe>
+     <!-- Content -->
+     {{body}}
+    </keepinframe>
+</div>
+<div id='footerContent'>
+    <!-- footer content -->
+    Copyright @lawpal.com 2012. Page. <pdf:pagenumber>
+</div>
+</body>
+</document>

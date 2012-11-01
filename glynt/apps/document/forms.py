@@ -21,35 +21,3 @@ class ClientCreatedDocumentForm(forms.ModelForm):
     model = ClientCreatedDocument
     fields = ('id', 'name')
 
-
-class CreateStepForm(BootstrapForm):
-    """ The template form used to help the authoring tool """
-    STEP_TYPES = (
-        ('step', 'Normal Step'),
-        ('loop-step', 'Loop Step')
-    )
-    class Meta:
-        layout = (
-            Fieldset("Step Details", "type", "hide_from", "step_title",),
-        )
-    type = forms.ChoiceField(choices=STEP_TYPES, initial='step')
-    hide_from = forms.CharField(max_length=32, widget=forms.Select)
-    step_title = forms.CharField(max_length=32, initial=_('Step No. 1'))
-
-
-class CreateStepFieldForm(BootstrapForm):
-    """ The template form used to help the authoring tool """
-    FIELDS = [(v, v) for v in sorted(VALID_FIELD_TYPES)]
-    WIDGETS = [(v, v) for v in sorted(VALID_WIDGETS)]
-    class Meta:
-        layout = (
-            Fieldset("Basic", "label", "placeholder", "help_text", "required",),
-            Fieldset("Extra", "field", "widget", "css_class",),
-        )
-    label = forms.CharField()
-    placeholder = forms.CharField()
-    help_text = forms.CharField()
-    required = forms.BooleanField()
-    field = forms.ChoiceField(choices=FIELDS, initial='CharField')
-    widget = forms.ChoiceField(choices=WIDGETS, initial='TextInput')
-    css_class = forms.CharField(initial='md-updater')

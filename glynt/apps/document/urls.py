@@ -2,8 +2,8 @@ from django.conf.urls import patterns, url
 from django.views.generic.base import TemplateView
 from django.contrib.auth.decorators import login_required
 
-from glynt.apps.document.views import AuthorToolView, DocumentView, MyDocumentView, DocumentByCategoryListView
-from glynt.apps.document.views import DocumentExportView, CloneClientCreatedDocumentView, DeleteClientCreatedDocumentView, UndoDeleteClientCreatedDocumentView
+from glynt.apps.document.views import DocumentView, MyDocumentView, DocumentByCategoryListView
+from glynt.apps.document.views import CloneClientCreatedDocumentView, DeleteClientCreatedDocumentView, UndoDeleteClientCreatedDocumentView
 from glynt.apps.document.views import ReviewClientCreatedView, ValidateClientCreatedDocumentFormView, PersistClientCreatedDocumentProgressView 
 
 
@@ -18,9 +18,7 @@ urlpatterns = patterns('',
     url(r'^my/(?P<slug>.+)/review/$', login_required(ReviewClientCreatedView.as_view()), name='my_review'),
     url(r'^my/(?P<slug>.+)/$', login_required(MyDocumentView.as_view(template_name='document/document.html')), name='my_view'),
 
-    url(r'^author/$', login_required(AuthorToolView.as_view()), name='author_doc'),
-    url(r'^(?P<slug>.+)/export/$', login_required(DocumentExportView.as_view()), name='export'),
     # is not login_required as we want users to be redirected to login
-    url(r'^(?P<slug>.+)/save/$', ValidateClientCreatedDocumentFormView.as_view(), name='validate_form'),
+    url(r'^(?P<slug>.+)/save/$', login_required(ValidateClientCreatedDocumentFormView.as_view()), name='validate_form'),
     url(r'^(?P<slug>.+)/$', DocumentView.as_view(template_name='document/preview-document.html'), name='view'),
 )
