@@ -14,7 +14,7 @@ TEMPLATE_DEBUG = DEBUG
 ADMINS = (
     ('Ross', 'sendrossemail@gmail.com'),
 )
-
+COMPRESSION_ENABLED = False
 MANAGERS = ADMINS
 
 DATABASES = {

@@ -756,12 +756,25 @@ $(document).ready(function(){
     /**
     * Primary view acts as a holder for the other views
     */
-	$(window).scroll(function(){
-	    $(".document-questions").css("top",Math.max(45,130-$(this).scrollTop()));
+	
+	$('#preview-doc').toggle(
+	function()
+	{
+	  $('#preview-doc').animate({
+		  height: $(window).height() - 100, 
+	 }, 250);
+	},
+	function()
+	{
+	  $('#preview-doc').animate({
+	  height: $(window).height() - 100, 
+		  height: "30px", 
+	  }, 250);     
+
+
 	});
-	$(window).resize(function() {
-		$(".document-questions").height($(window).height());
-	});
+	
+	
 	
     function PageDocumentController() {
         var self = this;
@@ -1345,7 +1358,7 @@ $(document).ready(function(){
   	<a href="#">{{step_name}}	<span class="page_num" style="display:hidden">{{text}}</span></a>
   </li>
   {{/each}}
-  <li data-goto_step="{{last}}" class="last_step" title="{{step_name}}"><a href="#">Finalize</a></li>
+  <li data-goto_step="{{last}}" class="last_step" title="{{step_name}}"><a href="#">Review</a></li>
 </ul>
 {% endtplhandlebars %}
 
