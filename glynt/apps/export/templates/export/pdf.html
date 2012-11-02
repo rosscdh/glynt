@@ -9,7 +9,7 @@ http://www.htmltopdf.org/doc/pisa-en.html for reference
     <style type="text/css">
         @page {
             size: letter portrait;
-            margin: 1.0in 0.25in 0.5in 0.25in;
+            margin: 1in 1in 1in 1in;
             padding: 0;
 
             @frame header {
@@ -29,16 +29,25 @@ http://www.htmltopdf.org/doc/pisa-en.html for reference
                 height: 1cm;
             }
         }
-
-        <!-- add content styles here -->
+		ol.levelone {
+			list-style-type:decimal;
+		}
+		ol.leveltwo {
+			list-style-type:lower-latin;
+		}
+		ol.levelthree  {
+			list-style-type:lower-roman;
+		}
+		ol li {
+			margin-top:10px;
+		}
         h1 { text-align: middle; font-size: 18px; }
     </style>
 </head>
 <body>
-<div id='headerContent'>
-    <!-- header content -->
+<!-- <div id='headerContent'>
     <img src="{{ STATIC_URL }}img/homeimg.jpg"/>
-</div>
+</div> -->
 <div>
     <keepinframe>
      <!-- Content -->
@@ -47,7 +56,7 @@ http://www.htmltopdf.org/doc/pisa-en.html for reference
 </div>
 <div id='footerContent'>
     <!-- footer content -->
-    Copyright @lawpal.com 2012. Page. <pdf:pagenumber>
+    Document created by LawPal and Orrick. Page. <pdf:pagenumber>
 </div>
 </body>
 </document>

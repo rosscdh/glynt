@@ -68,6 +68,7 @@
       </span>
     </div>
   </div>
+  
 {% endblock %}
 
 {% block document_head %}
@@ -77,8 +78,14 @@
 {% endblock %}
 
 {% block document %}
-<div class="doc-body">
-<span id="document-md" data-bind="html: App.documentModel.renderedHTML()">{% show_loading modal='False' %}</span>
+<div class="row">
+		<div style="" id="preview-doc" class="span12">
+			<div id="preview-doc-inner">
+			<div class="doc-body">
+				<span id="document-md" data-bind="html: App.documentModel.renderedHTML()">{% show_loading modal='False' %}</span>
+			</div>
+		</div>
+	</div>
 </div>
 {% endblock %}
 
@@ -114,7 +121,11 @@ ul#step-list li a{
   padding:10px;
 }
 </style>
+
+
 {% endblock %}
+{% block footer %}{% endblock %}
+
 
 {% block js %}
 {% include 'document/inline/document.js' %}
