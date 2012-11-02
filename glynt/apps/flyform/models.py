@@ -27,6 +27,17 @@ class FlyForm(models.Model):
         """ Return the Form component of new forms otherwise its an old form"""
         return self.body["steps"] if type(self.body) is dict and "steps" in self.body else self.body
 
+    @property
+    def flyform_fields(self):
+        field_names = []
+        for step in self.flyform_steps:
+            for field in step['fields']:
+                field_names.append(field['name'])
+        return field_names
+
+    def flyform_fields_as_json(self):
+        return json.dumps(self.flyform_fields)
+
     def flyformset(self):
       """ return a list of FlyForms based on the models steps """
       return [BaseFlyForm(step_num, json.dumps(step)) for step_num, step in enumerate(self.flyform_steps)]

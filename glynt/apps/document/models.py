@@ -101,12 +101,10 @@ class ClientCreatedDocument(models.Model):
         return qr.make_image()
 
     def rendered_body(self):
-        data = []
-        if type(self.source_document.flyform.defaults) is dict:
-            data = self.source_document.flyform.defaults.items()
+        """ Merge with the base set of fields"""
+        data = [(k, '') for k in self.source_document.flyform.flyform_fields]
         if type(self.data) is dict:
-            data = data + self.data.items()
-            data = dict(data)
+            data = dict(data + self.data.items())
         data['document_title'] = self.name if 'document_title' in data else ''
 
         pybars_plus = PybarsPlus(self.body)

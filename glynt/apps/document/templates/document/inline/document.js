@@ -708,7 +708,7 @@ $(document).ready(function(){
       self.context(context);
     }
 
-    self.setContextItem = function setContextItem(input,local_context) {
+    self.setContextItem = function setContextItem(input, local_context) {
       // only allow if the data-hb-name is set
       if (typeof input.attr('data-hb-name') == 'string') {
           var context = (local_context == undefined) ? self.context() : local_context ;
@@ -936,7 +936,6 @@ $(document).ready(function(){
             .error(function(jqXHR, textStatus, errorThrown) { 
                 var data = $.parseJSON(jqXHR.responseText);
                 self.clearInjectedErrors();
-                console.log(data)
                 self.message(data.message);
 
                 $.each(data.errors, function(key, errors){
@@ -1003,7 +1002,6 @@ $(document).ready(function(){
                 var data = data[0];
             })
             .error(function(jqXHR, textStatus, errorThrown) { 
-                console.log(jqXHR)
             })
             .complete(function() {
             });
@@ -1161,9 +1159,10 @@ $(document).ready(function(){
           self.bindLoopStepContextData();
 
           self.initializeValuesFromDefaultData();// main initializer
+          self.setContext();
 
           self.initializeWidgets();
-          self.setContext();
+
           self.render();
           // show the buttons which are hidden by default
           $('#progress-buttons').show();

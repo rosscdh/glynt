@@ -15,8 +15,12 @@ from django_countries import CountryFormField as CountryField
 US_STATES = [(v,v) for k,v in SHORT_US_STATES]
 USPS_CHOICES = [(v,v) for k,v in SHORT_USPS_CHOICES]
 
+# Custom Fields
+USStatesField = forms.ChoiceField(choices=US_STATES)
+USStatesUPSField = forms.ChoiceField(choices=USPS_CHOICES)
 
-CUSTOM_VALID_FIELD_TYPES = ['CountryField', 'USStateField', 'USZipCodeField']
+
+CUSTOM_VALID_FIELD_TYPES = ['CountryField', 'USStatesField', 'USStatesUPSField']
 VALID_FIELD_TYPES = CUSTOM_VALID_FIELD_TYPES + ['BooleanField', 'CharField', 'ChoiceField', 'DateField', 'DateTimeField', 'DecimalField', 'EmailField', 'FloatField', 'ImageField', 'IntegerField', 'MultiValueField', 'MultipleChoiceField', 'SlugField', 'TimeField', 'URLField', ]
 
 
@@ -25,8 +29,8 @@ VALID_WIDGETS = ['TextInput', 'PasswordInput', 'HiddenInput', 'MultipleHiddenInp
 
 
 # Custom Widgets
-forms.widgets.InviteeWidget = forms.TextInput(attrs={"class": "md-updater is_invitee"})
-forms.widgets.SocialContactWidget = forms.TextInput(attrs={"class": "md-updater contact-list"})
+InviteeWidget = forms.TextInput(attrs={"class": "md-updater is_invitee"})
+SocialContactWidget = forms.TextInput(attrs={"class": "md-updater contact-list"})
 
 
 
@@ -227,15 +231,20 @@ class BaseFlyForm(forms.Form, LoopStepCleanFieldsMixin, StepHiddenFieldsMixin, B
           f = getattr(sys.modules[__name__], field['field'], None)
 
         if f:
-          field_instance = f()
+          if callable(f):
+              field_instance = f()
+          else:
+              field_instance = f
+
           field_instance.label = field['label'] if field['label'] else field['name']
           field_instance.name = self.slugify(field['name']) if field['name'] else self.slugify(field_instance.label)
           field_instance.help_text = field['help_text'] if field['help_text'] else None
           field_instance.required = True if field['required'] in ['true','True',True,'1', 1] else False
 
-          widget = self.setup_field_widget(field_instance, field)
-          if widget:
-            field_instance.widget = widget
+          self.setup_field_widget(field_instance, field)
+          if 'full_company_name' in self.fields:
+              print field_instance.name
+              print self.fields['full_company_name'].name == self.fields['full_company_name'].widget.attrs['data-hb-name']
 
           if hasattr(f, 'choices') and 'choices' in field and type(field['choices']) is list:
             # Add log here as sometimes choices may be present but not specified
@@ -246,6 +255,7 @@ class BaseFlyForm(forms.Form, LoopStepCleanFieldsMixin, StepHiddenFieldsMixin, B
 
           # Append the field
           self.fields[field_instance.name] = field_instance
+          #print self.fields[field_instance.name].widget.__dict__
 
   def valid_choice_options(self, choices):
     """ Converts JSON fomrat tuple into python tuple 
@@ -263,34 +273,42 @@ class BaseFlyForm(forms.Form, LoopStepCleanFieldsMixin, StepHiddenFieldsMixin, B
       return tuple()
 
   def setup_field_widget(self, field_instance, field_dict):
+    widget = None
+    # if is a custom widget
     if 'widget' in field_dict and field_dict['widget'] in VALID_WIDGETS_CUSTOM:
-        widget = getattr(forms.widgets, field_dict['widget'], None)
+        # get an instance of it, but be careful we have to copy it; otherwise it affects previous instances
+        w = getattr(sys.modules[__name__], field_dict['widget'], None)
+        if w is not None:
+            widget = copy.deepcopy(w)
     else:
         w = getattr(forms.widgets, field_dict['widget'], None) if 'widget' in field_dict else None
-        if w:
+        if w is not None and callable(w):
           widget = w()
         else:
           widget = field_instance.widget
 
-    widget.attrs.update({
-      'placeholder': field_dict['placeholder'],
-      'data-hb-name': field_dict['data-hb-name'] if field_dict['data-hb-name'] else field_instance.name,
-    })
-    if 'class' in widget.attrs:
-        # join with custom widget attrs
-        widget.attrs['class'] = ' '.join(widget.attrs['class'].split(' ') + field_dict['class'].split(' '))
-    else:
-        widget.attrs['class'] = field_dict['class']
 
-    if 'data-show_when' in field_dict:
-      widget.attrs['data-show_when'] = safestring.mark_safe(field_dict['data-show_when'])
-    if 'data-hide_when' in field_dict:
-      widget.attrs['data-hide_when'] = safestring.mark_safe(field_dict['data-hide_when'])
+    if widget is not None:
+        widget.attrs.update({
+            'placeholder': field_dict['placeholder'],
+            'data-hb-name': field_dict['data-hb-name'] if 'data-hb-name' in field_dict and field_dict['data-hb-name'] != "" else field_instance.name,
+        })
 
-    # Handle loop step loop length fields, required to make the loop function
-    if 'data-glynt-loop_length' in field_dict:
-      widget.attrs['data-glynt-loop_length'] = len(field_instance.choices) if hasattr(field_instance, 'choices') else ''
+        if 'class' in widget.attrs:
+            # join with custom widget attrs
+            widget.attrs['class'] = ' '.join(set(widget.attrs['class'].split(' ') + field_dict['class'].split(' ')))
+        else:
+            widget.attrs['class'] = field_dict['class']
+
+        if 'data-show_when' in field_dict:
+          widget.attrs['data-show_when'] = safestring.mark_safe(field_dict['data-show_when'])
+        if 'data-hide_when' in field_dict:
+          widget.attrs['data-hide_when'] = safestring.mark_safe(field_dict['data-hide_when'])
+
+        # Handle loop step loop length fields, required to make the loop function
+        if 'data-glynt-loop_length' in field_dict:
+          widget.attrs['data-glynt-loop_length'] = len(field_instance.choices) if hasattr(field_instance, 'choices') else ''
 
 
-    return widget
+    field_instance.widget = widget
 

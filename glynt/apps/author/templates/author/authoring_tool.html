@@ -7,18 +7,13 @@
 
 {% block body %}
 <div class="span12">
-  <h2>Document Author tool</h2>
-  {% if object %}
-  <h3>Editing {{ object.name }}</h3>
-  {% else %}
-  {% endif %}
-  <div id="message" class="row"></div>
+  <h2>Document Author tool{% if object %} - {{ object.name }}{% endif %}</h2>
 </div>
 
 <div class="span2 sidebar">
   <ul class="nav nav-list">
     <li class="nav-header">{% trans 'Authoring' %}</li>
-      <li><a href="#/"> {% trans 'Steps & Variables' %}</a></li>
+      <li><a href="#/"> {% trans 'Steps & Fields' %}</a></li>
       <li><a href="#/meta"> {% trans 'Properties' %}</a></li>
     <li class="nav-header">{% trans 'Document' %}</li>
       <li><a href="#/doc"> {% trans 'Document' %}</a></li>
@@ -29,8 +24,6 @@
     <li class="divider"></li>
         <li><a href="{% url 'author:edit' pk=object.pk %}" class="btn btn-success" id="save-json">{% trans 'Save' %}</a></li>
     {% endif %}
-    <li class="divider"></li>
-      <li><a id="reset" href="#/reset" class="btn btn-danger"> {% trans 'Reset' %}</a></li>
   </ul>
 </div>
 
@@ -67,8 +60,8 @@
 {% block css %}
 <style>
 .modal{
-   width:800px;
-   margin-left:-400px;
+   width:80%;
+   margin-left:-40%;
 }
 ol.step-field-list li {
     margin:10px 0px;
@@ -186,7 +179,7 @@ $(document).ready(function(){
           'help_text': '',
           'placeholder': '',
           'data-hb-name': '',
-          'required': 'true',
+          'required': true,
           'class': 'md-updater'
         };
 
@@ -254,18 +247,12 @@ $(document).ready(function(){
             self.render_fields(step_index);
             self.update_json();
         };
-        // ---- RESET -----
-        self.reset = function reset() {
-            $.cookie('auth_tool', '');
-            // self.json_output.val();
-            // self.render();
-            window.location.reload();
-        };
         // ---- UPDATE JSON -----
         self.update_json = function update_json() {
-            self.json_output.val(JSON.stringify(self.flyform_schema, null, "\t"));
-            self.bind_forms_to_data();
-            $.cookie('auth_tool', JSON.stringify(self.flyform_schema));
+            var pretty_json = JSON.stringify(self.flyform_schema, null, "\t");
+            self.json_output.val(pretty_json);
+            $.cookie('auth_tool', pretty_json);
+//            self.bind_forms_to_data();
         };
         self.load_data_from_source = function load_data_from_source() {
             data = $.parseJSON(self.json_output.val());
@@ -307,11 +294,10 @@ $(document).ready(function(){
             var attr_name = field.attr('name');
             var value = field.val();
             if (attr_name == 'type') {
-                self.flyform_schema.steps[step_index][attr_name] = self.ensureValue(value);
+                self.flyform_schema.steps[step_index][attr_name] = self.ensureJSONValue(value);
             } else {
-                self.flyform_schema.steps[step_index].properties[attr_name] = self.ensureValue(value);
+                self.flyform_schema.steps[step_index].properties[attr_name] = self.ensureJSONValue(value);
             }
-            self.update_json();
         };
         self.updateField = function updateField(field) {
             var form = field.closest('form.form-field');
@@ -324,25 +310,31 @@ $(document).ready(function(){
             if (attr_name == 'choices') {
                 if (value != '' && value != 'null' && value != null) {
                   value = $.parseJSON(value);
-                } else {
-                  value = undefined;
                 }
             }
             if (value != undefined) {
-              self.flyform_schema.steps[step_index].fields[field_index][attr_name] = self.ensureValue(value);
+              self.flyform_schema.steps[step_index].fields[field_index][attr_name] = self.ensureJSONValue(value);
             }
         };
         self.updateMetaField = function updateMetaField(field) {
             var form = field.closest('form.form-meta');
             var attr_name = field.attr('name');
             var value = field.val();
-            self.flyform_schema.meta[attr_name] = self.ensureValue(value);
-            self.update_json();
+            self.flyform_schema.meta[attr_name] = self.ensureJSONValue(value);
         };
 
-        self.ensureValue = function ensureValue(value) {
-          if (['True','true',1,'False','false',0].indexOf(value) != -1) {
+        self.ensureJSONValue = function ensureJSONValue(value) {
+          if (['Yes','y','True','true',1,'No','n','False','false',0].indexOf(value) != -1) {
             value = (['True','true',1].indexOf(value) >= 0) ? true: false;
+          }
+          return value;
+        };
+        self.ensureFormValue = function ensureFormValue(value) {
+          if ([true,'Yes','y','True','true',1,false,'No','n','False','false',0].indexOf(value) != -1) {
+            value = ([true,'True','true',1].indexOf(value) >= 0) ? 'true': 'false';
+          }
+          if (typeof value != 'string') {
+            value = JSON.stringify(value);
           }
           return value;
         };
@@ -352,7 +344,7 @@ $(document).ready(function(){
             $.each($('form.form-step'), function(step_index, form_step){
                 form_step = $(form_step);
                 var form_id = form_step.attr('id');
-                
+
                 var step_attribs = self.flyform_schema.steps[step_index].properties;
                 // put type in there so we can set it in the form
                 step_attribs.type = self.flyform_schema.steps[step_index].type;
@@ -376,12 +368,12 @@ $(document).ready(function(){
                 step_field_list.empty();
                 $.each(self.flyform_schema.steps[step_index].fields, function(index, field){
                     hide_from_field.append($("<option/>", {value: field.name, text: field.label }));
-                    step_field_list.append($('<li/>',{class: 'modal-scrollto', 'data-step_index': step_index, rel: 'field-' + index, html: '<a href="">'+ field.label +'</a>'}))
+                    step_field_list.append($('<li/>',{'data-step_index': step_index, rel: 'field-' + index, html: $('<a/>', {class:'modal-scrollto', 'data-step_index': step_index, href:'', html: field.label})}))
                 });
 
                 for(var attrib_key in step_attribs){
                     attrib_value = step_attribs[attrib_key];
-                    $('body').find('form#'+ form_id +' [name='+ attrib_key +']').val(attrib_value);
+                    $('body').find('form#'+ form_id +' [name='+ attrib_key +']').val(self.ensureFormValue(attrib_value));
                 }
             });
             // bind field element data from json to form field value
@@ -402,9 +394,18 @@ $(document).ready(function(){
                         }
                     }
                     if (attrib_value != undefined) {
-                      $('body').find('form#'+ form_id +' [name='+ attrib_key +']').val(attrib_value);
+                      $('body').find('form#'+ form_id +' [name='+ attrib_key +']').val(self.ensureFormValue(attrib_value));
                     }
                 }
+            });
+            // bind field element data from json to form field value
+            $.each($('form.form-meta'), function(field_index, form_field){
+              form_field = $(form_field);
+              var form_id = form_field.attr('id');
+              var field_attribs = self.flyform_schema.meta;
+              $.each(field_attribs, function(field_name, field_value){
+                form_field.find('[name='+ field_name +']').val(self.ensureFormValue(field_value));
+              });
             });
         }
 
@@ -465,18 +466,14 @@ $(document).ready(function(){
                     self.update_json();
                 }
             });
-            $('a#show_fields, li.modal-scrollto').live('click', function(event){
+            $('a#show_fields, a.modal-scrollto').live('click', function(event){
                 event.preventDefault();
-                step = $(this).attr('data-step_index');
-
+                var step = $(this).attr('data-step_index');
+                $(this).addClass('selected');
+                self.current_step = step;
+                self.render();
+                $('#modal-header').html(self.flyform_schema.steps[step].properties.step_title);
                 $('div#fields').modal('toggle')
-                if (self.current_step != step) {
-                    $(this).addClass('selected');
-                    self.current_step = step;
-                    //step.properties.step_title
-                    $('#modal-header').html(self.flyform_schema.steps[step].properties.step_title);
-                    self.render();
-                }
             });
             $('[name=hide_from]').live('change', function(event){
                 var target_field = $(this).val();
@@ -523,6 +520,7 @@ $(document).ready(function(){
             $('form.form-step input, form.form-step textarea, form.form-step select, form.form-step radio, form.form-step checkbox').live('change', function(event){
               event.preventDefault();
               self.updateStep($(this));
+              self.update_json();
             });
             $('form.form-field input, form.form-field textarea, form.form-field select, form.form-field radio, form.form-field checkbox').live('change', function(event){
               event.preventDefault();
@@ -538,10 +536,6 @@ $(document).ready(function(){
                 event.preventDefault();
                 var form = $(this).closest('form.form-step');
                 self.dispatch('change_steptype', {'selected_type': $(this).val(), 'form': form});
-            });
-            $('#reset').live('click', function(event){
-                event.preventDefault();
-                self.reset();
             });
             // if the user changes the json manually then update our form
             self.json_output.live('change', function(event){

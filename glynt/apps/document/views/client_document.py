@@ -31,11 +31,14 @@ class MyDocumentView(DocumentView):
     document_slug = slugify(self.kwargs['slug'])
 
     self.user_document = get_object_or_404(ClientCreatedDocument.objects.select_related(), slug=document_slug, owner=self.request.user)
+    user_can_view_document(self.user_document, self.request.user)
+
     context['userdoc'] = self.user_document
     context['userdoc_form'] = ClientCreatedDocumentForm(instance=context['userdoc'])
 
     # Setup the document based on teh source_document of the viewed doc
     self.document = self.user_document.source_document
+
     context['object'] = self.document
     context['document'] = self.document.body
     context['default_data'] = json.dumps(self.user_document.data)
@@ -50,9 +53,9 @@ class MyDocumentView(DocumentView):
     except KeyError:
       context['form_set'] = FORM_GROUPS['no_steps']
 
-    context['final_step_index'] = len(context['form_set']) + 1
+    #print context['form_set'][0].fields['full_company_name'].widget.__dict__
 
-    user_can_view_document(self.user_document, self.request.user)
+    context['final_step_index'] = len(context['form_set']) + 1
 
     return context
 

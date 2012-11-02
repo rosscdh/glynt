@@ -47,7 +47,8 @@ display:none;
 {% endblock %}
 
 {% block js %}
-<script id="document-default_data" type="text/javascript">[{{ default_data|default:''|safe }}]</script>
+<script id="document-default_data" type="text/javascript">{{ flyform_fieldnames|default:''|safe }}</script>
+
 <script id="js-document" type="text/x-handlebars-template">
 {{ userdoc.body|default:object.body|safe }}
 </script>
@@ -621,7 +622,6 @@ $(document).ready(function(){
                             current_context_value = current_context[context_var_name];
                             if (required_value == current_context_value) {
                                 // apply callback
-//console.log(callback)
                             }
                         }
                     }
@@ -649,12 +649,11 @@ $(document).ready(function(){
 
         self.initializeValuesFromDefaultData = function initializeValuesFromDefaultData() {
             var data = $.parseJSON($('script#document-default_data').html());
-
             if (data) {
-                data = data[0];
+                data = data;
                 if (data) {
-                    $.each(data, function(key, value) {
-                        self.documentModel.setContextItemByForce(key, value)
+                    $.each(data, function(index, key) {
+                        self.documentModel.setContextItemByForce(key, '_______________')
                     });
                 }
             }
@@ -666,7 +665,7 @@ $(document).ready(function(){
             self.setContext();
             self.setGlyntRuleset();
             self.applyGlyntRuleset();
-        	self.render();
+            self.render();
         }
 
         self.render = function render() {
