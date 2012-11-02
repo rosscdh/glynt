@@ -923,7 +923,6 @@ $(document).ready(function(){
             .error(function(jqXHR, textStatus, errorThrown) { 
                 var data = $.parseJSON(jqXHR.responseText);
                 self.clearInjectedErrors();
-                console.log(data)
                 self.message(data.message);
 
                 $.each(data.errors, function(key, errors){
@@ -990,7 +989,6 @@ $(document).ready(function(){
                 var data = data[0];
             })
             .error(function(jqXHR, textStatus, errorThrown) { 
-                console.log(jqXHR)
             })
             .complete(function() {
             });
@@ -1148,9 +1146,10 @@ $(document).ready(function(){
           self.bindLoopStepContextData();
 
           self.initializeValuesFromDefaultData();// main initializer
+          self.setContext();
 
           self.initializeWidgets();
-          self.setContext();
+
           self.render();
           // show the buttons which are hidden by default
           $('#progress-buttons').show();
@@ -1192,6 +1191,8 @@ $(document).ready(function(){
       self.parseCallbacks = function parseCallbacks() {
         $.each(self.hideWhen, function(i,item) {
           item = $(item);
+console.log(item)
+console.log('fdas')
           if (self.inlineCallBack(item.attr('data-hide_when')) == true) {
             self.recordHiddenField(item, true);
             item.closest('.control-group').hide();
