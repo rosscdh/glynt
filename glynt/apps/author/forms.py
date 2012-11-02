@@ -40,7 +40,7 @@ class CreateStepFieldForm(BootstrapForm):
     placeholder = forms.CharField(help_text=_('A Hint which is not submittable'))
     help_text = forms.CharField()
     initial = forms.CharField(label=_('Inital Value'), help_text=_('The initial submittable Value of this field - not required'))
-    required = forms.ChoiceField(choices=((True,_('Yes')), (False,_('No'))), initial=False, required=False)
+    required = forms.ChoiceField(choices=(('true',_('Yes')), ('false',_('No'))), initial='false', required=False)
     field = forms.ChoiceField(choices=FIELDS, initial='CharField')
     widget = forms.ChoiceField(choices=WIDGETS, initial='')
     choices = forms.CharField(widget=forms.Textarea, help_text=_('In the form [["a","Alpha"], [1,"One"], [1,1]]'))
@@ -54,7 +54,7 @@ class CreateStepFieldForm(BootstrapForm):
 
 class DocumentMetaForm(BootstrapForm):
     """ The template form used to help the authoring tool document meta """
-    can_add_invite = forms.ChoiceField(label=_('Allow 3rd parties to sign'), choices=((True,'Yes'),(False,'No')), initial=False, help_text=_('Can the user invite extra People to sign?'))
+    can_add_invite = forms.ChoiceField(label=_('Allow 3rd parties to sign'), choices=(('true','Yes'),('false','No')), initial='false', help_text=_('Can the user invite extra People to sign?'))
 
     class Meta:
         layout = (

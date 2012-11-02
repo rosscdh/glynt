@@ -29,8 +29,6 @@
     <li class="divider"></li>
         <li><a href="{% url 'author:edit' pk=object.pk %}" class="btn btn-success" id="save-json">{% trans 'Save' %}</a></li>
     {% endif %}
-    <li class="divider"></li>
-      <li><a id="reset" href="#/reset" class="btn btn-danger"> {% trans 'Reset' %}</a></li>
   </ul>
 </div>
 
@@ -186,7 +184,7 @@ $(document).ready(function(){
           'help_text': '',
           'placeholder': '',
           'data-hb-name': '',
-          'required': 'true',
+          'required': true,
           'class': 'md-updater'
         };
 
@@ -254,18 +252,12 @@ $(document).ready(function(){
             self.render_fields(step_index);
             self.update_json();
         };
-        // ---- RESET -----
-        self.reset = function reset() {
-            $.cookie('auth_tool', '');
-            // self.json_output.val();
-            // self.render();
-            window.location.reload();
-        };
         // ---- UPDATE JSON -----
         self.update_json = function update_json() {
-            self.json_output.val(JSON.stringify(self.flyform_schema, null, "\t"));
+            var pretty_json = JSON.stringify(self.flyform_schema, null, "\t");
+            self.json_output.val(pretty_json);
+            $.cookie('auth_tool', pretty_json);
             self.bind_forms_to_data();
-            $.cookie('auth_tool', JSON.stringify(self.flyform_schema));
         };
         self.load_data_from_source = function load_data_from_source() {
             data = $.parseJSON(self.json_output.val());
@@ -307,11 +299,10 @@ $(document).ready(function(){
             var attr_name = field.attr('name');
             var value = field.val();
             if (attr_name == 'type') {
-                self.flyform_schema.steps[step_index][attr_name] = self.ensureValue(value);
+                self.flyform_schema.steps[step_index][attr_name] = self.ensureJSONValue(value);
             } else {
-                self.flyform_schema.steps[step_index].properties[attr_name] = self.ensureValue(value);
+                self.flyform_schema.steps[step_index].properties[attr_name] = self.ensureJSONValue(value);
             }
-            self.update_json();
         };
         self.updateField = function updateField(field) {
             var form = field.closest('form.form-field');
@@ -329,20 +320,28 @@ $(document).ready(function(){
                 }
             }
             if (value != undefined) {
-              self.flyform_schema.steps[step_index].fields[field_index][attr_name] = self.ensureValue(value);
+              self.flyform_schema.steps[step_index].fields[field_index][attr_name] = self.ensureJSONValue(value);
             }
         };
         self.updateMetaField = function updateMetaField(field) {
             var form = field.closest('form.form-meta');
             var attr_name = field.attr('name');
             var value = field.val();
-            self.flyform_schema.meta[attr_name] = self.ensureValue(value);
-            self.update_json();
+            self.flyform_schema.meta[attr_name] = self.ensureJSONValue(value);
         };
 
-        self.ensureValue = function ensureValue(value) {
-          if (['True','true',1,'False','false',0].indexOf(value) != -1) {
+        self.ensureJSONValue = function ensureJSONValue(value) {
+          if (['Yes','y','True','true',1,'No','n','False','false',0].indexOf(value) != -1) {
             value = (['True','true',1].indexOf(value) >= 0) ? true: false;
+          }
+          return value;
+        };
+        self.ensureFormValue = function ensureFormValue(value) {
+          if ([true,'Yes','y','True','true',1,false,'No','n','False','false',0].indexOf(value) != -1) {
+            value = ([true,'True','true',1].indexOf(value) >= 0) ? 'true': 'false';
+          }
+          if (typeof value != 'string') {
+            value = JSON.stringify(value);
           }
           return value;
         };
@@ -352,7 +351,7 @@ $(document).ready(function(){
             $.each($('form.form-step'), function(step_index, form_step){
                 form_step = $(form_step);
                 var form_id = form_step.attr('id');
-                
+
                 var step_attribs = self.flyform_schema.steps[step_index].properties;
                 // put type in there so we can set it in the form
                 step_attribs.type = self.flyform_schema.steps[step_index].type;
@@ -381,7 +380,7 @@ $(document).ready(function(){
 
                 for(var attrib_key in step_attribs){
                     attrib_value = step_attribs[attrib_key];
-                    $('body').find('form#'+ form_id +' [name='+ attrib_key +']').val(attrib_value);
+                    $('body').find('form#'+ form_id +' [name='+ attrib_key +']').val(self.ensureFormValue(attrib_value));
                 }
             });
             // bind field element data from json to form field value
@@ -402,9 +401,18 @@ $(document).ready(function(){
                         }
                     }
                     if (attrib_value != undefined) {
-                      $('body').find('form#'+ form_id +' [name='+ attrib_key +']').val(attrib_value);
+                      $('body').find('form#'+ form_id +' [name='+ attrib_key +']').val(self.ensureFormValue(attrib_value));
                     }
                 }
+            });
+            // bind field element data from json to form field value
+            $.each($('form.form-meta'), function(field_index, form_field){
+              form_field = $(form_field);
+              var form_id = form_field.attr('id');
+              var field_attribs = self.flyform_schema.meta;
+              $.each(field_attribs, function(field_name, field_value){
+                form_field.find('[name='+ field_name +']').val(self.ensureFormValue(field_value));
+              });
             });
         }
 
@@ -523,6 +531,7 @@ $(document).ready(function(){
             $('form.form-step input, form.form-step textarea, form.form-step select, form.form-step radio, form.form-step checkbox').live('change', function(event){
               event.preventDefault();
               self.updateStep($(this));
+              self.update_json();
             });
             $('form.form-field input, form.form-field textarea, form.form-field select, form.form-field radio, form.form-field checkbox').live('change', function(event){
               event.preventDefault();
@@ -538,10 +547,6 @@ $(document).ready(function(){
                 event.preventDefault();
                 var form = $(this).closest('form.form-step');
                 self.dispatch('change_steptype', {'selected_type': $(this).val(), 'form': form});
-            });
-            $('#reset').live('click', function(event){
-                event.preventDefault();
-                self.reset();
             });
             // if the user changes the json manually then update our form
             self.json_output.live('change', function(event){
