@@ -69,15 +69,17 @@
    height: 500px;
  }
  .carousel img {
-   min-width: 100%;
    height: 500px;
+   background-size: auto auto!important;
+   max-width:inherit;
+   float:right;
  }
 
  .carousel-caption {
    background-color: transparent;
    position: static;
    max-width: 550px;
-   padding: 0 20px;
+   padding: 0 20px 20px 20px;
    margin-bottom: 100px;
  }
  .carousel-caption h1,
@@ -86,6 +88,7 @@
    line-height: 1.25;
    color: #fff;
    text-shadow: 0 1px 1px rgba(0,0,0,.4);
+   padding-bottom:20px;
  }
  .carousel-caption .btn {
    margin-top: 10px;
@@ -235,31 +238,31 @@
 <div id="myCarousel" class="carousel slide">
   <div class="carousel-inner">
     <div class="item active">
-      <img src="http://twitter.github.com/bootstrap/assets/img/examples/slide-01.jpg" alt="">
+        <img src="/static/img/homepage/slide-group.png" alt="">
       <div class="container">
         <div class="carousel-caption">
-          <h1>Example headline.</h1>
-          <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+          <h1>A better legal service is coming.</h1>
+          <p class="lead">Legal services are unnecessarily expensive, complicated and disconnected. We're working hard to change that.</p>
           <a class="btn btn-large btn-primary" href="#">Sign up today</a>
         </div>
       </div>
     </div>
     <div class="item">
-      <img src="http://twitter.github.com/bootstrap/assets/img/examples/slide-02.jpg" alt="">
+      <img src="/static/img/homepage/slide-fortune.png" alt="">
       <div class="container">
         <div class="carousel-caption">
-          <h1>Another example headline.</h1>
-          <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+          <h1 style="color:#666">Efficiency. The key to saving time and money.</h1>
+          <p class="lead" style="color:#666">Technology can help you save time and money </p>
           <a class="btn btn-large btn-primary" href="#">Learn more</a>
         </div>
       </div>
     </div>
     <div class="item">
-      <img src="http://twitter.github.com/bootstrap/assets/img/examples/slide-03.jpg" alt="">
+        <img src="/static/img/homepage/slide-orrick.png" alt="">
       <div class="container">
         <div class="carousel-caption">
-          <h1>One more for good measure.</h1>
-          <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+          <h1>A historic law firm joins LawPal.</h1>
+          <p class="lead">Orrick, Herrington &amp; Sutcliffe become LawPal's launch partner.</p>
           <a class="btn btn-large btn-primary" href="#">Browse gallery</a>
         </div>
       </div>
