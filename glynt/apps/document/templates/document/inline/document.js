@@ -708,7 +708,7 @@ $(document).ready(function(){
       self.context(context);
     }
 
-    self.setContextItem = function setContextItem(input,local_context) {
+    self.setContextItem = function setContextItem(input, local_context) {
       // only allow if the data-hb-name is set
       if (typeof input.attr('data-hb-name') == 'string') {
           var context = (local_context == undefined) ? self.context() : local_context ;

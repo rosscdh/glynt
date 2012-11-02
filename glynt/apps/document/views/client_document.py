@@ -53,6 +53,8 @@ class MyDocumentView(DocumentView):
     except KeyError:
       context['form_set'] = FORM_GROUPS['no_steps']
 
+    #print context['form_set'][0].fields['full_company_name'].widget.__dict__
+
     context['final_step_index'] = len(context['form_set']) + 1
 
     return context
