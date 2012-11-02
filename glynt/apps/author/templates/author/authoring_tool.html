@@ -65,8 +65,8 @@
 {% block css %}
 <style>
 .modal{
-   width:800px;
-   margin-left:-400px;
+   width:80%;
+   margin-left:-40%;
 }
 ol.step-field-list li {
     margin:10px 0px;
@@ -375,7 +375,7 @@ $(document).ready(function(){
                 step_field_list.empty();
                 $.each(self.flyform_schema.steps[step_index].fields, function(index, field){
                     hide_from_field.append($("<option/>", {value: field.name, text: field.label }));
-                    step_field_list.append($('<li/>',{class: 'modal-scrollto', 'data-step_index': step_index, rel: 'field-' + index, html: '<a href="">'+ field.label +'</a>'}))
+                    step_field_list.append($('<li/>',{'data-step_index': step_index, rel: 'field-' + index, html: $('<a/>', {class:'modal-scrollto', 'data-step_index': step_index, href:'', html: field.label})}))
                 });
 
                 for(var attrib_key in step_attribs){
@@ -473,18 +473,13 @@ $(document).ready(function(){
                     self.update_json();
                 }
             });
-            $('a#show_fields, li.modal-scrollto').live('click', function(event){
+            $('a#show_fields, a.modal-scrollto').live('click', function(event){
                 event.preventDefault();
-                step = $(this).attr('data-step_index');
-
+                var step = $(this).attr('data-step_index');
                 $('div#fields').modal('toggle')
-                if (self.current_step != step) {
-                    $(this).addClass('selected');
-                    self.current_step = step;
-                    //step.properties.step_title
-                    $('#modal-header').html(self.flyform_schema.steps[step].properties.step_title);
-                    self.render();
-                }
+                $(this).addClass('selected');
+                self.current_step = step;
+                $('#modal-header').html(self.flyform_schema.steps[step].properties.step_title);
             });
             $('[name=hide_from]').live('change', function(event){
                 var target_field = $(this).val();
