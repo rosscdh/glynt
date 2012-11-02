@@ -53,6 +53,10 @@ class CreateStepFieldForm(BootstrapForm):
 
 
 class DocumentMetaForm(BootstrapForm):
+    body = forms.ChoiceField(widget=forms.widgets.Textarea)
+
+
+class DocumentMetaForm(BootstrapForm):
     """ The template form used to help the authoring tool document meta """
     can_add_invite = forms.ChoiceField(label=_('Allow 3rd parties to sign'), choices=(('true','Yes'),('false','No')), initial='false', help_text=_('Can the user invite extra People to sign?'))
 

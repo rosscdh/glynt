@@ -7,18 +7,13 @@
 
 {% block body %}
 <div class="span12">
-  <h2>Document Author tool</h2>
-  {% if object %}
-  <h3>Editing {{ object.name }}</h3>
-  {% else %}
-  {% endif %}
-  <div id="message" class="row"></div>
+  <h2>Document Author tool{% if object %} - {{ object.name }}{% endif %}</h2>
 </div>
 
 <div class="span2 sidebar">
   <ul class="nav nav-list">
     <li class="nav-header">{% trans 'Authoring' %}</li>
-      <li><a href="#/"> {% trans 'Steps & Variables' %}</a></li>
+      <li><a href="#/"> {% trans 'Steps & Fields' %}</a></li>
       <li><a href="#/meta"> {% trans 'Properties' %}</a></li>
     <li class="nav-header">{% trans 'Document' %}</li>
       <li><a href="#/doc"> {% trans 'Document' %}</a></li>
