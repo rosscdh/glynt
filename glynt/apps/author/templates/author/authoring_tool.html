@@ -469,10 +469,11 @@ $(document).ready(function(){
             $('a#show_fields, a.modal-scrollto').live('click', function(event){
                 event.preventDefault();
                 var step = $(this).attr('data-step_index');
-                $('div#fields').modal('toggle')
                 $(this).addClass('selected');
                 self.current_step = step;
+                self.render();
                 $('#modal-header').html(self.flyform_schema.steps[step].properties.step_title);
+                $('div#fields').modal('toggle')
             });
             $('[name=hide_from]').live('change', function(event){
                 var target_field = $(this).val();
