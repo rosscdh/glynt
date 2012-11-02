@@ -244,6 +244,9 @@ ol.leveltwo {
 ol.levelthree  {
 	list-style-type:lower-roman;
 }
+ol.indent-only {
+	list-style-type:none;
+}
 ol li {
 	margin-top:10px;
 }
