@@ -252,7 +252,7 @@ $(document).ready(function(){
             var pretty_json = JSON.stringify(self.flyform_schema, null, "\t");
             self.json_output.val(pretty_json);
             $.cookie('auth_tool', pretty_json);
-            self.bind_forms_to_data();
+//            self.bind_forms_to_data();
         };
         self.load_data_from_source = function load_data_from_source() {
             data = $.parseJSON(self.json_output.val());
@@ -310,8 +310,6 @@ $(document).ready(function(){
             if (attr_name == 'choices') {
                 if (value != '' && value != 'null' && value != null) {
                   value = $.parseJSON(value);
-                } else {
-                  value = undefined;
                 }
             }
             if (value != undefined) {

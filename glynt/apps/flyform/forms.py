@@ -15,8 +15,12 @@ from django_countries import CountryFormField as CountryField
 US_STATES = [(v,v) for k,v in SHORT_US_STATES]
 USPS_CHOICES = [(v,v) for k,v in SHORT_USPS_CHOICES]
 
+# Custom Fields
+USStatesField = forms.ChoiceField(choices=US_STATES)
+USStatesUPSField = forms.ChoiceField(choices=USPS_CHOICES)
 
-CUSTOM_VALID_FIELD_TYPES = ['CountryField', 'USStateField', 'USZipCodeField']
+
+CUSTOM_VALID_FIELD_TYPES = ['CountryField', 'USStatesField', 'USStatesUPSField']
 VALID_FIELD_TYPES = CUSTOM_VALID_FIELD_TYPES + ['BooleanField', 'CharField', 'ChoiceField', 'DateField', 'DateTimeField', 'DecimalField', 'EmailField', 'FloatField', 'ImageField', 'IntegerField', 'MultiValueField', 'MultipleChoiceField', 'SlugField', 'TimeField', 'URLField', ]
 
 
@@ -227,7 +231,11 @@ class BaseFlyForm(forms.Form, LoopStepCleanFieldsMixin, StepHiddenFieldsMixin, B
           f = getattr(sys.modules[__name__], field['field'], None)
 
         if f:
-          field_instance = f()
+          if callable(f):
+              field_instance = f()
+          else:
+              field_instance = f
+
           field_instance.label = field['label'] if field['label'] else field['name']
           field_instance.name = self.slugify(field['name']) if field['name'] else self.slugify(field_instance.label)
           field_instance.help_text = field['help_text'] if field['help_text'] else None
@@ -267,7 +275,7 @@ class BaseFlyForm(forms.Form, LoopStepCleanFieldsMixin, StepHiddenFieldsMixin, B
         widget = getattr(forms.widgets, field_dict['widget'], None)
     else:
         w = getattr(forms.widgets, field_dict['widget'], None) if 'widget' in field_dict else None
-        if w:
+        if callable(w):
           widget = w()
         else:
           widget = field_instance.widget

@@ -49,3 +49,5 @@ EMAIL_HOST_PASSWORD = '0113633alex'
 # EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'glynt@dev.weareml.com'
 SERVER_EMAIL = 'glynt@dev.weareml.com'
+
+COMPRESS_ENABLED = False
