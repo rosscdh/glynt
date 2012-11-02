@@ -1191,8 +1191,6 @@ $(document).ready(function(){
       self.parseCallbacks = function parseCallbacks() {
         $.each(self.hideWhen, function(i,item) {
           item = $(item);
-console.log(item)
-console.log('fdas')
           if (self.inlineCallBack(item.attr('data-hide_when')) == true) {
             self.recordHiddenField(item, true);
             item.closest('.control-group').hide();
