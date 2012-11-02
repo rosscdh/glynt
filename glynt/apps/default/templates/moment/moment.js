@@ -1,4 +1,4 @@
-<script type="text/javascript"x>
+<script type="text/javascript">
 $(document).ready(function(){
   // create new default date
   var c = new Date();
