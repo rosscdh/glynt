@@ -1242,17 +1242,17 @@ $(document).ready(function(){
       };
 
       self.inlineCallBack = function inlineCallBack(callback) {
-//           re = new RegExp("^(.+) ([\={1,2}\!\>\<]+) ([\'\"]?.+?[\'\"]?)$",'ig');
-//           var match = re.exec(callback)
-// //          console.log(match)
-//           var variable = self.parseVariable(match[1]);
-//           var comparison = match[2];
-//           var operator = self.parseVariable(match[3]);
-//           //console.log(operator)
+          re = new RegExp("^(.+) ([\={1,2}\!\>\<]+) ([\'\"]?.+?[\'\"]?)$",'ig');
+          var match = re.exec(callback)
+//          console.log(match)
+          var variable = self.parseVariable(match[1]);
+          var comparison = match[2];
+          var operator = self.parseVariable(match[3]);
+          //console.log(operator)
 
-//           expression = variable + comparison + operator;
+          expression = variable + comparison + operator;
 //          console.log('expression is: ' + eval(expression))
-          return eval(callback);
+          return eval(expression);
       };
 
       self.init();
