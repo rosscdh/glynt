@@ -242,9 +242,6 @@ class BaseFlyForm(forms.Form, LoopStepCleanFieldsMixin, StepHiddenFieldsMixin, B
           field_instance.required = True if field['required'] in ['true','True',True,'1', 1] else False
 
           self.setup_field_widget(field_instance, field)
-          if 'full_company_name' in self.fields:
-              print field_instance.name
-              print self.fields['full_company_name'].name == self.fields['full_company_name'].widget.attrs['data-hb-name']
 
           if hasattr(f, 'choices') and 'choices' in field and type(field['choices']) is list:
             # Add log here as sometimes choices may be present but not specified

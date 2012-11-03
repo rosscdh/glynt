@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from pybars import Compiler
 
 
@@ -10,13 +11,18 @@ class PybarsPlus(object):
     self.compiler = Compiler()
     self.source = unicode(source)
     self.compiler.register_helper(u'if_eq', self.helper_if_eq)
+    self.compiler.register_helper(u'unless_eq', self.helper_unless_eq)
+    self.compiler.register_helper(u'if_gt', self.helper_if_gt)
+    self.compiler.register_helper(u'if_lt', self.helper_if_lt)
+    self.compiler.register_helper(u'if_gteq', self.helper_if_gteq)
+    self.compiler.register_helper(u'if_lteq', self.helper_if_lteq)
 
   def render(self, context):
     template = self.compiler.compile(self.source)
     if template:
       html = template(context)
-      return ''.join(html)
-    return ''
+      return unicode(''.join(html))
+    return None
 
   def helper_if_eq(self, this, *args, **kwargs):
     options = args[0]
