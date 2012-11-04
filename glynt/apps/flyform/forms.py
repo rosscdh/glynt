@@ -241,14 +241,16 @@ class BaseFlyForm(forms.Form, LoopStepCleanFieldsMixin, StepHiddenFieldsMixin, B
           field_instance.help_text = field['help_text'] if field['help_text'] else None
           field_instance.required = True if field['required'] in ['true','True',True,'1', 1] else False
 
+          if 'initial' in field:
+            field_instance.initial = field['initial']
+
           self.setup_field_widget(field_instance, field)
 
           if hasattr(f, 'choices') and 'choices' in field and type(field['choices']) is list:
             # Add log here as sometimes choices may be present but not specified
             field_instance.choices = self.valid_choice_options(field['choices'])
 
-          if 'initial' in field:
-            field_instance.initial = field['initial']
+          self.setup_widget_attrs(field_instance, field)
 
           # Append the field
           self.fields[field_instance.name] = field_instance
@@ -284,10 +286,18 @@ class BaseFlyForm(forms.Form, LoopStepCleanFieldsMixin, StepHiddenFieldsMixin, B
         else:
           widget = field_instance.widget
 
+    field_instance.widget = widget
 
+  def setup_widget_attrs(self, field_instance, field_dict):
+    widget = field_instance.widget
     if widget is not None:
+        initial = field_instance.initial if field_instance.initial is not None else ''
+        if initial is '' and field_instance.__class__.__name__ is 'ChoiceField':
+            initial, text = field_instance.choices[0]
+
         widget.attrs.update({
             'placeholder': field_dict['placeholder'],
+            'data-initial': initial,
             'data-hb-name': field_dict['data-hb-name'] if 'data-hb-name' in field_dict and field_dict['data-hb-name'] != "" else field_instance.name,
         })
 
@@ -307,5 +317,5 @@ class BaseFlyForm(forms.Form, LoopStepCleanFieldsMixin, StepHiddenFieldsMixin, B
           widget.attrs['data-glynt-loop_length'] = len(field_instance.choices) if hasattr(field_instance, 'choices') else ''
 
 
-    field_instance.widget = widget
+    
 

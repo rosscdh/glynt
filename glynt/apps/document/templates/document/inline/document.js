@@ -12,11 +12,8 @@
 // use strict;
 // use warnings;
 $(document).ready(function(){
-//"use strict";
-//"use warnings";
   $('#progress-buttons').hide();
 
-  
   var initArgosPanOptia = function initArgosPanOptia(App) {
     App.widgets.observer = new argosPanOptia();
   };
@@ -28,11 +25,11 @@ $(document).ready(function(){
 
   var initContactList = function initContactList(App) {
     // ----- FACEBOOK CALLBACK -----
-    var facebookCallback = function(q,callbackId,callBack) {
+    var facebookCallback = function(q, callbackId, callBack) {
       var self = this;
       var results = [];
 
-      processFriends = function(friends) {
+      processFriends = function processFriends(friends) {
         if (friends != undefined) {
             for (var i = 0; i < Math.min(friends.length, 2000); i++) {
                 friend = friends[i];
@@ -1196,6 +1193,7 @@ $(document).ready(function(){
           if (self.inlineCallBack(item.attr('data-hide_when')) == true) {
             self.recordHiddenField(item, true);
             item.closest('.control-group').hide();
+            item.val(item.attr('data-initial')) // reset to initial value
           }else{
             self.recordHiddenField(item, false);
             item.closest('.control-group').fadeIn('slow');
@@ -1209,6 +1207,7 @@ $(document).ready(function(){
           }else{
             self.recordHiddenField(item, true);
             item.closest('.control-group').hide();
+            item.val(item.attr('data-initial')) // reset to initial value
           };
         });
       };
