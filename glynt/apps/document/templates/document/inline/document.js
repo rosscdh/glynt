@@ -12,21 +12,23 @@
 // use strict;
 // use warnings;
 $(document).ready(function(){
+//"use strict";
+//"use warnings";
   $('#progress-buttons').hide();
 
   
-  initArgosPanOptia = function initArgosPanOptia(App) {
+  var initArgosPanOptia = function initArgosPanOptia(App) {
     App.widgets.observer = new argosPanOptia();
   };
 
-  initConditionalCallback = function initConditionalCallback(App) {
+  var initConditionalCallback = function initConditionalCallback(App) {
     App.widgets.ccbs = new conditionalCallbackSets(App.documentModel);
     App.widgets.ccbs.parseCallbacks();
   };
 
-  initContactList = function initContactList(App) {
+  var initContactList = function initContactList(App) {
     // ----- FACEBOOK CALLBACK -----
-    facebookCallback = function(q,callbackId,callBack) {
+    var facebookCallback = function(q,callbackId,callBack) {
       var self = this;
       var results = [];
 
@@ -93,7 +95,7 @@ $(document).ready(function(){
     App.widgets.contactsWidget = new contactsWidget([facebookCallback], {});
   };
 
-  initSelect2 = function initSelect2(App) {
+  var initSelect2 = function initSelect2(App) {
     {% if request.user.is_authenticated %}
     $(".contact-list").select2({
         query: function(query) {
@@ -178,14 +180,14 @@ $(document).ready(function(){
         }
 
         self.stepList = function stepList() {
-          steps = function(text){
-            step_list = [];
-            i = 1;
+          var steps = function(text){
+            var step_list = [];
+            var i = 1;
 
             $.each(self.steps(), function(index,element){
-              is_current = self.currentFormStep() == i;
-              step_text = (text == undefined || text == 'numeric') ? i : text ;
-              step_name = element.title;
+              var is_current = self.currentFormStep() == i;
+              var step_text = (text == undefined || text == 'numeric') ? i : text ;
+              var step_name = element.title;
 
               step_list.push({index:i-1, text: step_text, step_name: step_name, step: i, is_current: is_current});
               i++;
@@ -193,7 +195,7 @@ $(document).ready(function(){
 
             return step_list;
           };
-          context = {
+          var context = {
             'current': self.currentFormStep(),
             'last': self.maxFormSteps(),
             'step_list': steps('&nbsp;')
@@ -282,7 +284,7 @@ $(document).ready(function(){
 
         self.stepVisibility = function stepVisibility(step) {
           $.each(self.steps(), function(index,item){
-              form_group = $(item.form_set);
+              var form_group = $(item.form_set);
               if ((index+1) == step) {
                   form_group.css('display', 'block');
                   form_group.removeClass('hidden');
@@ -679,7 +681,7 @@ $(document).ready(function(){
     // This is where radio and checkboxes in a loop are handled
     self.setTemplateHelperValues = function setTemplateHelperValues(input, local_context) {
         // set custom
-        helper = self.getTemplateHelperKey(input);
+        var helper = self.getTemplateHelperKey(input);
 
         var context = (local_context == undefined) ? self.context() : local_context ;
         var slug = helper['slug'];
@@ -847,7 +849,7 @@ $(document).ready(function(){
                 if (data) {
                     $('form.bind-document').find(self.valid_fieldtypes.join(',')).each(function(index,element){
                         element = $(element);
-                        element_name = element.attr('name');
+                        var element_name = element.attr('name');
                         if (element_name != undefined && element_name in data) {
                             element.val(data[element_name]);
                         }
@@ -861,7 +863,7 @@ $(document).ready(function(){
         * to prevent the 400 error that occurs when we run out of cookie mem space
         */
         self.deleteOtherDocCookies = function deleteOtherDocCookies() {
-            arrCookieDocs = document.cookie.split(';');
+            var arrCookieDocs = document.cookie.split(';');
             for (var i = 0; i < arrCookieDocs.length; i++) {
                 var name_value = arrCookieDocs[i].split("=");
                 if (name_value[0].indexOf('glynt-') != -1) {
@@ -881,7 +883,7 @@ $(document).ready(function(){
                 if (cookie_value.length >= 0) {
                     $('form.bind-document').find(self.valid_fieldtypes.join(',')).each(function(index,element){
                         element = $(element);
-                        element_name = element.attr('name');
+                        var element_name = element.attr('name');
                         if (element_name != undefined && cookie_value.attr(element_name) != undefined) {
                             element.val(cookie_value.attr(element.attr('name')));
                         }
@@ -1161,7 +1163,7 @@ $(document).ready(function(){
     /**
     * Handler for fields that have show-when and hide when callbacks
     */
-    conditionalCallbackSets = function(documentModel) {
+    var conditionalCallbackSets = function(documentModel) {
       var self = this;
       var showWhen = [];
       var hideWhen = [];
@@ -1215,11 +1217,11 @@ $(document).ready(function(){
       */
       self.recordHiddenField = function recordHiddenField(field, is_hidden) {
         field = $(field);
-        target_field = field.closest('form').find('input[name=hidden_fields]:first')[0];
+        var target_field = field.closest('form').find('input[name=hidden_fields]:first')[0];
         target_field = $(target_field);
 
-        val = (target_field.val() != '') ? target_field.val() : '[]' ;
-        data = $.parseJSON(val);
+        var val = (target_field.val() != '') ? target_field.val() : '[]' ;
+        var data = $.parseJSON(val);
         // perform union or intersect to add or remove name from list
         data = (is_hidden === true) ? data.union([field.attr('name')]) : data.subtract([field.attr('name')]) ;
         // set the value in the hidden field
@@ -1230,28 +1232,24 @@ $(document).ready(function(){
       self.parseVariable = function parseVariable(variable) {
         if (variable.indexOf('"') != -1 || variable.indexOf("'") != -1) {
           variable = variable.replace(/[\'\"]/gi,'');
-          variable = '"' + variable + '"';
         } else {
           variable = variable.replace(/[\'\"]/gi,'"');
           if (isNaN(variable)) {
             variable = documentModel.context()[variable];
-            variable = '"' + variable + '"';
           }
         }
-        return variable;
+        return '"' + variable + '"';
       };
 
       self.inlineCallBack = function inlineCallBack(callback) {
-          re = new RegExp("^(.+) ([\={1,2}\!\>\<]+) ([\'\"]?.+?[\'\"]?)$",'ig');
+          var re = new RegExp("^([\'\"]?.+?[\'\"]?) ([\={1,2}\!\>\<]+) ([\'\"]?.+?[\'\"]?)$",'ig');
           var match = re.exec(callback)
-//          console.log(match)
           var variable = self.parseVariable(match[1]);
           var comparison = match[2];
           var operator = self.parseVariable(match[3]);
-          //console.log(operator)
-
-          expression = variable + comparison + operator;
-//          console.log('expression is: ' + eval(expression))
+          var expression = variable + comparison + operator;
+        // console.log('expression is: ' + expression)
+        // console.log(callback)
           return eval(expression);
       };
 
