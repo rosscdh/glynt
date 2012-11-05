@@ -763,15 +763,21 @@ $(document).ready(function(){
 	  $('#preview-doc').animate({
 		  height: $(window).height() - 100, 
 	 }, 250);
+	$('#view-doc').hide();
+	$('#close-doc').show();
+	
+	// Set the preview window to the correct height
+	var h = $(window).height() - 150;
+	$('.doc-body').height(h);
+
 	},
 	function()
 	{
 	  $('#preview-doc').animate({
-	  height: $(window).height() - 100, 
 		  height: "30px", 
 	  }, 250);     
-
-
+	$('#view-doc').show();
+	$('#close-doc').hide();
 	});
 	
 	

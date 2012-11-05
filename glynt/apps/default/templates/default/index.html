@@ -78,21 +78,43 @@
  .carousel-caption {
    background-color: transparent;
    position: static;
-   max-width: 550px;
+   max-width: 460px;
    padding: 0 20px 20px 20px;
    margin-bottom: 100px;
  }
+ .carousel-caption h1{
+	font-size:38px;
+}
  .carousel-caption h1,
  .carousel-caption .lead {
    margin: 0;
    line-height: 1.25;
-   color: #fff;
+   color: #FFF;
    text-shadow: 0 1px 1px rgba(0,0,0,.4);
    padding-bottom:20px;
  }
+ .carousel-caption.dark h1,
+ .carousel-caption.dark .lead {
+	color:#fff;
+   padding-bottom:20px;
+text-shadow:none;
+}
+ .carousel-caption.dark p.lead{
+	color:#222;
+	
+}
+.carousel-caption.dark h1 span {
+	background-color:#69c3e5;
+	padding:5px 5px 5px 5px;
+	opacity:0.9
+}
+.carousel-caption.dark h1 span.blue {
+	background-color:#76c68b;
+}
  .carousel-caption .btn {
-   margin-top: 10px;
- }
+   margin-top: 0px;
+ 	font-size:20px;
+}
 
 
 
@@ -240,8 +262,8 @@
     <div class="item active">
         <img src="/static/img/homepage/slide-group.png" alt="">
       <div class="container">
-        <div class="carousel-caption">
-          <h1>A better legal service is coming.</h1>
+        <div class="carousel-caption dark">
+          <h1><span>A better legal service is coming.</span></h1>
           <p class="lead">Legal services are unnecessarily expensive, complicated and disconnected. We're working hard to change that.</p>
           <a class="btn btn-large btn-primary" href="#">Sign up today</a>
         </div>
@@ -250,9 +272,9 @@
     <div class="item">
       <img src="/static/img/homepage/slide-fortune.png" alt="">
       <div class="container">
-        <div class="carousel-caption">
-          <h1 style="color:#666">Efficiency. The key to saving time and money.</h1>
-          <p class="lead" style="color:#666">Technology can help you save time and money </p>
+        <div class="carousel-caption dark">
+          <h1><span class="blue">Efficiency. The key to saving time and money.</span></h1>
+          <p class="lead">Technology can help you save time and money </p>
           <a class="btn btn-large btn-primary" href="#">Learn more</a>
         </div>
       </div>
@@ -263,7 +285,7 @@
         <div class="carousel-caption">
           <h1>A historic law firm joins LawPal.</h1>
           <p class="lead">Orrick, Herrington &amp; Sutcliffe become LawPal's launch partner.</p>
-          <a class="btn btn-large btn-primary" href="#">Browse gallery</a>
+          <a class="btn btn-large btn-primary" href="#">Read more</a>
         </div>
       </div>
     </div>
@@ -283,20 +305,20 @@
   <!-- Three columns of text below the carousel -->
   <div class="row">
     <div class="span4">
-      <img class="img-circle" src="http://placehold.it/140x140">
-      <h2>Heading</h2>
+      <img class="img-circle" src="/static/img/homepage/folder.png">
+      <h2>Legal Documents</h2>
       <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
       <p><a class="btn" href="#">View details &raquo;</a></p>
     </div><!-- /.span4 -->
     <div class="span4">
-      <img class="img-circle" src="http://placehold.it/140x140">
-      <h2>Heading</h2>
+      <img class="img-circle" src="/static/img/homepage/cycle.png">
+      <h2>Management</h2>
       <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
       <p><a class="btn" href="#">View details &raquo;</a></p>
     </div><!-- /.span4 -->
     <div class="span4">
-      <img class="img-circle" src="http://placehold.it/140x140">
-      <h2>Heading</h2>
+      <img class="img-circle" src="/static/img/homepage/advice.png">
+      <h2>Advice</h2>
       <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
       <p><a class="btn" href="#">View details &raquo;</a></p>
     </div><!-- /.span4 -->
@@ -305,41 +327,37 @@
 
   <!-- START THE FEATURETTES -->
 
-  <hr class="featurette-divider">
+  <!-- <hr class="featurette-divider">
 
-  <div class="featurette">
-    <img class="featurette-image pull-right" src="../assets/img/examples/browser-icon-chrome.png">
-    <h2 class="featurette-heading">First featurette headling. <span class="muted">It'll blow your mind.</span></h2>
-    <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
-  </div>
+    <div class="featurette">
+      <img class="featurette-image" src="/static/img/homepage/screenshot.png" align="center">
+      <h2 class="featurette-heading">First featurette headling. <span class="muted">It'll blow your mind.</span></h2>
+      <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+    </div>
 
-  <hr class="featurette-divider">
+    <hr class="featurette-divider">
 
-  <div class="featurette">
-    <img class="featurette-image pull-left" src="../assets/img/examples/browser-icon-firefox.png">
-    <h2 class="featurette-heading">Oh yeah, it's that good. <span class="muted">See for yourself.</span></h2>
-    <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
-  </div>
+    <div class="featurette">
+      <img class="featurette-image pull-left" src="../assets/img/examples/browser-icon-firefox.png">
+      <h2 class="featurette-heading">Oh yeah, it's that good. <span class="muted">See for yourself.</span></h2>
+      <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+    </div>
 
-  <hr class="featurette-divider">
+    <hr class="featurette-divider">
 
-  <div class="featurette">
-    <img class="featurette-image pull-right" src="../assets/img/examples/browser-icon-safari.png">
-    <h2 class="featurette-heading">And lastly, this one. <span class="muted">Checkmate.</span></h2>
-    <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
-  </div>
+    <div class="featurette">
+      <img class="featurette-image pull-right" src="../assets/img/examples/browser-icon-safari.png">
+      <h2 class="featurette-heading">And lastly, this one. <span class="muted">Checkmate.</span></h2>
+      <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+    </div>
 
-  <hr class="featurette-divider">
-
+    <hr class="featurette-divider"> -->
+  
   <!-- /END THE FEATURETTES -->
+</div>
+<br />
+<br />
 
-
-  <!-- FOOTER -->
-  <footer>
-    <p class="pull-right"><a href="#">Back to top</a></p>
-    <p>&copy; 2012 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-  </footer>
-
-</div><!-- /.container -->
+<!-- /.container -->
 
 {% endblock %}
