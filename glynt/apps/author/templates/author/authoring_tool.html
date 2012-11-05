@@ -141,16 +141,12 @@ ol.step-field-list li {
 <br/>
 </script>
 
+<span id="document-body" class="hide">{{ object.body|default:''|safe }}</span>
+
 <script type="text/javascript" src="{{ STATIC_URL }}author/js/wordfrequency.js"></script>
 
 <script>
 $(document).ready(function(){
-
-    words = new wordCount({
-        STATIC_URL: '{{ STATIC_URL }}',
-        doc: $('#id_body').val()
-    });
-
     app = $.sammy(function() {
         var self = this;
 
@@ -265,6 +261,7 @@ $(document).ready(function(){
             self.render_fields(step_index);
             self.update_json();
         };
+
         // ---- UPDATE JSON -----
         self.update_json = function update_json() {
             var pretty_json = JSON.stringify(self.flyform_schema, null, "\t");
@@ -272,6 +269,7 @@ $(document).ready(function(){
             $.cookie('auth_tool', pretty_json);
 //            self.bind_forms_to_data();
         };
+
         self.load_data_from_source = function load_data_from_source() {
             data = $.parseJSON(self.json_output.val());
             //data = $.parseJSON($.cookie('auth_tool'));
@@ -338,6 +336,7 @@ $(document).ready(function(){
               self.flyform_schema.steps[step_index].fields[field_index][attr_name] = self.ensureJSONValue(value);
             }
         };
+
         self.updateMetaField = function updateMetaField(field) {
             var form = field.closest('form.form-meta');
             var attr_name = field.attr('name');
@@ -351,6 +350,7 @@ $(document).ready(function(){
           }
           return value;
         };
+
         self.ensureFormValue = function ensureFormValue(value) {
           if ([true,'Yes','y','True','true',1,false,'No','n','False','false',0].indexOf(value) != -1) {
             value = ([true,'True','true',1].indexOf(value) >= 0) ? 'true': 'false';
@@ -360,6 +360,7 @@ $(document).ready(function(){
           }
           return value;
         };
+
         // ----- BIND DATA TO FORM VIEWS -----
         self.bind_forms_to_data = function bind_forms_to_data() {
             // bind step data to form value
@@ -420,6 +421,9 @@ $(document).ready(function(){
                     }
                 }
             });
+
+            $('form.form-doc').find('#id_body').val($('span#document-body').html());
+
             // bind field element data from json to form field value
             $.each($('form.form-meta'), function(field_index, form_field){
               form_field = $(form_field);
@@ -451,6 +455,13 @@ $(document).ready(function(){
                     $(element).hide();
                 });
             }
+        };
+
+        self.init_word_analasys = function init_word_analasys() {
+          self.words = new wordCount({
+              STATIC_URL: '{{ STATIC_URL }}',
+              doc: $('span#document-body').html()
+          });
         };
 
         self.init_interface = function init_interface() {
@@ -573,6 +584,7 @@ $(document).ready(function(){
             self.registerCallback('change_steptype', self.on_steptype_change);
 
             self.load_data_from_source();
+            self.init_word_analasys();
             self.init_interface();
             self.render();
 

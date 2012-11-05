@@ -3,8 +3,7 @@ wordCount = function WordCount(params) {
 
     self.STATIC_URL = params.STATIC_URL;
     //document.body.innerText.toLowerCase().trim().replace(/[,;.]/g,'').split(/[\s\/]+/g).sort()
-    self.sWords = (params.doc == undefined) ? false : params.doc.toLowerCase().trim().replace(/[,;.]/g,'').split(/[\s\/]+/g).sort();
-    console.log(self.sWords)
+    self.sWords = (params.doc == undefined) ? false : params.doc;
     self.iWordsCount = self.sWords.length; // count w/ duplicates
     self.stopWords = [];
     self.result = [];
@@ -23,8 +22,12 @@ wordCount = function WordCount(params) {
       self.result = (self.sWords === false) ? false : self.evaluateWords();
     });
 
+    self.prepareDoc = function prepareDoc(data) {
+        return data.toLowerCase().trim().replace(/(<([^>]+)>)/gi,'').replace(/(\{\{([\/{1}])?(.+)\}\})/gi,'').replace(/[\,\;\.\[\]\(\)]/ig,'').split(/[\s\/]+/ig).sort();
+    };
+
     self.parseDoc = function parseDoc(doc) {
-        self.sWords = doc.toLowerCase().trim().replace(/[,;.]/g,'').split(/[\s\/]+/g).sort();
+        self.sWords = self.prepareDoc(doc);
         self.iWordsCount = self.sWords.length;
         self.result = self.evaluateWords();
         return self.result;
@@ -32,6 +35,11 @@ wordCount = function WordCount(params) {
 
     self.evaluateWords = function evaluateWords() {
         var ignore = self.stopWords;
+
+        if (typeof self.sWords != 'object') {
+            self.sWords = self.prepareDoc(self.sWords);
+        }
+
         var counts = {}; // object for math
         var arr = []; // an array of objects to return
 

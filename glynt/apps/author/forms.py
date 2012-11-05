@@ -53,7 +53,7 @@ class CreateStepFieldForm(BootstrapForm):
 
 
 class DocumentForm(BootstrapForm):
-    body = forms.ChoiceField(initial='The quick brown fox', widget=forms.widgets.Textarea)
+    body = forms.ChoiceField(widget=forms.widgets.Textarea(attrs={'class':'span6'}))
 
 
 class DocumentMetaForm(BootstrapForm):
