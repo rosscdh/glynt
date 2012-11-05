@@ -132,8 +132,14 @@ ol.step-field-list li {
 <br/>
 </script>
 
+<script type="text/javascript" src="{{ STATIC_URL }}author/js/wordfrequency.js"></script>
+
 <script>
 $(document).ready(function(){
+    words = new wordCount({
+        STATIC_URL: '{{ STATIC_URL }}',
+    });
+    console.log(words)
     app = $.sammy(function() {
         var self = this;
 
