@@ -18,6 +18,7 @@ from glynt.apps.sign.forms import DocumentSignatureForm
 from glynt.apps.sign.utils import encode_data
 
 import datetime
+from django.utils.timezone import utc
 
 
 class ProcessInviteToSignView(BaseFormView):
@@ -120,9 +121,11 @@ class ProcessSignDocumentView(UpdateView):
 
     if not self.object.is_signed:
       signature = request.POST.get('output', None)
+      date_signed = datetime.datetime.utcnow().replace(tzinfo=utc)
       self.object.signature = signature
       self.object.is_signed = True
-      self.object.meta_data['signed_at'] = datetime.datetime.utcnow()
+      self.object.date_signed = date_signed
+      self.object.meta_data['signed_at'] = date_signed
       self.object.meta_data['signee_ip'] = request.META.get('REMOTE_ADDR')
       self.object.meta_data['signee_host'] = request.META.get('REMOTE_HOST')
       self.object.meta_data['signee_useragent'] = request.META.get('HTTP_USER_AGENT')
