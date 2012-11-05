@@ -123,6 +123,15 @@ ol.step-field-list li {
 <br/>
 </script>
 
+<script type="text/x-handlebars" id="hb-doc">
+<div id="doc">
+  <form id="form-doc" class="form-doc form-horizontal">
+    {{ form_document }}
+  </form>
+</div>
+<br/>
+</script>
+
 <script type="text/x-handlebars" id="hb-meta">
 <div id="meta">
   <form id="form-meta" class="form-meta form-horizontal">
@@ -136,10 +145,12 @@ ol.step-field-list li {
 
 <script>
 $(document).ready(function(){
+
     words = new wordCount({
         STATIC_URL: '{{ STATIC_URL }}',
+        doc: $('#id_body').val()
     });
-    console.log(words)
+
     app = $.sammy(function() {
         var self = this;
 
@@ -157,6 +168,7 @@ $(document).ready(function(){
 
         self.steps_view = Handlebars.compile($('script#hb-steps').html());
         self.fields_view = Handlebars.compile($('script#hb-fields').html());
+        self.doc_view = Handlebars.compile($('script#hb-doc').html());
         self.meta_view = Handlebars.compile($('script#hb-meta').html());
         self.json_output = $('#json-output');
 
@@ -280,6 +292,7 @@ $(document).ready(function(){
         self.render = function render() {
           self.render_steps();
           self.render_fields(self.current_step);
+          self.render_doc();
           self.render_meta();
           self.dispatch('bind_data', {});
         };
@@ -288,6 +301,9 @@ $(document).ready(function(){
         };
         self.render_fields = function render_fields(step_index) {
           $( "div#fields_list" ).html(self.fields_view({'step': self.flyform_schema.steps[step_index]}));
+        };
+        self.render_doc = function render_doc() {
+          $( "div#doc" ).html(self.doc_view({}));
         };
         self.render_meta = function render_meta() {
           $( "div#meta" ).html(self.meta_view({}));

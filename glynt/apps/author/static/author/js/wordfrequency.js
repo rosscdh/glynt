@@ -3,7 +3,8 @@ wordCount = function WordCount(params) {
 
     self.STATIC_URL = params.STATIC_URL;
     //document.body.innerText.toLowerCase().trim().replace(/[,;.]/g,'').split(/[\s\/]+/g).sort()
-    self.sWords = (params.doc == undefined) ? false : params.doc;
+    self.sWords = (params.doc == undefined) ? false : params.doc.toLowerCase().trim().replace(/[,;.]/g,'').split(/[\s\/]+/g).sort();
+    console.log(self.sWords)
     self.iWordsCount = self.sWords.length; // count w/ duplicates
     self.stopWords = [];
     self.result = [];
