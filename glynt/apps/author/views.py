@@ -6,7 +6,7 @@ from django.views.generic.base import TemplateView
 from django.views.generic.edit import BaseUpdateView
 
 
-from glynt.apps.author.forms import CreateStepForm, CreateStepFieldForm, DocumentMetaForm
+from glynt.apps.author.forms import CreateStepForm, CreateStepFieldForm, DocumentForm, DocumentMetaForm
 from glynt.apps.document.models import Document
 
 import logging
@@ -24,6 +24,7 @@ class AuthorToolView(TemplateView, BaseUpdateView):
 
         context['form_steps'] = CreateStepForm()
         context['form_fields'] = CreateStepFieldForm()
+        context['form_document'] = DocumentForm()
         context['form_document_meta'] = DocumentMetaForm()
 
         context['csrf_raw_token'] = get_token(self.request)
