@@ -265,7 +265,7 @@ $(document).ready(function(){
       App.registerCallback('invitee.add', self.argosPanOptiaCallback);
 
       // send the data to the invite widget
-      App.dispatch('invitee.data', $('script#inviteeListJSON').html());
+      App.dispatch('invitee.data', $('script#js-invitee-list').html());
 
       self.render();
     };

@@ -33,6 +33,10 @@ class DocumentSignature(models.Model):
     def get_absolute_url(self):
         return reverse('sign:default', kwargs={'pk': self.document.pk, 'hash': self.key_hash})
 
+    @property
+    def signature_pic_url(self):
+        return reverse('sign:signature_pic', kwargs={'pk': self.document.pk, 'hash': self.key_hash})
+
     def signature_as_string(self):
       return json.dumps(self.signature)
 

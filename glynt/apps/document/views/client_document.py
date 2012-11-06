@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404
 from django.views.generic.base import View
 from django.utils import simplejson as json
 from django.db.utils import IntegrityError
+from django.template import Context
 
 from glynt.apps.document.models import Document, ClientCreatedDocument
 from glynt.apps.document.forms import ClientCreatedDocumentForm
@@ -26,27 +27,26 @@ class MyDocumentView(DocumentView):
   """ Used when viewing a users own documents """
   def get_context_data(self, **kwargs):
     # call the parent dirctly and skip what the parent would do
+    # the item being skipped here is the user_can_view_document
     context = super(DocumentView, self).get_context_data(**kwargs)
 
     document_slug = slugify(self.kwargs['slug'])
 
-    self.user_document = get_object_or_404(ClientCreatedDocument.objects.select_related(), slug=document_slug, owner=self.request.user)
+    self.user_document = get_object_or_404(ClientCreatedDocument.objects.select_related('source_document', 'source_document__flyform'), slug=document_slug, owner=self.request.user)
     user_can_view_document(self.user_document, self.request.user)
+    # Setup the document based on teh source_document of the viewed doc
+    self.document = self.user_document.source_document
+    invitee_list = self.user_document.documentsignature_set.all()
 
     context['userdoc'] = self.user_document
     context['userdoc_form'] = ClientCreatedDocumentForm(instance=context['userdoc'])
-
-    # Setup the document based on teh source_document of the viewed doc
-    self.document = self.user_document.source_document
-
     context['object'] = self.document
     context['document'] = self.document.body
     context['default_data'] = json.dumps(self.user_document.data)
-
-    invitee_list = self.user_document.documentsignature_set.all()
     context['invitee_list'] = invitee_list
-    context['invitee_list_json'] = json.dumps([{'id': i.pk, 'name': i.meta_data['to_name'], 'email': i.meta_data['to_email'], 'is_signed': i.is_signed} for i in invitee_list])
+    context['invitee_list_json'] = json.dumps([{'id': i.pk, 'name': i.meta_data['to_name'], 'email': i.meta_data['to_email'], 'is_signed': i.is_signed, 'date_signed': i.date_signed.strftime("%x %X") if i.date_signed is not None else '', 'signature_image_url': i.signature_pic_url, 'ip': i.meta_data['signee_ip'] if 'signee_ip' in i.meta_data else ''} for i in invitee_list])
     context['can_add_invite'] = str(self.document.flyform.flyform_meta['can_add_invite']).lower() if 'can_add_invite' in self.document.flyform.flyform_meta else str(False).lower()
+    context['signature_template'] = self.document.flyform.signature_template.render(Context({}))
 
     try:
       context['form_set'] = self.document.flyform.flyformset()

@@ -1,6 +1,7 @@
 from django.db import models
 from jsonfield import JSONField
 from django.utils import simplejson as json
+from django.template import loader
 
 from glynt.apps.document.models import Document
 from glynt.apps.flyform.forms import BaseFlyForm
@@ -34,6 +35,11 @@ class FlyForm(models.Model):
             for field in step['fields']:
                 field_names.append(field['name'])
         return field_names
+
+    @property
+    def signature_template(self):
+        template_file = self.flyform_meta['templates']['signature'] if 'templates' in self.flyform_meta and 'signature' in self.flyform_meta['templates'] else 'sign/partials/signature_template.html'
+        return loader.get_template(template_file)
 
     def flyform_fields_as_json(self):
         return json.dumps(self.flyform_fields)

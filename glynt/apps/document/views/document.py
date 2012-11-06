@@ -26,6 +26,7 @@ class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
     document_slug = slugify(self.kwargs['slug'])
 
     self.document = get_object_or_404(Document.objects.select_related('flyform'), slug=document_slug)
+    user_can_view_document(self.document, self.request.user)
 
     context['csrf_raw_token'] = get_token(self.request)
 
@@ -33,15 +34,13 @@ class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
     context['document'] = self.document.body
     context['default_data'] = self.document.default_data_as_json()
     context['flyform_fieldnames'] = self.document.flyform.flyform_fields_as_json()
-    
+
     context['userdoc_form'] = ClientCreatedDocumentForm()
 
     try:
       context['form_set'] = self.document.flyform.flyformset()
     except KeyError:
       context['form_set'] = FORM_GROUPS['no_steps']
-
-    user_can_view_document(self.document, self.request.user)
 
     return context
 

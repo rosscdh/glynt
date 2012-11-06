@@ -2,12 +2,14 @@
 {% load glynt_helpers %}
 {% load url from future %}
 
-<script id="inviteeListJSON">{{ invitee_list_json|default:""|safe }}</script>
-<script id="document-default_data" type="text/javascript">[{{ default_data|default:''|safe }}]</script>
-<script id="js-document" type="text/x-handlebars-template">
-{{ userdoc.body|default:object.body|safe }}
-</script>
 <script src="{{ STATIC_URL }}js/jquery.jeditable.mini.js"></script>
+
+<script type="text/javascript" id="document-default_data">[{{ default_data|default:''|safe }}]</script>
+<script type="text/javascript" id="js-invitee-list">{{ invitee_list_json|default:""|safe }}</script>
+
+<script type="text/x-handlebars-template" id="js-document">{{ userdoc.body|default:object.body|safe }}</script>
+<script type="text/x-handlebars-template" id="js-signature_template">{{ signature_template|default:""|safe }}</script>
+
 <script id="document-controls" type="text/javascript">
 // use strict;
 // use warnings;
@@ -216,8 +218,11 @@ $(document).ready(function(){
             is_last_step = (self.maxFormSteps() == self.currentFormStep()) ? true : false ;
             if (is_last_step == true) {
               $('#last-step').show();
+              $('li#last_step').addClass('active');
+              console.log($('li#last_step'))
             }else{
               $('#last-step').hide();
+              $('li#last_step').removeClass('active');
             }
             return is_last_step
         }
@@ -501,6 +506,7 @@ $(document).ready(function(){
     self.FalseValuesList = ['False','false',false,null,void 0,''];
     self.handlebarsElementId = ko.observable('script#js-document');
     self.compiledTemplate = Handlebars.compile($(self.handlebarsElementId()).html()); // must not be ko.observable
+    self.compiledSignatureTemplate = Handlebars.compile($('script#js-signature_template').html()); // must not be ko.observable
     self.renderedHTML = ko.observable('');
 
     self.visibilityRuleset = ko.observableArray([]);
@@ -748,7 +754,14 @@ $(document).ready(function(){
     }
 
     self.render = function render() {
-        return self.compiledTemplate(self.context());
+        // append the signature_template as a variable; and pass the current context into it
+        // so we can render out the desired fields
+        context = self.context();
+        invitees = {'signatures': $.parseJSON($('script#js-invitee-list').html())};
+        $.extend(context, invitees)
+        console.log(new Handlebars.SafeString(self.compiledSignatureTemplate(context)))
+        self.setContextItemByForce('signature_template', new Handlebars.SafeString(self.compiledSignatureTemplate(context)));
+        return self.compiledTemplate(context);
     }
   }
 
@@ -956,7 +969,6 @@ $(document).ready(function(){
                         field = $('#id_' + key);
                         self.injectError(field, errors);
                     }
-                    
                 });
                 is_valid = false;
             })
@@ -1360,10 +1372,10 @@ $(document).ready(function(){
 <ul id="step-list" class="nav nav-tabs">
   {{#each step_list}}
   <li data-goto_step="{{step}}" rel="pagination-tooltip" title="{{step_name}}" class="{{#if is_current}}active{{/if}}">
-  	<a href="#">{{step_name}}	<span class="page_num" style="display:hidden">{{text}}</span></a>
+    <a href="#">{{step_name}}	<span class="page_num" style="display:hidden">{{text}}</span></a>
   </li>
   {{/each}}
-  <li data-goto_step="{{last}}" class="last_step" title="{{step_name}}"><a href="#">Review</a></li>
+  <li data-goto_step="{{last}}" id="last_step" class="last_step" title="{{step_name}}"><a href="#">Review</a></li>
 </ul>
 {% endtplhandlebars %}
 
