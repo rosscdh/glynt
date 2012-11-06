@@ -12,7 +12,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    ('Ross', 'sendrossemail@gmail.com'),
+    ("Ross Crawford-d'Heureuse", 'ross@lawpal.com'),
 )
 COMPRESSION_ENABLED = False
 MANAGERS = ADMINS
