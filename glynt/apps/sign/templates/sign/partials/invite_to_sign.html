@@ -154,7 +154,6 @@ $(document).ready(function(){
     self.render = function render() {
       self.context['csrf_token'] =  $.cookie('csrftoken'); // update the csrf token and make it current
       self.target_element.html(self.compiledTemplate(self.context));
-      console.log(self.context)
     };
 
     self.removeInvitation = function removeInvitation(id) {
@@ -275,7 +274,6 @@ $(document).ready(function(){
   };
 {% if target_element %}
   // if we have a target_element specified then instantiate the invite widget
-  console.log($('{{ target_element }}').attr('data-can_add_invite'))
   var inviteToSign = new inviteToSignWidget({'target_element': $('{{ target_element }}'), 'can_add_invite': $('{{ target_element }}').attr('data-can_add_invite') });
 {% endif %}
 

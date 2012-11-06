@@ -52,7 +52,6 @@ $(document).ready(function(){
         })
         .success(function(data, textStatus, jqXHR) {
           var response = data;
-
           if (response.data != undefined && response.data.length > 0) {
             processFriends(response.data);
             if (response.paging != undefined && response.paging.next != undefined) {
@@ -70,7 +69,7 @@ $(document).ready(function(){
       };
 
       sendData = function(current_results) {
-        callBack(results,callbackId);
+        callBack(results, callbackId);
       };
 
       // Only perform IF we have a FB connected account
@@ -244,7 +243,7 @@ $(document).ready(function(){
                   return step;
               }
           }
-          console.log('error has not caught valid step: '+active)
+          //console.log('error has not caught valid step: '+active)
           self.stepVisibility(default_step);
         };
 
@@ -254,12 +253,12 @@ $(document).ready(function(){
           for(var step = active; step <= default_step ; step++) {
               if(self.validateStep(step)) {
                   self.stepVisibility(step);
-                  // persist the cookie progress
-                  self.persistProgressToCookie(step);
+                  // // persist the cookie progress
+                  // self.persistProgressToCookie(step);
                   return step;
               }
           }
-          console.log('error has not caught valid step: '+active)
+          //console.log('error has not caught valid step: '+active)
           self.stepVisibility(default_step);
         };
 
@@ -459,7 +458,7 @@ $(document).ready(function(){
             }
 
             // @TODO DELETE HACK
-            for (var c=index+1; c <= fieldsets.length; c++) {
+            for (var c = index+1; c <= fieldsets.length; c++) {
                 // hide these elements
                 $(fieldsets[c]).remove();
                 self.form_fieldset.find('#set-'+c).remove();
@@ -926,7 +925,7 @@ $(document).ready(function(){
             var form_data_serialized = form.serialize();
             $.ajax({
               type: 'POST',
-              url: "{% url 'document:my_view' slug=userdoc.slug %}?step="+step,
+              url: "{% url 'document:my_view' slug=userdoc.slug %}?step=" + step,
               data: form_data_serialized,
               current_progress: $.cookie('{{ userdoc.cookie_name }}')
             })
@@ -940,6 +939,7 @@ $(document).ready(function(){
             })
             .error(function(jqXHR, textStatus, errorThrown) { 
                 var data = $.parseJSON(jqXHR.responseText);
+
                 self.clearInjectedErrors();
                 self.message(data.message);
 
@@ -951,7 +951,6 @@ $(document).ready(function(){
                             field = form.find('#id_'+index+'_'+key);
                             self.injectError(field, error);
                         });
-                        
                     } else {
                         // normal step
                         field = $('#id_' + key);

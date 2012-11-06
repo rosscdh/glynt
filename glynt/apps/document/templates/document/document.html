@@ -79,16 +79,16 @@
 
 {% block document %}
 <div class="row">
-		<div style="" id="preview-doc" class="span12">
-			<div id="view-doc" class="drawer-toggle"><span>Preview Document</span></div>
-			<div id="close-doc" class="drawer-toggle" style="display:none;"><span>Hide Preview</span></div>
-			
-			<div id="preview-doc-inner">
-			<div class="doc-body">
-				<span id="document-md" data-bind="html: App.documentModel.renderedHTML()">{% show_loading modal='False' %}</span>
-			</div>
-		</div>
-	</div>
+    <div style="" id="preview-doc" class="span12">
+      <div id="view-doc" class="drawer-toggle"><span>Preview Document</span></div>
+      <div id="close-doc" class="drawer-toggle" style="display:none;"><span>Hide Preview</span></div>
+      
+      <div id="preview-doc-inner">
+      <div class="doc-body">
+        <span id="document-md" data-bind="html: App.documentModel.renderedHTML()">{% show_loading modal='False' %}</span>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
 

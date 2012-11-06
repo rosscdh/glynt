@@ -58,10 +58,13 @@ class JsonErrorResponseMixin(object):
       status = 200
     else:
       msg = ''
-      for key,field in form.fields.iteritems():
-        if key in form.errors:
-          label = form.fields[key].label
-          msg += '%s' % (str(form.errors[key]).replace('<li>','<li>%s - '%(label,)), )
+      for key, error in form.errors.iteritems():
+        if type(key) is int:
+            # loop-step
+            msg = '<ul class="errorlist"><li>%s</li></ul>' % unicode(_('There were errors in the form. Please see below'))
+        else:
+            label = form.fields[key].label
+            msg += '%s' % (unicode(error).replace('<li>','<li>%s - '%(label,)), )
       status = 400
 
     return {
@@ -69,6 +72,6 @@ class JsonErrorResponseMixin(object):
         'step': self.step,
         'status': status,
         'message': msg,
+        'errors': dict(form.errors.items()),
         'object': None,
     }
-
