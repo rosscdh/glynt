@@ -10,7 +10,7 @@ from bootstrap.forms import BootstrapMixin, Fieldset
 
 from django.contrib.localflavor.us.forms import USStateField, USZipCodeField
 from django.contrib.localflavor.us.us_states import US_STATES as SHORT_US_STATES, USPS_CHOICES as SHORT_USPS_CHOICES
-from django_countries import CountryFormField as CountryField
+from django_countries import CountryFormField
 
 US_STATES = [(v,v) for k,v in SHORT_US_STATES]
 USPS_CHOICES = [(v,v) for k,v in SHORT_USPS_CHOICES]
@@ -19,6 +19,10 @@ USPS_CHOICES = [(v,v) for k,v in SHORT_USPS_CHOICES]
 USStatesField = forms.ChoiceField(choices=US_STATES)
 USStatesUPSField = forms.ChoiceField(choices=USPS_CHOICES)
 
+c = CountryFormField()
+choices = c.choices + [(_('England'),_('England')), (_('Wales'),_('Wales')), (_('Scotland'),_('Scotland')), (_('Northern Ireland'),_('Northern Ireland'))]
+choices.sort(key=lambda tup: tup[0])
+CountryField = CountryFormField(choices=choices)
 
 CUSTOM_VALID_FIELD_TYPES = ['CountryField', 'USStatesField', 'USStatesUPSField']
 VALID_FIELD_TYPES = CUSTOM_VALID_FIELD_TYPES + ['BooleanField', 'CharField', 'ChoiceField', 'DateField', 'DateTimeField', 'DecimalField', 'EmailField', 'FloatField', 'ImageField', 'IntegerField', 'MultiValueField', 'MultipleChoiceField', 'SlugField', 'TimeField', 'URLField', ]

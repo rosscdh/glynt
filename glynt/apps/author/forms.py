@@ -3,9 +3,9 @@ from django.utils.translation import ugettext_lazy as _
 from django import forms
 from bootstrap.forms import BootstrapForm, Fieldset
 
-from glynt.apps.flyform.forms import VALID_FIELD_TYPES, VALID_WIDGETS
 
 import datetime
+
 
 DATE_FORMAT = "%a, %d %b %Y"
 def _get_date_today():
@@ -32,6 +32,9 @@ class CreateStepForm(BootstrapForm):
 
 class CreateStepFieldForm(BootstrapForm):
     """ The template form used to help the authoring tool """
+    # Overrides
+    VALID_FIELD_TYPES = ['ChoiceField', 'CharField', 'IntegerField', 'DecimalField', 'DateFieldField', 'USStatesField', 'CountryField']
+    VALID_WIDGETS = ['SocialContactWidget', 'InviteeWidget', 'TextInput', 'Textarea', 'Select', 'RadioSelect', 'SelectMultiple']
     FIELDS = [(v, v) for v in sorted(VALID_FIELD_TYPES)]
     WIDGETS = [('', 'Default')] + [(v, v) for v in sorted(VALID_WIDGETS)]
 
