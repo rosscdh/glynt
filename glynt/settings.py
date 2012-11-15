@@ -152,6 +152,8 @@ PROJECT_APPS = (
     'glynt.apps.author',
     # The End User - Client, those that consume the documents
     'glynt.apps.client',
+    # The v2 Document Signing system
+    'glynt.apps.smoothe',
     # The Document Signing system
     'glynt.apps.sign',
     # The Document Export system

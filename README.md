@@ -25,7 +25,30 @@
 
 1. pip install -r requirements.txt : install update the required libraries (append --upgrade if you are not sure)
 
-## Default fixtures
+# Default fixtures
+
+1. python manage.py loaddata sites document_category document.xml flyform.xml
+
+## Fix Fixtures
+
+### When manage.py dumpdata flyform.flyform --format=xml > ~/flyform.xml
+
+Remember to replace bad json:
+
+vim glynt/apps/flyform/fixtures/flyform.xml
+
+    :%s/u'/"/gc
+    :%s/',/\",/gc
+    :%s/':/\":/gc
+    :%s/'\}/\"\}/gc
+
+### When manage.py dumpdata document.document --format=xml > ~/document.xml
+
+Remember to remove invalid xml return characters using vim:
+
+vim glynt/apps/document/fixtures/document.xml
+
+    :%s/\%x0c/\r/gc
 
 1. python manage.py loaddata sites document_category document_flyform
 

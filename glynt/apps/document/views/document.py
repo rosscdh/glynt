@@ -31,7 +31,6 @@ class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
     context['document'] = self.document.body
     context['default_data'] = self.document.default_data_as_json()
 
-
     return context
 
   def get_form_class(self):
