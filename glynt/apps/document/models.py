@@ -31,9 +31,9 @@ class Document(models.Model):
     slug = models.SlugField(blank=False, max_length=255)
     summary = models.TextField(blank=True, null=True)
     body = models.TextField(blank=True, null=True)
-    flyform = models.OneToOneField('flyform.FlyForm')
-    doc_status = models.IntegerField(choices=DOC_STATUS.get_choices(), blank=False)
-    is_public = models.BooleanField(default=True)
+    flyform = models.OneToOneField('flyform.FlyForm', blank=True, null=True, db_index=True)
+    doc_status = models.IntegerField(choices=DOC_STATUS.get_choices(), blank=False, db_index=True)
+    is_public = models.BooleanField(default=True, db_index=True)
     doc_cats = models.ManyToManyField('DocumentCategory')
     tags = TaggableManager()
 
@@ -47,8 +47,12 @@ class Document(models.Model):
     def __unicode__(self):
       return u'%s' % (self.name, )
 
+    @property
+    def is_v1_doc(self):
+        return True if self.flyform is not None else False
+
     def default_data_as_json(self):
-      return json.dumps(self.flyform.defaults)
+      return json.dumps(self.flyform.defaults) if self.is_v1_doc is True else None
 
 
 class DocumentCategory(CategoryBase):
@@ -149,7 +153,10 @@ class ClientCreatedDocument(models.Model):
       return self.documentsignature_set.filter(is_signed=True)
 
     def get_absolute_url(self):
-      return reverse('document:my_view', kwargs={'slug': self.slug})
+        if self.source_document.is_v1_doc is True:
+            return reverse('document:my_view', kwargs={'slug': self.slug})
+        else:
+            return reverse('doc:my_view', kwargs={'slug': self.slug})
 
     @property
     def cookie_name(self):

@@ -1,0 +1,33 @@
+{% extends 'document/base.html' %}
+{% load i18n markup %}
+{% load sign_tags %}
+{% load glynt_helpers %}
+{% load url from future %}
+
+
+{% block owner_info %}
+<div class="">
+  <h2 id="document-title" class="editable">{{ userdoc.name }}</h2>
+</div>
+{% endblock %}
+
+
+{% block document %}
+<div class="row">
+  <ul id="progress"></ul>
+  <div id="document" data-bind="html: App.documentModel.renderedHTML()">{% show_loading modal='False' %}</span>
+</div>
+{% endblock %}
+
+
+{% block css %}
+<style></style>
+{% endblock %}
+
+{% tplhandlebars "document-hb" %}{% endtplhandlebars %}
+
+{% block js %}
+<script>
+{% include 'smoothe/document.js' %}
+</script>
+{% endblock %}

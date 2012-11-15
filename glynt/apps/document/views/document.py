@@ -32,13 +32,13 @@ class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
 
     context['object'] = self.document
     context['document'] = self.document.body
-    context['default_data'] = self.document.default_data_as_json()
-    context['flyform_fieldnames'] = self.document.flyform.flyform_fields_as_json()
+    context['default_data'] = self.document.default_data_as_json() if self.document.is_v1_doc else None
+    context['flyform_fieldnames'] = self.document.flyform.flyform_fields_as_json() if self.document.is_v1_doc else None
 
     context['userdoc_form'] = ClientCreatedDocumentForm()
 
     try:
-      context['form_set'] = self.document.flyform.flyformset()
+      context['form_set'] = self.document.flyform.flyformset() if self.document.is_v1_doc else None
     except KeyError:
       context['form_set'] = FORM_GROUPS['no_steps']
 

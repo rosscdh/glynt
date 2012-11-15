@@ -20,7 +20,9 @@ urlpatterns = patterns('',
     url(r'^doc/comments/', include('django.contrib.comments.urls')),
     # The Authoring Tool
     url(r'^author/', include('glynt.apps.author.urls', namespace='author')),
-    # The Documents
+    # The v2 Documents
+    url(r'^v2/doc/', include('glynt.apps.smoothe.urls', namespace='doc')),
+    # The v1 Documents
     url(r'^doc/', include('glynt.apps.document.urls', namespace='document')),
     # The Export
     url(r'^export/', include('glynt.apps.export.urls', namespace='export')),
