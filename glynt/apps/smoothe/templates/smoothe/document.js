@@ -26,7 +26,7 @@ $(document).ready(function(){
         };
 
         self.init = function init() {
-            $.getScript("{{ STATIC_URL }}js/smooth.js")
+            $.getScript("{{ STATIC_URL }}js/smoothe.js")
             .done(function(script, textStatus) {
                 self.init_interface();
                 self.render();
