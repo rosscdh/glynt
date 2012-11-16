@@ -1,7 +1,8 @@
 $(document).ready(function(){
-    app = $.sammy(function() {
+    window.app = $.sammy(function() {
         var self = this;
-
+        self.context = {};
+        self.helper_context = {};
         // ---- OBSERVER -----
         self.observer = new argosPanOptia();
 
@@ -40,5 +41,5 @@ $(document).ready(function(){
     });
 
     // start the application
-    app.run('#/');
+    window.app.run('#/');
 });
