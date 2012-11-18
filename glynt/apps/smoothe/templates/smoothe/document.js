@@ -24,6 +24,11 @@ $(document).ready(function(){
         };
 
         self.init_interface = function init_interface() {
+            $('.edit').hallo({});
+            console.log($('.edit'))
+            $('.edit').bind('hallomodified', function(event, data) {
+            console.log(data)
+            });
         };
 
         self.init = function init() {
@@ -43,3 +48,4 @@ $(document).ready(function(){
     // start the application
     window.app.run('#/');
 });
+
