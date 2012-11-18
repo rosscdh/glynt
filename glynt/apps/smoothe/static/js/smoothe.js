@@ -15,6 +15,7 @@ Handlebars.registerHelper('doc_var', function(context, options) {
     field_type = context.hash.field_type;
   }
   // see if this context.name is already defined in the app context (to get user populated data)
+  var has_initial = (context.hash.initial == undefined) ? false : true;
   var value = (context.hash.initial != undefined) ? context.hash.initial : '_____'.repeat(2) ;
   value = (app.context[var_name] == undefined) ? value : app.context[var_name] ;
 
@@ -23,7 +24,7 @@ Handlebars.registerHelper('doc_var', function(context, options) {
     app.context[var_name] = null;
   };
   // wrap the value in our detailed html to allow UX interaction
-  var html_return = '<span class="{type} edit" data-doc_var="{variable_name}">{value}</span>'.assign({ variable_name: var_name, value: value, type: 'doc_var' });
+  var html_return = '<span class="{type} edit" data-has_initial="{has_initial}" data-doc_var="{variable_name}">{value}</span>'.assign({ variable_name: var_name, value: value, type: 'doc_var', has_initial: has_initial });
 
   context.hash.field_type = field_type;
   context.hash.html_return = html_return;

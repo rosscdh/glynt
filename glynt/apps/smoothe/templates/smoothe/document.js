@@ -26,6 +26,7 @@ $(document).ready(function(){
         // ---- BIND METHODS -----
         self.bind_data = function bind_data(data){
             var update_fields = false;
+            var notify_user = (data.notify == undefined) ? true: data.notify;
             var doc_var = data.doc_var;
             var doc_var_value = data.value;
 
@@ -41,9 +42,9 @@ $(document).ready(function(){
 
             if (update_fields) {
                 $.each($('[data-doc_var="'+ doc_var +'"]'), function(index, element){
-                    $(element).fadeOut('fast');
+                    if (notify_user) { $(element).fadeOut('fast'); };
                     $(element).html(self.context[doc_var]);
-                    $(element).fadeIn('fast');
+                    if (notify_user) { $(element).fadeIn('fast'); };
                 });
             };
         };
@@ -73,6 +74,11 @@ $(document).ready(function(){
                 var doc_var_name = $(this).attr('data-doc_var')
                 var doc_val = $(this).html();
                 self.dispatch('bind_data', {'doc_var': doc_var_name, 'value': doc_val});
+            });
+            $.each($('[data-has_initial=true]'), function(index, element){
+                var doc_var_name = $(this).attr('data-doc_var')
+                var doc_val = $(this).html();
+                self.dispatch('bind_data', {'doc_var': doc_var_name, 'value': doc_val, 'notify': false});
             });
 
         };
