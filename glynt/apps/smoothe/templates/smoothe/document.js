@@ -11,7 +11,7 @@ $(document).ready(function(){
 
         self.doc_view = Handlebars.compile($('script#document-hb').html());
 
-        // ---- RENDER VIEWS -----
+        // ---- VIEWS -----
         this.get('#/', function() {
         });
 
@@ -23,22 +23,74 @@ $(document).ready(function(){
           $( "div#document" ).html(self.doc_view({}));
         };
 
+        // ---- BIND METHODS -----
+        self.bind_data = function bind_data(data){
+            var update_fields = false;
+            var doc_var = data.doc_var;
+            var doc_var_value = data.value;
+
+            if (self.context[doc_var] === undefined) {
+                self.context[doc_var] = null;
+            };
+
+            if (self.context[doc_var] != doc_var_value) {
+                update_fields = true;    
+            };
+
+            self.context[doc_var] = doc_var_value;
+
+            if (update_fields) {
+                $.each($('[data-doc_var="'+ doc_var +'"]'), function(index, element){
+                    $(element).fadeOut('fast');
+                    $(element).html(self.context[doc_var]);
+                    $(element).fadeIn('fast');
+                });
+            };
+        };
+
+        // ---- DISPATCH -----
+        self.registerCallback = function registerCallback(event_name, callback) {
+          self.observer.registerCallback(event_name, callback);
+        };
+        self.dispatch = function dispatch(event_name, value) {
+          self.observer.dispatch(event_name, value);
+        };
+
+        // ---- INTERFACE EVENTS -----
         self.init_interface = function init_interface() {
-            $('.edit').hallo({});
-            console.log($('.edit'))
-            $('.edit').bind('hallomodified', function(event, data) {
-            console.log(data)
+            /**
+            * Setup the editable items
+            */
+            $('.edit').hallo({
+                plugins: {
+                    'halloformat': {}
+                },
+                editable: true,
+                showAlways: true
             });
+
+            $('.edit').live('blur', function(event){
+                var doc_var_name = $(this).attr('data-doc_var')
+                var doc_val = $(this).html();
+                self.dispatch('bind_data', {'doc_var': doc_var_name, 'value': doc_val});
+            });
+
         };
 
         self.init = function init() {
+            // load the smooth helpers
             $.getScript("{{ STATIC_URL }}js/smoothe.js")
             .done(function(script, textStatus) {
-                self.init_interface();
+                // register callbacks
+                self.registerCallback('bind_data', self.bind_data);
+
+                // output html so we can bind events
                 self.render();
+                // bind events
+                self.init_interface();
             })
             .fail(function(jqxhr, settings, exception) {
-                alert('could not load smoothe.js, there will be no document!');
+                console.log('could not load smoothe.js, there will be no document!');
             });
         };
 

@@ -19,13 +19,34 @@
 
 {% block css %}
 <style>
-
-.doc_var{
-  background-color:#c00;
-  color:#000;
+.doc_var {
+background-color: #fef58e;
+padding: 2px;
+-webkit-touch-callout: text;
+-webkit-user-select: text;
+-khtml-user-select: text;
+-moz-user-select: text;
+-ms-user-select: text;
+user-select: text;
+min-width: 30px;
+border-bottom: 2px dotted #f492be;
+outline: none;
+display: inline-block;
+*display: inline;/* for IE7*/
+*zoom:1;/* for IE7*/
+min-width: 60px;
+font-size: 15px;
+color: 000;
+transition: background-color 0.2s;
+transition: background-color 0.2s;
+-moz-transition: background-color 0.2s; /* Firefox 4 */
+-webkit-transition: background-color 0.2s; /* Safari and Chrome */
+-o-transition: background-color 0.2s; /* Opera */
+text-align:center;
 }
   
 </style>
+<link rel="stylesheet" href="{{ STATIC_URL }}css/hallo.css" charset="utf-8" />
 <link rel="stylesheet" href="{{ STATIC_URL }}fontawesome/css/font-awesome.css" charset="utf-8" />
 <!--[if lt IE 9]>
 <link rel="stylesheet" href="{{ STATIC_URL }}fontawesome/css/font-awesome-ie7.css" charset="utf-8" />
@@ -33,11 +54,11 @@
 {% endblock %}
 
 {% block js %}
-<script src="{{ STATIC_URL }}js/jquery.jeditable.mini.js"></script>
 <script type="text/x-handlebars-template" id="document-hb">
 {{ userdoc.body|default:object.body|safe }}
 </script>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js"></script>
 <script src="{{ STATIC_URL }}js/rangy-core-1.2.3.js"></script>
 <script src="{{ STATIC_URL }}js/hallo-min.js"></script>
 
