@@ -72,6 +72,7 @@
 {% block js %}
 <script id="document-data" type="text/javascript">[{{ document_data|default:''|safe }}]</script>
 <script id="js-document" type="text/x-handlebars-template">{{ userdoc.body|default:userdoc.source_document.body|safe }}</script>
+<script type="text/javascript" src="{{ STATIC_URL }}knockoutjs/js/knockout-2.1.0.js"></script>
 <script>
 $(document).ready(function(){
     var app = $.sammy(function() {

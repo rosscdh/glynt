@@ -52,6 +52,7 @@ display:none;
 <script id="js-document" type="text/x-handlebars-template">
 {{ userdoc.body|default:object.body|safe }}
 </script>
+<script type="text/javascript" src="{{ STATIC_URL }}knockoutjs/js/knockout-2.1.0.js"></script>
 <script src="{{ STATIC_URL }}js/jquery.jeditable.mini.js"></script>
 <script id="document-controls" type="text/javascript">
 $(document).ready(function(){
