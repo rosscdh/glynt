@@ -35,7 +35,7 @@ class MyDocumentView(DocumentView):
         context['userdoc'] = self.user_document
         context['object'] = self.document
         context['document'] = self.document.body
-        context['default_data'] = json.dumps(self.user_document.data) if self.user_document else None
+        context['default_data'] = self.user_document.data_as_json() if self.user_document else self.document.default_data_as_json()
         context['invitee_list'] = invitee_list
         context['invitee_list_json'] = False
         context['can_add_invite'] = False

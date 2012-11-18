@@ -1,8 +1,23 @@
 $(document).ready(function(){
+    orGroup = function orGroup(params) {
+        var self = this;
+        this.name = params.name;
+        this.current = params.current;
+        this.items = params.items;
+        this.length = params.items.length;
+        this.add_item = function add_item(item) {
+            self.items.add(item);
+            self.length = self.items.length;
+        }
+    };
+
     window.app = $.sammy(function() {
         var self = this;
+        self.default_data = $.parseJSON($('script#document-default_data').html());
         self.context = {};
-        self.helper_context = {};
+        self.helper_context = {
+            'or_groups': {}
+        };
         // ---- OBSERVER -----
         self.observer = new argosPanOptia();
 
@@ -21,6 +36,11 @@ $(document).ready(function(){
         };
         self.render_doc = function render_steps() {
           $( "div#document" ).html(self.doc_view({}));
+          self.dispatch('handle_doc_or', {});
+        };
+
+        self.setup_data = function setup_data() {
+            self.context = Object.merge(self.default_data, self.context);
         };
 
         // ---- BIND METHODS -----
@@ -47,6 +67,26 @@ $(document).ready(function(){
                     if (notify_user) { $(element).fadeIn('fast'); };
                 });
             };
+        };
+        self.handle_doc_or = function handle_doc_or() {
+            // loop over ors and ensure only 1 is showing at one time
+            // ensure that the appropriate one is handled and displayed 
+            // from user selected data
+            var found = Object.merge(self.helper_context.or_groups, {});
+            $.each($('[data-doc_or]'), function(index, element) { 
+                var e = $(element);
+                var doc_group = e.attr('data-doc_or');
+                if ((Object.has(found, doc_group)) == false) {
+                    e.show();
+                    found[doc_group] = new orGroup({name: doc_group, current: index, items: [e]});
+                } else {
+                    e.hide();
+                    found[doc_group].add_item(e);
+                };
+            });
+            self.helper_context.or_groups = Object.merge(self.helper_context.or_groups, found);
+            // when we want to replace the current doc or value use
+            // $('#document').find('[data-doc_or=group_1]').html($(app.helper_context.or_groups.group_1.items[1]).html());
         };
 
         // ---- DISPATCH -----
@@ -84,11 +124,15 @@ $(document).ready(function(){
         };
 
         self.init = function init() {
+            // setup the data from defaults
+            self.setup_data();
+
             // load the smooth helpers
             $.getScript("{{ STATIC_URL }}js/smoothe.js")
             .done(function(script, textStatus) {
                 // register callbacks
                 self.registerCallback('bind_data', self.bind_data);
+                self.registerCallback('handle_doc_or', self.handle_doc_or);
 
                 // output html so we can bind events
                 self.render();

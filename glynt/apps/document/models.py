@@ -52,7 +52,7 @@ class Document(models.Model):
         return True if self.flyform is not None else False
 
     def default_data_as_json(self):
-      return json.dumps(self.flyform.defaults) if self.is_v1_doc is True else None
+      return json.dumps(self.flyform.defaults) if self.is_v1_doc is True else json.dumps({'document_name': self.name, 'document_summary': self.summary})
 
 
 class DocumentCategory(CategoryBase):

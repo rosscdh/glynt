@@ -44,7 +44,11 @@ transition: background-color 0.2s;
 -o-transition: background-color 0.2s; /* Opera */
 text-align:center;
 }
-  
+
+.doc_or{
+background-color: #fef58e;
+padding: 2px;
+}
 </style>
 <link rel="stylesheet" href="{{ STATIC_URL }}css/hallo.css" charset="utf-8" />
 <link rel="stylesheet" href="{{ STATIC_URL }}fontawesome/css/font-awesome.css" charset="utf-8" />
@@ -54,6 +58,7 @@ text-align:center;
 {% endblock %}
 
 {% block js %}
+<script type="application/json" id="document-default_data">{{ default_data|default:''|safe }}</script>
 <script type="text/x-handlebars-template" id="document-hb">
 {{ userdoc.body|default:object.body|safe }}
 </script>

@@ -5,7 +5,7 @@
 
 Handlebars.registerHelper('doc_var', function(context, options) {
   if (context.hash.name == undefined || context.hash.name == '') {
-    throw 'doc_var requires a "name"';
+    throw 'doc_var requires a unique "name"';
   };
   var app = (context.hash.app == undefined) ? window.app : eval('window.'.format(context.hash.app)) ;
   var var_name = context.hash.name;
@@ -38,12 +38,12 @@ Handlebars.registerHelper('doc_var', function(context, options) {
 
 Handlebars.registerHelper('doc_or', function(context, options) {
   if (context.hash.name == undefined || context.hash.name == '') {
-    throw 'doc_or requires a "name"';
+    throw 'doc_or requires a unique "name"';
   };
   var app = (context.hash.app == undefined) ? window.app : eval('window.'.format(context.hash.app)) ;
   var var_name = context.hash.name;
-
+  var html = context.call(this);
   // wrap the value in our detailed html to allow UX interaction
-  var html_return = '<span class="{type}" data-doc_or="{variable_name}" data-doc_or_group="{var_group}">'.assign({ variable_name: var_name, type: 'doc_var' });
+  var html_return = '<span class="{type}" data-doc_or="{variable_name}">{html}</span>'.assign({ variable_name: var_name, html: html, type: 'doc_or' });
   return new Handlebars.SafeString(html_return);
 });
