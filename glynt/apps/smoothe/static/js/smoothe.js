@@ -15,6 +15,14 @@ Handlebars.registerHelper('doc_var', function(context, options) {
     field_type = context.hash.field_type;
   }
   // see if this context.name is already defined in the app context (to get user populated data)
+  try{
+      var initial_inner = context.call(this);
+      context.hash.initial = initial_inner;
+  }catch(e){
+      // as we set the hash initial based on html_inner above we need do nothing
+      // except catch the error
+  }
+
   var has_initial = (context.hash.initial == undefined) ? false : true;
   var value = (context.hash.initial != undefined) ? context.hash.initial : '_____'.repeat(2) ;
   value = (app.context[var_name] == undefined) ? value : app.context[var_name] ;
