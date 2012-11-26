@@ -31,7 +31,6 @@ class Document(models.Model):
     slug = models.SlugField(blank=False, max_length=255)
     summary = models.TextField(blank=True, null=True)
     body = models.TextField(blank=True, null=True)
-    flyform = models.OneToOneField('flyform.FlyForm', related_name='fly_form')
     doc_status = models.IntegerField(choices=DOC_STATUS.get_choices(), blank=False)
     is_public = models.BooleanField(default=True)
     doc_cats = models.ManyToManyField('DocumentCategory')
