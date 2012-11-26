@@ -9,14 +9,15 @@ from glynt.apps.flyform.forms import BaseFlyForm
 
 class FlyForm(models.Model):
     """ Flyform model used to store teh JSON representation of a form """
-    body = JSONField(blank=False,null=False)
-    defaults = JSONField(blank=True,null=True)
+    document = models.ForeignKey(Document, blank=True, null=True, related_name='fly_document')
+    body = JSONField(blank=False, null=False)
+    defaults = JSONField(blank=True, null=True)
 
     def __unicode__(self):
-      try:
+      if self.document is not None:
         return u'FlyForm for %s' % (self.document.name,)
-      except Document.DoesNotExist:
-        return u'FlyForm for %s' % ('New Document',)
+      else:
+        return u'Unbound FlyForm, has no document'
 
     @property
     def flyform_meta(self):
