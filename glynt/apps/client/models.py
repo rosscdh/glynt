@@ -1,16 +1,16 @@
 from django.conf import settings
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
+
 from jsonfield import JSONField
 
-from socialregistration.signals import login, connect, profile_data
 from userena.models import UserenaSignup, UserenaBaseProfile
 from userena.managers import ASSIGNED_PERMISSIONS
-from guardian.shortcuts import assign, get_perms
+from socialregistration.signals import login, connect
+from guardian.shortcuts import assign
 
 from django_countries import CountryField
 from managers import GlyntUserManager as UserManager
@@ -48,7 +48,7 @@ class ClientProfile(UserenaBaseProfile):
       validate(tmp_url)
       # remove the static url from it
       url = tmp_url
-    except ValidationError, e:
+    except ValidationError:
       pass
 
     return url
@@ -97,7 +97,7 @@ def populate_profile_data(sender, **kwargs):
       try:
         validate(profile.profile_data['profile_photo'])
         profile.mugshot = profile.profile_data['profile_photo']
-      except ValidationError, e:
+      except ValidationError:
         pass
 
   profile.save()

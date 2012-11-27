@@ -152,8 +152,6 @@ PROJECT_APPS = (
     'glynt.apps.author',
     # The End User - Client, those that consume the documents
     'glynt.apps.client',
-    # The Form Generator
-    'glynt.apps.flyform',
     # The Document Signing system
     'glynt.apps.sign',
     # The Document Export system

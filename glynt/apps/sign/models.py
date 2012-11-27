@@ -8,6 +8,9 @@ from glynt.apps.document.models import ClientCreatedDocument
 
 from signpad2image.signpad2image import s2ib
 
+# import signals here as they need to be initialized with the models
+from glynt.apps.sign.signals import save_document_signature_signal
+
 
 class DocumentSignature(models.Model):
     """ Model to store a users signature of a document
@@ -51,6 +54,3 @@ class DocumentSignature(models.Model):
 
     def signee_email(self):
       return u'%s' % (self.meta_data['to_email'],)
-
-# import signals here as they need to be initialized with the models
-from glynt.apps.sign.signals import *

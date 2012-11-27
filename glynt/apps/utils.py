@@ -8,15 +8,9 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from collections import namedtuple
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.http import HttpResponse
 
-import urlparse
-from django.http import QueryDict
-from functools import wraps
-from django.utils.decorators import available_attrs
-from django.contrib.auth import REDIRECT_FIELD_NAME
 
 
 class HttpResponseUnauthorized(HttpResponse):
@@ -121,13 +115,4 @@ def user_is_self_or_admin(request, viewed_user):
     return HttpResponseRedirect( settings.LOGIN_URL )
 
   return True
-
-
-def get_profile_avatar(request, user):
-  """ Retrieve the current users profile
-  if they have uploaded a photo then use that
-  if they are a signup user then just get their userena defaults
-  if they are a facebook signup user then use their profile data 
-  """
-  profile = user.get_profile()
 

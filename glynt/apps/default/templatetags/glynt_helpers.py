@@ -1,8 +1,8 @@
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django import template
+
 import time
-import ast
 
 register = template.Library()
 

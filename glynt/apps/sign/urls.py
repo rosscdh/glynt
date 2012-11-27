@@ -1,6 +1,5 @@
 from django.conf.urls import patterns, url
 from django.views.generic import TemplateView
-from django.contrib.auth.decorators import login_required
 
 from glynt.apps.sign.views import ProcessInviteToSignView, SignDocumentView, ProcessSignDocumentView, RenderSignatureImageView
 from glynt.apps.sign.views import DeleteInviteToSignView

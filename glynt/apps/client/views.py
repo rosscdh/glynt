@@ -1,14 +1,10 @@
-from django.conf import settings
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
-from django.core.urlresolvers import reverse
-from django.views.generic.base import View, TemplateView
-from django.views.generic.edit import FormView, ProcessFormView
+from django.views.generic.base import TemplateView
+from django.views.generic.edit import FormView
 from django.views.generic.detail import BaseDetailView
-from django.template.defaultfilters import slugify
-from django.http import HttpResponseRedirect, HttpResponse, Http404
+from django.http import HttpResponse, Http404
 from django.contrib.auth import authenticate, login
-from django.contrib import messages
 from django.middleware.csrf import get_token
 
 from socialregistration.contrib.facebook_js.models import FacebookProfile
@@ -87,7 +83,6 @@ class HasLocalFacebookAccountView(BaseDetailView):
 
   def get(self, request, *args, **kwargs):
     self.object = self.get_object()
-    context = self.get_context_data(object=self.object)
     return HttpResponse('[{"exists":true, "is_authenticated": %s}]' %(str(request.user.is_authenticated()).lower()), status=200)
 
 

@@ -1,5 +1,4 @@
 from django.conf.urls import patterns, url
-from django.views.generic.base import TemplateView
 from django.contrib.auth.decorators import login_required
 
 from glynt.apps.author.views import AuthorToolView

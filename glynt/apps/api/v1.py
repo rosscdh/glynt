@@ -1,16 +1,10 @@
-from django.conf.urls.defaults import url
-from django.utils import simplejson as json
 import ast
 
 from tastypie.resources import ModelResource
-from tastypie.validation import FormValidation
 from tastypie.api import Api
 from tastypie.serializers import Serializer
-from tastypie import fields, utils
-from tastypie.resources import Resource
 from tastypie.cache import SimpleCache
 from tastypie.authentication import SessionAuthentication
-from tastypie.authorization import DjangoAuthorization
 
 
 from glynt.apps.document.models import Document, ClientCreatedDocument

@@ -1,8 +1,7 @@
 # -*- coding: UTF-8 -*-
 from django.contrib import admin
 
-from models import UserSignup, ClientProfile
-from userena.models import UserenaSignup, UserenaBaseProfile
+from models import UserSignup
 
 
 # admin.site.unregister([UserenaProfile])

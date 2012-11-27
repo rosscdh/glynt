@@ -1,16 +1,8 @@
-from django.db import models
-from django.db.models import Q
-from django.contrib.auth.models import User, UserManager, Permission, AnonymousUser
-from django.contrib.contenttypes.models import ContentType
-from django.utils.translation import ugettext as _
-from django.conf import settings
+from django.contrib.auth.models import User
+from userena.utils import get_profile_model
 
-from userena import settings as userena_settings
-from userena.utils import generate_sha1, get_profile_model, get_datetime_now
-from userena import signals as userena_signals
-
-from userena.managers import UserenaManager, SHA1_RE, ASSIGNED_PERMISSIONS
-from guardian.shortcuts import assign, get_perms
+from userena.managers import UserenaManager, ASSIGNED_PERMISSIONS
+from guardian.shortcuts import assign
 
 
 class GlyntUserManager(UserenaManager):
@@ -44,8 +36,6 @@ class GlyntUserManager(UserenaManager):
     :return: :class:`User` instance representing the new user.
 
     """
-    now = get_datetime_now()
-
     new_user = User.objects.create_user(username, email, password)
     new_user.is_active = active
     new_user.save()

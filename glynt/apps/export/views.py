@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
-from django.template.defaultfilters import slugify
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import View
 from django.template.loader import render_to_string
-from django.utils.safestring import mark_safe
 from django.template import RequestContext
 
 from glynt.apps.document.models import ClientCreatedDocument

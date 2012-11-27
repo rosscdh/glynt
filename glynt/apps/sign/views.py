@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-from django.conf import settings
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import UpdateView
-from django.views.generic.edit import BaseFormView, ProcessFormView, FormMixin
+from django.views.generic.edit import BaseFormView
 from django.views.generic.detail import BaseDetailView
 
 

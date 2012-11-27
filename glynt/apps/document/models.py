@@ -14,7 +14,10 @@ from glynt.apps.document.managers import DocumentManager, PublicDocumentManager,
 from glynt.apps.document.managers import ClientCreatedDocumentManager, PublicClientCreatedDocumentManager, DeletedClientCreatedDocumentManager
 
 from glynt.pybars_plus import PybarsPlus
-import markdown
+
+# import signals
+from glynt.apps.document.signals import save_document_comment_signal
+
 import qrcode
 
 
@@ -160,5 +163,3 @@ class ClientCreatedDocument(models.Model):
     def data_as_json(self):
       return json.dumps(self.data)
 
-# import signals
-from glynt.apps.document.signals import *

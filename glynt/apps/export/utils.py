@@ -1,16 +1,6 @@
 import os
 from django.conf import settings
-from django.utils.translation import ugettext_lazy as _
-from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponse, HttpResponseBadRequest
-from django.shortcuts import get_object_or_404
 
-from django.template.context import Context
-from django.template.loader import get_template
-
-from glynt.apps.document.models import Document, ClientCreatedDocument
-
-from django_xhtml2pdf import utils as xhtml2pdf
 from xhtml2pdf import pisa
 import StringIO
 

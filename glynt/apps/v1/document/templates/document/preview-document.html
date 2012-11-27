@@ -1,0 +1,743 @@
+{% extends 'document/base.html' %}
+{% load i18n markup templatetag_handlebars %}
+{% load glynt_helpers %}
+{% load url from future %}
+
+
+{% block owner_info %}
+<div class="span12">
+    <h2 id="document-title" class="editable">{{ userdoc.name }}</h2>
+    <form id="userdoc-name-form" class="hidden">
+        {{ userdoc_form }}
+    </form>
+</div>
+{% endblock %}
+
+{% block form %}
+&nbsp;
+{% endblock %}
+
+{% block document %}
+<span id="document-md" data-bind="html: App.documentModel.renderedHTML()"></span>
+{% endblock %}
+
+{% block css %}
+<style>
+.hidden {
+    display:none;
+}
+form div.form-group ul{
+    list-style-type: none;
+    list-style: none;
+}
+.doc-var{
+    background-color:#ccc;
+}
+span.helptext {
+display:none;
+}
+.editable{
+    cursor: pointer;
+    background-color:transparent;
+}
+.editable:hover{
+    background-color:#f5f5f5;
+}
+</style>
+{% endblock %}
+
+{% block js %}
+<script id="document-default_data" type="text/javascript">{{ flyform_fieldnames|default:''|safe }}</script>
+
+<script id="js-document" type="text/x-handlebars-template">
+{{ userdoc.body|default:object.body|safe }}
+</script>
+<script src="{{ STATIC_URL }}js/jquery.jeditable.mini.js"></script>
+<script id="document-controls" type="text/javascript">
+$(document).ready(function(){
+
+    function FormControls() {
+        var self = this;
+
+        self.actualFormSteps = ({{ form_set|length }}+1);// account for end form
+        self.maxFormSteps = ko.observable(({{ form_set|length }}+1));// account for end form
+        self.currentFormStep = ko.observable(1);
+
+        self.showNext = function showNext() {
+            return (self.currentFormStep() == self.maxFormSteps())? false : true ;
+        }
+        self.showPrev = function showPrev() {
+            return (self.currentFormStep() == 1)? false : true ;
+        }
+        self.isLastStep = function isLastStep() {
+            return (self.maxFormSteps() == self.currentFormStep()) ? true : false ;
+        }
+
+        self.determineNextStepIndex = function determineNextStepIndex(direction, next_step) {
+            //@TODO basis for the ruleset evaluation routine
+            if (direction == 'next') {
+                return self.determineNextStep(next_step);
+            } else {
+                return self.determinePrevStep(next_step);
+            }
+        }
+
+        self.determinePrevStep = function determinePrevStep(current_step) {
+            for(var step = current_step; step > 0; step--) {
+                if(self.validateStep(step)) {
+                    return step;
+                }
+            }
+
+            return 1;
+        };
+
+        self.determineNextStep = function determineNextStep(current_step) {
+            for(var step = current_step; step < self.maxFormSteps() ; step++) {
+                if(self.validateStep(step)) {
+                    return step;
+                }
+            }
+
+            return self.maxFormSteps();
+        };
+
+        self.validateStep = function validateStep(step) {
+            var ruleset = App.documentModel.getRuleByType('show_step_when');
+            for (var x=0; x < ruleset.length; x++) {
+                if (ruleset[x].target_element != 'undefined') {
+                    target_element = $(ruleset[x].target_element);
+                    target_element_step_id = target_element.attr('id').replace(/[^\d]+/ig, '');
+                } else {
+                    target_element = null;
+                    target_element_step_id = null;
+                }
+
+                for (var i=0; i < ruleset[x].ruleset.length; i++) {
+                    for (context_var_name in ruleset[x].ruleset[i]) {
+                        var required_value = ruleset[x].ruleset[i][context_var_name];
+
+                        if (context_var_name in App.documentModel.context()) {
+                            var current_context_value = App.documentModel.context()[context_var_name];
+                            if (required_value != current_context_value && target_element_step_id == step) {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+        self.determineStepVisibility = function determineStepVisibility(direction,step) {
+
+            new_step = self.determineNextStepIndex(direction,step);
+
+            step = new_step;
+
+            $.each($('div.form-group'), function(index,form_group){
+                form_group = $(form_group);
+
+                if ((index+1) == step) {
+                    form_group.css('display', 'block');
+                    form_group.removeClass('hidden');
+                } else {
+                    form_group.css('display', 'none');
+                    form_group.addClass('hidden');
+                }
+            });
+            return step;
+        }
+
+        self.next = function next() {
+            var current = self.currentFormStep();
+            var next = current+1;
+
+            // async cant wait for valid or not
+            App.submitForm(current, $('form#glynt-doc-' + current));
+
+            next = self.determineStepVisibility('next', next);
+            self.currentFormStep(next);
+
+        }
+        self.prev = function prev() {
+            var current = self.currentFormStep();
+            var prev = current-1;
+
+            // async cant wait for valid or not
+            App.submitForm(current, $('form#glynt-doc-' + current));
+            
+            prev = self.determineStepVisibility('prev', prev);
+            self.currentFormStep(prev);
+        }
+    }
+
+    function Rule(element,target_element,ruleset){
+        var self = this;
+        self.element = (element != undefined)?element:null,
+        self.target_element = (target_element != undefined)?target_element:null,
+        self.ruleset = (ruleset != undefined)?ruleset:[]
+    };
+
+    function LoopStep(form_fieldset, hide_from_element, iteration_title){
+        var self = this; 
+        self.form_fieldset = (form_fieldset != undefined)?form_fieldset:null;
+        self.hide_from_element = (hide_from_element != undefined)?hide_from_element:null;
+        self.iteration_title = (iteration_title != undefined)?iteration_title:'Item';
+        self.valid_fieldtypes = ['input', 'text','select','textarea','select-one','radio','checkbox']
+        self.repeatable_fields = [];
+        self.repeatable_fieldset = null;
+        self.hb_loop_ob_container = ko.observable({});
+        self.loopContainerForContext = ko.observableArray([]);
+
+        self.isValidInputType = function isValidInputType(element) {
+            var element_type = App.getElementType(element);
+            var found = false;
+            if ($.inArray(element_type, self.valid_fieldtypes) != -1) {
+                return true;
+            }
+            return false;
+        }
+
+        self.showIteration = function showIteration(index) {
+            if (self.repeatable_fieldset === null) {
+                // not exists create it
+                fieldset = $('<fieldset class="loop" style="display:none;"><legend>&nbsp;</legend>');
+                for (f in self.repeatable_fields) {
+                    field = $(self.repeatable_fields[f]);
+                    field.css('display','');
+                    fieldset.append(field);
+                }
+                self.repeatable_fieldset = fieldset;
+            }
+
+            // @TODO remove redundant items from the list, to allow fro increase and decrease of index
+            // ruleset if they reduce ie.. 5 to 2 then 3,4,5 are deleted
+            // @TODO make methods
+            // @CODESMELL
+            var fieldsets = self.form_fieldset.find('fieldset');
+            var hb_base_ob = {};
+
+            for (var c=1; c <= index; c++) {
+                var fieldset = false;
+
+                if (self.hb_loop_ob_container()[c] != undefined) {
+                    // exists already
+//console.log('existing element')
+                    hb_ob = self.hb_loop_ob_container()[c];
+                    fieldset = self.form_fieldset.find('#set-'+c);
+                    fieldset.css('display','');
+
+                    fieldset.children().each(function(index,element){
+                        element = $(element);
+
+                        if (self.isValidInputType(element) === true) {
+                            var key = element.attr('name').replace(/(_(\d+))?/ig, '');
+                            hb_ob[key] = element.val();
+                        }
+                    });
+                }else{
+//console.log('new element')
+                    hb_ob = $.extend({}, hb_base_ob);
+                    hb_ob['id'] = self.iteration_title.toLowerCase() +'_'+ c;
+                    hb_ob['index'] = c;
+                    // new so create it based on default
+                    // deep copy the set
+                    fieldset = self.repeatable_fieldset.clone();
+                    // set element attribs
+                    fieldset.attr('id', 'set-'+c)
+                    fieldset.css('display','');
+                }
+
+                legend = fieldset.find('legend');
+                legend.html(self.iteration_title + '&nbsp;' + c); // @TODO need to put real title name here
+
+                // loop over element set of inputs (that are valid)
+                if (fieldset !== null) {
+                    fieldset.find(self.valid_fieldtypes.join(',')).each(function(index,element){
+                        element = $(element);
+                        if (self.hb_loop_ob_container()[c] == undefined) {
+                            if (self.isValidInputType(element) === true) {
+                                // update id to be unique
+                                old_id = element.attr('id');
+                                new_id = old_id + '_' + c;
+                                element.attr('id', new_id);
+                                // update name to be unique
+                                old_name = element.attr('name');
+                                new_name = old_name + '_' + c;
+                                element.attr('name', new_name);
+                                slug_with_no_id = old_name.replace(/(_(\d+))?/ig, '');
+
+                                // update hb-name so that we get correct context variables
+                                element.attr('data-hb-name', old_name);
+
+                                // set the context params
+                                hb_ob = App.documentModel.ensureElementContextRadioCheckboxOptionsPresent(element,hb_ob);
+                                hb_ob[slug_with_no_id] = element.val();
+
+                                App.documentModel.setContextItem(element);
+                            }
+                        }
+                    });
+                }
+                self.form_fieldset.append(fieldset);
+                self.hb_loop_ob_container()[c] = hb_ob;
+            }
+
+            // @TODO DELETE HACK
+            for (var c=index+1; c <= fieldsets.length; c++) {
+                // hide these elements
+                $(fieldsets[c]).remove();
+                self.form_fieldset.find('#set-'+c).remove();
+                delete self.hb_loop_ob_container()[c];
+            }
+            self.loopContainerForContext([]);//reset
+            for (i in self.hb_loop_ob_container()) {
+                self.loopContainerForContext().push(self.hb_loop_ob_container()[i]);
+            }
+            
+            // set array grouping context variable to allow handlebarsjs to loop
+            var hb_loop_key = 'loop_' + self.iteration_title.toLowerCase();
+            App.documentModel.setContextItemByForce(hb_loop_key, self.loopContainerForContext());
+            App.render();
+        }
+
+        self.init = function init(){
+        // loop over ALL form elements (including labels and other helper items) find the from element and hide all those after
+            var found = false;
+            self.form_fieldset.children().each(function(index,element){
+                element = $(element);
+                if (element.attr('id') == $(hide_from_element).attr('id')) {
+                    found = true;
+                } else {
+                    if (found == true) {
+                        element.hide();
+                        self.repeatable_fields.push(element);
+                    }
+                }
+
+            });
+        }
+
+        self.init();
+    };
+
+	function DocumentModel() {
+		var self = this;
+
+        self.textElementsList = ['text','textarea','hidden','select'];
+        self.FalseValuesList = ['False','false',false,null,void 0,''];
+		self.handlebarsElementId = ko.observable('script#js-document');
+		self.documentTemplate = ko.observable($(self.handlebarsElementId()).html());
+        self.compiledTemplate = false; // must not be ko.observable
+		self.renderedHTML = ko.observable('');
+
+        self.visibilityRuleset = ko.observableArray([]);
+        self.loopStepList = ko.observable({});
+
+        self.ruleSet = ko.observable({
+            'show_step_when': [],
+            'show_element_when': []
+        });
+
+		self.context = ko.observable({
+		    'user_company_name': 'RuleNo1',
+            'user_company_url': 'http://www.ruleno1.com',
+		    'document_title': '{{ userdoc.name|default:object.name }}'
+		});
+
+        self.getRuleByType = function getRuleByType(ruleset_type) {
+            if (ruleset_type in self.ruleSet()) {
+                return self.ruleSet()[ruleset_type];
+            }
+            return false;
+        }
+
+        self.setRule = function setRule(element,ruleset) {
+            var rule = new Rule(element);
+            for (r in self.ruleSet()) {
+                if (r in ruleset) {
+                    if (r == 'show_step_when') {
+                        rule.target_element = $(element.closest('div.form-group')[0]);
+                    }
+                    rule.ruleset.push(ruleset[r]);
+                    self.ruleSet()[r].push(rule);
+                }
+            };
+        }
+
+        self.showLoopStep = function showLoopStep(element, num) {
+            var formset_id = $($(element).closest('div.form-group')[0]).attr('id');
+            self.loopStepList()[formset_id].showIteration(num);
+        }
+
+        self.getLoopStepByChildElement = function getLoopStepByChildElement(requested_element) {
+            var found = false;
+            var requested_id = parseInt(requested_element.attr('id').replace(/[^\d]+/ig, ''));
+            var formset_id = $($(requested_element).closest('div.form-group')[0]).attr('id');
+
+            $.each(self.loopStepList()[formset_id].hb_loop_ob_container(), function(index,element){
+                if (found === false && element['id'] != undefined) {
+                    var item_id = parseInt(element['id'].replace(/[^\d]+/ig, ''));
+
+                    if (item_id === requested_id) {
+                        found = {
+                            'formset_id': formset_id,
+                            'context_index': index,
+                            'container_context': element,
+                        }
+                    };
+                }
+            });
+
+            return found;
+        }
+
+        self.setLoopStep = function setLoopStep(form_fieldset, hide_from_element, iteration_title) {
+            var formset_id = $($(hide_from_element).closest('div.form-group')[0]).attr('id');
+            self.loopStepList()[formset_id] = new LoopStep(form_fieldset, hide_from_element, iteration_title);
+        }
+
+        self.slugify = function slugify(text) {
+            if (typeof text == 'boolean') {
+                text = (text === true)?'true':'false';
+            } else if (text != undefined && text != null) {
+                text = text.replace(/[^_-a-zA-Z0-9,&\s]+/ig, '');
+                //text = text.replace(/-/gi, "_");
+                text = text.replace(/\s/gi, "-").toLowerCase();
+            }
+            return text;
+        }
+
+        self.assertElementIsVisibleWhen = function assertElementIsVisibleWhen(key, value) {
+            if (key in self.context()) {
+                var context_value = self.context()[key];
+                if (context_value == value) {
+                    return true;
+                } else {
+                    // hide the relavant object
+                }
+            }
+            return false;
+        }
+
+        self.determineValue = function determineValue(input) {
+			var value = null;
+			var is_placeholder_value = true;
+			if (input.val() != 'undefined' && input.val() != '') {
+			    value = input.val();
+			    is_placeholder_value = false;
+			} else {
+			    value = input.attr('placeholder');
+		    }
+
+            if (self.textElementsList.indexOf(input.attr('type')) >= 0 || self.textElementsList.indexOf(input.prop('type')) >= 0) {
+                    //value = '[' + value.toString() + ']';
+                    value = value.toString();
+            }
+            // if the textElementsList has no type of this type.. it could be a checkbox or radio
+            if (self.textElementsList.indexOf(input.attr('type')) == -1) {
+                
+                if (input.attr('type') == 'radio' || input.attr('type') == 'checkbox') {
+                    value = (input.attr('checked') == 'checked') ? true : false ;
+                }
+            }
+
+            return {
+                'value': value,
+                'is_placeholder_value': is_placeholder_value
+            };
+        }
+
+        self.setTemplateHasHelperValues = function setTemplateHasHelperValues(input, value, is_placeholder_value) {
+            var key = 'has_' + input.attr('data-hb-name');
+            var has_this_value = (self.FalseValuesList.indexOf(value) >= 0 || is_placeholder_value === true)? false : true ;
+            self.setContextItemByForce(key, has_this_value);
+        }
+
+        // method to set the _value values of the specified item
+        self.getTemplateHelperKey = function getTemplateHelperKey(input) {
+            var value = input.val();
+            var slug = self.slugify(input.attr('data-hb-name'));
+            var value_slug = self.slugify(value);
+            var key = '_' + slug + '_' + value_slug;
+            var id_free_key = key.replace(/_[\d]+/ig, '');
+
+            return {
+                'value': value,
+                'slug': slug,
+                'value_slug': value_slug,
+                'id_free_key': id_free_key,
+                'key': key,
+            }
+
+        }
+
+        self.ensureElementContextRadioCheckboxOptionsPresent = function ensureElementContextRadioCheckboxOptionsPresent(element,local_context) {
+            var required_name = element.attr('name');
+
+            if (element.attr('type') == 'radio' || element.attr('type') == 'checkbox') {
+                if (element.attr('name') == required_name) {
+                    // found the name of the lement so ensure the key exists
+                    // @TODO these variables need to be commmon make a method
+                    var slug = self.slugify(element.attr('data-hb-name')).replace(/(_[\d]+)/ig, '');
+                    var value_slug = self.slugify(element.val());
+                    var key = '_' + slug + '_' + value_slug;
+
+                    if ((key in local_context) == false) {
+                        local_context[key] = false;
+                    }else{
+                        for (context_key in local_context) {
+                            if (context_key.indexOf(slug) >= 0) {
+                                // found it
+                                if (element.attr('checked') == 'checked') {
+                                    // exists 
+                                    local_context[key] = true;
+                                }else{
+                                    local_context[key] = false;
+                                }
+                            }
+                        }
+                    }
+
+                }
+            };
+            return local_context;
+        }
+
+        // This is where radio and checkboxes in a loop are handled
+        self.setTemplateHelperValues = function setTemplateHelperValues(input,local_context) {
+            // set custom
+            helper = self.getTemplateHelperKey(input);
+
+            var context = (local_context == undefined) ? self.context() : local_context ;
+            var slug = helper['slug'];
+            var key = helper['key'];
+
+            if (input.attr('type') == 'radio') {
+                helper = self.ensureElementContextRadioCheckboxOptionsPresent(input,helper);
+                context = $.merge(context,helper);
+            }
+
+            if (local_context == undefined) {
+                // set the base key value for this input
+                self.setContextItemByForce(key, true);
+            }
+
+            return context;
+        }
+
+		self.setContextItem = function setContextItem(input,local_context) {
+            // only allow if the data-hb-name is set
+            if (typeof input.attr('data-hb-name') == 'string') {
+    			var context = (local_context == undefined) ? self.context() : local_context ;
+    			var key = name = input.attr('data-hb-name');
+    			var value_ob = self.determineValue(input);
+                var value = value_ob['value'];
+                var is_placeholder_value = value_ob['is_placeholder_value'];
+
+                // set the helper values
+                self.setTemplateHelperValues(input);
+                // set the has_attrib values
+                self.setTemplateHasHelperValues(input, value, is_placeholder_value);
+
+            	context[key] = value;
+                if (local_context == undefined) {
+            	   self.context(context);
+                }
+                return context
+            }
+            return false;
+		}
+
+        self.setContextItemByForce = function setContextItemByForce(key,value) {
+            var context = self.context();
+            context[key] = value;
+            self.context(context);
+        }
+
+        self.render = function render() {
+            self.compiledTemplate = (self.compiledTemplate == false) ? Handlebars.compile(self.documentTemplate()) : self.compiledTemplate ;
+            return self.compiledTemplate(self.context());
+        }
+	}
+
+    /**
+    * Primary view acts as a holder for the other views
+    */
+    function PageDocumentController() {
+        var self = this;
+
+        self.markdownConverter = new Markdown.Converter();
+        self.targetDocumentId = ko.observable('span#document-md');
+        self.documentModel = new DocumentModel();
+        self.formControls = new FormControls();
+        self.message = ko.observable(null);
+
+        self.setGlyntRuleset = function setGlyntRuleset() {
+            // loop over lements looking for rulesets
+            $('form.bind-document input[data-glynt-rule]').each(function(index,element){
+                var rules = eval($(element).attr('data-glynt-rule'));
+                rules = rules[0];// javascript json weirdness
+                self.documentModel.setRule($(element), rules);
+            });
+            $('form.bind-document [data-glynt-loop_step]').each(function(index,element){
+                var form_fieldset = $(element).closest('div.form-group');
+                var data = eval($(element).attr('data-glynt-loop_step'))[0];
+                var hide_from_element = $('[name='+ data['hide_from'] +']')[0];
+                var iteration_title = data['iteration_title'];
+                
+                self.documentModel.setLoopStep(form_fieldset, hide_from_element, iteration_title);
+            });
+        }
+
+        // @TODO apply rulesets
+        self.applyGlyntRuleset = function applyGlyntRuleset() {
+            var current_context = self.documentModel.context();
+            var ruleset = self.documentModel.getRuleByType('show_step_when');
+
+            var target_element = null;
+            var target_element_step_id = null;
+
+            var callback = null;
+            var required_value = null;
+            var current_context_value = null;
+
+            for (var x=0; x < ruleset.length; x++) {
+
+                if (ruleset[x].target_element == 'undefined') {
+                    target_element = $(ruleset[x].target_element);
+                    target_element_step_id = target_element.attr('id').replace(/[^\d]+/ig, '');
+                } else {
+                    target_element = null;
+                    target_element_step_id = null;
+                }
+
+                for (var i=0; i < ruleset[x].ruleset.length; i++) {
+                    callback = (ruleset[x].ruleset[i]['callback'] == 'undefined')? null : ruleset[x].ruleset[i]['callback'] ;
+                    for (var context_var_name in ruleset[x].ruleset[i]) {
+
+                        required_value = ruleset[x].ruleset[i][context_var_name];    
+                        if (context_var_name in current_context) {
+                            current_context_value = current_context[context_var_name];
+                            if (required_value == current_context_value) {
+                                // apply callback
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        self.setContext = function setContext() {
+            // loop over all valid form elements and set them in the context
+            var name = null;
+            var value = null;
+
+            $.each($('form.bind-document'), function(index, form) {
+                $.each($(this).find('input'), function(index, input) {
+                    self.documentModel.setContextItem($(input));
+                });
+                $.each($(this).find('textarea'), function(index, input) {
+                    self.documentModel.setContextItem($(input));
+                });
+                $.each($(this).find('select'), function(index, input) {
+                    self.documentModel.setContextItem($(input));
+                });
+            });
+        }
+
+        self.initializeValuesFromDefaultData = function initializeValuesFromDefaultData() {
+            var data = $.parseJSON($('script#document-default_data').html());
+            if (data) {
+                data = data;
+                if (data) {
+                    $.each(data, function(index, key) {
+                        self.documentModel.setContextItemByForce(key, '_______________')
+                    });
+                }
+            }
+        }
+
+        self.init = function init() {
+            // main initializer
+            self.initializeValuesFromDefaultData();
+            self.setContext();
+            self.setGlyntRuleset();
+            self.applyGlyntRuleset();
+            self.render();
+        }
+
+        self.render = function render() {
+            self.documentModel.renderedHTML(self.renderMarkdown(self.documentModel.render()))
+        }
+        self.renderMarkdown = function renderMarkdown(md) {
+        	return self.markdownConverter.makeHtml(md);
+        }
+
+        self.validateStepForm = function validateStepForm() {
+
+            var csrf_token = $('form.bind-document:first').find('input[type=hidden]:first')
+            var data = {
+                csrfmiddlewaretoken: '{{ csrf_raw_token }}',
+                current_progress: $.cookie('glynt-{{ object.slug }}'),
+                name: $('form#userdoc-name-form input#id_name').val(),
+                id: $('form#userdoc-name-form input#id_id').val()
+            };
+
+            $.ajax({
+              type: 'POST',
+              url: "{% url 'document:validate_form' slug=object.slug %}",
+              data: data,
+            })
+            .success(function(data, textStatus, jqXHR) {
+                var data = data[0];
+                if (data.url != undefined && data.url != document.location) {
+                    document.location = data.url;
+                } else {
+                    console.log('Missing URL to redirect to')
+                }
+            })
+            .error(function(jqXHR, textStatus, errorThrown) { 
+                console.log(jqXHR)
+            })
+            .complete(function() {
+            });
+        }
+
+        self.getElementType = function getElementType(element) {
+            var element_type = element.attr('type');
+            if (element_type == undefined) {
+                // textarea?
+                element_type = element.prop('type');
+            }
+            return element_type;
+        }
+
+        self.init();
+    }
+
+    // ----- KO Instance -----
+    App = new PageDocumentController()
+    // ----- KO Bindings -----
+    ko.applyBindings(App);
+
+
+    {% if userdoc_form %}
+    $('#document-title.editable').editable(function(value, settings) { 
+        $('form#userdoc-name-form input#id_name').val(value);
+            App.validateStepForm()
+            return(value);
+    }, {
+        indicator : 'Saving...',
+        tooltip   : 'Click to create your new document...',
+        placeholder : 'Click to create your new document...',
+        type      : 'textarea',
+        submit    : '{% trans "Save" %}',
+    });
+    {% endif %}
+
+});
+</script>
+
+{% endblock %}

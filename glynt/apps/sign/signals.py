@@ -6,14 +6,10 @@ from django.dispatch import receiver
 from glynt.apps.sign.models import DocumentSignature
 from glynt.apps.sign.tasks import send_signature_invite_email, send_signature_acquired_email
 
-import datetime
-
 
 @receiver(post_save, sender=DocumentSignature)
 def save_document_signature_signal(sender, **kwargs):
     # send an email to the invited person
-    is_new = kwargs['created']
-
     signature = kwargs['instance']
     document = signature.document
 

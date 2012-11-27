@@ -8,9 +8,6 @@ from django.contrib.comments.models import Comment
 from glynt.apps.document import tasks
 from glynt.apps.document.models import ClientCreatedDocument
 
-import datetime
-
-
 
 @receiver(post_save, sender=Comment)
 def save_document_comment_signal(sender, **kwargs):
