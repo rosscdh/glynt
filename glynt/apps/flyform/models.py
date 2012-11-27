@@ -9,7 +9,7 @@ from glynt.apps.flyform.forms import BaseFlyForm
 
 class FlyForm(models.Model):
     """ Flyform model used to store teh JSON representation of a form """
-    document = models.ForeignKey(Document, blank=True, null=True, related_name='fly_document')
+    document = models.ForeignKey(Document, blank=True, null=True)
     body = JSONField(blank=False, null=False)
     defaults = JSONField(blank=True, null=True)
 
