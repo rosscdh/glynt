@@ -9,9 +9,6 @@ from django.views.generic.edit import FormMixin
 
 from utils import JsonErrorResponseMixin, user_can_view_document
 
-from glynt.apps.flyform.forms import BaseFlyForm
-from glynt.apps.document.views.utils import FORM_GROUPS
-from glynt.apps.document.forms import ClientCreatedDocumentForm
 from glynt.apps.document.models import Document
 
 import logging
@@ -33,14 +30,7 @@ class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
     context['object'] = self.document
     context['document'] = self.document.body
     context['default_data'] = self.document.default_data_as_json()
-    context['flyform_fieldnames'] = self.document.flyform.flyform_fields_as_json()
 
-    context['userdoc_form'] = ClientCreatedDocumentForm()
-
-    try:
-      context['form_set'] = self.document.flyform.flyformset()
-    except KeyError:
-      context['form_set'] = FORM_GROUPS['no_steps']
 
     return context
 
@@ -48,7 +38,7 @@ class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
     """
     Returns the form class to use in this view
     """
-    return BaseFlyForm
+    return None
 
   def get_form(self, form_class):
     """

@@ -15,9 +15,6 @@ from glynt.apps.document.managers import ClientCreatedDocumentManager, PublicCli
 
 from glynt.pybars_plus import PybarsPlus
 
-# import signals
-from glynt.apps.document.signals import save_document_comment_signal
-
 import qrcode
 
 
@@ -48,6 +45,9 @@ class Document(models.Model):
 
     def __unicode__(self):
       return u'%s' % (self.name, )
+    
+    def default_data_as_json(self):
+        return json.dumps({})
 
 
 class DocumentCategory(CategoryBase):
@@ -157,3 +157,6 @@ class ClientCreatedDocument(models.Model):
     def data_as_json(self):
       return json.dumps(self.data)
 
+
+# import signals, must be at end of file
+from glynt.apps.document.signals import save_document_comment_signal

@@ -12,7 +12,6 @@ from django.db.utils import IntegrityError
 from django.template import Context
 
 from glynt.apps.document.models import Document, ClientCreatedDocument
-from glynt.apps.document.forms import ClientCreatedDocumentForm
 from glynt.apps.document import tasks
 
 from glynt.apps.document.views.document import DocumentView
@@ -39,14 +38,15 @@ class MyDocumentView(DocumentView):
     invitee_list = self.user_document.documentsignature_set.all()
 
     context['userdoc'] = self.user_document
-    context['userdoc_form'] = ClientCreatedDocumentForm(instance=context['userdoc'])
     context['object'] = self.document
     context['document'] = self.document.body
     context['default_data'] = json.dumps(self.user_document.data)
-    context['invitee_list'] = invitee_list
-    context['invitee_list_json'] = json.dumps([{'id': i.pk, 'name': i.meta_data['to_name'], 'email': i.meta_data['to_email'], 'is_signed': i.is_signed, 'date_signed': i.date_signed.strftime("%x %X") if i.date_signed is not None else '', 'signature_image_url': i.signature_pic_url, 'ip': i.meta_data['signee_ip'] if 'signee_ip' in i.meta_data else ''} for i in invitee_list])
-    context['can_add_invite'] = str(self.document.flyform.flyform_meta['can_add_invite']).lower() if 'can_add_invite' in self.document.flyform.flyform_meta else str(False).lower()
-    context['signature_template'] = self.document.flyform.signature_template.render(Context({}))
+
+    # @TODO handle invitees gracefully
+    # context['invitee_list'] = invitee_list
+    # context['invitee_list_json'] = json.dumps([{'id': i.pk, 'name': i.meta_data['to_name'], 'email': i.meta_data['to_email'], 'is_signed': i.is_signed, 'date_signed': i.date_signed.strftime("%x %X") if i.date_signed is not None else '', 'signature_image_url': i.signature_pic_url, 'ip': i.meta_data['signee_ip'] if 'signee_ip' in i.meta_data else ''} for i in invitee_list])
+    # context['can_add_invite'] = str(self.document.flyform.flyform_meta['can_add_invite']).lower() if 'can_add_invite' in self.document.flyform.flyform_meta else str(False).lower()
+    # context['signature_template'] = self.document.flyform.signature_template.render(Context({}))
 
     try:
       context['form_set'] = self.document.flyform.flyformset()
@@ -78,9 +78,10 @@ class ValidateClientCreatedDocumentFormView(View):
     userdoc_pk = request.POST.get('id', None)
 
     form = ClientCreatedDocumentForm(request.POST)
+    document_slug = slugify(self.kwargs['slug'])
 
     if not form.is_valid():
-      return HttpResponse('[{"status":"%s", "message":"%s"}]' % (progress.pk, 'error', unicode(_('The form was not valid; please check your data "%s"' %(form.errors,) ))), status=400, content_type="application/json")
+      return HttpResponse('[{"status":"%s", "message":"%s"}]' % ('error', unicode(_('The form was not valid; please check your data "%s"' %(form.errors,) ))), status=400, content_type="application/json")
     else:
       if not request.user.is_authenticated():
         redirect_url = '%s?next=%s' % (settings.LOGIN_URL, reverse('document:view', kwargs={'slug':document_slug}))
