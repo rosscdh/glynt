@@ -48,25 +48,6 @@ __e.g.__
 ** The default is always the first in the list. **
 
 
-## Or Variables ##
-Provides the user with a set of clauses, of which the user can select only 1
-
-1. name: String - The variable by which this object is referred to within the document context
-2. can_toggle: Boolean [true|*false] - Allows the user to turn this clause on or off
-
-__e.g.__
-
-    {{#doc_or name="my_variable_name" required=true}}
-    Clause A
-    {{doc_or}}
-    Clause B
-    {{doc_or}}
-    Clause C
-    {{/doc_or}}
-
-** The default is always the first in the list. **
-
-
 ## Select Clause ##
 Select clauses are designed to allow the user to select 1 or more statements or even sections of a document.
 
