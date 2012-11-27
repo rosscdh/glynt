@@ -1,11 +1,6 @@
 # -*- coding: utf-8 -*-
-# tasks to handle the sending of signature invitations
-from django.conf import settings
-from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.models import User
 
-from templated_email import send_templated_mail
 from celery.task import task
 
 import user_streams
@@ -60,7 +55,7 @@ def document_comment(**kwargs):
     """
     # Send notification
     document = kwargs['document']
-    source_document = kwargs['source_document']
+    #source_document = kwargs['source_document']
     commenting_user = kwargs['commenting_user']
     commenting_user_name = kwargs['commenting_user_name']
     username = commenting_user.get_full_name() if commenting_user else commenting_user_name

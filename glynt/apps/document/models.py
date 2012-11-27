@@ -49,9 +49,6 @@ class Document(models.Model):
     def __unicode__(self):
       return u'%s' % (self.name, )
 
-    def default_data_as_json(self):
-      return json.dumps(self.flyform.defaults)
-
 
 class DocumentCategory(CategoryBase):
     """
@@ -156,9 +153,6 @@ class ClientCreatedDocument(models.Model):
     @property
     def cookie_name(self):
       return 'glynt-%s' % (self.pk, )
-
-    def diff_source(self):
-      return 'Return a diff against the self.source_document.body value'
 
     def data_as_json(self):
       return json.dumps(self.data)
