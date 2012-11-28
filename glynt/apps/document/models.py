@@ -148,10 +148,7 @@ class ClientCreatedDocument(models.Model):
       return self.documentsignature_set.filter(is_signed=True)
 
     def get_absolute_url(self):
-        if self.source_document.is_v1_doc is True:
-            return reverse('document:my_view', kwargs={'slug': self.slug})
-        else:
-            return reverse('doc:my_view', kwargs={'slug': self.slug})
+        return reverse('doc:my_view', kwargs={'slug': self.slug})
 
     @property
     def cookie_name(self):

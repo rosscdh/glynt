@@ -20,9 +20,9 @@ class DocumentView(TemplateView, FormMixin, JsonErrorResponseMixin):
   def get_context_data(self, **kwargs):
     context = super(DocumentView, self).get_context_data(**kwargs)
 
-    document_slug = slugify(self.kwargs['slug'])
+    self.document_slug = slugify(self.kwargs['slug'])
 
-    self.document = get_object_or_404(Document.objects.select_related('flyform'), slug=document_slug)
+    self.document = get_object_or_404(Document.objects.select_related('flyform'), slug=self.document_slug)
     user_can_view_document(self.document, self.request.user)
 
     context['csrf_raw_token'] = get_token(self.request)

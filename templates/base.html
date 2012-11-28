@@ -10,14 +10,16 @@
 
     {% compress css %}
     <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
-
-    <link href="{{ STATIC_URL }}css/ml.css" rel="stylesheet">
-    <link href="{{ STATIC_URL }}js/select2/select2.css" rel="stylesheet">
-    <link href="{{ STATIC_URL }}css/errors.css" rel="stylesheet">
-    <link href="{{ STATIC_URL }}css/jquery-ui-theme.css" rel="stylesheet">
-
+    <link href="{{ STATIC_URL }}css/ml.css" rel="stylesheet" charset="utf-8" />
+    <link href="{{ STATIC_URL }}js/select2/select2.css" rel="stylesheet" charset="utf-8" />
+    <link href="{{ STATIC_URL }}css/errors.css" rel="stylesheet" charset="utf-8" />
+    <link href="{{ STATIC_URL }}css/jquery-ui-theme.css" rel="stylesheet" charset="utf-8" />
+    <link href="{{ STATIC_URL }}fontawesome/css/font-awesome.css" rel="stylesheet" charset="utf-8" />
+    <!--[if lt IE 9]>
+    <link href="{{ STATIC_URL }}fontawesome/css/font-awesome-ie7.css" rel="stylesheet" charset="utf-8" />
+    <![endif]-->
     {% block extrahead %}{% endblock %}
-    <link href="{{ STATIC_URL }}css/jquery.signaturepad.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}css/jquery.signaturepad.css" rel="stylesheet" charset="utf-8" />
     {% block css %}{% endblock %}
     {% endcompress %}
 

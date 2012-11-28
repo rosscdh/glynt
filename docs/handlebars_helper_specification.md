@@ -5,8 +5,7 @@ They are handlebars helper methods; and are simply javascript that can be modifi
 
 They exist in order to make authoring a document as simple as possible
 
-The stanzas are constructed in the form:
-
+__The stanzas are constructed in the form:__
 
 # Name #
 Description
@@ -21,6 +20,8 @@ __e.g.__
 
 
 # The Glynt Document variable Set #
+
+**NB.** all strings must be indicated using " and not '
 
 
 ## Document Variables ##
@@ -43,26 +44,7 @@ Allow the user to select from a pre-determined set of variable options; or enter
 
 __e.g.__
 
-    {{#doc_choice name="my_variable_name" choices=['a','b','c'] is_static=true}}{{/doc_choice}}
-
-** The default is always the first in the list. **
-
-
-## Or Variables ##
-Provides the user with a set of clauses, of which the user can select only 1
-
-1. name: String - The variable by which this object is referred to within the document context
-2. can_toggle: Boolean [true|*false] - Allows the user to turn this clause on or off
-
-__e.g.__
-
-    {{#doc_or name="my_variable_name" required=true}}
-    Clause A
-    {{doc_or}}
-    Clause B
-    {{doc_or}}
-    Clause C
-    {{/doc_or}}
+    {{#doc_choice name="my_variable_name" choices=["a","b","c"] is_static=true}}{{/doc_choice}}
 
 ** The default is always the first in the list. **
 
@@ -78,9 +60,9 @@ __e.g.__
 
     {{#doc_select name="my_variable_name"}}
     Clause A
-    {{doc_select}}
+    {option}
     Clause B
-    {{doc_select}}
+    {option}
     Clause C
     {{/doc_select}}
 
@@ -92,9 +74,9 @@ __e.g.__
 
     {{#doc_select name="my_variable_name" multi=true}}
     Clause A
-    {{doc_select}}
+    {option}
     Clause B
-    {{doc_select}}
+    {option}
     Clause C
     {{/doc_select}}
 

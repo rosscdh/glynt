@@ -141,6 +141,9 @@ $(document).ready(function(){
             })
             .fail(function(jqxhr, settings, exception) {
                 console.log('could not load smoothe.js, there will be no document!');
+                console.log(jqxhr);
+                console.log(settings);
+                console.log(exception);
             });
         };
 
