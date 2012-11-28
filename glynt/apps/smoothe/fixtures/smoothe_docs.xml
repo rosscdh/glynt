@@ -26,21 +26,21 @@ This document serves only to allow one to test the glynt functionality of the sm
 
 ## Select ##
 
-{#doc_select name="select_invalid"}{/doc_select}
+{#doc_select name="select_invalid" title="Select A"}{/doc_select}
 
-{{#doc_select name="select_defaults"}}
+{{#doc_select name="select_defaults" title="Select B"}}
 Clause A
 {option}
 Clause B
 {{/doc_select}}
 
-{{#doc_select name="select_single"}}
+{{#doc_select name="select_single" title="Select B"}}
 Clause A
 {{/doc_select}}
 
 ## Select Multi ##
 
-{{#doc_select name="select_multi" multi=true}}
+{{#doc_select name="select_multi" title="Select B" multi=true}}
 Clause A
 {option}
 Clause B
@@ -48,7 +48,7 @@ Clause B
 
 ## Select Toggle ##
 
-{{#doc_select name="select_can_toggle" can_toggle=true}}
+{{#doc_select name="select_can_toggle" title="Select B" can_toggle=true}}
 Clause A
 {option}
 Clause B
