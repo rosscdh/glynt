@@ -46,6 +46,10 @@ class Document(models.Model):
     def __unicode__(self):
       return u'%s' % (self.name, )
 
+    @property
+    def is_v1_doc(self):
+        return True if self.flyform is not None else False
+
     def default_data_as_json(self):
         return json.dumps({})
 
