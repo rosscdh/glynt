@@ -30,7 +30,7 @@ Handlebars.registerHelper('doc_var', function(options) {
     var field_type = 'text';
     var has_initial = (options.hash.initial === undefined) ? false : true;
     var value = null;
-    var html_return = '<span class="{type} edit" data-has_initial="{has_initial}" data-doc_var="{variable_name}">{value}</span>';
+    var html_return = null;
 
     if (options.hash.field_type !== undefined && options.hash.field_type === '') {
         field_type = options.hash.field_type;
@@ -48,17 +48,20 @@ Handlebars.registerHelper('doc_var', function(options) {
         // set to nul because we know it is undefined; assert positive
         app.context[var_name] = null;
     }
-    // wrap the value in our detailed html to allow UX interaction
-    html_return = html_return.assign({ 'variable_name': var_name, 'value': value, 'type': 'doc_var', 'has_initial': has_initial });
-
+    options.hash.type = 'doc_var';
     options.hash.field_type = field_type;
-    options.hash.html_return = html_return;
+    options.hash.variable_name = var_name;
+    options.hash.value = value;
+    options.hash.has_initial = has_initial;
+
+    // wrap the value in our detailed html to allow UX interaction
+    html_return = Handlebars.partials['doc_var-partial'];
 
     // set the context
     app.helper_context[var_name] = options.hash;
 
     // make it safe so hb does not mess with it
-    return new Handlebars.SafeString(html_return);
+    return html_return(options.hash);
 });
 
 
@@ -66,11 +69,15 @@ Handlebars.registerHelper('doc_choice', function(options) {
     if (options.hash.name === undefined || options.hash.name === '') {
         throw new Error('doc_choice requires a unique "name"');
     }
+    if (options.hash.choices === undefined || options.hash.choices.length <= 0) {
+        console.log('"{name}" is a doc_choice element and requires a "choices" list i.e. ["a","b","c"]'.assign({'name': options.hash.name}));
+        options.hash.choices = [];
+    }
     var app = (options.hash.app === undefined) ? window.app : eval('window.'.format(options.hash.app)) ;
     var var_name = options.hash.name;
     var choices = options.hash.choices;
     var html_return = '';
-console.log(options.hash.choices)
+//console.log(options.hash.choices)
     // set the context
     app.helper_context[var_name] = options.hash;
 
@@ -88,9 +95,12 @@ Handlebars.registerHelper('doc_select', function(options) {
     var title = options.hash.name;
     var can_toggle = (options.hash.can_toggle === undefined) ? false: options.hash.can_toggle;
     var html_return = '';
+    // get the inner content
     var content = options.fn(this);
+    // split it based on the {option} seperator as per our docs
     options.hash.select_options = [];
     select_options = content.split('{option}');// splti by the {option} seperator
+    // setup the partial list
     for (var i = 0; i < select_options.length; i++) {
         options.hash.select_options.push({
             'text': select_options[i],
@@ -99,11 +109,20 @@ Handlebars.registerHelper('doc_select', function(options) {
         });
     }
 
-    html_return = Handlebars.compile('<ul id="{{id}}" data-can_toggle="{{can_toggle}}" data-multi="{{multi}}" class="doc_select {{class}}">{{#each select_options}}<li data-option_index="{{index}}" class="{{#if selected}}selected{{/if}}">{{text}}</li>{{/each}}</ul>');
+    html_return = Handlebars.partials['doc_select-partial'];
 
     // set the context
     app.helper_context[var_name] = options.hash;
 
-    // make it safe so hb does not mess with it
-    return html_return(options.hash);
+    if (can_toggle == true) {
+        var toggle = Handlebars.partials['toggle-partial'];
+        var show_toggle = (app.context[var_name] === undefined || app.context[var_name].show_toggle === undefined || app.context[var_name].show_toggle === true) ? true : false;
+        toggle_hash = {
+            'toggle_for': var_name,
+            'text': (show_toggle == false) ? 'Show': 'Hide'
+        };
+        return html_return(options.hash) + toggle(toggle_hash);
+    } else {
+        return html_return(options.hash);
+    }
 });

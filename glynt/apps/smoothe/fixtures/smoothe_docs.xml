@@ -18,7 +18,7 @@ This document serves only to allow one to test the glynt functionality of the sm
 
 ## Choice ##
 
-{#doc_choice name="doc_choice_invalid"}{/doc_choice}
+{{#doc_choice name="doc_choice_invalid"}}{{/doc_choice}}
 
 {{#doc_choice name="doc_choice_is_static" choices=["a","b","c"] is_static=true}}{{/doc_choice}}
 
@@ -26,7 +26,7 @@ This document serves only to allow one to test the glynt functionality of the sm
 
 ## Select ##
 
-{#doc_select name="select_invalid" title="Select A"}{/doc_select}
+{{#doc_select name="select_invalid" title="Select A"}}{{/doc_select}}
 
 {{#doc_select name="select_defaults" title="Select B"}}
 Clause A

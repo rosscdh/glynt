@@ -59,6 +59,19 @@ padding: 2px;
 {{ userdoc.body|default:object.body|safe }}
 </script>
 
+<script type="text/x-handlebars-template" id="doc_var-partial">{% verbatim %}
+<span class="{{type}} edit" data-has_initial="{{has_initial}}" data-doc_var="{{variable_name}}">{{value}}</span>
+{% endverbatim %}</script>
+
+<script type="text/x-handlebars-template" id="doc_select-partial">{% verbatim %}
+<ul id="{{id}}" data-can_toggle="{{can_toggle}}" data-multi="{{multi}}" class="doc_select {{class}}">
+{{#each select_options}}<li data-option_index="{{index}}" class="{{#if selected}}selected{{/if}}">{{text}}</li>{{/each}}
+</ul>
+{% endverbatim %}</script>
+
+<script type="text/x-handlebars-template" id="toggle-partial">{% verbatim %}
+<div id="toggle-{{toggle_for}}" data-toggle_for="{{toggle_for}}" class="toggle">{{text}}</div>
+{% endverbatim %}</script>
 
 <script src="{{ STATIC_URL }}js/rangy-core-1.2.3.js"></script>
 <script src="{{ STATIC_URL }}js/hallo-min.js"></script>
