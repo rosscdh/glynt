@@ -5,10 +5,10 @@
     <field type="CharField" name="name">Smoothe Document - Test Case 1</field>
     <field type="SlugField" name="slug">smoothe-document-test-case-1</field>
     <field type="TextField" name="summary">Test case Fixture</field>
-    <field type="TextField" name="body">
+    <field type="TextField" name="body"><![CDATA[
 This document serves only to allow one to test the glynt functionality of the smoothe library
 
-## Std Var ##
+<h2>Std Var</h2>
 
 {#doc_var name="doc_var_invalid"}{/doc_var}
 
@@ -16,7 +16,7 @@ This document serves only to allow one to test the glynt functionality of the sm
 
 {{#doc_var name="doc_var_initial_val" initial="Small Initial Content"}}{{/doc_var}}
 
-## Choice ##
+<h2>Choice</h2>
 
 {{#doc_choice name="doc_choice_invalid"}}{{/doc_choice}}
 
@@ -24,37 +24,36 @@ This document serves only to allow one to test the glynt functionality of the sm
 
 {{#doc_choice name="doc_choice_not_static" choices=["d","e","f"] is_static=false}}{{/doc_choice}}
 
-## Select ##
+<h2>Select</h2>
 
-{{#doc_select name="select_invalid" title="Select A"}}{{/doc_select}}
+{{#doc_select name="select_invalid" label="Select A"}}{{/doc_select}}
 
-{{#doc_select name="select_defaults" title="Select B"}}
+{{#doc_select name="select_defaults" label="Select B"}}
 Clause A
 {option}
 Clause B
 {{/doc_select}}
 
-{{#doc_select name="select_single" title="Select B"}}
+{{#doc_select name="select_single" label="Select B"}}
 Clause A
 {{/doc_select}}
 
-## Select Multi ##
+<h2>Select Multi</h2>
 
-{{#doc_select name="select_multi" title="Select B" multi=true}}
-Clause A
-{option}
-Clause B
-{{/doc_select}}
-
-## Select Toggle ##
-
-{{#doc_select name="select_can_toggle" title="Select B" can_toggle=true}}
+{{#doc_select name="select_multi" label="Select B" multi=true}}
 Clause A
 {option}
 Clause B
 {{/doc_select}}
 
+<h2>Select Toggle</h2>
 
+{{#doc_select name="select_can_toggle" label="Select B" can_toggle=true}}
+Clause A
+{option}
+Clause B
+{{/doc_select}}
+]]>
     </field>
     <field type="IntegerField" name="doc_status">1</field>
     <field type="BooleanField" name="is_public">True</field>

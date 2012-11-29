@@ -53,13 +53,13 @@ __e.g.__
 Select clauses are designed to allow the user to select 1 or more statements or even sections of a document.
 
 1. name: String - The variable by which this object is referred to within the document context
-2. title: String - The text that will be shown in the helper html
+2. label: String - The text that will be shown in the helper html
 3. multi: Boolean [true|*false] - Can the user select more than 1 of the clauses
 4. can_toggle: Boolean [true|*false] - Allows the user to turn this clause on or off
 
 __e.g.__
 
-    {{#doc_select name="my_variable_name" title="My Variable Title"}}
+    {{#doc_select name="my_variable_name" label="My Variable Title"}}
     Clause A
     {option}
     Clause B
@@ -73,7 +73,7 @@ Allow the user to select more than 1 clause; and are simply the doc_select handl
 
 __e.g.__
 
-    {{#doc_select name="my_variable_name" title="My Variable Title" multi=true}}
+    {{#doc_select name="my_variable_name" label="My Variable Title" multi=true}}
     Clause A
     {option}
     Clause B

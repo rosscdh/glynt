@@ -58,6 +58,7 @@ Handlebars.registerHelper('doc_var', function(options) {
     html_return = Handlebars.partials['doc_var-partial'];
 
     // set the context
+    options.hash.id = MD5(String(var_name + app.helper_context.length+1));
     app.helper_context[var_name] = options.hash;
 
     // make it safe so hb does not mess with it
@@ -79,6 +80,7 @@ Handlebars.registerHelper('doc_choice', function(options) {
     var html_return = '';
 //console.log(options.hash.choices)
     // set the context
+    options.hash.id = MD5(String(var_name + app.helper_context.length+1));
     app.helper_context[var_name] = options.hash;
 
     // make it safe so hb does not mess with it
@@ -92,7 +94,7 @@ Handlebars.registerHelper('doc_select', function(options) {
     }
     var app = (options.hash.app === undefined) ? window.app : eval('window.'.format(options.hash.app)) ;
     var var_name = options.hash.name;
-    var title = options.hash.name;
+    var label = (options.hash.label === undefined) ? false: options.hash.label;
     var can_toggle = (options.hash.can_toggle === undefined) ? false: options.hash.can_toggle;
     var html_return = '';
     // get the inner content
@@ -112,6 +114,7 @@ Handlebars.registerHelper('doc_select', function(options) {
     html_return = Handlebars.partials['doc_select-partial'];
 
     // set the context
+    options.hash.id = MD5(String(var_name + app.helper_context.length+1));
     app.helper_context[var_name] = options.hash;
 
     if (can_toggle == true) {
@@ -119,6 +122,7 @@ Handlebars.registerHelper('doc_select', function(options) {
         var show_toggle = (app.context[var_name] === undefined || app.context[var_name].show_toggle === undefined || app.context[var_name].show_toggle === true) ? true : false;
         toggle_hash = {
             'toggle_for': var_name,
+            'label': label,
             'text': (show_toggle == false) ? 'Show': 'Hide'
         };
         return html_return(options.hash) + toggle(toggle_hash);

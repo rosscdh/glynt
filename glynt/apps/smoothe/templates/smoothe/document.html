@@ -64,13 +64,26 @@ padding: 2px;
 {% endverbatim %}</script>
 
 <script type="text/x-handlebars-template" id="doc_select-partial">{% verbatim %}
-<ul id="{{id}}" data-can_toggle="{{can_toggle}}" data-multi="{{multi}}" class="doc_select {{class}}">
-{{#each select_options}}<li data-option_index="{{index}}" class="{{#if selected}}selected{{/if}}">{{text}}</li>{{/each}}
-</ul>
+<div class="tabbable tabs-left">
+  <ul id="{{id}}" data-can_toggle="{{can_toggle}}" data-multi="{{multi}}" class="doc_select {{class}} nav nav-tabs">
+    <li class=""><legend>{{label}}</legend></li>
+    {{#each select_options}}
+    <li data-option_index="{{index}}" class="{{#if_eq index compare="0"}}active{{/if_eq}} {{#if selected}}selected{{/if}}"><a href="#content-{{../id}}-{{index}}">Option {{index}}</a></li>
+    {{/each}}
+  </ul>
+  <div class="tab-content">
+    {{#each select_options}}
+    <div class="tab-pane" id="content-{{../id}}-{{index}}">{{text}}</div>
+    {{/each}}
+  </div>
+</div>
 {% endverbatim %}</script>
 
 <script type="text/x-handlebars-template" id="toggle-partial">{% verbatim %}
-<div id="toggle-{{toggle_for}}" data-toggle_for="{{toggle_for}}" class="toggle">{{text}}</div>
+<div id="toggle-{{toggle_for}}" data-toggle_for="{{toggle_for}}" class="toggle row">
+  {{#if label}}<div class="label">{{label}}</div>{{/if}}
+  <div class="toggle_state btn btn-inverse">{{text}}</div>
+</div>
 {% endverbatim %}</script>
 
 <script src="{{ STATIC_URL }}js/rangy-core-1.2.3.js"></script>
