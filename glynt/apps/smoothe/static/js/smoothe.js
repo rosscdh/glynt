@@ -2,23 +2,6 @@
 * Handlebars helpers that assist in the creation of document variables
 * generally the output html that allows us to bind DOM events
 */
-// var docVarBase = function docVarBase(params) {
-//     self = this;
-//     self.param_required = ['name'];
-//     self.param_optional = [];
-//     self.valid_params = null;
-// 
-//     self.init = function init(params) {
-//         console.log(params)
-//         self.valid_params = self.param_required + self.param_optional;
-//         $.each(params, function(key, value){
-//             if (self.valid_params.indexOf(key) > -1) {
-//                 self[key] = value;
-//             }
-//         });
-//     }
-//     self.init(params)
-// };
 
 Handlebars.registerHelper('doc_var', function(options) {
 
@@ -58,8 +41,8 @@ Handlebars.registerHelper('doc_var', function(options) {
     html_return = Handlebars.partials['doc_var-partial'];
 
     // set the context
-    options.hash.id = MD5(String(var_name + app.helper_context.length+1));
-    app.helper_context[var_name] = options.hash;
+    options.hash.id = MD5(String(var_name + app.context.length+1));
+    app.context[var_name] = options.hash;
 
     // make it safe so hb does not mess with it
     return html_return(options.hash);
@@ -80,8 +63,8 @@ Handlebars.registerHelper('doc_choice', function(options) {
     var html_return = '';
 //console.log(options.hash.choices)
     // set the context
-    options.hash.id = MD5(String(var_name + app.helper_context.length+1));
-    app.helper_context[var_name] = options.hash;
+    options.hash.id = MD5(String(var_name + app.context.length+1));
+    app.context[var_name] = options.hash;
 
     // make it safe so hb does not mess with it
     return new Handlebars.SafeString(html_return);
@@ -105,7 +88,7 @@ Handlebars.registerHelper('doc_select', function(options) {
     // setup the partial list
     for (var i = 0; i < select_options.length; i++) {
         options.hash.select_options.push({
-            'text': select_options[i],
+            'text': select_options[i].compact(),
             'selected': false,
             'index': i
         });
@@ -114,8 +97,11 @@ Handlebars.registerHelper('doc_select', function(options) {
     html_return = Handlebars.partials['doc_select-partial'];
 
     // set the context
-    options.hash.id = MD5(String(var_name + app.helper_context.length+1));
-    app.helper_context[var_name] = options.hash;
+    options.hash.id = MD5(String(var_name + app.context.length+1));
+    app.context[var_name] = options.hash;
+    if (var_name == 'select_can_toggle') {
+        console.log(options.hash.select_options)
+    }
 
     if (can_toggle == true) {
         var toggle = Handlebars.partials['toggle-partial'];
@@ -130,3 +116,42 @@ Handlebars.registerHelper('doc_select', function(options) {
         return html_return(options.hash);
     }
 });
+
+
+Handlebars.registerHelper('help_for', function(options) {
+    if (options.hash.varname === undefined || options.hash.varname === '') {
+        throw new Error('help_for requires a "varname"');
+    }
+    var app = (options.hash.app === undefined) ? window.app : eval('window.'.format(options.hash.app)) ;
+    var var_name = options.hash.varname;
+    var content = options.fn(this);
+
+    if (app.context[var_name] === undefined || typeof app.context[var_name] !== 'object') {
+        throw new Error('There is no variable named "{varname}" that is an "object" in the app.context'.assign({'varname': varname}));
+    }else{
+        app.context[var_name].help_text = content;
+    }
+    
+});
+
+
+// ----- JQUEY PLUGINS -----
+// select jquery UI plugin
+(function($) {
+    $.widget("ui.glynt_select", {
+        options: {
+            context_name: null,
+            multi: false,
+            can_toggle: false,
+            location: "bottom",
+            color: "#fff",
+            backgroundColor: "#000"
+        },
+        _create: function() {
+            var self = this;
+            self.app = window.app;
+            self.multi = ($(self.element).attr('data-multi') !== '') ? true: false;
+            self.can_toggle = ($(self.element).attr('data-can_toggle') !== '') ? true: false;
+        }
+    });
+})(jQuery);

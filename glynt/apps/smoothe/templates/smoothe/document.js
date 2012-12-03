@@ -25,9 +25,8 @@ $(document).ready(function(){
         self.nav = $('ul.nav-list li a');
 
         self.doc_view = Handlebars.compile($('script#document-hb').html());
-        
-        Handlebars.registerPartial("toggle-partial", Handlebars.compile($("script#toggle-partial").html()));
 
+        Handlebars.registerPartial("toggle-partial", Handlebars.compile($("script#toggle-partial").html()));
         Handlebars.registerPartial("doc_var-partial", Handlebars.compile($("script#doc_var-partial").html()));
         Handlebars.registerPartial("doc_select-partial", Handlebars.compile($("script#doc_select-partial").html()));
 
@@ -126,6 +125,7 @@ $(document).ready(function(){
                 self.dispatch('bind_data', {'doc_var': doc_var_name, 'value': doc_val, 'notify': false});
             });
 
+            $('.doc_select').glynt_select();
         };
 
         self.init = function init() {

@@ -53,6 +53,11 @@ Clause A
 {option}
 Clause B
 {{/doc_select}}
+
+{{#help_for varname="doc_var_default"}}This is extended help text for the "doc_var_default" variable{{/help_for}}
+
+{{#help_for varname="select_can_toggle"}}This is extended help text for the "select_multi" variable{{/help_for}}
+
 ]]>
     </field>
     <field type="IntegerField" name="doc_status">1</field>
