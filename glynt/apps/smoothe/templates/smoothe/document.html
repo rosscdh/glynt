@@ -86,6 +86,10 @@ padding: 2px;
 </div>
 {% endverbatim %}</script>
 
+<script type="text/x-handlebars-template" id="doc_note-partial">{% verbatim %}
+<span id="{{id}}" data-note_id="{{id}}" class="note">{{content}}</span>
+{% endverbatim %}</script>
+
 <script src="{{ STATIC_URL }}js/rangy-core-1.2.3.js"></script>
 <script src="{{ STATIC_URL }}js/hallo-min.js"></script>
 

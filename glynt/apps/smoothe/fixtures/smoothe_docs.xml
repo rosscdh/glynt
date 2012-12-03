@@ -54,6 +54,12 @@ Clause A
 Clause B
 {{/doc_select}}
 
+{{#doc_note}}
+This is my wonderful paragraph with some text
+{note}
+This is my awesome explanation text, which wont confuse the user; but instead illuminate them...
+{{/doc_note}}
+
 {{#help_for varname="doc_var_default"}}This is extended help text for the "doc_var_default" variable{{/help_for}}
 
 {{#help_for varname="select_can_toggle"}}This is extended help text for the "select_multi" variable{{/help_for}}

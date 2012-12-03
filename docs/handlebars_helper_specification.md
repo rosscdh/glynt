@@ -94,3 +94,17 @@ __e.g.__
 
     {{#help_for varname="my_var"}}Extended Help Text Goes here{{/help_for}}
 
+## Paragraph Note ##
+
+Some paragraphs will need to be annotated and have help text associated with them.
+
+1. takes no variables
+
+__e.g.__
+
+    {{#doc_note}}
+    This is my wonderful paragraph with some text
+    {note}
+    This is my awesome explanation text, which wont confuse the user; but instead illuminate them...
+    {{/doc_note}}
+

@@ -14,7 +14,9 @@ $(document).ready(function(){
     window.app = $.sammy(function() {
         var self = this;
         self.default_data = $.parseJSON($('script#document-default_data').html());
-        self.context = {};
+        self.context = {
+            'notes': {}
+        };
         self.helper_context = {
             'or_groups': {}
         };
@@ -29,6 +31,7 @@ $(document).ready(function(){
         Handlebars.registerPartial("toggle-partial", Handlebars.compile($("script#toggle-partial").html()));
         Handlebars.registerPartial("doc_var-partial", Handlebars.compile($("script#doc_var-partial").html()));
         Handlebars.registerPartial("doc_select-partial", Handlebars.compile($("script#doc_select-partial").html()));
+        Handlebars.registerPartial("doc_note-partial", Handlebars.compile($("script#doc_note-partial").html()));
 
         // ---- VIEWS -----
         this.get('#/', function() {

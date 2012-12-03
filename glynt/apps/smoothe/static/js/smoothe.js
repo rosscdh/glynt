@@ -99,9 +99,6 @@ Handlebars.registerHelper('doc_select', function(options) {
     // set the context
     options.hash.id = MD5(String(var_name + app.context.length+1));
     app.context[var_name] = options.hash;
-    if (var_name == 'select_can_toggle') {
-        console.log(options.hash.select_options)
-    }
 
     if (can_toggle == true) {
         var toggle = Handlebars.partials['toggle-partial'];
@@ -131,7 +128,20 @@ Handlebars.registerHelper('help_for', function(options) {
     }else{
         app.context[var_name].help_text = content;
     }
-    
+});
+
+Handlebars.registerHelper('doc_note', function(options) {
+    var app = (options.hash.app === undefined) ? window.app : eval('window.'.format(options.hash.app)) ;
+    var content = options.fn(this);
+    content = content.split('{note}');
+    var note = content[1];
+    content = content[0];
+
+    options.hash.id = MD5(note);
+    app.context.notes[options.hash.id] = note;
+
+    var html_return = Handlebars.partials['doc_note-partial'];
+    return html_return({'id': options.hash.id, 'note': note, 'content': content});
 });
 
 
