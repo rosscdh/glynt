@@ -82,3 +82,15 @@ __e.g.__
     {{/doc_select}}
 
 ** see Select Clause **
+
+
+## Help Text ##
+
+Some variable need a bit more explanation; in order to show this extra text we define it seperately using the help_for tag
+
+1. varname: the name of the variable that this help text applies to
+
+__e.g.__
+
+    {{#help_for varname="my_var"}}Extended Help Text Goes here{{/help_for}}
+
