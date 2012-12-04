@@ -184,10 +184,19 @@ Handlebars.registerHelper('doc_note', function(options) {
             var var_name = $(self.element).attr('data-doc_var');
             var choices = self.app.context[var_name].choices;
             var element = $(self.element);
-            element.glynt_typeahead({
-                source: choices
-            });
 
+            element.glynt_typeahead({source: choices});
+
+            element.on('mouseover', function(event){
+                event.preventDefault();
+                $(this).css('cursor', 'pointer')
+                self.options.target_element.html('Valid choices include "{choices}"'.assign({'choices': choices}));
+            });
+            element.on('mouseout', function(event){
+                event.preventDefault();
+                $(this).css('cursor', 'auto')
+                self.options.target_element.html('');
+            });
         }
     });
 
@@ -206,12 +215,12 @@ Handlebars.registerHelper('doc_note', function(options) {
             self.note_icon.on('mouseover', function(event){
                 event.preventDefault();
                 $(this).css('cursor', 'pointer')
-                $(self.options.target_element).html(self.note);
+                self.options.target_element.html(self.note);
             });
             self.note_icon.on('mouseout', function(event){
                 event.preventDefault();
                 $(this).css('cursor', 'auto')
-                $(self.options.target_element).html('');
+                self.options.target_element.html('');
             });
         }
     });

@@ -12,14 +12,17 @@
 {% block document %}
 <div class="row">
   <ul id="progress"></ul>
-  <div id="document">{% show_loading modal='False' %}</div>
-  <div id="element_help_text"></div>
+  <div id="document" class="span6">{% show_loading modal='False' %}</div>
+  <div id="element_help_text" class="span2"></div>
 </div>
 {% endblock %}
 
 
 {% block css %}
 <style>
+#element_help_text {
+  
+}
 .doc_var, .doc_choice {
 background-color: #fef58e;
 padding: 2px;
