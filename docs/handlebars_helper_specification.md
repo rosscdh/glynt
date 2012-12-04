@@ -28,7 +28,7 @@ __e.g.__
 Standard variables; the default value is defined by the content in-between the "{{#doc_var}}{{/doc_var}}" tags
 
 1. name: String - The variable by which this object is referred to within the document context
-
+ 
 __e.g.__
 
     {{#doc_var name="my_variable_name"}}Some Content Goes here and is the Default Value of the my_variable_name var{{/doc_var}}
@@ -39,8 +39,9 @@ Allow the user to select from a pre-determined set of variable options; or enter
 
 1. name: String - The variable by which this object is referred to within the document context
 2. can_toggle: Boolean [true|*false] - Allows the user to turn this clause on or off
-3. choices: List ['a','b','c','d'] - Will provide a selection of options the user can select from
+3. choices: String "a,b,c,d" - Will provide a selection of options the user can select from
 4. is_static: Boolean [*true|false] - If true, then the user can choose only 1 of the variables specified by "choices". If false they can enter their own value as well as the ones provided by "choices"
+5. initial: The initial value "a" *should be one of the provided options
 
 __e.g.__
 
@@ -84,16 +85,6 @@ __e.g.__
 ** see Select Clause **
 
 
-## Help Text ##
-
-Some variable need a bit more explanation; in order to show this extra text we define it seperately using the help_for tag
-
-1. varname: the name of the variable that this help text applies to
-
-__e.g.__
-
-    {{#help_for varname="my_var"}}Extended Help Text Goes here{{/help_for}}
-
 ## Paragraph Note ##
 
 Some paragraphs will need to be annotated and have help text associated with them.
@@ -107,4 +98,15 @@ __e.g.__
     {note}
     This is my awesome explanation text, which wont confuse the user; but instead illuminate them...
     {{/doc_note}}
+
+
+## Help Text ##
+
+Some variable need a bit more explanation; in order to show this extra text we define it seperately using the help_for tag
+
+1. varname: the name of the variable that this help text applies to
+
+__e.g.__
+
+    {{#help_for varname="my_var"}}Extended Help Text Goes here{{/help_for}}
 

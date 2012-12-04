@@ -20,9 +20,9 @@ This document serves only to allow one to test the glynt functionality of the sm
 
 {{#doc_choice name="doc_choice_invalid"}}{{/doc_choice}}
 
-{{#doc_choice name="doc_choice_is_static" choices=["a","b","c"] is_static=true}}{{/doc_choice}}
+{{#doc_choice name="doc_choice_is_static" choices="magic,wizard,monkey" is_static=true}}monkey{{/doc_choice}}
 
-{{#doc_choice name="doc_choice_not_static" choices=["d","e","f"] is_static=false}}{{/doc_choice}}
+{{#doc_choice name="doc_choice_not_static" choices="donkey,camel,fish" is_static=false}}fish{{/doc_choice}}
 
 <h2>Select</h2>
 

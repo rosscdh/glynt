@@ -31,6 +31,7 @@ $(document).ready(function(){
         Handlebars.registerPartial("toggle-partial", Handlebars.compile($("script#toggle-partial").html()));
         Handlebars.registerPartial("doc_var-partial", Handlebars.compile($("script#doc_var-partial").html()));
         Handlebars.registerPartial("doc_select-partial", Handlebars.compile($("script#doc_select-partial").html()));
+        Handlebars.registerPartial("doc_choice-partial", Handlebars.compile($("script#doc_choice-partial").html()));
         Handlebars.registerPartial("doc_note-partial", Handlebars.compile($("script#doc_note-partial").html()));
 
         // ---- VIEWS -----
@@ -130,7 +131,8 @@ $(document).ready(function(){
                 self.dispatch('bind_data', {'doc_var': doc_var_name, 'value': doc_val, 'notify': false});
             });
 
-            $('.doc_select').glynt_select();
+            $('.doc_select').glynt_select({target_element: $('#element_help_text')});
+            $('.doc_choice').glynt_choice({target_element: $('#element_help_text')});
             $('.note').glynt_note({target_element: $('#element_help_text')});
         };
 

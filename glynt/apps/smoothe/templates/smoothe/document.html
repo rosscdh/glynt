@@ -20,7 +20,7 @@
 
 {% block css %}
 <style>
-.doc_var {
+.doc_var, .doc_choice {
 background-color: #fef58e;
 padding: 2px;
 -webkit-touch-callout: text;
@@ -79,6 +79,11 @@ padding: 2px;
   </div>
 </div>
 {% endverbatim %}</script>
+
+<script type="text/x-handlebars-template" id="doc_choice-partial">{% verbatim %}
+<span id="{{id}}" class="doc_choice edit" data-doc_var="{{name}}">{{value}}</span>
+{% endverbatim %}</script>
+
 
 <script type="text/x-handlebars-template" id="toggle-partial">{% verbatim %}
 <div id="toggle-{{toggle_for}}" data-toggle_for="{{toggle_for}}" class="toggle row">
