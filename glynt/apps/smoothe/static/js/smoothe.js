@@ -134,8 +134,8 @@ Handlebars.registerHelper('doc_note', function(options) {
     var app = (options.hash.app === undefined) ? window.app : eval('window.'.format(options.hash.app)) ;
     var content = options.fn(this);
     content = content.split('{note}');
-    var note = content[1];
-    content = content[0];
+    var note = content[1].compact();
+    content = content[0].compact();
 
     options.hash.id = MD5(note);
     app.context.notes[options.hash.id] = note;
@@ -150,18 +150,37 @@ Handlebars.registerHelper('doc_note', function(options) {
 (function($) {
     $.widget("ui.glynt_select", {
         options: {
-            context_name: null,
-            multi: false,
-            can_toggle: false,
-            location: "bottom",
-            color: "#fff",
-            backgroundColor: "#000"
         },
         _create: function() {
             var self = this;
             self.app = window.app;
             self.multi = ($(self.element).attr('data-multi') !== '') ? true: false;
             self.can_toggle = ($(self.element).attr('data-can_toggle') !== '') ? true: false;
+        }
+    });
+
+    $.widget("ui.glynt_note", {
+        options: {
+            target_element: null
+        },
+        _create: function() {
+            var self = this;
+            self.app = window.app;
+            self.has_note_id = ($(self.element).attr('data-note_id') !== '') ? true: false;
+            self.note_id = $(self.element).attr('data-note_id');
+            self.note = self.app.context.notes[self.note_id];
+            self.note_icon = $(self.element).find('.note:first');
+
+            self.note_icon.on('mouseover', function(event){
+                event.preventDefault();
+                $(this).css('cursor', 'pointer')
+                $(self.options.target_element).html(self.note);
+            });
+            self.note_icon.on('mouseout', function(event){
+                event.preventDefault();
+                $(this).css('cursor', 'auto')
+                $(self.options.target_element).html('');
+            });
         }
     });
 })(jQuery);

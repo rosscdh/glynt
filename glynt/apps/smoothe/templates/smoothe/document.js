@@ -120,7 +120,9 @@ $(document).ready(function(){
             $('.edit').live('blur', function(event){
                 var doc_var_name = $(this).attr('data-doc_var')
                 var doc_val = $(this).html();
-                self.dispatch('bind_data', {'doc_var': doc_var_name, 'value': doc_val});
+                if (app.context[doc_var_name].value != doc_val) {
+                    self.dispatch('bind_data', {'doc_var': doc_var_name, 'value': doc_val});
+                }
             });
             $.each($('[data-has_initial=true]'), function(index, element){
                 var doc_var_name = $(this).attr('data-doc_var')
@@ -129,6 +131,7 @@ $(document).ready(function(){
             });
 
             $('.doc_select').glynt_select();
+            $('.note').glynt_note({target_element: $('#element_help_text')});
         };
 
         self.init = function init() {

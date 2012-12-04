@@ -13,6 +13,7 @@
 <div class="row">
   <ul id="progress"></ul>
   <div id="document">{% show_loading modal='False' %}</div>
+  <div id="element_help_text"></div>
 </div>
 {% endblock %}
 
@@ -87,7 +88,7 @@ padding: 2px;
 {% endverbatim %}</script>
 
 <script type="text/x-handlebars-template" id="doc_note-partial">{% verbatim %}
-<span id="{{id}}" data-note_id="{{id}}" class="note">{{content}}</span>
+<span id="{{id}}" data-note_id="{{id}}" class="note"><i class="note icon-info-sign icon-white icon-align-left"></i>{{content}}</span>
 {% endverbatim %}</script>
 
 <script src="{{ STATIC_URL }}js/rangy-core-1.2.3.js"></script>
