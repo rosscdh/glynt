@@ -10,7 +10,7 @@ This document serves only to allow one to test the glynt functionality of the sm
 
 <h2>Std Var</h2>
 
-{#doc_var name="doc_var_invalid"}{/doc_var}
+{{#doc_var name="doc_var_invalid"}}{{/doc_var}}
 
 {{#doc_var name="doc_var_default"}}Default Content of context:variable_1{{/doc_var}}
 
