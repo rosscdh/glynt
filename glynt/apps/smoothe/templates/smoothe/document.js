@@ -14,7 +14,9 @@ $(document).ready(function(){
     window.app = $.sammy(function() {
         var self = this;
         self.default_data = $.parseJSON($('script#document-default_data').html());
-        self.context = {};
+        self.context = {
+            'notes': {}
+        };
         self.helper_context = {
             'or_groups': {}
         };
@@ -25,11 +27,12 @@ $(document).ready(function(){
         self.nav = $('ul.nav-list li a');
 
         self.doc_view = Handlebars.compile($('script#document-hb').html());
-        
-        Handlebars.registerPartial("toggle-partial", Handlebars.compile($("script#toggle-partial").html()));
 
+        Handlebars.registerPartial("toggle-partial", Handlebars.compile($("script#toggle-partial").html()));
         Handlebars.registerPartial("doc_var-partial", Handlebars.compile($("script#doc_var-partial").html()));
         Handlebars.registerPartial("doc_select-partial", Handlebars.compile($("script#doc_select-partial").html()));
+        Handlebars.registerPartial("doc_choice-partial", Handlebars.compile($("script#doc_choice-partial").html()));
+        Handlebars.registerPartial("doc_note-partial", Handlebars.compile($("script#doc_note-partial").html()));
 
         // ---- VIEWS -----
         this.get('#/', function() {
@@ -118,7 +121,9 @@ $(document).ready(function(){
             $('.edit').live('blur', function(event){
                 var doc_var_name = $(this).attr('data-doc_var')
                 var doc_val = $(this).html();
-                self.dispatch('bind_data', {'doc_var': doc_var_name, 'value': doc_val});
+                if (app.context[doc_var_name].value != doc_val) {
+                    self.dispatch('bind_data', {'doc_var': doc_var_name, 'value': doc_val});
+                }
             });
             $.each($('[data-has_initial=true]'), function(index, element){
                 var doc_var_name = $(this).attr('data-doc_var')
@@ -126,6 +131,9 @@ $(document).ready(function(){
                 self.dispatch('bind_data', {'doc_var': doc_var_name, 'value': doc_val, 'notify': false});
             });
 
+            $('.doc_select').glynt_select({target_element: $('#element_help_text')});
+            $('.doc_choice').glynt_choice({target_element: $('#element_help_text')});
+            $('.note').glynt_note({target_element: $('#element_help_text')});
         };
 
         self.init = function init() {

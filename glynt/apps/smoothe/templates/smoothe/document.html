@@ -12,14 +12,18 @@
 {% block document %}
 <div class="row">
   <ul id="progress"></ul>
-  <div id="document">{% show_loading modal='False' %}</div>
+  <div id="document" class="span6">{% show_loading modal='False' %}</div>
+  <div id="element_help_text" class="span2"></div>
 </div>
 {% endblock %}
 
 
 {% block css %}
 <style>
-.doc_var {
+#element_help_text {
+  
+}
+.doc_var, .doc_choice {
 background-color: #fef58e;
 padding: 2px;
 -webkit-touch-callout: text;
@@ -68,7 +72,7 @@ padding: 2px;
   <ul id="{{id}}" data-can_toggle="{{can_toggle}}" data-multi="{{multi}}" class="doc_select {{class}} nav nav-tabs">
     <li class=""><legend>{{label}}</legend></li>
     {{#each select_options}}
-    <li data-option_index="{{index}}" class="{{#if_eq index compare="0"}}active{{/if_eq}} {{#if selected}}selected{{/if}}"><a href="#content-{{../id}}-{{index}}">Option {{index}}</a></li>
+    <li data-option_index="{{index}}" class="{{#if_eq index compare="0"}}active{{/if_eq}} {{#if selected}}selected{{/if}}"><a href="" rel="#content-{{../id}}-{{index}}">Option {{index}}</a></li>
     {{/each}}
   </ul>
   <div class="tab-content">
@@ -79,11 +83,20 @@ padding: 2px;
 </div>
 {% endverbatim %}</script>
 
+<script type="text/x-handlebars-template" id="doc_choice-partial">{% verbatim %}
+<span id="{{id}}" class="doc_choice edit" data-doc_var="{{name}}">{{value}}</span>
+{% endverbatim %}</script>
+
+
 <script type="text/x-handlebars-template" id="toggle-partial">{% verbatim %}
 <div id="toggle-{{toggle_for}}" data-toggle_for="{{toggle_for}}" class="toggle row">
   {{#if label}}<div class="label">{{label}}</div>{{/if}}
   <div class="toggle_state btn btn-inverse">{{text}}</div>
 </div>
+{% endverbatim %}</script>
+
+<script type="text/x-handlebars-template" id="doc_note-partial">{% verbatim %}
+<span id="{{id}}" data-note_id="{{id}}" class="note"><i class="note icon-info-sign icon-white icon-align-left"></i>{{content}}</span>
 {% endverbatim %}</script>
 
 <script src="{{ STATIC_URL }}js/rangy-core-1.2.3.js"></script>

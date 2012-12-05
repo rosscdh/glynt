@@ -20,9 +20,9 @@ This document serves only to allow one to test the glynt functionality of the sm
 
 {{#doc_choice name="doc_choice_invalid"}}{{/doc_choice}}
 
-{{#doc_choice name="doc_choice_is_static" choices=["a","b","c"] is_static=true}}{{/doc_choice}}
+{{#doc_choice name="doc_choice_is_static" choices="magic,wizard,monkey" is_static=true}}monkey{{/doc_choice}}
 
-{{#doc_choice name="doc_choice_not_static" choices=["d","e","f"] is_static=false}}{{/doc_choice}}
+{{#doc_choice name="doc_choice_not_static" choices="donkey,camel,fish" is_static=false}}fish{{/doc_choice}}
 
 <h2>Select</h2>
 
@@ -53,6 +53,17 @@ Clause A
 {option}
 Clause B
 {{/doc_select}}
+
+{{#doc_note}}
+This is my wonderful paragraph with some text
+{note}
+This is my awesome explanation text, which wont confuse the user; but instead illuminate them...
+{{/doc_note}}
+
+{{#help_for varname="doc_var_default"}}This is extended help text for the "doc_var_default" variable{{/help_for}}
+
+{{#help_for varname="select_can_toggle"}}This is extended help text for the "select_multi" variable{{/help_for}}
+
 ]]>
     </field>
     <field type="IntegerField" name="doc_status">1</field>
