@@ -29,21 +29,33 @@ This document serves only to allow one to test the glynt functionality of the sm
 {{#doc_select name="select_invalid" label="Select A"}}{{/doc_select}}
 
 {{#doc_select name="select_defaults" label="Select B"}}
-Clause A
+There was a donkey, who lived on a hill
+There was a donkey, who lived on a hill
+There was a donkey, who lived on a hill
 {option}
-Clause B
+A monkey named George, caught a train to a gorge
+A monkey named George, caught a train to a gorge
+A monkey named George, caught a train to a gorge
+A monkey named George, caught a train to a gorge
 {{/doc_select}}
 
 {{#doc_select name="select_single" label="Select B"}}
-Clause A
+Everybody loved him, especially Jill
+Everybody loved him, especially Jill
+Everybody loved him, especially Jill
 {{/doc_select}}
+
 
 <h2>Select Multi</h2>
 
 {{#doc_select name="select_multi" label="Select B" multi=true}}
-Clause A
+Living Parge like a gansta, the monkey went pranksta
+Living Parge like a gansta, the monkey went pranksta
+Living Parge like a gansta, the monkey went pranksta
+Living Parge like a gansta, the monkey went pranksta
 {option}
-Clause B
+Several paragraphs are dull and depressing, written on trains surrounded by
+monkies
 {{/doc_select}}
 
 <h2>Select Toggle</h2>

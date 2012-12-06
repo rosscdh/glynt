@@ -118,12 +118,21 @@ $(document).ready(function(){
                 showAlways: true
             });
 
-            $('.edit').live('blur', function(event){
+            $('.edit').on('blur', function(event){
                 var doc_var_name = $(this).attr('data-doc_var')
                 var doc_val = $(this).html();
                 if (app.context[doc_var_name].value != doc_val) {
                     self.dispatch('bind_data', {'doc_var': doc_var_name, 'value': doc_val});
                 }
+            });
+            $('.edit').on('click', function(event){
+                event.preventDefault();
+                var range = document.createRange();
+                range.setStartBefore(this.firstChild);
+                range.setEndAfter(this.lastChild);
+                var sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
             });
             $.each($('[data-has_initial=true]'), function(index, element){
                 var doc_var_name = $(this).attr('data-doc_var')
