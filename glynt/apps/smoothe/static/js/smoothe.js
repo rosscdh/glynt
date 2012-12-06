@@ -162,6 +162,60 @@ Handlebars.registerHelper('doc_note', function(options) {
 (function($) {
   "use strict"; // jshint ;_;
 
+  var acheronCallback = function(q, callbackId, callBack) {
+    var self = this;
+    self.url = '/api/v1/document/templates/';
+    self.results = [];
+
+  };
+
+  window.Acheron = new contactsWidget([acheronCallback], {})
+
+  // all editable widgets
+  $.widget("ui.glynt_edit", {
+      options: {
+      },
+      _create: function() {
+          var self = this;
+          self.app = window.app;
+
+          // apply the hallo editor
+          $(self.element).hallo({
+              plugins: {
+                  'halloformat': {}
+              },
+              editable: true,
+              showAlways: true
+          });
+          // GlyntTypeAhead
+          if ($(self.element).hasClass('doc_choice') === false) {// only if were NOT looking at a choice element
+              $(self.element).glynt_typeahead({
+                  source: ['something','you typed','before']
+              });
+          }
+
+          // events
+          $(self.element).on('blur', function(event){
+              var doc_var_name = $(this).attr('data-doc_var')
+              var doc_val = $(this).html();
+              if (self.app.context[doc_var_name].value != doc_val) {
+                  self.app.dispatch('bind_data', {'doc_var': doc_var_name, 'value': doc_val});
+              }
+          });
+          $(self.element).on('click', function(event){
+              event.preventDefault();
+              if (this.firstChild) {
+                  var range = document.createRange();
+                  var sel = window.getSelection();
+                  range.setStartBefore(this.firstChild);
+                  range.setEndAfter(this.lastChild);
+                  sel.removeAllRanges();
+                  sel.addRange(range);
+              }
+          });
+      }
+  });
+
     $.widget("ui.glynt_select", {
         options: {
             target_element: null
@@ -182,15 +236,17 @@ Handlebars.registerHelper('doc_note', function(options) {
             var self = this;
             self.app = window.app;
             var var_name = $(self.element).attr('data-doc_var');
-            var choices = self.app.context[var_name].choices;
+            self.choices = self.app.context[var_name].choices;
             var element = $(self.element);
 
-            element.glynt_typeahead({source: choices});
+            element.glynt_typeahead({
+                'source': self.choices
+            });
 
             element.on('mouseover', function(event){
                 event.preventDefault();
                 $(this).css('cursor', 'pointer')
-                self.options.target_element.html('Valid choices include "{choices}"'.assign({'choices': choices}));
+                self.options.target_element.html('Valid choices include "{choices}"'.assign({'choices': self.choices}));
             });
             element.on('mouseout', function(event){
                 event.preventDefault();

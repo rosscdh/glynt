@@ -110,36 +110,13 @@ $(document).ready(function(){
             /**
             * Setup the editable items
             */
-            $('.edit').hallo({
-                plugins: {
-                    'halloformat': {}
-                },
-                editable: true,
-                showAlways: true
-            });
-
-            $('.edit').on('blur', function(event){
-                var doc_var_name = $(this).attr('data-doc_var')
-                var doc_val = $(this).html();
-                if (app.context[doc_var_name].value != doc_val) {
-                    self.dispatch('bind_data', {'doc_var': doc_var_name, 'value': doc_val});
-                }
-            });
-            $('.edit').on('click', function(event){
-                event.preventDefault();
-                var range = document.createRange();
-                range.setStartBefore(this.firstChild);
-                range.setEndAfter(this.lastChild);
-                var sel = window.getSelection();
-                sel.removeAllRanges();
-                sel.addRange(range);
-            });
             $.each($('[data-has_initial=true]'), function(index, element){
                 var doc_var_name = $(this).attr('data-doc_var')
                 var doc_val = $(this).html();
                 self.dispatch('bind_data', {'doc_var': doc_var_name, 'value': doc_val, 'notify': false});
             });
 
+            $('.edit').glynt_edit();
             $('.doc_select').glynt_select({target_element: $('#element_help_text')});
             $('.doc_choice').glynt_choice({target_element: $('#element_help_text')});
             $('.note').glynt_note({target_element: $('#element_help_text')});

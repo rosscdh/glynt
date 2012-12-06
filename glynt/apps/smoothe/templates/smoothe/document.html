@@ -63,9 +63,11 @@ padding: 2px;
 {{ userdoc.body|default:object.body|safe }}
 </script>
 
+
 <script type="text/x-handlebars-template" id="doc_var-partial">{% verbatim %}
 <span class="{{type}} edit" data-has_initial="{{has_initial}}" data-doc_var="{{variable_name}}">{{value}}</span>
 {% endverbatim %}</script>
+
 
 <script type="text/x-handlebars-template" id="doc_select-partial">{% verbatim %}
 <div class="tabbable tabs-left">
@@ -84,6 +86,7 @@ padding: 2px;
 </div>
 {% endverbatim %}</script>
 
+
 <script type="text/x-handlebars-template" id="doc_choice-partial">{% verbatim %}
 <span id="{{id}}" class="doc_choice edit" data-doc_var="{{name}}">{{value}}</span>
 {% endverbatim %}</script>
@@ -95,6 +98,7 @@ padding: 2px;
   <div class="toggle_state btn btn-inverse">{{text}}</div>
 </div>
 {% endverbatim %}</script>
+
 
 <script type="text/x-handlebars-template" id="doc_note-partial">{% verbatim %}
 <span id="{{id}}" data-note_id="{{id}}" class="note"><i class="note icon-info-sign icon-white icon-align-left"></i>{{content}}</span>
