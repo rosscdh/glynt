@@ -59,6 +59,10 @@ margin:15px 0px;
 border-left:solid #08C 2px;
 padding-left:2px;
 margin:10px 0px;
+min-height:40px;
+}
+.doc_select_option.selected{
+background-color:#007AB8;
 }
 
 .selecta{
@@ -90,7 +94,7 @@ margin:10px 0px;
 
 
 <script type="text/x-handlebars-template" id="doc_select-selecta-partial">{% verbatim %}
-<div id="{{id}}" class="selecta {{#if_eq selected compare="true"}}selected{{/if_eq}}" data-target="{{target}}">{{handle}}</div>
+<div id="{{id}}" class="selecta btn btn-primary btn-small {{#if_eq selected compare="true"}}selected{{/if_eq}}" data-target="{{target}}">{{handle}}</div>
 {% endverbatim %}</script>
 
 

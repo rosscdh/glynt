@@ -106,6 +106,7 @@ Handlebars.registerHelper('doc_select', function(options) {
     options.hash.select_options = [];
     select_options = content.split('{option}');// splti by the {option} seperator
     // setup the partial list
+
     for (var i = 0; i < select_options.length; i++) {
         options.hash.select_options.push({
             'id': '{id}-{index}'.assign({'id': options.hash.id, 'index': i}),
@@ -243,15 +244,34 @@ Handlebars.registerHelper('doc_note', function(options) {
             self.html_selecta = Handlebars.partials['doc_select-selecta-partial'];
 
             $.each(self.context.select_options, function(index,option){
+                if (option.text.compact().length > 0) {
+                    var selecta = self.html_selecta(option);
+                    $('body').append(selecta);
+                    selecta = $('#{id}'.assign({'id': option.id}))
 
-                var selecta = self.html_selecta(option);
-                $('body').append(selecta);
-                selecta = $('#{id}'.assign({'id': option.id}))
-                // $(selecta).css({'position':'absolute'});
-                var parent = $("#content-{target}".assign({'target': option.id}));
-                var parent_pos = parent.offset();
-                console.log(parent_pos)
-                selecta.css({'left': parent_pos.left - selecta.width(), 'top': parent_pos.top - (parent.height()/2) })
+                    var parent = $("#content-{target}".assign({'target': option.id}));
+                    var parent_pos = parent.offset();
+
+                    selecta.css({'left': parent_pos.left - (selecta.width()*1.6), 'top': parent_pos.top + (parent.height()/3.2) - (selecta.height()/4.2) });
+                    selecta.on('click', function(event){
+                        event.preventDefault();
+
+                        var target = $('#content-{id}-{index}'.assign({'id': self.context.select_options[index].target, 'index': index}));
+
+                        if (self.context.select_options[index].selected === false) {
+                            self.context.select_options[index].selected = true;
+                            target.addClass('selected');
+                            $(this).html('Deselect');
+                            if (self.multi === false) {
+                                // disable all other select items
+                            }
+                        } else {
+                            self.context.select_options[index].selected = false;
+                            $(this).html('Select');
+                            target.removeClass('selected');
+                        }
+                    });
+                }
 
             });
         }
