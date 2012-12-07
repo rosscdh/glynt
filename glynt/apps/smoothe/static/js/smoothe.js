@@ -91,6 +91,14 @@ Handlebars.registerHelper('doc_select', function(options) {
     var var_name = options.hash.name;
     var label = (options.hash.label === undefined) ? false: options.hash.label;
     var can_toggle = (options.hash.can_toggle === undefined) ? false: options.hash.can_toggle;
+    var multi = (options.hash.multi === undefined) ? false: options.hash.multi;
+
+    options.hash.label = label;
+    options.hash.variable_name = var_name;
+    options.hash.can_toggle = can_toggle;
+    options.hash.multi = multi;
+    options.hash.id = MD5(String(var_name + app.context.length+1));
+
     var html_return = '';
     // get the inner content
     var content = options.fn(this);
@@ -100,17 +108,19 @@ Handlebars.registerHelper('doc_select', function(options) {
     // setup the partial list
     for (var i = 0; i < select_options.length; i++) {
         options.hash.select_options.push({
+            'id': '{id}-{index}'.assign({'id': options.hash.id, 'index': i}),
             'text': select_options[i].compact(),
+            'handle': 'Select',
+            'target': options.hash.id,
             'selected': false,
             'index': i
         });
     }
 
-    html_return = Handlebars.partials['doc_select-partial'];
-
     // set the context
-    options.hash.id = MD5(String(var_name + app.context.length+1));
     app.context[var_name] = options.hash;
+
+    html_return = Handlebars.partials['doc_select-partial'];
 
     if (can_toggle == true) {
         var toggle = Handlebars.partials['toggle-partial'];
@@ -223,8 +233,27 @@ Handlebars.registerHelper('doc_note', function(options) {
         _create: function() {
             var self = this;
             self.app = window.app;
-            self.multi = ($(self.element).attr('data-multi') !== '') ? true: false;
-            self.can_toggle = ($(self.element).attr('data-can_toggle') !== '') ? true: false;
+            self.id = $(self.element).attr('id');
+            self.variable_name = $(self.element).attr('data-doc_var');
+            self.context = self.app.context[self.variable_name];
+
+            self.multi = self.context.multi;
+            self.can_toggle = self.context.can_toggle;
+
+            self.html_selecta = Handlebars.partials['doc_select-selecta-partial'];
+
+            $.each(self.context.select_options, function(index,option){
+
+                var selecta = self.html_selecta(option);
+                $('body').append(selecta);
+                selecta = $('#{id}'.assign({'id': option.id}))
+                // $(selecta).css({'position':'absolute'});
+                var parent = $("#content-{target}".assign({'target': option.id}));
+                var parent_pos = parent.offset();
+                console.log(parent_pos)
+                selecta.css({'left': parent_pos.left - selecta.width(), 'top': parent_pos.top - (parent.height()/2) })
+
+            });
         }
     });
 

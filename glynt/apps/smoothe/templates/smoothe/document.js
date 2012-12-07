@@ -31,6 +31,7 @@ $(document).ready(function(){
         Handlebars.registerPartial("toggle-partial", Handlebars.compile($("script#toggle-partial").html()));
         Handlebars.registerPartial("doc_var-partial", Handlebars.compile($("script#doc_var-partial").html()));
         Handlebars.registerPartial("doc_select-partial", Handlebars.compile($("script#doc_select-partial").html()));
+        Handlebars.registerPartial("doc_select-selecta-partial", Handlebars.compile($("script#doc_select-selecta-partial").html()));
         Handlebars.registerPartial("doc_choice-partial", Handlebars.compile($("script#doc_choice-partial").html()));
         Handlebars.registerPartial("doc_note-partial", Handlebars.compile($("script#doc_note-partial").html()));
 

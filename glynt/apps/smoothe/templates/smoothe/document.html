@@ -49,9 +49,20 @@ transition: background-color 0.2s;
 text-align:center;
 }
 
-.doc_or{
-background-color: #fef58e;
-padding: 2px;
+.doc_select{
+background-color:#CEEAF8;
+border:0px;
+margin:15px 0px;
+}
+
+.doc_select .doc_select_option{
+border-left:solid #08C 2px;
+padding-left:2px;
+margin:10px 0px;
+}
+
+.selecta{
+  position:absolute;
 }
 </style>
 <link rel="stylesheet" href="{{ STATIC_URL }}css/hallo.css" charset="utf-8" />
@@ -70,20 +81,16 @@ padding: 2px;
 
 
 <script type="text/x-handlebars-template" id="doc_select-partial">{% verbatim %}
-<div class="tabbable tabs-left">
-  <ul id="{{id}}" data-can_toggle="{{can_toggle}}" data-multi="{{multi}}" class="doc_select {{class}} nav nav-tabs">
-    {{#each select_options}}
-    <li data-option_index="{{index}}" class="{{#if_eq index compare="0"}}active{{/if_eq}} {{#if selected}}selected{{/if}}">
-      <a rel="#content-{{../id}}-{{index}}">select</a>
-    </li>
-    {{/each}}
-  </ul>
-  <div class="tab-content">
-    {{#each select_options}}
-    <div class="" id="content-{{../id}}-{{index}}">{{text}}</div>
-    {{/each}}
-  </div>
+<div id="doc_select-{{id}}" data-doc_var="{{variable_name}}" class="doc_select">
+  {{#each select_options}}
+  <div id="content-{{../id}}-{{index}}" class="doc_select_option">{{text}}</div>
+  {{/each}}
 </div>
+{% endverbatim %}</script>
+
+
+<script type="text/x-handlebars-template" id="doc_select-selecta-partial">{% verbatim %}
+<div id="{{id}}" class="selecta {{#if_eq selected compare="true"}}selected{{/if_eq}}" data-target="{{target}}">{{handle}}</div>
 {% endverbatim %}</script>
 
 
