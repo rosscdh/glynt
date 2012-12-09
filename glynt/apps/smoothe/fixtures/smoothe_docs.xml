@@ -121,7 +121,7 @@ This is my awesome explanation text, which wont confuse the user; but instead il
                     Your employment under this Contract will begin on {{#doc_var name="employment_date_start" class="datepicker"}}Employment date start{{/doc_var}}.
                 {{/doc_select}}
                 {{#doc_select name="continuous_employment"}}
-                    Your period of continuous employment with the Company {{#doc_choice name="my_variable_name" choices=["began","will begin"] is_static=true}}{{/doc_choice}} on {{#doc_var name="employment_date_start" class="datepicker"}}Employment date start{{/doc_var}}.
+                    Your period of continuous employment with the Company {{#doc_choice name="my_variable_name" choices="began,will begin" is_static=true}}{{/doc_choice}} on {{#doc_var name="employment_date_start" class="datepicker"}}Employment date start{{/doc_var}}.
                 {option}
                     No employment with a previous employer counts as part of your period of continuous employment with the Company.
                 {{/doc_select}}
@@ -214,7 +214,7 @@ This is my awesome explanation text, which wont confuse the user; but instead il
                 The Company shall comply with its duties under the Pensions Act 2008. Details of any pension scheme applicable to your employment shall be provided to you by {{#doc_var name="pension_info_person_responsible"}}Person responsible for pension scheme{{/doc_var}}.2
             </li>
             <li>
-                {{#doc_choice name="contracting_out_certificate" choices=["A","No"] is_static=true}}{{/doc_choice}} contracting out certificate in relation to your employment is in force.
+                {{#doc_choice name="contracting_out_certificate" choices="A,No" is_static=true}}{{/doc_choice}} contracting out certificate in relation to your employment is in force.
             </li>
         </ol>
     </li>
