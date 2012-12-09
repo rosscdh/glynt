@@ -233,7 +233,9 @@ Handlebars.registerHelper('doc_note', function(options) {
       }
 
       Selecta.prototype = {
+
         constructor: Selecta
+
         , init: function () {
             var self = this;
 
@@ -321,7 +323,6 @@ Handlebars.registerHelper('doc_note', function(options) {
         options: {
             target_element: null
         },
-        html_selecta: Handlebars.partials['doc_select-selecta-partial'],
         _create: function() {
             var self = this;
             self.app = window.app;
@@ -337,9 +338,6 @@ Handlebars.registerHelper('doc_note', function(options) {
             $.each(self.context.select_options, function(index, option){
                 if (option.text.compact().length > 0) {
 
-                    // var selecta = self.html_selecta(option);
-                    // $('body').append(selecta);
-
                     self.context.select_options[index].selecta = new Selecta({
                         'widget': self,
                         'index': index,
@@ -349,19 +347,6 @@ Handlebars.registerHelper('doc_note', function(options) {
                 }
 
             });
-        },
-        selecta_parent: function selecta_parent(option) {
-            return $("#content-{target}".assign({'target': option.id}));
-        },
-        selecta_position: function selecta_position(selecta, parent) {
-            var parent_pos = parent.offset();
-            return {
-                'left': parent_pos.left - (selecta.width()*1.6),
-                'top': parent_pos.top + (parent.height()/3.2) - (selecta.height()/4.2)
-            }
-        },
-        set_selecta_pos: function set_selecta_pos(selecta, selecta_pos) {
-            selecta.css({'left': selecta_pos.left, 'top': selecta_pos.top });
         }
     });
 
