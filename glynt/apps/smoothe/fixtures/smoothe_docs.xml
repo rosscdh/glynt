@@ -28,6 +28,7 @@ This document serves only to allow one to test the glynt functionality of the sm
 
 {{#doc_select name="select_invalid" label="Select A"}}{{/doc_select}}
 
+<hr/>
 {{#doc_select name="select_defaults" label="Select B"}}
 There was a donkey, who lived on a hill
 There was a donkey, who lived on a hill
@@ -39,6 +40,7 @@ A monkey named George, caught a train to a gorge
 A monkey named George, caught a train to a gorge
 {{/doc_select}}
 
+<hr/>
 {{#doc_select name="select_single" label="Select B"}}
 Everybody loved him, especially Jill
 Everybody loved him, especially Jill

@@ -106,7 +106,6 @@ Handlebars.registerHelper('doc_select', function(options) {
     options.hash.select_options = [];
     select_options = content.split('{option}');// splti by the {option} seperator
     // setup the partial list
-
     for (var i = 0; i < select_options.length; i++) {
         options.hash.select_options.push({
             'id': '{id}-{index}'.assign({'id': options.hash.id, 'index': i}),
@@ -173,17 +172,16 @@ Handlebars.registerHelper('doc_note', function(options) {
 (function($) {
   "use strict"; // jshint ;_;
 
-  var acheronCallback = function(q, callbackId, callBack) {
-    var self = this;
-    self.url = '/api/v1/document/templates/';
-    self.results = [];
+  // var acheronCallback = function(q, callbackId, callBack) {
+  //   var self = this;
+  //   self.url = '/api/v1/document/templates/';
+  //   self.results = [];
+  // };
 
-  };
+  // window.Acheron = new contactsWidget([acheronCallback], {})
 
-  window.Acheron = new contactsWidget([acheronCallback], {})
-
-  // all editable widgets
-  $.widget("ui.glynt_edit", {
+    // all editable widgets
+    $.widget("ui.glynt_edit", {
       options: {
       },
       _create: function() {
@@ -225,12 +223,105 @@ Handlebars.registerHelper('doc_note', function(options) {
               }
           });
       }
-  });
+    });
+
+      var Selecta = function (options) {
+        //this.$element = $(element)
+        this.options = $.extend({}, options)
+        this.init()
+        this.listen()
+      }
+
+      Selecta.prototype = {
+        constructor: Selecta
+        , init: function () {
+            var self = this;
+
+            // create html
+            self.selecta_html = self.options.html(self.options.item);
+            // appendhtml
+            $('body').append(self.selecta_html);
+            // set element
+            self.$element = $('#{id}'.assign({'id': self.options.item.id}))
+
+            self.widget = self.options.widget;
+            self.context = self.options.widget.context;
+
+            self.options.$parent = $("#content-{target}".assign({'target': self.options.item.id}));
+
+            self.$target = self.options.$parent;
+            self.select_options = self.widget.context.select_options;
+            self.select_option = self.select_options[self.options.index];
+            self.other_options = self.select_options.findAll({
+                id: function(id){
+                    return id !== self.select_option.id
+                }
+            });
+            
+            self.position(self.pos());
+        }
+        , listen: function () {
+            var self = this;
+
+            self.$element.on('click', function(event){
+                event.preventDefault();
+                if (self.select_option.selected === false) {
+                    self.select_option.selected = true;
+                    self.$element.addClass('btn-primary');
+                    self.$element.find('i').removeClass('icon-star-empty')
+                    self.$element.find('i').addClass('icon-star')
+                } else {
+                    self.select_option.selected = false;
+                    self.$element.removeClass('btn-primary');
+                    self.$element.find('i').removeClass('icon-star')
+                    self.$element.find('i').addClass('icon-star-empty')
+                }
+                self.$target.toggleClass('selected');
+                self.handle_is_multi();
+            });
+
+            $(window).on('resize', function() {
+                self.position(self.pos());
+            });
+        }
+        , handle_is_multi: function () {
+            // if not is_multi then ensure no other items in this option_set are selected
+            var self = this;
+            if (self.context.multi === false) {
+                $.each(self.other_options, function(index, item){
+                    // content element
+                    item.selecta.$target.removeClass('selected');
+                    // select elemnt
+                    item.selecta.select_option.selected = false;
+                    item.selecta.$element.removeClass('btn-primary');
+                    item.selecta.$element.find('i').removeClass('icon-star')
+                    item.selecta.$element.find('i').addClass('icon-star-empty')
+                });
+            }
+        }
+        , position: function (pos) {
+            // set the position of this element
+            // can pass in a {left:x, top: x}
+            var self = this;
+            self.$element.css({'left': pos.left + 'px', 'top': pos.top + 'px' });
+        }
+        , pos: function () {
+            // get the approximate position of the element
+            // relative to its parent
+            var self = this;
+            var parent_pos = self.options.$parent.offset();
+            return {
+                'left': parent_pos.left - (self.$element.width()*3),
+                'top': parent_pos.top + (self.options.$parent.height()/3.2) - (self.$element.height()/4.2)
+            }
+        }
+      }
 
     $.widget("ui.glynt_select", {
         options: {
             target_element: null
         },
+        html_selecta: Handlebars.partials['doc_select-selecta-partial'],
         _create: function() {
             var self = this;
             self.app = window.app;
@@ -243,37 +334,34 @@ Handlebars.registerHelper('doc_note', function(options) {
 
             self.html_selecta = Handlebars.partials['doc_select-selecta-partial'];
 
-            $.each(self.context.select_options, function(index,option){
+            $.each(self.context.select_options, function(index, option){
                 if (option.text.compact().length > 0) {
-                    var selecta = self.html_selecta(option);
-                    $('body').append(selecta);
-                    selecta = $('#{id}'.assign({'id': option.id}))
 
-                    var parent = $("#content-{target}".assign({'target': option.id}));
-                    var parent_pos = parent.offset();
+                    // var selecta = self.html_selecta(option);
+                    // $('body').append(selecta);
 
-                    selecta.css({'left': parent_pos.left - (selecta.width()*1.6), 'top': parent_pos.top + (parent.height()/3.2) - (selecta.height()/4.2) });
-                    selecta.on('click', function(event){
-                        event.preventDefault();
-
-                        var target = $('#content-{id}-{index}'.assign({'id': self.context.select_options[index].target, 'index': index}));
-
-                        if (self.context.select_options[index].selected === false) {
-                            self.context.select_options[index].selected = true;
-                            target.addClass('selected');
-                            $(this).html('Deselect');
-                            if (self.multi === false) {
-                                // disable all other select items
-                            }
-                        } else {
-                            self.context.select_options[index].selected = false;
-                            $(this).html('Select');
-                            target.removeClass('selected');
-                        }
+                    self.context.select_options[index].selecta = new Selecta({
+                        'widget': self,
+                        'index': index,
+                        'item': option,
+                        'html': Handlebars.partials['doc_select-selecta-partial']
                     });
                 }
 
             });
+        },
+        selecta_parent: function selecta_parent(option) {
+            return $("#content-{target}".assign({'target': option.id}));
+        },
+        selecta_position: function selecta_position(selecta, parent) {
+            var parent_pos = parent.offset();
+            return {
+                'left': parent_pos.left - (selecta.width()*1.6),
+                'top': parent_pos.top + (parent.height()/3.2) - (selecta.height()/4.2)
+            }
+        },
+        set_selecta_pos: function set_selecta_pos(selecta, selecta_pos) {
+            selecta.css({'left': selecta_pos.left, 'top': selecta_pos.top });
         }
     });
 
