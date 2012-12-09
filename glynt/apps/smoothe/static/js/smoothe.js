@@ -109,7 +109,7 @@ Handlebars.registerHelper('doc_select', function(options) {
     for (var i = 0; i < select_options.length; i++) {
         options.hash.select_options.push({
             'id': '{id}-{index}'.assign({'id': options.hash.id, 'index': i}),
-            'text': select_options[i].compact(),
+            'text': new Handlebars.SafeString(select_options[i].compact()),
             'handle': 'Select',
             'target': options.hash.id,
             'selected': false,
