@@ -109,7 +109,7 @@ Handlebars.registerHelper('doc_select', function(options) {
     for (var i = 0; i < select_options.length; i++) {
         options.hash.select_options.push({
             'id': '{id}-{index}'.assign({'id': options.hash.id, 'index': i}),
-            'text': new Handlebars.SafeString(select_options[i].compact()),
+            'text': new Handlebars.SafeString(select_options[i]),
             'handle': 'Select',
             'target': options.hash.id,
             'selected': false,
@@ -156,8 +156,8 @@ Handlebars.registerHelper('doc_note', function(options) {
     var app = (options.hash.app === undefined) ? window.app : eval('window.'.format(options.hash.app)) ;
     var content = options.fn(this);
     content = content.split('{note}');
-    var note = content[1].compact();
-    content = content[0].compact();
+    var note = content[1];
+    content = content[0];
 
     options.hash.id = MD5(note);
     app.context.notes[options.hash.id] = note;
@@ -336,7 +336,7 @@ Handlebars.registerHelper('doc_note', function(options) {
             self.html_selecta = Handlebars.partials['doc_select-selecta-partial'];
 
             $.each(self.context.select_options, function(index, option){
-                if (option.text.compact().length > 0) {
+                if (option.text.string.length > 0) {
 
                     self.context.select_options[index].selecta = new Selecta({
                         'widget': self,
