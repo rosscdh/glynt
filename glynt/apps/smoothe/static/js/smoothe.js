@@ -143,7 +143,7 @@ Handlebars.registerHelper('help_for', function(options) {
     }
     var app = (options.hash.app === undefined) ? window.app : eval('window.'.format(options.hash.app)) ;
     var var_name = options.hash.varname;
-    var content = options.fn(this);
+    var content = options.fn(this).compact();
 
     if (app.context[var_name] === undefined || typeof app.context[var_name] !== 'object') {
         throw new Error('There is no variable named "{varname}" that is an "object" in the app.context'.assign({'varname': varname}));
@@ -172,21 +172,17 @@ Handlebars.registerHelper('doc_note', function(options) {
 (function($) {
   "use strict"; // jshint ;_;
 
-  // var acheronCallback = function(q, callbackId, callBack) {
-  //   var self = this;
-  //   self.url = '/api/v1/document/templates/';
-  //   self.results = [];
-  // };
-
-  // window.Acheron = new contactsWidget([acheronCallback], {})
-
     // all editable widgets
     $.widget("ui.glynt_edit", {
       options: {
+          help_target: $('#element_help_text')
       },
       _create: function() {
           var self = this;
           self.app = window.app;
+          self.id = $(self.element).attr('id');
+          self.variable_name = $(self.element).attr('data-doc_var');
+          self.context = self.app.context[self.variable_name];
 
           // apply the hallo editor
           $(self.element).hallo({
@@ -222,6 +218,38 @@ Handlebars.registerHelper('doc_note', function(options) {
                   sel.addRange(range);
               }
           });
+          $(self.element).on('mouseover', function(event){
+              self.toggle_help(event);
+          });
+          $(self.element).on('mouseout', function(event){
+              self.toggle_help(event);
+          });
+      },
+      toggle_help: function toggle_help(event) {
+          var self = this;
+          if (self.context.help_text !== undefined && typeof self.context.help_text === 'string') {
+              if (self.options.help_target.length >= 1) {
+                    var target = self.options.help_target;
+                    var element = $(self.element);
+                    var element_pos = element.position();
+                    if (target.css('display') == 'none' && event.type == 'mouseover' ) {
+                        var pos = {
+                            'left': element_pos.left + $('#document').width(),
+                            'top': element_pos.top
+                        }
+                        target.css({'left': pos.left + 'px', 'top': pos.top + 'px'});
+                        var icon = $('<i/>', {class:'icon-info-sign icon-align-left'});
+                        var info = $('<div/>', {class:'info-text'}).append(self.context.help_text)
+                        info.prepend(icon);
+                        target.html(info);
+                        target.css('display', 'block');
+                    } else {
+                        target.html('');
+                        target.css('display', 'none');
+                    }
+              }
+
+          }
       }
     });
 
