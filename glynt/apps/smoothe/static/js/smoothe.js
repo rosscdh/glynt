@@ -24,8 +24,7 @@ Handlebars.registerHelper('doc_var', function(options) {
     }
 
     value = (options.hash.initial !== undefined) ? options.hash.initial : '' ;
-    value = (app.context[var_name] === undefined) ? value : app.context[var_name] ;
-
+    value = (app.context[var_name] === undefined) ? value : app.context[var_name].value ;
     // add value to context
     if (app.context[var_name] === undefined) {
         // set to nul because we know it is undefined; assert positive
@@ -207,7 +206,7 @@ Handlebars.registerHelper('doc_note', function(options) {
             var self = this;
             var pos = self.help_pos();
             var icon = $('<i/>', {class:'icon-info-sign icon-align-left'});
-            var info = $('<div/>', {class:'info-text'}).append(self.options.item.help_text)
+            var info = $('<div/>', {class:'info-text'}).append('&nbsp;' + self.options.item.help_text)
 
             self.$target.css({'left': pos.left + 'px', 'top': pos.top + 'px'});
             info.prepend(icon);
