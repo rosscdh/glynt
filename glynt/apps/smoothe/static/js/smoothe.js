@@ -234,7 +234,7 @@ Handlebars.registerHelper('doc_note', function(options) {
                     var element_pos = element.position();
                     if (target.css('display') == 'none' && event.type == 'mouseover' ) {
                         var pos = {
-                            'left': element_pos.left + $('#document').width(),
+                            'left': $('#document').width()*1.1,
                             'top': element_pos.top
                         }
                         target.css({'left': pos.left + 'px', 'top': pos.top + 'px'});
