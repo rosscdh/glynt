@@ -172,11 +172,85 @@ Handlebars.registerHelper('doc_note', function(options) {
 (function($) {
   "use strict"; // jshint ;_;
 
+    var HelpText = function (options) {
+    this.options = $.extend({}, options)
+    this.init()
+    this.listen()
+    }
+
+    HelpText.prototype = {
+        constructor: HelpText
+        , element: null
+        , target: null
+        , init: function () {
+            var self = this;
+            self.$element = $('#{id}'.assign({'id': self.options.item.id}));
+            self.$target = $(self.options.help_target);
+            self.listen();
+        }
+        , listen: function () {
+            var self = this;
+
+            self.$element.on('mouseover mouseout', function(event){
+                self.toggle(event);
+            });
+        }
+        , help_pos: function () {
+            var self = this;
+            var element_pos = self.$element.position();
+            return {
+                'left': $('#document').width()*1.1,
+                'top': element_pos.top
+            }
+        }
+        , show: function () {
+            var self = this;
+            var pos = self.help_pos();
+            var icon = $('<i/>', {class:'icon-info-sign icon-align-left'});
+            var info = $('<div/>', {class:'info-text'}).append(self.options.item.help_text)
+
+            self.$target.css({'left': pos.left + 'px', 'top': pos.top + 'px'});
+            info.prepend(icon);
+            self.$target.html(info);
+            self.$target.css('display', 'block');
+        }
+        , hide: function () {
+            var self = this;
+            self.$target.html('');
+            self.$target.css('display', 'none');
+        }
+        , toggle: function (event) {
+            var self = this;
+            var target = self.options.help_target;
+
+            if (event.type == 'mouseover' ) {
+                console.log('show')
+                self.show();
+            } else {
+                console.log('hide')
+                self.hide();
+            }
+
+        }
+    };
+    $.widget("ui.help_text", {
+        options: {
+            help_target: $('#element_help_text')
+        },
+        _create: function() {
+            var self = this;
+            self.app = window.app;
+            $.each(self.app.context, function(index, item){
+                if(item.help_text !== undefined) {
+                    self.app.context.help[item.name] = new HelpText({'item': item, 'help_target': self.options.help_target});
+                }
+            });
+        }
+    });
+
     // all editable widgets
     $.widget("ui.glynt_edit", {
-      options: {
-          help_target: $('#element_help_text')
-      },
+      options: {},
       _create: function() {
           var self = this;
           self.app = window.app;
@@ -218,38 +292,6 @@ Handlebars.registerHelper('doc_note', function(options) {
                   sel.addRange(range);
               }
           });
-          $(self.element).on('mouseover', function(event){
-              self.toggle_help(event);
-          });
-          $(self.element).on('mouseout', function(event){
-              self.toggle_help(event);
-          });
-      },
-      toggle_help: function toggle_help(event) {
-          var self = this;
-          if (self.context.help_text !== undefined && typeof self.context.help_text === 'string') {
-              if (self.options.help_target.length >= 1) {
-                    var target = self.options.help_target;
-                    var element = $(self.element);
-                    var element_pos = element.position();
-                    if (target.css('display') == 'none' && event.type == 'mouseover' ) {
-                        var pos = {
-                            'left': $('#document').width()*1.1,
-                            'top': element_pos.top
-                        }
-                        target.css({'left': pos.left + 'px', 'top': pos.top + 'px'});
-                        var icon = $('<i/>', {class:'icon-info-sign icon-align-left'});
-                        var info = $('<div/>', {class:'info-text'}).append(self.context.help_text)
-                        info.prepend(icon);
-                        target.html(info);
-                        target.css('display', 'block');
-                    } else {
-                        target.html('');
-                        target.css('display', 'none');
-                    }
-              }
-
-          }
       }
     });
 
@@ -348,9 +390,7 @@ Handlebars.registerHelper('doc_note', function(options) {
       }
 
     $.widget("ui.glynt_select", {
-        options: {
-            target_element: null
-        },
+        options: {},
         _create: function() {
             var self = this;
             self.app = window.app;

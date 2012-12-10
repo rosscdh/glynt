@@ -88,12 +88,12 @@ z-index:25;
 
 
 <script type="text/x-handlebars-template" id="doc_var-partial">{% verbatim %}
-<span class="{{type}} edit" data-has_initial="{{has_initial}}" data-doc_var="{{variable_name}}">{{value}}</span>
+<span id="{{id}}" class="{{type}} edit" data-has_initial="{{has_initial}}" data-doc_var="{{variable_name}}">{{value}}</span>
 {% endverbatim %}</script>
 
 
 <script type="text/x-handlebars-template" id="doc_select-partial">{% verbatim %}
-<div id="doc_select-{{id}}" data-doc_var="{{variable_name}}" class="doc_select">
+<div id="{{id}}" data-doc_var="{{variable_name}}" class="doc_select">
   {{#each select_options}}
   <div id="content-{{../id}}-{{index}}" class="doc_select_option">{{text}}</div>
   {{/each}}

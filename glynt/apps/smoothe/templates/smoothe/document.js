@@ -15,6 +15,7 @@ $(document).ready(function(){
         var self = this;
         self.default_data = $.parseJSON($('script#document-default_data').html());
         self.context = {
+            'help': {},
             'notes': {}
         };
         self.helper_context = {
@@ -118,9 +119,10 @@ $(document).ready(function(){
             });
 
             $('.edit').glynt_edit();
-            $('.doc_select').glynt_select({target_element: $('#element_help_text')});
+            $('.doc_select').glynt_select({});
             $('.doc_choice').glynt_choice({target_element: $('#element_help_text')});
             $('.note').glynt_note({target_element: $('#element_help_text')});
+            $('body').help_text({target_element: $('#element_help_text')});
         };
 
         self.init = function init() {

@@ -367,28 +367,25 @@ Signed …………………………………………….. Dated …………�
 Opening note: 
 This contract of employment is appropriate for a non-executive employee. It includes the required statutory particulars under section 1 of the Employment Rights Act 1996, along with optional wording in square brackets, which an employer may wish to include.  As this contract of employment is designed for non-executive employees, more detailed clauses such as garden leave, intellectual property, restrictive covenants etc. have not been included.
 
- {{#help_for varname="continuous_employment"}} One of the statutory particulars that is required to be provided is the date when the employee’s period of continuous employment began, taking into account any employment with a previous employer which counts towards that period.{{/help_for}}
+{{#help_for varname="continuous_employment"}} One of the statutory particulars that is required to be provided is the date when the employee’s period of continuous employment began, taking into account any employment with a previous employer which counts towards that period.{{/help_for}}
 
 {{#help_for varname="probationary_period"}} A probationary period at the start of the employment may be of benefit to the employer, allowing the employer to dismiss on minimum notice (usually 1 week) if an employee’s performance or conduct is unsatisfactory. {{/help_for}}
 
-
 {{#help_for varname="outside_activities"}} An outside interest clause is designed to control an employee’s outside activities during the course of employment. {{/help_for}}
-
 
 {{#help_for varname="normal_hours_of_work"}} For example: 9:30am to 5:30pm Mondays to Fridays. {{/help_for}}
 
 {{#help_for varname="annual_holiday"}} The minimum statutory holiday entitlement is 5.6 working weeks’ paid annual leave per year (equivalent to 28 days for a full-time employee), including public and bank holidays. As such, in addition to the public holidays referred to in clause 7.1, 20 working days’ holiday will need to be provided in order to satisfy the minimum statutory holiday entitlement for an employee who works 5 days a week. However, an employer can choose to give a more generous contractual holiday entitlement. {{/help_for}}
 
-
 {{#help_for varname="sickness_payment"}} The employer will need to pay statutory sick pay (SSP), provided that the employee is eligible and satisfies the qualification requirements. Employers may choose to pay employees company sick pay in excess of SSP. {{/help_for}}
-
 
 {{#help_for varname="pension_info_person_responsible"}}The employer will need to be mindful of the pension auto-enrolment regime, and will need to comply with its duties when it reaches its staging date. {{/help_for}}
 
 {{#help_for varname="probationary_period_length"}} To be deleted if the probationary period in clause 2.3 is not used.{{/help_for}}
+
 {{#help_for varname="contracting_out_certificate"}} One of the statutory particulars that is required to be provided is whether or not a contracting out certificate is in place. {{/help_for}}
 
-8 {{#help_for varname="notice_period_payment"}} A payment in lieu of notice (PILON) clause is a useful tool as it allows the employer to end the employment with immediate effect avoiding having the employee actually work his/her notice without the dismissal being a breach of contract. Careful consideration should be given before including a PILON clause, as they may not always be appropriate and the PILON can relate to salary only or salary and benefits. {{/help_for}}
+{{#help_for varname="notice_period_payment"}} A payment in lieu of notice (PILON) clause is a useful tool as it allows the employer to end the employment with immediate effect avoiding having the employee actually work his/her notice without the dismissal being a breach of contract. Careful consideration should be given before including a PILON clause, as they may not always be appropriate and the PILON can relate to salary only or salary and benefits. {{/help_for}}
 
 {{#help_for varname="collective_agreements"}} One of the statutory particulars that is required to be provided is details of any collective agreements which affect the terms and conditions of employment.  A collective agreement is an agreement or arrangement between the employer or an employer’s association and one or more trade union.  {{/help_for}}
 
