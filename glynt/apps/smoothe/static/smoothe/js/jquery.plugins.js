@@ -3,6 +3,71 @@
 (function($) {
   "use strict"; // jshint ;_;
 
+  /* GLYNT_PROGRESS PUBLIC CLASS DEFINITION
+   * ================================= */
+   var GlyntProgress = function (options) {
+     this.options = $.extend({}, options)
+     this.$element = $(this.options.element).appendTo(this.options.target_element)
+     this.init()
+     this.listen()
+     this.render()
+   }
+
+   GlyntProgress.prototype = {
+     constructor: GlyntProgress
+     ,init: function () {
+         var self = this;
+         // insert elements into the ul
+         // self.$element.parent().height($('#document').height())
+         // self.$element.height(self.$element.parent().height())
+         $.each(self.options.items, function(index, item){
+             if (item) {
+                var content = $('<a/>',{href:'#', html:'&nbsp;'})
+                var li = $('<li/>', {
+                    html: content
+                    ,'data-var_name': item.name
+                    ,'title': (!item.initial) ? item.name.replace('_', ' ') : item.initial
+                    ,'class': (item.type !== undefined) ? item.type.replace('doc_', '') : ''
+                })
+                li.tooltip({
+                    placement: 'top'
+                });
+                self.$element.append(li);
+             }
+         });
+     }
+     ,listen: function () {
+         var self = this;
+         self.$element.find('li').on('mouseover', function(event) {
+             $(this).addClass('toggle-on')
+         });
+         self.$element.find('li').on('mouseout', function(event) {
+             $(this).removeClass('toggle-on')
+         });
+     }
+     ,render: function () {
+         var self = this;
+         console.log('render')
+     }
+   }
+   $.widget("ui.glynt_progress", {
+       options: {
+           target_element: $('#controls'),
+           element: $('<ul/>', {id: 'glynt_progress'}),
+       },
+       _create: function() {
+           var self = this;
+           self.app = window.app;
+           self.options.items = Object.clone(self.app.context);
+           delete self.options.items.notes
+           delete self.options.items.progress
+           delete self.options.items.help
+
+           var options = $.extend({}, self.options);
+           self.app.context.progress = new GlyntProgress(options);
+       }
+   });
+
     var HelpText = function (options) {
     this.options = $.extend({}, options)
     this.init()
@@ -71,7 +136,7 @@
             var self = this;
             self.app = window.app;
             $.each(self.app.context, function(index, item){
-                if(item.help_text !== undefined) {
+                if(item && item.help_text !== undefined) {
                     self.app.context.help[item.name] = new HelpText({'item': item, 'help_target': self.options.help_target});
                 }
             });

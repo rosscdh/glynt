@@ -15,6 +15,7 @@ $(document).ready(function(){
         var self = this;
         self.default_data = $.parseJSON($('script#document-default_data').html());
         self.context = {
+            'progress': null,
             'help': {},
             'notes': {}
         };
@@ -100,6 +101,8 @@ $(document).ready(function(){
             $('.doc_choice').glynt_choice({target_element: $('#element_help_text')});
             $('.note').glynt_note({target_element: $('#element_help_text')});
             $('body').help_text({target_element: $('#element_help_text')});
+            $('body').glynt_progress();
+
         };
 
         self.init = function init() {
@@ -120,7 +123,7 @@ $(document).ready(function(){
                     self.listen();
                 })
                 .fail(function(jqxhr, settings, exception) {
-                    console.log('Could not load juqery.plugins.js, {exception}'.assign({'exception': exception}));
+                    console.log('Could not load jquery.plugins.js, {exception}'.assign({'exception': exception}));
                 });
             })
             .fail(function(jqxhr, settings, exception) {

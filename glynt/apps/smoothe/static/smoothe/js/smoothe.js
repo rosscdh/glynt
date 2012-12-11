@@ -72,6 +72,7 @@ Handlebars.registerHelper('doc_choice', function(options) {
     value = (options.hash.initial !== undefined) ? options.hash.initial : '' ;
     value = (app.context[var_name] === undefined) ? value : app.context[var_name] ;
     options.hash.value = value;
+    options.hash.type = 'doc_choice';
 
     var html_return = Handlebars.partials['doc_choice-partial'];
 
@@ -99,6 +100,7 @@ Handlebars.registerHelper('doc_select', function(options) {
     options.hash.can_toggle = can_toggle;
     options.hash.multi = multi;
     options.hash.id = MD5(String(var_name + app.context.length+1));
+    options.hash.type = 'doc_select';
 
     var html_return = '';
     // get the inner content
