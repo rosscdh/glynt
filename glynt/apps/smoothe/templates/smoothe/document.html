@@ -13,7 +13,7 @@
 <div class="row">
   <ul id="progress"></ul>
   <div id="document" class="span6">{% show_loading modal='False' %}</div>
-  <div id="element_help_text" class="span3">fdasfsd</div>
+  <div id="element_help_text" class="span3"></div>
 </div>
 {% endblock %}
 
@@ -123,8 +123,8 @@ z-index:25;
 <span id="{{id}}" data-note_id="{{id}}" class="note"><i class="note icon-info-sign icon-white icon-align-left"></i>{{content}}</span>
 {% endverbatim %}</script>
 
-<script src="{{ STATIC_URL }}js/rangy-core-1.2.3.js"></script>
-<script src="{{ STATIC_URL }}js/hallo-min.js"></script>
+<script src="{{ STATIC_URL }}smoothe/js/rangy-core-1.2.3.js"></script>
+<script src="{{ STATIC_URL }}smoothe/js/hallo-min.js"></script>
 
 <script type="text/javascript">
 {% include 'smoothe/document.js' %}

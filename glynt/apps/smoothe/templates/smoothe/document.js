@@ -46,7 +46,6 @@ $(document).ready(function(){
         };
         self.render_doc = function render_steps() {
           $( "div#document" ).html(self.doc_view({}));
-          self.dispatch('handle_doc_or', {});
         };
 
         self.setup_data = function setup_data() {
@@ -78,26 +77,6 @@ $(document).ready(function(){
                 });
             };
         };
-        self.handle_doc_or = function handle_doc_or() {
-            // loop over ors and ensure only 1 is showing at one time
-            // ensure that the appropriate one is handled and displayed 
-            // from user selected data
-            var found = Object.merge(self.helper_context.or_groups, {});
-            $.each($('[data-doc_or]'), function(index, element) { 
-                var e = $(element);
-                var doc_group = e.attr('data-doc_or');
-                if ((Object.has(found, doc_group)) == false) {
-                    e.show();
-                    found[doc_group] = new orGroup({name: doc_group, current: index, items: [e]});
-                } else {
-                    e.hide();
-                    found[doc_group].add_item(e);
-                };
-            });
-            self.helper_context.or_groups = Object.merge(self.helper_context.or_groups, found);
-            // when we want to replace the current doc or value use
-            // $('#document').find('[data-doc_or=group_1]').html($(app.helper_context.or_groups.group_1.items[1]).html());
-        };
 
         // ---- DISPATCH -----
         self.registerCallback = function registerCallback(event_name, callback) {
@@ -108,14 +87,12 @@ $(document).ready(function(){
         };
 
         // ---- INTERFACE EVENTS -----
-        self.init_interface = function init_interface() {
+        self.listen = function listen() {
             /**
             * Setup the editable items
             */
             $.each($('[data-has_initial=true]'), function(index, element){
-                var doc_var_name = $(this).attr('data-doc_var')
-                var doc_val = $(this).html();
-                self.dispatch('bind_data', {'doc_var': doc_var_name, 'value': doc_val, 'notify': false});
+                self.dispatch('bind_data', {'doc_var': $(this).attr('data-doc_var'), 'value': $(this).html(), 'notify': false});
             });
 
             $('.edit').glynt_edit();
@@ -130,22 +107,24 @@ $(document).ready(function(){
             self.setup_data();
 
             // load the smooth helpers
-            $.getScript("{{ STATIC_URL }}js/smoothe.js")
+            $.getScript("{{ STATIC_URL }}smoothe/js/smoothe.js")
             .done(function(script, textStatus) {
-                // register callbacks
-                self.registerCallback('bind_data', self.bind_data);
-                self.registerCallback('handle_doc_or', self.handle_doc_or);
+                $.getScript("{{ STATIC_URL }}smoothe/js/jquery.plugins.js")
+                .done(function(script, textStatus) {
+                    // register callbacks
+                    self.registerCallback('bind_data', self.bind_data);
 
-                // output html so we can bind events
-                self.render();
-                // bind events
-                self.init_interface();
+                    // output html so we can bind events
+                    self.render();
+                    // bind events
+                    self.listen();
+                })
+                .fail(function(jqxhr, settings, exception) {
+                    console.log('Could not load juqery.plugins.js, {exception}'.assign({'exception': exception}));
+                });
             })
             .fail(function(jqxhr, settings, exception) {
-                console.log('could not load smoothe.js, there will be no document!');
-                console.log(jqxhr);
-                console.log(settings);
-                console.log(exception);
+                console.log('Could not load smoothe.js, {exception}'.assign({'exception': exception}));
             });
         };
 
