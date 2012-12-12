@@ -41,6 +41,17 @@ $(document).ready(function(){
         this.get('#/', function() {
         });
 
+        self.instance_count = function instance_count(options, var_name) {
+            // method increments the instance count of each variable
+            // for use in the progress meter
+            if (!self.context[var_name]) {
+                options.hash.instance_count = 1;
+            } else {
+                self.context[var_name].instance_count++;
+                options.hash.instance_count = self.context[var_name].instance_count;// = options.hash.instance_count+1;
+            }
+            return options;
+        }
         // ---- RENDER VIEWS -----
         self.render = function render() {
           self.render_doc();

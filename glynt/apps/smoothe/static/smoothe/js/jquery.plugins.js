@@ -20,14 +20,22 @@
          // insert elements into the ul
          // self.$element.parent().height($('#document').height())
          // self.$element.height(self.$element.parent().height())
+         this.options.target_element.top = $('div.navbar').position().top + $('div.navbar').height()
+         this.$element.attr('top', this.options.target_element.top);
+         this.$element.attr('top', 0);
          $.each(self.options.items, function(index, item){
              if (item) {
-                var content = $('<a/>',{href:'#', html:'&nbsp;'})
+                // types: select, choice, var
+                var item_class = item.type.replace('doc_', '');
+                var icon_css_class = self.icon_css_class(item_class);
+                var icon = $('<i>', {class: icon_css_class + ' icon-align-left', title: item_class.replace('_', ' ')})
+                var content = $('<a/>',{href: '#', html: icon})
                 var li = $('<li/>', {
                     html: content
                     ,'data-var_name': item.name
+                    ,'data-instance_count': item.instance_count
                     ,'title': (!item.initial) ? item.name.replace('_', ' ') : item.initial
-                    ,'class': (item.type !== undefined) ? item.type.replace('doc_', '') : ''
+                    ,'class': item_class
                 })
                 li.tooltip({
                     placement: 'top'
@@ -36,10 +44,24 @@
              }
          });
      }
+     ,icon_css_class: function (item_class) {
+         var icon_css_class = 'icon-font'
+         if (item_class == 'choice') {
+             icon_css_class = 'icon-plus-sign';
+         } else if (item_class == 'select') {
+             icon_css_class = 'icon-th-list';
+         }
+         return icon_css_class;
+     }
      ,listen: function () {
          var self = this;
          self.$element.find('li').on('mouseover', function(event) {
+             event.preventDefault();
              $(this).addClass('toggle-on')
+             // var num = $(this).attr('data-instance_count')
+             // var html = $(this).html();
+             // html = html + ' ' + num;
+             // $(this).html(html);
          });
          self.$element.find('li').on('mouseout', function(event) {
              $(this).removeClass('toggle-on')
@@ -52,7 +74,7 @@
    }
    $.widget("ui.glynt_progress", {
        options: {
-           target_element: $('#controls'),
+           target_element: $('#progress'),
            element: $('<ul/>', {id: 'glynt_progress'}),
        },
        _create: function() {

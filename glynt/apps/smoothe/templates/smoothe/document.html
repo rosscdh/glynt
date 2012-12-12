@@ -8,10 +8,13 @@
 </div>
 {% endblock %}
 
+{% block prebody %}
+<div id="progress" class=""></div>
+{% endblock %}
 
 {% block document %}
-<div id="controls"></div>
-<div class="row">
+
+<div class="row-fluid">
   <div id="document" class="span6">{% show_loading modal='False' %}</div>
   <div id="element_help_text" class="span3"></div>
 </div>
@@ -20,6 +23,9 @@
 
 {% block css %}
 <style>
+.border{
+  border:solid #c00 1px;
+}
 #element_help_text {
   
 }
@@ -66,7 +72,7 @@ background-color:#007AB8;
 }
 
 .selecta{
-  position:absolute;
+position:absolute;
 }
 #element_help_text{
 position:absolute;
@@ -77,10 +83,11 @@ padding:5px;
 z-index:25;
 }
 
-div.controls {
-position: fixed;
+div#progress {
+/*position: fixed;*/
+position:absolute;
+width: 45px;
 left: 0;
-top: 0;
 }
 ul#glynt_progress {
 list-style-type: none;
@@ -96,7 +103,8 @@ transition: width 0.2s;
 -moz-transition: width 0.2s; /* Firefox 4 */
 -webkit-transition: width 0.2s; /* Safari and Chrome */
 -o-transition: width 0.2s; /* Opera */
-opacity:0.3;
+opacity:0.6;
+color:#000;
 }
 ul#glynt_progress li.choice {
 background-color: #78c68e;
@@ -109,7 +117,7 @@ opacity: 1;
 background-color: #bfd547;
 }
 ul#glynt_progress li:hover {
-width: 35px;
+width: 45px;
 }
 
 </style>

@@ -42,6 +42,8 @@ Handlebars.registerHelper('doc_var', function(options) {
 
     // set the context
     options.hash.id = MD5(String(var_name + app.context.length+1));
+    options = app.instance_count(options, var_name);
+
     app.context[var_name] = options.hash;
 
     // make it safe so hb does not mess with it
@@ -78,6 +80,8 @@ Handlebars.registerHelper('doc_choice', function(options) {
 
     // set the context
     options.hash.id = MD5(String(var_name + app.context.length+1));
+    options = app.instance_count(options, var_name);
+
     app.context[var_name] = options.hash;
 
     // make it safe so hb does not mess with it
@@ -121,6 +125,7 @@ Handlebars.registerHelper('doc_select', function(options) {
     }
 
     // set the context
+    options = app.instance_count(options, var_name);
     app.context[var_name] = options.hash;
 
     html_return = Handlebars.partials['doc_select-partial'];
