@@ -41,6 +41,7 @@ $(document).ready(function(){
         this.get('#/', function() {
         });
 
+        // ---- CONTEXT MODIFIERS -----
         self.instance_count = function instance_count(options, var_name) {
             // method increments the instance count of each variable
             // for use in the progress meter
@@ -52,9 +53,13 @@ $(document).ready(function(){
             }
             return options;
         }
+
         // ---- RENDER VIEWS -----
         self.render = function render() {
           self.render_doc();
+          $('div#sidebar').height($('div#document').height());
+          $('div#sidebar').css('top', $('div.navbar').position().top + $('div.navbar').height());
+          $('ul#glynt_progress').height($('div#document').height());
         };
         self.render_doc = function render_steps() {
           $( "div#document" ).html(self.doc_view({}));

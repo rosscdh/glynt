@@ -17,12 +17,9 @@
      constructor: GlyntProgress
      ,init: function () {
          var self = this;
-         // insert elements into the ul
-         // self.$element.parent().height($('#document').height())
-         // self.$element.height(self.$element.parent().height())
-         this.options.target_element.top = $('div.navbar').position().top + $('div.navbar').height()
-         this.$element.attr('top', this.options.target_element.top);
-         this.$element.attr('top', 0);
+
+         this.options.target_element.css('top', $('div.navbar').position().top + $('div.navbar').height());
+
          $.each(self.options.items, function(index, item){
              if (item) {
                 // types: select, choice, var
@@ -58,18 +55,22 @@
          self.$element.find('li').on('mouseover', function(event) {
              event.preventDefault();
              $(this).addClass('toggle-on')
-             // var num = $(this).attr('data-instance_count')
-             // var html = $(this).html();
-             // html = html + ' ' + num;
-             // $(this).html(html);
          });
          self.$element.find('li').on('mouseout', function(event) {
              $(this).removeClass('toggle-on')
          });
+         var navbar_height = $('div.navbar').height();
+         $(window).scroll(function () {
+             var offset = $(document).scrollTop();
+             if ($(document).scrollTop() > navbar_height) {
+                 offset = $(document).scrollTop() - navbar_height;
+             }
+             self.$element.animate({top:offset},{duration:200,queue:false});
+             //self.$element.css('top', offset);
+         });
      }
      ,render: function () {
          var self = this;
-         console.log('render')
      }
    }
    $.widget("ui.glynt_progress", {
@@ -105,6 +106,7 @@
             self.$element = $('#{id}'.assign({'id': self.options.item.id}));
             self.$selector = (self.options.selector !== undefined) ? $(self.options.selector) : self.$element;
             self.$target = $(self.options.help_target);
+            self.$target.attr('class','span3')
             self.listen();
         }
         , listen: function () {
@@ -117,8 +119,9 @@
         , help_pos: function () {
             var self = this;
             var element_pos = self.$selector.position();
+            var doc_pos = $('#document').position();
             return {
-                'left': $('#document').width()*1.1,
+                'left': doc_pos.left + $('#document').width()*1.15,
                 'top': element_pos.top
             }
         }
