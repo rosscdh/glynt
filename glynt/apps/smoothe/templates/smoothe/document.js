@@ -15,6 +15,8 @@ $(document).ready(function(){
         var self = this;
         self.default_data = $.parseJSON($('script#document-default_data').html());
         self.context = {
+            'progress': null,
+            'help': {},
             'notes': {}
         };
         self.helper_context = {
@@ -31,6 +33,7 @@ $(document).ready(function(){
         Handlebars.registerPartial("toggle-partial", Handlebars.compile($("script#toggle-partial").html()));
         Handlebars.registerPartial("doc_var-partial", Handlebars.compile($("script#doc_var-partial").html()));
         Handlebars.registerPartial("doc_select-partial", Handlebars.compile($("script#doc_select-partial").html()));
+        Handlebars.registerPartial("doc_select-selecta-partial", Handlebars.compile($("script#doc_select-selecta-partial").html()));
         Handlebars.registerPartial("doc_choice-partial", Handlebars.compile($("script#doc_choice-partial").html()));
         Handlebars.registerPartial("doc_note-partial", Handlebars.compile($("script#doc_note-partial").html()));
 
@@ -44,7 +47,6 @@ $(document).ready(function(){
         };
         self.render_doc = function render_steps() {
           $( "div#document" ).html(self.doc_view({}));
-          self.dispatch('handle_doc_or', {});
         };
 
         self.setup_data = function setup_data() {
@@ -76,26 +78,6 @@ $(document).ready(function(){
                 });
             };
         };
-        self.handle_doc_or = function handle_doc_or() {
-            // loop over ors and ensure only 1 is showing at one time
-            // ensure that the appropriate one is handled and displayed 
-            // from user selected data
-            var found = Object.merge(self.helper_context.or_groups, {});
-            $.each($('[data-doc_or]'), function(index, element) { 
-                var e = $(element);
-                var doc_group = e.attr('data-doc_or');
-                if ((Object.has(found, doc_group)) == false) {
-                    e.show();
-                    found[doc_group] = new orGroup({name: doc_group, current: index, items: [e]});
-                } else {
-                    e.hide();
-                    found[doc_group].add_item(e);
-                };
-            });
-            self.helper_context.or_groups = Object.merge(self.helper_context.or_groups, found);
-            // when we want to replace the current doc or value use
-            // $('#document').find('[data-doc_or=group_1]').html($(app.helper_context.or_groups.group_1.items[1]).html());
-        };
 
         // ---- DISPATCH -----
         self.registerCallback = function registerCallback(event_name, callback) {
@@ -106,34 +88,21 @@ $(document).ready(function(){
         };
 
         // ---- INTERFACE EVENTS -----
-        self.init_interface = function init_interface() {
+        self.listen = function listen() {
             /**
             * Setup the editable items
             */
-            $('.edit').hallo({
-                plugins: {
-                    'halloformat': {}
-                },
-                editable: true,
-                showAlways: true
-            });
-
-            $('.edit').live('blur', function(event){
-                var doc_var_name = $(this).attr('data-doc_var')
-                var doc_val = $(this).html();
-                if (app.context[doc_var_name].value != doc_val) {
-                    self.dispatch('bind_data', {'doc_var': doc_var_name, 'value': doc_val});
-                }
-            });
             $.each($('[data-has_initial=true]'), function(index, element){
-                var doc_var_name = $(this).attr('data-doc_var')
-                var doc_val = $(this).html();
-                self.dispatch('bind_data', {'doc_var': doc_var_name, 'value': doc_val, 'notify': false});
+                self.dispatch('bind_data', {'doc_var': $(this).attr('data-doc_var'), 'value': $(this).html(), 'notify': false});
             });
 
-            $('.doc_select').glynt_select({target_element: $('#element_help_text')});
+            $('.edit').glynt_edit();
+            $('.doc_select').glynt_select({});
             $('.doc_choice').glynt_choice({target_element: $('#element_help_text')});
             $('.note').glynt_note({target_element: $('#element_help_text')});
+            $('body').help_text({target_element: $('#element_help_text')});
+            $('body').glynt_progress();
+
         };
 
         self.init = function init() {
@@ -141,22 +110,24 @@ $(document).ready(function(){
             self.setup_data();
 
             // load the smooth helpers
-            $.getScript("{{ STATIC_URL }}js/smoothe.js")
+            $.getScript("{{ STATIC_URL }}smoothe/js/smoothe.js")
             .done(function(script, textStatus) {
-                // register callbacks
-                self.registerCallback('bind_data', self.bind_data);
-                self.registerCallback('handle_doc_or', self.handle_doc_or);
+                $.getScript("{{ STATIC_URL }}smoothe/js/jquery.plugins.js")
+                .done(function(script, textStatus) {
+                    // register callbacks
+                    self.registerCallback('bind_data', self.bind_data);
 
-                // output html so we can bind events
-                self.render();
-                // bind events
-                self.init_interface();
+                    // output html so we can bind events
+                    self.render();
+                    // bind events
+                    self.listen();
+                })
+                .fail(function(jqxhr, settings, exception) {
+                    console.log('Could not load jquery.plugins.js, {exception}'.assign({'exception': exception}));
+                });
             })
             .fail(function(jqxhr, settings, exception) {
-                console.log('could not load smoothe.js, there will be no document!');
-                console.log(jqxhr);
-                console.log(settings);
-                console.log(exception);
+                console.log('Could not load smoothe.js, {exception}'.assign({'exception': exception}));
             });
         };
 

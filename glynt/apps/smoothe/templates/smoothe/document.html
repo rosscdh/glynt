@@ -10,10 +10,10 @@
 
 
 {% block document %}
+<div id="controls"></div>
 <div class="row">
-  <ul id="progress"></ul>
   <div id="document" class="span6">{% show_loading modal='False' %}</div>
-  <div id="element_help_text" class="span2"></div>
+  <div id="element_help_text" class="span3"></div>
 </div>
 {% endblock %}
 
@@ -49,10 +49,69 @@ transition: background-color 0.2s;
 text-align:center;
 }
 
-.doc_or{
-background-color: #fef58e;
-padding: 2px;
+.doc_select{
+background-color:#CEEAF8;
+border:0px;
+margin:15px 0px;
 }
+
+.doc_select .doc_select_option{
+border-left:solid #08C 2px;
+padding-left:2px;
+margin:10px 0px;
+min-height:40px;
+}
+.doc_select_option.selected{
+background-color:#007AB8;
+}
+
+.selecta{
+  position:absolute;
+}
+#element_help_text{
+position:absolute;
+display:none;
+background-color:#CEEAF8;
+border:solid #08C 1px;
+padding:5px;
+z-index:25;
+}
+
+div.controls {
+position: fixed;
+left: 0;
+top: 0;
+}
+ul#glynt_progress {
+list-style-type: none;
+margin-left: 0px;
+min-height: 100%;
+}
+ul#glynt_progress li {
+height: 5%;
+width: 25px;
+background-color: #bfd547;
+transition: width 0.2s;
+transition: width 0.2s;
+-moz-transition: width 0.2s; /* Firefox 4 */
+-webkit-transition: width 0.2s; /* Safari and Chrome */
+-o-transition: width 0.2s; /* Opera */
+opacity:0.3;
+}
+ul#glynt_progress li.choice {
+background-color: #78c68e;
+}
+ul#glynt_progress li.select {
+background-color: #CEEAF8;
+}
+ul#glynt_progress li.complete {
+opacity: 1;
+background-color: #bfd547;
+}
+ul#glynt_progress li:hover {
+width: 35px;
+}
+
 </style>
 <link rel="stylesheet" href="{{ STATIC_URL }}css/hallo.css" charset="utf-8" />
 {% endblock %}
@@ -63,25 +122,25 @@ padding: 2px;
 {{ userdoc.body|default:object.body|safe }}
 </script>
 
+
 <script type="text/x-handlebars-template" id="doc_var-partial">{% verbatim %}
-<span class="{{type}} edit" data-has_initial="{{has_initial}}" data-doc_var="{{variable_name}}">{{value}}</span>
+<span id="{{id}}" class="{{type}} edit" data-has_initial="{{has_initial}}" data-doc_var="{{variable_name}}">{{value}}</span>
 {% endverbatim %}</script>
 
+
 <script type="text/x-handlebars-template" id="doc_select-partial">{% verbatim %}
-<div class="tabbable tabs-left">
-  <ul id="{{id}}" data-can_toggle="{{can_toggle}}" data-multi="{{multi}}" class="doc_select {{class}} nav nav-tabs">
-    <li class=""><legend>{{label}}</legend></li>
-    {{#each select_options}}
-    <li data-option_index="{{index}}" class="{{#if_eq index compare="0"}}active{{/if_eq}} {{#if selected}}selected{{/if}}"><a href="" rel="#content-{{../id}}-{{index}}">Option {{index}}</a></li>
-    {{/each}}
-  </ul>
-  <div class="tab-content">
-    {{#each select_options}}
-    <div class="tab-pane" id="content-{{../id}}-{{index}}">{{text}}</div>
-    {{/each}}
-  </div>
+<div id="{{id}}" data-doc_var="{{variable_name}}" class="doc_select">
+  {{#each select_options}}
+  <div id="content-{{../id}}-{{index}}" class="doc_select_option">{{text}}</div>
+  {{/each}}
 </div>
 {% endverbatim %}</script>
+
+
+<script type="text/x-handlebars-template" id="doc_select-selecta-partial">{% verbatim %}
+<div id="{{id}}" class="selecta btn btn-info btn-small {{#if_eq selected compare="true"}}selected{{/if_eq}}" data-target="{{target}}"><i class="icon-star-empty"></i><!--{{handle}}--></div>
+{% endverbatim %}</script>
+
 
 <script type="text/x-handlebars-template" id="doc_choice-partial">{% verbatim %}
 <span id="{{id}}" class="doc_choice edit" data-doc_var="{{name}}">{{value}}</span>
@@ -95,12 +154,13 @@ padding: 2px;
 </div>
 {% endverbatim %}</script>
 
+
 <script type="text/x-handlebars-template" id="doc_note-partial">{% verbatim %}
 <span id="{{id}}" data-note_id="{{id}}" class="note"><i class="note icon-info-sign icon-white icon-align-left"></i>{{content}}</span>
 {% endverbatim %}</script>
 
-<script src="{{ STATIC_URL }}js/rangy-core-1.2.3.js"></script>
-<script src="{{ STATIC_URL }}js/hallo-min.js"></script>
+<script src="{{ STATIC_URL }}smoothe/js/rangy-core-1.2.3.js"></script>
+<script src="{{ STATIC_URL }}smoothe/js/hallo-min.js"></script>
 
 <script type="text/javascript">
 {% include 'smoothe/document.js' %}
