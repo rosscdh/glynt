@@ -76,20 +76,16 @@ $(document).ready(function(){
             var doc_var = data.doc_var;
             var doc_var_value = data.value;
 
-            if (self.context[doc_var] === undefined) {
-                self.context[doc_var] = null;
-            };
-
             if (self.context[doc_var] != doc_var_value) {
-                update_fields = true;    
+                update_fields = true; 
             };
 
-            self.context[doc_var] = doc_var_value;
+            self.context[doc_var].value = doc_var_value;
 
             if (update_fields) {
                 $.each($('[data-doc_var="'+ doc_var +'"]'), function(index, element){
                     if (notify_user) { $(element).fadeOut('fast'); };
-                    $(element).html(self.context[doc_var]);
+
                     if (notify_user) { $(element).fadeIn('fast'); };
                 });
             };

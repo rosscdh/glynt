@@ -33,7 +33,21 @@
                     ,'data-instance_count': item.instance_count
                     ,'title': (!item.initial) ? item.name.replace('_', ' ') : item.initial
                     ,'class': item_class
-                })
+                    , mouseover: function() {
+                    }
+                    , mouseout: function() {
+                    }
+                    });
+
+
+                    $('#{id}'.assign({id:item.id})).on('blur', function (event) {
+                        if (item.initial === item.value || item.value == '') {
+                            li.removeClass('complete');
+                        } else {
+                            li.addClass('complete');
+                        }
+                    });
+
                 li.tooltip({
                     placement: 'top'
                 });
