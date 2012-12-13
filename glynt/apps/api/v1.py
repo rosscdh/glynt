@@ -1,4 +1,7 @@
 import ast
+from django.conf import settings
+
+from tastypie_elasticsearch.resources import ElasticSearch
 
 from tastypie.resources import ModelResource
 from tastypie.api import Api
@@ -75,7 +78,22 @@ class SignatureResource(BaseApiModelResource):
         del(bundle.data['meta_data'])
         return bundle
 
+
+class BaseElasticSearchResource(ElasticSearch):
+    class Meta:
+        serializer = Serializer(formats=available_formats)
+        es_server = getattr(settings, "ES_INDEX_SERVER", "http://127.0.0.1:9200/")
+        es_timeout = 20
+
+
+class UserTagsResource(BaseElasticSearchResource):
+    class Meta(BaseElasticSearchResource.Meta):
+        indices = ["user_tags"]
+        resource_name = 'client/tags'
+
+
 """ Register the api resources """
 v1_internal_api.register(DocumentResource())
 v1_internal_api.register(ClientCreatedDocumentResource())
 v1_internal_api.register(SignatureResource())
+v1_internal_api.register(UserTagsResource())

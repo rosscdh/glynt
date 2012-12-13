@@ -26,11 +26,7 @@ Handlebars.registerHelper('doc_var', function(options) {
 
     value = (options.hash.initial !== undefined) ? options.hash.initial : '' ;
     value = (app.context[var_name] === undefined) ? value : app.context[var_name].value ;
-    // add value to context
-    if (app.context[var_name] === undefined) {
-        // set to nul because we know it is undefined; assert positive
-        app.context[var_name] = null;
-    }
+
     options.hash.type = 'doc_var';
     options.hash.field_type = field_type;
     options.hash.variable_name = var_name;
@@ -43,7 +39,6 @@ Handlebars.registerHelper('doc_var', function(options) {
     // set the context
     options.hash.id = MD5(String(var_name + app.context.length+1));
     options = app.instance_count(options, var_name);
-
     app.context[var_name] = options.hash;
 
     // make it safe so hb does not mess with it
