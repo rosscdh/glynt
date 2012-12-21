@@ -26,6 +26,19 @@
         <div id="preview" class="aligned field-box field-document_preview"></div>
     </div>
 {% endfor %}
+
+<script type="text/javascript" src="{{ STATIC_URL }}js/sammyjs/sammy.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/sammyjs/plugins/sammy.handlebars.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/sammyjs/plugins/sammy.json.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/contactObserver.js"></script>
+
 <script id="document-preview">
-  
+!function ($) {
+
+  "use strict"; // jshint ;_;
+  $(document).ready(function(){
+    {% include 'smoothe/document.js' %}
+  });
+
+}(django.jQuery);
 </script>

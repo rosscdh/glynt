@@ -79,7 +79,6 @@ Handlebars.registerHelper('doc_choice', function(options) {
 
     app.context[var_name] = options.hash;
 
-    // make it safe so hb does not mess with it
     return html_return(options.hash);
 });
 

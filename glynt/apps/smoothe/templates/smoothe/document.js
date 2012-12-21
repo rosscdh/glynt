@@ -74,7 +74,8 @@ $(document).ready(function(){
             if (update_fields) {
                 $.each($('[data-doc_var="'+ doc_var +'"]'), function(index, element){
                     if (notify_user) { $(element).fadeOut('fast'); };
-
+                    // set all elements related to this field to have the new updated value
+                    $(element).html(self.context[doc_var].value);
                     if (notify_user) { $(element).fadeIn('fast'); };
                 });
             };

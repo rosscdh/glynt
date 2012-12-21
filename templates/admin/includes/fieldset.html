@@ -1,6 +1,8 @@
 <fieldset class="module aligned {{ fieldset.classes }}">
     {% if fieldset.name == 'Document Authoring' %}
+
       {% include "admin/document/document/includes/authoring.html" %}
+
     {% else %}
 
       {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}

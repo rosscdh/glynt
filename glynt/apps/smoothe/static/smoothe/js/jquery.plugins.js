@@ -321,7 +321,7 @@
             var self = this;
             var parent_pos = self.options.$parent.offset();
             return {
-                'left': parent_pos.left - (self.$element.width()*3),
+                'left': parent_pos.left - (self.$element.width()*5),
                 'top': parent_pos.top + (self.options.$parent.height()/3.2) - (self.$element.height()/4.2)
             }
         }
@@ -366,20 +366,37 @@
             var var_name = $(self.element).attr('data-doc_var');
             self.choices = self.app.context[var_name].choices;
             var element = $(self.element);
+            self.is_static = self.app.context[var_name].is_static;
 
             element.glynt_typeahead({
                 'source': self.choices
             });
 
+            element.popover({
+                trigger: 'hover',
+                placement: 'top',
+                title: (self.is_static) ? 'Required Choice Info' : 'Choice Info',
+                content: (self.is_static) ? 'Valid choices are: "{choices}"'.assign({'choices': self.choices}) : 'Some valid choices are: "{choices}"'.assign({'choices': self.choices})
+            });
+
+            element.on('blur', function(event){
+                if (self.is_static) {
+                    // if is static (required to have one of the specified values)
+                    var val = $(this).html();
+
+                    if (self.app.context[var_name].choices.indexOf(val) == -1) {
+                        $(this).html('');
+                    }
+                }
+            });
+
             element.on('mouseover', function(event){
                 event.preventDefault();
                 $(this).css('cursor', 'pointer')
-                self.options.target_element.html('Valid choices include "{choices}"'.assign({'choices': self.choices}));
             });
             element.on('mouseout', function(event){
                 event.preventDefault();
                 $(this).css('cursor', 'auto')
-                self.options.target_element.html('');
             });
         }
     });
