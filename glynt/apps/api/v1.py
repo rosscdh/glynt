@@ -3,12 +3,13 @@ from django.conf import settings
 
 from tastypie_elasticsearch.resources import ElasticSearch
 
+from tastypie import fields, utils
 from tastypie.resources import ModelResource
 from tastypie.api import Api
 from tastypie.serializers import Serializer
 from tastypie.cache import SimpleCache
-from tastypie.authentication import SessionAuthentication
-
+from tastypie.authentication import BasicAuthentication, SessionAuthentication
+from tastypie.authorization import Authorization
 
 from glynt.apps.document.models import Document, ClientCreatedDocument
 from glynt.apps.sign.models import DocumentSignature
@@ -81,12 +82,16 @@ class SignatureResource(BaseApiModelResource):
 
 class BaseElasticSearchResource(ElasticSearch):
     class Meta:
+        authentication = BasicAuthentication()
+        authorization = Authorization()
         serializer = Serializer(formats=available_formats)
         es_server = getattr(settings, "ES_INDEX_SERVER", "http://127.0.0.1:9200/")
         es_timeout = 20
 
 
 class UserTagsResource(BaseElasticSearchResource):
+    user = fields.IntegerField(attribute='user', null=False)
+    tag = fields.CharField(attribute='tag', null=False)
     class Meta(BaseElasticSearchResource.Meta):
         indices = ["user_tags"]
         resource_name = 'client/tags'

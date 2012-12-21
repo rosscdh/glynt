@@ -1,15 +1,4 @@
 $(document).ready(function(){
-    orGroup = function orGroup(params) {
-        var self = this;
-        this.name = params.name;
-        this.current = params.current;
-        this.items = params.items;
-        this.length = params.items.length;
-        this.add_item = function add_item(item) {
-            self.items.add(item);
-            self.length = self.items.length;
-        }
-    };
 
     window.app = $.sammy(function() {
         var self = this;

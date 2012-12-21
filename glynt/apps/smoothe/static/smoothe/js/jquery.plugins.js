@@ -25,17 +25,21 @@
                 // types: select, choice, var
                 var item_class = item.type.replace('doc_', '');
                 var icon_css_class = self.icon_css_class(item_class);
-                var icon = $('<i>', {class: icon_css_class + ' icon-align-left', title: item_class.replace('_', ' ')})
-                var content = $('<a/>',{href: '#', html: icon})
+                var icon = $('<i>', {class: icon_css_class + ' icon-align-left', title: item_class.replace('_', ' ')});
+                var content = $('<a/>',{href: '#', html: icon});
+                var title = (!item.initial) ? item.name.replace('_', ' ') : item.initial;
+
                 var li = $('<li/>', {
                     html: content
                     ,'data-var_name': item.name
                     ,'data-instance_count': item.instance_count
-                    ,'title': (!item.initial) ? item.name.replace('_', ' ') : item.initial
+                    ,'title': title
                     ,'class': item_class
                     , mouseover: function() {
+                        $(this).attr('title',item.value);
                     }
                     , mouseout: function() {
+                        $(this).attr('title',title);
                     }
                     });
 

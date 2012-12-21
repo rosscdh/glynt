@@ -46,7 +46,7 @@ Allow the user to select from a pre-determined set of variable options; or enter
 __e.g.__
 
 
-    {{#doc_choice name="my_variable_name" choices=["a","b","c"] is_static=true}}{{/doc_choice}}
+    {{#doc_choice name="my_variable_name" choices="a,b,c" is_static=true}}{{/doc_choice}}
 
 ** The default is always the first in the list. **
 
