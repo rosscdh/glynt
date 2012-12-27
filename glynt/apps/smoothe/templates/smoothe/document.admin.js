@@ -17,7 +17,7 @@ $(document).ready(function(){
         self.views = $('div.view');
         self.nav = $('ul.nav-list li a');
 
-        self.doc_view = Handlebars.compile($('script#document-hb').html());
+        self.doc_view = null;
 
         Handlebars.registerPartial("toggle-partial", Handlebars.compile($("script#toggle-partial").html()));
         Handlebars.registerPartial("doc_var-partial", Handlebars.compile($("script#doc_var-partial").html()));
@@ -48,25 +48,23 @@ $(document).ready(function(){
 
         // ---- RENDER VIEWS -----
         self.render = function render() {
-            self.render_doc();
-            if ($('div#sidebar').length > 0) {
-                $('div#sidebar').height($('div#document').height());
-                $('div#sidebar').css('top', $('div.navbar').position().top + $('div.navbar').height());
-            }
-            if ($('ul#glynt_progress').length > 0) {
-                $('ul#glynt_progress').height($('div#document').height());
-            }
-        };
-        self.render_doc = function render_steps() {
             if ($("div#document").length > 0) {
+                self.doc_view = self.get_doc_view();
                 $("div#document").html(self.doc_view({}));
             } else {
                 console.log('Can not output to undefined div#document')
             }
         };
 
-        self.setup_data = function setup_data(params) {
-            self.default_data = (params !== undefined && params.data !== undefined) ? params.data : $.parseJSON($('script#document-default_data').html()) ;
+        self.get_doc_view = function get_doc_view() {
+            return Handlebars.compile($('#id_body').val());
+        }
+        self.get_default_data = function get_default_data() {
+            return {};
+        };
+
+        self.setup_data = function setup_data() {
+            self.default_data = self.get_default_data();
             self.context = Object.merge(self.default_data, self.context);
         };
 
@@ -115,8 +113,11 @@ $(document).ready(function(){
             $('.doc_choice').glynt_choice({target_element: $('#element_help_text')});
             $('.note').glynt_note({target_element: $('#element_help_text')});
             $('body').help_text({target_element: $('#element_help_text')});
-            $('body').glynt_progress();
+            $('body').glynt_progress({in_admin: true});
 
+            $('#id_body').on('change', function(event){
+                self.render();
+            });
         };
 
         self.init = function init() {
@@ -133,6 +134,7 @@ $(document).ready(function(){
 
                     // output html so we can bind events
                     self.render();
+
                     // bind events
                     self.listen();
                 })

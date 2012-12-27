@@ -1,3 +1,4 @@
+{% load templatetag_handlebars%}
 {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}
 {% if fieldset.description %}
     <div class="description">{{ fieldset.description|safe }}</div>
@@ -23,22 +24,45 @@
                 {% endif %}
             </div>
         {% endfor %}
-        <div id="preview" class="aligned field-box field-document_preview"></div>
+        <div id="document" class="aligned field-box field-document_preview"></div>
     </div>
 {% endfor %}
 
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui-1.8.18.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/md5.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/sugar-1.3.5.min.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/sammyjs/sammy.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/sammyjs/plugins/sammy.handlebars.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/sammyjs/plugins/sammy.json.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/contactObserver.js"></script>
+{% handlebars_js %}
+<script type="text/javascript" src="{{ STATIC_URL }}handlebars-helpers.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}smoothe/js/rangy-core-1.2.3.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}smoothe/js/hallo-min.js"></script>
+
+{% include 'smoothe/handlebars-templates.html' %}
+
+<script type="application/json" id="document-default_data">{{ original.body|safe }}</script>
+<script type="text/x-handlebars-template" id="document-hb">
+{{ original.body|safe }}
+</script>
 
 <script id="document-preview">
 !function ($) {
 
   "use strict"; // jshint ;_;
-  $(document).ready(function(){
-    {% include 'smoothe/document.js' %}
-  });
 
-}(django.jQuery);
+  {% include 'smoothe/document.admin.js' %}
+
+}(window.jQuery);
 </script>
+
+<style>
+  #id_body{
+    min-height:480px;
+  }
+</style>
+<link href="{{ STATIC_URL }}bootstrap/css/bootstrap.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ STATIC_URL }}smoothe/css/smoothe.css" charset="utf-8" />
+<link rel="stylesheet" href="{{ STATIC_URL }}css/hallo.css" charset="utf-8" />

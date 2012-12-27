@@ -23,111 +23,7 @@
 
 
 {% block css %}
-<style>
-.border{
-  border:solid #c00 1px;
-}
-#element_help_text {
-  
-}
-.doc_var, .doc_choice {
-background-color: #fef58e;
-padding: 2px;
--webkit-touch-callout: text;
--webkit-user-select: text;
--khtml-user-select: text;
--moz-user-select: text;
--ms-user-select: text;
-user-select: text;
-min-width: 30px;
-border-bottom: 2px dotted #f492be;
-outline: none;
-display: inline-block;
-*display: inline;/* for IE7*/
-*zoom:1;/* for IE7*/
-min-width: 60px;
-font-size: 15px;
-color: 000;
-transition: background-color 0.2s;
-transition: background-color 0.2s;
--moz-transition: background-color 0.2s; /* Firefox 4 */
--webkit-transition: background-color 0.2s; /* Safari and Chrome */
--o-transition: background-color 0.2s; /* Opera */
-text-align:center;
-}
-
-.doc_select{
-background-color:#CEEAF8;
-border:0px;
-margin:15px 0px;
-}
-
-.doc_select .doc_select_option{
-border-left:solid #08C 2px;
-padding-left:2px;
-margin:10px 0px;
-min-height:40px;
-}
-.doc_select_option.selected{
-background-color:#007AB8;
-}
-
-.selecta{
-position:absolute;
-}
-#element_help_text{
-position:absolute;
-display:none;
-background-color:#CEEAF8;
-border:solid #08C 1px;
-padding:5px;
-z-index:25;
-}
-
-div#sidebar {
-  color:#fff;
-  background-color:#F9F9F9;
-}
-
-div#progress {
-/*position: fixed;*/
-position:absolute;
-width: 45px;
-left: 0;
-}
-ul#glynt_progress {
-position:absolute;
-list-style-type: none;
-margin-left: 0px;
-min-height: 100%;
-}
-ul#glynt_progress li {
-height: 5%;
-width: 25px;
-background-color: #bfd547;
-transition: width 0.2s;
-transition: width 0.2s;
--moz-transition: width 0.2s; /* Firefox 4 */
--webkit-transition: width 0.2s; /* Safari and Chrome */
--o-transition: width 0.2s; /* Opera */
-opacity:0.3;
-color:#000;
-}
-ul#glynt_progress li.choice {
-background-color: #78c68e;
-}
-ul#glynt_progress li.select {
-background-color: #CEEAF8;
-}
-ul#glynt_progress li.complete {
-opacity: 1;
-background-color: #bfd547;
-}
-ul#glynt_progress li:hover, .hover_state {
-width: 45px;
-}
-
-</style>
+<link rel="stylesheet" href="{{ STATIC_URL }}smoothe/css/smoothe.css" charset="utf-8" />
 <link rel="stylesheet" href="{{ STATIC_URL }}css/hallo.css" charset="utf-8" />
 {% endblock %}
 
@@ -138,44 +34,10 @@ width: 45px;
 </script>
 
 
-<script type="text/x-handlebars-template" id="doc_var-partial">{% verbatim %}
-<span id="{{id}}" class="{{type}} edit" data-has_initial="{{has_initial}}" data-doc_var="{{variable_name}}">{{value}}</span>
-{% endverbatim %}</script>
+<script type="text/javascript" src="{{ STATIC_URL }}smoothe/js/rangy-core-1.2.3.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}smoothe/js/hallo-min.js"></script>
 
-
-<script type="text/x-handlebars-template" id="doc_select-partial">{% verbatim %}
-<div id="{{id}}" data-doc_var="{{variable_name}}" class="doc_select">
-  {{#each select_options}}
-  <div id="content-{{../id}}-{{index}}" class="doc_select_option">{{text}}</div>
-  {{/each}}
-</div>
-{% endverbatim %}</script>
-
-
-<script type="text/x-handlebars-template" id="doc_select-selecta-partial">{% verbatim %}
-<div id="{{id}}" class="selecta btn btn-info btn-small {{#if_eq selected compare="true"}}selected{{/if_eq}}" data-target="{{target}}"><i class="icon-star-empty"></i><!--{{handle}}--></div>
-{% endverbatim %}</script>
-
-
-<script type="text/x-handlebars-template" id="doc_choice-partial">{% verbatim %}
-<span id="{{id}}" class="doc_choice edit" data-doc_var="{{name}}">{{value}}</span>
-{% endverbatim %}</script>
-
-
-<script type="text/x-handlebars-template" id="toggle-partial">{% verbatim %}
-<div id="toggle-{{toggle_for}}" data-toggle_for="{{toggle_for}}" class="toggle row">
-  {{#if label}}<div class="label">{{label}}</div>{{/if}}
-  <div class="toggle_state btn btn-inverse">{{text}}</div>
-</div>
-{% endverbatim %}</script>
-
-
-<script type="text/x-handlebars-template" id="doc_note-partial">{% verbatim %}
-<span id="{{id}}" data-note_id="{{id}}" class="note"><i class="note icon-info-sign icon-white icon-align-left"></i>{{content}}</span>
-{% endverbatim %}</script>
-
-<script src="{{ STATIC_URL }}smoothe/js/rangy-core-1.2.3.js"></script>
-<script src="{{ STATIC_URL }}smoothe/js/hallo-min.js"></script>
+{% include 'smoothe/handlebars-templates.html' %}
 
 <script type="text/javascript">
 {% include 'smoothe/document.js' %}

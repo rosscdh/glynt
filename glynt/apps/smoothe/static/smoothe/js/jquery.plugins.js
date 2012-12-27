@@ -5,20 +5,26 @@
 
   /* GLYNT_PROGRESS PUBLIC CLASS DEFINITION
    * ================================= */
-   var GlyntProgress = function (options) {
-     this.options = $.extend({}, options)
-     this.$element = $(this.options.element).appendTo(this.options.target_element)
-     this.init()
-     this.listen()
-     this.render()
-   }
+    var GlyntProgress = function (options) {
+        this.options = $.extend({
+            in_admin: false
+        }, options)
+        this.$element = $(this.options.element).appendTo(this.options.target_element)
+        this.init()
+        this.listen()
+        this.render()
+    }
 
    GlyntProgress.prototype = {
      constructor: GlyntProgress
      ,init: function () {
          var self = this;
 
-         this.options.target_element.css('top', $('div.navbar').position().top + $('div.navbar').height());
+            if (self.options.in_admin === false) {
+                this.options.target_element.css('top', $('div.navbar').position().top + $('div.navbar').height());
+            } else {
+                this.options.target_element.css('top', 0);
+            }
 
          $.each(self.options.items, function(index, item){
              if (item) {
