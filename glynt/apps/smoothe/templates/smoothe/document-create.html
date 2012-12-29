@@ -1,29 +1,33 @@
-{% extends 'document/base.html' %}
+{% extends 'smoothe/document.html' %}
 {% load i18n markup sign_tags templatetag_handlebars glynt_helpers %}
 {% load url from future %}
 
-{% block owner_info %}
-<div class="">
-  <h2 id="document-title" class="editable">{{ userdoc.name }}</h2>
-</div>
-{% endblock %}
-
-{% block prebody %}
-<div id="progress" class=""></div>
-{% endblock %}
-
 {% block document %}
 <div class="row-fluid">
-  <div id="document" class="span6 offset1">{% show_loading modal='False' %}</div>
+  <div class="span6">
+    <h3>{% trans 'Document Details' %}</h3>
+    <form class="form-inline">
+      {{ form }}
+    </form>
+  </div>
   <div id="sidebar" class="span3">&nbsp;</div>
   <div id="element_help_text"></div>
+  <div class="span6 pull-right">
+    <h3>{% trans 'Preview' %}</h3>
+    <p></p>
+    <div id="document">{% show_loading modal='False' %}</div>
+  </div>
 </div>
 {% endblock %}
 
-
 {% block css %}
-<link rel="stylesheet" href="{{ STATIC_URL }}smoothe/css/smoothe.css" charset="utf-8" />
-<link rel="stylesheet" href="{{ STATIC_URL }}css/hallo.css" charset="utf-8" />
+{{ block.super }}
+<style>
+  #id_body{
+    min-width:512px;
+    min-height:480px;
+  }
+</style>
 {% endblock %}
 
 {% block js %}
@@ -38,6 +42,6 @@
 {% include 'smoothe/handlebars-templates.html' %}
 
 <script type="text/javascript">
-{% include 'smoothe/document.js' %}
+{% include 'smoothe/document.admin.js' %}
 </script>
 {% endblock %}
