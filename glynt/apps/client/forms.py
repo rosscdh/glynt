@@ -56,7 +56,7 @@ class SignupForm(BootstrapMixin, SignupFormOnlyEmail):
 
 class AuthenticationForm(BootstrapMixin, AuthenticationForm):
   username = forms.CharField(label=_("Email or Username"), max_length=30, widget=forms.TextInput(attrs={'placeholder': 'username@example.com'}))
-
+  password = forms.CharField(label=_("Password"), max_length=30, widget=forms.PasswordInput(attrs={'placeholder': 'password'}))
   class Meta:
     layout = (
       Fieldset("Please Login", "username", "password"),

@@ -7,81 +7,137 @@
 
 {% block bodyclass %}dashboard{% endblock %}
 
-{% block body %}
+{% block prebody %}
+<div id="hero">
+	<div class="row">
+		<div class="span8">
+			<h3>Create new document from our popular</h3>
+			<div class="features2">
+	            <!-- features 2 -->
+	            <div class="row">
+	                <div class="span2 feature2">
+	                    <div class="icon"><img src="/static/img/glyphicons/glyphicons_020_home.png"></div>
+	                    <h4>Short commercial lease</h4>
+	                    <p>
+	                        You can't do better design with a computer, but you can speed up your work
+	                        enormously.
+	                    </p>
+	                </div>
+	                <div class="span2 feature2">
+	                    <div class="icon">
+	                        <img src="/static/img/glyphicons/glyphicons_051_eye_open.png"></div>
+	                    <h4>Mutual non-disclosure agreement</h4>
+	                    <p>
+	                        You can't do better design with a computer, but you can speed up your work
+	                        enormously.
+	                    </p>
+	                </div>
+	                <div class="span2 feature2">
+	                    <div class="icon">
+	                        <img src="/static/img/glyphicons/glyphicons_298_hospital.png"></div>
+	                    <h4>Health and Safety Policy</h4>
+	                    <p>
+	                        You can't do better design with a computer, but you can speed up your work
+	                        enormously.
+	                    </p>
+	                </div>
+	                <div class="span2 feature2">
+	                    <div class="icon">
+	                        <img src="/static/img/glyphicons/glyphicons_037_coins.png"></div>
+	                    <h4>Loan agreement</h4>
+	                    <p>
+	                        You can't do better design with a computer, but you can speed up your work
+	                        enormously.
+	                    </p>
+	                </div>
+	            </div>
+	        </div>
+		</div>
+		<div class="span4">
+			activity
+		</div>
+	</div>
+</div>
+
+
+
+
 
 <div class="row">
       <div class="span3 sidebar">
+		  <br />
+		  <a href="#/list/templates/create_new" class="btn btn-success btn-large" id="toggle-docs">{% trans 'Create New Document' %}</a>
           <ul class="nav nav-list">
-            <li style="margin-left:15px"><a href="#/list/templates/create_new" class="btn btn-green btn-block" id="toggle-docs">{% trans 'New Doc' %}</a></li>
+            <li style="margin-left:15px"></li>
             <li class="divider"></li>
               <li><a href="#/list/my_documents/all"> {% trans 'All Documents' %}</a></li>
               <li><a href="#/list/activity"> {% trans 'Activity' %}</a></li>
           </ul>
       </div>
+	      <div id="my_docs_list" class="span9 view default">
+	        <div class="dash-panel">
+	          <h2 class="title">{% trans 'Your Documents' %}</h2>
+	          <table id="my-documents" class="table table-stripped table-border table-hover ">
+	          <tr>
+	              <th>{% trans 'Document Name' %}</th>
+	              <th>{% trans 'Status' %}</th>
+	              <th><span class="pull-right">{% trans 'Action' %}</span></th>
+	          </tr>
+	          {% for d in my_document_list %}
+	          <tr>
+	              <td class="document-title">
+	                <a href="{% url 'document:my_review' slug=d.slug %}" rel="tooltip" title="{% trans 'Created by' %} {{ d.owner.get_profile.short_name|default:d.owner.username }}" class="doc-title">{{ d.name }}</a>
+	                <br/><span class="created">{% trans 'Created' %} {% moment d.created_at d.created_at %}</span>
+	              </td>
+	              <td class="document-status">
+	                {% document_status d %}
+	              <td class="document-action">
+	                <div class="btn-group pull-right">
+	                  <button class="btn dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i> <span class="caret"></span></button>
+	                  <ul class="dropdown-menu">
+	                    <li><a id="edit-{{ d.pk }}" class="small" href="{% url 'document:my_view' slug=d.slug %}">{% trans 'Edit' %}</a></li>
+	                    <li><a id="clone-{{ d.pk }}" href="#clone" data-url="{% url 'document:my_clone' pk=d.pk %}" data-pk="{{ d.pk }}" class="clone-my-document">{% trans 'Clone' %}</a></li>
+	                    <li><a id="export-{{ d.pk }}" href="{% url 'export:as_pdf' slug=d.slug %}" target="_BLANK" data-url="{% url 'export:as_pdf' slug=d.slug %}" data-pk="{{ d.pk }}" class="">{% trans 'Download PDF' %}</a></li>
+	                    <li><a id="delete-{{ d.pk }}" href="#delete" data-url="{% url 'document:my_delete' pk=d.pk %}" data-pk="{{ d.pk }}" class="delete-my-document">{% trans 'Delete' %}</a></li>
+	                  </ul>
+	                </div>
+	              </td>
+	          </tr>
+	          {% endfor %}
+	          </table>
+	        </div>
+	      </div>
 
-      <div id="my_docs_list" class="span9 view default">
-        <div class="doc-body">
-          <h2 class="title">{% trans 'Your Documents' %}</h2>
-          <table id="my-documents" class="table table-stripped table-border table-hover ">
-          <tr>
-              <th>{% trans 'Document Name' %}</th>
-              <th>{% trans 'Status' %}</th>
-              <th><span class="pull-right">{% trans 'Action' %}</span></th>
-          </tr>
-          {% for d in my_document_list %}
-          <tr>
-              <td class="document-title">
-                <a href="{% url 'document:my_review' slug=d.slug %}" rel="tooltip" title="{% trans 'Created by' %} {{ d.owner.get_profile.short_name|default:d.owner.username }}" class="doc-title">{{ d.name }}</a>
-                <br/><span class="created">{% trans 'Created' %} {% moment d.created_at d.created_at %}</span>
-              </td>
-              <td class="document-status">
-                {% document_status d %}
-              <td class="document-action">
-                <div class="btn-group pull-right">
-                  <button class="btn dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i> <span class="caret"></span></button>
-                  <ul class="dropdown-menu">
-                    <li><a id="edit-{{ d.pk }}" class="small" href="{% url 'document:my_view' slug=d.slug %}">{% trans 'Edit' %}</a></li>
-                    <li><a id="clone-{{ d.pk }}" href="#clone" data-url="{% url 'document:my_clone' pk=d.pk %}" data-pk="{{ d.pk }}" class="clone-my-document">{% trans 'Clone' %}</a></li>
-                    <li><a id="export-{{ d.pk }}" href="{% url 'export:as_pdf' slug=d.slug %}" target="_BLANK" data-url="{% url 'export:as_pdf' slug=d.slug %}" data-pk="{{ d.pk }}" class="">{% trans 'Download PDF' %}</a></li>
-                    <li><a id="delete-{{ d.pk }}" href="#delete" data-url="{% url 'document:my_delete' pk=d.pk %}" data-pk="{{ d.pk }}" class="delete-my-document">{% trans 'Delete' %}</a></li>
-                  </ul>
-                </div>
-              </td>
-          </tr>
-          {% endfor %}
-          </table>
-        </div>
-      </div>
+	      <div id="activity_list" class="span9 view hide dash-panel">
+	        <div class="doc-body">
+	          <h3>{% trans 'Activity' %}</h3>
+	          <ul class="activity activity-large">
+	          {% user_activity_stream request.user 50 %}
+	          </ul>
+	        </div>
+	      </div>
 
-      <div id="activity_list" class="span9 view hide">
-        <div class="doc-body">
-          <h3>{% trans 'Activity' %}</h3>
-          <ul class="activity activity-large">
-          {% user_activity_stream request.user 50 %}
-          </ul>
-        </div>
-      </div>
-
-      <div id="templates_list" class="span9 view hide">
-        <div class="doc-body">
-          <h2>{% trans 'New Document' %}</h2>
-          {% if user.is_staff %}
-          <div class="span3 pull-right"><a href="{% url 'doc:create' %}" class="admin btn btn-warning" id="toggle-docs">{% trans 'Create Doc' %}</a></div>
-          {% endif %}
-          <ul>
-            {% for d in public_document_list %}
-            <li>
-                {% if d.is_v1_doc %}
-                <a class="template-document" href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a>
-                {% else %}
-                <a class="template-document" href="{% url 'doc:view' slug=d.slug %}">{{ d.name }}</a>
-                {% endif %}
-                {% if user.is_staff %}- <a class="admin author_edit-document" href="{% url 'author:edit' pk=d.pk %}">edit</a>{% endif %}
-            </li>
-            {% endfor %}
-          </ul>
-        </div>
-      </div>
+	      <div id="templates_list" class="span9 view hide dash-panel">
+	        <div class="doc-body">
+	          <h2>{% trans 'New Document' %}</h2>
+	          {% if user.is_staff %}
+	          <div class="span3 pull-right"><a href="{% url 'doc:create' %}" class="admin btn btn-warning" id="toggle-docs">{% trans 'Create Doc' %}</a></div>
+	          {% endif %}
+	          <ul>
+	            {% for d in public_document_list %}
+	            <li>
+	                {% if d.is_v1_doc %}
+	                <a class="template-document" href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a>
+	                {% else %}
+	                <a class="template-document" href="{% url 'doc:view' slug=d.slug %}">{{ d.name }}</a>
+	                {% endif %}
+	                {% if user.is_staff %}- <a class="admin author_edit-document" href="{% url 'author:edit' pk=d.pk %}">edit</a>{% endif %}
+	            </li>
+	            {% endfor %}
+	          </ul>
+	        </div>
+	      </div>
+	  
 </div>
 {% endblock %}
 
