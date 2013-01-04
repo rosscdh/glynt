@@ -5,30 +5,59 @@
 
   /* GLYNT_PROGRESS PUBLIC CLASS DEFINITION
    * ================================= */
-   var GlyntProgress = function (options) {
-     this.options = $.extend({}, options)
-     this.$element = $(this.options.element).appendTo(this.options.target_element)
-     this.init()
-     this.listen()
-     this.render()
-   }
+    var GlyntProgress = function (options) {
+        this.options = $.extend({
+            in_admin: false
+        }, options)
+        this.$element = $(this.options.element).appendTo(this.options.target_element)
+        this.init()
+        this.listen()
+        this.render()
+    }
 
    GlyntProgress.prototype = {
      constructor: GlyntProgress
      ,init: function () {
          var self = this;
-         // insert elements into the ul
-         // self.$element.parent().height($('#document').height())
-         // self.$element.height(self.$element.parent().height())
+
+            if (self.options.in_admin === false) {
+                this.options.target_element.css('top', $('div.navbar').position().top + $('div.navbar').height());
+            } else {
+                this.options.target_element.css('top', 0);
+            }
+
          $.each(self.options.items, function(index, item){
              if (item) {
-                var content = $('<a/>',{href:'#', html:'&nbsp;'})
+                // types: select, choice, var
+                var item_class = item.type.replace('doc_', '');
+                var icon_css_class = self.icon_css_class(item_class);
+                var icon = $('<i>', {class: icon_css_class + ' icon-align-left', title: item_class.replace('_', ' ')});
+                var content = $('<a/>',{href: '#', html: icon});
+                var title = (!item.initial) ? item.name.replace('_', ' ') : item.initial;
+
                 var li = $('<li/>', {
                     html: content
                     ,'data-var_name': item.name
-                    ,'title': (!item.initial) ? item.name.replace('_', ' ') : item.initial
-                    ,'class': (item.type !== undefined) ? item.type.replace('doc_', '') : ''
-                })
+                    ,'data-instance_count': item.instance_count
+                    ,'title': title
+                    ,'class': item_class
+                    , mouseover: function() {
+                        $(this).attr('title',item.value);
+                    }
+                    , mouseout: function() {
+                        $(this).attr('title',title);
+                    }
+                    });
+
+
+                    $('#{id}'.assign({id:item.id})).on('blur', function (event) {
+                        if (item.initial === item.value || item.value == '') {
+                            li.removeClass('complete');
+                        } else {
+                            li.addClass('complete');
+                        }
+                    });
+
                 li.tooltip({
                     placement: 'top'
                 });
@@ -36,23 +65,41 @@
              }
          });
      }
+     ,icon_css_class: function (item_class) {
+         var icon_css_class = 'icon-font'
+         if (item_class == 'choice') {
+             icon_css_class = 'icon-plus-sign';
+         } else if (item_class == 'select') {
+             icon_css_class = 'icon-th-list';
+         }
+         return icon_css_class;
+     }
      ,listen: function () {
          var self = this;
          self.$element.find('li').on('mouseover', function(event) {
+             event.preventDefault();
              $(this).addClass('toggle-on')
          });
          self.$element.find('li').on('mouseout', function(event) {
              $(this).removeClass('toggle-on')
          });
+         var navbar_height = $('div.navbar').height();
+         $(window).scroll(function () {
+             var offset = $(document).scrollTop();
+             if ($(document).scrollTop() > navbar_height) {
+                 offset = $(document).scrollTop() - navbar_height;
+             }
+             self.$element.animate({top:offset},{duration:200,queue:false});
+             //self.$element.css('top', offset);
+         });
      }
      ,render: function () {
          var self = this;
-         console.log('render')
      }
    }
    $.widget("ui.glynt_progress", {
        options: {
-           target_element: $('#controls'),
+           target_element: $('#progress'),
            element: $('<ul/>', {id: 'glynt_progress'}),
        },
        _create: function() {
@@ -83,6 +130,7 @@
             self.$element = $('#{id}'.assign({'id': self.options.item.id}));
             self.$selector = (self.options.selector !== undefined) ? $(self.options.selector) : self.$element;
             self.$target = $(self.options.help_target);
+            self.$target.attr('class','span3')
             self.listen();
         }
         , listen: function () {
@@ -95,8 +143,9 @@
         , help_pos: function () {
             var self = this;
             var element_pos = self.$selector.position();
+            var doc_pos = $('#document').position();
             return {
-                'left': $('#document').width()*1.1,
+                'left': doc_pos.left + $('#document').width()*1.15,
                 'top': element_pos.top
             }
         }
@@ -278,7 +327,7 @@
             var self = this;
             var parent_pos = self.options.$parent.offset();
             return {
-                'left': parent_pos.left - (self.$element.width()*3),
+                'left': parent_pos.left - (self.$element.width()*5),
                 'top': parent_pos.top + (self.options.$parent.height()/3.2) - (self.$element.height()/4.2)
             }
         }
@@ -323,20 +372,37 @@
             var var_name = $(self.element).attr('data-doc_var');
             self.choices = self.app.context[var_name].choices;
             var element = $(self.element);
+            self.is_static = self.app.context[var_name].is_static;
 
             element.glynt_typeahead({
                 'source': self.choices
             });
 
+            element.popover({
+                trigger: 'hover',
+                placement: 'top',
+                title: (self.is_static) ? 'Required Choice Info' : 'Choice Info',
+                content: (self.is_static) ? 'Valid choices are: "{choices}"'.assign({'choices': self.choices}) : 'Some valid choices are: "{choices}"'.assign({'choices': self.choices})
+            });
+
+            element.on('blur', function(event){
+                if (self.is_static) {
+                    // if is static (required to have one of the specified values)
+                    var val = $(this).html();
+
+                    if (self.app.context[var_name].choices.indexOf(val) == -1) {
+                        $(this).html('');
+                    }
+                }
+            });
+
             element.on('mouseover', function(event){
                 event.preventDefault();
                 $(this).css('cursor', 'pointer')
-                self.options.target_element.html('Valid choices include "{choices}"'.assign({'choices': self.choices}));
             });
             element.on('mouseout', function(event){
                 event.preventDefault();
                 $(this).css('cursor', 'auto')
-                self.options.target_element.html('');
             });
         }
     });

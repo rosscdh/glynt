@@ -12,10 +12,6 @@
 <div class="row">
       <div class="span3 sidebar">
           <ul class="nav nav-list">
-            {% if user.is_staff %}
-            <li><a href="{% url 'author:create' %}" class="admin btn btn-warning" id="toggle-docs">{% trans 'Create Doc' %}</a></li>
-            <li class="divider"></li>
-            {% endif %}
             <li style="margin-left:15px"><a href="#/list/templates/create_new" class="btn btn-green btn-block" id="toggle-docs">{% trans 'New Doc' %}</a></li>
             <li class="divider"></li>
               <li><a href="#/list/my_documents/all"> {% trans 'All Documents' %}</a></li>
@@ -69,6 +65,9 @@
       <div id="templates_list" class="span9 view hide">
         <div class="doc-body">
           <h2>{% trans 'New Document' %}</h2>
+          {% if user.is_staff %}
+          <div class="span3 pull-right"><a href="{% url 'doc:create' %}" class="admin btn btn-warning" id="toggle-docs">{% trans 'Create Doc' %}</a></div>
+          {% endif %}
           <ul>
             {% for d in public_document_list %}
             <li>

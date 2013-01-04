@@ -186,7 +186,10 @@ HELPER_APPS = (
     'django_comments_xtd',
     'django_markup',
     'compressor',
+    'tastypie_elasticsearch',
 )
+
+ES_INDEX_SERVER = 'http://127.0.0.1:9200/'
 
 # Handle south and its breaking tests
 if not IS_TESTING:
