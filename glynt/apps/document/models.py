@@ -31,7 +31,7 @@ class Document(models.Model):
     slug = models.SlugField(blank=False, max_length=255)
     summary = models.TextField(blank=True, null=True)
     body = models.TextField(blank=True, null=True)
-    doc_status = models.IntegerField(choices=DOC_STATUS.get_choices(), blank=False)
+    doc_status = models.IntegerField(choices=DOC_STATUS.get_choices(), blank=False, default=DOC_STATUS.draft)
     is_public = models.BooleanField(default=True)
     doc_cats = models.ManyToManyField('DocumentCategory')
     tags = TaggableManager()

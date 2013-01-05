@@ -7,11 +7,10 @@ from glynt.apps.document.models import Document
 
 
 class DocumentForm(BootstrapModelForm):
-  class Meta:
-    model = Document
-    layout = (
-        Fieldset('Document Authoring', 'body'),
-        Fieldset('Document Properties', 'name', 'slug', 'owner', 'summary', 'doc_status', 'is_public', 'doc_cats', 'tags'),
-    )
-
-
+    class Meta:
+        model = Document
+        exclude = ('slug',)
+        layout = (
+            Fieldset('Document Authoring', 'body'),
+            Fieldset('Document Properties', 'name', 'owner', 'summary', 'doc_status', 'is_public', 'doc_cats', 'tags'),
+        )

@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
 from django.middleware.csrf import get_token
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 
 from glynt.apps.document.views import DocumentView
 from glynt.apps.document.views.utils import user_can_view_document
@@ -62,3 +62,8 @@ class CreateDocumentView(CreateView):
       context['form'] = self.get_form(self.get_form_class())
 
       return context
+
+class UpdateDocumentView(UpdateView):
+    template_name = 'smoothe/document-create.html'
+    form_class = DocumentForm
+    model = Document
