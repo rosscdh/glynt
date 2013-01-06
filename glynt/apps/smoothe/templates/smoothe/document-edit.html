@@ -1,0 +1,24 @@
+{% extends 'smoothe/document-create.html' %}
+{% load i18n markup sign_tags templatetag_handlebars glynt_helpers %}
+{% load url from future %}
+
+{% block document %}
+<div class="row-fluid">
+  <div class="span6">
+    <h3>{% trans 'Document Details' %}</h3>
+    <form id="update-doc" class="form-inline" action="{% url 'doc:update' pk=object.pk %}" method="post">{% csrf_token %}
+      {{ form }}
+      <div class="form-actions">
+          <button id="update-doc-submit" type="submit" class="submit btn btn-primary">{% trans "Update" %}</button>
+      </div>
+    </form>
+  </div>
+  <div id="sidebar" class="span3">&nbsp;</div>
+  <div id="element_help_text"></div>
+  <div class="span6 pull-right">
+    <h3>{% trans 'Preview' %}</h3>
+    <p></p>
+    <div id="document">{% show_loading modal='False' %}</div>
+  </div>
+</div>
+{% endblock %}

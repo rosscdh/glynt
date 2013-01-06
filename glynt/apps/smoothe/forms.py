@@ -18,4 +18,5 @@ class DocumentForm(BootstrapModelForm):
 
     def clean_name(self):
         self.cleaned_data['slug'] = slugify(self.cleaned_data['name'])
+        self.instance.slug = self.cleaned_data['slug']
         return self.cleaned_data['name']

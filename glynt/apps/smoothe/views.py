@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
 from django.middleware.csrf import get_token
 from django.views.generic import CreateView, UpdateView
+from django.core.urlresolvers import reverse
 
 from glynt.apps.document.views import DocumentView
 from glynt.apps.document.views.utils import user_can_view_document
@@ -63,7 +64,8 @@ class CreateDocumentView(CreateView):
 
       return context
 
+
 class UpdateDocumentView(UpdateView):
-    template_name = 'smoothe/document-create.html'
+    template_name = 'smoothe/document-edit.html'
     form_class = DocumentForm
     model = Document
