@@ -46,6 +46,9 @@ class Document(models.Model):
     def __unicode__(self):
       return u'%s' % (self.name, )
 
+    def get_absolute_url(self):
+        return reverse('doc:update', kwargs={'pk': self.pk})
+
     @property
     def is_v1_doc(self):
         return True if self.flyform is not None else False

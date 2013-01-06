@@ -27,8 +27,6 @@ $(document).ready(function(){
         Handlebars.registerPartial("doc_note-partial", Handlebars.compile($("script#doc_note-partial").html()));
 
         // ---- VIEWS -----
-        this.notFound = function(){
-        };
         this.get('#/', function() {
         });
 
