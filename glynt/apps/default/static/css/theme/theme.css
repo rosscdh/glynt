@@ -173,14 +173,14 @@ body {
 	margin: 0 auto;
 }
 #hero .item h1 {
-	font-size: 24px;
+	font-size: 30px;
 	font-weight: bolder;
 	margin-top: 10px;
 }
 #hero .item p {
-	font-size: 13px;
+	font-size: 15px;
 	color: #4E4E4E;
-	line-height: 20px;
+	line-height: 24px;
 }
 #hero .item .btn {
 	margin-top: 10px;
@@ -189,10 +189,10 @@ body {
 /* introduction heading section*/
 #intro {
 	text-align: center;
-	margin-top: 50px;
+	margin-top: 65px;
 }
 #intro h1 {
-	width: 55%;
+	width: 80%;
 	font-size: 28px;
 	margin: 0 auto;
 	color: #252B34;
@@ -499,29 +499,17 @@ body {
 
 /* Dashboard 
 -------------------------------------------------- */
-.dash-panel {
-	background-color:white;
-	padding:10px 20px 10px 20px;
-	margin-top:10px;
+/*.dash-panel {
+    background-color:white;
+    padding:10px 20px 10px 20px;
+    margin-top:10px;
 }
-
-.dashboard h3.intro {
-	color: #282F39;
-	text-align: center;
-	font-weight: normal;
-	font-size: 22px;
-	line-height: 32px;
-	width: 83%;
-	margin: 0 auto;
-	margin-bottom: 70px;
-}
-.dashboard .feature2 .icon {
-	width: 45px;
-	height: 45px;
+*/.dashboard .feature2 .icon {
+	width: 35px;
+	height: 30px;
 	background-color: white;
 	border-radius: 100px;
 	position: absolute;	
-	text-align:center;
 }
 .dashboard .feature2 .icon img {
 	padding-top:10px;
@@ -571,13 +559,17 @@ body {
 }
 .dashboard .feature2 h4,
 .dashboard .feature2 p {
-	margin-left: 60px;
-	width: 80%;
+	margin-left: 40px;
+	width: 90%;
 }
 .dashboard .feature2 h4 {
-	line-height: 25px;
+	line-height: 20px;
 	color: #000;
 	font-size:16px;
+	margin-bottom:0px;
+}
+.dashboard .feature2 p {
+    font-size:12px;
 }
 
 @media (max-width: 979px) {
@@ -587,6 +579,10 @@ body {
 	}
 }
 
+.dashboard .section_header{
+    margin-top:0px;
+    margin-bottom:20px;
+}
 
 
 
@@ -615,7 +611,7 @@ body {
 		margin-left: 30px;
 	}
 	#hero .item h1 {
-		font-size: 30px;
+		font-size: 40px;
 		margin-top: 40px;
 		margin-left: 20px;
 	}
@@ -708,7 +704,7 @@ body {
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) { 
 	#intro h1 {
-		width: 80%;
+		width: 90%;
 	}
 	#features .feature h3 {
 		padding-left: 0px;
