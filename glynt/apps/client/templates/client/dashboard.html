@@ -11,20 +11,13 @@
 <div id="hero">
 	<div class="container">
 		<div class="row">
-			<div class="span12">
-				<h2 class="section_header">
-					<hr class="left visible-desktop">
-					<span>Welcome back</span>
-					<hr class="right visible-desktop">
-		        </h2>
-			</div>
 			<div class="span8">
-				<h3>Create new document <a href="#" class="btn-small btn btn-success pull-right" style="margin-right:10px;margin-top:5px;">View All Documents</a></h3>
+				<h3>New document <span>Choose from a popular document or view all</span></h3>
 				<div class="features2">
 		            <!-- features 2 -->
 		            <div class="row">
 		                <div class="span4 feature2">
-		                    <div class="icon"><img src="/static/img/glyphicons/glyphicons_020_home.png"></div>
+		                    <div class="icon c1">CL</div>
 		                    <h4>Short commercial lease</h4>
 		                    <p>
 		                        You can't do better design with a computer, but you can speed up your work
@@ -32,8 +25,7 @@
 		                    </p>
 		                </div>
 		                <div class="span4 feature2">
-		                    <div class="icon">
-		                        <img src="/static/img/glyphicons/glyphicons_051_eye_open.png"></div>
+		                    <div class="icon c2">NDA</div>
 		                    <h4>Mutual non-disclosure agreement</h4>
 		                    <p>
 		                        You can't do better design with a computer, but you can speed up your work
@@ -41,8 +33,7 @@
 		                    </p>
 		                </div>
 		                <div class="span4 feature2">
-		                    <div class="icon">
-		                        <img src="/static/img/glyphicons/glyphicons_298_hospital.png"></div>
+		                    <div class="icon c3">HSP</div>
 		                    <h4>Health and Safety Policy</h4>
 		                    <p>
 		                        You can't do better design with a computer, but you can speed up your work
@@ -50,21 +41,25 @@
 		                    </p>
 		                </div>
 		                <div class="span4 feature2">
-		                    <div class="icon">
-		                        <img src="/static/img/glyphicons/glyphicons_037_coins.png"></div>
+		                    <div class="icon c4">LA</div>
 		                    <h4>Loan agreement</h4>
 		                    <p>
 		                        You can't do better design with a computer, but you can speed up your work
 		                        enormously.
 		                    </p>
 		                </div>
+					</div>
+		            <div class="row">
+						<div class="span8 view-all">
+							<a href="#" class="btn btn-success">View All Documents</a>
+						</div>
 		            </div>
 		        </div>
 			</div>
-			<div class="span4">
+			<div class="span4 mini-activity hidden-phone">
+				<h3>Recent activity</h3>
 				<ul>
-					<li>Bob signed a new document</li>
-					<li>Alan is amazing and cool</li>
+  		          {% user_activity_stream request.user 4 %}
 				</ul>
 			</div>
 		</div>
@@ -75,35 +70,51 @@
 
 
 <div class="container">
-	<div class="row">
+	<!-- <div class="row">
 	      <div class="span12 sidebar">
 			  <br />
 	          <ul class="nav nav-list">
 	            <li style="margin-left:15px"></li>
 	            <li class="divider"></li>
-	              <li><a href="#/list/my_documents/all"> {% trans 'All Documents' %}</a></li>
+	              <li><a href="#/list/my_documents/all"></a></li>
 	              <li><a href="#/list/activity"> {% trans 'Activity' %}</a></li>
 	          </ul>
 	      </div>
-		</div>
-		<div class="row">
+		</div> -->
+		<div class="row existing-docs">
+			<div class="span12">
+				<h3>Existing documents <span>A library of your existing LawPal documents</span></h3>
+			</div>
+			<div class="span12">
+				<ul class="nav nav-tabs">
+				  <li class="active">
+				    <a href="#/list/my_documents/all"><i class="icon-globe"></i> {% trans 'All Documents' %}</a>
+				  </li>
+				  <li><a href="#"><i class="icon-pause"></i> Incomplete Documents</a></li>
+				  <li><a href="#"><i class="icon-briefcase"></i> AcmeCo Docs</a></li>
+				  <li><a href="#"><i class="icon-home"></i> Property A Docs</a></li>
+				</ul>
+			</div>
 		      <div id="my_docs_list" class="span12 view default">
 		        <div class="dash-panel">
-		          <h2 class="title">{% trans 'Your Documents' %}</h2>
 		          <table id="my-documents" class="table table-stripped table-border table-hover ">
 		          <tr>
 		              <th>{% trans 'Document Name' %}</th>
+		              <th>{% trans 'Date Created' %}</th>
 		              <th>{% trans 'Status' %}</th>
 		              <th><span class="pull-right">{% trans 'Action' %}</span></th>
 		          </tr>
 		          {% for d in my_document_list %}
 		          <tr>
 		              <td class="document-title">
-		                <a href="{% url 'document:my_review' slug=d.slug %}" rel="tooltip" title="{% trans 'Created by' %} {{ d.owner.get_profile.short_name|default:d.owner.username }}" class="doc-title">{{ d.name }}</a>
-		                <br/><span class="created">{% trans 'Created' %} {% moment d.created_at d.created_at %}</span>
+		                <div class="icon c1">CL</div> <a href="{% url 'document:my_review' slug=d.slug %}" rel="tooltip" title="{% trans 'Created by' %} {{ d.owner.get_profile.short_name|default:d.owner.username }}" class="doc-title">{{ d.name }}</a>
+					</td>
+					<td>
+					    <span>{% moment d.created_at d.created_at %}</span>
 		              </td>
 		              <td class="document-status">
 		                {% document_status d %}
+					</td>
 		              <td class="document-action">
 		                <div class="btn-group pull-right">
 		                  <button class="btn dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i> <span class="caret"></span></button>
@@ -152,6 +163,16 @@
 		      </div>
 	</div>
 </div>
+{% for d in public_document_list %}
+<li>
+    {% if d.is_v1_doc %}
+    <a class="template-document" href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a>
+    {% else %}
+    <a class="template-document" href="{% url 'doc:view' slug=d.slug %}">{{ d.name }}</a>
+    {% endif %}
+    {% if user.is_staff %}- <a class="admin author_edit-document" href="{% url 'author:edit' pk=d.pk %}">edit</a>{% endif %}
+</li>
+{% endfor %}
 {% endblock %}
 
 {% block css %}

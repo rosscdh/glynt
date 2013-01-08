@@ -4197,9 +4197,12 @@ a.thumbnail:hover {
   display: block;
   visibility: visible;
   padding: 5px;
-  font-size: 11px;
+  font-size: 13px;
   opacity: 0;
   filter: alpha(opacity=0);
+  color:white;
+  max-width:300px;
+  white-space: nowrap;
 }
 .tooltip.in {
   opacity: 0.8;
@@ -4218,12 +4221,12 @@ a.thumbnail:hover {
   margin-left: -3px;
 }
 .tooltip-inner {
-  max-width: 200px;
+  max-width: 400px;
   padding: 3px 8px;
   color: #ffffff;
   text-align: center;
   text-decoration: none;
-  background-color: #000000;
+  background-color: #242b35;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -4240,21 +4243,21 @@ a.thumbnail:hover {
   left: 50%;
   margin-left: -5px;
   border-width: 5px 5px 0;
-  border-top-color: #000000;
+  border-top-color: #242b35;
 }
 .tooltip.right .tooltip-arrow {
   top: 50%;
   left: 0;
   margin-top: -5px;
   border-width: 5px 5px 5px 0;
-  border-right-color: #000000;
+  border-right-color: #242b35;
 }
 .tooltip.left .tooltip-arrow {
   top: 50%;
   right: 0;
   margin-top: -5px;
   border-width: 5px 0 5px 5px;
-  border-left-color: #000000;
+  border-left-color: #242b35;
 }
 .tooltip.bottom .tooltip-arrow {
   top: 0;

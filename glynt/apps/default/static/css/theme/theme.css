@@ -9,6 +9,9 @@ body {
 	font-family: 'Lato', sans-serif !important;
 	color: #333;
 }
+a {
+	color:#759B48;
+}
 .scrolltop {
 	background-color: #F1F1F1;
 	border: 1px solid darkGray;
@@ -63,8 +66,8 @@ body {
     font-size: 30px;
 	text-shadow: none;
 	height:30px;
-	padding-top:18px;
-}
+/*	padding-top:18px;
+*/}
 .navbar a.brand{
 	color:white;
 }
@@ -504,72 +507,50 @@ body {
     padding:10px 20px 10px 20px;
     margin-top:10px;
 }
-*/.dashboard .feature2 .icon {
-	width: 35px;
-	height: 30px;
-	background-color: white;
-	border-radius: 100px;
-	position: absolute;	
+*/
+.dashboard #hero {
+	padding-top:20px;
 }
-.dashboard .feature2 .icon img {
-	padding-top:10px;
+.dashboard h3 {
+	font-size:27px;
+	line-height:29px;
+}
+.dashboard h3 span {
+	color:#759b48;
+	line-height:29px;
+	font-size:15px;
+}
+.dashboard .icon {
+	width:33px;
+	height:27px;
+	background-color:#005d89;
+	color:white;
+	text-align:center;
+	font-size:11px;
+	position:absolute;
+	border-radius:17px;
+	padding-top:6px;
+	margin-top:10px;
+}
+.dashboard .icon.c2{background-color:#e00c61;}
+.dashboard .icon.c3{background-color:#0a934e;}
+.dashboard .icon.c4{background-color:#f69c00;}
 
-}
-.dashboard .feature2 i.cloud {
-	background-position: 0 0;
-	width: 36px;
-	height: 23px;
-	top: 19px;
-	left: 14px;
-}
-.dashboard .feature2 i.tools {
-	background-position: -5px -97px;
-	width: 25px;
-	height: 25px;
-	top: 19px;
-	left: 20px;
-}
-.dashboard .feature2 i.graph {
-	background-position: -8px -47px;
-	width: 22px;
-	height: 25px;
-	top: 19px;
-	left: 21px
-}
-.dashboard .feature2 i.mobile {
-	background-position: -7px -153px;
-	width: 21px;
-	height: 31px;
-	top: 18px;
-	left: 22px;
-}
-.dashboard .feature2 i.lab {
-	background-position: -7px -212px;
-	width: 21px;
-	height: 34px;
-	top: 14px;
-	left: 22px;
-}
-.dashboard .feature2 i.secure {
-	background-position: -4px -270px;
-	width: 24px;
-	height: 29px;
-	top: 16px;
-	left: 20px;
-}
 .dashboard .feature2 h4,
 .dashboard .feature2 p {
-	margin-left: 40px;
-	width: 90%;
+	margin-left: 45px;
+	width: 80%;
 }
 .dashboard .feature2 h4 {
 	line-height: 20px;
 	color: #000;
-	font-size:16px;
+	font-size:15px;
 	margin-bottom:0px;
+	margin-top:10px;
 }
 .dashboard .feature2 p {
     font-size:12px;
+	margin-bottom:10px;
 }
 
 @media (max-width: 979px) {
@@ -578,13 +559,64 @@ body {
 		line-height: 20px;
 	}
 }
-
+.dashboard .view-all .btn {
+	font-size:16px;
+	margin-top:10px;
+}
 .dashboard .section_header{
     margin-top:0px;
     margin-bottom:20px;
 }
+.dashboard .mini-activity {
+	background-color:#ffebd0;
+	margin-top:13px;
+}
+.dashboard .mini-activity h3 {
+	background:#efaa4e url('../img/orange_nav_bg.png') top;
+	color:white;
+	font-size:16px;
+	padding:4px 0px 4px 20px;
+	margin-top:0px;
+}
+.dashboard .mini-activity ul li {
+	list-style-image: url('../img/bullet.png');
+	margin-left:15px;
+	font-size:12px;
+}
+.dashboard .nav {
+	margin-bottom:0px;
+}
+.dashboard .dash-panel {
+	padding-top:20px;
+	background-color:white;
+	border:1px solid #DDD;
+	border-top:none;
+}
+.dashboard .existing-docs{
+	padding-top:20px;
+}
+.dashboard .existing-docs h3{
+	padding-bottom:10px;
+}
+.dashboard table .icon {
+	margin-top:0px;
+	width:30px;
+	height:25px;
+	padding-top:4px;
+}
+.dashboard table .doc-title {
+	font-size:20px;
+	margin-left:40px;
+	line-height:25px;
+}
 
+/* Drafting
+-------------------------------------------------- */
 
+body.preview #document {
+	background-color:white;
+	padding:60px;
+}
 
 /* Responsive
 -------------------------------------------------- */
