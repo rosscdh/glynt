@@ -62,13 +62,15 @@ Handlebars.registerHelper('doc_choice', function(options) {
     var value = null;
     var var_name = options.hash.name;
     var choices = options.hash.choices;
+
     var has_initial = (options.hash.initial === undefined) ? false : true;
     if (has_initial === false) {
         options.hash.initial = options.fn(this);
     }
     value = (options.hash.initial !== undefined) ? options.hash.initial : '' ;
-    value = (app.context[var_name] === undefined) ? value : app.context[var_name] ;
+    value = (app.context[var_name] === undefined || app.context[var_name].value === "") ? value : app.context[var_name].value ;
     options.hash.value = value;
+
     options.hash.type = 'doc_choice';
 
     var html_return = Handlebars.partials['doc_choice-partial'];

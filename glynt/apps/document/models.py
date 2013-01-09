@@ -152,7 +152,7 @@ class ClientCreatedDocument(models.Model):
       return self.documentsignature_set.filter(is_signed=True)
 
     def get_absolute_url(self):
-        return reverse('doc:my_view', kwargs={'slug': self.slug})
+        return reverse('doc:update_document_view', kwargs={'slug': self.slug})
 
     @property
     def cookie_name(self):

@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from bootstrap.forms import BootstrapModelForm, Fieldset
 
 from glynt.apps.document.models import Document
+from glynt.apps.document.models import ClientCreatedDocument
 
 
 class DocumentForm(BootstrapModelForm):
@@ -15,3 +16,6 @@ class DocumentForm(BootstrapModelForm):
     )
 
 
+class ClientDocumentForm(forms.ModelForm):
+  class Meta:
+    model = ClientCreatedDocument
