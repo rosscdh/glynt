@@ -164,14 +164,14 @@
 	</div>
 </div>
 {% for d in public_document_list %}
-<li>
+<!-- <li>
     {% if d.is_v1_doc %}
     <a class="template-document" href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a>
     {% else %}
     <a class="template-document" href="{% url 'doc:view' slug=d.slug %}">{{ d.name }}</a>
     {% endif %}
     {% if user.is_staff %}- <a class="admin author_edit-document" href="{% url 'author:edit' pk=d.pk %}">edit</a>{% endif %}
-</li>
+</li> -->
 {% endfor %}
 {% endblock %}
 

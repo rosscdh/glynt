@@ -9,6 +9,9 @@ body {
 	font-family: 'Lato', sans-serif !important;
 	color: #333;
 }
+h1,h2, h3, h4 {
+	font-family: 'helvetica neue', 'Lato', sans-serif !important;	
+}
 a {
 	color:#759B48;
 }
@@ -147,7 +150,7 @@ a {
 
 /* carousel section */
 #hero {
-	padding-top: 50px;
+	padding-top: 40px;
 	background: #ffffff; /* Old browsers */
 	background: -moz-linear-gradient(top,  #ffffff 1%, #f9f9f9 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#ffffff), color-stop(100%,#f9f9f9)); /* Chrome,Safari4+ */
@@ -174,6 +177,43 @@ a {
 #hero .carousel-inner .item.slide3 img {
 	display: block;
 	margin: 0 auto;
+}
+#hero .home h1 {
+	font-size:45px;
+	text-align:center;
+}
+#hero .home h2 {
+	font-size:23px;
+	text-align:center;
+	font-weight:normal;
+	color:#666;
+}
+#hero .screen {
+	text-align:right;
+}
+#hero .screen img{
+	padding-top:30px;
+}
+#hero .features {
+	padding-top:10px;
+}
+#hero #hero-features li {
+	background:url('../img/feature-icons.png') no-repeat left top;
+	padding-left:45px;
+	height:31px;
+	list-style-type:none;
+	font-size:16px;
+	padding-top:6px;
+	margin-bottom:6px;
+}
+#hero #hero-features li.draft {
+	background-position:0px -38px;
+}
+#hero #hero-features li.sign {
+	background-position:0px -73px;
+}
+#hero #hero-features li.sync {
+	background-position:0px -110px;
 }
 #hero .item h1 {
 	font-size: 30px;
@@ -512,7 +552,7 @@ a {
 	padding-top:20px;
 }
 .dashboard h3 {
-	font-size:27px;
+	font-size:26px;
 	line-height:29px;
 }
 .dashboard h3 span {
@@ -522,14 +562,14 @@ a {
 }
 .dashboard .icon {
 	width:33px;
-	height:27px;
+	height:23px;
 	background-color:#005d89;
 	color:white;
 	text-align:center;
-	font-size:11px;
+	font-size:12px;
 	position:absolute;
-	border-radius:17px;
-	padding-top:6px;
+	border-radius:4px;
+	padding-top:3px;
 	margin-top:10px;
 }
 .dashboard .icon.c2{background-color:#e00c61;}
@@ -561,7 +601,7 @@ a {
 }
 .dashboard .view-all .btn {
 	font-size:16px;
-	margin-top:10px;
+	margin-top:15px;
 }
 .dashboard .section_header{
     margin-top:0px;
@@ -582,6 +622,10 @@ a {
 	list-style-image: url('../img/bullet.png');
 	margin-left:15px;
 	font-size:12px;
+	margin-right:15px;
+}
+.dashboard .mini-activity ul {
+	min-height:200px;
 }
 .dashboard .nav {
 	margin-bottom:0px;
@@ -591,6 +635,9 @@ a {
 	background-color:white;
 	border:1px solid #DDD;
 	border-top:none;
+	padding:0px 10px;
+}
+.dashboard .dash-panel table {
 }
 .dashboard .existing-docs{
 	padding-top:20px;

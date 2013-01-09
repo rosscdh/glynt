@@ -10,7 +10,30 @@
 	<div class="container">
 		<!-- starts carousel -->
 		<div class="row animated fadeInDown">
-			<div class="span12">
+			<div class="span12 home">
+				<h1>Legal documents at your fingertips</h1>
+				<h2 class="sub">Meet LawPal, get your legal documents sorted and move on with your day. </h2>
+				<div class="row">
+					<div class="span6 screen">
+						<img src="/static/css/img/imac-home.png" width="413" height="347" alt="Imac Home" align="center">
+					</div>
+					<div class="span6 features">
+						<h3>LawPal gives you :</h3>
+						<ul id="hero-features">
+							<li class="library">Growing document library</li>
+							<li class="draft">Simple online drafting</li>
+							<li class="sign">e-Signing, commenting and sharing</li>
+							<li class="sync">Document storage and cloud sync</li>
+						</ul>
+						<h3>We're in beta, <span>subscribe</span> : </h3>
+						<form action="http://lawpal.us6.list-manage.com/subscribe/post?u=a28c24eb98757a383d43fb6dc&amp;id=dfe63d77dd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate form-inline" target="_blank" novalidate>
+							<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+							<input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="btn btn-success">
+						</form>
+					</div>
+				</div>
+			</div>
+				{% comment %}
 				<div id="myCarousel" class="carousel slide">
 					<!-- carousel items -->
 					<div class="carousel-inner">
@@ -60,13 +83,14 @@
 					<a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
 					<a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
 				</div>
+				{% endcomment %}
 			</div>
 		</div>
 	</div>
 </div>
 <div id="intro">
 	<div class="container">
-		<h1>LawPal is changing the way you access quality legal services. We'll save you time, money and put you in control. </h1>
+		<h1>We are build a platform to power the future of online legal services.  </h1>
 	</div>
 </div>
 
@@ -85,7 +109,7 @@
 			<div class="span4 feature">
 				<img src="{{ STATIC_URL }}css/img/feature1.jpg" alt="feature1" class="thumb" />
 				<h3>
-					<i class="i_cloud"></i> Responsive clean theme
+					<i class="i_cloud"></i> Cloud feature
 				</h3>
 				<p class="description">
 					There are many variations of passages of Lorem Ipsum available, but the 
@@ -97,7 +121,7 @@
 			<div class="span4 feature">
 				<img src="{{ STATIC_URL }}css/img/feature2.jpg" alt="feature2" class="thumb" />
 				<h3>
-					<i class="i_chart"></i> Responsive clean theme
+					<i class="i_chart"></i> Another feature
 				</h3>
 				<p class="description">
 					There are many variations of passages of Lorem Ipsum available, but the 
@@ -109,7 +133,7 @@
 			<div class="span4 feature">
 				<img src="{{ STATIC_URL }}css/img/feature3.jpg" alt="feature3" class="thumb" />
 				<h3>
-					<i class="i_movil"></i> Responsive clean theme
+					<i class="i_movil"></i> Another feature
 				</h3>
 				<p class="description">
 					There are many variations of passages of Lorem Ipsum available, but the 
@@ -117,116 +141,6 @@
 					words which don't look even slightly believable.
 				</p>
 				<a href="#" class="btn btn-default">more</a>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- starts pricing -->
-<div id="pricing">
-	<div class="container">
-		<!-- header -->
-		<h2 class="section_header">
-			<hr class="left visible-desktop">
-			<span>
-				Pricing 
-				<small>
-					See all plan details here</small>
-			</span>
-			<hr class="right visible-desktop">
-		</h2>
-
-		<!-- pricing charts -->
-		<div class="row">
-			<div class="span4">
-				<div class="price_wrapper lite regular">
-					<div class="header">
-						<span>Lite</span>
-						<div class="price">
-							<span>$ 35</span>
-							Per Month
-						</div>
-					</div>
-					<div class="section">
-						<h3>Passages of Lorem randomised
-							words which look slightly.</h3>
-						<ul class="perks">
-							<li>
-								<i class="i_shuffle"></i>
-								Cross-browser
-							</li>
-							<li>
-								<i class="i_loading"></i>
-								Fast-loading
-							</li>
-						</ul>
-						<a href="#" class="btn">Order now</a>
-					</div>
-				</div>
-			</div>
-			<div class="span4">
-				<div class="price_wrapper pro">
-					<div class="header">
-						<span>Pro</span>
-						<div class="price">
-							<span>$ 99</span>
-							Per Month
-						</div>
-					</div>
-					<div class="section">
-						<h3>Passages of Lorem randomised
-							words which look slightly.</h3>
-						<ul class="perks">
-							<li>
-								<i class="i_shuffle"></i>
-								Cross-browser
-							</li>
-							<li>
-								<i class="i_loading"></i>
-								Fast-loading
-							</li>
-							<li>
-								<i class="i_bookmark"></i>
-								Bookmarkable URLs
-							</li>
-							<li>
-								<i class="i_bars"></i>
-								W3C Standards
-							</li>
-						</ul>
-						<a href="#" class="btn">Order now</a>
-					</div>
-				</div>
-			</div>
-			<div class="span4">
-				<div class="price_wrapper standard regular">
-					<div class="header">
-						<span>Standard</span>
-						<div class="price">
-							<span>$ 65</span>
-							Per Month
-						</div>
-					</div>
-					<div class="section">
-						<h3>Passages of Lorem randomised
-							words which look slightly.</h3>
-						<ul class="perks">
-							<li>
-								<i class="i_shuffle"></i>
-								Cross-browser
-							</li>
-							<li>
-								<i class="i_loading"></i>
-								Fast-loading
-							</li>
-							<li>
-								<i class="i_bookmark"></i>
-								Bookmarkable URLs
-							</li>
-						</ul>
-						<a href="#" class="btn">Order now</a>
-					</div>
-				</div>
 			</div>
 		</div>
 	</div>
