@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
 from django.middleware.csrf import get_token
 from django.views.generic import CreateView, UpdateView
+from django.views.generic.edit import ModelFormMixin
 from django.core.urlresolvers import reverse
 
 from glynt.apps.document.views import DocumentView
@@ -18,23 +19,33 @@ from .forms import DocumentForm as DocumentTemplateForm, ClientDocumentForm
 class CreateDocumentView(CreateView):
     """ Create a new User Document from a Template """
     model = ClientCreatedDocument
+    form_class = ClientDocumentForm
     template_name='smoothe/document.html'
+    http_method_names = ['get', 'post']
+
+    def get_form_kwargs(self):
+        kwargs = super(ModelFormMixin, self).get_form_kwargs()
+
+        self.document = get_object_or_404(Document, slug=self.kwargs['slug'])
+
+        kwargs.update({
+         'request': self.request,
+         'source_document': self.document
+        })
+
+        return kwargs
 
     def get_context_data(self, **kwargs):
         context = super(CreateDocumentView, self).get_context_data(**kwargs)
 
         invitee_list = []
-        self.user_document = None
-        self.document = get_object_or_404(Document, slug=self.kwargs['slug'])
 
         context['csrf_raw_token'] = get_token(self.request)
         context['submit_url'] = reverse('doc:create_document', kwargs={'slug': self.document.slug})
         context['object'] = self.document
         context['document'] = self.document.body
         context['default_data'] = self.document.default_data_as_json()
-        context['userdoc'] = self.user_document
-        context['object'] = self.document
-        context['document'] = self.document.body
+        context['userdoc'] = None
 
         return context
 
@@ -43,6 +54,7 @@ class UpdateDocumentView(UpdateView):
     """ Edit a User Document """
     model = ClientCreatedDocument
     template_name='smoothe/document.html'
+    http_method_names = ['get', 'put']
 
     def get_context_data(self, **kwargs):
         context = super(UpdateDocumentView, self).get_context_data(**kwargs)

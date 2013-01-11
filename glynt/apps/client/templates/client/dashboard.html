@@ -66,7 +66,7 @@
         <div class="doc-body">
           <h2>{% trans 'New Document' %}</h2>
           {% if user.is_staff %}
-          <div class="span3 pull-right"><a href="{% url 'doc:create_template' %}" class="admin btn btn-warning" id="toggle-docs">{% trans 'Create Doc' %}</a></div>
+          <div class="span3 pull-right"><a href="{% url 'doc:create_template' %}" class="admin btn btn-warning" id="toggle-docs">{% trans 'Create New Template' %}</a></div>
           {% endif %}
           <ul>
             {% for d in public_document_list %}
@@ -74,7 +74,7 @@
                 {% if d.is_v1_doc %}
                 <a class="template-document" href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a>
                 {% else %}
-                <a class="template-document" href="{% url 'doc:create_documentument' slug=d.slug %}">{{ d.name }}</a>
+                <a class="template-document" href="{% url 'doc:create_document' slug=d.slug %}">{{ d.name }}</a>
                 {% endif %}
                 {% if user.is_staff %}- <a class="admin author_edit-document" href="{% url 'author:edit' pk=d.pk %}">edit</a>{% endif %}
             </li>
