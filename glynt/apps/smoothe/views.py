@@ -99,3 +99,9 @@ class CreateTemplateView(CreateView):
       context['form'] = self.get_form(self.get_form_class())
 
       return context
+
+
+class UpdateDocumentView(UpdateView):
+    template_name = 'smoothe/document-edit.html'
+    form_class = DocumentTemplateForm
+    model = Document
