@@ -117,6 +117,32 @@ $(document).ready(function(){
             $('body').help_text({target_element: $('#element_help_text')});
             $('body').glynt_progress();
 
+            $('form#document-form button.submit').on('click', function(event){
+                event.preventDefault();
+                var data = {
+                    csrfmiddlewaretoken: "{{ csrf_raw_token }}"
+                };
+
+                $.each(self.context, function(index, item) {
+                    data[item.name] = item.value;
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    url: $(this).closest('form').attr('href'),
+                    data: data,
+                })
+                .success(function(data, textStatus, jqXHR) {
+                    console.log('yay')
+                })
+                .error(function(jqXHR, textStatus, errorThrown) { 
+                    console.log('boo')
+                })
+                .complete(function() {
+                    console.log('complete')
+                });
+
+            });
         };
 
         self.init = function init() {

@@ -31,7 +31,7 @@ class Document(models.Model):
     slug = models.SlugField(blank=False, max_length=255)
     summary = models.TextField(blank=True, null=True)
     body = models.TextField(blank=True, null=True)
-    doc_status = models.IntegerField(choices=DOC_STATUS.get_choices(), blank=False)
+    doc_status = models.IntegerField(choices=DOC_STATUS.get_choices(), blank=False, default=DOC_STATUS.draft)
     is_public = models.BooleanField(default=True)
     doc_cats = models.ManyToManyField('DocumentCategory')
     tags = TaggableManager()
@@ -45,6 +45,9 @@ class Document(models.Model):
 
     def __unicode__(self):
       return u'%s' % (self.name, )
+
+    def get_absolute_url(self):
+        return reverse('doc:update', kwargs={'pk': self.pk})
 
     @property
     def is_v1_doc(self):
@@ -93,6 +96,19 @@ class ClientCreatedDocument(models.Model):
         return int(self.meta_data['num_signed'])
       return 0
 
+    @property
+    def num_invited(self):
+        if self.meta_data and 'num_invited' in self.meta_data:
+            return int(self.meta_data['num_invited'])
+        return 0
+
+    @property
+    def cookie_name(self):
+        return 'glynt-%s' % (self.pk, )
+
+    def get_absolute_url(self):
+        return reverse('doc:update_document', kwargs={'pk': self.pk})
+
     def get_qr_code(self):
         qr = qrcode.QRCode(
             version=1,
@@ -126,12 +142,6 @@ class ClientCreatedDocument(models.Model):
       self.meta_data['num_signed'] = len(self.meta_data['signers'])
       self.save()
 
-    @property
-    def num_invited(self):
-      if self.meta_data and 'num_invited' in self.meta_data:
-        return int(self.meta_data['num_invited'])
-      return 0
-
     def increment_num_invited(self, signature_id):
       """ Save the number of invitees, save the signature_id for uniqueness """
       if 'invitees' not in self.meta_data:
@@ -150,13 +160,6 @@ class ClientCreatedDocument(models.Model):
     def signed_signatories(self):
       """ Get list of people who have signed """
       return self.documentsignature_set.filter(is_signed=True)
-
-    def get_absolute_url(self):
-        return reverse('doc:my_view', kwargs={'slug': self.slug})
-
-    @property
-    def cookie_name(self):
-      return 'glynt-%s' % (self.pk, )
 
     def data_as_json(self):
       return json.dumps(self.data)

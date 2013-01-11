@@ -6,15 +6,17 @@
 <div class="row-fluid">
   <div class="span6">
     <h3>{% trans 'Document Details' %}</h3>
-    <form class="form-inline">
+    <form id="create-doc" class="form-inline" action="{% url 'doc:create' %}" method="post">{% csrf_token %}
       {{ form }}
+      <div class="form-actions">
+          <button id="create-doc-submit" type="submit" class="submit btn btn-primary">{% trans "Create" %}</button>
+      </div>
     </form>
   </div>
   <div id="sidebar" class="span3">&nbsp;</div>
   <div id="element_help_text"></div>
   <div class="span6 pull-right">
     <h3>{% trans 'Preview' %}</h3>
-    <p></p>
     <div id="document">{% show_loading modal='False' %}</div>
   </div>
 </div>
