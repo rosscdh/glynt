@@ -19,51 +19,42 @@ import urllib2
 
 
 class UserSignup(UserenaSignup):
-  """ Override the manager as we do some funky things """
-  objects = UserManager()
+    """ Override the manager as we do some funky things """
+    objects = UserManager()
 
 
 class ClientProfile(UserenaBaseProfile):
-  """ Base User Profile, where we store all the interesting information about users """
-  user = models.OneToOneField(User,
-                              unique=True,
-                              related_name='my_profile')
-  profile_data = JSONField(blank=True, null=True)
-  country = CountryField(default='US', null=True)
-  state = models.CharField(max_length=64, null=True)
+    """ Base User Profile, where we store all the interesting information about users """
+    user = models.OneToOneField(User, unique=True, related_name='my_profile')
+    profile_data = JSONField(blank=True, null=True)
+    country = CountryField(default='US', null=True)
+    state = models.CharField(max_length=64, null=True)
 
-  def short_name(self):
-    """ Returns A. LastName """
-    user = self.user
-    return u'%s. %s' % (user.first_name[0], user.last_name,)
+    @classmethod
+    def create(cls, **kwargs):
+        profile = cls(**kwargs)
+        profile.save()
+        return profile
 
-  def get_mugshot_url(self):
-    """ Override the default """
-    # @TODO on save to thumbnail image; write a task that
-    # processes remote urls and downloads them locally
-    url = super(ClientProfile, self).get_mugshot_url()
-    validate = URLValidator(verify_exists=False)
-    tmp_url = urllib2.unquote(url.replace(settings.MEDIA_URL,''))
-    try:
-      validate(tmp_url)
-      # remove the static url from it
-      url = tmp_url
-    except ValidationError:
-      pass
+    def short_name(self):
+        """ Returns A. LastName """
+        user = self.user
+        return u'%s. %s' % (user.first_name[0], user.last_name,)
 
-    return url
-
-
-class ClientContactsList(models.Model):
-  """ Model to store a list of the clients contacts in the form:
-  {
-  'name': '',
-  'picture': '',
-  'extra': {'id': <int>id, 'service': 'facebook', 'data_type': 'friends'}
-  }
-  """
-  user = models.OneToOneField(User)
-  data = JSONField(blank=True, null=True)
+    def get_mugshot_url(self):
+        """ Override the default """
+        # @TODO on save to thumbnail image; write a task that
+        # processes remote urls and downloads them locally
+        url = super(ClientProfile, self).get_mugshot_url()
+        validate = URLValidator(verify_exists=False)
+        tmp_url = urllib2.unquote(url.replace(settings.MEDIA_URL,''))
+        try:
+            validate(tmp_url)
+            # remove the static url from it
+            url = tmp_url
+        except ValidationError:
+            pass
+        return url
 
 
 @receiver(connect)
