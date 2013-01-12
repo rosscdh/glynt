@@ -42,7 +42,6 @@ class DocumentTemplate(models.Model):
 
     class Meta:
       ordering = ['name']
-      db_table = 'document'
 
     def __unicode__(self):
       return u'%s' % (self.name, )
@@ -64,7 +63,6 @@ class DocumentTemplateCategory(CategoryBase):
     """
     class Meta:
       verbose_name_plural = 'Document Categories'
-      db_table = 'documentcategory'
 
 
 class ClientCreatedDocument(models.Model):
@@ -88,7 +86,6 @@ class ClientCreatedDocument(models.Model):
     class Meta:
       unique_together = ('slug', 'owner',)
       ordering = ['-created_at', 'name']
-      db_table = 'clientcreateddocument '
 
     def __unicode__(self):
       return u'%s' % (self.name)
