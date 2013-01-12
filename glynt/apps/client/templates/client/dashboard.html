@@ -76,7 +76,7 @@
                 {% else %}
                 <a class="template-document" href="{% url 'doc:create_document' slug=d.slug %}">{{ d.name }}</a>
                 {% endif %}
-                {% if user.is_staff %}- <a class="admin author_edit-document" href="{% url 'doc:update' pk=d.pk %}">edit</a>{% endif %}
+                {% if user.is_staff %}- <a class="admin author_edit-document" href="{% url 'doc:update_document' pk=d.pk %}">edit</a>{% endif %}
             </li>
             {% endfor %}
           </ul>

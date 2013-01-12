@@ -87,7 +87,7 @@ class CreateTemplateView(CreateView):
         return initial
 
     def get_context_data(self, **kwargs):
-      context = super(CreateDocumentView, self).get_context_data(**kwargs)
+      context = super(CreateTemplateView, self).get_context_data(**kwargs)
 
       self.document = context['form'].instance
 

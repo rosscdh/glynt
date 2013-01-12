@@ -47,7 +47,7 @@ class Document(models.Model):
       return u'%s' % (self.name, )
 
     def get_absolute_url(self):
-        return reverse('doc:update', kwargs={'pk': self.pk})
+        return reverse('doc:update_template', kwargs={'pk': self.pk})
 
     @property
     def is_v1_doc(self):
