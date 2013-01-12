@@ -4,360 +4,172 @@
 {% load document_tags %}
 
 {% block prebody %}
-<style>
-
- /* GLOBAL STYLES
- -------------------------------------------------- */
- /* Padding below the footer and lighter body text */
-
- body {
-   padding-bottom: 40px;
-   color: #5a5a5a;
- }
 
 
-
- /* CUSTOMIZE THE NAVBAR
- -------------------------------------------------- */
-
- /* Special class on .container surrounding .navbar, used for positioning it into place. */
- .navbar-wrapper {
-   position: relative;
-   z-index: 10;
-   margin-top: 20px;
-   margin-bottom: -90px; /* Negative margin to pull up carousel. 90px is roughly margins and height of navbar. */
- }
-
-
-
- /* Navbar links: increase padding for taller navbar */
- .navbar .nav > li > a {
-   padding: 15px 20px;
- }
-
- /* Offset the responsive button for proper vertical alignment */
- .navbar .btn-navbar {
-   margin-top: 10px;
- }
-
-
-
- /* CUSTOMIZE THE NAVBAR
- -------------------------------------------------- */
-
- /* Carousel base class */
- .carousel {
-   margin-bottom: 60px;
- }
-
- .carousel .container {
-   position: absolute;
-   right: 0;
-   bottom: 0;
-   left: 0;
- }
-
- .carousel-control {
-   background-color: transparent;
-   border: 0;
-   font-size: 120px;
-   margin-top: 0;
-   text-shadow: 0 1px 1px rgba(0,0,0,.4);
- }
-
- .carousel .item {
-   height: 500px;
- }
- .carousel img {
-   height: 500px;
-   background-size: auto auto!important;
-   max-width:inherit;
-   float:right;
- }
-
- .carousel-caption {
-   background-color: transparent;
-   position: static;
-   max-width: 460px;
-   padding: 0 20px 20px 20px;
-   margin-bottom: 100px;
- }
- .carousel-caption h1{
-	font-size:38px;
-}
- .carousel-caption h1,
- .carousel-caption .lead {
-   margin: 0;
-   line-height: 1.25;
-   color: #FFF;
-   text-shadow: 0 1px 1px rgba(0,0,0,.4);
-   padding-bottom:20px;
- }
- .carousel-caption.dark h1,
- .carousel-caption.dark .lead {
-	color:#fff;
-   padding-bottom:20px;
-text-shadow:none;
-}
- .carousel-caption.dark p.lead{
-	color:#222;
-	
-}
-.carousel-caption.dark h1 span {
-	background-color:#69c3e5;
-	padding:5px 5px 5px 5px;
-	opacity:0.9
-}
-.carousel-caption.dark h1 span.blue {
-	background-color:#76c68b;
-}
- .carousel-caption .btn {
-   margin-top: 0px;
- 	font-size:20px;
-}
-
-
-
- /* MARKETING CONTENT
- -------------------------------------------------- */
-
- /* Center align the text within the three columns below the carousel */
- .marketing .span4 {
-   text-align: center;
- }
- .marketing h2 {
-   font-weight: normal;
- }
- .marketing .span4 p {
-   margin-left: 10px;
-   margin-right: 10px;
- }
-
-
- /* Featurettes
- ------------------------- */
-
- .featurette-divider {
-   margin: 80px 0; /* Space out the Bootstrap <hr> more */
- }
- .featurette {
-   padding-top: 120px; /* Vertically center images part 1: add padding above and below text. */
-   overflow: hidden; /* Vertically center images part 2: clear their floats. */
- }
- .featurette-image {
-   margin-top: -120px; /* Vertically center images part 3: negative margin up the image the same amount of the padding to center it. */
- }
-
- /* Give some space on the sides of the floated elements so text doesn't run right into it. */
- .featurette-image.pull-left {
-   margin-right: 40px;
- }
- .featurette-image.pull-right {
-   margin-left: 40px;
- }
-
- /* Thin out the marketing headings */
- .featurette-heading {
-   font-size: 50px;
-   font-weight: 300;
-   line-height: 1;
-   letter-spacing: -1px;
- }
-
-
-
- /* RESPONSIVE CSS
- -------------------------------------------------- */
-
- @media (max-width: 979px) {
-
-   .container.navbar-wrapper {
-     margin-bottom: 0;
-     width: auto;
-   }
-   .navbar-inner {
-     border-radius: 0;
-     margin: -20px 0;
-   }
-
-   .carousel .item {
-     height: 500px;
-   }
-   .carousel img {
-     width: auto;
-     height: 500px;
-   }
-
-   .featurette {
-     height: auto;
-     padding: 0;
-   }
-   .featurette-image.pull-left,
-   .featurette-image.pull-right {
-     display: block;
-     float: none;
-     max-width: 40%;
-     margin: 0 auto 20px;
-   }
- }
-
-
- @media (max-width: 767px) {
-
-   .navbar-inner {
-     margin: -20px;
-   }
-
-   .carousel {
-     margin-left: -20px;
-     margin-right: -20px;
-   }
-   .carousel .container {
-
-   }
-   .carousel .item {
-     height: 300px;
-   }
-   .carousel img {
-     height: 300px;
-   }
-   .carousel-caption {
-     width: 65%;
-     padding: 0 70px;
-     margin-bottom: 40px;
-   }
-   .carousel-caption h1 {
-     font-size: 30px;
-   }
-   .carousel-caption .lead,
-   .carousel-caption .btn {
-     font-size: 18px;
-   }
-
-   .marketing .span4 + .span4 {
-     margin-top: 40px;
-   }
-
-   .featurette-heading {
-     font-size: 30px;
-   }
-   .featurette .lead {
-     font-size: 18px;
-     line-height: 1.5;
-   }
-
- }
- </style>
-
-
-<!-- Masthead
-================================================== -->
-
-
-
-<!-- Carousel
-================================================== -->
-<div id="myCarousel" class="carousel slide">
-  <div class="carousel-inner">
-    <div class="item active">
-        <img src="/static/img/homepage/slide-group.png" alt="">
-      <div class="container">
-        <div class="carousel-caption dark">
-          <h1><span>A better legal service is coming.</span></h1>
-          <p class="lead">Legal services are unnecessarily expensive, complicated and disconnected. We're working hard to change that.</p>
-          <a class="btn btn-large btn-primary" href="#">Sign up today</a>
-        </div>
-      </div>
-    </div>
-    <div class="item">
-      <img src="/static/img/homepage/slide-fortune.png" alt="">
-      <div class="container">
-        <div class="carousel-caption dark">
-          <h1><span class="blue">Efficiency. The key to saving time and money.</span></h1>
-          <p class="lead">Technology can help you save time and money </p>
-          <a class="btn btn-large btn-primary" href="#">Learn more</a>
-        </div>
-      </div>
-    </div>
-    <div class="item">
-        <img src="/static/img/homepage/slide-orrick.png" alt="">
-      <div class="container">
-        <div class="carousel-caption">
-          <h1>A historic law firm joins LawPal.</h1>
-          <p class="lead">Orrick, Herrington &amp; Sutcliffe become LawPal's launch partner.</p>
-          <a class="btn btn-large btn-primary" href="#">Read more</a>
-        </div>
-      </div>
-    </div>
-  </div>
-  <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-  <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
-</div><!-- /.carousel -->
-
-
-
-<!-- Marketing messaging and featurettes
-================================================== -->
-<!-- Wrap the rest of the page in another container to center all the content. -->
-
-<div class="container marketing">
-
-  <!-- Three columns of text below the carousel -->
-  <div class="row">
-    <div class="span4">
-      <img class="img-circle" src="/static/img/homepage/folder.png">
-      <h2>Legal Documents</h2>
-      <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
-      <p><a class="btn" href="#">View details &raquo;</a></p>
-    </div><!-- /.span4 -->
-    <div class="span4">
-      <img class="img-circle" src="/static/img/homepage/cycle.png">
-      <h2>Management</h2>
-      <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-      <p><a class="btn" href="#">View details &raquo;</a></p>
-    </div><!-- /.span4 -->
-    <div class="span4">
-      <img class="img-circle" src="/static/img/homepage/advice.png">
-      <h2>Advice</h2>
-      <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-      <p><a class="btn" href="#">View details &raquo;</a></p>
-    </div><!-- /.span4 -->
-  </div><!-- /.row -->
-
-
-  <!-- START THE FEATURETTES -->
-
-  <!-- <hr class="featurette-divider">
-
-    <div class="featurette">
-      <img class="featurette-image" src="/static/img/homepage/screenshot.png" align="center">
-      <h2 class="featurette-heading">First featurette headling. <span class="muted">It'll blow your mind.</span></h2>
-      <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
-    </div>
-
-    <hr class="featurette-divider">
-
-    <div class="featurette">
-      <img class="featurette-image pull-left" src="../assets/img/examples/browser-icon-firefox.png">
-      <h2 class="featurette-heading">Oh yeah, it's that good. <span class="muted">See for yourself.</span></h2>
-      <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
-    </div>
-
-    <hr class="featurette-divider">
-
-    <div class="featurette">
-      <img class="featurette-image pull-right" src="../assets/img/examples/browser-icon-safari.png">
-      <h2 class="featurette-heading">And lastly, this one. <span class="muted">Checkmate.</span></h2>
-      <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
-    </div>
-
-    <hr class="featurette-divider"> -->
-  
-  <!-- /END THE FEATURETTES -->
+<div id="hero">
+	<div class="container">
+		<!-- starts carousel -->
+		<div class="row animated fadeInDown">
+			<div class="span12 home">
+				<h1>Legal documents at your fingertips</h1>
+				<h2 class="sub">Meet LawPal, get your legal documents sorted and move on with your day. </h2>
+				<div class="row">
+					<div class="span6 screen">
+						<img src="/static/css/img/imac-home.png" width="413" height="347" alt="Imac Home" align="center">
+					</div>
+					<div class="span6 features">
+						<h3>LawPal gives you :</h3>
+						<ul id="hero-features">
+							<li class="library">Growing document library</li>
+							<li class="draft">Simple online drafting</li>
+							<li class="sign">e-Signing, commenting and sharing</li>
+							<li class="sync">Document storage and cloud sync</li>
+						</ul>
+						<h3>We're in beta, <span>subscribe</span> : </h3>
+						<form action="http://lawpal.us6.list-manage.com/subscribe/post?u=a28c24eb98757a383d43fb6dc&amp;id=dfe63d77dd" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate form-inline" target="_blank" novalidate>
+							<input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+							<input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="btn btn-success">
+						</form>
+					</div>
+				</div>
+			</div>
+				{% comment %}
+				<div id="myCarousel" class="carousel slide">
+					<!-- carousel items -->
+					<div class="carousel-inner">
+						<!-- slide -->
+						<div class="active item slide1">
+							<div class="row">
+								<div class="span5">
+									<img src="{{ STATIC_URL }}css/img/slide1.png" alt="slide1" />
+								</div>
+								<div class="span5">
+									<h1>
+										<br />
+										Legal documents. Done.
+									</h1>
+									<p>
+										Create customized legal documents for your business in minutes, get them signed and get on with your day. 
+									</p>
+									<a href="https://wrapbootstrap.com/theme/measure-responsive-business-theme-WB0D95984" class="btn btn-success btn-large">
+										Join LawPal Beta
+									</a>
+								</div>
+							</div>
+						</div>
+						<!-- slide -->
+						<div class="item slide2">
+							<div class="row">
+								<div class="span4 animated fadeInUpBig">
+									<h1>Fully responsive blog template</h1>
+									<p>
+										Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nisi ut aliquip ex ea commodo consequat.
+									</p>
+									<a href="blog.html" class="btn btn-success btn-large">
+										Watch it now!
+									</a>
+								</div>
+								<div class="span6 animated fadeInDownBig">
+									<img src="{{ STATIC_URL }}css/img/slide2.png" alt="slide2" />
+								</div>
+							</div>
+						</div>
+						<!-- slide -->
+						<!-- <div class="item slide3 animated fadeInUpBig">
+													<img src="{{ STATIC_URL }}css/img/slide3.png" alt="slide3" />
+												</div> -->
+					</div>
+					<!-- Carousel nav -->
+					<a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+					<a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+				</div>
+				{% endcomment %}
+			</div>
+		</div>
+	</div>
 </div>
-<br />
-<br />
+<div id="intro">
+	<div class="container">
+		<h1>We are build a platform to power the future of online legal services.  </h1>
+	</div>
+</div>
 
-<!-- /.container -->
+<!-- features -->
+<div id="features">
+	<div class="container">
+		<!-- header -->
+		<h2 class="section_header">
+			<hr class="left visible-desktop">
+			<span>Features</span>
+			<hr class="right visible-desktop">
+		</h2>
 
-{% endblock %}
+		<!-- feature list -->
+		<div class="row">
+			<div class="span4 feature">
+				<img src="{{ STATIC_URL }}css/img/feature1.jpg" alt="feature1" class="thumb" />
+				<h3>
+					<i class="i_cloud"></i> Cloud feature
+				</h3>
+				<p class="description">
+					There are many variations of passages of Lorem Ipsum available, but the 
+					majority have suffered alteration in some form, by injected humour, or randomised 
+					words which don't look even slightly believable.
+				</p>
+				<a href="#" class="btn btn-default">more</a>
+			</div>
+			<div class="span4 feature">
+				<img src="{{ STATIC_URL }}css/img/feature2.jpg" alt="feature2" class="thumb" />
+				<h3>
+					<i class="i_chart"></i> Another feature
+				</h3>
+				<p class="description">
+					There are many variations of passages of Lorem Ipsum available, but the 
+					majority have suffered alteration in some form, by injected humour, or randomised 
+					words which don't look even slightly believable.
+				</p>
+				<a href="#" class="btn btn-default">more</a>
+			</div>
+			<div class="span4 feature">
+				<img src="{{ STATIC_URL }}css/img/feature3.jpg" alt="feature3" class="thumb" />
+				<h3>
+					<i class="i_movil"></i> Another feature
+				</h3>
+				<p class="description">
+					There are many variations of passages of Lorem Ipsum available, but the 
+					majority have suffered alteration in some form, by injected humour, or randomised 
+					words which don't look even slightly believable.
+				</p>
+				<a href="#" class="btn btn-default">more</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- starts testimonial -->
+<div id="testimonials">
+	<div class="container">
+		<div class="controls">
+			<hr>
+		</div>
+		<div class="phrases_wrapper">
+			<div class="phrase">
+				<div class="row">
+					<div class="span7">
+						<p class="testimony">
+							There are many variations of passages words which don't look even slightly passage of anything embarrassing hidden in the middle.
+							<span>"</span>
+						</p>
+					</div>
+					<div class="span3 offset1">
+						<div class="pic">
+							<img src="{{ STATIC_URL }}css/img/pic1.jpg" alt="author" class="{{ STATIC_URL }}css/img-circle" />
+							<span class="name">Alejandra Galvan Castillo</span>
+							<span class="position">Bootstrap wizard</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>{% endblock %}

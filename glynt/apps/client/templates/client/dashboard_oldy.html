@@ -1,0 +1,294 @@
+{% extends 'client/base.html' %}
+{% load i18n humanize %}
+{% load glynt_helpers %}
+{% load activity %}
+{% load templatetag_handlebars %}
+{% load url from future %}
+
+{% block bodyclass %}dashboard{% endblock %}
+
+{% block body %}
+
+<div class="row">
+      <div class="span3 sidebar">
+		  <br />
+		  <a href="#/list/templates/create_new" class="btn btn-success btn-large" id="toggle-docs">{% trans 'Create New Document' %}</a>
+          <ul class="nav nav-list">
+            <li style="margin-left:15px"></li>
+            <li class="divider"></li>
+              <li><a href="#/list/my_documents/all"> {% trans 'All Documents' %}</a></li>
+              <li><a href="#/list/activity"> {% trans 'Activity' %}</a></li>
+          </ul>
+      </div>
+	      <div id="my_docs_list" class="span9 view default">
+	        <div class="dash-panel">
+	          <h2 class="title">{% trans 'Your Documents' %}</h2>
+	          <table id="my-documents" class="table table-stripped table-border table-hover ">
+	          <tr>
+	              <th>{% trans 'Document Name' %}</th>
+	              <th>{% trans 'Status' %}</th>
+	              <th><span class="pull-right">{% trans 'Action' %}</span></th>
+	          </tr>
+	          {% for d in my_document_list %}
+	          <tr>
+	              <td class="document-title">
+	                <a href="{% url 'document:my_review' slug=d.slug %}" rel="tooltip" title="{% trans 'Created by' %} {{ d.owner.get_profile.short_name|default:d.owner.username }}" class="doc-title">{{ d.name }}</a>
+	                <br/><span class="created">{% trans 'Created' %} {% moment d.created_at d.created_at %}</span>
+	              </td>
+	              <td class="document-status">
+	                {% document_status d %}
+	              <td class="document-action">
+	                <div class="btn-group pull-right">
+	                  <button class="btn dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i> <span class="caret"></span></button>
+	                  <ul class="dropdown-menu">
+	                    <li><a id="edit-{{ d.pk }}" class="small" href="{% url 'document:my_view' slug=d.slug %}">{% trans 'Edit' %}</a></li>
+	                    <li><a id="clone-{{ d.pk }}" href="#clone" data-url="{% url 'document:my_clone' pk=d.pk %}" data-pk="{{ d.pk }}" class="clone-my-document">{% trans 'Clone' %}</a></li>
+	                    <li><a id="export-{{ d.pk }}" href="{% url 'export:as_pdf' slug=d.slug %}" target="_BLANK" data-url="{% url 'export:as_pdf' slug=d.slug %}" data-pk="{{ d.pk }}" class="">{% trans 'Download PDF' %}</a></li>
+	                    <li><a id="delete-{{ d.pk }}" href="#delete" data-url="{% url 'document:my_delete' pk=d.pk %}" data-pk="{{ d.pk }}" class="delete-my-document">{% trans 'Delete' %}</a></li>
+	                  </ul>
+	                </div>
+	              </td>
+	          </tr>
+	          {% endfor %}
+	          </table>
+	        </div>
+	      </div>
+
+	      <div id="activity_list" class="span9 view hide">
+	        <div class="dash-panel">
+	          <h3>{% trans 'Activity' %}</h3>
+	          <ul class="activity activity-large">
+	          {% user_activity_stream request.user 50 %}
+	          </ul>
+	        </div>
+	      </div>
+
+	      <div id="templates_list" class="span9 view hide">
+	        <div class="dash-panel">
+	          <h2>{% trans 'New Document' %}</h2>
+	          {% if user.is_staff %}
+	          <div class="span3 pull-right"><a href="{% url 'doc:create' %}" class="admin btn btn-warning" id="toggle-docs">{% trans 'Create Doc' %}</a></div>
+	          {% endif %}
+	          <ul>
+	            {% for d in public_document_list %}
+	            <li>
+	                {% if d.is_v1_doc %}
+	                <a class="template-document" href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a>
+	                {% else %}
+	                <a class="template-document" href="{% url 'doc:view' slug=d.slug %}">{{ d.name }}</a>
+	                {% endif %}
+	                {% if user.is_staff %}- <a class="admin author_edit-document" href="{% url 'author:edit' pk=d.pk %}">edit</a>{% endif %}
+	            </li>
+	            {% endfor %}
+	          </ul>
+	        </div>
+	      </div>
+	  
+</div>
+{% endblock %}
+
+{% block css %}
+<style>
+ul.activity{
+  margin:0px;
+  padding:0px;
+  list-style: none;
+}
+ul.activity li{
+  padding:5px 0px;
+  border-bottom:solid #ccc 1px;
+}
+ul.activity li:last{
+  border:0px;
+}
+</style>
+{% endblock %}
+
+{% block js %}
+
+{% tplhandlebars "document-template-item" %}
+<div class="span2" style="background-color:{{color}}"><a class="template-document" href="{{url}}">{{text}}</a></div>
+{% endtplhandlebars %}
+
+<script id="document-controls" type="text/javascript">
+$(document).ready(function(){
+// ----- Document Template Select -----
+var app = $.sammy(function() {
+    var self = this;
+    self.views = $('div.view');
+    self.nav = $('ul.nav-list li a');
+
+    var hb_templates_source   = $("script#template_list").html();
+    var hb_templates_list = Handlebars.compile(hb_templates_source);
+
+    this.get('#/', function() {
+        this.redirect('#/list/my_documents/all');
+    });
+
+    this.get('#/list/my_documents/all', function() {
+        self.show($('div#my_docs_list'));
+    });
+    this.get('#/list/my_documents/incomplete', function() {
+        self.show($('div#my_docs_list'));
+    });
+    this.get('#/list/my_documents/out_for_signing', function() {
+        self.show($('div#my_docs_list'));
+    });
+    this.get('#/list/my_documents/recently_signed', function() {
+        self.show($('div#my_docs_list'));
+    });
+    this.get('#/list/my_documents/awaiting_your_signature', function() {
+        self.show($('div#my_docs_list'));
+    });
+
+    this.get('#/list/activity', function() {
+        self.show($('div#activity_list'));
+    });
+
+    this.get('#/list/templates/create_new', function() {
+        self.show($('div#templates_list'));
+    });
+
+    this.hide_all = function hide_all() {
+        self.nav.removeClass('selected');
+        $.each(self.views, function(index, item) {
+            $(item).hide();
+        });
+    };
+    this.show = function show_view(view_list) {
+        if ($.isArray(view_list) == false) {
+            view_list = [view_list];
+        }
+        self.hide_all();
+        $('[href="'+window.location.hash+'"]').addClass('selected');
+        $.each(view_list, function(index, item) {
+            item.show();
+        });
+    }
+    
+});
+
+// start the application
+app.run('#/');
+
+// ----- My Document list options -----
+  $('a.export-pdf').live('click', function(event){
+    event.preventDefault();
+    var data = {
+        csrfmiddlewaretoken: '{{ csrf_raw_token }}',
+        md: '',
+        id: $(this).attr('data-pk')
+    };
+
+    $.ajax({
+      type: 'POST',
+      url: $(this).attr('data-url'),
+      data: data,
+    })
+    .success(function(data, textStatus, jqXHR) {
+      console.log(data)
+    })
+    .error(function() { 
+        console.log('Error in Javascript event')
+    })
+    .complete(function() {
+    });
+  });
+
+  deleted_doc = null;
+
+  $('a.delete-my-document').live('click', function(event){
+    event.preventDefault();
+    var self = $(this);
+    var data = {
+        csrfmiddlewaretoken: '{{ csrf_raw_token }}'
+    };
+    $.ajax({
+      type: 'POST',
+      url: $(this).attr('data-url'),
+      data: data,
+    })
+    .success(function(data, textStatus, jqXHR) {
+      data = data[0];
+      var div = self.closest('div');
+      var td = self.closest('td');
+      var tr = self.closest('tr');
+      deleted_doc = td.html()
+      div.fadeOut('slow', function(){
+        $(this).remove();
+        td.html(data.message);
+      });
+
+    })
+    .error(function(jqXHR, textStatus, errorThrown) { 
+      console.log(jqXHR)
+      console.log(textStatus)
+      console.log(errorThrown)
+      console.log('Error in Javascript event')
+    })
+    .complete(function() {
+    });
+  });
+
+  $('a.undelete-my-document').live('click', function(event){
+    event.preventDefault();
+
+    var self = $(this);
+    var data = {
+        csrfmiddlewaretoken: '{{ csrf_raw_token }}'
+    };
+    $.ajax({
+      type: 'POST',
+      url: $(this).attr('href'),
+      data: data,
+    })
+    .success(function(data, textStatus, jqXHR) {
+      data = data;
+
+      var div = self.closest('div');
+      var td = self.closest('td');
+      var tr = self.closest('tr');
+
+      td.html(deleted_doc);
+      $(deleted_doc).children().show();
+
+    })
+    .error(function(jqXHR, textStatus, errorThrown) { 
+      console.log(jqXHR)
+      console.log(textStatus)
+      console.log(errorThrown)
+      console.log('Error in Javascript event')
+    })
+    .complete(function() {
+    });
+  });
+
+  $('a.clone-my-document').live('click', function(event){
+    event.preventDefault();
+    var self = $(this);
+    var data = {
+        csrfmiddlewaretoken: '{{ csrf_raw_token }}'
+    };
+    $.ajax({
+      type: 'POST',
+      url: $(this).attr('data-url'),
+      data: data,
+    })
+    .success(function(data, textStatus, jqXHR) {
+      data = data[0];
+      window.location = data.url
+    })
+    .error(function(jqXHR, textStatus, errorThrown) { 
+      console.log(jqXHR)
+      console.log(textStatus)
+      console.log(errorThrown)
+      console.log('Error in Javascript event')
+    })
+    .complete(function() {
+    });
+  });
+
+
+});
+</script>
+{% endblock %}

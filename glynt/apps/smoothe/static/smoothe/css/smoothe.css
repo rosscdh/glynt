@@ -65,27 +65,29 @@ div#sidebar {
 
 div#progress {
 /*position: fixed;*/
-position:absolute;
+position:fixed;
 width: 45px;
 left: 0;
+top:0;
 }
 ul#glynt_progress {
-position:absolute;
 list-style-type: none;
 margin-left: 0px;
 min-height: 100%;
+
 }
 ul#glynt_progress li {
-height: 5%;
-width: 25px;
+height: 35px;
+width: 35px;
 background-color: #bfd547;
 transition: width 0.2s;
 transition: width 0.2s;
 -moz-transition: width 0.2s; /* Firefox 4 */
 -webkit-transition: width 0.2s; /* Safari and Chrome */
 -o-transition: width 0.2s; /* Opera */
-opacity:0.3;
+opacity:0.7;
 color:#000;
+background-image:none!important;
 }
 ul#glynt_progress li.choice {
 background-color: #78c68e;
@@ -98,5 +100,6 @@ opacity: 1;
 background-color: #bfd547;
 }
 ul#glynt_progress li:hover, .hover_state {
-width: 45px;
+width: 65px;
+opacity:0.9;
 }

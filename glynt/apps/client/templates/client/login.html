@@ -5,29 +5,66 @@
 
 
 {% block body %}
-<div class="container">
+<!-- <div class="container">
   <div class="row">
     <br />
     <br />
     <br />
     <div class="span5 offset1">
-      <form id="user-login" class="form-horizontal" action="{% url 'client:login' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}" method="post">{% csrf_token %}
-      {{ form }}
-      <br/>
-      <div class="form-actions">
-          <button id="user-login-submit" type="submit" class="submit btn btn-primary">{% trans "Login" %}</button>
-      </div>
-      </form>
+     
     
     </div>
     <div class="span4 offset1">
       <fieldset>
         <legend>Social Sign In</legend>
-        {% include 'client/partials/signin_providers.html' %}
+        
       </fieldset><em></em>
     </div>
   </div>
+</div> -->
+
+
+<div id="box_login">
+   <div class="container">
+       <div class="span12 box_wrapper">
+           <div class="span12 box">
+               <div>
+                   <div class="head">
+                       <h4>{% trans "Log into your account" %}</h4>
+                   </div>
+                   <div class="social">
+                       <a class="face_login" href="#" id="connect-facebook">
+                           <span class="face_icon">
+                              <img src="{{ STATIC_URL }}css/img/i_face.png" alt="fb" alt=""/>
+                           </span>
+                           <span class="text">{% trans "Sign in with Facebook" %}</span>
+                       </a>
+                       <div class="division">
+                           <hr class="left">
+                           <span>{% trans "or" %}</span>
+                           <hr class="right">
+                       </div>
+                   </div>
+                   <div class="form">
+				       <form id="user-login" class="form-horizontal" action="{% url 'client:login' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}" method="post">
+						   {% csrf_token %}
+				           {{ form.username }}
+				           {{ form.password }}
+				       		<br/>
+							<button id="user-login-submit" type="submit" class="submit btn">{% trans "Login" %}</button>
+				       </form>
+                   </div>
+               </div>
+           </div>
+           <p class="already">Don't have an account? <a href="{% url 'client:signup' %}"> {% trans "Sign Up" %}</a></p>
+       </div>
+   </div>
 </div>
+
+{% block extrahead %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/theme/signin.css">
+{% endblock %}
+
 
 {% show_loading %}
 

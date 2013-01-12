@@ -10,7 +10,10 @@
 
     {% compress css %}
     <link href="{{ STATIC_URL }}bootstrap/css/bootstrap.css" rel="stylesheet">
-    <link href="{{ STATIC_URL }}css/ml.css" rel="stylesheet" charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/theme/theme.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/theme/animate.css">
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
+    <!-- <link href="{{ STATIC_URL }}css/ml.css" rel="stylesheet" charset="utf-8" /> -->
     <link href="{{ STATIC_URL }}js/select2/select2.css" rel="stylesheet" charset="utf-8" />
     <link href="{{ STATIC_URL }}css/errors.css" rel="stylesheet" charset="utf-8" />
     <link href="{{ STATIC_URL }}css/jquery-ui-theme.css" rel="stylesheet" charset="utf-8" />
@@ -40,47 +43,65 @@
 
   <body data-spy="scroll" data-target=".subnav" data-offset="50" class="preview {% block bodyclass %}{% endblock %}">
   {% block navbar %}
-  <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-          <div class="container">
+  
+  <a href="#" class="scrolltop">
+         <span>up</span>
+     </a>
+     <!-- begins navbar -->
+ 	<div class="navbar navbar-fixed-top">
+       <div class="navbar-inner">
+         <div class="container">
+     		<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+ 	            <span class="icon-bar"></span>
+ 	            <span class="icon-bar"></span>
+ 	            <span class="icon-bar"></span>
+           	</a>
             {% if request.user.is_authenticated %}
-              <a class="brand" href="/client">
-                  {{ PROJECT_NAME }}
-              </a>
+            	<a class="brand" data-section="body" href="/client">
+ 	               <img src="/static/css/img/logo.png">
+              	</a>
             {% else %}
-              <a class="brand" href="/">
-                  {{ PROJECT_NAME }}
-              </a>
+	        	<a class="brand" data-section="body" href="/">
+	               <img src="/static/css/img/logo.png">
+	           </a>
             {% endif %}
-            <form class="navbar-search pull-right" action="">
-              <input type="text" class="search-query span2" placeholder="Search">
-            </form>
-            <p class="pull-right">
-            <ul class="nav pull-right">
-                {% if request.user.is_authenticated %}
-                <li><a href="{% url 'client:dashboard' %}">{% trans 'Dashboard' %}</a></li>
-                <li class="divider-vertical"></li>                    
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="{{ request.user.get_profile.get_mugshot_url }}" width="22" height="22"> {{request.user.first_name}} {{request.user.last_name}}<b class="caret"></b></a>
-                  <ul class="dropdown-menu">
-                        <li><a id="user-profile" class="" href="{% url 'userena_profile_detail' username=request.user.username %}">{% trans 'Profile' %}</a></li>
-                        <li><a id="user-logout" class="" href="{% url 'socialregistration:logout' %}">{% trans 'Logout' %}</a></li>
-                  </ul>
-                </li>
-                {% else %}
-                <li class=""><a id="user-signup-link" class="" href="{% url 'client:signup' %}">{% trans 'Sign Up' %}</a></li>
-                <li><a id="user-explore-link" class="" href="#">{% trans 'Explore' %}</a></li>
-                <li><a id="user-blog-link" class="" href="#">{% trans 'Blog' %}</a></li>
-                <li><a id="user-login-link" class="" href="{% url 'client:login' %}">{% trans 'Sign In' %}</a></li>
-                {% endif %}
-            </ul>
-            </p>
-          </div> <!-- /container -->
-      </div> <!-- /navbar-inner -->
-  </div> <!-- /navbar -->
+
+ 		  	<div class="nav-collapse collapse">
+                 <ul class="nav pull-right">
+                     
+	                 {% if request.user.is_authenticated %}
+	                 <li><a href="{% url 'client:dashboard' %}">{% trans 'Dashboard' %}</a></li>
+	                 <li class="divider-vertical"></li>                    
+	                 <li class="dropdown">
+	                   <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="{{ request.user.get_profile.get_mugshot_url }}" width="22" height="22"> {{request.user.first_name}} {{request.user.last_name}}<b class="caret"></b></a>
+	                   <ul class="dropdown-menu">
+	                         <li><a id="user-profile" class="" href="{% url 'userena_profile_detail' username=request.user.username %}">{% trans 'Profile' %}</a></li>
+	                         <li><a id="user-logout" class="" href="{% url 'socialregistration:logout' %}">{% trans 'Logout' %}</a></li>
+	                   </ul>
+	                 </li>
+	                 {% else %}
+                     <li><a href="#" class="scroller" data-section="#features">Features</a></li>
+                     <li><a href="#" class="scroller" data-section="#pricing">Pricing</a></li>
+                     <li><a href="#" class="scroller" data-section="#footer">Contact us</a></li>
+                     <li><a href="blog.html">Blog</a></li>
+	                 <li class=""><a id="user-signup-link" class="btn-header" href="{% url 'client:signup' %}">{% trans 'Sign Up' %}</a></li>
+	                 <li><a id="user-login-link" class="btn-header" href="{% url 'client:login' %}">{% trans 'Sign In' %}</a></li>
+	                 {% endif %}
+					 
+					 
+                 </ul>
+ 	        </div>
+         </div>
+       </div>
+     </div>
+     <!-- ends navbar -->
+  
+ 
+ 
+ 
   {% endblock %}
   {% block prebody %}{% endblock %}
-    <div class="container-fluid">
+    <div class="container">
       <ul id="messages">
           {% if messages %}
           {% for message in messages %}
@@ -89,20 +110,93 @@
           {% endif %}
       </ul>
       {% block body %}{% endblock %}
-	  {% block footer %}
-      <div class="row" id="footer">
-		<br />
-        <div class="span12">
-			<footer>
-			        <p class="pull-right"><a href="#">Back to top</a></p>
-			        <p>© 2012 LawPal Ltd. · <a href="#">Privacy</a> · <a href="#">Terms</a> · <a href="#">Legal</a></p>
-			      </footer>
-          
-        </div>
-      <div>
-	  {% endblock %}
-    </div>
 
+    </div>
+  {% block footer %}
+  <!-- starts footer -->
+      <div id="footer"{% if request.user.is_authenticated %} class="dash"{% endif %}>
+          <div class="container">
+              {% if not request.user.is_authenticated %}
+              <div class="row">
+                  <div class="span8">
+                      <h3>From the Blog</h3>
+                      <div class="blog_post">
+                          <div class="row">
+                              <div class="span2">
+                                  <a href="blog.html">
+                                      <img src="{{ STATIC_URL }}css/img/pic_blog.png" alt="post image" class="{{ STATIC_URL }}css/img-circle" />
+                                  </a>
+                              </div>
+                              <div class="span4">
+                                  <a href="blog.html" class="title">
+                                      Lorem Ipsum is simply dummy 
+                                  </a>
+                                  <div class="intro">
+                                      There are many variations of passages of Lorem alteration in some form by injected look even slightly believable.
+                                  </div>
+                                  <div class="date">
+                                      Oct 22. 2012
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="span4 contact_us">
+                      <h3>Contact Us</h3>
+                      <form class="form-horizontal">
+                          <div class="field">
+                              <div class="label_field">
+                                  <label for="inputName">Name</label>
+                              </div>
+                              <input type="text" id="inputName" />
+                          </div>
+
+                          <div class="field">
+                              <div class="label_field">
+                                  <label for="inputEmail">Email</label>
+                              </div>
+                              <input type="text" id="inputEmail" />
+                          </div>
+
+                          <div class="field">
+                              <div class="label_field">
+                                  <label for="inputCity">City</label>
+                              </div>
+                              <input type="text" id="inputCity" />
+                          </div>
+
+                          <div class="field">
+                              <div class="label_field">
+                                  <label for="inputComment">Comments</label>
+                              </div>
+                              <textarea name="comments"></textarea>
+                          </div>
+                          <button type="submit" class="btn">Send</button>
+                      </form>
+                  </div>
+              </div>
+              {% endif %}
+              <hr>
+              <div class="row copyright">
+                  <div class="span5">
+                      <h3>Social</h3>
+                      <a href="#" class="social fb">
+                          <i class="i_facebook"></i>
+                      </a>
+                      <a href="#" class="social tw">
+                          <i class="i_twitter"></i>
+                      </a>
+                      <a href="#" class="social yt">
+                          <i class="i_youtube"></i>
+                      </a>
+                  </div>
+                  <div class="span2 offset5 copy">
+                      <p>{% now "Y" %} - {{ PROJECT_NAME }} Inc</p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  {% endblock %}
     {% compress js %}
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui-1.8.18.min.js"></script>
@@ -120,6 +214,8 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/flashcanvas.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.signaturepad.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/json2.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/theme.js"></script>
+	
     {% moment_js %}
     <script type="text/javascript" src="{{ STATIC_URL }}js/moment/moment.min.js"></script>
     {% handlebars_js %}
@@ -134,7 +230,7 @@
     $(document).ready(function(){
       $('body').tooltip({
         selector: '[rel=tooltip]',
-        placement: 'top',
+        placement: 'right',
         animation: true,
         delay: { show: 50, hide: 5 }
       });

@@ -59,7 +59,7 @@
                     });
 
                 li.tooltip({
-                    placement: 'top'
+                    placement: 'right'
                 });
                 self.$element.append(li);
              }
