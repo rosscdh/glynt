@@ -25,9 +25,11 @@
 
 1. pip install -r requirements.txt : install update the required libraries (append --upgrade if you are not sure)
 
+
 # Default fixtures
 
 1. python manage.py loaddata sites document_category document.xml flyform.xml
+
 
 ## Fix Fixtures
 

@@ -29,8 +29,10 @@ class Document(models.Model):
     owner = models.ForeignKey(User)
     name = models.CharField(max_length=128, blank=False)
     slug = models.SlugField(blank=False, max_length=255)
-    summary = models.TextField(blank=True, null=True)
-    body = models.TextField(blank=True, null=True)
+    acronym = models.CharField(max_length=64, blank=True)
+    summary = models.CharField(max_length=255, blank=True)
+    description = models.TextField(blank=True)
+    body = models.TextField(blank=True)
     doc_status = models.IntegerField(choices=DOC_STATUS.get_choices(), blank=False, default=DOC_STATUS.draft)
     is_public = models.BooleanField(default=True)
     doc_cats = models.ManyToManyField('DocumentCategory')
@@ -47,7 +49,7 @@ class Document(models.Model):
       return u'%s' % (self.name, )
 
     def get_absolute_url(self):
-        return reverse('doc:update', kwargs={'pk': self.pk})
+        return reverse('doc:update_template', kwargs={'pk': self.pk})
 
     @property
     def is_v1_doc(self):

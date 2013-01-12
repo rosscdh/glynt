@@ -6,7 +6,7 @@
 <div class="row-fluid">
   <div class="span6">
     <h3>{% trans 'Document Details' %}</h3>
-    <form id="create-doc" class="form-inline" action="{% url 'doc:create' %}" method="post">{% csrf_token %}
+    <form id="create-doc" class="form-inline" action="{% url 'doc:create_template' %}" method="post">{% csrf_token %}
       {{ form }}
       <div class="form-actions">
           <button id="create-doc-submit" type="submit" class="submit btn btn-primary">{% trans "Create" %}</button>
