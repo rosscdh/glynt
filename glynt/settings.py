@@ -154,6 +154,8 @@ PROJECT_APPS = (
     'glynt.apps.client',
     # The v2 Document Signing system
     'glynt.apps.smoothe',
+    # The Flyform
+    'glynt.apps.flyform',
     # The Document Signing system
     'glynt.apps.sign',
     # The Document Export system
