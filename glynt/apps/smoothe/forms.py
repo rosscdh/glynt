@@ -4,17 +4,17 @@ from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 from bootstrap.forms import BootstrapModelForm, Fieldset
 
-from glynt.apps.document.models import Document
+from glynt.apps.document.models import DocumentTemplate
 from glynt.apps.document.models import ClientCreatedDocument
 
 
 class DocumentForm(BootstrapModelForm):
     class Meta:
-        model = Document
+        model = DocumentTemplate
         exclude = ('slug',)
         layout = (
             Fieldset('Document Authoring', 'body'),
-            Fieldset('Document Properties', 'name', 'owner', 'summary', 'doc_status', 'is_public', 'doc_cats', 'tags'),
+            Fieldset('Document Properties', 'name', 'owner', 'summary', 'description', 'doc_status', 'is_public', 'doc_cats'),
         )
 
 

@@ -3,13 +3,13 @@ from jsonfield import JSONField
 from django.utils import simplejson as json
 from django.template import loader
 
-from glynt.apps.document.models import Document
+from glynt.apps.document.models import DocumentTemplate
 from glynt.apps.flyform.forms import BaseFlyForm
 
 
 class FlyForm(models.Model):
     """ Flyform model used to store teh JSON representation of a form """
-    document = models.ForeignKey(Document, blank=True, null=True)
+    document = models.ForeignKey(DocumentTemplate, blank=True, null=True)
     body = JSONField(blank=False, null=False)
     defaults = JSONField(blank=True, null=True)
 

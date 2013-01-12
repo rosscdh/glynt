@@ -12,7 +12,7 @@ class Migration(SchemaMigration):
         db.create_table('document_document_doc_cats', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
             ('document', models.ForeignKey(orm['document.document'], null=False)),
-            ('documentcategory', models.ForeignKey(orm['document.documentcategory'], null=False))
+            ('documentcategory', models.ForeignKey(orm['document.documenttemplatecategory'], null=False))
         ))
         db.create_unique('document_document_doc_cats', ['document_id', 'documentcategory_id'])
 
@@ -62,7 +62,7 @@ class Migration(SchemaMigration):
         'document.document': {
             'Meta': {'object_name': 'Document'},
             'body': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'doc_cats': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['document.DocumentCategory']", 'symmetrical': 'False'}),
+            'doc_cats': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['document.DocumentTemplateCategory']", 'symmetrical': 'False'}),
             'doc_status': ('django.db.models.fields.IntegerField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_public': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
@@ -71,14 +71,14 @@ class Migration(SchemaMigration):
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50'}),
             'summary': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'})
         },
-        'document.documentcategory': {
-            'Meta': {'object_name': 'DocumentCategory'},
+        'document.documenttemplatecategory': {
+            'Meta': {'object_name': 'DocumentTemplateCategory'},
             'active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'level': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'lft': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'parent': ('mptt.fields.TreeForeignKey', [], {'blank': 'True', 'related_name': "'children'", 'null': 'True', 'to': "orm['document.DocumentCategory']"}),
+            'parent': ('mptt.fields.TreeForeignKey', [], {'blank': 'True', 'related_name': "'children'", 'null': 'True', 'to': "orm['document.DocumentTemplateCategory']"}),
             'rght': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50'}),
             'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'})

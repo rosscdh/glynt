@@ -77,7 +77,7 @@ class Migration(DataMigration):
         'document.document': {
             'Meta': {'ordering': "['name']", 'object_name': 'Document'},
             'body': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'doc_cats': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['document.DocumentCategory']", 'symmetrical': 'False'}),
+            'doc_cats': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['document.DocumentTemplateCategory']", 'symmetrical': 'False'}),
             'doc_status': ('django.db.models.fields.IntegerField', [], {}),
             'flyform': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'fly_form'", 'unique': 'True', 'to': "orm['flyform.FlyForm']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -87,14 +87,14 @@ class Migration(DataMigration):
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255'}),
             'summary': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'})
         },
-        'document.documentcategory': {
-            'Meta': {'object_name': 'DocumentCategory'},
+        'document.documenttemplatecategory': {
+            'Meta': {'object_name': 'DocumentTemplateCategory'},
             'active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'level': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'lft': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'parent': ('mptt.fields.TreeForeignKey', [], {'blank': 'True', 'related_name': "'children'", 'null': 'True', 'to': "orm['document.DocumentCategory']"}),
+            'parent': ('mptt.fields.TreeForeignKey', [], {'blank': 'True', 'related_name': "'children'", 'null': 'True', 'to': "orm['document.DocumentTemplateCategory']"}),
             'rght': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50'}),
             'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'})

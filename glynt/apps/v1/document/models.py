@@ -33,7 +33,7 @@ class Document(models.Model):
     body = models.TextField(blank=True, null=True)
     doc_status = models.IntegerField(choices=DOC_STATUS.get_choices(), blank=False)
     is_public = models.BooleanField(default=True)
-    doc_cats = models.ManyToManyField('DocumentCategory')
+    doc_cats = models.ManyToManyField('DocumentTemplateCategory')
     tags = TaggableManager()
 
     objects = DocumentManager()
@@ -50,7 +50,7 @@ class Document(models.Model):
       return json.dumps(self.flyform.defaults)
 
 
-class DocumentCategory(CategoryBase):
+class DocumentTemplateCategory(CategoryBase):
     """
     Basic Categories for document Model
     """

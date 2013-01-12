@@ -4,7 +4,7 @@ from django.utils.encoding import smart_unicode
 from django.utils import simplejson as json
 
 from glynt.apps.flyform.models import FlyForm
-from glynt.apps.document.models import Document
+from glynt.apps.document.models import DocumentTemplate
 
 
 class Command(BaseCommand):

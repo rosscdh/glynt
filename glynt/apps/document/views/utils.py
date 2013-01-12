@@ -2,7 +2,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
-from glynt.apps.document.models import Document, ClientCreatedDocument
+from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
 
 import logging
 logger = logging.getLogger(__name__)
@@ -38,7 +38,7 @@ def user_can_view_document(document, user):
       return True
     if document.is_public == False:
       raise Http404
-    if document.doc_status in [Document.DOC_STATUS.deleted, Document.DOC_STATUS.draft]:
+    if document.doc_status in [Document.DOC_STATUS.deleted, DocumentTemplate.DOC_STATUS.draft]:
       raise Http404
 
   elif type(document) == ClientCreatedDocument:

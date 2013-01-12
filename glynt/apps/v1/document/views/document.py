@@ -12,7 +12,7 @@ from utils import JsonErrorResponseMixin, user_can_view_document
 from glynt.apps.flyform.forms import BaseFlyForm
 from glynt.apps.document.views.utils import FORM_GROUPS
 from glynt.apps.document.forms import ClientCreatedDocumentForm
-from glynt.apps.document.models import Document
+from glynt.apps.document.models import DocumentTemplate
 
 import logging
 logger = logging.getLogger(__name__)

@@ -3,7 +3,7 @@
 {% load mptt_tags %}
 {% load url from future %}
 
-{% full_tree_for_model document.DocumentCategory as cats %}
+{% full_tree_for_model document.DocumentTemplateCategory as cats %}
 <ul id="document-category-list">
     {% for cat in cats %}
     {% if not cat.is_leaf_node %}

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<django-objects version="1.0"><object pk="29" model="document.document"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Orrick Confidential Information and Invention Assignment Agreement (Consultant)</field><field type="SlugField" name="slug">orrick-confidential-information-and-invention-assignment-agreement-consultant</field><field type="TextField" name="summary"></field><field type="TextField" name="body">&lt;center&gt;
+<django-objects version="1.0"><object pk="29" model="document.documenttemplate"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Orrick Confidential Information and Invention Assignment Agreement (Consultant)</field><field type="SlugField" name="slug">orrick-confidential-information-and-invention-assignment-agreement-consultant</field><field type="TextField" name="summary"></field><field type="TextField" name="body">&lt;center&gt;
 &lt;strong&gt;{{full_company_name}}
 
 CONFIDENTIAL INFORMATION AND INVENTION ASSIGNMENT AGREEMENT&lt;/strong&gt;
@@ -249,7 +249,7 @@ Further, I agree that for {{confidentiality_period}}  months from the date of th
 Date:		Consultant:  {{consultant_name}} 
 
 (Signature)
-</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"><object pk="1"></object></field></object><object pk="22" model="document.document"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Orrick Confidential Information and Invention Assignment Agreement (Employee)</field><field type="SlugField" name="slug">orrick-confidential-information-and-invention-assignment-agreement</field><field type="TextField" name="summary"></field><field type="TextField" name="body">&lt;center&gt;
+</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"><object pk="1"></object></field></object><object pk="22" model="document.documenttemplate"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Orrick Confidential Information and Invention Assignment Agreement (Employee)</field><field type="SlugField" name="slug">orrick-confidential-information-and-invention-assignment-agreement</field><field type="TextField" name="summary"></field><field type="TextField" name="body">&lt;center&gt;
 &lt;strong&gt;{{full_company_name}}
 
 CONFIDENTIAL INFORMATION AND INVENTION ASSIGNMENT AGREEMENT&lt;/strong&gt;
@@ -498,7 +498,7 @@ Date:		Employee:  {{employee_name}}
 
 (Signature)
 
-</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"><object pk="1"></object></field></object><object pk="21" model="document.document"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Orrick Consulting Agreement</field><field type="SlugField" name="slug">orrick-consulting-agreement</field><field type="TextField" name="summary"></field><field type="TextField" name="body">&lt;center&gt;&lt;strong&gt;{{full_company_name}}&lt;/strong&gt;&lt;br/&gt;
+</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"><object pk="1"></object></field></object><object pk="21" model="document.documenttemplate"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Orrick Consulting Agreement</field><field type="SlugField" name="slug">orrick-consulting-agreement</field><field type="TextField" name="summary"></field><field type="TextField" name="body">&lt;center&gt;&lt;strong&gt;{{full_company_name}}&lt;/strong&gt;&lt;br/&gt;
 
 &lt;strong&gt;&lt;u&gt;CONSULTING AGREEMENT&lt;/u&gt;&lt;/strong&gt;&lt;/center&gt;
 
@@ -699,7 +699,7 @@ Signature of Consultant:
 {{consultant_name}}	 
 
 {{date_agreement}}
-</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"><object pk="1"></object></field></object><object pk="19" model="document.document"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Orrick Employee Offer</field><field type="SlugField" name="slug">orrick-employee-offer</field><field type="TextField" name="summary"></field><field type="TextField" name="body">&lt;center&gt;
+</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"><object pk="1"></object></field></object><object pk="19" model="document.documenttemplate"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Orrick Employee Offer</field><field type="SlugField" name="slug">orrick-employee-offer</field><field type="TextField" name="summary"></field><field type="TextField" name="body">&lt;center&gt;
 &lt;strong&gt;{{full_company_name}}&lt;/strong&gt;&lt;br/&gt;
 
 {{nl2br company_street_address}}
@@ -789,7 +789,7 @@ Anticipated Start Date: {{date_preferred}}
 &lt;strong&gt;CONFIDENTIAL INFORMATION AND INVENTION ASSIGNMENT AGREEMENT&lt;/strong&gt;
 
 *(See Attached)*
-</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"><object pk="1"></object></field></object><object pk="17" model="document.document"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Orrick Employment Agreement</field><field type="SlugField" name="slug">orrick-employment-agreement</field><field type="TextField" name="summary"></field><field type="TextField" name="body">&lt;center&gt;
+</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"><object pk="1"></object></field></object><object pk="17" model="document.documenttemplate"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Orrick Employment Agreement</field><field type="SlugField" name="slug">orrick-employment-agreement</field><field type="TextField" name="summary"></field><field type="TextField" name="body">&lt;center&gt;
 &lt;strong&gt;{{full_company_name}}&lt;/strong&gt;&lt;br/&gt;
 
 {{nl2br company_street_address}}
@@ -1009,7 +1009,7 @@ Anticipated Start Date: {{date_preferred}}
 CONFIDENTIAL INFORMATION AND INVENTION ASSIGNMENT AGREEMENT
 
 (See Attached)
-	</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"><object pk="1"></object></field></object><object pk="23" model="document.document"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Orrick Indemnification Agreement</field><field type="SlugField" name="slug">orrick-indemnification-agreement</field><field type="TextField" name="summary"></field><field type="TextField" name="body">&lt;center&gt;
+	</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"><object pk="1"></object></field></object><object pk="23" model="document.documenttemplate"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Orrick Indemnification Agreement</field><field type="SlugField" name="slug">orrick-indemnification-agreement</field><field type="TextField" name="summary"></field><field type="TextField" name="body">&lt;center&gt;
 &lt;strong&gt;{{full_company_name}}
 
 Indemnification Agreement&lt;/strong&gt;
@@ -1258,7 +1258,7 @@ AGREED TO AND ACCEPTED:
 
 Address: {{nl2br employee_address}} 
 Fax:	{{employee_fax}}
-</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"><object pk="1"></object></field></object><object pk="24" model="document.document"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Orrick Stockholder Approval of Indemnification Agreement</field><field type="SlugField" name="slug">orrick-stockholder-approval-indemnification-agreement</field><field type="TextField" name="summary"></field><field type="TextField" name="body">&lt;center&gt;
+</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"><object pk="1"></object></field></object><object pk="24" model="document.documenttemplate"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Orrick Stockholder Approval of Indemnification Agreement</field><field type="SlugField" name="slug">orrick-stockholder-approval-indemnification-agreement</field><field type="TextField" name="summary"></field><field type="TextField" name="body">&lt;center&gt;
 &lt;strong&gt;ACTION BY WRITTEN CONSENT  OF THE STOCKHOLDERS OF {{full_company_name}}&lt;/strong&gt;
 &lt;/center&gt;
 
@@ -1295,7 +1295,7 @@ This Action by Written Consent may be executed in counterparts, each of which sh
 	
 FORM OF INDEMNIFICATION AGREEMENT&lt;/strong&gt;
 &lt;/center&gt;
-</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"><object pk="1"></object></field></object><object pk="28" model="document.document"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Orrick (UK) Mutual Confidentiality NDA</field><field type="SlugField" name="slug">orrick-uk-mutual-confidentiality-nda</field><field type="TextField" name="summary"></field><field type="TextField" name="body">&lt;center&gt;
+</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"><object pk="1"></object></field></object><object pk="28" model="document.documenttemplate"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Orrick (UK) Mutual Confidentiality NDA</field><field type="SlugField" name="slug">orrick-uk-mutual-confidentiality-nda</field><field type="TextField" name="summary"></field><field type="TextField" name="body">&lt;center&gt;
 &lt;strong&gt;&lt;u&gt;DATED  {{date_year}}&lt;/u&gt;&lt;/strong&gt;
 &lt;/center&gt; 
 
@@ -1455,7 +1455,7 @@ This agreement may be executed in any number of counterparts and by the Parties 
 &lt;strong&gt;SIGNED&lt;/strong&gt; by or on behalf of the Parties.
 &lt;hr/&gt;
 
-{{signature_template}}</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"><object pk="1"></object></field></object><object pk="26" model="document.document"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Orrick (UK) Mutual NDA</field><field type="SlugField" name="slug">orrick-uk-mutual-nda</field><field type="TextField" name="summary"></field><field type="TextField" name="body">&lt;center&gt;
+{{signature_template}}</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"><object pk="1"></object></field></object><object pk="26" model="document.documenttemplate"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Orrick (UK) Mutual NDA</field><field type="SlugField" name="slug">orrick-uk-mutual-nda</field><field type="TextField" name="summary"></field><field type="TextField" name="body">&lt;center&gt;
 &lt;strong&gt;&lt;u&gt;DATED  {{date_year}}&lt;/u&gt;&lt;/strong&gt;
 &lt;/center&gt; 
 
@@ -1634,7 +1634,7 @@ for and on behalf of [INSERT NAME OF COMPANY]
 &lt;br/&gt;
 SIGNED by [INSERT NAME OF SIGNATORY] 
 for and on behalf of [INSERT NAME OF COMPANY]
-</field><field type="IntegerField" name="doc_status">2</field><field type="BooleanField" name="is_public">True</field><field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"><object pk="1"></object></field></object><object pk="27" model="document.document"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Orrick (UK) Option Promise Letter</field><field type="SlugField" name="slug">orrick-uk-option-promise-letter</field><field type="TextField" name="summary"></field><field type="TextField" name="body">{{employee_name}},
+</field><field type="IntegerField" name="doc_status">2</field><field type="BooleanField" name="is_public">True</field><field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"><object pk="1"></object></field></object><object pk="27" model="document.documenttemplate"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Orrick (UK) Option Promise Letter</field><field type="SlugField" name="slug">orrick-uk-option-promise-letter</field><field type="TextField" name="summary"></field><field type="TextField" name="body">{{employee_name}},
 {{employee_address}}
 &lt;br/&gt;
 {{date_agreement}}
@@ -1675,7 +1675,7 @@ Yours sincerely,
 &lt;br/&gt;
 {{signature_template}}
 For and on behalf of {{full_company_name}} &lt;strong&gt;LIMITED&lt;/strong&gt;
-</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"><object pk="1"></object></field></object><object pk="25" model="document.document"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Orrick (UK) Termsheet</field><field type="SlugField" name="slug">orrick-uk-termsheet</field><field type="TextField" name="summary"></field><field type="TextField" name="body">&lt;center&gt;
+</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"><object pk="1"></object></field></object><object pk="25" model="document.documenttemplate"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Orrick (UK) Termsheet</field><field type="SlugField" name="slug">orrick-uk-termsheet</field><field type="TextField" name="summary"></field><field type="TextField" name="body">&lt;center&gt;
 &lt;strong&gt;SUMMARY OF TERMS FOR AN INVESTMENT INTO {{full_company_name}} LIMITED&lt;/strong&gt;
 &lt;/center&gt;
 
@@ -2241,7 +2241,7 @@ This term sheet summarises the principal terms of the proposed financing (the "&
 By signing this summary of terms, both the Company and the Investor[s] agree to work in good faith expeditiously towards a closing.
 
 EXECUTED this [**] day of ___________ 20[**]
-</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"><object pk="1"></object></field></object><object pk="16" model="document.document"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Shareholder Agreement</field><field type="SlugField" name="slug">shareholder-agreement</field><field type="TextField" name="summary"></field><field type="TextField" name="body">###{{document_title}}###
+</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"><object pk="1"></object></field></object><object pk="16" model="document.documenttemplate"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Shareholder Agreement</field><field type="SlugField" name="slug">shareholder-agreement</field><field type="TextField" name="summary"></field><field type="TextField" name="body">###{{document_title}}###
 
 THIS AGREEMENT is made on {{date_start}} between the shareholders:
 {{#each loop_shareholder}}
@@ -2427,4 +2427,4 @@ Address of witness: __________________________
 Occupation of witness: __________________________
 Signature of witness: __________________________ 
 {{/if_eq}}
-{{/each}}</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"><object pk="20"></object></field></object></django-objects>
+{{/each}}</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"><object pk="20"></object></field></object></django-objects>

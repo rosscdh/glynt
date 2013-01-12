@@ -7,7 +7,7 @@ from django.views.generic.edit import BaseUpdateView
 
 
 from glynt.apps.author.forms import CreateStepForm, CreateStepFieldForm, DocumentForm, DocumentMetaForm
-from glynt.apps.document.models import Document
+from glynt.apps.document.models import DocumentTemplate
 
 import logging
 logger = logging.getLogger(__name__)
@@ -19,7 +19,7 @@ class AuthorToolView(TemplateView, BaseUpdateView):
     def get_context_data(self, **kwargs):
         context = super(AuthorToolView, self).get_context_data(**kwargs)
         if 'pk' in self.kwargs:
-            context['object'] = Document.objects.select_related('flyform').get(pk=self.kwargs['pk'])
+            context['object'] = DocumentTemplate.objects.select_related('flyform').get(pk=self.kwargs['pk'])
             context['json'] = json.dumps(context['object'].flyform.body)
 
         context['form_steps'] = CreateStepForm()

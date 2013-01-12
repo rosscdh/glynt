@@ -4,13 +4,13 @@ from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse
 from django.utils.translation import gettext as _
 
-from glynt.apps.document.models import Document
+from glynt.apps.document.models import DocumentTemplate
 from models import FlyForm
 
 
 class DocumentInline(admin.TabularInline):
-  model = Document
-  exclude = ['slug', 'summary', 'body', 'doc_status', 'is_public', 'doc_cats', 'tags']
+  model = DocumentTemplate
+  exclude = ['slug', 'summary', 'body', 'doc_status', 'is_public', 'doc_cats']
   readonly_fields = ['name', 'owner' ,'link']
   extra = 0
   can_delete = False

@@ -10,7 +10,7 @@
             "slug": "commercial", 
             "tree_id": 1
         }, 
-        "model": "document.documentcategory", 
+        "model": "document.documenttemplatecategory", 
         "pk": 1
     }, 
     {
@@ -24,7 +24,7 @@
             "slug": "personal", 
             "tree_id": 2
         }, 
-        "model": "document.documentcategory", 
+        "model": "document.documenttemplatecategory", 
         "pk": 2
     }, 
     {
@@ -38,7 +38,7 @@
             "slug": "divorce", 
             "tree_id": 2
         }, 
-        "model": "document.documentcategory", 
+        "model": "document.documenttemplatecategory", 
         "pk": 3
     }, 
     {
@@ -52,7 +52,7 @@
             "slug": "marital-separation-agreement", 
             "tree_id": 2
         }, 
-        "model": "document.documentcategory", 
+        "model": "document.documenttemplatecategory", 
         "pk": 4
     }, 
     {
@@ -66,7 +66,7 @@
             "slug": "name-change", 
             "tree_id": 2
         }, 
-        "model": "document.documentcategory", 
+        "model": "document.documenttemplatecategory", 
         "pk": 5
     }, 
     {
@@ -80,7 +80,7 @@
             "slug": "parenting-plan", 
             "tree_id": 2
         }, 
-        "model": "document.documentcategory", 
+        "model": "document.documenttemplatecategory", 
         "pk": 6
     }, 
     {
@@ -94,7 +94,7 @@
             "slug": "power-of-attorney", 
             "tree_id": 2
         }, 
-        "model": "document.documentcategory", 
+        "model": "document.documenttemplatecategory", 
         "pk": 7
     }, 
     {
@@ -108,7 +108,7 @@
             "slug": "last-will", 
             "tree_id": 2
         }, 
-        "model": "document.documentcategory", 
+        "model": "document.documenttemplatecategory", 
         "pk": 8
     }, 
     {
@@ -122,7 +122,7 @@
             "slug": "living-trusts", 
             "tree_id": 2
         }, 
-        "model": "document.documentcategory", 
+        "model": "document.documenttemplatecategory", 
         "pk": 9
     }, 
     {
@@ -136,7 +136,7 @@
             "slug": "living-wills", 
             "tree_id": 2
         }, 
-        "model": "document.documentcategory", 
+        "model": "document.documenttemplatecategory", 
         "pk": 10
     }, 
     {
@@ -150,7 +150,7 @@
             "slug": "advance-directive", 
             "tree_id": 2
         }, 
-        "model": "document.documentcategory", 
+        "model": "document.documenttemplatecategory", 
         "pk": 11
     }, 
     {
@@ -164,7 +164,7 @@
             "slug": "personal-service-agreements", 
             "tree_id": 2
         }, 
-        "model": "document.documentcategory", 
+        "model": "document.documenttemplatecategory", 
         "pk": 12
     }, 
     {
@@ -178,7 +178,7 @@
             "slug": "deeds", 
             "tree_id": 2
         }, 
-        "model": "document.documentcategory", 
+        "model": "document.documenttemplatecategory", 
         "pk": 13
     }, 
     {
@@ -192,7 +192,7 @@
             "slug": "premarital-agreement", 
             "tree_id": 2
         }, 
-        "model": "document.documentcategory", 
+        "model": "document.documenttemplatecategory", 
         "pk": 14
     }, 
     {
@@ -206,7 +206,7 @@
             "slug": "qualified-domestic-relations-order", 
             "tree_id": 2
         }, 
-        "model": "document.documentcategory", 
+        "model": "document.documenttemplatecategory", 
         "pk": 15
     }, 
     {
@@ -220,7 +220,7 @@
             "slug": "complaint-letters", 
             "tree_id": 2
         }, 
-        "model": "document.documentcategory", 
+        "model": "document.documenttemplatecategory", 
         "pk": 16
     }, 
     {
@@ -234,7 +234,7 @@
             "slug": "estate-letters", 
             "tree_id": 2
         }, 
-        "model": "document.documentcategory", 
+        "model": "document.documenttemplatecategory", 
         "pk": 17
     }, 
     {
@@ -248,7 +248,7 @@
             "slug": "identity-theft", 
             "tree_id": 2
         }, 
-        "model": "document.documentcategory", 
+        "model": "document.documenttemplatecategory", 
         "pk": 18
     }, 
     {
@@ -262,7 +262,7 @@
             "slug": "federal-income-tax-filing", 
             "tree_id": 2
         }, 
-        "model": "document.documentcategory", 
+        "model": "document.documenttemplatecategory", 
         "pk": 19
     }, 
     {
@@ -276,7 +276,7 @@
             "slug": "incorporation", 
             "tree_id": 1
         }, 
-        "model": "document.documentcategory", 
+        "model": "document.documenttemplatecategory", 
         "pk": 20
     }, 
     {
@@ -290,7 +290,7 @@
             "slug": "llc-formation", 
             "tree_id": 1
         }, 
-        "model": "document.documentcategory", 
+        "model": "document.documenttemplatecategory", 
         "pk": 21
     }, 
     {
@@ -304,7 +304,7 @@
             "slug": "contracts", 
             "tree_id": 1
         }, 
-        "model": "document.documentcategory", 
+        "model": "document.documenttemplatecategory", 
         "pk": 22
     }, 
     {
@@ -318,7 +318,7 @@
             "slug": "copyright-trademark", 
             "tree_id": 1
         }, 
-        "model": "document.documentcategory", 
+        "model": "document.documenttemplatecategory", 
         "pk": 23
     }, 
     {
@@ -332,7 +332,7 @@
             "slug": "human-resource-forms", 
             "tree_id": 1
         }, 
-        "model": "document.documentcategory", 
+        "model": "document.documenttemplatecategory", 
         "pk": 24
     }, 
     {
@@ -346,7 +346,7 @@
             "slug": "landlord-tenant", 
             "tree_id": 1
         }, 
-        "model": "document.documentcategory", 
+        "model": "document.documenttemplatecategory", 
         "pk": 25
     }, 
     {
@@ -360,7 +360,7 @@
             "slug": "partnership-agreement", 
             "tree_id": 1
         }, 
-        "model": "document.documentcategory", 
+        "model": "document.documenttemplatecategory", 
         "pk": 26
     }, 
     {
@@ -374,7 +374,7 @@
             "slug": "promissory-notes", 
             "tree_id": 1
         }, 
-        "model": "document.documentcategory", 
+        "model": "document.documenttemplatecategory", 
         "pk": 27
     }, 
     {
@@ -388,7 +388,7 @@
             "slug": "stock-option-plans", 
             "tree_id": 1
         }, 
-        "model": "document.documentcategory", 
+        "model": "document.documenttemplatecategory", 
         "pk": 28
     }
 ]

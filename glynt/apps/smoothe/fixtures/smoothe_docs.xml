@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <django-objects version="1.0">
-  <object pk="1" model="document.document">
+  <object pk="1" model="document.documenttemplate">
     <field to="auth.user" name="owner" rel="ManyToOneRel">1</field>
     <field type="CharField" name="name">Smoothe Document - Test Case 1</field>
     <field type="SlugField" name="slug">smoothe-document-test-case-1</field>
@@ -82,11 +82,11 @@ This is my awesome explanation text, which wont confuse the user; but instead il
     </field>
     <field type="IntegerField" name="doc_status">1</field>
     <field type="BooleanField" name="is_public">True</field>
-    <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel">
+    <field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel">
       <object pk="1"/>
     </field>
   </object>
-  <object pk="2" model="document.document">
+  <object pk="2" model="document.documenttemplate">
     <field to="auth.user" name="owner" rel="ManyToOneRel">1</field>
     <field type="CharField" name="name">Smoothe Document - Contract of Employment</field>
     <field type="SlugField" name="slug">smoothe-document-contract-of-employment</field>
@@ -393,7 +393,7 @@ This contract of employment is appropriate for a non-executive employee. It incl
     </field>
     <field type="IntegerField" name="doc_status">1</field>
     <field type="BooleanField" name="is_public">True</field>
-    <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel">
+    <field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel">
       <object pk="1"/>
     </field>
   </object>

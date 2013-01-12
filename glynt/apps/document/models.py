@@ -9,7 +9,7 @@ from categories.models import CategoryBase
 from jsonfield import JSONField
 
 from glynt.apps.utils import get_namedtuple_choices
-from glynt.apps.document.managers import DocumentManager, PublicDocumentManager, PrivateDocumentManager
+from glynt.apps.document.managers import DocumentTemplateManager, PublicDocumentTemplateManager, PrivateDocumentTemplateManager
 from glynt.apps.document.managers import ClientCreatedDocumentManager, PublicClientCreatedDocumentManager, DeletedClientCreatedDocumentManager
 
 from glynt.pybars_plus import PybarsPlus
@@ -17,7 +17,7 @@ from glynt.pybars_plus import PybarsPlus
 import qrcode
 
 
-class Document(models.Model):
+class DocumentTemplate(models.Model):
     """ Base Document Class """
     DOC_STATUS = get_namedtuple_choices('DOC_STATUS', (
         (0,'deleted','Deleted'),
@@ -34,14 +34,15 @@ class Document(models.Model):
     body = models.TextField(blank=True)
     doc_status = models.IntegerField(choices=DOC_STATUS.get_choices(), blank=False, default=DOC_STATUS.draft)
     is_public = models.BooleanField(default=True)
-    doc_cats = models.ManyToManyField('DocumentCategory')
+    doc_cats = models.ManyToManyField('DocumentTemplateCategory')
 
-    objects = DocumentManager()
-    public_objects = PublicDocumentManager()
-    private_objects = PrivateDocumentManager()
+    objects = DocumentTemplateManager()
+    public_objects = PublicDocumentTemplateManager()
+    private_objects = PrivateDocumentTemplateManager()
 
     class Meta:
       ordering = ['name']
+      db_table = 'document'
 
     def __unicode__(self):
       return u'%s' % (self.name, )
@@ -57,19 +58,20 @@ class Document(models.Model):
         return json.dumps({})
 
 
-class DocumentCategory(CategoryBase):
+class DocumentTemplateCategory(CategoryBase):
     """
     Basic Categories for document Model
     """
     class Meta:
       verbose_name_plural = 'Document Categories'
+      db_table = 'documentcategory'
 
 
 class ClientCreatedDocument(models.Model):
     """ Model to store the user generate document based on a source document 
     but associated with a specific creating user """
     owner = models.ForeignKey(User)
-    source_document = models.ForeignKey(Document)
+    source_document = models.ForeignKey(DocumentTemplate)
     name = models.CharField(max_length=128, blank=True, null=True)
     slug = models.SlugField(unique=False, blank=False, null=True, max_length=255)
     body = models.TextField(blank=True, null=True)
@@ -86,6 +88,7 @@ class ClientCreatedDocument(models.Model):
     class Meta:
       unique_together = ('slug', 'owner',)
       ordering = ['-created_at', 'name']
+      db_table = 'clientcreateddocument '
 
     def __unicode__(self):
       return u'%s' % (self.name)

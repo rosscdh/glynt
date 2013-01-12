@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login
 from django.middleware.csrf import get_token
 
 from socialregistration.contrib.facebook_js.models import FacebookProfile
-from glynt.apps.document.models import Document, ClientCreatedDocument
+from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
 from forms import SignupForm, AuthenticationForm
 
 
@@ -92,7 +92,7 @@ class DashboardView(TemplateView):
   def get_context_data(self, **kwargs):
     context = super(DashboardView, self).get_context_data(**kwargs)
 
-    context['public_document_list'] = Document.public_objects.all()
+    context['public_document_list'] = DocumentTemplate.public_objects.all()
     context['my_document_list'] = ClientCreatedDocument.active_objects.filter(owner=self.request.user)
 
     context['csrf_raw_token'] = get_token(self.request)

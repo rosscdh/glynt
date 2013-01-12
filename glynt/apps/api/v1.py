@@ -11,7 +11,7 @@ from tastypie.cache import SimpleCache
 from tastypie.authentication import BasicAuthentication, SessionAuthentication
 from tastypie.authorization import Authorization
 
-from glynt.apps.document.models import Document, ClientCreatedDocument
+from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
 from glynt.apps.sign.models import DocumentSignature
 
 
@@ -45,7 +45,7 @@ class BaseApiModelResource(ModelResource):
 class DocumentResource(BaseApiModelResource):
     class Meta(BaseApiModelResource.Meta):
         list_allowed_methods = ['get']
-        queryset = Document.objects.all()
+        queryset = DocumentTemplate.objects.all()
         resource_name = 'document/templates'
         excludes = ['body']
 

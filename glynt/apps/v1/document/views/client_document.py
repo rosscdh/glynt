@@ -11,7 +11,7 @@ from django.utils import simplejson as json
 from django.db.utils import IntegrityError
 from django.template import Context
 
-from glynt.apps.document.models import Document, ClientCreatedDocument
+from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
 from glynt.apps.document.forms import ClientCreatedDocumentForm
 from glynt.apps.document import tasks
 

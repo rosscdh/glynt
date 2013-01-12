@@ -146,6 +146,8 @@ DJANGO_APPS = (
 PROJECT_APPS = (
     # The default app that handles the basics
     'glynt.apps.default',
+    # The Flyform
+    'glynt.apps.flyform',
     # The primary document view system
     'glynt.apps.document',
     # The document authoring system
@@ -154,8 +156,6 @@ PROJECT_APPS = (
     'glynt.apps.client',
     # The v2 Document Signing system
     'glynt.apps.smoothe',
-    # The Flyform
-    'glynt.apps.flyform',
     # The Document Signing system
     'glynt.apps.sign',
     # The Document Export system
@@ -230,7 +230,7 @@ DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d
 CATEGORIES_SETTINGS = {
     'ALLOW_SLUG_CHANGE': False,
     'CACHE_VIEW_LENGTH': 0,
-    'RELATION_MODELS': ["document.DocumentCategory"],
+    'RELATION_MODELS': ["document.DocumentTemplateCategory"],
     'M2M_REGISTRY': {},
     'FK_REGISTRY': {},
     'THUMBNAIL_UPLOAD_PATH': 'uploads/categories/thumbnails',

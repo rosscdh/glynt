@@ -9,7 +9,7 @@ from django.views.generic.edit import FormMixin
 
 from utils import JsonErrorResponseMixin, user_can_view_document
 
-from glynt.apps.document.models import Document
+from glynt.apps.document.models import DocumentTemplate
 
 import logging
 logger = logging.getLogger(__name__)

@@ -1,6 +1,6 @@
 from django import template
 
-from glynt.apps.document.models import DocumentCategory
+from glynt.apps.document.models import DocumentTemplateCategory
 
 import user_streams
 
@@ -10,7 +10,7 @@ register = template.Library()
 @register.inclusion_tag('document/partials/document_categories_home.html')
 def document_categories_home():
     return {
-    'objects': DocumentCategory.objects.filter(active=True)
+    'objects': DocumentTemplateCategory.objects.filter(active=True)
     }
 
 

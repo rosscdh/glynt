@@ -11,7 +11,7 @@ from django.core.urlresolvers import reverse
 
 from glynt.apps.document.views import DocumentView
 from glynt.apps.document.views.utils import user_can_view_document
-from glynt.apps.document.models import Document, ClientCreatedDocument
+from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
 
 from .forms import DocumentForm as DocumentTemplateForm, ClientDocumentForm
 
@@ -26,7 +26,7 @@ class CreateDocumentView(CreateView):
     def get_form_kwargs(self):
         kwargs = super(ModelFormMixin, self).get_form_kwargs()
 
-        self.document = get_object_or_404(Document, slug=self.kwargs['slug'])
+        self.document = get_object_or_404(DocumentTemplate, slug=self.kwargs['slug'])
 
         kwargs.update({
          'request': self.request,
@@ -75,7 +75,7 @@ class CreateTemplateView(CreateView):
     """ Used creating a new document """
     template_name = 'smoothe/document-create.html'
     form_class = DocumentTemplateForm
-    model = Document
+    model = DocumentTemplate
 
     def get_initial(self):
         """
@@ -104,4 +104,4 @@ class CreateTemplateView(CreateView):
 class UpdateDocumentView(UpdateView):
     template_name = 'smoothe/document-edit.html'
     form_class = DocumentTemplateForm
-    model = Document
+    model = DocumentTemplate

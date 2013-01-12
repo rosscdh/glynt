@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <django-objects version="1.0">
-        <object pk="1" model="document.document">
+        <object pk="1" model="document.documenttemplate">
             <field to="auth.user" name="owner" rel="ManyToOneRel">1</field>
             <field type="CharField" name="name">Test Buy a Gift Contract</field>
             <field type="SlugField" name="slug">test-buy-a-gift-contract</field>
@@ -26,11 +26,11 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
             <field to="flyform.flyform" name="flyform" rel="OneToOneRel">1</field>
             <field type="IntegerField" name="doc_status">1</field>
             <field type="BooleanField" name="is_public">True</field>
-            <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel">
+            <field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel">
                 <object pk="2"/>
             </field>
         </object>
-    <object pk="2" model="document.document">
+    <object pk="2" model="document.documenttemplate">
         <field to="auth.user" name="owner" rel="ManyToOneRel">1</field>
         <field type="CharField" name="name">Employment agreement</field>
         <field type="SlugField" name="slug">employment-agreement</field>
@@ -43,9 +43,9 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
         <field to="flyform.flyform" name="flyform" rel="OneToOneRel">2</field>
         <field type="IntegerField" name="doc_status">0</field>
         <field type="BooleanField" name="is_public">True</field>
-        <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"/>
+        <field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"/>
     </object>
-    <object pk="3" model="document.document">
+    <object pk="3" model="document.documenttemplate">
         <field to="auth.user" name="owner" rel="ManyToOneRel">1</field>
         <field type="CharField" name="name">Independent contractor agreement</field>
         <field type="SlugField" name="slug">independent-contractor-agreement</field>
@@ -58,9 +58,9 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
         <field to="flyform.flyform" name="flyform" rel="OneToOneRel">3</field>
         <field type="IntegerField" name="doc_status">0</field>
         <field type="BooleanField" name="is_public">True</field>
-        <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"/>
+        <field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"/>
     </object>
-    <object pk="4" model="document.document">
+    <object pk="4" model="document.documenttemplate">
         <field to="auth.user" name="owner" rel="ManyToOneRel">1</field>
         <field type="CharField" name="name">Non-disclosure agreement</field>
         <field type="SlugField" name="slug">non-disclosure-agreement</field>
@@ -73,9 +73,9 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
         <field to="flyform.flyform" name="flyform" rel="OneToOneRel">4</field>
         <field type="IntegerField" name="doc_status">0</field>
         <field type="BooleanField" name="is_public">True</field>
-        <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"/>
+        <field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"/>
     </object>
-    <object pk="5" model="document.document">
+    <object pk="5" model="document.documenttemplate">
         <field to="auth.user" name="owner" rel="ManyToOneRel">1</field>
         <field type="CharField" name="name">Employee handbook</field>
         <field type="SlugField" name="slug">employee-handbook</field>
@@ -88,9 +88,9 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
         <field to="flyform.flyform" name="flyform" rel="OneToOneRel">5</field>
         <field type="IntegerField" name="doc_status">0</field>
         <field type="BooleanField" name="is_public">True</field>
-        <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"/>
+        <field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"/>
     </object>
-    <object pk="6" model="document.document">
+    <object pk="6" model="document.documenttemplate">
         <field to="auth.user" name="owner" rel="ManyToOneRel">1</field>
         <field type="CharField" name="name">Demotion Letter</field>
         <field type="SlugField" name="slug">demotion-letter</field>
@@ -103,9 +103,9 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
         <field to="flyform.flyform" name="flyform" rel="OneToOneRel">6</field>
         <field type="IntegerField" name="doc_status">0</field>
         <field type="BooleanField" name="is_public">True</field>
-        <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"/>
+        <field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"/>
     </object>
-    <object pk="7" model="document.document">
+    <object pk="7" model="document.documenttemplate">
         <field to="auth.user" name="owner" rel="ManyToOneRel">1</field>
         <field type="CharField" name="name">Employee Evaluation Form</field>
         <field type="SlugField" name="slug">employee-evaluation-form</field>
@@ -118,9 +118,9 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
         <field to="flyform.flyform" name="flyform" rel="OneToOneRel">7</field>
         <field type="IntegerField" name="doc_status">0</field>
         <field type="BooleanField" name="is_public">True</field>
-        <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"/>
+        <field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"/>
     </object>
-    <object pk="8" model="document.document">
+    <object pk="8" model="document.documenttemplate">
         <field to="auth.user" name="owner" rel="ManyToOneRel">1</field>
         <field type="CharField" name="name">Employment Information Release</field>
         <field type="SlugField" name="slug">employment-information-release</field>
@@ -133,9 +133,9 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
         <field to="flyform.flyform" name="flyform" rel="OneToOneRel">8</field>
         <field type="IntegerField" name="doc_status">0</field>
         <field type="BooleanField" name="is_public">True</field>
-        <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"/>
+        <field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"/>
     </object>
-    <object pk="9" model="document.document">
+    <object pk="9" model="document.documenttemplate">
         <field to="auth.user" name="owner" rel="ManyToOneRel">1</field>
         <field type="CharField" name="name">Employee Retirement Agreement</field>
         <field type="SlugField" name="slug">employee-retirement-agreement</field>
@@ -148,9 +148,9 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
         <field to="flyform.flyform" name="flyform" rel="OneToOneRel">9</field>
         <field type="IntegerField" name="doc_status">0</field>
         <field type="BooleanField" name="is_public">True</field>
-        <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"/>
+        <field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"/>
     </object>
-    <object pk="10" model="document.document">
+    <object pk="10" model="document.documenttemplate">
         <field to="auth.user" name="owner" rel="ManyToOneRel">1</field>
         <field type="CharField" name="name">Employee Tracker</field>
         <field type="SlugField" name="slug">employee-tracker</field>
@@ -163,9 +163,9 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
         <field to="flyform.flyform" name="flyform" rel="OneToOneRel">10</field>
         <field type="IntegerField" name="doc_status">0</field>
         <field type="BooleanField" name="is_public">True</field>
-        <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"/>
+        <field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"/>
     </object>
-    <object pk="11" model="document.document">
+    <object pk="11" model="document.documenttemplate">
         <field to="auth.user" name="owner" rel="ManyToOneRel">1</field>
         <field type="CharField" name="name">Employee Warning Letter</field>
         <field type="SlugField" name="slug">employee-warning-letter</field>
@@ -178,9 +178,9 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
         <field to="flyform.flyform" name="flyform" rel="OneToOneRel">11</field>
         <field type="IntegerField" name="doc_status">0</field>
         <field type="BooleanField" name="is_public">True</field>
-        <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"/>
+        <field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"/>
     </object>
-    <object pk="12" model="document.document">
+    <object pk="12" model="document.documenttemplate">
         <field to="auth.user" name="owner" rel="ManyToOneRel">1</field>
         <field type="CharField" name="name">Leave of Absence</field>
         <field type="SlugField" name="slug">leave-of-absence</field>
@@ -193,9 +193,9 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
         <field to="flyform.flyform" name="flyform" rel="OneToOneRel">12</field>
         <field type="IntegerField" name="doc_status">0</field>
         <field type="BooleanField" name="is_public">True</field>
-        <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"/>
+        <field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"/>
     </object>
-    <object pk="13" model="document.document">
+    <object pk="13" model="document.documenttemplate">
         <field to="auth.user" name="owner" rel="ManyToOneRel">1</field>
         <field type="CharField" name="name">Termination Letter</field>
         <field type="SlugField" name="slug">termination-letter</field>
@@ -208,9 +208,9 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
         <field to="flyform.flyform" name="flyform" rel="OneToOneRel">13</field>
         <field type="IntegerField" name="doc_status">0</field>
         <field type="BooleanField" name="is_public">True</field>
-        <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"/>
+        <field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"/>
     </object>
-    <object pk="14" model="document.document">
+    <object pk="14" model="document.documenttemplate">
         <field to="auth.user" name="owner" rel="ManyToOneRel">1</field>
         <field type="CharField" name="name">Time Off Request</field>
         <field type="SlugField" name="slug">time-off-request</field>
@@ -223,9 +223,9 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
         <field to="flyform.flyform" name="flyform" rel="OneToOneRel">14</field>
         <field type="IntegerField" name="doc_status">0</field>
         <field type="BooleanField" name="is_public">True</field>
-        <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"/>
+        <field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"/>
     </object>
-    <object pk="15" model="document.document">
+    <object pk="15" model="document.documenttemplate">
         <field to="auth.user" name="owner" rel="ManyToOneRel">1</field>
         <field type="CharField" name="name">Work Injury Report</field>
         <field type="SlugField" name="slug">work-injury-report</field>
@@ -238,9 +238,9 @@ My Friend {{friend_name}} can be found, somewhere in {{friend_country}}.. howeve
         <field to="flyform.flyform" name="flyform" rel="OneToOneRel">15</field>
         <field type="IntegerField" name="doc_status">0</field>
         <field type="BooleanField" name="is_public">True</field>
-        <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel"/>
+        <field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"/>
     </object>
-  <object pk="16" model="document.document">
+  <object pk="16" model="document.documenttemplate">
     <field to="auth.user" name="owner" rel="ManyToOneRel">1</field>
     <field type="CharField" name="name">Shareholder Agreement</field>
     <field type="SlugField" name="slug">shareholder-agreement</field>
@@ -435,7 +435,7 @@ Signature of witness: __________________________
     <field to="flyform.flyform" name="flyform" rel="OneToOneRel">16</field>
     <field type="IntegerField" name="doc_status">1</field>
     <field type="BooleanField" name="is_public">True</field>
-    <field to="document.documentcategory" name="doc_cats" rel="ManyToManyRel">
+    <field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel">
       <object pk="20"></object>
     </field>
   </object>

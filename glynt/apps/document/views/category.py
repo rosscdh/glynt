@@ -1,13 +1,13 @@
 from django.views.generic.list import ListView
 
-from glynt.apps.document.models import Document, DocumentCategory
+from glynt.apps.document.models import DocumentTemplate, DocumentTemplateCategory
 
 import logging
 logger = logging.getLogger(__name__)
 
 
 class DocumentByCategoryListView(ListView):
-  model = Document
+  model = DocumentTemplate
   template_name = 'document/documentcategory_list.html'
 
   def get_queryset(self):
@@ -25,7 +25,7 @@ class DocumentByCategoryListView(ListView):
   def get_context_data(self, **kwargs):
     context = super(DocumentByCategoryListView, self).get_context_data(**kwargs)
 
-    context['category'] = DocumentCategory.objects.get(slug=self.category)
+    context['category'] = DocumentTemplateCategory.objects.get(slug=self.category)
     context['doc_type'] = self.doc_type
 
     return context
