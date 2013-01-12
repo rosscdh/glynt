@@ -67,20 +67,7 @@
 </div>
 
 
-
-
 <div class="container">
-	<!-- <div class="row">
-	      <div class="span12 sidebar">
-			  <br />
-	          <ul class="nav nav-list">
-	            <li style="margin-left:15px"></li>
-	            <li class="divider"></li>
-	              <li><a href="#/list/my_documents/all"></a></li>
-	              <li><a href="#/list/activity"> {% trans 'Activity' %}</a></li>
-	          </ul>
-	      </div>
-		</div> -->
 		<div class="row existing-docs">
 			<div class="span12">
 				<h3>Existing documents <span>A library of your existing LawPal documents</span></h3>
@@ -145,17 +132,17 @@
 		        <div class="doc-body">
 		          <h2>{% trans 'New Document' %}</h2>
 		          {% if user.is_staff %}
-		          <div class="span3 pull-right"><a href="{% url 'doc:create' %}" class="admin btn btn-warning" id="toggle-docs">{% trans 'Create Doc' %}</a></div>
+		          <div class="span3 pull-right"><a href="{% url 'doc:create_template' %}" class="admin btn btn-warning" id="toggle-docs">{% trans 'Create Doc' %}</a></div>
 		          {% endif %}
 		          <ul>
 		            {% for d in public_document_list %}
 		            <li>
-		                {% if d.is_v1_doc %}
-		                <a class="template-document" href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a>
-		                {% else %}
-		                <a class="template-document" href="{% url 'doc:view' slug=d.slug %}">{{ d.name }}</a>
-		                {% endif %}
-		                {% if user.is_staff %}- <a class="admin author_edit-document" href="{% url 'author:edit' pk=d.pk %}">edit</a>{% endif %}
+                        {% if d.is_v1_doc %}
+                        <a class="template-document" href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a>
+                        {% else %}
+                        <a class="template-document" href="{% url 'doc:create_document' slug=d.slug %}">{{ d.name }}</a>
+                        {% endif %}
+                        {% if user.is_staff %}- <a class="admin author_edit-document" href="{% url 'doc:update_document' pk=d.pk %}">edit</a>{% endif %}
 		            </li>
 		            {% endfor %}
 		          </ul>
@@ -163,16 +150,6 @@
 		      </div>
 	</div>
 </div>
-{% for d in public_document_list %}
-<!-- <li>
-    {% if d.is_v1_doc %}
-    <a class="template-document" href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a>
-    {% else %}
-    <a class="template-document" href="{% url 'doc:view' slug=d.slug %}">{{ d.name }}</a>
-    {% endif %}
-    {% if user.is_staff %}- <a class="admin author_edit-document" href="{% url 'author:edit' pk=d.pk %}">edit</a>{% endif %}
-</li> -->
-{% endfor %}
 {% endblock %}
 
 {% block css %}
