@@ -5,7 +5,6 @@ from django.core.urlresolvers import reverse
 from django.utils import simplejson as json
 from django.utils.safestring import mark_safe
 
-from taggit.managers import TaggableManager
 from categories.models import CategoryBase
 from jsonfield import JSONField
 
@@ -36,7 +35,6 @@ class Document(models.Model):
     doc_status = models.IntegerField(choices=DOC_STATUS.get_choices(), blank=False, default=DOC_STATUS.draft)
     is_public = models.BooleanField(default=True)
     doc_cats = models.ManyToManyField('DocumentCategory')
-    tags = TaggableManager()
 
     objects = DocumentManager()
     public_objects = PublicDocumentManager()
