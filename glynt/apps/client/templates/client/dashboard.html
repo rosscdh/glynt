@@ -20,52 +20,52 @@
 			<div class="span8">
 				<h3>New document <span>Choose from a popular document or view all</span></h3>
 				<div class="features2">
-		            <!-- features 2 -->
-		            <div class="row">
-		                <div class="span4 feature2">
-		                    <div class="icon c1">CL</div>
-		                    <h4>Short commercial lease</h4>
-		                    <p>
-		                        You can't do better design with a computer, but you can speed up your work
-		                        enormously.
-		                    </p>
-		                </div>
-		                <div class="span4 feature2">
-		                    <div class="icon c2">NDA</div>
-		                    <h4>Mutual non-disclosure agreement</h4>
-		                    <p>
-		                        You can't do better design with a computer, but you can speed up your work
-		                        enormously.
-		                    </p>
-		                </div>
-		                <div class="span4 feature2">
-		                    <div class="icon c3">HSP</div>
-		                    <h4>Health and Safety Policy</h4>
-		                    <p>
-		                        You can't do better design with a computer, but you can speed up your work
-		                        enormously.
-		                    </p>
-		                </div>
-		                <div class="span4 feature2">
-		                    <div class="icon c4">LA</div>
-		                    <h4>Loan agreement</h4>
-		                    <p>
-		                        You can't do better design with a computer, but you can speed up your work
-		                        enormously.
-		                    </p>
-		                </div>
-					</div>
-		            <div class="row">
-						<div class="span8 view-all">
-							<a href="#/list/templates/create_new" class="btn btn-success">View All Documents</a>
+					<!-- features 2 -->
+					<div class="row">
+						<div class="span4 feature2">
+							<div class="icon c1">CL</div>
+							<h4>Short commercial lease</h4>
+							<p>
+								You can't do better design with a computer, but you can speed up your work
+								enormously.
+							</p>
 						</div>
-		            </div>
-		        </div>
+						<div class="span4 feature2">
+							<div class="icon c2">NDA</div>
+							<h4>Mutual non-disclosure agreement</h4>
+							<p>
+								You can't do better design with a computer, but you can speed up your work
+								enormously.
+							</p>
+						</div>
+						<div class="span4 feature2">
+							<div class="icon c3">HSP</div>
+							<h4>Health and Safety Policy</h4>
+							<p>
+								You can't do better design with a computer, but you can speed up your work
+								enormously.
+							</p>
+						</div>
+						<div class="span4 feature2">
+							<div class="icon c4">LA</div>
+							<h4>Loan agreement</h4>
+							<p>
+								You can't do better design with a computer, but you can speed up your work
+								enormously.
+							</p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="span8 view-all">
+							<a href="#/list/templates" class="btn btn-success">View All Documents</a>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="span4 mini-activity hidden-phone">
 				<h3>{% trans 'Recent activity' %}</h3>
 				<ul>
-  		          {% user_activity_stream request.user 4 %}
+				  {% user_activity_stream request.user 4 %}
 				</ul>
 			</div>
 		</div>
@@ -81,63 +81,69 @@
 		<div class="span12">
 			<ul class="nav nav-tabs">
 			  <li class="active">
-			    <a href="#/list/my_documents/all"><i class="icon-globe"></i> {% trans 'All Documents' %}</a>
+				<a href="#/list/my_documents/all"><i class="icon-globe"></i> {% trans 'All Documents' %}</a>
 			  </li>
 			  <li><a href="#"><i class="icon-pause"></i> Incomplete Documents</a></li>
 			  <li><a href="#"><i class="icon-briefcase"></i> AcmeCo Docs</a></li>
 			  <li><a href="#"><i class="icon-home"></i> Property A Docs</a></li>
 			</ul>
 		</div>
-	      <div id="my_docs_list" class="span12 view default">
-	        <div class="dash-panel">
-	          <table id="my-documents" class="table table-stripped table-border table-hover ">
-	          <tr>
-	              <th>{% trans 'Document Name' %}</th>
-	              <th>{% trans 'Date Created' %}</th>
-	              <th>{% trans 'Status' %}</th>
-	              <th><span class="pull-right">{% trans 'Action' %}</span></th>
-	          </tr>
-	          {% for d in my_document_list %}
-	          <tr>
-	              <td class="document-title">
-	                <div class="icon {% colorize_acronym d.source_document.acronym %}">{{ d.source_document.acronym|default:"?" }}</div> <a href="{% url 'document:my_review' slug=d.slug %}" rel="tooltip" title="{% trans 'Created by' %} {{ d.owner.get_profile.short_name|default:d.owner.username }}" class="doc-title">{{ d.name }}</a>
+
+		  <div id="my_docs_list" class="span12 view default">
+			<div class="dash-panel">
+			  <table id="my-documents" class="table table-stripped table-border table-hover ">
+			  <tr>
+				  <th>{% trans 'Document Name' %}</th>
+				  <th>{% trans 'Date Created' %}</th>
+				  <th>{% trans 'Status' %}</th>
+				  <th><span class="pull-right">{% trans 'Action' %}</span></th>
+			  </tr>
+			  {% for d in my_document_list %}
+			  <tr>
+				  <td class="document-title">
+					<div class="icon {% colorize_acronym d.source_document.acronym %}">{{ d.source_document.acronym|default:"?" }}</div> <a href="{% url 'document:my_review' slug=d.slug %}" rel="tooltip" title="{% trans 'Created by' %} {{ d.owner.get_profile.short_name|default:d.owner.username }}" class="doc-title">{{ d.name }}</a>
 				</td>
 				<td>
-				    <span>{% moment d.created_at d.created_at %}</span>
-	              </td>
-	              <td class="document-status">
-	                {% document_status d %}
+					<span>{% moment d.created_at d.created_at %}</span>
+				  </td>
+				  <td class="document-status">
+					{% document_status d %}
 				</td>
-	              <td class="document-action">
-	                <div class="btn-group pull-right">
-	                  <button class="btn dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i> <span class="caret"></span></button>
-	                  <ul class="dropdown-menu">
-	                    <li><a id="edit-{{ d.pk }}" class="small" href="{% url 'document:my_view' slug=d.slug %}">{% trans 'Edit' %}</a></li>
-	                    <li><a id="clone-{{ d.pk }}" href="#clone" data-url="{% url 'document:my_clone' pk=d.pk %}" data-pk="{{ d.pk }}" class="clone-my-document">{% trans 'Clone' %}</a></li>
-	                    <li><a id="export-{{ d.pk }}" href="{% url 'export:as_pdf' slug=d.slug %}" target="_BLANK" data-url="{% url 'export:as_pdf' slug=d.slug %}" data-pk="{{ d.pk }}" class="">{% trans 'Download PDF' %}</a></li>
-	                    <li><a id="delete-{{ d.pk }}" href="#delete" data-url="{% url 'document:my_delete' pk=d.pk %}" data-pk="{{ d.pk }}" class="delete-my-document">{% trans 'Delete' %}</a></li>
-	                  </ul>
-	                </div>
-	              </td>
-	          </tr>
-	          {% endfor %}
-	          </table>
-	        </div>
-	      </div>
+				  <td class="document-action">
+					<div class="btn-group pull-right">
+					  <button class="btn dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i> <span class="caret"></span></button>
+					  <ul class="dropdown-menu">
+						<li><a id="edit-{{ d.pk }}" class="small" href="{% url 'document:my_view' slug=d.slug %}">{% trans 'Edit' %}</a></li>
+						<li><a id="clone-{{ d.pk }}" href="#clone" data-url="{% url 'document:my_clone' pk=d.pk %}" data-pk="{{ d.pk }}" class="clone-my-document">{% trans 'Clone' %}</a></li>
+						<li><a id="export-{{ d.pk }}" href="{% url 'export:as_pdf' slug=d.slug %}" target="_BLANK" data-url="{% url 'export:as_pdf' slug=d.slug %}" data-pk="{{ d.pk }}" class="">{% trans 'Download PDF' %}</a></li>
+						<li><a id="delete-{{ d.pk }}" href="#delete" data-url="{% url 'document:my_delete' pk=d.pk %}" data-pk="{{ d.pk }}" class="delete-my-document">{% trans 'Delete' %}</a></li>
+					  </ul>
+					</div>
+				  </td>
+			  </tr>
+			  {% endfor %}
+			  </table>
+			</div>
+		  </div>
 
-            <div id="templates_list" class="span12 view hide dash-panel">
-                <div class="doc-body">
-                    <h2>{% trans 'New Document' %}</h2>
-                    <ul>
-                        {% for d in public_document_list %}
-                        <li>
-                            <a class="template-document" href="{% url 'doc:create_document' pk=d.pk %}">{{ d.name }}</a>
-                            {% if user.is_staff %}- <a class="admin author_edit-document" href="{% url 'doc:update_document' pk=d.pk %}">edit</a>{% endif %}
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
+			<div id="templates_list" class="modal hide fade view" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h3>{% trans 'Document Templates' %}</h3>
+				</div>
+				<div class="modal-body">
+					<ul>
+						{% for d in public_document_list %}
+						<li>
+							<a class="template-document" href="{% url 'doc:create_document' pk=d.pk %}">{{ d.name }}</a>
+							{% if user.is_staff %}
+							&nbsp;<a class="admin author_edit-document" href="{% url 'doc:update_template' pk=d.pk %}">edit</a>
+							{% endif %}
+						</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
 	</div>
 </div>
 {% endblock %}
@@ -159,64 +165,76 @@ ul.activity li:last{
 </style>
 {% endblock %}
 
+
 {% block js %}
-
-{% tplhandlebars "document-template-item" %}
-<div class="span2" style="background-color:{{color}}"><a class="template-document" href="{{url}}">{{text}}</a></div>
-{% endtplhandlebars %}
-
 <script id="document-controls" type="text/javascript">
 $(document).ready(function(){
 // ----- Document Template Select -----
 var app = $.sammy(function() {
-    var self = this;
-    self.views = $('div.view');
-    self.nav = $('ul.nav-list li a');
+	var self = this;
+	self.views = $('div.view');
+	self.nav = $('ul.nav-list li a');
 
-    var hb_templates_source   = $("script#template_list").html();
-    var hb_templates_list = Handlebars.compile(hb_templates_source);
+	var hb_templates_source   = $("script#template_list").html();
+	var hb_templates_list = Handlebars.compile(hb_templates_source);
 
-    this.get('#/', function() {
-        this.redirect('#/list/my_documents/all');
-    });
+	this.get('#/', function() {
+		this.redirect('#/list/my_documents/all');
+	});
 
-    this.get('#/list/my_documents/all', function() {
-        self.show($('div#my_docs_list'));
-    });
-    this.get('#/list/my_documents/incomplete', function() {
-        self.show($('div#my_docs_list'));
-    });
-    this.get('#/list/my_documents/out_for_signing', function() {
-        self.show($('div#my_docs_list'));
-    });
-    this.get('#/list/my_documents/recently_signed', function() {
-        self.show($('div#my_docs_list'));
-    });
-    this.get('#/list/my_documents/awaiting_your_signature', function() {
-        self.show($('div#my_docs_list'));
-    });
+	this.get('#/list/my_documents/all', function() {
+		self.show($('div#my_docs_list'));
+	});
+	this.get('#/list/my_documents/incomplete', function() {
+		self.show($('div#my_docs_list'));
+	});
+	this.get('#/list/my_documents/out_for_signing', function() {
+		self.show($('div#my_docs_list'));
+	});
+	this.get('#/list/my_documents/recently_signed', function() {
+		self.show($('div#my_docs_list'));
+	});
+	this.get('#/list/my_documents/awaiting_your_signature', function() {
+		self.show($('div#my_docs_list'));
+	});
 
-    this.get('#/list/templates/create_new', function() {
-        self.show($('div#templates_list'));
-    });
+	this.get('#/list/templates', function() {
+		var view = $('div#templates_list');
+		self.show_modal(this, view);
+	});
 
-    this.hide_all = function hide_all() {
-        self.nav.removeClass('selected');
-        $.each(self.views, function(index, item) {
-            $(item).hide();
-        });
-    };
-    this.show = function show_view(view_list) {
-        if ($.isArray(view_list) == false) {
-            view_list = [view_list];
-        }
-        self.hide_all();
-        $('[href="'+window.location.hash+'"]').addClass('selected');
-        $.each(view_list, function(index, item) {
-            item.show();
-        });
-    }
-    
+	this.hide_all = function hide_all() {
+		self.nav.removeClass('selected');
+		$.each(self.views, function(index, item) {
+			$(item).hide();
+		});
+	};
+	this.show = function show_view(view_list) {
+		if ($.isArray(view_list) == false) {
+			view_list = [view_list];
+		}
+		self.hide_all();
+		$('[href="'+window.location.hash+'"]').addClass('selected');
+		$.each(view_list, function(index, item) {
+			item.show();
+		});
+	};
+	this.show_modal = function show_modal(caller, view) {
+		//this.hide_all();
+		view.modal({show:true});
+		view.on('show', function(){
+			$(this).removeClass('hide');
+			$(this).addClass('selected');
+		});
+		view.on('hide', function(){
+			$(this).addClass('hide');
+			$(this).removeClass('selected');
+		});
+		view.on('hidden', function(){
+			caller.redirect('#/list/my_documents/all');
+		});
+	}
+	
 });
 
 // start the application
@@ -224,119 +242,119 @@ app.run('#/');
 
 // ----- My Document list options -----
   $('a.export-pdf').live('click', function(event){
-    event.preventDefault();
-    var data = {
-        csrfmiddlewaretoken: '{{ csrf_raw_token }}',
-        md: '',
-        id: $(this).attr('data-pk')
-    };
+	event.preventDefault();
+	var data = {
+		csrfmiddlewaretoken: '{{ csrf_raw_token }}',
+		md: '',
+		id: $(this).attr('data-pk')
+	};
 
-    $.ajax({
-      type: 'POST',
-      url: $(this).attr('data-url'),
-      data: data,
-    })
-    .success(function(data, textStatus, jqXHR) {
-      console.log(data)
-    })
-    .error(function() { 
-        console.log('Error in Javascript event')
-    })
-    .complete(function() {
-    });
+	$.ajax({
+	  type: 'POST',
+	  url: $(this).attr('data-url'),
+	  data: data,
+	})
+	.success(function(data, textStatus, jqXHR) {
+	  console.log(data)
+	})
+	.error(function() { 
+		console.log('Error in Javascript event')
+	})
+	.complete(function() {
+	});
   });
 
   deleted_doc = null;
 
   $('a.delete-my-document').live('click', function(event){
-    event.preventDefault();
-    var self = $(this);
-    var data = {
-        csrfmiddlewaretoken: '{{ csrf_raw_token }}'
-    };
-    $.ajax({
-      type: 'POST',
-      url: $(this).attr('data-url'),
-      data: data,
-    })
-    .success(function(data, textStatus, jqXHR) {
-      data = data[0];
-      var div = self.closest('div');
-      var td = self.closest('td');
-      var tr = self.closest('tr');
-      deleted_doc = td.html()
-      div.fadeOut('slow', function(){
-        $(this).remove();
-        td.html(data.message);
-      });
+	event.preventDefault();
+	var self = $(this);
+	var data = {
+		csrfmiddlewaretoken: '{{ csrf_raw_token }}'
+	};
+	$.ajax({
+	  type: 'POST',
+	  url: $(this).attr('data-url'),
+	  data: data,
+	})
+	.success(function(data, textStatus, jqXHR) {
+	  data = data[0];
+	  var div = self.closest('div');
+	  var td = self.closest('td');
+	  var tr = self.closest('tr');
+	  deleted_doc = td.html()
+	  div.fadeOut('slow', function(){
+		$(this).remove();
+		td.html(data.message);
+	  });
 
-    })
-    .error(function(jqXHR, textStatus, errorThrown) { 
-      console.log(jqXHR)
-      console.log(textStatus)
-      console.log(errorThrown)
-      console.log('Error in Javascript event')
-    })
-    .complete(function() {
-    });
+	})
+	.error(function(jqXHR, textStatus, errorThrown) { 
+	  console.log(jqXHR)
+	  console.log(textStatus)
+	  console.log(errorThrown)
+	  console.log('Error in Javascript event')
+	})
+	.complete(function() {
+	});
   });
 
   $('a.undelete-my-document').live('click', function(event){
-    event.preventDefault();
+	event.preventDefault();
 
-    var self = $(this);
-    var data = {
-        csrfmiddlewaretoken: '{{ csrf_raw_token }}'
-    };
-    $.ajax({
-      type: 'POST',
-      url: $(this).attr('href'),
-      data: data,
-    })
-    .success(function(data, textStatus, jqXHR) {
-      data = data;
+	var self = $(this);
+	var data = {
+		csrfmiddlewaretoken: '{{ csrf_raw_token }}'
+	};
+	$.ajax({
+	  type: 'POST',
+	  url: $(this).attr('href'),
+	  data: data,
+	})
+	.success(function(data, textStatus, jqXHR) {
+	  data = data;
 
-      var div = self.closest('div');
-      var td = self.closest('td');
-      var tr = self.closest('tr');
+	  var div = self.closest('div');
+	  var td = self.closest('td');
+	  var tr = self.closest('tr');
 
-      td.html(deleted_doc);
-      $(deleted_doc).children().show();
+	  td.html(deleted_doc);
+	  $(deleted_doc).children().show();
 
-    })
-    .error(function(jqXHR, textStatus, errorThrown) { 
-      console.log(jqXHR)
-      console.log(textStatus)
-      console.log(errorThrown)
-      console.log('Error in Javascript event')
-    })
-    .complete(function() {
-    });
+	})
+	.error(function(jqXHR, textStatus, errorThrown) { 
+	  console.log(jqXHR)
+	  console.log(textStatus)
+	  console.log(errorThrown)
+	  console.log('Error in Javascript event')
+	})
+	.complete(function() {
+	});
   });
 
   $('a.clone-my-document').live('click', function(event){
-    event.preventDefault();
-    var self = $(this);
-    var data = {
-        csrfmiddlewaretoken: '{{ csrf_raw_token }}'
-    };
-    $.ajax({
-      type: 'POST',
-      url: $(this).attr('data-url'),
-      data: data,
-    })
-    .success(function(data, textStatus, jqXHR) {
-      data = data[0];
-      window.location = data.url
-    })
-    .error(function(jqXHR, textStatus, errorThrown) { 
-      console.log(jqXHR)
-      console.log(textStatus)
-      console.log(errorThrown)
-      console.log('Error in Javascript event')
-    })
-    .complete(function() {
-    });
+	event.preventDefault();
+	var self = $(this);
+	var data = {
+		csrfmiddlewaretoken: '{{ csrf_raw_token }}'
+	};
+	$.ajax({
+	  type: 'POST',
+	  url: $(this).attr('data-url'),
+	  data: data,
+	})
+	.success(function(data, textStatus, jqXHR) {
+	  data = data[0];
+	  window.location = data.url
+	})
+	.error(function(jqXHR, textStatus, errorThrown) { 
+	  console.log(jqXHR)
+	  console.log(textStatus)
+	  console.log(errorThrown)
+	  console.log('Error in Javascript event')
+	})
+	.complete(function() {
+	});
   });
 
 
