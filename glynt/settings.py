@@ -168,7 +168,6 @@ HELPER_APPS = (
     'django_extensions',
     'templatetag_handlebars',
     'django_markdown',
-    'taggit',
     'django_jenkins',
     'categories',
     'categories.editor',
@@ -176,7 +175,6 @@ HELPER_APPS = (
     'django_xhtml2pdf',
     'socialregistration',
     'socialregistration.contrib.facebook_js',
-    #'socialregistration.contrib.linkedin_js',
     'djcelery',
     'bootstrap',
     # Userena

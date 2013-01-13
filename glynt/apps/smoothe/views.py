@@ -59,14 +59,11 @@ class UpdateDocumentView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super(UpdateDocumentView, self).get_context_data(**kwargs)
 
-        self.user_document = ClientCreatedDocument.objects.select_related('source_document').get(pk=self.pk)
-        invitee_list = self.user_document.documentsignature_set.all()
+        invitee_list = self.object.documentsignature_set.all()
 
         context['csrf_raw_token'] = get_token(self.request)
-        context['submit_url'] = reverse('doc:update_document', kwargs={'pk': self.user_document.pk})
-        context['userdoc'] = self.user_document
-        context['object'] = self.document
-        context['document'] = self.document.body
+        context['submit_url'] = reverse('doc:update_document', kwargs={'pk': self.object.pk})
+        context['document_template'] = self.object.source_document
 
         return context
 
@@ -101,7 +98,7 @@ class CreateTemplateView(CreateView):
       return context
 
 
-class UpdateDocumentView(UpdateView):
+class UpdateTemplateView(UpdateView):
     template_name = 'smoothe/document-edit.html'
     form_class = DocumentTemplateForm
     model = DocumentTemplate

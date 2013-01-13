@@ -2,8 +2,9 @@ from django.conf.urls import patterns, url
 from django.views.generic.base import TemplateView
 from django.contrib.auth.decorators import login_required
 
-from glynt.apps.smoothe.views import CreateDocumentView, UpdateDocumentView, \
-                                     CreateTemplateView, CreateTemplateView as UpdateTemplateView
+from glynt.apps.smoothe.views import CreateTemplateView, UpdateTemplateView, \
+                                     CreateDocumentView, UpdateDocumentView
+                                     
 
 
 urlpatterns = patterns('',

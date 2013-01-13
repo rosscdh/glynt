@@ -34,7 +34,7 @@ class MyDocumentView(DocumentView):
 
     self.user_document = get_object_or_404(ClientCreatedDocument.objects.select_related('source_document', 'source_document__flyform'), slug=document_slug, owner=self.request.user)
     user_can_view_document(self.user_document, self.request.user)
-    # Setup the document based on teh source_document of the viewed doc
+    # Setup the document based on the source_document of the viewed doc
     self.document = self.user_document.source_document
     invitee_list = self.user_document.documentsignature_set.all()
 

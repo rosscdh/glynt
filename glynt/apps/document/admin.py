@@ -8,10 +8,7 @@ from glynt.apps.document.models import DocumentTemplate, DocumentTemplateCategor
 
 class DocumentTemplateAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
-    fieldsets = (
-        ('Template Properties', { 'fields': ('name', 'slug', 'owner', 'acronym', 'summary', 'description', 'doc_status', 'is_public', 'doc_cats') }),
-        ('Template Authoring', {'fields': ('body',), 'description': 'Author your document using the text input below. You should see a preview of the document.' }),
-    )
+
 
 class DocumentTemplateCategoryAdmin(CategoryBaseAdmin):
     prepopulated_fields = {"slug": ("name",)}

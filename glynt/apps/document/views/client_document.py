@@ -31,9 +31,9 @@ class MyDocumentView(DocumentView):
 
     document_slug = slugify(self.kwargs['slug'])
 
-    self.user_document = get_object_or_404(ClientCreatedDocument.objects.select_related('source_document', 'source_document__flyform'), slug=document_slug, owner=self.request.user)
+    self.user_document = get_object_or_404(ClientCreatedDocument, slug=document_slug, owner=self.request.user)
     user_can_view_document(self.user_document, self.request.user)
-    # Setup the document based on teh source_document of the viewed doc
+    # Setup the document based on the source_document of the viewed doc
     self.document = self.user_document.source_document
     invitee_list = self.user_document.documentsignature_set.all()
 
@@ -42,31 +42,17 @@ class MyDocumentView(DocumentView):
     context['document'] = self.document.body
     context['default_data'] = json.dumps(self.user_document.data)
 
-    # @TODO handle invitees gracefully
-    # context['invitee_list'] = invitee_list
-    # context['invitee_list_json'] = json.dumps([{'id': i.pk, 'name': i.meta_data['to_name'], 'email': i.meta_data['to_email'], 'is_signed': i.is_signed, 'date_signed': i.date_signed.strftime("%x %X") if i.date_signed is not None else '', 'signature_image_url': i.signature_pic_url, 'ip': i.meta_data['signee_ip'] if 'signee_ip' in i.meta_data else ''} for i in invitee_list])
-    # context['can_add_invite'] = str(self.document.flyform.flyform_meta['can_add_invite']).lower() if 'can_add_invite' in self.document.flyform.flyform_meta else str(False).lower()
-    # context['signature_template'] = self.document.flyform.signature_template.render(Context({}))
-
-    try:
-      context['form_set'] = self.document.flyform.flyformset()
-    except KeyError:
-      context['form_set'] = FORM_GROUPS['no_steps']
-
-    #print context['form_set'][0].fields['full_company_name'].widget.__dict__
-
-    context['final_step_index'] = len(context['form_set']) + 1
-
     return context
 
 
 class ReviewClientCreatedView(MyDocumentView):
+    """ Show an overview of the selected document """
     template_name = 'document/review.html'
     def get_context_data(self, **kwargs):
-      context = super(ReviewClientCreatedView, self).get_context_data(**kwargs)
-      context['document_data'] = self.user_document.data_as_json()
-      context['next'] = reverse('document:my_review', kwargs={'slug':self.user_document.slug})
-      return context
+        context = super(ReviewClientCreatedView, self).get_context_data(**kwargs)
+        context['document_data'] = self.user_document.data_as_json()
+        context['next'] = reverse('document:my_review', kwargs={'slug':self.user_document.slug})
+        return context
 
 
 # TODO this view represents both the create and the form validate (edit) views

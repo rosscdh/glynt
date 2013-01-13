@@ -51,13 +51,13 @@
 					</div>
 		            <div class="row">
 						<div class="span8 view-all">
-							<a href="#" class="btn btn-success">View All Documents</a>
+							<a href="#/list/templates/create_new" class="btn btn-success">View All Documents</a>
 						</div>
 		            </div>
 		        </div>
 			</div>
 			<div class="span4 mini-activity hidden-phone">
-				<h3>Recent activity</h3>
+				<h3>{% trans 'Recent activity' %}</h3>
 				<ul>
   		          {% user_activity_stream request.user 4 %}
 				</ul>
@@ -94,7 +94,7 @@
 		          {% for d in my_document_list %}
 		          <tr>
 		              <td class="document-title">
-		                <div class="icon c1">CL</div> <a href="{% url 'document:my_review' slug=d.slug %}" rel="tooltip" title="{% trans 'Created by' %} {{ d.owner.get_profile.short_name|default:d.owner.username }}" class="doc-title">{{ d.name }}</a>
+		                <div class="icon {% colorize_acronym d.source_document.acronym %}">{{ d.source_document.acronym|default:"?" }}</div> <a href="{% url 'document:my_review' slug=d.slug %}" rel="tooltip" title="{% trans 'Created by' %} {{ d.owner.get_profile.short_name|default:d.owner.username }}" class="doc-title">{{ d.name }}</a>
 					</td>
 					<td>
 					    <span>{% moment d.created_at d.created_at %}</span>
@@ -119,35 +119,26 @@
 		        </div>
 		      </div>
 
-		      <div id="activity_list" class="span12 view hide dash-panel">
-		        <div class="doc-body">
-		          <h3>{% trans 'Activity' %}</h3>
-		          <ul class="activity activity-large">
-		          {% user_activity_stream request.user 50 %}
-		          </ul>
-		        </div>
-		      </div>
-
-		      <div id="templates_list" class="span12 view hide dash-panel">
-		        <div class="doc-body">
-		          <h2>{% trans 'New Document' %}</h2>
-		          {% if user.is_staff %}
-		          <div class="span3 pull-right"><a href="{% url 'doc:create_template' %}" class="admin btn btn-warning" id="toggle-docs">{% trans 'Create Doc' %}</a></div>
-		          {% endif %}
-		          <ul>
-		            {% for d in public_document_list %}
-		            <li>
-                        {% if d.is_v1_doc %}
-                        <a class="template-document" href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a>
-                        {% else %}
-                        <a class="template-document" href="{% url 'doc:create_document' slug=d.slug %}">{{ d.name }}</a>
+                <div id="templates_list" class="span12 view hide dash-panel">
+                    <div class="doc-body">
+                        <h2>{% trans 'New Document' %}</h2>
+                        {% if user.is_staff %}
+                        <div class="span3 pull-right"><a href="{% url 'doc:create_template' %}" class="admin btn btn-warning" id="toggle-docs">{% trans 'Create Doc' %}</a></div>
                         {% endif %}
-                        {% if user.is_staff %}- <a class="admin author_edit-document" href="{% url 'doc:update_document' pk=d.pk %}">edit</a>{% endif %}
-		            </li>
-		            {% endfor %}
-		          </ul>
-		        </div>
-		      </div>
+                        <ul>
+                            {% for d in public_document_list %}
+                            <li>
+                                {% if d.is_v1_doc %}
+                                <a class="template-document" href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a>
+                                {% else %}
+                                <a class="template-document" href="{% url 'doc:create_document' slug=d.slug %}">{{ d.name }}</a>
+                                {% endif %}
+                                {% if user.is_staff %}- <a class="admin author_edit-document" href="{% url 'doc:update_document' pk=d.pk %}">edit</a>{% endif %}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
 	</div>
 </div>
 {% endblock %}
@@ -204,10 +195,6 @@ var app = $.sammy(function() {
     });
     this.get('#/list/my_documents/awaiting_your_signature', function() {
         self.show($('div#my_docs_list'));
-    });
-
-    this.get('#/list/activity', function() {
-        self.show($('div#activity_list'));
     });
 
     this.get('#/list/templates/create_new', function() {

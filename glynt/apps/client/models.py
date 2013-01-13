@@ -39,7 +39,7 @@ class ClientProfile(UserenaBaseProfile):
     def short_name(self):
         """ Returns A. LastName """
         user = self.user
-        return u'%s. %s' % (user.first_name[0], user.last_name,)
+        return u'%s. %s' % (user.first_name[0], user.last_name,) if user.first_name and user.last_name else user.username
 
     def get_mugshot_url(self):
         """ Override the default """

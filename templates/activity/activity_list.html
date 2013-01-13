@@ -1,6 +1,10 @@
-{% load humanize glynt_helpers %}
+{% load i18n humanize glynt_helpers %}
 {% for a in object_list %}
 <li>
-<div class="">{{ a.content|safe }} <span class="created">{% moment a.created_at a.created_at %}</span></div>
+    <span class="created">{% moment a.created_at a.created_at %}</span><br/>{{ a.content|safe }}
+</li>
+{% empty %}
+<li>
+<div class="">{% trans 'No recent Activity' %}</div>
 </li>
 {% endfor %}

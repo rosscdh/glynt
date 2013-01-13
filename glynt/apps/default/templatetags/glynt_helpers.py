@@ -20,6 +20,23 @@ def current_site_domain():
 current_site_domain.is_safe = True
 
 
+@register.simple_tag
+def colorize_acronym(acronym):
+    color_class = None
+    if acronym == 'cl':
+        color_class = 'c1'
+    elif acronym == 'la':
+        color_class = 'c2'
+    elif acronym == 'nda':
+        color_class = 'c3'
+    elif acronym == 'hsp':
+        color_class = 'c4'
+    else:
+        color_class = 'c5'
+    return color_class
+colorize_acronym.is_safe = True
+
+
 @register.inclusion_tag('document/partials/document_status.html')
 def document_status(document):
   status = None

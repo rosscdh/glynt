@@ -31,14 +31,14 @@ def userdoc_from_request(user, source_doc=None, pk=None):
 def user_can_view_document(document, user):
   """ Helper method for testing a users access to this document """
   
-  if type(document) == Document:
+  if type(document) == DocumentTemplate:
     if user.is_superuser or user.is_staff:
       return True
-    if document.owner == user and document.doc_status not in [Document.DOC_STATUS.deleted]:
+    if document.owner == user and document.doc_status not in [DocumentTemplate.DOC_STATUS.deleted]:
       return True
     if document.is_public == False:
       raise Http404
-    if document.doc_status in [Document.DOC_STATUS.deleted, DocumentTemplate.DOC_STATUS.draft]:
+    if document.doc_status in [DocumentTemplate.DOC_STATUS.deleted, DocumentTemplate.DOC_STATUS.draft]:
       raise Http404
 
   elif type(document) == ClientCreatedDocument:
