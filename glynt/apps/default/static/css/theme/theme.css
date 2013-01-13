@@ -548,6 +548,13 @@ a {
     margin-top:10px;
 }
 */
+.admin-panel {
+background-color: #92C65F;
+border: 3px solid #EDEDED;
+border-top:0px;
+padding:10px 0px 5px 0px;
+}
+
 .dashboard #hero {
 	padding-top:20px;
 }

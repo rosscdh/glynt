@@ -13,7 +13,7 @@ from glynt.apps.document.views import DocumentView
 from glynt.apps.document.views.utils import user_can_view_document
 from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
 
-from .forms import DocumentForm as DocumentTemplateForm, ClientDocumentForm
+from .forms import DocumentTemplateForm, ClientDocumentForm
 
 
 class CreateDocumentView(CreateView):

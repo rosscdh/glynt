@@ -8,13 +8,13 @@ from glynt.apps.document.models import DocumentTemplate
 from glynt.apps.document.models import ClientCreatedDocument
 
 
-class DocumentForm(BootstrapModelForm):
+class DocumentTemplateForm(BootstrapModelForm):
     class Meta:
         model = DocumentTemplate
         exclude = ('slug',)
         layout = (
             Fieldset('Document Authoring', 'body'),
-            Fieldset('Document Properties', 'name', 'owner', 'summary', 'description', 'doc_status', 'is_public', 'doc_cats'),
+            Fieldset('Document Properties', 'name', 'owner', 'acronym', 'summary', 'description', 'doc_status', 'is_public', 'doc_cats'),
         )
 
 

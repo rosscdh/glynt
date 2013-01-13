@@ -95,11 +95,15 @@
        </div>
      </div>
      <!-- ends navbar -->
-  
- 
- 
- 
   {% endblock %}
+
+    {% if user.is_staff %}
+    <div class="row admin-panel">
+        {% block admin_panel %}{% endblock %}
+    </div>
+    {% endif %}
+  
+
   {% block prebody %}{% endblock %}
     <div class="container">
       <ul id="messages">
@@ -110,7 +114,6 @@
           {% endif %}
       </ul>
       {% block body %}{% endblock %}
-
     </div>
   {% block footer %}
   <!-- starts footer -->

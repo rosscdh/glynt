@@ -7,6 +7,12 @@
 
 {% block bodyclass %}dashboard{% endblock %}
 
+{% block admin_panel %}
+<div class="offset1 span3 pull-right">
+<a href="{% url 'doc:create_template' %}" class="admin btn btn-warning" id="toggle-docs">{% trans 'Create Template' %}</a>
+</div>
+{% endblock %}
+
 {% block prebody %}
 <div id="hero">
 	<div class="container">
@@ -68,77 +74,70 @@
 
 
 <div class="container">
-		<div class="row existing-docs">
-			<div class="span12">
-				<h3>Existing documents <span>A library of your existing LawPal documents</span></h3>
-			</div>
-			<div class="span12">
-				<ul class="nav nav-tabs">
-				  <li class="active">
-				    <a href="#/list/my_documents/all"><i class="icon-globe"></i> {% trans 'All Documents' %}</a>
-				  </li>
-				  <li><a href="#"><i class="icon-pause"></i> Incomplete Documents</a></li>
-				  <li><a href="#"><i class="icon-briefcase"></i> AcmeCo Docs</a></li>
-				  <li><a href="#"><i class="icon-home"></i> Property A Docs</a></li>
-				</ul>
-			</div>
-		      <div id="my_docs_list" class="span12 view default">
-		        <div class="dash-panel">
-		          <table id="my-documents" class="table table-stripped table-border table-hover ">
-		          <tr>
-		              <th>{% trans 'Document Name' %}</th>
-		              <th>{% trans 'Date Created' %}</th>
-		              <th>{% trans 'Status' %}</th>
-		              <th><span class="pull-right">{% trans 'Action' %}</span></th>
-		          </tr>
-		          {% for d in my_document_list %}
-		          <tr>
-		              <td class="document-title">
-		                <div class="icon {% colorize_acronym d.source_document.acronym %}">{{ d.source_document.acronym|default:"?" }}</div> <a href="{% url 'document:my_review' slug=d.slug %}" rel="tooltip" title="{% trans 'Created by' %} {{ d.owner.get_profile.short_name|default:d.owner.username }}" class="doc-title">{{ d.name }}</a>
-					</td>
-					<td>
-					    <span>{% moment d.created_at d.created_at %}</span>
-		              </td>
-		              <td class="document-status">
-		                {% document_status d %}
-					</td>
-		              <td class="document-action">
-		                <div class="btn-group pull-right">
-		                  <button class="btn dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i> <span class="caret"></span></button>
-		                  <ul class="dropdown-menu">
-		                    <li><a id="edit-{{ d.pk }}" class="small" href="{% url 'document:my_view' slug=d.slug %}">{% trans 'Edit' %}</a></li>
-		                    <li><a id="clone-{{ d.pk }}" href="#clone" data-url="{% url 'document:my_clone' pk=d.pk %}" data-pk="{{ d.pk }}" class="clone-my-document">{% trans 'Clone' %}</a></li>
-		                    <li><a id="export-{{ d.pk }}" href="{% url 'export:as_pdf' slug=d.slug %}" target="_BLANK" data-url="{% url 'export:as_pdf' slug=d.slug %}" data-pk="{{ d.pk }}" class="">{% trans 'Download PDF' %}</a></li>
-		                    <li><a id="delete-{{ d.pk }}" href="#delete" data-url="{% url 'document:my_delete' pk=d.pk %}" data-pk="{{ d.pk }}" class="delete-my-document">{% trans 'Delete' %}</a></li>
-		                  </ul>
-		                </div>
-		              </td>
-		          </tr>
-		          {% endfor %}
-		          </table>
-		        </div>
-		      </div>
+	<div class="row existing-docs">
+		<div class="span12">
+			<h3>Existing documents <span>A library of your existing LawPal documents</span></h3>
+		</div>
+		<div class="span12">
+			<ul class="nav nav-tabs">
+			  <li class="active">
+			    <a href="#/list/my_documents/all"><i class="icon-globe"></i> {% trans 'All Documents' %}</a>
+			  </li>
+			  <li><a href="#"><i class="icon-pause"></i> Incomplete Documents</a></li>
+			  <li><a href="#"><i class="icon-briefcase"></i> AcmeCo Docs</a></li>
+			  <li><a href="#"><i class="icon-home"></i> Property A Docs</a></li>
+			</ul>
+		</div>
+	      <div id="my_docs_list" class="span12 view default">
+	        <div class="dash-panel">
+	          <table id="my-documents" class="table table-stripped table-border table-hover ">
+	          <tr>
+	              <th>{% trans 'Document Name' %}</th>
+	              <th>{% trans 'Date Created' %}</th>
+	              <th>{% trans 'Status' %}</th>
+	              <th><span class="pull-right">{% trans 'Action' %}</span></th>
+	          </tr>
+	          {% for d in my_document_list %}
+	          <tr>
+	              <td class="document-title">
+	                <div class="icon {% colorize_acronym d.source_document.acronym %}">{{ d.source_document.acronym|default:"?" }}</div> <a href="{% url 'document:my_review' slug=d.slug %}" rel="tooltip" title="{% trans 'Created by' %} {{ d.owner.get_profile.short_name|default:d.owner.username }}" class="doc-title">{{ d.name }}</a>
+				</td>
+				<td>
+				    <span>{% moment d.created_at d.created_at %}</span>
+	              </td>
+	              <td class="document-status">
+	                {% document_status d %}
+				</td>
+	              <td class="document-action">
+	                <div class="btn-group pull-right">
+	                  <button class="btn dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i> <span class="caret"></span></button>
+	                  <ul class="dropdown-menu">
+	                    <li><a id="edit-{{ d.pk }}" class="small" href="{% url 'document:my_view' slug=d.slug %}">{% trans 'Edit' %}</a></li>
+	                    <li><a id="clone-{{ d.pk }}" href="#clone" data-url="{% url 'document:my_clone' pk=d.pk %}" data-pk="{{ d.pk }}" class="clone-my-document">{% trans 'Clone' %}</a></li>
+	                    <li><a id="export-{{ d.pk }}" href="{% url 'export:as_pdf' slug=d.slug %}" target="_BLANK" data-url="{% url 'export:as_pdf' slug=d.slug %}" data-pk="{{ d.pk }}" class="">{% trans 'Download PDF' %}</a></li>
+	                    <li><a id="delete-{{ d.pk }}" href="#delete" data-url="{% url 'document:my_delete' pk=d.pk %}" data-pk="{{ d.pk }}" class="delete-my-document">{% trans 'Delete' %}</a></li>
+	                  </ul>
+	                </div>
+	              </td>
+	          </tr>
+	          {% endfor %}
+	          </table>
+	        </div>
+	      </div>
 
-                <div id="templates_list" class="span12 view hide dash-panel">
-                    <div class="doc-body">
-                        <h2>{% trans 'New Document' %}</h2>
-                        {% if user.is_staff %}
-                        <div class="span3 pull-right"><a href="{% url 'doc:create_template' %}" class="admin btn btn-warning" id="toggle-docs">{% trans 'Create Doc' %}</a></div>
-                        {% endif %}
-                        <ul>
-                            {% for d in public_document_list %}
-                            <li>
-                                {% if d.is_v1_doc %}
-                                <a class="template-document" href="{% url 'document:view' slug=d.slug %}">{{ d.name }}</a>
-                                {% else %}
-                                <a class="template-document" href="{% url 'doc:create_document' slug=d.slug %}">{{ d.name }}</a>
-                                {% endif %}
-                                {% if user.is_staff %}- <a class="admin author_edit-document" href="{% url 'doc:update_document' pk=d.pk %}">edit</a>{% endif %}
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+            <div id="templates_list" class="span12 view hide dash-panel">
+                <div class="doc-body">
+                    <h2>{% trans 'New Document' %}</h2>
+                    <ul>
+                        {% for d in public_document_list %}
+                        <li>
+                            <a class="template-document" href="{% url 'doc:create_document' pk=d.pk %}">{{ d.name }}</a>
+                            {% if user.is_staff %}- <a class="admin author_edit-document" href="{% url 'doc:update_document' pk=d.pk %}">edit</a>{% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
                 </div>
+            </div>
 	</div>
 </div>
 {% endblock %}
