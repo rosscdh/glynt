@@ -17,6 +17,14 @@ class DocumentTemplateForm(BootstrapModelForm):
             Fieldset('Document Properties', 'name', 'owner', 'acronym', 'summary', 'description', 'doc_status', 'is_public', 'doc_cats'),
         )
 
+    def save(self, commit=True):
+        if self.instance.pk is None:
+            # New
+            if not self.instance.slug:
+                self.instance.slug = slugify(self.instance.name)
+
+        return super(DocumentTemplateForm, self).save(commit=commit)
+
 
 class ClientDocumentForm(forms.ModelForm):
     class Meta:

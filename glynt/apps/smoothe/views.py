@@ -16,61 +16,9 @@ from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
 from .forms import DocumentTemplateForm, ClientDocumentForm
 
 
-class CreateDocumentView(CreateView):
-    """ Create a new User Document from a Template """
-    model = ClientCreatedDocument
-    form_class = ClientDocumentForm
-    template_name='smoothe/document.html'
-    http_method_names = ['get', 'post']
-
-    def get_form_kwargs(self):
-        kwargs = super(ModelFormMixin, self).get_form_kwargs()
-
-        self.document = get_object_or_404(DocumentTemplate, slug=self.kwargs['slug'])
-
-        kwargs.update({
-         'request': self.request,
-         'source_document': self.document
-        })
-
-        return kwargs
-
-    def get_context_data(self, **kwargs):
-        context = super(CreateDocumentView, self).get_context_data(**kwargs)
-
-        invitee_list = []
-
-        context['csrf_raw_token'] = get_token(self.request)
-        context['submit_url'] = reverse('doc:create_document', kwargs={'slug': self.document.slug})
-        context['object'] = self.document
-        context['document'] = self.document.body
-        context['default_data'] = self.document.default_data_as_json()
-        context['userdoc'] = None
-
-        return context
-
-
-class UpdateDocumentView(UpdateView):
-    """ Edit a User Document """
-    model = ClientCreatedDocument
-    template_name='smoothe/document.html'
-    http_method_names = ['get', 'put']
-
-    def get_context_data(self, **kwargs):
-        context = super(UpdateDocumentView, self).get_context_data(**kwargs)
-
-        invitee_list = self.object.documentsignature_set.all()
-
-        context['csrf_raw_token'] = get_token(self.request)
-        context['submit_url'] = reverse('doc:update_document', kwargs={'pk': self.object.pk})
-        context['document_template'] = self.object.source_document
-
-        return context
-
-
 class CreateTemplateView(CreateView):
-    """ Used creating a new document """
-    template_name = 'smoothe/document-create.html'
+    """ Used creating a new document template """
+    template_name = 'smoothe/template-create.html'
     form_class = DocumentTemplateForm
     model = DocumentTemplate
 
@@ -99,6 +47,57 @@ class CreateTemplateView(CreateView):
 
 
 class UpdateTemplateView(UpdateView):
-    template_name = 'smoothe/document-edit.html'
+    template_name = 'smoothe/template-edit.html'
     form_class = DocumentTemplateForm
     model = DocumentTemplate
+
+
+class CreateDocumentView(CreateView):
+    """ Create a new User Document from a Template """
+    model = ClientCreatedDocument
+    form_class = ClientDocumentForm
+    template_name='smoothe/document.html'
+    http_method_names = ['get', 'post']
+
+    def get_form_kwargs(self):
+        kwargs = super(CreateDocumentView, self).get_form_kwargs()
+        self.document_template = get_object_or_404(DocumentTemplate, pk=self.kwargs['pk'])
+
+        kwargs.update({
+         'request': self.request,
+         'source_document': self.document_template
+        })
+
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateDocumentView, self).get_context_data(**kwargs)
+
+        invitee_list = []
+
+        context['csrf_raw_token'] = get_token(self.request)
+        context['submit_url'] = reverse('doc:create_document', kwargs={'pk': self.document_template.pk})
+        context['document_template'] = self.document_template
+        context['default_data'] = self.document_template.default_data_as_json()
+
+        return context
+
+
+class UpdateDocumentView(UpdateView):
+    """ Edit a User Document """
+    model = ClientCreatedDocument
+    template_name='smoothe/document.html'
+    http_method_names = ['get', 'put']
+
+    def get_context_data(self, **kwargs):
+        context = super(UpdateDocumentView, self).get_context_data(**kwargs)
+
+        invitee_list = self.object.documentsignature_set.all()
+
+        context['csrf_raw_token'] = get_token(self.request)
+        context['submit_url'] = reverse('doc:update_document', kwargs={'pk': self.object.pk})
+        context['document_template'] = self.object.source_document
+
+        return context
+
+
