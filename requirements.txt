@@ -1,8 +1,5 @@
 Django
 Markdown
-pyes
-nltk
-numpy
 pyyaml
 Werkzeug
 #django-extensions
@@ -15,7 +12,6 @@ django-templated-email
 PIL
 sh
 behave
-django-tastypie-elasticsearch
 -e git+https://github.com/jezdez/django_compressor.git#egg=django_compressor
 -e git+https://github.com/toastdriven/django-tastypie.git#egg=django-tastypie
 -e git+https://github.com/stard0g101/pybars.git#egg=pybars
