@@ -297,7 +297,10 @@ class BaseFlyForm(forms.Form, LoopStepCleanFieldsMixin, StepHiddenFieldsMixin, B
     if widget is not None:
         initial = field_instance.initial if field_instance.initial is not None else ''
         if initial is '' and field_instance.__class__.__name__ is 'ChoiceField':
-            initial, text = field_instance.choices[0]
+            try:
+                initial, text = field_instance.choices[0]
+            except IndexError:
+                initial, text = (None, '',)
 
         widget.attrs.update({
             'placeholder': field_dict['placeholder'],

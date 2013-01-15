@@ -19,15 +19,18 @@ class FacebookLoginTest(TestCase):
   def test_lack_of_presence_of_facebook_button_on_root(self):
     response = self.client.get(reverse('glynt:default'), follow=True)
     fb_button_login = '<fb:login-button id="fb_login-button"'
-    self.assertNotContains( response, fb_button_login, status_code=200 )
+    self.assertNotContains( response, fb_button_login, status_code=200)
 
   def test_presence_of_facebook_button_on_login_and_signup(self):
     """ Facebook button should only be on the login and signup pages"""
     urls = [reverse('client:login'), reverse('client:signup')]
     for url in urls:
       response = self.client.get(url, follow=True)
-      fb_button_login = '<img src="http://static.ak.fbcdn.net/images/fbconnect/login-buttons/connect_light_large_short.gif" style="cursor:pointer;" id="connect-facebook" border="0" />'
-      self.assertContains( response, fb_button_login, status_code=200 )
+      fb_button_login = 'id="connect-facebook"'
+      self.assertContains(response, fb_button_login, status_code=200)
+      self.assertContains(response, 'FB.init({', status_code=200)
+      self.assertContains(response, 'var csrftoken =', status_code=200)
+      self.assertContains(response, 'https://graph.facebook.com/oauth/access_token?client_id=', status_code=200)
 
   def test_facebook_request_permissions(self):
     FB_PERMS = FACEBOOK_REQUEST_PERMISSIONS.split(',')

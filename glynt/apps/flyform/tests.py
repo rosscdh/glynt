@@ -62,7 +62,7 @@ class BaseFlyFormTest(TestCase):
     form = BaseFlyForm(1, self.base_json)
     self.assertEqual(type(form.fields['test_field']), fields.CharField)
     self.assertEqual(type(form.fields['test_field'].widget), widgets.TextInput)
-    self.assertEqual(form.as_ul(), '<li><label for="id_test_field">Test:</label> <input name="test_field" id="id_test_field" placeholder="tester" type="text" class="md-updater" data-hb-name="test_field" /> <span class="helptext">My Test Field</span><input id="id_step_title" type="hidden" data-step-title="Step No. 1" name="step_title" /></li>')
+    self.assertEqual(form.as_ul(), '<li><label for="id_test_field">Test:</label> <input data-initial="" data-hb-name="test_field" id="id_test_field" type="text" placeholder="tester" class="md-updater" name="test_field" /> <span class="helptext">My Test Field</span><input id="id_step_title" type="hidden" data-step-title="Step No. 1" name="step_title" /><input type="hidden" name="hidden_fields" id="id_hidden_fields" /></li>')
 
   def test_setup_step_title(self):
     form = BaseFlyForm(1, self.base_json)
@@ -97,11 +97,11 @@ class BaseFlyFormTest(TestCase):
           "data-hb-name": "test_field"}
       ]
     }
-    form = BaseFlyForm(1, json.dumps(json_form))
+    form = BaseFlyForm(0, json.dumps(json_form))
 
     self.assertEqual(type(form.fields['test_field']), fields.CharField)
     self.assertEqual(type(form.fields['test_field'].widget), widgets.TextInput)
-    self.assertEqual(form.as_ul(), '<li><label for="id_test_field">Test:</label> <input name="test_field" id="id_test_field" placeholder="tester" type="text" class="md-updater" data-hb-name="test_field" /> <span class="helptext">My Test Field</span><input id="id_step_title" type="hidden" data-step-title="Step No. 1" name="step_title" data-glynt-loop_step="[{\'iteration_title\': \'Step No. 1\',\'hide_from\': \'test_field\'}]" /></li>')
+    self.assertEqual(form.as_ul(), '<li><label for="id_test_field">Test:</label> <input data-initial="" data-hb-name="test_field" id="id_test_field" type="text" placeholder="tester" class="md-updater" name="test_field" /> <span class="helptext">My Test Field</span><input id="id_step_title" type="hidden" data-step-title="Step No. 1" name="step_title" data-glynt-loop_step="[{\'iteration_title\': \'Step No. 1\',\'hide_from\': \'test_field\'}]" /><input type="hidden" name="hidden_fields" id="id_hidden_fields" /></li>')
 
   def test_basic_fields(self):
     multi_field = copy.deepcopy(BASE_JSON)
@@ -140,7 +140,6 @@ class BaseFlyFormTest(TestCase):
       steps.append(copy.deepcopy(step))
 
     for s in steps:
-      print s
       form = BaseFlyForm(1, json.dumps(s))
       form.as_ul()
 
