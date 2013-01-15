@@ -11,7 +11,7 @@ PROJECT = 'glynt'
 PROJECT_PATH = '/home/rossc/Projects/Personal/RuleNumberOne/%s' % (PROJECT,)
 #PROJECT_PATH = '/home/rossc/Projects/Personal/%s' % (PROJECT,)
 
-PROJECT_DEPLOY_INSTANCE = ( ('glynt', 'cartvine_shoppers'),)
+PROJECT_DEPLOY_INSTANCE = ( ('glynt', 'glynt'),)
 
 REMOTE_PROJECT_PATHS = []
 for app, project in PROJECT_DEPLOY_INSTANCE:
