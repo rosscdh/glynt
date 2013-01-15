@@ -29,8 +29,8 @@ DATABASES = {
     }
 }
 
-if IS_TESTING:
-    DATABASES['default']['TEST_NAME'] = '/tmp/testserver.db'
+# if IS_TESTING:
+#     DATABASES['default']['TEST_NAME'] = '/tmp/testserver.db'
 
 TIME_ZONE = 'Europe/London'
 
