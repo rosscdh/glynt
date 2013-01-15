@@ -28,7 +28,7 @@
 
 # Default fixtures
 
-1. python manage.py loaddata sites document_category document.xml flyform.xml
+1. python manage.py loaddata sites document_category documenttemplates
 
 
 ## Fix Fixtures
