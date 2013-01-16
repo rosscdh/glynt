@@ -19,6 +19,7 @@
     <link href="{{ STATIC_URL }}css/errors.css" rel="stylesheet" charset="utf-8" />
     <link href="{{ STATIC_URL }}css/jquery-ui-theme.css" rel="stylesheet" charset="utf-8" />
     <link href="{{ STATIC_URL }}smoothe/fontawesome/css/font-awesome.css" rel="stylesheet" charset="utf-8" />
+    <link href="{{ STATIC_URL }}jparallax/jquery.parallax.css" rel="stylesheet" charset="utf-8" />
     <!--[if lt IE 9]>
     <link href="{{ STATIC_URL }}smoothe/fontawesome/css/font-awesome-ie7.css" rel="stylesheet" charset="utf-8" />
     <![endif]-->
@@ -229,6 +230,8 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/sugar-1.3.5.min.js"></script>
     {% endcompress %}
 
+    <script type="text/javascript" src="{{ STATIC_URL }}jparallax/jquery.event.frame.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}jparallax/jquery.parallax.js"></script>
 
     {% block js %}{% endblock %}
     <script>

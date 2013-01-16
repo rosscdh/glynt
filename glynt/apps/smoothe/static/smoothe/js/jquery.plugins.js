@@ -20,11 +20,11 @@
      ,init: function () {
          var self = this;
 
-            if (self.options.in_admin === false) {
-                this.options.target_element.css('top', $('div.navbar').position().top + $('div.navbar').height());
-            } else {
-                this.options.target_element.css('top', 0);
-            }
+        if (self.options.in_admin === false) {
+            this.options.target_element.css('top', $('div.navbar').position().top + $('div.navbar').height());
+        } else {
+            this.options.target_element.css('top', 0);
+        }
 
          $.each(self.options.items, function(index, item){
              if (item) {
@@ -51,7 +51,7 @@
                     , click: function() {
                         console.log()
                         $('html, body').animate({
-                            scrollTop: element.offset().top
+                            scrollTop: element.offset().top - $('.navbar').height()
                         }, 200);
                     }
                     });
@@ -81,8 +81,17 @@
          }
          return icon_css_class;
      }
+     ,setPos: function() {
+        var self = this;
+        var doc_top = $('#document').position().top;
+        var wide = self.$element.width();
+        var pos = $('#document').offset().left - wide;
+        self.$element.offset($('#document').offset());
+        self.$element.css('left', pos+'px');
+     }
      ,listen: function () {
          var self = this;
+
          self.$element.find('li').on('mouseover', function(event) {
              event.preventDefault();
              $(this).addClass('toggle-on')
@@ -90,18 +99,28 @@
          self.$element.find('li').on('mouseout', function(event) {
              $(this).removeClass('toggle-on')
          });
+
          var navbar_height = $('div.navbar').height();
-         $(window).scroll(function () {
-             var offset = $(document).scrollTop();
-             if ($(document).scrollTop() > navbar_height) {
-                 offset = $(document).scrollTop() - navbar_height;
-             }
-             self.$element.animate({top:offset},{duration:200,queue:false});
-             //self.$element.css('top', offset);
-         });
+
+         /***
+         *
+         * SCROLL THE PROGRESS BAR
+         * scroll according to height in proportion to window height
+         */
+        self.$element.parallax({
+            // xorigin: '40px',
+            decay: 0.3,
+            yparallax: 1.7,
+            xparallax: false
+        });
+        $(window).resize(function() {
+            self.setPos();
+        });
+
      }
      ,render: function () {
          var self = this;
+         self.setPos();
      }
    }
    $.widget("ui.glynt_progress", {

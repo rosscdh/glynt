@@ -463,7 +463,11 @@ GUIDANCE NOTES
 {{#help_for varname="second_party_company"}} The full name of the second party to the confidentiality agreement. {{/help_for}}
 {{#help_for varname="purpose"}} A general description of the purpose of the discussions that require confidentiality e.g. "a corporate merger" {{/help_for}}
 
-</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"><object pk="1"></object></field></object><object pk="4" model="document.documenttemplate"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Loan Agreement</field><field type="SlugField" name="slug">loan-agreement</field><field type="CharField" name="acronym">la</field><field type="CharField" name="summary"></field><field type="TextField" name="description"></field><field type="TextField" name="body">THIS AGREEMENT is made on the {{#doc_var name="agreement_date" class="datepicker"}} DATE OF AGREEMENT {{/doc_var}} between
+</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"><object pk="1"></object></field></object><object pk="4" model="document.documenttemplate"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Loan Agreement</field><field type="SlugField" name="slug">loan-agreement</field><field type="CharField" name="acronym">la</field><field type="CharField" name="summary"></field><field type="TextField" name="description"></field><field type="TextField" name="body">
+Loan Agreement
+==============
+
+THIS AGREEMENT is made on the {{#doc_var name="agreement_date" class="datepicker"}} DATE OF AGREEMENT {{/doc_var}} between
 
 {{#doc_var name="first_party"}}NAME OF FIRST PARTY {{/doc_var}}  residing at  {{#doc_var name="first_party_address"}} ADDRESS OF FIRST PARTY{{/doc_var}} ("the Borrower"); and
 
@@ -551,7 +555,9 @@ i = loan interest rate {{/help_for}}
 {{#help_for varname="prepayment_penalty"}} The number of months' notice the Borrower must give the Lender, or months' interest in lieu the Borrower must pay to the Lender to repay the Loan before its natural termination. {{/help_for}}
 {{#help_for varname="interest_rate"}} The interest rate over and above the base rate that will be charged for the loan {{/help_for}}
 
-</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"><object pk="11"></object></field></object><object pk="3" model="document.documenttemplate"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Partnership Agrement</field><field type="SlugField" name="slug">partnership-agrement</field><field type="CharField" name="acronym">pa</field><field type="CharField" name="summary"></field><field type="TextField" name="description"></field><field type="TextField" name="body">PARTNERSHIP AGREEMENT
+</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"><object pk="11"></object></field></object><object pk="3" model="document.documenttemplate"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Partnership Agrement</field><field type="SlugField" name="slug">partnership-agrement</field><field type="CharField" name="acronym">pa</field><field type="CharField" name="summary"></field><field type="TextField" name="description"></field><field type="TextField" name="body">
+PARTNERSHIP AGREEMENT
+=====================
 
 THIS AGREEMENT is made on the {{#doc_var name="agreement_date"}} DATE OF AGREEMENT {{/doc_var}} BETWEEN
 
