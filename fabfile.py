@@ -146,7 +146,7 @@ def deploy(deploy_to_env='staging'):
             env.remote_project_path = remote_project_path
 
             execute(do_deploy, hosts=env.hosts)
+            execute(conclude_deploy, hosts=env.hosts)
 
-        conclude_deploy()
     else:
         raise Exception('%s is not defined in HOSTS' %(env,) )
