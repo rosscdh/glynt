@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<django-objects version="1.0"><object pk="2" model="document.documenttemplate"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Assured Shorthold Tenancy Agreement</field><field type="SlugField" name="slug">assured-shorthold-tenancy-agreement</field><field type="CharField" name="acronym">ta</field><field type="CharField" name="summary"></field><field type="TextField" name="description"></field><field type="TextField" name="body">Assured Shorthold Tenancy Agreement
+<django-objects version="1.0"><object pk="2" model="document.documenttemplate"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Assured Shorthold Tenancy Agreement</field><field type="SlugField" name="slug">assured-shorthold-tenancy-agreement</field><field type="CharField" name="acronym">ta</field><field type="CharField" name="summary"></field><field type="TextField" name="description"></field><field type="TextField" name="body">
+Assured Shorthold Tenancy Agreement
+===================================
+
 (For a room in a house or flat with non-resident landlord)
+
 
 The Landlord
 -------------

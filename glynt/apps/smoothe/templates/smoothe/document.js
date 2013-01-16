@@ -13,6 +13,7 @@ $(document).ready(function(){
 
         // ---- OBSERVER -----
         self.observer = new argosPanOptia();
+        self.markdownConverter = new Markdown.Converter();
 
         self.views = $('div.view');
         self.nav = $('ul.nav-list li a');
@@ -59,10 +60,13 @@ $(document).ready(function(){
         };
         self.render_doc = function render_steps() {
             if ($("div#document").length > 0) {
-                $("div#document").html(self.doc_view({}));
+                $("div#document").html(self.renderMarkdown(self.doc_view({})));
             } else {
                 console.log('Can not output to undefined div#document')
             }
+        };
+        self.renderMarkdown = function renderMarkdown(md) {
+          return self.markdownConverter.makeHtml(md);
         };
 
         self.setup_data = function setup_data(params) {
