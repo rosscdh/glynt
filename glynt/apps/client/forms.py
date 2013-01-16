@@ -7,6 +7,7 @@ from bootstrap.forms import BootstrapMixin, Fieldset
 
 from userena.forms import SignupFormOnlyEmail
 from userena import settings as userena_settings
+from userena import signals as userena_signals
 from django_countries.countries import COUNTRIES_PLUS
 
 from models import UserSignup
@@ -41,7 +42,7 @@ class SignupForm(BootstrapMixin, SignupFormOnlyEmail):
                                   self.cleaned_data['country'],
                                   self.cleaned_data['state'])
 
-    new_user = UserSignup.objects.create_user(username,
+    user = UserSignup.objects.create_user(username,
                                                   email,
                                                   password,
                                                   not userena_settings.USERENA_ACTIVATION_REQUIRED,
@@ -50,8 +51,11 @@ class SignupForm(BootstrapMixin, SignupFormOnlyEmail):
                                                   last_name=last_name,
                                                   country=country,
                                                   state=state)
+    # Send the signup complete signal
+    userena_signals.signup_complete.send(sender=None,
+                                         user=user)
 
-    return new_user
+    return user
 
 
 class AuthenticationForm(BootstrapMixin, AuthenticationForm):

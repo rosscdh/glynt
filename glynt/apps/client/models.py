@@ -71,6 +71,10 @@ def create_client_profile(sender, **kwargs):
     for perm in ASSIGNED_PERMISSIONS['user']:
         assign(perm[0], user, user)
 
+    # Send the signup complete signal
+    userena_signals.signup_complete.send(sender=None,
+                                         user=user)
+
 
 @receiver(login)
 @receiver(connect)

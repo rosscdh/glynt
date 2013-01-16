@@ -146,11 +146,15 @@ Handlebars.registerHelper('help_for', function(options) {
         throw new Error('help_for requires a "varname"');
     }
     var app = (options.hash.app === undefined) ? window.app : eval('window.'.format(options.hash.app)) ;
-    var var_name = options.hash.varname;
+    try{
+        var var_name = options.hash.varname;
+    } catch(e) {
+        console.log(e)
+    }
     var content = options.fn(this).compact();
 
     if (app.context[var_name] === undefined || typeof app.context[var_name] !== 'object') {
-        throw new Error('There is no variable named "{varname}" that is an "object" in the app.context'.assign({'varname': varname}));
+        throw new Error('There is no variable named "{varname}" that is an "object" in the app.context'.assign({'varname': var_name}));
     }else{
         app.context[var_name].help_text = content;
     }

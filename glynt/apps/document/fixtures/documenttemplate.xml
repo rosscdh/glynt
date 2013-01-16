@@ -803,22 +803,23 @@ THE RENT
 
 At a rent of {{#doc_var name="annual_rent"}} AMOUNT {{/doc_var}}  per annum (exclusive of value added tax if applicable) and is payable
 {{#doc_select name="payment_frequency" label="Payment Frequency" multi=true}}in advance by equal monthly installments on the [DAY] day of each month 
-{option}{#doc_var name="first_payment_date"}} OTHER {{/doc_var}} {#doc_var name="first_payment_date"}} DATE {{/doc_var}}.
+{option}
+{{#doc_var name="first_payment_date"}} OTHER {{/doc_var}} {{#doc_var name="first_payment_date"}} DATE {{/doc_var}}.
 {{/doc_select}}
 
-The first payment is due on {#doc_var name="first_payment_date"}} DATE {{/doc_var}} and will be {#doc_var name="first_payment_amount"}} AMOUNT {{/doc_var}}.
+The first payment is due on {{#doc_var name="first_payment_date"}} DATE {{/doc_var}} and will be {{#doc_var name="first_payment_amount"}} AMOUNT {{/doc_var}}.
 
 
 THE INTEREST RATE
 
 
-The rate of {#doc_var name="interest"}} INTEREST {{/doc_var}}% per annum above the Base Rate of the Bank of England from time to time in force.
+The rate of {{#doc_var name="interest"}} INTEREST {{/doc_var}}% per annum above the Base Rate of the Bank of England from time to time in force.
 
 
 {{#doc_select name="probationary_period" can_toggle=true}}
 THE DEPOSIT
 
-The Deposit will be {#doc_var name="deposit"}} DEPOSIT {{/doc_var}}.
+The Deposit will be {{#doc_var name="deposit"}} DEPOSIT {{/doc_var}}.
 {{/doc_select}}
 
 
@@ -1030,13 +1031,13 @@ Where grounds and/or parking spaces etc are to be included, specify these also. 
 {{#help_for varname="tenant_name"}} The full name of the Tenant.{{/help_for}}
 {{#help_for varname="landlord_company_number"}} The registered company number if Landlord is a company.  Delete if not relevant{{/help_for}}
 {{#help_for varname="deposit"}} The amount of deposit the Tenant is required to pay.  Delete if not relevant{{/help_for}}
-{{#help_for varname="expiry_date"}} The date on which the lease expires {{/help_for}}
+{{#help_for varname="end_date"}} The date on which the lease expires {{/help_for}}
 {{#help_for varname="interest"}} The rate of interest to be applied on overdue payments.  This will be the amount above the base rate of The Bank of England from time to time in force{{/help_for}}
-{{#help_for varname="rent"}} The amount of rent the Tenant must pay the Landlord each year.{{/help_for}}
+{{#help_for varname="annual_rent"}} The amount of rent the Tenant must pay the Landlord each year.{{/help_for}}
 {{#help_for varname="services"}} If non-standard Services will be provided, include paragraph 3.4 and list the Services e.g. caretaking/porterage, hot water to basins in Property, how water to bains in Common Parts, heating of the Property, heating of Common Parts, lighting of Common Parts, lift service in Common Parts.{{/help_for}}
 {{#help_for varname="tenant_company_number"}} The registered company number if Tenant is a company.  Delete if not relevant.{{/help_for}}
 {{#help_for varname="use"}} A description of what the Tenant may use the Property for e.g. "a shop".{{/help_for}}
-{{#help_for varname="common_parts"}} If Tenant will have shared us of Common Parts, include paragraph 2.4 and list the Common Parts e.g. car parks, delivery areas, entrances, estate roads, hallways, lifts, passages, staircases, toilets, yards{{/help_for}}
+{{#help_for varname="common_parts_grant"}} If Tenant will have shared us of Common Parts, include paragraph 2.4 and list the Common Parts e.g. car parks, delivery areas, entrances, estate roads, hallways, lifts, passages, staircases, toilets, yards{{/help_for}}
 {{#help_for varname="posting"}} The number of months before the end of the lease that the Landlord can display a notice for re-letting the property.  A suitable number of months needs to be considered; 1-3 months is likely to be appropriate for fairly short lettings, and presently up to 6 months for longer ones.{{/help_for}}
 {{#help_for varname="first_payment_date"}} The day, month and year on which the Tenants is due to pay the Landlord the first rental payment{{/help_for}}
 {{#help_for varname="rental_period"}} The number of years or months for which this Lease will run {{/help_for}}

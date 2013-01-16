@@ -8,6 +8,8 @@ from django.contrib.auth import authenticate, login
 from django.middleware.csrf import get_token
 
 from socialregistration.contrib.facebook_js.models import FacebookProfile
+from userena import signals as userena_signals
+
 from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
 from forms import SignupForm, AuthenticationForm
 
