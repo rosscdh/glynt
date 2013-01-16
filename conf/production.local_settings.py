@@ -27,7 +27,7 @@ MEDIA_URL = '/media/'
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = '/home/stard0g101/webapps/glynt_static/'
+STATIC_ROOT = '/home/stard0g101/webapps/glynt_static/base/'
 MEDIA_ROOT = '/home/stard0g101/webapps/glynt_static/media/'
 
 # Additional locations of static files

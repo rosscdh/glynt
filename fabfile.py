@@ -86,12 +86,12 @@ def do_deploy():
 def do_assets():
     # Activate virtualenv
     with prefix('workon %s' % (env.project_name,)):
-        run('python %s/%s/manage.py compress --force' % (env.remote_project_path, PROJECT,))
         run('python %s/%s/manage.py collectstatic --noinput' % (env.remote_project_path, PROJECT,))
+        run('python %s/%s/manage.py compress --force' % (env.remote_project_path, PROJECT,))
         run('%s/apache2/bin/restart' % (env.remote_project_path,))
 
 @task
-def deploy_assets(deploy_to_env='staging'):
+def assets(deploy_to_env='staging'):
     if deploy_to_env in HOSTS:
 
         env.hosts = HOSTS[deploy_to_env]
@@ -118,7 +118,7 @@ def do_requirements():
             raise Exception('requirements.exe does not exist at: %s' %(requirements_path,) )
 
 @task
-def deploy_requirements(deploy_to_env='staging'):
+def requirements(deploy_to_env='staging'):
     if deploy_to_env in HOSTS:
 
         env.hosts = HOSTS[deploy_to_env]
