@@ -44,7 +44,7 @@ def deploy_archive_file():
     put('/tmp/%s.zip'%(env.SHA1_FILENAME,), env.DEPLOY_ARCHIVE_PATH)
 
 def conclude_deploy():
-    run('unlink %s%s.zip' % (env.DEPLOY_ARCHIVE_PATH, PROJECT,))
+    run('unlink %s%s.zip' % (env.DEPLOY_ARCHIVE_PATH, env.SHA1_FILENAME,))
 
 
 @task
