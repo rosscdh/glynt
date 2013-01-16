@@ -86,7 +86,7 @@ def do_deploy():
 def do_fixtures():
     # Activate virtualenv
     with prefix('workon %s' % (env.project_name,)):
-        run('python %s/%s/manage.py loaddata sites document_category documenttemplates' % (env.remote_project_path, PROJECT,))
+        run('python %s/%s/manage.py loaddata sites document_category documenttemplate' % (env.remote_project_path, PROJECT,))
 
 @task
 def fixtures(deploy_to_env='staging'):
@@ -109,7 +109,6 @@ def do_assets():
     with prefix('workon %s' % (env.project_name,)):
         run('python %s/%s/manage.py collectstatic --noinput' % (env.remote_project_path, PROJECT,))
         run('python %s/%s/manage.py compress --force' % (env.remote_project_path, PROJECT,))
-        run('%s/apache2/bin/restart' % (env.remote_project_path,))
 
 @task
 def assets(deploy_to_env='staging'):
