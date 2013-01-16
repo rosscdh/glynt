@@ -34,6 +34,7 @@
                 var icon = $('<i>', {class: icon_css_class + ' icon-align-left', title: item_class.replace('_', ' ')});
                 var content = $('<a/>',{href: '#', html: icon});
                 var title = (!item.initial) ? item.name.replace('_', ' ') : item.initial;
+                var element = $('#' + item.id);
 
                 var li = $('<li/>', {
                     html: content
@@ -46,6 +47,12 @@
                     }
                     , mouseout: function() {
                         $(this).attr('title',title);
+                    }
+                    , click: function() {
+                        console.log()
+                        $('html, body').animate({
+                            scrollTop: element.offset().top
+                        }, 200);
                     }
                     });
 
