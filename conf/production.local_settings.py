@@ -49,4 +49,4 @@ DEFAULT_FROM_EMAIL = 'glynt@dev.weareml.com'
 SERVER_EMAIL = 'glynt@dev.weareml.com'
 
 COMPRESS_ENABLED = True
-COMPRESS_OFFLINE = True
+COMPRESS_OFFLINE = False
