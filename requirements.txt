@@ -6,7 +6,7 @@ Werkzeug
 -e git+https://github.com/stard0g101/django-extensions.git@1101b87bfa02f91931922a6996186e3c8d030cf9#egg=django-extensions
 markup
 south
-#psycopg2
+psycopg2
 django-celery
 django-templated-email
 PIL
