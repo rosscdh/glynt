@@ -83,6 +83,27 @@ def do_deploy():
 
 
 @task
+def do_fixtures():
+    # Activate virtualenv
+    with prefix('workon %s' % (env.project_name,)):
+        run('python %s/%s/manage.py loaddata sites document_category documenttemplates' % (env.remote_project_path, PROJECT,))
+
+@task
+def fixtures(deploy_to_env='staging'):
+    if deploy_to_env in HOSTS:
+
+        env.hosts = HOSTS[deploy_to_env]
+
+        for app_name, project_name, remote_project_path in REMOTE_PROJECT_PATHS:
+            env.environment = deploy_to_env
+            env.app_name = app_name
+            env.project_name = project_name
+            env.remote_project_path = remote_project_path
+            execute(do_fixtures, hosts=env.hosts)
+    else:
+        raise Exception('%s is not defined in HOSTS' %(env,) )
+
+@task
 def do_assets():
     # Activate virtualenv
     with prefix('workon %s' % (env.project_name,)):

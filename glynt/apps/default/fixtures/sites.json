@@ -1,8 +1,8 @@
 [
     {
         "fields": {
-            "domain": "http://local.weareml.com:8001", 
-            "name": "Testing WeAreML"
+            "domain": "http://dev.lawpal.com", 
+            "name": "Stage Lawpal.com"
         }, 
         "model": "sites.site", 
         "pk": 3
