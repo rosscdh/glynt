@@ -13,7 +13,6 @@ composer.lock
 :2e_*
 ._*
 .DS_Store
-/glynt/apps/default/static/js/select2/*
 /reports/*
 /bdd/vendor/*
 /bdd/results/*
