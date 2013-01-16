@@ -27,12 +27,12 @@ MEDIA_URL = '/media/'
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = '/home/stard0g101/webapps/cartvine_static/'
-MEDIA_ROOT = '/home/stard0g101/webapps/cartvine_static/media/'
+STATIC_ROOT = '/home/stard0g101/webapps/glynt_static/'
+MEDIA_ROOT = '/home/stard0g101/webapps/glynt_static/media/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    '/home/stard0g101/webapps/cartvine_static/base/',
+    '/home/stard0g101/webapps/glynt_static/base/',
 )
 
 FACEBOOK_API_KEY = '343632075713954'

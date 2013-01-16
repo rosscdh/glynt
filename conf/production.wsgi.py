@@ -16,16 +16,16 @@ framework.
 import os, sys, site
 
 # Tell wsgi to add the Python site-packages to its path. 
-site.addsitedir('/home/stard0g101/.virtualenvs/cartvine_shoppers/lib/python2.6/site-packages')
-site.addsitedir('/home/stard0g101/webapps/cartvine_shoppers/glynt')
+site.addsitedir('/home/stard0g101/.virtualenvs/glynt/lib/python2.7/site-packages')
+site.addsitedir('/home/stard0g101/webapps/glynt/glynt')
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'glynt.settings'
 
-activate_this = os.path.expanduser("~/.virtualenvs/cartvine_shoppers/bin/activate_this.py")
+activate_this = os.path.expanduser("~/.virtualenvs/glynt/bin/activate_this.py")
 execfile(activate_this, dict(__file__=activate_this))
 
 # Calculate the path based on the location of the WSGI script
-project = '/home/stard0g101/webapps/cartvine_shoppers/glynt/glynt/'
+project = '/home/stard0g101/webapps/glynt/glynt/glynt/'
 workspace = os.path.dirname(project)
 sys.path.append(workspace)
 
