@@ -204,12 +204,13 @@
 
           // apply the hallo editor
           $(self.element).hallo({
-              plugins: {
-                  'halloformat': {}
-              },
+              // plugins: {
+              //     'halloformat': {}
+              // },
               editable: true,
               showAlways: true
           });
+
           // GlyntTypeAhead
           if ($(self.element).hasClass('doc_choice') === false) {// only if were NOT looking at a choice element
               $(self.element).glynt_typeahead({
