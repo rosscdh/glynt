@@ -102,6 +102,8 @@
 
          var navbar_height = $('div.navbar').height();
 
+        self.$element.trigger('unfreeze');
+
         $(window).resize(function() {
             self.setPos();
         });
