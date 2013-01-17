@@ -9,6 +9,7 @@ from jsonfield import JSONField
 
 from userena.models import UserenaSignup, UserenaBaseProfile
 from userena.managers import ASSIGNED_PERMISSIONS
+from userena import signals as userena_signals
 from socialregistration.signals import login, connect
 from guardian.shortcuts import assign
 
@@ -64,16 +65,15 @@ def create_client_profile(sender, **kwargs):
   # @TODO turn this process into a signal so it can be called for other signup types
   if is_new:
     # Give permissions to view and change profile
-    for perm in ASSIGNED_PERMISSIONS['profile']:
-        assign(perm[0], user, profile)
+    for perm, name in ASSIGNED_PERMISSIONS['profile']:
+        assign(perm, user, profile)
 
     # Give permissions to view and change itself
-    for perm in ASSIGNED_PERMISSIONS['user']:
-        assign(perm[0], user, user)
+    for perm, name in ASSIGNED_PERMISSIONS['user']:
+        assign(perm, user, user)
 
     # Send the signup complete signal
-    userena_signals.signup_complete.send(sender=None,
-                                         user=user)
+    userena_signals.signup_complete.send(sender=None, user=user)
 
 
 @receiver(login)
