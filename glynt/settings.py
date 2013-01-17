@@ -199,8 +199,8 @@ USER_STREAMS_BACKEND = 'user_streams.backends.user_streams_single_table_backend.
 USER_STREAMS_USE_UTC = True
 
 ANONYMOUS_USER_ID = -1
-AUTH_PROFILE_MODULE = 'client.ClientProfile'
-USERENA_WITHOUT_USERNAMES = True
+AUTH_PROFILE_MODULE = 'client.ClientProfile' # our custom profile
+USERENA_WITHOUT_USERNAMES = True # step userarena forcing user to provide username
 USERENA_HIDE_EMAIL = True
 
 FACEBOOK_API_KEY = '419217318130542'
@@ -258,12 +258,6 @@ INTERNAL_IPS = ('127.0.0.1',)
 # Custom test runner for this project
 TEST_RUNNER = 'glynt.test_runner.GlyntAppTestRunner'
 
-
-# A sample logging configuration. The only tangible logging
-# performed by this configuration is to send an email to
-# the site admins on every HTTP 500 error when DEBUG=False.
-# See http://docs.djangoproject.com/en/dev/topics/logging for
-# more details on how to customize your logging configuration.
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

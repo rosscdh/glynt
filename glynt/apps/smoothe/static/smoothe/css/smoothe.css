@@ -64,8 +64,7 @@ div#sidebar {
 }
 
 div#progress {
-/*position: fixed;*/
-position:fixed;
+position: absolute;
 width: 45px;
 left: 0;
 top:0;

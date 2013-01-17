@@ -156,7 +156,7 @@ class CloneClientCreatedDocumentView(View):
         saved = True
 
 
-    url = reverse('document:my_view', kwargs={'slug':client_document.slug})
+    url = reverse('doc:update_document', kwargs={'pk':client_document.pk})
     message = _("Cloned %s as %s") % (source_client_document.name, client_document.name,)
 
     # Notification

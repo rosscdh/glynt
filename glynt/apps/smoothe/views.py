@@ -78,7 +78,6 @@ class CreateDocumentView(CreateView):
         context['csrf_raw_token'] = get_token(self.request)
         context['submit_url'] = reverse('doc:create_document', kwargs={'pk': self.document_template.pk})
         context['document_template'] = self.document_template
-        context['default_data'] = self.document_template.default_data_as_json()
 
         return context
 

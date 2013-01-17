@@ -3,6 +3,7 @@ $(document).ready(function(){
     window.app = $.sammy(function() {
         var self = this;
         self.default_data = null;
+        self.document_data = null;
 
         self.context = {
             'progress': null,
@@ -70,8 +71,9 @@ $(document).ready(function(){
         };
 
         self.setup_data = function setup_data(params) {
-            self.default_data = (params !== undefined && params.data !== undefined) ? params.data : $.parseJSON($('script#document-default_data').html()) ;
-            self.context = Object.merge(self.default_data, self.context);
+           self.default_data = (params !== undefined && params.data !== undefined) ? params.data : $.parseJSON($('script#document-default_data').html()) ;
+           self.context = Object.merge(self.context, self.default_data);
+            // self.document_data = $.parseJSON($('script#document-document_data').html());
         };
 
         // ---- BIND METHODS -----
@@ -82,7 +84,7 @@ $(document).ready(function(){
             var doc_var_value = data.value;
 
             if (self.context[doc_var] != doc_var_value) {
-                update_fields = true; 
+                update_fields = true;
             };
 
             self.context[doc_var].value = doc_var_value;
@@ -137,7 +139,10 @@ $(document).ready(function(){
                     data: data,
                 })
                 .success(function(data, textStatus, jqXHR) {
-                    console.log('yay')
+                    console.log('@TODO redirect')
+                    console.log(data)
+                    console.log(textStatus)
+                    console.log(jqXHR)
                 })
                 .error(function(jqXHR, textStatus, errorThrown) { 
                     console.log('boo')
@@ -150,8 +155,6 @@ $(document).ready(function(){
         };
 
         self.init = function init() {
-            // setup the data from defaults
-            self.setup_data();
 
             // load the smooth helpers
             $.getScript("{{ STATIC_URL }}smoothe/js/smoothe.js")

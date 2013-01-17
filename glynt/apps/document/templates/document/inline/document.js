@@ -938,7 +938,7 @@ $(document).ready(function(){
             var form_data_serialized = form.serialize();
             $.ajax({
               type: 'POST',
-              url: "{% url 'document:my_view' slug=userdoc.slug %}?step=" + step,
+              url: "{% url 'doc:update_document' pk=userdoc.pk %}?step=" + step,
               data: form_data_serialized,
               current_progress: $.cookie('{{ userdoc.cookie_name }}')
             })

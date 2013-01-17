@@ -3,6 +3,9 @@ from django.db import models
 
 class DocumentTemplateManager(models.Manager):
     """ Default handler of Document objects """
+    def by_acronym(self):
+        return self.get_query_set().values('pk','name','summary','acronym').distinct()
+
     def by_user(self, user):
         return self.get_query_set().filter(owner=user)
 

@@ -23,6 +23,7 @@ current_site_domain.is_safe = True
 @register.simple_tag
 def colorize_acronym(acronym):
     color_class = None
+
     if acronym == 'cl':
         color_class = 'c1'
     elif acronym == 'la':

@@ -112,20 +112,6 @@
      ,render: function () {
          var self = this;
          self.setPos();
-
-         /***
-         *
-         * SCROLL THE PROGRESS BAR
-         * scroll according to height in proportion to window height
-         * set before callign listen as it interrupts parallax
-         */
-        self.$element.parallax({
-            // xorigin: '40px',
-            decay: 0.3,
-            yparallax: 1.7,
-            xparallax: false
-        });
-
          self.listen();
      }
    }

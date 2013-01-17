@@ -43,6 +43,6 @@ class ClientDocumentForm(forms.ModelForm):
             kwargs['data'].setdefault('slug', '%s-%s' % (self.request.user.pk, self.source_document.pk,))
             kwargs['data'].setdefault('data', {})
             kwargs['data'].setdefault('meta_data', {})
-            kwargs['data'].setdefault('body', 'blank')
+            kwargs['data'].setdefault('body', self.source_document.body)
 
         super(ClientDocumentForm, self).__init__(*args, **kwargs)

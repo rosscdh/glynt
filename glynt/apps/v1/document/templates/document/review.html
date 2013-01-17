@@ -16,7 +16,7 @@
 
 <div class="span3 sidebar">
   <ul class="nav nav-list">
-    <li><a href="{% url 'document:my_view' slug=userdoc.slug %}" class="btn btn-green">{% trans 'Edit Doc' %}</a></li>
+    <li><a href="{% url 'doc:update_document' pk=userdoc.pk %}" class="btn btn-green">{% trans 'Edit Doc' %}</a></li>
     <li class="divider"></li>
       <li><a href="#/review"> {% trans 'Review Document' %}</a></li>
     <li class="divider"></li>
