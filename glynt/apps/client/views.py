@@ -58,6 +58,8 @@ class LoginView(FormView):
 
 class HasLocalFacebookAccountView(BaseDetailView):
   """ Used to evaluate if the facebook user exists in our system or not @TODO move to socialregistration? """
+  template_name = 'client/partials/blank.html'
+
   def get_queryset(self):
     return FacebookProfile.objects.all()
 
