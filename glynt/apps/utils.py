@@ -4,6 +4,7 @@ In order to provide clean access to constants used in model definitions
 This class provides a simple lookup mechnism which allows static reference to named values
 instead of having to hardcode the numeric variable
 """
+import json
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from collections import namedtuple
@@ -12,9 +13,41 @@ from django.contrib import messages
 from django.http import HttpResponse
 
 
-
 class HttpResponseUnauthorized(HttpResponse):
   status_code = 401
+
+
+class AjaxableResponseMixin(object):
+  """
+  Mixin to add AJAX support to a form.
+  Must be used with an object-based FormView (e.g. CreateView)
+  """
+  def render_to_json_response(self, context, **response_kwargs):
+      data = json.dumps(context)
+      response_kwargs['content_type'] = 'application/json'
+      return HttpResponse(data, **response_kwargs)
+
+  def form_invalid(self, form):
+      if self.request.is_ajax():
+          data = {
+            'errors': form.errors['__all__']
+          }
+          return self.render_to_json_response(data, status=400)
+      else:
+          return super(AjaxableResponseMixin, self).form_invalid(form)
+
+  def form_valid(self, form):
+      """ save the form but also render via ajax if ajax request """
+      form.instance.save()
+
+      if self.request.is_ajax():
+          data = {
+              'pk': form.instance.pk,
+              'url': form.instance.get_absolute_url() if hasattr(form.instance, 'get_absolute_url') else None,
+          }
+          return self.render_to_json_response(data)
+      else:
+          return super(AjaxableResponseMixin, self).form_valid(form)
 
 
 def get_namedtuple_choices(name, choices_tuple):

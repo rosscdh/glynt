@@ -139,16 +139,13 @@ $(document).ready(function(){
                     data: data,
                 })
                 .success(function(data, textStatus, jqXHR) {
-                    console.log('@TODO redirect')
-                    console.log(data)
-                    console.log(textStatus)
-                    console.log(jqXHR)
+                    document.location = data.url;
                 })
                 .error(function(jqXHR, textStatus, errorThrown) { 
-                    console.log('boo')
-                })
-                .complete(function() {
-                    console.log('complete')
+                    var data = $.parseJSON(jqXHR.responseText);
+                    console.log(data)
+                    console.log(textStatus)
+                    console.log(errorThrown)
                 });
 
             });

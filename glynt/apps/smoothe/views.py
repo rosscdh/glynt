@@ -12,11 +12,12 @@ from django.core.urlresolvers import reverse
 from glynt.apps.document.views import DocumentView
 from glynt.apps.document.views.utils import user_can_view_document
 from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
+from glynt.apps.utils import AjaxableResponseMixin
 
 from .forms import DocumentTemplateForm, ClientDocumentForm
 
 
-class CreateTemplateView(CreateView):
+class CreateTemplateView(AjaxableResponseMixin, CreateView):
     """ Used creating a new document template """
     template_name = 'smoothe/template-create.html'
     form_class = DocumentTemplateForm
@@ -46,13 +47,13 @@ class CreateTemplateView(CreateView):
       return context
 
 
-class UpdateTemplateView(UpdateView):
+class UpdateTemplateView(AjaxableResponseMixin, UpdateView):
     template_name = 'smoothe/template-edit.html'
     form_class = DocumentTemplateForm
     model = DocumentTemplate
 
 
-class CreateDocumentView(CreateView):
+class CreateDocumentView(AjaxableResponseMixin, CreateView):
     """ Create a new User Document from a Template """
     model = ClientCreatedDocument
     form_class = ClientDocumentForm
@@ -82,7 +83,7 @@ class CreateDocumentView(CreateView):
         return context
 
 
-class UpdateDocumentView(UpdateView):
+class UpdateDocumentView(AjaxableResponseMixin, UpdateView):
     """ Edit a User Document """
     model = ClientCreatedDocument
     template_name='smoothe/document.html'

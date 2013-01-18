@@ -40,9 +40,27 @@ class ClientDocumentForm(forms.ModelForm):
             kwargs['data'].setdefault('owner', self.request.user.pk)
             kwargs['data'].setdefault('source_document', self.source_document.pk)
             kwargs['data'].setdefault('name', self.source_document.name)
-            kwargs['data'].setdefault('slug', '%s-%s' % (self.request.user.pk, self.source_document.pk,))
+            kwargs['data'].setdefault('slug', '%s-%s' % (self.source_document.pk, self.request.user.pk,))
             kwargs['data'].setdefault('data', {})
             kwargs['data'].setdefault('meta_data', {})
             kwargs['data'].setdefault('body', self.source_document.body)
 
         super(ClientDocumentForm, self).__init__(*args, **kwargs)
+
+    def clean_slug(self):
+        """ @TODO move to utils and make mixin """
+        slug = self.cleaned_data.get('slug')
+        if slug:
+            original_slug = slug
+            avail = False
+            counter = 1
+            while not avail and counter < 15:
+                print slug
+                try:
+                    item = self.Meta.model.objects.get(slug=slug)
+                    counter += 1
+                    slug = '%s-%d' %(original_slug, counter,)
+                except self.Meta.model.DoesNotExist:
+                    avail = True
+
+        return slug
