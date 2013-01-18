@@ -28,13 +28,14 @@ class AjaxableResponseMixin(object):
       return HttpResponse(data, **response_kwargs)
 
   def form_invalid(self, form):
-      if self.request.is_ajax():
-          data = {
-            'errors': form.errors['__all__']
-          }
-          return self.render_to_json_response(data, status=400)
-      else:
-          return super(AjaxableResponseMixin, self).form_invalid(form)
+    if self.request.is_ajax():
+        errors = form.errors['__all__'] if '__all__' in form.errors else form.errors
+        data = {
+            'errors': errors
+        }
+        return self.render_to_json_response(data, status=400)
+    else:
+        return super(AjaxableResponseMixin, self).form_invalid(form)
 
   def form_valid(self, form):
       """ save the form but also render via ajax if ajax request """

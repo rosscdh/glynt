@@ -58,7 +58,6 @@ class CreateDocumentView(AjaxableResponseMixin, CreateView):
     model = ClientCreatedDocument
     form_class = ClientDocumentForm
     template_name='smoothe/document.html'
-    http_method_names = ['get', 'post']
 
     def get_form_kwargs(self):
         kwargs = super(CreateDocumentView, self).get_form_kwargs()
@@ -86,8 +85,8 @@ class CreateDocumentView(AjaxableResponseMixin, CreateView):
 class UpdateDocumentView(AjaxableResponseMixin, UpdateView):
     """ Edit a User Document """
     model = ClientCreatedDocument
+    form_class = ClientDocumentForm
     template_name='smoothe/document.html'
-    http_method_names = ['get', 'put']
 
     def get_context_data(self, **kwargs):
         context = super(UpdateDocumentView, self).get_context_data(**kwargs)

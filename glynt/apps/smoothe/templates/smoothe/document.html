@@ -4,7 +4,11 @@
 
 {% block owner_info %}
 <div class="">
-  <h2 id="document-title" class="editable">{{ clientcreateddocument.name }}</h2>
+    {% if clientcreateddocument %}
+    <h2 id="document-title">{{ clientcreateddocument.name }}</h2>
+    {% else %}
+    <h2 id="document-title">Create - {{ document_template.name }}</h2>
+    {% endif %}
 </div>
 {% endblock %}
 
@@ -37,6 +41,7 @@
 {% endblock %}
 
 {% block js %}
+
 <script type="application/json" id="document-default_data">{{ document_template.default_data_as_json|default:''|safe }}</script>
 <script type="application/json" id="document-document_data">{{ clientcreateddocument.data_as_json|default:''|safe }}</script>
 <script type="text/x-handlebars-template" id="document-hb">

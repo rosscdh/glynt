@@ -344,7 +344,9 @@ The frequency of rental payments. Generally the rental period is monthly, but it
 
 
 __THIS FORM OF AGREEMENT IS A BINDING DOCUMENT. BEFORE SIGNING IT YOU SHOULD READ IT CAREFULLY TO ENSURE THAT IT CONTAINS EVERYTHING YOU DO WANT AND NOTHING UNACCEPTABLE TO YOU.__
-</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"><object pk="25"></object></field></object><object pk="5" model="document.documenttemplate"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Confidentiality Agreement</field><field type="SlugField" name="slug">confidentiality-agreement</field><field type="CharField" name="acronym">ca</field><field type="CharField" name="summary"></field><field type="TextField" name="description"></field><field type="TextField" name="body">CONFIDENTIALITY AGREEMENT
+</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"><object pk="25"></object></field></object><object pk="5" model="document.documenttemplate"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Confidentiality Agreement</field><field type="SlugField" name="slug">confidentiality-agreement</field><field type="CharField" name="acronym">ca</field><field type="CharField" name="summary"></field><field type="TextField" name="description"></field><field type="TextField" name="body">
+Confidentiality Agreement
+===================================
 
 THIS AGREEMENT is dated {{#doc_var name="agreement_date" class="datepicker"}} DATE OF AGREEMENT {{/doc_var}} and is made BETWEEN:
 
@@ -465,7 +467,7 @@ GUIDANCE NOTES
 
 </field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"><object pk="1"></object></field></object><object pk="4" model="document.documenttemplate"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Loan Agreement</field><field type="SlugField" name="slug">loan-agreement</field><field type="CharField" name="acronym">la</field><field type="CharField" name="summary"></field><field type="TextField" name="description"></field><field type="TextField" name="body">
 Loan Agreement
-==============
+===================================
 
 THIS AGREEMENT is made on the {{#doc_var name="agreement_date" class="datepicker"}} DATE OF AGREEMENT {{/doc_var}} between
 
@@ -556,8 +558,8 @@ i = loan interest rate {{/help_for}}
 {{#help_for varname="interest_rate"}} The interest rate over and above the base rate that will be charged for the loan {{/help_for}}
 
 </field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"><object pk="11"></object></field></object><object pk="3" model="document.documenttemplate"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Partnership Agrement</field><field type="SlugField" name="slug">partnership-agrement</field><field type="CharField" name="acronym">pa</field><field type="CharField" name="summary"></field><field type="TextField" name="description"></field><field type="TextField" name="body">
-PARTNERSHIP AGREEMENT
-=====================
+Partnership Agreement
+===================================
 
 THIS AGREEMENT is made on the {{#doc_var name="agreement_date"}} DATE OF AGREEMENT {{/doc_var}} BETWEEN
 
@@ -739,9 +741,9 @@ GUIDANCE NOTES
 {{#help_for varname="business_commencement_date"}} The day, month and year on which the Partnership first exists as a legal entity.{{/help_for}}
 {{#help_for varname="retirement_notice"}} The number of months notice a Partner must give to all other Partners of intention to retire or resign from the Partnership.{{/help_for}}
 {{#help_for varname="business_description"}} The general nature of the business in which the Partnership will engage.{{/help_for}}
-</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"><object pk="26"></object></field></object><object pk="1" model="document.documenttemplate"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Short-term Commercial Lease</field><field type="SlugField" name="slug">short-term-commercial-lease</field><field type="CharField" name="acronym">cl</field><field type="CharField" name="summary"></field><field type="TextField" name="description"></field><field type="TextField" name="body">SHORT-TERM COMMERCIAL LEASE
-________________
-
+</field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"><object pk="26"></object></field></object><object pk="1" model="document.documenttemplate"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Short-term Commercial Lease</field><field type="SlugField" name="slug">short-term-commercial-lease</field><field type="CharField" name="acronym">cl</field><field type="CharField" name="summary"></field><field type="TextField" name="description"></field><field type="TextField" name="body"> 
+Short-Term Commercial Lease
+===================================
 
 
 ________________

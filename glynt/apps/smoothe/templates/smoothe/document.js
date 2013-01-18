@@ -71,9 +71,7 @@ $(document).ready(function(){
         };
 
         self.setup_data = function setup_data(params) {
-           self.default_data = (params !== undefined && params.data !== undefined) ? params.data : $.parseJSON($('script#document-default_data').html()) ;
-           self.context = Object.merge(self.context, self.default_data);
-            // self.document_data = $.parseJSON($('script#document-document_data').html());
+            self.document_data = $.parseJSON($('script#document-document_data').html());
         };
 
         // ---- BIND METHODS -----
@@ -83,7 +81,7 @@ $(document).ready(function(){
             var doc_var = data.doc_var;
             var doc_var_value = data.value;
 
-            if (self.context[doc_var] != doc_var_value) {
+            if (self.context[doc_var].value != doc_var_value) {
                 update_fields = true;
             };
 
@@ -115,6 +113,13 @@ $(document).ready(function(){
             $.each($('[data-has_initial=true]'), function(index, element){
                 self.dispatch('bind_data', {'doc_var': $(this).attr('data-doc_var'), 'value': $(this).html(), 'notify': false});
             });
+            if (self.document_data !== null) {
+                $.each(self.context, function(key, item){
+                    if (item && self.document_data[key]) {
+                        self.dispatch('bind_data', {'doc_var': key, 'value': self.document_data[key], 'notify': false});
+                    }
+                });
+            }
 
             $('.edit').glynt_edit();
             $('.doc_select').glynt_select({});
@@ -128,7 +133,7 @@ $(document).ready(function(){
                 var data = {
                     csrfmiddlewaretoken: "{{ csrf_raw_token }}"
                 };
-
+                // extract just the value from context
                 $.each(self.context, function(index, item) {
                     data[item.name] = item.value;
                 });
@@ -139,15 +144,19 @@ $(document).ready(function(){
                     data: data,
                 })
                 .success(function(data, textStatus, jqXHR) {
-                    document.location = data.url;
+                    if (window.location.pathname !== data.url) {
+                        document.location = data.url;
+                    }else{
+                        // congrats maybe show a message?
+                    }
                 })
                 .error(function(jqXHR, textStatus, errorThrown) { 
                     var data = $.parseJSON(jqXHR.responseText);
+                    // oh oh maybe show a message?
                     console.log(data)
                     console.log(textStatus)
                     console.log(errorThrown)
                 });
-
             });
         };
 
@@ -158,9 +167,10 @@ $(document).ready(function(){
             .done(function(script, textStatus) {
                 $.getScript("{{ STATIC_URL }}smoothe/js/jquery.plugins.js")
                 .done(function(script, textStatus) {
+                    // initialize
+                    self.setup_data();
                     // register callbacks
                     self.registerCallback('bind_data', self.bind_data);
-
                     // output html so we can bind events
                     self.render();
                     // bind events

@@ -32,25 +32,41 @@ class ClientDocumentForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         """ Handle accessing the request object form this form"""
-        self.request = kwargs.pop('request')
-        self.source_document = kwargs.pop('source_document')
+        self.request = kwargs.pop('request') if 'request' in kwargs else None
+        self.source_document = kwargs.pop('source_document') if 'source_document' in kwargs else None
 
         if 'data' in kwargs:
+            doc_data = kwargs['data']
             kwargs['data'] = kwargs['data'].copy() # make it mutable
-            kwargs['data'].setdefault('owner', self.request.user.pk)
-            kwargs['data'].setdefault('source_document', self.source_document.pk)
-            kwargs['data'].setdefault('name', self.source_document.name)
-            kwargs['data'].setdefault('slug', '%s-%s' % (self.source_document.pk, self.request.user.pk,))
-            kwargs['data'].setdefault('data', {})
-            kwargs['data'].setdefault('meta_data', {})
-            kwargs['data'].setdefault('body', self.source_document.body)
+
+            if kwargs['instance'] is not None:
+                source = kwargs['instance']
+                kwargs['data']['doc_data'] = doc_data
+
+                kwargs['data'].setdefault('doc_data', doc_data) # ensure the primary json is saved
+                kwargs['data'].setdefault('owner', source.owner.pk)
+                kwargs['data'].setdefault('source_document', source.source_document.pk)
+                kwargs['data'].setdefault('name', source.name)
+                kwargs['data'].setdefault('slug', source.slug)
+                kwargs['data'].setdefault('meta_data', source.meta_data)
+                kwargs['data'].setdefault('body', source.body)
+
+            else:
+                kwargs['data'].setdefault('doc_data', doc_data) # ensure the primary json is saved
+                kwargs['data'].setdefault('owner', self.request.user.pk)
+                kwargs['data'].setdefault('source_document', self.source_document.pk)
+                kwargs['data'].setdefault('name', self.source_document.name)
+                kwargs['data'].setdefault('slug', '%s-%s' % (self.source_document.pk, self.request.user.pk,))
+                kwargs['data'].setdefault('meta_data', {})
+                kwargs['data'].setdefault('body', self.source_document.body)
 
         super(ClientDocumentForm, self).__init__(*args, **kwargs)
 
     def clean_slug(self):
         """ @TODO move to utils and make mixin """
         slug = self.cleaned_data.get('slug')
-        if slug:
+        # slug is there and this is a new instance
+        if slug and self.instance.pk is None:
             original_slug = slug
             avail = False
             counter = 1

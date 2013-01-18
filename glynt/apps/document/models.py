@@ -74,7 +74,7 @@ class ClientCreatedDocument(models.Model):
     name = models.CharField(max_length=128, blank=True, null=True)
     slug = models.SlugField(unique=False, blank=False, null=True, max_length=255)
     body = models.TextField(blank=True, null=True)
-    data = JSONField(blank=True, null=True)
+    doc_data = JSONField(blank=True, null=True, db_column='data')
     meta_data = JSONField(blank=True, null=True, default={}) # Stores data on num_signatures vs total signatures
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
@@ -163,7 +163,7 @@ class ClientCreatedDocument(models.Model):
       return self.documentsignature_set.filter(is_signed=True)
 
     def data_as_json(self):
-      return json.dumps(self.data)
+      return json.dumps(self.doc_data)
 
 
 # import signals, must be at end of file
