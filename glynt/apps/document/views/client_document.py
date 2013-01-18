@@ -40,7 +40,7 @@ class MyDocumentView(DocumentView):
     context['userdoc'] = self.user_document
     context['object'] = self.document
     context['document'] = self.document.body
-    context['default_data'] = json.dumps(self.user_document.data)
+    context['default_data'] = json.dumps(self.user_document.doc_data)
 
     return context
 
@@ -118,7 +118,7 @@ class PersistClientCreatedDocumentProgressView(View):
     progress, is_new = userdoc_from_request(user=request.user, source_doc=None, pk=userdoc_pk)
 
     if userdoc_current_progress:
-      progress.data = userdoc_current_progress
+      progress.doc_data = userdoc_current_progress
       progress.save()
 
     return HttpResponse('[{"userdoc_id": %d, "status":"%s", "message":"%s"}]' % (progress.pk, 'success_persisted', unicode(_('Progress Persisted'))), status=200, content_type="application/json")
