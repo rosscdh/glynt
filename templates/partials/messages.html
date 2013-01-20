@@ -1,0 +1,10 @@
+<div id="messages" class="span6 hide">
+    <div class="close span1 pull-right">X</div>
+    <ul class="span6">
+    {% if messages %}
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    {% endif %}
+    </ul>
+</div>

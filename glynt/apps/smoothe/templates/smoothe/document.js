@@ -1,3 +1,4 @@
+{% load i18n %}
 $(document).ready(function(){
 
     window.app = $.sammy(function() {
@@ -15,6 +16,7 @@ $(document).ready(function(){
         // ---- OBSERVER -----
         self.observer = new argosPanOptia();
         self.markdownConverter = new Markdown.Converter();
+        self.message = new GlyntMessage({});
 
         self.views = $('div.view');
         self.nav = $('ul.nav-list li a');
@@ -130,6 +132,12 @@ $(document).ready(function(){
 
             $('form#document-form button.submit').on('click', function(event){
                 event.preventDefault();
+                var button = $(this);
+                button.show();
+                var offset = button.closest('form').offset();
+                button.toggle();
+
+
                 var data = {
                     csrfmiddlewaretoken: "{{ csrf_raw_token }}"
                 };
@@ -148,14 +156,16 @@ $(document).ready(function(){
                         document.location = data.url;
                     }else{
                         // congrats maybe show a message?
+                        self.message.place(offset).show('{% trans "Updated your Document" %}');
                     }
                 })
-                .error(function(jqXHR, textStatus, errorThrown) { 
+                .error(function(jqXHR, textStatus, errorThrown) {
                     var data = $.parseJSON(jqXHR.responseText);
                     // oh oh maybe show a message?
-                    console.log(data)
-                    console.log(textStatus)
-                    console.log(errorThrown)
+                    self.message.place(button.offset()).show_error(data.errors);
+                })
+                .complete(function(jqXHR, textStatus, errorThrown) {
+                    button.toggle();
                 });
             });
         };

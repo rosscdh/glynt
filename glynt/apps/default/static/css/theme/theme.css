@@ -47,6 +47,18 @@ a {
     margin: 8px 0 0 10px;
 }
 
+/* Message
+-------------------------------------------------- */
+div#messages {
+background-color: #fef58e;
+border: 3px solid #EDEDED;
+border-top:0px;
+padding:10px 0px;
+}
+div#messages ul {
+list-style-type:none;
+}
+
 /* Navbar
 -------------------------------------------------- */
 .navbar-fixed-top {
