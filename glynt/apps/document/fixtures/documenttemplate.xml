@@ -4,16 +4,14 @@ Assured Shorthold Tenancy Agreement
 ===================================
 
 (For a room in a house or flat with non-resident landlord)
+----------------------------------------------------------
 
-
-The Landlord
--------------
+**The Landlord**
 
 {{#doc_var name="landlord_name"}} LANDLORD NAME {{/doc_var}}
 {{#doc_var name="landlord_address"}} LANDLORD ADDRESS {{/doc_var}}
 
-The Tenant
-----------
+**The Tenant**
 
 {{#doc_select name="tenant_name" label="Tenant" multi=true}}
 {{#doc_var name="first_tenant_name"}} FIRST TENANT NAME {{/doc_var}}
@@ -25,35 +23,29 @@ The Tenant
 
 (The term "the Tenant" applies to each named joint tenant.  Each individual tenant enjoys the full rights and is fully responsible for the obligations set out in this Agreement.)
 
-The Property
-------------
+**The Property**
 
 {{#doc_var name="tenancy_address"}} ADDRESS OF TENANCY {{/doc_var}}
 
 together with the fixtures and fittings and any effects set out in the inventory and signed by the parties hereto.
 
-The Term
----------
+**The Term**
 
 For a fixed period of {{#doc_var name="tenancy_period"}} TENANCY PERIOD {{/doc_var}} months from {{#doc_var name="commencement_date"}} COMMENCEMENT DATE {{/doc_var}} to {{#doc_var name="expiry_date"}} EXPIRY DATE {{/doc_var}}.
 
-The Rent
---------
+**The Rent**
 
 At a rent of {{#doc_var name="rent_amount"}} AMOUNT {{/doc_var}} per {{#doc_choice name="week_month" choices="week,month" is_static=true}}{{/doc_choice}} payable every {{#doc_choice name="week_month" choices="week,month" is_static=true}}{{/doc_choice}} by equal payments in advance, first payment due on {{#doc_var name="payment_date" class="datepicker"}} PAYMENT DATE {{/doc_var}}  and every {{#doc_choice name="week_month" choices="week,month" is_static=true}}{{/doc_choice}} thereafter on the same day in each {{#doc_choice name="week_month" choices="week,month" is_static=true}}{{/doc_choice}}.
 
-Method of Payment
------------------
+**Method of Payment**
 
 {{#doc_var name="payment_method"}} METHOD OF PAYMENT {{/doc_var}}.
 
-The Deposit
------------
+**The Deposit**
 
 The deposit shall be {{#doc_var name="deposit"}} DEPOSIT {{/doc_var}}.
 
-Details of Agent
-----------------
+**Details of Agent**
 
 {{#doc_var name="agent_name"}} NAME OF AGENT {{/doc_var}}
 {{#doc_var name="agent_address"}} ADDRESS OF AGENT {{/doc_var}}
@@ -61,242 +53,206 @@ Details of Agent
 Terms and Conditions
 --------------------
 
-1 **General**
-
-This Agreement is an Assured Shorthold Tenancy as defined in Section 20 of the Housing Act 1988 (as amended by the Housing Act 1996). The Landlord may recover possession of the Property at the end of the Term by obtaining a court order pursuant to the provisions of Section 21 of the Housing Act 1988 (as amended by the Housing Act 1996).
-
-1.2 The Landlord may seek recovery of possession of the Property prior to expiry of the Term on one or more of the grounds 2, 8, 10, 11, 12, 13, 14, 14A, 15 or 17 as set out in Schedule 2 to the Housing Act 1988, as amended by the Housing Act 1996. These grounds are set out in the Schedule to this Agreement.
-
-1.3 This Agreement is for the letting of all types of residential accommodation whether unfurnished or furnished in accordance with the inventory signed between the parties.
-
-1.4 Under this Agreement the Tenant will have exclusive occupation of his designated room and will share with the other occupiers of the Property the use and facilities of the Property (including such bathroom, toilet, kitchen and sitting room facilities as may be at the Property).
-
-1.5 In this Agreement any reference to the masculine includes the feminine.
-
-2 **The Property**
-
-The Property is the Property specified above, together with any outside space or garden and the fixtures and fittings and any effects in the premises as set out in the inventory.
-
-3 **Tenancy Deposit Protection Scheme**
-
-3.1 The Deposit specified above shall be paid by the Tenant to the Landlord or his Agent and shall be held on the terms of {{#doc_var name="deposit_protection_scheme"}} NAME OF DEPOSIT PROTECTION SCHEME {{/doc_var}} ("the Scheme"). Within 30 days of receiving the Deposit, the Landlord shall give the Tenant prescribed information about the Scheme.
-
-3.2 The following sums may be paid out of the Deposit to the Landlord or his Agent in accordance with the terms of the Scheme:
-
-3.2.1 any rent or other payments due from the Tenant under this Agreement which remain unpaid at the end of the tenancy;
-
-3.2.2 any sum the Landlord expends or incurs in remedying any failure by the Tenant to comply with his obligations under this agreement, including those relating to the cleaning of the premises and its fixtures and fittings; 
-
-3.2.3 any unpaid accounts for the supply of utilities or Council Tax incurred at the Property for which the Tenant is liable;
-
-3.2.4 any costs incurred in making good any damage to the premises or its fixtures and fittings or for replacing missing items for which the tenant may be liable, fair wear and tear, insured risks and repairs that are the responsibility of the Landlord excepted.
- 
-3.3 Any interest on the Deposit shall be paid to the {{#doc_choice name="interest_payment" choices="Landlord, Tenant, Agent" is_static=true}}{{/doc_choice}}
-
-4 **Rent**
-
-The Tenant shall pay the Rent by the method and at the times specified above.
-
-5 **Forfeiture and Interest on Payments in Arrears**
-
-5.1 Where the Rent, any part of it, or any other sum due from the Tenant under this Agreement, is in arrears of 14 days or more after it has become due, whether legally demanded or not, or the Tenant has breached any of the terms of this Agreement, then the Landlord shall be entitled to end the tenancy either (a) by serving the appropriate notice and obtaining a court order, or (b) by re-entering the Property if it is no longer occupied by the Tenant or anyone else with a lawful right to live in it. If the Landlord exercises this right of forfeiture, it shall be without prejudice to the other rights and remedies of the Landlord.
-
-5.2 Where the Rent or any other sum due by the Tenant under this Agreement is in arrears, whether legally demanded or not, the Landlord shall be entitled to charge interest at the rate of 4% above the prevailing base rate of the Bank of England on the outstanding sum from the date when the same became due until the date of payment.
-5.3 Any bank charges incurred by the Landlord through a cheque of the Tenant being dishonoured by the Tenant's bankers shall be deducted from the Deposit if not already paid by the Tenant to the Landlord.
-
-6 **Insurance**
-
-6.1 The Landlord shall effect suitable building insurance cover for the Property and shall insure the Landlord's fixtures, fittings and effects, including such electrical appliances as are not the Tenant's responsibility, against loss or damage by fire, lightning, storm, flood, impact, riots, malicious damage, damage from burst pipes, theft and third party risks and such other risks as are normally covered by a Householder's Comprehensive Policy.
-
-6.2 If the Tenant so wishes, he can insure his personal effects, which shall not be the Landlord's responsibility.
-
-6.3 The Tenant must not do anything, or fail to comply with any requirement, as a result of which the policy of insurance effected by the Landlord for the Property and the Landlord's fixtures, fittings and effects may become void or voidable or by which the rate of premium on any such policy may be increased.
-
-7 **Maintenance and Repairs by Landlord**
-
-7.1 The Landlord shall maintain the Property in a wind and water-tight condition and in all other respects reasonably fit for human habitation.
-
-7.2 The Landlord shall keep in repair the structure and exterior of the Property.
-
-7.3 The Landlord shall keep in repair and in good working order all installations in the Property for the supply of water, gas, electricity, sanitation and heating (other than those installed by the Tenant or which the Tenant is entitled to remove).
-
-8 **Quiet Possession**
-
-The Landlord agrees, subject to the Tenant paying the Rent and observing and performing the obligations set out on this Agreement, not to interrupt or interfere with the Tenant’s right to quiet possession and enjoyment of the Property.
-
-9 **Use of Property**
-
-The Tenant shall use the Property for residential purposes only and shall not (nor allow others to) operate a business at the Property or use it for any improper, immoral or illegal purposes. If the Tenant wishes to use the Property for business purposes he must obtain the prior written consent of the Landlord.
-
-10 **Maintenance and Cleaning by Tenant**
-
-10.1 The Tenant shall keep the interior of the Property in good repair and condition and in good decorative order and in particular shall take all reasonable steps to keep the Property aired and heated and to prevent water pipes freezing in cold weather.
-
-10.2 The Tenant shall be responsible for the professional cleaning costs at the end of the tenancy.
-
-10.3 The Tenant shall not bring any hazardous materials into the Property and shall take all reasonable steps to avoid danger to the Property or neighbouring properties by way of fire or flooding.
-
-10.4 The Tenant shall be responsible for cleaning and keeping free from all blockages and obstructions all baths, sinks, lavatories, cisterns and drains and in particular shall take all reasonable steps not to pour oil, grease or other damaging materials down the drains or waste pipes.
-
-11 **Communal Areas**
-
-The Tenant shall take reasonable care to keep any common entrances, halls, stairways, lifts, passageways and any other common parts clean and fit for use by the Tenant and other occupiers and visitors to the Property.
-
-12 **Garden**
-
-The Tenant is responsible for the maintenance of any garden areas and for keeping such areas neat and tidy and free from weeds, with any grass kept cut, subject to the Landlord providing and maintaining appropriate garden tools for this purpose.
-
-13 **Nuisance**
-
-The Tenant shall not (nor allow others to) cause nuisance or annoyance to the Landlord or his Agent or any neighbours.
-
-14 **Damage**
-
-The Tenant shall not (nor allow others to) cause any damage or injury to the exterior, structure or any part of the Property.
-
-15 **Alterations to Property**
-
-The Tenant shall not (nor allow others to) make any alterations, improvements or additions to the Property, including the erection of a television aerial, external decoration and additions to or alterations to, the Landlord's installations, fixtures and fittings without the prior written consent of the Landlord. The Tenant shall not (nor allow others to) remove any of the items specified in the inventory (if any) or any of the Landlord’s possessions from the premises.
-
-16 **Repairing Damage**
-
-The Tenant agrees to make good any damage to the Property or the common parts or to the Landlord's fixtures, fittings or furnishings caused by the Tenant or any visitor of the Tenant to the Property, fair wear and tear excepted, and to pay any costs incurred by the Landlord in carrying out such works in default.
-
-17 **Reporting Disrepair**
-
-The Tenant shall immediately notify the Landlord or his Agent of any disrepair or defect or act of vandalism in respect of the Property or the fixtures, fittings or furnishings and any failure of mechanical or electrical appliances. The Landlord shall repair any damage to the Property or repair or replace any defective fixtures, fittings, furnishings or appliances within a reasonable period of time after being notified by the Tenant.
-
-18 **Forwarding Correspondence**
-
-The Tenant shall forward any correspondence addressed to the Landlord or any notice received by the Tenant relating to the Property to the Landlord or his Agent immediately upon receipt thereof.
-
-19 **Pets**
-
-The Tenant shall not (nor allow others to) keep pets of any kind on the Property without the prior written consent of the Landlord. Where permitted, any pet must be kept under control to ensure that it does not cause damage to the Property or cause nuisance either to neighbours or in the locality of the Property.
-
-20 **Locks and Keys**
-
-The Tenant shall not alter or change or install any locks on any doors or windows in or about the Property or have any additional keys made for any locks without the prior written consent of the Landlord.
-
-21 **Assignment**
-
-The Tenant shall not assign, sublet or share possession or occupation of the Property or any part thereof without the prior written consent of the Landlord.
-
-22 **Utilities**
-
-22.1 The Tenant will make a proportionate contribution to the costs of all charges in respect of any electrical, gas, water and telephone or other services used at or supplied to the Property. On the termination of the tenancy the Tenant shall settle all accounts for these supplies. 
-
-22.2 The Tenant shall not do anything that may cause the disconnection of any of these supplies.
-
-22.3 The telephone number cannot be changed or taken away by the Tenant on the termination of the tenancy.  In the event that the telephone is disconnected or the telephone is removed as a result of the failure of the Tenant to pay telephone bills, the Tenant shall be liable for all costs incurred in the reconnection of the service.  
-
-22.4 During the period of the tenancy the Tenant shall also be wholly responsible for the television licence for any television used in his designated room and proportionately responsible for the television licence for any television in the Property in a communal area.
-
-23 **Council Tax**
-
-During the Term, the Tenant will make a proportionate contribution to the payment of council tax and water and sewerage charges, or any local tax which may replace this.
- 
-24 **Rights of Access**
-
-24.1 The Tenant shall allow the Landlord or his Agent access to the Property at reasonable hours during the day, to inspect the condition of the Property or to carry out repairs or other works to the Property or to carry out maintenance of the appliances. The Landlord shall normally give at least 24 hours' notice but the Tenant shall give immediate access in an emergency.
-
-24.2 The Tenant shall allow the Landlord or his Agent access to the premises at reasonable hours during the final 28 days of the tenancy, to show the premises to prospective Tenants or at any time to show the premises to a prospective purchaser or anyone acting on his behalf.
-
-25 **Property Left Unattended**
-
-Whenever the Property is left unattended, the Tenant must fasten all locks on all doors and windows and activate any burglar alarm to prevent unauthorised access to the premises. The Tenant should notify the Landlord if he intends to leave the premises vacant for a period in excess of 14 consecutive days and in such a case, the Tenant shall take all reasonable steps to avoid frost or flood damage.
-
-26 **Refuse**
-
-The Tenant shall dispose of all refuse in an appropriate manner and at the appropriate time. Refuse must not be left anywhere in the common parts at any time.
-
-27 **Damage by Fire etc.**
-
-The Landlord is responsible for returning to the Tenant any portion of rent paid for any period that the Property is rendered uninhabitable by fire or other risk against which the Landlord has effected insurance.
-
-28 **Moving Out**
-
-28.1 At the end of the tenancy the Tenant shall give the Landlord vacant possession and shall return all the keys of the Property to the Landlord. The Tenant shall remove all rubbish and all furniture and personal effects owned by the Tenant and leave the Property and the Landlord's fixtures and fittings in the same condition and state of repair as at the start of the tenancy, fair wear and tear excepted.
-
-28.2 The Tenant shall provide a forwarding address for the return of any Deposit.
-
-29 **Gas Safety**
-
-The Landlord shall ensure that all gas fittings (appliances, pipework) and flues in the Property are maintained in a safe condition, that all installation, maintenance and safety checks are carried out by a Gas Safe Registered engineer and that an annual safety check is carried out on each gas appliance/flue. 
-
-30 **Electrical Safety**
-
-The Landlord shall ensure that all electrical appliances and equipment supplied by him are safe so as not to cause danger. 
-
-31 **Furniture and Furnishings**
-
-The Landlord shall ensure that any furniture and furnishings meet with the legal regulations on safety.
-
-32 **Inventory Check and Return of Deposit **
-
-At the termination of the tenancy (howsoever the same may be terminated) the Landlord shall be entitled to use the Deposit to meet any outstanding sums or accounts due by the Tenant and to make good any breach or non-compliance by the Tenant with his obligations under this Agreement and the Landlord shall account to the Tenant for the balance of such sum. The final amount of the deposit to be returned shall be agreed between the Landlord and the Tenant and repayment of the agreed sum made within 10 days of {{#doc_select name="deposit_return_date" label="Return of Deposit" multi=true}} 
-notification of agreement between the parties to the Scheme
-{option}
-the termination of the tenancy
-{{/doc_select}}. Where a dispute occurs, both parties agree to enter into any Alternative Dispute Resolution (ADR) service offered by the administrator of the Scheme. If the Deposit shall be insufficient for the purpose aforesaid the Tenant shall pay to the Landlord such further sum as shall be required for such purposes.
-
-33 **Notices**
-
-33.1 Any notice required or authorised to be given by either party under this Agreement to the other party shall be in writing and shall be sent by recorded delivery and if served on the Tenant, shall be served at the Property or such other address as may be specified by the Tenant, and if served on the Landlord or his Agent shall be sent to the address specified in clause 33.2 below. Any such notice shall be deemed to be given to and received 3 working days following the date of posting.
-
-33.2 The Tenant is hereby notified that in accordance with section 48 of the Landlord and Tenant Act 1987, the address for the Tenant to serve notices on the Landlord (including notices in proceedings) is:
-
- {{#doc_var name="landlord_notice_address"}} ADDRESS FOR NOTICES IN THE UK {{/doc_var}}
-
-The Landlord hereby agrees to let the Property and the Tenant hereby agrees to take the Property for the Rent and Term in accordance with the conditions stated within this Agreement.
+1. **General** 
+  1. This Agreement is an Assured Shorthold Tenancy as defined in Section 20 of the Housing Act 1988 (as amended by the Housing Act 1996). The Landlord may recover possession of the Property at the end of the Term by obtaining a court order pursuant to the provisions of Section 21 of the Housing Act 1988 (as amended by the Housing Act 1996). 
+  2. The Landlord may seek recovery of possession of the Property prior to expiry of the Term on one or more of the grounds 2, 8, 10, 11, 12, 13, 14, 14A, 15 or 17 as set out in Schedule 2 to the Housing Act 1988, as amended by the Housing Act 1996. These grounds are set out in the Schedule to this Agreement. 
+  3. This Agreement is for the letting of all types of residential accommodation whether unfurnished or furnished in accordance with the inventory signed between the parties. 
+  4. Under this Agreement the Tenant will have exclusive occupation of his designated room and will share with the other occupiers of the Property the use and facilities of the Property (including such bathroom, toilet, kitchen and sitting room facilities as may be at the Property). 
+  5. In this Agreement any reference to the masculine includes the feminine. 
+2. **The Property** 
+  1. The Property is the Property specified above, together with any outside space or garden and the fixtures and fittings and any effects in the premises as set out in the inventory. 
+3. Tenancy Deposit Protection Scheme** 
+  1. The Deposit specified above shall be paid by the Tenant to the Landlord or his Agent and shall be held on the terms of {{#doc_var name="deposit_protection_scheme"}} NAME OF DEPOSIT PROTECTION SCHEME {{/doc_var}} ("the Scheme"). Within 30 days of receiving the Deposit, the Landlord shall give the Tenant prescribed information about the Scheme. 
+  2. The following sums may be paid out of the Deposit to the Landlord or his Agent in accordance with the terms of the Scheme: 
+    1. any rent or other payments due from the Tenant under this Agreement which remain unpaid at the end of the tenancy; 
+    2. any sum the Landlord expends or incurs in remedying any failure by the Tenant to comply with his obligations under this agreement, including those relating to the cleaning of the premises and its fixtures and fittings; 
+    3. any unpaid accounts for the supply of utilities or Council Tax incurred at the Property for which the Tenant is liable; 
+    4. any costs incurred in making good any damage to the premises or its fixtures and fittings or for replacing missing items for which the tenant may be liable, fair wear and tear, insured risks and repairs that are the responsibility of the Landlord excepted. 
+  3. Any interest on the Deposit shall be paid to the {{#doc_choice name="interest_payment" choices="Landlord, Tenant, Agent" is_static=true}}{{/doc_choice}} 
+4. **Rent** 
+  1. The Tenant shall pay the Rent by the method and at the times specified above. 
+5. **Forfeiture and Interest on Payments in Arrears** 
+  1. Where the Rent, any part of it, or any other sum due from the Tenant under this Agreement, is in arrears of 14 days or more after it has become due, whether legally demanded or not, or the Tenant has breached any of the terms of this Agreement, then the Landlord shall be entitled to end the tenancy either (a) by serving the appropriate notice and obtaining a court order, or (b) by re-entering the Property if it is no longer occupied by the Tenant or anyone else with a lawful right to live in it. If the Landlord exercises this right of forfeiture, it shall be without prejudice to the other rights and remedies of the Landlord. 
+  2. Where the Rent or any other sum due by the Tenant under this Agreement is in arrears, whether legally demanded or not, the Landlord shall be entitled to charge interest at the rate of 4% above the prevailing base rate of the Bank of England on the outstanding sum from the date when the same became due until the date of payment. 
+  3. Any bank charges incurred by the Landlord through a cheque of the Tenant being dishonoured by the Tenant's bankers shall be deducted from the Deposit if not already paid by the Tenant to the Landlord. 
+6. **Insurance** 
+  1. The Landlord shall effect suitable building insurance cover for the Property and shall insure the Landlord's fixtures, fittings and effects, including such electrical appliances as are not the Tenant's responsibility, against loss or damage by fire, lightning, storm, flood, impact, riots, malicious damage, damage from burst pipes, theft and third party risks and such other risks as are normally covered by a Householder's Comprehensive Policy. 
+  2. If the Tenant so wishes, he can insure his personal effects, which shall not be the Landlord's responsibility. 
+  3. The Tenant must not do anything, or fail to comply with any requirement, as a result of which the policy of insurance effected by the Landlord for the Property and the Landlord's fixtures, fittings and effects may become void or voidable or by which the rate of premium on any such policy may be increased. 
+7. **Maintenance and Repairs by Landlord** 
+  1. The Landlord shall maintain the Property in a wind and water-tight condition and in all other respects reasonably fit for human habitation. 
+  2. The Landlord shall keep in repair the structure and exterior of the Property. 
+  3. The Landlord shall keep in repair and in good working order all installations in the Property for the supply of water, gas, electricity, sanitation and heating (other than those installed by the Tenant or which the Tenant is entitled to remove). 
+8. **Quiet Possession** 
+  1. The Landlord agrees, subject to the Tenant paying the Rent and observing and performing the obligations set out on this Agreement, not to interrupt or interfere with the Tenant’s right to quiet possession and enjoyment of the Property. 
+9. **Use of Property** 
+  1. The Tenant shall use the Property for residential purposes only and shall not (nor allow others to) operate a business at the Property or use it for any improper, immoral or illegal purposes. If the Tenant wishes to use the Property for business purposes he must obtain the prior written consent of the Landlord. 
+10. **Maintenance and Cleaning by Tenant** 
+  1. The Tenant shall keep the interior of the Property in good repair and condition and in good decorative order and in particular shall take all reasonable steps to keep the Property aired and heated and to prevent water pipes freezing in cold weather. 
+  2. The Tenant shall be responsible for the professional cleaning costs at the end of the tenancy. 
+  3. The Tenant shall not bring any hazardous materials into the Property and shall take all reasonable steps to avoid danger to the Property or neighbouring properties by way of fire or flooding. 
+  4. The Tenant shall be responsible for cleaning and keeping free from all blockages and obstructions all baths, sinks, lavatories, cisterns and drains and in particular shall take all reasonable steps not to pour oil, grease or other damaging materials down the drains or waste pipes. 
+11. **Communal Areas** 
+  1. The Tenant shall take reasonable care to keep any common entrances, halls, stairways, lifts, passageways and any other common parts clean and fit for use by the Tenant and other occupiers and visitors to the Property. 
+12. **Garden** 
+  1. The Tenant is responsible for the maintenance of any garden areas and for keeping such areas neat and tidy and free from weeds, with any grass kept cut, subject to the Landlord providing and maintaining appropriate garden tools for this purpose. 
+13. **Nuisance** 
+  1. The Tenant shall not (nor allow others to) cause nuisance or annoyance to the Landlord or his Agent or any neighbours. 
+14. **Nuisance** 
+  1. The Tenant shall not (nor allow others to) cause nuisance or annoyance to the Landlord or his Agent or any neighbours. 
+15. **Damage** 
+  1. The Tenant shall not (nor allow others to) cause any damage or injury to the exterior, structure or any part of the Property. 
+16. **Alterations to Property** 
+  1. The Tenant shall not (nor allow others to) make any alterations, improvements or additions to the Property, including the erection of a television aerial, external decoration and additions to or alterations to, the Landlord's installations, fixtures and fittings without the prior written consent of the Landlord. The Tenant shall not (nor allow others to) remove any of the items specified in the inventory (if any) or any of the Landlord’s possessions from the premises. 
+17. **Repairing Damage** 
+  1. The Tenant agrees to make good any damage to the Property or the common parts or to the Landlord's fixtures, fittings or furnishings caused by the Tenant or any visitor of the Tenant to the Property, fair wear and tear excepted, and to pay any costs incurred by the Landlord in carrying out such works in default. 
+18. **Reporting Disrepair** 
+  1. The Tenant shall immediately notify the Landlord or his Agent of any disrepair or defect or act of vandalism in respect of the Property or the fixtures, fittings or furnishings and any failure of mechanical or electrical appliances. The Landlord shall repair any damage to the Property or repair or replace any defective fixtures, fittings, furnishings or appliances within a reasonable period of time after being notified by the Tenant. 
+19. **Forwarding Correspondence** 
+  1. The Tenant shall forward any correspondence addressed to the Landlord or any notice received by the Tenant relating to the Property to the Landlord or his Agent immediately upon receipt thereof. 
+20. **Pets** 
+  1. The Tenant shall not (nor allow others to) keep pets of any kind on the Property without the prior written consent of the Landlord. Where permitted, any pet must be kept under control to ensure that it does not cause damage to the Property or cause nuisance either to neighbours or in the locality of the Property. 
+21. **Locks and Keys** 
+  1. The Tenant shall not alter or change or install any locks on any doors or windows in or about the Property or have any additional keys made for any locks without the prior written consent of the Landlord. 
+22. **Assignment** 
+  1. The Tenant shall not assign, sublet or share possession or occupation of the Property or any part thereof without the prior written consent of the Landlord. 
+23. **Locks and Keys** 
+  1. The Tenant shall not alter or change or install any locks on any doors or windows in or about the Property or have any additional keys made for any locks without the prior written consent of the Landlord. 
+24. **Assignment** 
+  1. The Tenant shall not assign, sublet or share possession or occupation of the Property or any part thereof without the prior written consent of the Landlord. 
+25. **Utilities** 
+  1. The Tenant will make a proportionate contribution to the costs of all charges in respect of any electrical, gas, water and telephone or other services used at or supplied to the Property. On the termination of the tenancy the Tenant shall settle all accounts for these supplies. 
+  2. The Tenant shall not do anything that may cause the disconnection of any of these supplies. 
+  3. The telephone number cannot be changed or taken away by the Tenant on the termination of the tenancy. In the event that the telephone is disconnected or the telephone is removed as a result of the failure of the Tenant to pay telephone bills, the Tenant shall be liable for all costs incurred in the reconnection of the service. 
+  4. During the period of the tenancy the Tenant shall also be wholly responsible for the television licence for any television used in his designated room and proportionately responsible for the television licence for any television in the Property in a communal area. 
+26. **Council Tax** 
+  1. During the Term, the Tenant will make a proportionate contribution to the payment of council tax and water and sewerage charges, or any local tax which may replace this. 
+27. **Rights of Access** 
+  1. The Tenant shall allow the Landlord or his Agent access to the Property at reasonable hours during the day, to inspect the condition of the Property or to carry out repairs or other works to the Property or to carry out maintenance of the appliances. The Landlord shall normally give at least 24 hours' notice but the Tenant shall give immediate access in an emergency. 
+  2. The Tenant shall allow the Landlord or his Agent access to the premises at reasonable hours during the final 28 days of the tenancy, to show the premises to prospective Tenants or at any time to show the premises to a prospective purchaser or anyone acting on his behalf. 
+28. **Property Left Unattended** 
+  1. Whenever the Property is left unattended, the Tenant must fasten all locks on all doors and windows and activate any burglar alarm to prevent unauthorised access to the premises. The Tenant should notify the Landlord if he intends to leave the premises vacant for a period in excess of 14 consecutive days and in such a case, the Tenant shall take all reasonable steps to avoid frost or flood damage. 
+29. **Refuse** 
+  1. The Tenant shall dispose of all refuse in an appropriate manner and at the appropriate time. Refuse must not be left anywhere in the common parts at any time. 
+30. **Damage by Fire etc.** 
+  1. The Landlord is responsible for returning to the Tenant any portion of rent paid for any period that the Property is rendered uninhabitable by fire or other risk against which the Landlord has effected insurance. 
+31. **Moving Out** 
+  1. At the end of the tenancy the Tenant shall give the Landlord vacant possession and shall return all the keys of the Property to the Landlord. The Tenant shall remove all rubbish and all furniture and personal effects owned by the Tenant and leave the Property and the Landlord's fixtures and fittings in the same condition and state of repair as at the start of the tenancy, fair wear and tear excepted. 
+  2. The Tenant shall provide a forwarding address for the return of any Deposit. 
+32. **Gas Safety** 
+  1. The Landlord shall ensure that all gas fittings (appliances, pipework) and flues in the Property are maintained in a safe condition, that all installation, maintenance and safety checks are carried out by a Gas Safe Registered engineer and that an annual safety check is carried out on each gas appliance/flue. 
+33. **Electrical Safety** 
+  1. The Landlord shall ensure that all electrical appliances and equipment supplied by him are safe so as not to cause danger. 
+34. **Furniture and Furnishings** 
+  1. The Landlord shall ensure that any furniture and furnishings meet with the legal regulations on safety. 
+35. **Inventory Check and Return of Deposit** 
+  1. At the termination of the tenancy (howsoever the same may be terminated) the Landlord shall be entitled to use the Deposit to meet any outstanding sums or accounts due by the Tenant and to make good any breach or non-compliance by the Tenant with his obligations under this Agreement and the Landlord shall account to the Tenant for the balance of such sum. The final amount of the deposit to be returned shall be agreed between the Landlord and the Tenant and repayment of the agreed sum made within 10 days of {{#doc_select name="deposit_return_date" label="Return of Deposit" multi=true}} notification of agreement between the parties to the Scheme {option} the termination of the tenancy {{/doc_select}}. Where a dispute occurs, both parties agree to enter into any Alternative Dispute Resolution (ADR) service offered by the administrator of the Scheme. If the Deposit shall be insufficient for the purpose aforesaid the Tenant shall pay to the Landlord such further sum as shall be required for such purposes. 
+36. **Notices** 
+  1. Any notice required or authorised to be given by either party under this Agreement to the other party shall be in writing and shall be sent by recorded delivery and if served on the Tenant, shall be served at the Property or such other address as may be specified by the Tenant, and if served on the Landlord or his Agent shall be sent to the address specified in clause 33.2 below. Any such notice shall be deemed to be given to and received 3 working days following the date of posting. 
+  2. The Tenant is hereby notified that in accordance with section 48 of the Landlord and Tenant Act 1987, the address for the Tenant to serve notices on the Landlord (including notices in proceedings) is: {{#doc_var name="landlord_notice_address"}} ADDRESS FOR NOTICES IN THE UK {{/doc_var}} 
+
+
+
+**The Landlord hereby agrees to let the Property and the Tenant hereby agrees to take the Property for the Rent and Term in accordance with the conditions stated within this Agreement.**
 
 **SIGNED** by the Landlord/Agent:
 
 
+
 SCHEDULE
---------
+========
 
 Housing Act 1988 Schedule 2
-(as amended by the Housing Act 1996)
+---------------------------
 
-Ground 2 The Property is subject to a mortgage granted before the beginning of the tenancy and the lendor wants to exercise their rights over the Property, i.e. intends to repossess the Property.
+### (as amended by the Housing Act 1996) ###
 
-Ground 8 Both at the date of the service of the notice relating to the proceedings for possession and at the date of the hearing:
-(a) if rent is payable weekly or fortnightly, at least 8 weeks' rent is unpaid;
-(b) if rent is payable monthly, at least 2 months' rent is unpaid;
-(c) if rent is payable quarterly, at least one quarter's rent is more than 3 months in arrears; and
-(d) if rent is payable yearly, at least 3 months' rent is more than three months in arrears.
 
-Ground 10 Some rent lawfully due from the Tenant is unpaid on the date on which the proceedings for possession are begun and was in arrears at the date of the service of the notice relating to those proceedings.
-
-Ground 11 Whether or not any rent is in arrears on the date on which proceedings for possession are begun, the Tenant has persistently delayed paying rent which has become lawfully due.
-
-Ground 12 Any obligation of the tenancy (other than one related to the payment of rent) has been broken or not performed.
-
-Ground 13 The condition of the Property or any of the common parts has deteriorated owing to acts of waste by, or the neglect or default of, the Tenant or any other person residing in the Property and, in the case of an act of waste by, or the neglect or default of, a person lodging with the Tenant or a sub-tenant of his, the Tenant has not taken such steps as he ought reasonably to have taken for the removal of the lodger or sub-tenant.
-
-Ground 14 The Tenant or a person residing in or visiting the Property:
-
-(a) has been guilty of conduct causing or likely to cause a nuisance or annoyance to a person residing, visiting or otherwise engaging in a lawful activity in the locality; or
-(b) has been convicted of:
-(i) using the Property or allowing it to be used for immoral or illegal purposes, or
-(ii) an offence committed in, or in the locality of, the Property.
-
-Ground 14A The Property was occupied (whether alone or with others) by a married couple, a couple who are civil partners of each other, a couple living together as husband and wife or a couple living together as if they were civil partners and:
-
-(a) one or both of the partners is a tenant of the Property;
-(b) the landlord who is seeking possession is a registered social landlord or a charitable housing trust;
-(c) one partner has left the dwelling-house because of violence or threats of violence by the other towards:
-(i) that partner; or
-(ii) a member of the family of that partner who was residing with that partner immediately before the partner left; and
-(d) the court is satisfied that the partner who has left is unlikely to return.
-
-Ground 15 The condition of any furniture provided for use under the tenancy has, in the opinion of the court, deteriorated owing to ill-treatment by the Tenant or any other person residing in the Property and, in the case of ill-treatment by a person lodging with the Tenant or by a sub-tenant of his, the Tenant has not taken such steps as he ought reasonably to have taken for the removal of the lodger or sub-tenant.
-
-Ground 17 The Tenant is the person, or one of the persons, to whom the tenancy was granted and the Landlord was induced to grant the tenancy by a false statement made knowingly or recklessly by the tenant or a person acting at the Tenant's instigation.
+&lt;table border="1"&gt;
+&lt;tr&gt;
+&lt;td&gt;
+Ground 2
+&lt;/td&gt;
+&lt;td&gt;
+The Property is subject to a mortgage granted before the beginning of the tenancy and the lendor wants to exercise their rights over the Property, i.e. intends to repossess the Property.
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+Ground 8
+&lt;/td&gt;
+&lt;td&gt;
+Both at the date of the service of the notice relating to the proceedings for possession and at the date of the hearing: (a) if rent is payable weekly or fortnightly, at least 8 weeks' rent is unpaid; (b) if rent is payable monthly, at least 2 months' rent is unpaid; (c) if rent is payable quarterly, at least one quarter's rent is more than 3 months in arrears; and (d) if rent is payable yearly, at least 3 months' rent is more than three months in arrears.
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+Ground 10
+&lt;/td&gt;
+&lt;td&gt;
+Some rent lawfully due from the Tenant is unpaid on the date on which the proceedings for possession are begun and was in arrears at the date of the service of the notice relating to those proceedings.
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+Ground 11
+&lt;/td&gt;
+&lt;td&gt;
+Whether or not any rent is in arrears on the date on which proceedings for possession are begun, the Tenant has persistently delayed paying rent which has become lawfully due.
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+Ground 12
+&lt;/td&gt;
+&lt;td&gt;
+Any obligation of the tenancy (other than one related to the payment of rent) has been broken or not performed.
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+Ground 13
+&lt;/td&gt;
+&lt;td&gt;
+The condition of the Property or any of the common parts has deteriorated owing to acts of waste by, or the neglect or default of, the Tenant or any other person residing in the Property and, in the case of an act of waste by, or the neglect or default of, a person lodging with the Tenant or a sub-tenant of his, the Tenant has not taken such steps as he ought reasonably to have taken for the removal of the lodger or sub-tenant.
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+Ground 14
+&lt;/td&gt;
+&lt;td&gt;
+The Tenant or a person residing in or visiting the Property: (a) has been guilty of conduct causing or likely to cause a nuisance or annoyance to a person residing, visiting or otherwise engaging in a lawful activity in the locality; or (b) has been convicted of: (i) using the Property or allowing it to be used for immoral or illegal purposes, or (ii) an offence committed in, or in the locality of, the Property.
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+Ground 14A
+&lt;/td&gt;
+&lt;td&gt;
+The Property was occupied (whether alone or with others) by a married couple, a couple who are civil partners of each other, a couple living together as husband and wife or a couple living together as if they were civil partners and: (a) one or both of the partners is a tenant of the Property; (b) the landlord who is seeking possession is a registered social landlord or a charitable housing trust; (c) one partner has left the dwelling-house because of violence or threats of violence by the other towards: (i) that partner; or (ii) a member of the family of that partner who was residing with that partner immediately before the partner left; and (d) the court is satisfied that the partner who has left is unlikely to return.
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+Ground 15
+&lt;/td&gt;
+&lt;td&gt;
+The condition of any furniture provided for use under the tenancy has, in the opinion of the court, deteriorated owing to ill-treatment by the Tenant or any other person residing in the Property and, in the case of ill-treatment by a person lodging with the Tenant or by a sub-tenant of his, the Tenant has not taken such steps as he ought reasonably to have taken for the removal of the lodger or sub-tenant.
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+Ground 17
+&lt;/td&gt;
+&lt;td&gt;
+The Tenant is the person, or one of the persons, to whom the tenancy was granted and the Landlord was induced to grant the tenancy by a false statement made knowingly or recklessly by the tenant or a person acting at the Tenant's instigation.
+&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
 
 GUIDANCE NOTES
---------------
+==============
 
 These notes are provided to assist you in completing your document.  They do not form part of the Tenancy Agreement.
 
@@ -330,20 +286,7 @@ The Tenancy Deposit Scheme (TDS) - This is an insurance-based scheme. The landlo
 {{#help_for varname="landlord_notice_address"}} The address in the UK where the Tenant should send Notices such as notice to terminate agreement.  Typically this is either the address of the Landlord or his/her Agent.{{/help_for}}
 {{#help_for varname="payment_method"}} The method by which the Tenant(s) will pay rent e.g. cash, cheque, direct debit, standing order {{/help_for}}
 
-
-ALEX: I AM NT SURE HOW TO FORMAT THESE HELP PROVISIONS.  LET’S DISCUSS
-
-[Landlord OR Tenant OR Agent] (Tenancy Deposit Protection Scheme)
-An indication of to whom any interest on the deposit is payable.
-
-[notification of agreement … OR the termination of the tenancy] (32)
-Insert "notification of agreement between the parties to the Scheme" if the selected scheme is custodial-based; insert  "the termination of the tenancy" if the selected scheme is insurance-based.
-
-[WEEK/MONTH] (The Rent)
-The frequency of rental payments. Generally the rental period is monthly, but it could be weekly, in which case a rent book must be supplied.
-
-
-__THIS FORM OF AGREEMENT IS A BINDING DOCUMENT. BEFORE SIGNING IT YOU SHOULD READ IT CAREFULLY TO ENSURE THAT IT CONTAINS EVERYTHING YOU DO WANT AND NOTHING UNACCEPTABLE TO YOU.__
+{{#help_for varname="interest_payment"}}An indication of to whom any interest on the deposit is payable.{{/help_for}}
 </field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"><object pk="25"></object></field></object><object pk="5" model="document.documenttemplate"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Confidentiality Agreement</field><field type="SlugField" name="slug">confidentiality-agreement</field><field type="CharField" name="acronym">ca</field><field type="CharField" name="summary"></field><field type="TextField" name="description"></field><field type="TextField" name="body">
 Confidentiality Agreement
 ===================================

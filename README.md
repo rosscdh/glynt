@@ -54,6 +54,12 @@ vim glynt/apps/document/fixtures/document.xml
 
 1. python manage.py loaddata sites document_category document_flyform
 
+
+## Markdown
+
+1. For a complete overview of markdown: http://stackoverflow.com/editing-help
+2. Install html2text to convert html to Markdown (pip install html2text)
+
 ## Docs
 
 1. found in the /docs folder
