@@ -31,16 +31,18 @@ text-align:center;
 }
 
 .doc_select{
-background-color:#CEEAF8;
 border:0px;
 margin:15px 0px;
 }
 
 .doc_select .doc_select_option{
 border-left:solid #08C 2px;
-padding-left:2px;
-margin:10px 0px;
+padding:2px;
+margin:5px 0px;
 min-height:40px;
+}
+.doc_select_option{
+background-color:#CEEAF8;
 }
 .doc_select_option.selected{
 background-color:#007AB8;

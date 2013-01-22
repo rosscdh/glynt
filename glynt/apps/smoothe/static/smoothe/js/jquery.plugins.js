@@ -9,18 +9,40 @@
             this.options = $.extend({
                 in_admin: false
             }, options)
-            this.$container = $(this.options.container);
+            this.select_element = this.options.select_element;
+            this.$container = $(this.select_element.element);
+            this.$button = false;
+            this.$show_button = $('<button>', {
+                                class: 'btn btn-success',
+                                html: '+'
+                            });
             this.init();
             this.listen();
-            this.render();
         }
         GlyntToggle.prototype = {
             constructor: GlyntToggle
             ,init: function () {
+                self = this;
+                self.$button = self.$container.find('button.toggle_state:first');
+                self.first_selecta = self.select_element.context.select_options[0].selecta.$element;
+
+                $('body').append(self.$show_button);
+                self.$show_button.hide();
             }
             ,listen: function () {
+                self.$show_button.on('click', function(){
+                    self.$container.show();
+                    self.$show_button.hide();
+                });
+                self.$button.on('click', function(event){
+                    self.$container.hide();
+                    self.$show_button.show();
+                    self.$show_button.offset(self.first_selecta.offset());
+                    console.log(self.$show_button)
+                });
             }
-            ,render: function () {
+            ,inject_show: function() {
+
             }
         }
     /* GLYNT_INCREMENTOR PUBLIC CLASS DEFINITION
@@ -30,8 +52,9 @@
                 in_admin: false
             }, options)
             this.select_element = this.options.select_element;
-            this.$container = $(this.options.container);
-            this.$element = false;
+            this.$container = $(this.select_element.element);
+            this.$button = false;
+            this.first_row = false;
             this.init();
             this.listen();
         }
@@ -39,18 +62,23 @@
             constructor: GlyntIncrementor
             ,init: function () {
                 self = this;
-                this.$element = this.$container.find('button.incrementor:first')
+                this.$button = this.$container.find('button.incrementor:first');
+                this.first_row = self.select_element.context.select_options[0];
             }
             ,listen: function () {
-                console.log(this.$container)
-                this.$element.on('click', function(event){
+                self.$button.on('click', function(event){
                     // increment the first row
                     console.log(self.select_element.context.select_options)
+                    console.log(self);//.increment();
                 });
             }
             ,increment: function () {
-            }
-            ,decrement: function () {
+                var copy = $.extend(true, {}, this.first_row);
+                copy.index = self.select_element.context.select_options.length;
+                var from = '-{index}'.assign({index: this.first_row.index});
+                var to = '-{index}'.assign({index: copy.index});
+                copy.id = copy.id.replace(from, to);
+                self.select_element.context.select_options.push(copy);
             }
         }
 
@@ -429,15 +457,19 @@
                 }
 
             });
-            // listen for "can_toggle" functionality
-            if (self.can_toggle === true) {
-                // create new GyntToggle
-            }
+
             // listen for "incrementor" functionality
             if (self.can_increment === true) {
                 // create new GlyntIncrementor
-                self.incrementor = new GlyntIncrementor({select_element: self, container: $(self.element)})
+                self.incrementor = new GlyntIncrementor({select_element: self})
             }
+
+            // listen for "can_toggle" functionality
+            if (self.can_toggle === true) {
+                // create new GyntToggle
+                self.toggle = new GlyntToggle({select_element: self})
+            }
+
         }
     });
 
