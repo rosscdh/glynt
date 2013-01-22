@@ -3,6 +3,57 @@
 (function($) {
   "use strict"; // jshint ;_;
 
+  /* GLYNT_TOGGLE PUBLIC CLASS DEFINITION
+   * ================================= */
+        var GlyntToggle = function (options) {
+            this.options = $.extend({
+                in_admin: false
+            }, options)
+            this.$container = $(this.options.container);
+            this.init();
+            this.listen();
+            this.render();
+        }
+        GlyntToggle.prototype = {
+            constructor: GlyntToggle
+            ,init: function () {
+            }
+            ,listen: function () {
+            }
+            ,render: function () {
+            }
+        }
+    /* GLYNT_INCREMENTOR PUBLIC CLASS DEFINITION
+     * ================================= */
+        var GlyntIncrementor = function (options) {
+            this.options = $.extend({
+                in_admin: false
+            }, options)
+            this.select_element = this.options.select_element;
+            this.$container = $(this.options.container);
+            this.$element = false;
+            this.init();
+            this.listen();
+        }
+        GlyntIncrementor.prototype = {
+            constructor: GlyntIncrementor
+            ,init: function () {
+                self = this;
+                this.$element = this.$container.find('button.incrementor:first')
+            }
+            ,listen: function () {
+                console.log(this.$container)
+                this.$element.on('click', function(event){
+                    // increment the first row
+                    console.log(self.select_element.context.select_options)
+                });
+            }
+            ,increment: function () {
+            }
+            ,decrement: function () {
+            }
+        }
+
   /* GLYNT_PROGRESS PUBLIC CLASS DEFINITION
    * ================================= */
     var GlyntProgress = function (options) {
@@ -14,7 +65,6 @@
         this.listen()
         this.render()
     }
-
    GlyntProgress.prototype = {
      constructor: GlyntProgress
      ,init: function () {
@@ -115,6 +165,7 @@
          self.listen();
      }
    }
+   // GLYNT_PROGRESS ui_widget
    $.widget("ui.glynt_progress", {
        options: {
            target_element: $('#progress'),
@@ -363,21 +414,30 @@
 
             self.multi = self.context.multi;
             self.can_toggle = self.context.can_toggle;
+            self.can_increment = self.context.can_increment;
 
             self.html_selecta = Handlebars.partials['doc_select-selecta-partial'];
-
+            // add selecta widgets to each li
             $.each(self.context.select_options, function(index, option){
                 if (option.text.string.length > 0) {
-
                     self.context.select_options[index].selecta = new Selecta({
                         'widget': self,
                         'index': index,
                         'item': option,
-                        'html': Handlebars.partials['doc_select-selecta-partial']
+                        'html': self.html_selecta
                     });
                 }
 
             });
+            // listen for "can_toggle" functionality
+            if (self.can_toggle === true) {
+                // create new GyntToggle
+            }
+            // listen for "incrementor" functionality
+            if (self.can_increment === true) {
+                // create new GlyntIncrementor
+                self.incrementor = new GlyntIncrementor({select_element: self, container: $(self.element)})
+            }
         }
     });
 

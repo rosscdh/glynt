@@ -58,6 +58,7 @@ Select clauses are designed to allow the user to select 1 or more statements or 
 2. label: String - The text that will be shown in the helper html
 3. multi: Boolean [true|*false] - Can the user select more than 1 of the clauses
 4. can_toggle: Boolean [true|*false] - Allows the user to turn this clause on or off
+5. can_increment: Boolean [true|*false] - Allows the user to add options to this current set; will create a copy of the first item and its contents (usually doc_vars)
 
 __e.g.__
 
@@ -81,6 +82,20 @@ __e.g.__
     Clause B
     {option}
     Clause C
+    {{/doc_select}}
+
+** see Select Clause **
+
+
+## Incrementor Clauses ##
+Allow the user to expand on a set. Will create a clone of the first item in the set. If the first row
+contains doc_var items, then those doc_var names will each have a +1 index appended "<doc_var_name>_{index}" appended to their id and name.
+The first doc_var remains "<doc_var_name>" and recieves no index.
+
+__e.g.__
+
+    {{#doc_select name="my_variable_name" label="My Variable Title" can_increment=true}}
+    {{#doc_var name="employee"}}Employee Name{{/doc_var}}
     {{/doc_select}}
 
 ** see Select Clause **
