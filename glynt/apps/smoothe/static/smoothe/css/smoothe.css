@@ -5,7 +5,7 @@
   
 }
 .doc_var, .doc_choice {
-background-color: #fef58e;
+background-color: #fff5bb;
 padding: 2px;
 -webkit-touch-callout: text;
 -webkit-user-select: text;
@@ -14,7 +14,6 @@ padding: 2px;
 -ms-user-select: text;
 user-select: text;
 min-width: 30px;
-border-bottom: 2px dotted #f492be;
 outline: none;
 display: inline-block;
 *display: inline;/* for IE7*/
@@ -31,23 +30,43 @@ text-align:center;
 }
 
 .doc_select{
-background-color:#CEEAF8;
 border:0px;
 margin:15px 0px;
 }
 
 .doc_select .doc_select_option{
-border-left:solid #08C 2px;
+border-left:solid #F1F1F1 2px;
 padding-left:2px;
 margin:10px 0px;
 min-height:40px;
+color:#888;
+background-color:#F9F9F9;
+
 }
-.doc_select_option.selected{
-background-color:#007AB8;
+
+.doc_select .doc_select_option .doc_var.edit {
+	background:#F1f1f1;
 }
+
+.doc_select_option.selected {
+	background:none;
+	color:black;
+	border-left:none;
+}
+.doc_select .doc_select_option.selected .doc_var.edit {
+	background:#fff5bb;
+}
+
 
 .selecta{
 position:absolute;
+margin-left:16px;
+}
+.selecta.btn {
+	color:#666;
+	background-color:none;
+	background:none;
+	border:none;
 }
 #element_help_text{
 position:absolute;
@@ -101,4 +120,14 @@ background-color: #bfd547;
 ul#glynt_progress li:hover, .hover_state {
 width: 65px;
 opacity:0.9;
+}
+
+
+body.preview #document {
+	background-color:white;
+	padding:60px;
+}
+body.preview #document * {
+	font-size:15px;
+	font-family:Helvetica;
 }

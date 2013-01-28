@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <django-objects version="1.0"><object pk="2" model="document.documenttemplate"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Assured Shorthold Tenancy Agreement</field><field type="SlugField" name="slug">assured-shorthold-tenancy-agreement</field><field type="CharField" name="acronym">ta</field><field type="CharField" name="summary"></field><field type="TextField" name="description"></field><field type="TextField" name="body">
+<center>
 Assured Shorthold Tenancy Agreement
 ===================================
 
 (For a room in a house or flat with non-resident landlord)
-
+</center>
 
 The Landlord
 -------------
 
-{{#doc_var name="landlord_name"}} LANDLORD NAME {{/doc_var}}
-{{#doc_var name="landlord_address"}} LANDLORD ADDRESS {{/doc_var}}
+{{#doc_var name="landlord_name"}} Landlord Name {{/doc_var}}
+{{#doc_var name="landlord_address"}} Landlord Address {{/doc_var}}
 
 The Tenant
 ----------
 
 {{#doc_select name="tenant_name" label="Tenant" multi=true}}
-{{#doc_var name="first_tenant_name"}} FIRST TENANT NAME {{/doc_var}}
+{{#doc_var name="first_tenant_name"}} First tenant name {{/doc_var}}
 {option}
-{{#doc_var name="second_tenant_name"}} SECOND TENANT NAME {{/doc_var}}
+{{#doc_var name="second_tenant_name"}} Second tenant name {{/doc_var}}
 {option}
-{{#doc_var name="third_tenant_name"}} THIRD TENANT NAME {{/doc_var}}
+{{#doc_var name="third_tenant_name"}} Third tenant name {{/doc_var}}
 {{/doc_select}}
 
 (The term "the Tenant" applies to each named joint tenant.  Each individual tenant enjoys the full rights and is fully responsible for the obligations set out in this Agreement.)

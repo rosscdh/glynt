@@ -303,13 +303,13 @@
                 if (self.select_option.selected === false) {
                     self.select_option.selected = true;
                     self.$element.addClass('btn-primary');
-                    self.$element.find('i').removeClass('icon-star-empty')
-                    self.$element.find('i').addClass('icon-star')
+                    self.$element.find('i').removeClass('icon-eye-close')
+                    self.$element.find('i').addClass('icon-eye-open')
                 } else {
                     self.select_option.selected = false;
                     self.$element.removeClass('btn-primary');
-                    self.$element.find('i').removeClass('icon-star')
-                    self.$element.find('i').addClass('icon-star-empty')
+                    self.$element.find('i').removeClass('icon-eye-open')
+                    self.$element.find('i').addClass('icon-eye-close')
                 }
                 self.$target.toggleClass('selected');
                 self.handle_is_multi();

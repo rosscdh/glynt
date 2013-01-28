@@ -680,11 +680,8 @@ padding:10px 0px 5px 0px;
 
 /* Drafting
 -------------------------------------------------- */
+/* ==== moved to smoothe.css ==== */
 
-body.preview #document {
-	background-color:white;
-	padding:60px;
-}
 
 /* Responsive
 -------------------------------------------------- */
