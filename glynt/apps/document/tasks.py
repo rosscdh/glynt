@@ -63,3 +63,10 @@ def document_comment(**kwargs):
     user = document.owner
     user_streams.add_stream_item(user, _('%s commented on "<a href="%s">%s</a>" - "%s"' % (username, document.get_absolute_url(), document.name, comment,)), document)
 
+
+@task()
+def generate_document_html(**kwargs):
+    document = kwargs['document']
+    # extract source HTML
+    # convert handlebars template tags
+    # save to document.body

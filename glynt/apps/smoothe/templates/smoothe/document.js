@@ -139,7 +139,6 @@ $(document).ready(function(){
                 var offset = button.closest('form').offset();
                 button.toggle();
 
-
                 var data = {
                     csrfmiddlewaretoken: "{{ csrf_raw_token }}"
                 };
