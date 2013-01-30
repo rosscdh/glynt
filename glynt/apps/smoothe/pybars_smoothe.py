@@ -38,39 +38,38 @@ class Smoothe(object):
         return None
 
     def doc_var(self, this, *args, **kwargs):
-        var_name = kwargs['name']
+        var_name = kwargs.get('name', None)
         if var_name in self.context:
             return self.context[var_name]
         return None
 
     def doc_choice(self, this, *args, **kwargs):
-        var_name = kwargs['name']
-        choices = kwargs['choices']
-        is_static = kwargs['is_static'] if 'is_static' in kwargs else False
+        var_name = kwargs.get('name', None)
+        choices = kwargs.get('choices', [])
+        is_static = kwargs.get('is_static', False)
 
         if var_name in self.context:
-            if self.context[var_name] in choices:
-                return self.context[var_name]
-            else:
+            if self.context[var_name] not in choices:
                 # Test for is static
-                if is_static == False:
-                    return self.context[var_name]
-                else:
+                if is_static == True:
                     raise DocChoiceException(self.context[var_name], choices)
+            return self.context[var_name]
         return None
 
     def doc_select(self, this, *args, **kwargs):
         options = args[0]
-        var_name = kwargs['name']
+        var_name = kwargs.get('name', None)
+        join_by = str(kwargs.get('join_by', "\r"))
         choices_text = unicode(options['fn'](this))
         choices = [o.strip() for o in choices_text.split('{option}')]
+
         if var_name in self.context:
             selected_values = self.context[var_name]
             for o in selected_values:
                 if o not in choices:
                     raise DocSelectException(self.context[var_name], choices)
-
-            return "\r".join(self.context[var_name])
+            # Join the selectd options based on the join_by character; that may be custom
+            return join_by.join(self.context[var_name])
         return None
 
     def help_for(self, this, *args, **kwargs):
