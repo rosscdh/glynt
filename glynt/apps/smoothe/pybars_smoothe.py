@@ -59,7 +59,7 @@ class Smoothe(object):
             if self.context[var_name] not in choices:
                 # Test for is static
                 if is_static == True:
-                    logger.error("choice %s was not in the set of valid choices"%(o,))
+                    logger.error("choice %s was not in the set of valid choices"%(self.context[var_name],))
                     raise DocChoiceException(self.context[var_name], choices)
             return self.context[var_name].strip()
         logger.warn("var_name %s was not found in context"%(var_name,))
