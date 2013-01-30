@@ -2,9 +2,10 @@
 from django.utils.translation import ugettext_lazy as _
 
 from celery.task import task
+from glynt.apps.document.models import DocumentHTML
+from glynt.apps.smoothe.pybars_smoothe import Smoothe
 
 import user_streams
-
 import logging
 logger = logging.getLogger(__name__)
 
@@ -70,9 +71,11 @@ def document_comment(**kwargs):
 @task()
 def generate_document_html(**kwargs):
     document = kwargs['document']
+    html, is_new = DocumentHTML.objects.get_or_create(document=document)
     # extract source HTML
     logger.info(document)
     logger.info(document.body)
-    print document.body
+    smoothe = Smoothe(source=document.body)
+    print smoothe.render(document.doc_data)
     # convert handlebars template tags
     # save to document.body

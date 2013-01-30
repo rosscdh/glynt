@@ -20,9 +20,8 @@ class Smoothe(object):
     compiler = None
     template = None
 
-    def __init__(self, context=None, source=None):
+    def __init__(self, source=None):
         self.compiler = Compiler()
-        self.context = context
         self.source = source
         self.compiler.register_helper(u'doc_var', self.doc_var)
         self.compiler.register_helper(u'doc_choice', self.doc_choice)
