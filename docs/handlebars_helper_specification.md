@@ -21,7 +21,8 @@ __e.g.__
 
 # The Glynt Document variable Set #
 
-**NB.** all strings must be indicated using " and not '
+1. **NB.** all strings must be indicated using " and not '
+2. **NB.** when setting css class for a variable object use "_class" and not "class" as class is a reserved word
 
 
 ## Document Variables ##

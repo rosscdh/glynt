@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from pybars import Compiler, strlist
 import re
+import logging
+logger = logging.getLogger(__file__)
 
 
 class DocChoiceException(Exception):
@@ -16,13 +18,15 @@ class DocSelectException(DocChoiceException):
 
 
 class Smoothe(object):
-    source = None
+    source_html = None
+    context = {}
     compiler = None
     template = None
 
-    def __init__(self, source=None):
+    def __init__(self, source_html=None):
         self.compiler = Compiler()
-        self.source = source
+        self.source_html = source_html
+        self.context = {}
         self.compiler.register_helper(u'doc_var', self.doc_var)
         self.compiler.register_helper(u'doc_choice', self.doc_choice)
         self.compiler.register_helper(u'doc_select', self.doc_select)
@@ -30,16 +34,20 @@ class Smoothe(object):
         self.compiler.register_helper(u'doc_note', self.doc_note)
 
     def render(self, context):
-        template = self.compiler.compile(self.source)
-        if template:
+        self.context = context
+        template = self.compiler.compile(self.source_html)
+        if not template:
+            logger.error("template was not set from provided source_html")
+            return None
+        else:
             html = template(context)
             return unicode(''.join(html))
-        return None
 
     def doc_var(self, this, *args, **kwargs):
         var_name = kwargs.get('name', None)
         if var_name in self.context:
-            return self.context[var_name]
+            return self.context[var_name].strip()
+        logger.warn("var_name %s was not found in context"%(var_name,))
         return None
 
     def doc_choice(self, this, *args, **kwargs):
@@ -51,8 +59,10 @@ class Smoothe(object):
             if self.context[var_name] not in choices:
                 # Test for is static
                 if is_static == True:
+                    logger.error("choice %s was not in the set of valid choices"%(o,))
                     raise DocChoiceException(self.context[var_name], choices)
-            return self.context[var_name]
+            return self.context[var_name].strip()
+        logger.warn("var_name %s was not found in context"%(var_name,))
         return None
 
     def doc_select(self, this, *args, **kwargs):
@@ -66,9 +76,13 @@ class Smoothe(object):
             selected_values = self.context[var_name]
             for o in selected_values:
                 if o not in choices:
+                    logger.error("option %s was not in the set of valid select options"%(o,))
                     raise DocSelectException(self.context[var_name], choices)
+
             # Join the selectd options based on the join_by character; that may be custom
             return join_by.join(self.context[var_name])
+
+        logger.warn("var_name %s was not found in context"%(var_name,))
         return None
 
     def help_for(self, this, *args, **kwargs):

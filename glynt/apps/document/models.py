@@ -167,6 +167,10 @@ class ClientCreatedDocument(models.Model):
 
 
 class DocumentHTML(models.Model):
+    """ 
+        The Storage of rendered HTML is managed by this model
+        @TODO: Versioning
+    """
     document = models.ForeignKey(ClientCreatedDocument)
     html = models.TextField(blank=True)
 

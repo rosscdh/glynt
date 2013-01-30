@@ -7,7 +7,7 @@ from glynt.apps.smoothe.pybars_smoothe import Smoothe
 
 import user_streams
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__file__)
 
 
 @task()
@@ -71,11 +71,15 @@ def document_comment(**kwargs):
 @task()
 def generate_document_html(**kwargs):
     document = kwargs['document']
+
+    # Get or create the HTML object
     html, is_new = DocumentHTML.objects.get_or_create(document=document)
-    # extract source HTML
-    logger.info(document)
-    logger.info(document.body)
-    smoothe = Smoothe(source=document.body)
-    print smoothe.render(document.doc_data)
+
     # convert handlebars template tags
-    # save to document.body
+    smoothe = Smoothe(source_html=document.body)
+
+    try:
+        html.html = smoothe.render(document.doc_data)
+    except Exception as e:
+        logger.error('Could not save HTML for Document(%d): Exception: %s'%(document.pk, e,))
+    html.save()

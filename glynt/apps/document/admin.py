@@ -3,7 +3,7 @@ from django.contrib import admin
 
 from categories.admin import CategoryBaseAdmin
 
-from glynt.apps.document.models import DocumentTemplate, DocumentTemplateCategory, ClientCreatedDocument
+from glynt.apps.document.models import DocumentTemplate, DocumentTemplateCategory, ClientCreatedDocument, DocumentHTML
 
 
 class DocumentTemplateAdmin(admin.ModelAdmin):
@@ -16,4 +16,4 @@ class DocumentTemplateCategoryAdmin(CategoryBaseAdmin):
 
 admin.site.register(DocumentTemplate, DocumentTemplateAdmin)
 admin.site.register(DocumentTemplateCategory, DocumentTemplateCategoryAdmin)
-admin.site.register([ClientCreatedDocument])
+admin.site.register([ClientCreatedDocument, DocumentHTML])

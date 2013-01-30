@@ -23,14 +23,14 @@ class TestTemplateToDoc(mocktest.TestCase):
         }
 
     def testDocVar(self):
-        self.subject.source = self.html_handlers['doc_var']
+        self.subject.source_html = self.html_handlers['doc_var']
         context = {'monkey': u'This is some kind of Banana!'}
         self.subject.context = context
 
         assert self.subject.render(context) == u'This is some kind of Banana!'
 
     def testDocChoice(self):
-        self.subject.source = self.html_handlers['doc_choice']
+        self.subject.source_html = self.html_handlers['doc_choice']
         context = {
             'animal_farm': u'pig'
         }
@@ -39,7 +39,7 @@ class TestTemplateToDoc(mocktest.TestCase):
 
     @raises(DocChoiceException)
     def testInvalidStaticDocChoice(self):
-        self.subject.source = self.html_handlers['doc_choice']
+        self.subject.source_html = self.html_handlers['doc_choice']
         context = {
             'animal_farm': u'monkey'
         }
@@ -47,7 +47,7 @@ class TestTemplateToDoc(mocktest.TestCase):
         self.subject.render(context)
 
     def testNotStaticDocChoice(self):
-        self.subject.source = self.html_handlers['doc_choice_custom_not_is_static']
+        self.subject.source_html = self.html_handlers['doc_choice_custom_not_is_static']
         context = {
             'animal_farm': u'gorilla'
         }
@@ -55,7 +55,7 @@ class TestTemplateToDoc(mocktest.TestCase):
         assert self.subject.render(context) == u'gorilla'
 
     def testDefaultDocChoice(self):
-        self.subject.source = self.html_handlers['doc_choice_custom_unspecified_static']
+        self.subject.source_html = self.html_handlers['doc_choice_custom_unspecified_static']
         context = {
             'animal_farm': u'gorilla'
         }
@@ -63,7 +63,7 @@ class TestTemplateToDoc(mocktest.TestCase):
         assert self.subject.render(context) == u'gorilla'
 
     def testDocSelect(self):
-        self.subject.source = self.html_handlers['doc_select']
+        self.subject.source_html = self.html_handlers['doc_select']
         context = {
             'favourite_monkies': [u'Gorillas']
         }
@@ -72,7 +72,7 @@ class TestTemplateToDoc(mocktest.TestCase):
 
     def testMultiDocSelect(self):
         """ When multi=true the method will return a string """
-        self.subject.source = self.html_handlers['doc_select']
+        self.subject.source_html = self.html_handlers['doc_select']
         context = {
             'favourite_monkies': [u'Gorillas', 'Big Hairy Ones']
         }
@@ -83,7 +83,7 @@ class TestTemplateToDoc(mocktest.TestCase):
     @raises(DocSelectException)
     def testInvalidMultiDocSelect(self):
         """ Elephants are NOT monkies """
-        self.subject.source = self.html_handlers['doc_select']
+        self.subject.source_html = self.html_handlers['doc_select']
         context = {
             'favourite_monkies': [u'Elephants', 'Gorillas']
         }
@@ -92,7 +92,7 @@ class TestTemplateToDoc(mocktest.TestCase):
 
     def testCustomJoinByDocSelect(self):
         """ Join by '-A crazy night out with a Ham-' """
-        self.subject.source = self.html_handlers['doc_select_custom_join_by']
+        self.subject.source_html = self.html_handlers['doc_select_custom_join_by']
         context = {
             'favourite_monkies': [u'Chimpanzies', 'Baboons']
         }
@@ -105,7 +105,7 @@ class TestHTMLExample(TestTemplateToDoc):
         handlers = [v for k,v in self.html_handlers.items() if 'custom' not in k]
         html = '<html><head></head><body> <h1>A Test Title</h1> %s </body></html>'
 
-        self.subject.source = html % ("<br/>".join(handlers),)
+        self.subject.source_html = html % ("<br/>".join(handlers),)
         context = {
             'monkey': u'Slurping Schwein on the Train from Moenchengladbach',
             'animal_farm': u'horse',
