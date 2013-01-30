@@ -176,4 +176,4 @@ class DocumentHTML(models.Model):
 
 
 # import signals, must be at end of file
-from glynt.apps.document.signals import save_document_comment_signal
+from glynt.apps.document.signals import save_document_comment_signal, generate_document_body_signal

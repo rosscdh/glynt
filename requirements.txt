@@ -49,4 +49,4 @@ django_markup
 # https://github.com/ivaynberg/select2.git
 # https://github.com/timrwood/moment.git
 nosetests
-mocktests
+mocktest
