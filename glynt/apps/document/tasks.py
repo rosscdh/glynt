@@ -5,6 +5,9 @@ from celery.task import task
 
 import user_streams
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 @task()
 def document_created(**kwargs):
@@ -68,5 +71,8 @@ def document_comment(**kwargs):
 def generate_document_html(**kwargs):
     document = kwargs['document']
     # extract source HTML
+    logger.info(document)
+    logger.info(document.body)
+    print document.body
     # convert handlebars template tags
     # save to document.body

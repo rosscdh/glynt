@@ -166,5 +166,10 @@ class ClientCreatedDocument(models.Model):
       return json.dumps(self.doc_data)
 
 
+class DocumentHTML(models.Model):
+    document = models.ForeignKey(ClientCreatedDocument)
+    html = models.TextField(blank=True)
+
+
 # import signals, must be at end of file
 from glynt.apps.document.signals import save_document_comment_signal
