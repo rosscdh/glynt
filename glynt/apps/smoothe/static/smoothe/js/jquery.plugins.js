@@ -329,8 +329,8 @@
                     // select elemnt
                     item.selecta.select_option.selected = false;
                     item.selecta.$element.removeClass('btn-primary');
-                    item.selecta.$element.find('i').removeClass('icon-star')
-                    item.selecta.$element.find('i').addClass('icon-star-empty')
+                    item.selecta.$element.find('i').removeClass('icon-eye-open');
+                    item.selecta.$element.find('i').addClass('icon-eye-close');
                 });
             }
         }
@@ -347,7 +347,7 @@
             var parent_pos = self.options.$parent.offset();
             return {
                 'left': parent_pos.left - (self.$element.width()*5),
-                'top': parent_pos.top + (self.options.$parent.height()/3.2) - (self.$element.height()/4.2)
+                'top': parent_pos.top
             }
         }
       }

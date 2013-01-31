@@ -28,6 +28,9 @@ transition: background-color 0.2s;
 -o-transition: background-color 0.2s; /* Opera */
 text-align:center;
 }
+.doc_var.isModified{
+/*	background-color:#e2f6cd;
+*/}
 
 .doc_select{
 border:0px;
@@ -131,3 +134,25 @@ body.preview #document * {
 	font-size:15px;
 	font-family:Helvetica;
 }
+body.preview #document h1 {
+	text-transform:uppercase;
+	font-size:17px;
+}
+body.preview #document ol {list-style-type:decimal;}
+body.preview #document ol ol {list-style-type:lower-alpha;}
+body.preview #documentol ol ol {list-style-type:lower-roman;}
+body.preview #document li {margin-bottom:1em;}
+body.preview #document ol ol, body.preview #document ol ol ol {margin-top:1em;}
+
+/* This needs work */
+body.preview #document ol.decimal {list-style-type:decimal;}
+body.preview #document ol.decimal ol {list-style-type:decimal;}
+body.preview #documentol ol.decimal ol {list-style-type:decimal;}
+
+
+/*
+AH NOTE : Some code to acheive 1.1.1 style numbering. Might not translate to PDF's so need to wait until that functionality is there before implementation.
+body.preview OL { counter-reset: item }
+body.preview LI { display: block; }
+body.preview LI:before { content: counters(item, ".") " "; counter-increment: item }
+*/

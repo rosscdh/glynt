@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <django-objects version="1.0"><object pk="2" model="document.documenttemplate"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Assured Shorthold Tenancy Agreement</field><field type="SlugField" name="slug">assured-shorthold-tenancy-agreement</field><field type="CharField" name="acronym">ta</field><field type="CharField" name="summary"></field><field type="TextField" name="description"></field><field type="TextField" name="body">
-<center>
+&lt;center&gt;
 Assured Shorthold Tenancy Agreement
 ===================================
 
 (For a room in a house or flat with non-resident landlord)
-</center>
+&lt;/center&gt;
 
 The Landlord
 -------------
@@ -465,7 +465,6 @@ GUIDANCE NOTES
 {{#help_for varname="second_party_individual"}} The full name of the second party to the confidentiality agreement. {{/help_for}}
 {{#help_for varname="second_party_company"}} The full name of the second party to the confidentiality agreement. {{/help_for}}
 {{#help_for varname="purpose"}} A general description of the purpose of the discussions that require confidentiality e.g. "a corporate merger" {{/help_for}}
-
 </field><field type="IntegerField" name="doc_status">1</field><field type="BooleanField" name="is_public">True</field><field to="document.documenttemplatecategory" name="doc_cats" rel="ManyToManyRel"><object pk="1"></object></field></object><object pk="4" model="document.documenttemplate"><field to="auth.user" name="owner" rel="ManyToOneRel">1</field><field type="CharField" name="name">Loan Agreement</field><field type="SlugField" name="slug">loan-agreement</field><field type="CharField" name="acronym">la</field><field type="CharField" name="summary"></field><field type="TextField" name="description"></field><field type="TextField" name="body">
 Loan Agreement
 ===================================
