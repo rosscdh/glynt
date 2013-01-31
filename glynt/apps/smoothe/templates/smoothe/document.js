@@ -144,13 +144,26 @@ $(document).ready(function(){
                 };
                 // extract just the value from context
                 $.each(self.context, function(index, item) {
-                    data[item.name] = item.value;
+                    if (item.type == 'doc_select') {
+                        var select_item = []
+                        // extract the item index and its selected value
+                        $.each(item.select_options, function(i,item){
+                            select_item.push({
+                                'selected': item.selected
+                                ,'index': item.index
+                            });
+                        });
+                        data[item.name] = select_item;
+                    } else {
+                        data[item.name] = item.value;
+                    }
                 });
 
                 $.ajax({
-                    type: 'POST',
-                    url: $(this).closest('form').attr('href'),
-                    data: data,
+                    type: 'POST'
+                    ,url: $(this).closest('form').attr('href')
+                    ,contentType : 'application/json'
+                    ,data: data
                 })
                 .success(function(data, textStatus, jqXHR) {
                     if (window.location.pathname !== data.url) {

@@ -20,6 +20,7 @@ class TestTemplateToDoc(mocktest.TestCase):
             # Doc Select
             'doc_select': u'{{#doc_select name="favourite_monkies" label="What are your favourite Monkies?"}}Gorillas{option}Baboons{option}Chimpanzies{option}Big Hairy Ones{{/doc_select}}',
             'doc_select_custom_join_by': u'{{#doc_select name="favourite_monkies" join_by="-A crazy night out with a Ham-" label="What are your favourite Monkies?"}}Gorillas{option}Baboons{option}Chimpanzies{option}Big Hairy Ones{{/doc_select}}',
+            'doc_select_custom_subvariable': u'{{#doc_select name="favourite_monkies" label="What are your favourite Monkies?"}}Gorillas named {{#doc_var name="gorilla_name"}}{{/doc_var}}{option}Baboons{option}Chimpanzies named {{#doc_var name="chimp_name"}}{{/doc_var}}{option}Big Hairy Ones named {{#doc_var name="big_hairy_name"}}{{/doc_var}}{{/doc_select}}',
         }
 
     def testDocVar(self):
@@ -70,7 +71,7 @@ class TestTemplateToDoc(mocktest.TestCase):
         self.subject.context = context
         assert self.subject.render(context) == u'Gorillas'
 
-    def testMultiDocSelect(self):
+    def testDocSelectMulti(self):
         """ When multi=true the method will return a string """
         self.subject.source_html = self.html_handlers['doc_select']
         context = {
@@ -81,7 +82,7 @@ class TestTemplateToDoc(mocktest.TestCase):
         assert self.subject.render(context) == u'Gorillas\rBig Hairy Ones'
 
     @raises(DocSelectException)
-    def testInvalidMultiDocSelect(self):
+    def testDocSelectInvalidMulti(self):
         """ Elephants are NOT monkies """
         self.subject.source_html = self.html_handlers['doc_select']
         context = {
@@ -90,7 +91,7 @@ class TestTemplateToDoc(mocktest.TestCase):
         self.subject.context = context
         self.subject.render(context)
 
-    def testCustomJoinByDocSelect(self):
+    def testDocSelectCustomJoinBy(self):
         """ Join by '-A crazy night out with a Ham-' """
         self.subject.source_html = self.html_handlers['doc_select_custom_join_by']
         context = {
@@ -98,6 +99,19 @@ class TestTemplateToDoc(mocktest.TestCase):
         }
         self.subject.context = context
         eq_(self.subject.render(context), 'Chimpanzies-A crazy night out with a Ham-Baboons')
+
+    def testDocSelectSubVariable(self):
+        """ Test DocSelects that contain sub doc_vars """
+        self.subject.source_html = self.html_handlers['doc_select_custom_subvariable']
+        context = {
+            'favourite_monkies': [u'Chimpanzies named George', 'Baboons'],
+            'gorilla_name': 'Harald',
+            'chimp_name': 'George',
+            'big_hairy_name': 'Grumwald',
+        }
+        self.subject.context = context
+        print self.subject.render(context)
+        #eq_(self.subject.render(context), 'Chimpanzies-A crazy night out with a Ham-Baboons')
 
 
 class TestHTMLExample(TestTemplateToDoc):

@@ -112,12 +112,18 @@ Handlebars.registerHelper('doc_select', function(options) {
     var select_options = content.split('{option}');// splti by the {option} seperator
     // setup the partial list
     for (var i = 0; i < select_options.length; i++) {
+        // handle this ugly nastiness from submitting json obejct and having it converted into an abomination
+        var selected = '{var_name}[{index}][selected]'.assign({var_name:var_name, index:i})
+        if (app.document_data[selected] !== undefined){
+            selected = (app.document_data[selected] == 'true')
+        }
+
         options.hash.select_options.push({
             'id': '{id}-{index}'.assign({'id': options.hash.id, 'index': i}),
             'text': new Handlebars.SafeString(select_options[i]),
             'handle': 'Select',
             'target': options.hash.id,
-            'selected': false,
+            'selected': selected,
             'index': i
         });
     }

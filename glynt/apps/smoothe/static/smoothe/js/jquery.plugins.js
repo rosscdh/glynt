@@ -371,26 +371,46 @@
                     return id !== self.select_option.id
                 }
             });
-            
+            self.set_selected_status();
             self.position(self.pos());
+        }
+        , set_selected_status: function() {
+            var self = this;
+            if (self.select_option.selected === true) {
+                self.select_option.selected = true;
+                self.$element.addClass('btn-primary');
+                self.$element.find('i').removeClass('icon-star-empty')
+                self.$element.find('i').addClass('icon-star')
+                self.$target.addClass('selected');
+            } else {
+                self.select_option.selected = false;
+                self.$element.removeClass('btn-primary');
+                self.$element.find('i').removeClass('icon-star')
+                self.$element.find('i').addClass('icon-star-empty')
+                self.$target.removeClass('selected');
+            }
+        }
+        , toggle_selected_status: function() {
+            var self = this;
+            if (self.select_option.selected === false) {
+                self.select_option.selected = true;
+                self.$element.addClass('btn-primary');
+                self.$element.find('i').removeClass('icon-star-empty')
+                self.$element.find('i').addClass('icon-star')
+            } else {
+                self.select_option.selected = false;
+                self.$element.removeClass('btn-primary');
+                self.$element.find('i').removeClass('icon-star')
+                self.$element.find('i').addClass('icon-star-empty')
+            }
+            self.$target.toggleClass('selected');
         }
         , listen: function () {
             var self = this;
 
             self.$element.on('click', function(event){
                 event.preventDefault();
-                if (self.select_option.selected === false) {
-                    self.select_option.selected = true;
-                    self.$element.addClass('btn-primary');
-                    self.$element.find('i').removeClass('icon-star-empty')
-                    self.$element.find('i').addClass('icon-star')
-                } else {
-                    self.select_option.selected = false;
-                    self.$element.removeClass('btn-primary');
-                    self.$element.find('i').removeClass('icon-star')
-                    self.$element.find('i').addClass('icon-star-empty')
-                }
-                self.$target.toggleClass('selected');
+                self.toggle_selected_status();
                 self.handle_is_multi();
             });
 

@@ -1,20 +1,17 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
-from django.utils import simplejson as json
-from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import get_object_or_404
-from django.template.defaultfilters import slugify
 from django.middleware.csrf import get_token
 from django.views.generic import CreateView, UpdateView
-from django.views.generic.edit import ModelFormMixin
 from django.core.urlresolvers import reverse
 
-from glynt.apps.document.views import DocumentView
-from glynt.apps.document.views.utils import user_can_view_document
 from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
 from glynt.apps.utils import AjaxableResponseMixin
 
 from .forms import DocumentTemplateForm, ClientDocumentForm
+
+import logging
+logger = logging.getLogger(__file__)
 
 
 class CreateTemplateView(AjaxableResponseMixin, CreateView):

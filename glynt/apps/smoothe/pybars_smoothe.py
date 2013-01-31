@@ -74,6 +74,7 @@ class Smoothe(object):
 
         if var_name in self.context:
             selected_values = self.context[var_name]
+
             for o in selected_values:
                 if o not in choices:
                     logger.error("option %s was not in the set of valid select options"%(o,))
