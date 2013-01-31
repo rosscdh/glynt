@@ -71,7 +71,6 @@ class ClientDocumentForm(forms.ModelForm):
             avail = False
             counter = 1
             while not avail and counter < 15:
-                print slug
                 try:
                     item = self.Meta.model.objects.get(slug=slug)
                     counter += 1

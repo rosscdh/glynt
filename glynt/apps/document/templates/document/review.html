@@ -72,13 +72,18 @@
 {% block js %}
 <script id="document-data" type="text/javascript">[{{ document_data|default:''|safe }}]</script>
 <script id="js-document" type="text/x-handlebars-template">{{ document.html|default:userdoc.source_document.body|safe }}</script>
-<script type="text/javascript" src="{{ STATIC_URL }}knockoutjs/js/knockout-2.1.0.js"></script>
+
 <script>
 $(document).ready(function(){
     var app = $.sammy(function() {
         var self = this;
+
         self.views = $('div.view');
         self.nav = $('ul.nav-list li a');
+
+        self.markdownConverter = new Markdown.Converter();
+        self.targetDocumentId = 'span#document-md';
+        self.compiledTemplate = Handlebars.compile($('#js-document').html()); // must not be ko.observable
 
         var hb_templates_source   = $("script#template_list").html();
         var hb_templates_list = Handlebars.compile(hb_templates_source);
@@ -106,6 +111,7 @@ $(document).ready(function(){
                 $(item).hide();
             });
         };
+
         this.show = function show(view_list) {
             if ($.isArray(view_list) == false) {
                 view_list = [view_list];
@@ -116,21 +122,6 @@ $(document).ready(function(){
                 item.show();
             });
         }
-    
-    });
-
-    // start the application
-    app.run('#/');
-
-    /**
-    * Primary view acts as a holder for the other views
-    */
-    function PageDocumentController() {
-        var self = this;
-
-        self.markdownConverter = new Markdown.Converter();
-        self.targetDocumentId = 'span#document-md';
-        self.compiledTemplate = Handlebars.compile($('#js-document').html()); // must not be ko.observable
 
         self.render = function render() {
             var data = $.parseJSON($('script#document-data').html());
@@ -144,25 +135,11 @@ $(document).ready(function(){
           return self.markdownConverter.makeHtml(md);
         }
 
-        self.registerCallback = function registerCallback(event_name, callback) {
-          self.observer.registerCallback(event_name, callback);
-        };
-        self.dispatch = function dispatch(event_name, value) {
-          self.observer.dispatch(event_name, value);
-        };
+    });
 
-        self.init = function init() {
-          self.render();
-          self.observer = new argosPanOptia();
-        };
-
-        self.init();
-    }
-
-    // ----- KO Instance -----
-    App = new PageDocumentController();
-    // ----- KO Bindings -----
-    ko.applyBindings(App);
+    // start the application
+    app.run('#/');
+    app.render();
 
     $.each($('.signaturePad'), function(index, item) {
       item = $(item);

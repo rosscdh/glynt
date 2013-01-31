@@ -80,6 +80,6 @@ def generate_document_html(**kwargs):
 
     try:
         html.html = smoothe.render(document.doc_data)
+        html.save()
     except Exception as e:
         logger.error('Could not save HTML for Document(%d): Exception: %s'%(document.pk, e,))
-    html.save()
