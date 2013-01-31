@@ -49,9 +49,7 @@
     {% endblock %}
 
     {% if user.is_staff %}
-        <div class="row admin-panel">
-        {% block admin_panel %}{% endblock %}
-        </div>
+		{% block admin_panel %}{% endblock %}
     {% endif %}
 
     {% block prebody %}{% endblock %}

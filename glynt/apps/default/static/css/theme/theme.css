@@ -592,6 +592,7 @@ padding:10px 0px 5px 0px;
 	border-radius:4px;
 	padding-top:3px;
 	margin-top:10px;
+	text-transform:uppercase;
 }
 .dashboard .icon.c2{background-color:#e00c61;}
 .dashboard .icon.c3{background-color:#0a934e;}

@@ -1,6 +1,12 @@
 .border{
   border:solid #c00 1px;
 }
+h2#document-title {
+	font-weight:normal;
+	text-align:normal;
+	line-height:2em;
+	margin-top:20px;
+}
 #element_help_text {
   
 }
@@ -66,18 +72,22 @@ position:absolute;
 margin-left:16px;
 }
 .selecta.btn {
-	color:#666;
+	color:#777;
 	background-color:none;
 	background:none;
 	border:none;
 }
+.selecta.btn:hover .icon-ok {
+	color:green;
+}
 #element_help_text{
 position:absolute;
 display:none;
-background-color:#CEEAF8;
-border:solid #08C 1px;
-padding:5px;
+background-color:#757C7E;
+border:solid #ccc 1px;
+padding:13px;
 z-index:25;
+color:white;
 }
 
 div#sidebar {
@@ -123,6 +133,12 @@ background-color: #bfd547;
 ul#glynt_progress li:hover, .hover_state {
 width: 65px;
 opacity:0.9;
+}
+
+button#document-create {
+	font-size:20px;
+	padding:20px;
+	width:510px;
 }
 
 

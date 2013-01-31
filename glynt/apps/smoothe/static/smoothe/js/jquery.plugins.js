@@ -170,7 +170,7 @@
         , show: function () {
             var self = this;
             var pos = self.help_pos();
-            var icon = $('<i/>', {class:'icon-info-sign icon-align-left'});
+            var icon = $();
             var info = $('<div/>', {class:'info-text'}).append('&nbsp;' + self.options.item.help_text)
 
             self.$target.css({'left': pos.left + 'px', 'top': pos.top + 'px'});
@@ -304,11 +304,11 @@
                     self.select_option.selected = true;
                     self.$element.addClass('btn-primary');
                     self.$element.find('i').removeClass('icon-eye-close')
-                    self.$element.find('i').addClass('icon-eye-open')
+                    self.$element.find('i').addClass('icon-ok')
                 } else {
                     self.select_option.selected = false;
                     self.$element.removeClass('btn-primary');
-                    self.$element.find('i').removeClass('icon-eye-open')
+                    self.$element.find('i').removeClass('icon-ok')
                     self.$element.find('i').addClass('icon-eye-close')
                 }
                 self.$target.toggleClass('selected');
