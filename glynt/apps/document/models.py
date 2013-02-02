@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.utils import simplejson as json
 from django.utils.safestring import mark_safe
-
+from django.utils.encoding import smart_unicode
 from categories.models import CategoryBase
 from jsonfield import JSONField
 
@@ -15,6 +15,7 @@ from glynt.apps.document.managers import ClientCreatedDocumentManager, PublicCli
 from glynt.pybars_plus import PybarsPlus
 
 import qrcode
+import markdown
 
 
 class DocumentTemplate(models.Model):
@@ -173,6 +174,9 @@ class DocumentHTML(models.Model):
     """
     document = models.ForeignKey(ClientCreatedDocument)
     html = models.TextField(blank=True)
+
+    def render(self):
+        return markdown.markdown(smart_unicode(self.html)) if self.html else None
 
 
 # import signals, must be at end of file

@@ -75,7 +75,11 @@ $(document).ready(function(){
         };
 
         self.setup_data = function setup_data(params) {
-            self.document_data = $.parseJSON($('script#document-document_data').html());
+            var data = $('script#document-document_data').html();
+            if (data == null || data == '') {
+                data = "{}";
+            }
+            self.document_data = $.parseJSON(data);
         };
 
         // ---- BIND METHODS -----

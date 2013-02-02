@@ -4,10 +4,12 @@ from django.utils.translation import ugettext_lazy as _
 from celery.task import task
 from glynt.apps.document.models import DocumentHTML
 from glynt.apps.smoothe.pybars_smoothe import Smoothe
+from glynt.apps.services import SaasposeService, DocRaptorService, PdfCrowdService
 
 import user_streams
+
 import logging
-logger = logging.getLogger(__file__)
+logger = logging.getLogger('django.request')
 
 
 @task()
@@ -81,5 +83,20 @@ def generate_document_html(**kwargs):
     try:
         html.html = smoothe.render(document.doc_data)
         html.save()
+        # Send for HTML to PDF conversion
+        convert_to_pdf(document_html=html)
     except Exception as e:
         logger.error('Could not save HTML for Document(%d): Exception: %s'%(document.pk, e,))
+
+
+@task()
+def convert_to_pdf(document_html, **kwargs):
+    logger.info('Converting htmlto PDF Services')
+    sp = SaasposeService(html=document_html.render())
+    sp.create_pdf()
+
+    # dr = DocRaptorService(html=document_html.render())
+    # dr.create_pdf()
+
+    # pc = PdfCrowdService(html=document_html.render())
+    # pc.create_pdf()

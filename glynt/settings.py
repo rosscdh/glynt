@@ -161,6 +161,8 @@ PROJECT_APPS = (
     'glynt.apps.export',
     # The Api
     'glynt.apps.api',
+    # Remote and 3rd Party services (pdf/doc conversion)
+    'glynt.apps.services',
 )
 
 HELPER_APPS = (
