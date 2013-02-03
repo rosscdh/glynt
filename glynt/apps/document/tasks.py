@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from celery.task import task
 from glynt.apps.document.models import DocumentHTML
 from glynt.apps.smoothe.pybars_smoothe import Smoothe
-from glynt.apps.services import SaasposeService, DocRaptorService, PdfCrowdService
+from glynt.apps.services import GlyntPdfService
 
 import user_streams
 
@@ -80,23 +80,20 @@ def generate_document_html(**kwargs):
     # convert handlebars template tags
     smoothe = Smoothe(source_html=document.body)
 
-    try:
-        html.html = smoothe.render(document.doc_data)
-        html.save()
-        # Send for HTML to PDF conversion
-        convert_to_pdf(document_html=html)
-    except Exception as e:
-        logger.error('Could not save HTML for Document(%d): Exception: %s'%(document.pk, e,))
+    #try:
+    html.html = smoothe.render(document.doc_data)
+    html.save()
+    # Send for HTML to PDF conversion
+    convert_to_pdf(document_html=html, document=document)
+    # except Exception as e:
+    #     logger.error('Could not save HTML for Document(%d): Exception: %s'%(document.pk, e,))
 
 
 @task()
 def convert_to_pdf(document_html, **kwargs):
+    from django.core.files.storage import default_storage
+    from django.conf import settings
     logger.info('Converting htmlto PDF Services')
-    sp = SaasposeService(html=document_html.render())
-    sp.create_pdf()
-
-    # dr = DocRaptorService(html=document_html.render())
-    # dr.create_pdf()
-
-    # pc = PdfCrowdService(html=document_html.render())
-    # pc.create_pdf()
+    glynt_pdf = GlyntPdfService(html=document_html.render(), document=kwargs.get('document', None))
+    pdf_file = glynt_pdf.create_pdf()
+    default_storage.save('%s/glyntpdf.pdf'%(settings.MEDIA_ROOT,), pdf_file)

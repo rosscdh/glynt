@@ -23,8 +23,7 @@ def generate_pdf_template_object(html, link_callback=None):
     """
     pdf = StringIO.StringIO()
     link_callback = fetch_resources if link_callback is None else link_callback
-    pisa.CreatePDF(html.encode("UTF-8"), pdf , encoding='UTF-8',
-                   link_callback=link_callback)
+    pisa.CreatePDF(html, pdf , encoding='UTF-8', link_callback=link_callback)
     return pdf
 
 
