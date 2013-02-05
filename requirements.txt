@@ -48,3 +48,8 @@ django_markup
 # https://github.com/danharper/Handlebars-Helpers.git
 # https://github.com/ivaynberg/select2.git
 # https://github.com/timrwood/moment.git
+django-nose
+mocktest
+# pdfcrowd - failed they dont support unicode elegantly
+-e git+https://github.com/jkeyes/python-docraptor.git#egg=python-docraptor
+#-e git+https://github.com/saaspose/Saaspose.SDK-for-Python.git#egg=Saaspose.SDK-for-Python- manually installed .. sigh saaspose

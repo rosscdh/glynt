@@ -7,6 +7,9 @@ from bootstrap.forms import BootstrapModelForm, Fieldset
 from glynt.apps.document.models import DocumentTemplate
 from glynt.apps.document.models import ClientCreatedDocument
 
+import logging
+logger = logging.getLogger(__file__)
+
 
 class DocumentTemplateForm(BootstrapModelForm):
     class Meta:
@@ -40,6 +43,7 @@ class ClientDocumentForm(forms.ModelForm):
             kwargs['data'] = kwargs['data'].copy() # make it mutable
 
             if kwargs['instance'] is not None:
+                from django.utils import simplejson as json
                 source = kwargs['instance']
                 kwargs['data']['doc_data'] = doc_data
 
@@ -71,7 +75,6 @@ class ClientDocumentForm(forms.ModelForm):
             avail = False
             counter = 1
             while not avail and counter < 15:
-                print slug
                 try:
                     item = self.Meta.model.objects.get(slug=slug)
                     counter += 1

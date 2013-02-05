@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.utils import simplejson as json
 from django.utils.safestring import mark_safe
-
+from django.utils.encoding import smart_unicode
 from categories.models import CategoryBase
 from jsonfield import JSONField
 
@@ -13,8 +13,14 @@ from glynt.apps.document.managers import DocumentTemplateManager, PublicDocument
 from glynt.apps.document.managers import ClientCreatedDocumentManager, PublicClientCreatedDocumentManager, DeletedClientCreatedDocumentManager
 
 from glynt.pybars_plus import PybarsPlus
+from glynt.apps.smoothe.pybars_smoothe import Smoothe
 
 import qrcode
+import markdown
+
+
+import logging
+logger = logging.getLogger('django.request')
 
 
 class DocumentTemplate(models.Model):
@@ -166,5 +172,21 @@ class ClientCreatedDocument(models.Model):
       return json.dumps(self.doc_data)
 
 
+class DocumentHTML(models.Model):
+    """ 
+        The Storage of rendered HTML is managed by this model
+        @TODO: Versioning
+    """
+    document = models.ForeignKey(ClientCreatedDocument)
+    html = models.TextField(blank=True)
+
+    def render(self):
+        logger.info('DocumentHTML render: %s'%(self.pk,))
+        html = markdown.markdown(smart_unicode(self.html)) if self.html else None
+        smoothe = Smoothe(source_html=html)
+
+        return smoothe.render(self.document.doc_data)
+
+
 # import signals, must be at end of file
-from glynt.apps.document.signals import save_document_comment_signal
+from glynt.apps.document.signals import save_document_comment_signal, generate_document_body_signal

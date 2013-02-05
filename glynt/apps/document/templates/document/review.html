@@ -16,9 +16,13 @@
 
 <div class="span3 sidebar">
   <ul class="nav nav-list">
-    <li><a href="{% url 'doc:update_document' pk=userdoc.pk %}" class="btn btn-green">{% trans 'Edit Doc' %}</a></li>
+    <li><a href="{% url 'doc:update_document' pk=userdoc.pk %}" class="btn btn-success">{% trans 'Edit Doc' %}</a></li>
+    <li class="divider"></li>
+    <li><a id="export-{{ d.pk }}" href="{% url 'export:as_pdf' slug=userdoc.slug %}" class="btn btn-success" target="_BLANK" data-url="{% url 'export:as_pdf' slug=userdoc.slug %}" data-pk="{{ userdoc.pk }}" class="">{% trans 'Download PDF' %}</a></li>
     <li class="divider"></li>
       <li><a href="#/review"> {% trans 'Review Document' %}</a></li>
+      <li class="divider"></li>
+        <li><a href="#/review/qr"> {% trans 'QR Code' %}</a></li>
     <li class="divider"></li>
       <li><a href="#/review/signatories"> {% trans 'Signature Details' %}</a></li>
     <li class="divider"></li>
@@ -50,11 +54,9 @@
 
 <div id="comments" class="span9 view hide">
     <h2 class="title">{% trans 'Comments' %}</h2>
-    <div class="doc-body">
-        <div id="document-comments">
-        {% comments_for_object userdoc next %}
-        </div>
-    </div>
+      <div id="document-comments" class="doc-body">
+      {% comments_for_object userdoc next %}
+      </div>
 </div>
 
 <div id="activity" class="span9 view hide">
@@ -65,20 +67,33 @@
       </ul>
     </div>
 </div>
+
+<div id="qr" class="span9 view hide">
+    <h2 class="title">{% trans 'Document QR Code' %}</h2>
+    <p>Download and share this QR code to link to this document</p>
+    <div class="doc-body">
+      show QR code here
+    </div>
+</div>
 {% endblock %}
 
 {% block css %}{% endblock %}
 
 {% block js %}
 <script id="document-data" type="text/javascript">[{{ document_data|default:''|safe }}]</script>
-<script id="js-document" type="text/x-handlebars-template">{{ userdoc.body|default:userdoc.source_document.body|safe }}</script>
-<script type="text/javascript" src="{{ STATIC_URL }}knockoutjs/js/knockout-2.1.0.js"></script>
+<script id="js-document" type="text/x-handlebars-template">{{ document.html|default:userdoc.source_document.body|safe }}</script>
+
 <script>
 $(document).ready(function(){
     var app = $.sammy(function() {
         var self = this;
+
         self.views = $('div.view');
         self.nav = $('ul.nav-list li a');
+
+        self.markdownConverter = new Markdown.Converter();
+        self.targetDocumentId = 'span#document-md';
+        self.compiledTemplate = Handlebars.compile($('#js-document').html()); // must not be ko.observable
 
         var hb_templates_source   = $("script#template_list").html();
         var hb_templates_list = Handlebars.compile(hb_templates_source);
@@ -99,6 +114,9 @@ $(document).ready(function(){
         this.get('#/review/activity', function() {
             self.show($('div#activity'));
         });
+        this.get('#/review/qr', function() {
+            self.show($('div#qr'));
+        });
     
         this.hide_all = function hide_all() {
             self.nav.removeClass('selected');
@@ -106,6 +124,7 @@ $(document).ready(function(){
                 $(item).hide();
             });
         };
+
         this.show = function show(view_list) {
             if ($.isArray(view_list) == false) {
                 view_list = [view_list];
@@ -116,21 +135,6 @@ $(document).ready(function(){
                 item.show();
             });
         }
-    
-    });
-
-    // start the application
-    app.run('#/');
-
-    /**
-    * Primary view acts as a holder for the other views
-    */
-    function PageDocumentController() {
-        var self = this;
-
-        self.markdownConverter = new Markdown.Converter();
-        self.targetDocumentId = 'span#document-md';
-        self.compiledTemplate = Handlebars.compile($('#js-document').html()); // must not be ko.observable
 
         self.render = function render() {
             var data = $.parseJSON($('script#document-data').html());
@@ -144,25 +148,11 @@ $(document).ready(function(){
           return self.markdownConverter.makeHtml(md);
         }
 
-        self.registerCallback = function registerCallback(event_name, callback) {
-          self.observer.registerCallback(event_name, callback);
-        };
-        self.dispatch = function dispatch(event_name, value) {
-          self.observer.dispatch(event_name, value);
-        };
+    });
 
-        self.init = function init() {
-          self.render();
-          self.observer = new argosPanOptia();
-        };
-
-        self.init();
-    }
-
-    // ----- KO Instance -----
-    App = new PageDocumentController();
-    // ----- KO Bindings -----
-    ko.applyBindings(App);
+    // start the application
+    app.run('#/');
+    app.render();
 
     $.each($('.signaturePad'), function(index, item) {
       item = $(item);

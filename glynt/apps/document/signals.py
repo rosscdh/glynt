@@ -17,3 +17,10 @@ def save_document_comment_signal(sender, **kwargs):
     comment_text = truncatewords(comment.comment, 15)
     # Notification
     tasks.document_comment(source_document=source_document, document=client_document, commenting_user=comment.user, commenting_user_name=comment.user_name, comment=comment_text)
+
+
+@receiver(post_save, sender=ClientCreatedDocument)
+def generate_document_body_signal(sender, **kwargs):
+    document = kwargs['instance']
+    # Generate HTML Body
+    tasks.generate_document_html(document=document)

@@ -1,65 +1,38 @@
-<!-- 
-This is intended to be rendered to a PDF using pisa, not in a browser.
-Therefore, the HTML and CSS here can look a bit fishy. Please refer to 
-http://www.htmltopdf.org/doc/pisa-en.html for reference 
--->
-<document pagesize='letter'>
+<html>
 <head>
-    <title>{{ title }}</title>
-    <style type="text/css">
-        @page {
-            size: letter portrait;
-            margin: 1in 1in 1in 1in;
-            padding: 0;
-
-            @frame header {
-                -pdf-frame-content: headerContent;
-                width: 8in;
-                top: 0.5in;
-                margin-left: 0.5in;
-                margin-right: 0.5in;
-                height: 1.0in;
-            }
-            @frame footer {
-                -pdf-frame-content: footerContent;
-                width: 8in;
-                bottom: 0in;
-                margin-left: 2cm;
-                margin-right: 2cm;
-                height: 1cm;
-            }
-        }
-		ol.levelone {
-			list-style-type:decimal;
-		}
-		ol.leveltwo {
-			list-style-type:lower-latin;
-		}
-		ol.levelthree  {
-			list-style-type:lower-roman;
-		}
-		ol li {
-			margin-top:10px;
-		}
-		ol.indent-only {
-			list-style-type:none;
-		}
-        h1 { text-align: middle; font-size: 18px; }
-    </style>
+<title>{{ title|safe }}</title>
+<style type="text/css" media="print">
+/*django foible here ENSURE that "@page {" NOTE the white space*/
+@page {  
+ margin-left: 1in;  
+ margin-right: 1in;  
+ margin-top: 1in;  
+ margin-bottom: 1in;  
+ font-size: 12pt;
+} 
+p {
+ font-size: 12pt;
+}
+li {
+	margin-bottom:1em;
+}
+ul {
+	list-style-type: decimal;
+}
+</style>
 </head>
+
 <body>
-<!-- <div id='headerContent'>
-    <img src="{{ STATIC_URL }}img/homeimg.jpg"/>
-</div> -->
-<div>
+
+<div class="content">
     <keepinframe>
      <!-- Content -->
-     {{body}}
+     {{ body|safe }}
     </keepinframe>
 </div>
-<div id='footerContent'>
+
     <!-- footer content -->
-    Document created by LawPal and Orrick. Page. <pdf:pagenumber>
-</div>
+    <p>Document created by LawPal.com. <pdf:pagenumber></p>
+
 </body>
-</document>
+</html>

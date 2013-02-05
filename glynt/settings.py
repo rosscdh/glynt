@@ -161,6 +161,8 @@ PROJECT_APPS = (
     'glynt.apps.export',
     # The Api
     'glynt.apps.api',
+    # Remote and 3rd Party services (pdf/doc conversion)
+    'glynt.apps.services',
 )
 
 HELPER_APPS = (
@@ -238,20 +240,30 @@ COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = False
 
 if DEBUG:
+    INSTALLED_APPS = INSTALLED_APPS + (
+        'django.contrib.webdesign',
+    )
+
     if not IS_TESTING:
         MIDDLEWARE_CLASSES += (
-        'debug_toolbar.middleware.DebugToolbarMiddleware',
+            'debug_toolbar.middleware.DebugToolbarMiddleware',
         )
         DEBUG_TOOLBAR_CONFIG = {
-        'INTERCEPT_REDIRECTS': False
+            'INTERCEPT_REDIRECTS': False
         }
         INSTALLED_APPS = INSTALLED_APPS + (
-        'debug_toolbar',
+            'debug_toolbar',
         )
 
-    INSTALLED_APPS = INSTALLED_APPS + (
-    'django.contrib.webdesign',
-    )
+    if IS_TESTING:
+        INSTALLED_APPS = INSTALLED_APPS + (
+            'django_nose',
+        )
+        NOSE_ARGS = [
+            '--with-coverage',
+        ]
+
+
 
 INTERNAL_IPS = ('127.0.0.1',)
 

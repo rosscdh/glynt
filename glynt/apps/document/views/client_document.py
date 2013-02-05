@@ -39,7 +39,7 @@ class MyDocumentView(DocumentView):
 
     context['userdoc'] = self.user_document
     context['object'] = self.document
-    context['document'] = self.document.body
+    context['document'] = self.user_document.documenthtml_set.all()[0]
     context['default_data'] = json.dumps(self.user_document.doc_data)
 
     return context

@@ -24,6 +24,8 @@ $(document).ready(function(){
         self.doc_view = Handlebars.compile($('script#document-hb').html());
 
         Handlebars.registerPartial("toggle-partial", Handlebars.compile($("script#toggle-partial").html()));
+        Handlebars.registerPartial("incrementor-partial", Handlebars.compile($("script#incrementor-partial").html()));
+
         Handlebars.registerPartial("doc_var-partial", Handlebars.compile($("script#doc_var-partial").html()));
         Handlebars.registerPartial("doc_select-partial", Handlebars.compile($("script#doc_select-partial").html()));
         Handlebars.registerPartial("doc_select-selecta-partial", Handlebars.compile($("script#doc_select-selecta-partial").html()));
@@ -73,7 +75,11 @@ $(document).ready(function(){
         };
 
         self.setup_data = function setup_data(params) {
-            self.document_data = $.parseJSON($('script#document-document_data').html());
+            var data = $('script#document-document_data').html();
+            if (data == null || data == '') {
+                data = "{}";
+            }
+            self.document_data = $.parseJSON(data);
         };
 
         // ---- BIND METHODS -----
@@ -137,19 +143,31 @@ $(document).ready(function(){
                 var offset = button.closest('form').offset();
                 button.toggle();
 
-
                 var data = {
                     csrfmiddlewaretoken: "{{ csrf_raw_token }}"
                 };
                 // extract just the value from context
                 $.each(self.context, function(index, item) {
-                    data[item.name] = item.value;
+                    if (item.type == 'doc_select') {
+                        var select_item = []
+                        // extract the item index and its selected value
+                        $.each(item.select_options, function(i,item){
+                            select_item.push({
+                                'selected': item.selected
+                                ,'index': item.index
+                            });
+                        });
+                        data[item.name] = select_item;
+                    } else {
+                        data[item.name] = item.value;
+                    }
                 });
 
                 $.ajax({
-                    type: 'POST',
-                    url: $(this).closest('form').attr('href'),
-                    data: data,
+                    type: 'POST'
+                    ,url: $(this).closest('form').attr('href')
+                    ,contentType : 'application/json'
+                    ,data: data
                 })
                 .success(function(data, textStatus, jqXHR) {
                     if (window.location.pathname !== data.url) {

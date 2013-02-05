@@ -3,6 +3,85 @@
 (function($) {
   "use strict"; // jshint ;_;
 
+  /* GLYNT_TOGGLE PUBLIC CLASS DEFINITION
+   * ================================= */
+        var GlyntToggle = function (options) {
+            this.options = $.extend({
+                in_admin: false
+            }, options)
+            this.select_element = this.options.select_element;
+            this.$container = $(this.select_element.element);
+            this.$button = false;
+            this.$show_button = $('<button>', {
+                                class: 'btn btn-success',
+                                html: '+'
+                            });
+            this.init();
+            this.listen();
+        }
+        GlyntToggle.prototype = {
+            constructor: GlyntToggle
+            ,init: function () {
+                self = this;
+                self.$button = self.$container.find('button.toggle_state:first');
+                self.first_selecta = self.select_element.context.select_options[0].selecta.$element;
+
+                $('body').append(self.$show_button);
+                self.$show_button.hide();
+            }
+            ,listen: function () {
+                self.$show_button.on('click', function(){
+                    self.$container.show();
+                    self.$show_button.hide();
+                });
+                self.$button.on('click', function(event){
+                    self.$container.hide();
+                    self.$show_button.show();
+                    self.$show_button.offset(self.first_selecta.offset());
+                    console.log(self.$show_button)
+                });
+            }
+            ,inject_show: function() {
+
+            }
+        }
+    /* GLYNT_INCREMENTOR PUBLIC CLASS DEFINITION
+     * ================================= */
+        var GlyntIncrementor = function (options) {
+            this.options = $.extend({
+                in_admin: false
+            }, options)
+            this.select_element = this.options.select_element;
+            this.$container = $(this.select_element.element);
+            this.$button = false;
+            this.first_row = false;
+            this.init();
+            this.listen();
+        }
+        GlyntIncrementor.prototype = {
+            constructor: GlyntIncrementor
+            ,init: function () {
+                self = this;
+                this.$button = this.$container.find('button.incrementor:first');
+                this.first_row = self.select_element.context.select_options[0];
+            }
+            ,listen: function () {
+                self.$button.on('click', function(event){
+                    // increment the first row
+                    console.log(self.select_element.context.select_options)
+                    console.log(self);//.increment();
+                });
+            }
+            ,increment: function () {
+                var copy = $.extend(true, {}, this.first_row);
+                copy.index = self.select_element.context.select_options.length;
+                var from = '-{index}'.assign({index: this.first_row.index});
+                var to = '-{index}'.assign({index: copy.index});
+                copy.id = copy.id.replace(from, to);
+                self.select_element.context.select_options.push(copy);
+            }
+        }
+
   /* GLYNT_PROGRESS PUBLIC CLASS DEFINITION
    * ================================= */
     var GlyntProgress = function (options) {
@@ -14,7 +93,6 @@
         this.listen()
         this.render()
     }
-
    GlyntProgress.prototype = {
      constructor: GlyntProgress
      ,init: function () {
@@ -115,6 +193,7 @@
          self.listen();
      }
    }
+   // GLYNT_PROGRESS ui_widget
    $.widget("ui.glynt_progress", {
        options: {
            target_element: $('#progress'),
@@ -170,7 +249,7 @@
         , show: function () {
             var self = this;
             var pos = self.help_pos();
-            var icon = $();
+            var icon = $('<i/>', {class:'icon-info-sign icon-align-left'});
             var info = $('<div/>', {class:'info-text'}).append('&nbsp;' + self.options.item.help_text)
 
             self.$target.css({'left': pos.left + 'px', 'top': pos.top + 'px'});
@@ -292,26 +371,46 @@
                     return id !== self.select_option.id
                 }
             });
-            
+            self.set_selected_status();
             self.position(self.pos());
+        }
+        , set_selected_status: function() {
+            var self = this;
+            if (self.select_option.selected === true) {
+                self.select_option.selected = true;
+                self.$element.addClass('btn-primary');
+                self.$element.find('i').removeClass('icon-star-empty')
+                self.$element.find('i').addClass('icon-star')
+                self.$target.addClass('selected');
+            } else {
+                self.select_option.selected = false;
+                self.$element.removeClass('btn-primary');
+                self.$element.find('i').removeClass('icon-star')
+                self.$element.find('i').addClass('icon-star-empty')
+                self.$target.removeClass('selected');
+            }
+        }
+        , toggle_selected_status: function() {
+            var self = this;
+            if (self.select_option.selected === false) {
+                self.select_option.selected = true;
+                self.$element.addClass('btn-primary');
+                self.$element.find('i').removeClass('icon-star-empty')
+                self.$element.find('i').addClass('icon-star')
+            } else {
+                self.select_option.selected = false;
+                self.$element.removeClass('btn-primary');
+                self.$element.find('i').removeClass('icon-star')
+                self.$element.find('i').addClass('icon-star-empty')
+            }
+            self.$target.toggleClass('selected');
         }
         , listen: function () {
             var self = this;
 
             self.$element.on('click', function(event){
                 event.preventDefault();
-                if (self.select_option.selected === false) {
-                    self.select_option.selected = true;
-                    self.$element.addClass('btn-primary');
-                    self.$element.find('i').removeClass('icon-eye-close')
-                    self.$element.find('i').addClass('icon-ok')
-                } else {
-                    self.select_option.selected = false;
-                    self.$element.removeClass('btn-primary');
-                    self.$element.find('i').removeClass('icon-ok')
-                    self.$element.find('i').addClass('icon-eye-close')
-                }
-                self.$target.toggleClass('selected');
+                self.toggle_selected_status();
                 self.handle_is_multi();
             });
 
@@ -329,8 +428,8 @@
                     // select elemnt
                     item.selecta.select_option.selected = false;
                     item.selecta.$element.removeClass('btn-primary');
-                    item.selecta.$element.find('i').removeClass('icon-eye-open');
-                    item.selecta.$element.find('i').addClass('icon-eye-close');
+                    item.selecta.$element.find('i').removeClass('icon-star')
+                    item.selecta.$element.find('i').addClass('icon-star-empty')
                 });
             }
         }
@@ -347,7 +446,7 @@
             var parent_pos = self.options.$parent.offset();
             return {
                 'left': parent_pos.left - (self.$element.width()*5),
-                'top': parent_pos.top
+                'top': parent_pos.top + (self.options.$parent.height()/3.2) - (self.$element.height()/4.2)
             }
         }
       }
@@ -363,21 +462,34 @@
 
             self.multi = self.context.multi;
             self.can_toggle = self.context.can_toggle;
+            self.can_increment = self.context.can_increment;
 
             self.html_selecta = Handlebars.partials['doc_select-selecta-partial'];
-
+            // add selecta widgets to each li
             $.each(self.context.select_options, function(index, option){
                 if (option.text.string.length > 0) {
-
                     self.context.select_options[index].selecta = new Selecta({
                         'widget': self,
                         'index': index,
                         'item': option,
-                        'html': Handlebars.partials['doc_select-selecta-partial']
+                        'html': self.html_selecta
                     });
                 }
 
             });
+
+            // listen for "incrementor" functionality
+            if (self.can_increment === true) {
+                // create new GlyntIncrementor
+                self.incrementor = new GlyntIncrementor({select_element: self})
+            }
+
+            // listen for "can_toggle" functionality
+            if (self.can_toggle === true) {
+                // create new GyntToggle
+                self.toggle = new GlyntToggle({select_element: self})
+            }
+
         }
     });
 
