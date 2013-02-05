@@ -160,12 +160,12 @@
          return icon_css_class;
      }
      ,setPos: function() {
-        var self = this;
-        var doc_top = $('#document').position().top;
-        var wide = self.$element.width();
-        var pos = $('#document').offset().left - wide;
-        self.$element.offset($('#document').offset());
-        self.$element.css('left', pos+'px');
+        // var self = this;
+        //      var doc_top = $('#document').position().top;
+        //      var wide = self.$element.width();
+        //      var pos = $('#document').offset().left - wide;
+        //      self.$element.offset($('#document').offset());
+        //      self.$element.css('left', pos+'px');
      }
      ,listen: function () {
          var self = this;

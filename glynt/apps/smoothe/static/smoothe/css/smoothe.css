@@ -96,10 +96,9 @@ div#sidebar {
 }
 
 div#progress {
-position: absolute;
-width: 45px;
-left: 0;
-top:0;
+    position:fixed;
+    left: 0;
+    top: 221px;
 }
 ul#glynt_progress {
 list-style-type: none;

@@ -3,13 +3,14 @@
 {% load url from future %}
 
 {% block owner_info %}
-<div class="">
-    {% if clientcreateddocument %}
-    <h2 id="document-title">{{ clientcreateddocument.name }}</h2>
-    {% else %}
-    <h2 id="document-title">Create - {{ document_template.name }}</h2>
-    {% endif %}
-</div>
+	<div class="span12">
+
+	    {% if clientcreateddocument %}
+	    <h2 id="document-title">{{ clientcreateddocument.name }}</h2>
+	    {% else %}
+	    <h2 id="document-title">Create - {{ document_template.name }}</h2>
+	    {% endif %}
+	</div>
 {% endblock %}
 
 {% block prebody %}
