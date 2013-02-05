@@ -88,6 +88,8 @@
         this.options = $.extend({
             in_admin: false
         }, options)
+        this.num_elements = 0
+        this.completed_elements = 0
         this.$element = $(this.options.element).appendTo(this.options.target_element)
         this.init()
         this.listen()
@@ -105,7 +107,7 @@
         }
 
         var percent_indicator_li = $('<li/>', {
-                html: '<strong>{complete}%</strong>'.assign({complete: 0})
+                html: '<strong><span id="percent-complete">{complete}</span>%</strong>'.assign({complete: 0})
                 ,mouseover: function() {
                 }
                 ,mouseout: function() {
@@ -116,7 +118,8 @@
          self.$element.prepend(percent_indicator_li);
 
          $.each(self.options.items, function(index, item){
-             if (item) {
+
+             if (index != 'self.app.context.progress' && item) {
                 // types: select, choice, var
                 var item_class = item.type.replace('doc_', '');
                 var icon_css_class = self.icon_css_class(item_class);
@@ -144,22 +147,27 @@
                         }
                     });
 
-
-                $('#{id}'.assign({id:item.id})).on('blur', function (event) {
-                    if (item.initial === item.value || item.value == '') {
-                        li.removeClass('complete');
-                    } else {
-                        li.addClass('complete');
-                    }
-                });
-
                 li.tooltip({
                     placement: 'right'
                 });
 
                 self.$element.append(li);
+                self.num_elements++;
              }
          });
+     }
+     ,increment_percent_complete: function() {
+         this.update_percent()
+         this.completed_elements++;
+     }
+     ,decrement_percent_complete: function() {
+         this.completed_elements--;
+         this.update_percent()
+     }
+     ,update_percent: function() {
+         var percent = (100/this.num_elements)*this.completed_elements;
+         console.log(percent)
+         $('#percent-complete').text(Math.round(percent,0));
      }
      ,icon_css_class: function (item_class) {
          var icon_css_class = 'icon-font'
@@ -219,6 +227,7 @@
 
            var options = $.extend({}, self.options);
            self.app.context.progress = new GlyntProgress(options);
+           console.log('self.app.context.progress')
        }
    });
 
@@ -301,16 +310,38 @@
 
     // all editable widgets
     $.widget("ui.glynt_edit", {
-      options: {},
-      _create: function() {
+      options: {}
+      ,$element: null
+      ,_create: function() {
           var self = this;
           self.app = window.app;
           self.id = $(self.element).attr('id');
           self.variable_name = $(self.element).attr('data-doc_var');
           self.context = self.app.context[self.variable_name];
-
+          self.$element = $(self.element);
+          self.listen();
+          self.$element.trigger('change');
+      }
+      ,handle_value_change: function(e) {
+          var self = this;
+          var val = e.text();
+          console.log(val)
+          if (val == '' || val == self.context.initial) {
+              e.removeClass('done');// make it yellow
+              e.html(self.context.initial);
+              // issue element done event
+              $.Queue('percentCompleteDecrement').publish({'element':e});
+          }else{
+              if (e.hasClass('done') == false) {
+                  e.addClass('done');   // make it green
+                  $.Queue('percentCompleteIncrement').publish({'element':e});
+              }
+          }
+      }
+      ,listen: function () {
+          var self = this;
           // apply the hallo editor
-          $(self.element).hallo({
+          self.$element.hallo({
               // plugins: {
               //     'halloformat': {}
               // },
@@ -319,31 +350,32 @@
           });
 
           // GlyntTypeAhead
-          if ($(self.element).hasClass('doc_choice') === false) {// only if were NOT looking at a choice element
-              $(self.element).glynt_typeahead({
+          if (self.$element.hasClass('doc_choice') === false) {// only if were NOT looking at a choice element
+              self.$element.glynt_typeahead({
                   source: ['something','you typed','before']
               });
           }
 
           // events
-          $(self.element).on('blur', function(event){
+          self.$element.on('blur', function(event){
               var doc_var_name = $(this).attr('data-doc_var')
               var doc_val = $(this).html();
               if (self.app.context[doc_var_name].value != doc_val) {
                   self.app.dispatch('bind_data', {'doc_var': doc_var_name, 'value': doc_val});
               }
+              $(this).trigger('change');
           });
-          $(self.element).on('change', function(event){
-              console.log('fdafdsf')
+
+          /**
+          * Handle changing of edit value
+          * NOTE: these are not fields.. there is no .val() etc
+          */
+          self.$element.on('change', function(event){
               var e = $(this);
-              if (e.val() == '' || e.val() == self.context.initial) {
-                  e.removeClass('done')
-                  // issue element done event
-              }else{
-                  e.addClass('done')
-              }
+              self.handle_value_change(e);
           });
-          $(self.element).on('click', function(event){
+
+          self.$element.on('click', function(event){
               event.preventDefault();
               if (this.firstChild) {
                   var range = document.createRange();

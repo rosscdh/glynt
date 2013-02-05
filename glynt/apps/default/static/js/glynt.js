@@ -234,12 +234,38 @@ $(function () {
 });
 
 $(document).ready(function(){
+    /**
+     * Queue callback handler
+     * read: https://gist.github.com/1321768
+     */
+     var queue = {};
+     jQuery.Queue = function(id) {
+       var callbacks
+       ,item = id && queue[id];
+       // no item! greate create it
+       if ( !item ) {
+         callbacks = jQuery.Callbacks();
+         // setup default handler
+         item = {
+           'publish': callbacks.fire,
+           'subscribe': callbacks.add,
+           'unsubscribe': callbacks.remove
+         };
+         // we have an entry with this id
+         if (id) {
+           queue[id] = item;
+         }
+       }
+       return item;
+     };
+
     $('body').tooltip({
         selector: '[rel=tooltip]',
         placement: 'right',
         animation: true,
         delay: { show: 50, hide: 5 }
     });
+
     $('body').popover({
         selector: '[rel=popover]',
         trigger: 'hover',

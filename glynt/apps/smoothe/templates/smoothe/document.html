@@ -56,4 +56,20 @@
 <script type="text/javascript">
 {% include 'smoothe/document.js' %}
 </script>
+<script type="text/javascript">
+$(document).ready(function(){
+  /**
+  * Handle the percentage complete increment and decrement
+  */
+  var handle_increment = function(element) {
+      window.app.context.progress.increment_percent_complete()
+  }
+  $.Queue('percentCompleteIncrement').subscribe(handle_increment);
+
+  var handle_decrement = function(element) {
+      window.app.context.progress.decrement_percent_complete()
+  }
+  $.Queue('percentCompleteDecrement').subscribe(handle_decrement);
+});
+</script>
 {% endblock %}

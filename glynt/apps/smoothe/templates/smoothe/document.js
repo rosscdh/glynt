@@ -129,12 +129,12 @@ $(document).ready(function(){
                 });
             }
 
+            $('body').glynt_progress();
             $('.edit').glynt_edit();
             $('.doc_select').glynt_select({});
             $('.doc_choice').glynt_choice({target_element: $('#element_help_text')});
             $('.note').glynt_note({target_element: $('#element_help_text')});
             $('body').help_text({target_element: $('#element_help_text')});
-            $('body').glynt_progress();
 
             $('form#document-form button.submit').on('click', function(event){
                 event.preventDefault();
