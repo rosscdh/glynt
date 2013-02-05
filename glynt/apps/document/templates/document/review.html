@@ -16,11 +16,13 @@
 
 <div class="span3 sidebar">
   <ul class="nav nav-list">
-    <li><a href="{% url 'doc:update_document' pk=userdoc.pk %}" class="btn btn-green">{% trans 'Edit Doc' %}</a></li>
+    <li><a href="{% url 'doc:update_document' pk=userdoc.pk %}" class="btn btn-success">{% trans 'Edit Doc' %}</a></li>
+    <li class="divider"></li>
+    <li><a id="export-{{ d.pk }}" href="{% url 'export:as_pdf' slug=userdoc.slug %}" class="btn btn-success" target="_BLANK" data-url="{% url 'export:as_pdf' slug=userdoc.slug %}" data-pk="{{ userdoc.pk }}" class="">{% trans 'Download PDF' %}</a></li>
     <li class="divider"></li>
       <li><a href="#/review"> {% trans 'Review Document' %}</a></li>
       <li class="divider"></li>
-        <li><a id="export-{{ d.pk }}" href="{% url 'export:as_pdf' slug=userdoc.slug %}" target="_BLANK" data-url="{% url 'export:as_pdf' slug=userdoc.slug %}" data-pk="{{ userdoc.pk }}" class="">{% trans 'Download PDF' %}</a></li>
+        <li><a href="#/review/qr"> {% trans 'QR Code' %}</a></li>
     <li class="divider"></li>
       <li><a href="#/review/signatories"> {% trans 'Signature Details' %}</a></li>
     <li class="divider"></li>
@@ -52,11 +54,9 @@
 
 <div id="comments" class="span9 view hide">
     <h2 class="title">{% trans 'Comments' %}</h2>
-    <div class="doc-body">
-        <div id="document-comments">
-        {% comments_for_object userdoc next %}
-        </div>
-    </div>
+      <div id="document-comments" class="doc-body">
+      {% comments_for_object userdoc next %}
+      </div>
 </div>
 
 <div id="activity" class="span9 view hide">
@@ -65,6 +65,14 @@
       <ul class="activity activity-large">
       {% document_activity_stream document=userdoc limit=50 %}
       </ul>
+    </div>
+</div>
+
+<div id="qr" class="span9 view hide">
+    <h2 class="title">{% trans 'Document QR Code' %}</h2>
+    <p>Download and share this QR code to link to this document</p>
+    <div class="doc-body">
+      show QR code here
     </div>
 </div>
 {% endblock %}
@@ -105,6 +113,9 @@ $(document).ready(function(){
         });
         this.get('#/review/activity', function() {
             self.show($('div#activity'));
+        });
+        this.get('#/review/qr', function() {
+            self.show($('div#qr'));
         });
     
         this.hide_all = function hide_all() {
