@@ -19,6 +19,8 @@
     <li><a href="{% url 'doc:update_document' pk=userdoc.pk %}" class="btn btn-green">{% trans 'Edit Doc' %}</a></li>
     <li class="divider"></li>
       <li><a href="#/review"> {% trans 'Review Document' %}</a></li>
+      <li class="divider"></li>
+        <li><a id="export-{{ d.pk }}" href="{% url 'export:as_pdf' slug=userdoc.slug %}" target="_BLANK" data-url="{% url 'export:as_pdf' slug=userdoc.slug %}" data-pk="{{ userdoc.pk }}" class="">{% trans 'Download PDF' %}</a></li>
     <li class="divider"></li>
       <li><a href="#/review/signatories"> {% trans 'Signature Details' %}</a></li>
     <li class="divider"></li>

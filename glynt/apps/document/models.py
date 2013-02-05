@@ -13,9 +13,14 @@ from glynt.apps.document.managers import DocumentTemplateManager, PublicDocument
 from glynt.apps.document.managers import ClientCreatedDocumentManager, PublicClientCreatedDocumentManager, DeletedClientCreatedDocumentManager
 
 from glynt.pybars_plus import PybarsPlus
+from glynt.apps.smoothe.pybars_smoothe import Smoothe
 
 import qrcode
 import markdown
+
+
+import logging
+logger = logging.getLogger('django.request')
 
 
 class DocumentTemplate(models.Model):
@@ -176,7 +181,11 @@ class DocumentHTML(models.Model):
     html = models.TextField(blank=True)
 
     def render(self):
-        return markdown.markdown(smart_unicode(self.html)) if self.html else None
+        logger.info('DocumentHTML render: %s'%(self.pk,))
+        html = markdown.markdown(smart_unicode(self.html)) if self.html else None
+        smoothe = Smoothe(source_html=html)
+
+        return smoothe.render(self.document.doc_data)
 
 
 # import signals, must be at end of file

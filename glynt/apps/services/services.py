@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-import docraptor
-import pdfcrowd
+#import docraptor
+#import pdfcrowd
 
 from glynt.apps.export.utils import fetch_resources as link_callback
 from django.template import RequestContext
@@ -28,11 +28,11 @@ class GlyntPdfService(BaseService):
     def create_pdf(self):
         logger.info('using GlyntPdfService Service')
 
-        document = self.kwargs.get('document', None)
+        title = self.kwargs.get('title', None)
         html = smart_text(self.html, encoding='utf-8', strings_only=False, errors='strict')
 
         context = {
-            'title': document.name if document is not None else None
+            'title': title
             ,'body': html
         }
 
@@ -48,22 +48,22 @@ class GlyntPdfService(BaseService):
         return ContentFile(pdf.read())
 
 
-class DocRaptorService(BaseService):
-    def create_pdf(self):
-        logger.info('using DocRaptor Service')
-        dr = docraptor.DocRaptor(api_key='LsEAKMvtz5hXBVAyfr')
-
-        with open("/tmp/docraptor.pdf", "wb") as pdf:
-            pdf.write(dr.create({
-                'document_content': self.html, 
-                'test': True
-            }).content)
-
-
-class PdfCrowdService(BaseService):
-    def create_pdf(self):
-        logger.info('using PDFCrowd Service')
-        client = pdfcrowd.Client("rossc", "77862631d91bd3ff79f2cc7a91fb5eaf")
-        output_file = open("/tmp/pdfcrowd.pdf", 'wb')
-        client.convertHtml(self.html, output_file)
-        output_file.close()
+# class DocRaptorService(BaseService):
+#     def create_pdf(self):
+#         logger.info('using DocRaptor Service')
+#         dr = docraptor.DocRaptor(api_key='LsEAKMvtz5hXBVAyfr')
+# 
+#         with open("/tmp/docraptor.pdf", "wb") as pdf:
+#             pdf.write(dr.create({
+#                 'document_content': self.html, 
+#                 'test': True
+#             }).content)
+# 
+# 
+# class PdfCrowdService(BaseService):
+#     def create_pdf(self):
+#         logger.info('using PDFCrowd Service')
+#         client = pdfcrowd.Client("rossc", "77862631d91bd3ff79f2cc7a91fb5eaf")
+#         output_file = open("/tmp/pdfcrowd.pdf", 'wb')
+#         client.convertHtml(self.html, output_file)
+#         output_file.close()

@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import ugettext_lazy as _
+from django.core.files.storage import default_storage
+from django.conf import settings
 
 from celery.task import task
+
 from glynt.apps.document.models import DocumentHTML
 from glynt.apps.smoothe.pybars_smoothe import Smoothe
 from glynt.apps.services import GlyntPdfService
@@ -73,27 +76,28 @@ def document_comment(**kwargs):
 @task()
 def generate_document_html(**kwargs):
     document = kwargs['document']
-
     # Get or create the HTML object
     html, is_new = DocumentHTML.objects.get_or_create(document=document)
-
-    # convert handlebars template tags
-    smoothe = Smoothe(source_html=document.body)
-
-    #try:
-    html.html = smoothe.render(document.doc_data)
-    html.save()
-    # Send for HTML to PDF conversion
-    convert_to_pdf(document_html=html, document=document)
-    # except Exception as e:
-    #     logger.error('Could not save HTML for Document(%d): Exception: %s'%(document.pk, e,))
+    # Only create the HTML if we dont have it already (derive from source document)
+    if is_new is True:
+        logger.info('Saving DocumentHTML document: %s'%(document.pk,))
+        try:
+            html.html = document.body
+            html.save()
+        except Exception as e:
+            logger.error('Could not save HTML for Document(%d): Exception: %s'%(document.pk, e,))
+    else:
+        logger.info('DocumentHTML already exists document: %s'%(document.pk,))
 
 
 @task()
 def convert_to_pdf(document_html, **kwargs):
-    from django.core.files.storage import default_storage
-    from django.conf import settings
-    logger.info('Converting htmlto PDF Services')
-    glynt_pdf = GlyntPdfService(html=document_html.render(), document=kwargs.get('document', None))
+    """ 
+        @TODO this is a POC
+        >>> # Send for HTML to PDF conversion
+        >>> convert_to_pdf(document_html=html, title=document.name)
+    """
+    logger.info('Creating PDF Document: %s DocumentHTML: %s'%(kwargs.get('document_pk', None), kwargs.get('document_html_pk', None),))
+    glynt_pdf = GlyntPdfService(html=document_html.render(), title=kwargs.get('title', None))
     pdf_file = glynt_pdf.create_pdf()
     default_storage.save('%s/glyntpdf.pdf'%(settings.MEDIA_ROOT,), pdf_file)
