@@ -104,6 +104,17 @@
             this.options.target_element.css('top', 0);
         }
 
+        var percent_indicator_li = $('<li/>', {
+                html: '<strong>{complete}%</strong>'.assign({complete: 0})
+                ,mouseover: function() {
+                }
+                ,mouseout: function() {
+                }
+                ,click: function() {
+                }
+            });
+         self.$element.prepend(percent_indicator_li);
+
          $.each(self.options.items, function(index, item){
              if (item) {
                 // types: select, choice, var
@@ -115,37 +126,37 @@
                 var element = $('#' + item.id);
 
                 var li = $('<li/>', {
-                    html: content
-                    ,'data-var_name': item.name
-                    ,'data-instance_count': item.instance_count
-                    ,'title': title
-                    ,'class': item_class
-                    , mouseover: function() {
-                        $(this).attr('title',item.value);
-                    }
-                    , mouseout: function() {
-                        $(this).attr('title',title);
-                    }
-                    , click: function() {
-                        console.log()
-                        $('html, body').animate({
-                            scrollTop: element.offset().top - $('.navbar').height()
-                        }, 200);
-                    }
-                    });
-
-
-                    $('#{id}'.assign({id:item.id})).on('blur', function (event) {
-                        if (item.initial === item.value || item.value == '') {
-                            li.removeClass('complete');
-                        } else {
-                            li.addClass('complete');
+                        html: content
+                        ,'data-var_name': item.name
+                        ,'data-instance_count': item.instance_count
+                        ,'title': title
+                        ,'class': item_class
+                        ,mouseover: function() {
+                            $(this).attr('title',item.value);
+                        }
+                        ,mouseout: function() {
+                            $(this).attr('title',title);
+                        }
+                        ,click: function() {
+                            $('html, body').animate({
+                                scrollTop: element.offset().top - $('.navbar').height()
+                            }, 200);
                         }
                     });
+
+
+                $('#{id}'.assign({id:item.id})).on('blur', function (event) {
+                    if (item.initial === item.value || item.value == '') {
+                        li.removeClass('complete');
+                    } else {
+                        li.addClass('complete');
+                    }
+                });
 
                 li.tooltip({
                     placement: 'right'
                 });
+
                 self.$element.append(li);
              }
          });
@@ -162,7 +173,7 @@
      ,setPos: function() {
         var self = this;
         var doc_top = $('#document').position().top;
-        var wide = self.$element.width();
+        var wide = self.$element.width()/1.4;
         var pos = $('#document').offset().left - wide;
         self.$element.offset($('#document').offset());
         self.$element.css('left', pos+'px');
@@ -190,7 +201,6 @@
      ,render: function () {
          var self = this;
          self.setPos();
-         self.listen();
      }
    }
    // GLYNT_PROGRESS ui_widget
@@ -321,6 +331,16 @@
               var doc_val = $(this).html();
               if (self.app.context[doc_var_name].value != doc_val) {
                   self.app.dispatch('bind_data', {'doc_var': doc_var_name, 'value': doc_val});
+              }
+          });
+          $(self.element).on('change', function(event){
+              console.log('fdafdsf')
+              var e = $(this);
+              if (e.val() == '' || e.val() == self.context.initial) {
+                  e.removeClass('done')
+                  // issue element done event
+              }else{
+                  e.addClass('done')
               }
           });
           $(self.element).on('click', function(event){

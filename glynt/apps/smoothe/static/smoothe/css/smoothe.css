@@ -1,8 +1,10 @@
 .border{
   border:solid #c00 1px;
 }
-#element_help_text {
-  
+#element_help_text {  
+}
+.done{
+background-color: #92C65F!important;
 }
 .doc_var, .doc_choice {
 background-color: #fef58e;
