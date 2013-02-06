@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 #import docraptor
-
+from django.conf import settings
 from glynt.apps.export.utils import fetch_resources as link_callback
 from django.template import RequestContext
 from django.template.loader import render_to_string
+from django.core.files.storage import default_storage
 
 from xhtml2pdf import pisa
 import StringIO
@@ -76,7 +77,8 @@ class HelloSignService(object):
             signature.add_signer(HelloSigner(name=i['name'], email=i['email']))
 
         # Add the document to sign
-        signature.add_doc(HelloDoc(file_path=self.pdf_provder.create_pdf()))
+        path = default_storage.save('%s/tmp.pdf'%(settings.MEDIA_ROOT), self.pdf_provder.create_pdf())
+        signature.add_doc(HelloDoc(file_path=path))
 
         return signature.create(auth=self.pdf_provder_authentication)
 
