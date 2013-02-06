@@ -157,16 +157,17 @@
          });
      }
      ,increment_percent_complete: function() {
-         this.update_percent()
          this.completed_elements++;
+         this.update_percent()
      }
      ,decrement_percent_complete: function() {
          this.completed_elements--;
          this.update_percent()
      }
      ,update_percent: function() {
+         //console.log('100/{num} * {complete}'.assign({num: this.num_elements, complete: this.completed_elements}))
          var percent = (100/this.num_elements)*this.completed_elements;
-         console.log(percent)
+         //console.log(percent)
          $('#percent-complete').text(Math.round(percent,0));
      }
      ,icon_css_class: function (item_class) {
@@ -181,7 +182,7 @@
      ,setPos: function() {
         var self = this;
         var doc_top = $('#document').position().top;
-        var wide = self.$element.width()/1.4;
+        var wide = self.$element.width()/1.2;
         var pos = $('#document').offset().left - wide;
         self.$element.offset($('#document').offset());
         self.$element.css('left', pos+'px');
@@ -320,17 +321,22 @@
           self.context = self.app.context[self.variable_name];
           self.$element = $(self.element);
           self.listen();
-          self.$element.trigger('change');
+          self.$element.trigger('change', {'initial': true});
       }
-      ,handle_value_change: function(e) {
+      ,handle_value_change: function(e, data) {
           var self = this;
           var val = e.text();
-          console.log(val)
+
           if (val == '' || val == self.context.initial) {
-              e.removeClass('done');// make it yellow
-              e.html(self.context.initial);
-              // issue element done event
-              $.Queue('percentCompleteDecrement').publish({'element':e});
+                e.removeClass('done');// make it yellow
+                // setthe value back to the initial value
+                e.html(self.context.initial);
+                // only issue the decrement if its an actual user change
+                // and not the initial load
+                if (data === undefined || data.initial !== true) {
+                    // issue element done event
+                    $.Queue('percentCompleteDecrement').publish({'element':e});
+                }
           }else{
               if (e.hasClass('done') == false) {
                   e.addClass('done');   // make it green
@@ -370,22 +376,45 @@
           * Handle changing of edit value
           * NOTE: these are not fields.. there is no .val() etc
           */
-          self.$element.on('change', function(event){
+          self.$element.on('change', function(event, data){
               var e = $(this);
-              self.handle_value_change(e);
+              self.handle_value_change(e, data);
+          });
+
+          /**
+          * Capture return (13)
+          * 13: tabs to the next item
+          */
+          self.$element.on('keydown', function(event){
+            var key = event.keyCode || event.which;
+            if (key === 13) {
+                event.preventDefault();
+                $(this).trigger('keypress', {which: 9})
+            }
+            console.log(key)
           });
 
           self.$element.on('click', function(event){
+              self.select_inner_text(this);
               event.preventDefault();
-              if (this.firstChild) {
-                  var range = document.createRange();
-                  var sel = window.getSelection();
-                  range.setStartBefore(this.firstChild);
-                  range.setEndAfter(this.lastChild);
-                  sel.removeAllRanges();
-                  sel.addRange(range);
-              }
+              event.stopPropagation();
+              
           });
+          self.$element.on('focus', function(event){
+              event.preventDefault();
+              event.stopPropagation();
+              self.select_inner_text(this);
+          });
+      }
+      ,select_inner_text: function(element) {
+          //if (element.firstChild) {
+              var range = document.createRange();
+              var sel = window.getSelection();
+              range.setStartBefore(element.firstChild);
+              range.setEndAfter(element.lastChild);
+              sel.removeAllRanges();
+              sel.addRange(range);
+          //}
       }
     });
 
