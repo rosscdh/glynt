@@ -118,15 +118,18 @@ class ClientCreatedDocument(models.Model):
     def get_absolute_url(self):
         return reverse('doc:update_document', kwargs={'pk': self.pk})
 
+    def get_review_url(self):
+        return reverse('document:my_review', kwargs={'slug': self.slug})
+
     def qr_code_image(self):
         site = Site.objects.get_current()
-        url = '%s%s' % (site.domain, self.get_absolute_url(),)
+        url = '%s%s' % (site.domain, self.get_review_url(),)
 
         qr = qrcode.QRCode(
             version=1,
             error_correction=qrcode.constants.ERROR_CORRECT_L,
-            box_size=10,
-            border=4,
+            box_size=7,
+            border=2,
         )
 
         qr.add_data(url)
