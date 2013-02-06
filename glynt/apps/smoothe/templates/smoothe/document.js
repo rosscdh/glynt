@@ -60,7 +60,7 @@ $(document).ready(function(){
                 $('div#sidebar').css('top', $('div.navbar').position().top + $('div.navbar').height());
             }
             if ($('ul#glynt_progress').length > 0) {
-                $('ul#glynt_progress').height($('div#document').height());
+                // $('ul#glynt_progress').height($('div#document').height());
             }
         };
         self.render_doc = function render_steps() {

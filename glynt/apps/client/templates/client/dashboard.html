@@ -7,8 +7,8 @@
 {% block bodyclass %}dashboard{% endblock %}
 
 {% block admin_panel %}
-<div class="offset1 span3 pull-right">
-<a href="{% url 'doc:create_template' %}" class="admin btn btn-warning" id="toggle-docs">{% trans 'Create Template' %}</a>
+<div class="offset1 span2 pull-right">
+<a href="{% url 'doc:create_template' %}" class="admin btn btn-link" id="toggle-docs">{% trans 'Create Template' %}</a>
 </div>
 {% endblock %}
 
@@ -21,11 +21,11 @@
 				<div class="features2">
 					<!-- features 2 -->
 					<div class="row">
-						{% document_examples 4 %}
+					  {% document_examples 4 %}
 					</div>
 					<div class="row">
 						<div class="span8 view-all">
-							<a href="#/list/templates" class="btn btn-success">Create Document</a>
+							<a href="#/list/templates" class="btn btn-large btn-success">View All Documents</a>
 						</div>
 					</div>
 				</div>
@@ -51,9 +51,9 @@
 				<li class="active">
 				<a href="#/list/my_documents/all"><i class="icon-globe"></i> {% trans 'All Documents' %}</a>
 				</li>
-				<li><a href="#"><i class="icon-pause"></i> Incomplete Documents</a></li>
-        <!-- <li><a href="#"><i class="icon-briefcase"></i> AcmeCo Docs</a></li>
-        <li><a href="#"><i class="icon-home"></i> Property A Docs</a></li> -->
+				<!-- <li><a href="#"><i class="icon-pause"></i> Incomplete Documents</a></li>
+				<li><a href="#"><i class="icon-briefcase"></i> AcmeCo Docs</a></li>
+				<li><a href="#"><i class="icon-home"></i> Property A Docs</a></li>-->
 			</ul>
 		</div>
 
