@@ -74,7 +74,6 @@
     <p>Download and share this QR code to link to this document</p>
     <div class="doc-body">
       <img src="{% url 'document:qr_code' pk=userdoc.pk %}" />
-      {% url 'document:qr_code' pk=userdoc.pk %}
     </div>
 </div>
 {% endblock %}

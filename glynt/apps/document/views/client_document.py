@@ -30,7 +30,9 @@ class DocumentQRCode(DetailView):
 
     def render_to_response(self, context, **response_kwargs):
         image_data = context['object'].qr_code_image()
-        return HttpResponse(image_data, mimetype="image/png")
+        response = HttpResponse(mimetype="image/png")
+        image_data.save(response, "PNG")
+        return response
     
 
 
