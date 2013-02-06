@@ -5,6 +5,8 @@ from django.core.urlresolvers import reverse
 from django.utils import simplejson as json
 from django.utils.safestring import mark_safe
 from django.utils.encoding import smart_unicode
+from django.contrib.sites.models import Site
+
 from categories.models import CategoryBase
 from jsonfield import JSONField
 
@@ -117,13 +119,17 @@ class ClientCreatedDocument(models.Model):
         return reverse('doc:update_document', kwargs={'pk': self.pk})
 
     def qr_code_image(self):
+        site = Site.objects.get_current()
+        url = '%s%s' % (site.domain, self.get_absolute_url(),)
+
         qr = qrcode.QRCode(
             version=1,
             error_correction=qrcode.constants.ERROR_CORRECT_L,
             box_size=10,
             border=4,
         )
-        qr.add_data(self.get_absolute_url())
+
+        qr.add_data(url)
         qr.make(fit=True)
         return qr.make_image()
 
