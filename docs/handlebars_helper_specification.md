@@ -29,7 +29,8 @@ __e.g.__
 Standard variables; the default value is defined by the content in-between the "{{#doc_var}}{{/doc_var}}" tags
 
 1. name: String - The variable by which this object is referred to within the document context
- 
+2. inherit_from: String - the "name" of another variable that this variable inherits its initial value from. If the user changes the value of a doc_var that inherits_from then that field should stay set as the new value
+
 __e.g.__
 
     {{#doc_var name="my_variable_name"}}Some Content Goes here and is the Default Value of the my_variable_name var{{/doc_var}}
