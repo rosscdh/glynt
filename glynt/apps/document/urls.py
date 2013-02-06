@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from glynt.apps.document.views import DocumentView, MyDocumentView, DocumentByCategoryListView
 from glynt.apps.document.views import CloneClientCreatedDocumentView, DeleteClientCreatedDocumentView, UndoDeleteClientCreatedDocumentView
 from glynt.apps.document.views import ReviewClientCreatedView, ValidateClientCreatedDocumentFormView, PersistClientCreatedDocumentProgressView 
+from glynt.apps.document.views import DocumentQRCode
 
 
 urlpatterns = patterns('',
@@ -16,6 +17,10 @@ urlpatterns = patterns('',
     url(r'^my/(?P<pk>\d+)/persist/$', login_required(PersistClientCreatedDocumentProgressView.as_view()), name='my_persist'),
     url(r'^my/(?P<slug>.+)/review/$', login_required(ReviewClientCreatedView.as_view()), name='my_review'),
     url(r'^my/(?P<slug>.+)/$', login_required(MyDocumentView.as_view(template_name='document/document.html')), name='my_view'),
+
+    # QR code image
+    
+    url(r'^qr/(?P<pk>.+)/view/$', login_required(DocumentQRCode.as_view()), name='qr_code'),
 
     # is not login_required as we want users to be redirected to login
     url(r'^(?P<slug>.+)/save/$', login_required(ValidateClientCreatedDocumentFormView.as_view()), name='validate_form'),

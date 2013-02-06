@@ -6,7 +6,10 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.template.defaultfilters import slugify
 from django.shortcuts import get_object_or_404
+
 from django.views.generic.base import View
+from django.views.generic import DetailView
+
 from django.utils import simplejson as json
 from django.db.utils import IntegrityError
 from django.template import Context
@@ -20,6 +23,15 @@ from glynt.apps.document.views.utils import user_can_view_document, userdoc_from
 
 import logging
 logger = logging.getLogger(__name__)
+
+
+class DocumentQRCode(DetailView):
+    model = ClientCreatedDocument
+
+    def render_to_response(self, context, **response_kwargs):
+        image_data = context['object'].qr_code_image()
+        return HttpResponse(image_data, mimetype="image/png")
+    
 
 
 class MyDocumentView(DocumentView):

@@ -47,6 +47,7 @@
 
 <div id="signatories" class="span9 view hide">
     <h2 class="title">{% trans 'Signatories' %}</h2>
+    <div id="invite-to-sign" class="doc-body"></div>
     <div class="doc-body">
         {% invitee_detail_list invitee_list %}
     </div>
@@ -72,7 +73,8 @@
     <h2 class="title">{% trans 'Document QR Code' %}</h2>
     <p>Download and share this QR code to link to this document</p>
     <div class="doc-body">
-      show QR code here
+      <img src="{% url 'document:qr_code' pk=userdoc.pk %}" />
+      {% url 'document:qr_code' pk=userdoc.pk %}
     </div>
 </div>
 {% endblock %}

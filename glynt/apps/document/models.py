@@ -116,7 +116,7 @@ class ClientCreatedDocument(models.Model):
     def get_absolute_url(self):
         return reverse('doc:update_document', kwargs={'pk': self.pk})
 
-    def get_qr_code(self):
+    def qr_code_image(self):
         qr = qrcode.QRCode(
             version=1,
             error_correction=qrcode.constants.ERROR_CORRECT_L,
