@@ -52,4 +52,4 @@ django-nose
 mocktest
 # pdfcrowd - failed they dont support unicode elegantly
 -e git+https://github.com/jkeyes/python-docraptor.git#egg=python-docraptor
-#-e git+https://github.com/saaspose/Saaspose.SDK-for-Python.git#egg=Saaspose.SDK-for-Python- manually installed .. sigh saaspose
+-e git+https://github.com/stard0g101/HelloSignApi.git#egg=HelloSignApi

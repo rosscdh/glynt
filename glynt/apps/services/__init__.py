@@ -1,3 +1,3 @@
-from services import GlyntPdfService#, DocRaptorService, PdfCrowdService
+from services import HelloSignService, GlyntPdfService#, DocRaptorService, PdfCrowdService
 
-__all__ = ['GlyntPdfService']
+__all__ = ['HelloSignService','GlyntPdfService']

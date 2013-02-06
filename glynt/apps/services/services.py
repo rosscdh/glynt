@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 #import docraptor
-#import pdfcrowd
 
 from glynt.apps.export.utils import fetch_resources as link_callback
 from django.template import RequestContext
@@ -14,6 +13,9 @@ from django.core.files.storage import default_storage
 
 from django.utils.encoding import smart_unicode as smart_text # preparing for 1.5
 
+from hellosign import HelloSign, HelloSignSignature
+from hellosign import HelloSigner, HelloDoc
+
 import logging
 logger = logging.getLogger('django.request')
 
@@ -25,6 +27,9 @@ class BaseService(object):
 
 
 class GlyntPdfService(BaseService):
+    """
+        PDF Creation Service
+    """
     def create_pdf(self):
         logger.info('using GlyntPdfService Service')
 
@@ -48,6 +53,34 @@ class GlyntPdfService(BaseService):
         return ContentFile(pdf.read())
 
 
+class HelloSignService(object):
+    """
+        Service that allows us to send a document for signing
+    """
+    def __init__(self, document, invitees, **kwargs):
+        self.document = document
+
+        document_html = self.document.documenthtml_set.all()[0]
+        self.invitees = invitees
+        self.user = kwargs.get('user', None)
+        self.subject = kwargs.get('subject', None)
+        self.message = kwargs.get('message', None)
+
+        self.pdf_provder_authentication = ("sendrossemail@gmail.com", "zanshin77")
+        self.pdf_provder = GlyntPdfService(html=document_html.render(), title=document.name)
+
+    def send_for_signing(self):
+        signature = HelloSignSignature(title=self.document.name, subject=self.subject, message=self.message)
+
+        for i in self.invitees:
+            signature.add_signer(HelloSigner(name=i['name'], email=i['email']))
+
+        # Add the document to sign
+        signature.add_doc(HelloDoc(file_path=self.pdf_provder.create_pdf()))
+
+        return signature.create(auth=self.pdf_provder_authentication)
+
+
 # class DocRaptorService(BaseService):
 #     def create_pdf(self):
 #         logger.info('using DocRaptor Service')
@@ -58,12 +91,3 @@ class GlyntPdfService(BaseService):
 #                 'document_content': self.html, 
 #                 'test': True
 #             }).content)
-# 
-# 
-# class PdfCrowdService(BaseService):
-#     def create_pdf(self):
-#         logger.info('using PDFCrowd Service')
-#         client = pdfcrowd.Client("rossc", "77862631d91bd3ff79f2cc7a91fb5eaf")
-#         output_file = open("/tmp/pdfcrowd.pdf", 'wb')
-#         client.convertHtml(self.html, output_file)
-#         output_file.close()
