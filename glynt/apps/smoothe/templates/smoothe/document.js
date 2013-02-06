@@ -124,7 +124,7 @@ $(document).ready(function(){
             if (self.document_data !== null) {
                 $.each(self.context, function(key, item){
                     if (item && self.document_data[key]) {
-                        self.dispatch('bind_data', {'doc_var': key, 'value': self.document_data[key], 'notify': false});
+                        self.dispatch('bind_data', {'doc_var': key, 'value': self.document_data[key].compact(), 'notify': false});
                     }
                 });
             }
