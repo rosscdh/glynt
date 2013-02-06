@@ -107,7 +107,7 @@ Handlebars.registerHelper('doc_select', function(options) {
         var multi = (options.hash.multi === undefined) ? false: options.hash.multi;
         var can_increment = (options.hash.can_increment === undefined) ? false: options.hash.can_increment;
         var extended_html = (options.hash.extended_html === undefined) ? Array(): Array(options.hash.extended_html);
-        var default_selected_items =  (options.hash.selected === undefined) ? Array(): Array(options.hash.selected.split(","));
+        var default_selected_items =  (options.hash.selected === undefined) ? Array(): options.hash.selected.split(",");
 
         options.hash.label = label;
         options.hash.variable_name = var_name;
@@ -148,7 +148,7 @@ Handlebars.registerHelper('doc_select', function(options) {
             // set defaults, but only we if have no values
             $.each(options.hash.select_options, function(index,item){
                 var i = index + 1; // the spec is 1 based
-                if (default_selected_items.indexOf(i) >= 0) {
+                if (default_selected_items.indexOf(String(i)) >= 0) {
                     item.selected = true;
                 }
             })
