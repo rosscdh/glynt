@@ -5,43 +5,45 @@
 */
 
 Handlebars.registerHelper('doc_var', function(options) {
-    if (options.hash.name === undefined || options.hash.name === '') {
-        throw new Error('doc_var requires a unique "name"');
-    }
     var app = window.app || eval('window.'.format(options.hash.app)) ;
-    var var_name = options.hash.name;
-    var field_type = 'text';
-    var has_initial = (options.hash.initial === undefined) ? false : true;
-    var value = null;
-    var html_return = null;
-
-    if (options.hash.field_type !== undefined && options.hash.field_type === '') {
-        field_type = options.hash.field_type;
-    }
-    // see if this options.name is already defined in the app context (to get user populated data)
-    if (has_initial === false) {
-        options.hash.initial = options.fn(this);
-    }
-
-    value = (options.hash.initial !== undefined) ? options.hash.initial : '' ;
-    value = (app.context[var_name] === undefined) ? value : app.context[var_name].value ;
-
-    options.hash.type = 'doc_var';
-    options.hash.field_type = field_type;
-    options.hash.variable_name = var_name;
-    options.hash.value = value;
-    options.hash.has_initial = has_initial;
-
+    var var_name = options.hash.name.compact();
     // wrap the value in our detailed html to allow UX interaction
-    html_return = Handlebars.partials['doc_var-partial'];
+    var html_return = Handlebars.partials['doc_var-partial'];
 
-    // set the context
-    options.hash.id = MD5(String(var_name + app.context.length+1));
-    options = app.instance_count(options, var_name);
-    app.context[var_name] = options.hash;
+    if (app.context[var_name] === undefined) {
+        if (options.hash.name === undefined || options.hash.name === '') {
+            throw new Error('doc_var requires a unique "name"');
+        }
+        var field_type = 'text';
+        var has_initial = (options.hash.initial === undefined) ? false : true;
+        var value = null;
 
+        if (options.hash.field_type !== undefined && options.hash.field_type === '') {
+            field_type = options.hash.field_type;
+        }
+        // see if this options.name is already defined in the app context (to get user populated data)
+        if (has_initial === false) {
+            options.hash.has_initial = has_initial;
+            options.hash.initial = options.fn(this).compact();
+            console.log('name: {name},initial: {initial}'.assign({initial:options.hash.initial, name:var_name}))
+        }
+
+        value = (options.hash.initial !== undefined) ? options.hash.initial : '' ;
+        value = (app.context[var_name] === undefined) ? value : app.context[var_name].value ;
+        value = value.compact();
+
+        options.hash.type = 'doc_var';
+        options.hash.field_type = field_type;
+        options.hash.variable_name = var_name;
+        options.hash.value = value;
+
+        // set the context
+        options.hash.id = MD5(String(var_name + app.context.length+1));
+        options = app.instance_count(options, var_name);
+        app.context[var_name] = options.hash;
+    }
     // make it safe so hb does not mess with it
-    return html_return(options.hash);
+    return html_return(app.context[var_name]);
 });
 
 
@@ -95,6 +97,7 @@ Handlebars.registerHelper('doc_select', function(options) {
     var multi = (options.hash.multi === undefined) ? false: options.hash.multi;
     var can_increment = (options.hash.can_increment === undefined) ? false: options.hash.can_increment;
     var extended_html = (options.hash.extended_html === undefined) ? Array(): Array(options.hash.extended_html);
+    var default_selected_items =  (options.hash.selected === undefined) ? Array(): Array(options.hash.selected.split(","));
 
     options.hash.label = label;
     options.hash.variable_name = var_name;
@@ -110,12 +113,17 @@ Handlebars.registerHelper('doc_select', function(options) {
     // split it based on the {option} seperator as per our docs
     options.hash.select_options = [];
     var select_options = content.split('{option}');// splti by the {option} seperator
+    var has_selected_item = false;
     // setup the partial list
     for (var i = 0; i < select_options.length; i++) {
         // handle this ugly nastiness from submitting json obejct and having it converted into an abomination
         var selected = '{var_name}[{index}][selected]'.assign({var_name:var_name, index:i})
         if (app.document_data[selected] !== undefined){
             selected = (app.document_data[selected] == 'true')
+        }
+        // used for setting defaults
+        if (has_selected_item == false && selected === true) {
+            has_selected_item = true;
         }
 
         options.hash.select_options.push({
@@ -126,6 +134,15 @@ Handlebars.registerHelper('doc_select', function(options) {
             'selected': selected,
             'index': i
         });
+    }
+    if (has_selected_item === false) {
+        // set defaults, but only we if have no values
+        $.each(options.hash.select_options, function(index,item){
+            var i = index + 1; // the spec is 1 based
+            if (default_selected_items.indexOf(i) >= 0) {
+                item.selected = true;
+            }
+        })
     }
 
     // set the context

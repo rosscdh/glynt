@@ -115,7 +115,7 @@
                 ,click: function() {
                 }
             });
-         self.$element.prepend(percent_indicator_li);
+         //self.$element.prepend(percent_indicator_li);
 
          $.each(self.options.items, function(index, item){
 
@@ -180,12 +180,13 @@
          return icon_css_class;
      }
      ,setPos: function() {
-        var self = this;
-        var doc_top = $('#document').position().top;
-        var wide = self.$element.width()/1.2;
-        var pos = $('#document').offset().left - wide;
-        self.$element.offset($('#document').offset());
-        self.$element.css('left', pos+'px');
+        // var self = this;
+        // var doc_top = $('#document').position().top;
+        // var wide = self.$element.width()/1.2;
+        // //var pos = $('#document').offset().left - wide;
+        // var pos = 5;
+        // self.$element.offset($('#document').offset());
+        // self.$element.css('left', pos+'px');
      }
      ,listen: function () {
          var self = this;
@@ -252,18 +253,16 @@
         }
         , listen: function () {
             var self = this;
-
-            self.$selector.on('mouseover mouseout', function(event){
-                self.toggle(event);
-            });
         }
         , help_pos: function () {
             var self = this;
             var element_pos = self.$selector.position();
+            var element_width = self.$selector.width();
             var doc_pos = $('#document').position();
             return {
-                'left': doc_pos.left + $('#document').width()*1.15,
-                'top': element_pos.top
+                //'left': doc_pos.left + $('#document').width()*1.15,
+                'left': element_pos.left + element_width
+                ,'top': element_pos.top
             }
         }
         , show: function () {
@@ -282,18 +281,8 @@
             self.$target.html('');
             self.$target.css('display', 'none');
         }
-        , toggle: function (event) {
-            var self = this;
-            var target = self.options.help_target;
-
-            if (event.type == 'mouseover' ) {
-                self.show();
-            } else {
-                self.hide();
-            }
-
-        }
     };
+
     $.widget("ui.help_text", {
         options: {
             help_target: $('#element_help_text')
@@ -351,8 +340,8 @@
               // plugins: {
               //     'halloformat': {}
               // },
-              editable: true,
-              showAlways: true
+              editable: true
+              ,showAlways: true
           });
 
           // GlyntTypeAhead
@@ -391,7 +380,6 @@
                 event.preventDefault();
                 $(this).trigger('keypress', {which: 9})
             }
-            console.log(key)
           });
 
           self.$element.on('click', function(event){
@@ -404,17 +392,34 @@
               event.preventDefault();
               event.stopPropagation();
               self.select_inner_text(this);
+              self.app.context.help[self.variable_name].show();
+          });
+          self.$element.on('blur', function(event){
+            self.app.context.help[self.variable_name].hide();
+          });
+          self.$element.on('mouseenter', function(event){
+            self.app.context.help[self.variable_name].show();
           });
       }
+      ,clear_if_initial_text: function(element) {
+        var self = this;
+        var element = $(element);
+        var val = element.text();
+        console.log(val)
+        if (val == self.context.initial) {
+            element.text('');
+        }
+      }
       ,select_inner_text: function(element) {
-          //if (element.firstChild) {
-              var range = document.createRange();
-              var sel = window.getSelection();
-              range.setStartBefore(element.firstChild);
-              range.setEndAfter(element.lastChild);
-              sel.removeAllRanges();
-              sel.addRange(range);
-          //}
+        this.clear_if_initial_text(element);
+
+        var range = document.createRange();
+        var sel = window.getSelection();
+
+        range.setStartBefore(element.firstChild);
+        range.setEndAfter(element.lastChild);
+        sel.removeAllRanges();
+        sel.addRange(range);
       }
     });
 

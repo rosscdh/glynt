@@ -9,6 +9,11 @@ h2#document-title {
 }
 #element_help_text {
 }
+
+.done{
+    background-color: #92C65F!important;
+}
+
 .doc_var, .doc_choice {
 background-color: #fff5bb;
 padding: 2px;

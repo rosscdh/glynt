@@ -61,6 +61,7 @@ Select clauses are designed to allow the user to select 1 or more statements or 
 4. can_toggle: Boolean [true|*false] - Allows the user to turn this clause on or off
 5. can_increment: Boolean [true|*false] - Allows the user to add options to this current set; will create a copy of the first item and its contents (usually doc_vars)
 6. join_by: String [*"\r"] - The string by which the selected option/s will be connected
+7. selected: String ["1,3,n"] - the index (1 based) that are selected by default
 
 __e.g.__
 
