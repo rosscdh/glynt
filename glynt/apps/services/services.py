@@ -58,7 +58,7 @@ class GlyntPdfService(BaseService):
         pdf.seek(0)
 
         # return a ContentFile object to be used
-        return ContentFile(pdf.read())
+        return ContentFile(pdf.read(), name=title)
 
 
 class HelloSignService(object):
@@ -67,9 +67,13 @@ class HelloSignService(object):
     """
     def __init__(self, document, invitees, **kwargs):
         self.document = document
-        logger.info('Submitting document to HelloSign: "%s"'%(document,))
+        logger.info('Submitting document to HelloSign: "%s"'%(document.name,))
 
         document_html = self.document.documenthtml_set.all()[0]
+
+        # Dependency injected class for testing
+        self.HelloSignSignatureClass = kwargs.get('HelloSignSignatureClass', HelloSignSignature)
+
         self.invitees = invitees
         self.user = kwargs.get('user', None)
         self.subject = kwargs.get('subject', None)
@@ -83,12 +87,15 @@ class HelloSignService(object):
         self.pdf_provider = GlyntPdfService(html=document_html.render(), title=document.name)
 
     def random_filename(self):
+        """
+            Should return in the form: MEDIA_ROOT/:id-:md5hash.pdf
+        """
         m = hashlib.md5()
         m.update(str(datetime.datetime.now()))
         return '%s/%s-%s.pdf'%(settings.MEDIA_ROOT, self.document.pk, m.hexdigest(),)
 
     def send_for_signing(self):
-        signature = HelloSignSignature(title=self.document.name, subject=self.subject, message=self.message)
+        signature = self.HelloSignSignatureClass(title=self.document.name, subject=self.subject, message=self.message)
 
         for i in self.invitees:
             signature.add_signer(HelloSigner(name=i['name'], email=i['email']))
@@ -96,9 +103,10 @@ class HelloSignService(object):
         # Add the document to sign
         tmp_filename = self.random_filename()
         pdf = self.pdf_provider.create_pdf()
+
         # Save it temporarily
         path = default_storage.save(tmp_filename, pdf)
-        logger.info('Saved document to: "%s"'%(path,))
+        logger.info('Saved tmp document to: "%s"'%(path,))
 
         signature.add_doc(HelloDoc(file_path=path))
 
@@ -106,10 +114,12 @@ class HelloSignService(object):
         try:
             result = signature.create(auth=self.pdf_provider_authentication)
         except Exception as e:
+            result = None
             logger.error('Could not submit %s to HelloSign: "%s"'%(path, e,))
 
         # Delete the tmp file
-        pdf.delete(save=False)
+        default_storage.delete(path)
+        logger.info('Deleted tmp document: "%s"'%(path,))
 
         return result
 

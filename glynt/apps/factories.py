@@ -20,14 +20,16 @@ class AdminFactory(UserFactory):
 class TemplateFactory(factory.Factory):
     FACTORY_FOR = DocumentTemplate
     owner = factory.SubFactory(UserFactory)
-    body = u''
+    body = u'<p>body</p>'
+
 
 class DocumentFactory(factory.Factory):
     FACTORY_FOR = ClientCreatedDocument
+    name = factory.LazyAttributeSequence(lambda a, n: 'Document_{0}'.format(n))
     owner = factory.SubFactory(UserFactory)
     source_document = factory.SubFactory(TemplateFactory)
     doc_data = {'username':'test username', 'title': 'Title'}
-    body = u'fdsafd'
+    body = u'<p>body</p>'
 
 
 class DocumentHTMLFactory(factory.Factory):
