@@ -269,6 +269,7 @@ INTERNAL_IPS = ('127.0.0.1',)
 
 # Custom test runner for this project
 TEST_RUNNER = 'glynt.test_runner.GlyntAppTestRunner'
+#TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 LOGGING = {
     'version': 1,
@@ -307,6 +308,7 @@ TEMPLATED_EMAIL_DJANGO_SUBJECTS = {
 
 BROKER_URL = 'amqp://guest:guest@localhost:5672/'
 
+HELLOSIGN_AUTH = ("", "")
 
 import djcelery
 djcelery.setup_loader()

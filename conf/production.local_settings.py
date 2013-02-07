@@ -50,3 +50,5 @@ SERVER_EMAIL = 'glynt@dev.weareml.com'
 
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = False
+
+HELLOSIGN_AUTH = ("sendrossemail@gmail.com", "zanshin77")

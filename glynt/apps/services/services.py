@@ -17,6 +17,9 @@ from django.utils.encoding import smart_unicode as smart_text # preparing for 1.
 from hellosign import HelloSign, HelloSignSignature
 from hellosign import HelloSigner, HelloDoc
 
+import datetime
+import hashlib
+
 import logging
 logger = logging.getLogger('django.request')
 
@@ -32,10 +35,9 @@ class GlyntPdfService(BaseService):
         PDF Creation Service
     """
     def create_pdf(self):
-        logger.info('using GlyntPdfService Service')
-
         title = self.kwargs.get('title', None)
         html = smart_text(self.html, encoding='utf-8', strings_only=False, errors='strict')
+        logger.info('using GlyntPdfService Service to create "%s"'%(title,))
 
         context = {
             'title': title
@@ -47,10 +49,15 @@ class GlyntPdfService(BaseService):
 
         # use the export wrapper HTML, to render the context
         pdf = StringIO.StringIO()
-        pisa.CreatePDF(html.encode("UTF-8"), pdf , encoding='UTF-8', link_callback=link_callback)
+        try:
+            pisa.CreatePDF(html.encode("UTF-8"), pdf , encoding='UTF-8', link_callback=link_callback)
+        except Exception as e:
+            logger.error('Could not generate PDF "%s" with pisa: "%s"'%(context['title'], e,))
+
+        # return pdf pointer to 0 to allow reading into ContentFile
         pdf.seek(0)
 
-        # return a contentfile object to be used
+        # return a ContentFile object to be used
         return ContentFile(pdf.read())
 
 
@@ -60,6 +67,7 @@ class HelloSignService(object):
     """
     def __init__(self, document, invitees, **kwargs):
         self.document = document
+        logger.info('Submitting document to HelloSign: "%s"'%(document,))
 
         document_html = self.document.documenthtml_set.all()[0]
         self.invitees = invitees
@@ -67,8 +75,17 @@ class HelloSignService(object):
         self.subject = kwargs.get('subject', None)
         self.message = kwargs.get('message', None)
 
-        self.pdf_provder_authentication = ("sendrossemail@gmail.com", "zanshin77")
-        self.pdf_provder = GlyntPdfService(html=document_html.render(), title=document.name)
+        try:
+            self.pdf_provider_authentication = settings.HELLOSIGN_AUTH
+        except AttributeError:
+            logger.critical("No settings.HELLOSIGN_AUTH has been specified. Please provide them")
+
+        self.pdf_provider = GlyntPdfService(html=document_html.render(), title=document.name)
+
+    def random_filename(self):
+        m = hashlib.md5()
+        m.update(str(datetime.datetime.now()))
+        return '%s/%s-%s.pdf'%(settings.MEDIA_ROOT, self.document.pk, m.hexdigest(),)
 
     def send_for_signing(self):
         signature = HelloSignSignature(title=self.document.name, subject=self.subject, message=self.message)
@@ -77,10 +94,24 @@ class HelloSignService(object):
             signature.add_signer(HelloSigner(name=i['name'], email=i['email']))
 
         # Add the document to sign
-        path = default_storage.save('%s/tmp.pdf'%(settings.MEDIA_ROOT), self.pdf_provder.create_pdf())
+        tmp_filename = self.random_filename()
+        pdf = self.pdf_provider.create_pdf()
+        # Save it temporarily
+        path = default_storage.save(tmp_filename, pdf)
+        logger.info('Saved document to: "%s"'%(path,))
+
         signature.add_doc(HelloDoc(file_path=path))
 
-        return signature.create(auth=self.pdf_provder_authentication)
+        # Perform the submission
+        try:
+            result = signature.create(auth=self.pdf_provider_authentication)
+        except Exception as e:
+            logger.error('Could not submit %s to HelloSign: "%s"'%(path, e,))
+
+        # Delete the tmp file
+        pdf.delete(save=False)
+
+        return result
 
 
 # class DocRaptorService(BaseService):

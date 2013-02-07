@@ -39,17 +39,21 @@ facebook
 -e git+https://github.com/stard0g101/django-user-streams.git@extended_templates#egg=django-user-streams
 -e git+https://github.com/stard0g101/django-comments-xtd.git#egg=django-comments-xtd
 django_markup
-# javascript markdown
+
+# Javascript Markdown
 # hg clone https://code.google.com/p/pagedown/
-# possible multi format 
-# https://github.com/NetAngels/django-webodt.git
-# event pubsub
+
 # Handlebars helpers
 # https://github.com/danharper/Handlebars-Helpers.git
 # https://github.com/ivaynberg/select2.git
 # https://github.com/timrwood/moment.git
-django-nose
-mocktest
-# pdfcrowd - failed they dont support unicode elegantly
+
+# 3rd party Services
 -e git+https://github.com/jkeyes/python-docraptor.git#egg=python-docraptor
 -e git+https://github.com/stard0g101/HelloSignApi.git#egg=HelloSignApi
+
+# Testing
+django-nose
+mocktest
+djangosanetesting
+factory_boy

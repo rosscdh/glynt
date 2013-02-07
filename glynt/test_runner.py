@@ -1,12 +1,16 @@
 # Make our own testrunner that by default only tests our own apps
+import os
 from django.conf import settings
 
 # from django_behave.runner import DjangoBehaveTestSuiteRunner
+#from django_nose import NoseTestSuiteRunner
 from django.test.simple import DjangoTestSuiteRunner
-from django_nose import NoseTestSuiteRunner
 
-# class GlyntAppTestRunner(DjangoBehaveTestSuiteRunner):
-class GlyntAppTestRunner(NoseTestSuiteRunner):
+
+os.getenv('DJANGO_SETTINGS_MODULE', 'settings')
+
+
+class GlyntAppTestRunner(DjangoTestSuiteRunner):
     def build_suite(self, test_labels, *args, **kwargs):
         PROJECT_APPS = []
         # Remove path info and use only the app "label"
