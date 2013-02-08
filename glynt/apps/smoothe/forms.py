@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from django import forms
-from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 from bootstrap.forms import BootstrapModelForm, Fieldset
 
@@ -29,6 +28,7 @@ class DocumentTemplateForm(BootstrapModelForm):
         return super(DocumentTemplateForm, self).save(commit=commit)
 
 
+#@TODO: add tests for this form
 class ClientDocumentForm(forms.ModelForm):
     class Meta:
         model = ClientCreatedDocument
@@ -43,7 +43,6 @@ class ClientDocumentForm(forms.ModelForm):
             kwargs['data'] = kwargs['data'].copy() # make it mutable
 
             if kwargs['instance'] is not None:
-                from django.utils import simplejson as json
                 source = kwargs['instance']
                 kwargs['data']['doc_data'] = doc_data
 

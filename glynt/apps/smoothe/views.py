@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.middleware.csrf import get_token
 from django.views.generic import CreateView, UpdateView
@@ -70,8 +69,6 @@ class CreateDocumentView(AjaxableResponseMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super(CreateDocumentView, self).get_context_data(**kwargs)
 
-        invitee_list = []
-
         context['csrf_raw_token'] = get_token(self.request)
         context['submit_url'] = reverse('doc:create_document', kwargs={'pk': self.document_template.pk})
         context['document_template'] = self.document_template
@@ -87,8 +84,6 @@ class UpdateDocumentView(AjaxableResponseMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(UpdateDocumentView, self).get_context_data(**kwargs)
-
-        invitee_list = self.object.documentsignature_set.all()
 
         context['csrf_raw_token'] = get_token(self.request)
         context['submit_url'] = reverse('doc:update_document', kwargs={'pk': self.object.pk})

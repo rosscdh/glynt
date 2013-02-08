@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-from pybars import Compiler, strlist
-import re
-import logging
+from pybars import Compiler
 
+import logging
 logger = logging.getLogger('django.request')
 
 

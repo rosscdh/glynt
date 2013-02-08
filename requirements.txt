@@ -57,6 +57,5 @@ django-nose
 mocktest
 djangosanetesting
 factory_boy
--e git+https://github.com/lamby/django-lint.git#egg=django-lint
 
 #zopyx.convert2

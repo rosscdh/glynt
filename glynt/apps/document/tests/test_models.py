@@ -5,7 +5,7 @@ from nose.tools import *
 from mocktest import *
 
 from glynt.apps.factories import SiteFactory, DocumentFactory, DocumentHTMLFactory
-from glynt.apps.document.models import DocumentHTML, ClientCreatedDocument, DocumentTemplateCategory, DocumentTemplate
+from glynt.apps.document.models import ClientCreatedDocument, DocumentTemplateCategory, DocumentTemplate
 from qrcode.image.pil import PilImage
 
 import re

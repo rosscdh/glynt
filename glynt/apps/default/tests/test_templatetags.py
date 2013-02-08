@@ -1,13 +1,8 @@
 # -*- coding: utf-8 -*-
-from django.conf import settings
-from django.core.files.base import ContentFile
-from django.template.loader import render_to_string
 from nose.tools import *
 from mocktest import *
 
 from glynt.apps.default.templatetags.glynt_helpers import colorize_acronym, moment_js
-
-import re
 
 
 class TestTemplateTags(mocktest.TestCase):
