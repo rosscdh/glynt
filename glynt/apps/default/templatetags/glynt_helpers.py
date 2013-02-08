@@ -99,3 +99,11 @@ def show_loading(**kwargs):
     kwargs['body'] = False if 'body' in kwargs and kwargs['body'] in false_eval else True
     kwargs['footer'] = False if 'footer' in kwargs and kwargs['footer'] in false_eval else True
     return kwargs
+
+
+@register.inclusion_tag('vendors/intercom.html', takes_context=True)
+def intercom_script(context, **kwargs):
+    return {
+        'user': context.get('user', None)
+    }
+intercom_script.is_safe = True
