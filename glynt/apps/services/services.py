@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 #import docraptor
+import pdb
 from django.conf import settings
 from glynt.apps.export.utils import fetch_resources as link_callback
 from django.template import RequestContext
@@ -8,6 +9,7 @@ from django.core.files.storage import default_storage
 
 from xhtml2pdf import pisa
 import StringIO
+import sh
 
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
@@ -25,9 +27,26 @@ logger = logging.getLogger('django.request')
 
 
 class BaseService(object):
+    template = 'export/pdf.html'
+
     def __init__(self, html, **kwargs):
         self.html = html
         self.kwargs = kwargs
+
+    def get_context(self):
+        title = self.kwargs.get('title', None)
+        html = smart_text(self.html, encoding='utf-8', strings_only=False, errors='strict')
+
+        context = {
+            'title': title
+            ,'body': html
+        }
+
+        return context
+
+    def get_html(self, context):
+        # Render the core body wrapped in custom html
+        return render_to_string(self.template, context)
 
 
 class GlyntPdfService(BaseService):
@@ -35,17 +54,11 @@ class GlyntPdfService(BaseService):
         PDF Creation Service
     """
     def create_pdf(self):
-        title = self.kwargs.get('title', None)
-        html = smart_text(self.html, encoding='utf-8', strings_only=False, errors='strict')
-        logger.info('using GlyntPdfService Service to create "%s"'%(title,))
+        context = self.get_context()
 
-        context = {
-            'title': title
-            ,'body': html
-        }
+        logger.info('using GlyntDocxService Service to create .docx "%s"'%(context['title'],))
 
-        # Render the core body wrapped in custom html
-        html = render_to_string('export/pdf.html', context)
+        html = self.get_html(context=context)
 
         # use the export wrapper HTML, to render the context
         pdf = StringIO.StringIO()
@@ -58,7 +71,15 @@ class GlyntPdfService(BaseService):
         pdf.seek(0)
 
         # return a ContentFile object to be used
-        return ContentFile(pdf.read(), name=title)
+        return ContentFile(pdf.read(), name=context['title'])
+
+
+class GlyntDocxService(BaseService):
+    """
+        Docx Creation Service
+    """
+    def create_pdf(self):
+        pass
 
 
 class HelloSignService(object):
@@ -97,6 +118,7 @@ class HelloSignService(object):
     def send_for_signing(self):
         signature = self.HelloSignSignatureClass(title=self.document.name, subject=self.subject, message=self.message)
 
+        # Add invitees
         for i in self.invitees:
             signature.add_signer(HelloSigner(name=i['name'], email=i['email']))
 

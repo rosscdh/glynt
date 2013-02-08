@@ -136,17 +136,6 @@ class ClientCreatedDocument(models.Model):
         qr.make(fit=True)
         return qr.make_image()
 
-    def rendered_body(self):
-        """ Merge with the base set of fields"""
-        data = [(k, '') for k in self.source_document.flyform.flyform_fields]
-        if type(self.data) is dict:
-            data = dict(data + [(k, v) for k, v in self.data.iteritems()])
-        data['document_title'] = self.name if 'document_title' in data else ''
-
-        pybars_plus = PybarsPlus(self.body)
-        #return mark_safe(markdown.markdown(pybars_plus.render(data)))
-        return mark_safe(pybars_plus.render(data))
-
     def increment_num_signed(self, signature_id):
       """ Save the number of signers, save the signature_id for uniqueness """
       if 'signers' not in self.meta_data:

@@ -57,3 +57,5 @@ django-nose
 mocktest
 djangosanetesting
 factory_boy
+
+zopyx.convert2
