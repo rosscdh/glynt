@@ -1,16 +1,20 @@
-"""
-This file demonstrates writing tests using the unittest module. These will pass
-when you run "manage.py test".
+# -*- coding: utf-8 -*-
+from django.conf import settings
+from nose.tools import *
+from mocktest import *
 
-Replace this with more appropriate tests for your application.
-"""
-
-from django.test import TestCase
+from glynt.apps.export.utils import UnsupportedMediaPathException, fetch_resources
 
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.assertEqual(1 + 1, 2)
+class TestFetchResources(mocktest.TestCase):
+    def test_fetch_resources(self):
+        result = fetch_resources(uri='%smonkey.png'%(settings.STATIC_URL,))
+        assert settings.STATIC_ROOT in result
+
+        result = fetch_resources(uri='%smonkey.png'%(settings.MEDIA_URL,))
+        assert settings.MEDIA_ROOT in result
+
+
+    @raises(UnsupportedMediaPathException)
+    def test_fetch_resources_unsupported(self):
+        result = fetch_resources(uri='/totally_wrong/monkey.png')

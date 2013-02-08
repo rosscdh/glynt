@@ -1,37 +1,18 @@
-import os
 from django.conf import settings
 
-from xhtml2pdf import pisa
-import StringIO
-
+import os
 import logging
-logger = logging.getLogger(__name__)
-
-
-FORM_GROUPS = {
-  'no_steps': [],
-}
+logger = logging.getLogger('django.request')
 
 
 class UnsupportedMediaPathException(Exception):
     pass
 
 
-def generate_pdf_template_object(html, link_callback=None):
-    """
-    Inner function to pass template objects directly instead of passing a filename
-    """
-    pdf = StringIO.StringIO()
-    link_callback = fetch_resources if link_callback is None else link_callback
-    pisa.CreatePDF(html, pdf , encoding='UTF-8', link_callback=link_callback)
-    return pdf
-
-
-def fetch_resources(uri, rel):
+def fetch_resources(uri):
     """
     Callback to allow xhtml2pdf/reportlab to retrieve Images,Stylesheets, etc.
     `uri` is the href attribute from the html link element.
-    `rel` gives a relative path, but it's not used here.
     """
     if uri.startswith(settings.MEDIA_URL):
         path = os.path.join(settings.MEDIA_ROOT,
@@ -47,6 +28,6 @@ def fetch_resources(uri, rel):
     else:
         raise UnsupportedMediaPathException(
                                 'media urls must start with %s or %s' % (
-                                settings.MEDIA_ROOT, settings.STATIC_ROOT))
+                                settings.MEDIA_URL, settings.STATIC_URL))
     return path
 

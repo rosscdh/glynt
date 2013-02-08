@@ -81,14 +81,17 @@ def create_client_profile(sender, **kwargs):
 def populate_profile_data(sender, **kwargs):
   user = kwargs['user']
   profile, is_new = ClientProfile.objects.get_or_create(user=user)
+
   if 'profile_data' in kwargs:
     profile.profile_data = kwargs['profile_data']
 
     # Handle facebook profile_photo
     if 'profile_photo' in profile.profile_data:
+
       # @TODO on save to thumbnail image; write a task that
       # processes remote urls and downloads them locally
       validate = URLValidator(verify_exists=True)
+
       try:
         validate(profile.profile_data['profile_photo'])
         profile.mugshot = profile.profile_data['profile_photo']
