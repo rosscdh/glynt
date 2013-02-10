@@ -16,21 +16,19 @@
 
 <div class="span3 sidebar">
   <ul class="nav nav-list">
-    <li><a href="{% url 'doc:update_document' pk=userdoc.pk %}" class="btn btn-success">{% trans 'Edit Doc' %}</a></li>
+    <li><a href="#/review" class="btn btn-success"><i class="icon-bookmark"></i>{% trans 'Review Document' %}</a></li>
     <li class="divider"></li>
-    <li><a id="export-{{ d.pk }}" href="{% url 'export:as_pdf' slug=userdoc.slug %}" class="btn btn-success" target="_BLANK" data-url="{% url 'export:as_pdf' slug=userdoc.slug %}" data-pk="{{ userdoc.pk }}" class="">{% trans 'Download PDF' %}</a></li>
+    <li><a href="{% url 'doc:update_document' pk=userdoc.pk %}" class="btn"><i class="icon-edit"></i>{% trans 'Edit Doc' %}</a></li>
     <li class="divider"></li>
-      <li><a href="#/review"> {% trans 'Review Document' %}</a></li>
-      <li class="divider"></li>
-        <li><a href="#/review/qr"> {% trans 'QR Code' %}</a></li>
+    <li><a id="export-{{ d.pk }}" href="{% url 'export:as_pdf' slug=userdoc.slug %}" class="btn" target="_BLANK" data-url="{% url 'export:as_pdf' slug=userdoc.slug %}" data-pk="{{ userdoc.pk }}" class=""><i class="icon-download"></i>{% trans 'Download PDF' %}</a></li>
     <li class="divider"></li>
-      <li><a href="#/review/signatories"> {% trans 'Signature Details' %}</a></li>
+        <li><a href="#/review/qr" class="btn"><i class="icon-qrcode"></i>{% trans 'QR Code' %}</a></li>
     <li class="divider"></li>
-      <li><a href="#/review/comments"> {% trans 'Comments' %}</a></li>
+      <li><a href="#/review/signatories" class="btn"><i class="icon-pencil"></i>{% trans 'Signature Details' %}</a></li>
     <li class="divider"></li>
-      <li><a href="#/review/activity"> {% trans 'Activity' %}</a></li>
-    <li class="nav-header">{% trans 'Signature Invites' %}</li>
-      <li><div id="invite-to-sign" class="">&nbsp;</div></li>
+      <li><a href="#/review/comments" class="btn"><i class="icon-comment"></i>{% trans 'Comments' %}</a></li>
+    <li class="divider"></li>
+      <li><a href="#/review/activity" class="btn"><i class="icon-list"></i>{% trans 'Activity' %}</a></li>
   </ul>
 </div>
 
@@ -47,7 +45,7 @@
 
 <div id="signatories" class="span9 view hide">
     <h2 class="title">{% trans 'Signatories' %}</h2>
-    <div id="invite-to-sign" class="doc-body"></div>
+    <div id="invite-to-sign" data-can_add_invite="true" class="">&nbsp;</div>
     <div class="doc-body">
         {% invitee_detail_list invitee_list %}
     </div>
