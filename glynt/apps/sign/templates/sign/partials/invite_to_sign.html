@@ -1,7 +1,6 @@
-{% load i18n markup templatetag_handlebars %}
-{% load url from future %}
-
+{% load i18n markup templatetag_handlebars %}{% load url from future %}
 <div id="signatory-detail">&nbsp;</div>
+
 {% tplhandlebars "hb-signatory-detail" %}
 <form class="form-horizontal">
 <div id="modal-signatory-detail" class="modal hide" tabindex="-1" role="dialog">
@@ -53,7 +52,7 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-//  console.log('{{target_element}}')
+  console.log('{{target_element}}')
   /**
   * Invite To Sign Widget - Allows a list of signatories tobe generated
   * this list is then posted and the backend sends an invite email
@@ -261,8 +260,8 @@ $(document).ready(function(){
       self.setupInterface();
 
       // register our callback with the App observer
-      //App.registerCallback('invitee.data', self.argosPanOptiaData);
-      //App.registerCallback('invitee.add', self.argosPanOptiaCallback);
+      $.Queue('invitee.data').subscribe(self.argosPanOptiaData);
+      $.Queue('invitee.add').subscribe(self.argosPanOptiaCallback);
 
       // send the data to the invite widget
       //App.dispatch('invitee.data', $('script#js-invitee-list').html());
