@@ -138,6 +138,19 @@ class ClientCreatedDocument(models.Model):
         qr.make(fit=True)
         return qr.make_image()
 
+    @property
+    def invitees(self):
+        return self.documentsignature_set.all()
+
+    @property
+    def invitees_as_json(self):
+        invitees = []
+        for i in self.documentsignature_set.all():
+            i.meta_data['pk'] = i.pk
+            i.meta_data['is_signed'] = i.is_signed
+            invitees.append(i.meta_data)
+        return json.dumps(invitees)
+
     def increment_num_signed(self, signature_id):
       """ Save the number of signers, save the signature_id for uniqueness """
       if 'signers' not in self.meta:

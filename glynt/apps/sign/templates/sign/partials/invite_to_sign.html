@@ -1,6 +1,10 @@
 {% load i18n markup templatetag_handlebars %}{% load url from future %}
 <div id="signatory-detail">&nbsp;</div>
 
+<script type="text/javascript" id="js-invitee-list">{{ document.invitees_as_json|default:""|safe }}</script>
+
+{{document.invitees_as_json}}
+
 {% tplhandlebars "hb-signatory-detail" %}
 <form id="add-invite" class="form-horizontal" data-validate="parsley">
 <div id="modal-signatory-detail" class="modal hide" tabindex="-1" role="dialog">
@@ -190,6 +194,9 @@ $(document).ready(function(){
     };
 
     self.listen = function listen() {
+      $.Queue('invitee.data').subscribe(self.load_contacts);
+      $.Queue('invitee.add').subscribe(self.contact_add);
+
       $(self.target_element).addClass('invitee-vehicle');
 
       $(document).on('click', '#submit-invitation',  function(event){
@@ -244,8 +251,8 @@ $(document).ready(function(){
       invitee_list = $.parseJSON(invitee_list);
       if (invitee_list) {
         $.each(invitee_list, function(index, contact_ob) {
-          if (contact_ob.id && contact_ob.name) {
-            self.add(contact_ob.id, contact_ob.email, contact_ob.name, contact_ob.profile_picture, contact_ob.is_signed);
+          if (contact_ob.pk && contact_ob.to_name) {
+            self.add(contact_ob.pk, contact_ob.to_email, contact_ob.to_name, contact_ob.profile_picture, contact_ob.is_signed);
           };
         });
       };
@@ -253,11 +260,8 @@ $(document).ready(function(){
 
     self.init = function init(params) {
       self.target_element = params['target_element'];
-      self.listen();
 
-      // register our callback with the App observer
-      $.Queue('invitee.data').subscribe(self.load_contacts);
-      $.Queue('invitee.add').subscribe(self.contact_add);
+      self.listen();
 
       // send the data to the invite widget
       $.Queue('invitee.data').publish($('script#js-invitee-list').html());

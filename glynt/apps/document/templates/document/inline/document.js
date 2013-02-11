@@ -5,7 +5,6 @@
 <script src="{{ STATIC_URL }}js/jquery.jeditable.mini.js"></script>
 
 <script type="text/javascript" id="document-default_data">[{{ default_data|default:''|safe }}]</script>
-<script type="text/javascript" id="js-invitee-list">{{ invitee_list_json|default:""|safe }}</script>
 
 <script type="text/x-handlebars-template" id="js-document">{{ userdoc.body|default:object.body|safe }}</script>
 <script type="text/x-handlebars-template" id="js-signature_template">{{ signature_template|default:""|safe }}</script>
