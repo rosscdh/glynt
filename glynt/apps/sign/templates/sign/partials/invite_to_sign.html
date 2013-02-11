@@ -3,8 +3,6 @@
 
 <script type="text/javascript" id="js-invitee-list">{{ document.invitees_as_json|default:""|safe }}</script>
 
-{{document.invitees_as_json}}
-
 {% tplhandlebars "hb-signatory-detail" %}
 <form id="add-invite" class="form-horizontal" data-validate="parsley">
 <div id="modal-signatory-detail" class="modal hide" tabindex="-1" role="dialog">
