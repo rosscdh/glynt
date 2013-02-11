@@ -113,6 +113,10 @@ class ClientCreatedDocument(models.Model):
     def cookie_name(self):
         return 'glynt-%s' % (self.pk, )
 
+    @property
+    def meta(self):
+        return self.meta_data if type(self.meta_data) is dict else {}
+
     def get_absolute_url(self):
         return reverse('doc:update_document', kwargs={'pk': self.pk})
 
@@ -136,24 +140,24 @@ class ClientCreatedDocument(models.Model):
 
     def increment_num_signed(self, signature_id):
       """ Save the number of signers, save the signature_id for uniqueness """
-      if 'signers' not in self.meta_data:
-        self.meta_data['signers'] = []
-      if signature_id not in self.meta_data['signers']:
-        self.meta_data['signers'].append(signature_id)
-      if 'num_signed' not in self.meta_data:
-        self.meta_data['num_signed'] = 0
-      self.meta_data['num_signed'] = len(self.meta_data['signers'])
+      if 'signers' not in self.meta:
+        self.meta['signers'] = []
+      if signature_id not in self.meta['signers']:
+        self.meta['signers'].append(signature_id)
+      if 'num_signed' not in self.meta:
+        self.meta['num_signed'] = 0
+      self.meta['num_signed'] = len(self.meta['signers'])
       self.save()
 
     def increment_num_invited(self, signature_id):
       """ Save the number of invitees, save the signature_id for uniqueness """
-      if 'invitees' not in self.meta_data:
-        self.meta_data['invitees'] = []
-      if signature_id not in self.meta_data['invitees']:
-        self.meta_data['invitees'].append(signature_id)
-      if 'num_invited' not in self.meta_data:
-        self.meta_data['num_invited'] = 0
-      self.meta_data['num_invited'] = len(self.meta_data['invitees'])
+      if 'invitees' not in self.meta:
+        self.meta['invitees'] = []
+      if signature_id not in self.meta['invitees']:
+        self.meta['invitees'].append(signature_id)
+      if 'num_invited' not in self.meta:
+        self.meta['num_invited'] = 0
+      self.meta['num_invited'] = len(self.meta['invitees'])
       self.save()
 
     def signatories(self):
