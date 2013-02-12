@@ -3,11 +3,12 @@ from django import template
 register = template.Library()
 
 
-@register.inclusion_tag('sign/partials/invite_to_sign.html')
-def invite_to_sign(document, target_element):
+@register.inclusion_tag('sign/partials/invite_to_sign.html', takes_context=True)
+def invite_to_sign(context, document, target_element):
     return {
-    'document': document,
-    'target_element': target_element
+    'document': document
+    ,'target_element': target_element
+    ,'STATIC_URL': context['STATIC_URL']
     }
 
 
