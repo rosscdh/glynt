@@ -49,7 +49,6 @@ class MyDocumentView(DocumentView):
     user_can_view_document(self.user_document, self.request.user)
     # Setup the document based on the source_document of the viewed doc
     self.document = self.user_document.source_document
-    invitee_list = self.user_document.documentsignature_set.all()
 
     context['userdoc'] = self.user_document
     context['object'] = self.document

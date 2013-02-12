@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 #import docraptor
-import pdb
 from django.conf import settings
 from glynt.apps.export.utils import fetch_resources as link_callback
 from django.template import RequestContext

@@ -1,9 +1,10 @@
-{% load i18n markup templatetag_handlebars %}
-{% load url from future %}
-
+{% load i18n markup templatetag_handlebars %}{% load url from future %}
 <div id="signatory-detail">&nbsp;</div>
+
+<script type="text/javascript" id="js-invitee-list">{{ document.invitees_as_json|default:""|safe }}</script>
+
 {% tplhandlebars "hb-signatory-detail" %}
-<form class="form-horizontal">
+<form id="add-invite" class="form-horizontal" data-validate="parsley">
 <div id="modal-signatory-detail" class="modal hide" tabindex="-1" role="dialog">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -13,10 +14,10 @@
     {{#with invitee}}
     <input type="hidden" id="id_detail-id" name="detail-id" value="{{id}}"/>
     <div class="control-group">
-      <div class="controls"><input class="input-large" type="text" id="id_detail-name" name="detail-name" value="{{name}}" placeholder="{% trans 'Name' %}" /></div>
+      <div class="controls"><input class="input-large" type="text" id="id_detail-name" name="detail-name" data-notblank="true" value="{{name}}" placeholder="{% trans 'Name' %}" /></div>
     </div>
     <div class="control-group">
-        <div class="controls"><div class="input-prepend"><span class="add-on">@</span><input class="input-large" type="text" id="id_detail-email" name="detail-email" value="{{email}}" placeholder="{% trans 'Email' %}" /></div></div>
+        <div class="controls"><div class="input-prepend"><span class="add-on">@</span><input class="input-large" type="text" id="id_detail-email" name="detail-email" data-required="true" data-type="email" value="{{email}}" placeholder="{% trans 'Email' %}" /></div></div>
     </div>
     {{/with}}
   </div>
@@ -29,7 +30,7 @@
 
 {% tplhandlebars "hb-invite-signatories" %}
 <div id="invite-signatories">
-  {{#if can_add_invite}}<a id="" href="#invitee-add" class="signatory_add">{% trans 'Invite another to Sign' %}</a>{{/if}}
+  {{#if can_add_invite}}<a id="invitee-add" href="javascript:;" class="btn btn-inverse signatory_add"><i class="icon-user icon-white"></i>{% trans 'Invite' %}</a>{{/if}}
   <span class="message">{{message}}</span>
   <form id="send-invite" class="form-horizontal">
     <input type="hidden" name="csrfmiddlewaretoken" value="{{csrf_token}}" />
@@ -53,7 +54,7 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-//  console.log('{{target_element}}')
+  console.log('{{target_element}}')
   /**
   * Invite To Sign Widget - Allows a list of signatories tobe generated
   * this list is then posted and the backend sends an invite email
@@ -142,15 +143,6 @@ $(document).ready(function(){
       self.render();
     };
 
-    self.isValidEmail = function isValidEmail(email) {
-        var filter = /^([\w-\.\+]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
-        if (filter.test(email)) {
-          return true;
-        } else {
-          return false;
-        }
-    };
-
     self.render = function render() {
       self.context['csrf_token'] =  $.cookie('csrftoken'); // update the csrf token and make it current
       self.target_element.html(self.compiledTemplate(self.context));
@@ -199,35 +191,43 @@ $(document).ready(function(){
       });
     };
 
-    self.setupInterface = function setupInterface() {
+    self.listen = function listen() {
+      $.Queue('invitee.data').subscribe(self.load_contacts);
+      $.Queue('invitee.add').subscribe(self.contact_add);
+
       $(self.target_element).addClass('invitee-vehicle');
 
-      $('#submit-invitation').live('click', function(event){
+      $(document).on('click', '#submit-invitation',  function(event){
           event.preventDefault();
           self.sendInvitation();
       });
-      $('.signatory_add').live('click', function(event){
+      $(document).on('click', '.signatory_add', function(event){
           event.preventDefault();
           self.showDetailView();
       });
-      $('.signatory_detail').live('click', function(event){
+      $(document).on('click', '.signatory_detail',  function(event){
           event.preventDefault();
           self.showDetailView($(this).attr('data-index_lookup'));
       });
-      $('.signatory_remove').live('click', function(event){
+      $(document).on('click', '.signatory_remove',  function(event){
           event.preventDefault();
           self.remove($(this).attr('data-index_lookup'));
       });
       $('div#modal-signatory-detail"').modal('hide');
-      $('button#detail-done').live('click', function(event){
+
+      $(document).on('click', 'button#detail-done',  function(event){
           event.preventDefault();
+
           var control_group = $(this).closest('form');
           // set values
           id = control_group.find('[name=detail-id]').val();
           name = control_group.find('[name=detail-name]').val();
           email = control_group.find('[name=detail-email]').val();
-          // validate email
-          if (name != '' && email != '' && self.isValidEmail(email)) {
+
+          // validate form
+          valid = $('form#add-invite').parsley('validate');
+
+          if (valid === true) {
             self.update(id, name, email);
             $('div#modal-signatory-detail"').modal('hide');
           } else {
@@ -241,16 +241,16 @@ $(document).ready(function(){
 
     };
 
-    self.argosPanOptiaCallback = function argosPanOptiaCallback(contact_ob) {
+    self.contact_add = function contact_add(contact_ob) {
       self.add(contact_ob.id, contact_ob.email, contact_ob.name, contact_ob.profile_picture, false);
     };
 
-    self.argosPanOptiaData = function argosPanOptiaData(invitee_list) {
+    self.load_contacts = function load_contacts(invitee_list) {
       invitee_list = $.parseJSON(invitee_list);
       if (invitee_list) {
         $.each(invitee_list, function(index, contact_ob) {
-          if (contact_ob.id && contact_ob.name) {
-            self.add(contact_ob.id, contact_ob.email, contact_ob.name, contact_ob.profile_picture, contact_ob.is_signed);
+          if (contact_ob.pk && contact_ob.to_name) {
+            self.add(contact_ob.pk, contact_ob.to_email, contact_ob.to_name, contact_ob.profile_picture, contact_ob.is_signed);
           };
         });
       };
@@ -258,14 +258,11 @@ $(document).ready(function(){
 
     self.init = function init(params) {
       self.target_element = params['target_element'];
-      self.setupInterface();
 
-      // register our callback with the App observer
-      //App.registerCallback('invitee.data', self.argosPanOptiaData);
-      //App.registerCallback('invitee.add', self.argosPanOptiaCallback);
+      self.listen();
 
       // send the data to the invite widget
-      //App.dispatch('invitee.data', $('script#js-invitee-list').html());
+      $.Queue('invitee.data').publish($('script#js-invitee-list').html());
 
       self.render();
     };
@@ -281,6 +278,12 @@ $(document).ready(function(){
 </script>
 
 <style>
+form#add-invite {
+    color:#333;
+}
+.parsley-error-list{
+ color:#333;   
+}
   .invitee-vehicle {
     margin:5px 0px;
     padding:0px 5px 5px 5px;

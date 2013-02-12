@@ -102,12 +102,11 @@ ROOT_URLCONF = 'glynt.urls'
 WSGI_APPLICATION = 'glynt.wsgi.application'
 
 AUTHENTICATION_BACKENDS = (
-    'glynt.backends.EmailOrUsernameBackend',
-    'django.contrib.auth.backends.ModelBackend',
-    'socialregistration.contrib.facebook_js.auth.FacebookAuth',
-    #'socialregistration.contrib.linkedin.auth.LinkedInAuth',
-    'userena.backends.UserenaAuthenticationBackend',
-    'guardian.backends.ObjectPermissionBackend',
+'glynt.backends.EmailOrUsernameBackend',
+'django.contrib.auth.backends.ModelBackend',
+'socialregistration.contrib.facebook_js.auth.FacebookAuth',
+'userena.backends.UserenaAuthenticationBackend',
+'guardian.backends.ObjectPermissionBackend',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -188,8 +187,6 @@ HELPER_APPS = (
     'django_markup',
     'compressor',
 )
-
-ES_INDEX_SERVER = 'http://127.0.0.1:9200/'
 
 # Handle south and its breaking tests
 if not IS_TESTING:

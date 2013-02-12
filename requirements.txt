@@ -58,4 +58,4 @@ mocktest
 djangosanetesting
 factory_boy
 
-zopyx.convert2
+#zopyx.convert2

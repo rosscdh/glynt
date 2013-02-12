@@ -10,7 +10,7 @@ from glynt.apps.services import GlyntPdfService
 
 
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('django.request')
 
 
 class ExportAsPDFView(View):
@@ -22,6 +22,7 @@ class ExportAsPDFView(View):
         document_html = get_object_or_404(DocumentHTML, document=document)
 
         filename = '%s.pdf' % (document.slug,)
+
         try:
             pdf_service = GlyntPdfService(html=document_html.render(), title=document.name)
             response = HttpResponse(pdf_service.create_pdf(), status=200, content_type='application/pdf')

@@ -1,13 +1,10 @@
 import ast
-from django.conf import settings
 
-from tastypie import fields, utils
 from tastypie.resources import ModelResource
 from tastypie.api import Api
 from tastypie.serializers import Serializer
 from tastypie.cache import SimpleCache
-from tastypie.authentication import BasicAuthentication, SessionAuthentication
-from tastypie.authorization import Authorization
+from tastypie.authentication import SessionAuthentication
 
 from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
 from glynt.apps.sign.models import DocumentSignature

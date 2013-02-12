@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from pybars import Compiler, strlist
-import re
+from pybars import Compiler
+
 import logging
-logger = logging.getLogger(__file__)
+logger = logging.getLogger('django.request')
 
 
 class DocChoiceException(Exception):

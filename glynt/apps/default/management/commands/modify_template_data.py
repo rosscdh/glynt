@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
-from django.core.management.base import BaseCommand, CommandError
-from django.utils.encoding import smart_unicode
+from django.core.management.base import BaseCommand
 
 from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
 
