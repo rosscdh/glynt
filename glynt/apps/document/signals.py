@@ -24,3 +24,5 @@ def generate_document_body_signal(sender, **kwargs):
     document = kwargs['instance']
     # Generate HTML Body
     tasks.generate_document_html(document=document)
+
+

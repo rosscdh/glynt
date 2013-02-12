@@ -153,24 +153,28 @@ class ClientCreatedDocument(models.Model):
 
     def increment_num_signed(self, signature_id):
       """ Save the number of signers, save the signature_id for uniqueness """
-      if 'signers' not in self.meta:
-        self.meta['signers'] = []
-      if signature_id not in self.meta['signers']:
-        self.meta['signers'].append(signature_id)
-      if 'num_signed' not in self.meta:
-        self.meta['num_signed'] = 0
-      self.meta['num_signed'] = len(self.meta['signers'])
+      meta = self.meta.copy()
+      if 'signers' not in meta:
+        meta['signers'] = []
+      if signature_id not in meta['signers']:
+        meta['signers'].append(signature_id)
+      if 'num_signed' not in meta:
+        meta['num_signed'] = 0
+      meta['num_signed'] = len(meta['signers'])
+      self.meta_data = meta
       self.save()
 
     def increment_num_invited(self, signature_id):
       """ Save the number of invitees, save the signature_id for uniqueness """
-      if 'invitees' not in self.meta:
-        self.meta['invitees'] = []
-      if signature_id not in self.meta['invitees']:
-        self.meta['invitees'].append(signature_id)
-      if 'num_invited' not in self.meta:
-        self.meta['num_invited'] = 0
-      self.meta['num_invited'] = len(self.meta['invitees'])
+      meta = self.meta.copy()
+      if 'invitees' not in meta:
+        meta['invitees'] = []
+      if signature_id not in meta['invitees']:
+        meta['invitees'].append(signature_id)
+      if 'num_invited' not in meta:
+        meta['num_invited'] = 0
+      meta['num_invited'] = len(meta['invitees'])
+      self.meta_data = meta
       self.save()
 
     def signatories(self):
