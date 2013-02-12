@@ -36,7 +36,7 @@ def decrement_signer_counters(sender, **kwargs):
     # decrement signatures
     document.meta_data['invitees'] = filter(lambda i: i != signature.pk, document.meta_data['invitees'])
     document.meta_data['num_invited'] = len(document.meta_data['invitees'])
-    
+
     if signature.is_signed == True:
         document.meta_data['signers'] = filter(lambda i: i != signature.pk, document.meta_data['signers'])
         document.meta_data['num_signed'] = len(document.meta_data['signers'])
