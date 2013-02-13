@@ -151,32 +151,6 @@ class ClientCreatedDocument(models.Model):
             invitees.append(i.meta_data)
         return json.dumps(invitees)
 
-    def increment_num_signed(self, signature_id):
-      """ Save the number of signers, save the signature_id for uniqueness """
-      meta = self.meta.copy()
-      if 'signers' not in meta:
-        meta['signers'] = []
-      if signature_id not in meta['signers']:
-        meta['signers'].append(signature_id)
-      if 'num_signed' not in meta:
-        meta['num_signed'] = 0
-      meta['num_signed'] = len(meta['signers'])
-      self.meta_data = meta
-      self.save()
-
-    def increment_num_invited(self, signature_id):
-      """ Save the number of invitees, save the signature_id for uniqueness """
-      meta = self.meta.copy()
-      if 'invitees' not in meta:
-        meta['invitees'] = []
-      if signature_id not in meta['invitees']:
-        meta['invitees'].append(signature_id)
-      if 'num_invited' not in meta:
-        meta['num_invited'] = 0
-      meta['num_invited'] = len(meta['invitees'])
-      self.meta_data = meta
-      self.save()
-
     def signatories(self):
       """ Get list of people invited to sign """
       return self.documentsignature_set.all()

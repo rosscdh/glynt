@@ -9,7 +9,6 @@ from glynt.apps.document.models import ClientCreatedDocument, DocumentTemplateCa
 from qrcode.image.pil import PilImage
 
 import re
-import pdb
 
 
 class TestImportedSignals(mocktest.TestCase):
@@ -47,31 +46,31 @@ class TestClientCreatedDocument(mocktest.TestCase):
         result = self.subject.qr_code_image()
         assert type(result) == PilImage
 
-    def test_increment_num_signed(self):
-        """ SIGNED - increment the number of signees, but
-        ensure that the id is unique and only counted once
-        """
-        self.subject.increment_num_signed(4)
-        assert self.subject.meta_data['num_signed'] == 1
-
-        for i in range(1,5):
-            self.subject.increment_num_signed(i)
-
-        # is 4 and not 5 because we added signature_id 1 which is then already in the model
-        assert self.subject.meta_data['num_signed'] == 4
-        assert self.subject.num_signed == 4
-
-    def test_increment_num_invited(self):
-        """ INVITED """
-        self.subject.increment_num_invited(4)
-        assert self.subject.meta_data['num_invited'] == 1
-
-        for i in range(1,5):
-            self.subject.increment_num_invited(i)
-
-        # is 4 and not 5 because we added signature_id 1 which is then already in the model
-        assert self.subject.meta_data['num_invited'] == 4
-        assert self.subject.num_invited == 4
+    # def test_increment_num_signed(self):
+    #     """ SIGNED - increment the number of signees, but
+    #     ensure that the id is unique and only counted once
+    #     """
+    #     self.subject.increment_num_signed(4)
+    #     assert self.subject.meta_data['num_signed'] == 1
+    # 
+    #     for i in range(1,5):
+    #         self.subject.increment_num_signed(i)
+    # 
+    #     # is 4 and not 5 because we added signature_id 1 which is then already in the model
+    #     assert self.subject.meta_data['num_signed'] == 4
+    #     assert self.subject.num_signed == 4
+    # 
+    # def test_increment_num_invited(self):
+    #     """ INVITED """
+    #     self.subject.increment_num_invited(4)
+    #     assert self.subject.meta_data['num_invited'] == 1
+    # 
+    #     for i in range(1,5):
+    #         self.subject.increment_num_invited(i)
+    # 
+    #     # is 4 and not 5 because we added signature_id 1 which is then already in the model
+    #     assert self.subject.meta_data['num_invited'] == 4
+    #     assert self.subject.num_invited == 4
 
     def test_data_as_json(self):
         assert self.subject.data_as_json() == json.dumps(self.doc_data)

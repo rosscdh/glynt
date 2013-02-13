@@ -11,8 +11,8 @@ class DocumentSignerService(BaseDocumentService):
         if 'signers' not in meta:
           meta['signers'] = []
 
-        if signature_id not in meta['signers']:
-          meta['signers'].append(signature_id)
+        if signature.pk not in meta['signers']:
+          meta['signers'].append(signature.pk)
 
         if 'num_signed' not in meta:
           meta['num_signed'] = 0
@@ -23,9 +23,8 @@ class DocumentSignerService(BaseDocumentService):
         self.document.save()
 
     def decrement(self, signature):
-        if signature.is_signed == True:
-            self.document.meta_data['signers'] = filter(lambda i: i != signature.pk, self.document.meta_data['signers'])
-            self.document.meta_data['num_signed'] = len(self.document.meta_data['signers'])
+        self.document.meta_data['signers'] = filter(lambda i: i != signature.pk, self.document.meta_data['signers'])
+        self.document.meta_data['num_signed'] = len(self.document.meta_data['signers'])
         self.document.save()
 
 
@@ -38,8 +37,8 @@ class DocumentInviteeService(BaseDocumentService):
         if 'invitees' not in meta:
           meta['invitees'] = []
 
-        if signature_id not in meta['invitees']:
-          meta['invitees'].append(signature_id)
+        if signature.pk not in meta['invitees']:
+          meta['invitees'].append(signature.pk)
 
         if 'num_invited' not in meta:
           meta['num_invited'] = 0

@@ -21,7 +21,6 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': os.path.join(SITE_ROOT, 'dev.db'),
-        #'NAME': '/tmp/testserver.db',
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -29,8 +28,8 @@ DATABASES = {
     }
 }
 
-# if IS_TESTING:
-#     DATABASES['default']['TEST_NAME'] = '/tmp/testserver.db'
+if IS_TESTING:
+    DATABASES['default']['TEST_NAME'] = '/tmp/testserver.db'
 
 TIME_ZONE = 'Europe/London'
 

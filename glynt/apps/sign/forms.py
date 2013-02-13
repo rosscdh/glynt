@@ -30,25 +30,32 @@ class DocumentSignatureForm(forms.ModelForm):
 
       to_email = meta_data.get('to_email', None)
       to_name = meta_data.get('to_name', None)
-      username = None
-      first_name = None
-      last_name = None
 
       if to_email is not None:
-          # we have a to_email
-          username = slugify(to_email)
-          name = to_name.split(' ')
-          try:
-              first_name = name[0]
-              last_name = ' '.join(name[1:])
-          except:
-              first_name = to_name
-
-          logger.info('%s %s'%(first_name, last_name,))
-
           # Create the user or associate an existing one with this 
-          user, is_new = User.objects.get_or_create(email=to_email, first_name=first_name, last_name=last_name)
+          try:
+              user = User.objects.filter(email=to_email)[0]
+          except User.DoesnotExist:
+              user = User.objects.create(email=to_email)
+
           if is_new == True:
+              username = None
+              first_name = None
+              last_name = None
+
+              # we have a to_email
+              username = slugify(to_email)
+              name = to_name.split(' ')
+              try:
+                  first_name = name[0]
+                  last_name = ' '.join(name[1:])
+              except:
+                  first_name = to_name
+
+              logger.info('Creating user: %s %s %s'%(first_name, last_name, user.email,))
+
+              user.first_name = first_name
+              user.last_name = last_name
               user.username = username
               user.save()
 
