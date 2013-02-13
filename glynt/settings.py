@@ -309,7 +309,13 @@ HELLOSIGN_AUTH = ("", "")
 import djcelery
 djcelery.setup_loader()
 
-try:
-    from local_settings import *
-except ImportError:
-    pass
+if IS_TESTING:
+    try:
+        from test_settings import *
+    except ImportError:
+        pass
+else:
+    try:
+        from local_settings import *
+    except ImportError:
+        pass
