@@ -386,19 +386,24 @@
               self.select_inner_text(this);
               event.preventDefault();
               event.stopPropagation();
-              
           });
           self.$element.on('focus', function(event){
               event.preventDefault();
               event.stopPropagation();
               self.select_inner_text(this);
-              self.app.context.help[self.variable_name].show();
+              if (self.app.context.help[self.variable_name] !== undefined) {
+                  self.app.context.help[self.variable_name].show();
+              }
           });
           self.$element.on('blur', function(event){
-            self.app.context.help[self.variable_name].hide();
+            if (self.app.context.help[self.variable_name] !== undefined) {
+              self.app.context.help[self.variable_name].hide();
+            }
           });
           self.$element.on('mouseenter', function(event){
-            self.app.context.help[self.variable_name].show();
+            if (self.app.context.help[self.variable_name] !== undefined) {
+              self.app.context.help[self.variable_name].show();
+            }
           });
       }
       ,clear_if_initial_text: function(element) {

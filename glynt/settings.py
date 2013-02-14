@@ -208,8 +208,6 @@ FACEBOOK_REQUEST_PERMISSIONS = 'email,user_likes,user_about_me,read_stream'
 LINKEDIN_CONSUMER_KEY = '1uh2ns1cn9tm'
 LINKEDIN_CONSUMER_SECRET_KEY = 'MnrqdbtmM10gkz27'
 
-# LOGIN_REDIRECT_URL = '/'
-# LOGOUT_URL = '/social/logout/'
 LOGIN_REDIRECT_URL = '/client/'#/accounts/%(username)s/'
 LOGIN_URL = '/client/login/'
 LOGOUT_URL = '/social/logout/'
