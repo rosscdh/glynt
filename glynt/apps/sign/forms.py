@@ -27,7 +27,7 @@ class DocumentSignatureForm(forms.ModelForm):
   def clean_user(self):
       """ @TODO turn the user createion aspect into a service """
       meta_data = self.data['meta_data'].copy()
-
+      is_new = False
       to_email = meta_data.get('to_email', None)
       to_name = meta_data.get('to_name', None)
 
@@ -37,6 +37,7 @@ class DocumentSignatureForm(forms.ModelForm):
               user = User.objects.filter(email=to_email)[0]
           except User.DoesnotExist:
               user = User.objects.create(email=to_email)
+              is_new = True
 
           if is_new == True:
               username = None
