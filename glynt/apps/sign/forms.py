@@ -34,8 +34,9 @@ class DocumentSignatureForm(forms.ModelForm):
       if to_email is not None:
           # Create the user or associate an existing one with this 
           try:
-              user = User.objects.filter(email=to_email)[0]
-          except User.DoesNotExist:
+              user = User.objects.filter(email=to_email)
+              user = user[0]
+          except User.DoesNotExist, IndexError:
               user = User.objects.create(email=to_email)
               is_new = True
 
