@@ -38,7 +38,6 @@
                     self.$container.hide();
                     self.$show_button.show();
                     self.$show_button.offset(self.first_selecta.offset());
-                    console.log(self.$show_button)
                 });
             }
             ,inject_show: function() {
@@ -68,7 +67,6 @@
             ,listen: function () {
                 self.$button.on('click', function(event){
                     // increment the first row
-                    console.log(self.select_element.context.select_options)
                     console.log(self);//.increment();
                 });
             }
@@ -229,7 +227,6 @@
 
            var options = $.extend({}, self.options);
            self.app.context.progress = new GlyntProgress(options);
-           console.log('self.app.context.progress')
        }
    });
 
@@ -410,7 +407,7 @@
         var self = this;
         var element = $(element);
         var val = element.text();
-        console.log(val)
+
         if (val == self.context.initial) {
             element.text('');
         }
