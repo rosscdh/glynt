@@ -28,7 +28,7 @@ class DocumentSignature(models.Model):
         ordering = ['-date_invited', '-date_signed']
 
     def __unicode__(self):
-      return u'%s - to: %s (%s)' % (self.key_hash, self.meta_data['to_name'], self.meta_data['to_email'])
+      return u'%s' % (self.key_hash,)
 
     def get_absolute_url(self):
         return reverse('sign:default', kwargs={'pk': self.document.pk, 'hash': self.key_hash})

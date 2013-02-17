@@ -111,7 +111,7 @@ class HelloSignService(object):
             Should return in the form: MEDIA_ROOT/:id-:md5hash.pdf
         """
         m = hashlib.md5()
-        m.update(str(datetime.datetime.now()))
+        m.update(str(datetime.datetime.utcnow()))
         return '%s/%s-%s.pdf'%(settings.MEDIA_ROOT, self.document.pk, m.hexdigest(),)
 
     def send_for_signing(self):
@@ -155,3 +155,4 @@ class HelloSignService(object):
 #                 'document_content': self.html, 
 #                 'test': True
 #             }).content)
+

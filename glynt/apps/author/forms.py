@@ -4,14 +4,6 @@ from django import forms
 from bootstrap.forms import BootstrapForm, Fieldset
 
 
-import datetime
-
-
-DATE_FORMAT = "%a, %d %b %Y"
-def _get_date_today():
-  return datetime.date.today().strftime(DATE_FORMAT)
-
-
 class CreateStepForm(BootstrapForm):
     """ The template form used to help the authoring tool """
     STEP_TYPES = (

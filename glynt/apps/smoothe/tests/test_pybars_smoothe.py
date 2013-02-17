@@ -110,7 +110,7 @@ class TestTemplateToDoc(mocktest.TestCase):
             'big_hairy_name': 'Grumwald',
         }
         self.subject.context = context
-        print self.subject.render(context)
+        #print self.subject.render(context)
         #eq_(self.subject.render(context), 'Chimpanzies-A crazy night out with a Ham-Baboons')
 
 

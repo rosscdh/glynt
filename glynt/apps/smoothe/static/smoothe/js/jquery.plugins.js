@@ -38,7 +38,6 @@
                     self.$container.hide();
                     self.$show_button.show();
                     self.$show_button.offset(self.first_selecta.offset());
-                    console.log(self.$show_button)
                 });
             }
             ,inject_show: function() {
@@ -68,7 +67,6 @@
             ,listen: function () {
                 self.$button.on('click', function(event){
                     // increment the first row
-                    console.log(self.select_element.context.select_options)
                     console.log(self);//.increment();
                 });
             }
@@ -229,7 +227,6 @@
 
            var options = $.extend({}, self.options);
            self.app.context.progress = new GlyntProgress(options);
-           console.log('self.app.context.progress')
        }
    });
 
@@ -386,26 +383,31 @@
               self.select_inner_text(this);
               event.preventDefault();
               event.stopPropagation();
-              
           });
           self.$element.on('focus', function(event){
               event.preventDefault();
               event.stopPropagation();
               self.select_inner_text(this);
-              self.app.context.help[self.variable_name].show();
+              if (self.app.context.help[self.variable_name] !== undefined) {
+                  self.app.context.help[self.variable_name].show();
+              }
           });
           self.$element.on('blur', function(event){
-            self.app.context.help[self.variable_name].hide();
+            if (self.app.context.help[self.variable_name] !== undefined) {
+              self.app.context.help[self.variable_name].hide();
+            }
           });
           self.$element.on('mouseenter', function(event){
-            self.app.context.help[self.variable_name].show();
+            if (self.app.context.help[self.variable_name] !== undefined) {
+              self.app.context.help[self.variable_name].show();
+            }
           });
       }
       ,clear_if_initial_text: function(element) {
         var self = this;
         var element = $(element);
         var val = element.text();
-        console.log(val)
+
         if (val == self.context.initial) {
             element.text('');
         }

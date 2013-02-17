@@ -21,7 +21,6 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': os.path.join(SITE_ROOT, 'dev.db'),
-        #'NAME': '/tmp/testserver.db',
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -29,8 +28,8 @@ DATABASES = {
     }
 }
 
-# if IS_TESTING:
-#     DATABASES['default']['TEST_NAME'] = '/tmp/testserver.db'
+if IS_TESTING:
+    DATABASES['default']['TEST_NAME'] = '/tmp/testserver.db'
 
 TIME_ZONE = 'Europe/London'
 
@@ -209,8 +208,6 @@ FACEBOOK_REQUEST_PERMISSIONS = 'email,user_likes,user_about_me,read_stream'
 LINKEDIN_CONSUMER_KEY = '1uh2ns1cn9tm'
 LINKEDIN_CONSUMER_SECRET_KEY = 'MnrqdbtmM10gkz27'
 
-# LOGIN_REDIRECT_URL = '/'
-# LOGOUT_URL = '/social/logout/'
 LOGIN_REDIRECT_URL = '/client/'#/accounts/%(username)s/'
 LOGIN_URL = '/client/login/'
 LOGOUT_URL = '/social/logout/'
@@ -310,7 +307,13 @@ HELLOSIGN_AUTH = ("", "")
 import djcelery
 djcelery.setup_loader()
 
-try:
-    from local_settings import *
-except ImportError:
-    pass
+if IS_TESTING:
+    try:
+        from test_settings import *
+    except ImportError:
+        pass
+else:
+    try:
+        from local_settings import *
+    except ImportError:
+        pass

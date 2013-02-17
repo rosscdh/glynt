@@ -158,6 +158,7 @@ class CloneClientCreatedDocumentView(View):
         name = '%s %s' % (name, counter,)
       slug = slugify(name)
 
+      # @TODO turn this into a service
       try:
         ClientCreatedDocument.objects.get(owner=request.user, slug=slug, name=name)
         counter = counter + 1
@@ -165,6 +166,10 @@ class CloneClientCreatedDocumentView(View):
       except ClientCreatedDocument.DoesNotExist:
         client_document.name = name
         client_document.slug = slug
+        client_document.meta_data['num_signed'] = 0
+        client_document.meta_data['signers'] = []
+        client_document.meta_data['num_invited'] = 0
+        client_document.meta_data['invitees'] = []
         client_document.save()
         saved = True
 

@@ -2,7 +2,11 @@ import factory
 
 from django.contrib.sites.models import Site
 from django.contrib.auth.models import User
+
 from glynt.apps.document.models import ClientCreatedDocument, DocumentTemplate, DocumentHTML
+from glynt.apps.sign.models import DocumentSignature
+
+import random
 
 
 class SiteFactory(factory.Factory):
@@ -42,3 +46,10 @@ class DocumentFactory(factory.Factory):
 class DocumentHTMLFactory(factory.Factory):
     FACTORY_FOR = DocumentHTML
     document = factory.SubFactory(DocumentFactory)
+
+
+class SignatureFactory(factory.Factory):
+    FACTORY_FOR = DocumentSignature
+    document = factory.SubFactory(DocumentFactory)
+    key_hash = factory.LazyAttributeSequence(lambda a, n: 'r3n{0}0m'.format(n))
+    user = None
