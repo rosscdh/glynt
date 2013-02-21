@@ -14,6 +14,7 @@ pillow
 sh
 behave
 pytz
+django-storages
 -e git+https://github.com/jezdez/django_compressor.git#egg=django_compressor
 -e git+https://github.com/toastdriven/django-tastypie.git#egg=django-tastypie
 -e git+https://github.com/stard0g101/pybars.git#egg=pybars
