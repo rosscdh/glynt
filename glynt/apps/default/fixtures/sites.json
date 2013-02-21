@@ -1,20 +1,20 @@
 [
     {
         "fields": {
+            "domain": "http://uk.lawpal.com", 
+            "name": "Prod Lawpal.com"
+        }, 
+        "model": "sites.site", 
+        "pk": 3
+    },
+    {
+        "fields": {
             "domain": "http://dev.lawpal.com", 
             "name": "Stage Lawpal.com"
         }, 
         "model": "sites.site", 
-        "pk": 3
-    }, 
-    {
-        "fields": {
-            "domain": "http://dev.weareml.com", 
-            "name": "Demo WeAreML"
-        }, 
-        "model": "sites.site", 
         "pk": 2
-    }, 
+    },
     {
         "fields": {
             "domain": "http://local.weareml.com:8000", 
