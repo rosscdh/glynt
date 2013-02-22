@@ -271,6 +271,32 @@ list-style-type:none;
 	margin-top: 10px;
 	font-weight: bolder;
 }
+/* homepage carousel */
+#myCarousel .carousel-control {
+	background:url('/static/img/aarows.png')!important;
+	width:72px;
+	height:128px;
+	top:30%;
+}
+#myCarousel a.carousel-control.left {
+	left:-120px;
+}
+#myCarousel a.carousel-control.right {
+	background-position:-90px 0px!important;
+	right:-120px;
+}
+#myCarousel p {
+	line-height:1.5em;
+	font-size:16px;
+}
+
+/* homepage social */
+
+.social-block {
+	background-color:#4ad1e5;
+}
+
+
 /* introduction heading section*/
 #intro {
 	text-align: center;
