@@ -55,7 +55,7 @@ class GlyntPdfService(BaseService):
     def create_pdf(self):
         context = self.get_context()
 
-        logger.info('using GlyntDocxService Service to create .docx "%s"'%(context['title'],))
+        logger.info('using GlyntPdfService Service to create .pdf "%s"'%(context['title'],))
 
         html = self.get_html(context=context)
 
