@@ -226,6 +226,7 @@ CMS_PERMISSION = False
 CMS_TEMPLATES = (
     ('layout/base.html', 'Default (Bootstrap)'),
     ('layout/homepage.html', 'Homepage Template'),
+    ('layout/document_list.html', 'Document List Template'),
 )
 
 CMS_APPHOOKS = ()
