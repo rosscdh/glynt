@@ -225,7 +225,7 @@ CMS_PERMISSION = False
 
 CMS_TEMPLATES = (
     ('layout/base.html', 'Default (Bootstrap)'),
-    # ('layout/infozu.html', 'InfoZu Template'),
+    ('layout/homepage.html', 'Homepage Template'),
 )
 
 CMS_APPHOOKS = ()
