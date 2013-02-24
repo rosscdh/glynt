@@ -106,6 +106,7 @@
                     <li>
                         <a class="template-document" href="{% url 'doc:create_document' pk=d.pk %}">{{ d.name }}</a>
                         {{ d.summary }}
+                        {{ d.last_modified }}
                         {% if user.is_staff %}
                         &nbsp;<a class="admin author_edit-document" href="{% url 'doc:update_template' pk=d.pk %}">edit</a>
                         {% endif %}
