@@ -40,6 +40,8 @@ class DocumentTemplate(models.Model):
     body = models.TextField(blank=True)
     doc_status = models.IntegerField(choices=DOC_STATUS.get_choices(), blank=False, default=DOC_STATUS.draft)
     is_public = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
     doc_cats = models.ManyToManyField('DocumentTemplateCategory')
 
     objects = DocumentTemplateManager()
