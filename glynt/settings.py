@@ -214,7 +214,12 @@ HELPER_APPS = (
     'compressor',
 )
 
+# Handle south and its breaking tests
+if not IS_TESTING:
+    HELPER_APPS = HELPER_APPS + ('south',)
+
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + CMS_APPS + HELPER_APPS
+
 
 CMS_PERMISSION = False
 
@@ -232,10 +237,6 @@ CMS_LANGUAGES = LANGUAGES = (
     ('en', gettext('English')),
 )
 
-
-# Handle south and its breaking tests
-if not IS_TESTING:
-    HELPER_APPS = HELPER_APPS + ('south',)
 
 USER_STREAMS_BACKEND = 'user_streams.backends.user_streams_single_table_backend.SingleTableDatabaseBackend'
 USER_STREAMS_USE_UTC = True
