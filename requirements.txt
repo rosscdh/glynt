@@ -12,8 +12,9 @@ django-templated-email
 PIL
 sh
 pytz
--e git+https://github.com/django-debug-toolbar/django-debug-toolbar.git#egg=django-debug-toolbar
 
+-e git+https://github.com/django-debug-toolbar/django-debug-toolbar.git#egg=django-debug-toolbar
+django-storages
 -e git+https://github.com/jezdez/django_compressor.git#egg=django_compressor
 -e git+https://github.com/toastdriven/django-tastypie.git#egg=django-tastypie
 -e git+https://github.com/stard0g101/pybars.git#egg=pybars

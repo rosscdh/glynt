@@ -19,7 +19,7 @@ def save_document_comment_signal(sender, **kwargs):
     tasks.document_comment(source_document=source_document, document=client_document, commenting_user=comment.user, commenting_user_name=comment.user_name, comment=comment_text)
 
 
-@receiver(post_save, sender=ClientCreatedDocument)
+@receiver(post_save, sender=ClientCreatedDocument, dispatch_uid='document.generate.html')
 def generate_document_body_signal(sender, **kwargs):
     document = kwargs['instance']
     # Generate HTML Body

@@ -1,4 +1,4 @@
-<html>
+<meta http-equiv="content-type" content="text/html; charset=utf-8"> 
 <head>
 <title>{{ title|safe }}</title>
 <style type="text/css" media="print">
@@ -10,26 +10,22 @@
  margin-bottom: 1in;  
  font-size: 12pt;
 } 
-p {
- font-size: 12pt;
-}
+
 li {
 	margin-bottom:1em;
 }
-ul {
-	list-style-type: decimal;
+ol {
+    list-style-type: decimal;
 }
 </style>
 </head>
 
 <body>
 
-<div class="content">
-    <keepinframe>
+
      <!-- Content -->
      {{ body|safe }}
-    </keepinframe>
-</div>
+
 
     <!-- footer content -->
     <p>Document created by LawPal.com. <pdf:pagenumber></p>
