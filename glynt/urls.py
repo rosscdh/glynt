@@ -30,8 +30,6 @@ urlpatterns = patterns('',
     url(r'^export/', include('glynt.apps.export.urls', namespace='export')),
     # The Document Signatures
     url(r'^sign/doc/', include('glynt.apps.sign.urls', namespace='sign')),
-    # Default App
-    # url(r'^', include('glynt.apps.default.urls', namespace='glynt')),
     # Sitemap
     url(r'^sitemap.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': {'cmspages': CMSSitemap}})
 )
