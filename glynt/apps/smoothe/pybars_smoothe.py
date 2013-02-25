@@ -73,6 +73,7 @@ class Smoothe(object):
         choices = [o.strip() for o in choices_text.split('{option}')]
         selected_values = []
 
+        # 1. Complex Multi selector, a json nested nightmare 
         for i,value in enumerate(choices):
             c = i+1
 
@@ -92,7 +93,17 @@ class Smoothe(object):
             # Join the selectd options based on the join_by character; that may be custom
             return join_by.join(selected_values)
 
+        logger.info("var_name: %s is not a Complex Multi Select but could be a Simple Select" % index_lookup_name)
+        # 2. Simple selector, not a json nested nightmare 
+        if self.context.get(var_name, None) is not None:
+            simple_selected = self.context.get(var_name, [])
+            for c in simple_selected:
+                if c not in choices:
+                    raise DocSelectException(c, choices)
+            return join_by.join(simple_selected)
+
         logger.info("var_name %s was not found in context"%(var_name,))
+
         return None
 
     def help_for(self, this, *args, **kwargs):
