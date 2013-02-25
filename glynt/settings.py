@@ -359,6 +359,9 @@ BROKER_URL = 'amqp://guest:guest@localhost:5672/'
 
 HELLOSIGN_AUTH = ("", "")
 
+DOCRAPTOR_KEY = "vIvrCmZtnQTC4p6V0k"
+# old dev key # DOCRAPTOR_KEY = "LsEAKMvtz5hXBVAyfr"
+
 import djcelery
 djcelery.setup_loader()
 

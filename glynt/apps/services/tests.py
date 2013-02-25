@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from nose.tools import *
 from mocktest import *
 
-from .services import GlyntPdfService, GlyntDocxService, HelloSignService
+from .services import GlyntPdfService, HelloSignService
 from glynt.apps.services.services import BaseService
 from hellosign import HelloSignSignature, HelloSigner
 from glynt.apps.factories import DocumentFactory
