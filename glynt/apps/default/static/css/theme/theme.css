@@ -139,7 +139,6 @@ list-style-type:none;
 .navbar .nav li.dropdown.active > .dropdown-toggle, 
 .navbar .nav li.dropdown.open.active > .dropdown-toggle {
 	background: none;
-	color: #fff;
 }
 .dropdown-menu li > a:hover,
 .dropdown-menu li > a:focus,
@@ -271,6 +270,20 @@ list-style-type:none;
 	margin-top: 10px;
 	font-weight: bolder;
 }
+/* introduction heading section*/
+#intro {
+	text-align: center;
+	margin-top: 75px;
+}
+#intro h1 {
+	width: 100%;
+	font-size: 35px;
+	margin: 0 auto;
+	color: #757c7e;
+	font-weight: normal;
+	text-shadow: white 2px 2px 1px;
+}
+
 /* homepage carousel */
 #myCarousel .carousel-control {
 	background:url('/static/img/aarows.png')!important;
@@ -332,19 +345,14 @@ list-style-type:none;
 	background-color:#00aced;
 	height:125px;
 }
-/* introduction heading section*/
-#intro {
-	text-align: center;
-	margin-top: 65px;
+
+/* Coming soon*/
+
+.coming-soon {
+	margin-top:90px;
+	text-align:center;
 }
-#intro h1 {
-	width: 100%;
-	font-size: 35px;
-	margin: 0 auto;
-	color: #757c7e;
-	font-weight: normal;
-	text-shadow: white 2px 2px 1px;
-}
+
 /* features section */
 #features { }
 #features .container { }
@@ -509,7 +517,7 @@ list-style-type:none;
 
 /* footer section */
 #footer {
-	background: url("../img/footer_bg.jpg") 0 0 repeat;
+	background-color:#212526;
 	min-height: 300px;
 	margin-top: 100px;
 	color: #fff;
