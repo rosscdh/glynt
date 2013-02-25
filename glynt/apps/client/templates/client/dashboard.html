@@ -5,7 +5,9 @@
 {% load url from future %}
 
 {% block bodyclass %}dashboard{% endblock %}
-
+    {% block navbar %}
+        {% include 'partials/nav_dark.html' %}
+    {% endblock %}
 {% block admin_panel %}
 <div class="offset1 span2 pull-right">
 <a href="{% url 'doc:create_template' %}" class="admin btn btn-link" id="toggle-docs">{% trans 'Create Template' %}</a>
@@ -13,29 +15,24 @@
 {% endblock %}
 
 {% block prebody %}
-<div id="hero">
-    <div class="container">
-        <div class="row">
-            <div class="span8">
-                <h3>New document <span>Choose from a popular document or view all</span></h3>
-                <div class="features2">
-                    <!-- features 2 -->
-                    <div class="row">
-                      {% document_examples 4 %}
-                    </div>
-                    <div class="row">
-                        <div class="span8 view-all">
-                            <a href="#/list/templates" class="btn btn-large btn-success">View All Documents</a>
-                        </div>
-                    </div>
+<div class="container">
+    <div class="row dashtop">
+        <div class="span8">
+            <h1>Create a new document</h1>
+			<h4>Choose from a popular document or</h4>
+			<a href="#/list/templates" class="btn btn-large btn-red">View All Documents</a>
+            <div class="features2 docs">
+                <!-- features 2 -->
+                <div class="row">
+                  {% document_examples 4 %}
                 </div>
             </div>
-            <div class="span4 mini-activity hidden-phone">
-                <h3>{% trans 'Recent activity' %}</h3>
-                <ul>
-                    {% user_activity_stream request.user 4 %}
-                </ul>
-            </div>
+        </div>
+        <div class="span4 mini-activity hidden-phone">
+            <h3>{% trans 'Recent activity' %}</h3>
+            <ul>
+                {% user_activity_stream request.user 4 %}
+            </ul>
         </div>
     </div>
 </div>

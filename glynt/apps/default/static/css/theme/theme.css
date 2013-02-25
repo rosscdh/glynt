@@ -50,13 +50,13 @@ a {
 /* Message
 -------------------------------------------------- */
 div#messages {
-background-color: #fef58e;
-border: 3px solid #EDEDED;
-border-top:0px;
-padding:10px 0px;
+	background-color: #fef58e;
+	border: 3px solid #EDEDED;
+	border-top:0px;
+	padding:10px 0px;
 }
 div#messages ul {
-list-style-type:none;
+	list-style-type:none;
 }
 
 /* Navbar
@@ -75,16 +75,21 @@ list-style-type:none;
 	box-shadow:none;
 	border-bottom:0px;
 }
-.navbar .brand {
-    font-size: 30px;
-	text-shadow: none;
-	height:30px;
-	width:135px;
-/*	padding-top:18px;
-*/}
-.navbar a.brand{
-	color:white;
+.navbar-fixed-top.dark .navbar-inner {
+	background: #58daea; /* Old browsers */
+	/* IE9 SVG, needs conditional override of 'filter' to 'none' */
+	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzU4ZGFlYSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjM3JSIgc3RvcC1jb2xvcj0iIzUzY2JmMSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMzYWM2ZGYiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+	background: -moz-linear-gradient(top,  #58daea 0%, #53cbf1 37%, #3ac6df 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#58daea), color-stop(37%,#53cbf1), color-stop(100%,#3ac6df)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #58daea 0%,#53cbf1 37%,#3ac6df 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #58daea 0%,#53cbf1 37%,#3ac6df 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #58daea 0%,#53cbf1 37%,#3ac6df 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #58daea 0%,#53cbf1 37%,#3ac6df 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#58daea', endColorstr='#3ac6df',GradientType=0 ); /* IE6-8 */
+	padding:7px 0px;
+	
 }
+
 .navbar .nav {
 	top: 4px;
 	/*margin-right: 40px;*/
@@ -101,8 +106,14 @@ list-style-type:none;
 	transition: all .2s linear;	
 	padding-right:6px;
 }
+.navbar.dark .nav > li > a {
+	color:white;
+}
 .navbar .nav > li > a:hover {
 	color: #2bb0c4;		
+}
+.navbar.dark .nav > li > a:hover {
+	color:white;
 }
 .navbar .nav > li.active > a,
 .navbar .nav > li.active:hover > a,
@@ -115,6 +126,20 @@ list-style-type:none;
 	-moz-box-shadow: none;
 	background: none;
 	color: #2bb0c4;
+}
+.navbar.dark .nav > li.active > a,
+.navbar.dark .nav > li.active:hover > a,
+.navbar.dark .nav > .active > a,
+.navbar.dark .nav > .active > a:hover,
+.navbar.dark .nav > .active > a:focus {
+	color:white;
+}
+.navbar.dark .nav li.dropdown.open > .dropdown-toggle, .navbar.dark .nav li.dropdown.active > .dropdown-toggle, .navbar.dark .nav li.dropdown.open.active > .dropdown-toggle {
+	color:#b9f4ff;
+}
+.navbar .divider-vertical {
+	height:30px;
+	margin-top:5px;
 }
 .btn-dropnav {
     float: right;
@@ -659,11 +684,24 @@ list-style-type:none;
     margin-top:10px;
 }
 */
+.dashboard .dashtop{
+	margin-top:50px;
+	margin-bottom:20px;
+}
+.dashboard .dashtop h1{
+	padding:0px 0px;
+}
+.dashboard .dashtop h4{
+	padding:10px 0px 5px 0px;
+}
+.dashboard .dashtop .docs{
+	margin:20px 0px;
+}
 .admin-panel {
-background-color: #92C65F;
-border: 3px solid #EDEDED;
-border-top:0px;
-padding:10px 0px 5px 0px;
+	background-color: #92C65F;
+	border: 3px solid #EDEDED;
+	border-top:0px;
+	padding:10px 0px 5px 0px;
 }
 .admin-panel:empty { display:none; }
 
@@ -682,21 +720,42 @@ padding:10px 0px 5px 0px;
 }
 .dashboard .icon {
 	width:33px;
-	height:23px;
-	background-color:#005d89;
+	height:20px;
+	background-color:#70df7e;
 	color:white;
 	text-align:center;
-	font-size:12px;
+	font-size:15px;
 	position:absolute;
-	border-radius:4px;
 	padding-top:3px;
 	margin-top:10px;
 	text-transform:uppercase;
+	padding-top:20px;
+	padding-bottom:4px;
+	border-left:1px solid #70df7e;
+	border-bottom:1px solid #70df7e;
+}
+.dashboard .icon:before {
+    content:"";
+    position:absolute;
+    top:0;
+    right:0;
+    border-width:0 8px 8px 0; /* This trick side-steps a webkit bug */
+    border-style:solid;
+    border-color:#fff #fff #70df7e #70df7e; /* A bit more verbose to work with .rounded too */
+    background:#FFF; /* For when also applying a border-radius */
+    display:block; width:0; /* Only for Firefox 3.0 damage limitation */
+    /* Optional: shadow */
+    -webkit-box-shadow:0 1px 1px rgba(0,0,0,0.3), -1px 1px 1px rgba(0,0,0,0.2);
+       -moz-box-shadow:0 1px 1px rgba(0,0,0,0.3), -1px 1px 1px rgba(0,0,0,0.2);
+            box-shadow:0 1px 1px rgba(0,0,0,0.3), -1px 1px 1px rgba(0,0,0,0.2);
 }
 .dashboard .icon.c2{background-color:#e00c61;}
 .dashboard .icon.c3{background-color:#0a934e;}
 .dashboard .icon.c4{background-color:#f69c00;}
 
+.dashboard .feature2 {
+	height:90px;
+}
 .dashboard .feature2 h4,
 .dashboard .feature2 p {
 	margin-left: 45px;
@@ -704,10 +763,12 @@ padding:10px 0px 5px 0px;
 }
 .dashboard .feature2 h4 {
 	line-height: 20px;
-	color: #000;
-	font-size:15px;
+	font-size:18px;
 	margin-bottom:0px;
-	margin-top:10px;
+	margin-top:0px;
+}
+.dashboard .feature2 h4 a {
+	color:#222;
 }
 .dashboard .feature2 p {
     font-size:12px;
@@ -784,7 +845,15 @@ padding:10px 0px 5px 0px;
 	border-radius:0px;
 	
 }
-
+.btn-red {
+	background-color:#f7877c;
+	border:1px solid #e76356;
+	color:white;
+}
+.btn-red:hover {
+	background-color:#e76c60;
+	color:white;
+}
 
 /* Drafting
 -------------------------------------------------- */
