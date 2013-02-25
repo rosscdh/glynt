@@ -70,6 +70,8 @@ class DocumentTemplateCategory(CategoryBase):
     """
     Basic Categories for document Model
     """
+    color = models.CharField(max_length=24, null=True)
+
     class Meta:
       verbose_name_plural = 'Document Categories'
 
@@ -172,6 +174,9 @@ class DocumentHTML(models.Model):
     """
     document = models.ForeignKey(ClientCreatedDocument)
     html = models.TextField(blank=True)
+
+    class Meta:
+      verbose_name_plural = 'Document HTML'
 
     def render(self):
         logger.info('DocumentHTML render: %s'%(self.pk,))
