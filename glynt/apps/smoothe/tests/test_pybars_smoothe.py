@@ -132,14 +132,14 @@ class TestSimpleSelectHTMLExample(TestTemplateToDoc):
 
         self.subject.source_html = html % ("<br/>".join(handlers),)
         context = {
-            'monkey': u'Slurping Schwein on the Train from Moenchengladbach',
+            'monkey': u'Slurping Schwein on the Train from Mönchengladbach',
             'animal_farm': u'horse',
             'favourite_monkies': [u'Baboons', u'Gorillas']
         }
         self.subject.context = context
 
         html_result = self.subject.render(context)
-        expected_html = html % (u'Baboons\rGorillas<br/>horse<br/>Slurping Schwein on the Train from Moenchengladbach')
+        expected_html = html % (u'Baboons\rGorillas<br/>horse<br/>Slurping Schwein on the Train from Mönchengladbach')
 
         eq_(html_result, expected_html)
 
