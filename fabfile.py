@@ -86,7 +86,7 @@ def do_deploy():
 def do_fixtures():
     # Activate virtualenv
     with prefix('workon %s' % (env.project_name,)):
-        run('python %s/%s/manage.py loaddata sites document_category documenttemplate' % (env.remote_project_path, PROJECT,))
+        run('python %s/%s/manage.py loaddata sites document_category documenttemplate public/fixtures/cms.json' % (env.remote_project_path, PROJECT,))
 
 @task
 def fixtures(deploy_to_env='staging'):
