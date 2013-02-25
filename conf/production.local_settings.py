@@ -5,7 +5,7 @@ SITE_ROOT = os.path.dirname(os.path.realpath(__file__+ '/../'))
 
 SITE_ID = 3
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 DATABASES = {
