@@ -291,12 +291,47 @@ list-style-type:none;
 }
 
 /* homepage social */
-
 .social-block {
 	background-color:#4ad1e5;
+	margin-top:40px;
+	padding:50px 0px;
 }
-
-
+.social-block {
+	text-align:center;
+	color:white;
+}
+.social-block .options {
+	margin-top:30px;
+}
+.social-block h2 {
+	margin:0px 100px;
+	line-height:1.4em;
+	font-size:24px;
+}
+.social-block .facebook {
+	background-color:#3b5999;
+	height:125px;
+}
+.social-block .facebook .share {
+	margin-left:31px;
+	margin-top:25px;
+}
+.social-block .twitter .share {
+	margin-left:5px;
+	margin-top:21px;
+}
+.social-block .email {
+	background-color:#f68175;
+	height:125px;
+}
+.social-block .email input {
+	width:90%;
+	padding:9px 15px;
+}
+.social-block .twitter {
+	background-color:#00aced;
+	height:125px;
+}
 /* introduction heading section*/
 #intro {
 	text-align: center;
