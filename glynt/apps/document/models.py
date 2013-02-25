@@ -40,6 +40,8 @@ class DocumentTemplate(models.Model):
     body = models.TextField(blank=True)
     doc_status = models.IntegerField(choices=DOC_STATUS.get_choices(), blank=False, default=DOC_STATUS.draft)
     is_public = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
     doc_cats = models.ManyToManyField('DocumentTemplateCategory')
 
     objects = DocumentTemplateManager()
@@ -68,6 +70,8 @@ class DocumentTemplateCategory(CategoryBase):
     """
     Basic Categories for document Model
     """
+    color = models.CharField(max_length=24, null=True)
+
     class Meta:
       verbose_name_plural = 'Document Categories'
 
@@ -170,6 +174,9 @@ class DocumentHTML(models.Model):
     """
     document = models.ForeignKey(ClientCreatedDocument)
     html = models.TextField(blank=True)
+
+    class Meta:
+      verbose_name_plural = 'Document HTML'
 
     def render(self):
         logger.info('DocumentHTML render: %s'%(self.pk,))

@@ -11,11 +11,15 @@ SITE_ROOT = os.path.dirname(os.path.realpath(__file__+ '/../'))
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+gettext = lambda s: s
+
 ADMINS = (
-    ("Ross Crawford-d'Heureuse", 'ross@lawpal.com'),
+    ("Ross Crawford-dHeureuse", 'ross@lawpal.com'),
 )
+
 COMPRESSION_ENABLED = False
 MANAGERS = ADMINS
+CMS_MODERATOR = ()
 
 DATABASES = {
     'default': {
@@ -95,6 +99,12 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + (
+    'cms.middleware.page.CurrentPageMiddleware',
+    'cms.middleware.user.CurrentUserMiddleware',
+    'cms.middleware.toolbar.ToolbarMiddleware',
+)
+
 ROOT_URLCONF = 'glynt.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
@@ -109,16 +119,21 @@ AUTHENTICATION_BACKENDS = (
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
-"django.contrib.auth.context_processors.auth",
-"django.core.context_processors.debug",
-"django.core.context_processors.i18n",
-"django.core.context_processors.media",
-"django.core.context_processors.static",
-"django.core.context_processors.tz",
-"django.contrib.messages.context_processors.messages",
-"django.core.context_processors.request",
-"socialregistration.contrib.facebook_js.context_processors.FacebookTemplateVars",
-"glynt.context_processors.project_info",
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    "django.core.context_processors.tz",
+    "django.contrib.messages.context_processors.messages",
+    "django.core.context_processors.request",
+    "socialregistration.contrib.facebook_js.context_processors.FacebookTemplateVars",
+    "glynt.context_processors.project_info",
+)
+
+TEMPLATE_CONTEXT_PROCESSORS = TEMPLATE_CONTEXT_PROCESSORS + (
+    'cms.context_processors.media',
+    'sekizai.context_processors.sekizai',
 )
 
 TEMPLATE_DIRS = (
@@ -128,6 +143,7 @@ TEMPLATE_DIRS = (
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 DJANGO_APPS = (
+'django.contrib.sitemaps',
 'django.contrib.auth',
 'django.contrib.contenttypes',
 'django.contrib.sessions',
@@ -163,6 +179,17 @@ PROJECT_APPS = (
     'glynt.apps.services',
 )
 
+CMS_APPS = (
+    'cms',
+    'mptt',
+    'menus',
+    'sekizai',
+
+    'cms.plugins.link',
+    'cms.plugins.picture',
+    'cms.plugins.text',
+)
+
 HELPER_APPS = (
     'django_extensions',
     'templatetag_handlebars',
@@ -191,7 +218,26 @@ HELPER_APPS = (
 if not IS_TESTING:
     HELPER_APPS = HELPER_APPS + ('south',)
 
-INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + HELPER_APPS
+INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + CMS_APPS + HELPER_APPS
+
+
+CMS_PERMISSION = False
+
+CMS_TEMPLATES = (
+    ('layout/base.html', 'Default (Bootstrap)'),
+    ('layout/homepage.html', 'Homepage Template'),
+    ('layout/document_list.html', 'Document List Template'),
+)
+
+CMS_APPHOOKS = ()
+
+CMS_SHOW_START_DATE = True
+CMS_SHOW_END_DATE = True
+
+CMS_LANGUAGES = LANGUAGES = (
+    ('en', gettext('English')),
+)
+
 
 USER_STREAMS_BACKEND = 'user_streams.backends.user_streams_single_table_backend.SingleTableDatabaseBackend'
 USER_STREAMS_USE_UTC = True
@@ -278,9 +324,19 @@ LOGGING = {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'console':{
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
         }
     },
     'loggers': {
+        'django.test': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
         'django.request': {
             'handlers': ['mail_admins'],
             'level': 'ERROR',

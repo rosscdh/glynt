@@ -71,19 +71,39 @@ class Smoothe(object):
         join_by = str(kwargs.get('join_by', "\r"))
         choices_text = unicode(options['fn'](this))
         choices = [o.strip() for o in choices_text.split('{option}')]
+        selected_values = []
 
-        if var_name in self.context:
-            selected_values = self.context[var_name]
+        # 1. Complex Multi selector, a json nested nightmare 
+        for i,value in enumerate(choices):
+            c = i+1
 
-            for o in selected_values:
-                if o not in choices:
-                    logger.error("option %s was not in the set of valid select options"%(o,))
-                    raise DocSelectException(self.context[var_name], choices)
+            index_lookup_name = '%s[%d][selected]' % (var_name, i,)
+            is_present = self.context.get(index_lookup_name)
 
+            if is_present == 'true':
+                # have found the [selected] == true
+                logger.info("%d index IS present %s and its index is: %d and its value is %s" % (c,is_present,i,choices[i],))
+                #now use the index to get the context name
+                selected_values.append(choices[i])
+            else:
+                logger.info("%d index is not present"%c)
+
+        if len(selected_values) > 0:
+            logger.info("var_name: %s is in self.context" % index_lookup_name)
             # Join the selectd options based on the join_by character; that may be custom
-            return join_by.join(self.context[var_name])
+            return join_by.join(selected_values)
 
-        logger.warn("var_name %s was not found in context"%(var_name,))
+        logger.info("var_name: %s is not a Complex Multi Select but could be a Simple Select" % index_lookup_name)
+        # 2. Simple selector, not a json nested nightmare 
+        if self.context.get(var_name, None) is not None:
+            simple_selected = self.context.get(var_name, [])
+            for c in simple_selected:
+                if c not in choices:
+                    raise DocSelectException(c, choices)
+            return join_by.join(simple_selected)
+
+        logger.info("var_name %s was not found in context"%(var_name,))
+
         return None
 
     def help_for(self, this, *args, **kwargs):

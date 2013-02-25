@@ -25,7 +25,7 @@ activate_this = os.path.expanduser("~/.virtualenvs/glynt/bin/activate_this.py")
 execfile(activate_this, dict(__file__=activate_this))
 
 # Calculate the path based on the location of the WSGI script
-project = '/home/stard0g101/webapps/glynt/glynt/glynt/'
+project = '/home/stard0g101/webapps/glynt/glynt/'
 workspace = os.path.dirname(project)
 sys.path.append(workspace)
 

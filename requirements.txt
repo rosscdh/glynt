@@ -2,17 +2,19 @@ Django
 Markdown
 pyyaml
 Werkzeug
-#django-extensions
--e git+https://github.com/stard0g101/django-extensions.git@1101b87bfa02f91931922a6996186e3c8d030cf9#egg=django-extensions
+django-extensions
 markup
 south
-psycopg2
+django-cms==2.3.5
+#psycopg2
 django-celery
 django-templated-email
 PIL
 sh
-behave
 pytz
+
+-e git+https://github.com/django-debug-toolbar/django-debug-toolbar.git#egg=django-debug-toolbar
+django-storages
 -e git+https://github.com/jezdez/django_compressor.git#egg=django_compressor
 -e git+https://github.com/toastdriven/django-tastypie.git#egg=django-tastypie
 -e git+https://github.com/stard0g101/pybars.git#egg=pybars
@@ -28,9 +30,7 @@ facebook
 -e git+https://github.com/etianen/django-reversion.git#egg=django-reversion
 -e git+https://github.com/bread-and-pepper/django-userena.git#egg=django-userena
 -e git+https://github.com/lukaszb/django-guardian.git#egg=django-guardian
--e git+https://github.com/kmmbvnr/django-jenkins.git#egg=django-jenkins
 -e git+https://github.com/callowayproject/django-categories.git#egg=django-categories
--e git+https://github.com/django-debug-toolbar/django-debug-toolbar.git#egg=django-debug-toolbar
 -e git+https://github.com/bradjasper/django-jsonfield.git#egg=django-jsonfield
 -e git+https://github.com/stard0g101/django-countries.git#egg=django-countries
 -e git+https://github.com/stard0g101/django-bootstrap.git#egg=bootstrap
@@ -54,6 +54,8 @@ django_markup
 -e git+https://github.com/stard0g101/HelloSignApi.git#egg=HelloSignApi
 
 # Testing
+-e git+https://github.com/kmmbvnr/django-jenkins.git#egg=django-jenkins
+behave
 django-nose
 mocktest
 djangosanetesting

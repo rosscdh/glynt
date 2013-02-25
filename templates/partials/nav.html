@@ -1,9 +1,9 @@
-{% load i18n %}{% load url from future %}
+{% load i18n menu_tags %}{% load url from future %}
 <a href="#" class="scrolltop">
     <span>up</span>
 </a>
  <!-- begins navbar -->
-<div class="navbar navbar-fixed-top nav-public">
+<div class="navbar navbar-fixed-top">
    <div class="navbar-inner">
      <div class="container">
         <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -13,17 +13,17 @@
         </a>
         {% if request.user.is_authenticated %}
             <a class="brand" data-section="body" href="/client">
-               <img src="{{ STATIC_URL }}img/logo-nav-white.png">
+               <img src="{{ STATIC_URL }}css/img/logo.png">
             </a>
         {% else %}
             <a class="brand" data-section="body" href="/">
-				<img src="{{ STATIC_URL }}img/logo-nav-white.png">           
-			</a>
+               <img src="{{ STATIC_URL }}css/img/logo.png">
+           </a>
         {% endif %}
 
         <div class="nav-collapse collapse">
-             <ul class="nav">
-                 
+             <ul class="nav pull-right">
+
                  {% if request.user.is_authenticated %}
                  <li><a href="{% url 'client:dashboard' %}">{% trans 'Dashboard' %}</a></li>
                  <li class="divider-vertical"></li>                    
@@ -35,15 +35,9 @@
                    </ul>
                  </li>
                  {% else %}
-                 <li><a href="#" class="scroller" data-section="#features">Features</a></li>
-                 <li><a href="#" class="scroller" data-section="#pricing">Pricing</a></li>
-                 <li><a href="#" class="scroller" data-section="#footer">Contact us</a></li>
-                 <li><a href="blog.html">Blog</a></li>
-	             </ul>
-				 <ul class="nav pull-right">
-				 
-                 <li><a id="user-login-link" class="btn-header" href="{% url 'client:login' %}">{% trans 'Login' %}</a></li>
-                 <li class=""><a id="user-signup-link" class="btn-header" href="{% url 'client:signup' %}">{% trans 'Signup' %}</a></li>
+
+                 {% show_menu 0 100 100 100 %}
+
                  {% endif %}
                  
                  

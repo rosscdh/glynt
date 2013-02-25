@@ -4,6 +4,9 @@ from mocktest import *
 
 from glynt.apps.smoothe.pybars_smoothe import Smoothe, DocChoiceException, DocSelectException
 
+import logging
+logger = logging.getLogger('django.test')
+
 
 class TestTemplateToDoc(mocktest.TestCase):
     """ Class tests that the server-side handebars methods are called
@@ -21,6 +24,7 @@ class TestTemplateToDoc(mocktest.TestCase):
             'doc_select': u'{{#doc_select name="favourite_monkies" label="What are your favourite Monkies?"}}Gorillas{option}Baboons{option}Chimpanzies{option}Big Hairy Ones{{/doc_select}}',
             'doc_select_custom_join_by': u'{{#doc_select name="favourite_monkies" join_by="-A crazy night out with a Ham-" label="What are your favourite Monkies?"}}Gorillas{option}Baboons{option}Chimpanzies{option}Big Hairy Ones{{/doc_select}}',
             'doc_select_custom_subvariable': u'{{#doc_select name="favourite_monkies" label="What are your favourite Monkies?"}}Gorillas named {{#doc_var name="gorilla_name"}}{{/doc_var}}{option}Baboons{option}Chimpanzies named {{#doc_var name="chimp_name"}}{{/doc_var}}{option}Big Hairy Ones named {{#doc_var name="big_hairy_name"}}{{/doc_var}}{{/doc_select}}',
+            'doc_select_custom_multi': u'{{#doc_select multi=true name="best_apes" label="What are the best Apes?"}}Gorillaz{option}Chimpanzies{option}Baboons{{/doc_select}}',
         }
 
     def testDocVar(self):
@@ -28,7 +32,7 @@ class TestTemplateToDoc(mocktest.TestCase):
         context = {'monkey': u'This is some kind of Banana!'}
         self.subject.context = context
 
-        assert self.subject.render(context) == u'This is some kind of Banana!'
+        eq_(self.subject.render(context), u'This is some kind of Banana!')
 
     def testDocChoice(self):
         self.subject.source_html = self.html_handlers['doc_choice']
@@ -36,7 +40,7 @@ class TestTemplateToDoc(mocktest.TestCase):
             'animal_farm': u'pig'
         }
         self.subject.context = context
-        assert self.subject.render(context) == u'pig'
+        eq_(self.subject.render(context), u'pig')
 
     @raises(DocChoiceException)
     def testInvalidStaticDocChoice(self):
@@ -53,7 +57,7 @@ class TestTemplateToDoc(mocktest.TestCase):
             'animal_farm': u'gorilla'
         }
         self.subject.context = context
-        assert self.subject.render(context) == u'gorilla'
+        eq_(self.subject.render(context), u'gorilla')
 
     def testDefaultDocChoice(self):
         self.subject.source_html = self.html_handlers['doc_choice_custom_unspecified_static']
@@ -61,7 +65,7 @@ class TestTemplateToDoc(mocktest.TestCase):
             'animal_farm': u'gorilla'
         }
         self.subject.context = context
-        assert self.subject.render(context) == u'gorilla'
+        eq_(self.subject.render(context), u'gorilla')
 
     def testDocSelect(self):
         self.subject.source_html = self.html_handlers['doc_select']
@@ -69,7 +73,7 @@ class TestTemplateToDoc(mocktest.TestCase):
             'favourite_monkies': [u'Gorillas']
         }
         self.subject.context = context
-        assert self.subject.render(context) == u'Gorillas'
+        eq_(self.subject.render(context), u'Gorillas')
 
     def testDocSelectMulti(self):
         """ When multi=true the method will return a string """
@@ -79,7 +83,7 @@ class TestTemplateToDoc(mocktest.TestCase):
         }
         self.subject.context = context
         # Joins on new line char
-        assert self.subject.render(context) == u'Gorillas\rBig Hairy Ones'
+        eq_(self.subject.render(context), u'Gorillas\rBig Hairy Ones')
 
     @raises(DocSelectException)
     def testDocSelectInvalidMulti(self):
@@ -110,24 +114,32 @@ class TestTemplateToDoc(mocktest.TestCase):
             'big_hairy_name': 'Grumwald',
         }
         self.subject.context = context
-        #print self.subject.render(context)
-        #eq_(self.subject.render(context), 'Chimpanzies-A crazy night out with a Ham-Baboons')
+        eq_(self.subject.render(context), 'Chimpanzies named George\rBaboons')
 
+    def testComplexMultiDocSelectSubVariable(self):
+        self.subject.source_html = self.html_handlers["doc_select_custom_multi"]
+        context = {
+            'best_apes[0][selected]': 'true',
+            'best_apes[1][selected]': 'false',
+            'best_apes[2][selected]': 'true'
+        }
+        eq_(self.subject.render(context), u'Gorillaz\rBaboons')
 
-class TestHTMLExample(TestTemplateToDoc):
+class TestSimpleSelectHTMLExample(TestTemplateToDoc):
     def testGenericHTML(self):
-        handlers = [v for k,v in self.html_handlers.items() if 'custom' not in k]
+        handlers = [v for k,v in self.html_handlers.items() if '_custom_' not in k]
         html = '<html><head></head><body> <h1>A Test Title</h1> %s </body></html>'
 
         self.subject.source_html = html % ("<br/>".join(handlers),)
         context = {
-            'monkey': u'Slurping Schwein on the Train from Moenchengladbach',
+            'monkey': u'Slurping Schwein on the Train from Mönchengladbach',
             'animal_farm': u'horse',
             'favourite_monkies': [u'Baboons', u'Gorillas']
         }
         self.subject.context = context
 
         html_result = self.subject.render(context)
-        expected_html = html % ('Slurping Schwein on the Train from Moenchengladbach<br/>horse<br/>Baboons\rGorillas')
+        expected_html = html % (u'Baboons\rGorillas<br/>horse<br/>Slurping Schwein on the Train from Mönchengladbach')
 
         eq_(html_result, expected_html)
+
