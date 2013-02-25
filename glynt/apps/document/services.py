@@ -49,9 +49,11 @@ class DocumentInviteeService(BaseDocumentService):
         self.document.save()
 
     def decrement(self, signature):
-        self.document.meta_data['invitees'] = filter(lambda i: i != signature.pk, self.document.meta_data['invitees'])
-        self.document.meta_data['num_invited'] = len(self.document.meta_data['invitees'])
-        self.document.save()
+        # @TODO fix this bug on delete if invitees is None
+        # self.document.meta_data['invitees'] = filter(lambda i: i != signature.pk, self.document.meta_data['invitees']) if 'invitees' in self.document.meta_data and self.document.meta_data['invitees'] is not None else []
+        # self.document.meta_data['num_invited'] = len(self.document.meta_data['invitees'])
+        # self.document.save()
+        pass
 
 
 class DocumentCloneService(BaseDocumentService):
