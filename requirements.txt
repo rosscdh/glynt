@@ -1,35 +1,43 @@
 Django
-Markdown
-pyyaml
+#psycopg2 # required for production postgres db
 Werkzeug
 django-extensions
-markup
 south
+
+Markdown
+pyyaml
+
+markup
+
 django-cms==2.3.5
-#psycopg2
+
 django-celery
 django-templated-email
+
 PIL
 sh
-pytz
+
+django-storages
 
 -e git+https://github.com/django-debug-toolbar/django-debug-toolbar.git#egg=django-debug-toolbar
-django-storages
+
 -e git+https://github.com/jezdez/django_compressor.git#egg=django_compressor
 -e git+https://github.com/toastdriven/django-tastypie.git#egg=django-tastypie
 -e git+https://github.com/stard0g101/pybars.git#egg=pybars
--e git+https://github.com/chrisglass/xhtml2pdf.git#egg=xhtml2pdf
--e git+https://github.com/stard0g101/django-xhtml2pdf.git#egg=django-xhtml2pdf
+
+#-e git+https://github.com/chrisglass/xhtml2pdf.git#egg=xhtml2pdf # not planning on using xhtml2pdf(pisa) too unstable
+#-e git+https://github.com/stard0g101/django-xhtml2pdf.git#egg=django-xhtml2pdf # not planning on using xhtml2pdf(pisa) too unstable
+
 -e git+https://github.com/stard0g101/django-templatetag-handlebars.git#egg=django-templatetag-handlebars
 -e git+https://github.com/klen/django_markdown.git#egg=django_markdown
+
 -e git+https://github.com/stard0g101/django-socialregistration.git@linkedin#egg=django-socialregistration
 facebook
+
 -e git+https://github.com/Julian/jsonschema.git#egg=jsonschema
 -e git+https://github.com/alex/django-taggit.git#egg=django-taggit
-# model record versioning for documents
--e git+https://github.com/etianen/django-reversion.git#egg=django-reversion
+
 -e git+https://github.com/bread-and-pepper/django-userena.git#egg=django-userena
--e git+https://github.com/lukaszb/django-guardian.git#egg=django-guardian
 -e git+https://github.com/callowayproject/django-categories.git#egg=django-categories
 -e git+https://github.com/bradjasper/django-jsonfield.git#egg=django-jsonfield
 -e git+https://github.com/stard0g101/django-countries.git#egg=django-countries
@@ -38,7 +46,6 @@ facebook
 -e git+https://github.com/stard0g101/python-signpad2image.git#egg=python-signpad2image
 -e git+https://github.com/lincolnloop/python-qrcode.git#egg=python-qrcode
 -e git+https://github.com/stard0g101/django-user-streams.git@extended_templates#egg=django-user-streams
--e git+https://github.com/stard0g101/django-comments-xtd.git#egg=django-comments-xtd
 django_markup
 
 # Javascript Markdown
@@ -51,10 +58,10 @@ django_markup
 
 # 3rd party Services
 -e git+https://github.com/jkeyes/python-docraptor.git#egg=python-docraptor
--e git+https://github.com/stard0g101/HelloSignApi.git#egg=HelloSignApi
 
 # Testing
 -e git+https://github.com/kmmbvnr/django-jenkins.git#egg=django-jenkins
+HTTPretty
 behave
 django-nose
 mocktest
