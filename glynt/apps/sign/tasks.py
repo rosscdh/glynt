@@ -21,14 +21,16 @@ def send_signature_invite_email(**kwargs):
   document = kwargs['document']
   key_hash = kwargs['key_hash']
   admin_name, admin_email = settings.ADMINS[0]
-  to_name, to_email = (kwargs['to_name'], kwargs['to_email'],)
-  invited_by_pk, invited_by_name, invited_by_email = (kwargs['invited_by_pk'], kwargs['invited_by_name'], kwargs['invited_by_email'],)
+
+  to_name, to_email = (kwargs.get('to_name', 'No Name'), kwargs.get('to_email', 'noone@lawpal.com'),)
+  invited_by_pk, invited_by_name, invited_by_email = (kwargs.get('invited_by_pk', None), kwargs.get('invited_by_name','No Invited By'), kwargs.get('invited_by_email','noinvitedby@lawpal.com'),)
+
   kwargs['from_name'] = invited_by_name
   kwargs['from_email'] = invited_by_email
   kwargs['document_name'] = document.name
 
   kwargs['sign_url'] = reverse('sign:default', kwargs={'hash': key_hash, 'pk': document.pk})
-
+  
   send_templated_mail(
           template_name = 'invite_to_sign',
           template_prefix="sign/email/",

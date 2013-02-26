@@ -5,19 +5,19 @@ from django.template.loader import render_to_string
 from nose.tools import *
 from mocktest import *
 
-from .services import GlyntPdfService, GlyntDocxService, HelloSignService
-from glynt.apps.services.services import BaseService
+from .services import GlyntPdfService, HelloSignService
+from glynt.apps.services.services import BasePdfService
 from hellosign import HelloSignSignature, HelloSigner
 from glynt.apps.factories import DocumentFactory
 
 import re
 
 
-class TestBaseService(mocktest.TestCase):
+class TestBasePdfService(mocktest.TestCase):
     def setUp(self):
         self.html = '<h1>Document Title</h1><p>Hi there</p>'
         self.title = 'Title Goes Here'
-        self.subject = BaseService(html=self.html, title=self.title)
+        self.subject = BasePdfService(html=self.html, title=self.title)
 
     @raises(TypeError)
     def test_init_fail(self):

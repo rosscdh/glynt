@@ -194,11 +194,8 @@ HELPER_APPS = (
     'django_extensions',
     'templatetag_handlebars',
     'django_markdown',
-    'django_jenkins',
     'categories',
     'categories.editor',
-    'mptt',
-    'django_xhtml2pdf',
     'socialregistration',
     'socialregistration.contrib.facebook_js',
     'djcelery',
@@ -206,17 +203,31 @@ HELPER_APPS = (
     # Userena
     'userena',
     'guardian',
+    # Thumbnail generator
     'easy_thumbnails',
+    # Activity stream
     'user_streams',
     'user_streams.backends.user_streams_single_table_backend',
-    'django_comments_xtd',
     'django_markup',
     'compressor',
 )
 
 # Handle south and its breaking tests
-if not IS_TESTING:
-    HELPER_APPS = HELPER_APPS + ('south',)
+if IS_TESTING == True:
+    HELPER_APPS = HELPER_APPS + (
+        'django_jenkins',
+    )
+
+    # Log email to console
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    # disable celery for test
+    BROKER_BACKEND = 'memory'
+
+else:
+    HELPER_APPS = HELPER_APPS + (
+        'south',
+    )
+
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + CMS_APPS + HELPER_APPS
 
@@ -358,6 +369,9 @@ TEMPLATED_EMAIL_DJANGO_SUBJECTS = {
 BROKER_URL = 'amqp://guest:guest@localhost:5672/'
 
 HELLOSIGN_AUTH = ("", "")
+
+DOCRAPTOR_KEY = "vIvrCmZtnQTC4p6V0k"
+# old dev key # DOCRAPTOR_KEY = "LsEAKMvtz5hXBVAyfr"
 
 import djcelery
 djcelery.setup_loader()

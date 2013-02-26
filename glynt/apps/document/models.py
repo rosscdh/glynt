@@ -180,7 +180,8 @@ class DocumentHTML(models.Model):
 
     def render(self):
         logger.info('DocumentHTML render: %s'%(self.pk,))
-        html = markdown.markdown(smart_unicode(self.html)) if self.html else None
+        #html = markdown.markdown(smart_unicode(self.html)) if self.html else None
+        html = smart_unicode(self.html) if self.html else None
         smoothe = Smoothe(source_html=html)
 
         return smoothe.render(self.document.doc_data)

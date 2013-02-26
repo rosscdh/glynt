@@ -35,45 +35,19 @@ class TestClientCreatedDocument(mocktest.TestCase):
 
     def test_get_absolute_url(self):
         url = self.subject.get_absolute_url()
-        assert re.search('/v2/doc/my/(\d+)/edit/', url) is not None
+        eq_(re.search('/document/my/(\d+)/edit/', url) is not None, True)
 
     def test_get_review_url(self):
         url = self.subject.get_review_url()
-        assert re.search('/doc/my/%s/review/'%(self.slug,), url) is not None
+        eq_(re.search('/template/my/%s/review/' % self.slug, url) is not None, True)
 
     def test_qr_code_image(self):
         """ Test that we get a PIL image when calling this method """
         result = self.subject.qr_code_image()
-        assert type(result) == PilImage
-
-    # def test_increment_num_signed(self):
-    #     """ SIGNED - increment the number of signees, but
-    #     ensure that the id is unique and only counted once
-    #     """
-    #     self.subject.increment_num_signed(4)
-    #     assert self.subject.meta_data['num_signed'] == 1
-    # 
-    #     for i in range(1,5):
-    #         self.subject.increment_num_signed(i)
-    # 
-    #     # is 4 and not 5 because we added signature_id 1 which is then already in the model
-    #     assert self.subject.meta_data['num_signed'] == 4
-    #     assert self.subject.num_signed == 4
-    # 
-    # def test_increment_num_invited(self):
-    #     """ INVITED """
-    #     self.subject.increment_num_invited(4)
-    #     assert self.subject.meta_data['num_invited'] == 1
-    # 
-    #     for i in range(1,5):
-    #         self.subject.increment_num_invited(i)
-    # 
-    #     # is 4 and not 5 because we added signature_id 1 which is then already in the model
-    #     assert self.subject.meta_data['num_invited'] == 4
-    #     assert self.subject.num_invited == 4
+        eq_(type(result), PilImage)
 
     def test_data_as_json(self):
-        assert self.subject.data_as_json() == json.dumps(self.doc_data)
+        eq_(self.subject.data_as_json(), json.dumps(self.doc_data))
 
     def test_signatories(self):
         """ this functionality should be moved into a dedicated module """

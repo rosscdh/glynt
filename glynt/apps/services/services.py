@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#import docraptor
+import os
 from django.conf import settings
 from glynt.apps.export.utils import fetch_resources as link_callback
 from django.template import RequestContext
@@ -18,6 +18,9 @@ from django.utils.encoding import smart_unicode as smart_text # preparing for 1.
 from hellosign import HelloSign, HelloSignSignature
 from hellosign import HelloSigner, HelloDoc
 
+import docraptor
+DOCRAPTOR_KEY = getattr(settings, 'DOCRAPTOR_KEY', None)
+
 import datetime
 import hashlib
 
@@ -25,7 +28,7 @@ import logging
 logger = logging.getLogger('django.request')
 
 
-class BaseService(object):
+class BasePdfService(object):
     template = 'export/pdf.html'
 
     def __init__(self, html, **kwargs):
@@ -48,14 +51,37 @@ class BaseService(object):
         return render_to_string(self.template, context)
 
 
-class GlyntPdfService(BaseService):
+class DocRaptorService(BasePdfService):
+    def create_pdf(self):
+        logger.info('using DocRaptor Service: %s' % DOCRAPTOR_KEY)
+        context = self.get_context()
+        title = context.get('title', 'Untitled Document')
+
+        html = self.get_html(context=context)
+        logger.info('Local HTML Response: %s' % html)
+
+        try:
+            dr = docraptor.DocRaptor(api_key=DOCRAPTOR_KEY)
+            pdf_response = dr.create({
+                        'document_content': html.encode("UTF-8"),
+                        'test': True
+                    }).content
+            logger.info('DocRaptor Response: %s' % type(pdf_response))
+        except Exception as e:
+            logger.error(e)
+
+        return ContentFile(pdf_response, name=title)
+
+
+class XHTML2PdfService(BasePdfService):
     """
         PDF Creation Service
     """
     def create_pdf(self):
         context = self.get_context()
+        title = context.get('title', 'Untitled Document')
 
-        logger.info('using GlyntPdfService Service to create .pdf "%s"'%(context['title'],))
+        logger.info('using GlyntPdfService Service to create .pdf "%s"'%(title,))
 
         html = self.get_html(context=context)
 
@@ -64,21 +90,21 @@ class GlyntPdfService(BaseService):
         try:
             pisa.CreatePDF(html.encode("UTF-8"), pdf , encoding='UTF-8', link_callback=link_callback)
         except Exception as e:
-            logger.error('Could not generate PDF "%s" with pisa: "%s"'%(context['title'], e,))
+            logger.error('Could not generate PDF "%s" with pisa: "%s"'%(title, e,))
 
         # return pdf pointer to 0 to allow reading into ContentFile
         pdf.seek(0)
 
         # return a ContentFile object to be used
-        return ContentFile(pdf.read(), name=context['title'])
+        return ContentFile(pdf.read(), name=title)
 
 
-class GlyntDocxService(BaseService):
+class GlyntPdfService(DocRaptorService):
     """
-        Docx Creation Service
+        Interface to the various PDF Creation Services
+        Used by the views
     """
-    def create_pdf(self):
-        pass
+    pass
 
 
 class HelloSignService(object):
@@ -143,16 +169,3 @@ class HelloSignService(object):
         logger.info('Deleted tmp document: "%s"'%(path,))
 
         return result
-
-
-# class DocRaptorService(BaseService):
-#     def create_pdf(self):
-#         logger.info('using DocRaptor Service')
-#         dr = docraptor.DocRaptor(api_key='LsEAKMvtz5hXBVAyfr')
-# 
-#         with open("/tmp/docraptor.pdf", "wb") as pdf:
-#             pdf.write(dr.create({
-#                 'document_content': self.html, 
-#                 'test': True
-#             }).content)
-
