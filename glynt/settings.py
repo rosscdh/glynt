@@ -217,6 +217,12 @@ if IS_TESTING == True:
     HELPER_APPS = HELPER_APPS + (
         'django_jenkins',
     )
+
+    # Log email to console
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    # disable celery for test
+    BROKER_BACKEND = 'memory'
+
 else:
     HELPER_APPS = HELPER_APPS + (
         'south',
