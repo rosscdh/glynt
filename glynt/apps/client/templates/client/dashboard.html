@@ -35,20 +35,21 @@
             </ul>
         </div>
     </div>
+	<hr />
 </div>
 
 
 <div class="container">
     <div class="row existing-docs">
         <div class="span12">
-            <h3>Existing documents <span>A library of your existing LawPal documents</span></h3>
+            <h2>Your documents</h2>
         </div>
         <div class="span12">
             <ul class="nav nav-tabs">
                 <li class="active">
-                <a href="#/list/my_documents/all"><i class="icon-user"></i> {% trans 'My Documents' %}</a>
+                	<a href="#/list/my_documents/all">{% trans 'My Documents' %}</a>
                 </li>
-                <li><a href="#/list/shared_documents/all"><i class="icon-globe"></i> {% trans 'Shared Documents' %}</a></li>
+                <li><a href="#/list/shared_documents/all">{% trans 'Shared Documents' %}</a></li>
                 <!-- <li><a href="#"><i class="icon-briefcase"></i> AcmeCo Docs</a></li>
                 <li><a href="#"><i class="icon-home"></i> Property A Docs</a></li>-->
             </ul>
@@ -76,7 +77,7 @@
                 </td>
                     <td class="document-action">
                     <div class="btn-group pull-right">
-                        <button class="btn dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i> <span class="caret"></span></button>
+                        <button class="btn btn-red dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i> <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                         <li><a id="edit-{{ d.pk }}" class="small" href="{% url 'doc:update_document' pk=d.pk %}">{% trans 'Edit' %}</a></li>
                         <li><a id="clone-{{ d.pk }}" href="#clone" data-url="{% url 'document:my_clone' pk=d.pk %}" data-pk="{{ d.pk }}" class="clone-my-document">{% trans 'Clone' %}</a></li>
