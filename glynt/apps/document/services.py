@@ -11,13 +11,18 @@ class BaseDocumentService(object):
 
 class DocumentSignerService(BaseDocumentService):
     """ To be used for increment/decrement the signers count of a document """
+    def reset(self):
+        self.document.meta_data['num_signed'] = 0
+        self.document.meta_data['signers'] = []
+        self.document.save()
+
     def increment(self, signature):
         """ Save the number of signers, save the signature_id for uniqueness """
         meta = self.get_meta()
         signers = meta.get('signers', [])
         num_signed = meta.get('num_signed', 0)
 
-        if signature.pk not in signers:
+        if signature.is_signed == True and signature.pk not in signers:
             signers.append(signature.pk)
 
         self.document.meta_data['num_signed'] = len(signers)
@@ -37,13 +42,18 @@ class DocumentSignerService(BaseDocumentService):
 
 class DocumentInviteeService(BaseDocumentService):
     """ To be used for increment/decrement the signature invitee count of a document """
+    def reset(self):
+        self.document.meta_data['num_invited'] = 0
+        self.document.meta_data['invitees'] = []
+        self.document.save()
+
     def increment(self, signature):
         """ Save the number of invitees, save the signature_id for uniqueness """
         meta = self.get_meta()
         invitees = meta.get('invitees', [])
         num_invited = meta.get('num_invited', 0)
 
-        if signature.pk not in invitees:
+        if signature.pk is not None and signature.pk not in invitees:
             invitees.append(signature.pk)
 
         self.document.meta_data['num_invited'] = len(invitees)

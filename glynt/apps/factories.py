@@ -51,5 +51,5 @@ class DocumentHTMLFactory(factory.Factory):
 class SignatureFactory(factory.Factory):
     FACTORY_FOR = DocumentSignature
     document = factory.SubFactory(DocumentFactory)
+    user = factory.SubFactory(UserFactory)
     key_hash = factory.LazyAttributeSequence(lambda a, n: 'r3n{0}0m'.format(n))
-    user = None
