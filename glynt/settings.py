@@ -215,7 +215,7 @@ HELPER_APPS = (
 # Handle south and its breaking tests
 if IS_TESTING == True:
     HELPER_APPS = HELPER_APPS + (
-        'django_jenkins'
+        'django_jenkins',
     )
 else:
     HELPER_APPS = HELPER_APPS + (
