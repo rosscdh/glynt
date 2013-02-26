@@ -30,30 +30,33 @@ class DocumentSignerService(BaseDocumentService):
 
 class DocumentInviteeService(BaseDocumentService):
     """ To be used for increment/decrement the signature invitee count of a document """
+    def get_meta(self):
+        return self.document.meta.copy()
+
     def increment(self, signature):
         """ Save the number of invitees, save the signature_id for uniqueness """
-        meta = self.document.meta.copy()
+        meta = self.get_meta()
+        invitees = meta.get('invitees', [])
+        num_invited = meta.get('num_invited', 0)
 
-        if 'invitees' not in meta:
-          meta['invitees'] = []
+        if signature.pk not in invitees:
+            invitees.append(signature.pk)
 
-        if signature.pk not in meta['invitees']:
-          meta['invitees'].append(signature.pk)
-
-        if 'num_invited' not in meta:
-          meta['num_invited'] = 0
-
-        meta['num_invited'] = len(meta['invitees'])
+        meta['num_invited'] = len(invitees)
+        meta['invitees'] = invitees
 
         self.document.meta_data = meta
         self.document.save()
 
     def decrement(self, signature):
-        # @TODO fix this bug on delete if invitees is None
-        # self.document.meta_data['invitees'] = filter(lambda i: i != signature.pk, self.document.meta_data['invitees']) if 'invitees' in self.document.meta_data and self.document.meta_data['invitees'] is not None else []
-        # self.document.meta_data['num_invited'] = len(self.document.meta_data['invitees'])
-        # self.document.save()
-        pass
+        meta = self.get_meta()
+        invitees = meta.get('invitees', [])
+
+        invitees = filter(lambda i: i != signature.pk, invitees)
+
+        self.document.meta_data['num_invited'] = len(invitees)
+        self.document.meta_data['invitees'] = invitees
+        self.document.save()
 
 
 class DocumentCloneService(BaseDocumentService):
