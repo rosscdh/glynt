@@ -157,6 +157,9 @@ DJANGO_APPS = (
 )
 
 PROJECT_APPS = (
+    # Django CMS Helper app
+    'public',
+
     # The default app that handles the basics
     'glynt.apps.default',
     # The Flyform

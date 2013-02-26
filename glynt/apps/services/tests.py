@@ -21,7 +21,7 @@ class TestBasePdfService(mocktest.TestCase):
 
     @raises(TypeError)
     def test_init_fail(self):
-        subject = BaseService()
+        subject = BasePdfService()
 
     def test_template(self):
         assert self.subject.template == 'export/pdf.html'
