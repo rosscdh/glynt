@@ -43,6 +43,16 @@ class TestDocumentSignerService(BaseService):
         exactly 2 arguments (1 given) """
         DocumentSignerService()
 
+    def reset(self):
+        eq_(self.document.meta_data['num_signed'], 0)
+        eq_(self.document.meta_data['signers'], [])
+        self.subject.increment(self.signature)
+        eq_(self.document.meta_data['num_signed'], 1)
+        eq_(self.document.meta_data['signers'], [1])
+        self.subject.reset()
+        eq_(self.document.meta_data['num_signed'], 0)
+        eq_(self.document.meta_data['signers'], [])
+
     def test_increment(self):
         self.subject.increment(self.signature)
 
@@ -100,6 +110,16 @@ class TestDocumentInviteeService(BaseService):
         """ throws error TypeError: __init__() takes 
         exactly 2 arguments (1 given) """
         DocumentInviteeService()
+
+    def reset(self):
+        eq_(self.document.meta_data['num_invited'], 0)
+        eq_(self.document.meta_data['invitees'], [])
+        self.subject.increment(self.signature)
+        eq_(self.document.meta_data['num_invited'], 1)
+        eq_(self.document.meta_data['invitees'], [1])
+        self.subject.reset()
+        eq_(self.document.meta_data['num_invited'], 0)
+        eq_(self.document.meta_data['invitees'], [])
 
     def test_increment(self):
         self.subject.increment(self.signature)
