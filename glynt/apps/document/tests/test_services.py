@@ -43,7 +43,7 @@ class TestDocumentSignerService(BaseService):
         exactly 2 arguments (1 given) """
         DocumentSignerService()
 
-    def reset(self):
+    def test_reset(self):
         eq_(self.document.meta_data['num_signed'], 0)
         eq_(self.document.meta_data['signers'], [])
         self.subject.increment(self.signature)
@@ -111,7 +111,7 @@ class TestDocumentInviteeService(BaseService):
         exactly 2 arguments (1 given) """
         DocumentInviteeService()
 
-    def reset(self):
+    def test_reset(self):
         eq_(self.document.meta_data['num_invited'], 0)
         eq_(self.document.meta_data['invitees'], [])
         self.subject.increment(self.signature)
