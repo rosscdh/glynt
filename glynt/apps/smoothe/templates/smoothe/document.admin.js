@@ -49,7 +49,7 @@ $(document).ready(function(){
         self.render = function render() {
             if ($("div#document").length > 0) {
                 self.doc_view = self.get_doc_view();
-                $("div#document").html(self.renderMarkdown(self.doc_view({})));
+                $("div#document").html(self.doc_view({}));
             } else {
                 console.log('Can not output to undefined div#document')
             }

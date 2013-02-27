@@ -174,8 +174,7 @@ $(document).ready(function(){
         self.render = function render() {
             var data = $.parseJSON($('script#document-data').html());
             data = data[0];
-            html = self.renderMarkdown(self.compiledTemplate(data));
-            $(self.targetDocumentId).html(html);
+            $(self.targetDocumentId).html(self.compiledTemplate(data));
         }
 
         self.renderMarkdown = function renderMarkdown(md) {

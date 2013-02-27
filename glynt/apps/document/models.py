@@ -16,7 +16,7 @@ from glynt.apps.document.managers import ClientCreatedDocumentManager, PublicCli
 from glynt.apps.smoothe.pybars_smoothe import Smoothe
 
 import qrcode
-import markdown
+#import markdown
 
 
 import logging

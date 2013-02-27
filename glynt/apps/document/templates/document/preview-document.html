@@ -669,7 +669,7 @@ $(document).ready(function(){
         }
 
         self.render = function render() {
-            self.documentModel.renderedHTML(self.renderMarkdown(self.documentModel.render()))
+            self.documentModel.renderedHTML(self.documentModel.render())
         }
         self.renderMarkdown = function renderMarkdown(md) {
         	return self.markdownConverter.makeHtml(md);
