@@ -135,6 +135,9 @@ $(document).ready(function(){
             $('.doc_choice').glynt_choice({target_element: $('#element_help_text')});
             $('.note').glynt_note({target_element: $('#element_help_text')});
             $('body').help_text({target_element: $('#element_help_text')});
+            $.each($('.datepicker'), function(i,element){
+                $(element).datepicker("option", "dateFormat", 'd M, y');
+            });
 
             $('form#document-form button.submit').on('click', function(event){
                 event.preventDefault();

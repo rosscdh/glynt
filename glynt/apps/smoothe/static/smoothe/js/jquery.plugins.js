@@ -121,8 +121,8 @@
                 // types: select, choice, var
                 var item_class = item.type.replace('doc_', '');
                 var icon_css_class = self.icon_css_class(item_class);
-                var icon = $('<i>', {class: icon_css_class + ' icon-align-left', title: item_class.replace('_', ' ')});
-                var content = $('<a/>',{href: '#', html: icon});
+//                var icon = $('<i>', {class: icon_css_class + ' icon-align-left', title: item_class.replace('_', ' ')});
+                var content = $('<a/>',{href: '#', html: ''});
                 var title = (!item.initial) ? item.name.replace('_', ' ') : item.initial;
                 var element = $('#' + item.id);
 
@@ -143,6 +143,12 @@
                                 scrollTop: element.offset().top - $('.navbar').height()
                             }, 200);
                         }
+                        ,has_value: function(){
+                            $(this).addClass('done');
+                        }
+                        ,has_no_value: function(){
+                            $(this).removeClass('done');
+                        }
                     });
 
                 li.tooltip({
@@ -154,11 +160,11 @@
              }
          });
      }
-     ,increment_percent_complete: function() {
+     ,increment_percent_complete: function(element) {
          this.completed_elements++;
          this.update_percent()
      }
-     ,decrement_percent_complete: function() {
+     ,decrement_percent_complete: function(element) {
          this.completed_elements--;
          this.update_percent()
      }
@@ -335,7 +341,7 @@
           // apply the hallo editor
           self.$element.hallo({
               plugins: {
-                  'halloformat': {}
+                  //'halloformat': {}
               },
               editable: true
               ,showAlways: true
@@ -381,8 +387,8 @@
 
           self.$element.on('click', function(event){
               self.select_inner_text(this);
-              event.preventDefault();
-              event.stopPropagation();
+//              event.preventDefault();
+//              event.stopPropagation();
           });
           self.$element.on('focus', function(event){
               event.preventDefault();

@@ -1,7 +1,7 @@
 {% load i18n markup templatetag_handlebars glynt_helpers %}
 
 <script type="text/x-handlebars-template" id="doc_var-partial">{% verbatim %}
-<span id="{{id}}" class="{{type}} edit" data-has_initial="{{has_initial}}" data-doc_var="{{variable_name}}">{{value}}</span>
+<span id="{{id}}" class="{{type}} {{_class}} edit" data-has_initial="{{has_initial}}" data-doc_var="{{variable_name}}">{{value}}</span>
 {% endverbatim %}</script>
 
 
