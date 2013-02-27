@@ -334,9 +334,9 @@
           var self = this;
           // apply the hallo editor
           self.$element.hallo({
-              // plugins: {
-              //     'halloformat': {}
-              // },
+              plugins: {
+                  'halloformat': {}
+              },
               editable: true
               ,showAlways: true
           });
