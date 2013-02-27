@@ -39,7 +39,7 @@
 {% block document %}
 <div id="review" class="span9 view default">
     <div class="doc-body">
-        <span id="document-md">{% show_loading modal='False' %}</span>
+        <span id="document-md">{{ document_html|default:""|safe }}</span>
     </div>
 </div>
 
@@ -79,8 +79,6 @@
 {% block css %}{% endblock %}
 
 {% block js %}
-<script id="document-data" type="text/javascript">[{{ document_data|default:''|safe }}]</script>
-<script id="js-document" type="text/x-handlebars-template">{{ document.html|default:userdoc.source_document.body|safe }}</script>
 
 <script>
 $(document).ready(function(){
@@ -89,10 +87,6 @@ $(document).ready(function(){
 
         self.views = $('div.view');
         self.nav = $('ul.nav-list li a');
-
-        self.markdownConverter = new Markdown.Converter();
-        self.targetDocumentId = 'span#document-md';
-        self.compiledTemplate = Handlebars.compile($('#js-document').html()); // must not be ko.observable
 
         var hb_templates_source   = $("script#template_list").html();
         var hb_templates_list = Handlebars.compile(hb_templates_source);
@@ -135,23 +129,10 @@ $(document).ready(function(){
             });
         }
 
-        self.render = function render() {
-            var data = $.parseJSON($('script#document-data').html());
-            data = data[0];
-
-            html = self.renderMarkdown(self.compiledTemplate(data));
-            $(self.targetDocumentId).html(html);
-        }
-
-        self.renderMarkdown = function renderMarkdown(md) {
-          return self.markdownConverter.makeHtml(md);
-        }
-
     });
 
     // start the application
     app.run('#/');
-    app.render();
 
     $.each($('.signaturePad'), function(index, item) {
       item = $(item);

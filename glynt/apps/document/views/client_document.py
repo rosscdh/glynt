@@ -47,6 +47,7 @@ class MyDocumentView(DocumentView):
 
     self.user_document = get_object_or_404(ClientCreatedDocument, slug=document_slug, owner=self.request.user)
     user_can_view_document(self.user_document, self.request.user)
+
     # Setup the document based on the source_document of the viewed doc
     self.document = self.user_document.source_document
 
@@ -63,7 +64,7 @@ class ReviewClientCreatedView(MyDocumentView):
     template_name = 'document/review.html'
     def get_context_data(self, **kwargs):
         context = super(ReviewClientCreatedView, self).get_context_data(**kwargs)
-        context['document_data'] = self.user_document.data_as_json()
+        context['document_html'] = self.user_document.documenthtml_set.all()[0].render()
         context['next'] = reverse('document:my_review', kwargs={'slug':self.user_document.slug})
         return context
 
