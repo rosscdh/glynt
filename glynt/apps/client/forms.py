@@ -10,6 +10,10 @@ from userena import settings as userena_settings
 from userena import signals as userena_signals
 from django_countries.countries import COUNTRIES_PLUS
 
+ACCEPTED_COUNTRIES = ('GB',)
+
+COUNTRIES_PLUS = [(i,c) for i,c in COUNTRIES_PLUS if i in ACCEPTED_COUNTRIES]
+
 from models import UserSignup
 
 
@@ -18,7 +22,7 @@ class SignupForm(BootstrapMixin, SignupFormOnlyEmail):
   to our own UserSignup model and process allowing us to expand on fields saved """
   first_name = forms.CharField(max_length=24)
   last_name = forms.CharField(max_length=24)
-  country = forms.ChoiceField(choices=COUNTRIES_PLUS, initial='US')
+  country = forms.ChoiceField(choices=COUNTRIES_PLUS, initial='GB')
   state = forms.CharField(max_length=128)
 
   class Meta:
