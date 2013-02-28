@@ -30,7 +30,7 @@
 
 ** Document Templates **
 
-    `./manage.py dumpdata documenttemplate > glynt/apps/document/fixtures/documenttemplate.json`
+    `./manage.py dumpdata document.documenttemplate > glynt/apps/document/fixtures/documenttemplate.json`
 
 ** Django CMS **
 

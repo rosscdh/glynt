@@ -14,6 +14,7 @@ from glynt.apps.services.services import BasePdfService
 def validate_template_html(sender, **kwargs):
     template = kwargs['instance']
     # open html and render body
+    # must use the xhtml compliant template to enable html_tidy to work nice
     html_service = BasePdfService(template='export/xhtml_validator.html', html=template.body)
     # Validate HTML
     tasks.validate_document_html(html=html_service.get_html())
