@@ -102,7 +102,7 @@
                 <ul>
                     {% for d in public_document_list %}
                     <li>
-                        <a class="template-document" href="{% url 'doc:create_document' pk=d.pk %}">{{ d.name }}</a>
+                        <a class="template-document" href="{% url 'doc:create_document' slug=d.slug %}">{{ d.name }}</a>
                         {{ d.summary }}
                         {{ d.last_modified }}
                         {{ d.color }}

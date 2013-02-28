@@ -19,7 +19,6 @@ urlpatterns = patterns('',
     url(r'^my/(?P<slug>.+)/$', login_required(MyDocumentView.as_view(template_name='document/document.html')), name='my_view'),
 
     # QR code image
-    
     url(r'^qr/(?P<pk>.+)/view/$', login_required(DocumentQRCode.as_view()), name='qr_code'),
 
     # is not login_required as we want users to be redirected to login

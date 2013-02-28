@@ -3,7 +3,7 @@
 {% for d in objects %}
 <div class="span4 feature2">
 	<div class="icon {% colorize_acronym d.acronym %}">{{ d.acronym|upper }}</div>
-	<h4><a class="template-document" href="{% url 'doc:create_document' pk=d.pk %}">{{ d.name }}</a></h4>
+	<h4><a class="template-document" href="{% url 'doc:create_document' slug=d.slug %}">{{ d.name }}</a></h4>
 	<p>
 		{{ d.summary|default:"No Summary" }}
 	</p>

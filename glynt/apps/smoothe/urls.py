@@ -11,6 +11,6 @@ urlpatterns = patterns('',
     url(r'^template/(?P<pk>.+)/edit/$', login_required(UpdateTemplateView.as_view()), name='update_template'),
 
     # New User Docs are based on Templates
-    url(r'^my/create/(?P<pk>.+)/$', login_required(CreateDocumentView.as_view()), name='create_document'),
+    url(r'^(?P<slug>.*)/create/$', CreateDocumentView.as_view(), name='create_document'), # no login required, to allow user commiteent and signup
     url(r'^my/(?P<pk>.+)/edit/$', login_required(UpdateDocumentView.as_view()), name='update_document'),
 )
