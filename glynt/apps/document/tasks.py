@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.core.files.storage import default_storage
-from django.conf import settings
+from django.core.exceptions import ValidationError
 
 from celery.task import task
 
@@ -9,10 +10,19 @@ from glynt.apps.document.models import DocumentHTML
 from glynt.apps.smoothe.pybars_smoothe import Smoothe
 from glynt.apps.services import GlyntPdfService
 
+from .services import HtmlValidatorService
+
 import user_streams
 
 import logging
 logger = logging.getLogger('django.request')
+
+
+@task()
+def validate_document_html(html):
+    html_validator = HtmlValidatorService(html=html)
+    if not html_validator.is_valid():
+        raise ValidationError('Document Template HTML is invalid: %s, you will find a valid version at: %s' % (html_validator.errors, html_validator.valid_doc_path,) )
 
 
 @task()

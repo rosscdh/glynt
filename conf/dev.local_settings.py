@@ -1,3 +1,9 @@
+LOCAL_SETTINGS = True
+from settings import *
+
+MIDDLEWARE_CLASSES += (
+    'glynt.middleware.html_validator.HtmlValidatorMiddleware',
+)
 
 LOGGING = {
     'version': 1,
@@ -10,28 +16,33 @@ LOGGING = {
             'format': '%(levelname)s %(message)s'
         },
     },
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
     'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
+        'null': {
+            'level': 'DEBUG',
+            'class': 'django.utils.log.NullHandler',
         },
         'console':{
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
         }
     },
     'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'propagate': True,
+            'level': 'INFO',
+        },
         'django.request': {
             'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
+            'level': 'INFO',
+            'propagate': False,
+        }
     }
 }
+
+HELLOSIGN_AUTH = ("sendrossemail@gmail.com", "zanshin77")

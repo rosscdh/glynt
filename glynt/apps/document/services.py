@@ -1,4 +1,34 @@
 # -*- coding: utf-8 -*-
+import os
+from django.conf import settings
+from tidylib import tidy_document
+
+
+class HtmlValidatorService(object):
+    def __init__(self, html):
+        self.html = html
+        self.errors = None
+        self.document = None
+        self.valid_doc_path = None
+
+    def save_valid_doc(self):
+        self.valid_doc_path = os.path.join(settings.SITE_ROOT, 'valid_doc_template.html')
+        valid_doc = open(self.valid_doc_path, 'wb')
+        valid_doc.write(self.document.encode('utf-8'))
+        valid_doc.close()
+
+    def is_valid(self):
+        is_valid = False
+        if self.html is not None:
+            self.document, self.errors = tidy_document(self.html, \
+                                                options={'numeric-entities':1, "output-xhtml": 1} \
+                                            )
+            is_valid = len(self.errors) == 0
+
+            if is_valid == False:
+                self.save_valid_doc()
+
+        return is_valid
 
 
 class BaseDocumentService(object):

@@ -379,13 +379,20 @@ DOCRAPTOR_KEY = "vIvrCmZtnQTC4p6V0k"
 import djcelery
 djcelery.setup_loader()
 
+# Neat trick http://www.robgolding.com/blog/2010/05/03/extending-settings-variables-with-local_settings-py-in-django/
 if IS_TESTING:
     try:
-        from test_settings import *
-    except ImportError:
-        pass
+        LOCAL_SETTINGS
+    except NameError:
+        try:
+            from test_settings import *
+        except ImportError:
+            pass
 else:
     try:
-        from local_settings import *
-    except ImportError:
-        pass
+        LOCAL_SETTINGS
+    except NameError:
+        try:
+            from local_settings import *
+        except ImportError:
+            pass

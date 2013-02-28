@@ -35,6 +35,9 @@ class BasePdfService(object):
         self.html = html
         self.kwargs = kwargs
 
+        if 'template' in kwargs:
+            self.template = kwargs.get('template')
+
     def get_context(self):
         title = self.kwargs.get('title', None)
         html = smart_text(self.html, encoding='utf-8', strings_only=False, errors='strict')
@@ -46,7 +49,8 @@ class BasePdfService(object):
 
         return context
 
-    def get_html(self, context):
+    def get_html(self, context=None):
+        context = context if context is not None else self.get_context()
         # Render the core body wrapped in custom html
         return render_to_string(self.template, context)
 
@@ -58,15 +62,20 @@ class DocRaptorService(BasePdfService):
         title = context.get('title', 'Untitled Document')
 
         html = self.get_html(context=context)
-        logger.info('Local HTML Response: %s' % html)
+        logger.debug('Local HTML Response: %s' % html)
 
         try:
             dr = docraptor.DocRaptor(api_key=DOCRAPTOR_KEY)
+
             pdf_response = dr.create({
                         'document_content': html.encode("UTF-8"),
                         'test': True
                     }).content
-            logger.info('DocRaptor Response: %s' % type(pdf_response))
+
+            logger.info('DocRaptor Response Type: %s' % type(pdf_response))
+            if type(pdf_response) == str:
+                logger.debug('DocRaptor Response: %s' % pdf_response)
+
         except Exception as e:
             logger.error(e)
 

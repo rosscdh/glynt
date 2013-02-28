@@ -59,6 +59,9 @@ django_markup
 # 3rd party Services
 -e git+https://github.com/jkeyes/python-docraptor.git#egg=python-docraptor
 
+# HTML validation
+pytidylib
+
 # Testing
 -e git+https://github.com/kmmbvnr/django-jenkins.git#egg=django-jenkins
 HTTPretty
