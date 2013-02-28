@@ -88,6 +88,7 @@ class UpdateDocumentView(AjaxableResponseMixin, UpdateView):
         context['csrf_raw_token'] = get_token(self.request)
         context['submit_url'] = reverse('doc:update_document', kwargs={'pk': self.object.pk})
         context['document_template'] = self.object.source_document
+        context['document_body'] = self.object.documenthtml_set.all()[0]
 
         return context
 
