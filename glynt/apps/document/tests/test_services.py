@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.utils import simplejson as json
+from django.test.utils import override_settings
 from nose.tools import *
 from mocktest import *
 
 from glynt.apps.factories import UserFactory, TemplateFactory, DocumentFactory, SignatureFactory, DocumentHTMLFactory
-from glynt.apps.document.services import DocumentSignerService, DocumentInviteeService
+from glynt.apps.document.services import DocumentSignerService, DocumentInviteeService, HtmlValidatorService
 
+import os
 import hashlib
 import datetime
 import random
@@ -162,3 +164,52 @@ class TestDocumentInviteeService(BaseService):
             self.subject.increment(s)
 
         eq_(self.document.meta_data['num_invited'], 3)
+
+
+class TestHtmlValidatorService(mocktest.TestCase):
+    def setUp(self):
+        self.subject = HtmlValidatorService
+
+    @override_settings(DEBUG=False) # Set to false so we dont create documents in the root
+    def test_valid_html(self):
+        html = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"\n    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html><head><title>XHTML TITLE</title></head><body><p>This should be valid xhtml</p></body></html>'
+        s = self.subject(ident='valid_html_test', html=html)
+
+        # Should have no error message
+        eq_(s.error_msg, None)
+        # Should be valid
+        eq_(s.is_valid(), True)
+
+    @override_settings(DEBUG=False)
+    def test_invalid_html(self):
+        """ When DEBUG is False and the HTMl is invalid
+        Then the system Only Output a Message """
+        html = '<p</p>House of fun'
+        s = self.subject(ident='invalid-html-test', html=html)
+        output_file = '%s/invalid-html-test_valid.html'%os.path.realpath('.')
+
+        eq_(s.is_valid(), False)
+        eq_(os.path.exists('%s/invalid-html-test_valid.html'%os.path.realpath('.')), False)
+
+        # We should have a message
+        eq_(s.error_msg is not None, True)
+
+    @override_settings(DEBUG=True)
+    def test_invalid_file_save_debug_is_on(self):
+        """ When DEBUG is True and the HTMl is invalid
+        Then the system should output 2 documents for review """
+        html = '<p</p>House of fun'
+        s = self.subject(ident='invalid-html-test', html=html)
+
+        eq_(s.is_valid(), False)
+
+        # We should have a message
+        eq_(s.error_msg is not None, True)
+
+        output_file = '%s/invalid-html-test_valid.html'%os.path.realpath('.')
+        eq_(os.path.exists(output_file), True)
+        os.remove(output_file)
+
+        output_file = '%s/invalid-html-test_invalid.html'%os.path.realpath('.')
+        eq_(os.path.exists(output_file), True)
+        os.remove(output_file)

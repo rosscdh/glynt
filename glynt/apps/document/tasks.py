@@ -19,10 +19,11 @@ logger = logging.getLogger('django.request')
 
 
 @task()
-def validate_document_html(html):
-    html_validator = HtmlValidatorService(html=html)
+def validate_document_html(ident, html):
+    html_validator = HtmlValidatorService(ident=ident, html=html)
     if not html_validator.is_valid():
-        raise ValidationError('Document Template HTML is invalid: %s, you will find a valid version at: %s' % (html_validator.errors, html_validator.valid_doc_path,) )
+        logger.warning(html_validator.error_msg)
+        raise ValidationError(html_validator.error_msg)
 
 
 @task()

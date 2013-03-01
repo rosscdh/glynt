@@ -1,4 +1,5 @@
-valid_doc_template.html
+*_valid.html
+*_invalid.html
 \.coverage
 test_steps.json
 *.pyc

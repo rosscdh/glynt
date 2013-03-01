@@ -1,21 +1,40 @@
 # -*- coding: utf-8 -*-
 import os
 from django.conf import settings
+from django.utils.encoding import smart_unicode
+
 from tidylib import tidy_document
 
 
 class HtmlValidatorService(object):
-    def __init__(self, html):
+    """ Service used to validate HTML being added to the system 
+    Used primarily with document template additions
+    """
+    def __init__(self, ident, html):
+        self.ident = ident
         self.html = html
         self.errors = None
         self.document = None
         self.valid_doc_path = None
+        self.error_msg = None
 
     def save_valid_doc(self):
-        self.valid_doc_path = os.path.join(settings.SITE_ROOT, 'valid_doc_template.html')
-        valid_doc = open(self.valid_doc_path, 'wb')
-        valid_doc.write(self.document.encode('utf-8'))
-        valid_doc.close()
+        version_location_msg = None
+        self.valid_doc_path = os.path.join(settings.SITE_ROOT, '%s_valid.html' % self.ident)
+        self.invalid_doc_path = os.path.join(settings.SITE_ROOT, '%s_invalid.html' % self.ident)
+
+        self.error_msg = 'Document Template HTML is invalid: %s.' % self.errors
+
+        if settings.DEBUG is True:
+            self.error_msg += 'The Comparison Docs are found at: %s and %s' % (self.valid_doc_path, self.invalid_doc_path,)
+
+            valid_doc = open(self.valid_doc_path, 'wb')
+            valid_doc.write(self.document.encode('utf-8'))
+            valid_doc.close()
+
+            invalid_doc = open(self.invalid_doc_path, 'wb')
+            invalid_doc.write(self.html.encode('utf-8'))
+            invalid_doc.close()
 
     def is_valid(self):
         is_valid = False
