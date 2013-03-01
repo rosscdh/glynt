@@ -4,7 +4,7 @@ import sys
 IS_TESTING = False
 for test_app in ['jenkins','testserver','test']:
     if test_app in sys.argv[1:2]:
-     IS_TESTING = True
+        IS_TESTING = True
 
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__+ '/../'))
 
@@ -213,14 +213,11 @@ HELPER_APPS = (
     'user_streams.backends.user_streams_single_table_backend',
     'django_markup',
     'compressor',
+    'django_jenkins',
 )
 
 # Handle south and its breaking tests
 if IS_TESTING == True:
-    HELPER_APPS = HELPER_APPS + (
-        'django_jenkins',
-    )
-
     # Log email to console
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
     # disable celery for test

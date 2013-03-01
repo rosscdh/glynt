@@ -14,139 +14,138 @@ from django.http import HttpResponse
 
 
 class HttpResponseUnauthorized(HttpResponse):
-  status_code = 401
+    status_code = 401
 
 
 class AjaxableResponseMixin(object):
-  """
-  Mixin to add AJAX support to a form.
-  Must be used with an object-based FormView (e.g. CreateView)
-  """
-  def render_to_json_response(self, context, **response_kwargs):
-      data = json.dumps(context)
-      response_kwargs['content_type'] = 'application/json'
-      return HttpResponse(data, **response_kwargs)
+    """
+    Mixin to add AJAX support to a form.
+    Must be used with an object-based FormView (e.g. CreateView)
+    """
+    def render_to_json_response(self, context, **response_kwargs):
+        data = json.dumps(context)
+        response_kwargs['content_type'] = 'application/json'
+        return HttpResponse(data, **response_kwargs)
 
-  def form_invalid(self, form):
-    if self.request.is_ajax():
-        errors = form.errors['__all__'] if '__all__' in form.errors else form.errors
-        data = {
-            'errors': errors
-        }
-        return self.render_to_json_response(data, status=400)
-    else:
-        return super(AjaxableResponseMixin, self).form_invalid(form)
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            errors = form.errors['__all__'] if '__all__' in form.errors else form.errors
+            data = {
+                'errors': errors
+            }
+            return self.render_to_json_response(data, status=400)
+        else:
+            return super(AjaxableResponseMixin, self).form_invalid(form)
 
-  def form_valid(self, form):
-      """ save the form but also render via ajax if ajax request """
-      form.instance.save()
+    def form_valid(self, form):
+        """ save the form but also render via ajax if ajax request """
+        form.instance.save()
 
-      if self.request.is_ajax():
-          data = {
-              'pk': form.instance.pk,
-              'url': form.instance.get_absolute_url() if hasattr(form.instance, 'get_absolute_url') else None,
-          }
-          return self.render_to_json_response(data)
-      else:
-          return super(AjaxableResponseMixin, self).form_valid(form)
+        if self.request.is_ajax():
+            data = {
+                'pk': form.instance.pk,
+                'url': form.instance.get_absolute_url() if hasattr(form.instance, 'get_absolute_url') else None,
+            }
+            return self.render_to_json_response(data)
+        else:
+            return super(AjaxableResponseMixin, self).form_valid(form)
 
 
 def get_namedtuple_choices(name, choices_tuple):
-  """Factory function for quickly making a namedtuple suitable for use in a
-  Django model as a choices attribute on a field. It will preserve order.
+    """Factory function for quickly making a namedtuple suitable for use in a
+    Django model as a choices attribute on a field. It will preserve order.
 
-  Usage::
+    Usage::
 
-      class MyModel(models.Model):
-          COLORS = get_namedtuple_choices('COLORS', (
-              (0, 'BLACK', 'Black'),
-              (1, 'WHITE', 'White'),
-          ))
-          colors = models.PositiveIntegerField(choices=COLORS)
+        class MyModel(models.Model):
+            COLORS = get_namedtuple_choices('COLORS', (
+                (0, 'BLACK', 'Black'),
+                (1, 'WHITE', 'White'),
+            ))
+            colors = models.PositiveIntegerField(choices=COLORS)
 
-      >>> MyModel.COLORS.BLACK
-      0
-      >>> MyModel.COLORS.get_choices()
-      [(0, 'Black'), (1, 'White')]
+        >>> MyModel.COLORS.BLACK
+        0
+        >>> MyModel.COLORS.get_choices()
+        [(0, 'Black'), (1, 'White')]
 
-      class OtherModel(models.Model):
-          GRADES = get_namedtuple_choices('GRADES', (
-              ('FR', 'FR', 'Freshman'),
-              ('SR', 'SR', 'Senior'),
-          ))
-          grade = models.CharField(max_length=2, choices=GRADES)
+        class OtherModel(models.Model):
+            GRADES = get_namedtuple_choices('GRADES', (
+                ('FR', 'FR', 'Freshman'),
+                ('SR', 'SR', 'Senior'),
+            ))
+            grade = models.CharField(max_length=2, choices=GRADES)
 
-      >>> OtherModel.GRADES.FR
-      'FR'
-      >>> OtherModel.GRADES.get_choices()
-      [('FR', 'Freshman'), ('SR', 'Senior')]
+        >>> OtherModel.GRADES.FR
+        'FR'
+        >>> OtherModel.GRADES.get_choices()
+        [('FR', 'Freshman'), ('SR', 'Senior')]
 
-  """
-  class Choices(namedtuple(name, [name for val,name,desc in choices_tuple])):
-    __slots__ = ()
-    _choices = tuple([desc for val,name,desc in choices_tuple])
+    """
+    class Choices(namedtuple(name, [name for val,name,desc in choices_tuple])):
+        __slots__ = ()
+        _choices = tuple([desc for val,name,desc in choices_tuple])
 
-    def get_choices(self):
-      return zip(tuple(self), self._choices)
+        def get_choices(self):
+            return zip(tuple(self), self._choices)
 
-    def get_values(self):
-      values = []
-      for val,name,desc in choices_tuple:
-        if isinstance(val, type([])):
-          values.extend(val)
-        else:
-          values.append(val)
-      return values
+        def get_values(self):
+            values = []
+            for val,name,desc in choices_tuple:
+                if isinstance(val, type([])):
+                    values.extend(val)
+                else:
+                    values.append(val)
+            return values
 
-    def get_value_by_name(self, input_name):
-      for val,name,desc in choices_tuple:
-        if name == input_name:
-          return val
-      return False
+        def get_value_by_name(self, input_name):
+            for val,name,desc in choices_tuple:
+                if name == input_name:
+                    return val
+            return False
 
-    def is_valid(self, selection):
-      for val,name,desc in choices_tuple:
-        if val == selection or name == selection or desc == selection:
-          return True
-      return False
+        def is_valid(self, selection):
+            for val,name,desc in choices_tuple:
+                if val == selection or name == selection or desc == selection:
+                    return True
+            return False
 
-  return Choices._make([val for val,name,desc in choices_tuple])
+    return Choices._make([val for val,name,desc in choices_tuple])
 
 
 class DictDiffer(object):
-  """
-  Calculate the difference between two dictionaries as:
-  (1) items added
-  (2) items removed
-  (3) keys same in both but changed values
-  (4) keys same in both and unchanged values
-  """
-  def __init__(self, current_dict, past_dict):
-    self.current_dict, self.past_dict = current_dict, past_dict
-    self.set_current, self.set_past = set(current_dict.keys()), set(past_dict.keys())
-    self.intersect = self.set_current.intersection(self.set_past)
-  def added(self):
-    return self.set_current - self.intersect 
-  def removed(self):
-    return self.set_past - self.intersect 
-  def changed(self):
-    return set(o for o in self.intersect if self.past_dict[o] != self.current_dict[o])
-  def unchanged(self):
-    return set(o for o in self.intersect if self.past_dict[o] == self.current_dict[o])
+    """
+    Calculate the difference between two dictionaries as:
+    (1) items added
+    (2) items removed
+    (3) keys same in both but changed values
+    (4) keys same in both and unchanged values
+    """
+    def __init__(self, current_dict, past_dict):
+        self.current_dict, self.past_dict = current_dict, past_dict
+        self.set_current, self.set_past = set(current_dict.keys()), set(past_dict.keys())
+        self.intersect = self.set_current.intersection(self.set_past)
+    def added(self):
+        return self.set_current - self.intersect
+    def removed(self):
+        return self.set_past - self.intersect
+    def changed(self):
+        return set(o for o in self.intersect if self.past_dict[o] != self.current_dict[o])
+    def unchanged(self):
+        return set(o for o in self.intersect if self.past_dict[o] == self.current_dict[o])
 
 
 def user_is_self_or_admin(request, viewed_user):
-  """
-  Decorator to ensure you can only edit your own profile
-  unless you are an admin or mod
-  """
-  if not request.user.is_authenticated():
-    messages.error(request, _('You need to be logged in.'))
-    return HttpResponseRedirect( settings.LOGIN_URL )
+    """
+    Decorator to ensure you can only edit your own profile
+    unless you are an admin or mod
+    """
+    if not request.user.is_authenticated():
+        messages.error(request, _('You need to be logged in.'))
+        return HttpResponseRedirect( settings.LOGIN_URL )
 
-  if request.user != viewed_user and (not request.user.is_staff and not request.user.is_superuser ):
-    messages.error(request, _('You are trying to access someones profile without permission. You are a very norty person.'))
-    return HttpResponseRedirect( settings.LOGIN_URL )
+    if request.user != viewed_user and (not request.user.is_staff and not request.user.is_superuser ):
+        messages.error(request, _('You are trying to access someones profile without permission. You are a very norty person.'))
+        return HttpResponseRedirect( settings.LOGIN_URL )
 
-  return True
-
+    return True
