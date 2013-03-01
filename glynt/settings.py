@@ -19,7 +19,7 @@ ADMINS = (
 
 COMPRESSION_ENABLED = False
 MANAGERS = ADMINS
-CMS_MODERATOR = ()
+CMS_MODERATOR = ADMINS
 
 DATABASES = {
     'default': {
@@ -41,10 +41,10 @@ TIME_ZONE = 'Europe/London'
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
-if not IS_TESTING:
-    SITE_ID = 1
-else:
+if IS_TESTING:
     SITE_ID = 3
+else:
+    SITE_ID = 1
 
 PROJECT_NAME = 'LawPal'
 
@@ -272,9 +272,6 @@ LOGIN_REDIRECT_URL = '/client/'#/accounts/%(username)s/'
 LOGIN_URL = '/client/login/'
 LOGOUT_URL = '/social/logout/'
 
-COMMENTS_XTD_CONFIRM_EMAIL = False
-#COMMENTS_APP = 'django_comments_xtd'
-
 DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d %Y',
 '%b %d, %Y', '%d %b %Y', '%d %b, %Y', '%B %d %Y',
 '%B %d, %Y', '%d %B %Y', '%d %B, %Y')
@@ -374,7 +371,6 @@ BROKER_URL = 'amqp://guest:guest@localhost:5672/'
 HELLOSIGN_AUTH = ("", "")
 
 DOCRAPTOR_KEY = "vIvrCmZtnQTC4p6V0k"
-# old dev key # DOCRAPTOR_KEY = "LsEAKMvtz5hXBVAyfr"
 
 import djcelery
 djcelery.setup_loader()

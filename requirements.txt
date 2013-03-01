@@ -18,6 +18,8 @@ django-templated-email
 PIL
 sh
 
+xhtml2pdf
+
 django-storages
 
 -e git+https://github.com/django-debug-toolbar/django-debug-toolbar.git#egg=django-debug-toolbar
@@ -59,6 +61,7 @@ django_markup
 
 # 3rd party Services
 -e git+https://github.com/jkeyes/python-docraptor.git#egg=python-docraptor
+-e git+https://github.com/rosscdh/HelloSignApi.git#egg=HelloSignApi
 
 # HTML validation
 pytidylib

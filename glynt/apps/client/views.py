@@ -6,6 +6,7 @@ from django.views.generic.detail import BaseDetailView
 from django.http import HttpResponse, Http404
 from django.contrib.auth import authenticate, login
 from django.middleware.csrf import get_token
+from django.core.urlresolvers import reverse
 
 from socialregistration.contrib.facebook_js.models import FacebookProfile
 from userena import signals as userena_signals
@@ -16,7 +17,7 @@ from forms import SignupForm, AuthenticationForm
 
 class SignupView(FormView):
   template_name = 'userena/signup_form.html'
-  success_url = '/'
+  success_url = reverse('client:dashboard')
   form_class = SignupForm
 
   def post(self, request, *args, **kwargs):
@@ -34,7 +35,7 @@ class SignupView(FormView):
 class LoginView(FormView):
   """ Primative login """
   template_name = 'client/login.html'
-  success_url = '/'
+  success_url = reverse('client:dashboard')
   form_class = AuthenticationForm
 
   def post(self, request, *args, **kwargs):
