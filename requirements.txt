@@ -1,5 +1,5 @@
 Django==1.4.5
-django-cms==2.3.5
+django-cms==2.3.4
 
 #psycopg2 # required for production postgres db
 

@@ -19,7 +19,7 @@ ADMINS = (
 
 COMPRESSION_ENABLED = False
 MANAGERS = ADMINS
-CMS_MODERATOR = ADMINS
+CMS_MODERATOR = ()
 
 DATABASES = {
     'default': {
@@ -41,10 +41,7 @@ TIME_ZONE = 'Europe/London'
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
-if IS_TESTING:
-    SITE_ID = 3
-else:
-    SITE_ID = 1
+SITE_ID = 1
 
 PROJECT_NAME = 'LawPal'
 
