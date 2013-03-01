@@ -23,15 +23,15 @@ django-storages
 
 -e git+https://github.com/jezdez/django_compressor.git#egg=django_compressor
 -e git+https://github.com/toastdriven/django-tastypie.git#egg=django-tastypie
--e git+https://github.com/stard0g101/pybars.git#egg=pybars
+-e git+https://github.com/rosscdh/pybars.git#egg=pybars
 
 #-e git+https://github.com/chrisglass/xhtml2pdf.git#egg=xhtml2pdf # not planning on using xhtml2pdf(pisa) too unstable
-#-e git+https://github.com/stard0g101/django-xhtml2pdf.git#egg=django-xhtml2pdf # not planning on using xhtml2pdf(pisa) too unstable
+#-e git+https://github.com/rosscdh/django-xhtml2pdf.git#egg=django-xhtml2pdf # not planning on using xhtml2pdf(pisa) too unstable
 
--e git+https://github.com/stard0g101/django-templatetag-handlebars.git#egg=django-templatetag-handlebars
+-e git+https://github.com/rosscdh/django-templatetag-handlebars.git#egg=django-templatetag-handlebars
 -e git+https://github.com/klen/django_markdown.git#egg=django_markdown
 
--e git+https://github.com/stard0g101/django-socialregistration.git@linkedin#egg=django-socialregistration
+-e git+https://github.com/rosscdh/django-socialregistration.git@linkedin#egg=django-socialregistration
 facebook
 
 -e git+https://github.com/Julian/jsonschema.git#egg=jsonschema
@@ -40,12 +40,12 @@ facebook
 -e git+https://github.com/bread-and-pepper/django-userena.git#egg=django-userena
 -e git+https://github.com/callowayproject/django-categories.git#egg=django-categories
 -e git+https://github.com/bradjasper/django-jsonfield.git#egg=django-jsonfield
--e git+https://github.com/stard0g101/django-countries.git#egg=django-countries
--e git+https://github.com/stard0g101/django-bootstrap.git#egg=bootstrap
+-e git+https://github.com/rosscdh/django-countries.git#egg=django-countries
+-e git+https://github.com/rosscdh/django-bootstrap.git#egg=bootstrap
 -e git+https://github.com/brack3t/django-braces.git#egg=django-braces
--e git+https://github.com/stard0g101/python-signpad2image.git#egg=python-signpad2image
+-e git+https://github.com/rosscdh/python-signpad2image.git#egg=python-signpad2image
 -e git+https://github.com/lincolnloop/python-qrcode.git#egg=python-qrcode
--e git+https://github.com/stard0g101/django-user-streams.git@extended_templates#egg=django-user-streams
+-e git+https://github.com/rosscdh/django-user-streams.git@extended_templates#egg=django-user-streams
 django_markup
 
 # Javascript Markdown
