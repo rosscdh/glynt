@@ -61,13 +61,6 @@ class DocumentTemplate(models.Model):
     def is_v1_doc(self):
         return True if self.flyform is not None else False
 
-    @property
-    def category(self):
-        try:
-            return self.doc_cats.all()[0]
-        except:
-            return None
-
     def default_data_as_json(self):
         return json.dumps({})
 
