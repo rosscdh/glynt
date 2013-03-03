@@ -101,7 +101,7 @@ class DashboardView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
 
-        context['public_document_list'] = DocumentTemplate.public_objects.all()
+        context['public_document_list'] = DocumentTemplate.public_objects.select_related('doc_cats__all').all()
         context['my_document_list'] = ClientCreatedDocument.active_objects.filter(owner=self.request.user)
 
         context['csrf_raw_token'] = get_token(self.request)

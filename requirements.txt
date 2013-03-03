@@ -40,7 +40,6 @@ facebook
 -e git+https://github.com/alex/django-taggit.git#egg=django-taggit
 
 -e git+https://github.com/bread-and-pepper/django-userena.git#egg=django-userena
--e git+https://github.com/callowayproject/django-categories.git#egg=django-categories
 -e git+https://github.com/bradjasper/django-jsonfield.git#egg=django-jsonfield
 -e git+https://github.com/rosscdh/django-countries.git#egg=django-countries
 -e git+https://github.com/rosscdh/django-bootstrap.git#egg=bootstrap

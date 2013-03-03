@@ -104,9 +104,11 @@
                     <li>
                         <a class="template-document" href="{% url 'doc:create_document' slug=d.slug %}">{{ d.name }}</a>
                         {{ d.summary }}
-                        {{ d.last_modified }}
                         {{ d.color }}
-						
+                        {{ d.created_at }}
+                        {{ d.last_modified }}
+                        {{ d.category.name }}
+                        {{ d.category.color }}
                         {% if user.is_staff %}
                         &nbsp;<a class="admin author_edit-document" href="{% url 'doc:update_template' pk=d.pk %}">edit</a>
                         {% endif %}

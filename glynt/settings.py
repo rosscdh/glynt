@@ -194,8 +194,6 @@ HELPER_APPS = (
     'django_extensions',
     'templatetag_handlebars',
     'django_markdown',
-    'categories',
-    'categories.editor',
     'socialregistration',
     'socialregistration.contrib.facebook_js',
     'djcelery',
