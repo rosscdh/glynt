@@ -8,7 +8,7 @@
 {% block content %}
 
 {% include 'client/partials/signin_providers.html' %}
-
+<p class="forgotten">Already have an account but forgot your password? <a href="{% url 'userena_password_reset' %}"> {% trans "Reset it" %}</a></p>
 <form id="user-signup" class="form-horizontal" action="{% url 'client:signup' %}" method="post">{% csrf_token %}
   {{ form }}
   <br/>
