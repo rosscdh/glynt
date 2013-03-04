@@ -1,0 +1,14 @@
+{% for signature in object_list %}
+{% if has_signed %}
+    <img src="{{ signature_url }}" alt="" title="" border="0"/>
+    {{ name }}
+    {{ email }}
+    {{ date_signed }}
+    {{ ip_address }}
+{% else %}
+    Pending Signature
+    {{ name }}
+    {{ email }}
+    Invited on {{ date_invited }}
+{% endif %}
+{% endfor %}
