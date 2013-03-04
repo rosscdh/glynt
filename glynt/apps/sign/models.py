@@ -50,7 +50,7 @@ class DocumentSignature(models.Model):
         return u'%s' % self.meta_data.get('to_name', None),
 
     def signee_email(self):
-        return u'%s' % self.meta_data.get['to_email', None),
+        return u'%s' % self.meta_data.get('to_email', None),
 
     def signee_ip_address(self):
         return u'%s' % self.meta_data.get('signee_ip', None)
