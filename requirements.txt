@@ -1,5 +1,5 @@
 Django==1.4.5
-django-cms==2.3.5
+django-cms==2.3.4
 
 #psycopg2 # required for production postgres db
 
@@ -18,6 +18,8 @@ django-templated-email
 PIL
 sh
 
+xhtml2pdf
+
 django-storages
 
 -e git+https://github.com/django-debug-toolbar/django-debug-toolbar.git#egg=django-debug-toolbar
@@ -35,11 +37,9 @@ django-storages
 -e git+https://github.com/rosscdh/django-socialregistration.git@linkedin#egg=django-socialregistration
 facebook
 
--e git+https://github.com/Julian/jsonschema.git#egg=jsonschema
 -e git+https://github.com/alex/django-taggit.git#egg=django-taggit
 
 -e git+https://github.com/bread-and-pepper/django-userena.git#egg=django-userena
--e git+https://github.com/callowayproject/django-categories.git#egg=django-categories
 -e git+https://github.com/bradjasper/django-jsonfield.git#egg=django-jsonfield
 -e git+https://github.com/rosscdh/django-countries.git#egg=django-countries
 -e git+https://github.com/rosscdh/django-bootstrap.git#egg=bootstrap
@@ -59,6 +59,7 @@ django_markup
 
 # 3rd party Services
 -e git+https://github.com/jkeyes/python-docraptor.git#egg=python-docraptor
+-e git+https://github.com/rosscdh/HelloSignApi.git#egg=HelloSignApi
 
 # HTML validation
 pytidylib

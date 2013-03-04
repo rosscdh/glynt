@@ -42,7 +42,7 @@ class DocumentTemplate(models.Model):
     is_public = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
-    doc_cats = models.ManyToManyField('DocumentTemplateCategory')
+    doc_category = models.ForeignKey('DocumentTemplateCategory', blank=True, null=True)
 
     objects = DocumentTemplateManager()
     public_objects = PublicDocumentTemplateManager()
@@ -57,7 +57,6 @@ class DocumentTemplate(models.Model):
     def get_absolute_url(self):
         return reverse('doc:update_template', kwargs={'pk': self.pk})
 
-    
     @property
     def is_v1_doc(self):
         return True if self.flyform is not None else False
@@ -66,14 +65,19 @@ class DocumentTemplate(models.Model):
         return json.dumps({})
 
 
-class DocumentTemplateCategory(CategoryBase):
+class DocumentTemplateCategory(models.Model):
     """
     Basic Categories for document Model
     """
+    name =  models.CharField(max_length=24)
+    slug = models.SlugField(unique=True, max_length=32)
     color = models.CharField(max_length=24, null=True)
 
     class Meta:
       verbose_name_plural = 'Document Categories'
+
+    def __unicode__(self):
+        return u'%s' % self.name
 
 
 class ClientCreatedDocument(models.Model):

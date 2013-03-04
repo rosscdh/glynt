@@ -10,6 +10,10 @@
         <p>
             {{ template.summary }}
         </p>
+        {{ template.created_at }}
+        {{ template.last_modified }}
+        {{ template.doc_category.name }}
+        {{ template.doc_category.color }}
     </div>
     <div class="">{{ template.description }}</div>
     {% endfor %}

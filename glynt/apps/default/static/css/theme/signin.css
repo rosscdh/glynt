@@ -3,12 +3,12 @@
 #box_login .box_wrapper{
 	margin-left: 0;
 }
-#box_login .box_wrapper p.already{
+p.already, p.forgotten{
 	text-align: center;
 	font-style: 15px;
 	color: #454B52;
 }
-#box_login .box_wrapper p.already a{
+p.already a,p.forgotten a{
 	color: #454B52;
 	margin-left: 3px;
 	text-decoration: underline;

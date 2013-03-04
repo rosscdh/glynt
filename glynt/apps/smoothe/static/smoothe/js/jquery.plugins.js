@@ -261,11 +261,11 @@
             var self = this;
             var element_pos = self.$selector.position();
             var element_width = self.$selector.width();
-            var doc_pos = $('#document').position();
+            var sidebar = $('div#sidebar');
+            
             return {
-                //'left': doc_pos.left + $('#document').width()*1.15,
-                'left': element_pos.left + element_width
-                ,'top': element_pos.top
+                left: sidebar.position().left
+                ,top: element_pos.top
             }
         }
         , show: function () {
@@ -274,7 +274,7 @@
             var icon = $('<i/>', {class:'icon-info-sign icon-align-left'});
             var info = $('<div/>', {class:'info-text'}).append('&nbsp;' + self.options.item.help_text)
 
-            self.$target.css({'left': pos.left + 'px', 'top': pos.top + 'px'});
+            self.$target.css({'left': pos.left + 'px', 'top': pos.top + 'px', 'width': '210px'});
             info.prepend(icon);
             self.$target.html(info);
             self.$target.css('display', 'block');
