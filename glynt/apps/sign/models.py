@@ -11,7 +11,7 @@ from signpad2image.signpad2image import s2ib
 
 class DocumentSignature(models.Model):
     """ Model to store a users signature of a document
-    signatures are stored as JSON value 
+    signatures are stored as JSON value
     http://thomasjbradley.ca/lab/signature-pad/#database
     """
     document = models.ForeignKey(ClientCreatedDocument)
@@ -28,7 +28,7 @@ class DocumentSignature(models.Model):
         ordering = ['-date_invited', '-date_signed']
 
     def __unicode__(self):
-      return u'%s' % (self.key_hash,)
+        return u'%s' % (self.key_hash,)
 
     def get_absolute_url(self):
         return reverse('sign:default', kwargs={'pk': self.document.pk, 'hash': self.key_hash})
@@ -38,7 +38,7 @@ class DocumentSignature(models.Model):
         return reverse('sign:signature_pic', kwargs={'pk': self.document.pk, 'hash': self.key_hash})
 
     def signature_as_string(self):
-      return json.dumps(self.signature)
+        return json.dumps(self.signature)
 
     def signature_as_image(self):
         try:
@@ -46,11 +46,17 @@ class DocumentSignature(models.Model):
         except:
             return s2ib(False, wh=(198,120), pincolor=(0,0,0))
 
+    @property
     def signee_name(self):
-      return u'%s' % (self.meta_data['to_name'],)
+        return u'%s' % self.meta_data.get('to_name', None)
 
+    @property
     def signee_email(self):
-      return u'%s' % (self.meta_data['to_email'],)
+        return u'%s' % self.meta_data.get('to_email', None)
+
+    @property
+    def signee_ip_address(self):
+        return u'%s' % self.meta_data.get('signee_ip', None)
 
 
 # import signals, must be at end of file

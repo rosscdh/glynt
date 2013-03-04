@@ -9,6 +9,8 @@ from templated_email import send_templated_mail
 from celery.task import task
 
 import user_streams
+import logging
+logger = logging.getLogger('django.request')
 
 
 @task()
@@ -30,7 +32,9 @@ def send_signature_invite_email(**kwargs):
   kwargs['document_name'] = document.name
 
   kwargs['sign_url'] = reverse('sign:default', kwargs={'hash': key_hash, 'pk': document.pk})
-  
+
+  logger.debug('Sending invite email url: %s'%kwargs['sign_url'])
+
   send_templated_mail(
           template_name = 'invite_to_sign',
           template_prefix="sign/email/",
@@ -60,6 +64,8 @@ def send_signature_acquired_email(**kwargs):
   kwargs['document_name'] = document.name
 
   kwargs['review_signatures_url'] = reverse('sign:default', kwargs={'pk': document.pk, 'hash': key_hash})
+
+  logger.debug('Sending acquired signature email url: %s'%kwargs['review_signatures_url'])
 
   send_templated_mail(
           template_name = 'signature_acquired',

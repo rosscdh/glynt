@@ -53,6 +53,9 @@ class HtmlValidatorService(object):
 class BaseDocumentService(object):
     def __init__(self, document, **kwargs):
         self.document = document
+        #@TODO fix this; meta_data should default to being {} and not have to be set
+        if self.document.meta_data is None:
+            self.document.meta_data = {}
 
     def get_meta(self):
         return self.document.meta.copy()

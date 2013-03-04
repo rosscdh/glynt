@@ -12,12 +12,11 @@ from jsonfield import JSONField
 from glynt.apps.utils import get_namedtuple_choices
 from glynt.apps.document.managers import DocumentTemplateManager, PublicDocumentTemplateManager, PrivateDocumentTemplateManager
 from glynt.apps.document.managers import ClientCreatedDocumentManager, PublicClientCreatedDocumentManager, DeletedClientCreatedDocumentManager
+from glynt.apps.sign.services import SignaturePageService
 
 from glynt.apps.smoothe.pybars_smoothe import Smoothe
 
 import qrcode
-#import markdown
-
 
 import logging
 logger = logging.getLogger('django.request')
@@ -88,8 +87,8 @@ class ClientCreatedDocument(models.Model):
     name = models.CharField(max_length=128, blank=True, null=True)
     slug = models.SlugField(unique=False, blank=False, null=True, max_length=255)
     body = models.TextField(blank=True, null=True)
-    doc_data = JSONField(blank=True, null=True, db_column='data')
-    meta_data = JSONField(blank=True, null=True, default={}) # Stores data on num_signatures vs total signatures
+    doc_data = JSONField(blank=True, db_column='data')
+    meta_data = JSONField(blank=True, default={}) # Stores data on num_signatures vs total signatures
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
     is_deleted = models.BooleanField(default=False)
@@ -186,7 +185,14 @@ class DocumentHTML(models.Model):
         logger.info('DocumentHTML render: %s'%(self.pk,))
         #html = markdown.markdown(smart_unicode(self.html)) if self.html else None
         html = smart_unicode(self.html) if self.html else None
-        smoothe = Smoothe(source_html=html)
+
+        signature = SignaturePageService(document=self.document)
+        signature_html = signature.render()
+
+        # Merge the document and the signature html
+        document_html = html + '<p>&nbsp;</p>' + signature_html
+
+        smoothe = Smoothe(source_html=document_html)
 
         return smoothe.render(self.document.doc_data)
 

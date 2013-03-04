@@ -19,7 +19,7 @@ from glynt.apps.document import tasks
 
 from glynt.apps.document.views.document import DocumentView
 from glynt.apps.document.views.utils import user_can_view_document, userdoc_from_request, FORM_GROUPS
-
+from glynt.apps.sign.services import SignaturePageService
 
 import logging
 logger = logging.getLogger(__name__)
@@ -64,7 +64,11 @@ class ReviewClientCreatedView(MyDocumentView):
     template_name = 'document/review.html'
     def get_context_data(self, **kwargs):
         context = super(ReviewClientCreatedView, self).get_context_data(**kwargs)
+
+        signature_preview = SignaturePageService(document=self.user_document)
+
         context['document_html'] = self.user_document.documenthtml_set.all()[0].render()
+        context['signature'] = signature_preview.render()
         context['next'] = reverse('document:my_review', kwargs={'slug':self.user_document.slug})
         return context
 
