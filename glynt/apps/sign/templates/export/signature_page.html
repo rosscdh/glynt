@@ -1,6 +1,6 @@
 <ul class="unstyled">
-{% for signature in object_list %}
 <li class="span3">
+{% for signature in object_list %}
     {% if signature.has_signed %}
         {% if signature.signature_pic_url %}
         <img src="{{ signature.signature_pic_url }}" alt="" title="" border="0"/><br/>
