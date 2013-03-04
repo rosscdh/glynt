@@ -1,25 +1,24 @@
 # -*- coding: utf-8 -*-
 import os
 from django.conf import settings
-from glynt.apps.export.utils import fetch_resources as link_callback
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.core.files.storage import default_storage
-
-from xhtml2pdf import pisa
-import StringIO
-import sh
-
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
-
 from django.utils.encoding import smart_unicode as smart_text # preparing for 1.5
+
+from glynt.apps.export.utils import fetch_resources as link_callback
+
+import docraptor
+DOCRAPTOR_KEY = getattr(settings, 'DOCRAPTOR_KEY', None)
 
 from hellosign import HelloSign, HelloSignSignature
 from hellosign import HelloSigner, HelloDoc
 
-import docraptor
-DOCRAPTOR_KEY = getattr(settings, 'DOCRAPTOR_KEY', None)
+from xhtml2pdf import pisa
+import StringIO
+import sh
 
 import datetime
 import hashlib

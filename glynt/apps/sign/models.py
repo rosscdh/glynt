@@ -46,12 +46,15 @@ class DocumentSignature(models.Model):
         except:
             return s2ib(False, wh=(198,120), pincolor=(0,0,0))
 
+    @property
     def signee_name(self):
-        return u'%s' % self.meta_data.get('to_name', None),
+        return u'%s' % self.meta_data.get('to_name', None)
 
+    @property
     def signee_email(self):
-        return u'%s' % self.meta_data.get('to_email', None),
+        return u'%s' % self.meta_data.get('to_email', None)
 
+    @property
     def signee_ip_address(self):
         return u'%s' % self.meta_data.get('signee_ip', None)
 

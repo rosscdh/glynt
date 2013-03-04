@@ -45,4 +45,6 @@ LOGGING = {
     }
 }
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 HELLOSIGN_AUTH = ("sendrossemail@gmail.com", "zanshin77")

@@ -32,9 +32,9 @@
 
 {% block document %}
 <div id="review" class="span9 view default">
-  <div class="doc-body">
-      <span id="document-md">{% show_loading modal='False' %}</span>
-  </div>
+    <div class="doc-body">
+        <span id="document-md">{{ document_html|default:""|safe }}</span>
+    </div>
 </div>
 
 <div id="details" class="span9 view hide">
@@ -103,9 +103,6 @@
 
 
 {% block js %}
-<script id="document-data" type="text/javascript">[{{ document_data|default:''|safe }}]</script>
-<script id="js-document" type="text/x-handlebars-template">{{ userdoc.body|default:userdoc.source_document.body|safe }}</script>
-<script type="text/javascript" src="{{ STATIC_URL }}knockoutjs/js/knockout-2.1.0.js"></script>
 <script>
 var app = $.sammy(function() {
     var self = this;
@@ -161,38 +158,6 @@ app.run('#/');
 // use strict;
 // use warnings;
 $(document).ready(function(){
-    /**
-    * Primary view acts as a holder for the other views
-    */
-    function PageDocumentController() {
-        var self = this;
-
-        self.markdownConverter = new Markdown.Converter();
-        self.targetDocumentId = 'span#document-md';
-        self.compiledTemplate = Handlebars.compile($('#js-document').html()); // must not be ko.observable
-
-        self.render = function render() {
-            var data = $.parseJSON($('script#document-data').html());
-            data = data[0];
-            $(self.targetDocumentId).html(self.compiledTemplate(data));
-        }
-
-        self.renderMarkdown = function renderMarkdown(md) {
-          return self.markdownConverter.makeHtml(md);
-        }
-
-
-        self.init = function init() {
-          self.render();
-        };
-
-        self.init();
-    }
-
-    // ----- KO Instance -----
-    App = new PageDocumentController();
-    // ----- KO Bindings -----
-    ko.applyBindings(App);
 
     {% if object.is_signed %}
       sig = $('#signature-json').html();

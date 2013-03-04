@@ -1,14 +1,21 @@
+<ul class="unstyled">
 {% for signature in object_list %}
-{% if has_signed %}
-    <img src="{{ signature_url }}" alt="" title="" border="0"/>
-    {{ name }}
-    {{ email }}
-    {{ date_signed }}
-    {{ ip_address }}
-{% else %}
-    Pending Signature
-    {{ name }}
-    {{ email }}
-    Invited on {{ date_invited }}
-{% endif %}
+<li class="span3">
+    {% if signature.has_signed %}
+        {% if signature.signature_pic_url %}
+        <img src="{{ signature.signature_pic_url }}" alt="" title="" border="0"/><br/>
+        {% endif %}
+        <b>{{ signature.name }}</b>, {{ signature.email }}<br/>
+        Signed on: {{ signature.date_signed }}<br/>
+        Ip Address: {{ signature.ip_address }}
+    {% else %}
+        <b>Pending Signature</b><br/>
+        <b>{{ signature.name }}</b>, {{ signature.email }}<br/>
+        Invited on {{ signature.date_invited }}
+        {{signature_url}}
+    {% endif %}
+{% empty %}
+    <b>No-one has signed yet.</b>
 {% endfor %}
+</li>
+</ul>
