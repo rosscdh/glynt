@@ -3,6 +3,8 @@ import os
 from django.utils.encoding import smart_unicode
 from django.template.loader import render_to_string
 
+import datetime
+
 
 class SignaturePageService(object):
     """ Service used to generate a signature page 
@@ -29,8 +31,9 @@ class SignaturePageService(object):
     def get_context(self):
         return {
             'object_list': self.get_objects()
+            ,'current_date': datetime.datetime.utcnow()
         }
 
     def render(self):
-        render_to_string(self.template, context)
+        return render_to_string(self.template, context)
         

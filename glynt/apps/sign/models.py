@@ -47,13 +47,13 @@ class DocumentSignature(models.Model):
             return s2ib(False, wh=(198,120), pincolor=(0,0,0))
 
     def signee_name(self):
-        return u'%s' % (self.meta_data['to_name'],)
+        return u'%s' % self.meta_data.get('to_name', None),
 
     def signee_email(self):
-        return u'%s' % (self.meta_data['to_email'],)
+        return u'%s' % self.meta_data.get['to_email', None),
 
     def signee_ip_address(self):
-        return u'%s' % (self.meta_data['ip_address'],)
+        return u'%s' % self.meta_data.get('signee_ip', None)
 
 
 # import signals, must be at end of file
