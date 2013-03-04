@@ -60,43 +60,42 @@ class ClientProfile(UserenaBaseProfile):
 
 @receiver(connect)
 def create_client_profile(sender, **kwargs):
-  user = kwargs['user']
-  profile, is_new = ClientProfile.objects.get_or_create(user=user)
-  # @TODO turn this process into a signal so it can be called for other signup types
-  if is_new:
+    user = kwargs['user']
+    profile, is_new = ClientProfile.objects.get_or_create(user=user)
+    # @TODO turn this process into a signal so it can be called for other signup types
+    if is_new:
     # Give permissions to view and change profile
-    for perm, name in ASSIGNED_PERMISSIONS['profile']:
-        assign(perm, user, profile)
+        for perm, name in ASSIGNED_PERMISSIONS['profile']:
+            assign(perm, user, profile)
 
-    # Give permissions to view and change itself
-    for perm, name in ASSIGNED_PERMISSIONS['user']:
-        assign(perm, user, user)
+        # Give permissions to view and change itself
+        for perm, name in ASSIGNED_PERMISSIONS['user']:
+            assign(perm, user, user)
 
-    # Send the signup complete signal
-    userena_signals.signup_complete.send(sender=None, user=user)
+        # Send the signup complete signal
+        userena_signals.signup_complete.send(sender=None, user=user)
 
 
 @receiver(login)
 @receiver(connect)
 def populate_profile_data(sender, **kwargs):
-  user = kwargs['user']
-  profile, is_new = ClientProfile.objects.get_or_create(user=user)
+    user = kwargs['user']
+    profile, is_new = ClientProfile.objects.get_or_create(user=user)
 
-  if 'profile_data' in kwargs:
-    profile.profile_data = kwargs['profile_data']
+    if 'profile_data' in kwargs:
+        profile.profile_data = kwargs['profile_data']
 
-    # Handle facebook profile_photo
-    if 'profile_photo' in profile.profile_data:
+        # Handle facebook profile_photo
+        if 'profile_photo' in profile.profile_data:
 
-      # @TODO on save to thumbnail image; write a task that
-      # processes remote urls and downloads them locally
-      validate = URLValidator(verify_exists=True)
+            # @TODO on save to thumbnail image; write a task that
+            # processes remote urls and downloads them locally
+            validate = URLValidator(verify_exists=True)
 
-      try:
-        validate(profile.profile_data['profile_photo'])
-        profile.mugshot = profile.profile_data['profile_photo']
-      except ValidationError:
-        pass
+            try:
+                validate(profile.profile_data['profile_photo'])
+                profile.mugshot = profile.profile_data['profile_photo']
+            except ValidationError:
+                pass
 
-  profile.save()
-
+    profile.save()
