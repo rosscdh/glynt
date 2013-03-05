@@ -66,7 +66,7 @@ class HasLocalFacebookAccountView(BaseDetailView):
     template_name = 'client/partials/blank.html'
 
     def get_queryset(self):
-        return FacebookProfile.objects.all()
+        return FacebookProfile.objects
 
     def get_object(self, queryset=None):
         """
@@ -74,15 +74,16 @@ class HasLocalFacebookAccountView(BaseDetailView):
         By default this requires `self.queryset` and a `pk` or `slug` argument
         in the URLconf, but subclasses can override this to return any object.
         """
-        # Use a custom queryset if provided; this is required for subclasses
-        # like DateDetailView
-        if queryset is None:
-            queryset = self.get_queryset()
         # Next, try looking up by primary key.
         uid = self.request.GET.get('uid', None)
 
         if uid is None:
             raise Http404("Facebook uid does not exist")
+
+        # Use a custom queryset if provided; this is required for subclasses
+        # like DateDetailView
+        if queryset is None:
+            queryset = self.get_queryset()
 
         try:
             obj = queryset.get(uid=uid)

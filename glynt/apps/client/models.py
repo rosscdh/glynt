@@ -59,7 +59,7 @@ class ClientProfile(UserenaBaseProfile):
 
 
 @receiver(connect)
-def create_client_profile(sender, **kwargs):
+def create_client_profile(sender, dispatch_uid='client.create_client_profile', **kwargs):
     user = kwargs['user']
     profile, is_new = ClientProfile.objects.get_or_create(user=user)
     # @TODO turn this process into a signal so it can be called for other signup types
@@ -78,7 +78,7 @@ def create_client_profile(sender, **kwargs):
 
 @receiver(login)
 @receiver(connect)
-def populate_profile_data(sender, **kwargs):
+def populate_profile_data(sender, dispatch_uid='client.populate_profile_data', **kwargs):
     user = kwargs['user']
     profile, is_new = ClientProfile.objects.get_or_create(user=user)
 
