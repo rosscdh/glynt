@@ -32,7 +32,7 @@ class DocumentTemplate(models.Model):
     ))
     owner = models.ForeignKey(User)
     name = models.CharField(max_length=128, blank=False)
-    slug = models.SlugField(blank=False, max_length=255)
+    slug = models.SlugField(db_index=True, blank=False, max_length=255)
     acronym = models.CharField(max_length=64, blank=True)
     summary = models.CharField(max_length=255, blank=True)
     description = models.TextField(blank=True)
@@ -68,8 +68,8 @@ class DocumentTemplateCategory(models.Model):
     """
     Basic Categories for document Model
     """
-    name =  models.CharField(max_length=24)
-    slug = models.SlugField(unique=True, max_length=32)
+    name =  models.CharField(max_length=128)
+    slug = models.SlugField(db_index=True, unique=True, max_length=128)
     color = models.CharField(max_length=24, null=True)
 
     class Meta:
@@ -85,10 +85,9 @@ class ClientCreatedDocument(models.Model):
     owner = models.ForeignKey(User)
     source_document = models.ForeignKey(DocumentTemplate)
     name = models.CharField(max_length=128, blank=True, null=True)
-    slug = models.SlugField(unique=False, blank=False, null=True, max_length=255)
     body = models.TextField(blank=True, null=True)
     doc_data = JSONField(blank=True, db_column='data')
-    meta_data = JSONField(blank=True, default={}) # Stores data on num_signatures vs total signatures
+    meta_data = JSONField(blank=True, default='{}') # Stores data on num_signatures vs total signatures
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True, auto_now_add=True)
     is_deleted = models.BooleanField(default=False)
@@ -98,7 +97,6 @@ class ClientCreatedDocument(models.Model):
     deleted_objects = DeletedClientCreatedDocumentManager()
 
     class Meta:
-      unique_together = ('slug', 'owner',)
       ordering = ['-created_at', 'name']
 
     def __unicode__(self):
