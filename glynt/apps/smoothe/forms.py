@@ -16,7 +16,7 @@ class DocumentTemplateForm(BootstrapModelForm):
         exclude = ('slug',)
         layout = (
             Fieldset('Document Authoring', 'body'),
-            Fieldset('Document Properties', 'name', 'owner', 'acronym', 'summary', 'description', 'doc_status', 'is_public', 'doc_cats'),
+            Fieldset('Document Properties', 'name', 'owner', 'acronym', 'summary', 'description', 'doc_status', 'is_public', 'doc_category'),
         )
 
     def save(self, commit=True):
