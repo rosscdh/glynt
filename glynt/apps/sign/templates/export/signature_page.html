@@ -1,6 +1,6 @@
 <ul class="unstyled">
-<li class="span3">
 {% for signature in object_list %}
+<li class="span3">
     {% if signature.has_signed %}
         {% if signature.signature_pic %}
         <img src="{{ signature.signature_pic }}" alt="{{ signature.name }}" title="{{ signature.name }}" border="0"/><br/>
@@ -14,8 +14,10 @@
         Invited on {{ signature.date_invited }}
         {{signature_url}}
     {% endif %}
-{% empty %}
-    <b>No-one has signed yet.</b>
-{% endfor %}
 </li>
+{% empty %}
+<li class="span3">
+    <b>No-one has signed yet.</b>
+</li>
+{% endfor %}
 </ul>
