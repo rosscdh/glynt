@@ -126,7 +126,7 @@ class ClientCreatedDocument(models.Model):
         return reverse('doc:update_document', kwargs={'pk': self.pk})
 
     def get_review_url(self):
-        return reverse('document:my_review', kwargs={'slug': self.slug})
+        return reverse('document:my_review', kwargs={'pk': self.pk})
 
     def qr_code_image(self):
         site = Site.objects.get_current()

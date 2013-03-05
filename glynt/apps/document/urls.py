@@ -15,8 +15,8 @@ urlpatterns = patterns('',
     url(r'^my/(?P<pk>\d+)/undelete/$', login_required(UndoDeleteClientCreatedDocumentView.as_view()), name='my_undelete'),
     url(r'^my/(?P<pk>\d+)/clone/$', login_required(CloneClientCreatedDocumentView.as_view()), name='my_clone'),
     url(r'^my/(?P<pk>\d+)/persist/$', login_required(PersistClientCreatedDocumentProgressView.as_view()), name='my_persist'),
-    url(r'^my/(?P<slug>.+)/review/$', login_required(ReviewClientCreatedView.as_view()), name='my_review'),
-    url(r'^my/(?P<slug>.+)/$', login_required(MyDocumentView.as_view(template_name='document/document.html')), name='my_view'),
+    url(r'^my/(?P<pk>\d+)/review/$', login_required(ReviewClientCreatedView.as_view()), name='my_review'),
+    url(r'^my/(?P<pk>\d+)/$', login_required(MyDocumentView.as_view(template_name='document/document.html')), name='my_view'),
 
     # QR code image
     url(r'^qr/(?P<pk>.+)/view/$', login_required(DocumentQRCode.as_view()), name='qr_code'),

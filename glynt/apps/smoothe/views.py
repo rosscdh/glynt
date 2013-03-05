@@ -57,7 +57,7 @@ class CreateDocumentView(AjaxableResponseMixin, CreateView):
 
     def get_form_kwargs(self):
         kwargs = super(CreateDocumentView, self).get_form_kwargs()
-        self.document_template = get_object_or_404(DocumentTemplate, slug=self.kwargs['slug'])
+        self.document_template = get_object_or_404(DocumentTemplate, pk=self.kwargs['pk'])
 
         kwargs.update({
          'request': self.request,
@@ -70,7 +70,7 @@ class CreateDocumentView(AjaxableResponseMixin, CreateView):
         context = super(CreateDocumentView, self).get_context_data(**kwargs)
 
         context['csrf_raw_token'] = get_token(self.request)
-        context['submit_url'] = reverse('doc:create_document', kwargs={'slug': self.document_template.slug})
+        context['submit_url'] = reverse('doc:create_document', kwargs={'pk': self.document_template.pk})
         context['document_template'] = self.document_template
 
         return context

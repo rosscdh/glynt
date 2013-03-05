@@ -39,7 +39,7 @@ class PublicClientCreatedDocumentManager(ClientCreatedDocumentManager):
     pass
 
 
-class DeletedClientCreatedDocumentManager(ClientCreatedDocumentManager):
+class DeletedClientCreatedDocumentManager(models.Manager):
     """ Manager for clientdocuments that are deleted """
     def get_query_set(self):
         return super(DeletedClientCreatedDocumentManager, self).get_query_set().filter(is_deleted=True)

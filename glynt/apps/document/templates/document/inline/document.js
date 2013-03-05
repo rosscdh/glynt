@@ -1034,7 +1034,7 @@ $(document).ready(function(){
 
         {% if userdoc %}
         self.generatePDF = function generatePDF() {
-            var url = "{% url 'export:as_pdf' slug=userdoc.slug %}";
+            var url = "{% url 'export:as_pdf' pk=userdoc.pk %}";
             document.location = url;
         }
         {% endif %}
@@ -1057,7 +1057,7 @@ $(document).ready(function(){
 
             $.ajax({
               type: 'POST',
-              url: "{% url 'document:validate_form' slug=object.slug %}",
+              url: "{% url 'document:validate_form' pk=object.pk %}",
               data: data,
             })
             .success(function(data, textStatus, jqXHR) {

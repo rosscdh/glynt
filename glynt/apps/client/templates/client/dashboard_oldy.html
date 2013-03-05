@@ -32,7 +32,7 @@
 	          {% for d in my_document_list %}
 	          <tr>
 	              <td class="document-title">
-	                <a href="{% url 'document:my_review' slug=d.slug %}" rel="tooltip" title="{% trans 'Created by' %} {{ d.owner.get_profile.short_name|default:d.owner.username }}" class="doc-title">{{ d.name }}</a>
+	                <a href="{% url 'document:my_review' pk=d.pk %}" rel="tooltip" title="{% trans 'Created by' %} {{ d.owner.get_profile.short_name|default:d.owner.username }}" class="doc-title">{{ d.name }}</a>
 	                <br/><span class="created">{% trans 'Created' %} {% moment d.created_at d.created_at %}</span>
 	              </td>
 	              <td class="document-status">
@@ -41,9 +41,9 @@
 	                <div class="btn-group pull-right">
 	                  <button class="btn dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></i> <span class="caret"></span></button>
 	                  <ul class="dropdown-menu">
-	                    <li><a id="edit-{{ d.pk }}" class="small" href="{% url 'document:my_view' slug=d.slug %}">{% trans 'Edit' %}</a></li>
+	                    <li><a id="edit-{{ d.pk }}" class="small" href="{% url 'document:my_view' pk=d.pk %}">{% trans 'Edit' %}</a></li>
 	                    <li><a id="clone-{{ d.pk }}" href="#clone" data-url="{% url 'document:my_clone' pk=d.pk %}" data-pk="{{ d.pk }}" class="clone-my-document">{% trans 'Clone' %}</a></li>
-	                    <li><a id="export-{{ d.pk }}" href="{% url 'export:as_pdf' slug=d.slug %}" target="_BLANK" data-url="{% url 'export:as_pdf' slug=d.slug %}" data-pk="{{ d.pk }}" class="">{% trans 'Download PDF' %}</a></li>
+	                    <li><a id="export-{{ d.pk }}" href="{% url 'export:as_pdf' pk=d.pk %}" target="_BLANK" data-url="{% url 'export:as_pdf' pk=d.pk %}" data-pk="{{ d.pk }}" class="">{% trans 'Download PDF' %}</a></li>
 	                    <li><a id="delete-{{ d.pk }}" href="#delete" data-url="{% url 'document:my_delete' pk=d.pk %}" data-pk="{{ d.pk }}" class="delete-my-document">{% trans 'Delete' %}</a></li>
 	                  </ul>
 	                </div>

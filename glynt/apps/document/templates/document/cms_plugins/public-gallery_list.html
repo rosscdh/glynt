@@ -6,7 +6,7 @@
     {% for template in object_list %}
     <div class="span4 feature2">
         <div class="icon {% colorize_acronym template.acronym %}">{{ template.acronym|upper }}</div>
-        <h4><a class="template-document" href="{% url 'doc:create_document' slug=template.slug %}">{{ template.name }}</a></h4>
+        <h4><a class="template-document" href="{% url 'doc:create_document' pk=template.pk %}">{{ template.name }}</a></h4>
         <p>
             {{ template.summary }}
         </p>

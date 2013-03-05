@@ -20,7 +20,7 @@
     <li class="divider"></li>
     <li><a href="{% url 'doc:update_document' pk=userdoc.pk %}" class="btn"><i class="icon-edit"></i>{% trans 'Edit Doc' %}</a></li>
     <li class="divider"></li>
-    <li><a id="export-{{ d.pk }}" href="{% url 'export:as_pdf' slug=userdoc.slug %}" class="btn" target="_BLANK" data-url="{% url 'export:as_pdf' slug=userdoc.slug %}" data-pk="{{ userdoc.pk }}" class=""><i class="icon-download"></i>{% trans 'Download PDF' %}</a></li>
+    <li><a id="export-{{ d.pk }}" href="{% url 'export:as_pdf' pk=userdoc.pk %}" class="btn" target="_BLANK" data-url="{% url 'export:as_pdf' pk=userdoc.pk %}" data-pk="{{ userdoc.pk }}" class=""><i class="icon-download"></i>{% trans 'Download PDF' %}</a></li>
     <li class="divider"></li>
         <li><a href="#/review/qr" class="btn"><i class="icon-qrcode"></i>{% trans 'QR Code' %}</a></li>
     <li class="divider"></li>

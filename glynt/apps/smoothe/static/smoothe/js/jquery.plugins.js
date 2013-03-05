@@ -338,6 +338,10 @@
       }
       ,listen: function () {
           var self = this;
+
+          var min_width = self.$element.width();
+          self.$element.css('min-width', min_width);
+
           // apply the hallo editor
           self.$element.hallo({
               plugins: {

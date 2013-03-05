@@ -2,9 +2,9 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import View
+from django.template.defaultfilters import slugify
 
 from glynt.apps.document.models import ClientCreatedDocument
-
 from glynt.apps.document.models import DocumentHTML
 from glynt.apps.services import GlyntPdfService
 
@@ -18,10 +18,10 @@ class ExportAsPDFView(View):
         return self.get(request, args, kwargs)
 
     def get(self, request, *args, **kwargs):
-        document = get_object_or_404(ClientCreatedDocument.objects.select_related('source_document', 'source_document__flyform'), slug=self.kwargs['slug'], owner=request.user)
+        document = get_object_or_404(ClientCreatedDocument.objects.select_related('source_document', 'source_document__flyform'), pk=self.kwargs['pk'])
         document_html = get_object_or_404(DocumentHTML, document=document)
 
-        filename = '%s.pdf' % (document.slug,)
+        filename = '%s.pdf' % slugify(document.name)
 
         try:
             pdf_service = GlyntPdfService(html=document_html.render(), title=document.name)
@@ -39,10 +39,10 @@ class ExportAsHTMLView(View):
         return self.get(request, args, kwargs)
 
     def get(self, request, *args, **kwargs):
-        document = get_object_or_404(ClientCreatedDocument.objects.select_related('source_document', 'source_document__flyform'), slug=self.kwargs['slug'], owner=request.user)
+        document = get_object_or_404(ClientCreatedDocument.objects.select_related('source_document', 'source_document__flyform'), pk=self.kwargs['pk'])
         document_html = get_object_or_404(DocumentHTML, document=document)
 
-        filename = '%s.html' % (document.slug,)
+        filename = '%s.html' % slugify(document.name)
 
         try:
             response = HttpResponse(document_html.render(), status=200, content_type='text/html')
