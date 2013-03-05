@@ -15,11 +15,14 @@ class SignaturePageService(object):
     def __init__(self, document):
         self.document = document
 
+    def get_signature_url(self, sig):
+        return '%s%s' % (current_site_domain(), sig.signature_pic_url,)
+
     def get_objects(self):
         signatures = []
         for sig in self.document.documentsignature_set.select_related('user').all():
             s = {
-                'signature_pic_url': '%s%s' % (current_site_domain(), sig.signature_pic_url,)
+                'signature_pic': self.get_signature_url(sig)
                 ,'has_signed': sig.is_signed
                 ,'name': sig.signee_name
                 ,'email': sig.signee_email
@@ -40,4 +43,9 @@ class SignaturePageService(object):
 
     def render(self):
         return render_to_string(self.template, self.get_context())
-        
+
+
+class EmbeddedBase64SignatureService(SignaturePageService):
+    """ Return the base64 encoded versionfor pdf generation """
+    def get_signature_url(self, sig):
+        return sig.signature_base_64

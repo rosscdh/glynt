@@ -9,12 +9,13 @@ from django.core.files.storage import default_storage
 from django.utils.encoding import smart_unicode as smart_text # preparing for 1.5
 
 from glynt.apps.export.utils import fetch_resources as link_callback
-
-import docraptor
-DOCRAPTOR_KEY = getattr(settings, 'DOCRAPTOR_KEY', None)
+from glynt.apps.sign.services import EmbeddedBase64SignatureService
 
 from hellosign import HelloSign, HelloSignSignature
 from hellosign import HelloSigner, HelloDoc
+
+import docraptor
+DOCRAPTOR_KEY = getattr(settings, 'DOCRAPTOR_KEY', None)
 
 from xhtml2pdf import pisa
 import StringIO
@@ -27,7 +28,7 @@ import logging
 logger = logging.getLogger('django.request')
 
 
-class BasePdfService(object):
+class BaseDocumentAssemblerService(object):
     template = 'export/pdf.html'
 
     def __init__(self, html, **kwargs):
@@ -37,6 +38,11 @@ class BasePdfService(object):
         if 'template' in kwargs:
             self.template = kwargs.get('template')
 
+    def signature_page(self):
+        if 'document' in self.kwargs:
+            signature = EmbeddedBase64SignatureService(document=self.kwargs['document'])
+            return signature.render()
+
     def get_context(self):
         title = self.kwargs.get('title', None)
         html = smart_text(self.html, encoding='utf-8', strings_only=False, errors='strict')
@@ -44,8 +50,9 @@ class BasePdfService(object):
         context = {
             'title': title
             ,'body': html
+            ,'signature': self.signature_page()
         }
-
+        logger.debug(context)
         return context
 
     def get_html(self, context=None):
@@ -54,7 +61,7 @@ class BasePdfService(object):
         return render_to_string(self.template, context)
 
 
-class DocRaptorService(BasePdfService):
+class DocRaptorService(BaseDocumentAssemblerService):
     def create_pdf(self):
         logger.info('using DocRaptor Service: %s' % DOCRAPTOR_KEY)
         context = self.get_context()
@@ -72,6 +79,7 @@ class DocRaptorService(BasePdfService):
                     }).content
 
             logger.info('DocRaptor Response Type: %s' % type(pdf_response))
+
             if type(pdf_response) == str:
                 logger.debug('DocRaptor Response: %s' % pdf_response)
 
@@ -81,7 +89,7 @@ class DocRaptorService(BasePdfService):
         return ContentFile(pdf_response, name=title)
 
 
-class XHTML2PdfService(BasePdfService):
+class XHTML2PdfService(BaseDocumentAssemblerService):
     """
         PDF Creation Service
     """

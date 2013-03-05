@@ -2,8 +2,8 @@
 <li class="span3">
 {% for signature in object_list %}
     {% if signature.has_signed %}
-        {% if signature.signature_pic_url %}
-        <img src="{{ signature.signature_pic_url }}" alt="" title="" border="0"/><br/>
+        {% if signature.signature_pic %}
+        <img src="{{ signature.signature_pic }}" alt="{{ signature.name }}" title="{{ signature.name }}" border="0"/><br/>
         {% endif %}
         <b>{{ signature.name }}</b>, {{ signature.email }}<br/>
         Signed on: {{ signature.date_signed }}<br/>

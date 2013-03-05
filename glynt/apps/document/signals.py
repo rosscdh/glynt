@@ -7,7 +7,7 @@ from django.contrib.comments.models import Comment
 
 from glynt.apps.document import tasks
 from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
-from glynt.apps.services.services import BasePdfService
+from glynt.apps.services.services import BaseDocumentAssemblerService
 
 
 @receiver(post_save, sender=DocumentTemplate, dispatch_uid='template.html.validate')
@@ -16,7 +16,7 @@ def validate_template_html(sender, **kwargs):
 
     # open html and render body
     # must use the xhtml compliant template to enable html_tidy to work nice
-    html_service = BasePdfService(template='export/xhtml_validator.html', html=template.body)
+    html_service = BaseDocumentAssemblerService(template='export/xhtml_validator.html', html=template.body)
     # Validate HTML
     tasks.validate_document_html(ident=template.slug, html=html_service.get_html())
 

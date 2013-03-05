@@ -7,6 +7,7 @@ from django.template.defaultfilters import slugify
 from glynt.apps.document.models import ClientCreatedDocument
 from glynt.apps.document.models import DocumentHTML
 from glynt.apps.services import GlyntPdfService
+from glynt.apps.services.services import BaseDocumentAssemblerService
 
 
 import logging
@@ -24,7 +25,8 @@ class ExportAsPDFView(View):
         filename = '%s.pdf' % slugify(document.name)
 
         try:
-            pdf_service = GlyntPdfService(html=document_html.render(), title=document.name)
+            pdf_service = GlyntPdfService(document=document, html=document_html.render(), title=document.name)
+
             response = HttpResponse(pdf_service.create_pdf(), status=200, content_type='application/pdf')
             response['Content-Disposition'] = 'attachment; filename=%s' % (filename,)
         except Exception as e:
@@ -45,7 +47,9 @@ class ExportAsHTMLView(View):
         filename = '%s.html' % slugify(document.name)
 
         try:
-            response = HttpResponse(document_html.render(), status=200, content_type='text/html')
+            html_service = BaseDocumentAssemblerService(document=document, html=document_html.render(), title=document.name)
+
+            response = HttpResponse(html_service.get_html(), status=200, content_type='text/html')
             response['Content-Disposition'] = 'attachment; filename=%s' % (filename,)
         except Exception as e:
             logger.error(e)

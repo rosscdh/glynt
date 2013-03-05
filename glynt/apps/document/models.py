@@ -12,7 +12,6 @@ from jsonfield import JSONField
 from glynt.apps.utils import get_namedtuple_choices
 from glynt.apps.document.managers import DocumentTemplateManager, PublicDocumentTemplateManager, PrivateDocumentTemplateManager
 from glynt.apps.document.managers import ClientCreatedDocumentManager, PublicClientCreatedDocumentManager, DeletedClientCreatedDocumentManager
-from glynt.apps.sign.services import SignaturePageService
 
 from glynt.apps.smoothe.pybars_smoothe import Smoothe
 
@@ -184,13 +183,7 @@ class DocumentHTML(models.Model):
         #html = markdown.markdown(smart_unicode(self.html)) if self.html else None
         html = smart_unicode(self.html) if self.html else None
 
-        signature = SignaturePageService(document=self.document)
-        signature_html = signature.render()
-
-        # Merge the document and the signature html
-        document_html = html + '<p>&nbsp;</p>' + signature_html
-
-        smoothe = Smoothe(source_html=document_html)
+        smoothe = Smoothe(source_html=html)
 
         return smoothe.render(self.document.doc_data)
 

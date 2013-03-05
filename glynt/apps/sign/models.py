@@ -5,8 +5,10 @@ from django.core.urlresolvers import reverse
 from jsonfield import JSONField
 
 from glynt.apps.document.models import ClientCreatedDocument
-
 from signpad2image.signpad2image import s2ib
+
+import base64
+import StringIO
 
 
 class DocumentSignature(models.Model):
@@ -36,6 +38,13 @@ class DocumentSignature(models.Model):
     @property
     def signature_pic_url(self):
         return reverse('sign:signature_pic', kwargs={'pk': self.document.pk, 'hash': self.key_hash})
+
+    @property
+    def signature_base_64(self):
+        output = StringIO.StringIO()
+        image = self.signature_as_image()
+        image.save(output, "PNG")
+        return 'data:image/png;base64,%s' % output.getvalue().encode("base64")
 
     def signature_as_string(self):
         return json.dumps(self.signature)
