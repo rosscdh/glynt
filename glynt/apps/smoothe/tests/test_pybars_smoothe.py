@@ -2,10 +2,11 @@
 from nose.tools import *
 from mocktest import *
 
-from glynt.apps.smoothe.pybars_smoothe import Smoothe, DocChoiceException, DocSelectException
+from glynt.apps.smoothe.pybars_smoothe import Smoothe, DocChoiceException, DocSelectException, DocVarMismatchException
 
 import logging
 logger = logging.getLogger('django.test')
+import pdb
 
 
 class TestTemplateToDoc(mocktest.TestCase):
@@ -25,6 +26,8 @@ class TestTemplateToDoc(mocktest.TestCase):
             'doc_select_custom_join_by': u'{{#doc_select name="favourite_monkies" join_by="-A crazy night out with a Ham-" label="What are your favourite Monkies?"}}Gorillas{option}Baboons{option}Chimpanzies{option}Big Hairy Ones{{/doc_select}}',
             'doc_select_custom_subvariable': u'{{#doc_select name="favourite_monkies" label="What are your favourite Monkies?"}}Gorillas named {{#doc_var name="gorilla_name"}}{{/doc_var}}{option}Baboons{option}Chimpanzies named {{#doc_var name="chimp_name"}}{{/doc_var}}{option}Big Hairy Ones named {{#doc_var name="big_hairy_name"}}{{/doc_var}}{{/doc_select}}',
             'doc_select_custom_multi': u'{{#doc_select multi=true name="best_apes" label="What are the best Apes?"}}Gorillaz{option}Chimpanzies{option}Baboons{{/doc_select}}',
+            # Mismatched
+            '_custom_mismatched': u'{{#doc_var name="monkey"}}Bananarama{{/doc_choice}}{{#doc_select multi=true name="best_apes" label="What are the best Apes?"}}Gorillaz{option}Chimpanzies{option}Baboons{{/doc_var}}',
         }
 
     def testDocVar(self):
@@ -125,6 +128,7 @@ class TestTemplateToDoc(mocktest.TestCase):
         }
         eq_(self.subject.render(context), u'Gorillaz\rBaboons')
 
+
 class TestSimpleSelectHTMLExample(TestTemplateToDoc):
     def testGenericHTML(self):
         handlers = [v for k,v in self.html_handlers.items() if '_custom_' not in k]
@@ -142,4 +146,12 @@ class TestSimpleSelectHTMLExample(TestTemplateToDoc):
         expected_html = html % (u'Baboons\rGorillas<br/>horse<br/>Slurping Schwein on the Train from Mönchengladbach')
 
         eq_(html_result, expected_html)
+
+
+class TestMisMatchedTags(TestTemplateToDoc):
+    @raises(DocVarMismatchException)
+    def test_mismatch(self):
+        self.subject.source_html = self.html_handlers["_custom_mismatched"]
+        self.subject.render({})
+
 

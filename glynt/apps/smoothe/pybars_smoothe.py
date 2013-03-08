@@ -18,6 +18,12 @@ class DocSelectException(DocChoiceException):
     pass
 
 
+class DocVarMismatchException(Exception):
+    message = u'It looks like there is a variable mismatch. Look for a {{#doc_var}} that is mismatched with its ending token. it may have the wrong closing token i.e. {{/doc_select}} or indeed no ending token'
+    def __init__(self):
+        logger.critical(self.message)
+
+
 class Smoothe(object):
     source_html = None
     context = {}
@@ -41,8 +47,19 @@ class Smoothe(object):
             logger.error("template was not set from provided source_html")
             return None
         else:
-            html = template(context)
-            return unicode(''.join(html))
+            html_list = self.validate(template(context))
+            return unicode(''.join(html_list))
+
+    def validate(self, html_list):
+        match = re.search(r"\{\{\#doc_(.*?)\}\}", self.source_html) # match at least one doc_ tag
+        if match is not None:
+            # we have at least one doc_* variable
+            if len(html_list) == 0:
+                # if we have at least 1 match then the html_list should NOT
+                # be empty! thus we have a tag mismatch. doc_var being closed by doc_select
+                # or similar
+                raise DocVarMismatchException()
+        return html_list
 
     def doc_var(self, this, *args, **kwargs):
         var_name = kwargs.get('name', None)
