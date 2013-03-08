@@ -558,7 +558,13 @@
             self.variable_name = $(self.element).attr('data-doc_var');
             self.context = self.app.context[self.variable_name];
 
-            self.multi = self.context.multi;
+            if (!self.context) {
+                console.log('variable {var_name} (id:{id}) is not defined in the app.context'.assign({'id': self.id, 'var_name': self.variable_name}))
+                console.log($(self.element).attributes)
+                console.log($(self.element).html())
+            }
+
+            self.multi = (self.context && self.context.multi) ? self.context.multi : false;
             self.can_toggle = self.context.can_toggle;
             self.can_increment = self.context.can_increment;
 

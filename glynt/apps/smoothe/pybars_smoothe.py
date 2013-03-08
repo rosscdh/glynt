@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from pybars import Compiler
+import re
 
 import logging
 logger = logging.getLogger('django.request')
@@ -113,3 +114,16 @@ class Smoothe(object):
     def doc_note(self, this, *args, **kwargs):
         """ No note is provided on the server side render of the doc """
         return None
+
+
+class SmootheRemoval(Smoothe):
+    """ Class to remove the glynt smoothe handlers 
+    primarily for document xtml validation where the handlebars
+    tags can break xhtml validation """
+    def render(self, context=None):
+        html = self.source_html
+        # for i in range(0,25):
+        html = re.sub(r"\{\{\#(.*?)\}\}", "", html) # remove doc_* start
+        html = re.sub(r"\{\{\/(.*?)\}\}", "", html) # remove /doc_* end
+        html = re.sub(r"\{option\}", "", html)
+        return html

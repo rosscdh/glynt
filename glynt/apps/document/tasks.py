@@ -10,7 +10,10 @@ from glynt.apps.document.models import DocumentHTML
 from glynt.apps.smoothe.pybars_smoothe import Smoothe
 from glynt.apps.services import GlyntPdfService
 
+from glynt.apps.smoothe.pybars_smoothe import SmootheRemoval
+
 from .services import HtmlValidatorService
+
 
 import user_streams
 
@@ -20,7 +23,7 @@ logger = logging.getLogger('django.request')
 
 @task()
 def validate_document_html(ident, html):
-    html_validator = HtmlValidatorService(ident=ident, html=html)
+    html_validator = HtmlValidatorService(ident=ident, html=html, preprocessors=[SmootheRemoval])
     if not html_validator.is_valid():
         logger.warning(html_validator.error_msg)
         raise ValidationError(html_validator.error_msg)

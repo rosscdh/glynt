@@ -10,13 +10,20 @@ class HtmlValidatorService(object):
     """ Service used to validate HTML being added to the system 
     Used primarily with document template additions
     """
-    def __init__(self, ident, html):
+    def __init__(self, ident, html, **kwargs):
+        self.preprocessors = kwargs.pop('preprocessors')
         self.ident = ident
-        self.html = html
+        self.html = self.preprocess(html)
         self.errors = None
         self.document = None
         self.valid_doc_path = None
         self.error_msg = None
+
+    def preprocess(self, html):
+        for c in self.preprocessors:
+            instance = c(source_html=html)
+            html = instance.render({})
+        return html
 
     def save_valid_doc(self):
         version_location_msg = None
@@ -40,7 +47,11 @@ class HtmlValidatorService(object):
         is_valid = False
         if self.html is not None:
             self.document, self.errors = tidy_document(self.html, \
-                                                options={'numeric-entities':1, "output-xhtml": 1} \
+                                                options={
+                                                    'numeric-entities':1
+                                                    ,"output-xhtml": 1
+                                                    ,'new-inline-tags': ''
+                                                    } \
                                             )
             is_valid = len(self.errors) == 0
 
@@ -51,6 +62,7 @@ class HtmlValidatorService(object):
 
 
 class BaseDocumentService(object):
+    """ Service used to meddle with the document meta JSON structure """
     def __init__(self, document, **kwargs):
         self.document = document
         #@TODO fix this; meta_data should default to being {} and not have to be set
