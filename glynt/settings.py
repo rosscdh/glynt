@@ -381,6 +381,7 @@ DOCRAPTOR_KEY = "vIvrCmZtnQTC4p6V0k"
 
 LAWPAL_PRIVATE_BETA = True
 
+
 import djcelery
 djcelery.setup_loader()
 

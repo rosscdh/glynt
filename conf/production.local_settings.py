@@ -60,6 +60,13 @@ RAVEN_CONFIG = {
 SPLUNKSTORM_ENDPOINT = 'logs2.splunkstorm.com'
 SPLUNKSTORM_PORT = 20824
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/tmp/glynt.cache',
+    }
+}
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
