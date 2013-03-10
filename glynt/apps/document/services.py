@@ -11,7 +11,7 @@ class HtmlValidatorService(object):
     Used primarily with document template additions
     """
     def __init__(self, ident, html, **kwargs):
-        self.preprocessors = kwargs.pop('preprocessors')
+        self.preprocessors = kwargs.pop('preprocessors') if 'preprocessors' in kwargs else []
         self.ident = ident
         self.html = self.preprocess(html)
         self.errors = None

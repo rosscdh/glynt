@@ -9,10 +9,11 @@ from django.contrib.auth.hashers import make_password
 
 from glynt.apps.factories import UserFactory
 from socialregistration.contrib.facebook_js.context_processors import FACEBOOK_REQUEST_PERMISSIONS
-import pdb
+
+
 
 class FacebookLoginTest(TestCase):
-    fixtures = ['sites.json', 'cms.json']
+    fixtures = ['test_users.json', 'sites.json', 'cms.json']
 
     def setUp(self):
         user = UserFactory.create(pk=1)

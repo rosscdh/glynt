@@ -23,7 +23,6 @@ class TestImportedSignals(mocktest.TestCase):
 
 class TestClientCreatedDocument(mocktest.TestCase):
     def setUp(self):
-        self.slug = 'monkey-document'
         self.name = 'Monkey Document'
         self.domain = 'http://monkey-nuts.com'
         self.doc_data = {'test_var': 1, 'monkey_var': 'Some Var'}
@@ -31,7 +30,7 @@ class TestClientCreatedDocument(mocktest.TestCase):
         self.site = SiteFactory.create(domain=self.domain)
         settings.SITE_ID = self.site.pk
 
-        self.subject = DocumentFactory.create(name=self.name, slug=self.slug, doc_data=self.doc_data)
+        self.subject = DocumentFactory.create(name=self.name, doc_data=self.doc_data)
 
     def test_get_absolute_url(self):
         url = self.subject.get_absolute_url()
@@ -39,7 +38,7 @@ class TestClientCreatedDocument(mocktest.TestCase):
 
     def test_get_review_url(self):
         url = self.subject.get_review_url()
-        eq_(re.search('/template/my/%s/review/' % self.slug, url) is not None, True)
+        eq_(re.search('/template/my/%s/review/' % self.subject.pk, url) is not None, True)
 
     def test_qr_code_image(self):
         """ Test that we get a PIL image when calling this method """
