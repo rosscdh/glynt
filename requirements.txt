@@ -22,6 +22,9 @@ xhtml2pdf
 
 django-storages
 
+# getsentry.com
+raven
+
 -e git+https://github.com/django-debug-toolbar/django-debug-toolbar.git#egg=django-debug-toolbar
 
 -e git+https://github.com/jezdez/django_compressor.git#egg=django_compressor

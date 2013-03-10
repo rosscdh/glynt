@@ -214,6 +214,9 @@ HELPER_APPS = (
     'django_markup',
     'compressor',
     'django_jenkins',
+
+    # getsentry.com
+    'raven.contrib.django.raven_compat',
 )
 
 # Handle south and its breaking tests
