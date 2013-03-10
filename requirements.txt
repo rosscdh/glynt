@@ -24,6 +24,7 @@ django-storages
 
 # getsentry.com
 raven
+newrelic
 
 -e git+https://github.com/django-debug-toolbar/django-debug-toolbar.git#egg=django-debug-toolbar
 
