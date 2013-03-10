@@ -52,3 +52,51 @@ COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = False
 
 HELLOSIGN_AUTH = ("sendrossemail@gmail.com", "zanshin77")
+
+SPLUNKSTORM_ENDPOINT = 'logs2.splunkstorm.com'
+SPLUNKSTORM_PORT = 20824
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'null': {
+            'level': 'DEBUG',
+            'class': 'django.utils.log.NullHandler',
+        },
+        'splunkstorm':{
+            'level': 'INFO',
+            'class': 'glynt.logger.SplunkStormLogger',
+            'formatter': 'verbose'
+        },
+        'console':{
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler'
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'propagate': True,
+            'level': 'INFO',
+        },
+        'django.request': {
+            'handlers': ['splunkstorm'],
+            'level': 'INFO',
+            'propagate': False,
+        }
+    }
+}
