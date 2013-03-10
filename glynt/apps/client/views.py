@@ -14,6 +14,9 @@ from userena import signals as userena_signals
 from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
 from forms import SignupForm, AuthenticationForm
 
+import logging
+logger = logging.getLogger('django.request')
+
 
 class SignupView(FormView):
     template_name = 'userena/signup_form.html'
@@ -28,7 +31,8 @@ class SignupView(FormView):
 
         if form.is_valid():
             messages.info(request, _('Welcome, you have successfully signed up. Please remember to check your email and activate your account once you recieve our welcome email.'))
-            form.save()
+            user = form.save()
+            logger.info('A user has signed up %s' % user)
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
@@ -48,53 +52,23 @@ class LoginView(FormView):
 
         user = authenticate(username=request.POST.get('username',None), password=request.POST.get('password',None))
 
-        if user is not None:
+        if user is None:
+            logger.warn('Incorrect login attempt user: %s' % request.POST.get('username',None))
+        else:
             if user.is_active:
                 login(request, user)
                 if request.GET.get('next') is not None:
                     self.success_url = request.GET.get('next')
                 messages.success(request, _('Welcome, you have successfully logged in.'))
+
+                logger.info('LoggedIn user: %s' % user)
+
                 return self.form_valid(form)
             else:
                 messages.info(request, _('Sorry, but your Account has yet to be acivated.'))
-                return self.form_invalid(form)
-        else:
-            return self.form_invalid(form)
+                logger.info('Inactive login attempt user: %s' % request.POST.get('username',None))
 
-
-class HasLocalFacebookAccountView(BaseDetailView):
-    """ Used to evaluate if the facebook user exists in our system or not @TODO move to socialregistration? """
-    template_name = 'client/partials/blank.html'
-
-    def get_queryset(self):
-        return FacebookProfile.objects
-
-    def get_object(self, queryset=None):
-        """
-        Returns the object the view is displaying.
-        By default this requires `self.queryset` and a `pk` or `slug` argument
-        in the URLconf, but subclasses can override this to return any object.
-        """
-        # Next, try looking up by primary key.
-        uid = self.request.GET.get('uid', None)
-
-        if uid is None:
-            raise Http404("Facebook uid does not exist")
-
-        # Use a custom queryset if provided; this is required for subclasses
-        # like DateDetailView
-        if queryset is None:
-            queryset = self.get_queryset()
-
-        try:
-            obj = queryset.get(uid=uid)
-        except FacebookProfile.DoesNotExist:
-            raise Http404("Facebook %(uid)s could not be found" % {'uid': uid})
-        return obj
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        return HttpResponse('[{"exists":true, "is_authenticated": %s}]' %(str(request.user.is_authenticated()).lower()), status=200)
+        return self.form_invalid(form)
 
 
 class DashboardView(TemplateView):

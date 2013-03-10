@@ -10,7 +10,7 @@ from glynt.apps.utils import AjaxableResponseMixin
 from .forms import DocumentTemplateForm, ClientDocumentForm
 
 import logging
-logger = logging.getLogger(__file__)
+logger = logging.getLogger('django.request')
 
 
 class CreateTemplateView(AjaxableResponseMixin, CreateView):
