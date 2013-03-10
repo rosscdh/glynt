@@ -77,6 +77,7 @@ def do_deploy():
     # copy the live local_settings
     with cd(project_path):
         run('cp %s/%s/conf/%s.local_settings.py %s/%s/%s/local_settings.py' % (remote_project_path, PROJECT, environment, remote_project_path, PROJECT, app_name,))
+        run('cp %s/%s/conf/%s.newrelic.ini %s/%s/newrelic.ini' % (remote_project_path, PROJECT, environment, remote_project_path, PROJECT,))
         run('cp %s/%s/conf/%s.wsgi.py %s/%s/%s/wsgi.py' % (remote_project_path, PROJECT, environment, remote_project_path, PROJECT, app_name,))
 
     run('%s/apache2/bin/restart' % (remote_project_path,))
