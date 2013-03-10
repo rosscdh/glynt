@@ -24,7 +24,8 @@
 
 ## Update requirments
 
-1. pip install -r requirements.txt : install update the required libraries (append --upgrade if you are not sure)
+1. pip install --upgrade pip - ensure latest version
+2. pip install -r requirements.txt : install update the required libraries (append --upgrade if you are not sure)
 
 
 ## Creating Fixtures
@@ -36,6 +37,13 @@
 ** Django CMS **
 
     `./manage.py dumpdata cms text cms.placeholder cms.cmsplugin > public/fixtures/cms.json`
+
+
+## Django CMS - Dev Pages to live ##
+
+manage.py shell_plus
+
+    `Page.objects.filter(site=Site.objects.get(pk=1)).update(site=Site.objects.get(pk=3))`
 
 ## Fix Fixtures
 
