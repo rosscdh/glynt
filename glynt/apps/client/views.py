@@ -56,6 +56,7 @@ class LoginView(FormView):
                 messages.success(request, _('Welcome, you have successfully logged in.'))
                 return self.form_valid(form)
             else:
+                messages.info(request, _('Sorry, but your Account has yet to be acivated.'))
                 return self.form_invalid(form)
         else:
             return self.form_invalid(form)

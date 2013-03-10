@@ -1,0 +1,13 @@
+{% load glynt_helpers %}
+
+{% block plain %}
+A new user has signed up
+
+id: {{ user.pk }}
+email: {{ user.email }}
+
+You will need to activate their account manually
+
+Regards
+{{ PROJECT_NAME }}
+{% endblock %}

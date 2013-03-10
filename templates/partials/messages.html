@@ -1,10 +1,12 @@
-<div id="messages" class="span6 hide">
-    <div class="close span1 pull-right">X</div>
-    <ul class="span6">
-    {% if messages %}
+{% if messages %}
+<div class="container">
+<div id="messages" class="row {% if not messages %}hide{% endif %}">
+    {% if not messages %}<div class="close span1 pull-right">X</div>{% endif %}
+    <ul class="">
         {% for message in messages %}
         <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
         {% endfor %}
-    {% endif %}
     </ul>
 </div>
+</div>
+{% endif %}

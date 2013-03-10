@@ -7,10 +7,9 @@ from django.core.exceptions import ValidationError
 from celery.task import task
 
 from glynt.apps.document.models import DocumentHTML
-from glynt.apps.smoothe.pybars_smoothe import Smoothe
 from glynt.apps.services import GlyntPdfService
 
-from glynt.apps.smoothe.pybars_smoothe import Smoothe, SmootheRemoval
+from glynt.apps.smoothe.pybars_smoothe import SmootheRemoval
 
 from .services import HtmlValidatorService
 

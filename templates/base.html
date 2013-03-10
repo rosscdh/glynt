@@ -58,10 +58,11 @@
 		{% block admin_panel %}{% endblock %}
     {% endif %}
 
+    {% include 'partials/messages.html' %}
+
     {% block prebody %}{% endblock %}
 
     <div class="container">
-        {% include 'partials/messages.html' %}
         {% block body %}{% endblock %}
     </div>
 

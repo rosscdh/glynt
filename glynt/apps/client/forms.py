@@ -1,3 +1,4 @@
+from django.conf import settings
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.forms import AuthenticationForm

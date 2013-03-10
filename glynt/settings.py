@@ -18,7 +18,12 @@ ADMINS = (
 )
 
 COMPRESSION_ENABLED = False
-MANAGERS = ADMINS
+
+MANAGERS = ADMINS + (
+    ("Alex Halliday", 'alex@lawpal.com'),
+    ("Joe Musgrave", 'joe@lawpal.com'),
+)
+
 CMS_MODERATOR = ()
 
 DATABASES = {
@@ -250,6 +255,12 @@ USER_STREAMS_USE_UTC = True
 
 ANONYMOUS_USER_ID = -1
 AUTH_PROFILE_MODULE = 'client.ClientProfile' # our custom profile
+
+
+USERENA_USE_MESSAGES = True
+USERENA_LOGIN_AFTER_ACTIVATION = False # Enable beta style signup (manual activation)
+USERENA_ACTIVATION_REDIRECT_URL = '/'
+USERENA_SIGNIN_REDIRECT_URL = '/'
 USERENA_WITHOUT_USERNAMES = True # step userarena forcing user to provide username
 USERENA_HIDE_EMAIL = True
 
@@ -363,6 +374,8 @@ BROKER_URL = 'amqp://guest:guest@localhost:5672/'
 HELLOSIGN_AUTH = ("", "")
 
 DOCRAPTOR_KEY = "vIvrCmZtnQTC4p6V0k"
+
+LAWPAL_PRIVATE_BETA = True
 
 import djcelery
 djcelery.setup_loader()

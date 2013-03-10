@@ -10,6 +10,9 @@ from jsonfield import JSONField
 from userena.models import UserenaSignup, UserenaBaseProfile
 from userena.managers import ASSIGNED_PERMISSIONS
 from userena import signals as userena_signals
+
+from templated_email import send_templated_mail
+
 from socialregistration.signals import login, connect
 from guardian.shortcuts import assign
 
@@ -17,6 +20,11 @@ from django_countries import CountryField
 from managers import GlyntUserManager as UserManager
 
 import urllib2
+
+import logging
+logger = logging.getLogger('django.request')
+
+LAWPAL_PRIVATE_BETA = getattr(settings, 'LAWPAL_PRIVATE_BETA', False)
 
 
 class UserSignup(UserenaSignup):
@@ -99,3 +107,24 @@ def populate_profile_data(sender, dispatch_uid='client.populate_profile_data', *
                 pass
 
     profile.save()
+
+
+@receiver(userena_signals.activation_complete)
+def private_beta_profile(sender, dispatch_uid='client.private_beta_profile', **kwargs):
+    logger.info('LAWPAL_PRIVATE_BETA: %s' % LAWPAL_PRIVATE_BETA)
+
+    user = kwargs.get('user')
+
+    if LAWPAL_PRIVATE_BETA is True:
+        logger.info('Deactivating User Account %d for manual activation' % user.pk)
+        user.is_active = False # Set to false to allow manual activation
+        user.save()
+
+    logger.debug('Sending private_beta_profile email')
+    send_templated_mail(
+        template_name = 'private_beta_new_user',
+        template_prefix="sign/email/",
+        from_email = 'website@lawpal.com',
+        recipient_list = [e for n,e in settings.MANAGERS],
+        context = kwargs
+    )
