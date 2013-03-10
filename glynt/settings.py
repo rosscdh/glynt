@@ -260,7 +260,7 @@ AUTH_PROFILE_MODULE = 'client.ClientProfile' # our custom profile
 
 USERENA_USE_MESSAGES = True
 USERENA_LOGIN_AFTER_ACTIVATION = False # Enable beta style signup (manual activation)
-USERENA_ACTIVATION_REDIRECT_URL = '/thanks-for-your-interest/'
+USERENA_ACTIVATION_REDIRECT_URL = '/thanks-your-interest/'
 USERENA_SIGNIN_REDIRECT_URL = '/'
 USERENA_WITHOUT_USERNAMES = True # step userarena forcing user to provide username
 USERENA_HIDE_EMAIL = True
