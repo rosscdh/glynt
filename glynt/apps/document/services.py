@@ -30,7 +30,7 @@ class HtmlValidatorService(object):
         self.valid_doc_path = os.path.join(settings.SITE_ROOT, '%s_valid.html' % self.ident)
         self.invalid_doc_path = os.path.join(settings.SITE_ROOT, '%s_invalid.html' % self.ident)
 
-        self.error_msg = 'Document Template HTML is invalid: %s.' % self.errors
+        self.error_msg = 'Document Template %s HTML is invalid: %s.' % (self.ident, self.errors,)
 
         if settings.DEBUG is True:
             self.error_msg += 'The Comparison Docs are found at: %s and %s' % (self.valid_doc_path, self.invalid_doc_path,)

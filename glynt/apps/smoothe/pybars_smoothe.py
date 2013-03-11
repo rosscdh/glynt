@@ -142,7 +142,11 @@ class SmootheRemoval(Smoothe):
     def render(self, context=None):
         html = self.source_html
 
-        html = re.sub(r"\{\{\#(.*?)\}\}", "", html) # remove doc_* start
-        html = re.sub(r"\{\{\/(.*?)\}\}", "", html) # remove /doc_* end
+        regex = re.compile(r"\{\{\#(.*?)\}\}(.*)\{\{\/(.*?)\}\}", re.I&re.MULTILINE&re.IGNORECASE&re.DOTALL&re.DEBUG)
+        html = re.sub(regex, r"\2", html)
+
+        # html = re.sub(r"\{\{\#(.*?)\}\}", "", html) # remove doc_* start
+        # html = re.sub(r"\{\{\/(.*?)\}\}", "", html) # remove /doc_* end
         html = re.sub(r"\{option\}", "", html)
+        logger.info(html)
         return html
