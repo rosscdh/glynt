@@ -6,7 +6,6 @@ from glynt.apps.smoothe.pybars_smoothe import Smoothe, DocChoiceException, DocSe
 
 import logging
 logger = logging.getLogger('django.test')
-import pdb
 
 
 class TestTemplateToDoc(mocktest.TestCase):
