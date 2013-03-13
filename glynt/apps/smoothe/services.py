@@ -56,11 +56,12 @@ class SmootheValidateService(object):
         assert tag_names.issubset(tag_ends), 'Unclosed tags: %s' % ', '.join([name for name in tag_names])
 
         # ensure all doc_selects have an options
-        if 'doc_select' in tag_names:
-            doc_selects = self.rex_tag('doc_select')
-            for s in doc_selects:
-                tag, attribs, content = s
-                assert '{option}' in content, 'doc_select must contain at least 2 items seperated by "{option}", error at: %s' % attribs
+        # NOT REQRUIED: as a doc select can have only 1 value.. 
+        # if 'doc_select' in tag_names:
+        #     doc_selects = self.rex_tag('doc_select')
+        #     for s in doc_selects:
+        #         tag, attribs, content = s
+        #         assert '{option}' in content, 'doc_select must contain at least 2 items seperated by "{option}", error at: %s' % attribs
 
 
     def is_valid(self):

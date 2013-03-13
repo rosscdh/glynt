@@ -35,12 +35,12 @@ class TestSmootheValidator(mocktest.TestCase):
             eq_(len(s.errors), 1)
             eq_(s.error_msg, u"Unclosed tags: %s" % k)
 
-    def testInvalidDocSelect(self):
-        invalid = [
-            ('doc_select', '{{#doc_select name="principal_name"}} NO OPTION {{/doc_select}}')
-        ]
-        for k,i in invalid:
-            s = self.subject(ident='invalid-test', html=i)
-            eq_(s.is_valid(), False)
-            eq_(len(s.errors), 1)
-            eq_(s.error_msg, u"doc_select must contain at least 2 items seperated by \"{option}\", error at: name=\"principal_name\"")
+    # def testInvalidDocSelect(self):
+    #     invalid = [
+    #         ('doc_select', '{{#doc_select name="principal_name"}} NO OPTION {{/doc_select}}')
+    #     ]
+    #     for k,i in invalid:
+    #         s = self.subject(ident='invalid-test', html=i)
+    #         eq_(s.is_valid(), False)
+    #         eq_(len(s.errors), 1)
+    #         eq_(s.error_msg, u"doc_select must contain at least 2 items seperated by \"{option}\", error at: name=\"principal_name\"")
