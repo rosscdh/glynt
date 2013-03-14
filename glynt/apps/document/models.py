@@ -6,7 +6,6 @@ from django.utils import simplejson as json
 from django.utils.encoding import smart_unicode
 from django.contrib.sites.models import Site
 
-from categories.models import CategoryBase
 from jsonfield import JSONField
 
 from glynt.apps.utils import get_namedtuple_choices

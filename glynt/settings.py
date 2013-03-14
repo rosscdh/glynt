@@ -283,16 +283,6 @@ DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d
 '%b %d, %Y', '%d %b %Y', '%d %b, %Y', '%B %d %Y',
 '%B %d, %Y', '%d %B %Y', '%d %B, %Y')
 
-CATEGORIES_SETTINGS = {
-    'ALLOW_SLUG_CHANGE': False,
-    'CACHE_VIEW_LENGTH': 0,
-    'RELATION_MODELS': ["document.DocumentTemplateCategory"],
-    'M2M_REGISTRY': {},
-    'FK_REGISTRY': {},
-    'THUMBNAIL_UPLOAD_PATH': 'uploads/categories/thumbnails',
-    'THUMBNAIL_STORAGE': 'django.core.files.storage.FileSystemStorage',
-    'SLUG_TRANSLITERATOR': lambda x: x,
-}
 
 COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = False
