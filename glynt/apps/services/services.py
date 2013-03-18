@@ -52,7 +52,7 @@ class BaseDocumentAssemblerService(object):
             ,'body': html
             ,'signature': self.signature_page()
         }
-        logger.debug(context)
+        #logger.debug(context)
         return context
 
     def get_html(self, context=None):
@@ -68,7 +68,7 @@ class DocRaptorService(BaseDocumentAssemblerService):
         title = context.get('title', 'Untitled Document')
 
         html = self.get_html(context=context)
-        logger.debug('Local HTML Response: %s' % html)
+        #logger.debug('Local HTML Response: %s' % html)
 
         try:
             dr = docraptor.DocRaptor(api_key=DOCRAPTOR_KEY)
