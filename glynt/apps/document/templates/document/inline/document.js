@@ -214,7 +214,7 @@ $(document).ready(function(){
             return (self.currentFormStep() == 1)? false : true ;
         }
         self.isLastStep = function isLastStep() {
-            is_last_step = (self.maxFormSteps() == self.currentFormStep()) ? true : false ;
+            var is_last_step = (self.maxFormSteps() == self.currentFormStep()) ? true : false ;
             if (is_last_step == true) {
               $('#last-step').show();
               $('li#last_step').addClass('active');
@@ -237,7 +237,7 @@ $(document).ready(function(){
         }
 
         self.initPrevStep = function initPrevStep(active) {
-          default_step = 1;
+          var default_step = 1;
 
           for(var step = active; step >= 1; step--) {
               if(self.validateStep(step)) {
@@ -252,7 +252,7 @@ $(document).ready(function(){
         };
 
         self.initNextStep = function initNextStep(active) {
-          default_step = parseInt(self.maxFormSteps());
+          var default_step = parseInt(self.maxFormSteps());
 
           for(var step = active; step <= default_step ; step++) {
               if(self.validateStep(step)) {
@@ -272,7 +272,7 @@ $(document).ready(function(){
         }
 
         self.persistProgressToCookie = function persistProgressToCookie(step) {
-          element = self.steps()[step]
+          var element = self.steps()[step]
           if (element != undefined) {
             $.each(App.documentModel.context(), function(key, value){
               App.persistKeyValueToCookie(key, value);
@@ -414,7 +414,7 @@ $(document).ready(function(){
                             hb_ob[key] = element.val();
                         }
                     });
-                }else{
+                } else {
                     hb_ob = $.extend({}, hb_base_ob);
                     hb_ob['id'] = self.iteration_title.toLowerCase() +'_'+ c;
                     hb_ob['index'] = c;
@@ -755,8 +755,8 @@ $(document).ready(function(){
     self.render = function render() {
         // append the signature_template as a variable; and pass the current context into it
         // so we can render out the desired fields
-        context = self.context();
-        invitees = {'signatures': $.parseJSON($('script#js-invitee-list').html())};
+        var context = self.context();
+        var invitees = {'signatures': $.parseJSON($('script#js-invitee-list').html())};
         $.extend(context, invitees)
         console.log(new Handlebars.SafeString(self.compiledSignatureTemplate(context)))
         self.setContextItemByForce('signature_template', new Handlebars.SafeString(self.compiledSignatureTemplate(context)));
@@ -764,35 +764,28 @@ $(document).ready(function(){
     }
   }
 
-    /**
-    * Primary view acts as a holder for the other views
-    */
-	
-	$('#preview-doc').toggle(
-	function()
-	{
-	  $('#preview-doc').animate({
-		  height: $(window).height() - 100, 
-	 }, 250);
-	$('#view-doc').hide();
-	$('#close-doc').show();
-	
-	// Set the preview window to the correct height
-	var h = $(window).height() - 150;
-	$('.doc-body').height(h);
+  /**
+   * Primary view acts as a holder for the other views
+   */
+  $('#preview-doc').toggle(function() {
+    $('#preview-doc').animate({
+      height: $(window).height() - 100,
+    }, 250);
+    $('#view-doc').hide();
+    $('#close-doc').show();
 
-	},
-	function()
-	{
-	  $('#preview-doc').animate({
-		  height: "30px", 
-	  }, 250);     
-	$('#view-doc').show();
-	$('#close-doc').hide();
-	});
-	
-	
-	
+    // Set the preview window to the correct height
+    var h = $(window).height() - 150;
+    $('.doc-body').height(h);
+  },
+  function() {
+    $('#preview-doc').animate({
+      height: "30px",
+    }, 250);
+    $('#view-doc').show();
+    $('#close-doc').hide();
+  });
+
     function PageDocumentController() {
         var self = this;
         self.valid_fieldtypes = ['input', 'text','select','textarea','select-one','radio','checkbox']
@@ -923,7 +916,7 @@ $(document).ready(function(){
             self.documentModel.renderedHTML(self.documentModel.render())
         }
         self.renderMarkdown = function renderMarkdown(md) {
-          return self.markdownConverter.makeHtml(md);
+            return self.markdownConverter.makeHtml(md);
         }
 
         self.changeContext = function changeContext(input) {
