@@ -2,8 +2,8 @@
 
 ## Basic Installation
 
-1. easy_install pip
-2. pip install virtualenv virtualenvwrapper
+1. ```easy_install pip```
+2. ```pip install virtualenv virtualenvwrapper```
 3. Perform these steps
 
     export WORKON_HOME=~/.virtualenvs
@@ -12,20 +12,20 @@
     echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bash_profile
 
 4. mkvirtualenv --no-site-packages glynt
-5. cd /path/to/glynt
-6. pip install -r requirements.txt : install update the required libraries (append --upgrade if you are not sure)
-7. python manage.py syncdb : sync the database; and create the default user if there is not already one
-7a. python manage.py migrate socialregistration --fake : there is a small issue with socialregistration at the moment and its migration needs to be faked
-8. python manage.py migrate : perform the rest of the migrations
-9. python manage.py loaddata sites document_category documenttemplate public/fixtures/cms.json
-10. python manage.py check_permissions # Creates the userena permissions
-11. Thats it you can now python manage.py runserver_plus
+5. ```cd /path/to/glynt```
+6. ```pip install -r requirements.txt``` : install update the required libraries (append --upgrade if you are not sure)
+7. ```python manage.py syncdb``` : sync the database; and create the default user if there is not already one
+7a. ```python manage.py migrate socialregistration --fake``` : there is a small issue with socialregistration at the moment and its migration needs to be faked
+8. ```python manage.py migrate``` : perform the rest of the migrations
+9. ```python manage.py loaddata sites document_category documenttemplate public/fixtures/cms.json```
+10. ```python manage.py check_permissions``` # Creates the userena permissions
+11. Thats it you can now ```python manage.py runserver_plus```
 12. access http://local.weareml.com:8000/ (you may need to add 127.0.0.1 local.weareml.com to your /etc/hosts file)
 
 ## Update requirments
 
-1. pip install --upgrade pip - ensure latest version
-2. pip install -r requirements.txt : install update the required libraries (append --upgrade if you are not sure)
+1. ```pip install --upgrade pip``` - ensure latest version
+2. ```pip install -r requirements.txt``` : install update the required libraries (append --upgrade if you are not sure)
 
 
 ## Creating Fixtures
@@ -41,7 +41,7 @@
 
 ## Django CMS - Dev Pages to live ##
 
-manage.py shell_plus
+```manage.py shell_plus```
 
     `Page.objects.filter(site=Site.objects.get(pk=1)).update(site=Site.objects.get(pk=3))`
 
@@ -51,7 +51,7 @@ manage.py shell_plus
 
 Remember to replace bad json:
 
-vim glynt/apps/flyform/fixtures/flyform.xml
+```vim glynt/apps/flyform/fixtures/flyform.xml```
 
     :%s/u'/"/gc
     :%s/',/\",/gc
@@ -62,11 +62,11 @@ vim glynt/apps/flyform/fixtures/flyform.xml
 
 Remember to remove invalid xml return characters using vim:
 
-vim glynt/apps/document/fixtures/document.xml
+```vim glynt/apps/document/fixtures/document.xml```
 
     :%s/\%x0c/\r/gc
 
-1. python manage.py loaddata sites document_category document_flyform
+1. ```python manage.py loaddata sites document_category document_flyform```
 
 
 ## Markdown
