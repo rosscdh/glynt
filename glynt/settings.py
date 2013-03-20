@@ -164,6 +164,8 @@ PROJECT_APPS = (
 
     # The default app that handles the basics
     'glynt.apps.default',
+    # The Legal Firm App
+    'glynt.apps.firm',
     # The Flyform
     'glynt.apps.flyform',
     # The primary document view system

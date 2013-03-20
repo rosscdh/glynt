@@ -18,6 +18,8 @@ urlpatterns = patterns('',
 	url(r'^social/', include('socialregistration.urls', namespace='socialregistration')),
 	url(r'^accounts/', include('userena.urls')),
 	url(r'^client/', include('glynt.apps.client.urls', namespace='client')),
+    # Legal Firms
+    url(r'^firm/', include('glynt.apps.firm.urls', namespace='firms')),
 	# Document Comments
 	url(r'^doc/comments/', include('django.contrib.comments.urls')),
 	# The Authoring Tool

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load url from future %}
+
+{% block body %}
+<div class="hero-unit"><h1>Create a new Lawyer</h1></div>
+
+<div class="row-fluid">
+
+<form action="{% url 'firms:create' %}" class="form form-horizontal" method="POST">{% csrf_token %}
+    {{ form }}
+
+    <div class="control-group">
+    <div class="controls">
+    <button id="firm-create" type="submit" class="submit btn">{% trans "Create" %}</button>
+    </div>
+    </div>
+    
+</form>
+
+
+</div>
+{% endblock %}
