@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from nose.tools import *
 from mocktest import *
 
-from .services import GlyntPdfService, HelloSignService
+from .services import GlyntPdfService, GlyntDocService, HelloSignService
 from glynt.apps.services.services import BaseDocumentAssemblerService
 from hellosign import HelloSignSignature, HelloSigner
 from glynt.apps.factories import DocumentFactory
@@ -56,6 +56,23 @@ class TestGlyntPdfService(mocktest.TestCase):
 
     def test_create_pdf(self):
         result = self.subject.create_pdf()
+        assert result.name is not None
+        assert type(result) is ContentFile
+        assert result._size > 0
+
+
+class TestGlyntDocService(mocktest.TestCase):
+    def setUp(self):
+        self.html = '<h1>Document Title</h1><p>Hi there</p>'
+        self.title = 'Title Goes Here'
+        self.subject = GlyntDocService(html=self.html, title=self.title)
+
+    @raises(TypeError)
+    def test_init_fail(self):
+        subject = GlyntDocService()
+
+    def test_create_pdf(self):
+        result = self.subject.create_doc()
         assert result.name is not None
         assert type(result) is ContentFile
         assert result._size > 0
