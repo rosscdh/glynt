@@ -61,9 +61,9 @@ class BaseDocumentAssemblerService(object):
         return render_to_string(self.template, context)
 
 
-class DocRaptorService(BaseDocumentAssemblerService):
+class DocRaptorPdfService(BaseDocumentAssemblerService):
     def create_pdf(self):
-        logger.info('using DocRaptor Service: %s' % DOCRAPTOR_KEY)
+        logger.info('using DocRaptor Pdf Service: %s' % DOCRAPTOR_KEY)
         context = self.get_context()
         title = context.get('title', 'Untitled Document')
 
@@ -74,8 +74,8 @@ class DocRaptorService(BaseDocumentAssemblerService):
             dr = docraptor.DocRaptor(api_key=DOCRAPTOR_KEY)
 
             pdf_response = dr.create({
-                        'document_content': html.encode("UTF-8"),
-                        'test': True
+                        'document_content': html.encode("UTF-8")
+                        ,'test': True
                     }).content
 
             logger.info('DocRaptor Response Type: %s' % type(pdf_response))
@@ -87,6 +87,51 @@ class DocRaptorService(BaseDocumentAssemblerService):
             logger.error(e)
 
         return ContentFile(pdf_response, name=title)
+
+
+class DocRaptorDocService(BaseDocumentAssemblerService):
+    def create_doc(self):
+        logger.info('using DocRaptor Docx Service: %s' % DOCRAPTOR_KEY)
+        context = self.get_context()
+        title = context.get('title', 'Untitled Document')
+
+        html = self.get_html(context=context)
+        #logger.debug('Local HTML Response: %s' % html)
+
+        try:
+            dr = docraptor.DocRaptor(api_key=DOCRAPTOR_KEY)
+
+            pdf_response = dr.create({
+                        'document_type': 'docx'
+                        ,'document_content': html.encode("UTF-8")
+                        ,'test': True
+                    }).content
+
+            logger.info('DocRaptor Response Type: %s' % type(pdf_response))
+
+            if type(pdf_response) == str:
+                logger.debug('DocRaptor Response: %s' % pdf_response)
+
+        except Exception as e:
+            logger.error(e)
+
+        return ContentFile(pdf_response, name=title)
+
+
+class GlyntPdfService(DocRaptorPdfService):
+    """
+        Interface to the PDF Creation Services
+        Used by the views
+    """
+    pass
+
+
+class GlyntDocService(DocRaptorDocService):
+    """
+        Interface to the DOC Creation Services
+        Used by the views
+    """
+    pass
 
 
 class XHTML2PdfService(BaseDocumentAssemblerService):
@@ -113,14 +158,6 @@ class XHTML2PdfService(BaseDocumentAssemblerService):
 
         # return a ContentFile object to be used
         return ContentFile(pdf.read(), name=title)
-
-
-class GlyntPdfService(DocRaptorService):
-    """
-        Interface to the various PDF Creation Services
-        Used by the views
-    """
-    pass
 
 
 class HelloSignService(object):

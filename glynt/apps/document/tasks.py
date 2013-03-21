@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from celery.task import task
 
 from glynt.apps.document.models import DocumentHTML
-from glynt.apps.services import GlyntPdfService
+from glynt.apps.services.services import GlyntPdfService, GlyntDocService
 
 from glynt.apps.smoothe.pybars_smoothe import SmootheRemoval
 
@@ -118,5 +118,16 @@ def convert_to_pdf(document_html, **kwargs):
     """
     logger.info('Creating PDF Document: %s DocumentHTML: %s'%(kwargs.get('document_pk', None), kwargs.get('document_html_pk', None),))
     glynt_pdf = GlyntPdfService(html=document_html.render(), title=kwargs.get('title', None))
-    pdf_file = glynt_pdf.create_pdf()
-    default_storage.save('%s/glyntpdf.pdf'%(settings.MEDIA_ROOT,), pdf_file)
+    default_storage.save('%s/glyntpdf.pdf'%(settings.MEDIA_ROOT,), glynt_pdf.create_pdf())
+
+
+@task()
+def convert_to_doc(document_html, **kwargs):
+    """ 
+        @TODO this is a POC
+        >>> # Send for HTML to DOCx conversion
+        >>> convert_to_doc(document_html=html, title=document.name)
+    """
+    logger.info('Creating Docx Document: %s DocumentHTML: %s'%(kwargs.get('document_pk', None), kwargs.get('document_html_pk', None),))
+    glynt_doc = GlyntDocService(html=document_html.render(), title=kwargs.get('title', None))
+    default_storage.save('%s/glyntdoc.docx'%(settings.MEDIA_ROOT,), glynt_doc.create_doc())

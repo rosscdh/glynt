@@ -82,6 +82,7 @@
                         <li><a id="edit-{{ d.pk }}" class="small" href="{% url 'doc:update_document' pk=d.pk %}">{% trans 'Edit' %}</a></li>
                         <li><a id="clone-{{ d.pk }}" href="#clone" data-url="{% url 'document:my_clone' pk=d.pk %}" data-pk="{{ d.pk }}" class="clone-my-document">{% trans 'Clone' %}</a></li>
                         <li><a id="export-{{ d.pk }}" href="{% url 'export:as_pdf' pk=d.pk %}" target="_BLANK" data-url="{% url 'export:as_pdf' pk=d.pk %}" data-pk="{{ d.pk }}" class="">{% trans 'Download PDF' %}</a></li>
+                        <li><a id="export-{{ d.pk }}" href="{% url 'export:as_doc' pk=d.pk %}" target="_BLANK" data-url="{% url 'export:as_doc' pk=d.pk %}" data-pk="{{ d.pk }}" class="">{% trans 'Download DOC' %}</a></li>
                         <li><a id="export-{{ d.pk }}" href="{% url 'export:as_html' pk=d.pk %}" target="_BLANK" data-url="{% url 'export:as_html' pk=d.pk %}" data-pk="{{ d.pk }}" class="">{% trans 'Download HTML' %}</a></li>
                         <li><a id="delete-{{ d.pk }}" href="#delete" data-url="{% url 'document:my_delete' pk=d.pk %}" data-pk="{{ d.pk }}" class="delete-my-document">{% trans 'Delete' %}</a></li>
                         </ul>
