@@ -32,6 +32,10 @@ class Office(models.Model):
     photo = models.ImageField(upload_to='office')
     data = JSONField()
 
+    @property
+    def geo_location(self):
+        return u'%s' % self.data.get('geo_location', None)
+
 
 class tmpLawyerFirm(models.Model):
     """ Temp Table to allow capture of lawyer data"""
