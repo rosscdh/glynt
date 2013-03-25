@@ -4,6 +4,9 @@ django-cms==2.3.4
 #psycopg2 # required for production postgres db
 python-memcached
 
+# model charts
+pygraphviz
+
 Werkzeug
 django-extensions
 south
@@ -81,5 +84,4 @@ HTTPretty
 behave
 django-nose
 mocktest
-djangosanetesting
 factory_boy
