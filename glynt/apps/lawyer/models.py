@@ -16,7 +16,6 @@ class Lawyer(models.Model):
         (3, 'role3', 'Role 3'),
     ))
     user = models.ForeignKey(User)
-    slug = models.SlugField()
     role = models.IntegerField(choices=LAWYER_ROLES.get_choices(), db_index=True)
     summary = models.CharField(max_length=255)
     bio = models.TextField()
