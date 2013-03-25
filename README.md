@@ -45,6 +45,10 @@
 
     `Page.objects.filter(site=Site.objects.get(pk=1)).update(site=Site.objects.get(pk=3))`
 
+## Model Graphs ##
+
+```./manage.py graph_models -g -o  ~/Desktop/glynt-models.png firm lawyer deal endorsement auth```
+
 ## Fix Fixtures
 
 ### When manage.py dumpdata flyform.flyform --format=xml > ~/flyform.xml
