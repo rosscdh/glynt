@@ -12,10 +12,9 @@ class Deal(models.Model):
     and the recipients
     """
     DEAL_TYPES = get_namedtuple_choices('DEAL_TYPES', (
-        (1, 'dealtype1', 'Type 1'),
-        (2, 'dealtype2', 'Type 2'),
-        (3, 'dealtype3', 'Type 3'),
-      
+        (1, 'formation', 'Company Formation and Setup'),
+        (2, 'seed', 'Seed Financing'),
+        (3, 'series_a', 'Series A'),
     ))
     name = models.CharField(max_length=64)
     summary = models.CharField(max_length=255)

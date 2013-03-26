@@ -9,11 +9,16 @@ from glynt.apps.utils import get_namedtuple_choices
 class Lawyer(models.Model):
     """ The Firms
     Stores sundry information about legal Firms
+    LAWYER_ROLES: discussed and was very sure that lawyers only have 1 role
+    and are never part of more than 1 firm
     """
     LAWYER_ROLES = get_namedtuple_choices('LAWYER_ROLES', (
-        (1, 'role1', 'Role 1'),
-        (2, 'role2', 'Role 2'),
-        (3, 'role3', 'Role 3'),
+        (13, 'managing_partner', 'Managing Partner'),
+        (8, 'senior_partner', 'Senior Partner'),
+        (5, 'partner', 'Partner'),
+        (3, 'of_counsel', 'Of Counsel'),
+        (2, 'senior_associate', 'Senior Associate'),
+        (1, 'associate', 'Associate'),
     ))
     user = models.ForeignKey(User)
     role = models.IntegerField(choices=LAWYER_ROLES.get_choices(), db_index=True)
