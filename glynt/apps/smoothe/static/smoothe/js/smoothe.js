@@ -5,6 +5,7 @@
 */
 
 Handlebars.registerHelper('doc_var', function(options) {
+    console.log(options);
     var app = window.app || eval('window.'.format(options.hash.app)) ;
     var var_name = options.hash.name.compact();
     // wrap the value in our detailed html to allow UX interaction
@@ -25,7 +26,7 @@ Handlebars.registerHelper('doc_var', function(options) {
         if (has_initial === false) {
             options.hash.has_initial = has_initial;
             options.hash.initial = options.fn(this).compact();
-            console.log('name: {name},initial: {initial}'.assign({initial:options.hash.initial, name:var_name}))
+            console.log('name: {name},initial: {initial}'.assign({initial:options.hash.initial, name:var_name}));
         }
 
         value = (options.hash.initial !== undefined) ? options.hash.initial : '' ;
@@ -65,17 +66,17 @@ Handlebars.registerHelper('doc_choice', function(options) {
         } else {
             options.hash.choices = options.hash.choices.split(',');
         }
-        var app = window.app || eval('window.'.format(options.hash.app)) ;
+        app = window.app || eval('window.'.format(options.hash.app));
         var value = null;
-        var var_name = options.hash.name;
+        var_name = options.hash.name;
         var choices = options.hash.choices;
 
         var has_initial = (options.hash.initial === undefined) ? false : true;
         if (has_initial === false) {
             options.hash.initial = options.fn(this);
         }
-        value = (options.hash.initial !== undefined) ? options.hash.initial : '' ;
-        value = (app.context[var_name] === undefined || app.context[var_name].value === "") ? value : app.context[var_name].value ;
+        value = (options.hash.initial !== undefined) ? options.hash.initial : '';
+        value = (app.context[var_name] === undefined || app.context[var_name].value === "") ? value : app.context[var_name].value;
         options.hash.value = value;
 
         options.hash.type = 'doc_choice';
@@ -100,8 +101,8 @@ Handlebars.registerHelper('doc_select', function(options) {
         if (options.hash.name === undefined || options.hash.name === '') {
             throw new Error('doc_select requires a unique "name"');
         }
-        var app = window.app || eval('window.'.format(options.hash.app)) ;
-        var var_name = options.hash.name;
+        app = window.app || eval('window.'.format(options.hash.app)) ;
+        var_name = options.hash.name;
         var label = (options.hash.label === undefined) ? false: options.hash.label;
         var can_toggle = (options.hash.can_toggle === undefined) ? false: options.hash.can_toggle;
         var multi = (options.hash.multi === undefined) ? false: options.hash.multi;
@@ -126,12 +127,12 @@ Handlebars.registerHelper('doc_select', function(options) {
         // setup the partial list
         for (var i = 0; i < select_options.length; i++) {
             // handle this ugly nastiness from submitting json obejct and having it converted into an abomination
-            var selected = '{var_name}[{index}][selected]'.assign({var_name:var_name, index:i})
-            if (app.document_data[selected] !== undefined){
-                selected = (app.document_data[selected] == 'true')
+            var selected = '{var_name}[{index}][selected]'.assign({var_name:var_name, index:i});
+            if (app.document_data[selected] !== undefined) {
+                selected = (app.document_data[selected] == 'true');
             }
             // used for setting defaults
-            if (has_selected_item == false && selected === true) {
+            if (has_selected_item === false && selected === true) {
                 has_selected_item = true;
             }
 
@@ -151,14 +152,14 @@ Handlebars.registerHelper('doc_select', function(options) {
                 if (default_selected_items.indexOf(String(i)) >= 0) {
                     item.selected = true;
                 }
-            })
+            });
         }
 
         // set the context
         options = app.instance_count(options, var_name);
         app.context[var_name] = options.hash;
 
-        if (can_increment == true) {
+        if (can_increment === true) {
             var incrementor = Handlebars.partials['incrementor-partial'];
             var incrementor_hash = {
               'incrementor_for': var_name,
@@ -167,13 +168,13 @@ Handlebars.registerHelper('doc_select', function(options) {
             extended_html.push(incrementor(incrementor_hash));
         }
 
-        if (can_toggle == true) {
+        if (can_toggle === true) {
             var toggle = Handlebars.partials['toggle-partial'];
             var show_toggle = (app.context[var_name] === undefined || app.context[var_name].show_toggle === undefined || app.context[var_name].show_toggle === true) ? true : false;
             var toggle_hash = {
                 'toggle_for': var_name,
                 'label': label,
-                'text': (show_toggle == false) ? 'Show': 'Hide'
+                'text': (show_toggle === false) ? 'Show': 'Hide'
             };
             extended_html.push(toggle(toggle_hash));
         }
@@ -192,7 +193,7 @@ Handlebars.registerHelper('help_for', function(options) {
     try{
         var var_name = options.hash.varname;
     } catch(e) {
-        console.log(e)
+        console.log(e);
     }
     var content = options.fn(this).compact();
 
