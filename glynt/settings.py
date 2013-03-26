@@ -244,6 +244,8 @@ CMS_TEMPLATES = (
     ('layout/homepage.html', 'Homepage Template'),
     ('layout/default.html', 'Basic Template'),
     ('layout/document_list.html', 'Document List Template'),
+    ('layout/new-home.html', 'New homepage'),
+
 )
 
 CMS_APPHOOKS = ()

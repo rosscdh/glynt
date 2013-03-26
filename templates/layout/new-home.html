@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block navbar %}{% endblock %}
+
+
+{% block bodyclass %}splash{% endblock %}
+
+{% block prebody %}
+
+<div class="container">
+	<div class="row">
+		<img src="/static/img/logo-splash.png">
+		<hr />
+		<h1>Visibility and efficiency for startup law</h1>
+		<h3>Engage top law firms and effortlessly manage your transaction through LawPal</h3>
+	</div>
+	<div class="row startups">
+		<h3>Startups - follow us for updates (we'll be ready for your shortly)</h3>
+		<form class="form-inline">
+		  <input type="text" class="input-small" placeholder="Email" type="email">
+		  <button type="submit" class="btn">Submit</button>
+		</form>
+		<hr />
+	</div>
+	<div class="row startups">
+		<h3>Lawyers</h3>
+		<a href="#" class="btn btn-large">Sign in with LinekdIn</a>
+		<a href="#" class="btn btn-large">Sign in with Twitter</a>
+	</div>
+</div>
+{% endblock %}
+{% block footer %}
+
+
+
+{% endblock %}
