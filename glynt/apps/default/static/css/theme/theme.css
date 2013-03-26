@@ -180,9 +180,18 @@ div#messages ul {
 	background-repeat: repeat-x;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#475B77', endColorstr='#475B77', GradientType=0);
 }
+ /* 2.0 homepage */
+ 
+ body.splash {
+     padding-top: 0px;
+     background-color:#4bd1e5;
+     padding-top:90px;
+     color:white;
+ }
 
 
-/* Index
+
+/* Old Index
 -------------------------------------------------- */
 
 /* carousel section */
