@@ -1,3 +1,4 @@
+.sonar
 *_valid.html
 *_invalid.html
 \.coverage
