@@ -1,0 +1,250 @@
+{% extends 'base.html' %}
+
+
+
+{% block bodyclass %}lawyer-form{% endblock %}
+
+{% block prebody %}
+<div id="hero">
+	<div class="container">
+		<!-- starts carousel -->
+		<div class="row animated fadeInDown">
+			<div class="span12">
+				<h1>Update your profile</h1>
+				<h3>The doors are opening soon. Make sure everything is up to date.<br />
+					Have a question? Contact us at <a href="mailto:founders@lawpal.com">founders@lawpal.com</a> </h3>
+				 </h3>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container profile">
+	<div class="row">
+		<div class="span12">
+			<h1>
+				Confirm your details
+			</h1>
+			<br>
+			<form class="form-horizontal">
+				<div class="alert">
+				  <button type="button" class="close" data-dismiss="alert">&times;</button>
+				  <strong>Warning!</strong> Best check yo self, you're not looking too good.
+				</div>
+				<div class="alert alert-error">
+	              <button type="button" class="close" data-dismiss="alert">×</button>
+	              <strong>Oh snap!</strong> Change a few things up and try submitting again.
+	            </div>
+			<div class="row">
+					<div class="span5">
+						<div class="control-group success">
+							<label class="control-label" for="inputEmail">First Name</label>
+							<div class="controls">
+								<input type="text" id="inputEmail" placeholder="John">
+								<span class="help-inline">Woohoo!</span>
+							</div>
+						</div>
+						<div class="control-group error">
+							<label class="control-label" for="inputEmail">Email address</label>
+							<div class="controls">
+								<input type="text" id="inputEmail" placeholder="Email">
+								<span class="help-inline">This email is already registered.</span>
+								
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="inputEmail">Telephone Number</label>
+							<div class="controls">
+								<input type="text" id="inputEmail" placeholder="+44 207 7778 2020" title="Shows on your profile. Include country code.">
+							</div>
+						</div>
+					</div>
+					
+					<div class="span5">
+						<div class="control-group">
+							<label class="control-label" for="inputPassword">Last Name</label>
+							<div class="controls">
+								<input type="text" id="inputPassword" placeholder="Sonsini">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="inputEmail">Firm Name</label>
+							<div class="controls">
+								<input type="text" class="" style="margin: 0 auto;" data-provide="typeahead" data-items="4" data-source='["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Dakota","North Carolina","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"]'>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="inputEmail">Firm Position</label>
+							<div class="controls">
+								<select>
+								  <option>Associate</option>
+								  <option>Partner</option>
+								  <option>etc</option>
+								</select>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="inputEmail">Years Practicing</label>
+							<div class="controls">
+								<select>
+								  <option>1</option>
+								  <option>2</option>
+								  <option>3</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="span12">
+						<legend>Your Practice Locations</legend>
+					</div>
+				</div>
+				<div class="row">
+					<div class="span5">
+						<div class="control-group">
+							<label class="control-label" for="inputPassword">Primary Location</label>
+							<div class="controls">
+								<input type="text" id="inputPassword" placeholder="London, UK" title="The primary city you operate from">
+							</div>
+						</div>
+					</div>
+					<div class="span5">
+						<div class="control-group">
+							<label class="control-label" for="inputPassword">Secondary Location</label>
+							<div class="controls">
+								<input type="text" id="inputPassword" placeholder="San Francisco, CA" title="Optional. The secondary city you operate from.">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="span12">
+						<legend>Your Profile</legend>
+					</div>
+				</div>
+				<div class="row">
+					<div class="span12">
+						<div class="control-group">
+							<label class="control-label" for="inputPassword">Short description</label>
+							<div class="controls">
+								<input type="text" id="inputPassword" placeholder="e.g. Partner at WDJ advising technology companies in Europe" class="span8" title="Keep it short, and make it personal.">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="inputPassword">Bio</label>
+							<div class="controls">
+								<textarea rows="3" class="span5"></textarea>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="span12">
+						<legend>Profile Photo</legend>
+					</div>
+				</div>
+				<div class="row">
+					<div class="span8">
+						<div class="control-group">
+							<label class="control-label" for="inputPassword">Main Photo</label>
+							<div class="controls">
+								<div class="input-append">
+								  <input class="span4" id="appendedInputButton" type="text">
+								  <button class="btn" type="button">Browse</button>
+								</div>
+						      <span class="help-block">Please add a good quality photo to your profile. It really helps.</span>
+							</div>
+						</div>
+					</div>
+					<div class="span4">
+						<img src="http://placehold.it/130x130">
+					</div>
+				</div>
+				<div class="row">
+					<div class="span12">
+						<legend>Startups Advised</legend>
+					</div>
+				</div>
+				<div class="row">
+					<div class="span8">
+						<div class="control-group">
+							<label class="control-label" for="inputEmail">Startups Advised</label>
+							<div class="controls">
+								<input type="text" class="" style="margin: 0 auto;" data-provide="typeahead" data-items="4" data-source='["Airbnb","SocialGO","LawPal","Acme Co"]'>
+  						    	<span class="help-block">This helps us match you with similar startups</span>
+							</div>
+						</div>
+						
+					</div>
+					<div class="span4">
+						<ol>
+							<li>Airbnb</li>
+							<li>SocialGO</li>
+							<li>Uber</li>
+							<li>LawPal</li>
+						</oL>
+					</div>
+				</div>
+				<div class="row">
+					<div class="span12">
+						<legend>Approximate Transaction Volume</legend>
+					</div>
+				</div>
+				<div class="row">
+					<div class="span8">
+						<table class="table">
+							<tr>
+								<th class="span3"></th>
+								<th>2010</th>
+								<th>2011</th>
+								<th>2012</th>
+							</tr>
+
+							<tr>
+								<th>Incorporation and Setup</th>
+								<td><input class="span1" type="text"></td>
+								<td><input class="span1" type="text"></td>
+								<td><input class="span1" type="text"></td>
+							</tr>
+
+							<tr>
+								<th>Seed Financing</th>
+								<td><input class="span1" type="text"></td>
+								<td><input class="span1" type="text"></td>
+								<td><input class="span1" type="text"></td>
+							</tr>
+							<tr>
+								<th>Series A</th>
+								<td><input class="span1" type="text"></td>
+								<td><input class="span1" type="text"></td>
+								<td><input class="span1" type="text"></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="row">
+					<div class="span12">
+						<br />
+						<label class="checkbox">
+		                	<input type="checkbox"> I agree to the LawPal <a href="">Terms and Conditions</a>
+		              	</label>
+						<br />
+						<a href="#" class="btn btn-primary btn-large">Update Profile</a>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+$(document).ready(function(){
+	$('input[title]').tooltip({trigger: 'focus', placement: 'bottom'});
+});
+</script>
+
+{% endblock %}

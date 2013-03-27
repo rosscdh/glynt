@@ -1,0 +1,638 @@
+/* #######################################################################
+
+
+	LawPal Web App
+	
+	Last modified: 26/03/2013
+	
+	----------
+	
+	0.  CSS Reset
+	1.  Typography & Colours		
+	2.	Login and Signup Pages
+	3.	Buttons
+	4.	Landing Page
+	
+	
+ #######################################################################
+
+	0.  CSS Reset
+
+####################################################################### */
+
+html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,figcaption,figure,footer,header,hgroup,menu,nav,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0;}
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block;}
+blockquote,q{quotes:none;}
+blockquote:before,blockquote:after,q:before,q:after{content:none;}
+ins{background-color:#ff9;color:#000;text-decoration:none;}
+mark{background-color:#ff9;color:#000;font-style:italic;font-weight:700;}
+del{text-decoration:line-through;}
+abbr[title],dfn[title]{border-bottom:1px dotted;cursor:help;}
+table{border-collapse:collapse;border-spacing:0;}
+hr{display:block;height:1px;border:0;border-top:1px solid #ccc;margin:1em 0;padding:0;}
+input,select{vertical-align:middle;}
+body{font:13px/1.231 sans-serif;}
+select,input,textarea,button{font:99% sans-serif;}
+pre,code,kbd,samp{font-family:monospace, sans-serif;}
+html{overflow-y:scroll;}
+a:hover,a:active{outline:none;}
+ul,ol{margin-left:2em;}
+ol{list-style-type:decimal;}
+nav ul,nav li{list-style:none;list-style-image:none;margin:0;}
+small{font-size:85%;}
+strong,th{font-weight:700;}
+td{vertical-align:top;}
+sub,sup{font-size:75%;line-height:0;position:relative;}
+sup{top:-.5em;}
+sub{bottom:-.25em;}
+pre{white-space:pre-wrap;word-wrap:break-word;padding:1em;}
+textarea{overflow:auto;max-width:100%;}
+.ie6 legend,.ie7 legend{margin-left:-7px;}
+input[type="checkbox"]{vertical-align:bottom;}
+.ie7 input[type="checkbox"]{vertical-align:baseline;}
+label,input[type="button"],input[type="submit"],input[type="image"],button{cursor:pointer;}
+button,input,select,textarea{margin:0;}
+input:invalid,textarea:invalid{border-radius:1px;-moz-box-shadow:0 0 5px red;-webkit-box-shadow:0 0 5px red;box-shadow:0 0 5px red;}
+.no-boxshadow input:invalid,.no-boxshadow textarea:invalid{background-color:#f0dddd;}
+button{width:auto;overflow:visible;}
+.ie7 img{-ms-interpolation-mode:bicubic;}
+input[type="radio"],.ie6 input{vertical-align:text-bottom;}
+em,i { font-style: oblique; }
+img { max-width: 100%; height: auto; }
+input[type=text], input[type=button], input[type=submit], button, textarea { -webkit-appearance: none; }
+input, textarea { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
+
+/* #######################################################################
+
+	1.  Typography & Colours
+
+####################################################################### */
+
+html {
+-webkit-text-size-adjust: none;
+-webkit-font-smoothing: aliased;
+}
+body {
+font: 17px "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+color: #fff;
+background: #4ad1e5;
+font-weight: 300;
+text-rendering: optimizeLegibility;
+}
+button, input, select {
+font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+font-size: 17px;
+}
+article, p {
+line-height: 1.9;
+}
+p {
+margin: 0 0 1em 0;
+}
+h1 {
+font-size: 49px;
+font-weight: 300;
+}
+.login h2 {
+font-size: 21px;
+margin-bottom: 1em;
+}
+.signup-form h2 {
+font-size: 37px;
+font-weight: 100;
+margin: 0 0 0.25em 0;
+}
+.signup-form h3 {
+font-size: 23px;
+margin: 0 0 0.25em 0;
+}
+input[type=text], input[type=password], textarea {
+font-size: 17px;
+font-weight: 300;
+}
+.flag {
+font-size: 15px;
+color: #757c7e;
+font-weight: 300;
+}
+.flag a, .flag a:hover {
+color: #757c7e;
+}
+header nav ul li a {
+color: #757c7e;
+}
+.login section.main a {
+color: #fff;
+}
+.login section.main a:hover {
+color: #757c7e;
+}
+footer {
+font-size: 15px;
+color: #969898;
+}
+footer a {
+color: #fff;
+}
+footer .tweet {
+font-style: oblique;
+}
+footer h6 {
+font-size: 19px;
+}
+footer p {
+line-height: 1.4;
+}
+footer .blog-post a p {
+color: #b4b6b6;
+}
+.credits {
+font-size: 13px;
+}
+footer a.twitter:hover, footer a.facebook:hover {
+color: #fff;
+}
+
+/* #######################################################################
+
+	2.	Login and Signup Pages
+	
+####################################################################### */
+
+a, a:hover {
+text-decoration: none;
+-o-transition: color 0.25s ease-in;
+-webkit-transition: color 0.25s ease-in;
+-moz-transition: color 0.25s ease-in;
+transition: color 0.25s ease-in;
+}
+a:hover, header nav .active {
+color: #4ad1e5;
+}
+footer a.twitter, footer a.facebook, footer a.twitter:hover, footer a.facebook:hover {
+-o-transition: all 0.25s ease-in;
+-webkit-transition: all 0.25s ease-in;
+-moz-transition: all 0.25s ease-in;
+transition: all 0.25s ease-in;
+}
+.wrapper {
+width: 940px;
+margin: 0 auto;
+}
+header .logo {
+float: left;
+}
+header {
+float: left;
+width: 100%;
+background: #fff;
+padding: 30px 0;
+line-height: 0;
+}
+header .wrapper {
+position: relative;
+}
+header nav.main {
+float: left;
+margin-left: 33px;
+}
+header nav.user {
+float: right;
+}
+header nav ul {
+padding: 0;
+margin: 0;
+line-height: 1.2;
+}
+header nav ul li {
+display: inline;
+margin: 0 0 0 24px;
+padding: 0;
+}
+hgroup {
+display: block;
+float: left;
+width: 100%;
+}
+h1 {
+position: relative;
+float: left;
+}
+
+::-webkit-input-placeholder {
+color: #757c7e;
+}
+:-moz-placeholder {
+color: #757c7e;  
+}
+::-moz-placeholder {
+color: #757c7e;  
+}
+:-ms-input-placeholder {  
+color: #757c7e;  
+}
+.flag {
+background: #fbd831;
+white-space: nowrap;
+position: absolute;
+top: -12px;
+right: -86px;
+display: inline-block;
+line-height: 1.5;
+padding: 2px 8px;
+vertical-align: middle;
+}
+.flag.top {
+top: auto;
+bottom: -94px;
+right: 32px;
+bottom: -94px;
+right: 32px;
+}
+.flag:after {
+content:"";
+position: absolute;
+bottom: -10px;
+left: 0;
+border-width: 10px 10px 0px 0px;
+border-style: solid;
+border-color: #fbd831 transparent; 
+display:block; 
+width:0;
+}
+.flag.top:after {
+bottom: auto;
+top: -10px;
+left: auto;
+right: 0;
+border-width: 0px 0px 10px 10px ;
+}
+section.main {
+float: left;
+width: 100%;
+margin-top: 40px;
+}
+.login section.main {
+margin-top: 110px;
+}
+.login form {
+float: left;
+width: 100%;
+margin-bottom: 40px;
+}
+.login form.signup-form {
+margin-top: 80px;
+}
+.login form.signup-form p {
+width: 40.425531914894%;
+}
+.signup-form h3 {
+float: left;
+width: 100%;
+}
+.login section.main p.form-input {
+float: left;
+width: 40.425531914894%;
+margin-right: 2.127659574468%;
+}
+.login section.main p.form-submit {
+float: left;
+width: 14.893617021277%;
+}
+.login section.main form.signup-form p.form-submit {
+width: 100%;
+}
+input[type=text], input[type=password], textarea {
+padding: 18px 22px;
+background: #fff;
+border: none;
+width: 100%;
+border: 1px solid #fff;
+}
+input[type=text]:hover, input[type=password]:hover, textarea:hover, input[type=text]:focus, input[type=password]:focus, textarea:focus {
+border: 1px solid #2f8692;
+}
+input[type=checkbox], input[type=radio], label {
+float: left;
+vertical-align: middle;
+}
+input[type=checkbox], input[type=radio] {
+margin-top: 0.6em;
+margin-right: 2.127659574468%;
+}
+select {
+width: 100%;
+}
+label {
+margin-right: 2.127659574468%;
+}
+section.main {
+min-height: 528px;
+}
+footer {
+float: left;
+width: 100%;
+margin-top: 65px;
+padding: 65px 0;
+background: #222526;
+text-align: center;
+}
+p.social-signin a.btn {
+margin-right: 20px;
+}
+footer .footer-feed {
+float: left;
+width: 100%;
+margin-top: 65px;
+padding: 35px 0;
+border-top: 1px solid #4c5152;
+border-bottom: 1px solid #4c5152;
+text-align: left;
+}
+.tweet {
+float: left;
+width: 36.170212765957%;
+margin-left: 6.382978723404%;
+padding-left: 6.382978723404%;
+background: url(../img/icon-tweet.png) 0 50% no-repeat;
+}
+.blog-post {
+float: right;
+width: 36.170212765957%;
+margin-right: 6.382978723404%;
+}
+.blog-post img {
+float: left;
+margin-right: 20px;
+border: 1px solid #79797a;
+}
+footer .credits {
+float: left;
+width: 100%;
+padding: 25px 0;
+text-align: left;
+}
+footer p.left {
+float: left;
+width: 50%;
+}
+footer p.right {
+float: right;
+width: 33%;
+text-align: right;
+}
+footer a.twitter, footer a.facebook {
+margin-right: 15px;
+padding-left: 25px;
+background: url(../img/icon-social.png) 0 0 no-repeat;
+opacity: 0.5; 
+filter: alpha(opacity=50);
+}
+footer a.facebook {
+background-position: 0 100%;
+}
+footer a.twitter:hover, footer a.facebook:hover {
+opacity: 1; 
+filter: alpha(opacity=100);
+}
+.login hgroup h2  {
+float: left;
+width: 100%;
+}
+
+/* #######################################################################
+
+	3.  Buttons
+
+####################################################################### */
+
+button, a.btn {
+border: 1px solid #e76356;
+background-color: #f57d71;
+background-image: linear-gradient(bottom, rgba(0,0,0,.1) 0%, rgba(255,255,255,.1) 100%);
+color: #fff;
+padding: 15px 40px;
+vertical-align: middle;
+white-space: nowrap;
+font-weight: 300;
+}
+a.btn {
+padding: 15px 20px;
+}
+button:hover, a.btn:hover {
+background-color: #f07367;
+background-image: linear-gradient(bottom, rgba(255,255,255,.1) 0%, rgba(0,0,0,.1) 100%);
+color: #fff !important;
+}
+a.btn.twitter {
+background-image: url(../img/icon-twitter.png);
+background-position: 20px 50%;
+background-repeat: no-repeat;
+padding-left: 50px;
+border: 1px solid #1d90bb;
+background-color: #1ab4ef;
+background-color: -moz-linear-gradient(top,  #1ab4ef 0%, #00aced 100%);
+background-color: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#1ab4ef), color-stop(100%,#00aced));
+background-color: -webkit-linear-gradient(top,  #1ab4ef 0%,#00aced 100%);
+background-color: -o-linear-gradient(top,  #1ab4ef 0%,#00aced 100%);
+background-color: -ms-linear-gradient(top,  #1ab4ef 0%,#00aced 100%);
+background-color: linear-gradient(to bottom,  #1ab4ef 0%,#00aced 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1ab4ef', endColorstr='#00aced',GradientType=0 );
+}
+a.btn.twitter:hover {
+background-color: #00aced;
+background-color: -moz-linear-gradient(top,  #00aced 0%, #1ab4ef 100%);
+background-color: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#00aced), color-stop(100%,#1ab4ef));
+background-color: -webkit-linear-gradient(top,  #00aced 0%,#1ab4ef 100%);
+background-color: -o-linear-gradient(top,  #00aced 0%,#1ab4ef 100%);
+background-color: -ms-linear-gradient(top,  #00aced 0%,#1ab4ef 100%);
+background-color: linear-gradient(to bottom,  #00aced 0%,#1ab4ef 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00aced', endColorstr='#1ab4ef',GradientType=0 );
+}
+a.btn.facebook {
+background-image: url(../img/icon-fb.png);
+background-position: 20px 50%;
+background-repeat: no-repeat;
+padding-left: 40px;
+border: 1px solid #1b5266;
+background-color: #4f6aa2;
+background-color: -moz-linear-gradient(top,  #4f6aa2 0%, #3b5998 100%);
+background-color: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4f6aa2), color-stop(100%,#3b5998));
+background-color: -webkit-linear-gradient(top,  #4f6aa2 0%,#3b5998 100%);
+background-color: -o-linear-gradient(top,  #4f6aa2 0%,#3b5998 100%);
+background-color: -ms-linear-gradient(top,  #4f6aa2 0%,#3b5998 100%);
+background-color: linear-gradient(to bottom,  #4f6aa2 0%,#3b5998 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4f6aa2', endColorstr='#3b5998',GradientType=0 );
+}
+a.btn.facebook:hover {
+background-color: #3b5998;
+background-color: -moz-linear-gradient(top,  #3b5998 0%, #4f6aa2 100%);
+background-color: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#3b5998), color-stop(100%,#4f6aa2));
+background-color: -webkit-linear-gradient(top,  #3b5998 0%,#4f6aa2 100%);
+background-color: -o-linear-gradient(top,  #3b5998 0%,#4f6aa2 100%);
+background-color: -ms-linear-gradient(top,  #3b5998 0%,#4f6aa2 100%);
+background-color: linear-gradient(to bottom,  #3b5998 0%,#4f6aa2 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3b5998', endColorstr='#4f6aa2',GradientType=0 );
+}
+
+
+/* #######################################################################
+
+	4.	Landing Page
+	
+####################################################################### */
+
+body.landing {
+background: url(../img/landing-background.jpg) 0 0 no-repeat;
+background-size: cover;
+}
+body.landing .wrap {
+margin: 0 auto;
+width: 1024px;
+text-align: center;
+}
+body.landing .panel {
+float: left;
+width: 964px;
+background: url(../img/ie-panel.png) 0 0 no-repeat;
+background: rgba(0,0,0,0.77);
+margin-top: 75px;
+padding: 125px 30px;
+min-height: 410px;
+}
+body.landing .panel h1 {
+float: none;
+font-size: 55px;
+font-weight: 100;
+line-height: 1.2;
+}
+body.landing .panel h2 {
+font-size: 22px;
+font-weight: 100;
+}
+body.landing header {
+float: left;
+width: 100%;
+background: none;
+padding: 0;
+}
+body.landing .divide {
+margin: 0 0 1em 0;
+padding: 1em 0 2em 0;
+text-align: center;
+height: 2px;
+float: left;
+width: 100%;
+}
+body.landing .divider {
+width: 140px;
+margin: 1.5em auto 0 auto;
+height: 0;
+opacity: 0.5; 
+filter: alpha(opacity=30);
+border-top: 1px solid #fff;
+}
+body.landing .panel .left, body.landing .panel .right {
+float: left;
+width: 50%;
+}
+body.landing .panel .right {
+float: right;
+}
+body.landing .panel h3, body.landing .panel h4 {
+font-weight: 100;
+letter-spacing: 0.06em;
+}
+body.landing .panel h3 {
+font-size: 33px;
+margin-bottom:17px;
+}
+body.landing .panel h4 {
+font-size: 15px;
+color:#ccc;
+}
+a.btn strong {
+font-weight: 500;
+}
+body.landing .panel .left h4, body.landing .panel .right h4 {
+margin-bottom: 0.5em;
+}
+body.landing .panel input {
+float: none;
+width: 60%;
+padding: 13px 15px;
+margin-right: 20px;
+}
+body.landing .panel a.btn, body.landing .panel button {
+padding: 13px 15px;
+display: inline-block;
+}
+body.landing .panel button {
+padding: 13px 30px;
+}
+body.landing .panel a.btn {
+padding: 7px 15px;
+}
+body.landing .panel a.btn.linkedin {
+border: 1px solid #0273aa;
+margin-right: 20px;
+background: #1a88bd;
+background: -moz-linear-gradient(top,  #1a88bd 0%, #007bb6 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#1a88bd), color-stop(100%,#007bb6));
+background: -webkit-linear-gradient(top,  #1a88bd 0%,#007bb6 100%);
+background: -o-linear-gradient(top,  #1a88bd 0%,#007bb6 100%);
+background: -ms-linear-gradient(top,  #1a88bd 0%,#007bb6 100%);
+background: linear-gradient(to bottom,  #1a88bd 0%,#007bb6 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1a88bd', endColorstr='#007bb6',GradientType=0 );
+} 
+body.landing .panel a.btn.angelist {
+border: 1px solid #222121;
+background: #535353;
+background: -moz-linear-gradient(top,  #535353 0%, #404040 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#535353), color-stop(100%,#404040));
+background: -webkit-linear-gradient(top,  #535353 0%,#404040 100%);
+background: -o-linear-gradient(top,  #535353 0%,#404040 100%);
+background: -ms-linear-gradient(top,  #535353 0%,#404040 100%);
+background: linear-gradient(to bottom,  #535353 0%,#404040 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#535353', endColorstr='#404040',GradientType=0 );
+}
+body.landing .panel a.btn.linkedin:hover {
+background: #007bb6;
+background: -moz-linear-gradient(top,  #007bb6 0%, #1a88bd 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#007bb6), color-stop(100%,#1a88bd));
+background: -webkit-linear-gradient(top,  #007bb6 0%,#1a88bd 100%);
+background: -o-linear-gradient(top,  #007bb6 0%,#1a88bd 100%);
+background: -ms-linear-gradient(top,  #007bb6 0%,#1a88bd 100%);
+background: linear-gradient(to bottom,  #007bb6 0%,#1a88bd 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#007bb6', endColorstr='#1a88bd',GradientType=0 );
+}
+body.landing .panel a.btn.angelist:hover {
+background: #404040;
+background: -moz-linear-gradient(top,  #404040 0%, #535353 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#404040), color-stop(100%,#535353));
+background: -webkit-linear-gradient(top,  #404040 0%,#535353 100%);
+background: -o-linear-gradient(top,  #404040 0%,#535353 100%);
+background: -ms-linear-gradient(top,  #404040 0%,#535353 100%);
+background: linear-gradient(to bottom,  #404040 0%,#535353 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#404040', endColorstr='#535353',GradientType=0 );
+}
+.reveal {
+height: 110px;
+
+}
+.reveal .reveal-inner, .reveal .reveal-inner {
+	opacity:1;
+/*position: absolute;
+left: -99999em;
+float: left;
+width: 100%;*/
+}
+.no-js .reveal .reveal-inner, .reveal .reveal-inner.show {
+position: relative;
+left: auto;
+}
+body.landing .panel hgroup:hover {
+cursor: pointer;
+}
+
+

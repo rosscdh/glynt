@@ -250,8 +250,10 @@ CMS_TEMPLATES = (
     ('layout/homepage.html', 'Homepage Template'),
     ('layout/default.html', 'Basic Template'),
     ('layout/document_list.html', 'Document List Template'),
-    ('layout/new-home.html', 'New homepage'),
-
+    ('layout/new-home.html', '2.0 Homepage'),
+    ('layout/lawyer-welcome.html', '2.0 Lawyer Welcome'),
+    ('layout/lawyer-welcome-form.html', '2.0 Lawyer Form'),
+    ('layout/twitter-test.html', 'Twitter Test')
 )
 
 CMS_APPHOOKS = ()
