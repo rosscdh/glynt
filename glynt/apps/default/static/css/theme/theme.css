@@ -180,6 +180,22 @@ div#messages ul {
 	background-repeat: repeat-x;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#475B77', endColorstr='#475B77', GradientType=0);
 }
+
+#hero {
+	padding-top: 65px;
+	background: #4ad1e5; /* Old browsers */
+	height: auto;
+	padding-bottom: 55px;
+	color:white;
+	margin-bottom:40px;
+}
+#hero h1 {
+	font-size:44px;
+	line-height:60px;
+}
+#hero a {
+	color:white;
+}
  /* 2.0 homepage */
  
  body.splash {
@@ -190,17 +206,34 @@ div#messages ul {
  }
 
 
+ /* 2.0 Lawyer Welcome */
+
+ body.lawyer-welcome .screenshots {
+	 margin-top:-95px;
+	 padding-bottom:40px;
+ }
+ body.lawyer-welcome #hero {
+	 padding:60px 0px;
+ } 
+body.lawyer-welcome #hero h1 {
+ 	font-size:50px;
+ 	line-height:50px;
+	padding:15px 0px;
+}
+body.lawyer-welcome #hero h3 {
+	font-size:22px;
+	line-height:35px;
+}
+ body.lawyer-welcome .profile p {
+	 font-size:19px;
+	 line-height:30px;
+ }
 
 /* Old Index
 -------------------------------------------------- */
 
 /* carousel section */
-#hero {
-	padding-top: 40px;
-	background: #4ad1e5; /* Old browsers */
-	height: auto;
-	padding-bottom: 50px;
-}
+
 #hero .beta-flag {
 	position:relative;
 	padding:2px;
@@ -666,10 +699,7 @@ div#messages ul {
 
 /* Btn
 -------------------------------------------------- */
-.btn, .btn.dropdown-toggle {
-	border-radius:0px 0px 0px 0px!important;
-	
-}
+
 .btn-red {
 	background-color:#f7877c;
 	border:1px solid #e76356;
@@ -699,10 +729,7 @@ div#messages ul {
 .nav {
 	margin-bottom:0px;
 }*/
-.nav li a {
-	color:#51d3e6;
-	
-}
+
 /*
 .nav li {
 	font-size:16px;
