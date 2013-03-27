@@ -27,6 +27,9 @@ class Lawyer(models.Model):
     data = JSONField()
     photo = models.ImageField(upload_to='lawyer')
 
+    def __unicode__(self):
+        return u'%s' % (self.user.username,)
+
     @property
     def current_geo_loc(self):
         return u'%s' % self.data.get('current_geo_loc', None)

@@ -21,6 +21,8 @@ class Firm(models.Model):
     lawyers = models.ManyToManyField(User, related_name='firm_lawyers')
     deals = models.ManyToManyField(Deal, related_name='firm_deals')
 
+    def __unicode__(self):
+        return u'%s' % (self.name,)
 
 class Office(models.Model):
     """ The Firm Office
@@ -31,6 +33,9 @@ class Office(models.Model):
     country = models.CharField(max_length=64, db_index=True)
     photo = models.ImageField(upload_to='office')
     data = JSONField()
+
+    def __unicode__(self):
+        return u'%s - %s' % (self.firm.name, self.address,)
 
     @property
     def geo_location(self):
