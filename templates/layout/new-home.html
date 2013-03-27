@@ -1,36 +1,150 @@
-{% extends 'base.html' %}
 
-{% block navbar %}{% endblock %}
+<!doctype html>
+
+<!--[if lt IE 7 ]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+
+<!--[if IE 7 ]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+
+<!--[if IE 8 ]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+
+<!--[if IE 9 ]>    <html class="no-js ie9" lang="en"> <![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+
+<html class="no-js" lang="en">
+
+<!--<![endif]-->
+
+<head>
+
+<meta charset="utf-8">
+
+<!--[if lt IE 9]> 
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+<![endif]-->
+
+<title>LawPal Landing</title>
+
+<meta name="description" content="">
+
+<meta name="author" content="">
+
+<link rel="stylesheet" href="/static/homepage/assets/css/lawpal.css">
+
+</head>
+
+<body class="landing">
 
 
-{% block bodyclass %}splash{% endblock %}
 
-{% block prebody %}
 
-<div class="container">
-	<div class="row">
-		<img src="/static/img/logo-splash.png">
-		<hr />
-		<h1>Visibility and efficiency for startup law</h1>
-		<h3>Engage top law firms and effortlessly manage your transaction through LawPal</h3>
+
+<div class="wrap">
+
+	<div class="panel">
+
+	
+
+		<header>
+
+			<a href="#" title="Go Home"><img src="/static/homepage/assets/img/logo-white.png" alt="LawPal logo" /></a>
+
+			<div class="divide"></div>
+
+		</header>
+
+
+
+		<section class="landing-main" role="main">
+
+			<article>
+
+				<hgroup>
+
+					<h1>
+
+						Get your transaction done
+
+					</h1>
+
+					<h2>
+
+						Founders + lawyer matchmaking and transaction management
+
+					</h2>
+
+				</hgroup>
+
+				<div class="divide"></div>
+
+					<form class="left reveal">
+
+						<hgroup>
+
+							<h3>Startups</h3>
+
+						</hgroup>	
+
+						<div class="reveal-inner">
+
+							<!-- <h4>Follow us for updates (we're not yet ready for you)</h4> -->
+
+							<p>
+
+								<input type="text" name="username" placeholder="Sign up for updates" /><button type="submit">Sign up</button>
+
+							</p>
+
+						</div>	
+
+					</form>
+
+					<div class="right reveal">
+
+						<hgroup>
+
+							<h3>Lawyers</h3>
+
+						</hgroup>
+
+						<div class="reveal-inner">
+
+							<!-- <h4>Sign in with your existing social logins below</h4> -->
+
+							<p>
+
+								<a class="btn linkedin" href="/welcome" title="Sign in with LinkedIn">Sign in with <strong>LinkedIn</strong></a>
+
+								<a class="btn angelist" href="/welcome" title="Sign in with AngeList">Sign in with <strong>AngelList</strong></a>
+
+							</p>	
+
+						</div>	
+
+					</div>
+
+				</div>	
+
+			</article>
+
+		</section>
+
+		
+
 	</div>
-	<div class="row startups">
-		<h3>Startups - follow us for updates (we'll be ready for your shortly)</h3>
-		<form class="form-inline">
-		  <input type="text" class="input-small" placeholder="Email" type="email">
-		  <button type="submit" class="btn">Submit</button>
-		</form>
-		<hr />
-	</div>
-	<div class="row startups">
-		<h3>Lawyers</h3>
-		<a href="#" class="btn btn-large">Sign in with LinekdIn</a>
-		<a href="#" class="btn btn-large">Sign in with Twitter</a>
-	</div>
-</div>
-{% endblock %}
-{% block footer %}
+
+</div>	
 
 
 
-{% endblock %}
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> 
+
+<script src="/static/homepage/assets/js/general.js"></script> 
+
+</body>
+
+</html>
