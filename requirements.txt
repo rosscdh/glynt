@@ -17,11 +17,11 @@ pyyaml
 
 markup
 
-django-celery
+django-rq
 django-templated-email
 
-PIL
-sh
+# Imaging
+pillow
 
 xhtml2pdf
 
@@ -43,9 +43,8 @@ newrelic
 -e git+https://github.com/rosscdh/django-templatetag-handlebars.git#egg=django-templatetag-handlebars
 -e git+https://github.com/klen/django_markdown.git#egg=django_markdown
 
-# Note the @branch
--e git+https://github.com/rosscdh/django-socialregistration.git@linkedin#egg=django-socialregistration
-facebook
+# social sign in
+django-social-auth
 
 -e git+https://github.com/alex/django-taggit.git#egg=django-taggit
 
