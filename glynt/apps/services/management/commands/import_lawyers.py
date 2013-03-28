@@ -48,24 +48,23 @@ class Command(BaseCommand):
                         username = slugify(u'%s-%s%s'% (r[1], r[2],r[6],))
                         u, user_is_new = User.objects.get_or_create(username=username, first_name=r[1], last_name=r[2], email=r[6])
 
-                    if user_is_new:
-                        data = {'twitter':r[11], 'angel_list':r[5], 'linkedin':r[9], 'facebook':r[10], 'location':r[7], 'phone':r[8]}
-                        role = Lawyer.LAWYER_ROLES.get_value_by_name(r[4].lower())
-                        l, lawyer_is_new = Lawyer.objects.get_or_create(user=u, bio=r[len(r)-1], role=role, data=data)
-                        print "lawyer: %s" % l
+                    data = {'twitter':r[11], 'angel_list':r[5], 'linkedin':r[9], 'facebook':r[10], 'location':r[7], 'phone':r[8]}
+                    role = Lawyer.LAWYER_ROLES.get_value_by_name(r[4].lower())
+                    l, lawyer_is_new = Lawyer.objects.get_or_create(user=u, bio=r[len(r)-1], role=role, data=data)
+                    print u"lawyer: %s" % l
 
-                        f, firm_is_new = Firm.objects.get_or_create(name=r[3])
-                        print "firm: %s" % f
+                    f, firm_is_new = Firm.objects.get_or_create(name=r[3])
+                    print u"firm: %s" % f
 
-                        if lawyer_is_new:
-                            f.lawyers.add(u)
-                            print "joined %s with firm: %s" % (l,f,)
+                    if lawyer_is_new:
+                        f.lawyers.add(u)
+                        print u"joined %s with firm: %s" % (l,f,)
 
-                        try:
-                            f.office
-                        except Office.DoesNotExist:
-                            # add office
-                            data = {'phone':r[8]}
-                            o, office_is_new = Office.objects.get_or_create(firm=f, address=r[7], data=data)
-                            print "added office: %s" % o
+                    try:
+                        f.office
+                    except Office.DoesNotExist:
+                        # add office
+                        data = {'phone':r[8]}
+                        o, office_is_new = Office.objects.get_or_create(firm=f, address=r[7], data=data)
+                        print u"added office: %s" % o
 
