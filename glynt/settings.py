@@ -113,9 +113,11 @@ ROOT_URLCONF = 'glynt.urls'
 WSGI_APPLICATION = 'glynt.wsgi.application'
 
 AUTHENTICATION_BACKENDS = (
+'social_auth.backends.contrib.linkedin.AngelBackend',
+'social_auth.backends.contrib.linkedin.LinkedinBackend',
+'social_auth.backends.contrib.github.GithubBackend',
 'glynt.backends.EmailOrUsernameBackend',
 'django.contrib.auth.backends.ModelBackend',
-'socialregistration.contrib.facebook_js.auth.FacebookAuth',
 'userena.backends.UserenaAuthenticationBackend',
 'guardian.backends.ObjectPermissionBackend',
 )
@@ -129,7 +131,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
     "django.core.context_processors.request",
-    "socialregistration.contrib.facebook_js.context_processors.FacebookTemplateVars",
     "glynt.context_processors.project_info",
 )
 
@@ -145,17 +146,17 @@ TEMPLATE_DIRS = (
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 DJANGO_APPS = (
-'django.contrib.sitemaps',
-'django.contrib.auth',
-'django.contrib.contenttypes',
-'django.contrib.sessions',
-'django.contrib.sites',
-'django.contrib.messages',
-'django.contrib.staticfiles',
-'django.contrib.admin',
-'django.contrib.markup',
-'django.contrib.humanize',
-'django.contrib.comments',
+    'django.contrib.sitemaps',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.sites',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'django.contrib.admin',
+    'django.contrib.markup',
+    'django.contrib.humanize',
+    'django.contrib.comments',
 )
 
 PROJECT_APPS = (
@@ -207,11 +208,13 @@ HELPER_APPS = (
     'django_extensions',
     'templatetag_handlebars',
     'django_markdown',
-    'socialregistration',
-    'socialregistration.contrib.facebook_js',
-    'djcelery',
+    'django_rq',
     'bootstrap',
-    # Userena
+    'django_markup',
+    'compressor',
+    # Social Authentication
+    'social_auth',
+    # User Profiles
     'userena',
     'guardian',
     # Thumbnail generator
@@ -219,9 +222,6 @@ HELPER_APPS = (
     # Activity stream
     'user_streams',
     'user_streams.backends.user_streams_single_table_backend',
-    'django_markup',
-    'compressor',
-    'django_jenkins',
 
     # getsentry.com
     'raven.contrib.django.raven_compat',
@@ -234,12 +234,18 @@ if IS_TESTING == True:
     # disable celery for test
     BROKER_BACKEND = 'memory'
 
+    HELPER_APPS = HELPER_APPS + (
+        'django_jenkins',
+    )
 else:
     HELPER_APPS = HELPER_APPS + (
         'south',
     )
 
 
+# Primary installed apps goes here
+# we do this so that we only test our apps
+# the other apps will/can be tested seperately
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + CMS_APPS + HELPER_APPS
 
 
@@ -288,9 +294,6 @@ FACEBOOK_REQUEST_PERMISSIONS = 'email,user_likes,user_about_me,read_stream'
 LINKEDIN_CONSUMER_KEY = '1uh2ns1cn9tm'
 LINKEDIN_CONSUMER_SECRET_KEY = 'MnrqdbtmM10gkz27'
 
-LOGIN_REDIRECT_URL = '/client/'#/accounts/%(username)s/'
-LOGIN_URL = '/client/login/'
-LOGOUT_URL = '/social/logout/'
 
 DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d %Y',
 '%b %d, %Y', '%d %b %Y', '%d %b, %Y', '%B %d %Y',
@@ -330,7 +333,6 @@ INTERNAL_IPS = ('127.0.0.1',)
 
 # Custom test runner for this project
 TEST_RUNNER = 'glynt.test_runner.GlyntAppTestRunner'
-#TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 LOGGING = {
     'version': 1,
@@ -385,8 +387,12 @@ DOCRAPTOR_KEY = "vIvrCmZtnQTC4p6V0k"
 LAWPAL_PRIVATE_BETA = True
 
 
-import djcelery
-djcelery.setup_loader()
+RQ_QUEUES = {
+    'default': {
+        'HOST': '127.0.0.1',
+    }
+}
+
 
 # Neat trick http://www.robgolding.com/blog/2010/05/03/extending-settings-variables-with-local_settings-py-in-django/
 if IS_TESTING:
