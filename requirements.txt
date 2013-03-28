@@ -1,5 +1,5 @@
-Django==1.5
-
+#Django>=1.4,<1.6
+django-cms
 google-api-python-client
 
 #psycopg2 # required for production postgres db
