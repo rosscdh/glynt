@@ -20,28 +20,31 @@ class Command(BaseCommand):
         make_option('--local_file',
             action='store_true',
             dest='local_file',
-            default='/Users/rossc/Downloads/LawyerDB.csv',
+            default='/Users/rossc/Downloads/LawyerDB-Lawyer.csv',
             help='Path to the local csv file'),
         )
     local_file = None
-    lawyer_list = []
-    firm_list = []
+
     def handle(self, *args, **options):
         self.local_file = options['local_file']
 
         if self.local_file and os.path.exists(self.local_file):
             self.import_csv(self.local_file)
+        else:
+            print "could not find file at: %s" % self.local_file
 
     def import_csv(self, csv_file):
         """
         ['Title', 'First name', 'Last name', 'Firm ', 'Title', 'Angelist URL', 'email', 'City/Location', 'phone', 'LinkedIn', 'Facebook', 'Twitter', 'Other start-ups advised']
         """
         with open(csv_file, 'rb') as csv_file:
+            print "starting csv"
             dialect = csv.Sniffer().sniff(csv_file.read(1024))
             csv_file.seek(0)
             for i,r in enumerate(csv.reader(csv_file, dialect)):
                 # get nice names
-                title, first_name, last_name, firm, title, angelist_url, email, city_location, phone, linkedin_url, facebook_url, twitter_url, bio = r
+                #title, first_name, last_name, firm, title, angelist_url, email, city_location, phone, linkedin_url, facebook_url, twitter_url, bio, = r
+                print r
 
                 # skip title row
                 if i > 0:
