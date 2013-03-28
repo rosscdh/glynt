@@ -113,13 +113,13 @@ ROOT_URLCONF = 'glynt.urls'
 WSGI_APPLICATION = 'glynt.wsgi.application'
 
 AUTHENTICATION_BACKENDS = (
-'social_auth.backends.contrib.linkedin.AngelBackend',
-'social_auth.backends.contrib.linkedin.LinkedinBackend',
-'social_auth.backends.contrib.github.GithubBackend',
-'glynt.backends.EmailOrUsernameBackend',
-'django.contrib.auth.backends.ModelBackend',
-'userena.backends.UserenaAuthenticationBackend',
-'guardian.backends.ObjectPermissionBackend',
+    'social_auth.backends.contrib.angel.AngelBackend',
+    'social_auth.backends.contrib.linkedin.LinkedinBackend',
+    'social_auth.backends.contrib.github.GithubBackend',
+    'glynt.backends.EmailOrUsernameBackend',
+    'userena.backends.UserenaAuthenticationBackend',
+    'guardian.backends.ObjectPermissionBackend',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -272,9 +272,14 @@ CMS_LANGUAGES = LANGUAGES = (
     ('en', gettext('English')),
 )
 
+LOGIN_URL          = '/'
+LOGIN_REDIRECT_URL = '/logged-in/'
+LOGIN_ERROR_URL    = '/login-error/'
+
 
 USER_STREAMS_BACKEND = 'user_streams.backends.user_streams_single_table_backend.SingleTableDatabaseBackend'
 USER_STREAMS_USE_UTC = True
+
 
 ANONYMOUS_USER_ID = -1
 AUTH_PROFILE_MODULE = 'client.ClientProfile' # our custom profile
@@ -287,12 +292,27 @@ USERENA_SIGNIN_REDIRECT_URL = '/'
 USERENA_WITHOUT_USERNAMES = True # step userarena forcing user to provide username
 USERENA_HIDE_EMAIL = True
 
+
 FACEBOOK_API_KEY = '419217318130542'
 FACEBOOK_SECRET_KEY = 'a8a6359a83c2af62c0aadb8e507bd15f'
 FACEBOOK_REQUEST_PERMISSIONS = 'email,user_likes,user_about_me,read_stream'
 
+
 LINKEDIN_CONSUMER_KEY = '1uh2ns1cn9tm'
 LINKEDIN_CONSUMER_SECRET_KEY = 'MnrqdbtmM10gkz27'
+LINKEDIN_SCOPE = ['r_basicprofile', 'r_emailaddress']
+LINKEDIN_EXTRA_FIELD_SELECTORS = ['email-address', 'headline', 'industry']
+LINKEDIN_EXTRA_DATA = [('id', 'id'),
+                       ('first-name', 'first_name'),
+                       ('last-name', 'last_name'),
+                       ('email-address', 'email_address'),
+                       ('headline', 'headline'),
+                       ('industry', 'industry')]
+
+
+ANGEL_CLIENT_ID = ''
+ANGEL_CLIENT_SECRET = ''
+ANGEL_AUTH_EXTRA_ARGUMENTS = {'scope': 'email message'}
 
 
 DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d %Y',

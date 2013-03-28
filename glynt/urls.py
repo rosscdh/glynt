@@ -15,8 +15,9 @@ urlpatterns = patterns('',
 	# Api
 	url(r'^api/', include(v1_internal_api.urls)),
 	# django-RQ
-    url(r'^django_rq/', include('django_rq.urls')),
+    #url(r'^django_rq/', include('django_rq.urls')),
 	# Accounts & Registration
+    url(r'', include('social_auth.urls')),
 	url(r'^accounts/', include('userena.urls')),
 	url(r'^client/', include('glynt.apps.client.urls', namespace='client')),
     # Legal Firms
