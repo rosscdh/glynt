@@ -52,7 +52,7 @@ class Command(BaseCommand):
                     try:
                         u, user_is_new = User.objects.get_or_create(username=username, first_name=r[1], last_name=r[2], email=r[6])
                     except IntegrityError:
-                        username = slugify(u'%s-%s%s'% (r[1], r[2],r[6],))
+                        username = slugify(u'%s-%s%s'% (r[1], r[2], r[6],))
                         u, user_is_new = User.objects.get_or_create(username=username, first_name=r[1], last_name=r[2], email=r[6])
 
                     data = {'twitter':r[11], 'angel_list':r[5], 'linkedin':r[9], 'facebook':r[10], 'location':r[7], 'phone':r[8]}

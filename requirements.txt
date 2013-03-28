@@ -44,7 +44,7 @@ newrelic
 -e git+https://github.com/klen/django_markdown.git#egg=django_markdown
 
 # social sign in
-django-social-auth
+-e git+https://github.com/omab/django-social-auth.git#egg=django-social-auth
 
 -e git+https://github.com/alex/django-taggit.git#egg=django-taggit
 
