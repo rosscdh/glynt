@@ -4,6 +4,7 @@ from django.db.utils import IntegrityError
 from optparse import make_option
 from django.core.management.base import BaseCommand
 from django.template.defaultfilters import slugify
+from django.utils.encoding import smart_unicode
 
 from django.contrib.auth.models import User
 from glynt.apps.lawyer.models import Lawyer
@@ -39,6 +40,9 @@ class Command(BaseCommand):
             dialect = csv.Sniffer().sniff(csv_file.read(1024))
             csv_file.seek(0)
             for i,r in enumerate(csv.reader(csv_file, dialect)):
+                # get nice names
+                title, first_name, last_name, firm, title, angelist_url, email, city_location, phone, linkedin_url, facebook_url, twitter_url, bio = r
+
                 # skip title row
                 if i > 0:
                     username = slugify(u'%s-%s'% (r[1], r[2],))
@@ -53,12 +57,15 @@ class Command(BaseCommand):
                     l, lawyer_is_new = Lawyer.objects.get_or_create(user=u, bio=r[len(r)-1], role=role, data=data)
                     print u"lawyer: %s" % l
 
-                    f, firm_is_new = Firm.objects.get_or_create(name=r[3])
+                    f, firm_is_new = Firm.objects.get_or_create(name=smart_unicode(r[3]))
                     print u"firm: %s" % f
 
-                    if lawyer_is_new:
-                        f.lawyers.add(u)
-                        print u"joined %s with firm: %s" % (l,f,)
+                    try:
+                        f.lawyers.remove(u)
+                    except:
+                        pass
+                    f.lawyers.add(u)
+                    print u"joined %s with firm: %s" % (l,f,)
 
                     try:
                         f.office
