@@ -43,8 +43,8 @@ class Command(BaseCommand):
             csv_file.seek(0)
             for i,r in enumerate(csv.reader(csv_file, dialect)):
                 # get nice names
-                #title, first_name, last_name, firm, title, angelist_url, email, city_location, phone, linkedin_url, facebook_url, twitter_url, bio, = r
-                print r
+                for k,v in enumerate(r):
+                    r[k] = smart_unicode(v)
 
                 # skip title row
                 if i > 0:
@@ -60,7 +60,7 @@ class Command(BaseCommand):
                     l, lawyer_is_new = Lawyer.objects.get_or_create(user=u, bio=r[len(r)-1], role=role, data=data)
                     print u"lawyer: %s" % l
 
-                    f, firm_is_new = Firm.objects.get_or_create(name=smart_unicode(r[3]))
+                    f, firm_is_new = Firm.objects.get_or_create(name=r[3])
                     print u"firm: %s" % f
 
                     try:
@@ -71,7 +71,7 @@ class Command(BaseCommand):
                     print u"joined %s with firm: %s" % (l,f,)
 
                     try:
-                        f.office
+                        f.office_set.get(address=r[7])
                     except Office.DoesNotExist:
                         # add office
                         data = {'phone':r[8]}
