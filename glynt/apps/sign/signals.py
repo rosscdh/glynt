@@ -25,16 +25,16 @@ def save_document_signature_signal(sender, **kwargs):
     meta_data = dict([(str(k), v) for k, v in signature.meta_data.items()])
     if signature.is_signed == True:
         logger.debug('signature (%d) is signed, sending acquired email'%signature.pk)
-        # try:
-        #     send_signature_acquired_email.delay(document=signature.document, date_invited=signature.date_invited, key_hash=signature.key_hash, **meta_data)
-        # except:
-        send_signature_acquired_email(document=signature.document, date_invited=signature.date_invited, key_hash=signature.key_hash, **meta_data)
+        try:
+            send_signature_acquired_email.delay(document=signature.document, date_invited=signature.date_invited, key_hash=signature.key_hash, **meta_data)
+        except:
+            send_signature_acquired_email(document=signature.document, date_invited=signature.date_invited, key_hash=signature.key_hash, **meta_data)
     else:
         logger.debug('signature (%d) not signed, sending invite email'%signature.pk)
-        # try:
-        #             send_signature_invite_email.delay(document=signature.document, date_invited=signature.date_invited, key_hash=signature.key_hash, **meta_data)
-        #         except:
-        send_signature_invite_email(document=signature.document, date_invited=signature.date_invited, key_hash=signature.key_hash, **meta_data)
+        try:
+            send_signature_invite_email.delay(document=signature.document, date_invited=signature.date_invited, key_hash=signature.key_hash, **meta_data)
+        except:
+            send_signature_invite_email(document=signature.document, date_invited=signature.date_invited, key_hash=signature.key_hash, **meta_data)
 
 
 @receiver(pre_delete, sender=DocumentSignature)

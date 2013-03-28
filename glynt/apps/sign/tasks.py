@@ -6,14 +6,14 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 
 from templated_email import send_templated_mail
-from celery.task import task
+from django_rq import job
 
 import user_streams
 import logging
 logger = logging.getLogger('django.request')
 
 
-@task()
+@job()
 def send_signature_invite_email(**kwargs):
   """
   """
@@ -47,7 +47,7 @@ def send_signature_invite_email(**kwargs):
   user_streams.add_stream_item(user, _('You invited %s to sign "<a href="%s">%s</a>"' % (to_name, document.get_absolute_url(), document.name,)), document)
 
 
-@task()
+@job()
 def send_signature_acquired_email(**kwargs):
   """
   """
