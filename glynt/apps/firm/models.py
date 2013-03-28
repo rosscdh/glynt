@@ -28,7 +28,7 @@ class Office(models.Model):
     """ The Firm Office
     Model provides Offices related to a Firm
     """
-    firm = models.ForeignKey(Firm, related_name='office')
+    firm = models.ForeignKey(Firm)
     address = models.CharField(max_length=255)
     country = models.CharField(max_length=64, db_index=True)
     photo = models.ImageField(upload_to='office')

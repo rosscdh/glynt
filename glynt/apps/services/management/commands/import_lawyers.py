@@ -72,7 +72,7 @@ class Command(BaseCommand):
 
                     try:
                         f.office_set.get(address=r[7])
-                    except Office.DoesNotExist:
+                    except Office.DoesNotExist,AttributeError:
                         # add office
                         data = {'phone':r[8]}
                         o, office_is_new = Office.objects.get_or_create(firm=f, address=r[7], data=data)
