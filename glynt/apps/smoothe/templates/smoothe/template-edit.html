@@ -6,7 +6,7 @@
 <div class="row-fluid">
   <div class="span6">
     <h3>{% trans 'Edit' %} - {{ object.name }}</h3>
-    <form id="update-doc" class="form-inline" action="{% url 'doc:update_document' pk=object.pk %}" method="post">{% csrf_token %}
+    <form id="update-doc" class="form-inline" action="{% url 'doc:update_template' pk=object.pk %}" method="post">{% csrf_token %}
       {{ form }}
       <div class="form-actions">
           <button id="update-doc-submit" type="submit" class="submit btn btn-primary">{% trans "Update" %}</button>
