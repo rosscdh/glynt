@@ -42,12 +42,12 @@ class Command(BaseCommand):
             dialect = csv.Sniffer().sniff(csv_file.read(1024))
             csv_file.seek(0)
             for i,r in enumerate(csv.reader(csv_file, dialect)):
-                # get nice names
-                for k,v in enumerate(r):
-                    r[k] = smart_unicode(v)
-
                 # skip title row
                 if i > 0:
+                    # get nice names
+                    for k,v in enumerate(r):
+                        r[k] = smart_unicode(v)
+
                     username = slugify(u'%s-%s'% (r[1], r[2],))
                     try:
                         u, user_is_new = User.objects.get_or_create(username=username, first_name=r[1], last_name=r[2], email=r[6])
