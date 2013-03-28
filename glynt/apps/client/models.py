@@ -13,7 +13,6 @@ from userena import signals as userena_signals
 
 from templated_email import send_templated_mail
 
-from socialregistration.signals import login, connect
 from guardian.shortcuts import assign
 
 from django_countries import CountryField
@@ -66,7 +65,7 @@ class ClientProfile(UserenaBaseProfile):
         return url
 
 
-@receiver(connect)
+#@receiver(connect)
 def create_client_profile(sender, dispatch_uid='client.create_client_profile', **kwargs):
     user = kwargs['user']
     profile, is_new = ClientProfile.objects.get_or_create(user=user)
@@ -84,8 +83,8 @@ def create_client_profile(sender, dispatch_uid='client.create_client_profile', *
         userena_signals.signup_complete.send(sender=None, user=user)
 
 
-@receiver(login)
-@receiver(connect)
+#@receiver(login)
+#@receiver(connect)
 def populate_profile_data(sender, dispatch_uid='client.populate_profile_data', **kwargs):
     user = kwargs['user']
     profile, is_new = ClientProfile.objects.get_or_create(user=user)
