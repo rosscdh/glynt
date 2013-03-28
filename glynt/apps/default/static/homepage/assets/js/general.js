@@ -5,6 +5,7 @@ jQuery(window).load(function() {
 });
 jQuery(document).ready(function() {
 
+
 	// get reveal and expose inner
 	jQuery('.reveal').each(function(index) {
 		var getHeight = (jQuery(this).height()/2);
