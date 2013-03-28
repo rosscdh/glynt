@@ -387,11 +387,11 @@ DOCRAPTOR_KEY = "vIvrCmZtnQTC4p6V0k"
 LAWPAL_PRIVATE_BETA = True
 
 
-RQ_QUEUES = {
-    'default': {
-        'HOST': '127.0.0.1',
-    }
-}
+# RQ_QUEUES = {
+#     'default': {
+#         'HOST': '127.0.0.1',
+#     }
+# }
 
 
 # Neat trick http://www.robgolding.com/blog/2010/05/03/extending-settings-variables-with-local_settings-py-in-django/

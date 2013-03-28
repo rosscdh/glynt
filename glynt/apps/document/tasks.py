@@ -20,7 +20,7 @@ import logging
 logger = logging.getLogger('django.request')
 
 
-@job()
+@job
 def validate_document_html(ident, html):
     html_validator = HtmlValidatorService(ident=ident, html=html, preprocessors=[SmootheRemoval])
     smoothe_validator = SmootheValidateService(ident=ident, html=html)
@@ -34,7 +34,7 @@ def validate_document_html(ident, html):
         raise ValidationError(smoothe_validator.error_msg)
 
 
-@job()
+@job
 def document_created(**kwargs):
     """
     """
@@ -45,7 +45,7 @@ def document_created(**kwargs):
     user_streams.add_stream_item(user, _('You created a "%s" document "<a href="%s">%s</a>"' % (doc_type, document.get_absolute_url(), document.name,)), document)
 
 
-@job()
+@job
 def document_deleted(**kwargs):
     """
     """
@@ -55,7 +55,7 @@ def document_deleted(**kwargs):
     user_streams.add_stream_item(user, _('You Deleted the document "%s"' % (document.name,)), document)
 
 
-@job()
+@job
 def document_restored(**kwargs):
     """
     """
@@ -65,7 +65,7 @@ def document_restored(**kwargs):
     user_streams.add_stream_item(user, _('You Restored the deleted document "<a href="%s">%s</a>"' % (document.get_absolute_url(), document.name,)), document)
 
 
-@job()
+@job
 def document_cloned(**kwargs):
     """
     """
@@ -76,7 +76,7 @@ def document_cloned(**kwargs):
     user_streams.add_stream_item(user, _('You Cloned the document "<a href="%s">%s</a>" as "<a href="%s">%s</a>"' % (source_document.get_absolute_url(), source_document.name, document.get_absolute_url(), document.name,)), document)
 
 
-@job()
+@job
 def document_comment(**kwargs):
     """
     When a user Comments on a document
@@ -92,7 +92,7 @@ def document_comment(**kwargs):
     user_streams.add_stream_item(user, _('%s commented on "<a href="%s">%s</a>" - "%s"' % (username, document.get_absolute_url(), document.name, comment,)), document)
 
 
-@job()
+@job
 def generate_document_html(**kwargs):
     document = kwargs['document']
     # Get or create the HTML object
@@ -109,7 +109,7 @@ def generate_document_html(**kwargs):
         logger.info('DocumentHTML already exists document: %s'%(document.pk,))
 
 
-@job()
+@job
 def convert_to_pdf(document_html, **kwargs):
     """ 
         @TODO this is a POC
@@ -121,7 +121,7 @@ def convert_to_pdf(document_html, **kwargs):
     default_storage.save('%s/glyntpdf.pdf'%(settings.MEDIA_ROOT,), glynt_pdf.create_pdf())
 
 
-@job()
+@job
 def convert_to_doc(document_html, **kwargs):
     """ 
         @TODO this is a POC

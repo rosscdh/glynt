@@ -13,7 +13,7 @@ import logging
 logger = logging.getLogger('django.request')
 
 
-@job()
+@job
 def send_signature_invite_email(**kwargs):
   """
   """
@@ -47,7 +47,7 @@ def send_signature_invite_email(**kwargs):
   user_streams.add_stream_item(user, _('You invited %s to sign "<a href="%s">%s</a>"' % (to_name, document.get_absolute_url(), document.name,)), document)
 
 
-@job()
+@job
 def send_signature_acquired_email(**kwargs):
   """
   """
