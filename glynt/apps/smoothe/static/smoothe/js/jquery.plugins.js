@@ -314,12 +314,27 @@
           self.$element = $(self.element);
           self.listen();
           self.$element.trigger('change', {'initial': true});
+          self.$element.dirty = false;
+          if(self.context['inherit_from'] !== undefined) {
+              var inherit_element = $('span.doc_var[data-doc_var=' +
+              self.context['inherit_from'] + ']').first();
+
+              // initial inheritance
+              self.$element.html(inherit_element.html());
+
+              inherit_element.on('change', function() {
+                  var e = self.$element;
+                  if(!e.dirty) {
+                      self.$element.html(inherit_element.html());
+                  }
+              });
+          }
       }
       ,handle_value_change: function(e, data) {
           var self = this;
           var val = e.text();
 
-          if (val == '' || val == self.context.initial) {
+          if (val === '' || val === self.context.initial) {
                 e.removeClass('done');// make it yellow
                 // setthe value back to the initial value
                 e.html(self.context.initial);
@@ -329,7 +344,7 @@
                     // issue element done event
                     $.Queue('percentCompleteDecrement').publish({'element':e});
                 }
-          }else{
+          } else {
               if (e.hasClass('done') == false) {
                   e.addClass('done');   // make it green
                   $.Queue('percentCompleteIncrement').publish({'element':e});
@@ -382,11 +397,13 @@
           * 13: tabs to the next item
           */
           self.$element.on('keydown', function(event){
-            var key = event.keyCode || event.which;
-            if (key === 13) {
-                event.preventDefault();
-                $(this).trigger('keypress', {which: 9})
-            }
+              // mark as dirty for inheritance
+              self.$element.dirty = true;
+              var key = event.keyCode || event.which;
+              if (key === 13) {
+                  event.preventDefault();
+                  $(this).trigger('keypress', {which: 9})
+              }
           });
 
           self.$element.on('click', function(event){
