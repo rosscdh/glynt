@@ -228,7 +228,10 @@ body.lawyer-welcome #hero h3 {
 	 font-size:19px;
 	 line-height:30px;
  }
-
+ body.lawyer-welcome .screenshots img {
+	 -webkit-box-shadow:  0px 0px 1px 1px #ddd;
+	         box-shadow:  0px 0px 1px 1px #ddd;
+ }
 /* Old Index
 -------------------------------------------------- */
 

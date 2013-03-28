@@ -246,14 +246,15 @@ INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + CMS_APPS + HELPER_APPS
 CMS_PERMISSION = False
 
 CMS_TEMPLATES = (
-    ('layout/base.html', 'Default (Bootstrap)'),
-    ('layout/homepage.html', 'Homepage Template'),
+    ('layout/base.html', 'Default'),
     ('layout/default.html', 'Basic Template'),
-    ('layout/document_list.html', 'Document List Template'),
+    # ('layout/homepage.html', '1.0 Homepage Template'),
+    # ('layout/document_list.html', '1.0 Document List Template'),
     ('layout/new-home.html', '2.0 Homepage'),
+    ('layout/about-pages.html', '2.0 About Pages'),
     ('layout/lawyer-welcome.html', '2.0 Lawyer Welcome'),
     ('layout/lawyer-welcome-form.html', '2.0 Lawyer Form'),
-    ('layout/twitter-test.html', 'Twitter Test')
+    ('layout/twitter-test.html', 'DEV Twitter Test')
 )
 
 CMS_APPHOOKS = ()

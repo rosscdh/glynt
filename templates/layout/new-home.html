@@ -1,4 +1,7 @@
-
+{% load i18n templatetag_handlebars glynt_helpers document_tags thumbnail sekizai_tags compress cms_tags %}{% load url from future %}
+{% render_block "css" %}
+{% render_block "js" %}
+{% block content %}
 <!doctype html>
 
 <!--[if lt IE 7 ]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
@@ -65,13 +68,15 @@
 
 					<h1>
 
-						Get your transaction done
+						<!-- Startup legal services that don't suck. -->
+						Efficient, easy legals for startups.
 
+						<!-- 						Engage, Transact, Complete. Fast. -->
 					</h1>
 
 					<h2>
 
-						Founders + lawyer matchmaking and transaction management
+						Founder => lawyer matchmaking and transaction management
 
 					</h2>
 
@@ -137,6 +142,7 @@
 
 </div>	
 
+<div id="footer"><a href="/about">About Us</a> &middot; <a href="#">Photo Credit</a> &middot; <a href="http://blog.lawpal.com/" target="_BLANK">Blog</a> &middot; <a href="mailto:hello@lawpal.com">Contact Us</a> &middot; <a href="/terms">Terms and Conditions</a> </div>
 
 
 
@@ -148,3 +154,4 @@
 </body>
 
 </html>
+{% endblock %}
