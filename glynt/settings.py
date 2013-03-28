@@ -208,7 +208,7 @@ HELPER_APPS = (
     'django_extensions',
     'templatetag_handlebars',
     'django_markdown',
-    'django_rq',
+    # 'django_rq',
     'bootstrap',
     'django_markup',
     'compressor',
