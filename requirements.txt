@@ -37,10 +37,12 @@ django-storages
 raven
 newrelic
 
+#api
+django-tastypie
+
 -e git+https://github.com/django-debug-toolbar/django-debug-toolbar.git#egg=django-debug-toolbar
 
 -e git+https://github.com/jezdez/django_compressor.git#egg=django_compressor
--e git+https://github.com/toastdriven/django-tastypie.git#egg=django-tastypie
 -e git+https://github.com/rosscdh/pybars.git#egg=pybars
 
 #-e git+https://github.com/chrisglass/xhtml2pdf.git#egg=xhtml2pdf # not planning on using xhtml2pdf(pisa) too unstable
