@@ -1,0 +1,284 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Lawyers - Signup{% endblock %}
+{% block bodyclass %}lawyer-form{% endblock %}
+
+{% block prebody %}
+<div id="hero">
+	<div class="container">
+		<!-- starts carousel -->
+		<div class="row animated fadeInDown">
+			<div class="span12">
+				<h1>Update your profile</h1>
+				<h3>The doors are opening soon. Make sure everything is up to date.<br />
+					Have a question? Contact us at <a href="mailto:founders@lawpal.com">founders@lawpal.com</a> </h3>
+				 </h3>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container profile">
+	<div class="row">
+		<div class="span12">
+			<h1>
+				Confirm your details
+			</h1>
+			<br>
+			<form action="{% url 'public:lawyer_setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
+				{% for e in form.non_field_errors %}
+				<div class="alert-error">
+				  {{ e }}
+				</div>
+				{% endfor %}
+			<div class="row">
+					<div class="span5">
+						<div class="control-group">
+							<label class="control-label" for="inputEmail">{{ form.first_name.label }}</label>
+							<div class="controls">
+								{{ form.first_name.errors }}
+								{{ form.first_name }}
+								<span class="help-inline">{{ form.first_name.help_text }}</span>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="inputEmail">{{ form.email.label }}</label>
+							<div class="controls">
+								{{ form.email.errors }}
+								{{ form.email }}
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="inputEmail">{{ form.phone.label }}</label>
+							<div class="controls">
+								{{ form.phone.errors }}
+								{{ form.phone }}
+							</div>
+						</div>
+					</div>
+					
+					<div class="span5">
+						<div class="control-group">
+							<label class="control-label" for="inputPassword">{{ form.last_name.label }}</label>
+							<div class="controls">
+								{{ form.last_name.errors }}
+								{{ form.last_name }}
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="inputEmail">{{ form.firm_name.label }}</label>
+							<div class="controls">
+								{{ form.firm_name.errors }}
+								{{ form.firm_name }}
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="inputEmail">{{ form.position.label }}</label>
+							<div class="controls">
+								{{ form.position.errors }}
+								{{ form.position }}
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="inputEmail">{{ form.years_practiced.label }}</label>
+							<div class="controls">
+								{{ form.years_practiced.errors }}
+								{{ form.years_practiced }}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="span12">
+						<legend>Your Practice Locations</legend>
+					</div>
+				</div>
+				<div class="row">
+					<div class="span5">
+						<div class="control-group">
+							<label class="control-label" for="inputPassword">{{ form.practice_location_1.label }}</label>
+							<div class="controls">
+								{{ form.practice_location_1.errors }}
+								{{ form.practice_location_1 }}
+							</div>
+						</div>
+					</div>
+					<div class="span5">
+						<div class="control-group">
+							<label class="control-label" for="inputPassword">{{ form.practice_location_2.label }}</label>
+							<div class="controls">
+								{{ form.practice_location_2.errors }}
+								{{ form.practice_location_2 }}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="span12">
+						<legend>Your Profile</legend>
+					</div>
+				</div>
+				<div class="row">
+					<div class="span12">
+						<div class="control-group">
+							<label class="control-label" for="inputPassword">{{ form.profile_summary.label }}</label>
+							<div class="controls">
+								{{ form.profile_summary.errors }}
+								{{ form.profile_summary }}
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="inputPassword">{{ form.profile_bio.label }}</label>
+							<div class="controls">
+								{{ form.profile_bio.errors }}
+								{{ form.profile_bio }}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="span12">
+						<legend>Profile Photo</legend>
+					</div>
+				</div>
+				<div class="row">
+					<div class="span8">
+						<div class="control-group">
+							<label class="control-label" for="inputPassword">{{ form.profile_photo.label }}</label>
+							<div class="controls">
+								{{ form.profile_photo }}
+								<div class="input-append">
+								  <input class="span4" id="appendedInputButton" type="text">
+								  <button class="btn" type="button">Browse</button>
+								</div>
+						      <span class="help-block">{{ form.startups_advised.help_text }}</span>
+							</div>
+						</div>
+					</div>
+					<div class="span4">
+						<img src="http://placehold.it/130x130">
+					</div>
+				</div>
+				<div class="row">
+					<div class="span12">
+						<legend>Startups Advised</legend>
+					</div>
+				</div>
+				<div class="row">
+					<div class="span8">
+						<div class="control-group">
+							<label class="control-label" for="inputEmail">{{ form.startups_advised.label }}</label>
+							<div class="controls">
+								{{ form.startups_advised.errors }}
+								{{ form.startups_advised }}
+  						    	<span class="help-block">{{ form.startups_advised.help_text }}</span>
+							</div>
+						</div>
+						
+					</div>
+					<div class="span4">
+						<ol>
+							<li>{{ form.startups_advised.field.widget.attrs.title }}</li>
+						</oL>
+					</div>
+				</div>
+				<div class="row">
+					<div class="span12">
+						<legend>Approximate Transaction Volume</legend>
+					</div>
+				</div>
+				<div class="row">
+					<div class="span8">
+						<table class="table">
+							<tr>
+								<th class="span3"></th>
+								<th>2010</th>
+								<th>2011</th>
+								<th>2012</th>
+							</tr>
+
+							<tr>
+								<th>Incorporation and Setup</th>
+								<td><input class="span1" type="text"></td>
+								<td><input class="span1" type="text"></td>
+								<td><input class="span1" type="text"></td>
+							</tr>
+
+							<tr>
+								<th>Seed Financing</th>
+								<td><input class="span1" type="text"></td>
+								<td><input class="span1" type="text"></td>
+								<td><input class="span1" type="text"></td>
+							</tr>
+							<tr>
+								<th>Series A</th>
+								<td><input class="span1" type="text"></td>
+								<td><input class="span1" type="text"></td>
+								<td><input class="span1" type="text"></td>
+							</tr>
+						</table>
+						{{ form.volume_incorp_setup }}
+						{{ form.volume_seed_financing }}
+						{{ form.volume_series_a }}
+					</div>
+				</div>
+				<div class="row">
+					<div class="span12">
+						<br />
+						<label class="checkbox">
+							{{ form.agree_tandc.errors }}
+		                	{{ form.agree_tandc }} I agree to the LawPal <a href="{% url 'public:terms' %}">Terms and Conditions</a>
+		              	</label>
+						<br />
+						<button id="lawyer-profile" type="submit" class="btn btn-primary btn-large">Update Profile</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+
+{{ form.media }}
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+	$('input[title]').tooltip({trigger: 'focus', placement: 'bottom'});
+
+	$.each($('.typeahead'), function(i, element) {
+		var e = $(element);
+		e.typeahead({
+		source: function(query, process_callback) {
+			console.log(process_callback)
+			var url = e.attr('data-source');
+			$.ajax({
+				type: 'GET',
+				url: url,
+				data: null,
+				beforeSend: function(jqXHR, settings) {
+					// Pull the token out of the DOM.
+					jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+				},
+				success: function(data, textStatus, jqXHR){
+					var object_list = []
+					$.each(data.objects, function(i,item){
+						object_list.push(item.name)
+					})
+					process_callback(object_list);
+				},
+				error: function(data, textStatus, jqXHR){
+					console.log(jqXHR)
+					console.log(textStatus)
+				}
+			});
+		}
+		});
+	});
+});
+</script>
+
+{% endblock %}

@@ -12,7 +12,7 @@ logger = logging.getLogger('django.request')
 
 class LawyerProfileSetupView(FormView):
     form_class = LawyerProfileSetupForm
-    template_name = 'public/lawyer-welcome-form.html'
+    template_name = 'public/lawyer-profile-form.html'
 
     def get_form(self, form_class):
         """

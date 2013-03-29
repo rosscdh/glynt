@@ -2,6 +2,7 @@ import ast
 
 from tastypie.resources import ModelResource
 from tastypie.api import Api
+from tastypie import fields
 from tastypie.serializers import Serializer
 from tastypie.cache import SimpleCache
 from tastypie.authentication import Authentication, SessionAuthentication
@@ -40,7 +41,7 @@ class BaseApiModelResource(ModelResource):
 
 class FirmSimpleResource(BaseApiModelResource):
     class Meta(BaseApiModelResource.Meta):
-        authentication = Authentication
+        authentication = Authentication()
         list_allowed_methods = ['get']
         queryset = Firm.objects.all()
         resource_name = 'firm'
@@ -49,12 +50,17 @@ class FirmSimpleResource(BaseApiModelResource):
 
 class OfficeSimpleResource(BaseApiModelResource):
     class Meta(BaseApiModelResource.Meta):
-        authentication = Authentication
+        authentication = Authentication()
         list_allowed_methods = ['get']
         queryset = Office.objects.all()
-        resource_name = 'firm/office'
+        resource_name = 'office'
         includes = ['pk','address']
 
+    def dehydrate(self, bundle):
+        name = bundle.data.get('address', None)
+        bundle.data.pop('address')
+        bundle.data.update({'name': name})
+        return bundle
 
 class DocumentResource(BaseApiModelResource):
     class Meta(BaseApiModelResource.Meta):
