@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand
 from django.template.defaultfilters import slugify
 from django.utils.encoding import smart_unicode
 
-from glynt.apps.firm.models import Firm, Office
+from glynt.apps.firm.services import EnsureFirmService
 
 import csv
 import pdb
@@ -36,15 +36,17 @@ class Command(BaseCommand):
         [''Firm Name', 'Address', 'Cities']
         """
         with open(csv_file, 'rb') as csv_file:
-            print "starting csv"
+            print "starting firm csv"
             dialect = csv.Sniffer().sniff(csv_file.read(1024))
             csv_file.seek(0)
+
             for i,r in enumerate(csv.reader(csv_file, dialect)):
-                # get nice names
+                # unicodeify
                 for k,v in enumerate(r):
                     r[k] = smart_unicode(v)
+
+                # get nice names
                 firm_name, address, cities, = r
 
-                firm, firm_is_new = Firm.objects.get_or_create(name=firm_name)
-                office, office_is_new = Office.objects.get_or_create(firm=firm, address=address)
+                ensure_firm = EnsureFirmService(firm_name=firm_name, offices=[address])
 

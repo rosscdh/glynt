@@ -1,44 +1,86 @@
 # -*- coding: UTF-8 -*-
 from django import forms
+from django.conf import settings
+from django.contrib.auth.models import User
 from django.core import exceptions
 
 from bootstrap.forms import BootstrapMixin
+from cicu.widgets import CicuUploderInput
+
 from glynt.apps.lawyer.models import Lawyer
 
+from glynt.apps.lawyer.services import EnsureLawyerService
 
-class LawyerSignupForm(BootstrapMixin, forms.Form):
-    title = forms.CharField()
+import logging
+logger = logging.getLogger('django.request')
+
+API_URLS = {
+    'firm': '/api/v1/firm/',
+    'office': '/api/v1/firm/office/',
+}
+
+
+class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
+    title = forms.CharField(required=False)
+
     first_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'John'}))
     last_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'Sonsini'}))
+
     email = forms.EmailField(help_text="Your Email", widget=forms.TextInput(attrs={'placeholder':'john@lawpal.com'}))
-    firm = forms.CharField()
-    position = forms.ChoiceField(choices=Lawyer.LAWYER_ROLES.get_choices(), initial=Lawyer.LAWYER_ROLES.associate, label="Position", help_text="")
-    years_practiced = forms.IntegerField(label="Years Practicing", widget=forms.TextInput(attrs={'class':'input-mini'}))
-    profile_photo = forms.ImageField()
-    practice_location_1 = forms.CharField(label="Primary Location", widget=forms.TextInput(attrs={'class':'input-large','placeholder':'San Francisco, CA','title':'The primary city you operate from'}))
-    practice_location_2 = forms.CharField(label="Secondary Location", widget=forms.TextInput(attrs={'class':'input-large','placeholder':'London, UK','title':'Optional. The secondary city you operate from.'}))
-    profile_summary = forms.CharField(label="Short description", widget=forms.TextInput(attrs={'class':'input-xxlarge','placeholder':'e.g. Partner at WDJ advising technology companies in Europe','title':'Keep it short, and make it personal.'}))
-    profile_bio = forms.CharField(widget=forms.Textarea(attrs={'class':'input-xxlarge','placeholder':'A bit more about you.','title':'A bit longer, but still make it personal.'}))
+    firm_name = forms.CharField( widget=forms.TextInput(attrs={'class':'typeahead','autocomplete':'off','data-provide':'', 'data-items':4, 'data-source':API_URLS.get('firm','')}))
+
     phone = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'+44 207 7778 2020', 'title':'Shows on your profile. Include country code.'}))
-    angelist_url = forms.URLField()
-    linkedin_url = forms.URLField()
-    facebook_url = forms.URLField()
-    twitter_url = forms.URLField()
-    startups_advised = forms.CharField(label="Startups Advised", help_text='This helps us match you with similar startups', widget=forms.Textarea(attrs={'data-provide':'', 'data-items':4, 'data-source':''}))
-    approx_tx_vol_incorp_setup = forms.CharField() # list of lists :[[2010,2011,2012]]
-    approx_tx_vol_seed_financing = forms.CharField() # list of lists :[[2010,2011,2012]]
-    approx_tx_vol_series_a = forms.CharField() # list of lists :[[2010,2011,2012]]
-    agree_tandc = forms.BooleanField()
+    position = forms.ChoiceField(choices=Lawyer.LAWYER_ROLES.get_choices(), initial=Lawyer.LAWYER_ROLES.associate, label="Position", help_text="")
+    years_practiced = forms.IntegerField(label="Years Practicing", initial="3", widget=forms.TextInput(attrs={'class':'input-mini'}))
+
+    practice_location_1 = forms.CharField(label="Primary Location", widget=forms.TextInput(attrs={'class':'input-large','placeholder':'San Francisco, CA','title':'The primary city you operate from','class':'typeahead','autocomplete':'off','data-provide':'', 'data-items':4, 'data-source':''}))
+    practice_location_2 = forms.CharField(required=False, label="Secondary Location", widget=forms.TextInput(attrs={'class':'input-large','placeholder':'London, UK','title':'Optional. The secondary city you operate from.','class':'typeahead','autocomplete':'off','data-provide':'', 'data-items':4, 'data-source':''}))
+
+    profile_summary = forms.CharField(label="Short description", widget=forms.TextInput(attrs={'class':'input-xxlarge','placeholder':'e.g. Partner at WDJ advising technology companies in Europe','title':'Keep it short, and make it personal.'}))
+    profile_bio = forms.CharField(required=False, widget=forms.Textarea(attrs={'class':'input-xxlarge','placeholder':'A bit more about you.','title':'A bit longer, but still make it personal.'}))
+
+    profile_photo = forms.ImageField(label="Main Photo", help_text="Please add a good quality photo to your profile. It really helps.")
+
+    startups_advised = forms.CharField(label="Startups Advised", help_text='This helps us match you with similar startups', widget=forms.TextInput(attrs={'title':'e.g. instagram.com','class':'typeahead','autocomplete':'off','data-provide':'', 'data-items':4, 'data-source':''}))
+
+    volume_incorp_setup = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
+    volume_seed_financing = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
+    volume_series_a = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
+
+    agree_tandc = forms.BooleanField(widget=forms.CheckboxInput)
+
+    class Meta:
+        widgets = {
+            'profile_photo': CicuUploderInput(options={
+                'ratioWidth': '600',       #fix-width ratio, default 0
+                'ratioHeight':'400',       #fix-height ratio , default 0
+                'sizeWarning': 'False',    #if True the crop selection have to respect minimal ratio size defined above. Default 'False'
+            })
+        }
+
+    def __init__(self, *args, **kwargs):
+        """ get request object and user """
+        self.request = kwargs.pop('request', None)
+        self.user = self.request.user
+        super(LawyerProfileSetupForm, self).__init__(*args, **kwargs)
+
 
     def clean_email(self):
         email = self.cleaned_data['email']
         # Nasty
-        for l in tmpLawyerFirm.objects.all():
-            if l.email == email:
-                raise exceptions.ValidationError('Sorry but a Lawyer with that email already exists (id: %s)' % (l.pk) )
+        try:
+            lawyer_exists = User.objects.exclude(pk=self.user.pk).get(email=email)
+            msg = 'Sorry but a Lawyer with that email already exists (id: %s)' % (lawyer.pk)
+            logging.error(msg)
+            raise exceptions.ValidationError(msg)
+        except User.DoesNotExist:
+            # ok this lawyer is valid
+            pass
 
-    def clean_firm(self):
-        pass
+
+    def clean_firm_name(self):
+        firm_name = self.cleaned_data['firm_name']
+
     def clean_practice_location_1(self):
         pass
     def clean_practice_location_2(self):
@@ -47,6 +89,19 @@ class LawyerSignupForm(BootstrapMixin, forms.Form):
         pass
 
     def save(self, commit=True):
-        lawerfirm = tmpLawyerFirm(data=self.cleaned_data)
-        return lawerfirm.save()
+        logger.info('Ensuring the LawyerProfile Exists')
+
+        data = self.cleaned_data
+
+        firm_name = self.cleaned_data.get('firm_name')
+
+        offices = []
+        offices.append(self.cleaned_data.get('practice_location_1'))
+        offices.append(self.cleaned_data.get('practice_location_2'))
+
+        lawyer_service = EnsureLawyerService(user=self.user, firm_name=firm_name, offices=offices, **data)
+        lawyer_service.process()
+
+        logger.info('Complete: Ensuring the LawyerProfile Exists')
+
 

@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 
 from glynt.apps.factories import UserFactory
-from socialregistration.contrib.facebook_js.context_processors import FACEBOOK_REQUEST_PERMISSIONS
+#from socialregistration.contrib.facebook_js.context_processors import FACEBOOK_REQUEST_PERMISSIONS
 
 
 

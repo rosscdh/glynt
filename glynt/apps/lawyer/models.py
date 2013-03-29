@@ -20,7 +20,7 @@ class Lawyer(models.Model):
         (2, 'senior_associate', 'Senior Associate'),
         (1, 'associate', 'Associate'),
     ))
-    user = models.ForeignKey(User)
+    user = models.OneToOneField(User, related_name='lawyer_profile')
     role = models.IntegerField(choices=LAWYER_ROLES.get_choices(), db_index=True)
     summary = models.CharField(max_length=255)
     bio = models.TextField()

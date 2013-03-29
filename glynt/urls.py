@@ -12,13 +12,14 @@ urlpatterns = patterns('',
 	# Admin
 	url(r'^admin/', include(admin.site.urls)),
 	# Api
-	url(r'^api/', include(v1_internal_api.urls)),
+	url(r'^api/', include(v1_internal_api.urls, namespace='api')),
     # image upload and crop
     url(r'^ajax-upload/', include('cicu.urls')),
 	# Accounts & Registration
     url(r'', include('social_auth.urls')),
 	url(r'^accounts/', include('userena.urls')),
 	url(r'^client/', include('glynt.apps.client.urls', namespace='client')),
+	url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}, name='logout'),
     # Legal Firms
     url(r'^firm/', include('glynt.apps.firm.urls', namespace='firms')),
 	# Document Comments
@@ -34,7 +35,7 @@ urlpatterns = patterns('',
 	# The Document Signatures
 	url(r'^sign/doc/', include('glynt.apps.sign.urls', namespace='sign')),
 	# The public site and theme
-	url(r'^', include('public.urls', namespace='sign')),
+	url(r'^', include('public.urls', namespace='public')),
 )
 
 

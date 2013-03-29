@@ -38,6 +38,20 @@ FACEBOOK_SECRET_KEY = '4f9854b8fe8f5ccf27ac1ffcf5051b79'
 
 LINKEDIN_CONSUMER_KEY = 'gnesv6zvhzgn'
 LINKEDIN_CONSUMER_SECRET_KEY = '3eTYERhJZd4UJSjM'
+LINKEDIN_SCOPE = ['r_basicprofile', 'r_emailaddress']
+LINKEDIN_EXTRA_FIELD_SELECTORS = ['email-address', 'headline', 'industry']
+LINKEDIN_EXTRA_DATA = [('id', 'id'),
+                       ('first-name', 'first_name'),
+                       ('last-name', 'last_name'),
+                       ('email-address', 'email_address'),
+                       ('headline', 'headline'),
+                       ('industry', 'industry')]
+
+
+ANGEL_CLIENT_ID = '77339d6d557a0ae6c835baf89a22c2b0'
+ANGEL_CLIENT_SECRET = '809bddbacb7dafbe482054bb96d944f4'
+ANGEL_AUTH_EXTRA_ARGUMENTS = {'scope': 'email message'}
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'

@@ -125,6 +125,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
     "django.core.context_processors.request",
     "glynt.context_processors.project_info",
+    "social_auth.context_processors.social_auth_by_type_backends",
 )
 
 TEMPLATE_DIRS = (
@@ -182,6 +183,7 @@ PROJECT_APPS = (
 
 HELPER_APPS = (
     'menu',
+    'cicu',# image crop and upload
     'django_extensions',
     'templatetag_handlebars',
     'django_markdown',
@@ -226,29 +228,6 @@ else:
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + HELPER_APPS
 
 
-CMS_PERMISSION = False
-
-CMS_TEMPLATES = (
-    ('layout/base.html', 'Default'),
-    ('layout/default.html', 'Basic Template'),
-    # ('layout/homepage.html', '1.0 Homepage Template'),
-    # ('layout/document_list.html', '1.0 Document List Template'),
-    ('layout/new-home.html', '2.0 Homepage'),
-    ('layout/about-pages.html', '2.0 About Pages'),
-    ('layout/lawyer-welcome.html', '2.0 Lawyer Welcome'),
-    ('layout/lawyer-welcome-form.html', '2.0 Lawyer Form'),
-    ('layout/twitter-test.html', 'DEV Twitter Test')
-)
-
-CMS_APPHOOKS = ()
-
-CMS_SHOW_START_DATE = True
-CMS_SHOW_END_DATE = True
-
-CMS_LANGUAGES = LANGUAGES = (
-    ('en', gettext('English')),
-)
-
 LOGIN_URL          = '/'
 LOGIN_REDIRECT_URL = '/logged-in/'
 LOGIN_ERROR_URL    = '/login-error/'
@@ -287,10 +266,20 @@ LINKEDIN_EXTRA_DATA = [('id', 'id'),
                        ('industry', 'industry')]
 
 
-ANGEL_CLIENT_ID = ''
-ANGEL_CLIENT_SECRET = ''
+ANGEL_CLIENT_ID = '77339d6d557a0ae6c835baf89a22c2b0'
+ANGEL_CLIENT_SECRET = '809bddbacb7dafbe482054bb96d944f4'
 ANGEL_AUTH_EXTRA_ARGUMENTS = {'scope': 'email message'}
 
+SOCIAL_AUTH_PIPELINE = (
+    'social_auth.backends.pipeline.social.social_auth_user',
+    'social_auth.backends.pipeline.associate.associate_by_email',
+    'social_auth.backends.pipeline.misc.save_status_to_session',
+    'social_auth.backends.pipeline.user.create_user',
+    'social_auth.backends.pipeline.social.associate_user',
+    'social_auth.backends.pipeline.social.load_extra_data',
+    'social_auth.backends.pipeline.user.update_user_details',
+    'social_auth.backends.pipeline.misc.save_status_to_session',
+)
 
 DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d %Y',
 '%b %d, %Y', '%d %b %Y', '%d %b, %Y', '%B %d %Y',
@@ -359,6 +348,11 @@ LOGGING = {
         'django.request': {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
+            'propagate': True,
+        },
+        'lawpal.services': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
             'propagate': True,
         },
     }

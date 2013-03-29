@@ -56,7 +56,7 @@
 {% block js %}
 
 {% if not request.user.is_authenticated %}
-  {% include 'socialregistration/facebook_js/facebook_js.html' %}
+  {#% include 'socialregistration/facebook_js/facebook_js.html' %#}
 {% endif %}
 
 <script id="login-controls" type="text/javascript">

@@ -1389,5 +1389,5 @@ $(document).ready(function(){
 
 
 {% if request.user.is_authenticated %}
-	{% include 'socialregistration/facebook_js/facebook_js.html' %}
+	
 {% endif %}

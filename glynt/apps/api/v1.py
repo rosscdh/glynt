@@ -4,7 +4,7 @@ from tastypie.resources import ModelResource
 from tastypie.api import Api
 from tastypie.serializers import Serializer
 from tastypie.cache import SimpleCache
-from tastypie.authentication import SessionAuthentication
+from tastypie.authentication import Authentication, SessionAuthentication
 
 from glynt.apps.firm.models import Firm, Office
 from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
@@ -40,6 +40,7 @@ class BaseApiModelResource(ModelResource):
 
 class FirmSimpleResource(BaseApiModelResource):
     class Meta(BaseApiModelResource.Meta):
+        authentication = Authentication
         list_allowed_methods = ['get']
         queryset = Firm.objects.all()
         resource_name = 'firm'
@@ -48,6 +49,7 @@ class FirmSimpleResource(BaseApiModelResource):
 
 class OfficeSimpleResource(BaseApiModelResource):
     class Meta(BaseApiModelResource.Meta):
+        authentication = Authentication
         list_allowed_methods = ['get']
         queryset = Office.objects.all()
         resource_name = 'firm/office'

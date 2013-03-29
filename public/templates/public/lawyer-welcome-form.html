@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
-
-
+{% block page_title %}Lawyers - Signup{% endblock %}
 {% block bodyclass %}lawyer-form{% endblock %}
 
 {% block prebody %}
@@ -26,7 +25,7 @@
 				Confirm your details
 			</h1>
 			<br>
-			<form class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
+			<form action="{% url 'public:lawyer_setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
 				{% for e in form.non_field_errors %}
 				<div class="alert-error">
 				  {{ e }}
@@ -34,7 +33,7 @@
 				{% endfor %}
 			<div class="row">
 					<div class="span5">
-						<div class="control-group success">
+						<div class="control-group">
 							<label class="control-label" for="inputEmail">{{ form.first_name.label }}</label>
 							<div class="controls">
 								{{ form.first_name.errors }}
@@ -42,7 +41,7 @@
 								<span class="help-inline">{{ form.first_name.help_text }}</span>
 							</div>
 						</div>
-						<div class="control-group error">
+						<div class="control-group">
 							<label class="control-label" for="inputEmail">{{ form.email.label }}</label>
 							<div class="controls">
 								{{ form.email.errors }}
@@ -145,13 +144,14 @@
 				<div class="row">
 					<div class="span8">
 						<div class="control-group">
-							<label class="control-label" for="inputPassword">Main Photo</label>
+							<label class="control-label" for="inputPassword">{{ form.profile_photo.label }}</label>
 							<div class="controls">
+								{{ form.profile_photo }}
 								<div class="input-append">
 								  <input class="span4" id="appendedInputButton" type="text">
 								  <button class="btn" type="button">Browse</button>
 								</div>
-						      <span class="help-block">Please add a good quality photo to your profile. It really helps.</span>
+						      <span class="help-block">{{ form.startups_advised.help_text }}</span>
 							</div>
 						</div>
 					</div>
@@ -171,7 +171,6 @@
 							<div class="controls">
 								{{ form.startups_advised.errors }}
 								{{ form.startups_advised }}
-								<input type="text" class="" style="margin: 0 auto;" data-provide="typeahead" data-items="4" data-source='["Airbnb","SocialGO","LawPal","Acme Co"]'>
   						    	<span class="help-block">{{ form.startups_advised.help_text }}</span>
 							</div>
 						</div>
@@ -179,10 +178,7 @@
 					</div>
 					<div class="span4">
 						<ol>
-							<li>Airbnb</li>
-							<li>SocialGO</li>
-							<li>Uber</li>
-							<li>LawPal</li>
+							<li>{{ form.startups_advised.field.widget.attrs.title }}</li>
 						</oL>
 					</div>
 				</div>
@@ -221,16 +217,20 @@
 								<td><input class="span1" type="text"></td>
 							</tr>
 						</table>
+						{{ form.volume_incorp_setup }}
+						{{ form.volume_seed_financing }}
+						{{ form.volume_series_a }}
 					</div>
 				</div>
 				<div class="row">
 					<div class="span12">
 						<br />
 						<label class="checkbox">
-		                	<input type="checkbox"> I agree to the LawPal <a href="">Terms and Conditions</a>
+							{{ form.agree_tandc.errors }}
+		                	{{ form.agree_tandc }} I agree to the LawPal <a href="{% url 'public:terms' %}">Terms and Conditions</a>
 		              	</label>
 						<br />
-						<a href="#" class="btn btn-primary btn-large">Update Profile</a>
+						<button id="lawyer-profile" type="submit" class="btn btn-primary btn-large">Update Profile</button>
 					</div>
 				</div>
 			</form>
@@ -241,9 +241,22 @@
 {% endblock %}
 
 {% block js %}
+
+{{ form.media }}
+
 <script type="text/javascript">
 $(document).ready(function(){
+
 	$('input[title]').tooltip({trigger: 'focus', placement: 'bottom'});
+
+	$.each($('.typeahead'), function(i, element) {
+		var e = $(element);
+		e.typeahead({
+		source: function(query, process_callback) {
+			var url = e.attr('data-source');
+		}
+		});
+	});
 });
 </script>
 
