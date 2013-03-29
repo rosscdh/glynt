@@ -25,8 +25,6 @@ MANAGERS = ADMINS + (
     ("Joe Musgrave", 'joe@lawpal.com'),
 )
 
-CMS_MODERATOR = ()
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -102,12 +100,6 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-MIDDLEWARE_CLASSES = MIDDLEWARE_CLASSES + (
-    'cms.middleware.page.CurrentPageMiddleware',
-    'cms.middleware.user.CurrentUserMiddleware',
-    'cms.middleware.toolbar.ToolbarMiddleware',
-)
-
 ROOT_URLCONF = 'glynt.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
@@ -135,11 +127,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "glynt.context_processors.project_info",
 )
 
-TEMPLATE_CONTEXT_PROCESSORS = TEMPLATE_CONTEXT_PROCESSORS + (
-    'cms.context_processors.media',
-    'sekizai.context_processors.sekizai',
-)
-
 TEMPLATE_DIRS = (
     os.path.join(SITE_ROOT, 'templates'),
 )
@@ -161,11 +148,12 @@ DJANGO_APPS = (
 )
 
 PROJECT_APPS = (
-    # Django CMS Helper app
-    'public',
+    # Public and Theme
+    'public', # preferred
+    'glynt.apps.default', # depreciating
 
-    # The default app that handles the basics
-    'glynt.apps.default',
+    # The Api
+    'glynt.apps.api',
     # The Legal Firms
     'glynt.apps.firm',
     # The Lawyers
@@ -188,21 +176,8 @@ PROJECT_APPS = (
     'glynt.apps.sign',
     # The Document Export system
     'glynt.apps.export',
-    # The Api
-    'glynt.apps.api',
     # Remote and 3rd Party services (pdf/doc conversion)
     'glynt.apps.services',
-)
-
-CMS_APPS = (
-    'cms',
-    'mptt',
-    'menus',
-    'sekizai',
-
-    'cms.plugins.link',
-    'cms.plugins.picture',
-    'cms.plugins.text',
 )
 
 HELPER_APPS = (
@@ -247,7 +222,7 @@ else:
 # Primary installed apps goes here
 # we do this so that we only test our apps
 # the other apps will/can be tested seperately
-INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + CMS_APPS + HELPER_APPS
+INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + HELPER_APPS
 
 
 CMS_PERMISSION = False

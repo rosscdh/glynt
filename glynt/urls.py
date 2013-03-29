@@ -2,7 +2,6 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib import admin
-from cms.sitemaps import CMSSitemap
 
 from glynt.apps.api.v1 import v1_internal_api
 
@@ -34,14 +33,8 @@ urlpatterns = patterns('',
 	url(r'^export/', include('glynt.apps.export.urls', namespace='export')),
 	# The Document Signatures
 	url(r'^sign/doc/', include('glynt.apps.sign.urls', namespace='sign')),
-	# Sitemap
-	url(r'^sitemap.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': {'cmspages': CMSSitemap}})
-)
-
-
-# Django CMS
-urlpatterns += patterns('',
-	url(r'^', include('cms.urls')),
+	# The public site and theme
+	url(r'^', include('public.urls', namespace='sign')),
 )
 
 

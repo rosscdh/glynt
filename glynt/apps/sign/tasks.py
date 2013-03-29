@@ -7,14 +7,14 @@ from django.contrib.auth.models import User
 
 from templated_email import send_templated_mail
 
-#from django_rq import job
+from celery.task import task
 
 import user_streams
 import logging
 logger = logging.getLogger('django.request')
 
 
-#@job
+@task()
 def send_signature_invite_email(**kwargs):
   """
   """
@@ -48,7 +48,7 @@ def send_signature_invite_email(**kwargs):
   user_streams.add_stream_item(user, _('You invited %s to sign "<a href="%s">%s</a>"' % (to_name, document.get_absolute_url(), document.name,)), document)
 
 
-#@job
+@task()
 def send_signature_acquired_email(**kwargs):
   """
   """

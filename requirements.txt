@@ -1,6 +1,6 @@
-#Django>=1.4,<1.6
-django-cms
-google-api-python-client
+Django
+
+#google-api-python-client # coming soon
 
 #psycopg2 # required for production postgres db
 python-memcached
@@ -17,7 +17,9 @@ pyyaml
 
 markup
 
-django-rq
+celery
+#django-rq # potential but not sure
+
 django-templated-email
 
 # Imaging
