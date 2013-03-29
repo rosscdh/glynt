@@ -1,6 +1,9 @@
 Django
 django-simple-menu
 
+# image upload and crop
+clean-image-crop-uploader
+
 #google-api-python-client # coming soon
 
 #psycopg2 # required for production postgres db

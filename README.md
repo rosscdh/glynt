@@ -79,3 +79,8 @@ Remember to remove invalid xml return characters using vim:
 ## Docs
 
 1. found in the /docs folder
+
+
+## EC2 Account signin
+
+```https://562971026743.signin.aws.amazon.com/console/ec2```

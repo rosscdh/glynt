@@ -13,8 +13,8 @@ urlpatterns = patterns('',
 	url(r'^admin/', include(admin.site.urls)),
 	# Api
 	url(r'^api/', include(v1_internal_api.urls)),
-	# django-RQ
-    #url(r'^django_rq/', include('django_rq.urls')),
+    # image upload and crop
+    url(r'^ajax-upload/', include('cicu.urls')),
 	# Accounts & Registration
     url(r'', include('social_auth.urls')),
 	url(r'^accounts/', include('userena.urls')),

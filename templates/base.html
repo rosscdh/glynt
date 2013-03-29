@@ -1,12 +1,12 @@
-{% load i18n templatetag_handlebars glynt_helpers document_tags thumbnail sekizai_tags compress cms_tags %}{% load url from future %}
+{% load i18n templatetag_handlebars glynt_helpers document_tags thumbnail compress %}{% load url from future %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>{% block page_title %}{% page_attribute page_title %}{% endblock %}</title>
+        <title>{% block page_title %}{% endblock %}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="{% block meta_description %}{% page_attribute meta_description %}{% endblock %}"/>
-        <meta name="keywords" content="{% block meta_keywords %}{% page_attribute meta_keywords %}{% endblock %}"/>
+        <meta name="description" content="{% block meta_description %}{% endblock %}"/>
+        <meta name="keywords" content="{% block meta_keywords %}{% endblock %}"/>
         <meta name="author" content="{% block meta_author %}{% endblock %}"/>
 
         {% if not request.DEBUG %}
@@ -29,8 +29,6 @@
         <link href="{{ STATIC_URL }}css/jquery.signaturepad.css" rel="stylesheet" charset="utf-8" />
         {% block css %}{% endblock %}
         {% endcompress %}
-
-        {% render_block "css" %}
 
         <link rel="apple-touch-icon" sizes="114x114" href="{{ STATIC_URL }}img/apple-touch-icon-114x114.png">
 
@@ -94,8 +92,6 @@
     {% comments_js %}
     <script type="text/javascript" src="{{ STATIC_URL }}js/sugar-1.3.5.min.js"></script>
     {% endcompress %}
-
-    {% render_block "js" %}
 
     {% block js %}{% endblock %}
     <script type="text/javascript">

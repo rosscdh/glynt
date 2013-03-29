@@ -181,6 +181,7 @@ PROJECT_APPS = (
 )
 
 HELPER_APPS = (
+    'menu',
     'django_extensions',
     'templatetag_handlebars',
     'django_markdown',

@@ -6,6 +6,7 @@ from tastypie.serializers import Serializer
 from tastypie.cache import SimpleCache
 from tastypie.authentication import SessionAuthentication
 
+from glynt.apps.firm.models import Firm, Office
 from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
 from glynt.apps.sign.models import DocumentSignature
 
@@ -35,6 +36,22 @@ class BaseApiModelResource(ModelResource):
             pass
 
         return super(BaseApiModelResource, self).get_object_list(request)
+
+
+class FirmSimpleResource(BaseApiModelResource):
+    class Meta(BaseApiModelResource.Meta):
+        list_allowed_methods = ['get']
+        queryset = Firm.objects.all()
+        resource_name = 'firm'
+        includes = ['pk','name']
+
+
+class OfficeSimpleResource(BaseApiModelResource):
+    class Meta(BaseApiModelResource.Meta):
+        list_allowed_methods = ['get']
+        queryset = Office.objects.all()
+        resource_name = 'firm/office'
+        includes = ['pk','address']
 
 
 class DocumentResource(BaseApiModelResource):
@@ -76,6 +93,9 @@ class SignatureResource(BaseApiModelResource):
 
 
 """ Register the api resources """
+v1_internal_api.register(FirmSimpleResource())
+v1_internal_api.register(OfficeSimpleResource())
+
 v1_internal_api.register(DocumentResource())
 v1_internal_api.register(ClientCreatedDocumentResource())
 v1_internal_api.register(SignatureResource())
