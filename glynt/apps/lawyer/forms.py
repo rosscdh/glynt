@@ -39,9 +39,9 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     profile_summary = forms.CharField(label="Short description", widget=forms.TextInput(attrs={'class':'input-xxlarge','placeholder':'e.g. Partner at WDJ advising technology companies in Europe','title':'Keep it short, and make it personal.'}))
     profile_bio = forms.CharField(required=False, widget=forms.Textarea(attrs={'class':'input-xxlarge','placeholder':'A bit more about you.','title':'A bit longer, but still make it personal.'}))
 
-    profile_photo = forms.ImageField(label="Main Photo", help_text="Please add a good quality photo to your profile. It really helps.")
+    profile_photo = forms.ImageField(required=False, label="Main Photo", help_text="Please add a good quality photo to your profile. It really helps.")
 
-    startups_advised = forms.CharField(label="Startups Advised", help_text='This helps us match you with similar startups', widget=forms.TextInput(attrs={'title':'e.g. instagram.com','class':'typeahead','autocomplete':'off','data-provide':'', 'data-items':4, 'data-source':''}))
+    startups_advised = forms.CharField(required=False, label="Startups Advised", help_text='This helps us match you with similar startups', widget=forms.TextInput(attrs={'title':'e.g. instagram.com','class':'typeahead','autocomplete':'off','data-provide':'', 'data-items':4, 'data-source':''}))
 
     volume_incorp_setup = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
     volume_seed_financing = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
@@ -77,28 +77,20 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
         except User.DoesNotExist:
             # ok this lawyer is valid
             pass
+        return email
 
-
-    def clean_firm_name(self):
-        firm_name = self.cleaned_data['firm_name']
-
-    def clean_practice_location_1(self):
-        pass
-    def clean_practice_location_2(self):
-        pass
-    def firm_locations(self):
-        pass
 
     def save(self, commit=True):
         logger.info('Ensuring the LawyerProfile Exists')
 
         data = self.cleaned_data
 
-        firm_name = self.cleaned_data.get('firm_name')
+        firm_name = data.pop('firm_name')
 
         offices = []
-        offices.append(self.cleaned_data.get('practice_location_1'))
-        offices.append(self.cleaned_data.get('practice_location_2'))
+        # dont pop these as we need them for local storage in lawyer
+        offices.append(data.get('practice_location_1', None))
+        offices.append(data.get('practice_location_2', None))
 
         lawyer_service = EnsureLawyerService(user=self.user, firm_name=firm_name, offices=offices, **data)
         lawyer_service.process()

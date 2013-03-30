@@ -146,10 +146,10 @@
 						<div class="control-group">
 							<label class="control-label" for="inputPassword">{{ form.profile_photo.label }}</label>
 							<div class="controls">
-								{{ form.profile_photo }}
+								{{ form.position.errors }}
 								<div class="input-append">
-								  <input class="span4" id="appendedInputButton" type="text">
-								  <button class="btn" type="button">Browse</button>
+									{{ form.profile_photo }}
+									<button class="btn" type="button">Browse</button>
 								</div>
 						      <span class="help-block">{{ form.startups_advised.help_text }}</span>
 							</div>

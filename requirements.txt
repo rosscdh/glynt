@@ -59,7 +59,7 @@ django-tastypie
 # Note the @branch
 -e git+https://github.com/rosscdh/django-userena.git@lp#egg=django-userena
 
--e git+https://github.com/bradjasper/django-jsonfield.git#egg=django-jsonfield
+django-jsonfield
 -e git+https://github.com/rosscdh/django-countries.git#egg=django-countries
 -e git+https://github.com/rosscdh/django-bootstrap.git#egg=bootstrap
 -e git+https://github.com/brack3t/django-braces.git#egg=django-braces

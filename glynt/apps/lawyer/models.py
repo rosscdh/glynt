@@ -24,11 +24,19 @@ class Lawyer(models.Model):
     role = models.IntegerField(choices=LAWYER_ROLES.get_choices(), db_index=True)
     summary = models.CharField(max_length=255)
     bio = models.TextField()
-    data = JSONField()
+    data = JSONField(default={})
     photo = models.ImageField(upload_to='lawyer')
 
     def __unicode__(self):
         return u'%s' % (self.user.username,)
+
+    @property
+    def phone(self):
+        return u'%s' % self.data.get('phone', None)
+
+    @property
+    def years_practiced(self):
+        return u'%s' % self.data.get('years_practiced', None)
 
     @property
     def current_geo_loc(self):
