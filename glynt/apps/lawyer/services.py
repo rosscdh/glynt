@@ -16,6 +16,7 @@ class EnsureLawyerService(object):
         self.offices = offices
 
         self.role = kwargs.pop('role', Lawyer.LAWYER_ROLES.associate)
+
         self.data = kwargs
         logger.debug(self.data)
 

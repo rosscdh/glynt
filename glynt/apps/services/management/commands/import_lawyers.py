@@ -33,10 +33,14 @@ class Command(BaseCommand):
             print "could not find file at: %s" % self.local_file
 
     def import_csv(self, csv_file):
+        """
+        First name, Last name, Firm , Title, Angelist URL, email, City/Location,phone,LinkedIn,Facebook,Twitter,Other start-ups advised
+        """
         with open(csv_file, 'rb') as csv_file:
             print "starting csv"
             dialect = csv.Sniffer().sniff(csv_file.read(1024))
             csv_file.seek(0)
+
             for i, r in enumerate(csv.reader(csv_file, dialect)):
                 # skip title row
                 if i > 0:
@@ -44,15 +48,17 @@ class Command(BaseCommand):
                     for k,v in enumerate(r):
                         r[k] = smart_unicode(v)
 
-                    username = slugify(u'%s-%s'% (r[1], r[2],))
+                    username = slugify(u'%s-%s'% (r[0], r[1],))
+                    print r
+
                     try:
-                        user, user_is_new = User.objects.get_or_create(username=username, first_name=r[1], last_name=r[2], email=r[6])
+                        user, user_is_new = User.objects.get_or_create(username=username, first_name=r[0], last_name=r[1], email=r[5])
                     except IntegrityError:
-                        username = slugify(u'%s-%s%s'% (r[1], r[2], r[6],))
-                        user, user_is_new = User.objects.get_or_create(username=username, first_name=r[1], last_name=r[2], email=r[6])
+                        username = slugify(u'%s-%s%s'% (r[0], r[1], r[5],))
+                        user, user_is_new = User.objects.get_or_create(username=username, first_name=r[0], last_name=r[1], email=r[5])
     
-                    firm_name = r[3]
-                    offices = r[7]
+                    firm_name = r[2]
+                    offices = r[6]
+
                     lawyer_service = EnsureLawyerService(user=user, firm_name=firm_name, offices=[offices])
                     lawyer_service.process()
-

@@ -21,7 +21,7 @@ class Lawyer(models.Model):
         (1, 'associate', 'Associate'),
     ))
     user = models.OneToOneField(User, related_name='lawyer_profile')
-    role = models.IntegerField(choices=LAWYER_ROLES.get_choices(), db_index=True)
+    role = models.IntegerField(choices=LAWYER_ROLES.get_choices(), default=LAWYER_ROLES.associate, db_index=True)
     summary = models.CharField(max_length=255)
     bio = models.TextField()
     data = JSONField(default={})
