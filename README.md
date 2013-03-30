@@ -17,7 +17,7 @@
 7. ```python manage.py syncdb``` : sync the database; and create the default user if there is not already one
 7a. ```python manage.py migrate socialregistration --fake``` : there is a small issue with socialregistration at the moment and its migration needs to be faked
 8. ```python manage.py migrate``` : perform the rest of the migrations
-9. ```python manage.py loaddata sites document_category documenttemplate lawyers legal cms```
+9. ```python manage.py loaddata sites document_category documenttemplate lawyers legal```
 10. ```python manage.py check_permissions``` # Creates the userena permissions
 11. Thats it you can now ```python manage.py runserver_plus```
 12. access http://local.weareml.com:8000/ (you may need to add 127.0.0.1 local.weareml.com to your /etc/hosts file)
@@ -34,16 +34,6 @@
 
     `./manage.py dumpdata document.documenttemplate > glynt/apps/document/fixtures/documenttemplate.json`
 
-** Django CMS **
-
-    `./manage.py dumpdata cms text cms.placeholder cms.cmsplugin > public/fixtures/cms.json`
-
-
-## Django CMS - Dev Pages to live ##
-
-```manage.py shell_plus```
-
-    `Page.objects.filter(site=Site.objects.get(pk=1)).update(site=Site.objects.get(pk=3))`
 
 ## Model Graphs ##
 
