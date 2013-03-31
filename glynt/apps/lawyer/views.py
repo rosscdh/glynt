@@ -26,7 +26,7 @@ class LawyerProfileSetupView(FormView):
         kwargs.update({'request': self.request}) # add the request to the form
 
         user = self.request.user
-        lawyer_service = EnsureLawyerService(user=user, firm_name=None, offices=[])
+        lawyer_service = EnsureLawyerService(user=user)
         lawyer_service.process()
         lawyer = lawyer_service.lawyer
         firm = lawyer_service.firm
@@ -45,8 +45,8 @@ class LawyerProfileSetupView(FormView):
             'practice_location_2': lawyer.data.get('practice_location_2', None),
 
             'years_practiced': lawyer.years_practiced,
-            'profile_summary': lawyer.summary,
-            'profile_bio': lawyer.bio,
+            'summary': lawyer.summary,
+            'bio': lawyer.bio,
             'agree_tandc': lawyer.data.get('agree_tandc', None),
         }})
         return form_class(**kwargs)

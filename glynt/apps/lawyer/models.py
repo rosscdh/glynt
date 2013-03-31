@@ -35,8 +35,12 @@ class Lawyer(models.Model):
         return u'%s' % self.data.get('phone', None)
 
     @property
+    def phone(self):
+        return u'%s' % self.data.get('phone', None)
+
+    @property
     def years_practiced(self):
-        return u'%s' % self.data.get('years_practiced', None)
+        return u'%s' % self.data.get('years_practiced', 0)
 
     @property
     def current_geo_loc(self):

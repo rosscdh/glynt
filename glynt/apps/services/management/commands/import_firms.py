@@ -41,12 +41,14 @@ class Command(BaseCommand):
             csv_file.seek(0)
 
             for i,r in enumerate(csv.reader(csv_file, dialect)):
-                # unicodeify
-                for k,v in enumerate(r):
-                    r[k] = smart_unicode(v)
+                if i > 0:
+                    # unicodeify
+                    for k,v in enumerate(r):
+                        r[k] = smart_unicode(v)
+                    # get nice names
+                    firm_name, address, cities, = r
+                    address = '%s, %s' % (address, cities)
 
-                # get nice names
-                firm_name, address, cities, = r
-
-                ensure_firm = EnsureFirmService(firm_name=firm_name, offices=[address])
+                    firm_service = EnsureFirmService(firm_name=firm_name, offices=[address])
+                    firm_service.process()
 

@@ -49,7 +49,6 @@ class Command(BaseCommand):
                         r[k] = smart_unicode(v)
 
                     username = slugify(u'%s-%s'% (r[0], r[1],))
-                    print r
 
                     try:
                         user, user_is_new = User.objects.get_or_create(username=username, first_name=r[0], last_name=r[1], email=r[5])
