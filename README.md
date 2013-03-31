@@ -32,7 +32,9 @@
 
 ** Document Templates **
 
-    `./manage.py dumpdata document.documenttemplate > glynt/apps/document/fixtures/documenttemplate.json`
+`./manage.py dumpdata document.documenttemplate > glynt/apps/document/fixtures/documenttemplate.json`
+`./manage.py dumpdata lawyer auth > public/fixtures/lawyers.json`
+`./manage.py dumpdata firm deal endorsement > public/fixtures/legal.json`
 
 
 ## Model Graphs ##
