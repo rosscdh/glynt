@@ -19,7 +19,27 @@ class EnsureLawyerService(object):
 
         self.data = kwargs
 
+    def update_user(self):
+        self.title = self.data.get('title', None)
+
+        self.first_name = self.data.get('first_name', None)
+        self.last_name = self.data.get('last_name', None)
+        self.email = self.data.get('email', None)
+
+        if self.first_name is not None:
+            self.user.first_name = self.first_name
+
+        if self.last_name is not None:
+            self.user.last_name = self.last_name
+
+        if self.email is not None:
+            self.user.email = self.email
+
+        self.user.save()
+
     def process(self):
+        self.update_user()
+
         self.lawyer, lawyer_is_new = Lawyer.objects.get_or_create(user=self.user)
 
         if self.role:
