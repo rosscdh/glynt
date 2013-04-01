@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.utils import simplejson as json
 from models import Lawyer
 from glynt.apps.firm.services import EnsureFirmService
 
@@ -53,6 +54,15 @@ class EnsureLawyerService(object):
 
         if self.data.get('bio', None) is not None:
             self.lawyer.bio = self.data.get('bio')
+
+        if self.data.get('volume_incorp_setup', None) is not None:
+            self.lawyer.data['volume_incorp_setup'] = json.loads(self.data.get('volume_incorp_setup'))
+
+        if self.data.get('volume_seed_financing', None) is not None:
+            self.lawyer.data['volume_seed_financing'] = json.loads(self.data.get('volume_seed_financing'))
+
+        if self.data.get('volume_series_a', None) is not None:
+            self.lawyer.data['volume_series_a'] = json.loads(self.data.get('volume_series_a'))
 
         self.lawyer.save()
 

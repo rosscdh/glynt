@@ -206,9 +206,9 @@
 
 							<tr>
 								<th>Seed Financing</th>
-								<td><input class="span1 volume" data-volume_type="incorp_setup" data-year="2010" type="text"></td>
-								<td><input class="span1 volume" data-volume_type="incorp_setup" data-year="2011" type="text"></td>
-								<td><input class="span1 volume" data-volume_type="incorp_setup" data-year="2012" type="text"></td>
+								<td><input class="span1 volume" data-volume_type="seed_financing" data-year="2010" type="text"></td>
+								<td><input class="span1 volume" data-volume_type="seed_financing" data-year="2011" type="text"></td>
+								<td><input class="span1 volume" data-volume_type="seed_financing" data-year="2012" type="text"></td>
 							</tr>
 							<tr>
 								<th>Series A</th>
@@ -300,12 +300,41 @@ $(document).ready(function(){
 	* handle typeahead requests
 	*/
 	$.each($('.volume'), function(i, element) {
+
 		var e = $(element);
 		var volume_type = e.attr('data-volume_type');
 		var year = e.attr('data-year');
-		
+
+		var target_element = $('#id_volume_' + volume_type);
+
+		// default json data from hidden element
+		var target_json = $.parseJSON(target_element.val());
+		target_json = (target_json === null) ? {} : target_json ;
+
+		// parse and reform and set defaults
+		var volume_object = window[volume_type + '_object'] || target_json;
+		volume_object[year] = target_json[year] || 0;
+		var as_json = JSON.stringify(volume_object)
+
+		// set the initial value
+		window[volume_type + '_object'] = volume_object;
+		e.val(volume_object[year])
+		target_element.val(as_json);
+
 		e.on('change', function(event){
-			
+			var volume = e.val();
+			var volume_type = e.attr('data-volume_type');
+			var year = e.attr('data-year');
+
+			var target_element = $('#id_volume_' + volume_type);
+			var target_json = $.parseJSON(target_element.val());
+			var volume_object = window[volume_type + '_object'];
+
+			volume_object[year] = volume;
+			var as_json = JSON.stringify(volume_object)
+
+			target_element.val(as_json);
+			// console.log(target_element.val())
 		})
 	});
 

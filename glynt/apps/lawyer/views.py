@@ -2,7 +2,7 @@
 from django.views.generic import FormView
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-
+from django.utils import simplejson as json
 from glynt.apps.lawyer.services import EnsureLawyerService
 
 from forms import LawyerProfileSetupForm
@@ -31,6 +31,9 @@ class LawyerProfileSetupView(FormView):
         lawyer = lawyer_service.lawyer
         firm = lawyer_service.firm
 
+        volume_incorp_setup = json.dumps(lawyer.data.get('volume_incorp_setup', {}))
+        volume_seed_financing = json.dumps(lawyer.data.get('volume_seed_financing', {}))
+        volume_series_a = json.dumps(lawyer.data.get('volume_series_a', {}))
 
         kwargs.update({'initial': {
             'first_name': user.first_name,
@@ -44,9 +47,15 @@ class LawyerProfileSetupView(FormView):
             'practice_location_1': lawyer.data.get('practice_location_1', None),
             'practice_location_2': lawyer.data.get('practice_location_2', None),
 
+
             'years_practiced': lawyer.years_practiced,
             'summary': lawyer.summary,
             'bio': lawyer.bio,
+
+            'volume_incorp_setup': volume_incorp_setup,
+            'volume_seed_financing': volume_seed_financing,
+            'volume_series_a': volume_series_a,
+
             'agree_tandc': lawyer.data.get('agree_tandc', None),
         }})
         return form_class(**kwargs)
