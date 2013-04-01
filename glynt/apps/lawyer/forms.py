@@ -5,7 +5,10 @@ from django.contrib.auth.models import User
 from django.core import exceptions
 
 from bootstrap.forms import BootstrapMixin
+
+from cicu.models import UploadedFile
 from cicu.widgets import CicuUploderInput
+from easy_thumbnails.fields import ThumbnailerImageField
 
 from glynt.apps.lawyer.models import Lawyer
 
@@ -13,8 +16,6 @@ from glynt.apps.lawyer.services import EnsureLawyerService
 
 import logging
 logger = logging.getLogger('django.request')
-
-import pdb
 
 API_URLS = {
     'firms': '/api/v1/firm/?format=json&limit=1000',
@@ -46,8 +47,10 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
                 'ratioHeight':'110',       #fix-height ratio , default 0
                 'sizeWarning': 'False',    #if True the crop selection have to respect minimal ratio size defined above. Default 'False'
                 'modalButtonLabel': 'Upload photo',
-                'onCrop': 'photoUploadComplete',
+                'onReady': 'preparePhotoPreview',
+                'onCrop': 'photoCrop',
             }))
+    hidden_photo = forms.CharField(required=False, widget=forms.HiddenInput) # transports the id
 
     startups_advised = forms.CharField(required=False, label="Startups Advised", help_text='This helps us match you with similar startups', widget=forms.TextInput(attrs={'title':'e.g. instagram.com','class':'typeahead','autocomplete':'off','data-provide':'', 'data-items':4, 'data-source':''}))
 
@@ -67,7 +70,6 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
 
     def clean_email(self):
         email = self.cleaned_data['email']
-        # Nasty
         try:
             lawyer_exists = User.objects.exclude(pk=self.user.pk).get(email=email)
             msg = 'Sorry but a Lawyer with that email already exists (id: %s)' % (lawyer.pk)
@@ -78,9 +80,9 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
             pass
         return email
 
-    def clean_photo(self):
-        photo = self.cleaned_data.get('photo', None)
-        return photo
+    def clean_hidden_photo(self):
+        hidden_photo = self.cleaned_data.get('hidden_photo', None)
+        return int(hidden_photo) if hidden_photo else None
 
     def save(self, commit=True):
         logger.info('Ensuring the LawyerProfile Exists')
@@ -89,11 +91,15 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
 
         firm_name = data.pop('firm_name')
 
+        hidden_photo = self.cleaned_data.get('hidden_photo', None)
+        if type(hidden_photo) is int:
+            data['photo'] = UploadedFile.objects.get(pk=hidden_photo)
+
         offices = []
         # dont pop these as we need them for local storage in lawyer
         offices.append(data.get('practice_location_1', None))
         offices.append(data.get('practice_location_2', None))
-        pdb.set_trace()
+
         lawyer_service = EnsureLawyerService(user=self.user, firm_name=firm_name, offices=offices, **data)
         lawyer_service.process()
 

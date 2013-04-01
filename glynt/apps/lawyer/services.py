@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 from django.utils import simplejson as json
 from models import Lawyer
 from glynt.apps.firm.services import EnsureFirmService
@@ -48,6 +49,14 @@ class EnsureLawyerService(object):
 
         if self.data:
             self.lawyer.data = self.data
+
+        if self.data.get('photo', None) is not None:
+            photo = self.data.pop('photo') # remove so it does not get serialized
+
+            if self.lawyer.photo != photo: # only if its not the same image
+                photo_file = os.path.basename(photo.file.path)# get base name
+                self.lawyer.photo.save(photo_file, photo.file)
+
 
         if self.data.get('summary', None) is not None:
             self.lawyer.summary = self.data.get('summary')

@@ -47,10 +47,11 @@ class LawyerProfileSetupView(FormView):
             'practice_location_1': lawyer.data.get('practice_location_1', None),
             'practice_location_2': lawyer.data.get('practice_location_2', None),
 
-
             'years_practiced': lawyer.years_practiced,
             'summary': lawyer.summary,
             'bio': lawyer.bio,
+
+            'photo': lawyer.photo,
 
             'volume_incorp_setup': volume_incorp_setup,
             'volume_seed_financing': volume_seed_financing,

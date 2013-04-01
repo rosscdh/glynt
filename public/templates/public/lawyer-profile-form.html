@@ -149,6 +149,7 @@
 								{{ form.position.errors }}
 								<div class="input-append">
 									{{ form.photo }}
+									{{ form.hidden_photo }}
 								</div>
 						      <span class="help-block">{{ form.startups_advised.help_text }}</span>
 							</div>
@@ -239,22 +240,37 @@
 
 {% endblock %}
 
+{% block css %}
+<style>
+img#photo-preview{
+    border:solid #ccc 2px;
+    min-height: 50px;
+    min-width: 50px;
+    max-height: 130px;
+    max-width: 130px;
+}
+</style>
+{% endblock %}
+
 {% block js %}
+
+<!-- # include cicu etc -->
+{{ form.media }}
 
 <script type="text/javascript">
 
-function photoUploadComplete(element, data) {
-	var element = $(data[0]);
+function preparePhotoPreview(element) {
+	var element = $('.cropped-imag-preview');
 	$.each(element.find('img'), function(i,img){
 		img = $(img)
-		console.log(img)
 		$('#photo-preview').attr('src', img.attr('src'))
-		$('id_photo').val(img.attr('src'))
 		img.hide();
-
 	})
-	//element.prependTo($('<img>'))
-	//$('#photo-preview').appendTo(element)
+}
+
+function photoCrop(element, data) {
+	$('#id_hidden_photo').val(data.id);// id to be sent
+	preparePhotoPreview(element)
 }
 
 $(document).ready(function(){
@@ -352,8 +368,5 @@ $(document).ready(function(){
 
 });
 </script>
-
-<!-- # include cicu etc -->
-{{ form.media }}
 
 {% endblock %}
