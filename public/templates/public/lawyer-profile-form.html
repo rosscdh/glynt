@@ -199,22 +199,22 @@
 
 							<tr>
 								<th>Incorporation and Setup</th>
-								<td><input class="span1" type="text"></td>
-								<td><input class="span1" type="text"></td>
-								<td><input class="span1" type="text"></td>
+								<td><input class="span1 volume" data-volume_type="incorp_setup" data-year="2010" type="text"></td>
+								<td><input class="span1 volume" data-volume_type="incorp_setup" data-year="2011" type="text"></td>
+								<td><input class="span1 volume" data-volume_type="incorp_setup" data-year="2012" type="text"></td>
 							</tr>
 
 							<tr>
 								<th>Seed Financing</th>
-								<td><input class="span1" type="text"></td>
-								<td><input class="span1" type="text"></td>
-								<td><input class="span1" type="text"></td>
+								<td><input class="span1 volume" data-volume_type="incorp_setup" data-year="2010" type="text"></td>
+								<td><input class="span1 volume" data-volume_type="incorp_setup" data-year="2011" type="text"></td>
+								<td><input class="span1 volume" data-volume_type="incorp_setup" data-year="2012" type="text"></td>
 							</tr>
 							<tr>
 								<th>Series A</th>
-								<td><input class="span1" type="text"></td>
-								<td><input class="span1" type="text"></td>
-								<td><input class="span1" type="text"></td>
+								<td><input class="span1 volume" data-volume_type="series_a" data-year="2010" type="text"></td>
+								<td><input class="span1 volume" data-volume_type="series_a" data-year="2011" type="text"></td>
+								<td><input class="span1 volume" data-volume_type="series_a" data-year="2012" type="text"></td>
 							</tr>
 						</table>
 						{{ form.volume_incorp_setup }}
@@ -249,35 +249,66 @@ $(document).ready(function(){
 
 	$('input[title]').tooltip({trigger: 'focus', placement: 'top'});
 
+	/**
+	* Dynamic selector functions based on form api urls
+	* 
+	*/
+	{% for key, url in form.data_source_urls.items %}
+	{{ key }}_lookup = function(callback) {
+		var url = '{{ url }}';
+		var object_list = []
+		$.ajax({
+			type: 'GET',
+			url: url,
+			data: null,
+			beforeSend: function(jqXHR, settings) {
+				// Pull the token out of the DOM.
+				jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+			},
+			success: function(data, textStatus, jqXHR){
+				$.each(data.objects, function(i,item){
+					object_list.push(item.name)
+				})
+				// call the calling callback.. javascript
+				callback(object_list);
+			},
+			error: function(data, textStatus, jqXHR){
+				console.log(jqXHR)
+				console.log(textStatus)
+			}
+		});
+	}
+	{% endfor %}
+
+	/**
+	* handle typeahead requests
+	*/
 	$.each($('.typeahead'), function(i, element) {
 		var e = $(element);
 		e.typeahead({
 		source: function(query, process_callback) {
-			console.log(process_callback)
-			var url = e.attr('data-source');
-			$.ajax({
-				type: 'GET',
-				url: url,
-				data: null,
-				beforeSend: function(jqXHR, settings) {
-					// Pull the token out of the DOM.
-					jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
-				},
-				success: function(data, textStatus, jqXHR){
-					var object_list = []
-					$.each(data.objects, function(i,item){
-						object_list.push(item.name)
-					})
-					process_callback(object_list);
-				},
-				error: function(data, textStatus, jqXHR){
-					console.log(jqXHR)
-					console.log(textStatus)
-				}
-			});
+			var lookup_name = e.attr('data-source');
+			var fn = window[lookup_name + '_lookup']
+			if(typeof fn === 'function') {
+				fn(process_callback);
+			}
 		}
 		});
 	});
+
+	/**
+	* handle typeahead requests
+	*/
+	$.each($('.volume'), function(i, element) {
+		var e = $(element);
+		var volume_type = e.attr('data-volume_type');
+		var year = e.attr('data-year');
+		
+		e.on('change', function(event){
+			
+		})
+	});
+
 });
 </script>
 
