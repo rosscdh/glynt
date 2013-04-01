@@ -154,8 +154,8 @@
 							</div>
 						</div>
 					</div>
-					<div id="photo-preview" class="span4">
-						<!-- <img src="http://placehold.it/130x130"> -->
+					<div class="span4">
+						<img id="photo-preview" width="130" height="130" src="http://placehold.it/130x130">
 					</div>
 				</div>
 				<div class="row">
@@ -242,6 +242,21 @@
 {% block js %}
 
 <script type="text/javascript">
+
+function photoUploadComplete(element, data) {
+	var element = $(data[0]);
+	$.each(element.find('img'), function(i,img){
+		img = $(img)
+		console.log(img)
+		$('#photo-preview').attr('src', img.attr('src'))
+		$('id_photo').val(img.attr('src'))
+		img.hide();
+
+	})
+	//element.prependTo($('<img>'))
+	//$('#photo-preview').appendTo(element)
+}
+
 $(document).ready(function(){
 
 	$('input[title]').tooltip({trigger: 'focus', placement: 'top'});
@@ -334,11 +349,6 @@ $(document).ready(function(){
 			// console.log(target_element.val())
 		})
 	});
-
-	// re-place cicu ajax-upload-preview-area
-	var copy_of_cicu_preview = $('div.cropped-imag-preview').clone();
-	$('div.cropped-imag-preview').remove();
-	$('#photo-preview').append(copy_of_cicu_preview);
 
 });
 </script>

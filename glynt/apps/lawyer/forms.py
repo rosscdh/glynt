@@ -14,6 +14,8 @@ from glynt.apps.lawyer.services import EnsureLawyerService
 import logging
 logger = logging.getLogger('django.request')
 
+import pdb
+
 API_URLS = {
     'firms': '/api/v1/firm/?format=json&limit=1000',
     'offices': '/api/v1/office/?format=json&limit=1000',
@@ -43,6 +45,8 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
                 'ratioWidth': '110',       #fix-width ratio, default 0
                 'ratioHeight':'110',       #fix-height ratio , default 0
                 'sizeWarning': 'False',    #if True the crop selection have to respect minimal ratio size defined above. Default 'False'
+                'modalButtonLabel': 'Upload photo',
+                'onCrop': 'photoUploadComplete',
             }))
 
     startups_advised = forms.CharField(required=False, label="Startups Advised", help_text='This helps us match you with similar startups', widget=forms.TextInput(attrs={'title':'e.g. instagram.com','class':'typeahead','autocomplete':'off','data-provide':'', 'data-items':4, 'data-source':''}))
@@ -74,6 +78,9 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
             pass
         return email
 
+    def clean_photo(self):
+        photo = self.cleaned_data.get('photo', None)
+        return photo
 
     def save(self, commit=True):
         logger.info('Ensuring the LawyerProfile Exists')
@@ -86,7 +93,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
         # dont pop these as we need them for local storage in lawyer
         offices.append(data.get('practice_location_1', None))
         offices.append(data.get('practice_location_2', None))
-
+        pdb.set_trace()
         lawyer_service = EnsureLawyerService(user=self.user, firm_name=firm_name, offices=offices, **data)
         lawyer_service.process()
 
