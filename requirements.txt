@@ -27,7 +27,7 @@ celery
 django-templated-email
 
 # Imaging
-pillow
+pillow<=1.9 # https://github.com/python-imaging/Pillow/issues/173
 
 xhtml2pdf
 

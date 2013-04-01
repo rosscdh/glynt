@@ -154,8 +154,8 @@
 							</div>
 						</div>
 					</div>
-					<div class="span4">
-						<img src="http://placehold.it/130x130">
+					<div id="photo-preview" class="span4">
+						<!-- <img src="http://placehold.it/130x130"> -->
 					</div>
 				</div>
 				<div class="row">
@@ -334,6 +334,11 @@ $(document).ready(function(){
 			// console.log(target_element.val())
 		})
 	});
+
+	// re-place cicu ajax-upload-preview-area
+	var copy_of_cicu_preview = $('div.cropped-imag-preview').clone();
+	$('div.cropped-imag-preview').remove();
+	$('#photo-preview').append(copy_of_cicu_preview);
 
 });
 </script>

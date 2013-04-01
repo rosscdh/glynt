@@ -40,8 +40,8 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     bio = forms.CharField(required=False, widget=forms.Textarea(attrs={'class':'input-xxlarge','placeholder':'A bit more about you.','title':'A bit longer, but still make it personal.'}))
 
     photo = forms.ImageField(required=False, label="Main Photo", help_text="Please add a good quality photo to your profile. It really helps.", widget=CicuUploderInput(options={
-                'ratioWidth': '600',       #fix-width ratio, default 0
-                'ratioHeight':'400',       #fix-height ratio , default 0
+                'ratioWidth': '110',       #fix-width ratio, default 0
+                'ratioHeight':'110',       #fix-height ratio , default 0
                 'sizeWarning': 'False',    #if True the crop selection have to respect minimal ratio size defined above. Default 'False'
             }))
 
