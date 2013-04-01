@@ -144,12 +144,11 @@
 				<div class="row">
 					<div class="span8">
 						<div class="control-group">
-							<label class="control-label" for="inputPassword">{{ form.profile_photo.label }}</label>
+							<label class="control-label" for="inputPassword">{{ form.photo.label }}</label>
 							<div class="controls">
 								{{ form.position.errors }}
 								<div class="input-append">
-									{{ form.profile_photo }}
-									<button class="btn" type="button">Browse</button>
+									{{ form.photo }}
 								</div>
 						      <span class="help-block">{{ form.startups_advised.help_text }}</span>
 							</div>
@@ -241,8 +240,6 @@
 {% endblock %}
 
 {% block js %}
-
-{{ form.media }}
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -340,5 +337,8 @@ $(document).ready(function(){
 
 });
 </script>
+
+<!-- # include cicu etc -->
+{{ form.media }}
 
 {% endblock %}

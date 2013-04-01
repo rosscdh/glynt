@@ -43,6 +43,9 @@
 
 <body data-spy="scroll" data-target=".subnav" data-offset="50" class="preview {% block bodyclass %}{% endblock %}">
 
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui-1.8.18.min.js"></script>
+
     {% block navbar %}
         {% include 'partials/nav.html' %}
     {% endblock %}
@@ -63,8 +66,6 @@
         {% include 'partials/footer.html' %}
     {% endblock %}
 
-    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-ui-1.8.18.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/sammyjs/sammy.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/sammyjs/plugins/sammy.json.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/json2.min.js"></script>

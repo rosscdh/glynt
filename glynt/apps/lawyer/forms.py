@@ -39,7 +39,11 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     summary = forms.CharField(label="Short description", widget=forms.TextInput(attrs={'class':'input-xxlarge','placeholder':'e.g. Partner at WDJ advising technology companies in Europe','title':'Keep it short, and make it personal.'}))
     bio = forms.CharField(required=False, widget=forms.Textarea(attrs={'class':'input-xxlarge','placeholder':'A bit more about you.','title':'A bit longer, but still make it personal.'}))
 
-    profile_photo = forms.ImageField(required=False, label="Main Photo", help_text="Please add a good quality photo to your profile. It really helps.")
+    photo = forms.ImageField(required=False, label="Main Photo", help_text="Please add a good quality photo to your profile. It really helps.", widget=CicuUploderInput(options={
+                'ratioWidth': '600',       #fix-width ratio, default 0
+                'ratioHeight':'400',       #fix-height ratio , default 0
+                'sizeWarning': 'False',    #if True the crop selection have to respect minimal ratio size defined above. Default 'False'
+            }))
 
     startups_advised = forms.CharField(required=False, label="Startups Advised", help_text='This helps us match you with similar startups', widget=forms.TextInput(attrs={'title':'e.g. instagram.com','class':'typeahead','autocomplete':'off','data-provide':'', 'data-items':4, 'data-source':''}))
 
@@ -48,15 +52,6 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     volume_series_a = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
 
     agree_tandc = forms.BooleanField(widget=forms.CheckboxInput)
-
-    class Meta:
-        widgets = {
-            'profile_photo': CicuUploderInput(options={
-                'ratioWidth': '600',       #fix-width ratio, default 0
-                'ratioHeight':'400',       #fix-height ratio , default 0
-                'sizeWarning': 'False',    #if True the crop selection have to respect minimal ratio size defined above. Default 'False'
-            })
-        }
 
     def __init__(self, *args, **kwargs):
         """ get request object and user """
