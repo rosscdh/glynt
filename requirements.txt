@@ -9,8 +9,8 @@ clean-image-crop-uploader
 #psycopg2 # required for production postgres db
 python-memcached
 
-# model charts
-pygraphviz
+# model charts - will need to have brew graphiz installed
+# pygraphviz
 
 Werkzeug
 django-extensions
