@@ -254,7 +254,7 @@ FACEBOOK_REQUEST_PERMISSIONS = 'email,user_likes,user_about_me,read_stream'
 
 
 LINKEDIN_CONSUMER_KEY = '1uh2ns1cn9tm'
-LINKEDIN_CONSUMER_SECRET_KEY = 'MnrqdbtmM10gkz27'
+LINKEDIN_CONSUMER_SECRET = 'MnrqdbtmM10gkz27'
 LINKEDIN_SCOPE = ['r_basicprofile', 'r_emailaddress']
 LINKEDIN_EXTRA_FIELD_SELECTORS = ['email-address', 'headline', 'industry']
 LINKEDIN_EXTRA_DATA = [('id', 'id'),
@@ -265,20 +265,20 @@ LINKEDIN_EXTRA_DATA = [('id', 'id'),
                        ('industry', 'industry')]
 
 
-ANGEL_CLIENT_ID = '77339d6d557a0ae6c835baf89a22c2b0'
-ANGEL_CLIENT_SECRET = '809bddbacb7dafbe482054bb96d944f4'
-ANGEL_AUTH_EXTRA_ARGUMENTS = {'scope': 'email message'}
+ANGEL_CLIENT_ID = '00342c269e46c6059ab76013bb74ed44'
+ANGEL_CLIENT_SECRET = '0f7ca41e548dcc04357984e5ceebfa26'
+ANGEL_AUTH_EXTRA_ARGUMENTS = {'scope': 'email'}
 
-SOCIAL_AUTH_PIPELINE = (
+(
     'social_auth.backends.pipeline.social.social_auth_user',
-    'social_auth.backends.pipeline.associate.associate_by_email',
-    'social_auth.backends.pipeline.misc.save_status_to_session',
+    'social_auth.backends.pipeline.user.get_username',
     'social_auth.backends.pipeline.user.create_user',
     'social_auth.backends.pipeline.social.associate_user',
     'social_auth.backends.pipeline.social.load_extra_data',
-    'social_auth.backends.pipeline.user.update_user_details',
+    'social_auth.backends.pipeline.user.update_user_details'
     'social_auth.backends.pipeline.misc.save_status_to_session',
 )
+
 
 DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d %Y',
 '%b %d, %Y', '%d %b %Y', '%d %b, %Y', '%B %d %Y',
