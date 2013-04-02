@@ -7,6 +7,8 @@ from glynt.apps.lawyer.forms import LawyerProfileSetupForm
 from glynt.apps.lawyer.views import LawyerProfileSetupView
 
 urlpatterns = patterns('',
+    # about
+    url(r'^about/$', TemplateView.as_view(template_name='public/about.html'), name='terms'),
     # T&C
     url(r'^terms/$', TemplateView.as_view(template_name='public/terms-and-conditions.html'), name='terms'),
     # lawyers
