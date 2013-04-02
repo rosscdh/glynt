@@ -50,7 +50,7 @@ LINKEDIN_EXTRA_DATA = [('id', 'id'),
 
 ANGEL_CLIENT_ID = '77339d6d557a0ae6c835baf89a22c2b0'
 ANGEL_CLIENT_SECRET = '809bddbacb7dafbe482054bb96d944f4'
-ANGEL_AUTH_EXTRA_ARGUMENTS = {'scope': 'email message'}
+ANGEL_AUTH_EXTRA_ARGUMENTS = {'scope': 'email'}
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
