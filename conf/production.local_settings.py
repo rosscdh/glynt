@@ -23,7 +23,7 @@ TIME_ZONE = 'Europe/London'
 
 USE_ETAGS = True
 
-MEDIA_URL = '/media/'
+MEDIA_URL = '/static/media/'
 
 STATIC_URL = '/static/'
 
