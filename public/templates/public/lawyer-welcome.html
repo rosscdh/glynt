@@ -8,7 +8,7 @@
 		<!-- starts carousel -->
 		<div class="row animated fadeInDown">
 			<div class="span12">
-				<h1>Hey Chris, a warm welcome to LawPal</h1>
+				<h1>Hey {{ user.first_name|default:user }}, a warm welcome to LawPal</h1>
 				<h3>We're up to something big and we want you to be part of it.<br />
 					Shortly we will be launching a discovery platform to help founders find quality lawyers and firms.
 				 </h3>
