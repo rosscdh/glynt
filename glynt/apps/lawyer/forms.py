@@ -3,6 +3,7 @@ from django import forms
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core import exceptions
+from django.utils import simplejson as json
 
 from bootstrap.forms import BootstrapMixin
 
@@ -19,7 +20,7 @@ logger = logging.getLogger('django.request')
 
 API_URLS = {
     'firms': '/api/v1/firm/?format=json&limit=1000',
-    'offices': '/api/v1/office/?format=json&limit=1000',
+    'locations': '/api/v1/location/?format=json&limit=1000',
 }
 
 
@@ -33,7 +34,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     firm_name = forms.CharField( widget=forms.TextInput(attrs={'class':'typeahead','autocomplete':'off','data-provide':'', 'data-items':4, 'data-source': 'firms'}))
 
     phone = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'+44 207 7778 2020', 'title':'Shows on your profile. Include country code.'}))
-    position = forms.ChoiceField(choices=Lawyer.LAWYER_ROLES.get_choices(), initial=Lawyer.LAWYER_ROLES.associate, label="Position", help_text="")
+    position = forms.CharField(label="Position", help_text="", widget=forms.TextInput(attrs={'placeholder':Lawyer.LAWYER_ROLES.associate, 'class':'typeahead','autocomplete':'off','data-provide':'', 'data-items':4, 'data-source': json.dumps(Lawyer.LAWYER_ROLES.get_values())}))
     years_practiced = forms.IntegerField(label="Years Practicing", initial="3", widget=forms.TextInput(attrs={'class':'input-mini'}))
 
     practice_location_1 = forms.CharField(label="Primary Location", widget=forms.TextInput(attrs={'class':'input-large','placeholder':'San Francisco, CA','title':'The primary city you operate from','class':'typeahead','autocomplete':'off','data-provide':'', 'data-items':4, 'data-source':'offices'}))
@@ -41,6 +42,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
 
     summary = forms.CharField(label="Short description", widget=forms.TextInput(attrs={'class':'input-xxlarge','placeholder':'e.g. Partner at WDJ advising technology companies in Europe','title':'Keep it short, and make it personal.'}))
     bio = forms.CharField(required=False, widget=forms.Textarea(attrs={'class':'input-xxlarge','placeholder':'A bit more about you.','title':'A bit longer, but still make it personal.'}))
+    if_i_wasnt_a_lawyer = forms.CharField(required=False, widget=forms.TextInput(attrs={'class':'input-xxlarge','placeholder':'e.g. Astronaut, Rocket Scientist','title':''}))
 
     photo = forms.ImageField(required=False, label="Main Photo", help_text="Please add a good quality photo to your profile. It really helps.", widget=CicuUploderInput(options={
                 'ratioWidth': '110',       #fix-width ratio, default 0
