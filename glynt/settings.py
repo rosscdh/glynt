@@ -203,6 +203,8 @@ HELPER_APPS = (
     # Activity stream
     'user_streams',
     'user_streams.backends.user_streams_single_table_backend',
+    # Cities
+    'cities_light',
 
     # getsentry.com
     'raven.contrib.django.raven_compat',

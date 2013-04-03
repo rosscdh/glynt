@@ -1,12 +1,13 @@
 import ast
-
-from tastypie.resources import ModelResource
+from itertools import chain
+from tastypie.resources import ModelResource, ALL
 from tastypie.api import Api
 from tastypie import fields
 from tastypie.serializers import Serializer
 from tastypie.cache import SimpleCache
 from tastypie.authentication import Authentication, SessionAuthentication
 
+from cities_light.models import Country
 from glynt.apps.firm.models import Firm, Office
 from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
 from glynt.apps.sign.models import DocumentSignature
@@ -27,32 +28,42 @@ class BaseApiModelResource(ModelResource):
         cache = SimpleCache(timeout=30)
         authentication = SessionAuthentication()
 
-    def get_object_list(self, request):
-        """ Test for a set of catch field names 
-        These keys relate to references to models that need to be filtered by
-        the current user"""
-        try:
-            self._meta.queryset = self._meta.queryset.model.objects.apply_api_user_filter(request.user)
-        except AttributeError:
-            pass
 
-        return super(BaseApiModelResource, self).get_object_list(request)
+CITY_REGION_QS = Country.objects.prefetch_related('region_set', 'city_set').get(name='United States').city_set.all() #\
+                #| Country.objects.prefetch_related('region_set', 'city_set').get(name='United Kingdom').city_set.all()
+
+class LocationSimpleResource(BaseApiModelResource):
+    name = fields.CharField(attribute='name', null=True)
+    state_name = fields.CharField(attribute='region__geoname_code', null=True)
+
+    class Meta(BaseApiModelResource.Meta):
+        queryset = CITY_REGION_QS
+        authentication = Authentication()
+        list_allowed_methods = ['get']
+        resource_name = 'location'
+        fields = ['name', 'state_name']
+        includes = ['name', 'region__geoname_code']
+        filtering = {
+            'name': ALL,
+            'state_name': ALL,
+        }
+        cache = SimpleCache()
 
 
 class FirmSimpleResource(BaseApiModelResource):
     class Meta(BaseApiModelResource.Meta):
+        queryset = Firm.objects.all()
         authentication = Authentication()
         list_allowed_methods = ['get']
-        queryset = Firm.objects.all()
         resource_name = 'firm'
         includes = ['pk','name']
 
 
 class OfficeSimpleResource(BaseApiModelResource):
     class Meta(BaseApiModelResource.Meta):
+        queryset = Office.objects.all()
         authentication = Authentication()
         list_allowed_methods = ['get']
-        queryset = Office.objects.all()
         resource_name = 'office'
         includes = ['pk','address']
 
@@ -101,6 +112,7 @@ class SignatureResource(BaseApiModelResource):
 
 
 """ Register the api resources """
+v1_internal_api.register(LocationSimpleResource())
 v1_internal_api.register(FirmSimpleResource())
 v1_internal_api.register(OfficeSimpleResource())
 
