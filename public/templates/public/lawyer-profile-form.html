@@ -293,9 +293,10 @@ $(document).ready(function(){
 	* 
 	*/
 	{% for key, url in form.data_source_urls.items %}
-	{{ key }}_lookup = function(callback) {
+	{{ key }}_lookup = function(filter, callback) {
 		var url = '{{ url }}';
 		var object_list = []
+		url = (filter === undefined)? url: url + '&' + filter;
 		$.ajax({
 			type: 'GET',
 			url: url,
@@ -327,9 +328,11 @@ $(document).ready(function(){
 		e.typeahead({
 		source: function(query, process_callback) {
 			var lookup_name = e.attr('data-source');
+			var filter = e.attr('data-filter');
+			filter = (filter === undefined)? filter : filter + '=' + query ;
 			var fn = window[lookup_name + '_lookup']
 			if(typeof fn === 'function') {
-				fn(process_callback);
+				fn(filter, process_callback);
 			}
 		}
 		});

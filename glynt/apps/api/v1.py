@@ -49,6 +49,14 @@ class LocationSimpleResource(BaseApiModelResource):
         }
         cache = SimpleCache()
 
+    def dehydrate(self, bundle):
+        name = bundle.data.get('name', None)
+        state_name = bundle.data.get('state_name', None)
+        bundle.data.pop('name')
+        bundle.data.pop('state_name')
+        bundle.data.update({'name': '%s, %s' % (name, state_name,) })
+        return bundle
+
 
 class FirmSimpleResource(BaseApiModelResource):
     class Meta(BaseApiModelResource.Meta):
