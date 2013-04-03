@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Lawyers - Signup{% endblock %}
+{% block bodyclass %}lawyer-form{% endblock %}
+
+{% block prebody %}
+<div id="hero">
+	<div class="container">
+		<!-- starts carousel -->
+		<div class="row animated fadeInDown">
+			<div class="span12">
+				<h1>Thank you.</h1>
+				<h3>We will be in touch shortly. But before you go, please recommend one or two other people from your firm to join LawPal.</h3>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container profile">
+	<div class="row">
+		<div class="span12">
+			<h1>
+				Invite 2 colleagues to join LawPal
+			</h1>
+			<br>
+			<form action="{% url 'public:lawyer_setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
+				{% for e in form.non_field_errors %}
+				<div class="alert-error">
+				  {{ e }}
+				</div>
+				{% endfor %}
+			<div class="row">
+					<div class="span5">
+						<div class="control-group">
+							<label class="control-label" for="inputEmail">Full name</label>
+							<div class="controls">
+								<input id="id_first_name" name="name" placeholder="John Smith" type="text">
+								<span class="help-inline"></span>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="inputEmail">Full name</label>
+							<div class="controls">
+								<input id="id_first_name" name="name" placeholder="John Smith" type="text">
+								<span class="help-inline"></span>
+							</div>
+						</div>
+					</div>
+					<div class="span5">
+						<div class="control-group">
+							<label class="control-label" for="inputEmail">Email</label>
+							<div class="controls">
+								<input id="id_first_name" name="first_name" placeholder="john.smith@firm.com" type="text">
+								<span class="help-inline"></span>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="inputEmail">Email</label>
+							<div class="controls">
+								<input id="id_first_name" name="first_name" placeholder="john.smith@firm.com" type="text">
+								<span class="help-inline"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="span12">
+					<a href="" class="btn btn-red btn-large">Complete</a>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block css %}
+<style>
+img#photo-preview{
+    border:solid #ccc 2px;
+    min-height: 50px;
+    min-width: 50px;
+    max-height: 130px;
+    max-width: 130px;
+}
+</style>
+{% endblock %}
+
+{% block js %}
+
+<!-- # include cicu etc -->
+{{ form.media }}
+
+<script type="text/javascript">
+
+function preparePhotoPreview(element) {
+	var element = $('.cropped-imag-preview');
+	$.each(element.find('img'), function(i,img){
+		img = $(img)
+		$('#photo-preview').attr('src', img.attr('src'))
+		img.hide();
+	})
+}
+
+function photoCrop(element, data) {
+	$('#id_hidden_photo').val(data.id);// id to be sent
+	preparePhotoPreview(element)
+}
+
+$(document).ready(function(){
+
+	$('input[title]').tooltip({trigger: 'focus', placement: 'top'});
+
+	/**
+	* Dynamic selector functions based on form api urls
+	* 
+	*/
+	{% for key, url in form.data_source_urls.items %}
+	{{ key }}_lookup = function(callback) {
+		var url = '{{ url }}';
+		var object_list = []
+		$.ajax({
+			type: 'GET',
+			url: url,
+			data: null,
+			beforeSend: function(jqXHR, settings) {
+				// Pull the token out of the DOM.
+				jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+			},
+			success: function(data, textStatus, jqXHR){
+				$.each(data.objects, function(i,item){
+					object_list.push(item.name)
+				})
+				// call the calling callback.. javascript
+				callback(object_list);
+			},
+			error: function(data, textStatus, jqXHR){
+				console.log(jqXHR)
+				console.log(textStatus)
+			}
+		});
+	}
+	{% endfor %}
+
+	/**
+	* handle typeahead requests
+	*/
+	$.each($('.typeahead'), function(i, element) {
+		var e = $(element);
+		e.typeahead({
+		source: function(query, process_callback) {
+			var lookup_name = e.attr('data-source');
+			var fn = window[lookup_name + '_lookup']
+			if(typeof fn === 'function') {
+				fn(process_callback);
+			}
+		}
+		});
+	});
+
+	/**
+	* handle typeahead requests
+	*/
+	$.each($('.volume'), function(i, element) {
+
+		var e = $(element);
+		var volume_type = e.attr('data-volume_type');
+		var year = e.attr('data-year');
+
+		var target_element = $('#id_volume_' + volume_type);
+
+		// default json data from hidden element
+		var target_json = $.parseJSON(target_element.val());
+		target_json = (target_json === null) ? {} : target_json ;
+
+		// parse and reform and set defaults
+		var volume_object = window[volume_type + '_object'] || target_json;
+		volume_object[year] = target_json[year] || 0;
+		var as_json = JSON.stringify(volume_object)
+
+		// set the initial value
+		window[volume_type + '_object'] = volume_object;
+		e.val(volume_object[year])
+		target_element.val(as_json);
+
+		e.on('change', function(event){
+			var volume = e.val();
+			var volume_type = e.attr('data-volume_type');
+			var year = e.attr('data-year');
+
+			var target_element = $('#id_volume_' + volume_type);
+			var target_json = $.parseJSON(target_element.val());
+			var volume_object = window[volume_type + '_object'];
+
+			volume_object[year] = volume;
+			var as_json = JSON.stringify(volume_object)
+
+			target_element.val(as_json);
+			// console.log(target_element.val())
+		})
+	});
+
+});
+</script>
+
+{% endblock %}

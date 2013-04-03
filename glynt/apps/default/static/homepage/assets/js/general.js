@@ -6,7 +6,7 @@ jQuery(window).load(function() {
 jQuery(document).ready(function() {
 
 
-    bgImageTotal=2;
+    bgImageTotal=5;
 
     randomNumber = Math.round(Math.random()*(bgImageTotal-1))+1;
 

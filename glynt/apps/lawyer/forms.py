@@ -52,7 +52,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
             }))
     hidden_photo = forms.CharField(required=False, widget=forms.HiddenInput) # transports the id
 
-    startups_advised = forms.CharField(required=False, label="Startups Advised", help_text='This helps us match you with similar startups', widget=forms.TextInput(attrs={'title':'e.g. instagram.com','class':'typeahead','autocomplete':'off','data-provide':'', 'data-items':4, 'data-source':''}))
+    startups_advised = forms.CharField(required=False, label="Startups Advised", help_text='This helps us match you with similar startups', widget=forms.TextInput(attrs={'title':'e.g. Sphero','class':'typeahead','autocomplete':'off','data-provide':'', 'data-items':4, 'data-source':''}))
 
     volume_incorp_setup = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
     volume_seed_financing = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
