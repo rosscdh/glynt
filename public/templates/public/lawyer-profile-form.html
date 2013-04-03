@@ -261,16 +261,27 @@ img#photo-preview{
 
 function preparePhotoPreview(element) {
 	var element = $('.cropped-imag-preview');
+	var cookie_data = $.parseJSON($.cookie('lawyer_profile'));
+
 	$.each(element.find('img'), function(i,img){
 		img = $(img)
-		$('#photo-preview').attr('src', img.attr('src'))
+        src = img.attr('src');
+
+		if (cookie_data && cookie_data.id !== undefined) {
+		    $('#id_hidden_photo').val(cookie_data.id);
+		    src = cookie_data.path;
+		}
+
+		$('#photo-preview').attr('src', src)
+
 		img.hide();
 	})
 }
 
 function photoCrop(element, data) {
 	$('#id_hidden_photo').val(data.id);// id to be sent
-	preparePhotoPreview(element)
+    $.cookie('lawyer_profile', JSON.stringify({'id': data.id, 'path': data.path}));
+	preparePhotoPreview(element);
 }
 
 $(document).ready(function(){

@@ -64,4 +64,5 @@ class LawyerProfileSetupView(FormView):
     def form_valid(self, form):
         form.save()
         messages.success(self.request, 'You successfully updated your profile')
+        del(self.request.COOKIES['lawyer_profile'])
         return super(LawyerProfileSetupView, self).form_valid(form=form)
