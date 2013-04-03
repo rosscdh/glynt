@@ -6,35 +6,13 @@ jQuery(window).load(function() {
 jQuery(document).ready(function() {
 
 
-	// get reveal and expose inner
-	jQuery('.reveal').each(function(index) {
-		var getHeight = (jQuery(this).height()/2);
-		var $current = jQuery(this);
-		
-		jQuery('hgroup',this).css("margin-top" , getHeight);
-		
-		// jQuery('.reveal-inner',$current).hide();
-				// 
-		// jQuery(this).hover(
-		//   function () {
-		//     jQuery('hgroup',this).animate({
-		//         marginTop: 0
-		//       }, 100, function() {
-		//         jQuery('.reveal-inner',$current).addClass("show");
-		//         jQuery('.reveal-inner',$current).fadeIn(100);
-		//       });
-		//   },
-		//   function () {
-		//   	jQuery('.reveal-inner',$current).fadeOut(100, function() {
-		//   	    jQuery('hgroup',$current).animate({
-		//   	        marginTop: getHeight
-		//   	      }, 100, function() {
-		//   	      });
-		//   	  });
-		//   }
-		// );
-		
-	});
+    bgImageTotal=2;
+
+    randomNumber = Math.round(Math.random()*(bgImageTotal-1))+1;
+
+    imgPath=('/static/homepage/assets/img/bg/landing'+randomNumber+'.jpg');
+
+    $('body').css('background-image', ('url("'+imgPath+'")'));
 
 	// polyfill placeholder text
 	if ( (jQuery('html').hasClass("oldie")) || (jQuery('html').hasClass("ie9")) ) {

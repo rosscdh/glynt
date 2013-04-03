@@ -75,7 +75,7 @@ html {
 body {
 font: 17px "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 color: #fff;
-background: #4ad1e5;
+background: #000;
 font-weight: 300;
 text-rendering: optimizeLegibility;
 }
@@ -483,8 +483,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3b5998', end
 ####################################################################### */
 
 body.landing {
-background: url('/static/homepage/assets/img/bg/5.jpg');
 background-size: cover;
+}
+body.landing.backgrounda {
+background: url('../img/bg/landing0.jpg');	
+}
+body.landing.backgroundb {
+background: url('../img/bg/landing1.jpg');	
 }
 body.landing .wrap {
 margin: 0 auto;
@@ -554,13 +559,12 @@ color:#ccc;
 body #footer {
 position:absolute;
 bottom:0;
-right:0;
-width:350px;
+width:360px;
 height:20px;
 background-color:black;
-opacity:.6;
-padding:3px;
-font-size:12px;
+opacity:.5;
+padding:3px 0px 0px 0px;
+font-size:11px;
 text-align:center;
 }
 body #footer a {
