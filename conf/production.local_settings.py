@@ -31,8 +31,6 @@ STATIC_URL = '/static/'
 STATIC_ROOT = '/home/stard0g101/webapps/glynt_static/'
 MEDIA_ROOT = '/home/stard0g101/webapps/glynt_static/media/'
 
-# Additional locations of static files
-STATICFILES_DIRS = ()
 
 FACEBOOK_API_KEY = '343632075713954'
 FACEBOOK_SECRET_KEY = '4f9854b8fe8f5ccf27ac1ffcf5051b79'
