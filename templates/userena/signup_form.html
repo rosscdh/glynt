@@ -20,21 +20,3 @@
 {% show_loading %}
 
 {% endblock %}
-
-{% block js %}
-
-{% if not request.user.is_authenticated %}
-	{% include 'socialregistration/facebook_js/facebook_js.html' %}
-{% endif %}
-
-<script id="login-controls" type="text/javascript">
-$(document).ready(function(){
-  $('#connect-facebook').live('click', function(event){
-    event.preventDefault();
-    $('div#loader').modal({keyboard: false}, 'show');
-    SocialFBLogin();
-  });
-});
-</script>
-
-{% endblock %}

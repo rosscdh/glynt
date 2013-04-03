@@ -76,8 +76,8 @@ STATICFILES_DIRS = (
 # various locations.
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -285,7 +285,7 @@ DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d
 '%B %d, %Y', '%d %B %Y', '%d %B, %Y')
 
 
-COMPRESS_ENABLED = False
+COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = False
 
 if DEBUG:
@@ -376,6 +376,7 @@ DOCRAPTOR_KEY = "vIvrCmZtnQTC4p6V0k"
 
 LAWPAL_PRIVATE_BETA = True
 
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'local.weareml.com:8000']
 
 # RQ_QUEUES = {
 #     'default': {

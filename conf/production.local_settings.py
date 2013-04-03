@@ -6,6 +6,8 @@ SITE_ROOT = os.path.dirname(os.path.realpath(__file__+ '/../'))
 SITE_ID = 3
 
 DEBUG = False
+COMPRESS_ENABLED = True
+COMPRESS_OFFLINE = False
 TEMPLATE_DEBUG = DEBUG
 
 DATABASES = {
@@ -62,10 +64,9 @@ EMAIL_HOST_PASSWORD = '0113633alex'
 DEFAULT_FROM_EMAIL = 'glynt@dev.weareml.com'
 SERVER_EMAIL = 'glynt@dev.weareml.com'
 
-COMPRESS_ENABLED = True
-COMPRESS_OFFLINE = False
-
 HELLOSIGN_AUTH = ("sendrossemail@gmail.com", "zanshin77")
+
+ALLOWED_HOSTS = ['dev.lawpal.com']
 
 RAVEN_CONFIG = {
     'dsn': 'https://b5a6429d03e2418cbe71cd5a4c9faca6:ddabb51af47546d1ac0e63cb453797ba@app.getsentry.com/6287',
