@@ -2,10 +2,12 @@
 LOCAL_SETTINGS = True
 from settings import *
 
+PROJECT_ENVIRONMENT = 'prod'
+
 SITE_ID = 3
 
-DEBUG = False
-COMPRESS_ENABLED = True
+DEBUG = True
+COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = False
 TEMPLATE_DEBUG = DEBUG
 

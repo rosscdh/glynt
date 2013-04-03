@@ -2,6 +2,8 @@
 import os
 import sys
 
+PROJECT_ENVIRONMENT = 'prod'
+
 IS_TESTING = False
 for test_app in ['jenkins','testserver','test']:
     if test_app in sys.argv[1:2]:
@@ -76,8 +78,8 @@ STATICFILES_DIRS = (
 # various locations.
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
-    'compressor.finders.CompressorFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -124,6 +126,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
     "django.core.context_processors.request",
     "glynt.context_processors.project_info",
+    "glynt.context_processors.project_environment",
     "social_auth.context_processors.social_auth_by_type_backends",
 )
 

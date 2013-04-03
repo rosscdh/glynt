@@ -1,6 +1,8 @@
 LOCAL_SETTINGS = True
 from settings import *
 
+PROJECT_ENVIRONMENT = 'dev'
+
 RAVEN_CONFIG = {
     'dsn': 'https://b5a6429d03e2418cbe71cd5a4c9faca6:ddabb51af47546d1ac0e63cb453797ba@app.getsentry.com/6287',
 }
