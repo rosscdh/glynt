@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-import os
-
-SITE_ROOT = os.path.dirname(os.path.realpath(__file__+ '/../'))
+LOCAL_SETTINGS = True
+from settings import *
 
 SITE_ID = 3
 
