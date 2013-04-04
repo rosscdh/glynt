@@ -78,11 +78,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
         email = self.cleaned_data['email']
         try:
             lawyer_exists = User.objects.exclude(pk=self.user.pk).get(email=email)
-<<<<<<< HEAD
-            msg = 'Sorry but a Lawyer with that email already exists (id: %s)' % (self.user.pk)
-=======
-            msg = 'Sorry but a Lawyer(User) with that email already exists (id: %s)' % (self.user.pk)
->>>>>>> ec4218c7d17bac7400438b3449110877d5ed7631
+            msg = 'Sorry but a User with that email already exists (id: %s)' % (self.user.pk)
             logging.error(msg)
             raise exceptions.ValidationError(msg)
         except User.DoesNotExist:
