@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
-import os
+LOCAL_SETTINGS = True
+from settings import *
 
-SITE_ROOT = os.path.dirname(os.path.realpath(__file__+ '/../'))
+PROJECT_ENVIRONMENT = 'prod'
 
 SITE_ID = 3
 
 DEBUG = True
+COMPRESS_ENABLED = False
+COMPRESS_OFFLINE = False
 TEMPLATE_DEBUG = DEBUG
 
 DATABASES = {
@@ -23,15 +26,13 @@ TIME_ZONE = 'Europe/London'
 
 USE_ETAGS = True
 
-MEDIA_URL = '/media/'
+MEDIA_URL = '/static/media/'
 
 STATIC_URL = '/static/'
 
 STATIC_ROOT = '/home/stard0g101/webapps/glynt_static/'
 MEDIA_ROOT = '/home/stard0g101/webapps/glynt_static/media/'
 
-# Additional locations of static files
-STATICFILES_DIRS = ()
 
 FACEBOOK_API_KEY = '343632075713954'
 FACEBOOK_SECRET_KEY = '4f9854b8fe8f5ccf27ac1ffcf5051b79'
@@ -48,9 +49,9 @@ LINKEDIN_EXTRA_DATA = [('id', 'id'),
                        ('industry', 'industry')]
 
 
-ANGEL_CLIENT_ID = '77339d6d557a0ae6c835baf89a22c2b0'
-ANGEL_CLIENT_SECRET = '809bddbacb7dafbe482054bb96d944f4'
-ANGEL_AUTH_EXTRA_ARGUMENTS = {'scope': 'email message'}
+ANGEL_CLIENT_ID = '06aa0b726a71dc994bb44c3c4f3d9b91'
+ANGEL_CLIENT_SECRET = '26ea24f6107df875d2a410a8e2f55a27'
+ANGEL_AUTH_EXTRA_ARGUMENTS = {'scope': 'email'}
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -62,10 +63,9 @@ EMAIL_HOST_PASSWORD = '0113633alex'
 DEFAULT_FROM_EMAIL = 'glynt@dev.weareml.com'
 SERVER_EMAIL = 'glynt@dev.weareml.com'
 
-COMPRESS_ENABLED = False
-COMPRESS_OFFLINE = False
-
 HELLOSIGN_AUTH = ("sendrossemail@gmail.com", "zanshin77")
+
+ALLOWED_HOSTS = ['dev.lawpal.com']
 
 RAVEN_CONFIG = {
     'dsn': 'https://b5a6429d03e2418cbe71cd5a4c9faca6:ddabb51af47546d1ac0e63cb453797ba@app.getsentry.com/6287',

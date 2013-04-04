@@ -2,6 +2,8 @@
 import os
 import sys
 
+PROJECT_ENVIRONMENT = 'prod'
+
 IS_TESTING = False
 for test_app in ['jenkins','testserver','test']:
     if test_app in sys.argv[1:2]:
@@ -124,6 +126,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
     "django.core.context_processors.request",
     "glynt.context_processors.project_info",
+    "glynt.context_processors.project_environment",
     "social_auth.context_processors.social_auth_by_type_backends",
 )
 
@@ -200,6 +203,8 @@ HELPER_APPS = (
     # Activity stream
     'user_streams',
     'user_streams.backends.user_streams_single_table_backend',
+    # Cities
+    'cities_light',
 
     # getsentry.com
     'raven.contrib.django.raven_compat',
@@ -285,7 +290,7 @@ DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d
 '%B %d, %Y', '%d %B %Y', '%d %B, %Y')
 
 
-COMPRESS_ENABLED = False
+COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = False
 
 if DEBUG:
@@ -376,6 +381,7 @@ DOCRAPTOR_KEY = "vIvrCmZtnQTC4p6V0k"
 
 LAWPAL_PRIVATE_BETA = True
 
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'local.weareml.com:8000']
 
 # RQ_QUEUES = {
 #     'default': {

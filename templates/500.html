@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Internal Error - Sorry{% endblock %}
+
+{% block prebody %}
+<div class="hero-unit">
+    <h1>Oh Dear, it looks like something bad happened</h1>
+    {{ error }}
+</div>
+{% endblock %}
