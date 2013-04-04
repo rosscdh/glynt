@@ -332,7 +332,6 @@ $(document).ready(function(){
 	*/
 	$.each($('.typeahead[data-provide="local"]'), function(i, element) {
 		var e = $(element);
-		console.log($.parseJSON(e.attr('data-source')))
 		e.typeahead({
 		    source: $.parseJSON(e.attr('data-source'))
 		    ,limit: 10
