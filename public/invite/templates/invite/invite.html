@@ -1,5 +1,5 @@
-<div id="" class="span8">
-    <form action="" class="form-inline" method="POST">{% csrf_token %}
+<div id="" class="span12">
+    <form data-validate="parsley" action="" class="form-inline" method="POST">{% csrf_token %}
         <div id="invite-repeatable-group" class="control-group">
         {{ form.email }}
         {{ form.name }}
@@ -20,21 +20,25 @@
 $(document).ready(function(){
 
     var remove_btn = $('<button/>', {
-        class: 'btn btn-primary btn-small'
+        class: 'remove-btn btn btn-info btn-small'
         ,html: '<i class="icon-minus-sign"></i>'
     });
+
     var repeatable = $('#invite-repeatable-group');
 
-    $('#invite-btn').on('click', function(event){
+    $('#invite-btn').live('click', function(event){
+        event.preventDefault();
         var clone = repeatable.clone()
         var remove_clone = remove_btn.clone();
         clone.append(remove_clone);
         clone.insertAfter(repeatable)
     });
 
-    $('.remove-btn').on('click', function(event){
-        var clone = repeatable.clone()
-        clone.insertAfter(repeatable)
+    $('.remove-btn').live('click', function(event){
+        event.preventDefault();
+        var self = $(this);
+        var container = self.parent();
+        container.remove();
     });
 
 });

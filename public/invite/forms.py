@@ -11,8 +11,8 @@ logger = logging.getLogger('django.request')
 
 class InviteEmailForm(BootstrapMixin, forms.Form):
     invite_type = forms.CharField(widget=forms.HiddenInput)
-    email = forms.EmailField(required=True, widget=forms.TextInput(attrs={'placeholder':'their.name@example.com'}))
-    name = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder':'John Doe'}))
+    email = forms.EmailField(required=True, widget=forms.TextInput(attrs={'placeholder':'their.name@example.com', 'data-type':'email', 'data-trigger':'change'}))
+    name = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder':'John Doe', 'data-required':'true', 'data-required':'true', 'data-trigger':'change'}))
 
     def clean_email(self):
         email = self.cleaned_data.get('email', None)
