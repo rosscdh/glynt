@@ -9,6 +9,9 @@ django-simple-menu
 #psycopg2 # required for production postgres db
 python-memcached
 
+django-cities-light
+django-inviter
+
 # model charts - will need to have brew graphiz installed
 # pygraphviz
 
