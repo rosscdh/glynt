@@ -19,7 +19,6 @@ DOCRAPTOR_KEY = getattr(settings, 'DOCRAPTOR_KEY', None)
 
 from xhtml2pdf import pisa
 import StringIO
-import sh
 
 import datetime
 import hashlib
