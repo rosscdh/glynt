@@ -12,15 +12,18 @@
     echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bash_profile
 
 4. mkvirtualenv --no-site-packages glynt
-5. ```cd /path/to/glynt```
-6. ```pip install -r requirements.txt``` : install update the required libraries (append --upgrade if you are not sure)
-7. ```python manage.py syncdb``` : sync the database; and create the default user if there is not already one
-7a. ```python manage.py migrate socialregistration --fake``` : there is a small issue with socialregistration at the moment and its migration needs to be faked
-8. ```python manage.py migrate``` : perform the rest of the migrations
-9. ```python manage.py loaddata sites document_category documenttemplate lawyers legal```
-10. ```python manage.py check_permissions``` # Creates the userena permissions
-11. Thats it you can now ```python manage.py runserver_plus```
-12. access http://local.weareml.com:8000/ (you may need to add 127.0.0.1 local.weareml.com to your /etc/hosts file)
+5. ```mkdir -p ~/Projects```
+6. ```cd ~/Projects```
+7. ```git clone git@github.com:rosscdh/glynt/glynt.git```
+8. ```cd glynt```
+9. ```pip install -r requirements.txt``` : install update the required libraries (append --upgrade if you are not sure)
+10. ```python manage.py syncdb``` : sync the database; and create the default user if there is not already one
+10a. ```python manage.py migrate socialregistration --fake``` : there is a small issue with socialregistration at the moment and its migration needs to be faked
+11. ```python manage.py migrate``` : perform the rest of the migrations
+12. ```python manage.py loaddata sites document_category documenttemplate lawyers legal```
+13. ```python manage.py check_permissions``` # Creates the userena permissions
+14. Thats it you can now ```python manage.py runserver_plus```
+15. access http://local.weareml.com:8000/ (you may need to add 127.0.0.1 local.weareml.com to your /etc/hosts file)
 
 ## Update requirments
 
