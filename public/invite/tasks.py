@@ -17,5 +17,5 @@ def send_invite_email(from_user, to_object, **kwargs):
     """ from user = request.user 
     to_object = (email,name)
     """
-    invite_service = InviteUserService(inviting_user=from_user, invitee_obj=to_object)
+    invite_service = InviteToJoinService(inviting_user=from_user, invitee_obj=to_object)
     invite_service.process()

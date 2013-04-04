@@ -2,20 +2,28 @@
 from jsonview.decorators import json_view
 
 from forms import InviteEmailForm
-from tasks import send_invite_email
 
 import logging
 logger = logging.getLogger('django.request')
 
-@json_view
+#@json_view
 def InviteEmailView(request):
         """
         Handles POST requests, instantiating a form instance with the passed
         POST variables and then checked for validity.
         """
-        if request.method is 'POST':
+        if request.method == 'POST':
+            invitees_list = zip(request.POST.getlist('email'), request.POST.getlist('name'))
+            invite_type = request.POST.get('invite_type', 'lawyer')
+
+            for email,name in invitees_list:
+
+                form = InviteEmailForm({'email': email, 'name': name, 'invite_type':invite_type})
+
+                if form.is_valid():
+                    form.save(user=request.user)
+
             assert False
-            #send_invite_email(from_user=request.user, (email,name,))
         return {
         
         }

@@ -1,6 +1,9 @@
 # -*- coding: UTF-8 -*-
+from django.conf import settings
 from django.contrib.auth.models import User
+from templated_email import send_templated_mail
 
+admin_name, admin_email = settings.ADMINS[0]
 
 import logging
 logger = logging.getLogger('lawpal.service')
@@ -23,10 +26,10 @@ class InviteToJoinService(object):
         # get email template
         self.email_template = kwargs.get('email_template', 'lawyer')
 
-        self.context = {
+        self.context = kwargs.update({
             'from': self.from_name
             ,'to': self.to_name
-        }
+        })
 
     def process(self):
         logger.info('Sending Invite Email')
