@@ -10,7 +10,7 @@ django-simple-menu
 python-memcached
 
 django-cities-light
-django-inviter
+django-jsonview
 
 # model charts - will need to have brew graphiz installed
 # pygraphviz
