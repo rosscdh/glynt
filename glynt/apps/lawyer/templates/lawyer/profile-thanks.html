@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
+{% load invite_tags %}
 
-{% block page_title %}Lawyers - Signup{% endblock %}
+{% block page_title %}Lawyers - Thanks for completing your profile{% endblock %}
 {% block bodyclass %}lawyer-form{% endblock %}
 
 {% block prebody %}
@@ -23,6 +24,7 @@
 				Invite 2 colleagues to join LawPal
 			</h1>
 			<br>
+			{% invite_to_lawpal 'lawyer' %}
 			<form action="{% url 'lawyer:setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
 				{% for e in form.non_field_errors %}
 				<div class="alert-error">

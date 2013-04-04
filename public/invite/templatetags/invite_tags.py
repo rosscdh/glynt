@@ -1,12 +1,13 @@
 from django import template
-from forms import InviteEmailForm
+
+from public.invite.forms import InviteEmailForm
 
 register = template.Library()
 
 
 @register.inclusion_tag('invite/invite.html', takes_context=True)
-def invite_to_lawpal(context, document, target_element):
+def invite_to_lawpal(context, invite_type):
     return {
-        'form': InviteEmailForm()
+        'form': InviteEmailForm(initial={'invite_type': invite_type})
         ,'STATIC_URL': context['STATIC_URL']
     }

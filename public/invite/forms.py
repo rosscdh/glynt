@@ -10,6 +10,7 @@ logger = logging.getLogger('django.request')
 
 
 class InviteEmailForm(BootstrapMixin, forms.Form):
+    invite_type = forms.CharField(widget=forms.HiddenInput)
     email = forms.EmailField(required=True)
     name = forms.CharField(required=True)
 

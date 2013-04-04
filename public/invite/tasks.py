@@ -6,7 +6,7 @@ from templated_email import send_templated_mail
 
 from celery.task import task
 
-from services import InviteUserService
+from services import InviteToJoinService
 
 import logging
 logger = logging.getLogger('django.request')
