@@ -37,7 +37,8 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     firm_name = forms.CharField(widget=forms.TextInput(attrs={'class':'typeahead','autocomplete':'off','data-provide':'ajax', 'data-items':4, 'data-source': 'firms'}))
 
     phone = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'+44 207 7778 2020', 'title':'Shows on your profile. Include country code.'}))
-    position = forms.ChoiceField(choices=Lawyer.LAWYER_ROLES.get_choices(), label="Position", help_text="")
+
+    position = forms.ChoiceField(choices=Lawyer.LAWYER_ROLES.get_choices(), label="Position", help_text="What is your Position in your Firm")
     years_practiced = forms.IntegerField(label="Years Practicing", initial="3", widget=forms.TextInput(attrs={'class':'input-mini'}))
 
     practice_location_1 = forms.CharField(label="Primary Location", widget=forms.TextInput(attrs={'class':'input-large','placeholder':'San Francisco, CA','title':'The primary city you operate from','class':'typeahead','autocomplete':'off','data-provide':'ajax', 'data-items':4, 'data-source':'locations', 'data-filter':'name__icontains'}))
@@ -77,7 +78,11 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
         email = self.cleaned_data['email']
         try:
             lawyer_exists = User.objects.exclude(pk=self.user.pk).get(email=email)
+<<<<<<< HEAD
             msg = 'Sorry but a Lawyer with that email already exists (id: %s)' % (self.user.pk)
+=======
+            msg = 'Sorry but a Lawyer(User) with that email already exists (id: %s)' % (self.user.pk)
+>>>>>>> ec4218c7d17bac7400438b3449110877d5ed7631
             logging.error(msg)
             raise exceptions.ValidationError(msg)
         except User.DoesNotExist:
