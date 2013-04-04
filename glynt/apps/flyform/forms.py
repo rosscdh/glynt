@@ -8,8 +8,8 @@ from django.utils import safestring
 from django.template.defaultfilters import slugify
 from bootstrap.forms import BootstrapMixin, Fieldset
 
-from django.contrib.localflavor.us.forms import USStateField, USZipCodeField
-from django.contrib.localflavor.us.us_states import US_STATES as SHORT_US_STATES, USPS_CHOICES as SHORT_USPS_CHOICES
+from django_localflavor_us.forms import USStateField, USZipCodeField
+from django_localflavor_us.us_states import US_STATES as SHORT_US_STATES, USPS_CHOICES as SHORT_USPS_CHOICES
 from django_countries import CountryFormField
 
 US_STATES = [(v,v) for k,v in SHORT_US_STATES]
@@ -261,7 +261,7 @@ class BaseFlyForm(forms.Form, LoopStepCleanFieldsMixin, StepHiddenFieldsMixin, B
           #print self.fields[field_instance.name].widget.__dict__
 
   def valid_choice_options(self, choices):
-    """ Converts JSON fomrat tuple into python tuple 
+    """ Converts JSON fomrat tuple into python tuple
     expects JSON format tuple in form:
     [[k,v],[k,v]]
     Also accepts String which must equate to a locally availabel variable
@@ -324,5 +324,5 @@ class BaseFlyForm(forms.Form, LoopStepCleanFieldsMixin, StepHiddenFieldsMixin, B
           widget.attrs['data-glynt-loop_length'] = len(field_instance.choices) if hasattr(field_instance, 'choices') else ''
 
 
-    
+
 

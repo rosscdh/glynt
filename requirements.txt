@@ -1,5 +1,6 @@
 Django
 django-simple-menu
+-e git+https://github.com/django/django-localflavor-us#egg=django-localflavor-us
 
 # image upload and crop
 -e git+https://github.com/rosscdh/clean-image-crop-uploader.git@rc_fixes#egg=clean-image-crop-uploader
