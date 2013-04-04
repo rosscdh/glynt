@@ -12,7 +12,7 @@ class CreateFirmView(FormView):
     template_name = 'firm/create.html'
 
     def get_success_url(self):
-        return reverse('firms:create')
+        return reverse('firm:create')
 
     def form_valid(self, form):
         messages.success(self.request, 'Thanks, you created a new Lawyer')

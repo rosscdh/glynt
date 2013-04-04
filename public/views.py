@@ -13,7 +13,7 @@ class PublicHomepageView(TemplateView):
 
     def get_template_names(self):
         if self.request.user.is_authenticated():
-            return ['public/lawyer-welcome.html']
+            return ['lawyer/welcome.html']
         else:
             return [self.template_name]
 

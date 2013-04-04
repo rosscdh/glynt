@@ -22,7 +22,9 @@ urlpatterns = patterns('',
 	url(r'^client/', include('glynt.apps.client.urls', namespace='client')),
 	url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}, name='logout'),
     # Legal Firms
-    url(r'^firm/', include('glynt.apps.firm.urls', namespace='firms')),
+    url(r'^firms/', include('glynt.apps.firm.urls', namespace='firm')),
+    # lawyers
+    url(r'^lawyers/', include('glynt.apps.lawyer.urls', namespace='lawyer')),
 	# Document Comments
 	url(r'^doc/comments/', include('django.contrib.comments.urls')),
 	# The Authoring Tool

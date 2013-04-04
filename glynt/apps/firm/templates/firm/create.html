@@ -7,7 +7,7 @@
 
 <div class="row-fluid">
 
-<form action="{% url 'firms:create' %}" class="form form-horizontal" method="POST">{% csrf_token %}
+<form action="{% url 'firm:create' %}" class="form form-horizontal" method="POST">{% csrf_token %}
     {{ form }}
 
     <div class="control-group">

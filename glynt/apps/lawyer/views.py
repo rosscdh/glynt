@@ -13,10 +13,10 @@ logger = logging.getLogger('django.request')
 
 class LawyerProfileSetupView(FormView):
     form_class = LawyerProfileSetupForm
-    template_name = 'public/lawyer-profile-form.html'
+    template_name = 'lawyer/profile-form.html'
 
     def get_success_url(self):
-        return reverse('public:lawyer_setup_profile_thanks')
+        return reverse('lawyer:thanks')
 
     def get_form(self, form_class):
         """

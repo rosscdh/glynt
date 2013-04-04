@@ -23,7 +23,7 @@
 				Invite 2 colleagues to join LawPal
 			</h1>
 			<br>
-			<form action="{% url 'public:lawyer_setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
+			<form action="{% url 'lawyer:setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
 				{% for e in form.non_field_errors %}
 				<div class="alert-error">
 				  {{ e }}
