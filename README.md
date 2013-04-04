@@ -14,7 +14,7 @@
 4. mkvirtualenv --no-site-packages glynt
 5. ```mkdir -p ~/Projects```
 6. ```cd ~/Projects```
-7. ```git clone git@github.com:rosscdh/glynt/glynt.git```
+7. ```git clone git@github.com:rosscdh/glynt.git```
 8. ```cd glynt```
 9. ```pip install -r requirements.txt``` : install update the required libraries (append --upgrade if you are not sure)
 10. ```python manage.py syncdb``` : sync the database; and create the default user if there is not already one
