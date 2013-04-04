@@ -153,7 +153,11 @@ DJANGO_APPS = (
 PROJECT_APPS = (
     # Public and Theme
     'public', # preferred
-    'glynt.apps.default', # depreciating
+    # The inviter app
+    'public.invite',
+    # Older public site
+    'glynt.apps.default', # depreciating @TODO end this
+
 
     # The Api
     'glynt.apps.api',
