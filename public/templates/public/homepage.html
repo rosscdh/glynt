@@ -138,18 +138,15 @@
 
 		</section>
 
-		
-
 	</div>
 
 </div>	
 
-<div id="footer"><a href="/about">About Us</a> &middot; <a href="http://blog.lawpal.com/" target="_BLANK">LawPal Blog</a> &middot; <a href="mailto:hello@lawpal.com">Contact Us</a> &middot; <a href="/terms">Terms and Conditions</a> &middot; <a href="http://blog.lawpal.com/photocredit">Photo Credit</a> </div>
+<div id="footer" class="span12 text-center">
+    <a href="{% url 'public:about' %}">About Us</a> &middot; <a href="http://blog.lawpal.com/" target="_BLANK">LawPal Blog</a> &middot; <a href="mailto:hello@lawpal.com">Contact Us</a> &middot; <a href="{% url 'public:about' %}">Terms and Conditions</a> &middot; <a href="http://blog.lawpal.com/photocredit">Photo Credit</a>
+</div>
 
-
-
-
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> 
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
 
 <script src="{{ STATIC_URL }}homepage/assets/js/general.js"></script> 
 
