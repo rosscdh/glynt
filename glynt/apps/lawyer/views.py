@@ -40,7 +40,7 @@ class LawyerProfileSetupView(FormView):
             'last_name': user.last_name,
             'email': user.email,
 
-            'position': lawyer.data.get('position', None),
+            'position': lawyer.role,
             'phone': lawyer.phone,
 
             'firm_name': getattr(firm, 'name', None),

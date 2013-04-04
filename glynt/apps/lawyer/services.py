@@ -17,8 +17,7 @@ class EnsureLawyerService(object):
         self.firm_name = firm_name
         self.offices = offices
 
-        self.role = kwargs.pop('role', Lawyer.LAWYER_ROLES.associate)
-
+        self.role = kwargs.pop('position', None)
         self.data = kwargs
 
     # def role_id(self, position):
