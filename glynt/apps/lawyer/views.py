@@ -40,7 +40,7 @@ class LawyerProfileSetupView(FormView):
             'last_name': user.last_name,
             'email': user.email,
 
-            'role': lawyer.role,
+            'position': lawyer.data.get('position', None),
             'phone': lawyer.phone,
 
             'firm_name': getattr(firm, 'name', None),
@@ -65,5 +65,5 @@ class LawyerProfileSetupView(FormView):
     def form_valid(self, form):
         form.save()
         messages.success(self.request, 'You successfully updated your profile')
-        del(self.request.COOKIES['lawyer_profile'])
+        form.delete_cookie()
         return super(LawyerProfileSetupView, self).form_valid(form=form)

@@ -153,7 +153,7 @@
 						<div class="control-group">
 							<label class="control-label" for="inputPassword">{{ form.photo.label }}</label>
 							<div class="controls">
-								{{ form.position.errors }}
+								{{ form.photo.errors }}
 								<div class="input-append">
 									{{ form.photo }}
 									{{ form.hidden_photo }}
@@ -268,14 +268,17 @@ img#photo-preview{
 
 function preparePhotoPreview(element) {
 	var element = $('.cropped-imag-preview');
-	var cookie_data = $.parseJSON($.cookie('lawyer_profile'));
+	var cookie_data = $.parseJSON($.cookie('{{ form.cookie_name }}'));
 
 	$.each(element.find('img'), function(i,img){
 		img = $(img)
         src = img.attr('src');
 
+        photo_id = null;
+
 		if (cookie_data && cookie_data.id !== undefined) {
-		    $('#id_hidden_photo').val(cookie_data.id);
+		    photo_id = cookie_data.id;
+	        $('#id_hidden_photo').val(photo_id);
 		    src = cookie_data.path;
 		}
 
@@ -287,7 +290,7 @@ function preparePhotoPreview(element) {
 
 function photoCrop(element, data) {
 	$('#id_hidden_photo').val(data.id);// id to be sent
-    $.cookie('lawyer_profile', JSON.stringify({'id': data.id, 'path': data.path}));
+    $.cookie('{{ form.cookie_name }}', JSON.stringify({'id': data.id, 'path': data.path}));
 	preparePhotoPreview(element);
 }
 

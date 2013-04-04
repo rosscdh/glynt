@@ -25,25 +25,26 @@ API_URLS = {
 
 
 class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
+    cookie_name = 'lawyer_profile_photo'
     ROLES = [display_name for name,display_name in Lawyer.LAWYER_ROLES.get_choices()]
 
     title = forms.CharField(required=False)
 
     first_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'John'}))
     last_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'Sonsini'}))
-    email = forms.EmailField(help_text="Your Email", widget=forms.TextInput(attrs={'placeholder':'john@lawpal.com'}))
+    email = forms.EmailField(help_text="Your Email", widget=forms.TextInput(attrs={'placeholder':'john@lawpal.com', 'data-type':'email'}))
 
     firm_name = forms.CharField(widget=forms.TextInput(attrs={'class':'typeahead','autocomplete':'off','data-provide':'ajax', 'data-items':4, 'data-source': 'firms'}))
 
     phone = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'+44 207 7778 2020', 'title':'Shows on your profile. Include country code.'}))
-    position = forms.CharField(label="Position", help_text="", widget=forms.TextInput(attrs={'placeholder':'e.g. Associate','class':'typeahead', 'autocomplete':'off', 'data-provide':'typeahead', 'data-items':4, 'data-provide':'local','data-source': json.dumps(ROLES)}))
+    position = forms.ChoiceField(choices=Lawyer.LAWYER_ROLES.get_choices(), label="Position", help_text="")
     years_practiced = forms.IntegerField(label="Years Practicing", initial="3", widget=forms.TextInput(attrs={'class':'input-mini'}))
 
     practice_location_1 = forms.CharField(label="Primary Location", widget=forms.TextInput(attrs={'class':'input-large','placeholder':'San Francisco, CA','title':'The primary city you operate from','class':'typeahead','autocomplete':'off','data-provide':'ajax', 'data-items':4, 'data-source':'locations', 'data-filter':'name__icontains'}))
     practice_location_2 = forms.CharField(required=False, label="Secondary Location", widget=forms.TextInput(attrs={'class':'input-large','placeholder':'London, UK','title':'Optional. The secondary city you operate from.','class':'typeahead','autocomplete':'off','data-provide':'ajax', 'data-items':4, 'data-source':'locations', 'data-filter':'name__icontains'}))
 
     summary = forms.CharField(label="Short description", widget=forms.TextInput(attrs={'class':'input-xxlarge','placeholder':'e.g. Partner at WDJ advising technology companies in Europe','title':'Keep it short, and make it personal.'}))
-    bio = forms.CharField(required=False, widget=forms.Textarea(attrs={'class':'input-xxlarge','placeholder':'A bit more about you.','title':'A bit longer, but still make it personal.'}))
+    bio = forms.CharField(required=False, widget=forms.Textarea(attrs={'class':'input-xxlarge', 'data-trigger':'keyup', 'data-rangelength':'[10,250]','placeholder':'A bit more about you.','title':'A bit longer, but still make it personal.'}))
     if_i_wasnt_a_lawyer = forms.CharField(required=False, widget=forms.TextInput(attrs={'class':'input-xxlarge','placeholder':'e.g. Astronaut and part-time Pastry Chef','title':'If I wasn\'t a lawyer, I would be a...'}))
 
     photo = forms.ImageField(required=False, label="Main Photo", help_text="Please add a good quality photo to your profile. It really helps.", widget=CicuUploderInput(options={
@@ -56,7 +57,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
             }))
     hidden_photo = forms.CharField(required=False, widget=forms.HiddenInput) # transports the id
 
-    startups_advised = forms.CharField(required=False, label="Startups Advised", help_text='This helps us match you with similar startups', widget=forms.TextInput(attrs={'title':'e.g. Sphero','class':'typeahead','autocomplete':'off','data-provide':'', 'data-items':4, 'data-source':''}))
+    startups_advised = forms.CharField(required=False, label="Startups Advised", help_text='This helps us match you with similar startups', widget=forms.TextInput(attrs={'title':'e.g. http://facebook.com', 'data-trigger':'change', 'data-type':'url','class':'typeahead','autocomplete':'off','data-provide':'', 'data-items':4, 'data-source':''}))
 
     volume_incorp_setup = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
     volume_seed_financing = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
@@ -88,6 +89,11 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
         hidden_photo = self.cleaned_data.get('hidden_photo', None)
         return int(hidden_photo) if hidden_photo else None
 
+    def delete_cookie(self):
+        """ Remove the lawyer_profile cookie set when photo is uploaded """
+        if self.request.COOKIES.get(self.cookie_name, None) is not None:
+            del(self.request.COOKIES[self.cookie_name])
+
     def save(self, commit=True):
         logger.info('Ensuring the LawyerProfile Exists')
 
@@ -107,6 +113,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
         lawyer_service = EnsureLawyerService(user=self.user, firm_name=firm_name, offices=offices, **data)
         lawyer_service.process()
 
+        self.delete_cookie()
         logger.info('Complete: Ensuring the LawyerProfile Exists')
 
 

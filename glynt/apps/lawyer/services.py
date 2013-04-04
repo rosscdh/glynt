@@ -21,6 +21,15 @@ class EnsureLawyerService(object):
 
         self.data = kwargs
 
+    # def role_id(self, position):
+    #     """ Return the role_id that matches the user input Role """
+    #     if position is not None:
+    #         position = position.lower().strip()
+    #         role_id = next((role_id for role_id,role in Lawyer.LAWYER_ROLES.get_choices() if role.lower() == position), [Lawyer.LAWYER_ROLES.unknown])
+    #     else:
+    #         role_id = Lawyer.LAWYER_ROLES.unknown
+    #     return role_id
+
     def update_user(self):
         self.title = self.data.get('title', None)
 

@@ -19,6 +19,7 @@ class Lawyer(models.Model):
         (3, 'of_counsel', 'Of Counsel'),
         (2, 'senior_associate', 'Senior Associate'),
         (1, 'associate', 'Associate'),
+        (0, 'unknown', 'Unknown Role'),
     ))
     user = models.OneToOneField(User, related_name='lawyer_profile')
     role = models.IntegerField(choices=LAWYER_ROLES.get_choices(), default=LAWYER_ROLES.associate, db_index=True)
