@@ -18,6 +18,7 @@ urlpatterns = patterns('',
     url(r'^logged-in/$', LoggedInRedirectView.as_view(), name='logged_in_generic'),
     # lawyers
     url(r'^lawyers/profile/setup/$', login_required(LawyerProfileSetupView.as_view()), name='lawyer_setup_profile'),
+    url(r'^lawyers/profile/setup/thanks/$', login_required(TemplateView.as_view(template_name='public/lawyer-profile-thanks.html')), name='lawyer_setup_profile_thanks'),
     url(r'^lawyers/$', login_required(TemplateView.as_view(template_name='public/lawyer-welcome.html')), name='lawyer'),
     url(r'^lawyers/thanks/$', TemplateView.as_view(template_name='public/lawyer-profile-thanks.html'), name='thanks'),
     # home

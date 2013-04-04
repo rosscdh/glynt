@@ -3,6 +3,7 @@ from django import forms
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core import exceptions
+from django.utils import simplejson as json
 
 from bootstrap.forms import BootstrapMixin
 
@@ -24,23 +25,26 @@ API_URLS = {
 
 
 class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
+    ROLES = [display_name for name,display_name in Lawyer.LAWYER_ROLES.get_choices()]
+
     title = forms.CharField(required=False)
 
     first_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'John'}))
     last_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'Sonsini'}))
     email = forms.EmailField(help_text="Your Email", widget=forms.TextInput(attrs={'placeholder':'john@lawpal.com'}))
 
-    firm_name = forms.CharField( widget=forms.TextInput(attrs={'class':'typeahead','autocomplete':'off','data-provide':'', 'data-items':4, 'data-source': 'firms'}))
+    firm_name = forms.CharField(widget=forms.TextInput(attrs={'class':'typeahead','autocomplete':'off','data-provide':'ajax', 'data-items':4, 'data-source': 'firms'}))
 
     phone = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'+44 207 7778 2020', 'title':'Shows on your profile. Include country code.'}))
-    position = forms.ChoiceField(choices=Lawyer.LAWYER_ROLES.get_choices(), initial=Lawyer.LAWYER_ROLES.associate, label="Position", help_text="")
+    position = forms.CharField(label="Position", help_text="", widget=forms.TextInput(attrs={'placeholder':'e.g. Associate','class':'typeahead', 'autocomplete':'off', 'data-provide':'typeahead', 'data-items':4, 'data-provide':'local','data-source': json.dumps(ROLES)}))
     years_practiced = forms.IntegerField(label="Years Practicing", initial="3", widget=forms.TextInput(attrs={'class':'input-mini'}))
 
-    practice_location_1 = forms.CharField(label="Primary Location", widget=forms.TextInput(attrs={'class':'input-large','placeholder':'San Francisco, CA','title':'The primary city you operate from','class':'typeahead','autocomplete':'off','data-provide':'', 'data-items':4, 'data-source':'locations', 'data-filter':'name__icontains'}))
-    practice_location_2 = forms.CharField(required=False, label="Secondary Location", widget=forms.TextInput(attrs={'class':'input-large','placeholder':'London, UK','title':'Optional. The secondary city you operate from.','class':'typeahead','autocomplete':'off','data-provide':'', 'data-items':4, 'data-source':'locations', 'data-filter':'name__icontains'}))
+    practice_location_1 = forms.CharField(label="Primary Location", widget=forms.TextInput(attrs={'class':'input-large','placeholder':'San Francisco, CA','title':'The primary city you operate from','class':'typeahead','autocomplete':'off','data-provide':'ajax', 'data-items':4, 'data-source':'locations', 'data-filter':'name__icontains'}))
+    practice_location_2 = forms.CharField(required=False, label="Secondary Location", widget=forms.TextInput(attrs={'class':'input-large','placeholder':'London, UK','title':'Optional. The secondary city you operate from.','class':'typeahead','autocomplete':'off','data-provide':'ajax', 'data-items':4, 'data-source':'locations', 'data-filter':'name__icontains'}))
 
     summary = forms.CharField(label="Short description", widget=forms.TextInput(attrs={'class':'input-xxlarge','placeholder':'e.g. Partner at WDJ advising technology companies in Europe','title':'Keep it short, and make it personal.'}))
     bio = forms.CharField(required=False, widget=forms.Textarea(attrs={'class':'input-xxlarge','placeholder':'A bit more about you.','title':'A bit longer, but still make it personal.'}))
+    if_i_wasnt_a_lawyer = forms.CharField(required=False, widget=forms.TextInput(attrs={'class':'input-xxlarge','placeholder':'e.g. Astronaut and part-time Pastry Chef','title':'If I wasn\'t a lawyer, I would be a...'}))
 
     photo = forms.ImageField(required=False, label="Main Photo", help_text="Please add a good quality photo to your profile. It really helps.", widget=CicuUploderInput(options={
                 'ratioWidth': '110',       #fix-width ratio, default 0

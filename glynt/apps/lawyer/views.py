@@ -16,7 +16,7 @@ class LawyerProfileSetupView(FormView):
     template_name = 'public/lawyer-profile-form.html'
 
     def get_success_url(self):
-        return reverse('public:lawyer_setup_profile')
+        return reverse('public:lawyer_setup_profile_thanks')
 
     def get_form(self, form_class):
         """
@@ -50,6 +50,7 @@ class LawyerProfileSetupView(FormView):
             'years_practiced': lawyer.years_practiced,
             'summary': lawyer.summary,
             'bio': lawyer.bio,
+            'if_i_wasnt_a_lawyer': lawyer.data.get('if_i_wasnt_a_lawyer', None),
 
             'photo': lawyer.photo,
 
