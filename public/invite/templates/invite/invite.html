@@ -1,15 +1,41 @@
-<div id="" class="">
+<div id="" class="span8">
     <form action="" class="form-inline" method="POST">{% csrf_token %}
-		<div class="control-group">
-			<button id="invite" type="submit" class="btn btn-primary btn-large"><i class="icon-plus-sign"></i>&nbsp;Add</button>
-		</div>
-        <div id="base_elements" class="span8">
-            {{ form.as_p }}
-		</div>		
+        <div id="invite-repeatable-group" class="control-group">
+        {{ form.email }}
+        {{ form.name }}
+        </div>
+        <div class="control-group span2 pull-right">
+            <br/>
+            <button id="invite-btn" type="button" class="btn btn-primary btn-small"><i class="icon-plus-sign"></i>&nbsp;Add</button>
+        </div>
 		<div class="row-fluid">
+            <br/>
 			<div class="control-group">
 				<button id="invite" type="submit" class="btn btn-primary btn-large">Invite</button>
 			</div>
 		</div>
     </form>
 </div>
+<script id="js-invite">
+$(document).ready(function(){
+
+    var remove_btn = $('<button/>', {
+        class: 'btn btn-primary btn-small'
+        ,html: '<i class="icon-minus-sign"></i>'
+    });
+    var repeatable = $('#invite-repeatable-group');
+
+    $('#invite-btn').on('click', function(event){
+        var clone = repeatable.clone()
+        var remove_clone = remove_btn.clone();
+        clone.append(remove_clone);
+        clone.insertAfter(repeatable)
+    });
+
+    $('.remove-btn').on('click', function(event){
+        var clone = repeatable.clone()
+        clone.insertAfter(repeatable)
+    });
+
+});
+</script>
