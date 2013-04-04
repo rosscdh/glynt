@@ -34,8 +34,8 @@ class LocationSimpleResource(BaseApiModelResource):
     state_name = fields.CharField(attribute='region__geoname_code', null=True)
 
     class Meta(BaseApiModelResource.Meta):
-        queryset = Country.objects.prefetch_related('region_set', 'city_set').get(name='United States').city_set.all() #\
-                #| Country.objects.prefetch_related('region_set', 'city_set').get(name='United Kingdom').city_set.all()
+        queryset = Country.objects.prefetch_related('region_set', 'city_set').get(name='United States').city_set.all() \
+                | Country.objects.prefetch_related('region_set', 'city_set').get(name='United Kingdom').city_set.all()
         authentication = Authentication()
         list_allowed_methods = ['get']
         resource_name = 'location'
