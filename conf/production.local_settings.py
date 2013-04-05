@@ -26,12 +26,11 @@ TIME_ZONE = 'Europe/London'
 
 USE_ETAGS = True
 
-MEDIA_URL = '/static/media/'
-
+MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
 
-STATIC_ROOT = '/var/app/lawpal/glynt_static/'
-MEDIA_ROOT = '/var/app/lawpal/glynt_static/media/'
+STATIC_ROOT = '/var/app/lawpal/glynt-static/'
+MEDIA_ROOT = '/var/app/lawpal/glynt-media/'
 
 
 FACEBOOK_API_KEY = '343632075713954'
