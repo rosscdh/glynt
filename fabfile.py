@@ -135,7 +135,7 @@ def start_service():
 
 @task
 def stop_service():
-    run(env.start_service)
+    run(env.stop_service)
 
 @task
 def fixtures():
@@ -163,7 +163,7 @@ def requirements():
 
 
 @task
-def deploy(is_predeploy=False):
+def deploy(is_predeploy='False'):
     """
     :is_predeploy=True - will deploy the latest MASTER SHA but not link it in: this allows for assets collection
     and requirements update etc...
