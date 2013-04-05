@@ -128,6 +128,11 @@ LOGGING = {
             'handlers': ['splunkstorm'],
             'level': 'INFO',
             'propagate': False,
+        },
+        'lawpal.services': {
+            'handlers': ['splunkstorm'],
+            'level': 'INFO',
+            'propagate': False,
         }
     }
 }

@@ -30,8 +30,8 @@ MEDIA_URL = '/static/media/'
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = '/home/stard0g101/webapps/glynt_static/'
-MEDIA_ROOT = '/home/stard0g101/webapps/glynt_static/media/'
+STATIC_ROOT = '/var/app/lawpal/glynt_static/'
+MEDIA_ROOT = '/var/app/lawpal/glynt_static/media/'
 
 
 FACEBOOK_API_KEY = '343632075713954'
@@ -67,7 +67,7 @@ SERVER_EMAIL = 'glynt@dev.weareml.com'
 
 HELLOSIGN_AUTH = ("sendrossemail@gmail.com", "zanshin77")
 
-ALLOWED_HOSTS = ['dev.lawpal.com']
+ALLOWED_HOSTS = ['preview.lawpal.com','dev.lawpal.com']
 
 RAVEN_CONFIG = {
     'dsn': 'https://b5a6429d03e2418cbe71cd5a4c9faca6:ddabb51af47546d1ac0e63cb453797ba@app.getsentry.com/6287',
@@ -125,6 +125,11 @@ LOGGING = {
             'level': 'INFO',
         },
         'django.request': {
+            'handlers': ['splunkstorm'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'lawpal.services': {
             'handlers': ['splunkstorm'],
             'level': 'INFO',
             'propagate': False,
