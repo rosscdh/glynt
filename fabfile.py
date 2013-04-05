@@ -61,16 +61,25 @@ def prepare_deploy():
 
 @task
 def chores():
-    # sudo('aptitude install unzip easy_install')
-    # sudo('easy_install pip')
-    # sudo('pip install virtualenv virtualenvwrapper')
+    sudo('aptitude --assume-yes install build-essential python-setuptools python-dev uwsgi-plugin-python libjpeg8 libjpeg62-dev libfreetype6 libfreetype6-dev easy_install nmap htop vim')
+    sudo('aptitude --assume-yes install git-core mercurial subversion')
+    sudo('aptitude --assume-yes install rabbitmq-server')
+
+    sudo('easy_install pip')
+    sudo('pip install virtualenv virtualenvwrapper pillow')
+
+    put('conf/.bash_profile', '~/.bash_profile')
+
+@task
+def virtualenv():
     if not files.exists('~/.virtualenvs'):
         with shell_env(WORKON_HOME='~/.virtualenvs'):
+            run('export WORKON_HOME=~/.virtualenvs')
             run('mkdir -p $WORKON_HOME')
 
     if not files.exists('~/.virtualenvs/%s' % env.project):
         with shell_env(WORKON_HOME='~/.virtualenvs'):
-            run('source /usr/local/bin/virtualenvwrapper.sh')
+            run('export WORKON_HOME=~/.virtualenvs')
             run('mkvirtualenv %s' % env.project)
 
 def deploy_archive_file():
@@ -128,38 +137,22 @@ def fixtures():
         execute(do_fixtures, hosts=env.hosts)
 
 @task
-def do_assets():
+def assets():
     # Activate virtualenv
-    with prefix('workon %s' % (env.project_name,)):
+    with prefix('workon %s' % (env.project,)):
         run('python %s/%s/manage.py collectstatic --noinput' % (env.remote_project_path, PROJECT,))
         run('python %s/%s/manage.py compress --force' % (env.remote_project_path, PROJECT,))
 
 @task
-def assets():
-    for app_name, project_name, remote_project_path in env.remote_project_path:
-        env.app_name = app_name
-        env.project_name = project_name
-        env.remote_project_path = remote_project_path
-        execute(do_assets, hosts=env.hosts)
-
-@task
-def do_requirements():
-    project_path = '%s/%s' % (env.remote_project_path, env.project_name, )
+def requirements():
+    project_path = '%s%s' % (env.remote_project_path, env.project, )
     requirements_path = '%s/requirements.txt' % (project_path, )
 
-    with prefix('workon %s' % (env.project_name,)):
-        if files.exists(requirements_path):
-            run('pip install -r %s' %(requirements_path,) )
-        else:
-            raise Exception('requirements.exe does not exist at: %s' %(requirements_path,) )
+    with prefix('workon %s' % (env.project,)):
+        run('pip install -r %s' %(requirements_path,) )
+        if env.environment == 'production':
+            run('pip install psycopg2')
 
-@task
-def requirements(deploy_to_env='staging'):
-    for app_name, project_name, remote_project_path in env.remote_project_path:
-        env.app_name = app_name
-        env.project_name = project_name
-        env.remote_project_path = remote_project_path
-        execute(do_requirements, hosts=env.hosts)
 
 @task
 def deploy():
