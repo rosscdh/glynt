@@ -29,8 +29,7 @@ def production():
     env.key_filename = '/Users/rossc/Projects/lawpal/lawpal-chef/chef-machines.pem'
 
     env.start_service = 'uwsgi --http :9090 --module main --callable app -H ~/.virtualenvs/%s/' % env.project
-    #env.restart_service = "kill -HUP `cat /tmp/lawpal.pid`"
-    env.restart_service = None
+    env.stop_service = "kill -HUP `cat /tmp/lawpal.pid`"
 
 @task
 def stage():
@@ -47,7 +46,7 @@ def stage():
     env.key_filename = None
 
     env.start_service = None
-    env.restart_service = None
+    env.stop_service = None
 
 def git_export():
   cd(env.local_project_path)
@@ -118,9 +117,21 @@ def do_deploy():
         run('cp conf/%s.wsgi.py %s/wsgi.py' % (env.environment, env.project,))
         run('cp conf/%s.newrelic.ini newrelic.ini' % (env.environment,))
 
-    if env.restart_service:
-        run(env.restart_service)
+    execute(restart_service)
 
+
+@task
+def restart_service():
+    execute(stop_service)
+    execute(start_service)
+
+@task
+def start_service():
+    run(env.start_service)
+
+@task
+def stop_service():
+    run(env.start_service)
 
 @task
 def do_fixtures():
