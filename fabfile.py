@@ -9,7 +9,7 @@ debug = True
 PROJECT = 'glynt'
 
 PROJECT_PATH = '/home/rossc/Projects/Personal/RuleNumberOne/%s' % (PROJECT,)
-#PROJECT_PATH = '/home/rossc/Projects/Personal/%s' % (PROJECT,)
+
 
 PROJECT_DEPLOY_INSTANCE = (('glynt', 'glynt'),)
 
@@ -27,6 +27,31 @@ env.SHA1_FILENAME = None
 env.DEPLOY_ARCHIVE_PATH = '~/'
 
 FILENAME_TIMESTAMP = strftime("%m-%d-%Y-%H:%M:%S", gmtime())
+
+@task
+def production():
+    env.project = 'glynt'
+    env.environment = 'production'
+    env.project_path = '/var/apps/lawpal/%s' % env.project
+
+    # change from the default user to 'vagrant'
+    env.user = 'ubuntu'
+    # connect to the port-forwarded ssh
+    env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com']
+    env.key_filename = '/Users/rossc/Projects/lawpal/lawpal-chef/chef-machines.pem'
+
+
+@task
+def stage():
+    env.project = 'glynt'
+    env.environment = 'stage'
+    env.project_path = '/home/stard0g101/webapps/%s' % env.project
+
+    # change from the default user to 'vagrant'
+    env.user = 'stard0g101'
+    # connect to the port-forwarded ssh
+    env.hosts = ['stard0g101.webfactional.com']
+    env.key_filename = None
 
 
 @task
@@ -90,19 +115,12 @@ def do_fixtures():
         run('python %s/%s/manage.py loaddata sites document_category documenttemplate public/fixtures/cms.json' % (env.remote_project_path, PROJECT,))
 
 @task
-def fixtures(deploy_to_env='staging'):
-    if deploy_to_env in HOSTS:
-
-        env.hosts = HOSTS[deploy_to_env]
-
-        for app_name, project_name, remote_project_path in REMOTE_PROJECT_PATHS:
-            env.environment = deploy_to_env
-            env.app_name = app_name
-            env.project_name = project_name
-            env.remote_project_path = remote_project_path
-            execute(do_fixtures, hosts=env.hosts)
-    else:
-        raise Exception('%s is not defined in HOSTS' %(env,) )
+def fixtures():
+    for app_name, project_name, remote_project_path in REMOTE_PROJECT_PATHS:
+        env.app_name = app_name
+        env.project_name = project_name
+        env.remote_project_path = remote_project_path
+        execute(do_fixtures, hosts=env.hosts)
 
 @task
 def do_assets():
@@ -112,20 +130,12 @@ def do_assets():
         run('python %s/%s/manage.py compress --force' % (env.remote_project_path, PROJECT,))
 
 @task
-def assets(deploy_to_env='staging'):
-    if deploy_to_env in HOSTS:
-
-        env.hosts = HOSTS[deploy_to_env]
-
-        for app_name, project_name, remote_project_path in REMOTE_PROJECT_PATHS:
-            env.environment = deploy_to_env
-            env.app_name = app_name
-            env.project_name = project_name
-            env.remote_project_path = remote_project_path
-            execute(do_assets, hosts=env.hosts)
-    else:
-        raise Exception('%s is not defined in HOSTS' %(env,) )
-
+def assets():
+    for app_name, project_name, remote_project_path in REMOTE_PROJECT_PATHS:
+        env.app_name = app_name
+        env.project_name = project_name
+        env.remote_project_path = remote_project_path
+        execute(do_assets, hosts=env.hosts)
 
 @task
 def do_requirements():
@@ -140,34 +150,20 @@ def do_requirements():
 
 @task
 def requirements(deploy_to_env='staging'):
-    if deploy_to_env in HOSTS:
-
-        env.hosts = HOSTS[deploy_to_env]
-
-        for app_name, project_name, remote_project_path in REMOTE_PROJECT_PATHS:
-            env.environment = deploy_to_env
-            env.app_name = app_name
-            env.project_name = project_name
-            env.remote_project_path = remote_project_path
-            execute(do_requirements, hosts=env.hosts)
-    else:
-        raise Exception('%s is not defined in HOSTS' %(env,) )
+    for app_name, project_name, remote_project_path in REMOTE_PROJECT_PATHS:
+        env.app_name = app_name
+        env.project_name = project_name
+        env.remote_project_path = remote_project_path
+        execute(do_requirements, hosts=env.hosts)
 
 @task
-def deploy(deploy_to_env='staging'):
-    if deploy_to_env in HOSTS:
-        env.hosts = HOSTS[deploy_to_env]
+def deploy():
+    prepare_deploy()
 
-        prepare_deploy()
+    for app_name, project_name, remote_project_path in REMOTE_PROJECT_PATHS:
+        env.app_name = app_name
+        env.project_name = project_name
+        env.remote_project_path = remote_project_path
 
-        for app_name, project_name, remote_project_path in REMOTE_PROJECT_PATHS:
-            env.environment = deploy_to_env
-            env.app_name = app_name
-            env.project_name = project_name
-            env.remote_project_path = remote_project_path
-
-            execute(do_deploy, hosts=env.hosts)
-            execute(conclude_deploy, hosts=env.hosts)
-
-    else:
-        raise Exception('%s is not defined in HOSTS' %(env,) )
+        execute(do_deploy, hosts=env.hosts)
+        execute(conclude_deploy, hosts=env.hosts)
