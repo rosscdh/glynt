@@ -21,8 +21,8 @@ site.addsitedir('/var/app/lawpal/glynt/glynt')
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'glynt.settings'
 
-activate_this = os.path.expanduser("~/.virtualenvs/glynt/bin/activate_this.py")
-execfile(activate_this, dict(__file__=activate_this))
+# activate_this = os.path.expanduser("~/.virtualenvs/glynt/bin/activate_this.py")
+# execfile(activate_this, dict(__file__=activate_this))
 
 # Calculate the path based on the location of the WSGI script
 project = '/var/app/lawpal/glynt/glynt/'
