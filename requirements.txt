@@ -1,5 +1,5 @@
 Django
-django-simple-menu
+# django-simple-menu
 
 # image upload and crop
 -e git+https://github.com/rosscdh/clean-image-crop-uploader.git@rc_fixes#egg=clean-image-crop-uploader
@@ -10,7 +10,7 @@ django-simple-menu
 python-memcached
 
 django-cities-light
-django-inviter
+# django-jsonview # not required
 
 # model charts - will need to have brew graphiz installed
 # pygraphviz

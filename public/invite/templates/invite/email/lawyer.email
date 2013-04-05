@@ -1,0 +1,14 @@
+{% load glynt_helpers %}
+
+{% block subject %}Invitations from {{ from_name }}{% endblock %}
+
+{% block plain %}
+Hi {{ to_name }},
+
+{{ from_name }} has invited you to join them at lawpal.com.
+
+Lawpal is building a platform which will allow you to connect with hundreds of emerging technology companies. 
+Save yourself time and save your clients money by using the LawPal platform to manage your new and existing relationships.
+
+{% include 'email/footer.email' %}
+{% endblock %}

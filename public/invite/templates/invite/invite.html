@@ -1,0 +1,113 @@
+<div id="invite-container" class="span12">
+    <form data-validate="parsley" data-send-type="ajax" action="{% url 'invite:send' %}" class="form-inline" method="POST">{% csrf_token %}
+        {{ form.invite_type }}
+        <div class="control-group span8">
+            <button id="add-btn" type="button" class="btn btn-primary btn-small"><i class="icon-plus-sign"></i>&nbsp;Add</button>
+        </div>
+        <br/><span class="repeatable-head"></span>
+        <div id="invite-repeatable-group" class="control-group span8">
+            <div class="span3">{{ form.email }}</div>
+            <div class="span3">{{ form.name }}</div>
+        </div>
+        <br/>
+		<div class="span8">
+			<div class="control-group">
+				<button id="invite-btn" type="submit" class="btn btn-primary btn-large">Invite</button>
+			</div>
+		</div>
+    </form>
+</div>
+
+<script type="text/x-handlebars" id="hb-success">
+{% verbatim %}
+<hr/>
+<h3>Invites</h3>
+<ul class="unstyled">
+{{#each data}}
+    <li>
+    {{name}} - {{email}} {{#if errors}}<span class="alert-error">{{errors}}</span>{{/if}}
+    </li>
+{{/each}}
+<ul>
+{% endverbatim %}
+</script>
+
+<script id="js-invite">
+$(document).ready(function(){
+
+    var remove_btn = $('<button/>', {
+        class: 'remove-btn btn btn-info btn-small'
+        ,html: '<i class="icon-minus-sign"></i>'
+    });
+
+    var repeatable = $('#invite-repeatable-group');
+
+    var complete_msg = Handlebars.compile($('script#hb-success').html());
+
+    $('#add-btn').live('click', function(event){
+        event.preventDefault();
+        var clone = repeatable.clone()
+        var num_fields = repeatable.find('input[type=text]').length;
+        var form = $(this).closest('form');
+        var num = (form.find('input[type=text]').length / 2) + 1;
+
+        clone.attr('id',null);// nullify the id
+        
+        $.each(clone.find('input'), function(i,e){
+            e = $(e);
+            e.val('');
+            form.parsley('addItem', e);
+        })
+
+        var remove_btn_clone = remove_btn.clone();
+
+        clone.append($('<div/>',{
+            class: 'span1',
+            html: remove_btn_clone
+        }));
+
+        clone.insertAfter(repeatable.parent().find('span.repeatable-head'))
+    });
+
+    $('.remove-btn').live('click', function(event){
+        event.preventDefault();
+        var self = $(this);
+        var form = self.closest('form');
+        var container = self.closest('div.control-group');
+        $.each(container.find('input'), function(i,e){
+            e = $(e);
+            form.parsley('removeItem', e);
+        })
+        container.remove();
+    });
+
+    $('#invite-btn').live('click', function(event){
+        var self = $(this);
+        var form = self.closest('form');
+
+        if (form.attr('data-send-type') == 'ajax') {
+            event.preventDefault();
+            $.ajax({
+                type: form.attr('method'),
+                url: form.attr('action'),
+                data: form.serialize(),
+            })
+            // .beforeSend(function(jqXHR, settings){
+            //     // hide button
+            //     console.log('beforesend')
+            // })
+            .success(function(data, textStatus, jqXHR) {
+                $('#invite-container').html(complete_msg({'data': data}))
+            })
+            .error(function(jqXHR, textStatus, errorThrown) { 
+                console.log('error: '+errorThrown)
+            })
+            .complete(function() {
+                // show buttons
+                console.log('complete')
+            });
+        }
+    });
+
+});
+</script>

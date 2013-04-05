@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
+{% load invite_tags %}
 
-{% block page_title %}Lawyers - Signup{% endblock %}
+{% block page_title %}Lawyers - Thanks for completing your profile{% endblock %}
 {% block bodyclass %}lawyer-form{% endblock %}
 
 {% block prebody %}
@@ -23,50 +24,7 @@
 				Invite 2 colleagues to join LawPal
 			</h1>
 			<br>
-			<form action="{% url 'lawyer:setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
-				{% for e in form.non_field_errors %}
-				<div class="alert-error">
-				  {{ e }}
-				</div>
-				{% endfor %}
-			<div class="row">
-					<div class="span5">
-						<div class="control-group">
-							<label class="control-label" for="inputEmail">Full name</label>
-							<div class="controls">
-								<input id="id_first_name" name="name" placeholder="John Smith" type="text">
-								<span class="help-inline"></span>
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="inputEmail">Full name</label>
-							<div class="controls">
-								<input id="id_first_name" name="name" placeholder="John Smith" type="text">
-								<span class="help-inline"></span>
-							</div>
-						</div>
-					</div>
-					<div class="span5">
-						<div class="control-group">
-							<label class="control-label" for="inputEmail">Email</label>
-							<div class="controls">
-								<input id="id_first_name" name="first_name" placeholder="john.smith@firm.com" type="text">
-								<span class="help-inline"></span>
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="inputEmail">Email</label>
-							<div class="controls">
-								<input id="id_first_name" name="first_name" placeholder="john.smith@firm.com" type="text">
-								<span class="help-inline"></span>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="span12">
-					<a href="" class="btn btn-red btn-large">Complete</a>
-				</div>
-			</form>
+			{% invite_to_lawpal invite_type='lawyer' %}
 		</div>
 	</div>
 </div>

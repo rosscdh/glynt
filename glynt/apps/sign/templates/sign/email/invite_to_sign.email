@@ -1,4 +1,4 @@
-{% extends 'base.email' %}
+{% extends 'email/base.email' %}
 {% load glynt_helpers %}
 
 {% block plain %}

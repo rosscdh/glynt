@@ -153,7 +153,11 @@ DJANGO_APPS = (
 PROJECT_APPS = (
     # Public and Theme
     'public', # preferred
-    'glynt.apps.default', # depreciating
+    # The inviter app
+    'public.invite',
+    # Older public site
+    'glynt.apps.default', # depreciating @TODO end this
+
 
     # The Api
     'glynt.apps.api',
@@ -369,9 +373,10 @@ NO_SIG_IMAGE = os.path.join(STATIC_ROOT, 'signature/no_sig.png'),
 TEMPLATED_EMAIL_BACKEND = 'templated_email.backends.vanilla_django.TemplateBackend'
 TEMPLATED_EMAIL_TEMPLATE_DIR = 'email/'
 TEMPLATED_EMAIL_FILE_EXTENSION = 'email'
-TEMPLATED_EMAIL_DJANGO_SUBJECTS = {
-    'invite_to_sign': 'You have been invited to sign',
-}
+# TEMPLATED_EMAIL_DJANGO_SUBJECTS = {
+#     'invite_to_sign': 'You have been invited to sign',
+#     'lawyer': 'Bugger',
+# }
 
 BROKER_URL = 'amqp://guest:guest@localhost:5672/'
 

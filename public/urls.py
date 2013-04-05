@@ -7,7 +7,7 @@ from views import LoggedInRedirectView, PublicHomepageView
 
 urlpatterns = patterns('',
     # about
-    url(r'^about/$', TemplateView.as_view(template_name='public/about.html'), name='terms'),
+    url(r'^about/$', TemplateView.as_view(template_name='public/about.html'), name='about'),
     # T&C
     url(r'^terms/$', TemplateView.as_view(template_name='public/terms-and-conditions.html'), name='terms'),
     # Logged-in
