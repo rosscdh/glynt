@@ -85,27 +85,32 @@ $(document).ready(function(){
         var self = $(this);
         var form = self.closest('form');
 
+        form.find('button').attr('disabled','disabled')
+
         if (form.attr('data-send-type') == 'ajax') {
             event.preventDefault();
-            $.ajax({
-                type: form.attr('method'),
-                url: form.attr('action'),
-                data: form.serialize(),
-            })
-            // .beforeSend(function(jqXHR, settings){
-            //     // hide button
-            //     console.log('beforesend')
-            // })
-            .success(function(data, textStatus, jqXHR) {
-                $('#invite-container').html(complete_msg({'data': data}))
-            })
-            .error(function(jqXHR, textStatus, errorThrown) { 
-                console.log('error: '+errorThrown)
-            })
-            .complete(function() {
-                // show buttons
-                console.log('complete')
-            });
+
+            if (form.parsley( 'validate' )) {
+                $.ajax({
+                    type: form.attr('method'),
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                })
+                .success(function(data, textStatus, jqXHR) {
+                    $('#invite-container').hide().html(complete_msg({'data': data}))
+                })
+                .error(function(jqXHR, textStatus, errorThrown) { 
+                    console.log('error: '+errorThrown)
+                })
+                .complete(function() {
+                    // show buttons
+                    $('#invite-container').fadeIn('slow')
+                    form.find('button').attr('disabled','')
+                });
+            } else {
+                console.log('not valid')
+                form.find('button').attr('disabled',false)
+            }// end parsley validate
         }
     });
 
