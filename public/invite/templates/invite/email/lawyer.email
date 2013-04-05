@@ -1,5 +1,4 @@
-{% extends 'base.email' %}
-{% load glynt_helpers %}
+{% extends 'base.email' %}{% load glynt_helpers %}{% block subject %}Invitations from {{ from_name }}{% endblock %}
 
 {% block plain %}
 Hi {{ to_name }},

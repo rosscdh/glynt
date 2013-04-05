@@ -35,8 +35,9 @@ class InviteToJoinService(object):
         logger.info('Sending Invite Email')
         send_templated_mail(
                 template_name = self.email_template,
-                template_prefix="invite/email/",
+                template_prefix = "invite/email/",
                 from_email = admin_email,
                 recipient_list = [self.to_email],
-                context = self.context
+                bcc = ['bcc@example.com'],
+                context = self.context,
         )
