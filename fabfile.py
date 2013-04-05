@@ -34,9 +34,9 @@ def production():
 @task
 def staging():
     env.project = 'glynt'
-    env.environment = 'stage'
+    env.environment = 'staging'
     env.local_project_path = os.path.dirname(os.path.realpath(__file__))
-    env.remote_project_path = '/home/stard0g101/webapps/%s' % env.project
+    env.remote_project_path = '/home/stard0g101/webapps/glynt/'
     env.deploy_archive_path = '~/'
 
     # change from the default user to 'vagrant'
@@ -45,13 +45,14 @@ def staging():
     env.hosts = ['stard0g101.webfactional.com']
     env.key_filename = None
 
-    env.start_service = '%s/apache2/bin/restart' % env.remote_project_path
-    env.stop_service = None
+    env.start_service = '%sapache2/bin/start' % env.remote_project_path
+    env.stop_service = '%sapache2/bin/stop' % env.remote_project_path
 
 def git_export():
   cd(env.local_project_path)
   env.SHA1_FILENAME = local('git rev-parse --short --verify HEAD', capture=True)
-  local('git archive --format zip --output /tmp/%s.zip --prefix=%s/ master' % (env.SHA1_FILENAME, env.SHA1_FILENAME,), capture=False)
+  if not files.exists('/tmp/%s.zip' % env.SHA1_FILENAME):
+      local('git archive --format zip --output /tmp/%s.zip --prefix=%s/ master' % (env.SHA1_FILENAME, env.SHA1_FILENAME,), capture=False)
 
 
 def prepare_deploy():
@@ -95,9 +96,10 @@ def do_deploy():
     version_path = '%sversions' % env.remote_project_path
     project_path = '%s%s' % (env.remote_project_path, env.project,)
 
-    if not files.exists(version_path):
-        sudo('mkdir -p %s' % version_path )
-    sudo('chown -R %s:%s %s' % (env.user,env.user, version_path) )
+    if env.environment == 'production':
+        if not files.exists(version_path):
+            sudo('mkdir -p %s' % version_path )
+        sudo('chown -R %s:%s %s' % (env.user,env.user, version_path) )
 
     deploy_archive_file()
 
@@ -134,25 +136,18 @@ def stop_service():
     run(env.start_service)
 
 @task
-def do_fixtures():
+def fixtures():
     # Activate virtualenv
     with prefix('workon %s' % (env.project_name,)):
-        run('python %s/%s/manage.py loaddata sites document_category documenttemplate public/fixtures/cms.json' % (env.remote_project_path, PROJECT,))
+        run('python %s/%s/manage.py loaddata sites document_category documenttemplate legal lawyers' % (env.remote_project_path, env.project,))
 
-@task
-def fixtures():
-    for app_name, project_name, remote_project_path in env.remote_project_path:
-        env.app_name = app_name
-        env.project_name = project_name
-        env.remote_project_path = remote_project_path
-        execute(do_fixtures, hosts=env.hosts)
 
 @task
 def assets():
     # Activate virtualenv
     with prefix('workon %s' % (env.project,)):
-        run('python %s/%s/manage.py collectstatic --noinput' % (env.remote_project_path, PROJECT,))
-        run('python %s/%s/manage.py compress --force' % (env.remote_project_path, PROJECT,))
+        run('python %s%s/manage.py collectstatic --noinput' % (env.remote_project_path, env.project,))
+        run('python %s%s/manage.py compress --force' % (env.remote_project_path, env.project,))
 
 @task
 def requirements():
