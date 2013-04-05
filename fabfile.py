@@ -32,7 +32,7 @@ def production():
     env.stop_service = "kill -HUP `cat /tmp/lawpal.pid`"
 
 @task
-def stage():
+def staging():
     env.project = 'glynt'
     env.environment = 'stage'
     env.local_project_path = os.path.dirname(os.path.realpath(__file__))
@@ -45,7 +45,7 @@ def stage():
     env.hosts = ['stard0g101.webfactional.com']
     env.key_filename = None
 
-    env.start_service = None
+    env.start_service = '%s/apache2/bin/restart' % env.remote_project_path
     env.stop_service = None
 
 def git_export():
