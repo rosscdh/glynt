@@ -1,22 +1,28 @@
 <div id="" class="span12">
     <form data-validate="parsley" data-method="standard" action="{% url 'invite:send' %}" class="form-inline" method="POST">{% csrf_token %}
         {{ form.invite_type }}
-        <div id="invite-repeatable-group" class="control-group span12">
+        <div class="control-group span8">
+            <button id="add-btn" type="button" class="btn btn-primary btn-small"><i class="icon-plus-sign"></i>&nbsp;Add</button>
+        </div>
+        <br/><span class="repeatable-head"></span>
+        <div id="invite-repeatable-group" class="control-group span8">
             <div class="span3">{{ form.email }}</div>
             <div class="span3">{{ form.name }}</div>
         </div>
-        <div class="control-group span2 pull-right">
-            <br/>
-            <button id="add-btn" type="button" class="btn btn-primary btn-small"><i class="icon-plus-sign"></i>&nbsp;Add</button>
-        </div>
-		<div class="row-fluid">
-            <br/>
+        <br/>
+		<div class="span8">
 			<div class="control-group">
 				<button id="invite" type="submit" class="btn btn-primary btn-large">Invite</button>
 			</div>
 		</div>
     </form>
 </div>
+<style>
+.border{
+    border:solid #c00 1px;
+}
+    
+</style>
 <script id="js-invite">
 $(document).ready(function(){
 
@@ -35,7 +41,12 @@ $(document).ready(function(){
         var num = (form.find('input[type=text]').length / 2) + 1;
 
         clone.attr('id',null);// nullify the id
-        clone.find('input').val('')
+        
+        $.each(clone.find('input'), function(i,e){
+            e = $(e);
+            e.val('');
+            form.parsley('addItem', e);
+        })
 
         var remove_btn_clone = remove_btn.clone();
 
@@ -44,19 +55,24 @@ $(document).ready(function(){
             html: remove_btn_clone
         }));
 
-        clone.insertBefore(repeatable)
+        clone.insertAfter(repeatable.parent().find('span.repeatable-head'))
     });
 
     $('.remove-btn').live('click', function(event){
         event.preventDefault();
         var self = $(this);
+        var form = self.closest('form');
         var container = self.closest('div.control-group');
+        $.each(container.find('input'), function(i,e){
+            e = $(e);
+            form.parsley('removeItem', e);
+        })
         container.remove();
     });
 
     $('#invite-btn').live('click', function(event){
         var self = $(this);
-        var form = $(this).closest('form');
+        var form = self.closest('form');
         if (self.attr('data-method') == 'ajax') {
             event.preventDefault();
             $.ajax({
