@@ -35,6 +35,8 @@
 <script id="js-invite">
 $(document).ready(function(){
 
+    $('#invite-repeatable-group').find('input:first').select();
+
     var remove_btn = $('<button/>', {
         class: 'remove-btn btn btn-info btn-small'
         ,html: '<i class="icon-minus-sign"></i>'
@@ -67,6 +69,7 @@ $(document).ready(function(){
         }));
 
         clone.insertAfter(repeatable.parent().find('span.repeatable-head'))
+        clone.find('input:first').select()
     });
 
     $('.remove-btn').live('click', function(event){
