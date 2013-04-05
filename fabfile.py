@@ -25,11 +25,12 @@ def production():
     # change from the default user to 'vagrant'
     env.user = 'ubuntu'
     # connect to the port-forwarded ssh
-    #env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com']
-    env.hosts = ['ec2-184-72-21-48.us-west-1.compute.amazonaws.com']
+    env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com']
     env.key_filename = '/Users/rossc/Projects/lawpal/lawpal-chef/chef-machines.pem'
 
-    env.restart_service = "kill -HUP `cat /tmp/lawpal.pid`"
+    env.start_service = 'uwsgi --http :9090 --module main --callable app -H ~/.virtualenvs/%s/' % env.project
+    #env.restart_service = "kill -HUP `cat /tmp/lawpal.pid`"
+    env.restart_service = None
 
 @task
 def stage():
@@ -45,6 +46,8 @@ def stage():
     env.hosts = ['stard0g101.webfactional.com']
     env.key_filename = None
 
+    env.start_service = None
+    env.restart_service = None
 
 def git_export():
   cd(env.local_project_path)
@@ -58,7 +61,17 @@ def prepare_deploy():
 
 @task
 def chores():
-    sudo('aptitude install unzip')
+    # sudo('aptitude install unzip easy_install')
+    # sudo('easy_install pip')
+    # sudo('pip install virtualenv virtualenvwrapper')
+    if not files.exists('~/.virtualenvs'):
+        with shell_env(WORKON_HOME='~/.virtualenvs'):
+            run('mkdir -p $WORKON_HOME')
+
+    if not files.exists('~/.virtualenvs/%s' % env.project):
+        with shell_env(WORKON_HOME='~/.virtualenvs'):
+            run('source /usr/local/bin/virtualenvwrapper.sh')
+            run('mkvirtualenv %s' % env.project)
 
 def deploy_archive_file():
     put('/tmp/%s.zip'%(env.SHA1_FILENAME,), env.deploy_archive_path)
@@ -81,21 +94,23 @@ def do_deploy():
     deploy_archive_file()
 
     # extract project zip file:into a staging area and link it in
-    with cd('%s' % env.remote_project_path):
+    with cd('%s' % version_path):
         run('unzip %s%s.zip' % (env.deploy_archive_path, env.SHA1_FILENAME,))
 
-        run('unlink %s'%(project_path,))
+    with cd('%s' % env.remote_project_path):
+        if files.exists(project_path):
+            run('unlink %s' % project_path)
 
         run('ln -s %s/%s %s'%(version_path, env.SHA1_FILENAME, project_path,))
 
     # copy the live local_settings
     with cd(project_path):
-        print project_path
-        # run('cp conf/%s.local_settings.py %s/%s/%s/local_settings.py' % (environment, project_path, env.project, app_name,))
-        # run('cp conf/%s.newrelic.ini %s/newrelic.ini' % (environment, project_path,))
-        # run('cp conf/%s.wsgi.py %s/%s/wsgi.py' % (environment, project_path, env.project, app_name,))
+        run('cp conf/%s.local_settings.py %s/local_settings.py' % (env.environment, env.project,))
+        run('cp conf/%s.wsgi.py %s/wsgi.py' % (env.environment, env.project,))
+        run('cp conf/%s.newrelic.ini newrelic.ini' % (env.environment,))
 
-    run(env.restart_service)
+    if env.restart_service:
+        run(env.restart_service)
 
 
 @task
