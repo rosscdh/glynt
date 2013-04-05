@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
-from jsonview.decorators import json_view
+from django.http import HttpResponse
 from django.utils import simplejson as json
 from forms import InviteEmailForm
 
 import logging
 logger = logging.getLogger('django.request')
 
-@json_view
+
 def InviteEmailView(request):
         """
         Handles POST requests, instantiating a form instance with the passed
         POST variables and then checked for validity.
         """
-        errors = success = []
+        message = []
         c = 0
         if request.method == 'POST':
             invitees_list = zip(request.POST.getlist('email'), request.POST.getlist('name'))
@@ -23,14 +23,11 @@ def InviteEmailView(request):
 
                 if form.is_valid():
                     form.save(user=request.user)
-                    success.append('%s: %s' % (name,email,))
+                    er = None
                 else:
-                    er = ','.join(['%d %s: %s' % (c, k, ', '.join(v),) for k, v in form.errors.items()])
-                    errors.append(er)
+                    er = ','.join(['%s: %s' % (k, ', '.join(v),) for k, v in form.errors.items()])
+
+                message.append({'name': name, 'email': email, 'errors':er} )
                 c = c+1
 
-        success = ' '.join(success)
-        return {
-            'message': 'Invited %s' % success,
-            'errors': json.dumps(errors)
-        }
+        return HttpResponse(json.dumps(message), mimetype="application/json")

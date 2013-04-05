@@ -21,18 +21,28 @@ class InviteToJoinService(object):
 
         self.from_email, self.from_name = inviting_user.email, inviting_user.get_full_name()
         self.to_email, self.to_name = invitee_obj
+
         logger.info('Invite request from User (%s) %s -> %s to ' % (inviting_user.pk, self.from_email, self.to_email,))
 
         # get email template
         self.email_template = kwargs.get('email_template', 'lawyer')
+        self.context = kwargs
 
-        self.context = kwargs.update({
-            'from': self.from_name
-            ,'to': self.to_name
+        assert self.from_name
+        assert self.to_name
+        assert self.from_email
+        assert self.to_email
+
+        self.context.update({
+            'from_name': self.from_name
+            ,'to_name': self.to_name
+            ,'from_email': self.from_email
+            ,'to_email': self.to_email
         })
 
     def process(self):
         logger.info('Sending Invite Email')
+
         send_templated_mail(
                 template_name = self.email_template,
                 template_prefix = "invite/email/",

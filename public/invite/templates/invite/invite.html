@@ -1,5 +1,5 @@
-<div id="" class="span12">
-    <form data-validate="parsley" data-method="standard" action="{% url 'invite:send' %}" class="form-inline" method="POST">{% csrf_token %}
+<div id="invite-container" class="span12">
+    <form data-validate="parsley" data-send-type="ajax" action="{% url 'invite:send' %}" class="form-inline" method="POST">{% csrf_token %}
         {{ form.invite_type }}
         <div class="control-group span8">
             <button id="add-btn" type="button" class="btn btn-primary btn-small"><i class="icon-plus-sign"></i>&nbsp;Add</button>
@@ -17,12 +17,21 @@
 		</div>
     </form>
 </div>
-<style>
-.border{
-    border:solid #c00 1px;
-}
-    
-</style>
+
+<script type="text/x-handlebars" id="hb-success">
+{% verbatim %}
+<hr/>
+<h3>Invites</h3>
+<ul class="unstyled">
+{{#each data}}
+    <li>
+    {{name}} - {{email}} {{#if errors}}<span class="alert-error">{{errors}}</span>{{/if}}
+    </li>
+{{/each}}
+<ul>
+{% endverbatim %}
+</script>
+
 <script id="js-invite">
 $(document).ready(function(){
 
@@ -32,6 +41,8 @@ $(document).ready(function(){
     });
 
     var repeatable = $('#invite-repeatable-group');
+
+    var complete_msg = Handlebars.compile($('script#hb-success').html());
 
     $('#add-btn').live('click', function(event){
         event.preventDefault();
@@ -73,24 +84,27 @@ $(document).ready(function(){
     $('#invite-btn').live('click', function(event){
         var self = $(this);
         var form = self.closest('form');
-        if (self.attr('data-method') == 'ajax') {
+
+        if (form.attr('data-send-type') == 'ajax') {
             event.preventDefault();
             $.ajax({
                 type: form.attr('method'),
                 url: form.attr('action'),
                 data: form.serialize(),
             })
-            .beforeSend(function(jqXHR, settings){
-                // hide button
-            })
+            // .beforeSend(function(jqXHR, settings){
+            //     // hide button
+            //     console.log('beforesend')
+            // })
             .success(function(data, textStatus, jqXHR) {
-                
+                $('#invite-container').html(complete_msg({'data': data}))
             })
             .error(function(jqXHR, textStatus, errorThrown) { 
-                
+                console.log('error: '+errorThrown)
             })
             .complete(function() {
                 // show buttons
+                console.log('complete')
             });
         }
     });

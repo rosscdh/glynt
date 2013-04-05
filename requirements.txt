@@ -10,7 +10,7 @@ Django
 python-memcached
 
 django-cities-light
-django-jsonview
+# django-jsonview # not required
 
 # model charts - will need to have brew graphiz installed
 # pygraphviz
