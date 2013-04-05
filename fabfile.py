@@ -111,15 +111,17 @@ def do_deploy():
         if files.exists(project_path):
             run('unlink %s' % project_path)
 
-        run('ln -s %s/%s %s'%(version_path, env.SHA1_FILENAME, project_path,))
+        if not env.is_predeploy:
+            run('ln -s %s/%s %s'%(version_path, env.SHA1_FILENAME, project_path,))
 
-    # copy the live local_settings
-    with cd(project_path):
-        run('cp conf/%s.local_settings.py %s/local_settings.py' % (env.environment, env.project,))
-        run('cp conf/%s.wsgi.py %s/wsgi.py' % (env.environment, env.project,))
-        run('cp conf/%s.newrelic.ini newrelic.ini' % (env.environment,))
+    if not env.is_predeploy:
+        # copy the live local_settings
+        with cd(project_path):
+            run('cp conf/%s.local_settings.py %s/local_settings.py' % (env.environment, env.project,))
+            run('cp conf/%s.wsgi.py %s/wsgi.py' % (env.environment, env.project,))
+            run('cp conf/%s.newrelic.ini newrelic.ini' % (env.environment,))
 
-    execute(restart_service)
+        execute(restart_service)
 
 
 @task
@@ -161,7 +163,14 @@ def requirements():
 
 
 @task
-def deploy():
+def deploy(is_predeploy=False):
+    """
+    :is_predeploy=True - will deploy the latest MASTER SHA but not link it in: this allows for assets collection
+    and requirements update etc...
+    """
+
+    env.is_predeploy = True if is_predeploy.lower() in ['true','t','y','yes','1',1] else False
+
     prepare_deploy()
     execute(do_deploy)
     execute(conclude_deploy)
