@@ -24,6 +24,7 @@ def production():
 
     # change from the default user to 'vagrant'
     env.user = 'ubuntu'
+    env.application_user = 'app'
     # connect to the port-forwarded ssh
     env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com']
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
@@ -41,12 +42,22 @@ def staging():
 
     # change from the default user to 'vagrant'
     env.user = 'stard0g101'
+    env.application_user = 'stard0g101'
+
     # connect to the port-forwarded ssh
     env.hosts = ['stard0g101.webfactional.com']
     env.key_filename = None
 
     env.start_service = '%sapache2/bin/start' % env.remote_project_path
     env.stop_service = '%sapache2/bin/stop' % env.remote_project_path
+
+
+def virtualenv(cmd):
+  # change to base dir
+  with cd("/var/apps/lawpal"):
+    # activate the virtualenv, run scripts as app user
+    sudo("source /var/apps/.bashrc && %s" % cmd, user=env.application_user)
+
 
 def git_export():
   cd(env.local_project_path)
@@ -74,17 +85,17 @@ def chores():
 
     put('conf/.bash_profile', '~/.bash_profile')
 
-@task
-def virtualenv():
-    if not files.exists('~/.virtualenvs'):
-        with shell_env(WORKON_HOME='~/.virtualenvs'):
-            run('export WORKON_HOME=~/.virtualenvs')
-            run('mkdir -p $WORKON_HOME')
+# @task
+# def virtualenv():
+#     if not files.exists('~/.virtualenvs'):
+#         with shell_env(WORKON_HOME='~/.virtualenvs'):
+#             run('export WORKON_HOME=~/.virtualenvs')
+#             run('mkdir -p $WORKON_HOME')
 
-    if not files.exists('~/.virtualenvs/%s' % env.project):
-        with shell_env(WORKON_HOME='~/.virtualenvs'):
-            run('export WORKON_HOME=~/.virtualenvs')
-            run('mkvirtualenv %s' % env.project)
+#     if not files.exists('~/.virtualenvs/%s' % env.project):
+#         with shell_env(WORKON_HOME='~/.virtualenvs'):
+#             run('export WORKON_HOME=~/.virtualenvs')
+#             run('mkvirtualenv %s' % env.project)
 
 def deploy_archive_file():
     put('/tmp/%s.zip'%(env.SHA1_FILENAME,), env.deploy_archive_path)
@@ -144,26 +155,24 @@ def stop_service():
 @task
 def fixtures():
     # Activate virtualenv
-    with prefix('workon %s' % (env.project_name,)):
-        run('python %s/%s/manage.py loaddata sites document_category documenttemplate legal lawyers' % (env.remote_project_path, env.project,))
+    virtualenv('python %s/%s/manage.py loaddata sites document_category documenttemplate legal lawyers' % (env.remote_project_path, env.project,))
 
 
 @task
 def assets():
     # Activate virtualenv
-    with prefix('workon %s' % (env.project,)):
-        run('python %s%s/manage.py collectstatic --noinput' % (env.remote_project_path, env.project,))
-        run('python %s%s/manage.py compress --force' % (env.remote_project_path, env.project,))
+    virtualenv('python %s%s/manage.py collectstatic --noinput' % (env.remote_project_path, env.project,))
+    virtualenv('python %s%s/manage.py compress --force' % (env.remote_project_path, env.project,))
 
 @task
 def requirements():
     project_path = '%s%s' % (env.remote_project_path, env.project, )
     requirements_path = '%s/requirements.txt' % (project_path, )
 
-    with prefix('workon %s' % (env.project,)):
-        run('pip install -r %s' %(requirements_path,) )
-        if env.environment == 'production':
-            run('pip install psycopg2')
+    virtualenv('pip install -r %s' %(requirements_path,) )
+
+    if env.environment == 'production':
+        virtualenv('pip install psycopg2')
 
 
 @task
