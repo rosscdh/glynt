@@ -20,17 +20,19 @@ def production():
     env.environment = 'production'
     env.local_project_path = os.path.dirname(os.path.realpath(__file__))
     env.remote_project_path = '/var/apps/lawpal/'
-    env.deploy_archive_path = '~/'
+    env.deploy_archive_path = '/var/apps/'
 
     # change from the default user to 'vagrant'
     env.user = 'ubuntu'
     env.application_user = 'app'
     # connect to the port-forwarded ssh
-    env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com']
+    #env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com']
+    env.hosts = ['ec2-184-72-21-48.us-west-1.compute.amazonaws.com']
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
 
-    env.start_service = 'uwsgi --http :9090 --module main --callable app -H ~/.virtualenvs/%s/' % env.project
-    env.stop_service = "kill -HUP `cat /tmp/lawpal.pid`"
+    env.start_service = 'supervisorctl start uwsgi'
+    env.stop_service = 'supervisorctl stop uwsgi'
+    #env.stop_service = "kill -HUP `cat /tmp/lawpal.pid`"
 
 @task
 def staging():
@@ -78,30 +80,25 @@ def supervisord_restart():
 def chores():
     sudo('aptitude --assume-yes install build-essential python-setuptools python-dev uwsgi-plugin-python libjpeg8 libjpeg62-dev libfreetype6 libfreetype6-dev easy_install nmap htop vim')
     sudo('aptitude --assume-yes install git-core mercurial subversion')
-    sudo('aptitude --assume-yes install rabbitmq-server')
+    sudo('aptitude --assume-yes install libtidy-dev python-psycopg2')
+    #sudo('aptitude --assume-yes install rabbitmq-server')
 
     sudo('easy_install pip')
     sudo('pip install virtualenv virtualenvwrapper pillow')
 
     put('conf/.bash_profile', '~/.bash_profile')
 
-# @task
-# def virtualenv():
-#     if not files.exists('~/.virtualenvs'):
-#         with shell_env(WORKON_HOME='~/.virtualenvs'):
-#             run('export WORKON_HOME=~/.virtualenvs')
-#             run('mkdir -p $WORKON_HOME')
-
-#     if not files.exists('~/.virtualenvs/%s' % env.project):
-#         with shell_env(WORKON_HOME='~/.virtualenvs'):
-#             run('export WORKON_HOME=~/.virtualenvs')
-#             run('mkvirtualenv %s' % env.project)
 
 def deploy_archive_file():
-    put('/tmp/%s.zip'%(env.SHA1_FILENAME,), env.deploy_archive_path)
+    file_name = '%s.zip' % env.SHA1_FILENAME
+    if not files.exists('%s/%s' % (env.deploy_archive_path, file_name)):
+        put('/tmp/%s' % file_name, env.deploy_archive_path, use_sudo=True)
+
 
 def conclude_deploy():
-    run('unlink %s%s.zip' % (env.deploy_archive_path, env.SHA1_FILENAME,))
+    file_name = '%s.zip' % env.SHA1_FILENAME
+    if files.exists('%s/%s' % (env.deploy_archive_path, file_name)):
+        sudo('rm %s/%s' % (env.deploy_archive_path, file_name,))
 
 
 def do_deploy():
@@ -109,34 +106,36 @@ def do_deploy():
         raise Exception('Must have a SHA1_FILENAME defined. Ensure you have run @git_export')
 
     version_path = '%sversions' % env.remote_project_path
+    full_version_path = '%s/%s' % (version_path, env.SHA1_FILENAME)
+
     project_path = '%s%s' % (env.remote_project_path, env.project,)
 
     if env.environment == 'production':
-        if not files.exists(version_path):
+        if not files.exists(version_path, use_sudo=True):
             sudo('mkdir -p %s' % version_path )
-        sudo('chown -R %s:%s %s' % (env.user,env.user, version_path) )
+        sudo('chown -R %s:%s %s' % (env.application_user, env.application_user, env.remote_project_path) )
 
     deploy_archive_file()
 
+
     # extract project zip file:into a staging area and link it in
-    with cd('%s' % version_path):
-        run('unzip %s%s.zip' % (env.deploy_archive_path, env.SHA1_FILENAME,))
+    if not files.exists(full_version_path, use_sudo=True):
+        with cd('%s' % version_path):
+            virtualenv('unzip %s%s.zip -d %s' % (env.deploy_archive_path, env.SHA1_FILENAME, version_path,))
 
-    with cd('%s' % env.remote_project_path):
-        if files.exists(project_path):
-            run('unlink %s' % project_path)
-
-        if not env.is_predeploy:
-            run('ln -s %s/%s %s'%(version_path, env.SHA1_FILENAME, project_path,))
+    if not env.is_predeploy:
+        if files.exists(project_path, use_sudo=True):
+            virtualenv('unlink %s' % project_path)
+        virtualenv('ln -s %s/%s %s' % (version_path, env.SHA1_FILENAME, project_path,))
 
     if not env.is_predeploy:
         # copy the live local_settings
         with cd(project_path):
-            run('cp conf/%s.local_settings.py %s/local_settings.py' % (env.environment, env.project,))
-            run('cp conf/%s.wsgi.py %s/wsgi.py' % (env.environment, env.project,))
-            run('cp conf/%s.newrelic.ini newrelic.ini' % (env.environment,))
+            virtualenv('cp %s/conf/%s.local_settings.py %s/%s/local_settings.py' % (project_path, env.environment, project_path, env.project))
+            virtualenv('cp %s/conf/%s.wsgi.py %s/%s/wsgi.py' % (project_path, env.environment, project_path, env.project))
+            virtualenv('cp %s/conf/%s.newrelic.ini %s/%s/newrelic.ini' % (project_path, env.environment, project_path, env.project))
 
-        execute(restart_service)
+        #execute(restart_service)
 
 
 @task
