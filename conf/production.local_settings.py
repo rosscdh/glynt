@@ -17,7 +17,7 @@ DATABASES = {
         'NAME': 'glynt',
         'USER': 'glynt',
         'PASSWORD': 'sWnMqbEAnQ',
-        'HOST': '1.db.srv.lawpal.com',
+        'HOST': 'db1.srv.lawpal.com',
     }
 }
 
