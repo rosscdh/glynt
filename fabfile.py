@@ -60,6 +60,10 @@ def prepare_deploy():
 
 
 @task
+def supervisord_restart():
+    sudo('supervisorctl restart uwsgi')
+
+@task
 def chores():
     sudo('aptitude --assume-yes install build-essential python-setuptools python-dev uwsgi-plugin-python libjpeg8 libjpeg62-dev libfreetype6 libfreetype6-dev easy_install nmap htop vim')
     sudo('aptitude --assume-yes install git-core mercurial subversion')
