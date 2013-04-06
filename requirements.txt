@@ -1,5 +1,5 @@
 Django
-# django-simple-menu
+django-simple-menu
 
 # image upload and crop
 -e git+https://github.com/rosscdh/clean-image-crop-uploader.git@rc_fixes#egg=clean-image-crop-uploader
@@ -7,6 +7,7 @@ Django
 #google-api-python-client # coming soon
 
 #psycopg2 # required for production postgres db
+pytidylib
 python-memcached
 
 django-cities-light
