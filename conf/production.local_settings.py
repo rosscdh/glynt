@@ -14,11 +14,10 @@ TEMPLATE_DEBUG = DEBUG
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'stard0g101_glynt',
-        'USER': 'stard0g101_glynt',
-        'PASSWORD': '1003507b',
-        'HOST': 'web48.webfaction.com',
-        # 'PORT': '',
+        'NAME': 'glynt',
+        'USER': 'glynt',
+        'PASSWORD': 'sWnMqbEAnQ',
+        'HOST': '1.db.srv.lawpal.com',
     }
 }
 
