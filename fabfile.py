@@ -26,8 +26,7 @@ def production():
     env.user = 'ubuntu'
     env.application_user = 'app'
     # connect to the port-forwarded ssh
-    #env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com']
-    env.hosts = ['ec2-184-72-21-48.us-west-1.compute.amazonaws.com']
+    env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com']
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
 
     env.start_service = 'supervisorctl start uwsgi'
@@ -97,8 +96,8 @@ def deploy_archive_file():
 
 def conclude_deploy():
     file_name = '%s.zip' % env.SHA1_FILENAME
-    if files.exists('%s/%s' % (env.deploy_archive_path, file_name)):
-        sudo('rm %s/%s' % (env.deploy_archive_path, file_name,))
+    if files.exists('%s%s' % (env.deploy_archive_path, file_name)):
+        sudo('rm %s%s' % (env.deploy_archive_path, file_name,))
 
 
 def do_deploy():
@@ -134,8 +133,6 @@ def do_deploy():
             virtualenv('cp %s/conf/%s.local_settings.py %s/%s/local_settings.py' % (project_path, env.environment, project_path, env.project))
             virtualenv('cp %s/conf/%s.wsgi.py %s/%s/wsgi.py' % (project_path, env.environment, project_path, env.project))
             virtualenv('cp %s/conf/%s.newrelic.ini %s/%s/newrelic.ini' % (project_path, env.environment, project_path, env.project))
-
-        #execute(restart_service)
 
 
 @task
@@ -185,4 +182,5 @@ def deploy(is_predeploy='False'):
 
     prepare_deploy()
     execute(do_deploy)
+    execute(restart_service)
     execute(conclude_deploy)
