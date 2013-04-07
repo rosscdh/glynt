@@ -22,6 +22,7 @@ def production():
     env.local_project_path = os.path.dirname(os.path.realpath(__file__))
     env.remote_project_path = '/var/apps/lawpal/'
     env.deploy_archive_path = '/var/apps/'
+    env.virtualenv_path = '/var/apps/.lawpal-live-venv/'
 
     # change from the default user to 'vagrant'
     env.user = 'ubuntu'
@@ -42,6 +43,7 @@ def preview():
     env.local_project_path = os.path.dirname(os.path.realpath(__file__))
     env.remote_project_path = '/var/apps/preview-lawpal/'
     env.deploy_archive_path = '/var/apps/'
+    env.virtualenv_path = '/var/apps/.lawpal-preview-venv/'
 
     # change from the default user to 'vagrant'
     env.user = 'ubuntu'
@@ -61,6 +63,7 @@ def staging():
     env.local_project_path = os.path.dirname(os.path.realpath(__file__))
     env.remote_project_path = '/home/stard0g101/webapps/glynt/'
     env.deploy_archive_path = '~/'
+    env.virtualenv_path = '/home/stard0g101/.virtualenvs/glynt/'
 
     # change from the default user to 'vagrant'
     env.user = 'stard0g101'
@@ -74,18 +77,26 @@ def staging():
     env.stop_service = '%sapache2/bin/stop' % env.remote_project_path
     env.light_restart = None
 
+
 def virtualenv(cmd):
   # change to base dir
   with cd("/var/apps/lawpal"):
     # activate the virtualenv, run scripts as app user
-    sudo("source /var/apps/.bashrc && %s" % cmd, user=env.application_user)
+    sudo("source %sbin/activate && %s" % (env.virtualenv_path, cmd,), user=env.application_user)
+
 
 def cli(cmd, as_who='user'):
     sudo(cmd) if as_who == 'sudo' else run(cmd)
 
+@task
+def clean_pyc():
+    virtualenv('python %s%s/manage.py clean_pyc' % (env.remote_project_path, env.project))
+
+
 def get_sha1():
   cd(env.local_project_path)
   return local('git rev-parse --short --verify HEAD', capture=True)
+
 
 def git_export():
   cd(env.local_project_path)
@@ -107,9 +118,6 @@ def clean_versions():
 def supervisord_restart():
     sudo('supervisorctl restart uwsgi')
 
-@task
-def restart_lite():
-    sudo(env.light_restart)
 
 @task
 def chores():
@@ -175,6 +183,10 @@ def do_deploy():
 
 
 @task
+def restart_lite():
+    sudo(env.light_restart)
+
+@task
 def restart_service():
     execute(stop_service)
     execute(start_service)
@@ -204,10 +216,7 @@ def requirements():
     project_path = '%s%s' % (env.remote_project_path, env.project, )
     requirements_path = '%s/requirements.txt' % (project_path, )
 
-    virtualenv('pip install -r %s' %(requirements_path,) )
-
-    if env.environment == 'production':
-        virtualenv('pip install psycopg2')
+    virtualenv('pip install -r %s' % requirements_path )
 
 
 @task
@@ -221,5 +230,5 @@ def deploy(is_predeploy='False'):
 
     prepare_deploy()
     execute(do_deploy)
-    execute(clean_zip)
-    execute(restart_service)
+    #execute(clean_zip)
+    execute(restart_lite)
