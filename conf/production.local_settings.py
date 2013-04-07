@@ -7,7 +7,7 @@ PROJECT_ENVIRONMENT = 'prod'
 SITE_ID = 3
 
 DEBUG = False
-COMPRESS_ENABLED = True
+COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = False
 TEMPLATE_DEBUG = DEBUG
 
@@ -32,6 +32,8 @@ STATIC_URL = '/static/'
 STATIC_ROOT = '/var/apps/lawpal/static/'
 MEDIA_ROOT = '/var/apps/lawpal/media/'
 
+ALLOWED_HOSTS = ['1.web.srv.lawpal.com', '2.web.srv.lawpal.com']
+ALLOWED_HOSTS += ['preview.lawpal.com', 'www.lawpal.com', 'lawpal.com']
 
 FACEBOOK_API_KEY = '343632075713954'
 FACEBOOK_SECRET_KEY = '4f9854b8fe8f5ccf27ac1ffcf5051b79'
@@ -66,7 +68,6 @@ SERVER_EMAIL = 'glynt@dev.weareml.com'
 
 HELLOSIGN_AUTH = ("sendrossemail@gmail.com", "zanshin77")
 
-ALLOWED_HOSTS = ['preview.lawpal.com','dev.lawpal.com']
 
 RAVEN_CONFIG = {
     'dsn': 'https://b5a6429d03e2418cbe71cd5a4c9faca6:ddabb51af47546d1ac0e63cb453797ba@app.getsentry.com/6287',
