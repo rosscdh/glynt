@@ -340,7 +340,7 @@ LOGGING = {
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
         },
-        'console':{
+        'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
         }
@@ -361,6 +361,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
+        'lawpal.commands': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        }
     }
 }
 

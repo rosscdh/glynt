@@ -9,6 +9,9 @@ from django.core.files import File
 
 from glynt.apps.startups.services import EnsureStartupService
 
+import logging
+logger = logging.getLogger('lawpal.commands.import_startups')
+
 
 class Command(BaseCommand):
     """ Import Startups
@@ -17,13 +20,23 @@ class Command(BaseCommand):
     """
 
     def handle(self, *args, **options):
-        startup = self.fetch_single_500startup('http://500.co/startup-profiles/twilio/')
-        if 'photo_url' in startup:
-            startup['photo'] = self.fetch_image(startup['photo_url'])
-        service = EnsureStartupService(**startup)
-        service.process()
+        logger.info("Fetching 500startups")
+        startups_500 = self.fetch_500startups()
+        for s in startups_500:
+            self.create_startup(s)
+
+        logger.info("Fetching angellist")
+        startups_angellist = self.fetch_angellist()
+        for s in startups_angellist:
+            self.create_startup(s)
 
     # common
+
+    def create_startup(self, data):
+        if 'photo_url' in data:
+            data['photo'] = self.fetch_image(data['photo_url'])
+        service = EnsureStartupService(**data)
+        service.process()
 
     def fetch_image(self, src):
         filename, _ = urllib.urlretrieve(src)
@@ -48,24 +61,37 @@ class Command(BaseCommand):
         following tag:
             Location: Earth: North America: United States (1688)
         """
-        startups = self.get_angellist_startups_for_tag(1688, limit=100)
+        startups = self.get_angellist_startups_for_tag(1688, limit=10)
         return startups
 
     def get_angellist_startups_for_tag(self, tag_id, limit=None):
         def get_page(page):
-            return requests.get('https://api.angel.co/1/tags/%s/startups' % tag_id, params={'page': page}).json()
+            logger.info("Fetching page %s for tag %s", page, tag_id)
+            r = requests.get('https://api.angel.co/1/tags/%s/startups' % tag_id, params={'page': page})
+            return r.json()
 
         page = 1
         results = []
+
+        logger.info("Fetching %s startups from angellist tag %s", limit if limit else 'all', tag_id)
         while True:
             response = get_page(page)
-            results.extend([s for s in response['startups'] if s.get('hidden') is False])
+            for startup in response['startups']:
+                if startup.get('hidden') is False:
+                    results.append(self.format_angellist_startup(startup))
 
             if response['page'] >= response['last_page'] or (limit and len(results) >= limit):
                 return results[:limit]
 
             time.sleep(4)  # angellist has a req/hour limit of 1000 or about one per 3.75 sec
             page += 1
+
+    def format_angellist_startup(self, data):
+        data['photo_url'] = data.pop('logo_url', None)
+        data['summary'] = data.pop('product_desc', None)
+        data['website'] = data.pop('company_url', None)
+        data['twitter'] = data.pop('twitter_url', None)
+        return data
 
     # 500startups
 
@@ -80,13 +106,15 @@ class Command(BaseCommand):
 
         # fetch each indidual startup
         results = []
-        for url in reversed(urls):
+        logger.info("Got %s urls from 500startups:", len(urls))
+        for url in urls:
             results.append(self.fetch_single_500startup(url))
             time.sleep(1)  # be (a little) nice
 
         return results
 
     def fetch_single_500startup(self, url):
+        logger.info("Fetching %s", url)
         doc = lxml.html.parse(url)
         root = doc.getroot()
         sidebar = root.cssselect('div#sidebar')[0]
