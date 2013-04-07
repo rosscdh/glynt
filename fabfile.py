@@ -148,14 +148,18 @@ def clean_zip():
 
 @task
 def relink():
+    if not env.SHA1_FILENAME:
+        env.SHA1_FILENAME = get_sha1()
+
     version_path = '%sversions' % env.remote_project_path
     full_version_path = '%s/%s' % (version_path, env.SHA1_FILENAME)
     project_path = '%s%s' % (env.remote_project_path, env.project,)
 
     if not env.is_predeploy:
-        if files.exists(project_path, use_sudo=True):
-            virtualenv('unlink %s' % project_path)
-        virtualenv('ln -s %s/%s %s' % (version_path, env.SHA1_FILENAME, project_path,))
+        if files.exists('%s/%s' % (version_path, env.SHA1_FILENAME)): # check the sha1 dir exists
+            if files.exists(project_path): # unlink the glynt dir
+                virtualenv('unlink %s' % project_path)
+            virtualenv('ln -s %s/%s %s' % (version_path, env.SHA1_FILENAME, project_path,)) # relink
 
 
 def do_deploy():
@@ -172,7 +176,6 @@ def do_deploy():
         env_run('chown -R %s:%s %s' % (env.application_user, env.application_user, env.remote_project_path) )
 
     deploy_archive_file()
-
 
     # extract project zip file:into a staging area and link it in
     if not files.exists('%s/manage.py'%full_version_path):
