@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %}{% load crispy_forms_tags %}
 
 {% block page_title %}Lawyers - Signup{% endblock %}
 {% block bodyclass %}lawyer-form{% endblock %}
@@ -25,64 +25,31 @@
 			</h1>
 			<br>
 			<form id="lawyer-profile-form" action="{% url 'lawyer:setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
-				{% for e in form.non_field_errors %}
-				<div class="alert-error">
-				  {{ e }}
-				</div>
-				{% endfor %}
+			{{ form|as_crispy_errors }}
 			<div class="row">
 					<div class="span5">
 						<div class="control-group">
-							<label class="control-label" for="inputEmail">{{ form.first_name.label }}</label>
-							<div class="controls">
-								{{ form.first_name.errors }}
-								{{ form.first_name }}
-								<span class="help-inline">{{ form.first_name.help_text }}</span>
-							</div>
+							{{ form.first_name|as_crispy_field }}
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="inputEmail">{{ form.email.label }}</label>
-							<div class="controls">
-								{{ form.email.errors }}
-								{{ form.email }}
-							</div>
+							{{ form.email|as_crispy_field }}
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="inputEmail">{{ form.phone.label }}</label>
-							<div class="controls">
-								{{ form.phone.errors }}
-								{{ form.phone }}
-							</div>
+							{{ form.phone|as_crispy_field }}
 						</div>
 					</div>
 					<div class="span5">
 						<div class="control-group">
-							<label class="control-label" for="inputPassword">{{ form.last_name.label }}</label>
-							<div class="controls">
-								{{ form.last_name.errors }}
-								{{ form.last_name }}
-							</div>
+							{{ form.last_name|as_crispy_field }}
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="inputEmail">{{ form.firm_name.label }}</label>
-							<div class="controls">
-								{{ form.firm_name.errors }}
-								{{ form.firm_name }}
-							</div>
+							{{ form.firm_name|as_crispy_field }}
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="inputEmail">{{ form.position.label }}</label>
-							<div class="controls">
-								{{ form.position.errors }}
-								{{ form.position }}
-							</div>
+							{{ form.position|as_crispy_field }}
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="inputEmail">{{ form.years_practiced.label }}</label>
-							<div class="controls">
-								{{ form.years_practiced.errors }}
-								{{ form.years_practiced }}
-							</div>
+							{{ form.years_practiced|as_crispy_field }}
 						</div>
 					</div>
 				</div>
@@ -94,22 +61,12 @@
 				<div class="row">
 					<div class="span5">
 						<div class="control-group">
-							<label class="control-label" for="inputPassword">{{ form.practice_location_1.label }}</label>
-							<div class="controls">
-								{{ form.practice_location_1.errors }}
-								{{ form.practice_location_1 }}
-							    <span class="help-block">In format: City, State or Country</span>
-							</div>
+							{{ form.practice_location_1|as_crispy_field }}
 						</div>
 					</div>
 					<div class="span5">
 						<div class="control-group">
-							<label class="control-label" for="inputPassword">{{ form.practice_location_2.label }}</label>
-							<div class="controls">
-								{{ form.practice_location_2.errors }}
-								{{ form.practice_location_2 }}
-							    <span class="help-block">In format: City, State or Country</span>
-							</div>
+							{{ form.practice_location_2|as_crispy_field }}
 						</div>
 					</div>
 				</div>
@@ -121,25 +78,13 @@
 				<div class="row">
 					<div class="span12">
 						<div class="control-group">
-							<label class="control-label" for="inputPassword">{{ form.summary.label }}</label>
-							<div class="controls">
-								{{ form.summary.errors }}
-								{{ form.summary }}
-							</div>
+							{{ form.summary|as_crispy_field }}
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="inputPassword">{{ form.bio.label }}</label>
-							<div class="controls">
-								{{ form.bio.errors }}
-								{{ form.bio }}
-							</div>
+							{{ form.bio|as_crispy_field }}
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="inputPassword">{{ form.if_i_wasnt_a_lawyer.label }}</label>
-							<div class="controls">
-								{{ form.if_i_wasnt_a_lawyer.errors }}
-								{{ form.if_i_wasnt_a_lawyer }}
-							</div>
+							{{ form.if_i_wasnt_a_lawyer|as_crispy_field }}
 						</div>
 					</div>
 				</div>
@@ -233,8 +178,8 @@
 					<div class="span12">
 						<br />
 						<label class="checkbox">
-							{{ form.agree_tandc.errors }}
-		                	{{ form.agree_tandc }} I agree to the LawPal <a href="{% url 'public:terms' %}">Terms and Conditions</a>
+							{{ form.agree_tandc|as_crispy_field }}
+		                	I agree to the LawPal <a href="{% url 'public:terms' %}">Terms and Conditions</a>
 		              	</label>
 						<br />
 						<button id="lawyer-profile" type="submit" class="btn btn-primary btn-large">Update Profile</button>

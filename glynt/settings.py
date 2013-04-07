@@ -197,6 +197,7 @@ HELPER_APPS = (
     'django_markdown',
     # 'django_rq',
     'bootstrap',
+    'crispy_forms',
     'django_markup',
     'compressor',
     # Social Authentication
