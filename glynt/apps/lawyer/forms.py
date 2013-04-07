@@ -21,6 +21,7 @@ logger = logging.getLogger('django.request')
 API_URLS = {
     'firms': '/api/v1/firm/?format=json&limit=1000',
     'locations': '/api/v1/location/?format=json&limit=1000',
+    'startups': '/api/v1/startup/?format=json&limit=1000',
 }
 
 
@@ -58,7 +59,8 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
             }))
     hidden_photo = forms.CharField(required=False, widget=forms.HiddenInput) # transports the id
 
-    startups_advised = forms.CharField(required=False, label="Startups Advised", help_text='This helps us match you with similar startups', widget=forms.TextInput(attrs={'title':'e.g. http://facebook.com', 'data-trigger':'change', 'data-type':'url','class':'typeahead','autocomplete':'off','data-provide':'', 'data-items':4, 'data-source':''}))
+    startups_advised_input = forms.CharField(required=False, label="Startups Advised", help_text='This helps us match you with similar startups', widget=forms.TextInput(attrs={'placeholder':'e.g. Facebook http://facebook.com', 'class':'typeahead','autocomplete':'off','data-provide':'ajax', 'data-items':4, 'data-source': 'startups'}))
+    startups_advised = forms.CharField(required=False, widget=forms.HiddenInput)
 
     volume_incorp_setup = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
     volume_seed_financing = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
@@ -94,6 +96,9 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
         """ Remove the lawyer_profile cookie set when photo is uploaded """
         if self.request.COOKIES.get(self.cookie_name, None) is not None:
             del(self.request.COOKIES[self.cookie_name])
+        # startup list
+        if self.request.COOKIES.get('startup_list', None) is not None:
+            del(self.request.COOKIES['startup_list'])
 
     def save(self, commit=True):
         logger.info('Ensuring the LawyerProfile Exists')
