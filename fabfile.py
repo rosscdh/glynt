@@ -88,6 +88,9 @@ def chores():
     put('conf/.bash_profile', '~/.bash_profile')
 
 
+def env_run():
+    return sudo if env.environment == 'production' else run
+
 def deploy_archive_file():
     file_name = '%s.zip' % env.SHA1_FILENAME
     if not files.exists('%s/%s' % (env.deploy_archive_path, file_name)):
@@ -110,15 +113,15 @@ def do_deploy():
     project_path = '%s%s' % (env.remote_project_path, env.project,)
 
     if env.environment == 'production':
-        if not files.exists(version_path, use_sudo=True):
-            sudo('mkdir -p %s' % version_path )
-        sudo('chown -R %s:%s %s' % (env.application_user, env.application_user, env.remote_project_path) )
+        if not files.exists(version_path):
+            env_run('mkdir -p %s' % version_path )
+        env_run('chown -R %s:%s %s' % (env.application_user, env.application_user, env.remote_project_path) )
 
     deploy_archive_file()
 
 
     # extract project zip file:into a staging area and link it in
-    if not files.exists(full_version_path, use_sudo=True):
+    if not files.exists(full_version_path):
         with cd('%s' % version_path):
             virtualenv('unzip %s%s.zip -d %s' % (env.deploy_archive_path, env.SHA1_FILENAME, version_path,))
 
@@ -142,11 +145,11 @@ def restart_service():
 
 @task
 def start_service():
-    run(env.start_service)
+    env_run(env.start_service)
 
 @task
 def stop_service():
-    run(env.stop_service)
+    env_run(env.stop_service)
 
 @task
 def fixtures():
