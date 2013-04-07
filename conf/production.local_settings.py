@@ -83,7 +83,7 @@ SPLUNKSTORM_PORT = 20824
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': 'unix:/home/stard0g101/memcached.sock'
+        'LOCATION': '127.0.0.1:11211'
     },
     'fallback': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
