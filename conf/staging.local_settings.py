@@ -6,7 +6,7 @@ PROJECT_ENVIRONMENT = 'prod'
 
 SITE_ID = 3
 
-DEBUG = False
+DEBUG = True
 COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = False
 TEMPLATE_DEBUG = DEBUG
@@ -14,11 +14,11 @@ TEMPLATE_DEBUG = DEBUG
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'd7c7vlhi6had88',
-        'USER': 'u1uq45tflfbqqo',
-        'PASSWORD': 'p7vgff9h197gnres0kj13btoos4',
-        'HOST': 'ec2-54-225-205-183.compute-1.amazonaws.com',
-        'PORT': 5642
+        'NAME': 'stard0g101_glynt',
+        'USER': 'stard0g101_glynt',
+        'PASSWORD': '1003507b',
+        'HOST': 'web48.webfaction.com',
+        # 'PORT': '',
     }
 }
 
@@ -26,14 +26,13 @@ TIME_ZONE = 'Europe/London'
 
 USE_ETAGS = True
 
-MEDIA_URL = '/media/'
+MEDIA_URL = '/static/media/'
+
 STATIC_URL = '/static/'
 
-STATIC_ROOT = '/var/apps/lawpal/static/'
-MEDIA_ROOT = '/var/apps/lawpal/media/'
+STATIC_ROOT = '/home/stard0g101/webapps/glynt_static/'
+MEDIA_ROOT = '/home/stard0g101/webapps/glynt_static/media/'
 
-ALLOWED_HOSTS = ['1.web.srv.lawpal.com', '2.web.srv.lawpal.com']
-ALLOWED_HOSTS += ['preview.lawpal.com', 'www.lawpal.com', 'lawpal.com']
 
 FACEBOOK_API_KEY = '343632075713954'
 FACEBOOK_SECRET_KEY = '4f9854b8fe8f5ccf27ac1ffcf5051b79'
@@ -68,14 +67,11 @@ SERVER_EMAIL = 'glynt@dev.weareml.com'
 
 HELLOSIGN_AUTH = ("sendrossemail@gmail.com", "zanshin77")
 
+ALLOWED_HOSTS = ['dev.lawpal.com']
 
 RAVEN_CONFIG = {
     'dsn': 'https://b5a6429d03e2418cbe71cd5a4c9faca6:ddabb51af47546d1ac0e63cb453797ba@app.getsentry.com/6287',
 }
-
-# Heroku - CloudAMQP
-BROKER_URL = 'amqp://ixrhhdcu:PZffJcRS4NmILD65ss4s-aza7fKtTgYc@tiger.cloudamqp.com/ixrhhdcu'
-BROKER_POOL_LIMIT = 1
 
 SPLUNKSTORM_ENDPOINT = 'logs2.splunkstorm.com'
 SPLUNKSTORM_PORT = 20824
@@ -83,7 +79,7 @@ SPLUNKSTORM_PORT = 20824
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211'
+        'LOCATION': 'unix:/home/stard0g101/memcached.sock'
     },
     'fallback': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
@@ -102,11 +98,6 @@ LOGGING = {
             'format': '%(levelname)s %(message)s'
         },
     },
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
     'handlers': {
         'null': {
             'level': 'DEBUG',
@@ -124,7 +115,6 @@ LOGGING = {
         },
         'mail_admins': {
             'level': 'ERROR',
-            'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
         }
     },

@@ -1,7 +1,3 @@
-{% load glynt_helpers %}{% block subject %}Invitations from {{ from_name }}{% endblock %}
-
-{% block plain %}{% endblock %}
-
 Thanks,
 
 The LawPal Team

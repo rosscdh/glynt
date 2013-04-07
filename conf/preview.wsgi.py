@@ -17,8 +17,8 @@ import os, sys, site
 
 # Tell wsgi to add the Python site-packages to its path. 
 site.addsitedir('/var/apps/lib/python2.7/site-packages')
-site.addsitedir('/var/apps/lawpal/glynt')
-site.addsitedir('/var/apps/lawpal/glynt/glynt')
+site.addsitedir('/var/apps/preview-lawpal/glynt')
+site.addsitedir('/var/apps/preview-lawpal/glynt/glynt')
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'glynt.settings'
 
@@ -26,7 +26,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'glynt.settings'
 # execfile(activate_this, dict(__file__=activate_this))
 
 # Calculate the path based on the location of the WSGI script
-project = '/var/apps/lawpal/glynt/glynt/'
+project = '/var/apps/preview-lawpal/glynt/glynt/'
 workspace = os.path.dirname(project)
 sys.path.append(workspace)
 

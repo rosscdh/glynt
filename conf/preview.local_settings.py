@@ -29,8 +29,8 @@ USE_ETAGS = True
 MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
 
-STATIC_ROOT = '/var/apps/lawpal/static/'
-MEDIA_ROOT = '/var/apps/lawpal/media/'
+STATIC_ROOT = '/var/apps/preview-lawpal/static/'
+MEDIA_ROOT = '/var/apps/preview-lawpal/media/'
 
 ALLOWED_HOSTS = ['1.web.srv.lawpal.com', '2.web.srv.lawpal.com']
 ALLOWED_HOSTS += ['preview.lawpal.com', 'www.lawpal.com', 'lawpal.com']

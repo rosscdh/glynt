@@ -1,8 +1,16 @@
 [
     {
         "fields": {
-            "domain": "http://uk.lawpal.com", 
+            "domain": "http://www.lawpal.com", 
             "name": "Prod Lawpal.com"
+        }, 
+        "model": "sites.site", 
+        "pk": 4
+    },
+    {
+        "fields": {
+            "domain": "http://preview.lawpal.com", 
+            "name": "Preview Prod Lawpal.com"
         }, 
         "model": "sites.site", 
         "pk": 3

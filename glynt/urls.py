@@ -16,6 +16,8 @@ urlpatterns = patterns('',
 	url(r'^api/', include(v1_internal_api.urls, namespace='api')),
     # image upload and crop
     url(r'^ajax-upload/', include('cicu.urls')),
+    # Invite to join
+    url(r'^invite/', include('public.invite.urls', namespace='invite')),
 	# Accounts & Registration
     url(r'', include('social_auth.urls')),
 	url(r'^accounts/', include('userena.urls')),

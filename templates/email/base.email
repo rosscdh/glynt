@@ -1,0 +1,5 @@
+{% load glynt_helpers %}{% block subject %}{% endblock %}
+
+{% block plain %}
+{% include 'email/footer.email' %}
+{% endblock %}

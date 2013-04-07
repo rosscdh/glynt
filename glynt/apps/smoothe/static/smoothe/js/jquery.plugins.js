@@ -315,7 +315,8 @@
           self.listen();
           self.$element.trigger('change', {'initial': true});
           self.$element.dirty = false;
-          if(self.context['inherit_from'] !== undefined) {
+          if(self.context['type'] === 'doc_var' &&
+              self.context['inherit_from'] !== undefined) {
               var inherit_element = $('span.doc_var[data-doc_var=' +
               self.context['inherit_from'] + ']').first();
 
