@@ -1,12 +1,4 @@
 # Drivers
-Django
-django-simple-menu
-
-# image upload and crop
--e git+https://github.com/rosscdh/clean-image-crop-uploader.git@rc_fixes#egg=clean-image-crop-uploader
-
-#google-api-python-client # coming soon
-
 python-memcached
 #psycopg2 # required for production postgres db
 
@@ -23,7 +15,6 @@ django-cities-light
 # model charts - will need to have brew graphiz installed
 # pygraphviz
 
-Werkzeug
 django-extensions
 django-templated-email
 django-storages
