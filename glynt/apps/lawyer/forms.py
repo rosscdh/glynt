@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core import exceptions
 from django.utils import simplejson as json
+from django.core.urlresolvers import reverse
 
 from bootstrap.forms import BootstrapMixin
 
@@ -66,7 +67,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     volume_seed_financing = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
     volume_series_a = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
 
-    agree_tandc = forms.BooleanField(widget=forms.CheckboxInput)
+    agree_tandc = forms.BooleanField(label='', widget=forms.CheckboxInput)
 
     def __init__(self, *args, **kwargs):
         """ get request object and user """
