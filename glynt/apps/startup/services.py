@@ -20,6 +20,7 @@ class EnsureStartupService(object):
         self.data = kwargs
 
     def process(self):
+        logger.info("Creating startup %s", self.startup_name)
         self.startup, is_new = Startup.objects.get_or_create(name=self.startup_name)
 
         if self.slug or is_new:
@@ -41,4 +42,5 @@ class EnsureStartupService(object):
         if self.data:
             self.startup.data = self.data
 
+        logger.info("Saving startup %s", self.startup_name)
         self.startup.save()

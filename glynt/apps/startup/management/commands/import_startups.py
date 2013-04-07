@@ -61,7 +61,7 @@ class Command(BaseCommand):
         following tag:
             Location: Earth: North America: United States (1688)
         """
-        startups = self.get_angellist_startups_for_tag(1688, limit=10)
+        startups = self.get_angellist_startups_for_tag(1688, limit=1000)
         return startups
 
     def get_angellist_startups_for_tag(self, tag_id, limit=None):
@@ -127,6 +127,7 @@ class Command(BaseCommand):
         caption = []
         for p in paragraphs:
             text = p.text_content().strip()
+            text = text.replace(u'\xc2\xa0', u' ')  # fix some stupid &nbsp; encoding
             if text:
                 caption.append(text)
         caption = " ".join(caption)
