@@ -51,6 +51,7 @@ class LawyerProfileSetupView(FormView):
             'summary': lawyer.summary,
             'bio': lawyer.bio,
             'if_i_wasnt_a_lawyer': lawyer.data.get('if_i_wasnt_a_lawyer', None),
+            'startups_advised': lawyer.data.get('startups_advised', None),
 
             'photo': lawyer.photo,
 
