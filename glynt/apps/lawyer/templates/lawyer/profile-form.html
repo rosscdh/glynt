@@ -179,7 +179,7 @@
 						<br />
 						<label class="checkbox">
 							{{ form.agree_tandc|as_crispy_field }}
-		                	I agree to the LawPal <a href="{% url 'public:terms' %}">Terms and Conditions</a>
+		                	<span id="i_agree_html">I agree to the LawPal <a href="{% url 'public:terms' %}">Terms and Conditions</a></span>
 		              	</label>
 						<br />
 						<button id="lawyer-profile" type="submit" class="btn btn-primary btn-large">Update Profile</button>
@@ -248,6 +248,10 @@ $(document).ready(function(){
 			return false;
 		}
 	});
+
+
+	$('span#i_agree_html').hide()
+	$('label[for=id_agree_tandc]').append($('span#i_agree_html').html())
 
 	$('input[title]').tooltip({trigger: 'focus', placement: 'top'});
 
