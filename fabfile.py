@@ -80,6 +80,8 @@ def virtualenv(cmd):
     # activate the virtualenv, run scripts as app user
     sudo("source /var/apps/.bashrc && %s" % cmd, user=env.application_user)
 
+def cli(cmd, as_who='user'):
+    sudo(cmd) if as_who == 'sudo' else run(cmd)
 
 def get_sha1():
   cd(env.local_project_path)
