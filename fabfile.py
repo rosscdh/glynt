@@ -12,7 +12,7 @@ debug = True
 env.SHA1_FILENAME = None
 
 env.timestamp = time.time()
-
+env.is_predeploy = False
 
 @task
 def production():
@@ -146,6 +146,17 @@ def clean_zip():
     if files.exists('%s%s' % (env.deploy_archive_path, file_name)):
         sudo('rm %s%s' % (env.deploy_archive_path, file_name,))
 
+@task
+def relink():
+    version_path = '%sversions' % env.remote_project_path
+    full_version_path = '%s/%s' % (version_path, env.SHA1_FILENAME)
+    project_path = '%s%s' % (env.remote_project_path, env.project,)
+
+    if not env.is_predeploy:
+        if files.exists(project_path, use_sudo=True):
+            virtualenv('unlink %s' % project_path)
+        virtualenv('ln -s %s/%s %s' % (version_path, env.SHA1_FILENAME, project_path,))
+
 
 def do_deploy():
     if env.SHA1_FILENAME is None:
@@ -153,7 +164,6 @@ def do_deploy():
 
     version_path = '%sversions' % env.remote_project_path
     full_version_path = '%s/%s' % (version_path, env.SHA1_FILENAME)
-
     project_path = '%s%s' % (env.remote_project_path, env.project,)
 
     if env.environment == 'production':
@@ -165,14 +175,11 @@ def do_deploy():
 
 
     # extract project zip file:into a staging area and link it in
-    if not files.exists(full_version_path):
+    if not files.exists('%s/manage.py'%full_version_path):
         with cd('%s' % version_path):
             virtualenv('unzip %s%s.zip -d %s' % (env.deploy_archive_path, env.SHA1_FILENAME, version_path,))
 
-    if not env.is_predeploy:
-        if files.exists(project_path, use_sudo=True):
-            virtualenv('unlink %s' % project_path)
-        virtualenv('ln -s %s/%s %s' % (version_path, env.SHA1_FILENAME, project_path,))
+    execute(relink)
 
     if not env.is_predeploy:
         # copy the live local_settings
