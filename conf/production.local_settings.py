@@ -4,7 +4,7 @@ from settings import *
 
 PROJECT_ENVIRONMENT = 'prod'
 
-SITE_ID = 3
+SITE_ID = 4
 
 DEBUG = False
 COMPRESS_ENABLED = False
