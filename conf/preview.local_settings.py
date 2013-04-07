@@ -32,7 +32,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = '/var/apps/preview-lawpal/static/'
 MEDIA_ROOT = '/var/apps/preview-lawpal/media/'
 
-ALLOWED_HOSTS = ['preview.lawpal.com', 'www.lawpal.com', '.lawpal.com']
+ALLOWED_HOSTS = ['*']
 
 FACEBOOK_API_KEY = '343632075713954'
 FACEBOOK_SECRET_KEY = '4f9854b8fe8f5ccf27ac1ffcf5051b79'
