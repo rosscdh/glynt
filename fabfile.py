@@ -32,7 +32,7 @@ def production():
 
     env.start_service = 'supervisorctl start uwsgi'
     env.stop_service = 'supervisorctl stop uwsgi'
-    #env.stop_service = "kill -HUP `cat /tmp/lawpal.pid`"
+    env.light_restart = "kill -HUP `cat /tmp/lawpal.pid`"
 
 @task
 def preview():
@@ -52,7 +52,7 @@ def preview():
 
     env.start_service = 'supervisorctl start uwsgi'
     env.stop_service = 'supervisorctl stop uwsgi'
-    #env.stop_service = "kill -HUP `cat /tmp/lawpal.pid`"
+    env.light_restart = "kill -HUP `cat /tmp/lawpal.pid`"
 
 @task
 def staging():
@@ -72,7 +72,7 @@ def staging():
 
     env.start_service = '%sapache2/bin/start' % env.remote_project_path
     env.stop_service = '%sapache2/bin/stop' % env.remote_project_path
-
+    env.light_restart = None
 
 def virtualenv(cmd):
   # change to base dir
@@ -95,6 +95,10 @@ def prepare_deploy():
 @task
 def supervisord_restart():
     sudo('supervisorctl restart uwsgi')
+
+@task
+def restart_lite():
+    sudo(env.light_restart)
 
 @task
 def chores():
