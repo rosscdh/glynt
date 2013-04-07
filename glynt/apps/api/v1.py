@@ -26,7 +26,7 @@ class BaseApiModelResource(ModelResource):
     """
     class Meta:
         serializer = Serializer(formats=available_formats)
-        cache = SimpleCache(timeout=30)
+        cache = SimpleCache(timeout=300)
         authentication = SessionAuthentication()
 
 
@@ -35,7 +35,7 @@ class LocationSimpleResource(BaseApiModelResource):
     state_name = fields.CharField(attribute='region__geoname_code', null=True)
 
     class Meta(BaseApiModelResource.Meta):
-        queryset = City.objects.all()
+        queryset = City.objects.prefetch_related('region').all()
         authentication = Authentication()
         list_allowed_methods = ['get']
         resource_name = 'location'

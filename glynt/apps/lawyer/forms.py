@@ -35,15 +35,15 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     last_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'Sonsini'}))
     email = forms.EmailField(help_text="Your Email", widget=forms.TextInput(attrs={'placeholder':'john@lawpal.com', 'data-type':'email'}))
 
-    firm_name = forms.CharField(widget=forms.TextInput(attrs={'class':'typeahead','autocomplete':'off','data-provide':'ajax', 'data-items':4, 'data-source': 'firms'}))
+    firm_name = forms.CharField(widget=forms.TextInput(attrs={'class':'typeahead','autocomplete':'off','data-provide':'ajax', 'minLength':'2', 'data-items':4, 'data-source': 'firms'}))
 
     phone = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'+44 207 7778 2020', 'title':'Shows on your profile. Include country code.'}))
 
     position = forms.ChoiceField(choices=Lawyer.LAWYER_ROLES.get_choices(), label="Position", help_text="What is your Position in your Firm")
     years_practiced = forms.IntegerField(label="Years Practicing", initial="3", widget=forms.TextInput(attrs={'class':'input-mini'}))
 
-    practice_location_1 = forms.CharField(label="Primary Location", widget=forms.TextInput(attrs={'class':'input-large','placeholder':'San Francisco, CA','title':'The primary city you operate from','class':'typeahead','autocomplete':'off','data-provide':'ajax', 'data-items':4, 'data-source':'locations', 'data-filter':'name__icontains'}))
-    practice_location_2 = forms.CharField(required=False, label="Secondary Location", widget=forms.TextInput(attrs={'class':'input-large','placeholder':'London, UK','title':'Optional. The secondary city you operate from.','class':'typeahead','autocomplete':'off','data-provide':'ajax', 'data-items':4, 'data-source':'locations', 'data-filter':'name__icontains'}))
+    practice_location_1 = forms.CharField(label="Primary Location", widget=forms.TextInput(attrs={'class':'input-large','placeholder':'San Francisco, CA','title':'The primary city you operate from','class':'typeahead','autocomplete':'off','data-provide':'ajax', 'minLength':'3', 'data-items':4, 'data-source':'locations', 'data-filter':'name__istartswith'}))
+    practice_location_2 = forms.CharField(required=False, label="Secondary Location", widget=forms.TextInput(attrs={'class':'input-large','placeholder':'London, UK','title':'Optional. The secondary city you operate from.','class':'typeahead','autocomplete':'off','data-provide':'ajax', 'minLength':'3', 'data-items':4, 'data-source':'locations', 'data-filter':'name__istartswith'}))
 
     summary = forms.CharField(label="Short description", widget=forms.TextInput(attrs={'class':'input-xxlarge','placeholder':'e.g. Partner at WDJ advising technology companies in Europe','title':'Keep it short, and make it personal.'}))
     bio = forms.CharField(required=False, widget=forms.Textarea(attrs={'class':'input-xxlarge', 'data-trigger':'keyup', 'data-rangelength':'[10,250]','placeholder':'A bit more about you.','title':'A bit longer, but still make it personal.'}))
