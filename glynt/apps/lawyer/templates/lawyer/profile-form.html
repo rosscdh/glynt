@@ -436,11 +436,10 @@ $(document).ready(function(){
 		startup = startup.compact()
 
 		cookie_data.remove(startup)
-		console.log(cookie_data)
-		console.log(startup)
+
 		var cookie_string = JSON.stringify(cookie_data);
 		$.cookie(cookie_name, cookie_string);
-		console.log(cookie_string)
+
 		$('#id_startups_advised').val(cookie_string);
 	}
 
