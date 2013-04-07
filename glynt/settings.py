@@ -161,6 +161,8 @@ PROJECT_APPS = (
 
     # The Api
     'glynt.apps.api',
+    # The Startups
+    'glynt.apps.startup',
     # The Legal Firms
     'glynt.apps.firm',
     # The Lawyers
@@ -342,7 +344,7 @@ LOGGING = {
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
         },
-        'console':{
+        'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
         }
@@ -363,6 +365,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
+        'lawpal.commands': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        }
     }
 }
 
