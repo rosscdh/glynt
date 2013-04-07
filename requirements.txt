@@ -7,8 +7,6 @@ django-simple-menu
 
 #google-api-python-client # coming soon
 
-pytidylib
-
 python-memcached
 #psycopg2 # required for production postgres db
 
