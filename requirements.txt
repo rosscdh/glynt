@@ -20,6 +20,7 @@ django-templated-email
 django-storages
 django-tastypie
 django-jsonfield
+django-crispy-forms
 south
 -e git+https://github.com/django/django-localflavor-us#egg=django-localflavor-us
 -e git+https://github.com/jezdez/django_compressor.git#egg=django_compressor
