@@ -72,6 +72,9 @@ RAVEN_CONFIG = {
     'dsn': 'https://b5a6429d03e2418cbe71cd5a4c9faca6:ddabb51af47546d1ac0e63cb453797ba@app.getsentry.com/6287',
 }
 
+# Heroku - CloudAMQP
+BROKER_URL = 'amqp://ixrhhdcu:PZffJcRS4NmILD65ss4s-aza7fKtTgYc@tiger.cloudamqp.com/ixrhhdcu'
+
 SPLUNKSTORM_ENDPOINT = 'logs2.splunkstorm.com'
 SPLUNKSTORM_PORT = 20824
 
