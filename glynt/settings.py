@@ -162,7 +162,7 @@ PROJECT_APPS = (
     # The Api
     'glynt.apps.api',
     # The Startups
-    'glynt.apps.startups',
+    'glynt.apps.startup',
     # The Legal Firms
     'glynt.apps.firm',
     # The Lawyers
