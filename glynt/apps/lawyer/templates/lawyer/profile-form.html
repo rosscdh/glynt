@@ -397,6 +397,8 @@ $(document).ready(function(){
 		var force = force || false
 		var cookie_name = 'startup_list';
 		var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
+		startup = startup.compact()
+
 		if (force === false && cookie_data.indexOf(startup) >= 0) {
 			// is already present
 			return false
@@ -431,9 +433,15 @@ $(document).ready(function(){
 	function remove_startup(startup){
 		var cookie_name = 'startup_list';
 		var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
+		startup = startup.compact()
 
 		cookie_data.remove(startup)
-		$.cookie(cookie_name, JSON.stringify(cookie_data));
+		console.log(cookie_data)
+		console.log(startup)
+		var cookie_string = JSON.stringify(cookie_data);
+		$.cookie(cookie_name, cookie_string);
+		console.log(cookie_string)
+		$('#id_startups_advised').val(cookie_string);
 	}
 
 

@@ -20,15 +20,6 @@ class EnsureLawyerService(object):
         self.role = kwargs.pop('position', None)
         self.data = kwargs
 
-    # def role_id(self, position):
-    #     """ Return the role_id that matches the user input Role """
-    #     if position is not None:
-    #         position = position.lower().strip()
-    #         role_id = next((role_id for role_id,role in Lawyer.LAWYER_ROLES.get_choices() if role.lower() == position), [Lawyer.LAWYER_ROLES.unknown])
-    #     else:
-    #         role_id = Lawyer.LAWYER_ROLES.unknown
-    #     return role_id
-
     def update_user(self):
         self.title = self.data.get('title', None)
 
@@ -65,6 +56,9 @@ class EnsureLawyerService(object):
                 photo_file = os.path.basename(photo.file.path)# get base name
                 self.lawyer.photo.save(photo_file, photo.file)
 
+
+        if self.data.get('startups_advised', None) is not None:
+            self.lawyer.data['startups_advised'] = json.loads(self.data.get('startups_advised'))
 
         if self.data.get('summary', None) is not None:
             self.lawyer.summary = self.data.get('summary')
