@@ -30,6 +30,11 @@
 1. ```pip install --upgrade pip``` - ensure latest version
 2. ```pip install -r requirements.txt``` : install update the required libraries (append --upgrade if you are not sure)
 
+## Cities
+
+Load all the city data
+
+```manage.py cities_light --force-all```
 
 ## Creating Fixtures
 

@@ -153,12 +153,16 @@ DJANGO_APPS = (
 PROJECT_APPS = (
     # Public and Theme
     'public', # preferred
-    'glynt.apps.default', # depreciating
+    # The inviter app
+    'public.invite',
+    # Older public site
+    'glynt.apps.default', # depreciating @TODO end this
+
 
     # The Api
     'glynt.apps.api',
     # The Startups
-    'glynt.apps.startups',
+    'glynt.apps.startup',
     # The Legal Firms
     'glynt.apps.firm',
     # The Lawyers
@@ -376,11 +380,13 @@ NO_SIG_IMAGE = os.path.join(STATIC_ROOT, 'signature/no_sig.png'),
 TEMPLATED_EMAIL_BACKEND = 'templated_email.backends.vanilla_django.TemplateBackend'
 TEMPLATED_EMAIL_TEMPLATE_DIR = 'email/'
 TEMPLATED_EMAIL_FILE_EXTENSION = 'email'
-TEMPLATED_EMAIL_DJANGO_SUBJECTS = {
-    'invite_to_sign': 'You have been invited to sign',
-}
+# TEMPLATED_EMAIL_DJANGO_SUBJECTS = {
+#     'invite_to_sign': 'You have been invited to sign',
+#     'lawyer': 'Bugger',
+# }
 
 BROKER_URL = 'amqp://guest:guest@localhost:5672/'
+BROKER_POOL_LIMIT = 1
 
 HELLOSIGN_AUTH = ("", "")
 
@@ -389,12 +395,6 @@ DOCRAPTOR_KEY = "vIvrCmZtnQTC4p6V0k"
 LAWPAL_PRIVATE_BETA = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'local.weareml.com:8000']
-
-# RQ_QUEUES = {
-#     'default': {
-#         'HOST': '127.0.0.1',
-#     }
-# }
 
 
 # Neat trick http://www.robgolding.com/blog/2010/05/03/extending-settings-variables-with-local_settings-py-in-django/

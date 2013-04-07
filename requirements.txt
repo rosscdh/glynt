@@ -10,7 +10,11 @@ newrelic
 Django
 django-simple-menu
 django-cities-light
-django-inviter
+# django-jsonview # not required
+
+# model charts - will need to have brew graphiz installed
+# pygraphviz
+
 django-extensions
 django-templated-email
 django-storages
@@ -37,6 +41,7 @@ Markdown
 pyyaml
 pytidylib
 lxml
+BeautifulSoup
 cssselect
 -e git+https://github.com/rosscdh/pybars.git#egg=pybars
 -e git+https://github.com/rosscdh/django-templatetag-handlebars.git#egg=django-templatetag-handlebars

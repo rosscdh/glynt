@@ -9,6 +9,7 @@ from tastypie.authentication import Authentication, SessionAuthentication
 
 from cities_light.models import Country
 from glynt.apps.firm.models import Firm, Office
+from glynt.apps.startup.models import Startup
 from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
 from glynt.apps.sign.models import DocumentSignature
 
@@ -79,6 +80,27 @@ class OfficeSimpleResource(BaseApiModelResource):
         bundle.data.update({'name': name})
         return bundle
 
+
+class StartupSimpleResource(BaseApiModelResource):
+    name = fields.CharField(attribute='name', null=True)
+    website = fields.CharField(attribute='website', null=True)
+
+    class Meta(BaseApiModelResource.Meta):
+        queryset = Startup.objects.all()
+        authentication = Authentication()
+        list_allowed_methods = ['get']
+        resource_name = 'startup'
+        includes = ['pk','name', 'website']
+
+    def dehydrate(self, bundle):
+        name = bundle.data.get('name', None)
+        website = bundle.data.get('website', None)
+        bundle.data.pop('name')
+        bundle.data.pop('website')
+        bundle.data.update({'name': '%s, %s' % (name, website,) })
+        return bundle
+
+
 class DocumentResource(BaseApiModelResource):
     class Meta(BaseApiModelResource.Meta):
         list_allowed_methods = ['get']
@@ -121,6 +143,7 @@ class SignatureResource(BaseApiModelResource):
 v1_internal_api.register(LocationSimpleResource())
 v1_internal_api.register(FirmSimpleResource())
 v1_internal_api.register(OfficeSimpleResource())
+v1_internal_api.register(StartupSimpleResource())
 
 v1_internal_api.register(DocumentResource())
 v1_internal_api.register(ClientCreatedDocumentResource())
