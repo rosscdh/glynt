@@ -24,7 +24,7 @@
 				Confirm your details
 			</h1>
 			<br>
-			<form action="{% url 'lawyer:setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
+			<form id="lawyer-profile-form" action="{% url 'lawyer:setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
 				{% for e in form.non_field_errors %}
 				<div class="alert-error">
 				  {{ e }}
@@ -174,18 +174,17 @@
 				<div class="row">
 					<div class="span8">
 						<div class="control-group">
-							<label class="control-label" for="inputEmail">{{ form.startups_advised.label }}</label>
+							<label class="control-label" for="inputEmail">{{ form.startups_advised_input.label }}</label>
 							<div class="controls">
-								{{ form.startups_advised.errors }}
-								{{ form.startups_advised }}
-  						    	<span class="help-block">{{ form.startups_advised.help_text }}</span>
+								{{ form.startups_advised_input.errors }}
+								{{ form.startups_advised_input }}&nbsp;<button id="add-startup-btn" type="button" class="btn btn-primary btn-small"><i class="icon-plus-sign"></i>&nbsp;Add</button>
+  						    	<span class="help-block">{{ form.startups_advised_input.help_text }}</span>
 							</div>
 						</div>
 						
 					</div>
 					<div class="span4">
-						<ol>
-							<li>{{ form.startups_advised.field.widget.attrs.title }}</li>
+						<ol id="startups-advised-list">
 						</oL>
 					</div>
 				</div>
@@ -296,6 +295,14 @@ function photoCrop(element, data) {
 
 $(document).ready(function(){
 
+	/** stop the form submitting on enter, must push de button */
+	$('form#lawyer-profile-form').bind("keypress", function(e) {
+		if (e.keyCode == 13) {
+			e.preventDefault();
+			return false;
+		}
+	});
+
 	$('input[title]').tooltip({trigger: 'focus', placement: 'top'});
 
 	/**
@@ -360,7 +367,71 @@ $(document).ready(function(){
 	});
 
 	/**
-	* handle typeahead requests
+	* handle startup additions
+	*/
+	$('button#add-startup-btn').on('click', function(event){
+		event.preventDefault();
+
+		var element = $('#id_startups_advised_input');
+		var startup = element.val();
+
+		add_startup(startup);
+
+		element.val('');
+		element.select();
+	});
+
+	function process_startups() {
+		var cookie_name = 'startup_list';
+		var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
+		var force = true;
+		$.each(cookie_data, function(i,startup){
+			add_startup(startup, force);
+		})
+	}
+	process_startups();
+
+	function add_startup(startup, force){
+		var force = force || false
+		var cookie_name = 'startup_list';
+		var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
+		if (force === false && cookie_data.indexOf(startup) >= 0) {
+			// is already present
+			return false
+		}else {
+			if (cookie_data.indexOf(startup) < 0) {
+				cookie_data.push(startup);
+			}
+
+			$.cookie(cookie_name, JSON.stringify(cookie_data));
+
+			var remove_but = $('<button/>', {
+				class: 'btn btn-warning btn-small remove-startup-btn',
+				html: '<i class="icon-minus-sign"></i>'
+			});
+			var li = $('<li/>', {
+				html: remove_but.prop('outerHTML') +'&nbsp;'+ startup
+			});
+
+			$('ol#startups-advised-list').append(li);
+		}
+	}
+	$('.remove-startup-btn').live('click', function(event){
+		event.preventDefault();
+		var element = $(this);
+		var startup = element.closest('li').text();
+		element.closest('li').remove();
+		remove_startup(startup)
+	})
+	function remove_startup(startup){
+		var cookie_name = 'startup_list';
+		var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
+
+		cookie_data.remove(startup)
+		$.cookie(cookie_name, JSON.stringify(cookie_data));
+	}
+	/**
+	* handle volume changes
 	*/
 	$.each($('.volume'), function(i, element) {
 
