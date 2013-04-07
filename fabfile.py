@@ -37,8 +37,8 @@ def production():
 @task
 def preview():
     env.project = 'glynt'
-    env.environment = 'production'
-    env.environment_class = 'preview'
+    env.environment = 'preview'
+    env.environment_class = 'production'
     env.local_project_path = os.path.dirname(os.path.realpath(__file__))
     env.remote_project_path = '/var/apps/preview-lawpal/'
     env.deploy_archive_path = '/var/apps/'
@@ -81,9 +81,13 @@ def virtualenv(cmd):
     sudo("source /var/apps/.bashrc && %s" % cmd, user=env.application_user)
 
 
+def get_sha1():
+  cd(env.local_project_path)
+  return local('git rev-parse --short --verify HEAD', capture=True)
+
 def git_export():
   cd(env.local_project_path)
-  env.SHA1_FILENAME = local('git rev-parse --short --verify HEAD', capture=True)
+  env.SHA1_FILENAME = get_sha1()
   if not files.exists('/tmp/%s.zip' % env.SHA1_FILENAME):
       local('git archive --format zip --output /tmp/%s.zip --prefix=%s/ master' % (env.SHA1_FILENAME, env.SHA1_FILENAME,), capture=False)
 
@@ -91,6 +95,11 @@ def git_export():
 def prepare_deploy():
     git_export()
 
+@task
+def clean_versions():
+    current_version = get_sha1()
+    versions_path = '%sversions' % env.remote_project_path
+    sudo('find %s/* ! -iname %s -print0 | xargs -0 rm -rf' % (versions_path ,current_version,))
 
 @task
 def supervisord_restart():
@@ -122,7 +131,7 @@ def deploy_archive_file():
         put('/tmp/%s' % file_name, env.deploy_archive_path, use_sudo=True)
 
 
-def conclude_deploy():
+def clean_zip():
     file_name = '%s.zip' % env.SHA1_FILENAME
     if files.exists('%s%s' % (env.deploy_archive_path, file_name)):
         sudo('rm %s%s' % (env.deploy_archive_path, file_name,))
@@ -210,5 +219,5 @@ def deploy(is_predeploy='False'):
 
     prepare_deploy()
     execute(do_deploy)
+    execute(clean_zip)
     execute(restart_service)
-    #execute(conclude_deploy)
