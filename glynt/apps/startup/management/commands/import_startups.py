@@ -7,7 +7,7 @@ import lxml.html
 from django.core.management.base import BaseCommand
 from django.core.files import File
 
-from glynt.apps.startups.services import EnsureStartupService
+from glynt.apps.startup.services import EnsureStartupService
 
 import logging
 logger = logging.getLogger('lawpal.commands.import_startups')
