@@ -4,7 +4,6 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from jsonfield import JSONField
-from glynt.apps.deal.models import Deal
 
 
 class Founder(models.Model):
@@ -40,8 +39,6 @@ class Startup(models.Model):
     twitter = models.CharField(max_length=64, blank=True, null=True)
     photo = models.ImageField(upload_to=_startup_upload_photo)
     founders = models.ManyToManyField(User, related_name='startups')
-    # todo: not sure about this:
-    deals = models.ManyToManyField(Deal, related_name='deals')
     data = JSONField(default={})
 
     def __unicode__(self):
