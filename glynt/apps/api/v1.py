@@ -7,7 +7,7 @@ from tastypie.serializers import Serializer
 from tastypie.cache import SimpleCache
 from tastypie.authentication import Authentication, SessionAuthentication
 
-from cities_light.models import Country
+from cities_light.models import City
 from glynt.apps.firm.models import Firm, Office
 from glynt.apps.startup.models import Startup
 from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
@@ -35,16 +35,13 @@ class LocationSimpleResource(BaseApiModelResource):
     state_name = fields.CharField(attribute='region__geoname_code', null=True)
 
     class Meta(BaseApiModelResource.Meta):
-        queryset = Country.objects.prefetch_related('region_set', 'city_set').get(name='United States').city_set.all() \
-                | Country.objects.prefetch_related('region_set', 'city_set').get(name='United Kingdom').city_set.all()
+        queryset = City.objects.all()
         authentication = Authentication()
         list_allowed_methods = ['get']
         resource_name = 'location'
         fields = ['name', 'state_name']
-        includes = ['name', 'region__geoname_code']
         filtering = {
             'name': ALL,
-            'state_name': ALL,
         }
         cache = SimpleCache()
 
