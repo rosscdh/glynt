@@ -179,6 +179,7 @@
 								{{ form.startups_advised_input.errors }}
 								{{ form.startups_advised_input }}&nbsp;<button id="add-startup-btn" type="button" class="btn btn-primary btn-small"><i class="icon-plus-sign"></i>&nbsp;Add</button>
   						    	<span class="help-block">{{ form.startups_advised_input.help_text }}</span>
+  						    	{{ form.startups_advised }}<!-- hidden -->
 							</div>
 						</div>
 						
@@ -366,6 +367,7 @@ $(document).ready(function(){
 		});
 	});
 
+
 	/**
 	* handle startup additions
 	*/
@@ -383,7 +385,7 @@ $(document).ready(function(){
 
 	function process_startups() {
 		var cookie_name = 'startup_list';
-		var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
+		var cookie_data = $.parseJSON($('#id_startups_advised').val()) || $.parseJSON($.cookie(cookie_name)) || [];
 		var force = true;
 		$.each(cookie_data, function(i,startup){
 			add_startup(startup, force);
@@ -403,7 +405,10 @@ $(document).ready(function(){
 				cookie_data.push(startup);
 			}
 
-			$.cookie(cookie_name, JSON.stringify(cookie_data));
+			cookie_string = JSON.stringify(cookie_data);
+			$.cookie(cookie_name, cookie_string);
+			// set the form value
+			$('#id_startups_advised').val(cookie_string);
 
 			var remove_but = $('<button/>', {
 				class: 'btn btn-warning btn-small remove-startup-btn',
@@ -430,6 +435,8 @@ $(document).ready(function(){
 		cookie_data.remove(startup)
 		$.cookie(cookie_name, JSON.stringify(cookie_data));
 	}
+
+
 	/**
 	* handle volume changes
 	*/
