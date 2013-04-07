@@ -29,8 +29,8 @@ USE_ETAGS = True
 MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
 
-STATIC_ROOT = '/var/app/lawpal/glynt-static/'
-MEDIA_ROOT = '/var/app/lawpal/glynt-media/'
+STATIC_ROOT = '/var/apps/lawpal/static/'
+MEDIA_ROOT = '/var/apps/lawpal/media/'
 
 
 FACEBOOK_API_KEY = '343632075713954'
