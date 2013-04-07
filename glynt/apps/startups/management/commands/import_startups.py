@@ -1,28 +1,33 @@
 # -*- coding: utf-8 -*-
 import time
 import re
-from optparse import make_option
-
 import requests
+import urllib
 import lxml.html
-
 from django.core.management.base import BaseCommand
+from django.core.files import File
+
+from glynt.apps.startups.services import EnsureStartupService
 
 
 class Command(BaseCommand):
-    """ Imports startups from 500 startups (http://500.co/startups) and angellist (http://angel.co)
-     """
-    #option_list = BaseCommand.option_list + (
-    #    make_option('--local_file',
-    #        action='store_true',
-    #        dest='local_file',
-    #        default='/Users/rossc/Downloads/LawyerDB-Firms.csv',
-    #        help='Path to the local csv file'),
-    #    )
-    #local_file = None
+    """ Import Startups
+    Imports startups from 500 startups (http://500.co/startups)
+    and angellist (http://angel.co)
+    """
 
     def handle(self, *args, **options):
-        pass
+        startup = self.fetch_single_500startup('http://500.co/startup-profiles/twilio/')
+        if 'photo_url' in startup:
+            startup['photo'] = self.fetch_image(startup['photo_url'])
+        service = EnsureStartupService(**startup)
+        service.process()
+
+    # common
+
+    def fetch_image(self, src):
+        filename, _ = urllib.urlretrieve(src)
+        return File(open(filename))
 
     # angellist
 
@@ -96,11 +101,15 @@ class Command(BaseCommand):
             text = p.text_content().strip()
             if text:
                 caption.append(text)
-        caption = "".join(caption)
+        caption = " ".join(caption)
 
+        twitter = None
         ul_links = sidebar.cssselect('ul.social-links a')
         social_links = []
         for a in ul_links:
-            social_links.append((a.get('class'), a.get('href')))
+            if a.get('class') == 'twitter':
+                twitter = a.get('href')
+            else:
+                social_links.append((a.get('class'), a.get('href')))
 
-        return dict(name=name, link=link, text=caption, logo=logo_src, social=social_links)
+        return dict(name=name, website=link, summary=caption, twitter=twitter, photo_url=logo_src, social=social_links)

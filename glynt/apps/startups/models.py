@@ -1,4 +1,5 @@
 # coding: utf-8
+import os
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -22,6 +23,11 @@ class Founder(models.Model):
         return self.user.username
 
 
+def _startup_upload_photo(instance, filename):
+    _, ext = os.path.splitext(filename)
+    return 'startup/%s%s' % (instance.slug, ext)
+
+
 class Startup(models.Model):
     """ The Startups
     Stores various information related to startups,
@@ -29,10 +35,10 @@ class Startup(models.Model):
     """
     name = models.CharField(max_length=128)
     slug = models.SlugField()
-    summary = models.TextField()
+    summary = models.TextField(blank=True, null=True)
     website = models.URLField(blank=True, null=True)
     twitter = models.CharField(max_length=64, blank=True, null=True)
-    photo = models.ImageField(upload_to='startup')
+    photo = models.ImageField(upload_to=_startup_upload_photo)
     founders = models.ManyToManyField(User, related_name='startups')
     # todo: not sure about this:
     deals = models.ManyToManyField(Deal, related_name='deals')
