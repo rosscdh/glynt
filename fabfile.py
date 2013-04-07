@@ -18,8 +18,29 @@ env.timestamp = time.time()
 def production():
     env.project = 'glynt'
     env.environment = 'production'
+    env.environment_class = 'production'
     env.local_project_path = os.path.dirname(os.path.realpath(__file__))
     env.remote_project_path = '/var/apps/lawpal/'
+    env.deploy_archive_path = '/var/apps/'
+
+    # change from the default user to 'vagrant'
+    env.user = 'ubuntu'
+    env.application_user = 'app'
+    # connect to the port-forwarded ssh
+    env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com']
+    env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
+
+    env.start_service = 'supervisorctl start uwsgi'
+    env.stop_service = 'supervisorctl stop uwsgi'
+    #env.stop_service = "kill -HUP `cat /tmp/lawpal.pid`"
+
+@task
+def preview():
+    env.project = 'glynt'
+    env.environment = 'production'
+    env.environment_class = 'preview'
+    env.local_project_path = os.path.dirname(os.path.realpath(__file__))
+    env.remote_project_path = '/var/apps/preview-lawpal/'
     env.deploy_archive_path = '/var/apps/'
 
     # change from the default user to 'vagrant'
@@ -88,8 +109,8 @@ def chores():
     put('conf/.bash_profile', '~/.bash_profile')
 
 
-def env_run():
-    return sudo if env.environment == 'production' else run
+def env_run(cmd):
+    return sudo(cmd) if env.environment == 'production' else run(cmd)
 
 def deploy_archive_file():
     file_name = '%s.zip' % env.SHA1_FILENAME
@@ -186,4 +207,4 @@ def deploy(is_predeploy='False'):
     prepare_deploy()
     execute(do_deploy)
     execute(restart_service)
-    execute(conclude_deploy)
+    #execute(conclude_deploy)
