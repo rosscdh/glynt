@@ -19,9 +19,9 @@ import logging
 logger = logging.getLogger('django.request')
 
 API_URLS = {
-    'firms': '/api/v1/firm/?format=json&limit=1000',
-    'locations': '/api/v1/location/?format=json&limit=1000',
-    'startups': '/api/v1/startup/?format=json&limit=1000',
+    'firms': '/api/v1/firm/?format=json&limit=5',
+    'locations': '/api/v1/location/?format=json&limit=5',
+    'startups': '/api/v1/startup/?format=json&limit=5',
 }
 
 
