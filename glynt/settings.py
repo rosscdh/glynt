@@ -379,6 +379,7 @@ TEMPLATED_EMAIL_FILE_EXTENSION = 'email'
 # }
 
 BROKER_URL = 'amqp://guest:guest@localhost:5672/'
+BROKER_POOL_LIMIT = 1
 
 HELLOSIGN_AUTH = ("", "")
 
