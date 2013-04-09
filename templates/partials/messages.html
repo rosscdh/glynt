@@ -1,12 +1,13 @@
 {% if messages %}
 <div class="container">
-<div id="messages" class="row {% if not messages %}hide{% endif %}">
-    {% if not messages %}<div class="close span1 pull-right">X</div>{% endif %}
-    <ul class="">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
-</div>
+	<div class="row">
+		<div class="alert {% if not messages %}hide{% endif %}">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+		    {% if not messages %}<div class="close span1 pull-right">X</div>{% endif %}
+		        {% for message in messages %}
+		        	{{ message }}<br />
+		        {% endfor %}
+		</div>
+	</div>
 </div>
 {% endif %}
