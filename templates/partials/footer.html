@@ -4,6 +4,16 @@
   <div class="container">
 	<div class="row copyright">
 		<div class="span5">
+			<ul class="unstyled">
+				<li><a href="{% url 'public:about' %}">About Us</a></li>
+				<li><a href="http://blog.lawpal.com/" target="_BLANK">LawPal Blog</a></li>
+				<li><a href="{% url 'public:terms' %}">Terms and Conditions</a></li>
+				<li><a href="{% url 'public:privacy' %}">Privacy Policy</a></li>
+				<li><a href="{% url 'public:disclaimer' %}">Disclaimer</a></li>
+				<li><a href="mailto:support@lawpal.com">Contact Us</a></li>
+			</ul>
+		</div>
+		<div class="span5">
 			<a href="http://facebook.com/lawpalhq" class="social fb">
 				<i class="i_facebook"></i>
 			</a>
@@ -15,7 +25,7 @@
 			</a> -->
 
 		</div>
-		<div class="span2 offset5 copy">
+		<div class="span2 copy">
 			<p>{% now "Y" %} - {{ PROJECT_NAME }} Inc</p>
 		</div>
 	</div>

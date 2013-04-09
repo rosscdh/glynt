@@ -1,18 +1,21 @@
 <div id="invite-container" class="span12">
     <form data-validate="parsley" data-send-type="ajax" action="{% url 'invite:send' %}" class="form-inline" method="POST">{% csrf_token %}
         {{ form.invite_type }}
-        <div class="control-group span8">
-            <button id="add-btn" type="button" class="btn btn-primary btn-small"><i class="icon-plus-sign"></i>&nbsp;Add</button>
-        </div>
-        <br/><span class="repeatable-head"></span>
-        <div id="invite-repeatable-group" class="control-group span8">
-            <div class="span3">{{ form.email }}</div>
-            <div class="span3">{{ form.name }}</div>
-        </div>
-        <br/>
-		<div class="span8">
-			<div class="control-group">
-				<button id="invite-btn" type="submit" class="btn btn-primary btn-large">Invite</button>
+		<div class="row">
+	        <div class="control-group span8">
+	            <button id="add-btn" type="button" class="btn btn-primary btn-small"><i class="icon-plus-sign"></i>&nbsp;Add</button>
+	        </div>
+	        <br/><span class="repeatable-head"></span>
+		
+	        <div id="invite-repeatable-group" class="control-group span8">
+	            <div class="span3">{{ form.email }}</div>
+	            <div class="span3">{{ form.name }}</div>
+	        </div>
+	        <br/>
+			<div class="span8">
+				<div class="control-group">
+					<button id="invite-btn" type="submit" class="btn btn-primary btn-large">Invite</button>
+				</div>
 			</div>
 		</div>
     </form>
