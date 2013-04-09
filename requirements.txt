@@ -19,7 +19,6 @@ django-extensions
 django-templated-email
 django-storages
 django-tastypie
-django-jsonfield
 django-crispy-forms
 south
 -e git+https://github.com/django/django-localflavor-us#egg=django-localflavor-us
@@ -29,6 +28,7 @@ south
 -e git+https://github.com/rosscdh/django-bootstrap.git#egg=bootstrap
 -e git+https://github.com/brack3t/django-braces.git#egg=django-braces
 -e git+https://github.com/lincolnloop/python-qrcode.git#egg=python-qrcode
+-e git+https://github.com/bradjasper/django-jsonfield#django-jsonfield
 
 # Auth and Users
 -e git+https://github.com/rosscdh/django-social-auth.git@rc_fixes#egg=django-social-auth
