@@ -5,15 +5,22 @@ body {
 	position: relative;
 	padding-top: 69px;
 	-webkit-font-smoothing: antialiased;
-	font-family:  "HelveticaNeue-Light", 'Lato', sans-serif !important;	
-	color: #767b7e;
+	font-family:  "HelveticaNeue", 'Lato', sans-serif !important;	
+	color: #5b5e60;
 }
-h1,h2, h3, h4 {
-	font-family:  "HelveticaNeue-Light", 'Lato', sans-serif !important;	
-	font-weight:normal;
+h1,h2 { 
+	font-family:  "HelveticaNeue-light", 'Lato', sans-serif !important;	
+	font-weight:300;
+}
+h3, h4 {
+ 	font-family:  "HelveticaNeue", 'Lato', sans-serif !important;	
+    font-weight: normal;
 }
 a {
 	color:#4d5456;
+}
+.alert {
+    margin-top:20px;
 }
 .scrolltop {
 	background-color: #F1F1F1;
@@ -88,9 +95,7 @@ div#messages ul {
 	background: linear-gradient(to bottom,  #58daea 0%,#53cbf1 37%,#3ac6df 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#58daea', endColorstr='#3ac6df',GradientType=0 ); /* IE6-8 */
 	padding:7px 0px;
-	
 }
-
 .navbar .nav {
 	top: 4px;
 	/*margin-right: 40px;*/
@@ -435,52 +440,10 @@ body.lawyer-welcome #hero h3 {
 #footer h3 {
 	margin-bottom: 25px;
 }
-#footer .blog_post {
-	/*width: 80%;*/
+#footer a {
+    color:#ddd;
 }
-#footer .blog_post .img-circle {
-	width: 120px;
-	height: 120px;
-	display: block;
-	margin: 0 auto;
-	border: 0px;
-}
-#footer .blog_post .title {
-	font-size: 17px;
-	font-weight: bold;
-	color: #fff;
-}
-#footer .blog_post .intro {
-	margin: 10px 0px;
-	font-size: 15px;
-}
-#footer .blog_post .date {
-	font-size: 13px;
-	color: #B7B9BD;
-}
-#footer .contact_us .field {
-	margin-bottom: 15px;
-}
-#footer .contact_us .field .label_field {
-	float: left;
-	width: 80px;
-}
-#footer .contact_us .field input[type="text"],
-#footer .contact_us .field textarea {
-	background-color: #1a1f26;
-	border: 1px solid #2f3743;
-	border-radius: 5px;
-	color: #fff;
-}
-#footer .contact_us .field textarea {
-	height: 65px;
-}
-#footer .contact_us .field select {
-	width: 205px;
-}
-#footer .contact_us button[type="submit"] {
-	margin-left: 220px;
-}
+
 #footer hr {
 	border-top: 1px solid black;
 	border-bottom: 1px solid #363B43;
