@@ -8,28 +8,28 @@
         <meta name="description" content="">
         <meta name="author" content="">
         {% if not request.DEBUG %}
-        <!-- <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'> -->
+        <!-- <link rel="dns-prefetch" href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'> -->
         {% endif %}
 
         {% compress css %}
-        <link href="{{ STATIC_URL }}bootstrap/css/bootstrap.css" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/theme/theme.css">
-        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/theme/animate.css">
+        <link rel="dns-prefetch" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css" rel="stylesheet">
+        <link rel="dns-prefetch" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/theme/theme.css">
+        <link rel="dns-prefetch" rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/theme/animate.css">
         <!-- <link href="{{ STATIC_URL }}css/ml.css" rel="stylesheet" charset="utf-8" /> -->
-        <link href="{{ STATIC_URL }}js/select2/select2.css" rel="stylesheet" charset="utf-8" />
-        <link href="{{ STATIC_URL }}css/errors.css" rel="stylesheet" charset="utf-8" />
-        <link href="{{ STATIC_URL }}css/jquery-ui-theme.css" rel="stylesheet" charset="utf-8" />
-        <link href="{{ STATIC_URL }}smoothe/fontawesome/css/font-awesome.css" rel="stylesheet" charset="utf-8" />
+        <link rel="dns-prefetch" href="{{ STATIC_URL }}js/select2/select2.css" rel="stylesheet" charset="utf-8" />
+        <link rel="dns-prefetch" href="{{ STATIC_URL }}css/errors.css" rel="stylesheet" charset="utf-8" />
+        <link rel="dns-prefetch" href="{{ STATIC_URL }}css/jquery-ui-theme.css" rel="stylesheet" charset="utf-8" />
+        <link rel="dns-prefetch" href="{{ STATIC_URL }}smoothe/fontawesome/css/font-awesome.css" rel="stylesheet" charset="utf-8" />
         <!--[if lt IE 9]>
         <link href="{{ STATIC_URL }}smoothe/fontawesome/css/font-awesome-ie7.css" rel="stylesheet" charset="utf-8" />
         <![endif]-->
         {% block extrahead %}{% endblock %}
-        <link href="{{ STATIC_URL }}css/jquery.signaturepad.css" rel="stylesheet" charset="utf-8" />
+        <link rel="dns-prefetch" href="{{ STATIC_URL }}css/jquery.signaturepad.css" rel="stylesheet" charset="utf-8" />
         {% block css %}{% endblock %}
         {% endcompress %}
 
         <!-- Le fav and touch icons -->
-        <link rel="shortcut icon" href="{{ STATIC_URL }}img/favicon.ico">
+        <link rel="dns-prefetch" rel="shortcut icon" href="{{ STATIC_URL }}img/favicon.ico">
 
         <link rel="apple-touch-icon" href="{{ STATIC_URL }}img/apple-touch-icon.png">
         <link rel="apple-touch-icon" sizes="72x72" href="{{ STATIC_URL }}img/apple-touch-icon-72x72.png">
