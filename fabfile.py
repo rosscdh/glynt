@@ -9,8 +9,8 @@ import time
 
 debug = True
 
+env.local_project_path = os.path.dirname(os.path.realpath(__file__))
 env.SHA1_FILENAME = None
-
 env.timestamp = time.time()
 env.is_predeploy = False
 
@@ -97,11 +97,10 @@ def get_sha1():
   cd(env.local_project_path)
   return local('git rev-parse --short --verify HEAD', capture=True)
 
-
+@task
 def git_export():
-  cd(env.local_project_path)
   env.SHA1_FILENAME = get_sha1()
-  if not files.exists('/tmp/%s.zip' % env.SHA1_FILENAME):
+  if not os.path.exists('/tmp/%s.zip' % env.SHA1_FILENAME):
       local('git archive --format zip --output /tmp/%s.zip --prefix=%s/ master' % (env.SHA1_FILENAME, env.SHA1_FILENAME,), capture=False)
 
 
