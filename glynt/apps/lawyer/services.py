@@ -53,6 +53,7 @@ class EnsureLawyerService(object):
             photo = self.data.pop('photo') # remove so it does not get serialized
 
             if self.lawyer.photo != photo: # only if its not the same image
+                logger.info('New photo for %s' % self.lawyer)
                 photo_file = os.path.basename(photo.file.path)# get base name
                 self.lawyer.photo.save(photo_file, photo.file)
 
@@ -98,5 +99,5 @@ class EnsureLawyerService(object):
             firms = self.user.firm_lawyers.all()
             if firms:
                 self.firm = firms[0]
-                logger.info('Firm %s is assocaited with lawyer %s ' % (self.lawyer.user.username, self.firm.name))
+                logger.info('Firm %s is associated with lawyer %s ' % (self.lawyer.user.username, self.firm.name))
             
