@@ -250,7 +250,7 @@ def requirements():
 
 @task
 def newrelic_note():
-    desc = prompt('Deployment Description:')
+    desc = prompt('LAWPAL - Deployment Description:')
     description = '[env:%s] %s' % (env.environment, desc)
     user = getpass.getuser()
 
@@ -276,6 +276,7 @@ def deploy(is_predeploy='False'):
 
     env.is_predeploy = True if is_predeploy.lower() in ['true','t','y','yes','1',1] else False
 
+    execute(newrelic_note)
     prepare_deploy()
     execute(do_deploy)
     execute(clean_pyc)
