@@ -9,6 +9,9 @@ from fabric.contrib import files
 
 import datetime
 import time
+import requests
+from termcolor import colored
+from pprint import pprint
 
 debug = True
 
@@ -27,6 +30,7 @@ def production():
     env.deploy_archive_path = '/var/apps/'
     env.virtualenv_path = '/var/apps/.lawpal-live-venv/'
 
+    env.newrelic_api_token = '343889f950aebe17556fcac919cd9ac9eda2baac9d0a0cd'
     env.newrelic_app_name = 'Lawpal'
     env.newrelic_application_id = '1858111'
 
@@ -51,6 +55,7 @@ def preview():
     env.deploy_archive_path = '/var/apps/'
     env.virtualenv_path = '/var/apps/.lawpal-preview-venv/'
 
+    env.newrelic_api_token = '343889f950aebe17556fcac919cd9ac9eda2baac9d0a0cd'
     env.newrelic_app_name = 'Lawpal'
     env.newrelic_application_id = '1858111'
 
@@ -75,6 +80,7 @@ def staging():
     env.deploy_archive_path = '~/'
     env.virtualenv_path = '/home/stard0g101/.virtualenvs/glynt/'
 
+    env.newrelic_api_token = 'a7b966785ff101a80eb02bf2a92a3fa6400b284139f964f'
     env.newrelic_app_name = 'Lawpal'
     env.newrelic_application_id = '2058809'
 
@@ -250,21 +256,34 @@ def requirements():
 
 @task
 def newrelic_note():
-    desc = prompt('LAWPAL - Deployment Description:')
-    description = '[env:%s] %s' % (env.environment, desc)
+    if not hasattr(env, 'deploy_desc'):
+        env.deploy_desc = prompt(colored('Deployment Note:', 'yellow'))
+
+    description = '[env:%s][%s@%s] %s' % (env.environment, env.user, env.host, env.deploy_desc)
     user = getpass.getuser()
 
-    headers = {'content-type': 'application/json'}
+    headers = {
+        'x-api-key': env.newrelic_api_token
+    }
 
     payload = {
-        'deployment[app_name]': env.newrelic_app_name,
+        #'deployment[app_name]': env.newrelic_app_name, # new relc wants either app_name or application_id not both
         'deployment[application_id]': env.newrelic_application_id,
         'deployment[description]': description,
         'deployment[user]': user,
         'deployment[revision]': get_sha1()
     }
-    print json.dumps(payload)
-    #requests.post('https://rpm.newrelic.com/deployments.xml', data=json.dumps(payload), headers=headers)
+    
+    colored('Sending Deployment Message to NewRelic', 'blue')
+
+    r = requests.post('https://rpm.newrelic.com/deployments.xml', data=payload, headers=headers)
+
+    #xml = r.text
+    is_ok = r.status_code in [200,201]
+    text = 'OK' if is_ok else 'Not OK'
+    color = 'green' if is_ok else 'red'
+
+    print colored('%s (%s)' % (text, r.status_code), color)
 
 
 @task
@@ -276,7 +295,6 @@ def deploy(is_predeploy='False'):
 
     env.is_predeploy = True if is_predeploy.lower() in ['true','t','y','yes','1',1] else False
 
-    execute(newrelic_note)
     prepare_deploy()
     execute(do_deploy)
     execute(clean_pyc)
