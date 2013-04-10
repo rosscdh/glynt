@@ -20,9 +20,9 @@ import logging
 logger = logging.getLogger('django.request')
 
 API_URLS = {
-    'firms': '/api/v1/firm/?format=json&limit=5',
-    'locations': '/api/v1/location/?format=json&limit=5',
-    'startups': '/api/v1/startup/?format=json&limit=5',
+    'firms': '/api/v1/firm/lite/?format=json&limit=15',
+    'locations': '/api/v1/location/lite/?format=json&limit=15',
+    'startups': '/api/v1/startup/lite/?format=json&limit=15',
 }
 
 
@@ -60,7 +60,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
             }))
     hidden_photo = forms.CharField(required=False, widget=forms.HiddenInput) # transports the id
 
-    startups_advised_input = forms.CharField(required=False, label="Startups Advised", help_text='This helps us match you with similar startups', widget=forms.TextInput(attrs={'placeholder':'e.g. Facebook http://facebook.com', 'class':'typeahead','autocomplete':'off','data-provide':'ajax', 'data-items':4, 'data-source': 'startups'}))
+    startups_advised_input = forms.CharField(required=False, label="Startups Advised", help_text='This helps us match you with similar startups', widget=forms.TextInput(attrs={'placeholder':'e.g. Facebook http://facebook.com', 'class':'typeahead','autocomplete':'off','data-provide':'ajax', 'data-items':4, 'data-source': 'startups', 'data-filter':'name__istartswith'}))
     startups_advised = forms.CharField(required=False, widget=forms.HiddenInput)
 
     volume_incorp_setup = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]

@@ -38,7 +38,7 @@ class LocationSimpleResource(BaseApiModelResource):
         queryset = City.objects.prefetch_related('region').all()
         authentication = Authentication()
         list_allowed_methods = ['get']
-        resource_name = 'location'
+        resource_name = 'location/lite'
         fields = ['name', 'state_name']
         filtering = {
             'name': ALL,
@@ -59,8 +59,12 @@ class FirmSimpleResource(BaseApiModelResource):
         queryset = Firm.objects.all()
         authentication = Authentication()
         list_allowed_methods = ['get']
-        resource_name = 'firm'
-        includes = ['pk','name']
+        resource_name = 'firm/lite'
+        fields = ['pk','name']
+        filtering = {
+            'name': ALL,
+        }
+        cache = SimpleCache()
 
 
 class OfficeSimpleResource(BaseApiModelResource):
@@ -68,8 +72,12 @@ class OfficeSimpleResource(BaseApiModelResource):
         queryset = Office.objects.all()
         authentication = Authentication()
         list_allowed_methods = ['get']
-        resource_name = 'office'
-        includes = ['pk','address']
+        resource_name = 'office/lite'
+        fields = ['pk','address']
+        filtering = {
+            'name': ALL,
+        }
+        cache = SimpleCache()
 
     def dehydrate(self, bundle):
         name = bundle.data.get('address', None)
@@ -79,15 +87,16 @@ class OfficeSimpleResource(BaseApiModelResource):
 
 
 class StartupSimpleResource(BaseApiModelResource):
-    name = fields.CharField(attribute='name', null=True)
-    website = fields.CharField(attribute='website', null=True)
-
     class Meta(BaseApiModelResource.Meta):
         queryset = Startup.objects.all()
         authentication = Authentication()
         list_allowed_methods = ['get']
-        resource_name = 'startup'
-        includes = ['pk','name', 'website']
+        resource_name = 'startup/lite'
+        fields = ['pk','name', 'website']
+        filtering = {
+            'name': ALL,
+        }
+        cache = SimpleCache()
 
     def dehydrate(self, bundle):
         name = bundle.data.get('name', None)
