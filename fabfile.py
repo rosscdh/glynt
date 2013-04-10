@@ -241,4 +241,5 @@ def deploy(is_predeploy='False'):
     execute(do_deploy)
     execute(clean_zip)
     execute(clean_pyc)
-    execute(restart_lite)
+    #execute(restart_lite)
+    execute(supervisord_restart)
