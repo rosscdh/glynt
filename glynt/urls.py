@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
+from django.views.generic.base import RedirectView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib import admin
 
@@ -39,6 +40,8 @@ urlpatterns = patterns('',
 	url(r'^export/', include('glynt.apps.export.urls', namespace='export')),
 	# The Document Signatures
 	url(r'^sign/doc/', include('glynt.apps.sign.urls', namespace='sign')),
+    # favicon
+    url(r'^favicon\.ico/$', RedirectView.as_view(url='%simg/favicon.ico' % settings.STATIC_URL)),
 	# The public site and theme
 	url(r'^', include('public.urls', namespace='public')),
 )
