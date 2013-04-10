@@ -1,5 +1,8 @@
 from __future__ import with_statement
 import os
+import json
+#import requests
+import getpass
 from fabric.api import *
 from fabric.contrib.console import confirm
 from fabric.contrib import files
@@ -24,6 +27,9 @@ def production():
     env.deploy_archive_path = '/var/apps/'
     env.virtualenv_path = '/var/apps/.lawpal-live-venv/'
 
+    env.newrelic_app_name = 'Lawpal'
+    env.newrelic_application_id = '1858111'
+
     # change from the default user to 'vagrant'
     env.user = 'ubuntu'
     env.application_user = 'app'
@@ -45,6 +51,9 @@ def preview():
     env.deploy_archive_path = '/var/apps/'
     env.virtualenv_path = '/var/apps/.lawpal-preview-venv/'
 
+    env.newrelic_app_name = 'Lawpal'
+    env.newrelic_application_id = '1858111'
+
     # change from the default user to 'vagrant'
     env.user = 'ubuntu'
     env.application_user = 'app'
@@ -65,6 +74,9 @@ def staging():
     env.remote_project_path = '/home/stard0g101/webapps/glynt/'
     env.deploy_archive_path = '~/'
     env.virtualenv_path = '/home/stard0g101/.virtualenvs/glynt/'
+
+    env.newrelic_app_name = 'Lawpal'
+    env.newrelic_application_id = '2058809'
 
     # change from the default user to 'vagrant'
     env.user = 'stard0g101'
@@ -235,6 +247,24 @@ def requirements():
     requirements_path = '%s/requirements.txt' % (project_path, )
 
     virtualenv('pip install -r %s' % requirements_path )
+
+@task
+def newrelic_note():
+    desc = prompt('Deployment Description:')
+    description = '[env:%s] %s' % (env.environment, desc)
+    user = getpass.getuser()
+
+    headers = {'content-type': 'application/json'}
+
+    payload = {
+        'deployment[app_name]': env.newrelic_app_name,
+        'deployment[application_id]': env.newrelic_application_id,
+        'deployment[description]': description,
+        'deployment[user]': user,
+        'deployment[revision]': get_sha1()
+    }
+    print json.dumps(payload)
+    #requests.post('https://rpm.newrelic.com/deployments.xml', data=json.dumps(payload), headers=headers)
 
 
 @task
