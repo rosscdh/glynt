@@ -156,8 +156,8 @@ def relink():
 
     if not env.is_predeploy:
         if files.exists('%s/%s' % (version_path, env.SHA1_FILENAME)): # check the sha1 dir exists
-            if files.exists(project_path): # unlink the glynt dir
-                virtualenv('unlink %s' % project_path)
+            #if files.exists(project_path, use_sudo=True): # unlink the glynt dir
+            virtualenv('unlink %s' % project_path)
             virtualenv('ln -s %s/%s %s' % (version_path, env.SHA1_FILENAME, project_path,)) # relink
 
 
