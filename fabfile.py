@@ -60,6 +60,7 @@ def preview():
 def staging():
     env.project = 'glynt'
     env.environment = 'staging'
+    env.environment_class = 'webfaction'
     env.local_project_path = os.path.dirname(os.path.realpath(__file__))
     env.remote_project_path = '/home/stard0g101/webapps/glynt/'
     env.deploy_archive_path = '~/'
@@ -80,13 +81,17 @@ def staging():
 
 def virtualenv(cmd):
   # change to base dir
-  with cd("/var/apps/lawpal"):
+  with cd(env.remote_project_path):
     # activate the virtualenv, run scripts as app user
-    sudo("source %sbin/activate && %s" % (env.virtualenv_path, cmd,), user=env.application_user)
+    if env.environment_class is 'webfaction':
+        # webfaction
+        run("source %sbin/activate && %s" % (env.virtualenv_path, cmd,))
+    else:
+        sudo("source %sbin/activate && %s" % (env.virtualenv_path, cmd,), user=env.application_user)
 
 
 def cli(cmd, as_who='user'):
-    sudo(cmd) if as_who == 'sudo' else run(cmd)
+    sudo(cmd) if as_who == 'sudo' and env.environment_class is not 'webfaction' else run(cmd)
 
 @task
 def clean_pyc():
@@ -115,7 +120,10 @@ def clean_versions():
 
 @task
 def supervisord_restart():
-    sudo('supervisorctl restart uwsgi')
+    if env.environment_class is 'webfaction':
+        execute(restart_service)
+    else:
+        sudo('supervisorctl restart uwsgi')
 
 
 @task
@@ -132,18 +140,19 @@ def chores():
 
 
 def env_run(cmd):
-    return sudo(cmd) if env.environment == 'production' else run(cmd)
+    return sudo(cmd) if env.environment_class is 'production' else run(cmd)
 
 def deploy_archive_file():
     file_name = '%s.zip' % env.SHA1_FILENAME
     if not files.exists('%s/%s' % (env.deploy_archive_path, file_name)):
-        put('/tmp/%s' % file_name, env.deploy_archive_path, use_sudo=True)
+        as_sudo = env.environment_class is 'production'
+        put('/tmp/%s' % file_name, env.deploy_archive_path, use_sudo=as_sudo)
 
 
 def clean_zip():
     file_name = '%s.zip' % env.SHA1_FILENAME
     if files.exists('%s%s' % (env.deploy_archive_path, file_name)):
-        sudo('rm %s%s' % (env.deploy_archive_path, file_name,))
+        env_run('rm %s%s' % (env.deploy_archive_path, file_name,))
 
 @task
 def relink():
