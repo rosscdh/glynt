@@ -34,6 +34,9 @@ MEDIA_ROOT = '/var/apps/lawpal/media/'
 
 ALLOWED_HOSTS = ['*']
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+
+
 FACEBOOK_API_KEY = '343632075713954'
 FACEBOOK_SECRET_KEY = '4f9854b8fe8f5ccf27ac1ffcf5051b79'
 

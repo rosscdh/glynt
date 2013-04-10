@@ -34,6 +34,9 @@ MEDIA_ROOT = '/var/apps/preview-lawpal/media/'
 
 ALLOWED_HOSTS = ['*']
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+
+
 FACEBOOK_API_KEY = '343632075713954'
 FACEBOOK_SECRET_KEY = '4f9854b8fe8f5ccf27ac1ffcf5051b79'
 
@@ -60,8 +63,8 @@ EMAIL_HOST_USER = 'lawpal'
 EMAIL_HOST_PASSWORD = '0113633alex'
 # EMAIL_PORT = 587
 # EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'glynt@dev.weareml.com'
-SERVER_EMAIL = 'glynt@dev.weareml.com'
+DEFAULT_FROM_EMAIL = 'founders@preview.lawpal.com'
+SERVER_EMAIL = 'glynt@preview.lawpal.com'
 
 HELLOSIGN_AUTH = ("sendrossemail@gmail.com", "zanshin77")
 
