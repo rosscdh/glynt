@@ -14,6 +14,7 @@ class Firm(models.Model):
     name = models.CharField(max_length=128, db_index=True)
     slug = models.SlugField()
     summary = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
     website = models.URLField()
     twitter = models.CharField(max_length=64, db_index=True)
     photo = models.ImageField(upload_to='firm')
