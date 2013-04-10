@@ -280,7 +280,7 @@ def newrelic_note():
 
     #xml = r.text
     is_ok = r.status_code in [200,201]
-    text = 'OK' if is_ok else 'Not OK'
+    text = 'DeploymentNote Recorded OK' if is_ok else 'DeploymentNote Recorded Not OK'
     color = 'green' if is_ok else 'red'
 
     print colored('%s (%s)' % (text, r.status_code), color)
@@ -295,6 +295,7 @@ def deploy(is_predeploy='False'):
 
     env.is_predeploy = True if is_predeploy.lower() in ['true','t','y','yes','1',1] else False
 
+    execute(newrelic_note)
     prepare_deploy()
     execute(do_deploy)
     execute(clean_pyc)
