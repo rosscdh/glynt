@@ -32,7 +32,7 @@ class Startup(models.Model):
     Stores various information related to startups,
     including relationships to founders (Users)
     """
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, db_index=True)
     slug = models.SlugField(max_length=255, db_index=True)
     summary = models.TextField(blank=True, null=True)
     website = models.URLField(blank=True, null=True)

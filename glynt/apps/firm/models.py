@@ -11,7 +11,7 @@ class Firm(models.Model):
     """ The Firms
     Stores sundry information about legal Firms
     """
-    name = models.CharField(max_length=128)
+    name = models.CharField(max_length=128, db_index=True)
     slug = models.SlugField()
     summary = models.CharField(max_length=255)
     website = models.URLField()
@@ -30,7 +30,7 @@ class Office(models.Model):
     Model provides Offices related to a Firm
     """
     firm = models.ForeignKey(Firm)
-    address = models.CharField(max_length=255)
+    address = models.CharField(max_length=255, db_index=True)
     country = models.CharField(max_length=64, db_index=True)
     photo = models.ImageField(upload_to='office')
     data = JSONField(default={})
