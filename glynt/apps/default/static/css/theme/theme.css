@@ -209,7 +209,13 @@ div#messages ul {
      padding-top:90px;
      color:white;
  }
+ /* 2.0 Lawyer Welcome */
 
+ .about-us p {
+	 font-size:16px;
+	 line-height:1.6em;
+	 margin-bottom:15px;
+ }
 
  /* 2.0 Lawyer Welcome */
 
