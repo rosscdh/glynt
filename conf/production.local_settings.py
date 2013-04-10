@@ -34,7 +34,8 @@ MEDIA_ROOT = '/var/apps/lawpal/media/'
 
 ALLOWED_HOSTS = ['*']
 
-SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+SESSION_CACHE_ALIAS = 'session_cache'
 
 
 FACEBOOK_API_KEY = '343632075713954'
@@ -84,6 +85,11 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': '127.0.0.1:11211'
+    },
+    'session_cache': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+        'TIMEOUT': 3600
     },
     'fallback': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
