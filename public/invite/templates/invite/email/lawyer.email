@@ -3,12 +3,14 @@
 {% block subject %}Invitations from {{ from_name }}{% endblock %}
 
 {% block plain %}
-Hi {{ to_name }},
+Dear {{ to_name }},
 
-{{ from_name }} has invited you to join them at lawpal.com.
+{{ from_name }} thinks you are are a great lawyer and wants people to know it.
 
-Lawpal is building a platform which will allow you to connect with hundreds of emerging technology companies. 
-Save yourself time and save your clients money by using the LawPal platform to manage your new and existing relationships.
+LawPal is preparing a beautiful, curated directory of outstanding lawyers currently advising startups throughout the world. 
+Please visit http://preview.lawpal.com, sign in and complete your profile. LawPal profiles are designed to show who you are - both as an attorney and as a person.  
+
+Lawpal is building a platform which will allow you to connect with hundreds of emerging technology companies and save yourself time and save your clients money by using the LawPal platform to manage your new and existing relationships.
 
 {% include 'email/footer.email' %}
 {% endblock %}
