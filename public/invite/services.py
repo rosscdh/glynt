@@ -19,7 +19,9 @@ class InviteToJoinService(object):
         logger.info('Invite request from User %d' % inviting_user.pk)
         self.invitee_obj = invitee_obj
 
-        self.from_email, self.from_name = inviting_user.email, inviting_user.get_full_name()
+        user_full_name = inviting_user.get_full_name() or inviting_user.username
+
+        self.from_email, self.from_name = inviting_user.email, user_full_name
         self.to_email, self.to_name = invitee_obj
 
         logger.info('Invite request from User (%s) %s -> %s to ' % (inviting_user.pk, self.from_email, self.to_email,))
