@@ -239,7 +239,7 @@ def deploy(is_predeploy='False'):
 
     prepare_deploy()
     execute(do_deploy)
-    execute(clean_zip)
     execute(clean_pyc)
     #execute(restart_lite)
     execute(supervisord_restart)
+    execute(clean_zip)
