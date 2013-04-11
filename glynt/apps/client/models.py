@@ -33,7 +33,7 @@ class UserSignup(UserenaSignup):
 
 class ClientProfile(UserenaBaseProfile):
     """ Base User Profile, where we store all the interesting information about users """
-    user = models.OneToOneField(User, unique=True, related_name='my_profile')
+    user = models.OneToOneField(User, unique=True, related_name='profile')
     profile_data = JSONField(blank=True, null=True)
     country = CountryField(default='US', null=True)
     state = models.CharField(max_length=64, null=True)
@@ -54,16 +54,18 @@ class ClientProfile(UserenaBaseProfile):
         # @TODO on save to thumbnail image; write a task that
         # processes remote urls and downloads them locally
         url = super(ClientProfile, self).get_mugshot_url()
-        validate = URLValidator(verify_exists=False)
+        validate = URLValidator()
         tmp_url = urllib2.unquote(url.replace(settings.MEDIA_URL,''))
         try:
             validate(tmp_url)
             # remove the static url from it
             url = tmp_url
         except ValidationError:
-            pass
-        return url
+            url = settings.DEFAULT_MUGSHOT_URL
+        return url if url not in [None,''] else settings.DEFAULT_MUGSHOT_URL
 
+# set the profile
+User.profile = property(lambda u: ClientProfile.objects.get_or_create(user=u)[0])
 
 #@receiver(connect)
 def create_client_profile(sender, dispatch_uid='client.create_client_profile', **kwargs):
