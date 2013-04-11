@@ -1,12 +1,11 @@
 from __future__ import with_statement
-import os
-import json
-#import requests
-import getpass
 from fabric.api import *
 from fabric.contrib.console import confirm
 from fabric.contrib import files
 
+import os
+import json
+import getpass
 import datetime
 import time
 import requests
@@ -19,6 +18,8 @@ env.local_project_path = os.path.dirname(os.path.realpath(__file__))
 env.SHA1_FILENAME = None
 env.timestamp = time.time()
 env.is_predeploy = False
+env.local_user = getpass.getuser()
+
 
 @task
 def production():
@@ -257,11 +258,11 @@ def requirements():
 @task
 def newrelic_note():
     if not hasattr(env, 'deploy_desc'):
-        env.deploy_desc = prompt(colored('Deployment Note:', 'yellow'))
+        env.deploy_desc = prompt(colored('Hi %s, Please provide a Deployment Note:' % env.local_user, 'yellow'))
 
+@task
+def newrelic_deploynote():
     description = '[env:%s][%s@%s] %s' % (env.environment, env.user, env.host, env.deploy_desc)
-    user = getpass.getuser()
-
     headers = {
         'x-api-key': env.newrelic_api_token
     }
@@ -270,7 +271,7 @@ def newrelic_note():
         #'deployment[app_name]': env.newrelic_app_name, # new relc wants either app_name or application_id not both
         'deployment[application_id]': env.newrelic_application_id,
         'deployment[description]': description,
-        'deployment[user]': user,
+        'deployment[user]': env.local_user,
         'deployment[revision]': get_sha1()
     }
     
@@ -278,9 +279,8 @@ def newrelic_note():
 
     r = requests.post('https://rpm.newrelic.com/deployments.xml', data=payload, headers=headers)
 
-    #xml = r.text
     is_ok = r.status_code in [200,201]
-    text = 'DeploymentNote Recorded OK' if is_ok else 'DeploymentNote Recorded Not OK'
+    text = 'DeploymentNote Recorded OK' if is_ok else 'DeploymentNote Recorded Not OK: %s' % r.text
     color = 'green' if is_ok else 'red'
 
     print colored('%s (%s)' % (text, r.status_code), color)
@@ -302,3 +302,4 @@ def deploy(is_predeploy='False'):
     #execute(restart_lite)
     execute(supervisord_restart)
     execute(clean_zip)
+    execute(newrelic_deploynote)
