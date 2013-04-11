@@ -56,6 +56,7 @@ class EnsureLawyerService(object):
                 logger.info('New photo for %s' % self.lawyer)
                 photo_file = os.path.basename(photo.file.path)# get base name
                 self.lawyer.photo.save(photo_file, photo.file)
+                self.lawyer.user.profile.mugshot.save(photo_file, photo.file)
 
 
         if self.data.get('startups_advised', None) is not None:
