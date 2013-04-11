@@ -11,15 +11,24 @@ COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = False
 TEMPLATE_DEBUG = DEBUG
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'd7c7vlhi6had88',
-        'USER': 'u1uq45tflfbqqo',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'lawpal_prelaunch',
+        'USER': 'postgres',
         'PASSWORD': 'p7vgff9h197gnres0kj13btoos4',
-        'HOST': 'ec2-54-225-205-183.compute-1.amazonaws.com',
+        'HOST': 'ec2-50-18-97-221.us-west-1.compute.amazonaws.com',
         'PORT': 5642
-    }
+    },
+    # 'heroku': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': 'd7c7vlhi6had88',
+    #     'USER': 'u1uq45tflfbqqo',
+    #     'PASSWORD': 'p7vgff9h197gnres0kj13btoos4',
+    #     'HOST': 'ec2-54-225-205-183.compute-1.amazonaws.com',
+    #     'PORT': 5642
+    # }
 }
 
 TIME_ZONE = 'Europe/London'
