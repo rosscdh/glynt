@@ -277,7 +277,7 @@ def newrelic_deploynote():
     
     colored('Sending Deployment Message to NewRelic', 'blue')
 
-    r = requests.post('https://rpm.newrelic.com/deployments.xml', data=payload, headers=headers)
+    r = requests.post('https://rpm.newrelic.com/deployments.xml', data=payload, headers=headers, verify=False)
 
     is_ok = r.status_code in [200,201]
     text = 'DeploymentNote Recorded OK' if is_ok else 'DeploymentNote Recorded Not OK: %s' % r.text
