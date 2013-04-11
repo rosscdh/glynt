@@ -49,21 +49,6 @@ class ClientProfile(UserenaBaseProfile):
         user = self.user
         return u'%s. %s' % (user.first_name[0], user.last_name,) if user.first_name and user.last_name else user.username
 
-    def get_mugshot_url(self):
-        """ Override the default """
-        # @TODO on save to thumbnail image; write a task that
-        # processes remote urls and downloads them locally
-        url = super(ClientProfile, self).get_mugshot_url()
-        validate = URLValidator()
-        tmp_url = urllib2.unquote(url.replace(settings.MEDIA_URL,''))
-        try:
-            validate(tmp_url)
-            # remove the static url from it
-            url = tmp_url
-        except ValidationError:
-            url = settings.DEFAULT_MUGSHOT_URL
-        return url if url not in [None,''] else settings.DEFAULT_MUGSHOT_URL
-
 # set the profile
 User.profile = property(lambda u: ClientProfile.objects.get_or_create(user=u)[0])
 
