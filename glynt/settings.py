@@ -374,6 +374,8 @@ LOGGING = {
     }
 }
 
+DEFAULT_MUGSHOT_URL = 'http://placehold.it/30x30'
+
 # Signature Image generator
 BLANK_SIG_IMAGE = os.path.join(STATIC_ROOT, 'signature/blank_sig.png'),
 NO_SIG_IMAGE = os.path.join(STATIC_ROOT, 'signature/no_sig.png'),
