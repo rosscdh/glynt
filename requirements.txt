@@ -41,7 +41,7 @@ markup
 Markdown
 pyyaml
 pytidylib
-lxml
+#lxml
 BeautifulSoup
 cssselect
 -e git+https://github.com/rosscdh/pybars.git#egg=pybars
@@ -85,6 +85,7 @@ mocktest
 factory_boy
 
 # Misc
+python-dateutil
 requests
 termcolor
 #google-api-python-client # coming soon
