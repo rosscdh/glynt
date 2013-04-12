@@ -22,6 +22,31 @@ env.local_user = getpass.getuser()
 
 
 @task
+def filestore_prod():
+    env.environment = 'production'
+    env.environment_class = 'filesystem'
+    env.local_project_path = os.path.dirname(os.path.realpath(__file__))
+    env.remote_project_path = None
+    env.deploy_archive_path = None
+    env.virtualenv_path = None
+
+    env.newrelic_api_token = None
+    env.newrelic_app_name = None
+    env.newrelic_application_id = None
+
+    # change from the default user to 'vagrant'
+    env.user = 'ubuntu'
+    env.application_user = None
+    # connect to the port-forwarded ssh
+    env.hosts = ['ec2-54-241-224-100.us-west-1.compute.amazonaws.com']
+    env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
+
+    env.start_service = None
+    env.stop_service = None
+    env.light_restart = None
+
+
+@task
 def production():
     env.project = 'glynt'
     env.environment = 'production'
@@ -157,6 +182,15 @@ def chores():
 
     put('conf/.bash_profile', '~/.bash_profile')
 
+@task
+def filesystem_chores():
+    sudo('aptitude --assume-yes update')
+    sudo('aptitude --assume-yes install build-essential python-setuptools python-dev easy_install nmap htop vim')
+    sudo('aptitude --assume-yes install nfs-kernel-server')
+
+@task
+def nfs_reload():
+    sudo('service nfs-kernel-server reload')
 
 def env_run(cmd):
     return sudo(cmd) if env.environment_class is 'production' else run(cmd)
