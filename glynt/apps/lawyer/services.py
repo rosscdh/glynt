@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+from django.contrib.auth.models import User
 from django.utils import simplejson as json
 from models import Lawyer
 from glynt.apps.firm.services import EnsureFirmService
@@ -17,32 +18,27 @@ class EnsureLawyerService(object):
         self.firm_name = firm_name
         self.offices = offices
 
+        self.form = kwargs.pop('form', None)
         self.role = kwargs.pop('position', None)
         self.data = kwargs
 
     def update_user(self):
-        self.title = self.data.get('title', None)
-
-        self.first_name = self.data.get('first_name', None)
-        self.last_name = self.data.get('last_name', None)
-        self.email = self.data.get('email', None)
-
-        if self.first_name is not None:
-            self.user.first_name = self.first_name
-
-        if self.last_name is not None:
-            self.user.last_name = self.last_name
-
-        if self.email is not None:
-            self.user.email = self.email
-
-        self.user.save()
+        fields_to_update = {}
+        fields_to_update.update(first_name = self.data.get('first_name', None))
+        fields_to_update.update(last_name = self.data.get('last_name', None))
+        fields_to_update.update(email = self.data.get('email', None))
+        # remove empty items
+        fields_to_update = [(k,v) for k,v in fields_to_update.items() if v is not None]
+        # update the user only if changes happened
+        User.objects.filter(pk=self.user.pk).update(**dict(fields_to_update))
 
     def process(self):
         self.update_user()
+        self.lawyer, self.lawyer_is_new = Lawyer.objects.get_or_create(user=self.user)
+        if self.form is not None:
+            self.perform_update()
 
-        self.lawyer, lawyer_is_new = Lawyer.objects.get_or_create(user=self.user)
-
+    def perform_update(self):
         if self.role:
             self.lawyer.role = self.role
 
@@ -79,7 +75,7 @@ class EnsureLawyerService(object):
 
         self.lawyer.save()
 
-        logger.info('get_or_create:lawyer %s is_new: %s' % (self.lawyer.user.username, lawyer_is_new,))
+        logger.info('get_or_create:lawyer %s is_new: %s' % (self.lawyer.user.username, self.lawyer_is_new,))
 
         if self.firm_name is not None:
 
