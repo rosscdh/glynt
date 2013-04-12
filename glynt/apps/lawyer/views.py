@@ -31,11 +31,11 @@ class LawyerProfileSetupView(FormView):
         lawyer = lawyer_service.lawyer
         firm = lawyer_service.firm
 
-        startups_advised = json.dumps(lawyer.data.get('startups_advised', []))
+        startups_advised = lawyer.data.get('startups_advised', [])
 
-        volume_incorp_setup = json.dumps(lawyer.data.get('volume_incorp_setup', {}))
-        volume_seed_financing = json.dumps(lawyer.data.get('volume_seed_financing', {}))
-        volume_series_a = json.dumps(lawyer.data.get('volume_series_a', {}))
+        volume_incorp_setup = lawyer.data.get('volume_incorp_setup', {})
+        volume_seed_financing = lawyer.data.get('volume_seed_financing', {})
+        volume_series_a = lawyer.data.get('volume_series_a', {})
 
 
         kwargs.update({'initial': {
