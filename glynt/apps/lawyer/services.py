@@ -56,6 +56,12 @@ class EnsureLawyerService(object):
             logger.info('Saved new photo %s for %s' % (photo.file, self.lawyer))
 
     def perform_update(self):
+        """
+        DANGER: we make use of json fields to store flexible extended data
+        We also use the .update() methods for quick and easy updates that are less
+        load inducing. Beware you cannot do an .update() on the Lawyer.data field.
+        It must go via the .save() method or things get incorrectly encoded
+        """
         fields_to_update = {}
 
         if self.role:
