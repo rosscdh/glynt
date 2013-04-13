@@ -117,7 +117,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
         offices.append(data.get('practice_location_1', None))
         offices.append(data.get('practice_location_2', None))
 
-        lawyer_service = EnsureLawyerService(user=self.user, firm_name=firm_name, offices=offices, **data)
+        lawyer_service = EnsureLawyerService(user=self.user, firm_name=firm_name, offices=offices, form=self, **data)
         lawyer_service.process()
 
         self.delete_cookie()
