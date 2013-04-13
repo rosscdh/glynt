@@ -71,20 +71,31 @@ class EnsureLawyerService(object):
         # Update standard model fields
         fields_to_update.update(summary = self.data.get('summary', None))
         fields_to_update.update(bio = self.data.get('bio', None))
+        # remove empty items
+        fields_to_update = [(k,v) for k,v in fields_to_update.items() if v is not None]
 
         # Updates to the JSON Data object for the Lawyer
+        tmp_data = {}
         data = self.lawyer.data
 
-        data.update(startups_advised = json.loads(self.data.get('startups_advised', '[]')))
-        data.update(volume_incorp_setup = json.loads(self.data.get('volume_incorp_setup', self.default_volume_matrix)))
-        data.update(volume_seed_financing = json.loads(self.data.get('volume_seed_financing', self.default_volume_matrix)))
-        data.update(volume_series_a = json.loads(self.data.get('volume_series_a', self.default_volume_matrix)))
+        tmp_data.update(startups_advised = self.data.get('startups_advised', '[]'))
 
-        # add the JSON object field to the main set of fields to update
-        fields_to_update.update(data = data)
-        assert False
-        # will always be present due to the previous get_or_create
+        tmp_data.update(volume_incorp_setup = self.data.get('volume_incorp_setup', self.default_volume_matrix))
+        tmp_data.update(volume_seed_financing = self.data.get('volume_seed_financing', self.default_volume_matrix))
+        tmp_data.update(volume_series_a = self.data.get('volume_series_a', self.default_volume_matrix))
+        # remove empty items
+        tmp_data = [(k,v) for k,v in tmp_data.items() if v is not None]
+
+        # add the JSON object and perform lawyer save on that field only
+        if tmp_data:
+            self.lawyer.data.update(tmp_data)
+            self.lawyer.save()
+            logger.info('lawyer:fields:data update %s' % self.lawyer.user.username)
+
+        # Primary lawyer update query
+        # Will always be present due to the previous get_or_create
         Lawyer.objects.filter(pk=self.lawyer.pk).update(**dict(fields_to_update))
+
         logger.info('get_or_create:lawyer %s is_new: %s' % (self.lawyer.user.username, self.lawyer_is_new,))
 
         if self.firm_name is None:

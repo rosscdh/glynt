@@ -116,7 +116,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
         # dont pop these as we need them for local storage in lawyer
         offices.append(data.get('practice_location_1', None))
         offices.append(data.get('practice_location_2', None))
-        assert False
+
         lawyer_service = EnsureLawyerService(user=self.user, firm_name=firm_name, offices=offices, form=self, **data)
         lawyer_service.process()
 
