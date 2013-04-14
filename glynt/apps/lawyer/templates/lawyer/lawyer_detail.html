@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load thumbnail easy_maps_tags cache %}
+{% extends 'base.html' %}{% load lawyer_profile_tags thumbnail easy_maps_tags cache %}
 
 {% block page_title %}{{ object.user.get_full_name|default:object.user.username }}{% endblock %}
 {% block bodyclass %}{% endblock %}
@@ -20,11 +20,13 @@ geo loc: {{ object.current_geo_loc }}<br/>
 
 {{ firm.primary_office }}
 
-
 {% cache 300 "lawyer" "primary_office_location" firm.primary_office.pk %}
     {% easy_map firm.primary_office.address 300 191 10 %}
 {% endcache %}
 
+
+<h2>Startups</h2>
+{% startups_advised %}
 
 </div>
 {% endblock %}
