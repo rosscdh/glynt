@@ -56,7 +56,7 @@ def production():
     env.deploy_archive_path = '/var/apps/'
     env.virtualenv_path = '/var/apps/.lawpal-live-venv/'
 
-    env.newrelic_api_token = '343889f950aebe17556fcac919cd9ac9eda2baac9d0a0cd'
+    env.newrelic_api_token = 'ec2a185854e15d572186b246961e0ed11378cc249d0a0cd'
     env.newrelic_app_name = 'Lawpal'
     env.newrelic_application_id = '1858111'
 
@@ -81,7 +81,7 @@ def preview():
     env.deploy_archive_path = '/var/apps/'
     env.virtualenv_path = '/var/apps/.lawpal-preview-venv/'
 
-    env.newrelic_api_token = '343889f950aebe17556fcac919cd9ac9eda2baac9d0a0cd'
+    env.newrelic_api_token = 'ec2a185854e15d572186b246961e0ed11378cc249d0a0cd'
     env.newrelic_app_name = 'Lawpal'
     env.newrelic_application_id = '1858111'
 
@@ -314,7 +314,7 @@ def newrelic_deploynote():
     r = requests.post('https://rpm.newrelic.com/deployments.xml', data=payload, headers=headers, verify=False)
 
     is_ok = r.status_code in [200,201]
-    text = 'DeploymentNote Recorded OK' if is_ok else 'DeploymentNote Recorded Not OK: %s' % r.text
+    text = 'DeploymentNote Recorded OK' if is_ok is True else 'DeploymentNote Recorded Not OK: %s' % r.text
     color = 'green' if is_ok else 'red'
 
     print colored('%s (%s)' % (text, r.status_code), color)

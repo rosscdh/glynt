@@ -37,6 +37,13 @@ class LawyerProfileSetupView(FormView):
     def get_success_url(self):
         return reverse('lawyer:thanks')
 
+    def get_context_data(self, **kwargs):
+        context = super(LawyerProfileSetupView, self).get_context_data(**kwargs)
+        context.update({
+            'lawyer': self.lawyer,
+        })
+        return context
+
     def get_form(self, form_class):
         """
         Returns an instance of the form to be used in this view.
@@ -47,14 +54,14 @@ class LawyerProfileSetupView(FormView):
         user = self.request.user
         lawyer_service = EnsureLawyerService(user=user)
         lawyer_service.process()
-        lawyer = lawyer_service.lawyer
+        lawyer = self.lawyer = lawyer_service.lawyer
         firm = lawyer_service.firm
 
-        startups_advised = json.dumps(lawyer.data.get('startups_advised', []))
+        startups_advised = lawyer.data.get('startups_advised', [])
 
-        volume_incorp_setup = json.dumps(lawyer.data.get('volume_incorp_setup', {}))
-        volume_seed_financing = json.dumps(lawyer.data.get('volume_seed_financing', {}))
-        volume_series_a = json.dumps(lawyer.data.get('volume_series_a', {}))
+        # volume_incorp_setup = lawyer.data.get('volume_incorp_setup', {})
+        # volume_seed_financing = lawyer.data.get('volume_seed_financing', {})
+        # volume_series_a = lawyer.data.get('volume_series_a', {})
 
 
         kwargs.update({'initial': {
@@ -77,9 +84,9 @@ class LawyerProfileSetupView(FormView):
 
             'photo': lawyer.photo,
 
-            'volume_incorp_setup': volume_incorp_setup,
-            'volume_seed_financing': volume_seed_financing,
-            'volume_series_a': volume_series_a,
+            # 'volume_incorp_setup': volume_incorp_setup,
+            # 'volume_seed_financing': volume_seed_financing,
+            # 'volume_series_a': volume_series_a,
 
             'agree_tandc': lawyer.data.get('agree_tandc', None),
         }})

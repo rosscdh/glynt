@@ -19,7 +19,7 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'p7vgff9h197gnres0kj13btoos4',
         'HOST': 'ec2-50-18-97-221.us-west-1.compute.amazonaws.com',
-        'PORT': 5642
+        'PORT': 5432
     },
     # 'heroku': {
     #     'ENGINE': 'django.db.backends.postgresql_psycopg2',

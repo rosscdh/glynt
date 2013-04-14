@@ -6,7 +6,7 @@ from templated_email import send_templated_mail
 admin_name, admin_email = settings.ADMINS[0]
 
 import logging
-logger = logging.getLogger('lawpal.service')
+logger = logging.getLogger('lawpal.services')
 
 
 class InviteToJoinService(object):
