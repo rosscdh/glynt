@@ -30,10 +30,24 @@ class Lawyer(models.Model):
     def __unicode__(self):
         return u'%s' % (self.user.username,)
 
-    @property
-    def phone(self):
-        return u'%s' % self.data.get('phone', None)
+    def username(self):
+        return self.user.username
 
+    def full_name(self):
+        return self.user.get_full_name()
+
+    def email(self):
+        return self.user.email
+
+    def last_login(self):
+        return self.user.last_login
+
+    def firm_name(self):
+        try:
+            self.user.firm_lawyers.all()[0].name
+        except IndexError:
+            return None
+            
     @property
     def phone(self):
         return u'%s' % self.data.get('phone', None)
