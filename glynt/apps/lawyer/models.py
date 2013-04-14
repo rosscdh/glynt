@@ -31,8 +31,11 @@ class Lawyer(models.Model):
         return u'%s' % (self.user.username,)
 
     @property
-    def phone(self):
-        return u'%s' % self.data.get('phone', None)
+    def primary_firm(self):
+        try:
+            return self.user.firm_lawyers.prefetch_related().all()[0]
+        except IndexError:
+            return None
 
     @property
     def phone(self):

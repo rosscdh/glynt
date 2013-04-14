@@ -25,6 +25,13 @@ class Firm(models.Model):
     def __unicode__(self):
         return u'%s' % (self.name,)
 
+    @property
+    def primary_office(self):
+        try:
+            return self.office_set.all()[0]
+        except IndexError:
+            return None
+
 
 class Office(models.Model):
     """ The Firm Office

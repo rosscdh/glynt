@@ -1,14 +1,33 @@
 # -*- coding: utf-8 -*-
-from django.views.generic import FormView
+from django.views.generic import FormView, DetailView
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.utils import simplejson as json
 from glynt.apps.lawyer.services import EnsureLawyerService
 
+from models import Lawyer
 from forms import LawyerProfileSetupForm
 
 import logging
 logger = logging.getLogger('django.request')
+
+
+class LawyerProfileView(DetailView):
+    model = Lawyer
+    slug_field = 'user__username'
+    def get_queryset(self):
+        return self.model._default_manager.prefetch_related('user', 'user__firm_lawyers').all()
+
+    def get_context_data(self, **kwargs):
+        """
+        Insert the single object into the context dict.
+        """
+        context = super(LawyerProfileView, self).get_context_data(**kwargs)
+
+        context.update({
+            'firm': self.object.primary_firm
+        })
+        return context
 
 
 class LawyerProfileSetupView(FormView):

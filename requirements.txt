@@ -71,6 +71,10 @@ xhtml2pdf
 celery
 #django-rq # potential but not sure
 
+# Maps
+geopy >= 0.95
+django-easy-maps
+
 # Dev
 Werkzeug
 -e git+https://github.com/django-debug-toolbar/django-debug-toolbar.git#egg=django-debug-toolbar

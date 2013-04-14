@@ -212,7 +212,8 @@ HELPER_APPS = (
     'user_streams.backends.user_streams_single_table_backend',
     # Cities
     'cities_light',
-
+    # Maps
+    'easy_maps',
     # getsentry.com
     'raven.contrib.django.raven_compat',
 )
@@ -258,6 +259,16 @@ USERENA_ACTIVATION_REDIRECT_URL = '/thanks-your-interest/'
 USERENA_SIGNIN_REDIRECT_URL = '/'
 USERENA_WITHOUT_USERNAMES = True # step userarena forcing user to provide username
 USERENA_HIDE_EMAIL = True
+
+
+EASY_MAPS_CENTER = (-41.3, 32)
+
+
+THUMBNAIL_ALIASES = {
+    '': {
+        'avatar': {'size': (50, 50), 'crop': True},
+    },
+}
 
 
 FACEBOOK_API_KEY = '419217318130542'
