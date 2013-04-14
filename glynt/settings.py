@@ -267,6 +267,7 @@ EASY_MAPS_CENTER = (-41.3, 32)
 THUMBNAIL_ALIASES = {
     '': {
         'avatar': {'size': (50, 50), 'crop': True},
+        'startup': {'size': (130, 60), 'crop': False},
     },
 }
 

@@ -8,8 +8,8 @@
 <h1>{{ object.user.get_full_name|default:object.user.username }}</h1>
 
 <img src="{{ object.photo|thumbnail_url:'avatar' }}" alt="" title="" border="0"/>
-summary: {{ object.summary }}<br/>
-bio: {{ object.bio }}<br/>
+summary: {{ object.summary|default:"No Data" }}<br/>
+bio: {{ object.bio|default:"No Data" }}<br/>
 years practice: {{ object.years_practiced }}<br/>
 geo loc: {{ object.current_geo_loc }}<br/>
 
