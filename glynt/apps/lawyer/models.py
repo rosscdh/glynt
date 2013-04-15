@@ -30,6 +30,13 @@ class Lawyer(models.Model):
     def __unicode__(self):
         return u'%s' % (self.user.username,)
 
+    @property
+    def primary_firm(self):
+        try:
+            return self.user.firm_lawyers.prefetch_related().all()[0]
+        except IndexError:
+            return None
+
     def username(self):
         return self.user.username
 

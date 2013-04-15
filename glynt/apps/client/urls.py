@@ -1,5 +1,8 @@
+# -*- coding: utf-8 -*-
 from django.conf.urls import patterns, url
 from django.contrib.auth.decorators import login_required
+
+from social_auth.views import auth, complete, disconnect
 
 from views import SignupView, LoginView, DashboardView
 from glynt.decorators import anonymous_required
