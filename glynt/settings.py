@@ -267,7 +267,7 @@ FACEBOOK_REQUEST_PERMISSIONS = 'email,user_likes,user_about_me,read_stream'
 
 LINKEDIN_CONSUMER_KEY = '1uh2ns1cn9tm'
 LINKEDIN_CONSUMER_SECRET = 'MnrqdbtmM10gkz27'
-LINKEDIN_SCOPE = ['r_basicprofile', 'r_emailaddress']
+LINKEDIN_SCOPE = ['r_basicprofile', 'r_emailaddress', 'r_network']
 LINKEDIN_EXTRA_FIELD_SELECTORS = ['email-address', 'headline', 'industry']
 LINKEDIN_EXTRA_DATA = [('id', 'id'),
                        ('first-name', 'first_name'),

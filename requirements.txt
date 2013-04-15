@@ -93,3 +93,6 @@ termcolor
 #google-api-python-client # coming soon
 #-e git+https://github.com/chrisglass/xhtml2pdf.git#egg=xhtml2pdf # not planning on using xhtml2pdf(pisa) too unstable
 #-e git+https://github.com/rosscdh/django-xhtml2pdf.git#egg=django-xhtml2pdf # not planning on using xhtml2pdf(pisa) too unstable
+
+# Api access
+tweepy
