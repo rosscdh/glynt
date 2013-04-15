@@ -1,0 +1,4 @@
+{% load url from future %}
+<a id="associate-{{ name }}" href="{% if is_linked %}{{ disconnect_url }}{% else %}{{ connect_url }}{% endif %}" class="btn btn-small btn-{% if is_linked %}primary{% else %}inverse{% endif %} span4">
+    {{ name }}
+</a>

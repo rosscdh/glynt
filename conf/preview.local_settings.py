@@ -66,6 +66,8 @@ ANGEL_CLIENT_ID = 'c1602543cc137ebdf925cc8d63087bc5' # dev.lawpal.com
 ANGEL_CLIENT_SECRET = '3b31b0e3b11d9d49dae7167035b4fe20' # dev.lawpal.com
 ANGEL_AUTH_EXTRA_ARGUMENTS = {'scope': 'email'}
 
+TWITTER_CONSUMER_KEY = ''
+TWITTER_CONSUMER_SECRET = ''
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'

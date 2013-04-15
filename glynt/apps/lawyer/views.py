@@ -16,7 +16,7 @@ class LawyerProfileView(DetailView):
     model = Lawyer
     slug_field = 'user__username'
     def get_queryset(self):
-        return self.model._default_manager.prefetch_related('user', 'user__firm_lawyers').all()
+        return self.model._default_manager.prefetch_related('user').all()
 
     def get_context_data(self, **kwargs):
         """
