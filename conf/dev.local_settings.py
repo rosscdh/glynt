@@ -46,3 +46,7 @@ LOGGING = {
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 HELLOSIGN_AUTH = ("sendrossemail@gmail.com", "zanshin77")
+
+
+TWITTER_CONSUMER_KEY = 's4S1EAIeNded9aX5EBWwKQ'
+TWITTER_CONSUMER_SECRET = 'GwkDznb11TzxHxQAsb5B5NbmzklpIlqpXcsXXB5sI'

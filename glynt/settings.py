@@ -92,6 +92,7 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'glynt.middleware.SSLRequiredMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -109,7 +110,7 @@ WSGI_APPLICATION = 'glynt.wsgi.application'
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.contrib.angel.AngelBackend',
     'social_auth.backends.contrib.linkedin.LinkedinBackend',
-    'social_auth.backends.contrib.github.GithubBackend',
+    'social_auth.backends.twitter.TwitterBackend',
     'glynt.backends.EmailOrUsernameBackend',
     'userena.backends.UserenaAuthenticationBackend',
     'guardian.backends.ObjectPermissionBackend',
@@ -128,6 +129,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "glynt.context_processors.project_info",
     "glynt.context_processors.project_environment",
     "social_auth.context_processors.social_auth_by_type_backends",
+    "social_auth.context_processors.social_auth_by_name_backends",
 )
 
 TEMPLATE_DIRS = (
@@ -212,7 +214,8 @@ HELPER_APPS = (
     'user_streams.backends.user_streams_single_table_backend',
     # Cities
     'cities_light',
-
+    # Maps
+    'easy_maps',
     # getsentry.com
     'raven.contrib.django.raven_compat',
 )
@@ -260,6 +263,17 @@ USERENA_WITHOUT_USERNAMES = True # step userarena forcing user to provide userna
 USERENA_HIDE_EMAIL = True
 
 
+EASY_MAPS_CENTER = (-41.3, 32)
+
+
+THUMBNAIL_ALIASES = {
+    '': {
+        'avatar': {'size': (50, 50), 'crop': True},
+        'startup': {'size': (130, 60), 'crop': False},
+    },
+}
+
+
 FACEBOOK_API_KEY = '419217318130542'
 FACEBOOK_SECRET_KEY = 'a8a6359a83c2af62c0aadb8e507bd15f'
 FACEBOOK_REQUEST_PERMISSIONS = 'email,user_likes,user_about_me,read_stream'
@@ -281,15 +295,18 @@ ANGEL_CLIENT_ID = '00342c269e46c6059ab76013bb74ed44'
 ANGEL_CLIENT_SECRET = '0f7ca41e548dcc04357984e5ceebfa26'
 ANGEL_AUTH_EXTRA_ARGUMENTS = {'scope': 'email'}
 
-(
-    'social_auth.backends.pipeline.social.social_auth_user',
-    'social_auth.backends.pipeline.user.get_username',
-    'social_auth.backends.pipeline.user.create_user',
-    'social_auth.backends.pipeline.social.associate_user',
-    'social_auth.backends.pipeline.social.load_extra_data',
-    'social_auth.backends.pipeline.user.update_user_details'
-    'social_auth.backends.pipeline.misc.save_status_to_session',
-)
+TWITTER_CONSUMER_KEY = 'q4iigBXEJj7OBuIYHVF99g'
+TWITTER_CONSUMER_SECRET = 'Ka9XGTeRlu1v7XRs2GSdK43Sd0l4j0eXXE2gI4iXd8E'
+
+# SOCIAL_AUTH_PIPELINE = (
+#     'social_auth.backends.pipeline.social.social_auth_user',
+#     'social_auth.backends.pipeline.user.get_username',
+#     'social_auth.backends.pipeline.user.create_user',
+#     'social_auth.backends.pipeline.social.associate_user',
+#     'social_auth.backends.pipeline.social.load_extra_data',
+#     'social_auth.backends.pipeline.user.update_user_details'
+#     'social_auth.backends.pipeline.misc.save_status_to_session',
+# )
 
 
 DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d %Y',
