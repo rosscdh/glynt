@@ -239,7 +239,7 @@ else:
 # Primary installed apps goes here
 # we do this so that we only test our apps
 # the other apps will/can be tested seperately
-INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + HELPER_APPS
+INSTALLED_APPS = DJANGO_APPS + HELPER_APPS + PROJECT_APPS 
 
 
 LOGIN_URL          = '/'

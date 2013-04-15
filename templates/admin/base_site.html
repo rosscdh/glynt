@@ -1,7 +1,47 @@
 {% extends "admin/base.html" %}
 {% load i18n %}
 
-{% block title %}{{ title }} | {{ PROJECT_NAME }} {% trans ':admin' %}{% endblock %}
+{% block title %}LawPal Admin{% endblock %}
+
+{% block extrahead %}
+<style>
+	#branding h1 {
+	    padding: 0 10px;
+	    font-size: 18px;
+	    margin: 13px 0;
+	    font-weight: normal;
+	    color: #FFF;
+		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", Helvetica;
+		text-transform:uppercase;
+	}
+	#header {
+	    background: #4ad1e5;
+	    color: #FFF;
+	    overflow: hidden;
+	}
+	* {
+		font-family:Helvetica, Arial;
+	}
+	h1 {
+		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", Helvetica;
+		font-weight:100;
+		font-size:30px;
+		color:#aaa;
+		margin: 20px 0px;
+	}
+	.module h2, .module caption, .inline-group h2 {
+		background-image:none;
+		background-color: #76b68c;
+		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", Helvetica;
+		font-weight:normal;
+		font-size:13px;
+		opacity:0.6;
+	}
+	a {
+		color:#000;
+	}
+</style>
+{% endblock %}
 
 {% block branding %}
 <h1 id="site-name">{{ PROJECT_NAME }} {% trans ':admin' %}</h1>
