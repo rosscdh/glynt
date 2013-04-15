@@ -92,6 +92,7 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'glynt.middleware.SSLRequiredMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -109,7 +110,7 @@ WSGI_APPLICATION = 'glynt.wsgi.application'
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.contrib.angel.AngelBackend',
     'social_auth.backends.contrib.linkedin.LinkedinBackend',
-    'social_auth.backends.contrib.github.GithubBackend',
+    'social_auth.backends.contrib.TwitterBackend',
     'glynt.backends.EmailOrUsernameBackend',
     'userena.backends.UserenaAuthenticationBackend',
     'guardian.backends.ObjectPermissionBackend',
@@ -128,6 +129,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "glynt.context_processors.project_info",
     "glynt.context_processors.project_environment",
     "social_auth.context_processors.social_auth_by_type_backends",
+    "social_auth.context_processors.social_auth_by_name_backends",
 )
 
 TEMPLATE_DIRS = (
@@ -293,7 +295,10 @@ ANGEL_CLIENT_ID = '00342c269e46c6059ab76013bb74ed44'
 ANGEL_CLIENT_SECRET = '0f7ca41e548dcc04357984e5ceebfa26'
 ANGEL_AUTH_EXTRA_ARGUMENTS = {'scope': 'email'}
 
-(
+TWITTER_CONSUMER_KEY = ''
+TWITTER_CONSUMER_SECRET = ''
+
+SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.social.social_auth_user',
     'social_auth.backends.pipeline.user.get_username',
     'social_auth.backends.pipeline.user.create_user',
