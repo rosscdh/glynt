@@ -110,7 +110,7 @@ WSGI_APPLICATION = 'glynt.wsgi.application'
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.contrib.angel.AngelBackend',
     'social_auth.backends.contrib.linkedin.LinkedinBackend',
-    'social_auth.backends.contrib.twitter.TwitterBackend',
+    'social_auth.backends.twitter.TwitterBackend',
     'glynt.backends.EmailOrUsernameBackend',
     'userena.backends.UserenaAuthenticationBackend',
     'guardian.backends.ObjectPermissionBackend',
@@ -295,18 +295,18 @@ ANGEL_CLIENT_ID = '00342c269e46c6059ab76013bb74ed44'
 ANGEL_CLIENT_SECRET = '0f7ca41e548dcc04357984e5ceebfa26'
 ANGEL_AUTH_EXTRA_ARGUMENTS = {'scope': 'email'}
 
-TWITTER_CONSUMER_KEY = ''
-TWITTER_CONSUMER_SECRET = ''
+TWITTER_CONSUMER_KEY = 'q4iigBXEJj7OBuIYHVF99g'
+TWITTER_CONSUMER_SECRET = 'Ka9XGTeRlu1v7XRs2GSdK43Sd0l4j0eXXE2gI4iXd8E'
 
-SOCIAL_AUTH_PIPELINE = (
-    'social_auth.backends.pipeline.social.social_auth_user',
-    'social_auth.backends.pipeline.user.get_username',
-    'social_auth.backends.pipeline.user.create_user',
-    'social_auth.backends.pipeline.social.associate_user',
-    'social_auth.backends.pipeline.social.load_extra_data',
-    'social_auth.backends.pipeline.user.update_user_details'
-    'social_auth.backends.pipeline.misc.save_status_to_session',
-)
+# SOCIAL_AUTH_PIPELINE = (
+#     'social_auth.backends.pipeline.social.social_auth_user',
+#     'social_auth.backends.pipeline.user.get_username',
+#     'social_auth.backends.pipeline.user.create_user',
+#     'social_auth.backends.pipeline.social.associate_user',
+#     'social_auth.backends.pipeline.social.load_extra_data',
+#     'social_auth.backends.pipeline.user.update_user_details'
+#     'social_auth.backends.pipeline.misc.save_status_to_session',
+# )
 
 
 DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d %Y',
