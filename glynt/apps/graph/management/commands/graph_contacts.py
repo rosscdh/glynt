@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+""" 
+Command to collect user connections from various services
+"""
 import sys
 from django.conf import settings
 from django.core.management.base import BaseCommand
@@ -11,6 +14,7 @@ from glynt.apps.graph.services import LinkedinConnectionsService, AngelConnectio
 
 import json
 from urlparse import parse_qs
+
 
 
 class Command(BaseCommand):
