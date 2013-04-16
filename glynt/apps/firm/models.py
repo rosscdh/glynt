@@ -29,7 +29,7 @@ class Firm(models.Model):
     def primary_office(self):
         try:
             return self.office_set.all()[0]
-        except IndexError:
+        except:
             return None
 
 
