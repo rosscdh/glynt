@@ -17,7 +17,7 @@ class GraphConnection(models.Model):
     """ Generic Database Model to store various provider abstractions """
     PROVIDERS = get_namedtuple_choices('PROVIDERS', (
         (0,'linkedin','Linkedin'),
-        (1,'aangel','Angel'),
+        (1,'angel','Angel'),
       
     ))
     provider = models.IntegerField(choices=PROVIDERS.get_choices(), db_index=True)
@@ -66,6 +66,7 @@ class LawpalBaseConnection(object):
         logger.info('Associating %s with %s (%s:%s)' % (user.get_full_name(), self.full_name, self.provider, self.uid) )
         # get the integer val for the type
         provider_id = GraphConnection.PROVIDERS.get_value_by_name(self.provider)
+
         # get or create the graph object
         graph_obj, is_new = GraphConnection.objects.get_or_create(full_name=self.full_name, provider=provider_id)
         # update json_data
@@ -81,11 +82,13 @@ class LawpalBaseConnection(object):
 
 class LinkedinConnection(LawpalBaseConnection):
     """ Linkedin Connection Provider """
+    provider = 'linkedin'
     def get_full_name_from_data(self):
         return u'%s %s' % (self.extra_data.get('firstName'), self.extra_data.get('lastName'),)
 
 
 class AngelConnection(LawpalBaseConnection):
     """ Linkedin Connection Provider """
+    provider = 'angel'
     def get_full_name_from_data(self):
         return u'%s' % self.extra_data.get('name')
