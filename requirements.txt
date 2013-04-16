@@ -28,7 +28,9 @@ south
 -e git+https://github.com/rosscdh/django-bootstrap.git#egg=bootstrap
 -e git+https://github.com/brack3t/django-braces.git#egg=django-braces
 -e git+https://github.com/lincolnloop/python-qrcode.git#egg=python-qrcode
--e git+https://github.com/bradjasper/django-jsonfield#egg=django-jsonfield
+
+# JSON Field
+django-jsonfield # This is the correct one, the bradjasper version does not save correctly (converts to string), but we probably need to patch it so that the loaddata works
 
 # Auth and Users
 -e git+https://github.com/rosscdh/django-social-auth.git@rc_fixes#egg=django-social-auth

@@ -30,7 +30,7 @@ workspace = os.path.dirname(project)
 sys.path.append(workspace)
 
 import newrelic.agent
-newrelic.agent.initialize('/home/stard0g101/webapps/glynt/glynt/newrelic.ini')
+newrelic.agent.initialize('/home/stard0g101/webapps/glynt/glynt/glynt/newrelic.ini')
 
 from django.core.handlers.wsgi import WSGIHandler
 application = WSGIHandler()

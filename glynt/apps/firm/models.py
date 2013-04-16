@@ -13,14 +13,14 @@ class Firm(models.Model):
     """
     name = models.CharField(max_length=128, db_index=True)
     slug = models.SlugField()
-    summary = models.CharField(max_length=255)
+    summary = models.CharField(max_length=255, blank=True)
     description = models.TextField(blank=True)
-    website = models.URLField()
-    twitter = models.CharField(max_length=64, db_index=True)
-    photo = models.ImageField(upload_to='firm')
+    website = models.URLField(blank=True)
+    twitter = models.CharField(max_length=64, blank=True, db_index=True)
+    photo = models.ImageField(upload_to='firm', blank=True)
     data = JSONField(default={})
-    lawyers = models.ManyToManyField(User, related_name='firm_lawyers')
-    deals = models.ManyToManyField(Deal, related_name='firm_deals')
+    lawyers = models.ManyToManyField(User, blank=True, related_name='firm_lawyers')
+    deals = models.ManyToManyField(Deal, blank=True, related_name='firm_deals')
 
     def __unicode__(self):
         return u'%s' % (self.name,)
