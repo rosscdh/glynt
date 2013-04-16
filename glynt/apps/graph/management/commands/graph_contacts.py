@@ -22,8 +22,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         for a in UserSocialAuth.objects.prefetch_related('user').all():
-            # if a.provider == 'linkedin':
-            #     self.linkedin(a)
+            if a.provider == 'linkedin':
+                self.linkedin(a)
 
             if a.provider == 'angel':
                 self.angel(a)

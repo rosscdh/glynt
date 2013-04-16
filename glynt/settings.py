@@ -250,6 +250,7 @@ LOGIN_ERROR_URL    = '/login-error/'
 USER_STREAMS_BACKEND = 'user_streams.backends.user_streams_single_table_backend.SingleTableDatabaseBackend'
 USER_STREAMS_USE_UTC = True
 
+HELLOSIGN_AUTH = ("sendrossemail@gmail.com", "test2007")
 
 ANONYMOUS_USER_ID = -1
 AUTH_PROFILE_MODULE = 'client.ClientProfile' # our custom profile

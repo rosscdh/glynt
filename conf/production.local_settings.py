@@ -69,8 +69,6 @@ EMAIL_HOST_PASSWORD = '0113633alex'
 DEFAULT_FROM_EMAIL = 'glynt@dev.weareml.com'
 SERVER_EMAIL = 'glynt@dev.weareml.com'
 
-HELLOSIGN_AUTH = ("sendrossemail@gmail.com", "zanshin77")
-
 
 RAVEN_CONFIG = {
     'dsn': 'https://b5a6429d03e2418cbe71cd5a4c9faca6:ddabb51af47546d1ac0e63cb453797ba@app.getsentry.com/6287',
@@ -148,6 +146,11 @@ LOGGING = {
             'propagate': False,
         },
         'lawpal.services': {
+            'handlers': ['splunkstorm'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'lawpal.graph': {
             'handlers': ['splunkstorm'],
             'level': 'INFO',
             'propagate': False,

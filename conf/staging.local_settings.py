@@ -65,8 +65,6 @@ EMAIL_HOST_PASSWORD = '0113633alex'
 DEFAULT_FROM_EMAIL = 'glynt@dev.weareml.com'
 SERVER_EMAIL = 'glynt@dev.weareml.com'
 
-HELLOSIGN_AUTH = ("sendrossemail@gmail.com", "zanshin77")
-
 ALLOWED_HOSTS = ['dev.lawpal.com']
 
 RAVEN_CONFIG = {
