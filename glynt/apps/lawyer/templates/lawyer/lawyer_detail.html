@@ -11,6 +11,7 @@
 {% endblock %}
 
 {% block prebody %}
+
 <div id="hero">
 	<div class="container">
 		<!-- starts carousel -->
@@ -68,10 +69,26 @@
 
 	<div class="divide">
 	    <div class=" buttons">
-			<a href="#" class="btn btn-large btn-primary" title="Message Leilat">Message Leila</a>
-			<a href="#" class="btn btn-large btn-secondary" title="Endorse Leila">Endorse Leila</a>
-			<a href="#" class="btn btn-large btn-tertiary" title="Engage Leila">Engage Leila</a>
-	    </div>
+			<a href="#comingSoonModal" class="btn btn-large btn-primary" title="Message Leilat" data-toggle="modal">Message Leila</a>
+			<a href="#comingSoonModal" class="btn btn-large btn-secondary" title="Endorse Leila" data-toggle="modal">Endorse Leila</a>
+			<a href="#comingSoonModal" class="btn btn-large btn-tertiary" title="Engage Leila"  data-toggle="modal">Engage Leila</a>
+ 
+			<!-- Modal -->
+			<div id="comingSoonModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			  <div class="modal-header">
+			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			    <h3 id="myModalLabel">Coming Soon</h3>
+			  </div>
+			  <div class="modal-body">
+			    <p>Whilst profiles are in preview mode, this feature is disabled. We will shortly be enabling this for some users as part of our rollout. Stay tuned!</p>
+			  </div>
+			  <div class="modal-footer">
+			    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+			    <!-- <button class="btn btn-primary">Save changes</button> -->
+			  </div>
+			</div>
+		
+		</div>
 	</div>
 
 	<div class="divide">
