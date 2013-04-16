@@ -107,7 +107,7 @@
 						</div>
 					</div>
 					<div class="span4">
-						<img id="photo-preview" width="130" height="130" src="http://placehold.it/130x130">
+						<img id="photo-preview" width="130" height="130" src="{{ request.user.profile.get_mugshot_url }}">
 					</div>
 				</div>
 				<div class="row">
@@ -219,6 +219,9 @@ function preparePhotoPreview(element) {
 
         photo_id = null;
 
+        /**
+        * Stores the photo ID in a field
+        */
 		if (cookie_data && cookie_data.id !== undefined) {
 		    photo_id = cookie_data.id;
 	        $('#id_hidden_photo').val(photo_id);
