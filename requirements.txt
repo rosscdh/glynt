@@ -73,9 +73,6 @@ xhtml2pdf
 celery
 #django-rq # potential but not sure
 
-# Maps
-geopy >= 0.95
-django-easy-maps
 
 # Dev
 Werkzeug
