@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load lawyer_profile_tags thumbnail easy_maps_tags cache %}
+{% extends 'base.html' %}{% load account_tags lawyer_profile_tags thumbnail easy_maps_tags cache %}
 
 {% block page_title %}{{ object.user.get_full_name|default:object.user.username }}{% endblock %}
 {% block bodyclass %}{% endblock %}
@@ -170,6 +170,7 @@
 <!-- <div class="row-fluid">
 <h1>{{ object.user.get_full_name|default:object.user.username }}</h1>
 
+
 <img src="{{ object.photo|thumbnail_url:'avatar' }}" alt="" title="" border="0"/>
 summary: {{ object.summary|default:"No Data" }}<br/>
 bio: {{ object.bio|default:"No Data" }}<br/>
@@ -179,8 +180,12 @@ geo loc: {{ object.current_geo_loc }}<br/>
 {{ object.data.practice_location_1 }}<br/>
 {{ object.data.practice_location_2 }}
 
-<h2>Firms</h2>
+{{ object.data.if_i_wasnt_a_lawyer|default:"No Data" }}
 
+<h2>Accounts</h2>
+{% social_associate social_auth %}
+
+<h2>Firms</h2>
 {{ firm.primary_office }}
 
 {% cache 300 "lawyer" "primary_office_location" firm.primary_office.pk %}
@@ -189,8 +194,9 @@ geo loc: {{ object.current_geo_loc }}<br/>
 
 
 <h2>Startups</h2>
-{% startups_advised %}
-
+{% cache 300 "lawyer" "startups_advised" firm.primary_office.pk %}
+    {% startups_advised %}
+{% endcache %}
 </div>
  -->
 {% endblock %}
