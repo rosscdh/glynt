@@ -163,6 +163,8 @@ PROJECT_APPS = (
 
     # The Api
     'glynt.apps.api',
+    # The Graph
+    'glynt.apps.graph',
     # The Startups
     'glynt.apps.startup',
     # The Legal Firms
