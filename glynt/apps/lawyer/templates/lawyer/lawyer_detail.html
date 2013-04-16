@@ -1,169 +1,129 @@
-{% extends 'base.html' %}{% load account_tags lawyer_profile_tags thumbnail easy_maps_tags cache %}
+{% extends 'base.html' %}{% load account_tags lawyer_profile_tags thumbnail easy_maps_tags cache jsonify %}
 
 {% block page_title %}{{ object.user.get_full_name|default:object.user.username }}{% endblock %}
-{% block bodyclass %}{% endblock %}
+{% block bodyclass %}lawyer-welcome{% endblock %}
 
 {% block css %}
 <link href="{{ STATIC_URL }}css/theme/lawyer-profile.css" rel="stylesheet" charset="utf-8" />
 {% endblock %}
-
+{% block js %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/Chart.min.js"></script>
+{% endblock %}
 
 {% block prebody %}
- 
 <div id="hero">
 	<div class="container">
 		<!-- starts carousel -->
 		<div class="row animated fadeInDown">
 			<div class="span12">
 				<div class="avatar">
-					<img src="/static/img/app/lawyer-avatar.png" alt="Avatar" />
+					<img src="{{ MEDIA_URL }}{{ object.photo|default:'lawyer/default_avatar.png' }}" alt="Avatar" />
 				</div>
 				<h1>{{ object.user.get_full_name|default:object.user.username }}</h1>
-				<h3>{{ object.summary }}</h3>
+				<h3>{{ object.summary }} <br /> {{ object.primary_firm }}</h3>
 			</div>
 		</div>
 	</div>
 </div>
 <div class="container profile">
 	<div class="row">
+		<div class="span8">	
+			<h2>About Me</h2>
+			<div class="more-less">
+			    <div class="more-block">
+					<p>{{ object.bio|default:"No biography yet yet."|linebreaksbr }}</p>
+			    </div>
+			</div>
+			<br />
+		</div>	
+		<div class="span4 pull-right">
+			a{{ firm.photo }}a
 			
-		<div class="left">	
-			<h2>About {{ object.user.get_full_name|default:object.user.username }}</h2>
-			<p>{{ object.bio|default:"No description yet." }}</p>
-			<h3>Deal flow</h3>
-			<p class="deals">
-				<div class="deal-outer">
-					<div class="deal deal-company">
-						<div class="circle"></div>
-						<div class="circle"></div>
-						<div class="circle"></div>
-						<div class="circle light"></div>
-						<div class="circle"></div>
-						<div class="circle"></div>
-						<div class="circle"></div>
-						<div class="circle light"></div>
-						<div class="circle"></div>
-						<div class="circle"></div>
-						<div class="circle"></div>
-						<div class="circle light"></div>
-						<div class="circle light"></div>
-						<div class="circle light"></div>
-						<div class="circle light"></div>
-						<div class="circle light"></div>
-					</div>
-					<p>Company Setup</p>
-				</div>
-				<div class="deal-outer">	
-					<div class="deal deal-seed">
-						<div class="circle"></div>
-						<div class="circle"></div>
-						<div class="circle light"></div>
-						<div class="circle"></div>
-						<div class="circle"></div>
-						<div class="circle light"></div>
-						<div class="circle light"></div>
-						<div class="circle light"></div>
-						<div class="circle light"></div>
-					</div>
-					<p>Seed Financing</p>
-				</div>	
-				<div class="deal-outer">	
-					<div class="deal deal-series">
-						<div class="circle light"></div>
-						<div class="circle light"></div>
-						<div class="circle light"></div>
-						<div class="circle light"></div>
-					</div>
-					<p>Series A</p>
-				</div>	
-			</p>	
-		</div>
-		
-		<div class="right">
 			<div class="map">
 				{% if object.data.practice_location_1 and not object.data.practice_location_2 %}
-				<img src="http://maps.googleapis.com/maps/api/staticmap?size=290x145&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_1 }}&sensor=false">
+					<img src="http://maps.googleapis.com/maps/api/staticmap?size=300x145&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_1 }}&sensor=false&maptype=roadmap">
 				{% endif %}
 				{% if object.data.practice_location_1 and object.data.practice_location_2 %}
-				<img src="http://maps.googleapis.com/maps/api/staticmap?size=144x145&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_1 }}&sensor=false">
-				<img src="http://maps.googleapis.com/maps/api/staticmap?size=144x145&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_2 }}&sensor=false">
+					<img src="http://maps.googleapis.com/maps/api/staticmap?size=150x145&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_1 }}&sensor=false"><img src="http://maps.googleapis.com/maps/api/staticmap?size=149x145&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_2 }}&sensor=false">
 				{% endif %}
-
 				<ul>
 					{% for practice_location in object.practice_locations  %}
 						<li class="marker">{{ practice_location }}</li>
 					{% endfor %}	
-					<li class="tick">{{ total_deals }} Deals Closed (2011-2012)</li>
-					<li class="star">192 Endorsements</li>
+					<li class="tick">{{ object.data.years_practiced }} Years Practicing</li>
+					<li class="star">No endorsements yet</li>
 					<li class="friends"><img src="/static/img/app/small-avatar.jpg" alt="Avatar" /> Benjamin Ling is a mutual contact</li>
 				</ul>
 			</div>
-		</div>		
-			
+		</div>	
+		<div class="span8">
+				<h2>Deal Snapshot</h2>
+				<canvas id="myChart0" width="300" height="200"></canvas>
+				<canvas id="myChart1" width="300" height="200"></canvas>
+		</div>	
 	</div>
-</div>
 
 
-<div class="divide">
-    <div class="container buttons">
-		<a href="#" class="btn btn-large btn-primary" title="Message Leilat">Message Leila</a>
-		<a href="#" class="btn btn-large btn-secondary" title="Endorse Leila">Endorse Leila</a>
-		<a href="#" class="btn btn-large btn-tertiary" title="Engage Leila">Engage Leila</a>
-    </div>
-</div>
-
-<div class="divide">
-	<div class="container startups">
-		<h2>Startups Advised</h2>
-		<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
-		<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
-		<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
-		<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
-		<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
-		<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
-		<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
-		<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
-		<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
-		<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
+	<div class="divide">
+	    <div class=" buttons">
+			<a href="#" class="btn btn-large btn-primary" title="Message Leilat">Message Leila</a>
+			<a href="#" class="btn btn-large btn-secondary" title="Endorse Leila">Endorse Leila</a>
+			<a href="#" class="btn btn-large btn-tertiary" title="Engage Leila">Engage Leila</a>
+	    </div>
 	</div>
-</div>
 
-<div class="divide">
-	<div class="container endorsements">
-		<h2>Client Endorsements</h2>
-		<div class="endorsement">
-			<img src="/static/img/app/medium-avatar.png" alt="Avatar (Placeholder)" />
-			<p>Awesome to work with, responsive and helpful. Instrumental in getting Airbnb to where it is today</p>
-			<p class="source">Alex Halliday</p>
-		</div>
-		<div class="endorsement">
-			<img src="/static/img/app/medium-avatar.png" alt="Avatar (Placeholder)" />
-			<p>Awesome to work with, responsive and helpful. Instrumental in getting Airbnb to where it is today</p>
-			<p class="source">Alex Halliday</p>
-		</div>
-		<div class="endorsement">
-			<img src="/static/img/app/medium-avatar.png" alt="Avatar (Placeholder)" />
-			<p>Awesome to work with, responsive and helpful. Instrumental in getting Airbnb to where it is today</p>
-			<p class="source">Alex Halliday</p>
-		</div>
-		<div class="endorsement">
-			<img src="/static/img/app/medium-avatar.png" alt="Avatar (Placeholder)" />
-			<p>Awesome to work with, responsive and helpful. Instrumental in getting Airbnb to where it is today</p>
-			<p class="source">Alex Halliday</p>
-		</div>
-		<div class="endorsement">
-			<img src="/static/img/app/medium-avatar.png" alt="Avatar (Placeholder)" />
-			<p>Awesome to work with, responsive and helpful. Instrumental in getting Airbnb to where it is today</p>
-			<p class="source">Alex Halliday</p>
-		</div>
-		<div class="endorsement">
-			<img src="/static/img/app/medium-avatar.png" alt="Avatar (Placeholder)" />
-			<p>Awesome to work with, responsive and helpful. Instrumental in getting Airbnb to where it is today</p>
-			<p class="source">Alex Halliday</p>
+	<div class="divide">
+		<div class="startups">
+			<h2>Startups Advised</h2>
+			<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
+			<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
+			<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
+			<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
+			<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
+			<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
+			<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
+			<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
+			<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
+			<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
 		</div>
 	</div>
-</div>
 
+	<div class="divide">
+		<div class="endorsements">
+			<h2>Client Endorsements</h2>
+			<div class="endorsement">
+				<img src="/static/img/app/medium-avatar.png" alt="Avatar (Placeholder)" />
+				<p>Awesome to work with, responsive and helpful. Instrumental in getting Airbnb to where it is today</p>
+				<p class="source">Alex Halliday</p>
+			</div>
+			<div class="endorsement">
+				<img src="/static/img/app/medium-avatar.png" alt="Avatar (Placeholder)" />
+				<p>Awesome to work with, responsive and helpful. Instrumental in getting Airbnb to where it is today</p>
+				<p class="source">Alex Halliday</p>
+			</div>
+			<div class="endorsement">
+				<img src="/static/img/app/medium-avatar.png" alt="Avatar (Placeholder)" />
+				<p>Awesome to work with, responsive and helpful. Instrumental in getting Airbnb to where it is today</p>
+				<p class="source">Alex Halliday</p>
+			</div>
+			<div class="endorsement">
+				<img src="/static/img/app/medium-avatar.png" alt="Avatar (Placeholder)" />
+				<p>Awesome to work with, responsive and helpful. Instrumental in getting Airbnb to where it is today</p>
+				<p class="source">Alex Halliday</p>
+			</div>
+			<div class="endorsement">
+				<img src="/static/img/app/medium-avatar.png" alt="Avatar (Placeholder)" />
+				<p>Awesome to work with, responsive and helpful. Instrumental in getting Airbnb to where it is today</p>
+				<p class="source">Alex Halliday</p>
+			</div>
+			<div class="endorsement">
+				<img src="/static/img/app/medium-avatar.png" alt="Avatar (Placeholder)" />
+				<p>Awesome to work with, responsive and helpful. Instrumental in getting Airbnb to where it is today</p>
+				<p class="source">Alex Halliday</p>
+			</div>
+		</div>
+	</div>
+</div>
 {% endblock %}
 
 {% block body %}
@@ -199,4 +159,105 @@ geo loc: {{ object.current_geo_loc }}<br/>
 {% endcache %}
 </div>
  -->
+{{ object.data.volume_incorp_setup|jsonify }}
+
+<script>
+////////////
+// Charts //
+////////////
+$(document).ready(function () {
+//Get context with jQuery - using jQuery's .get() method.
+var ctx0 = $("#myChart0").get(0).getContext("2d");
+var ctx1 = $("#myChart1").get(0).getContext("2d");
+
+var chartnumbers =
+{ 
+    "incorp": 
+    [ 
+		{{ object.data.volume_incorp_setup|jsonify }}
+    ], 
+    "seed": 
+    [ 
+		{{ object.data.volume_seed_financing|jsonify }}
+    ], 
+    "seriesa": 
+    [ 
+		{{ object.data.volume_series_a|jsonify }}
+    ] 	
+}
+
+var data0 = {
+	labels : ["2010","2011","2012"],
+	datasets : [
+		{
+			fillColor : "rgba(151,187,205,0.5)",
+			strokeColor : "rgba(151,187,205,1)",
+			pointColor : "rgba(151,187,205,1)",
+			pointStrokeColor : "#fff",
+			data : [chartnumbers.incorp[0]['2010']+chartnumbers.seriesa[0]['2010']+chartnumbers.seed[0]['2010'],chartnumbers.incorp[0]['2011']+chartnumbers.seriesa[0]['2011']+chartnumbers.seed[0]['2011'],chartnumbers.incorp[0]['2012']+chartnumbers.seriesa[0]['2012']+chartnumbers.seed[0]['2012']],
+		}
+	]
+}
+
+var data1 = [
+	{
+		value: chartnumbers.seed[0]['2010']+chartnumbers.seed[0]['2011']+chartnumbers.seed[0]['2012'],
+		color:"#F38630"
+	},
+	{
+		value : chartnumbers.incorp[0]['2010']+chartnumbers.incorp[0]['2011']+chartnumbers.incorp[0]['2012'],
+		color : "#E0E4CC"
+	},
+	{
+		value : chartnumbers.seriesa[0]['2010']+chartnumbers.seriesa[0]['2011']+chartnumbers.seriesa[0]['2012'],
+		color : "#69D2E7"
+	}			
+]
+
+
+
+
+var linedefaults = {
+	//Boolean - Whether to show labels on the scale	
+	scaleShowLabels : false,
+}
+
+
+new Chart(ctx0).Line(data0,linedefaults);
+new Chart(ctx1).Pie(data1);
+
+
+//////////////////////////
+// More/Less on profile //
+//////////////////////////
+
+// The height of the content block when it's not expanded
+var adjustheight = 168;
+// The "more" link text
+var moreText = "+ Show More";
+// The "less" link text
+var lessText = "- Show Less";
+
+// Sets the .more-block div to the specified height and hides any content that overflows
+$(".more-less .more-block").css('height', adjustheight).css('overflow', 'hidden');
+
+// The section added to the bottom of the "more-less" div
+$(".more-less").append('<span class="continued"><a href="#" class="adjust"></a></span>');
+
+$("a.adjust").text(moreText);
+
+$(".adjust").toggle(function() {
+		$(this).parents("div:first").find(".more-block").css('height', 'auto').css('overflow', 'visible');
+		// Hide the [...] when expanded
+		$(this).parents("div:first").find("p.continued").css('display', 'none');
+		$(this).text(lessText);
+	}, function() {
+		$(this).parents("div:first").find(".more-block").css('height', adjustheight).css('overflow', 'hidden');
+		$(this).parents("div:first").find("p.continued").css('display', 'block');
+		$(this).text(moreText);
+});
+});
+
+
+</script>
 {% endblock %}

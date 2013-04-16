@@ -218,6 +218,8 @@ HELPER_APPS = (
     'easy_maps',
     # getsentry.com
     'raven.contrib.django.raven_compat',
+    # jsonfields
+    'jsonfield',
 )
 
 # Handle south and its breaking tests
