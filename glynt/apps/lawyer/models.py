@@ -35,7 +35,7 @@ class Lawyer(models.Model):
         try:
             return self.user.firm_lawyers.prefetch_related().all()[0]
         except IndexError:
-            return None
+            return 'dsadsa'
 
     def username(self):
         return self.user.username
@@ -54,6 +54,18 @@ class Lawyer(models.Model):
             self.user.firm_lawyers.all()[0].name
         except IndexError:
             return None
+
+    def practice_locations(self):
+        locations = []
+        if self.data.get('practice_location_1', None) is not None:
+            locations.append(self.data.get('practice_location_1'))
+        if self.data.get('practice_location_2', None) is not None:
+            locations.append(self.data.get('practice_location_2'))
+        return locations
+        
+    def total_deals(self):
+        total = self.data.get('volume_incorp_setup')
+        return total
             
     @property
     def phone(self):

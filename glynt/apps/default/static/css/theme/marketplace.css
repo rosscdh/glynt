@@ -1,0 +1,214 @@
+#hero {
+background: url(../../img/app/marketplace-background.jpg) 0 0 no-repeat;
+background-size: cover;
+text-align: center;
+position: relative;
+min-height: 218px;
+}
+#hero h1 {
+margin: 0.25em 0 0 0;
+line-height: 0.5 !important;
+}
+#hero .dock {
+position: absolute;
+left: 0;
+bottom: 0;
+width: 100%;
+height: 128px;
+background: rgba(0,0,0,0.41);
+}
+a.btn {
+padding: 12px 23px 13px 23px;
+border: 1px solid #e76356;
+border-radius: none;
+color: #fff;
+}
+a.btn.btn-primary {
+background: #f67e72;
+background: -moz-linear-gradient(top,  #f78b80 0%, #f67e72 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f78b80), color-stop(100%,#f67e72));
+background: -webkit-linear-gradient(top,  #f78b80 0%,#f67e72 100%);
+background: -o-linear-gradient(top,  #f78b80 0%,#f67e72 100%);
+background: -ms-linear-gradient(top,  #f78b80 0%,#f67e72 100%);
+background: linear-gradient(to bottom,  #f78b80 0%,#f67e72 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f78b80', endColorstr='#f67e72',GradientType=0 );
+}
+a.btn.btn-primary:hover {
+background: #eb786d;
+}
+.dock ul {
+padding: 0;
+margin: 0;
+list-style-type: none;
+}
+.dock ul li {
+display: inline;
+}
+.dock ul li a {
+display: inline-block;
+padding: 90px 30px 20px 30px;
+width: 70px;
+height: 18px;
+text-align: center;
+text-decoration: none;
+-o-transition: background-color 0.25s ease-in;
+-webkit-transition: background-color 0.25s ease-in;
+-moz-transition: background-color 0.25s ease-in;
+transition: background-color 0.25s ease-in;
+}
+.dock ul li a:hover, .dock ul li.dock-active a {
+text-decoration: none;
+background-color: rgba(0,0,0,0.6);
+-o-transition: background-color 0.25s ease-in;
+-webkit-transition: background-color 0.25s ease-in;
+-moz-transition: background-color 0.25s ease-in;
+transition: background-color 0.25s ease-in;
+}
+.dock li.dock-packages a {
+background: url(../../img/app/icon-packages.png) 50% 30% no-repeat;
+}
+.dock li.dock-firms a {
+background: url(../../img/app/icon-firms.png) 50% 30% no-repeat;
+}
+.dock li.dock-lawyers a {
+background: url(../../img/app/icon-lawyers.png) 50% 30% no-repeat;
+}
+.filter {
+background: #f8f9f9;
+border: 1px solid #ededed;
+padding: 20px;
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+box-sizing: border-box;
+margin-bottom: 40px;
+}
+.filter .checkboxes {
+float: left;
+width: 602px;
+}
+.filter .checkboxes input[type=checkbox], .filter .checkboxes label, .filter .checkboxes strong {
+float: left;
+margin-right: 6px;
+}
+.filter .location {
+float: right;
+width: 250px;
+}
+.filter .location h3 {
+line-height: 1;
+}
+.partner {
+float: left;
+width: 100%;
+border-bottom: 1px solid #ededed;
+margin: 0 0 10px 0;
+padding: 0 0 10px 0;
+}
+.partner .left {
+float: left;
+width: 140px;
+}
+img.partner-avatar {
+border: 1px solid #dbdbdb;
+}
+img.partner-logo {
+padding: 4px 8px;
+background: #f8f9f9;
+border: 1px solid #ededed;
+float: left;
+margin-top: 10px;
+}
+.partner .right {
+float: right;
+width: 780px;
+}
+.partner h2 {
+line-height: 0.5;
+}
+.partner h3 {
+margin-top: 5px;
+margin-left: 10px;
+font-size: 15px;
+float: left;
+}
+ul.partner-info {
+float: left;
+clear: left;
+padding: 0;
+margin: 0;
+list-style-type: none;
+}
+ul.partner-info li {
+margin: 0 15px 10px 0;
+padding: 2px 0 2px 20px;
+display: inline;
+}
+ul.partner-info li.marker.big {
+display: block;
+}
+ul.partner-info li.tick, ul.partner-info li.star {
+background: url(../../img/app/map-sprite.png) 0 5px no-repeat;
+}
+ul.partner-info li.tick {
+background-position: 0 -55px;
+}
+ul.partner-info li.star {
+background-position: 0 -119px;
+}
+ul.partner-info li.marker {
+background: url(../../img/app/marker.png) 0 2px no-repeat;
+}
+.partner a.btn, ul.partner-social {
+float: right;
+}
+.partner a.btn {
+margin-top: -50px;
+}
+ul.partner-social {
+width: 222px;
+padding: 0;
+margin: -50px 140px 0 0;
+list-style-type: none;
+}
+ul.partner-social li {
+float: left;
+display: inline-block;
+width: 74px;
+}
+ul.partner-social li.angellist {
+background: url(../../img/app/icon-angellist.png) 0 2px no-repeat;
+}
+ul.partner-social li.linkedin {
+background: url(../../img/app/icon-linkedin.png) 0 2px no-repeat;
+}
+ul.partner-social li.twitter {
+background: url(../../img/app/icon-twitter.png) 0 2px no-repeat;
+}
+ul.partner-social .circle-big {
+font-size: 12px;
+background: #757c7e;
+color: #fff;
+width: 37px;
+height: 37px;
+border-radius: 50px;
+line-height: 37px;
+text-align: center;
+float: left;
+margin: 0 0 0 20px;
+}
+ul.partner-social .circle-small {
+font-size: 12px;
+background: #c2320b;
+color: #fff;
+width: 24px;
+height: 24px;
+border-radius: 50px;
+line-height: 24px;
+text-align: center;
+float: left;
+margin: -12px 0 0 12px;
+}
+
+
+
+
