@@ -39,13 +39,21 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': False,
+        },
+        'lawpal.services': {
+            'handlers': ['splunkstorm'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'lawpal.graph': {
+            'handlers': ['splunkstorm'],
+            'level': 'INFO',
+            'propagate': False,
         }
     }
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-HELLOSIGN_AUTH = ("sendrossemail@gmail.com", "zanshin77")
 
 
 TWITTER_CONSUMER_KEY = 's4S1EAIeNded9aX5EBWwKQ'

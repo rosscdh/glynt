@@ -163,6 +163,8 @@ PROJECT_APPS = (
 
     # The Api
     'glynt.apps.api',
+    # The Graph
+    'glynt.apps.graph',
     # The Startups
     'glynt.apps.startup',
     # The Legal Firms
@@ -214,8 +216,6 @@ HELPER_APPS = (
     'user_streams.backends.user_streams_single_table_backend',
     # Cities
     'cities_light',
-    # Maps
-    'easy_maps',
     # getsentry.com
     'raven.contrib.django.raven_compat',
     # jsonfields
@@ -252,6 +252,7 @@ LOGIN_ERROR_URL    = '/login-error/'
 USER_STREAMS_BACKEND = 'user_streams.backends.user_streams_single_table_backend.SingleTableDatabaseBackend'
 USER_STREAMS_USE_UTC = True
 
+HELLOSIGN_AUTH = ("sendrossemail@gmail.com", "test2007")
 
 ANONYMOUS_USER_ID = -1
 AUTH_PROFILE_MODULE = 'client.ClientProfile' # our custom profile
@@ -283,7 +284,7 @@ FACEBOOK_REQUEST_PERMISSIONS = 'email,user_likes,user_about_me,read_stream'
 
 LINKEDIN_CONSUMER_KEY = '1uh2ns1cn9tm'
 LINKEDIN_CONSUMER_SECRET = 'MnrqdbtmM10gkz27'
-LINKEDIN_SCOPE = ['r_basicprofile', 'r_emailaddress']
+LINKEDIN_SCOPE = ['r_basicprofile', 'r_emailaddress', 'r_network']
 LINKEDIN_EXTRA_FIELD_SELECTORS = ['email-address', 'headline', 'industry']
 LINKEDIN_EXTRA_DATA = [('id', 'id'),
                        ('first-name', 'first_name'),
@@ -381,6 +382,11 @@ LOGGING = {
             'propagate': True,
         },
         'lawpal.services': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'lawpal.graph': {
             'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': True,
