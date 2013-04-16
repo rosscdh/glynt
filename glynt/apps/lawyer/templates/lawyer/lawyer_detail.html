@@ -17,7 +17,7 @@
 		<div class="row animated fadeInDown">
 			<div class="span12">
 				<div class="avatar">
-					<img src="{{ MEDIA_URL }}{{ object.photo|default:'lawyer/default_avatar.png' }}" alt="Avatar" />
+					<img src="{{ MEDIA_URL }}{{ object.photo|default:'lawyer/default_avatar.png' }}" alt="{{ object.user.get_full_name|default:object.user.username }}" />
 				</div>
 				<h1>{{ object.user.get_full_name|default:object.user.username }}</h1>
 				<h3>{{ object.summary }} <br /> {{ object.primary_firm }}</h3>
@@ -37,8 +37,9 @@
 			<br />
 		</div>	
 		<div class="span4 pull-right">
-			a{{ firm.photo }}a
-			
+			<div class="firm">
+				<img src="{{ MEDIA_URL }}{{ firm.photo|default:'firm/blank.gif' }}" alt="{{ firm.name }}" class="firm-logo" />
+			</div>
 			<div class="map">
 				{% if object.data.practice_location_1 and not object.data.practice_location_2 %}
 					<img src="http://maps.googleapis.com/maps/api/staticmap?size=300x145&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_1 }}&sensor=false&maptype=roadmap">
@@ -53,8 +54,9 @@
 					<li class="tick">{{ object.data.years_practiced }} Years Practicing</li>
 					<li class="star">No endorsements yet</li>
 					<li class="friends"><img src="/static/img/app/small-avatar.jpg" alt="Avatar" /> Benjamin Ling is a mutual contact</li>
-				</ul>
+				</ul>				
 			</div>
+			
 		</div>	
 		<div class="span8">
 				<h2>Deal Snapshot</h2>
@@ -143,7 +145,6 @@ geo loc: {{ object.current_geo_loc }}<br/>
 {{ object.data.if_i_wasnt_a_lawyer|default:"No Data" }}
 
 <h2>Accounts</h2>
-{% social_associate social_auth %}
 
 <h2>Firms</h2>
 {{ firm.primary_office }}
@@ -155,7 +156,6 @@ geo loc: {{ object.current_geo_loc }}<br/>
 {% endcache %}
 </div>
  -->
-{{ object.data.volume_incorp_setup|jsonify }}
 
 <script>
 ////////////
@@ -209,8 +209,6 @@ var data1 = [
 		color : "#69D2E7"
 	}			
 ]
-
-
 
 
 var linedefaults = {

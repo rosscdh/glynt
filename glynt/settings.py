@@ -220,6 +220,8 @@ HELPER_APPS = (
     'raven.contrib.django.raven_compat',
     # jsonfields
     'jsonfield',
+    # parsely
+    'parsley',
 )
 
 # Handle south and its breaking tests

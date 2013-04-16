@@ -15,6 +15,8 @@ padding: 0 !important;
 border: 8px solid rgba(255,255,255,0.46);
 box-shadow: 0 0 10px rgba(0,0,0,0.23);
 border-radius: 100px;
+max-width:200px;
+max-height:150px;
 }
 body.lawyer-welcome .profile p {
 font-size: 17px;
@@ -206,7 +208,14 @@ margin: 0;
 font-size: 11px;
 color: #b4b7b8;
 }
-
+.firm{
+text-align:center;
+}
+.firm .firm-logo {
+max-width:130px;
+max-height:130px;
+padding:20px;
+}
 
 
 

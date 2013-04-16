@@ -23,7 +23,7 @@
 				Confirm your details
 			</h1>
 			<br>
-			<form id="lawyer-profile-form" action="{% url 'lawyer:setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
+			<form id="lawyer-profile-form" action="{% url 'lawyer:setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data" data-validate="parsley">{% csrf_token %}
 			{{ form|as_crispy_errors }}
 			<div class="row">
 					<div class="span5">

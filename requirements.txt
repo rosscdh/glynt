@@ -38,6 +38,7 @@ django-jsonfield # This is the correct one, the bradjasper version does not save
 -e git+https://github.com/rosscdh/django-user-streams.git@extended_templates#egg=django-user-streams  # Note the @branch
 
 # Markup
+django-parsely
 django_markup
 markup
 Markdown

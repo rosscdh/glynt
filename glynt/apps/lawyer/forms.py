@@ -16,6 +16,9 @@ from glynt.apps.lawyer.models import Lawyer
 
 from glynt.apps.lawyer.services import EnsureLawyerService
 
+from parsley.decorators import parsleyfy
+
+
 import logging
 logger = logging.getLogger('django.request')
 
@@ -25,7 +28,7 @@ API_URLS = {
     'startups': '/api/v1/startup/lite/?format=json&limit=15',
 }
 
-
+@parsleyfy
 class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     cookie_name = 'lawyer_profile_photo'
     ROLES = [display_name for name,display_name in Lawyer.LAWYER_ROLES.get_choices()]
@@ -60,7 +63,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
             }))
     hidden_photo = forms.CharField(required=False, widget=forms.HiddenInput) # transports the id
 
-    startups_advised_input = forms.CharField(required=False, label="Startups Advised", help_text='This helps us match you with similar startups', widget=forms.TextInput(attrs={'placeholder':'e.g. Facebook http://facebook.com', 'class':'typeahead','autocomplete':'off','data-provide':'ajax', 'data-items':4, 'data-source': 'startups', 'data-filter':'name__istartswith'}))
+    startups_advised_input = forms.CharField(required=False, label="Startups Advised", help_text='This helps us match you with similar startups', widget=forms.TextInput(attrs={'placeholder':'e.g. Instagram.com', 'class':'typeahead','autocomplete':'off','data-provide':'ajax', 'data-items':4, 'data-source': 'startups', 'data-filter':'name__istartswith'}))
     startups_advised = forms.CharField(required=False, widget=forms.HiddenInput)
 
     volume_incorp_setup = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
