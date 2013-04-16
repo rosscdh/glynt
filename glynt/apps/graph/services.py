@@ -7,7 +7,7 @@ them to the graph database models
 """
 from django.conf import settings
 
-from models import LawpalBaseConnection
+from models import LawpalBaseConnection, LinkedinConnection, AngelConnection
 from models import GraphConnection
 
 import oauth2 as oauth
@@ -17,31 +17,40 @@ logger = logging.getLogger('lawpal.services')
 
 
 class ProcessConnectionsService(object):
+    """ Class to provide accessor to the connection_class
+    which can be one of LawpalBaseConnection or descendant objects """
     provider = 'unknown'
+    connection_class = LawpalBaseConnection
     connection = None
 
     def __init__(self, uid, item, **kwargs):
-        self.connection_class = kwargs.get('connection_class', LawpalBaseConnection)
+        self.connection_class = kwargs.get('connection_class') if kwargs.get('connection_class', None) is not None else self.connection_class
         self.uid = uid
-		self.connection = self.connection_class(provider=self.provider, uid=self.uid, **item)
+        self.connection = self.connection_class(provider=self.provider, uid=self.uid, **item)
+        self.user = kwargs.get('user', None)
 
-        logger.info('Commencing process for %s connection %s' % (self.provider, self.uid))
+        logger.info('Connection process %s.%s' % (self.provider, self.uid))
 
         self.__dict__.update(item)
+
         self.process(item)
 
     def process(self, item):
-        logger.info('Processing %s connection %s' % (self.provider, self.uid))
-        
-
+        if self.user is None:
+            logger.info('Connection %s.%s has no associated user' % (self.provider, self.uid))
+        else:
+            logger.info('Processing connection %s.%s for user %s' % (self.provider, self.uid, self.user.get_full_name()))
+            self.connection.associate(user=self.user)
 
 
 class LinkedInProcessConnectionsService(ProcessConnectionsService):
     provider = 'linkedin'
+    connection_class = LinkedinConnection
 
 
 class AngelProcessConnectionsService(ProcessConnectionsService):
     provider = 'angel'
+    connection_class = AngelConnection
 
 
 """
@@ -88,4 +97,4 @@ class AngelConnectionsService(CollectConnectionsBaseService):
     url = 'https://api.angel.co/1/users/%s/followers?access_token=%s'
 
     def get_url(self):
-        return self.url % (getattr(self, 'user_id'), getattr(self, 'access_token'))
+        return self.url % (getattr(self, 'angel_uid'), getattr(self, 'access_token'))
