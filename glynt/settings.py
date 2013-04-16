@@ -383,6 +383,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
+        'lawpal.graph': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
         'lawpal.commands': {
             'handlers': ['console'],
             'level': 'DEBUG',
