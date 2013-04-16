@@ -211,7 +211,7 @@ img#photo-preview{
 
 function preparePhotoPreview(element) {
 	var element = $('.cropped-imag-preview');
-	var cookie_data = $.parseJSON($.cookie('{{ form.cookie_name }}'));
+	var cookie_data = $.parseJSON($.cookie('{{ form.cookie_name }}-{{ user.pk }}'));
 
 	$.each(element.find('img'), function(i,img){
 		img = $(img)
@@ -236,7 +236,7 @@ function preparePhotoPreview(element) {
 
 function photoCrop(element, data) {
 	$('#id_hidden_photo').val(data.id);// id to be sent
-    $.cookie('{{ form.cookie_name }}', JSON.stringify({'id': data.id, 'path': data.path}));
+    $.cookie('{{ form.cookie_name }}-{{ user.pk }}', JSON.stringify({'id': data.id, 'path': data.path}));
 	preparePhotoPreview(element);
 }
 
@@ -351,7 +351,7 @@ $(document).ready(function(){
 	});
 
 	function process_startups() {
-		var cookie_name = 'startup_list';
+		var cookie_name = 'startup_list-{{ user.pk }}';
 		var cookie_data = $.parseJSON($.cookie(cookie_name)) || $.parseJSON($('#id_startups_advised').val()) || [];
 		var force = true;
 		$.each(cookie_data, function(i,startup){
@@ -362,7 +362,7 @@ $(document).ready(function(){
 
 	function add_startup(startup, force){
 		var force = force || false
-		var cookie_name = 'startup_list';
+		var cookie_name = 'startup_list-{{ user.pk }}';
 		var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
 		startup = startup.compact()
 
@@ -398,7 +398,7 @@ $(document).ready(function(){
 		remove_startup(startup)
 	})
 	function remove_startup(startup){
-		var cookie_name = 'startup_list';
+		var cookie_name = 'startup_list-{{ user.pk }}';
 		var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
 		startup = startup.compact()
 

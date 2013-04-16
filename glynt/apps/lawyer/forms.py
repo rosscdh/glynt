@@ -31,6 +31,7 @@ API_URLS = {
 @parsleyfy
 class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     cookie_name = 'lawyer_profile_photo'
+
     ROLES = [display_name for name,display_name in Lawyer.LAWYER_ROLES.get_choices()]
 
     title = forms.CharField(required=False)
