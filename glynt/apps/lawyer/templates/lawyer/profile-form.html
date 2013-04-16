@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load crispy_forms_tags %}
+{% extends 'base.html' %}{% load crispy_forms_tags jsonify %}
 
 {% block page_title %}Complete your profile{% endblock %}
 {% block bodyclass %}lawyer-form{% endblock %}
@@ -254,9 +254,9 @@ $(document).ready(function(){
 
 	$('input[title]').tooltip({trigger: 'focus', placement: 'top'});
 
-	$('#id_volume_incorp_setup').val('{{ lawyer.data.volume_incorp_setup|safe }}');
-	$('#id_volume_seed_financing').val('{{ lawyer.data.volume_seed_financing|safe }}');
-	$('#id_volume_series_a').val('{{ lawyer.data.volume_series_a|safe }}');
+	$('#id_volume_incorp_setup').val('{{ lawyer.data.volume_incorp_setup|jsonify }}');
+	$('#id_volume_seed_financing').val('{{ lawyer.data.volume_seed_financing|jsonify }}');
+	$('#id_volume_series_a').val('{{ lawyer.data.volume_series_a|jsonify }}');
 	/**
 	* Dynamic selector functions based on form api urls
 	* 
@@ -408,7 +408,6 @@ $(document).ready(function(){
 
 		// default json data from hidden element
 		var target_json = $.parseJSON(target_element.val());
-		console.log(target_json)
 		target_json = (target_json === null) ? {} : target_json ;
 
 		// parse and reform and set defaults

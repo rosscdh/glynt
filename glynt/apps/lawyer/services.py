@@ -84,19 +84,16 @@ class EnsureLawyerService(object):
         tmp_data = {}
         data = self.lawyer.data
 
-        tmp_data.update(startups_advised = self.data.get('startups_advised', '[]'))
-
-        tmp_data.update(volume_incorp_setup = self.data.get('volume_incorp_setup', self.default_volume_matrix))
-        tmp_data.update(volume_seed_financing = self.data.get('volume_seed_financing', self.default_volume_matrix))
-        tmp_data.update(volume_series_a = self.data.get('volume_series_a', self.default_volume_matrix))
-        # remove empty items
-        tmp_data = [(k,v) for k,v in tmp_data.items() if v is not None]
+        tmp_data.update({
+            'startups_advised': json.loads(self.data.get('startups_advised', '[]')),
+            'volume_incorp_setup': json.loads(self.data.get('volume_incorp_setup', self.default_volume_matrix)),
+            'volume_seed_financing': json.loads(self.data.get('volume_seed_financing', self.default_volume_matrix)),
+            'volume_series_a': json.loads(self.data.get('volume_series_a', self.default_volume_matrix)),
+        })
 
         # add the JSON object and perform lawyer save on that field only
-        if tmp_data:
-            self.lawyer.data.update(tmp_data)
-            self.lawyer.save()
-            logger.info('lawyer:fields:data update %s' % self.lawyer.user.username)
+        self.lawyer.data.update(tmp_data)
+        self.lawyer.save()
 
         # Primary lawyer update query
         # Will always be present due to the previous get_or_create
