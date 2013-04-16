@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load invite_tags %}
+{% load invite_tags account_tags %}
 
 {% block page_title %}Lawyers - Thanks for completing your profile{% endblock %}
 {% block bodyclass %}lawyer-form{% endblock %}
@@ -20,6 +20,8 @@
 <div class="container profile">
 	<div class="row">
 		<div class="span12">
+			{% social_associate social_auth %}
+			
 			<h1>
 				Invite 2 colleagues to join LawPal
 			</h1>
