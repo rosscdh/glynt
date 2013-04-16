@@ -59,11 +59,6 @@ class LawyerProfileSetupView(FormView):
 
         startups_advised = lawyer.data.get('startups_advised', [])
 
-        # volume_incorp_setup = lawyer.data.get('volume_incorp_setup', {})
-        # volume_seed_financing = lawyer.data.get('volume_seed_financing', {})
-        # volume_series_a = lawyer.data.get('volume_series_a', {})
-
-
         kwargs.update({'initial': {
             'first_name': user.first_name,
             'last_name': user.last_name,
@@ -80,13 +75,9 @@ class LawyerProfileSetupView(FormView):
             'summary': lawyer.summary,
             'bio': lawyer.bio,
             'if_i_wasnt_a_lawyer': lawyer.data.get('if_i_wasnt_a_lawyer', None),
-            'startups_advised': startups_advised,
+            'startups_advised': json.dumps(startups_advised),
 
             'photo': lawyer.photo,
-
-            # 'volume_incorp_setup': volume_incorp_setup,
-            # 'volume_seed_financing': volume_seed_financing,
-            # 'volume_series_a': volume_series_a,
 
             'agree_tandc': lawyer.data.get('agree_tandc', None),
         }})

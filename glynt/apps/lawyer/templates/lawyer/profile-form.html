@@ -23,7 +23,7 @@
 				Confirm your details
 			</h1>
 			<br>
-			<form id="lawyer-profile-form" action="{% url 'lawyer:setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data" data-validate="parsley">{% csrf_token %}
+			<form id="lawyer-profile-form" data-validate="parsley" action="{% url 'lawyer:setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
 			{{ form|as_crispy_errors }}
 			<div class="row">
 					<div class="span5">
@@ -151,21 +151,20 @@
 							<tr>
 								<th>Incorporation and Setup</th>
 								<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="incorp_setup" data-year="2010" type="text"></td>
-								<td><input class="span1 volume" data-volume_type="incorp_setup" data-year="2011" type="text"></td>
-								<td><input class="span1 volume" data-volume_type="incorp_setup" data-year="2012" type="text"></td>
+								<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="incorp_setup" data-year="2011" type="text"></td>
+								<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="incorp_setup" data-year="2012" type="text"></td>
 							</tr>
-
 							<tr>
 								<th>Seed Financing</th>
-								<td><input class="span1 volume" data-volume_type="seed_financing" data-year="2010" type="text"></td>
-								<td><input class="span1 volume" data-volume_type="seed_financing" data-year="2011" type="text"></td>
-								<td><input class="span1 volume" data-volume_type="seed_financing" data-year="2012" type="text"></td>
+								<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="seed_financing" data-year="2010" type="text"></td>
+								<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="seed_financing" data-year="2011" type="text"></td>
+								<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="seed_financing" data-year="2012" type="text"></td>
 							</tr>
 							<tr>
 								<th>Series A</th>
-								<td><input class="span1 volume" data-volume_type="series_a" data-year="2010" type="text"></td>
-								<td><input class="span1 volume" data-volume_type="series_a" data-year="2011" type="text"></td>
-								<td><input class="span1 volume" data-volume_type="series_a" data-year="2012" type="text"></td>
+								<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="series_a" data-year="2010" type="text"></td>
+								<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="series_a" data-year="2011" type="text"></td>
+								<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="series_a" data-year="2012" type="text"></td>
 							</tr>
 						</table>
 						{{ form.volume_incorp_setup }}
@@ -320,23 +319,37 @@ $(document).ready(function(){
 
 
 	/**
+	* remove photo from parsley
+	*/
+	$('form#lawyer-profile-form').parsley( 'removeItem', '#id_photo' )
+	$('form#lawyer-profile-form').parsley( 'removeItem', '#id_hidden_photo' )
+
+	/**
 	* handle startup additions
 	*/
 	$('button#add-startup-btn').on('click', function(event){
 		event.preventDefault();
 
 		var element = $('#id_startups_advised_input');
-		var startup = element.val();
+	
+		// remove and then re-add
+		element.closest('form').parsley( 'removeItem', '#' + element.attr('id') )
+		element.closest('form').parsley( 'addItem', '#' + element.attr('id') )
+		element.parsley( 'addConstraint', { url: true } );
 
-		add_startup(startup);
+		if ( element.parsley( 'validate' ) === true ) {
+			var startup = element.val();
+			add_startup(startup);
 
-		element.val('');
-		element.select();
+			element.val('');
+			element.select();
+			console.log(element.closest('form'))
+		}
 	});
 
 	function process_startups() {
 		var cookie_name = 'startup_list';
-		var cookie_data = $.parseJSON($('#id_startups_advised').val()) || $.parseJSON($.cookie(cookie_name)) || [];
+		var cookie_data = $.parseJSON($.cookie(cookie_name)) || $.parseJSON($('#id_startups_advised').val()) || [];
 		var force = true;
 		$.each(cookie_data, function(i,startup){
 			add_startup(startup, force);

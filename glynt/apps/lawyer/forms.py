@@ -37,7 +37,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
 
     first_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'John'}))
     last_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'Sonsini'}))
-    email = forms.EmailField(help_text="", widget=forms.TextInput(attrs={'placeholder':'john@lawpal.com', 'data-type':'email'}))
+    email = forms.EmailField(help_text="", widget=forms.TextInput(attrs={'placeholder':'john@lawpal.com'}))
 
     firm_name = forms.CharField(widget=forms.TextInput(attrs={'class':'typeahead','autocomplete':'off','data-provide':'ajax', 'minLength':'2', 'data-items':4, 'data-source': 'firms'}))
 
@@ -46,24 +46,24 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     position = forms.ChoiceField(choices=Lawyer.LAWYER_ROLES.get_choices(), label="Position")
     years_practiced = forms.IntegerField(label="Years Practicing", initial="3", widget=forms.TextInput(attrs={'class':'input-mini'}))
 
-    practice_location_1 = forms.CharField(label="Primary Location", widget=forms.TextInput(attrs={'class':'input-large','placeholder':'San Francisco, CA','title':'The primary city you operate from','class':'typeahead','autocomplete':'off','data-provide':'ajax', 'minLength':'3', 'data-items':4, 'data-source':'locations', 'data-filter':'name__istartswith'}))
-    practice_location_2 = forms.CharField(required=False, label="Secondary Location", widget=forms.TextInput(attrs={'class':'input-large','placeholder':'London, UK','title':'Optional. The secondary city you operate from.','class':'typeahead','autocomplete':'off','data-provide':'ajax', 'minLength':'3', 'data-items':4, 'data-source':'locations', 'data-filter':'name__istartswith'}))
+    practice_location_1 = forms.CharField(label="Primary Location", widget=forms.TextInput(attrs={'class':'input-large','placeholder':'San Francisco, CA','title':'The primary city you operate from','class':'typeahead','autocomplete':'on','data-provide':'ajax', 'minLength':'3', 'data-items':4, 'data-source':'locations', 'data-filter':'name__istartswith'}))
+    practice_location_2 = forms.CharField(required=False, label="Secondary Location", widget=forms.TextInput(attrs={'class':'input-large','placeholder':'London, UK','title':'Optional. The secondary city you operate from.','class':'typeahead','autocomplete':'on','data-provide':'ajax', 'minLength':'3', 'data-items':4, 'data-source':'locations', 'data-filter':'name__istartswith'}))
 
     summary = forms.CharField(label="Short description", widget=forms.TextInput(attrs={'class':'input-xxlarge','placeholder':'e.g. Partner at Orrick advising technology companies in Europe','title':'Keep it short, and make it personal.'}))
-    bio = forms.CharField(required=False, widget=forms.Textarea(attrs={'class':'input-xxlarge', 'data-trigger':'keyup', 'data-rangelength':'[10,2050]','placeholder':'A bit more about you.','title':'A bit longer, but still make it personal.'}))
+    bio = forms.CharField(required=False, widget=forms.Textarea(attrs={'class':'input-xxlarge', 'data-trigger':'keyup', 'data-rangelength':'[0,1024]','placeholder':'A bit more about you.','title':'A bit longer, but still make it personal.'}))
     if_i_wasnt_a_lawyer = forms.CharField(label="If I wasn't a lawyer", required=False, widget=forms.TextInput(attrs={'class':'input-xxlarge','placeholder':'e.g. Astronaut and part-time Pastry Chef','title':'If I wasn\'t a lawyer, I would be a...'}))
 
-    photo = forms.ImageField(required=False, label="Main Photo", help_text="Please add a good quality photo to your profile. It really helps.", widget=CicuUploderInput(options={
+    photo = forms.ImageField(required=False, label="Main Photo", help_text="Please add a good quality photo to your profile. It really helps.", widget=CicuUploderInput(attrs={'data-required': 'false'}, options={
                 'ratioWidth': '110',       #fix-width ratio, default 0
                 'ratioHeight':'110',       #fix-height ratio , default 0
                 'sizeWarning': 'False',    #if True the crop selection have to respect minimal ratio size defined above. Default 'False'
                 'modalButtonLabel': 'Upload photo',
                 'onReady': 'preparePhotoPreview',
-                'onCrop': 'photoCrop',
+                'onCrop': 'photoCrop'
             }))
     hidden_photo = forms.CharField(required=False, widget=forms.HiddenInput) # transports the id
 
-    startups_advised_input = forms.CharField(required=False, label="Startups Advised", help_text='This helps us match you with similar startups', widget=forms.TextInput(attrs={'placeholder':'e.g. Instagram.com', 'class':'typeahead','autocomplete':'off','data-provide':'ajax', 'data-items':4, 'data-source': 'startups', 'data-filter':'name__istartswith'}))
+    startups_advised_input = forms.URLField(required=False, label="Startups Advised", help_text='This helps us match you with similar startups', widget=forms.TextInput(attrs={'placeholder':'e.g. Instagram.com', 'class':'typeahead','autocomplete':'on','data-provide':'ajax', 'data-items':4, 'data-source': 'startups', 'data-filter':'name__istartswith'}))
     startups_advised = forms.CharField(required=False, widget=forms.HiddenInput)
 
     volume_incorp_setup = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
