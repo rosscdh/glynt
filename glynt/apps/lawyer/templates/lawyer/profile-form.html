@@ -424,7 +424,6 @@ $(document).ready(function(){
 
 		// default json data from hidden element
 		var target_json = $.parseJSON(target_element.val());
-		target_json = (target_json === null) ? {} : target_json ;
 
 		// parse and reform and set defaults
 		var volume_object = window[volume_type + '_object'] || target_json;
@@ -433,16 +432,20 @@ $(document).ready(function(){
 
 		// set the initial value
 		window[volume_type + '_object'] = volume_object;
+//console.log(volume_object[year])
 		e.val(volume_object[year])
 		target_element.val(as_json);
 
+		function ensureVolumeValue(volume_type) {
+			var target_element = $('#id_volume_' + volume_type);
+			return (typeof(target_element.val()) != typeof({})) ? {} : $.parseJSON(target_element.val());
+		}
 		e.on('change', function(event){
 			var volume = e.val();
 			var volume_type = e.attr('data-volume_type');
 			var year = e.attr('data-year');
 
-			var target_element = $('#id_volume_' + volume_type);
-			var target_json = $.parseJSON(target_element.val());
+			var target_json = ensureVolumeValue(volume_type);
 			var volume_object = window[volume_type + '_object'];
 
 			volume_object[year] = volume;
