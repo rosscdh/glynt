@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django.core import exceptions
 from django.utils import simplejson as json
 from django.core.urlresolvers import reverse
+from django.core.cache import cache
+from glynt.cache_utils_1_5 import make_template_fragment_key
 
 from bootstrap.forms import BootstrapMixin
 
@@ -125,6 +127,8 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
         lawyer_service.process()
 
         self.delete_cookie()
+        cache.delete(make_template_fragment_key("user", ["mugshot", self.request.user.pk]))
+
         logger.info('Complete: Ensuring the LawyerProfile Exists')
 
 

@@ -59,10 +59,6 @@ class LawyerProfileSetupView(FormView):
 
         startups_advised = lawyer.data.get('startups_advised', [])
 
-        if bool(lawyer.photo) is False:
-            lawyer.photo = lawyer.user.profile.mugshot
-
-
         kwargs.update({'initial': {
             'first_name': user.first_name,
             'last_name': user.last_name,
@@ -82,7 +78,6 @@ class LawyerProfileSetupView(FormView):
             'startups_advised': json.dumps(startups_advised),
 
             'photo': lawyer.photo,
-            'hidden_photo': lawyer.photo,
 
             'agree_tandc': lawyer.data.get('agree_tandc', None),
         }})

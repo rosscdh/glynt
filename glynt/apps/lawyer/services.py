@@ -81,10 +81,9 @@ class EnsureLawyerService(object):
         fields_to_update = [(k,v) for k,v in fields_to_update.items() if v is not None]
 
         # Updates to the JSON Data object for the Lawyer
-        tmp_data = {}
         data = self.lawyer.data
 
-        tmp_data.update({
+        data.update({
             'startups_advised': json.loads(self.data.get('startups_advised', '[]')),
             'volume_incorp_setup': json.loads(self.data.get('volume_incorp_setup', self.default_volume_matrix)),
             'volume_seed_financing': json.loads(self.data.get('volume_seed_financing', self.default_volume_matrix)),
@@ -92,8 +91,8 @@ class EnsureLawyerService(object):
         })
 
         # add the JSON object and perform lawyer save on that field only
-        self.lawyer.data.update(tmp_data)
-        self.lawyer.save()
+        self.lawyer.data = data
+        self.lawyer.save(update_fields=['data'])
 
         # Primary lawyer update query
         # Will always be present due to the previous get_or_create
