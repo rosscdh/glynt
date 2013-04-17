@@ -37,7 +37,7 @@ class EnsureLawyerService(object):
         User.objects.filter(pk=self.user.pk).update(**dict(fields_to_update))
 
         # Update the password if present
-        if self.form.cleaned_data.get('password', None) is not None:
+        if self.form is not None and self.form.cleaned_data.get('password', None) is not None:
             self.user.set_password(self.form.cleaned_data.get('password', None))
             self.user.save()
 
