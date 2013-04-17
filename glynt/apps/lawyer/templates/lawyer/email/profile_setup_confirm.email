@@ -1,0 +1,13 @@
+{% load glynt_helpers %}
+
+{% block subject %}Invitations from {{ from_name }}{% endblock %}
+
+{% block plain %}
+Dear {{ to_name }},
+
+Your profile at Lawpal.com has been updated.
+
+Please visit {{ profile_url }} to see the changes.
+
+{% include 'email/footer.email' %}
+{% endblock %}
