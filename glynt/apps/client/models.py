@@ -52,7 +52,8 @@ class ClientProfile(UserenaBaseProfile):
 # set the profile
 User.profile = property(lambda u: ClientProfile.objects.get_or_create(user=u)[0])
 
-#@receiver(connect)
+
+@receiver(connect)
 def create_client_profile(sender, dispatch_uid='client.create_client_profile', **kwargs):
     user = kwargs['user']
     profile, is_new = ClientProfile.objects.get_or_create(user=user)
@@ -70,8 +71,8 @@ def create_client_profile(sender, dispatch_uid='client.create_client_profile', *
         userena_signals.signup_complete.send(sender=None, user=user)
 
 
-#@receiver(login)
-#@receiver(connect)
+# @receiver(login)
+# @receiver(connect)
 def populate_profile_data(sender, dispatch_uid='client.populate_profile_data', **kwargs):
     user = kwargs['user']
     profile, is_new = ClientProfile.objects.get_or_create(user=user)
