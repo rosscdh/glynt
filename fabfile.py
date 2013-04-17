@@ -147,14 +147,18 @@ def get_sha1():
   return local('git rev-parse --short --verify HEAD', capture=True)
 
 @task
-def git_export():
+def git_export(branch='master'):
   env.SHA1_FILENAME = get_sha1()
   if not os.path.exists('/tmp/%s.zip' % env.SHA1_FILENAME):
-      local('git archive --format zip --output /tmp/%s.zip --prefix=%s/ master' % (env.SHA1_FILENAME, env.SHA1_FILENAME,), capture=False)
+      local('git archive --format zip --output /tmp/%s.zip --prefix=%s/ %s' % (env.SHA1_FILENAME, env.SHA1_FILENAME,), capture=False, branch)
 
 
 def prepare_deploy():
     git_export()
+
+@task
+def migrations():
+    virtualenv('pip install -r %s%s/requirements.txt' % (env.remote_project_path, env.project))
 
 @task
 def clean_versions():
