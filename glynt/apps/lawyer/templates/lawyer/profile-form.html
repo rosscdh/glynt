@@ -447,7 +447,8 @@ $(document).ready(function(){
 		var target_json = $.parseJSON(target_element.val());
 
 		// parse and reform and set defaults
-		var volume_object = window[volume_type + '_object'] || (typeof(target_json) == 'string') ? {} :target_json;
+
+		var volume_object = window[volume_type + '_object'] || (typeof(target_json) == 'object') ? target_json : {};
 		volume_object[year] = (target_json[year] !== undefined)? target_json[year]: 0;
 		var as_json = JSON.stringify(volume_object)
 
