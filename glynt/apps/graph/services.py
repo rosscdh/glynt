@@ -16,7 +16,7 @@ import logging
 logger = logging.getLogger('lawpal.services')
 
 
-class ProcessConnectionsService(object):
+class ProcessConnectionService(object):
     """ Class to provide accessor to the connection_class
     which can be one of LawpalBaseConnection or descendant objects """
     provider = 'unknown'
@@ -43,12 +43,12 @@ class ProcessConnectionsService(object):
             self.connection.associate(user=self.user)
 
 
-class LinkedInProcessConnectionsService(ProcessConnectionsService):
+class LinkedInProcessConnectionService(ProcessConnectionService):
     provider = 'linkedin'
     connection_class = LinkedinConnection
 
 
-class AngelProcessConnectionsService(ProcessConnectionsService):
+class AngelProcessConnectionService(ProcessConnectionService):
     provider = 'angel'
     connection_class = AngelConnection
 
@@ -58,7 +58,7 @@ The Collector Services
 Used to Query the remote 3rd Party Api
 """
 
-class CollectConnectionsBaseService(object):
+class CollectConnectionBaseService(object):
     consumer = None
     client = None
     url = None
@@ -80,7 +80,7 @@ class CollectConnectionsBaseService(object):
         return client.request(self.get_url(), method, '')
 
 
-class LinkedinConnectionsService(CollectConnectionsBaseService):
+class LinkedinConnectionService(CollectConnectionBaseService):
     consumer = oauth.Consumer(settings.LINKEDIN_CONSUMER_KEY, settings.LINKEDIN_CONSUMER_SECRET)
     url = 'http://api.linkedin.com/v1/people/~/connections?format=json'
 
@@ -89,10 +89,10 @@ class LinkedinConnectionsService(CollectConnectionsBaseService):
                     key=getattr(self, 'oauth_token'),
                     secret=getattr(self, 'oauth_token_secret'))
         client = oauth.Client(self.consumer, access_token)
-        return super(LinkedinConnectionsService, self).request(method=method, client=client)
+        return super(LinkedinConnectionService, self).request(method=method, client=client)
 
 
-class AngelConnectionsService(CollectConnectionsBaseService):
+class AngelConnectionService(CollectConnectionBaseService):
     consumer = oauth.Consumer(settings.ANGEL_CLIENT_ID, settings.ANGEL_CLIENT_SECRET)
     url = 'https://api.angel.co/1/users/%s/followers?access_token=%s'
 

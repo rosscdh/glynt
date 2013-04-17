@@ -92,3 +92,4 @@ class AngelConnection(LawpalBaseConnection):
     provider = 'angel'
     def get_full_name_from_data(self):
         return u'%s' % self.extra_data.get('name')
+
