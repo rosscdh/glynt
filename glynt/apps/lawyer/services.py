@@ -2,8 +2,10 @@
 import os
 from django.contrib.auth.models import User
 from django.utils import simplejson as json
+
 from models import Lawyer
 from glynt.apps.firm.services import EnsureFirmService
+from tasks import send_profile_setup_email
 
 import logging
 logger = logging.getLogger('lawpal.services')
@@ -99,6 +101,9 @@ class EnsureLawyerService(object):
         # Primary lawyer update query
         # Will always be present due to the previous get_or_create
         Lawyer.objects.filter(pk=self.lawyer.pk).update(**dict(fields_to_update))
+
+        # Send profile email
+        send_profile_setup_email(user=self.lawyer.user)
 
         logger.info('get_or_create:lawyer %s is_new: %s' % (self.lawyer.user.username, self.lawyer_is_new,))
 
