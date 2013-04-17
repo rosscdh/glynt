@@ -14,22 +14,30 @@ from glynt.apps.graph.services import LinkedinConnectionService, AngelConnection
 
 import json
 from urlparse import parse_qs
-import pdb
+
+import logging
+logger = logging.getLogger('lawpal.graph')
 
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
         make_option('--auth',
-            action='store_true',
             dest='auth',
             default=None,
             help='A specific Authentication Object to use'),
+        make_option('--provider_type',
+            dest='provider_type',
+            default=None,
+            help='A specific Provider Type to check'),
     )
 
     help = 'Collects Contact Ids from various connected user Services'
 
     def handle(self, *args, **options):
         auth = options.get('auth', None)
+
+        self.provider_type = options.get('provider_type', None)
+
         if auth is not None:
             self.process_single_auth(auth)
         else:
@@ -43,8 +51,16 @@ class Command(BaseCommand):
         else:
             raise Exception('Unknown Auth Provider %s' % auth.provider)
 
+    def get_queryset(self):
+        qs = UserSocialAuth.objects.prefetch_related('user')
+        if self.provider_type is not None:
+            qs = qs.filter(provider=self.provider_type)
+        else:
+            qs = qs.all()
+        return qs
+
     def process_all_auth(self):
-        for auth in UserSocialAuth.objects.prefetch_related('user').all():
+        for auth in self.get_queryset():
             self.process_single_auth(auth)
 
     def linkedin(self, auth):
@@ -64,14 +80,32 @@ class Command(BaseCommand):
         if auth.provider == 'angel':
             access_token = auth.extra_data.get('access_token')
 
-            oauth_client = AngelConnectionService(access_token=access_token, angel_uid=auth.uid)
-            resp, content = oauth_client.request()
+            # initial values
+            complete = False
+            current_page = 1
 
-            content = json.loads(content)
+            logger.info('Starting angel contact graph import for %s' % auth)
 
-            for u in content.get('users', []):
-                if u.get('id', None) is not None:
-                    c = AngelProcessConnectionService(uid=u.get('id'), item=u, user=auth.user)
+            # Basic Pagination
+            while not complete:
+                oauth_client = AngelConnectionService(access_token=access_token, angel_uid=auth.uid, page=current_page)
+                resp, content = oauth_client.request()
+
+                # decode the json
+                content = json.loads(content)
+
+                # get the page info
+                current_page = int(content.get('page', 1))
+                last_page = int(content.get('last_page', 1))
+
+                logger.info('page %d or %d for angel auth: %s' % (last_page, current_page, auth,))
+
+                for u in content.get('users', []):
+                    if u.get('id', None) is not None:
+                        c = AngelProcessConnectionService(uid=u.get('id'), item=u, user=auth.user)
+
+                complete = bool(current_page >= last_page)
+
 
     def twitter(self):
         pass

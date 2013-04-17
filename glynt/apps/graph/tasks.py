@@ -15,4 +15,5 @@ def collect_user_graph_connections(auth, **kwargs):
     """ task used to initiate the collection of a users
     graph connections form the backend bassed in via auth
     """
+    logger.error('Calling graph_contacts command %s' % auth)
     call_command('graph_contacts', auth=auth)
