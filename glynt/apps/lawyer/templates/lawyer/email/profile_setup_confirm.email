@@ -1,6 +1,6 @@
 {% load glynt_helpers %}
 
-{% block subject %}Lawpal.com - Your Profile has been Updated{% endblock %}
+{% block subject %}LawPal Account Details{% endblock %}
 
 {% block plain %}
 Dear {{ to_name }},
