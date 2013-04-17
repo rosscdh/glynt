@@ -70,6 +70,9 @@ MEDIA_URL = '/m/'
 STATIC_ROOT = os.path.join(SITE_ROOT, 'static')
 STATIC_URL = '/static/'
 
+import djcelery
+djcelery.setup_loader()
+
 # Additional locations of static files
 STATICFILES_DIRS = (
 )
@@ -222,6 +225,8 @@ HELPER_APPS = (
     'jsonfield',
     # parsely
     'parsley',
+    # Celery Tasks
+    'djcelery',
 )
 
 # Handle south and its breaking tests
@@ -303,15 +308,15 @@ ANGEL_AUTH_EXTRA_ARGUMENTS = {'scope': 'email'}
 TWITTER_CONSUMER_KEY = 'q4iigBXEJj7OBuIYHVF99g'
 TWITTER_CONSUMER_SECRET = 'Ka9XGTeRlu1v7XRs2GSdK43Sd0l4j0eXXE2gI4iXd8E'
 
-# SOCIAL_AUTH_PIPELINE = (
-#     'social_auth.backends.pipeline.social.social_auth_user',
-#     'social_auth.backends.pipeline.user.get_username',
-#     'social_auth.backends.pipeline.user.create_user',
-#     'social_auth.backends.pipeline.social.associate_user',
-#     'social_auth.backends.pipeline.social.load_extra_data',
-#     'social_auth.backends.pipeline.user.update_user_details'
-#     'social_auth.backends.pipeline.misc.save_status_to_session',
-# )
+SOCIAL_AUTH_PIPELINE = (
+    'social_auth.backends.pipeline.social.social_auth_user',
+    'social_auth.backends.pipeline.user.get_username',
+    'social_auth.backends.pipeline.user.create_user',
+    'social_auth.backends.pipeline.social.associate_user',
+    'social_auth.backends.pipeline.social.load_extra_data',
+    'social_auth.backends.pipeline.user.update_user_details',
+    'glynt.apps.graph.pipeline.graph_user_connections',
+)
 
 
 DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d %Y',
@@ -410,12 +415,11 @@ NO_SIG_IMAGE = os.path.join(STATIC_ROOT, 'signature/no_sig.png'),
 TEMPLATED_EMAIL_BACKEND = 'templated_email.backends.vanilla_django.TemplateBackend'
 TEMPLATED_EMAIL_TEMPLATE_DIR = 'email/'
 TEMPLATED_EMAIL_FILE_EXTENSION = 'email'
-# TEMPLATED_EMAIL_DJANGO_SUBJECTS = {
-#     'invite_to_sign': 'You have been invited to sign',
-#     'lawyer': 'Bugger',
-# }
 
-BROKER_URL = 'amqp://guest:guest@localhost:5672/'
+
+# Broker for Celery
+# Currently using CloudAMQP by Heroku
+BROKER_URL = 'amqp://gxdzjcxo:sMKG0qU4bJlUWmRMkWKuArtPQiY3m84G@tiger.cloudamqp.com/gxdzjcxo'
 BROKER_POOL_LIMIT = 1
 
 HELLOSIGN_AUTH = ("", "")

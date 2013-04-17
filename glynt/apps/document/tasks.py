@@ -21,7 +21,7 @@ logger = logging.getLogger('django.request')
 
 
 @task()
-def validate_document_html(ident, html):
+def validate_document_html_task(ident, html):
     html_validator = HtmlValidatorService(ident=ident, html=html, preprocessors=[SmootheRemoval])
     smoothe_validator = SmootheValidateService(ident=ident, html=html)
 
@@ -35,7 +35,7 @@ def validate_document_html(ident, html):
 
 
 @task()
-def document_created(**kwargs):
+def document_created_task(**kwargs):
     """
     """
     # Send notification
@@ -46,7 +46,7 @@ def document_created(**kwargs):
 
 
 @task()
-def document_deleted(**kwargs):
+def document_deleted_task(**kwargs):
     """
     """
     # Send notification
@@ -56,7 +56,7 @@ def document_deleted(**kwargs):
 
 
 @task()
-def document_restored(**kwargs):
+def document_restored_task(**kwargs):
     """
     """
     # Send notification
@@ -66,7 +66,7 @@ def document_restored(**kwargs):
 
 
 @task()
-def document_cloned(**kwargs):
+def document_cloned_task(**kwargs):
     """
     """
     # Send notification
@@ -77,7 +77,7 @@ def document_cloned(**kwargs):
 
 
 @task()
-def document_comment(**kwargs):
+def document_comment_task(**kwargs):
     """
     When a user Comments on a document
     """
@@ -93,7 +93,7 @@ def document_comment(**kwargs):
 
 
 @task()
-def generate_document_html(**kwargs):
+def generate_document_html_task(**kwargs):
     document = kwargs['document']
     # Get or create the HTML object
     html, is_new = DocumentHTML.objects.get_or_create(document=document)
@@ -110,7 +110,7 @@ def generate_document_html(**kwargs):
 
 
 @task()
-def convert_to_pdf(document_html, **kwargs):
+def convert_to_pdf_task(document_html, **kwargs):
     """ 
         @TODO this is a POC
         >>> # Send for HTML to PDF conversion
@@ -122,7 +122,7 @@ def convert_to_pdf(document_html, **kwargs):
 
 
 @task()
-def convert_to_doc(document_html, **kwargs):
+def convert_to_doc_task(document_html, **kwargs):
     """ 
         @TODO this is a POC
         >>> # Send for HTML to DOCx conversion

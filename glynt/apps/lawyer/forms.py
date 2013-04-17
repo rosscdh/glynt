@@ -72,6 +72,8 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     volume_incorp_setup = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
     volume_seed_financing = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
     volume_series_a = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
+    volume_ip = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
+    volume_other = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
 
     agree_tandc = forms.BooleanField(label='', widget=forms.CheckboxInput)
 

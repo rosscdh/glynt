@@ -71,7 +71,7 @@ xhtml2pdf
 -e git+https://github.com/rosscdh/python-signpad2image.git#egg=python-signpad2image
 
 # Workers
-celery
+django-celery
 #django-rq # potential but not sure
 
 

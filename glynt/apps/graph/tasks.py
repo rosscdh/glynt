@@ -2,7 +2,7 @@
 """ Tasks related to the Lawpal Graphing System """
 from django.conf import settings
 
-from celery import task
+from celery.task import task
 
 from django.core.management import call_command
 
