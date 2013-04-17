@@ -38,9 +38,13 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
 
     title = forms.CharField(required=False)
 
-    first_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'data-trigger':'change','placeholder':'John'}))
-    last_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'data-trigger':'change','placeholder':'Sonsini'}))
-    email = forms.EmailField(help_text="", widget=forms.TextInput(attrs={'data-trigger':'change','placeholder':'john@lawpal.com'}))
+    first_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'John'}))
+    last_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'Sonsini'}))
+    email = forms.EmailField(label="Firm email", help_text="", widget=forms.TextInput(attrs={'data-trigger':'change','placeholder':'john@lawpal.com'}))
+
+    password = forms.CharField(label="Password", help_text="", widget=forms.PasswordInput(attrs={'data-trigger':'change','placeholder':'******'}))
+    password_confirm = forms.CharField(label="Confirm password", help_text="", widget=forms.PasswordInput(attrs={'data-trigger':'change', 'placeholder':'******', 'minLength':'5', 'data-equalto':'#id_password'}))
+
 
     firm_name = forms.CharField(widget=forms.TextInput(attrs={'data-trigger':'change','class':'typeahead','autocomplete':'off','data-provide':'ajax', 'minLength':'2', 'data-items':4, 'data-source': 'firms'}))
 

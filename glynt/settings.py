@@ -222,6 +222,8 @@ HELPER_APPS = (
     'jsonfield',
     # parsely
     'parsley',
+    # clear-cache
+    'clear_cache',
 )
 
 # Handle south and its breaking tests

@@ -35,7 +35,7 @@ class Lawyer(models.Model):
         try:
             return self.user.firm_lawyers.prefetch_related().all()[0]
         except IndexError:
-            return 'dsadsa'
+            return None
 
     def username(self):
         return self.user.username

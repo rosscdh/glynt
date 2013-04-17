@@ -79,6 +79,7 @@ celery
 Werkzeug
 -e git+https://github.com/django-debug-toolbar/django-debug-toolbar.git#egg=django-debug-toolbar
 # pygraphviz
+django-clear-cache
 
 # Testing
 -e git+https://github.com/kmmbvnr/django-jenkins.git#egg=django-jenkins
