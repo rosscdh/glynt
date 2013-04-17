@@ -131,6 +131,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.request",
     "glynt.context_processors.project_info",
     "glynt.context_processors.project_environment",
+    "glynt.context_processors.default_profile_image",
     "social_auth.context_processors.social_auth_by_type_backends",
     "social_auth.context_processors.social_auth_by_name_backends",
 )
@@ -275,6 +276,7 @@ USERENA_HIDE_EMAIL = True
 
 EASY_MAPS_CENTER = (-41.3, 32)
 
+DEFAULT_PROFILE_IMAGE = '/img/default_avatar.png'
 
 THUMBNAIL_ALIASES = {
     '': {
