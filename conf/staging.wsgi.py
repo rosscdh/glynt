@@ -32,6 +32,10 @@ sys.path.append(workspace)
 import newrelic.agent
 newrelic.agent.initialize('/home/stard0g101/webapps/glynt/glynt/glynt/newrelic.ini')
 
+# Celery
+import djcelery
+djcelery.setup_loader()
+
 from django.core.handlers.wsgi import WSGIHandler
 application = WSGIHandler()
 application = newrelic.agent.wsgi_application()(application)

@@ -2,8 +2,10 @@
 import os
 from django.contrib.auth.models import User
 from django.utils import simplejson as json
+
 from models import Lawyer
 from glynt.apps.firm.services import EnsureFirmService
+from tasks import send_profile_setup_email
 
 import logging
 logger = logging.getLogger('lawpal.services')
@@ -81,22 +83,27 @@ class EnsureLawyerService(object):
         fields_to_update = [(k,v) for k,v in fields_to_update.items() if v is not None]
 
         # Updates to the JSON Data object for the Lawyer
-        data = self.lawyer.data
+        lawyer_data = self.lawyer.data
 
-        data.update({
+        lawyer_data.update({
             'startups_advised': json.loads(self.data.get('startups_advised', '[]')),
             'volume_incorp_setup': json.loads(self.data.get('volume_incorp_setup', self.default_volume_matrix)),
             'volume_seed_financing': json.loads(self.data.get('volume_seed_financing', self.default_volume_matrix)),
             'volume_series_a': json.loads(self.data.get('volume_series_a', self.default_volume_matrix)),
+            'volume_ip': json.loads(self.data.get('volume_ip', self.default_volume_matrix)),
+            'volume_other': json.loads(self.data.get('volume_other', self.default_volume_matrix)),
         })
 
         # add the JSON object and perform lawyer save on that field only
-        self.lawyer.data = data
+        self.lawyer.data = lawyer_data
         self.lawyer.save(update_fields=['data'])
 
         # Primary lawyer update query
         # Will always be present due to the previous get_or_create
         Lawyer.objects.filter(pk=self.lawyer.pk).update(**dict(fields_to_update))
+
+        # Send profile email
+        send_profile_setup_email(user=self.lawyer.user)
 
         logger.info('get_or_create:lawyer %s is_new: %s' % (self.lawyer.user.username, self.lawyer_is_new,))
 

@@ -21,9 +21,9 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         logger.info("Fetching 500startups")
-        startups_500 = self.fetch_500startups()
-        for s in startups_500:
-            self.create_startup(s)
+        # startups_500 = self.fetch_500startups()
+        # for s in startups_500:
+        #     self.create_startup(s)
 
         logger.info("Fetching angellist")
         startups_angellist = self.fetch_angellist()

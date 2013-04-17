@@ -187,10 +187,24 @@
 							<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="series_a" data-year="2011" type="text"></td>
 							<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="series_a" data-year="2012" type="text"></td>
 						</tr>
+						<tr>
+							<th>Intellectual Property</th>
+							<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="ip" data-year="2010" type="text"></td>
+							<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="ip" data-year="2011" type="text"></td>
+							<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="ip" data-year="2012" type="text"></td>
+						</tr>
+						<tr>
+							<th>Other</th>
+							<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="other" data-year="2010" type="text"></td>
+							<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="other" data-year="2011" type="text"></td>
+							<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="other" data-year="2012" type="text"></td>
+						</tr>
 					</table>
 					{{ form.volume_incorp_setup }}
 					{{ form.volume_seed_financing }}
 					{{ form.volume_series_a }}
+					{{ form.volume_ip }}
+					{{ form.volume_other }}
 				</div>
 			</div>
 			<div class="row">
@@ -280,6 +294,8 @@ $(document).ready(function(){
 	$('#id_volume_incorp_setup').val('{{ lawyer.data.volume_incorp_setup|jsonify }}');
 	$('#id_volume_seed_financing').val('{{ lawyer.data.volume_seed_financing|jsonify }}');
 	$('#id_volume_series_a').val('{{ lawyer.data.volume_series_a|jsonify }}');
+	$('#id_volume_ip').val('{{ lawyer.data.volume_ip|jsonify }}');
+	$('#id_volume_other').val('{{ lawyer.data.volume_other|jsonify }}');
 	/**
 	* Dynamic selector functions based on form api urls
 	* 
@@ -447,13 +463,14 @@ $(document).ready(function(){
 		var target_json = $.parseJSON(target_element.val());
 
 		// parse and reform and set defaults
-		var volume_object = window[volume_type + '_object'] || target_json;
-		volume_object[year] = target_json[year] || 0;
+
+		var volume_object = window[volume_type + '_object'] || (typeof(target_json) == 'object') ? target_json : {};
+		volume_object[year] = (target_json[year] !== undefined)? target_json[year]: 0;
 		var as_json = JSON.stringify(volume_object)
 
 		// set the initial value
 		window[volume_type + '_object'] = volume_object;
-//console.log(volume_object[year])
+
 		e.val(volume_object[year])
 		target_element.val(as_json);
 
