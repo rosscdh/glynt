@@ -36,6 +36,11 @@ class EnsureLawyerService(object):
         # this avoides superflous saves, and also uses update and not the heavy save method
         User.objects.filter(pk=self.user.pk).update(**dict(fields_to_update))
 
+        # Update the password if present
+        if self.form.cleaned_data.get('password', None) is not None:
+            self.user.set_password(self.form.cleaned_data.get('password', None))
+            self.user.save()
+
     def process(self):
         self.update_user()
         self.lawyer, self.lawyer_is_new = Lawyer.objects.get_or_create(user=self.user)
