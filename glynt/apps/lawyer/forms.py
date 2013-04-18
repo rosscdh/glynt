@@ -32,7 +32,7 @@ API_URLS = {
 
 @parsleyfy
 class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
-    cookie_name = 'lawyer_profile_photo'
+    cookie_name = 'lawyer_profile_photo-%d'
 
     ROLES = [display_name for name,display_name in Lawyer.LAWYER_ROLES.get_choices()]
 
@@ -40,11 +40,6 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
 
     first_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'John'}))
     last_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'Sonsini'}))
-    email = forms.EmailField(label="Firm email", help_text="", widget=forms.TextInput(attrs={'data-trigger':'change','placeholder':'john@lawpal.com'}))
-
-    password = forms.CharField(label="Password", help_text="", widget=forms.PasswordInput(attrs={'data-trigger':'change','placeholder':'******'}))
-    password_confirm = forms.CharField(label="Confirm password", help_text="", widget=forms.PasswordInput(attrs={'data-trigger':'change', 'placeholder':'******', 'minLength':'5', 'data-equalto':'#id_password'}))
-
 
     firm_name = forms.CharField(widget=forms.TextInput(attrs={'data-trigger':'change','class':'typeahead','autocomplete':'off','data-provide':'ajax', 'minLength':'2', 'data-items':4, 'data-source': 'firms'}))
 
@@ -85,8 +80,20 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
         """ get request object and user """
         self.request = kwargs.pop('request', None)
         self.user = self.request.user
+        self.cookie_name = self.cookie_name % self.user.pk
         self.data_source_urls = API_URLS
         super(LawyerProfileSetupForm, self).__init__(*args, **kwargs)
+        self.inject_email_pass_objects()
+
+    def inject_email_pass_objects(self):
+        """ If the user has not yet defined a password
+        I.e they are new, then show the email and password elements
+        """
+        if self.user.password == '!':
+            self.fields['email'] = forms.EmailField(label="Firm email", help_text="", widget=forms.TextInput(attrs={'data-trigger':'change','placeholder':'john@lawpal.com'}))
+            self.fields['password'] = forms.CharField(label="Password", help_text="", widget=forms.PasswordInput(attrs={'data-trigger':'change'}))
+            self.fields['password_confirm'] = forms.CharField(label="Confirm password", help_text="", widget=forms.PasswordInput(attrs={'data-trigger':'change', 'minLength':'5', 'data-equalto':'#id_password'}))
+
 
 
     def clean_email(self):
@@ -110,8 +117,9 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
         if self.request.COOKIES.get(self.cookie_name, None) is not None:
             del(self.request.COOKIES[self.cookie_name])
         # startup list
-        if self.request.COOKIES.get('startup_list', None) is not None:
-            del(self.request.COOKIES['startup_list'])
+        startup_cookie_name = 'startup_list-%d' % self.user.pk
+        if self.request.COOKIES.get(startup_cookie_name, None) is not None:
+            del(self.request.COOKIES[startup_cookie_name])
 
     def save(self, commit=True):
         logger.info('Ensuring the LawyerProfile Exists')
