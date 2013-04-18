@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load account_tags lawyer_profile_tags jsonify thumbnail cache %}
+}}{% extends 'base.html' %}{% load account_tags lawyer_profile_tags jsonify thumbnail cache %}
 
 {% block page_title %}{{ object.user.get_full_name|default:object.user.username }}{% endblock %}
 {% block bodyclass %}lawyer-welcome{% endblock %}
@@ -58,22 +58,25 @@
 			
 		</div>	
 		<div class="span8">
-				<h2>Deal Snapshot</h2>
-				<br />
+				<h2>Transaction Snapshot</h2>
 				<div class="deal-charts row">
 					<div class="span4">
+						<h5>Transactions by year</h5>
+						<br />
 						<canvas id="dealChart0" width="300" height="200"></canvas>
 					</div>
-					<div class="span4" style="position:relative;top:-200">					
-						<canvas id="dealChart1" width="300" height="200"></canvas>
-						<div style="position:absolute;top:0;right:-80px">
+					<div class="span4" style="position:relative;">			
+						<h5>Transactions by type</h5>
+						<br />		
+						<canvas id="dealChart1" width="220" height="200"></canvas>
+						<div style="position:absolute;top:105px;right:-0px">
 							<span class="label label-info" style="background-color:#F38630">Series A</span>
 							<br /> 
-							<span class="label label-info" style="background-color:#6bdb7e">Seed Financing</span> 
+							<span class="label label-info" style="background-color:#6bdb7e">Seed</span> 
 							<br />
 							<span class="label label-info" style="background-color:#69D2E7">Incorporation</span> 
 							<br />
-							<span class="label label-info" style="background-color:#f88172">Intellectual Property</span>
+							<span class="label label-info" style="background-color:#f88172">IP</span>
 							<br />
 							<span class="label label-info" style="background-color:#6ndn7e">Other</span>
 						</div>

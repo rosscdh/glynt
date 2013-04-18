@@ -32,14 +32,14 @@ class BaseApiModelResource(ModelResource):
 
 class LocationSimpleResource(BaseApiModelResource):
     name = fields.CharField(attribute='name', null=True)
-    state_name = fields.CharField(attribute='region__geoname_code', null=True)
+    region = fields.CharField(attribute='region__name', null=True)
 
     class Meta(BaseApiModelResource.Meta):
         queryset = City.objects.prefetch_related('region').all()
         authentication = Authentication()
         list_allowed_methods = ['get']
         resource_name = 'location/lite'
-        fields = ['name', 'state_name']
+        fields = ['name', 'region']
         filtering = {
             'name': ALL,
         }
@@ -47,10 +47,10 @@ class LocationSimpleResource(BaseApiModelResource):
 
     def dehydrate(self, bundle):
         name = bundle.data.get('name', None)
-        state_name = bundle.data.get('state_name', None)
+        region = bundle.data.get('region', None)
         bundle.data.pop('name')
-        bundle.data.pop('state_name')
-        bundle.data.update({'name': '%s, %s' % (name, state_name,) })
+        bundle.data.pop('region')
+        bundle.data.update({'name': '%s, %s' % (name, region) })
         return bundle
 
 
