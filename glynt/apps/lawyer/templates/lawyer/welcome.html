@@ -34,7 +34,7 @@
 		<div class="span12">
 			<h1>Claim your profile and join the LawPal community</h1>
 			<br />
-			<a href="{% url 'lawyer:setup_profile' %}" class="btn btn-large btn-primary">Complete your profile</a>  or <a href="{% url 'lawyer:setup_profile' %}" class="btn btn-large">Preview</a>
+			<a href="{% url 'lawyer:setup_profile' %}" class="btn btn-large btn-primary">Complete your profile</a>  or <a href="{% url 'lawyer:profile' slug=user.username %}" class="btn btn-large">Preview</a>
 			<br />
 			<br />
 			<p>
