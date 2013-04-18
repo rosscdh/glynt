@@ -15,13 +15,13 @@
 <div id="hero">
 	<div class="container">
 		<!-- starts carousel -->
-		<div class="row animated fadeInDown">
+		<div class="row animated fadeInRight">
 			<div class="span12">
 				<div class="avatar">
 					<img src="{% if object.photo %}{{ MEDIA_URL }}{{ object.photo }}{% else %}{{ default_profile_image }}{% endif %}" alt="{{ object.user.get_full_name|default:object.user.username }}" />
 				</div>
 				<h1>{{ object.user.get_full_name|default:object.user.username }}</h1>
-				<h3>{{ object.summary }} <br /> {{ object.primary_firm }}</h3>
+				<h3>{{ object.summary }}</h3>
 			</div>
 		</div>
 	</div>
@@ -31,13 +31,23 @@
 		<div class="span8">	
 			<h2>About Me</h2>
 			<div>
-				<p>{{ object.bio|default:"<div class=\"no-data\">No biography yet</div>"|linebreaksbr }}</p>
+				<p>{{ object.bio|default:"<div class=\"no-data\">No biography yet.</div>"|linebreaksbr }}</p>
 			</div>
 			<br />
 		</div>	
 		<div class="span4 pull-right">
+			{% if user.username == object.user.username %}
+				<div class="text-center">
+					<a href="{% url 'lawyer:setup_profile' %}" class="btn">Edit profile</a> 
+					<a href="{% url 'lawyer:invite' %}" class="btn btn-primary">Invite Lawyers</a>
+				</div>
+				{% endif %}
 			<div class="firm">
-				<img src="{{ MEDIA_URL }}{{ firm.photo|default:'firm/blank.gif' }}" alt="{{ firm.name }}" class="firm-logo" />
+				{% if firm.photo == '' %}
+					<h2>{{ object.primary_firm }}</h2>
+				{% else %} 
+					<img src="{{ MEDIA_URL }}{{ firm.photo|default:'firm/blank.gif' }}" alt="{{ firm.name }}" class="firm-logo" />				
+				{% endif %} 
 			</div>
 			<div class="map">
 				{% if object.data.practice_location_1 and not object.data.practice_location_2 %}
@@ -88,9 +98,9 @@
 
 	<div class="divide">
 	    <div class=" buttons">
-			<a href="#comingSoonModal" class="btn btn-large btn-primary" title="Message Leilat" data-toggle="modal">Message Leila</a>
-			<a href="#comingSoonModal" class="btn btn-large btn-secondary" title="Endorse Leila" data-toggle="modal">Endorse Leila</a>
-			<a href="#comingSoonModal" class="btn btn-large btn-tertiary" title="Engage Leila"  data-toggle="modal">Engage Leila</a>
+			<a href="#comingSoonModal" class="btn btn-large btn-primary" title="Message Leilat" data-toggle="modal">Message</a>
+			<a href="#comingSoonModal" class="btn btn-large btn-secondary" title="Endorse Leila" data-toggle="modal">Endorse</a>
+			<a href="#comingSoonModal" class="btn btn-large btn-tertiary" title="Engage Leila"  data-toggle="modal">Engage</a>
  
 			<!-- Modal -->
 			<div id="comingSoonModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -99,7 +109,7 @@
 			    <h3 id="myModalLabel">Coming Soon</h3>
 			  </div>
 			  <div class="modal-body">
-			    <p>Whilst profiles are in preview mode, this feature is disabled. We will shortly be enabling this for some users as part of our rollout. Stay tuned!</p>
+			    <p>Whilst profiles are in preview mode, this feature is disabled. We will shortly be enabling this for some users as part of our rollout.</p>
 			  </div>
 			  <div class="modal-footer">
 			    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>

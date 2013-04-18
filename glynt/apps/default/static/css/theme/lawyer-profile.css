@@ -15,8 +15,8 @@ padding: 0 !important;
 border: 8px solid rgba(255,255,255,0.46);
 box-shadow: 0 0 10px rgba(0,0,0,0.23);
 border-radius: 100px;
-max-width:200px;
-max-height:150px;
+width:125px;
+height:125px;
 }
 body.lawyer-welcome .profile p {
 font-size: 17px;
@@ -216,7 +216,11 @@ max-width:130px;
 max-height:130px;
 padding:20px;
 }
-
+.no-data{
+text-align:center;
+font-size:14px;
+color:#ccc;	
+}
 
 
 
