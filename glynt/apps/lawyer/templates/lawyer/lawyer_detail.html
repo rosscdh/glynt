@@ -146,34 +146,6 @@
 {% endblock %}
 
 {% block body %}
-<!-- <div class="row-fluid">
-<h1>{{ object.user.get_full_name|default:object.user.username }}</h1>
-
-
-<img src="{{ object.photo|thumbnail_url:'avatar' }}" alt="" title="" border="0"/>
-summary: {{ object.summary|default:"No Data" }}<br/>
-bio: {{ object.bio|default:"No Data" }}<br/>
-years practice: {{ object.years_practiced }}<br/>
-geo loc: {{ object.current_geo_loc }}<br/>
-
-{{ object.data.practice_location_1 }}<br/>
-{{ object.data.practice_location_2 }}
-
-{{ object.data.if_i_wasnt_a_lawyer|default:"No Data" }}
-
-<h2>Accounts</h2>
-
-<h2>Firms</h2>
-{{ firm.primary_office }}
-
-
-<h2>Startups</h2>
-{% cache 300 "lawyer" "startups_advised" firm.primary_office.pk %}
-    {% startups_advised %}
-{% endcache %}
-</div>
- -->
-
 <script>
 ////////////
 // Charts //
@@ -183,8 +155,7 @@ $(document).ready(function () {
 var ctx0 = $("#myChart0").get(0).getContext("2d");
 var ctx1 = $("#myChart1").get(0).getContext("2d");
 
-chartnumbers =
-{ 
+chartnumbers = { 
     "incorp": 
     [ 
 		{{ object.data.volume_incorp_setup|jsonify }}
