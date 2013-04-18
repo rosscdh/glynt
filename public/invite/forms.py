@@ -13,8 +13,8 @@ logger = logging.getLogger('django.request')
 
 class InviteEmailForm(BootstrapMixin, forms.Form):
     invite_type = forms.CharField(initial='lawyer', widget=forms.HiddenInput)
-    email = forms.EmailField(required=True, widget=forms.TextInput(attrs={'placeholder':'their.name@example.com', 'data-required':'true', 'data-type':'email', 'data-notblank':'true', 'data-trigger':'change', 'data-minlength':'6'}))
-    name = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder':'John Doe', 'data-required':'true', 'data-notblank':'true', 'data-trigger':'change', 'data-minlength':'5'}))
+    email = forms.EmailField(required=True, widget=forms.TextInput(attrs={'placeholder':'their.name@example.com', 'data-required':'true', 'data-type':'email', 'data-notblank':'true', 'data-minlength':'6'}))
+    name = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder':'John Doe', 'data-required':'true', 'data-notblank':'true', 'data-minlength':'5'}))
 
     def clean_email(self):
         """ check invitee has not opted-out

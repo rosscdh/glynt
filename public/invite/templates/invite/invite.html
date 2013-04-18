@@ -1,30 +1,24 @@
-<div id="invite-container" class="span12">
+<div id="invite-container" class="container recommend">
     <form data-validate="parsley" data-send-type="ajax" action="{% url 'invite:send' %}" class="form-inline" method="POST">{% csrf_token %}
         {{ form.invite_type }}
-		<div class="row">
-	        <div class="control-group span8">
-	            <button id="add-btn" type="button" class="btn btn-primary btn-small"><i class="icon-plus-sign"></i>&nbsp;Add</button>
-	        </div>
-	        <br/><span class="repeatable-head"></span>
-		
-	        <div id="invite-repeatable-group" class="control-group span8">
-	            <div class="span3">{{ form.email }}</div>
-	            <div class="span3">{{ form.name }}</div>
-	        </div>
-	        <br/>
-			<div class="span8">
-				<div class="control-group">
-					<button id="invite-btn" type="submit" class="btn btn-primary btn-large">Invite</button>
-				</div>
+		<div id="invite-repeatable-group">
+			<div class="loop">
+				<p>
+					{{ form.email }} {{ form.name }}
+				</p>
 			</div>
 		</div>
+		<span class="repeatable-head"></span>
+		<button class="btn btn-secondary left" value="Invite more" type="button" id="add-btn">Invite more</button>
+		<button class="btn btn-primary right" value="Send Invites" type="submit" id="invite-btn">Send Invites</button>
     </form>
 </div>
+
 
 <script type="text/x-handlebars" id="hb-success">
 {% verbatim %}
 <hr/>
-<h3>Invites</h3>
+<h3>Invites Sent</h3>
 <ul class="unstyled">
 {{#each data}}
     <li>
@@ -40,9 +34,9 @@ $(document).ready(function(){
 
     $('#invite-repeatable-group').find('input:first').select();
 
-    var remove_btn = $('<button/>', {
-        class: 'remove-btn btn btn-info btn-small'
-        ,html: '<i class="icon-minus-sign"></i>'
+    var remove_btn = $('<a/>', {
+        class: 'button close'
+        ,html: '&times;'
     });
 
     var repeatable = $('#invite-repeatable-group');
@@ -51,35 +45,34 @@ $(document).ready(function(){
 
     $('#add-btn').live('click', function(event){
         event.preventDefault();
+
         var clone = repeatable.clone()
         var num_fields = repeatable.find('input[type=text]').length;
         var form = $(this).closest('form');
-        var num = (form.find('input[type=text]').length / 2) + 1;
 
-        clone.attr('id',null);// nullify the id
-        
+		var num = (form.find('input[type=text]').length / 2) + 1;
+
+		clone.attr('id',null);// nullify the id
+
         $.each(clone.find('input'), function(i,e){
-            e = $(e);
+			e = $(e);
             e.val('');
             form.parsley('addItem', e);
         })
 
         var remove_btn_clone = remove_btn.clone();
 
-        clone.append($('<div/>',{
-            class: 'span1',
-            html: remove_btn_clone
-        }));
+        clone.prepend(remove_btn_clone);
 
         clone.insertAfter(repeatable.parent().find('span.repeatable-head'))
         clone.find('input:first').select()
     });
 
-    $('.remove-btn').live('click', function(event){
+    $('.close').live('click', function(event){
         event.preventDefault();
         var self = $(this);
         var form = self.closest('form');
-        var container = self.closest('div.control-group');
+        var container = self.closest('div');
         $.each(container.find('input'), function(i,e){
             e = $(e);
             form.parsley('removeItem', e);
@@ -88,7 +81,8 @@ $(document).ready(function(){
     });
 
     $('#invite-btn').live('click', function(event){
-        var self = $(this);
+
+		var self = $(this);
         var form = self.closest('form');
 
         form.find('button').attr('disabled','disabled')
