@@ -158,7 +158,11 @@ def prepare_deploy():
 
 @task
 def migrations():
-    virtualenv('pip install -r %s%s/requirements.txt' % (env.remote_project_path, env.project))
+    virtualenv('python %s/%s/manage.py migrate' % (env.remote_project_path, env.project))
+
+@task
+def syncdb():
+    virtualenv('python %s/%s/manage.py syncdb' % (env.remote_project_path, env.project))
 
 @task
 def clean_versions():

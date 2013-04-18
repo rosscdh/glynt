@@ -13,6 +13,7 @@ from userena.models import UserenaSignup, UserenaBaseProfile
 from userena.managers import ASSIGNED_PERMISSIONS
 from userena import signals as userena_signals
 
+from glynt.apps.lawyer.services import EnsureLawyerService
 
 from templated_email import send_templated_mail
 
@@ -59,7 +60,7 @@ def create_client_profile(sender, **kwargs):
 
     if profile is not None and is_new == True:
         user = profile.user
-
+        logger.info('Creating Profile Permissions for User %s' % user.username)
         # Give permissions to view and change profile
         for perm, name in ASSIGNED_PERMISSIONS['profile']:
             assign(perm, user, profile)
@@ -72,13 +73,27 @@ def create_client_profile(sender, **kwargs):
         userena_signals.signup_complete.send(sender=None, user=user)
 
 
+@receiver(post_save, sender=ClientProfile, dispatch_uid='client.create_lawyer_profile')
+def create_lawyer_profile(sender, **kwargs):
+    profile = kwargs.get('instance', None)
+    is_new = kwargs.get('created', None)
+
+    if profile is not None and is_new == True:
+        user = profile.user
+        logger.info('Creating Lawyer Profile for User %s' % user.username)
+        lawyer_service = EnsureLawyerService(user=profile.user)
+        lawyer_service.process()
+
+
 @receiver(post_save, sender=ClientProfile, dispatch_uid='client.create_userarena_signup')
 def create_userarena_signup(sender, **kwargs):
     profile = kwargs.get('instance', None)
     is_new = kwargs.get('created', None)
 
     if profile is not None and is_new == True:
-        userena_signup, is_new = UserenaSignup.objects.get_or_create(user=profile.user)
+        user = profile.user
+        logger.info('Creating UserenaSignup object for User %s' % user.username)
+        userena_signup, is_new = UserenaSignup.objects.create_userena_profile(user=profile.user)
 
 
 # @receiver(post_save, sender=ClientProfile, dispatch_uid='client.private_beta_profile')

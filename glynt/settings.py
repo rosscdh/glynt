@@ -101,6 +101,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'glynt.middleware.LawpalSocialAuthExceptionMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -269,14 +270,13 @@ AUTH_PROFILE_MODULE = 'client.ClientProfile' # our custom profile
 
 
 USERENA_USE_MESSAGES = True
-USERENA_LOGIN_AFTER_ACTIVATION = False # Enable beta style signup (manual activation)
-USERENA_ACTIVATION_REDIRECT_URL = '/thanks-your-interest/'
+USERENA_LOGIN_AFTER_ACTIVATION = True # Enable beta style signup (manual activation)
+USERENA_ACTIVATION_DAYS = 10
+USERENA_ACTIVATION_REDIRECT_URL = '/'
 USERENA_SIGNIN_REDIRECT_URL = '/'
 USERENA_WITHOUT_USERNAMES = True # step userarena forcing user to provide username
 USERENA_HIDE_EMAIL = True
 
-
-EASY_MAPS_CENTER = (-41.3, 32)
 
 DEFAULT_PROFILE_IMAGE = '/img/default_avatar.png'
 
@@ -312,6 +312,7 @@ ANGEL_AUTH_EXTRA_ARGUMENTS = {'scope': 'email'}
 TWITTER_CONSUMER_KEY = 'q4iigBXEJj7OBuIYHVF99g'
 TWITTER_CONSUMER_SECRET = 'Ka9XGTeRlu1v7XRs2GSdK43Sd0l4j0eXXE2gI4iXd8E'
 
+SOCIAL_AUTH_BACKEND_ERROR_URL = '/'
 SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.social.social_auth_user',
     'social_auth.backends.pipeline.user.get_username',
