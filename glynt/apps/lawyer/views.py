@@ -35,7 +35,7 @@ class LawyerProfileSetupView(FormView):
     template_name = 'lawyer/profile-form.html'
 
     def get_success_url(self):
-        return reverse('lawyer:thanks')
+        return reverse('lawyer:profile',kwargs={'slug':self.lawyer.user.username})
 
     def get_context_data(self, **kwargs):
         context = super(LawyerProfileSetupView, self).get_context_data(**kwargs)

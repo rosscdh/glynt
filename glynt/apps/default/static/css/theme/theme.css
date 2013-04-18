@@ -47,7 +47,9 @@ form a {
 	top: 7px;
 	left: 10px;
 }
-
+.text-center {
+	text-align: center;
+}
 /* Old versions of IE patches */
 .old-ie #hero .carousel-inner .row {
 	padding-left: 55px;
@@ -194,6 +196,11 @@ div#messages ul {
 	background-repeat: repeat-x;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#475B77', endColorstr='#475B77', GradientType=0);
 }
+.navbar .dropdown-toggle img {
+	width:22px;
+	height:22px;
+}
+
 
 #hero {
 	padding-top: 65px;
