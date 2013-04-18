@@ -43,7 +43,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
 
     firm_name = forms.CharField(widget=forms.TextInput(attrs={'data-trigger':'change','class':'typeahead','autocomplete':'off','data-provide':'ajax', 'minLength':'2', 'data-items':4, 'data-source': 'firms'}))
 
-    phone = forms.CharField(help_text="", widget=forms.TextInput(attrs={'data-trigger':'change','placeholder':'+44 207 7778 2020', 'title':'Shows on your profile. Include country code.'}))
+    phone = forms.CharField(help_text="", widget=forms.TextInput(attrs={'data-trigger':'change','placeholder':'+1 415 225 6464', 'title':'Shows on your profile. Include country code.'}))
 
     position = forms.ChoiceField(choices=Lawyer.LAWYER_ROLES.get_choices(), label="Position")
     years_practiced = forms.IntegerField(label="Years Practicing", initial="3", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini'}))
@@ -65,7 +65,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
             }))
     hidden_photo = forms.CharField(required=False, widget=forms.HiddenInput) # transports the id
 
-    startups_advised_input = forms.URLField(required=False, label="Startups Advised", help_text='Enter the domain name of any startups you advised and press "Add". This helps similar startups find you.', widget=forms.TextInput(attrs={'data-trigger':'change','placeholder':'e.g. Instagram.com', 'class':'typeahead','autocomplete':'on','data-provide':'ajax', 'data-items':4, 'data-source': 'startups', 'data-filter':'name__istartswith'}))
+    startups_advised_input = forms.URLField(required=False, label="Startups Advised", help_text='Enter the domain name of any startups you have advised and press "Add". This helps similar startups find you.', widget=forms.TextInput(attrs={'data-trigger':'change','placeholder':'e.g. Instagram.com', 'class':'typeahead','autocomplete':'on','data-provide':'ajax', 'data-items':4, 'data-source': 'startups', 'data-filter':'name__istartswith'}))
     startups_advised = forms.CharField(required=False, widget=forms.HiddenInput)
 
     volume_incorp_setup = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
