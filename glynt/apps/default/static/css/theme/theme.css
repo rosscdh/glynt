@@ -57,6 +57,12 @@ form a {
     margin: 8px 0 0 10px;
 }
 
+.label, .badge {
+	font-size:10px;
+	border-radius:0;
+	text-shadow:none;
+}
+
 /* Message
 -------------------------------------------------- */
 div#messages {

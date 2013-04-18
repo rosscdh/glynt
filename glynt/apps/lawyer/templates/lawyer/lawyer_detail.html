@@ -30,10 +30,8 @@
 	<div class="row">
 		<div class="span8">	
 			<h2>About Me</h2>
-			<div class="more-less">
-			    <div class="more-block">
-					<p>{{ object.bio|default:"No biography yet yet."|linebreaksbr }}</p>
-			    </div>
+			<div>
+				<p>{{ object.bio|default:"<div class=\"no-data\">No biography yet</div>"|linebreaksbr }}</p>
 			</div>
 			<br />
 		</div>	
@@ -61,8 +59,26 @@
 		</div>	
 		<div class="span8">
 				<h2>Deal Snapshot</h2>
-				<canvas id="myChart0" width="300" height="200"></canvas>
-				<canvas id="myChart1" width="300" height="200"></canvas>
+				<br />
+				<div class="deal-charts row">
+					<div class="span4">
+						<canvas id="dealChart0" width="300" height="200"></canvas>
+					</div>
+					<div class="span4" style="position:relative;top:-200">					
+						<canvas id="dealChart1" width="300" height="200"></canvas>
+						<div style="position:absolute;top:0;right:-80px">
+							<span class="label label-info" style="background-color:#F38630">Series A</span>
+							<br /> 
+							<span class="label label-info" style="background-color:#6bdb7e">Seed Financing</span> 
+							<br />
+							<span class="label label-info" style="background-color:#69D2E7">Incorporation</span> 
+							<br />
+							<span class="label label-info" style="background-color:#f88172">Intellectual Property</span>
+							<br />
+							<span class="label label-info" style="background-color:#6ndn7e">Other</span>
+						</div>
+					</div>
+				</div>
 		</div>	
 	</div>
 
@@ -91,19 +107,10 @@
 		</div>
 	</div>
 
-	<div class="divide">
+<!-- 	<div class="divide">
 		<div class="startups">
 			<h2>Startups Advised</h2>
-			<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
-			<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
-			<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
-			<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
-			<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
-			<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
-			<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
-			<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
-			<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
-			<img src="/static/img/app/placeholder-logo.png" alt="Logo (Placeholder)" /> 
+			{{ object.data.startups_advised|jsonify }}
 		</div>
 	</div>
 
@@ -141,132 +148,105 @@
 				<p class="source">Alex Halliday</p>
 			</div>
 		</div>
-	</div>
+	</div> -->
 </div>
 {% endblock %}
 
 {% block body %}
-<!-- <div class="row-fluid">
-<h1>{{ object.user.get_full_name|default:object.user.username }}</h1>
-
-
-<img src="{{ object.photo|thumbnail_url:'avatar' }}" alt="" title="" border="0"/>
-summary: {{ object.summary|default:"No Data" }}<br/>
-bio: {{ object.bio|default:"No Data" }}<br/>
-years practice: {{ object.years_practiced }}<br/>
-geo loc: {{ object.current_geo_loc }}<br/>
-
-{{ object.data.practice_location_1 }}<br/>
-{{ object.data.practice_location_2 }}
-
-{{ object.data.if_i_wasnt_a_lawyer|default:"No Data" }}
-
-<h2>Accounts</h2>
-
-<h2>Firms</h2>
-{{ firm.primary_office }}
-
-
-<h2>Startups</h2>
-{% cache 300 "lawyer" "startups_advised" firm.primary_office.pk %}
-    {% startups_advised %}
-{% endcache %}
-</div>
- -->
 
 <script>
-////////////
-// Charts //
-////////////
+
 $(document).ready(function () {
-//Get context with jQuery - using jQuery's .get() method.
-var ctx0 = $("#myChart0").get(0).getContext("2d");
-var ctx1 = $("#myChart1").get(0).getContext("2d");
+	//Get context with jQuery - using jQuery's .get() method.
+	var ctx0 = $("#dealChart0").get(0).getContext("2d");
+	var ctx1 = $("#dealChart1").get(0).getContext("2d");
 
-chartnumbers =
-{ 
-    "incorp": 
-    [ 
-		{{ object.data.volume_incorp_setup|jsonify }}
-    ], 
-    "seed": 
-    [ 
-		{{ object.data.volume_seed_financing|jsonify }}
-    ], 
-    "seriesa": 
-    [ 
-		{{ object.data.volume_series_a|jsonify }}
-    ] 	
-}
+	var chartnumbers =
+	{ 
+	    "incorp":[{{ object.data.volume_incorp_setup|jsonify }}], 
+	    "seed": [{{ object.data.volume_seed_financing|jsonify }}], 
+	    "seriesa":[{{ object.data.volume_series_a|jsonify }}], 	
+	    "ip": [{{ object.data.volume_ip|jsonify }}],
+	    "other":[{{ object.data.volume_other|jsonify }}] 	 	
+	}
 
-var data0 = {
-	labels : ["2010","2011","2012"],
-	datasets : [
-		{
-			fillColor : "rgba(151,187,205,0.5)",
-			strokeColor : "rgba(151,187,205,1)",
-			pointColor : "rgba(151,187,205,1)",
-			pointStrokeColor : "#fff",
-			data : [chartnumbers.incorp[0]['2010']+chartnumbers.seriesa[0]['2010']+chartnumbers.seed[0]['2010'],chartnumbers.incorp[0]['2011']+chartnumbers.seriesa[0]['2011']+chartnumbers.seed[0]['2011'],chartnumbers.incorp[0]['2012']+chartnumbers.seriesa[0]['2012']+chartnumbers.seed[0]['2012']],
+	getByYear = function() {
+		var total = {};
+		$.each(chartnumbers, function(i,e){
+			$.each(e[0], function(y,v){
+				// console.log(v)
+				total[y] = (total[y] === undefined)? 0 : total[y] += parseInt(v) ;
+			})
+		})
+		var ret_val = []
+		$.each(total, function(year,val){
+			ret_val.push(val)
+		})
+		return ret_val
+	}
+
+
+	getByType = function() {
+		var total = {};
+		$.each(chartnumbers, function(i,e){
+			total[i] = (total[i] === undefined)? 0 : total[i];
+			$.each(e[0], function(y,v){
+				total[i] += parseInt(v)
+			})
+		})
+		return total
+	}
+
+	linedefaults = {
+		//Boolean - Whether to show labels on the scale	
+		scaleShowLabels : true,
+	}
+
+	hasValidData = function(){
+			var total = 0;
+			$.each(getByYear(), function(i){
+				total += parseInt(i)
+			})
+			return total
 		}
-	]
-}
 
-var data1 = [
-	{
-		value: chartnumbers.seed[0]['2010']+chartnumbers.seed[0]['2011']+chartnumbers.seed[0]['2012'],
-		color:"#F38630"
-	},
-	{
-		value : chartnumbers.incorp[0]['2010']+chartnumbers.incorp[0]['2011']+chartnumbers.incorp[0]['2012'],
-		color : "#E0E4CC"
-	},
-	{
-		value : chartnumbers.seriesa[0]['2010']+chartnumbers.seriesa[0]['2011']+chartnumbers.seriesa[0]['2012'],
-		color : "#69D2E7"
-	}			
-]
+	if(hasValidData() > 0) {
+		new Chart(ctx0).Line({
+			labels : ["2010","2011","2012"],
+			datasets : [{
+					fillColor : "rgba(151,187,205,0.5)",
+					strokeColor : "rgba(151,187,205,1)",
+					pointColor : "rgba(151,187,205,1)",
+					pointStrokeColor : "#fff",
+					data : getByYear(),
+				}]
+			}
+			,linedefaults);
 
-
-var linedefaults = {
-	//Boolean - Whether to show labels on the scale	
-	scaleShowLabels : false,
-}
-
-
-new Chart(ctx0).Line(data0,linedefaults);
-new Chart(ctx1).Pie(data1);
-
-
-//////////////////////////
-// More/Less on profile //
-//////////////////////////
-
-// The height of the content block when it's not expanded
-var adjustheight = 168;
-// The "more" link text
-var moreText = "+ Show More";
-// The "less" link text
-var lessText = "- Show Less";
-
-// Sets the .more-block div to the specified height and hides any content that overflows
-$(".more-less .more-block").css('height', adjustheight).css('overflow', 'hidden');
-
-// The section added to the bottom of the "more-less" div
-$(".more-less").append('<span class="continued"><a href="#" class="adjust"></a></span>');
-
-$("a.adjust").text(moreText);
-
-$(".adjust").toggle(function() {
-		$(this).parents("div:first").find(".more-block").css('height', 'auto').css('overflow', 'visible');
-		// Hide the [...] when expanded
-		$(this).parents("div:first").find("p.continued").css('display', 'none');
-		$(this).text(lessText);
-	}, function() {
-		$(this).parents("div:first").find(".more-block").css('height', adjustheight).css('overflow', 'hidden');
-		$(this).parents("div:first").find("p.continued").css('display', 'block');
-		$(this).text(moreText);
-});
+			console.log(getByType().seriesa)
+		new Chart(ctx1).Doughnut([
+			{
+				value: getByType().seriesa,
+				color:"#F38630"
+			},
+			{
+				value: getByType().seed,
+				color : "#6bdb7e"
+			},
+			{
+				value : getByType().incorp,
+				color : "#69D2E7",
+			},
+			{
+				value: getByType().other,
+				color : "#6ndn7e"
+			},
+			{
+				value : getByType().ip,
+				color : "#f88172"
+			}			
+		]);
+	}
 });
 
 

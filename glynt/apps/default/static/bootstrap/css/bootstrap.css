@@ -1879,14 +1879,14 @@ legend + .control-group {
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
-  color: #333333;
+  color: #676767;
   /* Darken IE7 buttons by default so they stand out more given they won't have borders */
   font-weight:500;
   *margin-left: .3em;
   font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
   border-radius:2px;
   border:none;
-  background-color:#DDD;
+  background-color:#ececec;
 }
 /*
 .btn:hover,
