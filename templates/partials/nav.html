@@ -26,7 +26,7 @@
                      {% endif %}
                      {% cache 300 "user" "mugshot" user.pk %}
                      <li class="dropdown">
-                       <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="{{ user.profile.get_mugshot_url }}" width="22" height="22"> {{request.user.first_name}} {{request.user.last_name}}<b class="caret"></b></a>
+                       <a href="#" class="dropdown-toggle" data-toggle="dropdown"> {{request.user.first_name}} {{request.user.last_name}}<b class="caret"></b></a>
                        <ul class="dropdown-menu">
                             <!-- <li><a id="user-profile-form" class="" href="{% url 'lawyer:setup_profile' %}">{% trans 'Setup Profile' %}</a></li> -->
                             <li><a id="user-profile-form" class="" href="{% url 'lawyer:invite' %}">{% trans 'Invite Colleagues' %}</a></li>
