@@ -96,6 +96,11 @@ class AngelConnectionService(CollectConnectionBaseService):
     consumer = oauth.Consumer(settings.ANGEL_CLIENT_ID, settings.ANGEL_CLIENT_SECRET)
     url = 'https://api.angel.co/1/users/%s/followers?access_token=%s&page=%d'
 
+    def request(self, method='GET'):
+        client = oauth.Client(self.consumer, access_token)
+        client.disable_ssl_certificate_validation = True # Disable this because angellist has ssl issues
+        return super(LinkedinConnectionService, self).request(method=method, client=client)
+
     def get_url(self):
         page = getattr(self, 'page', 1)
         return self.url % (getattr(self, 'angel_uid'), getattr(self, 'access_token'), page)
