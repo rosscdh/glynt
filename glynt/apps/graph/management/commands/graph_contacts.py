@@ -73,10 +73,12 @@ class Command(BaseCommand):
             oauth_client = LinkedinConnectionService(oauth_token=user_access_data.get('oauth_token')[0], \
                                                     oauth_token_secret=user_access_data.get('oauth_token_secret')[0])
             resp, content = oauth_client.request()
+            print resp.__dict__
 
             content = json.loads(content)
             contacts = content.get('values', [])
-            logger.info('Linked in contacts:%d for %s '%(len(contacts), auth.user.username,))
+            logger.info('LinkedIn contacts:%d for %s '%(len(contacts), auth.user.username,))
+            logger.debug('LinkedIn response:%s for %s '%(resp, auth.user.username,))
 
             for u in contacts:
                 # linked in uses "id" and not uid
@@ -107,7 +109,7 @@ class Command(BaseCommand):
 
                 contacts = content.get('users', [])
                 logger.info('AngelList in contacts:%d for %s '%(len(contacts), auth.user.username,))
-
+                logger.debug('AngelList in response:%s for %s '%(resp, auth.user.username,))
                 for u in contacts:
                     if u.get('id', None) is not None:
                         c = AngelProcessConnectionService(uid=u.get('id'), item=u, user=auth.user)
