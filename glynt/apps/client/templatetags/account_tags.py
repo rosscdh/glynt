@@ -15,11 +15,14 @@ def social_associate(context, social_auth):
 
 
 @register.inclusion_tag('client/partials/social-button.html', takes_context=True)
-def social_button(context, name, img=None):
+def social_button(context, name, img=None, **kwargs):
+
+    display_name = kwargs.get('display_name', None)
     social_auth = context.get('social_auth', None)
 
     context.update({
         'name': name,
+        'display_name': display_name,
         'is_linked': social_auth.get(name, None) is not None,
         'connect_url': reverse('socialauth_begin', kwargs={'backend': name}),
         'disconnect_url': reverse('socialauth_disconnect', kwargs={'backend': name}),

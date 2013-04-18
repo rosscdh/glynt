@@ -1,4 +1,4 @@
-}}{% extends 'base.html' %}{% load account_tags lawyer_profile_tags jsonify thumbnail cache %}
+{% extends 'base.html' %}{% load account_tags lawyer_profile_tags jsonify thumbnail cache %}
 
 {% block page_title %}{{ object.user.get_full_name|default:object.user.username }}{% endblock %}
 {% block bodyclass %}lawyer-welcome{% endblock %}
@@ -52,7 +52,7 @@
 					{% endfor %}	
 					<li class="tick">{{ object.data.years_practiced }} Years Practicing</li>
 					<li class="star">No endorsements yet</li>
-					<li class="friends"><img src="/static/img/app/small-avatar.jpg" alt="Avatar" /> Benjamin Ling is a mutual contact</li>
+					<!-- <li class="friends"><img src="/static/img/app/small-avatar.jpg" alt="Avatar" /> Benjamin Ling is a mutual contact</li> -->
 				</ul>				
 			</div>
 			
@@ -120,31 +120,6 @@
 	<div class="divide">
 		<div class="endorsements">
 			<h2>Client Endorsements</h2>
-			<div class="endorsement">
-				<img src="/static/img/app/medium-avatar.png" alt="Avatar (Placeholder)" />
-				<p>Awesome to work with, responsive and helpful. Instrumental in getting Airbnb to where it is today</p>
-				<p class="source">Alex Halliday</p>
-			</div>
-			<div class="endorsement">
-				<img src="/static/img/app/medium-avatar.png" alt="Avatar (Placeholder)" />
-				<p>Awesome to work with, responsive and helpful. Instrumental in getting Airbnb to where it is today</p>
-				<p class="source">Alex Halliday</p>
-			</div>
-			<div class="endorsement">
-				<img src="/static/img/app/medium-avatar.png" alt="Avatar (Placeholder)" />
-				<p>Awesome to work with, responsive and helpful. Instrumental in getting Airbnb to where it is today</p>
-				<p class="source">Alex Halliday</p>
-			</div>
-			<div class="endorsement">
-				<img src="/static/img/app/medium-avatar.png" alt="Avatar (Placeholder)" />
-				<p>Awesome to work with, responsive and helpful. Instrumental in getting Airbnb to where it is today</p>
-				<p class="source">Alex Halliday</p>
-			</div>
-			<div class="endorsement">
-				<img src="/static/img/app/medium-avatar.png" alt="Avatar (Placeholder)" />
-				<p>Awesome to work with, responsive and helpful. Instrumental in getting Airbnb to where it is today</p>
-				<p class="source">Alex Halliday</p>
-			</div>
 			<div class="endorsement">
 				<img src="/static/img/app/medium-avatar.png" alt="Avatar (Placeholder)" />
 				<p>Awesome to work with, responsive and helpful. Instrumental in getting Airbnb to where it is today</p>
