@@ -36,10 +36,13 @@ class EnsureLawyerService(object):
         # this avoides superflous saves, and also uses update and not the heavy save method
         User.objects.filter(pk=self.user.pk).update(**dict(fields_to_update))
 
-        # Update the password if present
+        # Update the password if present in the form
+        # being present in the form means that this is a new user
         if self.form is not None and self.form.cleaned_data.get('password', None) is not None:
             self.user.set_password(self.form.cleaned_data.get('password', None))
             self.user.save()
+            # Send the email on profile setup
+            self.send_congratulations_email(user=self.user)
 
     def process(self):
         self.update_user()
@@ -61,6 +64,10 @@ class EnsureLawyerService(object):
             self.lawyer.photo.save(photo_file, photo.file)
             self.lawyer.user.profile.mugshot.save(photo_file, photo.file)
             logger.info('Saved new photo %s for %s' % (photo.file, self.lawyer))
+
+    def send_congratulations_email(self, user):
+        # Send profile email
+        send_profile_setup_email(user=user)
 
     def perform_update(self):
         """
@@ -106,9 +113,6 @@ class EnsureLawyerService(object):
         # Primary lawyer update query
         # Will always be present due to the previous get_or_create
         Lawyer.objects.filter(pk=self.lawyer.pk).update(**dict(fields_to_update))
-
-        # Send profile email
-        send_profile_setup_email(user=self.lawyer.user)
 
         logger.info('get_or_create:lawyer %s is_new: %s' % (self.lawyer.user.username, self.lawyer_is_new,))
 
