@@ -109,7 +109,7 @@ def create_userarena_signup(sender, **kwargs):
 #     if LAWPAL_PRIVATE_BETA is True:
 #         logger.info('Deactivating User Account %d for manual activation' % user.pk)
 #         user.is_active = False # Set to false to allow manual activation
-#         user.save(update_fields=[is_active])
+#         user.save(update_fields=['is_active'])
 
 #     logger.debug('Sending private_beta_profile email')
 #     send_templated_mail(
