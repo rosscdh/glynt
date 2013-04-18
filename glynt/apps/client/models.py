@@ -93,7 +93,7 @@ def create_userarena_signup(sender, **kwargs):
     if profile is not None and is_new == True:
         user = profile.user
         logger.info('Creating UserenaSignup object for User %s' % user.username)
-        userena_signup, is_new = UserenaSignup.objects.get_or_create(user=profile.user)
+        userena_signup, is_new = UserenaSignup.objects.create_userena_profile(user=profile.user)
 
 
 # @receiver(post_save, sender=ClientProfile, dispatch_uid='client.private_beta_profile')
