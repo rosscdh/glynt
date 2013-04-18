@@ -65,7 +65,7 @@ class LawyerProfileSetupView(FormView):
             'email': user.email,
 
             'position': lawyer.role,
-            'phone': lawyer.phone,
+            'phone': lawyer.phone if lawyer.phone not in [None,'None'] else '',
 
             'firm_name': getattr(firm, 'name', None),
             'practice_location_1': lawyer.data.get('practice_location_1', None),
