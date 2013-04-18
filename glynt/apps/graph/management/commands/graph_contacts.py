@@ -72,8 +72,10 @@ class Command(BaseCommand):
             resp, content = oauth_client.request()
 
             content = json.loads(content)
+            contacts = content.get('values', [])
+            logger.info('Linked in contacts:%d for %s '%(len(contacts), auth.user.username,))
 
-            for u in content.get('values'):
+            for u in contacts:
                 c = LinkedInProcessConnectionService(item=u, uid=u.get('uid'), user=auth.user)
 
     def angel(self, auth):
@@ -97,10 +99,12 @@ class Command(BaseCommand):
                 # get the page info
                 current_page = int(content.get('page', 1))
                 last_page = int(content.get('last_page', 1))
-
                 logger.info('page %d or %d for angel auth: %s' % (last_page, current_page, auth,))
 
-                for u in content.get('users', []):
+                contacts = content.get('users', [])
+                logger.info('AngelList in contacts:%d for %s '%(len(contacts), auth.user.username,))
+
+                for u in contacts:
                     if u.get('id', None) is not None:
                         c = AngelProcessConnectionService(uid=u.get('id'), item=u, user=auth.user)
 
