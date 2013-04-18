@@ -6,10 +6,6 @@ PROJECT_ENVIRONMENT = 'dev'
 # VERY IMPORTANT
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# Heroku - CloudAMQP
-BROKER_URL = 'amqp://gqhezwgc:1JylV9VKTXnlA9iuy9WFqIOqbl4yTmQa@tiger.cloudamqp.com/gqhezwgc'
-BROKER_POOL_LIMIT = 1
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

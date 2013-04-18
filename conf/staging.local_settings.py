@@ -11,6 +11,12 @@ COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = False
 TEMPLATE_DEBUG = DEBUG
 
+
+# Heroku - CloudAMQP
+BROKER_URL = 'amqp://gqhezwgc:1JylV9VKTXnlA9iuy9WFqIOqbl4yTmQa@tiger.cloudamqp.com/gqhezwgc'
+BROKER_POOL_LIMIT = 1
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
