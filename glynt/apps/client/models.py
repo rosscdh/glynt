@@ -72,6 +72,15 @@ def create_client_profile(sender, **kwargs):
         userena_signals.signup_complete.send(sender=None, user=user)
 
 
+@receiver(post_save, sender=ClientProfile, dispatch_uid='client.create_userarena_signup')
+def create_userarena_signup(sender, **kwargs):
+    profile = kwargs.get('instance', None)
+    is_new = kwargs.get('created', None)
+
+    if profile is not None and is_new == True:
+        userena_signup, is_new = UserenaSignup.objects.get_or_create(user=profile.user)
+
+
 # @receiver(post_save, sender=ClientProfile, dispatch_uid='client.private_beta_profile')
 # def private_beta_profile(sender, **kwargs):
 #     """ if the settings.LAWPAL_PRIVATE_BETA is True
