@@ -3,11 +3,14 @@
 {% block subject %}LawPal Account Details{% endblock %}
 
 {% block plain %}
-Dear {{ to_name }},
+Congratulations, your account on LawPal.com has been created. 
 
-Your profile at Lawpal.com has been updated.
+Login at :
+{% current_site_domain %}
 
-Please visit {{ profile_url }} to see the changes.
+Registered email address :
+{{ to_email }}
+
 
 {% include 'email/footer.email' %}
 {% endblock %}
