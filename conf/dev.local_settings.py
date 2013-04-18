@@ -3,6 +3,9 @@ from settings import *
 
 PROJECT_ENVIRONMENT = 'dev'
 
+# VERY IMPORTANT
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -52,8 +55,6 @@ LOGGING = {
         }
     }
 }
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 TWITTER_CONSUMER_KEY = 's4S1EAIeNded9aX5EBWwKQ'
