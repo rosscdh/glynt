@@ -557,7 +557,7 @@ font-size: 15px;
 color:#ccc;
 }
 body #footer {
-position:absolute;
+position:fixed;
 bottom:0;
 width:100%;
 height:20px;
@@ -662,4 +662,9 @@ body.landing .panel hgroup:hover {
 cursor: pointer;
 }
 
+@media screen and (max-width: 984px) {
+     body.landing .panel {
+          margin-top: 0px;
+     }
+}
 

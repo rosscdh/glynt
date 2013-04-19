@@ -1,16 +1,23 @@
 {% load glynt_helpers %}
 
-{% block subject %}Invitations from {{ from_name }}{% endblock %}
+{% block subject %}Invitation from {{ from_name }}{% endblock %}
 
 {% block plain %}
-Dear {{ to_name }},
+Hi there,
 
-{{ from_name }} thinks you are are a great lawyer and wants people to know it.
+Today, I'm inviting you to create your profile on the LawPal preview beta!
 
-LawPal is preparing a beautiful, curated directory of outstanding lawyers currently advising startups throughout the world. 
-Please visit http://preview.lawpal.com, sign in and complete your profile. LawPal profiles are designed to show who you are - both as an attorney and as a person.  
+Being listed on LawPal will allow new funded startups who are seeking outside council to find you. 
 
-Lawpal is building a platform which will allow you to connect with hundreds of emerging technology companies and save yourself time and save your clients money by using the LawPal platform to manage your new and existing relationships.
+LawPal will shortly be launching a beautiful, curated directory of outstanding lawyers currently advising startups throughout the world and we want you on board. 
+LawPal profiles are designed to show who you are - both as an attorney and as a person.  
 
-{% include 'email/footer.email' %}
+Please go here to create your profile: http://preview.lawpal.com/
+
+Welcome and we hope you enjoy using the platform,
+
+Regards, 
+
+{{ from_name }}{
+
 {% endblock %}
