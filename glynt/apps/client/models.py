@@ -76,13 +76,11 @@ def create_client_profile(sender, **kwargs):
 @receiver(post_save, sender=ClientProfile, dispatch_uid='client.create_lawyer_profile')
 def create_lawyer_profile(sender, **kwargs):
     profile = kwargs.get('instance', None)
-    is_new = kwargs.get('created', None)
+    user = profile.user
 
-    if profile is not None and is_new == True:
-        user = profile.user
-        logger.info('Creating Lawyer Profile for User %s' % user.username)
-        lawyer_service = EnsureLawyerService(user=profile.user)
-        lawyer_service.process()
+    logger.info('Creating Lawyer Profile for User %s' % user.username)
+    lawyer_service = EnsureLawyerService(user=profile.user)
+    lawyer_service.process()
 
 
 @receiver(post_save, sender=ClientProfile, dispatch_uid='client.create_userarena_signup')
@@ -95,27 +93,3 @@ def create_userarena_signup(sender, **kwargs):
         logger.info('Creating UserenaSignup object for User %s' % user.username)
         userena_signup, is_new = UserenaSignup.objects.create_userena_profile(user=profile.user)
 
-
-# @receiver(post_save, sender=ClientProfile, dispatch_uid='client.private_beta_profile')
-# def private_beta_profile(sender, **kwargs):
-#     """ if the settings.LAWPAL_PRIVATE_BETA is True
-#     then this method will diable the user account 
-#     until we manually activate itself """
-#     logger.info('LAWPAL_PRIVATE_BETA: %s' % LAWPAL_PRIVATE_BETA)
-
-#     instance = kwargs.get('instance')
-#     user = instance.user
-
-#     if LAWPAL_PRIVATE_BETA is True:
-#         logger.info('Deactivating User Account %d for manual activation' % user.pk)
-#         user.is_active = False # Set to false to allow manual activation
-#         user.save(update_fields=['is_active'])
-
-#     logger.debug('Sending private_beta_profile email')
-#     send_templated_mail(
-#         template_name = 'private_beta_new_user',
-#         template_prefix="sign/email/",
-#         from_email = 'website@lawpal.com',
-#         recipient_list = [e for n,e in settings.MANAGERS],
-#         context = kwargs
-#     )
