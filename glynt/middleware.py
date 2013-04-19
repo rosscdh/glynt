@@ -9,23 +9,28 @@ from social_auth.middleware import SocialAuthExceptionMiddleware
 from social_auth.exceptions import SocialAuthBaseException
 from social_auth.utils import backend_setting, get_backend_name
 
-SECURE_REQUIRED_PATHS = getattr(settings, 'SECURE_REQUIRED_PATHS', False)
-HTTPS_SUPPORT = getattr(settings, 'HTTPS_SUPPORT', False)
+# SECURE_REQUIRED_PATHS = getattr(settings, 'SECURE_REQUIRED_PATHS', [])
+# HTTPS_SUPPORT = getattr(settings, 'HTTPS_SUPPORT', False)
 
 
-class SSLRequiredMiddleware(object):
-    def __init__(self):
-        self.paths = SECURE_REQUIRED_PATHS
-        self.enabled = self.paths and HTTPS_SUPPORT
+# class SSLRequiredMiddleware(object):
+#     def __init__(self):
+#         self.paths = SECURE_REQUIRED_PATHS
+#         self.enabled = len(SECURE_REQUIRED_PATHS) > 0 or HTTPS_SUPPORT
 
-    def process_request(self, request):
-        if self.enabled and not request.is_secure():
-            for path in self.paths:
-                if request.get_full_path().startswith(path):
-                    request_url = request.build_absolute_uri(request.get_full_path())
-                    secure_url = request_url.replace('http://', 'https://')
-                    return HttpResponsePermanentRedirect(secure_url)
-        return None
+#     def process_request(self, request):
+#         if self.enabled and not request.is_secure():
+
+#             request_url = request.build_absolute_uri(request.get_full_path())
+#             secure_url = request_url.replace('http://', 'https://')
+
+#             if len(self.paths) == 0:
+#                 return HttpResponsePermanentRedirect(secure_url)
+#             else:
+#                 for path in self.paths:
+#                     if request.get_full_path().startswith(path):
+#                         return HttpResponsePermanentRedirect(secure_url)
+#         return None
 
 
 class LawpalSocialAuthExceptionMiddleware(SocialAuthExceptionMiddleware):
