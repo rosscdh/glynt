@@ -1,11 +1,18 @@
 # -*- coding: UTF-8 -*-
 from django.db import models
 from django.contrib.auth.models import User
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 from autoslug.fields import AutoSlugField
 from jsonfield import JSONField
 
 from glynt.apps.deal.models import Deal
+
+from tasks import new_firm_email_task
+
+import logging
+logger = logging.getLogger('django.request')
 
 
 class Firm(models.Model):
@@ -66,3 +73,14 @@ class tmpLawyerFirm(models.Model):
     @property
     def firm(self):
         return u'%s' % self.data.get('firm', 'No Firm')
+
+
+@receiver(post_save, sender=Firm, dispatch_uid='firm.new_firm', )
+def new_firm(sender, **kwargs):
+    """ Capture the new Firm Creation """
+    firm = kwargs.get('instance', None)
+    is_new = kwargs.get('created', None)
+
+    if firm is not None and is_new == True:
+        logger.info('A new Firm was created %s' % firm)
+        new_firm_email_task()
