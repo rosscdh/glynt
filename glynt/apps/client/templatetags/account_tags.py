@@ -18,12 +18,15 @@ def social_associate(context, social_auth):
 def social_button(context, name, img=None, **kwargs):
 
     display_name = kwargs.get('display_name', None)
+    can_unlink = kwargs.get('can_unlink', True)
+
     social_auth = context.get('social_auth', None)
 
     context.update({
         'name': name,
         'display_name': display_name,
         'is_linked': social_auth.get(name, None) is not None,
+        'can_unlink': can_unlink,
         'connect_url': reverse('socialauth_begin', kwargs={'backend': name}),
         'disconnect_url': reverse('socialauth_disconnect', kwargs={'backend': name}),
         'img': img
