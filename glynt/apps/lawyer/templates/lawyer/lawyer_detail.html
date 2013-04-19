@@ -43,14 +43,10 @@
 				</div>
 				{% endif %}
 			<div class="firm">
-				{% if firm.photo %}
-					<img src="{{ MEDIA_URL }}{{ firm.photo|default:'firm/blank.gif' }}" alt="{{ firm.name }}" class="firm-logo" />				
+				{% if firm.photo == '' %}
+					<h2>{{ object.primary_firm }}</h2>
 				{% else %} 
-					{% if firm %}
-						<h2>{{ firm }}</h2>
-					{% else %}
-						<br />
-					{% endif %}
+					<img src="{{ MEDIA_URL }}{{ firm.photo|default:'firm/blank.gif' }}" alt="{{ firm.name }}" class="firm-logo" />				
 				{% endif %} 
 			</div>
 			<div class="map">
