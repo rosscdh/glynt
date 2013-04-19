@@ -25,7 +25,7 @@ def get_username(details, user=None,
     if user was given.
     """
     if user:
-        return {'username': UserSocialAuth.user_username(user)}
+        return {'username': user.username}
 
     uuid_length = getattr(settings, 'SOCIAL_AUTH_UUID_LENGTH', 4)
 
