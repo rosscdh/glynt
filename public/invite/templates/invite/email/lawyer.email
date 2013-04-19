@@ -12,12 +12,12 @@ Being listed on LawPal will allow new funded startups who are seeking outside co
 LawPal will shortly be launching a beautiful, curated directory of outstanding lawyers currently advising startups throughout the world and we want you on board. 
 LawPal profiles are designed to show who you are - both as an attorney and as a person.  
 
-Please go here to create your profile: http://preview.lawpal.com/
+Please go here to create your profile: {% current_site_domain %}
 
 Welcome and we hope you enjoy using the platform,
 
 Regards, 
 
-{{ from_name }}{
+{{ from_name }}
 
 {% endblock %}
