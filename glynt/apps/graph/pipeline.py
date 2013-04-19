@@ -9,6 +9,16 @@ import logging
 logger = logging.getLogger('lawpal.graph')
 
 
+def ensure_user_setup(*args, **kwargs):
+    """ Ensures the client.ClientProfile models and setup processes get called """
+    user = kwargs.get('user', None)
+
+    if user is not None:
+        # Call the lambda defined in client/models.py
+        user.profile
+
+
+
 def graph_user_connections(backend, details, response, user=None, is_new=False,
                         *args, **kwargs):
 	auth = UserSocialAuth.objects.get(user=user, provider=backend.name)
@@ -16,6 +26,7 @@ def graph_user_connections(backend, details, response, user=None, is_new=False,
 		collect_user_graph_connections.delay(auth=auth)
 	except Exception as e:
 		logger.error('Did not try collect_user_graph_connections as no connection to broker could be found: %s' % e)
+
 
 
 def get_username(details, user=None,

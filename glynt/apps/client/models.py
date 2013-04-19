@@ -17,7 +17,7 @@ from glynt.apps.lawyer.services import EnsureLawyerService
 
 from templated_email import send_templated_mail
 
-from guardian.shortcuts import assign
+from guardian.shortcuts import assign_perm
 
 from django_countries import CountryField
 
@@ -35,6 +35,7 @@ class ClientProfile(UserenaBaseProfile):
     profile_data = JSONField(blank=True, null=True)
     country = CountryField(default='US', null=True)
     state = models.CharField(max_length=64, null=True)
+    is_lawyer = models.BooleanField(default=True)
 
     @classmethod
     def create(cls, **kwargs):
@@ -48,6 +49,7 @@ class ClientProfile(UserenaBaseProfile):
         return u'%s. %s' % (user.first_name[0], user.last_name,) if user.first_name and user.last_name else user.username
 
 # set the profile
+# This is what triggers the whole cleint profile creation process in pipeline.py:ensure_user_setup
 User.profile = property(lambda u: ClientProfile.objects.get_or_create(user=u)[0])
 
 
@@ -56,18 +58,18 @@ def create_client_profile(sender, **kwargs):
     """ Method creates the permissions required for the current user
     to view their account info and edit passwrds etc """
     profile = kwargs.get('instance', None)
-    is_new = kwargs.get('created', None)
+    is_new = kwargs.get('created', False)
 
     if profile is not None and is_new == True:
         user = profile.user
         logger.info('Creating Profile Permissions for User %s' % user.username)
         # Give permissions to view and change profile
         for perm, name in ASSIGNED_PERMISSIONS['profile']:
-            assign(perm, user, profile)
+            assign_perm(perm, user, profile)
 
         # Give permissions to view and change itself
         for perm, name in ASSIGNED_PERMISSIONS['user']:
-            assign(perm, user, user)
+            assign_perm(perm, user, user)
 
         # Send the signup complete signal
         userena_signals.signup_complete.send(sender=None, user=user)
@@ -76,10 +78,10 @@ def create_client_profile(sender, **kwargs):
 @receiver(post_save, sender=ClientProfile, dispatch_uid='client.create_lawyer_profile')
 def create_lawyer_profile(sender, **kwargs):
     profile = kwargs.get('instance', None)
-    is_new = kwargs.get('created', None)
+    is_new = kwargs.get('created', False)
+    user = profile.user
 
     if profile is not None and is_new == True:
-        user = profile.user
         logger.info('Creating Lawyer Profile for User %s' % user.username)
         lawyer_service = EnsureLawyerService(user=profile.user)
         lawyer_service.process()
@@ -93,29 +95,5 @@ def create_userarena_signup(sender, **kwargs):
     if profile is not None and is_new == True:
         user = profile.user
         logger.info('Creating UserenaSignup object for User %s' % user.username)
-        userena_signup, is_new = UserenaSignup.objects.create_userena_profile(user=profile.user)
+        userena_signup = UserenaSignup.objects.create_userena_profile(user=user)
 
-
-# @receiver(post_save, sender=ClientProfile, dispatch_uid='client.private_beta_profile')
-# def private_beta_profile(sender, **kwargs):
-#     """ if the settings.LAWPAL_PRIVATE_BETA is True
-#     then this method will diable the user account 
-#     until we manually activate itself """
-#     logger.info('LAWPAL_PRIVATE_BETA: %s' % LAWPAL_PRIVATE_BETA)
-
-#     instance = kwargs.get('instance')
-#     user = instance.user
-
-#     if LAWPAL_PRIVATE_BETA is True:
-#         logger.info('Deactivating User Account %d for manual activation' % user.pk)
-#         user.is_active = False # Set to false to allow manual activation
-#         user.save(update_fields=['is_active'])
-
-#     logger.debug('Sending private_beta_profile email')
-#     send_templated_mail(
-#         template_name = 'private_beta_new_user',
-#         template_prefix="sign/email/",
-#         from_email = 'website@lawpal.com',
-#         recipient_list = [e for n,e in settings.MANAGERS],
-#         context = kwargs
-#     )

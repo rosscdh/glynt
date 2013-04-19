@@ -30,6 +30,7 @@ class EnsureLawyerService(object):
         fields_to_update.update(first_name = self.data.get('first_name', None))
         fields_to_update.update(last_name = self.data.get('last_name', None))
         fields_to_update.update(email = self.data.get('email', None))
+
         # remove empty items
         fields_to_update = [(k,v) for k,v in fields_to_update.items() if v is not None]
         # update the user only if changes happened
@@ -44,8 +45,15 @@ class EnsureLawyerService(object):
             # Send the email on profile setup
             self.send_congratulations_email(user=self.user)
 
+    def update_user_profile(self):
+        # update the is_lawyer attribute
+        profile = self.user.profile
+        profile.is_lawyer = True
+        profile.save(update_fields=['is_lawyer'])
+
     def process(self):
         self.update_user()
+        self.update_user_profile()
         self.lawyer, self.lawyer_is_new = Lawyer.objects.get_or_create(user=self.user)
 
         # user may already be associated with a firm

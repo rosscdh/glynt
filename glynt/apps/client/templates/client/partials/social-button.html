@@ -1,11 +1,7 @@
 {% load url from future %}
 
-<span class="button-wrap {% if is_linked %}{{ display_name|default:name }} btn-active{% else %}btn-inactive{% endif %}">
-	<a class="btn btn-large btn-{{ name }} {% if is_linked %}disabled{% endif %}" title="Signed in with {{ name }}" id="associate-{{ name }}" href="{% if is_linked %}{{ disconnect_url }}{% else %}{{ connect_url }}{% endif %}">
+<span class="button-wrap {% if is_linked %}{{ display_name|default:name }} btn-active{% else %}btn-inactive{% endif %}">    
+	<a class="btn btn-large btn-{{ name }} {% if is_linked %}disabled{% endif %}" title="Signed in with {{ name }}" id="associate-{{ name }}" href="{% if is_linked and can_unlink %}{{ disconnect_url }}{% else %}{% if not can_unlink %}#{% else %}{{ connect_url }}{% endif %}{% endif %}">
 		{% if is_linked %}{{ display_name|default:name }} Connected{% else %}Connect {{ display_name|default:name }}{% endif %}
 	</a>
 </span>
-
-<!-- <a  class="btn btn-small btn-{% if is_linked %}primary{% else %}inverse{% endif %} span4">
-    {{ name }}
-</a> -->

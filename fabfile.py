@@ -153,7 +153,7 @@ def git_export(branch='master'):
   if not os.path.exists('/tmp/%s.zip' % env.SHA1_FILENAME):
       local('git archive --format zip --output /tmp/%s.zip --prefix=%s/ %s' % (env.SHA1_FILENAME, env.SHA1_FILENAME, branch,), capture=False)
 
-
+@task
 def prepare_deploy():
     git_export()
 
@@ -204,8 +204,12 @@ def nfs_reload():
 def env_run(cmd):
     return sudo(cmd) if env.environment_class is 'production' else run(cmd)
 
+@task
 def deploy_archive_file():
-    file_name = '%s.zip' % env.SHA1_FILENAME
+    filename = env.get('SHA1_FILENAME', None)
+    if filename is None:
+        filename = env.SHA1_FILENAME = get_sha1()
+    file_name = '%s.zip' % filename
     if not files.exists('%s/%s' % (env.deploy_archive_path, file_name)):
         as_sudo = env.environment_class is 'production'
         put('/tmp/%s' % file_name, env.deploy_archive_path, use_sudo=as_sudo)
@@ -249,8 +253,7 @@ def do_deploy():
 
     # extract project zip file:into a staging area and link it in
     if not files.exists('%s/manage.py'%full_version_path):
-        with cd('%s' % version_path):
-            virtualenv('unzip %s%s.zip -d %s' % (env.deploy_archive_path, env.SHA1_FILENAME, version_path,))
+        unzip_archive()
 
     execute(relink)
 
@@ -261,7 +264,11 @@ def do_deploy():
             virtualenv('cp %s/conf/%s.wsgi.py %s/%s/wsgi.py' % (project_path, env.environment, project_path, env.project))
             virtualenv('cp %s/conf/%s.newrelic.ini %s/%s/newrelic.ini' % (project_path, env.environment, project_path, env.project))
 
-
+@task
+def unzip_archive():
+    version_path = '%sversions' % env.remote_project_path
+    with cd('%s' % version_path):
+        virtualenv('unzip %s%s.zip -d %s' % (env.deploy_archive_path, env.SHA1_FILENAME, version_path,))
 @task
 def restart_lite():
     sudo(env.light_restart)
