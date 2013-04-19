@@ -48,8 +48,8 @@ class EnsureLawyerService(object):
         self.update_user()
         self.lawyer, self.lawyer_is_new = Lawyer.objects.get_or_create(user=self.user)
 
-        # usermay already be associated with a firm
-        firms = self.user.firm_lawyers.all()
+        # user may already be associated with a firm
+        firms = self.lawyer.firm_lawyers.all()
         if firms:
             self.firm = firms[0]
             logger.info('Firm %s is associated with lawyer %s ' % (self.lawyer.user.username, self.firm.name))

@@ -33,8 +33,14 @@ class Lawyer(models.Model):
     @property
     def primary_firm(self):
         try:
-            return self.user.firm_lawyers.prefetch_related().all()[0]
+            return self.firm_lawyers.prefetch_related().all()[0]
         except IndexError:
+            return None
+
+    def firm_name(self):
+        try:
+            primary_firm.name
+        except:
             return None
 
     def username(self):
@@ -48,12 +54,6 @@ class Lawyer(models.Model):
 
     def last_login(self):
         return self.user.last_login
-
-    def firm_name(self):
-        try:
-            self.user.firm_lawyers.all()[0].name
-        except IndexError:
-            return None
 
     def practice_locations(self):
         locations = []
