@@ -319,6 +319,7 @@ TWITTER_CONSUMER_SECRET = 'Ka9XGTeRlu1v7XRs2GSdK43Sd0l4j0eXXE2gI4iXd8E'
 SOCIAL_AUTH_SLUGIFY_USERNAMES = True
 SOCIAL_AUTH_UUID_LENGTH = 0
 SOCIAL_AUTH_BACKEND_ERROR_URL = '/'
+SOCIAL_AUTH_PROTECTED_USER_FIELDS = ('first_name', 'last_name', 'full_name', 'email',)
 SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.social.social_auth_user',
     'glynt.apps.graph.pipeline.get_username',
