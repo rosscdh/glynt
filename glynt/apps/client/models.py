@@ -17,7 +17,7 @@ from glynt.apps.lawyer.services import EnsureLawyerService
 
 from templated_email import send_templated_mail
 
-from guardian.shortcuts import assign
+from guardian.shortcuts import assign_perm
 
 from django_countries import CountryField
 
@@ -48,6 +48,7 @@ class ClientProfile(UserenaBaseProfile):
         return u'%s. %s' % (user.first_name[0], user.last_name,) if user.first_name and user.last_name else user.username
 
 # set the profile
+# This is what triggers the whole cleint profile creation process in pipeline.py:ensure_user_setup
 User.profile = property(lambda u: ClientProfile.objects.get_or_create(user=u)[0])
 
 
@@ -56,18 +57,18 @@ def create_client_profile(sender, **kwargs):
     """ Method creates the permissions required for the current user
     to view their account info and edit passwrds etc """
     profile = kwargs.get('instance', None)
-    is_new = kwargs.get('created', None)
+    is_new = kwargs.get('created', False)
 
     if profile is not None and is_new == True:
         user = profile.user
         logger.info('Creating Profile Permissions for User %s' % user.username)
         # Give permissions to view and change profile
         for perm, name in ASSIGNED_PERMISSIONS['profile']:
-            assign(perm, user, profile)
+            assign_perm(perm, user, profile)
 
         # Give permissions to view and change itself
         for perm, name in ASSIGNED_PERMISSIONS['user']:
-            assign(perm, user, user)
+            assign_perm(perm, user, user)
 
         # Send the signup complete signal
         userena_signals.signup_complete.send(sender=None, user=user)
@@ -76,11 +77,13 @@ def create_client_profile(sender, **kwargs):
 @receiver(post_save, sender=ClientProfile, dispatch_uid='client.create_lawyer_profile')
 def create_lawyer_profile(sender, **kwargs):
     profile = kwargs.get('instance', None)
+    is_new = kwargs.get('created', False)
     user = profile.user
 
-    logger.info('Creating Lawyer Profile for User %s' % user.username)
-    lawyer_service = EnsureLawyerService(user=profile.user)
-    lawyer_service.process()
+    if profile is not None and is_new == True:
+        logger.info('Creating Lawyer Profile for User %s' % user.username)
+        lawyer_service = EnsureLawyerService(user=profile.user)
+        lawyer_service.process()
 
 
 @receiver(post_save, sender=ClientProfile, dispatch_uid='client.create_userarena_signup')
@@ -91,5 +94,5 @@ def create_userarena_signup(sender, **kwargs):
     if profile is not None and is_new == True:
         user = profile.user
         logger.info('Creating UserenaSignup object for User %s' % user.username)
-        userena_signup, is_new = UserenaSignup.objects.create_userena_profile(user=profile.user)
+        userena_signup = UserenaSignup.objects.create_userena_profile(user=user)
 
