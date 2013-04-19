@@ -16,15 +16,19 @@ TEMPLATE_DEBUG = DEBUG
 
 gettext = lambda s: s
 
+COMPRESSION_ENABLED = False
+
 ADMINS = (
     ("Ross Crawford-dHeureuse", 'ross@lawpal.com'),
 )
 
-COMPRESSION_ENABLED = False
-
 MANAGERS = ADMINS + (
     ("Alex Halliday", 'alex@lawpal.com'),
     ("Joe Musgrave", 'joe@lawpal.com'),
+)
+
+NOTICEGROUP_EMAIL = (
+ ("LawPal Tech", 'tech@lawpal.com'),   
 )
 
 DATABASES = {
@@ -312,10 +316,12 @@ ANGEL_AUTH_EXTRA_ARGUMENTS = {'scope': 'email'}
 TWITTER_CONSUMER_KEY = 'q4iigBXEJj7OBuIYHVF99g'
 TWITTER_CONSUMER_SECRET = 'Ka9XGTeRlu1v7XRs2GSdK43Sd0l4j0eXXE2gI4iXd8E'
 
+SOCIAL_AUTH_SLUGIFY_USERNAMES = True
+SOCIAL_AUTH_UUID_LENGTH = 0
 SOCIAL_AUTH_BACKEND_ERROR_URL = '/'
 SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.social.social_auth_user',
-    'social_auth.backends.pipeline.user.get_username',
+    'glynt.apps.graph.pipeline.get_username',
     'social_auth.backends.pipeline.user.create_user',
     'social_auth.backends.pipeline.social.associate_user',
     'social_auth.backends.pipeline.social.load_extra_data',

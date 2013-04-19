@@ -3,6 +3,7 @@ import os
 from django.db import models
 from django.contrib.auth.models import User
 
+from autoslug.fields import AutoSlugField
 from jsonfield import JSONField
 
 
@@ -33,7 +34,7 @@ class Startup(models.Model):
     including relationships to founders (Users)
     """
     name = models.CharField(max_length=255, db_index=True)
-    slug = models.SlugField(max_length=255, db_index=True)
+    slug = AutoSlugField(db_index=True, populate_from='name', editable=True)
     summary = models.TextField(blank=True, null=True)
     website = models.URLField(blank=True, null=True)
     twitter = models.CharField(max_length=64, blank=True, null=True)

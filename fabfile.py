@@ -123,6 +123,7 @@ def staging():
     env.light_restart = None
 
 
+@task
 def virtualenv(cmd):
   # change to base dir
   with cd(env.remote_project_path):
