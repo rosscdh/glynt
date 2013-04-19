@@ -107,6 +107,18 @@ div#messages ul {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#58daea', endColorstr='#3ac6df',GradientType=0 ); /* IE6-8 */
 	padding:7px 0px;
 }
+.navbar .unread_counter {
+	background-color:#d24230;
+	color:white;
+	font-size:10px;
+	font-weight:bold;
+	padding:2px 5px 3px 5px;
+	border-radius:10px;
+	font-weight:bold;
+	top:-2px;
+	position:relative;
+	font-style:normal;
+}
 .navbar .nav {
 	top: 4px;
 	/*margin-right: 40px;*/
