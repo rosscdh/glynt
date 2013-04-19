@@ -434,7 +434,7 @@ DOCRAPTOR_KEY = "vIvrCmZtnQTC4p6V0k"
 
 LAWPAL_PRIVATE_BETA = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'local.weareml.com:8000']
+ALLOWED_HOSTS = ['*']
 
 
 # Neat trick http://www.robgolding.com/blog/2010/05/03/extending-settings-variables-with-local_settings-py-in-django/

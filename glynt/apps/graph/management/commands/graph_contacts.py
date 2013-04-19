@@ -44,12 +44,15 @@ class Command(BaseCommand):
             self.process_all_auth()
 
     def process_single_auth(self, auth):
-        if auth.provider == 'linkedin':
-            self.linkedin(auth)
-        elif auth.provider == 'angel':
-            self.angel(auth)
+        if type(auth) is not UserSocialAuth:
+            logger.error('Cloud not Process Auth Graph collection as its not a UserSocialAuth class it is a %s' % type(auth))
         else:
-            raise Exception('Unknown Auth Provider %s' % auth.provider)
+            if auth.provider == 'linkedin':
+                self.linkedin(auth)
+            elif auth.provider == 'angel':
+                self.angel(auth)
+            else:
+                raise Exception('Unknown Auth Provider %s' % auth.provider)
 
     def get_queryset(self):
         qs = UserSocialAuth.objects.prefetch_related('user')
@@ -70,11 +73,16 @@ class Command(BaseCommand):
             oauth_client = LinkedinConnectionService(oauth_token=user_access_data.get('oauth_token')[0], \
                                                     oauth_token_secret=user_access_data.get('oauth_token_secret')[0])
             resp, content = oauth_client.request()
+            print resp.__dict__
 
             content = json.loads(content)
+            contacts = content.get('values', [])
+            logger.info('LinkedIn contacts:%d for %s '%(len(contacts), auth.user.username,))
+            logger.debug('LinkedIn response:%s for %s '%(resp, auth.user.username,))
 
-            for u in content.get('values'):
-                c = LinkedInProcessConnectionService(item=u, uid=u.get('uid'), user=auth.user)
+            for u in contacts:
+                # linked in uses "id" and not uid
+                c = LinkedInProcessConnectionService(item=u, uid=u.get('id'), user=auth.user)
 
     def angel(self, auth):
         if auth.provider == 'angel':
@@ -97,10 +105,12 @@ class Command(BaseCommand):
                 # get the page info
                 current_page = int(content.get('page', 1))
                 last_page = int(content.get('last_page', 1))
-
                 logger.info('page %d or %d for angel auth: %s' % (last_page, current_page, auth,))
 
-                for u in content.get('users', []):
+                contacts = content.get('users', [])
+                logger.info('AngelList in contacts:%d for %s '%(len(contacts), auth.user.username,))
+                logger.debug('AngelList in response:%s for %s '%(resp, auth.user.username,))
+                for u in contacts:
                     if u.get('id', None) is not None:
                         c = AngelProcessConnectionService(uid=u.get('id'), item=u, user=auth.user)
 

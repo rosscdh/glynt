@@ -50,9 +50,9 @@ SESSION_CACHE_ALIAS = 'session_cache'
 FACEBOOK_API_KEY = '343632075713954'
 FACEBOOK_SECRET_KEY = '4f9854b8fe8f5ccf27ac1ffcf5051b79'
 
-LINKEDIN_CONSUMER_KEY = 'gnesv6zvhzgn'
-LINKEDIN_CONSUMER_SECRET = '3eTYERhJZd4UJSjM'
-LINKEDIN_SCOPE = ['r_basicprofile', 'r_emailaddress']
+LINKEDIN_CONSUMER_KEY = 'rrjwcpuvhfl1'
+LINKEDIN_CONSUMER_SECRET = '2wm9DFbdUjLyi76U'
+LINKEDIN_SCOPE = ['r_basicprofile', 'r_emailaddress', 'r_network']
 LINKEDIN_EXTRA_FIELD_SELECTORS = ['email-address', 'headline', 'industry']
 LINKEDIN_EXTRA_DATA = [('id', 'id'),
                        ('first-name', 'first_name'),
@@ -84,7 +84,7 @@ RAVEN_CONFIG = {
 }
 
 # Heroku - CloudAMQP
-BROKER_URL = 'amqp://ixrhhdcu:PZffJcRS4NmILD65ss4s-aza7fKtTgYc@tiger.cloudamqp.com/ixrhhdcu'
+BROKER_URL = 'amqp://gqhezwgc:1JylV9VKTXnlA9iuy9WFqIOqbl4yTmQa@tiger.cloudamqp.com/gqhezwgc'
 BROKER_POOL_LIMIT = 1
 
 SPLUNKSTORM_ENDPOINT = 'logs2.splunkstorm.com'

@@ -96,6 +96,12 @@ class AngelConnectionService(CollectConnectionBaseService):
     consumer = oauth.Consumer(settings.ANGEL_CLIENT_ID, settings.ANGEL_CLIENT_SECRET)
     url = 'https://api.angel.co/1/users/%s/followers?access_token=%s&page=%d'
 
+    def get_client(self):
+        """ Disable the ssl validation for angel they have ssl problems"""
+        client = oauth.Client(consumer=self.consumer)
+        client.disable_ssl_certificate_validation = True
+        return client
+
     def get_url(self):
         page = getattr(self, 'page', 1)
         return self.url % (getattr(self, 'angel_uid'), getattr(self, 'access_token'), page)
