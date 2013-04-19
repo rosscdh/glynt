@@ -106,6 +106,7 @@ $(document).ready(function(){
                     // show buttons
                     $('#invite-container').fadeIn('slow')
                     form.find('button').attr('disabled','')
+					Intercom('update', {"Invites Sent": "Complete"});
                 });
             } else {
                 console.log('not valid')

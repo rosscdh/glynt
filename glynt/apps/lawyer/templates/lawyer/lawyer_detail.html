@@ -41,6 +41,13 @@
 					<a href="{% url 'lawyer:setup_profile' %}" class="btn">Edit profile</a> 
 					<a href="{% url 'lawyer:invite' %}" class="btn btn-primary">Invite Lawyers</a>
 				</div>
+					{% if object.summary %} 
+					    <script>
+						  $(document).ready(function () {
+					     	  Intercom('update', {"Lawyer Profile": "Complete", "Firm": "{{firm}}"});
+					   	 });
+						</script>
+					{% endif %}
 				{% endif %}
 			<div class="firm">
 				{% if firm.photo %}
@@ -215,7 +222,6 @@ $(document).ready(function () {
 			}
 			,linedefaults);
 
-			console.log(getByType().seriesa)
 		new Chart(ctx1).Doughnut([
 			{
 				value: getByType().seriesa,
