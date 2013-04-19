@@ -2,6 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from autoslug.fields import AutoSlugField
 from jsonfield import JSONField
 
 from glynt.apps.deal.models import Deal
@@ -12,7 +13,7 @@ class Firm(models.Model):
     Stores sundry information about legal Firms
     """
     name = models.CharField(max_length=128, db_index=True)
-    slug = models.SlugField()
+    slug = AutoSlugField(populate_from='name', editable=True)
     summary = models.CharField(max_length=255, blank=True)
     description = models.TextField(blank=True)
     website = models.URLField(blank=True)
@@ -39,8 +40,8 @@ class Office(models.Model):
     """
     firm = models.ForeignKey(Firm)
     address = models.CharField(max_length=255, db_index=True)
-    country = models.CharField(max_length=64, db_index=True)
-    photo = models.ImageField(upload_to='office')
+    country = models.CharField(max_length=64, db_index=True, blank=True)
+    photo = models.ImageField(upload_to='office', blank=True)
     data = JSONField(default={})
 
     def __unicode__(self):
