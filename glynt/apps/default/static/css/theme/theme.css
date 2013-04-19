@@ -86,7 +86,7 @@ div#messages ul {
     opacity: 0.96;
 	border-bottom:1px solid #F1F1F1;
 }
-.navbar-fixed-top .navbar-inner, .navbar-static-top .navbar-inner {
+.navbar-fixed-top .navbar-inner, .navbar-static-top .navbar-inner, .navbar .navbar-inner {
     padding: 17px 0 17px 0;
 	background:#FFF;
 	box-shadow:none;
@@ -879,3 +879,17 @@ i.myspace { background-position: -233px -51px; }
 
 
 .hallotoolbar{ display:none!important;}
+
+
+/* Basic responsive */
+
+@media screen and (max-width: 984px) {
+     body {
+          padding-top:0px;
+		  
+     }
+	 .navbar-fixed-top, .navbar-fixed-bottom {
+		 position:relative;
+	 }
+}
+
