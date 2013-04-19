@@ -1,12 +1,12 @@
 # -*- coding: UTF-8 -*-
 from django.db import models
-from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 
 from autoslug.fields import AutoSlugField
 from jsonfield import JSONField
 
+from glynt.apps.lawyer.models import Lawyer
 from glynt.apps.deal.models import Deal
 
 from tasks import new_firm_email_task
@@ -27,7 +27,7 @@ class Firm(models.Model):
     twitter = models.CharField(max_length=64, blank=True, db_index=True)
     photo = models.ImageField(upload_to='firm', blank=True)
     data = JSONField(default={})
-    lawyers = models.ManyToManyField(User, blank=True, related_name='firm_lawyers')
+    lawyers = models.ManyToManyField(Lawyer, blank=True, related_name='firm_lawyers')
     deals = models.ManyToManyField(Deal, blank=True, related_name='firm_deals')
 
     def __unicode__(self):
