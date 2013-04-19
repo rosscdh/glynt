@@ -44,7 +44,6 @@ Markdown
 pyyaml
 pytidylib
 #lxml
-BeautifulSoup
 cssselect
 -e git+https://github.com/rosscdh/pybars.git#egg=pybars
 -e git+https://github.com/rosscdh/django-templatetag-handlebars.git#egg=django-templatetag-handlebars
@@ -83,10 +82,14 @@ django-clear-cache
 # Testing
 -e git+https://github.com/kmmbvnr/django-jenkins.git#egg=django-jenkins
 HTTPretty
-behave
 django-nose
 mocktest
 factory_boy
+behave
+django_behave
+mechanize
+wsgi_intercept
+BeautifulSoup
 
 # Misc
 django-autoslug
