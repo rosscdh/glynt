@@ -89,6 +89,7 @@ mocktest
 factory_boy
 
 # Misc
+django-autoslug
 python-dateutil
 requests
 termcolor

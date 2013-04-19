@@ -28,7 +28,8 @@ class EnsureFirmService(object):
 
         if self.lawyer is not None:
             # removeall current associated firms, as a lawyer can have only 1 association
-            self.user.firm_lawyers.remove()
+            self.user.firm_lawyers.clear()
+
             # Add user as a lawyer to this firm
             self.firm.lawyers.add(self.user)
             logger.info('Associating Lawyer %s with Firm %s'%(self.user, self.firm,))

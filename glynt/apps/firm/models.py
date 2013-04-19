@@ -1,10 +1,18 @@
 # -*- coding: UTF-8 -*-
 from django.db import models
 from django.contrib.auth.models import User
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
+from autoslug.fields import AutoSlugField
 from jsonfield import JSONField
 
 from glynt.apps.deal.models import Deal
+
+from tasks import new_firm_email_task
+
+import logging
+logger = logging.getLogger('django.request')
 
 
 class Firm(models.Model):
@@ -12,7 +20,7 @@ class Firm(models.Model):
     Stores sundry information about legal Firms
     """
     name = models.CharField(max_length=128, db_index=True)
-    slug = models.SlugField()
+    slug = AutoSlugField(populate_from='name', editable=True)
     summary = models.CharField(max_length=255, blank=True)
     description = models.TextField(blank=True)
     website = models.URLField(blank=True)
@@ -39,8 +47,8 @@ class Office(models.Model):
     """
     firm = models.ForeignKey(Firm)
     address = models.CharField(max_length=255, db_index=True)
-    country = models.CharField(max_length=64, db_index=True)
-    photo = models.ImageField(upload_to='office')
+    country = models.CharField(max_length=64, db_index=True, blank=True)
+    photo = models.ImageField(upload_to='office', blank=True)
     data = JSONField(default={})
 
     def __unicode__(self):
@@ -65,3 +73,14 @@ class tmpLawyerFirm(models.Model):
     @property
     def firm(self):
         return u'%s' % self.data.get('firm', 'No Firm')
+
+
+@receiver(post_save, sender=Firm, dispatch_uid='firm.new_firm', )
+def new_firm(sender, **kwargs):
+    """ Capture the new Firm Creation """
+    firm = kwargs.get('instance', None)
+    is_new = kwargs.get('created', None)
+
+    if firm is not None and is_new == True:
+        logger.info('A new Firm was created %s' % firm)
+        new_firm_email_task()

@@ -28,7 +28,7 @@ class Lawyer(models.Model):
     photo = models.ImageField(upload_to='lawyer')
 
     def __unicode__(self):
-        return u'%s' % (self.user.username,)
+        return u'%s (%s)' % (self.user.username, self.user.email,)
 
     @property
     def primary_firm(self):

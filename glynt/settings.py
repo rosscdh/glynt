@@ -16,15 +16,19 @@ TEMPLATE_DEBUG = DEBUG
 
 gettext = lambda s: s
 
+COMPRESSION_ENABLED = False
+
 ADMINS = (
     ("Ross Crawford-dHeureuse", 'ross@lawpal.com'),
 )
 
-COMPRESSION_ENABLED = False
-
 MANAGERS = ADMINS + (
     ("Alex Halliday", 'alex@lawpal.com'),
     ("Joe Musgrave", 'joe@lawpal.com'),
+)
+
+NOTICEGROUP_EMAIL = (
+ ("LawPal Tech", 'tech@lawpal.com'),   
 )
 
 DATABASES = {
