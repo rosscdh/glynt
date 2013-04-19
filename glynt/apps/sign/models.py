@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from jsonfield import JSONField
 
 from glynt.apps.document.models import ClientCreatedDocument
-from signpad2image import s2ib
+from signpad2image.signpad2image import s2ib
 
 import base64
 import StringIO
