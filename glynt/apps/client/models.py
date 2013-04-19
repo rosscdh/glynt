@@ -35,6 +35,7 @@ class ClientProfile(UserenaBaseProfile):
     profile_data = JSONField(blank=True, null=True)
     country = CountryField(default='US', null=True)
     state = models.CharField(max_length=64, null=True)
+    is_lawyer = models.BooleanField(default=True)
 
     @classmethod
     def create(cls, **kwargs):
