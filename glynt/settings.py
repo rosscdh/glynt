@@ -5,9 +5,10 @@ import sys
 PROJECT_ENVIRONMENT = 'prod'
 
 IS_TESTING = False
-for test_app in ['jenkins','testserver','test']:
-    if test_app in sys.argv[1:2]:
-        IS_TESTING = True
+
+TEST_APPS = ['jenkins','testserver','test', 'behave']
+if sys.argv[1:2] in TEST_APPS or os.path.basename(sys.argv[0]) in TEST_APPS:
+    IS_TESTING = True
 
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__+ '/../'))
 
@@ -237,6 +238,8 @@ HELPER_APPS = (
     'clear_cache',
     # Celery Tasks
     'djcelery',
+    # south migrations
+    'south',
 )
 
 # Handle south and its breaking tests
@@ -249,10 +252,7 @@ if IS_TESTING == True:
     HELPER_APPS = HELPER_APPS + (
         'django_jenkins',
     )
-else:
-    HELPER_APPS = HELPER_APPS + (
-        'south',
-    )
+
 
 
 # Primary installed apps goes here

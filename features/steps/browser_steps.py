@@ -15,198 +15,198 @@ def before_feature(context, feature):
 
 # Step Setup
 
-@given('/^(?:|I )am logged in as "([^"]*)"$/')
+@given(r'^(?\:|I )am logged in as "([^"]*)"')
 def step(context):
     pass
 
-@given('/^there is no "([^"]*)" user$/')
+@given(r'^there is no "([^"]*)" user')
 def step(context):
     pass
 
-@given('/^^(?:|I )click "([^"]*)"$/')
+# @given(r'^(?:|I )click "([^"]*)"$')
+# def step(context):
+#     pass
+
+# @given(r'^(?:|I )am on ([^"]*)')
+# def step(context):
+#     pass
+
+@when(r'^(?:|I )go to (?:|the )homepage')
 def step(context):
     pass
 
-# @given('/^(?:|I )am on (?:|the )homepage$/')
+# @given(r'^(?:|I )am on "(?P<page>[^"]+)"$')
 # def step(context):
 #     pass
 
-@when('/^(?:|I )go to (?:|the )homepage$/')
-def step(context):
-    pass
-
-# @given('/^(?:|I )am on "(?P<page>[^"]+)"$/')
+# @when(r'^(?:|I )go to "(?P<page>[^"]+)"$')
 # def step(context):
 #     pass
 
-# @when('/^(?:|I )go to "(?P<page>[^"]+)"$/')
+# @when(r'^(?:|I )reload the page$')
 # def step(context):
 #     pass
 
-# @when('/^(?:|I )reload the page$/')
+# @when(r'^(?:|I )move backward one page$')
 # def step(context):
 #     pass
 
-# @when('/^(?:|I )move backward one page$/')
+# @when(r'^(?:|I )move forward one page$')
 # def step(context):
 #     pass
 
-# @when('/^(?:|I )move forward one page$/')
+# @when(r'^(?:|I )press "(?P<button>(?:[^"]|\\")*)"$')
 # def step(context):
 #     pass
 
-# @when('/^(?:|I )press "(?P<button>(?:[^"]|\\")*)"$/')
+# @when(r'^(?:|I )follow "(?P<link>(?:[^"]|\\")*)"$')
 # def step(context):
 #     pass
 
-# @when('/^(?:|I )follow "(?P<link>(?:[^"]|\\")*)"$/')
+# @when(r'^(?:|I )fill in "(?P<field>(?:[^"]|\\")*)" with "(?P<value>(?:[^"]|\\")*)"$')
 # def step(context):
 #     pass
 
-# @when('/^(?:|I )fill in "(?P<field>(?:[^"]|\\")*)" with "(?P<value>(?:[^"]|\\")*)"$/')
+# @when(r'^(?:|I )fill in "(?P<field>(?:[^"]|\\")*)" with:$')
 # def step(context):
 #     pass
 
-# @when('/^(?:|I )fill in "(?P<field>(?:[^"]|\\")*)" with:$/')
+# @when(r'^(?:|I )fill in "(?P<value>(?:[^"]|\\")*)" for "(?P<field>(?:[^"]|\\")*)"$')
 # def step(context):
 #     pass
 
-# @when('/^(?:|I )fill in "(?P<value>(?:[^"]|\\")*)" for "(?P<field>(?:[^"]|\\")*)"$/')
+# @when(r'^(?:|I )fill in the following:$')
 # def step(context):
 #     pass
 
-# @when('/^(?:|I )fill in the following:$/')
+# @when(r'^(?:|I )select "(?P<option>(?:[^"]|\\")*)" from "(?P<select>(?:[^"]|\\")*)"$')
 # def step(context):
 #     pass
 
-# @when('/^(?:|I )select "(?P<option>(?:[^"]|\\")*)" from "(?P<select>(?:[^"]|\\")*)"$/')
+# @when(r'^(?:|I )additionally select "(?P<option>(?:[^"]|\\")*)" from "(?P<select>(?:[^"]|\\")*)"$')
 # def step(context):
 #     pass
 
-# @when('/^(?:|I )additionally select "(?P<option>(?:[^"]|\\")*)" from "(?P<select>(?:[^"]|\\")*)"$/')
+# @when(r'^(?:|I )check "(?P<option>(?:[^"]|\\")*)"$')
 # def step(context):
 #     pass
 
-# @when('/^(?:|I )check "(?P<option>(?:[^"]|\\")*)"$/')
+# @when(r'^(?:|I )uncheck "(?P<option>(?:[^"]|\\")*)"$')
 # def step(context):
 #     pass
 
-# @when('/^(?:|I )uncheck "(?P<option>(?:[^"]|\\")*)"$/')
+# @when(r'^(?:|I )attach the file "(?P[^"]*)" to "(?P<field>(?:[^"]|\\")*)"$')
 # def step(context):
 #     pass
 
-# @when('/^(?:|I )attach the file "(?P[^"]*)" to "(?P<field>(?:[^"]|\\")*)"$/')
+# @then(r'^(?:|I )should be on "(?P<page>[^"]+)"$')
 # def step(context):
 #     pass
 
-# @then('/^(?:|I )should be on "(?P<page>[^"]+)"$/')
+# @then(r'^(?:|I )should be on (?:|the )homepage$')
 # def step(context):
 #     pass
 
-# @then('/^(?:|I )should be on (?:|the )homepage$/')
+# @then(r'^the (?i)url(?-i) should match (?P<pattern>"([^"]|\\")*")$')
 # def step(context):
 #     pass
 
-# @then('/^the (?i)url(?-i) should match (?P<pattern>"([^"]|\\")*")$/')
+# @then(r'^the response status code should be (?P<code>\d+)$')
 # def step(context):
 #     pass
 
-# @then('/^the response status code should be (?P<code>\d+)$/')
+# @then(r'^the response status code should not be (?P<code>\d+)$')
 # def step(context):
 #     pass
 
-# @then('/^the response status code should not be (?P<code>\d+)$/')
+# @then(r'^(?:|I )should see "(?P<text>(?:[^"]|\\")*)"$')
 # def step(context):
 #     pass
 
-# @then('/^(?:|I )should see "(?P<text>(?:[^"]|\\")*)"$/')
+# @then(r'^(?:|I )should not see "(?P<text>(?:[^"]|\\")*)"$')
 # def step(context):
 #     pass
 
-# @then('/^(?:|I )should not see "(?P<text>(?:[^"]|\\")*)"$/')
+# @then(r'^(?:|I )should see text matching (?P<pattern>"(?:[^"]|\\")*")$')
 # def step(context):
 #     pass
 
-# @then('/^(?:|I )should see text matching (?P<pattern>"(?:[^"]|\\")*")$/')
+# @then(r'^(?:|I )should not see text matching (?P<pattern>"(?:[^"]|\\")*")$')
 # def step(context):
 #     pass
 
-# @then('/^(?:|I )should not see text matching (?P<pattern>"(?:[^"]|\\")*")$/')
+# @then(r'^the response should contain "(?P<text>(?:[^"]|\\")*)"$')
 # def step(context):
 #     pass
 
-# @then('/^the response should contain "(?P<text>(?:[^"]|\\")*)"$/')
+# @then(r'^the response should not contain "(?P<text>(?:[^"]|\\")*)"$')
 # def step(context):
 #     pass
 
-# @then('/^the response should not contain "(?P<text>(?:[^"]|\\")*)"$/')
+# @then(r'^(?:|I )should see "(?P<text>(?:[^"]|\\")*)" in the "(?P<element>[^"]*)" element$')
 # def step(context):
 #     pass
 
-# @then('/^(?:|I )should see "(?P<text>(?:[^"]|\\")*)" in the "(?P<element>[^"]*)" element$/')
+# @then(r'^(?:|I )should not see "(?P<text>(?:[^"]|\\")*)" in the "(?P<element>[^"]*)" element$')
 # def step(context):
 #     pass
 
-# @then('/^(?:|I )should not see "(?P<text>(?:[^"]|\\")*)" in the "(?P<element>[^"]*)" element$/')
+# @then(r'^the "(?P<element>[^"]*)" element should contain "(?P<value>(?:[^"]|\\")*)"$')
 # def step(context):
 #     pass
 
-# @then('/^the "(?P<element>[^"]*)" element should contain "(?P<value>(?:[^"]|\\")*)"$/')
+# @then(r'^the "(?P<element>[^"]*)" element should not contain "(?P<value>(?:[^"]|\\")*)"$')
 # def step(context):
 #     pass
 
-# @then('/^the "(?P<element>[^"]*)" element should not contain "(?P<value>(?:[^"]|\\")*)"$/')
+# @then(r'^(?:|I )should see an? "(?P<element>[^"]*)" element$')
 # def step(context):
 #     pass
 
-# @then('/^(?:|I )should see an? "(?P<element>[^"]*)" element$/')
+# @then(r'^(?:|I )should not see an? "(?P<element>[^"]*)" element$')
 # def step(context):
 #     pass
 
-# @then('/^(?:|I )should not see an? "(?P<element>[^"]*)" element$/')
+# @then(r'^the "(?P<field>(?:[^"]|\\")*)" field should contain "(?P<value>(?:[^"]|\\")*)"$')
 # def step(context):
 #     pass
 
-# @then('/^the "(?P<field>(?:[^"]|\\")*)" field should contain "(?P<value>(?:[^"]|\\")*)"$/')
+# @then(r'^the "(?P<field>(?:[^"]|\\")*)" field should not contain "(?P<value>(?:[^"]|\\")*)"$')
 # def step(context):
 #     pass
 
-# @then('/^the "(?P<field>(?:[^"]|\\")*)" field should not contain "(?P<value>(?:[^"]|\\")*)"$/')
+# @then(r'^the "(?P<checkbox>(?:[^"]|\\")*)" checkbox should be checked$')
 # def step(context):
 #     pass
 
-# @then('/^the "(?P<checkbox>(?:[^"]|\\")*)" checkbox should be checked$/')
+# @then(r'^the checkbox "(?P<checkbox>(?:[^"]|\\")*)" (?:is|should be) checked$')
 # def step(context):
 #     pass
 
-# @then('/^the checkbox "(?P<checkbox>(?:[^"]|\\")*)" (?:is|should be) checked$/')
+# @then(r'^the "(?P<checkbox>(?:[^"]|\\")*)" checkbox should not be checked$')
 # def step(context):
 #     pass
 
-# @then('/^the "(?P<checkbox>(?:[^"]|\\")*)" checkbox should not be checked$/')
+# @then(r'^the checkbox "(?P<checkbox>(?:[^"]|\\")*)" should (?:be unchecked|not be checked)$')
 # def step(context):
 #     pass
 
-# @then('/^the checkbox "(?P<checkbox>(?:[^"]|\\")*)" should (?:be unchecked|not be checked)$/')
+# @then(r'^the checkbox "(?P<checkbox>(?:[^"]|\\")*)" is (?:unchecked|not checked)$')
 # def step(context):
 #     pass
 
-# @then('/^the checkbox "(?P<checkbox>(?:[^"]|\\")*)" is (?:unchecked|not checked)$/')
+# @then(r'^(?:|I )should see (?P<num>\d+) "(?P<element>[^"]*)" elements?$')
 # def step(context):
 #     pass
 
-# @then('/^(?:|I )should see (?P<num>\d+) "(?P<element>[^"]*)" elements?$/')
+# @then(r'^print current URL$')
 # def step(context):
 #     pass
 
-# @then('/^print current URL$/')
+# @then(r'^print last response$')
 # def step(context):
 #     pass
 
-# @then('/^print last response$/')
-# def step(context):
-#     pass
-
-# @then('/^show last response$/')
+# @then(r'^show last response$')
 # def step(context):
 #     pass

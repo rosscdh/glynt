@@ -5,7 +5,6 @@ import os, sys, site
 
 # Tell wsgi to add the Python site-packages to its path. 
 GLYNT_PATH = os.path.dirname(os.path.realpath(__file__ + '../../'))
-sys.path.append(GLYNT_PATH)
 
 
 # This is necessary for all installed apps to be recognized, for some reason.
@@ -15,9 +14,9 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'glynt.settings'
 def before_all(context):
     # Even though DJANGO_SETTINGS_MODULE is set, this may still be
     # necessary. Or it may be simple CYA insurance.
-    # from django.core.management import setup_environ
+    from django.core.management import setup_environ
     from django.conf import settings
-    # setup_environ(settings)
+    #setup_environ(settings)
 
     ### Take a TestRunner hostage.
     from django.test.simple import DjangoTestSuiteRunner
