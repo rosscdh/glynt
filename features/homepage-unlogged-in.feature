@@ -10,26 +10,25 @@ Scenario: The unauthenticated Homepage
     Then I should see "Legal services marketplace and relationship management for startups" in the "hgroup > h2" element
 
     Then I should see "Startups" in the "hgroup > h3" element
-    Then I should see "" in the "input[name='EMAIL'][placeholder='Sign up for updates']" element
+    Then the "input[name='EMAIL'][placeholder='Sign up for updates']" should be empty
 
     Then I should see "Lawyers" in the "div.right hgroup > h3" element
-    Then I should see "Sign in with LinkedIn" in the "a.btn.linkedin" element
+    Then I should see "Sign in with LinkedIn" in the "#signin-linkedin" element
 
 
 Scenario: Redirect to LinkedIn
     Given I am on "/"
     Then I should see "Lawyers" in the "div.right hgroup > h3" element
-    Then I should see "Sign in with LinkedIn" in the "a.btn.linkedin" element
+    Then I should see "Sign in with LinkedIn" in the "#signin-linkedin" element
 
-    Given I follow "Sign in with LinkedIn"
+    When I follow "Sign in with LinkedIn"
 
     # Redirect to the linkedin auth page
-    Then I should be on "/uas/oauth/authorize"
+    Then I should be on "https://www.linkedin.com/uas/oauth/authorize?oauth_token="
 
 
-@mink:zombie
 Scenario: Starups signup for updates (Mailchimp)
     Given I am on "/"
     Then I should see "Startups" in the "hgroup > h3" element
-    Then I should see "" in the "input[name='EMAIL'][placeholder='Sign up for updates']" element
+    Then the "input[name='EMAIL'][placeholder='Sign up for updates']" should be empty
     Then I should see "Sign Up" in the "button[type=submit]" element

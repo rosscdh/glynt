@@ -5,7 +5,6 @@ import sys
 PROJECT_ENVIRONMENT = 'prod'
 
 IS_TESTING = False
-
 TEST_APPS = ['jenkins','testserver','test', 'behave']
 if sys.argv[1:2] in TEST_APPS or os.path.basename(sys.argv[0]) in TEST_APPS:
     IS_TESTING = True
@@ -395,7 +394,7 @@ LOGGING = {
     'loggers': {
         'django.test': {
             'handlers': ['console'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': True,
         },
         'django.request': {

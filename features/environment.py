@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """"""
 import os, sys, site
+import urlparse
 
 # Tell wsgi to add the Python site-packages to its path. 
 GLYNT_PATH = os.path.dirname(os.path.realpath(__file__ + '../../'))
@@ -48,6 +49,35 @@ def before_all(context):
         return urlparse.urljoin('http://%s:%d/' % (host, port), url)
 
     context.browser_url = browser_url
+
+    def go_to_url(url, redirect=True):
+        context.browser.set_handle_redirect(redirect)
+        context.browser.open(context.browser_url(url))
+
+    context.go_to = go_to_url
+
+    ### Cssselect implementation
+    import lxml.html
+    from cssselect import GenericTranslator, SelectorError
+    def csss(selector):
+        """ html object for parsing
+        currently using cssselect
+        """
+        doc = lxml.html.fromstring(context.browser.response().read())
+        return doc.cssselect(selector)
+
+    context.csss = csss
+
+    ### Pyquery implementation
+    from pyquery import PyQuery
+    def pq(selector):
+        """ html object for parsing
+        currently using pyquery
+        """
+        html = PyQuery(context.browser.response().read())
+        return html(selector)
+
+    context.pq = pq
 
     ### BeautifulSoup is handy to have nearby. (Substitute lxml or html5lib as you see fit)
     from BeautifulSoup import BeautifulSoup

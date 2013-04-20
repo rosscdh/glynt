@@ -89,7 +89,7 @@ behave
 django_behave
 mechanize
 wsgi_intercept
-BeautifulSoup
+pyquery
 
 # Misc
 django-autoslug

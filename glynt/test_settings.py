@@ -1,31 +1,58 @@
+# -*- coding: utf-8 -*-
+LOCAL_SETTINGS = True
+from settings import *
+
+PROJECT_ENVIRONMENT = 'test'
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
-    'formatters': {
-        'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
-        },
-        'simple': {
-            'format': '%(levelname)s %(message)s'
-        },
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
     },
     'handlers': {
-        'null': {
-            'level': 'DEBUG',
-            'class': 'django.utils.log.NullHandler',
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
         },
-        'console':{
+        'console': {
             'level': 'INFO',
             'class': 'logging.StreamHandler',
-            'formatter': 'verbose'
         }
     },
     'loggers': {
+        'django.test': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django.test.behave': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
         'django.request': {
-            'handlers': ['null'],
+            'handlers': ['console'],
             'level': 'ERROR',
-            'propagate': False,
+            'propagate': True,
+        },
+        'lawpal.services': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'lawpal.graph': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'lawpal.commands': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
         }
     }
 }
-

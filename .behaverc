@@ -1,0 +1,7 @@
+[behave]
+stop=true
+format=pretty
+color=true
+logging_clear_handlers=yes
+logging_level=INFO
+log_capture=false
