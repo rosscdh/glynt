@@ -221,6 +221,10 @@ def clean_zip():
         env_run('rm %s%s' % (env.deploy_archive_path, file_name,))
 
 @task
+def clear_cache():
+    virtualenv(cmd='python glynt/manage.py clear_cache')
+
+@task
 def relink():
     if not env.SHA1_FILENAME:
         env.SHA1_FILENAME = get_sha1()
@@ -349,7 +353,6 @@ def deploy(is_predeploy='False'):
     prepare_deploy()
     execute(do_deploy)
     execute(clean_pyc)
-
     #execute(restart_lite)
     execute(supervisord_restart)
     execute(clean_zip)
