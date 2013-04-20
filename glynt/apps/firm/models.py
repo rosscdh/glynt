@@ -83,4 +83,4 @@ def new_firm(sender, **kwargs):
 
     if firm is not None and is_new == True:
         logger.info('A new Firm was created %s' % firm)
-        new_firm_email_task()
+        new_firm_email_task(firm=firm)

@@ -15,8 +15,11 @@ logger = logging.getLogger('django.request')
 def new_firm_email_task(**kwargs):
   """
   """
-  firm = kwargs.get('firm', 'No Firm is present')
+  firm = kwargs.get('firm', {'name': 'No Firm is present', 'pk': None})
   logger.info('Sending new_firm_email_task: %s' % firm)
+  kwargs.update({
+    'firm': firm
+  })
   send_templated_mail(
           template_name = 'firm_created',
           template_prefix="email/info/",
