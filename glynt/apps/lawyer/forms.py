@@ -41,7 +41,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     first_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'John'}))
     last_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'Sonsini'}))
 
-    firm_name = forms.CharField(widget=forms.TextInput(attrs={'data-trigger':'change','class':'typeahead','autocomplete':'off','data-provide':'ajax', 'minLength':'2', 'data-items':4, 'data-source': 'firms'}))
+    firm_name = forms.CharField(widget=forms.TextInput(attrs={'data-trigger':'change','class':'typeahead','autocomplete':'off','data-provide':'ajax', 'minLength':'2', 'data-items':4, 'data-source': 'firms', 'data-filter':'name__istartswith', }))
 
     phone = forms.CharField(help_text="", widget=forms.TextInput(attrs={'data-trigger':'change','placeholder':'+1 415 225 6464', 'title':'Shows on your profile. Include country code.'}))
 
