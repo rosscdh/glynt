@@ -349,7 +349,7 @@ def deploy(is_predeploy='False'):
     prepare_deploy()
     execute(do_deploy)
     execute(clean_pyc)
-    execute(virtualenv(cmd='python glynt/manage.py clear_cache'))
+
     #execute(restart_lite)
     execute(supervisord_restart)
     execute(clean_zip)
