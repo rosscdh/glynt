@@ -56,7 +56,4 @@ class Command(BaseCommand):
             # create from node(s)
             for from_user in conn.from_users.all():
                 from_vert = user_cache[from_user.id]
-                # TODO: this is terrible:
-                # we should probably make shared "enum" of these providers (they're also used in social auth)
-                edgetype = 'angellist' if conn.provider == 1 else 'linkedin'
-                graph.edges.create(from_vert, edgetype, to_vert)
+                graph.edges.create(from_vert, conn.provider, to_vert)

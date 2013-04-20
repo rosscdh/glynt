@@ -5,22 +5,25 @@ Not Just standard django models
 import sys
 from django.db import models
 from django.contrib.auth.models import User
-
-from glynt.apps.utils import get_namedtuple_choices
 from jsonfield import JSONField
 
 import logging
 logger = logging.getLogger('lawpal.graph')
 
 
+class Provider(models.Model):
+    ANGELLIST = 'angellist'
+    LINKEDIN = 'linkedin'
+
+    choices = (
+        (ANGELLIST, 'Angellist'),
+        (LINKEDIN, 'LinkedIn')
+    )
+
+
 class GraphConnection(models.Model):
     """ Generic Database Model to store various provider abstractions """
-    PROVIDERS = get_namedtuple_choices('PROVIDERS', (
-        (0, 'linkedin', 'Linkedin'),
-        (1, 'angel', 'Angel'),
-    ))
-
-    provider = models.IntegerField(choices=PROVIDERS.get_choices(), db_index=True)
+    provider = models.CharField(choices=Provider.choices, db_index=True)
     uid = models.CharField(max_length=64, db_index=True)
     to_user = models.ForeignKey(User, related_name='graph_connection_from', null=True, blank=True)
     from_users = models.ManyToManyField(User, related_name='graph_connection_to')
