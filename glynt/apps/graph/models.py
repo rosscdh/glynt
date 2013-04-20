@@ -23,7 +23,7 @@ class Provider(models.Model):
 
 class GraphConnection(models.Model):
     """ Generic Database Model to store various provider abstractions """
-    provider = models.CharField(choices=Provider.choices, db_index=True)
+    provider = models.CharField(max_length=32, choices=Provider.choices, db_index=True)
     uid = models.CharField(max_length=64, db_index=True)
     to_user = models.ForeignKey(User, related_name='graph_connection_from', null=True, blank=True)
     from_users = models.ManyToManyField(User, related_name='graph_connection_to')
