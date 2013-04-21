@@ -13,7 +13,7 @@
             <span class="icon-bar"></span>
         </a>
         <a class="brand" data-section="body" href="/">
-           <img src="{{ STATIC_URL }}img/logo-nav-white.png" title="LawPal"> 
+           <img src="{{ STATIC_URL }}img/logo-nav-white.png" alt="LawPal"> 
 		   <span class="label">Beta</span>
        </a>
         <div class="nav-collapse">
@@ -34,13 +34,10 @@
                         <li><a id="user-logout" class="" href="{% url 'logout' %}">{% trans 'Logout' %}</a></li>
                    </ul>
                  </li>
-             </ul>
              {% else %}
-         		 <ul class="nav pull-right">
-					 <li><a href="/" id="">{% trans 'Login' %}</a></li>
-				 </ul>
+				 <li><a href="/">{% trans 'Login' %}</a></li>
              {% endif %}
-                 
+            </ul>                 
         </div>
      </div>
    </div>
