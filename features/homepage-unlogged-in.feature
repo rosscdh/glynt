@@ -1,6 +1,6 @@
 Feature: View the Public Homepage
     In order to get interested in LawPal.com
-    An unauthenticated user 
+    As an unauthenticated user 
     I need to be able to see the pubic homepage
 
 Scenario: The unauthenticated Homepage
