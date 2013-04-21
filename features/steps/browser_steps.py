@@ -172,9 +172,10 @@ def step(context, text):
 @then(u'I should see "{text}" in the "{css_selector}" element')
 def step(context, text, css_selector):
     found = False
-    text = text.strip()
+    text = unicode(text.strip())
+
     for m in context.csss(css_selector):
-        if m.text_content().strip() == text:
+        if unicode(m.text_content().strip()) == text:
             found = True
             break
     assert found == True

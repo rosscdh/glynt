@@ -31,4 +31,4 @@ Scenario: Starups signup for updates (Mailchimp)
     Given I am on "/"
     Then I should see "Startups" in the "hgroup > h3" element
     Then the "input[name='EMAIL'][placeholder='Sign up for updates']" should be empty
-    Then I should see "Sign Up" in the "button[type=submit]" element
+    Then I should see "Sign up" in the "#sign-up-mailchimp" element
