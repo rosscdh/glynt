@@ -2,32 +2,45 @@
 """"""
 from behave import *
 
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
+from django.utils.encoding import smart_unicode
+
 import logging
 logger = logging.getLogger('django.test.behave')
 
-BEHAVE_DEFAULT_USER_PASSWORD = 'test' # take from settings one day
+BEHAVE_DEFAULT_USER_PASSWORD = getattr(settings, 'BEHAVE_DEFAULT_USER_PASSWORD', 'test') # take from settings one day
+BEHAVE_DEFAULT_USER_PASSWORD = getattr(settings, 'BEHAVE_DEFAULT_USER_PASSWORD', 'test') # take from settings one day
 
-# Environment Setup
-
-def before_all(context):
-    pass
-
-def after_all(context):
-    pass
-
-def before_feature(context, feature):
-    pass
 
 # Step Setup
-
-
-
 @given(u'I am logged in as "{username_pass}"')
 def step(context, username_pass):
+    context.loaddata('test_users')
+
     try:
         username, password = username_pass.split(':')
     except:
         username, password = (username_pass, BEHAVE_DEFAULT_USER_PASSWORD)
+
+    user = User(username=username, email='%s+behave@lawpal.com')
+    user.set_password(password)
+    log_in_as(context, username, password)
+
+    assert user.is_authenticated() is True
+
+
+def log_in_as(context, username, password):
+    context.go_to(reverse('client:login'))
+    original_url = context.browser.geturl()
+    br = context.browser
+    br.select_form(nr=0)
+    br.form['username'] = username
+    br.form['password'] = password
+    br.submit()
+    # go pack to that page
+    context.go_to(original_url)
 
 
 @given(u'there is no "([^"]*)" user')
@@ -77,7 +90,7 @@ def step(context, link_selector):
     link_selector = link_selector.strip()
     for m in context.csss('a[href]'):
         url = m.get('href')
-        for i in [unicode(m.text_content()), m.get('href'), m.get('title'), m.get('name'), m.get('alt')]:
+        for i in [smart_unicode(m.text_content()), m.get('href'), m.get('title'), m.get('name'), m.get('alt')]:
             if type(i) in [str,unicode] and link_selector == i.strip():
                 context.go_to(url)
                 break
@@ -122,7 +135,7 @@ def step(context, link_selector):
 @then(u'I should be on "{url}"')
 def step(context, url):
     url = url.strip()
-    assert unicode(url) in unicode(context.browser.geturl().strip())
+    assert smart_unicode(url) in smart_unicode(context.browser.geturl().strip())
 
 # @then(u'(?:|I )should be on (?:|the )homepage')
 # def step(context):
@@ -172,10 +185,11 @@ def step(context, text):
 @then(u'I should see "{text}" in the "{css_selector}" element')
 def step(context, text, css_selector):
     found = False
-    text = unicode(text.strip())
-
+    text = smart_unicode(text.strip())
+    print context.csss(css_selector)
     for m in context.csss(css_selector):
-        if unicode(m.text_content().strip()) == text:
+        print m.text_content()
+        if smart_unicode(m.text_content().strip()) == text:
             found = True
             break
     assert found == True
@@ -237,13 +251,14 @@ def step(context, css_selector):
 # def step(context):
 #     pass
 
-# @then(u'print current URL')
-# def step(context):
-#     pass
-
-@then(u'print last response')
+@then(u'print current URL')
 def step(context):
-    pass
+    print smart_unicode(context.browser.geturl().strip())
+
+@then(u'print html')
+def print_html(context):
+    print smart_unicode(context.browser.response().read())
+
 
 # @then(u'show last response')
 # def step(context):

@@ -15,6 +15,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'glynt.settings'
 def before_all(context):
     # Even though DJANGO_SETTINGS_MODULE is set, this may still be
     # necessary. Or it may be simple CYA insurance.
+    from django.core.management import call_command
     from django.core.management import setup_environ
     from django.conf import settings
     #setup_environ(settings)
@@ -40,6 +41,12 @@ def before_all(context):
     # monkeypatches the networking internals to use a fake socket when
     # connecting to this port.
     wsgi_intercept.add_wsgi_intercept(host, port, WSGIHandler)
+
+
+    def loaddata(fixtures):
+        call_command('loaddata', fixtures)
+
+    context.loaddata = loaddata
 
     def browser_url(url):
         """Create a URL for the virtual WSGI server.
