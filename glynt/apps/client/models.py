@@ -69,6 +69,7 @@ def create_client_profile(sender, **kwargs):
 
         # Give permissions to view and change itself
         for perm, name in ASSIGNED_PERMISSIONS['user']:
+            print perm
             assign_perm(perm, user, user)
 
         # Send the signup complete signal

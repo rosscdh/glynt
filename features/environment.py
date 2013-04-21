@@ -42,7 +42,6 @@ def before_all(context):
     # connecting to this port.
     wsgi_intercept.add_wsgi_intercept(host, port, WSGIHandler)
 
-
     def loaddata(fixtures):
         call_command('loaddata', fixtures)
 

@@ -6,6 +6,9 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.utils.encoding import smart_unicode
+from django.core.management import call_command
+
+import urlparse
 
 import logging
 logger = logging.getLogger('django.test.behave')
@@ -17,15 +20,21 @@ BEHAVE_DEFAULT_USER_PASSWORD = getattr(settings, 'BEHAVE_DEFAULT_USER_PASSWORD',
 # Step Setup
 @given(u'I am logged in as "{username_pass}"')
 def step(context, username_pass):
-    context.loaddata('test_users')
-
     try:
         username, password = username_pass.split(':')
     except:
         username, password = (username_pass, BEHAVE_DEFAULT_USER_PASSWORD)
 
-    user = User(username=username, email='%s+behave@lawpal.com')
+    User.objects.filter(username=username).delete()
+
+    user, is_new = User.objects.get_or_create(username=username, email='%s+behave@lawpal.com')
     user.set_password(password)
+    user.save(update_fields=['username', 'email', 'password'])
+    call_command('check_permissions')
+    # ensure profile is created
+    user.profile
+    user.get_profile()
+    # log them in
     log_in_as(context, username, password)
 
     assert user.is_authenticated() is True
@@ -135,6 +144,7 @@ def step(context, link_selector):
 @then(u'I should be on "{url}"')
 def step(context, url):
     url = url.strip()
+    #url = urlparse.urlparse(url.strip())
     assert smart_unicode(url) in smart_unicode(context.browser.geturl().strip())
 
 # @then(u'(?:|I )should be on (?:|the )homepage')
