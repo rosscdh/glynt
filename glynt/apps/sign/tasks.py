@@ -14,7 +14,7 @@ import logging
 logger = logging.getLogger('django.request')
 
 
-site_name, site_email = settings.DEFAULT_FROM_EMAIL
+site_email = settings.DEFAULT_FROM_EMAIL
 
 
 @task()

@@ -12,7 +12,7 @@ import logging
 logger = logging.getLogger('lawpal.services')
 
 
-site_name, site_email = settings.DEFAULT_FROM_EMAIL
+site_email = settings.DEFAULT_FROM_EMAIL
 
 
 @task()
