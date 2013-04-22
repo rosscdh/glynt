@@ -23,7 +23,7 @@ def new_firm_email_task(**kwargs):
   send_templated_mail(
           template_name = 'firm_created',
           template_prefix="email/info/",
-          from_email = settings.ADMINS[0][1],
+          from_email = settings.DEFAULT_FROM_EMAIL[1],
           recipient_list = [email for name,email in settings.NOTICEGROUP_EMAIL],
           context = kwargs
   )

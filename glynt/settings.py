@@ -31,6 +31,8 @@ NOTICEGROUP_EMAIL = (
  ("LawPal Tech", 'tech@lawpal.com'),   
 )
 
+DEFAULT_FROM_EMAIL = ("No Reply", 'noreply@lawpal.com',)
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
