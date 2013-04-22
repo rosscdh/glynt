@@ -31,7 +31,8 @@ NOTICEGROUP_EMAIL = (
  ("LawPal Tech", 'tech@lawpal.com'),   
 )
 
-DEFAULT_FROM_EMAIL = ("No Reply", 'noreply@lawpal.com',)
+DEFAULT_FROM_EMAIL = 'noreply@localhost'
+SERVER_EMAIL = 'glynt@localhost'
 
 DATABASES = {
     'default': {
