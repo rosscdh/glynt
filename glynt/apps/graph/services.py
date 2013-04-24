@@ -7,10 +7,11 @@ them to the graph database models
 """
 from django.conf import settings
 
-from models import LawpalBaseConnection, LinkedinConnection, AngelConnection
+from models import LawpalBaseConnection, LinkedinConnection, AngelConnection, FullContactConnection
 from models import GraphConnection
 
 import oauth2 as oauth
+import requests
 
 import logging
 logger = logging.getLogger('lawpal.services')
@@ -51,6 +52,11 @@ class LinkedInProcessConnectionService(ProcessConnectionService):
 class AngelProcessConnectionService(ProcessConnectionService):
     provider = 'angel'
     connection_class = AngelConnection
+
+
+class FullContactProcessConnectionService(ProcessConnectionService):
+    provider = 'fullcontact'
+    connection_class = FullContactConnection
 
 
 """
@@ -105,3 +111,24 @@ class AngelConnectionService(CollectConnectionBaseService):
     def get_url(self):
         page = getattr(self, 'page', 1)
         return self.url % (getattr(self, 'angel_uid'), getattr(self, 'access_token'), page)
+
+
+class FullContactConnectionService(CollectConnectionBaseService):
+    consumer = requests # python reqeusts library
+    url = 'https://api.fullcontact.com/v2/person.json?email={email}&apiKey={access_token}&page={page}'
+
+    def get_url(self):
+        page = getattr(self, 'page', 1)
+        return self.url.format(email=getattr(self, 'email'), access_token=getattr(self, 'access_token'), page=page)
+
+    def request(self, method='GET', **kwargs):
+        """ we dont use oauth for FullContact just a direct requests """
+        url = self.get_url()
+        action_method = method.lower()
+
+        # call the consumer (requests object) and pass it the generated url
+        response = getattr(self.consumer, action_method)(url)
+
+        # return as a tuple to be the same as oauth requests
+        return (response, response.json(),)
+

@@ -88,8 +88,16 @@ class LinkedinConnection(LawpalBaseConnection):
 
 
 class AngelConnection(LawpalBaseConnection):
-    """ Linkedin Connection Provider """
+    """ AngelList Connection Provider """
     provider = 'angel'
     def get_full_name_from_data(self):
         return u'%s' % self.extra_data.get('name')
+
+
+class FullContactConnection(LawpalBaseConnection):
+    """ FullContact Connection Provider """
+    provider = 'fullcontact'
+    def get_full_name_from_data(self):
+        contact_info = self.extra_data.get('contactInfo')
+        return u'%s' % contact_info.get('fullName')
 
