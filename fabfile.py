@@ -351,7 +351,7 @@ def deploy(is_predeploy='False'):
     execute(clean_pyc)
 
     if env.environment_class == 'webfaction':
-        execute(restart_lite)
+        execute(restart_service)
     else:
         execute(supervisord_restart)
     execute(clean_zip)
