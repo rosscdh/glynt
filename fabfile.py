@@ -350,7 +350,9 @@ def deploy(is_predeploy='False'):
     execute(do_deploy)
     execute(clean_pyc)
 
-    #execute(restart_lite)
-    execute(supervisord_restart)
+    if env.environment_class == 'webfaction':
+        execute(restart_lite)
+    else:
+        execute(supervisord_restart)
     execute(clean_zip)
     execute(newrelic_deploynote)
