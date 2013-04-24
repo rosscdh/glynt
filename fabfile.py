@@ -64,7 +64,10 @@ def production():
     env.user = 'ubuntu'
     env.application_user = 'app'
     # connect to the port-forwarded ssh
-    env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com', 'ec2-54-241-224-100.us-west-1.compute.amazonaws.com']
+    env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com']
+    env.celery_hosts = ['ec2-54-241-224-100.us-west-1.compute.amazonaws.com']
+    env.hosts += env.celery_hosts
+
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
 
     env.start_service = 'supervisorctl start uwsgi'
@@ -89,7 +92,10 @@ def preview():
     env.user = 'ubuntu'
     env.application_user = 'app'
     # connect to the port-forwarded ssh
-    env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com', 'ec2-54-241-224-100.us-west-1.compute.amazonaws.com']
+    env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com']
+    env.celery_hosts = ['ec2-54-241-224-100.us-west-1.compute.amazonaws.com']
+    env.hosts += env.celery_hosts
+
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
 
     env.start_service = 'supervisorctl start uwsgi'
@@ -181,21 +187,15 @@ def supervisord_restart():
 
 @task
 def chores():
-    sudo('aptitude --assume-yes install build-essential python-setuptools python-dev uwsgi-plugin-python libjpeg8 libjpeg62-dev libfreetype6 libfreetype6-dev easy_install nmap htop vim')
+    sudo('aptitude --assume-yes install build-essential python-setuptools python-dev uwsgi-plugin-python libjpeg8 libjpeg62-dev libfreetype6 libfreetype6-dev easy_install nmap htop vim unzip')
     sudo('aptitude --assume-yes install git-core mercurial subversion')
-    sudo('aptitude --assume-yes install libtidy-dev python-psycopg2')
-    #sudo('aptitude --assume-yes install rabbitmq-server')
+    sudo('aptitude --assume-yes install libtidy-dev libpq-dev python-psycopg2')
 
     sudo('easy_install pip')
     sudo('pip install virtualenv virtualenvwrapper pillow')
 
     put('conf/.bash_profile', '~/.bash_profile')
 
-@task
-def filesystem_chores():
-    sudo('aptitude --assume-yes update')
-    sudo('aptitude --assume-yes install build-essential python-setuptools python-dev easy_install nmap htop vim')
-    sudo('aptitude --assume-yes install nfs-kernel-server')
 
 @task
 def nfs_reload():
