@@ -13,6 +13,30 @@ import logging
 logger = logging.getLogger('lawpal.graph')
 
 
+class FullContactData(models.Model):
+    """ Provides a data source for a users fullcontact.com info """
+    user = models.ForeignKey(User)
+    extra_data = JSONField(blank=True, default={})
+
+    def photos(self):
+        return [(p.get('typeName',None), p.get('isPrimary',False), p.get('url', None)) for p in self.extra_data.get('photos', [])]
+
+    def profile_pic(self):
+        avatar = [url for type_of,primary,url in self.photos() if primary is True][0]
+        return '<img src="%s" border="0"/>' % avatar
+    profile_pic.allow_tags = True
+
+    def contact_info(self):
+        return self.extra_data.get('contactInfo', None)
+
+    @property
+    def full_name(self):
+        return self.contact_info().get('fullName')
+
+    @property
+    def social_profile_names(self):
+        return ', '.join([p.get('typeName', 'Unknown') for p in self.extra_data.get('socialProfiles', [])])
+
 class GraphConnection(models.Model):
     """ Generic Database Model to store various provider abstractions """
     PROVIDERS = get_namedtuple_choices('PROVIDERS', (

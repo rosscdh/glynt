@@ -10,9 +10,7 @@ from optparse import make_option
 from django.contrib.auth.models import User
 
 from glynt.apps.graph.services import FullContactConnectionService
-
-import json
-from urlparse import parse_qs
+from glynt.apps.graph.models import FullContactData
 
 import logging
 logger = logging.getLogger('lawpal.graph')
@@ -37,8 +35,8 @@ class Command(BaseCommand):
 
         self.access_token = FULLCONTACT_API_KEY
 
-        self.pk = int(options.get('pk', 0))
-        if self.pk == 0:
+        self.pk = options.get('pk', None)
+        if self.pk is not None and type(self.pk) != int:
             raise Exception('--pk must be an integer')
 
         if self.pk is not None and type(self.pk) is int:
@@ -50,9 +48,8 @@ class Command(BaseCommand):
     def process_single_user(self, user):
         self.fullcontact(user)
 
-
     def get_queryset(self, filter_options=None):
-        qs = User.objects
+        qs = User.objects.exclude(email='')
         if filter_options is not None:
             qs = qs.filter(**filter_options)
         else:
@@ -64,24 +61,18 @@ class Command(BaseCommand):
             self.process_single_user(user)
 
     def fullcontact(self, user):
+        """ Process the fullcontact data for a users email """
+        logger.info('Starting FullContact info import for %s' % user.pk)
 
-        # initial values
-        complete = False
-        current_page = 1
+        client = FullContactConnectionService(access_token=self.access_token, email=user.email, page=current_page)
+        resp, json_content = client.request()
 
-        logger.info('Starting FullContact info import for %s' % self.pk)
+        contact_info = json_content.get('contactInfo', None)
 
-        # Basic Pagination
-        while not complete:
-            client = FullContactConnectionService(access_token=self.access_token, email=user.email, page=current_page)
-            resp, json_content = client.request()
-
-            # get the page info
-            current_page = int(json_content.get('page', 1))
-            last_page = int(json_content.get('last_page', 1))
-            logger.info('page %d or %d for FullContact: %s' % (last_page, current_page, user,))
-            import pdb
-            pdb.set_trace()
-
-            complete = bool(current_page >= last_page)
-
+        # if we have found a FC user object
+        if contact_info is not None:
+            # Get the user FC data object
+            fc_data, is_new = FullContactData.objects.get_or_create(user=user)
+            logger.info('FullContact User Found: %s (%s) is_new: %s' % (user.username, user.pk, is_new,))
+            fc_data.extra_data = json_content
+            fc_data.save(update_fields=['extra_data'])
