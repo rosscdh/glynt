@@ -19,20 +19,17 @@ class FullContactData(models.Model):
     user = models.ForeignKey(User)
     extra_data = JSONField(blank=True, default={})
 
-    def photos(self):
-        return [(p.get('typeName',None), p.get('isPrimary',False), p.get('url', None)) for p in self.extra_data.get('photos', [])]
-
-    def profile_pic(self):
+    @property
+    def primary_photo_url(self):
+        photos = self.photos()
         try:
-            avatar = [url for type_of,primary,url in self.photos() if primary is True][0]
+            primary_photo = [url for type_of,primary,url in photos if primary is True][0]
         except IndexError:
-            avatar = settings.DEFAULT_MUGSHOT_URL
-
-        return '<img src="%s" border="0"/>' % avatar
-    profile_pic.allow_tags = True
-
-    def contact_info(self):
-        return self.extra_data.get('contactInfo', {})
+            if len(photos) > 0:
+                primary_photo = photos[0][2] # return the photo of the first record
+            else:
+                primary_photo = settings.DEFAULT_MUGSHOT_URL
+        return primary_photo
 
     @property
     def full_name(self):
@@ -41,6 +38,43 @@ class FullContactData(models.Model):
     @property
     def social_profile_names(self):
         return ', '.join([p.get('typeName', 'Unknown') for p in self.extra_data.get('socialProfiles', [])])
+
+    @property
+    def primary_profile(self):
+        """ @BUSINESS_RULE: Set the profile to be any profile that has a 'bio' field
+        if we have no isPrimary then set it to the profile that we do have a bio for """
+        profiles = self.profiles()
+        found_profile = {}
+
+        for p in profiles:
+            # set profile if we find a isPrimary
+            if p.get('isPrimary', False) is True:
+                found_profile = p
+                break
+            # set profile to any profile that has a bio if we dont already have a profile
+            if found_profile == {} and p.get('bio', None) is not None:
+                found_profile = p
+
+        if found_profile == {}:
+            # None Found so set it to the first
+            try:
+                found_profile = profiles[0]
+            except IndexError:
+                pass
+        return found_profile
+
+    def profiles(self):
+        return self.extra_data.get('socialProfiles', [])
+
+    def photos(self):
+        return [(p.get('typeName',None), p.get('isPrimary',False), p.get('url', None)) for p in self.extra_data.get('photos', [])]
+
+    def profile_pic(self):
+        return '<img src="%s" border="0"/>' % self.primary_photo_url
+    profile_pic.allow_tags = True
+
+    def contact_info(self):
+        return self.extra_data.get('contactInfo', {})
 
 class GraphConnection(models.Model):
     """ Generic Database Model to store various provider abstractions """

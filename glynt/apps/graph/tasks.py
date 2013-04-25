@@ -19,6 +19,7 @@ def collect_user_fullcontact_info(user, **kwargs):
     try:
         call_command('graph_fullcontact_user', pk=user.pk)
     except Exception, e:
+        logger.info('Failed, so retry calling graph_fullcontact_user command %s' % user)
         # add auth to the kwargs, as we handle it seperately in the signature
         kwargs.update({'pk': user.pk})
         # retry again in 2 hours
@@ -34,6 +35,7 @@ def collect_user_graph_connections(auth, **kwargs):
     try:
         call_command('graph_contacts', auth=auth)
     except Exception, e:
+        logger.info('Failed, so retry calling collect_user_graph_connections command %s' % user)
         # add auth to the kwargs, as we handle it seperately in the signature
         kwargs.update({'auth': auth})
         # retry again in 2 hours

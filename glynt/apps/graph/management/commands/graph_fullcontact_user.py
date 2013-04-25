@@ -10,6 +10,7 @@ from optparse import make_option
 from django.contrib.auth.models import User
 
 from glynt.apps.graph.services import FullContactConnectionService
+from glynt.apps.client.services import FullContactProfileDataService
 from glynt.apps.graph.models import FullContactData
 
 import logging
@@ -25,9 +26,12 @@ class Command(BaseCommand):
             dest='pk',
             default=None,
             help='A specific user to populate'),
+        make_option('--update_user_profile',
+            dest='update_user_profile',
+            default=False,
+            help='Update the user profile data from FullContact'),
     )
-
-    help = 'Collects the Fullcontact.com information about a user'
+    help = 'Collects the Fullcontact.com information about a user and optionally updates their profile data'
 
     def handle(self, *args, **options):
         if FULLCONTACT_API_KEY is None:
@@ -35,14 +39,22 @@ class Command(BaseCommand):
 
         self.access_token = FULLCONTACT_API_KEY
 
+        update_user_profile = options.get('update_user_profile', False)
+        self.update_user_profile = True if update_user_profile.strip().lower() in ['true', 't', '1', 'y'] else False
+
         self.pk = options.get('pk', None)
+        self.pk = int(self.pk) if self.pk is not None else self.pk
+
+
         if self.pk is not None and type(self.pk) != int:
             raise Exception('--pk must be an integer')
-
+        
         if self.pk is not None and type(self.pk) is int:
             logger.info('FullContact import PK has been specified: %s' % self.pk)
             self.process_single_user(self.get_queryset(filter_options={'pk':self.pk})[0])
+
         else:
+            logger.info('Process all Users')
             self.process_all_user()
 
     def process_single_user(self, user):
@@ -65,15 +77,21 @@ class Command(BaseCommand):
         logger.info('Checking FullContact info for %s' % user.pk)
         # Get the user FC data object
         fc_data, is_new = FullContactData.objects.get_or_create(user=user)
-        if is_new is True or fc_data.extra_data.get('contactInfo',None) is None:
+        if 1 or is_new is True or fc_data.extra_data.get('contactInfo',None) is None:
             logger.info('FullContact User needs data from FullContact: %s (%s) is_new: %s' % (user.username, user.pk, is_new,))
+
             client = FullContactConnectionService(access_token=self.access_token, email=user.email)
             resp, json_content = client.request()
 
             contact_info = json_content.get('contactInfo', None)
 
             # if we have found a FC user object
-            if contact_info is not None:
+            if contact_info is None:
+                logger.info('FullContact User Not Found: %s' % resp)
+            else:
                 logger.info('FullContact User Found: %s (%s) is_new: %s' % (user.username, user.pk, is_new,))
                 fc_data.extra_data = json_content
                 fc_data.save(update_fields=['extra_data'])
+
+                if self.update_user_profile is True:
+                    FullContactProfileDataService(user=user)
