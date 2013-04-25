@@ -436,13 +436,6 @@ TEMPLATED_EMAIL_BACKEND = 'templated_email.backends.vanilla_django.TemplateBacke
 TEMPLATED_EMAIL_TEMPLATE_DIR = 'email/'
 TEMPLATED_EMAIL_FILE_EXTENSION = 'email'
 
-
-# Broker for Celery
-# Currently using CloudAMQP by Heroku
-#BROKER_URL = 'amqp://gxdzjcxo:sMKG0qU4bJlUWmRMkWKuArtPQiY3m84G@tiger.cloudamqp.com/gxdzjcxo'
-BROKER_URL = 'amqp://root:testlocalhost/dev_lawpal'
-BROKER_POOL_LIMIT = 1
-
 HELLOSIGN_AUTH = ("", "")
 
 DOCRAPTOR_KEY = "vIvrCmZtnQTC4p6V0k"

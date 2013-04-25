@@ -62,7 +62,7 @@ class Command(BaseCommand):
 
     def fullcontact(self, user):
         """ Process the fullcontact data for a users email """
-        logger.info('Starting FullContact info import for %s' % user.pk)
+        logger.info('Checking FullContact info for %s' % user.pk)
         # Get the user FC data object
         fc_data, is_new = FullContactData.objects.get_or_create(user=user)
         if is_new is True or fc_data.extra_data.get('contactInfo',None) is None:

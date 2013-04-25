@@ -3,7 +3,7 @@ from django.conf import settings
 from django.template.defaultfilters import slugify
 
 from social_auth.models import UserSocialAuth
-from tasks import collect_user_graph_connections
+from tasks import collect_user_fullcontact_info, collect_user_graph_connections
 
 import logging
 logger = logging.getLogger('lawpal.graph')
@@ -21,11 +21,19 @@ def ensure_user_setup(*args, **kwargs):
 
 def graph_user_connections(backend, details, response, user=None, is_new=False,
                         *args, **kwargs):
-	auth = UserSocialAuth.objects.get(user=user, provider=backend.name)
-	try:
-		collect_user_graph_connections.delay(auth=auth)
-	except Exception as e:
-		logger.error('Did not try collect_user_graph_connections as no connection to broker could be found: %s' % e)
+
+    if user is not None:
+        auth = UserSocialAuth.objects.get(user=user, provider=backend.name)
+        
+        try:
+            collect_user_fullcontact_info.delay(user=user)
+        except Exception as e:
+            logger.error('Did not try collect_user_fullcontact_info as no connection to broker could be found: %s' % e)
+
+        try:
+            collect_user_graph_connections.delay(auth=auth)
+        except Exception as e:
+            logger.error('Did not try collect_user_graph_connections as no connection to broker could be found: %s' % e)
 
 
 
