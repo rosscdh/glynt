@@ -63,16 +63,17 @@ class Command(BaseCommand):
     def fullcontact(self, user):
         """ Process the fullcontact data for a users email """
         logger.info('Starting FullContact info import for %s' % user.pk)
+        # Get the user FC data object
+        fc_data, is_new = FullContactData.objects.get_or_create(user=user)
+        if is_new is True or fc_data.extra_data.get('contactInfo',None) is None:
+            logger.info('FullContact User needs data from FullContact: %s (%s) is_new: %s' % (user.username, user.pk, is_new,))
+            client = FullContactConnectionService(access_token=self.access_token, email=user.email)
+            resp, json_content = client.request()
 
-        client = FullContactConnectionService(access_token=self.access_token, email=user.email, page=current_page)
-        resp, json_content = client.request()
+            contact_info = json_content.get('contactInfo', None)
 
-        contact_info = json_content.get('contactInfo', None)
-
-        # if we have found a FC user object
-        if contact_info is not None:
-            # Get the user FC data object
-            fc_data, is_new = FullContactData.objects.get_or_create(user=user)
-            logger.info('FullContact User Found: %s (%s) is_new: %s' % (user.username, user.pk, is_new,))
-            fc_data.extra_data = json_content
-            fc_data.save(update_fields=['extra_data'])
+            # if we have found a FC user object
+            if contact_info is not None:
+                logger.info('FullContact User Found: %s (%s) is_new: %s' % (user.username, user.pk, is_new,))
+                fc_data.extra_data = json_content
+                fc_data.save(update_fields=['extra_data'])

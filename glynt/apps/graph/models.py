@@ -3,6 +3,7 @@
 Not Just standard django models
 """
 import sys
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -22,16 +23,20 @@ class FullContactData(models.Model):
         return [(p.get('typeName',None), p.get('isPrimary',False), p.get('url', None)) for p in self.extra_data.get('photos', [])]
 
     def profile_pic(self):
-        avatar = [url for type_of,primary,url in self.photos() if primary is True][0]
+        try:
+            avatar = [url for type_of,primary,url in self.photos() if primary is True][0]
+        except IndexError:
+            avatar = settings.DEFAULT_MUGSHOT_URL
+
         return '<img src="%s" border="0"/>' % avatar
     profile_pic.allow_tags = True
 
     def contact_info(self):
-        return self.extra_data.get('contactInfo', None)
+        return self.extra_data.get('contactInfo', {})
 
     @property
     def full_name(self):
-        return self.contact_info().get('fullName')
+        return self.contact_info().get('fullName', None)
 
     @property
     def social_profile_names(self):
