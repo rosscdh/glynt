@@ -33,244 +33,236 @@
         </ul>
 
         <form id="lawyer-profile-form" data-validate="parsley" action="{% url 'lawyer:setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
-        <div class="tab-content">
+            <div class="tab-content">
 
-            {% if user.password == "!" %}
-            <div id="login-details" class="tab-pane active">
-                <div class="row">
-                    <div class="span12">
-                        <legend>Account Setup</legend>
-                    </div>
-                    <div class="span5">
-                        <div class="control-group">
-                            {{ form.email|as_crispy_field }}
+                {% if user.password == "!" %}
+                <div id="login-details" class="tab-pane active">
+                    <div class="row">
+                        <div class="span12">
+                            <legend>Account Setup</legend>
                         </div>
-                    </div>
-                    <div class="span5">
-                        <div class="control-group">
-                            {{ form.password|as_crispy_field }}
-                        </div>
-                        <div class="control-group">
-                            {{ form.password_confirm|as_crispy_field }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-
-            <div id="general" class="tab-pane{% if user.password != "!" %} active{% endif %}">
-                <div class="row">
-                    <div class="span12">
-                        <legend>General</legend>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="span5">
-                        <div class="control-group">
-                            {{ form.first_name|as_crispy_field }}
-                        </div>
-                        <div class="control-group">
-                            {{ form.firm_name|as_crispy_field }}
-                        </div>
-                        <div class="control-group">
-                            {{ form.phone|as_crispy_field }}
-                        </div>
-                    </div>
-                    <div class="span5">
-                        <div class="control-group">
-                            {{ form.last_name|as_crispy_field }}
-                        </div>
-                        <div class="control-group">
-                            {{ form.position|as_crispy_field }}
-                        </div>
-                        <div class="control-group">
-                            {{ form.years_practiced|as_crispy_field }}
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="span12">
-                        <legend>Your Practice Locations</legend>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="span5">
-                        <div class="control-group">
-                            {{ form.practice_location_1|as_crispy_field }}
-                        </div>
-                    </div>
-                    <div class="span5">
-                        <div class="control-group">
-                            {{ form.practice_location_2|as_crispy_field }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="transactions-and-startups" class="tab-pane">
-                <div class="row">
-                    <div class="span12">
-                        <legend>Startups Advised</legend>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="span8">
-
-                        <p>{{ form.startups_advised_input.help_text }}</p>
-                        <div class="control-group">
-                            <label class="control-label" for="inputEmail">{{ form.startups_advised_input.label }}</label>
-                            <div class="controls">
-                                {{ form.startups_advised_input.errors }}
-                                {{ form.startups_advised_input }}<button id="add-startup-btn" type="button" class="btn btn-link btn-small"><i class="icon-plus-sign"></i>&nbsp;Add</button>
-                                {{ form.startups_advised }}<!-- hidden -->
+                        <div class="span5">
+                            <div class="control-group">
+                                {{ form.email|as_crispy_field }}
                             </div>
                         </div>
-                        
-                    </div>
-                    <div class="span4">
-                        <ol id="startups-advised-list">
-                        </oL>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="span12">
-                        <legend>Approximate Transaction Volume</legend>
+                        <div class="span5">
+                            <div class="control-group">
+                                {{ form.password|as_crispy_field }}
+                            </div>
+                            <div class="control-group">
+                                {{ form.password_confirm|as_crispy_field }}
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="span10">
-                        <p>This data is shown on your profile as an indication of the type and volume of work you undertake. <br />You can always update this later.</p>
-                        <table class="table">
-                            <tr>
-                                <th class="span3"></th>
-                                <th>2010</th>
-                                <th>2011</th>
-                                <th>2012</th>
-                            </tr>
+                {% endif %}
 
-                            <tr>
-                                <th>Incorporation and Setup</th>
-                                <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="incorp_setup" data-year="2010" type="text"></td>
-                                <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="incorp_setup" data-year="2011" type="text"></td>
-                                <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="incorp_setup" data-year="2012" type="text"></td>
-                            </tr>
-                            <tr>
-                                <th>Seed Financing</th>
-                                <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="seed_financing" data-year="2010" type="text"></td>
-                                <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="seed_financing" data-year="2011" type="text"></td>
-                                <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="seed_financing" data-year="2012" type="text"></td>
-                            </tr>
-                            <tr>
-                                <th>Series A</th>
-                                <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="series_a" data-year="2010" type="text"></td>
-                                <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="series_a" data-year="2011" type="text"></td>
-                                <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="series_a" data-year="2012" type="text"></td>
-                            </tr>
-                            <tr>
-                                <th>Intellectual Property</th>
-                                <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="ip" data-year="2010" type="text"></td>
-                                <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="ip" data-year="2011" type="text"></td>
-                                <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="ip" data-year="2012" type="text"></td>
-                            </tr>
-                            <tr>
-                                <th>Other</th>
-                                <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="other" data-year="2010" type="text"></td>
-                                <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="other" data-year="2011" type="text"></td>
-                                <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="other" data-year="2012" type="text"></td>
-                            </tr>
-                        </table>
-                        {{ form.volume_incorp_setup }}
-                        {{ form.volume_seed_financing }}
-                        {{ form.volume_series_a }}
-                        {{ form.volume_ip }}
-                        {{ form.volume_other }}
+                <div id="general" class="tab-pane{% if user.password != "!" %} active{% endif %}">
+                    <div class="row">
+                        <div class="span12">
+                            <legend>General</legend>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span5">
+                            <div class="control-group">
+                                {{ form.first_name|as_crispy_field }}
+                            </div>
+                            <div class="control-group">
+                                {{ form.firm_name|as_crispy_field }}
+                            </div>
+                            <div class="control-group">
+                                {{ form.phone|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="span5">
+                            <div class="control-group">
+                                {{ form.last_name|as_crispy_field }}
+                            </div>
+                            <div class="control-group">
+                                {{ form.position|as_crispy_field }}
+                            </div>
+                            <div class="control-group">
+                                {{ form.years_practiced|as_crispy_field }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span12">
+                            <legend>Your Practice Locations</legend>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span5">
+                            <div class="control-group">
+                                {{ form.practice_location_1|as_crispy_field }}
+                            </div>
+                        </div>
+                        <div class="span5">
+                            <div class="control-group">
+                                {{ form.practice_location_2|as_crispy_field }}
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="profile" class="tab-pane">
-                <div class="row">
-                    <div class="span12">
-                        <legend>Profile</legend>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="span12">
-                        <div class="control-group">
-                            {{ form.summary|as_crispy_field }}
-                        </div>
-                        <div class="control-group">
-                            {{ form.bio|as_crispy_field }}
-                        </div>
-                        <div class="control-group">
-                            {{ form.if_i_wasnt_a_lawyer|as_crispy_field }}
+                <div id="transactions-and-startups" class="tab-pane">
+                    <div class="row">
+                        <div class="span12">
+                            <legend>Startups Advised</legend>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="span12">
-                        <legend>Profile Photo</legend>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="span8">
-                        <div class="control-group">
-                            <label class="control-label" for="inputPassword">{{ form.photo.label }}</label>
-                            <div class="controls">
-                                {{ form.photo.errors }}
-                                <div class="input">
-                                    {{ form.photo }}
-                                    {{ form.hidden_photo }}
+                    <div class="row">
+                        <div class="span8">
+
+                            <p>{{ form.startups_advised_input.help_text }}</p>
+                            <div class="control-group">
+                                <label class="control-label" for="inputEmail">{{ form.startups_advised_input.label }}</label>
+                                <div class="controls">
+                                    {{ form.startups_advised_input.errors }}
+                                    {{ form.startups_advised_input }}<button id="add-startup-btn" type="button" class="btn btn-link btn-small"><i class="icon-plus-sign"></i>&nbsp;Add</button>
+                                    {{ form.startups_advised }}<!-- hidden -->
                                 </div>
-                              <span class="help-block">A good photo makes all the difference.</span>
+                            </div>
+                            
+                        </div>
+                        <div class="span4">
+                            <ol id="startups-advised-list">
+                            </oL>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span12">
+                            <legend>Approximate Transaction Volume</legend>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span10">
+                            <p>This data is shown on your profile as an indication of the type and volume of work you undertake. <br />You can always update this later.</p>
+                            <table class="table">
+                                <tr>
+                                    <th class="span3"></th>
+                                    <th>2010</th>
+                                    <th>2011</th>
+                                    <th>2012</th>
+                                </tr>
+
+                                <tr>
+                                    <th>Incorporation and Setup</th>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="incorp_setup" data-year="2010" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="incorp_setup" data-year="2011" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="incorp_setup" data-year="2012" type="text"></td>
+                                </tr>
+                                <tr>
+                                    <th>Seed Financing</th>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="seed_financing" data-year="2010" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="seed_financing" data-year="2011" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="seed_financing" data-year="2012" type="text"></td>
+                                </tr>
+                                <tr>
+                                    <th>Series A</th>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="series_a" data-year="2010" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="series_a" data-year="2011" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="series_a" data-year="2012" type="text"></td>
+                                </tr>
+                                <tr>
+                                    <th>Intellectual Property</th>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="ip" data-year="2010" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="ip" data-year="2011" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="ip" data-year="2012" type="text"></td>
+                                </tr>
+                                <tr>
+                                    <th>Other</th>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="other" data-year="2010" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="other" data-year="2011" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="other" data-year="2012" type="text"></td>
+                                </tr>
+                            </table>
+                            {{ form.volume_incorp_setup }}
+                            {{ form.volume_seed_financing }}
+                            {{ form.volume_series_a }}
+                            {{ form.volume_ip }}
+                            {{ form.volume_other }}
+                        </div>
+                    </div>
+                </div>
+
+                <div id="profile" class="tab-pane">
+                    <div class="row">
+                        <div class="span12">
+                            <legend>Profile</legend>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span12">
+                            <div class="control-group">
+                                {{ form.summary|as_crispy_field }}
+                            </div>
+                            <div class="control-group">
+                                {{ form.bio|as_crispy_field }}
+                            </div>
+                            <div class="control-group">
+                                {{ form.if_i_wasnt_a_lawyer|as_crispy_field }}
                             </div>
                         </div>
                     </div>
-                    <div class="span4">
-                        <img id="photo-preview" width="130" height="130" src="{{ request.user.profile.get_mugshot_url }}">
+                    <div class="row">
+                        <div class="span12">
+                            <legend>Profile Photo</legend>
+                        </div>
                     </div>
-                </div>
-            </div>
-
-            <div id="connected-accounts" class="tab-pane">
-                <div class="row">
-                    <div class="span12">
-                        <legend>Connected Accounts</legend>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="span12">
-                        <p>The more accounts you connect, the more likely it is that startups will find you.<p>
-                        <div class="buttons">
-                        {% social_associate social_auth %}
+                    <div class="row">
+                        <div class="span8">
+                            <div class="control-group">
+                                <label class="control-label" for="inputPassword">{{ form.photo.label }}</label>
+                                <div class="controls">
+                                    {{ form.photo.errors }}
+                                    <div class="input">
+                                        {{ form.photo }}
+                                        {{ form.hidden_photo }}
+                                    </div>
+                                  <span class="help-block">A good photo makes all the difference.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="span4">
+                            <img id="photo-preview" width="130" height="130" src="{{ request.user.profile.get_mugshot_url }}">
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="form-submit" class="row">
-                <div class="span12 divide">
-                    <label class="checkbox">
-                        {{ form.agree_tandc|as_crispy_field }}
-                        <span id="i_agree_html">I agree to the LawPal <a href="{% url 'public:terms' %}">Terms and Conditions</a></span>
-                    </label>
-                    <div class="form-actions">
-                        <button id="update-profile" type="submit" class="btn btn-primary btn-large">Update Profile</button>
+                <div id="connected-accounts" class="tab-pane">
+                    <div class="row">
+                        <div class="span12">
+                            <legend>Connected Accounts</legend>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span12">
+                            <p>The more accounts you connect, the more likely it is that startups will find you.<p>
+                            <div class="buttons">
+                            {% social_associate social_auth %}
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-        </div>
+                <div id="form-submit" class="row">
+                    <div class="span12 divide">
+                        <label class="checkbox">
+                            {{ form.agree_tandc|as_crispy_field }}
+                            <span id="i_agree_html">I agree to the LawPal <a href="{% url 'public:terms' %}">Terms and Conditions</a></span>
+                        </label>
+                        <div class="form-actions">
+                            <button id="update-profile" type="submit" class="btn btn-primary btn-large">Update Profile</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </form>
 
-<!--         <div class="span12">
-            <h1>Confirm your details</h1>
-            <br>
-            <form id="lawyer-profile-form" data-validate="parsley" action="{% url 'lawyer:setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
-            {{ form|as_crispy_errors }}
-         
-            </form>
-        </div> -->
     </div>
 </div>
 
@@ -334,6 +326,49 @@ $(document).ready(function(){
         e.preventDefault();
         $(this).tab('show');
     })
+
+    /**
+    * Parsley error counter
+    */
+    var handleErrorCount = function handleErrorCount(tabPane) {
+        var targetTabLink =  $('a[href="#{id}"]'.assign({
+            id: tabPane.prop('id')
+        }));
+        var targetTabLi = targetTabLink.closest('li')
+
+        var errorCount = parseInt(tabPane.find('.parsley-error').length);
+        tabPane.attr('error-count', errorCount);
+
+        targetTabLi.find('span').remove()
+        if (errorCount > 0) {
+            var errorTemplate = $('<span/>', {
+                html: '({errorCount})&nbsp;'.assign({'errorCount': errorCount})
+                ,class: 'parsley-error'
+            })
+            targetTabLink.prepend(errorTemplate)
+        }
+       // targetTabLink.closest('li').addClass('parsley-error')
+    };
+    /**
+    * Parsley error catcher
+    */
+    $( 'form[data-validate="parsley"]' ).parsley( 'addListener', {
+        onFieldError: function ( elem, constraints, ParsleyField ) {
+            // get the nearest tabPane to store error count
+            var tabPane = $(elem).closest('.tab-pane');
+            handleErrorCount(tabPane)
+            // if field is not visible, do not apply Parsley validation!
+            if ( !$( elem ).is( ':visible' ) ) {
+                return true;
+            }
+            return false;
+        }
+        , onFieldSuccess: function ( elem, constraints, ParsleyField ) {
+            // get the nearest tabPane to store error count
+            var tabPane = $(elem).closest('.tab-pane');
+            handleErrorCount(tabPane)
+        }
+    });
 
     /** stop the form submitting on enter, must push de button */
     $('form#lawyer-profile-form').bind("keypress", function(e) {
