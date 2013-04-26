@@ -1,0 +1,11 @@
+<ul>
+{% for p in social_profiles %}
+<li>
+    {{ p.typeId }}<br/>
+    {{ p.typeName }}<br/>
+    {{ p.url }}
+</li>
+{% empty %}
+<li>No Social Profile Found</li>
+{% endfor %}
+</ul>
