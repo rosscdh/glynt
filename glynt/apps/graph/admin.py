@@ -11,6 +11,7 @@ class GraphConnectionAdmin(admin.ModelAdmin):
 
 
 class FullContactDataAdmin(admin.ModelAdmin):
+    search_fields = ['user__username',]
     list_display = ('user', 'full_name', 'social_profile_names', 'profile_pic',)
 
 
