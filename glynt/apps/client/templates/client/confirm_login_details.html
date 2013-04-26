@@ -1,0 +1,46 @@
+{% extends 'base.html' %}{% load i18n %}{% load url from future %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% trans "Confirm your Account" %}{% endblock %}
+
+{% block prebody %}
+<div id="hero">
+    <div class="container">
+        <!-- starts carousel -->
+        <div class="row animated fadeInDown">
+            <div class="span12">
+                <h1>Complete your login details</h1>
+                <h3>You are a critical part of the LawPal community.<br> The doors are opening soon. Make sure everything is current so founders can see who you really are. Have a question or comments? Contact us at <a href="mailto:founders@lawpal.com">founders@lawpal.com</a> </h3>
+                 
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+{{ form.errors }}
+<form id="lawyer-signin-details" data-validate="parsley" class="form-horizontal" action="{% url 'client:confirm_signup' slug=request.user.username %}" method="post">{% csrf_token %}
+  {{ form.username }}
+  <div class="row">
+      <div class="span5">
+          <div class="control-group">
+              {{ form.email|as_crispy_field }}
+          </div>
+      </div>
+      <div class="span5">
+          <div class="control-group">
+              {{ form.password|as_crispy_field }}
+          </div>
+          <div class="control-group">
+              {{ form.confirm_password|as_crispy_field }}
+          </div>
+      </div>
+  </div>
+  <br/>
+  <div class="form-actions">
+      <button id="lawyer-signin-details-submit" type="submit" class="submit btn btn-primary">{% trans "Submit" %}</button>
+  </div>
+</form>
+
+{% endblock %}
