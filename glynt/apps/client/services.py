@@ -23,6 +23,7 @@ class FullContactProfileDataService(object):
         self.process()
 
     def photo(self):
+        """ update photo only if the user has not entered data """
         #logger.debug('FC: current bio: %s' % self.user.profile.mugshot.file)
         if self.user.profile.mugshot in [None,'']:
             self.user.profile.mugshot = self.fc.primary_photo_url
@@ -30,6 +31,7 @@ class FullContactProfileDataService(object):
             logger.info('FC: set the user profile mugshot: %d' % self.user.pk)
 
     def bio(self):
+        """ update bio only if the user has not entered data """
         #logger.debug('FC: current summary: %s' % self.user.lawyer_profile.summary)
         if len(self.user.lawyer_profile.bio) == 0:
 

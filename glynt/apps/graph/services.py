@@ -32,6 +32,7 @@ class ProcessConnectionService(object):
 
         logger.info('Connection process %s.%s' % (self.provider, self.uid))
 
+        # update the local class dic with the item so we can refer to the values directly
         self.__dict__.update(item)
 
         self.process(item)
