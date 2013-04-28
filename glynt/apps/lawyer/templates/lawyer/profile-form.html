@@ -12,9 +12,13 @@
         <!-- starts carousel -->
         <div class="row animated fadeInDown">
             <div class="span12">
+                {% if user.password == "!" %}
                 <h1>Claim your profile</h1>
                 <h3>You are a critical part of the LawPal community.<br/> The doors are opening soon. Make sure everything is current so founders can see who you really are. Have a question or comments? Contact us at <a href="mailto:founders@lawpal.com">founders@lawpal.com</a> </h3>
-                 </h3>
+                </h3>
+                {% else %}
+                <h1>Update your profile</h1>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -339,14 +343,15 @@ $(document).ready(function(){
         var errorCount = parseInt(tabPane.find('.parsley-error').length);
         tabPane.attr('error-count', errorCount);
 
-        targetTabLi.find('span').remove()
+        targetTabLi.find('em').remove()
         if (errorCount > 0) {
-            var errorTemplate = $('<span/>', {
-                html: '({errorCount})&nbsp;'.assign({'errorCount': errorCount})
-                ,class: 'parsley-error'
+            var errorTemplate = $('<em/>', {
+                html: '<span>{errorCount}</span>'.assign({'errorCount': errorCount})
+                ,class: 'unread_counter animated bounce'
             })
-            targetTabLink.prepend(errorTemplate)
+            targetTabLink.append(errorTemplate)
         }
+
        // targetTabLink.closest('li').addClass('parsley-error')
     };
     /**

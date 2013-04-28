@@ -107,7 +107,7 @@ div#messages ul {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#58daea', endColorstr='#3ac6df',GradientType=0 ); /* IE6-8 */
 	padding:7px 0px;
 }
-.navbar .unread_counter {
+.unread_counter {
 	background-color:#d24230;
 	color:white;
 	font-size:10px;
@@ -116,8 +116,8 @@ div#messages ul {
 	border-radius:10px;
 	font-weight:bold;
 	top:-2px;
-	position:relative;
 	font-style:normal;
+	margin-left:6px;
 }
 .navbar .nav {
 	top: 4px;
@@ -134,6 +134,7 @@ div#messages ul {
 	-o-transition: all .2s linear;
 	transition: all .2s linear;	
 	padding-right:6px;
+	position:relative;
 }
 .navbar.dark .nav > li > a {
 	color:white;
@@ -778,14 +779,34 @@ table.table td {
 }
 */
 .nav-tabs {
-	border-bottom-color:#51d3e6;
+	border-bottom-color:#6adc7d;
+	border-bottom-width:3px;
 	margin-bottom:0px;
 }
+.nav-tabs > li > a {
+	color:#a4a8ab;
+	position: relative;
+}
+.nav-tabs li .unread_counter {
+	position:absolute;
+	top:-10px;
+	left:50%;
+	margin-left:-10px;
+	width:11px;
+	text-align: center;
+	padding:4px 4px 4px 4px;
+	line-height: 11px;
+	font-size:12px;
+}
 .nav-tabs > .active > a, .nav-tabs > .active > a:hover {
-	background-color: #51d3e6;
+	background-color: #6adc7d;
 	color:white;
-	border-color: #51d3e6;
-	
+	border-color: #6adc7d;
+	border-radius: 0px 0px 0px 0px;
+}
+.nav-tabs a:hover {
+	border-radius: 0px 0px 0px 0px;
+	color:#666;
 }
 .table th {
 	border:0px 0px 0px 0px;
