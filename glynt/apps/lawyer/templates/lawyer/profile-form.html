@@ -246,6 +246,41 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="span12">
+                            <legend>Websites</legend>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span8">
+                            <p>{{ form.websites_input.help_text }}</p>
+                            <div class="control-group">
+                                <label class="control-label" for="inputEmail">{{ form.websites_input.label }}</label>
+                                <div class="controls">
+                                    {{ form.websites_input.errors }}
+                                    {{ form.websites_input }}<button id="add-website-btn" type="button" class="btn btn-link btn-small"><i class="icon-plus-sign"></i>&nbsp;Add</button>
+                                    {{ form.websites }}<!-- hidden -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="span4">
+                            <ol id="website-list">
+                            </oL>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="span12">
+                            <legend>Extra</legend>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="control-group">
+                            {{ form.twitter|as_crispy_field }}
+                        </div>
+                    </div>
+
                 </div>
 
                 <div id="form-submit" class="row">

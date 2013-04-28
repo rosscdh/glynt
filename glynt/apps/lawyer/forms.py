@@ -65,6 +65,11 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
             }))
     hidden_photo = forms.CharField(required=False, widget=forms.HiddenInput) # transports the id
 
+    twitter = forms.CharField(required=False, label="twitter.com/", help_text="", widget=forms.TextInput(attrs={}))
+
+    websites_input = forms.URLField(required=False, label="Website Address", help_text='Enter the domain name of your public website, if you have one.', widget=forms.TextInput(attrs={}))
+    websites = forms.CharField(required=False, widget=forms.HiddenInput)
+
     startups_advised_input = forms.URLField(required=False, label="Startups Advised", help_text='Enter the domain name of any startups you have advised and press "Add". This helps similar startups find you.', widget=forms.TextInput(attrs={'data-trigger':'change','placeholder':'e.g. Instagram.com', 'class':'typeahead','autocomplete':'on','data-provide':'ajax', 'data-items':4, 'data-source': 'startups', 'data-filter':'name__istartswith'}))
     startups_advised = forms.CharField(required=False, widget=forms.HiddenInput)
 
