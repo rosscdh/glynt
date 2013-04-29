@@ -1,7 +1,8 @@
 #hero {
 background: url(../../img/app/lawyer-background.jpg) 0 0 no-repeat;
 background-size: cover;
-text-align: center;
+text-align: left;
+padding-bottom:0px;
 }
 #hero h1 {
 margin: 0.25em 0 0 0;
@@ -11,6 +12,13 @@ line-height: 0.5 !important;
 margin: 0 !important;
 padding: 0 !important;
 }
+
+#hero #buttons {
+	text-align:right;
+	background-color:rgba(37,37,37,0.2);
+	padding:8px 0px 8px 0px;
+}
+
 .avatar img {
 border: 8px solid rgba(255,255,255,0.46);
 box-shadow: 0 0 10px rgba(0,0,0,0.23);

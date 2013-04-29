@@ -1,7 +1,7 @@
 {% extends 'base.html' %}{% load account_tags lawyer_profile_tags jsonify thumbnail cache %}
 
 {% block page_title %}{{ object.user.get_full_name|default:object.user.username }}{% endblock %}
-{% block bodyclass %}lawyer-welcome{% endblock %}
+{% block bodyclass %}lawyer-profile{% endblock %}
 
 {% block css %}
 <link href="{{ STATIC_URL }}css/theme/lawyer-profile.css" rel="stylesheet" charset="utf-8" />
@@ -16,12 +16,33 @@
 	<div class="container">
 		<!-- starts carousel -->
 		<div class="row animated fadeInRight">
-			<div class="span12">
+			
+			<div class="span6">
 				<div class="avatar">
 					<img src="{% if object.photo %}{{ MEDIA_URL }}{{ object.photo }}{% else %}{{ default_profile_image }}{% endif %}" alt="{{ object.user.get_full_name|default:object.user.username }}" />
 				</div>
+			</div>
+			<div class="span6">
 				<h1>{{ object.user.get_full_name|default:object.user.username }}</h1>
 				<h3>{{ object.summary }}</h3>
+			</div>
+		</div>
+	
+	</div>
+	<div id="buttons">
+		<div class="container">
+			<div class="row12">
+				{% if user.username == object.user.username %}
+					<a href="{% url 'lawyer:setup_profile' %}" class="btn">Edit profile</a> 
+					<a href="{% url 'lawyer:invite' %}" class="btn btn-primary">Invite Lawyers</a>
+					{% if object.summary %} 
+					    <script>
+						  $(document).ready(function () {
+					     	  Intercom('update', {"Lawyer Profile": "Complete", "Firm": "{{firm}}"});
+					   	 });
+						</script>
+					{% endif %}
+				{% endif %}
 			</div>
 		</div>
 	</div>
@@ -36,19 +57,6 @@
 			<br />
 		</div>	
 		<div class="span4 pull-right">
-			{% if user.username == object.user.username %}
-				<div class="text-center">
-					<a href="{% url 'lawyer:setup_profile' %}" class="btn">Edit profile</a> 
-					<a href="{% url 'lawyer:invite' %}" class="btn btn-primary">Invite Lawyers</a>
-				</div>
-					{% if object.summary %} 
-					    <script>
-						  $(document).ready(function () {
-					     	  Intercom('update', {"Lawyer Profile": "Complete", "Firm": "{{firm}}"});
-					   	 });
-						</script>
-					{% endif %}
-				{% endif %}
 			<div class="firm">
 				{% if firm.photo %}
 					<img src="{{ MEDIA_URL }}{{ firm.photo|default:'firm/blank.gif' }}" alt="{{ firm.name }}" class="firm-logo" />				
