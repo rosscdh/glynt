@@ -28,7 +28,7 @@ class Command(BaseCommand):
             help='A specific user to populate'),
         make_option('--update_user_profile',
             dest='update_user_profile',
-            default=False,
+            default=True,
             help='Update the user profile data from FullContact'),
     )
     help = 'Collects the Fullcontact.com information about a user and optionally updates their profile data'
@@ -40,7 +40,7 @@ class Command(BaseCommand):
         self.access_token = FULLCONTACT_API_KEY
 
         update_user_profile = options.get('update_user_profile', False)
-        self.update_user_profile = True if update_user_profile is not False and update_user_profile.strip().lower() in ['true', 't', '1', 'y'] else False
+        self.update_user_profile = True if update_user_profile or update_user_profile.strip().lower() in ['true', 't', '1', 'y'] else False
 
         self.pk = options.get('pk', None)
         self.pk = int(self.pk) if self.pk is not None else self.pk
@@ -77,11 +77,13 @@ class Command(BaseCommand):
         logger.info('Checking FullContact info for %s' % user.pk)
         # Get the user FC data object
         fc_data, is_new = FullContactData.objects.get_or_create(user=user)
-        if 1 or is_new is True or fc_data.extra_data.get('contactInfo',None) is None:
+        if fc_data.extra_data.get('contactInfo',None) is not None:
             logger.info('FullContact User needs data from FullContact: %s (%s) is_new: %s' % (user.username, user.pk, is_new,))
 
             client = FullContactConnectionService(access_token=self.access_token, email=user.email)
             resp, json_content = client.request()
+
+            logger.info('FullContact response: %s ' % resp)
 
             contact_info = json_content.get('contactInfo', None)
 
