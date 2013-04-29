@@ -78,6 +78,7 @@ class LawyerProfileSetupView(FormView):
             'startups_advised': json.dumps(startups_advised),
 
             'photo': lawyer.photo,
+            'twitter': lawyer.data.get('twitter',''),
 
             'agree_tandc': lawyer.data.get('agree_tandc', None),
         }})
