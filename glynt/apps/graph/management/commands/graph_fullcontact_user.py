@@ -40,7 +40,7 @@ class Command(BaseCommand):
         self.access_token = FULLCONTACT_API_KEY
 
         update_user_profile = options.get('update_user_profile', False)
-        self.update_user_profile = True if update_user_profile.strip().lower() in ['true', 't', '1', 'y'] else False
+        self.update_user_profile = True if update_user_profile is not False and update_user_profile.strip().lower() in ['true', 't', '1', 'y'] else False
 
         self.pk = options.get('pk', None)
         self.pk = int(self.pk) if self.pk is not None else self.pk
