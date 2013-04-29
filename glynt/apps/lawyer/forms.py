@@ -79,6 +79,8 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     volume_ip = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
     volume_other = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
 
+    volume_by_year = forms.CharField(required=False, widget=forms.HiddenInput)
+
     agree_tandc = forms.BooleanField(label='', widget=forms.CheckboxInput)
 
     def __init__(self, *args, **kwargs):

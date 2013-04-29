@@ -141,49 +141,54 @@
                         <div class="span10">
                             <p>This data is shown on your profile as an indication of the type and volume of work you undertake. <br />You can always update this later.</p>
                             <table class="table">
+
+                                <tr>
+                                    <th class="span3"></th>
+                                    <th>Incorporation and Setup</th>
+                                    <th>Seed Financing</th>
+                                    <th>Series A</th>
+                                    <th>Intellectual Property</th>
+                                    <th>Other</th>
+                                </tr>
+
+                                <tr>
+                                    <th>Average Annual</th>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="incorp_setup" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="seed_financing" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="series_a" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="ip" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="other" type="text"></td>
+                                </tr>
+
+                            </table>
+
+                            <table class="table">
+
                                 <tr>
                                     <th class="span3"></th>
                                     <th>2010</th>
                                     <th>2011</th>
                                     <th>2012</th>
+                                    <th>2013</th>
                                 </tr>
 
                                 <tr>
-                                    <th>Incorporation and Setup</th>
-                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="incorp_setup" data-year="2010" type="text"></td>
-                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="incorp_setup" data-year="2011" type="text"></td>
-                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="incorp_setup" data-year="2012" type="text"></td>
+                                    <th>Total by year</th>
+                                    <td><input class="span1 json_volume parsley-validate" data-type="digits" data-required="true" data-json_target="volume_by_year" data-volume_type="2010" type="text"></td>
+                                    <td><input class="span1 json_volume parsley-validate" data-type="digits" data-required="true" data-json_target="volume_by_year" data-volume_type="2011" type="text"></td>
+                                    <td><input class="span1 json_volume parsley-validate" data-type="digits" data-required="true" data-json_target="volume_by_year" data-volume_type="2012" type="text"></td>
+                                    <td><input class="span1 json_volume parsley-validate" data-type="digits" data-required="true" data-json_target="volume_by_year" data-volume_type="2013" type="text"></td>
                                 </tr>
-                                <tr>
-                                    <th>Seed Financing</th>
-                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="seed_financing" data-year="2010" type="text"></td>
-                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="seed_financing" data-year="2011" type="text"></td>
-                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="seed_financing" data-year="2012" type="text"></td>
-                                </tr>
-                                <tr>
-                                    <th>Series A</th>
-                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="series_a" data-year="2010" type="text"></td>
-                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="series_a" data-year="2011" type="text"></td>
-                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="series_a" data-year="2012" type="text"></td>
-                                </tr>
-                                <tr>
-                                    <th>Intellectual Property</th>
-                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="ip" data-year="2010" type="text"></td>
-                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="ip" data-year="2011" type="text"></td>
-                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="ip" data-year="2012" type="text"></td>
-                                </tr>
-                                <tr>
-                                    <th>Other</th>
-                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="other" data-year="2010" type="text"></td>
-                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="other" data-year="2011" type="text"></td>
-                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="other" data-year="2012" type="text"></td>
-                                </tr>
+
                             </table>
+
                             {{ form.volume_incorp_setup }}
                             {{ form.volume_seed_financing }}
                             {{ form.volume_series_a }}
                             {{ form.volume_ip }}
                             {{ form.volume_other }}
+                            {{ form.volume_by_year }}
+
                         </div>
                     </div>
                 </div>
@@ -413,20 +418,16 @@ $(document).ready(function(){
         }
     });
 
-
+    /**
+    * Handle the placement of the t&c text which is placed strangely due to the form
+    */
     $('span#i_agree_html').hide()
     $('label[for=id_agree_tandc]').append($('span#i_agree_html').html())
 
     $('input[title]').tooltip({trigger: 'focus', placement: 'top'});
 
-    $('#id_volume_incorp_setup').val('{{ lawyer.data.volume_incorp_setup|jsonify }}');
-    $('#id_volume_seed_financing').val('{{ lawyer.data.volume_seed_financing|jsonify }}');
-    $('#id_volume_series_a').val('{{ lawyer.data.volume_series_a|jsonify }}');
-    $('#id_volume_ip').val('{{ lawyer.data.volume_ip|jsonify }}');
-    $('#id_volume_other').val('{{ lawyer.data.volume_other|jsonify }}');
     /**
     * Dynamic selector functions based on form api urls
-    * 
     */
     {% for key, url in form.data_source_urls.items %}
     {{ key }}_lookup = function(filter, callback) {
@@ -577,48 +578,88 @@ $(document).ready(function(){
 
 
     /**
+    * JSON output the volue type values
+    */
+    $('#id_volume_incorp_setup').val('{{ lawyer.data.volume_incorp_setup }}');
+    $('#id_volume_seed_financing').val('{{ lawyer.data.volume_seed_financing }}');
+    $('#id_volume_series_a').val('{{ lawyer.data.volume_series_a }}');
+    $('#id_volume_ip').val('{{ lawyer.data.volume_ip }}');
+    $('#id_volume_other').val('{{ lawyer.data.volume_other }}');
+    $('#id_volume_by_year').val('{{ lawyer.data.volume_by_year|jsonify }}');
+
+    /**
     * handle volume changes
     */
-    $.each($('.volume'), function(i, element) {
+    single_value = function single_value(element, volume_type, target_element, element_value) {
+        $(target_element).val(element_value)
+        window[volume_type + '_object'] = element_value
 
+        target_element.val(window[volume_type + '_object'])
+
+        return window[volume_type + '_object']
+    }
+
+    json_value = function json_value(element, volume_type, target_element, element_value) {
+        var json_taget_name = target_element.attr('id')
+        var element_value = $.parseJSON(element_value);
+//console.log(element_value)
+// console.log(json_taget_name)
+// console.log(element_value[2013])
+        // ensure object
+        var var_name = json_taget_name + '_object'
+        window[var_name] = (window[var_name] === undefined) ? {} : window[var_name]
+
+        // ensure value
+// console.log((typeof(element_value) == 'number'))
+// console.log(typeof(element_value))
+// console.log(element_value[volume_type])
+        window[var_name][volume_type] = (typeof(element_value) == 'number') ? element_value : (typeof(element_value) == 'object') ? element_value[volume_type] : 0
+// console.log(JSON.stringify(window[var_name]))
+
+        return window[var_name][volume_type]
+    }
+
+    $.each($('.json_volume'), function(i, element) {
         var e = $(element);
         var volume_type = e.attr('data-volume_type');
-        var year = e.attr('data-year');
+        var target_element = $('#id_' + e.attr('data-json_target'));
+        var element_value = target_element.val();
+        var val = json_value(e, volume_type, target_element, element_value)
 
+        e.val(val)
+
+        e.on('change', function(event){
+            var e = $(this);
+            var element_value = e.val();
+// console.log(element_value)
+            var target_element = $('#id_' + e.attr('data-json_target'));
+            var var_name = target_element.attr('id') + '_object'
+            var volume_type = e.attr('data-volume_type');
+
+            var val = json_value(e, volume_type, target_element, element_value)
+            target_element.val(JSON.stringify(window[var_name]))
+        })
+    });
+    
+    $.each($('.volume'), function(i, element) {
+        var e = $(element);
+        var volume_type = e.attr('data-volume_type');
+
+        // Normal value
         var target_element = $('#id_volume_' + volume_type);
+        var element_value = target_element.val() || 0;
+        var val = single_value(e, volume_type, target_element, element_value)
 
-        // default json data from hidden element
-        var target_json = $.parseJSON(target_element.val());
+        e.val(val)
 
-        // parse and reform and set defaults
-
-        var volume_object = window[volume_type + '_object'] || (typeof(target_json) == 'object') ? target_json : {};
-        volume_object[year] = (target_json[year] !== undefined)? target_json[year]: 0;
-        var as_json = JSON.stringify(volume_object)
-
-        // set the initial value
-        window[volume_type + '_object'] = volume_object;
-
-        e.val(volume_object[year])
-        target_element.val(as_json);
-
-        function ensureVolumeValue(volume_type) {
-            var target_element = $('#id_volume_' + volume_type);
-            return (typeof(target_element.val()) != typeof({})) ? {} : $.parseJSON(target_element.val());
-        }
         e.on('change', function(event){
             var volume = e.val();
             var volume_type = e.attr('data-volume_type');
-            var year = e.attr('data-year');
-
-            var target_json = ensureVolumeValue(volume_type);
+            var target_json = single_value(e, volume_type, target_element, element_value)
             var volume_object = window[volume_type + '_object'];
+            var final_value = volume;
 
-            volume_object[year] = volume;
-            var as_json = JSON.stringify(volume_object)
-
-            target_element.val(as_json);
-            // console.log(target_element.val())
+            target_element.val(final_value);
         })
     });
 
