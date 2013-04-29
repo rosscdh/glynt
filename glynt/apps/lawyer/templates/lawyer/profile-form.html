@@ -12,13 +12,9 @@
         <!-- starts carousel -->
         <div class="row animated fadeInDown">
             <div class="span12">
-                {% if user.password == "!" %}
                 <h1>Claim your profile</h1>
                 <h3>You are a critical part of the LawPal community.<br/> The doors are opening soon. Make sure everything is current so founders can see who you really are. Have a question or comments? Contact us at <a href="mailto:founders@lawpal.com">founders@lawpal.com</a> </h3>
-                </h3>
-                {% else %}
-                <h1>Update your profile</h1>
-                {% endif %}
+                 </h3>
             </div>
         </div>
     </div>
@@ -27,246 +23,286 @@
 
 <div class="container profile">
     <div class="row">
-        <div class="span12">
-            <ul id="profile-tab" class="nav nav-tabs">
-                {% if user.password == "!" %}<li class="active"><a href="#login-details" data-toggle="tab">Account Setup</a></li>{% endif %}
-                <li{% if user.password != "!" %} class="active"{% endif %}><a href="#general" data-toggle="tab">General</a></li>
-                <li><a href="#transactions-and-startups" data-toggle="tab">Transactions &amp; Startups</a></li>
-                <li><a href="#profile" data-toggle="tab">Profile</a></li>
-                <li><a href="#connected-accounts" data-toggle="tab">Connected Accounts</a></li>
-            </ul>
 
-            <form id="lawyer-profile-form" data-validate="parsley" action="{% url 'lawyer:setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
-                <div class="tab-content">
+        <ul id="profile-tab" class="nav nav-tabs">
+            {% if user.password == "!" %}<li class="active"><a href="#login-details" data-toggle="tab">Account Setup</a></li>{% endif %}
+            <li{% if user.password != "!" %} class="active"{% endif %}><a href="#general" data-toggle="tab">General</a></li>
+            <li><a href="#transactions-and-startups" data-toggle="tab">Transactions &amp; Startups</a></li>
+            <li><a href="#profile" data-toggle="tab">Profile</a></li>
+            <li><a href="#connected-accounts" data-toggle="tab">Connected Accounts</a></li>
+        </ul>
 
-                    {% if user.password == "!" %}
-                    <div id="login-details" class="tab-pane active">
-                        <div class="row">
-                            <div class="span12">
-                                <legend>Account Setup</legend>
+        <form id="lawyer-profile-form" data-validate="parsley" action="{% url 'lawyer:setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
+            <div class="tab-content">
+
+                {% if user.password == "!" %}
+                <div id="login-details" class="tab-pane active">
+                    <div class="row">
+                        <div class="span12">
+                            <legend>Account Setup</legend>
+                        </div>
+                        <div class="span5">
+                            <div class="control-group">
+                                {{ form.email|as_crispy_field }}
                             </div>
-                            <div class="span5">
-                                <div class="control-group">
-                                    {{ form.email|as_crispy_field }}
-                                </div>
+                        </div>
+                        <div class="span5">
+                            <div class="control-group">
+                                {{ form.password|as_crispy_field }}
                             </div>
-                            <div class="span5">
-                                <div class="control-group">
-                                    {{ form.password|as_crispy_field }}
-                                </div>
-                                <div class="control-group">
-                                    {{ form.password_confirm|as_crispy_field }}
-                                </div>
+                            <div class="control-group">
+                                {{ form.password_confirm|as_crispy_field }}
                             </div>
                         </div>
                     </div>
-                    {% endif %}
+                </div>
+                {% endif %}
 
-                    <div id="general" class="tab-pane{% if user.password != "!" %} active{% endif %}">
-                        <div class="row">
-                            <div class="span12">
-                                <legend>General</legend>
+                <div id="general" class="tab-pane{% if user.password != "!" %} active{% endif %}">
+                    <div class="row">
+                        <div class="span12">
+                            <legend>General</legend>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span5">
+                            <div class="control-group">
+                                {{ form.first_name|as_crispy_field }}
+                            </div>
+                            <div class="control-group">
+                                {{ form.firm_name|as_crispy_field }}
+                            </div>
+                            <div class="control-group">
+                                {{ form.phone|as_crispy_field }}
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="span5">
-                                <div class="control-group">
-                                    {{ form.first_name|as_crispy_field }}
-                                </div>
-                                <div class="control-group">
-                                    {{ form.firm_name|as_crispy_field }}
-                                </div>
-                                <div class="control-group">
-                                    {{ form.phone|as_crispy_field }}
-                                </div>
+                        <div class="span5">
+                            <div class="control-group">
+                                {{ form.last_name|as_crispy_field }}
                             </div>
-                            <div class="span5">
-                                <div class="control-group">
-                                    {{ form.last_name|as_crispy_field }}
-                                </div>
-                                <div class="control-group">
-                                    {{ form.position|as_crispy_field }}
-                                </div>
-                                <div class="control-group">
-                                    {{ form.years_practiced|as_crispy_field }}
-                                </div>
+                            <div class="control-group">
+                                {{ form.position|as_crispy_field }}
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="span12">
-                                <legend>Your Practice Locations</legend>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="span5">
-                                <div class="control-group">
-                                    {{ form.practice_location_1|as_crispy_field }}
-                                </div>
-                            </div>
-                            <div class="span5">
-                                <div class="control-group">
-                                    {{ form.practice_location_2|as_crispy_field }}
-                                </div>
+                            <div class="control-group">
+                                {{ form.years_practiced|as_crispy_field }}
                             </div>
                         </div>
                     </div>
-
-                    <div id="transactions-and-startups" class="tab-pane">
-                        <div class="row">
-                            <div class="span12">
-                                <legend>Startups Advised</legend>
+                    <div class="row">
+                        <div class="span12">
+                            <legend>Your Practice Locations</legend>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span5">
+                            <div class="control-group">
+                                {{ form.practice_location_1|as_crispy_field }}
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="span8">
+                        <div class="span5">
+                            <div class="control-group">
+                                {{ form.practice_location_2|as_crispy_field }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                                <p>{{ form.startups_advised_input.help_text }}</p>
-                                <div class="control-group">
-                                    <label class="control-label" for="inputEmail">{{ form.startups_advised_input.label }}</label>
-                                    <div class="controls">
-                                        {{ form.startups_advised_input.errors }}
-                                        {{ form.startups_advised_input }}<button id="add-startup-btn" type="button" class="btn btn-link btn-small"><i class="icon-plus-sign"></i>&nbsp;Add</button>
-                                        {{ form.startups_advised }}<!-- hidden -->
+                <div id="transactions-and-startups" class="tab-pane">
+                    <div class="row">
+                        <div class="span12">
+                            <legend>Startups Advised</legend>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span8">
+
+                            <p>{{ form.startups_advised_input.help_text }}</p>
+                            <div class="control-group">
+                                <label class="control-label" for="inputEmail">{{ form.startups_advised_input.label }}</label>
+                                <div class="controls">
+                                    {{ form.startups_advised_input.errors }}
+                                    {{ form.startups_advised_input }}<button id="add-startup-btn" type="button" class="btn btn-link btn-small add-website-btn" data-additem_callback="add_startup" data-data_target="id_startups_advised_input" data-target="startups-advised-list"><i class="icon-plus-sign"></i>&nbsp;Add</button>
+                                    {{ form.startups_advised }}<!-- hidden -->
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="span4">
+                            <ol id="startups-advised-list">
+                            </oL>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span12">
+                            <legend>Approximate Transaction Volume</legend>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span10">
+                            <p>This data is shown on your profile as an indication of the type and volume of work you undertake. <br />You can always update this later.</p>
+                            <table class="table">
+
+                                <tr>
+                                    <th class="span3"></th>
+                                    <th>Incorporation and Setup</th>
+                                    <th>Seed Financing</th>
+                                    <th>Series A</th>
+                                    <th>Intellectual Property</th>
+                                    <th>Other</th>
+                                </tr>
+
+                                <tr>
+                                    <th>Average Annual</th>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="incorp_setup" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="seed_financing" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="series_a" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="ip" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="other" type="text"></td>
+                                </tr>
+
+                            </table>
+
+                            <table class="table">
+
+                                <tr>
+                                    <th class="span3"></th>
+                                    <th>2010</th>
+                                    <th>2011</th>
+                                    <th>2012</th>
+                                    <th>2013</th>
+                                </tr>
+
+                                <tr>
+                                    <th>Total by year</th>
+                                    <td><input class="span1 json_volume parsley-validate" data-type="digits" data-required="true" data-json_target="volume_by_year" data-volume_type="2010" type="text"></td>
+                                    <td><input class="span1 json_volume parsley-validate" data-type="digits" data-required="true" data-json_target="volume_by_year" data-volume_type="2011" type="text"></td>
+                                    <td><input class="span1 json_volume parsley-validate" data-type="digits" data-required="true" data-json_target="volume_by_year" data-volume_type="2012" type="text"></td>
+                                    <td><input class="span1 json_volume parsley-validate" data-type="digits" data-required="true" data-json_target="volume_by_year" data-volume_type="2013" type="text"></td>
+                                </tr>
+
+                            </table>
+
+                            {{ form.volume_incorp_setup }}
+                            {{ form.volume_seed_financing }}
+                            {{ form.volume_series_a }}
+                            {{ form.volume_ip }}
+                            {{ form.volume_other }}
+                            {{ form.volume_by_year }}
+
+                        </div>
+                    </div>
+                </div>
+
+                <div id="profile" class="tab-pane">
+                    <div class="row">
+                        <div class="span12">
+                            <legend>Profile</legend>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span12">
+                            <div class="control-group">
+                                {{ form.summary|as_crispy_field }}
+                            </div>
+                            <div class="control-group">
+                                {{ form.bio|as_crispy_field }}
+                            </div>
+                            <div class="control-group">
+                                {{ form.if_i_wasnt_a_lawyer|as_crispy_field }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span12">
+                            <legend>Profile Photo</legend>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span8">
+                            <div class="control-group">
+                                <label class="control-label" for="inputPassword">{{ form.photo.label }}</label>
+                                <div class="controls">
+                                    {{ form.photo.errors }}
+                                    <div class="input">
+                                        {{ form.photo }}
+                                        {{ form.hidden_photo }}
                                     </div>
+                                  <span class="help-block">A good photo makes all the difference.</span>
                                 </div>
-                                
-                            </div>
-                            <div class="span4">
-                                <ol id="startups-advised-list">
-                                </oL>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="span12">
-                                <legend>Approximate Transaction Volume</legend>
-                            </div>
+                        <div class="span4">
+                            <img id="photo-preview" width="130" height="130" src="{{ request.user.profile.get_mugshot_url }}">
                         </div>
-                        <div class="row">
-                            <div class="span10">
-                                <p>This data is shown on your profile as an indication of the type and volume of work you undertake. <br />You can always update this later.</p>
-                                <table class="table">
-                                    <tr>
-                                        <th class="span3"></th>
-                                        <th>2010</th>
-                                        <th>2011</th>
-                                        <th>2012</th>
-                                    </tr>
+                    </div>
+                </div>
 
-                                    <tr>
-                                        <th>Incorporation and Setup</th>
-                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="incorp_setup" data-year="2010" type="text"></td>
-                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="incorp_setup" data-year="2011" type="text"></td>
-                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="incorp_setup" data-year="2012" type="text"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Seed Financing</th>
-                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="seed_financing" data-year="2010" type="text"></td>
-                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="seed_financing" data-year="2011" type="text"></td>
-                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="seed_financing" data-year="2012" type="text"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Series A</th>
-                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="series_a" data-year="2010" type="text"></td>
-                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="series_a" data-year="2011" type="text"></td>
-                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="series_a" data-year="2012" type="text"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Intellectual Property</th>
-                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="ip" data-year="2010" type="text"></td>
-                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="ip" data-year="2011" type="text"></td>
-                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="ip" data-year="2012" type="text"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Other</th>
-                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="other" data-year="2010" type="text"></td>
-                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="other" data-year="2011" type="text"></td>
-                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="other" data-year="2012" type="text"></td>
-                                    </tr>
-                                </table>
-                                {{ form.volume_incorp_setup }}
-                                {{ form.volume_seed_financing }}
-                                {{ form.volume_series_a }}
-                                {{ form.volume_ip }}
-                                {{ form.volume_other }}
+                <div id="connected-accounts" class="tab-pane">
+                    <div class="row">
+                        <div class="span12">
+                            <legend>Connected Accounts</legend>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span12">
+                            <p>The more accounts you connect, the more likely it is that startups will find you.<p>
+                            <div class="buttons">
+                            {% social_associate social_auth %}
                             </div>
                         </div>
                     </div>
 
-                    <div id="profile" class="tab-pane">
-                        <div class="row">
-                            <div class="span12">
-                                <legend>Profile</legend>
-                            </div>
+                    <div class="row">
+                        <div class="span12">
+                            <legend>Websites</legend>
                         </div>
-                        <div class="row">
-                            <div class="span12">
-                                <div class="control-group">
-                                    {{ form.summary|as_crispy_field }}
-                                </div>
-                                <div class="control-group">
-                                    {{ form.bio|as_crispy_field }}
-                                </div>
-                                <div class="control-group">
-                                    {{ form.if_i_wasnt_a_lawyer|as_crispy_field }}
+                    </div>
+                    <div class="row">
+                        <div class="span8">
+                            <p>{{ form.websites_input.help_text }}</p>
+                            <div class="control-group">
+                                <label class="control-label" for="inputEmail">{{ form.websites_input.label }}</label>
+                                <div class="controls">
+                                    {{ form.websites_input.errors }}
+                                    {{ form.websites_input }}<button id="add-personal-website-btn" type="button" class="btn btn-link btn-small add-website-btn" data-additem_callback="add_website" data-data_target="id_websites_input" data-target="personal-website-list"><i class="icon-plus-sign"></i>&nbsp;Add</button>
+                                    {{ form.websites }}<!-- hidden -->
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="span12">
-                                <legend>Profile Photo</legend>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="span8">
-                                <div class="control-group">
-                                    <label class="control-label" for="inputPassword">{{ form.photo.label }}</label>
-                                    <div class="controls">
-                                        {{ form.photo.errors }}
-                                        <div class="input">
-                                            {{ form.photo }}
-                                            {{ form.hidden_photo }}
-                                        </div>
-                                      <span class="help-block">A good photo makes all the difference.</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="span4">
-                                <img id="photo-preview" width="130" height="130" src="{{ request.user.profile.get_mugshot_url }}">
-                            </div>
+                        <div class="span4">
+                            <ol id="personal-website-list">
+                            </oL>
                         </div>
                     </div>
 
-                    <div id="connected-accounts" class="tab-pane">
-                        <div class="row">
-                            <div class="span12">
-                                <legend>Connected Accounts</legend>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="span12">
-                                <p>The more accounts you connect, the more likely it is that startups will find you.<p>
-                                <div class="buttons">
-                                {% social_associate social_auth %}
-                                </div>
-                            </div>
+                    <div class="row">
+                        <div class="span12">
+                            <legend>Extra</legend>
                         </div>
                     </div>
-
-                    <div id="form-submit" class="row">
-                        <div class="span12 divide">
-                            <label class="checkbox">
-                                {{ form.agree_tandc|as_crispy_field }}
-                                <span id="i_agree_html">I agree to the LawPal <a href="{% url 'public:terms' %}">Terms and Conditions</a></span>
-                            </label>
-                            <div class="">
-                                <button id="update-profile" type="submit" class="btn btn-primary btn-large">Update Profile</button>
-                            </div>
+                    <div class="row">
+                        <div class="control-group">
+                            {{ form.twitter|as_crispy_field }}
                         </div>
                     </div>
 
                 </div>
-            </form>
-        </div>
+
+                <div id="form-submit" class="row">
+                    <div class="span12 divide">
+                        <label class="checkbox">
+                            {{ form.agree_tandc|as_crispy_field }}
+                            <span id="i_agree_html">I agree to the LawPal <a href="{% url 'public:terms' %}">Terms and Conditions</a></span>
+                        </label>
+                        <div class="form-actions">
+                            <button id="update-profile" type="submit" class="btn btn-primary btn-large">Update Profile</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+
     </div>
 </div>
 
@@ -343,15 +379,14 @@ $(document).ready(function(){
         var errorCount = parseInt(tabPane.find('.parsley-error').length);
         tabPane.attr('error-count', errorCount);
 
-        targetTabLi.find('em').remove()
+        targetTabLi.find('span').remove()
         if (errorCount > 0) {
-            var errorTemplate = $('<em/>', {
-                html: '<span>{errorCount}</span>'.assign({'errorCount': errorCount})
-                ,class: 'unread_counter animated bounce'
+            var errorTemplate = $('<span/>', {
+                html: '({errorCount})&nbsp;'.assign({'errorCount': errorCount})
+                ,class: 'parsley-error'
             })
-            targetTabLink.append(errorTemplate)
+            targetTabLink.prepend(errorTemplate)
         }
-
        // targetTabLink.closest('li').addClass('parsley-error')
     };
     /**
@@ -383,20 +418,16 @@ $(document).ready(function(){
         }
     });
 
-
+    /**
+    * Handle the placement of the t&c text which is placed strangely due to the form
+    */
     $('span#i_agree_html').hide()
     $('label[for=id_agree_tandc]').append($('span#i_agree_html').html())
 
     $('input[title]').tooltip({trigger: 'focus', placement: 'top'});
 
-    $('#id_volume_incorp_setup').val('{{ lawyer.data.volume_incorp_setup|jsonify }}');
-    $('#id_volume_seed_financing').val('{{ lawyer.data.volume_seed_financing|jsonify }}');
-    $('#id_volume_series_a').val('{{ lawyer.data.volume_series_a|jsonify }}');
-    $('#id_volume_ip').val('{{ lawyer.data.volume_ip|jsonify }}');
-    $('#id_volume_other').val('{{ lawyer.data.volume_other|jsonify }}');
     /**
     * Dynamic selector functions based on form api urls
-    * 
     */
     {% for key, url in form.data_source_urls.items %}
     {{ key }}_lookup = function(filter, callback) {
@@ -465,10 +496,13 @@ $(document).ready(function(){
     /**
     * handle startup additions
     */
-    $('button#add-startup-btn').on('click', function(event){
+    $('.add-website-btn').on('click', function(event){
         event.preventDefault();
-
-        var element = $('#id_startups_advised_input');
+        var e = $(this)
+//console.log('click:add-website-btn')
+        var element = $('#' + e.attr('data-data_target'));//$('#id_startups_advised_input');
+        var callback_name = e.attr('data-additem_callback')
+        var callback = window[callback_name]
     
         // remove and then re-add
         element.closest('form').parsley( 'removeItem', '#' + element.attr('id') )
@@ -476,14 +510,68 @@ $(document).ready(function(){
         element.parsley( 'addConstraint', { url: true } );
 
         if ( element.parsley( 'validate' ) === true ) {
-            var startup = element.val();
-            add_startup(startup);
-
+            var item = element.val();
             element.val('');
             element.select();
-            console.log(element.closest('form'))
+            if (callback !== undefined) {
+                callback(item);
+            } else {
+                console.log('Callback {cb_name} for add-website-btn was not defined'.assign({'cb_name': callback_name}))
+            }
+            
         }
     });
+    $('.remove-website-btn').live('click', function(event){
+        event.preventDefault();
+        var element = $(this);
+        var website = element.closest('li').text();
+        element.closest('li').remove();
+        var cookie_name = element.attr('data-cookie_name');//'startup_list-{{ user.pk }}';
+        remove_website_item(website, cookie_name)
+    })
+
+    add_startup = function add_startup(startup, force){
+        var force = force || false
+        var cookie_name = 'startup_list-{{ user.pk }}';
+        var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
+        startup = startup.compact(startup, $('ol#startups-advised-list'), cookie_name, cookie_data, force)
+        add_generic_website(startup, $('ol#startups-advised-list'), $('#id_startups_advised'), cookie_name, cookie_data, force)
+    }
+
+    add_website = function add_website(website, force){
+        var force = force || false
+        var cookie_name = 'website_list-{{ user.pk }}';
+        var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
+        website = website.compact(website, $('ol#personal-website-list'), cookie_name, cookie_data, force)
+        add_generic_website(website, $('ol#personal-website-list'), $('#id_websites'), cookie_name, cookie_data, force)
+    }
+
+    add_generic_website = function add_generic_website(website_url, target_element, target_data_element, cookie_name, cookie_data, force) {
+        if (force === false && cookie_data.indexOf(website_url) >= 0) {
+            // is already present
+            return false
+        }else {
+            if (cookie_data.indexOf(website_url) < 0) {
+                cookie_data.push(website_url);
+            }
+
+            cookie_string = JSON.stringify(cookie_data);
+            $.cookie(cookie_name, cookie_string);
+            // set the form value
+            target_data_element.val(cookie_string);
+
+            var remove_but = $('<button/>', {
+                class: 'btn btn-link btn-small remove-website-btn',
+                'data-cookie_name': cookie_name,
+                html: '<i class="icon-minus-sign"></i>'
+            });
+            var li = $('<li/>', {
+                html: remove_but.prop('outerHTML') +'&nbsp;'+ website_url
+            });
+
+            target_element.append(li);
+        }
+    }
 
     function process_startups() {
         var cookie_name = 'startup_list-{{ user.pk }}';
@@ -495,49 +583,24 @@ $(document).ready(function(){
     }
     process_startups();
 
-    function add_startup(startup, force){
-        var force = force || false
-        var cookie_name = 'startup_list-{{ user.pk }}';
-        var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
-        startup = startup.compact()
-
-        if (force === false && cookie_data.indexOf(startup) >= 0) {
-            // is already present
-            return false
-        }else {
-            if (cookie_data.indexOf(startup) < 0) {
-                cookie_data.push(startup);
-            }
-
-            cookie_string = JSON.stringify(cookie_data);
-            $.cookie(cookie_name, cookie_string);
-            // set the form value
-            $('#id_startups_advised').val(cookie_string);
-
-            var remove_but = $('<button/>', {
-                class: 'btn btn-link btn-small remove-startup-btn',
-                html: '<i class="icon-minus-sign"></i>'
-            });
-            var li = $('<li/>', {
-                html: remove_but.prop('outerHTML') +'&nbsp;'+ startup
-            });
-
-            $('ol#startups-advised-list').append(li);
-        }
+    function process_websites() {
+        var cookie_name = 'website_list-{{ user.pk }}';
+        var cookie_data = $.parseJSON($.cookie(cookie_name)) || $.parseJSON($('#id_websites').val()) || [];
+        var force = true;
+        $.each(cookie_data, function(i,website){
+            add_website(website, force);
+        })
     }
-    $('.remove-startup-btn').live('click', function(event){
-        event.preventDefault();
-        var element = $(this);
-        var startup = element.closest('li').text();
-        element.closest('li').remove();
-        remove_startup(startup)
-    })
-    function remove_startup(startup){
-        var cookie_name = 'startup_list-{{ user.pk }}';
-        var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
-        startup = startup.compact()
+    process_websites();
 
-        cookie_data.remove(startup)
+
+
+    function remove_website_item(website, cookie_name){
+        //var cookie_name = 'startup_list-{{ user.pk }}';
+        var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
+        website = website.compact()
+
+        cookie_data.remove(website)
 
         var cookie_string = JSON.stringify(cookie_data);
         $.cookie(cookie_name, cookie_string);
@@ -547,48 +610,88 @@ $(document).ready(function(){
 
 
     /**
+    * JSON output the volue type values
+    */
+    $('#id_volume_incorp_setup').val('{{ lawyer.data.volume_incorp_setup }}');
+    $('#id_volume_seed_financing').val('{{ lawyer.data.volume_seed_financing }}');
+    $('#id_volume_series_a').val('{{ lawyer.data.volume_series_a }}');
+    $('#id_volume_ip').val('{{ lawyer.data.volume_ip }}');
+    $('#id_volume_other').val('{{ lawyer.data.volume_other }}');
+    $('#id_volume_by_year').val('{{ lawyer.data.volume_by_year|jsonify }}');
+
+    /**
     * handle volume changes
     */
-    $.each($('.volume'), function(i, element) {
+    single_value = function single_value(element, volume_type, target_element, element_value) {
+        $(target_element).val(element_value)
+        window[volume_type + '_object'] = element_value
 
+        target_element.val(window[volume_type + '_object'])
+
+        return window[volume_type + '_object']
+    }
+
+    json_value = function json_value(element, volume_type, target_element, element_value) {
+        var json_taget_name = target_element.attr('id')
+        var element_value = $.parseJSON(element_value);
+//console.log(element_value)
+// console.log(json_taget_name)
+// console.log(element_value[2013])
+        // ensure object
+        var var_name = json_taget_name + '_object'
+        window[var_name] = (window[var_name] === undefined) ? {} : window[var_name]
+
+        // ensure value
+// console.log((typeof(element_value) == 'number'))
+// console.log(typeof(element_value))
+// console.log(element_value[volume_type])
+        window[var_name][volume_type] = (typeof(element_value) == 'number') ? element_value : (typeof(element_value) == 'object') ? element_value[volume_type] : 0
+// console.log(JSON.stringify(window[var_name]))
+
+        return window[var_name][volume_type]
+    }
+
+    $.each($('.json_volume'), function(i, element) {
         var e = $(element);
         var volume_type = e.attr('data-volume_type');
-        var year = e.attr('data-year');
+        var target_element = $('#id_' + e.attr('data-json_target'));
+        var element_value = target_element.val();
+        var val = json_value(e, volume_type, target_element, element_value)
 
+        e.val(val)
+
+        e.on('change', function(event){
+            var e = $(this);
+            var element_value = e.val();
+// console.log(element_value)
+            var target_element = $('#id_' + e.attr('data-json_target'));
+            var var_name = target_element.attr('id') + '_object'
+            var volume_type = e.attr('data-volume_type');
+
+            var val = json_value(e, volume_type, target_element, element_value)
+            target_element.val(JSON.stringify(window[var_name]))
+        })
+    });
+    
+    $.each($('.volume'), function(i, element) {
+        var e = $(element);
+        var volume_type = e.attr('data-volume_type');
+
+        // Normal value
         var target_element = $('#id_volume_' + volume_type);
+        var element_value = target_element.val() || 0;
+        var val = single_value(e, volume_type, target_element, element_value)
 
-        // default json data from hidden element
-        var target_json = $.parseJSON(target_element.val());
+        e.val(val)
 
-        // parse and reform and set defaults
-
-        var volume_object = window[volume_type + '_object'] || (typeof(target_json) == 'object') ? target_json : {};
-        volume_object[year] = (target_json[year] !== undefined)? target_json[year]: 0;
-        var as_json = JSON.stringify(volume_object)
-
-        // set the initial value
-        window[volume_type + '_object'] = volume_object;
-
-        e.val(volume_object[year])
-        target_element.val(as_json);
-
-        function ensureVolumeValue(volume_type) {
-            var target_element = $('#id_volume_' + volume_type);
-            return (typeof(target_element.val()) != typeof({})) ? {} : $.parseJSON(target_element.val());
-        }
         e.on('change', function(event){
             var volume = e.val();
             var volume_type = e.attr('data-volume_type');
-            var year = e.attr('data-year');
-
-            var target_json = ensureVolumeValue(volume_type);
+            var target_json = single_value(e, volume_type, target_element, element_value)
             var volume_object = window[volume_type + '_object'];
+            var final_value = volume;
 
-            volume_object[year] = volume;
-            var as_json = JSON.stringify(volume_object)
-
-            target_element.val(as_json);
-            // console.log(target_element.val())
+            target_element.val(final_value);
         })
     });
 

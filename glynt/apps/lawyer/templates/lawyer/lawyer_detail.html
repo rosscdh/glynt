@@ -19,7 +19,7 @@
 			
 			<div class="span6">
 				<div class="avatar">
-					<img src="{% if object.photo %}{{ MEDIA_URL }}{{ object.photo }}{% else %}{{ default_profile_image }}{% endif %}" alt="{{ object.user.get_full_name|default:object.user.username }}" />
+					<img src="{% if object.photo %}{{ MEDIA_URL }}{{ object.photo }}{% else %}{{ object.user.profile.get_mugshot_url|default:default_profile_image }}{% endif %}" alt="{{ object.user.get_full_name|default:object.user.username }}" />
 				</div>
 			</div>
 			<div class="span6">

@@ -30,10 +30,18 @@ class FullContactProfileDataService(object):
             self.user.profile.save(update_fields=['mugshot'])
             logger.info('FC: set the user profile mugshot: %d' % self.user.pk)
 
+    def twitter(self):
+        if self.user.lawyer_profile.data.get('twitter', None) is None or len(self.user.lawyer_profile.data.get('twitter')) == 0:
+            for p in self.fc.profiles():
+                if p.get('typeId',None) == 'twitter' and p.get('username', None) is not None:
+                    self.user.lawyer_profile.data['twitter'] = p.get('username')
+                    self.user.lawyer_profile.save(update_fields=['data'])
+                    break
+
     def bio(self):
         """ update bio only if the user has not entered data """
         #logger.debug('FC: current summary: %s' % self.user.lawyer_profile.summary)
-        if len(self.user.lawyer_profile.bio) == 0:
+        if len(self.user.lawyer_profile.bio.strip()) == 0:
 
             b = self.fc.primary_profile.get('bio', None) # get from model property
 
@@ -45,4 +53,5 @@ class FullContactProfileDataService(object):
 
     def process(self):
         self.photo()
+        self.twitter()
         self.bio()

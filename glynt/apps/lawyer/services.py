@@ -16,7 +16,8 @@ class EnsureLawyerService(object):
     """ Setup a Lawyer and his related Firm and Office """
     lawyer = None
     firm = None
-    default_volume_matrix = unicode('{"2010":0,"2011":0,"2012":0}')
+    default_volume_matrix = unicode('[0]')
+    default_volume_matrix_by_year = unicode('{"2010":0,"2011":0,"2012":0,"2013":0}')
     def __init__(self, user, firm_name=None, offices=[], **kwargs):
         self.user = user
         self.firm_name = firm_name
@@ -86,7 +87,8 @@ class EnsureLawyerService(object):
         # Updates to the JSON Data object for the Lawyer
         volume_types = (('startups_advised', unicode('[]')), ('volume_incorp_setup', self.default_volume_matrix), \
                         ('volume_seed_financing', self.default_volume_matrix), ('volume_series_a', self.default_volume_matrix), \
-                        ('volume_ip', self.default_volume_matrix), ('volume_other', self.default_volume_matrix),)
+                        ('volume_ip', self.default_volume_matrix), ('volume_other', self.default_volume_matrix), \
+                        ('volume_by_year', self.default_volume_matrix_by_year),)
 
         for vt, default in volume_types:
             try:
