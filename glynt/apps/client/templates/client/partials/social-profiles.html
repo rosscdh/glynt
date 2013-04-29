@@ -1,9 +1,10 @@
-<ul>
+<ul class="social-buttons">
 {% for p in social_profiles %}
 <li>
     {{ p.typeId }}<br/>
-    {{ p.typeName }}<br/>
-    {{ p.url }}
+    <br/>
+    
+    <a href="{{ p.url }}"><img src="https://api.fullcontact.com/v2/icon/{{ p.typeName }}/32/default?apiKey=7280036b99dd362e"> {{ p.typeName }}</a>
 </li>
 {% empty %}
 <li>No Social Profile Found</li>
