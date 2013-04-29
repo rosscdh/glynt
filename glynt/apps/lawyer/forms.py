@@ -119,14 +119,17 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
         hidden_photo = self.cleaned_data.get('hidden_photo', None)
         return int(hidden_photo) if hidden_photo else None
 
-    def delete_cookie(self):
+    def delete_cookie(self, cookie_name):
+        if self.request.COOKIES.get(cookie_name, None) is not None:
+            del(self.request.COOKIES[cookie_name])
+
+    def delete_cookies(self):
         """ Remove the lawyer_profile cookie set when photo is uploaded """
-        if self.request.COOKIES.get(self.cookie_name, None) is not None:
-            del(self.request.COOKIES[self.cookie_name])
+        self.delete_cookie(self.cookie_name)
         # startup list
-        startup_cookie_name = 'startup_list-%d' % self.user.pk
-        if self.request.COOKIES.get(startup_cookie_name, None) is not None:
-            del(self.request.COOKIES[startup_cookie_name])
+        self.delete_cookie('startup_list-%d' % self.user.pk)
+        # websites list
+        self.delete_cookie('website_list-%d' % self.user.pk)
 
     def save(self, commit=True):
         logger.info('Ensuring the LawyerProfile Exists')
@@ -147,7 +150,8 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
         lawyer_service = EnsureLawyerService(user=self.user, firm_name=firm_name, offices=offices, form=self, **data)
         lawyer_service.process()
 
-        self.delete_cookie()
+        self.delete_cookies()
+        # clear the nav cache for the user
         cache.delete(make_template_fragment_key("user", ["mugshot", self.request.user.pk]))
 
         logger.info('Complete: Ensuring the LawyerProfile Exists')
