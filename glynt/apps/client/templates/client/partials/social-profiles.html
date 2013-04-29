@@ -1,12 +1,13 @@
 <ul class="social-buttons">
 {% for p in social_profiles %}
-<li>
-    {{ p.typeId }}<br/>
-    <br/>
-    
-    <a href="{{ p.url }}"><img src="https://api.fullcontact.com/v2/icon/{{ p.typeName }}/32/default?apiKey=7280036b99dd362e"> {{ p.typeName }}</a>
+<li class="icon {{ p.typeId }}">
+    <a href="{{ p.url }}">
+		<img src="https://s3.amazonaws.com/lp-static/icons/{{ p.typeId }}/{{ p.typeId }}-32.png" class="custom">
+<!--         <img src="https://api.fullcontact.com/v2/icon/{{ p.typeId }}/32/default?apiKey=7280036b99dd362e" class="fallback">
+ -->  </a>
 </li>
 {% empty %}
-<li>No Social Profile Found</li>
-{% endfor %}
+<!-- <li>No Social Profile Found</li>
+ -->
+ {% endfor %}
 </ul>
