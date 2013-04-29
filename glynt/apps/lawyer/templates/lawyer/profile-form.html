@@ -121,7 +121,7 @@
                                 <label class="control-label" for="inputEmail">{{ form.startups_advised_input.label }}</label>
                                 <div class="controls">
                                     {{ form.startups_advised_input.errors }}
-                                    {{ form.startups_advised_input }}<button id="add-startup-btn" type="button" class="btn btn-link btn-small"><i class="icon-plus-sign"></i>&nbsp;Add</button>
+                                    {{ form.startups_advised_input }}<button id="add-startup-btn" type="button" class="btn btn-link btn-small add-website-btn" data-additem_callback="add_startup" data-data_target="id_startups_advised_input" data-target="startups-advised-list"><i class="icon-plus-sign"></i>&nbsp;Add</button>
                                     {{ form.startups_advised }}<!-- hidden -->
                                 </div>
                             </div>
@@ -264,13 +264,13 @@
                                 <label class="control-label" for="inputEmail">{{ form.websites_input.label }}</label>
                                 <div class="controls">
                                     {{ form.websites_input.errors }}
-                                    {{ form.websites_input }}<button id="add-website-btn" type="button" class="btn btn-link btn-small"><i class="icon-plus-sign"></i>&nbsp;Add</button>
+                                    {{ form.websites_input }}<button id="add-personal-website-btn" type="button" class="btn btn-link btn-small add-website-btn" data-additem_callback="add_website" data-data_target="id_websites_input" data-target="personal-website-list"><i class="icon-plus-sign"></i>&nbsp;Add</button>
                                     {{ form.websites }}<!-- hidden -->
                                 </div>
                             </div>
                         </div>
                         <div class="span4">
-                            <ol id="website-list">
+                            <ol id="personal-website-list">
                             </oL>
                         </div>
                     </div>
@@ -496,10 +496,13 @@ $(document).ready(function(){
     /**
     * handle startup additions
     */
-    $('button#add-startup-btn').on('click', function(event){
+    $('.add-website-btn').on('click', function(event){
         event.preventDefault();
-
-        var element = $('#id_startups_advised_input');
+        var e = $(this)
+//console.log('click:add-website-btn')
+        var element = $('#' + e.attr('data-data_target'));//$('#id_startups_advised_input');
+        var callback_name = e.attr('data-additem_callback')
+        var callback = window[callback_name]
     
         // remove and then re-add
         element.closest('form').parsley( 'removeItem', '#' + element.attr('id') )
@@ -507,13 +510,68 @@ $(document).ready(function(){
         element.parsley( 'addConstraint', { url: true } );
 
         if ( element.parsley( 'validate' ) === true ) {
-            var startup = element.val();
-            add_startup(startup);
-
+            var item = element.val();
             element.val('');
             element.select();
+            if (callback !== undefined) {
+                callback(item);
+            } else {
+                console.log('Callback {cb_name} for add-website-btn was not defined'.assign({'cb_name': callback_name}))
+            }
+            
         }
     });
+    $('.remove-website-btn').live('click', function(event){
+        event.preventDefault();
+        var element = $(this);
+        var website = element.closest('li').text();
+        element.closest('li').remove();
+        var cookie_name = element.attr('data-cookie_name');//'startup_list-{{ user.pk }}';
+        remove_website_item(website, cookie_name)
+    })
+
+    add_startup = function add_startup(startup, force){
+        var force = force || false
+        var cookie_name = 'startup_list-{{ user.pk }}';
+        var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
+        startup = startup.compact(startup, $('ol#startups-advised-list'), cookie_name, cookie_data, force)
+        add_generic_website(startup, $('ol#startups-advised-list'), $('#id_startups_advised'), cookie_name, cookie_data, force)
+    }
+
+    add_website = function add_website(website, force){
+        var force = force || false
+        var cookie_name = 'website_list-{{ user.pk }}';
+        var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
+        website = website.compact(website, $('ol#personal-website-list'), cookie_name, cookie_data, force)
+        add_generic_website(website, $('ol#personal-website-list'), $('#id_websites'), cookie_name, cookie_data, force)
+    }
+
+    add_generic_website = function add_generic_website(website_url, target_element, target_data_element, cookie_name, cookie_data, force) {
+        if (force === false && cookie_data.indexOf(website_url) >= 0) {
+            // is already present
+            return false
+        }else {
+            if (cookie_data.indexOf(website_url) < 0) {
+                cookie_data.push(website_url);
+            }
+
+            cookie_string = JSON.stringify(cookie_data);
+            $.cookie(cookie_name, cookie_string);
+            // set the form value
+            target_data_element.val(cookie_string);
+
+            var remove_but = $('<button/>', {
+                class: 'btn btn-link btn-small remove-website-btn',
+                'data-cookie_name': cookie_name,
+                html: '<i class="icon-minus-sign"></i>'
+            });
+            var li = $('<li/>', {
+                html: remove_but.prop('outerHTML') +'&nbsp;'+ website_url
+            });
+
+            target_element.append(li);
+        }
+    }
 
     function process_startups() {
         var cookie_name = 'startup_list-{{ user.pk }}';
@@ -525,49 +583,24 @@ $(document).ready(function(){
     }
     process_startups();
 
-    function add_startup(startup, force){
-        var force = force || false
-        var cookie_name = 'startup_list-{{ user.pk }}';
-        var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
-        startup = startup.compact()
-
-        if (force === false && cookie_data.indexOf(startup) >= 0) {
-            // is already present
-            return false
-        }else {
-            if (cookie_data.indexOf(startup) < 0) {
-                cookie_data.push(startup);
-            }
-
-            cookie_string = JSON.stringify(cookie_data);
-            $.cookie(cookie_name, cookie_string);
-            // set the form value
-            $('#id_startups_advised').val(cookie_string);
-
-            var remove_but = $('<button/>', {
-                class: 'btn btn-link btn-small remove-startup-btn',
-                html: '<i class="icon-minus-sign"></i>'
-            });
-            var li = $('<li/>', {
-                html: remove_but.prop('outerHTML') +'&nbsp;'+ startup
-            });
-
-            $('ol#startups-advised-list').append(li);
-        }
+    function process_websites() {
+        var cookie_name = 'website_list-{{ user.pk }}';
+        var cookie_data = $.parseJSON($.cookie(cookie_name)) || $.parseJSON($('#id_websites').val()) || [];
+        var force = true;
+        $.each(cookie_data, function(i,website){
+            add_website(website, force);
+        })
     }
-    $('.remove-startup-btn').live('click', function(event){
-        event.preventDefault();
-        var element = $(this);
-        var startup = element.closest('li').text();
-        element.closest('li').remove();
-        remove_startup(startup)
-    })
-    function remove_startup(startup){
-        var cookie_name = 'startup_list-{{ user.pk }}';
-        var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
-        startup = startup.compact()
+    process_websites();
 
-        cookie_data.remove(startup)
+
+
+    function remove_website_item(website, cookie_name){
+        //var cookie_name = 'startup_list-{{ user.pk }}';
+        var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
+        website = website.compact()
+
+        cookie_data.remove(website)
 
         var cookie_string = JSON.stringify(cookie_data);
         $.cookie(cookie_name, cookie_string);
