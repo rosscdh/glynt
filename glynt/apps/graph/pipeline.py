@@ -5,6 +5,8 @@ from django.template.defaultfilters import slugify
 from social_auth.models import UserSocialAuth
 from tasks import collect_user_fullcontact_info, collect_user_graph_connections
 
+import uuid
+
 import logging
 logger = logging.getLogger('lawpal.graph')
 
@@ -53,7 +55,7 @@ def get_username(details, user=None,
     elif details.get('username'):
         username = unicode(details['username'])
     else:
-        username = uuid4().get_hex()
+        username = uuid.uuid4().get_hex()
 
     username = slugify(username)
 
@@ -65,7 +67,7 @@ def get_username(details, user=None,
     # as base but adding a unique hash at the end. Original
     # username is cut to avoid any field max_length.
     while user_exists(username=final_username):
-        username = short_username + uuid4().get_hex()[:uuid_length]
+        username = short_username + uuid.uuid4().get_hex()[:uuid_length]
         username = username[:max_length]
         final_username = slugify(UserSocialAuth.clean_username(username))
 
