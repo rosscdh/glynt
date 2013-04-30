@@ -290,7 +290,8 @@ USERENA_ACTIVATION_REDIRECT_URL = '/'
 USERENA_SIGNIN_REDIRECT_URL = '/'
 USERENA_WITHOUT_USERNAMES = True # step userarena forcing user to provide username
 USERENA_HIDE_EMAIL = True
-
+USERENA_MUGSHOT_GRAVATAR = False
+USERENA_MUGSHOT_DEFAULT = STATIC_URL +'img/default_avatar.png'
 
 DEFAULT_PROFILE_IMAGE = '/img/default_avatar.png'
 
