@@ -32,7 +32,6 @@ API_URLS = {
 
 @parsleyfy
 class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
-    cookie_name = 'lawyer_profile_photo-%d'
 
     ROLES = [display_name for name,display_name in Lawyer.LAWYER_ROLES.get_choices()]
 
@@ -70,6 +69,9 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     websites_input = forms.URLField(required=False, label="Website Address", help_text='Enter the domain name of your public website, if you have one.', widget=forms.TextInput(attrs={}))
     websites = forms.CharField(required=False, widget=forms.HiddenInput)
 
+    bar_membership_input = forms.CharField(required=False, label="Bar Location", help_text='Enter the location of your bar memberships.', widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-large','placeholder':'San Francisco, California','title':'The primary city you operate from','class':'typeahead','autocomplete':'on','data-provide':'ajax', 'minLength':'3', 'data-items':4, 'data-source':'locations', 'data-filter':'name__istartswith', 'autocomplete':'off'}))
+    bar_membership = forms.CharField(required=False, widget=forms.HiddenInput)
+
     startups_advised_input = forms.URLField(required=False, label="Startups Advised", help_text='Enter the domain name of any startups you have advised and press "Add". This helps similar startups find you.', widget=forms.TextInput(attrs={'data-trigger':'change','placeholder':'e.g. Instagram.com', 'class':'typeahead','autocomplete':'on','data-provide':'ajax', 'data-items':4, 'data-source': 'startups', 'data-filter':'name__istartswith'}))
     startups_advised = forms.CharField(required=False, widget=forms.HiddenInput)
 
@@ -87,7 +89,6 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
         """ get request object and user """
         self.request = kwargs.pop('request', None)
         self.user = self.request.user
-        self.cookie_name = self.cookie_name % self.user.pk
         self.data_source_urls = API_URLS
         super(LawyerProfileSetupForm, self).__init__(*args, **kwargs)
         self.inject_email_pass_objects()
@@ -100,8 +101,6 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
             self.fields['email'] = forms.EmailField(label="Firm email", help_text="", widget=forms.TextInput(attrs={'data-trigger':'change','placeholder':'john@lawpal.com'}))
             self.fields['password'] = forms.CharField(label="Password", help_text="", widget=forms.PasswordInput(attrs={'data-trigger':'change'}))
             self.fields['password_confirm'] = forms.CharField(label="Confirm password", help_text="", widget=forms.PasswordInput(attrs={'data-trigger':'change', 'minLength':'5', 'data-equalto':'#id_password'}))
-
-
 
     def clean_email(self):
         email = self.cleaned_data['email']
@@ -125,11 +124,14 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
 
     def delete_cookies(self):
         """ Remove the lawyer_profile cookie set when photo is uploaded """
-        self.delete_cookie(self.cookie_name)
+        self.delete_cookie('lawyer_profile_photo-%d' % self.user.pk)
         # startup list
         self.delete_cookie('startup_list-%d' % self.user.pk)
         # websites list
         self.delete_cookie('website_list-%d' % self.user.pk)
+        # bar_membership list
+        self.delete_cookie('bar_membership-%d' % self.user.pk)
+        
 
     def save(self, commit=True):
         logger.info('Ensuring the LawyerProfile Exists')

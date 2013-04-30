@@ -240,6 +240,8 @@ HELPER_APPS = (
     'clear_cache',
     # Celery Tasks
     'djcelery',
+    # User switcher
+    'debug_toolbar_user_panel',
 )
 
 # Handle south and its breaking tests
@@ -324,7 +326,7 @@ TWITTER_CONSUMER_KEY = 'q4iigBXEJj7OBuIYHVF99g'
 TWITTER_CONSUMER_SECRET = 'Ka9XGTeRlu1v7XRs2GSdK43Sd0l4j0eXXE2gI4iXd8E'
 
 SOCIAL_AUTH_SLUGIFY_USERNAMES = True
-SOCIAL_AUTH_UUID_LENGTH = 0
+SOCIAL_AUTH_UUID_LENGTH = 3 # greater than 0 otehrwise it defaults to 3
 SOCIAL_AUTH_BACKEND_ERROR_URL = '/'
 SOCIAL_AUTH_PROTECTED_USER_FIELDS = ('first_name', 'last_name', 'full_name', 'email',)
 SOCIAL_AUTH_PIPELINE = (
@@ -374,6 +376,18 @@ if DEBUG:
 
 
 INTERNAL_IPS = ('127.0.0.1',)
+DEBUG_TOOLBAR_PANELS = (
+    'debug_toolbar.panels.version.VersionDebugPanel',
+    'debug_toolbar.panels.timer.TimerDebugPanel',
+    'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
+    'debug_toolbar.panels.headers.HeaderDebugPanel',
+    'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
+    'debug_toolbar.panels.template.TemplateDebugPanel',
+    'debug_toolbar.panels.sql.SQLDebugPanel',
+    'debug_toolbar.panels.signals.SignalDebugPanel',
+    'debug_toolbar.panels.logger.LoggingPanel',
+    'debug_toolbar_user_panel.panels.UserPanel',
+)
 
 # Custom test runner for this project
 TEST_RUNNER = 'glynt.test_runner.GlyntAppTestRunner'

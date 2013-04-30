@@ -88,6 +88,32 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="span12">
+                            <legend>Bar Memberships</legend>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span8">
+
+                            <p>{{ form.bar_membership.help_text }}</p>
+                            <div class="control-group">
+                                <label class="control-label" for="inputEmail">{{ form.bar_membership_input.label }}</label>
+                                <div class="controls">
+                                    {{ form.bar_membership_input.errors }}
+                                    {{ form.bar_membership_input }}<button id="add-bar-membership-btn" type="button" class="btn btn-link btn-small multi-add-btn" data-type="" data-additem_callback="add_bar_membership" data-data_target="id_bar_membership_input" data-target="bar-membership-list"><i class="icon-plus-sign"></i>&nbsp;Add</button>
+                                    {{ form.bar_membership }}<!-- hidden -->
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="span4">
+                            <ol id="bar-membership-list">
+                            </ol>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="span12">
                             <legend>Your Practice Locations</legend>
@@ -121,7 +147,7 @@
                                 <label class="control-label" for="inputEmail">{{ form.startups_advised_input.label }}</label>
                                 <div class="controls">
                                     {{ form.startups_advised_input.errors }}
-                                    {{ form.startups_advised_input }}<button id="add-startup-btn" type="button" class="btn btn-link btn-small add-website-btn" data-additem_callback="add_startup" data-data_target="id_startups_advised_input" data-target="startups-advised-list"><i class="icon-plus-sign"></i>&nbsp;Add</button>
+                                    {{ form.startups_advised_input }}<button id="add-startup-btn" type="button" class="btn btn-link btn-small multi-add-btn" data-type="url" data-additem_callback="add_startup" data-data_target="id_startups_advised_input" data-target="startups-advised-list"><i class="icon-plus-sign"></i>&nbsp;Add</button>
                                     {{ form.startups_advised }}<!-- hidden -->
                                 </div>
                             </div>
@@ -129,7 +155,7 @@
                         </div>
                         <div class="span4">
                             <ol id="startups-advised-list">
-                            </oL>
+                            </ol>
                         </div>
                     </div>
                     <div class="row">
@@ -153,11 +179,11 @@
 
                                 <tr>
                                     <th>Average Annual</th>
-                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="incorp_setup" type="text"></td>
-                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="seed_financing" type="text"></td>
-                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="series_a" type="text"></td>
-                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="ip" type="text"></td>
-                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="other" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="number" data-required="true" data-volume_type="incorp_setup" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="number" data-required="true" data-volume_type="seed_financing" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="number" data-required="true" data-volume_type="series_a" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="number" data-required="true" data-volume_type="ip" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="number" data-required="true" data-volume_type="other" type="text"></td>
                                 </tr>
 
                             </table>
@@ -174,10 +200,10 @@
 
                                 <tr>
                                     <th>Total by year</th>
-                                    <td><input class="span1 json_volume parsley-validate" data-type="digits" data-required="true" data-json_target="volume_by_year" data-volume_type="2010" type="text"></td>
-                                    <td><input class="span1 json_volume parsley-validate" data-type="digits" data-required="true" data-json_target="volume_by_year" data-volume_type="2011" type="text"></td>
-                                    <td><input class="span1 json_volume parsley-validate" data-type="digits" data-required="true" data-json_target="volume_by_year" data-volume_type="2012" type="text"></td>
-                                    <td><input class="span1 json_volume parsley-validate" data-type="digits" data-required="true" data-json_target="volume_by_year" data-volume_type="2013" type="text"></td>
+                                    <td><input class="span1 json_volume parsley-validate" data-type="number" data-required="true" data-json_target="volume_by_year" data-volume_type="2010" type="text"></td>
+                                    <td><input class="span1 json_volume parsley-validate" data-type="number" data-required="true" data-json_target="volume_by_year" data-volume_type="2011" type="text"></td>
+                                    <td><input class="span1 json_volume parsley-validate" data-type="number" data-required="true" data-json_target="volume_by_year" data-volume_type="2012" type="text"></td>
+                                    <td><input class="span1 json_volume parsley-validate" data-type="number" data-required="true" data-json_target="volume_by_year" data-volume_type="2013" type="text"></td>
                                 </tr>
 
                             </table>
@@ -264,14 +290,14 @@
                                 <label class="control-label" for="inputEmail">{{ form.websites_input.label }}</label>
                                 <div class="controls">
                                     {{ form.websites_input.errors }}
-                                    {{ form.websites_input }}<button id="add-personal-website-btn" type="button" class="btn btn-link btn-small add-website-btn" data-additem_callback="add_website" data-data_target="id_websites_input" data-target="personal-website-list"><i class="icon-plus-sign"></i>&nbsp;Add</button>
+                                    {{ form.websites_input }}<button id="add-personal-website-btn" type="button" class="btn btn-link btn-small multi-add-btn"  data-type="url" data-additem_callback="add_website" data-data_target="id_websites_input" data-target="personal-website-list"><i class="icon-plus-sign"></i>&nbsp;Add</button>
                                     {{ form.websites }}<!-- hidden -->
                                 </div>
                             </div>
                         </div>
                         <div class="span4">
                             <ol id="personal-website-list">
-                            </oL>
+                            </ol>
                         </div>
                     </div>
 
@@ -329,7 +355,7 @@ img#photo-preview{
 
 function preparePhotoPreview(element) {
     var element = $('.cropped-imag-preview');
-    var cookie_data = $.parseJSON($.cookie('{{ form.cookie_name }}-{{ user.pk }}'));
+    var cookie_data = $.parseJSON($.cookie('lawyer_profile_photo-{{ user.pk }}'));
 
     $.each(element.find('img'), function(i,img){
         img = $(img)
@@ -354,7 +380,7 @@ function preparePhotoPreview(element) {
 
 function photoCrop(element, data) {
     $('#id_hidden_photo').val(data.id);// id to be sent
-    $.cookie('{{ form.cookie_name }}-{{ user.pk }}', JSON.stringify({'id': data.id, 'path': data.path}));
+    $.cookie('lawyer_profile_photo-{{ user.pk }}', JSON.stringify({'id': data.id, 'path': data.path}));
     preparePhotoPreview(element);
 }
 
@@ -497,19 +523,27 @@ $(document).ready(function(){
     /**
     * handle startup additions
     */
-    $('.add-website-btn').on('click', function(event){
+    $('.multi-add-btn').on('click', function(event){
         event.preventDefault();
         var e = $(this)
         var element = $('#' + e.attr('data-data_target'));//$('#id_startups_advised_input');
         var callback_name = e.attr('data-additem_callback')
         var callback = window[callback_name]
-    
-        // remove and then re-add
-        element.closest('form').parsley( 'removeItem', '#' + element.attr('id') )
-        element.closest('form').parsley( 'addItem', '#' + element.attr('id') )
-        element.parsley( 'addConstraint', { url: true } );
 
-        if ( element.parsley( 'validate' ) === true ) {
+        // remove and then re-add
+        parsleyConstraints = e.attr('data-type') || false
+
+        if (parsleyConstraints) {
+            element.closest('form').parsley( 'removeItem', '#' + element.attr('id') )
+            element.closest('form').parsley( 'addItem', '#' + element.attr('id') )
+            // loop over data-type as defined in the html attribute and ensure constraint is applied
+            $.each(parsleyConstraints.split(','), function(i,e){
+                element.parsley( 'addConstraint', { e: true } );    
+            })
+            
+        }
+
+        if ( parsleyConstraints === false || element.parsley( 'validate' ) === true ) {
             var item = element.val();
             element.val('');
             element.select();
@@ -521,13 +555,13 @@ $(document).ready(function(){
             
         }
     });
-    $('.remove-website-btn').live('click', function(event){
+    $('.remove-multi-add-btn').live('click', function(event){
         event.preventDefault();
         var element = $(this);
-        var website = element.closest('li').text();
+        var item = element.closest('li').text();
         element.closest('li').remove();
         var cookie_name = element.attr('data-cookie_name');//'startup_list-{{ user.pk }}';
-        remove_website_item(website, cookie_name)
+        remove_multi_add_item(item, cookie_name)
     })
 
     add_startup = function add_startup(startup, force){
@@ -535,7 +569,7 @@ $(document).ready(function(){
         var cookie_name = 'startup_list-{{ user.pk }}';
         var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
         startup = startup.compact(startup, $('ol#startups-advised-list'), cookie_name, cookie_data, force)
-        add_generic_website(startup, $('ol#startups-advised-list'), $('#id_startups_advised'), cookie_name, cookie_data, force)
+        add_generic_list_element(startup, $('ol#startups-advised-list'), $('#id_startups_advised'), cookie_name, cookie_data, force)
     }
 
     add_website = function add_website(website, force){
@@ -543,16 +577,25 @@ $(document).ready(function(){
         var cookie_name = 'website_list-{{ user.pk }}';
         var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
         website = website.compact(website, $('ol#personal-website-list'), cookie_name, cookie_data, force)
-        add_generic_website(website, $('ol#personal-website-list'), $('#id_websites'), cookie_name, cookie_data, force)
+        add_generic_list_element(website, $('ol#personal-website-list'), $('#id_websites'), cookie_name, cookie_data, force)
     }
 
-    add_generic_website = function add_generic_website(website_url, target_element, target_data_element, cookie_name, cookie_data, force) {
-        if (force === false && cookie_data.indexOf(website_url) >= 0) {
+    add_bar_membership = function add_bar_membership(bar_membership, force){
+        var force = force || false
+        var cookie_name = 'bar_membership_list-{{ user.pk }}';
+        var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
+        console.log(bar_membership)
+        bar_membership = bar_membership.compact(bar_membership, $('ol#bar-membership-list'), cookie_name, cookie_data, force)
+        add_generic_list_element(bar_membership, $('ol#bar-membership-list'), $('#id_bar_membership'), cookie_name, cookie_data, force)
+    }
+
+    add_generic_list_element = function add_generic_list_element(item, target_element, target_data_element, cookie_name, cookie_data, force) {
+        if (force === false && cookie_data.indexOf(item) >= 0) {
             // is already present
             return false
         }else {
-            if (cookie_data.indexOf(website_url) < 0) {
-                cookie_data.push(website_url);
+            if (cookie_data.indexOf(item) < 0) {
+                cookie_data.push(item);
             }
 
             cookie_string = JSON.stringify(cookie_data);
@@ -561,16 +604,26 @@ $(document).ready(function(){
             target_data_element.val(cookie_string);
 
             var remove_but = $('<button/>', {
-                class: 'btn btn-link btn-small remove-website-btn',
+                class: 'btn btn-link btn-small remove-multi-add-btn',
                 'data-cookie_name': cookie_name,
                 html: '<i class="icon-minus-sign"></i>'
             });
             var li = $('<li/>', {
-                html: remove_but.prop('outerHTML') +'&nbsp;'+ website_url
+                html: remove_but.prop('outerHTML') +'&nbsp;'+ item
             });
 
             target_element.append(li);
         }
+    }
+    remove_multi_add_item = function remove_multi_add_item(item, cookie_name){
+        //var cookie_name = 'startup_list-{{ user.pk }}';
+        var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
+        item = item.compact()
+
+        cookie_data.remove(item)
+
+        var cookie_string = JSON.stringify(cookie_data);
+        $.cookie(cookie_name, cookie_string);
     }
 
     function process_startups() {
@@ -593,21 +646,15 @@ $(document).ready(function(){
     }
     process_websites();
 
-
-
-    function remove_website_item(website, cookie_name){
-        //var cookie_name = 'startup_list-{{ user.pk }}';
-        var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
-        website = website.compact()
-
-        cookie_data.remove(website)
-
-        var cookie_string = JSON.stringify(cookie_data);
-        $.cookie(cookie_name, cookie_string);
-
-        $('#id_startups_advised').val(cookie_string);
+    function process_bar_membership() {
+        var cookie_name = 'bar_membership_list-{{ user.pk }}';
+        var cookie_data = $.parseJSON($.cookie(cookie_name)) || $.parseJSON($('#id_bar_membership').val()) || [];
+        var force = true;
+        $.each(cookie_data, function(i,bar_membership){
+            add_bar_membership(bar_membership, force);
+        })
     }
-
+    process_bar_membership();
 
     /**
     * JSON output the volue type values
@@ -634,20 +681,17 @@ $(document).ready(function(){
     json_value = function json_value(element, volume_type, target_element, element_value) {
         var json_taget_name = target_element.attr('id')
         var element_value = $.parseJSON(element_value);
-//console.log(element_value)
-// console.log(json_taget_name)
-// console.log(element_value[2013])
+
         // ensure object
         var var_name = json_taget_name + '_object'
         window[var_name] = (window[var_name] === undefined) ? {} : window[var_name]
 
         // ensure value
-// console.log((typeof(element_value) == 'number'))
-// console.log(typeof(element_value))
-// console.log(element_value[volume_type])
         window[var_name][volume_type] = (typeof(element_value) == 'number') ? element_value : (typeof(element_value) == 'object') ? element_value[volume_type] : 0
-// console.log(JSON.stringify(window[var_name]))
 
+        if (typeof(window[var_name][volume_type]) == 'undefined') {
+            window[var_name][volume_type] = 0   
+        }
         return window[var_name][volume_type]
     }
 

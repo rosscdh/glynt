@@ -84,3 +84,9 @@ Remember to remove invalid xml return characters using vim:
 ## EC2 Account signin
 
 ```https://562971026743.signin.aws.amazon.com/console/ec2```
+
+
+## Postgres Backup and Restore
+
+    sudo -u postgres -s pg_dump --no-owner --no-acl -Fc lawpal_prelaunch > lawpal_prelaunch.bak
+    pg_restore -U rosscdh -h localhost -d lawpal_prelaunch -Fc lawpal_prelaunch.bak
