@@ -9,8 +9,9 @@ from optparse import make_option
 
 from social_auth.models import UserSocialAuth
 
+from glynt.apps.graph.services import LinkedinConnectionService, AngelConnectionService
 from glynt.apps.graph.services import LinkedInProcessConnectionService, AngelProcessConnectionService
-from glynt.apps.graph.services import LinkedinConnectionService, AngelConnectionService, FullContactConnectionService
+
 
 import json
 from urlparse import parse_qs
@@ -50,8 +51,6 @@ class Command(BaseCommand):
             if auth.provider == 'linkedin':
                 self.linkedin(auth)
             elif auth.provider == 'angel':
-                self.angel(auth)
-            elif auth.provider == 'fullcontact':
                 self.angel(auth)
             else:
                 raise Exception('Unknown Auth Provider %s' % auth.provider)
@@ -117,39 +116,3 @@ class Command(BaseCommand):
                         c = AngelProcessConnectionService(uid=u.get('id'), item=u, user=auth.user)
 
                 complete = bool(current_page >= last_page)
-
-    def fullcontact(self, auth):
-        if auth.provider == 'angel':
-            access_token = auth.extra_data.get('access_token')
-
-            # initial values
-            complete = False
-            current_page = 1
-
-            logger.info('Starting angel contact graph import for %s' % auth)
-
-            # Basic Pagination
-            while not complete:
-                oauth_client = FullContactConnectionService(access_token=access_token, email=auth.email, page=current_page)
-                resp, content = oauth_client.request()
-
-                # decode the json
-                content = json.loads(content)
-
-                # get the page info
-                current_page = int(content.get('page', 1))
-                last_page = int(content.get('last_page', 1))
-                logger.info('page %d or %d for angel auth: %s' % (last_page, current_page, auth,))
-
-                contacts = content.get('users', [])
-                logger.info('AngelList in contacts:%d for %s '%(len(contacts), auth.user.username,))
-                logger.debug('AngelList in response:%s for %s '%(resp, auth.user.username,))
-                for u in contacts:
-                    if u.get('id', None) is not None:
-                        c = AngelProcessConnectionService(uid=u.get('id'), item=u, user=auth.user)
-
-                complete = bool(current_page >= last_page)
-
-
-    def twitter(self):
-        pass
