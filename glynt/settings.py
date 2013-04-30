@@ -31,6 +31,9 @@ NOTICEGROUP_EMAIL = (
     ("LawPal Tech", 'tech@lawpal.com'),
 )
 
+DEFAULT_FROM_EMAIL = 'noreply@localhost'
+SERVER_EMAIL = 'glynt@localhost'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -94,8 +97,10 @@ SECRET_KEY = 'i6=)1=4in#zyp&amp;g)^j2nl1abaeu)@2)^$ox5w7ac*uhml!uy-5'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
+    ('django.template.loaders.cached.Loader', (
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader',
+    )),
 )
 
 MIDDLEWARE_CLASSES = (
@@ -235,6 +240,8 @@ HELPER_APPS = (
     'clear_cache',
     # Celery Tasks
     'djcelery',
+    # User switcher
+    'debug_toolbar_user_panel',
 )
 
 # Handle south and its breaking tests
@@ -313,11 +320,13 @@ ANGEL_CLIENT_ID = '00342c269e46c6059ab76013bb74ed44'
 ANGEL_CLIENT_SECRET = '0f7ca41e548dcc04357984e5ceebfa26'
 ANGEL_AUTH_EXTRA_ARGUMENTS = {'scope': 'email'}
 
+FULLCONTACT_API_KEY = '7280036b99dd362e'
+
 TWITTER_CONSUMER_KEY = 'q4iigBXEJj7OBuIYHVF99g'
 TWITTER_CONSUMER_SECRET = 'Ka9XGTeRlu1v7XRs2GSdK43Sd0l4j0eXXE2gI4iXd8E'
 
 SOCIAL_AUTH_SLUGIFY_USERNAMES = True
-SOCIAL_AUTH_UUID_LENGTH = 0
+SOCIAL_AUTH_UUID_LENGTH = 3 # greater than 0 otehrwise it defaults to 3
 SOCIAL_AUTH_BACKEND_ERROR_URL = '/'
 SOCIAL_AUTH_PROTECTED_USER_FIELDS = ('first_name', 'last_name', 'full_name', 'email',)
 SOCIAL_AUTH_PIPELINE = (
@@ -366,6 +375,18 @@ if DEBUG:
 
 
 INTERNAL_IPS = ('127.0.0.1',)
+DEBUG_TOOLBAR_PANELS = (
+    'debug_toolbar.panels.version.VersionDebugPanel',
+    'debug_toolbar.panels.timer.TimerDebugPanel',
+    'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
+    'debug_toolbar.panels.headers.HeaderDebugPanel',
+    'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
+    'debug_toolbar.panels.template.TemplateDebugPanel',
+    'debug_toolbar.panels.sql.SQLDebugPanel',
+    'debug_toolbar.panels.signals.SignalDebugPanel',
+    'debug_toolbar.panels.logger.LoggingPanel',
+    'debug_toolbar_user_panel.panels.UserPanel',
+)
 
 # Custom test runner for this project
 TEST_RUNNER = 'glynt.test_runner.GlyntAppTestRunner'
@@ -427,13 +448,6 @@ NO_SIG_IMAGE = os.path.join(STATIC_ROOT, 'signature/no_sig.png'),
 TEMPLATED_EMAIL_BACKEND = 'templated_email.backends.vanilla_django.TemplateBackend'
 TEMPLATED_EMAIL_TEMPLATE_DIR = 'email/'
 TEMPLATED_EMAIL_FILE_EXTENSION = 'email'
-
-
-# Broker for Celery
-# Currently using CloudAMQP by Heroku
-#BROKER_URL = 'amqp://gxdzjcxo:sMKG0qU4bJlUWmRMkWKuArtPQiY3m84G@tiger.cloudamqp.com/gxdzjcxo'
-BROKER_URL = 'amqp://root:testlocalhost/dev_lawpal'
-BROKER_POOL_LIMIT = 1
 
 HELLOSIGN_AUTH = ("", "")
 

@@ -14,6 +14,9 @@ import logging
 logger = logging.getLogger('django.request')
 
 
+site_email = settings.DEFAULT_FROM_EMAIL
+
+
 @task()
 def send_signature_invite_email(**kwargs):
   """
@@ -23,7 +26,6 @@ def send_signature_invite_email(**kwargs):
   # process email
   document = kwargs['document']
   key_hash = kwargs['key_hash']
-  admin_name, admin_email = settings.ADMINS[0]
 
   to_name, to_email = (kwargs.get('to_name', 'No Name'), kwargs.get('to_email', 'noone@lawpal.com'),)
   invited_by_pk, invited_by_name, invited_by_email = (kwargs.get('invited_by_pk', None), kwargs.get('invited_by_name','No Invited By'), kwargs.get('invited_by_email','noinvitedby@lawpal.com'),)
@@ -39,7 +41,7 @@ def send_signature_invite_email(**kwargs):
   send_templated_mail(
           template_name = 'invite_to_sign',
           template_prefix="sign/email/",
-          from_email = admin_email,
+          from_email = site_email,
           recipient_list = [to_email],
           context = kwargs
   )
@@ -57,7 +59,6 @@ def send_signature_acquired_email(**kwargs):
   # process email
   document = kwargs['document']
   key_hash = kwargs['key_hash']
-  admin_name, admin_email = settings.ADMINS[0]
   to_name, to_email = (kwargs['to_name'], kwargs['to_email'],)
   invited_by_pk, invited_by_name, invited_by_email = (kwargs['invited_by_pk'], kwargs['invited_by_name'], kwargs['invited_by_email'],)
   kwargs['from_name'] = invited_by_name
@@ -71,7 +72,7 @@ def send_signature_acquired_email(**kwargs):
   send_templated_mail(
           template_name = 'signature_acquired',
           template_prefix="sign/email/",
-          from_email = admin_email,
+          from_email = site_email,
           recipient_list = [invited_by_email],
           context = kwargs
   )

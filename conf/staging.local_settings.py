@@ -12,11 +12,6 @@ COMPRESS_OFFLINE = False
 TEMPLATE_DEBUG = DEBUG
 
 
-# Heroku - CloudAMQP
-BROKER_URL = 'amqp://gqhezwgc:1JylV9VKTXnlA9iuy9WFqIOqbl4yTmQa@tiger.cloudamqp.com/gqhezwgc'
-BROKER_POOL_LIMIT = 1
-
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -76,6 +71,10 @@ ALLOWED_HOSTS = ['dev.lawpal.com']
 RAVEN_CONFIG = {
     'dsn': 'https://b5a6429d03e2418cbe71cd5a4c9faca6:ddabb51af47546d1ac0e63cb453797ba@app.getsentry.com/6287',
 }
+
+# Heroku - CloudAMQP
+BROKER_URL = 'amqp://gxdzjcxo:sMKG0qU4bJlUWmRMkWKuArtPQiY3m84G@tiger.cloudamqp.com/gxdzjcxo'
+BROKER_POOL_LIMIT = 1
 
 SPLUNKSTORM_ENDPOINT = 'logs2.splunkstorm.com'
 SPLUNKSTORM_PORT = 20824

@@ -1,20 +1,66 @@
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
+from django.views.generic import UpdateView
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
-from django.views.generic.detail import BaseDetailView
 from django.http import HttpResponse, Http404
+from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.middleware.csrf import get_token
 from django.core.urlresolvers import reverse
 
+from django.contrib.auth.models import User
+
 from userena import signals as userena_signals
 
 from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
-from forms import SignupForm, AuthenticationForm
+from forms import ConfirmLoginDetailsForm, SignupForm, AuthenticationForm
 
 import logging
 logger = logging.getLogger('django.request')
+
+
+class ConfirmLoginDetailsView(UpdateView):
+    model = User
+    slug_field = 'username'
+    template_name = 'client/confirm_login_details.html'
+    form_class = ConfirmLoginDetailsForm
+
+    def get_success_url(self):
+        return reverse('public:homepage')
+
+    def get_object(self, queryset=None):
+        slug = self.kwargs.get(self.slug_url_kwarg, None)
+        slug_field = self.get_slug_field()
+        queryset = User.objects.filter(**{slug_field: slug})
+        try:
+            # Get the single item from the filtered queryset
+            obj = queryset.get()
+        except ObjectDoesNotExist:
+            raise Http404(_("No %(verbose_name)s found matching the query") %
+                          {'verbose_name': queryset.model._meta.verbose_name})
+        return obj
+
+    def get_initial(self):
+        user = self.request.user
+        return {
+            'username': user.username,
+            'email': user.email,
+            'password': user.password,
+        }
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+
+        if form.is_valid():
+            messages.info(request, _('Welcome, you have successfully signed up.'))
+            form.save()
+            logger.info('User %s has confirmed their account' % request.user)
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
 
 class SignupView(FormView):

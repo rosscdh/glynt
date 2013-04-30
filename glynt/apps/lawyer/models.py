@@ -25,7 +25,7 @@ class Lawyer(models.Model):
     summary = models.CharField(max_length=255)
     bio = models.TextField()
     data = JSONField(default={})
-    photo = models.ImageField(upload_to='lawyer')
+    photo = models.ImageField(upload_to='lawyer', blank=True)
 
     def __unicode__(self):
         return u'%s (%s)' % (self.user.username, self.user.email,)
