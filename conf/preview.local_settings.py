@@ -75,7 +75,7 @@ EMAIL_HOST_USER = 'lawpal'
 EMAIL_HOST_PASSWORD = '0113633alex'
 # EMAIL_PORT = 587
 # EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'founders@preview.lawpal.com'
+DEFAULT_FROM_EMAIL = 'noreply@lawpal.com'
 SERVER_EMAIL = 'glynt@preview.lawpal.com'
 
 

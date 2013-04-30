@@ -9,8 +9,9 @@ from optparse import make_option
 
 from social_auth.models import UserSocialAuth
 
-from glynt.apps.graph.services import LinkedInProcessConnectionService, AngelProcessConnectionService
 from glynt.apps.graph.services import LinkedinConnectionService, AngelConnectionService
+from glynt.apps.graph.services import LinkedInProcessConnectionService, AngelProcessConnectionService
+
 
 import json
 from urlparse import parse_qs
@@ -115,7 +116,3 @@ class Command(BaseCommand):
                         c = AngelProcessConnectionService(uid=u.get('id'), item=u, user=auth.user)
 
                 complete = bool(current_page >= last_page)
-
-
-    def twitter(self):
-        pass

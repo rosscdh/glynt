@@ -32,7 +32,6 @@ API_URLS = {
 
 @parsleyfy
 class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
-    cookie_name = 'lawyer_profile_photo-%d'
 
     ROLES = [display_name for name,display_name in Lawyer.LAWYER_ROLES.get_choices()]
 
@@ -41,7 +40,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     first_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'John'}))
     last_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'Sonsini'}))
 
-    firm_name = forms.CharField(widget=forms.TextInput(attrs={'data-trigger':'change','class':'typeahead','autocomplete':'off','data-provide':'ajax', 'minLength':'2', 'data-items':4, 'data-source': 'firms'}))
+    firm_name = forms.CharField(widget=forms.TextInput(attrs={'data-trigger':'change','class':'typeahead','autocomplete':'off','data-provide':'ajax', 'minLength':'2', 'data-items':4, 'data-source': 'firms', 'data-filter':'name__istartswith', }))
 
     phone = forms.CharField(help_text="", widget=forms.TextInput(attrs={'data-trigger':'change','placeholder':'+1 415 225 6464', 'title':'Shows on your profile. Include country code.'}))
 
@@ -51,7 +50,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     practice_location_1 = forms.CharField(label="Primary Location", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-large','placeholder':'San Francisco, California','title':'The primary city you operate from','class':'typeahead','autocomplete':'on','data-provide':'ajax', 'minLength':'3', 'data-items':4, 'data-source':'locations', 'data-filter':'name__istartswith', 'autocomplete':'off'}))
     practice_location_2 = forms.CharField(required=False, label="Secondary Location", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-large','placeholder':'London, England','title':'Optional. The secondary city you operate from.','class':'typeahead','autocomplete':'on','data-provide':'ajax', 'minLength':'3', 'data-items':4, 'data-source':'locations', 'data-filter':'name__istartswith','autocomplete':'off'}))
 
-    summary = forms.CharField(label="Short description", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-xxlarge','placeholder':'e.g. Partner at Orrick advising technology companies in Europe','title':'Keep it short, and make it personal.'}))
+    summary = forms.CharField(label="Short description", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-rangelength':'[0,255]','class':'input-xxlarge','placeholder':'e.g. Partner at Orrick advising technology companies in Europe','title':'Keep it short, and make it personal.'}))
     bio = forms.CharField(required=False, widget=forms.Textarea(attrs={'data-trigger':'change','class':'input-xxlarge', 'data-trigger':'keyup', 'data-rangelength':'[0,1024]','placeholder':'A bit more about you.','title':'A bit longer, but still make it personal.'}))
     if_i_wasnt_a_lawyer = forms.CharField(label="If I wasn't a lawyer", required=False, widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-xxlarge','placeholder':'e.g. Astronaut and part-time Pastry Chef','title':'If I wasn\'t a lawyer, I would be a...'}))
 
@@ -65,6 +64,14 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
             }))
     hidden_photo = forms.CharField(required=False, widget=forms.HiddenInput) # transports the id
 
+    twitter = forms.CharField(required=False, label="twitter.com/", help_text="", widget=forms.TextInput(attrs={}))
+
+    websites_input = forms.URLField(required=False, label="Website Address", help_text='Enter the domain name of your public website, if you have one.', widget=forms.TextInput(attrs={}))
+    websites = forms.CharField(required=False, widget=forms.HiddenInput)
+
+    bar_membership_input = forms.CharField(required=False, label="Bar Location", help_text='Enter the location of your bar memberships.', widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-large','placeholder':'San Francisco, California','title':'The primary city you operate from','class':'typeahead','autocomplete':'on','data-provide':'ajax', 'minLength':'3', 'data-items':4, 'data-source':'locations', 'data-filter':'name__istartswith', 'autocomplete':'off'}))
+    bar_membership = forms.CharField(required=False, widget=forms.HiddenInput)
+
     startups_advised_input = forms.URLField(required=False, label="Startups Advised", help_text='Enter the domain name of any startups you have advised and press "Add". This helps similar startups find you.', widget=forms.TextInput(attrs={'data-trigger':'change','placeholder':'e.g. Instagram.com', 'class':'typeahead','autocomplete':'on','data-provide':'ajax', 'data-items':4, 'data-source': 'startups', 'data-filter':'name__istartswith'}))
     startups_advised = forms.CharField(required=False, widget=forms.HiddenInput)
 
@@ -74,13 +81,14 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     volume_ip = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
     volume_other = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
 
+    volume_by_year = forms.CharField(required=False, widget=forms.HiddenInput)
+
     agree_tandc = forms.BooleanField(label='', widget=forms.CheckboxInput)
 
     def __init__(self, *args, **kwargs):
         """ get request object and user """
         self.request = kwargs.pop('request', None)
         self.user = self.request.user
-        self.cookie_name = self.cookie_name % self.user.pk
         self.data_source_urls = API_URLS
         super(LawyerProfileSetupForm, self).__init__(*args, **kwargs)
         self.inject_email_pass_objects()
@@ -93,8 +101,6 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
             self.fields['email'] = forms.EmailField(label="Firm email", help_text="", widget=forms.TextInput(attrs={'data-trigger':'change','placeholder':'john@lawpal.com'}))
             self.fields['password'] = forms.CharField(label="Password", help_text="", widget=forms.PasswordInput(attrs={'data-trigger':'change'}))
             self.fields['password_confirm'] = forms.CharField(label="Confirm password", help_text="", widget=forms.PasswordInput(attrs={'data-trigger':'change', 'minLength':'5', 'data-equalto':'#id_password'}))
-
-
 
     def clean_email(self):
         email = self.cleaned_data['email']
@@ -112,14 +118,20 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
         hidden_photo = self.cleaned_data.get('hidden_photo', None)
         return int(hidden_photo) if hidden_photo else None
 
-    def delete_cookie(self):
+    def delete_cookie(self, cookie_name):
+        if self.request.COOKIES.get(cookie_name, None) is not None:
+            del(self.request.COOKIES[cookie_name])
+
+    def delete_cookies(self):
         """ Remove the lawyer_profile cookie set when photo is uploaded """
-        if self.request.COOKIES.get(self.cookie_name, None) is not None:
-            del(self.request.COOKIES[self.cookie_name])
+        self.delete_cookie('lawyer_profile_photo-%d' % self.user.pk)
         # startup list
-        startup_cookie_name = 'startup_list-%d' % self.user.pk
-        if self.request.COOKIES.get(startup_cookie_name, None) is not None:
-            del(self.request.COOKIES[startup_cookie_name])
+        self.delete_cookie('startup_list-%d' % self.user.pk)
+        # websites list
+        self.delete_cookie('website_list-%d' % self.user.pk)
+        # bar_membership list
+        self.delete_cookie('bar_membership-%d' % self.user.pk)
+        
 
     def save(self, commit=True):
         logger.info('Ensuring the LawyerProfile Exists')
@@ -140,7 +152,8 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
         lawyer_service = EnsureLawyerService(user=self.user, firm_name=firm_name, offices=offices, form=self, **data)
         lawyer_service.process()
 
-        self.delete_cookie()
+        self.delete_cookies()
+        # clear the nav cache for the user
         cache.delete(make_template_fragment_key("user", ["mugshot", self.request.user.pk]))
 
         logger.info('Complete: Ensuring the LawyerProfile Exists')

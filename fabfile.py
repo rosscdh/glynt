@@ -1,6 +1,7 @@
 from __future__ import with_statement
 from fabric.api import *
 from fabric.contrib.console import confirm
+from fabric.context_managers import settings
 from fabric.contrib import files
 
 import os
@@ -22,9 +23,9 @@ env.local_user = getpass.getuser()
 
 
 @task
-def filestore_prod():
+def prod_celery_workers():
     env.environment = 'production'
-    env.environment_class = 'filesystem'
+    env.environment_class = 'celery'
     env.local_project_path = os.path.dirname(os.path.realpath(__file__))
     env.remote_project_path = None
     env.deploy_archive_path = None
@@ -36,9 +37,34 @@ def filestore_prod():
 
     # change from the default user to 'vagrant'
     env.user = 'ubuntu'
-    env.application_user = None
+    env.application_user = 'app'
     # connect to the port-forwarded ssh
     env.hosts = ['ec2-54-241-224-100.us-west-1.compute.amazonaws.com']
+    env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
+
+    env.start_service = None
+    env.stop_service = None
+    env.light_restart = None
+
+
+@task
+def prod_db():
+    env.environment = 'production'
+    env.environment_class = 'db'
+    env.local_project_path = os.path.dirname(os.path.realpath(__file__))
+    env.remote_project_path = None
+    env.deploy_archive_path = None
+    env.virtualenv_path = None
+
+    env.newrelic_api_token = None
+    env.newrelic_app_name = None
+    env.newrelic_application_id = None
+
+    # change from the default user to 'vagrant'
+    env.user = 'ubuntu'
+    env.application_user = 'app'
+    # connect to the port-forwarded ssh
+    env.hosts = ['ec2-50-18-97-221.us-west-1.compute.amazonaws.com']
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
 
     env.start_service = None
@@ -65,6 +91,9 @@ def production():
     env.application_user = 'app'
     # connect to the port-forwarded ssh
     env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com']
+    env.celery_hosts = ['ec2-54-241-224-100.us-west-1.compute.amazonaws.com']
+    env.hosts += env.celery_hosts
+
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
 
     env.start_service = 'supervisorctl start uwsgi'
@@ -90,6 +119,9 @@ def preview():
     env.application_user = 'app'
     # connect to the port-forwarded ssh
     env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com']
+    env.celery_hosts = ['ec2-54-241-224-100.us-west-1.compute.amazonaws.com']
+    env.hosts += env.celery_hosts
+
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
 
     env.start_service = 'supervisorctl start uwsgi'
@@ -148,6 +180,20 @@ def get_sha1():
   return local('git rev-parse --short --verify HEAD', capture=True)
 
 @task
+def db_backup(db='lawpal_prelaunch'):
+    db_backup_name = '%s.bak' % db
+    sudo('pg_dump --no-owner --no-acl -Fc %s > /tmp/%s' % (db, db_backup_name,), user='postgres')
+    local('scp -i %s %s@%s:/tmp/%s /tmp/' % (env.key_filename, env.user, env.host, db_backup_name,))
+
+@task
+def db_local_restore(db='lawpal_prelaunch'):
+    with settings(warn_only=True): # only warning as we will often have errors importing
+        db_backup_name = '%s.bak' % db
+        local('echo "DROP DATABASE %s;" | psql -h localhost -U %s' % (db, env.local_user,))
+        local('echo "CREATE DATABASE %s WITH OWNER %s ENCODING \'UTF8\';" | psql -h localhost -U %s' % (db, env.local_user, env.local_user,))
+        local('pg_restore -U %s -h localhost -d %s -Fc /tmp/%s' % (env.local_user, db, db_backup_name,))
+
+@task
 def git_export(branch='master'):
   env.SHA1_FILENAME = get_sha1()
   if not os.path.exists('/tmp/%s.zip' % env.SHA1_FILENAME):
@@ -181,21 +227,15 @@ def supervisord_restart():
 
 @task
 def chores():
-    sudo('aptitude --assume-yes install build-essential python-setuptools python-dev uwsgi-plugin-python libjpeg8 libjpeg62-dev libfreetype6 libfreetype6-dev easy_install nmap htop vim')
+    sudo('aptitude --assume-yes install build-essential python-setuptools python-dev uwsgi-plugin-python libjpeg8 libjpeg62-dev libfreetype6 libfreetype6-dev easy_install nmap htop vim unzip')
     sudo('aptitude --assume-yes install git-core mercurial subversion')
-    sudo('aptitude --assume-yes install libtidy-dev python-psycopg2')
-    #sudo('aptitude --assume-yes install rabbitmq-server')
+    sudo('aptitude --assume-yes install libtidy-dev libpq-dev python-psycopg2')
 
     sudo('easy_install pip')
     sudo('pip install virtualenv virtualenvwrapper pillow')
 
     put('conf/.bash_profile', '~/.bash_profile')
 
-@task
-def filesystem_chores():
-    sudo('aptitude --assume-yes update')
-    sudo('aptitude --assume-yes install build-essential python-setuptools python-dev easy_install nmap htop vim')
-    sudo('aptitude --assume-yes install nfs-kernel-server')
 
 @task
 def nfs_reload():
@@ -349,7 +389,10 @@ def deploy(is_predeploy='False'):
     prepare_deploy()
     execute(do_deploy)
     execute(clean_pyc)
-    #execute(restart_lite)
-    execute(supervisord_restart)
+
+    if env.environment_class == 'webfaction':
+        execute(restart_service)
+    else:
+        execute(supervisord_restart)
     execute(clean_zip)
     execute(newrelic_deploynote)

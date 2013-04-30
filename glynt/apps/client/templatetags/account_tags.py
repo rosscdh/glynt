@@ -32,3 +32,23 @@ def social_button(context, name, img=None, **kwargs):
         'img': img
     })
     return context
+
+
+@register.inclusion_tag('client/partials/social-profiles.html', takes_context=True)
+def social_profiles(context, user, profile_type_id=None):
+    profiles = []
+
+    if user is not None:
+        try:
+            fc = user.fullcontactdata_set.all()[0]
+            profiles = fc.profiles()
+        except:
+            pass
+
+        if profile_type_id is not None:
+            profiles = [p for p in profiles if p.get('typeId', None) == profile_type_id]
+
+    context.update({
+        'social_profiles': profiles
+    })
+    return context

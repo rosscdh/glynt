@@ -17,8 +17,15 @@ class PublicHomepageView(TemplateView):
         else:
             return [self.template_name]
 
+
 class LoggedInRedirectView(RedirectView):
     """ View to handle generic logged in from Oauth Providers """
     def get_redirect_url(self):
-        url = reverse('public:homepage')
+        """ if the user has already signed up and has set a password then continue normally
+        otherwise show them the form """
+        if self.request.user.password == '!':
+            url = reverse('client:confirm_signup', kwargs={'slug': self.request.user.username})
+        else:
+            url = reverse('public:homepage')
+
         return url

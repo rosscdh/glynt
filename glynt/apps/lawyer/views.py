@@ -78,6 +78,7 @@ class LawyerProfileSetupView(FormView):
             'startups_advised': json.dumps(startups_advised),
 
             'photo': lawyer.photo,
+            'twitter': lawyer.data.get('twitter',''),
 
             'agree_tandc': lawyer.data.get('agree_tandc', None),
         }})
@@ -86,5 +87,5 @@ class LawyerProfileSetupView(FormView):
     def form_valid(self, form):
         form.save()
         messages.success(self.request, 'You successfully updated your profile')
-        form.delete_cookie()
+        form.delete_cookies()
         return super(LawyerProfileSetupView, self).form_valid(form=form)

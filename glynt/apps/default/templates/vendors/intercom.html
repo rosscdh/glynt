@@ -5,7 +5,11 @@
     email: "{{ user.email }}",
     // TODO: The current logged in user's sign-up date as a Unix timestamp.
     created_at: "{{ user.date_joined|date:"U" }}",
-    app_id: "xw4ux8lx"
+    app_id: "xw4ux8lx",
+    widget: {
+      activator: '#Intercom',
+      use_counter: true
+    },
   };
 </script>
 

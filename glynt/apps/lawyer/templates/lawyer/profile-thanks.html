@@ -6,6 +6,7 @@
 
 {% block prebody %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/css/theme/lawyer-invite.css">
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/css/theme/social-buttons.css">
 <div id="hero">
 	<div class="container">
 		<!-- starts carousel -->
@@ -21,7 +22,18 @@
 		</div>
 	</div>
 </div>
-<div class="container">
+<div class="">
+	<div class="container recommend">
+		<h2>
+			Recommend other lawyers
+		</h2>
+		<p>
+			LawPal works through referral. Please endorse at least two other colleagues in your firm or another.
+		</p>
+		{% invite_to_lawpal invite_type='lawyer' %}
+	</div>
+</div>
+<div class="container divide">
 	<h2>
 		Connect your existing accounts
 	</h2>
@@ -30,28 +42,6 @@
 	</p>
 	<div class="buttons">
 		{% social_associate social_auth %}
-	</div>
-</div>
-<div class="divide">
-	<div class="container recommend">
-		<h2>
-			Recommend other lawyers
-		</h2>
-		<p>
-			LawPal works through referral. Please endorse at least two other colleagues in your firm or another.
-		</p>
-
-		{% invite_to_lawpal invite_type='lawyer' %}
-
-
-		<!-- <form action="post">
-			<p>
-				<label for="invite-one-name">Invite One</label> <input type="text" id="invite-one-name" placeholder="Full name"> <input type="text" id="invite-one-email" placeholder="Email">
-			</p>
-			<p>
-				<label for="invite-two-name">Invite Two</label> <input type="text" id="invite-two-name" placeholder="Full name"> <input type="text" id="invite-two-email" placeholder="Email">
-			</p><button class="btn btn-secondary left" value="Invite more">Invite more</button> <button class="btn btn-primary right" value="Send Invites" type="submit">Send Invites</button>
-		</form> -->
 	</div>
 </div>
 

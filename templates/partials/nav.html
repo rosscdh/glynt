@@ -13,11 +13,11 @@
             <span class="icon-bar"></span>
         </a>
         <a class="brand" data-section="body" href="/">
-           <img src="{{ STATIC_URL }}img/logo-nav-white.png" title="LawPal"> 
-		   <span class="label">Beta</span>
+           <img src="{{ STATIC_URL }}img/logo-nav-white.png" alt="LawPal"> 
+		   <span class="">Beta</span>
        </a>
-
         <div class="nav-collapse">
+
              <ul class="nav pull-right">
                  {% if request.user.is_authenticated %}
                      {% if PROJECT_ENVIRONMENT != 'prod' %}
@@ -38,11 +38,22 @@
                      </li>
                      {% endcache %}
                  {% else %}
-                     <!-- # Main menu here -->
-                 {% endif %}
-                 
-                 
-             </ul>
+
+				 <li><a id="Intercom" href="mailto:xw4ux8lx@incoming.intercom.io">Support</a></li>
+                 <li class="dropdown">
+                   <a href="#" class="dropdown-toggle" data-toggle="dropdown"> {{request.user.first_name}} {{request.user.last_name}}<b class="caret"></b></a>
+                   <ul class="dropdown-menu">
+                        <!-- <li><a id="user-profile-form" class="" href="{% url 'lawyer:setup_profile' %}">{% trans 'Setup Profile' %}</a></li> -->
+                        <li><a id="user-profile-form" class="" href="{% url 'lawyer:invite' %}">{% trans 'Invite Colleagues' %}</a></li>
+                        <li><a id="user-profile-form" class="" href="{% url 'lawyer:profile' slug=request.user.username %}">{% trans 'Preview Profile' %}</a></li>
+                        <li><a id="user-profile" class="" href="{% url 'userena_profile_detail' username=request.user.username %}">{% trans 'Account' %}</a></li>
+                        <li><a id="user-logout" class="" href="{% url 'logout' %}">{% trans 'Logout' %}</a></li>
+                   </ul>
+                 </li>
+             {% else %}
+				 <li><a href="/">{% trans 'Login' %}</a></li>
+             {% endif %}
+            </ul>                 
         </div>
      </div>
    </div>
