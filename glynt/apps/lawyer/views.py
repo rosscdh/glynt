@@ -101,7 +101,7 @@ class LawyerListView(AjaxListView):
     model = Lawyer
 
     def get_queryset(self):
-        return self.model._default_manager.exclude(user__password='!').filter(user__is_active=True, user__is_superuser=False).prefetch_related('user', 'firm_lawyers')
+        return self.model._default_manager.exclude(user__password='!').select_related().filter(user__is_active=True, user__is_superuser=False).prefetch_related('user', 'firm_lawyers')
     def get_context_data(self, **kwargs):
         super(LawyerListView, self).get_context_data(**kwargs)
         import pdb
