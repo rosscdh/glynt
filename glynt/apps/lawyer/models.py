@@ -65,7 +65,10 @@ class Lawyer(models.Model):
 
     @property
     def startups_advised(self):
-        return self.data.get('startups_advised', [])
+        try:
+            return self.data.get('startups_advised', [])
+        except:
+            return []
 
     @property
     def total_deals(self):
