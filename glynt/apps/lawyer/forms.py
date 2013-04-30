@@ -102,8 +102,6 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
             self.fields['password'] = forms.CharField(label="Password", help_text="", widget=forms.PasswordInput(attrs={'data-trigger':'change'}))
             self.fields['password_confirm'] = forms.CharField(label="Confirm password", help_text="", widget=forms.PasswordInput(attrs={'data-trigger':'change', 'minLength':'5', 'data-equalto':'#id_password'}))
 
-
-
     def clean_email(self):
         email = self.cleaned_data['email']
         try:
