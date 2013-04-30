@@ -86,6 +86,7 @@ class GraphConnection(models.Model):
     ))
     user = models.OneToOneField(User, null=True, blank=True)
     provider = models.IntegerField(choices=PROVIDERS.get_choices(), db_index=True)
+    provider_uid = models.CharField(max_length=128, db_index=True)
     full_name = models.CharField(max_length=128)
     extra_data = JSONField(blank=True, null=True)
     users = models.ManyToManyField(User, related_name='connected_users')
@@ -133,7 +134,7 @@ class LawpalBaseConnection(object):
         provider_id = GraphConnection.PROVIDERS.get_value_by_name(self.provider)
 
         # get or create the graph object
-        graph_obj, is_new = GraphConnection.objects.get_or_create(full_name=self.full_name, provider=provider_id)
+        graph_obj, is_new = GraphConnection.objects.get_or_create(full_name=self.full_name, provider=provider_id, provider_uid=self.uid)
         # update json_data
         graph_obj.extra_data = self.extra_data
         graph_obj.save()
