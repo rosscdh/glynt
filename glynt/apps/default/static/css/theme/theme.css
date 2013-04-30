@@ -213,7 +213,11 @@ div#messages ul {
 	width:22px;
 	height:22px;
 }
-
+.navbar span {
+font-size: 11px;
+color:#ccc;
+text-transform: uppercase;
+}
 
 #hero {
 	padding-top: 65px;
@@ -226,9 +230,6 @@ div#messages ul {
 #hero h1 {
 	font-size:44px;
 	line-height:60px;
-}
-#hero a {
-	color:white;
 }
  /* 2.0 homepage */
  

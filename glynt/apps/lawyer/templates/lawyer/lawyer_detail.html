@@ -15,26 +15,24 @@
 <div id="hero">
 	<div class="container">
 		<!-- starts carousel -->
-		<div class="row animated fadeInRight">
-			
-			<div class="span6">
+		<div class="row animated fadeInRight profile-details">
+			<div class="span5">
 				<div class="avatar">
 					<img src="{% if object.photo %}{{ MEDIA_URL }}{{ object.photo }}{% else %}{{ object.user.profile.get_mugshot_url|default:default_profile_image }}{% endif %}" alt="{{ object.user.get_full_name|default:object.user.username }}" />
 				</div>
 			</div>
-			<div class="span6">
+			<div class="span7">
 				<h1>{{ object.user.get_full_name|default:object.user.username }}</h1>
 				<h3>{{ object.summary }}</h3>
 			</div>
 		</div>
-	
 	</div>
 	<div id="buttons">
 		<div class="container">
 			<div class="row12">
 				{% if user.username == object.user.username %}
-					<a href="{% url 'lawyer:setup_profile' %}" class="btn">Edit profile</a> 
-					<a href="{% url 'lawyer:invite' %}" class="btn btn-primary">Invite Lawyers</a>
+					<a href="{% url 'lawyer:setup_profile' %}" class="btn">Edit profile</a>  
+					<a href="{% url 'lawyer:invite' %}" class="btn btn-primary">Invite Lawyers</a> 
 					{% if object.summary %} 
 					    <script>
 						  $(document).ready(function () {
@@ -42,6 +40,9 @@
 					   	 });
 						</script>
 					{% endif %}
+					<a href="#comingSoonModal" class="btn right" title="Message" data-toggle="modal"><i class="icon-envelope"></i> Message</a>
+					<a href="#comingSoonModal" class="btn right" title="Endorse" data-toggle="modal"><i class="icon-star"></i> Endorse</a>
+					<a href="#comingSoonModal" class="btn right" title="Engage"  data-toggle="modal"><i class="icon-play"></i> Engage</a>
 				{% endif %}
 			</div>
 		</div>
@@ -50,7 +51,7 @@
 <div class="container profile">
 	<div class="row">
 		<div class="span8">	
-			<h2>About Me</h2>
+			<h2>About</h2>
 			<div>
 				<p>{{ object.bio|default:"<div class=\"no-data\">No biography yet.</div>"|linebreaksbr }}</p>
 			</div>
@@ -84,7 +85,10 @@
 					<!-- <li class="friends"><img src="/static/img/app/small-avatar.jpg" alt="Avatar" /> Benjamin Ling is a mutual contact</li> -->
 				</ul>				
 			</div>
-			
+			<div class="other-profiles">
+				<h5>Other Profiles</h5>
+				{% social_profiles object.user %}
+			</div>
 		</div>	
 		<div class="span8">
 				<h2>Transaction Snapshot</h2>
@@ -117,10 +121,6 @@
 
 	<div class="divide">
 	    <div class=" buttons">
-			<a href="#comingSoonModal" class="btn btn-large btn-primary" title="Message Leilat" data-toggle="modal">Message</a>
-			<a href="#comingSoonModal" class="btn btn-large btn-secondary" title="Endorse Leila" data-toggle="modal">Endorse</a>
-			<a href="#comingSoonModal" class="btn btn-large btn-tertiary" title="Engage Leila"  data-toggle="modal">Engage</a>
- 
 			<!-- Modal -->
 			<div id="comingSoonModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			  <div class="modal-header">
@@ -138,10 +138,6 @@
 		
 		</div>
 	</div>
-
-{% social_profiles object.user %}
-
-{% social_profiles object.user 'facebook' %}
 
 <!-- 	<div class="divide">
 		<div class="startups">
@@ -172,56 +168,56 @@ $(document).ready(function () {
 	var ctx0 = $("#dealChart0").get(0).getContext("2d");
 	var ctx1 = $("#dealChart1").get(0).getContext("2d");
 
-	var chartnumbers =
-	{ 
-	    "incorp":[{{ object.data.volume_incorp_setup|jsonify }}], 
-	    "seed": [{{ object.data.volume_seed_financing|jsonify }}], 
-	    "seriesa":[{{ object.data.volume_series_a|jsonify }}], 	
-	    "ip": [{{ object.data.volume_ip|jsonify }}],
-	    "other":[{{ object.data.volume_other|jsonify }}] 	 	
-	}
+	// var chartnumbers =
+	// { 
+	//     "incorp":[{{ object.data.volume_incorp_setup|jsonify }}], 
+	//     "seed": [{{ object.data.volume_seed_financing|jsonify }}], 
+	//     "seriesa":[{{ object.data.volume_series_a|jsonify }}], 	
+	//     "ip": [{{ object.data.volume_ip|jsonify }}],
+	//     "other":[{{ object.data.volume_other|jsonify }}] 	 	
+	// }
 
-	getByYear = function() {
-		var total = {};
-		$.each(chartnumbers, function(i,e){
-			$.each(e[0], function(y,v){
-				// console.log(v)
-				total[y] = (total[y] === undefined)? 0 : total[y] += parseInt(v) ;
-			})
-		})
-		var ret_val = []
-		$.each(total, function(year,val){
-			ret_val.push(val)
-		})
-		return ret_val
-	}
+	// getByYear = function() {
+	// 	var total = {};
+	// 	$.each(chartnumbers, function(i,e){
+	// 		$.each(e[0], function(y,v){
+	// 			// console.log(v)
+	// 			total[y] = (total[y] === undefined)? 0 : total[y] += parseInt(v) ;
+	// 		})
+	// 	})
+	// 	var ret_val = []
+	// 	$.each(total, function(year,val){
+	// 		ret_val.push(val)
+	// 	})
+	// 	return ret_val
+	// }
 
 
-	getByType = function() {
-		var total = {};
-		$.each(chartnumbers, function(i,e){
-			total[i] = (total[i] === undefined)? 0 : total[i];
-			$.each(e[0], function(y,v){
-				total[i] += parseInt(v)
-			})
-		})
-		return total
-	}
+	// getByType = function() {
+	// 	var total = {};
+	// 	$.each(chartnumbers, function(i,e){
+	// 		total[i] = (total[i] === undefined)? 0 : total[i];
+	// 		$.each(e[0], function(y,v){
+	// 			total[i] += parseInt(v)
+	// 		})
+	// 	})
+	// 	return total
+	// }
 
-	linedefaults = {
-		//Boolean - Whether to show labels on the scale	
-		scaleShowLabels : true,
-	}
+	// linedefaults = {
+	// 	//Boolean - Whether to show labels on the scale	
+	// 	scaleShowLabels : true,
+	// }
 
-	hasValidData = function(){
-			var total = 0;
-			$.each(getByYear(), function(i){
-				total += parseInt(i)
-			})
-			return total
-		}
+	// hasValidData = function(){
+	// 		var total = 0;
+	// 		$.each(getByYear(), function(i){
+	// 			total += parseInt(i)
+	// 		})
+	// 		return total
+	// 	}
 
-	if(hasValidData() > 0) {
+	// if(1 > 0) {
 		new Chart(ctx0).Line({
 			labels : ["2010","2011","2012"],
 			datasets : [{
@@ -236,27 +232,27 @@ $(document).ready(function () {
 
 		new Chart(ctx1).Doughnut([
 			{
-				value: getByType().seriesa,
+				value: {{ object.data.volume_series_a|jsonify }},
 				color:"#F38630"
 			},
 			{
-				value: getByType().seed,
+				value: {{ object.data.volume_seed_financing|jsonify }},
 				color : "#6bdb7e"
 			},
 			{
-				value : getByType().incorp,
+				value : {{ object.data.volume_incorp_setup|jsonify }},
 				color : "#69D2E7",
 			},
 			{
-				value: getByType().other,
+				value: {{ object.data.volume_other|jsonify }},
 				color : "#6ndn7e"
 			},
 			{
-				value : getByType().ip,
+				value : {{ object.data.volume_ip|jsonify }},
 				color : "#f88172"
 			}			
 		]);
-	}
+	// }
 });
 
 
