@@ -18,7 +18,7 @@
 		<div class="row animated fadeInRight profile-details">
 			<div class="span5">
 				<div class="avatar">
-					<img src="{% if object.photo %}{{ MEDIA_URL }}{{ object.photo }}{% else %}{{ object.user.profile.get_mugshot_url|default:default_profile_image }}{% endif %}" alt="{{ object.user.get_full_name|default:object.user.username }}" />
+					<img src="{{ object.profile_photo }}" alt="{{ object.user.get_full_name|default:object.user.username }}" />
 				</div>
 			</div>
 			<div class="span7">
@@ -36,7 +36,7 @@
 					{% if object.summary %} 
 					    <script>
 						  $(document).ready(function () {
-					     	  Intercom('update', {"Lawyer Profile": "Complete", "Firm": "{{firm}}"});
+					     	  Intercom('update', {"Lawyer Profile": "Complete", "Firm": "{{ firm }}"});
 					   	 });
 						</script>
 					{% endif %}

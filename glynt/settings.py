@@ -144,6 +144,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "glynt.context_processors.default_profile_image",
     "social_auth.context_processors.social_auth_by_type_backends",
     "social_auth.context_processors.social_auth_by_name_backends",
+    "django.core.context_processors.request",
 )
 
 TEMPLATE_DIRS = (
@@ -238,6 +239,8 @@ HELPER_APPS = (
     'parsley',
     # clear-cache
     'clear_cache',
+    # engless pagination
+    'endless_pagination',
     # Celery Tasks
     'djcelery',
     # User switcher
@@ -287,7 +290,8 @@ USERENA_ACTIVATION_REDIRECT_URL = '/'
 USERENA_SIGNIN_REDIRECT_URL = '/'
 USERENA_WITHOUT_USERNAMES = True  # step userarena forcing user to provide username
 USERENA_HIDE_EMAIL = True
-
+USERENA_MUGSHOT_GRAVATAR = False
+USERENA_MUGSHOT_DEFAULT = STATIC_URL +'img/default_avatar.png'
 
 DEFAULT_PROFILE_IMAGE = '/img/default_avatar.png'
 

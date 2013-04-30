@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -33,7 +34,7 @@ class Lawyer(models.Model):
     @property
     def primary_firm(self):
         try:
-            return self.firm_lawyers.prefetch_related().all()[0]
+            return self.firm_lawyers.all().prefetch_related()[0]
         except IndexError:
             return None
 
@@ -42,6 +43,18 @@ class Lawyer(models.Model):
             primary_firm.name
         except:
             return None
+
+    @property
+    def position(self):
+        return self.LAWYER_ROLES.get_desc_by_value(self.role)
+
+    @property
+    def profile_photo(self):
+        p = getattr(self, 'photo', None)
+        try:
+            return p.url()
+        except ValueError:
+            return self.user.profile.get_mugshot_url()
 
     def username(self):
         return self.user.username
@@ -61,7 +74,7 @@ class Lawyer(models.Model):
             locations.append(self.data.get('practice_location_1'))
         if self.data.get('practice_location_2', None) is not None:
             locations.append(self.data.get('practice_location_2'))
-        return locations
+        return [l for l in locations if l.strip() != '']
         
     def total_deals(self):
         total = self.data.get('volume_incorp_setup')

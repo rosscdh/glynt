@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Marketplace{% endblock %}
+{% block bodyclass %}lawyer-welcome{% endblock %}
+
+
+{% block prebody %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/theme/lawyer-listing.css" type="text/css">
+
+    
+<div id="hero">
+	<div class="container">
+		<!-- starts carousel -->
+		<div class="row animated fadeInDown">
+			<div class="span12">
+				<h1>Find the firm to help the Acme Inc Team</h1>
+			</div>
+		</div>
+		<div class="dock">
+			<ul>
+				<li class="dock-packages"><a href="#" title="Packages">Packages</a></li>
+				<li class="dock-firms"><a href="#" title="Firms">Firms</a></li>
+				<li class="dock-lawyers dock-active"><a href="#" title="Lawyers">Lawyers</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block body %}
+
+<div class="container filter">
+	<div class="checkboxes">
+		<h3>Sort by</h3>
+		<strong>Showing: </strong>
+		<input id="endorsements" type="checkbox" value="Endorsements" checked /><label for="endorsements">Endorsements</label>
+		<input id="connections" type="checkbox" value="Connections" checked /><label for="Connections">Connections</label>
+		<input id="activity" type="checkbox" value="Activity" checked /><label for="activity">Activity</label>
+	</div>
+	<div class="location">
+		<label for="location"><h3>Filter by location</h3></label>
+		<select>
+			<option value="California, USA">California, USA</option>
+			<option value="San Francisco, USA">San Francisco, USA</option>
+			<option value="United Kingdom">United Kingdom</option>
+		</select>
+	</div>
+</div>
+
+
+<div class="container">
+
+	{% include page_template %}
+
+</div>
+
+
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script src="{{ STATIC_URL }}endless_pagination/js/endless-pagination.js"></script>
+    <script>
+        $.endlessPaginate({
+            paginateOnScroll: true
+            ,paginateOnScrollMargin: 60
+            ,paginateOnScrollChunkSize: 5
+        });
+    </script>
+{% endblock %}
