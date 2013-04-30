@@ -4,6 +4,9 @@ from south.db import db
 from south.v2 import DataMigration
 from django.db import models
 
+from collections import Counter
+
+
 def ensure_int(input):
     if type(input) is list:
         for i,sub in enumerate(input):
@@ -58,6 +61,9 @@ class Migration(DataMigration):
             l.data['volume_series_a'] = avg_by_year(volume_series_a)
             l.data['volume_ip'] = avg_by_year(volume_ip)
             l.data['volume_other'] = avg_by_year(volume_other)
+
+            l.data['volume_by_year'] = total(input)
+
             l.save(update_fields=['data'])
 
     def backwards(self, orm):
