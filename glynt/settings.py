@@ -48,16 +48,6 @@ DATABASES = {
 if IS_TESTING:
     DATABASES['default']['TEST_NAME'] = '/tmp/testserver.db'
 
-NEO4J_DATABASES = {
-    'default' : {
-        'HOST':'localhost',
-        'PORT':7474,
-        'ENDPOINT':'/db/data'
-    }
-}
-
-DATABASE_ROUTERS = ['neo4django.utils.Neo4djangoIntegrationRouter']
-
 TIME_ZONE = 'Europe/London'
 
 # Language code for this installation. All choices can be found here:
