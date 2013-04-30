@@ -28,13 +28,8 @@ def parse_startups(startups):
 
 @register.inclusion_tag('lawyer/partials/startups_advised.html', takes_context=True)
 def startups_advised(context):
-    lawyer = context.get('object', None)
-    startups_advised = lawyer.data.get('startups_advised', '[]')
-    startups_advised = parse_startups(json.loads(startups_advised)) if type(startups_advised) is str else parse_startups(startups_advised)
-
-    return {
-        'lawyer': lawyer,
-        'user': context.get('user', None),
-        'startups': startups_advised,
-        'STATIC_URL': context.get('STATIC_URL', None),
-    }
+    context.update({
+        'lawyer': context.get('object', None),
+        'startups': lawyer.startups_advised,
+    })
+    return context
