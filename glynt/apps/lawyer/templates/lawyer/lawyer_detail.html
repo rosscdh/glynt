@@ -204,10 +204,10 @@ $(document).ready(function () {
 	// 	return total
 	// }
 
-	// linedefaults = {
-	// 	//Boolean - Whether to show labels on the scale	
-	// 	scaleShowLabels : true,
-	// }
+	linedefaults = {
+		//Boolean - Whether to show labels on the scale	
+		scaleShowLabels : true,
+	}
 
 	// hasValidData = function(){
 	// 		var total = 0;
@@ -217,7 +217,7 @@ $(document).ready(function () {
 	// 		return total
 	// 	}
 
-	// if(1 > 0) {
+	if(1 > 0) {
 		new Chart(ctx0).Line({
 			labels : ["2010","2011","2012"],
 			datasets : [{
@@ -225,7 +225,7 @@ $(document).ready(function () {
 					strokeColor : "rgba(151,187,205,1)",
 					pointColor : "rgba(151,187,205,1)",
 					pointStrokeColor : "#fff",
-					data : getByYear(),
+					data : [{{ object.data.volume_2011 }},{{ object.data.volume_seed_financing }},92]
 				}]
 			}
 			,linedefaults);
@@ -252,7 +252,7 @@ $(document).ready(function () {
 				color : "#f88172"
 			}			
 		]);
-	// }
+	 }
 });
 
 
