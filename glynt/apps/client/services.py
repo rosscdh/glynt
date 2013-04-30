@@ -17,7 +17,10 @@ class FullContactProfileDataService(object):
     def __init__(self, user, **kwargs):
         logger.info('Populate User Profile from FullContact for: %d' % user.pk)
         self.user = user
-        self.fc = FullContactData.objects.get(user=user)
+
+        self.fc, is_new = FullContactData.objects.get_or_create(user=user)
+        logger.info('FullContact model for: %d is_new: %s' % (user.pk, is_new))
+
         self.data = self.fc.extra_data
 
         self.process()
