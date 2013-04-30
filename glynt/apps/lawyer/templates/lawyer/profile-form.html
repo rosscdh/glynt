@@ -179,11 +179,11 @@
 
                                 <tr>
                                     <th>Average Annual</th>
-                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="incorp_setup" type="text"></td>
-                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="seed_financing" type="text"></td>
-                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="series_a" type="text"></td>
-                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="ip" type="text"></td>
-                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="other" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="number" data-required="true" data-volume_type="incorp_setup" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="number" data-required="true" data-volume_type="seed_financing" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="number" data-required="true" data-volume_type="series_a" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="number" data-required="true" data-volume_type="ip" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="number" data-required="true" data-volume_type="other" type="text"></td>
                                 </tr>
 
                             </table>
@@ -200,10 +200,10 @@
 
                                 <tr>
                                     <th>Total by year</th>
-                                    <td><input class="span1 json_volume parsley-validate" data-type="digits" data-required="true" data-json_target="volume_by_year" data-volume_type="2010" type="text"></td>
-                                    <td><input class="span1 json_volume parsley-validate" data-type="digits" data-required="true" data-json_target="volume_by_year" data-volume_type="2011" type="text"></td>
-                                    <td><input class="span1 json_volume parsley-validate" data-type="digits" data-required="true" data-json_target="volume_by_year" data-volume_type="2012" type="text"></td>
-                                    <td><input class="span1 json_volume parsley-validate" data-type="digits" data-required="true" data-json_target="volume_by_year" data-volume_type="2013" type="text"></td>
+                                    <td><input class="span1 json_volume parsley-validate" data-type="number" data-required="true" data-json_target="volume_by_year" data-volume_type="2010" type="text"></td>
+                                    <td><input class="span1 json_volume parsley-validate" data-type="number" data-required="true" data-json_target="volume_by_year" data-volume_type="2011" type="text"></td>
+                                    <td><input class="span1 json_volume parsley-validate" data-type="number" data-required="true" data-json_target="volume_by_year" data-volume_type="2012" type="text"></td>
+                                    <td><input class="span1 json_volume parsley-validate" data-type="number" data-required="true" data-json_target="volume_by_year" data-volume_type="2013" type="text"></td>
                                 </tr>
 
                             </table>
@@ -681,20 +681,17 @@ $(document).ready(function(){
     json_value = function json_value(element, volume_type, target_element, element_value) {
         var json_taget_name = target_element.attr('id')
         var element_value = $.parseJSON(element_value);
-//console.log(element_value)
-// console.log(json_taget_name)
-// console.log(element_value[2013])
+
         // ensure object
         var var_name = json_taget_name + '_object'
         window[var_name] = (window[var_name] === undefined) ? {} : window[var_name]
 
         // ensure value
-// console.log((typeof(element_value) == 'number'))
-// console.log(typeof(element_value))
-// console.log(element_value[volume_type])
         window[var_name][volume_type] = (typeof(element_value) == 'number') ? element_value : (typeof(element_value) == 'object') ? element_value[volume_type] : 0
-// console.log(JSON.stringify(window[var_name]))
 
+        if (typeof(window[var_name][volume_type]) == 'undefined') {
+            window[var_name][volume_type] = 0   
+        }
         return window[var_name][volume_type]
     }
 
