@@ -76,6 +76,7 @@ class FullContactData(models.Model):
     def contact_info(self):
         return self.extra_data.get('contactInfo', {})
 
+
 class GraphConnection(models.Model):
     """ Generic Database Model to store various provider abstractions """
     PROVIDERS = get_namedtuple_choices('PROVIDERS', (
@@ -83,10 +84,11 @@ class GraphConnection(models.Model):
         (1,'angel','Angel'),
       
     ))
+    user = models.OneToOneField(User, null=True, blank=True)
     provider = models.IntegerField(choices=PROVIDERS.get_choices(), db_index=True)
     full_name = models.CharField(max_length=128)
     extra_data = JSONField(blank=True, null=True)
-    users = models.ManyToManyField(User)
+    users = models.ManyToManyField(User, related_name='connected_users')
 
     def __unicode__(self):
         return self.full_name
