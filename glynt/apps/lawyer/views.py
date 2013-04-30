@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.views.generic import FormView, DetailView
+from endless_pagination.views import AjaxListView
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.utils import simplejson as json
+
 from glynt.apps.lawyer.services import EnsureLawyerService
 
 from models import Lawyer
@@ -15,6 +17,7 @@ logger = logging.getLogger('django.request')
 class LawyerProfileView(DetailView):
     model = Lawyer
     slug_field = 'user__username'
+
     def get_queryset(self):
         return self.model._default_manager.prefetch_related('user').all()
 
@@ -89,3 +92,20 @@ class LawyerProfileSetupView(FormView):
         messages.success(self.request, 'You successfully updated your profile')
         form.delete_cookies()
         return super(LawyerProfileSetupView, self).form_valid(form=form)
+
+
+class LawyerListView(AjaxListView):
+    template_name = 'lawyer/lawyer_list.html'
+    page_template = 'lawyer/partials/lawyer_list_default.html'
+    paginate_by = 10
+    model = Lawyer
+
+    def get_queryset(self):
+        return self.model._default_manager.exclude(user__password='!').filter(user__is_active=True, user__is_superuser=False).prefetch_related('user', 'firm_lawyers')
+    def get_context_data(self, **kwargs):
+        super(LawyerListView, self).get_context_data(**kwargs)
+        import pdb
+        #pdb.set_trace()
+        if 'view' not in kwargs:
+            kwargs['view'] = self
+        return kwargs

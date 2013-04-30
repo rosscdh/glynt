@@ -1,12 +1,8 @@
-{% extends 'base.html' %}{% load account_tags lawyer_profile_tags jsonify thumbnail cache %}
+{% extends 'base.html' %}
 
 {% block page_title %}Marketplace{% endblock %}
 {% block bodyclass %}lawyer-welcome{% endblock %}
 
-{% block css %}
-{% endblock %}
-{% block js %}
-{% endblock %}
 
 {% block prebody %}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/theme/lawyer-listing.css" type="text/css">
@@ -30,6 +26,10 @@
 	</div>
 </div>
 
+{% endblock %}
+
+{% block body %}
+
 <div class="container filter">
 	<div class="checkboxes">
 		<h3>Sort by</h3>
@@ -49,156 +49,23 @@
 </div>
 
 
-
-
-
 <div class="container">
 
-
-
-	<div class="partner">
-
-		<div class="left">
-
-			<img src="/static/img/app/partner-avatar.png" class="partner-avatar" />
-
-		</div>
-
-		<div class="right">	
-
-			<h2>Chris Grew</h2>
-
-			<img src="/static/img/app/partner-logo.png" class="partner-logo" />
-
-			<h3>Partner at Orrick</h3>
-
-			<ul class="partner-info">
-
-				<li class="marker big">San Fransisco, CA</li>
-
-				<li class="tick">76 Similar Deals Closed (2011-2012)</li>
-
-				<li class="star">76 Endorsements</li>
-
-			</ul>
-
-			<a class="btn btn-primary">View Profile</a>
-
-			<ul class="partner-social">
-
-				<li class="angellist"><div class="circle-big">33</div><div class="circle-small animated fadeInDown">2</div></li>
-
-				<li class="linkedin"><div class="circle-big">33</div><div class="circle-small animated fadeInDown">2</div></li>
-
-				<li class="twitter"><div class="circle-big">33</div><div class="circle-small animated fadeInDown">2</div></li>
-
-			</ul>
-
-		</div>	
-
-	</div>
-
-
-
-
-
-	<div class="partner">
-
-		<div class="left">
-
-			<img src="/static/img/app/partner-avatar.png" class="partner-avatar" />
-
-		</div>
-
-		<div class="right">	
-
-			<h2>Chris Grew</h2>
-
-			<img src="/static/img/app/partner-logo.png" class="partner-logo" />
-
-			<h3>Partner at Orrick</h3>
-
-			<ul class="partner-info">
-
-				<li class="marker big">San Fransisco, CA</li>
-
-				<li class="tick">76 Similar Deals Closed (2011-2012)</li>
-
-				<li class="star">76 Endorsements</li>
-
-			</ul>
-
-			<a class="btn btn-primary">View Profile</a>
-
-			<ul class="partner-social">
-
-				<li class="angellist"><div class="circle-big">33</div><div class="circle-small animated fadeInDown">2</div></li>
-
-				<li class="linkedin"><div class="circle-big">33</div><div class="circle-small animated fadeInDown">2</div></li>
-
-				<li class="twitter"><div class="circle-big">33</div><div class="circle-small animated fadeInDown">2</div></li>
-
-			</ul>
-
-		</div>	
-
-	</div>
-
-
-
-
-
-	<div class="partner">
-
-		<div class="left">
-
-			<img src="/static/img/app/partner-avatar.png" class="partner-avatar" />
-
-		</div>
-
-		<div class="right">	
-
-			<h2>Chris Grew</h2>
-
-			<img src="/static/img/app/partner-logo.png" class="partner-logo" />
-
-			<h3>Partner at Orrick</h3>
-
-			<ul class="partner-info">
-
-				<li class="marker big">San Fransisco, CA</li>
-
-				<li class="tick">76 Similar Deals Closed (2011-2012)</li>
-
-				<li class="star">76 Endorsements</li>
-
-			</ul>
-
-			<a class="btn btn-primary">View Profile</a>
-
-			<ul class="partner-social">
-
-				<li class="angellist"><div class="circle-big">33</div><div class="circle-small animated fadeInDown">2</div></li>
-
-				<li class="linkedin"><div class="circle-big">33</div><div class="circle-small animated fadeInDown">2</div></li>
-
-				<li class="twitter"><div class="circle-big">33</div><div class="circle-small animated fadeInDown">2</div></li>
-
-			</ul>
-
-		</div>	
-
-	</div>
-
-
+	{% include page_template %}
 
 </div>
 
 
-
-
 {% endblock %}
 
-{% block body %}
-
+{% block js %}
+    {{ block.super }}
+    <script src="{{ STATIC_URL }}endless_pagination/js/endless-pagination.js"></script>
+    <script>
+        $.endlessPaginate({
+            paginateOnScroll: true
+            ,paginateOnScrollMargin: 60
+            ,paginateOnScrollChunkSize: 5
+        });
+    </script>
 {% endblock %}
