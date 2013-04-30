@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 """"""
-from behave import *
+from behave import given, when, then
+from behaving.web.steps import *
 
-from django.conf import settings
-from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.utils.encoding import smart_unicode
 from django.core.management import call_command
@@ -13,13 +12,13 @@ import urlparse
 import logging
 logger = logging.getLogger('django.test.behave')
 
-BEHAVE_DEFAULT_USER_PASSWORD = getattr(settings, 'BEHAVE_DEFAULT_USER_PASSWORD', 'test') # take from settings one day
-BEHAVE_DEFAULT_USER_PASSWORD = getattr(settings, 'BEHAVE_DEFAULT_USER_PASSWORD', 'test') # take from settings one day
+BEHAVE_DEFAULT_USER_PASSWORD = 'test'
 
 
 # Step Setup
 @given(u'I am logged in as "{username_pass}"')
 def step(context, username_pass):
+    from django.contrib.auth.models import User
     try:
         username, password = username_pass.split(':')
     except:
@@ -41,7 +40,7 @@ def step(context, username_pass):
 
 
 def log_in_as(context, username, password):
-    context.go_to(reverse('client:login'))
+    when_i_visit_url(context, reverse('client:login'))
     original_url = context.browser.geturl()
     br = context.browser
     br.select_form(nr=0)
@@ -49,7 +48,7 @@ def log_in_as(context, username, password):
     br.form['password'] = password
     br.submit()
     # go pack to that page
-    context.go_to(original_url)
+    when_i_visit_url(context, original_url)
 
 
 @given(u'there is no "([^"]*)" user')
@@ -58,7 +57,7 @@ def step(context):
 
 @given(u'I am on "{url_path}"')
 def step(context, url_path):
-    context.go_to(url_path)
+    when_i_visit_url(context, url_path)
 
 
 # @given(u'(?:|I )click "([^"]*)"')

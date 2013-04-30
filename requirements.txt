@@ -86,7 +86,7 @@ django-nose
 mocktest
 factory_boy
 behave
-django_behave
+#-e git+https://github.com/rosscdh/django-behave.git#egg=django-behave
 mechanize
 wsgi_intercept
 pyquery

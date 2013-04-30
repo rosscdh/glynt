@@ -6,6 +6,7 @@ PROJECT_ENVIRONMENT = 'prod'
 
 IS_TESTING = False
 TEST_APPS = ['jenkins','testserver','test', 'behave']
+
 if sys.argv[1:2] in TEST_APPS or os.path.basename(sys.argv[0]) in TEST_APPS:
     IS_TESTING = True
 
@@ -42,8 +43,6 @@ DATABASES = {
     }
 }
 
-if IS_TESTING:
-    DATABASES['default']['TEST_NAME'] = '/tmp/testserver.db'
 
 TIME_ZONE = 'Europe/London'
 
@@ -237,19 +236,17 @@ HELPER_APPS = (
     'clear_cache',
     # Celery Tasks
     'djcelery',
-    # south migrations
-    'south',
+    # Testing helpers
+    'django_jenkins',
+    'django-behave',
 )
 
-# Handle south and its breaking tests
-if IS_TESTING == True:
-    # Log email to console
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-    # disable celery for test
-    BROKER_BACKEND = 'memory'
 
-    HELPER_APPS = HELPER_APPS + (
-        'django_jenkins',
+# Handle south and its breaking tests
+if not IS_TESTING:
+    HELPER_APPS += (
+        # south migrations
+        'south',
     )
 
 
@@ -259,6 +256,12 @@ if IS_TESTING == True:
 # the other apps will/can be tested seperately
 INSTALLED_APPS = DJANGO_APPS + HELPER_APPS + PROJECT_APPS 
 
+# Custom test runner for this project
+TEST_RUNNER = 'glynt.test_runner.GlyntAppTestRunner'
+
+
+# disable celery for test
+BROKER_BACKEND = 'memory'
 
 LOGIN_URL          = '/'
 LOGIN_REDIRECT_URL = '/logged-in/'
@@ -369,8 +372,6 @@ if DEBUG:
 
 INTERNAL_IPS = ('127.0.0.1',)
 
-# Custom test runner for this project
-TEST_RUNNER = 'glynt.test_runner.GlyntAppTestRunner'
 
 LOGGING = {
     'version': 1,

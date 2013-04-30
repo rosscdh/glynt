@@ -6,11 +6,10 @@ from django.conf import settings
 #from django_nose import NoseTestSuiteRunner
 from django.test.simple import DjangoTestSuiteRunner
 
-
 os.getenv('DJANGO_SETTINGS_MODULE', 'settings')
 
 
-class GlyntAppTestRunner(DjangoTestSuiteRunner):
+class GlyntAppTestRunner(DjangoBehave_Runner):
     def build_suite(self, test_labels, *args, **kwargs):
         PROJECT_APPS = []
         # Remove path info and use only the app "label"
