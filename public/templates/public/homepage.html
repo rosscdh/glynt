@@ -55,82 +55,54 @@
 <div class="wrap">
 
 	<div class="panel">
-
-	
-
 		<header>
-
 			<a href="#" title="Go Home"><img src="{{ STATIC_URL }}homepage/assets/img/logo-white.png" alt="LawPal logo" /></a>
-
 			<div class="divide"></div>
-
 		</header>
-
-
-
 		<section class="landing-main" role="main">
-
 			<article>
-
 				<hgroup>
-
 					<h1>
 						<!-- Startup legal services that don't suck. -->
 						<!-- Efficient, easy legals for startups. -->
 						<!-- Engage, Transact, Close. -->
 						Connecting beautifully
 					</h1>
-
 					<h2>
-
 						Legal services marketplace and relationship management for startups
-
 					</h2>
 				</hgroup>
 				<div class="divide"></div>
-
-				<form action="http://lawpal.us6.list-manage2.com/subscribe/post?u=a28c24eb98757a383d43fb6dc&amp;id=dfe63d77dd" method="post" class="left reveal">
-
-						<hgroup>
-
-							<h3>Startups</h3>
-
-						</hgroup>	
-
-						<div class="reveal-inner">
-
-							<!-- <h4>Follow us for updates (we're not yet ready for you)</h4> -->
-							<p>
-									<input type="email" name="EMAIL" placeholder="Sign up for updates" />
-									<button type="submit">Sign up</button>
-							</p>
-
-						</div>	
-
-					</form>
-
-					<div class="right reveal">
-
-						<hgroup>
-
-							<h3>Lawyers</h3>
-
-						</hgroup>
-
-						<div class="reveal-inner">
-
-							<!-- <h4>Sign in with your existing social logins below</h4> -->
-
-							<p>
-
-								<a class="btn linkedin" href="{% url "socialauth_begin" "linkedin" %}" title="Sign in with LinkedIn">Sign in with <strong>LinkedIn</strong></a>
-
-							</p>	
-
-						</div>	
-
+					<div style="">
+						<form action="http://lawpal.us6.list-manage2.com/subscribe/post?u=a28c24eb98757a383d43fb6dc&amp;id=dfe63d77dd" method="post" class="left reveal">
+							<hgroup>
+								<h3>Startups</h3>
+							</hgroup>	
+							<div class="reveal-inner">
+								<!-- <h4>Follow us for updates (we're not yet ready for you)</h4> -->
+								<p>
+										<input type="email" name="EMAIL" placeholder="Sign up for updates" />
+										<button type="submit">Sign up</button>
+								</p>
+							</div>	
+						</form>
+						<div class="right reveal">
+							<hgroup>
+								<h3>Lawyers</h3>
+							</hgroup>
+							<div class="reveal-inner">
+								<p>
+									<a class="btn linkedin" href="{% url "socialauth_begin" "linkedin" %}" title="Sign in with LinkedIn">Sign in with <strong>LinkedIn</strong></a>
+								</p>	
+								<a href="#" id="data-statement">We never spam. Read more.</a>
+							</div>
+						</div>
+						<div style="clear:both"></div>
 					</div>
-
+					<div class="divide"></div>
+					<div id="data-statement-body">
+						We will never publish to your social networks without your consent or contact your connections directly. Like many platforms, we use social login as way of expediting the signup process and verifying your indentity. We also use some aspects of your social profile to improve the efficiency of LawPal, for example, showing common contacts. Have further questions?  <a href="mailto:founders@lawpal.com" target=blank>Contact us here</a>. 
+					</div>
 				</div>	
 
 			</article>
@@ -146,10 +118,21 @@
 </div>
 
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
-
 <script src="{{ STATIC_URL }}homepage/assets/js/general.js"></script> 
+<script id="IntercomSettingsScriptTag">
+  window.intercomSettings = {
+    app_id: "xw4ux8lx",
+      widget: {
+    activator: '#IntercomDefaultWidget'
+  	},
+    
+  };
+</script>
 
-<script type="text/javascript" src="//assets.zendesk.com/external/zenbox/v2.6/zenbox.js"></script>
+<script>
+(function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://api.intercom.io/api/js/library.js';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}};})()
+</script>
+
 
 </body>
 

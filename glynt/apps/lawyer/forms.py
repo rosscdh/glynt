@@ -37,18 +37,21 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
 
     title = forms.CharField(required=False)
 
-    first_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'John'}))
-    last_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'Sonsini'}))
+    first_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'John', 'tabindex':'1'}))
+    last_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'Sonsini','tabindex':'2'}))
 
-    firm_name = forms.CharField(widget=forms.TextInput(attrs={'data-trigger':'change','class':'typeahead','autocomplete':'off','data-provide':'ajax', 'minLength':'2', 'data-items':4, 'data-source': 'firms', 'data-filter':'name__istartswith', }))
+    firm_name = forms.CharField(widget=forms.TextInput(attrs={'data-trigger':'change','class':'typeahead','autocomplete':'off','data-provide':'ajax', 'minLength':'2', 'data-items':4, 'data-source': 'firms', 'data-filter':'name__istartswith','tabindex':'3' }))
 
-    phone = forms.CharField(help_text="", widget=forms.TextInput(attrs={'data-trigger':'change','placeholder':'+1 415 225 6464', 'title':'Shows on your profile. Include country code.'}))
+    phone = forms.CharField(help_text="", widget=forms.TextInput(attrs={'data-trigger':'change','placeholder':'+1 415 225 6464', 'title':'Shows on your profile. Include country code.', 'tabindex':'4'}))
 
     position = forms.ChoiceField(choices=Lawyer.LAWYER_ROLES.get_choices(), label="Position")
-    years_practiced = forms.IntegerField(label="Years Practicing", initial="3", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini'}))
+    years_practiced = forms.IntegerField(label="Years Practicing", initial="3", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini', 'tabindex':'6'}))
 
-    practice_location_1 = forms.CharField(label="Primary Location", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-large','placeholder':'San Francisco, California','title':'The primary city you operate from','class':'typeahead','autocomplete':'on','data-provide':'ajax', 'minLength':'3', 'data-items':4, 'data-source':'locations', 'data-filter':'name__istartswith', 'autocomplete':'off'}))
-    practice_location_2 = forms.CharField(required=False, label="Secondary Location", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-large','placeholder':'London, England','title':'Optional. The secondary city you operate from.','class':'typeahead','autocomplete':'on','data-provide':'ajax', 'minLength':'3', 'data-items':4, 'data-source':'locations', 'data-filter':'name__istartswith','autocomplete':'off'}))
+    bar_membership_input = forms.CharField(required=False, label="Bar Location", help_text='Enter the location of your bar memberships.', widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-large','placeholder':'California','title':'The state you are licensed in','class':'typeahead','autocomplete':'on','data-provide':'ajax', 'minLength':'3', 'data-items':4, 'data-source':'locations', 'data-filter':'name__istartswith', 'autocomplete':'off','tabindex':'7'}))
+    bar_membership = forms.CharField(required=False, widget=forms.HiddenInput)
+
+    practice_location_1 = forms.CharField(label="Primary Location", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-large','placeholder':'San Francisco, California','title':'The primary city you operate from','class':'typeahead','autocomplete':'on','data-provide':'ajax', 'minLength':'3', 'data-items':4, 'data-source':'locations', 'data-filter':'name__istartswith', 'autocomplete':'off','tabindex':'8'}))
+    practice_location_2 = forms.CharField(required=False, label="Secondary Location", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-large','placeholder':'London, England','title':'Optional. The secondary city you operate from.','class':'typeahead','autocomplete':'on','data-provide':'ajax', 'minLength':'3', 'data-items':4, 'data-source':'locations', 'data-filter':'name__istartswith','autocomplete':'off','tabindex':'9'}))
 
     summary = forms.CharField(label="Short description", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-rangelength':'[0,255]','class':'input-xxlarge','placeholder':'e.g. Partner at Orrick advising technology companies in Europe','title':'Keep it short, and make it personal.'}))
     bio = forms.CharField(required=False, widget=forms.Textarea(attrs={'data-trigger':'change','class':'input-xxlarge', 'data-trigger':'keyup', 'data-rangelength':'[0,1024]','placeholder':'A bit more about you.','title':'A bit longer, but still make it personal.'}))
@@ -69,10 +72,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     websites_input = forms.URLField(required=False, label="Website Address", help_text='Enter the domain name of your public website, if you have one.', widget=forms.TextInput(attrs={}))
     websites = forms.CharField(required=False, widget=forms.HiddenInput)
 
-    bar_membership_input = forms.CharField(required=False, label="Bar Location", help_text='Enter the location of your bar memberships.', widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-large','placeholder':'San Francisco, California','title':'The primary city you operate from','class':'typeahead','autocomplete':'on','data-provide':'ajax', 'minLength':'3', 'data-items':4, 'data-source':'locations', 'data-filter':'name__istartswith', 'autocomplete':'off'}))
-    bar_membership = forms.CharField(required=False, widget=forms.HiddenInput)
-
-    startups_advised_input = forms.URLField(required=False, label="Startups Advised", help_text='Enter the domain name of any startups you have advised and press "Add". This helps similar startups find you.', widget=forms.TextInput(attrs={'data-trigger':'change','placeholder':'e.g. Instagram.com', 'class':'typeahead','autocomplete':'on','data-provide':'ajax', 'data-items':4, 'data-source': 'startups', 'data-filter':'name__istartswith'}))
+    startups_advised_input = forms.URLField(required=False, label="Startups Advised", help_text='Enter the domain name of any startups you have advised and press "Add". It must be public knowledge that you have advised them.', widget=forms.TextInput(attrs={'data-trigger':'change','placeholder':'e.g. Instagram.com', 'class':'typeahead','autocomplete':'on','data-provide':'ajax', 'data-items':4, 'data-source': 'startups', 'data-filter':'name__istartswith'}))
     startups_advised = forms.CharField(required=False, widget=forms.HiddenInput)
 
     volume_incorp_setup = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]

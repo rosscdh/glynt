@@ -1,9 +1,7 @@
 {% if user and user.is_authenticated %}
 <script id="IntercomSettingsScriptTag">
   window.intercomSettings = {
-    // TODO: The current logged in user's email address.
     email: "{{ user.email }}",
-    // TODO: The current logged in user's sign-up date as a Unix timestamp.
     created_at: "{{ user.date_joined|date:"U" }}",
     app_id: "xw4ux8lx",
     widget: {
