@@ -18,6 +18,7 @@ class EnsureLawyerService(object):
     firm = None
     default_volume_matrix = unicode('[0]')
     default_volume_matrix_by_year = unicode('{"2010":0,"2011":0,"2012":0,"2013":0}')
+
     def __init__(self, user, firm_name=None, offices=[], **kwargs):
         self.user = user
         self.firm_name = firm_name

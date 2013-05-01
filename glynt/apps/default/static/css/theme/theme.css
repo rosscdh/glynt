@@ -563,8 +563,10 @@ body.lawyer-welcome #hero h3 {
 
 input.parsley-success, textarea.parsley-success {
   color: #468847 !important;
-  border: 1px solid #D6E9C6 !important;
+  border: 1px solid #ebf4e4 !important;
  background: #f6faf4 url('/static/img/form-tick.png') no-repeat center right;
+ transition: background-color 0.4s linear;
+
 }
 input.parsley-error, textarea.parsley-error {
   color: #B94A48 !important;
@@ -768,12 +770,19 @@ table.table td {
 
 /* Tables
 -------------------------------------------------- */
+.table th{
+	text-align: center;
+}
 
 .table th, .table td {
-	font-size:12px;
+	font-size:13px;
 }
 legend {
 	color:#606060;
+	margin-top:20px;
+}
+.table.table-center *{
+	text-align: center;
 }
 
 /* Nav Tabs

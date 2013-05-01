@@ -18,7 +18,7 @@
 		<div class="row animated fadeInRight profile-details">
 			<div class="span5">
 				<div class="avatar">
-					<img src="{% if object.photo %}{{ MEDIA_URL }}{{ object.photo }}{% else %}{{ object.user.profile.get_mugshot_url|default:default_profile_image }}{% endif %}" alt="{{ object.user.get_full_name|default:object.user.username }}" />
+					<img src="{{ object.profile_photo }}" alt="{{ object.user.get_full_name|default:object.user.username }}" />
 				</div>
 			</div>
 			<div class="span7">
@@ -36,7 +36,7 @@
 					{% if object.summary %} 
 					    <script>
 						  $(document).ready(function () {
-					     	  Intercom('update', {"Lawyer Profile": "Complete", "Firm": "{{firm}}"});
+					     	  Intercom('update', {"Lawyer Profile": "Complete", "Firm": "{{ firm }}"});
 					   	 });
 						</script>
 					{% endif %}
@@ -79,8 +79,10 @@
 				<ul>
 					{% for practice_location in object.practice_locations  %}
 						<li class="marker">{{ practice_location }}</li>
-					{% endfor %}	
-					<li class="tick">{{ object.data.years_practiced }} Years Practicing</li>
+					{% endfor %}
+					{% if object.data.years_practiced > 0 %}	
+						<li class="tick">{{ object.data.years_practiced }} Years Practicing</li>
+					{% endif %}
 					<li class="star">No endorsements yet</li>
 					<!-- <li class="friends"><img src="/static/img/app/small-avatar.jpg" alt="Avatar" /> Benjamin Ling is a mutual contact</li> -->
 				</ul>				
@@ -88,38 +90,64 @@
 			<div class="other-profiles">
 				<h5>Other Profiles</h5>
 				{% social_profiles object.user %}
-			</div>
+ 			</div>
+			<!-- <div class="bar-license">
+				<h5>Licensed In</h5>
+				{% for o in object.data.bar_membership  %}
+					{{ o }}
+				{% endfor %}
+			</div> -->
 		</div>	
 		<div class="span8">
-				<h2>Transaction Snapshot</h2>
-				<div class="deal-charts row">
-					<div class="span4">
-						<h5>Transactions by year</h5>
+			<h2>Transaction Snapshot</h2>
+			<div class="deal-charts row">
+				<div class="span4">
+					<h5>Transactions by year</h5>
+					<br />
+					<canvas id="dealChart0" width="300" height="200"></canvas>
+				</div>
+				<div class="span4" style="position:relative;">			
+					<h5>Transactions by type</h5>
+					<br />		
+					<canvas id="dealChart1" width="220" height="200"></canvas>
+					<div style="position:absolute;top:125px;right:-0px">
+						<span class="label label-info" style="color:#F38630;background-color:white;">Series A</span>
+						<br /> 
+						<span class="label label-info" style="color:#6bdb7e;background-color:white;">Seed</span> 
 						<br />
-						<canvas id="dealChart0" width="300" height="200"></canvas>
-					</div>
-					<div class="span4" style="position:relative;">			
-						<h5>Transactions by type</h5>
-						<br />		
-						<canvas id="dealChart1" width="220" height="200"></canvas>
-						<div style="position:absolute;top:105px;right:-0px">
-							<span class="label label-info" style="background-color:#F38630">Series A</span>
-							<br /> 
-							<span class="label label-info" style="background-color:#6bdb7e">Seed</span> 
-							<br />
-							<span class="label label-info" style="background-color:#69D2E7">Incorporation</span> 
-							<br />
-							<span class="label label-info" style="background-color:#f88172">IP</span>
-							<br />
-							<span class="label label-info" style="background-color:#6ndn7e">Other</span>
-						</div>
+						<span class="label label-info" style="color:#69D2E7;background-color:white;">Incorporation</span> 
+						<br />
+						<span class="label label-info" style="color:#f88172;background-color:white;">IP</span>
+						<br />
+						<span class="label label-info" style="background-color:white;color:#6ndn7e">Other</span>
 					</div>
 				</div>
-		</div>	
+			</div>
+		</div>
+		<div class="span8">
+			<div class="startups">
+				<h2>Startups Advised</h2>
+				{% for o in object.data.startups_advised %}
+					<span><img src="http://{{ o }}/favicon.ico" class="fav"> <a href="http://{{ o }}" target="_BLANK" class="domain">{{ o }}</a></span>
+				{% endfor %}
+			</div>
+			<br />
+			<br />
+			<br />
+		</div>
+<!-- 		<div class="span8">
+			<div class="startups">
+				<h2>Other Webistes</h2>
+				{% for o in object.data.websites %}
+					<span><img src="http://{{ o }}/favicon.ico" class="fav"> <a href="http://{{ o }}" target="_BLANK" class="domain">{{ o }}</a></span>
+				{% endfor %}
+			</div>
+		</div> -->
 	</div>
 
 
-	<div class="divide">
+
+	<div>
 	    <div class=" buttons">
 			<!-- Modal -->
 			<div id="comingSoonModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -139,23 +167,11 @@
 		</div>
 	</div>
 
-<!-- 	<div class="divide">
-		<div class="startups">
-			<h2>Startups Advised</h2>
-			{{ object.data.startups_advised|jsonify }}
-		</div>
-	</div>
-
 	<div class="divide">
 		<div class="endorsements">
-			<h2>Client Endorsements</h2>
-			<div class="endorsement">
-				<img src="/static/img/app/medium-avatar.png" alt="Avatar (Placeholder)" />
-				<p>Awesome to work with, responsive and helpful. Instrumental in getting Airbnb to where it is today</p>
-				<p class="source">Alex Halliday</p>
-			</div>
+			<h2>More profile data coming soon.</h2>
 		</div>
-	</div> -->
+	</div>
 </div>
 {% endblock %}
 
@@ -164,60 +180,18 @@
 <script>
 
 $(document).ready(function () {
+$('img').error(function() {
+	$(this).attr("src", '/static/img/app/hyperlink_blue.png');
+});
+
+
 	//Get context with jQuery - using jQuery's .get() method.
 	var ctx0 = $("#dealChart0").get(0).getContext("2d");
 	var ctx1 = $("#dealChart1").get(0).getContext("2d");
 
-	// var chartnumbers =
-	// { 
-	//     "incorp":[{{ object.data.volume_incorp_setup|jsonify }}], 
-	//     "seed": [{{ object.data.volume_seed_financing|jsonify }}], 
-	//     "seriesa":[{{ object.data.volume_series_a|jsonify }}], 	
-	//     "ip": [{{ object.data.volume_ip|jsonify }}],
-	//     "other":[{{ object.data.volume_other|jsonify }}] 	 	
-	// }
+	linedefaults = { scaleShowLabels : true }
 
-	// getByYear = function() {
-	// 	var total = {};
-	// 	$.each(chartnumbers, function(i,e){
-	// 		$.each(e[0], function(y,v){
-	// 			// console.log(v)
-	// 			total[y] = (total[y] === undefined)? 0 : total[y] += parseInt(v) ;
-	// 		})
-	// 	})
-	// 	var ret_val = []
-	// 	$.each(total, function(year,val){
-	// 		ret_val.push(val)
-	// 	})
-	// 	return ret_val
-	// }
-
-
-	// getByType = function() {
-	// 	var total = {};
-	// 	$.each(chartnumbers, function(i,e){
-	// 		total[i] = (total[i] === undefined)? 0 : total[i];
-	// 		$.each(e[0], function(y,v){
-	// 			total[i] += parseInt(v)
-	// 		})
-	// 	})
-	// 	return total
-	// }
-
-	linedefaults = {
-		//Boolean - Whether to show labels on the scale	
-		scaleShowLabels : true,
-	}
-
-	// hasValidData = function(){
-	// 		var total = 0;
-	// 		$.each(getByYear(), function(i){
-	// 			total += parseInt(i)
-	// 		})
-	// 		return total
-	// 	}
-
-	if(1 > 0) {
+	if('{{ object.data.volume_by_year.2011 }}' > 0) {
 		new Chart(ctx0).Line({
 			labels : ["2010","2011","2012"],
 			datasets : [{
@@ -225,11 +199,12 @@ $(document).ready(function () {
 					strokeColor : "rgba(151,187,205,1)",
 					pointColor : "rgba(151,187,205,1)",
 					pointStrokeColor : "#fff",
-					data : [{{ object.data.volume_2011 }},{{ object.data.volume_seed_financing }},92]
+					data : [{{ object.data.volume_by_year.2011 }},{{ object.data.volume_by_year.2012 }},{{ object.data.volume_by_year.2013 }}]
 				}]
 			}
 			,linedefaults);
-
+	}
+	if('{{ object.data.volume_series_a }}' > 0) {
 		new Chart(ctx1).Doughnut([
 			{
 				value: {{ object.data.volume_series_a|jsonify }},
@@ -245,7 +220,7 @@ $(document).ready(function () {
 			},
 			{
 				value: {{ object.data.volume_other|jsonify }},
-				color : "#6ndn7e"
+				color : "#3a87ad"
 			},
 			{
 				value : {{ object.data.volume_ip|jsonify }},
@@ -253,8 +228,7 @@ $(document).ready(function () {
 			}			
 		]);
 	 }
+
 });
-
-
 </script>
 {% endblock %}

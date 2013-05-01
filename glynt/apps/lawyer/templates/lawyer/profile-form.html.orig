@@ -12,20 +12,22 @@
         <!-- starts carousel -->
         <div class="row animated fadeInDown">
             <div class="span12">
-                 {% if user.username == object.user.username %}
+                {% if user.password == "!" %}
                 <h1>Claim your profile</h1>
                 <h3>You are a critical part of the LawPal community.<br/> The doors are opening soon. Make sure everything is current so founders can see who you really are. Have a question or comments? Contact us at <a href="mailto:founders@lawpal.com">founders@lawpal.com</a> </h3>
-                 </h3>
-                 {% else %}
+                </h3>
+                {% else %}
                 <h1>Update your profile</h1>
-                 {% endif %}
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
+
+
 <div class="container profile">
     <div class="row">
-            <div class="span12">
+        <div class="span12">
             <ul id="profile-tab" class="nav nav-tabs">
                 {% if user.password == "!" %}<li class="active"><a href="#login-details" data-toggle="tab">Account Setup</a></li>{% endif %}
                 <li{% if user.password != "!" %} class="active"{% endif %}><a href="#general" data-toggle="tab">General</a></li>
@@ -33,6 +35,7 @@
                 <li><a href="#profile" data-toggle="tab">Profile</a></li>
                 <li><a href="#connected-accounts" data-toggle="tab">Connected Accounts</a></li>
             </ul>
+
             <form id="lawyer-profile-form" data-validate="parsley" action="{% url 'lawyer:setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
                 <div class="tab-content">
 
@@ -89,32 +92,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="row">
-                            <div class="span12">
-                                <legend>Bar Memberships</legend>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="span8">
-
-                                <p>{{ form.bar_membership.help_text }}</p>
-                                <div class="control-group">
-                                    <label class="control-label" for="inputEmail">{{ form.bar_membership_input.label }}</label>
-                                    <div class="controls">
-                                        {{ form.bar_membership_input.errors }}
-                                        {{ form.bar_membership_input }}<button id="add-bar-membership-btn" type="button" class="btn btn-link btn-small multi-add-btn" data-type="" data-additem_callback="add_bar_membership" data-data_target="id_bar_membership_input" data-target="bar-membership-list"><i class="icon-plus-sign"></i>&nbsp;Add</button>
-                                        {{ form.bar_membership }}<!-- hidden -->
-                                    </div>
-                                </div>
-                                
-                            </div>
-                            <div class="span4">
-                                <ol id="bar-membership-list">
-                                </ol>
-                            </div>
-                        </div>
-
                         <div class="row">
                             <div class="span12">
                                 <legend>Your Practice Locations</legend>
@@ -140,23 +117,24 @@
                                 <legend>Startups Advised</legend>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="span8">
+                    </div>
+                    <div class="row">
+                        <div class="span8">
 
-                                <p>{{ form.startups_advised_input.help_text }}</p>
-                                <div class="control-group">
-                                    <label class="control-label" for="inputEmail">{{ form.startups_advised_input.label }}</label>
-                                    <div class="controls">
-                                        {{ form.startups_advised_input.errors }}
-                                        {{ form.startups_advised_input }}<button id="add-startup-btn" type="button" class="btn btn-link btn-small multi-add-btn" data-type="url" data-additem_callback="add_startup" data-data_target="id_startups_advised_input" data-target="startups-advised-list"><i class="icon-plus-sign"></i>&nbsp;Add</button>
-                                        {{ form.startups_advised }}<!-- hidden -->
-                                    </div>
+                            <p>{{ form.startups_advised_input.help_text }}</p>
+                            <div class="control-group">
+                                <label class="control-label" for="inputEmail">{{ form.startups_advised_input.label }}</label>
+                                <div class="controls">
+                                    {{ form.startups_advised_input.errors }}
+                                    {{ form.startups_advised_input }}<button id="add-startup-btn" type="button" class="btn btn-link btn-small add-website-btn" data-additem_callback="add_startup" data-data_target="id_startups_advised_input" data-target="startups-advised-list"><i class="icon-plus-sign"></i>&nbsp;Add</button>
+                                    {{ form.startups_advised }}<!-- hidden -->
+>>>>>>> 97295bcfb28fe39beff2af6de8da07a2ccf71d95
                                 </div>
                                 
                             </div>
                             <div class="span4">
                                 <ol id="startups-advised-list">
-                                </ol>
+                                </oL>
                             </div>
                         </div>
                         <div class="row">
@@ -164,59 +142,110 @@
                                 <legend>Approximate Transaction Volume</legend>
                             </div>
                         </div>
+<<<<<<< HEAD
                         <div class="row">
                             <div class="span10">
                                 <p>This data is shown on your profile as an indication of the type and volume of work you undertake. <br />You can always update this later.</p>
-                                <br />
-                                <table class="table table-center">
-
-                                    <tr>
-                                        <th class="span3"></th>
-                                        <th>Incorporation and Setup</th>
-                                        <th>Seed Financing</th>
-                                        <th>Series A</th>
-                                        <th>Intellectual Property</th>
-                                        <th>Other</th>
-                                    </tr>
-                                    <tr>
-                                        <th>Average annual transactions</th>
-                                        <td><input class="span1 volume parsley-validate" data-type="number" data-required="true" data-volume_type="incorp_setup" type="text"></td>
-                                        <td><input class="span1 volume parsley-validate" data-type="number" data-required="true" data-volume_type="seed_financing" type="text"></td>
-                                        <td><input class="span1 volume parsley-validate" data-type="number" data-required="true" data-volume_type="series_a" type="text"></td>
-                                        <td><input class="span1 volume parsley-validate" data-type="number" data-required="true" data-volume_type="ip" type="text"></td>
-                                        <td><input class="span1 volume parsley-validate" data-type="number" data-required="true" data-volume_type="other" type="text"></td>
-                                    </tr>
-
-                                </table>
-
-                                <table class="table table-center">
-
+                                <table class="table">
                                     <tr>
                                         <th class="span3"></th>
                                         <th>2010</th>
                                         <th>2011</th>
                                         <th>2012</th>
-                                        <th>2013</th>
                                     </tr>
 
                                     <tr>
-                                        <th>Approximate total by year</th>
-                                        <td><input class="span1 json_volume parsley-validate" data-type="number" data-required="true" data-json_target="volume_by_year" data-volume_type="2010" type="text"></td>
-                                        <td><input class="span1 json_volume parsley-validate" data-type="number" data-required="true" data-json_target="volume_by_year" data-volume_type="2011" type="text"></td>
-                                        <td><input class="span1 json_volume parsley-validate" data-type="number" data-required="true" data-json_target="volume_by_year" data-volume_type="2012" type="text"></td>
-                                        <td><input class="span1 json_volume parsley-validate" data-type="number" data-required="true" data-json_target="volume_by_year" data-volume_type="2013" type="text"></td>
+                                        <th>Incorporation and Setup</th>
+                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="incorp_setup" data-year="2010" type="text"></td>
+                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="incorp_setup" data-year="2011" type="text"></td>
+                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="incorp_setup" data-year="2012" type="text"></td>
                                     </tr>
-
+                                    <tr>
+                                        <th>Seed Financing</th>
+                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="seed_financing" data-year="2010" type="text"></td>
+                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="seed_financing" data-year="2011" type="text"></td>
+                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="seed_financing" data-year="2012" type="text"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Series A</th>
+                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="series_a" data-year="2010" type="text"></td>
+                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="series_a" data-year="2011" type="text"></td>
+                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="series_a" data-year="2012" type="text"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Intellectual Property</th>
+                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="ip" data-year="2010" type="text"></td>
+                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="ip" data-year="2011" type="text"></td>
+                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="ip" data-year="2012" type="text"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Other</th>
+                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="other" data-year="2010" type="text"></td>
+                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="other" data-year="2011" type="text"></td>
+                                        <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="other" data-year="2012" type="text"></td>
+                                    </tr>
                                 </table>
-
                                 {{ form.volume_incorp_setup }}
                                 {{ form.volume_seed_financing }}
                                 {{ form.volume_series_a }}
                                 {{ form.volume_ip }}
                                 {{ form.volume_other }}
-                                {{ form.volume_by_year }}
-
                             </div>
+=======
+                    </div>
+                    <div class="row">
+                        <div class="span10">
+                            <p>This data is shown on your profile as an indication of the type and volume of work you undertake. <br />You can always update this later.</p>
+                            <table class="table">
+
+                                <tr>
+                                    <th class="span3"></th>
+                                    <th>Incorporation and Setup</th>
+                                    <th>Seed Financing</th>
+                                    <th>Series A</th>
+                                    <th>Intellectual Property</th>
+                                    <th>Other</th>
+                                </tr>
+
+                                <tr>
+                                    <th>Average Annual</th>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="incorp_setup" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="seed_financing" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="series_a" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="ip" type="text"></td>
+                                    <td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="other" type="text"></td>
+                                </tr>
+
+                            </table>
+
+                            <table class="table">
+
+                                <tr>
+                                    <th class="span3"></th>
+                                    <th>2010</th>
+                                    <th>2011</th>
+                                    <th>2012</th>
+                                    <th>2013</th>
+                                </tr>
+
+                                <tr>
+                                    <th>Total by year</th>
+                                    <td><input class="span1 json_volume parsley-validate" data-type="digits" data-required="true" data-json_target="volume_by_year" data-volume_type="2010" type="text"></td>
+                                    <td><input class="span1 json_volume parsley-validate" data-type="digits" data-required="true" data-json_target="volume_by_year" data-volume_type="2011" type="text"></td>
+                                    <td><input class="span1 json_volume parsley-validate" data-type="digits" data-required="true" data-json_target="volume_by_year" data-volume_type="2012" type="text"></td>
+                                    <td><input class="span1 json_volume parsley-validate" data-type="digits" data-required="true" data-json_target="volume_by_year" data-volume_type="2013" type="text"></td>
+                                </tr>
+
+                            </table>
+
+                            {{ form.volume_incorp_setup }}
+                            {{ form.volume_seed_financing }}
+                            {{ form.volume_series_a }}
+                            {{ form.volume_ip }}
+                            {{ form.volume_other }}
+                            {{ form.volume_by_year }}
+
+>>>>>>> 97295bcfb28fe39beff2af6de8da07a2ccf71d95
                         </div>
                     </div>
 
@@ -278,51 +307,54 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+<<<<<<< HEAD
+=======
 
-                        <div class="row">
-                            <div class="span12">
-                                <legend>Websites</legend>
-                            </div>
+                    <div class="row">
+                        <div class="span12">
+                            <legend>Websites</legend>
                         </div>
-                        <div class="row">
-                            <div class="span8">
-                                <p>{{ form.websites_input.help_text }}</p>
-                                <div class="control-group">
-                                    <label class="control-label" for="inputEmail">{{ form.websites_input.label }}</label>
-                                    <div class="controls">
-                                        {{ form.websites_input.errors }}
-                                        {{ form.websites_input }}<button id="add-personal-website-btn" type="button" class="btn btn-link btn-small multi-add-btn"  data-type="url" data-additem_callback="add_website" data-data_target="id_websites_input" data-target="personal-website-list"><i class="icon-plus-sign"></i>&nbsp;Add</button>
-                                        {{ form.websites }}<!-- hidden -->
-                                    </div>
+                    </div>
+                    <div class="row">
+                        <div class="span8">
+                            <p>{{ form.websites_input.help_text }}</p>
+                            <div class="control-group">
+                                <label class="control-label" for="inputEmail">{{ form.websites_input.label }}</label>
+                                <div class="controls">
+                                    {{ form.websites_input.errors }}
+                                    {{ form.websites_input }}<button id="add-personal-website-btn" type="button" class="btn btn-link btn-small add-website-btn" data-additem_callback="add_website" data-data_target="id_websites_input" data-target="personal-website-list"><i class="icon-plus-sign"></i>&nbsp;Add</button>
+                                    {{ form.websites }}<!-- hidden -->
                                 </div>
                             </div>
-                            <div class="span4">
-                                <ol id="personal-website-list">
-                                </ol>
-                            </div>
                         </div>
-
-                        <div class="row">
-                            <div class="span12">
-                                <legend>Extra</legend>
-                            </div>
+                        <div class="span4">
+                            <ol id="personal-website-list">
+                            </oL>
                         </div>
-                        <div class="row">
-                            <div class="control-group">
-                                {{ form.twitter|as_crispy_field }}
-                            </div>
-                        </div>
-
                     </div>
+
+                    <div class="row">
+                        <div class="span12">
+                            <legend>Extra</legend>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="control-group">
+                            {{ form.twitter|as_crispy_field }}
+                        </div>
+                    </div>
+
+                </div>
+>>>>>>> 97295bcfb28fe39beff2af6de8da07a2ccf71d95
 
                     <div id="form-submit" class="row">
                         <div class="span12 divide">
-                            <div class="form-actions">
                             <label class="checkbox">
                                 {{ form.agree_tandc|as_crispy_field }}
                                 <span id="i_agree_html">I agree to the LawPal <a href="{% url 'public:terms' %}">Terms and Conditions</a></span>
                             </label>
-
+                            <div class="">
                                 <button id="update-profile" type="submit" class="btn btn-primary btn-large">Update Profile</button>
                             </div>
                         </div>
@@ -330,7 +362,6 @@
 
                 </div>
             </form>
-
         </div>
     </div>
 </div>
@@ -358,7 +389,7 @@ img#photo-preview{
 
 function preparePhotoPreview(element) {
     var element = $('.cropped-imag-preview');
-    var cookie_data = $.parseJSON($.cookie('lawyer_profile_photo-{{ user.pk }}'));
+    var cookie_data = $.parseJSON($.cookie('{{ form.cookie_name }}-{{ user.pk }}'));
 
     $.each(element.find('img'), function(i,img){
         img = $(img)
@@ -383,7 +414,7 @@ function preparePhotoPreview(element) {
 
 function photoCrop(element, data) {
     $('#id_hidden_photo').val(data.id);// id to be sent
-    $.cookie('lawyer_profile_photo-{{ user.pk }}', JSON.stringify({'id': data.id, 'path': data.path}));
+    $.cookie('{{ form.cookie_name }}-{{ user.pk }}', JSON.stringify({'id': data.id, 'path': data.path}));
     preparePhotoPreview(element);
 }
 
@@ -415,7 +446,6 @@ $(document).ready(function(){
                 ,class: 'unread_counter animated bounce'
             })
             targetTabLink.append(errorTemplate)
-             $("html, body").animate({ scrollTop: 0 }, "fast");
         }
 
        // targetTabLink.closest('li').addClass('parsley-error')
@@ -527,27 +557,20 @@ $(document).ready(function(){
     /**
     * handle startup additions
     */
-    $('.multi-add-btn').on('click', function(event){
+    $('.add-website-btn').on('click', function(event){
         event.preventDefault();
         var e = $(this)
+//console.log('click:add-website-btn')
         var element = $('#' + e.attr('data-data_target'));//$('#id_startups_advised_input');
         var callback_name = e.attr('data-additem_callback')
         var callback = window[callback_name]
-
+    
         // remove and then re-add
-        parsleyConstraints = e.attr('data-type') || false
+        element.closest('form').parsley( 'removeItem', '#' + element.attr('id') )
+        element.closest('form').parsley( 'addItem', '#' + element.attr('id') )
+        element.parsley( 'addConstraint', { url: true } );
 
-        if (parsleyConstraints) {
-            element.closest('form').parsley( 'removeItem', '#' + element.attr('id') )
-            element.closest('form').parsley( 'addItem', '#' + element.attr('id') )
-            // loop over data-type as defined in the html attribute and ensure constraint is applied
-            $.each(parsleyConstraints.split(','), function(i,e){
-                element.parsley( 'addConstraint', { e: true } );    
-            })
-            
-        }
-
-        if ( parsleyConstraints === false || element.parsley( 'validate' ) === true ) {
+        if ( element.parsley( 'validate' ) === true ) {
             var item = element.val();
             element.val('');
             element.select();
@@ -559,13 +582,13 @@ $(document).ready(function(){
             
         }
     });
-    $('.remove-multi-add-btn').live('click', function(event){
+    $('.remove-website-btn').live('click', function(event){
         event.preventDefault();
         var element = $(this);
-        var item = element.closest('li').text();
+        var website = element.closest('li').text();
         element.closest('li').remove();
         var cookie_name = element.attr('data-cookie_name');//'startup_list-{{ user.pk }}';
-        remove_multi_add_item(item, cookie_name)
+        remove_website_item(website, cookie_name)
     })
 
     add_startup = function add_startup(startup, force){
@@ -573,7 +596,7 @@ $(document).ready(function(){
         var cookie_name = 'startup_list-{{ user.pk }}';
         var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
         startup = startup.compact(startup, $('ol#startups-advised-list'), cookie_name, cookie_data, force)
-        add_generic_list_element(startup, $('ol#startups-advised-list'), $('#id_startups_advised'), cookie_name, cookie_data, force)
+        add_generic_website(startup, $('ol#startups-advised-list'), $('#id_startups_advised'), cookie_name, cookie_data, force)
     }
 
     add_website = function add_website(website, force){
@@ -581,25 +604,16 @@ $(document).ready(function(){
         var cookie_name = 'website_list-{{ user.pk }}';
         var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
         website = website.compact(website, $('ol#personal-website-list'), cookie_name, cookie_data, force)
-        add_generic_list_element(website, $('ol#personal-website-list'), $('#id_websites'), cookie_name, cookie_data, force)
+        add_generic_website(website, $('ol#personal-website-list'), $('#id_websites'), cookie_name, cookie_data, force)
     }
 
-    add_bar_membership = function add_bar_membership(bar_membership, force){
-        var force = force || false
-        var cookie_name = 'bar_membership_list-{{ user.pk }}';
-        var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
-        console.log(bar_membership)
-        bar_membership = bar_membership.compact(bar_membership, $('ol#bar-membership-list'), cookie_name, cookie_data, force)
-        add_generic_list_element(bar_membership, $('ol#bar-membership-list'), $('#id_bar_membership'), cookie_name, cookie_data, force)
-    }
-
-    add_generic_list_element = function add_generic_list_element(item, target_element, target_data_element, cookie_name, cookie_data, force) {
-        if (force === false && cookie_data.indexOf(item) >= 0) {
+    add_generic_website = function add_generic_website(website_url, target_element, target_data_element, cookie_name, cookie_data, force) {
+        if (force === false && cookie_data.indexOf(website_url) >= 0) {
             // is already present
             return false
         }else {
-            if (cookie_data.indexOf(item) < 0) {
-                cookie_data.push(item);
+            if (cookie_data.indexOf(website_url) < 0) {
+                cookie_data.push(website_url);
             }
 
             cookie_string = JSON.stringify(cookie_data);
@@ -608,26 +622,16 @@ $(document).ready(function(){
             target_data_element.val(cookie_string);
 
             var remove_but = $('<button/>', {
-                class: 'btn btn-link btn-small remove-multi-add-btn',
+                class: 'btn btn-link btn-small remove-website-btn',
                 'data-cookie_name': cookie_name,
                 html: '<i class="icon-minus-sign"></i>'
             });
             var li = $('<li/>', {
-                html: remove_but.prop('outerHTML') +'&nbsp;'+ item
+                html: remove_but.prop('outerHTML') +'&nbsp;'+ website_url
             });
 
             target_element.append(li);
         }
-    }
-    remove_multi_add_item = function remove_multi_add_item(item, cookie_name){
-        //var cookie_name = 'startup_list-{{ user.pk }}';
-        var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
-        item = item.compact()
-
-        cookie_data.remove(item)
-
-        var cookie_string = JSON.stringify(cookie_data);
-        $.cookie(cookie_name, cookie_string);
     }
 
     function process_startups() {
@@ -650,15 +654,21 @@ $(document).ready(function(){
     }
     process_websites();
 
-    function process_bar_membership() {
-        var cookie_name = 'bar_membership_list-{{ user.pk }}';
-        var cookie_data = $.parseJSON($.cookie(cookie_name)) || $.parseJSON($('#id_bar_membership').val()) || [];
-        var force = true;
-        $.each(cookie_data, function(i,bar_membership){
-            add_bar_membership(bar_membership, force);
-        })
+
+
+    function remove_website_item(website, cookie_name){
+        //var cookie_name = 'startup_list-{{ user.pk }}';
+        var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
+        website = website.compact()
+
+        cookie_data.remove(website)
+
+        var cookie_string = JSON.stringify(cookie_data);
+        $.cookie(cookie_name, cookie_string);
+
+        $('#id_startups_advised').val(cookie_string);
     }
-    process_bar_membership();
+
 
     /**
     * JSON output the volue type values
@@ -685,17 +695,20 @@ $(document).ready(function(){
     json_value = function json_value(element, volume_type, target_element, element_value) {
         var json_taget_name = target_element.attr('id')
         var element_value = $.parseJSON(element_value);
-
+//console.log(element_value)
+// console.log(json_taget_name)
+// console.log(element_value[2013])
         // ensure object
         var var_name = json_taget_name + '_object'
         window[var_name] = (window[var_name] === undefined) ? {} : window[var_name]
 
         // ensure value
+// console.log((typeof(element_value) == 'number'))
+// console.log(typeof(element_value))
+// console.log(element_value[volume_type])
         window[var_name][volume_type] = (typeof(element_value) == 'number') ? element_value : (typeof(element_value) == 'object') ? element_value[volume_type] : 0
+// console.log(JSON.stringify(window[var_name]))
 
-        if (typeof(window[var_name][volume_type]) == 'undefined') {
-            window[var_name][volume_type] = 0   
-        }
         return window[var_name][volume_type]
     }
 

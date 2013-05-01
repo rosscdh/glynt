@@ -47,14 +47,14 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     position = forms.ChoiceField(choices=Lawyer.LAWYER_ROLES.get_choices(), label="Position")
     years_practiced = forms.IntegerField(label="Years Practicing", initial="3", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini', 'tabindex':'6'}))
 
-    bar_membership_input = forms.CharField(required=False, label="Bar Location", help_text='Enter the location of your bar memberships.', widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-large','placeholder':'California','title':'The state you are licensed in','class':'typeahead','autocomplete':'on','data-provide':'ajax', 'minLength':'3', 'data-items':4, 'data-source':'locations', 'data-filter':'name__istartswith', 'autocomplete':'off','tabindex':'7'}))
+    bar_membership_input = forms.CharField(required=False, label="Bar Location", help_text='Enter the location of your bar memberships.', widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-large','placeholder':'California','title':'The state you are licensed in','class':'typeahesad','autocomplete':'off','data-provide':'ajax', 'minLength':'3', 'data-items':4, 'data-source':'locations', 'data-filter':'name__istartswith', 'autocomplete':'off','tabindex':'7'}))
     bar_membership = forms.CharField(required=False, widget=forms.HiddenInput)
-
+    # todo : fix up typedown to be states only! 
     practice_location_1 = forms.CharField(label="Primary Location", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-large','placeholder':'San Francisco, California','title':'The primary city you operate from','class':'typeahead','autocomplete':'on','data-provide':'ajax', 'minLength':'3', 'data-items':4, 'data-source':'locations', 'data-filter':'name__istartswith', 'autocomplete':'off','tabindex':'8'}))
     practice_location_2 = forms.CharField(required=False, label="Secondary Location", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-large','placeholder':'London, England','title':'Optional. The secondary city you operate from.','class':'typeahead','autocomplete':'on','data-provide':'ajax', 'minLength':'3', 'data-items':4, 'data-source':'locations', 'data-filter':'name__istartswith','autocomplete':'off','tabindex':'9'}))
 
-    summary = forms.CharField(label="Short description", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-rangelength':'[0,255]','class':'input-xxlarge','placeholder':'e.g. Partner at Orrick advising technology companies in Europe','title':'Keep it short, and make it personal.'}))
-    bio = forms.CharField(required=False, widget=forms.Textarea(attrs={'data-trigger':'change','class':'input-xxlarge', 'data-trigger':'keyup', 'data-rangelength':'[0,1024]','placeholder':'A bit more about you.','title':'A bit longer, but still make it personal.'}))
+    summary = forms.CharField(label="Short description", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-rangelength':'[0,1024]','class':'input-xxlarge','placeholder':'e.g. Partner at Orrick advising technology companies in Europe','title':'Keep it short, and make it personal.'}))
+    bio = forms.CharField(required=False, widget=forms.Textarea(attrs={'data-trigger':'change','class':'input-xxlarge', 'data-rangelength':'[30,1024]','placeholder':'A bit more about you.','title':'A bit longer, but still make it personal.'}))
     if_i_wasnt_a_lawyer = forms.CharField(label="If I wasn't a lawyer", required=False, widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-xxlarge','placeholder':'e.g. Astronaut and part-time Pastry Chef','title':'If I wasn\'t a lawyer, I would be a...'}))
 
     photo = forms.ImageField(required=False, label="Main Photo", help_text="Please add a good quality photo to your profile. It really helps.", widget=CicuUploderInput(attrs={'data-trigger':'change','data-required': 'false'}, options={
@@ -65,6 +65,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
                 'onReady': 'preparePhotoPreview',
                 'onCrop': 'photoCrop'
             }))
+    
     hidden_photo = forms.CharField(required=False, widget=forms.HiddenInput) # transports the id
 
     twitter = forms.CharField(required=False, label="twitter.com/", help_text="", widget=forms.TextInput(attrs={}))
@@ -72,7 +73,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     websites_input = forms.URLField(required=False, label="Website Address", help_text='Enter the domain name of your public website, if you have one.', widget=forms.TextInput(attrs={}))
     websites = forms.CharField(required=False, widget=forms.HiddenInput)
 
-    startups_advised_input = forms.URLField(required=False, label="Startups Advised", help_text='Enter the domain name of any startups you have advised and press "Add". It must be public knowledge that you have advised them.', widget=forms.TextInput(attrs={'data-trigger':'change','placeholder':'e.g. Instagram.com', 'class':'typeahead','autocomplete':'on','data-provide':'ajax', 'data-items':4, 'data-source': 'startups', 'data-filter':'name__istartswith'}))
+    startups_advised_input = forms.URLField(required=False, label="Startups Advised", help_text='Enter the domain name of any startups you have advised and press "Add". It must be public knowledge that you have advised them.', widget=forms.TextInput(attrs={'data-trigger':'change','placeholder':'e.g. Instagram.com', 'class':'typeahead','autocomplete':'on','data-trigger':'focusout','data-provide':'ajax', 'data-items':4, 'data-source': 'startups', 'data-filter':'name__istartswith'}))
     startups_advised = forms.CharField(required=False, widget=forms.HiddenInput)
 
     volume_incorp_setup = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]

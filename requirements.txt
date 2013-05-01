@@ -45,6 +45,7 @@ pyyaml
 pytidylib
 #lxml
 cssselect
+django-endless-pagination
 -e git+https://github.com/rosscdh/pybars.git#egg=pybars
 -e git+https://github.com/rosscdh/django-templatetag-handlebars.git#egg=django-templatetag-handlebars
 -e git+https://github.com/klen/django_markdown.git#egg=django_markdown

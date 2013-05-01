@@ -15,18 +15,20 @@
         <!--[if lt IE 9]>
         <link href="{{ STATIC_URL }}smoothe/fontawesome/css/font-awesome-ie7.css" rel="stylesheet" charset="utf-8" />
         <![endif]-->
-        {% block extrahead %}{% endblock %}
-        <link href="{{ STATIC_URL }}css/jquery.signaturepad.css" rel="stylesheet" />
-        {% block css %}{% endblock %}
+<!--    <link href="{{ STATIC_URL }}css/jquery.signaturepad.css" rel="stylesheet" />-->
         {% endcompress %}
 
-        <link href="{{ STATIC_URL }}css/jquery-ui-theme.css" rel="stylesheet" />
-		
-<!--         <link href="{{ STATIC_URL }}css/ml.css" rel="stylesheet" charset="utf-8" />
- -->	    <link href="{{ STATIC_URL }}js/select2/select2.css" rel="stylesheet" charset="utf-8" />
-	    <link href="{{ STATIC_URL }}css/errors.css" rel="stylesheet" charset="utf-8" />
+        {% block css %}{% endblock %}
+
+        {% block extrahead %}{% endblock %}
+
+
+<!--         <link href="{{ STATIC_URL }}css/jquery-ui-theme.css" rel="stylesheet" />		
+        <link href="{{ STATIC_URL }}css/ml.css" rel="stylesheet" charset="utf-8" />
+	    <link href="{{ STATIC_URL }}js/select2/select2.css" rel="stylesheet" charset="utf-8" />
+ 	    <link href="{{ STATIC_URL }}css/errors.css" rel="stylesheet" charset="utf-8" />
 	    <link href="{{ STATIC_URL }}smoothe/fontawesome/css/font-awesome.css" rel="stylesheet" charset="utf-8" />
-	    <link rel="apple-touch-icon" sizes="114x114" href="{{ STATIC_URL }}img/apple-touch-icon-114x114.png">
+	    <link rel="apple-touch-icon" sizes="114x114" href="{{ STATIC_URL }}img/apple-touch-icon-114x114.png"> -->
 
         <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
         <!--[if lt IE 9]> 
@@ -62,8 +64,8 @@
     {% endblock %}
 
 
-    
-		<!-- Dashboard stuff, commented out for current release -->
+    {% comment %}
+		<!-- Dashboard stuff, commented out for current release
 		<script type="text/javascript" src="{{ STATIC_URL }}js/md5.js"></script>
 	    <script type="text/javascript" src="{{ STATIC_URL }}js/select2/select2.js"></script>
 	    <script type="text/javascript" src="{{ STATIC_URL }}pagedown/Markdown.Converter.js"></script>
@@ -73,9 +75,7 @@
 	    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.signaturepad.js"></script>
 	    <script type="text/javascript" src="{{ STATIC_URL }}js/sammyjs/sammy.js"></script>
 	    <script type="text/javascript" src="{{ STATIC_URL }}js/sammyjs/plugins/sammy.json.js"></script>
-	    <script type="text/javascript" src="{{ STATIC_URL }}js/glynt.js"></script>
-    {% comment %}
-
+	    <script type="text/javascript" src="{{ STATIC_URL }}js/glynt.js"></script> -->
 	{% endcomment %}
 
  	 <script type="text/javascript" src="{{ STATIC_URL }}handlebars.js"></script>
@@ -110,8 +110,8 @@
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
         })();
     </script>
-
-    {% intercom_script %}
-
+    {% if PROJECT_ENVIRONMENT != 'dev' %}
+        {% intercom_script %}
+    {% endif %}
 </body>
 </html>

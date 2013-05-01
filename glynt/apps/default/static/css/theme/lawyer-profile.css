@@ -27,9 +27,12 @@ float:right;
 margin-left:4px;
 padding:6px 14px 6px 12px;
 opacity:0.7;
+  transition-property : opacity; 
+  transition-duration : 0.3s; 
 }
 #hero:hover #buttons .right {
 opacity:1;
+
 }
 
 .avatar img {
@@ -191,14 +194,27 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5bd269', end
 .buttons a.btn.btn-tertiary:hover {
 background: #44c254;
 }
-.startups, .endorsements {
-text-align: center;
-}
 .startups h2 {
-margin-bottom: 20px;
+margin-top: 40px;
 }
 .startups img {
-padding: 20px;
+padding: 0px 1px 0px 0px;
+opacity:0.5;
+margin-top:-5px;
+}
+.startups img.fav {
+width:16px;
+height:16px;
+}
+.startups span {
+white-space: nowrap;
+line-height:30px;
+}
+.startups .domain {
+font-size:18px;
+text-transform: lowercase;
+margin-right:20px;
+color:#bbbbbb;
 }
 .endorsement {
 float: left;
@@ -254,12 +270,12 @@ margin-left:0px;
 }
 ul.social-buttons li {
 float:left;
-width:32px;
-height:32px;
+width:26px;
+height:26px;
 margin:0px 5px 5px 0px;
 padding:4px;
 border-radius:2px;
-opacity:0.5;
+opacity:0.3;
 }
 ul.social-buttons li:hover {
 opacity:1;
