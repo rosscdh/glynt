@@ -52,7 +52,7 @@ class Lawyer(models.Model):
     def profile_photo(self):
         p = getattr(self, 'photo', None)
         try:
-            return p.url()
+            return p.url
         except ValueError:
             return self.user.profile.get_mugshot_url()
 
