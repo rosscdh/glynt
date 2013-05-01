@@ -5,7 +5,6 @@ from django.core.urlresolvers import reverse
 from jsonfield import JSONField
 
 from glynt.apps.document.models import ClientCreatedDocument
-from signpad2image.signpad2image import s2ib
 
 import base64
 import StringIO
@@ -50,6 +49,7 @@ class DocumentSignature(models.Model):
         return json.dumps(self.signature)
 
     def signature_as_image(self):
+        from signpad2image.signpad2image import s2ib
         try:
             return s2ib(self.signature_as_string(), wh=(198,120), pincolor=(0,0,0))
         except:
