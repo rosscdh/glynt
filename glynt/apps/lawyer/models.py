@@ -39,7 +39,7 @@ class Lawyer(models.Model):
 
     def firm_name(self):
         try:
-            primary_firm.name
+            return self.primary_firm.name
         except:
             return None
 
@@ -62,10 +62,17 @@ class Lawyer(models.Model):
         if self.data.get('practice_location_2', None) is not None:
             locations.append(self.data.get('practice_location_2'))
         return locations
-        
+
+    @property
+    def startups_advised(self):
+        try:
+            return self.data.get('startups_advised', [])
+        except:
+            return []
+
+    @property
     def total_deals(self):
-        total = self.data.get('volume_incorp_setup')
-        return total
+        return self.data.get('volume_incorp_setup', 0)
             
     @property
     def phone(self):
