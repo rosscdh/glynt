@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """"""
 import os, sys, site
+import urlparse
 
 # Tell wsgi to add the Python site-packages to its path. 
 GLYNT_PATH = os.path.dirname(os.path.realpath(__file__ + '../../'))
@@ -36,6 +37,9 @@ def before_all(context):
     from django.core.handlers.wsgi import WSGIHandler
     host = context.host = 'localhost'
     port = context.port = getattr(settings, 'TESTING_MECHANIZE_INTERCEPT_PORT', 17681)
+
+    context.base_url = urlparse.urljoin('http://%s:%d/' % (host, port), '/')
+
     # NOTE: Nothing is actually listening on this port. wsgi_intercept
     # monkeypatches the networking internals to use a fake socket when
     # connecting to this port.
@@ -78,6 +82,7 @@ def before_scenario(context, scenario):
     # MAGIC: All requests made by this monkeypatched browser to the magic
     # host and port will be intercepted by wsgi_intercept via a
     # fake socket and routed to Django's WSGI interface.
+    from splinter import Browser
     browser = context.browser = mechanize_intercept.Browser()
     browser.set_handle_robots(False)
 
