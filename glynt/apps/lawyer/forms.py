@@ -27,6 +27,7 @@ logger = logging.getLogger('django.request')
 API_URLS = {
     'firms': '/api/v1/firm/lite/?format=json&limit=15',
     'locations': '/api/v1/location/lite/?format=json&limit=15',
+    'states': '/api/v1/state/lite/?format=json&limit=15',
     'startups': '/api/v1/startup/lite/?format=json&limit=15',
 }
 
@@ -47,11 +48,11 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     position = forms.ChoiceField(choices=Lawyer.LAWYER_ROLES.get_choices(), label="Position")
     years_practiced = forms.IntegerField(label="Years Practicing", initial="3", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini', 'tabindex':'6'}))
 
-    bar_membership_input = forms.CharField(required=False, label="Bar Location", help_text='Enter the location of your bar memberships.', widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-large','placeholder':'California','title':'The state you are licensed in','class':'typeahesad','autocomplete':'off','data-provide':'ajax', 'minLength':'3', 'data-items':4, 'data-source':'locations', 'data-filter':'name__istartswith', 'autocomplete':'off','tabindex':'7'}))
+    bar_membership_input = forms.CharField(required=False, label="Bar Location", help_text='Enter the location of your bar memberships.', widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-large','placeholder':'California','title':'The state you are licensed in','class':'typeahesad','autocomplete':'off','data-provide':'ajax', 'minLength':'2', 'data-items':4, 'data-source':'states', 'data-filter':'name__istartswith', 'autocomplete':'on','tabindex':'7'}))
     bar_membership = forms.CharField(required=False, widget=forms.HiddenInput)
-    # todo : fix up typedown to be states only! 
-    practice_location_1 = forms.CharField(label="Primary Location", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-large','placeholder':'San Francisco, California','title':'The primary city you operate from','class':'typeahead','autocomplete':'on','data-provide':'ajax', 'minLength':'3', 'data-items':4, 'data-source':'locations', 'data-filter':'name__istartswith', 'autocomplete':'off','tabindex':'8'}))
-    practice_location_2 = forms.CharField(required=False, label="Secondary Location", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-large','placeholder':'London, England','title':'Optional. The secondary city you operate from.','class':'typeahead','autocomplete':'on','data-provide':'ajax', 'minLength':'3', 'data-items':4, 'data-source':'locations', 'data-filter':'name__istartswith','autocomplete':'off','tabindex':'9'}))
+
+    practice_location_1 = forms.CharField(label="Primary Location", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-large','placeholder':'San Francisco, California','title':'The primary city you operate from','class':'typeahead','autocomplete':'on','data-provide':'ajax', 'minLength':'2', 'data-items':4, 'data-source':'locations', 'data-filter':'name__istartswith', 'autocomplete':'off','tabindex':'8'}))
+    practice_location_2 = forms.CharField(required=False, label="Secondary Location", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-large','placeholder':'London, England','title':'Optional. The secondary city you operate from.','class':'typeahead','autocomplete':'on','data-provide':'ajax', 'minLength':'2', 'data-items':4, 'data-source':'locations', 'data-filter':'name__istartswith','autocomplete':'off','tabindex':'9'}))
 
     summary = forms.CharField(label="Short description", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-rangelength':'[0,1024]','class':'input-xxlarge','placeholder':'e.g. Partner at Orrick advising technology companies in Europe','title':'Keep it short, and make it personal.'}))
     bio = forms.CharField(required=False, widget=forms.Textarea(attrs={'data-trigger':'change','class':'input-xxlarge', 'data-rangelength':'[30,1024]','placeholder':'A bit more about you.','title':'A bit longer, but still make it personal.'}))
