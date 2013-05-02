@@ -7,7 +7,7 @@ from tastypie.serializers import Serializer
 from tastypie.cache import SimpleCache
 from tastypie.authentication import Authentication, SessionAuthentication
 
-from cities_light.models import City
+from cities_light.models import City, Region
 from glynt.apps.firm.models import Firm, Office
 from glynt.apps.startup.models import Startup
 from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
@@ -53,6 +53,20 @@ class LocationSimpleResource(BaseApiModelResource):
         bundle.data.update({'name': '%s, %s' % (name, region) })
         return bundle
 
+
+class StateSimpleResource(BaseApiModelResource):
+    name = fields.CharField(attribute='display_name', null=True)
+
+    class Meta(BaseApiModelResource.Meta):
+        queryset = Region.objects.all()
+        authentication = Authentication()
+        list_allowed_methods = ['get']
+        resource_name = 'state/lite'
+        fields = ['display_name',]
+        filtering = {
+            'name': ALL,
+        }
+        cache = SimpleCache()
 
 class FirmSimpleResource(BaseApiModelResource):
     class Meta(BaseApiModelResource.Meta):
@@ -147,6 +161,7 @@ class SignatureResource(BaseApiModelResource):
 
 """ Register the api resources """
 v1_internal_api.register(LocationSimpleResource())
+v1_internal_api.register(StateSimpleResource())
 v1_internal_api.register(FirmSimpleResource())
 v1_internal_api.register(OfficeSimpleResource())
 v1_internal_api.register(StartupSimpleResource())
