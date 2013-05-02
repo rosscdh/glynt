@@ -121,8 +121,8 @@ class EnsureLawyerService(object):
             self.lawyer.role = self.role
 
         if self.data:
-            self.data['bar_membership'] = json.loads(self.data.get('bar_membership', '[]'))
-            self.data['websites'] = json.loads(self.data.get('websites', '[]'))
+            self.data['bar_membership'] = json.loads(self.data.get('bar_membership', '[]')) if self.data.get('bar_membership', '[]') != '' else []
+            self.data['websites'] = json.loads(self.data.get('websites', '[]')) if self.data.get('websites', '[]') != '' else []
             self.lawyer.data = self.data
 
         if self.data.get('photo', None) is not None:
