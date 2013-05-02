@@ -26,6 +26,11 @@ class EnsureLawyerService(object):
 
         self.form = kwargs.pop('form', None)
         self.role = kwargs.pop('position', None)
+
+        # remove unwanted fields
+        kwargs.pop('bar_membership_input', None)
+        kwargs.pop('websites_input', None)
+
         self.data = kwargs
 
     def update_user(self):
@@ -116,6 +121,8 @@ class EnsureLawyerService(object):
             self.lawyer.role = self.role
 
         if self.data:
+            self.data['bar_membership'] = json.loads(self.data.get('bar_membership', '[]'))
+            self.data['websites'] = json.loads(self.data.get('websites', '[]'))
             self.lawyer.data = self.data
 
         if self.data.get('photo', None) is not None:
