@@ -7,7 +7,7 @@ from tastypie.serializers import Serializer
 from tastypie.cache import SimpleCache
 from tastypie.authentication import Authentication, SessionAuthentication
 
-from cities_light.models import City, Region
+from cities_light.models import City, Country, Region
 from glynt.apps.firm.models import Firm, Office
 from glynt.apps.startup.models import Startup
 from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
