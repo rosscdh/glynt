@@ -2,9 +2,8 @@
 {% for p in social_profiles %}
 <li class="icon {{ p.typeId }}">
     <a href="{{ p.url }}">
-		<img src="https://s3.amazonaws.com/lp-static/icons/{{ p.typeId }}/{{ p.typeId }}-32.png" class="custom">
-<!--         <img src="https://api.fullcontact.com/v2/icon/{{ p.typeId }}/32/default?apiKey=7280036b99dd362e" class="fallback">
- -->  </a>
+		<img src="//s3.amazonaws.com/lp-static/icons/{{ p.typeId }}/{{ p.typeId }}-32.png" class="custom">
+</a>
 </li>
 {% empty %}
 </ul>

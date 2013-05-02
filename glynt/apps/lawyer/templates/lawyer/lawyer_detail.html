@@ -73,10 +73,10 @@
 			</div>
 			<div class="map">
 				{% if object.data.practice_location_1 and not object.data.practice_location_2 %}
-					<img src="http://maps.googleapis.com/maps/api/staticmap?size=300x145&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_1 }}&sensor=false&maptype=roadmap">
+					<img src="//maps.googleapis.com/maps/api/staticmap?size=300x145&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_1 }}&sensor=false&maptype=roadmap">
 				{% endif %}
 				{% if object.data.practice_location_1 and object.data.practice_location_2 %}
-					<img src="http://maps.googleapis.com/maps/api/staticmap?size=150x145&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_1 }}&sensor=false"><img src="http://maps.googleapis.com/maps/api/staticmap?size=149x145&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_2 }}&sensor=false">
+					<img src="//maps.googleapis.com/maps/api/staticmap?size=150x145&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_1 }}&sensor=false"><img src="http://maps.googleapis.com/maps/api/staticmap?size=149x145&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_2 }}&sensor=false">
 				{% endif %}
 				<ul>
 					{% for practice_location in object.practice_locations  %}
