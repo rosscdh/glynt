@@ -23,8 +23,34 @@ env.local_user = getpass.getuser()
 
 
 @task
-def prod_celery_workers():
+def prod_celery():
+    env.project = 'glynt'
     env.environment = 'production'
+    env.environment_class = 'celery'
+    env.local_project_path = os.path.dirname(os.path.realpath(__file__))
+    env.remote_project_path = None
+    env.deploy_archive_path = None
+    env.virtualenv_path = None
+
+    env.newrelic_api_token = None
+    env.newrelic_app_name = None
+    env.newrelic_application_id = None
+
+    # change from the default user to 'vagrant'
+    env.user = 'ubuntu'
+    env.application_user = 'app'
+    # connect to the port-forwarded ssh
+    env.hosts = ['ec2-54-241-224-100.us-west-1.compute.amazonaws.com']
+    env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
+
+    env.start_service = None
+    env.stop_service = None
+    env.light_restart = None
+
+@task
+def preview_celery():
+    env.project = 'glynt'
+    env.environment = 'preview'
     env.environment_class = 'celery'
     env.local_project_path = os.path.dirname(os.path.realpath(__file__))
     env.remote_project_path = None
@@ -49,6 +75,7 @@ def prod_celery_workers():
 
 @task
 def prod_db():
+    env.project = 'glynt'
     env.environment = 'production'
     env.environment_class = 'db'
     env.local_project_path = os.path.dirname(os.path.realpath(__file__))
@@ -92,7 +119,6 @@ def production():
     # connect to the port-forwarded ssh
     env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com']
     env.celery_hosts = ['ec2-54-241-224-100.us-west-1.compute.amazonaws.com']
-    env.hosts += env.celery_hosts
 
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
 
@@ -120,7 +146,6 @@ def preview():
     # connect to the port-forwarded ssh
     env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com']
     env.celery_hosts = ['ec2-54-241-224-100.us-west-1.compute.amazonaws.com']
-    env.hosts += env.celery_hosts
 
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
 
