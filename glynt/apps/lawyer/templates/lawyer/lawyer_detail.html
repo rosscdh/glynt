@@ -84,19 +84,17 @@
 						<li class="tick">{{ object.data.years_practiced }} Years Practicing</li>
 					{% endif %}
 					<li class="star">No endorsements yet</li>
-					<!-- <li class="friends"><img src="/static/img/app/small-avatar.jpg" alt="Avatar" /> Benjamin Ling is a mutual contact</li> -->
+					<!-- <li class="friends"><img src="{{ STATIC_URL }}img/app/small-avatar.jpg" alt="Avatar" /> Benjamin Ling is a mutual contact</li> -->
 				</ul>				
 			</div>
-			<div class="other-profiles">
+			<div id="other-profiles" class="row other-profiles">
 				<h5>Other Profiles</h5>
 				{% social_profiles object.user %}
  			</div>
-			<!-- <div class="bar-license">
+			<div id="bar-license" class="row bar-license">
 				<h5>Licensed In</h5>
-				{% for o in object.data.bar_membership  %}
-					{{ o }}
-				{% endfor %}
-			</div> -->
+				{% simple_name_list data_list=object.data.bar_membership %}
+			</div>
 		</div>	
 		<div class="span8">
 			<h2>Transaction Snapshot</h2>
@@ -131,18 +129,15 @@
 					<span><img src="http://{{ o }}/favicon.ico" class="fav"> <a href="http://{{ o }}" target="_BLANK" class="domain">{{ o }}</a></span>
 				{% endfor %}
 			</div>
-			<br />
-			<br />
-			<br />
 		</div>
-<!-- 		<div class="span8">
+		<div class="span8">
 			<div class="startups">
 				<h2>Other Webistes</h2>
 				{% for o in object.data.websites %}
 					<span><img src="http://{{ o }}/favicon.ico" class="fav"> <a href="http://{{ o }}" target="_BLANK" class="domain">{{ o }}</a></span>
 				{% endfor %}
 			</div>
-		</div> -->
+		</div>
 	</div>
 
 
@@ -181,7 +176,7 @@
 
 $(document).ready(function () {
 $('img').error(function() {
-	$(this).attr("src", '/static/img/app/hyperlink_blue.png');
+	$(this).attr("src", '{{ STATIC_URL }}img/app/hyperlink_blue.png');
 });
 
 
