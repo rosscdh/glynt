@@ -58,7 +58,8 @@ class StateSimpleResource(BaseApiModelResource):
     name = fields.CharField(attribute='display_name', null=True)
 
     class Meta(BaseApiModelResource.Meta):
-        queryset = Region.objects.all()
+        # Only filter by USA, allow freeform for others
+        queryset = Region.objects.filter(country_id=Country.objects.get(code3='USA'))
         authentication = Authentication()
         list_allowed_methods = ['get']
         resource_name = 'state/lite'
