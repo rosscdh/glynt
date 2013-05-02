@@ -282,6 +282,7 @@ opacity:0.3;
 ul li.nothing-found {
 color:#ccc;
 margin:10px 0px;
+font-size:15px;
 }
 
 ul.social-buttons li:hover {
