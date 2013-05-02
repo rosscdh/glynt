@@ -215,7 +215,11 @@ def syncdb():
 def clean_versions():
     current_version = get_sha1()
     versions_path = '%sversions' % env.remote_project_path
-    sudo('find %s/* ! -iname %s -print0 | xargs -0 rm -rf' % (versions_path ,current_version,))
+    cmd = 'find %s/* ! -iname %s -print0 | xargs -0 rm -Rf' % (versions_path ,current_version,)
+    if env.environment_class is 'webfaction':
+        run(cmd)
+    else:
+        sudo(cmd)
 
 @task
 def supervisord_restart():
@@ -229,7 +233,7 @@ def supervisord_restart():
 def chores():
     sudo('aptitude --assume-yes install build-essential python-setuptools python-dev uwsgi-plugin-python libjpeg8 libjpeg62-dev libfreetype6 libfreetype6-dev easy_install nmap htop vim unzip')
     sudo('aptitude --assume-yes install git-core mercurial subversion')
-    sudo('aptitude --assume-yes install libtidy-dev libpq-dev python-psycopg2')
+    sudo('aptitude --assume-yes install libtidy-dev postgresql-client libpq-dev python-psycopg2')
 
     sudo('easy_install pip')
     sudo('pip install virtualenv virtualenvwrapper pillow')
@@ -315,8 +319,11 @@ def restart_lite():
 
 @task
 def restart_service():
-    execute(stop_service)
-    execute(start_service)
+    if env.environment_class == 'webfaction':
+        execute(stop_service)
+        execute(start_service)
+    else:
+        execute(supervisord_restart)
 
 @task
 def start_service():
@@ -390,9 +397,7 @@ def deploy(is_predeploy='False'):
     execute(do_deploy)
     execute(clean_pyc)
 
-    if env.environment_class == 'webfaction':
-        execute(restart_service)
-    else:
-        execute(supervisord_restart)
+    execute(restart_service)
+
     execute(clean_zip)
     execute(newrelic_deploynote)
