@@ -3,6 +3,7 @@ background: url(../../img/app/lawyer-background.jpg) 0 0 no-repeat;
 background-size: cover;
 text-align: left;
 padding-bottom:0px;
+background-position: 0 -60px;
 }
 #hero h1 {
 margin: 0.25em 0 0 0;
@@ -214,7 +215,7 @@ line-height:30px;
 font-size:18px;
 text-transform: lowercase;
 margin-right:20px;
-color:#bbbbbb;
+color:#929292;
 }
 .endorsement {
 float: left;
@@ -277,6 +278,12 @@ padding:4px;
 border-radius:2px;
 opacity:0.3;
 }
+
+ul li.nothing-found {
+color:#ccc;
+margin:10px 0px;
+}
+
 ul.social-buttons li:hover {
 opacity:1;
 }

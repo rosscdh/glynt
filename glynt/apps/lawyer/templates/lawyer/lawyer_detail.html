@@ -16,12 +16,12 @@
 	<div class="container">
 		<!-- starts carousel -->
 		<div class="row animated fadeInRight profile-details">
-			<div class="span5">
+			<div class="span2">
 				<div class="avatar">
 					<img src="{{ object.profile_photo }}" alt="{{ object.user.get_full_name|default:object.user.username }}" />
 				</div>
 			</div>
-			<div class="span7">
+			<div class="span10">
 				<h1>{{ object.user.get_full_name|default:object.user.username }}</h1>
 				<h3>{{ object.summary }}</h3>
 			</div>
@@ -42,10 +42,10 @@
 						</script>
 						{% endif %}
 					{% endif %}
-					<a href="#comingSoonModal" class="btn right" title="Message" data-toggle="modal"><i class="icon-envelope"></i> Message</a>
-					<a href="#comingSoonModal" class="btn right" title="Endorse" data-toggle="modal"><i class="icon-star"></i> Endorse</a>
-					<a href="#comingSoonModal" class="btn right" title="Engage"  data-toggle="modal"><i class="icon-play"></i> Engage</a>
 				{% endif %}
+				<a href="#comingSoonModal" class="btn right" title="Message" data-toggle="modal"><i class="icon-envelope"></i> Message</a>
+				<a href="#comingSoonModal" class="btn right" title="Endorse" data-toggle="modal"><i class="icon-star"></i> Endorse</a>
+				<a href="#comingSoonModal" class="btn right" title="Engage"  data-toggle="modal"><i class="icon-play"></i> Engage</a>
 			</div>
 		</div>
 	</div>
@@ -89,12 +89,12 @@
 					<!-- <li class="friends"><img src="{{ STATIC_URL }}img/app/small-avatar.jpg" alt="Avatar" /> Benjamin Ling is a mutual contact</li> -->
 				</ul>				
 			</div>
-			<div id="other-profiles" class="row other-profiles">
+			<div id="other-profiles" class="other-profiles">
 				<h5>Other Profiles</h5>
 				{% social_profiles object.user %}
  			</div>
-			<div id="bar-license" class="row bar-license">
-				<h5>Licensed In</h5>
+			<div id="bar-license" class="bar-license">
+				<h5>Licensed In :</h5>
 				{% simple_name_list data_list=object.data.bar_membership %}
 			</div>
 		</div>	
@@ -128,21 +128,17 @@
 			<div class="startups">
 				<h2>Startups Advised</h2>
 				{% for o in object.data.startups_advised %}
-					<span><img src="http://{{ o }}/favicon.ico" class="fav"> <a href="http://{{ o }}" target="_BLANK" class="domain">{{ o }}</a></span>
+					<span><!-- <img src="http://www.{{ o }}/favicon.ico" class="fav">  --><a href="http://{{ o }}" target="_BLANK" class="domain">{{ o }}</a></span>
 				{% endfor %}
 			</div>
 		</div>
 		<div class="span8">
 			<div class="startups">
-				<h2>Other Webistes</h2>
-				{% for o in object.data.websites %}
-					<span><img src="http://{{ o }}/favicon.ico" class="fav"> <a href="http://{{ o }}" target="_BLANK" class="domain">{{ o }}</a></span>
-				{% endfor %}
+				<h2>Other Websites</h2>
+				{% simple_name_list data_list=object.data.websites %}
 			</div>
 		</div>
 	</div>
-
-
 
 	<div>
 	    <div class=" buttons">
@@ -163,12 +159,6 @@
 		
 		</div>
 	</div>
-
-	<div class="divide">
-		<div class="endorsements">
-			<h2>More profile data coming soon.</h2>
-		</div>
-	</div>
 </div>
 {% endblock %}
 
@@ -186,9 +176,9 @@ $('img').error(function() {
 	var ctx0 = $("#dealChart0").get(0).getContext("2d");
 	var ctx1 = $("#dealChart1").get(0).getContext("2d");
 
-	linedefaults = { scaleShowLabels : true }
+	linedefaults = { scaleShowLabels : false, scaleOverride : true,	scaleStartValue : 0, 	scaleStepWidth : 10, scaleSteps : 15 }
 
-	if('{{ object.data.volume_by_year.2011 }}' > 0) {
+	if($.isNumeric('{{ object.data.volume_by_year.2011 }}')) {
 		new Chart(ctx0).Line({
 			labels : ["2010","2011","2012"],
 			datasets : [{
@@ -196,12 +186,12 @@ $('img').error(function() {
 					strokeColor : "rgba(151,187,205,1)",
 					pointColor : "rgba(151,187,205,1)",
 					pointStrokeColor : "#fff",
-					data : [{{ object.data.volume_by_year.2011 }},{{ object.data.volume_by_year.2012 }},{{ object.data.volume_by_year.2013 }}]
+					data : [{{ object.data.volume_by_year.2010 }},{{ object.data.volume_by_year.2011 }},{{ object.data.volume_by_year.2012 }}]
 				}]
 			}
 			,linedefaults);
 	}
-	if('{{ object.data.volume_series_a }}' > 0) {
+	if($.isNumeric('{{ object.data.volume_series_a }}')){
 		new Chart(ctx1).Doughnut([
 			{
 				value: {{ object.data.volume_series_a|jsonify }},
