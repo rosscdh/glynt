@@ -34,11 +34,13 @@
 					<a href="{% url 'lawyer:setup_profile' %}" class="btn">Edit profile</a>  
 					<a href="{% url 'lawyer:invite' %}" class="btn btn-primary">Invite Lawyers</a> 
 					{% if object.summary %} 
+						{% if PROJECT_ENVIRONMENT != 'dev' %}
 					    <script>
 						  $(document).ready(function () {
 					     	  Intercom('update', {"Lawyer Profile": "Complete", "Firm": "{{ firm }}"});
 					   	 });
 						</script>
+						{% endif %}
 					{% endif %}
 					<a href="#comingSoonModal" class="btn right" title="Message" data-toggle="modal"><i class="icon-envelope"></i> Message</a>
 					<a href="#comingSoonModal" class="btn right" title="Endorse" data-toggle="modal"><i class="icon-star"></i> Endorse</a>
