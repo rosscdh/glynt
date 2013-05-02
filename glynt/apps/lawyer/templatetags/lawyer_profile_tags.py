@@ -18,3 +18,11 @@ def startups_advised(context):
         'startups': lawyer.startups_advised,
     })
     return context
+
+
+@register.inclusion_tag('lawyer/partials/simple_name_list.html', takes_context=False)
+def simple_name_list(data_list):
+    context = {
+        'object_list': data_list,
+    }
+    return context
