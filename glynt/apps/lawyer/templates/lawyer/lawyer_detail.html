@@ -92,6 +92,8 @@
 			<div id="other-profiles" class="other-profiles">
 				<h5>Other Profiles</h5>
 				{% social_profiles object.user %}
+ 				<br />
+ 				<br />
  			</div>
 			<div id="bar-license" class="bar-license">
 				<h5>Licensed In :</h5>
@@ -104,13 +106,15 @@
 				<div class="span4">
 					<h5>Transactions by year</h5>
 					<br />
+					<img src="/static/img/graph-year-placeholder.png" id="graph-year-placeholder">
 					<canvas id="dealChart0" width="300" height="200"></canvas>
 				</div>
 				<div class="span4" style="position:relative;">			
 					<h5>Transactions by type</h5>
 					<br />		
+					<img src="/static/img/graph-type-placeholder.png" id="graph-type-placeholder">
 					<canvas id="dealChart1" width="220" height="200"></canvas>
-					<div style="position:absolute;top:125px;right:-0px">
+					<div style="position:absolute;top:125px;right:-0px;opacity:0.3" id="type-legend">
 						<span class="label label-info" style="color:#F38630;background-color:white;">Series A</span>
 						<br /> 
 						<span class="label label-info" style="color:#6bdb7e;background-color:white;">Seed</span> 
@@ -119,7 +123,7 @@
 						<br />
 						<span class="label label-info" style="color:#f88172;background-color:white;">IP</span>
 						<br />
-						<span class="label label-info" style="background-color:white;color:#6ndn7e">Other</span>
+						<span class="label label-info" style="background-color:white;color:#3a87ad">Other</span>
 					</div>
 				</div>
 			</div>
@@ -129,6 +133,10 @@
 				<h2>Startups Advised</h2>
 				{% for o in object.data.startups_advised %}
 					<span><a href="http://{{ o }}" target="_BLANK" class="domain">{{ o }}</a></span>
+				{% empty %}
+					<ul class="unstyled">
+						<li class="nothing-found">Nothing yet.</li>
+					</ul>
 				{% endfor %}
 			</div>
 		</div>
@@ -190,6 +198,10 @@ $('img').error(function() {
 				}]
 			}
 			,linedefaults);
+			$("#graph-year-placeholder").hide();
+
+	}else{
+	 	$("#dealChart0").hide();
 	}
 	if($.isNumeric('{{ object.data.volume_series_a }}')){
 		new Chart(ctx1).Doughnut([
@@ -214,6 +226,11 @@ $('img').error(function() {
 				color : "#f88172"
 			}			
 		]);
+		$("#graph-type-placeholder").hide();
+		$("#type-legend").css({ opacity: 1 });
+
+	 }else{
+	 	$("#dealChart1").hide();
 	 }
 
 });
