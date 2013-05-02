@@ -28,9 +28,9 @@ def prod_celery():
     env.environment = 'production'
     env.environment_class = 'celery'
     env.local_project_path = os.path.dirname(os.path.realpath(__file__))
-    env.remote_project_path = None
-    env.deploy_archive_path = None
-    env.virtualenv_path = None
+    env.remote_project_path = '/var/apps/lawpal/'
+    env.deploy_archive_path = '/var/apps/'
+    env.virtualenv_path = '/var/apps/.lawpal-live-venv/'
 
     env.newrelic_api_token = None
     env.newrelic_app_name = None
@@ -53,9 +53,9 @@ def preview_celery():
     env.environment = 'preview'
     env.environment_class = 'celery'
     env.local_project_path = os.path.dirname(os.path.realpath(__file__))
-    env.remote_project_path = None
-    env.deploy_archive_path = None
-    env.virtualenv_path = None
+    env.remote_project_path = '/var/apps/preview-lawpal/'
+    env.deploy_archive_path = '/var/apps/'
+    env.virtualenv_path = '/var/apps/.lawpal-preview-venv/'
 
     env.newrelic_api_token = None
     env.newrelic_app_name = None
@@ -225,16 +225,25 @@ def git_export(branch='master'):
       local('git archive --format zip --output /tmp/%s.zip --prefix=%s/ %s' % (env.SHA1_FILENAME, env.SHA1_FILENAME, branch,), capture=False)
 
 @task
+def celery_worker(action='start', loglevel='info'):
+    if action == 'start':
+        virtualenv('python %s%s/manage.py celeryd_detach worker --loglevel=%s' % (env.remote_project_path, env.project, loglevel))
+
+@task
+def stop_celery_worker():
+    pass
+
+@task
 def prepare_deploy():
     git_export()
 
 @task
 def migrations():
-    virtualenv('python %s/%s/manage.py migrate' % (env.remote_project_path, env.project))
+    virtualenv('python %s%s/manage.py migrate' % (env.remote_project_path, env.project))
 
 @task
 def syncdb():
-    virtualenv('python %s/%s/manage.py syncdb' % (env.remote_project_path, env.project))
+    virtualenv('python %s%s/manage.py syncdb' % (env.remote_project_path, env.project))
 
 @task
 def clean_versions():
@@ -271,7 +280,7 @@ def nfs_reload():
     sudo('service nfs-kernel-server reload')
 
 def env_run(cmd):
-    return sudo(cmd) if env.environment_class is 'production' else run(cmd)
+    return sudo(cmd) if env.environment_class in ['production', 'celery'] else run(cmd)
 
 @task
 def deploy_archive_file():
@@ -280,7 +289,7 @@ def deploy_archive_file():
         filename = env.SHA1_FILENAME = get_sha1()
     file_name = '%s.zip' % filename
     if not files.exists('%s/%s' % (env.deploy_archive_path, file_name)):
-        as_sudo = env.environment_class is 'production'
+        as_sudo = env.environment_class in ['production', 'celery']
         put('/tmp/%s' % file_name, env.deploy_archive_path, use_sudo=as_sudo)
 
 
@@ -313,7 +322,7 @@ def do_deploy():
     full_version_path = '%s/%s' % (version_path, env.SHA1_FILENAME)
     project_path = '%s%s' % (env.remote_project_path, env.project,)
 
-    if env.environment == 'production':
+    if env.environment_class in ['production', 'celery']:
         if not files.exists(version_path):
             env_run('mkdir -p %s' % version_path )
         env_run('chown -R %s:%s %s' % (env.application_user, env.application_user, env.remote_project_path) )
