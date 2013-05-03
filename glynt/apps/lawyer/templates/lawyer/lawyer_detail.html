@@ -175,10 +175,6 @@
 <script>
 
 $(document).ready(function () {
-$('img').error(function() {
-	$(this).attr("src", '{{ STATIC_URL }}img/app/hyperlink_blue.png');
-});
-
 
 	//Get context with jQuery - using jQuery's .get() method.
 	var ctx0 = $("#dealChart0").get(0).getContext("2d");
