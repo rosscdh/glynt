@@ -14,7 +14,7 @@
             <div class="span12">
                  {% if user.username == object.user.username %}
                 <h1>Claim your profile</h1>
-                <h3>You are a critical part of the LawPal community.<br/> The doors are opening soon. Make sure everything is current so founders can see who you really are. Have a question or comments? Contact us at <a href="mailto:founders@lawpal.com">founders@lawpal.com</a> </h3>
+                <h3>You are a critical part of the LawPal community.<br/> The doors are opening soon. Make sure everything is current so founders can see who you really are. Have a question or comments? Contact us at <a href="mailto:founders@lawpal.com" style="color:white;">founders@lawpal.com</a> </h3>
                  </h3>
                  {% else %}
                 <h1>Update your profile</h1>
@@ -397,6 +397,11 @@ $(document).ready(function(){
         $(this).tab('show');
     })
 
+    /** scroll top top on submit **/
+   $("#update-profile").live("click", function() {
+      $("html, body").animate({scrollTop: 200}, 1000);
+});
+
     /**
     * Parsley error counter
     */
@@ -416,7 +421,6 @@ $(document).ready(function(){
                 ,class: 'unread_counter animated bounce'
             })
             targetTabLink.append(errorTemplate)
-             $("html, body").animate({ scrollTop: 0 }, "fast");
         }
 
        // targetTabLink.closest('li').addClass('parsley-error')
@@ -677,9 +681,7 @@ $(document).ready(function(){
     single_value = function single_value(element, volume_type, target_element, element_value) {
         $(target_element).val(element_value)
         window[volume_type + '_object'] = element_value
-
         target_element.val(window[volume_type + '_object'])
-
         return window[volume_type + '_object']
     }
 
