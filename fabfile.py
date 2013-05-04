@@ -151,7 +151,7 @@ def preview():
 
     env.start_service = 'supervisorctl start uwsgi'
     env.stop_service = 'supervisorctl stop uwsgi'
-    env.light_restart = "kill -HUP `cat /tmp/lawpal.pid`"
+    env.light_restart = "kill -HUP `cat /tmp/preview-lawpal.pid`"
 
 @task
 def staging():
@@ -181,15 +181,14 @@ def staging():
 
 
 @task
-def virtualenv(cmd):
+def virtualenv(cmd, **kwargs):
   # change to base dir
-  with cd(env.remote_project_path):
-    # activate the virtualenv, run scripts as app user
+  #with cd(env.remote_project_path):
     if env.environment_class is 'webfaction':
         # webfaction
-        run("source %sbin/activate && %s" % (env.virtualenv_path, cmd,))
+        run("source %sbin/activate && %s" % (env.virtualenv_path, cmd,), **kwargs)
     else:
-        sudo("source %sbin/activate && %s" % (env.virtualenv_path, cmd,), user=env.application_user)
+        sudo("source %sbin/activate && %s" % (env.virtualenv_path, cmd,), user=env.application_user, **kwargs)
 
 
 def cli(cmd, as_who='user'):
@@ -225,9 +224,18 @@ def git_export(branch='master'):
       local('git archive --format zip --output /tmp/%s.zip --prefix=%s/ %s' % (env.SHA1_FILENAME, env.SHA1_FILENAME, branch,), capture=False)
 
 @task
-def celery_worker(action='start', loglevel='info'):
-    if action == 'start':
-        virtualenv('python %s%s/manage.py celeryd_detach worker --loglevel=%s' % (env.remote_project_path, env.project, loglevel))
+def celery_start(loglevel='info'):
+    pid_path = "%sceleryd.pid" % env.remote_project_path
+    if files.exists(pid_path):
+        execute(celery_stop)
+    virtualenv('python %s%s/manage.py celeryd_detach worker --loglevel=%s --pidfile=%s' % (env.remote_project_path, env.project, loglevel, pid_path,), warn_only=True)
+
+@task
+def celery_stop():
+    pid_path = "%sceleryd.pid" % env.remote_project_path
+    sudo("cat %s | xargs kill -9" % pid_path, user=env.application_user, warn_only=True, shell=False)
+    # if files.exists(pid_path):
+    #     sudo("rm %s" % pid_path , shell=False, warn_only=True)
 
 @task
 def stop_celery_worker():
@@ -255,6 +263,7 @@ def clean_versions():
     else:
         sudo(cmd)
 
+# ------ RESTARTERS ------#
 @task
 def supervisord_restart():
     if env.environment_class is 'webfaction':
@@ -262,10 +271,27 @@ def supervisord_restart():
     else:
         sudo('supervisorctl restart uwsgi')
 
+@task
+def restart_lite():
+    sudo(env.light_restart)
+
+@task
+def restart_service(heavy_handed=False):
+    if env.environment_class not in ['celery']: # dont restart celery nginx services
+        if env.environment_class == 'webfaction':
+            execute(stop_service)
+            execute(start_service)
+        else:
+            if not heavy_handed:
+                execute(restart_lite)
+            else:
+                execute(supervisord_restart)
+
+# ------ END-RESTARTERS ------#
 
 @task
 def chores():
-    sudo('aptitude --assume-yes install build-essential python-setuptools python-dev uwsgi-plugin-python libjpeg8 libjpeg62-dev libfreetype6 libfreetype6-dev easy_install nmap htop vim unzip')
+    sudo('aptitude --assume-yes install build-essential python-setuptools python-dev apache2-utils uwsgi-plugin-python libjpeg8 libjpeg62-dev libfreetype6 libfreetype6-dev easy_install nmap htop vim unzip')
     sudo('aptitude --assume-yes install git-core mercurial subversion')
     sudo('aptitude --assume-yes install libtidy-dev postgresql-client libpq-dev python-psycopg2')
 
@@ -274,10 +300,6 @@ def chores():
 
     put('conf/.bash_profile', '~/.bash_profile')
 
-
-@task
-def nfs_reload():
-    sudo('service nfs-kernel-server reload')
 
 def env_run(cmd):
     return sudo(cmd) if env.environment_class in ['production', 'celery'] else run(cmd)
@@ -347,17 +369,6 @@ def unzip_archive():
     version_path = '%sversions' % env.remote_project_path
     with cd('%s' % version_path):
         virtualenv('unzip %s%s.zip -d %s' % (env.deploy_archive_path, env.SHA1_FILENAME, version_path,))
-@task
-def restart_lite():
-    sudo(env.light_restart)
-
-@task
-def restart_service():
-    if env.environment_class == 'webfaction':
-        execute(stop_service)
-        execute(start_service)
-    else:
-        execute(supervisord_restart)
 
 @task
 def start_service():
