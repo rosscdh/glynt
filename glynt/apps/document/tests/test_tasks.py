@@ -5,7 +5,8 @@ from glynt.apps.factories import DocumentFactory, DocumentHTMLFactory
 from glynt.apps.document.models import DocumentHTML
 from glynt.apps.services import GlyntPdfService
 
-from glynt.apps.document.tasks import document_created, document_deleted, document_restored, document_cloned, document_comment, generate_document_html, convert_to_pdf
+from glynt.apps.document.tasks import document_created_task, document_deleted_task, document_restored_task, \
+                        document_cloned_task, document_comment_task, generate_document_html_task, convert_to_pdf_task
 import user_streams
 
 
@@ -17,22 +18,22 @@ class TestDocumentTasks(mocktest.TestCase):
         expect(user_streams).add_stream_item.once()
         expect(self.document).get_absolute_url.once()
         # test
-        document_created(document=self.document)
+        document_created_task(document=self.document)
 
     def test_document_deleted(self):
         expect(user_streams).add_stream_item.once()
         # test
-        document_deleted(document=self.document)
+        document_deleted_task(document=self.document)
 
     def test_document_restored(self):
         expect(user_streams).add_stream_item.once()
         # test
-        document_restored(document=self.document)
+        document_restored_task(document=self.document)
 
     def test_document_cloned(self):
         expect(user_streams).add_stream_item.once()
         # test
-        document_cloned(source_document=self.document.source_document, document=self.document)
+        document_cloned_task(source_document=self.document.source_document, document=self.document)
 
     def test_document_comment(self):
         expect(user_streams).add_stream_item.once()
@@ -46,7 +47,7 @@ class TestDocumentTasks(mocktest.TestCase):
         when(DocumentHTML.objects).get_or_create.then_return((doc_html, True,))
         expect(doc_html).save.once()
         # test
-        generate_document_html(document=self.document)
+        generate_document_html_task(document=self.document)
 
     def test_convert_to_pdf(self):
         pass
