@@ -5,6 +5,9 @@ from django.template.defaultfilters import slugify
 from social_auth.models import UserSocialAuth
 from tasks import collect_user_fullcontact_info, collect_user_graph_connections
 
+from glynt.apps.graph.services import LinkedinProfileService
+from urlparse import parse_qs
+
 import uuid
 
 import logging
@@ -20,22 +23,44 @@ def ensure_user_setup(*args, **kwargs):
         user.profile
 
 
+def profile_photo(backend, details, response, user=None, is_new=False,
+                        *args, **kwargs):
+    if user is not None:
+        auth = user.social_auth.get(provider='linkedin')
+        access_token = auth.extra_data.get('access_token', None)
+
+        if access_token is not None:
+            logger.info('Pipeline.linkedin.profile_photo user: %s' % user)
+
+            api_data = parse_qs(access_token)
+            service = LinkedinProfileService(uid=auth.uid, oauth_token=api_data.get('oauth_token')[0], \
+                                                oauth_token_secret=api_data.get('oauth_token_secret')[0])
+            profile = service.profile
+
+            if profile.get('photo_url') is None:
+                logger.info('Pipeline.linkedin.profile_photo user does not have linkedin photo: %s' % user)
+            else:
+                logger.info('Pipeline.linkedin.profile_photo user has linkedin photo: %s' % profile.get('photo_url'))
+                client_profile = user.profile
+                client_profile.profile_data['linkedin_photo_url'] = profile.get('photo_url')
+                client_profile.save(update_fields=['profile_data'])
+
 
 def graph_user_connections(backend, details, response, user=None, is_new=False,
                         *args, **kwargs):
     logger.debug('Graph.graph_user_connections start')
     if user is not None:
         auth = UserSocialAuth.objects.get(user=user, provider=backend.name)
-        logger.info('Graph.graph_user_connections auth: %s' % auth)
+        logger.info('Pipeline: Graph.graph_user_connections auth: %s' % auth)
 
         try:
-            logger.info('Send: Graph.collect_user_fullcontact_info auth: %s' % user)
+            logger.info('Pipeline: Graph.collect_user_fullcontact_info auth: %s' % user)
             collect_user_fullcontact_info.delay(user=user)
         except Exception as e:
             logger.error('Did not try collect_user_fullcontact_info as no connection to broker could be found: %s' % e)
 
         try:
-            logger.info('Send: Graph.collect_user_graph_connections auth: %s' % user)
+            logger.info('Pipeline: Graph.collect_user_graph_connections auth: %s' % user)
             collect_user_graph_connections.delay(auth=auth)
         except Exception as e:
             logger.error('Did not try collect_user_graph_connections as no connection to broker could be found: %s' % e)

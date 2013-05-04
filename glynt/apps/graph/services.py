@@ -10,8 +10,11 @@ from django.conf import settings
 from models import LawpalBaseConnection, LinkedinConnection, AngelConnection, FullContactConnection
 from models import GraphConnection
 
+from BeautifulSoup import BeautifulSoup
 import oauth2 as oauth
 import requests
+import json
+
 
 import logging
 logger = logging.getLogger('lawpal.services')
@@ -97,6 +100,32 @@ class LinkedinConnectionService(CollectConnectionBaseService):
                     secret=getattr(self, 'oauth_token_secret'))
         client = oauth.Client(self.consumer, access_token)
         return super(LinkedinConnectionService, self).request(method=method, client=client)
+
+
+class LinkedinProfileService(LinkedinConnectionService):
+    url = 'http://api.linkedin.com/v1/people/%s'
+    linkedin_user_profile = None
+    def get_url(self):
+        """ allow ability to specify the user to query 
+        default is ~ or current logged in user """
+        return self.url % '%s:(picture-url,current-status,industry,summary)'%self.uid if self.uid else '~'
+
+    @property
+    def profile(self):
+        if self.linkedin_user_profile is None:
+            resp, content = self.request()
+
+            p = BeautifulSoup(content)
+
+            # parse the crzy linked in api
+            self.linkedin_user_profile = {
+                'photo_url': p.person.find('picture-url').string if p.person.find('picture-url') is not None else None,
+                'status': p.person.find('current-status').string if p.person.find('current-status') is not None else None,
+                'industry': p.person.find('industry').string if p.person.find('industry') is not None else None,
+                'summary': p.person.find('summary').string if p.person.find('summary') is not None else None,
+
+            }
+        return self.linkedin_user_profile
 
 
 class AngelConnectionService(CollectConnectionBaseService):
