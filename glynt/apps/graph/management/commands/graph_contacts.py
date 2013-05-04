@@ -74,7 +74,6 @@ class Command(BaseCommand):
             oauth_client = LinkedinConnectionService(oauth_token=user_access_data.get('oauth_token')[0], \
                                                     oauth_token_secret=user_access_data.get('oauth_token_secret')[0])
             resp, content = oauth_client.request()
-            print resp.__dict__
 
             content = json.loads(content)
             contacts = content.get('values', [])
