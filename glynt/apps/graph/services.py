@@ -10,7 +10,6 @@ from django.conf import settings
 from models import LawpalBaseConnection, LinkedinConnection, AngelConnection, FullContactConnection
 from models import GraphConnection
 
-from BeautifulSoup import BeautifulSoup
 import oauth2 as oauth
 import requests
 import json
@@ -98,12 +97,12 @@ class LinkedinConnectionService(CollectConnectionBaseService):
         access_token = oauth.Token(
                     key=getattr(self, 'oauth_token'),
                     secret=getattr(self, 'oauth_token_secret'))
-        client = oauth.Client(self.consumer, access_token)
+        self.client = client = oauth.Client(self.consumer, access_token)
         return super(LinkedinConnectionService, self).request(method=method, client=client)
 
 
 class LinkedinProfileService(LinkedinConnectionService):
-    url = 'http://api.linkedin.com/v1/people/%s'
+    url = 'http://api.linkedin.com/v1/people/%s?format=json'
     linkedin_user_profile = None
     def get_url(self):
         """ allow ability to specify the user to query 
@@ -113,16 +112,18 @@ class LinkedinProfileService(LinkedinConnectionService):
     @property
     def profile(self):
         if self.linkedin_user_profile is None:
-            resp, content = self.request()
-
-            p = BeautifulSoup(content)
+            try:
+                resp, content = self.request()
+                p = json.loads(content)
+            except:
+                p = {}
 
             # parse the crzy linked in api
             self.linkedin_user_profile = {
-                'photo_url': p.person.find('picture-url').string if p.person.find('picture-url') is not None else None,
-                'status': p.person.find('current-status').string if p.person.find('current-status') is not None else None,
-                'industry': p.person.find('industry').string if p.person.find('industry') is not None else None,
-                'summary': p.person.find('summary').string if p.person.find('summary') is not None else None,
+                'photo_url': p.get('pictureUrl', None),
+                'status': p.get('currentStatus', None),
+                'industry': p.get('industry', None),
+                'summary': p.get('summary', None),
 
             }
         return self.linkedin_user_profile
