@@ -7,7 +7,9 @@
     widget: {
       activator: '#Intercom',
       use_counter: true
-    },
+    } {% if intercomio_userhash %},
+      user_hash: "{{ intercomio_userhash }}"
+      {% endif %}
   };
 </script>
 
