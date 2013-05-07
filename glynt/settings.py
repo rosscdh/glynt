@@ -142,6 +142,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "glynt.context_processors.project_info",
     "glynt.context_processors.project_environment",
     "glynt.context_processors.default_profile_image",
+    "glynt.context_processors.intercomio_userhash",
     "social_auth.context_processors.social_auth_by_type_backends",
     "social_auth.context_processors.social_auth_by_name_backends",
     "django.core.context_processors.request",
@@ -344,6 +345,8 @@ SOCIAL_AUTH_PIPELINE = (
     'glynt.apps.graph.pipeline.ensure_user_setup',
     'glynt.apps.graph.pipeline.graph_user_connections',
 )
+
+INTERCOM_API_SECRET = '-sjPyiyI5P44z3QsHLDUWfoLK8Rml7Wbg2wmj64L'
 
 
 DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d %Y',
