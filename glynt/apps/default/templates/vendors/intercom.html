@@ -1,15 +1,16 @@
 {% if user and user.is_authenticated %}
 <script id="IntercomSettingsScriptTag">
   window.intercomSettings = {
-    email: "{{ user.email }}",
-    created_at: "{{ user.date_joined|date:"U" }}",
-    app_id: "xw4ux8lx",
-    widget: {
+    email: "{{ user.email }}"
+    ,created_at: "{{ user.date_joined|date:"U" }}"
+    ,app_id: "xw4ux8lx"
+    ,widget: {
       activator: '#Intercom',
       use_counter: true
-    } {% if intercomio_userhash %},
-      user_hash: "{{ intercomio_userhash }}"
-      {% endif %}
+    }
+    {% if intercomio_userhash %},
+    ,user_hash: "{{ intercomio_userhash }}"
+    {% endif %}
   };
 </script>
 

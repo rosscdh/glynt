@@ -145,7 +145,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "social_auth.context_processors.social_auth_by_type_backends",
     "social_auth.context_processors.social_auth_by_name_backends",
     "django.core.context_processors.request",
-    "glynt.context_processors.intercomio_userhash",
 )
 
 TEMPLATE_DIRS = (
