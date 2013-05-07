@@ -345,6 +345,8 @@ SOCIAL_AUTH_PIPELINE = (
     'glynt.apps.graph.pipeline.graph_user_connections',
 )
 
+INTERCOM_API_SECRET = '-sjPyiyI5P44z3QsHLDUWfoLK8Rml7Wbg2wmj64L'
+
 
 DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d %Y',
 '%b %d, %Y', '%d %b %Y', '%d %b, %Y', '%B %d %Y',

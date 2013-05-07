@@ -3,6 +3,7 @@ from django.conf import settings
 import os
 
 
+
 def project_info(request):
     PROJECT_NAME = getattr(settings, 'PROJECT_NAME', 'LawPal')
     return {
