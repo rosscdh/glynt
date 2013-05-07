@@ -30,4 +30,6 @@ def intercomio_userhash(request):
     if request.user.is_authenticated():
         intercom_unique_hash = hmac.new(settings.INTERCOM_API_SECRET, str(request.user.pk), digestmod=hashlib.sha256).hexdigest()
 
-    return intercom_unique_hash
+    return {
+        'intercomio_userhash': intercom_unique_hash
+    }
