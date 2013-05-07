@@ -1,0 +1,48 @@
+[
+  {
+    "pk": 1,
+    "model": "cities_light.country",
+    "fields": {
+      "code2": "US",
+      "code3": "USA",
+      "name": "United States",
+      "tld": "us",
+      "alternate_names": "Vereinigte Staaten,America,United States of America,Estados Unidos,Stany Zjednoczone,U.S.,USA,U.S.A.",
+      "continent": "NA",
+      "geoname_id": 6252001,
+      "name_ascii": "United States",
+      "slug": "united-states"
+    }
+  },
+  {
+    "pk": 1,
+    "model": "cities_light.region",
+    "fields": {
+      "display_name": "Parròquia d'Ordino, Andorra",
+      "name": "Parròquia d'Ordino",
+      "country": 1,
+      "alternate_names": "Ordino",
+      "geoname_id": 3039676,
+      "geoname_code": "05",
+      "name_ascii": "Parroquia d'Ordino",
+      "slug": "parroquia-dordino"
+    }
+  },
+  {
+    "pk": 1,
+    "model": "cities_light.city",
+    "fields": {
+      "display_name": "Ancaster, Ontario, Canada",
+      "name": "Ancaster",
+      "country": 38,
+      "region": 474,
+      "alternate_names": "",
+      "search_names": "ancastercanada ancasterontariocanada ancasteroncanada ancasterkanada ancasterontariokanada ancasteronkanada",
+      "longitude": "-79.98716",
+      "geoname_id": 8285452,
+      "name_ascii": "Ancaster",
+      "latitude": "43.21806",
+      "slug": "ancaster"
+    }
+  }
+]
