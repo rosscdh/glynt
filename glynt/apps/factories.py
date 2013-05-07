@@ -1,7 +1,7 @@
 import factory
 
 from django.contrib.sites.models import Site
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AnonymousUser
 
 from glynt.apps.document.models import ClientCreatedDocument, DocumentTemplate, DocumentHTML
 from glynt.apps.sign.models import DocumentSignature
@@ -15,6 +15,10 @@ class SiteFactory(factory.Factory):
     name = factory.LazyAttributeSequence(lambda a, n: 'Test Domain Example {0}'.format(n))
 
 
+class LoggedOutUserFactory(factory.Factory):
+    FACTORY_FOR = AnonymousUser
+
+
 class UserFactory(factory.Factory):
     FACTORY_FOR = User
     first_name = 'Test'
@@ -22,6 +26,7 @@ class UserFactory(factory.Factory):
     is_superuser = False
     username = factory.LazyAttributeSequence(lambda a, n: '{0}_{1}'.format(a.first_name, n).lower())
     email = factory.LazyAttributeSequence(lambda a, n: '{0}.{1}+{2}@lawpal.com'.format(a.first_name, a.last_name, n).lower())
+    password = 'test'
 
 
 class AdminFactory(UserFactory):
