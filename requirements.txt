@@ -41,6 +41,7 @@ django-jsonfield # This is the correct one, the bradjasper version does not save
 pyelasticsearch
 geopy # for spatial
 
+
 # Markup
 django-parsley
 django_markup
