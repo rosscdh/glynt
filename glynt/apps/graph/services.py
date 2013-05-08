@@ -12,6 +12,8 @@ from models import GraphConnection
 
 import oauth2 as oauth
 import requests
+import json
+
 
 import logging
 logger = logging.getLogger('lawpal.services')
@@ -95,8 +97,36 @@ class LinkedinConnectionService(CollectConnectionBaseService):
         access_token = oauth.Token(
                     key=getattr(self, 'oauth_token'),
                     secret=getattr(self, 'oauth_token_secret'))
-        client = oauth.Client(self.consumer, access_token)
+        self.client = client = oauth.Client(self.consumer, access_token)
         return super(LinkedinConnectionService, self).request(method=method, client=client)
+
+
+class LinkedinProfileService(LinkedinConnectionService):
+    url = 'http://api.linkedin.com/v1/people/%s?format=json'
+    linkedin_user_profile = None
+    def get_url(self):
+        """ allow ability to specify the user to query 
+        default is ~ or current logged in user """
+        return self.url % '%s:(picture-url,current-status,industry,summary)'%self.uid if self.uid else '~'
+
+    @property
+    def profile(self):
+        if self.linkedin_user_profile is None:
+            try:
+                resp, content = self.request()
+                p = json.loads(content)
+            except:
+                p = {}
+
+            # parse the crzy linked in api
+            self.linkedin_user_profile = {
+                'photo_url': p.get('pictureUrl', None),
+                'status': p.get('currentStatus', None),
+                'industry': p.get('industry', None),
+                'summary': p.get('summary', None),
+
+            }
+        return self.linkedin_user_profile
 
 
 class AngelConnectionService(CollectConnectionBaseService):
