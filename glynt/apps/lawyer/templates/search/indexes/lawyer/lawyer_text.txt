@@ -1,0 +1,7 @@
+{{ object.full_name }}
+{{ object.role }}
+{{ object.summary }}
+{{ object.firm_name }}
+{% for location in object.practice_locations %}
+    {{ location }}
+{% endfor %}
