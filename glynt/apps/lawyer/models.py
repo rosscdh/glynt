@@ -100,8 +100,8 @@ class Lawyer(models.Model):
         return u'%s' % self.data.get('years_practiced', 0)
 
     @property
-    def current_geo_loc(self):
-        return u'%s' % self.data.get('current_geo_loc', None)
+    def geo_loc(self):
+        return u'%' % self.data.get('current_geo_loc', None)
 
     @property
     def twitter(self):
