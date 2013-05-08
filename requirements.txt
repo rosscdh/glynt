@@ -36,6 +36,9 @@ django-jsonfield # This is the correct one, the bradjasper version does not save
 -e git+https://github.com/rosscdh/django-userena.git@lp#egg=django-userena  # Note the @branch
 -e git+https://github.com/rosscdh/django-user-streams.git@extended_templates#egg=django-user-streams  # Note the @branch
 
+# Search
+-e git+https://github.com/toastdriven/django-haystack.git@master#egg=django-haystack
+
 # Markup
 django-parsley
 django_markup
