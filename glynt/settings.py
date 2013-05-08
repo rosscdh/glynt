@@ -241,6 +241,8 @@ HELPER_APPS = (
     'clear_cache',
     # engless pagination
     'endless_pagination',
+    # Search
+    #'haystack',
     # Celery Tasks
     'djcelery',
     # User switcher
@@ -381,6 +383,8 @@ if DEBUG:
             '--with-coverage',
         ]
 
+# Process model updates in real time
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 
 INTERNAL_IPS = ('127.0.0.1',)
