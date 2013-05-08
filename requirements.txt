@@ -39,6 +39,7 @@ django-jsonfield # This is the correct one, the bradjasper version does not save
 # Search
 -e git+https://github.com/toastdriven/django-haystack.git@master#egg=django-haystack
 pyelasticsearch
+geopy # for spatial
 
 # Markup
 django-parsley
