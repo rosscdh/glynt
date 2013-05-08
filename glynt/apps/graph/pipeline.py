@@ -25,25 +25,39 @@ def ensure_user_setup(*args, **kwargs):
 
 def profile_photo(backend, details, response, user=None, is_new=False,
                         *args, **kwargs):
-    if user is not None:
-        auth = user.social_auth.get(provider='linkedin')
-        access_token = auth.extra_data.get('access_token', None)
+    """ see if the details dict has the linkedin picture-url
+    if present update the profiel dict for use in updating user pic 
+    not rpesent? then init the linkedinprofileservice and get it from linked in"""
+    if backend == 'linkedin':
+        profile = {}
 
-        if access_token is not None:
-            logger.info('Pipeline.linkedin.profile_photo user: %s' % user)
+        logger.info('Pipeline.linkedin.profile_photo logged in with linkedin')
 
-            api_data = parse_qs(access_token)
-            service = LinkedinProfileService(uid=auth.uid, oauth_token=api_data.get('oauth_token')[0], \
-                                                oauth_token_secret=api_data.get('oauth_token_secret')[0])
-            profile = service.profile
+        if details.get('picture-url', None) is not None:
+            profile.update({
+                'photo_url': details.get('picture-url')
+            })
+            logger.info('Pipeline.linkedin.profile_photo details already had linkedin photo: %s' % profile.get('photo_url'))
+        else:
+            if user is not None:
+                auth = user.social_auth.get(provider='linkedin')
+                access_token = auth.extra_data.get('access_token', None)
 
-            if profile.get('photo_url') is None:
-                logger.info('Pipeline.linkedin.profile_photo user does not have linkedin photo: %s' % user)
-            else:
-                logger.info('Pipeline.linkedin.profile_photo user has linkedin photo: %s' % profile.get('photo_url'))
-                client_profile = user.profile
-                client_profile.profile_data['linkedin_photo_url'] = profile.get('photo_url')
-                client_profile.save(update_fields=['profile_data'])
+                if access_token is not None:
+                    logger.info('Pipeline.linkedin.profile_photo user: %s' % user)
+
+                    api_data = parse_qs(access_token)
+                    service = LinkedinProfileService(uid=auth.uid, oauth_token=api_data.get('oauth_token')[0], \
+                                                        oauth_token_secret=api_data.get('oauth_token_secret')[0])
+                    profile = service.profile
+
+        if profile.get('photo_url') is None:
+            logger.info('Pipeline.linkedin.profile_photo user does not have linkedin photo: %s' % user)
+        else:
+            logger.info('Pipeline.linkedin.profile_photo user has linkedin photo: %s' % profile.get('photo_url'))
+            client_profile = user.profile
+            client_profile.profile_data['linkedin_photo_url'] = profile.get('photo_url')
+            client_profile.save(update_fields=['profile_data'])
 
 
 def graph_user_connections(backend, details, response, user=None, is_new=False,
