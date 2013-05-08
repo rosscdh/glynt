@@ -195,6 +195,10 @@ def cli(cmd, as_who='user'):
     sudo(cmd) if as_who == 'sudo' and env.environment_class is not 'webfaction' else run(cmd)
 
 @task
+def clear_cache():
+    virtualenv(cmd='python %s%s/manage.py clear_cache' % (env.remote_project_path, env.project))
+
+@task
 def clean_pyc():
     virtualenv('python %s%s/manage.py clean_pyc' % (env.remote_project_path, env.project))
 
@@ -443,7 +447,7 @@ def deploy(is_predeploy='False'):
     prepare_deploy()
     execute(do_deploy)
     execute(clean_pyc)
-
+    execute(clear_cache)
     execute(restart_service)
 
     execute(clean_zip)
