@@ -28,7 +28,7 @@ def profile_photo(backend, details, response, user=None, is_new=False,
     """ see if the details dict has the linkedin picture-url
     if present update the profiel dict for use in updating user pic 
     not rpesent? then init the linkedinprofileservice and get it from linked in"""
-    if backend == 'linkedin':
+    if backend.name == 'linkedin':
         profile = {}
 
         logger.info('Pipeline.linkedin.profile_photo logged in with linkedin')
@@ -56,7 +56,7 @@ def profile_photo(backend, details, response, user=None, is_new=False,
         else:
             logger.info('Pipeline.linkedin.profile_photo user has linkedin photo: %s' % profile.get('photo_url'))
             client_profile = user.profile
-            client_profile.profile_data['linkedin_photo_url'] = profile.get('photo_url')
+            client_profile.profile_data.update({'linkedin_photo_url': profile.get('photo_url')})
             client_profile.save(update_fields=['profile_data'])
 
 

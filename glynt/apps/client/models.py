@@ -32,7 +32,7 @@ LAWPAL_PRIVATE_BETA = getattr(settings, 'LAWPAL_PRIVATE_BETA', False)
 class ClientProfile(UserenaBaseProfile):
     """ Base User Profile, where we store all the interesting information about users """
     user = models.OneToOneField(User, unique=True, related_name='profile')
-    profile_data = JSONField(default={}, null=True)
+    profile_data = JSONField(default={})
     country = CountryField(default='US', null=True)
     state = models.CharField(max_length=64, null=True)
     is_lawyer = models.BooleanField(default=True)
