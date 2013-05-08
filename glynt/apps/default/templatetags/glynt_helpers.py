@@ -112,6 +112,7 @@ def show_loading(**kwargs):
 def intercom_script(context, **kwargs):
     user = context.get('user', None)
     intercomio_userhash = None
+
     # were not in dev (because we dont want intercom to record us devs)
     if getattr(settings, 'PROJECT_ENVIRONMENT', None) != 'dev':
         if user and user.is_authenticated():

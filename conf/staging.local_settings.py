@@ -2,7 +2,7 @@
 LOCAL_SETTINGS = True
 from settings import *
 
-PROJECT_ENVIRONMENT = 'prod'
+PROJECT_ENVIRONMENT = 'staging'
 
 SITE_ID = 3
 
