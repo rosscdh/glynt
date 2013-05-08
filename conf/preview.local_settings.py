@@ -52,14 +52,6 @@ FACEBOOK_SECRET_KEY = '4f9854b8fe8f5ccf27ac1ffcf5051b79'
 
 LINKEDIN_CONSUMER_KEY = 'rrjwcpuvhfl1'
 LINKEDIN_CONSUMER_SECRET = '2wm9DFbdUjLyi76U'
-LINKEDIN_SCOPE = ['r_basicprofile', 'r_emailaddress', 'r_network']
-LINKEDIN_EXTRA_FIELD_SELECTORS = ['email-address', 'headline', 'industry']
-LINKEDIN_EXTRA_DATA = [('id', 'id'),
-                       ('first-name', 'first_name'),
-                       ('last-name', 'last_name'),
-                       ('email-address', 'email_address'),
-                       ('headline', 'headline'),
-                       ('industry', 'industry')]
 
 
 ANGEL_CLIENT_ID = 'c1602543cc137ebdf925cc8d63087bc5' # dev.lawpal.com
