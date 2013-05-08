@@ -110,8 +110,8 @@
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
         })();
     </script>
-    {% if PROJECT_ENVIRONMENT != 'dev' %}
-        {% intercom_script %}
-    {% endif %}
+
+    {% intercom_script %}
+
 </body>
 </html>

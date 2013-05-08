@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django import template
 
+import hmac, hashlib
 import time
 
 register = template.Library()
@@ -109,7 +110,15 @@ def show_loading(**kwargs):
 
 @register.inclusion_tag('vendors/intercom.html', takes_context=True)
 def intercom_script(context, **kwargs):
-    return {
-        'user': context.get('user', None)
-    }
+    user = context.get('user', None)
+    intercomio_userhash = None
+    # were not in dev (because we dont want intercom to record us devs)
+    if getattr(settings, 'PROJECT_ENVIRONMENT', None) != 'dev':
+        if user and user.is_authenticated():
+            intercomio_userhash = hmac.new(settings.INTERCOM_API_SECRET, str(user.pk), digestmod=hashlib.sha256).hexdigest()
+
+    context.update({
+        'intercomio_userhash': intercomio_userhash,
+    })
+    return context
 intercom_script.is_safe = True

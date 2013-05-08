@@ -259,7 +259,7 @@
                                 </div>
                             </div>
                             <div class="span4">
-                                <img id="photo-preview" width="130" height="130" src="{{ request.user.profile.get_mugshot_url }}">
+                                <img id="photo-preview" width="130" height="130" src="{{ lawyer.profile_photo }}">
                             </div>
                         </div>
                     </div>
@@ -374,8 +374,9 @@ function preparePhotoPreview(element) {
             $('#id_hidden_photo').val(photo_id);
             src = cookie_data.path;
         }
-
-        $('#photo-preview').attr('src', src)
+        if (src) {
+            $('#photo-preview').attr('src', src)
+        }
 
         img.hide();
     })

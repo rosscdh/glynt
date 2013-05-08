@@ -145,7 +145,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "social_auth.context_processors.social_auth_by_type_backends",
     "social_auth.context_processors.social_auth_by_name_backends",
     "django.core.context_processors.request",
-    "glynt.context_processors.intercomio_userhash",
 )
 
 TEMPLATE_DIRS = (
@@ -312,7 +311,7 @@ FACEBOOK_REQUEST_PERMISSIONS = 'email,user_likes,user_about_me,read_stream'
 LINKEDIN_CONSUMER_KEY = '1uh2ns1cn9tm'
 LINKEDIN_CONSUMER_SECRET = 'MnrqdbtmM10gkz27'
 LINKEDIN_SCOPE = ['r_basicprofile', 'r_emailaddress', 'r_network']
-LINKEDIN_EXTRA_FIELD_SELECTORS = ['email-address', 'headline', 'industry']
+LINKEDIN_EXTRA_FIELD_SELECTORS = ['picture-url','email-address', 'headline', 'industry']
 LINKEDIN_EXTRA_DATA = [('id', 'id'),
                        ('first-name', 'first_name'),
                        ('last-name', 'last_name'),
@@ -336,13 +335,14 @@ SOCIAL_AUTH_BACKEND_ERROR_URL = '/'
 SOCIAL_AUTH_PROTECTED_USER_FIELDS = ('first_name', 'last_name', 'full_name', 'email',)
 SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.social.social_auth_user',
-    'social_auth.backends.pipeline.associate.associate_by_email',
+    'social_auth.backends.pipeline.associate.associate_by_email', # very insecure, only here to allow transfer of users from preview.lawpal
     'glynt.apps.graph.pipeline.get_username',
     'social_auth.backends.pipeline.user.create_user',
     'social_auth.backends.pipeline.social.associate_user',
     'social_auth.backends.pipeline.social.load_extra_data',
     'social_auth.backends.pipeline.user.update_user_details',
     'glynt.apps.graph.pipeline.ensure_user_setup',
+    'glynt.apps.graph.pipeline.profile_photo',
     'glynt.apps.graph.pipeline.graph_user_connections',
 )
 
