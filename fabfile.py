@@ -398,11 +398,13 @@ def requirements():
     virtualenv('pip install -r %s' % requirements_path )
 
 @task
+@serial
 def newrelic_note():
     if not hasattr(env, 'deploy_desc'):
         env.deploy_desc = prompt(colored('Hi %s, Please provide a Deployment Note:' % env.local_user, 'yellow'))
 
 @task
+@serial
 def newrelic_deploynote():
     description = '[env:%s][%s@%s] %s' % (env.environment, env.user, env.host, env.deploy_desc)
     headers = {
