@@ -8,7 +8,9 @@
     <div class="control-group">
       {{ form.name|as_crispy_field }}
     </div>
-    {% if form.email %}
+    {% if form.email.is_hidden %}
+      {{ form.email|as_crispy_field }}
+    {% else %}
     <div class="control-group">
       {{ form.email|as_crispy_field }}
     </div>
