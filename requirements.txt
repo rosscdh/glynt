@@ -42,7 +42,7 @@ south
 # Search
 -e git+https://github.com/toastdriven/django-haystack.git@master#egg=django-haystack
 pyelasticsearch
-geopy # for spatial
+# geopy # for spatial
 
 # Markup
 django-parsley
