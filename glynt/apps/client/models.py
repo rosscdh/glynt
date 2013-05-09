@@ -43,6 +43,10 @@ class ClientProfile(UserenaBaseProfile):
         profile.save()
         return profile
 
+    def get_mugshot_url(self):
+        p = self.profile_data.get('linkedin_photo_url', None) or self.profile_data.get('facebook_photo_url', None) or super(ClientProfile, self).get_mugshot_url()
+        return p
+
     def short_name(self):
         """ Returns A. LastName """
         user = self.user
