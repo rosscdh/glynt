@@ -11,7 +11,7 @@ class LawyerIndex(indexes.SearchIndex, indexes.Indexable):
     username = indexes.CharField(model_attr='user__username')
     full_name = indexes.CharField(model_attr='user__get_full_name')
     profile_photo = indexes.CharField(model_attr='profile_photo')
-    role = indexes.CharField(model_attr='position')
+    position = indexes.CharField(model_attr='position')
     firm_name = indexes.CharField(model_attr='firm_name', null=True)
     summary = indexes.CharField(model_attr='summary')
     geo_loc = indexes.LocationField(model_attr='geo_loc', null=True)
