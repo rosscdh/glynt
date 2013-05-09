@@ -169,11 +169,18 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
 
 @parsleyfy
 class LawyerSearchForm(BootstrapMixin, forms.Form):
-    q = forms.CharField(label='', help_text='', widget=forms.TextInput(attrs={'placeholder':'Keyword, Name, Location', 'tabindex':'1', 'class':'input-xlarge'}))
+    location = forms.CharField(label='', help_text='', widget=forms.TextInput(attrs={'placeholder':'Location', 'tabindex':'1', 'class':'input-xlarge typeahead','autocomplete':'on','data-provide':'ajax', 'minLength':'2', 'data-items': 5, 'data-source':'locations', 'data-filter':'name__istartswith', 'tabindex':'2'}))
+    q = forms.CharField(label='', help_text='', required=False, widget=forms.TextInput(attrs={'placeholder':'Firm, Keyword, Name', 'tabindex':'1', 'class':'input-xlarge'}))
 
     def __init__(self, *args, **kwargs):
         """ get request object and user """
+        self.api_urls = API_URLS
         self.request = kwargs.pop('request', None)
         self.user = self.request.user
         super(LawyerSearchForm, self).__init__(*args, **kwargs)
+
+        # cant query location without elastic search
+        if not settings.USE_ELASTICSEARCH:
+            del self.fields['location']
+            self.fields['location'] = forms.EmailField(label="", help_text="", widget=forms.HiddenInput(attrs={}))
 

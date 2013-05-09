@@ -10,7 +10,7 @@
         <h2><a href="{% url 'lawyer:profile' slug=l.username %}">{{ l.full_name }}</a></h2>
         
         {% if l.firm_name %}
-            <h3>{{ l.role }} at {{ l.firm_name }}</h3>
+            <h3>{% if l.position %}{{ l.position }} at {%endif%}{{ l.firm_name }}</h3>
         {% endif %}
         <ul class="partner-info">
             {% for practice_location in l.object.practice_locations  %}

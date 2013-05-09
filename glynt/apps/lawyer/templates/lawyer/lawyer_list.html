@@ -33,6 +33,7 @@
 <div class="container filter">
 
     <form id="lawyer-list-form" data-validate="parsley" action="{% url 'lawyer:list' %}" method="GET" class="form-inline">{% csrf_token %}
+        {{ form.location|as_crispy_field }}
         {{ form.q|as_crispy_field }}
         <button id="lawyer-list-filter" type="submit" class="submit btn btn-primary">Search</button>
     </form>
@@ -56,11 +57,74 @@
         $('button#lawyer-list-filter').live('click', function(event){
             event.preventDefault();
             var form = $( 'form#lawyer-list-form' );
-            var query = encodeURIComponent($('#id_q').val());
+
             if (form.parsley( 'validate' )) {
-                document.location = form.attr('action') + '?q={query}'.assign({'query': query }) ;
+                params = {}
+                // remove items with no value
+                $.each({
+                    'q': encodeURIComponent($('#id_q').val())
+                    ,'location': encodeURIComponent($('#id_location').val())
+                }, function(k,val){
+                    if (val != '') {
+                        params[k] = val;
+                    }
+                });
+
+                document.location = form.attr('action') + '?{params}'.assign({'params': $.param(params) });
             }
         });
+
+
+    /**
+    * Dynamic selector functions based on form api urls
+    * @TODO unify this with profile form
+    */
+    locations_lookup = function(filter, callback) {
+        var url = '{{ form.api_urls.locations }}';
+        var object_list = []
+        url = (filter === undefined)? url: url + '&' + filter;
+        $.ajax({
+            type: 'GET',
+            url: url,
+            data: null,
+            beforeSend: function(jqXHR, settings) {
+                // Pull the token out of the DOM.
+                jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+            },
+            success: function(data, textStatus, jqXHR){
+                $.each(data.objects, function(i,item){
+                    object_list.push(item.name)
+                })
+                // call the calling callback.. javascript
+                callback(object_list);
+            },
+            error: function(data, textStatus, jqXHR){
+                console.log(jqXHR)
+                console.log(textStatus)
+            }
+        });
+    }
+
+    /**
+    * handle typeahead requests
+    */
+    $.each($('.typeahead[data-provide="ajax"]'), function(i, element) {
+        var e = $(element);
+
+        e.typeahead({
+            source: function(query, process_callback) {
+                var provide = e.attr('data-provide');
+                var lookup_name = e.attr('data-source');
+                var filter = e.attr('data-filter');
+                filter = (filter === undefined)? filter : filter + '=' + query ;
+                var fn = window[lookup_name + '_lookup']
+                if(typeof fn === 'function') {
+                    fn(filter, process_callback);
+                }
+            }
+            ,limit: 15
+        });
+    });
     });
     </script>
     <script src="{{ STATIC_URL }}endless_pagination/js/endless-pagination.js"></script>
