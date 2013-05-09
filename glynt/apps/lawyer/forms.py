@@ -169,7 +169,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
 
 @parsleyfy
 class LawyerSearchForm(BootstrapMixin, forms.Form):
-    location = forms.CharField(label='', help_text='', widget=forms.TextInput(attrs={'placeholder':'Location', 'tabindex':'1', 'class':'input-xlarge typeahead','autocomplete':'on','data-provide':'ajax', 'minLength':'2', 'data-items': 5, 'data-source':'locations', 'data-filter':'name__istartswith', 'tabindex':'2'}))
+    location = forms.CharField(label='', help_text='', required=False, widget=forms.TextInput(attrs={'placeholder':'Location', 'tabindex':'1', 'class':'input-xlarge typeahead','autocomplete':'on','data-provide':'ajax', 'minLength':'2', 'data-items': 5, 'data-source':'locations', 'data-filter':'name__istartswith', 'tabindex':'2'}))
     q = forms.CharField(label='', help_text='', required=False, widget=forms.TextInput(attrs={'placeholder':'Firm, Keyword, Name', 'tabindex':'1', 'class':'input-xlarge'}))
 
     def __init__(self, *args, **kwargs):
