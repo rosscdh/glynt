@@ -2,7 +2,6 @@
 from django import template
 from django.test import LiveServerTestCase
 from django.utils import unittest
-from django.test.client import Client
 from django.test.utils import override_settings
 from nose.tools import *
 
@@ -41,10 +40,9 @@ class TestTemplateTag_ShowLoadingModal(unittest.TestCase):
         pass
 
 
-class TestTemplateTag_Intercom(LiveServerTestCase):
+class TestTemplateTag_Intercom(unittest.TestCase):
     fixtures = ['test_cities']
     def setUp(self):
-        self.client = Client()
 
         self.user = UserFactory.create()
         self.context = {
