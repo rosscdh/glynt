@@ -40,11 +40,12 @@ class ContactUsView(FormView):
     form_class = ContactForm
     success_url = '/thanks/'
 
-    def get_template_names(self):
-        if self.request.is_ajax():
-            return ['partials/contact_us_form.html']
-        else:
-            return [self.template_name]
+    def get_context_data(self, **kwargs):
+        kwargs = super(ContactUsView, self).get_context_data(**kwargs)
+        kwargs.update({
+            'template_to_extend': 'base-slim.html' if self.request.is_ajax() else 'base.html'
+        })
+        return kwargs
 
     def form_valid(self, form):
         send_mail('%s has contacted LawPal' % form.cleaned_data['name'], form.cleaned_data['message'], form.cleaned_data['email'], ['rob@lawpal.com'], fail_silently=False)
