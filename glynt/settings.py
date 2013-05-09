@@ -242,7 +242,7 @@ HELPER_APPS = (
     # engless pagination
     'endless_pagination',
     # Search
-    #'haystack',
+    'haystack',
     # Celery Tasks
     'djcelery',
     # User switcher

@@ -1,0 +1,34 @@
+{% load lawyer_profile_tags endless %}
+{% lazy_paginate object_list %}
+
+{% for l in object_list %}
+<div class="partner">
+    <div class="left">
+        <a href="{% url 'lawyer:profile' slug=l.user.username %}"><img src="{{ l.user.profile.get_mugshot_url }}" class="partner-avatar" /></a>
+    </div>
+    <div class="right"> 
+        <h2><a href="{% url 'lawyer:profile' slug=l.user.username %}">{{ l.user.get_full_name }}</a></h2>
+        
+        {% if l.firm_lawyers.all.0 %}
+            <h3>{{ l.position }} at {{ l.firm_lawyers.all.0 }}</h3>
+        {% endif %}
+        <ul class="partner-info">
+            {% for practice_location in l.practice_locations  %}
+            <li class="marker big">{{ practice_location }}</li>
+            {% endfor %}    
+            <li class="tick">76 Similar Deals Closed (2011-2012)</li>
+            <li class="star">76 Endorsements</li>
+        </ul>
+        <a href="{% url 'lawyer:profile' slug=l.user.username %}" class="btn btn-primary">View Profile</a>
+        <ul class="partner-social">
+            <li class="angellist"><div class="circle-big">33</div><div class="circle-small animated fadeInDown">2</div></li>
+            <li class="linkedin"><div class="circle-big">33</div><div class="circle-small animated fadeInDown">2</div></li>
+            <!-- <li class="twitter"><div class="circle-big">33</div><div class="circle-small animated fadeInDown">2</div></li> -->
+        </ul>
+    </div>  
+</div>
+{% empty %}
+    None Found
+{% endfor %}
+
+{% show_more %}

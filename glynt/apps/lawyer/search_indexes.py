@@ -6,10 +6,11 @@ from models import Lawyer
 
 class LawyerIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.EdgeNgramField(document=True, use_template=True)
+    username = indexes.CharField(model_attr='user__get_full_name')
     full_name = indexes.CharField(model_attr='user__get_full_name')
     role = indexes.CharField(model_attr='position')
     summary = indexes.CharField(model_attr='summary')
-    geo_loc = indexes.LocationField(model_attr='geo_loc', null=True)
+    #geo_loc = indexes.LocationField(model_attr='geo_loc', null=True)
 
     def get_model(self):
         return Lawyer
