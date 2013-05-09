@@ -10,9 +10,14 @@ $(document).ready( function() {
         return false;
     });
 
+    // Activate parsley form validation when the modal has finished loading
+    $('#contactModal').live('shown', function() {
+        $('#contact-us-form-modal').parsley();
+    });
+
     // Simulate input submit
     $('#submitMessage').live('click', function() {
-       $('#contact-us-form').submit();
+        $('#contact-us-form-modal').submit();
     });
 
     // Submit form

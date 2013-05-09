@@ -56,8 +56,11 @@ class ContactUsView(FormView):
         return kwargs
 
     def form_valid(self, form):
+        #if self.request.user.email:
+        #    email = self.request.user.email
+        #else:
+        #   email = form.cleaned_data['email']
         send_mail('%s has contacted LawPal' % form.cleaned_data['name'], form.cleaned_data['message'], form.cleaned_data['email'], ['rob@lawpal.com'], fail_silently=False)
-
         return super(ContactUsView, self).form_valid(form)
 
 
