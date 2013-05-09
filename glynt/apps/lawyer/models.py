@@ -72,6 +72,10 @@ class Lawyer(models.Model):
     def last_login(self):
         return self.user.last_login
 
+    @property
+    def search_locations(self):
+        return ', '.join(self.practice_locations())
+
     def practice_locations(self):
         locations = []
         if self.data.get('practice_location_1', None) is not None:

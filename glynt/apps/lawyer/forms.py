@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 from django import forms
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.core import exceptions
 from django.utils import simplejson as json
@@ -144,7 +145,11 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
 
         hidden_photo = self.cleaned_data.get('hidden_photo', None)
         if type(hidden_photo) is int:
-            data['photo'] = UploadedFile.objects.get(pk=hidden_photo)
+            try:
+                data['photo'] = UploadedFile.objects.get(pk=hidden_photo)
+            except UploadedFile.DoesNotExist:
+                data['photo'] = None
+
 
         offices = []
         # dont pop these as we need them for local storage in lawyer
@@ -160,4 +165,15 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
 
         logger.info('Complete: Ensuring the LawyerProfile Exists')
 
+
+
+@parsleyfy
+class LawyerSearchForm(BootstrapMixin, forms.Form):
+    q = forms.CharField(label='', help_text='', widget=forms.TextInput(attrs={'placeholder':'Keyword, Name, Location', 'tabindex':'1', 'class':'input-xlarge'}))
+
+    def __init__(self, *args, **kwargs):
+        """ get request object and user """
+        self.request = kwargs.pop('request', None)
+        self.user = self.request.user
+        super(LawyerSearchForm, self).__init__(*args, **kwargs)
 
