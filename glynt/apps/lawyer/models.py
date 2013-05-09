@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 from jsonfield import JSONField
 from glynt.apps.utils import get_namedtuple_choices
 
+from managers import DefaultLawyerManager, ApprovedLawyerManager
+
 
 class Lawyer(models.Model):
     """ The Firms
@@ -27,6 +29,9 @@ class Lawyer(models.Model):
     bio = models.TextField()
     data = JSONField(default={})
     photo = models.ImageField(upload_to='lawyer', blank=True)
+
+    objects = DefaultLawyerManager()
+    approved = ApprovedLawyerManager()
 
     def __unicode__(self):
         return u'%s (%s)' % (self.user.username, self.user.email,)
@@ -51,14 +56,11 @@ class Lawyer(models.Model):
     @property
     def profile_photo(self):
         p = getattr(self, 'photo', None)
-        linkedin_photo = self.user.profile.profile_data.get('linkedin_photo_url', None)
         try:
             return p.url
         except ValueError:
-            if linkedin_photo is not None:
-                return linkedin_photo
-            else:
-                return self.user.profile.get_mugshot_url()
+            return self.user.profile.profile_data.get('linkedin_photo_url', None) or self.user.profile.get_mugshot_url()
+
 
     def username(self):
         return self.user.username
