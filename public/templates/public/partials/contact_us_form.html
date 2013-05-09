@@ -1,0 +1,15 @@
+{% load crispy_forms_tags %}
+
+<div class="modal-body">
+  <form id="contact-us-form-modal" data-validate="parsley" action="{% url 'public:contact_us' %}" method="POST" class="form-horizontal">{% csrf_token %}
+    <div class="control-group">
+      {{ form.name|as_crispy_field }}
+    </div>
+    <div class="control-group">
+      {{ form.email|as_crispy_field }}
+    </div>
+    <div class="control-group">
+      {{ form.message|as_crispy_field }}
+    </div>
+  </form>
+</div>
