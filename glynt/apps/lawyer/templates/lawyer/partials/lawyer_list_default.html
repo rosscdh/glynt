@@ -4,7 +4,7 @@
 {% for l in object_list %}
 <div class="partner">
     <div class="left">
-        <a href="{% url 'lawyer:profile' slug=l.user.username %}"><img src="{{ l.profile_photo }}" class="partner-avatar" /></a>
+        <a href="{% url 'lawyer:profile' slug=l.user.username %}"><img src="{{ l.user.profile.get_mugshot_url }}" class="partner-avatar" /></a>
     </div>
     <div class="right"> 
         <h2><a href="{% url 'lawyer:profile' slug=l.user.username %}">{{ l.user.get_full_name }}</a></h2>
