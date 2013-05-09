@@ -88,11 +88,3 @@ class TestTemplateTag_Intercom(LiveServerTestCase):
         result = intercom_script(self.context)
         self.assertTrue('intercomio_userhash' in result)
         self.assertTrue(result.get('intercomio_userhash') is not None)
-
-
-    @override_settings(PROJECT_ENVIRONMENT='test')
-    def test_presence(self):
-        result = self.client.get('/')
-        script_tag = self.get_intercom_tag(result)
-
-        self.assertTrue(len(script_tag) == 1) # we have 1 script of this id
