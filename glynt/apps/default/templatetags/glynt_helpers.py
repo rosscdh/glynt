@@ -122,3 +122,12 @@ def intercom_script(context, **kwargs):
     })
     return context
 intercom_script.is_safe = True
+
+
+@register.inclusion_tag('partials/contact_us_form.html', takes_context=True)
+def contact_us_form(context, modal_mode=True, **kwargs):
+    context.update({
+        'modal_mode': modal_mode,
+    })
+    return context
+contact_us_form.is_safe = True

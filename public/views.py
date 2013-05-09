@@ -42,12 +42,11 @@ class ContactUsView(FormView):
 
     def get_template_names(self):
         if self.request.is_ajax():
-            return ['public/contact_us_modal.html']
+            return ['partials/contact_us_form.html']
         else:
             return [self.template_name]
 
     def form_valid(self, form):
-        #if self.request.user.is_authenticated():
         send_mail('%s has contacted LawPal' % form.cleaned_data['name'], form.cleaned_data['message'], form.cleaned_data['email'], ['rob@lawpal.com'], fail_silently=False)
 
         return super(ContactUsView, self).form_valid(form)

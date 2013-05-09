@@ -1,4 +1,6 @@
-{% load crispy_forms_tags %}
+{% load crispy_forms_tags glynt_helpers %}
+
+{% if modal_mode %}
 
 <div class="modal-header">
   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -10,11 +12,9 @@
     <div class="control-group">
       {{ form.name|as_crispy_field }}
     </div>
-    {% if not user.is_authenticated %}
     <div class="control-group">
       {{ form.email|as_crispy_field }}
     </div>
-    {% endif %}
     <div class="control-group">
       {{ form.message|as_crispy_field }}
     </div>
@@ -24,3 +24,5 @@
 <div class="modal-footer">
   <button id="submitMessage" type="submit" class="btn btn-primary">Send Message</button>
 </div>
+
+{% endif %}
