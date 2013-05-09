@@ -124,10 +124,11 @@ def intercom_script(context, **kwargs):
 intercom_script.is_safe = True
 
 
-@register.inclusion_tag('partials/contact_us_form.html', takes_context=True)
-def contact_us_form(context, modal_mode=True, **kwargs):
+@register.inclusion_tag('public/partials/contact_us_wrapper.html', takes_context=True)
+def contact_us_form(context, is_modal=None, **kwargs):
+    is_modal = True if is_modal is None and context.get('request').is_ajax() else False
     context.update({
-        'modal_mode': modal_mode,
+        'is_modal': is_modal,
     })
     return context
 contact_us_form.is_safe = True
