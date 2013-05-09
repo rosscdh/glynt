@@ -43,6 +43,7 @@ class Lawyer(models.Model):
         except IndexError:
             return None
 
+    @property
     def firm_name(self):
         try:
             return self.primary_firm.name
@@ -56,11 +57,10 @@ class Lawyer(models.Model):
     @property
     def profile_photo(self):
         p = getattr(self, 'photo', None)
-        try:
+        if p._file is not None and getattr(p, 'url', None):
             return p.url
-        except ValueError:
+        else:
             return self.user.profile.profile_data.get('linkedin_photo_url', None) or self.user.profile.get_mugshot_url()
-
 
     def username(self):
         return self.user.username
@@ -107,7 +107,7 @@ class Lawyer(models.Model):
 
     @property
     def geo_loc(self):
-        return u'%' % self.data.get('current_geo_loc', None)
+        return self.data.get('current_geo_loc', None)
 
     @property
     def twitter(self):
