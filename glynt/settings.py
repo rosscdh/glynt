@@ -283,6 +283,11 @@ ANONYMOUS_USER_ID = -1
 AUTH_PROFILE_MODULE = 'client.ClientProfile' # our custom profile
 
 
+# Celery
+BROKER_HEARTBEAT = 5 # helps with heroku connection limits
+BROKER_POOL_LIMIT = 1 # Very importnat for heroku, stops a max + 1 event
+
+
 USERENA_USE_MESSAGES = True
 USERENA_LOGIN_AFTER_ACTIVATION = True # Enable beta style signup (manual activation)
 USERENA_ACTIVATION_DAYS = 10

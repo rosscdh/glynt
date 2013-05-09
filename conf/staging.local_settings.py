@@ -66,7 +66,6 @@ RAVEN_CONFIG = {
 
 # Heroku - CloudAMQP
 BROKER_URL = 'amqp://gxdzjcxo:sMKG0qU4bJlUWmRMkWKuArtPQiY3m84G@tiger.cloudamqp.com/gxdzjcxo'
-BROKER_POOL_LIMIT = 1
 
 SPLUNKSTORM_ENDPOINT = 'logs2.splunkstorm.com'
 SPLUNKSTORM_PORT = 20824
