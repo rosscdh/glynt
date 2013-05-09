@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
 from django.views.generic import FormView, DetailView
 from django.views.generic.edit import FormMixin
 from endless_pagination.views import AjaxListView
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.utils import simplejson as json
+
+from haystack.query import SearchQuerySet
+from haystack.inputs import Exact, Clean
 
 from glynt.apps.lawyer.services import EnsureLawyerService
 from glynt.apps.utils import get_query
@@ -14,6 +18,9 @@ from forms import LawyerProfileSetupForm, LawyerSearchForm
 
 import logging
 logger = logging.getLogger('django.request')
+
+
+USE_ELASTICSEARCH = getattr(settings, 'USE_ELASTICSEARCH', False)
 
 
 class LawyerProfileView(DetailView):
@@ -103,16 +110,39 @@ class LawyerListView(AjaxListView, FormMixin):
     model = Lawyer
     form_class = LawyerSearchForm
 
-    def get_queryset(self):
-        entry_query = None
+    def __init__(self, *args, **kwargs):
+        if USE_ELASTICSEARCH:
+            self.page_template = 'lawyer/partials/lawyer_list_elasticsearch.html'
+
+        super(LawyerListView, self).__init__(*args, **kwargs)
+
+    def get_query_string(self):
+        query_string = None
         if ('q' in self.request.GET) and self.request.GET['q'].strip():
             query_string = self.request.GET['q'].strip()
-            entry_query = get_query(query_string, ['user__first_name','user__last_name','bio',])
+        return query_string
 
-        return self.model._default_manager.exclude(user__password='!').select_related('user', 'user__profile') \
-                    .filter(user__is_active=True, user__is_superuser=False) \
-                    .filter(entry_query) \
-                    .prefetch_related('user', 'firm_lawyers')
+    def get_elasticsearch_queryset(self):
+        query_string = self.get_query_string()
+        return SearchQuerySet().filter(content=Exact(Clean(query_string)))
+        
+    def get_basic_queryset(self):
+        query_string = self.get_query_string()
+
+        if query_string:
+            # create a django Q queryset using get_query
+            entry_query = get_query(query_string, ['user__first_name','user__last_name','bio',])
+            return self.model.approved.filter(entry_query)
+
+        return self.model.approved.all()
+
+    def get_queryset(self):
+        """ return the approved lawyers 
+        if we have a query string then use that to filter """
+        if USE_ELASTICSEARCH:
+            return self.get_elasticsearch_queryset()
+        else:
+            return self.get_basic_queryset()
 
     def get_form(self, form_class):
         kwargs = self.get_form_kwargs()
