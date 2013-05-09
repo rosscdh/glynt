@@ -4,22 +4,22 @@
 {% for l in object_list %}
 <div class="partner">
     <div class="left">
-        <a href="{% url 'lawyer:profile' slug=l.user.username %}"><img src="{{ l.user.profile.get_mugshot_url }}" class="partner-avatar" /></a>
+        <a href="{% url 'lawyer:profile' slug=l.username %}"><img src="{{ l.profile_photo }}" class="partner-avatar" /></a>
     </div>
     <div class="right"> 
-        <h2><a href="{% url 'lawyer:profile' slug=l.user.username %}">{{ l.user.get_full_name }}</a></h2>
+        <h2><a href="{% url 'lawyer:profile' slug=l.username %}">{{ l.full_name }}</a></h2>
         
-        {% if l.firm_lawyers.all.0 %}
-            <h3>{{ l.position }} at {{ l.firm_lawyers.all.0 }}</h3>
+        {% if l.firm_name %}
+            <h3>{{ l.role }} at {{ l.firm_name }}</h3>
         {% endif %}
         <ul class="partner-info">
-            {% for practice_location in l.practice_locations  %}
+            {% for practice_location in l.object.practice_locations  %}
             <li class="marker big">{{ practice_location }}</li>
             {% endfor %}    
             <li class="tick">76 Similar Deals Closed (2011-2012)</li>
             <li class="star">76 Endorsements</li>
         </ul>
-        <a href="{% url 'lawyer:profile' slug=l.user.username %}" class="btn btn-primary">View Profile</a>
+        <a href="{% url 'lawyer:profile' slug=l.username %}" class="btn btn-primary">View Profile</a>
         <ul class="partner-social">
             <li class="angellist"><div class="circle-big">33</div><div class="circle-small animated fadeInDown">2</div></li>
             <li class="linkedin"><div class="circle-big">33</div><div class="circle-small animated fadeInDown">2</div></li>
