@@ -38,7 +38,9 @@ class LoggedInRedirectView(RedirectView):
 class ContactUsView(FormView):
     template_name = 'public/contact-us.html'
     form_class = ContactForm
-    success_url = '/thanks/'
+
+    def get_success_url(self):
+        return reverse('public:contact_us')
 
     def get_form(self, form_class):
         """
@@ -56,11 +58,8 @@ class ContactUsView(FormView):
         return kwargs
 
     def form_valid(self, form):
-        #if self.request.user.email:
-        #    email = self.request.user.email
-        #else:
-        #   email = form.cleaned_data['email']
         send_mail('%s has contacted LawPal' % form.cleaned_data['name'], form.cleaned_data['message'], form.cleaned_data['email'], ['rob@lawpal.com'], fail_silently=False)
+        messages.success(self.request, "Message sent, thanks!")
         return super(ContactUsView, self).form_valid(form)
 
 

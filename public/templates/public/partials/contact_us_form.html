@@ -1,6 +1,9 @@
 {% load crispy_forms_tags glynt_helpers %}
 
 {% if is_modal %}
+
+  {% include 'partials/messages.html' %}
+
   <form id="contact-us-form-modal" data-validate="parsley" action="{% url 'public:contact_us' %}" method="POST" class="form-horizontal">{% csrf_token %}
 {% else %}
   <form id="contact-us-form" data-validate="parsley" action="{% url 'public:contact_us' %}" method="POST" class="form-horizontal">{% csrf_token %}
