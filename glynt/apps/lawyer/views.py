@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 from django.views.generic import FormView, DetailView
+from django.views.generic.edit import FormMixin
 from endless_pagination.views import AjaxListView
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.utils import simplejson as json
 
 from glynt.apps.lawyer.services import EnsureLawyerService
+from glynt.apps.utils import get_query
 
 from models import Lawyer
-from forms import LawyerProfileSetupForm
+from forms import LawyerProfileSetupForm, LawyerSearchForm
 
 import logging
 logger = logging.getLogger('django.request')
@@ -94,11 +96,35 @@ class LawyerProfileSetupView(FormView):
         return super(LawyerProfileSetupView, self).form_valid(form=form)
 
 
-class LawyerListView(AjaxListView):
+class LawyerListView(AjaxListView, FormMixin):
     template_name = 'lawyer/lawyer_list.html'
     page_template = 'lawyer/partials/lawyer_list_default.html'
     paginate_by = 10
     model = Lawyer
+    form_class = LawyerSearchForm
 
     def get_queryset(self):
-        return self.model._default_manager.exclude(user__password='!').select_related().filter(user__is_active=True, user__is_superuser=False).prefetch_related('user', 'firm_lawyers')
+        entry_query = None
+        if ('q' in self.request.GET) and self.request.GET['q'].strip():
+            query_string = self.request.GET['q'].strip()
+            entry_query = get_query(query_string, ['user__first_name','user__last_name','bio',])
+
+        return self.model._default_manager.exclude(user__password='!').select_related('user', 'user__profile') \
+                    .filter(user__is_active=True, user__is_superuser=False) \
+                    .filter(entry_query) \
+                    .prefetch_related('user', 'firm_lawyers')
+
+    def get_form(self, form_class):
+        kwargs = self.get_form_kwargs()
+        kwargs.update({'request': self.request}) # add the request to the form
+
+        return form_class(**kwargs)
+
+    def get_context_data(self, **kwargs):
+        kwargs = super(LawyerListView, self).get_context_data(**kwargs)
+
+        kwargs.update({
+            'form': self.get_form(self.get_form_class())
+        })
+
+        return kwargs

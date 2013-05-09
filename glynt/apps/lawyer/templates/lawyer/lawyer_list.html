@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %}{% load crispy_forms_tags %}
 
 {% block page_title %}Marketplace{% endblock %}
 {% block bodyclass %}lawyer-welcome{% endblock %}
@@ -31,17 +31,12 @@
 {% block body %}
 
 <div class="container filter">
-	<div class="checkboxes">
-		<h3>Sort by</h3>
-		<strong>Showing: </strong>
-		<input id="endorsements" type="checkbox" value="Endorsements" checked /><label for="endorsements">Endorsements</label>
-		<input id="connections" type="checkbox" value="Connections" checked /><label for="Connections">Connections</label>
-		<input id="activity" type="checkbox" value="Activity" checked /><label for="activity">Activity</label>
-	</div>
-	<div class="location">
-		<label for="location"><h3>Filter by location</h3></label>
-		<input></input>
-	</div>
+
+    <form id="lawyer-list-form" data-validate="parsley" action="{% url 'lawyer:list' %}" method="GET" class="form-inline">{% csrf_token %}
+        {{ form.q|as_crispy_field }}
+        <button id="lawyer-list-filter" type="submit" class="submit btn btn-primary">Search</button>
+    </form>
+
 </div>
 
 
@@ -56,6 +51,18 @@
 
 {% block js %}
     {{ block.super }}
+    <script id="controls-search">
+    $(document).ready(function(){
+        $('button#lawyer-list-filter').live('click', function(event){
+            event.preventDefault();
+            var form = $( 'form#lawyer-list-form' );
+            var query = encodeURIComponent($('#id_q').val());
+            if (form.parsley( 'validate' )) {
+                document.location = form.attr('action') + '?q={query}'.assign({'query': query }) ;
+            }
+        });
+    });
+    </script>
     <script src="{{ STATIC_URL }}endless_pagination/js/endless-pagination.js"></script>
     <script>
         $.endlessPaginate({
