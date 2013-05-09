@@ -40,6 +40,14 @@ class ContactUsView(FormView):
     form_class = ContactForm
     success_url = '/thanks/'
 
+    def get_form(self, form_class):
+        """
+        Returns an instance of the form to be used in this view.
+        """
+        kwargs = self.get_form_kwargs()
+        kwargs.update({'request': self.request}) # add the request to the form
+        return form_class(**kwargs)
+
     def get_context_data(self, **kwargs):
         kwargs = super(ContactUsView, self).get_context_data(**kwargs)
         kwargs.update({
