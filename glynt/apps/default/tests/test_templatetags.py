@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
+from django import template
 from django.test import LiveServerTestCase
 from django.utils import unittest
 from django.test.client import Client
 from django.test.utils import override_settings
 from nose.tools import *
-
-from BeautifulSoup import BeautifulSoup
 
 from glynt.apps.factories import UserFactory, LoggedOutUserFactory
 
@@ -57,9 +56,11 @@ class TestTemplateTag_Intercom(LiveServerTestCase):
             'user': self.loggedout_user
         }
 
-    def get_intercom_tag(self, result):
-        soup = BeautifulSoup(result.content)
-        return soup.findAll('script', id="IntercomSettingsScriptTag")
+    def render_template(self, *args, **kwargs):
+        context = kwargs.get('context', {})
+        t = template.Template(''.join(args))
+        c = template.Context(context)
+        return t.render(c)
 
     @override_settings(PROJECT_ENVIRONMENT='dev')
     def test_does_not_show_in_dev_for_both_user_states(self):
@@ -67,10 +68,12 @@ class TestTemplateTag_Intercom(LiveServerTestCase):
         result = intercom_script(self.loggedout_context)
         self.assertTrue('intercomio_userhash' in result)
         self.assertTrue(result.get('intercomio_userhash') is None)
+        self.assertTrue(result.get('show_widget') is False)
         # Logged in
         result = intercom_script(self.context)
         self.assertTrue('intercomio_userhash' in result)
         self.assertTrue(result.get('intercomio_userhash') is None)
+        self.assertTrue(result.get('show_widget') is False)
 
     @override_settings(PROJECT_ENVIRONMENT='test')
     def test_not_authenticated_shows_but_no_hash(self):
@@ -79,7 +82,7 @@ class TestTemplateTag_Intercom(LiveServerTestCase):
         result = intercom_script(self.loggedout_context)
         self.assertTrue('intercomio_userhash' in result)
         self.assertTrue(result.get('intercomio_userhash') is None)
-
+        self.assertTrue(result.get('show_widget') is False)
 
     @override_settings(PROJECT_ENVIRONMENT='test')
     def test_is_authenticated_and_shows_hash(self):
@@ -88,3 +91,25 @@ class TestTemplateTag_Intercom(LiveServerTestCase):
         result = intercom_script(self.context)
         self.assertTrue('intercomio_userhash' in result)
         self.assertTrue(result.get('intercomio_userhash') is not None)
+        self.assertTrue(result.get('show_widget') is True)
+
+
+    @override_settings(PROJECT_ENVIRONMENT='test')
+    def test_presence(self):
+        intercom_result = intercom_script(self.context)
+        result = self.render_template(
+            '{% load glynt_helpers %}'
+            ,'{% intercom_script %}'
+            , context=self.context
+        )
+
+        self.assertTrue(intercom_result.get('show_widget') is True)
+        assert 'user_hash:' in result
+        assert 'user_id:' in result
+        assert 'name:' in result
+        assert 'email:' in result
+
+        assert 'user_id: "%s"' % intercom_result.get('user').pk in result
+        assert 'name: "%s"' % intercom_result.get('user').get_full_name() in result
+        assert 'email: "%s"' % intercom_result.get('user').email in result
+        assert 'user_hash: "%s"' % intercom_result.get('intercomio_userhash') in result
