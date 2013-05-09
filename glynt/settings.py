@@ -390,7 +390,7 @@ if DEBUG:
 
 # Process model updates in real time
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
-
+USE_ELASTICSEARCH = False
 
 INTERNAL_IPS = ('127.0.0.1',)
 DEBUG_TOOLBAR_PANELS = (
