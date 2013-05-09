@@ -133,7 +133,7 @@ class LawyerListView(AjaxListView, FormMixin):
         return SearchQuerySet().filter(sq)
         
     def get_basic_queryset(self):
-        query_string = self.request.GET['q'].strip()
+        query_string = self.request.GET.get('q', '').strip()
         logger.debug('Basic QueryString %s' % query_string)
 
         if query_string:
