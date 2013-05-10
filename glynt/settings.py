@@ -435,6 +435,11 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
         'lawpal.services': {
             'handlers': ['console'],
             'level': 'DEBUG',
