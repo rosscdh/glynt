@@ -24,7 +24,6 @@ ADMINS = (
 
 MANAGERS = ADMINS + (
     ("Alex Halliday", 'alex@lawpal.com'),
-    ("Joe Musgrave", 'joe@lawpal.com'),
 )
 
 NOTICEGROUP_EMAIL = (
