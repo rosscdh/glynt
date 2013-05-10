@@ -27,7 +27,7 @@ def prod_celery():
     env.project = 'glynt'
     env.environment = 'production'
     env.environment_class = 'celery'
-    env.local_project_path = os.path.dirname(os.path.realpath(__file__))
+
     env.remote_project_path = '/var/apps/lawpal/'
     env.deploy_archive_path = '/var/apps/'
     env.virtualenv_path = '/var/apps/.lawpal-live-venv/'
@@ -52,7 +52,7 @@ def preview_celery():
     env.project = 'glynt'
     env.environment = 'preview'
     env.environment_class = 'celery'
-    env.local_project_path = os.path.dirname(os.path.realpath(__file__))
+
     env.remote_project_path = '/var/apps/preview-lawpal/'
     env.deploy_archive_path = '/var/apps/'
     env.virtualenv_path = '/var/apps/.lawpal-preview-venv/'
@@ -78,7 +78,7 @@ def prod_db():
     env.project = 'glynt'
     env.environment = 'production'
     env.environment_class = 'db'
-    env.local_project_path = os.path.dirname(os.path.realpath(__file__))
+
     env.remote_project_path = None
     env.deploy_archive_path = None
     env.virtualenv_path = None
@@ -104,7 +104,7 @@ def production():
     env.project = 'glynt'
     env.environment = 'production'
     env.environment_class = 'production'
-    env.local_project_path = os.path.dirname(os.path.realpath(__file__))
+
     env.remote_project_path = '/var/apps/lawpal/'
     env.deploy_archive_path = '/var/apps/'
     env.virtualenv_path = '/var/apps/.lawpal-live-venv/'
@@ -131,7 +131,7 @@ def preview():
     env.project = 'glynt'
     env.environment = 'preview'
     env.environment_class = 'production'
-    env.local_project_path = os.path.dirname(os.path.realpath(__file__))
+
     env.remote_project_path = '/var/apps/preview-lawpal/'
     env.deploy_archive_path = '/var/apps/'
     env.virtualenv_path = '/var/apps/.lawpal-preview-venv/'
@@ -158,7 +158,7 @@ def staging():
     env.project = 'glynt'
     env.environment = 'staging'
     env.environment_class = 'webfaction'
-    env.local_project_path = os.path.dirname(os.path.realpath(__file__))
+
     env.remote_project_path = '/home/stard0g101/webapps/glynt/'
     env.deploy_archive_path = '~/'
     env.virtualenv_path = '/home/stard0g101/.virtualenvs/glynt/'
@@ -261,7 +261,7 @@ def syncdb():
 def clean_versions():
     current_version = get_sha1()
     versions_path = '%sversions' % env.remote_project_path
-    cmd = 'find %s/* ! -iname %s -print0 | xargs -0 rm -Rf' % (versions_path ,current_version,)
+    cmd = 'ls %s/* | grep -v %s | xargs rm -Rf' % (versions_path ,current_version,)
     if env.environment_class is 'webfaction':
         run(cmd)
     else:
