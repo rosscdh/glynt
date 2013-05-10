@@ -62,10 +62,10 @@ class ContactUsView(FormView):
     def form_valid(self, form):
         logger.info('Contact us from: %s (%s) message: %s' % (form.cleaned_data['name'], form.cleaned_data['email'], form.cleaned_data['message'],) )
 
-        try:
-            send_contactus_email.delay(from_name=form.cleaned_data['name'], from_email=form.cleaned_data['email'], message=form.cleaned_data['message'])
-        except:
-            send_contactus_email(from_name=form.cleaned_data['name'], from_email=form.cleaned_data['email'], message=form.cleaned_data['message'])
+        # try:
+        #     send_contactus_email.delay(from_name=form.cleaned_data['name'], from_email=form.cleaned_data['email'], message=form.cleaned_data['message'])
+        # except:
+        send_contactus_email(from_name=form.cleaned_data['name'], from_email=form.cleaned_data['email'], message=form.cleaned_data['message'])
 
         messages.success(self.request, "Message sent, thanks!")
 
