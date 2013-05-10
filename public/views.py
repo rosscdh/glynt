@@ -1,12 +1,14 @@
+# -*- coding: utf-8 -*-
 from django.contrib import messages
-from django.utils.translation import ugettext_lazy as _
 from django.views.generic.base import RedirectView
+from django.views.generic.edit import FormView
 from django.views.generic import TemplateView
 from django.core.urlresolvers import reverse
-from django.core.mail import send_mail
 
 from public.forms import ContactForm
-from django.views.generic.edit import FormView
+from public.tasks import send_contactus_email
+
+
 
 import logging
 logger = logging.getLogger('django.request')
@@ -58,16 +60,14 @@ class ContactUsView(FormView):
         return kwargs
 
     def form_valid(self, form):
-        send_mail('%s has contacted LawPal' % form.cleaned_data['name'], form.cleaned_data['message'], form.cleaned_data['email'], ['rob@lawpal.com'], fail_silently=False)
+        logger.info('Contact us from: %s (%s) message: %s' % (form.cleaned_data['name'], form.cleaned_data['email'], form.cleaned_data['message'],) )
+
+        try:
+            send_contactus_email.delay(from_name=form.cleaned_data['name'], from_email=form.cleaned_data['email'], message=form.cleaned_data['message'])
+        except:
+            send_contactus_email(from_name=form.cleaned_data['name'], from_email=form.cleaned_data['email'], message=form.cleaned_data['message'])
+
         messages.success(self.request, "Message sent, thanks!")
+
         return super(ContactUsView, self).form_valid(form)
 
-
-class ThankYouView(TemplateView):
-    template_name = 'public/thanks.html'
-
-    def get_template_names(self):
-        if self.request.is_ajax():
-            return ['public/thanks_modal.html']
-        else:
-            return [self.template_name]
