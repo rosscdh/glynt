@@ -14,8 +14,16 @@ class ContactForm(BootstrapMixin, forms.Form):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request')
         self.user = self.request.user
+
         super(ContactForm, self).__init__(*args, **kwargs)
+
         self.inject_email()
+        self.set_initial()
+
+    def set_initial(self):
+        if self.user.is_authenticated():
+            self.fields['name'].initial = self.user.get_full_name()
+            self.fields['email'].initial = self.user.email
 
     def inject_email(self):
         """ If the user is NOT signed in OR they have no email address then show the email field """
@@ -28,5 +36,5 @@ class ContactForm(BootstrapMixin, forms.Form):
         if self.cleaned_data['email']:
             email = self.cleaned_data['email']
         else:
-            email = self.request.user.email
+            email = self.user.email
         return email
