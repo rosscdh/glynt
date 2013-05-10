@@ -160,7 +160,7 @@ class LawyerListView(AjaxListView, FormMixin):
             'request': self.request
             ,'initial': {
                         'q': urlparse.unquote(self.request.GET.get('q')) if self.request.GET.get('q') else None,
-                        'location': urlparse.unquote(self.request.GET.get('location')) if self.request.GET.get('location') else 'San Francisco, California'
+                        'location': urlparse.unquote(self.request.GET.get('location')) if 'location' in self.request.GET or self.request.GET.get('location') else 'San Francisco, California'
                         }
             }) # add the request to the form
 
