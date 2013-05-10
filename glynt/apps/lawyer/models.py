@@ -8,6 +8,9 @@ from glynt.apps.utils import get_namedtuple_choices
 
 from managers import DefaultLawyerManager, ApprovedLawyerManager
 
+import logging
+logger = logging.getLogger('django.request')
+
 
 class Lawyer(models.Model):
     """ The Firms
@@ -56,10 +59,10 @@ class Lawyer(models.Model):
 
     @property
     def profile_photo(self):
-        p = getattr(self, 'photo', None)
-        if getattr(p, 'url'):
+        try:
             return self.photo.url
-        else:
+        except:
+            logger.info('Lawyer %s had no self.photo.url associated with it; resorting to linked in or client mugshot')
             return self.user.profile.profile_data.get('linkedin_photo_url', None) or self.user.profile.get_mugshot_url()
 
     def username(self):
