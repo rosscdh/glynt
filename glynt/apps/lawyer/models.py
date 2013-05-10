@@ -57,8 +57,8 @@ class Lawyer(models.Model):
     @property
     def profile_photo(self):
         p = getattr(self, 'photo', None)
-        if p._file is not None and getattr(p, 'url', None):
-            return p.url
+        if getattr(p, 'url'):
+            return self.photo.url
         else:
             return self.user.profile.profile_data.get('linkedin_photo_url', None) or self.user.profile.get_mugshot_url()
 
