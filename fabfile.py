@@ -190,10 +190,6 @@ def virtualenv(cmd, **kwargs):
     else:
         sudo("source %sbin/activate && %s" % (env.virtualenv_path, cmd,), user=env.application_user, **kwargs)
 
-
-def cli(cmd, as_who='user'):
-    sudo(cmd) if as_who == 'sudo' and env.environment_class is not 'webfaction' else run(cmd)
-
 @task
 def clear_cache():
     virtualenv(cmd='python %s%s/manage.py clear_cache' % (env.remote_project_path, env.project))
@@ -202,6 +198,9 @@ def clear_cache():
 def clean_pyc():
     virtualenv('python %s%s/manage.py clean_pyc' % (env.remote_project_path, env.project))
 
+@task
+def update_index():
+    virtualenv('python %s%s/manage.py update_index' % (env.remote_project_path, env.project))
 
 def get_sha1():
   cd(env.local_project_path)
@@ -299,6 +298,9 @@ def chores():
     sudo('aptitude --assume-yes install git-core mercurial subversion')
     sudo('aptitude --assume-yes install libtidy-dev postgresql-client libpq-dev python-psycopg2')
 
+    # GEO
+    sudo('aptitude --assume-yes install libgeos-dev')
+
     sudo('easy_install pip')
     sudo('pip install virtualenv virtualenvwrapper pillow')
 
@@ -338,11 +340,20 @@ def relink():
             #if files.exists(project_path, use_sudo=True): # unlink the glynt dir
             virtualenv('unlink %s' % project_path)
             virtualenv('ln -s %s/%s %s' % (version_path, env.SHA1_FILENAME, project_path,)) # relink
+        execute(clean_start)
+
+@task
+def clean_start():
+    execute(clean_pyc)
+    execute(clear_cache)
+    execute(restart_service)
+
+    execute(clean_zip)
 
 
 def do_deploy():
     if env.SHA1_FILENAME is None:
-        raise Exception('Must have a SHA1_FILENAME defined. Ensure you have run @git_export')
+        env.SHA1_FILENAME = get_sha1()
 
     version_path = '%sversions' % env.remote_project_path
     full_version_path = '%s/%s' % (version_path, env.SHA1_FILENAME)
@@ -359,7 +370,15 @@ def do_deploy():
     if not files.exists('%s/manage.py'%full_version_path):
         unzip_archive()
 
-    execute(relink)
+
+@task
+def update_env_conf():
+    if env.SHA1_FILENAME is None:
+        env.SHA1_FILENAME = get_sha1()
+
+    version_path = '%sversions' % env.remote_project_path
+    full_version_path = '%s/%s' % (version_path, env.SHA1_FILENAME)
+    project_path = '%s%s' % (env.remote_project_path, env.project,)
 
     if not env.is_predeploy:
         # copy the live local_settings
@@ -396,7 +415,11 @@ def assets():
 
 @task
 def requirements():
-    project_path = '%s%s' % (env.remote_project_path, env.project, )
+    sha = env.get('SHA1_FILENAME', None)
+    if sha is None:
+        env.SHA1_FILENAME = get_sha1()
+    
+    project_path = '%sversions/%s' % (env.remote_project_path, env.SHA1_FILENAME,)
     requirements_path = '%s/requirements.txt' % (project_path, )
 
     virtualenv('pip install -r %s' % requirements_path )
@@ -446,9 +469,5 @@ def deploy(is_predeploy='False'):
     execute(newrelic_note)
     prepare_deploy()
     execute(do_deploy)
-    execute(clean_pyc)
-    execute(clear_cache)
-    execute(restart_service)
-
-    execute(clean_zip)
     execute(newrelic_deploynote)
+
