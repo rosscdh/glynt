@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import factory
 
 from django.contrib.sites.models import Site

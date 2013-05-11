@@ -62,7 +62,6 @@ class Lawyer(models.Model):
         try:
             return self.photo.url
         except:
-            logger.info('Lawyer %s had no self.photo.url associated with it; resorting to linked in or client mugshot')
             return self.user.profile.profile_data.get('linkedin_photo_url', None) or self.user.profile.get_mugshot_url()
 
     def username(self):

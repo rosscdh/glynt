@@ -24,7 +24,6 @@ ADMINS = (
 
 MANAGERS = ADMINS + (
     ("Alex Halliday", 'alex@lawpal.com'),
-    ("Joe Musgrave", 'joe@lawpal.com'),
 )
 
 NOTICEGROUP_EMAIL = (
@@ -288,7 +287,8 @@ AUTH_PROFILE_MODULE = 'client.ClientProfile' # our custom profile
 # Celery
 BROKER_HEARTBEAT = 5 # helps with heroku connection limits
 BROKER_POOL_LIMIT = 1 # Very importnat for heroku, stops a max + 1 event
-
+BROKER_CONNECTION_MAX_RETRIES = 5
+BROKER_CONNECTION_TIMEOUT = 4
 
 USERENA_USE_MESSAGES = True
 USERENA_LOGIN_AFTER_ACTIVATION = True # Enable beta style signup (manual activation)

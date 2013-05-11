@@ -1,0 +1,35 @@
+{% load crispy_forms_tags glynt_helpers %}
+{% if is_modal %}
+
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+  <h3 id="myModalLabel">Contact Us</h3>
+</div>
+
+<div class="modal-body">
+    {% include 'public/partials/contact_us_form.html' %}
+</div>
+
+<div class="modal-footer">
+  <button id="submitMessage" type="submit" class="btn btn-primary">Send Message</button>
+</div>
+
+{% else %}
+
+<div id="hero">
+    <div class="container">
+    <h1>Contact Us</h1>
+    </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="span12 contact-us">
+
+      {% include 'public/partials/contact_us_form.html' %}
+
+    </div>
+  </div>
+</div>
+
+{% endif %}
+
