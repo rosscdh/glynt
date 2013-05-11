@@ -199,8 +199,8 @@ def clean_pyc():
     virtualenv('python %s%s/manage.py clean_pyc' % (env.remote_project_path, env.project))
 
 @task
-def update_index():
-    virtualenv('python %s%s/manage.py update_index' % (env.remote_project_path, env.project))
+def manage(cmd='validate'):
+    virtualenv('python %s%s/manage.py %s' % (env.remote_project_path, env.project, cmd))
 
 def get_sha1():
   cd(env.local_project_path)
@@ -227,6 +227,11 @@ def git_export(branch='master'):
       local('git archive --format zip --output /tmp/%s.zip --prefix=%s/ %s' % (env.SHA1_FILENAME, env.SHA1_FILENAME, branch,), capture=False)
 
 @task
+def celery_restart():
+    execute(celery_stop)
+    execute(celery_start)
+
+@task
 def celery_start(loglevel='info'):
     pid_path = "%sceleryd.pid" % env.remote_project_path
     if files.exists(pid_path):
@@ -239,10 +244,6 @@ def celery_stop():
     sudo("cat %s | xargs kill -9" % pid_path, user=env.application_user, warn_only=True, shell=False)
     # if files.exists(pid_path):
     #     sudo("rm %s" % pid_path , shell=False, warn_only=True)
-
-@task
-def stop_celery_worker():
-    pass
 
 @task
 def prepare_deploy():
@@ -369,6 +370,8 @@ def do_deploy():
     # extract project zip file:into a staging area and link it in
     if not files.exists('%s/manage.py'%full_version_path):
         unzip_archive()
+
+    execute(update_env_conf)
 
 
 @task
