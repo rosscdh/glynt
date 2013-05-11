@@ -15,31 +15,31 @@ class TestDocumentTasks(mocktest.TestCase):
         self.document = DocumentFactory.create()
 
     def test_document_created(self):
-        expect(user_streams).add_stream_item.once()
+        #expect(user_streams).add_stream_item.once()
         expect(self.document).get_absolute_url.once()
         # test
         document_created_task(document=self.document)
 
     def test_document_deleted(self):
-        expect(user_streams).add_stream_item.once()
+        #expect(user_streams).add_stream_item.once()
         # test
         document_deleted_task(document=self.document)
 
     def test_document_restored(self):
-        expect(user_streams).add_stream_item.once()
+        #expect(user_streams).add_stream_item.once()
         # test
         document_restored_task(document=self.document)
 
     def test_document_cloned(self):
-        expect(user_streams).add_stream_item.once()
+        #expect(user_streams).add_stream_item.once()
         # test
         document_cloned_task(source_document=self.document.source_document, document=self.document)
 
     def test_document_comment(self):
-        expect(user_streams).add_stream_item.once()
-        expect(self.document.owner).get_full_name.exactly(2).times()
+        #expect(user_streams).add_stream_item.once()
+        #expect(self.document.owner).get_full_name.exactly(2).times()
         # test
-        document_comment(commenting_user=self.document.owner, commenting_user_name=self.document.owner.get_full_name(), document=self.document, comment='My Comment')
+        document_comment_task(commenting_user=self.document.owner, commenting_user_name=self.document.owner.get_full_name(), document=self.document, comment='My Comment')
 
     def test_generate_document_html(self):
         doc_html = DocumentHTMLFactory.create(document=self.document)

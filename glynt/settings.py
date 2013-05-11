@@ -190,21 +190,21 @@ PROJECT_APPS = (
     # Endorsements by users
     'glynt.apps.endorsement',
     # The Flyform
-    'glynt.apps.flyform',
+    #'glynt.apps.flyform',
     # The primary document view system
     'glynt.apps.document',
     # The document authoring system
-    'glynt.apps.author',
+    #'glynt.apps.author',
     # The End User - Client, those that consume the documents
     'glynt.apps.client',
     # The v2 Document Signing system
-    'glynt.apps.smoothe',
+    #'glynt.apps.smoothe',
     # The Document Signing system
-    'glynt.apps.sign',
+    #'glynt.apps.sign',
     # The Document Export system
     'glynt.apps.export',
     # Remote and 3rd Party services (pdf/doc conversion)
-    'glynt.apps.services',
+    #'glynt.apps.services',
 )
 
 HELPER_APPS = (
@@ -390,7 +390,14 @@ if DEBUG:
 
 # Process model updates in real time
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
-USE_ELASTICSEARCH = False
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': 'http://jsy06hdx:km5ugyiy90yy17qg@banyan-8252692.us-east-1.bonsai.io',
+        'INDEX_NAME': 'glynt-dev',
+    },
+}
+USE_ELASTICSEARCH = True
 
 INTERNAL_IPS = ('127.0.0.1',)
 DEBUG_TOOLBAR_PANELS = (
