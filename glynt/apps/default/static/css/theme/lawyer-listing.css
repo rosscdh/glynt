@@ -120,7 +120,7 @@ padding: 0;
 margin-bottom: -20px;
 }
 .buttons a.btn {
-padding: 15px 23px 17px 23px;
+padding: 11px 23px 13px 23px;
 border: 1px solid #e76356;
 border-radius: none;
 width: 125px;
@@ -230,7 +230,7 @@ height: 128px;
 background: rgba(0,0,0,0.41);
 }
 a.btn {
-padding: 12px 23px 13px 23px;
+padding: 6px 23px 7px 23px;
 border: 1px solid #e76356;
 border-radius: none;
 color: #fff;
@@ -268,7 +268,7 @@ text-decoration: none;
 -moz-transition: background-color 0.25s ease-in;
 transition: background-color 0.25s ease-in;
 }
-.dock ul li a:hover, .dock ul li.dock-active a {
+.dock ul li.doc-lawyers a:hover, .dock ul li.dock-active a {
 text-decoration: none;
 background-color: rgba(0,0,0,0.6);
 -o-transition: background-color 0.25s ease-in;
@@ -277,9 +277,11 @@ background-color: rgba(0,0,0,0.6);
 transition: background-color 0.25s ease-in;
 }
 .dock li.dock-packages a {
+opacity:0.5;
 background: url(../../img/app/icon-packages.png) 50% 30% no-repeat;
 }
 .dock li.dock-firms a {
+opacity:0.5;
 background: url(../../img/app/icon-firms.png) 50% 30% no-repeat;
 }
 .dock li.dock-lawyers a {
@@ -309,17 +311,17 @@ width: 250px;
 .filter .location h3 {
 line-height: 1;
 }
+.filter button {
+margin-top:10px;
+}
 .partner {
-float: left;
-width: 100%;
 border-bottom: 1px solid #ededed;
-margin: 0 0 10px 0;
-padding: 0 0 10px 0;
+padding-top: 10px;
+padding-bottom: 10px;
 }
 .partner .left {
-float: left;
-width: 140px;
 }
+
 img.partner-avatar {
 border: 1px solid #dbdbdb;
 }
@@ -327,8 +329,12 @@ img.partner-logo {
 padding: 4px 8px;
 background: #f8f9f9;
 border: 1px solid #ededed;
-float: left;
-margin-top: 10px;
+float: right;
+margin-top: 15px;
+width:60px;
+margin-right:5px;
+max-height:40px;
+margin-bottom: 5px
 }
 .partner .right {
 float: right;
@@ -336,12 +342,13 @@ width: 780px;
 }
 .partner h2 {
 line-height: 0.5;
+margin-top:20px;
 }
 .partner h3 {
 margin-top: 5px;
-margin-left: 10px;
 font-size: 15px;
 float: left;
+line-height: 18px;
 }
 ul.partner-info {
 float: left;
@@ -370,12 +377,15 @@ background-position: 0 -119px;
 ul.partner-info li.marker {
 background: url(../../img/app/marker.png) 0 2px no-repeat;
 }
+ul.partner-info li span {
+color:#aaa;
+}
 .partner a.btn, ul.partner-social {
 float: right;
-}
+}/*
 .partner a.btn {
 margin-top: -50px;
-}
+}*/
 ul.partner-social {
 width: 222px;
 padding: 0;

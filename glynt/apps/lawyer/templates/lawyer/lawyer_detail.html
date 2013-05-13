@@ -143,7 +143,13 @@
 		<div class="span8">
 			<div class="startups">
 				<h2>Other Websites</h2>
-				{% simple_name_list data_list=object.data.websites %}
+				{% for o in object.data.websites %}
+					<span><a href="http://{{ o }}" target="_BLANK" class="domain">{{ o }}</a></span>
+				{% empty %}
+					<ul class="unstyled">
+						<li class="nothing-found">Nothing yet.</li>
+					</ul>
+				{% endfor %}
 			</div>
 		</div>
 	</div>
