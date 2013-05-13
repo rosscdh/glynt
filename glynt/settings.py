@@ -395,7 +395,7 @@ HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
         'URL': 'http://jsy06hdx:km5ugyiy90yy17qg@banyan-8252692.us-east-1.bonsai.io',
-        'INDEX_NAME': 'glynt-dev',
+        'INDEX_NAME': 'dev-lawyers',
     },
 }
 USE_ELASTICSEARCH = True

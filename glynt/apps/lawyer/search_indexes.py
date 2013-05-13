@@ -19,6 +19,14 @@ class LawyerIndex(indexes.SearchIndex, indexes.Indexable):
     def get_model(self):
         return Lawyer
 
+    def should_update(self, instance, **kwargs):
+        if instance.is_active:
+            return True
+        else:
+            # remove inactivive objects
+            self.remove_object(instance, **kwargs)
+        return False
+
     def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""
-        return self.get_model().approved.all()
+        return self.get_model().objects.all()
