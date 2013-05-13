@@ -117,7 +117,7 @@ def production():
     env.user = 'ubuntu'
     env.application_user = 'app'
     # connect to the port-forwarded ssh
-    env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com']
+    env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com', 'ec2-54-241-224-100.us-west-1.compute.amazonaws.com']
     env.celery_hosts = ['ec2-54-241-224-100.us-west-1.compute.amazonaws.com']
 
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
@@ -144,7 +144,7 @@ def preview():
     env.user = 'ubuntu'
     env.application_user = 'app'
     # connect to the port-forwarded ssh
-    env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com']
+    env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com', 'ec2-54-241-224-100.us-west-1.compute.amazonaws.com']
     env.celery_hosts = ['ec2-54-241-224-100.us-west-1.compute.amazonaws.com']
 
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
