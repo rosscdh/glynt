@@ -65,9 +65,9 @@
                     'q': encodeURIComponent($('#id_q').val())
                     ,'location': encodeURIComponent($('#id_location').val())
                 }, function(k,val){
-                    if (val != '') {
+                    //if (val != '') {
                         params[k] = val;
-                    }
+                    //}
                 });
 
                 document.location = form.attr('action') + '?{params}'.assign({'params': $.param(params) });
