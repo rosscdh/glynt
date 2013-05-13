@@ -30,11 +30,9 @@
 	<div id="buttons">
 		<div class="container">
 			<div class="row12">
-				{% if user.username == object.user.username %}
-					{% if user.is_staff %}
+				{% if user.is_staff %}
 					<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="false" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if not object.is_active %}hide{% endif %} btn btn-primary">Disable</a>
 					<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="true" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if object.is_active %}hide{% endif %} btn btn-success">Approve</a>
-					{% endif %}
 				{% endif %}
 				{% if user.username == object.user.username %}
 					<a href="{% url 'lawyer:setup_profile' %}" class="btn">Edit profile</a>  
