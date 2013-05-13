@@ -48,7 +48,9 @@
     {{ block.super }}
     <script id="controls-search">
     $(document).ready(function(){
-
+        $('form#lawyer-list-form input').live('click', function(event){
+            $(this).select()
+        });
         $('button#lawyer-list-filter').live('click', function(event){
             event.preventDefault();
             var form = $( 'form#lawyer-list-form' );
