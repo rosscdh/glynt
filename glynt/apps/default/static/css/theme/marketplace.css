@@ -117,6 +117,8 @@ background: #f8f9f9;
 border: 1px solid #ededed;
 float: left;
 margin-top: 10px;
+width:20px;
+height:20px;
 }
 .partner .right {
 float: right;
