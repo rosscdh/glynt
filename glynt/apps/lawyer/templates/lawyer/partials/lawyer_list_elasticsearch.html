@@ -10,26 +10,21 @@
         <img src="http://local.weareml.com:8000/m/firm/orrick-bank-logo-1-500x316.jpg" class="partner-logo"> 
         <h2><a href="{% url 'lawyer:profile' slug=l.username %}">{{ l.full_name }}</a></h2>
         
-         <h3>This is the description for the lawyer</h3>
+        <h3>{{ l.object.summary }}</h3>
 
         {% if l.firm_name %}
             <h3>{% if l.position %}{{ l.position }} <span>at</span> {%endif%}{{ l.firm_name }}</h3>
         {% endif %}
+
         <ul class="partner-info">
-            <li class="marker big">San Francisco, CA <span>and</span> London, England</li>
-        </ul>
-        <ul class="partner-info">
-            {% for practice_location in l.object.practice_locations  %}aa
-            <li class="marker big">{{ practice_location }}</li>
-            {% endfor %}    
+            <li class="marker big">
+            {% for practice_location in l.object.practice_locations  %}
+            {{ practice_location }}{% if not forloop.last %} <span>and</span> {% endif %}
+            {% endfor %}
+            </li>
         </ul>
 
         <a href="{% url 'lawyer:profile' slug=l.username %}" class="btn btn-primary">View Profile</a>
-<!--         <ul class="partner-social">
-            <li class="angellist"><div class="circle-big">33</div><div class="circle-small animated fadeInDown">2</div></li>
-            <li class="linkedin"><div class="circle-big">33</div><div class="circle-small animated fadeInDown">2</div></li>
-            <li class="twitter"><div class="circle-big">33</div><div class="circle-small animated fadeInDown">2</div></li>
-        </ul> -->
         {% if firm.photo %}
             <img src="{{ MEDIA_URL }}{{ firm.photo|default:'firm/blank.gif' }}" alt="{{ firm.name }}" class="firm-logo" />              
         {% endif %} 
