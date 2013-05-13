@@ -26,16 +26,21 @@ padding: 0 !important;
 #hero #buttons .right {
 float:right;
 margin-left:4px;
-padding:6px 14px 6px 12px;
-opacity:0.7;
-  transition-property : opacity; 
-  transition-duration : 0.3s; 
+padding:5px 14px 6px 12px;
+opacity:0.9;
+transition-property : opacity; 
+transition-duration : 0.3s;
+color:white;
+background-color: transparent;
+font-size:15px; 
 }
 #hero:hover #buttons .right {
 opacity:1;
-
 }
-
+#hero #buttons .right i {
+margin-top:2px;
+margin-right:3px;
+}
 .avatar img {
 border: 8px solid rgba(255,255,255,0.46);
 box-shadow: 0 0 10px rgba(0,0,0,0.23);
@@ -106,10 +111,10 @@ margin-top: 20px;
 width: 100%;
 border: 1px solid #ededed;
 background: #f8f9f9;
-font-size: 15px;
+font-size: 14px;
 }
 .map ul {
-padding: 25px;
+padding: 18px;
 margin: 0;
 }
 .map ul li {
@@ -217,14 +222,14 @@ text-transform: lowercase;
 margin-right:20px;
 color:#929292;
 }
-.endorsement {
+/*.endorsement {
 float: left;
 text-align: left;
 width: 29.148936170213%;
 margin-right: 6.170212765957%;
 font-size: 13px;
 margin-bottom: 30px;
-}
+}*/
 .endorsements h2 {
 margin-bottom: 40px;
 }
@@ -233,18 +238,19 @@ margin-right: 0;
 }
 .endorsement img {
 float: left;
-margin-right: 20px;
+margin-right: 15px;
 margin-bottom: 40px;
-border: 5px solid #fff;
-border-radius: 40px;
+margin-top:3px;
+border: 2px solid #fff;
+border-radius: 2px;
 box-shadow: 0 0 7px rgba(0,0,0,0.16);
 }
 .endorsement p {
 margin: 0;
 }
 .endorsement .source {
-font-size: 11px;
-color: #b4b7b8;
+font-size: 12px;
+color: #aaa;
 }
 .firm{
 text-align:center;
@@ -275,7 +281,7 @@ width:26px;
 height:26px;
 margin:0px 5px 5px 0px;
 padding:4px;
-border-radius:2px;
+border-radius:0px;
 opacity:0.3;
 }
 
@@ -293,7 +299,7 @@ opacity:1;
 .icon {
 display: none;
 }
-.icon.aboutme, .icon.youtube,  .icon.googleprofile, .icon.bebo, .icon.bitbucket, .icon.deviantart, .icon.facebook, .icon.formspring, .icon.klout, .icon.lastfm, .icon.picasa, .icon.pinterest, .icon.posterous, .icon.quora, .icon.skype, .icon.stackexchange, .icon.tumblr, .icon.wordpress, .icon.yahoo, .icon.yelp, .icon.behance, .icon.blogger, .icon.delicious, .icon.digg, .icon.disqus, .icon.flickr, .icon.foursquare, .icon.github, .icon.googleplus, .icon.goodreads, .icon.hackernews, .icon.imdb, .icon.linkedin, .icon.myspace, .icon.orkut, .icon.pinboard, .icon.reddit, .icon.slideshare, .icon.soundcloud, .icon.stackoverflow, .icon.stumbleupon, .icon.twitter, .icon.vimeo, .icon.wordpress {
+.icon.aboutme, .icon.youtube,  .icon.bitbucket, .icon.deviantart, .icon.facebook, .icon.formspring, .icon.klout, .icon.lastfm, .icon.picasa, .icon.pinterest, .icon.posterous, .icon.quora, .icon.skype, .icon.stackexchange, .icon.tumblr, .icon.wordpress, .icon.yahoo, .icon.yelp, .icon.behance, .icon.blogger, .icon.delicious, .icon.digg, .icon.disqus, .icon.flickr, .icon.foursquare, .icon.github, .icon.googleplus, .icon.goodreads, .icon.hackernews, .icon.imdb, .icon.linkedin, .icon.pinboard, .icon.reddit, .icon.slideshare, .icon.soundcloud, .icon.stackoverflow, .icon.stumbleupon, .icon.twitter, .icon.vimeo, .icon.wordpress {
 display: inline
 }
 /* TODO : a more advanced implementation of this. */
@@ -417,5 +423,82 @@ display: none;
 .icon.yahoo{ background-color:#731A8B;}
 .icon.yelp{ background-color:#C93C27;}
 .icon.youtube{ background-color:#CD332D;}
+
+
+
+/** %[Object] Button */
+/*------------------------------------*/
+.endorsement .btn {
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: 1.2em;
+    margin-bottom: 2em;
+    cursor: pointer;
+    border: none;
+    height: 2em;
+    padding: 0 1em;
+    position: relative;
+    line-height: 2;
+    color: #fff;
+    text-decoration: none;
+
+}
+
+.endorsement .btn:hover,
+.endorsement .btn:active,
+.endorsement .btn:focus {
+    opacity: 0.9;
+    color: #eee;
+}
+
+/*------------------------------------*/
+
+.endorsement .btn--small { font-size: .75em; }
+.endorsement .btn--large { font-size: 1.25em; }
+.endorsement .btn--huge { font-size: 1.75em; }
+
+/*------------------------------------*/
+
+.endorsement .btn--primary { background: #e76356; }
+.endorsement .btn--secondary { background: #757c7e; }
+.endorsement .btn--tertiary { background: #3a87ad; }
+
+/*------------------------------------*/
+
+.endorsement .btn--counter {
+    margin-right: 3em;
+}
+
+.endorsement .btn--counter span {
+    color: #888;
+    background: #fff;
+    text-shadow: none;
+    border: 1px solid #ccc;
+    top: 0;
+    bottom: 0;
+    left: 100%;
+    padding: 0 .5em;
+    margin-left: .7em;
+    position: absolute;
+}
+
+.endorsement .btn--counter span:after,
+.endorsement .btn--counter span:before {
+    content: '';
+    width: 0;
+    height: 0;
+    right: 100%;
+    top: 50%;
+    margin-top: -.4em;
+    position: absolute;
+    border: .375em solid;
+    border-left-width: 0;
+    border-color: transparent #ccc transparent transparent;
+}
+
+.endorsement .btn--counter span:after {
+    border-right-color: #fff;
+    margin-right: -2px;
+}
 
 

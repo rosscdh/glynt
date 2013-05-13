@@ -347,7 +347,6 @@ margin-top:20px;
 .partner h3 {
 margin-top: 5px;
 font-size: 15px;
-float: left;
 line-height: 18px;
 }
 ul.partner-info {
@@ -377,7 +376,7 @@ background-position: 0 -119px;
 ul.partner-info li.marker {
 background: url(../../img/app/marker.png) 0 2px no-repeat;
 }
-ul.partner-info li span {
+ul.partner-info li span, h3 span {
 color:#aaa;
 }
 .partner a.btn, ul.partner-social {
