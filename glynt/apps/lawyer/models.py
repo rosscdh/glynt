@@ -32,6 +32,7 @@ class Lawyer(models.Model):
     bio = models.TextField()
     data = JSONField(default={})
     photo = models.ImageField(upload_to='lawyer', blank=True)
+    is_active = models.BooleanField(default=False, db_index=True)
 
     objects = DefaultLawyerManager()
     approved = ApprovedLawyerManager()

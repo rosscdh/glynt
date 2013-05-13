@@ -6,8 +6,10 @@ from tastypie import fields
 from tastypie.serializers import Serializer
 from tastypie.cache import SimpleCache
 from tastypie.authentication import Authentication, SessionAuthentication
+from tastypie.authorization import Authorization, DjangoAuthorization
 
 from cities_light.models import City, Country, Region
+from glynt.apps.lawyer.models import Lawyer
 from glynt.apps.firm.models import Firm, Office
 from glynt.apps.startup.models import Startup
 from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
@@ -122,6 +124,22 @@ class StartupSimpleResource(BaseApiModelResource):
         return bundle
 
 
+class LawyerResource(BaseApiModelResource):
+    class Meta(BaseApiModelResource.Meta):
+        authentication = Authentication()
+        authorization = Authorization()
+        list_allowed_methods = ['get', 'put', 'patch']
+        queryset = Lawyer.objects.all().prefetch_related('user', 'firm_lawyers')
+        resource_name = 'lawyers'
+        excludes = ['data', 'summary', 'bio']
+
+    def dehydrate(self, bundle):
+        bundle.data.pop('role')
+        bundle.data['name'] = bundle.obj.user.get_full_name()
+        bundle.data['position'] = bundle.obj.position
+        return bundle
+
+
 class DocumentResource(BaseApiModelResource):
     class Meta(BaseApiModelResource.Meta):
         list_allowed_methods = ['get']
@@ -167,6 +185,7 @@ v1_internal_api.register(FirmSimpleResource())
 v1_internal_api.register(OfficeSimpleResource())
 v1_internal_api.register(StartupSimpleResource())
 
+v1_internal_api.register(LawyerResource())
 v1_internal_api.register(DocumentResource())
 v1_internal_api.register(ClientCreatedDocumentResource())
 v1_internal_api.register(SignatureResource())
