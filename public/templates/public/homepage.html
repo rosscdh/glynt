@@ -78,12 +78,11 @@
 								<h3>Startups</h3>
 							</hgroup>	
 							<div class="reveal-inner">
-								<!-- <h4>Follow us for updates (we're not yet ready for you)</h4> -->
 								<p>
-										<input type="email" name="EMAIL" placeholder="Sign up for updates" />
-										<button type="submit">Sign up</button>
-								</p>
-							</div>	
+									<a class="btn google" href="{% url "socialauth_begin" "google-oauth2" %}" title="Sign in with Google">Sign in with <strong>Google</strong></a>
+								</p>	
+								<a href="#" id="data-statement">We never spam. Read more.</a>
+							</div>
 						</form>
 						<div class="right reveal">
 							<hgroup>
