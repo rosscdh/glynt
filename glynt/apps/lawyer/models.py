@@ -65,6 +65,7 @@ class Lawyer(models.Model):
         except:
             return self.user.profile.profile_data.get('linkedin_photo_url', None) or self.user.profile.get_mugshot_url()
 
+
     def username(self):
         return self.user.username
 

@@ -57,21 +57,56 @@
 <div class="container profile">
 	<div class="row">
 		<div class="span8">
+				<h2>About</h2>
+				<div>
+					<p>{{ object.bio|default:"<div class=\"no-data\">No biography yet.</div>"|linebreaksbr }}</p>
+				</div>
+				<hr>
 			<div class="row">
 			{% if PROJECT_ENVIRONMENT == 'dev' %}
 				<div class="span8">	
 					<div class="row">
-						<div class="span4">
-							<h2>Endorsements</h2>
+						<div class="span8">
+							<h2>Transaction Pricing</h2>
+							<table class="table pricing">
+								<tr>
+									<th>Seed Financing</th>
+									<td class="price">$5-10k</td>
+									<td>
+										<ul class="fee-options">
+											<li class="cap tip" data-toggle="tooltip" title="Fee cap available for this transaction"></li>
+											<li class="deferred tip" data-toggle="tooltip" title="Deferred fees available for this transaction"></li>
+											<li class="fixed tip" data-toggle="tooltip" title="Fixed fees available for this transaction"></li>
+										</ul>
+									</td>
+								</tr>
+								<tr>
+									<th>Incorporation</th>
+									<td  class="price">$2k</td>
+									<td>
+										<ul class="fee-options">
+											<li class="cap tip" data-toggle="tooltip" title="Fee cap available for this transaction"></li>
+											<li class="deferred tip" data-toggle="tooltip" title="Deferred fees available for this transaction"></li>
+											<li class="fixed tip" data-toggle="tooltip" title="Fixed fees available for this transaction"></li>
+										</ul>
+									</td>
+								</tr>
+							</table>
 						</div>
-						<div class="span4">
-							<div class="endorsement">
-							    <a href="#" onclick="return false;" class="btn btn--tertiary btn--counter comment pull-right" data-content='
-							    <textarea data-required="true" placeholder="Write your endorsement and press enter..." tabindex="1" type="text"></textarea>
-								'>Endorse {{ object.user.first_name }}<span>32</span></a>
+					</div>
+					<hr>
+					<div class="row">
+						<div class="span6 endorsement">
+							<h2>Endorsements</h2>
+							<div class="link">
+							    <a href="#" onclick="return false;" class="btn btn--primary btn--counter comment" data-content='
+							    <textarea data-required="true" placeholder="Write your endorsement. It will be sent for approval before it appears." tabindex="1" type="text"></textarea>
+							    <a href="#" class="btn btn-primary btn-small">Endorse</a>
+								'>Endorse<span>32</span></a>
 							</div>
 						</div>
 					</div>
+
 					<div class="row">
 						<div class="span4">
 							<div class="endorsement">
@@ -91,13 +126,8 @@
 				</div>
 			</div>
 			{% endif %}
-			<h2>About</h2>
-			<div>
-				<p>{{ object.bio|default:"<div class=\"no-data\">No biography yet.</div>"|linebreaksbr }}</p>
-			</div>
-			<br />
 		</div>	
-		<div class="span4 pull-right">
+		<div class="span4 pull-right sidebar">
 			<div class="firm">
 				{% if firm.photo %}
 					<img src="{{ MEDIA_URL }}{{ firm.photo|default:'firm/blank.gif' }}" alt="{{ firm.name }}" class="firm-logo" />				
@@ -116,29 +146,31 @@
 				{% if object.data.practice_location_1 and object.data.practice_location_2 %}
 					<img src="//maps.googleapis.com/maps/api/staticmap?size=150x145&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_1 }}&sensor=false"><img src="http://maps.googleapis.com/maps/api/staticmap?size=149x145&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_2 }}&sensor=false">
 				{% endif %}
-				<ul>
+				<ul class="key-points">
 					{% for practice_location in object.practice_locations  %}
 						<li class="marker">{{ practice_location }}</li>
 					{% endfor %}
 					{% if object.data.years_practiced > 0 %}	
 						<li class="tick">{{ object.data.years_practiced }} Years Practicing</li>
 					{% endif %}
-					<li class="star">No endorsements yet</li>
 					<!-- <li class="friends"><img src="{{ STATIC_URL }}img/app/small-avatar.jpg" alt="Avatar" /> Benjamin Ling is a mutual contact</li> -->
-				</ul>				
+				</ul>
+				<div class="span4">				
+					<div id="other-profiles" class="other-profiles">
+						<h5>Other Profiles</h5>
+						{% social_profiles object.user %}
+		 			</div>
+		 			<hr>
+					<div id="bar-license" class="bar-license">
+						<h5>Licensed In</h5>
+						{% simple_name_list data_list=object.data.bar_membership %}
+					</div>
+				</div>
 			</div>
-			<div id="other-profiles" class="other-profiles">
-				<h5>Other Profiles</h5>
-				{% social_profiles object.user %}
- 				<br />
- 				<br />
- 			</div>
-			<div id="bar-license" class="bar-license">
-				<h5>Licensed In :</h5>
-				{% simple_name_list data_list=object.data.bar_membership %}
-			</div>
+
 		</div>	
 		<div class="span8">
+			<hr>
 			<h2>Transaction Snapshot</h2>
 			<div class="deal-charts row">
 				<div class="span4">
@@ -165,7 +197,9 @@
 					</div>
 				</div>
 			</div>
+		<hr>
 		</div>
+
 		<div class="span8">
 			<div class="startups">
 				<h2>Startups Advised</h2>
@@ -177,7 +211,9 @@
 					</ul>
 				{% endfor %}
 			</div>
+		<hr>
 		</div>
+
 		<div class="span8">
 			<div class="startups">
 				<h2>Other Websites</h2>
@@ -223,6 +259,12 @@ $(document).ready(function () {
 
 
 	$('.comment').popover({ html : true});
+	
+
+	$("a.comment").click(function() {
+	    $(this).toggleClass('faded');
+	});
+	$('.tip').tooltip();
 
 	{% if user.is_staff %}
 	$('[data-provide=ajax]').live('click', function(event){
