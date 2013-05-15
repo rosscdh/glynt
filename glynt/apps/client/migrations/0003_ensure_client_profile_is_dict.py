@@ -8,7 +8,7 @@ class Migration(DataMigration):
 
     def forwards(self, orm):
         # Note: Remember to use orm['appname.ModelName'] rather than "from appname.models..."
-        for null_profile in orm['client.ClientProfile'].filter(profile_data=None):
+        for null_profile in orm['client.ClientProfile'].objects.filter(profile_data=None):
             null_profile.profile_data = {}
             null_profile.save(update_fields=['profile_data'])
 
