@@ -86,6 +86,11 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
 
     volume_by_year = forms.CharField(required=False, widget=forms.HiddenInput)
 
+    seed_financing_amount_min = forms.IntegerField(required=False, label="Seed Financing Min", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini',}))
+    seed_financing_amount_max = forms.IntegerField(required=False, label="Seed Financing Max", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini',}))
+    seed_fee_cap_available = forms.BooleanField(required=False, label='Fee cap available for this transaction?', widget=forms.CheckboxInput)
+
+
     agree_tandc = forms.BooleanField(label='', widget=forms.CheckboxInput)
 
     def __init__(self, *args, **kwargs):

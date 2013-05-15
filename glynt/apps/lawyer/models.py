@@ -124,3 +124,15 @@ class Lawyer(models.Model):
     @property
     def website(self):
         return u'%s' % self.data.get('website', None)
+
+    @property
+    def seed_financing_amount_min(self):
+        return u'%s' % self.data.get('seed_financing_amount_min', None)
+
+    @property
+    def seed_financing_amount_max(self):
+        return u'%s' % self.data.get('seed_financing_amount_max', None)
+
+    @property
+    def seed_fee_cap_available(self):
+        return u'%s' % self.data.get('seed_fee_cap_available', None)
