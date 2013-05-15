@@ -78,7 +78,12 @@
                                 <p>Tick all that apply</p>
                                 <label class="checkbox"><input type="checkbox" tabindex="7"> We have <strong>already raised capital</strong></label>
                                 <label class="checkbox"><input type="checkbox" tabindex="8"> We are in the process <strong>raising capital</strong></label>
-                                <label class="checkbox"><input type="checkbox" tabindex="9"> We are <strong>part of an incubator</strong> or accelerator</label>
+                                <label class="checkbox"><input class="incubator" type="checkbox" tabindex="9"> We are <strong>part of an incubator</strong> or accelerator</label>
+                                <select id="incubators" class="hidden">
+                                    <option> Please select which one...</option>
+                                    <option>Incubator 1</option>
+                                    <option>Incubator 2</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -109,11 +114,21 @@
 
 {% block css %}
 <style>
+    .hidden { display: none; }
 </style>
 {% endblock %}
 
 {% block js %}
-
+<script>
+    $(document).ready(function() {
+        $('.incubator').change(function(){
+            if( $(this).is(':checked')) {
+                $("#incubators").removeClass('hidden');
+            } else {
+                $("#incubators").addClass('hidden');
+            }
+        });
+    });
 </script>
 
 {% endblock %}
