@@ -18,7 +18,7 @@
 		</div>
 		<div class="dock">
 			<ul>
-				<li class="dock-packages"><a href="#" title="Packages">Packages</a></li>
+				<li class="dock-packages"><a href="#" title="Packages" class="tip">Packages</a></li>
 				<li class="dock-firms"><a href="#" title="Firms">Firms</a></li>
 				<li class="dock-lawyers dock-active"><a href="#" title="Lawyers">Lawyers</a></li>
 			</ul>
@@ -31,21 +31,15 @@
 {% block body %}
 
 <div class="container filter">
-
     <form id="lawyer-list-form" data-validate="parsley" action="{% url 'lawyer:list' %}" method="GET" class="form-inline">{% csrf_token %}
-        {{ form.location|as_crispy_field }}
-        {{ form.q|as_crispy_field }}
-        <button id="lawyer-list-filter" type="submit" class="submit btn btn-primary">Search</button>
+        <div class="row">
+            <div class="span4"><label>Filter by location</label>{{ form.location|as_crispy_field }}</span></div>
+            <div class="span4"><label>Filter by keyword</label>{{ form.q|as_crispy_field }}</span></div>
+            <div class="span3"><br /><button id="lawyer-list-filter" type="submit" class="submit btn btn-primary">Search</button></span></div>
+        </div>
     </form>
-
 </div>
-
-
-<div class="container">
-
-	{% include page_template %}
-
-</div>
+{% include page_template %}
 
 
 {% endblock %}
@@ -54,6 +48,9 @@
     {{ block.super }}
     <script id="controls-search">
     $(document).ready(function(){
+        $('form#lawyer-list-form input').live('click', function(event){
+            $(this).select()
+        });
         $('button#lawyer-list-filter').live('click', function(event){
             event.preventDefault();
             var form = $( 'form#lawyer-list-form' );
@@ -65,9 +62,9 @@
                     'q': encodeURIComponent($('#id_q').val())
                     ,'location': encodeURIComponent($('#id_location').val())
                 }, function(k,val){
-                    if (val != '') {
+                    //if (val != '') {
                         params[k] = val;
-                    }
+                    //}
                 });
 
                 document.location = form.attr('action') + '?{params}'.assign({'params': $.param(params) });

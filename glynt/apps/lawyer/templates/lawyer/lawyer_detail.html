@@ -30,9 +30,13 @@
 	<div id="buttons">
 		<div class="container">
 			<div class="row12">
+				{% if user.is_staff %}
+					<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="false" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if not object.is_active %}hide{% endif %} btn btn-primary">Disable</a>
+					<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="true" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if object.is_active %}hide{% endif %} btn btn-success">Approve</a>
+				{% endif %}
 				{% if user.username == object.user.username %}
 					<a href="{% url 'lawyer:setup_profile' %}" class="btn">Edit profile</a>  
-					<a href="{% url 'lawyer:invite' %}" class="btn btn-primary">Invite Lawyers</a> 
+					<a href="{% url 'lawyer:invite' %}" class="btn">Invite Lawyers</a> 
 					{% if object.summary %} 
 						{% if PROJECT_ENVIRONMENT != 'dev' %}
 					    <script>
@@ -43,16 +47,50 @@
 						{% endif %}
 					{% endif %}
 				{% endif %}
-				<a href="#comingSoonModal" class="btn right" title="Message" data-toggle="modal"><i class="icon-envelope"></i> Message</a>
-				<a href="#comingSoonModal" class="btn right" title="Endorse" data-toggle="modal"><i class="icon-star"></i> Endorse</a>
-				<a href="#comingSoonModal" class="btn right" title="Engage"  data-toggle="modal"><i class="icon-play"></i> Engage</a>
+				<a href="#comingSoonModal" class="btn right" title="Message" data-toggle="modal"><i class="icon-envelope icon-white"></i> Message</a>
+				<a href="#comingSoonModal" class="btn right" title="Endorse" data-toggle="modal"><i class="icon-star icon-white"></i> Endorse</a>
+				<a href="#comingSoonModal" class="btn right" title="Engage"  data-toggle="modal"><i class="icon-play icon-white"></i> Engage</a>
 			</div>
 		</div>
 	</div>
 </div>
 <div class="container profile">
 	<div class="row">
-		<div class="span8">	
+		<div class="span8">
+			<div class="row">
+			{% if PROJECT_ENVIRONMENT == 'dev' %}
+				<div class="span8">	
+					<div class="row">
+						<div class="span4">
+							<h2>Endorsements</h2>
+						</div>
+						<div class="span4">
+							<div class="endorsement">
+							    <a href="#" onclick="return false;" class="btn btn--tertiary btn--counter comment pull-right" data-content='
+							    <textarea data-required="true" placeholder="Write your endorsement and press enter..." tabindex="1" type="text"></textarea>
+								'>Endorse {{ object.user.first_name }}<span>32</span></a>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="span4">
+							<div class="endorsement">
+								<img src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn1/41686_715347325_1131784592_q.jpg" alt="Avatar (Placeholder)">
+								<p>Awesome to work with, responsive and helpful. Instrumental in getting Airbnb to where it is today</p>
+								<p class="source">Alex Halliday, DropBox</p>
+							</div>
+						</div>
+							<div class="span4">
+								<div class="endorsement">
+									<img src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash4/369196_508036857_212730382_q.jpg" alt="Avatar (Placeholder)">
+									<p>Awesome to work with, responsive and helpful. Instrumental in getting Airbnb to where it is today</p>
+									<p class="source">Alex Halliday, Box.net</p>
+								</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			{% endif %}
 			<h2>About</h2>
 			<div>
 				<p>{{ object.bio|default:"<div class=\"no-data\">No biography yet.</div>"|linebreaksbr }}</p>
@@ -143,7 +181,13 @@
 		<div class="span8">
 			<div class="startups">
 				<h2>Other Websites</h2>
-				{% simple_name_list data_list=object.data.websites %}
+				{% for o in object.data.websites %}
+					<span><a href="http://{{ o }}" target="_BLANK" class="domain">{{ o }}</a></span>
+				{% empty %}
+					<ul class="unstyled">
+						<li class="nothing-found">Nothing yet.</li>
+					</ul>
+				{% endfor %}
 			</div>
 		</div>
 	</div>
@@ -168,6 +212,7 @@
 		</div>
 	</div>
 </div>
+{% csrf_token %}
 {% endblock %}
 
 {% block body %}
@@ -175,6 +220,61 @@
 <script>
 
 $(document).ready(function () {
+
+
+	$('.comment').popover({ html : true});
+
+	{% if user.is_staff %}
+	$('[data-provide=ajax]').live('click', function(event){
+		event.preventDefault();
+
+		var link_object = $(this)
+		var original_text = $(this).text()
+		$(this).text('Please Wait')
+
+		var url = $(this).attr('data-url');
+		var method_type = $(this).attr('data-method') || 'GET';
+		var toggle_class = $(this).attr('data-toggle_class') || false;
+		var data = {}
+
+		// get attributues to build a data package out of
+		$($(this)[0].attributes).each(function(i,item){
+			if (this.nodeName.indexOf('data-') >= 0 && ['data-url', 'data-method', 'data-provide', 'data-toggle_class'].indexOf(this.nodeName) == -1) {
+				var name = this.nodeName.replace('data-', '')
+				var val = this.nodeValue;
+				if (val.match(/(true|false)/)) {
+					val = (val === 'true') ? true : false ;
+				}
+				data[name] = val;
+			}
+		})
+
+		data = JSON.stringify(data)
+
+        $.ajax({
+            type: method_type,
+            url: url,
+            data: data,
+            contentType: "application/json",
+            beforeSend: function(jqXHR, settings) {
+                // Pull the token out of the DOM.
+                jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+            },
+            success: function(data, textStatus, jqXHR){
+            	if (toggle_class) {
+            		$('.{toggle_class}'.assign({'toggle_class':toggle_class})).toggle()
+            	}
+            },
+            error: function(data, textStatus, jqXHR){
+            },
+            complete: function() {
+            	link_object.text(original_text)
+
+            }
+        });
+
+	});
+	{% endif %}
 
 	//Get context with jQuery - using jQuery's .get() method.
 	var ctx0 = $("#dealChart0").get(0).getContext("2d");

@@ -126,7 +126,8 @@ class LawyerListView(AjaxListView, FormMixin):
     def get_elasticsearch_queryset(self):
         sq = SQ()
         for k,v in self.request.GET.items():
-            sq.add(SQ(content=Clean(v)), SQ.OR)
+            if v:
+                sq.add(SQ(content=Clean(v)), SQ.OR)
 
         logger.debug('ElasticSearch QueryString %s' % sq)
 
@@ -158,10 +159,8 @@ class LawyerListView(AjaxListView, FormMixin):
         kwargs = self.get_form_kwargs()
         kwargs.update({
             'request': self.request
-            ,'initial': {
-                        'q': urlparse.unquote(self.request.GET.get('q')) if self.request.GET.get('q') else None,
-                        'location': urlparse.unquote(self.request.GET.get('location')) if 'location' in self.request.GET or self.request.GET.get('location') else 'San Francisco, California'
-                        }
+            ,'initial': { 'q': urlparse.unquote(self.request.GET.get('q')) if self.request.GET.get('q') else None,
+                          'location': urlparse.unquote(self.request.GET.get('location')) if 'location' in self.request.GET or self.request.GET.get('location') else 'San Francisco, California'}
             }) # add the request to the form
 
         return form_class(**kwargs)

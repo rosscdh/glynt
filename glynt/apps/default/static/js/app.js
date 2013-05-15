@@ -23,3 +23,6 @@ $('.new-property').hide();
 $(".add-new-property").click(function() {
 	$('.new-property').show();
 })
+
+$('input[title]').tooltip({trigger: 'focus', placement: 'top'});
+$('.tip').tooltip({trigger: 'focus', placement: 'top'});
