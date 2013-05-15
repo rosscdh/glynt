@@ -79,7 +79,7 @@
 							</hgroup>	
 							<div class="reveal-inner">
 								<p>
-									<a class="btn google" href="{% url "socialauth_begin" "google-oauth2" %}" title="Sign in with Google">Sign in with <strong>Google</strong></a>
+									<a class="btn google" href="{% url "public:auth_user_class_redirect" user_class_name="startup" %}" title="Sign in with Google">Sign in with <strong>Google</strong></a>
 								</p>	
 								<a href="#" id="data-statement">We never spam. Read more.</a>
 							</div>
@@ -90,7 +90,7 @@
 							</hgroup>
 							<div class="reveal-inner">
 								<p>
-									<a class="btn linkedin" href="{% url "socialauth_begin" "linkedin" %}" title="Sign in with LinkedIn">Sign in with <strong>LinkedIn</strong></a>
+									<a class="btn linkedin" href="{% url "public:auth_user_class_redirect" user_class_name="lawyer" %}" title="Sign in with LinkedIn">Sign in with <strong>LinkedIn</strong></a>
 								</p>	
 								<a href="#" id="data-statement">We never spam. Read more.</a>
 							</div>

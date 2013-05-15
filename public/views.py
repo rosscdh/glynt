@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib import messages
+from django.http import Http404
 from django.views.generic.base import RedirectView
 from django.views.generic.edit import FormView
 from django.views.generic import TemplateView
@@ -7,8 +8,6 @@ from django.core.urlresolvers import reverse
 
 from public.forms import ContactForm
 from public.tasks import send_contactus_email
-
-
 
 import logging
 logger = logging.getLogger('django.request')
@@ -18,15 +17,50 @@ class PublicHomepageView(TemplateView):
     template_name='public/homepage.html'
 
     def get_template_names(self):
-        if self.request.user.is_authenticated():
-            return ['lawyer/welcome.html']
+        user_class_name = self.request.session.get('user_type', 'lawyer')
+        if not self.request.user.is_authenticated():
+            # return the standard homepage if we are not logged in
+            template_name = self.template_name
         else:
-            return [self.template_name]
+            # we are logged in.. redirect based on the user_class_name
+            if user_class_name == 'lawyer':
+                template_name = 'lawyer/welcome.html'
+
+            elif user_class_name == 'startup':
+                template_name = 'startup/welcome.html'
+
+        return [template_name]
 
 
-class LoggedInRedirectView(RedirectView):
+
+class UserClassSessionRedirectView(RedirectView):
+    """ View to set a session that helps us determine what class a user is logging in as,
+    based on the session value 
+    """
+    permanent = False # status = 302 not 301 (permanent)
+    def get_redirect_url(self, **kwargs):
+        """ if the user has already signed up and has set a password then continue normally
+        otherwise show them the form """
+
+        user_class_name = kwargs.get('user_class_name', 'lawyer')
+
+        self.request.session['user_type'] = user_class_name
+        logging.debug('logging in as user_class_name: %s' % user_class_name)
+
+        if user_class_name == 'lawyer':
+            url = reverse('socialauth_begin', args=['linkedin'])
+        elif user_class_name == 'startup':
+            url = reverse('socialauth_begin', args=['google-oauth2'])
+        else:
+            raise Http404("User Class %s is not Defined" % user_class_name)
+
+        logging.debug('redirecting user_class_name: %s to : %s' % (user_class_name, url,))
+        return url    
+
+
+class UserClassLoggedInRedirectView(RedirectView):
     """ View to handle generic logged in from Oauth Providers """
-    def get_redirect_url(self):
+    def get_redirect_url(self, **kwargs):
         """ if the user has already signed up and has set a password then continue normally
         otherwise show them the form """
         if self.request.user.password == '!':

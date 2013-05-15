@@ -63,7 +63,9 @@ def profile_photo(backend, details, response, user=None, is_new=False,
 def graph_user_connections(backend, details, response, user=None, is_new=False,
                         *args, **kwargs):
     logger.debug('Graph.graph_user_connections start')
+
     if user is not None:
+
         auth = UserSocialAuth.objects.get(user=user, provider=backend.name)
         logger.info('Pipeline: Graph.graph_user_connections auth: %s' % auth)
 
