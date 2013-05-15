@@ -286,9 +286,9 @@ AUTH_PROFILE_MODULE = 'client.ClientProfile' # our custom profile
 
 # Celery
 BROKER_HEARTBEAT = 10 # helps with heroku connection limits
-BROKER_CONNECTION_TIMEOUT = 10
+BROKER_CONNECTION_TIMEOUT = 3
 BROKER_POOL_LIMIT = 1 # Very importnat for heroku, stops a max + 1 event
-BROKER_CONNECTION_MAX_RETRIES = 5
+BROKER_CONNECTION_MAX_RETRIES = 2
 
 
 USERENA_USE_MESSAGES = True
