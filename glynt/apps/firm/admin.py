@@ -20,10 +20,6 @@ class FirmAdmin(admin.ModelAdmin):
         OfficeInline,
     ]
 
-    def num_offices(self, obj):
-        return obj.office_set.count()
-    num_offices.short_description = 'Office Count'
-
 
 
 admin.site.register(Firm, FirmAdmin)
