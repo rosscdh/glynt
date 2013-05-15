@@ -63,7 +63,10 @@ class Lawyer(models.Model):
         try:
             return self.photo.url
         except:
-            return self.user.profile.profile_data.get('linkedin_photo_url', None) or self.user.profile.get_mugshot_url()
+            try:
+                return self.user.profile.profile_data.get('linkedin_photo_url', None) or self.user.profile.get_mugshot_url()
+            except:
+                return getattr(settings, 'USERENA_MUGSHOT_DEFAULT', '') # must return string here if no mugshot default
 
 
     def username(self):

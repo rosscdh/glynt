@@ -5,7 +5,7 @@ import sys
 PROJECT_ENVIRONMENT = 'prod'
 
 IS_TESTING = False
-for test_app in ['jenkins','testserver','test']:
+for test_app in ['loaddata','jenkins','testserver','test']:
     if test_app in sys.argv[1:2]:
         IS_TESTING = True
 
@@ -240,8 +240,6 @@ HELPER_APPS = (
     'clear_cache',
     # engless pagination
     'endless_pagination',
-    # Search
-    'haystack',
     # Celery Tasks
     'djcelery',
     # User switcher
@@ -260,7 +258,10 @@ if IS_TESTING == True:
     )
 else:
     HELPER_APPS = HELPER_APPS + (
+        # Db Migrations
         'south',
+        # Search - inluded here to allow for loading of fixtures
+        'haystack',
     )
 
 
