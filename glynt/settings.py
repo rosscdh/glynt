@@ -110,8 +110,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'glynt.middleware.LawpalSocialAuthExceptionMiddleware',
-    # Uncomment the next line for simple clickjacking protection:
-    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
 
@@ -391,6 +390,7 @@ if DEBUG:
             '--with-coverage',
         ]
 
+
 # Process model updates in real time
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 HAYSTACK_CONNECTIONS = {
@@ -400,6 +400,7 @@ HAYSTACK_CONNECTIONS = {
         'INDEX_NAME': 'glynt-dev',
     },
 }
+
 USE_ELASTICSEARCH = True
 
 INTERNAL_IPS = ('127.0.0.1',)

@@ -42,6 +42,7 @@ south
 # Neo4j integration
 -e git+https://github.com/rosscdh/neo4django.git#egg=neo4django
 -e git+https://github.com/robinedwards/django-debug-toolbar-neo4j-panel.git@HEAD#egg=neo4j_panel-dev
+
 # Search
 -e git+https://github.com/toastdriven/django-haystack.git@master#egg=django-haystack
 pyelasticsearch
