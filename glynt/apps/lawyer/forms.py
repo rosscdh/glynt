@@ -194,4 +194,3 @@ class LawyerSearchForm(BootstrapMixin, forms.Form):
         if not settings.USE_ELASTICSEARCH:
             del self.fields['location']
             self.fields['location'] = forms.EmailField(label="", help_text="", widget=forms.HiddenInput(attrs={}))
-
