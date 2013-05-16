@@ -26,3 +26,16 @@ def simple_name_list(data_list):
         'object_list': data_list,
     }
     return context
+
+
+@register.inclusion_tag('lawyer/partials/humanise_number.html', takes_context=False )
+def humanise_number(num):
+    magnitude = 0
+    while num >= 1000:
+        magnitude += 1
+        num /= 1000
+    humanised_num = '%s%s' % (num, ['', 'k', 'm', 'g', 't', 'p'][magnitude])
+    context = {
+        'number': humanised_num,
+    }
+    return context
