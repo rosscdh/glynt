@@ -17,6 +17,7 @@ composer.lock
 :2e_*
 ._*
 .DS_Store
+.idea*
 /reports/*
 /bdd/vendor/*
 /bdd/results/*

@@ -6,6 +6,11 @@ from django.contrib.auth.models import User
 from jsonfield import JSONField
 from glynt.apps.utils import get_namedtuple_choices
 
+from managers import DefaultLawyerManager, ApprovedLawyerManager
+
+import logging
+logger = logging.getLogger('django.request')
+
 
 class Lawyer(models.Model):
     """ The Firms
@@ -28,6 +33,9 @@ class Lawyer(models.Model):
     data = JSONField(default={})
     photo = models.ImageField(upload_to='lawyer', blank=True)
 
+    objects = DefaultLawyerManager()
+    approved = ApprovedLawyerManager()
+
     def __unicode__(self):
         return u'%s (%s)' % (self.user.username, self.user.email,)
 
@@ -38,9 +46,10 @@ class Lawyer(models.Model):
         except IndexError:
             return None
 
+    @property
     def firm_name(self):
         try:
-            primary_firm.name
+            return self.primary_firm.name
         except:
             return None
 
@@ -50,11 +59,13 @@ class Lawyer(models.Model):
 
     @property
     def profile_photo(self):
-        p = getattr(self, 'photo', None)
         try:
-            return p.url()
-        except ValueError:
-            return self.user.profile.get_mugshot_url()
+            return self.photo.url
+        except:
+            try:
+                return self.user.profile.profile_data.get('linkedin_photo_url', None) or self.user.profile.get_mugshot_url()
+            except:
+                return getattr(settings, 'USERENA_MUGSHOT_DEFAULT', '') # must return string here if no mugshot default
 
     def username(self):
         return self.user.username
@@ -68,6 +79,10 @@ class Lawyer(models.Model):
     def last_login(self):
         return self.user.last_login
 
+    @property
+    def search_locations(self):
+        return ', '.join(self.practice_locations())
+
     def practice_locations(self):
         locations = []
         if self.data.get('practice_location_1', None) is not None:
@@ -75,10 +90,17 @@ class Lawyer(models.Model):
         if self.data.get('practice_location_2', None) is not None:
             locations.append(self.data.get('practice_location_2'))
         return [l for l in locations if l.strip() != '']
-        
+
+    @property
+    def startups_advised(self):
+        try:
+            return self.data.get('startups_advised', [])
+        except:
+            return []
+
+    @property
     def total_deals(self):
-        total = self.data.get('volume_incorp_setup')
-        return total
+        return self.data.get('volume_incorp_setup', 0)
             
     @property
     def phone(self):
@@ -89,8 +111,8 @@ class Lawyer(models.Model):
         return u'%s' % self.data.get('years_practiced', 0)
 
     @property
-    def current_geo_loc(self):
-        return u'%s' % self.data.get('current_geo_loc', None)
+    def geo_loc(self):
+        return self.data.get('current_geo_loc', None)
 
     @property
     def twitter(self):

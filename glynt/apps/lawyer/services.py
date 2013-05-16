@@ -18,6 +18,7 @@ class EnsureLawyerService(object):
     firm = None
     default_volume_matrix = unicode('[0]')
     default_volume_matrix_by_year = unicode('{"2010":0,"2011":0,"2012":0,"2013":0}')
+
     def __init__(self, user, firm_name=None, offices=[], **kwargs):
         self.user = user
         self.firm_name = firm_name
@@ -25,6 +26,11 @@ class EnsureLawyerService(object):
 
         self.form = kwargs.pop('form', None)
         self.role = kwargs.pop('position', None)
+
+        # remove unwanted fields
+        kwargs.pop('bar_membership_input', None)
+        kwargs.pop('websites_input', None)
+
         self.data = kwargs
 
     def update_user(self):
@@ -115,6 +121,8 @@ class EnsureLawyerService(object):
             self.lawyer.role = self.role
 
         if self.data:
+            self.data['bar_membership'] = json.loads(self.data.get('bar_membership', '[]')) if self.data.get('bar_membership', '[]') != '' else []
+            self.data['websites'] = json.loads(self.data.get('websites', '[]')) if self.data.get('websites', '[]') != '' else []
             self.lawyer.data = self.data
 
         if self.data.get('photo', None) is not None:

@@ -2,6 +2,8 @@
 """"""
 from behave import given, when, then
 
+from behaving.web.steps import *
+
 # Environment Setup
 
 def before_all(context):
@@ -14,6 +16,14 @@ def before_feature(context, feature):
     pass
 
 # Step Setup
+@step(u'I am on "{url}"')
+def when_i_visit_url(context, url):
+    full_url = context.browser_url(url)
+    context.browser.open(full_url)
+
+@step(u'I should see a "{css}" element')
+def should_see_element_with_css_within_timeout(context, css, timeout=0):
+    assert context.browser.is_element_present_by_css(css, wait_time=timeout), u'Element not present'
 
 @given('/^(?:|I )am logged in as "([^"]*)"$/')
 def step(context):

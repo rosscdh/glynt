@@ -32,7 +32,7 @@ LAWPAL_PRIVATE_BETA = getattr(settings, 'LAWPAL_PRIVATE_BETA', False)
 class ClientProfile(UserenaBaseProfile):
     """ Base User Profile, where we store all the interesting information about users """
     user = models.OneToOneField(User, unique=True, related_name='profile')
-    profile_data = JSONField(blank=True, null=True)
+    profile_data = JSONField(default={})
     country = CountryField(default='US', null=True)
     state = models.CharField(max_length=64, null=True)
     is_lawyer = models.BooleanField(default=True)
@@ -42,6 +42,10 @@ class ClientProfile(UserenaBaseProfile):
         profile = cls(**kwargs)
         profile.save()
         return profile
+
+    def get_mugshot_url(self):
+        p = self.profile_data.get('linkedin_photo_url', None) or self.profile_data.get('facebook_photo_url', None) or super(ClientProfile, self).get_mugshot_url()
+        return p
 
     def short_name(self):
         """ Returns A. LastName """

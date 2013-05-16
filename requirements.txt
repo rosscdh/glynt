@@ -29,7 +29,10 @@ south
 -e git+https://github.com/lincolnloop/python-qrcode.git#egg=python-qrcode
 
 # JSON Field
-django-jsonfield # This is the correct one, the bradjasper version does not save correctly (converts to string), but we probably need to patch it so that the loaddata works
+#django-jsonfield # This is the correct one, the bradjasper version does not save correctly (converts to string), but we probably need to patch it so that the loaddata works
+# patched version to work with the pyelasticsearch requriement of the latest simplejson (which no does not support the correct json implementation)
+# long an short; simplejson bad, json good
+-e git+https://github.com/rosscdh/django-jsonfield.git@lawpal#egg=django-jsonfield
 
 # Auth and Users
 -e git+https://github.com/rosscdh/django-social-auth.git@rc_fixes#egg=django-social-auth
@@ -39,6 +42,10 @@ django-jsonfield # This is the correct one, the bradjasper version does not save
 # Neo4j integration
 -e git+https://github.com/rosscdh/neo4django.git#egg=neo4django
 -e git+https://github.com/robinedwards/django-debug-toolbar-neo4j-panel.git@HEAD#egg=neo4j_panel-dev
+# Search
+-e git+https://github.com/toastdriven/django-haystack.git@master#egg=django-haystack
+pyelasticsearch
+# geopy # for spatial
 
 # Markup
 django-parsley

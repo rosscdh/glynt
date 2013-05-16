@@ -14,6 +14,14 @@ jQuery(document).ready(function() {
 
     $('body').css('background-image', ('url("'+imgPath+'")'));
 
+
+$('#data-statement').click(function() {
+	$('#data-statement-body').fadeToggle();	
+	$('#data-statement').toggle();	
+
+});
+
+
 	// polyfill placeholder text
 	if ( (jQuery('html').hasClass("oldie")) || (jQuery('html').hasClass("ie9")) ) {
 	    jQuery('[placeholder]').focus(function () {

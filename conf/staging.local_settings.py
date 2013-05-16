@@ -2,7 +2,7 @@
 LOCAL_SETTINGS = True
 from settings import *
 
-PROJECT_ENVIRONMENT = 'prod'
+PROJECT_ENVIRONMENT = 'staging'
 
 SITE_ID = 3
 
@@ -40,14 +40,6 @@ FACEBOOK_SECRET_KEY = '4f9854b8fe8f5ccf27ac1ffcf5051b79'
 
 LINKEDIN_CONSUMER_KEY = 'gnesv6zvhzgn'
 LINKEDIN_CONSUMER_SECRET = '3eTYERhJZd4UJSjM'
-LINKEDIN_SCOPE = ['r_basicprofile', 'r_emailaddress', 'r_network']
-LINKEDIN_EXTRA_FIELD_SELECTORS = ['email-address', 'headline', 'industry']
-LINKEDIN_EXTRA_DATA = [('id', 'id'),
-                       ('first-name', 'first_name'),
-                       ('last-name', 'last_name'),
-                       ('email-address', 'email_address'),
-                       ('headline', 'headline'),
-                       ('industry', 'industry')]
 
 
 # ANGEL_CLIENT_ID = '06aa0b726a71dc994bb44c3c4f3d9b91' # www.lawpal.com
@@ -72,9 +64,19 @@ RAVEN_CONFIG = {
     'dsn': 'https://b5a6429d03e2418cbe71cd5a4c9faca6:ddabb51af47546d1ac0e63cb453797ba@app.getsentry.com/6287',
 }
 
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': 'http://jsy06hdx:km5ugyiy90yy17qg@banyan-8252692.us-east-1.bonsai.io',
+        'INDEX_NAME': 'glynt-stage',
+    },
+}
+USE_ELASTICSEARCH = True
+
+
 # Heroku - CloudAMQP
-BROKER_URL = 'amqp://gxdzjcxo:sMKG0qU4bJlUWmRMkWKuArtPQiY3m84G@tiger.cloudamqp.com/gxdzjcxo'
-BROKER_POOL_LIMIT = 1
+#BROKER_URL = 'amqp://gxdzjcxo:sMKG0qU4bJlUWmRMkWKuArtPQiY3m84G@tiger.cloudamqp.com/gxdzjcxo'
 
 SPLUNKSTORM_ENDPOINT = 'logs2.splunkstorm.com'
 SPLUNKSTORM_PORT = 20824

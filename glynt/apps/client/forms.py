@@ -30,17 +30,23 @@ class ConfirmLoginDetailsForm(forms.ModelForm):
     """
     username = forms.CharField(widget=forms.HiddenInput)
     email = forms.EmailField()
-    password = forms.CharField(widget=forms.PasswordInput)
+    password = forms.CharField(widget=forms.PasswordInput(render_value=False))
     confirm_password = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
         model = User
         fields = ['email', 'password', 'confirm_password']
 
+    def __init__(self, *args, **kwargs):
+        """ get request object and user """
+        self.request = kwargs.pop('request', None)
+        self.user = self.request.user
+        super(ConfirmLoginDetailsForm, self).__init__(*args, **kwargs)
+
     def clean_email(self):
         email = self.cleaned_data['email']
         try:
-            lawyer_exists = User.objects.filter(email=email)
+            lawyer_exists = User.objects.exclude(pk=self.user.pk).filter(email=email)
             if len(lawyer_exists) > 0:
                 msg = 'Sorry but a User with that email already exists (email: %s)' % (email)
                 logging.error(msg)
@@ -56,8 +62,15 @@ class ConfirmLoginDetailsForm(forms.ModelForm):
 
         if password != confirm_password:
             raise exceptions.ValidationError(_('Passwords do not match'))
+
         return password
 
+    def save(self, commit=True):
+        user = super(ConfirmLoginDetailsForm, self).save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.save(update_fields=['password'])
+        return user
 
 class SignupForm(BootstrapMixin, SignupFormOnlyEmail):
     """ The signup form overrides the Userena save method and hooks it up

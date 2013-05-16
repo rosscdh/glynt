@@ -1,17 +1,28 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
 from django.views.generic import FormView, DetailView
+from django.views.generic.edit import FormMixin
 from endless_pagination.views import AjaxListView
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.utils import simplejson as json
 
+from haystack.query import SQ, SearchQuerySet
+from haystack.inputs import Exact, Clean
+
 from glynt.apps.lawyer.services import EnsureLawyerService
+from glynt.apps.utils import get_query
 
 from models import Lawyer
-from forms import LawyerProfileSetupForm
+from forms import LawyerProfileSetupForm, LawyerSearchForm
+
+import urlparse
 
 import logging
 logger = logging.getLogger('django.request')
+
+
+USE_ELASTICSEARCH = getattr(settings, 'USE_ELASTICSEARCH', False)
 
 
 class LawyerProfileView(DetailView):
@@ -94,18 +105,72 @@ class LawyerProfileSetupView(FormView):
         return super(LawyerProfileSetupView, self).form_valid(form=form)
 
 
-class LawyerListView(AjaxListView):
+class LawyerListView(AjaxListView, FormMixin):
+    """ Provide the means to search for lawyers based on keywords, and location
+    use elastic search or a basic search depending on settings
+    """
     template_name = 'lawyer/lawyer_list.html'
     page_template = 'lawyer/partials/lawyer_list_default.html'
     paginate_by = 10
     model = Lawyer
+    form_class = LawyerSearchForm
+
+    def __init__(self, *args, **kwargs):
+        if USE_ELASTICSEARCH:
+            # use the elastic search template if were using it
+            # accounts for the object differences
+            self.page_template = 'lawyer/partials/lawyer_list_elasticsearch.html'
+
+        super(LawyerListView, self).__init__(*args, **kwargs)
+
+    def get_elasticsearch_queryset(self):
+        sq = SQ()
+        for k,v in self.request.GET.items():
+            sq.add(SQ(content=Clean(v)), SQ.OR)
+
+        logger.debug('ElasticSearch QueryString %s' % sq)
+
+        return SearchQuerySet().filter(sq)
+        
+    def get_basic_queryset(self):
+        query_string = self.request.GET.get('q', '').strip()
+        logger.debug('Basic QueryString %s' % query_string)
+
+        if query_string:
+            # create a django Q queryset using get_query
+            entry_query = get_query(query_string, ['user__first_name','user__last_name','bio',])
+            logger.debug('entry_query %s' % entry_query)
+            return self.model.approved.filter(entry_query)
+
+        return self.model.approved.all()
 
     def get_queryset(self):
-        return self.model._default_manager.exclude(user__password='!').select_related().filter(user__is_active=True, user__is_superuser=False).prefetch_related('user', 'firm_lawyers')
+        """ return the approved lawyers 
+        if we have a query string then use that to filter """
+        if USE_ELASTICSEARCH:
+            logger.info('Using ElasticSearch')
+            return self.get_elasticsearch_queryset()
+        else:
+            logger.info('Using BasicSearch')
+            return self.get_basic_queryset()
+
+    def get_form(self, form_class):
+        kwargs = self.get_form_kwargs()
+        kwargs.update({
+            'request': self.request
+            ,'initial': {
+                        'q': urlparse.unquote(self.request.GET.get('q')) if self.request.GET.get('q') else None,
+                        'location': urlparse.unquote(self.request.GET.get('location')) if 'location' in self.request.GET or self.request.GET.get('location') else 'San Francisco, California'
+                        }
+            }) # add the request to the form
+
+        return form_class(**kwargs)
+
     def get_context_data(self, **kwargs):
-        super(LawyerListView, self).get_context_data(**kwargs)
-        import pdb
-        #pdb.set_trace()
-        if 'view' not in kwargs:
-            kwargs['view'] = self
+        kwargs = super(LawyerListView, self).get_context_data(**kwargs)
+
+        kwargs.update({
+            'form': self.get_form(self.get_form_class())
+        })
+
         return kwargs

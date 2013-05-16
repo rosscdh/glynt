@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django import template
 
+import hmac, hashlib
 import time
 
 register = template.Library()
@@ -109,7 +110,28 @@ def show_loading(**kwargs):
 
 @register.inclusion_tag('vendors/intercom.html', takes_context=True)
 def intercom_script(context, **kwargs):
-    return {
-        'user': context.get('user', None)
-    }
+    user = context.get('user', None)
+    intercomio_userhash = None
+    show_widget = getattr(settings, 'PROJECT_ENVIRONMENT', None) != 'dev' and user.is_authenticated()
+    # were not in dev (because we dont want intercom to record us devs)
+    if show_widget:
+        if user and user.is_authenticated():
+            intercomio_userhash = hmac.new(settings.INTERCOM_API_SECRET, str(user.pk), digestmod=hashlib.sha256).hexdigest()
+
+    context.update({
+        'show_widget': show_widget,
+        'intercomio_userhash': intercomio_userhash,
+    })
+    return context
 intercom_script.is_safe = True
+
+
+
+@register.inclusion_tag('public/partials/contact_us_wrapper.html', takes_context=True)
+def contact_us_form(context, is_modal=None, **kwargs):
+    is_modal = True if is_modal is None and context.get('request').is_ajax() else False
+    context.update({
+        'is_modal': is_modal,
+    })
+    return context
+contact_us_form.is_safe = True

@@ -1,26 +1,54 @@
 {% extends 'base.html' %}
-{% load invite_tags %}
+{% load invite_tags account_tags %}
 
 {% block page_title %}Lawyers - Thanks for completing your profile{% endblock %}
 {% block bodyclass %}lawyer-form{% endblock %}
 
 {% block prebody %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/css/theme/lawyer-invite.css">
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/css/theme/social-buttons.css">
 <div id="hero">
 	<div class="container">
 		<!-- starts carousel -->
-		<div class="row animated fadeInDown">
+		<div class="row animated">
 			<div class="span12">
-				<h1>An opportunity to be involved in something big.</h1>
-				<h3>Invite your colleagues to join you on lawpal.com</h3>
+				<h1>
+					Build your network
+				</h1>
+				<h2>
+					LawPal has a powerful recommendation engine which uses your existing social networks to match you with new clients.
+				</h2>
 			</div>
 		</div>
 	</div>
 </div>
-
-<div class="container profile">
-	<div class="row">
+<div class="">
+	<div class="container recommend">
+		<h2>
+			Recommend other lawyers
+		</h2>
+		<p>
+			LawPal works through referral. Please endorse at least two other colleagues in your firm or another.
+		</p>
 		{% invite_to_lawpal invite_type='lawyer' %}
 	</div>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<div class="container divide">
+	<h2>
+		Connect your existing accounts
+	</h2>
+	<p>
+		The more accounts you connect, the more likely it is that startups will find you.
+	</p>
+	<div class="buttons">
+		{% social_associate social_auth %}
+	</div>
+	<p>
+			We will never publish to your social networks without your consent or contact your connections directly. Like many platforms, we use social login as way of expediting the signup process and verifying your indentity. We also use some aspects of your social profile to improve the efficiency of LawPal, for example, showing common contacts. Have further questions? <a href="{% url 'public:contact_us' %}" data-toggle="modal" class="contact-us">Contact us here</a>.
+	</p>
 </div>
 
 {% endblock %}

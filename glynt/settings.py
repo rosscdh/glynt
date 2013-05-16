@@ -5,7 +5,8 @@ import sys
 PROJECT_ENVIRONMENT = 'prod'
 
 IS_TESTING = False
-for test_app in ['jenkins', 'testserver', 'test']:
+
+for test_app in ['loaddata','jenkins','testserver','test']:
     if test_app in sys.argv[1:2]:
         IS_TESTING = True
 
@@ -24,7 +25,6 @@ ADMINS = (
 
 MANAGERS = ADMINS + (
     ("Alex Halliday", 'alex@lawpal.com'),
-    ("Joe Musgrave", 'joe@lawpal.com'),
 )
 
 NOTICEGROUP_EMAIL = (
@@ -191,21 +191,21 @@ PROJECT_APPS = (
     # Endorsements by users
     'glynt.apps.endorsement',
     # The Flyform
-    'glynt.apps.flyform',
+    #'glynt.apps.flyform',
     # The primary document view system
     'glynt.apps.document',
     # The document authoring system
-    'glynt.apps.author',
+    #'glynt.apps.author',
     # The End User - Client, those that consume the documents
     'glynt.apps.client',
     # The v2 Document Signing system
-    'glynt.apps.smoothe',
+    #'glynt.apps.smoothe',
     # The Document Signing system
-    'glynt.apps.sign',
+    #'glynt.apps.sign',
     # The Document Export system
     'glynt.apps.export',
     # Remote and 3rd Party services (pdf/doc conversion)
-    'glynt.apps.services',
+    #'glynt.apps.services',
 )
 
 HELPER_APPS = (
@@ -259,7 +259,10 @@ if IS_TESTING is True:
     )
 else:
     HELPER_APPS = HELPER_APPS + (
+        # Db Migrations
         'south',
+        # Search - inluded here to allow for loading of fixtures
+        'haystack',
     )
 
 
@@ -281,6 +284,13 @@ HELLOSIGN_AUTH = ("sendrossemail@gmail.com", "test2007")
 
 ANONYMOUS_USER_ID = -1
 AUTH_PROFILE_MODULE = 'client.ClientProfile'  # our custom profile
+
+
+# Celery
+BROKER_HEARTBEAT = 10 # helps with heroku connection limits
+BROKER_CONNECTION_TIMEOUT = 10
+BROKER_POOL_LIMIT = 1 # Very importnat for heroku, stops a max + 1 event
+BROKER_CONNECTION_MAX_RETRIES = 5
 
 
 USERENA_USE_MESSAGES = True
@@ -311,7 +321,7 @@ FACEBOOK_REQUEST_PERMISSIONS = 'email,user_likes,user_about_me,read_stream'
 LINKEDIN_CONSUMER_KEY = '1uh2ns1cn9tm'
 LINKEDIN_CONSUMER_SECRET = 'MnrqdbtmM10gkz27'
 LINKEDIN_SCOPE = ['r_basicprofile', 'r_emailaddress', 'r_network']
-LINKEDIN_EXTRA_FIELD_SELECTORS = ['email-address', 'headline', 'industry']
+LINKEDIN_EXTRA_FIELD_SELECTORS = ['picture-url','email-address', 'headline', 'industry']
 LINKEDIN_EXTRA_DATA = [('id', 'id'),
                        ('first-name', 'first_name'),
                        ('last-name', 'last_name'),
@@ -335,14 +345,18 @@ SOCIAL_AUTH_BACKEND_ERROR_URL = '/'
 SOCIAL_AUTH_PROTECTED_USER_FIELDS = ('first_name', 'last_name', 'full_name', 'email',)
 SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.social.social_auth_user',
+    'social_auth.backends.pipeline.associate.associate_by_email', # very insecure, only here to allow transfer of users from preview.lawpal
     'glynt.apps.graph.pipeline.get_username',
     'social_auth.backends.pipeline.user.create_user',
     'social_auth.backends.pipeline.social.associate_user',
     'social_auth.backends.pipeline.social.load_extra_data',
     'social_auth.backends.pipeline.user.update_user_details',
     'glynt.apps.graph.pipeline.ensure_user_setup',
+    'glynt.apps.graph.pipeline.profile_photo',
     'glynt.apps.graph.pipeline.graph_user_connections',
 )
+
+INTERCOM_API_SECRET = '-sjPyiyI5P44z3QsHLDUWfoLK8Rml7Wbg2wmj64L'
 
 
 DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d %Y',
@@ -377,6 +391,16 @@ if DEBUG:
             '--with-coverage',
         ]
 
+# Process model updates in real time
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': 'http://jsy06hdx:km5ugyiy90yy17qg@banyan-8252692.us-east-1.bonsai.io',
+        'INDEX_NAME': 'glynt-dev',
+    },
+}
+USE_ELASTICSEARCH = True
 
 INTERNAL_IPS = ('127.0.0.1',)
 DEBUG_TOOLBAR_PANELS = (
@@ -424,6 +448,11 @@ LOGGING = {
         'django.request': {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
             'propagate': True,
         },
         'lawpal.services': {
