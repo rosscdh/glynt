@@ -19,7 +19,7 @@
 <div class="container profile">
     <div class="row">
         <div class="span12">
-            <form id="startupSignUp" data-validate="parsley" action="" method="POST" class="form-horizontal">
+            <form id="startupSignUp" data-validate="parsley" action="" method="POST" class="form-horizontal">{% csrf_token %}
                 <div class="row">
                     <div class="span12">
                         <legend>Confirm your details</legend>
@@ -28,35 +28,21 @@
                 <div class="row">
                     <div class="span5">
                         <div class="control-group">
-                            <label class="control-label" for="inputFirstName">First Name</label>
-                            <div class="controls">
-                                <input type="text" id="inputFirstName" placeholder="First Name" tabindex="1">
-                            </div>
+                            {{ form.first_name|as_crispy_field }}
                         </div>
                         <div class="control-group">
-                            <label class="control-label" for="inputEmail">Email</label>
-                            <div class="controls">
-                                <input type="text" id="inputEmail" placeholder="Email address" tabindex="3">
-                            </div>
+                            {{ form.email|as_crispy_field }}
                         </div>
                     </div>
                     <div class="span5">
                         <div class="control-group">
-                            <label class="control-label" for="inputLastName">Last Name</label>
-                            <div class="controls">
-                                <input type="text" id="inputLastName" placeholder="Last Name" tabindex="2">
-                            </div>
+                            {{ form.last_name|as_crispy_field }}
                         </div>
                         <div class="control-group">
-                            <label class="control-label" for="inputLastName">Password</label>
-                            <div class="controls">
-                                <input type="text" id="inputPassword" placeholder="Enter your password" tabindex="4">
-                            </div>
+                            {{ form.password|as_crispy_field }}
                         </div>
                        <div class="control-group">
-                            <div class="controls">
-                                <input type="text" id="inputPasswordConfirm" placeholder="Enter your password again" tabindex="5">
-                            </div>
+                            {{ form.password_confirm|as_crispy_field }}
                         </div>
                     </div>
                 </div>
@@ -68,17 +54,14 @@
                 <div class="row">
                     <div class="span8">
                         <div class="control-group">
-                            <label class="control-label" for="inputCompanyName">Company name</label>
-                            <div class="controls">
-                                <input type="text" id="inputCompanyName" placeholder="Acme Inc" tabindex="6">
-                            </div>
+                            {{ form.name|as_crispy_field }}
                         </div>
                         <div class="control-group">
                             <div class="controls">
                                 <p>Tick all that apply</p>
-                                <label class="checkbox"><input type="checkbox" tabindex="7"> We have <strong>already raised capital</strong></label>
-                                <label class="checkbox"><input type="checkbox" tabindex="8"> We are in the process <strong>raising capital</strong></label>
-                                <label class="checkbox"><input class="incubator" type="checkbox" tabindex="9"> We are <strong>part of an incubator</strong> or accelerator</label>
+                                <label class="checkbox">{{ form.already_raised_capital }} We have <strong>already raised capital</strong></label>
+                                <label class="checkbox">{{ form.process_raising_capital }} We are in the process <strong>raising capital</strong></label>
+                                <label class="checkbox">{{ form.incubator_or_accelerator }} We are <strong>part of an incubator</strong> or accelerator</label>
                                 <select id="incubators" class="hidden">
                                     <option> Please select which one...</option>
                                     <option>Incubator 1</option>
@@ -95,7 +78,7 @@
                                 <div id="div_id_agree_tandc" class="control-group">
                                     <div class="controls">
                                         <label class="checkbox">
-                                            <input type="checkbox" tabindex="10"> I agree to the LawPal <a href="/legal/terms/">Terms and Conditions</a>
+                                            {{ form.agree_tandc }} I agree to the LawPal <a href="/legal/terms/">Terms and Conditions</a>
                                         </label>
                                     </div>
                                 </div>
