@@ -16,12 +16,15 @@ class StartupProfileSetupForm(BootstrapMixin, forms.Form):
     """ Form to allow startups to enter basic information about 
     their setups
     """
+    # django user ifo used to populate founder object
     first_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'First name', 'tabindex':'1'}))
     last_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'Last name','tabindex':'2'}))
+
+    # startup
     startup_name = forms.CharField(label="Acme Inc", help_text="", widget=forms.TextInput(attrs={'placeholder':'Startup Name', 'tabindex':'6'}))
     already_raised_capital = forms.BooleanField(required=False, label='', widget=forms.CheckboxInput(attrs={'tabindex':'7'}))
     process_raising_capital = forms.BooleanField(required=False, label='', widget=forms.CheckboxInput(attrs={'tabindex':'8'}))
-    incubator_or_accelerator = forms.CharField(required=False, label='', widget=forms.TextInput(attrs={'class':'incubator', 'tabindex':'9'}))
+    incubator_or_accelerator_name  = forms.CharField(required=False, label='', help_text="", widget=forms.TextInput(attrs={'placeholder':'Incubator or accelerator name'}))
     agree_tandc = forms.BooleanField(label='', widget=forms.CheckboxInput(attrs={'tabindex':'10'}))
 
     def __init__(self, *args, **kwargs):
