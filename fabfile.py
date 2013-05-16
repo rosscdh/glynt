@@ -371,8 +371,6 @@ def do_deploy():
     if not files.exists('%s/manage.py'%full_version_path):
         unzip_archive()
 
-    execute(update_env_conf)
-
 
 @task
 def update_env_conf():
@@ -472,5 +470,6 @@ def deploy(is_predeploy='False'):
     execute(newrelic_note)
     prepare_deploy()
     execute(do_deploy)
+    execute(update_env_conf)
     execute(newrelic_deploynote)
 
