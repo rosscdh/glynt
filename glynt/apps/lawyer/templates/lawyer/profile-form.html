@@ -323,47 +323,48 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="span4">
-                                <div class="control-group">
-                                    {{ form.seed_financing_amount_min|as_crispy_field }}
+                            <div class="control-group control-group-inline-left">
+                                <label class="control-label">Seed Financing</label>
+                                <div class="controls">
+                                    <div class="input-prepend">
+                                        <span class="add-on">$</span>
+                                        {{ form.seed_financing_amount_min }}
+                                    </div>
+                                    <div class="input-prepend slight-nudge">
+                                        <span class="add-on">$</span>
+                                        {{ form.seed_financing_amount_max }}
+                                    </div>
                                 </div>
                             </div>
-                            <div class="span2">
-                                <div class="control-group">
-                                    {{ form.seed_financing_amount_max|as_crispy_field }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="span12">
+                            <div class="span6 control-group-inline-right">
                                 <div class="control-group">
                                     {{ form.seed_fee_cap_available|as_crispy_field }}
                                     {{ form.seed_deferred_fees_available|as_crispy_field }}
                                     {{ form.seed_fixed_fees_available|as_crispy_field }}
                                 </div>
+                            </div>
+                        </div>
 
-                            </div>
-                        </div>
                         <div class="row">
-                            <div class="span4">
-                                <div class="control-group">
-                                    {{ form.incorporation_min|as_crispy_field }}
+                            <div class="control-group control-group-inline-left">
+                                <label class="control-label">Incorporation</label>
+                                <div class="controls">
+                                    <div class="input-prepend">
+                                        <span class="add-on">$</span>
+                                        {{ form.incorporation_min }}
+                                    </div>
+                                    <div class="input-prepend slight-nudge">
+                                        <span class="add-on">$</span>
+                                        {{ form.incorporation_max }}
+                                    </div>
                                 </div>
                             </div>
-                            <div class="span2">
-                                <div class="control-group">
-                                    {{ form.incorporation_max|as_crispy_field }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="span12">
+                            <div class="span6 control-group-inline-right">
                                 <div class="control-group">
                                     {{ form.inc_fee_cap_available|as_crispy_field }}
                                     {{ form.inc_deferred_fees_available|as_crispy_field }}
                                     {{ form.inc_fixed_fees_available|as_crispy_field }}
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -399,6 +400,34 @@ img#photo-preview{
     max-height: 130px;
     max-width: 130px;
 }
+
+.input-append .add-on, .input-prepend .add-on {
+    border: 1px solid #CCC;
+}
+
+.slight-nudge {
+    margin-left: 10px;
+}
+
+.control-group-inline-left {
+    width: 520px;
+    float: left;
+}
+
+.control-group-inline-right {
+    width: 350px;
+    float: left;
+    margin: 0;
+}
+
+.control-group-inline-right .controls {
+    margin: 0;
+}
+
+#id_seed_financing_amount_min, #id_seed_financing_amount_max, #id_incorporation_min, #id_incorporation_max {
+    width: 90px;
+}
+
 </style>
 {% endblock %}
 
