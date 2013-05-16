@@ -17,10 +17,13 @@ logger = logging.getLogger('lawpal.graph')
 def ensure_user_setup(*args, **kwargs):
     """ Ensures the client.ClientProfile models and setup processes get called """
     user = kwargs.get('user', None)
+    request = kwargs.get('request', {})
+    session = request.session if request.session else {}
 
     if user is not None:
         # Call the lambda defined in client/models.py
-        user.profile
+        profile = user.profile
+        profile.profile_data['user_class_name'] = session.get('user_class_name', 'lawyer')
 
 
 def profile_photo(backend, details, response, user=None, is_new=False,
