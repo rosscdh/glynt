@@ -70,7 +70,7 @@
 							<table class="table pricing">
 								<tr>
 									<th>Seed Financing</th>
-									<td class="price">${{ object.data.seed_financing_amount_min|default:"0"|intword }}-{{ object.data.seed_financing_amount_max|default:"0"|intword }}</td>
+									<td class="price">${{ object.data.seed_financing_amount_min|default:"0"|intcomma }} &ndash; ${{ object.data.seed_financing_amount_max|default:"0"|intcomma }}</td>
 									<td>
 										<ul class="fee-options">
 											{% if object.data.seed_fee_cap_available == True %}
@@ -87,7 +87,7 @@
 								</tr>
 								<tr>
 									<th>Incorporation</th>
-									<td  class="price">${{ object.data.incorporation_min|default:"0"|intword }}-{{ object.data.incorporation_max|default:"0"|intword }}</td>
+									<td  class="price">${{ object.data.incorporation_min|default:"0"|intword }} &ndash; ${{ object.data.incorporation_max|default:"0"|intword }}</td>
 									<td>
 										<ul class="fee-options">
 											{% if object.data.inc_fee_cap_available == True %}
