@@ -1,0 +1,48 @@
+[
+  {
+    "pk": 1,
+    "model": "cities_light.country",
+    "fields": {
+      "code2": "US",
+      "code3": "USA",
+      "name": "United States",
+      "tld": "us",
+      "alternate_names": "Vereinigte Staaten,America,United States of America,Estados Unidos,Stany Zjednoczone,U.S.,USA,U.S.A.",
+      "continent": "NA",
+      "geoname_id": 6252001,
+      "name_ascii": "United States",
+      "slug": "united-states"
+    }
+  },
+  {
+    "pk": 1,
+    "model": "cities_light.region",
+    "fields": {
+      "display_name": "California, United States",
+      "name": "California",
+      "country": 1,
+      "alternate_names": "Kalifornien,California Republic,Golden State,State of California,CA,Estado de California,Alta California",
+      "geoname_id": 5332921,
+      "geoname_code": "CA",
+      "name_ascii": "California",
+      "slug": "california"
+    }
+  },
+  {
+    "pk": 1,
+    "model": "cities_light.city",
+    "fields": {
+      "display_name": "San Francisco, California, United States",
+      "name": "San Francisco",
+      "country": 1,
+      "region": 1,
+      "alternate_names": "São Francisco",
+      "search_names": "sanfranciscounitedstates sanfranciscocaliforniaunitedstates saofranciscounitedstates saofranciscocaliforniaunitedstates",
+      "longitude": "-122.41942",
+      "geoname_id": 5391959,
+      "name_ascii": "San Francisco",
+      "latitude": "37.77493",
+      "slug": "san-francisco"
+    }
+  }
+]

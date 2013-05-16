@@ -94,6 +94,9 @@ class GraphConnection(models.Model):
     extra_data = JSONField(blank=True, null=True)
     users = models.ManyToManyField(User, related_name='connected_users')
 
+    class Meta:
+        unique_together = (('provider', 'provider_uid', 'full_name'),)
+
     def __unicode__(self):
         return self.full_name
 

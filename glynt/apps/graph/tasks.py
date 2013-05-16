@@ -17,13 +17,14 @@ def collect_user_fullcontact_info(user, **kwargs):
     """
     logger.info('Calling graph_fullcontact_user command %s' % user)
     try:
+        # call the CLI command
         call_command('graph_fullcontact_user', pk=user.pk)
     except Exception, e:
         logger.info('Failed, so retry calling graph_fullcontact_user command %s' % user)
         # add auth to the kwargs, as we handle it seperately in the signature
         kwargs.update({'pk': user.pk})
-        # retry again in 2 hours
-        graph_fullcontact_user.retry(args=[], exc=e, countdown=7200, kwargs=kwargs)
+        # retry calling this same method again in 2 hours
+        collect_user_fullcontact_info.retry(args=[], exc=e, countdown=7200, kwargs=kwargs)
 
 
 @task()
@@ -33,10 +34,11 @@ def collect_user_graph_connections(auth, **kwargs):
     """
     logger.info('Calling graph_contacts command %s' % auth)
     try:
+        # call the CLI command
         call_command('graph_contacts', auth=auth)
     except Exception, e:
         logger.info('Failed, so retry calling collect_user_graph_connections command %s' % auth.user)
         # add auth to the kwargs, as we handle it seperately in the signature
         kwargs.update({'auth': auth})
-        # retry again in 2 hours
+        # retry calling this same method again in 2 hours
         collect_user_graph_connections.retry(args=[], exc=e, countdown=7200, kwargs=kwargs)

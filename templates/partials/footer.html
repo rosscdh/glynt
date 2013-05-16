@@ -10,17 +10,16 @@
 				<li><a href="{% url 'public:terms' %}">Terms and Conditions</a></li>
 				<li><a href="{% url 'public:privacy' %}">Privacy Policy</a></li>
 				<li><a href="{% url 'public:disclaimer' %}">Disclaimer</a></li>
-				<li><a href="mailto:support@lawpal.com">Contact Us</a></li>
+        <li><a href="{% url 'public:contact_us' %}" data-toggle="modal" class="contact-us">Contact Us</a></li>
 			</ul>
 		</div>
 		<div class="span5">
-			<a href="http://facebook.com/lawpalhq" class="social fb">
+			<a href="//facebook.com/lawpalhq" class="social fb">
 				<i class="i_facebook"></i>
 			</a>
-			<a href="http://twitter.com/lawpalhq" class="social tw">
+			<a href="//twitter.com/lawpalhq" class="social tw">
 				<i class="i_twitter"></i>
 			</a>
-
 		</div>
 		<div class="span2 copy">
 			<p>{% now "Y" %} - {{ PROJECT_NAME }} Inc</p>
@@ -28,3 +27,9 @@
 	</div>
   </div>
 </div>
+
+ {% block js %}
+   <script type="text/javascript" src="{{ STATIC_URL }}js/contact-us.js"></script>
+ {% endblock %}
+
+<div id="contactModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>

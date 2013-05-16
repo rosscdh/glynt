@@ -29,6 +29,13 @@ class ConfirmLoginDetailsView(UpdateView):
     def get_success_url(self):
         return reverse('public:homepage')
 
+    def get_form(self, form_class):
+        kwargs = self.get_form_kwargs()
+        kwargs.update({
+            'request': self.request
+        })
+        return form_class(**kwargs)
+
     def get_object(self, queryset=None):
         slug = self.kwargs.get(self.slug_url_kwarg, None)
         slug_field = self.get_slug_field()

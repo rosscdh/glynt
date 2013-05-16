@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %}{% load crispy_forms_tags %}
 
 {% block page_title %}Marketplace{% endblock %}
 {% block bodyclass %}lawyer-welcome{% endblock %}
@@ -13,7 +13,7 @@
 		<!-- starts carousel -->
 		<div class="row animated fadeInDown">
 			<div class="span12">
-				<h1>Find the firm to help the Acme Inc Team</h1>
+				<h1>Find the lawyer to help your company grow</h1>
 			</div>
 		</div>
 		<div class="dock">
@@ -31,21 +31,13 @@
 {% block body %}
 
 <div class="container filter">
-	<div class="checkboxes">
-		<h3>Sort by</h3>
-		<strong>Showing: </strong>
-		<input id="endorsements" type="checkbox" value="Endorsements" checked /><label for="endorsements">Endorsements</label>
-		<input id="connections" type="checkbox" value="Connections" checked /><label for="Connections">Connections</label>
-		<input id="activity" type="checkbox" value="Activity" checked /><label for="activity">Activity</label>
-	</div>
-	<div class="location">
-		<label for="location"><h3>Filter by location</h3></label>
-		<select>
-			<option value="California, USA">California, USA</option>
-			<option value="San Francisco, USA">San Francisco, USA</option>
-			<option value="United Kingdom">United Kingdom</option>
-		</select>
-	</div>
+
+    <form id="lawyer-list-form" data-validate="parsley" action="{% url 'lawyer:list' %}" method="GET" class="form-inline">{% csrf_token %}
+        {{ form.location|as_crispy_field }}
+        {{ form.q|as_crispy_field }}
+        <button id="lawyer-list-filter" type="submit" class="submit btn btn-primary">Search</button>
+    </form>
+
 </div>
 
 
@@ -60,6 +52,81 @@
 
 {% block js %}
     {{ block.super }}
+    <script id="controls-search">
+    $(document).ready(function(){
+        $('button#lawyer-list-filter').live('click', function(event){
+            event.preventDefault();
+            var form = $( 'form#lawyer-list-form' );
+
+            if (form.parsley( 'validate' )) {
+                params = {}
+                // remove items with no value
+                $.each({
+                    'q': encodeURIComponent($('#id_q').val())
+                    ,'location': encodeURIComponent($('#id_location').val())
+                }, function(k,val){
+                    if (val != '') {
+                        params[k] = val;
+                    }
+                });
+
+                document.location = form.attr('action') + '?{params}'.assign({'params': $.param(params) });
+            }
+        });
+
+
+    /**
+    * Dynamic selector functions based on form api urls
+    * @TODO unify this with profile form
+    */
+    locations_lookup = function(filter, callback) {
+        var url = '{{ form.api_urls.locations }}';
+        var object_list = []
+        url = (filter === undefined)? url: url + '&' + filter;
+        $.ajax({
+            type: 'GET',
+            url: url,
+            data: null,
+            beforeSend: function(jqXHR, settings) {
+                // Pull the token out of the DOM.
+                jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+            },
+            success: function(data, textStatus, jqXHR){
+                $.each(data.objects, function(i,item){
+                    object_list.push(item.name)
+                })
+                // call the calling callback.. javascript
+                callback(object_list);
+            },
+            error: function(data, textStatus, jqXHR){
+                console.log(jqXHR)
+                console.log(textStatus)
+            }
+        });
+    }
+
+    /**
+    * handle typeahead requests
+    */
+    $.each($('.typeahead[data-provide="ajax"]'), function(i, element) {
+        var e = $(element);
+
+        e.typeahead({
+            source: function(query, process_callback) {
+                var provide = e.attr('data-provide');
+                var lookup_name = e.attr('data-source');
+                var filter = e.attr('data-filter');
+                filter = (filter === undefined)? filter : filter + '=' + query ;
+                var fn = window[lookup_name + '_lookup']
+                if(typeof fn === 'function') {
+                    fn(filter, process_callback);
+                }
+            }
+            ,limit: 15
+        });
+    });
+    });
+    </script>
     <script src="{{ STATIC_URL }}endless_pagination/js/endless-pagination.js"></script>
     <script>
         $.endlessPaginate({
