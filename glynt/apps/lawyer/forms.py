@@ -10,6 +10,7 @@ from django.core.cache import cache
 from glynt.cache_utils_1_5 import make_template_fragment_key
 
 from bootstrap.forms import BootstrapMixin
+from crispy_forms.bootstrap import PrependedAppendedText
 
 from cicu.models import UploadedFile
 from cicu.widgets import CicuUploderInput
@@ -92,7 +93,9 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     seed_deferred_fees_available = forms.BooleanField(required=False, label='Deferred fees available for this transaction?', widget=forms.CheckboxInput)
     seed_fixed_fees_available = forms.BooleanField(required=False, label='Fixed fees available for this transaction?', widget=forms.CheckboxInput)
 
-    incorporation_min = forms.IntegerField(required=False, label="Incorporation Min", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini',}))
+    #incorporation_min = forms.IntegerField(required=False, label="Incorporation Min", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini',}))
+    incorporation_min = PrependedAppendedText(label="", help_text="", prepended_text="test")
+
     incorporation_max = forms.IntegerField(required=False, label="Incorporation Max", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini',}))
     inc_fee_cap_available = forms.BooleanField(required=False, label='Fee cap available for this transaction?', widget=forms.CheckboxInput)
     inc_deferred_fees_available = forms.BooleanField(required=False, label='Deferred fees available for this transaction?', widget=forms.CheckboxInput)
