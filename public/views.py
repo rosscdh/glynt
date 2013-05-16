@@ -17,7 +17,9 @@ class PublicHomepageView(TemplateView):
     template_name='public/homepage.html'
 
     def get_template_names(self):
-        user_class_name = self.request.session.get('user_type', 'lawyer')
+        # get from session
+        user_class_name = self.request.session.get('user_class_name', 'lawyer')
+
         if not self.request.user.is_authenticated():
             # return the standard homepage if we are not logged in
             template_name = self.template_name
@@ -44,7 +46,7 @@ class UserClassSessionRedirectView(RedirectView):
 
         user_class_name = kwargs.get('user_class_name', 'lawyer')
 
-        self.request.session['user_type'] = user_class_name
+        self.request.session['user_class_name'] = user_class_name
         logging.debug('logging in as user_class_name: %s' % user_class_name)
 
         if user_class_name == 'lawyer':
