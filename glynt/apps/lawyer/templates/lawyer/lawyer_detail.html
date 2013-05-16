@@ -1,5 +1,4 @@
-{% extends 'base.html' %}{% load account_tags lawyer_profile_tags jsonify thumbnail cache %}
-
+{% extends 'base.html' %}{% load account_tags lawyer_profile_tags jsonify thumbnail humanize cache %}
 {% block page_title %}{{ object.user.get_full_name|default:object.user.username }}{% endblock %}
 {% block bodyclass %}lawyer-profile{% endblock %}
 
@@ -71,23 +70,35 @@
 							<table class="table pricing">
 								<tr>
 									<th>Seed Financing</th>
-									<td class="price">$5-10k</td>
+									<td class="price">${{ object.data.seed_financing_amount_min|default:"0"|intword }}-{{ object.data.seed_financing_amount_max|default:"0"|intword }}</td>
 									<td>
 										<ul class="fee-options">
-											<li class="cap tip" data-toggle="tooltip" title="Fee cap available for this transaction"></li>
-											<li class="deferred tip" data-toggle="tooltip" title="Deferred fees available for this transaction"></li>
-											<li class="fixed tip" data-toggle="tooltip" title="Fixed fees available for this transaction"></li>
+											{% if object.data.seed_fee_cap_available == True %}
+                                                <li class="cap tip" data-toggle="tooltip" title="Fee cap available for this transaction"></li>
+                                            {% endif %}
+                                            {% if object.data.seed_deferred_fees_available == True %}
+    											<li class="deferred tip" data-toggle="tooltip" title="Deferred fees available for this transaction"></li>
+                                            {% endif %}
+                                            {% if object.data.seed_fixed_fees_available == True %}
+											    <li class="fixed tip" data-toggle="tooltip" title="Fixed fees available for this transaction"></li>
+                                            {% endif %}
 										</ul>
 									</td>
 								</tr>
 								<tr>
 									<th>Incorporation</th>
-									<td  class="price">$2k</td>
+									<td  class="price">${{ object.data.incorporation_min|default:"0"|intword }}-{{ object.data.incorporation_max|default:"0"|intword }}</td>
 									<td>
 										<ul class="fee-options">
-											<li class="cap tip" data-toggle="tooltip" title="Fee cap available for this transaction"></li>
-											<li class="deferred tip" data-toggle="tooltip" title="Deferred fees available for this transaction"></li>
-											<li class="fixed tip" data-toggle="tooltip" title="Fixed fees available for this transaction"></li>
+											{% if object.data.inc_fee_cap_available == True %}
+                                                <li class="cap tip" data-toggle="tooltip" title="Fee cap available for this transaction"></li>
+                                            {% endif %}
+                                            {% if object.data.inc_deferred_fees_available == True %}
+    											<li class="deferred tip" data-toggle="tooltip" title="Deferred fees available for this transaction"></li>
+                                            {% endif %}
+                                            {% if object.data.inc_fixed_fees_available == True %}
+											    <li class="fixed tip" data-toggle="tooltip" title="Fixed fees available for this transaction"></li>
+                                            {% endif %}
 										</ul>
 									</td>
 								</tr>

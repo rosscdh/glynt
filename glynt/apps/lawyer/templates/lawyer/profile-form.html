@@ -338,6 +338,30 @@
                             <div class="span12">
                                 <div class="control-group">
                                     {{ form.seed_fee_cap_available|as_crispy_field }}
+                                    {{ form.seed_deferred_fees_available|as_crispy_field }}
+                                    {{ form.seed_fixed_fees_available|as_crispy_field }}
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="span4">
+                                <div class="control-group">
+                                    {{ form.incorporation_min|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="span2">
+                                <div class="control-group">
+                                    {{ form.incorporation_max|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="span12">
+                                <div class="control-group">
+                                    {{ form.inc_fee_cap_available|as_crispy_field }}
+                                    {{ form.inc_deferred_fees_available|as_crispy_field }}
+                                    {{ form.inc_fixed_fees_available|as_crispy_field }}
                                 </div>
 
                             </div>
@@ -707,6 +731,23 @@ $(document).ready(function(){
     $('#id_seed_financing_amount_max').val('{{ lawyer.data.seed_financing_amount_max }}');
     if ('{{ lawyer.data.seed_fee_cap_available }}' === 'True') {
         $('#id_seed_fee_cap_available').prop('checked', true);
+    }
+    if ('{{ lawyer.data.seed_deferred_fees_available }}' === 'True') {
+        $('#id_seed_deferred_fees_available').prop('checked', true);
+    }
+    if ('{{ lawyer.data.seed_fixed_fees_available }}' === 'True') {
+        $('#id_seed_fixed_fees_available').prop('checked', true);
+    }
+    $('#id_incorporation_min').val('{{ lawyer.data.incorporation_min }}');
+    $('#id_incorporation_max').val('{{ lawyer.data.incorporation_max }}');
+    if ('{{ lawyer.data.inc_fee_cap_available }}' === 'True') {
+        $('#id_inc_fee_cap_available').prop('checked', true);
+    }
+    if ('{{ lawyer.data.inc_deferred_fees_available }}' === 'True') {
+        $('#id_inc_deferred_fees_available').prop('checked', true);
+    }
+    if ('{{ lawyer.data.inc_fixed_fees_available }}' === 'True') {
+        $('#id_inc_fixed_fees_available').prop('checked', true);
     }
 
     /**
