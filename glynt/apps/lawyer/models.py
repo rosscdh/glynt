@@ -139,3 +139,31 @@ class Lawyer(models.Model):
     @property
     def seed_fee_cap_available(self):
         return u'%s' % self.data.get('seed_fee_cap_available', None)
+
+    @property
+    def seed_deferred_fees_available(self):
+        return u'%s' % self.data.get('seed_deferred_fees_available', None)
+
+    @property
+    def seed_fixed_fees_available(self):
+        return u'%s' % self.data.get('seed_fixed_fees_available', None)
+
+    @property
+    def incorporation_min(self):
+        return u'%s' % self.data.get('seed_financing_amount_min', None)
+
+    @property
+    def incorporation_max(self):
+        return u'%s' % self.data.get('seed_financing_amount_max', None)
+
+    @property
+    def inc_fee_cap_available(self):
+        return u'%s' % self.data.get('inc_fee_cap_available', None)
+
+    @property
+    def inc_deferred_fees_available(self):
+        return u'%s' % self.data.get('inc_deferred_fees_available', None)
+
+    @property
+    def inc_fixed_fees_available(self):
+        return u'%s' % self.data.get('inc_fixed_fees_available', None)

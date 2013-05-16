@@ -89,7 +89,14 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     seed_financing_amount_min = forms.IntegerField(required=False, label="Seed Financing Min", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini',}))
     seed_financing_amount_max = forms.IntegerField(required=False, label="Seed Financing Max", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini',}))
     seed_fee_cap_available = forms.BooleanField(required=False, label='Fee cap available for this transaction?', widget=forms.CheckboxInput)
+    seed_deferred_fees_available = forms.BooleanField(required=False, label='Deferred fees available for this transaction?', widget=forms.CheckboxInput)
+    seed_fixed_fees_available = forms.BooleanField(required=False, label='Fixed fees available for this transaction?', widget=forms.CheckboxInput)
 
+    incorporation_min = forms.IntegerField(required=False, label="Incorporation Min", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini',}))
+    incorporation_max = forms.IntegerField(required=False, label="Incorporation Max", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini',}))
+    inc_fee_cap_available = forms.BooleanField(required=False, label='Fee cap available for this transaction?', widget=forms.CheckboxInput)
+    inc_deferred_fees_available = forms.BooleanField(required=False, label='Deferred fees available for this transaction?', widget=forms.CheckboxInput)
+    inc_fixed_fees_available = forms.BooleanField(required=False, label='Fixed fees available for this transaction?', widget=forms.CheckboxInput)
 
     agree_tandc = forms.BooleanField(label='', widget=forms.CheckboxInput)
 
