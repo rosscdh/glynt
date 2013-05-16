@@ -22,7 +22,7 @@
             <form id="startupSignUp" data-validate="parsley" action="" method="POST" class="form-horizontal">{% csrf_token %}
                 <div class="row">
                     <div class="span12">
-                        <legend>Confirm your details</legend>
+                        <legend>Your details</legend>
                     </div>
                 </div>
                 <div class="row">
@@ -30,19 +30,10 @@
                         <div class="control-group">
                             {{ form.first_name|as_crispy_field }}
                         </div>
-                        <div class="control-group">
-                            {{ form.email|as_crispy_field }}
-                        </div>
                     </div>
                     <div class="span5">
                         <div class="control-group">
                             {{ form.last_name|as_crispy_field }}
-                        </div>
-                        <div class="control-group">
-                            {{ form.password|as_crispy_field }}
-                        </div>
-                       <div class="control-group">
-                            {{ form.password_confirm|as_crispy_field }}
                         </div>
                     </div>
                 </div>
@@ -54,7 +45,7 @@
                 <div class="row">
                     <div class="span8">
                         <div class="control-group">
-                            {{ form.name|as_crispy_field }}
+                            {{ form.startup_name|as_crispy_field }}
                         </div>
                         <div class="control-group">
                             <div class="controls">
