@@ -62,12 +62,10 @@
                                 <label class="checkbox">{{ form.already_raised_capital }} We have <strong>already raised capital</strong></label>
                                 <label class="checkbox">{{ form.process_raising_capital }} We are in the process <strong>raising capital</strong></label>
                                 <label class="checkbox">{{ form.incubator_or_accelerator }} We are <strong>part of an incubator</strong> or accelerator</label>
-                                <select id="incubators" class="hidden">
-                                    <option> Please select which one...</option>
-                                    <option>Incubator 1</option>
-                                    <option>Incubator 2</option>
-                                </select>
                             </div>
+                        </div>
+                        <div id="incubators" class="control-group hidden">
+                            {{ form.incubator_or_accelerator_name|as_crispy_field }}
                         </div>
                     </div>
                 </div>
