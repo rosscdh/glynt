@@ -102,6 +102,63 @@
 										</ul>
 									</td>
 								</tr>
+                                {% if object.data.optional_funding != "" %}
+                                <tr>
+									<th>{{ object.data.optional_funding }}</th>
+									<td  class="price">${% humanise_number num=object.data.optional_min %} &ndash; ${% humanise_number num=object.data.optional_max %}</td>
+									<td>
+										<ul class="fee-options">
+											{% if object.data.optional_fee_cap_available == True %}
+                                                <li class="cap tip" data-toggle="tooltip" title="Fee cap available for this transaction"></li>
+                                            {% endif %}
+                                            {% if object.data.optional_deferred_fees_available == True %}
+    											<li class="deferred tip" data-toggle="tooltip" title="Deferred fees available for this transaction"></li>
+                                            {% endif %}
+                                            {% if object.data.optional_fixed_fees_available == True %}
+											    <li class="fixed tip" data-toggle="tooltip" title="Fixed fees available for this transaction"></li>
+                                            {% endif %}
+										</ul>
+									</td>
+								</tr>
+                                {% endif %}
+                                {% if object.data.optional_funding2 != "" %}
+                                <tr>
+									<th>{{ object.data.optional_funding2 }}</th>
+									<td  class="price">${% humanise_number num=object.data.optional_min2 %} &ndash; ${% humanise_number num=object.data.optional_max2 %}</td>
+									<td>
+										<ul class="fee-options">
+											{% if object.data.optional_fee_cap_available2 == True %}
+                                                <li class="cap tip" data-toggle="tooltip" title="Fee cap available for this transaction"></li>
+                                            {% endif %}
+                                            {% if object.data.optional_deferred_fees_available2 == True %}
+    											<li class="deferred tip" data-toggle="tooltip" title="Deferred fees available for this transaction"></li>
+                                            {% endif %}
+                                            {% if object.data.optional_fixed_fees_available2 == True %}
+											    <li class="fixed tip" data-toggle="tooltip" title="Fixed fees available for this transaction"></li>
+                                            {% endif %}
+										</ul>
+									</td>
+								</tr>
+                                {% endif %}
+                                {% if object.data.optional_funding3 != "" %}
+                                <tr>
+									<th>{{ object.data.optional_funding3 }}</th>
+									<td  class="price">${% humanise_number num=object.data.optional_min3 %} &ndash; ${% humanise_number num=object.data.optional_max3 %}</td>
+									<td>
+										<ul class="fee-options">
+											{% if object.data.optional_fee_cap_available3 == True %}
+                                                <li class="cap tip" data-toggle="tooltip" title="Fee cap available for this transaction"></li>
+                                            {% endif %}
+                                            {% if object.data.optional_deferred_fees_available3 == True %}
+    											<li class="deferred tip" data-toggle="tooltip" title="Deferred fees available for this transaction"></li>
+                                            {% endif %}
+                                            {% if object.data.optional_fixed_fees_available3 == True %}
+											    <li class="fixed tip" data-toggle="tooltip" title="Fixed fees available for this transaction"></li>
+                                            {% endif %}
+										</ul>
+									</td>
+								</tr>
+                                {% endif %}
 							</table>
 						</div>
 					</div>
