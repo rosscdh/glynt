@@ -368,12 +368,6 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="span12">
-                                <button type="button" id="add-custom-funding-type" class="btn btn-link btn-small multi-add-btn"><i class="icon-plus-sign"></i>&nbsp;Add custom funding type</button>
-                            </div>
-                        </div>
-
                         <div id="custom-funding-type" class="row hidden">
                             <div class="control-group control-group-inline-left">
                                 {{ form.optional_funding }}
@@ -394,6 +388,58 @@
                                     {{ form.optional_deferred_fees_available|as_crispy_field }}
                                     {{ form.optional_fixed_fees_available|as_crispy_field }}
                                 </div>
+                            </div>
+                        </div>
+
+                        <div id="custom-funding-type2" class="row hidden">
+                            <div class="control-group control-group-inline-left">
+                                {{ form.optional_funding2 }}
+                                <div class="controls">
+                                    <div class="input-prepend">
+                                        <span class="add-on">$</span>
+                                        {{ form.optional_min2 }}
+                                    </div>
+                                    <div class="input-prepend slight-nudge">
+                                        <span class="add-on">$</span>
+                                        {{ form.optional_max2 }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span6 control-group-inline-right">
+                                <div class="control-group">
+                                    {{ form.optional_fee_cap_available2|as_crispy_field }}
+                                    {{ form.optional_deferred_fees_available2|as_crispy_field }}
+                                    {{ form.optional_fixed_fees_available2|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="custom-funding-type3" class="row hidden">
+                            <div class="control-group control-group-inline-left">
+                                {{ form.optional_funding3 }}
+                                <div class="controls">
+                                    <div class="input-prepend">
+                                        <span class="add-on">$</span>
+                                        {{ form.optional_min3 }}
+                                    </div>
+                                    <div class="input-prepend slight-nudge">
+                                        <span class="add-on">$</span>
+                                        {{ form.optional_max3 }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span6 control-group-inline-right">
+                                <div class="control-group">
+                                    {{ form.optional_fee_cap_available3|as_crispy_field }}
+                                    {{ form.optional_deferred_fees_available3|as_crispy_field }}
+                                    {{ form.optional_fixed_fees_available3|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="span12">
+                                <button type="button" id="add-custom-funding-type" class="btn btn-link btn-small multi-add-btn"><i class="icon-plus-sign"></i>&nbsp;Add custom funding type</button>
                             </div>
                         </div>
 
@@ -820,8 +866,48 @@ $(document).ready(function(){
     }
     if ('{{ lawyer.data.optional_funding }}' !== '') {
         $('#id_optional_funding').val('{{ lawyer.data.optional_funding }}');
+        $('#id_optional_min').val('{{ lawyer.data.optional_min }}');
+        $('#id_optional_max').val('{{ lawyer.data.optional_max }}');
         $('#custom-funding-type').removeClass('hidden');
-        $('#add-custom-funding-type').remove();
+        if ('{{ lawyer.data.optional_fee_cap_available }}' === 'True') {
+            $('#id_optional_fee_cap_available').prop('checked', true);
+        }
+        if ('{{ lawyer.data.optional_deferred_fees_available }}' === 'True') {
+            $('#id_optional_deferred_fees_available').prop('checked', true);
+        }
+        if ('{{ lawyer.data.optional_fixed_fees_available }}' === 'True') {
+            $('#id_optional_fixed_fees_available').prop('checked', true);
+        }
+    }
+    if ('{{ lawyer.data.optional_funding2 }}' !== '') {
+        $('#id_optional_funding2').val('{{ lawyer.data.optional_funding2 }}');
+        $('#id_optional_min2').val('{{ lawyer.data.optional_min2 }}');
+        $('#id_optional_max2').val('{{ lawyer.data.optional_max2 }}');
+        $('#custom-funding-type2').removeClass('hidden');
+        if ('{{ lawyer.data.optional_fee_cap_available2 }}' === 'True') {
+            $('#id_optional_fee_cap_available2').prop('checked', true);
+        }
+        if ('{{ lawyer.data.optional_deferred_fees_available2 }}' === 'True') {
+            $('#id_optional_deferred_fees_available2').prop('checked', true);
+        }
+        if ('{{ lawyer.data.optional_fixed_fees_available2 }}' === 'True') {
+            $('#id_optional_fixed_fees_available2').prop('checked', true);
+        }
+    }
+    if ('{{ lawyer.data.optional_funding3 }}' !== '') {
+        $('#id_optional_funding3').val('{{ lawyer.data.optional_funding3 }}');
+        $('#id_optional_min3').val('{{ lawyer.data.optional_min3 }}');
+        $('#id_optional_max3').val('{{ lawyer.data.optional_max3 }}');
+        $('#custom-funding-type3').removeClass('hidden');
+        if ('{{ lawyer.data.optional_fee_cap_available3 }}' === 'True') {
+            $('#id_optional_fee_cap_available3').prop('checked', true);
+        }
+        if ('{{ lawyer.data.optional_deferred_fees_available3 }}' === 'True') {
+            $('#id_optional_deferred_fees_available3').prop('checked', true);
+        }
+        if ('{{ lawyer.data.optional_fixed_fees_available3 }}' === 'True') {
+            $('#id_optional_fixed_fees_available3').prop('checked', true);
+        }
     }
 
     /**
@@ -896,8 +982,16 @@ $(document).ready(function(){
     });
 
     $('#add-custom-funding-type').click(function() {
-        $('#custom-funding-type').removeClass('hidden');
-        $(this).remove();
+        if ($('#custom-funding-type').hasClass('hidden')) {
+            $('#custom-funding-type').removeClass('hidden');
+        }
+        else if ($('#custom-funding-type2').hasClass('hidden')) {
+            $('#custom-funding-type2').removeClass('hidden');
+        }
+        else {
+            $('#custom-funding-type3').removeClass('hidden');
+            $(this).remove();
+        }
     });
 
 

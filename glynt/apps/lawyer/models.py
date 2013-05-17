@@ -167,3 +167,51 @@ class Lawyer(models.Model):
     @property
     def inc_fixed_fees_available(self):
         return u'%s' % self.data.get('inc_fixed_fees_available', None)
+
+    @property
+    def optional_funding(self):
+        return u'%s' % self.data.get('optional_funding', None)
+
+    @property
+    def optional_min(self):
+        return u'%s' % self.data.get('optional_min', None)
+
+    @property
+    def optional_max(self):
+        return u'%s' % self.data.get('optional_max', None)
+
+    @property
+    def optional_fee_cap_available(self):
+        return u'%s' % self.data.get('optional_fee_cap_available', None)
+
+    @property
+    def optional_deferred_fees_available(self):
+        return u'%s' % self.data.get('optional_deferred_fees_available', None)
+
+    @property
+    def optional_fixed_fees_available(self):
+        return u'%s' % self.data.get('optional_fixed_fees_available', None)
+
+    @property
+    def optional_funding2(self):
+        return u'%s' % self.data.get('optional_funding2', None)
+
+    @property
+    def optional_min2(self):
+        return u'%s' % self.data.get('optional_min2', None)
+
+    @property
+    def optional_max2(self):
+        return u'%s' % self.data.get('optional_max2', None)
+
+    @property
+    def optional_fee_cap_available2(self):
+        return u'%s' % self.data.get('optional_fee_cap_available2', None)
+
+    @property
+    def optional_deferred_fees_available2(self):
+        return u'%s' % self.data.get('optional_deferred_fees_available2', None)
+
+    @property
+    def optional_fixed_fees_available2(self):
+        return u'%s' % self.data.get('optional_fixed_fees_available2', None)
