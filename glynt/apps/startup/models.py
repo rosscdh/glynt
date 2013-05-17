@@ -7,25 +7,14 @@ from autoslug.fields import AutoSlugField
 from jsonfield import JSONField
 
 
-class Founder(models.Model):
-    """ The founders
-    Founders might be the best word choice. Think
-    of this as a profile for a User involved in startup
-    activity.
-    """
-    user = models.OneToOneField(User, related_name='founder_profile')
-    summary = models.CharField(max_length=255)
-    bio = models.TextField()
-    data = JSONField(default={})
-    photo = models.ImageField(upload_to='founder')
-
-    def __unicode__(self):
-        return self.user.username
-
-
 def _startup_upload_photo(instance, filename):
     _, ext = os.path.splitext(filename)
     return 'startup/%s%s' % (instance.slug, ext)
+
+
+def _founder_upload_photo(instance, filename):
+    _, ext = os.path.splitext(filename)
+    return 'founder/%s%s' % (instance.slug, ext)
 
 
 class Startup(models.Model):
@@ -44,3 +33,31 @@ class Startup(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class Founder(models.Model):
+    """ The founders
+    Founders might be the best word choice. Think
+    of this as a profile for a User involved in startup
+    activity.
+    """
+    user = models.OneToOneField(User, related_name='founder_profile')
+    summary = models.CharField(max_length=255)
+    bio = models.TextField()
+    data = JSONField(default={})
+    photo = models.ImageField(upload_to=_founder_upload_photo)
+
+    def __unicode__(self):
+        return self.user.username
+
+    @property
+    def startups(self):
+        return self.user.startups.all()
+
+    @property
+    def primary_startup(self):
+        try:
+            return self.startups[0]
+        except IndexError:
+            # not found so return an empty instance
+            return Startup()
