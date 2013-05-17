@@ -18,6 +18,7 @@
                  </h3>
                  {% else %}
                 <h1>Update your profile</h1>
+                <h3>Make sure your profile is updated as fully as possible.</h3>
                  {% endif %}
             </div>
         </div>
@@ -32,6 +33,7 @@
                 <li><a href="#transactions-and-startups" data-toggle="tab">Transactions &amp; Startups</a></li>
                 <li><a href="#profile" data-toggle="tab">Profile</a></li>
                 <li><a href="#connected-accounts" data-toggle="tab">Connected Accounts</a></li>
+                <li><a href="#fees-packages" data-toggle="tab">Fees and Packages</a></li>
             </ul>
             <form id="lawyer-profile-form" data-validate="parsley" action="{% url 'lawyer:setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
                 <div class="tab-content">
@@ -312,6 +314,134 @@
                                 {{ form.twitter|as_crispy_field }}
                             </div>
                         </div>
+                    </div>
+
+                    <div id="fees-packages" class="tab-pane">
+                        <div class="row">
+                            <div class="span12">
+                                <legend>Fees and Packages</legend>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="control-group control-group-inline-left">
+                                <label class="control-label">Seed Financing</label>
+                                <div class="controls">
+                                    <div class="input-prepend">
+                                        <span class="add-on">$</span>
+                                        {{ form.seed_financing_amount_min }}
+                                    </div>
+                                    <div class="input-prepend slight-nudge">
+                                        <span class="add-on">$</span>
+                                        {{ form.seed_financing_amount_max }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span6 control-group-inline-right">
+                                <div class="control-group">
+                                    {{ form.seed_fee_cap_available|as_crispy_field }}
+                                    {{ form.seed_deferred_fees_available|as_crispy_field }}
+                                    {{ form.seed_fixed_fees_available|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="control-group control-group-inline-left">
+                                <label class="control-label">Incorporation</label>
+                                <div class="controls">
+                                    <div class="input-prepend">
+                                        <span class="add-on">$</span>
+                                        {{ form.incorporation_min }}
+                                    </div>
+                                    <div class="input-prepend slight-nudge">
+                                        <span class="add-on">$</span>
+                                        {{ form.incorporation_max }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span6 control-group-inline-right">
+                                <div class="control-group">
+                                    {{ form.inc_fee_cap_available|as_crispy_field }}
+                                    {{ form.inc_deferred_fees_available|as_crispy_field }}
+                                    {{ form.inc_fixed_fees_available|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="custom-funding-type" class="row hidden">
+                            <div class="control-group control-group-inline-left">
+                                {{ form.optional_funding }}
+                                <div class="controls">
+                                    <div class="input-prepend">
+                                        <span class="add-on">$</span>
+                                        {{ form.optional_min }}
+                                    </div>
+                                    <div class="input-prepend slight-nudge">
+                                        <span class="add-on">$</span>
+                                        {{ form.optional_max }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span6 control-group-inline-right">
+                                <div class="control-group">
+                                    {{ form.optional_fee_cap_available|as_crispy_field }}
+                                    {{ form.optional_deferred_fees_available|as_crispy_field }}
+                                    {{ form.optional_fixed_fees_available|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="custom-funding-type2" class="row hidden">
+                            <div class="control-group control-group-inline-left">
+                                {{ form.optional_funding2 }}
+                                <div class="controls">
+                                    <div class="input-prepend">
+                                        <span class="add-on">$</span>
+                                        {{ form.optional_min2 }}
+                                    </div>
+                                    <div class="input-prepend slight-nudge">
+                                        <span class="add-on">$</span>
+                                        {{ form.optional_max2 }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span6 control-group-inline-right">
+                                <div class="control-group">
+                                    {{ form.optional_fee_cap_available2|as_crispy_field }}
+                                    {{ form.optional_deferred_fees_available2|as_crispy_field }}
+                                    {{ form.optional_fixed_fees_available2|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="custom-funding-type3" class="row hidden">
+                            <div class="control-group control-group-inline-left">
+                                {{ form.optional_funding3 }}
+                                <div class="controls">
+                                    <div class="input-prepend">
+                                        <span class="add-on">$</span>
+                                        {{ form.optional_min3 }}
+                                    </div>
+                                    <div class="input-prepend slight-nudge">
+                                        <span class="add-on">$</span>
+                                        {{ form.optional_max3 }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span6 control-group-inline-right">
+                                <div class="control-group">
+                                    {{ form.optional_fee_cap_available3|as_crispy_field }}
+                                    {{ form.optional_deferred_fees_available3|as_crispy_field }}
+                                    {{ form.optional_fixed_fees_available3|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="span12">
+                                <button type="button" id="add-custom-funding-type" class="btn btn-link btn-small multi-add-btn"><i class="icon-plus-sign"></i>&nbsp;Add custom funding type</button>
+                            </div>
+                        </div>
 
                     </div>
 
@@ -346,6 +476,44 @@ img#photo-preview{
     max-height: 130px;
     max-width: 130px;
 }
+
+.input-append .add-on, .input-prepend .add-on {
+    border: 1px solid #CCC;
+}
+
+.slight-nudge {
+    margin-left: 10px;
+}
+
+.control-group-inline-left {
+    width: 520px;
+    float: left;
+}
+
+.control-group-inline-right {
+    width: 350px;
+    float: left;
+    margin: 0 0 1em;
+}
+
+.control-group-inline-right .controls {
+    margin: 0;
+}
+
+.control-group-inline-right .control-group {
+    margin-bottom: 5px;
+}
+
+.control-group-inline-left .controls input {
+    width: 90px;
+}
+
+.inline-form-element {
+    float: left;
+    width: 115px;
+    margin: 0 0 0 20px;
+}
+
 </style>
 {% endblock %}
 
@@ -666,7 +834,7 @@ $(document).ready(function(){
     process_bar_membership();
 
     /**
-    * JSON output the volue type values
+    * JSON output the volume type values
     */
     $('#id_volume_incorp_setup').val('{{ lawyer.data.volume_incorp_setup }}');
     $('#id_volume_seed_financing').val('{{ lawyer.data.volume_seed_financing }}');
@@ -674,6 +842,73 @@ $(document).ready(function(){
     $('#id_volume_ip').val('{{ lawyer.data.volume_ip }}');
     $('#id_volume_other').val('{{ lawyer.data.volume_other }}');
     $('#id_volume_by_year').val('{{ lawyer.data.volume_by_year|jsonify }}');
+    $('#id_seed_financing_amount_min').val('{{ lawyer.data.seed_financing_amount_min }}');
+    $('#id_seed_financing_amount_max').val('{{ lawyer.data.seed_financing_amount_max }}');
+    if ('{{ lawyer.data.seed_fee_cap_available }}' === 'True') {
+        $('#id_seed_fee_cap_available').prop('checked', true);
+    }
+    if ('{{ lawyer.data.seed_deferred_fees_available }}' === 'True') {
+        $('#id_seed_deferred_fees_available').prop('checked', true);
+    }
+    if ('{{ lawyer.data.seed_fixed_fees_available }}' === 'True') {
+        $('#id_seed_fixed_fees_available').prop('checked', true);
+    }
+    $('#id_incorporation_min').val('{{ lawyer.data.incorporation_min }}');
+    $('#id_incorporation_max').val('{{ lawyer.data.incorporation_max }}');
+    if ('{{ lawyer.data.inc_fee_cap_available }}' === 'True') {
+        $('#id_inc_fee_cap_available').prop('checked', true);
+    }
+    if ('{{ lawyer.data.inc_deferred_fees_available }}' === 'True') {
+        $('#id_inc_deferred_fees_available').prop('checked', true);
+    }
+    if ('{{ lawyer.data.inc_fixed_fees_available }}' === 'True') {
+        $('#id_inc_fixed_fees_available').prop('checked', true);
+    }
+    if ('{{ lawyer.data.optional_funding }}' !== '') {
+        $('#id_optional_funding').val('{{ lawyer.data.optional_funding }}');
+        $('#id_optional_min').val('{{ lawyer.data.optional_min }}');
+        $('#id_optional_max').val('{{ lawyer.data.optional_max }}');
+        $('#custom-funding-type').removeClass('hidden');
+        if ('{{ lawyer.data.optional_fee_cap_available }}' === 'True') {
+            $('#id_optional_fee_cap_available').prop('checked', true);
+        }
+        if ('{{ lawyer.data.optional_deferred_fees_available }}' === 'True') {
+            $('#id_optional_deferred_fees_available').prop('checked', true);
+        }
+        if ('{{ lawyer.data.optional_fixed_fees_available }}' === 'True') {
+            $('#id_optional_fixed_fees_available').prop('checked', true);
+        }
+    }
+    if ('{{ lawyer.data.optional_funding2 }}' !== '') {
+        $('#id_optional_funding2').val('{{ lawyer.data.optional_funding2 }}');
+        $('#id_optional_min2').val('{{ lawyer.data.optional_min2 }}');
+        $('#id_optional_max2').val('{{ lawyer.data.optional_max2 }}');
+        $('#custom-funding-type2').removeClass('hidden');
+        if ('{{ lawyer.data.optional_fee_cap_available2 }}' === 'True') {
+            $('#id_optional_fee_cap_available2').prop('checked', true);
+        }
+        if ('{{ lawyer.data.optional_deferred_fees_available2 }}' === 'True') {
+            $('#id_optional_deferred_fees_available2').prop('checked', true);
+        }
+        if ('{{ lawyer.data.optional_fixed_fees_available2 }}' === 'True') {
+            $('#id_optional_fixed_fees_available2').prop('checked', true);
+        }
+    }
+    if ('{{ lawyer.data.optional_funding3 }}' !== '') {
+        $('#id_optional_funding3').val('{{ lawyer.data.optional_funding3 }}');
+        $('#id_optional_min3').val('{{ lawyer.data.optional_min3 }}');
+        $('#id_optional_max3').val('{{ lawyer.data.optional_max3 }}');
+        $('#custom-funding-type3').removeClass('hidden');
+        if ('{{ lawyer.data.optional_fee_cap_available3 }}' === 'True') {
+            $('#id_optional_fee_cap_available3').prop('checked', true);
+        }
+        if ('{{ lawyer.data.optional_deferred_fees_available3 }}' === 'True') {
+            $('#id_optional_deferred_fees_available3').prop('checked', true);
+        }
+        if ('{{ lawyer.data.optional_fixed_fees_available3 }}' === 'True') {
+            $('#id_optional_fixed_fees_available3').prop('checked', true);
+        }
+    }
 
     /**
     * handle volume changes
@@ -746,6 +981,18 @@ $(document).ready(function(){
         })
     });
 
+    $('#add-custom-funding-type').click(function() {
+        if ($('#custom-funding-type').hasClass('hidden')) {
+            $('#custom-funding-type').removeClass('hidden');
+        }
+        else if ($('#custom-funding-type2').hasClass('hidden')) {
+            $('#custom-funding-type2').removeClass('hidden');
+        }
+        else {
+            $('#custom-funding-type3').removeClass('hidden');
+            $(this).remove();
+        }
+    });
 });
 </script>
 

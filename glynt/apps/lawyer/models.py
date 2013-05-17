@@ -32,6 +32,7 @@ class Lawyer(models.Model):
     bio = models.TextField()
     data = JSONField(default={})
     photo = models.ImageField(upload_to='lawyer', blank=True)
+    is_active = models.BooleanField(default=False, db_index=True)
 
     objects = DefaultLawyerManager()
     approved = ApprovedLawyerManager()
@@ -67,6 +68,7 @@ class Lawyer(models.Model):
             except:
                 return getattr(settings, 'USERENA_MUGSHOT_DEFAULT', '') # must return string here if no mugshot default
 
+
     def username(self):
         return self.user.username
 
@@ -89,7 +91,7 @@ class Lawyer(models.Model):
             locations.append(self.data.get('practice_location_1'))
         if self.data.get('practice_location_2', None) is not None:
             locations.append(self.data.get('practice_location_2'))
-        return [l for l in locations if l.strip() != '']
+        return locations
 
     @property
     def startups_advised(self):
@@ -125,3 +127,91 @@ class Lawyer(models.Model):
     @property
     def website(self):
         return u'%s' % self.data.get('website', None)
+
+    @property
+    def seed_financing_amount_min(self):
+        return u'%s' % self.data.get('seed_financing_amount_min', None)
+
+    @property
+    def seed_financing_amount_max(self):
+        return u'%s' % self.data.get('seed_financing_amount_max', None)
+
+    @property
+    def seed_fee_cap_available(self):
+        return u'%s' % self.data.get('seed_fee_cap_available', None)
+
+    @property
+    def seed_deferred_fees_available(self):
+        return u'%s' % self.data.get('seed_deferred_fees_available', None)
+
+    @property
+    def seed_fixed_fees_available(self):
+        return u'%s' % self.data.get('seed_fixed_fees_available', None)
+
+    @property
+    def incorporation_min(self):
+        return u'%s' % self.data.get('seed_financing_amount_min', None)
+
+    @property
+    def incorporation_max(self):
+        return u'%s' % self.data.get('seed_financing_amount_max', None)
+
+    @property
+    def inc_fee_cap_available(self):
+        return u'%s' % self.data.get('inc_fee_cap_available', None)
+
+    @property
+    def inc_deferred_fees_available(self):
+        return u'%s' % self.data.get('inc_deferred_fees_available', None)
+
+    @property
+    def inc_fixed_fees_available(self):
+        return u'%s' % self.data.get('inc_fixed_fees_available', None)
+
+    @property
+    def optional_funding(self):
+        return u'%s' % self.data.get('optional_funding', None)
+
+    @property
+    def optional_min(self):
+        return u'%s' % self.data.get('optional_min', None)
+
+    @property
+    def optional_max(self):
+        return u'%s' % self.data.get('optional_max', None)
+
+    @property
+    def optional_fee_cap_available(self):
+        return u'%s' % self.data.get('optional_fee_cap_available', None)
+
+    @property
+    def optional_deferred_fees_available(self):
+        return u'%s' % self.data.get('optional_deferred_fees_available', None)
+
+    @property
+    def optional_fixed_fees_available(self):
+        return u'%s' % self.data.get('optional_fixed_fees_available', None)
+
+    @property
+    def optional_funding2(self):
+        return u'%s' % self.data.get('optional_funding2', None)
+
+    @property
+    def optional_min2(self):
+        return u'%s' % self.data.get('optional_min2', None)
+
+    @property
+    def optional_max2(self):
+        return u'%s' % self.data.get('optional_max2', None)
+
+    @property
+    def optional_fee_cap_available2(self):
+        return u'%s' % self.data.get('optional_fee_cap_available2', None)
+
+    @property
+    def optional_deferred_fees_available2(self):
+        return u'%s' % self.data.get('optional_deferred_fees_available2', None)
+
+    @property
+    def optional_fixed_fees_available2(self):
+        return u'%s' % self.data.get('optional_fixed_fees_available2', None)
