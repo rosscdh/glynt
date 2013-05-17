@@ -41,7 +41,9 @@ class EnsureFounderService(object):
 
 class EnsureStartupService(object):
     """ Set up a startup """
+    founder = None
     startup = None
+
     def __init__(self, name, founder, **kwargs):
         self.startup_name = name
         self.founder = founder
@@ -52,16 +54,19 @@ class EnsureStartupService(object):
         self.photo = kwargs.pop('photo', None)
         self.data = kwargs
 
-    def add_founder(self, founder):
+    def add_founder(self, founder=None):
+        founder = founder if founder else self.founder
         if not self.startup:
             raise Exception('Startup has not yet been defined for service, need to call .process()')
 
-        self.startup.founders.remove(self.founder) # ensure he is not already assocaited with the startup
-        self.startup.founders.add(self.founder)
+        self.startup.founders.remove(founder) # ensure he is not already assocaited with the startup
+        self.startup.founders.add(founder)
 
     def process(self):
         self.startup, is_new = Startup.objects.get_or_create(name=self.startup_name)
         logger.info("Processing startup %s (is_new: %s)" % (self.startup, is_new,))
+
+        self.add_founder(self.founder)
 
         if self.slug or is_new:
             self.startup.slug = self.slug if self.slug else slugify(self.startup_name)
