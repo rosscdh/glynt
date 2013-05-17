@@ -246,12 +246,17 @@
     table.pricing ul.fee-options li.cap{
     background-position: -231px 0;
     }
-    table.pricing ul.fee-options li.deferred{
-
+    table.pricing ul.fee-options li.no-cap{
+    background-position: -231px -40px;
+    }
+    table.pricing ul.fee-options li.no-deferred{
+    background-position: 0 -40px;
     }
     table.pricing ul.fee-options li.fixed{
     background-position: -185px 0;
-
+    }
+    table.pricing ul.fee-options li.no-fixed{
+    background-position: -185px -40px;
     }
 
 /* Endorsement */
