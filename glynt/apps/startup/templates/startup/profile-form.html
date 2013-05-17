@@ -16,6 +16,7 @@
         </div>
     </div>
 </div>
+
 <div class="container profile">
     <div class="row">
         <div class="span12">
@@ -43,19 +44,33 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="span8">
+                    <div class="span5">
                         <div class="control-group">
                             {{ form.startup_name|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="span5">
+                        <div class="control-group">
+                            {{ form.twitter|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="span8">
+                        <div class="control-group">
+                            {{ form.url|as_crispy_field }}
+                        </div>
+                        <div class="control-group">
+                            {{ form.summary|as_crispy_field }}
                         </div>
                         <div class="control-group">
                             <div class="controls">
                                 <p>Tick all that apply</p>
                                 <label class="checkbox">{{ form.already_raised_capital }} We have <strong>already raised capital</strong></label>
                                 <label class="checkbox">{{ form.process_raising_capital }} We are in the process <strong>raising capital</strong></label>
-                                <label class="checkbox">{{ form.incubator_or_accelerator }} We are <strong>part of an incubator</strong> or accelerator</label>
                             </div>
                         </div>
-                        <div id="incubators" class="control-group hidden">
+                        <div id="incubators" class="control-group">
                             {{ form.incubator_or_accelerator_name|as_crispy_field }}
                         </div>
                     </div>
@@ -92,15 +107,9 @@
 
 {% block js %}
 <script>
-    $(document).ready(function() {
-        $('.incubator').change(function(){
-            if( $(this).is(':checked')) {
-                $("#incubators").removeClass('hidden');
-            } else {
-                $("#incubators").addClass('hidden');
-            }
-        });
-    });
+$(document).ready(function() {
+
+});
 </script>
 
 {% endblock %}
