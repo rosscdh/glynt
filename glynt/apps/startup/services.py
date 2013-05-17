@@ -52,6 +52,13 @@ class EnsureStartupService(object):
         self.photo = kwargs.pop('photo', None)
         self.data = kwargs
 
+    def add_founder(self, founder):
+        if not self.startup:
+            raise Exception('Startup has not yet been defined for service, need to call .process()')
+
+        self.startup.founders.remove(self.founder) # ensure he is not already assocaited with the startup
+        self.startup.founders.add(self.founder)
+
     def process(self):
         self.startup, is_new = Startup.objects.get_or_create(name=self.startup_name)
         logger.info("Processing startup %s (is_new: %s)" % (self.startup, is_new,))
