@@ -10,8 +10,8 @@ logger = logging.getLogger('lawpal.services')
 class EnsureFounderService(object):
     """ Set up a startup founder """
     founder = None
-    def __init__(self, user, **kwargs):
-        self.user = user
+    def __init__(self, founder_user, **kwargs):
+        self.user = founder_user
         self.summary = kwargs.pop('summary', None)
         self.bio = kwargs.pop('bio', None)
         self.photo = kwargs.pop('photo', None)
@@ -20,6 +20,13 @@ class EnsureFounderService(object):
     def process(self):
         self.founder, is_new = Founder.objects.get_or_create(user=self.user)
         logger.info("Processing founder %s (is_new: %s)" % (self.user.get_full_name(), is_new,))
+
+        if self.data.get('first_name'):
+            self.founder.user.first_name = self.data.get('first_name')
+        if self.data.get('last_name'):
+            self.founder.user.last_name = self.data.get('last_name')
+
+        self.founder.user.save(update_fields=['first_name', 'last_name'])
 
         if self.summary:
             self.founder.summary = self.summary
@@ -44,7 +51,7 @@ class EnsureStartupService(object):
     founder = None
     startup = None
 
-    def __init__(self, name, founder, **kwargs):
+    def __init__(self, name, founder=None, **kwargs):
         self.startup_name = name
         self.founder = founder
         self.slug = kwargs.pop('slug', None)
@@ -55,12 +62,13 @@ class EnsureStartupService(object):
         self.data = kwargs
 
     def add_founder(self, founder=None):
-        founder = founder if founder else self.founder
-        if not self.startup:
-            raise Exception('Startup has not yet been defined for service, need to call .process()')
+        if self.founder or founder:
+            founder = founder if founder else self.founder
+            if not self.startup:
+                raise Exception('Startup has not yet been defined for service, need to call .process()')
 
-        self.startup.founders.remove(founder) # ensure he is not already assocaited with the startup
-        self.startup.founders.add(founder)
+            self.startup.founders.remove(founder.user) # ensure he is not already assocaited with the startup
+            self.startup.founders.add(founder.user)
 
     def process(self):
         self.startup, is_new = Startup.objects.get_or_create(name=self.startup_name)
