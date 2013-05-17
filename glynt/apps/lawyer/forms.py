@@ -98,12 +98,26 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     inc_deferred_fees_available = forms.BooleanField(required=False, label='Deferred fees available for this transaction?', widget=forms.CheckboxInput)
     inc_fixed_fees_available = forms.BooleanField(required=False, label='Fixed fees available for this transaction?', widget=forms.CheckboxInput)
 
-    optional_funding = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'Funding type','class':'inline-form-element'}))
+    optional_funding = forms.CharField(required=False, help_text="", widget=forms.TextInput(attrs={'placeholder':'Funding type','class':'inline-form-element'}))
     optional_min = forms.IntegerField(required=False, label="Optional Min", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini','title':'minimum e.g. 500'}))
     optional_max = forms.IntegerField(required=False, label="Optional Max", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini','title':'maximum e.g. 50000'}))
     optional_fee_cap_available = forms.BooleanField(required=False, label='Fee cap available for this transaction?', widget=forms.CheckboxInput)
     optional_deferred_fees_available = forms.BooleanField(required=False, label='Deferred fees available for this transaction?', widget=forms.CheckboxInput)
     optional_fixed_fees_available = forms.BooleanField(required=False, label='Fixed fees available for this transaction?', widget=forms.CheckboxInput)
+
+    optional_funding2 = forms.CharField(required=False, help_text="", widget=forms.TextInput(attrs={'placeholder':'Funding type','class':'inline-form-element'}))
+    optional_min2 = forms.IntegerField(required=False, label="Optional Min", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini','title':'minimum e.g. 500'}))
+    optional_max2 = forms.IntegerField(required=False, label="Optional Max", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini','title':'maximum e.g. 50000'}))
+    optional_fee_cap_available2 = forms.BooleanField(required=False, label='Fee cap available for this transaction?', widget=forms.CheckboxInput)
+    optional_deferred_fees_available2 = forms.BooleanField(required=False, label='Deferred fees available for this transaction?', widget=forms.CheckboxInput)
+    optional_fixed_fees_available2 = forms.BooleanField(required=False, label='Fixed fees available for this transaction?', widget=forms.CheckboxInput)
+
+    optional_funding3 = forms.CharField(required=False, help_text="", widget=forms.TextInput(attrs={'placeholder':'Funding type','class':'inline-form-element'}))
+    optional_min3 = forms.IntegerField(required=False, label="Optional Min", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini','title':'minimum e.g. 500'}))
+    optional_max3 = forms.IntegerField(required=False, label="Optional Max", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini','title':'maximum e.g. 50000'}))
+    optional_fee_cap_available3 = forms.BooleanField(required=False, label='Fee cap available for this transaction?', widget=forms.CheckboxInput)
+    optional_deferred_fees_available3 = forms.BooleanField(required=False, label='Deferred fees available for this transaction?', widget=forms.CheckboxInput)
+    optional_fixed_fees_available3 = forms.BooleanField(required=False, label='Fixed fees available for this transaction?', widget=forms.CheckboxInput)
 
     agree_tandc = forms.BooleanField(label='', widget=forms.CheckboxInput)
 

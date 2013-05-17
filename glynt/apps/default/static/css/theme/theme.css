@@ -396,12 +396,12 @@ input.parsley-success, textarea.parsley-success {
 input.parsley-error, textarea.parsley-error {
   color: #B94A48 !important;
   background-color: #F2DEDE !important;
-  border: 1px solid #EED3D7 !important;
+  border: 2px solid red !important;
 }
 ul.parsley-error-list {
-    font-size: 11px;
-    margin: 2px;
-    list-style-type:none;
+   font-size: 11px;
+   margin: 2px;
+   list-style-type:none;
    background-color:rgba(255,255,255,1);
    padding:2px;   
    width:200px;
@@ -409,6 +409,7 @@ ul.parsley-error-list {
 }
 ul.parsley-error-list li {
     line-height: 11px;
+    color: red;
 }
 table.table input {
    padding:3px;
