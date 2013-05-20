@@ -43,9 +43,9 @@ in the INSTALLED_APPS setting.
             <form action="{% block pm_form_action %}{% endblock %}" method="post">{% csrf_token %}
                 {% block pm_form_buttons %}
 
-                <div class="btn-group postman-btn-group">{% block pm_delete_button %}<button class="btn btn-danger" type="submit" onclick="this.form.action='{% url 'postman_delete' %}'">{% trans "Delete" %}</button>{% endblock %}
-                {% block pm_archive_button %}<button class="btn btn-warning" type="submit" onclick="this.form.action='{% url 'postman_archive' %}'">{% trans "Archive" %}</button>{% endblock %}
-                {% block pm_undelete_button %}<button class="btn btn-success" type="submit" onclick="this.form.action='{% url 'postman_undelete' %}'">{% trans "Undelete" %}</button>
+                <div class="btn-group postman-btn-group">{% block pm_delete_button %}<button class="btn" type="submit" onclick="this.form.action='{% url 'postman_delete' %}'">{% trans "Delete" %}</button>{% endblock %}
+                {% block pm_archive_button %}<button class="btn" type="submit" onclick="this.form.action='{% url 'postman_archive' %}'">{% trans "Archive" %}</button>{% endblock %}
+                {% block pm_undelete_button %}<button class="btn" type="submit" onclick="this.form.action='{% url 'postman_undelete' %}'">{% trans "Undelete" %}</button>
                 {% endblock %}</div>
 
                 {% endblock %}
@@ -92,5 +92,6 @@ in the INSTALLED_APPS setting.
         #pm_messages { margin-top: 1em }
         #pm_messages .postman-action-col { width: 20px; text-align: center; }
         #pm_messages tr th { text-align: left }
+        .btn-group.open .btn.dropdown-toggle { background-color: #e6e6e6; }
     </style>
 {% endblock %}

@@ -24,6 +24,13 @@
                     <li class="divider-vertical"></li>
                  {% endif %}
                  <li><a id="Intercom" href="mailto:xw4ux8lx@incoming.intercom.io">Support</a></li>
+                 <li><a href="{% url 'postman_inbox' %}">
+                     {% if postman_unread_count != 0  %}
+                        <span class="badge badge-important unread-messages">{{ postman_unread_count }}</span> <i class="icon-comment"></i>
+                     {% else %}
+                        <i class="icon-comment"></i>
+                     {% endif %}
+                      </a></li>
                  <li class="dropdown">
                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> {{request.user.first_name}} {{request.user.last_name}}<b class="caret"></b></a>
                    <ul class="dropdown-menu">
@@ -43,3 +50,9 @@
    </div>
  </div>
  <!-- ends navbar -->
+
+{% block css %}
+<style>
+    .navbar .unread-messages { color: #fff; }
+</style>
+{% endblock %}
