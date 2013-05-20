@@ -28,6 +28,8 @@ urlpatterns = patterns('',
     url(r'^firms/', include('glynt.apps.firm.urls', namespace='firm')),
     # lawyers
     url(r'^lawyers/', include('glynt.apps.lawyer.urls', namespace='lawyer')),
+    # Messaging
+    url(r'^messages/', include('postman.urls')),
 	# Document Comments
 	url(r'^doc/comments/', include('django.contrib.comments.urls')),
 	# The Authoring Tool

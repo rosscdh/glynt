@@ -110,6 +110,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'glynt.middleware.LawpalSocialAuthExceptionMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'pagination.middleware.PaginationMiddleware',
 )
 
 
@@ -142,6 +143,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "glynt.context_processors.default_profile_image",
     "social_auth.context_processors.social_auth_by_type_backends",
     "social_auth.context_processors.social_auth_by_name_backends",
+    "postman.context_processors.inbox",
     "django.core.context_processors.request",
 )
 
@@ -243,6 +245,13 @@ HELPER_APPS = (
     'djcelery',
     # User switcher
     'debug_toolbar_user_panel',
+    # Notification
+    'notification',
+    # Django Pagination,
+    'pagination',
+    # Django postman
+    'postman',
+
 )
 
 # Handle south and its breaking tests
@@ -353,6 +362,14 @@ SOCIAL_AUTH_PIPELINE = (
     'glynt.apps.graph.pipeline.profile_photo',
     'glynt.apps.graph.pipeline.graph_user_connections',
 )
+
+POSTMAN_DISALLOW_ANONYMOUS = True
+POSTMAN_DISALLOW_MULTIRECIPIENTS = True
+POSTMAN_DISALLOW_COPIES_ON_REPLY = True
+POSTMAN_DISABLE_USER_EMAILING = True
+POSTMAN_AUTO_MODERATE_AS = True
+POSTMAN_MAILER_APP = None
+POSTMAN_NOTIFIER_APP = None
 
 INTERCOM_API_SECRET = '-sjPyiyI5P44z3QsHLDUWfoLK8Rml7Wbg2wmj64L'
 
