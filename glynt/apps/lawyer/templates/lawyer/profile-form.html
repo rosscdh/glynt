@@ -18,6 +18,7 @@
                  </h3>
                  {% else %}
                 <h1>Update your profile</h1>
+                <h3>Make sure your profile is updated as fully as possible.</h3>
                  {% endif %}
             </div>
         </div>
@@ -32,6 +33,7 @@
                 <li><a href="#transactions-and-startups" data-toggle="tab">Transactions &amp; Startups</a></li>
                 <li><a href="#profile" data-toggle="tab">Profile</a></li>
                 <li><a href="#connected-accounts" data-toggle="tab">Connected Accounts</a></li>
+                <li><a href="#fees-packages" data-toggle="tab">Fees and Packages</a></li>
             </ul>
             <form id="lawyer-profile-form" data-validate="parsley" action="{% url 'lawyer:setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
                 <div class="tab-content">
@@ -312,7 +314,58 @@
                                 {{ form.twitter|as_crispy_field }}
                             </div>
                         </div>
+                    </div>
 
+                    <div id="fees-packages" class="tab-pane">
+                        <div class="row">
+                            <div class="span12">
+                                <legend>Fees and Packages</legend>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="span4">
+                                <div class="control-group">
+                                    {{ form.seed_financing_amount_min|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="span2">
+                                <div class="control-group">
+                                    {{ form.seed_financing_amount_max|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="span12">
+                                <div class="control-group">
+                                    {{ form.seed_fee_cap_available|as_crispy_field }}
+                                    {{ form.seed_deferred_fees_available|as_crispy_field }}
+                                    {{ form.seed_fixed_fees_available|as_crispy_field }}
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="span4">
+                                <div class="control-group">
+                                    {{ form.incorporation_min|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="span2">
+                                <div class="control-group">
+                                    {{ form.incorporation_max|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="span12">
+                                <div class="control-group">
+                                    {{ form.inc_fee_cap_available|as_crispy_field }}
+                                    {{ form.inc_deferred_fees_available|as_crispy_field }}
+                                    {{ form.inc_fixed_fees_available|as_crispy_field }}
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
 
                     <div id="form-submit" class="row">
@@ -666,7 +719,7 @@ $(document).ready(function(){
     process_bar_membership();
 
     /**
-    * JSON output the volue type values
+    * JSON output the volume type values
     */
     $('#id_volume_incorp_setup').val('{{ lawyer.data.volume_incorp_setup }}');
     $('#id_volume_seed_financing').val('{{ lawyer.data.volume_seed_financing }}');
@@ -674,6 +727,28 @@ $(document).ready(function(){
     $('#id_volume_ip').val('{{ lawyer.data.volume_ip }}');
     $('#id_volume_other').val('{{ lawyer.data.volume_other }}');
     $('#id_volume_by_year').val('{{ lawyer.data.volume_by_year|jsonify }}');
+    $('#id_seed_financing_amount_min').val('{{ lawyer.data.seed_financing_amount_min }}');
+    $('#id_seed_financing_amount_max').val('{{ lawyer.data.seed_financing_amount_max }}');
+    if ('{{ lawyer.data.seed_fee_cap_available }}' === 'True') {
+        $('#id_seed_fee_cap_available').prop('checked', true);
+    }
+    if ('{{ lawyer.data.seed_deferred_fees_available }}' === 'True') {
+        $('#id_seed_deferred_fees_available').prop('checked', true);
+    }
+    if ('{{ lawyer.data.seed_fixed_fees_available }}' === 'True') {
+        $('#id_seed_fixed_fees_available').prop('checked', true);
+    }
+    $('#id_incorporation_min').val('{{ lawyer.data.incorporation_min }}');
+    $('#id_incorporation_max').val('{{ lawyer.data.incorporation_max }}');
+    if ('{{ lawyer.data.inc_fee_cap_available }}' === 'True') {
+        $('#id_inc_fee_cap_available').prop('checked', true);
+    }
+    if ('{{ lawyer.data.inc_deferred_fees_available }}' === 'True') {
+        $('#id_inc_deferred_fees_available').prop('checked', true);
+    }
+    if ('{{ lawyer.data.inc_fixed_fees_available }}' === 'True') {
+        $('#id_inc_fixed_fees_available').prop('checked', true);
+    }
 
     /**
     * handle volume changes

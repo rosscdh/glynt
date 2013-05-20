@@ -77,6 +77,15 @@ div#messages ul {
 	list-style-type:none;
 }
 
+/* Popover
+-------------------------------------------------- */
+.popover-content textarea {
+font-size:13px;
+color:#666;
+height:90px;
+}
+
+
 /* Navbar
 -------------------------------------------------- */
 .navbar-fixed-top {
