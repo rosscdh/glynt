@@ -1,0 +1,45 @@
+{% extends "postman/base.html" %}
+{% load i18n %}
+
+{% block extrahead %}{{ block.super }}{% endblock %}
+
+{% block content %}
+    <div id="postman">
+        <div class="page-header">
+            <h2>{% block pm_write_title %}{% endblock %}</h2>
+        </div>
+
+
+        <div class="row">
+            <div class="span10">
+                <form class="form-horizontal" action="{% if next_url %}?next={{ next_url|urlencode }}{% endif %}" method="post">{% csrf_token %}
+                    {% block pm_write_recipient %}{% endblock %}
+                    <div class="control-group">
+                        <label class="control-label" for="id_recipients">Recipient</label>
+                        <div class="controls">
+                            {{ form.recipients }}
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="id_subject">Subject</label>
+                        <div class="controls">
+                            {{ form.subject }}
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="id_body">Message</label>
+                        <div class="controls">
+                            {{ form.body }}
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <button type="submit">{% trans "Send" %}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+</div>
+{% endblock %}

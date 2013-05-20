@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load url from future %}
+{% load i18n %}{% load postman_tags %}
+{% block title %}{% trans "Messaging" %}{% endblock %}
+{% block css %}{{ block.super }}
+<link type="text/css" media="all" rel="stylesheet" href="{{ STATIC_URL }}postman/css/postman.css" />{% endblock %}
+
+
+{% block prebody %}
+    <div id="hero">
+    <div class="container">
+        <!-- starts carousel -->
+        <div class="row animated fadeInDown">
+            <div class="span12">
+                <h1>Your Messages</h1>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+<div class="row">
+  <div class="span2">
+    <ul id="postman_menu" class="nav nav-pills nav-stacked">{% postman_unread as unread_count %}
+        {% url 'postman_inbox' as url %}
+        <li {% if request.path == url %} class="active"{% endif %}><a href="{% url 'postman_inbox' %}">{% trans "Inbox" %}{% if unread_count %} <strong>({{ unread_count }})</strong>{% endif %}</a></li>
+        {% url 'postman_sent' as url %}
+        <li {% if request.path == url %} class="active"{% endif %}><a href="{% url 'postman_sent' %}">{% trans "Sent Messages" %}</a></li>
+        {% url 'postman_write' as url %}
+        <li {% if request.path == url %} class="active"{% endif %}><a href="{% url 'postman_write' %}">{% trans "Write" %}</a></li>
+        {% url 'postman_archives' as url %}
+        <li {% if request.path == url %} class="active"{% endif %}><a href="{% url 'postman_archives' %}">{% trans "Archives" %}</a></li>
+        {% url 'postman_trash' as url %}
+        <li {% if request.path == url %} class="active"{% endif %}><a href="{% url 'postman_trash' %}">{% trans "Trash" %}</a></li>
+    </ul>
+  </div>
+  <div class="span10">{% block content %}{% endblock %}</div>
+</div>
+{% endblock %}

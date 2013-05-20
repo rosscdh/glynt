@@ -113,3 +113,8 @@ termcolor
 
 # Api access
 tweepy
+
+# Messaging App
+django-notification
+django-postman
+django-pagination
