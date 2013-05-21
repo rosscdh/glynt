@@ -45,3 +45,12 @@ def humanise_number(num):
 
     humanised_num = '%s%s' % (num, ['', 'k', 'm', 'g', 't', 'p'][magnitude])
     return humanised_num
+
+
+@register.filter
+def ensure_number(num):
+    if not isinstance(num, ( int, long )):
+        num = 0
+
+    ensure_number = num
+    return ensure_number

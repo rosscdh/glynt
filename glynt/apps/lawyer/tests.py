@@ -86,3 +86,25 @@ class TestHumaniseNumber(unittest.TestCase):
         )
 
         self.assertEqual(result, '0')
+
+
+class EnsureNumber(unittest.TestCase):
+    def setUp(self):
+        self.context = {
+            'no_number': 'None',
+        }
+
+    def render_template(self, *args, **kwargs):
+        context = kwargs.get('context', {})
+        t = template.Template(''.join(args))
+        c = template.Context(context)
+        return t.render(c)
+
+    def test_ensure_number_converts_string_to_zero(self):
+        result = self.render_template(
+            '{% load lawyer_profile_tags %}'
+            ,'{{ no_number|ensure_number }}'
+            , context=self.context
+        )
+
+        self.assertEqual(result, '0')
