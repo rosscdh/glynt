@@ -106,15 +106,15 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     optional_fixed_fees_available = forms.BooleanField(required=False, label='Fixed fees available for this transaction?', widget=forms.CheckboxInput)
 
     optional_funding2 = forms.CharField(required=False, help_text="", widget=forms.TextInput(attrs={'placeholder':'Funding type','class':'inline-form-element'}))
-    optional_min2 = forms.IntegerField(required=False, label="Optional Min", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini','title':'minimum e.g. 500'}))
-    optional_max2 = forms.IntegerField(required=False, label="Optional Max", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini','title':'maximum e.g. 50000'}))
+    optional_min2 = forms.IntegerField(required=False, label="Optional Min", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-lessthan':'#id_optional_max2', 'data-lessthan-message':'This value should be less than the max.', 'class':'input-mini','title':'minimum e.g. 500'}))
+    optional_max2 = forms.IntegerField(required=False, label="Optional Max", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-morethan':'#id_optional_min2', 'data-morethan-message':'This value should be more than the min.', 'class':'input-mini','title':'maximum e.g. 50000'}))
     optional_fee_cap_available2 = forms.BooleanField(required=False, label='Fee cap available for this transaction?', widget=forms.CheckboxInput)
     optional_deferred_fees_available2 = forms.BooleanField(required=False, label='Deferred fees available for this transaction?', widget=forms.CheckboxInput)
     optional_fixed_fees_available2 = forms.BooleanField(required=False, label='Fixed fees available for this transaction?', widget=forms.CheckboxInput)
 
     optional_funding3 = forms.CharField(required=False, help_text="", widget=forms.TextInput(attrs={'placeholder':'Funding type','class':'inline-form-element'}))
-    optional_min3 = forms.IntegerField(required=False, label="Optional Min", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini','title':'minimum e.g. 500'}))
-    optional_max3 = forms.IntegerField(required=False, label="Optional Max", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini','title':'maximum e.g. 50000'}))
+    optional_min3 = forms.IntegerField(required=False, label="Optional Min", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-lessthan':'#id_optional_max3', 'data-lessthan-message':'This value should be less than the max.', 'class':'input-mini','title':'minimum e.g. 500'}))
+    optional_max3 = forms.IntegerField(required=False, label="Optional Max", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-morethan':'#id_optional_min3', 'data-morethan-message':'This value should be more than the min.', 'class':'input-mini','title':'maximum e.g. 50000'}))
     optional_fee_cap_available3 = forms.BooleanField(required=False, label='Fee cap available for this transaction?', widget=forms.CheckboxInput)
     optional_deferred_fees_available3 = forms.BooleanField(required=False, label='Deferred fees available for this transaction?', widget=forms.CheckboxInput)
     optional_fixed_fees_available3 = forms.BooleanField(required=False, label='Fixed fees available for this transaction?', widget=forms.CheckboxInput)
@@ -153,6 +153,18 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     def clean_hidden_photo(self):
         hidden_photo = self.cleaned_data.get('hidden_photo', None)
         return int(hidden_photo) if hidden_photo else None
+
+    def clean(self):
+        cleaned_data = super(LawyerProfileSetupForm, self).clean()
+        min_amount = cleaned_data.get('seed_financing_amount_min')
+        max_amount = cleaned_data.get('seed_financing_amount_max')
+
+        if not min_amount <  max_amount:
+            msg = 'Your min amount is too low'
+            logging.error(msg)
+            raise exceptions.ValidationError(msg)
+
+        return cleaned_data
 
     def delete_cookie(self, cookie_name):
         if self.request.COOKIES.get(cookie_name, None) is not None:
