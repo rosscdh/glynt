@@ -376,6 +376,19 @@ body.lawyer-welcome #hero h3 {
 }
 
 /* Form Styling */
+.form-horizontal.compact .control-group {
+	margin-bottom:10px;
+}
+.form-horizontal.compact ul.parsley-error-list {
+	position:static;
+	background:transparent;
+}
+.form-actions {
+	border-top:none;
+}
+.form-actions .radio, .form-actions .checkbox {
+	padding-left:9px;
+}
 
 input.parsley-success, textarea.parsley-success {
   color: #468847 !important;

@@ -22,15 +22,15 @@ class StartupProfileSetupForm(BootstrapMixin, forms.Form):
     last_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'Last name','tabindex':'2'}))
 
     # startup
-    startup_name = forms.CharField(label="Startup Name", help_text="", widget=forms.TextInput(attrs={'placeholder':'Startup Name', 'tabindex':'3'}))
+    startup_name = forms.CharField(label="Startup Name", help_text="", widget=forms.TextInput(attrs={'placeholder':'Acme Inc', 'tabindex':'3'}))
     twitter = forms.CharField(required=False, label="Twitter", help_text="", widget=forms.TextInput(attrs={'tabindex':'6'}))
-    summary = forms.CharField(label="Summary", widget=forms.Textarea(attrs={'placeholder':'Summary', 'tabindex':'4', 'class':'input-xxlarge', 'data-rangelength':'[30,1024]'}))
-    url = forms.URLField(label="URL", help_text="", widget=forms.TextInput(attrs={'placeholder':'http://www.your-startup.com', 'class':'input-xxlarge', 'tabindex':'5'}))
+    summary = forms.CharField(label="Summary", widget=forms.Textarea(attrs={'placeholder':'A brief description of your startup', 'tabindex':'4', 'class':'input-large', 'data-rangelength':'[0,1024]', 'rows':'2'}))
+    url = forms.URLField(label="URL", help_text="", widget=forms.TextInput(attrs={'placeholder':'http://acmeco.com', 'class':'input-large', 'tabindex':'4'}))
 
     # capital details
     already_raised_capital = forms.BooleanField(required=False, label='', widget=forms.CheckboxInput(attrs={'tabindex':'7'}))
     process_raising_capital = forms.BooleanField(required=False, label='', widget=forms.CheckboxInput(attrs={'tabindex':'8'}))
-    incubator_or_accelerator_name  = forms.CharField(required=False, label='', help_text="If your startup is part of an incubator or accelerator, please provide the name", widget=forms.TextInput(attrs={'placeholder':'Incubator or accelerator name'}))
+    incubator_or_accelerator_name  = forms.CharField(required=False, label='', help_text="", widget=forms.TextInput(attrs={'placeholder':'Incubator or accelerator name'}))
     agree_tandc = forms.BooleanField(label='', widget=forms.CheckboxInput(attrs={'tabindex':'10'}))
 
     def __init__(self, *args, **kwargs):

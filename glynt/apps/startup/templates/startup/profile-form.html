@@ -1,57 +1,36 @@
 {% extends 'base.html' %}{% load crispy_forms_tags invite_tags account_tags jsonify %}
 
-{% block page_title %}Sign up to LawPal{% endblock %}
+{% block page_title %}Start using LawPal{% endblock %}
 {% block bodyclass %}startup-form{% endblock %}
-
-
 {% block prebody %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/css/theme/social-buttons.css">
-
-<div id="hero">
-    <div class="container">
-        <div class="row animated fadeInDown">
-            <div class="span12">
-                <h1>Sign up to LawPal</h1>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="container profile">
     <div class="row">
-        <div class="span12">
-            <form id="startupSignUp" data-validate="parsley" action="" method="POST" class="form-horizontal">{% csrf_token %}
+        <div class="span4">
+            <img src="{{ STATIC_URL }}img/welcome-circle.jpg" class="logo-head">
+        </div>
+        <div class="span8 pull-right">
+            <h1>Start using LawPal</h1>            
+            <form id="startupSignUp" data-validate="parsley" action="" method="POST" class="form-horizontal compact">{% csrf_token %}
                 <div class="row">
-                    <div class="span12">
+                    <div class="span8">
                         <legend>Your details</legend>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="span5">
+
+                    <div class="span8">
                         <div class="control-group">
                             {{ form.first_name|as_crispy_field }}
                         </div>
-                    </div>
-                    <div class="span5">
                         <div class="control-group">
                             {{ form.last_name|as_crispy_field }}
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                   <div class="span12">
-                        <legend>Tell us about your company</legend>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="span5">
+                    <div class="span8">
+                        <legend>Tell us about your startup</legend>
                         <div class="control-group">
                             {{ form.startup_name|as_crispy_field }}
-                        </div>
-                    </div>
-                    <div class="span5">
-                        <div class="control-group">
-                            {{ form.twitter|as_crispy_field }}
                         </div>
                     </div>
                 </div>
@@ -64,10 +43,13 @@
                             {{ form.summary|as_crispy_field }}
                         </div>
                         <div class="control-group">
+                            <label class="control-label">Tick all that apply</label>
                             <div class="controls">
-                                <p>Tick all that apply</p>
+                                <label class="checkbox">{{ form.already_raised_capital }} We have <strong>already incorporated a company</strong></label>
                                 <label class="checkbox">{{ form.already_raised_capital }} We have <strong>already raised capital</strong></label>
                                 <label class="checkbox">{{ form.process_raising_capital }} We are in the process <strong>raising capital</strong></label>
+                                <br />
+                                <p>We are part of an <strong>incubator or accelerator : </strong></p>
                             </div>
                         </div>
                         <div id="incubators" class="control-group">
@@ -76,7 +58,7 @@
                     </div>
                 </div>
                 <div id="form-submit" class="row">
-                    <div class="span12 divide">
+                    <div class="span8 divide">
                         <div class="form-actions">
                             <label class="checkbox">
                                 <div id="div_id_agree_tandc" class="control-group">
@@ -102,13 +84,31 @@
 {% block css %}
 <style>
     .hidden { display: none; }
+    #id_incubator_or_accelerator_name {
+        margin-top:-15px;
+    }
+    .logo-head{
+        margin-top:40px;
+        float:left;
+    }
+    h1 {
+        margin-top:80px;
+        font-size:50px;
+        color:#ccc;
+    }
 </style>
 {% endblock %}
 
 {% block js %}
 <script>
 $(document).ready(function() {
-
+$('#supplied').live('change', function(){
+     if ( $(this).attr("checked")) {
+         $('.date').show();
+     } else {
+         $('.date').hide();
+     }
+ });
 });
 </script>
 
