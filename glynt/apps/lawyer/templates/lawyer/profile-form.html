@@ -864,6 +864,7 @@ $(document).ready(function(){
     if ('{{ lawyer.data.inc_fixed_fees_available }}' === 'True') {
         $('#id_inc_fixed_fees_available').prop('checked', true);
     }
+    var optionalFunding = 0;
     if ('{{ lawyer.data.optional_funding }}' !== '') {
         $('#id_optional_funding').val('{{ lawyer.data.optional_funding }}');
         $('#id_optional_min').val('{{ lawyer.data.optional_min }}');
@@ -878,6 +879,7 @@ $(document).ready(function(){
         if ('{{ lawyer.data.optional_fixed_fees_available }}' === 'True') {
             $('#id_optional_fixed_fees_available').prop('checked', true);
         }
+        optionalFunding++;
     }
     if ('{{ lawyer.data.optional_funding2 }}' !== '') {
         $('#id_optional_funding2').val('{{ lawyer.data.optional_funding2 }}');
@@ -893,6 +895,7 @@ $(document).ready(function(){
         if ('{{ lawyer.data.optional_fixed_fees_available2 }}' === 'True') {
             $('#id_optional_fixed_fees_available2').prop('checked', true);
         }
+        optionalFunding++;
     }
     if ('{{ lawyer.data.optional_funding3 }}' !== '') {
         $('#id_optional_funding3').val('{{ lawyer.data.optional_funding3 }}');
@@ -908,6 +911,10 @@ $(document).ready(function(){
         if ('{{ lawyer.data.optional_fixed_fees_available3 }}' === 'True') {
             $('#id_optional_fixed_fees_available3').prop('checked', true);
         }
+        optionalFunding++;
+    }
+    if (optionalFunding > 2) {
+        $('#add-custom-funding-type').remove();
     }
 
     /**
