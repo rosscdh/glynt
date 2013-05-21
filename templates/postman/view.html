@@ -2,44 +2,71 @@
 {% load url from future %}
 {% load i18n %}{% load postman_tags %}
 {% block content %}
-    <div id="postman">
-        {% for message in pm_messages %}
 
-        <h2>{{ message.subject }}</h2>
+{% for message in pm_messages %}
 
+<div class="message-container">
+
+    <h2 class="message-subject">{{ message.subject }}</h2>
+
+    <div class="message-info well well-small clearfix">
         <div class="pull-left">
-
-            <p>{{ message.obfuscated_sender|or_me:user }}</p>
-            <p>{{ message.obfuscated_recipient|or_me:user }}</p>
+            <p><span class="muted">From: </span><span class="badge badge-info">{{ message.obfuscated_sender|or_me:user }}</span></p>
         </div>
 
         <div class="pull-right">
             <p>{{ message.sent_at|date:"DATETIME_FORMAT"}}</p>
         </div>
+    </div>
 
-        {% if message.is_rejected %}  <div class="pm_status">{% trans "Rejected" %}{% if message.moderation_reason %}{% trans ":" %} {{ message.moderation_reason }}{% endif %}</div>{% endif %}
-
-        <div class="pm_body">
-            {{ message.body|linebreaksbr }}
+    <div class="row">
+        <div class="span10 message-body">
+                {{ message.body|linebreaksbr }}
         </div>
     </div>
+
 {% if forloop.last %}
-<form action="" method="post">{% csrf_token %}
-<input type="hidden" {% if pm_messages|length > 1 and message.thread_id %}name="tpks" value="{{ message.thread_id }}"{% else %}name="pks" value="{{ message.pk }}"{% endif %} />
-<a href="{{ next_url }}">{% trans "Back" %}</a>
-<span id="pm_buttons">
-<button type="submit" onclick="this.form.action='{% url 'postman_delete' %}?next={{ next_url|urlencode }}'">{% trans "Delete" %}</button>
-{% if not archived %}<button type="submit" onclick="this.form.action='{% url 'postman_archive' %}?next={{ next_url|urlencode }}'">{% trans "Archive" %}</button>{% endif %}
-</span>
-{% if reply_to_pk %}<a href="{% url 'postman_reply' reply_to_pk %}?next={{ next_url|urlencode }}">{% trans "Reply" %}</a>{% endif %}
-</form>
-{% if reply_to_pk %}<hr />
+<div class="row">
+    <div class="span10 well message-actions">
+        <form action="" method="post">{% csrf_token %}
+            <input type="hidden" {% if pm_messages|length > 1 and message.thread_id %}name="tpks" value="{{ message.thread_id }}"{% else %}name="pks" value="{{ message.pk }}"{% endif %} />
+            <a href="{{ next_url }}">{% trans "Back" %}</a>
+            <button class="btn" type="submit" onclick="this.form.action='{% url 'postman_delete' %}?next={{ next_url|urlencode }}'">{% trans "Delete" %}</button>
+            {% if not archived %}
+            <button class="btn" type="submit" onclick="this.form.action='{% url 'postman_archive' %}?next={{ next_url|urlencode }}'">{% trans "Archive" %}</button>
+            {% endif %}
+            {% if reply_to_pk %}
+            <a href="{% url 'postman_reply' reply_to_pk %}?next={{ next_url|urlencode }}">{% trans "Reply" %}</a>
+            {% endif %}
+        </form>
+    </div>
+</div>
+
+ {% if reply_to_pk %}<hr />
 <h2>{% trans 'Reply' %}</h2>
 <form action="{% url 'postman_reply' reply_to_pk %}?next={{ next_url|urlencode }}" method="post">{% csrf_token %}
 <div id="pm_reply">{{ form.body }}</div>
 <button type="submit">{% trans 'Reply' %}</button>
 </form>{% endif %}
 {% endif %}
-{% endfor %}
 </div>
+{% endfor %}
+{% endblock %}
+
+{% block css %}
+<style>
+.message-subject {
+    margin-bottom: .5em;
+}
+.message-info p {
+    margin: 0;
+}
+.message-body {
+    border-bottom: 1px solid #e6e6e6;
+    padding-bottom: 1em;
+}
+.message-actions {
+    margin-top: 2em;
+}
+</style>
 {% endblock %}

@@ -50,7 +50,7 @@ in the INSTALLED_APPS setting.
 
                 {% endblock %}
 
-                <table id="pm_messages" class="table table-striped table-bordered">
+                <table id="pm_messages" class="table">
                     <thead>
                         <tr>
                             <th class="postman-action-col">{% trans "Action" %}</th>
@@ -89,7 +89,7 @@ in the INSTALLED_APPS setting.
 
 {% block css %}
     <style>
-        #pm_messages { margin-top: 1em }
+        #pm_messages { margin-top: 1em; border-top: 1px solid #6adc7d; }
         #pm_messages .postman-action-col { width: 20px; text-align: center; }
         #pm_messages tr th { text-align: left }
         .btn-group.open .btn.dropdown-toggle { background-color: #e6e6e6; }
