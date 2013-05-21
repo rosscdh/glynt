@@ -210,8 +210,3 @@ class LawyerSearchForm(BootstrapMixin, forms.Form):
         self.request = kwargs.pop('request', None)
         self.user = self.request.user
         super(LawyerSearchForm, self).__init__(*args, **kwargs)
-
-        # cant query location without elastic search
-        if not settings.USE_ELASTICSEARCH:
-            del self.fields['location']
-            self.fields['location'] = forms.EmailField(label="", help_text="", widget=forms.HiddenInput(attrs={}))
