@@ -17,6 +17,7 @@ class StartupProfileSetupForm(BootstrapMixin, forms.Form):
     """ Form to allow startups to enter basic information about 
     their setups
     """
+    # django user ifo used to populate founder object
     first_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'First name', 'tabindex':'1'}))
     last_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'Last name','tabindex':'2'}))
 
