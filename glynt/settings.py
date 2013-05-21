@@ -245,8 +245,6 @@ HELPER_APPS = (
     'djcelery',
     # User switcher
     'debug_toolbar_user_panel',
-    # Notification
-    'notification',
     # Django Pagination,
     'pagination',
     # Django postman

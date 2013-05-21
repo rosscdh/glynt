@@ -115,6 +115,5 @@ termcolor
 tweepy
 
 # Messaging App
-django-notification
 django-postman
 django-pagination
