@@ -49,7 +49,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     position = forms.ChoiceField(choices=Lawyer.LAWYER_ROLES.get_choices(), label="Position")
     years_practiced = forms.IntegerField(label="Years Practicing", initial="3", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini', 'tabindex':'6'}))
 
-    bar_membership_input = forms.CharField(required=False, label="Bar Location", help_text='Enter the location of your bar memberships.', widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-large','placeholder':'California','title':'The state you are licensed in','class':'typeahead','autocomplete':'off','data-provide':'ajax', 'minLength':'2', 'data-items':4, 'data-source':'states', 'data-filter':'name__istartswith', 'autocomplete':'on','tabindex':'7'}))
+    bar_membership_input = forms.CharField(required=False, label="Bar Location", help_text='Enter the location of your bar memberships.', widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-large','placeholder':'California','title':'The state you are licensed in','class':'typeahead','autocomplete':'off','data-provide':'ajax', 'minLength':'2', 'data-items':4, 'data-source':'states', 'data-filter':'name__istartswith','tabindex':'7'}))
     bar_membership = forms.CharField(required=False, widget=forms.HiddenInput)
 
     practice_location_1 = forms.CharField(label="Primary Location", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-large','placeholder':'San Francisco, California','title':'The primary city you operate from','class':'typeahead','autocomplete':'on','data-provide':'ajax', 'minLength':'2', 'data-items':4, 'data-source':'locations', 'data-filter':'name__istartswith', 'autocomplete':'off','tabindex':'8'}))
@@ -85,6 +85,39 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     volume_other = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
 
     volume_by_year = forms.CharField(required=False, widget=forms.HiddenInput)
+
+    seed_financing_amount_min = forms.IntegerField(required=False, label="Seed Financing Min", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini', 'title':'Seed financing minimum e.g. 500'}))
+    seed_financing_amount_max = forms.IntegerField(required=False, label="Seed Financing Max", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini', 'title':'Seed financing maximum e.g. 50000'}))
+    seed_fee_cap_available = forms.BooleanField(required=False, label='Fee cap available for this transaction?', widget=forms.CheckboxInput)
+    seed_deferred_fees_available = forms.BooleanField(required=False, label='Deferred fees available for this transaction?', widget=forms.CheckboxInput)
+    seed_fixed_fees_available = forms.BooleanField(required=False, label='Fixed fees available for this transaction?', widget=forms.CheckboxInput)
+
+    incorporation_min = forms.IntegerField(required=False, label="Incorporation Min", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini','title':'Incorporation minimum e.g. 500'}))
+    incorporation_max = forms.IntegerField(required=False, label="Incorporation Max", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini','title':'Incorporation maximum e.g. 50000'}))
+    inc_fee_cap_available = forms.BooleanField(required=False, label='Fee cap available for this transaction?', widget=forms.CheckboxInput)
+    inc_deferred_fees_available = forms.BooleanField(required=False, label='Deferred fees available for this transaction?', widget=forms.CheckboxInput)
+    inc_fixed_fees_available = forms.BooleanField(required=False, label='Fixed fees available for this transaction?', widget=forms.CheckboxInput)
+
+    optional_funding = forms.CharField(required=False, help_text="", widget=forms.TextInput(attrs={'placeholder':'Funding type','class':'inline-form-element'}))
+    optional_min = forms.IntegerField(required=False, label="Optional Min", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini','title':'minimum e.g. 500'}))
+    optional_max = forms.IntegerField(required=False, label="Optional Max", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini','title':'maximum e.g. 50000'}))
+    optional_fee_cap_available = forms.BooleanField(required=False, label='Fee cap available for this transaction?', widget=forms.CheckboxInput)
+    optional_deferred_fees_available = forms.BooleanField(required=False, label='Deferred fees available for this transaction?', widget=forms.CheckboxInput)
+    optional_fixed_fees_available = forms.BooleanField(required=False, label='Fixed fees available for this transaction?', widget=forms.CheckboxInput)
+
+    optional_funding2 = forms.CharField(required=False, help_text="", widget=forms.TextInput(attrs={'placeholder':'Funding type','class':'inline-form-element'}))
+    optional_min2 = forms.IntegerField(required=False, label="Optional Min", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini','title':'minimum e.g. 500'}))
+    optional_max2 = forms.IntegerField(required=False, label="Optional Max", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini','title':'maximum e.g. 50000'}))
+    optional_fee_cap_available2 = forms.BooleanField(required=False, label='Fee cap available for this transaction?', widget=forms.CheckboxInput)
+    optional_deferred_fees_available2 = forms.BooleanField(required=False, label='Deferred fees available for this transaction?', widget=forms.CheckboxInput)
+    optional_fixed_fees_available2 = forms.BooleanField(required=False, label='Fixed fees available for this transaction?', widget=forms.CheckboxInput)
+
+    optional_funding3 = forms.CharField(required=False, help_text="", widget=forms.TextInput(attrs={'placeholder':'Funding type','class':'inline-form-element'}))
+    optional_min3 = forms.IntegerField(required=False, label="Optional Min", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini','title':'minimum e.g. 500'}))
+    optional_max3 = forms.IntegerField(required=False, label="Optional Max", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini','title':'maximum e.g. 50000'}))
+    optional_fee_cap_available3 = forms.BooleanField(required=False, label='Fee cap available for this transaction?', widget=forms.CheckboxInput)
+    optional_deferred_fees_available3 = forms.BooleanField(required=False, label='Deferred fees available for this transaction?', widget=forms.CheckboxInput)
+    optional_fixed_fees_available3 = forms.BooleanField(required=False, label='Fixed fees available for this transaction?', widget=forms.CheckboxInput)
 
     agree_tandc = forms.BooleanField(label='', widget=forms.CheckboxInput)
 
@@ -168,8 +201,8 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
 
 @parsleyfy
 class LawyerSearchForm(BootstrapMixin, forms.Form):
-    location = forms.CharField(label='', help_text='', required=False, widget=forms.TextInput(attrs={'placeholder':'Location', 'tabindex':'1', 'class':'input-xlarge typeahead','autocomplete':'on','data-provide':'ajax', 'minLength':'2', 'data-items': 5, 'data-source':'locations', 'data-filter':'name__istartswith', 'tabindex':'2'}))
-    q = forms.CharField(label='', help_text='', required=False, widget=forms.TextInput(attrs={'placeholder':'Firm, Keyword, Name', 'tabindex':'1', 'class':'input-xlarge'}))
+    location = forms.CharField(label='', help_text='', required=False, widget=forms.TextInput(attrs={'placeholder':'Enter a location', 'tabindex':'1', 'class':'input-xlarge typeahead','autocomplete':'off','data-provide':'ajax', 'minLength':'2', 'data-items': 5, 'data-source':'locations', 'data-filter':'name__istartswith', 'tabindex':'2'}))
+    q = forms.CharField(label='', help_text='', required=False, widget=forms.TextInput(attrs={'placeholder':'Seed financing', 'tabindex':'2', 'class':'input-xlarge typeahead', 'data-provide':'typeahead', 'minLength':'0', 'autocomplete':'off', 'data-source':"[\"Seed financing\",\"Convertible loan note\",\"Intellectual property\"]"}))
 
     def __init__(self, *args, **kwargs):
         """ get request object and user """
@@ -182,4 +215,3 @@ class LawyerSearchForm(BootstrapMixin, forms.Form):
         if not settings.USE_ELASTICSEARCH:
             del self.fields['location']
             self.fields['location'] = forms.EmailField(label="", help_text="", widget=forms.HiddenInput(attrs={}))
-

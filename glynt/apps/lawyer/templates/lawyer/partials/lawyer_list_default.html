@@ -1,7 +1,8 @@
-{% load lawyer_profile_tags endless %}
+{% load lawyer_profile_tags endless jsonify %}
 {% lazy_paginate object_list %}
 
 {% for l in object_list %}
+
 <div class="partner">
     <div class="left">
         <a href="{% url 'lawyer:profile' slug=l.user.username %}"><img src="{{ l.user.profile.get_mugshot_url }}" class="partner-avatar" /></a>
@@ -17,7 +18,7 @@
             <li class="marker big">{{ practice_location }}</li>
             {% endfor %}    
             <li class="tick">76 Similar Deals Closed (2011-2012)</li>
-            <li class="star">76 Endorsements</li>
+            <li class="star">76 Endorsemenssts</li>
         </ul>
         <a href="{% url 'lawyer:profile' slug=l.user.username %}" class="btn btn-primary">View Profile</a>
         <ul class="partner-social">

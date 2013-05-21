@@ -40,7 +40,7 @@ def prod_celery():
     env.user = 'ubuntu'
     env.application_user = 'app'
     # connect to the port-forwarded ssh
-    env.hosts = ['ec2-54-241-224-100.us-west-1.compute.amazonaws.com']
+    env.hosts = ['ec2-54-241-224-100.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
 
     env.start_service = None
@@ -65,7 +65,7 @@ def preview_celery():
     env.user = 'ubuntu'
     env.application_user = 'app'
     # connect to the port-forwarded ssh
-    env.hosts = ['ec2-54-241-224-100.us-west-1.compute.amazonaws.com']
+    env.hosts = ['ec2-54-241-224-100.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
 
     env.start_service = None
@@ -91,7 +91,7 @@ def prod_db():
     env.user = 'ubuntu'
     env.application_user = 'app'
     # connect to the port-forwarded ssh
-    env.hosts = ['ec2-50-18-97-221.us-west-1.compute.amazonaws.com']
+    env.hosts = ['ec2-50-18-97-221.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
 
     env.start_service = None
@@ -117,8 +117,7 @@ def production():
     env.user = 'ubuntu'
     env.application_user = 'app'
     # connect to the port-forwarded ssh
-    env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com', 'ec2-54-241-224-100.us-west-1.compute.amazonaws.com']
-    env.celery_hosts = ['ec2-54-241-224-100.us-west-1.compute.amazonaws.com']
+    env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com', 'ec2-54-241-224-100.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
 
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
 
@@ -144,8 +143,7 @@ def preview():
     env.user = 'ubuntu'
     env.application_user = 'app'
     # connect to the port-forwarded ssh
-    env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com', 'ec2-54-241-224-100.us-west-1.compute.amazonaws.com']
-    env.celery_hosts = ['ec2-54-241-224-100.us-west-1.compute.amazonaws.com']
+    env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com', 'ec2-54-241-224-100.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
 
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
 
@@ -250,7 +248,7 @@ def prepare_deploy():
     git_export()
 
 @task
-def migrations():
+def migrate():
     virtualenv('python %s%s/manage.py migrate' % (env.remote_project_path, env.project))
 
 @task
@@ -270,26 +268,29 @@ def clean_versions():
 # ------ RESTARTERS ------#
 @task
 def supervisord_restart():
-    if env.environment_class is 'webfaction':
-        execute(restart_service)
-    else:
-        sudo('supervisorctl restart uwsgi')
+    with settings(warn_only=True):
+        if env.environment_class is 'webfaction':
+            execute(restart_service)
+        else:
+            sudo('supervisorctl restart uwsgi')
 
 @task
 def restart_lite():
-    sudo(env.light_restart)
+    with settings(warn_only=True):
+        sudo(env.light_restart)
 
 @task
 def restart_service(heavy_handed=False):
-    if env.environment_class not in ['celery']: # dont restart celery nginx services
-        if env.environment_class == 'webfaction':
-            execute(stop_service)
-            execute(start_service)
-        else:
-            if not heavy_handed:
-                execute(restart_lite)
+    with settings(warn_only=True):
+        if env.environment_class not in ['celery']: # dont restart celery nginx services
+            if env.environment_class == 'webfaction':
+                execute(stop_service)
+                execute(start_service)
             else:
-                execute(supervisord_restart)
+                if not heavy_handed:
+                    execute(restart_lite)
+                else:
+                    execute(supervisord_restart)
 
 # ------ END-RESTARTERS ------#
 
@@ -341,7 +342,6 @@ def relink():
             #if files.exists(project_path, use_sudo=True): # unlink the glynt dir
             virtualenv('unlink %s' % project_path)
             virtualenv('ln -s %s/%s %s' % (version_path, env.SHA1_FILENAME, project_path,)) # relink
-        execute(clean_start)
 
 @task
 def clean_start():
@@ -371,8 +371,6 @@ def do_deploy():
     if not files.exists('%s/manage.py'%full_version_path):
         unzip_archive()
 
-    execute(update_env_conf)
-
 
 @task
 def update_env_conf():
@@ -386,9 +384,9 @@ def update_env_conf():
     if not env.is_predeploy:
         # copy the live local_settings
         with cd(project_path):
-            virtualenv('cp %s/conf/%s.local_settings.py %s/%s/local_settings.py' % (project_path, env.environment, project_path, env.project))
-            virtualenv('cp %s/conf/%s.wsgi.py %s/%s/wsgi.py' % (project_path, env.environment, project_path, env.project))
-            virtualenv('cp %s/conf/%s.newrelic.ini %s/%s/newrelic.ini' % (project_path, env.environment, project_path, env.project))
+            virtualenv('cp %s/conf/%s.local_settings.py %s/%s/local_settings.py' % (full_version_path, env.environment, full_version_path, env.project))
+            virtualenv('cp %s/conf/%s.wsgi.py %s/%s/wsgi.py' % (full_version_path, env.environment, full_version_path, env.project))
+            virtualenv('cp %s/conf/%s.newrelic.ini %s/%s/newrelic.ini' % (full_version_path, env.environment, full_version_path, env.project))
 
 @task
 def unzip_archive():
@@ -472,5 +470,8 @@ def deploy(is_predeploy='False'):
     execute(newrelic_note)
     prepare_deploy()
     execute(do_deploy)
+    execute(update_env_conf)
+    execute(relink)
+    execute(clean_start)
     execute(newrelic_deploynote)
 

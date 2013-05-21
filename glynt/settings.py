@@ -109,8 +109,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'glynt.middleware.LawpalSocialAuthExceptionMiddleware',
-    # Uncomment the next line for simple clickjacking protection:
-    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
 
@@ -396,7 +395,7 @@ HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
         'URL': 'http://jsy06hdx:km5ugyiy90yy17qg@banyan-8252692.us-east-1.bonsai.io',
-        'INDEX_NAME': 'glynt-dev',
+        'INDEX_NAME': 'dev-lawyers',
     },
 }
 USE_ELASTICSEARCH = True

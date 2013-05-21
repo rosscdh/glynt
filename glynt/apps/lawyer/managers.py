@@ -11,6 +11,6 @@ class ApprovedLawyerManager(models.Manager):
         # exclude users who have not set their password
         return super(ApprovedLawyerManager, self).get_query_set() \
                     .select_related('user', 'user__profile') \
-                    .exclude(user__password='!') \
-                    .filter(user__is_active=True, user__is_superuser=False, user__is_staff=False) \
+                    .exclude(is_active=False) \
+                    .filter(user__is_active=True) \
                     .prefetch_related('user', 'firm_lawyers')
