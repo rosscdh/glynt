@@ -118,9 +118,9 @@ class LawyerListView(AjaxListView, FormMixin):
         if we have a query string then use that to filter """
         logger.info('Using ElasticSearch')
         sq = SQ()
-        for k,v in self.request.GET.items():
-            if v:
-                sq.add(SQ(content=Clean(v)), SQ.OR)
+        for key,value in self.request.GET.items():
+            if value:
+                sq.add(SQ(content=Clean(urlparse.unquote(value))), SQ.OR)
 
         logger.debug('ElasticSearch QueryString %s' % sq)
 
