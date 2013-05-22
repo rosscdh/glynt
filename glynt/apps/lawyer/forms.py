@@ -86,8 +86,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
 
     volume_by_year = forms.CharField(required=False, widget=forms.HiddenInput)
 
-    #seed_financing_amount_min = forms.IntegerField(required=False, label="Seed Financing Min", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-lessthan':'#id_seed_financing_amount_max', 'data-lessthan-message':'This value should be less than the "Seed Financing" max.', 'class':'input-mini', 'title':'Seed financing minimum e.g. 500'}))
-    seed_financing_amount_min = forms.IntegerField(required=False, label="Seed Financing Min", widget=forms.TextInput(attrs={'data-trigger':'change', 'class':'input-mini', 'title':'Seed financing minimum e.g. 500'}))
+    seed_financing_amount_min = forms.IntegerField(required=False, label="Seed Financing Min", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-lessthan':'#id_seed_financing_amount_max', 'data-lessthan-message':'This value should be less than the "Seed Financing" max.', 'class':'input-mini', 'title':'Seed financing minimum e.g. 500'}))
     seed_financing_amount_max = forms.IntegerField(required=False, label="Seed Financing Max", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-morethan':'#id_seed_financing_amount_min', 'data-morethan-message':'This value should be more than the "Seed Financing" min.', 'class':'input-mini', 'title':'Seed financing maximum e.g. 50000'}))
     seed_fee_cap_available = forms.BooleanField(required=False, label='Fee cap available for this transaction?', widget=forms.CheckboxInput)
     seed_deferred_fees_available = forms.BooleanField(required=False, label='Deferred fees available for this transaction?', widget=forms.CheckboxInput)
@@ -157,21 +156,16 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
 
     def clean(self):
         cleaned_data = super(LawyerProfileSetupForm, self).clean()
+        msg = 'Sorry but the minimum amount needs to be lower than the maximum'
+        min_max_li = [('seed_financing_amount_min', 'seed_financing_amount_max'), ('incorporation_min', 'incorporation_max'), ('optional_min', 'optional_max'), ('optional_min2', 'optional_max2'), ('optional_min3', 'optional_max3')]
 
-        seed_financing_amount_min = cleaned_data.get('seed_financing_amount_min')
-        seed_financing_amount_max = cleaned_data.get('seed_financing_amount_max')
-        incorporation_min = cleaned_data.get('incorporation_min')
-        incorporation_max = cleaned_data.get('incorporation_max')
-        optional_min = cleaned_data.get('optional_min')
-        optional_max = cleaned_data.get('optional_max')
-        optional_min2 = cleaned_data.get('optional_min2')
-        optional_max2 = cleaned_data.get('optional_max2')
-        optional_min3 = cleaned_data.get('optional_min3')
-        optional_max3 = cleaned_data.get('optional_max3')
+        for min, max in min_max_li:
+            min = cleaned_data.get(min)
+            max = cleaned_data.get(max)
 
-        min_max_li = [seed_financing_amount_min, seed_financing_amount_max, incorporation_min, incorporation_max]
-
-        #Not sure of the most pythonic way of doing this.
+            if min > max:
+                logging.error(msg)
+                raise exceptions.ValidationError(msg)
 
         return cleaned_data
 
