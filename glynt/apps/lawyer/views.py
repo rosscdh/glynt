@@ -22,8 +22,6 @@ import logging
 logger = logging.getLogger('django.request')
 
 
-USE_ELASTICSEARCH = getattr(settings, 'USE_ELASTICSEARCH', False)
-
 
 class LawyerProfileView(DetailView):
     model = Lawyer
@@ -115,15 +113,10 @@ class LawyerListView(AjaxListView, FormMixin):
     model = Lawyer
     form_class = LawyerSearchForm
 
-    def __init__(self, *args, **kwargs):
-        if USE_ELASTICSEARCH:
-            # use the elastic search template if were using it
-            # accounts for the object differences
-            self.page_template = 'lawyer/partials/lawyer_list_elasticsearch.html'
-
-        super(LawyerListView, self).__init__(*args, **kwargs)
-
-    def get_elasticsearch_queryset(self):
+    def get_queryset(self):
+        """ return the approved lawyers 
+        if we have a query string then use that to filter """
+        logger.info('Using ElasticSearch')
         sq = SQ()
         for k,v in self.request.GET.items():
             if v:
@@ -132,35 +125,13 @@ class LawyerListView(AjaxListView, FormMixin):
         logger.debug('ElasticSearch QueryString %s' % sq)
 
         return SearchQuerySet().filter(sq)
-        
-    def get_basic_queryset(self):
-        query_string = self.request.GET.get('q', '').strip()
-        logger.debug('Basic QueryString %s' % query_string)
-
-        if query_string:
-            # create a django Q queryset using get_query
-            entry_query = get_query(query_string, ['user__first_name','user__last_name','bio',])
-            logger.debug('entry_query %s' % entry_query)
-            return self.model.approved.filter(entry_query)
-
-        return self.model.approved.all()
-
-    def get_queryset(self):
-        """ return the approved lawyers 
-        if we have a query string then use that to filter """
-        if USE_ELASTICSEARCH:
-            logger.info('Using ElasticSearch')
-            return self.get_elasticsearch_queryset()
-        else:
-            logger.info('Using BasicSearch')
-            return self.get_basic_queryset()
 
     def get_form(self, form_class):
         kwargs = self.get_form_kwargs()
         kwargs.update({
             'request': self.request
             ,'initial': { 'q': urlparse.unquote(self.request.GET.get('q')) if self.request.GET.get('q') else None,
-                          'location': urlparse.unquote(self.request.GET.get('location')) if 'location' in self.request.GET or self.request.GET.get('location') else 'San Francisco, California'}
+                          'location': urlparse.unquote(self.request.GET.get('location')) if 'location' in self.request.GET or self.request.GET.get('location') else None}
             }) # add the request to the form
 
         return form_class(**kwargs)
