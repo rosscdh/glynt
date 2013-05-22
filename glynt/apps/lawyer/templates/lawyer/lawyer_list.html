@@ -19,10 +19,10 @@
 		<div class="dock">
             <form id="lawyer-list-form" data-validate="parsley" action="{% url 'lawyer:list' %}" method="GET" class="form-inline">{% csrf_token %}
                 We need a lawyer in {{ form.location|as_crispy_field }} <span id="rotate"></span> {{ form.q|as_crispy_field }}
-                <span class="rotate">for</span>
-                <span class="rotate">that does</span>
-                <span class="rotate">who can do</span>
-                <span class="rotate">that works at</span>
+                <span class="rotate" data-value="Incorporation, Seed fina..">for</span>
+                <span class="rotate" data-value="any type of startup law">that does</span>
+                <span class="rotate" data-value="law firm name">that works at</span>
+                <span class="rotate" data-value="in their history">who has</span>
                 <br />
                 <br />
                 <button class="btn btn-large submit" type="submit" id="lawyer-list-filter">Show Lawyers</button>
@@ -153,12 +153,15 @@ $(document).ready(function(){
     var termRotator = function termRotator() {
         var ct = $("#rotate").data("term") || 0;
         var terms = $('span.rotate');
-
+        var placeholder = $(terms[ct]).attr('data-value')
         if (pauseRotator === true) {
             $("#rotate").data("term", 0).text($(terms[ct]).text()).show();
             return;
         }
         $("#rotate").data("term", ct == terms.length -1 ? 0 : ct + 1).text($(terms[ct]).text()).fadeIn().delay(2000).fadeOut(200, termRotator);
+        if (placeholder) {
+            $("#id_q").attr('placeholder', placeholder)
+        }
     }
     $(termRotator);
 });
