@@ -773,6 +773,28 @@ i.myspace { background-position: -233px -51px; }
 .hallotoolbar{ display:none!important;}
 
 
+/* Messaging
+-------------------------------------------------- */
+
+.hero {
+	padding-top: 65px;
+	background: #4ad1e5; /* Old browsers */
+	height: auto;
+	padding-bottom: 55px;
+	color:white;
+	margin-bottom:40px;
+}
+.hero h1 {
+	font-size:44px;
+	line-height:60px;
+}
+.hero-thin {
+    padding-top: 2.3em;
+    padding-bottom: 2.2em;
+}
+
+
+
 /* Basic responsive */
 
 @media screen and (max-width: 984px) {

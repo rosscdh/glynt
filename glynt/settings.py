@@ -206,6 +206,8 @@ PROJECT_APPS = (
     'glynt.apps.export',
     # Remote and 3rd Party services (pdf/doc conversion)
     #'glynt.apps.services',
+    # Message app
+    'glynt.apps.engage',
 )
 
 HELPER_APPS = (

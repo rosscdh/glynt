@@ -10,80 +10,37 @@ If the real implementation is to be used, just make sure that 'pagination' is de
 in the INSTALLED_APPS setting.
 {% endcomment %}
 {% block content %}
-<div id="postman">
-    <div class="row">
-        <div class="span10">
-            <div class="page-header">
-                 <h2>{% block pm_folder_title %}{% endblock %}</h2>
-            </div>
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="span10">
-            {% autopaginate pm_messages %}
-            {% if invalid_page %}
-            <p>{% trans "Sorry, this page number is invalid." %}</p>
-            {% else %}
-            {% if pm_messages %}
-            {% block pm_by_modes %}
-            <div class="btn-group pull-right">
-                <button class="btn dropdown-toggle" data-toggle="dropdown">Sort by <span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                    <li><a href="{{ by_conversation_url }}"><i class="i"></i>{% trans "Conversation" %}</a></li>
-                    <li><a href="{{ by_message_url }}"><i class="i"></i>{% trans "Message" %}</a></li>
-                </ul>
-            </div>
-            {% endblock pm_by_modes %}
-        </div>
-    </div>
+<div class="row">
+    <div class="span10">
 
-    <div class="row">
-        <div class="span10">
-            <form action="{% block pm_form_action %}{% endblock %}" method="post">{% csrf_token %}
-                {% block pm_form_buttons %}
+{% autopaginate pm_messages %}
+{% if invalid_page %}
+<p>{% trans "Sorry, this page number is invalid." %}</p>
+{% else %}
+{% if pm_messages %}
 
-                <div class="btn-group postman-btn-group">{% block pm_delete_button %}<button class="btn" type="submit" onclick="this.form.action='{% url 'postman_delete' %}'">{% trans "Delete" %}</button>{% endblock %}
-                {% block pm_archive_button %}<button class="btn" type="submit" onclick="this.form.action='{% url 'postman_archive' %}'">{% trans "Archive" %}</button>{% endblock %}
-                {% block pm_undelete_button %}<button class="btn" type="submit" onclick="this.form.action='{% url 'postman_undelete' %}'">{% trans "Undelete" %}</button>
-                {% endblock %}</div>
 
-                {% endblock %}
+<ul class="message-list">
 
-                <table id="pm_messages" class="table">
-                    <thead>
-                        <tr>
-                            <th class="postman-action-col">{% trans "Action" %}</th>
-                            {% block pm_sender_header %}<th><a href="{% postman_order_by sender %}">{% trans "Sender" %}</a></th>{% endblock %}
-                            {% block pm_recipient_header %}   <th><a href="{% postman_order_by recipient %}">{% trans "Recipient" %}</a></th>{% endblock %}
-                            <th><a href="{% postman_order_by subject %}">{% trans "Subject" %}</a></th>
-                            <th><a href="{% postman_order_by date %}">{% block pm_date %}{% trans "Date" %}{% endblock %}</a></th>
-                        </tr>
-                    </thead>
-                    <tbody>{% for message in pm_messages %}
-                        <tr>
-                            <td class="postman-action-col"><input type="checkbox" {% if by_conversation and message.thread_id %}name="tpks" value="{{ message.thread_id }}"{% else %}name="pks" value="{{ message.pk }}"{% endif %} /></td>
-                            {% block pm_sender_cell %}<td>{{ message.obfuscated_sender|or_me:user }}{% if message.count %} ({{ message.count }}){% endif %}</td>{% endblock %}
-                            {% block pm_recipient_cell %}   <td>{{ message.obfuscated_recipient|or_me:user }}{% if message.count %} ({{ message.count }}){% endif %}</td>{% endblock %}
-                            <td>{% if message.is_new %}<strong>{% endif %}{% if message.is_replied %}<em>{% endif %}
-                            {% block pm_subject %}<a href="{% if by_conversation and message.thread_id %}{% url 'postman_view_conversation' message.thread_id %}{% else %}{{message.get_absolute_url }}{% endif %}?next={{ current_url|urlencode }}">
-                            {% include "postman/inc_subject_ex.html" %}</a>{% endblock %}{% if message.is_replied %}</em>{% endif %}{% if message.is_new %}</strong>{% endif %}</td>
-                            <td>{{ message.sent_at|compact_date:_("g:i A,M j,n/j/y") }}</td>
-                        </tr>{% endfor %}
-                    </tbody>
-                </table>
-            </form>
-        </div>
-    </div>
+    {% for message in pm_messages %}
+    <li {% if message.is_new %}class="new-message"{% endif %}>
+        <a href="{% if by_conversation and message.thread_id %}{% url 'postman_view_conversation' message.thread_id %}{% else %}{{message.get_absolute_url }}{% endif %}?next={{ current_url|urlencode }}">
+<span class="message-sender">{{ message.obfuscated_sender|or_me:user|truncatechars:22 }}{% if message.count %} ({{ message.count }}){% endif %}</span>{% include "postman/inc_subject_ex.html" %}</a>
+    <a class="close" href="/messages/delete/" data-message-id="{% if by_conversation and message.thread_id %}{{ message.thread_id }}{% else %}{{ message.id }}{% endif %}" data-message-type="{%  if  by_conversation and message.thread_id %}tpks{% else %}pks{% endif %}">&times;</a></li>
+{% endfor %}</ul>
+
+
+
 {% paginate %}
 {% else %}
 
         <p>{% trans "No messages." %}</p>
-    </div>
-</div>
 {% endif %}
 {% endif %}
 {% block pm_footer_info %}{% endblock %}
+
+</div>
 </div>
 {% endblock content %}
 
@@ -93,5 +50,89 @@ in the INSTALLED_APPS setting.
         #pm_messages .postman-action-col { width: 20px; text-align: center; }
         #pm_messages tr th { text-align: left }
         .btn-group.open .btn.dropdown-toggle { background-color: #e6e6e6; }
+
+        .message-list {
+            list-style: none;
+        }
+
+        .message-list li {
+            border-bottom: 1px solid #f2f2f2;
+            position: relative;
+        }
+
+        .message-list li:hover {
+            background-color: #f2f2f2;
+        }
+
+        .message-list a {
+            text-decoration: none;
+            padding: 1em 1em;
+            display: block;
+        }
+
+        .new-message {
+            border-left: 2px solid #6adc7d;
+            font-weight: bold;
+        }
+
+        .message-sender {
+            display: inline-block;
+            min-width: 12em;
+        }
+
+        .message-body {
+            color: #ccc;
+        }
+
+        .message-list .close {
+            display: block;
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            padding: 0;
+        }
+
+
     </style>
+{% endblock %}
+
+{% block js %}
+    <script>
+    $(document).ready(function() {
+        $('a.close').click(function(ev) {
+            ev.preventDefault();
+            if ($(this).attr('data-message-type') === 'pks'){
+                $.ajax({
+                type: 'POST',
+                url: $(this).attr('href'),
+                data: {
+                    pks: $(this).attr('data-message-id'),
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                //context: this,
+                success: function(data, status) {
+                    console.log(data);
+                }
+            });
+            } else {
+                $.ajax({
+                type: 'POST',
+                url: $(this).attr('href'),
+                data: {
+                    tpks: $(this).attr('data-message-id'),
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                //context: this,
+                success: function(data, status) {
+                    console.log(data);
+                }
+            });
+            }
+
+        return false;
+        })
+    });
+    </script>
 {% endblock %}
