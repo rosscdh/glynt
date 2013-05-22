@@ -169,9 +169,9 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
         optional_min3 = cleaned_data.get('optional_min3')
         optional_max3 = cleaned_data.get('optional_max3')
 
-        min_max_li = [seed_financing_amount_min, seed_financing_amount_max]
+        min_max_li = [seed_financing_amount_min, seed_financing_amount_max, incorporation_min, incorporation_max]
 
-        #need to loop through them here.
+        #Not sure of the most pythonic way of doing this.
 
         return cleaned_data
 
