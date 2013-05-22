@@ -566,9 +566,9 @@ $(document).ready(function(){
     })
 
     /** scroll top top on submit **/
-   $("#update-profile").live("click", function() {
-      $("html, body").animate({scrollTop: 200}, 1000);
-});
+    $("#update-profile").live("click", function() {
+        $("html, body").animate({scrollTop: 200}, 1000);
+    });
 
     /**
     * Parsley error counter
@@ -633,11 +633,10 @@ $(document).ready(function(){
     /**
     * Dynamic selector functions based on form api urls
     */
-    {% for key, url in form.data_source_urls.items %}
-    {{ key }}_lookup = function(filter, callback) {
-        var url = '{{ url }}';
+    ajax_lookup = function(url, filter, callback) {
         var object_list = []
         url = (filter === undefined)? url: url + '&' + filter;
+        console.log(url)
         $.ajax({
             type: 'GET',
             url: url,
@@ -659,7 +658,6 @@ $(document).ready(function(){
             }
         });
     }
-    {% endfor %}
 
     /**
     * handle typeahead requests
@@ -678,13 +676,10 @@ $(document).ready(function(){
         e.typeahead({
             source: function(query, process_callback) {
                 var provide = e.attr('data-provide');
-                var lookup_name = e.attr('data-source');
+                var url = e.attr('data-source');
                 var filter = e.attr('data-filter');
                 filter = (filter === undefined)? filter : filter + '=' + query ;
-                var fn = window[lookup_name + '_lookup']
-                if(typeof fn === 'function') {
-                    fn(filter, process_callback);
-                }
+                ajax_lookup(url, filter, process_callback);
             }
             ,limit: 15
         });
