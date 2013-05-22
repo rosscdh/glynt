@@ -5,7 +5,8 @@
 
 {% for message in pm_messages %}
 
-<div class="message-container">
+<div class="row">
+<div class="span10">
 
     <h2 class="message-subject">{{ message.subject }}</h2>
 
@@ -18,12 +19,14 @@
             <p>{{ message.sent_at|date:"DATETIME_FORMAT"}}</p>
         </div>
     </div>
+</div>
+</div>
 
-    <div class="row">
-        <div class="span10 message-body">
-                {{ message.body|linebreaksbr }}
-        </div>
+<div class="row">
+    <div class="span10 message-body">
+        {{ message.body|linebreaksbr }}
     </div>
+</div>
 
 {% if forloop.last %}
 <div class="row">
@@ -49,7 +52,6 @@
 <button type="submit">{% trans 'Reply' %}</button>
 </form>{% endif %}
 {% endif %}
-</div>
 {% endfor %}
 {% endblock %}
 
