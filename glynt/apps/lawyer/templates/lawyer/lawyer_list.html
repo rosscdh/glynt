@@ -133,12 +133,12 @@ $(document).ready(function(){
     * term rotator - for lawyer search form
     * @TODO turn into object
     */
-    $('form#lawyer-list-form input').live('blur', function(event){
-        console.log('start')
+    $('form#lawyer-list-form').delegate(':input', 'blur', function(event){
+        //console.log('start')
         window.startRotator();
     });
-    $('form#lawyer-list-form input').live('focus click', function(event){
-        console.log('stop')
+    $('form#lawyer-list-form').delegate(':input', 'focus', function(event){
+        //console.log('stop')
         window.stopRotator();
     });
     pauseRotator = false;
@@ -148,10 +148,12 @@ $(document).ready(function(){
     }
     stopRotator = function stopRotator() {
         pauseRotator = true;
+        $("#rotate").clearQueue();
     }
     var termRotator = function termRotator() {
         var ct = $("#rotate").data("term") || 0;
         var terms = $('span.rotate');
+
         if (pauseRotator === true) {
             $("#rotate").data("term", 0).text($(terms[ct]).text()).show();
             return;
