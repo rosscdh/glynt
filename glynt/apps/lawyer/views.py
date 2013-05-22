@@ -120,7 +120,7 @@ class LawyerListView(AjaxListView, FormMixin):
         sq = SQ()
         for key,value in self.request.GET.items():
             if value:
-                sq.add(SQ(content=Clean(urlparse.unquote(value))), SQ.OR)
+                sq.add(SQ(content=Clean(urlparse.unquote(value))), SQ.AND)
 
         logger.debug('ElasticSearch QueryString %s' % sq)
 
