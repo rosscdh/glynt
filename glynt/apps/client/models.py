@@ -47,6 +47,18 @@ class ClientProfile(UserenaBaseProfile):
         p = self.profile_data.get('linkedin_photo_url', None) or self.profile_data.get('facebook_photo_url', None) or super(ClientProfile, self).get_mugshot_url()
         return p
 
+    @property
+    def user_class(self):
+        return self.profile_data.get('user_class_name', None)
+
+    @property
+    def is_lawyer(self):
+        return True if self.user_class == 'lawyer' else False
+
+    @property
+    def is_startup(self):
+        return True if self.user_class == 'startup' else False
+
     def short_name(self):
         """ Returns A. LastName """
         user = self.user
