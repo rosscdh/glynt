@@ -28,6 +28,8 @@ urlpatterns = patterns('',
     url(r'^firms/', include('glynt.apps.firm.urls', namespace='firm')),
     # lawyers
     url(r'^lawyers/', include('glynt.apps.lawyer.urls', namespace='lawyer')),
+    # Engage app
+    url(r'^engage/', include('glynt.apps.engage.urls', namespace='engage')),
     # Messaging
     url(r'^messages/', include('postman.urls')),
 	# Document Comments
