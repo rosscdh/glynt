@@ -37,7 +37,7 @@
                 <div class="row">
                     <div class="span8">
                         <div class="control-group">
-                            {{ form.url|as_crispy_field }}
+                            {{ form.website|as_crispy_field }}
                         </div>
                         <div class="control-group">
                             {{ form.summary|as_crispy_field }}
@@ -45,7 +45,7 @@
                         <div class="control-group">
                             <label class="control-label">Tick all that apply</label>
                             <div class="controls">
-                                <label class="checkbox">{{ form.already_raised_capital }} We have <strong>already incorporated a company</strong></label>
+                                <label class="checkbox">{{ form.already_incorporated }} We have <strong>already incorporated a company</strong></label>
                                 <label class="checkbox">{{ form.already_raised_capital }} We have <strong>already raised capital</strong></label>
                                 <label class="checkbox">{{ form.process_raising_capital }} We are in the process <strong>raising capital</strong></label>
                                 <br />
