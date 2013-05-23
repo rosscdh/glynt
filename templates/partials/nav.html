@@ -19,9 +19,6 @@
         <div class="nav-collapse">
             <ul class="nav pull-right">
              {% if request.user.is_authenticated %}
-                 {% if PROJECT_ENVIRONMENT != 'prod' %}
-<!--                     <li><a href="{% url 'client:dashboard' %}">{% trans 'Dashboard' %}</a></li>
- -->                 {% endif %}
                 <li><a href="{% url 'lawyer:list' %}">{% trans 'Marketplace' %}</a></li>
                 <li class="divider-vertical"></li>
                  <li><a id="Intercom" href="mailto:xw4ux8lx@incoming.intercom.io">Support</a></li>
