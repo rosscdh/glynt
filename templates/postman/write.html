@@ -1,3 +1,7 @@
-{% extends "postman/base_write.html" %}
-{% load i18n %}
-{% block pm_write_title %}{% trans "Write"%}{% endblock %}
+{% load url from future %}{% load i18n %}
+<form action="{% url 'engage:message' to=to_user.username %}{% if next_url %}?next={{ next_url|urlencode }}{% endif %}" method="post">{% csrf_token %}
+<table>
+{{ form.as_table }}
+</table>
+<button type="submit">{% trans "Send" %}</button>
+</form>

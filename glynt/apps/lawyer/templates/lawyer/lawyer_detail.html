@@ -46,7 +46,7 @@
 						{% endif %}
 					{% endif %}
 				{% endif %}
-				<a href="/messages/write" id="sendMessage" class="btn right" title="Message" data-toggle="modal"><i class="icon-envelope"></i> Message</a>
+				<a href="{% url 'engage:message' to=object.user.username %}" id="sendMessage" class="btn right" title="Message" data-toggle="modal"><i class="icon-envelope"></i> Message</a>
 				<a href="#comingSoonModal" class="btn right" title="Endorse" data-toggle="modal"><i class="icon-star"></i> Endorse</a>
 				<a href="#comingSoonModal" class="btn right" title="Engage"  data-toggle="modal"><i class="icon-play"></i> Engage</a>
 			</div>
