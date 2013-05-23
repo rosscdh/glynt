@@ -17,6 +17,12 @@ class EnsureFounderService(object):
         self.photo = kwargs.pop('photo', None)
         self.data = kwargs
 
+    def update_user_profile(self):
+        # update the is_startup attribute
+        profile = self.user.profile
+        profile.profile_data['is_startup'] = True
+        profile.save(update_fields=['profile_data'])
+
     def process(self):
         self.founder, is_new = Founder.objects.get_or_create(user=self.user)
         logger.info("Processing founder %s (is_new: %s)" % (self.user.get_full_name(), is_new,))

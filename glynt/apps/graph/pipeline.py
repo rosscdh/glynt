@@ -25,7 +25,7 @@ def ensure_user_setup(*args, **kwargs):
         # Call the lambda defined in client/models.py
         profile, is_new = _create_user_profile(user=user)
 
-        profile.profile_data['user_class_name'] = user_class_name = session.get('user_class_name', 'lawyer')
+        profile.profile_data['user_class_name'] = session.get('user_class_name', 'lawyer')
         profile.save(update_fields=['profile_data'])
 
         create_glynt_profile(profile=profile, is_new=is_new)
