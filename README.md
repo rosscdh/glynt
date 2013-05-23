@@ -90,3 +90,15 @@ Remember to remove invalid xml return characters using vim:
 
     sudo -u postgres -s pg_dump --no-owner --no-acl -Fc lawpal_prelaunch > lawpal_prelaunch.bak
     pg_restore -U rosscdh -h localhost -d lawpal_prelaunch -Fc lawpal_prelaunch.bak
+
+
+## Deployment ##
+
+Valid environemnts are: staging|preview|production
+
+```
+export TARGET_ENV='staging'
+fab $TARGET_ENV deploy assets
+fab $TARGET_ENV requirements clean_pyc syncdb migrate
+```
+
