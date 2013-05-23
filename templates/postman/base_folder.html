@@ -103,6 +103,7 @@ in the INSTALLED_APPS setting.
     $(document).ready(function() {
         $('a.close').click(function(ev) {
             ev.preventDefault();
+            var container = $(this).parent();
             if ($(this).attr('data-message-type') === 'pks'){
                 $.ajax({
                 type: 'POST',
@@ -111,9 +112,8 @@ in the INSTALLED_APPS setting.
                     pks: $(this).attr('data-message-id'),
                     csrfmiddlewaretoken: '{{ csrf_token }}'
                 },
-                //context: this,
                 success: function(data, status) {
-                    console.log(data);
+                    container.fadeOut();
                 }
             });
             } else {
@@ -124,9 +124,8 @@ in the INSTALLED_APPS setting.
                     tpks: $(this).attr('data-message-id'),
                     csrfmiddlewaretoken: '{{ csrf_token }}'
                 },
-                //context: this,
                 success: function(data, status) {
-                    console.log(data);
+                    container.fadeOut();
                 }
             });
             }
