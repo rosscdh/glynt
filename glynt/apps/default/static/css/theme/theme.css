@@ -803,6 +803,14 @@ i.myspace { background-position: -233px -51px; }
     padding-bottom: 2.2em;
 }
 
+#postman_menu a [class^="icon-"] {
+    margin-right: 4px;
+}
+
+#postman_menu .active a  [class^="icon-"] {
+    background-image: url('/static/bootstrap/img/glyphicons-halflings.png');
+}
+
 
 
 /* Basic responsive */

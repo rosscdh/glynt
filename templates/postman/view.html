@@ -6,13 +6,24 @@
 {% for message in pm_messages %}
 
 <div class="row">
+<div class="span10 view-message-controls">
+    <form action="" method="post">{% csrf_token %}
+        <a href="{{ next_url }}" class="btn"><i class="icon-arrow-left"></i> {% trans "Back" %}</a>
+        <input type="hidden" {% if pm_messages|length > 1 and message.thread_id %}name="tpks" value="{{ message.thread_id }}"{% else %}name="pks" value="{{ message.pk }}"{% endif %} />
+        {% if not message.recipient_deleted_at  %}
+        <button class="btn" type="submit" onclick="this.form.action='{% url 'postman_delete' %}?next={{ next_url|urlencode }}'"><i class="icon-trash"></i> {% trans "Delete" %}</button>
+        {% else %}
+        <button class="btn" type="submit" onclick="this.form.action='{% url 'postman_undelete' %}?next={{ next_url|urlencode }}'">{% trans "Restore to Inbox" %}</button>
+        {% endif %}
+    </form>
+</div>
 <div class="span10">
 
-    <h2 class="message-subject">{{ message.subject }}</h2>
+    <h3 class="message-subject page-header">{{ message.subject }}</h3>
 
-    <div class="message-info well well-small clearfix">
+    <div class="message-info clearfix">
         <div class="pull-left">
-            <p><span class="muted">From: </span><span class="badge badge-info">{{ message.obfuscated_sender|or_me:user }}</span></p>
+            <p><i class="icon-user"></i> <strong>{{ message.obfuscated_sender|or_me:user }}</strong></p>
         </div>
 
         <div class="pull-right">
@@ -29,27 +40,11 @@
 </div>
 
 {% if forloop.last %}
-<div class="row">
-    <div class="span10 well message-actions">
-        <form action="" method="post">{% csrf_token %}
-            <input type="hidden" {% if pm_messages|length > 1 and message.thread_id %}name="tpks" value="{{ message.thread_id }}"{% else %}name="pks" value="{{ message.pk }}"{% endif %} />
-            <a href="{{ next_url }}">{% trans "Back" %}</a>
-            <button class="btn" type="submit" onclick="this.form.action='{% url 'postman_delete' %}?next={{ next_url|urlencode }}'">{% trans "Delete" %}</button>
-            {% if not archived %}
-            <button class="btn" type="submit" onclick="this.form.action='{% url 'postman_archive' %}?next={{ next_url|urlencode }}'">{% trans "Archive" %}</button>
-            {% endif %}
-            {% if reply_to_pk %}
-            <a href="{% url 'postman_reply' reply_to_pk %}?next={{ next_url|urlencode }}">{% trans "Reply" %}</a>
-            {% endif %}
-        </form>
-    </div>
-</div>
-
- {% if reply_to_pk %}<hr />
-<h2>{% trans 'Reply' %}</h2>
-<form action="{% url 'postman_reply' reply_to_pk %}?next={{ next_url|urlencode }}" method="post">{% csrf_token %}
-<div id="pm_reply">{{ form.body }}</div>
-<button type="submit">{% trans 'Reply' %}</button>
+{% if reply_to_pk %}
+<h3>{% trans 'Reply' %}</h3>
+    <form action="{% url 'postman_reply' reply_to_pk %}?next={{ next_url|urlencode }}" method="post" class="form-wide">{% csrf_token %}
+        {{ form.body }}
+        <button type="submit" class="btn btn-primary">{% trans 'Reply' %}</button>
 </form>{% endif %}
 {% endif %}
 {% endfor %}
@@ -69,6 +64,22 @@
 }
 .message-actions {
     margin-top: 2em;
+}
+.message-info {
+    margin: 0 0 1em;
+}
+.view-message-controls button, .view-message-controls a {
+    font-weight: normal;
+    text-decoration: none;
+    font: -webkit-control;
+}
+.view-message-controls form {
+    margin: 0;
+}
+.form-wide textarea {
+    width: 100%;
+    box-sizing: border-box;
+    height: 7em;
 }
 </style>
 {% endblock %}

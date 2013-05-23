@@ -19,23 +19,26 @@ in the INSTALLED_APPS setting.
 <p>{% trans "Sorry, this page number is invalid." %}</p>
 {% else %}
 {% if pm_messages %}
-
-
+<div class="row">
+{% block edit-controls %}
+<div class="span10">
+    <a href="#edit" class="btn pull-right edit-message-list" data-toggle="button"><i class="icon-cog"></i> Edit</a>
+</div>
+{% endblock %}
+</div>
 <ul class="message-list">
-
     {% for message in pm_messages %}
     <li {% if message.is_new %}class="new-message"{% endif %}>
         <a href="{% if by_conversation and message.thread_id %}{% url 'postman_view_conversation' message.thread_id %}{% else %}{{message.get_absolute_url }}{% endif %}?next={{ current_url|urlencode }}">
-<span class="message-sender">{{ message.obfuscated_sender|or_me:user|truncatechars:22 }}{% if message.count %} ({{ message.count }}){% endif %}</span>{% include "postman/inc_subject_ex.html" %}</a>
-    <a class="close" href="/messages/delete/" data-message-id="{% if by_conversation and message.thread_id %}{{ message.thread_id }}{% else %}{{ message.id }}{% endif %}" data-message-type="{%  if  by_conversation and message.thread_id %}tpks{% else %}pks{% endif %}">&times;</a></li>
-{% endfor %}</ul>
-
-
+        <span class="message-sender">{{ message.obfuscated_sender|or_me:user|truncatechars:22 }}{% if message.count %} ({{ message.count }}){% endif %}</span>{% include "postman/inc_subject_ex.html" %}
+        <span class="message-date">{{ message.sent_at|date:"d M" }}</span></a>
+        <a class="close hidden" href="/messages/delete/" data-message-id="{% if by_conversation and message.thread_id %}{{ message.thread_id }}{% else %}{{ message.id }}{% endif %}" data-message-type="{%  if  by_conversation and message.thread_id %}tpks{% else %}pks{% endif %}">&times;</a></li>
+{% endfor %}
+</ul>
 
 {% paginate %}
 {% else %}
-
-        <p>{% trans "No messages." %}</p>
+<p>{% trans "No messages." %}</p>
 {% endif %}
 {% endif %}
 {% block pm_footer_info %}{% endblock %}
@@ -53,6 +56,8 @@ in the INSTALLED_APPS setting.
 
         .message-list {
             list-style: none;
+            border-top: 1px solid #f2f2f2;
+            margin-top: 1em;
         }
 
         .message-list li {
@@ -80,6 +85,12 @@ in the INSTALLED_APPS setting.
             min-width: 12em;
         }
 
+        .message-date {
+            color: #ccc;
+            float: right;
+            margin-right: 2em;
+        }
+
         .message-body {
             color: #ccc;
         }
@@ -92,8 +103,12 @@ in the INSTALLED_APPS setting.
             right: 10px;
             top: 10px;
             padding: 0;
+            color: red;
+            opacity: 1;
         }
-
+        .edit-message-list {
+            font: -webkit-control;
+        }
 
     </style>
 {% endblock %}
@@ -112,8 +127,9 @@ in the INSTALLED_APPS setting.
                     pks: $(this).attr('data-message-id'),
                     csrfmiddlewaretoken: '{{ csrf_token }}'
                 },
-                success: function(data, status) {
+                success: function() {
                     container.fadeOut();
+                    updateNewMessageCount(container);
                 }
             });
             } else {
@@ -124,14 +140,32 @@ in the INSTALLED_APPS setting.
                     tpks: $(this).attr('data-message-id'),
                     csrfmiddlewaretoken: '{{ csrf_token }}'
                 },
-                success: function(data, status) {
+                success: function() {
                     container.fadeOut();
+                    updateNewMessageCount(container);
                 }
             });
             }
 
         return false;
-        })
+        });
+
+        $('.edit-message-list').click(function() {
+           $('.message-list .close').toggleClass('hidden');
+        });
+
+        // Updates count on new mail icons
+        function updateNewMessageCount(container) {
+            var message_count = $('.unread-messages').live();
+            if (container.hasClass('new-message')) {
+                if (parseInt(message_count.html()) > 1) {
+                    message_count.html(parseInt(message_count.html()) - 1);
+                } else {
+                    message_count.remove();
+                }
+            }
+        }
+
     });
     </script>
 {% endblock %}
