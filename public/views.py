@@ -4,6 +4,7 @@ from django.http import Http404
 from django.views.generic.base import RedirectView
 from django.views.generic.edit import FormView
 from django.views.generic import TemplateView
+from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
 from public.forms import ContactForm
@@ -33,6 +34,18 @@ class PublicHomepageView(TemplateView):
 
         return [template_name]
 
+    def render_to_response(self, context, **response_kwargs):
+        """
+        """
+        # @BUSINESS_RULE
+        # redirect the startup to the marketplace/lawyer-list
+        user_class_name = self.request.session.get('user_class_name', 'lawyer')
+        if user_class_name == 'startup':
+            messages.success(self.request, "Welcome back to LawPal.com")
+            return HttpResponseRedirect(redirect_to=reverse('lawyer:list'))
+        else:
+            return super(PublicHomepageView, self).render_to_response(context, **response_kwargs)
+
 
 
 class UserClassSessionRedirectView(RedirectView):
@@ -51,8 +64,10 @@ class UserClassSessionRedirectView(RedirectView):
 
         if user_class_name == 'lawyer':
             url = reverse('socialauth_begin', args=['linkedin'])
+
         elif user_class_name == 'startup':
             url = reverse('socialauth_begin', args=['google-oauth2'])
+
         else:
             raise Http404("User Class %s is not Defined" % user_class_name)
 
