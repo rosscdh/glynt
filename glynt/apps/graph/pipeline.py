@@ -5,6 +5,7 @@ from django.template.defaultfilters import slugify
 from social_auth.models import UserSocialAuth
 from tasks import collect_user_fullcontact_info, collect_user_graph_connections
 
+from glynt.apps.client.models import _create_user_profile, create_glynt_profile
 from glynt.apps.graph.services import LinkedinProfileService
 from urlparse import parse_qs
 
@@ -22,8 +23,12 @@ def ensure_user_setup(*args, **kwargs):
 
     if user is not None:
         # Call the lambda defined in client/models.py
-        profile = user.profile
-        profile.profile_data['user_class_name'] = session.get('user_class_name', 'lawyer')
+        profile, is_new = _create_user_profile(user=user)
+
+        profile.profile_data['user_class_name'] = user_class_name = session.get('user_class_name', 'lawyer')
+        profile.save(update_fields=['profile_data'])
+
+        create_glynt_profile(profile=profile, is_new=is_new)
 
 
 def profile_photo(backend, details, response, user=None, is_new=False,

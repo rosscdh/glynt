@@ -9,7 +9,6 @@ from tasks import send_profile_setup_email
 
 import logging
 logger = logging.getLogger('lawpal.services')
-import pdb
 
 
 class EnsureLawyerService(object):
