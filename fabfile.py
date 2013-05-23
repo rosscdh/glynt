@@ -434,32 +434,39 @@ def newrelic_note():
 @task
 @serial
 def newrelic_deploynote():
-    description = '[env:%s][%s@%s] %s' % (env.environment, env.user, env.host, env.deploy_desc)
-    headers = {
-        'x-api-key': env.newrelic_api_token
-    }
+    if not env.deploy_desc:
+        print colored('No env.deploy_desc was defined cant post to new relic', 'yellow')
+    else:
+        description = '[env:%s][%s@%s] %s' % (env.environment, env.user, env.host, env.deploy_desc)
+        headers = {
+            'x-api-key': env.newrelic_api_token
+        }
 
-    payload = {
-        #'deployment[app_name]': env.newrelic_app_name, # new relc wants either app_name or application_id not both
-        'deployment[application_id]': env.newrelic_application_id,
-        'deployment[description]': description,
-        'deployment[user]': env.local_user,
-        'deployment[revision]': get_sha1()
-    }
-    
-    colored('Sending Deployment Message to NewRelic', 'blue')
+        payload = {
+            #'deployment[app_name]': env.newrelic_app_name, # new relc wants either app_name or application_id not both
+            'deployment[application_id]': env.newrelic_application_id,
+            'deployment[description]': description,
+            'deployment[user]': env.local_user,
+            'deployment[revision]': get_sha1()
+        }
+        
+        colored('Sending Deployment Message to NewRelic', 'blue')
 
-    r = requests.post('https://rpm.newrelic.com/deployments.xml', data=payload, headers=headers, verify=False)
+        r = requests.post('https://rpm.newrelic.com/deployments.xml', data=payload, headers=headers, verify=False)
 
-    is_ok = r.status_code in [200,201]
-    text = 'DeploymentNote Recorded OK' if is_ok is True else 'DeploymentNote Recorded Not OK: %s' % r.text
-    color = 'green' if is_ok else 'red'
+        is_ok = r.status_code in [200,201]
+        text = 'DeploymentNote Recorded OK' if is_ok is True else 'DeploymentNote Recorded Not OK: %s' % r.text
+        color = 'green' if is_ok else 'red'
 
-    print colored('%s (%s)' % (text, r.status_code), color)
+        print colored('%s (%s)' % (text, r.status_code), color)
 
 
 @task
-def deploy(is_predeploy='False'):
+def conclude():
+    execute(newrelic_deploynote)
+
+@task
+def deploy(is_predeploy='False',full=False,db=False):
     """
     :is_predeploy=True - will deploy the latest MASTER SHA but not link it in: this allows for assets collection
     and requirements update etc...
@@ -471,7 +478,11 @@ def deploy(is_predeploy='False'):
     prepare_deploy()
     execute(do_deploy)
     execute(update_env_conf)
+    if full:
+        execute(requirements)
+    if full or db:
+        execute(syncdb)
+        execute(migrate)
     execute(relink)
     execute(clean_start)
-    execute(newrelic_deploynote)
 
