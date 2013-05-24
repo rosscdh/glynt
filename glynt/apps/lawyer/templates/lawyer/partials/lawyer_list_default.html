@@ -4,10 +4,10 @@
 {% for l in object_list %}
 <div class="partner row">
     <div class="span2">
-        <a href="{% url 'lawyer:profile' slug=l.username %}"><img src="{{ l.profile_photo }}" class="partner-avatar" /></a>
+        <a href="{% url 'lawyer:profile' slug=l.username %}"><img src="http://local.weareml.com:8000/static/img/default_avatar.png" class="partner-avatar" /></a>
     </div>
     <div class="span10"> 
-        <img src="http://local.weareml.com:8000/m/firm/orrick-bank-logo-1-500x316.jpg" class="partner-logo"> 
+        <!--<img src="" class="partner-logo">-->
         <h2><a href="{% url 'lawyer:profile' slug=l.username %}">{{ l.full_name }}</a></h2>
         
         <h3>{{ l.object.summary }}</h3>
@@ -23,7 +23,16 @@
             {% endfor %}
             </li>
         </ul>
-
+        <a href="#" class="lawyer-transaction-pricing" data-toggle="popover" data-placement="top" data-original-title="Transaction Pricing" data-content="adadas">Transaction Pricing <i class="icon-question-sign"></i></a>
+        <div class="lawyer-transaction-pricing-info hidden">
+           <ul>
+               <li>Seed Financing</li>
+               <li>Incorporation</li>
+               <li>Test1</li>
+               <li>test2</li>
+               <li>test3</li>
+           </ul>
+        </div>
         <a href="{% url 'lawyer:profile' slug=l.username %}" class="btn btn-primary">View Profile</a>
         {% if firm.photo %}
             <img src="{{ MEDIA_URL }}{{ firm.photo|default:'firm/blank.gif' }}" alt="{{ firm.name }}" class="firm-logo" />              
@@ -35,3 +44,11 @@
 {% endfor %}
 
 {% show_more %}
+
+{% block js %}
+<script>
+    $(document).ready(function() {
+            $('.lawyer-transaction-pricing').popover('toggle');
+    });
+</script>
+{% endblock %}

@@ -345,6 +345,7 @@ margin-top:10px;
 border-bottom: 1px solid #ededed;
 padding-top: 10px;
 padding-bottom: 10px;
+position: relative;
 }
 .partner .left {
 }
@@ -456,7 +457,14 @@ text-align: center;
 float: left;
 margin: -12px 0 0 12px;
 }
-
+a.lawyer-transaction-pricing {
+    position: absolute;
+    right: 10em;
+    top: 6.5em;
+}
+a.lawyer-transaction-pricing:hover {
+    text-decoration: none;
+}
 
 
 
