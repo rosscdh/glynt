@@ -114,6 +114,10 @@ def virtualenv(cmd, **kwargs):
         sudo("source %sbin/activate && %s" % (env.virtualenv_path, cmd,), user=env.application_user, **kwargs)
 
 @task
+def pip_install():
+    virtualenv('pip install simplejson==3.2.0 --upgrade')
+
+@task
 def clear_cache():
     virtualenv(cmd='python %s%s/manage.py clear_cache' % (env.remote_project_path, env.project))
 
@@ -179,7 +183,14 @@ def update_index():
     with settings(host_string=env.db_host):
         #for i in ['default lawyer', 'firms firm']:
         for i in ['default lawyer',]:
-            virtualenv('python %s%s/manage.py update_index -u %s' % (env.remote_project_path, env.project, i))
+            virtualenv('python %s%s/manage.py update_index -a 100000 -u %s' % (env.remote_project_path, env.project, i))
+
+@task
+def rebuild_index():
+    with settings(host_string=env.db_host):
+        #for i in ['default lawyer', 'firms firm']:
+        for i in ['default lawyer',]:
+            virtualenv('python %s%s/manage.py rebuild_index --noinput' % (env.remote_project_path, env.project,))
 
 @task
 def migrate():
@@ -413,7 +424,7 @@ def conclude():
     execute(newrelic_deploynote)
 
 @task
-def deploy(is_predeploy='False',full='False',db='False'):
+def deploy(is_predeploy='False',full='False',db='False',search='False'):
     """
     :is_predeploy=True - will deploy the latest MASTER SHA but not link it in: this allows for assets collection
     and requirements update etc...
@@ -422,19 +433,23 @@ def deploy(is_predeploy='False',full='False',db='False'):
     env.is_predeploy = True if is_predeploy.lower() in true_list else False
     full = True if full.lower() in true_list else False
     db = True if db.lower() in true_list else False
+    search = True if search.lower() in true_list else False
 
     execute(newrelic_note)
     prepare_deploy()
     execute(do_deploy)
     execute(update_env_conf)
+    execute(celery_stop)
     if full:
         execute(requirements)
     if full or db:
         execute(syncdb)
         execute(migrate)
+    if full or search:
+        execute(update_index)
     execute(relink)
     if full:
         execute(assets)
-    execute(celery_restart)
     execute(clean_start)
+    execute(celery_start)
 
