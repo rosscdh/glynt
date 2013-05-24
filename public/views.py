@@ -40,9 +40,11 @@ class PublicHomepageView(TemplateView):
         # @BUSINESS_RULE
         # redirect the startup to the marketplace/lawyer-list
         user_class_name = self.request.session.get('user_class_name', 'lawyer')
+
         if self.request.user.is_authenticated() and user_class_name == 'startup':
-            messages.success(self.request, "Welcome back to LawPal.com")
+
             return HttpResponseRedirect(redirect_to=reverse('lawyer:list'))
+
         else:
             return super(PublicHomepageView, self).render_to_response(context, **response_kwargs)
 
