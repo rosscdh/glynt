@@ -21,84 +21,6 @@ env.timestamp = time.time()
 env.is_predeploy = False
 env.local_user = getpass.getuser()
 
-
-@task
-def prod_celery():
-    env.project = 'glynt'
-    env.environment = 'production'
-    env.environment_class = 'celery'
-
-    env.remote_project_path = '/var/apps/lawpal/'
-    env.deploy_archive_path = '/var/apps/'
-    env.virtualenv_path = '/var/apps/.lawpal-live-venv/'
-
-    env.newrelic_api_token = None
-    env.newrelic_app_name = None
-    env.newrelic_application_id = None
-
-    # change from the default user to 'vagrant'
-    env.user = 'ubuntu'
-    env.application_user = 'app'
-    # connect to the port-forwarded ssh
-    env.hosts = ['ec2-54-241-224-100.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
-    env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
-
-    env.start_service = None
-    env.stop_service = None
-    env.light_restart = None
-
-@task
-def preview_celery():
-    env.project = 'glynt'
-    env.environment = 'preview'
-    env.environment_class = 'celery'
-
-    env.remote_project_path = '/var/apps/preview-lawpal/'
-    env.deploy_archive_path = '/var/apps/'
-    env.virtualenv_path = '/var/apps/.lawpal-preview-venv/'
-
-    env.newrelic_api_token = None
-    env.newrelic_app_name = None
-    env.newrelic_application_id = None
-
-    # change from the default user to 'vagrant'
-    env.user = 'ubuntu'
-    env.application_user = 'app'
-    # connect to the port-forwarded ssh
-    env.hosts = ['ec2-54-241-224-100.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
-    env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
-
-    env.start_service = None
-    env.stop_service = None
-    env.light_restart = None
-
-
-@task
-def prod_db():
-    env.project = 'glynt'
-    env.environment = 'production'
-    env.environment_class = 'db'
-
-    env.remote_project_path = None
-    env.deploy_archive_path = None
-    env.virtualenv_path = None
-
-    env.newrelic_api_token = None
-    env.newrelic_app_name = None
-    env.newrelic_application_id = None
-
-    # change from the default user to 'vagrant'
-    env.user = 'ubuntu'
-    env.application_user = 'app'
-    # connect to the port-forwarded ssh
-    env.hosts = ['ec2-50-18-97-221.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
-    env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
-
-    env.start_service = None
-    env.stop_service = None
-    env.light_restart = None
-
-
 @task
 def production():
     env.project = 'glynt'
@@ -118,6 +40,7 @@ def production():
     env.application_user = 'app'
     # connect to the port-forwarded ssh
     env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com', 'ec2-54-241-224-100.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
+    env.db_host = env.hosts[0]
 
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
 
@@ -144,6 +67,7 @@ def preview():
     env.application_user = 'app'
     # connect to the port-forwarded ssh
     env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com', 'ec2-54-241-224-100.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
+    env.db_host = env.hosts[0]
 
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
 
@@ -171,15 +95,13 @@ def staging():
 
     # connect to the port-forwarded ssh
     env.hosts = ['stard0g101.webfactional.com']
+    env.db_host = env.hosts[0]
+
     env.key_filename = None
 
     env.start_service = '%sapache2/bin/start' % env.remote_project_path
     env.stop_service = '%sapache2/bin/stop' % env.remote_project_path
     env.light_restart = None
-
-@task
-def single_host(index=0):
-    env.hosts = env.hosts[index]
 
 @task
 def virtualenv(cmd, **kwargs):
@@ -254,20 +176,20 @@ def prepare_deploy():
 
 @task
 def update_index():
-    execute(single_host)
-    #for i in ['default lawyer', 'firms firm']:
-    for i in ['default lawyer',]:
-        virtualenv('python %s%s/manage.py update_index -u %s' % (env.remote_project_path, env.project, i))
+    with settings(host_string=env.db_host):
+        #for i in ['default lawyer', 'firms firm']:
+        for i in ['default lawyer',]:
+            virtualenv('python %s%s/manage.py update_index -u %s' % (env.remote_project_path, env.project, i))
 
 @task
 def migrate():
-    execute(single_host)
-    virtualenv('python %s%s/manage.py migrate' % (env.remote_project_path, env.project))
+    with settings(host_string=env.db_host):
+        virtualenv('python %s%s/manage.py migrate' % (env.remote_project_path, env.project))
 
 @task
 def syncdb():
-    execute(single_host)
-    virtualenv('python %s%s/manage.py syncdb' % (env.remote_project_path, env.project))
+    with settings(host_string=env.db_host):
+        virtualenv('python %s%s/manage.py syncdb' % (env.remote_project_path, env.project))
 
 @task
 def clean_versions():
