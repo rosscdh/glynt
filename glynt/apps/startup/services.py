@@ -10,8 +10,8 @@ logger = logging.getLogger('lawpal.services')
 class EnsureFounderService(object):
     """ Set up a startup founder """
     founder = None
-    def __init__(self, founder_user, **kwargs):
-        self.user = founder_user
+    def __init__(self, user, **kwargs):
+        self.user = user
         self.summary = kwargs.pop('summary', None)
         self.bio = kwargs.pop('bio', None)
         self.photo = kwargs.pop('photo', None)
