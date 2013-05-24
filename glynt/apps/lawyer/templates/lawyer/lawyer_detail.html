@@ -61,13 +61,20 @@
 					<p>{{ object.bio|default:"<div class=\"no-data\">No biography yet.</div>"|linebreaksbr }}</p>
 				</div>
 				<hr>
+
 			<div class="row">
-			{% if PROJECT_ENVIRONMENT == 'dev' %}
-				<div class="span8">	
+            <div class="span8">
 					<div class="row">
 						<div class="span8">
 							<h2>Transaction Pricing</h2>
+
+                            {% if object.data.seed_financing_amount_min or object.data.incorporation_min or object.data.optional_funding or object.data.optional_funding2 or object.data.optional_funding3 %}
+
+
 							<table class="table pricing">
+
+                            {% if object.data.seed_financing_amount_min %}
+
 								<tr>
 									<th>Seed Financing</th>
 									<td class="price">${{ object.data.seed_financing_amount_min|humanise_number }} &ndash; ${{ object.data.seed_financing_amount_max|humanise_number }}</td>
@@ -91,6 +98,11 @@
 										</ul>
 									</td>
 								</tr>
+
+                            {% endif %}
+
+                            {% if object.data.incorporation_min %}
+
 								<tr>
 									<th>Incorporation</th>
 									<td  class="price">${{ object.data.incorporation_min|humanise_number }} &ndash; ${{ object.data.incorporation_max|humanise_number }}</td>
@@ -114,6 +126,9 @@
 										</ul>
 									</td>
 								</tr>
+
+                            {% endif %}
+
                                 {% if object.data.optional_funding %}
                                 <tr>
 									<th>{{ object.data.optional_funding }}</th>
@@ -190,6 +205,9 @@
 								</tr>
                                 {% endif %}
 							</table>
+                        {% else %}
+                                <div class="no-data">Nothing yet.</div>
+                        {% endif %}
 						</div>
 					</div>
 					<hr>
@@ -222,6 +240,8 @@
 						</div>
 					</div>
 				</div>
+			{% if PROJECT_ENVIRONMENT == 'dev' %}
+
 				<hr>
 			{% endif %}
 			</div>
