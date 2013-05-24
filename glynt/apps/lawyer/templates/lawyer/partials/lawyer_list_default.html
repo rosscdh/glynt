@@ -1,44 +1,42 @@
-{% load lawyer_profile_tags endless jsonify %}
+{% load lawyer_profile_tags endless jsonify humanize %}
 {% lazy_paginate object_list %}
 
 {% for l in object_list %}
-<div class="partner row">
-    <div class="span2">
-        <a href="{% url 'lawyer:profile' slug=l.username %}"><img src="http://local.weareml.com:8000/static/img/default_avatar.png" class="partner-avatar" /></a>
-    </div>
-    <div class="span10"> 
-        <!--<img src="" class="partner-logo">-->
-        <h2><a href="{% url 'lawyer:profile' slug=l.username %}">{{ l.full_name }}</a></h2>
-        
-        <h3>{{ l.object.summary }}</h3>
 
-        {% if l.firm_name %}
-            <h3>{% if l.position %}{{ l.position }} <span>at</span> {%endif%}{{ l.firm_name }}</h3>
-        {% endif %}
+    <div class="clearfix partner">
 
-        <ul class="partner-info">
-            <li class="marker big">
-            {% for practice_location in l.object.practice_locations  %}
-            {{ practice_location }}{% if not forloop.last %} <span>and</span> {% endif %}
-            {% endfor %}
-            </li>
-        </ul>
-        <a href="#" class="lawyer-transaction-pricing" data-toggle="popover" data-placement="top" data-original-title="Transaction Pricing" data-content="adadas">Transaction Pricing <i class="icon-question-sign"></i></a>
-        <div class="lawyer-transaction-pricing-info hidden">
-           <ul>
-               <li>Seed Financing</li>
-               <li>Incorporation</li>
-               <li>Test1</li>
-               <li>test2</li>
-               <li>test3</li>
-           </ul>
+        <a class="partner-avatar" href="{% url 'lawyer:profile' slug=l.username %}">
+            <img src="{{ l.profile_photo }}"/>
+        </a>
+
+        <div class="partner-overview">
+            <h2 class="partner-name"><a href="{% url 'lawyer:profile' slug=l.username %}">{{ l.full_name }}</a></h2>
+
+            <h3>{{ l.summary|truncatechars:55 }}</h3>
+
+            {% if l.firm_name %}
+                <h3>{% if l.position %}{{ l.position }} <span>at</span> {% endif %}{{ l.firm_name }}</h3>
+            {% endif %}
+
+            <ul class="partner-info">
+                <li class="marker big">
+                    {% for practice_location in l.object.practice_locations  %}
+                    {{ practice_location }}{% if not forloop.last %} <span>and</span> {% endif %}
+                    {% endfor %}
+                </li>
+            </ul>
         </div>
-        <a href="{% url 'lawyer:profile' slug=l.username %}" class="btn btn-primary">View Profile</a>
-        {% if firm.photo %}
-            <img src="{{ MEDIA_URL }}{{ firm.photo|default:'firm/blank.gif' }}" alt="{{ firm.name }}" class="firm-logo" />              
-        {% endif %} 
-    </div>  
-</div>
+
+        {% if l.seed_financing_amount_min or l.incorporation_min %}
+        <div class="card-bordered card-transaction">
+            <ul>
+                <li><span class="transaction">Seed Financing</span><span class="transaction-amount">${{ l.seed_financing_amount_min|humanise_number }} &ndash; ${{ l.seed_financing_amount_max|humanise_number }}</span><span class="icons"><i class="{% if i.seed_fee_cap_available %}icap{% else %}no-icap{% endif %} tip" data-toggle="tooltip" title="Fee cap available for this transaction"></i><i class="{% if i.seed_deferred_fees_available %}ideferred{% else %}no-ideferred{% endif %} tip" data-toggle="tooltip" title="Deferred fees available for this transaction"></i><i class="{% if l.seed_fixed_fees_available %}ifixed{% else %}no-ifixed{% endif %} tip" data-toggle="tooltip" title="Fixed fees available for this transaction"></i></span></li>
+                <li><span class="transaction">Financing</span><span class="transaction-amount">${{ l.incorporation_min|humanise_number }} &ndash; ${{ l.incorporation_max|humanise_number }}</span><span class="icons"><i class="{% if i.inc_fee_cap_available %}icap{% else %}no-icap{% endif %} tip" data-toggle="tooltip" title="Fee cap available for this transaction"></i><i class="{% if i.inc_deferred_fees_available %}ideferred{% else %}no-ideferred{% endif %} tip" data-toggle="tooltip" title="Deferred fees available for this transaction"></i><i class="{% if l.inc_fixed_fees_available %}ifixed{% else %}no-ifixed{% endif %} tip" data-toggle="tooltip" title="Fixed fees available for this transaction"></i></span></li>
+            </ul>
+            <a href="{% url 'lawyer:profile' slug=l.username %}" class="transaction-view-all"><span>View all</span></a>
+        </div>
+        {% endif %}
+    </div>
 {% empty %}
     None Found
 {% endfor %}
@@ -46,9 +44,9 @@
 {% show_more %}
 
 {% block js %}
-<script>
-    $(document).ready(function() {
-            $('.lawyer-transaction-pricing').popover('toggle');
-    });
-</script>
+    <script>
+        $(document).ready(function () {
+            $('.tip').tooltip();
+        });
+    </script>
 {% endblock %}
