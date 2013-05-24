@@ -22,6 +22,31 @@ env.is_predeploy = False
 env.local_user = getpass.getuser()
 
 @task
+def prod_db():
+    env.project = 'glynt'
+    env.environment = 'production'
+    env.environment_class = 'db'
+
+    env.remote_project_path = None
+    env.deploy_archive_path = None
+    env.virtualenv_path = None
+
+    env.newrelic_api_token = None
+    env.newrelic_app_name = None
+    env.newrelic_application_id = None
+
+    # change from the default user to 'vagrant'
+    env.user = 'ubuntu'
+    env.application_user = 'app'
+    # connect to the port-forwarded ssh
+    env.hosts = ['ec2-50-18-97-221.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
+    env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
+
+    env.start_service = None
+    env.stop_service = None
+    env.light_restart = None
+
+@task
 def production():
     env.project = 'glynt'
     env.environment = 'production'
