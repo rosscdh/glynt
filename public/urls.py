@@ -21,6 +21,7 @@ urlpatterns = patterns('',
     url(r'^auth-redirect/(?P<user_class_name>.+)/$', UserClassSessionRedirectView.as_view(), name='auth_user_class_redirect'),
     # Social Auth Logged-in redirect to user type homepage
     url(r'^logged-in/$', UserClassLoggedInRedirectView.as_view(), name='auth_user_class_logged_in_redirect'),
+    url(r'^login-error/$', TemplateView.as_view(template_name='public/login-error.html'), name='login_error'),
     # home
     url(r'^$', PublicHomepageView.as_view(), name='homepage'),
 )
