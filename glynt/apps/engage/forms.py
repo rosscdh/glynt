@@ -6,7 +6,6 @@ from postman.fields import CommaSeparatedUserField
 
 class EngageWriteMessageForm(WriteForm):
     recipients = CommaSeparatedUserField(label='Recipient', required=False, widget=forms.HiddenInput)
-
     def __init__(self, *args, **kwargs):
         """ get request object and user """
         self.request = kwargs.pop('request', None)
@@ -14,7 +13,9 @@ class EngageWriteMessageForm(WriteForm):
         self.to = kwargs.pop('to', None)
         kwargs['sender'] = kwargs.pop('from', None)
 
-        recipients = [self.to.username]
+        kwargs['initial'].update({
+            'sender': kwargs['sender'],
+            'recipients': self.to.username,
+        })
 
         super(EngageWriteMessageForm, self).__init__(*args, **kwargs)
-        self.fields['recipients'].initial = recipients

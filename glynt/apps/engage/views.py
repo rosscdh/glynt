@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import ugettext_lazy as _
+from django.http import HttpResponse
 from django.views.generic import FormView
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 
-from glynt.apps.utils import _get_referer
+from postman.api import pm_write
+
+from glynt.apps.utils import _get_referer, AjaxableResponseMixin
 
 from forms import EngageWriteMessageForm
 
@@ -13,15 +16,16 @@ import logging
 logger = logging.getLogger('django.request')
 
 
-class EngageWriteMessageView(FormView):
+class EngageWriteMessageView(FormView, AjaxableResponseMixin):
     form_class = EngageWriteMessageForm
     template_name = 'postman/write.html'
     auto_moderators = []
 
-    def get_success_url(self):
-        return _get_referer(self.request)
 
     def get_context_data(self, **kwargs):
+        """ 
+        set context variables for form redirection
+        """
         context = super(EngageWriteMessageView, self).get_context_data(**kwargs)
         context.update({
             'next_url': _get_referer(self.request),
@@ -42,14 +46,22 @@ class EngageWriteMessageView(FormView):
             'from': self.request.user,
             'request': self.request,
         })
+
         return form_class(**kwargs)
 
     def form_valid(self, form):
         is_successful = form.save(auto_moderators=self.auto_moderators)
 
         if is_successful:
-            messages.success(self.request, _("Message successfully sent."), fail_silently=True)
+            msg = _("Message successfully sent.")
+            messages.success(self.request, msg, fail_silently=True)
+            status = 200
         else:
-            messages.warning(self.request, _("Message rejected for at least one recipient."), fail_silently=True)
+            msg = _("Message could not be sent.")
+            messages.warning(self.request, msg, fail_silently=True)
+            status = 500
 
-        return super(EngageWriteMessageView, self).form_valid(form=form)
+        return HttpResponse(msg, status=status, content_type='application/json')
+
+    def form_invalid(self, form):
+        return HttpResponse('<br/>'.join(form.errors), status=500, content_type='application/json')
