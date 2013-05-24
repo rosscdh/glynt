@@ -100,10 +100,13 @@ def create_client_profile(sender, **kwargs):
 def create_glynt_profile(profile, is_new):
     """ function used to create the appropriate glynt profile type
     for a user signing in """
+    logger.info('create_glynt_profile for User %s' % profile.user.pk)
     user = profile.user
     user_class_name = profile.user_class
 
-    if profile is not None and is_new == True:
+    if not is_new:
+        logger.info('create_glynt_profile profile is not new User %s' % profile.user.pk)
+    else:
         if profile.is_startup:
             logger.info('Creating Founder Profile for User %s' % user.username)
             founder_service = EnsureFounderService(user=user)
@@ -115,7 +118,7 @@ def create_glynt_profile(profile, is_new):
             lawyer_service.process()
 
         else:
-            raise Exception('Could not identify user class by session')
+            raise Exception('Could not identify user class')
 
 
 @receiver(post_save, sender=ClientProfile, dispatch_uid='client.create_userarena_signup')
