@@ -35,7 +35,7 @@ def simple_name_list(data_list):
 def humanise_number(num):
     if not isinstance(num, ( int, long )):
         num = 0
-        logger.info('Value "num" passed to humanise_number must be a number is type: %s %s' % (type(num),num,))
+        logger.debug('Value "num" passed to humanise_number must be a number is type: %s %s' % (type(num),num,))
 
     magnitude = 0
 
