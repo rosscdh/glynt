@@ -177,6 +177,9 @@ def staging():
     env.stop_service = '%sapache2/bin/stop' % env.remote_project_path
     env.light_restart = None
 
+@task
+def single_host(index=0):
+    env.hosts = env.hosts[index]
 
 @task
 def virtualenv(cmd, **kwargs):
@@ -232,27 +235,38 @@ def celery_restart():
 @task
 def celery_start(loglevel='info'):
     pid_path = "%sceleryd.pid" % env.remote_project_path
-    if files.exists(pid_path):
-        execute(celery_stop)
-    virtualenv('python %s%s/manage.py celeryd_detach worker --loglevel=%s --pidfile=%s' % (env.remote_project_path, env.project, loglevel, pid_path,), warn_only=True)
+    with settings(warn_only=True): # only warning as we will often have errors importing
+        if files.exists(pid_path):
+            execute(celery_stop)
+        virtualenv('python %s%s/manage.py celeryd_detach worker --loglevel=%s --pidfile=%s' % (env.remote_project_path, env.project, loglevel, pid_path,), warn_only=True)
 
 @task
 def celery_stop():
-    pid_path = "%sceleryd.pid" % env.remote_project_path
-    sudo("cat %s | xargs kill -9" % pid_path, user=env.application_user, warn_only=True, shell=False)
-    # if files.exists(pid_path):
-    #     sudo("rm %s" % pid_path , shell=False, warn_only=True)
+    with settings(warn_only=True): # only warning as we will often have errors importing
+        pid_path = "%sceleryd.pid" % env.remote_project_path
+        sudo("cat %s | xargs kill -9" % pid_path, user=env.application_user, warn_only=True, shell=False)
+        # if files.exists(pid_path):
+        #     sudo("rm %s" % pid_path , shell=False, warn_only=True)
 
 @task
 def prepare_deploy():
     git_export()
 
 @task
+def update_index():
+    execute(single_host)
+    #for i in ['default lawyer', 'firms firm']:
+    for i in ['default lawyer',]:
+        virtualenv('python %s%s/manage.py update_index -u %s' % (env.remote_project_path, env.project, i))
+
+@task
 def migrate():
+    execute(single_host)
     virtualenv('python %s%s/manage.py migrate' % (env.remote_project_path, env.project))
 
 @task
 def syncdb():
+    execute(single_host)
     virtualenv('python %s%s/manage.py syncdb' % (env.remote_project_path, env.project))
 
 @task
@@ -294,6 +308,17 @@ def restart_service(heavy_handed=False):
 
 # ------ END-RESTARTERS ------#
 
+# ------ SOURCE-VALIDATION ------#
+@task
+def mispelling():
+    words = ['of council', 'teh']
+    output = []
+    for w in words:
+        grp = local('cd %s;git grep "%s"' % (env.local_project_path, w,), capture=True)
+        output.append(grp)
+    print output
+
+# ------ END-SOURCE-VALIDATION ------#
 @task
 def chores():
     sudo('aptitude --assume-yes install build-essential python-setuptools python-dev apache2-utils uwsgi-plugin-python libjpeg8 libjpeg62-dev libfreetype6 libfreetype6-dev easy_install nmap htop vim unzip')
@@ -466,13 +491,15 @@ def conclude():
     execute(newrelic_deploynote)
 
 @task
-def deploy(is_predeploy='False',full=False,db=False):
+def deploy(is_predeploy='False',full='False',db='False'):
     """
     :is_predeploy=True - will deploy the latest MASTER SHA but not link it in: this allows for assets collection
     and requirements update etc...
     """
-
-    env.is_predeploy = True if is_predeploy.lower() in ['true','t','y','yes','1',1] else False
+    true_list = ['true','t','y','yes','1',1]
+    env.is_predeploy = True if is_predeploy.lower() in true_list else False
+    full = True if full.lower() in true_list else False
+    db = True if db.lower() in true_list else False
 
     execute(newrelic_note)
     prepare_deploy()
@@ -484,5 +511,8 @@ def deploy(is_predeploy='False',full=False,db=False):
         execute(syncdb)
         execute(migrate)
     execute(relink)
+    if full:
+        execute(assets)
+    execute(celery_restart)
     execute(clean_start)
 
