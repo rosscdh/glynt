@@ -21,7 +21,9 @@ def ensure_user_setup(*args, **kwargs):
     request = kwargs.get('request', {})
     session = request.session if request.session else {}
 
-    if user is not None:
+    if user is None:
+        logger.error('Pipeline.ensure_user_setup user is not present, cant create profile')
+    else:
         # Call the lambda defined in client/models.py
         profile, is_new = _create_user_profile(user=user)
 
@@ -39,20 +41,22 @@ def profile_photo(backend, details, response, user=None, is_new=False,
     if backend.name == 'linkedin':
         profile = {}
 
-        logger.info('Pipeline.linkedin.profile_photo logged in with linkedin')
+        logger.info('Pipeline.profile_photo logged in with linkedin')
 
         if details.get('picture-url', None) is not None:
             profile.update({
                 'photo_url': details.get('picture-url')
             })
-            logger.info('Pipeline.linkedin.profile_photo details already had linkedin photo: %s' % profile.get('photo_url'))
+            logger.info('Pipeline.profile_photo details already had linkedin photo: %s' % profile.get('photo_url'))
         else:
-            if user is not None:
+            if user is None:
+                logger.error('Pipeline.profile_photo.linkedin user is not present, cant get photo')
+            else:
                 auth = user.social_auth.get(provider='linkedin')
                 access_token = auth.extra_data.get('access_token', None)
 
                 if access_token is not None:
-                    logger.info('Pipeline.linkedin.profile_photo user: %s' % user)
+                    logger.info('Pipeline.profile_photo.linkedin user: %s' % user)
 
                     api_data = parse_qs(access_token)
                     service = LinkedinProfileService(uid=auth.uid, oauth_token=api_data.get('oauth_token')[0], \
@@ -66,28 +70,31 @@ def profile_photo(backend, details, response, user=None, is_new=False,
             client_profile = user.profile
             client_profile.profile_data.update({'linkedin_photo_url': profile.get('photo_url')})
             client_profile.save(update_fields=['profile_data'])
+    else:
+        logger.info('Pipeline.profile_photo backend is not linkedin')
 
 
 def graph_user_connections(backend, details, response, user=None, is_new=False,
                         *args, **kwargs):
     logger.debug('Graph.graph_user_connections start')
 
-    if user is not None:
+    if getattr(settings, 'BROKER_BACKEND', None): # only do this if we have a broker
+        if user is not None:
 
-        auth = UserSocialAuth.objects.get(user=user, provider=backend.name)
-        logger.info('Pipeline: Graph.graph_user_connections auth: %s' % auth)
+            auth = UserSocialAuth.objects.get(user=user, provider=backend.name)
+            logger.info('Pipeline: Graph.graph_user_connections auth: %s' % auth)
 
-        try:
-            logger.info('Pipeline: Graph.collect_user_fullcontact_info auth: %s' % user)
-            collect_user_fullcontact_info.delay(user=user)
-        except Exception as e:
-            logger.error('Did not try collect_user_fullcontact_info as no connection to broker could be found: %s' % e)
+            try:
+                logger.info('Pipeline: Graph.collect_user_fullcontact_info auth: %s' % user)
+                collect_user_fullcontact_info.delay(user=user)
+            except Exception as e:
+                logger.error('Did not try collect_user_fullcontact_info as no connection to broker could be found: %s' % e)
 
-        try:
-            logger.info('Pipeline: Graph.collect_user_graph_connections auth: %s' % user)
-            collect_user_graph_connections.delay(auth=auth)
-        except Exception as e:
-            logger.error('Did not try collect_user_graph_connections as no connection to broker could be found: %s' % e)
+            try:
+                logger.info('Pipeline: Graph.collect_user_graph_connections auth: %s' % user)
+                collect_user_graph_connections.delay(auth=auth)
+            except Exception as e:
+                logger.error('Did not try collect_user_graph_connections as no connection to broker could be found: %s' % e)
 
 
 
