@@ -243,6 +243,8 @@ HELPER_APPS = (
     'djcelery',
     # User switcher
     'debug_toolbar_user_panel',
+    # Vast array of Storage types
+    'storages',
 )
 
 # Handle south and its breaking tests
