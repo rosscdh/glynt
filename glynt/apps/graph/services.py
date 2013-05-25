@@ -124,7 +124,7 @@ class LinkedinProfileService(LinkedinConnectionService):
                 'photo_url': p.get('pictureUrl', None),
                 'status': p.get('currentStatus', None),
                 'industry': p.get('industry', None),
-                'summery': p.get('headline', None),
+                'summary': p.get('headline', None),
                 'bio': p.get('summary', None),
 
             }
