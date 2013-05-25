@@ -63,12 +63,6 @@ def linkedin_profile_extra_details(backend, details, response, user=None, is_new
                 service = LinkedinProfileService(uid=auth.uid, oauth_token=api_data.get('oauth_token')[0], \
                                                     oauth_token_secret=api_data.get('oauth_token_secret')[0])
                 profile = service.profile
-                # map linkedin field names to ours
-                bio = profile.get('summary',None)
-                profile['bio'] = bio
-
-                summary = profile.get('headline',None)
-                profile['summary'] = summary
 
             # logging info
             if not profile.get('photo_url'):
