@@ -503,14 +503,22 @@ $(document).ready(function () {
     });
 
     // Submit form
-    $('#send-message-form').live('submit', function() {
+    $('#send-message-form').live('submit', function(event) {
+        event.preventDefault();
         $.ajax({
             type: $(this).attr('method'),
             url: this.action,
             data: $(this).serialize(),
             context: this,
             success: function(data, status) {
-                $('#send-message-modal').html(data);
+                GlyntJsMessages.add_message(data.message);
+            },
+            error: function(jsdata, data, status) {
+                GlyntJsMessages.add_message(data.message, 'error');
+            },
+            complete: function(){
+                $("#send-message-modal").modal('hide');
+                GlyntJsMessages.show();
             }
         });
         return false;

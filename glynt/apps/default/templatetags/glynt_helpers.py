@@ -144,3 +144,15 @@ def write_message_form(context, is_modal=None, **kwargs):
     })
     return context
 write_message_form.is_safe = True
+
+@register.inclusion_tag('partials/handlebars_messages.js', takes_context=True)
+def handlebars_messages(context, **kwargs):
+    output_target = kwargs.get('output_target', None)
+    target_in_before_after = kwargs.get('target_in_before_after', None)
+    
+    context.update({
+        'output_target': output_target if output_target else 'div.navbar.navbar-fixed-top:first',
+        'target_in_before_after': target_in_before_after if target_in_before_after else 'after'
+    })
+    return context
+handlebars_messages.is_safe = True
