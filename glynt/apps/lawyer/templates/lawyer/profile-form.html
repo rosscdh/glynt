@@ -636,7 +636,6 @@ $(document).ready(function(){
     ajax_lookup = function(url, filter, callback) {
         var object_list = []
         url = (filter === undefined)? url: url + '&' + filter;
-        console.log(url)
         $.ajax({
             type: 'GET',
             url: url,
@@ -756,7 +755,7 @@ $(document).ready(function(){
         var force = force || false
         var cookie_name = 'bar_membership_list-{{ user.pk }}';
         var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
-        console.log(bar_membership)
+
         bar_membership = bar_membership.compact(bar_membership, $('ol#bar-membership-list'), cookie_name, cookie_data, force)
         add_generic_list_element(bar_membership, $('ol#bar-membership-list'), $('#id_bar_membership'), cookie_name, cookie_data, force)
     }
@@ -951,7 +950,7 @@ $(document).ready(function(){
         e.on('change', function(event){
             var e = $(this);
             var element_value = e.val();
-// console.log(element_value)
+
             var target_element = $('#id_' + e.attr('data-json_target'));
             var var_name = target_element.attr('id') + '_object'
             var volume_type = e.attr('data-volume_type');
