@@ -88,7 +88,7 @@ def linkedin_profile_extra_details(backend, details, response, user=None, is_new
                 # try to save the lawyer info
                 try:
                     user.lawyer_profile.summary = profile.get('summary')
-                    user.lawyer_profile.save(update_fields['summary'])
+                    user.lawyer_profile.save(update_fields=['summary'])
                 except:
                     logger.error('Pipeline.linkedin.summary could not save lawyer profile summary: %s' % user)
 
@@ -101,13 +101,14 @@ def linkedin_profile_extra_details(backend, details, response, user=None, is_new
                 # try to save the lawyer info
                 try:
                     user.lawyer_profile.bio = profile.get('bio')
-                    user.lawyer_profile.save(update_fields['bio'])
+                    user.lawyer_profile.save(update_fields=['bio'])
                 except:
                     logger.error('Pipeline.linkedin.bio could not save lawyer profile bio: %s' % user)
 
                 client_profile.profile_data.update({
                     'linkedin_headline': profile.get('summary')
                 })
+
             # save all updated fields
             client_profile.save(update_fields=['profile_data'])
 
