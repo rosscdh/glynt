@@ -464,7 +464,8 @@ def deploy(is_predeploy='False',full='False',db='False',search='False'):
     prepare_deploy()
     execute(do_deploy)
     execute(update_env_conf)
-    execute(celery_stop)
+    #execute(celery_stop)
+
     if full:
         execute(requirements)
     if full or db:
@@ -472,9 +473,9 @@ def deploy(is_predeploy='False',full='False',db='False',search='False'):
         execute(migrate)
     if full or search:
         execute(update_index)
+
     execute(relink)
-    if full:
-        execute(assets)
+    execute(assets)
     execute(clean_start)
-    execute(celery_start)
+    #execute(celery_start)
 
