@@ -15,8 +15,9 @@ from django.db.models import Q
 
 import re
 import json
+import urlparse
 
-
+# hardcoded here cos i havent yet figured out how to reverse tastypie urls (?)
 API_URLS = {
     'firms': '/api/v1/firm/lite/?format=json&limit=15',
     'locations': '/api/v1/location/lite/?format=json&limit=15',
@@ -27,6 +28,15 @@ API_URLS = {
 
 class HttpResponseUnauthorized(HttpResponse):
     status_code = 401
+
+
+def _get_referer(request):
+    """Return the HTTP_REFERER, if existing."""
+    if 'HTTP_REFERER' in request.META:
+        sr = urlparse.urlsplit(request.META['HTTP_REFERER'])
+        return urlparse.urlunsplit(('', '', sr.path, sr.query, sr.fragment))
+
+    return None
 
 
 class AjaxableResponseMixin(object):

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load url from future %}
+{% load i18n %}{% load postman_tags %}
+{% block title %}{% trans "Messaging" %}{% endblock %}
+
+{% block prebody %}
+<div class="hero hero-thin">
+	<div class="container">
+		<div class="row">
+			<div class="span12">
+			    <h1>Your Messages</h1>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block body %}
+<div class="row">
+  <div class="span2">
+    <ul id="postman_menu" class="nav nav-pills nav-stacked">{% postman_unread as unread_count %}
+        {% url 'postman_inbox' as url %}
+        <li {% if request.path == url %} class="active"{% endif %}><a href="{% url 'postman_inbox' %}"><i class="icon-inbox"></i> {% trans "Inbox" %}{% if unread_count %} <span class="badge badge-important unread-messages"> {{ unread_count }}</span>{% endif %}</a></li>
+        {% url 'postman_trash' as url %}
+        <li {% if request.path == url %} class="active"{% endif %}><a href="{% url 'postman_trash' %}"><i class="icon-trash"></i>{% trans "Trash" %}</a></li>
+    </ul>
+  </div>
+  <div class="span10">{% block content %}{% endblock %}</div>
+</div>
+{% endblock %}

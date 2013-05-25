@@ -46,9 +46,9 @@
 						{% endif %}
 					{% endif %}
 				{% endif %}
-				<a href="#comingSoonModal" class="btn right" title="Message" data-toggle="modal"><i class="icon-envelope icon-white"></i> Message</a>
-				<a href="#comingSoonModal" class="btn right" title="Endorse" data-toggle="modal"><i class="icon-star icon-white"></i> Endorse</a>
-				<a href="#comingSoonModal" class="btn right" title="Engage"  data-toggle="modal"><i class="icon-play icon-white"></i> Engage</a>
+				<a href="{% url 'engage:message' to=object.user.username %}" id="send-message" class="btn right" title="Message" data-toggle="modal"><i class="icon-envelope"></i> Message</a>
+				<a href="#comingSoonModal" class="btn right" title="Endorse" data-toggle="modal"><i class="icon-star"></i> Endorse</a>
+				<a href="#comingSoonModal" class="btn right" title="Engage"  data-toggle="modal"><i class="icon-play"></i> Engage</a>
 			</div>
 		</div>
 	</div>
@@ -342,8 +342,21 @@
 			    <!-- <button class="btn btn-primary">Save changes</button> -->
 			  </div>
 			</div>
+        </div>
+
+            <div id="send-message-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			  <div class="modal-header">
+			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			    <h3 id="myModalLabel">Sending Message</h3>
+			  </div>
+			  <div class="modal-body">
+			    <p>...</p>
+			  </div>
+			  <div class="modal-footer">
+			    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+			  </div>
+			</div>
 		
-		</div>
 	</div>
 </div>
 {% csrf_token %}
@@ -469,6 +482,49 @@ $(document).ready(function () {
 	 	$("#dealChart1").hide();
 	 }
 
+    // Load message modal
+    $("#send-message").click(function(ev) {
+        ev.preventDefault();
+        var url = $(this).attr('href');
+        $("#send-message-modal").load(url, function() {
+            $(this).modal('show');
+        });
+        return false;
+    });
+
+    // Activate parsley form validation when the modal has finished loading
+    $('#send-message-modal').live('shown', function() {
+        $('#send-message-form').parsley();
+    });
+
+    // Simulate input submit
+    $('#submit-modal-message').live('click', function() {
+        $('#send-message-form').submit();
+    });
+
+    // Submit form
+    $('#send-message-form').live('submit', function(event) {
+        event.preventDefault();
+        $.ajax({
+            type: $(this).attr('method'),
+            url: this.action,
+            data: $(this).serialize(),
+            context: this,
+            success: function(data, status) {
+                GlyntJsMessages.add_message(data.message);
+            },
+            error: function(jsdata, data, status) {
+                GlyntJsMessages.add_message(data.message, 'error');
+            },
+            complete: function(){
+                $("#send-message-modal").modal('hide');
+                GlyntJsMessages.show();
+            }
+        });
+        return false;
+    });
+
 });
+
 </script>
 {% endblock %}

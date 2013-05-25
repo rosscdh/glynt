@@ -61,8 +61,12 @@ form a {
 
 .label, .badge {
 	font-size:10px;
-	border-radius:0;
+	border-radius:10px;
 	text-shadow:none;
+}
+
+.badge {
+    padding: 2px 6px 3px;
 }
 
 /* Message
@@ -611,6 +615,24 @@ legend {
 	text-align: center;
 }
 
+
+/* Nav Pills
+-------------------------------------------------- */
+
+.nav-pills > li > a {
+    border-radius: 0;
+}
+
+
+.nav-pills > .active > a, .nav-pills > .active > a:hover {
+    background-color: #6adc7d;
+    background: none;
+    font-weight: bold;
+    color: #4d5456;
+}
+
+
+
 /* Nav Tabs
 -------------------------------------------------- */
 /*
@@ -759,6 +781,36 @@ i.myspace { background-position: -233px -51px; }
 
 
 .hallotoolbar{ display:none!important;}
+
+
+/* Messaging
+-------------------------------------------------- */
+
+.hero {
+	padding-top: 65px;
+	background: #4ad1e5; /* Old browsers */
+	height: auto;
+	padding-bottom: 55px;
+	color:white;
+	margin-bottom:40px;
+}
+.hero h1 {
+	font-size:44px;
+	line-height:60px;
+}
+.hero-thin {
+    padding-top: 2.3em;
+    padding-bottom: 2.2em;
+}
+
+#postman_menu a [class^="icon-"] {
+    margin-right: 4px;
+}
+
+#postman_menu .active a  [class^="icon-"] {
+    background-image: url('/static/bootstrap/img/glyphicons-halflings.png');
+}
+
 
 
 /* Basic responsive */
