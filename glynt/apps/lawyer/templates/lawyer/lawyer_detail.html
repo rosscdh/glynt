@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load account_tags lawyer_profile_tags jsonify thumbnail humanize cache %}
+{% extends 'base.html' %}{% load account_tags glynt_helpers lawyer_profile_tags jsonify thumbnail humanize cache %}
 {% block page_title %}{{ object.user.get_full_name|default:object.user.username }}{% endblock %}
 {% block bodyclass %}lawyer-profile{% endblock %}
 

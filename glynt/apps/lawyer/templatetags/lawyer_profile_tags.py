@@ -29,28 +29,3 @@ def simple_name_list(data_list):
         'object_list': data_list,
     }
     return context
-
-
-@register.filter(takes_context=False)
-def humanise_number(num):
-    if not isinstance(num, ( int, long )):
-        num = 0
-        logger.info('Value "num" passed to humanise_number must be a number is type: %s %s' % (type(num),num,))
-
-    magnitude = 0
-
-    while num >= 1000:
-        magnitude += 1
-        num /= 1000
-
-    humanised_num = '%s%s' % (num, ['', 'k', 'm', 'g', 't', 'p'][magnitude])
-    return humanised_num
-
-
-@register.filter
-def ensure_number(num):
-    if not isinstance(num, ( int, long )):
-        num = 0
-
-    ensure_number = num
-    return ensure_number

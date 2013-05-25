@@ -95,6 +95,31 @@ def comment_form(form, next):
     }
 
 
+@register.filter
+def ensure_number(num):
+    if not isinstance(num, ( int, long )):
+        num = 0
+
+    ensure_number = num
+    return ensure_number
+
+
+@register.filter(takes_context=False)
+def humanise_number(num):
+    if not isinstance(num, ( int, long )):
+        num = 0
+        logger.info('Value "num" passed to humanise_number must be a number is type: %s %s' % (type(num),num,))
+
+    magnitude = 0
+
+    while num >= 1000:
+        magnitude += 1
+        num /= 1000
+
+    humanised_num = '%s%s' % (num, ['', 'k', 'm', 'g', 't', 'p'][magnitude])
+    return humanised_num
+
+
 @register.inclusion_tag('pleasewait/loading.html')
 def show_loading(**kwargs):
     true_eval = (True, 'True')
