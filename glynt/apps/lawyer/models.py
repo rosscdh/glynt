@@ -107,7 +107,7 @@ class Lawyer(models.Model):
             locations.append(self.data.get('practice_location_1'))
         if self.data.get('practice_location_2', None) is not None:
             locations.append(self.data.get('practice_location_2'))
-        return locations
+        return [l.strip() for l in locations if l.strip() != '']
 
     @property
     def startups_advised(self):
