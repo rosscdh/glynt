@@ -8,17 +8,22 @@ import time
 
 register = template.Library()
 
+import logging
+logger = logging.getLogger('django.request')
+
 
 @register.simple_tag
 def current_date_format():
     return settings.DATE_FORMAT
 current_date_format.is_safe = True
 
+
 @register.simple_tag
 def navactive(request, urls):
     if request.path in ( reverse(url) for url in urls.split() ):
         return "active"
     return ""
+
 
 @register.simple_tag
 def current_site_domain():
