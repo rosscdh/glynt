@@ -2,7 +2,6 @@
 from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
 from django.views.generic import FormView
-from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 
@@ -54,14 +53,13 @@ class EngageWriteMessageView(FormView, AjaxableResponseMixin):
 
         if is_successful:
             msg = _("Message successfully sent.")
-            messages.success(self.request, msg, fail_silently=True)
             status = 200
         else:
             msg = _("Message could not be sent.")
-            messages.warning(self.request, msg, fail_silently=True)
             status = 500
 
-        return HttpResponse(msg, status=status, content_type='application/json')
+        return self.render_to_json_response({'message': unicode(msg), 'status': status})
 
     def form_invalid(self, form):
-        return HttpResponse('<br/>'.join(form.errors), status=500, content_type='application/json')
+        logger.error('EngageWriteMessageView.form_invalid %s' % ', '.join(form.errors))
+        return self.render_to_json_response({'message': '<br/>'.join(form.errors), 'status': 500})
