@@ -5,6 +5,9 @@ from django.utils import unittest
 from django.test.utils import override_settings
 from nose.tools import *
 
+import unittest
+
+from glynt.tests import TemplateRendererMixin
 from glynt.apps.factories import UserFactory, LoggedOutUserFactory
 
 from glynt.apps.default.templatetags.glynt_helpers import colorize_acronym,  \
@@ -111,3 +114,89 @@ class TestTemplateTag_Intercom(unittest.TestCase):
         assert 'name: "%s"' % intercom_result.get('user').get_full_name() in result
         assert 'email: "%s"' % intercom_result.get('user').email in result
         assert 'user_hash: "%s"' % intercom_result.get('intercomio_userhash') in result
+
+
+class TestHumaniseNumber(unittest.TestCase, TemplateRendererMixin):
+    def setUp(self):
+        self.expected_k_result = '500k'
+
+        self.context = {
+            'big_number': 500000,
+            'no_strings_allowed' : 'lawpal rulez',
+            'no_unicode_allowed' : u"\xc5",
+            'no_empty_strings_allowed' : '',
+            'no_neg_integers_allowed' : '-200000',
+            'no_floating_allowed' : '200.403424230'
+        }
+
+    @override_settings(PROJECT_ENVIRONMENT='test')
+    def test_humanise(self):
+        result = self.render_template(
+            '{% load glynt_helpers %}'
+            ,'{{ big_number|humanise_number }}'
+            , context=self.context
+        )
+
+        self.assertEqual(result, self.expected_k_result)
+
+    @override_settings(PROJECT_ENVIRONMENT='test')
+    def test_humanise_converts_strings_to_zero(self):
+        result = self.render_template(
+            '{% load glynt_helpers %}'
+            ,'{{ no_strings_allowed|humanise_number }}'
+            , context=self.context
+        )
+
+        self.assertEqual(result, '0')
+
+    def test_humanise_converts_unicode_to_zero(self):
+        result = self.render_template(
+            '{% load glynt_helpers %}'
+            ,'{{ no_unicode_allowed|humanise_number }}'
+            , context=self.context
+        )
+
+        self.assertEqual(result, '0')
+
+    def test_humanise_converts_empty_string_to_zero(self):
+        result = self.render_template(
+            '{% load glynt_helpers %}'
+            ,'{{ no_empty_strings_allowed|humanise_number }}'
+            , context=self.context
+        )
+
+        self.assertEqual(result, '0')
+
+    def test_humanise_converts_negative_integers_to_zero(self):
+        result = self.render_template(
+            '{% load glynt_helpers %}'
+            ,'{{ no_neg_integers_allowed|humanise_number }}'
+            , context=self.context
+        )
+
+        self.assertEqual(result, '0')
+
+    def test_humanise_converts_floating_to_zero(self):
+        result = self.render_template(
+            '{% load glynt_helpers %}'
+            ,'{{ no_floating_allowed|humanise_number }}'
+            , context=self.context
+        )
+
+        self.assertEqual(result, '0')
+
+
+class EnsureNumber(unittest.TestCase, TemplateRendererMixin):
+    def setUp(self):
+        self.context = {
+            'no_number': 'None',
+        }
+
+    def test_ensure_number_converts_string_to_zero(self):
+        result = self.render_template(
+            '{% load glynt_helpers %}'
+            ,'{{ no_number|ensure_number }}'
+            , context=self.context
+        )
+
+        self.assertEqual(result, '0')
