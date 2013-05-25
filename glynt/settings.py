@@ -243,6 +243,8 @@ HELPER_APPS = (
     'djcelery',
     # User switcher
     'debug_toolbar_user_panel',
+    # Vast array of Storage types
+    'storages',
 )
 
 # Handle south and its breaking tests
@@ -352,7 +354,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.user.update_user_details',
     'glynt.apps.graph.pipeline.ensure_user_setup',
     'glynt.apps.graph.pipeline.linkedin_profile_extra_details',
-    'glynt.apps.graph.pipeline.graph_user_connections',
+    # 'glynt.apps.graph.pipeline.graph_user_connections',
 )
 
 INTERCOM_API_SECRET = '-sjPyiyI5P44z3QsHLDUWfoLK8Rml7Wbg2wmj64L'
