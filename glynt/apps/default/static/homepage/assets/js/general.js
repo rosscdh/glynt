@@ -6,20 +6,19 @@ jQuery(window).load(function() {
 jQuery(document).ready(function() {
 
 
-    bgImageTotal=5;
+    bgImageTotal=1;
 
     randomNumber = Math.round(Math.random()*(bgImageTotal-1))+1;
 
     imgPath=('/static/homepage/assets/img/bg/landing'+randomNumber+'.jpg');
 
-    $('body').css('background-image', ('url("'+imgPath+'")'));
+    $('#hero').css('background-image', ('url("'+imgPath+'")'));
 
+    $('#hero').css({'height':(($(window).height())-182)+'px'});
 
-$('#data-statement').click(function() {
-	$('#data-statement-body').fadeToggle();	
-	$('#data-statement').toggle();	
-
-});
+    $(window).resize(function(){
+   		$('#hero').css({'height':(($(window).height())-182)+'px'});
+    });
 
 
 	// polyfill placeholder text

@@ -1,0 +1,102 @@
+body.homepage #hero {
+background: url(../../homepage/assets/img/bg/landing4.jpg) 0 0 no-repeat;
+background-size: cover;
+text-align: left;
+padding-bottom:0px;
+background-position: 0 -60px;
+margin-bottom:0px;
+position:relative;
+z-index: 5
+}
+body.homepage #hero h1 {
+margin: 0.25em 0 0 0;
+line-height: 0.8 !important;
+margin-top:38px;
+font-size:41px;
+}
+body.homepage #hero h3 {
+margin: 0 !important;
+padding: 0 !important;
+}
+body.homepage #hero .search {
+background-color:black 0.6;
+padding:90px 0px 35px 0px;
+width:100%;
+position:absolute;
+bottom:0;
+font-size:30px;
+line-height: 55px;
+color:#f0f0f0;
+/* http://www.colorzilla.com/gradient-editor/ */
+background: -moz-linear-gradient(top,  rgba(0,0,0,0) 0%, rgba(0,0,0,0.62) 36%, rgba(0,0,0,0.65) 38%, rgba(0,0,0,0.84) 61%, rgba(0,0,0,1) 81%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0)), color-stop(36%,rgba(0,0,0,0.62)), color-stop(38%,rgba(0,0,0,0.65)), color-stop(61%,rgba(0,0,0,0.84)), color-stop(81%,rgba(0,0,0,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.62) 36%,rgba(0,0,0,0.65) 38%,rgba(0,0,0,0.84) 61%,rgba(0,0,0,1) 81%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.62) 36%,rgba(0,0,0,0.65) 38%,rgba(0,0,0,0.84) 61%,rgba(0,0,0,1) 81%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.62) 36%,rgba(0,0,0,0.65) 38%,rgba(0,0,0,0.84) 61%,rgba(0,0,0,1) 81%); /* IE10+ */
+background: linear-gradient(to bottom,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.62) 36%,rgba(0,0,0,0.65) 38%,rgba(0,0,0,0.84) 61%,rgba(0,0,0,1) 81%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
+font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+font-weight: 300;
+}
+body.homepage #hero .search h1 {
+margin-bottom:13px;
+}
+body.homepage #hero .search input{
+background-color: rgba(0,0,0,0.2);
+font-size: 23px;
+color:white;
+border:none;
+border-bottom: 1px solid white;
+/*text-align: center;
+*/padding-bottom:5px;
+line-height:38px;
+font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+width:230px;
+padding:5px;
+font-weight:300;
+}
+body.homepage #hero .search .btn{
+font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+margin-top:10px;
+font-size:23px;
+margin-right:10px;
+font-weight: 450;
+padding:8px 13px;
+}
+body.homepage #learn-more h3{
+margin:0 auto;
+width:90px;
+height:65px;
+padding-top:25px;
+border-radius:100px;
+margin-top: -20px;
+background-color:#42d0e5;
+z-index: 6;
+color:white;
+font-size:18px;
+line-height: 20px;
+margin-bottom:20px;
+}
+body.homepage #learn-more h3, body.homepage #learn-more h3 a {
+text-align: center;
+color:white;
+}
+body.homepage .product-tour {
+padding-top:20px;
+}
+body.homepage .product-tour h2, body.homepage .product-tour h3 {
+text-align: center;
+}
+body.homepage .product-tour h2 {
+margin-bottom:0px;
+line-height:1em;
+font-size:40px;
+}
+body.homepage .product-tour h3 {
+color:#ccc;
+font-size:22px;
+line-height:1em;
+margin-bottom:20px;
+}
+
+

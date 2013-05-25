@@ -14,6 +14,6 @@ urlpatterns = patterns('',
 
     url(r'^welcome/$', login_required(TemplateView.as_view(template_name='lawyer/welcome.html')), name='welcome'),
     url(r'^(?P<slug>.+)/$', LawyerProfileView.as_view(), name='profile'),
-    url(r'^$', login_required(LawyerListView.as_view()), name='list'),
+    url(r'^$', LawyerListView.as_view(), name='list'),
 )
 
