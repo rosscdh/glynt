@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
-from neo4django.db import models
+from bulbs.model import Node, Relationship
+from bulbs.property import String, Integer, DateTime
+from bulbs.utils import current_datetime
 
+class Person(Node):
+    element_type = "person"
 
-class Person(models.NodeModel):
-    name = models.StringProperty()
-    is_lawyer = models.BooleanProperty(indexed=True)
+    linkedin = String(indexed=True)
 
-    contacts = models.Relationship('self', rel_type='connected_with')
+class Knows(Relationship):
+    label = "knows"
+
+    created = DateTime(default=current_datetime, nullable=False)

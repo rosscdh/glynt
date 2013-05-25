@@ -85,7 +85,6 @@ class GraphConnection(models.Model):
     PROVIDERS = get_namedtuple_choices('PROVIDERS', (
         (0,'linkedin','Linkedin'),
         (1,'angel','Angel'),
-      
     ))
     user = models.OneToOneField(User, null=True, blank=True)
     provider = models.IntegerField(choices=PROVIDERS.get_choices(), db_index=True)
