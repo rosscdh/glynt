@@ -44,6 +44,12 @@ def linkedin_profile_extra_details(backend, details, response, user=None, is_new
             })
             logger.info('Pipeline.linkedin.profile_photo details already had linkedin photo: %s' % profile.get('photo_url'))
 
+        if details.get('summary', None) is not None:
+            profile.update({
+                'bio': details.get('summary')
+            })
+            logger.info('Pipeline.linkedin.bio details already had linkedin summary-bio')
+
         if user is not None:
             auth = user.social_auth.get(provider='linkedin')
             access_token = auth.extra_data.get('access_token', None)
@@ -57,16 +63,26 @@ def linkedin_profile_extra_details(backend, details, response, user=None, is_new
                 service = LinkedinProfileService(uid=auth.uid, oauth_token=api_data.get('oauth_token')[0], \
                                                     oauth_token_secret=api_data.get('oauth_token_secret')[0])
                 profile = service.profile
+                # map linkedin field names to ours
+                bio = profile.get('summary',None)
+                profile['bio'] = bio
+
+                summary = profile.get('headline',None)
+                profile['summary'] = summary
 
             # logging info
             if not profile.get('photo_url'):
-                logger.info('Pipeline.linkedin.profile_photo user does not have linkedin photo: %s' % user)
+                logger.info('Pipeline.linkedin.photo_url user does not have linkedin photo: %s' % user)
             else:
-                logger.info('Pipeline.linkedin.profile_photo user %s has linkedin photo: %s' % (user, profile.get('photo_url')))
+                logger.info('Pipeline.linkedin.photo_url user %s has linkedin photo: %s' % (user, profile.get('photo_url')))
             if not profile.get('summary'):
                 logger.info('Pipeline.linkedin.summary user does not have linkedin headline: %s' % user)
             else:
-                logger.info('Pipeline.linkedin.profile_photo user %s has linkedin headline: %s' % (user, profile.get('headline')))
+                logger.info('Pipeline.linkedin.summary user %s has linkedin headline: %s' % (user, profile.get('headline')))
+            if not profile.get('bio'):
+                logger.info('Pipeline.linkedin.bio user does not have linkedin bio: %s' % user)
+            else:
+                logger.info('Pipeline.linkedin.bio user %s has linkedin bio: %s' % (user, profile.get('bio')))
 
             if profile.get('photo_url'):
                 client_profile.profile_data.update({
@@ -77,10 +93,23 @@ def linkedin_profile_extra_details(backend, details, response, user=None, is_new
             if profile.get('summary'):
                 # try to save the lawyer info
                 try:
-                    user.lawyer_profile.summary = summary
+                    user.lawyer_profile.summary = profile.get('summary')
                     user.lawyer_profile.save(update_fields['summary'])
                 except:
                     logger.error('Pipeline.linkedin.summary could not save lawyer profile summary: %s' % user)
+
+                client_profile.profile_data.update({
+                    'linkedin_headline': profile.get('summary')
+                })
+
+            # Update the user bio from the linkedin sumamry field
+            if profile.get('bio'):
+                # try to save the lawyer info
+                try:
+                    user.lawyer_profile.bio = profile.get('bio')
+                    user.lawyer_profile.save(update_fields['bio'])
+                except:
+                    logger.error('Pipeline.linkedin.bio could not save lawyer profile bio: %s' % user)
 
                 client_profile.profile_data.update({
                     'linkedin_headline': profile.get('summary')

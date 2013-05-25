@@ -325,7 +325,8 @@ LINKEDIN_EXTRA_DATA = [('id', 'id'),
                        ('last-name', 'last_name'),
                        ('email-address', 'email_address'),
                        ('headline', 'headline'),
-                       ('industry', 'industry')]
+                       ('industry', 'industry'),
+                       ('summary', 'summary')]
 
 
 ANGEL_CLIENT_ID = '00342c269e46c6059ab76013bb74ed44'
