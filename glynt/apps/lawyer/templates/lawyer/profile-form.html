@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load crispy_forms_tags invite_tags account_tags jsonify %}
+{% extends 'base.html' %}{% load crispy_forms_tags invite_tags account_tags jsonify glynt_helpers lawyer_profile_tags %}
 
 {% block page_title %}Complete your profile{% endblock %}
 {% block bodyclass %}lawyer-form{% endblock %}
@@ -636,7 +636,6 @@ $(document).ready(function(){
     ajax_lookup = function(url, filter, callback) {
         var object_list = []
         url = (filter === undefined)? url: url + '&' + filter;
-        console.log(url)
         $.ajax({
             type: 'GET',
             url: url,
@@ -756,7 +755,7 @@ $(document).ready(function(){
         var force = force || false
         var cookie_name = 'bar_membership_list-{{ user.pk }}';
         var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
-        console.log(bar_membership)
+
         bar_membership = bar_membership.compact(bar_membership, $('ol#bar-membership-list'), cookie_name, cookie_data, force)
         add_generic_list_element(bar_membership, $('ol#bar-membership-list'), $('#id_bar_membership'), cookie_name, cookie_data, force)
     }
@@ -837,8 +836,8 @@ $(document).ready(function(){
     $('#id_volume_ip').val('{{ lawyer.data.volume_ip }}');
     $('#id_volume_other').val('{{ lawyer.data.volume_other }}');
     $('#id_volume_by_year').val('{{ lawyer.data.volume_by_year|jsonify }}');
-    $('#id_seed_financing_amount_min').val('{{ lawyer.data.seed_financing_amount_min }}');
-    $('#id_seed_financing_amount_max').val('{{ lawyer.data.seed_financing_amount_max }}');
+    $('#id_seed_financing_amount_min').val('{{ lawyer.data.seed_financing_amount_min|ensure_number }}');
+    $('#id_seed_financing_amount_max').val('{{ lawyer.data.seed_financing_amount_max|ensure_number }}');
     if ('{{ lawyer.data.seed_fee_cap_available }}' === 'True') {
         $('#id_seed_fee_cap_available').prop('checked', true);
     }
@@ -848,8 +847,8 @@ $(document).ready(function(){
     if ('{{ lawyer.data.seed_fixed_fees_available }}' === 'True') {
         $('#id_seed_fixed_fees_available').prop('checked', true);
     }
-    $('#id_incorporation_min').val('{{ lawyer.data.incorporation_min }}');
-    $('#id_incorporation_max').val('{{ lawyer.data.incorporation_max }}');
+    $('#id_incorporation_min').val('{{ lawyer.data.incorporation_min|ensure_number }}');
+    $('#id_incorporation_max').val('{{ lawyer.data.incorporation_max|ensure_number }}');
     if ('{{ lawyer.data.inc_fee_cap_available }}' === 'True') {
         $('#id_inc_fee_cap_available').prop('checked', true);
     }
@@ -859,10 +858,11 @@ $(document).ready(function(){
     if ('{{ lawyer.data.inc_fixed_fees_available }}' === 'True') {
         $('#id_inc_fixed_fees_available').prop('checked', true);
     }
+    var optionalFunding = 0;
     if ('{{ lawyer.data.optional_funding }}' !== '') {
         $('#id_optional_funding').val('{{ lawyer.data.optional_funding }}');
-        $('#id_optional_min').val('{{ lawyer.data.optional_min }}');
-        $('#id_optional_max').val('{{ lawyer.data.optional_max }}');
+        $('#id_optional_min').val('{{ lawyer.data.optional_min|ensure_number }}');
+        $('#id_optional_max').val('{{ lawyer.data.optional_max|ensure_number }}');
         $('#custom-funding-type').removeClass('hidden');
         if ('{{ lawyer.data.optional_fee_cap_available }}' === 'True') {
             $('#id_optional_fee_cap_available').prop('checked', true);
@@ -873,11 +873,12 @@ $(document).ready(function(){
         if ('{{ lawyer.data.optional_fixed_fees_available }}' === 'True') {
             $('#id_optional_fixed_fees_available').prop('checked', true);
         }
+        optionalFunding++;
     }
     if ('{{ lawyer.data.optional_funding2 }}' !== '') {
         $('#id_optional_funding2').val('{{ lawyer.data.optional_funding2 }}');
-        $('#id_optional_min2').val('{{ lawyer.data.optional_min2 }}');
-        $('#id_optional_max2').val('{{ lawyer.data.optional_max2 }}');
+        $('#id_optional_min2').val('{{ lawyer.data.optional_min2|ensure_number }}');
+        $('#id_optional_max2').val('{{ lawyer.data.optional_max2|ensure_number }}');
         $('#custom-funding-type2').removeClass('hidden');
         if ('{{ lawyer.data.optional_fee_cap_available2 }}' === 'True') {
             $('#id_optional_fee_cap_available2').prop('checked', true);
@@ -888,11 +889,12 @@ $(document).ready(function(){
         if ('{{ lawyer.data.optional_fixed_fees_available2 }}' === 'True') {
             $('#id_optional_fixed_fees_available2').prop('checked', true);
         }
+        optionalFunding++;
     }
     if ('{{ lawyer.data.optional_funding3 }}' !== '') {
         $('#id_optional_funding3').val('{{ lawyer.data.optional_funding3 }}');
-        $('#id_optional_min3').val('{{ lawyer.data.optional_min3 }}');
-        $('#id_optional_max3').val('{{ lawyer.data.optional_max3 }}');
+        $('#id_optional_min3').val('{{ lawyer.data.optional_min3|ensure_number }}');
+        $('#id_optional_max3').val('{{ lawyer.data.optional_max3|ensure_number }}');
         $('#custom-funding-type3').removeClass('hidden');
         if ('{{ lawyer.data.optional_fee_cap_available3 }}' === 'True') {
             $('#id_optional_fee_cap_available3').prop('checked', true);
@@ -903,6 +905,10 @@ $(document).ready(function(){
         if ('{{ lawyer.data.optional_fixed_fees_available3 }}' === 'True') {
             $('#id_optional_fixed_fees_available3').prop('checked', true);
         }
+        optionalFunding++;
+    }
+    if (optionalFunding > 2) {
+        $('#add-custom-funding-type').remove();
     }
 
     /**
@@ -944,7 +950,7 @@ $(document).ready(function(){
         e.on('change', function(event){
             var e = $(this);
             var element_value = e.val();
-// console.log(element_value)
+
             var target_element = $('#id_' + e.attr('data-json_target'));
             var var_name = target_element.attr('id') + '_object'
             var volume_type = e.attr('data-volume_type');

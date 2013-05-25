@@ -7,7 +7,7 @@
         <a href="{% url 'lawyer:profile' slug=l.username %}"><img src="{{ l.profile_photo }}" class="partner-avatar" /></a>
     </div>
     <div class="span10"> 
-        <img src="http://local.weareml.com:8000/m/firm/orrick-bank-logo-1-500x316.jpg" class="partner-logo"> 
+        <!-- <img src="http://local.weareml.com:8000/m/firm/orrick-bank-logo-1-500x316.jpg" class="partner-logo">  -->
         <h2><a href="{% url 'lawyer:profile' slug=l.username %}">{{ l.full_name }}</a></h2>
         
         <h3>{{ l.object.summary }}</h3>

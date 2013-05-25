@@ -102,12 +102,13 @@ class LinkedinConnectionService(CollectConnectionBaseService):
 
 
 class LinkedinProfileService(LinkedinConnectionService):
-    url = 'http://api.linkedin.com/v1/people/%s?format=json'
+    url = 'https://api.linkedin.com/v1/people/%s?format=json'
     linkedin_user_profile = None
     def get_url(self):
         """ allow ability to specify the user to query 
         default is ~ or current logged in user """
-        return self.url % '%s:(picture-url,current-status,industry,summary)'%self.uid if self.uid else '~'
+        LINKEDIN_FIELDS = getattr(settings, 'LINKEDIN_EXTRA_FIELD_SELECTORS', ['picture-url','email-address','current-status','headline','industry','summary'])
+        return self.url % '%s:(%s)'%(self.uid if self.uid else '~', ','.join(LINKEDIN_FIELDS))
 
     @property
     def profile(self):
@@ -123,8 +124,42 @@ class LinkedinProfileService(LinkedinConnectionService):
                 'photo_url': p.get('pictureUrl', None),
                 'status': p.get('currentStatus', None),
                 'industry': p.get('industry', None),
-                'summary': p.get('summary', None),
+                'summary': p.get('headline', None),
+                'bio': p.get('summary', None),
 
+            }
+
+            photo_service = LinkedinProfilePhotoService(uid=self.uid, oauth_token=self.oauth_token, oauth_token_secret=self.oauth_token_secret)
+            photo = photo_service.profile
+            if photo.get('photo_url', None) is not None:
+                self.linkedin_user_profile.update(photo)
+
+        return self.linkedin_user_profile
+
+
+class LinkedinProfilePhotoService(LinkedinProfileService):
+    def get_url(self):
+        """ get the orignal image from linkedin """
+        return self.url % '%s/picture-urls::(original)'% self.uid if self.uid else '~'
+
+    @property
+    def profile(self):
+        if self.linkedin_user_profile is None:
+            try:
+                resp, content = self.request()
+                p = json.loads(content)
+            except:
+                p = {}
+
+            # parse the crzy linked in api
+            values = p.get('values', [])
+            try:
+                photo_url = values[0]
+            except IndexError:
+                photo_url = None
+
+            self.linkedin_user_profile = {
+                'photo_url': photo_url,
             }
         return self.linkedin_user_profile
 
