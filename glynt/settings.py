@@ -244,6 +244,8 @@ HELPER_APPS = (
     'djcelery',
     # User switcher
     'debug_toolbar_user_panel',
+    # Vast array of Storage types
+    'storages',
 )
 
 # Handle south and its breaking tests
@@ -320,13 +322,14 @@ FACEBOOK_REQUEST_PERMISSIONS = 'email,user_likes,user_about_me,read_stream'
 LINKEDIN_CONSUMER_KEY = '1uh2ns1cn9tm'
 LINKEDIN_CONSUMER_SECRET = 'MnrqdbtmM10gkz27'
 LINKEDIN_SCOPE = ['r_basicprofile', 'r_emailaddress', 'r_network']
-LINKEDIN_EXTRA_FIELD_SELECTORS = ['picture-url','email-address', 'headline', 'industry']
+LINKEDIN_EXTRA_FIELD_SELECTORS = ['picture-url','email-address','current-status','headline','industry','summary']
 LINKEDIN_EXTRA_DATA = [('id', 'id'),
                        ('first-name', 'first_name'),
                        ('last-name', 'last_name'),
                        ('email-address', 'email_address'),
                        ('headline', 'headline'),
-                       ('industry', 'industry')]
+                       ('industry', 'industry'),
+                       ('summary', 'summary')]
 
 
 ANGEL_CLIENT_ID = '00342c269e46c6059ab76013bb74ed44'
@@ -351,8 +354,8 @@ SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.social.load_extra_data',
     'social_auth.backends.pipeline.user.update_user_details',
     'glynt.apps.graph.pipeline.ensure_user_setup',
-    'glynt.apps.graph.pipeline.profile_photo',
-    'glynt.apps.graph.pipeline.graph_user_connections',
+    'glynt.apps.graph.pipeline.linkedin_profile_extra_details',
+    # 'glynt.apps.graph.pipeline.graph_user_connections',
 )
 
 INTERCOM_API_SECRET = '-sjPyiyI5P44z3QsHLDUWfoLK8Rml7Wbg2wmj64L'

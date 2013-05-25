@@ -78,7 +78,7 @@ USE_ELASTICSEARCH = True
 
 
 # Heroku - CloudAMQP
-BROKER_URL = 'amqp://gqhezwgc:1JylV9VKTXnlA9iuy9WFqIOqbl4yTmQa@tiger.cloudamqp.com/gqhezwgc'
+#BROKER_URL = 'amqp://gqhezwgc:1JylV9VKTXnlA9iuy9WFqIOqbl4yTmQa@tiger.cloudamqp.com/gqhezwgc'
 
 SPLUNKSTORM_ENDPOINT = 'logs2.splunkstorm.com'
 SPLUNKSTORM_PORT = 20824

@@ -81,35 +81,35 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
 
     volume_by_year = forms.CharField(required=False, widget=forms.HiddenInput)
 
-    seed_financing_amount_min = forms.IntegerField(required=False, label="Seed Financing Min", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini', 'title':'Seed financing minimum e.g. 500'}))
-    seed_financing_amount_max = forms.IntegerField(required=False, label="Seed Financing Max", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini', 'title':'Seed financing maximum e.g. 50000'}))
+    seed_financing_amount_min = forms.IntegerField(required=False, initial=0, label="Seed Financing Min", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-lessthanorequal':'#id_seed_financing_amount_max', 'data-lessthanorequal-message':'This value should be less than the "Seed Financing" max.', 'class':'input-mini', 'title':'Seed financing minimum e.g. 500'}))
+    seed_financing_amount_max = forms.IntegerField(required=False, initial=0, label="Seed Financing Max", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-morethanorequal':'#id_seed_financing_amount_min', 'data-morethanorequal-message':'This value should be more than the "Seed Financing" min.', 'class':'input-mini', 'title':'Seed financing maximum e.g. 50000'}))
     seed_fee_cap_available = forms.BooleanField(required=False, label='Fee cap available for this transaction?', widget=forms.CheckboxInput)
     seed_deferred_fees_available = forms.BooleanField(required=False, label='Deferred fees available for this transaction?', widget=forms.CheckboxInput)
     seed_fixed_fees_available = forms.BooleanField(required=False, label='Fixed fees available for this transaction?', widget=forms.CheckboxInput)
 
-    incorporation_min = forms.IntegerField(required=False, label="Incorporation Min", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini','title':'Incorporation minimum e.g. 500'}))
-    incorporation_max = forms.IntegerField(required=False, label="Incorporation Max", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini','title':'Incorporation maximum e.g. 50000'}))
+    incorporation_min = forms.IntegerField(required=False, initial=0, label="Incorporation Min", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-lessthanorequal':'#id_incorporation_max', 'data-lessthanorequal-message':'This value should be less than the "Incorporation" max.', 'class':'input-mini','title':'Incorporation minimum e.g. 500'}))
+    incorporation_max = forms.IntegerField(required=False, initial=0, label="Incorporation Max", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-morethanorequal':'#id_incorporation_min', 'data-morethanorequal-message':'This value should be more than the "Incorporation" min.', 'class':'input-mini','title':'Incorporation maximum e.g. 50000'}))
     inc_fee_cap_available = forms.BooleanField(required=False, label='Fee cap available for this transaction?', widget=forms.CheckboxInput)
     inc_deferred_fees_available = forms.BooleanField(required=False, label='Deferred fees available for this transaction?', widget=forms.CheckboxInput)
     inc_fixed_fees_available = forms.BooleanField(required=False, label='Fixed fees available for this transaction?', widget=forms.CheckboxInput)
 
     optional_funding = forms.CharField(required=False, help_text="", widget=forms.TextInput(attrs={'placeholder':'Funding type','class':'inline-form-element'}))
-    optional_min = forms.IntegerField(required=False, label="Optional Min", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini','title':'minimum e.g. 500'}))
-    optional_max = forms.IntegerField(required=False, label="Optional Max", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini','title':'maximum e.g. 50000'}))
+    optional_min = forms.IntegerField(required=False, initial=0, label="Optional Min", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-lessthanorequal':'#id_optional_max', 'data-lessthanorequal-message':'This value should be less than the max.', 'class':'input-mini','title':'minimum e.g. 500'}))
+    optional_max = forms.IntegerField(required=False, initial=0, label="Optional Max", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-morethanorequal':'#id_optional_min', 'data-morethanorequal-message':'This value should be more than the min.', 'class':'input-mini','title':'maximum e.g. 50000'}))
     optional_fee_cap_available = forms.BooleanField(required=False, label='Fee cap available for this transaction?', widget=forms.CheckboxInput)
     optional_deferred_fees_available = forms.BooleanField(required=False, label='Deferred fees available for this transaction?', widget=forms.CheckboxInput)
     optional_fixed_fees_available = forms.BooleanField(required=False, label='Fixed fees available for this transaction?', widget=forms.CheckboxInput)
 
     optional_funding2 = forms.CharField(required=False, help_text="", widget=forms.TextInput(attrs={'placeholder':'Funding type','class':'inline-form-element'}))
-    optional_min2 = forms.IntegerField(required=False, label="Optional Min", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini','title':'minimum e.g. 500'}))
-    optional_max2 = forms.IntegerField(required=False, label="Optional Max", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini','title':'maximum e.g. 50000'}))
+    optional_min2 = forms.IntegerField(required=False, initial=0, label="Optional Min", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-lessthanorequal':'#id_optional_max2', 'data-lessthanorequal-message':'This value should be less than the max.', 'class':'input-mini','title':'minimum e.g. 500'}))
+    optional_max2 = forms.IntegerField(required=False, initial=0, label="Optional Max", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-morethanorequal':'#id_optional_min2', 'data-morethanorequal-message':'This value should be more than the min.', 'class':'input-mini','title':'maximum e.g. 50000'}))
     optional_fee_cap_available2 = forms.BooleanField(required=False, label='Fee cap available for this transaction?', widget=forms.CheckboxInput)
     optional_deferred_fees_available2 = forms.BooleanField(required=False, label='Deferred fees available for this transaction?', widget=forms.CheckboxInput)
     optional_fixed_fees_available2 = forms.BooleanField(required=False, label='Fixed fees available for this transaction?', widget=forms.CheckboxInput)
 
     optional_funding3 = forms.CharField(required=False, help_text="", widget=forms.TextInput(attrs={'placeholder':'Funding type','class':'inline-form-element'}))
-    optional_min3 = forms.IntegerField(required=False, label="Optional Min", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini','title':'minimum e.g. 500'}))
-    optional_max3 = forms.IntegerField(required=False, label="Optional Max", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-mini','title':'maximum e.g. 50000'}))
+    optional_min3 = forms.IntegerField(required=False, initial=0, label="Optional Min", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-lessthanorequal':'#id_optional_max3', 'data-lessthanorequal-message':'This value should be less than the max.', 'class':'input-mini','title':'minimum e.g. 500'}))
+    optional_max3 = forms.IntegerField(required=False, initial=0, label="Optional Max", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-morethanorequal':'#id_optional_min3', 'data-morethanorequal-message':'This value should be more than the min.', 'class':'input-mini','title':'maximum e.g. 50000'}))
     optional_fee_cap_available3 = forms.BooleanField(required=False, label='Fee cap available for this transaction?', widget=forms.CheckboxInput)
     optional_deferred_fees_available3 = forms.BooleanField(required=False, label='Deferred fees available for this transaction?', widget=forms.CheckboxInput)
     optional_fixed_fees_available3 = forms.BooleanField(required=False, label='Fixed fees available for this transaction?', widget=forms.CheckboxInput)
@@ -148,6 +148,21 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     def clean_hidden_photo(self):
         hidden_photo = self.cleaned_data.get('hidden_photo', None)
         return int(hidden_photo) if hidden_photo else None
+
+    def clean(self):
+        cleaned_data = super(LawyerProfileSetupForm, self).clean()
+        msg = 'Sorry but the minimum amount needs to be lower than the maximum'
+        min_max_li = [('seed_financing_amount_min', 'seed_financing_amount_max'), ('incorporation_min', 'incorporation_max'), ('optional_min', 'optional_max'), ('optional_min2', 'optional_max2'), ('optional_min3', 'optional_max3')]
+
+        for min, max in min_max_li:
+            min = cleaned_data.get(min)
+            max = cleaned_data.get(max)
+
+            if min > max:
+                logging.error(msg)
+                raise exceptions.ValidationError(msg)
+
+        return cleaned_data
 
     def delete_cookie(self, cookie_name):
         if self.request.COOKIES.get(cookie_name, None) is not None:

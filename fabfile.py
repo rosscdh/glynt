@@ -21,58 +21,6 @@ env.timestamp = time.time()
 env.is_predeploy = False
 env.local_user = getpass.getuser()
 
-
-@task
-def prod_celery():
-    env.project = 'glynt'
-    env.environment = 'production'
-    env.environment_class = 'celery'
-
-    env.remote_project_path = '/var/apps/lawpal/'
-    env.deploy_archive_path = '/var/apps/'
-    env.virtualenv_path = '/var/apps/.lawpal-live-venv/'
-
-    env.newrelic_api_token = None
-    env.newrelic_app_name = None
-    env.newrelic_application_id = None
-
-    # change from the default user to 'vagrant'
-    env.user = 'ubuntu'
-    env.application_user = 'app'
-    # connect to the port-forwarded ssh
-    env.hosts = ['ec2-54-241-224-100.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
-    env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
-
-    env.start_service = None
-    env.stop_service = None
-    env.light_restart = None
-
-@task
-def preview_celery():
-    env.project = 'glynt'
-    env.environment = 'preview'
-    env.environment_class = 'celery'
-
-    env.remote_project_path = '/var/apps/preview-lawpal/'
-    env.deploy_archive_path = '/var/apps/'
-    env.virtualenv_path = '/var/apps/.lawpal-preview-venv/'
-
-    env.newrelic_api_token = None
-    env.newrelic_app_name = None
-    env.newrelic_application_id = None
-
-    # change from the default user to 'vagrant'
-    env.user = 'ubuntu'
-    env.application_user = 'app'
-    # connect to the port-forwarded ssh
-    env.hosts = ['ec2-54-241-224-100.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
-    env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
-
-    env.start_service = None
-    env.stop_service = None
-    env.light_restart = None
-
-
 @task
 def prod_db():
     env.project = 'glynt'
@@ -98,7 +46,6 @@ def prod_db():
     env.stop_service = None
     env.light_restart = None
 
-
 @task
 def production():
     env.project = 'glynt'
@@ -118,6 +65,7 @@ def production():
     env.application_user = 'app'
     # connect to the port-forwarded ssh
     env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com', 'ec2-54-241-224-100.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
+    env.db_host = env.hosts[0]
 
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
 
@@ -144,6 +92,7 @@ def preview():
     env.application_user = 'app'
     # connect to the port-forwarded ssh
     env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com', 'ec2-54-241-224-100.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
+    env.db_host = env.hosts[0]
 
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
 
@@ -171,12 +120,13 @@ def staging():
 
     # connect to the port-forwarded ssh
     env.hosts = ['stard0g101.webfactional.com']
+    env.db_host = env.hosts[0]
+
     env.key_filename = None
 
     env.start_service = '%sapache2/bin/start' % env.remote_project_path
     env.stop_service = '%sapache2/bin/stop' % env.remote_project_path
     env.light_restart = None
-
 
 @task
 def virtualenv(cmd, **kwargs):
@@ -187,6 +137,10 @@ def virtualenv(cmd, **kwargs):
         run("source %sbin/activate && %s" % (env.virtualenv_path, cmd,), **kwargs)
     else:
         sudo("source %sbin/activate && %s" % (env.virtualenv_path, cmd,), user=env.application_user, **kwargs)
+
+@task
+def pip_install():
+    virtualenv('pip install simplejson==3.2.0 --upgrade')
 
 @task
 def clear_cache():
@@ -232,28 +186,46 @@ def celery_restart():
 @task
 def celery_start(loglevel='info'):
     pid_path = "%sceleryd.pid" % env.remote_project_path
-    if files.exists(pid_path):
-        execute(celery_stop)
-    virtualenv('python %s%s/manage.py celeryd_detach worker --loglevel=%s --pidfile=%s' % (env.remote_project_path, env.project, loglevel, pid_path,), warn_only=True)
+    with settings(warn_only=True): # only warning as we will often have errors importing
+        if files.exists(pid_path):
+            execute(celery_stop)
+        virtualenv('python %s%s/manage.py celeryd_detach worker --loglevel=%s --pidfile=%s' % (env.remote_project_path, env.project, loglevel, pid_path,), warn_only=True)
 
 @task
 def celery_stop():
-    pid_path = "%sceleryd.pid" % env.remote_project_path
-    sudo("cat %s | xargs kill -9" % pid_path, user=env.application_user, warn_only=True, shell=False)
-    # if files.exists(pid_path):
-    #     sudo("rm %s" % pid_path , shell=False, warn_only=True)
+    with settings(warn_only=True): # only warning as we will often have errors importing
+        pid_path = "%sceleryd.pid" % env.remote_project_path
+        sudo("cat %s | xargs kill -9" % pid_path, user=env.application_user, warn_only=True, shell=False)
+        # if files.exists(pid_path):
+        #     sudo("rm %s" % pid_path , shell=False, warn_only=True)
 
 @task
 def prepare_deploy():
     git_export()
 
 @task
+def update_index():
+    with settings(host_string=env.db_host):
+        #for i in ['default lawyer', 'firms firm']:
+        for i in ['default lawyer',]:
+            virtualenv('python %s%s/manage.py update_index -a 100000 -u %s' % (env.remote_project_path, env.project, i))
+
+@task
+def rebuild_index():
+    with settings(host_string=env.db_host):
+        #for i in ['default lawyer', 'firms firm']:
+        for i in ['default lawyer',]:
+            virtualenv('python %s%s/manage.py rebuild_index --noinput' % (env.remote_project_path, env.project,))
+
+@task
 def migrate():
-    virtualenv('python %s%s/manage.py migrate' % (env.remote_project_path, env.project))
+    with settings(host_string=env.db_host):
+        virtualenv('python %s%s/manage.py migrate' % (env.remote_project_path, env.project))
 
 @task
 def syncdb():
-    virtualenv('python %s%s/manage.py syncdb' % (env.remote_project_path, env.project))
+    with settings(host_string=env.db_host):
+        virtualenv('python %s%s/manage.py syncdb' % (env.remote_project_path, env.project))
 
 @task
 def clean_versions():
@@ -294,6 +266,17 @@ def restart_service(heavy_handed=False):
 
 # ------ END-RESTARTERS ------#
 
+# ------ SOURCE-VALIDATION ------#
+@task
+def mispelling():
+    words = ['of council', 'teh']
+    output = []
+    for w in words:
+        grp = local('cd %s;git grep "%s"' % (env.local_project_path, w,), capture=True)
+        output.append(grp)
+    print output
+
+# ------ END-SOURCE-VALIDATION ------#
 @task
 def chores():
     sudo('aptitude --assume-yes install build-essential python-setuptools python-dev apache2-utils uwsgi-plugin-python libjpeg8 libjpeg62-dev libfreetype6 libfreetype6-dev easy_install nmap htop vim unzip')
@@ -466,23 +449,32 @@ def conclude():
     execute(newrelic_deploynote)
 
 @task
-def deploy(is_predeploy='False',full=False,db=False):
+def deploy(is_predeploy='False',full='False',db='False',search='False'):
     """
     :is_predeploy=True - will deploy the latest MASTER SHA but not link it in: this allows for assets collection
     and requirements update etc...
     """
-
-    env.is_predeploy = True if is_predeploy.lower() in ['true','t','y','yes','1',1] else False
+    true_list = ['true','t','y','yes','1',1]
+    env.is_predeploy = True if is_predeploy.lower() in true_list else False
+    full = True if full.lower() in true_list else False
+    db = True if db.lower() in true_list else False
+    search = True if search.lower() in true_list else False
 
     execute(newrelic_note)
     prepare_deploy()
     execute(do_deploy)
     execute(update_env_conf)
+    execute(celery_stop)
     if full:
         execute(requirements)
     if full or db:
         execute(syncdb)
         execute(migrate)
+    if full or search:
+        execute(update_index)
     execute(relink)
+    if full:
+        execute(assets)
     execute(clean_start)
+    execute(celery_start)
 
