@@ -31,7 +31,7 @@ def simple_name_list(data_list):
     return context
 
 
-@register.simple_tag
+@register.filter(takes_context=False)
 def humanise_number(num):
     if not isinstance(num, ( int, long )):
         num = 0

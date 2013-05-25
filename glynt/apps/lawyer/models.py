@@ -17,6 +17,11 @@ class Lawyer(models.Model):
     Stores sundry information about legal Firms
     LAWYER_ROLES: discussed and was very sure that lawyers only have 1 role
     and are never part of more than 1 firm
+
+    Note: we make use of __getattr__ to access data stored in the local JSONField
+    i.e. just refer to it. lawyer_object.my_obtuse_variable
+    If you require a specific sort of default ie.. not None
+    then write a custom getter
     """
     LAWYER_ROLES = get_namedtuple_choices('LAWYER_ROLES', (
         (13, 'managing_partner', 'Managing Partner'),
@@ -39,6 +44,13 @@ class Lawyer(models.Model):
 
     def __unicode__(self):
         return u'%s (%s)' % (self.user.username, self.user.email,)
+
+    def __getattr__(self, attr_name):
+        """ leverage python to get the attr if its not already part of the model structure
+        getatt is only called at 'finally' once all other lookup types have failed """
+        if attr_name not in self.data:
+            raise AttributeError, attr_name
+        return self.data.get(attr_name, None) 
 
     @property
     def primary_firm(self):
@@ -82,6 +94,10 @@ class Lawyer(models.Model):
         return self.user.last_login
 
     @property
+    def phone(self):
+        return self.data.get('phone')
+
+    @property
     def search_locations(self):
         return ', '.join(self.practice_locations())
 
@@ -91,7 +107,7 @@ class Lawyer(models.Model):
             locations.append(self.data.get('practice_location_1'))
         if self.data.get('practice_location_2', None) is not None:
             locations.append(self.data.get('practice_location_2'))
-        return locations
+        return [l.strip() for l in locations if l.strip() != '']
 
     @property
     def startups_advised(self):
@@ -103,10 +119,6 @@ class Lawyer(models.Model):
     @property
     def total_deals(self):
         return self.data.get('volume_incorp_setup', 0)
-            
-    @property
-    def phone(self):
-        return u'%s' % self.data.get('phone', None)
 
     @property
     def years_practiced(self):
@@ -114,104 +126,4 @@ class Lawyer(models.Model):
 
     @property
     def geo_loc(self):
-        return self.data.get('current_geo_loc', None)
-
-    @property
-    def twitter(self):
-        return u'%s' % self.data.get('twitter', None)
-
-    @property
-    def angel_list(self):
-        return u'%s' % self.data.get('angel_list', None)
-
-    @property
-    def website(self):
-        return u'%s' % self.data.get('website', None)
-
-    @property
-    def seed_financing_amount_min(self):
-        return u'%s' % self.data.get('seed_financing_amount_min', None)
-
-    @property
-    def seed_financing_amount_max(self):
-        return u'%s' % self.data.get('seed_financing_amount_max', None)
-
-    @property
-    def seed_fee_cap_available(self):
-        return u'%s' % self.data.get('seed_fee_cap_available', None)
-
-    @property
-    def seed_deferred_fees_available(self):
-        return u'%s' % self.data.get('seed_deferred_fees_available', None)
-
-    @property
-    def seed_fixed_fees_available(self):
-        return u'%s' % self.data.get('seed_fixed_fees_available', None)
-
-    @property
-    def incorporation_min(self):
-        return u'%s' % self.data.get('seed_financing_amount_min', None)
-
-    @property
-    def incorporation_max(self):
-        return u'%s' % self.data.get('seed_financing_amount_max', None)
-
-    @property
-    def inc_fee_cap_available(self):
-        return u'%s' % self.data.get('inc_fee_cap_available', None)
-
-    @property
-    def inc_deferred_fees_available(self):
-        return u'%s' % self.data.get('inc_deferred_fees_available', None)
-
-    @property
-    def inc_fixed_fees_available(self):
-        return u'%s' % self.data.get('inc_fixed_fees_available', None)
-
-    @property
-    def optional_funding(self):
-        return u'%s' % self.data.get('optional_funding', None)
-
-    @property
-    def optional_min(self):
-        return u'%s' % self.data.get('optional_min', None)
-
-    @property
-    def optional_max(self):
-        return u'%s' % self.data.get('optional_max', None)
-
-    @property
-    def optional_fee_cap_available(self):
-        return u'%s' % self.data.get('optional_fee_cap_available', None)
-
-    @property
-    def optional_deferred_fees_available(self):
-        return u'%s' % self.data.get('optional_deferred_fees_available', None)
-
-    @property
-    def optional_fixed_fees_available(self):
-        return u'%s' % self.data.get('optional_fixed_fees_available', None)
-
-    @property
-    def optional_funding2(self):
-        return u'%s' % self.data.get('optional_funding2', None)
-
-    @property
-    def optional_min2(self):
-        return u'%s' % self.data.get('optional_min2', None)
-
-    @property
-    def optional_max2(self):
-        return u'%s' % self.data.get('optional_max2', None)
-
-    @property
-    def optional_fee_cap_available2(self):
-        return u'%s' % self.data.get('optional_fee_cap_available2', None)
-
-    @property
-    def optional_deferred_fees_available2(self):
-        return u'%s' % self.data.get('optional_deferred_fees_available2', None)
-
-    @property
-    def optional_fixed_fees_available2(self):
-        return u'%s' % self.data.get('optional_fixed_fees_available2', None)
+        return self.data.get('current_geo_loc')
