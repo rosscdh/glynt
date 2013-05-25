@@ -159,13 +159,13 @@ def get_sha1():
   return local('git rev-parse --short --verify HEAD', capture=True)
 
 @task
-def db_backup(db='lawpal_prelaunch'):
+def db_backup(db='lawpal_production'):
     db_backup_name = '%s.bak' % db
     sudo('pg_dump --no-owner --no-acl -Fc %s > /tmp/%s' % (db, db_backup_name,), user='postgres')
     local('scp -i %s %s@%s:/tmp/%s /tmp/' % (env.key_filename, env.user, env.host, db_backup_name,))
 
 @task
-def db_local_restore(db='lawpal_prelaunch'):
+def db_local_restore(db='lawpal_production'):
     with settings(warn_only=True): # only warning as we will often have errors importing
         db_backup_name = '%s.bak' % db
         local('echo "DROP DATABASE %s;" | psql -h localhost -U %s' % (db, env.local_user,))
