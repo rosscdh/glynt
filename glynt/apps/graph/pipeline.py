@@ -85,28 +85,30 @@ def linkedin_profile_extra_details(backend, details, response, user=None, is_new
 
             # Update the user summary and if a lawyer save as sumamry
             if profile.get('summary'):
-                # try to save the lawyer info
-                try:
-                    user.lawyer_profile.summary = profile.get('summary')
-                    user.lawyer_profile.save(update_fields=['summary'])
-                except:
-                    logger.error('Pipeline.linkedin.summary could not save lawyer profile summary: %s' % user)
+                if not user.lawyer_profile.summary:
+                    # try to save the lawyer info
+                    try:
+                        user.lawyer_profile.summary = profile.get('summary')
+                        user.lawyer_profile.save(update_fields=['summary'])
+                    except:
+                        logger.error('Pipeline.linkedin.summary could not save lawyer profile summary: %s' % user)
 
                 client_profile.profile_data.update({
-                    'linkedin_headline': profile.get('summary')
+                    'linkedin_summary': profile.get('summary')
                 })
 
             # Update the user bio from the linkedin sumamry field
             if profile.get('bio'):
-                # try to save the lawyer info
-                try:
-                    user.lawyer_profile.bio = profile.get('bio')
-                    user.lawyer_profile.save(update_fields=['bio'])
-                except:
-                    logger.error('Pipeline.linkedin.bio could not save lawyer profile bio: %s' % user)
+                if not user.lawyer_profile.bio:
+                    # try to save the lawyer info
+                    try:
+                        user.lawyer_profile.bio = profile.get('bio')
+                        user.lawyer_profile.save(update_fields=['bio'])
+                    except:
+                        logger.error('Pipeline.linkedin.bio could not save lawyer profile bio: %s' % user)
 
                 client_profile.profile_data.update({
-                    'linkedin_headline': profile.get('summary')
+                    'linkedin_bio': profile.get('bio')
                 })
 
             # save all updated fields
