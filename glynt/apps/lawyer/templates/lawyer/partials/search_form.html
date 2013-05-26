@@ -1,0 +1,124 @@
+{% load url from future %}{% load crispy_forms_tags %}
+<form id="lawyer-list-form" data-validate="parsley" action="{% url 'lawyer:list' %}" method="GET" class="form-inline">{% csrf_token %}
+    We need a lawyer in {{ form.location|as_crispy_field }} <span id="rotate"></span> {{ form.q|as_crispy_field }}
+    <span class="rotate" data-value="Incorporation, Seed fina..">for</span>
+    <span class="rotate" data-value="any type of startup law">that does</span>
+    <span class="rotate" data-value="law firm name">that works at</span>
+    <span class="rotate" data-value="in their history">who has</span>
+    <br />
+    <br />
+    <button class="btn btn-large submit" type="submit" id="lawyer-list-filter">Show Lawyers</button>
+</form>
+<script id="controls-search">
+
+$(document).ready(function(){
+
+    $('form#lawyer-list-form input').live('click', function(event){
+        $(this).select()
+    });
+    $('button#lawyer-list-filter').live('click', function(event){
+        event.preventDefault();
+        var form = $( 'form#lawyer-list-form' );
+
+        if (form.parsley( 'validate' )) {
+            params = {}
+            // remove items with no value
+            $.each({
+                'q': encodeURIComponent($('#id_q').val())
+                ,'location': encodeURIComponent($('#id_location').val())
+            }, function(k,val){
+                //if (val != '') {
+                    params[k] = val;
+                //}
+            });
+
+            document.location = form.attr('action') + '?{params}'.assign({'params': $.param(params) });
+        }
+    });
+
+
+    /**
+    * Dynamic selector functions based on form api urls
+    * @TODO unify this with profile form
+    */
+    ajax_lookup = function(url, filter, callback) {
+        var object_list = []
+        url = (filter === undefined)? url: url + '&' + filter;
+        console.log(url)
+        $.ajax({
+            type: 'GET',
+            url: url,
+            data: null,
+            beforeSend: function(jqXHR, settings) {
+                // Pull the token out of the DOM.
+                jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+            },
+            success: function(data, textStatus, jqXHR){
+                $.each(data.objects, function(i,item){
+                    object_list.push(item.name)
+                })
+                // call the calling callback.. javascript
+                callback(object_list);
+            },
+            error: function(data, textStatus, jqXHR){
+                console.log(jqXHR)
+                console.log(textStatus)
+            }
+        });
+    }
+
+    /**
+    * handle typeahead requests
+    */
+    $.each($('[data-provide=ajax]'), function(i, element) {
+        var e = $(element);
+
+        e.typeahead({
+            source: function(query, process_callback) {
+                var provide = e.attr('data-provide');
+                var url = e.attr('data-source');
+                var filter = e.attr('data-filter');
+                filter = (filter === undefined)? filter : filter + '=' + query ;
+                ajax_lookup(url, filter, process_callback);
+            }
+            ,limit: 15
+        });
+    });
+
+    /**
+    * term rotator - for lawyer search form
+    * @TODO turn into object
+    */
+    $('form#lawyer-list-form').delegate(':input', 'blur', function(event){
+        //console.log('start')
+        window.startRotator();
+    });
+    $('form#lawyer-list-form').delegate(':input', 'focus', function(event){
+        //console.log('stop')
+        window.stopRotator();
+    });
+    pauseRotator = false;
+    startRotator = function startRotator() {
+        pauseRotator = false;
+        $(termRotator);
+    }
+    stopRotator = function stopRotator() {
+        pauseRotator = true;
+        $("#rotate").clearQueue();
+    }
+    var termRotator = function termRotator() {
+        var ct = $("#rotate").data("term") || 0;
+        var terms = $('span.rotate');
+        var placeholder = $(terms[ct]).attr('data-value')
+        if (pauseRotator === true) {
+            $("#rotate").data("term", 0).text($(terms[ct]).text()).show();
+            return;
+        }
+        $("#rotate").data("term", ct == terms.length -1 ? 0 : ct + 1).text($(terms[ct]).text()).fadeIn().delay(2000).fadeOut(200, termRotator);
+        if (placeholder) {
+            $("#id_q").attr('placeholder', placeholder)
+        }
+    }
+    $(termRotator);
+});
+</script>
