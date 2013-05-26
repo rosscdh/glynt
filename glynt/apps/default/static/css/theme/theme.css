@@ -581,9 +581,62 @@ table.table td {
 	line-height:30px;	
 }
 
+/* Signin Modal
+-------------------------------------------------- */
+#signin-modal {
+	background-color: transparent;
+	outline-width: 0px;
+	border-radius: 0px;
+}
+#signin-modal .startup, #signin-modal .lawyer {
+	color:white;
+	padding:20px 30px 30px 30px;
+}
+#signin-modal .startup div, #signin-modal .lawyer div {
+	background: url('/static/img/coffee-tie.png');
+	width:70px;
+	height:105px;
+	margin:0 auto;
+	margin-bottom: 10px;
+}
+#signin-modal .lawyer div {
+	background-position: 0px -105px;
+}
+#signin-modal .startup {
+	width:210px;
+	background-color:#f88172;
+	float:left;
+	text-align: center;
+}
+#signin-modal .startup .btn {
+	background-color:#f56b5e;
+	margin-top:7px;
+	padding:3px 14px 3px 8px;
+}
+#signin-modal .lawyer {
+	width:210px;
+	float:right;
+	background-color:#00d4ea;
+	text-align: center;
+}
+#signin-modal .lawyer .btn {
+	background-color:#03c2d6;
+	margin-top:7px;
+	padding:3px 14px 3px 8px;
+}
+
 /* Btn
 -------------------------------------------------- */
 
+.btn-blue {
+	background-color: #00d4e9;
+	color:white;
+
+}
+.btn-blue:hover {
+	background-color: #11b2c2;
+	color: white;
+}
 .btn-red {
 	background-color:#f7877c;
 	border:1px solid #e76356;
