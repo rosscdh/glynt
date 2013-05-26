@@ -159,13 +159,13 @@ def get_sha1():
   return local('git rev-parse --short --verify HEAD', capture=True)
 
 @task
-def db_backup(db='lawpal_prelaunch'):
+def db_backup(db='lawpal_production'):
     db_backup_name = '%s.bak' % db
     sudo('pg_dump --no-owner --no-acl -Fc %s > /tmp/%s' % (db, db_backup_name,), user='postgres')
     local('scp -i %s %s@%s:/tmp/%s /tmp/' % (env.key_filename, env.user, env.host, db_backup_name,))
 
 @task
-def db_local_restore(db='lawpal_prelaunch'):
+def db_local_restore(db='lawpal_production'):
     with settings(warn_only=True): # only warning as we will often have errors importing
         db_backup_name = '%s.bak' % db
         local('echo "DROP DATABASE %s;" | psql -h localhost -U %s' % (db, env.local_user,))
@@ -180,15 +180,15 @@ def git_export(branch='master'):
 
 @task
 def celery_restart():
-    execute(celery_stop)
-    execute(celery_start)
+    celery_stop()
+    celery_start()
 
 @task
 def celery_start(loglevel='info'):
     pid_path = "%sceleryd.pid" % env.remote_project_path
     with settings(warn_only=True): # only warning as we will often have errors importing
         if files.exists(pid_path):
-            execute(celery_stop)
+            celery_stop()
         virtualenv('python %s%s/manage.py celeryd_detach worker --loglevel=%s --pidfile=%s' % (env.remote_project_path, env.project, loglevel, pid_path,), warn_only=True)
 
 @task
@@ -242,7 +242,7 @@ def clean_versions():
 def supervisord_restart():
     with settings(warn_only=True):
         if env.environment_class is 'webfaction':
-            execute(restart_service)
+            restart_service()
         else:
             sudo('supervisorctl restart uwsgi')
 
@@ -256,13 +256,13 @@ def restart_service(heavy_handed=False):
     with settings(warn_only=True):
         if env.environment_class not in ['celery']: # dont restart celery nginx services
             if env.environment_class == 'webfaction':
-                execute(stop_service)
-                execute(start_service)
+                stop_service()
+                start_service()
             else:
                 if not heavy_handed:
-                    execute(restart_lite)
+                    restart_lite()
                 else:
-                    execute(supervisord_restart)
+                    supervisord_restart()
 
 # ------ END-RESTARTERS ------#
 
@@ -328,11 +328,11 @@ def relink():
 
 @task
 def clean_start():
-    execute(clean_pyc)
-    execute(clear_cache)
-    execute(restart_service)
+    clean_pyc()
+    clear_cache()
+    restart_service()
 
-    execute(clean_zip)
+    clean_zip()
 
 
 def do_deploy():
@@ -446,7 +446,7 @@ def newrelic_deploynote():
 
 @task
 def conclude():
-    execute(newrelic_deploynote)
+    newrelic_deploynote()
 
 @task
 def deploy(is_predeploy='False',full='False',db='False',search='False'):
@@ -460,21 +460,22 @@ def deploy(is_predeploy='False',full='False',db='False',search='False'):
     db = True if db.lower() in true_list else False
     search = True if search.lower() in true_list else False
 
-    execute(newrelic_note)
+    newrelic_note()
     prepare_deploy()
-    execute(do_deploy)
-    execute(update_env_conf)
-    execute(celery_stop)
+    do_deploy()
+    update_env_conf()
+    #celery_stop()
+
     if full:
-        execute(requirements)
+        requirements()
     if full or db:
-        execute(syncdb)
-        execute(migrate)
+        syncdb()
+        migrate()
     if full or search:
-        execute(update_index)
-    execute(relink)
-    if full:
-        execute(assets)
-    execute(clean_start)
-    execute(celery_start)
+        update_index()
+
+    relink()
+    assets()
+    clean_start()
+    #celery_start()
 
