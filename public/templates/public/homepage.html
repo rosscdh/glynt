@@ -14,8 +14,11 @@
 	</div> 
     <div class="search" style="position:absolute; bottom:0;">
     	<div class="container">
-		<h1>Startups - find your perfect lawyer.</h1>
-			I need a lawyer in <input id="user_screen_name" value="San Francisco"> <!-- for a <input id="user_screen_name" value="Seed financing"> -->
+<!-- 		<h1>Startups - find your perfect lawyer.</h1>
+ -->     	<h1>Attorney-client harmony</h1>
+
+
+ 		I need a lawyer in <input id="user_screen_name" value="San Francisco"> <!-- for a <input id="user_screen_name" value="Seed financing"> -->
 			<a href="#" class="btn btn-onblack btn-large">Search</a> <a href="#signin-modal" role="button" class="btn btn-onblack btn-large" data-toggle="modal">Sign In</a>
     	</div>
 	</div>
@@ -31,11 +34,15 @@
 <div class="container">
 	<div class="row">
 		<div class="span12 product-tour">
-			<h2>As a founder, it's an important relationship</h2>
-			<h3>Founder-lawyer dating. We'll find you Mr Right.</h3>
+			<h2>The LawPal Startup Marketplace</h2>
+			<h3>As a founder, it's an important relationship</h3>
 			<div class="row">
-				<div class="span6">
-					<img src="{{ STATIC_URL }}img/homepage/founder-values.jpg"> 	
+				<div class="span6 values">
+					<img src="{{ STATIC_URL }}img/homepage/founder-values.jpg">
+					<img src="{{ STATIC_URL }}img/tick.png" class="tick1 hideme">
+					<img src="{{ STATIC_URL }}img/tick.png" class="tick2 hideme"> 	
+ 					<img src="{{ STATIC_URL }}img/tick.png" class="tick3 hideme"> 	
+ 	
 				</div>
 				<div class="span6">
 					<div class="desc">
@@ -43,25 +50,41 @@
 						LawPal lets you find and work with lawyers in an entirely new way. We beleive that startups are stronger with qualtiy legal advice from a qualified attourney. We are here to give founders greater choice and transparency so they can find the right lawyer. Browse by location, fee structure. 
 						<br />
 						<br />
-						<a href="/lawyers" class="btn btn-blue">Browse Marketplace</a>
+						<a href="/lawyers" class="btn btn-blue btn-large">Browse Marketplace</a>
 					</div>
 				</div>
 			</div>
 			<div class="row">
 				<div class="span12">
+					<img src="{{ STATIC_URL }}img/down.png" class="down-arrow hideme">
 					<img src="{{ STATIC_URL }}img/sample-profile.png" class="sample-profile hideme">
+<!-- 					<br />
+					<br />
+					<img src="{{ STATIC_URL }}img/supporters.png" class=""> -->
 				</div>
 			</div>
 
 		</div>
 	</div>
 </div>
+<div class="coming">
+	<div class="container">
+		<div class="row">
+			<div class="span12">
+					<span class="hideme">and launching</span> 
+					<div class="image-wrap hideme">
+						<img src="{{ STATIC_URL }}img/cal.png">
+					</div>
+			</div>
+		</div>
+	</div>
+</div>
 <div class="container">
 	<div class="row">
 		<div class="span12 product-tour">
-			<h2>The relationship works better through LawPal</h2>
-			<h3>Beautifully simple tools to make your relationship more efficient and transparent <span>Coming August</span></h3>
-			<img src="{{ STATIC_URL }}img/homepage/tools.png" style="margin-left:75px;"> 	
+			<h2>Tools to manage your transactions</h2>
+			<h3>Beautifully simple tools to make your relationship more efficient and transparent</h3>
+			<img src="{{ STATIC_URL }}img/homepage/tools.png" style="margin-left:75px;" class="hideme"> 	
 		</div>
 	</div>
 </div>

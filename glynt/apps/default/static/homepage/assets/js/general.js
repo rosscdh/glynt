@@ -14,10 +14,10 @@ jQuery(document).ready(function() {
 
     $('#hero').css('background-image', ('url("'+imgPath+'")'));
 
-    $('#hero').css({'height':(($(window).height())-182)+'px'});
+    // $('#hero').css({'height':(($(window).height())-182)+'px'});
 
     $(window).resize(function(){
-   		$('#hero').css({'height':(($(window).height())-182)+'px'});
+   		// $('#hero').css({'height':(($(window).height())-182)+'px'});
     });
 
 
@@ -45,6 +45,11 @@ jQuery(document).ready(function() {
 	    });
 	}    
 
+	$('.hideme').each( function(i){
+            
+                $(this).animate({'opacity':'0'},100);
+        }); 
+
     /* Every time the window is scrolled ... */
     $(window).scroll( function(){
     
@@ -55,9 +60,9 @@ jQuery(document).ready(function() {
             var bottom_of_window = $(window).scrollTop() + $(window).height();
             
             /* If the object is completely visible in the window, fade it it */
-            if( bottom_of_window > bottom_of_object + 100 ){
+            if( bottom_of_window > bottom_of_object ){
                 
-                $(this).animate({'opacity':'1'},800);
+                $(this).animate({'opacity':'1'},1500);
                     
             }
             
