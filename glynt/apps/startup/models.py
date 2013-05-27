@@ -51,6 +51,10 @@ class Founder(models.Model):
         return self.user.username
 
     @property
+    def profile_photo(self):
+        return self.user.profile.get_mugshot_url()
+
+    @property
     def startups(self):
         return self.user.startups.all()
 

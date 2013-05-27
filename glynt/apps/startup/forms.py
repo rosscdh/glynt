@@ -2,6 +2,9 @@
 from django import forms
 from bootstrap.forms import BootstrapMixin
 
+from cicu.models import UploadedFile
+from cicu.widgets import CicuUploderInput
+
 from parsley.decorators import parsleyfy
 
 from models import Startup, Founder
@@ -20,6 +23,17 @@ class StartupProfileSetupForm(BootstrapMixin, forms.Form):
     # django user ifo used to populate founder object
     first_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'First name', 'tabindex':'1'}))
     last_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'Last name','tabindex':'2'}))
+
+    photo = forms.ImageField(required=False, label="Main Photo", help_text="Please add a good quality photo to your profile. It really helps.", widget=CicuUploderInput(attrs={'data-trigger':'change','data-required': 'false'}, options={
+                'ratioWidth': '110',       #fix-width ratio, default 0
+                'ratioHeight':'110',       #fix-height ratio , default 0
+                'sizeWarning': 'False',    #if True the crop selection have to respect minimal ratio size defined above. Default 'False'
+                'modalButtonLabel': 'Upload photo',
+                'onReady': 'preparePhotoPreview',
+                'onCrop': 'photoCrop'
+            }))
+    
+    hidden_photo = forms.CharField(required=False, widget=forms.HiddenInput) # transports the id
 
     # startup
     startup_name = forms.CharField(label="Startup Name", help_text="", widget=forms.TextInput(attrs={'placeholder':'Acme Inc', 'tabindex':'3'}))
@@ -47,7 +61,15 @@ class StartupProfileSetupForm(BootstrapMixin, forms.Form):
         #self.user
         logger.info('StartupProfileSetupForm Starting')
 
-        founder_service = EnsureFounderService(founder_user=self.user, **data)
+        # @TODO should be in the clean_photo method
+        hidden_photo = self.cleaned_data.get('hidden_photo', None)
+        if type(hidden_photo) is int:
+            try:
+                data['photo'] = UploadedFile.objects.get(pk=hidden_photo)
+            except UploadedFile.DoesNotExist:
+                data['photo'] = None
+
+        founder_service = EnsureFounderService(user=self.user, **data)
         founder = founder_service.process()
 
         startup_service = EnsureStartupService(name=data.get('startup_name'), founder=founder, **data)
