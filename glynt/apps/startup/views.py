@@ -20,6 +20,13 @@ class StartupProfileSetupView(FormView):
         messages.success(self.request, 'Thanks, your profile is complete.. now go find yourself a lawyer and get that funding')
         return reverse('startup:welcome')
 
+    def get_context_data(self, **kwargs):
+        context = super(StartupProfileSetupView, self).get_context_data(**kwargs)
+        context.update({
+            'founder': self.founder,
+        })
+        return context
+
     def get_form(self, form_class):
         """
         """
@@ -27,26 +34,28 @@ class StartupProfileSetupView(FormView):
         kwargs.update({'request': self.request}) # add the request to the form
         user = self.request.user
 
-        founder_service = EnsureFounderService(founder_user=user)
-        founder = founder_service.process()
+        founder_service = EnsureFounderService(user=user)
+        self.founder = founder_service.process()
         # get the startup
-        startup = founder.primary_startup
+        startup = self.founder.primary_startup
 
         kwargs.update({'initial': {
-            'first_name': founder.user.first_name,
-            'last_name': founder.user.last_name,
+            'first_name': self.founder.user.first_name,
+            'last_name': self.founder.user.last_name,
             'startup_name': startup.name,
+
+            'photo': self.founder.photo,
 
             'website': startup.website,
             'summary': startup.summary,
             
-            'already_incorporated': founder.data.get('already_incorporated', False),
-            'already_raised_capital': founder.data.get('already_raised_capital', False),
-            'process_raising_capital': founder.data.get('process_raising_capital', False),
+            'already_incorporated': self.founder.data.get('already_incorporated', False),
+            'already_raised_capital': self.founder.data.get('already_raised_capital', False),
+            'process_raising_capital': self.founder.data.get('process_raising_capital', False),
 
-            'incubator_or_accelerator_name': founder.data.get('incubator_or_accelerator_name'),
+            'incubator_or_accelerator_name': self.founder.data.get('incubator_or_accelerator_name'),
 
-            'agree_tandc': founder.data.get('agree_tandc', False),
+            'agree_tandc': self.founder.data.get('agree_tandc', False),
         }})
         return form_class(**kwargs)
 
