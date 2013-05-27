@@ -37,16 +37,16 @@ def profile_extra_details(backend, details, response, user=None, is_new=False, \
                         *args, **kwargs):
     """ process the backend based on the backend type """
     if backend.name == 'linkedin':
-        logger.info('Pipeline.profile_photo backend is linkedin')
+        logger.info('Pipeline.profile_extra_details backend is linkedin')
 
-        linkedin_profile_extra_details(backend, details, response, user=None, is_new=False, \
+        linkedin_profile_extra_details(backend=backend, details=details, response=response, user=user, is_new=is_new, \
                         *args, **kwargs)
 
     elif backend.name == 'google-oauth2':
-        logger.info('Pipeline.profile_photo backend is google-oauth2')
+        logger.info('Pipeline.profile_extra_details backend is google-oauth2')
 
     else:
-        logger.info('Pipeline.profile_photo backend is not linkedin')
+        logger.error('Pipeline.profile_extra_details backend is Unknown')
 
 
 def graph_user_connections(backend, details, response, user=None, is_new=False,

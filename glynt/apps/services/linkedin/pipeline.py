@@ -3,7 +3,7 @@ from glynt.apps.graph.services import LinkedinProfileService
 from urlparse import parse_qs
 
 import logging
-logger = logging.getLogger('lawpal.graph')
+logger = logging.getLogger('lawpal.services')
 
 
 def linkedin_profile_extra_details(backend, details, response, user=None, is_new=False,
@@ -13,24 +13,7 @@ def linkedin_profile_extra_details(backend, details, response, user=None, is_new
     if not present? then init the linkedinprofileservice and get it from linked in"""
     profile = {}
 
-    logger.info('Pipeline.profile_photo logged in with linkedin')
-
-    if details.get('headline', None) is not None:
-        profile.update({
-            'summary': details.get('headline')
-        })
-
-    if details.get('picture-url', None) is not None:
-        profile.update({
-            'photo_url': details.get('picture-url')
-        })
-        logger.info('Pipeline.linkedin.profile_photo details already had linkedin photo: %s' % profile.get('photo_url'))
-
-    if details.get('summary', None) is not None:
-        profile.update({
-            'bio': details.get('summary')
-        })
-        logger.info('Pipeline.linkedin.bio details already had linkedin summary-bio')
+    logger.info('Pipeline logging in with linkedin')
 
     if user is not None:
         auth = user.social_auth.get(provider='linkedin')
