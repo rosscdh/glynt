@@ -6,7 +6,10 @@ from social_auth.models import UserSocialAuth
 from tasks import collect_user_fullcontact_info, collect_user_graph_connections
 
 from glynt.apps.client.models import _create_user_profile, create_glynt_profile
+
 from glynt.apps.services.linkedin.pipeline import linkedin_profile_extra_details
+from glynt.apps.services.google.pipeline import google_profile_extra_details
+
 from urlparse import parse_qs
 
 import uuid
@@ -44,6 +47,9 @@ def profile_extra_details(backend, details, response, user=None, is_new=False, \
 
     elif backend.name == 'google-oauth2':
         logger.info('Pipeline.profile_extra_details backend is google-oauth2')
+
+        google_profile_extra_details(backend=backend, details=details, response=response, user=user, is_new=is_new, \
+                                *args, **kwargs)
 
     else:
         logger.error('Pipeline.profile_extra_details backend is Unknown')
