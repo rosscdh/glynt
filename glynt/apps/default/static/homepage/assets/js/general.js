@@ -6,10 +6,8 @@ jQuery(window).load(function() {
 jQuery(document).ready(function() {
 
 
-    bgImageTotal=1;
-
-    randomNumber = Math.round(Math.random()*(bgImageTotal-1))+1;
-
+    
+	randomNumber=Math.floor(Math.random()*4);
     imgPath=('/static/homepage/assets/img/bg/landing'+randomNumber+'.jpg');
 
     $('#hero').css('background-image', ('url("'+imgPath+'")'));
@@ -50,6 +48,12 @@ jQuery(document).ready(function() {
                 $(this).animate({'opacity':'0'},100);
         }); 
 
+	$('a').click(function(){
+	    $('html, body').animate({
+	        scrollTop: $('[name="' + $.attr(this, 'href').substr(1) + '"]').offset().top
+	    }, 500);
+	    return false;
+	});
     /* Every time the window is scrolled ... */
     $(window).scroll( function(){
     
