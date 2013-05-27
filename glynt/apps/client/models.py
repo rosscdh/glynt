@@ -46,6 +46,7 @@ class ClientProfile(UserenaBaseProfile):
 
     def get_mugshot_url(self):
         p = super(ClientProfile, self).get_mugshot_url()
+        pic = None
 
         if self.is_lawyer:
             pic = self.profile_data.get('linkedin_photo_url', None) or self.profile_data.get('facebook_photo_url', None)
