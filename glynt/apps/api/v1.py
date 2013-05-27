@@ -8,6 +8,8 @@ from tastypie.cache import SimpleCache
 from tastypie.authentication import Authentication, SessionAuthentication
 from tastypie.authorization import Authorization, DjangoAuthorization
 
+from django.contrib.auth.models import User
+
 from cities_light.models import City, Country, Region
 from glynt.apps.lawyer.models import Lawyer
 from glynt.apps.firm.models import Firm, Office
@@ -124,6 +126,30 @@ class StartupSimpleResource(BaseApiModelResource):
         return bundle
 
 
+class UserBasicProfileResource(BaseApiModelResource):
+    name = fields.CharField(attribute='get_full_name', null=True)
+
+    class Meta(BaseApiModelResource.Meta):
+        # Only filter by USA, allow freeform for others
+        queryset = User.objects.select_related('profile').exclude(is_superuser=True).filter(is_active=True)
+        authentication = Authentication()
+        list_allowed_methods = ['get']
+        resource_name = 'user/profile'
+        fields = ['pk','username', 'is_active', 'last_login']
+        filtering = {
+            'username': ALL,
+        }
+        cache = SimpleCache()
+
+    def dehydrate(self, bundle):
+        profile = bundle.data.get('username', None)
+        bundle.data.update({
+            'is_lawyer': bundle.obj.profile.is_lawyer,
+            'is_startup': bundle.obj.profile.is_startup,
+            'profile_photo': bundle.obj.profile.get_mugshot_url(),
+        })
+        return bundle
+
 class LawyerResource(BaseApiModelResource):
     class Meta(BaseApiModelResource.Meta):
         authentication = Authentication()
@@ -184,6 +210,8 @@ v1_internal_api.register(StateSimpleResource())
 v1_internal_api.register(FirmSimpleResource())
 v1_internal_api.register(OfficeSimpleResource())
 v1_internal_api.register(StartupSimpleResource())
+
+v1_internal_api.register(UserBasicProfileResource())
 
 v1_internal_api.register(LawyerResource())
 v1_internal_api.register(DocumentResource())

@@ -121,7 +121,7 @@ WSGI_APPLICATION = 'glynt.wsgi.application'
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.contrib.angel.AngelBackend',
     'social_auth.backends.contrib.linkedin.LinkedinBackend',
-    'social_auth.backends.twitter.TwitterBackend',
+    'social_auth.backends.google.GoogleOAuth2Backend',
     'glynt.backends.EmailOrUsernameBackend',
     'userena.backends.UserenaAuthenticationBackend',
     'guardian.backends.ObjectPermissionBackend',
@@ -288,9 +288,9 @@ AUTH_PROFILE_MODULE = 'client.ClientProfile' # our custom profile
 
 # Celery
 BROKER_HEARTBEAT = 10 # helps with heroku connection limits
-BROKER_CONNECTION_TIMEOUT = 10
+BROKER_CONNECTION_TIMEOUT = 3
 BROKER_POOL_LIMIT = 1 # Very importnat for heroku, stops a max + 1 event
-BROKER_CONNECTION_MAX_RETRIES = 5
+BROKER_CONNECTION_MAX_RETRIES = 2
 
 
 USERENA_USE_MESSAGES = True
@@ -346,14 +346,14 @@ SOCIAL_AUTH_BACKEND_ERROR_URL = '/'
 SOCIAL_AUTH_PROTECTED_USER_FIELDS = ('first_name', 'last_name', 'full_name', 'email',)
 SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.social.social_auth_user',
-    'social_auth.backends.pipeline.associate.associate_by_email', # very insecure, only here to allow transfer of users from preview.lawpal
+    #'social_auth.backends.pipeline.associate.associate_by_email', # removed as we no longer need to provision poeple coming from preview.
     'glynt.apps.graph.pipeline.get_username',
     'social_auth.backends.pipeline.user.create_user',
     'social_auth.backends.pipeline.social.associate_user',
     'social_auth.backends.pipeline.social.load_extra_data',
     'social_auth.backends.pipeline.user.update_user_details',
     'glynt.apps.graph.pipeline.ensure_user_setup',
-    'glynt.apps.graph.pipeline.linkedin_profile_extra_details',
+    'glynt.apps.graph.pipeline.profile_extra_details',
     # 'glynt.apps.graph.pipeline.graph_user_connections',
 )
 

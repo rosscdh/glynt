@@ -1,0 +1,171 @@
+body.homepage #hero {
+background: url(../../homepage/assets/img/bg/landing4.jpg) 0 0 no-repeat;
+background-size: cover;
+text-align: left;
+padding-bottom:0px;
+background-position: 0 -60px;
+margin-bottom:0px;
+position:relative;
+z-index: 5;
+height:550px;
+}
+body.homepage #hero h1 {
+margin: 0.25em 0 0 0;
+line-height: 1.2 !important;
+margin-top:38px;
+font-size:55px;
+text-align: center;
+}
+body.homepage #hero h3 {
+margin: 0 !important;
+padding: 0 !important;
+}
+body.homepage #hero .search {
+background-color:black 0.6;
+padding:05px 0px 35px 0px;
+width:100%;
+position:absolute;
+bottom:40px;
+font-size:30px;
+line-height: 55px;
+color:#f0f0f0;
+/* http://www.colorzilla.com/gradient-editor/ */
+font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+font-weight: 300;
+text-align: center;
+background-color:rgba(47,40,35,0.8);
+margin-bottom: 20px
+}
+body.homepage #hero .search h1 {
+margin-bottom:13px;
+}
+body.homepage #hero .search input{
+background-color: rgba(0,0,0,0.2);
+font-size: 23px;
+color:white;
+border:none;
+border-bottom: 1px solid white;
+/*text-align: center;
+*/padding-bottom:5px;
+line-height:38px;
+font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+width:230px;
+padding:5px;
+font-weight:300;
+}
+body.homepage #hero .search .btn{
+font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+margin-top:0px;
+font-size:23px;
+margin-right:10px;
+font-weight: 450;
+padding:8px 13px;
+text-decoration: none;
+}
+body.homepage #learn-more h3{
+margin:0 auto;
+width:90px;
+height:65px;
+padding-top:25px;
+border-radius:100px;
+margin-top: -20px;
+background-color:#42d0e5;
+z-index: 6;
+color:white;
+font-size:18px;
+line-height: 20px;
+margin-bottom:20px;
+}
+body.homepage .values {
+position: relative;
+}
+body.homepage .values .tick1 {
+position: absolute;
+top:100px;
+left:250px;
+}
+body.homepage .values .tick2 {
+position: absolute;
+top:136px;
+left:432px;
+}
+body.homepage .values .tick3 {
+position: absolute;
+top:226px;
+left:372px;
+}
+body.homepage #learn-more h3, body.homepage #learn-more h3 a {
+text-align: center;
+color:white;
+}
+body.homepage .product-tour .desc {
+padding:20px;
+font-size:19px;
+color:#666;
+line-height:1.35em;
+font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+}
+
+body.homepage .product-tour {
+padding-top:20px;
+margin-bottom:60px;
+}
+body.homepage .product-tour img.sample-profile {
+margin-top:30px;
+margin-bottom:20px;
+-moz-box-shadow: 2px 2px 5px #888;
+-webkit-box-shadow: 2px 2px 5px #888;
+box-shadow: 2px 2px 5px #888;
+}
+body.homepage .product-tour img.down-arrow {
+margin-left:308px;
+margin-top:20px;
+}
+body.homepage .product-tour h2, body.homepage .product-tour h3 {
+text-align: center;
+}
+body.homepage .product-tour h2 {
+margin-bottom:0px;
+line-height:1em;
+font-size:40px;
+}
+body.homepage .product-tour h3 {
+color:#ccc;
+font-size:22px;
+line-height:1em;
+margin-bottom:20px;
+}
+body.homepage .product-tour h3 span {
+color:#00d4ea;
+font-size:14px;
+line-height:24px;
+margin-top:-4px;
+}
+body.homepage .coming {
+text-align: center; 
+color:#aaa;
+padding:30px 0px 10px 0px;
+font-size:24px;
+font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+margin: 40px 0px 0px 0px;
+}
+body.homepage .coming img {
+margin-top:48px;
+}
+body.homepage .coming .image-wrap {
+width:150px;
+height:150px;
+background-color: #fff;
+border-radius: 200px;
+margin:0 auto;
+float:left;
+}
+body.homepage .coming span {
+float:left;
+padding-top:75px;
+padding-right:10px;
+padding-left:226px;
+}
+.hideme {
+opacity:0;
+}

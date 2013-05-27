@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from pybars import Compiler
 import re
-import pdb
 import logging
 logger = logging.getLogger('django.request')
 
@@ -53,7 +52,7 @@ class Smoothe(object):
 
     def validate(self, html_list):
         match = re.search(r"\{\{\#doc_(.*?)\}\}", self.source_html) # match at least one doc_ tag
-#        pdb.set_trace()
+
         if match is not None:
             # we have at least one doc_* variable
             if len(html_list) == 0:
