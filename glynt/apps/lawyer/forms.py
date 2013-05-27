@@ -13,7 +13,6 @@ from bootstrap.forms import BootstrapMixin
 
 from cicu.models import UploadedFile
 from cicu.widgets import CicuUploderInput
-from easy_thumbnails.fields import ThumbnailerImageField
 
 from glynt.apps.lawyer.models import Lawyer
 
@@ -186,6 +185,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
 
         firm_name = data.pop('firm_name')
 
+        # @TODO should be in the clean_photo method
         hidden_photo = self.cleaned_data.get('hidden_photo', None)
         if type(hidden_photo) is int:
             try:
