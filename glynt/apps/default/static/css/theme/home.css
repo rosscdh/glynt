@@ -33,7 +33,7 @@ color:#f0f0f0;
 font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
 font-weight: 300;
 text-align: center;
-background-color:rgba(102,108,109,0.9);
+background-color:rgba(47,40,35,0.8);
 margin-bottom: 20px
 }
 body.homepage #hero .search h1 {
@@ -152,9 +152,9 @@ body.homepage .coming img {
 margin-top:48px;
 }
 body.homepage .coming .image-wrap {
-width:170px;
-height:170px;
-background-color: #363439;
+width:150px;
+height:150px;
+background-color: #fff;
 border-radius: 200px;
 margin:0 auto;
 float:left;
