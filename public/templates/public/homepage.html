@@ -58,9 +58,6 @@
 				<div class="span12">
 					<img src="{{ STATIC_URL }}img/down.png" class="down-arrow hideme">
 					<img src="{{ STATIC_URL }}img/sample-profile.png" class="sample-profile hideme">
-<!-- 					<br />
-					<br />
-					<img src="{{ STATIC_URL }}img/supporters.png" class=""> -->
 				</div>
 			</div>
 
@@ -88,7 +85,13 @@
 		</div>
 	</div>
 </div>
-<script src="/static/homepage/assets/js/general.js"></script> 
-
+<script src="{{ STATIC_URL }}homepage/assets/js/general.js"></script>
+<script>
+$(document).ready(function(){
+	$('#id_location').live('click', function(event){
+		$(this).select()
+	});
+});
+</script> 
 {% endblock %}
 
