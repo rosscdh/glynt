@@ -36,7 +36,7 @@ class ClientProfile(UserenaBaseProfile):
     profile_data = JSONField(default={})
     country = CountryField(default='US', null=True)
     state = models.CharField(max_length=64, null=True)
-    is_lawyer = models.BooleanField(default=True)
+    is_lawyer = models.BooleanField(default=True) # @TODO this needs to go, as we stored the bolean in the json; index msut come from haystack
 
     @classmethod
     def create(cls, **kwargs):
@@ -45,8 +45,14 @@ class ClientProfile(UserenaBaseProfile):
         return profile
 
     def get_mugshot_url(self):
-        p = self.profile_data.get('linkedin_photo_url', None) or self.profile_data.get('facebook_photo_url', None) or super(ClientProfile, self).get_mugshot_url()
-        return p
+        p = super(ClientProfile, self).get_mugshot_url()
+
+        if self.is_lawyer:
+            pic = self.profile_data.get('linkedin_photo_url', None) or self.profile_data.get('facebook_photo_url', None)
+        if self.is_startup:
+            pic = self.profile_data.get('picture', None)
+
+        return pic if pic is not None else p
 
     @property
     def user_class(self):
