@@ -132,7 +132,7 @@ function preparePhotoPreview(element) {
     var element = $('.cropped-imag-preview');
     var cookie_data = $.parseJSON($.cookie('startup_profile_photo-{{ founder.pk }}'));
 
-    $.each(element.find('img#photo-preview'), function(i,img){
+    $.each(element.find('img'), function(i,img){
         img = $(img)
         src = img.attr('src');
 

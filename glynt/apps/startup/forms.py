@@ -55,6 +55,10 @@ class StartupProfileSetupForm(BootstrapMixin, forms.Form):
         self.user = self.request.user
         super(StartupProfileSetupForm, self).__init__(*args, **kwargs)
 
+    def clean_hidden_photo(self):
+        hidden_photo = self.cleaned_data.get('hidden_photo', None)
+        return int(hidden_photo) if hidden_photo else None
+
     def save(self, commit=True):
         data = self.cleaned_data
 

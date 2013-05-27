@@ -14,7 +14,7 @@ def _startup_upload_photo(instance, filename):
 
 def _founder_upload_photo(instance, filename):
     _, ext = os.path.splitext(filename)
-    return 'founder/%s%s' % (instance.slug, ext)
+    return 'founder/%s%s' % (instance.user.username, ext)
 
 
 class Startup(models.Model):

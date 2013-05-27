@@ -23,6 +23,17 @@ class EnsureFounderService(object):
         profile.profile_data['is_startup'] = True
         profile.save(update_fields=['profile_data'])
 
+    def save_photo(self, photo):
+        if photo and self.founder.photo != photo: # only if its not the same image
+            logger.info('New photo for %s' % self.founder)
+            photo_file = os.path.basename(self.photo.file.name)# get base name
+            try:
+                self.founder.photo.save(photo_file, photo.file)
+                self.founder.user.profile.mugshot.save(photo_file, photo.file)
+                logger.info('Saved new photo %s for %s' % (photo.file, self.founder))
+            except Exception as e:
+                logger.error('Could not save user photo %s for %s: %s' % (photo.file, self.founder, e))
+
     def process(self):
         self.founder, is_new = Founder.objects.get_or_create(user=self.user)
         logger.info("Processing founder %s (is_new: %s)" % (self.user.get_full_name(), is_new,))
@@ -40,12 +51,12 @@ class EnsureFounderService(object):
         if self.bio:
             self.founder.bio = self.bio
 
-        if self.photo and self.photo != self.founder.photo:
-            filename = os.path.basename(self.photo.name)
-            self.founder.photo.save(filename, self.photo)
-
         if self.data:
             self.founder.data = self.data
+
+        if self.photo:
+            # pop so it does not get serialized
+            self.save_photo(self.photo)
 
         logger.info("Saving founder %s", self.user)
         self.founder.save()
@@ -93,10 +104,6 @@ class EnsureStartupService(object):
 
         if self.twitter:
             self.startup.twitter = self.twitter
-
-        if self.photo and self.photo != self.startup.photo:
-            filename = os.path.basename(self.photo.name)
-            self.startup.photo.save(filename, self.photo)
 
         if self.data:
             self.startup.data = self.data
