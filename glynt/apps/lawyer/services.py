@@ -9,7 +9,6 @@ from tasks import send_profile_setup_email
 
 import logging
 logger = logging.getLogger('lawpal.services')
-import pdb
 
 
 class EnsureLawyerService(object):
@@ -160,3 +159,4 @@ class EnsureLawyerService(object):
             firm_service = EnsureFirmService(firm_name=self.firm_name, offices=self.offices, **self.data)
             firm_service.process()
             self.firm = firm_service.firm
+
