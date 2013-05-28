@@ -7,9 +7,15 @@ from jsonfield import JSONField
 from glynt.apps.utils import get_namedtuple_choices
 
 from managers import DefaultLawyerManager, ApprovedLawyerManager
+from transaction_packages import TransactionPackageBunch
 
 import logging
 logger = logging.getLogger('django.request')
+
+
+def _lawyer_upload_photo(instance, filename):
+    _, ext = os.path.splitext(filename)
+    return 'lawyer/%s%s' % (instance.user.username, ext)
 
 
 class Lawyer(models.Model):
@@ -31,12 +37,13 @@ class Lawyer(models.Model):
         (2, 'senior_associate', 'Senior Associate'),
         (1, 'associate', 'Associate'),
     ))
+
     user = models.OneToOneField(User, related_name='lawyer_profile')
     role = models.IntegerField(choices=LAWYER_ROLES.get_choices(), default=LAWYER_ROLES.associate, db_index=True)
     summary = models.CharField(max_length=255)
     bio = models.TextField()
     data = JSONField(default={})
-    photo = models.ImageField(upload_to='lawyer', blank=True)
+    photo = models.ImageField(upload_to=_lawyer_upload_photo, blank=True)
     is_active = models.BooleanField(default=False, db_index=True)
 
     objects = DefaultLawyerManager()
@@ -108,6 +115,11 @@ class Lawyer(models.Model):
         if self.data.get('practice_location_2', None) is not None:
             locations.append(self.data.get('practice_location_2'))
         return [l.strip() for l in locations if l.strip() != '']
+
+    @property
+    def pricing_packages(self):
+        return TransactionPackageBunch(data=self.data)
+
 
     @property
     def startups_advised(self):
