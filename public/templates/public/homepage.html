@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
 
-{% block page_title %}About LawPal{% endblock %}
+{% block page_title %}LawPal - Startup Legal Services Platform{% endblock %}
 {% block bodyclass %}homepage{% endblock %}
 {% block css %}
 <link href="{{ STATIC_URL }}css/theme/home.css" rel="stylesheet" charset="utf-8" />
 <!-- <link href="{{ STATIC_URL }}bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
  -->{% endblock %}
 
+{% block extrahead %}
+<meta name="description" content="LawPal help startups find the perfect lawyer to help their team prosper.">
+<meta name="keywords" content="incorporation, seed financing, convertible notes, venture capital, acquisition, angel investing">
+{% endblock %}
 
 {% block prebody %}
 <div id="hero" style="position:relative">
@@ -48,7 +52,7 @@
 				<div class="span6">
 					<div class="desc">
 						<br />
-						LawPal lets you find and work with lawyers in an entirely new way. We beleive that startups are stronger with qualtiy legal advice from a qualified attourney. We are here to give founders greater choice and transparency so they can find the right lawyer. Browse by location, fee structure. 
+						LawPal lets you find and work with lawyers in an entirely new way. We beleive that startups are stronger with qualtiy legal advice from a qualified attorney. We are here to give founders greater choice and transparency so they can find the right lawyer. Browse by location and fee structure to make a more informed decision.
 						<br />
 						<br />
 						<a href="/lawyers" class="btn btn-blue btn-large">Browse Marketplace</a>
@@ -84,12 +88,12 @@
 <div class="container">
 	<div class="row">
 		<div class="span12 product-tour">
-			<h2>Tools to manage your transactions</h2>
+			<h2>Tools to Manage Your Transactions</h2>
 			<h3>Beautifully simple tools to make your relationship more efficient and transparent</h3>
 			<img src="{{ STATIC_URL }}img/homepage/tools.png" style="margin-left:15px;" class="hideme"> 
 			<br />
 			<div class="desc full">
-				The legal transaction workflow is in the dark ages. It's inefficient and painful. We're working on a suite of tools to help visualize transactions in a beautifully simple way focusing both client and attorney on what needs to happen to get a deal closed. Sign in for more information. 
+				How many times have you asked yourself, "What's happening with my deal?". We're building a suite of tools to help visualize and manage transactions in a beautifully simple way by focusing both client and attorney on what needs to happen to get your deal closed. Sign in for more information. 
 			</div>
 		</div>
 	</div>
