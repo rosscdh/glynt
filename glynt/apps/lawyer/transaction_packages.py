@@ -92,6 +92,7 @@ class TransactionPackageBunch(object):
 
     def _availablekey_key(self, key):
         """"""
+        key = key % (self._fee_present_key,) # append correct key header to string
         if self.key == 'optional':
             return '%s%s' % (key, self.short if self.short > 1 else '')
         else:
@@ -110,9 +111,9 @@ class TransactionPackageBunch(object):
                 'title': self._title,
                 'min': self.data.get(self._min_key, 0) if type(self.data.get(self._min_key, 0)) == int else 0,
                 'max': self.data.get(self._max_key, 0) if type(self.data.get(self._max_key, 0)) == int else 0,
-                'fee_cap_available': True if self.data.get(self._availablekey_key('%s_fee_cap_available' % self._fee_present_key), None) == True else False,
-                'deferred_fees_available': True if self.data.get(self._availablekey_key('%s_deferred_fees_available' % self._fee_present_key), None) == True else False,
-                'fixed_fees_available': True if self.data.get(self._availablekey_key('%s_fixed_fees_available' % self._fee_present_key), None) == True else False,
+                'fee_cap_available': True if self.data.get(self._availablekey_key('%s_fee_cap_available'), None) == True else False,
+                'deferred_fees_available': True if self.data.get(self._availablekey_key('%s_deferred_fees_available'), None) == True else False,
+                'fixed_fees_available': True if self.data.get(self._availablekey_key('%s_fixed_fees_available'), None) == True else False,
             })
             package_items[self._key] = FeePackage(**p)
 
