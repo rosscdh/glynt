@@ -151,8 +151,8 @@ class TestTransactionPackageService(unittest.TestCase):
 
     def test_representations(self):
         subject = self.service_class(data=self.input.copy())
-        assert type(str(subject)) == str
-        assert type(subject.__repr__()) == dict
+        assert type(subject.items()) == list # items returns a list of bunch objects
+        assert type(subject.packages) == dict # the packages are stored as a key->value hash
         
     def test_optional_item(self):
         data = {

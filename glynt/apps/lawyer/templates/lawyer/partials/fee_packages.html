@@ -1,0 +1,33 @@
+{% load glynt_helpers humanize cache %}
+
+{% if fee_package_list %}
+<table class="table pricing">
+{% for p in fee_package_list %}
+<tr>
+    <th>{{ p.title }}</th>
+    <td  class="price">${{ p.min|humanise_number }} &ndash; ${{ p.max|humanise_number }}</td>
+    <td>
+        <ul class="fee-options">
+            {% if p.fee_cap_available %}
+                <li class="cap tip" data-toggle="tooltip" title="Fee cap available for this transaction"></li>
+            {% else %}
+                <li class="no-cap tip" data-toggle="tooltip" title="Fee cap available for this transaction"></li>
+            {% endif %}
+            {% if p.deferred_fees_available %}
+                <li class="deferred tip" data-toggle="tooltip" title="Deferred fees available for this transaction"></li>
+            {% else %}
+                <li class="no-deferred tip" data-toggle="tooltip" title="Deferred fees available for this transaction"></li>
+            {% endif %}
+            {% if p.fixed_fees_available %}
+                <li class="fixed tip" data-toggle="tooltip" title="Fixed fees available for this transaction"></li>
+            {% else %}
+                <li class="no-fixed tip" data-toggle="tooltip" title="Fixed fees available for this transaction"></li>
+            {% endif %}
+        </ul>
+    </td>
+</tr>
+{% endfor %}
+</table>
+{% else %}
+<div class="no-data">Nothing yet.</div>
+{% endif %}

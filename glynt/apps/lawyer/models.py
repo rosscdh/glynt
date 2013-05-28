@@ -117,7 +117,7 @@ class Lawyer(models.Model):
         return [l.strip() for l in locations if l.strip() != '']
 
     @property
-    def pricing_packages(self):
+    def fee_packages(self):
         return TransactionPackageBunch(data=self.data)
 
 

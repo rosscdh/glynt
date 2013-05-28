@@ -29,3 +29,11 @@ def simple_name_list(data_list):
         'object_list': data_list,
     }
     return context
+
+
+@register.inclusion_tag('lawyer/partials/fee_packages.html', takes_context=False)
+def fee_packages(lawyer):
+    context = {
+        'fee_package_list': lawyer.fee_packages.items()
+    }
+    return context

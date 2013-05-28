@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from bunch import Bunch
+
 import json
 import logging
 logger = logging.getLogger('lawpal.services')
@@ -9,6 +11,12 @@ TRANSACTION_PACKAGES = (('seed_financing_amount','seed','Seed Financing'),
                         ('optional', 1, 'optional_funding'), 
                         ('optional', 2, 'optional_funding'), 
                         ('optional', 3, 'optional_funding'),)
+
+
+class FeePackage(Bunch):
+    @property
+    def is_valid(self):
+        return False if self.title in [None, ''] else True
 
 
 class TransactionPackageBunch(object):
@@ -23,16 +31,23 @@ class TransactionPackageBunch(object):
 
     def __init__(self, data):
         self.data = data
+        logger.debug('Fee Packages - %s' % data )
         self.packages = self.handle()
-
-    def __str__(self):
-        return self.toJson()
-
-    def __repr__(self):
-        return self.packages
 
     def toJson(self):
         return json.dumps(self.packages)
+
+    def items(self):
+        return [p for key,p in self.packages.iteritems() if p.is_valid]
+
+    @property
+    def _fee_present_key(self):
+        """ this is necessary due to badly named data keys
+        @TODO normalise this at the very least """
+        if self.short in ['seed', 'inc']:
+            return self.short
+        else:
+            return self.key
 
     @property
     def _key(self):
@@ -43,6 +58,8 @@ class TransactionPackageBunch(object):
         if self.key == 'optional':
             return '%s%s' % (self.key, self.short if self.short > 1 else '')
         else:
+            # if self.short == 'seed': # in the case of seed the key changes
+            #return self.short
             return self.key
 
     @property
@@ -92,10 +109,10 @@ class TransactionPackageBunch(object):
                 'title': self._title,
                 'min': self.data.get(self._min_key, 0) if type(self.data.get(self._min_key, 0)) == int else 0,
                 'max': self.data.get(self._max_key, 0) if type(self.data.get(self._max_key, 0)) == int else 0,
-                'fee_cap_available': True if self.data.get(self._availablekey_key('%s_fee_cap_available' % self.key), None) == True else False,
-                'deferred_fees_available': True if self.data.get(self._availablekey_key('%s_deferred_fees_available' % self.key), None) == True else False,
-                'fixed_fees_available': True if self.data.get(self._availablekey_key('%s_fixed_fees_available' % self.key), None) == True else False,
+                'fee_cap_available': True if self.data.get(self._availablekey_key('%s_fee_cap_available' % self._fee_present_key), None) == True else False,
+                'deferred_fees_available': True if self.data.get(self._availablekey_key('%s_deferred_fees_available' % self._fee_present_key), None) == True else False,
+                'fixed_fees_available': True if self.data.get(self._availablekey_key('%s_fixed_fees_available' % self._fee_present_key), None) == True else False,
             })
-            package_items[self._key] = p
-
+            package_items[self._key] = FeePackage(**p)
+            logger.debug('Total Num Fee Packages - %d' % len(package_items) )
         return package_items
