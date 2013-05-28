@@ -16,7 +16,7 @@ TRANSACTION_PACKAGES = (('seed_financing_amount','seed','Seed Financing'),
 class FeePackage(Bunch):
     @property
     def is_valid(self):
-        return False if self.title in [None, ''] else True
+        return False if self.title.strip() in [None, ''] else True
 
 
 class TransactionPackageBunch(object):
@@ -38,6 +38,7 @@ class TransactionPackageBunch(object):
         return json.dumps(self.packages)
 
     def items(self):
+        """ Provide a list of valid (valid means they have a title that is not None or empty string) items """
         return [p for key,p in self.packages.iteritems() if p.is_valid]
 
     @property
