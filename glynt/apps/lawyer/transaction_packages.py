@@ -31,7 +31,6 @@ class TransactionPackageBunch(object):
 
     def __init__(self, data):
         self.data = data
-        logger.debug('Fee Packages - %s' % data )
         self.packages = self.handle()
 
     def toJson(self):
@@ -92,6 +91,7 @@ class TransactionPackageBunch(object):
             return '%s_max' % self.key
 
     def _availablekey_key(self, key):
+        """"""
         if self.key == 'optional':
             return '%s%s' % (key, self.short if self.short > 1 else '')
         else:
@@ -115,5 +115,5 @@ class TransactionPackageBunch(object):
                 'fixed_fees_available': True if self.data.get(self._availablekey_key('%s_fixed_fees_available' % self._fee_present_key), None) == True else False,
             })
             package_items[self._key] = FeePackage(**p)
-            logger.debug('Total Num Fee Packages - %d' % len(package_items) )
+
         return package_items
