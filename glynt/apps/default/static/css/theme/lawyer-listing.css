@@ -456,7 +456,10 @@ text-align: center;
 float: left;
 margin: -12px 0 0 12px;
 }
-
+.no-results {
+text-align: center;
+font-size:18px;
+}
 
 
 

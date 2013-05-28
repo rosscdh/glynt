@@ -14,12 +14,12 @@
         </a>
         <a class="brand" data-section="body" href="/">
            <img src="{{ STATIC_URL }}img/logo-nav-white.png" alt="LawPal"> 
-           <span class="">Beta</span>
+           <!-- <span class="">Beta</span> -->
        </a>
         <div class="nav-collapse">
             <ul class="nav pull-right">
              {% if request.user.is_authenticated %}
-                <li><a href="{% url 'lawyer:list' %}">{% trans 'Marketplace' %}</a></li>
+                {% if PROJECT_ENVIRONMENT != 'prod' %}<li><a href="{% url 'lawyer:list' %}">{% trans 'Marketplace' %}</a></li>{% endif %}
                 <li class="divider-vertical"></li>
                  <li><a id="Intercom" href="mailto:xw4ux8lx@incoming.intercom.io">Support</a></li>
                  <li><a href="{% url 'postman_inbox' %}">
@@ -32,15 +32,15 @@
                  <li class="dropdown">
                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> {{request.user.first_name}} {{request.user.last_name}}<b class="caret"></b></a>
                    <ul class="dropdown-menu">
-                        <li><a id="user-profile-form" class="" href="{% url 'lawyer:setup_profile' %}">{% trans 'Edit Profile' %}</a></li>
-                        <li><a id="user-profile-form" class="" href="{% url 'lawyer:profile' slug=request.user.username %}">{% trans 'View Profile' %}</a></li>
+                        <li><a id="user-profile-form" class="" href="{% if user.profile.is_lawyer %}{% url 'lawyer:setup_profile' %}{% else %}{% url 'startup:setup_profile' %}{% endif %}">{% trans 'Edit Profile' %}</a></li>
+                        {% if user.profile.is_lawyer %}<li><a id="user-profile-form" class="" href="{% url 'lawyer:profile' slug=request.user.username %}">{% trans 'View Profile' %}</a></li>{% endif %}
                         {% if PROJECT_ENVIRONMENT != 'prod' %}<li><a id="user-profile" class="" href="{% url 'userena_profile_detail' username=request.user.username %}">{% trans 'Account' %}</a></li>{% endif %}
-                        <li><a id="user-profile-form" class="" href="{% url 'lawyer:invite' %}">{% trans 'Invite Colleagues' %}</a></li>
+                        <li><a id="user-profile-form" class="" href="{% if user.profile.is_lawyer %}{% url 'lawyer:invite' %}{% else %}{% url 'startup:invite' %}{% endif %}">{% trans 'Invite Colleagues' %}</a></li>
                         <li><a id="user-logout" class="" href="{% url 'logout' %}">{% trans 'Logout' %}</a></li>
                    </ul>
                  </li>
              {% else %}
-                 <li><a href="/">{% trans 'Login' %}</a></li>
+                 <li><a href="#signin-modal" role="button" data-toggle="modal">{% trans 'Sign In' %}</a></li>
              {% endif %}
             </ul>                 
         </div>

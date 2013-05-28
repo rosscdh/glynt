@@ -6,20 +6,17 @@ jQuery(window).load(function() {
 jQuery(document).ready(function() {
 
 
-    bgImageTotal=5;
-
-    randomNumber = Math.round(Math.random()*(bgImageTotal-1))+1;
-
+    
+	randomNumber=Math.floor(Math.random()*4);
     imgPath=('/static/homepage/assets/img/bg/landing'+randomNumber+'.jpg');
 
-    $('body').css('background-image', ('url("'+imgPath+'")'));
+    $('#hero').css('background-image', ('url("'+imgPath+'")'));
 
+    // $('#hero').css({'height':(($(window).height())-182)+'px'});
 
-$('#data-statement').click(function() {
-	$('#data-statement-body').fadeToggle();	
-	$('#data-statement').toggle();	
-
-});
+    $(window).resize(function(){
+   		// $('#hero').css({'height':(($(window).height())-182)+'px'});
+    });
 
 
 	// polyfill placeholder text
@@ -45,4 +42,36 @@ $('#data-statement').click(function() {
 	        })
 	    });
 	}    
+
+	$('.hideme').each( function(i){
+            
+                $(this).animate({'opacity':'0'},100);
+        }); 
+
+	$('a').click(function(){
+	    $('html, body').animate({
+	        scrollTop: $('[name="' + $.attr(this, 'href').substr(1) + '"]').offset().top
+	    }, 500);
+	    return false;
+	});
+    /* Every time the window is scrolled ... */
+    $(window).scroll( function(){
+    
+        /* Check the location of each desired element */
+        $('.hideme').each( function(i){
+            
+            var bottom_of_object = $(this).position().top + $(this).outerHeight();
+            var bottom_of_window = $(window).scrollTop() + $(window).height();
+            
+            /* If the object is completely visible in the window, fade it it */
+            if( bottom_of_window > bottom_of_object ){
+                
+                $(this).animate({'opacity':'1'},1500);
+                    
+            }
+            
+        }); 
+    
+    });
+    
 });

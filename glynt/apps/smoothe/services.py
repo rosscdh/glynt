@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
 from django.utils.encoding import smart_unicode
-import pdb
 
 
 class SmootheValidateService(object):

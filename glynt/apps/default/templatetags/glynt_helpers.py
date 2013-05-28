@@ -8,17 +8,22 @@ import time
 
 register = template.Library()
 
+import logging
+logger = logging.getLogger('django.request')
+
 
 @register.simple_tag
 def current_date_format():
     return settings.DATE_FORMAT
 current_date_format.is_safe = True
 
+
 @register.simple_tag
 def navactive(request, urls):
     if request.path in ( reverse(url) for url in urls.split() ):
         return "active"
     return ""
+
 
 @register.simple_tag
 def current_site_domain():
@@ -93,6 +98,31 @@ def comment_form(form, next):
       'form': form,
       'next': next
     }
+
+
+@register.filter
+def ensure_number(num):
+    if not isinstance(num, ( int, long )):
+        num = 0
+
+    ensure_number = num
+    return ensure_number
+
+
+@register.filter(takes_context=False)
+def humanise_number(num):
+    if not isinstance(num, ( int, long )):
+        num = 0
+        logger.info('Value "num" passed to humanise_number must be a number is type: %s %s' % (type(num),num,))
+
+    magnitude = 0
+
+    while num >= 1000:
+        magnitude += 1
+        num /= 1000
+
+    humanised_num = '%s%s' % (num, ['', 'k', 'm', 'g', 't', 'p'][magnitude])
+    return humanised_num
 
 
 @register.inclusion_tag('pleasewait/loading.html')

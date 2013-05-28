@@ -9,7 +9,6 @@ from tasks import send_profile_setup_email
 
 import logging
 logger = logging.getLogger('lawpal.services')
-import pdb
 
 
 class EnsureLawyerService(object):
@@ -56,8 +55,8 @@ class EnsureLawyerService(object):
     def update_user_profile(self):
         # update the is_lawyer attribute
         profile = self.user.profile
-        profile.is_lawyer = True
-        profile.save(update_fields=['is_lawyer'])
+        profile.profile_data['is_lawyer'] = True
+        profile.save(update_fields=['profile_data'])
 
     def process(self):
         self.update_user()

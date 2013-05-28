@@ -7,7 +7,7 @@
         <a href="{% url 'lawyer:profile' slug=l.username %}"><img src="{{ l.profile_photo }}" class="partner-avatar" /></a>
     </div>
     <div class="span10"> 
-        <img src="http://local.weareml.com:8000/m/firm/orrick-bank-logo-1-500x316.jpg" class="partner-logo"> 
+        <!-- <img src="http://local.weareml.com:8000/m/firm/orrick-bank-logo-1-500x316.jpg" class="partner-logo">  -->
         <h2><a href="{% url 'lawyer:profile' slug=l.username %}">{{ l.full_name }}</a></h2>
         
         <h3>{{ l.object.summary }}</h3>
@@ -31,7 +31,14 @@
     </div>  
 </div>
 {% empty %}
-    None Found
+ <div class="row">
+    <div class="span12">
+        <div class="no-results">
+            Sorry, no lawyers found in that area.
+            More are signing up every day, so check back in a week or so. 
+        </div>
+    </div>
+</div>
 {% endfor %}
 
 {% show_more %}

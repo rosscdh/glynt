@@ -5,7 +5,11 @@ from django.template.defaultfilters import slugify
 from social_auth.models import UserSocialAuth
 from tasks import collect_user_fullcontact_info, collect_user_graph_connections
 
-from glynt.apps.graph.services import LinkedinProfileService
+from glynt.apps.client.models import _create_user_profile, create_glynt_profile
+
+from glynt.apps.services.linkedin.pipeline import linkedin_profile_extra_details
+from glynt.apps.services.google.pipeline import google_profile_extra_details
+
 from urlparse import parse_qs
 
 import uuid
@@ -17,67 +21,61 @@ logger = logging.getLogger('lawpal.graph')
 def ensure_user_setup(*args, **kwargs):
     """ Ensures the client.ClientProfile models and setup processes get called """
     user = kwargs.get('user', None)
+    request = kwargs.get('request', {})
+    session = request.session if request.session else {}
 
-    if user is not None:
+    if user is None:
+        logger.error('Pipeline.ensure_user_setup user is not present, cant create profile')
+    else:
         # Call the lambda defined in client/models.py
-        user.profile
+        profile, is_new = _create_user_profile(user=user)
+
+        profile.profile_data['user_class_name'] = session.get('user_class_name', 'lawyer')
+        profile.save(update_fields=['profile_data'])
+
+        create_glynt_profile(profile=profile, is_new=is_new)
 
 
-def profile_photo(backend, details, response, user=None, is_new=False,
+def profile_extra_details(backend, details, response, user=None, is_new=False, \
                         *args, **kwargs):
-    """ see if the details dict has the linkedin picture-url
-    if present update the profiel dict for use in updating user pic 
-    not rpesent? then init the linkedinprofileservice and get it from linked in"""
+    """ process the backend based on the backend type """
     if backend.name == 'linkedin':
-        profile = {}
+        logger.info('Pipeline.profile_extra_details backend is linkedin')
 
-        logger.info('Pipeline.linkedin.profile_photo logged in with linkedin')
+        linkedin_profile_extra_details(backend=backend, details=details, response=response, user=user, is_new=is_new, \
+                        *args, **kwargs)
 
-        if details.get('picture-url', None) is not None:
-            profile.update({
-                'photo_url': details.get('picture-url')
-            })
-            logger.info('Pipeline.linkedin.profile_photo details already had linkedin photo: %s' % profile.get('photo_url'))
-        else:
-            if user is not None:
-                auth = user.social_auth.get(provider='linkedin')
-                access_token = auth.extra_data.get('access_token', None)
+    elif backend.name == 'google-oauth2':
+        logger.info('Pipeline.profile_extra_details backend is google-oauth2')
 
-                if access_token is not None:
-                    logger.info('Pipeline.linkedin.profile_photo user: %s' % user)
+        google_profile_extra_details(backend=backend, details=details, response=response, user=user, is_new=is_new, \
+                                *args, **kwargs)
 
-                    api_data = parse_qs(access_token)
-                    service = LinkedinProfileService(uid=auth.uid, oauth_token=api_data.get('oauth_token')[0], \
-                                                        oauth_token_secret=api_data.get('oauth_token_secret')[0])
-                    profile = service.profile
-
-        if profile.get('photo_url') is None:
-            logger.info('Pipeline.linkedin.profile_photo user does not have linkedin photo: %s' % user)
-        else:
-            logger.info('Pipeline.linkedin.profile_photo user has linkedin photo: %s' % profile.get('photo_url'))
-            client_profile = user.profile
-            client_profile.profile_data.update({'linkedin_photo_url': profile.get('photo_url')})
-            client_profile.save(update_fields=['profile_data'])
+    else:
+        logger.error('Pipeline.profile_extra_details backend is Unknown')
 
 
 def graph_user_connections(backend, details, response, user=None, is_new=False,
                         *args, **kwargs):
     logger.debug('Graph.graph_user_connections start')
-    if user is not None:
-        auth = UserSocialAuth.objects.get(user=user, provider=backend.name)
-        logger.info('Pipeline: Graph.graph_user_connections auth: %s' % auth)
 
-        try:
-            logger.info('Pipeline: Graph.collect_user_fullcontact_info auth: %s' % user)
-            collect_user_fullcontact_info.delay(user=user)
-        except Exception as e:
-            logger.error('Did not try collect_user_fullcontact_info as no connection to broker could be found: %s' % e)
+    if getattr(settings, 'BROKER_BACKEND', None): # only do this if we have a broker
+        if user is not None:
 
-        try:
-            logger.info('Pipeline: Graph.collect_user_graph_connections auth: %s' % user)
-            collect_user_graph_connections.delay(auth=auth)
-        except Exception as e:
-            logger.error('Did not try collect_user_graph_connections as no connection to broker could be found: %s' % e)
+            auth = UserSocialAuth.objects.get(user=user, provider=backend.name)
+            logger.info('Pipeline: Graph.graph_user_connections auth: %s' % auth)
+
+            try:
+                logger.info('Pipeline: Graph.collect_user_fullcontact_info auth: %s' % user)
+                collect_user_fullcontact_info.delay(user=user)
+            except Exception as e:
+                logger.error('Did not try collect_user_fullcontact_info as no connection to broker could be found: %s' % e)
+
+            try:
+                logger.info('Pipeline: Graph.collect_user_graph_connections auth: %s' % user)
+                collect_user_graph_connections.delay(auth=auth)
+            except Exception as e:
+                logger.error('Did not try collect_user_graph_connections as no connection to broker could be found: %s' % e)
 
 
 

@@ -5,8 +5,12 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
+from django.core.files.base import File
 from django.core.files.storage import default_storage
 from django.utils.encoding import smart_unicode as smart_text # preparing for 1.5
+
+
+from PIL import Image
 
 from glynt.apps.export.utils import fetch_resources as link_callback
 from glynt.apps.sign.services import EmbeddedBase64SignatureService
@@ -19,6 +23,8 @@ DOCRAPTOR_KEY = getattr(settings, 'DOCRAPTOR_KEY', None)
 
 from xhtml2pdf import pisa
 import StringIO
+
+import requests
 
 import datetime
 import hashlib
@@ -221,3 +227,18 @@ class HelloSignService(object):
         logger.info('Deleted tmp document: "%s"'%(path,))
 
         return result
+
+
+class PhotoDownloadService(object):
+    """ Service to download and store photos """
+    url = None
+    file_name = None
+    downloaded_file = None
+    def __init__(self, url, file_name, **kwargs):
+        self.url = url
+        self.file_name = file_name
+        self.downloaded_file = File(self.download(self.url), name=self.file_name)
+
+    def download(self, url):
+        r = requests.get(url)
+        return Image.open(StringIO.StringIO(r.content))

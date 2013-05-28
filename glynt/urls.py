@@ -24,6 +24,8 @@ urlpatterns = patterns('',
 	url(r'^accounts/', include('userena.urls')),
 	url(r'^client/', include('glynt.apps.client.urls', namespace='client')),
 	url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}, name='logout'),
+    # Startups
+    url(r'^startups/', include('glynt.apps.startup.urls', namespace='startup')),
     # Legal Firms
     url(r'^firms/', include('glynt.apps.firm.urls', namespace='firm')),
     # lawyers
