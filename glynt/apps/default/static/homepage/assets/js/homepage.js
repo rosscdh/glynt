@@ -7,7 +7,7 @@ jQuery(document).ready(function() {
 
 
     
-	randomNumber=Math.floor(Math.random()*4);
+	randomNumber=Math.floor(Math.random()*3);
     imgPath=('/static/homepage/assets/img/bg/landing'+randomNumber+'.jpg');
 
     $('#hero').css('background-image', ('url("'+imgPath+'")'));

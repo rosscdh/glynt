@@ -66,8 +66,8 @@ text-decoration: none;
 body.homepage #learn-more h3{
 margin:0 auto;
 width:90px;
-height:65px;
-padding-top:25px;
+height:60px;
+padding-top:30px;
 border-radius:100px;
 margin-top: -20px;
 background-color:#42d0e5;
@@ -131,8 +131,8 @@ margin-bottom:20px;
 box-shadow: 2px 2px 5px #888;
 }
 body.homepage .product-tour img.down-arrow {
-margin-left:308px;
-margin-top:20px;
+margin-left:329px;
+margin-top:5px;
 float:left;
 }
 body.homepage .product-tour h2, body.homepage .product-tour h3 {
