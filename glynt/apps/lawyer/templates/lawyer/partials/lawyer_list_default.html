@@ -26,10 +26,13 @@
         </ul>
     </div>
 
+    {% if l.fee_packages %}
     <div class="card-bordered card-transaction">
         {% fee_packages_mini fee_packages=l.fee_packages %}
         <a href="{% url 'lawyer:profile' slug=l.username %}" class="transaction-view-all"><span>View all</span></a>
     </div>
+    {% endif %}
+
 </div>
 {% empty %}
  <div class="row">
