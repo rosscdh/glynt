@@ -409,7 +409,7 @@ a.btn.btn-primary:hover {
     padding: 0;
     position: relative;
     margin: 0 0 2em;
-    height: 177px;
+    height: 140px;
 }
 
 .partner .left {
@@ -418,14 +418,14 @@ a.btn.btn-primary:hover {
 a.partner-avatar {
     float: left;
     margin: 0 1.5em 0 0;
-    height: 177px;
-    width: 142px;
+    height: 140px;
+    width: 140px;
     display: block;
 }
 
 a.partner-avatar img {
-    height: 177px;
-    width: 142px;
+    height: 140px;
+    width: 140px;
 }
 
 img.partner-logo {
@@ -563,29 +563,29 @@ ul.partner-social .circle-small {
 
 .partner-overview {
     float: left;
-    padding: 1em 0 0;
+    padding: .4em 0 0;
 }
 
 .card-bordered {
     border: 1px solid #f0f0f0;
     box-sizing: border-box;
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 10px;
+    right: 10px;
     width: 380px;
-    height: 140px;
+    height: 120px;
     box-shadow: -2px 2px #f8f8f8;
 }
 
 .card-transaction ul {
     list-style: none;
-    margin: 0;
-    padding: 1.5em 1em 0 0;
+    margin: 0 0 .2em 0;
+    padding: 1em 1em 0 0;
 }
 
 .card-transaction li {
     color: #f98070;
-    padding: 0 0 1.5em 0;
+    padding: 0 0 1em 0;
     position: relative;
 }
 
@@ -602,7 +602,7 @@ ul.partner-social .circle-small {
     background: #f8f8f8;
     padding: .5em 0;
     text-align: center;
-    margin: -.5em 1em;
+    margin: -.7em 1em;
     color: #0088cc;
 }
 
@@ -647,16 +647,19 @@ font-size:18px;
 }
 
 .card-transaction i.no-icap {
-    background-position: -24pt -21pt;
+    /* background-position: -24pt -21pt; */
+    background: none;
 }
 
 
 .card-transaction i.no-ideferred {
-    background-position: -24pt -21pt;
+    /* background-position: -24pt -21pt; */
+    background: none;
 }
 
 .card-transaction i.no-ifixed {
-    background-position: -47pt -21pt;
+    /* background-position: -47pt -21pt; */
+    background: none;
 }
 
 .transaction-amount {
