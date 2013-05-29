@@ -27,7 +27,7 @@
     background-size: cover;
     text-align: center;
     position: relative;
-    min-height: 210px;
+    min-height: 160px;
 }
 
 #hero h1 {
@@ -40,21 +40,20 @@
     left: 0;
     bottom: 0;
     width: 100%;
-    height: 90px;
     background: rgba(0, 0, 0, 0.55);
-    padding: 32px 0px 25px 0px;
+    padding: 17px 0px 15px 0px;
     font-size: 24px;
 }
 
 #hero .dock input {
-    margin: 0px 0px 0px 0px;
-    padding: 0px 0px 0px 0px;
+    margin: 4px 0px 0px 0px;
+    padding: 0px 0px 4px 0px;
     border: none;
     color: white;
     background-color: transparent;
     border-bottom: 1px solid white;
     font-size: 20px;
-    text-align: center;
+    text-align: left;
     border-radius: 0px;
     box-shadow: none;
 }
@@ -62,13 +61,20 @@
 #hero .dock .btn {
     background-color: transparent;
     border: 1px solid white;
-    margin: 5px 0px 10px 0px;
+    margin: 5px 0px 0px 0px;
     text-decoration: none;
     color: white;
     padding: 7px 23px 6px 23px;
     font-weight: normal;
 }
-
+#hero .dock .examples {
+	text-align: right;
+	padding-right:370px;
+}
+#hero .dock .examples #rotate {
+	font-size:14px;
+	color:#b8c387;
+}
 .avatar img {
     border: 8px solid rgba(255, 255, 255, 0.46);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.23);
@@ -191,13 +197,13 @@ body.lawyer-welcome .profile p {
     margin-top: 20px;
 }
 
-.buttons {
+#hero .buttons {
     text-align: center;
     padding: 0;
     margin-bottom: -20px;
 }
 
-.buttons a.btn {
+#hero .buttons a.btn {
     padding: 11px 23px 13px 23px;
     border: 1px solid #e76356;
     border-radius: none;
@@ -205,11 +211,11 @@ body.lawyer-welcome .profile p {
     color: #fff;
 }
 
-.buttons a.btn.btn-secondary, .buttons a.btn.btn-tertiary {
+#hero .buttons a.btn.btn-secondary, .buttons a.btn.btn-tertiary {
     margin-left: 16px;
 }
 
-.buttons a.btn.btn-primary {
+#hero .buttons a.btn.btn-primary {
     background: #f67e72;
     background: -moz-linear-gradient(top, #f78b80 0%, #f67e72 100%);
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f78b80), color-stop(100%, #f67e72));
@@ -220,11 +226,11 @@ body.lawyer-welcome .profile p {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f78b80', endColorstr='#f67e72', GradientType=0);
 }
 
-.buttons a.btn.btn-primary:hover {
+#hero .buttons a.btn.btn-primary:hover {
     background: #eb786d;
 }
 
-.buttons a.btn.btn-secondary {
+#hero .buttons a.btn.btn-secondary {
     border: 1px solid #19acc2;
     background: #5cd6e8;
     background: -moz-linear-gradient(top, #5cd6e8 0%, #4ad1e5 100%);
@@ -236,11 +242,11 @@ body.lawyer-welcome .profile p {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5cd6e8', endColorstr='#4ad1e5', GradientType=0);
 }
 
-.buttons a.btn.btn-secondary:hover {
+#hero .buttons a.btn.btn-secondary:hover {
     background: #49ccdf;
 }
 
-.buttons a.btn.btn-tertiary {
+#hero .buttons a.btn.btn-tertiary {
     border: 1px solid #32a864;
     background: #5bd269;
     background: -moz-linear-gradient(top, #5bd269 0%, #48cd58 100%);
@@ -302,15 +308,13 @@ body.lawyer-welcome .profile p {
     font-size: 11px;
     color: #b4b7b8;
 }
-
-a.btn {
+#hero a.btn {
     padding: 6px 23px 7px 23px;
     border: 1px solid #e76356;
     border-radius: none;
     color: #fff;
 }
-
-a.btn.btn-primary {
+#hero a.btn.btn-primary {
     background: #f67e72;
     background: -moz-linear-gradient(top, #f78b80 0%, #f67e72 100%);
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f78b80), color-stop(100%, #f67e72));
@@ -321,7 +325,7 @@ a.btn.btn-primary {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f78b80', endColorstr='#f67e72', GradientType=0);
 }
 
-a.btn.btn-primary:hover {
+#hero a.btn.btn-primary:hover {
     background: #eb786d;
 }
 
@@ -447,11 +451,12 @@ img.partner-logo {
 
 .partner h2.partner-name {
     margin: 0;
+    margin-bottom:10px;
 }
 
 .partner h2.partner-name a {
-    color: #0088cc;
-    border-bottom: 1px solid #0088cc;
+    color: #4ad1e5;
+    border-bottom: 1px solid #4ad1e5;
 }
 
 .partner h2.partner-name a:hover {
@@ -461,7 +466,7 @@ img.partner-logo {
 .partner h3 {
     margin-top: 5px;
     font-size: 15px;
-    line-height: 18px;
+    line-height: 16px;
 }
 
 ul.partner-info {

@@ -12,7 +12,7 @@
 {% block prebody %}
 
 <div id="hero">
-	<div class="container">
+	<div class="container container-main">
 		<!-- starts carousel -->
 		<div class="row animated fadeInRight profile-details">
 			<div class="span2">
@@ -20,22 +20,18 @@
 					<img src="{{ object.profile_photo }}" alt="{{ object.user.get_full_name|default:object.user.username }}" />
 				</div>
 			</div>
-			<div class="span10">
+			<div class="span6">
 				<h1>{{ object.user.get_full_name|default:object.user.username }}</h1>
 				<h3>{{ object.summary }}</h3>
 			</div>
-		</div>
-	</div>
-	<div id="buttons">
-		<div class="container">
-			<div class="row12">
-				{% if user.is_staff %}
-					<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="false" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if not object.is_active %}hide{% endif %} btn btn-primary">Disable</a>
-					<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="true" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if object.is_active %}hide{% endif %} btn btn-success">Approve</a>
-				{% endif %}
-				{% if user.username == object.user.username %}
-					<a href="{% url 'lawyer:setup_profile' %}" class="btn">Edit profile</a>  
-					<a href="{% url 'lawyer:invite' %}" class="btn">Invite Lawyers</a> 
+			{% if user.username == object.user.username %}
+				<div class="span4 pull-right">
+					<br />
+					<br />
+					<br />
+					<br />
+<!-- 					<a href="{% url 'lawyer:setup_profile' %}" class="btn btn-primary pull-right">Edit profile</a>   
+					<a href="{% url 'lawyer:invite' %}" class="btn btn-primary pull-right">Invite Lawyers</a>   -->
 					{% if object.summary %} 
 						{% if PROJECT_ENVIRONMENT != 'dev' %}
 					    <script>
@@ -45,10 +41,20 @@
 						</script>
 						{% endif %}
 					{% endif %}
+				</div>
 				{% endif %}
-				<a href="{% url 'engage:message' to=object.user.username %}" id="send-message" class="btn right" title="Message" data-toggle="modal"><i class="icon-envelope"></i> Message</a>
-				<a href="#comingSoonModal" class="btn right" title="Endorse" data-toggle="modal"><i class="icon-star"></i> Endorse</a>
-				<a href="#comingSoonModal" class="btn right" title="Engage"  data-toggle="modal"><i class="icon-play"></i> Engage</a>
+		</div>
+	</div>
+	<div id="buttons">
+		<div class="container">
+			<div class="row12">
+				{% if user.is_staff %}
+					<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="false" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if not object.is_active %}hide{% endif %} btn btn-primary">Disable</a>
+					<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="true" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if object.is_active %}hide{% endif %} btn btn-success">Approve</a>
+				{% endif %}
+				<a href="{% url 'engage:message' to=object.user.username %}" id="send-message" class="btn right" title="Message" data-toggle="modal"><i class="icon-envelope icon-white"></i> Message</a>
+				<a href="#comingSoonModal" class="btn right" title="Endorse" data-toggle="modal"><i class="icon-star icon-white"></i> Endorse</a>
+				<a href="#comingSoonModal" class="btn right" title="Engage"  data-toggle="modal"><i class="icon-play icon-white"></i> Engage</a>
 			</div>
 		</div>
 	</div>
