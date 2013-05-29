@@ -14,9 +14,8 @@ TRANSACTION_PACKAGES = (('seed_financing_amount','seed','Seed Financing'),
 
 
 class FeePackage(Bunch):
-    @property
     def is_valid(self):
-        return False if self.title.strip() in [None, ''] else True
+        return False if self.title in [None, ''] else True
 
 
 class TransactionPackageBunch(object):
@@ -33,12 +32,15 @@ class TransactionPackageBunch(object):
         self.data = data
         self.packages = self.handle()
 
+    def __repl__(self):
+        return self.items()
+
     def toJson(self):
         return json.dumps(self.packages)
 
     def items(self):
         """ Provide a list of valid (valid means they have a title that is not None or empty string) items """
-        return [p for key,p in self.packages.iteritems() if p.is_valid]
+        return [p for key,p in self.packages.iteritems() if p.is_valid()]
 
     @property
     def _fee_present_key(self):
@@ -72,7 +74,7 @@ class TransactionPackageBunch(object):
         else:
             title = self.title
 
-        return title
+        return title.strip() if title is not None else title
 
     @property
     def _min_key(self):
@@ -103,11 +105,9 @@ class TransactionPackageBunch(object):
         package_items = {}
 
         for transaction in TRANSACTION_PACKAGES:
-            p = {} # setup the package dict
-
             self.key, self.short, self.title = transaction # assign transaction tuple to class attribs
 
-            p.update({
+            package_items[self._key] = FeePackage(**{
                 'title': self._title,
                 'min': self.data.get(self._min_key, 0) if type(self.data.get(self._min_key, 0)) == int else 0,
                 'max': self.data.get(self._max_key, 0) if type(self.data.get(self._max_key, 0)) == int else 0,
@@ -115,6 +115,5 @@ class TransactionPackageBunch(object):
                 'deferred_fees_available': True if self.data.get(self._availablekey_key('%s_deferred_fees_available'), None) == True else False,
                 'fixed_fees_available': True if self.data.get(self._availablekey_key('%s_fixed_fees_available'), None) == True else False,
             })
-            package_items[self._key] = FeePackage(**p)
 
         return package_items
