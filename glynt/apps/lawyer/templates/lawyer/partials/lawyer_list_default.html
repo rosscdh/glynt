@@ -9,7 +9,7 @@
     </a>
 
     <div class="partner-overview">
-        <h2 class="partner-name"><a href="{% url 'lawyer:profile' slug=l.username %}">{{ l.full_name }}</a></h2>
+        <h2 class="partner-name"><a href="{% url 'lawyer:profile' slug=l.username %}">{{ l.full_name|truncatechars:26 }}</a></h2>
 
         <h3>{{ l.summary|truncatechars:55 }}</h3>
 
@@ -26,7 +26,7 @@
         </ul>
     </div>
 
-    {% if l.fee_packages %}
+    {% if l.object.seed_financing_amount_min or l.object.incorporation_min %}
     <div class="card-bordered card-transaction">
         {% fee_packages_mini fee_packages=l.fee_packages %}
         <a href="{% url 'lawyer:profile' slug=l.username %}" class="transaction-view-all"><span>View all</span></a>
