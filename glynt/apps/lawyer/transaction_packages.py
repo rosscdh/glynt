@@ -47,6 +47,7 @@ class TransactionPackageBunch(object):
     title = None
 
     packages = {}
+    DEFAULT_ITEM_KEYS = ['seed_financing_amount', 'incorporation']
 
     def __init__(self, data):
         self.data = data
@@ -64,8 +65,7 @@ class TransactionPackageBunch(object):
 
     def default_items(self):
         """ Provide a list of valid (valid means they have a title that is not None or empty string) items """
-        default_items = ['seed_financing_amount', 'incorporation']
-        return [p for key,p in self.packages.iteritems() if p.key in default_items and p.is_valid()]
+        return [p for key,p in self.packages.iteritems() if p.key in self.DEFAULT_ITEM_KEYS and p.is_valid()]
 
     @property
     def _fee_present_key(self):
