@@ -20,8 +20,8 @@
              {% if request.user.is_authenticated %}
                 {% if PROJECT_ENVIRONMENT != 'prod' %}<li><a href="{% url 'lawyer:list' %}">{% trans 'Marketplace' %}</a></li>{% endif %}
                 <li class="divider-vertical"></li>
-                 <li class="nav-support" data-toggle="tooltip" title="Get support"><a id="Intercom" href="mailto:xw4ux8lx@incoming.intercom.io"><i class="icon-support"></i></a></li>
-                 <li class="nav-mail" data-toggle="tooltip" title="Your messages"><a href="{% url 'postman_inbox' %}">
+                 <li class="nav-support" data-toggle="tooltip" title="Support"><a id="Intercom" href="mailto:xw4ux8lx@incoming.intercom.io"><i class="icon-support"></i></a></li>
+                 <li class="nav-mail" data-toggle="tooltip" title="Inbox"><a href="{% url 'postman_inbox' %}">
                      {% if postman_unread_count != 0  %}
                         <span class="unread-messages">{{ postman_unread_count }}</span> <i class="icon-mail"></i>
                      {% else %}
