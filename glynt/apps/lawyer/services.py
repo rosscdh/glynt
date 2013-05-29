@@ -159,3 +159,4 @@ class EnsureLawyerService(object):
             firm_service = EnsureFirmService(firm_name=self.firm_name, offices=self.offices, **self.data)
             firm_service.process()
             self.firm = firm_service.firm
+

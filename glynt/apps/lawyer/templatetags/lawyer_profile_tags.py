@@ -31,6 +31,20 @@ def simple_name_list(data_list):
     return context
 
 
+@register.inclusion_tag('lawyer/partials/fee_packages.html', takes_context=False)
+def fee_packages(lawyer):
+    context = {
+        'fee_package_list': lawyer.fee_packages.items()
+    }
+    return context
+
+@register.inclusion_tag('lawyer/partials/fee_packages_mini.html', takes_context=False)
+def fee_packages_mini(fee_packages):
+    context = {
+        'fee_package_list': fee_packages
+    }
+    return context
+
 @register.filter(takes_context=False)
 def humanise_number(num):
     if not isinstance(num, ( int, long )):

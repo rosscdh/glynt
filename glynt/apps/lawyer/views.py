@@ -122,9 +122,8 @@ class LawyerListView(AjaxListView, FormMixin):
             if value:
                 sq.add(SQ(content=Clean(urlparse.unquote(value))), SQ.AND)
 
-        logger.debug('ElasticSearch QueryString %s' % sq)
-
         return SearchQuerySet().filter(sq)
+
 
     def get_form(self, form_class):
         kwargs = self.get_form_kwargs()

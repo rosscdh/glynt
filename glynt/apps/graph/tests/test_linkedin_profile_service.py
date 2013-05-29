@@ -9,6 +9,9 @@ import mocktest
 
 from glynt.apps.graph.services import LinkedinProfileService
 
+import logging
+logger = logging.getLogger('django.request')
+
 
 class LinkedinProfileServiceTest(mocktest.TestCase):
     """ Test the linkedin Profile services
@@ -17,10 +20,11 @@ class LinkedinProfileServiceTest(mocktest.TestCase):
     def setUp(self):
         """
         """
-        self.expected_url = 'http://api.linkedin.com/v1/people/123:(picture-url,current-status,industry,summary)?format=json'
+        self.expected_url = 'https://api.linkedin.com/v1/people/123:(picture-url,email-address,current-status,headline,industry,summary)?format=json'
         self.oauth_token = 'test_oauth_token'
         self.oauth_token_secret = 'test_oauth_token_secret'
         self.subject = LinkedinProfileService(uid='123', oauth_token=self.oauth_token, oauth_token_secret=self.oauth_token_secret)
+        self.expected_profile_keys = ['status', 'bio', 'industry', 'summary', 'photo_url']
 
     def test_url(self):
         self.assertEqual(self.subject.get_url(), self.expected_url)
@@ -39,11 +43,12 @@ class LinkedinProfileServiceTest(mocktest.TestCase):
         
         response = self.subject.profile
 
-        self.assertTrue(response.keys() == ['status', 'industry', 'summary', 'photo_url'])
+        self.assertEqual(response.keys(), self.expected_profile_keys)
 
         self.assertTrue(response.get('photo_url') == 'http://m3.licdn.com/mpr/mprx/0_G13Ym4CgyRCZ1zBI8AbDmUKpYsFZAnBIhqz3mU3DTM1ea-8wmzAthRviK-bbtlnFiri8Tp1jqBka')
         self.assertTrue(response.get('industry') == 'Internet')
-        self.assertTrue(response.get('summary') == 'Summary here')
+        self.assertTrue(response.get('summary') is None)
+        self.assertTrue(response.get('bio') == 'Summary here')
         self.assertTrue(response.get('status') == 'Monkies Rule')
 
     @httpretty.activate
@@ -58,11 +63,12 @@ class LinkedinProfileServiceTest(mocktest.TestCase):
         
         response = self.subject.profile
 
-        self.assertTrue(response.keys() == ['status', 'industry', 'summary', 'photo_url'])
+        self.assertEqual(response.keys(), self.expected_profile_keys)
 
         self.assertTrue(response.get('photo_url') is None)
         self.assertTrue(response.get('industry') == 'Internet')
         self.assertTrue(response.get('summary')  is None)
+        self.assertTrue(response.get('bio')  is None)
         self.assertTrue(response.get('status')  is None)
 
     @httpretty.activate
@@ -77,9 +83,10 @@ class LinkedinProfileServiceTest(mocktest.TestCase):
         
         response = self.subject.profile
 
-        self.assertTrue(response.keys() == ['status', 'industry', 'summary', 'photo_url'])
+        self.assertEqual(response.keys(), self.expected_profile_keys)
 
         self.assertTrue(response.get('photo_url') is None)
         self.assertTrue(response.get('industry') is None)
         self.assertTrue(response.get('summary')  is None)
+        self.assertTrue(response.get('bio')  is None)
         self.assertTrue(response.get('status')  is None)
