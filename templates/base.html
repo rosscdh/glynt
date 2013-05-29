@@ -96,13 +96,17 @@
 	{% handlebars_js %}
  	{% comments_js %}
 
+    {% handlebars_messages %}
+
     {% block js %}{% endblock %}
 	
     <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-36042667-1']);
         _gaq.push(['_trackPageview']);
-
+        {% if PROJECT_ENVIRONMENT != 'prod' %}
+             _gaq.push(['_setCustomVar', 1, 'env', '{{ PROJECT_ENVIRONMENT }}',1]); 
+        {% endif %}
         (function() {
         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
@@ -111,6 +115,7 @@
     </script>
 
     {% intercom_script %}
+
 
 </body>
 </html>

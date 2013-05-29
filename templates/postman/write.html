@@ -1,0 +1,16 @@
+{% load url from future %}{% load i18n crispy_forms_tags %}
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Send {{ to_user.first_name }} {{ to_user.last_name }} a message</h3>
+</div>
+
+<div class="modal-body">
+    <form id="send-message-form" data-validate="parsley" class="form-horizontal" action="{% url 'engage:message' to=to_user.username %}{% if next_url %}?next={{ next_url|urlencode }}{% endif %}" method="post">{% csrf_token %}
+        {{ form|crispy }}
+    </form>
+</div>
+
+<div class="modal-footer">
+    <!-- js event handles this button -->
+    <button id="submit-modal-message" class="btn btn-primary" type="submit">{% trans "Send" %}</button>
+</div>

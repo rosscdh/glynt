@@ -110,6 +110,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'glynt.middleware.LawpalSocialAuthExceptionMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'pagination.middleware.PaginationMiddleware',
 )
 
 
@@ -121,7 +122,7 @@ WSGI_APPLICATION = 'glynt.wsgi.application'
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.contrib.angel.AngelBackend',
     'social_auth.backends.contrib.linkedin.LinkedinBackend',
-    'social_auth.backends.twitter.TwitterBackend',
+    'social_auth.backends.google.GoogleOAuth2Backend',
     'glynt.backends.EmailOrUsernameBackend',
     'userena.backends.UserenaAuthenticationBackend',
     'guardian.backends.ObjectPermissionBackend',
@@ -142,6 +143,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "glynt.context_processors.default_profile_image",
     "social_auth.context_processors.social_auth_by_type_backends",
     "social_auth.context_processors.social_auth_by_name_backends",
+    "postman.context_processors.inbox",
     "django.core.context_processors.request",
 )
 
@@ -204,6 +206,8 @@ PROJECT_APPS = (
     'glynt.apps.export',
     # Remote and 3rd Party services (pdf/doc conversion)
     #'glynt.apps.services',
+    # Message app
+    'glynt.apps.engage',
 )
 
 HELPER_APPS = (
@@ -243,6 +247,12 @@ HELPER_APPS = (
     'djcelery',
     # User switcher
     'debug_toolbar_user_panel',
+
+    # Django Pagination,
+    'pagination',
+    # Django postman
+    'postman',
+
     # Vast array of Storage types
     'storages',
 )
@@ -288,9 +298,9 @@ AUTH_PROFILE_MODULE = 'client.ClientProfile' # our custom profile
 
 # Celery
 BROKER_HEARTBEAT = 10 # helps with heroku connection limits
-BROKER_CONNECTION_TIMEOUT = 10
+BROKER_CONNECTION_TIMEOUT = 3
 BROKER_POOL_LIMIT = 1 # Very importnat for heroku, stops a max + 1 event
-BROKER_CONNECTION_MAX_RETRIES = 5
+BROKER_CONNECTION_MAX_RETRIES = 2
 
 
 USERENA_USE_MESSAGES = True
@@ -346,16 +356,24 @@ SOCIAL_AUTH_BACKEND_ERROR_URL = '/'
 SOCIAL_AUTH_PROTECTED_USER_FIELDS = ('first_name', 'last_name', 'full_name', 'email',)
 SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.social.social_auth_user',
-    'social_auth.backends.pipeline.associate.associate_by_email', # very insecure, only here to allow transfer of users from preview.lawpal
+    #'social_auth.backends.pipeline.associate.associate_by_email', # removed as we no longer need to provision poeple coming from preview.
     'glynt.apps.graph.pipeline.get_username',
     'social_auth.backends.pipeline.user.create_user',
     'social_auth.backends.pipeline.social.associate_user',
     'social_auth.backends.pipeline.social.load_extra_data',
     'social_auth.backends.pipeline.user.update_user_details',
     'glynt.apps.graph.pipeline.ensure_user_setup',
-    'glynt.apps.graph.pipeline.linkedin_profile_extra_details',
+    'glynt.apps.graph.pipeline.profile_extra_details',
     # 'glynt.apps.graph.pipeline.graph_user_connections',
 )
+
+POSTMAN_DISALLOW_ANONYMOUS = True
+POSTMAN_DISALLOW_MULTIRECIPIENTS = True
+POSTMAN_DISALLOW_COPIES_ON_REPLY = True
+POSTMAN_DISABLE_USER_EMAILING = True
+POSTMAN_AUTO_MODERATE_AS = True
+POSTMAN_MAILER_APP = None
+POSTMAN_NOTIFIER_APP = None
 
 INTERCOM_API_SECRET = '-sjPyiyI5P44z3QsHLDUWfoLK8Rml7Wbg2wmj64L'
 

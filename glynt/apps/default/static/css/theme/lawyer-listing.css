@@ -606,6 +606,12 @@ ul.partner-social .circle-small {
     color: #0088cc;
 }
 
+.no-results {
+text-align: center;
+font-size:18px;
+
+}
+
 .transaction-view-all span {
     border-bottom: 1px solid #0088cc;
 }
