@@ -14,8 +14,17 @@ TRANSACTION_PACKAGES = (('seed_financing_amount','seed','Seed Financing'),
 
 
 class FeePackage(Bunch):
+    def valid_min_max(self):
+        return True if self.min >= 0 and self.max > self.min else False
+
+    def valid_range(self):
+        return True if self.min <= self.max else False
+
+    def valid_title(self):
+        return True if self.title not in [None, ''] else False
+
     def is_valid(self):
-        return False if self.title in [None, ''] else True
+        return True if self.valid_min_max() and self.valid_range() and self.valid_title() else False
 
 
 class TransactionPackageBunch(object):
