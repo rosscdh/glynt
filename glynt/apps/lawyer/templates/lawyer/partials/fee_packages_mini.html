@@ -1,0 +1,14 @@
+{% load glynt_helpers %}
+<ul>
+{% if fee_package_list %}
+    {% for fp in fee_package_list %}
+    <li>
+        <span class="transaction">{{ fp.0 }}</span>
+        <span class="transaction-amount">${{ fp.1|humanise_number }} &ndash; ${{ fp.2|humanise_number }}</span>
+        <span class="icons"><i class="{% if fp.3 %}icap{% else %}no-icap{% endif %} tip" data-toggle="tooltip" title="Fee cap available for this transaction"></i><i class="{% if fp.4 %}ideferred{% else %}no-ideferred{% endif %} tip" data-toggle="tooltip" title="Deferred fees available for this transaction"></i><i class="{% if fp.5 %}ifixed{% else %}no-ifixed{% endif %} tip" data-toggle="tooltip" title="Fixed fees available for this transaction"></i></span>
+    </li>
+    {% endfor %}
+{% else %}
+    <li class="no-data">Nothing yet.</li>
+{% endif %}
+</ul>

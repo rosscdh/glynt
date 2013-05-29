@@ -26,15 +26,10 @@
         </ul>
     </div>
 
-    {% if l.seed_financing_amount_min or l.incorporation_min %}
     <div class="card-bordered card-transaction">
-        <ul>
-            <li><span class="transaction">Seed Financing</span><span class="transaction-amount">${{ l.seed_financing_amount_min|humanise_number }} &ndash; ${{ l.seed_financing_amount_max|humanise_number }}</span><span class="icons"><i class="{% if i.seed_fee_cap_available %}icap{% else %}no-icap{% endif %} tip" data-toggle="tooltip" title="Fee cap available for this transaction"></i><i class="{% if i.seed_deferred_fees_available %}ideferred{% else %}no-ideferred{% endif %} tip" data-toggle="tooltip" title="Deferred fees available for this transaction"></i><i class="{% if l.seed_fixed_fees_available %}ifixed{% else %}no-ifixed{% endif %} tip" data-toggle="tooltip" title="Fixed fees available for this transaction"></i></span></li>
-            <li><span class="transaction">Financing</span><span class="transaction-amount">${{ l.incorporation_min|humanise_number }} &ndash; ${{ l.incorporation_max|humanise_number }}</span><span class="icons"><i class="{% if i.inc_fee_cap_available %}icap{% else %}no-icap{% endif %} tip" data-toggle="tooltip" title="Fee cap available for this transaction"></i><i class="{% if i.inc_deferred_fees_available %}ideferred{% else %}no-ideferred{% endif %} tip" data-toggle="tooltip" title="Deferred fees available for this transaction"></i><i class="{% if l.inc_fixed_fees_available %}ifixed{% else %}no-ifixed{% endif %} tip" data-toggle="tooltip" title="Fixed fees available for this transaction"></i></span></li>
-        </ul>
+        {% fee_packages_mini fee_packages=l.fee_packages %}
         <a href="{% url 'lawyer:profile' slug=l.username %}" class="transaction-view-all"><span>View all</span></a>
     </div>
-    {% endif %}
 </div>
 {% empty %}
  <div class="row">
