@@ -39,7 +39,7 @@
                    </ul>
                  </li>
              {% else %}
-                 <li><a href="#signin-modal" role="button" data-toggle="modal">{% trans 'Sign In' %}</a></li>
+                 <li><a href="#signin-modal" role="button" data-toggle="modal"  onClick="_gaq.push(['_trackEvent', 'Nav', 'Action', 'Sign In']);">{% trans 'Sign In' %}</a></li>
              {% endif %}
             </ul>                 
         </div>

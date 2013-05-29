@@ -14,6 +14,17 @@ TRANSACTION_PACKAGES = (('seed_financing_amount','seed','Seed Financing'),
 
 
 class FeePackage(Bunch):
+    def as_tuple(self):
+        return (
+            self.title,
+            self.min,
+            self.max,
+            self.fee_cap_available,
+            self.deferred_fees_available,
+            self.fixed_fees_available,
+            self.key,
+        )
+
     def valid_min_max(self):
         return True if self.min >= 0 and self.max > self.min else False
 
@@ -36,6 +47,7 @@ class TransactionPackageBunch(object):
     title = None
 
     packages = {}
+    DEFAULT_ITEM_KEYS = ['seed_financing_amount', 'incorporation']
 
     def __init__(self, data):
         self.data = data
@@ -50,6 +62,10 @@ class TransactionPackageBunch(object):
     def items(self):
         """ Provide a list of valid (valid means they have a title that is not None or empty string) items """
         return [p for key,p in self.packages.iteritems() if p.is_valid()]
+
+    def default_items(self):
+        """ Provide a list of valid (valid means they have a title that is not None or empty string) items """
+        return [p for key,p in self.packages.iteritems() if p.key in self.DEFAULT_ITEM_KEYS and p.is_valid()]
 
     @property
     def _fee_present_key(self):
@@ -123,6 +139,7 @@ class TransactionPackageBunch(object):
                 'fee_cap_available': True if self.data.get(self._availablekey_key('%s_fee_cap_available'), None) == True else False,
                 'deferred_fees_available': True if self.data.get(self._availablekey_key('%s_deferred_fees_available'), None) == True else False,
                 'fixed_fees_available': True if self.data.get(self._availablekey_key('%s_fixed_fees_available'), None) == True else False,
+                'key': self._key,
             })
 
         return package_items
