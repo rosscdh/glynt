@@ -6,3 +6,6 @@
 {% for location in object.practice_locations %}
     {{ location }}
 {% endfor %}
+{% for package in object.fee_packages.items %}
+    {{ package.title }}
+{% endfor %}
