@@ -38,6 +38,13 @@ def fee_packages(lawyer):
     }
     return context
 
+@register.inclusion_tag('lawyer/partials/fee_packages_mini.html', takes_context=False)
+def fee_packages_mini(fee_packages):
+    context = {
+        'fee_package_list': fee_packages
+    }
+    return context
+
 @register.filter(takes_context=False)
 def humanise_number(num):
     if not isinstance(num, ( int, long )):
