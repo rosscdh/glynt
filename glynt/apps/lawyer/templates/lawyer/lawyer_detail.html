@@ -70,6 +70,7 @@
 						</div>
 					</div>
 					<hr>
+			{% if PROJECT_ENVIRONMENT == 'dev' %}
 					<div class="row">
 						<div class="span6 endorsement">
 							<h2>Endorsements</h2>
@@ -99,8 +100,6 @@
 						</div>
 					</div>
 				</div>
-			{% if PROJECT_ENVIRONMENT == 'dev' %}
-
 				<hr>
 			{% endif %}
 			</div>
