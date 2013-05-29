@@ -563,29 +563,29 @@ ul.partner-social .circle-small {
 
 .partner-overview {
     float: left;
-    padding: 1em 0 0;
+    padding: .4em 0 0;
 }
 
 .card-bordered {
     border: 1px solid #f0f0f0;
     box-sizing: border-box;
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: 10px;
+    right: 10px;
     width: 380px;
-    height: 130px;
+    height: 120px;
     box-shadow: -2px 2px #f8f8f8;
 }
 
 .card-transaction ul {
     list-style: none;
-    margin: 0;
+    margin: 0 0 .2em 0;
     padding: 1em 1em 0 0;
 }
 
 .card-transaction li {
     color: #f98070;
-    padding: 0 0 1.5em 0;
+    padding: 0 0 1em 0;
     position: relative;
 }
 
