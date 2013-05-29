@@ -22,7 +22,7 @@
 			<h1>A better attorney-client relationship</h1>
 			<a name="learn"></a>
 			I need a lawyer in <input id="id_location" name="location" value="San Francisco"> <!-- for a <input id="user_screen_name" value="Seed financing"> -->
-			<button type="submit" class="btn btn-onblack btn-large">Search</button> <a href="#signin-modal" role="button" class="btn btn-onblack btn-large" data-toggle="modal">Sign In</a>
+			<button type="submit" class="btn btn-onblack btn-large" onClick="_gaq.push(['_trackEvent', 'Homepage', 'Action', 'Search']);">Search</button>or  <a href="#signin-modal" role="button" class="btn btn-onblack btn-large" data-toggle="modal" onClick="_gaq.push(['_trackEvent', 'Homepage', 'Action', 'Sign In']);">Sign In</a>
 			</form>
     	</div>
 
@@ -32,7 +32,7 @@
 <div class="container">
 	<div class="row">
 		<div class="span12" id="learn-more">
-			<h3><a href="#learn" class="">learn<br />more</a></h3>
+			<h3><a href="#learn" class=""  onClick="_gaq.push(['_trackEvent', 'Homepage', 'Action', 'Learn more']);">learn<br />more</a></h3>
 		</div>
 	</div>
 </div>
@@ -66,7 +66,7 @@
 <!-- 					<br />
 					<br />
 					<img src="{{ STATIC_URL }}img/supporters.png" class=""> -->
-					<a href="#signin-modal" role="button" class="btn btn-primary btn-huge btn-center" data-toggle="modal">Join the Marketplace</a>
+					<a href="#signin-modal" role="button" class="btn btn-primary btn-huge btn-center" data-toggle="modal"  onClick="_gaq.push(['_trackEvent', 'Homepage', 'Action', 'Large Join']);">Join the Marketplace</a>
 				</div>
 			</div>
 
@@ -90,11 +90,14 @@
 		<div class="span12 product-tour">
 			<h2>Tools to Manage Your Transactions</h2>
 			<h3>Beautifully simple tools to make your relationship more efficient and transparent</h3>
+			<br />
 			<img src="{{ STATIC_URL }}img/homepage/tools.png" style="margin-left:15px;" class="hideme"> 
+			<br />
 			<br />
 			<div class="desc full">
 				How many times have you asked yourself, "What's happening with my deal?". We're building a suite of tools to help visualize and manage transactions in a beautifully simple way by focusing both client and attorney on what needs to happen to get your deal closed. Sign in for more information. 
 			</div>
+			<br />
 		</div>
 	</div>
 </div>
@@ -123,7 +126,7 @@
 		</div>
 	</div>
 </div>
-<script src="/static/homepage/assets/js/general.js"></script> 
+<script src="/static/homepage/assets/js/homepage.js"></script> 
 <script>
 $(document).ready(function(){
 	$('#id_location').live('click', function(event){
