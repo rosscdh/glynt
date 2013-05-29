@@ -1,5 +1,5 @@
 {% extends 'base.html' %}{% load account_tags glynt_helpers lawyer_profile_tags jsonify thumbnail humanize cache %}
-{% block page_title %}{{ object.user.get_full_name|default:object.user.username }}{% endblock %}
+{% block page_title %}{{ object.user.get_full_name|default:object.user.username }} {% if firm %} - {{ firm }}{% endif %}{% endblock %}
 {% block bodyclass %}lawyer-profile{% endblock %}
 
 {% block css %}
@@ -24,14 +24,18 @@
 				<h1>{{ object.user.get_full_name|default:object.user.username }}</h1>
 				<h3>{{ object.summary }}</h3>
 			</div>
-			{% if user.username == object.user.username %}
-				<div class="span4 pull-right">
-					<br />
-					<br />
-					<br />
-					<br />
-<!-- 					<a href="{% url 'lawyer:setup_profile' %}" class="btn btn-primary pull-right">Edit profile</a>   
-					<a href="{% url 'lawyer:invite' %}" class="btn btn-primary pull-right">Invite Lawyers</a>   -->
+		</div>
+	</div>
+	<div id="buttons">
+		<div class="container">
+			<div class="row12">
+				{% if user.is_staff %}
+					<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="false" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if not object.is_active %}hide{% endif %} btn right"><i class="icon-eye-close icon-white"></i> Disable</a>
+					<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="true" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if object.is_active %}hide{% endif %} btn right"><i class="icon-eye-close icon-white"></i> Approve</a>
+				{% endif %}
+				{% if user.username == object.user.username %}
+					<a href="{% url 'lawyer:setup_profile' %}" class="btn right" ><i class="icon-edit icon-white"></i> Edit profile</a>   
+					<a href="{% url 'lawyer:invite' %}" class="btn right" ><i class="icon-heart icon-white"></i> Invite Lawyers</a>  
 					{% if object.summary %} 
 						{% if PROJECT_ENVIRONMENT != 'dev' %}
 					    <script>
@@ -41,20 +45,9 @@
 						</script>
 						{% endif %}
 					{% endif %}
-				</div>
-				{% endif %}
-		</div>
-	</div>
-	<div id="buttons">
-		<div class="container">
-			<div class="row12">
-				{% if user.is_staff %}
-					<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="false" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if not object.is_active %}hide{% endif %} btn btn-primary">Disable</a>
-					<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="true" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if object.is_active %}hide{% endif %} btn btn-success">Approve</a>
 				{% endif %}
 				<a href="{% url 'engage:message' to=object.user.username %}" id="send-message" class="btn right" title="Message" data-toggle="modal"><i class="icon-envelope icon-white"></i> Message</a>
-<!-- 				<a href="#comingSoonModal" class="btn right" title="Endorse" data-toggle="modal"><i class="icon-star icon-white"></i> Endorse</a>
- -->				<a href="#comingSoonModal" class="btn right" title="Engage"  data-toggle="modal"><i class="icon-play icon-white"></i> Engage</a>
+				<a href="#comingSoonModal" class="btn right" title="Engage"  data-toggle="modal"><i class="icon-play icon-white"></i> Engage</a>
 			</div>
 		</div>
 	</div>
