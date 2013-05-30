@@ -2,7 +2,30 @@
 """
 from django.test import TestCase
 
+from glynt.apps.factories import UserFactory
+from glynt.apps.client.models import _get_or_create_user_profile
+
+from glynt.apps.client.models import ClientProfile
+
 from forms import SignupForm, AuthenticationForm
+
+
+class ClientProfileCreateTest(TestCase):
+  def setUp(self):
+    self.subject = UserFactory.create()
+
+  def test__get_or_create_user_profile(self):
+    result = _get_or_create_user_profile(self.subject)
+    self.assertTrue(type(result) == tuple)
+
+    profile, is_new = result
+
+    self.assertTrue(type(profile) == ClientProfile)
+    self.assertTrue(is_new == True)
+
+  def test_profile_is_created_when_referenced(self):
+    profile = self.subject.profile
+    self.assertTrue(hasattr(self.subject, 'profile'))
 
 
 class SignupFormTest(TestCase):
