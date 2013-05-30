@@ -597,9 +597,9 @@ table.table td {
 	padding:20px 30px 30px 30px;
 }
 #signin-modal .startup div, #signin-modal .lawyer div {
-	background: url('/static/img/coffee-tie.png');
+	background: url('/static/img/coffee-tie.png') no-repeat;
 	width:70px;
-	height:105px;
+	height:104px;
 	margin:0 auto;
 	margin-bottom: 10px;
 }
