@@ -7,34 +7,44 @@
 {% block prebody %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/css/theme/social-buttons.css">
 
-<div id="hero">
     <div class="container">
-        <!-- starts carousel -->
-        <div class="row animated fadeInDown">
+        <div class="row">
             <div class="span12">
                  {% if user.username == object.user.username %}
                 <h1>Claim your profile</h1>
                 <h3>You are a critical part of the LawPal community.<br/> The doors are opening soon. Make sure everything is current so founders can see who you really are. Have a question or comments? Contact us at <a href="mailto:founders@lawpal.com" style="color:white;">founders@lawpal.com</a> </h3>
-                 </h3>
                  {% else %}
                 <h1>Update your profile</h1>
-                <h3>Make sure your profile is updated as fully as possible.</h3>
                  {% endif %}
+                <div class="alert alert-success profile-live hidden">
+                    <h4>Your profile is live</h4>
+                    Improve your exposure by updating: <a href="#transactions-and-startups" class="update-tab">Transaction and Startups</a> and <a href="#connected-accounts" class="update-tab">Connected Accounts</a>.
+                </div>
+
+                <div class="alert alert-block needs-completing hidden">
+                    <h4>Your profile needs completing</h4>
+                    Please make sure these sections are updated: <a href="#general" class="update-tab">Basic Info</a>, <a href="#fees-packages" class="update-tab">Fees and Packages</a> and <a href="#profile" class="update-tab">Profile</a>.
+                </div>
             </div>
         </div>
     </div>
-</div>
 <div class="container profile">
+
+     <div class="alert alert-error hidden">Please correct all errors before submitting the form</div>
+
     <div class="row">
             <div class="span12">
             <ul id="profile-tab" class="nav nav-tabs">
                 {% if user.password == "!" %}<li class="active"><a href="#login-details" data-toggle="tab">Account Setup</a></li>{% endif %}
                 <li{% if user.password != "!" %} class="active"{% endif %}><a href="#general" data-toggle="tab">General</a></li>
-                <li><a href="#transactions-and-startups" data-toggle="tab">Transactions &amp; Startups</a></li>
-                <li><a href="#profile" data-toggle="tab">Profile</a></li>
-                <li><a href="#connected-accounts" data-toggle="tab">Connected Accounts</a></li>
                 <li><a href="#fees-packages" data-toggle="tab">Fees and Packages</a></li>
+                <li><a href="#profile" data-toggle="tab">Profile</a></li>
+                <li><a href="#transactions-and-startups" data-toggle="tab">Transactions &amp; Startups</a></li>
+                <li><a href="#connected-accounts" data-toggle="tab">Connected Accounts</a></li>
             </ul>
+
+
+
             <form id="lawyer-profile-form" data-validate="parsley" action="{% url 'lawyer:setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
                 <div class="tab-content">
 
@@ -514,6 +524,16 @@ img#photo-preview{
     margin: 0 0 0 20px;
 }
 
+.profile-live a, .needs-completing a {
+    border-bottom: 1px solid #0088cc;
+    color: #0088cc;
+}
+
+.profile-live a:hover, .needs-completing a:hover {
+    text-decoration: none;
+}
+
+
 </style>
 {% endblock %}
 
@@ -563,44 +583,49 @@ $(document).ready(function(){
     $('ul#profile-tab li a').click(function (e) {
         e.preventDefault();
         $(this).tab('show');
-    })
-
-    /** scroll top top on submit **/
-    $("#update-profile").live("click", function() {
-        $("html, body").animate({scrollTop: 200}, 1000);
     });
 
     /**
     * Parsley error counter
     */
     var handleErrorCount = function handleErrorCount(tabPane) {
-        var targetTabLink =  $('a[href="#{id}"]'.assign({
+        var targetTabLink =  $('#profile-tab a[href="#{id}"]'.assign({
             id: tabPane.prop('id')
         }));
-        var targetTabLi = targetTabLink.closest('li')
-
+        var targetTabLi = targetTabLink.closest('li');
         var errorCount = parseInt(tabPane.find('.parsley-error').length);
         tabPane.attr('error-count', errorCount);
-
-        targetTabLi.find('em').remove()
+        targetTabLi.find('em').remove();
         if (errorCount > 0) {
             var errorTemplate = $('<em/>', {
                 html: '<span>{errorCount}</span>'.assign({'errorCount': errorCount})
                 ,class: 'unread_counter animated bounce'
-            })
-            targetTabLink.append(errorTemplate)
+            });
+            targetTabLink.append(errorTemplate);
         }
-
-       // targetTabLink.closest('li').addClass('parsley-error')
     };
     /**
     * Parsley error catcher
     */
     $( 'form[data-validate="parsley"]' ).parsley( 'addListener', {
+        onFormSubmit: function ( isFormValid, event, ParsleyForm ) {
+            console.log(isFormValid);
+            if (!isFormValid) {
+                $('.alert-error').removeClass('hidden');
+            } else {
+                $('.alert-error').addClass('hidden');
+            }
+        },
         onFieldError: function ( elem, constraints, ParsleyField ) {
-            // get the nearest tabPane to store error count
+            // Scroll to top ONLY on error
+            $("html, body").animate({scrollTop: 200}, 1000);
+            // get the nearest tabPane to store error count unless error is from T&Cs checkbox
+            if ($(elem).prop('id') !== 'id_agree_tandc') {
+                var tabPane = $(elem).closest('.tab-pane');
+                handleErrorCount(tabPane);
+            }
             var tabPane = $(elem).closest('.tab-pane');
-            handleErrorCount(tabPane)
+            handleErrorCount(tabPane);
             // if field is not visible, do not apply Parsley validation!
             if ( !$( elem ).is( ':visible' ) ) {
                 return true;
@@ -608,9 +633,21 @@ $(document).ready(function(){
             return false;
         }
         , onFieldSuccess: function ( elem, constraints, ParsleyField ) {
-            // get the nearest tabPane to store error count
-            var tabPane = $(elem).closest('.tab-pane');
-            handleErrorCount(tabPane)
+            // get the nearest tabPane to store error count unless error is from T&Cs checkbox
+            if ($(elem).prop('id') !== 'id_agree_tandc') {
+                var tabPane = $(elem).closest('.tab-pane');
+                handleErrorCount(tabPane)
+            }
+        }
+    });
+
+    /** show the tab with errors **/
+    $('#update-profile').click(function(e) {
+        /** hack to wait for DOM to update **/
+        window.setTimeout(removeTab, 0);
+
+        function removeTab() {
+            $('#profile-tab').find('.unread_counter').first().parent().trigger('click');
         }
     });
 
@@ -978,6 +1015,42 @@ $(document).ready(function(){
         })
     });
 
+    /**
+     * Checking each form section to determine which if any welcome message to display.
+     */
+    var tabGeneral = false, tabFees = false, tabProfile = false, tabTransaction = false, tabAccounts = false;
+
+    $('#fees-packages input[id*="_max"]').each(function () {
+        if ($(this).attr('value') != 0) {
+            tabFees = true;
+        }
+    });
+
+    $('#profile input[type="text"]').each(function () {
+        if ($(this).attr('value') != '') {
+            tabProfile = true;
+            return false;
+        }
+    });
+
+    $('#transactions-and-startups input[data-type="number"]').each(function () {
+       if ($(this).attr('value') != 0) {
+           tabTransaction = true;
+           return false;
+       }
+    });
+
+    if( $('#connected-accounts .btn-active').length ){
+        tabAccounts = true;
+    }
+
+    if (tabFees === false || tabProfile === false) {
+        $('.needs-completing').removeClass('hidden');
+    } else if (tabTransaction === false || tabAccounts === false) {
+        $('.profile-live').removeClass('hidden');
+    }
+
+
     $('#add-custom-funding-type').click(function() {
         if ($('#custom-funding-type').hasClass('hidden')) {
             $('#custom-funding-type').removeClass('hidden');
@@ -989,6 +1062,12 @@ $(document).ready(function(){
             $('#custom-funding-type3').removeClass('hidden');
             $(this).remove();
         }
+    });
+
+    $('.update-tab').click(function(e) {
+        e.preventDefault();
+        var hashValue = $(this).attr('href');
+        $('#profile-tab a[href='+hashValue+']').trigger('click');
     });
 });
 </script>
