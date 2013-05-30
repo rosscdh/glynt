@@ -889,6 +889,22 @@ i.myspace { background-position: -233px -51px; }
     background-image: url('/static/bootstrap/img/glyphicons-halflings.png');
 }
 
+.navbar-inner .container {
+    position: relative;
+}
+.profile-nudge {
+    color: #fff;
+    position: absolute;
+    z-index: 2000;
+    top: 8px;
+    left: 145px;
+    background: #ff7e00;
+    padding: .5em .7em;
+    font-weight: bold;
+    border-radius: .3em;
+    text-align: center;
+}
+
 
 
 /* Basic responsive */
