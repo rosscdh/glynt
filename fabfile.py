@@ -143,6 +143,11 @@ def pip_install():
     virtualenv('pip install simplejson==3.2.0 --upgrade')
 
 @task
+def check_permissions():
+    with cd(env.remote_project_path):
+        virtualenv(cmd='python %s%s/manage.py check_permissions' % (env.remote_project_path, env.project))
+
+@task
 def clean_all():
     with cd(env.remote_project_path):
         virtualenv(cmd='python %s%s/manage.py cleanup' % (env.remote_project_path, env.project))
