@@ -6,18 +6,18 @@
 
 {% block prebody %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/css/theme/social-buttons.css">
-
+<div id="hero">
     <div class="container">
         <div class="row">
             <div class="span12">
                 <h1>Update your profile</h1>
-                {% lawyer_profile_is_complete lawyer=lawyer %}
             </div>
         </div>
     </div>
+</div>
 <div class="container profile">
-
-     <div class="alert alert-error hidden">Please correct all errors before submitting the form</div>
+    {% lawyer_profile_is_complete lawyer=lawyer %}
+    <div class="alert alert-error hidden">Please correct all errors before submitting the form</div>
 
     <div class="row">
             <div class="span12">
@@ -89,7 +89,7 @@
 
                         <div class="row">
                             <div class="span12">
-                                <legend>Bar Memberships</legend>
+                                <legend>Your Bar Memberships</legend>
                             </div>
                         </div>
                         <div class="row">
@@ -315,6 +315,8 @@
                         <div class="row">
                             <div class="span12">
                                 <legend>Fees and Packages</legend>
+                                <p>Please list the approximate fee ranges for standard transactions and payment options available. This will increase your ranking in the LawPal marketplace.</p>
+                                <br />
                             </div>
                         </div>
                         <div class="row">
