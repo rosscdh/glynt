@@ -10,12 +10,7 @@
     <div class="container">
         <div class="row">
             <div class="span12">
-                {% if user.username == lawyer.user.username %}
-                    <h1>Claim your profile</h1>
-                    <h3>You are a critical part of the LawPal community.<br/> The doors are opening soon. Make sure everything is current so founders can see who you really are. Have a question or comments? Contact us at <a href="mailto:founders@lawpal.com" style="color:white;">founders@lawpal.com</a> </h3>
-                {% else %}
-                    <h1>Update your profile</h1>
-                {% endif %}
+                <h1>Update your profile</h1>
                 {% lawyer_profile_is_complete lawyer=lawyer %}
             </div>
         </div>
@@ -34,8 +29,6 @@
                 <li><a href="#transactions-and-startups" data-toggle="tab">Transactions &amp; Startups</a></li>
                 <li><a href="#connected-accounts" data-toggle="tab">Connected Accounts</a></li>
             </ul>
-
-
 
             <form id="lawyer-profile-form" data-validate="parsley" action="{% url 'lawyer:setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
                 <div class="tab-content">
