@@ -5,7 +5,7 @@ from django.template.defaultfilters import slugify
 from social_auth.models import UserSocialAuth
 from tasks import collect_user_fullcontact_info, collect_user_graph_connections
 
-from glynt.apps.client.models import _create_user_profile, create_glynt_profile
+from glynt.apps.client.models import _get_or_create_user_profile, create_glynt_profile
 
 from glynt.apps.services.linkedin.pipeline import linkedin_profile_extra_details
 from glynt.apps.services.google.pipeline import google_profile_extra_details
@@ -28,7 +28,7 @@ def ensure_user_setup(*args, **kwargs):
         logger.error('Pipeline.ensure_user_setup user is not present, cant create profile')
     else:
         # Call the lambda defined in client/models.py
-        profile, is_new = _create_user_profile(user=user)
+        profile, is_new = _get_or_create_user_profile(user=user)
 
         profile.profile_data['user_class_name'] = session.get('user_class_name', 'lawyer')
         profile.save(update_fields=['profile_data'])
@@ -86,37 +86,39 @@ def get_username(details, user=None,
     if user was given.
     """
     if user:
-        logger.info('User exists: %s' % user.username)
-        return {'username': user.username}
-
-    uuid_length = getattr(settings, 'SOCIAL_AUTH_UUID_LENGTH', 4)
-    if uuid_length <= 0:
-        logger.error('uuid_length cannot be 0 or less: %d' % uuid_length)
-        uuid_length = 3
-
-    if details.get('fullname'):
-        username = unicode(details['fullname'])
-    elif details.get('username'):
-        username = unicode(details['username'])
+        logger.info('User already exists so returning them as the user: %s' % user.username)
+        final_username = user.username
     else:
-        username = uuid.uuid4().get_hex()
+        uuid_length = getattr(settings, 'SOCIAL_AUTH_UUID_LENGTH', 4)
+        if uuid_length <= 0:
+            logger.error('uuid_length cannot be 0 or less: %d' % uuid_length)
+            uuid_length = 3
 
-    username = slugify(username)
-    logger.info('Getting username availability: %s' % username)
+        if details.get('fullname'):
+            username = unicode(details['fullname'])
+        elif details.get('username'):
+            username = unicode(details['username'])
+        else:
+            username = uuid.uuid4().get_hex()
 
-    max_length = UserSocialAuth.username_max_length()
-    short_username = username[:max_length - uuid_length]
-    final_username = UserSocialAuth.clean_username(username[:max_length])
+        username = slugify(username)
+        logger.info('Getting username availability: %s' % username)
 
-    # Generate a unique username for current user using username
-    # as base but adding a unique hash at the end. Original
-    # username is cut to avoid any field max_length.
-    while user_exists(username=final_username):
-        logger.info('Username %s exists, trying to create another' % final_username)
-        username = '%s-%s' % (short_username, uuid.uuid4().get_hex()[:uuid_length])
-        username = username[:max_length]
+        max_length = UserSocialAuth.username_max_length()
+        short_username = username[:max_length - uuid_length]
+        final_username = UserSocialAuth.clean_username(username[:max_length])
 
-        final_username = slugify(UserSocialAuth.clean_username(username))
+        # Generate a unique username for current user using username
+        # as base but adding a unique hash at the end. Original
+        # username is cut to avoid any field max_length.
 
+        while user_exists(username=final_username):
+            logger.info('Username %s exists, trying to create another' % final_username)
+            username = '%s-%s' % (short_username, uuid.uuid4().get_hex()[:uuid_length])
+            username = username[:max_length]
+
+            final_username = slugify(UserSocialAuth.clean_username(username))
+
+        logger.info('Pipeline: username will be : %s for %s' % (final_username,user))
 
     return {'username': final_username}
