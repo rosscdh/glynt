@@ -156,7 +156,6 @@ def intercom_script(context, **kwargs):
 intercom_script.is_safe = True
 
 
-
 @register.inclusion_tag('public/partials/contact_us_wrapper.html', takes_context=True)
 def contact_us_form(context, is_modal=None, **kwargs):
     is_modal = True if is_modal is None and context.get('request').is_ajax() else False
@@ -165,3 +164,25 @@ def contact_us_form(context, is_modal=None, **kwargs):
     })
     return context
 contact_us_form.is_safe = True
+
+
+@register.inclusion_tag('public/partials/write_message_form.html', takes_context=True)
+def write_message_form(context, is_modal=None, **kwargs):
+    is_modal = True if is_modal is None and context.get('request').is_ajax() else False
+    context.update({
+        'is_modal': is_modal,
+    })
+    return context
+write_message_form.is_safe = True
+
+@register.inclusion_tag('partials/handlebars_messages.js', takes_context=True)
+def handlebars_messages(context, **kwargs):
+    output_target = kwargs.get('output_target', None)
+    target_in_before_after = kwargs.get('target_in_before_after', None)
+    
+    context.update({
+        'output_target': output_target if output_target else 'div.navbar.navbar-fixed-top:first',
+        'target_in_before_after': target_in_before_after if target_in_before_after else 'after'
+    })
+    return context
+handlebars_messages.is_safe = True

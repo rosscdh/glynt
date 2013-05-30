@@ -14,6 +14,9 @@ django-cities-light
 # model charts - will need to have brew graphiz installed
 # pygraphviz
 
+# easydict lookups with dot notation
+bunch
+
 django-extensions
 django-templated-email
 django-storages
@@ -113,3 +116,7 @@ termcolor
 
 # Api access
 tweepy
+
+# Messaging App
+django-postman
+django-pagination

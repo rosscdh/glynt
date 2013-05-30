@@ -29,3 +29,33 @@ def simple_name_list(data_list):
         'object_list': data_list,
     }
     return context
+
+
+@register.inclusion_tag('lawyer/partials/fee_packages.html', takes_context=False)
+def fee_packages(lawyer):
+    context = {
+        'fee_package_list': lawyer.fee_packages.items()
+    }
+    return context
+
+@register.inclusion_tag('lawyer/partials/fee_packages_mini.html', takes_context=False)
+def fee_packages_mini(fee_packages):
+    context = {
+        'fee_package_list': fee_packages
+    }
+    return context
+
+@register.filter(takes_context=False)
+def humanise_number(num):
+    if not isinstance(num, ( int, long )):
+        num = 0
+        logger.debug('Value "num" passed to humanise_number must be a number is type: %s %s' % (type(num),num,))
+
+    magnitude = 0
+
+    while num >= 1000:
+        magnitude += 1
+        num /= 1000
+
+    humanised_num = '%s%s' % (num, ['', 'k', 'm', 'g', 't', 'p'][magnitude])
+    return humanised_num

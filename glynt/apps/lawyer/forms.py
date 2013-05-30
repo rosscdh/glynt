@@ -13,7 +13,6 @@ from bootstrap.forms import BootstrapMixin
 
 from cicu.models import UploadedFile
 from cicu.widgets import CicuUploderInput
-from easy_thumbnails.fields import ThumbnailerImageField
 
 from glynt.apps.lawyer.models import Lawyer
 
@@ -186,6 +185,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
 
         firm_name = data.pop('firm_name')
 
+        # @TODO should be in the clean_photo method
         hidden_photo = self.cleaned_data.get('hidden_photo', None)
         if type(hidden_photo) is int:
             try:
@@ -212,7 +212,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
 @parsleyfy
 class LawyerSearchForm(BootstrapMixin, forms.Form):
     location = forms.CharField(label='', help_text='', required=False, widget=forms.TextInput(attrs={'placeholder':'Anywhere', 'tabindex':'1', 'class':'input-xlarge typeahead','autocomplete':'off','data-provide':'ajax', 'minLength':'2', 'data-items': 5, 'data-source': API_URLS.get('locations'), 'data-filter':'name__istartswith', 'tabindex':'2', 'data-toggle': 'tooltip', 'title': 'Enter a Location or just leave it blank'}))
-    q = forms.CharField(label='', help_text='', required=False, widget=forms.TextInput(attrs={'placeholder':'Anything', 'tabindex':'2', 'class':'input-xlarge typeahead', 'data-provide':'typeahead', 'minLength':'0', 'autocomplete':'off', 'data-source':"[\"Seed financing\",\"Convertible loan note\",\"Intellectual property\"]", 'data-toggle': 'tooltip', 'title': 'Enter a Service Type or Generic Search Term'}))
+    q = forms.CharField(label='', help_text='', required=False, widget=forms.TextInput(attrs={'placeholder':'Anything', 'tabindex':'2', 'class':'input-xlarge typeahead', 'data-provide':'typeahead', 'minLength':'0', 'autocomplete':'off', 'data-source':"[]", 'data-toggle': 'tooltip', 'title': 'Enter a Service Type or Generic Search Term'}))
 
     def __init__(self, *args, **kwargs):
         """ get request object and user """

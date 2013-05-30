@@ -14,6 +14,7 @@ from userena.managers import ASSIGNED_PERMISSIONS
 from userena import signals as userena_signals
 
 from glynt.apps.lawyer.services import EnsureLawyerService
+from glynt.apps.startup.services import EnsureFounderService, EnsureStartupService
 
 from templated_email import send_templated_mail
 
@@ -35,7 +36,7 @@ class ClientProfile(UserenaBaseProfile):
     profile_data = JSONField(default={})
     country = CountryField(default='US', null=True)
     state = models.CharField(max_length=64, null=True)
-    is_lawyer = models.BooleanField(default=True)
+    is_lawyer = models.BooleanField(default=True) # @TODO this needs to go, as we stored the bolean in the json; index msut come from haystack
 
     @classmethod
     def create(cls, **kwargs):
@@ -44,17 +45,41 @@ class ClientProfile(UserenaBaseProfile):
         return profile
 
     def get_mugshot_url(self):
-        p = self.profile_data.get('linkedin_photo_url', None) or self.profile_data.get('facebook_photo_url', None) or super(ClientProfile, self).get_mugshot_url()
-        return p
+        p = super(ClientProfile, self).get_mugshot_url()
+        pic = None
+
+        if self.is_lawyer:
+            pic = self.profile_data.get('linkedin_photo_url', None) or self.profile_data.get('facebook_photo_url', None)
+        if self.is_startup:
+            pic = self.profile_data.get('picture', None)
+
+        return pic if pic is not None else p
+
+    @property
+    def user_class(self):
+        return self.profile_data.get('user_class_name', None)
+
+    @property
+    def is_lawyer(self):
+        return True if self.user_class == 'lawyer' else False
+
+    @property
+    def is_startup(self):
+        return True if self.user_class == 'startup' else False
 
     def short_name(self):
         """ Returns A. LastName """
         user = self.user
         return u'%s. %s' % (user.first_name[0], user.last_name,) if user.first_name and user.last_name else user.username
 
-# set the profile
-# This is what triggers the whole cleint profile creation process in pipeline.py:ensure_user_setup
-User.profile = property(lambda u: ClientProfile.objects.get_or_create(user=u)[0])
+
+def _create_user_profile(user):
+    # set the profile
+    # This is what triggers the whole cleint profile creation process in pipeline.py:ensure_user_setup
+    return ClientProfile.objects.get_or_create(user=user)
+
+# used to trigger profile creation by accidental refernce. Rather use the _create_user_profile def above
+User.profile = property(lambda u: _create_user_profile(user=u)[0])
 
 
 @receiver(post_save, sender=ClientProfile, dispatch_uid='client.create_client_profile', )
@@ -79,16 +104,28 @@ def create_client_profile(sender, **kwargs):
         userena_signals.signup_complete.send(sender=None, user=user)
 
 
-@receiver(post_save, sender=ClientProfile, dispatch_uid='client.create_lawyer_profile')
-def create_lawyer_profile(sender, **kwargs):
-    profile = kwargs.get('instance', None)
-    is_new = kwargs.get('created', False)
+def create_glynt_profile(profile, is_new):
+    """ function used to create the appropriate glynt profile type
+    for a user signing in """
+    logger.info('create_glynt_profile for User %s' % profile.user.pk)
     user = profile.user
+    user_class_name = profile.user_class
 
-    if profile is not None and is_new == True:
-        logger.info('Creating Lawyer Profile for User %s' % user.username)
-        lawyer_service = EnsureLawyerService(user=profile.user)
-        lawyer_service.process()
+    if not is_new:
+        logger.info('create_glynt_profile profile is not new User %s' % profile.user.pk)
+    else:
+        if profile.is_startup:
+            logger.info('Creating Founder Profile for User %s' % user.username)
+            founder_service = EnsureFounderService(user=user)
+            founder_service.process()
+
+        elif profile.is_lawyer:
+            logger.info('Creating Lawyer Profile for User %s' % user.username)
+            lawyer_service = EnsureLawyerService(user=user)
+            lawyer_service.process()
+
+        else:
+            raise Exception('Could not identify user class')
 
 
 @receiver(post_save, sender=ClientProfile, dispatch_uid='client.create_userarena_signup')

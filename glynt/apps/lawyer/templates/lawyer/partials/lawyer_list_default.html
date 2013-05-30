@@ -1,37 +1,55 @@
-{% load lawyer_profile_tags endless jsonify %}
+{% load lawyer_profile_tags endless jsonify glynt_helpers humanize %}
 {% lazy_paginate object_list %}
 
 {% for l in object_list %}
-<div class="partner row">
-    <div class="span2">
-        <a href="{% url 'lawyer:profile' slug=l.username %}"><img src="{{ l.profile_photo }}" class="partner-avatar" /></a>
-    </div>
-    <div class="span10"> 
-        <!-- <img src="http://local.weareml.com:8000/m/firm/orrick-bank-logo-1-500x316.jpg" class="partner-logo">  -->
-        <h2><a href="{% url 'lawyer:profile' slug=l.username %}">{{ l.full_name }}</a></h2>
-        
-        <h3>{{ l.object.summary }}</h3>
+<div class="clearfix partner">
+
+    <a class="partner-avatar" href="{% url 'lawyer:profile' slug=l.username %}">
+        <img src="{{ l.profile_photo }}"/>
+    </a>
+
+    <div class="partner-overview">
+        <h2 class="partner-name"><a href="{% url 'lawyer:profile' slug=l.username %}">{{ l.full_name|truncatechars:26 }}</a></h2>
+
+        <h3>{{ l.summary|truncatechars:55 }}</h3>
 
         {% if l.firm_name %}
-            <h3>{% if l.position %}{{ l.position }} <span>at</span> {%endif%}{{ l.firm_name }}</h3>
+            <h3>{% if l.position %}{{ l.position }} <span>at</span> {% endif %}{{ l.firm_name }}</h3>
         {% endif %}
 
         <ul class="partner-info">
             <li class="marker big">
-            {% for practice_location in l.object.practice_locations  %}
-            {{ practice_location }}{% if not forloop.last %} <span>and</span> {% endif %}
-            {% endfor %}
+                {% for practice_location in l.object.practice_locations  %}
+                {{ practice_location }}{% if not forloop.last %} <span>and</span> {% endif %}
+                {% endfor %}
             </li>
         </ul>
+    </div>
 
-        <a href="{% url 'lawyer:profile' slug=l.username %}" class="btn btn-primary">View Profile</a>
-        {% if firm.photo %}
-            <img src="{{ MEDIA_URL }}{{ firm.photo|default:'firm/blank.gif' }}" alt="{{ firm.name }}" class="firm-logo" />              
-        {% endif %} 
-    </div>  
+    {% if l.object.seed_financing_amount_min or l.object.incorporation_min %}
+    <div class="card-bordered card-transaction">
+        {% fee_packages_mini fee_packages=l.fee_packages %}
+        <a href="{% url 'lawyer:profile' slug=l.username %}" class="transaction-view-all"><span>View all</span></a>
+    </div>
+    {% endif %}
+
 </div>
 {% empty %}
-    None Found
+ <div class="row">
+    <div class="span12">
+        <div class="no-results">
+            Sorry, no lawyers found. More are signing up every day, so check back in a week or so. 
+        </div>
+    </div>
+</div>
 {% endfor %}
 
 {% show_more %}
+
+{% block js %}
+    <script>
+        $(document).ready(function () {
+            $('.tip').tooltip();
+        });
+    </script>
+{% endblock %}

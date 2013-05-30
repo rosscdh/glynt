@@ -87,11 +87,16 @@
 /* Profile Header (hero) */
 
     #hero {
-    background: url(../../img/app/lawyer-background.jpg) 0 0 no-repeat;
+    background: #f6f9f9;
     background-size: cover;
     text-align: left;
     padding-bottom:0px;
-    background-position: 0 -60px;
+    color:#666;
+    padding-top:55px;
+    margin-bottom:35px;
+    }
+    #hero .container {
+        margin-bottom:0px;
     }
     #hero h1 {
     margin: 0.25em 0 0 0;
@@ -99,16 +104,23 @@
     margin-top:38px;
     }
     #hero h3 {
-    margin: 5 !important;
+    margin: 0 !important;
     padding: 0 !important;
     font-size:20px;
+    color:#aaa;
     }
     #hero #buttons {
-    background-color:rgba(37,37,37,0.2);
+/*    background-color:#757c7e;
+*/
+    background-color:#42d0e5;
+
     padding:8px 0px 8px 0px;
     }
+    #hero .container-main {
+    margin-bottom:-20px;
+    }    
     #hero .profile-details {
-    padding-bottom:30px;
+    padding-bottom:0px;
     }
     #hero #buttons .right {
     float:right;
@@ -119,7 +131,7 @@
     transition-duration : 0.3s;
     color:white;
     background-color: transparent;
-    font-size:15px; 
+    font-size:16px; 
     }
     #hero:hover #buttons .right {
     opacity:1;
@@ -131,9 +143,8 @@
     #hero .avatar img {
     border: 8px solid rgba(255,255,255,0.46);
     box-shadow: 0 0 10px rgba(0,0,0,0.23);
-    border-radius: 100px;
-    width:125px;
-    height:125px;
+    border-radius: px;
+    width:170px;
     float:right;
     }
 

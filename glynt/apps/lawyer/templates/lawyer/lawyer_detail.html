@@ -1,5 +1,5 @@
 {% extends 'base.html' %}{% load account_tags glynt_helpers lawyer_profile_tags jsonify thumbnail humanize cache %}
-{% block page_title %}{{ object.user.get_full_name|default:object.user.username }}{% endblock %}
+{% block page_title %}{{ object.user.get_full_name|default:object.user.username }} {% if firm %} - {{ firm }}{% endif %}{% endblock %}
 {% block bodyclass %}lawyer-profile{% endblock %}
 
 {% block css %}
@@ -12,7 +12,7 @@
 {% block prebody %}
 
 <div id="hero">
-	<div class="container">
+	<div class="container container-main">
 		<!-- starts carousel -->
 		<div class="row animated fadeInRight profile-details">
 			<div class="span2">
@@ -20,7 +20,7 @@
 					<img src="{{ object.profile_photo }}" alt="{{ object.user.get_full_name|default:object.user.username }}" />
 				</div>
 			</div>
-			<div class="span10">
+			<div class="span6">
 				<h1>{{ object.user.get_full_name|default:object.user.username }}</h1>
 				<h3>{{ object.summary }}</h3>
 			</div>
@@ -30,12 +30,12 @@
 		<div class="container">
 			<div class="row12">
 				{% if user.is_staff %}
-					<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="false" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if not object.is_active %}hide{% endif %} btn btn-primary">Disable</a>
-					<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="true" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if object.is_active %}hide{% endif %} btn btn-success">Approve</a>
+					<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="false" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if not object.is_active %}hide{% endif %} btn right"><i class="icon-eye-close icon-white"></i> Disable</a>
+					<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="true" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if object.is_active %}hide{% endif %} btn right"><i class="icon-eye-close icon-white"></i> Approve</a>
 				{% endif %}
 				{% if user.username == object.user.username %}
-					<a href="{% url 'lawyer:setup_profile' %}" class="btn">Edit profile</a>  
-					<a href="{% url 'lawyer:invite' %}" class="btn">Invite Lawyers</a> 
+					<a href="{% url 'lawyer:setup_profile' %}" class="btn right" ><i class="icon-edit icon-white"></i> Edit profile</a>   
+					<a href="{% url 'lawyer:invite' %}" class="btn right" ><i class="icon-heart icon-white"></i> Invite Lawyers</a>  
 					{% if object.summary %} 
 						{% if PROJECT_ENVIRONMENT != 'dev' %}
 					    <script>
@@ -46,8 +46,7 @@
 						{% endif %}
 					{% endif %}
 				{% endif %}
-				<a href="#comingSoonModal" class="btn right" title="Message" data-toggle="modal"><i class="icon-envelope icon-white"></i> Message</a>
-				<a href="#comingSoonModal" class="btn right" title="Endorse" data-toggle="modal"><i class="icon-star icon-white"></i> Endorse</a>
+				<a href="{% url 'engage:message' to=object.user.username %}" id="send-message" class="btn right" title="Message" data-toggle="modal"><i class="icon-envelope icon-white"></i> Message</a>
 				<a href="#comingSoonModal" class="btn right" title="Engage"  data-toggle="modal"><i class="icon-play icon-white"></i> Engage</a>
 			</div>
 		</div>
@@ -61,138 +60,17 @@
 					<p>{{ object.bio|default:"<div class=\"no-data\">No biography yet.</div>"|linebreaksbr }}</p>
 				</div>
 				<hr>
+
 			<div class="row">
-			{% if PROJECT_ENVIRONMENT == 'dev' %}
-				<div class="span8">	
+            	<div class="span8">
 					<div class="row">
 						<div class="span8">
 							<h2>Transaction Pricing</h2>
-							<table class="table pricing">
-								<tr>
-									<th>Seed Financing</th>
-									<td class="price">${{ object.data.seed_financing_amount_min|humanise_number }} &ndash; ${{ object.data.seed_financing_amount_max|humanise_number }}</td>
-									<td>
-										<ul class="fee-options">
-											{% if object.data.seed_fee_cap_available %}
-                                                <li class="cap tip" data-toggle="tooltip" title="Fee cap available for this transaction"></li>
-                                            {% else %}
-                                                <li class="no-cap tip" data-toggle="tooltip" title="Fee cap available for this transaction"></li>
-                                            {% endif %}
-                                            {% if object.data.seed_deferred_fees_available %}
-    											<li class="deferred tip" data-toggle="tooltip" title="Deferred fees available for this transaction"></li>
-                                            {% else %}
-                                                <li class="no-deferred tip" data-toggle="tooltip" title="Deferred fees available for this transaction"></li>
-                                            {% endif %}
-                                            {% if object.data.seed_fixed_fees_available %}
-											    <li class="fixed tip" data-toggle="tooltip" title="Fixed fees available for this transaction"></li>
-                                            {% else %}
-                                                <li class="no-fixed tip" data-toggle="tooltip" title="Fixed fees available for this transaction"></li>
-                                            {% endif %}
-										</ul>
-									</td>
-								</tr>
-								<tr>
-									<th>Incorporation</th>
-									<td  class="price">${{ object.data.incorporation_min|humanise_number }} &ndash; ${{ object.data.incorporation_max|humanise_number }}</td>
-									<td>
-										<ul class="fee-options">
-											{% if object.data.inc_fee_cap_available %}
-                                                <li class="cap tip" data-toggle="tooltip" title="Fee cap available for this transaction"></li>
-                                            {% else %}
-                                                <li class="no-cap tip" data-toggle="tooltip" title="Fee cap available for this transaction"></li>
-                                            {% endif %}
-                                            {% if object.data.inc_deferred_fees_available %}
-    											<li class="deferred tip" data-toggle="tooltip" title="Deferred fees available for this transaction"></li>
-                                            {% else %}
-                                                <li class="no-deferred tip" data-toggle="tooltip" title="Deferred fees available for this transaction"></li>
-                                            {% endif %}
-                                            {% if object.data.inc_fixed_fees_available %}
-											    <li class="fixed tip" data-toggle="tooltip" title="Fixed fees available for this transaction"></li>
-                                            {% else %}
-                                                <li class="no-fixed tip" data-toggle="tooltip" title="Fixed fees available for this transaction"></li>
-                                            {% endif %}
-										</ul>
-									</td>
-								</tr>
-                                {% if object.data.optional_funding %}
-                                <tr>
-									<th>{{ object.data.optional_funding }}</th>
-									<td  class="price">${{ object.data.optional_min|humanise_number }} &ndash; ${{ object.data.optional_max|humanise_number }}</td>
-									<td>
-										<ul class="fee-options">
-											{% if object.data.optional_fee_cap_available %}
-                                                <li class="cap tip" data-toggle="tooltip" title="Fee cap available for this transaction"></li>
-                                            {% else %}
-                                                <li class="no-cap tip" data-toggle="tooltip" title="Fee cap available for this transaction"></li>
-                                            {% endif %}
-                                            {% if object.data.optional_deferred_fees_available %}
-    											<li class="deferred tip" data-toggle="tooltip" title="Deferred fees available for this transaction"></li>
-                                            {% else %}
-                                                <li class="no-deferred tip" data-toggle="tooltip" title="Deferred fees available for this transaction"></li>
-                                            {% endif %}
-                                            {% if object.data.optional_fixed_fees_available %}
-											    <li class="fixed tip" data-toggle="tooltip" title="Fixed fees available for this transaction"></li>
-                                            {% else %}
-                                                <li class="no-fixed tip" data-toggle="tooltip" title="Fixed fees available for this transaction"></li>
-                                            {% endif %}
-										</ul>
-									</td>
-								</tr>
-                                {% endif %}
-                                {% if object.data.optional_funding2 %}
-                                <tr>
-									<th>{{ object.data.optional_funding2 }}</th>
-									<td  class="price">${{ object.data.optional_min2|humanise_number }} &ndash; ${{ object.data.optional_max2|humanise_number }}</td>
-									<td>
-										<ul class="fee-options">
-											{% if object.data.optional_fee_cap_available2 %}
-                                                <li class="cap tip" data-toggle="tooltip" title="Fee cap available for this transaction"></li>
-                                            {% else %}
-                                                <li class="no-cap tip" data-toggle="tooltip" title="Fee cap available for this transaction"></li>
-                                            {% endif %}
-                                            {% if object.data.optional_deferred_fees_available2 %}
-    											<li class="deferred tip" data-toggle="tooltip" title="Deferred fees available for this transaction"></li>
-                                            {% else %}
-                                                <li class="no-deferred tip" data-toggle="tooltip" title="Deferred fees available for this transaction"></li>
-                                            {% endif %}
-                                            {% if object.data.optional_fixed_fees_available2 %}
-											    <li class="fixed tip" data-toggle="tooltip" title="Fixed fees available for this transaction"></li>
-                                            {% else %}
-                                                <li class="no-fixed tip" data-toggle="tooltip" title="Fixed fees available for this transaction"></li>
-                                            {% endif %}
-										</ul>
-									</td>
-								</tr>
-                                {% endif %}
-                                {% if object.data.optional_funding3 %}
-                                <tr>
-									<th>{{ object.data.optional_funding3 }}</th>
-									<td  class="price">${{ object.data.optional_min3|humanise_number }} &ndash; ${{ object.data.optional_max3|humanise_number }}</td>
-									<td>
-										<ul class="fee-options">
-											{% if object.data.optional_fee_cap_available3 %}
-                                                <li class="cap tip" data-toggle="tooltip" title="Fee cap available for this transaction"></li>
-                                            {% else %}
-                                                <li class="no-cap tip" data-toggle="tooltip" title="Fee cap available for this transaction"></li>
-                                            {% endif %}
-                                            {% if object.data.optional_deferred_fees_available3 %}
-    											<li class="deferred tip" data-toggle="tooltip" title="Deferred fees available for this transaction"></li>
-                                            {% else %}
-                                                <li class="no-deferred tip" data-toggle="tooltip" title="Deferred fees available for this transaction"></li>
-                                            {% endif %}
-                                            {% if object.data.optional_fixed_fees_available3 %}
-											    <li class="fixed tip" data-toggle="tooltip" title="Fixed fees available for this transaction"></li>
-                                            {% else %}
-                                                <li class="no-fixed tip" data-toggle="tooltip" title="Fixed fees available for this transaction"></li>
-                                            {% endif %}
-										</ul>
-									</td>
-								</tr>
-                                {% endif %}
-							</table>
+	                        {% fee_packages lawyer=object %}
 						</div>
 					</div>
 					<hr>
+					{% if PROJECT_ENVIRONMENT == 'dev' %}
 					<div class="row">
 						<div class="span6 endorsement">
 							<h2>Endorsements</h2>
@@ -204,7 +82,6 @@
 							</div>
 						</div>
 					</div>
-
 					<div class="row">
 						<div class="span4">
 							<div class="endorsement">
@@ -213,17 +90,17 @@
 								<p class="source">Alex Halliday, DropBox</p>
 							</div>
 						</div>
-							<div class="span4">
-								<div class="endorsement">
-									<img src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash4/369196_508036857_212730382_q.jpg" alt="Avatar (Placeholder)">
-									<p>Awesome to work with, responsive and helpful. Instrumental in getting Airbnb to where it is today</p>
-									<p class="source">Alex Halliday, Box.net</p>
-								</div>
+						<div class="span4">
+							<div class="endorsement">
+								<img src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash4/369196_508036857_212730382_q.jpg" alt="Avatar (Placeholder)">
+								<p>Awesome to work with, responsive and helpful. Instrumental in getting Airbnb to where it is today</p>
+								<p class="source">Alex Halliday, Box.net</p>
+							</div>
 						</div>
 					</div>
+					{% endif %}
 				</div>
 				<hr>
-			{% endif %}
 			</div>
 		</div>	
 		<div class="span4 pull-right sidebar">
@@ -342,8 +219,21 @@
 			    <!-- <button class="btn btn-primary">Save changes</button> -->
 			  </div>
 			</div>
+        </div>
+
+            <div id="send-message-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			  <div class="modal-header">
+			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			    <h3 id="myModalLabel">Sending Message</h3>
+			  </div>
+			  <div class="modal-body">
+			    <p>...</p>
+			  </div>
+			  <div class="modal-footer">
+			    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+			  </div>
+			</div>
 		
-		</div>
 	</div>
 </div>
 {% csrf_token %}
@@ -468,7 +358,9 @@ $(document).ready(function () {
 	 }else{
 	 	$("#dealChart1").hide();
 	 }
-
 });
+
 </script>
+
+<script type="text/javascript" src="{{ STATIC_URL }}/js/send-message.js"></script>
 {% endblock %}
