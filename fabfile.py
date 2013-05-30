@@ -143,12 +143,21 @@ def pip_install():
     virtualenv('pip install simplejson==3.2.0 --upgrade')
 
 @task
+def clean_all():
+    with cd(env.remote_project_path):
+        virtualenv(cmd='python %s%s/manage.py cleanup' % (env.remote_project_path, env.project))
+        virtualenv(cmd='python %s%s/manage.py clean_nonces' % (env.remote_project_path, env.project))
+        virtualenv(cmd='python %s%s/manage.py clean_associations' % (env.remote_project_path, env.project))
+
+@task
 def clear_cache():
-    virtualenv(cmd='python %s%s/manage.py clear_cache' % (env.remote_project_path, env.project))
+    with cd(env.remote_project_path):
+        virtualenv(cmd='python %s%s/manage.py clear_cache' % (env.remote_project_path, env.project))
 
 @task
 def clean_pyc():
-    virtualenv('python %s%s/manage.py clean_pyc' % (env.remote_project_path, env.project))
+    with cd(env.remote_project_path):
+        virtualenv('python %s%s/manage.py clean_pyc' % (env.remote_project_path, env.project))
 
 @task
 def manage(cmd='validate'):
