@@ -36,7 +36,6 @@ class ClientProfile(UserenaBaseProfile):
     profile_data = JSONField(default={})
     country = CountryField(default='US', null=True)
     state = models.CharField(max_length=64, null=True)
-    is_lawyer = models.BooleanField(default=True) # @TODO this needs to go, as we stored the bolean in the json; index msut come from haystack
 
     @classmethod
     def create(cls, **kwargs):
@@ -110,7 +109,8 @@ def create_glynt_profile(profile, is_new):
     for a user signing in """
     logger.info('create_glynt_profile for User %s' % profile.user.pk)
     user = profile.user
-    user_class_name = profile.user_class
+
+    logger.info('User is of class %s' % profile.user_class)
 
     if not is_new:
         logger.info('create_glynt_profile profile is not new User %s' % profile.user.pk)
