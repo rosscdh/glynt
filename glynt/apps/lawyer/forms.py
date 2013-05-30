@@ -220,3 +220,17 @@ class LawyerSearchForm(BootstrapMixin, forms.Form):
         self.request = kwargs.pop('request', None)
         self.user = self.request.user
         super(LawyerSearchForm, self).__init__(*args, **kwargs)
+
+
+class LawyerProfileIsCompleteValidator(forms.Form):
+    """ is used by the profile_complete template tag 
+    to evaluate the completeness of a lawyers profile """
+    first_name = forms.CharField(required=True)
+    last_name = forms.CharField(required=True)
+    firm_name = forms.CharField(required=True)
+    phone = forms.CharField(required=True)
+    position = forms.CharField(required=True)
+    years_practiced = forms.IntegerField(required=True)
+    practice_location_1 = forms.CharField(required=True)
+    fee_packages = forms.CharField(required=True)
+    summary = forms.CharField(required=True)
