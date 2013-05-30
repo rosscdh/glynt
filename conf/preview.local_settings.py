@@ -6,6 +6,8 @@ PROJECT_ENVIRONMENT = 'prod'
 
 SITE_ID = 3
 
+SECRET_KEY = 'g5ched^#zkyf!va9!2nwzzav3r@h8s+p%u2oeolg)@qak$!plc'
+
 DEBUG = False
 COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = False
