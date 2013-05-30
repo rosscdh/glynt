@@ -61,40 +61,45 @@ class TestTransactionPackageService(unittest.TestCase):
                           "fee_cap_available": True,
                           "deferred_fees_available": False,
                           "fixed_fees_available": True,
-                          "min": 0,
+                          "key": 'seed_financing_amount',
                           "max": 0,
+                          "min": 0,
             },
             "incorporation": {
                           "title": "Incorporation",
                           "fee_cap_available": False,
                           "deferred_fees_available": False,
                           "fixed_fees_available": False,
-                          "min": 0,
+                          "key": 'incorporation',
                           "max": 0,
+                          "min": 0,
             },
             "optional": {
                           "title": "Test Optional Title",
                           "fee_cap_available": False,
                           "deferred_fees_available": False,
                           "fixed_fees_available": False,
-                          "min": 0,
+                          "key": 'optional',
                           "max": 0,
+                          "min": 0,
             },
             "optional2": {
                           "title": "Test Optional Title 2",
                           "fee_cap_available": False,
                           "deferred_fees_available": False,
                           "fixed_fees_available": False,
-                          "min": 0,
+                          "key": 'optional',
                           "max": 0,
+                          "min": 0,
             },
             "optional3": {
                           "title": "Test Optional Title 3",
                           "fee_cap_available": False,
                           "deferred_fees_available": False,
                           "fixed_fees_available": False,
-                          "min": 0,
+                          "key": 'optional',
                           "max": 0,
+                          "min": 0,
             },
         }
     def test_constants(self):
@@ -110,7 +115,7 @@ class TestTransactionPackageService(unittest.TestCase):
         expected_sub_item_keys.sort()  # sort the array for comparison
 
         # test each expected key is in the packages keys
-        assert expected_keys == subject.packages.keys()
+        self.assertEqual(expected_keys, subject.packages.keys())
 
         # Ensure that all the sub packages have the same set of keys
         for key,val_dic in subject.packages.items():
@@ -118,7 +123,7 @@ class TestTransactionPackageService(unittest.TestCase):
             value_item_keys.sort() # sort the array for comparison
 
             # assert that the sub package contains all of the keys required
-            assert expected_sub_item_keys == value_item_keys
+            self.assertEqual(value_item_keys, expected_sub_item_keys)
 
     def test_package_keys_are_present_in_empty_data(self):
         subject = self.service_class(data={})
