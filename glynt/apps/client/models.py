@@ -73,13 +73,14 @@ class ClientProfile(UserenaBaseProfile):
         return u'%s. %s' % (user.first_name[0], user.last_name,) if user.first_name and user.last_name else user.username
 
 
-def _create_user_profile(user):
+def _get_or_create_user_profile(user):
     # set the profile
     # This is what triggers the whole cleint profile creation process in pipeline.py:ensure_user_setup
-    return ClientProfile.objects.get_or_create(user=user)
+    profile, is_new = ClientProfile.objects.get_or_create(user=user) # added like this so django noobs can see the result of get_or_create
+    return (profile, is_new,)
 
 # used to trigger profile creation by accidental refernce. Rather use the _create_user_profile def above
-User.profile = property(lambda u: _create_user_profile(user=u)[0])
+User.profile = property(lambda u: _get_or_create_user_profile(user=u)[0])
 
 
 @receiver(post_save, sender=ClientProfile, dispatch_uid='client.create_client_profile', )
@@ -93,11 +94,11 @@ def create_client_profile(sender, **kwargs):
         user = profile.user
         logger.info('Creating Profile Permissions for User %s' % user.username)
         # Give permissions to view and change profile
-        for perm, name in ASSIGNED_PERMISSIONS['profile']:
+        for perm, name in ASSIGNED_PERMISSIONS.get('profile',()):
             assign_perm(perm, user, profile)
 
         # Give permissions to view and change itself
-        for perm, name in ASSIGNED_PERMISSIONS['user']:
+        for perm, name in ASSIGNED_PERMISSIONS.get('user',()):
             assign_perm(perm, user, user)
 
         # Send the signup complete signal

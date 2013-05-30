@@ -5,7 +5,7 @@ from django.template.defaultfilters import slugify
 from social_auth.models import UserSocialAuth
 from tasks import collect_user_fullcontact_info, collect_user_graph_connections
 
-from glynt.apps.client.models import _create_user_profile, create_glynt_profile
+from glynt.apps.client.models import _get_or_create_user_profile, create_glynt_profile
 
 from glynt.apps.services.linkedin.pipeline import linkedin_profile_extra_details
 from glynt.apps.services.google.pipeline import google_profile_extra_details
@@ -28,7 +28,7 @@ def ensure_user_setup(*args, **kwargs):
         logger.error('Pipeline.ensure_user_setup user is not present, cant create profile')
     else:
         # Call the lambda defined in client/models.py
-        profile, is_new = _create_user_profile(user=user)
+        profile, is_new = _get_or_create_user_profile(user=user)
 
         profile.profile_data['user_class_name'] = session.get('user_class_name', 'lawyer')
         profile.save(update_fields=['profile_data'])
