@@ -895,17 +895,25 @@ i.myspace { background-position: -233px -51px; }
 .profile-nudge {
     color: #fff;
     position: absolute;
-    z-index: 2000;
-    top: 8px;
-    left: 145px;
-    background: #ff7e00;
-    padding: .5em .7em;
+    top: 44px;
+    right: 0px;
+    background: #e76356 /*#ff7e00*/;
+    padding: .5em 1.2em .5em 1em;
     font-weight: bold;
-    border-radius: .3em;
+    border-radius: .2em;
     text-align: center;
 }
 
+.profile-nudge i {
+    -webkit-animation-duration: 2s;
+    -webkit-animation-delay: 1s;
+    -webkit-animation-iteration-count: infinite;
+}
 
+.profile-nudge a, .profile-nudge a:hover {
+    color: #fff;
+    text-decoration: none;
+}
 
 /* Basic responsive */
 
