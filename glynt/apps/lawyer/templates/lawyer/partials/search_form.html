@@ -1,7 +1,7 @@
 {% load url from future %}{% load crispy_forms_tags %}
 <form id="lawyer-list-form" data-validate="parsley" action="{% url 'lawyer:list' %}" method="GET" class="form-inline">{% csrf_token %}
     <div class="container">
-    Search :  {{ form.location|as_crispy_field }} <button class="btn btn-large submit" type="submit" id="lawyer-list-filter">Show Lawyers</button>
+    Search :  {{ form.q|as_crispy_field }} <button class="btn btn-large submit" type="submit" id="lawyer-list-filter">Show Lawyers</button>
     <br />
         <div class="examples">
             <span id="rotate"></span>
@@ -28,11 +28,8 @@ $(document).ready(function(){
             // remove items with no value
             $.each({
                 'q': encodeURIComponent($('#id_q').val())
-                ,'location': encodeURIComponent($('#id_location').val())
             }, function(k,val){
-                //if (val != '') {
-                    params[k] = val;
-                //}
+                params[k] = val;
             });
 
             document.location = form.attr('action') + '?{params}'.assign({'params': $.param(params) });
@@ -112,15 +109,16 @@ $(document).ready(function(){
     var termRotator = function termRotator() {
         var ct = $("#rotate").data("term") || 0;
         var terms = $('span.rotate');
-        var placeholder = $(terms[ct]).attr('data-value')
+        //var placeholder = $(terms[ct]).attr('data-value')
+        var placeholder = $(terms[ct]).text()
         if (pauseRotator === true) {
             $("#rotate").data("term", 0).text($(terms[ct]).text()).show();
             return;
         }
         $("#rotate").data("term", ct == terms.length -1 ? 0 : ct + 1).text($(terms[ct]).text()).fadeIn().delay(4000).fadeOut(200, termRotator);
-        if (placeholder) {
-            $("#id_q").attr('placeholder', placeholder)
-        }
+        // if (placeholder) {
+        //     $("#id_q").attr('placeholder', placeholder)
+        // }
     }
     $(termRotator);
 });

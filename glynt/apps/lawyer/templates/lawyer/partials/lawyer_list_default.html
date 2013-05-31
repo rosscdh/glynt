@@ -18,10 +18,10 @@
         {% endif %}
 
         <ul class="partner-info">
-            <li class="marker big">
+            <li class="marker big">{% filter truncatechars:130 %}
                 {% for practice_location in l.object.practice_locations  %}
                 {{ practice_location }}{% if not forloop.last %} <span>and</span> {% endif %}
-                {% endfor %}
+                {% endfor %}{% endfilter %}
             </li>
         </ul>
     </div>

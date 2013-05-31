@@ -101,6 +101,10 @@ class Lawyer(models.Model):
         return self.user.last_login
 
     @property
+    def profile_status(self):
+        return u'%s' % ('live' if self.is_active == True else 'pending activation and will appear live shortly.')
+
+    @property
     def phone(self):
         return self.data.get('phone')
 

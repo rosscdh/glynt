@@ -6,31 +6,18 @@
 
 {% block prebody %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/css/theme/social-buttons.css">
-
+<div id="hero">
     <div class="container">
         <div class="row">
-            <div class="span12 header">
-                 {% if user.username == object.user.username %}
-                <h1>Claim your profile</h1>
-                <h3>You are a critical part of the LawPal community.<br/> The doors are opening soon. Make sure everything is current so founders can see who you really are. Have a question or comments? Contact us at <a href="mailto:founders@lawpal.com" style="color:white;">founders@lawpal.com</a> </h3>
-                 {% else %}
+            <div class="span12">
                 <h1>Update your profile</h1>
-                 {% endif %}
-                <div class="alert alert-success profile-live hidden">
-                    <h4>Your profile is live</h4>
-                    Improve your exposure by updating: <a href="#transactions-and-startups" class="update-tab">Transaction and Startups</a> and <a href="#connected-accounts" class="update-tab">Connected Accounts</a>.
-                </div>
-
-                <div class="alert alert-block needs-completing hidden">
-                    <h4>Your profile needs completing</h4>
-                    Please make sure these sections are updated: <a href="#general" class="update-tab">Basic Info</a>, <a href="#fees-packages" class="update-tab">Fees and Packages</a> and <a href="#profile" class="update-tab">Profile</a>.
-                </div>
             </div>
         </div>
     </div>
+</div>
 <div class="container profile">
-
-     <div class="alert alert-error hidden">Please correct all errors before submitting the form</div>
+    {% lawyer_profile_is_complete lawyer=lawyer %}
+    <div class="alert alert-error hidden">Please correct all errors before submitting the form</div>
 
     <div class="row">
             <div class="span12">
@@ -42,8 +29,6 @@
                 <li><a href="#transactions-and-startups" data-toggle="tab">Transactions &amp; Startups</a></li>
                 <li><a href="#connected-accounts" data-toggle="tab">Connected Accounts</a></li>
             </ul>
-
-
 
             <form id="lawyer-profile-form" data-validate="parsley" action="{% url 'lawyer:setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
                 <div class="tab-content">
@@ -104,7 +89,7 @@
 
                         <div class="row">
                             <div class="span12">
-                                <legend>Bar Memberships</legend>
+                                <legend>Your Bar Memberships</legend>
                             </div>
                         </div>
                         <div class="row">
@@ -330,6 +315,8 @@
                         <div class="row">
                             <div class="span12">
                                 <legend>Fees and Packages</legend>
+                                <p>Please list the approximate fee ranges for standard transactions and payment options available. This will increase your ranking in the LawPal marketplace.</p>
+                                <br />
                             </div>
                         </div>
                         <div class="row">
@@ -1049,13 +1036,6 @@ $(document).ready(function(){
     if( $('#connected-accounts .btn-active').length ){
         tabAccounts = true;
     }
-
-    if (tabFees === false || tabProfile === false) {
-        $('.needs-completing').removeClass('hidden');
-    } else if (tabTransaction === false || tabAccounts === false) {
-        $('.profile-live').removeClass('hidden');
-    }
-
 
     $('#add-custom-funding-type').click(function() {
         if ($('#custom-funding-type').hasClass('hidden')) {

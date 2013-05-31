@@ -6,6 +6,8 @@ PROJECT_ENVIRONMENT = 'staging'
 
 SITE_ID = 3
 
+SECRET_KEY = 'nbu+200^@(_o74_6st#!s=+1!@7gn7!8_mqbn&(+ci!f^s973+'
+
 DEBUG = True
 COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = False

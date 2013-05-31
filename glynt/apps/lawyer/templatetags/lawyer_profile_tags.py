@@ -4,7 +4,9 @@ from django import template
 from django.template.defaultfilters import slugify
 
 from glynt.apps.lawyer.models import Lawyer
+from glynt.apps.lawyer.forms import LawyerProfileIsCompleteValidator
 from glynt.apps.startup.models import Startup
+
 
 import json
 
@@ -59,3 +61,28 @@ def humanise_number(num):
 
     humanised_num = '%s%s' % (num, ['', 'k', 'm', 'g', 't', 'p'][magnitude])
     return humanised_num
+
+
+@register.inclusion_tag('lawyer/partials/profile_is_complete.html', takes_context=True)
+def lawyer_profile_is_complete(context, lawyer=None):
+    lawyer = lawyer if lawyer is not None else context.get('lawyer', None)
+    if lawyer is None:
+        raise Exception('lawyer_profile_is_complete requires a lawyer to be present in the context or to be passed in')
+    profile_form = LawyerProfileIsCompleteValidator({
+        'first_name': lawyer.user.first_name,
+        'last_name': lawyer.user.last_name,
+        'firm_name': lawyer.firm_name,
+        'phone': lawyer.phone,
+        'position': lawyer.position,
+        'years_practiced': lawyer.years_practiced,
+        'practice_location_1': lawyer.data.get('practice_location_1', None),
+        'fee_packages': ','.join([p.key for p in lawyer.fee_packages.items()]),
+        'summary': lawyer.summary,
+    })
+
+    context.update({
+        'profile_is_valid': profile_form.is_valid(),
+        'profile_status': lawyer.profile_status,
+        'is_active': lawyer.is_active,
+    })
+    return context
