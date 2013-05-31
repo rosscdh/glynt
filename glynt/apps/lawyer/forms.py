@@ -211,8 +211,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
 
 @parsleyfy
 class LawyerSearchForm(BootstrapMixin, forms.Form):
-    location = forms.CharField(label='', help_text='', required=False, widget=forms.TextInput(attrs={'placeholder':'Anywhere', 'tabindex':'1', 'class':'input-xlarge typeahead','autocomplete':'off','data-provide':'ajax', 'minLength':'2', 'data-items': 5, 'data-source': API_URLS.get('locations'), 'data-filter':'name__istartswith', 'tabindex':'2', 'data-toggle': 'tooltip', 'title': 'Enter a Location or just leave it blank'}))
-    q = forms.CharField(label='', help_text='', required=False, widget=forms.TextInput(attrs={'placeholder':'Anything', 'tabindex':'2', 'class':'input-xlarge typeahead', 'data-provide':'typeahead', 'minLength':'0', 'autocomplete':'off', 'data-source':"[]", 'data-toggle': 'tooltip', 'title': 'Enter a Service Type or Generic Search Term'}))
+    q = forms.CharField(label='', help_text='', required=False, widget=forms.TextInput(attrs={'placeholder':'Anywhere', 'tabindex':'1', 'class':'input-xlarge typeahead','autocomplete':'off','data-provide':'ajax', 'minLength':'2', 'data-items': 5, 'data-source': API_URLS.get('locations'), 'data-filter':'name__istartswith', 'tabindex':'2', 'data-toggle': 'tooltip', 'title': 'Enter a Location or just leave it blank'}))
 
     def __init__(self, *args, **kwargs):
         """ get request object and user """
