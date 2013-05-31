@@ -47,7 +47,7 @@
 					{% endif %}
 				{% endif %}
 				<a href="{% url 'engage:message' to=object.user.username %}" id="send-message" class="btn right" title="Message" data-toggle="modal"><i class="icon-envelope icon-white"></i> Message</a>
-				<a href="#comingSoonModal" class="btn right" title="Engage"  data-toggle="modal"><i class="icon-play icon-white"></i> Engage</a>
+				<a href="{% url 'startup:setup_abridged' %}" id="engage-lawyer" class="btn right" title="Engage"  data-toggle="modal"><i class="icon-play icon-white"></i> Engage</a>
 			</div>
 		</div>
 	</div>
@@ -206,7 +206,7 @@
 	<div>
 	    <div class=" buttons">
 			<!-- Modal -->
-			<div id="comingSoonModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div id="engage-lawyer-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			  <div class="modal-header">
 			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 			    <h3 id="myModalLabel">Coming Soon</h3>
@@ -363,4 +363,15 @@ $(document).ready(function () {
 </script>
 
 <script type="text/javascript" src="{{ STATIC_URL }}/js/send-message.js"></script>
+
+<script>
+    $("#engage-lawyer").click(function(ev) {
+        ev.preventDefault();
+        var url = $(this).attr('href');
+        $("#engage-lawyer-modal").load(url, function() {
+            $(this).modal('show');
+        });
+        return false;
+    });
+</script>
 {% endblock %}

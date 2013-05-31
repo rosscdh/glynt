@@ -1,0 +1,66 @@
+{% load url from future %}{% load i18n crispy_forms_tags %}
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Tell us about your startup</h3>
+</div>
+
+<div class="modal-body">
+    <form id="" data-validate="parsley" class="form-horizontal" action="" method="post">{% csrf_token %}
+      <!--   {{ form|crispy }} -->
+        <h3>What do you need a lawyer for</h3>
+        <ul class="lawyer-options">
+            <li>Incorporation</li>
+            <li>IP Issues</li>
+            <li>Employment</li>
+            <li>Co-founders</li>
+            <li>Fund raise</li>
+        </ul>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <!-- js event handles this button -->
+    <button id="submit-modal-message" class="btn btn-primary" type="submit">{% trans "Send" %}</button>
+</div>
+
+<style>
+    .lawyer-options{
+        text-align: left;
+        -webkit-user-select: none;  /* Chrome all / Safari all */
+        -moz-user-select: none;     /* Firefox all */
+        -ms-user-select: none;      /* IE 10+ */
+        user-select: none;
+    }
+
+    .lawyer-options li {
+        text-align: center;
+        display: inline-block;
+        width: 235px;
+        height: 45px;
+        background: none;
+        border: 2px solid #ccc;
+        margin: .2em;
+        line-height: 45px;
+        cursor: pointer;
+        border-radius: .2em;
+        -webkit-transition: all 0.1s ease-in;
+    }
+
+    .lawyer-options li:hover {
+        background: #eeeeee;
+    }
+
+    .lawyer-options li.selected,
+    .lawyer-options li.selected:hover {
+        background: #6adc7d;
+        border-color: #339933;
+    }
+</style>
+
+<script>
+
+    $('.lawyer-options li').click(function() {
+        $(this).toggleClass('selected');
+    })
+
+</script>

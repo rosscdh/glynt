@@ -4,7 +4,9 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse
 
 from services import EnsureFounderService
-from forms import StartupProfileSetupForm
+from forms import StartupProfileSetupForm, StartupAbridgedForm
+
+from glynt.apps.utils import AjaxableResponseMixin
 
 import urlparse
 
@@ -62,3 +64,8 @@ class StartupProfileSetupView(FormView):
     def form_valid(self, form):
         form.save()
         return super(StartupProfileSetupView, self).form_valid(form=form)
+
+
+class StartupAbridgedView(FormView, AjaxableResponseMixin):
+    form_class = StartupAbridgedForm
+    template_name = 'startup/abridged-form.html'
