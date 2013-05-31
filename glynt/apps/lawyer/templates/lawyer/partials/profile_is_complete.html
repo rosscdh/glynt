@@ -12,15 +12,18 @@
                         html: '<i class="icon-warning-sign icon-white animated flash"></i> <a href="{{ full_profile_url }}">Update profile</a>'
                         ,class: 'profile-nudge'
                     });
-                    $('.nav-bar-inner .container').append(warningTemplate)
+                    $('.navbar-inner .container').append(warningTemplate);
+                console.log('yo');
                 </script>
             {% endif %}
     {% else %}
-    <div class="alert alert-block {% if is_active %}alert-success{% endif %} profile-live">
-        <h4>Your profile is {{ profile_status }}</h4>
-        {% if not is_active %}
-        Improve your exposure by updating: <a href="{{ full_profile_url }}#transactions-and-startups" class="update-tab">Transaction & Startups</a> and <a href="{{ full_profile_url }}#connected-accounts" class="update-tab">Connected Accounts</a>.
+        {% if warning_type == 'alert' %}
+            <div class="alert alert-block {% if is_active %}alert-success{% endif %} profile-live">
+                <h4>Your profile is {{ profile_status }}</h4>
+                {% if not is_active %}
+                    Improve your exposure by updating: <a href="{{ full_profile_url }}#transactions-and-startups" class="update-tab">Transaction & Startups</a> and <a href="{{ full_profile_url }}#connected-accounts" class="update-tab">Connected Accounts</a>.
+                {% endif %}
+            </div>
         {% endif %}
-    </div>
     {% endif %}
 {% endif %}
