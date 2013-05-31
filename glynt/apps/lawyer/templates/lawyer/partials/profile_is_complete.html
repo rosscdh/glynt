@@ -1,8 +1,19 @@
 {% if not profile_is_valid %}
-<div class="alert alert-block needs-completing">
-    <h4>Please complete your basic profile to appear in the marketplace</h4>
-    Fill out <a href="#general" class="update-tab">Basic Info</a>, <a href="#fees-packages" class="update-tab">Fees and Packages</a> and <a href="#profile" class="update-tab">Profile</a> and press Update Profile.
-</div>
+    {% if warning_type == 'alert' %}
+        <div class="alert alert-block needs-completing">
+        <h4>Please complete your basic profile to appear in the marketplace</h4>
+        Fill out <a href="#general" class="update-tab">Basic Info</a>, <a href="#fees-packages" class="update-tab">Fees and Packages</a> and <a href="#profile" class="update-tab">Profile</a> and press Update Profile.
+    </div>
+    {% endif %}
+    {% if warning_type == 'flashing' %}
+        <script>
+            var warningTemplate = $('<div/>', {
+                html: '<i class="icon-warning-sign icon-white animated flash"></i> <a href="{% url 'lawyer:setup_profile' %}">Update profile</a>'
+                ,class: 'profile-nudge'
+            });
+            $('.nav-bar-inner .container').append(warningTemplate)
+        </script>
+    {% endif %}
 {% else %}
 <div class="alert alert-block {% if is_active %}alert-success{% endif %} profile-live">
     <h4>Your profile is {{ profile_status }}</h4>

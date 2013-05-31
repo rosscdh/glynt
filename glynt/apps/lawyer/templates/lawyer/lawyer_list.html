@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load crispy_forms_tags %}
+{% extends 'base.html' %}{% load crispy_forms_tags lawyer_profile_tags %}
 
 {% block page_title %}Marketplace{% endblock %}
 {% block bodyclass %}lawyer-welcome{% endblock %}
@@ -51,6 +51,9 @@
         ,paginateOnScrollMargin: 60
         ,paginateOnScrollChunkSize: 5
     });
+
+        {% lawyer_profile_is_complete warning_type='flashing' lawyer=lawyer %}
+
 
         /*
         <div class="profile-nudge"><i class="icon-warning-sign icon-white animated flash"></i> <a href="#">Update profile</a></div>
