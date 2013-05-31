@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from bulbs.neo4jserver import Graph
+from django.utils import simplejson as json
 from glynt.apps.graph.models import GraphConnection
 from glynt.apps.graph.neo4j import Person, Knows
 
@@ -7,7 +8,7 @@ graph = Graph()
 graph.add_proxy("people", Person)
 graph.add_proxy("knows", Knows)
 
-def connections_for_user(user_id)
+def connections_for_user(user_id):
     user = User.objects.select_related('social_auth').get(id=user_id)
     linkedin_id = user.social_auth.filter(provider="linkedin")[0].uid
     vertices = list(graph.people.index.lookup(linkedin=linkedin_id))
@@ -17,7 +18,7 @@ def connections_for_user(user_id)
     for connection in connections:
         conns.append(connection.id)
     
-    return set(conns)
+    return return json.dumps(set(conns))
 
 def user(request, user_id):
     user = User.objects.select_related('social_auth').get(id=user_id)
@@ -30,7 +31,7 @@ def user(request, user_id):
         sconnections = connection.bothV("knows")
         for sconnection in connections:
             counts.append(sconnection.id)
-    return len(set(counts))
+    return json.dumps(set(counts))
 
 def user_to_user(request, from_user, to_user):
     from_user_connections = connections_for_user(from_user)

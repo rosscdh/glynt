@@ -14,8 +14,6 @@ from glynt.apps.utils import get_namedtuple_choices
 import logging
 logger = logging.getLogger('lawpal.graph')
 
-
-
 class FullContactData(models.Model):
     """ Provides a data source for a users fullcontact.com info """
     user = models.ForeignKey(User)
@@ -77,8 +75,6 @@ class FullContactData(models.Model):
 
     def contact_info(self):
         return self.extra_data.get('contactInfo', {})
-
-
 
 class GraphConnection(models.Model):
     """ Generic Database Model to store various provider abstractions """

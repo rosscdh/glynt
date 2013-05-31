@@ -45,6 +45,17 @@ DATABASES = {
     }
 }
 
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": "lawpal_production",
+        "USER": "postgres",
+        "PASSWORD": "postgres",
+        "HOST": "localhost",
+        "PORT": "",
+    }
+}
+
 if IS_TESTING:
     DATABASES['default']['TEST_NAME'] = '/tmp/testserver.db'
 
