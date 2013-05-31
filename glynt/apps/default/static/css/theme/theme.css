@@ -61,8 +61,12 @@ form a {
 
 .label, .badge {
 	font-size:10px;
-	border-radius:0;
+	border-radius:10px;
 	text-shadow:none;
+}
+
+.badge {
+    padding: 2px 6px 3px;
 }
 
 /* Message
@@ -293,7 +297,7 @@ body.lawyer-welcome #hero h3 {
 /* footer section */
 #footer {
 	background-color:#212526;
-	min-height: 300px;
+	min-height: 180px;
 	margin-top: 100px;
     color:#aaa;
 	padding-top: 35px;
@@ -385,6 +389,19 @@ body.lawyer-welcome #hero h3 {
 }
 
 /* Form Styling */
+.form-horizontal.compact .control-group {
+	margin-bottom:10px;
+}
+.form-horizontal.compact ul.parsley-error-list {
+	position:static;
+	background:transparent;
+}
+.form-actions {
+	border-top:none;
+}
+.form-actions .radio, .form-actions .checkbox {
+	padding-left:9px;
+}
 
 input.parsley-success, textarea.parsley-success {
   color: #468847 !important;
@@ -568,9 +585,62 @@ table.table td {
 	line-height:30px;	
 }
 
+/* Signin Modal
+-------------------------------------------------- */
+#signin-modal {
+	background-color: transparent;
+	outline-width: 0px;
+	border-radius: 0px;
+}
+#signin-modal .startup, #signin-modal .lawyer {
+	color:white;
+	padding:20px 30px 30px 30px;
+}
+#signin-modal .startup div, #signin-modal .lawyer div {
+	background: url('/static/img/coffee-tie.png');
+	width:70px;
+	height:105px;
+	margin:0 auto;
+	margin-bottom: 10px;
+}
+#signin-modal .lawyer div {
+	background-position: 0px -105px;
+}
+#signin-modal .startup {
+	width:210px;
+	background-color:#f88172;
+	float:left;
+	text-align: center;
+}
+#signin-modal .startup .btn {
+	background-color:#f56b5e;
+	margin-top:7px;
+	padding:3px 14px 3px 8px;
+}
+#signin-modal .lawyer {
+	width:210px;
+	float:right;
+	background-color:#00d4ea;
+	text-align: center;
+}
+#signin-modal .lawyer .btn {
+	background-color:#03c2d6;
+	margin-top:7px;
+	padding:3px 14px 3px 8px;
+}
+
 /* Btn
 -------------------------------------------------- */
 
+.btn-blue {
+	background-color: #00d4e9;
+	color:white;
+
+}
+.btn-blue:hover {
+	background-color: #11b2c2;
+	color: white;
+}
 .btn-red {
 	background-color:#f7877c;
 	border:1px solid #e76356;
@@ -593,6 +663,18 @@ table.table td {
 	  border-left: 4px solid transparent;
 	  content: "";
 	}
+.btn-onblack {
+background:transparent;
+color:white;
+border:1px solid white;
+border-radius: 0px;	
+}
+.btn-onblack:hover {
+background:white;
+color:black;
+border:1px solid white;
+}
+
 
 /* Tables
 -------------------------------------------------- */
@@ -610,6 +692,24 @@ legend {
 .table.table-center *{
 	text-align: center;
 }
+
+
+/* Nav Pills
+-------------------------------------------------- */
+
+.nav-pills > li > a {
+    border-radius: 0;
+}
+
+
+.nav-pills > .active > a, .nav-pills > .active > a:hover {
+    background-color: #6adc7d;
+    background: none;
+    font-weight: bold;
+    color: #4d5456;
+}
+
+
 
 /* Nav Tabs
 -------------------------------------------------- */
@@ -759,6 +859,36 @@ i.myspace { background-position: -233px -51px; }
 
 
 .hallotoolbar{ display:none!important;}
+
+
+/* Messaging
+-------------------------------------------------- */
+
+.hero {
+	padding-top: 65px;
+	background: #4ad1e5; /* Old browsers */
+	height: auto;
+	padding-bottom: 55px;
+	color:white;
+	margin-bottom:40px;
+}
+.hero h1 {
+	font-size:44px;
+	line-height:60px;
+}
+.hero-thin {
+    padding-top: 2.3em;
+    padding-bottom: 2.2em;
+}
+
+#postman_menu a [class^="icon-"] {
+    margin-right: 4px;
+}
+
+#postman_menu .active a  [class^="icon-"] {
+    background-image: url('/static/bootstrap/img/glyphicons-halflings.png');
+}
+
 
 
 /* Basic responsive */

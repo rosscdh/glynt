@@ -1,0 +1,13 @@
+{% if not profile_is_valid %}
+<div class="alert alert-block needs-completing">
+    <h4>Please complete your basic profile to appear in the marketplace</h4>
+    Fill out <a href="#general" class="update-tab">Basic Info</a>, <a href="#fees-packages" class="update-tab">Fees and Packages</a> and <a href="#profile" class="update-tab">Profile</a> and press Update Profile.
+</div>
+{% else %}
+<div class="alert alert-block {% if is_active %}alert-success{% endif %} profile-live">
+    <h4>Your profile is {{ profile_status }}</h4>
+    {% if is_active == False %}
+    Improve your exposure by updating: <a href="#transactions-and-startups" class="update-tab">Transaction & Startups</a> and <a href="#connected-accounts" class="update-tab">Connected Accounts</a>.
+    {% endif %}
+</div>
+{% endif %}

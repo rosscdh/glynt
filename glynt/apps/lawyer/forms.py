@@ -13,7 +13,6 @@ from bootstrap.forms import BootstrapMixin
 
 from cicu.models import UploadedFile
 from cicu.widgets import CicuUploderInput
-from easy_thumbnails.fields import ThumbnailerImageField
 
 from glynt.apps.lawyer.models import Lawyer
 
@@ -51,7 +50,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     practice_location_2 = forms.CharField(required=False, label="Secondary Location", widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-large','placeholder':'London, England','title':'Optional. The secondary city you operate from.','class':'typeahead','autocomplete':'on','data-provide':'ajax', 'minLength':'2', 'data-items':4, 'data-source': API_URLS.get('locations'), 'data-filter':'name__istartswith','autocomplete':'off','tabindex':'9'}))
 
     summary = forms.CharField(label="Short description", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-rangelength':'[0,1024]','class':'input-xxlarge','placeholder':'e.g. Partner at Orrick advising technology companies in Europe','title':'Keep it short, and make it personal.'}))
-    bio = forms.CharField(required=False, widget=forms.Textarea(attrs={'data-trigger':'change','class':'input-xxlarge', 'data-rangelength':'[30,1024]','placeholder':'A bit more about you.','title':'A bit longer, but still make it personal.'}))
+    bio = forms.CharField(required=False, widget=forms.Textarea(attrs={'data-trigger':'change','class':'input-xxlarge', 'data-rangelength':'[0,1024]','placeholder':'A bit more about you.','title':'A bit longer, but still make it personal.'}))
     if_i_wasnt_a_lawyer = forms.CharField(label="If I wasn't a lawyer", required=False, widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-xxlarge','placeholder':'e.g. Astronaut and part-time Pastry Chef','title':'If I wasn\'t a lawyer, I would be a...'}))
 
     photo = forms.ImageField(required=False, label="Main Photo", help_text="Please add a good quality photo to your profile. It really helps.", widget=CicuUploderInput(attrs={'data-trigger':'change','data-required': 'false'}, options={
@@ -81,34 +80,34 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
 
     volume_by_year = forms.CharField(required=False, widget=forms.HiddenInput)
 
-    seed_financing_amount_min = forms.IntegerField(required=False, initial=0, label="Seed Financing Min", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-lessthanorequal':'#id_seed_financing_amount_max', 'data-lessthanorequal-message':'This value should be less than the "Seed Financing" max.', 'class':'input-mini', 'title':'Seed financing minimum e.g. 500'}))
+    seed_financing_amount_min = forms.IntegerField(required=False, initial=0, label="Seed Financing Min", widget=forms.TextInput(attrs={'data-trigger':'change', 'class':'input-mini', 'title':'Seed financing minimum e.g. 500'}))
     seed_financing_amount_max = forms.IntegerField(required=False, initial=0, label="Seed Financing Max", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-morethanorequal':'#id_seed_financing_amount_min', 'data-morethanorequal-message':'This value should be more than the "Seed Financing" min.', 'class':'input-mini', 'title':'Seed financing maximum e.g. 50000'}))
     seed_fee_cap_available = forms.BooleanField(required=False, label='Fee cap available for this transaction?', widget=forms.CheckboxInput)
     seed_deferred_fees_available = forms.BooleanField(required=False, label='Deferred fees available for this transaction?', widget=forms.CheckboxInput)
     seed_fixed_fees_available = forms.BooleanField(required=False, label='Fixed fees available for this transaction?', widget=forms.CheckboxInput)
 
-    incorporation_min = forms.IntegerField(required=False, initial=0, label="Incorporation Min", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-lessthanorequal':'#id_incorporation_max', 'data-lessthanorequal-message':'This value should be less than the "Incorporation" max.', 'class':'input-mini','title':'Incorporation minimum e.g. 500'}))
+    incorporation_min = forms.IntegerField(required=False, initial=0, label="Incorporation Min", widget=forms.TextInput(attrs={'data-trigger':'change', 'class':'input-mini','title':'Incorporation minimum e.g. 500'}))
     incorporation_max = forms.IntegerField(required=False, initial=0, label="Incorporation Max", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-morethanorequal':'#id_incorporation_min', 'data-morethanorequal-message':'This value should be more than the "Incorporation" min.', 'class':'input-mini','title':'Incorporation maximum e.g. 50000'}))
     inc_fee_cap_available = forms.BooleanField(required=False, label='Fee cap available for this transaction?', widget=forms.CheckboxInput)
     inc_deferred_fees_available = forms.BooleanField(required=False, label='Deferred fees available for this transaction?', widget=forms.CheckboxInput)
     inc_fixed_fees_available = forms.BooleanField(required=False, label='Fixed fees available for this transaction?', widget=forms.CheckboxInput)
 
-    optional_funding = forms.CharField(required=False, help_text="", widget=forms.TextInput(attrs={'placeholder':'Funding type','class':'inline-form-element'}))
-    optional_min = forms.IntegerField(required=False, initial=0, label="Optional Min", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-lessthanorequal':'#id_optional_max', 'data-lessthanorequal-message':'This value should be less than the max.', 'class':'input-mini','title':'minimum e.g. 500'}))
-    optional_max = forms.IntegerField(required=False, initial=0, label="Optional Max", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-morethanorequal':'#id_optional_min', 'data-morethanorequal-message':'This value should be more than the min.', 'class':'input-mini','title':'maximum e.g. 50000'}))
+    optional_funding = forms.CharField(required=False, help_text="", widget=forms.TextInput(attrs={'placeholder':'Package name','class':'inline-form-element'}))
+    optional_min = forms.IntegerField(required=False, initial=0, label="Optional Min", widget=forms.TextInput(attrs={'data-trigger':'change', 'class':'input-mini','title':'minimum e.g. 500'}))
+    optional_max = forms.IntegerField(required=False, initial=0, label="Optional Max", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-morethanorequal':'#id_optional_min', 'class':'input-mini','title':'maximum e.g. 50000'}))
     optional_fee_cap_available = forms.BooleanField(required=False, label='Fee cap available for this transaction?', widget=forms.CheckboxInput)
     optional_deferred_fees_available = forms.BooleanField(required=False, label='Deferred fees available for this transaction?', widget=forms.CheckboxInput)
     optional_fixed_fees_available = forms.BooleanField(required=False, label='Fixed fees available for this transaction?', widget=forms.CheckboxInput)
 
-    optional_funding2 = forms.CharField(required=False, help_text="", widget=forms.TextInput(attrs={'placeholder':'Funding type','class':'inline-form-element'}))
-    optional_min2 = forms.IntegerField(required=False, initial=0, label="Optional Min", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-lessthanorequal':'#id_optional_max2', 'data-lessthanorequal-message':'This value should be less than the max.', 'class':'input-mini','title':'minimum e.g. 500'}))
+    optional_funding2 = forms.CharField(required=False, help_text="", widget=forms.TextInput(attrs={'placeholder':'Package name','class':'inline-form-element'}))
+    optional_min2 = forms.IntegerField(required=False, initial=0, label="Optional Min", widget=forms.TextInput(attrs={'data-trigger':'change', 'class':'input-mini','title':'minimum e.g. 500'}))
     optional_max2 = forms.IntegerField(required=False, initial=0, label="Optional Max", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-morethanorequal':'#id_optional_min2', 'data-morethanorequal-message':'This value should be more than the min.', 'class':'input-mini','title':'maximum e.g. 50000'}))
     optional_fee_cap_available2 = forms.BooleanField(required=False, label='Fee cap available for this transaction?', widget=forms.CheckboxInput)
     optional_deferred_fees_available2 = forms.BooleanField(required=False, label='Deferred fees available for this transaction?', widget=forms.CheckboxInput)
     optional_fixed_fees_available2 = forms.BooleanField(required=False, label='Fixed fees available for this transaction?', widget=forms.CheckboxInput)
 
-    optional_funding3 = forms.CharField(required=False, help_text="", widget=forms.TextInput(attrs={'placeholder':'Funding type','class':'inline-form-element'}))
-    optional_min3 = forms.IntegerField(required=False, initial=0, label="Optional Min", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-lessthanorequal':'#id_optional_max3', 'data-lessthanorequal-message':'This value should be less than the max.', 'class':'input-mini','title':'minimum e.g. 500'}))
+    optional_funding3 = forms.CharField(required=False, help_text="", widget=forms.TextInput(attrs={'placeholder':'Package name','class':'inline-form-element'}))
+    optional_min3 = forms.IntegerField(required=False, initial=0, label="Optional Min", widget=forms.TextInput(attrs={'data-trigger':'change', 'class':'input-mini','title':'minimum e.g. 500'}))
     optional_max3 = forms.IntegerField(required=False, initial=0, label="Optional Max", widget=forms.TextInput(attrs={'data-trigger':'change', 'data-morethanorequal':'#id_optional_min3', 'data-morethanorequal-message':'This value should be more than the min.', 'class':'input-mini','title':'maximum e.g. 50000'}))
     optional_fee_cap_available3 = forms.BooleanField(required=False, label='Fee cap available for this transaction?', widget=forms.CheckboxInput)
     optional_deferred_fees_available3 = forms.BooleanField(required=False, label='Deferred fees available for this transaction?', widget=forms.CheckboxInput)
@@ -186,6 +185,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
 
         firm_name = data.pop('firm_name')
 
+        # @TODO should be in the clean_photo method
         hidden_photo = self.cleaned_data.get('hidden_photo', None)
         if type(hidden_photo) is int:
             try:
@@ -211,8 +211,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
 
 @parsleyfy
 class LawyerSearchForm(BootstrapMixin, forms.Form):
-    location = forms.CharField(label='', help_text='', required=False, widget=forms.TextInput(attrs={'placeholder':'Anywhere', 'tabindex':'1', 'class':'input-xlarge typeahead','autocomplete':'off','data-provide':'ajax', 'minLength':'2', 'data-items': 5, 'data-source': API_URLS.get('locations'), 'data-filter':'name__istartswith', 'tabindex':'2', 'data-toggle': 'tooltip', 'title': 'Enter a Location or just leave it blank'}))
-    q = forms.CharField(label='', help_text='', required=False, widget=forms.TextInput(attrs={'placeholder':'Anything', 'tabindex':'2', 'class':'input-xlarge typeahead', 'data-provide':'typeahead', 'minLength':'0', 'autocomplete':'off', 'data-source':"[\"Seed financing\",\"Convertible loan note\",\"Intellectual property\"]", 'data-toggle': 'tooltip', 'title': 'Enter a Service Type or Generic Search Term'}))
+    q = forms.CharField(label='', help_text='', required=False, widget=forms.TextInput(attrs={'placeholder':'Anywhere', 'tabindex':'1', 'class':'input-xlarge typeahead','autocomplete':'off','data-provide':'ajax', 'minLength':'2', 'data-items': 5, 'data-source': API_URLS.get('locations'), 'data-filter':'name__istartswith', 'tabindex':'2', 'data-toggle': 'tooltip', 'title': 'Enter a Location or just leave it blank'}))
 
     def __init__(self, *args, **kwargs):
         """ get request object and user """
@@ -220,3 +219,17 @@ class LawyerSearchForm(BootstrapMixin, forms.Form):
         self.request = kwargs.pop('request', None)
         self.user = self.request.user
         super(LawyerSearchForm, self).__init__(*args, **kwargs)
+
+
+class LawyerProfileIsCompleteValidator(forms.Form):
+    """ is used by the profile_complete template tag 
+    to evaluate the completeness of a lawyers profile """
+    first_name = forms.CharField(required=True)
+    last_name = forms.CharField(required=True)
+    firm_name = forms.CharField(required=True)
+    phone = forms.CharField(required=True)
+    position = forms.CharField(required=True)
+    years_practiced = forms.IntegerField(required=True)
+    practice_location_1 = forms.CharField(required=True)
+    fee_packages = forms.CharField(required=True)
+    summary = forms.CharField(required=True)

@@ -9,9 +9,8 @@
         <!-- starts carousel -->
         <div class="row animated fadeInDown">
             <div class="span12">
-                <h1>Complete your login details</h1>
-                <h3>You are a critical part of the LawPal community.<br> The doors are opening soon. Make sure everything is current so founders can see who you really are. Have a question or comments? Contact us at <a href="mailto:founders@lawpal.com">founders@lawpal.com</a> </h3>
-                 
+                <h1>Confirm your login details</h1>
+                <h2>Enter your details below to confirm your account information.</h2>
             </div>
         </div>
     </div>
@@ -23,24 +22,32 @@
 <form id="lawyer-signin-details" data-validate="parsley" class="form-horizontal" action="{% url 'client:confirm_signup' slug=request.user.username %}" method="post">{% csrf_token %}
   {{ form.username }}
   <div class="row">
-      <div class="span5">
+      <div class="span5 offset3">
+
           <div class="control-group">
               {{ form.email|as_crispy_field }}
           </div>
-      </div>
-      <div class="span5">
           <div class="control-group">
               {{ form.password|as_crispy_field }}
           </div>
           <div class="control-group">
               {{ form.confirm_password|as_crispy_field }}
           </div>
+          <div class="control-group">
+              <button id="lawyer-signin-details-submit" type="submit" class="submit btn btn-primary btn-large offset2">{% trans "Create Account" %}</button>
+          </div>
       </div>
   </div>
-  <br/>
-  <div class="form-actions">
-      <button id="lawyer-signin-details-submit" type="submit" class="submit btn btn-primary">{% trans "Submit" %}</button>
-  </div>
+
 </form>
 
+{% endblock %}
+{% block css %}
+<style>
+#hero {
+    text-align: center;
+    background-color:#555;
+    color:#f1f1f1;
+}
+</style>
 {% endblock %}
