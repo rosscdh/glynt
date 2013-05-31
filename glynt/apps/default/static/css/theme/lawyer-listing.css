@@ -607,8 +607,11 @@ ul.partner-social .circle-small {
     background: #f8f8f8;
     padding: .5em 0;
     text-align: center;
-    margin: -.7em 1em;
     color: #0088cc;
+    position: absolute;
+    width: 350px;
+    top: 75px;
+    left: 15px;
 }
 
 .no-results {
