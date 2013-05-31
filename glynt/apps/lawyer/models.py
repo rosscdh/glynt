@@ -102,7 +102,7 @@ class Lawyer(models.Model):
 
     @property
     def profile_status(self):
-        return u'%s' % ('Live' if self.is_active == True else 'Pending Activation by LawPal.com')
+        return u'%s' % ('live' if self.is_active == True else 'pending activation and will appear live shortly.')
 
     @property
     def phone(self):
