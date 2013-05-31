@@ -21,7 +21,7 @@
     		<form action="{% url 'lawyer:list' %}" method="GET">
 			<h1>A better attorney-client relationship</h1>
 			<a name="learn"></a>
-			I need a lawyer in <input id="id_location" name="location" value="San Francisco"> <!-- for a <input id="user_screen_name" value="Seed financing"> -->
+			I need a lawyer in <input id="id_q" name="q" value="San Francisco"> <!-- for a <input id="user_screen_name" value="Seed financing"> -->
 			<button type="submit" class="btn btn-onblack btn-large" onClick="_gaq.push(['_trackEvent', 'Homepage', 'Action', 'Search']);">Search</button>or  <a href="#signin-modal" role="button" class="btn btn-onblack btn-large" data-toggle="modal" onClick="_gaq.push(['_trackEvent', 'Homepage', 'Action', 'Sign In']);">Sign In</a>
 			</form>
     	</div>
@@ -129,7 +129,7 @@
 <script src="/static/homepage/assets/js/homepage.js"></script> 
 <script>
 $(document).ready(function(){
-	$('#id_location').live('click', function(event){
+	$('#id_q').live('click', function(event){
 		$(this).select()
 	});
 });
