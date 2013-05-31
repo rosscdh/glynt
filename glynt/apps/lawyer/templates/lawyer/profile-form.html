@@ -16,7 +16,8 @@
     </div>
 </div>
 <div class="container profile">
-    {% lawyer_profile_is_complete warning_type='alert' lawyer=lawyer %}
+    {% lawyer_profile_is_complete_message warning_type='alert' lawyer=lawyer %}
+
     <div class="alert alert-error hidden">Please correct all errors before submitting the form</div>
 
     <div class="row">
@@ -1055,6 +1056,11 @@ $(document).ready(function(){
         var hashValue = $(this).attr('href');
         $('#profile-tab a[href='+hashValue+']').trigger('click');
     });
+
+    if(window.location.hash) {
+       var hashValue = window.location.hash;
+        $('#profile-tab a[href='+hashValue+']').trigger('click'); 
+    }
 });
 </script>
 
