@@ -9,7 +9,10 @@ from postman.api import pm_write
 
 from glynt.apps.utils import _get_referer, AjaxableResponseMixin
 
+from bunches import StartupEngageLawyerBunch
+
 from forms import EngageWriteMessageForm
+from forms import EngageStartupLawyerForm
 
 import logging
 logger = logging.getLogger('django.request')
@@ -63,3 +66,23 @@ class EngageWriteMessageView(FormView, AjaxableResponseMixin):
     def form_invalid(self, form):
         logger.error('EngageWriteMessageView.form_invalid %s' % ', '.join(form.errors))
         return self.render_to_json_response({'message': '<br/>'.join(form.errors), 'status': 500})
+
+
+class StartupEngageLawyerView(FormView, AjaxableResponseMixin):
+    form_class = EngageStartupLawyerForm
+    template_name = 'startup/abridged-form.html'
+
+    def get_form(self, form_class):
+        """
+        """
+        kwargs = self.get_form_kwargs()
+
+        kwargs.update({'request': self.request}) # add the request to the form
+        user = self.request.user
+        founder_service = EnsureFounderService(user=user)
+        founder = founder_service.process()
+
+        initial = StartupEngageLawyerBunch(founder=founder)
+
+        kwargs.update({'initial': initial})
+        return form_class(**kwargs)

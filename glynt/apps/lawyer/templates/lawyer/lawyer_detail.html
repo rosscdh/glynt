@@ -47,7 +47,7 @@
 					{% endif %}
 				{% endif %}
 				<a href="{% url 'engage:message' to=object.user.username %}" id="send-message" class="btn right" title="Message" data-toggle="modal"><i class="icon-envelope icon-white"></i> Message</a>
-				<a href="{% url 'startup:setup_abridged' %}" id="engage-lawyer" class="btn right" title="Engage"  data-toggle="modal"><i class="icon-play icon-white"></i> Engage</a>
+				<a href="{% url 'engage:startup_lawyer' %}" id="engage-lawyer" class="btn right" title="Engage"  data-toggle="modal"><i class="icon-play icon-white"></i> Engage</a>
 			</div>
 		</div>
 	</div>

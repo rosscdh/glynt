@@ -5,13 +5,12 @@ from django.views.generic import TemplateView
 from django.views.generic import RedirectView
 from django.core.urlresolvers import reverse_lazy
 
-from views import StartupProfileSetupView, StartupAbridgedView
+from views import StartupProfileSetupView
 
 
 urlpatterns = patterns('',
     url(r'^profile/setup/$', login_required(StartupProfileSetupView.as_view()), name='setup_profile'),
     url(r'^invite/$', login_required(TemplateView.as_view(template_name='startup/invite.html')), name='invite'),
-    url(r'^abridged/$', login_required(StartupAbridgedView.as_view()), name='setup_abridged'),
 
     #url(r'^$', login_required(TemplateView.as_view(template_name='startup/welcome.html')), name='welcome'),
     url(r'^$', login_required(RedirectView.as_view(url=reverse_lazy('lawyer:list'))), name='welcome'),
