@@ -8,5 +8,5 @@ from views import EngageWriteMessageView, StartupEngageLawyerView
 urlpatterns = patterns('',
     # enage message
     url(r'^(?P<to>.+)/message/$', EngageWriteMessageView.as_view(), name='message'),
-    url(r'^startup/lawyer/$', login_required(StartupEngageLawyerView.as_view()), name='startup_lawyer'),
+    url(r'^lawyer/(?P<lawyer_pk>\d+)/as/startup/$', login_required(StartupEngageLawyerView.as_view()), name='startup_lawyer'),
 )

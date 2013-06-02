@@ -43,8 +43,6 @@ class EnsureFounderService(object):
         if self.data.get('last_name'):
             self.founder.user.last_name = self.data.get('last_name')
 
-        self.founder.user.save(update_fields=['first_name', 'last_name'])
-
         if self.summary:
             self.founder.summary = self.summary
 

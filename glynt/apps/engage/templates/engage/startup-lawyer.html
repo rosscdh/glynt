@@ -5,9 +5,10 @@
 </div>
 
 <div class="modal-body">
-    <form id="engage-lawyer-form" data-validate="parsley" class="form-inline" action="{% url 'engage:startup_lawyer' %}" method="post">{% csrf_token %}
+    <form id="engage-lawyer-form" data-validate="parsley" class="form-inline" action="{% url 'engage:startup_lawyer' lawyer_pk=lawyer.pk %}" method="POST">{% csrf_token %}
         <h3>What do you need a lawyer for</h3>
         <ul class="lawyer-options">
+            <li id="engage_for_general">General Advice</li>
             <li id="engage_for_incorporation">Incorporation</li>
             <li id="engage_for_ip">IP Issues</li>
             <li id="engage_for_employment">Employment</li>
@@ -59,6 +60,7 @@
 
 <script>
 $(document).ready(function () {
+    
     $('.lawyer-options li').click(function() {
         var elem = $(this);
         elem.toggleClass('selected');
@@ -73,32 +75,44 @@ $(document).ready(function () {
         }
     });
 
+    $.each($('.lawyer-options li'), function(i,item){
+        var elem = $(item);
+        var target_data_attr = 'input[data-target="li#{target}"]'.assign({'target': elem.attr('id')});
+        var target = $(target_data_attr);
+        if (target.val() === 'True' && target.hasClass('selected') === false) {
+            elem.addClass('selected');
+        }
+    })
+
     $('#submit-modal-message').click(function(event) {
         event.preventDefault();
         var link_object = $(this);
         var form = $('form#engage-lawyer-form');
         var url = form.attr('action');
 
-        $.ajax({
-            type: form.attr('method') || 'POST',
-            url: url,
-            data: form.serialize(),
-            contentType: "application/json",
-            beforeSend: function(jqXHR, settings) {
-                // Pull the token out of the DOM.
-                jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
-                link_object.attr('disabled', 'disabled')
-            },
-            success: function(data, textStatus, jqXHR){
-                console.log('fdafds')
-                console.log(data)
-            },
-            error: function(data, textStatus, jqXHR){
-            },
-            complete: function() {
-                link_object.removeAttr('disabled')
-            }
-        });
+        if ($( '#engage-lawyer-form' ).parsley('validate') ) {
+            $.ajax({
+                type: form.attr('method') || 'POST',
+                url: url,
+                data: form.serialize(),
+                beforeSend: function(jqXHR, settings) {
+                    // Pull the token out of the DOM.
+                    jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+                    link_object.attr('disabled', 'disabled')
+                },
+                success: function(data, textStatus, jqXHR){
+                    GlyntJsMessages.add_message(data.message);
+                },
+                error: function(data, textStatus, jqXHR){
+                    GlyntJsMessages.add_message("An error occurred: {error}".assign({'error': textStatus}), 'error');
+                },
+                complete: function() {
+                    link_object.removeAttr('disabled')
+                    GlyntJsMessages.show();
+                    $('#engage-lawyer-modal').modal('hide');
+                }
+            });
+        }
     });
 
 });

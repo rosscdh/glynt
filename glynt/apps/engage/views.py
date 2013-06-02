@@ -9,11 +9,12 @@ from postman.api import pm_write
 
 from glynt.apps.utils import _get_referer, AjaxableResponseMixin
 
+from glynt.apps.lawyer.models import Lawyer
 from glynt.apps.startup.services import EnsureFounderService
 from bunches import StartupEngageLawyerBunch
 
-from forms import EngageWriteMessageForm
-from forms import EngageStartupLawyerForm
+from forms import EngageWriteMessageForm, EngageStartupLawyerForm
+from models import Engagement
 
 import logging
 logger = logging.getLogger('django.request')
@@ -69,20 +70,47 @@ class EngageWriteMessageView(FormView, AjaxableResponseMixin):
         return self.render_to_json_response({'message': '<br/>'.join(form.errors), 'status': 500})
 
 
-class StartupEngageLawyerView(FormView, AjaxableResponseMixin):
+
+class StartupEngageLawyerView(AjaxableResponseMixin, FormView):
     form_class = EngageStartupLawyerForm
     template_name = 'engage/startup-lawyer.html'
 
     def get_form(self, form_class):
         """
         """
+        self.lawyer = get_object_or_404(Lawyer, pk=self.kwargs.get('lawyer_pk'))
+        #self.engagement = 
         kwargs = self.get_form_kwargs()
 
-        user = self.request.user
-        founder_service = EnsureFounderService(user=user)
+        founder_service = EnsureFounderService(user=self.request.user)
         founder = founder_service.process()
 
         initial = StartupEngageLawyerBunch(founder=founder)
 
-        kwargs.update({'initial': initial})
+        kwargs.update({
+            'request': self.request,
+            'lawyer': self.lawyer,
+            'initial': initial,
+
+        })
         return form_class(**kwargs)
+
+    def get_context_data(self, **kwargs):
+        """ """
+        context = super(StartupEngageLawyerView, self).get_context_data(**kwargs)
+        context.update({
+            'lawyer': self.lawyer,
+        })
+        return context
+
+    def form_valid(self, form):
+        is_successful = form.save()
+
+        if is_successful:
+            msg = _("Message of Engagement successfully sent.")
+            status = 200
+        else:
+            msg = _("Message of Engagement could not be sent.")
+            status = 500
+
+        return self.render_to_json_response({'message': unicode(msg), 'status': status})
