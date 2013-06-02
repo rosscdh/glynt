@@ -5,6 +5,7 @@ import sys
 PROJECT_ENVIRONMENT = 'prod'
 
 IS_TESTING = False
+
 for test_app in ['loaddata','jenkins','testserver','test']:
     if test_app in sys.argv[1:2]:
         IS_TESTING = True
@@ -27,7 +28,7 @@ MANAGERS = ADMINS + (
 )
 
 NOTICEGROUP_EMAIL = (
- ("LawPal Tech", 'tech@lawpal.com'),   
+    ("LawPal Tech", 'tech@lawpal.com'),
 )
 
 DEFAULT_FROM_EMAIL = 'noreply@localhost'
@@ -35,7 +36,7 @@ SERVER_EMAIL = 'glynt@localhost'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': os.path.join(SITE_ROOT, 'dev.db'),
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
@@ -169,11 +170,11 @@ DJANGO_APPS = (
 
 PROJECT_APPS = (
     # Public and Theme
-    'public', # preferred
+    'public',  # preferred
     # The inviter app
     'public.invite',
     # Older public site
-    'glynt.apps.default', # depreciating @TODO end this
+    'glynt.apps.default',  # depreciating @TODO end this
 
 
     # The Api
@@ -212,7 +213,7 @@ PROJECT_APPS = (
 
 HELPER_APPS = (
     'menu',
-    'cicu',# image crop and upload
+    'cicu',  # image crop and upload
     'django_extensions',
     'templatetag_handlebars',
     'django_markdown',
@@ -258,7 +259,7 @@ HELPER_APPS = (
 )
 
 # Handle south and its breaking tests
-if IS_TESTING == True:
+if IS_TESTING is True:
     # Log email to console
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
     # disable celery for test
@@ -279,12 +280,12 @@ else:
 # Primary installed apps goes here
 # we do this so that we only test our apps
 # the other apps will/can be tested seperately
-INSTALLED_APPS = DJANGO_APPS + HELPER_APPS + PROJECT_APPS 
+INSTALLED_APPS = DJANGO_APPS + HELPER_APPS + PROJECT_APPS
 
 
-LOGIN_URL          = '/'
+LOGIN_URL = '/'
 LOGIN_REDIRECT_URL = '/logged-in/'
-LOGIN_ERROR_URL    = '/login-error/'
+LOGIN_ERROR_URL = '/login-error/'
 
 
 USER_STREAMS_BACKEND = 'user_streams.backends.user_streams_single_table_backend.SingleTableDatabaseBackend'
@@ -293,7 +294,7 @@ USER_STREAMS_USE_UTC = True
 HELLOSIGN_AUTH = ("sendrossemail@gmail.com", "test2007")
 
 ANONYMOUS_USER_ID = -1
-AUTH_PROFILE_MODULE = 'client.ClientProfile' # our custom profile
+AUTH_PROFILE_MODULE = 'client.ClientProfile'  # our custom profile
 
 
 # Celery
@@ -304,11 +305,11 @@ BROKER_CONNECTION_MAX_RETRIES = 2
 
 
 USERENA_USE_MESSAGES = True
-USERENA_LOGIN_AFTER_ACTIVATION = True # Enable beta style signup (manual activation)
+USERENA_LOGIN_AFTER_ACTIVATION = True  # Enable beta style signup (manual activation)
 USERENA_ACTIVATION_DAYS = 10
 USERENA_ACTIVATION_REDIRECT_URL = '/'
 USERENA_SIGNIN_REDIRECT_URL = '/'
-USERENA_WITHOUT_USERNAMES = True # step userarena forcing user to provide username
+USERENA_WITHOUT_USERNAMES = True  # step userarena forcing user to provide username
 USERENA_HIDE_EMAIL = True
 USERENA_MUGSHOT_GRAVATAR = False
 USERENA_MUGSHOT_DEFAULT = STATIC_URL +'img/default_avatar.png'
@@ -364,7 +365,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.user.update_user_details',
     'glynt.apps.graph.pipeline.ensure_user_setup',
     'glynt.apps.graph.pipeline.profile_extra_details',
-    # 'glynt.apps.graph.pipeline.graph_user_connections',
+    'glynt.apps.graph.pipeline.graph_user_connections',
 )
 
 POSTMAN_DISALLOW_ANONYMOUS = True
@@ -379,8 +380,8 @@ INTERCOM_API_SECRET = '-sjPyiyI5P44z3QsHLDUWfoLK8Rml7Wbg2wmj64L'
 
 
 DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d %Y',
-'%b %d, %Y', '%d %b %Y', '%d %b, %Y', '%B %d %Y',
-'%B %d, %Y', '%d %B %Y', '%d %B, %Y')
+                      '%b %d, %Y', '%d %b %Y', '%d %b, %Y', '%B %d %Y',
+                      '%B %d, %Y', '%d %B %Y', '%d %B, %Y')
 
 
 COMPRESS_ENABLED = True
@@ -410,6 +411,7 @@ if DEBUG:
             '--with-coverage',
         ]
 
+
 # Process model updates in real time
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 HAYSTACK_CONNECTIONS = {
@@ -419,6 +421,7 @@ HAYSTACK_CONNECTIONS = {
         'INDEX_NAME': 'dev-lawyers',
     },
 }
+
 USE_ELASTICSEARCH = True
 
 INTERNAL_IPS = ('127.0.0.1',)
@@ -433,6 +436,7 @@ DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.signals.SignalDebugPanel',
     'debug_toolbar.panels.logger.LoggingPanel',
     'debug_toolbar_user_panel.panels.UserPanel',
+    'neo4j_panel.Neo4jPanel',
 )
 
 # Custom test runner for this project

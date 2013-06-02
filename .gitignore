@@ -1,4 +1,5 @@
 .sonar
+src/
 *_valid.html
 *_invalid.html
 \.coverage
@@ -34,3 +35,5 @@ composer.lock
 /pyactiveresource
 /shopify
 /socialregistration
+.vagrant
+Vagrantfile

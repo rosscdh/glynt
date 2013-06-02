@@ -5,14 +5,14 @@ Not Just standard django models
 import sys
 from django.conf import settings
 from django.db import models
+
 from django.contrib.auth.models import User
 
-from glynt.apps.utils import get_namedtuple_choices
 from jsonfield import JSONField
+from glynt.apps.utils import get_namedtuple_choices
 
 import logging
 logger = logging.getLogger('lawpal.graph')
-
 
 class FullContactData(models.Model):
     """ Provides a data source for a users fullcontact.com info """
@@ -82,9 +82,8 @@ class GraphConnection(models.Model):
     PROVIDERS = get_namedtuple_choices('PROVIDERS', (
         (0,'linkedin','Linkedin'),
         (1,'angel','Angel'),
-      
     ))
-    user = models.OneToOneField(User, null=True, blank=True)
+    user = models.ForeignKey(User, null=True, blank=True)
     provider = models.IntegerField(choices=PROVIDERS.get_choices(), db_index=True)
     provider_uid = models.CharField(max_length=128, db_index=True)
     full_name = models.CharField(max_length=128)
@@ -97,16 +96,14 @@ class GraphConnection(models.Model):
     def __unicode__(self):
         return self.full_name
 
-"""
-These classes are abstractions to allow massage
-the remote apis data into a structure we can use
-to populate the GraphConnection model
-"""
 
+# These classes are abstractions to allow massage of
+# the remote apis data into a structure we can use
+# to populate the GraphConnection model
 
 class LawpalBaseConnection(object):
-    """ 
-    Generic Connection Provider 
+    """
+    Generic Connection Provider
     Provides an means of associating standardised
     graph object with a user
     """
@@ -122,7 +119,7 @@ class LawpalBaseConnection(object):
         self.full_name = self.get_full_name_from_data()
 
     def get_full_name_from_data(self):
-        raise Exception('Not Implemented')
+        raise NotImplemented()
 
     def __str__(self):
         return '%s' % self.__unicode__().encode(sys.stdout.encoding)
@@ -132,41 +129,54 @@ class LawpalBaseConnection(object):
 
     def associate(self, user):
         """ Create or associate this object with the specified user """
-        logger.info('Associating %s with %s (%s:%s)' % (user.get_full_name(), self.full_name, self.provider, self.uid) )
+        logger.info('Associating %s with %s (%s:%s)' % (user.get_full_name(), self.full_name, self.provider, self.uid))
         # get the integer val for the type
         provider_id = GraphConnection.PROVIDERS.get_value_by_name(self.provider)
 
         # get or create the graph object
-        graph_obj, is_new = GraphConnection.objects.get_or_create(full_name=self.full_name, provider=provider_id, provider_uid=self.uid)
+        graph_obj, is_new = GraphConnection.objects.get_or_create(provider_uid=self.uid, provider=provider_id)
+
+        # TODO: find existing user with uid and add as graph_obj.to_user
+        try:
+            to_user = User.objects.get(social_auth__uid=self.uid, social_auth__provider=self.provider)
+            graph_obj.to_user = to_user
+        except User.DoesNotExist:
+            to_user = None
+
         # update json_data
         graph_obj.extra_data = self.extra_data
         graph_obj.save()
         # associate our user with it
         graph_obj.users.add(user)
 
-        logger.info('Graph Connection %s is_new: %s' % (self.full_name, is_new) )
+        logger.info('%s Graph Connection %s is_new: %s' % (self.provider, self.full_name, is_new))
 
         return graph_obj, is_new
 
 
 class LinkedinConnection(LawpalBaseConnection):
-    """ Linkedin Connection Provider """
+    """ Linkedin Connection, Provides
+    access to the linkedin object model """
     provider = 'linkedin'
+
     def get_full_name_from_data(self):
         return u'%s %s' % (self.extra_data.get('firstName'), self.extra_data.get('lastName'),)
 
 
 class AngelConnection(LawpalBaseConnection):
-    """ AngelList Connection Provider """
+    """ AngelList Connection, Provides
+    access to the linkedin object model """
     provider = 'angel'
+
     def get_full_name_from_data(self):
         return u'%s' % self.extra_data.get('name')
 
 
 class FullContactConnection(LawpalBaseConnection):
-    """ FullContact Connection Provider """
+    """ FullContact Connection, Provides
+    access to the linkedin object model """
     provider = 'fullcontact'
+
     def get_full_name_from_data(self):
         contact_info = self.extra_data.get('contactInfo')
         return u'%s' % contact_info.get('fullName')
-

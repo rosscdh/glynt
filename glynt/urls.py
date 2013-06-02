@@ -46,6 +46,8 @@ urlpatterns = patterns('',
 	url(r'^export/', include('glynt.apps.export.urls', namespace='export')),
 	# The Document Signatures
 	url(r'^sign/doc/', include('glynt.apps.sign.urls', namespace='sign')),
+    # The graph
+    url(r'^graph/', include('glynt.apps.graph.urls', namespace='graph')),
     # favicon
     url(r'^favicon\.ico/$', RedirectView.as_view(url='%simg/favicon.ico' % settings.STATIC_URL)),
     url(r'', include('debug_toolbar_user_panel.urls')),

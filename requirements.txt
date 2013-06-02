@@ -42,6 +42,10 @@ south
 -e git+https://github.com/rosscdh/django-userena.git@lp#egg=django-userena  # Note the @branch
 -e git+https://github.com/rosscdh/django-user-streams.git@extended_templates#egg=django-user-streams  # Note the @branch
 
+# Neo4j integration
+bulbs
+-e git+https://github.com/robinedwards/django-debug-toolbar-neo4j-panel.git@HEAD#egg=neo4j_panel-dev
+
 # Search
 -e git+https://github.com/toastdriven/django-haystack.git@bf1b48261a06d3e8f0a0008264d0c5f0465e773b#egg=django_haystack-dev
 pyelasticsearch
