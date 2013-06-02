@@ -9,6 +9,7 @@ from postman.api import pm_write
 
 from glynt.apps.utils import _get_referer, AjaxableResponseMixin
 
+from glynt.apps.startup.services import EnsureFounderService
 from bunches import StartupEngageLawyerBunch
 
 from forms import EngageWriteMessageForm
@@ -70,14 +71,13 @@ class EngageWriteMessageView(FormView, AjaxableResponseMixin):
 
 class StartupEngageLawyerView(FormView, AjaxableResponseMixin):
     form_class = EngageStartupLawyerForm
-    template_name = 'startup/abridged-form.html'
+    template_name = 'engage/startup-lawyer.html'
 
     def get_form(self, form_class):
         """
         """
         kwargs = self.get_form_kwargs()
 
-        kwargs.update({'request': self.request}) # add the request to the form
         user = self.request.user
         founder_service = EnsureFounderService(user=user)
         founder = founder_service.process()

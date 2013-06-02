@@ -365,13 +365,16 @@ $(document).ready(function () {
 <script type="text/javascript" src="{{ STATIC_URL }}/js/send-message.js"></script>
 
 <script>
+$(document).ready(function () {
     $("#engage-lawyer").click(function(ev) {
         ev.preventDefault();
         var url = $(this).attr('href');
+        console.log(url)
         $("#engage-lawyer-modal").load(url, function() {
             $(this).modal('show');
         });
         return false;
     });
+});
 </script>
 {% endblock %}

@@ -1,20 +1,20 @@
 {% load url from future %}{% load i18n crispy_forms_tags %}
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3>Tell us about your startup</h3>
+    <h3>Engage this Lawyer</h3>
 </div>
 
 <div class="modal-body">
-    <form id="" data-validate="parsley" class="form-horizontal" action="" method="post">{% csrf_token %}
-        {{ form|crispy }}
+    <form id="" data-validate="parsley" class="form-inline" action="" method="post">{% csrf_token %}
         <h3>What do you need a lawyer for</h3>
         <ul class="lawyer-options">
-            <li>Incorporation</li>
-            <li>IP Issues</li>
-            <li>Employment</li>
-            <li>Co-founders</li>
-            <li>Fund raise</li>
+            <li id="engage_for_incorporation">Incorporation</li>
+            <li id="engage_for_ip">IP Issues</li>
+            <li id="engage_for_employment">Employment</li>
+            <li id="engage_for_cofounders">Co-founders</li>
+            <li id="engage_for_fundraise">Fund raise</li>
         </ul>
+        {{ form|crispy }}
     </form>
 </div>
 
@@ -58,9 +58,19 @@
 </style>
 
 <script>
-
+$(document).ready(function () {
     $('.lawyer-options li').click(function() {
-        $(this).toggleClass('selected');
-    })
+        var elem = $(this);
+        elem.toggleClass('selected');
 
+        var target_data_attr = 'input[data-target="li#{target}"]'.assign({'target': elem.attr('id')});
+        var target = $(target_data_attr);
+
+        if (elem.hasClass('selected') == true) {
+            target.prop('checked', true);
+        } else {
+            target.prop('checked', false);
+        }
+    });
+});
 </script>

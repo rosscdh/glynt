@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from bunch import Bunch
 
+from glynt.apps.startup.forms import StartupProfileIsCompleteValidator
+
 import logging
 logger = logging.getLogger('lawpal.services')
 
@@ -18,3 +20,7 @@ class StartupEngageLawyerBunch(Bunch):
                     process_raising_capital = founder.data.get('process_raising_capital', False),
                     incubator_or_accelerator_name = founder.data.get('incubator_or_accelerator_name'),
                 )
+
+    def is_valid(self):
+        form = StartupProfileIsCompleteValidator({'first_name': self.first_name, 'last_name': self.last_name, 'startup_name': self.startup_name})
+        return form.is_valid()

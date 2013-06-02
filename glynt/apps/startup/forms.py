@@ -80,3 +80,9 @@ class StartupProfileSetupForm(BootstrapMixin, forms.Form):
         startup = startup_service.process()
 
 
+class StartupProfileIsCompleteValidator(forms.Form):
+    """ is used by the profile_complete template tag 
+    to evaluate the completeness of a startups profile """
+    first_name = forms.CharField(required=True)
+    last_name = forms.CharField(required=True)
+    startup_name = forms.CharField(required=True)
