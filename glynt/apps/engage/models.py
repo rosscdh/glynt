@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 
 from jsonfield import JSONField
 from glynt.apps.utils import get_namedtuple_choices
@@ -32,6 +33,9 @@ class Engagement(models.Model):
 
     def __unicode__(self):
         return '%s (%s) enagement of %s' % (self.startup, self.founder, self.lawyer,)
+
+    def get_absolute_url(self):
+        return reverse('engage:engagement', kwargs={'pk':self.pk})
 
     @property
     def status(self):
