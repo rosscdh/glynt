@@ -255,6 +255,9 @@ HELPER_APPS = (
 
     # Vast array of Storage types
     'storages',
+    # Engagement System
+    'fluent_comments',
+    'threadedcomments'
 )
 
 # Handle south and its breaking tests
@@ -281,6 +284,8 @@ else:
 # the other apps will/can be tested seperately
 INSTALLED_APPS = DJANGO_APPS + HELPER_APPS + PROJECT_APPS 
 
+COMMENTS_APP = 'fluent_comments'
+#FLUENT_COMMENTS_EXCLUDE_FIELDS = ('subject',)
 
 LOGIN_URL          = '/'
 LOGIN_REDIRECT_URL = '/logged-in/'

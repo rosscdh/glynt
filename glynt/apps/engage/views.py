@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
-from django.views.generic import FormView
+from django.views.generic import FormView, DetailView, ListView
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 
@@ -114,3 +114,38 @@ class StartupEngageLawyerView(AjaxableResponseMixin, FormView):
             status = 500
 
         return self.render_to_json_response({'message': unicode(msg), 'status': status})
+
+
+class EngagementView(DetailView):
+    model = Engagement
+
+    def get_object(self, queryset=None):
+        """"""
+        queryset = self.get_queryset()
+        # Next, try looking up by primary key.
+        pk = self.kwargs.get(self.pk_url_kwarg, None)
+        queryset = queryset.select_related('startup','founder','lawyer','founder__user','lawyer__user').filter(pk=pk)
+
+        try:
+            # Get the single item from the filtered queryset
+            obj = queryset.get()
+        except ObjectDoesNotExist:
+            raise Http404(_("No %(verbose_name)s found matching the query") %
+                          {'verbose_name': queryset.model._meta.verbose_name})
+        return obj
+
+
+class MyEngagementsView(ListView):
+    model = Engagement
+
+    def get_queryset(self):
+        """"""
+        user = self.request.user
+        queryset = self.model.objects
+        fltr = {}
+        if user.profile.is_lawyer:
+            fltr.update({'lawyer': user.lawyer_profile})
+        elif user.profile.is_startup:
+            fltr.update({'founder': user.founder_profile})
+
+        return queryset.filter(**fltr)

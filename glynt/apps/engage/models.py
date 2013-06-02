@@ -33,5 +33,9 @@ class Engagement(models.Model):
     def __unicode__(self):
         return '%s (%s) enagement of %s' % (self.startup, self.founder, self.lawyer,)
 
+    @property
+    def status(self):
+        return ENGAGEMENT_STATUS.get_desc_by_value(self.engagement_status)
+
     def engagement_statement(self):
         return self.data.get('engagement_statement', None)
