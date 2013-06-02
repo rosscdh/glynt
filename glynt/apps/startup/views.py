@@ -7,6 +7,7 @@ from services import EnsureFounderService
 from forms import StartupProfileSetupForm, StartupAbridgedForm
 
 from glynt.apps.utils import AjaxableResponseMixin
+from glynt.apps.startup.bunches import StartupEngageLawyerBunch
 
 import urlparse
 
@@ -69,3 +70,18 @@ class StartupProfileSetupView(FormView):
 class StartupAbridgedView(FormView, AjaxableResponseMixin):
     form_class = StartupAbridgedForm
     template_name = 'startup/abridged-form.html'
+
+    def get_form(self, form_class):
+        """
+        """
+        kwargs = self.get_form_kwargs()
+
+        kwargs.update({'request': self.request}) # add the request to the form
+        user = self.request.user
+        founder_service = EnsureFounderService(user=user)
+        founder = founder_service.process()
+
+        initial = StartupEngageLawyerBunch(founder=founder)
+
+        kwargs.update({'initial': initial})
+        return form_class(**kwargs)
