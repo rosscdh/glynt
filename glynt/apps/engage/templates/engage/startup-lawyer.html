@@ -5,7 +5,7 @@
 </div>
 
 <div class="modal-body">
-    <form id="" data-validate="parsley" class="form-inline" action="" method="post">{% csrf_token %}
+    <form id="engage-lawyer-form" data-validate="parsley" class="form-inline" action="{% url 'engage:startup_lawyer' %}" method="post">{% csrf_token %}
         <h3>What do you need a lawyer for</h3>
         <ul class="lawyer-options">
             <li id="engage_for_incorporation">Incorporation</li>
@@ -72,5 +72,34 @@ $(document).ready(function () {
             target.prop('checked', false);
         }
     });
+
+    $('#submit-modal-message').click(function(event) {
+        event.preventDefault();
+        var link_object = $(this);
+        var form = $('form#engage-lawyer-form');
+        var url = form.attr('action');
+
+        $.ajax({
+            type: form.attr('method') || 'POST',
+            url: url,
+            data: form.serialize(),
+            contentType: "application/json",
+            beforeSend: function(jqXHR, settings) {
+                // Pull the token out of the DOM.
+                jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+                link_object.attr('disabled', 'disabled')
+            },
+            success: function(data, textStatus, jqXHR){
+                console.log('fdafds')
+                console.log(data)
+            },
+            error: function(data, textStatus, jqXHR){
+            },
+            complete: function() {
+                link_object.removeAttr('disabled')
+            }
+        });
+    });
+
 });
 </script>
