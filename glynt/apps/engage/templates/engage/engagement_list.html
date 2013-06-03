@@ -26,10 +26,12 @@
             <ul class="message-list">
                 {% for message in object_list %}
                 <li {% if message.is_new %}class="new-message"{% endif %} data-url="{{ message.get_absolute_url }}">
-                    
-                    <span class="message-sender">{{ message }}</span>
-                    <span class="message-date">{{ message.date_created|date:"d M" }} - {{ message.date_updated|date:"d M" }}</span></a>
-                    
+                    <a href="{{ message.get_absolute_url }}">
+                        <span class="message-sender">{{ message }}</span>
+                        <span class="message-date">{{ message.date_created|date:"d M" }} - {{ message.date_updated|date:"d M" }}</span></a>
+                    </a>
+
+                    <a class="close hidden" href="/messages/delete/" data-message-id="{% if by_conversation and message.thread_id %}{{ message.thread_id }}{% else %}{{ message.id }}{% endif %}" data-message-type="{%  if  by_conversation and message.thread_id %}tpks{% else %}pks{% endif %}">&times;</a></li>
                 </li>
                 {% endfor %}
             </ul>
@@ -150,13 +152,6 @@
 
         $('.edit-message-list').click(function() {
            $('.message-list .close').toggleClass('hidden');
-        });
-
-        $('ul.message-list li').live('click', function(event) {
-            event.preventDefault()
-            var elem = $(this);
-            var url = elem.attr('data-url');
-            document.location = url
         });
 
         // Updates count on new mail icons
