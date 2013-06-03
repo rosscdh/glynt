@@ -29,10 +29,10 @@
                     <a href="{{ message.get_absolute_url }}">
                         <img src="{{ message.lawyer.profile_photo }}" class="avatar">
                         <span class="message-sender">{{ message }}</span>
-                        <span class="message-date">{{ message.date_created|date:"d M" }}</span></a>
+                        <span class="message-date">{{ message.date_created|date:"d M" }}</span>
                     </a>
 
-                    <a class="close hidden" href="/messages/delete/" data-message-id="{% if by_conversation and message.thread_id %}{{ message.thread_id }}{% else %}{{ message.id }}{% endif %}" data-message-type="{%  if  by_conversation and message.thread_id %}tpks{% else %}pks{% endif %}">&times;</a></li>
+                    <a class="close hidden" href="/messages/delete/" data-message-id="{% if by_conversation and message.thread_id %}{{ message.thread_id }}{% else %}{{ message.id }}{% endif %}" data-message-type="{%  if  by_conversation and message.thread_id %}tpks{% else %}pks{% endif %}">&times;</a>
                 </li>
                 {% endfor %}
             </ul>
