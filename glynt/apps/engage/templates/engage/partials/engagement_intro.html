@@ -1,10 +1,15 @@
 <h3>Engagement Request</h3>
 
-<p>status: {{ engagement.status }}</p>
-<p>for: {{ object.startup }}</p>
-<p>from: {{ object.founder.user.get_full_name }}</p>
-<p>to: {{ object.lawyer.user.get_full_name }} of {{ object.lawyer.firm_name }}</p>
+<p><b>to</b>: {{ object.lawyer.user.get_full_name }} of {{ object.lawyer.firm_name }}</p>
+<p><b>status</b>: {{ engagement.status }}</p>
+<p><b>from</b>: {{ object.founder.user.get_full_name }}</p>
+<p><b>on behalf of</b>: {{ object.startup }}</p>
 
-list of "engage for" will go here
+<h4>Engagement for</h4>
+{% for t,name in object.engagement_types %}
+<p><strong>{{ name }}</strong></p>
+{% endfor %}
 
-<p>{{ engagement.}}</p>
+
+<h4>Statement</h4>
+<p>{{ engagement.engagement_statement }}</p>

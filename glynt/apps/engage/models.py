@@ -8,8 +8,9 @@ from glynt.apps.utils import get_namedtuple_choices
 
 from glynt.apps.startup.models import Startup, Founder
 from glynt.apps.lawyer.models import Lawyer
+from bunches import StartupEngageLawyerBunch
 
-
+from utils import *
 ENGAGEMENT_STATUS = get_namedtuple_choices('ENGAGEMENT_STATUS', (
     (0, 'requested', 'Requested'),
     (1, 'considering', 'Lawyer has recieved the request and is considering it'),
@@ -41,5 +42,11 @@ class Engagement(models.Model):
     def status(self):
         return ENGAGEMENT_STATUS.get_desc_by_value(self.engagement_status)
 
+    @property
     def engagement_statement(self):
         return self.data.get('engagement_statement', None)
+
+    @property
+    def engagement_types(self):
+        engagement_types = [('engage_for_general','General'), ('engage_for_incorporation','Incorporation'), ('engage_for_ip','Intellectual Property'), ('engage_for_employment','Employment Law'), ('engage_for_fundraise','Fundraising'), ('engage_for_cofounders','Co-Founder')]
+        return [(self.data.get(r,False),name) for r,name in engagement_types if self.data.get(r,False)]
