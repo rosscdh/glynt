@@ -20,9 +20,10 @@ def engagement_dict(data):
     own_profile = True if data.get('lawyer').user.pk == data.get('user').pk else False
 
     if data.get('user',None) is not None:
-        if not own_profile:
-            if data.get('user').profile.is_startup:
-                engagement_list = Engagement.objects.filter(lawyer=data.get('lawyer'), founder=data.get('user').founder_profile)
+        if data.get('user').is_authenticated():
+            if not own_profile:
+                if data.get('user').profile.is_startup:
+                    engagement_list = Engagement.objects.filter(lawyer=data.get('lawyer'), founder=data.get('user').founder_profile)
 
     data = {
         'engagement_list': engagement_list,
