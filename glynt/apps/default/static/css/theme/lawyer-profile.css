@@ -212,8 +212,10 @@
     opacity:0.3;
     }
     ul li.nothing-found {
-    color:#ddd;
     margin:10px 0px;
+    }
+    .nothing-found {
+    color:#ddd;
     font-size:15px;
     }
     ul.social-buttons li:hover {
