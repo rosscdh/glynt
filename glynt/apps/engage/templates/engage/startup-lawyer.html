@@ -5,7 +5,7 @@
 </div>
 
 <div class="modal-body">
-    <form id="engage-lawyer-form" data-validate="parsley" class="form-inline" action="{% url 'engage:startup_lawyer' lawyer_pk=lawyer.pk %}" method="POST">{% csrf_token %}
+    <form id="engage-lawyer-form" data-validate="parsley" class="form-horizontal" action="{% url 'engage:startup_lawyer' lawyer_pk=lawyer.pk %}" method="POST">{% csrf_token %}
         <h3>What do you need a lawyer for</h3>
         <ul class="lawyer-options">
             <li id="engage_for_general">General Advice</li>
