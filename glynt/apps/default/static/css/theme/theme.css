@@ -597,9 +597,9 @@ table.table td {
 	padding:20px 30px 30px 30px;
 }
 #signin-modal .startup div, #signin-modal .lawyer div {
-	background: url('/static/img/coffee-tie.png');
+	background: url('/static/img/coffee-tie.png') no-repeat;
 	width:70px;
-	height:105px;
+	height:104px;
 	margin:0 auto;
 	margin-bottom: 10px;
 }
@@ -889,7 +889,31 @@ i.myspace { background-position: -233px -51px; }
     background-image: url('/static/bootstrap/img/glyphicons-halflings.png');
 }
 
+.navbar-inner .container {
+    position: relative;
+}
+.profile-nudge {
+    color: #fff;
+    position: absolute;
+    top: 44px;
+    right: 0px;
+    background: #e76356 /*#ff7e00*/;
+    padding: .5em 1.2em .5em 1em;
+    font-weight: bold;
+    border-radius: .2em;
+    text-align: center;
+}
 
+.profile-nudge i {
+    -webkit-animation-duration: 2s;
+    -webkit-animation-delay: 1s;
+    -webkit-animation-iteration-count: infinite;
+}
+
+.profile-nudge a, .profile-nudge a:hover {
+    color: #fff;
+    text-decoration: none;
+}
 
 /* Basic responsive */
 
