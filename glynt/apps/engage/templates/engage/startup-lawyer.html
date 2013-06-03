@@ -1,12 +1,15 @@
-{% load url from future %}{% load i18n crispy_forms_tags %}
+{% load url from future %}{% load i18n glynt_helpers crispy_forms_tags %}
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3>Engage this Lawyer</h3>
+    <h3>Your Engagement with {{ lawyer.user.get_full_name }}</h3>
+    {% if engagement %}
+    <b>since:</b> {% moment engagement.date_created %}
+    {% endif %}
 </div>
 
 <div class="modal-body">
     <form id="engage-lawyer-form" data-validate="parsley" class="form-horizontal" action="{% url 'engage:startup_lawyer' lawyer_pk=lawyer.pk %}" method="POST">{% csrf_token %}
-        <h3>What do you need a lawyer for</h3>
+        <h3>Your requirements</h3>
         <ul class="lawyer-options">
             <li id="engage_for_general">General Advice</li>
             <li id="engage_for_incorporation">Incorporation</li>
@@ -70,8 +73,10 @@ $(document).ready(function () {
 
         if (elem.hasClass('selected') == true) {
             target.prop('checked', true);
+            target.val('True');
         } else {
             target.prop('checked', false);
+            target.val('');
         }
     });
 

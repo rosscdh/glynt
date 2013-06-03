@@ -79,6 +79,10 @@ class StartupEngageLawyerView(AjaxableResponseMixin, FormView):
         """
         """
         self.lawyer = get_object_or_404(Lawyer, pk=self.kwargs.get('lawyer_pk'))
+        try:
+            self.engagement = Engagement.objects.get(lawyer=self.lawyer, founder=self.request.user.founder_profile)
+        except Engagement.DoesNotExist:
+            self.engagement = None
         #self.engagement = 
         kwargs = self.get_form_kwargs()
 
@@ -86,6 +90,17 @@ class StartupEngageLawyerView(AjaxableResponseMixin, FormView):
         founder = founder_service.process()
 
         initial = StartupEngageLawyerBunch(founder=founder)
+
+        if self.engagement is not None:
+            initial.update({
+                'engagement_statement': self.engagement.engagement_statement,
+                'engage_for_general': self.engagement.data.get('engage_for_general',False),
+                'engage_for_incorporation': self.engagement.data.get('engage_for_incorporation',False),
+                'engage_for_ip': self.engagement.data.get('engage_for_ip',False),
+                'engage_for_employment': self.engagement.data.get('engage_for_employment',False),
+                'engage_for_cofounders': self.engagement.data.get('engage_for_cofounders',False),
+                'engage_for_fundraise': self.engagement.data.get('engage_for_fundraise',False),
+            })
 
         kwargs.update({
             'request': self.request,
@@ -100,6 +115,7 @@ class StartupEngageLawyerView(AjaxableResponseMixin, FormView):
         context = super(StartupEngageLawyerView, self).get_context_data(**kwargs)
         context.update({
             'lawyer': self.lawyer,
+            'engagement': self.engagement,
         })
         return context
 
