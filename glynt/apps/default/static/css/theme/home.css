@@ -1,14 +1,18 @@
 
 
 body.homepage #hero {
-background-size: cover;
 text-align: left;
-padding-bottom:0px;
-background-position: 0 -60px;
+padding-bottom: 0px;
+background-position: top center;
 margin-bottom:0px;
 z-index: 5;
-height:550px;
+height: 490px;
 background-color: white;
+min-width: 980px;
+-webkit-background-size: cover;
+-moz-background-size: cover;
+-o-background-size: cover;
+background-size: cover;
 }
 body.homepage #hero h1 {
 margin: 0.25em 0 0 0;
