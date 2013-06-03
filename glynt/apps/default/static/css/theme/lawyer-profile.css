@@ -104,10 +104,11 @@
     margin-top:38px;
     }
     #hero h3 {
-    margin: 0 !important;
+    margin: .5em 0 0 0 !important;
     padding: 0 !important;
     font-size:20px;
     color:#aaa;
+    line-height: 1.2em;
     }
     #hero #buttons {
 /*    background-color:#757c7e;
