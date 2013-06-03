@@ -123,7 +123,7 @@
     #hero .profile-details {
     padding-bottom:0px;
     }
-    #hero #buttons .right {
+    /* #hero #buttons .right {
     float:right;
     margin-left:4px;
     padding:5px 0px 6px 20px;
@@ -140,6 +140,9 @@
     #hero #buttons .right i {
     margin-top:2px;
     margin-right:3px;
+    } */
+    #hero .engagement-container .btn-primary {
+        margin: 0 .6em 0 0;
     }
     #hero .avatar img {
     border: 8px solid rgba(255,255,255,0.46);
@@ -213,8 +216,10 @@
     opacity:0.3;
     }
     ul li.nothing-found {
-    color:#ddd;
     margin:10px 0px;
+    }
+    .nothing-found {
+    color:#ddd;
     font-size:15px;
     }
     ul.social-buttons li:hover {

@@ -1,0 +1,176 @@
+{% extends "postman/base.html" %}
+{% load url from future %}
+{% load i18n postman_tags %}{% load pagination_tags %}
+
+{% block content %}
+{#% autopaginate object_list %#}
+
+<div class="row">
+    <div class="span10">
+    {% if invalid_page %}
+
+    <p>{% trans "Sorry, this page number is invalid." %}</p>
+
+    {% else %}
+
+        {% if object_list %}
+
+            <div class="row">
+                {% block edit-controls %}
+                <div class="span10">
+                    <a href="#edit" class="btn pull-right edit-message-list" data-toggle="button"><i class="icon-cog"></i> Edit</a>
+                </div>
+                {% endblock %}
+            </div>
+
+            <ul class="message-list">
+                {% for message in object_list %}
+                <li {% if message.is_new %}class="new-message"{% endif %} data-url="{{ message.get_absolute_url }}">
+                    
+                    <span class="message-sender">{{ message }}</span>
+                    <span class="message-date">{{ message.date_created|date:"d M" }} - {{ message.date_updated|date:"d M" }}</span></a>
+                    
+                </li>
+                {% endfor %}
+            </ul>
+            {#% paginate %#}
+
+        {% else %}
+            <p>{% trans "No Engagements." %}</p>
+        {% endif %}
+
+    {% endif %}
+    {% block pm_footer_info %}{% endblock %}
+    </div>
+</div>
+{% endblock content %}
+
+{% block css %}
+    <style>
+        #pm_messages { margin-top: 1em; border-top: 1px solid #6adc7d; }
+        #pm_messages .postman-action-col { width: 20px; text-align: center; }
+        #pm_messages tr th { text-align: left }
+        .btn-group.open .btn.dropdown-toggle { background-color: #e6e6e6; }
+
+        .message-list {
+            list-style: none;
+            border-top: 1px solid #f2f2f2;
+            margin-top: 1em;
+        }
+
+        .message-list li {
+            border-bottom: 1px solid #f2f2f2;
+            position: relative;
+        }
+
+        .message-list li:hover {
+            background-color: #f2f2f2;
+        }
+
+        .message-list a {
+            text-decoration: none;
+            padding: 1em 1em;
+            display: block;
+        }
+
+        .new-message {
+            border-left: 2px solid #6adc7d;
+            font-weight: bold;
+        }
+
+        .message-sender {
+            display: inline-block;
+            min-width: 12em;
+        }
+
+        .message-date {
+            color: #ccc;
+            float: right;
+            margin-right: 2em;
+        }
+
+        .message-body {
+            color: #ccc;
+        }
+
+        .message-list .close {
+            display: block;
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            padding: 0;
+            color: red;
+            opacity: 1;
+        }
+        .edit-message-list {
+            font: -webkit-control;
+        }
+
+    </style>
+{% endblock %}
+
+{% block js %}
+    <script>
+    $(document).ready(function() {
+        $('a.close').click(function(ev) {
+            ev.preventDefault();
+            var container = $(this).parent();
+            if ($(this).attr('data-message-type') === 'pks'){
+                $.ajax({
+                type: 'POST',
+                url: $(this).attr('href'),
+                data: {
+                    pks: $(this).attr('data-message-id'),
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function() {
+                    container.fadeOut();
+                    updateNewMessageCount(container);
+                }
+            });
+            } else {
+                $.ajax({
+                type: 'POST',
+                url: $(this).attr('href'),
+                data: {
+                    tpks: $(this).attr('data-message-id'),
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function() {
+                    container.fadeOut();
+                    updateNewMessageCount(container);
+                }
+            });
+            }
+
+        return false;
+        });
+
+        $('.edit-message-list').click(function() {
+           $('.message-list .close').toggleClass('hidden');
+        });
+
+        $('ul.message-list li').live('click', function(event) {
+            event.preventDefault()
+            var elem = $(this);
+            var url = elem.attr('data-url');
+            document.location = url
+        });
+
+        // Updates count on new mail icons
+        function updateNewMessageCount(container) {
+            var message_count = $('.unread-messages').live();
+            if (container.hasClass('new-message')) {
+                if (parseInt(message_count.html()) > 1) {
+                    message_count.html(parseInt(message_count.html()) - 1);
+                } else {
+                    message_count.remove();
+                }
+            }
+        }
+
+    });
+    </script>
+{% endblock %}

@@ -1,0 +1,7 @@
+{% load i18n %}{% autoescape off %}Dear {{ object.recipient.get_full_name }}
+
+{{ object.sender.get_full_name }} has sent you a message.
+
+{{ object.body }}
+{% endautoescape %}
+{% include 'email/footer.email' %}

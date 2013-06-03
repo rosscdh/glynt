@@ -79,8 +79,12 @@ def moment_js(selector=None):
 
 
 @register.inclusion_tag('moment/moment.html')
-def moment(date_object, default_date):
+def moment(date_object, default_date=None):
+    if default_date is None:
+        default_date = date_object
+
     unix_timestamp = None
+
     if type(date_object) == str:
         date_object = time.strptime(date_object)
     if date_object:

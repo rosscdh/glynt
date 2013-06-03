@@ -31,6 +31,11 @@ south
 -e git+https://github.com/brack3t/django-braces.git#egg=django-braces
 -e git+https://github.com/lincolnloop/python-qrcode.git#egg=python-qrcode
 
+# Comments
+django-fluent-comments
+django-threadedcomments
+django-notification
+
 # JSON Field
 #django-jsonfield # This is the correct one, the bradjasper version does not save correctly (converts to string), but we probably need to patch it so that the loaddata works
 # patched version to work with the pyelasticsearch requriement of the latest simplejson (which no does not support the correct json implementation)
@@ -118,5 +123,5 @@ termcolor
 tweepy
 
 # Messaging App
-django-postman
+-e hg+https://bitbucket.org/stard0g101/django-postman#egg=django-postman
 django-pagination

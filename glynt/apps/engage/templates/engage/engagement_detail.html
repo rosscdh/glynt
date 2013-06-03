@@ -1,0 +1,57 @@
+{% extends 'base.html' %}{% load comments engagement_tags %}
+
+{% block page_title %}Engagement of {{ object.lawyer.user.get_full_name }} by {{ object.founder.user.get_full_name }} on behalf of {{ object.startup }}{% endblock %}
+
+{% block prebody %}
+
+<div id="hero">
+    <div class="container container-main">
+        <h2>Engagement of {{ object.lawyer.user.get_full_name }} by {{ object.founder.user.get_full_name }} on behalf of {{ object.startup }}</h2>
+    </div>
+    <div id="buttons">
+        <div class="container">
+            <div class="row12">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container profile">
+    <div class="row">
+        <div class="span8">
+            {% engagement_intro enagement=object %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="span8">
+            <div class="row">
+                {% render_comment_list for object %}
+                <hr>
+                {% render_comment_form for object %}
+            </div>
+        </div>  
+        <div class="span4 pull-right sidebar">
+
+        </div>  
+    </div>
+
+</div>
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fluent_comments/css/ajaxcomments.css" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/theme/lawyer-profile.css" rel="stylesheet" charset="utf-8" />
+<style>
+#id_honeypot{
+    visibility:hidden;
+}
+</style>
+{% endblock %}
+
+
+{% block js %}
+<script type="text/javascript" src="{{ STATIC_URL }}fluent_comments/js/ajaxcomments.js"></script>
+<script>
+$(document).ready(function () {
+});
+</script>
+{% endblock %}

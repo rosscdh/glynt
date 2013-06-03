@@ -6,6 +6,8 @@ from django.core.urlresolvers import reverse
 from services import EnsureFounderService
 from forms import StartupProfileSetupForm
 
+from glynt.apps.utils import AjaxableResponseMixin
+
 import urlparse
 
 import logging

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
-from django.views.generic import FormView
+from django.views.generic import FormView, DetailView, ListView
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 
@@ -9,7 +9,12 @@ from postman.api import pm_write
 
 from glynt.apps.utils import _get_referer, AjaxableResponseMixin
 
-from forms import EngageWriteMessageForm
+from glynt.apps.lawyer.models import Lawyer
+from glynt.apps.startup.services import EnsureFounderService
+from bunches import StartupEngageLawyerBunch
+
+from forms import EngageWriteMessageForm, EngageStartupLawyerForm
+from models import Engagement
 
 import logging
 logger = logging.getLogger('django.request')
@@ -63,3 +68,85 @@ class EngageWriteMessageView(FormView, AjaxableResponseMixin):
     def form_invalid(self, form):
         logger.error('EngageWriteMessageView.form_invalid %s' % ', '.join(form.errors))
         return self.render_to_json_response({'message': '<br/>'.join(form.errors), 'status': 500})
+
+
+
+class StartupEngageLawyerView(AjaxableResponseMixin, FormView):
+    form_class = EngageStartupLawyerForm
+    template_name = 'engage/startup-lawyer.html'
+
+    def get_form(self, form_class):
+        """
+        """
+        self.lawyer = get_object_or_404(Lawyer, pk=self.kwargs.get('lawyer_pk'))
+        #self.engagement = 
+        kwargs = self.get_form_kwargs()
+
+        founder_service = EnsureFounderService(user=self.request.user)
+        founder = founder_service.process()
+
+        initial = StartupEngageLawyerBunch(founder=founder)
+
+        kwargs.update({
+            'request': self.request,
+            'lawyer': self.lawyer,
+            'initial': initial,
+
+        })
+        return form_class(**kwargs)
+
+    def get_context_data(self, **kwargs):
+        """ """
+        context = super(StartupEngageLawyerView, self).get_context_data(**kwargs)
+        context.update({
+            'lawyer': self.lawyer,
+        })
+        return context
+
+    def form_valid(self, form):
+        is_successful = form.save()
+
+        if is_successful:
+            msg = _("Message of Engagement successfully sent.")
+            status = 200
+        else:
+            msg = _("Message of Engagement could not be sent.")
+            status = 500
+
+        return self.render_to_json_response({'message': unicode(msg), 'status': status})
+
+
+class EngagementView(DetailView):
+    model = Engagement
+
+    def get_object(self, queryset=None):
+        """"""
+        queryset = self.get_queryset()
+        # Next, try looking up by primary key.
+        pk = self.kwargs.get(self.pk_url_kwarg, None)
+        queryset = queryset.select_related('startup','founder','lawyer','founder__user','lawyer__user').filter(pk=pk)
+
+        try:
+            # Get the single item from the filtered queryset
+            obj = queryset.get()
+        except ObjectDoesNotExist:
+            raise Http404(_("No %(verbose_name)s found matching the query") %
+                          {'verbose_name': queryset.model._meta.verbose_name})
+        return obj
+
+
+class MyEngagementsView(ListView):
+    model = Engagement
+
+    def get_queryset(self):
+        """"""
+        user = self.request.user
+        queryset = self.model.objects
+        fltr = {}
+        if user.profile.is_lawyer:
+            fltr.update({'lawyer': user.lawyer_profile})
+        #elif user.profile.is_startup:
+        else:
+            fltr.update({'founder': user.founder_profile})
+
+        return queryset.filter(**fltr)

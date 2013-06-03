@@ -255,6 +255,10 @@ HELPER_APPS = (
 
     # Vast array of Storage types
     'storages',
+    # Engagement System
+    'fluent_comments',
+    'threadedcomments',
+    'notification',
 )
 
 # Handle south and its breaking tests
@@ -281,6 +285,8 @@ else:
 # the other apps will/can be tested seperately
 INSTALLED_APPS = DJANGO_APPS + HELPER_APPS + PROJECT_APPS 
 
+COMMENTS_APP = 'fluent_comments'
+#FLUENT_COMMENTS_EXCLUDE_FIELDS = ('subject',)
 
 LOGIN_URL          = '/'
 LOGIN_REDIRECT_URL = '/logged-in/'
@@ -370,10 +376,10 @@ SOCIAL_AUTH_PIPELINE = (
 POSTMAN_DISALLOW_ANONYMOUS = True
 POSTMAN_DISALLOW_MULTIRECIPIENTS = True
 POSTMAN_DISALLOW_COPIES_ON_REPLY = True
-POSTMAN_DISABLE_USER_EMAILING = True
+POSTMAN_DISABLE_USER_EMAILING = False
 POSTMAN_AUTO_MODERATE_AS = True
-POSTMAN_MAILER_APP = None
-POSTMAN_NOTIFIER_APP = None
+POSTMAN_MAILER_APP = 'django.core.mail'
+POSTMAN_NOTIFIER_APP = 'notification'
 
 INTERCOM_API_SECRET = '-sjPyiyI5P44z3QsHLDUWfoLK8Rml7Wbg2wmj64L'
 
