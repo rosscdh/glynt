@@ -46,7 +46,17 @@
 						{% endif %}
 					{% endif %}
 				{% endif %}
-				<a href="{% url 'engage:message' to=object.user.username %}" id="send-message" class="btn right" title="Message" data-toggle="modal"><i class="icon-envelope icon-white"></i> Message</a>
+
+                <div class="pull-right engagement-container">
+                    {% if request.user.profile.is_startup %}
+                        <a href="{% url 'engage:startup_lawyer' lawyer_pk=lawyer.pk %}" id="engage-lawyer" class="btn btn-large btn-primary right" data-toggle="modal">Connect</a>
+                    {% endif %}
+                    {% if request.user.is_authenticated %}
+                        <a href="{% url 'engage:message' to=object.user.username %}" id="send-message" class="btn btn-large right" title="Message" data-toggle="modal">Message</a>
+                    {% else %}
+                        <a href="{% url 'public:auth_user_class_redirect' user_class_name='startup' %}" id="" class="btn btn-large btn-primary right">Sign up to connect</a>
+                    {% endif %}
+                </div>
 			</div>
 		</div>
 	</div>
@@ -104,19 +114,10 @@
 		</div>	
 		<div class="span4 pull-right sidebar">
 
-            <div class="connect">
-                {% is_lawyer_engaged lawyer=object as is_lawyer_engaged %}
-                {% if is_lawyer_engaged %}
-                    <a href="{% url 'engage:startup_lawyer' lawyer_pk=lawyer.pk %}" id="engage-lawyer" class="btn btn-large btn-block btn-success" data-toggle="modal">Connected</a>
-                {% else %}
-                    <a href="{% url 'engage:startup_lawyer' lawyer_pk=lawyer.pk %}" id="engage-lawyer" class="btn btn-large btn-block btn-primary" data-toggle="modal">Connect</a>
-                {% endif %}
+            <div id="engagement-with" class="">
+                <h5>Previous connections</h5>
+                {% engagement_with_lawyer lawyer=object %}
             </div>
-
-        <div id="engagement-with" class="">
-						<h5>Engagement</h5>
-						{% engagement_with_lawyer lawyer=object %}
-		 			</div>
 
 			<div class="firm">
 				{% if firm.photo %}
@@ -217,22 +218,17 @@
 	</div>
 
 	<div>
-	    <div class=" buttons">
 			<!-- Modal -->
 			<div id="engage-lawyer-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			  <div class="modal-header">
 			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			    <h3 id="myModalLabel">Coming Soon</h3>
 			  </div>
 			  <div class="modal-body">
-			    <p>Whilst profiles are in preview mode, this feature is disabled. We will shortly be enabling this for some users as part of our rollout.</p>
 			  </div>
 			  <div class="modal-footer">
 			    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
-			    <!-- <button class="btn btn-primary">Save changes</button> -->
 			  </div>
 			</div>
-        </div>
 
             <div id="send-message-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			  <div class="modal-header">
@@ -246,7 +242,7 @@
 			    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
 			  </div>
 			</div>
-		
+
 	</div>
 </div>
 {% csrf_token %}
