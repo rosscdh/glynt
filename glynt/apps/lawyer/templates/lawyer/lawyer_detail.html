@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load account_tags glynt_helpers lawyer_profile_tags jsonify thumbnail humanize cache %}
+{% extends 'base.html' %}{% load account_tags glynt_helpers lawyer_profile_tags engagement_tags jsonify thumbnail humanize cache %}
 {% block page_title %}{{ object.user.get_full_name|default:object.user.username }} {% if firm %} - {{ firm }}{% endif %}{% endblock %}
 {% block bodyclass %}lawyer-profile{% endblock %}
 
@@ -131,7 +131,11 @@
 					{% endif %}
 					<!-- <li class="friends"><img src="{{ STATIC_URL }}img/app/small-avatar.jpg" alt="Avatar" /> Benjamin Ling is a mutual contact</li> -->
 				</ul>
-				<div class="span4">				
+				<div class="span4">	
+					<div id="engagement-with" class="">
+						<h5>Engagement</h5>
+						{% engagement_with_lawyer lawyer=object %}
+		 			</div>
 					<div id="other-profiles" class="other-profiles">
 						<h5>Other Profiles</h5>
 						{% social_profiles object.user %}

@@ -1,0 +1,5 @@
+{% for e in engagement_list %}
+<a href="{{ e.get_absolute_url }}">{{ e.engagement_statement|truncatechars:30 }}</a> - {{ e.date_created }}
+{% empty %}
+<span  class="nothing-found">No Engagements with this lawyer</span>
+{% endfor %}
