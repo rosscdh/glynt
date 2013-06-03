@@ -47,7 +47,6 @@
 					{% endif %}
 				{% endif %}
 				<a href="{% url 'engage:message' to=object.user.username %}" id="send-message" class="btn right" title="Message" data-toggle="modal"><i class="icon-envelope icon-white"></i> Message</a>
-				<a href="{% url 'engage:startup_lawyer' lawyer_pk=lawyer.pk %}" id="engage-lawyer" class="btn right" title="Engage"  data-toggle="modal"><i class="icon-play icon-white"></i> Engage</a>
 			</div>
 		</div>
 	</div>
@@ -104,6 +103,21 @@
 			</div>
 		</div>	
 		<div class="span4 pull-right sidebar">
+
+            <div class="connect">
+                {% is_lawyer_engaged lawyer=object as is_lawyer_engaged %}
+                {% if is_lawyer_engaged %}
+                    <a href="{% url 'engage:startup_lawyer' lawyer_pk=lawyer.pk %}" id="engage-lawyer" class="btn btn-large btn-block btn-success" data-toggle="modal">Connected</a>
+                {% else %}
+                    <a href="{% url 'engage:startup_lawyer' lawyer_pk=lawyer.pk %}" id="engage-lawyer" class="btn btn-large btn-block btn-primary" data-toggle="modal">Connect</a>
+                {% endif %}
+            </div>
+
+        <div id="engagement-with" class="">
+						<h5>Engagement</h5>
+						{% engagement_with_lawyer lawyer=object %}
+		 			</div>
+
 			<div class="firm">
 				{% if firm.photo %}
 					<img src="{{ MEDIA_URL }}{{ firm.photo|default:'firm/blank.gif' }}" alt="{{ firm.name }}" class="firm-logo" />				
@@ -131,11 +145,7 @@
 					{% endif %}
 					<!-- <li class="friends"><img src="{{ STATIC_URL }}img/app/small-avatar.jpg" alt="Avatar" /> Benjamin Ling is a mutual contact</li> -->
 				</ul>
-				<div class="span4">	
-					<div id="engagement-with" class="">
-						<h5>Engagement</h5>
-						{% engagement_with_lawyer lawyer=object %}
-		 			</div>
+            </div>
 					<div id="other-profiles" class="other-profiles">
 						<h5>Other Profiles</h5>
 						{% social_profiles object.user %}
@@ -145,7 +155,6 @@
 						<h5>Licensed In</h5>
 						{% simple_name_list data_list=object.data.bar_membership %}
 					</div>
-				</div>
 			</div>
 
 		</div>	
