@@ -34,6 +34,7 @@ south
 # Comments
 django-fluent-comments
 django-threadedcomments
+django-notification
 
 # JSON Field
 #django-jsonfield # This is the correct one, the bradjasper version does not save correctly (converts to string), but we probably need to patch it so that the loaddata works
@@ -122,5 +123,5 @@ termcolor
 tweepy
 
 # Messaging App
-django-postman
+-e hg+https://bitbucket.org/stard0g101/django-postman#egg=django-postman
 django-pagination

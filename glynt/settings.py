@@ -257,7 +257,8 @@ HELPER_APPS = (
     'storages',
     # Engagement System
     'fluent_comments',
-    'threadedcomments'
+    'threadedcomments',
+    'notification',
 )
 
 # Handle south and its breaking tests
@@ -378,7 +379,7 @@ POSTMAN_DISALLOW_COPIES_ON_REPLY = True
 POSTMAN_DISABLE_USER_EMAILING = False
 POSTMAN_AUTO_MODERATE_AS = True
 POSTMAN_MAILER_APP = 'django.core.mail'
-#POSTMAN_NOTIFIER_APP = None
+POSTMAN_NOTIFIER_APP = 'notification'
 
 INTERCOM_API_SECRET = '-sjPyiyI5P44z3QsHLDUWfoLK8Rml7Wbg2wmj64L'
 
