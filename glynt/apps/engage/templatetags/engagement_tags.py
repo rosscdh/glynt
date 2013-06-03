@@ -15,22 +15,22 @@ def engagement_intro(context, enagement):
     return context
 
 
-def engagement_dict(data):
+def engagement_dict(context, user=None):
     engagement_list = []
-    own_profile = True if data.get('lawyer').user.pk == data.get('user').pk else False
+    user = user if user is not None else context.get('user', None)
+    lawyer = context.get('lawyer', None)
+    own_profile = True if lawyer.user.pk == user.pk else False
 
-    if data.get('user',None) is not None:
-        if data.get('user').is_authenticated():
+    if user is not None:
+        if user.is_authenticated():
             if not own_profile:
-                if data.get('user').profile.is_startup:
-                    engagement_list = Engagement.objects.filter(lawyer=data.get('lawyer'), founder=data.get('user').founder_profile)
+                if user.profile.is_startup:
+                    engagement_list = Engagement.objects.filter(lawyer=lawyer, founder=user.founder_profile)
 
-    data = {
+    return {
         'engagement_list': engagement_list,
         'own_profile' : own_profile,
     }
-
-    return data
 
 
 @register.inclusion_tag('engage/partials/engagement_with_lawyer.html', takes_context=True)
@@ -48,13 +48,14 @@ def engagement_with_lawyer(context, lawyer):
 
 
 @register.assignment_tag(takes_context=True)
-def is_lawyer_engaged(context, lawyer):
+def is_lawyer_engaged_with_user(context, lawyer, user=None):
+    user = user if user is not None else context.get('user', None)
     context.update({
         'lawyer': lawyer,
     })
 
     lawyer_enganged = False
-    data = engagement_dict(context)
+    data = engagement_dict(context=context, user=user)
 
     if data.get('engagement_list'):
         lawyer_enganged = True
