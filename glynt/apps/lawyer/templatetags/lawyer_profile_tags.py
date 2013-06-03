@@ -65,7 +65,7 @@ def humanise_number(num):
 
 
 @register.inclusion_tag('lawyer/partials/profile_is_complete.html', takes_context=True)
-def lawyer_profile_is_complete_message(context, lawyer=None):
+def lawyer_profile_is_complete_message(context, warning_type, lawyer=None):
     if lawyer is None:
         if context.get('lawyer') is not None:
             lawyer = context.get('lawyer')
@@ -101,6 +101,7 @@ def lawyer_profile_is_complete_message(context, lawyer=None):
             'profile_is_valid': profile_form.is_valid(),
             'profile_status': lawyer.profile_status,
             'is_active': lawyer.is_active,
+            'warning_type': warning_type,
         })
 
     return context

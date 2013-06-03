@@ -16,7 +16,8 @@
     </div>
 </div>
 <div class="container profile">
-    {% lawyer_profile_is_complete_message lawyer=lawyer %}
+    {% lawyer_profile_is_complete_message warning_type='alert' %}
+
     <div class="alert alert-error hidden">Please correct all errors before submitting the form</div>
 
     <div class="row">
@@ -466,6 +467,12 @@
 
 {% block css %}
 <style>
+
+.header h1 {
+    margin: .8em 0 .7em 0;
+}
+
+
 img#photo-preview{
     border:solid #ccc 2px;
     min-height: 50px;
