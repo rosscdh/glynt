@@ -1,5 +1,10 @@
 {% load templatetag_handlebars %}
-{% tplhandlebars "tpl-lawyer-profile-mini" %}<div class="container">
+
+{% tplhandlebars "tpl-profile-mini" %}<div class="container">
+<img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - {{#if profile.is_lawyer }}Lawyer{{/if}}{{#if profile.is_startup }}Founder{{/if}}" border="0" />
+</div>{% endtplhandlebars %}
+
+{% tplhandlebars "tpl-lawyer-profile" %}<div class="container">
     <div class="row">
         {{ profile.name }}
         {{ profile.phone }}
@@ -10,10 +15,11 @@
     </div>
 </div>{% endtplhandlebars %}
 
-{% tplhandlebars "tpl-startup-profile-mini" %}<div class="container">
+{% tplhandlebars "tpl-startup-profile" %}<div class="container">
     <div class="row">
         {{ profile.name }}
         {{ profile.phone }}
+        {{ profile.profile_photo }}
         {{ profile.summary }}
         {{#each profile.startups }}
             {{ name }}
@@ -31,60 +37,79 @@ var GlyntProfilePopup = {
     profile_api_url: '/api/v1/user/profile/?username__in={username_list}'
     ,selector: '.profile-popup'
     ,extra_context: {}
-    ,profiles: []
+    ,profiles: {}
     ,profile_params:  Object.extended({})
     ,usernames: []
     ,templates: {
-        'startup': Handlebars.compile($('script#tpl-startup-profile-mini').html())
-        ,'lawyer': Handlebars.compile($('script#tpl-lawyer-profile-mini').html())
+        'mini': Handlebars.compile($('script#tpl-profile-mini').html())
+        ,'startup': Handlebars.compile($('script#tpl-startup-profile').html())
+        ,'lawyer': Handlebars.compile($('script#tpl-lawyer-profile').html())
     }
     ,add_profile: function add_profile(profile) {
         var self = this;
         var profile_html = null;
         var extra_context = self.extra_context || {}
 
-        context = $.extend({
-            'profile': profile
-        }, extra_context);
+        $.each(self.profile_params[profile.username], function(i,params){
+            var template = params.template || 'default'
+
+            // add the profile to the context NB necessary as this is where the display variables are kept
+            context = $.extend({
+                'profile': profile
+            }, extra_context);
+
+            if (template !== 'default') {
+                profile_html = self.templates[template](context);
+            } else {
+                // if we have no specific template defined
+                // then evaluate the user type and set their
+                // profile html accordingly
+                if (profile.is_lawyer) {
+                    profile_html = self.templates.lawyer(context);
+                }else if (profile.is_startup) {
+                    profile_html = self.templates.startup(context);
+                }
+            }
+
+            self.store_profile(profile.username, template, profile_html)
+        });
 
 
-        if (profile.is_lawyer) {
-            profile_html = self.templates.lawyer(context)
-        }else if (profile.is_startup) {
-            profile_html = self.templates.startup(context)
-        }
-
-        self.set_profile(profile.username, profile_html)
-
-        return this.profile(profile.username);
+        return self.profile_params[profile.username];
     }
-    ,profile: function profile(username) {
-// console.log(this.profiles)
-        return this.profiles[username]
+    ,store_profile: function store_profile(username, profile_type, html) {
+        var self = this;
+        self.profiles[username] = self.profiles[username] || {}
+        self.profiles[username][profile_type] = html;
     }
-    ,set_profile: function set_profile(key, profile_html) {
-        this.profiles[key] = profile_html
+    ,profile: function profile(username, profile_type) {
+        var self = this;
+        return self.profiles[username][profile_type];
     }
     ,render: function render(usernames) {
         var self = this;
         var profile_set = self.profile_params.select(usernames) || self.profile_params
+        // loop over each of the users and their defined set of variables
+        $.each(profile_set, function(username,target_params){
+            // loop over each instance of this users profile tags on the page
+            // and populate with appropriate template
+            $.each(target_params, function(i,params){
+                var target = params.target;
+                var target_profile_html = self.profile(username, params.template);
 
-        $.each(profile_set, function(username,params){
-            var target_profile_html = self.profile(username);
-            var target = params.target
+                if (params.action == 'popover') {
 
-            if (params.action == 'popover') {
+                    target.popover({
+                        'trigger': 'hover'
+                        ,'html': target_profile_html
+                    });
 
-                target.popover({
-                    'trigger': 'hover'
-                    ,'html': target_profile_html
-                });
+                } else {
+                    // inject by default
+                    target.html(target_profile_html);
+                }
+            })
 
-            } else {
-                // inject by default
-                target.html(target_profile_html)
-            }
-// console.log(target)
         });
     }
     ,find_all: function find_all() {
@@ -114,11 +139,6 @@ var GlyntProfilePopup = {
                 });
                 self.render(usernames);
             }
-        })
-        .error(function() { 
-// console.log('Error in Javascript event')
-        })
-        .complete(function() {
         });
     }
     ,init: function init() {
@@ -128,13 +148,19 @@ var GlyntProfilePopup = {
             var elem = $(item)
             var username = elem.attr('data-username');
             var action = elem.attr('data-action') || 'inject';
+            var template = elem.attr('data-template') || 'default';
             var target = elem.attr('data-target') || elem; // if target specified make jquery object and use other use simply user the current element
 
             self.usernames.push(username);
-            self.profile_params[username] = {
-                'action': action,
-                'target': $(target),
-            };
+
+            // ensure is a list
+            self.profile_params[username] = (self.profile_params[username] === undefined) ? [] : self.profile_params[username] ;
+
+            self.profile_params[username].push({
+                'action': action
+                ,'template': template
+                ,'target': target
+            });
         });
         self.find_all()
     }
