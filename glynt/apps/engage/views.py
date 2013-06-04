@@ -79,17 +79,8 @@ class StartupEngageLawyerView(AjaxableResponseMixin, FormView):
         """
         """
         self.lawyer = get_object_or_404(Lawyer, pk=self.kwargs.get('lawyer_pk'))
-        try:
-            # has a previous engagement with this lawyer
-            self.engagement = Engagement.objects.get(lawyer=self.lawyer, founder=self.request.user.founder_profile)
-        except Engagement.DoesNotExist:
-            # @BUSINESSRULE
-            # does not have a previous engagement with this lawyer so look for this startups previous
-            # engagement and use that as a template
-            try:
-                self.engagement = Engagement.objects.filter(founder=self.request.user.founder_profile).order_by('-id')[0]
-            except IndexError:
-                self.engagement = None
+
+        self.engagement = Engagement.objects.founder_lawyer_engagement(founder=self.request.user.founder_profile, lawyer=self.lawyer)
 
         #self.engagement = 
         kwargs = self.get_form_kwargs()

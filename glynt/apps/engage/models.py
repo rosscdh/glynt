@@ -8,7 +8,9 @@ from glynt.apps.utils import get_namedtuple_choices
 
 from glynt.apps.startup.models import Startup, Founder
 from glynt.apps.lawyer.models import Lawyer
+
 from bunches import StartupEngageLawyerBunch
+from managers import DefaultEngageManager
 
 from utils import *
 ENGAGEMENT_STATUS = get_namedtuple_choices('ENGAGEMENT_STATUS', (
@@ -31,6 +33,8 @@ class Engagement(models.Model):
     data = JSONField(default={})
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True, null=True)
+
+    objects = DefaultEngageManager()
 
     def __unicode__(self):
         return '%s (%s) enagement of %s' % (self.startup, self.founder, self.lawyer,)
