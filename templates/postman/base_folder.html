@@ -29,6 +29,10 @@ in the INSTALLED_APPS setting.
 <ul class="message-list">
     {% for message in pm_messages %}
     <li {% if message.is_new %}class="new-message"{% endif %}>
+
+        <div class="profile-popup" data-username="{{message.sender.username}}">sender</div>
+        <div class="profile-popup" data-username="{{message.recipient.username}}">recipient</div>
+        
         <a href="{% if by_conversation and message.thread_id %}{% url 'postman_view_conversation' message.thread_id %}{% else %}{{message.get_absolute_url }}{% endif %}?next={{ current_url|urlencode }}">
         <span class="message-sender">{{ message.obfuscated_sender|or_me:user|truncatechars:22 }}{% if message.count %} ({{ message.count }}){% endif %}</span>{% include "postman/inc_subject_ex.html" %}
         <span class="message-date">{{ message.sent_at|date:"d M" }}</span></a>
