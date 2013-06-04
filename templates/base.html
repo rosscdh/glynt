@@ -42,20 +42,26 @@
 
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
 
-    {% block navbar %}
-        {% include 'partials/nav.html' %}
-    {% endblock %}
+    <div id="wrap">
+	    <div id="main" class="clearfix">
 
-    {% if user.is_staff %}
-		{% block admin_panel %}{% endblock %}
-    {% endif %}
+        {% block navbar %}
+            {% include 'partials/nav.html' %}
+        {% endblock %}
 
-    {% include 'partials/messages.html' %}
+        {% if user.is_staff %}
+            {% block admin_panel %}{% endblock %}
+        {% endif %}
 
-    {% block prebody %}{% endblock %}
+        {% include 'partials/messages.html' %}
 
-    <div class="container">
-        {% block body %}{% endblock %}
+        {% block prebody %}
+        {% endblock %}
+
+            <div class="container">
+                {% block body %}{% endblock %}
+            </div>
+        </div>
     </div>
 
     {% block footer %}

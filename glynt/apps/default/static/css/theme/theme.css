@@ -297,8 +297,6 @@ body.lawyer-welcome #hero h3 {
 /* footer section */
 #footer {
 	background-color:#212526;
-	min-height: 180px;
-	margin-top: 100px;
     color:#aaa;
 	padding-top: 35px;
 	font-size:13px;
@@ -352,6 +350,31 @@ body.lawyer-welcome #hero h3 {
 	border-color: #777;
 	border-top:none;
 }
+
+/* Sticky footer styles
+-------------------------------------------------- */
+
+html, body, #wrap {
+    height: 100%;
+}
+
+body > #wrap {
+    height: auto;
+    min-height: 100%;
+}
+
+#main {
+    padding-bottom: 220px;
+}
+
+#footer {
+    position: relative;
+    margin-top: -180px;
+    height: 180px;
+    clear: both;
+    box-sizing: border-box;
+}
+
 /* section header */
 .section_header {
 	text-align: center;
