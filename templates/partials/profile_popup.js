@@ -1,8 +1,8 @@
 {% load templatetag_handlebars %}
 
-{% tplhandlebars "tpl-profile-mini" %}<div class="container">
-<img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - {{#if profile.is_lawyer }}Lawyer{{/if}}{{#if profile.is_startup }}Founder{{/if}}" border="0" />
-</div>{% endtplhandlebars %}
+{% tplhandlebars "tpl-profile-mini" %}
+<img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - {{#if profile.is_lawyer }}Lawyer{{/if}}{{#if profile.is_startup }}Founder{{/if}}" />
+{% endtplhandlebars %}
 
 {% tplhandlebars "tpl-lawyer-profile" %}<div class="container">
     <div class="row">

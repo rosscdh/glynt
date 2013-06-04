@@ -34,7 +34,8 @@ in the INSTALLED_APPS setting.
 
         <span class="profile-popup" data-template="mini" data-username="{{message.sender.username}}">&nbsp;</span>
 
-        <span class="message-sender">{% if message.count %} ({{ message.count }}){% endif %}</span>{% include "postman/inc_subject_ex.html" %}
+        <span class="message-sender">{{ message.sender.first_name|or_me:user|truncatechars:22 }}{% if message.count %} ({{ message.count }}){% endif %}</span>
+        {% include "postman/inc_subject_ex.html" %}
         <span class="message-date">{{ message.sent_at|date:"d M" }}</span></a>
         <a class="close hidden" href="/messages/delete/" data-message-id="{% if by_conversation and message.thread_id %}{{ message.thread_id }}{% else %}{{ message.id }}{% endif %}" data-message-type="{%  if  by_conversation and message.thread_id %}tpks{% else %}pks{% endif %}">&times;</a></li>
 {% endfor %}
