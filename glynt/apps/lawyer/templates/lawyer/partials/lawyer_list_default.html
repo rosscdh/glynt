@@ -9,6 +9,9 @@
     </a>
 
     <div class="partner-overview">
+
+<div class="profile-popup" data-username="{{l.username}}">{{l.username}}</div>
+
         <h2 class="partner-name"><a href="{% url 'lawyer:profile' slug=l.username %}">{{ l.full_name|truncatechars:26 }}</a></h2>
 
         <h3>{{ l.summary|truncatechars:55 }}</h3>
