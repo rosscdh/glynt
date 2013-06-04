@@ -190,3 +190,9 @@ def handlebars_messages(context, **kwargs):
     })
     return context
 handlebars_messages.is_safe = True
+
+@register.inclusion_tag('partials/profile_popup.js', takes_context=True)
+def profile_popup(context, **kwargs):
+    context.update(kwargs)
+    return context
+profile_popup.is_safe = True
