@@ -34,8 +34,8 @@
 					<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="true" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if object.is_active %}hide{% endif %} btn right"><i class="icon-eye-close icon-white"></i> Approve</a>
 				{% endif %}
 				{% if user.username == object.user.username %}
-					<a href="{% url 'lawyer:setup_profile' %}" class="btn right" ><i class="icon-edit icon-white"></i> Edit profile</a>   
-					<a href="{% url 'lawyer:invite' %}" class="btn right" ><i class="icon-heart icon-white"></i> Invite Lawyers</a>  
+					<a href="{% url 'lawyer:setup_profile' %}" class="btn right-links" ><i class="icon-edit icon-white"></i> Edit profile</a>
+					<a href="{% url 'lawyer:invite' %}" class="btn right-links" ><i class="icon-heart icon-white"></i> Invite Lawyers</a>
 					{% if object.summary %} 
 						{% if PROJECT_ENVIRONMENT != 'dev' %}
 					    <script>

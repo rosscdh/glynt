@@ -1,8 +1,14 @@
 {% load comments i18n %}
-<form action="{% comment_form_target %}" method="POST">
+<form action="{% comment_form_target %}" method="POST" class="">
 {% csrf_token %}
 {% if form.comment.errors %}{{ form.comment.errors }}{% endif %}
-{{ form.comment.label }}{{ form.comment }}
+
+<div class="control-group">
+    <div class="controls">
+        {{ form.comment }}
+    </div>
+</div>
+
 {{ form.honeypot }}
 {{ form.content_type }}
 {{ form.object_pk }}
