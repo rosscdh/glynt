@@ -1,0 +1,115 @@
+#pm_messages {
+    margin-top: 1em;
+    border-top: 1px solid #6adc7d;
+}
+
+#pm_messages .postman-action-col {
+    width: 20px;
+    text-align: center;
+}
+
+#pm_messages tr th {
+    text-align: left
+}
+
+.btn-group.open .btn.dropdown-toggle {
+    background-color: #e6e6e6;
+}
+
+.message-list {
+    list-style: none;
+    border-top: 1px solid #f2f2f2;
+    margin-top: 1em;
+}
+
+.message-list li {
+    border-bottom: 1px solid #f2f2f2;
+    position: relative;
+}
+
+.message-list li:hover {
+    background-color: #f2f2f2;
+}
+
+.message-list a {
+    text-decoration: none;
+    padding: 0 1em 0 0;
+    display: block;
+}
+
+.avatar {
+    width: 50px;
+    height: auto;
+    display: inline-block;
+    margin-right: 1em;
+}
+
+.new-message {
+    border-left: 2px solid #6adc7d;
+    font-weight: bold;
+}
+
+.message-sender {
+    display: inline-block;
+    min-width: 12em;
+}
+
+.message-date {
+    color: #ccc;
+    float: right;
+    margin: 1em 2em 0 0;
+}
+
+.message-body {
+    color: #ccc;
+}
+
+.message-list .close {
+    display: block;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    padding: 0;
+    color: red;
+    opacity: 1;
+}
+
+.edit-message-list {
+    font: -webkit-control;
+}
+
+.message-subject {
+    margin-bottom: .5em;
+}
+.message-info p {
+    margin: 0;
+}
+.message-body {
+    border-bottom: 1px solid #e6e6e6;
+    padding-bottom: 1em;
+    padding-left:5px;
+}
+.message-actions {
+    margin-top: 2em;
+}
+.message-info {
+    margin: 10px 0px 10px 0px;
+    background-color:#6bdb7e;
+    color:#FFF;
+    padding:5px 10px;
+}
+.view-message-controls button, .view-message-controls a {
+    font-weight: normal;
+    text-decoration: none;
+    font: -webkit-control;
+}
+.view-message-controls form {
+    margin: 0;
+}
+.form-wide textarea {
+    width: 100%;
+    box-sizing: border-box;
+    height: 7em;
+}
