@@ -25,11 +25,14 @@
 
             <ul class="message-list">
                 {% for message in object_list %}
-                <li {% if message.is_new %}class="new-message"{% endif %} data-url="{{ message.get_absolute_url }}">
+                <li class="engage-status-{{ message.status|lower }}" data-url="{{ message.get_absolute_url }}">
                     <a href="{{ message.get_absolute_url }}">
+                        {% if user.profile.is_startup %}
                         <img src="{{ message.lawyer.profile_photo }}" class="avatar">
-                        <span class="message-sender">{{ message }}</span>
+                        <span class="message-sender">{{ message.lawyer.user.get_full_name }}</span>
                         <span class="message-date">{{ message.date_created|date:"d M" }}</span>
+                        <span class="label engage-status engage-status-{{ message.status|lower }}">{{ message.status }}</span>
+                        {% endif %}
                     </a>
 
                     <a class="close hidden" href="/messages/delete/" data-message-id="{% if by_conversation and message.thread_id %}{{ message.thread_id }}{% else %}{{ message.id }}{% endif %}" data-message-type="{%  if  by_conversation and message.thread_id %}tpks{% else %}pks{% endif %}">&times;</a>

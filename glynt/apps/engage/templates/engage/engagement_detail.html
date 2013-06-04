@@ -1,6 +1,6 @@
 {% extends "postman/base.html" %}{% load comments engagement_tags %}
 
-{% block page_title %}Engagement of {{ object.lawyer.user.get_full_name }} by {{ object.founder.user.get_full_name }} on behalf of {{ object.startup }}{% endblock %}
+{% block page_title %}{{ object.lawyer.user.get_full_name }} Engagement Request{% endblock %}
 
 {% block content %}
             {% engagement_intro enagement=object %}

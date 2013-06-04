@@ -14,11 +14,9 @@ from managers import DefaultEngageManager
 
 from utils import *
 ENGAGEMENT_STATUS = get_namedtuple_choices('ENGAGEMENT_STATUS', (
-    (0, 'requested', 'Requested'),
-    (1, 'considering', 'Lawyer has recieved the request and is considering it'),
-    (2, 'engaged', 'Engaged'),
-    (3, 'paused', 'Engagement Paused'),
-    (4, 'complete', 'Completed Engagement'),
+    (0, 'new', 'New'),
+    (1, 'open', 'Open'),
+    (2, 'closed', 'Closed'),
 ))
 
 
@@ -26,7 +24,7 @@ class Engagement(models.Model):
     """ Base Engagement object
     Stores initial engagement details
     """
-    engagement_status = models.IntegerField(choices=ENGAGEMENT_STATUS.get_choices(), default=ENGAGEMENT_STATUS.requested, db_index=True)
+    engagement_status = models.IntegerField(choices=ENGAGEMENT_STATUS.get_choices(), default=ENGAGEMENT_STATUS.new, db_index=True)
     startup = models.ForeignKey(Startup)
     founder = models.ForeignKey(Founder)
     lawyer = models.ForeignKey(Lawyer)

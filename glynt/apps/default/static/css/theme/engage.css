@@ -117,3 +117,23 @@
 #id_honeypot{
     display:none;
 }
+
+li.engage-status-new {
+    border-left: 2px solid #6adc7d;
+}
+
+li.engage-status-open {
+
+}
+
+li.engage-status-closed {
+
+}
+
+span.engage-status-new {
+    background: #6adc7d;
+}
+
+span.engage-status {
+
+}
