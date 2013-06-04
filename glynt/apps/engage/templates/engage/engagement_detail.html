@@ -11,17 +11,8 @@
                 {% render_comment_form for object %}
 {% endblock %}
 
-{% block css %}
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fluent_comments/css/ajaxcomments.css" />
-<style>
-#id_honeypot{
-    visibility:hidden;
-}
-</style>
-{% endblock %}
-
-
 {% block js %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fluent_comments/css/ajaxcomments.css" />
 <script type="text/javascript" src="{{ STATIC_URL }}fluent_comments/js/ajaxcomments.js"></script>
 <script>
 $(document).ready(function () {

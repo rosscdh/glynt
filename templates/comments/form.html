@@ -1,21 +1,15 @@
 {% load comments i18n %}
-<form action="{% comment_form_target %}" method="POST" class="">
+<h3>{% trans 'Reply' %}</h3>
+
+<form action="{% comment_form_target %}" method="POST" class="form-wide">
 {% csrf_token %}
 {% if form.comment.errors %}{{ form.comment.errors }}{% endif %}
-
-<div class="control-group">
-    <div class="controls">
-        {{ form.comment }}
-    </div>
-</div>
-
+{{ form.comment }}
 {{ form.honeypot }}
 {{ form.content_type }}
 {{ form.object_pk }}
 {{ form.timestamp }}
 {{ form.security_hash }}
 {% if next %}<div><input type="hidden" name="next" value="{{ next }}" /></div>{% endif %}
-<div id="save-comment" class="controls">
-  <button id="btn-save_comment" class="submit_comment" class="btn btn-primary btn-small" type="submit">{% trans 'Post' %}</button>
-</div>
+<button id="btn-save_comment" class="btn btn-primary" type="submit">{% trans 'Post' %}</button>
 </form>
