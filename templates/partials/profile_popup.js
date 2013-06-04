@@ -3,7 +3,7 @@
     <div class="row">
         {{ profile.name }}
         {{ profile.phone }}
-        {{ profile.position }}
+        {{ profile.position }} at {{ profile.firm }}
         {{ profile.profile_photo }}
         {{ profile.years_practiced }}
         {{ profile.practice_locations }}
@@ -12,7 +12,16 @@
 
 {% tplhandlebars "tpl-startup-profile-mini" %}<div class="container">
     <div class="row">
-        {{ profile }}
+        {{ profile.name }}
+        {{ profile.phone }}
+        {{ profile.summary }}
+        {{#each profile.startups }}
+            {{ name }}
+            {{ summary }}
+            {{ twitter }}
+            {{ url }}
+        {{/each}}
+
     </div>
 </div>{% endtplhandlebars %}
 
@@ -20,9 +29,11 @@
 
 var GlyntProfilePopup = {
     profile_api_url: '/api/v1/user/profile/?username__in={username_list}'
+    ,selector: '.profile-popup'
     ,extra_context: {}
     ,profiles: []
-    ,username_list: []
+    ,profile_params:  Object.extended({})
+    ,usernames: []
     ,templates: {
         'startup': Handlebars.compile($('script#tpl-startup-profile-mini').html())
         ,'lawyer': Handlebars.compile($('script#tpl-lawyer-profile-mini').html())
@@ -42,43 +53,54 @@ var GlyntProfilePopup = {
         }else if (profile.is_startup) {
             profile_html = self.templates.startup(context)
         }
-        console.log(profile)
-        this.profiles[profile.username] = profile_html
 
-        return this.profiles[profile.username];
-    }
-    ,render: function render(extra_context) {
+        self.set_profile(profile.username, profile_html)
 
+        return this.profile(profile.username);
     }
-    ,show: function show() {
+    ,profile: function profile(username) {
+// console.log(this.profiles)
+        return this.profiles[username]
+    }
+    ,set_profile: function set_profile(key, profile_html) {
+        this.profiles[key] = profile_html
+    }
+    ,render: function render(usernames) {
         var self = this;
-        output = self.render();
-    }
-    ,hide: function hide() {
-        
+        var profile_set = self.profile_params.select(usernames) || self.profile_params
+
+        $.each(profile_set, function(username,params){
+            var target_profile_html = self.profile(username);
+            var target = params.target
+
+            if (params.action == 'popover') {
+
+                target.popover({
+                    'trigger': 'hover'
+                    ,'html': target_profile_html
+                });
+
+            } else {
+                // inject by default
+                target.html(target_profile_html)
+            }
+// console.log(target)
+        });
     }
     ,find_all: function find_all() {
         var self = this;
         // uniquify
-        self.username_list.unique()
-        // see if we have them already or not
-        $.each(self.username_list, function(i,username){
-            if (self.profiles[username] !== undefined) {
-                // we already have this profile remove it from query
-            }
+        self.usernames.unique()
+        // get the list of items
+        $.each(self.usernames.inGroupsOf(10), function(i, item_set){
+            // perform ajax query
+            self.users(item_set)
         });
 
-        // get the list of items
-        $.each(self.username_list.inGroupsOf(10), function(i, item_set){
-            // perform ajax query
-            var url = self.profile_api_url.assign({'username_list': item_set.compact()})
-            self.users(url)
-        })
-
     }
-    ,users: function users(url) {
+    ,users: function users(usernames) {
         var self = this;
-
+        var url = self.profile_api_url.assign({'username_list': usernames.compact()})
         $.ajax({
             type: 'GET',
             url: url,
@@ -86,24 +108,33 @@ var GlyntProfilePopup = {
         .success(function(data, textStatus, jqXHR) {
 
             if (data.objects && data.objects.length > 0) {
-
+                // loop over elements and create the profiles
                 $.each(data.objects, function(i,profile){
-                    profile = self.add_profile(profile);
-                    console.log(profile)
+                    self.add_profile(profile);
                 });
-            
+                self.render(usernames);
             }
         })
         .error(function() { 
-            console.log('Error in Javascript event')
+// console.log('Error in Javascript event')
         })
-        .complete(function() {});
+        .complete(function() {
+        });
     }
     ,init: function init() {
         var self = this;
-        $.each($('.profile-popup'), function(i, item){
-            var username = $(item).attr('data-username');
-            self.username_list.push(username);
+        // loop over our selector elements and try to get their info
+        $.each($(self.selector), function(i, item){
+            var elem = $(item)
+            var username = elem.attr('data-username');
+            var action = elem.attr('data-action') || 'inject';
+            var target = elem.attr('data-target') || elem; // if target specified make jquery object and use other use simply user the current element
+
+            self.usernames.push(username);
+            self.profile_params[username] = {
+                'action': action,
+                'target': $(target),
+            };
         });
         self.find_all()
     }
