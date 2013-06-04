@@ -21,4 +21,4 @@ With subject: "a great interest":
 {% endcomment %}{% load postman_tags %}
 
 <span class="message-subject">{% with message.subject|truncatewords:5 as truncated_subject %}{{ truncated_subject }}
-{% with truncated_subject|wordcount as subject_wc %}{% with 7|sub:subject_wc as wc %}{% if message.body and wc > 0 %}</span> <span class="message-body">- {{ message.body|truncatewords:wc }}</span>{% endif %}{% endwith %}{% endwith %}{% endwith %}
+{% with truncated_subject|wordcount as subject_wc %}{% with 7|sub:subject_wc as wc %}{% if message.body and wc > 0 %}</span> <span class="message-body-inbox">- {{ message.body|truncatewords:wc }}</span>{% endif %}{% endwith %}{% endwith %}{% endwith %}
