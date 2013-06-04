@@ -137,3 +137,15 @@ span.engage-status-new {
 span.engage-status {
 
 }
+
+div.side-info-container .avatar {
+    float: left;
+}
+
+div.side-info-container h3 {
+    display: inline-block;
+}
+
+.engagement-status {
+    margin-top: 0;
+}

@@ -1,14 +1,56 @@
+<div class="row">
+    <div class="span6">
 
-<p><b>to</b>: {{ object.lawyer.user.get_full_name }} of {{ object.lawyer.firm_name }}</p>
-<p><b>status</b>: {{ engagement.status }}</p>
-<p><b>from</b>: {{ object.founder.user.get_full_name }}</p>
-<p><b>on behalf of</b>: {{ object.startup }}</p>
+        <div class="alert engagement-status">
+            <span>Request status: <strong>{{ engagement.status }}</strong></span>
+        </div>
 
-<h4>Engagement for</h4>
-{% for t,name in object.engagement_types %}
-<p><strong>{{ name }}</strong></p>
-{% endfor %}
+        <div class="engagement-types">
+            <p>Work required
+                {% for t,name in object.engagement_types %}
+                    <span class="label">{{ name }}</span>
+                {% endfor %}
+            </p>
+        <hr />
+        </div>
 
+        {{ engagement.engagement_statement }}
+    </div>
 
-<h4>Statement</h4>
-<p>{{ engagement.engagement_statement }}</p>
+    <div class="span4 side-info-container">
+        <div class="well">
+            {% if user.profile.is_startup %}
+            <img src="{{ object.lawyer.profile_photo }}" class="avatar">
+            <h3>{{ object.lawyer.full_name }}</h3>
+                <dl>
+                    <dt>Lawyer Profile</dt>
+                    <dd><a href="{% url 'lawyer:profile' slug=object.lawyer.user.username %}">Visit profile</a></dd>
+                    <dt>Summary</dt>
+                    <dd>
+                        {{ object.lawyer.summary|default:'Nothing yet' }}
+                    </dd>
+                </dl>
+            {% else %}
+            <img src="{{ STATIC_URL }}img/default_avatar.png" class="avatar">
+            <h3>{{ object.startup }}</h3>
+                <dl>
+                    <dt>Website</dt>
+                    <dd><a href="{{ object.startup.website }}" target="_blank">{{ object.startup.website }} <i class="icon-share"></i></a></dd>
+                    <dt>Founders</dt>
+                    <dd>
+                        {{ object.founder.user.first_name }} {{ object.founder.user.last_name }}
+                        <!-- What happens when there is more than one founder? -->
+                    </dd>
+                    <dt>
+                        Summary
+                    </dt>
+                    <dd>
+                        {{ object.startup.summary }}
+                    </dd>
+                    <dt>Twitter</dt>
+                    <dd><a href="http://twitter.com/{{ object.startup.twitter }}"><i class="icon-twitter"></i>{{ object.startup.twitter }}</a></dd>
+                </dl>
+            {% endif %}
+        </div>
+    </div>
+</div>
