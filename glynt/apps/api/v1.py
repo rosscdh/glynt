@@ -73,6 +73,7 @@ class StateSimpleResource(BaseApiModelResource):
         }
         cache = SimpleCache()
 
+
 class FirmSimpleResource(BaseApiModelResource):
     class Meta(BaseApiModelResource.Meta):
         queryset = Firm.objects.all()
@@ -126,6 +127,44 @@ class StartupSimpleResource(BaseApiModelResource):
         return bundle
 
 
+def _startup_profile(bundle):
+    data = {}
+    if bundle.obj.profile.is_startup:
+        profile = bundle.obj.founder_profile
+        try:
+            primary_startup = profile.startups[0]
+        except IndexError:
+            primary_startup = {}
+
+        data.update({
+            'summary': profile.summary,
+            'bio': profile.bio,
+            'startups': [
+                {
+                    'name': primary_startup.name,
+                    'summary': primary_startup.summary,
+                    'url': primary_startup.website,
+                    'twitter': primary_startup.twitter,
+                }
+            ],
+        })
+    return data
+
+def _lawyer_profile(bundle):
+    data = {}
+    if bundle.obj.profile.is_lawyer:
+        profile = bundle.obj.lawyer_profile
+        data.update({
+            'position': profile.position,
+            'firm': profile.firm_name,
+            'phone': profile.phone,
+            'years_practiced': profile.years_practiced,
+            'profile_status': profile.profile_status,
+            #'fee_packages': profile.fee_packages.items(),
+            'practice_locations': profile.practice_locations(),
+        })
+    return data
+
 class UserBasicProfileResource(BaseApiModelResource):
     name = fields.CharField(attribute='get_full_name', null=True)
 
@@ -148,6 +187,8 @@ class UserBasicProfileResource(BaseApiModelResource):
             'is_startup': bundle.obj.profile.is_startup,
             'profile_photo': bundle.obj.profile.get_mugshot_url(),
         })
+        bundle.data.update(_lawyer_profile(bundle))
+        bundle.data.update(_startup_profile(bundle))
         return bundle
 
 class LawyerResource(BaseApiModelResource):
