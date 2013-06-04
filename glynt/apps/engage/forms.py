@@ -57,7 +57,7 @@ class EngageStartupLawyerForm(BootstrapMixin, forms.Form):
     engage_for_cofounders = forms.BooleanField(required=False, label='', widget=forms.HiddenInput(attrs={'data-target':'li#engage_for_cofounders'}))
     engage_for_fundraise = forms.BooleanField(required=False, label='', widget=forms.HiddenInput(attrs={'data-target':'li#engage_for_fundraise'}))
 
-    engagement_statement = forms.CharField(label='', help_text='', required=True, widget=forms.Textarea(attrs={'placeholder':'Your requirements', 'class': 'input-xlarge', 'tabindex':'1'}))
+    engagement_statement = forms.CharField(label='Your Requirements', help_text='', required=True, widget=forms.Textarea(attrs={'placeholder':'Your requirements', 'class': 'input-xlarge', 'tabindex':'1'}))
 
     def __init__(self, *args, **kwargs):
         """ Setup whether or not to show the Part1 aspect of the form """

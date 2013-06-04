@@ -1,24 +1,21 @@
 {% load url from future %}{% load i18n glynt_helpers crispy_forms_tags %}
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3>Your Engagement with {{ lawyer.user.get_full_name }}</h3>
-    {% if engagement %}
-    <b>since:</b> {% moment engagement.date_created %}
-    {% endif %}
+    <h3>Connecting with {{ lawyer.user.get_full_name }}</h3>
 </div>
 
 <div class="modal-body">
     <form id="engage-lawyer-form" data-validate="parsley" class="form-horizontal" action="{% url 'engage:startup_lawyer' lawyer_pk=lawyer.pk %}" method="POST">{% csrf_token %}
-        <h3>Your requirements</h3>
-        <ul class="lawyer-options">
-            <li id="engage_for_general">General Advice</li>
-            <li id="engage_for_incorporation">Incorporation</li>
-            <li id="engage_for_ip">IP Issues</li>
-            <li id="engage_for_employment">Employment</li>
-            <li id="engage_for_cofounders">Co-founders</li>
-            <li id="engage_for_fundraise">Fund raise</li>
-        </ul>
         {{ form|crispy }}
+        <p>Please select the type(s) of legal expertise required</p>
+        <ul class="lawyer-options">
+            <li id="engage_for_general"><i class="icon-white"></i> General Advice</li>
+            <li id="engage_for_incorporation"><i class="icon-white"></i> Incorporation</li>
+            <li id="engage_for_ip"><i class="icon-white"></i> IP Issues</li>
+            <li id="engage_for_employment"><i class="icon-white"></i> Employment</li>
+            <li id="engage_for_cofounders"><i class="icon-white"></i> Co-founders</li>
+            <li id="engage_for_fundraise"><i class="icon-white"></i> Fund raise</li>
+        </ul>
     </form>
 </div>
 
@@ -37,17 +34,22 @@
     }
 
     .lawyer-options li {
-        text-align: center;
         display: inline-block;
         width: 235px;
         height: 45px;
         background: none;
-        border: 2px solid #ccc;
+        border: 1px solid #ccc;
         margin: .2em;
         line-height: 45px;
         cursor: pointer;
-        border-radius: .2em;
+        border-radius: .3em;
         -webkit-transition: all 0.1s ease-in;
+        padding: 0 0 0 1em;
+        box-sizing: border-box;
+    }
+
+    .lawyer-options li i {
+        margin-right: .5em;
     }
 
     .lawyer-options li:hover {
@@ -57,7 +59,7 @@
     .lawyer-options li.selected,
     .lawyer-options li.selected:hover {
         background: #6adc7d;
-        border-color: #339933;
+        border-color: #fff;
     }
 </style>
 
@@ -66,7 +68,15 @@ $(document).ready(function () {
     
     $('.lawyer-options li').click(function() {
         var elem = $(this);
+
+        if (!elem.hasClass('selected')) {
+            elem.find('i').addClass('icon-ok-sign');
+        } else {
+            elem.find('i').removeClass('icon-ok-sign');
+        }
+
         elem.toggleClass('selected');
+
 
         var target_data_attr = 'input[data-target="li#{target}"]'.assign({'target': elem.attr('id')});
         var target = $(target_data_attr);
@@ -86,6 +96,7 @@ $(document).ready(function () {
         var target = $(target_data_attr);
         if (target.val() === 'True' && target.hasClass('selected') === false) {
             elem.addClass('selected');
+            elem.find('i').addClass('icon-ok-sign');
         }
     })
 

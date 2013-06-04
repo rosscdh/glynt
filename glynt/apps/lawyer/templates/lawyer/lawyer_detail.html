@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load account_tags glynt_helpers lawyer_profile_tags engagement_tags jsonify thumbnail humanize cache %}
+{% extends 'base.html' %}{% load account_tags glynt_helpers lawyer_profile_tags engagement_tags jsonify thumbnail humanize engagement_tags cache %}
 {% block page_title %}{{ object.user.get_full_name|default:object.user.username }} {% if firm %} - {{ firm }}{% endif %}{% endblock %}
 {% block bodyclass %}lawyer-profile{% endblock %}
 
@@ -48,8 +48,13 @@
 				{% endif %}
 
                 <div class="pull-right engagement-container">
-                    {% if request.user.profile.is_startup %}
-                        <a href="{% url 'engage:startup_lawyer' lawyer_pk=lawyer.pk %}" id="engage-lawyer" class="btn btn-large btn-primary right" data-toggle="modal">Connect</a>
+                {% is_lawyer_engaged_with_user lawyer=object as is_lawyer_engaged_with_user %}
+                    {% if request.user.profile.is_startup  %}
+                        {% if is_lawyer_engaged_with_user %}
+                            <a href="/engage/" class="btn btn-large btn-primary right">Connect</a>
+                        {% else %}
+                            <a href="{% url 'engage:startup_lawyer' lawyer_pk=lawyer.pk %}" id="engage-lawyer" class="btn btn-large btn-primary right" data-toggle="modal">Connect</a>
+                        {% endif %}
                     {% endif %}
                     {% if request.user.is_authenticated %}
                         <a href="{% url 'engage:message' to=object.user.username %}" id="send-message" class="btn btn-large right" title="Message" data-toggle="modal">Message</a>
