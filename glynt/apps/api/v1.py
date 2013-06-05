@@ -199,7 +199,7 @@ class UserBasicProfileResource(BaseApiModelResource):
 
     class Meta(BaseApiModelResource.Meta):
         # Only filter by USA, allow freeform for others
-        queryset = User.objects.select_related('profile').exclude(is_superuser=True).filter(is_active=True)
+        queryset = User.objects.select_related('profile').filter(is_active=True)
         authentication = Authentication()
         list_allowed_methods = ['get']
         resource_name = 'user/profile'

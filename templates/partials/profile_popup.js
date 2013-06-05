@@ -4,6 +4,13 @@
 <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - {{#if profile.is_lawyer }}Lawyer{{/if}}{{#if profile.is_founder }}Founder{{/if}}" />
 {% endtplhandlebars %}
 
+{% tplhandlebars "tpl-unknown-profile" %}<div class="container">
+    <div class="row">
+        <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }}" />
+        <h3>{{ profile.name }}</h3>
+    </div>
+</div>{% endtplhandlebars %}
+
 {% tplhandlebars "tpl-startup-profile" %}<div class="container">
     <div class="row">
         <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Startup" />
@@ -105,6 +112,7 @@ var GlyntProfile = {
         ,'startup': Handlebars.compile($('script#tpl-startup-profile').html())
         ,'founder': Handlebars.compile($('script#tpl-founder-profile').html())
         ,'lawyer': Handlebars.compile($('script#tpl-lawyer-profile').html())
+        ,'unknown': Handlebars.compile($('script#tpl-unknown-profile').html())
     }
     ,add_profile: function add_profile(profile) {
         var self = this;
@@ -128,10 +136,12 @@ var GlyntProfile = {
                 console.log(profile)
                 if (profile.is_lawyer) {
                     profile_html = self.templates.lawyer(context);
-                }else if (profile.is_founder) {
+                } else if (profile.is_founder) {
                     profile_html = self.templates.founder(context);
-                }else if (profile.is_startup) {
+                } else if (profile.is_startup) {
                     profile_html = self.templates.startup(context);
+                } else {
+                    profile_html = self.templates.unknown(context);
                 }
             }
 
