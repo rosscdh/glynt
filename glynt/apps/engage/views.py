@@ -122,10 +122,10 @@ class StartupEngageLawyerView(AjaxableResponseMixin, FormView):
         engagement = form.save()
 
         if engagement.pk:
-            msg = _("Message of Engagement successfully sent. <a href=\"%s\">Click here to view</a>" % engagement.get_absolute_url())
+            msg = _("Thanks. That Lawyer has been contacted. <a href=\"%s\">Check here for updates</a>" % engagement.get_absolute_url())
             status = 200
         else:
-            msg = _("Message of Engagement could not be sent.")
+            msg = _("Sorry, contact could not be made wih this Lawyer.")
             status = 500
 
         return self.render_to_json_response({'message': unicode(msg), 'status': status, 'instance': {'pk': engagement.pk, 'link': engagement.get_absolute_url()}})
