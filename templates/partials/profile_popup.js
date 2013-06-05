@@ -4,6 +4,36 @@
 <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - {{#if profile.is_lawyer }}Lawyer{{/if}}{{#if profile.is_startup }}Founder{{/if}}" />
 {% endtplhandlebars %}
 
+{% tplhandlebars "tpl-startup-profile" %}<div class="container">
+    <div class="span4 side-info-container">
+        <div class="well">
+        <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Startup" />
+        <h3>{{ profile.name }}</h3>
+            <dl>
+                <dt>Website</dt>
+                <dd><a href="{{ profile.website }}" target="_blank">{{ profile.website }} <i class="icon-share"></i></a></dd>
+                <dt>Founders</dt>
+                put list here
+                <dt>Summary</dt>
+                <dd>
+                    {{ profile.summary }}
+                </dd>
+                {{#if profile.locations }}
+                <dt>Locations</dt>
+                <dd>
+                {{/if}}
+                {{#each profile.locations }}
+                    {{this}}
+                {{/each}}
+                </dd>
+                {{#if profile.twitter }}
+                <dt>Twitter</dt>
+                <dd><a href="http://twitter.com/{{ profile.twitter }}"><i class="icon-twitter"></i>{{ profile.twitter }}</a></dd>
+                {{/if}}
+            </dl>
+    </div>
+</div>{% endtplhandlebars %}
+
 {% tplhandlebars "tpl-lawyer-profile" %}<div class="container">
     <div class="row">
         {{ profile.name }}
@@ -27,13 +57,12 @@
             {{ twitter }}
             {{ url }}
         {{/each}}
-
     </div>
 </div>{% endtplhandlebars %}
 
 <script type="text/javascript">
 
-var GlyntProfilePopup = {
+var GlyntProfile = {
     profile_api_url: '/api/v1/user/profile/?username__in={username_list}'
     ,selector: '.profile-popup'
     ,extra_context: {}
@@ -166,7 +195,13 @@ var GlyntProfilePopup = {
     }
 }
 
+var GlyntStartupProfile = $.extend({}, GlyntProfile, {
+    profile_api_url: '/api/v1/startup/profile/?slug__in={username_list}'
+    ,selector: '.startup-profile-popup'
+})
+
 $(document).ready(function(){
-    GlyntProfilePopup.init()
+    GlyntProfile.init()
+    GlyntStartupProfile.init()
 });
 </script>
