@@ -17,6 +17,8 @@ from glynt.apps.startup.models import Startup
 from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
 from glynt.apps.sign.models import DocumentSignature
 
+from glynt.apps.startup.bunches import StartupProfileBunch
+
 
 v1_internal_api = Api(api_name='v1')
 
@@ -106,7 +108,7 @@ class OfficeSimpleResource(BaseApiModelResource):
         return bundle
 
 
-class StartupSimpleResource(BaseApiModelResource):
+class StartupLiteSimpleResource(BaseApiModelResource):
     class Meta(BaseApiModelResource.Meta):
         queryset = Startup.objects.all()
         authentication = Authentication()
@@ -128,6 +130,29 @@ class StartupSimpleResource(BaseApiModelResource):
 
 
 def _startup_profile(bundle):
+    data = StartupProfileBunch(startup=bundle.obj)
+    data['profile_photo'] = data.photo_url
+    return data
+
+class StartupBasicProfileResource(BaseApiModelResource):
+    class Meta(BaseApiModelResource.Meta):
+        queryset = Startup.objects.all().select_related('founders', 'founders_user')
+        authentication = Authentication()
+        list_allowed_methods = ['get']
+        resource_name = 'startup/profile'
+
+        filtering = {
+            'name': ALL,
+        }
+        cache = SimpleCache()
+
+    def dehydrate(self, bundle):
+        profile_data = bundle.data.pop('data')
+        bundle.data.update(_startup_profile(bundle))
+        return bundle
+
+
+def _founder_profile(bundle):
     data = {}
     if bundle.obj.profile.is_startup:
         profile = bundle.obj.founder_profile
@@ -165,6 +190,7 @@ def _lawyer_profile(bundle):
         })
     return data
 
+
 class UserBasicProfileResource(BaseApiModelResource):
     name = fields.CharField(attribute='get_full_name', null=True)
 
@@ -188,7 +214,7 @@ class UserBasicProfileResource(BaseApiModelResource):
             'profile_photo': bundle.obj.profile.get_mugshot_url(),
         })
         bundle.data.update(_lawyer_profile(bundle))
-        bundle.data.update(_startup_profile(bundle))
+        bundle.data.update(_founder_profile(bundle))
         return bundle
 
 class LawyerResource(BaseApiModelResource):
@@ -250,9 +276,10 @@ v1_internal_api.register(LocationSimpleResource())
 v1_internal_api.register(StateSimpleResource())
 v1_internal_api.register(FirmSimpleResource())
 v1_internal_api.register(OfficeSimpleResource())
-v1_internal_api.register(StartupSimpleResource())
+v1_internal_api.register(StartupLiteSimpleResource())
 
 v1_internal_api.register(UserBasicProfileResource())
+v1_internal_api.register(StartupBasicProfileResource())
 
 v1_internal_api.register(LawyerResource())
 v1_internal_api.register(DocumentResource())
