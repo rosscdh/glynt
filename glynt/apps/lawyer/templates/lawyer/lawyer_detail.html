@@ -118,12 +118,6 @@
 			</div>
 		</div>	
 		<div class="span4 pull-right sidebar">
-
-            <div id="engagement-with" class="">
-                <h5>Previous connections</h5>
-                {% engagement_with_lawyer lawyer=object %}
-            </div>
-
 			<div class="firm">
 				{% if firm.photo %}
 					<img src="{{ MEDIA_URL }}{{ firm.photo|default:'firm/blank.gif' }}" alt="{{ firm.name }}" class="firm-logo" />				
