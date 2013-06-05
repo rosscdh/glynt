@@ -32,7 +32,7 @@ south
 -e git+https://github.com/lincolnloop/python-qrcode.git#egg=python-qrcode
 
 # Comments
-django-fluent-comments
+-e git+https://github.com/rosscdh/django-fluent-comments.git@fix-broken-ajax-references#egg=django-fluent-comments
 django-threadedcomments
 django-notification
 
