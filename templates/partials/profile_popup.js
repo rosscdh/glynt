@@ -10,8 +10,9 @@
 {% endtplhandlebars %}
 
 {% tplhandlebars "tpl-startup-profile" %}
+        <small>startup</small><br/>
         <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Startup" />
-        <h3>{{ profile.name }} - Startup</h3>
+        <h3>{{ profile.name }}</h3>
         <dl>
             <dt>Website</dt>
             <dd><a href="{{ profile.website }}" target="_blank">{{ profile.website }} <i class="icon-share"></i></a></dd>
@@ -37,8 +38,9 @@
 {% endtplhandlebars %}
 
 {% tplhandlebars "tpl-lawyer-profile" %}
+    <small>lawyer</small><br/>
     <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Startup" />
-    <h3>{{ profile.name }} - Lawyer</h3>
+    <h3>{{ profile.name }}</h3>
     <dl>
         <dt>Website</dt>
         <dd><a href="{{ profile.website }}" target="_blank">{{ profile.website }} <i class="icon-share"></i></a></dd>
@@ -64,11 +66,14 @@
 {% endtplhandlebars %}
 
 {% tplhandlebars "tpl-founder-profile" %}
+    <small>founder</small><br/>
     <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Founder" />
-    <h3>{{ profile.name }} - Founder</h3>
+    <h3>{{ profile.name }}</h3>
     <dl>
+        {{#if profile.phone }}
         <dt>Phone</dt>
         <dd>{{profile.phone}}</dd>
+        {{/if}}
         <dt>Summary</dt>
         <dd>
             {{ profile.summary }}
@@ -117,7 +122,6 @@ var GlyntProfile = {
                 // if we have no specific template defined
                 // then evaluate the user type and set their
                 // profile html accordingly
-                console.log(profile)
                 if (profile.is_lawyer) {
                     profile_html = self.templates.lawyer(context);
                 } else if (profile.is_founder) {
