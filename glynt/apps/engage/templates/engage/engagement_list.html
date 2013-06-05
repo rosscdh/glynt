@@ -12,23 +12,15 @@
     <p>{% trans "Sorry, this page number is invalid." %}</p>
 
     {% else %}
-
         {% if object_list %}
-
-            <div class="row">
-                {% block edit-controls %}
-                <div class="span10">
-                    <a href="#edit" class="btn pull-right edit-message-list" data-toggle="button"><i class="icon-cog"></i> Edit</a>
-                </div>
-                {% endblock %}
-            </div>
-
             <ul class="message-list">
                 {% for message in object_list %}
                 <li class="engage-status-{{ message.status|lower }}" data-url="{{ message.get_absolute_url }}">
                     <a href="{{ message.get_absolute_url }}">
                         {% if user.profile.is_founder %}
-                        <span class="profile-popup" data-template="mini" data-username="{{message.lawyer.user.username}}">&nbsp;</span>
+                        <span class="profile-popup" data-template="mini" data-username="{{message.lawyer.user.username}}">
+                            <img src="{{ STATIC_URL }}img/default_avatar.png" class="avatar">
+                        </span>
                         <span class="message-sender">{{ message.lawyer.user.get_full_name }} @ {{ message.lawyer.firm_name }}</span>
                         <span class="message-date">{{ message.date_created|date:"d M" }}</span>
                         <span class="label engage-status engage-status-{{ message.status|lower }}">{{ message.status }}</span>
@@ -39,7 +31,6 @@
                         <span class="label engage-status engage-status-{{ message.status|lower }}">{{ message.status }}</span>
                         {% endif %}
                     </a>
-
                     <a class="close hidden" href="/messages/delete/" data-message-id="{% if by_conversation and message.thread_id %}{{ message.thread_id }}{% else %}{{ message.id }}{% endif %}" data-message-type="{%  if  by_conversation and message.thread_id %}tpks{% else %}pks{% endif %}">&times;</a>
                 </li>
                 {% endfor %}
@@ -55,60 +46,3 @@
     </div>
 </div>
 {% endblock content %}
-
-{% block js %}
-    <script>
-    $(document).ready(function() {
-        $('a.close').click(function(ev) {
-            ev.preventDefault();
-            var container = $(this).parent();
-            if ($(this).attr('data-message-type') === 'pks'){
-                $.ajax({
-                type: 'POST',
-                url: $(this).attr('href'),
-                data: {
-                    pks: $(this).attr('data-message-id'),
-                    csrfmiddlewaretoken: '{{ csrf_token }}'
-                },
-                success: function() {
-                    container.fadeOut();
-                    updateNewMessageCount(container);
-                }
-            });
-            } else {
-                $.ajax({
-                type: 'POST',
-                url: $(this).attr('href'),
-                data: {
-                    tpks: $(this).attr('data-message-id'),
-                    csrfmiddlewaretoken: '{{ csrf_token }}'
-                },
-                success: function() {
-                    container.fadeOut();
-                    updateNewMessageCount(container);
-                }
-            });
-            }
-
-        return false;
-        });
-
-        $('.edit-message-list').click(function() {
-           $('.message-list .close').toggleClass('hidden');
-        });
-
-        // Updates count on new mail icons
-        function updateNewMessageCount(container) {
-            var message_count = $('.unread-messages').live();
-            if (container.hasClass('new-message')) {
-                if (parseInt(message_count.html()) > 1) {
-                    message_count.html(parseInt(message_count.html()) - 1);
-                } else {
-                    message_count.remove();
-                }
-            }
-        }
-
-    });
-    </script>
-{% endblock %}

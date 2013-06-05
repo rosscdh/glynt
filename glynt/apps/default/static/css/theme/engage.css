@@ -140,10 +140,15 @@ span.engage-status {
 
 div.side-info-container .avatar {
     float: left;
+    margin-bottom: 1em;
 }
 
 div.side-info-container h3 {
-    display: inline-block;
+    display: inline;
+}
+
+div.side-info-container dl {
+    clear: both;
 }
 
 .engagement-status {

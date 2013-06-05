@@ -4,15 +4,12 @@
 <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - {{#if profile.is_lawyer }}Lawyer{{/if}}{{#if profile.is_founder }}Founder{{/if}}" />
 {% endtplhandlebars %}
 
-{% tplhandlebars "tpl-unknown-profile" %}<div class="container">
-    <div class="row">
+{% tplhandlebars "tpl-unknown-profile" %}
         <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }}" />
         <h3>{{ profile.name }}</h3>
-    </div>
-</div>{% endtplhandlebars %}
+{% endtplhandlebars %}
 
-{% tplhandlebars "tpl-startup-profile" %}<div class="container">
-    <div class="row">
+{% tplhandlebars "tpl-startup-profile" %}
         <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Startup" />
         <h3>{{ profile.name }} - Startup</h3>
         <dl>
@@ -37,66 +34,53 @@
             <dd><a href="http://twitter.com/{{ profile.twitter }}"><i class="icon-twitter"></i>{{ profile.twitter }}</a></dd>
             {{/if}}
         </dl>
-    </div>
-</div>{% endtplhandlebars %}
+{% endtplhandlebars %}
 
-{% tplhandlebars "tpl-lawyer-profile" %}<div class="container">
-    <div class="row">
-        <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Startup" />
-        <h3>{{ profile.name }} - Lawyer</h3>
-        <dl>
-            <dt>Website</dt>
-            <dd><a href="{{ profile.website }}" target="_blank">{{ profile.website }} <i class="icon-share"></i></a></dd>
-            <dt>Founders</dt>
-            put list here
-            <dt>Summary</dt>
-            <dd>
-                {{ profile.summary }}
-            </dd>
-            {{#if profile.locations }}
-            <dt>Locations</dt>
-            <dd>
-            {{/if}}
-            {{#each profile.locations }}
-                {{this}}
-            {{/each}}
-            </dd>
-            {{#if profile.twitter }}
-            <dt>Twitter</dt>
-            <dd><a href="http://twitter.com/{{ profile.twitter }}"><i class="icon-twitter"></i>{{ profile.twitter }}</a></dd>
-            {{/if}}
-        </dl>
-    </div>
+{% tplhandlebars "tpl-lawyer-profile" %}
+    <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Startup" />
+    <h3>{{ profile.name }} - Lawyer</h3>
+    <dl>
+        <dt>Website</dt>
+        <dd><a href="{{ profile.website }}" target="_blank">{{ profile.website }} <i class="icon-share"></i></a></dd>
+        <dt>Founders</dt>
+        put list here
+        <dt>Summary</dt>
+        <dd>
+            {{ profile.summary }}
+        </dd>
+        {{#if profile.locations }}
+        <dt>Locations</dt>
+        <dd>
+        {{/if}}
+        {{#each profile.locations }}
+            {{this}}
+        {{/each}}
+        </dd>
+        {{#if profile.twitter }}
+        <dt>Twitter</dt>
+        <dd><a href="http://twitter.com/{{ profile.twitter }}"><i class="icon-twitter"></i>{{ profile.twitter }}</a></dd>
+        {{/if}}
+    </dl>
+{% endtplhandlebars %}
 
-        {{ profile.name }}
-        {{ profile.phone }}
-        {{ profile.position }} at {{ profile.firm }}
-        {{ profile.profile_photo }}
-        {{ profile.years_practiced }}
-        {{ profile.practice_locations }}
-
-</div>{% endtplhandlebars %}
-
-{% tplhandlebars "tpl-founder-profile" %}<div class="container">
-    <div class="row">
-        <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Founder" />
-        <h3>{{ profile.name }} - Founder</h3>
-        <dl>
-            <dt>Phone</dt>
-            <dd>{{profile.phone}}</dd>
-            <dt>Summary</dt>
-            <dd>
-                {{ profile.summary }}
-            </dd>
-            <dt>Startups</dt>
-            {{#each profile.startups }}
-            <dd>
-                {{ name }}
-            </dd>
-            {{/each}}
-        </dl>
-    </div>
-</div>{% endtplhandlebars %}
+{% tplhandlebars "tpl-founder-profile" %}
+    <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Founder" />
+    <h3>{{ profile.name }} - Founder</h3>
+    <dl>
+        <dt>Phone</dt>
+        <dd>{{profile.phone}}</dd>
+        <dt>Summary</dt>
+        <dd>
+            {{ profile.summary }}
+        </dd>
+        <dt>Startups</dt>
+        {{#each profile.startups }}
+        <dd>
+            {{ name }}
+        </dd>
+        {{/each}}
+    </dl>
+{% endtplhandlebars %}
 
 <script type="text/javascript">
 

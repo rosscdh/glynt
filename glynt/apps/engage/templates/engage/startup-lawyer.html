@@ -5,7 +5,8 @@
 </div>
 
 <div class="modal-body">
-    <form id="engage-lawyer-form" data-validate="parsley" class="form-horizontal" action="{% url 'engage:startup_lawyer' lawyer_pk=lawyer.pk %}" method="POST">{% csrf_token %}
+    <p>Please fill in the form below to help the Lawyer with your enquiry.</p>
+    <form id="engage-lawyer-form" data-validate="parsley" class="" action="{% url 'engage:startup_lawyer' lawyer_pk=lawyer.pk %}" method="POST">{% csrf_token %}
         {{ form|crispy }}
         <p>Please select the type(s) of legal expertise required</p>
         <ul class="lawyer-options">
@@ -31,6 +32,7 @@
         -moz-user-select: none;     /* Firefox all */
         -ms-user-select: none;      /* IE 10+ */
         user-select: none;
+        margin-left: 0;
     }
 
     .lawyer-options li {
