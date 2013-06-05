@@ -9,7 +9,7 @@ class StartupProfileBunch(Bunch):
     def __init__(self, startup):
         data = startup.data
         return super(StartupProfileBunch, self).__init__(
-                    status = data.get('status'), 
+                    status = data.get('status'),
                     community_profile =  False, 
                     crunchbase_url =  data.get('crunchbase_url'), 
                     video_url =  data.get('video_url'), 
