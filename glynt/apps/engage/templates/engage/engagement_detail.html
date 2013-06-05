@@ -3,12 +3,11 @@
 {% block page_title %}{{ object.lawyer.user.get_full_name }} Engagement Request{% endblock %}
 
 {% block content %}
-            {% engagement_intro enagement=object %}
+{% engagement_intro enagement=object %}
 
-
-                {% render_comment_list for object %}
-                <hr>
-                {% render_comment_form for object %}
+{% render_comment_list for object %}
+<hr>
+{% render_comment_form for object %}
 {% endblock %}
 
 {% block js %}
