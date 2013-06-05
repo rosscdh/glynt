@@ -32,28 +32,7 @@
                     </dd>
                 </dl>
             {% else %}
-            <span class="profile-popup" data-template="mini" data-username="{{object.founder.user.username}}">&nbsp;</span>
-            <h3>{{ object.startup }}</h3>
-                <dl>
-                    <dt>Website</dt>
-                    <dd><a href="{{ object.startup.website }}" target="_blank">{{ object.startup.website }} <i class="icon-share"></i></a></dd>
-                    <dt>Founders</dt>
-                    {% for f in object.startup.founders.all %}
-                    <dd>
-                        {{ f.get_full_name }}
-                    </dd>
-                    {% endfor %}
-                    <dt>
-                        Summary
-                    </dt>
-                    <dd>
-                        {{ object.startup.summary }}
-                    </dd>
-                    {% if object.startup.twitter %}
-                    <dt>Twitter</dt>
-                    <dd><a href="http://twitter.com/{{ object.startup.twitter }}"><i class="icon-twitter"></i>{{ object.startup.twitter }}</a></dd>
-                    {% endif %}
-                </dl>
+                <span class="profile-popup" data-template="mini" data-username="{{object.founder.user.username}}">&nbsp;</span>
             {% endif %}
         </div>
     </div>

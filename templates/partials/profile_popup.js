@@ -45,7 +45,7 @@
     </div>
 </div>{% endtplhandlebars %}
 
-{% tplhandlebars "tpl-startup-profile" %}<div class="container">
+{% tplhandlebars "tpl-founder-profile" %}<div class="container">
     <div class="row">
         {{ profile.name }}
         {{ profile.phone }}
@@ -72,6 +72,7 @@ var GlyntProfile = {
     ,templates: {
         'mini': Handlebars.compile($('script#tpl-profile-mini').html())
         ,'startup': Handlebars.compile($('script#tpl-startup-profile').html())
+        ,'founder': Handlebars.compile($('script#tpl-founder-profile').html())
         ,'lawyer': Handlebars.compile($('script#tpl-lawyer-profile').html())
     }
     ,add_profile: function add_profile(profile) {
@@ -93,9 +94,12 @@ var GlyntProfile = {
                 // if we have no specific template defined
                 // then evaluate the user type and set their
                 // profile html accordingly
+                console.log(profile)
                 if (profile.is_lawyer) {
                     profile_html = self.templates.lawyer(context);
                 }else if (profile.is_founder) {
+                    profile_html = self.templates.founder(context);
+                }else if (profile.is_startup) {
                     profile_html = self.templates.startup(context);
                 }
             }

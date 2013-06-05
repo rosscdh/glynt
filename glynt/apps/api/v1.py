@@ -131,8 +131,9 @@ class StartupLiteSimpleResource(BaseApiModelResource):
 
 def _startup_profile(bundle):
     data = StartupProfileBunch(startup=bundle.obj)
-    data['profile_photo'] = data.photo_url
+    data['profile_photo'] = data.photo_url if data.photo_url else bundle.obj.profile_photo
     data['username'] = bundle.obj.slug # required to integrate with GlyntProfile object
+    data['is_startup'] = True
     return data
 
 class StartupBasicProfileResource(BaseApiModelResource):
