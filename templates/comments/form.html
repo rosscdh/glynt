@@ -1,10 +1,10 @@
-{% load comments i18n %}
-<h3>{% trans 'Reply' %}</h3>
+{% load comments crispy_forms_tags fluent_comments_tags i18n %}
+<h3>{% trans 'Reply' %}</|as_crispy_fieldh3>
 
-<form action="{% comment_form_target %}" method="POST" class="form-wide">
+<form action="{% comment_form_target %}" data-ajax-action="{% url 'comments-post-comment-ajax' %}" method="POST" class="js-comments-form comments-form form-wide">
 {% csrf_token %}
 {% if form.comment.errors %}{{ form.comment.errors }}{% endif %}
-{{ form.comment }}
+{{ form.comment|as_crispy_field }}
 {{ form.honeypot }}
 {{ form.content_type }}
 {{ form.object_pk }}
@@ -12,4 +12,5 @@
 {{ form.security_hash }}
 {% if next %}<div><input type="hidden" name="next" value="{{ next }}" /></div>{% endif %}
 <button id="btn-save_comment" class="btn btn-primary" type="submit">{% trans 'Post' %}</button>
+{% ajax_comment_tags %}
 </form>
