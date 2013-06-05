@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 from django.conf import settings
 from django.db import models
+from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 
 from jsonfield import JSONField
@@ -58,6 +59,9 @@ class Lawyer(models.Model):
         if attr_name not in self.data:
             raise AttributeError, attr_name
         return self.data.get(attr_name, None) 
+
+    def get_absolute_url(self):
+        return reverse('lawyer:profile', kwargs={'slug': self.user.username})
 
     @property
     def primary_firm(self):
