@@ -18,9 +18,9 @@ class EnsureFounderService(object):
         self.data = kwargs
 
     def update_user_profile(self):
-        # update the is_startup attribute
+        # update the is_stis_founderartup attribute
         profile = self.user.profile
-        profile.profile_data['is_startup'] = True
+        profile.profile_data['is_founder'] = True
         profile.save(update_fields=['profile_data'])
 
     def save_photo(self, photo):

@@ -1,7 +1,7 @@
 {% load templatetag_handlebars %}
 
 {% tplhandlebars "tpl-profile-mini" %}
-<img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - {{#if profile.is_lawyer }}Lawyer{{/if}}{{#if profile.is_startup }}Founder{{/if}}" />
+<img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - {{#if profile.is_lawyer }}Lawyer{{/if}}{{#if profile.is_founder }}Founder{{/if}}" />
 {% endtplhandlebars %}
 
 {% tplhandlebars "tpl-startup-profile" %}<div class="container">
@@ -95,7 +95,7 @@ var GlyntProfile = {
                 // profile html accordingly
                 if (profile.is_lawyer) {
                     profile_html = self.templates.lawyer(context);
-                }else if (profile.is_startup) {
+                }else if (profile.is_founder) {
                     profile_html = self.templates.startup(context);
                 }
             }

@@ -16,9 +16,11 @@
         {{ engagement.engagement_statement }}
     </div>
 
+<span class="startup-profile-popup" data-username="{{object.startup.slug}}">&nbsp;</span>
+
     <div class="span4 side-info-container">
         <div class="well">
-            {% if user.profile.is_startup %}
+            {% if user.profile.is_founder %}
             <span class="profile-popup" data-template="mini" data-username="{{object.lawyer.user.username}}">&nbsp;</span>
             <h3>{{ object.lawyer.full_name }}</h3>
                 <dl>

@@ -20,7 +20,7 @@
   <div class="span2">
     <ul id="postman_menu" class="nav nav-pills nav-stacked">{% postman_unread as unread_count %}
         {% url 'engage:list' as url %}
-        {% if request.user.profile.is_startup %}
+        {% if request.user.profile.is_founder %}
             <li {% if request.path == url %} class="active"{% endif %}><a href="{% url 'engage:list' %}"><i class="icon-star"></i> {% trans "Requests" %}</a></li>
         {% else %}
                 <li {% if request.path == url %} class="active"{% endif %}><a href="{% url 'engage:list' %}"><i class="icon-star"></i> {% trans "Leads" %}</a></li>

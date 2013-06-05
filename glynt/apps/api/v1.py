@@ -156,7 +156,7 @@ class StartupBasicProfileResource(BaseApiModelResource):
 
 def _founder_profile(bundle):
     data = {}
-    if bundle.obj.profile.is_startup:
+    if bundle.obj.profile.is_founder:
         profile = bundle.obj.founder_profile
         try:
             primary_startup = profile.startups[0]
@@ -212,7 +212,7 @@ class UserBasicProfileResource(BaseApiModelResource):
         profile = bundle.data.get('username', None)
         bundle.data.update({
             'is_lawyer': bundle.obj.profile.is_lawyer,
-            'is_startup': bundle.obj.profile.is_startup,
+            'is_founder': bundle.obj.profile.is_founder,
             'profile_photo': bundle.obj.profile.get_mugshot_url(),
         })
         bundle.data.update(_lawyer_profile(bundle))

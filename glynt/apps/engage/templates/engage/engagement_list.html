@@ -27,7 +27,7 @@
                 {% for message in object_list %}
                 <li class="engage-status-{{ message.status|lower }}" data-url="{{ message.get_absolute_url }}">
                     <a href="{{ message.get_absolute_url }}">
-                        {% if user.profile.is_startup %}
+                        {% if user.profile.is_founder %}
                         <span class="profile-popup" data-template="mini" data-username="{{message.lawyer.user.username}}">&nbsp;</span>
                         <span class="message-sender">{{ message.lawyer.user.get_full_name }} @ {{ message.lawyer.firm_name }}</span>
                         <span class="message-date">{{ message.date_created|date:"d M" }}</span>

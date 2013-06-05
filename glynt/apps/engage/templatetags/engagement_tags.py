@@ -24,7 +24,7 @@ def engagement_dict(context, user=None):
     if user is not None:
         if user.is_authenticated():
             if not own_profile:
-                if user.profile.is_startup:
+                if user.profile.is_founder:
                     engagement_list = Engagement.objects.filter(lawyer=lawyer, founder=user.founder_profile)
 
     return {

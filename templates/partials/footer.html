@@ -34,15 +34,15 @@
 	    <h3>I'm a startup</h3>
 	    <div></div>
 	     {% if PROJECT_ENVIRONMENT != 'prod' %}
-	    	<a href="{% url "public:auth_user_class_redirect" user_class_name="startup" %}" class="btn btn-primary"><img src="/static/img/google-32.png">Sign in with Google</a>
+	    	<a href="{% url "public:auth_user_class_redirect" user_class_name="founder" %}" class="btn btn-primary"><img src="{{ STATIC_URL }}img/google-32.png">Sign in with Google</a>
 	    {% else %}
-	    	<a href="#" class="btn btn-primary"><img src="/static/img/google-32.png"> Coming Soon</a>
+	    	<a href="#" class="btn btn-primary"><img src="{{ STATIC_URL }}img/google-32.png"> Coming Soon</a>
 	    {% endif %}
 	</div>
 	<div class="lawyer">
 	    <h3>I'm a lawyer</h3>
 	    <div></div>
-	    <a href="{% url "public:auth_user_class_redirect" user_class_name="lawyer" %}" class="btn btn-primary"><img src="/static/img/linkedin-32.png"> Sign in with LinkedIn</a>
+	    <a href="{% url "public:auth_user_class_redirect" user_class_name="lawyer" %}" class="btn btn-primary"><img src="{{ STATIC_URL }}img/linkedin-32.png"> Sign in with LinkedIn</a>
 	</div>
 </div>
 

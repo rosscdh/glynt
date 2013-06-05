@@ -160,7 +160,7 @@ class MyEngagementsView(ListView):
         fltr = {}
         if user.profile.is_lawyer:
             fltr.update({'lawyer': user.lawyer_profile})
-        #elif user.profile.is_startup:
+        #elif user.profile.is_founder:
         else:
             fltr.update({'founder': user.founder_profile})
 

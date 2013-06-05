@@ -49,7 +49,7 @@ class ClientProfile(UserenaBaseProfile):
 
         if self.is_lawyer:
             pic = self.profile_data.get('linkedin_photo_url', None) or self.profile_data.get('facebook_photo_url', None)
-        if self.is_startup:
+        if self.is_founder:
             pic = self.profile_data.get('picture', None)
 
         return pic if pic is not None else p
@@ -63,8 +63,8 @@ class ClientProfile(UserenaBaseProfile):
         return True if self.user_class == 'lawyer' else False
 
     @property
-    def is_startup(self):
-        return True if self.user_class == 'startup' else False
+    def is_founder(self):
+        return True if self.user_class == 'founder' else False
 
     def short_name(self):
         """ Returns A. LastName """
@@ -115,7 +115,7 @@ def create_glynt_profile(profile, is_new):
     if not is_new:
         logger.info('create_glynt_profile profile is not new User %s' % profile.user.pk)
     else:
-        if profile.is_startup:
+        if profile.is_founder:
             logger.info('Creating Founder Profile for User %s' % user.username)
             founder_service = EnsureFounderService(user=user)
             founder_service.process()
