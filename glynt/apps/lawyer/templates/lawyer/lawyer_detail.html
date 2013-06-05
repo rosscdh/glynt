@@ -51,9 +51,9 @@
                 {% is_lawyer_engaged_with_user lawyer=object as is_lawyer_engaged_with_user %}
                     {% if request.user.profile.is_founder  %}
                         {% if is_lawyer_engaged_with_user %}
-                            <a href="/engage/" class="btn btn-large btn-primary right">Connect</a>
+                            <a href="/engage/" class="btn btn-large btn-primary right">Contact lawyer</a>
                         {% else %}
-                            <a href="{% url 'engage:startup_lawyer' lawyer_pk=lawyer.pk %}" id="engage-lawyer" class="btn btn-large btn-primary right" data-toggle="modal">Connect</a>
+                            <a href="{% url 'engage:startup_lawyer' lawyer_pk=lawyer.pk %}" id="engage-lawyer" class="btn btn-large btn-primary right" data-toggle="modal">Contact Lawyer</a>
                         {% endif %}
                     {% endif %}
                     {% if request.user.is_authenticated %}
