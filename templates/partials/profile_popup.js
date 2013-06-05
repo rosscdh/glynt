@@ -4,8 +4,7 @@
 <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - {{#if profile.is_lawyer }}Lawyer{{/if}}{{#if profile.is_founder }}Founder{{/if}}" />
 {% endtplhandlebars %}
 
-{% tplhandlebars "tpl-startup-profile" %}<div class="container">
-    <div class="row">
+{% tplhandlebars "tpl-startup-profile" %}
         <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Startup" />
         <h3>{{ profile.name }} - Startup</h3>
         <dl>
@@ -30,8 +29,7 @@
             <dd><a href="http://twitter.com/{{ profile.twitter }}"><i class="icon-twitter"></i>{{ profile.twitter }}</a></dd>
             {{/if}}
         </dl>
-    </div>
-</div>{% endtplhandlebars %}
+{% endtplhandlebars %}
 
 {% tplhandlebars "tpl-lawyer-profile" %}<div class="container">
     <div class="row">
