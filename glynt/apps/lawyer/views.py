@@ -120,7 +120,9 @@ class LawyerListView(AjaxListView, FormMixin):
         sq = SQ()
         for value in [value for key,value in self.request.GET.items() if key in ['q','location']]:
             if value:
-                sq.add(SQ(content=Clean(urlparse.unquote(value))), SQ.AND)
+                term = Clean(urlparse.unquote(value))
+                sq.add(SQ(content=term), SQ.AND)
+                sq.add(SQ(practice_locations=term), SQ.OR)
 
         return SearchQuerySet().filter(sq)
 

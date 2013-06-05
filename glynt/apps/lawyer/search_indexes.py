@@ -15,10 +15,14 @@ class LawyerIndex(indexes.SearchIndex, indexes.Indexable):
     firm_name = indexes.CharField(model_attr='firm_name', null=True)
     summary = indexes.CharField(model_attr='summary')
     geo_loc = indexes.LocationField(model_attr='geo_loc', null=True)
+    practice_locations = indexes.MultiValueField(null=True, boost=1.79)
     fee_packages = indexes.MultiValueField(null=True)
 
     def get_model(self):
         return Lawyer
+
+    def prepare_practice_locations(self, obj):
+        return obj.practice_locations()
 
     def prepare_fee_packages(self, obj):
         return [fp.as_tuple() for fp in obj.fee_packages.default_items()]
