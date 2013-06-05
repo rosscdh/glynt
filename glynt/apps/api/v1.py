@@ -132,6 +132,7 @@ class StartupLiteSimpleResource(BaseApiModelResource):
 def _startup_profile(bundle):
     data = StartupProfileBunch(startup=bundle.obj)
     data['profile_photo'] = data.photo_url
+    data['username'] = bundle.obj.slug # required to integrate with GlyntProfile object
     return data
 
 class StartupBasicProfileResource(BaseApiModelResource):
@@ -143,6 +144,7 @@ class StartupBasicProfileResource(BaseApiModelResource):
 
         filtering = {
             'name': ALL,
+            'slug': ALL,
         }
         cache = SimpleCache()
 
