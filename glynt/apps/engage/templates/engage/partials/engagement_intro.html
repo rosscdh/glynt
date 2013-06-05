@@ -13,42 +13,44 @@
             </p>
         <hr />
         </div>
-
         {{ engagement.engagement_statement }}
     </div>
 
     <div class="span4 side-info-container">
         <div class="well">
             {% if user.profile.is_startup %}
-            <img src="{{ object.lawyer.profile_photo }}" class="avatar">
+            <span class="profile-popup" data-template="mini" data-username="{{object.lawyer.user.username}}">&nbsp;</span>
             <h3>{{ object.lawyer.full_name }}</h3>
                 <dl>
                     <dt>Lawyer Profile</dt>
-                    <dd><a href="{% url 'lawyer:profile' slug=object.lawyer.user.username %}">Visit profile</a></dd>
+                    <dd><a href="{{ object.lawyer.get_absolute_url }}">Visit profile</a></dd>
                     <dt>Summary</dt>
                     <dd>
                         {{ object.lawyer.summary|default:'Nothing yet' }}
                     </dd>
                 </dl>
             {% else %}
-            <img src="{{ STATIC_URL }}img/default_avatar.png" class="avatar">
+            <span class="profile-popup" data-template="mini" data-username="{{object.founder.user.username}}">&nbsp;</span>
             <h3>{{ object.startup }}</h3>
                 <dl>
                     <dt>Website</dt>
                     <dd><a href="{{ object.startup.website }}" target="_blank">{{ object.startup.website }} <i class="icon-share"></i></a></dd>
                     <dt>Founders</dt>
+                    {% for f in object.startup.founders.all %}
                     <dd>
-                        {{ object.founder.user.first_name }} {{ object.founder.user.last_name }}
-                        <!-- What happens when there is more than one founder? -->
+                        {{ f.get_full_name }}
                     </dd>
+                    {% endfor %}
                     <dt>
                         Summary
                     </dt>
                     <dd>
                         {{ object.startup.summary }}
                     </dd>
+                    {% if object.startup.twitter %}
                     <dt>Twitter</dt>
                     <dd><a href="http://twitter.com/{{ object.startup.twitter }}"><i class="icon-twitter"></i>{{ object.startup.twitter }}</a></dd>
+                    {% endif %}
                 </dl>
             {% endif %}
         </div>
