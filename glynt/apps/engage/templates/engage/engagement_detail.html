@@ -1,18 +1,20 @@
-{% extends "base.html" %}{% load comments engagement_tags %}
+{% extends "postman/base.html" %}{% load comments engagement_tags %}
 
-{% block page_title %}{{ object.lawyer.user.get_full_name }} Engagement Request{% endblock %}
+{% block page_title %}Engagement Request{% endblock %}
 
-{% block body %}
-
-<div class="hide" id="comment-controls" data-is_reversed="true"></div>
-
+{% block content %}
 <div class="row">
     <div class="span7">
         <div class="alert engagement-status">
             <span>Request status: <strong>{{ object.status }}</strong></span>
         </div>
-
-        <h3 class="engage-detail-title">Request: {{ object.lawyer.user.get_full_name }}</h3>
+        <h3 class="engage-detail-title">
+            {% if user.profile.is_founder %}
+                Request to: {{ object.lawyer.user.get_full_name }}
+            {% else %}
+                Request from: {{ object.founder.user.get_full_name }}
+            {% endif %}
+        </h3>
         <span>{{ object.date_created }}</span>
         <hr />
 
