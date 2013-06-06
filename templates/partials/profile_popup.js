@@ -39,11 +39,15 @@
 
 {% tplhandlebars "tpl-lawyer-profile" %}
     <small>lawyer</small><br/>
-    <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Startup" />
-    <h3>{{ profile.name }}</h3>
+    <a href="{{ profile.profile_url }}"><img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Lawyer" /></a>
+    <h3>{{ profile.name }}<br/><small>{{ profile.position }} at {{ profile.firm }}</small></h3>
     <dl>
-        <dt>Website</dt>
-        <dd><a href="{{ profile.website }}" target="_blank">{{ profile.website }} <i class="icon-share"></i></a></dd>
+        <dt><a href="{{ profile.profile_url }}"><small>View Profile</small></a></dt>
+        <!--
+        // {{#if profile.website }}
+        // <dt>Website</dt>
+        // <dd><a href="{{ profile.website }}" target="_blank">{{ profile.website }} <i class="icon-share"></i></a></dd>
+        // {{/if}} --!>
         <dt>Founders</dt>
         put list here
         <dt>Summary</dt>
