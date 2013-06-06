@@ -10,14 +10,13 @@
 {% endtplhandlebars %}
 
 {% tplhandlebars "tpl-startup-profile" %}
-        <small>startup</small><br/>
         <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Startup" />
-        <h3>{{ profile.name }}</h3>
+        <h5>{{ profile.name }}</h5>
         <dl>
             <dt>Website</dt>
             <dd><a href="{{ profile.website }}" target="_blank">{{ profile.website }} <i class="icon-share"></i></a></dd>
-            <dt>Founders</dt>
-            put list here
+            <!-- <dt>Founders</dt>
+            // <dd>...</dd> -->
             <dt>Summary</dt>
             <dd>
                 {{ profile.summary }}
@@ -38,18 +37,15 @@
 {% endtplhandlebars %}
 
 {% tplhandlebars "tpl-lawyer-profile" %}
-    <small>lawyer</small><br/>
+
     <a href="{{ profile.profile_url }}"><img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Lawyer" /></a>
-    <h3>{{ profile.name }}<br/><small>{{ profile.position }} at {{ profile.firm }}</small></h3>
+    <h5>{{ profile.name }}<br/><small>{{ profile.position }} at {{ profile.firm }}</small></h5>
     <dl>
-        <dt><a href="{{ profile.profile_url }}"><small>View Profile</small></a></dt>
         <!--
         // {{#if profile.website }}
         // <dt>Website</dt>
         // <dd><a href="{{ profile.website }}" target="_blank">{{ profile.website }} <i class="icon-share"></i></a></dd>
-        // {{/if}} --!>
-        <dt>Founders</dt>
-        put list here
+        // {{/if}} -->
         <dt>Summary</dt>
         <dd>
             {{ profile.summary }}
@@ -67,12 +63,14 @@
         <dd><a href="http://twitter.com/{{ profile.twitter }}"><i class="icon-twitter"></i>{{ profile.twitter }}</a></dd>
         {{/if}}
     </dl>
+    <p class="text-center"><a href="{{ profile.profile_url }}" class="btn btn-primary">View full profile</a></p>
+
 {% endtplhandlebars %}
 
 {% tplhandlebars "tpl-founder-profile" %}
     <small>founder</small><br/>
     <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Founder" />
-    <h3>{{ profile.name }}</h3>
+    <h5>{{ profile.name }}</h5>
     <dl>
         {{#if profile.phone }}
         <dt>Phone</dt>

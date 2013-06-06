@@ -1,16 +1,15 @@
 {% load i18n %}
-<div{% if preview %} id="comment-preview"{% else %} id="c{{ comment.id }}"{% endif %} class="comment-item">
-  {% if preview %}<h3>{% trans "Preview of your comment" %}</h3>{% endif %}
-    <h4>
-      {% if comment.url %}<a href="{{ comment.url }}" rel="nofollow">{% endif %}
-      {% if comment.name %}{{ comment.name }}{% else %}{% trans "Anonymous" %}{% endif %}{% comment %}
-      {% endcomment %}{% if comment.url %}</a>{% endif %}
-      <span class="comment-date">{% blocktrans with submit_date=comment.submit_date %}on {{ submit_date }}{% endblocktrans %}</span>
-      {% if not comment.is_public %}<span class="comment-moderated-flag">({% trans "moderated" %})</span>{% endif %}
-      {% if USE_THREADEDCOMMENTS %}<a href="#c{{ comment.id }}" data-comment-id="{{ comment.id }}" class="comment-reply-link">{% trans "reply" %}</a>{% endif %}
-    </h4>
 
-    <div class="well comment-text">
-    <p>{{ comment.comment|linebreaks }}</p>
+<div id="c{{ comment.id }}" class="comment-item message-{% if comment.user == user %}right{% else %}left{% endif %} clearfix">
+
+    <div class="profile-popup message-avatar message-avatar" data-template="mini" data-username="{{ comment.user }}"></div>
+
+    <div class="comment-text triangle-border">
+        <p>{{ comment.comment|linebreaks }}</p>
     </div>
+
+    <span class="comment-name">{{ comment.user.get_full_name }}</span>
+
+    <span class="comment-date">{{ comment.submit_date }}</span>
+
 </div>

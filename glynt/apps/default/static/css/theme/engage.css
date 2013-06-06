@@ -151,6 +151,169 @@ div.side-info-container dl {
     clear: both;
 }
 
+div.side-info-container dd {
+    margin: 0 0 1em 0;
+}
+
 .engagement-status {
     margin-top: 0;
+}
+
+#comments {
+    color: #757c7e;
+}
+
+.comment-item {
+    position: relative;
+    margin-bottom: 1.8em;
+}
+
+.comment-item .comment-text {
+    border: 1px solid;
+    border-radius: .35em;
+    box-sizing: border-box;
+    padding: 0 1em;
+    position: relative;
+    background: #f5f6f6;
+    border-color: #d5d6d6;
+}
+
+.message-left .triangle-border {
+    margin-left: 80px
+}
+
+.message-left .triangle-border:before {
+    top: 10px;
+    bottom: auto;
+    left: -14px;
+    border-width: 8px 13px 8px 0;
+    border-color: transparent #d5d6d6;
+}
+
+.triangle-border:before {
+    content: "";
+    position: absolute;
+    bottom: -20px;
+    left: 40px;
+    border-width: 20px 20px 0;
+    border-style: solid;
+    border-color: #5a8f00 transparent;
+    display: block;
+    width: 0;
+}
+
+.message-left .triangle-border:after {
+    top: 10px;
+    bottom: auto;
+    left: -12px;
+    border-width: 8px 13px 8px 0;
+    border-color: transparent #f5f6f6;
+}
+
+.triangle-border:after {
+    content: "";
+    position: absolute;
+    bottom: -13px;
+    left: 47px;
+    border-width: 13px 13px 0;
+    border-style: solid;
+    border-color: #fff transparent;
+    display: block;
+    width: 0;
+}
+
+.message-right .triangle-border {
+    margin-right: 80px;
+}
+
+.message-right .triangle-border:before {
+    top: 10px;
+    bottom: auto;
+    left: auto;
+    right: -14px;
+    border-width: 8px 0 8px 13px;
+    border-color: transparent #d5d6d6;
+}
+
+.message-right .triangle-border:after {
+    top: 10px;
+    bottom: auto;
+    left: auto;
+    right: -12px;
+    border-width: 8px 0 8px 13px;
+    border-color: transparent #f5f6f6;
+}
+
+.message-avatar {
+    border: 1px solid #8a8b8b;
+    position: absolute;
+    padding: 0;
+    width: 48px;
+    height: 48px;
+}
+
+.message-right .message-avatar {
+    right: 0;
+}
+
+.message-avatar img {
+    margin: 0;
+    padding: 0;
+}
+
+.comment-date {
+    display: inline-block;
+    float: right;
+    text-align: right;
+    margin: .5em 0 2em 0;
+}
+
+.comment-name {
+    display: inline-block;
+    float: left;
+    text-align: left;
+    margin: .5em 0 2em 5.7em;
+}
+
+.engagement-types {
+    margin: 0;
+}
+
+.engagement-types  .label {
+    text-transform: uppercase;
+    font-size: .95em;
+    background-color: #edeeee;
+    color: #757c7e;
+    font-weight: normal;
+    padding: .2em .5em;
+    margin: 0 .5em 1em 0;
+    display: inline-block;
+}
+
+.engage-detail-title {
+    margin: 0;
+    line-height: 1.3em;
+}
+
+.initial-lead .comment-text {
+    background: #d2f5fa;
+    border-color: #68dff0;
+}
+
+.initial-lead.message-right .triangle-border:before
+, .initial-lead.message-left .triangle-border:before {
+    border-color: transparent #68dff0;
+}
+
+.initial-lead.message-right .triangle-border:after
+, .initial-lead.message-left .triangle-border:after {
+    border-color: transparent #d2f5fa ;
+}
+
+.message-right .comment-name {
+    margin-left: 0;
+}
+
+.message-right .comment-date {
+    margin: .5em 5.7em 2em 0;
 }

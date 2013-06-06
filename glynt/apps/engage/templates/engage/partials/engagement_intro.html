@@ -1,29 +1,21 @@
-<div class="row">
-    <div class="span6">
+<div class="comment-item initial-lead message-{% if comment.user == user %}right{% else %}left{% endif %} clearfix">
 
-        <div class="alert engagement-status">
-            <span>Request status: <strong>{{ engagement.status }}</strong></span>
-        </div>
+    <div class="profile-popup message-avatar message-avatar" data-template="mini" data-username="{{ engagement.founder }}"></div>
 
-        <div class="engagement-types">
-            <p>Work required
-                {% for t,name in object.engagement_types %}
-                    <span class="label">{{ name }}</span>
-                {% endfor %}
-            </p>
-        <hr />
-        </div>
-        {{ engagement.engagement_statement }}
+    <div class="comment-text triangle-border">
+        <p>{{ engagement.engagement_statement|linebreaks }} </p>
     </div>
 
-    <div class="span4 side-info-container">
-        <div class="well">
-            {% if user.profile.is_founder %}
-            <span class="profile-popup" data-username="{{ object.lawyer.user.username }}">&nbsp;</span>
-            {% else %}
-            <span class="profile-popup" data-username="{{ object.founder.user.username }}">&nbsp;</span>
-            <span class="startup-profile-popup" data-username="{{ object.startup.slug }}">&nbsp;</span>
-            {% endif %}
-        </div>
-    </div>
+    <span class="comment-name">{{ engagement.founder.user.get_full_name }}</span>
+
+    <span class="comment-date">{{ engagement.date_created }}</span>
+
+</div>
+
+<div class="engagement-types">
+    <p>Work required:
+    {% for t,name in object.engagement_types %}
+        <span class="label">{{ name }}</span>
+        {% endfor %}
+    </p>
 </div>

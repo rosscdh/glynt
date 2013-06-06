@@ -190,6 +190,7 @@ def _lawyer_profile(bundle):
             'phone': profile.phone,
             'years_practiced': profile.years_practiced,
             'profile_status': profile.profile_status,
+            'summary': profile.summary,
             #'fee_packages': profile.fee_packages.items(),
             'practice_locations': profile.practice_locations(),
         })
