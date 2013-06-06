@@ -3,18 +3,28 @@
 {% block page_title %}{{ object.lawyer.user.get_full_name }} Engagement Request{% endblock %}
 
 {% block content %}
+
+<div class="hide" id="comment-controls" data-is_reversed="true"></div>
+
 {% engagement_intro enagement=object %}
 
-{% render_comment_list for object %}
-<hr>
 {% render_comment_form for object %}
+<hr>
+{% render_comment_list_reversed for object %}
+
 {% endblock %}
 
 {% block js %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fluent_comments/css/ajaxcomments.css" />
 <script type="text/javascript" src="{{ STATIC_URL }}fluent_comments/js/ajaxcomments.js"></script>
 <script>
-$(document).ready(function () {
-});
+/**
+* Setup the fluent-comments comment_controls
+* to determine setup and useability
+* @LawPal contributed this functionality
+**/
+var COMMENT_CONTROLS = {
+    'is_reversed': true,
+}
 </script>
 {% endblock %}

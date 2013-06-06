@@ -2,10 +2,7 @@
 <div class="row">
     <div id="comments" class="span6">
         {% for comment in comment_list %}
-            <p><strong>{{ comment.name }}</strong> - {{ comment.submit_date }}</p>
-            <div class="well">
-            <p>{{ comment.comment }}</p>
-            </div>
+            {% include 'comments/comment.html' %}
         {% endfor %}
     </div>
 </div>

@@ -2,6 +2,9 @@
 from django import template
 from django.core.urlresolvers import reverse
 
+from django.contrib.comments.templatetags.comments import RenderCommentListNode
+from django.template.loader import render_to_string
+
 register = template.Library()
 
 from glynt.apps.engage.models import Engagement
@@ -61,3 +64,46 @@ def is_lawyer_engaged_with_user(context, lawyer, user=None):
         lawyer_enganged = True
 
     return lawyer_enganged
+
+
+
+class RenderCommentListReversedNode(RenderCommentListNode):
+    """Render the comment list directly in reverse """
+
+    def render(self, context):
+        ctype, object_pk = self.get_target_ctype_pk(context)
+        if object_pk:
+            template_search_list = [
+                "comments/%s/%s/list.html" % (ctype.app_label, ctype.model),
+                "comments/%s/list.html" % ctype.app_label,
+                "comments/list.html"
+            ]
+            qs = self.get_query_set(context).order_by('-id')
+            context.push()
+            liststr = render_to_string(template_search_list, {
+                "comment_list" : self.get_context_value_from_queryset(context, qs)
+            }, context)
+            context.pop()
+            return liststr
+        else:
+            return ''
+
+@register.tag
+def render_comment_list_reversed(parser, token):
+    """
+    Render the comment list (as returned by ``{% get_comment_list %}``)
+    through the ``comments/list.html`` template
+
+    but in reverse order
+
+    Syntax::
+
+        {% render_comment_list_reversed for [object] %}
+        {% render_comment_list_reversed for [app].[model] [object_id] %}
+
+    Example usage::
+
+        {% render_comment_list_reversed for event %}
+
+    """
+    return RenderCommentListReversedNode.handle_token(parser, token)

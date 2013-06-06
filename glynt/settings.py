@@ -141,6 +141,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "glynt.context_processors.project_info",
     "glynt.context_processors.project_environment",
     "glynt.context_processors.default_profile_image",
+    "glynt.context_processors.USE_THREADEDCOMMENTS",
     "social_auth.context_processors.social_auth_by_type_backends",
     "social_auth.context_processors.social_auth_by_name_backends",
     "postman.context_processors.inbox",
@@ -258,7 +259,9 @@ HELPER_APPS = (
     # Engagement System
     'fluent_comments',
     'threadedcomments',
-    'notification',
+
+    # Notications
+    'notifications',
 )
 
 # Handle south and its breaking tests
@@ -379,7 +382,6 @@ POSTMAN_DISALLOW_COPIES_ON_REPLY = True
 POSTMAN_DISABLE_USER_EMAILING = False
 POSTMAN_AUTO_MODERATE_AS = True
 POSTMAN_MAILER_APP = 'django.core.mail'
-POSTMAN_NOTIFIER_APP = 'notification'
 
 INTERCOM_API_SECRET = '-sjPyiyI5P44z3QsHLDUWfoLK8Rml7Wbg2wmj64L'
 

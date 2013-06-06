@@ -23,3 +23,8 @@ def default_profile_image(request):
     return {
         'default_profile_image': os.path.abspath('%s%s' % (settings.STATIC_URL, image))
     }
+
+def USE_THREADEDCOMMENTS(request):
+    return {
+        'USE_THREADEDCOMMENTS': True if 'threadedcomments' in settings.INSTALLED_APPS else False
+    }

@@ -34,7 +34,8 @@ south
 # Comments
 -e git+https://github.com/rosscdh/django-fluent-comments.git@fix-broken-ajax-references#egg=django-fluent-comments
 django-threadedcomments
-django-notification
+#django-notification # to allow threaded-comments to work a bit better
+django-notifications-hq # this is for the activity notifications
 
 # JSON Field
 #django-jsonfield # This is the correct one, the bradjasper version does not save correctly (converts to string), but we probably need to patch it so that the loaddata works
