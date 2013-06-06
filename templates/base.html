@@ -76,9 +76,13 @@
 	    <script type="text/javascript" src="{{ STATIC_URL }}js/glynt.js"></script> -->
 	{% endcomment %}
 
- 	 <script type="text/javascript" src="{{ STATIC_URL }}handlebars.js"></script>
-  	 <script type="text/javascript" src="{{ STATIC_URL }}handlebars-helpers.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}handlebars.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}handlebars-helpers.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/json2.min.js"></script>	 
+
+    {% handlebars_js %}
+    {% comments_js %}
+    {% moment_js %}
 
     {% compress js %}
 	    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.cookie.js"></script>
@@ -90,12 +94,8 @@
 	    <script type="text/javascript" src="{{ STATIC_URL }}js/sugar-1.3.9.min.js"></script>
     {% endcompress %}
 
-	{% handlebars_js %}
- 	{% comments_js %}
-    {% moment_js %}
-
     {% handlebars_messages %}
-    {% profile_popup %}
+    {% profile_cards %}
 
     {% block js %}{% endblock %}
 	
