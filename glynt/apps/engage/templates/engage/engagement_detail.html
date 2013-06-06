@@ -1,8 +1,8 @@
-{% extends "postman/base.html" %}{% load comments engagement_tags %}
+{% extends "base.html" %}{% load comments engagement_tags %}
 
 {% block page_title %}{{ object.lawyer.user.get_full_name }} Engagement Request{% endblock %}
 
-{% block content %}
+{% block body %}
 
 <div class="hide" id="comment-controls" data-is_reversed="true"></div>
 
@@ -25,9 +25,11 @@
     <div class="span3 side-info-container">
         <div class="well">
             {% if user.profile.is_founder %}
-            <span class="profile-popup" data-username="{{ object.lawyer.user.username }}">&nbsp;</span>
+            <div class="profile-card" data-username="{{ object.lawyer.user.username }}">&nbsp;</div>
             {% else %}
-            <span class="startup-profile-popup" data-username="{{ object.startup.slug }}">&nbsp;</span>
+            <div class="startup-profile-card" data-username="{{ object.startup.slug }}">&nbsp;</div>
+            <hr/>
+            <div class="profile-card" data-username="{{ object.founder.user.username }}">&nbsp;</div>
             {% endif %}
         </div>
     </div>

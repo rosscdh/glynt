@@ -2,7 +2,7 @@
 
 <div id="c{{ comment.id }}" class="comment-item message-{% if comment.user == user %}right{% else %}left{% endif %} clearfix">
 
-    <div class="profile-popup message-avatar message-avatar" data-template="mini" data-username="{{ comment.user }}"></div>
+    <div class="profile-card message-avatar message-avatar" data-template="mini" data-username="{{ comment.user }}"></div>
 
     <div class="comment-text triangle-border">
         <p>{{ comment.comment|linebreaks }}</p>
