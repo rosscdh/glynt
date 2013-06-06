@@ -165,6 +165,7 @@ def _founder_profile(bundle):
             primary_startup = {}
 
         data.update({
+            'profile_url': bundle.obj.founder_profile.get_absolute_url(),
             'summary': profile.summary,
             'bio': profile.bio,
             'startups': [
@@ -183,6 +184,7 @@ def _lawyer_profile(bundle):
     if bundle.obj.profile.is_lawyer:
         profile = bundle.obj.lawyer_profile
         data.update({
+            'profile_url': bundle.obj.lawyer_profile.get_absolute_url(),
             'position': profile.position,
             'firm': profile.firm_name,
             'phone': profile.phone,
@@ -215,6 +217,7 @@ class UserBasicProfileResource(BaseApiModelResource):
             'is_lawyer': bundle.obj.profile.is_lawyer,
             'is_founder': bundle.obj.profile.is_founder,
             'profile_photo': bundle.obj.profile.get_mugshot_url(),
+            'profile_url': None,
         })
         bundle.data.update(_lawyer_profile(bundle))
         bundle.data.update(_founder_profile(bundle))

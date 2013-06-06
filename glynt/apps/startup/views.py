@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.views.generic import FormView
+from django.views.generic import DetailView
 from django.contrib import messages
 from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
 
 from services import EnsureFounderService
 from forms import StartupProfileSetupForm
+from models import Founder
 
 from glynt.apps.utils import AjaxableResponseMixin
 
@@ -64,3 +67,24 @@ class StartupProfileSetupView(FormView):
     def form_valid(self, form):
         form.save()
         return super(StartupProfileSetupView, self).form_valid(form=form)
+
+
+class FounderProfileView(DetailView):
+    model = Founder
+
+    def get_object(self, queryset=None):
+        """
+        """
+        # Use a custom queryset if provided; this is required for subclasses
+        # like DateDetailView
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        slug = self.kwargs.get(self.slug_url_kwarg, None)
+        try:
+            # Get the single item from the filtered queryset
+            obj = queryset.get(user=User.objects.get(username=slug))
+        except ObjectDoesNotExist:
+            raise Http404(_("No %(verbose_name)s found matching the query") %
+                          {'verbose_name': queryset.model._meta.verbose_name})
+        return obj
