@@ -38,7 +38,7 @@
             {#% paginate %#}
 
         {% else %}
-            <p>{% trans "No Engagements." %}</p>
+            <p>You currently have no Engagements. Why not try searching for a Lawyer on the <a href="{% url 'lawyer:list' %}">marketplace</p>
         {% endif %}
 
     {% endif %}
