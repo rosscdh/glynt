@@ -238,5 +238,14 @@ var GlyntStartupProfileCards = $.extend({}, GlyntProfileCards, {
 $(document).ready(function(){
     GlyntProfileCards.init()
     GlyntStartupProfileCards.init()
+
+    $('.js-comments-form').submit(function() {
+        $(document).ajaxComplete(function(event, xhr, settings) {
+            if ( settings.url === "/comments/post/ajax/" ) {
+                GlyntProfileCards.init()
+                GlyntStartupProfileCards.init()
+            }
+        })
+    });
 });
 </script>
