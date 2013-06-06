@@ -34,7 +34,7 @@
             <dd><a href="http://twitter.com/{{ profile.twitter }}"><i class="icon-twitter"></i>{{ profile.twitter }}</a></dd>
             {{/if}}
         </dl>
-        <p class="text-center"><a href="{{ profile.profile_url }}" class="btn btn-primary">View full profile</a></p>
+        <!-- // <p class="text-center"><a href="{{ profile.profile_url }}" class="btn btn-primary">View full profile</a></p>-->
 {% endtplhandlebars %}
 
 {% tplhandlebars "tpl-lawyer-profile" %}
@@ -65,7 +65,6 @@
         {{/if}}
     </dl>
     <p class="text-center"><a href="{{ profile.profile_url }}" class="btn btn-primary">View full profile</a></p>
-
 {% endtplhandlebars %}
 
 {% tplhandlebars "tpl-founder-profile" %}
@@ -87,6 +86,7 @@
         </dd>
         {{/each}}
     </dl>
+    <p class="text-center"><a href="{{ profile.profile_url }}" class="btn btn-primary">View full profile</a></p>
 {% endtplhandlebars %}
 
 <script type="text/javascript">
