@@ -18,14 +18,14 @@
                 <li class="engage-status-{{ message.status|lower }}" data-url="{{ message.get_absolute_url }}">
                     <a href="{{ message.get_absolute_url }}">
                         {% if user.profile.is_founder %}
-                        <span class="profile-popup" data-template="mini" data-username="{{message.lawyer.user.username}}">
+                        <span class="profile-card" data-template="mini" data-username="{{message.lawyer.user.username}}">
                             <img src="{{ STATIC_URL }}img/default_avatar.png" class="avatar">
                         </span>
                         <span class="message-sender">{{ message.lawyer.user.get_full_name }} @ {{ message.lawyer.firm_name }}</span>
                         <span class="message-date">{{ message.date_created|date:"d M" }}</span>
                         <span class="label engage-status engage-status-{{ message.status|lower }}">{{ message.status }}</span>
                         {% else %}
-                        <span class="profile-popup" data-template="mini" data-username="{{message.founder.user.username}}">&nbsp;</span>
+                        <span class="profile-card" data-template="mini" data-username="{{message.founder.user.username}}">&nbsp;</span>
                         <span class="message-sender">{{ message.startup }} @ {{ message.founder.user.get_full_name }}</span>
                         <span class="message-date">{{ message.date_created|date:"d M" }}</span>
                         <span class="label engage-status engage-status-{{ message.status|lower }}">{{ message.status }}</span>
