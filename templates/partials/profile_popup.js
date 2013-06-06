@@ -93,7 +93,7 @@
 
 <script type="text/javascript">
 
-var GlyntProfile = {
+var GlyntProfileCards = {
     profile_api_url: '/api/v1/user/profile/?username__in={username_list}'
     ,selector: '.profile-popup'
     ,extra_context: {}
@@ -232,13 +232,13 @@ var GlyntProfile = {
     }
 }
 
-var GlyntStartupProfile = $.extend({}, GlyntProfile, {
+var GlyntStartupProfileCards = $.extend({}, GlyntProfileCards, {
     profile_api_url: '/api/v1/startup/profile/?slug__in={username_list}'
     ,selector: '.startup-profile-popup'
 })
 
 $(document).ready(function(){
-    GlyntProfile.init()
-    GlyntStartupProfile.init()
+    GlyntProfileCards.init()
+    GlyntStartupProfileCards.init()
 });
 </script>
