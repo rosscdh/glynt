@@ -32,7 +32,7 @@ south
 -e git+https://github.com/lincolnloop/python-qrcode.git#egg=python-qrcode
 
 # Comments
--e git+https://github.com/rosscdh/django-fluent-comments.git@fix-broken-ajax-references#egg=django-fluent-comments
+-e git+https://github.com/rosscdh/django-fluent-comments.git@js-controls#egg=django-fluent-comments
 django-threadedcomments
 #django-notification # to allow threaded-comments to work a bit better
 django-notifications-hq # this is for the activity notifications
