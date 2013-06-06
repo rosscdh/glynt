@@ -11,7 +11,7 @@
 
 {% tplhandlebars "tpl-startup-profile" %}
         <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Startup" />
-        <h5>{{ profile.name }}<br/><small>lawyer</small></h5>
+        <h5>{{ profile.name }}<br/><small>Startup</small></h5>
         <dl>
             <dt>Website</dt>
             <dd><a href="{{ profile.website }}" target="_blank">{{ profile.website }} <i class="icon-share"></i></a></dd>
