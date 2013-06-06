@@ -11,7 +11,7 @@
 
 {% tplhandlebars "tpl-startup-profile" %}
         <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Startup" />
-        <h5>{{ profile.name }}</h5>
+        <h5>{{ profile.name }}<br/><small>lawyer</small></h5>
         <dl>
             <dt>Website</dt>
             <dd><a href="{{ profile.website }}" target="_blank">{{ profile.website }} <i class="icon-share"></i></a></dd>
@@ -34,6 +34,7 @@
             <dd><a href="http://twitter.com/{{ profile.twitter }}"><i class="icon-twitter"></i>{{ profile.twitter }}</a></dd>
             {{/if}}
         </dl>
+        <p class="text-center"><a href="{{ profile.profile_url }}" class="btn btn-primary">View full profile</a></p>
 {% endtplhandlebars %}
 
 {% tplhandlebars "tpl-lawyer-profile" %}
@@ -68,9 +69,8 @@
 {% endtplhandlebars %}
 
 {% tplhandlebars "tpl-founder-profile" %}
-    <small>founder</small><br/>
     <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Founder" />
-    <h5>{{ profile.name }}</h5>
+    <h5>{{ profile.name }}<br/><small>founder</small></h5>
     <dl>
         {{#if profile.phone }}
         <dt>Phone</dt>
@@ -93,7 +93,7 @@
 
 var GlyntProfileCards = {
     profile_api_url: '/api/v1/user/profile/?username__in={username_list}'
-    ,selector: '.profile-popup'
+    ,selector: '.profile-card'
     ,extra_context: {}
     ,profiles: {}
     ,profile_params:  Object.extended({})
@@ -232,7 +232,7 @@ var GlyntProfileCards = {
 
 var GlyntStartupProfileCards = $.extend({}, GlyntProfileCards, {
     profile_api_url: '/api/v1/startup/profile/?slug__in={username_list}'
-    ,selector: '.startup-profile-popup'
+    ,selector: '.startup-profile-card'
 })
 
 $(document).ready(function(){
