@@ -145,7 +145,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "glynt.context_processors.USE_THREADEDCOMMENTS",
     "social_auth.context_processors.social_auth_by_type_backends",
     "social_auth.context_processors.social_auth_by_name_backends",
-    "postman.context_processors.inbox",
     "django.core.context_processors.request",
 )
 
@@ -251,9 +250,7 @@ HELPER_APPS = (
     'debug_toolbar_user_panel',
 
     # Django Pagination,
-    'pagination',
-    # Django postman
-    'postman',
+    # 'pagination',
 
     # Vast array of Storage types
     'storages',
