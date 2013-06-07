@@ -36,7 +36,7 @@
 				{% if user.username == object.user.username %}
 					<a href="{% url 'lawyer:setup_profile' %}" class="btn right-links" ><i class="icon-edit icon-white"></i> Edit profile</a>
 					<a href="{% url 'lawyer:invite' %}" class="btn right-links" ><i class="icon-heart icon-white"></i> Invite Lawyers</a>
-					{% if object.summary %} 
+					{% if object.summary %}
 						{% if PROJECT_ENVIRONMENT != 'dev' %}
 					    <script>
 						  $(document).ready(function () {
@@ -56,9 +56,7 @@
                             <a href="{% url 'engage:startup_lawyer' lawyer_pk=lawyer.pk %}" id="engage-lawyer" class="btn btn-large btn-primary right" data-toggle="modal">Contact Lawyer</a>
                         {% endif %}
                     {% endif %}
-                    {% if request.user.is_authenticated %}
-                        <a href="{% url 'engage:message' to=object.user.username %}" id="send-message" class="btn btn-large right" title="Message" data-toggle="modal">Message</a>
-                    {% else %}
+                    {% if not request.user.is_authenticated %}
                         <a href="{% url 'public:auth_user_class_redirect' user_class_name='founder' %}" id="" class="btn btn-large btn-primary right">Sign up to connect</a>
                     {% endif %}
                 </div>
@@ -116,18 +114,18 @@
 				</div>
 				<hr>
 			</div>
-		</div>	
+		</div>
 		<div class="span4 pull-right sidebar">
 			<div class="firm">
 				{% if firm.photo %}
-					<img src="{{ MEDIA_URL }}{{ firm.photo|default:'firm/blank.gif' }}" alt="{{ firm.name }}" class="firm-logo" />				
-				{% else %} 
+					<img src="{{ MEDIA_URL }}{{ firm.photo|default:'firm/blank.gif' }}" alt="{{ firm.name }}" class="firm-logo" />
+				{% else %}
 					{% if firm %}
 						<h2>{{ firm }}</h2>
 					{% else %}
 						<br />
 					{% endif %}
-				{% endif %} 
+				{% endif %}
 			</div>
 			<div class="map">
 				{% if object.data.practice_location_1 and not object.data.practice_location_2 %}
@@ -140,7 +138,7 @@
 					{% for practice_location in object.practice_locations  %}
 						<li class="marker">{{ practice_location }}</li>
 					{% endfor %}
-					{% if object.data.years_practiced > 0 %}	
+					{% if object.data.years_practiced > 0 %}
 						<li class="tick">{{ object.data.years_practiced }} Years Practicing</li>
 					{% endif %}
 					<!-- <li class="friends"><img src="{{ STATIC_URL }}img/app/small-avatar.jpg" alt="Avatar" /> Benjamin Ling is a mutual contact</li> -->
@@ -157,7 +155,7 @@
 					</div>
 			</div>
 
-		</div>	
+		</div>
 		<div class="span8">
 			<h2>Transaction Snapshot</h2>
 			<div class="deal-charts row">
@@ -167,17 +165,17 @@
 					<img src="/static/img/graph-year-placeholder.png" id="graph-year-placeholder">
 					<canvas id="dealChart0" width="300" height="200"></canvas>
 				</div>
-				<div class="span4" style="position:relative;">			
+				<div class="span4" style="position:relative;">
 					<h5>Transactions by type</h5>
-					<br />		
+					<br />
 					<img src="/static/img/graph-type-placeholder.png" id="graph-type-placeholder">
 					<canvas id="dealChart1" width="220" height="200"></canvas>
 					<div style="position:absolute;top:125px;right:-0px;opacity:0.3" id="type-legend">
 						<span class="label label-info" style="color:#F38630;background-color:white;">Series A</span>
-						<br /> 
-						<span class="label label-info" style="color:#6bdb7e;background-color:white;">Seed</span> 
 						<br />
-						<span class="label label-info" style="color:#69D2E7;background-color:white;">Incorporation</span> 
+						<span class="label label-info" style="color:#6bdb7e;background-color:white;">Seed</span>
+						<br />
+						<span class="label label-info" style="color:#69D2E7;background-color:white;">Incorporation</span>
 						<br />
 						<span class="label label-info" style="color:#f88172;background-color:white;">IP</span>
 						<br />
@@ -255,7 +253,7 @@ $(document).ready(function () {
 
 
 	$('.comment').popover({ html : true});
-	
+
 
 	$("a.comment").click(function() {
 	    $(this).toggleClass('faded');
@@ -358,7 +356,7 @@ $(document).ready(function () {
 			{
 				value : {{ object.data.volume_ip|jsonify }},
 				color : "#f88172"
-			}			
+			}
 		]);
 		$("#graph-type-placeholder").hide();
 		$("#type-legend").css({ opacity: 1 });
