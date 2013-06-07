@@ -109,7 +109,7 @@ var GlyntProfileCards = {
         var self = this;
         var profile_html = null;
         var extra_context = self.extra_context || {}
-
+console.log(profile)
         $.each(self.profile_params[profile.username], function(i,params){
             var template = params.template || 'default'
 
@@ -153,10 +153,13 @@ var GlyntProfileCards = {
     ,render: function render(usernames) {
         var self = this;
         var profile_set = self.profile_params.select(usernames) || self.profile_params
+console.log('rdenr')
+console.log(profile_set)
         // loop over each of the users and their defined set of variables
         $.each(profile_set, function(username,target_params){
             // loop over each instance of this users profile tags on the page
             // and populate with appropriate template
+console.log(username +' has: '+target_params)
             $.each(target_params, function(i,params){
                 var target = params.target;
                 var target_profile_html = self.profile(username, params.template);
@@ -189,44 +192,82 @@ var GlyntProfileCards = {
     }
     ,users: function users(usernames) {
         var self = this;
-        var url = self.profile_api_url.assign({'username_list': usernames.compact()})
-        $.ajax({
-            type: 'GET',
-            url: url,
+        // remove usernames that are already present
+        var usernames = self.usernames.find(function(u){
+            return (self.profiles[u] === undefined)
         })
-        .success(function(data, textStatus, jqXHR) {
-
-            if (data.objects && data.objects.length > 0) {
-                // loop over elements and create the profiles
-                $.each(data.objects, function(i,profile){
-                    self.add_profile(profile);
-                });
-                self.render(usernames);
-            }
-        });
+        // only get the usernames we DONT have from the api
+        if (usernames && usernames.length > 0) {
+            var url = self.profile_api_url.assign({'username_list': usernames})
+            $.ajax({
+                type: 'GET',
+                url: url,
+            })
+            .success(function(data, textStatus, jqXHR) {
+                if (data.objects && data.objects.length > 0) {
+                    // loop over elements and create the profiles
+                    $.each(data.objects, function(i,profile){
+                        self.add_profile(profile);
+                    });
+                }
+            });
+        }
+        self.render();
     }
-    ,init: function init() {
+    ,listen: function listen() {
         var self = this;
-        // loop over our selector elements and try to get their info
-        $.each($(self.selector), function(i, item){
-            var elem = $(item)
-            var username = elem.attr('data-username');
-            var action = elem.attr('data-action') || 'inject';
-            var template = elem.attr('data-template') || 'default';
-            var target = elem.attr('data-target') || elem; // if target specified make jquery object and use other use simply user the current element
 
+        $(self.selector).live('DOMNodeInserted', function(event){
+            console.log('live.load')
+            var elem = $(event.target);
+            self.parse_element(elem);
+            self.users([elem.attr('data-username')])
+        })
+    }
+    ,add_username: function add_username(username) {
+        var self = this;
+        if (self.usernames.find(username) == undefined) {
             self.usernames.push(username);
+            self.usernames = self.usernames.compact();
+            self.usernames = self.usernames.unique();
+        }
+    }
+    ,parse_element: function parse_element(item) {
+        var self = this;
+        var elem = $(item)
+        var username = elem.attr('data-username');
+        var action = elem.attr('data-action') || 'inject';
+        var template = elem.attr('data-template') || 'default';
+        var target = elem.attr('data-target') || elem; // if target specified make jquery object and use other use simply user the current element
 
-            // ensure is a list
-            self.profile_params[username] = (self.profile_params[username] === undefined) ? [] : self.profile_params[username] ;
+        self.add_username(username);
 
+        // ensure is a list
+        self.profile_params[username] = (self.profile_params[username] === undefined) ? [] : self.profile_params[username] ;
+
+        // test if the template object is already present
+        var is_already_present = self.profile_params[username].find(function(p){
+            return (p.action == action && p.template == template)
+        })
+
+        // only add this item if we dont already have it
+        if (is_already_present === undefined) {
+            // add dict to list for this username
             self.profile_params[username].push({
                 'action': action
                 ,'template': template
                 ,'target': target
             });
+        }
+    }
+    ,init: function init() {
+        var self = this;
+        // loop over our selector elements and try to get their info
+        $.each($(self.selector), function(i, item){
+            self.parse_element(item)
         });
-        self.find_all()
+        self.listen();
+        self.find_all();
     }
 }
 
@@ -238,14 +279,5 @@ var GlyntStartupProfileCards = $.extend({}, GlyntProfileCards, {
 $(document).ready(function(){
     GlyntProfileCards.init()
     GlyntStartupProfileCards.init()
-
-    $('.js-comments-form').submit(function() {
-        $(document).ajaxComplete(function(event, xhr, settings) {
-            if ( settings.url === "/comments/post/ajax/" ) {
-                GlyntProfileCards.init()
-                GlyntStartupProfileCards.init()
-            }
-        })
-    });
 });
 </script>
