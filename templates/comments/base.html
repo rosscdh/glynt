@@ -1,10 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>{% block title %}{% endblock %}</title>
-</head>
-<body>
+{% extends "base.html" %}{% load url from future %}{% load i18n %}
+
+{% block title %}{% trans "Messaging" %}{% endblock %}
+
+{% block prebody %}
+<div class="hero hero-thin">
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <h1>Your Messages</h1>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
   {% block content %}{% endblock %}
-</body>
-</html>
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/theme/engage.css">
+{% endblock %}
