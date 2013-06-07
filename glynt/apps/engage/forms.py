@@ -2,9 +2,9 @@
 from django import forms
 from bootstrap.forms import BootstrapMixin
 
-from postman.forms import WriteForm
-from postman.fields import CommaSeparatedUserField
-from postman.utils import WRAP_WIDTH
+# from postman.forms import WriteForm
+# from postman.fields import CommaSeparatedUserField
+# from postman.utils import WRAP_WIDTH
 
 from parsley.decorators import parsleyfy
 
@@ -15,9 +15,9 @@ logger = logging.getLogger('django.request')
 
 
 @parsleyfy
-class EngageWriteMessageForm(WriteForm):
-    recipients = CommaSeparatedUserField(label='Recipient', required=True, widget=forms.HiddenInput)
-    body = forms.CharField(required=True, widget=forms.Textarea(attrs={'cols': WRAP_WIDTH, 'rows': 12}))
+class EngageWriteMessageForm(forms.Form):
+    #recipients = CommaSeparatedUserField(label='Recipient', required=True, widget=forms.HiddenInput)
+    body = forms.CharField(required=True, widget=forms.Textarea(attrs={'cols': 6, 'rows': 12}))
 
     def __init__(self, *args, **kwargs):
         """ get request object and user """
