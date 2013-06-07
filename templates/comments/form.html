@@ -1,0 +1,16 @@
+
+{% load comments fluent_comments_tags i18n %}
+
+<form action="{% comment_form_target %}" data-ajax-action="{% url 'comments-post-comment-ajax' %}" method="POST" class="js-comments-form comments-form form-wide clearfix">{% csrf_token %}
+    {% if form.comment.errors %}{{ form.comment.errors }}{% endif %}
+    <label for="id_comment">Respond to latest comment</label>
+    <textarea cols="40" id="id_comment" name="comment" rows="10" placeholder="Your response"></textarea>
+    {{ form.honeypot }}
+    {{ form.content_type }}
+    {{ form.object_pk }}
+    {{ form.timestamp }}
+    {{ form.security_hash }}
+    {% if next %}<div><input type="hidden" name="next" value="{{ next }}" /></div>{% endif %}
+    <button id="btn-save_comment" class="btn btn-primary pull-right" type="submit">Respond Now</button>
+    {% ajax_comment_tags %}
+</form>
