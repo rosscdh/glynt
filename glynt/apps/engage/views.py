@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse
-from django.views.generic import FormView, DetailView, ListView
+from django.views.generic import FormView, DetailView, ListView, UpdateView
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 
@@ -10,6 +10,9 @@ from glynt.apps.utils import _get_referer, AjaxableResponseMixin
 from glynt.apps.lawyer.models import Lawyer
 from glynt.apps.startup.services import EnsureFounderService
 from bunches import StartupEngageLawyerBunch
+
+from notifications import notify
+import user_streams
 
 from forms import EngageWriteMessageForm, EngageStartupLawyerForm
 from models import Engagement
@@ -148,9 +151,20 @@ class EngagementView(DetailView):
         return obj
 
 
+class CloseEngagementView(AjaxableResponseMixin, UpdateView):
+    model = Engagement
+    http_method_names = [u'post']
+
+    def post(self, request, *args, **kwargs):
+        assert False
+        if request.is_ajax():
+            self.object = self.get_object()
+            self.object.close(actioning_user=request.user)
+        return self.render_to_json_response({}, pk=self.object.pk)
+
+
 class MyEngagementsView(ListView):
     model = Engagement
-
     def get_queryset(self):
         """"""
         user = self.request.user

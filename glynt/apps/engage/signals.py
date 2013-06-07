@@ -41,4 +41,6 @@ def save_engage_comment_signal(sender, **kwargs):
                 notify.send(comment.user, recipient=to_user, verb=u'replied', action_object=comment,
                             description=comment.comment, target=engagement, engagement_pk=engagement.pk, lawyer_pk=engagement.lawyer.user.pk, founder_pk=engagement.founder.user.pk)
                 # Log activity to stream
-                user_streams.add_stream_item(comment.user, '%s commented on the engagement', engagement)
+                description = '%s commented on the engagement' % comment.user
+                user_streams.add_stream_item(to_user, description, engagement)
+                user_streams.add_stream_item(comment.user, description, engagement)

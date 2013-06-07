@@ -67,6 +67,14 @@ class ClientProfile(UserenaBaseProfile):
     def is_founder(self):
         return True if self.user_class == 'founder' else False
 
+    @property
+    def non_specific_title(self):
+        if self.is_lawyer:
+            return 'The Lawyer'
+        if self.is_founder:
+            return 'The Founder'
+        return None
+
     def short_name(self):
         """ Returns A. LastName """
         user = self.user

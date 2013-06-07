@@ -25,11 +25,12 @@
         </h3>
         <span>{{ object.date_created }}</span>
         <hr />
-
         {% render_comment_form for object %}
         <hr>
         <h5>Conversation history (most recent at the top)</h5>
+
         {% render_comment_list_reversed for object %}
+
         {% engagement_intro enagement=object %}
     </div>
     <div class="span4 side-info-container">
@@ -51,14 +52,13 @@
                 <h3>Warning</h3>
             </div>
             <div class="modal-body">
-            <p>You are you want to close this lead?</p>
+                <p>You are you want to close this lead?</p>
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" aria-hidden="true" class="btn secondary">No</button>
+                <a href="#close-engagement" id="btn-confirm-close-engagement" data-url="{% url 'engage:close' pk=object.pk %}" class="btn btn-danger">Yes</a>
+            </div>
         </div>
-        <div class="modal-footer">
-            <button data-dismiss="modal" aria-hidden="true" class="btn secondary">No</button>
-            <a href="#close-engagement" class="btn btn-danger">Yes</a>
-        </div>
-</div>
-
     </div>
 </div>
 
@@ -77,7 +77,19 @@ var COMMENT_CONTROLS = {
     'is_reversed': true
 };
 
-
-
+$(document).ready(function(){
+    $('#btn-confirm-close-engagement').live('click', function(event){
+        event.preventDefault()
+        var csrf_token = $('input[name=csrfmiddlewaretoken]').val()
+        $.ajax({
+            type: 'POST',
+            url: $(this).attr('href'),
+            data: {'csrfmiddlewaretoken':csrf_token},
+        })
+        .complete(function(){
+            $('#close-engagement').modal('hide');
+        })
+    });
+});
 </script>
 {% endblock %}

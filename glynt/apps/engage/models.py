@@ -12,6 +12,8 @@ from glynt.apps.lawyer.models import Lawyer
 from bunches import StartupEngageLawyerBunch
 from managers import DefaultEngageManager
 
+import datetime
+
 from utils import *
 ENGAGEMENT_STATUS = get_namedtuple_choices('ENGAGEMENT_STATUS', (
     (0, 'new', 'New'),
@@ -39,6 +41,20 @@ class Engagement(models.Model):
 
     def get_absolute_url(self):
         return reverse('engage:engagement', kwargs={'pk':self.pk})
+
+    def close(self, actioning_user):
+        recipient = self.founder.user if actioning_user.profile.is_lawyer else self.lawyer.user
+
+        self.engagement_status = ENGAGEMENT_STATUS.closed
+        self.save(update_fields=['engagement_status'])
+
+        # send notification
+        description = '%s (%s) closed the Engagement' % (actioning_user.profile.non_specific_title, actioning_user)
+        notify.send(actioning_user, recipient=recipient, verb=u'closed', action_object=self,
+                    description=description, target=self, engagement_pk=self.pk, closed_by=actioning_user, directed_at=recipient, lawyer_pk=self.lawyer.user.pk, founder_pk=self.founder.user.pk, date_closed=datetime.datetime.utcnow())
+        # Log activity to stream
+        user_streams.add_stream_item(recipient, description, engagement)
+        user_streams.add_stream_item(actioning_user, description, engagement)
 
     @property
     def status(self):
