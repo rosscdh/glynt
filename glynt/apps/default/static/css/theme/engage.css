@@ -317,3 +317,13 @@ div.side-info-container dd {
 .message-right .comment-date {
     margin: .5em 5.7em 2em 0;
 }
+
+.close-lead {
+    display: block;
+    text-align: center;
+}
+
+.close-lead:hover {
+    text-decoration: none;
+    color: #e76356;
+}
