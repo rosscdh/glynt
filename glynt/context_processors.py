@@ -28,3 +28,11 @@ def USE_THREADEDCOMMENTS(request):
     return {
         'USE_THREADEDCOMMENTS': True if 'threadedcomments' in settings.INSTALLED_APPS else False
     }
+
+def notification_unread(request):
+    num_unread = 0
+    if request.user.is_authenticated():
+        num_unread = len(request.user.notifications.unread())
+    return {
+        'notification_unread': num_unread
+    }

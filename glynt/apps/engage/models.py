@@ -52,3 +52,7 @@ class Engagement(models.Model):
     def engagement_types(self):
         engagement_types = [('engage_for_general','General'), ('engage_for_incorporation','Incorporation'), ('engage_for_ip','Intellectual Property'), ('engage_for_employment','Employment Law'), ('engage_for_fundraise','Fundraising'), ('engage_for_cofounders','Co-Founder')]
         return [(self.data.get(r,False),name) for r,name in engagement_types if self.data.get(r,False)]
+
+
+# import signals so they load on django load
+from signals import save_engage_comment_signal

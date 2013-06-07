@@ -141,6 +141,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "glynt.context_processors.project_info",
     "glynt.context_processors.project_environment",
     "glynt.context_processors.default_profile_image",
+    "glynt.context_processors.notification_unread",
     "glynt.context_processors.USE_THREADEDCOMMENTS",
     "social_auth.context_processors.social_auth_by_type_backends",
     "social_auth.context_processors.social_auth_by_name_backends",
@@ -290,6 +291,7 @@ INSTALLED_APPS = DJANGO_APPS + HELPER_APPS + PROJECT_APPS
 
 COMMENTS_APP = 'fluent_comments'
 #FLUENT_COMMENTS_EXCLUDE_FIELDS = ('subject',)
+NOTIFY_USE_JSONFIELD = True
 
 LOGIN_URL          = '/'
 LOGIN_REDIRECT_URL = '/logged-in/'
