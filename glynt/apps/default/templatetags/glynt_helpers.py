@@ -193,6 +193,9 @@ handlebars_messages.is_safe = True
 
 @register.inclusion_tag('partials/profile_cards.js', takes_context=True)
 def profile_cards(context, **kwargs):
+    kwargs.update({
+        'DEBUG': settings.DEBUG
+    })
     context.update(kwargs)
     return context
 profile_cards.is_safe = True
