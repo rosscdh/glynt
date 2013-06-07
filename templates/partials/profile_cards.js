@@ -75,10 +75,6 @@
         <dt>Phone</dt>
         <dd>{{profile.phone}}</dd>
         {{/if}}
-        <dt>Summary</dt>
-        <dd>
-            {{ profile.summary }}
-        </dd>
         <dt>Startups</dt>
         {{#each profile.startups }}
         <dd>
