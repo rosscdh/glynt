@@ -2,9 +2,17 @@
 
 {% block page_title %}Engagement Request{% endblock %}
 
+{% block breadcrumb %}
+<ul class="breadcrumb">
+    <li><a href="/">Home</a> <span class="divider">/</span></li>
+    <li><a href="{% url 'engage:list' %}">Inbox</a> <span class="divider">/</span></li>
+    <li class="active">{% if user.profile.is_founder %}Request to: {{ object.lawyer.user.get_full_name }}{% else %}Request from: {{ object.founder.user.get_full_name }}{% endif %}</li>
+</ul>
+{% endblock %}
+
 {% block content %}
 <div class="row">
-    <div class="span7">
+    <div class="span8">
         <div class="alert engagement-status">
             <span>Request status: <strong>{{ object.status }}</strong></span>
         </div>
@@ -24,7 +32,7 @@
         {% render_comment_list_reversed for object %}
         {% engagement_intro enagement=object %}
     </div>
-    <div class="span3 side-info-container">
+    <div class="span4 side-info-container">
         <div class="well">
             {% if user.profile.is_founder %}
             <div class="profile-card" data-username="{{ object.lawyer.user.username }}">&nbsp;</div>

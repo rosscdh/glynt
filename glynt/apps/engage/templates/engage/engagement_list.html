@@ -2,11 +2,15 @@
 {% load url from future %}
 {% load i18n postman_tags %}{% load pagination_tags %}
 
+{% block breadcrumb %}
+<ul class="breadcrumb">
+    <li><a href="/">Home</a> <span class="divider">/</span></li>
+    <li class="active">Inbox</li>
+</ul>
+{% endblock %}
+
 {% block content %}
 {#% autopaginate object_list %#}
-
-<div class="row">
-    <div class="span10">
     {% if invalid_page %}
 
     <p>{% trans "Sorry, this page number is invalid." %}</p>
@@ -45,6 +49,5 @@
 
     {% endif %}
     {% block pm_footer_info %}{% endblock %}
-    </div>
-</div>
+
 {% endblock content %}

@@ -19,7 +19,7 @@
 .message-list {
     list-style: none;
     border-top: 1px solid #f2f2f2;
-    margin-top: 1em;
+    margin: 1em 0 0;
 }
 
 .message-list li {

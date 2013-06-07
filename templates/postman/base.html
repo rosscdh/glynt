@@ -16,23 +16,22 @@
 {% endblock %}
 
 {% block body %}
-<div class="row">
-  <div class="span2">
-    <ul id="postman_menu" class="nav nav-pills nav-stacked">{% postman_unread as unread_count %}
+  <!-- <div class="span2">
+        <ul id="postman_menu" class="nav nav-pills nav-stacked">{% postman_unread as unread_count %}
         {% url 'engage:list' as url %}
         {% if request.user.profile.is_founder %}
             <li {% if request.path == url %} class="active"{% endif %}><a href="{% url 'engage:list' %}"><i class="icon-star"></i> {% trans "Requests" %}</a></li>
         {% else %}
                 <li {% if request.path == url %} class="active"{% endif %}><a href="{% url 'engage:list' %}"><i class="icon-star"></i> {% trans "Leads" %}</a></li>
         {% endif %}
-<!--         {% url 'postman_inbox' as url %}
+         {% url 'postman_inbox' as url %}
         <li {% if request.path == url %} class="active"{% endif %}><a href="{% url 'postman_inbox' %}"><i class="icon-inbox"></i> {% trans "Inbox" %}{% if unread_count %} <span class="badge badge-important unread-messages"> {{ unread_count }}</span>{% endif %}</a></li>
         {% url 'postman_trash' as url %}
-        <li {% if request.path == url %} class="active"{% endif %}><a href="{% url 'postman_trash' %}"><i class="icon-trash"></i>{% trans "Trash" %}</a></li> -->
+        <li {% if request.path == url %} class="active"{% endif %}><a href="{% url 'postman_trash' %}"><i class="icon-trash"></i>{% trans "Trash" %}</a></li>
     </ul>
-  </div>
-  <div class="span10">{% block content %}{% endblock %}</div>
-</div>
+  </div> -->
+  {% block content %}{% endblock %}
+
 {% endblock %}
 
 {% block css %}
