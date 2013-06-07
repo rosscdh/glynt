@@ -19,7 +19,7 @@
 .message-list {
     list-style: none;
     border-top: 1px solid #f2f2f2;
-    margin-top: 1em;
+    margin: 1em 0 0;
 }
 
 .message-list li {
@@ -316,4 +316,14 @@ div.side-info-container dd {
 
 .message-right .comment-date {
     margin: .5em 5.7em 2em 0;
+}
+
+.close-lead {
+    display: block;
+    text-align: center;
+}
+
+.close-lead:hover {
+    text-decoration: none;
+    color: #e76356;
 }

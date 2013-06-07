@@ -2,11 +2,15 @@
 {% load url from future %}
 {% load i18n postman_tags %}{% load pagination_tags %}
 
+{% block breadcrumb %}
+<ul class="breadcrumb">
+    <li><a href="/">Home</a> <span class="divider">/</span></li>
+    <li class="active">Inbox</li>
+</ul>
+{% endblock %}
+
 {% block content %}
 {#% autopaginate object_list %#}
-
-<div class="row">
-    <div class="span10">
     {% if invalid_page %}
 
     <p>{% trans "Sorry, this page number is invalid." %}</p>
@@ -25,7 +29,9 @@
                         <span class="message-date">{{ message.date_created|date:"d M" }}</span>
                         <span class="label engage-status engage-status-{{ message.status|lower }}">{{ message.status }}</span>
                         {% else %}
-                        <span class="profile-card" data-template="mini" data-username="{{message.founder.user.username}}">&nbsp;</span>
+                        <span class="profile-card" data-template="mini" data-username="{{message.founder.user.username}}">
+                            <img src="{{ STATIC_URL }}img/default_avatar.png" class="avatar">
+                        </span>
                         <span class="message-sender">{{ message.startup }} @ {{ message.founder.user.get_full_name }}</span>
                         <span class="message-date">{{ message.date_created|date:"d M" }}</span>
                         <span class="label engage-status engage-status-{{ message.status|lower }}">{{ message.status }}</span>
@@ -43,6 +49,5 @@
 
     {% endif %}
     {% block pm_footer_info %}{% endblock %}
-    </div>
-</div>
+
 {% endblock content %}

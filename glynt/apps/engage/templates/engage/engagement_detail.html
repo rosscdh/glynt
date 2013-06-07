@@ -2,9 +2,17 @@
 
 {% block page_title %}Engagement Request{% endblock %}
 
+{% block breadcrumb %}
+<ul class="breadcrumb">
+    <li><a href="/">Home</a> <span class="divider">/</span></li>
+    <li><a href="{% url 'engage:list' %}">Inbox</a> <span class="divider">/</span></li>
+    <li class="active">{% if user.profile.is_founder %}Request to: {{ object.lawyer.user.get_full_name }}{% else %}Request from: {{ object.founder.user.get_full_name }}{% endif %}</li>
+</ul>
+{% endblock %}
+
 {% block content %}
 <div class="row">
-    <div class="span7">
+    <div class="span8">
         <div class="alert engagement-status">
             <span>Request status: <strong>{{ object.status }}</strong></span>
         </div>
@@ -24,7 +32,7 @@
         {% render_comment_list_reversed for object %}
         {% engagement_intro enagement=object %}
     </div>
-    <div class="span3 side-info-container">
+    <div class="span4 side-info-container">
         <div class="well">
             {% if user.profile.is_founder %}
             <div class="profile-card" data-username="{{ object.lawyer.user.username }}">&nbsp;</div>
@@ -34,6 +42,23 @@
             <div class="profile-card" data-username="{{ object.founder.user.username }}">&nbsp;</div>
             {% endif %}
         </div>
+
+        <a href="#close-engagement" data-toggle="modal" class="close-lead"><i class="icon icon-remove"></i> Close this Lead</a>
+
+        <div id="close-engagement" class="modal hide fade" role="dialog" aria-labelledby="close engagement" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3>Warning</h3>
+            </div>
+            <div class="modal-body">
+            <p>You are you want to close this lead?</p>
+        </div>
+        <div class="modal-footer">
+            <button data-dismiss="modal" aria-hidden="true" class="btn secondary">No</button>
+            <a href="#close-engagement" class="btn btn-danger">Yes</a>
+        </div>
+</div>
+
     </div>
 </div>
 
@@ -49,7 +74,10 @@
 * @LawPal contributed this functionality
 **/
 var COMMENT_CONTROLS = {
-    'is_reversed': true,
-}
+    'is_reversed': true
+};
+
+
+
 </script>
 {% endblock %}
