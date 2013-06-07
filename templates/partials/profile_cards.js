@@ -198,35 +198,52 @@ var GlyntProfileCards = {
     /**
     * method exists as a wrapper to allow us to perform lookups in sets of 10 at a time
     */
-    ,find_by_batch: function find_by_batch() {
+    ,find_by_batch: function find_by_batch(usernames) {
         var self = this;
         // uniquify
-        self.usernames.unique()
+        username_items = usernames || self.usernames
+
         // get the list of items
-        $.each(self.usernames.inGroupsOf(10), function(i, item_set){
+        $.each(username_items.unique().inGroupsOf(10), function(i, item_set){
             // perform ajax query
             self.query_api(item_set);
         });
     }
+    /**
+    * Extract set of usernames from the provided list, that we dont already have
+    */
+    ,usernames_to_fetch: function usernames_to_fetch(usernames) {
+        var self = this;
+        present_usernames = Object.keys(self.profiles);
+        return usernames.subtract(present_usernames);
+    }
+    /**
+    * Get the json from the api
+    */
     ,query_api: function query_api(usernames) {
         var self = this;
+        // remove usernames we already have
+        usernames = self.usernames_to_fetch(usernames);
+
         var url = self.profile_api_url.assign({'username_list': usernames})
 
-        $.ajax({
-            type: 'GET',
-            url: url,
-        })
-        .success(function(data, textStatus, jqXHR) {
-            if (data.objects && data.objects.length > 0) {
-                // loop over elements and create the profiles
-                $.each(data.objects, function(i,profile){
-                    self.add_profile(profile);
-                });
-            }
-        })
-        .complete(function(){
-            self.inject();
-        });
+        if (usernames.length > 0) {
+            $.ajax({
+                type: 'GET',
+                url: url,
+            })
+            .success(function(data, textStatus, jqXHR) {
+                if (data.objects && data.objects.length > 0) {
+                    // loop over elements and create the profiles
+                    $.each(data.objects, function(i,profile){
+                        self.add_profile(profile);
+                    });
+                }
+            })
+            .complete(function(){
+                self.inject();
+            });
+        }
     }
     ,store_profile_params: function store_profile_params(params) {
         var self = this;
@@ -267,17 +284,17 @@ var GlyntProfileCards = {
     ,listen: function listen() {
         var self = this;
 
-        // $(self.selector).live('DOMNodeInserted', function(event){
+        $(self.selector).live('DOMNodeInserted', function(event){
 
-        //     var item = event.target;
-        //     var elem = $(item)
+            var item = event.target;
+            var elem = $(item)
 
-        //     if (elem.is(self.selector)) {
-        //         //self.log(elem)
-        //         // self.parse_element(item);
-        //         // self.find_by_batch([elem.attr('data-username')]);
-        //     }
-        // })
+            if (elem.is(self.selector)) {
+                //self.log(elem)
+                self.parse_element(item);
+                //self.find_by_batch([elem.attr('data-username')]);
+            }
+        })
     }
     ,init: function init() {
         var self = this;
