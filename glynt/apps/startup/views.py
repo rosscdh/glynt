@@ -54,11 +54,11 @@ class StartupProfileSetupView(FormView):
             'website': startup.website,
             'summary': startup.summary,
             
-            'already_incorporated': self.founder.data.get('already_incorporated', False),
-            'already_raised_capital': self.founder.data.get('already_raised_capital', False),
-            'process_raising_capital': self.founder.data.get('process_raising_capital', False),
+            'already_incorporated': startup.data.get('already_incorporated', False),
+            'already_raised_capital': startup.data.get('already_raised_capital', False),
+            'process_raising_capital': startup.data.get('process_raising_capital', False),
 
-            'incubator_or_accelerator_name': self.founder.data.get('incubator_or_accelerator_name'),
+            'incubator_or_accelerator_name': startup.data.get('incubator_or_accelerator_name'),
 
             'agree_tandc': self.founder.data.get('agree_tandc', False),
         }})
