@@ -48,8 +48,9 @@ def save_engagement_comment_signal(sender, dispatch_uid='engagement.save_engagem
         if is_new:
             # mark notifications as read
             """ @BUSINESSRULE mark lawyer engagement notifications to read: only once they respond """
-            if comment.user.profile.is_lawyer:
-                mark_engagement_notifications_as_read(user=comment.user, engagement=engagement)
+            # commented out and made it when the lawyer views the engagement the same as for founders
+            # if comment.user.profile.is_lawyer:
+            #     mark_engagement_notifications_as_read(user=comment.user, engagement=engagement)
 
             """ @BUSINESSRULE if the engagement request is marked "new" then set it to open only once the lawyer responds """
             if engagement.engagement_status == ENGAGEMENT_STATUS.new:

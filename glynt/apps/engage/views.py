@@ -154,8 +154,8 @@ class EngagementView(DetailView):
 
     def render_to_response(self, context, **response_kwargs):
         """ @BUSINESSRULE if the viewing user is a founder, then mark their engagement notifications as read when they simply view the engagement """
-        if self.object.founder.user == self.request.user:
-            mark_engagement_notifications_as_read(user=self.object.founder.user, engagement=self.object)
+        #if self.object.founder.user == self.request.user:
+        mark_engagement_notifications_as_read(user=self.request.user, engagement=self.object)
 
         return super(EngagementView, self).render_to_response(context, **response_kwargs)
 
