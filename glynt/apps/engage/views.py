@@ -9,6 +9,7 @@ from glynt.apps.utils import _get_referer, AjaxableResponseMixin
 
 from glynt.apps.lawyer.models import Lawyer
 from glynt.apps.startup.services import EnsureFounderService
+
 from bunches import StartupEngageLawyerBunch
 
 from notifications import notify
@@ -16,6 +17,7 @@ import user_streams
 
 from forms import EngageWriteMessageForm, EngageStartupLawyerForm
 from models import Engagement
+from signals import mark_engagement_notifications_as_read
 
 import logging
 logger = logging.getLogger('django.request')
@@ -150,17 +152,31 @@ class EngagementView(DetailView):
                           {'verbose_name': queryset.model._meta.verbose_name})
         return obj
 
+    def render_to_response(self, context, **response_kwargs):
+        """ @BUSINESSRULE if the viewing user is a founder, then mark their engagement notifications as read when they simply view the engagement """
+        if self.object.founder.user == self.request.user:
+            mark_engagement_notifications_as_read(user=self.object.founder.user, engagement=self.object)
+
+        return super(EngagementView, self).render_to_response(context, **response_kwargs)
+
 
 class CloseEngagementView(AjaxableResponseMixin, UpdateView):
     model = Engagement
     http_method_names = [u'post']
 
     def post(self, request, *args, **kwargs):
-        assert False
         if request.is_ajax():
             self.object = self.get_object()
-            self.object.close(actioning_user=request.user)
-        return self.render_to_json_response({}, pk=self.object.pk)
+            message = self.object.close(actioning_user=request.user)
+        return self.render_to_json_response({'message': message, 'status': 200, 'instance': {'pk': self.object.pk, 'link': self.object.get_absolute_url()}})
+
+
+class ReOpenEngagementView(CloseEngagementView):
+    def post(self, request, *args, **kwargs):
+        if request.is_ajax():
+            self.object = self.get_object()
+            message = self.object.reopen(actioning_user=request.user)
+        return self.render_to_json_response({'message': message, 'status': 200, 'instance': {'pk': self.object.pk, 'link': self.object.get_absolute_url()}})
 
 
 class MyEngagementsView(ListView):
@@ -170,10 +186,15 @@ class MyEngagementsView(ListView):
         user = self.request.user
         queryset = self.model.objects
         fltr = {}
+
         if user.profile.is_lawyer:
             fltr.update({'lawyer': user.lawyer_profile})
-        #elif user.profile.is_founder:
-        else:
+        elif user.profile.is_founder:
             fltr.update({'founder': user.founder_profile})
+        else:
+            """@BUSINESSRULE if they are neither a founder not a startup show them nothign
+            @TODO this should all be in a manager """
+            # is not a valid user type, show them nothing
+            fltr.update({'pk': -1})
 
         return queryset.filter(**fltr)
