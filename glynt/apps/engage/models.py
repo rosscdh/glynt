@@ -3,6 +3,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 
+from notifications import notify
+import user_streams
+
 from jsonfield import JSONField
 from glynt.apps.utils import get_namedtuple_choices
 
@@ -42,7 +45,25 @@ class Engagement(models.Model):
     def get_absolute_url(self):
         return reverse('engage:engagement', kwargs={'pk':self.pk})
 
+    def open(self, actioning_user):
+        """ @TODO turn this into utility mixins """
+        recipient = self.founder.user if actioning_user.profile.is_lawyer else self.lawyer.user
+
+        self.engagement_status = ENGAGEMENT_STATUS.open
+        self.save(update_fields=['engagement_status'])
+
+        # send notification
+        description = '%s (%s) opened the Engagement' % (actioning_user.profile.non_specific_title, actioning_user)
+        notify.send(actioning_user, recipient=recipient, verb=u'closed', action_object=self,
+                    description=description, target=self, engagement_pk=self.pk, closed_by=actioning_user.pk, directed_at=recipient.pk, lawyer_pk=self.lawyer.user.pk, founder_pk=self.founder.user.pk, date_closed=datetime.datetime.utcnow())
+        # Log activity to stream
+        user_streams.add_stream_item(recipient, description, self)
+        user_streams.add_stream_item(actioning_user, description, self)
+
+        return description
+
     def close(self, actioning_user):
+        """ @TODO turn this into utility mixins """
         recipient = self.founder.user if actioning_user.profile.is_lawyer else self.lawyer.user
 
         self.engagement_status = ENGAGEMENT_STATUS.closed
@@ -51,10 +72,41 @@ class Engagement(models.Model):
         # send notification
         description = '%s (%s) closed the Engagement' % (actioning_user.profile.non_specific_title, actioning_user)
         notify.send(actioning_user, recipient=recipient, verb=u'closed', action_object=self,
-                    description=description, target=self, engagement_pk=self.pk, closed_by=actioning_user, directed_at=recipient, lawyer_pk=self.lawyer.user.pk, founder_pk=self.founder.user.pk, date_closed=datetime.datetime.utcnow())
+                    description=description, target=self, engagement_pk=self.pk, closed_by=actioning_user.pk, directed_at=recipient.pk, lawyer_pk=self.lawyer.user.pk, founder_pk=self.founder.user.pk, date_closed=datetime.datetime.utcnow())
         # Log activity to stream
-        user_streams.add_stream_item(recipient, description, engagement)
-        user_streams.add_stream_item(actioning_user, description, engagement)
+        user_streams.add_stream_item(recipient, description, self)
+        user_streams.add_stream_item(actioning_user, description, self)
+
+        return description
+
+    def reopen(self, actioning_user):
+        """ @TODO turn this into utility mixins """
+        recipient = self.founder.user if actioning_user.profile.is_lawyer else self.lawyer.user
+
+        self.engagement_status = ENGAGEMENT_STATUS.open
+        self.save(update_fields=['engagement_status'])
+
+        # send notification
+        description = '%s (%s) re-opened the Engagement' % (actioning_user.profile.non_specific_title, actioning_user)
+        notify.send(actioning_user, recipient=recipient, verb=u're-opened', action_object=self,
+                    description=description, target=self, engagement_pk=self.pk, closed_by=actioning_user.pk, directed_at=recipient.pk, lawyer_pk=self.lawyer.user.pk, founder_pk=self.founder.user.pk, date_closed=datetime.datetime.utcnow())
+        # Log activity to stream
+        user_streams.add_stream_item(recipient, description, self)
+        user_streams.add_stream_item(actioning_user, description, self)
+
+        return description
+
+    @property
+    def is_open(self):
+        return ENGAGEMENT_STATUS.open == self.engagement_status
+
+    @property
+    def is_closed(self):
+        return ENGAGEMENT_STATUS.closed == self.engagement_status
+
+    @property
+    def is_new(self):
+        return ENGAGEMENT_STATUS.new == self.engagement_status
 
     @property
     def status(self):
@@ -71,4 +123,4 @@ class Engagement(models.Model):
 
 
 # import signals so they load on django load
-from signals import save_engage_comment_signal
+from signals import save_engagement_comment_signal
