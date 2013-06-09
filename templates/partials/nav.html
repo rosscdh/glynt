@@ -94,7 +94,8 @@
         padding: 0;
     }
 
-    .navbar .unread-messages {
+    /*# navbar && any other span etc marked as unread-messages*/
+    .navbar .unread-messages, .unread-messages {
         color: #fff;
         position: absolute;
         background: #ae564e;
@@ -116,6 +117,11 @@
         height: 37px;
         margin: 0 .4em 0 .8em;
 
+    }
+
+    span.unread-messages {
+        top: 12px;
+        left: 0px;
     }
 
 </style>
