@@ -20,4 +20,8 @@ class StartupProfileBunch(Bunch):
                     thumb_url = data.get('thumb_url'),
                     photo_url = data.get('photo_url'),
                     screenshots = [s for s in data.get('screenshots', [])],
+                    already_incorporated = data.get('already_incorporated', False),
+                    already_raised_capital = data.get('already_raised_capital', False),
+                    process_raising_capital = data.get('process_raising_capital', False),
+                    incubator_or_accelerator_name = data.get('incubator_or_accelerator_name'),
                 )

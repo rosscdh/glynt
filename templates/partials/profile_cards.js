@@ -15,24 +15,29 @@
         <dl>
             <dt>Website</dt>
             <dd><a href="{{ profile.website }}" target="_blank">{{ profile.website }} <i class="icon-share"></i></a></dd>
-            <!-- <dt>Founders</dt>
-            // <dd>...</dd> -->
             <dt>Summary</dt>
             <dd>
                 {{ profile.summary }}
             </dd>
-            {{#if profile.locations }}
-            <dt>Locations</dt>
-            <dd>
-            {{/if}}
+            <dt>
+                {{#if profile.already_incorporated }}Are already Incorporated{{ else }}Are not yet Incorporated{{/if}}
+            </dt>
+            
+            <dt>
+                {{#if profile.already_raised_capital }}Have already raised capital{{ else }}Have not yet raised capital{{/if}}
+            </dt>
+            <dt>
+                {{#if profile.process_raising_capital }}Are in the process of raising capital{{ else }}Are not yet trying to raising capital{{/if}}
+            </dt>
+            <dt>
+                {{#if profile.incubator_or_accelerator_name }}{{ profile.incubator_or_accelerator_name }}{{ else }} Are not part of an incubator or accelerator{{/if}}
+            </dt>
+            
             {{#each profile.locations }}
                 {{this}}
             {{/each}}
+
             </dd>
-            {{#if profile.twitter }}
-            <dt>Twitter</dt>
-            <dd><a href="http://twitter.com/{{ profile.twitter }}"><i class="icon-twitter"></i>{{ profile.twitter }}</a></dd>
-            {{/if}}
         </dl>
 {% endtplhandlebars %}
 
