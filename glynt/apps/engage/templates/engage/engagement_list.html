@@ -33,7 +33,6 @@
                         <span class="label engage-status engage-status-{{ message.status|lower }}">{{ message.status }}</span>
                         {% endif %}
                     </a>
-                    <a class="close hidden" href="/messages/delete/" data-message-id="{% if by_conversation and message.thread_id %}{{ message.thread_id }}{% else %}{{ message.id }}{% endif %}" data-message-type="{%  if  by_conversation and message.thread_id %}tpks{% else %}pks{% endif %}">&times;</a>
                 </li>
                 {% endfor %}
             </ul>
