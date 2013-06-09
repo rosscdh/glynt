@@ -51,8 +51,8 @@ SESSION_COOKIE_SECURE = True
 
 
 GOOGLE_DISPLAY_NAME = 'LawPal.com - Development'
-GOOGLE_OAUTH2_CLIENT_ID = '316492043888-ac8ngfmlkn9fapo9ovvvgng4esnujrvg.apps.googleusercontent.com'
-GOOGLE_OAUTH2_CLIENT_SECRET = 'BjKXmFGh7d98zvowf9B31Bqv'
+GOOGLE_OAUTH2_CLIENT_ID = '316492043888-mhcap930opo9uf2kj1rv9654odm6niqu.apps.googleusercontent.com'
+GOOGLE_OAUTH2_CLIENT_SECRET = 'bigxopHAtqIPyWp4D6Lb-H0s'
 GOOGLE_OAUTH_EXTRA_SCOPE = ['https://www.googleapis.com/auth/plus.me']
 
 FACEBOOK_API_KEY = '343632075713954'
