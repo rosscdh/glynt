@@ -374,12 +374,12 @@ div.side-info-container dd {
     margin: .5em 5.7em 2em 0;
 }
 
-.close-lead {
+#engagement-status-controls a {
     display: block;
     text-align: center;
 }
 
-.close-lead:hover {
+#engagement-status-controls a:hover {
     text-decoration: none;
     color: #e76356;
 }
