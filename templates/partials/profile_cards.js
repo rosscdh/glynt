@@ -86,7 +86,7 @@
 <script type="text/javascript">
 
 var GlyntProfileCards = {
-    debug: {% if DEBUG %}true{% else %}false{% endif %}
+    debug: false//{% if DEBUG %}true{% else %}false{% endif %}
     ,profile_api_url: '/api/v1/user/profile/?username__in={username_list}'
     ,selector: '.profile-card'
     ,extra_context: {}
@@ -289,17 +289,16 @@ var GlyntProfileCards = {
     ,listen: function listen() {
         var self = this;
 
-        $(self.selector).live('DOMNodeInserted', function(event){
-
-            var item = event.target;
-            var elem = $(item)
-
-            if (elem.is(self.selector)) {
-                //self.log(elem)
+        /**
+        * on dom insert, detect if that element contains an object that matches our selector
+        * if it does prepare the profile and inject them
+        */
+        document.addEventListener("DOMNodeInserted", function(event) {
+            $.each($(event.target).find(self.selector), function(i,item){
                 self.parse_element(item);
-                //self.find_by_batch([elem.attr('data-username')]);
-            }
-        })
+                self.find_by_batch([$(item).attr('data-username')])
+            })
+        });
     }
     ,init: function init() {
         var self = this;
