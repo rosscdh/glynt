@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
 from django import template
 from django.core.urlresolvers import reverse
+from django.db.models.query import QuerySet
+from django.db.models import Count
 
 register = template.Library()
 
+from notifications.models import Notification
+
 from glynt.apps.engage.models import Engagement
+from glynt.apps.engage.utils import ENGAGEMENT_CONTENT_TYPE
 
 
 @register.inclusion_tag('engage/partials/engagement_intro.html', takes_context=True)
@@ -35,7 +40,6 @@ def engagement_dict(context, user=None):
 
 @register.inclusion_tag('engage/partials/engagement_with_lawyer.html', takes_context=True)
 def engagement_with_lawyer(context, lawyer):
-
     context.update({
         'lawyer': lawyer,
     })
@@ -61,3 +65,22 @@ def is_lawyer_engaged_with_user(context, lawyer, user=None):
         lawyer_enganged = True
 
     return lawyer_enganged
+
+
+@register.inclusion_tag('engage/partials/user_engagement_notification_count.js', takes_context=False)
+def user_engagement_notification_count(user):
+    unread = {}
+    
+    # get a grouped by result set
+    unread_qs = Notification.objects.filter(recipient=user, unread=True, target_content_type=ENGAGEMENT_CONTENT_TYPE)
+
+    # build a nice jsonifyable dict
+    for u in unread_qs:
+        # target_object_id is the id of the content object (engagement)
+        if u.target_object_id not in unread:
+            unread[u.target_object_id] = unread.get(u.target_object_id, 1)
+        else:
+            unread[u.target_object_id] += 1
+    return {
+        'unread': unread
+    }
