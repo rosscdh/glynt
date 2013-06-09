@@ -86,7 +86,7 @@
 <script type="text/javascript">
 
 var GlyntProfileCards = {
-    debug: false//{% if DEBUG %}true{% else %}false{% endif %}
+    debug: {% if DEBUG %}true{% else %}false{% endif %}
     ,profile_api_url: '/api/v1/user/profile/?username__in={username_list}'
     ,selector: '.profile-card'
     ,extra_context: {}
@@ -306,7 +306,6 @@ var GlyntProfileCards = {
         self.listen();
 
         // loop over our selector elements and try to get their info
-        console.log(self.selector)
         $.each($(self.selector), function(i, item){
             self.parse_element(item)
         });
