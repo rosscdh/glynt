@@ -1,7 +1,7 @@
 {% load templatetag_handlebars jsonify %}
 
 {% tplhandlebars "tpl-unread-count" %}
-<span class="offset10 unread-messages">{{ unread }}</span>
+({{ unread }})
 {% endtplhandlebars %}
 
 <script id="user_engagement_notification_count" type="application/json">
@@ -18,7 +18,7 @@ $(document).ready(function(){
         var unread = user_engagement_notification_count[pk];
         if (unread && unread >= 1) {
             html = unread_template({'unread': unread});
-            elem.append(html)
+            elem.addClass('engage-new-message').find('.message-sender').append(html)
         }
     })
 });

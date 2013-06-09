@@ -130,6 +130,62 @@ li.engage-status-closed {
 
 }
 
+li.engage-new-message {
+    border-left: 2px solid #fff;
+    -webkit-animation: RED-PULSE 2s infinite;
+    -moz-animation: RED-PULSE 2s infinite; /* Fx 5+ */
+    -o-animation: RED-PULSE 2s infinite; /* Opera 12+ */
+    animation: RED-PULSE 2s infinite; /* IE 10+ */
+}
+
+@-webkit-keyframes RED-PULSE {
+    0% {
+        border-left-color: #fff;
+    }
+    50% {
+        border-left-color: #ae564e;
+    }
+    100% {
+        border-left-color: #fff;
+    }
+}
+
+@-moz-keyframes RED-PULSE {
+    0% {
+        border-left-color: #fff;
+    }
+    50% {
+        border-left-color: #ae564e;
+    }
+    100% {
+        border-left-color: #fff;
+    }
+}
+
+@-o-keyframes RED-PULSE {
+    0% {
+        border-left-color: #fff;
+    }
+    50% {
+        border-left-color: #ae564e;
+    }
+    100% {
+        border-left-color: #fff;
+    }
+}
+
+@keyframes RED-PULSE {
+    0% {
+        border-left-color: #fff;
+    }
+    50% {
+        border-left-color: #ae564e;
+    }
+    100% {
+        border-left-color: #fff;
+    }
+}
+
 span.engage-status-new {
     background: #6adc7d;
 }
