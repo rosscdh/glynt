@@ -41,6 +41,8 @@ SESSION_CACHE_ALIAS = 'session_cache'
 SESSION_COOKIE_SECURE = True
 
 
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
+
 GOOGLE_DISPLAY_NAME = 'LawPal.com - Development'
 GOOGLE_OAUTH2_CLIENT_ID = '316492043888-k9aqv2u3ctfitqrduh07b1dger243auk.apps.googleusercontent.com'
 GOOGLE_OAUTH2_CLIENT_SECRET = 'XrbSGhSxNC1XWt5wKZVbf-zS'

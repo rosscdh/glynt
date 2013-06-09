@@ -49,6 +49,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 SESSION_CACHE_ALIAS = 'session_cache'
 SESSION_COOKIE_SECURE = True
 
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 
 GOOGLE_DISPLAY_NAME = 'LawPal.com - Development'
 GOOGLE_OAUTH2_CLIENT_ID = '316492043888-mhcap930opo9uf2kj1rv9654odm6niqu.apps.googleusercontent.com'
