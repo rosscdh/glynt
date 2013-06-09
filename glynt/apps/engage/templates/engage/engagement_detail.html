@@ -44,19 +44,29 @@
             {% endif %}
         </div>
 
-        <a href="#close-engagement" data-toggle="modal" class="close-lead"><i class="icon icon-remove"></i> Close this Lead</a>
+        <span id="engagement-status-controls">
+        {% if object.is_closed %}
+            <a href="#mod-engagement-status" data-toggle="modal" class="initial-lead"><i class="icon icon-ok"></i> Re-open this Lead</a>
+        {% else %}
+            <a href="#mod-engagement-status" data-toggle="modal" class="close-lead"><i class="icon icon-remove"></i> Close this Lead</a>
+        {% endif %}
+        </span>
 
-        <div id="close-engagement" class="modal hide fade" role="dialog" aria-labelledby="close engagement" aria-hidden="true">
+        <div id="mod-engagement-status" class="modal hide fade" role="dialog" aria-labelledby="close engagement" aria-hidden="true">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3>Warning</h3>
             </div>
             <div class="modal-body">
-                <p>You are you want to close this lead?</p>
+                {% if object.is_closed %}
+                    <p>You are sure you want to re-open this lead?</p>
+                {% else %}
+                    <p>You are sure you want to close this lead?</p>
+                {% endif %}
             </div>
             <div class="modal-footer">
                 <button data-dismiss="modal" aria-hidden="true" class="btn secondary">No</button>
-                <a href="#close-engagement" id="btn-confirm-close-engagement" data-url="{% url 'engage:close' pk=object.pk %}" class="btn btn-danger">Yes</a>
+                <a href="#close-engagement" id="btn-confirm-close-engagement" data-url="{% if object.is_closed %}{% url 'engage:re-open' pk=object.pk %}{% else %}{% url 'engage:close' pk=object.pk %}{% endif %}" class="btn btn-danger">Yes</a>
             </div>
         </div>
     </div>
@@ -82,13 +92,21 @@ $(document).ready(function(){
         event.preventDefault()
         var csrf_token = $('input[name=csrfmiddlewaretoken]').val()
         $.ajax({
-            type: 'POST',
-            url: $(this).attr('href'),
-            data: {'csrfmiddlewaretoken':csrf_token},
-        })
-        .complete(function(){
-            $('#close-engagement').modal('hide');
-        })
+            type: 'POST'
+            ,url: $(this).attr('data-url')
+            ,data: {'csrfmiddlewaretoken':csrf_token}
+            ,success: function(data, status) {
+                GlyntJsMessages.add_message(data.message);
+                $('#engagement-status-controls').fadeOut('slow');
+            }
+            ,error: function(jsdata, data, status) {
+                GlyntJsMessages.add_message(data.message, 'error');
+            }
+            ,complete: function(){
+                $("#mod-engagement-status").modal('hide');
+                GlyntJsMessages.show();
+            }
+        });
     });
 });
 </script>

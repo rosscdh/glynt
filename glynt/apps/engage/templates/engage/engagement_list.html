@@ -1,4 +1,4 @@
-{% extends "comments/base.html" %}{% load url from future %}{% load i18n %}
+{% extends "comments/base.html" %}{% load url from future %}{% load i18n engagement_tags %}
 
 {% block breadcrumb %}
 <ul class="breadcrumb">
@@ -15,9 +15,9 @@
 
     {% else %}
         {% if object_list %}
-            <ul class="message-list">
+            <ul id="engagement-list" class="message-list">
                 {% for message in object_list %}
-                <li class="engage-status-{{ message.status|lower }}" data-url="{{ message.get_absolute_url }}">
+                <li class="engage-status-{{ message.status|lower }}" data-pk="{{ message.pk }}" data-url="{{ message.get_absolute_url }}">
                     <a href="{{ message.get_absolute_url }}">
                         {% if user.profile.is_founder %}
                         <span class="profile-card" data-template="mini" data-username="{{message.lawyer.user.username}}">
@@ -37,6 +37,7 @@
                 </li>
                 {% endfor %}
             </ul>
+            {% user_engagement_notification_count user %}
         {% else %}
             <p>You currently have no Engagements. Why not try searching for a Lawyer on the <a href="{% url 'lawyer:list' %}">marketplace</p>
         {% endif %}
