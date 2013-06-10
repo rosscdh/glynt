@@ -34,7 +34,6 @@ south
 # Comments
 -e git+https://github.com/rosscdh/django-fluent-comments.git@js-controls#egg=django-fluent-comments
 django-threadedcomments
-#django-notification # to allow threaded-comments to work a bit better
 django-notifications-hq # this is for the activity notifications
 
 # JSON Field
