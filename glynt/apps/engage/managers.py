@@ -16,3 +16,10 @@ class DefaultEngageManager(models.Manager):
                 return self.filter(founder=founder).order_by('-id')[0]
             except IndexError:
                 return None
+
+    def filter_by_status(self, founder, lawyer, engagement_status):
+        #filter engagements between a founder and lawyer by their current engagement_status
+        try:
+            return self.filter(lawyer=lawyer, founder=founder).exclude(engagement_status=engagement_status)
+        except ObjectDoesNotExist:
+            return None

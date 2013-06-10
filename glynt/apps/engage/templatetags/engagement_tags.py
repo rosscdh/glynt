@@ -9,7 +9,7 @@ register = template.Library()
 
 from notifications.models import Notification
 
-from glynt.apps.engage.models import Engagement
+from glynt.apps.engage.models import Engagement, ENGAGEMENT_STATUS
 from glynt.apps.engage.utils import ENGAGEMENT_CONTENT_TYPE
 
 
@@ -35,7 +35,7 @@ def engagement_dict(context, user=None):
         if user.is_authenticated():
             if not own_profile:
                 if user.profile.is_founder:
-                    engagement_list = Engagement.objects.filter(lawyer=lawyer_id, founder=user.founder_profile).exclude(engagement_status=2)
+                    engagement_list = Engagement.objects.filter_by_status(lawyer=lawyer_id, founder=user.founder_profile, engagement_status=ENGAGEMENT_STATUS.open)
 
     return {
         'engagement_list': engagement_list,
