@@ -79,8 +79,12 @@ def moment_js(selector=None):
 
 
 @register.inclusion_tag('moment/moment.html')
-def moment(date_object, default_date):
+def moment(date_object, default_date=None):
+    if default_date is None:
+        default_date = date_object
+
     unix_timestamp = None
+
     if type(date_object) == str:
         date_object = time.strptime(date_object)
     if date_object:
@@ -186,3 +190,12 @@ def handlebars_messages(context, **kwargs):
     })
     return context
 handlebars_messages.is_safe = True
+
+@register.inclusion_tag('partials/profile_cards.js', takes_context=True)
+def profile_cards(context, **kwargs):
+    kwargs.update({
+        'DEBUG': settings.DEBUG
+    })
+    context.update(kwargs)
+    return context
+profile_cards.is_safe = True

@@ -1,5 +1,7 @@
 # coding: utf-8
 import os
+from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -34,6 +36,13 @@ class Startup(models.Model):
     def __unicode__(self):
         return self.name
 
+    @property
+    def profile_photo(self):
+        try:
+            return self.photo if self.photo else self.founders.all()[0].profile.get_mugshot_url()
+        except:
+            return settings.USERENA_MUGSHOT_DEFAULT
+
 
 class Founder(models.Model):
     """ The founders
@@ -49,6 +58,9 @@ class Founder(models.Model):
 
     def __unicode__(self):
         return self.user.username
+
+    def get_absolute_url(self):
+        return reverse('startup:founder_profile', kwargs={'slug': self.user.username})
 
     @property
     def profile_photo(self):

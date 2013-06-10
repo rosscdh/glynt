@@ -105,8 +105,8 @@ TEMPLATE_LOADERS = (
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'glynt.middleware.LawpalSocialAuthExceptionMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -141,9 +141,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "glynt.context_processors.project_info",
     "glynt.context_processors.project_environment",
     "glynt.context_processors.default_profile_image",
+    "glynt.context_processors.notification_unread",
+    "glynt.context_processors.USE_THREADEDCOMMENTS",
     "social_auth.context_processors.social_auth_by_type_backends",
     "social_auth.context_processors.social_auth_by_name_backends",
-    "postman.context_processors.inbox",
     "django.core.context_processors.request",
 )
 
@@ -249,12 +250,16 @@ HELPER_APPS = (
     'debug_toolbar_user_panel',
 
     # Django Pagination,
-    'pagination',
-    # Django postman
-    'postman',
+    # 'pagination',
 
     # Vast array of Storage types
     'storages',
+    # Engagement System
+    'fluent_comments',
+    'threadedcomments',
+
+    # Notications
+    'notifications',
 )
 
 # Handle south and its breaking tests
@@ -281,6 +286,9 @@ else:
 # the other apps will/can be tested seperately
 INSTALLED_APPS = DJANGO_APPS + HELPER_APPS + PROJECT_APPS 
 
+COMMENTS_APP = 'fluent_comments'
+FLUENT_COMMENTS_USE_EMAIL_NOTIFICATION = False # We handle our own email notifications
+NOTIFY_USE_JSONFIELD = True
 
 LOGIN_URL          = '/'
 LOGIN_REDIRECT_URL = '/logged-in/'
@@ -370,10 +378,9 @@ SOCIAL_AUTH_PIPELINE = (
 POSTMAN_DISALLOW_ANONYMOUS = True
 POSTMAN_DISALLOW_MULTIRECIPIENTS = True
 POSTMAN_DISALLOW_COPIES_ON_REPLY = True
-POSTMAN_DISABLE_USER_EMAILING = True
+POSTMAN_DISABLE_USER_EMAILING = False
 POSTMAN_AUTO_MODERATE_AS = True
-POSTMAN_MAILER_APP = None
-POSTMAN_NOTIFIER_APP = None
+POSTMAN_MAILER_APP = 'django.core.mail'
 
 INTERCOM_API_SECRET = '-sjPyiyI5P44z3QsHLDUWfoLK8Rml7Wbg2wmj64L'
 

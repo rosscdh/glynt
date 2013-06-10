@@ -40,6 +40,14 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 SESSION_CACHE_ALIAS = 'session_cache'
 SESSION_COOKIE_SECURE = True
 
+
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
+
+GOOGLE_DISPLAY_NAME = 'LawPal.com - Development'
+GOOGLE_OAUTH2_CLIENT_ID = '316492043888-k9aqv2u3ctfitqrduh07b1dger243auk.apps.googleusercontent.com'
+GOOGLE_OAUTH2_CLIENT_SECRET = 'XrbSGhSxNC1XWt5wKZVbf-zS'
+GOOGLE_OAUTH_EXTRA_SCOPE = ['https://www.googleapis.com/auth/plus.me']
+
 FACEBOOK_API_KEY = '343632075713954'
 FACEBOOK_SECRET_KEY = '4f9854b8fe8f5ccf27ac1ffcf5051b79'
 

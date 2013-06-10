@@ -1,0 +1,15 @@
+{% load i18n %}
+
+<div id="c{{ comment.id }}" class="comment-item message-{% if comment.user.pk == user.pk %}right{% else %}left{% endif %} clearfix">
+
+    <div class="profile-card message-avatar message-avatar" data-template="mini" data-username="{{ comment.user.username }}"></div>
+
+    <div class="comment-text triangle-border">
+        <p>{{ comment.comment|linebreaks }}</p>
+    </div>
+
+    <span class="comment-name">{{ comment.user.get_full_name }}</span>
+
+    <span class="comment-date">{{ comment.submit_date }}</span>
+
+</div>

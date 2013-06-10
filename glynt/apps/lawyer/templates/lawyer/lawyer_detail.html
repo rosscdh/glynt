@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load account_tags glynt_helpers lawyer_profile_tags jsonify thumbnail humanize cache %}
+{% extends 'base.html' %}{% load account_tags glynt_helpers lawyer_profile_tags engagement_tags jsonify thumbnail humanize engagement_tags cache %}
 {% block page_title %}{{ object.user.get_full_name|default:object.user.username }} {% if firm %} - {{ firm }}{% endif %}{% endblock %}
 {% block bodyclass %}lawyer-profile{% endblock %}
 
@@ -34,9 +34,9 @@
 					<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="true" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if object.is_active %}hide{% endif %} btn right"><i class="icon-eye-close icon-white"></i> Approve</a>
 				{% endif %}
 				{% if user.username == object.user.username %}
-					<a href="{% url 'lawyer:setup_profile' %}" class="btn right" ><i class="icon-edit icon-white"></i> Edit profile</a>   
-					<a href="{% url 'lawyer:invite' %}" class="btn right" ><i class="icon-heart icon-white"></i> Invite Lawyers</a>  
-					{% if object.summary %} 
+					<a href="{% url 'lawyer:setup_profile' %}" class="btn right-links" ><i class="icon-edit icon-white"></i> Edit profile</a>
+					<a href="{% url 'lawyer:invite' %}" class="btn right-links" ><i class="icon-heart icon-white"></i> Invite Lawyers</a>
+					{% if object.summary %}
 						{% if PROJECT_ENVIRONMENT != 'dev' %}
 					    <script>
 						  $(document).ready(function () {
@@ -46,8 +46,20 @@
 						{% endif %}
 					{% endif %}
 				{% endif %}
-				<a href="{% url 'engage:message' to=object.user.username %}" id="send-message" class="btn right" title="Message" data-toggle="modal"><i class="icon-envelope icon-white"></i> Message</a>
-				<a href="#comingSoonModal" class="btn right" title="Engage"  data-toggle="modal"><i class="icon-play icon-white"></i> Engage</a>
+
+                <div class="pull-right engagement-container">
+                {% is_lawyer_engaged_with_user lawyer=object as is_lawyer_engaged_with_user %}
+                    {% if request.user.profile.is_founder  %}
+                        {% if is_lawyer_engaged_with_user %}
+                            <a href="/engage/" class="btn btn-large btn-primary right">Contact lawyer</a>
+                        {% else %}
+                            <a href="{% url 'engage:startup_lawyer' lawyer_pk=lawyer.pk %}" id="engage-lawyer" class="btn btn-large btn-primary right" data-toggle="modal">Contact Lawyer</a>
+                        {% endif %}
+                    {% endif %}
+                    {% if not request.user.is_authenticated %}
+                        <a href="{% url 'public:auth_user_class_redirect' user_class_name='founder' %}" id="" class="btn btn-large btn-primary right">Sign up to connect</a>
+                    {% endif %}
+                </div>
 			</div>
 		</div>
 	</div>
@@ -102,18 +114,18 @@
 				</div>
 				<hr>
 			</div>
-		</div>	
+		</div>
 		<div class="span4 pull-right sidebar">
 			<div class="firm">
 				{% if firm.photo %}
-					<img src="{{ MEDIA_URL }}{{ firm.photo|default:'firm/blank.gif' }}" alt="{{ firm.name }}" class="firm-logo" />				
-				{% else %} 
+					<img src="{{ MEDIA_URL }}{{ firm.photo|default:'firm/blank.gif' }}" alt="{{ firm.name }}" class="firm-logo" />
+				{% else %}
 					{% if firm %}
 						<h2>{{ firm }}</h2>
 					{% else %}
 						<br />
 					{% endif %}
-				{% endif %} 
+				{% endif %}
 			</div>
 			<div class="map">
 				{% if object.data.practice_location_1 and not object.data.practice_location_2 %}
@@ -126,12 +138,12 @@
 					{% for practice_location in object.practice_locations  %}
 						<li class="marker">{{ practice_location }}</li>
 					{% endfor %}
-					{% if object.data.years_practiced > 0 %}	
+					{% if object.data.years_practiced > 0 %}
 						<li class="tick">{{ object.data.years_practiced }} Years Practicing</li>
 					{% endif %}
 					<!-- <li class="friends"><img src="{{ STATIC_URL }}img/app/small-avatar.jpg" alt="Avatar" /> Benjamin Ling is a mutual contact</li> -->
 				</ul>
-				<div class="span4">				
+            </div>
 					<div id="other-profiles" class="other-profiles">
 						<h5>Other Profiles</h5>
 						{% social_profiles object.user %}
@@ -141,10 +153,9 @@
 						<h5>Licensed In</h5>
 						{% simple_name_list data_list=object.data.bar_membership %}
 					</div>
-				</div>
 			</div>
 
-		</div>	
+		</div>
 		<div class="span8">
 			<h2>Transaction Snapshot</h2>
 			<div class="deal-charts row">
@@ -154,17 +165,17 @@
 					<img src="/static/img/graph-year-placeholder.png" id="graph-year-placeholder">
 					<canvas id="dealChart0" width="300" height="200"></canvas>
 				</div>
-				<div class="span4" style="position:relative;">			
+				<div class="span4" style="position:relative;">
 					<h5>Transactions by type</h5>
-					<br />		
+					<br />
 					<img src="/static/img/graph-type-placeholder.png" id="graph-type-placeholder">
 					<canvas id="dealChart1" width="220" height="200"></canvas>
 					<div style="position:absolute;top:125px;right:-0px;opacity:0.3" id="type-legend">
 						<span class="label label-info" style="color:#F38630;background-color:white;">Series A</span>
-						<br /> 
-						<span class="label label-info" style="color:#6bdb7e;background-color:white;">Seed</span> 
 						<br />
-						<span class="label label-info" style="color:#69D2E7;background-color:white;">Incorporation</span> 
+						<span class="label label-info" style="color:#6bdb7e;background-color:white;">Seed</span>
+						<br />
+						<span class="label label-info" style="color:#69D2E7;background-color:white;">Incorporation</span>
 						<br />
 						<span class="label label-info" style="color:#f88172;background-color:white;">IP</span>
 						<br />
@@ -204,22 +215,17 @@
 	</div>
 
 	<div>
-	    <div class=" buttons">
 			<!-- Modal -->
-			<div id="comingSoonModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div id="engage-lawyer-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			  <div class="modal-header">
 			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			    <h3 id="myModalLabel">Coming Soon</h3>
 			  </div>
 			  <div class="modal-body">
-			    <p>Whilst profiles are in preview mode, this feature is disabled. We will shortly be enabling this for some users as part of our rollout.</p>
 			  </div>
 			  <div class="modal-footer">
 			    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
-			    <!-- <button class="btn btn-primary">Save changes</button> -->
 			  </div>
 			</div>
-        </div>
 
             <div id="send-message-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			  <div class="modal-header">
@@ -233,7 +239,7 @@
 			    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
 			  </div>
 			</div>
-		
+
 	</div>
 </div>
 {% csrf_token %}
@@ -247,7 +253,7 @@ $(document).ready(function () {
 
 
 	$('.comment').popover({ html : true});
-	
+
 
 	$("a.comment").click(function() {
 	    $(this).toggleClass('faded');
@@ -350,7 +356,7 @@ $(document).ready(function () {
 			{
 				value : {{ object.data.volume_ip|jsonify }},
 				color : "#f88172"
-			}			
+			}
 		]);
 		$("#graph-type-placeholder").hide();
 		$("#type-legend").css({ opacity: 1 });
@@ -363,4 +369,18 @@ $(document).ready(function () {
 </script>
 
 <script type="text/javascript" src="{{ STATIC_URL }}/js/send-message.js"></script>
+
+<script>
+$(document).ready(function () {
+    $("#engage-lawyer").click(function(ev) {
+        ev.preventDefault();
+        var url = $(this).attr('href');
+        console.log(url)
+        $("#engage-lawyer-modal").load(url, function() {
+            $(this).modal('show');
+        });
+        return false;
+    });
+});
+</script>
 {% endblock %}

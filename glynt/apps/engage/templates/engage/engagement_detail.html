@@ -1,0 +1,114 @@
+{% extends "comments/base.html" %}{% load comments engagement_tags fluent_comments_tags %}
+
+{% block page_title %}Engagement Request{% endblock %}
+
+{% block breadcrumb %}
+<ul class="breadcrumb">
+    <li><a href="/">Home</a> <span class="divider">/</span></li>
+    <li><a href="{% url 'engage:list' %}">Inbox</a> <span class="divider">/</span></li>
+    <li class="active">{% if user.profile.is_founder %}Request to: {{ object.lawyer.user.get_full_name }}{% else %}Request from: {{ object.founder.user.get_full_name }}{% endif %}</li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="span8">
+        <div class="alert engagement-status">
+            <span>Request status: <strong>{{ object.status }}</strong></span>
+        </div>
+        <h3 class="engage-detail-title">
+            {% if user.profile.is_founder %}
+                Request to: {{ object.lawyer.user.get_full_name }}
+            {% else %}
+                Request from: {{ object.founder.user.get_full_name }}
+            {% endif %}
+        </h3>
+        <span>{{ object.date_created }}</span>
+        <hr />
+        {% render_comment_form for object %}
+        <hr>
+        <h5>Conversation history (most recent at the top)</h5>
+
+        {% render_comment_list_reversed for object %}
+
+        {% engagement_intro enagement=object %}
+    </div>
+    <div class="span4 side-info-container">
+        <div class="well">
+            {% if user.profile.is_founder %}
+            <div class="profile-card" data-username="{{ object.lawyer.user.username }}">&nbsp;</div>
+            {% else %}
+            <div class="startup-profile-card" data-username="{{ object.startup.slug }}">&nbsp;</div>
+            <hr/>
+            <div class="profile-card" data-username="{{ object.founder.user.username }}">&nbsp;</div>
+            {% endif %}
+        </div>
+
+        <span id="engagement-status-controls">
+        {% if object.is_closed %}
+            <a href="#mod-engagement-status" data-toggle="modal" class="initial-lead"><i class="icon icon-ok"></i> Re-open this Lead</a>
+        {% else %}
+            <a href="#mod-engagement-status" data-toggle="modal" class="close-lead"><i class="icon icon-remove"></i> Close this Lead</a>
+        {% endif %}
+        </span>
+
+        <div id="mod-engagement-status" class="modal hide fade" role="dialog" aria-labelledby="close engagement" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3>Warning</h3>
+            </div>
+            <div class="modal-body">
+                {% if object.is_closed %}
+                    <p>You are sure you want to re-open this lead?</p>
+                {% else %}
+                    <p>You are sure you want to close this lead?</p>
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" aria-hidden="true" class="btn secondary">No</button>
+                <a href="#close-engagement" id="btn-confirm-close-engagement" data-url="{% if object.is_closed %}{% url 'engage:re-open' slug=object.slug %}{% else %}{% url 'engage:close' slug=object.slug %}{% endif %}" class="btn btn-danger">Yes</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fluent_comments/css/ajaxcomments.css" />
+<script type="text/javascript" src="{{ STATIC_URL }}fluent_comments/js/ajaxcomments.js"></script>
+<script>
+/**
+* Setup the fluent-comments comment_controls
+* to determine setup and useability
+* @LawPal contributed this functionality
+**/
+var COMMENT_CONTROLS = {
+    'is_reversed': true
+    ,'scroll_to_comment': false
+};
+
+$(document).ready(function(){
+    $('#btn-confirm-close-engagement').live('click', function(event){
+        event.preventDefault()
+        var csrf_token = $('input[name=csrfmiddlewaretoken]').val()
+        $.ajax({
+            type: 'POST'
+            ,url: $(this).attr('data-url')
+            ,data: {'csrfmiddlewaretoken':csrf_token}
+            ,success: function(data, status) {
+                GlyntJsMessages.add_message(data.message);
+                $('#engagement-status-controls').fadeOut('slow');
+            }
+            ,error: function(jsdata, data, status) {
+                GlyntJsMessages.add_message(data.message, 'error');
+            }
+            ,complete: function(){
+                $("#mod-engagement-status").modal('hide');
+                GlyntJsMessages.show();
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

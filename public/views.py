@@ -29,7 +29,7 @@ class PublicHomepageView(TemplateView):
             if user_class_name == 'lawyer':
                 template_name = 'lawyer/welcome.html'
 
-            elif user_class_name == 'startup':
+            elif user_class_name == 'founder':
                 template_name = 'startup/welcome.html'
 
         return [template_name]
@@ -41,7 +41,7 @@ class PublicHomepageView(TemplateView):
         # redirect the startup to the marketplace/lawyer-list
         user_class_name = self.request.session.get('user_class_name', 'lawyer')
 
-        if self.request.user.is_authenticated() and user_class_name == 'startup':
+        if self.request.user.is_authenticated() and user_class_name == 'founder':
 
             return HttpResponseRedirect(redirect_to=reverse('lawyer:list'))
 
@@ -67,7 +67,7 @@ class UserClassSessionRedirectView(RedirectView):
         if user_class_name == 'lawyer':
             url = reverse('socialauth_begin', args=['linkedin'])
 
-        elif user_class_name == 'startup':
+        elif user_class_name == 'founder':
             url = reverse('socialauth_begin', args=['google-oauth2'])
 
         else:
