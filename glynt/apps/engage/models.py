@@ -16,8 +16,9 @@ from bunches import StartupEngageLawyerBunch
 from managers import DefaultEngageManager
 
 import datetime
+import hashlib
 
-from utils import *
+
 ENGAGEMENT_STATUS = get_namedtuple_choices('ENGAGEMENT_STATUS', (
     (0, 'new', 'New'),
     (1, 'open', 'Open'),
@@ -25,11 +26,19 @@ ENGAGEMENT_STATUS = get_namedtuple_choices('ENGAGEMENT_STATUS', (
 ))
 
 
+def generate_slug(engagement):
+    """ Generate the unique slug for this model """
+    hash_val = u'%s-%s' % (engagement.pk, datetime.datetime.utcnow())
+    h = hashlib.sha1(hash_val)
+    return h.hexdigest()
+
+
 class Engagement(models.Model):
     """ Base Engagement object
     Stores initial engagement details
     """
     engagement_status = models.IntegerField(choices=ENGAGEMENT_STATUS.get_choices(), default=ENGAGEMENT_STATUS.new, db_index=True)
+    slug = models.SlugField(max_length=128, blank=False)
     startup = models.ForeignKey(Startup)
     founder = models.ForeignKey(Founder)
     lawyer = models.ForeignKey(Lawyer)
