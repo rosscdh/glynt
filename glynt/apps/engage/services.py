@@ -1,16 +1,22 @@
 # -*- coding: utf-8 -*-
-import os
+from django.conf import settings
 
-try:
-    from notification import models as notification
-except:
-    notification = None
+from django.contrib.sites.models import Site
+
+from notification import models as notification
+
 from glynt.apps.startup.services import EnsureFounderService, EnsureStartupService
-from models import Engagement
 
+from glynt.apps.engage.models import Engagement
+from glynt.apps.engage.models import ENGAGEMENT_STATUS
+
+from templated_email import send_templated_mail
+from bunch import Bunch
 
 import logging
 logger = logging.getLogger('lawpal.services')
+
+site_email = settings.DEFAULT_FROM_EMAIL
 
 
 class EngageLawyerAsStartupService(object):
@@ -46,3 +52,62 @@ class EngageLawyerAsStartupService(object):
             action = 'engagement_request_new'
 
         notification.send([self.lawyer.user], action, {"from_user": self.user})
+
+
+
+class SendEngagementEmailsService(object):
+    """ Class to send email to appropriate persons involved in and engagement.
+    is applied when creating an engagement; as well as commenting on an engagement
+    """
+
+    def __init__(self, engagement, sender, recipients, notification, **kwargs):
+        self.engagement = engagement
+        self.sender = sender
+        self.sender_is_lawyer = sender.profile.is_lawyer
+        self.recipients = recipients
+        self.notification = notification
+        self.site = Site.objects.get_current()
+
+        kwargs.update({
+            'is_new': True if engagement.engagement_status == ENGAGEMENT_STATUS.new else False,
+            'engagement_status': ENGAGEMENT_STATUS.get_desc_by_value(engagement.engagement_status),
+            'sender_is_lawyer': self.sender_is_lawyer,
+            'from_name': self.sender.get_full_name(),
+            'from_email': self.sender.email,
+            'from': self.sender,
+            'engagement': self.engagement,
+            'notification': self.notification,
+            'message': self.message,
+            'comment': self.notification.description,
+            'site': self.site,
+        })
+        self.context = kwargs
+
+    @property
+    def message(self):
+        notice = self.notification
+        ctx = {
+            'actor': notice.actor.get_full_name(),
+            'verb': notice.verb,
+            'action_object': notice.action_object,
+            'target': notice.target.founder if self.sender_is_lawyer else notice.target.lawyer,
+            'timesince': notice.timesince()
+        }
+        return u'%(actor)s %(verb)s to their Engagement with %(target)s' % ctx
+
+    @property
+    def recipient_list(self):
+        if type(self.recipients) in [list,tuple]:
+            recipients = self.recipients
+        else:
+            recipients = [Bunch(name=u[0], email=u[1]) for u in settings.NOTICEGROUP_EMAIL]
+        return [u.email for u in self.recipients]
+
+    def process(self):
+        send_templated_mail(
+              template_name = 'engagement_notice_email',
+              template_prefix="email/",
+              from_email = site_email,
+              recipient_list = self.recipient_list,
+              context = self.context
+        )
