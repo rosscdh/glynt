@@ -6,7 +6,7 @@ from tastypie import fields
 from tastypie.serializers import Serializer
 from tastypie.cache import SimpleCache
 from tastypie.authentication import Authentication, SessionAuthentication
-from tastypie.authorization import Authorization, DjangoAuthorization
+from tastypie.authorization import Authorization, DjangoAuthorization, ReadOnlyAuthorization
 
 from django.contrib.auth.models import User
 
@@ -16,6 +16,8 @@ from glynt.apps.firm.models import Firm, Office
 from glynt.apps.startup.models import Startup
 from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
 from glynt.apps.sign.models import DocumentSignature
+from glynt.apps.engage.models import Engagement
+from glynt.apps.engage import ENGAGEMENT_STATUS
 
 from glynt.apps.startup.bunches import StartupProfileBunch
 
@@ -136,6 +138,7 @@ def _startup_profile(bundle):
     data['is_startup'] = True
     return data
 
+
 class StartupBasicProfileResource(BaseApiModelResource):
     class Meta(BaseApiModelResource.Meta):
         queryset = Startup.objects.all().select_related('founders', 'founders_user')
@@ -178,6 +181,7 @@ def _founder_profile(bundle):
             ],
         })
     return data
+
 
 def _lawyer_profile(bundle):
     data = {}
@@ -223,6 +227,7 @@ class UserBasicProfileResource(BaseApiModelResource):
         bundle.data.update(_lawyer_profile(bundle))
         bundle.data.update(_founder_profile(bundle))
         return bundle
+
 
 class LawyerResource(BaseApiModelResource):
     class Meta(BaseApiModelResource.Meta):
@@ -278,6 +283,27 @@ class SignatureResource(BaseApiModelResource):
         return bundle
 
 
+class EngagementResource(BaseApiModelResource):
+    class Meta(BaseApiModelResource.Meta):
+        authentication = Authentication()
+        authorization = ReadOnlyAuthorization()
+        queryset = Engagement.objects.all()
+        resource_name = 'engagement'
+        cache = SimpleCache()
+
+    def authorized_read_list(self, object_list, bundle):
+        if bundle.request.user.profile.is_founder:
+            founder = bundle.request.user.founder_profile.pk
+            return object_list.filter(founder=founder)
+        else:
+            lawyer = bundle.request.user.lawyer_profile
+            return object_list.filter(lawyer=lawyer)
+
+    def dehydrate(self, bundle):
+        bundle.data['engagement_status'] = bundle.obj.get_engagement_status_display()
+        return bundle
+
+
 """ Register the api resources """
 v1_internal_api.register(LocationSimpleResource())
 v1_internal_api.register(StateSimpleResource())
@@ -292,3 +318,4 @@ v1_internal_api.register(LawyerResource())
 v1_internal_api.register(DocumentResource())
 v1_internal_api.register(ClientCreatedDocumentResource())
 v1_internal_api.register(SignatureResource())
+v1_internal_api.register(EngagementResource())
