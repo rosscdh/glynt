@@ -12,6 +12,6 @@ urlpatterns = patterns('',
     
     url(r'^(?P<pk>\d+)/close/$', login_required(CloseEngagementView.as_view()), name='close'),
     url(r'^(?P<pk>\d+)/re-open/$', login_required(ReOpenEngagementView.as_view()), name='re-open'),
-    url(r'^(?P<pk>\d+)/$', login_required(EngagementView.as_view()), name='engagement'),
+    url(r'^(?P<slug>.+)/$', login_required(EngagementView.as_view()), name='engagement'),
     url(r'^$', login_required(MyEngagementsView.as_view()), name='list'),
 )
