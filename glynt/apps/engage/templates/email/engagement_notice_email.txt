@@ -1,0 +1,17 @@
+{% extends 'email/base.email' %}
+{% load glynt_helpers %}
+
+{% block plain %}
+Hi there,
+{% if is_new %}A new Lead is available at LawPal.com
+{% else %}A new notification has been created on one of your Engagements
+{% endif %}
+
+{{ message }}
+
+{{ comment }}
+
+To review this Engagement, go to {% current_site_domain %}{{ engagement.get_absolute_url }}.
+
+{% include 'email/footer.email' %}
+{% endblock %}
