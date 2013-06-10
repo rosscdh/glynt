@@ -17,6 +17,8 @@ from glynt.apps.startup.models import Startup
 from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
 from glynt.apps.sign.models import DocumentSignature
 
+from glynt.apps.startup.bunches import StartupProfileBunch
+
 
 v1_internal_api = Api(api_name='v1')
 
@@ -73,6 +75,7 @@ class StateSimpleResource(BaseApiModelResource):
         }
         cache = SimpleCache()
 
+
 class FirmSimpleResource(BaseApiModelResource):
     class Meta(BaseApiModelResource.Meta):
         queryset = Firm.objects.all()
@@ -105,7 +108,7 @@ class OfficeSimpleResource(BaseApiModelResource):
         return bundle
 
 
-class StartupSimpleResource(BaseApiModelResource):
+class StartupLiteSimpleResource(BaseApiModelResource):
     class Meta(BaseApiModelResource.Meta):
         queryset = Startup.objects.all()
         authentication = Authentication()
@@ -126,12 +129,80 @@ class StartupSimpleResource(BaseApiModelResource):
         return bundle
 
 
+def _startup_profile(bundle):
+    data = StartupProfileBunch(startup=bundle.obj)
+    data['profile_photo'] = data.photo_url if data.photo_url else bundle.obj.profile_photo
+    data['username'] = bundle.obj.slug # required to integrate with GlyntProfile object
+    data['is_startup'] = True
+    return data
+
+class StartupBasicProfileResource(BaseApiModelResource):
+    class Meta(BaseApiModelResource.Meta):
+        queryset = Startup.objects.all().select_related('founders', 'founders_user')
+        authentication = Authentication()
+        list_allowed_methods = ['get']
+        resource_name = 'startup/profile'
+
+        filtering = {
+            'name': ALL,
+            'slug': ALL,
+        }
+        cache = SimpleCache()
+
+    def dehydrate(self, bundle):
+        profile_data = bundle.data.pop('data')
+        bundle.data.update(_startup_profile(bundle))
+        return bundle
+
+
+def _founder_profile(bundle):
+    data = {}
+    if bundle.obj.profile.is_founder:
+        profile = bundle.obj.founder_profile
+        try:
+            primary_startup = profile.startups[0]
+        except IndexError:
+            primary_startup = {}
+
+        data.update({
+            'profile_url': bundle.obj.founder_profile.get_absolute_url(),
+            'summary': profile.summary,
+            'bio': profile.bio,
+            'startups': [
+                {
+                    'name': primary_startup.name,
+                    'summary': primary_startup.summary,
+                    'url': primary_startup.website,
+                    'twitter': primary_startup.twitter,
+                }
+            ],
+        })
+    return data
+
+def _lawyer_profile(bundle):
+    data = {}
+    if bundle.obj.profile.is_lawyer:
+        profile = bundle.obj.lawyer_profile
+        data.update({
+            'profile_url': bundle.obj.lawyer_profile.get_absolute_url(),
+            'position': profile.position,
+            'firm': profile.firm_name,
+            'phone': profile.phone,
+            'years_practiced': profile.years_practiced,
+            'profile_status': profile.profile_status,
+            'summary': profile.summary,
+            #'fee_packages': profile.fee_packages.items(),
+            'practice_locations': profile.practice_locations(),
+        })
+    return data
+
+
 class UserBasicProfileResource(BaseApiModelResource):
     name = fields.CharField(attribute='get_full_name', null=True)
 
     class Meta(BaseApiModelResource.Meta):
         # Only filter by USA, allow freeform for others
-        queryset = User.objects.select_related('profile').exclude(is_superuser=True).filter(is_active=True)
+        queryset = User.objects.select_related('profile').filter(is_active=True)
         authentication = Authentication()
         list_allowed_methods = ['get']
         resource_name = 'user/profile'
@@ -145,9 +216,12 @@ class UserBasicProfileResource(BaseApiModelResource):
         profile = bundle.data.get('username', None)
         bundle.data.update({
             'is_lawyer': bundle.obj.profile.is_lawyer,
-            'is_startup': bundle.obj.profile.is_startup,
+            'is_founder': bundle.obj.profile.is_founder,
             'profile_photo': bundle.obj.profile.get_mugshot_url(),
+            'profile_url': None,
         })
+        bundle.data.update(_lawyer_profile(bundle))
+        bundle.data.update(_founder_profile(bundle))
         return bundle
 
 class LawyerResource(BaseApiModelResource):
@@ -209,9 +283,10 @@ v1_internal_api.register(LocationSimpleResource())
 v1_internal_api.register(StateSimpleResource())
 v1_internal_api.register(FirmSimpleResource())
 v1_internal_api.register(OfficeSimpleResource())
-v1_internal_api.register(StartupSimpleResource())
+v1_internal_api.register(StartupLiteSimpleResource())
 
 v1_internal_api.register(UserBasicProfileResource())
+v1_internal_api.register(StartupBasicProfileResource())
 
 v1_internal_api.register(LawyerResource())
 v1_internal_api.register(DocumentResource())

@@ -123,10 +123,10 @@
     #hero .profile-details {
     padding-bottom:0px;
     }
-    #hero #buttons .right {
+    #hero #buttons .right-links {
     float:right;
     margin-left:4px;
-    padding:5px 0px 6px 20px;
+    padding:12px 0px 6px 20px;
     opacity:0.9;
     transition-property : opacity; 
     transition-duration : 0.3s;
@@ -134,12 +134,15 @@
     background-color: transparent;
     font-size:16px; 
     }
-    #hero:hover #buttons .right {
+    #hero:hover #buttons .right-links {
     opacity:1;
     }
-    #hero #buttons .right i {
+    #hero #buttons .right-links  i {
     margin-top:2px;
     margin-right:3px;
+    }
+    #hero .engagement-container .btn-primary {
+        margin: 0 .6em 0 0;
     }
     #hero .avatar img {
     border: 8px solid rgba(255,255,255,0.46);
@@ -213,8 +216,10 @@
     opacity:0.3;
     }
     ul li.nothing-found {
-    color:#ddd;
     margin:10px 0px;
+    }
+    .nothing-found {
+    color:#ddd;
     font-size:15px;
     }
     ul.social-buttons li:hover {
@@ -427,7 +432,7 @@ display: none;
 .icon.aboutme, .icon.youtube,  .icon.bitbucket, .icon.deviantart, .icon.facebook, .icon.formspring, .icon.klout, .icon.lastfm, .icon.picasa, .icon.pinterest, .icon.posterous, .icon.quora, .icon.skype, .icon.stackexchange, .icon.tumblr, .icon.wordpress, .icon.yahoo, .icon.yelp, .icon.behance, .icon.blogger, .icon.delicious, .icon.digg, .icon.disqus, .icon.flickr, .icon.foursquare, .icon.github, .icon.googleplus, .icon.goodreads, .icon.hackernews, .icon.imdb, .icon.linkedin, .icon.pinboard, .icon.reddit, .icon.slideshare, .icon.soundcloud, .icon.stackoverflow, .icon.stumbleupon, .icon.twitter, .icon.vimeo, .icon.wordpress {
 display: inline
 }
-.icon.500px{ background-color:#444444;}
+.icon{ background-color:#444444;}
 .icon.aboutme{ background-color:#00405D;}
 .icon.alistapart{ background-color:#222222;}
 .icon.amazon{ background-color:#FF9900;}

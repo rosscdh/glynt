@@ -21,7 +21,7 @@ var GlyntJsMessages = {
     ,template: Handlebars.compile($('script#tpl-messages').html())
     ,add_message: function add_message(msg, tags) {
         tags = tags || null
-        this.messages.push({'message': msg, 'tags': tags});
+        this.messages.push({'message': new Handlebars.SafeString(msg), 'tags': tags});
     }
     ,render: function render(extra_context) {
         var self = this;

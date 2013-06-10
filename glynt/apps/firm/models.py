@@ -34,7 +34,7 @@ class Firm(models.Model):
         return u'%s' % (self.name,)
 
     @property
-    def num_offices(self, obj):
+    def num_offices(self):
         return self.office_set.count()
 
     @property

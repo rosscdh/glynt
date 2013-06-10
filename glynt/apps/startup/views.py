@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
 from django.views.generic import FormView
+from django.views.generic import DetailView
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-
+from django.contrib.auth.models import User
+from django.http import Http404
 from services import EnsureFounderService
 from forms import StartupProfileSetupForm
+from models import Founder
+
+from glynt.apps.utils import AjaxableResponseMixin
 
 import urlparse
 
@@ -49,11 +54,11 @@ class StartupProfileSetupView(FormView):
             'website': startup.website,
             'summary': startup.summary,
             
-            'already_incorporated': self.founder.data.get('already_incorporated', False),
-            'already_raised_capital': self.founder.data.get('already_raised_capital', False),
-            'process_raising_capital': self.founder.data.get('process_raising_capital', False),
+            'already_incorporated': startup.data.get('already_incorporated', False),
+            'already_raised_capital': startup.data.get('already_raised_capital', False),
+            'process_raising_capital': startup.data.get('process_raising_capital', False),
 
-            'incubator_or_accelerator_name': self.founder.data.get('incubator_or_accelerator_name'),
+            'incubator_or_accelerator_name': startup.data.get('incubator_or_accelerator_name'),
 
             'agree_tandc': self.founder.data.get('agree_tandc', False),
         }})
@@ -62,3 +67,24 @@ class StartupProfileSetupView(FormView):
     def form_valid(self, form):
         form.save()
         return super(StartupProfileSetupView, self).form_valid(form=form)
+
+
+class FounderProfileView(DetailView):
+    model = Founder
+
+    def get_object(self, queryset=None):
+        """
+        """
+        # Use a custom queryset if provided; this is required for subclasses
+        # like DateDetailView
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        slug = self.kwargs.get(self.slug_url_kwarg, None)
+        try:
+            # Get the single item from the filtered queryset
+            obj = queryset.get(user=User.objects.get(username=slug))
+        except ObjectDoesNotExist:
+            raise Http404(_("No %(verbose_name)s found matching the query") %
+                          {'verbose_name': queryset.model._meta.verbose_name})
+        return obj
