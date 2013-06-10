@@ -124,7 +124,7 @@ class LawyerListView(AjaxListView, FormMixin):
                 sq.add(SQ(content=term), SQ.AND)
                 sq.add(SQ(practice_locations=term), SQ.OR)
 
-        return SearchQuerySet().filter(sq).order_by('-fee_packages', 'full_name')
+        return SearchQuerySet().filter(sq).order_by('-fee_packages')
 
 
     def get_form(self, form_class):
