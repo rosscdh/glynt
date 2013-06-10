@@ -140,7 +140,7 @@ def virtualenv(cmd, **kwargs):
 
 @task
 def pip_install():
-    virtualenv('pip install simplejson==3.2.0 --upgrade')
+    virtualenv('pip install -e git+https://github.com/rosscdh/django-fluent-comments.git@js-controls#egg=django-fluent-comments --upgrade')
 
 @task
 def check_permissions():
@@ -349,6 +349,7 @@ def clean_start():
     clean_zip()
 
 
+@task
 def do_deploy():
     if env.SHA1_FILENAME is None:
         env.SHA1_FILENAME = get_sha1()
