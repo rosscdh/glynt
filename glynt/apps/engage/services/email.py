@@ -3,12 +3,7 @@ from django.conf import settings
 
 from django.contrib.sites.models import Site
 
-from notifications import notify
-
-from glynt.apps.startup.services import EnsureFounderService, EnsureStartupService
-from glynt.apps.engage import generate_engagement_slug
-from glynt.apps.engage.models import Engagement
-from glynt.apps.engage.models import ENGAGEMENT_STATUS
+from glynt.apps.engage import ENGAGEMENT_STATUS
 
 from templated_email import send_templated_mail
 from bunch import Bunch
@@ -17,51 +12,6 @@ import logging
 logger = logging.getLogger('lawpal.services')
 
 site_email = settings.DEFAULT_FROM_EMAIL
-
-
-class EngageLawyerAsStartupService(object):
-    """ Allow a startup to engage a Lawyer """
-
-    def __init__(self, user, lawyer, startup_name, **kwargs):
-        self.user = user
-        self.lawyer = lawyer
-        self.startup_name = startup_name
-
-        self.form = kwargs.pop('form', None)
-
-        self.data = kwargs
-
-    def process(self):
-        founder_service = EnsureFounderService(user=self.user, **self.data)
-        self.founder = founder_service.process()
-
-        startup_service = EnsureStartupService(name=self.startup_name, founder=self.founder, **self.data)
-        self.startup = startup_service.process()
-
-        engagement, is_new = self.save_engagement()
-
-        self.notify(self.engagement, is_new)
-
-        return self.engagement
-
-    def save_engagement(self):
-        self.engagement, is_new = Engagement.objects.get_or_create(startup=self.startup, founder=self.founder, lawyer=self.lawyer)
-        self.engagement.data = self.data
-        self.engagement.save(update_fields=['data'])
-        return self.engagement, is_new
-
-
-    def notify(self, engagement, is_new):
-        verb = engagement_action = 'engagement_updated'
-        description = '%s Updated the Engagement Lead for %s' % (self.founder, self.lawyer,)
-
-        if is_new:
-            verb = engagement_action = 'engagement_created'
-            description = '%s Created a new Lead for %s' % (self.founder, self.lawyer,)
-
-        notify.send(self.founder.user, recipient=self.lawyer.user, verb=verb, action_object=self.engagement,
-                    description=description , target=self.lawyer, engagement_action=engagement_action, engagement_pk=self.engagement.pk, lawyer_pk=self.lawyer.user.pk, founder_pk=self.founder.user.pk)
-
 
 
 class SendEngagementEmailsService(object):
@@ -109,7 +59,7 @@ class SendEngagementEmailsService(object):
 
     @property
     def recipient_list(self):
-        if type(self.recipients) in [list,tuple]:
+        if type(self.recipients) in [list, tuple]:
             recipients = self.recipients
         else:
             recipients = [Bunch(name=u[0], email=u[1]) for u in settings.NOTICEGROUP_EMAIL]

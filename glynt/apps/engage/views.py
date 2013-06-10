@@ -11,6 +11,7 @@ from glynt.apps.utils import _get_referer, AjaxableResponseMixin
 
 from glynt.apps.lawyer.models import Lawyer
 from glynt.apps.startup.services import EnsureFounderService
+from glynt.apps.engage.models import Engagement
 
 from bunches import StartupEngageLawyerBunch
 
@@ -18,7 +19,6 @@ from notifications import notify
 import user_streams
 
 from forms import EngageWriteMessageForm, EngageStartupLawyerForm
-from models import Engagement
 from signals import mark_engagement_notifications_as_read
 
 import logging

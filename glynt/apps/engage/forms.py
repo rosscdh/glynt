@@ -8,7 +8,7 @@ from bootstrap.forms import BootstrapMixin
 
 from parsley.decorators import parsleyfy
 
-from services import EngageLawyerAsStartupService
+from glynt.apps.engage.services.startup_engage_lawyer import EngageLawyerAsStartupService
 
 import logging
 logger = logging.getLogger('django.request')

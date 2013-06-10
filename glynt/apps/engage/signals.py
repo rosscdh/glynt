@@ -10,7 +10,7 @@ import user_streams
 from notifications.models import Notification
 from glynt.apps.engage.utils import ENGAGEMENT_CONTENT_TYPE
 from glynt.apps.engage.models import Engagement, ENGAGEMENT_STATUS
-from glynt.apps.engage.services import SendEngagementEmailsService
+from glynt.apps.engage.services.email import SendEngagementEmailsService
 
 import logging
 logger = logging.getLogger('django.request')

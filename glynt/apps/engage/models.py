@@ -9,7 +9,9 @@ import user_streams
 from jsonfield import JSONField
 from glynt.apps.utils import get_namedtuple_choices
 
+from glynt.apps.engage import ENGAGEMENT_STATUS
 from glynt.apps.engage import generate_engagement_slug
+from glynt.apps.engage.services.actions import OpenEngagementService, CloseEngagementService, ReOpenEngagementService
 from glynt.apps.startup.models import Startup, Founder
 from glynt.apps.lawyer.models import Lawyer
 
@@ -18,12 +20,6 @@ from managers import DefaultEngageManager
 
 import datetime
 
-
-ENGAGEMENT_STATUS = get_namedtuple_choices('ENGAGEMENT_STATUS', (
-    (0, 'new', 'New'),
-    (1, 'open', 'Open'),
-    (2, 'closed', 'Closed'),
-))
 
 
 class Engagement(models.Model):
@@ -45,58 +41,20 @@ class Engagement(models.Model):
         return '%s of %s Enagement with %s' % (self.founder, self.startup, self.lawyer,)
 
     def get_absolute_url(self):
-        return reverse('engage:engagement', kwargs={'slug':self.slug})
+        return reverse('engage:engagement', kwargs={'slug': self.slug})
 
     def open(self, actioning_user):
-        """ @TODO turn this into utility mixins """
-        recipient = self.founder.user if actioning_user.profile.is_lawyer else self.lawyer.user
-
-        self.engagement_status = ENGAGEMENT_STATUS.open
-        self.save(update_fields=['engagement_status'])
-
-        # send notification
-        description = '%s (%s) opened the Engagement' % (actioning_user.profile.non_specific_title, actioning_user)
-        notify.send(actioning_user, recipient=recipient, verb=u'closed', action_object=self,
-                    description=description, target=self, engagement_pk=self.pk, closed_by=actioning_user.pk, directed_at=recipient.pk, lawyer_pk=self.lawyer.user.pk, founder_pk=self.founder.user.pk, date_closed=datetime.datetime.utcnow())
-        # Log activity to stream
-        user_streams.add_stream_item(recipient, description, self)
-        user_streams.add_stream_item(actioning_user, description, self)
-
-        return description
+        """ Open the notification """
+        service = OpenEngagementService(engagement=self, actioning_user=actioning_user)
+        return service.process()
 
     def close(self, actioning_user):
-        """ @TODO turn this into utility mixins """
-        recipient = self.founder.user if actioning_user.profile.is_lawyer else self.lawyer.user
-
-        self.engagement_status = ENGAGEMENT_STATUS.closed
-        self.save(update_fields=['engagement_status'])
-
-        # send notification
-        description = '%s (%s) closed the Engagement' % (actioning_user.profile.non_specific_title, actioning_user)
-        notify.send(actioning_user, recipient=recipient, verb=u'closed', action_object=self,
-                    description=description, target=self, engagement_pk=self.pk, closed_by=actioning_user.pk, directed_at=recipient.pk, lawyer_pk=self.lawyer.user.pk, founder_pk=self.founder.user.pk, date_closed=datetime.datetime.utcnow())
-        # Log activity to stream
-        user_streams.add_stream_item(recipient, description, self)
-        user_streams.add_stream_item(actioning_user, description, self)
-
-        return description
+        service = CloseEngagementService(engagement=self, actioning_user=actioning_user)
+        return service.process()
 
     def reopen(self, actioning_user):
-        """ @TODO turn this into utility mixins """
-        recipient = self.founder.user if actioning_user.profile.is_lawyer else self.lawyer.user
-
-        self.engagement_status = ENGAGEMENT_STATUS.open
-        self.save(update_fields=['engagement_status'])
-
-        # send notification
-        description = '%s (%s) re-opened the Engagement' % (actioning_user.profile.non_specific_title, actioning_user)
-        notify.send(actioning_user, recipient=recipient, verb=u're-opened', action_object=self,
-                    description=description, target=self, engagement_pk=self.pk, closed_by=actioning_user.pk, directed_at=recipient.pk, lawyer_pk=self.lawyer.user.pk, founder_pk=self.founder.user.pk, date_closed=datetime.datetime.utcnow())
-        # Log activity to stream
-        user_streams.add_stream_item(recipient, description, self)
-        user_streams.add_stream_item(actioning_user, description, self)
-
-        return description
+        service = ReOpeneEngagementService(engagement=self, actioning_user=actioning_user)
+        return service.process()
 
     @property
     def is_open(self):
