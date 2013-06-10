@@ -10,13 +10,14 @@ import user_streams
 from notifications.models import Notification
 from glynt.apps.engage.utils import ENGAGEMENT_CONTENT_TYPE
 from glynt.apps.engage.models import ENGAGEMENT_STATUS
+from glynt.apps.engage.services import SendEngagementEmailsService
 
 import logging
 logger = logging.getLogger('django.request')
 
 
-@receiver(post_save, sender=ThreadedComment)
-def save_engagement_comment_signal(sender, dispatch_uid='engagement.save_engagement_comment_signal', **kwargs):
+@receiver(post_save, sender=ThreadedComment, dispatch_uid='engagement.save_engagement_comment_signal')
+def save_engagement_comment_signal(sender, **kwargs):
     """ on save of a comment create a notification for the recipient of the comment
     and log the activity in the event stream """
 
@@ -73,3 +74,19 @@ def mark_engagement_notifications_as_read(user, engagement):
     """ used to mark the passed in users notifications for a specific engagement as read (can be either a lwayer or a founder) """
     logger.debug('marking unred notifications as read for user: %s and engagement: %s'%(user, engagement.pk))
     Notification.objects.filter(recipient=user, target_object_id=engagement.pk, unread=True, target_content_type=ENGAGEMENT_CONTENT_TYPE).mark_all_as_read()
+
+
+@receiver(post_save, sender=Notification, dispatch_uid='engagement.on_comment_notification_created')
+def on_comment_notification_created(sender, **kwargs):
+    """
+    Handle new notifications
+    """
+    is_new = kwargs.get('created')
+
+    notification = kwargs.get('instance')
+    sender = notification.actor
+    recipients = [notification.recipient]
+    engagement = notification.action_object
+
+    send = SendEngagementEmailsService(engagement=engagement, sender=sender, recipients=recipients, notification=notification)
+    send.process()

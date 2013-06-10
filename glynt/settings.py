@@ -105,8 +105,8 @@ TEMPLATE_LOADERS = (
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'glynt.middleware.LawpalSocialAuthExceptionMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -287,7 +287,7 @@ else:
 INSTALLED_APPS = DJANGO_APPS + HELPER_APPS + PROJECT_APPS 
 
 COMMENTS_APP = 'fluent_comments'
-#FLUENT_COMMENTS_EXCLUDE_FIELDS = ('subject',)
+FLUENT_COMMENTS_USE_EMAIL_NOTIFICATION = False # We handle our own email notifications
 NOTIFY_USE_JSONFIELD = True
 
 LOGIN_URL          = '/'
