@@ -143,8 +143,8 @@ class EngagementView(DetailView):
         """"""
         queryset = self.get_queryset()
         # Next, try looking up by primary key.
-        pk = self.kwargs.get(self.pk_url_kwarg, None)
-        queryset = queryset.select_related('startup','founder','lawyer','founder__user','lawyer__user').filter(pk=pk)
+        slug = self.kwargs.get(self.slug_url_kwarg, None)
+        queryset = queryset.select_related('startup','founder','lawyer','founder__user','lawyer__user').filter(slug=slug)
 
         try:
             # Get the single item from the filtered queryset

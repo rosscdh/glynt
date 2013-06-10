@@ -8,6 +8,7 @@ import user_streams
 
 from jsonfield import JSONField
 
+from glynt.apps.engage import generate_engagement_slug
 from glynt.apps.startup.models import Startup, Founder
 from glynt.apps.lawyer.models import Lawyer
 from glynt.apps.engage import ENGAGEMENT_STATUS
@@ -17,13 +18,13 @@ from managers import DefaultEngageManager
 
 import datetime
 
-from utils import *
 
 class Engagement(models.Model):
     """ Base Engagement object
     Stores initial engagement details
     """
     engagement_status = models.IntegerField(choices=ENGAGEMENT_STATUS.get_choices(), default=ENGAGEMENT_STATUS.new, db_index=True)
+    slug = models.SlugField(max_length=128, blank=False)
     startup = models.ForeignKey(Startup)
     founder = models.ForeignKey(Founder)
     lawyer = models.ForeignKey(Lawyer)
@@ -37,7 +38,7 @@ class Engagement(models.Model):
         return '%s of %s Enagement with %s' % (self.founder, self.startup, self.lawyer,)
 
     def get_absolute_url(self):
-        return reverse('engage:engagement', kwargs={'pk':self.pk})
+        return reverse('engage:engagement', kwargs={'slug':self.slug})
 
     def open(self, actioning_user):
         """ @TODO turn this into utility mixins """
@@ -114,6 +115,13 @@ class Engagement(models.Model):
     def engagement_types(self):
         engagement_types = [('engage_for_general','General'), ('engage_for_incorporation','Incorporation'), ('engage_for_ip','Intellectual Property'), ('engage_for_employment','Employment Law'), ('engage_for_fundraise','Fundraising'), ('engage_for_cofounders','Co-Founder')]
         return [(self.data.get(r,False),name) for r,name in engagement_types if self.data.get(r,False)]
+
+    def save(self, *args, **kwargs):
+        """ Ensure that we have a slug """
+        if self.slug in [None, '']:
+            self.slug = generate_engagement_slug(engagement=self)
+
+        return super(Engagement, self).save(*args, **kwargs)
 
 
 # import signals so they load on django load
