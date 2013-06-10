@@ -31,7 +31,7 @@
 
         {% render_comment_list_reversed for object %}
 
-        {% engagement_intro enagement=object %}
+        {% engagement_intro engagement=object %}
     </div>
     <div class="span4 side-info-container">
         <div class="well">
@@ -66,7 +66,7 @@
             </div>
             <div class="modal-footer">
                 <button data-dismiss="modal" aria-hidden="true" class="btn secondary">No</button>
-                <a href="#close-engagement" id="btn-confirm-close-engagement" data-url="{% if object.is_closed %}{% url 'engage:re-open' pk=object.pk %}{% else %}{% url 'engage:close' pk=object.pk %}{% endif %}" class="btn btn-danger">Yes</a>
+                <a href="#close-engagement" id="btn-confirm-close-engagement" data-url="{% if object.is_closed %}{% url 'engage:re-open' slug=object.slug %}{% else %}{% url 'engage:close' slug=object.slug %}{% endif %}" class="btn btn-danger">Yes</a>
             </div>
         </div>
     </div>

@@ -7,7 +7,7 @@ from notifications import notify
 
 from glynt.apps.startup.services import EnsureFounderService, EnsureStartupService
 from glynt.apps.engage.models import Engagement
-from glynt.apps.engage.models import ENGAGEMENT_STATUS
+from glynt.apps.engage import ENGAGEMENT_STATUS
 
 from templated_email import send_templated_mail
 from bunch import Bunch
@@ -35,15 +35,22 @@ class EngageLawyerAsStartupService(object):
         self.founder = founder_service.process()
 
         startup_service = EnsureStartupService(name=self.startup_name, founder=self.founder, **self.data)
-        startup = startup_service.process()
+        self.startup = startup_service.process()
 
-        self.engagement, is_new = Engagement.objects.get_or_create(startup=startup, founder=self.founder, lawyer=self.lawyer)
-        self.engagement.data = self.data
-        self.engagement.save(update_fields=['data'])
+        engagement, is_new = self.save_engagement()
 
         self.notify(self.engagement, is_new)
 
         return self.engagement
+
+    def save_engagement(self):
+        self.engagement, is_new = Engagement.objects.get_or_create(startup=self.startup, founder=self.founder, lawyer=self.lawyer)
+        self.engagement.data = self.data
+        self.engagement.slug = generate_engagement_slug(engagement=self.engagement)
+
+        self.engagement.save(update_fields=['data','slug'])
+        return self.engagement, is_new
+
 
     def notify(self, engagement, is_new):
         verb = engagement_action = 'engagement_updated'
