@@ -8,8 +8,8 @@
         <img src="{{ l.profile_photo }}"/>
     </a>
 
-    {% is_lawyer_engaged_with_user lawyer=l as lawyer_engaged %}
-    {% if lawyer_engaged %}
+    {% is_lawyer_engaged_with_user lawyer=l as is_lawyer_engaged %}
+    {% if is_lawyer_engaged.engagement_list %}
         <span class="badge btn-info badge-lawyer-engaged"><a href="{% url 'engage:list' %}">Lawyer contacted</a></span>
     {% endif %}
 

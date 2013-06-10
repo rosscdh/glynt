@@ -3,6 +3,7 @@ from django import template
 from django.core.urlresolvers import reverse
 from django.db.models.query import QuerySet
 from django.db.models import Count
+from django.db.models import Q
 
 register = template.Library()
 
@@ -34,7 +35,7 @@ def engagement_dict(context, user=None):
         if user.is_authenticated():
             if not own_profile:
                 if user.profile.is_founder:
-                    engagement_list = Engagement.objects.filter(lawyer=lawyer_id, founder=user.founder_profile)
+                    engagement_list = Engagement.objects.filter(lawyer=lawyer_id, founder=user.founder_profile).exclude(engagement_status=2)
 
     return {
         'engagement_list': engagement_list,
@@ -62,13 +63,11 @@ def is_lawyer_engaged_with_user(context, lawyer, user=None):
         'lawyer': lawyer,
     })
 
-    lawyer_engaged = False
-    data = engagement_dict(context=context, user=user)
+    context.update(
+        engagement_dict(context=context, user=user)
+    )
 
-    if data.get('engagement_list'):
-        lawyer_engaged = True
-
-    return lawyer_engaged
+    return context
 
 
 @register.inclusion_tag('engage/partials/user_engagement_notification_count.js', takes_context=False)
