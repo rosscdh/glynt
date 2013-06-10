@@ -351,65 +351,6 @@ body.lawyer-welcome #hero h3 {
 	border-top:none;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
-
-html, body, #wrap {
-    height: 100%;
-}
-
-body > #wrap {
-    height: auto;
-    min-height: 100%;
-}
-
-#main {
-    padding-bottom: 220px;
-}
-
-#footer {
-    position: relative;
-    margin-top: -180px;
-    height: 180px;
-    clear: both;
-    box-sizing: border-box;
-}
-
-/* section header */
-.section_header {
-	text-align: center;
-	font-weight: bolder;
-	color: #252b34;
-	margin-top: 80px;
-	position: relative;
-	margin-bottom: 40px;
-}
-.section_header.left span {
-	margin-left: 0px;
-	text-align: left;
-}
-.section_header hr {
-	border-top: 1px solid #BEC0C3;
-	border-bottom: 2px solid white;
-	width: 36%;
-	position: absolute;
-}
-.section_header hr.left { }
-.section_header hr.right {
-	right: 0px;
-	top: 0px;
-}
-.section_header span {
-	width: 27%;
-	display: block;
-	margin: 0 auto;
-}
-.section_header small {
-	margin-left: 20px;
-	font-size: 16px;
-	color: #7f8387;
-	display: none;
-}
 
 /* Form Styling */
 .form-horizontal.compact .control-group {
