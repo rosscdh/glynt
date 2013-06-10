@@ -7,10 +7,10 @@ from notifications import notify
 import user_streams
 
 from jsonfield import JSONField
-from glynt.apps.utils import get_namedtuple_choices
 
 from glynt.apps.startup.models import Startup, Founder
 from glynt.apps.lawyer.models import Lawyer
+from glynt.apps.engage import ENGAGEMENT_STATUS
 
 from bunches import StartupEngageLawyerBunch
 from managers import DefaultEngageManager
@@ -18,12 +18,6 @@ from managers import DefaultEngageManager
 import datetime
 
 from utils import *
-ENGAGEMENT_STATUS = get_namedtuple_choices('ENGAGEMENT_STATUS', (
-    (0, 'new', 'New'),
-    (1, 'open', 'Open'),
-    (2, 'closed', 'Closed'),
-))
-
 
 class Engagement(models.Model):
     """ Base Engagement object

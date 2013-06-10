@@ -3,13 +3,12 @@ from django import template
 from django.core.urlresolvers import reverse
 from django.db.models.query import QuerySet
 from django.db.models import Count
-from django.db.models import Q
 
 register = template.Library()
 
 from notifications.models import Notification
 
-from glynt.apps.engage.models import Engagement, ENGAGEMENT_STATUS
+from glynt.apps.engage.models import Engagement
 from glynt.apps.engage.utils import ENGAGEMENT_CONTENT_TYPE
 
 
@@ -35,7 +34,7 @@ def engagement_dict(context, user=None):
         if user.is_authenticated():
             if not own_profile:
                 if user.profile.is_founder:
-                    engagement_list = Engagement.objects.filter_by_status(lawyer=lawyer_id, founder=user.founder_profile, engagement_status=ENGAGEMENT_STATUS.open)
+                    engagement_list = Engagement.objects.open(lawyer=lawyer_id, founder=user.founder_profile)
 
     return {
         'engagement_list': engagement_list,

@@ -7,7 +7,7 @@ from notifications import notify
 
 from glynt.apps.startup.services import EnsureFounderService, EnsureStartupService
 from glynt.apps.engage.models import Engagement
-from glynt.apps.engage.models import ENGAGEMENT_STATUS
+from glynt.apps.engage import ENGAGEMENT_STATUS
 
 from templated_email import send_templated_mail
 from bunch import Bunch

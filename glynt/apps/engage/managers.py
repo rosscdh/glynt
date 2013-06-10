@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
+from glynt.apps.engage import ENGAGEMENT_STATUS
 
 
 class DefaultEngageManager(models.Manager):
@@ -17,9 +18,28 @@ class DefaultEngageManager(models.Manager):
             except IndexError:
                 return None
 
-    def filter_by_status(self, founder, lawyer, engagement_status):
-        #filter engagements between a founder and lawyer by their current engagement_status
+    def new(self, founder, lawyer):
+        #get any new engagements between the founder and lawyer
         try:
-            return self.filter(lawyer=lawyer, founder=founder).exclude(engagement_status=engagement_status)
+            return self.filter(lawyer=lawyer, founder=founder, engagement_status=ENGAGEMENT_STATUS.new)
         except ObjectDoesNotExist:
             return None
+
+    def open(self, founder, lawyer):
+        #filter out any closed engagements between the founder and lawyer
+        try:
+            return self.filter(lawyer=lawyer, founder=founder).exclude(engagement_status=ENGAGEMENT_STATUS.closed)
+        except ObjectDoesNotExist:
+            return None
+
+    def closed(self, founder, lawyer):
+        #get any closed engagements between the founder and lawyer
+        try:
+            return self.filter(lawyer=lawyer, founder=founder, engagement_status=ENGAGEMENT_STATUS.closed)
+        except ObjectDoesNotExist:
+            return None
+
+
+
+    def filter_engagement_by_user(self, founder, lawyer):
+        pass
