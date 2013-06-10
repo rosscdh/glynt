@@ -53,7 +53,7 @@ class Engagement(models.Model):
         return service.process()
 
     def reopen(self, actioning_user):
-        service = ReOpeneEngagementService(engagement=self, actioning_user=actioning_user)
+        service = ReOpenEngagementService(engagement=self, actioning_user=actioning_user)
         return service.process()
 
     @property

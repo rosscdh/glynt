@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 
-from notifications import notify
-
 from glynt.apps.engage import ENGAGEMENT_STATUS
 
+from notifications import notify
+import user_streams
 import datetime
 
 import logging
@@ -21,16 +21,17 @@ class OpenEngagementService(object):
     recipient = None
 
     def __init__(self, engagement, actioning_user, **kwargs):
-        self.engagement_status = self.status
+        self.engagement = engagement
         self.actioning_user = actioning_user
 
     def process(self):
+        self.engagement_status = self.status
         self.engagement.save(update_fields=['engagement_status'])
         return self.notifications()
 
     @property
     def recipient(self):
-        return self.founder.user if self.actioning_user.profile.is_lawyer else self.lawyer.user
+        return self.engagement.founder.user if self.actioning_user.profile.is_lawyer else self.engagement.lawyer.user
 
     def notifications(self):
         # send notification
@@ -40,7 +41,7 @@ class OpenEngagementService(object):
         notify.send(self.actioning_user, recipient=self.recipient, verb=self.verb, action_object=self.engagement,
                     description=description, target=self.engagement, engagement_pk=self.engagement.pk, \
                     closed_by=self.actioning_user.pk, directed_at=self.recipient.pk, \
-                    lawyer_pk=self.lawyer.user.pk, founder_pk=self.founder.user.pk, \
+                    lawyer_pk=self.engagement.lawyer.user.pk, founder_pk=self.engagement.founder.user.pk, \
                     date_closed=datetime.datetime.utcnow())
 
         # Log activity to stream
