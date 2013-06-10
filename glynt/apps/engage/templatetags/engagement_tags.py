@@ -13,9 +13,9 @@ from glynt.apps.engage.utils import ENGAGEMENT_CONTENT_TYPE
 
 
 @register.inclusion_tag('engage/partials/engagement_intro.html', takes_context=True)
-def engagement_intro(context, enagement):
+def engagement_intro(context, engagement):
     context.update({
-        'enagement': enagement,
+        'engagement': engagement,
     })
     return context
 
@@ -24,17 +24,21 @@ def engagement_dict(context, user=None):
     engagement_list = []
     user = user if user is not None else context.get('user', None)
     lawyer = context.get('lawyer', None)
-    own_profile = True if lawyer.user.pk == user.pk else False
+    try:
+        lawyer_id = lawyer.lawyer_pk
+    except AttributeError:
+        lawyer_id = lawyer.id
+    own_profile = True if lawyer_id == user.pk else False
 
     if user is not None:
         if user.is_authenticated():
             if not own_profile:
                 if user.profile.is_founder:
-                    engagement_list = Engagement.objects.filter(lawyer=lawyer, founder=user.founder_profile)
+                    engagement_list = Engagement.objects.filter(lawyer=lawyer_id, founder=user.founder_profile)
 
     return {
         'engagement_list': engagement_list,
-        'own_profile' : own_profile,
+        'own_profile': own_profile,
     }
 
 
@@ -58,13 +62,13 @@ def is_lawyer_engaged_with_user(context, lawyer, user=None):
         'lawyer': lawyer,
     })
 
-    lawyer_enganged = False
+    lawyer_engaged = False
     data = engagement_dict(context=context, user=user)
 
     if data.get('engagement_list'):
-        lawyer_enganged = True
+        lawyer_engaged = True
 
-    return lawyer_enganged
+    return lawyer_engaged
 
 
 @register.inclusion_tag('engage/partials/user_engagement_notification_count.js', takes_context=False)

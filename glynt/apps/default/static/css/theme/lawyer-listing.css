@@ -675,3 +675,15 @@ font-size:18px;
     width: 95px;
     text-align: center;
 }
+
+.badge-lawyer-engaged {
+    position: absolute;
+    top: 114px;
+    left: 18px;
+}
+
+.badge-lawyer-engaged a
+, .badge-lawyer-engaged a:hover {
+    color: #fff;
+    text-decoration: none;
+}

@@ -1,4 +1,4 @@
-{% load lawyer_profile_tags endless jsonify glynt_helpers humanize %}
+{% load lawyer_profile_tags endless jsonify glynt_helpers engagement_tags humanize %}
 {% lazy_paginate object_list %}
 
 {% for l in object_list %}
@@ -7,6 +7,11 @@
     <a class="partner-avatar" href="{% url 'lawyer:profile' slug=l.username %}">
         <img src="{{ l.profile_photo }}"/>
     </a>
+
+    {% is_lawyer_engaged_with_user lawyer=l as lawyer_engaged %}
+    {% if lawyer_engaged %}
+        <span class="badge btn-info badge-lawyer-engaged"><a href="{% url 'engage:list' %}">Lawyer contacted</a></span>
+    {% endif %}
 
     <div class="partner-overview">
         <h2 class="partner-name"><a href="{% url 'lawyer:profile' slug=l.username %}">{{ l.full_name|truncatechars:26 }}</a></h2>
