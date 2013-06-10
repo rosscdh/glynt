@@ -56,7 +56,7 @@ def engagement_with_lawyer(context, lawyer):
 
 
 @register.assignment_tag(takes_context=True)
-def is_lawyer_engaged_with_user(context, lawyer, user=None):
+def is_lawyer_engaged_with_user(context, lawyer, user):
     user = user if user is not None else context.get('user', None)
     context.update({
         'lawyer': lawyer,

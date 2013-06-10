@@ -8,7 +8,7 @@
         <img src="{{ l.profile_photo }}"/>
     </a>
 
-    {% is_lawyer_engaged_with_user lawyer=l as is_lawyer_engaged %}
+    {% is_lawyer_engaged_with_user lawyer=l user=request.user as is_lawyer_engaged %}
     {% for engagement in is_lawyer_engaged.engagement_list %}
         {% if forloop.first %}
             <span class="badge btn-info badge-lawyer-engaged"><a href="{{ engagement.get_absolute_url }}">Lawyer contacted</a></span>

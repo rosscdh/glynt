@@ -48,7 +48,7 @@
 				{% endif %}
 
                 <div class="pull-right engagement-container">
-                {% is_lawyer_engaged_with_user lawyer=object as is_lawyer_engaged_with_user %}
+                {% is_lawyer_engaged_with_user lawyer=object user=request.user as is_lawyer_engaged_with_user %}
                     {% if request.user.profile.is_founder  %}
                         {% if is_lawyer_engaged_with_user.engagement_list %}
                             {% for engagement in is_lawyer_engaged_with_user.engagement_list %}
