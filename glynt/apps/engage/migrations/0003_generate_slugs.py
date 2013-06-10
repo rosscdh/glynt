@@ -4,15 +4,13 @@ from south.db import db
 from south.v2 import DataMigration
 from django.db import models
 
-from glynt.apps.engage.models import generate_slug
-
 
 class Migration(DataMigration):
 
     def forwards(self, orm):
+        """ Jsut call save, as we override the save method and set slug if its null """
         for e in orm['engage.Engagement'].objects.all():
-            e.slug = generate_slug(e)
-            e.save(update_fields=['slug'])
+            e.save()
 
     def backwards(self, orm):
         pass
