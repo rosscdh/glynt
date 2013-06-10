@@ -9,6 +9,7 @@ import user_streams
 from jsonfield import JSONField
 from glynt.apps.utils import get_namedtuple_choices
 
+from glynt.apps.engage import generate_engagement_slug
 from glynt.apps.startup.models import Startup, Founder
 from glynt.apps.lawyer.models import Lawyer
 
@@ -16,7 +17,6 @@ from bunches import StartupEngageLawyerBunch
 from managers import DefaultEngageManager
 
 import datetime
-import hashlib
 
 
 ENGAGEMENT_STATUS = get_namedtuple_choices('ENGAGEMENT_STATUS', (
@@ -24,13 +24,6 @@ ENGAGEMENT_STATUS = get_namedtuple_choices('ENGAGEMENT_STATUS', (
     (1, 'open', 'Open'),
     (2, 'closed', 'Closed'),
 ))
-
-
-def generate_slug(engagement):
-    """ Generate the unique slug for this model """
-    hash_val = u'%s-%s' % (engagement.pk, datetime.datetime.utcnow())
-    h = hashlib.sha1(hash_val)
-    return h.hexdigest()
 
 
 class Engagement(models.Model):
@@ -52,7 +45,7 @@ class Engagement(models.Model):
         return '%s of %s Enagement with %s' % (self.founder, self.startup, self.lawyer,)
 
     def get_absolute_url(self):
-        return reverse('engage:engagement', kwargs={'pk':self.pk})
+        return reverse('engage:engagement', kwargs={'slug':self.slug})
 
     def open(self, actioning_user):
         """ @TODO turn this into utility mixins """
@@ -129,6 +122,13 @@ class Engagement(models.Model):
     def engagement_types(self):
         engagement_types = [('engage_for_general','General'), ('engage_for_incorporation','Incorporation'), ('engage_for_ip','Intellectual Property'), ('engage_for_employment','Employment Law'), ('engage_for_fundraise','Fundraising'), ('engage_for_cofounders','Co-Founder')]
         return [(self.data.get(r,False),name) for r,name in engagement_types if self.data.get(r,False)]
+
+    def save(self, *args, **kwargs):
+        """ Ensure that we have a slug """
+        if self.slug in [None, '']:
+            self.slug = generate_engagement_slug(engagement=self)
+
+        return super(Engagement, self).save(*args, **kwargs)
 
 
 # import signals so they load on django load
