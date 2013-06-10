@@ -8,6 +8,7 @@ from django.db import models
 class Migration(DataMigration):
 
     def forwards(self, orm):
+        """ Jsut call save, as we override the save method and set slug if its null """
         for e in orm['engage.Engagement'].objects.all():
             e.save()
 

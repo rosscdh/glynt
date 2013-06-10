@@ -6,6 +6,7 @@ from django.contrib.sites.models import Site
 from notifications import notify
 
 from glynt.apps.startup.services import EnsureFounderService, EnsureStartupService
+from glynt.apps.engage import generate_engagement_slug
 from glynt.apps.engage.models import Engagement
 from glynt.apps.engage import ENGAGEMENT_STATUS
 
@@ -46,9 +47,7 @@ class EngageLawyerAsStartupService(object):
     def save_engagement(self):
         self.engagement, is_new = Engagement.objects.get_or_create(startup=self.startup, founder=self.founder, lawyer=self.lawyer)
         self.engagement.data = self.data
-        self.engagement.slug = generate_engagement_slug(engagement=self.engagement)
-
-        self.engagement.save(update_fields=['data','slug'])
+        self.engagement.save(update_fields=['data'])
         return self.engagement, is_new
 
 
