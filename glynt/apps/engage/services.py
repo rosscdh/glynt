@@ -3,10 +3,9 @@ from django.conf import settings
 
 from django.contrib.sites.models import Site
 
-from notification import models as notification
+from notifications import notify
 
 from glynt.apps.startup.services import EnsureFounderService, EnsureStartupService
-
 from glynt.apps.engage.models import Engagement
 from glynt.apps.engage.models import ENGAGEMENT_STATUS
 
@@ -38,20 +37,24 @@ class EngageLawyerAsStartupService(object):
         startup_service = EnsureStartupService(name=self.startup_name, founder=self.founder, **self.data)
         startup = startup_service.process()
 
-        engagement, is_new = Engagement.objects.get_or_create(startup=startup, founder=self.founder, lawyer=self.lawyer)
-        engagement.data = self.data
-        engagement.save(update_fields=['data'])
+        self.engagement, is_new = Engagement.objects.get_or_create(startup=startup, founder=self.founder, lawyer=self.lawyer)
+        self.engagement.data = self.data
+        self.engagement.save(update_fields=['data'])
 
-        self.notify(engagement, is_new)
+        self.notify(self.engagement, is_new)
 
-        return engagement
+        return self.engagement
 
     def notify(self, engagement, is_new):
-        action = 'engagement_request_update'
-        if is_new:
-            action = 'engagement_request_new'
+        verb = engagement_action = 'engagement_updated'
+        description = '%s Updated the Engagement Lead for %s' % (self.founder, self.lawyer,)
 
-        notification.send([self.lawyer.user], action, {"from_user": self.user})
+        if is_new:
+            verb = engagement_action = 'engagement_created'
+            description = '%s Created a new Lead for %s' % (self.founder, self.lawyer,)
+
+        notify.send(self.founder.user, recipient=self.lawyer.user, verb=verb, action_object=self.engagement,
+                    description=description , target=self.lawyer, engagement_action=engagement_action, engagement_pk=self.engagement.pk, lawyer_pk=self.lawyer.user.pk, founder_pk=self.founder.user.pk)
 
 
 
@@ -62,6 +65,7 @@ class SendEngagementEmailsService(object):
 
     def __init__(self, engagement, sender, recipients, notification, **kwargs):
         self.engagement = engagement
+        self.is_new_engagement = kwargs.get('is_new_engagement', False)
         self.sender = sender
         self.sender_is_lawyer = sender.profile.is_lawyer
         self.recipients = recipients
@@ -69,7 +73,7 @@ class SendEngagementEmailsService(object):
         self.site = Site.objects.get_current()
 
         kwargs.update({
-            'is_new': True if engagement.engagement_status == ENGAGEMENT_STATUS.new else False,
+            'is_new': self.is_new_engagement,
             'engagement_status': ENGAGEMENT_STATUS.get_desc_by_value(engagement.engagement_status),
             'sender_is_lawyer': self.sender_is_lawyer,
             'from_name': self.sender.get_full_name(),
@@ -79,6 +83,7 @@ class SendEngagementEmailsService(object):
             'notification': self.notification,
             'message': self.message,
             'comment': self.notification.description,
+            'engagement_statement': self.engagement.engagement_statement,
             'site': self.site,
         })
         self.context = kwargs
@@ -86,14 +91,15 @@ class SendEngagementEmailsService(object):
     @property
     def message(self):
         notice = self.notification
+
         ctx = {
             'actor': notice.actor.get_full_name(),
             'verb': notice.verb,
             'action_object': notice.action_object,
-            'target': notice.target.founder if self.sender_is_lawyer else notice.target.lawyer,
+            'target': self.engagement.founder if self.sender_is_lawyer else self.engagement.lawyer,
             'timesince': notice.timesince()
         }
-        return u'%(actor)s %(verb)s to their Engagement with %(target)s' % ctx
+        return u'%(actor)s commented on the Engagement with %(target)s' % ctx
 
     @property
     def recipient_list(self):

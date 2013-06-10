@@ -3,15 +3,20 @@
 
 {% block plain %}
 Hi there,
-{% if is_new %}A new Lead is available at LawPal.com
-{% else %}A new notification has been created on one of your Engagements
-{% endif %}
-
+{% if is_new %}
+A new Lead is available at LawPal.com
+-----
+{% for t,name in engagement.engagement_types %}{{ name }}{% if not forloop.last %},{% endif %}{% endfor %}
+-----
+{{ engagement_statement }}
+-----
+{% else %}
 {{ message }}
-
+-----
 {{ comment }}
+-----{% endif %}
 
-To review this Engagement, go to {% current_site_domain %}{{ engagement.get_absolute_url }}.
+View this Engagement at: {% current_site_domain %}{{ engagement.get_absolute_url }}.
 
 {% include 'email/footer.email' %}
 {% endblock %}
