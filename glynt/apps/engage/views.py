@@ -4,6 +4,8 @@ from django.http import HttpResponse
 from django.views.generic import FormView, DetailView, ListView, UpdateView
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
 
 from glynt.apps.utils import _get_referer, AjaxableResponseMixin
 

@@ -4,7 +4,7 @@ from django.views.generic import DetailView
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
-
+from django.http import Http404
 from services import EnsureFounderService
 from forms import StartupProfileSetupForm
 from models import Founder
