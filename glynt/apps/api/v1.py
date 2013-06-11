@@ -289,6 +289,10 @@ class EngagementResource(BaseApiModelResource):
         authorization = ReadOnlyAuthorization()
         queryset = Engagement.objects.all()
         resource_name = 'engagement'
+        filtering = {
+            'engagement_status': '__in',
+        }
+
         cache = SimpleCache()
 
     def authorized_read_list(self, object_list, bundle):
