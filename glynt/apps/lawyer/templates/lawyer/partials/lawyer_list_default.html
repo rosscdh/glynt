@@ -8,12 +8,15 @@
         <img src="{{ l.profile_photo }}"/>
     </a>
 
+    {% comment %}
+    <!-- Removed as this implementation is not what i was after :) -->
     {% is_lawyer_engaged_with_user lawyer=l user=request.user as is_lawyer_engaged %}
     {% for engagement in is_lawyer_engaged.engagement_list %}
         {% if forloop.first %}
             <span class="badge btn-info badge-lawyer-engaged"><a href="{{ engagement.get_absolute_url }}">Lawyer contacted</a></span>
         {% endif %}
     {% endfor %}
+    {% endcomment %}
 
     <div class="partner-overview">
         <h2 class="partner-name"><a href="{% url 'lawyer:profile' slug=l.username %}">{{ l.full_name|truncatechars:26 }}</a></h2>
