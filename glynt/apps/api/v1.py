@@ -290,9 +290,8 @@ class EngagementResource(BaseApiModelResource):
         queryset = Engagement.objects.all()
         resource_name = 'engagement'
         filtering = {
-            'engagement_status': '__in',
+            'engagement_status': ALL,
         }
-
         cache = SimpleCache()
 
     def authorized_read_list(self, object_list, bundle):
@@ -303,8 +302,12 @@ class EngagementResource(BaseApiModelResource):
             lawyer = bundle.request.user.lawyer_profile
             return object_list.filter(lawyer=lawyer)
 
+    def hydrate(self, bundle):
+        bundle.data['engagement_status'] = ENGAGEMENT_STATUS.value_by_desc(bundle.data.pop('status'))
+        return bundle
+
     def dehydrate(self, bundle):
-        bundle.data['engagement_status'] = bundle.obj.get_engagement_status_display()
+        bundle.data['status'] = ENGAGEMENT_STATUS.get_desc_by_value(bundle.obj.engagement_status)
         return bundle
 
 
