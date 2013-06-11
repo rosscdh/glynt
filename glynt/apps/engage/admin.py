@@ -1,7 +1,8 @@
 # -*- coding: UTF-8 -*-
 from django.contrib import admin
 
-from models import Engagement
+from glynt.apps.engage.models import Engagement
+
 
 class EngagementAdmin(admin.ModelAdmin):
     list_filter = ['engagement_status']

@@ -48,19 +48,7 @@
 				{% endif %}
 
                 <div class="pull-right engagement-container">
-                {% is_lawyer_engaged_with_user lawyer=object user=request.user as is_lawyer_engaged_with_user %}
-                    {% if request.user.profile.is_founder  %}
-                        {% if is_lawyer_engaged_with_user.engagement_list %}
-                            {% for engagement in is_lawyer_engaged_with_user.engagement_list %}
-                                <a href="{{ engagement.get_absolute_url }}" class="btn btn-large btn-primary right">View open request</a>
-                            {% endfor %}
-                        {% else %}
-                            <a href="{% url 'engage:startup_lawyer' lawyer_pk=lawyer.pk %}" id="engage-lawyer" class="btn btn-large btn-primary right" data-toggle="modal">Contact Lawyer</a>
-                        {% endif %}
-                    {% endif %}
-                    {% if not request.user.is_authenticated %}
-                        <a href="{% url 'public:auth_user_class_redirect' user_class_name='founder' %}" id="" class="btn btn-large btn-primary right">Sign up to connect</a>
-                    {% endif %}
+                	{% engage_with_lawyer_button lawyer=object %}
                 </div>
 			</div>
 		</div>

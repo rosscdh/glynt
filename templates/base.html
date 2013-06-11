@@ -40,32 +40,34 @@
 
 <body data-spy="scroll" data-target=".subnav" data-offset="50" class="preview {% block bodyclass %}{% endblock %}">
 
-    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
 
-    <div id="wrap">
-	    <div id="main" class="clearfix">
+<div id="main" class="page-wrap">
 
-        {% block navbar %}
-            {% include 'partials/nav.html' %}
-        {% endblock %}
+    {% block navbar %}
+        {% include 'partials/nav.html' %}
+    {% endblock %}
 
-        {% if user.is_staff %}
-            {% block admin_panel %}{% endblock %}
-        {% endif %}
+    {% if user.is_staff %}
+        {% block admin_panel %}{% endblock %}
+    {% endif %}
 
-        {% include 'partials/messages.html' %}
+    {% include 'partials/messages.html' %}
 
-        {% block prebody %}
-        {% endblock %}
+    {% block prebody %}
+    {% endblock %}
 
-    <div class="container">
+    <div class="container main-container">
         {% block breadcrumb %}{% endblock %}
         {% block body %}{% endblock %}
     </div>
+</div>
 
-    {% block footer %}
-        {% include 'partials/footer.html' %}
-    {% endblock %}
+
+{% block footer %}
+    {% include 'partials/footer.html' %}
+{% endblock %}
+
 
     {% comment %}
 		<!-- Dashboard stuff, commented out for current release

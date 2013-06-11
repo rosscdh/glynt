@@ -8,30 +8,10 @@ from bootstrap.forms import BootstrapMixin
 
 from parsley.decorators import parsleyfy
 
-from services import EngageLawyerAsStartupService
+from glynt.apps.engage.services.startup_engage_lawyer import EngageLawyerAsStartupService
 
 import logging
 logger = logging.getLogger('django.request')
-
-
-@parsleyfy
-class EngageWriteMessageForm(forms.Form):
-    #recipients = CommaSeparatedUserField(label='Recipient', required=True, widget=forms.HiddenInput)
-    body = forms.CharField(required=True, widget=forms.Textarea(attrs={'cols': 6, 'rows': 12}))
-
-    def __init__(self, *args, **kwargs):
-        """ get request object and user """
-        self.request = kwargs.pop('request', None)
-        self.user = self.request.user
-        self.to = kwargs.pop('to', None)
-        kwargs['sender'] = kwargs.pop('from', None)
-
-        kwargs['initial'].update({
-            'sender': kwargs['sender'],
-            'recipients': self.to.username,
-        })
-
-        super(EngageWriteMessageForm, self).__init__(*args, **kwargs)
 
 
 @parsleyfy

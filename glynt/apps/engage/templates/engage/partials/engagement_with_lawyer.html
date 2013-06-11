@@ -1,5 +1,5 @@
 {% load glynt_helpers %}
-{% for e in engagement_list %}
+{% for e in engagements %}
 <a href="{{ e.get_absolute_url }}">{{ e.engagement_statement|truncatechars:30 }}</a> - {% moment e.date_created %}
 {% empty %}
 <span  class="nothing-found">No Engagements with this lawyer</span>
