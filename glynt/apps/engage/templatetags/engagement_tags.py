@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 from django import template
-from django.core.urlresolvers import reverse
-from django.db.models.query import QuerySet
-from django.db.models import Count
 
 register = template.Library()
 
