@@ -21,20 +21,21 @@ def engagement_intro(context, enagement):
 
 
 def engagement_dict(context, user=None):
-    engagement_list = []
-    user = user if user is not None else context.get('user', None)
+    engagements = []
+    user = context.get('user', user)
     lawyer = context.get('lawyer', None)
-    own_profile = True if lawyer.user.pk == user.pk else False
+    is_own_profile = True if lawyer.user.pk == user.pk else False
 
     if user is not None:
         if user.is_authenticated():
-            if not own_profile:
+            if not is_own_profile:
                 if user.profile.is_founder:
-                    engagement_list = Engagement.objects.filter(lawyer=lawyer, founder=user.founder_profile)
+                    engagements = Engagement.objects.filter(lawyer=lawyer, founder=user.founder_profile)
 
     return {
-        'engagement_list': engagement_list,
-        'own_profile' : own_profile,
+        'engagements': engagements,
+        'num_engagements': len(engagements),
+        'is_own_profile' : is_own_profile,
     }
 
 
@@ -51,20 +52,22 @@ def engagement_with_lawyer(context, lawyer):
     return context
 
 
-@register.assignment_tag(takes_context=True)
-def is_lawyer_engaged_with_user(context, lawyer, user=None):
-    user = user if user is not None else context.get('user', None)
-    context.update({
+
+@register.inclusion_tag('engage/partials/engage_with_lawyer_button.html', takes_context=True)
+def engage_with_lawyer_button(context, lawyer=None, user=None):
+    lawyer_enganged = False
+    user = context.get('user', user)
+    lawyer = context.get('lawyer', lawyer)
+    data = {}
+    data.update({
         'lawyer': lawyer,
     })
-
-    lawyer_enganged = False
-    data = engagement_dict(context=context, user=user)
-
-    if data.get('engagement_list'):
-        lawyer_enganged = True
-
-    return lawyer_enganged
+    data.update(engagement_dict(context=context, user=user))
+    data.update({
+        'has_engagements': True if data.get('engagements') else False,
+    })
+    context.update(data)
+    return context
 
 
 @register.inclusion_tag('engage/partials/user_engagement_notification_count.js', takes_context=False)
