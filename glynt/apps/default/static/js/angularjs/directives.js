@@ -6,8 +6,8 @@ angular.module('app.directives', []).
             restrict: 'E',
             transclude: true,
             scope: {},
-            controller: function ($scope, $element) {
-                console.log('controller called');
+            controller: function ($scope, $element, apiCall) {
+                console.log($element);
             },
             template: '<span>Badge will go here...</span>',
             replace: true
