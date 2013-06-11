@@ -25,6 +25,7 @@ import datetime
 class Engagement(models.Model):
     """ Base Engagement object
     Stores initial engagement details
+    NB, slug is generated on save if it is not set
     """
     engagement_status = models.IntegerField(choices=ENGAGEMENT_STATUS.get_choices(), default=ENGAGEMENT_STATUS.new, db_index=True)
     slug = models.SlugField(max_length=128, blank=False)

@@ -13,9 +13,9 @@ logger = logging.getLogger('lawpal.services')
 site_email = settings.DEFAULT_FROM_EMAIL
 
 
-class OpenEngagementService(object):
+class BaseEngagementService(object):
     """ The base class to handle opening and closing and re-opening Engagement objects """
-    status = ENGAGEMENT_STATUS.open
+    target_status = ENGAGEMENT_STATUS.open
     verb = 'opened'
     actioning_user = None
     recipient = None
@@ -25,7 +25,10 @@ class OpenEngagementService(object):
         self.actioning_user = actioning_user
 
     def process(self):
-        self.engagement_status = self.status
+        """ set the engagement engagement_status
+        and return the notification description so that it can be rendered
+        in json response """
+        self.engagement.engagement_status = self.target_status
         self.engagement.save(update_fields=['engagement_status'])
         return self.notifications()
 
@@ -51,11 +54,19 @@ class OpenEngagementService(object):
         return description
 
 
-class CloseEngagementService(OpenEngagementService):
-    status = ENGAGEMENT_STATUS.closed
+class OpenEngagementService(BaseEngagementService):
+    """ Service to assist in opening a class """
+    target_status = ENGAGEMENT_STATUS.open
+    verb = 'opened'
+
+
+class CloseEngagementService(BaseEngagementService):
+    """ Service to assist in closing a class """
+    target_status = ENGAGEMENT_STATUS.closed
     verb = 'closed'
 
 
-class ReOpenEngagementService(OpenEngagementService):
-    status = ENGAGEMENT_STATUS.open
+class ReOpenEngagementService(BaseEngagementService):
+    """ Service to assist in re-opening a class """
+    target_status = ENGAGEMENT_STATUS.open
     verb = 're-opened'
