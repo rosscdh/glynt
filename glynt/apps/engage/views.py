@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import ugettext_lazy as _
-from django.http import HttpResponse
 from django.views.generic import FormView, DetailView, ListView, UpdateView
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 
-from glynt.apps.utils import _get_referer, AjaxableResponseMixin
+from glynt.apps.utils import AjaxableResponseMixin
 
 from glynt.apps.lawyer.models import Lawyer
 from glynt.apps.startup.services import EnsureFounderService
@@ -15,10 +13,7 @@ from glynt.apps.engage.models import Engagement
 
 from bunches import StartupEngageLawyerBunch
 
-from notifications import notify
-import user_streams
-
-from forms import EngageWriteMessageForm, EngageStartupLawyerForm
+from forms import EngageStartupLawyerForm
 from signals import mark_engagement_notifications_as_read
 
 import logging
