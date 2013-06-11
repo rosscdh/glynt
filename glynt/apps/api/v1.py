@@ -303,11 +303,16 @@ class EngagementResource(BaseApiModelResource):
             return object_list.filter(lawyer=lawyer)
 
     def hydrate(self, bundle):
+        bundle.data['lawyer_id'] = bundle.data.pop('lawyer')
         bundle.data['engagement_status'] = ENGAGEMENT_STATUS.value_by_desc(bundle.data.pop('status'))
         return bundle
 
     def dehydrate(self, bundle):
-        bundle.data['status'] = ENGAGEMENT_STATUS.get_desc_by_value(bundle.obj.engagement_status)
+        bundle.data = {}
+        bundle.data.update({
+            'lawyer_id': bundle.obj.lawyer.pk,
+            'status': ENGAGEMENT_STATUS.get_desc_by_value(bundle.obj.engagement_status),
+        })
         return bundle
 
 
