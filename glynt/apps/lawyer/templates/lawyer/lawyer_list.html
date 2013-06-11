@@ -26,9 +26,9 @@
 
 {% block body %}
 {% lawyer_profile_is_complete_message warning_type='flashing' %}
-
+<div ng-app="marketplace" ng-controller="MarketplaceCtrl">
 {% include page_template %}
-
+</div>
 {% endblock %}
 
 {% block css %}

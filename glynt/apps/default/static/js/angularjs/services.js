@@ -2,10 +2,13 @@
 
 angular.module('app.services', ['ngResource']).
     factory('apiCall', function ($resource) {
-        return $resource('/api/v1/:type/:id',
-            {type: '@type', id: '@id'},
+        return $resource('/api/v1/:type',
+            {type: '@type'},
             {
-                get: {method: 'GET'}
+                get: {
+                    method: 'GET',
+                    cache : true
+                }
             }
         );
     });

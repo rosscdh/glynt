@@ -2,14 +2,12 @@
 {% lazy_paginate object_list %}
 
 {% for l in object_list %}
-<div ng-app="marketplace">
     <div class="clearfix partner">
 
         <a class="partner-avatar" href="{% url 'lawyer:profile' slug=l.username %}">
             <img src="{{ l.profile_photo }}"/>
+            <engaged lawyer="{{ l.pk }}"></engaged>
         </a>
-
-        <engaged data-lawyer-id="{{ l.pk }}"></engaged>
 
         {% comment %}
         <!-- Removed as this implementation is not what i was after :) -->
@@ -45,9 +43,7 @@
             <a href="{% url 'lawyer:profile' slug=l.username %}" class="transaction-view-all"><span>View all</span></a>
         </div>
         {% endif %}
-
     </div>
-</div>
 {% empty %}
  <div class="row">
     <div class="span12">

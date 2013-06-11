@@ -5,11 +5,14 @@ angular.module('app.directives', []).
         return {
             restrict: 'E',
             transclude: true,
-            scope: {},
-            controller: function ($scope, $element, apiCall) {
-                console.log($element);
+            scope: true,
+            controller: function ($scope, $element) {
+                var lawyer = $($element).attr('lawyer');
+                //console.log($scope.engagements);
             },
-            template: '<span>Badge will go here...</span>',
-            replace: true
+            template: '<span class="badge btn-info badge-lawyer-engaged"><a href="#">{{ lawyer_engaged }}</a></span>',
+
+
+            replace: false
         }
     });
