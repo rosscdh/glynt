@@ -85,7 +85,7 @@ class StartupEngageLawyerView(AjaxableResponseMixin, FormView):
         """
         self.lawyer = get_object_or_404(Lawyer, pk=self.kwargs.get('lawyer_pk'))
 
-        self.engagement = Engagement.objects.founder_lawyer_engagement(founder=self.request.user.founder_profile, lawyer=self.lawyer)
+        self.engagement = Engagement.objects.historic(founder=self.request.user.founder_profile, lawyer=self.lawyer)
 
         #self.engagement = 
         kwargs = self.get_form_kwargs()

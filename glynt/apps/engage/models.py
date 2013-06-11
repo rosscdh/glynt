@@ -1,13 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 
-from notifications import notify
-import user_streams
-
 from jsonfield import JSONField
-from glynt.apps.utils import get_namedtuple_choices
 
 from glynt.apps.engage import ENGAGEMENT_STATUS
 from glynt.apps.engage import generate_engagement_slug
@@ -15,10 +10,8 @@ from glynt.apps.engage.services.actions import OpenEngagementService, CloseEngag
 from glynt.apps.startup.models import Startup, Founder
 from glynt.apps.lawyer.models import Lawyer
 
-from bunches import StartupEngageLawyerBunch
-from managers import DefaultEngageManager
+from managers import DefaultEngagementManager
 
-import datetime
 
 
 
@@ -36,7 +29,7 @@ class Engagement(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True, null=True)
 
-    objects = DefaultEngageManager()
+    objects = DefaultEngagementManager()
 
     def __unicode__(self):
         return '%s of %s Enagement with %s' % (self.founder, self.startup, self.lawyer,)
@@ -91,4 +84,4 @@ class Engagement(models.Model):
 
 
 # import signals so they load on django load
-from signals import save_engagement_comment_signal
+from glynt.apps.engage.signals import save_engagement_comment_signal
