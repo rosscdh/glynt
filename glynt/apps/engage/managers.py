@@ -22,7 +22,7 @@ class DefaultEngagementManager(models.Manager):
         lawyer the process repeats"""
         try:
             # has a previous engagement with this lawyer
-            return self.get(lawyer=lawyer, founder=founder)
+            return self.get(lawyer=lawyer, founder=founder).order_by('-id')
         except ObjectDoesNotExist:
             # @BUSINESSRULE
             # does not have a previous engagement with this lawyer so look for this startups previous
