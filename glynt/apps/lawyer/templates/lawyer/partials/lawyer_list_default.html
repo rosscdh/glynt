@@ -2,47 +2,51 @@
 {% lazy_paginate object_list %}
 
 {% for l in object_list %}
-<div class="clearfix partner">
+<div ng-app="marketplace">
+    <div class="clearfix partner">
 
-    <a class="partner-avatar" href="{% url 'lawyer:profile' slug=l.username %}">
-        <img src="{{ l.profile_photo }}"/>
-    </a>
+        <a class="partner-avatar" href="{% url 'lawyer:profile' slug=l.username %}">
+            <img src="{{ l.profile_photo }}"/>
+        </a>
 
-    {% comment %}
-    <!-- Removed as this implementation is not what i was after :) -->
-    {% is_lawyer_engaged_with_user lawyer=l user=request.user as is_lawyer_engaged %}
-    {% for engagement in is_lawyer_engaged.engagement_list %}
-        {% if forloop.first %}
-            <span class="badge btn-info badge-lawyer-engaged"><a href="{{ engagement.get_absolute_url }}">Lawyer contacted</a></span>
+        <engaged data-lawyer-id="{{ l.pk }}"></engaged>
+
+        {% comment %}
+        <!-- Removed as this implementation is not what i was after :) -->
+        {% is_lawyer_engaged_with_user lawyer=l user=request.user as is_lawyer_engaged %}
+        {% for engagement in is_lawyer_engaged.engagement_list %}
+            {% if forloop.first %}
+                <span class="badge btn-info badge-lawyer-engaged"><a href="{{ engagement.get_absolute_url }}">Lawyer contacted</a></span>
+            {% endif %}
+        {% endfor %}
+        {% endcomment %}
+
+        <div class="partner-overview">
+            <h2 class="partner-name"><a href="{% url 'lawyer:profile' slug=l.username %}">{{ l.full_name|truncatechars:26 }}</a></h2>
+
+            <h3>{{ l.summary|truncatechars:55 }}</h3>
+
+            {% if l.firm_name %}
+                <h3>{% if l.position %}{{ l.position }} <span>at</span> {% endif %}{{ l.firm_name }}</h3>
+            {% endif %}
+
+            <ul class="partner-info">
+                <li class="marker big">{% filter truncatechars:130 %}
+                    {% for practice_location in l.object.practice_locations  %}
+                    {{ practice_location }}{% if not forloop.last %} <span>and</span> {% endif %}
+                    {% endfor %}{% endfilter %}
+                </li>
+            </ul>
+        </div>
+
+        {% if l.object.seed_financing_amount_min or l.object.incorporation_min %}
+        <div class="card-bordered card-transaction">
+            {% fee_packages_mini fee_packages=l.fee_packages %}
+            <a href="{% url 'lawyer:profile' slug=l.username %}" class="transaction-view-all"><span>View all</span></a>
+        </div>
         {% endif %}
-    {% endfor %}
-    {% endcomment %}
 
-    <div class="partner-overview">
-        <h2 class="partner-name"><a href="{% url 'lawyer:profile' slug=l.username %}">{{ l.full_name|truncatechars:26 }}</a></h2>
-
-        <h3>{{ l.summary|truncatechars:55 }}</h3>
-
-        {% if l.firm_name %}
-            <h3>{% if l.position %}{{ l.position }} <span>at</span> {% endif %}{{ l.firm_name }}</h3>
-        {% endif %}
-
-        <ul class="partner-info">
-            <li class="marker big">{% filter truncatechars:130 %}
-                {% for practice_location in l.object.practice_locations  %}
-                {{ practice_location }}{% if not forloop.last %} <span>and</span> {% endif %}
-                {% endfor %}{% endfilter %}
-            </li>
-        </ul>
     </div>
-
-    {% if l.object.seed_financing_amount_min or l.object.incorporation_min %}
-    <div class="card-bordered card-transaction">
-        {% fee_packages_mini fee_packages=l.fee_packages %}
-        <a href="{% url 'lawyer:profile' slug=l.username %}" class="transaction-view-all"><span>View all</span></a>
-    </div>
-    {% endif %}
-
 </div>
 {% empty %}
  <div class="row">
@@ -57,6 +61,14 @@
 {% show_more %}
 
 {% block js %}
+    <script src="{{ STATIC_URL }}js/angularjs/lib/angular.min.js"></script>
+
+    <script src="{{ STATIC_URL }}js/angularjs/app.js"></script>
+    <script src="{{ STATIC_URL }}js/angularjs/controllers.js"></script>
+    <script src="{{ STATIC_URL }}js/angularjs/services.js"></script>
+    <script src="{{ STATIC_URL }}js/angularjs/directives.js"></script>
+
+
     <script>
         $(document).ready(function () {
             $('.tip').tooltip();
