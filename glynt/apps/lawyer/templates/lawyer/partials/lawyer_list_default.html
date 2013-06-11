@@ -19,14 +19,14 @@
 
         <ul class="partner-info">
             <li class="marker big">{% filter truncatechars:130 %}
-                {% for practice_location in l.object.practice_locations  %}
+                {% for practice_location in l.practice_locations  %}
                 {{ practice_location }}{% if not forloop.last %} <span>and</span> {% endif %}
                 {% endfor %}{% endfilter %}
             </li>
         </ul>
     </div>
 
-    {% if l.object.seed_financing_amount_min or l.object.incorporation_min %}
+    {% if l.fee_packages %}
     <div class="card-bordered card-transaction">
         {% fee_packages_mini fee_packages=l.fee_packages %}
         <a href="{% url 'lawyer:profile' slug=l.username %}" class="transaction-view-all"><span>View all</span></a>

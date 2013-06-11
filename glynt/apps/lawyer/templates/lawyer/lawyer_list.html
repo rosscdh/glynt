@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load crispy_forms_tags lawyer_profile_tags %}
+{% extends 'base.html' %}{% load cache crispy_forms_tags lawyer_profile_tags %}
 
 {% block page_title %}Marketplace{% endblock %}
 {% block bodyclass %}lawyer-welcome{% endblock %}
@@ -25,7 +25,10 @@
 {% endblock %}
 
 {% block body %}
+
+{% cache 300 lawyer_list_profile_message user.pk %}
 {% lawyer_profile_is_complete_message warning_type='flashing' %}
+{% endcache %}
 
 {% include page_template %}
 
