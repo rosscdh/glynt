@@ -283,35 +283,29 @@ class SignatureResource(BaseApiModelResource):
         return bundle
 
 
-class EngagementResource(BaseApiModelResource):
+class StartupEngagementResource(BaseApiModelResource):
+    lawyer_id = fields.IntegerField('lawyer_id')
+
     class Meta(BaseApiModelResource.Meta):
-        authentication = Authentication()
         authorization = ReadOnlyAuthorization()
         queryset = Engagement.objects.all()
         resource_name = 'engagement'
+        fields = ['lawyer_id', 'engagement_status']
+        include_resource_uri = False
+        include_absolute_url = True
         filtering = {
             'engagement_status': ALL,
         }
-        cache = SimpleCache()
 
     def authorized_read_list(self, object_list, bundle):
-        if bundle.request.user.profile.is_founder:
-            founder = bundle.request.user.founder_profile.pk
-            return object_list.filter(founder=founder)
+        if not bundle.request.user.is_authenticated():
+            return []
         else:
-            lawyer = bundle.request.user.lawyer_profile
-            return object_list.filter(lawyer=lawyer)
-
-    def hydrate(self, bundle):
-        bundle.data['lawyer'] = bundle.data.pop('lawyer_id')
-        bundle.data['engagement_status'] = ENGAGEMENT_STATUS.value_by_desc(bundle.data.pop('status'))
-        return bundle
+            return object_list.filter(founder=bundle.request.user.founder_profile)
 
     def dehydrate(self, bundle):
-        bundle.data = {}
         bundle.data.update({
-            'lawyer_id': bundle.obj.lawyer.pk,
-            'status': ENGAGEMENT_STATUS.get_desc_by_value(bundle.obj.engagement_status),
+            'status': ENGAGEMENT_STATUS.get_desc_by_value(bundle.obj.engagement_status).lower(),
         })
         return bundle
 
@@ -330,4 +324,5 @@ v1_internal_api.register(LawyerResource())
 v1_internal_api.register(DocumentResource())
 v1_internal_api.register(ClientCreatedDocumentResource())
 v1_internal_api.register(SignatureResource())
-v1_internal_api.register(EngagementResource())
+
+v1_internal_api.register(StartupEngagementResource())
