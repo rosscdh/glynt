@@ -193,6 +193,20 @@ def git_export(branch='master'):
       local('git archive --format zip --output /tmp/%s.zip --prefix=%s/ %s' % (env.SHA1_FILENAME, env.SHA1_FILENAME, branch,), capture=False)
 
 @task
+@runs_once
+def current_version_sha():
+    current = '%s%s' % (env.remote_project_path, env.project)
+    realpath = run('ls -al %s' % current)
+    current_sha = realpath.split('/')[-1]
+    return current_sha
+
+@task
+@runs_once
+def diff_outgoing_with_current():
+    diff = local('git diff %s %s' % (get_sha1(), current_version_sha(),), capture=True)
+    print diff
+
+@task
 def celery_restart():
     celery_stop()
     celery_start()
@@ -218,6 +232,7 @@ def prepare_deploy():
     git_export()
 
 @task
+@runs_once
 def update_index():
     with settings(host_string=env.db_host):
         #for i in ['default lawyer', 'firms firm']:
@@ -225,6 +240,7 @@ def update_index():
             virtualenv('python %s%s/manage.py update_index -a 100000 -u %s' % (env.remote_project_path, env.project, i))
 
 @task
+@runs_once
 def rebuild_index():
     with settings(host_string=env.db_host):
         #for i in ['default lawyer', 'firms firm']:
@@ -232,11 +248,13 @@ def rebuild_index():
             virtualenv('python %s%s/manage.py rebuild_index --noinput' % (env.remote_project_path, env.project,))
 
 @task
+@runs_once
 def migrate():
     with settings(host_string=env.db_host):
         virtualenv('python %s%s/manage.py migrate' % (env.remote_project_path, env.project))
 
 @task
+@runs_once
 def syncdb():
     with settings(host_string=env.db_host):
         virtualenv('python %s%s/manage.py syncdb' % (env.remote_project_path, env.project))
@@ -475,6 +493,9 @@ def deploy(is_predeploy='False',full='False',db='False',search='False'):
     db = True if db.lower() in true_list else False
     search = True if search.lower() in true_list else False
 
+    diff = prompt(colored("View diff? [y,n]", 'magenta'), default="y")
+    if diff.lower() in ['y','yes', 1, '1']:
+        print diff_outgoing_with_current()
     newrelic_note()
     prepare_deploy()
     do_deploy()
