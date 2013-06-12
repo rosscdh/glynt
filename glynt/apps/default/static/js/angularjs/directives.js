@@ -11,21 +11,16 @@ angular.module('app.directives', []).
                 $scope.hide = 'hide';
                 $scope.$watch('engagements', function (data) {
                     if (data !== undefined) {
-                        $.each(data, function (i, engagement) {
-                            if (parseInt(lawyer) === engagement.lawyer_id) {
-                                $scope.lawyer_engaged = 'Already Contacted';
-                                $scope.enagagement_url = engagement.absolute_url;
-                                $scope.hide = '';
-                                return false
-                            }
-                        });
+                        var ele = data[$element.attr('lawyer')];
+                        if (ele) {
+                            $scope.lawyer_engaged = 'Already Contacted';
+                            $scope.enagagement_url = ele.absolute_url;
+                            $scope.hide = '';
+                        }
                     }
                 });
-
             },
             template: '<span class="badge btn-info badge-lawyer-engaged {{ hide }}"><a href="{{ enagagement_url }}">{{ lawyer_engaged }}</a></span>',
-
-
             replace: false
         }
     });
