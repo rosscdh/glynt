@@ -57,10 +57,14 @@ class Founder(models.Model):
     photo = models.ImageField(upload_to=_founder_upload_photo)
 
     def __unicode__(self):
-        return self.user.username
+        return u'%s' % (self.full_name,)
 
     def get_absolute_url(self):
         return reverse('startup:founder_profile', kwargs={'slug': self.user.username})
+
+    @property
+    def full_name(self):
+        return u'%s %s' % (self.data.get('first_name'), self.data.get('last_name'))
 
     @property
     def profile_photo(self):

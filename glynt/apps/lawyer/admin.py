@@ -18,8 +18,9 @@ class LawyerAdmin(admin.ModelAdmin):
     inlines = [
         FirmInline,
     ]
+
     def queryset (self, request):
-        qs = Lawyer.objects.select_related('user').all().prefetch_related('firm_lawyers')
+        qs = Lawyer.objects.select_related('user', ,'firm_lawyers').all()
         ordering = self.get_ordering(request)
         if ordering:
             qs = qs.order_by(*ordering)

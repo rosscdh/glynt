@@ -51,7 +51,7 @@ class Lawyer(models.Model):
     approved = ApprovedLawyerManager()
 
     def __unicode__(self):
-        return u'%s (%s)' % (self.user.username, self.user.email,)
+        return u'%s' % (self.full_name,)
 
     def __getattr__(self, attr_name):
         """ leverage python to get the attr if its not already part of the model structure
@@ -95,8 +95,9 @@ class Lawyer(models.Model):
     def username(self):
         return self.user.username
 
+    @property
     def full_name(self):
-        return self.user.get_full_name()
+        return u'%s %s' % (self.data.get('first_name'), self.data.get('last_name'))
 
     def email(self):
         return self.user.email

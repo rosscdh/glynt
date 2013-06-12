@@ -32,7 +32,7 @@ class Engagement(models.Model):
     objects = DefaultEngagementManager()
 
     def __unicode__(self):
-        return '%s of %s Enagement with %s' % (self.founder, self.startup, self.lawyer,)
+        return '%s of %s Enagement with %s' % (self.founder.user.get_full_name(), self.startup, self.lawyer.user.get_full_name(),)
 
     def get_absolute_url(self):
         return reverse('engage:engagement', kwargs={'slug': self.slug})
