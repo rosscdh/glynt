@@ -583,13 +583,17 @@ $(document).ready(function(){
     * Parsley error counter
     */
     var handleErrorCount = function handleErrorCount(tabPane) {
+
         var targetTabLink =  $('#profile-tab a[href="#{id}"]'.assign({
             id: tabPane.prop('id')
         }));
+
         var targetTabLi = targetTabLink.closest('li');
         var errorCount = parseInt(tabPane.find('.parsley-error').length);
-        tabPane.attr('error-count', errorCount);
+
+        tabPane.attr('data-error-count', errorCount);
         targetTabLi.find('em').remove();
+
         if (errorCount > 0) {
             var errorTemplate = $('<em/>', {
                 html: '<span>{errorCount}</span>'.assign({'errorCount': errorCount})
@@ -603,25 +607,37 @@ $(document).ready(function(){
     */
     $( 'form[data-validate="parsley"]' ).parsley( 'addListener', {
         onFormSubmit: function ( isFormValid, event, ParsleyForm ) {
-            console.log(isFormValid);
-            if (!isFormValid) {
+            if (isFormValid === false) {
+                // Scroll to top ONLY on error
+                $("html, body").animate({scrollTop: 200}, 1000);
+
+                // get the nearest tabPane to store error count unless error is from T&Cs checkbox
+                $.each($('.tab-pane[data-error-count]'), function(i,elem){
+                    var tabPane = $(elem);
+                    // this event must fire once all of the .parsley-errors
+                    // have been created (onFieldError)
+                    handleErrorCount(tabPane);
+                })
+
                 $('.alert-error').removeClass('hidden');
             } else {
                 $('.alert-error').addClass('hidden');
             }
         },
         onFieldError: function ( elem, constraints, ParsleyField ) {
-            // Scroll to top ONLY on error
-            $("html, body").animate({scrollTop: 200}, 1000);
-            // get the nearest tabPane to store error count unless error is from T&Cs checkbox
-            if ($(elem).prop('id') !== 'id_agree_tandc') {
-                var tabPane = $(elem).closest('.tab-pane');
-                handleErrorCount(tabPane);
+            elem = $(elem);
+
+            if (elem.prop('id') !== 'id_agree_tandc') {
+                var tabPane = $(elem.closest('.tab-pane'));
+                // increment the error count attrib
+                var errorCount = tabPane.attr('data-error-count');
+                if (errorCount == 0) {
+                    errorCount = parseInt(errorCount) + 1;
+                    tabPane.attr('data-error-count', errorCount)
+                }
             }
-            var tabPane = $(elem).closest('.tab-pane');
-            handleErrorCount(tabPane);
-            // if field is not visible, do not apply Parsley validation!
-            if ( !$( elem ).is( ':visible' ) ) {
+
+            if ( !elem.is( ':visible' ) ) {
                 return true;
             }
             return false;
