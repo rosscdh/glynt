@@ -6,12 +6,12 @@ angular.module('app.directives', []).
             restrict: 'E',
             transclude: true,
             scope: true,
-            controller: function ($scope, $element) {
-                var lawyer = $($element).attr('lawyer');
+            controller: function ($scope, $element, $attrs) {
+                var lawyer = $attrs.lawyer;
                 $scope.hide = 'hide';
                 $scope.$watch('engagements', function (data) {
                     if (data !== undefined) {
-                        var ele = data[$element.attr('lawyer')];
+                        var ele = data[lawyer];
                         if (ele && parseInt(ele) !== NaN) {
                             $scope.lawyer_engaged = 'Already Contacted';
                             $scope.enagagement_url = ele.absolute_url;
