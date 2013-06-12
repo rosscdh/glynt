@@ -5,8 +5,9 @@ angular.module('app.services', ['ngResource']).
         return $resource('/api/v1/:type',
             {type: '@type'},
             {
-                get: {
+                query: {
                     method: 'GET',
+                    isArray: false,
                     cache : true
                 }
             }
