@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app.directives', []).
+angular.module('App.Directives', []).
     directive('engaged', function () {
         return {
             restrict: 'E',

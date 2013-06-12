@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app.services', ['ngResource']).
+angular.module('App.Services', ['ngResource']).
     factory('apiCall', function ($resource) {
         return $resource('/api/v1/:type',
             {type: '@type'},

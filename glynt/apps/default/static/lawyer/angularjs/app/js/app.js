@@ -1,3 +1,3 @@
 'use strict';
 
-var app = angular.module('marketplace', ['app.controllers', 'app.directives', 'app.services']);
+angular.module('App', ['App.Controllers', 'App.Directives', 'App.Services']);

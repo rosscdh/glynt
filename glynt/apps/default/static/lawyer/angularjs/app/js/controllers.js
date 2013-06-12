@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app.controllers', []).
+angular.module('App.Controllers', []).
     controller('MarketplaceCtrl', function ($scope, apiCall) {
         apiCall.query({
             type: 'engagement',
