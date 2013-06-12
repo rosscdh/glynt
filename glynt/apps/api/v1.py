@@ -27,6 +27,17 @@ v1_internal_api = Api(api_name='v1')
 available_formats = ['json']
 
 
+class UserLoggedInAuthorization(Authorization):
+    """
+    authorized_read_list is deprecated so made a custom Authorization class
+    """
+    def read_list(self, object_list, bundle):
+        if not bundle.request.user.is_authenticated():
+            return []
+        else:
+            return object_list.filter(founder=bundle.request.user.founder_profile)
+
+
 class BaseApiModelResource(ModelResource):
     """
     Base Resource that all other api resources extend
@@ -287,7 +298,8 @@ class StartupEngagementResource(BaseApiModelResource):
     lawyer_id = fields.IntegerField('lawyer_id')
 
     class Meta(BaseApiModelResource.Meta):
-        authorization = ReadOnlyAuthorization()
+        authentication = Authentication()
+        authorization = UserLoggedInAuthorization()
         queryset = Engagement.objects.all()
         resource_name = 'engagement'
         fields = ['lawyer_id', 'engagement_status']
@@ -296,12 +308,6 @@ class StartupEngagementResource(BaseApiModelResource):
         filtering = {
             'engagement_status': ALL,
         }
-
-    def authorized_read_list(self, object_list, bundle):
-        if not bundle.request.user.is_authenticated():
-            return []
-        else:
-            return object_list.filter(founder=bundle.request.user.founder_profile)
 
     def dehydrate(self, bundle):
         bundle.data.update({

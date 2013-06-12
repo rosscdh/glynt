@@ -8,6 +8,7 @@ angular.module('app.directives', []).
             scope: true,
             controller: function ($scope, $element) {
                 var lawyer = $($element).attr('lawyer');
+                $scope.hide = 'hide';
                 $scope.$watch('engagements', function (data) {
                     if (data !== undefined) {
                         $.each(data, function (i, engagement) {
@@ -16,8 +17,6 @@ angular.module('app.directives', []).
                                 $scope.enagagement_url = engagement.absolute_url;
                                 $scope.hide = '';
                                 return false
-                            } else {
-                                $scope.hide = 'hide';
                             }
                         });
                     }

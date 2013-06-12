@@ -7,8 +7,7 @@ angular.module('app.services', ['ngResource']).
             {
                 query: {
                     method: 'GET',
-                    isArray: false,
-                    cache : true
+                    isArray: false
                 }
             }
         );
