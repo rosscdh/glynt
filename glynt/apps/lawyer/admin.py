@@ -20,7 +20,7 @@ class LawyerAdmin(admin.ModelAdmin):
     ]
 
     def queryset (self, request):
-        qs = Lawyer.objects.select_related('user', ,'firm_lawyers').all()
+        qs = Lawyer.objects.select_related('user', 'firm_lawyers').all()
         ordering = self.get_ordering(request)
         if ordering:
             qs = qs.order_by(*ordering)
