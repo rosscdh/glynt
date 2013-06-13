@@ -65,6 +65,7 @@ def production():
     env.application_user = 'app'
     # connect to the port-forwarded ssh
     env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com', 'ec2-54-241-224-100.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
+    env.celery_name = 'celery-production' # taken from chef cookbook
 
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
 
@@ -91,6 +92,7 @@ def preview():
     env.application_user = 'app'
     # connect to the port-forwarded ssh
     env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com', 'ec2-54-241-224-100.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
+    env.celery_name = 'celery-preview' # taken from chef cookbook
 
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
 
@@ -218,26 +220,26 @@ def diff_outgoing_with_current():
 @task
 @roles('worker')
 def celery_restart():
-    celery_stop()
-    celery_start()
+    with settings(warn_only=True): # only warning as we will often have errors importing
+        sudo('supervisorctl restart %s' % env.celery_name )
 
 @task
 @roles('worker')
 def celery_start(loglevel='info'):
-    pid_path = "%sceleryd.pid" % env.remote_project_path
     with settings(warn_only=True): # only warning as we will often have errors importing
-        if files.exists(pid_path):
-            celery_stop()
-        virtualenv('cd %s%s;python manage.py celery worker --loglevel=%s --pidfile=%s' % (env.remote_project_path, env.project, loglevel, pid_path,))
+        sudo('supervisorctl start %s' % env.celery_name )
 
 @task
 @roles('worker')
 def celery_stop():
     with settings(warn_only=True): # only warning as we will often have errors importing
-        pid_path = "%sceleryd.pid" % env.remote_project_path
-        sudo("cat %s | xargs kill -9" % pid_path, user=env.application_user, shell=True)
-        if files.exists(pid_path):
-            sudo("rm %s" % pid_path , shell=False, warn_only=True)
+        sudo('supervisorctl stop %s' % env.celery_name )
+
+@task
+@roles('worker')
+def celery_log():
+    with settings(warn_only=True): # only warning as we will often have errors importing
+        sudo('supervisorctl fg %s' % env.celery_name )
 
 @task
 def prepare_deploy():
