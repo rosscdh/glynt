@@ -7,7 +7,8 @@ files = [
   '../../js/angularjs/lib/angular-*.js',
   'test/lib/angular-mocks.js',
   'app/js/**/*.js',
-  'test/unit/**/*.js'
+  'test/unit/**/*.js',
+  '../../js/jquery.min.js'
 ];
 
 autoWatch = true;

@@ -1,7 +1,6 @@
 'use strict';
 
-angular.module('App.Directives', []).
-    directive('engaged', function () {
+App.directive('engaged', function () {
         return {
             restrict: 'E',
             transclude: true,
