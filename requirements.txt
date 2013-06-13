@@ -87,6 +87,7 @@ xhtml2pdf
 
 # Workers
 django-celery
+boto # required for AWS-SQS
 #django-rq # potential but not sure
 
 
