@@ -310,6 +310,10 @@ BROKER_CONNECTION_TIMEOUT = 3
 BROKER_POOL_LIMIT = 1 # Very importnat for heroku, stops a max + 1 event
 BROKER_CONNECTION_MAX_RETRIES = 2
 
+# AWS
+AWS_ACCESS_KEY_ID = 'AKIAI36HOWMVHPU4I3HA'
+AWS_SECRET_ACCESS_KEY = '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'
+
 
 USERENA_USE_MESSAGES = True
 USERENA_LOGIN_AFTER_ACTIVATION = True # Enable beta style signup (manual activation)
@@ -372,7 +376,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.user.update_user_details',
     'glynt.apps.graph.pipeline.ensure_user_setup',
     'glynt.apps.graph.pipeline.profile_extra_details',
-    # 'glynt.apps.graph.pipeline.graph_user_connections',
+    'glynt.apps.graph.pipeline.graph_user_connections',
 )
 
 POSTMAN_DISALLOW_ANONYMOUS = True

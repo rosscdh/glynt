@@ -95,8 +95,20 @@ HAYSTACK_CONNECTIONS = {
 USE_ELASTICSEARCH = True
 
 
-# Heroku - CloudAMQP
-BROKER_URL = 'amqp://gqhezwgc:1JylV9VKTXnlA9iuy9WFqIOqbl4yTmQa@tiger.cloudamqp.com/gqhezwgc'
+# AMPQ Queue System AWS
+BROKER_USER = AWS_ACCESS_KEY_ID
+BROKER_PASSWORD = AWS_SECRET_ACCESS_KEY
+BROKER_TRANSPORT = 'sqs'
+BROKER_TRANSPORT_OPTIONS = {
+    'region': 'us-west-1',
+}
+CELERY_DEFAULT_QUEUE = 'lawpal-preview'
+CELERY_QUEUES = {
+    CELERY_DEFAULT_QUEUE: {
+        'exchange': CELERY_DEFAULT_QUEUE,
+        'binding_key': CELERY_DEFAULT_QUEUE,
+    }
+}
 
 SPLUNKSTORM_ENDPOINT = 'logs2.splunkstorm.com'
 SPLUNKSTORM_PORT = 20824
