@@ -76,9 +76,6 @@ MEDIA_URL = '/m/'
 STATIC_ROOT = os.path.join(SITE_ROOT, 'static')
 STATIC_URL = '/static/'
 
-import djcelery
-djcelery.setup_loader()
-
 # Additional locations of static files
 STATICFILES_DIRS = (
 )
