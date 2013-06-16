@@ -6,7 +6,7 @@ from tastypie import fields
 from tastypie.serializers import Serializer
 from tastypie.cache import SimpleCache
 from tastypie.authentication import Authentication, SessionAuthentication
-from tastypie.authorization import Authorization, DjangoAuthorization
+from tastypie.authorization import Authorization, DjangoAuthorization, ReadOnlyAuthorization
 
 from django.contrib.auth.models import User
 
@@ -16,6 +16,8 @@ from glynt.apps.firm.models import Firm, Office
 from glynt.apps.startup.models import Startup
 from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
 from glynt.apps.sign.models import DocumentSignature
+from glynt.apps.engage.models import Engagement
+from glynt.apps.engage import ENGAGEMENT_STATUS
 
 from glynt.apps.startup.bunches import StartupProfileBunch
 
@@ -23,6 +25,17 @@ from glynt.apps.startup.bunches import StartupProfileBunch
 v1_internal_api = Api(api_name='v1')
 
 available_formats = ['json']
+
+
+class UserLoggedInAuthorization(Authorization):
+    """
+    authorized_read_list is deprecated so made a custom Authorization class
+    """
+    def read_list(self, object_list, bundle):
+        if not bundle.request.user.is_authenticated():
+            return []
+        else:
+            return object_list.filter(founder=bundle.request.user.founder_profile)
 
 
 class BaseApiModelResource(ModelResource):
@@ -136,6 +149,7 @@ def _startup_profile(bundle):
     data['is_startup'] = True
     return data
 
+
 class StartupBasicProfileResource(BaseApiModelResource):
     class Meta(BaseApiModelResource.Meta):
         queryset = Startup.objects.all().select_related('founders', 'founders_user')
@@ -178,6 +192,7 @@ def _founder_profile(bundle):
             ],
         })
     return data
+
 
 def _lawyer_profile(bundle):
     data = {}
@@ -223,6 +238,7 @@ class UserBasicProfileResource(BaseApiModelResource):
         bundle.data.update(_lawyer_profile(bundle))
         bundle.data.update(_founder_profile(bundle))
         return bundle
+
 
 class LawyerResource(BaseApiModelResource):
     class Meta(BaseApiModelResource.Meta):
@@ -278,6 +294,28 @@ class SignatureResource(BaseApiModelResource):
         return bundle
 
 
+class StartupEngagementResource(BaseApiModelResource):
+    lawyer_id = fields.IntegerField('lawyer_id')
+
+    class Meta(BaseApiModelResource.Meta):
+        authentication = Authentication()
+        authorization = UserLoggedInAuthorization()
+        queryset = Engagement.objects.all()
+        resource_name = 'engagement'
+        fields = ['lawyer_id', 'engagement_status']
+        include_resource_uri = False
+        include_absolute_url = True
+        filtering = {
+            'engagement_status': ALL,
+        }
+
+    def dehydrate(self, bundle):
+        bundle.data.update({
+            'status': ENGAGEMENT_STATUS.get_desc_by_value(bundle.obj.engagement_status).lower(),
+        })
+        return bundle
+
+
 """ Register the api resources """
 v1_internal_api.register(LocationSimpleResource())
 v1_internal_api.register(StateSimpleResource())
@@ -292,3 +330,5 @@ v1_internal_api.register(LawyerResource())
 v1_internal_api.register(DocumentResource())
 v1_internal_api.register(ClientCreatedDocumentResource())
 v1_internal_api.register(SignatureResource())
+
+v1_internal_api.register(StartupEngagementResource())
