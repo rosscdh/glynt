@@ -59,17 +59,15 @@ class UserClassSessionRedirectView(RedirectView):
         """ if the user has already signed up and has set a password then continue normally
         otherwise show them the form """
 
-        user_class_name = kwargs.get('user_class_name', 'lawyer')
+        user_class_name = kwargs.get('user_class_name', 'founder') # default to founder
+        login_type = kwargs.get('login_type', 'linkedin') # default ot linkedin
 
         self.request.session['user_class_name'] = user_class_name
-        logging.debug('logging in as user_class_name: %s' % user_class_name)
 
-        if user_class_name == 'lawyer':
-            url = reverse('socialauth_begin', args=['linkedin'])
+        logging.debug('logging in as user_class_name: %s using %s' % (user_class_name, login_type))
 
-        elif user_class_name == 'founder':
-            url = reverse('socialauth_begin', args=['google-oauth2'])
-
+        if user_class_name:
+            url = reverse('socialauth_begin', args=[login_type])
         else:
             raise Http404("User Class %s is not Defined" % user_class_name)
 

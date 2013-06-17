@@ -13,8 +13,8 @@
     <div class="row">
         
         <div class="startup">
-            <a href="{% url "public:auth_user_class_redirect" user_class_name="founder" %}" class="btn btn-primary"><img src="{{ STATIC_URL }}img/google-32.png">Sign in with Google</a>
-            <a href="{% url "public:auth_user_class_redirect" user_class_name="founder" %}" class="btn btn-primary"><img src="{{ STATIC_URL }}img/linkedin-32.png"> Sign in with LinkedIn</a>
+            <a href="{% url "public:auth_user_class_redirect" user_class_name="founder" login_type="google-oauth2" %}" class="btn btn-primary"><img src="{{ STATIC_URL }}img/google-32.png">Sign in with Google</a>
+            <a href="{% url "public:auth_user_class_redirect" user_class_name="founder" login_type="linkedin" %}" class="btn btn-primary"><img src="{{ STATIC_URL }}img/linkedin-32.png"> Sign in with LinkedIn</a>
         </div>
 
     </div>
