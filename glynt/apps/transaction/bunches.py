@@ -1,17 +1,18 @@
-# -*- coding: utf-8 -*-
+# coding: utf-8
+""" Bunches that prepare and save the pre-validation questions
+as well as the transactional info
+
+Bunches DO NOT perform database actions, they ONLY provide the data to be saved
+Services is where the magic happens
+"""
 from bunch import Bunch
+
+from glynt.apps.transaction.models import Transaction
 
 import logging
 logger = logging.getLogger('lawpal.services')
 
 
-class TransactionBunch(Bunch):
-    def __init__(self, transaction):
-        startup = founder.primary_startup
-        return super(TransactionBunch, self).__init__(
-                    transa = founder.data.get('incubator_or_accelerator_name'),
-                )
-
-    def is_valid(self):
-        form = StartupProfileIsCompleteValidator({'first_name': self.first_name, 'last_name': self.last_name, 'startup_name': self.startup_name})
-        return form.is_valid()
+class SeedFundingBunch(Bunch):
+    """ class defined the names of fields to extract from a transaction data field """
+    transaction_slug = 'seed-funding'
