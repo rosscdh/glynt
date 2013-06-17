@@ -20,6 +20,10 @@ env.SHA1_FILENAME = None
 env.timestamp = time.time()
 env.is_predeploy = False
 env.local_user = getpass.getuser()
+env.environment = 'local'
+
+env.truthy = ['true','t','y','yes','1',1]
+env.falsy = ['false','f','n','no','0',0]
 
 @task
 def prod_db():
@@ -190,12 +194,18 @@ def db_backup(db='lawpal_production'):
     local('scp -i %s %s@%s:/tmp/%s /tmp/' % (env.key_filename, env.user, env.host, db_backup_name,))
 
 @task
-def db_local_restore(db='lawpal_production'):
+def db_restore(db='lawpal_production', db_file=None):
     with settings(warn_only=True): # only warning as we will often have errors importing
-        db_backup_name = '%s.bak' % db
-        local('echo "DROP DATABASE %s;" | psql -h localhost -U %s' % (db, env.local_user,))
-        local('echo "CREATE DATABASE %s WITH OWNER %s ENCODING \'UTF8\';" | psql -h localhost -U %s' % (db, env.local_user, env.local_user,))
-        local('pg_restore -U %s -h localhost -d %s -Fc /tmp/%s' % (env.local_user, db, db_backup_name,))
+        if db_file is None:
+            db_file = '/tmp/%s.bak' % db
+            if not os.path.exists(db_file):
+                print colored('Database Backup %s does not exist...' % db_file, 'red')
+            else:
+                go = prompt(colored('Restore "%s" DB from a file entitled: "%s" in the "%s" environment: Proceed? (y,n)' % (db, db_file, env.environment,), 'yellow'))
+                if go in env.truthy:
+                    local('echo "DROP DATABASE %s;" | psql -h localhost -U %s' % (db, env.local_user,))
+                    local('echo "CREATE DATABASE %s WITH OWNER %s ENCODING \'UTF8\';" | psql -h localhost -U %s' % (db, env.local_user, env.local_user,))
+                    local('pg_restore -U %s -h localhost -d %s -Fc %s' % (env.local_user, db, db_file,))
 
 @task
 def git_export(branch='aws-sqs'):
@@ -512,11 +522,10 @@ def deploy(is_predeploy='False',full='False',db='False',search='False'):
     :is_predeploy=True - will deploy the latest MASTER SHA but not link it in: this allows for assets collection
     and requirements update etc...
     """
-    true_list = ['true','t','y','yes','1',1]
-    env.is_predeploy = True if is_predeploy.lower() in true_list else False
-    full = True if full.lower() in true_list else False
-    db = True if db.lower() in true_list else False
-    search = True if search.lower() in true_list else False
+    env.is_predeploy = True if is_predeploy.lower() in env.truthy else False
+    full = True if full.lower() in env.truthy else False
+    db = True if db.lower() in env.truthy else False
+    search = True if search.lower() in env.truthy else False
 
     diff()
     newrelic_note()
