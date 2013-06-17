@@ -10,9 +10,9 @@ from glynt.apps.engage.utils import ENGAGEMENT_CONTENT_TYPE
 
 
 @register.inclusion_tag('engage/partials/engagement_intro.html', takes_context=True)
-def engagement_intro(context, enagement):
+def engagement_intro(context, engagement):
     context.update({
-        'enagement': enagement,
+        'engagement': engagement,
     })
     return context
 
@@ -47,7 +47,6 @@ def engagement_with_lawyer(context, lawyer):
     )
 
     return context
-
 
 
 @register.inclusion_tag('engage/partials/engage_with_lawyer_button.html', takes_context=True)

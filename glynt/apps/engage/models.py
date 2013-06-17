@@ -9,10 +9,9 @@ from glynt.apps.engage import generate_engagement_slug
 from glynt.apps.engage.services.actions import OpenEngagementService, CloseEngagementService, ReOpenEngagementService
 from glynt.apps.startup.models import Startup, Founder
 from glynt.apps.lawyer.models import Lawyer
+from glynt.apps.engage import ENGAGEMENT_STATUS
 
 from managers import DefaultEngagementManager
-
-
 
 
 class Engagement(models.Model):
