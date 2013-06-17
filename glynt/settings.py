@@ -259,6 +259,7 @@ HELPER_APPS = (
 
     # Notications
     'notifications',
+    # Currency
 )
 
 # Handle south and its breaking tests
