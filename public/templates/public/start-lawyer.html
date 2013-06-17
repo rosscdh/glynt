@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Lawyers - Create your account{% endblock %}
+{% block bodyclass %}{% endblock %}
+
+{% block prebody %}
+<div id="hero">
+    <div class="container">
+    <h1>Lawyers - Create your account</h1>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        
+        <div class="startup">
+            <a href="{% url "public:auth_user_class_redirect" user_class_name="lawyer" login_type="linkedin" %}" class="btn btn-primary"><img src="{{ STATIC_URL }}img/linkedin-32.png"> Sign in with LinkedIn</a>
+        </div>
+
+    </div>
+</div>
+
+
+{% endblock %}
