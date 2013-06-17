@@ -1,12 +1,47 @@
 {% extends 'base.html' %}{% load transaction_tags %}
 
-{%block body %}
-<div class="row">
-<h3>All transactions</h3>
-{% transactions %}
-</div>
-<div class="row">
-<h3>Specific Transaction</h3>
-{% transactions 'seed-finance' %}
-</div>
+{% block css %}
+    <link href="{{ STATIC_URL }}css/theme/transact.css" rel="stylesheet" charset="utf-8"/>
+{% endblock %}
+
+{% block prebody %}
+    <div id="hero">
+        <div class="container container-main">
+            <div class="row animated fadeInRight">
+                <div class="span12">
+                    <h1>What do you need?</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="span8">
+            <div class="row">
+                {% transactions 'seed-financing' %}
+                {% transactions 'incorporation' %}
+            </div>
+            <div class="row">
+                {% transactions 'document-review' %}
+                {% transactions 'something-else' %}
+            </div>
+        </div>
+        <div class="span4">
+            <div class="well">
+                <h4>LawPal lawyers have:</h4>
+                <ul class="unstyled">
+                    <li>7 years + experience</li>
+                    <li>Available to meet you locally</li>
+                    <li>Vetted by LawPal with a track</li>
+                    <li>record serving startups</li>
+                    <li>Approved by you before they</li>
+                    <li>start work</li>
+                    <li>Agreed to a ﬁxed price in advance</li>
+                </ul>
+            </div>
+            <a href="#"><i class=" icon-question-sign"></i> Not sure where to start?</a>
+        </div>
+    </div>
 {% endblock %}
