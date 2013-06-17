@@ -1,0 +1,203 @@
+From bd99d42cbf653048ae4acb123d4eb532a3c3abeb Mon Sep 17 00:00:00 2001
+From: Ross Crawford-d'Heureuse <ross@lawpal.com>
+Date: Mon, 17 Jun 2013 08:44:50 +0200
+Subject: [PATCH] Added transaction app and admin interface and basic template
+ tag
+
+---
+ glynt/apps/transaction/admin.py                       |  7 +++++++
+ glynt/apps/transaction/bunches.py                     | 17 +++++++++++++++++
+ glynt/apps/transaction/models.py                      | 12 ++++++++++++
+ .../templates/transaction/transactions.html           | 11 +++++++++++
+ .../apps/transaction/templatetags/transaction_tags.py | 19 +++++++++++++++++++
+ glynt/apps/transaction/tests.py                       | 16 ++++++++++++++++
+ glynt/apps/transaction/urls.py                        |  2 ++
+ glynt/apps/transaction/views.py                       |  1 +
+ glynt/settings.py                                     |  4 +++-
+ glynt/urls.py                                         |  2 ++
+ 10 files changed, 90 insertions(+), 1 deletion(-)
+ create mode 100644 glynt/apps/transaction/__init__.py
+ create mode 100644 glynt/apps/transaction/admin.py
+ create mode 100644 glynt/apps/transaction/bunches.py
+ create mode 100644 glynt/apps/transaction/models.py
+ create mode 100644 glynt/apps/transaction/templates/transaction/transactions.html
+ create mode 100644 glynt/apps/transaction/templatetags/__init__.py
+ create mode 100644 glynt/apps/transaction/templatetags/transaction_tags.py
+ create mode 100644 glynt/apps/transaction/tests.py
+ create mode 100644 glynt/apps/transaction/urls.py
+ create mode 100644 glynt/apps/transaction/views.py
+
+diff --git a/glynt/apps/transaction/__init__.py b/glynt/apps/transaction/__init__.py
+new file mode 100644
+index 0000000..e69de29
+diff --git a/glynt/apps/transaction/admin.py b/glynt/apps/transaction/admin.py
+new file mode 100644
+index 0000000..26ad9d1
+--- /dev/null
++++ b/glynt/apps/transaction/admin.py
+@@ -0,0 +1,7 @@
++# -*- coding: UTF-8 -*-
++from django.contrib import admin
++
++from models import Transaction
++
++
++admin.site.register([Transaction])
+diff --git a/glynt/apps/transaction/bunches.py b/glynt/apps/transaction/bunches.py
+new file mode 100644
+index 0000000..4d416aa
+--- /dev/null
++++ b/glynt/apps/transaction/bunches.py
+@@ -0,0 +1,17 @@
++# -*- coding: utf-8 -*-
++from bunch import Bunch
++
++import logging
++logger = logging.getLogger('lawpal.services')
++
++
++class TransactionBunch(Bunch):
++    def __init__(self, transaction):
++        startup = founder.primary_startup
++        return super(TransactionBunch, self).__init__(
++                    transa = founder.data.get('incubator_or_accelerator_name'),
++                )
++
++    def is_valid(self):
++        form = StartupProfileIsCompleteValidator({'first_name': self.first_name, 'last_name': self.last_name, 'startup_name': self.startup_name})
++        return form.is_valid()
+\ No newline at end of file
+diff --git a/glynt/apps/transaction/models.py b/glynt/apps/transaction/models.py
+new file mode 100644
+index 0000000..85670f6
+--- /dev/null
++++ b/glynt/apps/transaction/models.py
+@@ -0,0 +1,12 @@
++# -*- coding: utf-8 -*-
++from django.db import models
++
++from jsonfield import JSONField
++
++
++class Transaction(models.Model):
++    title = models.CharField(max_length=128)
++    slug = models.SlugField(max_length=128, unique=True, blank=False)
++    description = models.TextField(blank=True)
++    price = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
++    data = JSONField(default={})
+diff --git a/glynt/apps/transaction/templates/transaction/transactions.html b/glynt/apps/transaction/templates/transaction/transactions.html
+new file mode 100644
+index 0000000..268ba98
+--- /dev/null
++++ b/glynt/apps/transaction/templates/transaction/transactions.html
+@@ -0,0 +1,11 @@
++<ul class="transaction_list">
++{% for t in transaction %}
++<li class="primary">
++    <h3 class="btn btn-success">{{ t.name }}</h3>
++    <div class="description">{{ t.description }}</div>
++    <div class="price">{{ t.price }}</div>
++</li>
++{% empty %}
++<li class="no-records">No transactions Found</li>
++{% endfor %}
++</ul>
+\ No newline at end of file
+diff --git a/glynt/apps/transaction/templatetags/__init__.py b/glynt/apps/transaction/templatetags/__init__.py
+new file mode 100644
+index 0000000..e69de29
+diff --git a/glynt/apps/transaction/templatetags/transaction_tags.py b/glynt/apps/transaction/templatetags/transaction_tags.py
+new file mode 100644
+index 0000000..7cca748
+--- /dev/null
++++ b/glynt/apps/transaction/templatetags/transaction_tags.py
+@@ -0,0 +1,19 @@
++# -*- coding: utf-8 -*-
++from django import template
++
++from glynt.apps.transaction.models import Transaction
++
++register = template.Library()
++
++
++@register.inclusion_tag('transaction/transactions.html', takes_context=True)
++def transactions(context, transactions=[]):
++    if transactions:
++        transactions = Transaction.objects.filter(slug__in=transactions)
++    else:
++        transactions = Transaction.objects.all()
++
++    context.update({
++        'transactions': transactions
++    })
++    return context
+\ No newline at end of file
+diff --git a/glynt/apps/transaction/tests.py b/glynt/apps/transaction/tests.py
+new file mode 100644
+index 0000000..501deb7
+--- /dev/null
++++ b/glynt/apps/transaction/tests.py
+@@ -0,0 +1,16 @@
++"""
++This file demonstrates writing tests using the unittest module. These will pass
++when you run "manage.py test".
++
++Replace this with more appropriate tests for your application.
++"""
++
++from django.test import TestCase
++
++
++class SimpleTest(TestCase):
++    def test_basic_addition(self):
++        """
++        Tests that 1 + 1 always equals 2.
++        """
++        self.assertEqual(1 + 1, 2)
+diff --git a/glynt/apps/transaction/urls.py b/glynt/apps/transaction/urls.py
+new file mode 100644
+index 0000000..ee48e4e
+--- /dev/null
++++ b/glynt/apps/transaction/urls.py
+@@ -0,0 +1,2 @@
++# -*- coding: utf-8 -*-
++from django.conf.urls import patterns, url
+diff --git a/glynt/apps/transaction/views.py b/glynt/apps/transaction/views.py
+new file mode 100644
+index 0000000..60f00ef
+--- /dev/null
++++ b/glynt/apps/transaction/views.py
+@@ -0,0 +1 @@
++# Create your views here.
+diff --git a/glynt/settings.py b/glynt/settings.py
+index 64f9dbb..f774d4e 100755
+--- a/glynt/settings.py
++++ b/glynt/settings.py
+@@ -204,8 +204,10 @@ PROJECT_APPS = (
+     'glynt.apps.export',
+     # Remote and 3rd Party services (pdf/doc conversion)
+     #'glynt.apps.services',
+-    # Message app
++    # Engagement App
+     'glynt.apps.engage',
++    # Startup & Lawyer Transactions
++    'glynt.apps.transaction',
+ )
+ 
+ HELPER_APPS = (
+diff --git a/glynt/urls.py b/glynt/urls.py
+index 8f5d920..7fba77d 100755
+--- a/glynt/urls.py
++++ b/glynt/urls.py
+@@ -32,6 +32,8 @@ urlpatterns = patterns('',
+     url(r'^lawyers/', include('glynt.apps.lawyer.urls', namespace='lawyer')),
+     # Engage app
+     url(r'^engage/', include('glynt.apps.engage.urls', namespace='engage')),
++    # Transaction
++    url(r'^transact/', include('glynt.apps.transaction.urls', namespace='transact')),
+ 	# Comments - used by engage and documents
+     url(r'^comments/', include('fluent_comments.urls')),
+ 	# The Authoring Tool
+-- 
+1.7.11.1
+
