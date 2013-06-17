@@ -23,6 +23,7 @@ class ToDo(models.Model):
     description = models.TextField(blank=True)
     status = models.IntegerField(choices=TODO_STATUS.get_choices(), default=TODO_STATUS.open, db_index=True)
     data = JSONField(default={})
+    date_due = models.DateField(blank=True, auto_now=False, auto_now_add=False)
     date_created = models.DateField(auto_now=False, auto_now_add=True)
     date_modified = models.DateField(auto_now=True, auto_now_add=True, db_index=True)
 
