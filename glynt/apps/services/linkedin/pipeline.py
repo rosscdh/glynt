@@ -29,6 +29,8 @@ def linkedin_profile_extra_details(backend, details, response, user=None, is_new
                                                 oauth_token_secret=api_data.get('oauth_token_secret')[0])
             profile = service.profile
 
+        userclass_profile = user.lawyer_profile if user.profile.is_lawyer else user.founder_profile
+
         # logging info
         if not profile.get('photo_url'):
             logger.info('Pipeline.linkedin.photo_url user does not have linkedin photo: %s' % user)
@@ -50,11 +52,11 @@ def linkedin_profile_extra_details(backend, details, response, user=None, is_new
 
         # Update the user summary and if a lawyer save as sumamry
         if profile.get('summary'):
-            if not user.lawyer_profile.summary:
+            if not userclass_profile.summary:
                 # try to save the lawyer info
                 try:
-                    user.lawyer_profile.summary = profile.get('summary')
-                    user.lawyer_profile.save(update_fields=['summary'])
+                    userclass_profile.summary = profile.get('summary')
+                    userclass_profile.save(update_fields=['summary'])
                 except:
                     logger.error('Pipeline.linkedin.summary could not save lawyer profile summary: %s' % user)
 
@@ -64,11 +66,11 @@ def linkedin_profile_extra_details(backend, details, response, user=None, is_new
 
         # Update the user bio from the linkedin sumamry field
         if profile.get('bio'):
-            if not user.lawyer_profile.bio:
+            if not userclass_profile.bio:
                 # try to save the lawyer info
                 try:
-                    user.lawyer_profile.bio = profile.get('bio')
-                    user.lawyer_profile.save(update_fields=['bio'])
+                    userclass_profile.bio = profile.get('bio')
+                    userclass_profile.save(update_fields=['bio'])
                 except:
                     logger.error('Pipeline.linkedin.bio could not save lawyer profile bio: %s' % user)
 

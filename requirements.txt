@@ -17,6 +17,10 @@ django-cities-light
 # easydict lookups with dot notation
 bunch
 
+# currency/money
+#-e git+https://github.com/panosl/django-currencies.git#egg=django-currencies # integration with openexchange
+-e git+https://github.com/poswald/python-money.git#egg=python-money
+
 django-extensions
 django-templated-email
 django-storages

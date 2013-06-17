@@ -32,6 +32,8 @@ urlpatterns = patterns('',
     url(r'^lawyers/', include('glynt.apps.lawyer.urls', namespace='lawyer')),
     # Engage app
     url(r'^engage/', include('glynt.apps.engage.urls', namespace='engage')),
+    # Transaction
+    url(r'^transact/', include('glynt.apps.transaction.urls', namespace='transact')),
 	# Comments - used by engage and documents
     url(r'^comments/', include('fluent_comments.urls')),
 	# The Authoring Tool

@@ -20,14 +20,22 @@
     	<div class="container">
     		<form action="{% url 'lawyer:list' %}" method="GET">
 			<h1>A better attorney-client relationship</h1>
-			<p>Get it done with LawPal</p>
-			<a href="#learn" class="btn"  onClick="_gaq.push(['_trackEvent', 'Homepage', 'Action', 'Learn more']);">learn more</a>
-			<a href="{% url 'public:start' %}" class="btn btn-success"  onClick="_gaq.push(['_trackEvent', 'Homepage', 'Action', 'start']);">start</a>
+			<a name="learn"></a>
+			I need a lawyer in <input id="id_q" name="q" value="San Francisco"> <!-- for a <input id="user_screen_name" value="Seed financing"> -->
+			<button type="submit" class="btn btn-onblack btn-large" onClick="_gaq.push(['_trackEvent', 'Homepage', 'Action', 'Search']);">Search</button>or  <a href="#signin-modal" role="button" class="btn btn-onblack btn-large" data-toggle="modal" onClick="_gaq.push(['_trackEvent', 'Homepage', 'Action', 'Sign In']);">Sign In</a>
+			</form>
     	</div>
 
 	</div>
 </div>
 
+<div class="container">
+	<div class="row">
+		<div class="span12" id="learn-more">
+			<h3><a href="#learn" class=""  onClick="_gaq.push(['_trackEvent', 'Homepage', 'Action', 'Learn more']);">learn<br />more</a></h3>
+		</div>
+	</div>
+</div>
 <div class="container">
 	<div class="row">
 		<div class="span12 product-tour">
