@@ -10,3 +10,10 @@ class Transaction(models.Model):
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
     data = JSONField(default={})
+
+    def __unicode__(self):
+        return u'%s, %s' % (self.title, self.display_price,)
+
+    @property
+    def display_price(self):
+        return "%01.2f" % self.price
