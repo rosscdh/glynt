@@ -7,7 +7,7 @@ Services is where the magic happens
 """
 from bunch import Bunch
 
-from glynt.apps.todo.models improt ToDo
+from glynt.apps.todo.models import ToDo
 
 import logging
 logger = logging.getLogger('lawpal.services')
