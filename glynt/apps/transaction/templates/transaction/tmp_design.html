@@ -1,7 +1,12 @@
 {% extends 'base.html' %}{% load transaction_tags %}
 
-
+{%block body %}
+<div class="row">
+<h3>All transactions</h3>
 {% transactions %}
-
-
-{% transactions 'seed-financing' %}
+</div>
+<div class="row">
+<h3>Specific Transaction</h3>
+{% transactions 'seed-finance' %}
+</div>
+{% endblock %}
