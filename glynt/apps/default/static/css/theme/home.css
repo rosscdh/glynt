@@ -1,5 +1,5 @@
-
-
+/* LEGACY CODE */
+/*
 body.homepage #hero {
 text-align: left;
 padding-bottom: 0px;
@@ -34,8 +34,7 @@ bottom:40px;
 font-size:30px;
 line-height: 55px;
 color:#f0f0f0;
-/* http://www.colorzilla.com/gradient-editor/ */
-font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 font-weight: 300;
 text-align: center;
 background-color:rgba(47,40,35,0.8);
@@ -50,8 +49,7 @@ font-size: 23px;
 color:white;
 border:none;
 border-bottom: 1px solid white;
-/*text-align: center;
-*/padding-bottom:5px;
+padding-bottom:5px;
 line-height:38px;
 font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
 width:230px;
@@ -195,4 +193,40 @@ text-align: center;
 body.homepage .twitter-follow-button {
 	margin-right:25px;
    margin-bottom:-3px;
+}
+
+*/
+
+/* HOMEPAGE CHANGES FOR TRANSACTION UPDATES */
+
+body.homepage {
+    margin: 0;
+    padding: 0;
+}
+
+.homepage .navbar-inner {
+    border: none;
+}
+
+.hero-welcome {
+    margin-top: 5em;
+    text-align: center;
+}
+
+.hero-welcome h1 {
+    font-size: 3.5em;
+    color: #333;
+}
+
+.hero-welcome h3 {
+    color: #ccc;
+    font-size: 2.5em;
+    margin: 1em 0;
+}
+
+.hero-welcome .btn {
+    width: 7em;
+    font-size: 1.2em;
+    padding: .5em 1em;
+    margin: 0 .5em;
 }
