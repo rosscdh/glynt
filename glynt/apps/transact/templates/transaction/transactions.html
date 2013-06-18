@@ -19,11 +19,12 @@
 {% block body %}
     <div class="row">
         <div class="span8">
-            {% transactions transaction='seed-financing' %}
+            <p>Please select which transaction(s) you require:</p>
             {% transactions transaction='incorporation' %}
-            {% transactions transaction='document-review' %}
-            {% transactions transaction='something-else' %}
+            {% transactions transaction='note-financing' %}
+            {% transactions transaction='equity-financing' %}
             <a href="#" class="btn btn-extra-margin">Not sure where to start?</a>
+            <a href="#" class="btn btn-primary btn-extra-margin pull-right">Continue</a>
         </div>
         <div class="span4">
             <div class="well">
@@ -40,4 +41,26 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+
+        function transaction_business_logic(element) {
+            var elm = $(element).attr('data-transaction');
+            if (elm === 'note-financing') {
+                $('.transaction-choice[data-transaction="equity-financing"] .btn').removeClass('active');
+            } else if (elm === 'equity-financing') {
+                $('.transaction-choice[data-transaction="note-financing"] .btn').removeClass('active');
+            }
+        }
+
+        $('.transaction-choice .btn').bind('click', function (data) {
+            if (!$(this).hasClass('active')) {
+                // Check if Note financing and disable Equity financing if true (and visa versa)
+                transaction_business_logic($(this).parent());
+            }
+        });
+
+    </script>
 {% endblock %}
