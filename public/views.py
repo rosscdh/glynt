@@ -34,21 +34,6 @@ class PublicHomepageView(TemplateView):
 
         return [template_name]
 
-    def render_to_response(self, context, **response_kwargs):
-        """
-        """
-        # @BUSINESS_RULE
-        # redirect the startup to the marketplace/lawyer-list
-        user_class_name = self.request.session.get('user_class_name', 'lawyer')
-
-        if self.request.user.is_authenticated() and user_class_name == 'founder':
-
-            return HttpResponseRedirect(redirect_to=reverse('lawyer:list'))
-
-        else:
-            return super(PublicHomepageView, self).render_to_response(context, **response_kwargs)
-
-
 
 class UserClassSessionRedirectView(RedirectView):
     """ View to set a session that helps us determine what class a user is logging in as,

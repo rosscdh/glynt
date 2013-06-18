@@ -18,6 +18,10 @@ urlpatterns = patterns('',
     # Contact us
     url(r'^contact-us/$', ContactUsView.as_view(), name='contact_us'),
 
+    # 
+    url(r'^how-it-works/$', TemplateView.as_view(template_name='public/how-it-works.html'), name='how-it-works'),
+    url(r'^our-services/$', TemplateView.as_view(template_name='public/our-services.html'), name='our-services'),
+
     # Start
     url(r'^start/$', TemplateView.as_view(template_name='public/start.html'), name='start'),
     url(r'^start/lawyer/$', TemplateView.as_view(template_name='public/start-lawyer.html'), name='start-lawyer'),

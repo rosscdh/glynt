@@ -8,7 +8,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from jsonfield import JSONField
 
-from glynt.utils import generate_unique_slug
+from glynt.apps.utils import generate_unique_slug
 
 from glynt.apps.todo import TODO_STATUS
 from glynt.apps.todo.managers import DefaultToDoManager

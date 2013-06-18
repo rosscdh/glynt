@@ -190,12 +190,13 @@ def db_backup(db='lawpal_production'):
     local('scp -i %s %s@%s:/tmp/%s /tmp/' % (env.key_filename, env.user, env.host, db_backup_name,))
 
 @task
-def db_local_restore(db='lawpal_production'):
+def db_local_restore(db='lawpal_production', db_file=None):
     with settings(warn_only=True): # only warning as we will often have errors importing
-        db_backup_name = '%s.bak' % db
+        if db_file is None:
+            db_file = '/tmp/%s.bak' % db
         local('echo "DROP DATABASE %s;" | psql -h localhost -U %s' % (db, env.local_user,))
         local('echo "CREATE DATABASE %s WITH OWNER %s ENCODING \'UTF8\';" | psql -h localhost -U %s' % (db, env.local_user, env.local_user,))
-        local('pg_restore -U %s -h localhost -d %s -Fc /tmp/%s' % (env.local_user, db, db_backup_name,))
+        local('pg_restore -U %s -h localhost -d %s -Fc %s' % (env.local_user, db, db_file,))
 
 @task
 def git_export(branch='aws-sqs'):

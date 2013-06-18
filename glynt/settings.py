@@ -207,7 +207,7 @@ PROJECT_APPS = (
     # Engagement App
     'glynt.apps.engage',
     # Startup & Lawyer Transactions
-    'glynt.apps.transaction',
+    'glynt.apps.transact',
 )
 
 HELPER_APPS = (

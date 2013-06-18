@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 
 from jsonfield import JSONField
 
-from glynt.utils import generate_unique_slug
+from glynt.apps.utils import generate_unique_slug
 from glynt.apps.engage import ENGAGEMENT_STATUS
 from glynt.apps.engage.services.actions import OpenEngagementService, CloseEngagementService, ReOpenEngagementService
 from glynt.apps.startup.models import Startup, Founder

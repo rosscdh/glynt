@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %}{% load url from future %}
 {% block page_title %}LawPal - A better attorney-client relationship{% endblock %}
 {% block bodyclass %}homepage{% endblock %}
 {% block css %}
@@ -11,18 +11,7 @@
 {% endblock %}
 
 {% block navbar %}
-    <div class="container">
-        <div class="navbar">
-            <div class="navbar-inner">
-                <a class="brand" href="#"><img src="{{ STATIC_URL }}img/logo-nav-white.png" alt="LawPal" title="LawPal"></a>
-                <ul class="nav pull-right">
-                    <li><a href="#">How it works</a></li>
-                    <li><a href="#">Our services</a></li>
-                    <li><a href="#">Meet our lawyers</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+    {% include 'public/partials/nav.html' %}
 {% endblock %}
 
 {% block prebody %}
