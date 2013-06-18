@@ -6,7 +6,7 @@
       "price": "2000.00",
       "description": "Product explanation goes here, why it's awesome etc.",
       "data": {},
-      "slug": "seed-finance",
+      "slug": "seed-financing",
       "title": "Seed financing"
     }
   },
@@ -39,7 +39,7 @@
       "price": "0.00",
       "description": "Production explanation goes here, why it's awesome etc.",
       "data": {},
-      "slug": "other",
+      "slug": "something-else",
       "title": "Something else"
     }
   }

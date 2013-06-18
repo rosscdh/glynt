@@ -7,16 +7,15 @@ register = template.Library()
 
 
 @register.inclusion_tag('transaction/transactions.html', takes_context=True)
-def transactions(context, transactions):
-    if type(transactions) == SafeText:
-        transactions = Transaction.objects.filter(slug=transactions)
-    elif type(transactions) is list:
-        # Doesn't work...
-        transactions = Transaction.objects.filter(slug__in=transactions)
+def transactions(context, transaction):
+    if type(transaction) in [SafeText, str, unicode]:
+        transaction = Transaction.objects.filter(slug=unicode(transaction))
+    elif type(transaction) in [list, tuple]:
+        transaction = Transaction.objects.filter(slug__in=transaction)
     else:
-        transactions = Transaction.objects.all()
+        transaction = Transaction.objects.all()
 
     context.update({
-        'transactions': transactions
+        'transactions': transaction
     })
     return context
