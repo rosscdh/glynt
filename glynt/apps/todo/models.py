@@ -8,6 +8,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from jsonfield import JSONField
 
+from glynt.utils import generate_unique_slug
+
 from glynt.apps.todo import TODO_STATUS
 from glynt.apps.todo.managers import DefaultToDoManager
 
@@ -28,3 +30,10 @@ class ToDo(models.Model):
     date_modified = models.DateField(auto_now=True, auto_now_add=True, db_index=True)
 
     objects = DefaultToDoManager()
+
+    def save(self, *args, **kwargs):
+        """ Ensure that we have a slug """
+        if self.slug in [None, '']:
+            self.slug = generate_unique_slug(instance=self)
+
+        return super(ToDo, self).save(*args, **kwargs)
