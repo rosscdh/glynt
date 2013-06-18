@@ -35,8 +35,8 @@ SERVER_EMAIL = 'glynt@localhost'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': os.path.join(SITE_ROOT, 'dev.db'),
+        'ENGINE': '', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': '',
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -522,19 +522,16 @@ ALLOWED_HOSTS = ['*']
 
 
 # Neat trick http://www.robgolding.com/blog/2010/05/03/extending-settings-variables-with-local_settings-py-in-django/
-if IS_TESTING:
+try:
+    LOCAL_SETTINGS
+except NameError:
     try:
-        LOCAL_SETTINGS
-    except NameError:
+        from local_settings import *
+    except ImportError:
+        print "Could not load local_settings"
+
+if IS_TESTING:
         try:
             from test_settings import *
         except ImportError:
-            pass
-else:
-    try:
-        LOCAL_SETTINGS
-    except NameError:
-        try:
-            from local_settings import *
-        except ImportError:
-            pass
+            print "Could not load test_settings"
