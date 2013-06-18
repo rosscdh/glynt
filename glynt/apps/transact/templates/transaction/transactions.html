@@ -24,7 +24,7 @@
             {% transactions transaction='note-financing' %}
             {% transactions transaction='equity-financing' %}
             <a href="#" class="btn btn-extra-margin">Not sure where to start?</a>
-            <a href="#" class="btn btn-primary btn-extra-margin pull-right">Continue</a>
+            <a href="#" id="continue" class="btn btn-primary btn-extra-margin pull-right">Continue</a>
         </div>
         <div class="span4">
             <div class="well">
@@ -46,21 +46,45 @@
 {% block js %}
     <script>
 
+        var selected_transactions = [];
+
         function transaction_business_logic(element) {
             var elm = $(element).attr('data-transaction');
             if (elm === 'note-financing') {
-                $('.transaction-choice[data-transaction="equity-financing"] .btn').removeClass('active');
+                transaction_deselection($('.transaction-choice[data-transaction="equity-financing"] .btn'));
             } else if (elm === 'equity-financing') {
-                $('.transaction-choice[data-transaction="note-financing"] .btn').removeClass('active');
+                transaction_deselection($('.transaction-choice[data-transaction="note-financing"] .btn'));
+            }
+            transaction_selection(element.find('.btn'));
+        }
+
+        function transaction_selection(element) {
+            element.addClass('active').html('<i class="icon-ok icon-white"></i>');
+            selected_transactions.push(element.parent().attr('data-transaction'));
+        }
+
+        function transaction_deselection(element) {
+            element.removeClass('active').html('Add');
+            var index = selected_transactions.indexOf(element.parent().attr('data-transaction'));
+            console.log(index);
+            if (index > -1) {
+                selected_transactions.splice(index, 1);
             }
         }
 
-        $('.transaction-choice .btn').bind('click', function (data) {
+        $('.transaction-choice .btn').bind('click', function () {
+            var elm = $(this);
             if (!$(this).hasClass('active')) {
                 // Check if Note financing and disable Equity financing if true (and visa versa)
-                transaction_business_logic($(this).parent());
+                transaction_business_logic(elm.parent());
+            } else {
+                transaction_deselection(elm);
             }
         });
+
+        $('#continue').click(function() {
+            alert('Selected items are: ' + selected_transactions);
+        })
 
     </script>
 {% endblock %}

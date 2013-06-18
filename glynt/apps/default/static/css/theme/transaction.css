@@ -8,6 +8,7 @@
     font-weight: normal;
     display: block;
     float: left;
+    width: 6em;
 }
 
 .transaction-choice h2 {
