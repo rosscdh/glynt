@@ -6,7 +6,7 @@ from glynt.apps.transact.models import Transaction
 register = template.Library()
 
 
-@register.inclusion_tag('transaction/transactions.html', takes_context=True)
+@register.inclusion_tag('transaction/partials/transaction_choice.html', takes_context=True)
 def transactions(context, transaction):
     if type(transaction) in [SafeText, str, unicode]:
         transaction = Transaction.objects.filter(slug=unicode(transaction))
