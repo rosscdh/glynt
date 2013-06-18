@@ -208,6 +208,40 @@ def db_restore(db='lawpal_production', db_file=None):
                     local('pg_restore -U %s -h localhost -d %s -Fc %s' % (env.local_user, db, db_file,))
 
 @task
+def git_tags():
+    """ returns list of tags """
+    #local('git fetch origin')
+    tags = local('git describe --tags', capture=True)
+    return tags.split()
+
+@task
+def git_previous_tag():
+    # last tag in list
+    previous = git_tags()[-1]
+    return previous
+
+@task
+def git_suggest_tag():
+    """ split into parts v1.0.0 drops v converts to ints and increaments and reassembles v1.0.1"""
+    previous = git_previous_tag().split('.')
+    mapped = map(int, previous[1:])
+    next = [int(previous[0].replace('v',''))] + mapped
+    next_rev = next[2] = mapped[-1] + 1
+    return {
+        'next': 'v%s' % '.'.join(map(str,next)), 
+        'previous': '.'.join(previous)
+    }
+
+@task
+def git_set_tag():
+    suggested = git_suggest_tag()
+    tag = prompt(colored('Please enter a tag: previous: %s suggested: %s' % (suggested['previous'], suggested['next']), 'yellow'), default=suggested['next'])
+    if tag:
+        comment = env.deploy_desc if 'deploy_desc' in env else prompt(colored('Please enter a tag comment', 'green'))
+        local('git tag -a %s -m "%s"' % (tag, comment))
+        local('git push origin %s' % tag)
+
+@task
 def git_export(branch='aws-sqs'):
   env.SHA1_FILENAME = get_sha1()
   if not os.path.exists('/tmp/%s.zip' % env.SHA1_FILENAME):
@@ -529,6 +563,10 @@ def deploy(is_predeploy='False',full='False',db='False',search='False'):
 
     diff()
     newrelic_note()
+
+    if env.environment == 'production':
+        set_tag()
+
     prepare_deploy()
     do_deploy()
     update_env_conf()
