@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django import template
 from django.utils.safestring import SafeText
-from glynt.apps.transaction.models import Transaction
+from glynt.apps.transact.models import Transaction
 
 register = template.Library()
 

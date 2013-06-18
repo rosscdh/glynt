@@ -7,7 +7,7 @@ Services is where the magic happens
 """
 from bunch import Bunch
 
-from glynt.apps.transaction.models import Transaction
+from glynt.apps.transact.models import Transaction
 
 import logging
 logger = logging.getLogger('lawpal.services')
