@@ -20,6 +20,7 @@ urlpatterns = patterns('',
 
     # Start
     url(r'^start/$', TemplateView.as_view(template_name='public/start.html'), name='start'),
+    url(r'^start/lawyer/$', TemplateView.as_view(template_name='public/start-lawyer.html'), name='start-lawyer'),
 
     # Social Auth session setter for user class
     url(r'^auth-redirect/(?P<user_class_name>.+)/(?P<login_type>.+)/$', UserClassSessionRedirectView.as_view(), name='auth_user_class_redirect'),
