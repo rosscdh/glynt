@@ -1,15 +1,29 @@
 .transaction-choice {
-    text-align: center;
-    margin-bottom: 3em;
+    border-bottom: 1px solid #ccc;
+    padding: 1em 0;
 }
 
 .transaction-choice .btn {
-    width: 100%;
-    margin: 0 0 1em;
-    font-size: 1.4em;
+    margin: .8em 1em 1em 0;
     font-weight: normal;
+    display: block;
+    float: left;
+}
+
+.transaction-choice h2 {
+    margin: 0;
+    font-size: 1.6em;
 }
 
 .transaction-choice p, .transaction-choice span {
     font-size: 1.2em;
 }
+
+.transaction-details {
+    float: left;
+}
+
+.btn-extra-margin {
+    margin: 1.5em 0;
+}
+

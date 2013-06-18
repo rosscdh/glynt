@@ -19,14 +19,12 @@
 {% block body %}
     <div class="row">
         <div class="span8">
-            <div class="row">
-                {% transactions transaction='seed-financing' %}
-                {% transactions transaction='incorporation' %}
-            </div>
-            <div class="row">
-                {% transactions transaction='document-review' %}
-                {% transactions transaction='something-else' %}
-            </div>
+            {% transactions transaction='seed-financing' %}
+            {% transactions transaction='incorporation' %}
+            {% transactions transaction='document-review' %}
+            {% transactions transaction='something-else' %}
+            <a href="#" class="btn btn-extra-margin">Not sure where to start?</a>
+
         </div>
         <div class="span4">
             <div class="well">
@@ -41,7 +39,6 @@
                     <li>Agreed to a ﬁxed price in advance</li>
                 </ul>
             </div>
-            <a href="#"><i class=" icon-question-sign"></i> Not sure where to start?</a>
         </div>
     </div>
 {% endblock %}
