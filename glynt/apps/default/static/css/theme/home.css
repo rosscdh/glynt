@@ -232,3 +232,34 @@ body.start {
     padding: .5em 1em;
     margin: 0 .5em;
 }
+
+.centered {
+    width: 250px;
+    height: 150px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -150px;
+    margin-left: -125px;
+    text-align: center;
+}
+
+.sign-in {
+    box-sizing: border-box;
+    padding: 2em;
+    border: 1px solid #e6e7e8;
+}
+
+.centered img.logo {
+    margin: 0 0 2em;
+}
+
+p.start-lawyer {
+    margin: 1em 0;
+    font-size: .8em;
+    font-weight: bold;
+}
+
+.start-lawyer a {
+    color: #f67e72;
+}
