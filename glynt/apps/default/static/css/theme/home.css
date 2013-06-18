@@ -199,12 +199,14 @@ body.homepage .twitter-follow-button {
 
 /* HOMEPAGE CHANGES FOR TRANSACTION UPDATES */
 
-body.homepage {
+body.homepage,
+body.start {
     margin: 0;
     padding: 0;
 }
 
-.homepage .navbar-inner {
+.homepage .navbar-inner,
+.start .navbar-inner {
     border: none;
 }
 

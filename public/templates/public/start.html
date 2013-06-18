@@ -1,7 +1,15 @@
 {% extends 'base.html' %}{% load url from future %}
 
-{% block page_title %}Start{% endblock %}
-{% block bodyclass %}{% endblock %}
+{% block page_title %}LawPal - A better attorney-client relationship{% endblock %}
+{% block bodyclass %}start{% endblock %}
+{% block extrahead %}
+    <meta name="description" content="LawPal - A better attorney-client relationship">
+    <meta name="keywords"
+          content="incorporation, seed financing, convertible notes, venture capital, acquisition, angel investing">
+{% endblock %}
+{% block css %}
+    <link href="{{ STATIC_URL }}css/theme/home.css" rel="stylesheet" charset="utf-8"/>
+{% endblock %}
 
 {% block navbar %}
     {% include 'public/partials/nav.html' %}
