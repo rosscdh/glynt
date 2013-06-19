@@ -1,0 +1,13 @@
+<ul class="social-buttons">
+{% for p in social_profiles %}
+<li class="icon {{ p.typeId }}">
+    <a href="{{ p.url }}">
+		<img src="//s3.amazonaws.com/lp-static/icons/{{ p.typeId }}/{{ p.typeId }}-32.png" class="custom">
+</a>
+</li>
+{% empty %}
+</ul>
+<ul class="unstyled">
+	<li class="nothing-found">No profile found yet</li>
+ {% endfor %}
+</ul>

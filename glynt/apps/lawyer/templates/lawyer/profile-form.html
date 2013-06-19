@@ -1,233 +1,478 @@
-{% extends 'base.html' %}{% load crispy_forms_tags jsonify %}
+{% extends 'base.html' %}{% load crispy_forms_tags invite_tags account_tags jsonify glynt_helpers lawyer_profile_tags %}
 
 {% block page_title %}Complete your profile{% endblock %}
 {% block bodyclass %}lawyer-form{% endblock %}
 
+
 {% block prebody %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/css/theme/social-buttons.css">
 <div id="hero">
-	<div class="container">
-		<!-- starts carousel -->
-		<div class="row animated fadeInDown">
-			<div class="span12">
-				<h1>Claim your profile</h1>
-				<h3>You are a critical part of the LawPal community.<br/> The doors are opening soon. Make sure everything is current so founders can see who you really are. Have a question or comments? Contact us at <a href="mailto:founders@lawpal.com">founders@lawpal.com</a> </h3>
-				 </h3>
-			</div>
-		</div>
-	</div>
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <h1>Update your profile</h1>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="container profile">
-	<div class="row">
-		<div class="span12">
-			<h1>
-				Confirm your details
-			</h1>
-			<br>
-			<form id="lawyer-profile-form" data-validate="parsley" action="{% url 'lawyer:setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
-			{{ form|as_crispy_errors }}
-			{% if user.password == "!" %}
-			<div class="row">
-				<div class="span12">
-					<legend>Account Details</legend>
-				</div>
-				<div class="span5">
-					<div class="control-group">
-						{{ form.email|as_crispy_field }}
-					</div>
-				</div>
-				<div class="span5">
-					<div class="control-group">
-						{{ form.password|as_crispy_field }}
-					</div>
-					<div class="control-group">
-						{{ form.password_confirm|as_crispy_field }}
-					</div>
-				</div>
-			</div>
-			{% endif %}
-			<div class="row">
-				<div class="span12">
-					<legend>Profile Details</legend>
-				</div>
-				<div class="span5">
-					<div class="control-group">
-						{{ form.first_name|as_crispy_field }}
-					</div>
-					<div class="control-group">
-						{{ form.firm_name|as_crispy_field }}
-					</div>
-					<div class="control-group">
-						{{ form.phone|as_crispy_field }}
-					</div>
-				</div>
-				<div class="span5">
-					<div class="control-group">
-						{{ form.last_name|as_crispy_field }}
-					</div>
-					<div class="control-group">
-						{{ form.position|as_crispy_field }}
-					</div>
-					<div class="control-group">
-						{{ form.years_practiced|as_crispy_field }}
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="span12">
-					<legend>Your Practice Locations</legend>
-				</div>
-			</div>
-			<div class="row">
-				<div class="span5">
-					<div class="control-group">
-						{{ form.practice_location_1|as_crispy_field }}
-					</div>
-				</div>
-				<div class="span5">
-					<div class="control-group">
-						{{ form.practice_location_2|as_crispy_field }}
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="span12">
-					<legend>Your Profile</legend>
-				</div>
-			</div>
-			<div class="row">
-				<div class="span12">
-					<div class="control-group">
-						{{ form.summary|as_crispy_field }}
-					</div>
-					<div class="control-group">
-						{{ form.bio|as_crispy_field }}
-					</div>
-					<div class="control-group">
-						{{ form.if_i_wasnt_a_lawyer|as_crispy_field }}
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="span12">
-					<legend>Profile Photo</legend>
-				</div>
-			</div>
-			<div class="row">
-				<div class="span8">
-					<div class="control-group">
-						<label class="control-label" for="inputPassword">{{ form.photo.label }}</label>
-						<div class="controls">
-							{{ form.photo.errors }}
-							<div class="input">
-								{{ form.photo }}
-								{{ form.hidden_photo }}
-							</div>
-					      <span class="help-block">A good photo makes all the difference.</span>
-						</div>
-					</div>
-				</div>
-				<div class="span4">
-					<img id="photo-preview" width="130" height="130" src="{{ request.user.profile.get_mugshot_url }}">
-				</div>
-			</div>
-			<div class="row">
-				<div class="span12">
-					<legend>Startups Advised</legend>
-				</div>
-			</div>
-			<div class="row">
-				<div class="span8">
+    {% lawyer_profile_is_complete_message warning_type='alert' %}
 
-			    	<p>{{ form.startups_advised_input.help_text }}</p>
-					<div class="control-group">
-						<label class="control-label" for="inputEmail">{{ form.startups_advised_input.label }}</label>
-						<div class="controls">
-							{{ form.startups_advised_input.errors }}
-							{{ form.startups_advised_input }}<button id="add-startup-btn" type="button" class="btn btn-link btn-small"><i class="icon-plus-sign"></i>&nbsp;Add</button>
-					    	{{ form.startups_advised }}<!-- hidden -->
-						</div>
-					</div>
-					
-				</div>
-				<div class="span4">
-					<ol id="startups-advised-list">
-					</oL>
-				</div>
-			</div>
-			<div class="row">
-				<div class="span12">
-					<legend>Approximate Transaction Volume</legend>
-				</div>
-			</div>
-			<div class="row">
-				<div class="span10">
-					<p>This data is shown on your profile as an indication of the type and volume of work you undertake. <br />You can always update this later.</p>
-					<table class="table">
-						<tr>
-							<th class="span3"></th>
-							<th>2010</th>
-							<th>2011</th>
-							<th>2012</th>
-						</tr>
+    <div class="alert alert-error hidden">Please correct all errors before submitting the form</div>
 
-						<tr>
-							<th>Incorporation and Setup</th>
-							<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="incorp_setup" data-year="2010" type="text"></td>
-							<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="incorp_setup" data-year="2011" type="text"></td>
-							<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="incorp_setup" data-year="2012" type="text"></td>
-						</tr>
-						<tr>
-							<th>Seed Financing</th>
-							<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="seed_financing" data-year="2010" type="text"></td>
-							<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="seed_financing" data-year="2011" type="text"></td>
-							<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="seed_financing" data-year="2012" type="text"></td>
-						</tr>
-						<tr>
-							<th>Series A</th>
-							<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="series_a" data-year="2010" type="text"></td>
-							<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="series_a" data-year="2011" type="text"></td>
-							<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="series_a" data-year="2012" type="text"></td>
-						</tr>
-						<tr>
-							<th>Intellectual Property</th>
-							<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="ip" data-year="2010" type="text"></td>
-							<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="ip" data-year="2011" type="text"></td>
-							<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="ip" data-year="2012" type="text"></td>
-						</tr>
-						<tr>
-							<th>Other</th>
-							<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="other" data-year="2010" type="text"></td>
-							<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="other" data-year="2011" type="text"></td>
-							<td><input class="span1 volume parsley-validate" data-type="digits" data-required="true" data-volume_type="other" data-year="2012" type="text"></td>
-						</tr>
-					</table>
-					{{ form.volume_incorp_setup }}
-					{{ form.volume_seed_financing }}
-					{{ form.volume_series_a }}
-					{{ form.volume_ip }}
-					{{ form.volume_other }}
-				</div>
-			</div>
-			<div class="row">
-				<div class="span12">
-					<br />
-					<label class="checkbox">
-						{{ form.agree_tandc|as_crispy_field }}
-	                	<span id="i_agree_html">I agree to the LawPal <a href="{% url 'public:terms' %}">Terms and Conditions</a></span>
-	              	</label>
-					<br />
-					<button id="lawyer-profile" type="submit" class="btn btn-primary btn-large">Update Profile</button>
-				</div>
-			</div>
-			</form>
-		</div>
-	</div>
+    <div class="row">
+            <div class="span12">
+            <ul id="profile-tab" class="nav nav-tabs">
+                {% if user.password == "!" %}<li class="active"><a href="#login-details" data-toggle="tab">Account Setup</a></li>{% endif %}
+                <li{% if user.password != "!" %} class="active"{% endif %}><a href="#general" data-toggle="tab">General</a></li>
+                <li><a href="#fees-packages" data-toggle="tab">Fees and Packages</a></li>
+                <li><a href="#profile" data-toggle="tab">Profile</a></li>
+                <li><a href="#transactions-and-startups" data-toggle="tab">Transactions &amp; Startups</a></li>
+                <li><a href="#connected-accounts" data-toggle="tab">Connected Accounts</a></li>
+            </ul>
+
+            <form id="lawyer-profile-form" data-validate="parsley" action="{% url 'lawyer:setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
+                <div class="tab-content">
+
+                    {% if user.password == "!" %}
+                    <div id="login-details" class="tab-pane active">
+                        <div class="row">
+                            <div class="span12">
+                                <legend>Account Setup</legend>
+                            </div>
+                            <div class="span5">
+                                <div class="control-group">
+                                    {{ form.email|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="span5">
+                                <div class="control-group">
+                                    {{ form.password|as_crispy_field }}
+                                </div>
+                                <div class="control-group">
+                                    {{ form.password_confirm|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div id="general" class="tab-pane{% if user.password != "!" %} active{% endif %}">
+                        <div class="row">
+                            <div class="span12">
+                                <legend>General</legend>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="span5">
+                                <div class="control-group">
+                                    {{ form.first_name|as_crispy_field }}
+                                </div>
+                                <div class="control-group">
+                                    {{ form.firm_name|as_crispy_field }}
+                                </div>
+                                <div class="control-group">
+                                    {{ form.phone|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="span5">
+                                <div class="control-group">
+                                    {{ form.last_name|as_crispy_field }}
+                                </div>
+                                <div class="control-group">
+                                    {{ form.position|as_crispy_field }}
+                                </div>
+                                <div class="control-group">
+                                    {{ form.years_practiced|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="span12">
+                                <legend>Your Bar Memberships</legend>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="span8">
+
+                                <p>{{ form.bar_membership.help_text }}</p>
+                                <div class="control-group">
+                                    <label class="control-label" for="inputEmail">{{ form.bar_membership_input.label }}</label>
+                                    <div class="controls">
+                                        {{ form.bar_membership_input.errors }}
+                                        {{ form.bar_membership_input }}<button id="add-bar-membership-btn" type="button" class="btn btn-link btn-small multi-add-btn" data-type="" data-additem_callback="add_bar_membership" data-data_target="id_bar_membership_input" data-target="bar-membership-list"><i class="icon-plus-sign"></i>&nbsp;Add</button>
+                                        {{ form.bar_membership }}<!-- hidden -->
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="span4">
+                                <ol id="bar-membership-list">
+                                </ol>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="span12">
+                                <legend>Your Practice Locations</legend>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="span5">
+                                <div class="control-group">
+                                    {{ form.practice_location_1|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="span5">
+                                <div class="control-group">
+                                    {{ form.practice_location_2|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="transactions-and-startups" class="tab-pane">
+                        <div class="row">
+                            <div class="span12">
+                                <legend>Startups Advised</legend>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="span8">
+
+                                <p>{{ form.startups_advised_input.help_text }}</p>
+                                <div class="control-group">
+                                    <label class="control-label" for="inputEmail">{{ form.startups_advised_input.label }}</label>
+                                    <div class="controls">
+                                        {{ form.startups_advised_input.errors }}
+                                        {{ form.startups_advised_input }}<button id="add-startup-btn" type="button" class="btn btn-link btn-small multi-add-btn" data-type="url" data-additem_callback="add_startup" data-data_target="id_startups_advised_input" data-target="startups-advised-list"><i class="icon-plus-sign"></i>&nbsp;Add</button>
+                                        {{ form.startups_advised }}<!-- hidden -->
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="span4">
+                                <ol id="startups-advised-list">
+                                </ol>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="span12">
+                                <legend>Approximate Transaction Volume</legend>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="span10">
+                                <p>This data is shown on your profile as an indication of the type and volume of work you undertake. <br />You can always update this later.</p>
+                                <br />
+                                <table class="table table-center">
+
+                                    <tr>
+                                        <th class="span3"></th>
+                                        <th>Incorporation and Setup</th>
+                                        <th>Seed Financing</th>
+                                        <th>Series A</th>
+                                        <th>Intellectual Property</th>
+                                        <th>Other</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Average annual transactions</th>
+                                        <td><input class="span1 volume parsley-validate" data-type="number" data-required="true" data-volume_type="incorp_setup" type="text"></td>
+                                        <td><input class="span1 volume parsley-validate" data-type="number" data-required="true" data-volume_type="seed_financing" type="text"></td>
+                                        <td><input class="span1 volume parsley-validate" data-type="number" data-required="true" data-volume_type="series_a" type="text"></td>
+                                        <td><input class="span1 volume parsley-validate" data-type="number" data-required="true" data-volume_type="ip" type="text"></td>
+                                        <td><input class="span1 volume parsley-validate" data-type="number" data-required="true" data-volume_type="other" type="text"></td>
+                                    </tr>
+
+                                </table>
+
+                                <table class="table table-center">
+
+                                    <tr>
+                                        <th class="span3"></th>
+                                        <th>2010</th>
+                                        <th>2011</th>
+                                        <th>2012</th>
+                                        <th>2013</th>
+                                    </tr>
+
+                                    <tr>
+                                        <th>Approximate total by year</th>
+                                        <td><input class="span1 json_volume parsley-validate" data-type="number" data-required="true" data-json_target="volume_by_year" data-volume_type="2010" type="text"></td>
+                                        <td><input class="span1 json_volume parsley-validate" data-type="number" data-required="true" data-json_target="volume_by_year" data-volume_type="2011" type="text"></td>
+                                        <td><input class="span1 json_volume parsley-validate" data-type="number" data-required="true" data-json_target="volume_by_year" data-volume_type="2012" type="text"></td>
+                                        <td><input class="span1 json_volume parsley-validate" data-type="number" data-required="true" data-json_target="volume_by_year" data-volume_type="2013" type="text"></td>
+                                    </tr>
+
+                                </table>
+
+                                {{ form.volume_incorp_setup }}
+                                {{ form.volume_seed_financing }}
+                                {{ form.volume_series_a }}
+                                {{ form.volume_ip }}
+                                {{ form.volume_other }}
+                                {{ form.volume_by_year }}
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="profile" class="tab-pane">
+                        <div class="row">
+                            <div class="span12">
+                                <legend>Profile</legend>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="span12">
+                                <div class="control-group">
+                                    {{ form.summary|as_crispy_field }}
+                                </div>
+                                <div class="control-group">
+                                    {{ form.bio|as_crispy_field }}
+                                </div>
+                                <div class="control-group">
+                                    {{ form.if_i_wasnt_a_lawyer|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="span12">
+                                <legend>Profile Photo</legend>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="span8">
+                                <div class="control-group">
+                                    <label class="control-label" for="inputPassword">{{ form.photo.label }}</label>
+                                    <div class="controls">
+                                        {{ form.photo.errors }}
+                                        <div class="input">
+                                            {{ form.photo }}
+                                            {{ form.hidden_photo }}
+                                        </div>
+                                      <span class="help-block">A good photo makes all the difference.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span4">
+                                <img id="photo-preview" width="130" height="130" src="{{ lawyer.profile_photo }}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="connected-accounts" class="tab-pane">
+                        <div class="row">
+                            <div class="span12">
+                                <legend>Connected Accounts</legend>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="span12">
+                                <p>The more accounts you connect, the more likely it is that startups will find you.<p>
+                                <div class="buttons">
+                                {% social_associate social_auth %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="span12">
+                                <legend>Websites</legend>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="span8">
+                                <p>{{ form.websites_input.help_text }}</p>
+                                <div class="control-group">
+                                    <label class="control-label" for="inputEmail">{{ form.websites_input.label }}</label>
+                                    <div class="controls">
+                                        {{ form.websites_input.errors }}
+                                        {{ form.websites_input }}<button id="add-personal-website-btn" type="button" class="btn btn-link btn-small multi-add-btn"  data-type="url" data-additem_callback="add_website" data-data_target="id_websites_input" data-target="personal-website-list"><i class="icon-plus-sign"></i>&nbsp;Add</button>
+                                        {{ form.websites }}<!-- hidden -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span4">
+                                <ol id="personal-website-list">
+                                </ol>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="span12">
+                                <legend>Extra</legend>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="control-group">
+                                {{ form.twitter|as_crispy_field }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="fees-packages" class="tab-pane">
+                        <div class="row">
+                            <div class="span12">
+                                <legend>Fees and Packages</legend>
+                                <p>Please list the approximate fee ranges for standard transactions and payment options available. This will increase your ranking in the LawPal marketplace.</p>
+                                <br />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="control-group control-group-inline-left">
+                                <label class="control-label">Seed Financing</label>
+                                <div class="controls">
+                                    <div class="input-prepend">
+                                        <span class="add-on">$</span>
+                                        {{ form.seed_financing_amount_min }}
+                                    </div>
+                                    <div class="input-prepend slight-nudge">
+                                        <span class="add-on">$</span>
+                                        {{ form.seed_financing_amount_max }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span6 control-group-inline-right">
+                                <div class="control-group">
+                                    {{ form.seed_fee_cap_available|as_crispy_field }}
+                                    {{ form.seed_deferred_fees_available|as_crispy_field }}
+                                    {{ form.seed_fixed_fees_available|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="control-group control-group-inline-left">
+                                <label class="control-label">Incorporation</label>
+                                <div class="controls">
+                                    <div class="input-prepend">
+                                        <span class="add-on">$</span>
+                                        {{ form.incorporation_min }}
+                                    </div>
+                                    <div class="input-prepend slight-nudge">
+                                        <span class="add-on">$</span>
+                                        {{ form.incorporation_max }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span6 control-group-inline-right">
+                                <div class="control-group">
+                                    {{ form.inc_fee_cap_available|as_crispy_field }}
+                                    {{ form.inc_deferred_fees_available|as_crispy_field }}
+                                    {{ form.inc_fixed_fees_available|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="custom-funding-type" class="row hidden">
+                            <div class="control-group control-group-inline-left">
+                                {{ form.optional_funding }}
+                                <div class="controls">
+                                    <div class="input-prepend">
+                                        <span class="add-on">$</span>
+                                        {{ form.optional_min }}
+                                    </div>
+                                    <div class="input-prepend slight-nudge">
+                                        <span class="add-on">$</span>
+                                        {{ form.optional_max }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span6 control-group-inline-right">
+                                <div class="control-group">
+                                    {{ form.optional_fee_cap_available|as_crispy_field }}
+                                    {{ form.optional_deferred_fees_available|as_crispy_field }}
+                                    {{ form.optional_fixed_fees_available|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="custom-funding-type2" class="row hidden">
+                            <div class="control-group control-group-inline-left">
+                                {{ form.optional_funding2 }}
+                                <div class="controls">
+                                    <div class="input-prepend">
+                                        <span class="add-on">$</span>
+                                        {{ form.optional_min2 }}
+                                    </div>
+                                    <div class="input-prepend slight-nudge">
+                                        <span class="add-on">$</span>
+                                        {{ form.optional_max2 }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span6 control-group-inline-right">
+                                <div class="control-group">
+                                    {{ form.optional_fee_cap_available2|as_crispy_field }}
+                                    {{ form.optional_deferred_fees_available2|as_crispy_field }}
+                                    {{ form.optional_fixed_fees_available2|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="custom-funding-type3" class="row hidden">
+                            <div class="control-group control-group-inline-left">
+                                {{ form.optional_funding3 }}
+                                <div class="controls">
+                                    <div class="input-prepend">
+                                        <span class="add-on">$</span>
+                                        {{ form.optional_min3 }}
+                                    </div>
+                                    <div class="input-prepend slight-nudge">
+                                        <span class="add-on">$</span>
+                                        {{ form.optional_max3 }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span6 control-group-inline-right">
+                                <div class="control-group">
+                                    {{ form.optional_fee_cap_available3|as_crispy_field }}
+                                    {{ form.optional_deferred_fees_available3|as_crispy_field }}
+                                    {{ form.optional_fixed_fees_available3|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="span12">
+                                <button type="button" id="add-custom-funding-type" class="btn btn-link btn-small multi-add-btn"><i class="icon-plus-sign"></i>&nbsp;Add custom transaction type</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div id="form-submit" class="row">
+                        <div class="span12 divide">
+                            <div class="form-actions">
+                            <label class="checkbox">
+                                {{ form.agree_tandc|as_crispy_field }}
+                                <span id="i_agree_html">I agree to the LawPal <a href="{% url 'public:terms' %}">Terms and Conditions</a></span>
+                            </label>
+
+                                <button id="update-profile" type="submit" class="btn btn-primary btn-large">Update Profile</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+
+        </div>
+    </div>
 </div>
 
 {% endblock %}
 
 {% block css %}
 <style>
+
+.header h1 {
+    margin: .8em 0 .7em 0;
+}
+
+
 img#photo-preview{
     border:solid #ccc 2px;
     min-height: 50px;
@@ -235,6 +480,54 @@ img#photo-preview{
     max-height: 130px;
     max-width: 130px;
 }
+
+.input-append .add-on, .input-prepend .add-on {
+    border: 1px solid #CCC;
+}
+
+.slight-nudge {
+    margin-left: 10px;
+}
+
+.control-group-inline-left {
+    width: 520px;
+    float: left;
+}
+
+.control-group-inline-right {
+    width: 350px;
+    float: left;
+    margin: 0 0 1em;
+}
+
+.control-group-inline-right .controls {
+    margin: 0;
+}
+
+.control-group-inline-right .control-group {
+    margin-bottom: 5px;
+}
+
+.control-group-inline-left .controls input {
+    width: 90px;
+}
+
+.inline-form-element {
+    float: left;
+    width: 115px;
+    margin: 0 0 0 20px;
+}
+
+.profile-live a, .needs-completing a {
+    border-bottom: 1px solid #0088cc;
+    color: #0088cc;
+}
+
+.profile-live a:hover, .needs-completing a:hover {
+    text-decoration: none;
+}
+
+
 </style>
 {% endblock %}
 
@@ -246,11 +539,11 @@ img#photo-preview{
 <script type="text/javascript">
 
 function preparePhotoPreview(element) {
-	var element = $('.cropped-imag-preview');
-	var cookie_data = $.parseJSON($.cookie('{{ form.cookie_name }}-{{ user.pk }}'));
+    var element = $('.cropped-imag-preview');
+    var cookie_data = $.parseJSON($.cookie('lawyer_profile_photo-{{ user.pk }}'));
 
-	$.each(element.find('img'), function(i,img){
-		img = $(img)
+    $.each(element.find('img'), function(i,img){
+        img = $(img)
         src = img.attr('src');
 
         photo_id = null;
@@ -258,243 +551,532 @@ function preparePhotoPreview(element) {
         /**
         * Stores the photo ID in a field
         */
-		if (cookie_data && cookie_data.id !== undefined) {
-		    photo_id = cookie_data.id;
-	        $('#id_hidden_photo').val(photo_id);
-		    src = cookie_data.path;
-		}
+        if (cookie_data && cookie_data.id !== undefined) {
+            photo_id = cookie_data.id;
+            $('#id_hidden_photo').val(photo_id);
+            //src = cookie_data.path;
+        }
+        if (src) {
+            $('#photo-preview').attr('src', src)
+        }
 
-		$('#photo-preview').attr('src', src)
-
-		img.hide();
-	})
+        img.hide();
+    })
 }
 
 function photoCrop(element, data) {
-	$('#id_hidden_photo').val(data.id);// id to be sent
-    $.cookie('{{ form.cookie_name }}-{{ user.pk }}', JSON.stringify({'id': data.id, 'path': data.path}));
-	preparePhotoPreview(element);
+    $('#id_hidden_photo').val(data.id);// id to be sent
+    $.cookie('lawyer_profile_photo-{{ user.pk }}', JSON.stringify({'id': data.id, 'path': data.path}));
+    preparePhotoPreview(element);
 }
 
 $(document).ready(function(){
+    /**
+    * Tabination
+    */
+    $('ul#profile-tab li a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
 
-	/** stop the form submitting on enter, must push de button */
-	$('form#lawyer-profile-form').bind("keypress", function(e) {
-		if (e.keyCode == 13) {
-			e.preventDefault();
-			return false;
-		}
-	});
+    /**
+    * Parsley error counter
+    */
+    var handleErrorCount = function handleErrorCount(tabPane) {
 
+        var targetTabLink =  $('#profile-tab a[href="#{id}"]'.assign({
+            id: tabPane.prop('id')
+        }));
 
-	$('span#i_agree_html').hide()
-	$('label[for=id_agree_tandc]').append($('span#i_agree_html').html())
+        var targetTabLi = targetTabLink.closest('li');
+        var errorCount = parseInt(tabPane.find('.parsley-error').length);
 
-	$('input[title]').tooltip({trigger: 'focus', placement: 'top'});
+        tabPane.attr('data-error-count', errorCount);
+        targetTabLi.find('em').remove();
 
-	$('#id_volume_incorp_setup').val('{{ lawyer.data.volume_incorp_setup|jsonify }}');
-	$('#id_volume_seed_financing').val('{{ lawyer.data.volume_seed_financing|jsonify }}');
-	$('#id_volume_series_a').val('{{ lawyer.data.volume_series_a|jsonify }}');
-	$('#id_volume_ip').val('{{ lawyer.data.volume_ip|jsonify }}');
-	$('#id_volume_other').val('{{ lawyer.data.volume_other|jsonify }}');
-	/**
-	* Dynamic selector functions based on form api urls
-	* 
-	*/
-	{% for key, url in form.data_source_urls.items %}
-	{{ key }}_lookup = function(filter, callback) {
-		var url = '{{ url }}';
-		var object_list = []
-		url = (filter === undefined)? url: url + '&' + filter;
-		$.ajax({
-			type: 'GET',
-			url: url,
-			data: null,
-			beforeSend: function(jqXHR, settings) {
-				// Pull the token out of the DOM.
-				jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
-			},
-			success: function(data, textStatus, jqXHR){
-				$.each(data.objects, function(i,item){
-					object_list.push(item.name)
-				})
-				// call the calling callback.. javascript
-				callback(object_list);
-			},
-			error: function(data, textStatus, jqXHR){
-				console.log(jqXHR)
-				console.log(textStatus)
-			}
-		});
-	}
-	{% endfor %}
+        if (errorCount > 0) {
+            var errorTemplate = $('<em/>', {
+                html: '<span>{errorCount}</span>'.assign({'errorCount': errorCount})
+                ,class: 'unread_counter animated bounce'
+            });
+            targetTabLink.append(errorTemplate);
+        }
+    };
+    /**
+    * Parsley error catcher
+    */
+    $( 'form[data-validate="parsley"]' ).parsley( 'addListener', {
+        onFormSubmit: function ( isFormValid, event, ParsleyForm ) {
+            if (isFormValid === false) {
+                // Scroll to top ONLY on error
+                $("html, body").animate({scrollTop: 200}, 1000);
 
-	/**
-	* handle typeahead requests
-	*/
-	$.each($('.typeahead[data-provide="local"]'), function(i, element) {
-		var e = $(element);
-		e.typeahead({
-		    source: $.parseJSON(e.attr('data-source'))
-		    ,limit: 10
-		});
-	});
+                // get the nearest tabPane to store error count unless error is from T&Cs checkbox
+                $.each($('.tab-pane[data-error-count]'), function(i,elem){
+                    var tabPane = $(elem);
+                    // this event must fire once all of the .parsley-errors
+                    // have been created (onFieldError)
+                    handleErrorCount(tabPane);
+                })
 
+                $('.alert-error').removeClass('hidden');
+            } else {
+                $('.alert-error').addClass('hidden');
+            }
+        },
+        onFieldError: function ( elem, constraints, ParsleyField ) {
+            elem = $(elem);
 
-	$.each($('.typeahead[data-provide="ajax"]'), function(i, element) {
-		var e = $(element);
-		e.typeahead({
-    		source: function(query, process_callback) {
-    			var provide = e.attr('data-provide');
-    			var lookup_name = e.attr('data-source');
-    			var filter = e.attr('data-filter');
-    			filter = (filter === undefined)? filter : filter + '=' + query ;
-    			var fn = window[lookup_name + '_lookup']
-    			if(typeof fn === 'function') {
-    				fn(filter, process_callback);
-    			}
-    		}
-    	    ,limit: 15
-		});
-	});
+            if (elem.prop('id') !== 'id_agree_tandc') {
+                var tabPane = $(elem.closest('.tab-pane'));
+                // increment the error count attrib
+                var errorCount = tabPane.attr('data-error-count');
+                if (errorCount == 0) {
+                    errorCount = parseInt(errorCount) + 1;
+                    tabPane.attr('data-error-count', errorCount)
+                }
+            }
 
+            if ( !elem.is( ':visible' ) ) {
+                return true;
+            }
+            return false;
+        }
+        , onFieldSuccess: function ( elem, constraints, ParsleyField ) {
+            // get the nearest tabPane to store error count unless error is from T&Cs checkbox
+            if ($(elem).prop('id') !== 'id_agree_tandc') {
+                var tabPane = $(elem).closest('.tab-pane');
+                handleErrorCount(tabPane)
+            }
+        }
+    });
 
-	/**
-	* remove photo from parsley
-	*/
-	$('form#lawyer-profile-form').parsley( 'removeItem', '#id_photo' )
-	$('form#lawyer-profile-form').parsley( 'removeItem', '#id_hidden_photo' )
+    /** show the tab with errors **/
+    $('#update-profile').click(function(e) {
+        /** hack to wait for DOM to update **/
+        window.setTimeout(removeTab, 0);
 
-	/**
-	* handle startup additions
-	*/
-	$('button#add-startup-btn').on('click', function(event){
-		event.preventDefault();
+        function removeTab() {
+            $('#profile-tab').find('.unread_counter').first().parent().trigger('click');
+        }
+    });
 
-		var element = $('#id_startups_advised_input');
-	
-		// remove and then re-add
-		element.closest('form').parsley( 'removeItem', '#' + element.attr('id') )
-		element.closest('form').parsley( 'addItem', '#' + element.attr('id') )
-		element.parsley( 'addConstraint', { url: true } );
+    /** stop the form submitting on enter, must push de button */
+    $('form#lawyer-profile-form').bind("keypress", function(e) {
+        if (e.keyCode == 13) {
+            e.preventDefault();
+            return false;
+        }
+    });
 
-		if ( element.parsley( 'validate' ) === true ) {
-			var startup = element.val();
-			add_startup(startup);
+    /**
+    * Handle the placement of the t&c text which is placed strangely due to the form
+    */
+    $('span#i_agree_html').hide()
+    $('label[for=id_agree_tandc]').append($('span#i_agree_html').html())
 
-			element.val('');
-			element.select();
-			console.log(element.closest('form'))
-		}
-	});
+    $('input[title]').tooltip({trigger: 'focus', placement: 'top'});
 
-	function process_startups() {
-		var cookie_name = 'startup_list-{{ user.pk }}';
-		var cookie_data = $.parseJSON($.cookie(cookie_name)) || $.parseJSON($('#id_startups_advised').val()) || [];
-		var force = true;
-		$.each(cookie_data, function(i,startup){
-			add_startup(startup, force);
-		})
-	}
-	process_startups();
+    /**
+    * Dynamic selector functions based on form api urls
+    */
+    ajax_lookup = function(url, filter, callback) {
+        var object_list = []
+        url = (filter === undefined)? url: url + '&' + filter;
+        $.ajax({
+            type: 'GET',
+            url: url,
+            data: null,
+            beforeSend: function(jqXHR, settings) {
+                // Pull the token out of the DOM.
+                jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+            },
+            success: function(data, textStatus, jqXHR){
+                $.each(data.objects, function(i,item){
+                    object_list.push(item.name)
+                })
+                // call the calling callback.. javascript
+                callback(object_list);
+            },
+            error: function(data, textStatus, jqXHR){
+                console.log(jqXHR)
+                console.log(textStatus)
+            }
+        });
+    }
 
-	function add_startup(startup, force){
-		var force = force || false
-		var cookie_name = 'startup_list-{{ user.pk }}';
-		var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
-		startup = startup.compact()
-
-		if (force === false && cookie_data.indexOf(startup) >= 0) {
-			// is already present
-			return false
-		}else {
-			if (cookie_data.indexOf(startup) < 0) {
-				cookie_data.push(startup);
-			}
-
-			cookie_string = JSON.stringify(cookie_data);
-			$.cookie(cookie_name, cookie_string);
-			// set the form value
-			$('#id_startups_advised').val(cookie_string);
-
-			var remove_but = $('<button/>', {
-				class: 'btn btn-link btn-small remove-startup-btn',
-				html: '<i class="icon-minus-sign"></i>'
-			});
-			var li = $('<li/>', {
-				html: remove_but.prop('outerHTML') +'&nbsp;'+ startup
-			});
-
-			$('ol#startups-advised-list').append(li);
-		}
-	}
-	$('.remove-startup-btn').live('click', function(event){
-		event.preventDefault();
-		var element = $(this);
-		var startup = element.closest('li').text();
-		element.closest('li').remove();
-		remove_startup(startup)
-	})
-	function remove_startup(startup){
-		var cookie_name = 'startup_list-{{ user.pk }}';
-		var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
-		startup = startup.compact()
-
-		cookie_data.remove(startup)
-
-		var cookie_string = JSON.stringify(cookie_data);
-		$.cookie(cookie_name, cookie_string);
-
-		$('#id_startups_advised').val(cookie_string);
-	}
+    /**
+    * handle typeahead requests
+    */
+    $.each($('.typeahead[data-provide="local"]'), function(i, element) {
+        var e = $(element);
+        e.typeahead({
+            source: $.parseJSON(e.attr('data-source'))
+            ,limit: 10
+        });
+    });
 
 
-	/**
-	* handle volume changes
-	*/
-	$.each($('.volume'), function(i, element) {
+    $.each($('.typeahead[data-provide="ajax"]'), function(i, element) {
+        var e = $(element);
+        e.typeahead({
+            source: function(query, process_callback) {
+                var provide = e.attr('data-provide');
+                var url = e.attr('data-source');
+                var filter = e.attr('data-filter');
+                filter = (filter === undefined)? filter : filter + '=' + query ;
+                ajax_lookup(url, filter, process_callback);
+            }
+            ,limit: 15
+        });
+    });
 
-		var e = $(element);
-		var volume_type = e.attr('data-volume_type');
-		var year = e.attr('data-year');
+    /**
+    * handle startup additions
+    */
+    $('.multi-add-btn').on('click', function(event){
+        event.preventDefault();
+        var e = $(this)
+        var element = $('#' + e.attr('data-data_target'));//$('#id_startups_advised_input');
+        var callback_name = e.attr('data-additem_callback')
+        var callback = window[callback_name]
 
-		var target_element = $('#id_volume_' + volume_type);
+        // remove and then re-add
+        parsleyConstraints = e.attr('data-type') || false
 
-		// default json data from hidden element
-		var target_json = $.parseJSON(target_element.val());
+        if (parsleyConstraints) {
+            element.closest('form').parsley( 'removeItem', '#' + element.attr('id') )
+            element.closest('form').parsley( 'addItem', '#' + element.attr('id') )
+            // loop over data-type as defined in the html attribute and ensure constraint is applied
+            $.each(parsleyConstraints.split(','), function(i,e){
+                element.parsley( 'addConstraint', { e: true } );    
+            })
+            
+        }
 
-		// parse and reform and set defaults
+        if ( parsleyConstraints === false || element.parsley( 'validate' ) === true ) {
+            var item = element.val();
+            element.val('');
+            element.select();
+            if (callback !== undefined) {
+                callback(item);
+            } else {
+                console.log('Callback {cb_name} for add-website-btn was not defined'.assign({'cb_name': callback_name}))
+            }
+            
+        }
+    });
+    $('.remove-multi-add-btn').live('click', function(event){
+        event.preventDefault();
+        var element = $(this);
+        var item = element.closest('li').text();
+        element.closest('li').remove();
+        var cookie_name = element.attr('data-cookie_name');//'startup_list-{{ user.pk }}';
+        remove_multi_add_item(item, cookie_name)
+    })
 
-		var volume_object = window[volume_type + '_object'] || (typeof(target_json) == 'object') ? target_json : {};
-		volume_object[year] = (target_json[year] !== undefined)? target_json[year]: 0;
-		var as_json = JSON.stringify(volume_object)
+    add_startup = function add_startup(startup, force){
+        var force = force || false
+        var cookie_name = 'startup_list-{{ user.pk }}';
+        var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
+        startup = startup.compact(startup, $('ol#startups-advised-list'), cookie_name, cookie_data, force)
+        add_generic_list_element(startup, $('ol#startups-advised-list'), $('#id_startups_advised'), cookie_name, cookie_data, force)
+    }
 
-		// set the initial value
-		window[volume_type + '_object'] = volume_object;
+    add_website = function add_website(website, force){
+        var force = force || false
+        var cookie_name = 'website_list-{{ user.pk }}';
+        var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
+        website = website.compact(website, $('ol#personal-website-list'), cookie_name, cookie_data, force)
+        add_generic_list_element(website, $('ol#personal-website-list'), $('#id_websites'), cookie_name, cookie_data, force)
+    }
 
-		e.val(volume_object[year])
-		target_element.val(as_json);
+    add_bar_membership = function add_bar_membership(bar_membership, force){
+        var force = force || false
+        var cookie_name = 'bar_membership_list-{{ user.pk }}';
+        var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
 
-		function ensureVolumeValue(volume_type) {
-			var target_element = $('#id_volume_' + volume_type);
-			return (typeof(target_element.val()) != typeof({})) ? {} : $.parseJSON(target_element.val());
-		}
-		e.on('change', function(event){
-			var volume = e.val();
-			var volume_type = e.attr('data-volume_type');
-			var year = e.attr('data-year');
+        bar_membership = bar_membership.compact(bar_membership, $('ol#bar-membership-list'), cookie_name, cookie_data, force)
+        add_generic_list_element(bar_membership, $('ol#bar-membership-list'), $('#id_bar_membership'), cookie_name, cookie_data, force)
+    }
 
-			var target_json = ensureVolumeValue(volume_type);
-			var volume_object = window[volume_type + '_object'];
+    add_generic_list_element = function add_generic_list_element(item, target_element, target_data_element, cookie_name, cookie_data, force) {
+        if (force === false && cookie_data.indexOf(item) >= 0) {
+            // is already present
+            return false
+        }else {
+            if (cookie_data.indexOf(item) < 0) {
+                cookie_data.push(item);
+            }
 
-			volume_object[year] = volume;
-			var as_json = JSON.stringify(volume_object)
+            cookie_string = JSON.stringify(cookie_data);
+            $.cookie(cookie_name, cookie_string);
+            // set the form value
+            target_data_element.val(cookie_string);
 
-			target_element.val(as_json);
-			// console.log(target_element.val())
-		})
-	});
+            var remove_but = $('<button/>', {
+                class: 'btn btn-link btn-small remove-multi-add-btn',
+                'data-cookie_name': cookie_name,
+                html: '<i class="icon-minus-sign"></i>'
+            });
+            var li = $('<li/>', {
+                html: remove_but.prop('outerHTML') +'&nbsp;'+ item
+            });
 
+            target_element.append(li);
+        }
+    }
+    remove_multi_add_item = function remove_multi_add_item(item, cookie_name){
+        //var cookie_name = 'startup_list-{{ user.pk }}';
+        var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
+        item = item.compact()
+
+        cookie_data.remove(item)
+
+        var cookie_string = JSON.stringify(cookie_data);
+        $.cookie(cookie_name, cookie_string);
+    }
+
+    function process_startups() {
+        var cookie_name = 'startup_list-{{ user.pk }}';
+        var cookie_data = $.parseJSON($.cookie(cookie_name)) || $.parseJSON($('#id_startups_advised').val()) || [];
+        var force = true;
+        $.each(cookie_data, function(i,startup){
+            add_startup(startup, force);
+        })
+    }
+    process_startups();
+
+    function process_websites() {
+        var cookie_name = 'website_list-{{ user.pk }}';
+        var cookie_data = $.parseJSON($.cookie(cookie_name)) || $.parseJSON($('#id_websites').val()) || [];
+        var force = true;
+        $.each(cookie_data, function(i,website){
+            add_website(website, force);
+        })
+    }
+    process_websites();
+
+    function process_bar_membership() {
+        var cookie_name = 'bar_membership_list-{{ user.pk }}';
+        var cookie_data = $.parseJSON($.cookie(cookie_name)) || $.parseJSON($('#id_bar_membership').val()) || [];
+        var force = true;
+        $.each(cookie_data, function(i,bar_membership){
+            add_bar_membership(bar_membership, force);
+        })
+    }
+    process_bar_membership();
+
+    /**
+    * JSON output the volume type values
+    */
+    $('#id_volume_incorp_setup').val('{{ lawyer.data.volume_incorp_setup }}');
+    $('#id_volume_seed_financing').val('{{ lawyer.data.volume_seed_financing }}');
+    $('#id_volume_series_a').val('{{ lawyer.data.volume_series_a }}');
+    $('#id_volume_ip').val('{{ lawyer.data.volume_ip }}');
+    $('#id_volume_other').val('{{ lawyer.data.volume_other }}');
+    $('#id_volume_by_year').val('{{ lawyer.data.volume_by_year|jsonify }}');
+    $('#id_seed_financing_amount_min').val('{{ lawyer.data.seed_financing_amount_min|ensure_number }}');
+    $('#id_seed_financing_amount_max').val('{{ lawyer.data.seed_financing_amount_max|ensure_number }}');
+
+    if ('{{ lawyer.data.seed_fee_cap_available }}' === 'True') {
+        $('#id_seed_fee_cap_available').prop('checked', true);
+    }
+    if ('{{ lawyer.data.seed_deferred_fees_available }}' === 'True') {
+        $('#id_seed_deferred_fees_available').prop('checked', true);
+    }
+    if ('{{ lawyer.data.seed_fixed_fees_available }}' === 'True') {
+        $('#id_seed_fixed_fees_available').prop('checked', true);
+    }
+
+    $('#id_incorporation_min').val('{{ lawyer.data.incorporation_min|ensure_number }}');
+    $('#id_incorporation_max').val('{{ lawyer.data.incorporation_max|ensure_number }}');
+
+    if ('{{ lawyer.data.inc_fee_cap_available }}' === 'True') {
+        $('#id_inc_fee_cap_available').prop('checked', true);
+    }
+    if ('{{ lawyer.data.inc_deferred_fees_available }}' === 'True') {
+        $('#id_inc_deferred_fees_available').prop('checked', true);
+    }
+    if ('{{ lawyer.data.inc_fixed_fees_available }}' === 'True') {
+        $('#id_inc_fixed_fees_available').prop('checked', true);
+    }
+    var optionalFunding = 0;
+    if ('{{ lawyer.data.optional_funding }}' !== '') {
+        $('#id_optional_funding').val('{{ lawyer.data.optional_funding }}');
+        $('#id_optional_min').val('{{ lawyer.data.optional_min|ensure_number }}');
+        $('#id_optional_max').val('{{ lawyer.data.optional_max|ensure_number }}');
+        $('#custom-funding-type').removeClass('hidden');
+        if ('{{ lawyer.data.optional_fee_cap_available }}' === 'True') {
+            $('#id_optional_fee_cap_available').prop('checked', true);
+        }
+        if ('{{ lawyer.data.optional_deferred_fees_available }}' === 'True') {
+            $('#id_optional_deferred_fees_available').prop('checked', true);
+        }
+        if ('{{ lawyer.data.optional_fixed_fees_available }}' === 'True') {
+            $('#id_optional_fixed_fees_available').prop('checked', true);
+        }
+        optionalFunding++;
+    }
+    if ('{{ lawyer.data.optional_funding2 }}' !== '') {
+        $('#id_optional_funding2').val('{{ lawyer.data.optional_funding2 }}');
+        $('#id_optional_min2').val('{{ lawyer.data.optional_min2|ensure_number }}');
+        $('#id_optional_max2').val('{{ lawyer.data.optional_max2|ensure_number }}');
+        $('#custom-funding-type2').removeClass('hidden');
+        if ('{{ lawyer.data.optional_fee_cap_available2 }}' === 'True') {
+            $('#id_optional_fee_cap_available2').prop('checked', true);
+        }
+        if ('{{ lawyer.data.optional_deferred_fees_available2 }}' === 'True') {
+            $('#id_optional_deferred_fees_available2').prop('checked', true);
+        }
+        if ('{{ lawyer.data.optional_fixed_fees_available2 }}' === 'True') {
+            $('#id_optional_fixed_fees_available2').prop('checked', true);
+        }
+        optionalFunding++;
+    }
+    if ('{{ lawyer.data.optional_funding3 }}' !== '') {
+        $('#id_optional_funding3').val('{{ lawyer.data.optional_funding3 }}');
+        $('#id_optional_min3').val('{{ lawyer.data.optional_min3|ensure_number }}');
+        $('#id_optional_max3').val('{{ lawyer.data.optional_max3|ensure_number }}');
+        $('#custom-funding-type3').removeClass('hidden');
+        if ('{{ lawyer.data.optional_fee_cap_available3 }}' === 'True') {
+            $('#id_optional_fee_cap_available3').prop('checked', true);
+        }
+        if ('{{ lawyer.data.optional_deferred_fees_available3 }}' === 'True') {
+            $('#id_optional_deferred_fees_available3').prop('checked', true);
+        }
+        if ('{{ lawyer.data.optional_fixed_fees_available3 }}' === 'True') {
+            $('#id_optional_fixed_fees_available3').prop('checked', true);
+        }
+        optionalFunding++;
+    }
+    if (optionalFunding > 2) {
+        $('#add-custom-funding-type').remove();
+    }
+
+    /**
+    * handle volume changes
+    */
+    single_value = function single_value(element, volume_type, target_element, element_value) {
+        $(target_element).val(element_value)
+        window[volume_type + '_object'] = element_value
+        target_element.val(window[volume_type + '_object'])
+        return window[volume_type + '_object']
+    }
+
+    json_value = function json_value(element, volume_type, target_element, element_value) {
+        var json_taget_name = target_element.attr('id')
+        var element_value = $.parseJSON(element_value);
+
+        // ensure object
+        var var_name = json_taget_name + '_object'
+        window[var_name] = (window[var_name] === undefined) ? {} : window[var_name]
+
+        // ensure value
+        window[var_name][volume_type] = (typeof(element_value) == 'number') ? element_value : (typeof(element_value) == 'object') ? element_value[volume_type] : 0
+
+        if (typeof(window[var_name][volume_type]) == 'undefined') {
+            window[var_name][volume_type] = 0   
+        }
+        return window[var_name][volume_type]
+    }
+
+    $.each($('.json_volume'), function(i, element) {
+        var e = $(element);
+        var volume_type = e.attr('data-volume_type');
+        var target_element = $('#id_' + e.attr('data-json_target'));
+        var element_value = target_element.val();
+        var val = json_value(e, volume_type, target_element, element_value)
+
+        e.val(val)
+
+        e.on('change', function(event){
+            var e = $(this);
+            var element_value = e.val();
+
+            var target_element = $('#id_' + e.attr('data-json_target'));
+            var var_name = target_element.attr('id') + '_object'
+            var volume_type = e.attr('data-volume_type');
+
+            var val = json_value(e, volume_type, target_element, element_value)
+            target_element.val(JSON.stringify(window[var_name]))
+        })
+    });
+    
+    $.each($('.volume'), function(i, element) {
+        var e = $(element);
+        var volume_type = e.attr('data-volume_type');
+
+        // Normal value
+        var target_element = $('#id_volume_' + volume_type);
+        var element_value = target_element.val() || 0;
+        var val = single_value(e, volume_type, target_element, element_value)
+
+        e.val(val)
+
+        e.on('change', function(event){
+            var volume = e.val();
+            var volume_type = e.attr('data-volume_type');
+            var target_json = single_value(e, volume_type, target_element, element_value)
+            var volume_object = window[volume_type + '_object'];
+            var final_value = volume;
+
+            target_element.val(final_value);
+        })
+    });
+
+    /**
+     * Checking each form section to determine which if any welcome message to display.
+     */
+    var tabGeneral = false, tabFees = false, tabProfile = false, tabTransaction = false, tabAccounts = false;
+
+    $('#fees-packages input[id*="_max"]').each(function () {
+        if ($(this).attr('value') != 0) {
+            tabFees = true;
+        }
+    });
+
+    $('#profile input[type="text"]').each(function () {
+        if ($(this).attr('value') != '') {
+            tabProfile = true;
+            return false;
+        }
+    });
+
+    $('#transactions-and-startups input[data-type="number"]').each(function () {
+       if ($(this).attr('value') != 0) {
+           tabTransaction = true;
+           return false;
+       }
+    });
+
+    if( $('#connected-accounts .btn-active').length ){
+        tabAccounts = true;
+    }
+
+    $('#add-custom-funding-type').click(function() {
+        if ($('#custom-funding-type').hasClass('hidden')) {
+            $('#custom-funding-type').removeClass('hidden');
+        }
+        else if ($('#custom-funding-type2').hasClass('hidden')) {
+            $('#custom-funding-type2').removeClass('hidden');
+        }
+        else {
+            $('#custom-funding-type3').removeClass('hidden');
+            $(this).remove();
+        }
+    });
+
+    $('.update-tab').click(function(e) {
+        e.preventDefault();
+        var hashValue = $(this).attr('href');
+        $('#profile-tab a[href='+hashValue+']').trigger('click');
+    });
+
+    if(window.location.hash) {
+       var hashValue = window.location.hash;
+        $('#profile-tab a[href='+hashValue+']').trigger('click'); 
+    }
 });
 </script>
 

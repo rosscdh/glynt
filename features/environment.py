@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """"""
+import os, sys, site
+import urlparse
+
 # Tell wsgi to add the Python site-packages to its path. 
 import os, site, sys
 FEATURE_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -24,149 +27,115 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'glynt.settings'
 import os
 from behaving import environment as benv
 
-
 def before_all(context):
+    # Even though DJANGO_SETTINGS_MODULE is set, this may still be
+    # necessary. Or it may be simple CYA insurance.
     from django.core.management import call_command
     from django.core.management import setup_environ
     from django.conf import settings
     #setup_environ(settings)
 
-    context.attachment_dir = os.path.join(os.path.dirname(FEATURE_DIR), 'data')
+    ### Take a TestRunner hostage.
+    from django.test.simple import DjangoTestSuiteRunner
+    # We'll use thise later to frog-march Django through the motions
+    # of setting up and tearing down the test environment, including
+    # test databases.
+    context.runner = DjangoTestSuiteRunner()
 
-    context.default_browser = 'chrome'
+    ## If you use South for migrations, uncomment this to monkeypatch
+    ## syncdb to get migrations to run.
+    from south.management.commands import patch_for_test_db_setup
+    patch_for_test_db_setup()
 
-    benv.before_all(context)
+    ### Set up the WSGI intercept "port".
+    import wsgi_intercept
+    from django.core.handlers.wsgi import WSGIHandler
+    host = context.host = 'localhost'
+    port = context.port = getattr(settings, 'TESTING_MECHANIZE_INTERCEPT_PORT', 17681)
+    # NOTE: Nothing is actually listening on this port. wsgi_intercept
+    # monkeypatches the networking internals to use a fake socket when
+    # connecting to this port.
+    wsgi_intercept.add_wsgi_intercept(host, port, WSGIHandler)
 
+    def loaddata(fixtures):
+        call_command('loaddata', fixtures)
 
-def after_all(context):
-    benv.after_all(context)
+    context.loaddata = loaddata
 
+    def browser_url(url):
+        """Create a URL for the virtual WSGI server.
 
-def before_feature(context, feature):
-    benv.before_feature(context, feature)
+        e.g context.browser_url('/'), context.browser_url(reverse('my_view'))
+        """
+        return urlparse.urljoin('http://%s:%d/' % (host, port), url)
 
+    context.browser_url = browser_url
 
-def after_feature(context, feature):
-    benv.after_feature(context, feature)
+    def go_to_url(url, redirect=True):
+        context.browser.set_handle_redirect(redirect)
+        context.browser.open(context.browser_url(url))
+
+    context.go_to = go_to_url
+
+    ### Cssselect implementation
+    import lxml.html
+    from cssselect import GenericTranslator, SelectorError
+    def csss(selector):
+        """ html object for parsing
+        currently using cssselect
+        """
+        doc = lxml.html.fromstring(context.browser.response().read())
+        return doc.cssselect(selector)
+
+    context.csss = csss
+
+    ### Pyquery implementation
+    from pyquery import PyQuery
+    def pq(selector):
+        """ html object for parsing
+        currently using pyquery
+        """
+        html = PyQuery(context.browser.response().read())
+        return html(selector)
+
+    context.pq = pq
+
+    ### BeautifulSoup is handy to have nearby. (Substitute lxml or html5lib as you see fit)
+    from BeautifulSoup import BeautifulSoup
+    def parse_soup():
+        """Use BeautifulSoup to parse the current response and return the DOM tree.
+        """
+        r = context.browser.response()
+        html = r.read()
+        r.seek(0)
+        return BeautifulSoup(html)
+
+    context.parse_soup = parse_soup
 
 
 def before_scenario(context, scenario):
-    benv.before_scenario(context, scenario)
+    # Set up the scenario test environment
+    context.runner.setup_test_environment()
+
+    # We must set up and tear down the entire database between
+    # scenarios. We can't just use db transactions, as Django's
+    # TestClient does, if we're doing full-stack tests with Mechanize,
+    # because Django closes the db connection after finishing the HTTP
+    # response.
+    context.old_db_config = context.runner.setup_databases()
+
+    ### Set up the Mechanize browser.
+    from wsgi_intercept import mechanize_intercept
+    # MAGIC: All requests made by this monkeypatched browser to the magic
+    # host and port will be intercepted by wsgi_intercept via a
+    # fake socket and routed to Django's WSGI interface.
+    browser = context.browser = mechanize_intercept.Browser()
+    browser.set_handle_robots(False)
 
 
 def after_scenario(context, scenario):
-    benv.after_scenario(context, scenario)
-
-
-# def before_all(context):
-#     # Even though DJANGO_SETTINGS_MODULE is set, this may still be
-#     # necessary. Or it may be simple CYA insurance.
-#     from django.core.management import call_command
-#     from django.core.management import setup_environ
-#     from django.conf import settings
-#     #setup_environ(settings)
-
-#     ### Take a TestRunner hostage.
-#     from django.test.simple import DjangoTestSuiteRunner
-#     # We'll use thise later to frog-march Django through the motions
-#     # of setting up and tearing down the test environment, including
-#     # test databases.
-#     context.runner = DjangoTestSuiteRunner()
-
-#     ## If you use South for migrations, uncomment this to monkeypatch
-#     ## syncdb to get migrations to run.
-#     from south.management.commands import patch_for_test_db_setup
-#     patch_for_test_db_setup()
-
-#     ### Set up the WSGI intercept "port".
-#     import wsgi_intercept
-#     from django.core.handlers.wsgi import WSGIHandler
-#     host = context.host = 'localhost'
-#     port = context.port = getattr(settings, 'TESTING_MECHANIZE_INTERCEPT_PORT', 17681)
-#     # NOTE: Nothing is actually listening on this port. wsgi_intercept
-#     # monkeypatches the networking internals to use a fake socket when
-#     # connecting to this port.
-#     wsgi_intercept.add_wsgi_intercept(host, port, WSGIHandler)
-
-#     def loaddata(fixtures):
-#         call_command('loaddata', fixtures)
-
-#     context.loaddata = loaddata
-
-#     def browser_url(url):
-#         """Create a URL for the virtual WSGI server.
-
-#         e.g context.browser_url('/'), context.browser_url(reverse('my_view'))
-#         """
-#         return urlparse.urljoin('http://%s:%d/' % (host, port), url)
-
-#     context.browser_url = browser_url
-
-#     def go_to_url(url, redirect=True):
-#         context.browser.set_handle_redirect(redirect)
-#         context.browser.open(context.browser_url(url))
-
-#     context.go_to = go_to_url
-
-#     ### Cssselect implementation
-#     import lxml.html
-#     from cssselect import GenericTranslator, SelectorError
-#     def csss(selector):
-#         """ html object for parsing
-#         currently using cssselect
-#         """
-#         doc = lxml.html.fromstring(context.browser.response().read())
-#         return doc.cssselect(selector)
-
-#     context.csss = csss
-
-#     ### Pyquery implementation
-#     from pyquery import PyQuery
-#     def pq(selector):
-#         """ html object for parsing
-#         currently using pyquery
-#         """
-#         html = PyQuery(context.browser.response().read())
-#         return html(selector)
-
-#     context.pq = pq
-
-#     ### BeautifulSoup is handy to have nearby. (Substitute lxml or html5lib as you see fit)
-#     from BeautifulSoup import BeautifulSoup
-#     def parse_soup():
-#         """Use BeautifulSoup to parse the current response and return the DOM tree.
-#         """
-#         r = context.browser.response()
-#         html = r.read()
-#         r.seek(0)
-#         return BeautifulSoup(html)
-
-#     context.parse_soup = parse_soup
-
-
-# def before_scenario(context, scenario):
-#     # Set up the scenario test environment
-#     context.runner.setup_test_environment()
-
-#     # We must set up and tear down the entire database between
-#     # scenarios. We can't just use db transactions, as Django's
-#     # TestClient does, if we're doing full-stack tests with Mechanize,
-#     # because Django closes the db connection after finishing the HTTP
-#     # response.
-#     context.old_db_config = context.runner.setup_databases()
-
-#     ### Set up the Mechanize browser.
-#     from wsgi_intercept import mechanize_intercept
-#     # MAGIC: All requests made by this monkeypatched browser to the magic
-#     # host and port will be intercepted by wsgi_intercept via a
-#     # fake socket and routed to Django's WSGI interface.
-#     browser = context.browser = mechanize_intercept.Browser()
-#     browser.set_handle_robots(False)
-
-
-# def after_scenario(context, scenario):
-#     # Tear down the scenario test environment.
-#     context.runner.teardown_databases(context.old_db_config)
-#     context.runner.teardown_test_environment()
-#     # Bob's your uncle.
+    # Tear down the scenario test environment.
+    context.runner.teardown_databases(context.old_db_config)
+    context.runner.teardown_test_environment()
+    # Bob's your uncle.
 

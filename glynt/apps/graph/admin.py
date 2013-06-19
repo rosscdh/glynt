@@ -1,7 +1,8 @@
 # -*- coding: UTF-8 -*-
 from django.contrib import admin
 
-from models import GraphConnection
+from models import GraphConnection, FullContactData
+
 
 class GraphConnectionAdmin(admin.ModelAdmin):
     list_filter = ['provider']
@@ -9,5 +10,10 @@ class GraphConnectionAdmin(admin.ModelAdmin):
     search_fields = ('full_name', 'provider')
 
 
-admin.site.register(GraphConnection, GraphConnectionAdmin)
+class FullContactDataAdmin(admin.ModelAdmin):
+    search_fields = ['user__username',]
+    list_display = ('user', 'full_name', 'social_profile_names', 'profile_pic',)
 
+
+admin.site.register(GraphConnection, GraphConnectionAdmin)
+admin.site.register(FullContactData, FullContactDataAdmin)

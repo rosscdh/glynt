@@ -6,6 +6,8 @@ PROJECT_ENVIRONMENT = 'prod'
 
 SITE_ID = 4
 
+SECRET_KEY = 'i6=)1=4in#zyp&amp;g)^j2nl1abaeu)@2)^$ox5w7ac*uhml!uy-5'
+
 DEBUG = False
 COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = False
@@ -14,11 +16,11 @@ TEMPLATE_DEBUG = DEBUG
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'd7c7vlhi6had88',
-        'USER': 'u1uq45tflfbqqo',
+        'NAME': 'lawpal_production',
+        'USER': 'postgres',
         'PASSWORD': 'p7vgff9h197gnres0kj13btoos4',
-        'HOST': 'ec2-54-225-205-183.compute-1.amazonaws.com',
-        'PORT': 5642
+        'HOST': 'ec2-50-18-97-221.us-west-1.compute.amazonaws.com',
+        'PORT': 5432
     }
 }
 
@@ -36,21 +38,21 @@ ALLOWED_HOSTS = ['*']
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 SESSION_CACHE_ALIAS = 'session_cache'
+SESSION_COOKIE_SECURE = True
 
+
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
+
+GOOGLE_DISPLAY_NAME = 'LawPal.com - Development'
+GOOGLE_OAUTH2_CLIENT_ID = '316492043888-k9aqv2u3ctfitqrduh07b1dger243auk.apps.googleusercontent.com'
+GOOGLE_OAUTH2_CLIENT_SECRET = 'XrbSGhSxNC1XWt5wKZVbf-zS'
+GOOGLE_OAUTH_EXTRA_SCOPE = ['https://www.googleapis.com/auth/plus.me']
 
 FACEBOOK_API_KEY = '343632075713954'
 FACEBOOK_SECRET_KEY = '4f9854b8fe8f5ccf27ac1ffcf5051b79'
 
 LINKEDIN_CONSUMER_KEY = 'gnesv6zvhzgn'
 LINKEDIN_CONSUMER_SECRET = '3eTYERhJZd4UJSjM'
-LINKEDIN_SCOPE = ['r_basicprofile', 'r_emailaddress', 'r_network']
-LINKEDIN_EXTRA_FIELD_SELECTORS = ['email-address', 'headline', 'industry']
-LINKEDIN_EXTRA_DATA = [('id', 'id'),
-                       ('first-name', 'first_name'),
-                       ('last-name', 'last_name'),
-                       ('email-address', 'email_address'),
-                       ('headline', 'headline'),
-                       ('industry', 'industry')]
 
 
 ANGEL_CLIENT_ID = '06aa0b726a71dc994bb44c3c4f3d9b91' # www.lawpal.com
@@ -66,17 +68,40 @@ EMAIL_HOST_USER = 'lawpal'
 EMAIL_HOST_PASSWORD = '0113633alex'
 # EMAIL_PORT = 587
 # EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'glynt@dev.weareml.com'
-SERVER_EMAIL = 'glynt@dev.weareml.com'
+DEFAULT_FROM_EMAIL = 'noreply@lawpal.com'
+SERVER_EMAIL = 'glynt@lawpal.com'
 
 
 RAVEN_CONFIG = {
     'dsn': 'https://b5a6429d03e2418cbe71cd5a4c9faca6:ddabb51af47546d1ac0e63cb453797ba@app.getsentry.com/6287',
 }
 
-# Heroku - CloudAMQP
-BROKER_URL = 'amqp://gqhezwgc:1JylV9VKTXnlA9iuy9WFqIOqbl4yTmQa@tiger.cloudamqp.com/gqhezwgc'
-BROKER_POOL_LIMIT = 1
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': 'http://giq8k0u0:8w1b1vt5lz38j3qo@fir-4141096.us-east-1.bonsai.io',
+        'INDEX_NAME': 'glynt-prod',
+    },
+}
+USE_ELASTICSEARCH = True
+
+
+# AMPQ Queue System AWS
+BROKER_USER = AWS_ACCESS_KEY_ID
+BROKER_PASSWORD = AWS_SECRET_ACCESS_KEY
+BROKER_TRANSPORT = 'sqs'
+BROKER_TRANSPORT_OPTIONS = {
+    'region': 'us-west-1',
+}
+CELERY_DEFAULT_QUEUE = 'lawpal-production'
+CELERY_QUEUES = {
+    CELERY_DEFAULT_QUEUE: {
+        'exchange': CELERY_DEFAULT_QUEUE,
+        'binding_key': CELERY_DEFAULT_QUEUE,
+    }
+}
+
 
 SPLUNKSTORM_ENDPOINT = 'logs2.splunkstorm.com'
 SPLUNKSTORM_PORT = 20824

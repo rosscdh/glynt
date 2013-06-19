@@ -34,6 +34,10 @@ class Firm(models.Model):
         return u'%s' % (self.name,)
 
     @property
+    def num_offices(self):
+        return self.office_set.count()
+
+    @property
     def primary_office(self):
         try:
             return self.office_set.all()[0]
@@ -83,4 +87,4 @@ def new_firm(sender, **kwargs):
 
     if firm is not None and is_new == True:
         logger.info('A new Firm was created %s' % firm)
-        new_firm_email_task()
+        new_firm_email_task(firm=firm)

@@ -1,0 +1,689 @@
+#hero {
+    background: url(../../img/app/lawyer-background.jpg) 0 0 no-repeat;
+    background-size: cover;
+    text-align: center;
+}
+
+#hero h1 {
+    margin: 0.25em 0 0 0;
+    line-height: 0.5 !important;
+}
+
+#hero h3 {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#hero a {
+    color: white;
+}
+
+#hero .control-group, #hero .controls {
+    display: inline;
+}
+
+#hero {
+    background: url(../../img/app/marketplace-background.jpg) 0 0 no-repeat;
+    background-size: cover;
+    text-align: center;
+    position: relative;
+    min-height: 160px;
+}
+
+#hero h1 {
+    margin: 0.25em 0 0 0;
+    line-height: 0.5 !important;
+}
+
+#hero .dock {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.55);
+    padding: 17px 0px 5px 0px;
+    font-size: 24px;
+}
+
+#hero .dock input {
+    margin: 4px 0px 0px 0px;
+    padding: 0px 0px 4px 0px;
+    border: none;
+    color: white;
+    background-color: transparent;
+    border-bottom: 1px solid white;
+    font-size: 20px;
+    text-align: left;
+    border-radius: 0px;
+    box-shadow: none;
+}
+
+#hero .dock .btn {
+    background-color: transparent;
+    border: 1px solid white;
+    margin: 5px 0px 0px 0px;
+    text-decoration: none;
+    color: white;
+    padding: 7px 23px 6px 23px;
+    font-weight: normal;
+}
+#hero .dock .examples {
+	text-align: right;
+	padding-right:370px;
+}
+#hero .dock .examples #rotate {
+	font-size:14px;
+	color:#b8c387;
+}
+.avatar img {
+    border: 8px solid rgba(255, 255, 255, 0.46);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.23);
+    border-radius: 100px;
+}
+
+body.lawyer-welcome .profile p {
+    font-size: 17px;
+    line-height: 1.6;
+}
+
+.deal-outer {
+    float: left;
+    width: 120px;
+    text-align: center;
+}
+
+.deal-outer p, body.lawyer-welcome .profile .deal-outer p {
+    margin-top: -10px;
+    font-size: 15px;
+}
+
+.deal {
+    display: inline-block;
+    width: 80px;
+    min-height: 95px;
+}
+
+.deal .circle {
+    float: left;
+    margin-right: 2px;
+    margin-bottom: 2px;
+    background: #cacaca;
+    width: 18px;
+    height: 18px;
+    border-radius: 20px;
+}
+
+.deal .circle.light {
+    background: #e1e1e1;
+}
+
+.deal.deal-seed {
+    width: 84px;
+}
+
+.deal.deal-seed .circle {
+    margin-right: 4px;
+    margin-bottom: 4px;
+    width: 24px;
+    height: 24px;
+}
+
+.deal.deal-series {
+    width: 88px;
+}
+
+.deal.deal-series .circle {
+    margin-right: 5px;
+    margin-bottom: 5px;
+    width: 39px;
+    height: 39px;
+}
+
+.profile .left {
+    float: left;
+    width: 57.446808510638%;
+}
+
+.profile .right {
+    float: right;
+    width: 290px;
+    margin-top: 20px;
+}
+
+.map {
+    float: left;
+    width: 100%;
+    border: 1px solid #ededed;
+    background: #f8f9f9;
+    font-size: 15px;
+}
+
+.map ul {
+    padding: 25px;
+    margin: 0;
+}
+
+.map ul li {
+    padding: 0;
+    margin: 0 0 0.5em 0;
+    list-style-type: none;
+}
+
+.map ul li.marker, .map ul li.tick, .map ul li.star {
+    padding: 0 0 0 20px;
+    background: url(../../img/app/map-sprite.png) 0 5px no-repeat;
+}
+
+.map ul li.tick {
+    background-position: 0 -53px;
+}
+
+.map ul li.star {
+    background-position: 0 -119px;
+}
+
+.map ul li.friends {
+    padding-top: 1em;
+    font-size: 12px;
+}
+
+.map ul li.friends img {
+    margin-right: 4px;
+}
+
+.divide {
+    border-top: 1px solid #e6e7e8;
+    padding: 34px 0;
+    margin-top: 20px;
+}
+
+#hero .buttons {
+    text-align: center;
+    padding: 0;
+    margin-bottom: -20px;
+}
+
+#hero .buttons a.btn {
+    padding: 11px 23px 13px 23px;
+    border: 1px solid #e76356;
+    border-radius: none;
+    width: 125px;
+    color: #fff;
+}
+
+#hero .buttons a.btn.btn-secondary, .buttons a.btn.btn-tertiary {
+    margin-left: 16px;
+}
+
+#hero .buttons a.btn.btn-primary {
+    background: #f67e72;
+    background: -moz-linear-gradient(top, #f78b80 0%, #f67e72 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f78b80), color-stop(100%, #f67e72));
+    background: -webkit-linear-gradient(top, #f78b80 0%, #f67e72 100%);
+    background: -o-linear-gradient(top, #f78b80 0%, #f67e72 100%);
+    background: -ms-linear-gradient(top, #f78b80 0%, #f67e72 100%);
+    background: linear-gradient(to bottom, #f78b80 0%, #f67e72 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f78b80', endColorstr='#f67e72', GradientType=0);
+}
+
+#hero .buttons a.btn.btn-primary:hover {
+    background: #eb786d;
+}
+
+#hero .buttons a.btn.btn-secondary {
+    border: 1px solid #19acc2;
+    background: #5cd6e8;
+    background: -moz-linear-gradient(top, #5cd6e8 0%, #4ad1e5 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #5cd6e8), color-stop(100%, #4ad1e5));
+    background: -webkit-linear-gradient(top, #5cd6e8 0%, #4ad1e5 100%);
+    background: -o-linear-gradient(top, #5cd6e8 0%, #4ad1e5 100%);
+    background: -ms-linear-gradient(top, #5cd6e8 0%, #4ad1e5 100%);
+    background: linear-gradient(to bottom, #5cd6e8 0%, #4ad1e5 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5cd6e8', endColorstr='#4ad1e5', GradientType=0);
+}
+
+#hero .buttons a.btn.btn-secondary:hover {
+    background: #49ccdf;
+}
+
+#hero .buttons a.btn.btn-tertiary {
+    border: 1px solid #32a864;
+    background: #5bd269;
+    background: -moz-linear-gradient(top, #5bd269 0%, #48cd58 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #5bd269), color-stop(100%, #48cd58));
+    background: -webkit-linear-gradient(top, #5bd269 0%, #48cd58 100%);
+    background: -o-linear-gradient(top, #5bd269 0%, #48cd58 100%);
+    background: -ms-linear-gradient(top, #5bd269 0%, #48cd58 100%);
+    background: linear-gradient(to bottom, #5bd269 0%, #48cd58 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5bd269', endColorstr='#48cd58', GradientType=0);
+}
+
+.buttons a.btn.btn-tertiary:hover {
+    background: #44c254;
+}
+
+.startups, .endorsements {
+    text-align: center;
+}
+
+.startups h2 {
+    margin-bottom: 20px;
+}
+
+.startups img {
+    padding: 20px;
+}
+
+.endorsement {
+    float: left;
+    text-align: left;
+    width: 29.148936170213%;
+    margin-right: 6.170212765957%;
+    font-size: 13px;
+    margin-bottom: 30px;
+}
+
+.endorsements h2 {
+    margin-bottom: 40px;
+}
+
+.endorsement:nth-child(4), .endorsement:nth-child(7), .endorsement:nth-child(10) {
+    margin-right: 0;
+}
+
+.endorsement img {
+    float: left;
+    margin-right: 20px;
+    margin-bottom: 40px;
+    border: 5px solid #fff;
+    border-radius: 40px;
+    box-shadow: 0 0 7px rgba(0, 0, 0, 0.16);
+}
+
+.endorsement p {
+    margin: 0;
+}
+
+.endorsement .source {
+    font-size: 11px;
+    color: #b4b7b8;
+}
+#hero a.btn {
+    padding: 6px 23px 7px 23px;
+    border: 1px solid #e76356;
+    border-radius: none;
+    color: #fff;
+}
+#hero a.btn.btn-primary {
+    background: #f67e72;
+    background: -moz-linear-gradient(top, #f78b80 0%, #f67e72 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f78b80), color-stop(100%, #f67e72));
+    background: -webkit-linear-gradient(top, #f78b80 0%, #f67e72 100%);
+    background: -o-linear-gradient(top, #f78b80 0%, #f67e72 100%);
+    background: -ms-linear-gradient(top, #f78b80 0%, #f67e72 100%);
+    background: linear-gradient(to bottom, #f78b80 0%, #f67e72 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f78b80', endColorstr='#f67e72', GradientType=0);
+}
+
+#hero a.btn.btn-primary:hover {
+    background: #eb786d;
+}
+
+.dock ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+.dock ul li {
+    display: inline;
+}
+
+.dock ul li a {
+    display: inline-block;
+    padding: 90px 30px 20px 30px;
+    width: 70px;
+    height: 18px;
+    text-align: center;
+    text-decoration: none;
+    -o-transition: background-color 0.25s ease-in;
+    -webkit-transition: background-color 0.25s ease-in;
+    -moz-transition: background-color 0.25s ease-in;
+    transition: background-color 0.25s ease-in;
+}
+
+.dock ul li.doc-lawyers a:hover, .dock ul li.dock-active a {
+    text-decoration: none;
+    background-color: rgba(0, 0, 0, 0.6);
+    -o-transition: background-color 0.25s ease-in;
+    -webkit-transition: background-color 0.25s ease-in;
+    -moz-transition: background-color 0.25s ease-in;
+    transition: background-color 0.25s ease-in;
+}
+
+.dock li.dock-packages a {
+    opacity: 0.5;
+    background: url(../../img/app/icon-packages.png) 50% 30% no-repeat;
+}
+
+.dock li.dock-firms a {
+    opacity: 0.5;
+    background: url(../../img/app/icon-firms.png) 50% 30% no-repeat;
+}
+
+.dock li.dock-lawyers a {
+    background: url(../../img/app/icon-lawyers.png) 50% 30% no-repeat;
+}
+
+.filter {
+    background: #f8f9f9;
+    border: 1px solid #ededed;
+    padding: 20px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin-bottom: 40px;
+}
+
+.filter .checkboxes {
+    float: left;
+    width: 602px;
+}
+
+.filter .checkboxes input[type=checkbox], .filter .checkboxes label, .filter .checkboxes strong {
+    float: left;
+    margin-right: 6px;
+}
+
+.filter .location {
+    float: right;
+    width: 250px;
+}
+
+.filter .location h3 {
+    line-height: 1;
+}
+
+.filter button {
+    margin-top: 10px;
+}
+
+.partner {
+    border: 1px solid #ededed;
+    padding: 0;
+    position: relative;
+    margin: 0 0 2em;
+    height: 140px;
+}
+
+.partner .left {
+}
+
+a.partner-avatar {
+    float: left;
+    margin: 0 1.5em 0 0;
+    height: 140px;
+    width: 140px;
+    display: block;
+}
+
+a.partner-avatar img {
+    height: 140px;
+    width: 140px;
+}
+
+img.partner-logo {
+    padding: 4px 8px;
+    background: #f8f9f9;
+    border: 1px solid #ededed;
+    float: right;
+    margin-top: 15px;
+    width: 60px;
+    margin-right: 5px;
+    max-height: 40px;
+    margin-bottom: 5px
+}
+
+.partner .right {
+    float: right;
+    width: 780px;
+}
+
+.partner h2.partner-name {
+    margin: 0;
+    margin-bottom:10px;
+}
+
+.partner h2.partner-name a {
+    color: #4ad1e5;
+    border-bottom: 1px solid #4ad1e5;
+}
+
+.partner h2.partner-name a:hover {
+    text-decoration: none;
+}
+
+.partner h3 {
+    margin-top: 5px;
+    font-size: 15px;
+    line-height: 16px;
+}
+
+ul.partner-info {
+    float: left;
+    clear: left;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+ul.partner-info li {
+    margin: 0 15px 10px 0;
+    padding: 2px 0 2px 20px;
+    display: inline;
+}
+
+ul.partner-info li.marker.big {
+    display: block;
+}
+
+ul.partner-info li.tick, ul.partner-info li.star {
+    background: url(../../img/app/map-sprite.png) 0 5px no-repeat;
+}
+
+ul.partner-info li.tick {
+    background-position: 0 -55px;
+}
+
+ul.partner-info li.star {
+    background-position: 0 -119px;
+}
+
+ul.partner-info li.marker {
+    background: url(../../img/app/marker.png) 0 2px no-repeat;
+}
+
+ul.partner-info li span, h3 span {
+    color: #aaa;
+}
+
+.partner a.btn, ul.partner-social {
+    float: right;
+}
+
+/*
+.partner a.btn {
+margin-top: -50px;
+}*/
+ul.partner-social {
+    width: 222px;
+    padding: 0;
+    margin: -50px 140px 0 0;
+    list-style-type: none;
+}
+
+ul.partner-social li {
+    float: left;
+    display: inline-block;
+    width: 74px;
+}
+
+ul.partner-social li.angellist {
+    background: url(../../img/app/icon-angellist.png) 0 2px no-repeat;
+}
+
+ul.partner-social li.linkedin {
+    background: url(../../img/app/icon-linkedin.png) 0 2px no-repeat;
+}
+
+ul.partner-social li.twitter {
+    background: url(../../img/app/icon-twitter.png) 0 2px no-repeat;
+}
+
+ul.partner-social .circle-big {
+    font-size: 12px;
+    background: #757c7e;
+    color: #fff;
+    width: 37px;
+    height: 37px;
+    border-radius: 50px;
+    line-height: 37px;
+    text-align: center;
+    float: left;
+    margin: 0 0 0 20px;
+}
+
+ul.partner-social .circle-small {
+    font-size: 12px;
+    background: #c2320b;
+    color: #fff;
+    width: 24px;
+    height: 24px;
+    border-radius: 50px;
+    line-height: 24px;
+    text-align: center;
+    float: left;
+    margin: -12px 0 0 12px;
+}
+
+.partner-overview {
+    float: left;
+    padding: .4em 0 0;
+}
+
+.card-bordered {
+    border: 1px solid #f0f0f0;
+    box-sizing: border-box;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 380px;
+    height: 120px;
+    box-shadow: -2px 2px #f8f8f8;
+}
+
+.card-transaction ul {
+    list-style: none;
+    margin: 0 0 .2em 0;
+    padding: 1em 1em 0 0;
+}
+
+.card-transaction li {
+    color: #f98070;
+    padding: 0 0 1em 0;
+    position: relative;
+}
+
+.card-transaction li span.transaction {
+    display: inline-block;
+    width: 120px;
+    text-align: right;
+    margin: 0 1em 0 0;
+    color: #5b5e60;
+}
+
+.transaction-view-all {
+    display: block;
+    background: #f8f8f8;
+    padding: .5em 0;
+    text-align: center;
+    color: #0088cc;
+    position: absolute;
+    width: 350px;
+    top: 75px;
+    left: 15px;
+}
+
+.no-results {
+text-align: center;
+font-size:18px;
+
+}
+
+.transaction-view-all span {
+    border-bottom: 1px solid #0088cc;
+}
+
+.transaction-view-all:hover {
+    text-decoration: none;
+    color: #0088cc;
+}
+
+.card-transaction .icons {
+    text-align: right;
+    width: 135px;
+    height: 25px;
+    position: absolute;
+    top: -3px;
+}
+
+.card-transaction i {
+    display: inline-block;
+    width: 27px;
+    height: 25px;
+    background: red;
+    margin: 0px .5em 0 0;
+    background:url(../../img/app/price-badges-mini.png) top left no-repeat;
+}
+
+.card-transaction i.ideferred {
+    background-position: -24pt 0;
+}
+
+.card-transaction i.ifixed {
+    background-position: -47pt 0;
+}
+
+.card-transaction i.no-icap {
+    /* background-position: -24pt -21pt; */
+    background: none;
+}
+
+
+.card-transaction i.no-ideferred {
+    /* background-position: -24pt -21pt; */
+    background: none;
+}
+
+.card-transaction i.no-ifixed {
+    /* background-position: -47pt -21pt; */
+    background: none;
+}
+
+.transaction-amount {
+    display: inline-block;
+    width: 95px;
+    text-align: center;
+}
+
+.badge-lawyer-engaged {
+    position: absolute;
+    top: 114px;
+    left: 18px;
+}
+
+.badge-lawyer-engaged a
+, .badge-lawyer-engaged a:hover {
+    color: #fff;
+    text-decoration: none;
+}

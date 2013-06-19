@@ -1,226 +1,554 @@
-#hero {
-background: url(../../img/app/lawyer-background.jpg) 0 0 no-repeat;
-background-size: cover;
-text-align: center;
+
+/*-----------------*/
+/* Lawyer Profile  */
+/*-----------------*/
+
+/* General Styles */
+
+    hr {
+    border-top:1px solid #f3f3f3;
+    width:50%;
+    }
+    h5 {
+    font-size:19px;
+    font-family:  "HelveticaNeue-light", 'Lato', sans-serif !important;   
+    font-weight: normal;
+    font-weight: 300;
+    }
+    .divide {
+    border-top: 1px solid #e6e7e8;
+    padding: 34px 0;
+    margin-top: 20px;
+    }
+
+    .buttons {
+    text-align: center;
+    padding: 0;
+    margin-bottom: -20px;
+    }
+    .buttons a.btn {
+    padding: 15px 23px 17px 23px;
+    border: 1px solid #e76356;
+    border-radius: none;
+    width: 125px;
+    color: #fff;
+    }
+    .buttons a.btn.btn-secondary, .buttons a.btn.btn-tertiary {
+    margin-left: 16px;
+    }
+    .buttons a.btn.btn-primary {
+    background: #f67e72;
+    background: -moz-linear-gradient(top,  #f78b80 0%, #f67e72 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f78b80), color-stop(100%,#f67e72));
+    background: -webkit-linear-gradient(top,  #f78b80 0%,#f67e72 100%);
+    background: -o-linear-gradient(top,  #f78b80 0%,#f67e72 100%);
+    background: -ms-linear-gradient(top,  #f78b80 0%,#f67e72 100%);
+    background: linear-gradient(to bottom,  #f78b80 0%,#f67e72 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f78b80', endColorstr='#f67e72',GradientType=0 );
+    }
+    .buttons a.btn.btn-primary:hover {
+    background: #eb786d;
+    }
+    .buttons a.btn.btn-secondary {
+    border: 1px solid #19acc2;
+    background: #5cd6e8;
+    background: -moz-linear-gradient(top,  #5cd6e8 0%, #4ad1e5 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#5cd6e8), color-stop(100%,#4ad1e5));
+    background: -webkit-linear-gradient(top,  #5cd6e8 0%,#4ad1e5 100%);
+    background: -o-linear-gradient(top,  #5cd6e8 0%,#4ad1e5 100%);
+    background: -ms-linear-gradient(top,  #5cd6e8 0%,#4ad1e5 100%);
+    background: linear-gradient(to bottom,  #5cd6e8 0%,#4ad1e5 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5cd6e8', endColorstr='#4ad1e5',GradientType=0 );
+    }
+    .buttons a.btn.btn-secondary:hover {
+    background: #49ccdf;
+    }
+    .buttons a.btn.btn-tertiary {
+    border: 1px solid #32a864;
+    background: #5bd269;
+    background: -moz-linear-gradient(top,  #5bd269 0%, #48cd58 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#5bd269), color-stop(100%,#48cd58));
+    background: -webkit-linear-gradient(top,  #5bd269 0%,#48cd58 100%);
+    background: -o-linear-gradient(top,  #5bd269 0%,#48cd58 100%);
+    background: -ms-linear-gradient(top,  #5bd269 0%,#48cd58 100%);
+    background: linear-gradient(to bottom,  #5bd269 0%,#48cd58 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5bd269', endColorstr='#48cd58',GradientType=0 );
+    }
+    .buttons a.btn.btn-tertiary:hover {
+    background: #44c254;
+    }
+    .no-data{
+    text-align:left;
+    font-size:22px;
+    color:#ddd; 
+    padding:10px 0px 40px 0px;
+    }
+
+/* Profile Header (hero) */
+
+    #hero {
+    background: #f6f9f9;
+    background-size: cover;
+    text-align: left;
+    padding-bottom:0px;
+    color:#666;
+    padding-top:55px;
+    margin-bottom:35px;
+    }
+    #hero .container {
+        margin-bottom:0px;
+    }
+    #hero h1 {
+    margin: 0.25em 0 0 0;
+    line-height: 0.8 !important;
+    margin-top:38px;
+    }
+    #hero h3 {
+    margin: .5em 0 0 0 !important;
+    padding: 0 !important;
+    font-size:20px;
+    color:#aaa;
+    line-height: 1.2em;
+    }
+    #hero #buttons {
+/*    background-color:#757c7e;
+*/
+    background-color:#42d0e5;
+
+    padding:8px 0px 8px 0px;
+    }
+    #hero .container-main {
+    margin-bottom:-20px;
+    }    
+    #hero .profile-details {
+    padding-bottom:0px;
+    }
+    #hero #buttons .right-links {
+    float:right;
+    margin-left:4px;
+    padding:12px 0px 6px 20px;
+    opacity:0.9;
+    transition-property : opacity; 
+    transition-duration : 0.3s;
+    color:white;
+    background-color: transparent;
+    font-size:16px; 
+    }
+    #hero:hover #buttons .right-links {
+    opacity:1;
+    }
+    #hero #buttons .right-links  i {
+    margin-top:2px;
+    margin-right:3px;
+    }
+    #hero .engagement-container .btn-primary {
+        margin: 0 .6em 0 0;
+    }
+    #hero .avatar img {
+    border: 8px solid rgba(255,255,255,0.46);
+    box-shadow: 0 0 10px rgba(0,0,0,0.23);
+    border-radius: px;
+    width:170px;
+    float:right;
+    }
+
+
+/* Profile Sidebar */
+
+    .firm{
+    text-align:center;
+    }
+    .firm h2{
+    font-size:20px;
+    }
+    .firm .firm-logo {
+    max-width:130px;
+    max-height:130px;
+    padding:20px;
+    }
+    .map {
+    width: 100%;
+    border: 1px solid #ededed;
+    background: #f8f9f9;
+    font-size: 14px;
+
+    }
+    .map ul.key-points {
+    padding: 18px;
+    padding-bottom:10px;
+    margin: 0;
+    }
+    .map ul li {
+    padding: 0;
+    margin: 0 0 0.5em 0;
+    list-style-type: none;
+
+    }
+    .map ul li.marker, .map ul li.tick, .map ul li.star {
+    padding: 0 0 0 20px;
+    background: url(../../img/app/map-sprite.png) 0 5px no-repeat;
+    }
+    .map ul li.tick {
+    background-position: 0 -53px;
+    }
+    .map ul li.star {
+    background-position: 0 -119px;
+    }
+    .map ul li.friends {
+    padding-top: 1em;
+    font-size: 12px;
+    }
+    .map ul li.friends img {
+    margin-right: 4px;
+    }
+    ul.social-buttons {
+    list-style-type: none;
+    padding:0px;
+    margin-left:0px;
+    }
+    ul.social-buttons li {
+    float:left;
+    width:26px;
+    height:26px;
+    margin:0px 5px 5px 0px;
+    padding:4px;
+    border-radius:0px;
+    opacity:0.3;
+    }
+    ul li.nothing-found {
+    margin:10px 0px;
+    }
+    .nothing-found {
+    color:#ddd;
+    font-size:15px;
+    }
+    ul.social-buttons li:hover {
+    opacity:1;
+    }
+    .other-profiles {
+    padding-top:15px;
+    }
+
+/* Pricing */
+
+    table.pricing th, table.pricing td {
+    font-family: "HelveticaNeue-light", 'Lato', sans-serif !important;
+    color:#888888;
+    vertical-align: middle;
+    }
+    table.pricing th{
+    text-align: right;
+    font-size:18px;
+    font-weight: normal;
+
+    }
+    table.pricing td.price{
+    font-size:26px;
+    color:#f98070;
+    text-align: center;
+    }
+
+    table.pricing ul.fee-options{
+    list-style-type:none;
+    margin-left:0px;
+    }
+    table.pricing ul.fee-options li{
+    width:40px;
+    height:41px;
+    float:left;
+    background: url('../../img/app/price-badges.png');
+    margin-left:6px;
+    margin-top:6px;
+    }
+    table.pricing ul.fee-options li.cap{
+    background-position: -231px 0;
+    }
+    table.pricing ul.fee-options li.no-cap{
+    background-position: -231px -40px;
+    }
+    table.pricing ul.fee-options li.no-deferred{
+    background-position: 0 -40px;
+    }
+    table.pricing ul.fee-options li.fixed{
+    background-position: -185px 0;
+    }
+    table.pricing ul.fee-options li.no-fixed{
+    background-position: -185px -40px;
+    }
+
+/* Endorsement */
+
+    .endorsement h2 {
+    width:214px;
+    float:left;
+    }
+    .endorsement:nth-child(4), .endorsement:nth-child(7), .endorsement:nth-child(10) {
+    margin-right: 0;
+    }
+    .endorsement img {
+    float: left;
+    margin-right: 15px;
+    margin-bottom: 40px;
+    margin-top:3px;
+    border: 2px solid #fff;
+    border-radius: 2px;
+    box-shadow: 0 0 7px rgba(0,0,0,0.16);
+    }
+    .endorsement p {
+    margin: 0;
+    padding-left:0px;
+    width:220px;
+    float:right;
+    padding-right:10px;
+    }
+    .endorsement .source {
+    font-size: 12px;
+    color: #aaa;
+    padding-left:0px;
+    width:220px;
+    float:right;
+    padding-right:10px;
+    }
+
+    /** %[Object] Button */
+    /*------------------------------------*/
+    .endorsement .btn {
+        display: inline-block;
+        vertical-align: middle;
+        margin-top: 1.25em;
+        margin-bottom: 2em;
+        cursor: pointer;
+        border: none;
+        height: 2em;
+        padding: 0 1em;
+        position: relative;
+        line-height: 2;
+        color: #fff;
+        text-decoration: none;
+
+    }
+    .endorsement .btn.faded, .endorsement .btn.faded:hover{
+        opacity:0.4;
+    }
+
+    .endorsement .btn:hover,
+    .endorsement .btn:active,
+    .endorsement .btn:focus {
+        opacity: 0.9;
+        color: #eee;
+    }
+
+    /*------------------------------------*/
+
+    .endorsement .btn--small { font-size: .75em; }
+    .endorsement .btn--large { font-size: 1.25em; }
+    .endorsement .btn--huge { font-size: 1.75em; }
+
+    /*------------------------------------*/
+
+    .endorsement .btn--primary { background: #e76356; }
+    .endorsement .btn--secondary { background: #757c7e; }
+    .endorsement .btn--tertiary { background: #3a87ad; }
+
+    /*------------------------------------*/
+
+    .endorsement .btn--counter {
+        margin-right: 3em;
+    }
+
+    .endorsement .btn--counter span {
+        color: #888;
+        background: #fff;
+        text-shadow: none;
+        border: 1px solid #ccc;
+        top: 0;
+        bottom: 0;
+        left: 100%;
+        padding: 0 .5em;
+        margin-left: .7em;
+        position: absolute;
+    }
+
+    .endorsement .btn--counter span:after,
+    .endorsement .btn--counter span:before {
+        content: '';
+        width: 0;
+        height: 0;
+        right: 100%;
+        top: 50%;
+        margin-top: -.4em;
+        position: absolute;
+        border: .375em solid;
+        border-left-width: 0;
+        border-color: transparent #ccc transparent transparent;
+    }
+
+    .endorsement .btn--counter span:after {
+        border-right-color: #fff;
+        margin-right: -2px;
+    }
+    .endorsement .popover {
+        padding-left:11px;
+    }
+        .endorsement .popover-content {
+            padding-left:5px;
+        }
+    .endorsement .popover-content p {
+        padding-right:0px;
+                margin-left:5px;
+    }
+    .endorsement .popover-content .btn {
+        margin: 0px 0px 5px 0px;
+        float:right;
+    }
+    .endorsement .popover-title {
+        display:none;
+    }
+    .endorsement .popover-content textarea {
+        width:190px;
+    }
+    
+
+/* Startups Advised */
+
+    .startups .domain {
+    font-size:18px;
+    text-transform: lowercase;
+    margin-right:20px;
+    color:#929292;
+    }
+    .social-buttons .icon {
+    }
+
+
+
+
+
+/* Appendix A */
+/* @todo remove this horrible css and come up with better social icons implementations */
+.icon {
+display: none;
 }
-#hero h1 {
-margin: 0.25em 0 0 0;
-line-height: 0.5 !important;
+.icon.aboutme, .icon.youtube,  .icon.bitbucket, .icon.deviantart, .icon.facebook, .icon.formspring, .icon.klout, .icon.lastfm, .icon.picasa, .icon.pinterest, .icon.posterous, .icon.quora, .icon.skype, .icon.stackexchange, .icon.tumblr, .icon.wordpress, .icon.yahoo, .icon.yelp, .icon.behance, .icon.blogger, .icon.delicious, .icon.digg, .icon.disqus, .icon.flickr, .icon.foursquare, .icon.github, .icon.googleplus, .icon.goodreads, .icon.hackernews, .icon.imdb, .icon.linkedin, .icon.pinboard, .icon.reddit, .icon.slideshare, .icon.soundcloud, .icon.stackoverflow, .icon.stumbleupon, .icon.twitter, .icon.vimeo, .icon.wordpress {
+display: inline
 }
-#hero h3 {
-margin: 0 !important;
-padding: 0 !important;
-}
-.avatar img {
-border: 8px solid rgba(255,255,255,0.46);
-box-shadow: 0 0 10px rgba(0,0,0,0.23);
-border-radius: 100px;
-width:125px;
-height:125px;
-}
-body.lawyer-welcome .profile p {
-font-size: 17px;
-line-height: 1.6;	
-font-family:  "HelveticaNeue", 'Lato', sans-serif !important;	
-}
-.deal-outer {
-float: left;
-width: 120px;
-text-align: center;
-}
-.deal-outer p, body.lawyer-welcome .profile .deal-outer p {
-margin-top: -10px;
-font-size: 15px;
-}
-.deal {
-display: inline-block;
-width: 80px;
-min-height: 95px;
-}
-.deal .circle {
-float: left;
-margin-right: 2px;
-margin-bottom: 2px;
-background: #cacaca;
-width: 18px;
-height: 18px;
-border-radius: 20px;
-}
-.deal .circle.light {
-background: #e1e1e1;
-}
-.deal.deal-seed {
-width: 84px;
-}
-.deal.deal-seed .circle {
-margin-right: 4px;
-margin-bottom: 4px;
-width: 24px;
-height: 24px;
-}
-.deal.deal-series {
-width: 88px;
-}
-.deal.deal-series .circle {
-margin-right: 5px;
-margin-bottom: 5px;
-width: 39px;
-height: 39px;
-}
-.profile .left {
-float: left;
-width: 57.446808510638%;
-}
-.profile .right {
-float: right;
-width: 290px;
-margin-top: 20px;
-}
-.map {
-float: left;
-width: 100%;
-border: 1px solid #ededed;
-background: #f8f9f9;
-font-size: 15px;
-}
-.map ul {
-padding: 25px;
-margin: 0;
-}
-.map ul li {
-padding: 0;
-margin: 0 0 0.5em 0;
-list-style-type: none;
-}
-.map ul li.marker, .map ul li.tick, .map ul li.star {
-padding: 0 0 0 20px;
-background: url(../../img/app/map-sprite.png) 0 5px no-repeat;
-}
-.map ul li.tick {
-background-position: 0 -53px;
-}
-.map ul li.star {
-background-position: 0 -119px;
-}
-.map ul li.friends {
-padding-top: 1em;
-font-size: 12px;
-}
-.map ul li.friends img {
-margin-right: 4px;
-}
-.divide {
-border-top: 1px solid #e6e7e8;
-padding: 34px 0;
-margin-top: 20px;
-}
-.buttons {
-text-align: center;
-padding: 0;
-margin-bottom: -20px;
-}
-.buttons a.btn {
-padding: 15px 23px 17px 23px;
-border: 1px solid #e76356;
-border-radius: none;
-width: 125px;
-color: #fff;
-}
-.buttons a.btn.btn-secondary, .buttons a.btn.btn-tertiary {
-margin-left: 16px;
-}
-.buttons a.btn.btn-primary {
-background: #f67e72;
-background: -moz-linear-gradient(top,  #f78b80 0%, #f67e72 100%);
-background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f78b80), color-stop(100%,#f67e72));
-background: -webkit-linear-gradient(top,  #f78b80 0%,#f67e72 100%);
-background: -o-linear-gradient(top,  #f78b80 0%,#f67e72 100%);
-background: -ms-linear-gradient(top,  #f78b80 0%,#f67e72 100%);
-background: linear-gradient(to bottom,  #f78b80 0%,#f67e72 100%);
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f78b80', endColorstr='#f67e72',GradientType=0 );
-}
-.buttons a.btn.btn-primary:hover {
-background: #eb786d;
-}
-.buttons a.btn.btn-secondary {
-border: 1px solid #19acc2;
-background: #5cd6e8;
-background: -moz-linear-gradient(top,  #5cd6e8 0%, #4ad1e5 100%);
-background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#5cd6e8), color-stop(100%,#4ad1e5));
-background: -webkit-linear-gradient(top,  #5cd6e8 0%,#4ad1e5 100%);
-background: -o-linear-gradient(top,  #5cd6e8 0%,#4ad1e5 100%);
-background: -ms-linear-gradient(top,  #5cd6e8 0%,#4ad1e5 100%);
-background: linear-gradient(to bottom,  #5cd6e8 0%,#4ad1e5 100%);
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5cd6e8', endColorstr='#4ad1e5',GradientType=0 );
-}
-.buttons a.btn.btn-secondary:hover {
-background: #49ccdf;
-}
-.buttons a.btn.btn-tertiary {
-border: 1px solid #32a864;
-background: #5bd269;
-background: -moz-linear-gradient(top,  #5bd269 0%, #48cd58 100%);
-background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#5bd269), color-stop(100%,#48cd58));
-background: -webkit-linear-gradient(top,  #5bd269 0%,#48cd58 100%);
-background: -o-linear-gradient(top,  #5bd269 0%,#48cd58 100%);
-background: -ms-linear-gradient(top,  #5bd269 0%,#48cd58 100%);
-background: linear-gradient(to bottom,  #5bd269 0%,#48cd58 100%);
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#5bd269', endColorstr='#48cd58',GradientType=0 );
-}
-.buttons a.btn.btn-tertiary:hover {
-background: #44c254;
-}
-.startups, .endorsements {
-text-align: center;
-}
-.startups h2 {
-margin-bottom: 20px;
-}
-.startups img {
-padding: 20px;
-}
-.endorsement {
-float: left;
-text-align: left;
-width: 29.148936170213%;
-margin-right: 6.170212765957%;
-font-size: 13px;
-margin-bottom: 30px;
-}
-.endorsements h2 {
-margin-bottom: 40px;
-}
-.endorsement:nth-child(4), .endorsement:nth-child(7), .endorsement:nth-child(10) {
-margin-right: 0;
-}
-.endorsement img {
-float: left;
-margin-right: 20px;
-margin-bottom: 40px;
-border: 5px solid #fff;
-border-radius: 40px;
-box-shadow: 0 0 7px rgba(0,0,0,0.16);
-}
-.endorsement p {
-margin: 0;
-}
-.endorsement .source {
-font-size: 11px;
-color: #b4b7b8;
-}
-.firm{
-text-align:center;
-}
-.firm .firm-logo {
-max-width:130px;
-max-height:130px;
-padding:20px;
-}
-.no-data{
-text-align:center;
-font-size:14px;
-color:#ccc;	
-}
+.icon{ background-color:#444444;}
+.icon.aboutme{ background-color:#00405D;}
+.icon.alistapart{ background-color:#222222;}
+.icon.amazon{ background-color:#FF9900;}
+.icon.amazonwishlist{ background-color:#FF9900;}
+.icon.android{ background-color:#A4C639;}
+.icon.appdotnet{ background-color:#898D90;}
+.icon.apple{ background-color:#B9BFC1;}
+.icon.audioboo{ background-color:#AE006E;}
+.icon.aws{ background-color:#FF9900;}
+.icon.bebo{ background-color:#EE1010;}
+.icon.behance{ background-color:#1769FF;}
+.icon.blip{ background-color:#FF1919;}
+.icon.blogger{ background-color:#F57D00;}
+.icon.bootstrap{ background-color:#0088CC;}
+.icon.codepen{ background-color:#231F20;}
+.icon.codeschool{ background-color:#C68044;}
+.icon.codecademy{ background-color:#0088CC;}
+.icon.coderwall{ background-color:#3E8DCC;}
+.icon.conservatives{ background-color:#0087DC;}
+.icon.coursera{ background-color:#3A6D8E;}
+.icon.css3{ background-color:#0092BF;}
+.icon.delicious{ background-color:#3274D1;}
+.icon.designernews{ background-color:#1C52A2;}
+.icon.deviantart{ background-color:#4B5D50;}
+.icon.digg{ background-color:#14589E;}
+.icon.disqus{ background-color:#2E9FFF;}
+.icon.dribbble{ background-color:#EA4C89;}
+.icon.dropbox{ background-color:#2281CF;}
+.icon.drupal{ background-color:#0077C0;}
+.icon.ebay{ background-color:#0064D2;}
+.icon.email{ background-color:#666666;}
+.icon.eventstore{ background-color:#6BA300;}
+.icon.eventbrite{ background-color:#F3844C;}
+.icon.evernote{ background-color:#7AC142;}
+.icon.exfm{ background-color:#0097F8;}
+.icon.facebook{ background-color:#3B5998;}
+.icon.flickr{ background-color:#0063DB;}
+.icon.formspring{ background-color:#0076C0;}
+.icon.forrst{ background-color:#5B9A68;}
+.icon.foursquare{ background-color:#2398C9;}
+.icon.geeklist{ background-color:#8CC63E;}
+.icon.github{ background-color:#4183C4;}
+.icon.goodreads{ background-color:#5A471B;}
+.icon.google{ background-color:#245DC1;}
+.icon.googleplus{ background-color:#D14836;}
+.icon.googleprofile{ background-color:#D14836;}
+.icon.govuk{ background-color:#231F20;}
+.icon.grooveshark{ background-color:#000000;}
+.icon.hackernews{ background-color:#FF6600;}
+.icon.heroku{ background-color:#6762A6;}
+.icon.html5{ background-color:#F06529;}
+.icon.imdb{ background-color:#F3CE00;}
+.icon.instagram{ background-color:#3F729B;}
+.icon.jquery{ background-color:#0867AB;}
+.icon.jqueryui{ background-color:#FEA620;}
+.icon.jsdb{ background-color:#DA320B;}
+.icon.jsfiddle{ background-color:#4679A4;}
+.icon.justgiving{ background-color:#78256D;}
+.icon.kickstarter{ background-color:#87C442;}
+.icon.klout{ background-color:#E24A25;}
+.icon.labour{ background-color:#C41230;}
+.icon.laravel{ background-color:#FB502B;}
+.icon.lastfm{ background-color:#D51007;}
+.icon.layervault{ background-color:#26AE90;}
+.icon.letterboxd{ background-color:#2C3641;}
+.icon.liberaldemocrats{ background-color:#F7B135;}
+.icon.linkedin{ background-color:#007FB1;}
+.icon.mediatemple{ background-color:#000000;}
+.icon.mendeley{ background-color:#B61F2F;}
+.icon.modernizr{ background-color:#D81A76;}
+.icon.myspace{ background-color:#008DDE;}
+.icon.nationalrail{ background-color:#003366;}
+.icon.newsvine{ background-color:#075B2F;}
+.icon.office{ background-color:#EB3C00;}
+.icon.orkut{ background-color:#ED2590;}
+.icon.outlook{ background-color:#0072C6;}
+.icon.path{ background-color:#E41F11;}
+.icon.php{ background-color:#6181B6;}
+.icon.pinboard{ background-color:#0000FF;}
+.icon.pingup{ background-color:#00B1AB;}
+.icon.pinterest{ background-color:#CB2027;}
+.icon.posterous{ background-color:#FFDD68;}
+.icon.protoio{ background-color:#40C8F4;}
+.icon.rails{ background-color:#A62C39;}
+.icon.readability{ background-color:#870000;}
+.icon.reddit{ background-color:#FF4500;}
+.icon.rss{ background-color:#FF8300;}
+.icon.simpleicons{ background-color:#BF1813;}
+.icon.skydrive{ background-color:#094AB1;}
+.icon.skype{ background-color:#00AFF0;}
+.icon.slideshare{ background-color:#009999;}
+.icon.smashingmagazine{ background-color:#E95C33;}
+.icon.soundcloud{ background-color:#FF6600;}
+.icon.spotify{ background-color:#80B719;}
+.icon.squarespace{ background-color:#000000;}
+.icon.stackexchange{ background-color:#1F5196;}
+.icon.stackoverflow{ background-color:#F47920;}
+.icon.stumbleupon{ background-color:#EB4924;}
+.icon.superuser{ background-color:#2DABE2;}
+.icon.ted{ background-color:#FF2B06;}
+.icon.trakt{ background-color:#222222;}
+.icon.treehouse{ background-color:#7FA24C;}
+.icon.tripadvisor{ background-color:#589442;}
+.icon.tumblr{ background-color:#2C4762;}
+.icon.twitter{ background-color:#39A9E0;}
+.icon.typo3{ background-color:#FF8700;}
+.icon.viadeo{ background-color:#F4982B;}
+.icon.vimeo{ background-color:#44BBFF;}
+.icon.vine{ background-color:#00A47A;}
+.icon.visualstudio{ background-color:#68217A;}
+.icon.w3c{ background-color:#0066B0;}
+.icon.windows{ background-color:#00BDF6;}
+.icon.wordpress{ background-color:#21759B;}
+.icon.yahoo{ background-color:#731A8B;}
+.icon.yelp{ background-color:#C93C27;}
+.icon.youtube{ background-color:#CD332D;}
 
 
 

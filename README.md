@@ -20,7 +20,7 @@
 10. ```python manage.py syncdb``` : sync the database; and create the default user if there is not already one
 10a. ```python manage.py migrate socialregistration --fake``` : there is a small issue with socialregistration at the moment and its migration needs to be faked
 11. ```python manage.py migrate``` : perform the rest of the migrations
-12. ```python manage.py loaddata sites document_category documenttemplate lawyers legal```
+12. ```python manage.py loaddata sites lawyers legal cities_light```
 13. ```python manage.py check_permissions``` # Creates the userena permissions
 14. Thats it you can now ```python manage.py runserver_plus```
 15. access http://local.weareml.com:8000/ (you may need to add 127.0.0.1 local.weareml.com to your /etc/hosts file)
@@ -84,3 +84,21 @@ Remember to remove invalid xml return characters using vim:
 ## EC2 Account signin
 
 ```https://562971026743.signin.aws.amazon.com/console/ec2```
+
+
+## Postgres Backup and Restore
+
+    sudo -u postgres -s pg_dump --no-owner --no-acl -Fc lawpal_prelaunch > lawpal_prelaunch.bak
+    pg_restore -U rosscdh -h localhost -d lawpal_prelaunch -Fc lawpal_prelaunch.bak
+
+
+## Deployment ##
+
+Valid environemnts are: staging|preview|production
+
+```
+export TARGET_ENV='staging'
+fab $TARGET_ENV deploy assets
+fab $TARGET_ENV requirements clean_pyc syncdb migrate
+```
+

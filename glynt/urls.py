@@ -24,12 +24,20 @@ urlpatterns = patterns('',
 	url(r'^accounts/', include('userena.urls')),
 	url(r'^client/', include('glynt.apps.client.urls', namespace='client')),
 	url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}, name='logout'),
+    # Startups
+    url(r'^startups/', include('glynt.apps.startup.urls', namespace='startup')),
     # Legal Firms
     url(r'^firms/', include('glynt.apps.firm.urls', namespace='firm')),
     # lawyers
     url(r'^lawyers/', include('glynt.apps.lawyer.urls', namespace='lawyer')),
-	# Document Comments
-	url(r'^doc/comments/', include('django.contrib.comments.urls')),
+    # Engage app
+    url(r'^engage/', include('glynt.apps.engage.urls', namespace='engage')),
+    # Transaction
+    url(r'^transact/', include('glynt.apps.transact.urls', namespace='transact')),
+	# Comments - used by engage and documents
+    url(r'^comments/', include('fluent_comments.urls')),
+    # Dashboard
+    url(r'^dashboard/', include('glynt.apps.dashboard.urls', namespace='dashboard')),
 	# The Authoring Tool
 	url(r'^author/', include('glynt.apps.author.urls', namespace='author')),
 	# The v2 Documents
@@ -42,6 +50,7 @@ urlpatterns = patterns('',
 	url(r'^sign/doc/', include('glynt.apps.sign.urls', namespace='sign')),
     # favicon
     url(r'^favicon\.ico/$', RedirectView.as_view(url='%simg/favicon.ico' % settings.STATIC_URL)),
+    url(r'', include('debug_toolbar_user_panel.urls')),
 	# The public site and theme
 	url(r'^', include('public.urls', namespace='public')),
 )

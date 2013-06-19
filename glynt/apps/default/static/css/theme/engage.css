@@ -1,0 +1,385 @@
+#pm_messages {
+    margin-top: 1em;
+    border-top: 1px solid #6adc7d;
+}
+
+#pm_messages .postman-action-col {
+    width: 20px;
+    text-align: center;
+}
+
+#pm_messages tr th {
+    text-align: left
+}
+
+.btn-group.open .btn.dropdown-toggle {
+    background-color: #e6e6e6;
+}
+
+.message-list {
+    list-style: none;
+    border-top: 1px solid #f2f2f2;
+    margin: 1em 0 0;
+}
+
+.message-list li {
+    border-bottom: 1px solid #f2f2f2;
+    position: relative;
+}
+
+.message-list li:hover {
+    background-color: #f2f2f2;
+}
+
+.message-list a {
+    text-decoration: none;
+    padding: 0 1em 0 0;
+    display: block;
+}
+
+.avatar {
+    width: 50px;
+    height: auto;
+    display: inline-block;
+    margin-right: 1em;
+}
+
+.new-message {
+    border-left: 2px solid #6adc7d;
+    font-weight: bold;
+}
+
+.message-sender {
+    display: inline-block;
+    min-width: 12em;
+}
+
+.message-date {
+    color: #ccc;
+    float: right;
+    margin: 1em 2em 0 0;
+}
+
+.message-body-inbox {
+    color: #ccc;
+}
+
+.message-list .close {
+    display: block;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    padding: 0;
+    color: red;
+    opacity: 1;
+}
+
+.edit-message-list {
+    font: -webkit-control;
+}
+
+.message-subject {
+    margin-bottom: .5em;
+}
+.message-info p {
+    margin: 0;
+}
+.message-body {
+    border-bottom: 1px solid #e6e6e6;
+    padding-bottom: 1em;
+    padding-left:5px;
+}
+.message-actions {
+    margin-top: 2em;
+}
+.message-info {
+    margin: 10px 0px 10px 0px;
+    background-color:#6bdb7e;
+    color:#FFF;
+    padding:5px 10px;
+}
+.view-message-controls button, .view-message-controls a {
+    font-weight: normal;
+    text-decoration: none;
+    font: -webkit-control;
+}
+.view-message-controls form {
+    margin: 0;
+}
+.form-wide textarea {
+    width: 100%;
+    box-sizing: border-box;
+    height: 7em;
+}
+
+#id_honeypot{
+    display:none;
+}
+
+li.engage-status-new {
+    border-left: 2px solid #6adc7d;
+}
+
+li.engage-status-open {
+
+}
+
+li.engage-status-closed {
+
+}
+
+li.engage-new-message {
+    border-left: 2px solid #fff;
+    -webkit-animation: RED-PULSE 2s infinite;
+    -moz-animation: RED-PULSE 2s infinite; /* Fx 5+ */
+    -o-animation: RED-PULSE 2s infinite; /* Opera 12+ */
+    animation: RED-PULSE 2s infinite; /* IE 10+ */
+}
+
+@-webkit-keyframes RED-PULSE {
+    0% {
+        border-left-color: #fff;
+    }
+    50% {
+        border-left-color: #ae564e;
+    }
+    100% {
+        border-left-color: #fff;
+    }
+}
+
+@-moz-keyframes RED-PULSE {
+    0% {
+        border-left-color: #fff;
+    }
+    50% {
+        border-left-color: #ae564e;
+    }
+    100% {
+        border-left-color: #fff;
+    }
+}
+
+@-o-keyframes RED-PULSE {
+    0% {
+        border-left-color: #fff;
+    }
+    50% {
+        border-left-color: #ae564e;
+    }
+    100% {
+        border-left-color: #fff;
+    }
+}
+
+@keyframes RED-PULSE {
+    0% {
+        border-left-color: #fff;
+    }
+    50% {
+        border-left-color: #ae564e;
+    }
+    100% {
+        border-left-color: #fff;
+    }
+}
+
+span.engage-status-new {
+    background: #6adc7d;
+}
+
+span.engage-status {
+
+}
+
+div.side-info-container .avatar {
+    float: left;
+    margin-bottom: 1em;
+}
+
+div.side-info-container h3 {
+    display: inline;
+}
+
+div.side-info-container dl {
+    clear: both;
+}
+
+div.side-info-container dd {
+    margin: 0 0 1em 0;
+}
+
+.engagement-status {
+    margin-top: 0;
+}
+
+#comments {
+    color: #757c7e;
+}
+
+.comment-item {
+    position: relative;
+    margin-bottom: 1.8em;
+}
+
+.comment-item .comment-text {
+    border: 1px solid;
+    border-radius: .35em;
+    box-sizing: border-box;
+    padding: 0 1em;
+    position: relative;
+    background: #f5f6f6;
+    border-color: #d5d6d6;
+}
+
+.message-left .triangle-border {
+    margin-left: 80px
+}
+
+.message-left .triangle-border:before {
+    top: 10px;
+    bottom: auto;
+    left: -14px;
+    border-width: 8px 13px 8px 0;
+    border-color: transparent #d5d6d6;
+}
+
+.triangle-border:before {
+    content: "";
+    position: absolute;
+    bottom: -20px;
+    left: 40px;
+    border-width: 20px 20px 0;
+    border-style: solid;
+    border-color: #5a8f00 transparent;
+    display: block;
+    width: 0;
+}
+
+.message-left .triangle-border:after {
+    top: 10px;
+    bottom: auto;
+    left: -12px;
+    border-width: 8px 13px 8px 0;
+    border-color: transparent #f5f6f6;
+}
+
+.triangle-border:after {
+    content: "";
+    position: absolute;
+    bottom: -13px;
+    left: 47px;
+    border-width: 13px 13px 0;
+    border-style: solid;
+    border-color: #fff transparent;
+    display: block;
+    width: 0;
+}
+
+.message-right .triangle-border {
+    margin-right: 80px;
+}
+
+.message-right .triangle-border:before {
+    top: 10px;
+    bottom: auto;
+    left: auto;
+    right: -14px;
+    border-width: 8px 0 8px 13px;
+    border-color: transparent #d5d6d6;
+}
+
+.message-right .triangle-border:after {
+    top: 10px;
+    bottom: auto;
+    left: auto;
+    right: -12px;
+    border-width: 8px 0 8px 13px;
+    border-color: transparent #f5f6f6;
+}
+
+.message-avatar {
+    border: 1px solid #8a8b8b;
+    position: absolute;
+    padding: 0;
+    width: 48px;
+    height: 48px;
+}
+
+.message-right .message-avatar {
+    right: 0;
+}
+
+.message-avatar img {
+    margin: 0;
+    padding: 0;
+}
+
+.comment-date {
+    display: inline-block;
+    float: right;
+    text-align: right;
+    margin: .5em 0 2em 0;
+}
+
+.comment-name {
+    display: inline-block;
+    float: left;
+    text-align: left;
+    margin: .5em 0 2em 5.7em;
+}
+
+.engagement-types {
+    margin: 0;
+}
+
+.engagement-types  .label {
+    text-transform: uppercase;
+    font-size: .95em;
+    background-color: #edeeee;
+    color: #757c7e;
+    font-weight: normal;
+    padding: .2em .5em;
+    margin: 0 .5em 1em 0;
+    display: inline-block;
+}
+
+.engage-detail-title {
+    margin: 0;
+    line-height: 1.3em;
+}
+
+.initial-lead .comment-text {
+    background: #d2f5fa;
+    border-color: #68dff0;
+}
+
+.initial-lead.message-right .triangle-border:before
+, .initial-lead.message-left .triangle-border:before {
+    border-color: transparent #68dff0;
+}
+
+.initial-lead.message-right .triangle-border:after
+, .initial-lead.message-left .triangle-border:after {
+    border-color: transparent #d2f5fa ;
+}
+
+.message-right .comment-name {
+    margin-left: 0;
+}
+
+.message-right .comment-date {
+    margin: .5em 5.7em 2em 0;
+}
+
+#engagement-status-controls a {
+    display: block;
+    text-align: center;
+}
+
+#engagement-status-controls a:hover {
+    text-decoration: none;
+    color: #e76356;
+}

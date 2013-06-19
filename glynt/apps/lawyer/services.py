@@ -9,13 +9,15 @@ from tasks import send_profile_setup_email
 
 import logging
 logger = logging.getLogger('lawpal.services')
-import pdb
+
 
 class EnsureLawyerService(object):
     """ Setup a Lawyer and his related Firm and Office """
     lawyer = None
     firm = None
-    default_volume_matrix = '{"2010":0,"2011":0,"2012":0}'
+    default_volume_matrix = unicode('[0]')
+    default_volume_matrix_by_year = unicode('{"2010":0,"2011":0,"2012":0,"2013":0}')
+
     def __init__(self, user, firm_name=None, offices=[], **kwargs):
         self.user = user
         self.firm_name = firm_name
@@ -23,6 +25,11 @@ class EnsureLawyerService(object):
 
         self.form = kwargs.pop('form', None)
         self.role = kwargs.pop('position', None)
+
+        # remove unwanted fields
+        kwargs.pop('bar_membership_input', None)
+        kwargs.pop('websites_input', None)
+
         self.data = kwargs
 
     def update_user(self):
@@ -48,8 +55,8 @@ class EnsureLawyerService(object):
     def update_user_profile(self):
         # update the is_lawyer attribute
         profile = self.user.profile
-        profile.is_lawyer = True
-        profile.save(update_fields=['is_lawyer'])
+        profile.profile_data['is_lawyer'] = True
+        profile.save(update_fields=['profile_data'])
 
     def process(self):
         self.update_user()
@@ -69,13 +76,36 @@ class EnsureLawyerService(object):
         if photo and self.lawyer.photo != photo: # only if its not the same image
             logger.info('New photo for %s' % self.lawyer)
             photo_file = os.path.basename(photo.file.path)# get base name
-            self.lawyer.photo.save(photo_file, photo.file)
-            self.lawyer.user.profile.mugshot.save(photo_file, photo.file)
-            logger.info('Saved new photo %s for %s' % (photo.file, self.lawyer))
+            try:
+                self.lawyer.photo.save(photo_file, photo.file)
+                self.lawyer.user.profile.mugshot.save(photo_file, photo.file)
+                logger.info('Saved new photo %s for %s' % (photo.file, self.lawyer))
+            except Exception as e:
+                logger.error('Could not save user photo %s for %s: %s' % (photo.file, self.lawyer, e))
+            
 
     def send_congratulations_email(self, user):
         # Send profile email
         send_profile_setup_email(user=user)
+
+    def volume_matrix(self, lawyer_data):
+        # Updates to the JSON Data object for the Lawyer
+        volume_types = (('startups_advised', unicode('[]')), ('volume_incorp_setup', self.default_volume_matrix), \
+                        ('volume_seed_financing', self.default_volume_matrix), ('volume_series_a', self.default_volume_matrix), \
+                        ('volume_ip', self.default_volume_matrix), ('volume_other', self.default_volume_matrix), \
+                        ('volume_by_year', self.default_volume_matrix_by_year),)
+
+        for vt, default in volume_types:
+            try:
+                # get value from sent data
+                val = self.data.get(vt, default)
+            except ValueError:
+                # errored out
+                val = default
+
+            lawyer_data[vt] = json.loads(val)
+
+        return lawyer_data
 
     def perform_update(self):
         """
@@ -90,6 +120,8 @@ class EnsureLawyerService(object):
             self.lawyer.role = self.role
 
         if self.data:
+            self.data['bar_membership'] = json.loads(self.data.get('bar_membership', '[]')) if self.data.get('bar_membership', '[]') != '' else []
+            self.data['websites'] = json.loads(self.data.get('websites', '[]')) if self.data.get('websites', '[]') != '' else []
             self.lawyer.data = self.data
 
         if self.data.get('photo', None) is not None:
@@ -102,17 +134,8 @@ class EnsureLawyerService(object):
         # remove empty items
         fields_to_update = [(k,v) for k,v in fields_to_update.items() if v is not None]
 
-        # Updates to the JSON Data object for the Lawyer
-        lawyer_data = self.lawyer.data
-
-        lawyer_data.update({
-            'startups_advised': json.loads(self.data.get('startups_advised', '[]')),
-            'volume_incorp_setup': json.loads(self.data.get('volume_incorp_setup', self.default_volume_matrix)),
-            'volume_seed_financing': json.loads(self.data.get('volume_seed_financing', self.default_volume_matrix)),
-            'volume_series_a': json.loads(self.data.get('volume_series_a', self.default_volume_matrix)),
-            'volume_ip': json.loads(self.data.get('volume_ip', self.default_volume_matrix)),
-            'volume_other': json.loads(self.data.get('volume_other', self.default_volume_matrix)),
-        })
+        # perform volume matrix update
+        lawyer_data = self.volume_matrix(lawyer_data=self.lawyer.data)
 
         # add the JSON object and perform lawyer save on that field only
         self.lawyer.data = lawyer_data
@@ -136,3 +159,4 @@ class EnsureLawyerService(object):
             firm_service = EnsureFirmService(firm_name=self.firm_name, offices=self.offices, **self.data)
             firm_service.process()
             self.firm = firm_service.firm
+

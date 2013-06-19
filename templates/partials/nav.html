@@ -1,4 +1,4 @@
-{% load i18n menu cache %}{% load url from future %}
+{% load i18n menu cache %}{% load url from future %}{% load cache %}
 <a href="#" class="scrolltop">
     <span>up</span>
 </a>
@@ -13,36 +13,129 @@
             <span class="icon-bar"></span>
         </a>
         <a class="brand" data-section="body" href="/">
-           <img src="{{ STATIC_URL }}img/logo-nav-white.png" title="LawPal"> 
-		   <span class="label">Beta</span>
+           <img src="{{ STATIC_URL }}img/logo-nav-white.png" alt="LawPal"> 
        </a>
+
         <div class="nav-collapse">
-         	<ul class="nav pull-right">
-             {% if request.user.is_authenticated %}
-                 {% if PROJECT_ENVIRONMENT != 'prod' %}
-                    <li><a href="{% url 'client:dashboard' %}">{% trans 'Dashboard' %}</a></li>
-                    <li class="divider-vertical"></li>
-                 {% endif %}
-				 <li><a id="Intercom" href="mailto:xw4ux8lx@incoming.intercom.io">Support</a></li>
+            <ul class="nav pull-right">
+             {% if user.is_authenticated %}
+                <li><a href="{% url 'lawyer:list' %}">{% trans 'Marketplace' %}</a></li>
+                <li class="divider-vertical"></li>
+                 <li class="nav-support" data-toggle="tooltip" title="Support"><a id="Intercom" href="mailto:xw4ux8lx@incoming.intercom.io"><i class="icon-support"></i></a></li>
+                 <li class="nav-mail" data-toggle="tooltip" title="Inbox"><a href="{% url 'engage:list' %}">
+                     {% if notification_unread != 0  %}
+                        <span class="unread-messages">{{ notification_unread }}</span> <i class="icon-mail"></i>
+                     {% else %}
+                        <i class="icon-mail"></i>
+                     {% endif %}
+                      </a>
+                </li>
+                {% cache 300 user_nav user.pk %}
                  <li class="dropdown">
-                   <a href="#" class="dropdown-toggle" data-toggle="dropdown"> {{request.user.first_name}} {{request.user.last_name}}<b class="caret"></b></a>
-                   <ul class="dropdown-menu">
-                        <!-- <li><a id="user-profile-form" class="" href="{% url 'lawyer:setup_profile' %}">{% trans 'Setup Profile' %}</a></li> -->
-                        <li><a id="user-profile-form" class="" href="{% url 'lawyer:invite' %}">{% trans 'Invite Colleagues' %}</a></li>
-                        <li><a id="user-profile-form" class="" href="{% url 'lawyer:profile' slug=request.user.username %}">{% trans 'Preview Profile' %}</a></li>
-                        <li><a id="user-profile" class="" href="{% url 'userena_profile_detail' username=request.user.username %}">{% trans 'Account' %}</a></li>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> {{ user.get_full_name }}<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a id="user-profile-form" class="" href="{% if user.profile.is_lawyer %}{% url 'lawyer:setup_profile' %}{% else %}{% url 'startup:setup_profile' %}{% endif %}">{% trans 'Edit Profile' %}</a></li>
+                        {% if user.profile.is_lawyer %}<li><a id="user-profile-form" class="" href="{% url 'lawyer:profile' slug=user.username %}">{% trans 'View Profile' %}</a></li>{% endif %}
+                        {% if PROJECT_ENVIRONMENT != 'prod' %}<li><a id="user-profile" class="" href="{% url 'userena_profile_detail' username=user.username %}">{% trans 'Account' %}</a></li>{% endif %}
+                        <li><a id="user-profile-form" class="" href="{% if user.profile.is_lawyer %}{% url 'lawyer:invite' %}{% else %}{% url 'startup:invite' %}{% endif %}">{% trans 'Invite Colleagues' %}</a></li>
                         <li><a id="user-logout" class="" href="{% url 'logout' %}">{% trans 'Logout' %}</a></li>
-                   </ul>
-                 </li>
-             </ul>
+                    </ul>
+                </li>
+                 {% endcache %}
              {% else %}
-         		 <ul class="nav pull-right">
-					 <li><a href="/" id="">{% trans 'Login' %}</a></li>
-				 </ul>
+                 <li><a href="#signin-modal" role="button" data-toggle="modal"  onClick="_gaq.push(['_trackEvent', 'Nav', 'Action', 'Sign In']);">{% trans 'Sign In' %}</a></li>
              {% endif %}
-                 
+            </ul>                 
         </div>
      </div>
    </div>
  </div>
  <!-- ends navbar -->
+
+{% block css %}
+<style>
+
+    .navbar .nav > li > a {
+       -webkit-transition: none;
+        -moz-transition: none;
+        -ms-transition: none;
+        -o-transition: none;
+        font-weight: 200;
+    }
+
+    .navbar .nav li.nav-mail {
+        width: 45px;
+        text-align: center;
+        position: relative;
+        line-height: 35px;
+    }
+
+    .navbar .nav li.nav-support {
+        width: 55px;
+        text-align: center;
+        line-height: 28px;
+    }
+
+    .navbar .nav li.nav-mail a,
+    .navbar .nav li.nav-support a {
+        padding: 0;
+    }
+
+    .navbar .nav li.nav-mail i.icon-mail {
+        background: url('{{ STATIC_URL }}img/app/nav-sprite.png') no-repeat;
+        background-position: -1pt -24pt;
+        width: 26px;
+        height: 17px;
+        padding: 0;
+    }
+
+    .navbar .nav li.nav-support i.icon-support {
+        background: url('{{ STATIC_URL }}img/app/nav-sprite.png') no-repeat;
+        background-position: -1pt 0px;
+        height: 23px;
+        width: 24px;
+        padding: 0;
+    }
+
+    /*# navbar && any other span etc marked as unread-messages*/
+    .navbar .unread-messages, .unread-messages {
+        color: #fff;
+        position: absolute;
+        background: #ae564e;
+        width: 22px;
+        height: 22px;
+        line-height: 22px;
+        border-radius: 35px;
+        border: 2px solid #fff;
+        top: -3px;
+        left: -3px;
+        font-size: .8em;
+    }
+
+    .navbar .nav .divider-vertical {
+        border: none;
+        background: url('{{ STATIC_URL }}img/app/nav-sprite.png') no-repeat;
+        background-position: -21pt -39pt;
+        width: 2px;
+        height: 37px;
+        margin: 0 .4em 0 .8em;
+
+    }
+
+    span.unread-messages {
+        top: 12px;
+        left: 0px;
+    }
+
+</style>
+{% endblock %}
+
+{% block js %}
+    <script>
+    $(document).ready(function() {
+       $('.navbar .nav li').tooltip({
+           placement: 'bottom'
+       })
+    });
+    </script>
+{% endblock %}

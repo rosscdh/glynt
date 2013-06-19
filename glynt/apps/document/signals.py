@@ -11,7 +11,7 @@ from glynt.apps.services.services import BaseDocumentAssemblerService
 
 @receiver(post_save, sender=DocumentTemplate, dispatch_uid='template.html.validate')
 def validate_template_html(sender, **kwargs):
-    from glynt.apps.document.tasks import valivalidate_document_html_taskdate_document_html_task
+    from glynt.apps.document.tasks import validate_document_html_task
     template = kwargs['instance']
 
     # open html and render body

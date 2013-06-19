@@ -50,7 +50,7 @@ class DocumentSignature(models.Model):
         return json.dumps(self.signature)
 
     def signature_as_image(self):
-        from signpad2image.signpad2image import s2ib
+        from signpad2image.signpad2image import s2ib # import here as tests break when imported above
         try:
             return s2ib(self.signature_as_string(), wh=(198,120), pincolor=(0,0,0))
         except:

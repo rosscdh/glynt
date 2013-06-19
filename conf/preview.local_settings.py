@@ -6,6 +6,8 @@ PROJECT_ENVIRONMENT = 'prod'
 
 SITE_ID = 3
 
+SECRET_KEY = 'g5ched^#zkyf!va9!2nwzzav3r@h8s+p%u2oeolg)@qak$!plc'
+
 DEBUG = False
 COMPRESS_ENABLED = False
 COMPRESS_OFFLINE = False
@@ -45,21 +47,20 @@ ALLOWED_HOSTS = ['*']
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 SESSION_CACHE_ALIAS = 'session_cache'
+SESSION_COOKIE_SECURE = True
 
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
+
+GOOGLE_DISPLAY_NAME = 'LawPal.com - Development'
+GOOGLE_OAUTH2_CLIENT_ID = '316492043888-mhcap930opo9uf2kj1rv9654odm6niqu.apps.googleusercontent.com'
+GOOGLE_OAUTH2_CLIENT_SECRET = 'bigxopHAtqIPyWp4D6Lb-H0s'
+GOOGLE_OAUTH_EXTRA_SCOPE = ['https://www.googleapis.com/auth/plus.me']
 
 FACEBOOK_API_KEY = '343632075713954'
 FACEBOOK_SECRET_KEY = '4f9854b8fe8f5ccf27ac1ffcf5051b79'
 
 LINKEDIN_CONSUMER_KEY = 'rrjwcpuvhfl1'
 LINKEDIN_CONSUMER_SECRET = '2wm9DFbdUjLyi76U'
-LINKEDIN_SCOPE = ['r_basicprofile', 'r_emailaddress', 'r_network']
-LINKEDIN_EXTRA_FIELD_SELECTORS = ['email-address', 'headline', 'industry']
-LINKEDIN_EXTRA_DATA = [('id', 'id'),
-                       ('first-name', 'first_name'),
-                       ('last-name', 'last_name'),
-                       ('email-address', 'email_address'),
-                       ('headline', 'headline'),
-                       ('industry', 'industry')]
 
 
 ANGEL_CLIENT_ID = 'c1602543cc137ebdf925cc8d63087bc5' # dev.lawpal.com
@@ -75,7 +76,7 @@ EMAIL_HOST_USER = 'lawpal'
 EMAIL_HOST_PASSWORD = '0113633alex'
 # EMAIL_PORT = 587
 # EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'founders@preview.lawpal.com'
+DEFAULT_FROM_EMAIL = 'noreply@lawpal.com'
 SERVER_EMAIL = 'glynt@preview.lawpal.com'
 
 
@@ -83,9 +84,31 @@ RAVEN_CONFIG = {
     'dsn': 'https://b5a6429d03e2418cbe71cd5a4c9faca6:ddabb51af47546d1ac0e63cb453797ba@app.getsentry.com/6287',
 }
 
-# Heroku - CloudAMQP
-BROKER_URL = 'amqp://gqhezwgc:1JylV9VKTXnlA9iuy9WFqIOqbl4yTmQa@tiger.cloudamqp.com/gqhezwgc'
-BROKER_POOL_LIMIT = 1
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': 'http://giq8k0u0:8w1b1vt5lz38j3qo@fir-4141096.us-east-1.bonsai.io',
+        'INDEX_NAME': 'glynt-preview',
+    },
+}
+USE_ELASTICSEARCH = True
+
+
+# AMPQ Queue System AWS
+BROKER_USER = AWS_ACCESS_KEY_ID
+BROKER_PASSWORD = AWS_SECRET_ACCESS_KEY
+BROKER_TRANSPORT = 'sqs'
+BROKER_TRANSPORT_OPTIONS = {
+    'region': 'us-west-1',
+}
+CELERY_DEFAULT_QUEUE = 'lawpal-preview'
+CELERY_QUEUES = {
+    CELERY_DEFAULT_QUEUE: {
+        'exchange': CELERY_DEFAULT_QUEUE,
+        'binding_key': CELERY_DEFAULT_QUEUE,
+    }
+}
 
 SPLUNKSTORM_ENDPOINT = 'logs2.splunkstorm.com'
 SPLUNKSTORM_PORT = 20824

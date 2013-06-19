@@ -5,8 +5,8 @@
 {% block plain %}
 A Firm has been Created on {% current_site_domain %}
 
-Name: {{ firm }}
-PK: {{ firm.pk }}
+Name: {{ firm.name }}
+Id: {{ firm.pk }}
 
 Please validate it.
 {% include 'email/footer.email' %}

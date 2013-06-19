@@ -9,7 +9,7 @@ from django.utils.encoding import smart_unicode
 from glynt.apps.firm.services import EnsureFirmService
 
 import csv
-import pdb
+
 
 class Command(BaseCommand):
     """ Imports Firms from the GDrive FirmsDB spreadsheet

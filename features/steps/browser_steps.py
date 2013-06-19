@@ -7,6 +7,9 @@ from django.core.urlresolvers import reverse
 from django.utils.encoding import smart_unicode
 from django.core.management import call_command
 
+from behaving.web.steps import *
+
+# Environment Setup
 import urlparse
 
 import logging
@@ -14,6 +17,15 @@ logger = logging.getLogger('django.test.behave')
 
 BEHAVE_DEFAULT_USER_PASSWORD = 'test'
 
+# Step Setup
+@step(u'I am on "{url}"')
+def when_i_visit_url(context, url):
+    full_url = context.browser_url(url)
+    context.browser.open(full_url)
+
+@step(u'I should see a "{css}" element')
+def should_see_element_with_css_within_timeout(context, css, timeout=0):
+    assert context.browser.is_element_present_by_css(css, wait_time=timeout), u'Element not present'
 
 # Step Setup
 @given(u'I am logged in as "{username_pass}"')

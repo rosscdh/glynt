@@ -4,7 +4,6 @@ In order to provide clean access to constants used in model definitions
 This class provides a simple lookup mechnism which allows static reference to named values
 instead of having to hardcode the numeric variable
 """
-import json
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from collections import namedtuple
@@ -12,9 +11,42 @@ from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.http import HttpResponse
 
+from django.db.models import Q
+
+import re
+import json
+import urlparse
+import hashlib
+import datetime
+
+
+# hardcoded here cos i havent yet figured out how to reverse tastypie urls (?)
+API_URLS = {
+    'firms': '/api/v1/firm/lite/?format=json&limit=15',
+    'locations': '/api/v1/location/lite/?format=json&limit=15',
+    'states': '/api/v1/state/lite/?format=json&limit=15',
+    'startups': '/api/v1/startup/lite/?format=json&limit=15',
+}
+
+
+def generate_unique_slug(instance):
+    """ Generate the unique slug for a model instance """
+    hash_val = u'%s-%s' % (instance.pk, datetime.datetime.utcnow())
+    h = hashlib.sha1(hash_val)
+    return h.hexdigest()
+
 
 class HttpResponseUnauthorized(HttpResponse):
     status_code = 401
+
+
+def _get_referer(request):
+    """Return the HTTP_REFERER, if existing."""
+    if 'HTTP_REFERER' in request.META:
+        sr = urlparse.urlsplit(request.META['HTTP_REFERER'])
+        return urlparse.urlunsplit(('', '', sr.path, sr.query, sr.fragment))
+
+    return None
 
 
 class AjaxableResponseMixin(object):
@@ -104,6 +136,12 @@ def get_namedtuple_choices(name, choices_tuple):
                     return val
             return False
 
+        def get_desc_by_value(self, input_value):
+            for val,name,desc in choices_tuple:
+                if val == input_value:
+                    return desc
+            return False
+
         def is_valid(self, selection):
             for val,name,desc in choices_tuple:
                 if val == selection or name == selection or desc == selection:
@@ -149,3 +187,40 @@ def user_is_self_or_admin(request, viewed_user):
         return HttpResponseRedirect( settings.LOGIN_URL )
 
     return True
+
+
+
+
+def normalize_query(query_string,
+                    findterms=re.compile(r'"([^"]+)"|(\S+)').findall,
+                    normspace=re.compile(r'\s{2,}').sub):
+    ''' Splits the query string in invidual keywords, getting rid of unecessary spaces
+        and grouping quoted words together.
+        Example:
+        
+        >>> normalize_query('  some random  words "with   quotes  " and   spaces')
+        ['some', 'random', 'words', 'with quotes', 'and', 'spaces']
+    
+    '''
+    return [normspace(' ', (t[0] or t[1]).strip()) for t in findterms(query_string)] 
+
+
+def get_query(query_string, search_fields):
+    ''' Returns a query, that is a combination of Q objects. That combination
+        aims to search keywords within a model by testing the given search fields.
+    '''
+    query = None # Query to search for every search term        
+    terms = normalize_query(query_string)
+    for term in terms:
+        or_query = None # Query to search for a given term in each field
+        for field_name in search_fields:
+            q = Q(**{"%s__icontains" % field_name: term})
+            if or_query is None:
+                or_query = q
+            else:
+                or_query = or_query | q
+        if query is None:
+            query = or_query
+        else:
+            query = query & or_query
+    return query

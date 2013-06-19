@@ -5,10 +5,9 @@ import sys
 PROJECT_ENVIRONMENT = 'prod'
 
 IS_TESTING = False
-TEST_APPS = ['jenkins','testserver','test', 'behave']
-
-if sys.argv[1:2] in TEST_APPS or os.path.basename(sys.argv[0]) in TEST_APPS:
-    IS_TESTING = True
+for test_app in ['loaddata','jenkins','testserver','test']:
+    if test_app in sys.argv[1:2]:
+        IS_TESTING = True
 
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__+ '/../'))
 
@@ -25,17 +24,19 @@ ADMINS = (
 
 MANAGERS = ADMINS + (
     ("Alex Halliday", 'alex@lawpal.com'),
-    ("Joe Musgrave", 'joe@lawpal.com'),
 )
 
 NOTICEGROUP_EMAIL = (
  ("LawPal Tech", 'tech@lawpal.com'),   
 )
 
+DEFAULT_FROM_EMAIL = 'noreply@localhost'
+SERVER_EMAIL = 'glynt@localhost'
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': os.path.join(SITE_ROOT, 'dev.db'),
+        'ENGINE': '', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': '',
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -73,9 +74,6 @@ MEDIA_URL = '/m/'
 STATIC_ROOT = os.path.join(SITE_ROOT, 'static')
 STATIC_URL = '/static/'
 
-import djcelery
-djcelery.setup_loader()
-
 # Additional locations of static files
 STATICFILES_DIRS = (
 )
@@ -89,7 +87,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'i6=)1=4in#zyp&amp;g)^j2nl1abaeu)@2)^$ox5w7ac*uhml!uy-5'
+SECRET_KEY = 'cusaaqg!ab^os!*+i*q9p8w4$%$)i93&(0ig%ts0nnjq5uj=*-'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -100,18 +98,21 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'glynt.middleware.LawpalSocialAuthExceptionMiddleware',
-    # Uncomment the next line for simple clickjacking protection:
-    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'pagination.middleware.PaginationMiddleware',
 )
 
 
 ROOT_URLCONF = 'glynt.urls'
+
+# Needed for AngularJS
+TASTYPIE_ALLOW_MISSING_SLASH = True
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'glynt.wsgi.application'
@@ -119,7 +120,7 @@ WSGI_APPLICATION = 'glynt.wsgi.application'
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.contrib.angel.AngelBackend',
     'social_auth.backends.contrib.linkedin.LinkedinBackend',
-    'social_auth.backends.twitter.TwitterBackend',
+    'social_auth.backends.google.GoogleOAuth2Backend',
     'glynt.backends.EmailOrUsernameBackend',
     'userena.backends.UserenaAuthenticationBackend',
     'guardian.backends.ObjectPermissionBackend',
@@ -138,8 +139,11 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "glynt.context_processors.project_info",
     "glynt.context_processors.project_environment",
     "glynt.context_processors.default_profile_image",
+    "glynt.context_processors.notification_unread",
+    "glynt.context_processors.USE_THREADEDCOMMENTS",
     "social_auth.context_processors.social_auth_by_type_backends",
     "social_auth.context_processors.social_auth_by_name_backends",
+    "django.core.context_processors.request",
 )
 
 TEMPLATE_DIRS = (
@@ -186,21 +190,27 @@ PROJECT_APPS = (
     # Endorsements by users
     'glynt.apps.endorsement',
     # The Flyform
-    'glynt.apps.flyform',
+    #'glynt.apps.flyform',
     # The primary document view system
     'glynt.apps.document',
     # The document authoring system
-    'glynt.apps.author',
+    #'glynt.apps.author',
     # The End User - Client, those that consume the documents
     'glynt.apps.client',
     # The v2 Document Signing system
-    'glynt.apps.smoothe',
+    #'glynt.apps.smoothe',
     # The Document Signing system
-    'glynt.apps.sign',
+    #'glynt.apps.sign',
     # The Document Export system
     'glynt.apps.export',
     # Remote and 3rd Party services (pdf/doc conversion)
-    'glynt.apps.services',
+    #'glynt.apps.services',
+    # Engagement App
+    'glynt.apps.engage',
+    # Startup & Lawyer Transactions
+    'glynt.apps.transact',
+    # Dashboard
+    'glynt.apps.dashboard',
 )
 
 HELPER_APPS = (
@@ -234,19 +244,56 @@ HELPER_APPS = (
     'parsley',
     # clear-cache
     'clear_cache',
+    # engless pagination
+    'endless_pagination',
     # Celery Tasks
     'djcelery',
+<<<<<<< HEAD
     # Testing helpers
     'django_jenkins',
     'django-behave',
+=======
+    # User switcher
+    'debug_toolbar_user_panel',
+
+    # Django Pagination,
+    # 'pagination',
+
+    # Vast array of Storage types
+    'storages',
+    # Engagement System
+    'fluent_comments',
+    'threadedcomments',
+
+    # Notications
+    'notifications',
+    # Currency
+>>>>>>> master
 )
 
 
 # Handle south and its breaking tests
+<<<<<<< HEAD
 if not IS_TESTING:
     HELPER_APPS += (
         # south migrations
+=======
+if IS_TESTING == True:
+    # Log email to console
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    # disable celery for test
+    BROKER_BACKEND = 'memory'
+
+    HELPER_APPS = HELPER_APPS + (
+        'django_jenkins',
+    )
+else:
+    HELPER_APPS = HELPER_APPS + (
+        # Db Migrations
+>>>>>>> master
         'south',
+        # Search - inluded here to allow for loading of fixtures
+        'haystack',
     )
 
 
@@ -256,12 +303,18 @@ if not IS_TESTING:
 # the other apps will/can be tested seperately
 INSTALLED_APPS = DJANGO_APPS + HELPER_APPS + PROJECT_APPS 
 
+<<<<<<< HEAD
 # Custom test runner for this project
 TEST_RUNNER = 'glynt.test_runner.GlyntAppTestRunner'
 
 
 # disable celery for test
 BROKER_BACKEND = 'memory'
+=======
+COMMENTS_APP = 'fluent_comments'
+FLUENT_COMMENTS_USE_EMAIL_NOTIFICATION = False # We handle our own email notifications
+NOTIFY_USE_JSONFIELD = True
+>>>>>>> master
 
 LOGIN_URL          = '/'
 LOGIN_REDIRECT_URL = '/logged-in/'
@@ -277,6 +330,17 @@ ANONYMOUS_USER_ID = -1
 AUTH_PROFILE_MODULE = 'client.ClientProfile' # our custom profile
 
 
+# Celery
+BROKER_HEARTBEAT = 10 # helps with heroku connection limits
+BROKER_CONNECTION_TIMEOUT = 3
+BROKER_POOL_LIMIT = 1 # Very importnat for heroku, stops a max + 1 event
+BROKER_CONNECTION_MAX_RETRIES = 2
+
+# AWS
+AWS_ACCESS_KEY_ID = 'AKIAI36HOWMVHPU4I3HA'
+AWS_SECRET_ACCESS_KEY = '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'
+
+
 USERENA_USE_MESSAGES = True
 USERENA_LOGIN_AFTER_ACTIVATION = True # Enable beta style signup (manual activation)
 USERENA_ACTIVATION_DAYS = 10
@@ -284,7 +348,8 @@ USERENA_ACTIVATION_REDIRECT_URL = '/'
 USERENA_SIGNIN_REDIRECT_URL = '/'
 USERENA_WITHOUT_USERNAMES = True # step userarena forcing user to provide username
 USERENA_HIDE_EMAIL = True
-
+USERENA_MUGSHOT_GRAVATAR = False
+USERENA_MUGSHOT_DEFAULT = STATIC_URL +'img/default_avatar.png'
 
 DEFAULT_PROFILE_IMAGE = '/img/default_avatar.png'
 
@@ -304,36 +369,50 @@ FACEBOOK_REQUEST_PERMISSIONS = 'email,user_likes,user_about_me,read_stream'
 LINKEDIN_CONSUMER_KEY = '1uh2ns1cn9tm'
 LINKEDIN_CONSUMER_SECRET = 'MnrqdbtmM10gkz27'
 LINKEDIN_SCOPE = ['r_basicprofile', 'r_emailaddress', 'r_network']
-LINKEDIN_EXTRA_FIELD_SELECTORS = ['email-address', 'headline', 'industry']
+LINKEDIN_EXTRA_FIELD_SELECTORS = ['picture-url','email-address','current-status','headline','industry','summary']
 LINKEDIN_EXTRA_DATA = [('id', 'id'),
                        ('first-name', 'first_name'),
                        ('last-name', 'last_name'),
                        ('email-address', 'email_address'),
                        ('headline', 'headline'),
-                       ('industry', 'industry')]
+                       ('industry', 'industry'),
+                       ('summary', 'summary')]
 
 
 ANGEL_CLIENT_ID = '00342c269e46c6059ab76013bb74ed44'
 ANGEL_CLIENT_SECRET = '0f7ca41e548dcc04357984e5ceebfa26'
 ANGEL_AUTH_EXTRA_ARGUMENTS = {'scope': 'email'}
 
+FULLCONTACT_API_KEY = '7280036b99dd362e'
+
 TWITTER_CONSUMER_KEY = 'q4iigBXEJj7OBuIYHVF99g'
 TWITTER_CONSUMER_SECRET = 'Ka9XGTeRlu1v7XRs2GSdK43Sd0l4j0eXXE2gI4iXd8E'
 
 SOCIAL_AUTH_SLUGIFY_USERNAMES = True
-SOCIAL_AUTH_UUID_LENGTH = 0
+SOCIAL_AUTH_UUID_LENGTH = 3 # greater than 0 otehrwise it defaults to 3
 SOCIAL_AUTH_BACKEND_ERROR_URL = '/'
 SOCIAL_AUTH_PROTECTED_USER_FIELDS = ('first_name', 'last_name', 'full_name', 'email',)
 SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.social.social_auth_user',
+    #'social_auth.backends.pipeline.associate.associate_by_email', # removed as we no longer need to provision poeple coming from preview.
     'glynt.apps.graph.pipeline.get_username',
     'social_auth.backends.pipeline.user.create_user',
     'social_auth.backends.pipeline.social.associate_user',
     'social_auth.backends.pipeline.social.load_extra_data',
     'social_auth.backends.pipeline.user.update_user_details',
     'glynt.apps.graph.pipeline.ensure_user_setup',
+    'glynt.apps.graph.pipeline.profile_extra_details',
     'glynt.apps.graph.pipeline.graph_user_connections',
 )
+
+POSTMAN_DISALLOW_ANONYMOUS = True
+POSTMAN_DISALLOW_MULTIRECIPIENTS = True
+POSTMAN_DISALLOW_COPIES_ON_REPLY = True
+POSTMAN_DISABLE_USER_EMAILING = False
+POSTMAN_AUTO_MODERATE_AS = True
+POSTMAN_MAILER_APP = 'django.core.mail'
+
+INTERCOM_API_SECRET = '-sjPyiyI5P44z3QsHLDUWfoLK8Rml7Wbg2wmj64L'
 
 
 DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d %Y',
@@ -368,9 +447,30 @@ if DEBUG:
             '--with-coverage',
         ]
 
-
+# Process model updates in real time
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': 'http://jsy06hdx:km5ugyiy90yy17qg@banyan-8252692.us-east-1.bonsai.io',
+        'INDEX_NAME': 'dev-lawyers',
+    },
+}
+USE_ELASTICSEARCH = True
 
 INTERNAL_IPS = ('127.0.0.1',)
+DEBUG_TOOLBAR_PANELS = (
+    'debug_toolbar.panels.version.VersionDebugPanel',
+    'debug_toolbar.panels.timer.TimerDebugPanel',
+    'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
+    'debug_toolbar.panels.headers.HeaderDebugPanel',
+    'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
+    'debug_toolbar.panels.template.TemplateDebugPanel',
+    'debug_toolbar.panels.sql.SQLDebugPanel',
+    'debug_toolbar.panels.signals.SignalDebugPanel',
+    'debug_toolbar.panels.logger.LoggingPanel',
+    'debug_toolbar_user_panel.panels.UserPanel',
+)
 
 
 LOGGING = {
@@ -403,6 +503,11 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
         'lawpal.services': {
             'handlers': ['console'],
             'level': 'DEBUG',
@@ -431,13 +536,6 @@ TEMPLATED_EMAIL_BACKEND = 'templated_email.backends.vanilla_django.TemplateBacke
 TEMPLATED_EMAIL_TEMPLATE_DIR = 'email/'
 TEMPLATED_EMAIL_FILE_EXTENSION = 'email'
 
-
-# Broker for Celery
-# Currently using CloudAMQP by Heroku
-#BROKER_URL = 'amqp://gxdzjcxo:sMKG0qU4bJlUWmRMkWKuArtPQiY3m84G@tiger.cloudamqp.com/gxdzjcxo'
-BROKER_URL = 'amqp://root:testlocalhost/dev_lawpal'
-BROKER_POOL_LIMIT = 1
-
 HELLOSIGN_AUTH = ("", "")
 
 DOCRAPTOR_KEY = "vIvrCmZtnQTC4p6V0k"
@@ -448,19 +546,16 @@ ALLOWED_HOSTS = ['*']
 
 
 # Neat trick http://www.robgolding.com/blog/2010/05/03/extending-settings-variables-with-local_settings-py-in-django/
-if IS_TESTING:
+try:
+    LOCAL_SETTINGS
+except NameError:
     try:
-        LOCAL_SETTINGS
-    except NameError:
+        from local_settings import *
+    except ImportError:
+        print "Could not load local_settings"
+
+if IS_TESTING:
         try:
             from test_settings import *
         except ImportError:
-            pass
-else:
-    try:
-        LOCAL_SETTINGS
-    except NameError:
-        try:
-            from local_settings import *
-        except ImportError:
-            pass
+            print "Could not load test_settings"

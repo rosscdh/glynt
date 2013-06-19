@@ -1,0 +1,63 @@
+{% load lawyer_profile_tags endless jsonify glynt_helpers engagement_tags humanize %}
+{% lazy_paginate object_list %}
+
+{% for l in object_list %}
+    <div class="clearfix partner">
+
+        <a class="partner-avatar" href="{% url 'lawyer:profile' slug=l.username %}">
+            <img src="{{ l.profile_photo }}"/>
+            <engaged lawyer="{{ l.pk }}"></engaged>
+        </a>
+
+        <div class="partner-overview">
+            <h2 class="partner-name"><a href="{% url 'lawyer:profile' slug=l.username %}">{{ l.full_name|truncatechars:26 }}</a></h2>
+
+            <h3>{{ l.summary|truncatechars:55 }}</h3>
+
+            {% if l.firm_name %}
+                <h3>{% if l.position %}{{ l.position }} <span>at</span> {% endif %}{{ l.firm_name }}</h3>
+            {% endif %}
+
+            <ul class="partner-info">
+                <li class="marker big">{% filter truncatechars:130 %}{% for practice_location in l.practice_locations  %}
+                    {{ practice_location }}{% if not forloop.last %} <span>and</span> {% endif %}{% endfor %}{% endfilter %}
+                </li>
+            </ul>
+        </div>
+
+        {% if l.fee_packages %}
+        <div class="card-bordered card-transaction">
+            {% fee_packages_mini fee_packages=l.fee_packages %}
+            <a href="{% url 'lawyer:profile' slug=l.username %}" class="transaction-view-all"><span>View all</span></a>
+        </div>
+        {% endif %}
+    </div>
+{% empty %}
+ <div class="row">
+    <div class="span12">
+        <div class="no-results">
+            Sorry, no lawyers found. More are signing up every day, so check back in a week or so. 
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% show_more %}
+
+{% block js %}
+    <script src="{{ STATIC_URL }}js/angularjs/lib/angular.min.js"></script>
+    <script src="{{ STATIC_URL }}js/angularjs/lib/angular-resource.min.js"></script>
+
+    <script src="{{ STATIC_URL }}lawyer/angularjs/app/js/app.js"></script>
+    <script src="{{ STATIC_URL }}lawyer/angularjs/app/js/controllers.js"></script>
+    <script src="{{ STATIC_URL }}lawyer/angularjs/app/js/services.js"></script>
+    <script src="{{ STATIC_URL }}lawyer/angularjs/app/js/directives.js"></script>
+
+<!-- <script src="{{ STATIC_URL }}lawyer/angularjs/test/lib/angular-mocks.js"></script> -->
+
+    <script>
+        $(document).ready(function () {
+            $('.tip').tooltip();
+        });
+    </script>
+{% endblock %}

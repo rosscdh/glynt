@@ -9,8 +9,9 @@ from optparse import make_option
 
 from social_auth.models import UserSocialAuth
 
-from glynt.apps.graph.services import LinkedInProcessConnectionService, AngelProcessConnectionService
 from glynt.apps.graph.services import LinkedinConnectionService, AngelConnectionService
+from glynt.apps.graph.services import LinkedInProcessConnectionService, AngelProcessConnectionService
+
 
 import json
 from urlparse import parse_qs
@@ -73,7 +74,6 @@ class Command(BaseCommand):
             oauth_client = LinkedinConnectionService(oauth_token=user_access_data.get('oauth_token')[0], \
                                                     oauth_token_secret=user_access_data.get('oauth_token_secret')[0])
             resp, content = oauth_client.request()
-            print resp.__dict__
 
             content = json.loads(content)
             contacts = content.get('values', [])
@@ -115,7 +115,3 @@ class Command(BaseCommand):
                         c = AngelProcessConnectionService(uid=u.get('id'), item=u, user=auth.user)
 
                 complete = bool(current_page >= last_page)
-
-
-    def twitter(self):
-        pass

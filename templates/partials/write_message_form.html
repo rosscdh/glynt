@@ -1,0 +1,25 @@
+{% load i18n crispy_forms_tags glynt_helpers %}
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+  <h3 id="myModalLabel">Send message</h3>
+</div>
+
+<div class="modal-body">
+    <form id="sendMessageForm" class="form-horizontal" action="/messages/write/" method="post">{% csrf_token %}
+        <div class="control-group">
+            {{ form.recipients|as_crispy_field }}
+        </div>
+        <div class="control-group">
+            {{ form.subject|as_crispy_field }}
+        </div>
+        <div class="control-group">
+            {{ form.body|as_crispy_field }}
+        </div>
+        <button type="submit" class="hidden">{% trans "Send" %}</button>
+    </form>
+</div>
+
+<div class="modal-footer">
+  <button id="submitModalMessage" type="submit" class="btn btn-primary">Send Message</button>
+</div>
