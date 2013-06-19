@@ -28,3 +28,12 @@
     margin: 1.5em 0;
 }
 
+.intake-progress {
+    margin-top: 1.5em;
+}
+
+p.intake-save a {
+    display: block;
+    margin: 1em 0;
+    font-size: .8em;
+}
