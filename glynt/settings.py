@@ -209,6 +209,8 @@ PROJECT_APPS = (
     #'glynt.apps.services',
     # Message app
     'glynt.apps.engage',
+    # Dashboard
+    'glynt.apps.dashboard',
 )
 
 HELPER_APPS = (
