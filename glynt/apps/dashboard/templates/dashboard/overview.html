@@ -1,0 +1,168 @@
+{% extends 'dashboard/base.html' %}
+
+{% block page_title %}Overview{% endblock %}
+{% block nav_overview %}<li class="active"><a href="{% url 'dashboard:overview' %}">Overview</a></li>{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="page-header" style="margin-bottom: 10px;">
+            <div class="btn-group pull-right">
+                <a class="btn btn-large dropdown-toggle" data-toggle="dropdown" href="#">Series Seed <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Incorporation</a></li>
+                    <li><a href="#">Note Financing</a></li>
+                    <li><a href="#">Series Seed</a></li>
+                </ul>
+            </div>
+            <h1>Overview</h1>
+        </div>
+        <div class="row">
+            <div class="span6">
+                <section>
+                    <h3>Current Progress</h3>
+                    <div class="well well-large" style="background-color: transparent;">
+                        <div class="progress">
+                            <div class="bar bar-success" style="width: 35%"></div>
+                            <div class="bar bar-info" style="width: 10%"></div>
+                            <div class="bar bar-warning" style="width: 20%"></div>
+                            <div class="bar bar-danger" style="width: 10%"></div>
+                        </div>
+                        <span class="label label-success">Resolved</span>
+                        <span class="label label-info">Needs Signing</span>
+                        <span class="label label-warning">Pending</span>
+                        <span class="label label-important">Open</span>
+                    </div>
+
+                    <div class="row-fluid">
+                        <ul class="thumbnails clearfix">
+                            <li class="span4">
+                                <div class="thumbnail" style="text-align: center; height: 120px; padding: 10px 0;">
+                                    <h1 style="font-size: 80px;">1</h1>
+                                    <div class="caption">
+                                        <h3 class="label-important" style="color: white;">OPEN</h3>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="span4">
+                                <div class="thumbnail" style="text-align: center; height: 120px; padding: 10px 0;">
+                                    <h1 style="font-size: 80px;">1</h1>
+                                    <div class="caption">
+                                        <h3 class="label-warning" style="color: white;">PENDING</h3>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="span4">
+                                <div class="thumbnail" style="text-align: center; height: 120px; padding: 10px 0;">
+                                    <h1 style="font-size: 80px;">1</h1>
+                                    <div class="caption">
+                                        <h3 class="label-success" style="color: white;">CLOSED</h3>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+            <div class="span6">
+                <section>
+                    <h3>Recent Activity</h3>
+                    <table>
+                        <thead>
+                            <th style="width: 80px;"></th>
+                            <th style="width: 42px;"></th>
+                            <th></th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="label label-success">RESOLVED</span></td>
+                                <td><img src="http://placehold.it/32" class="img-rounded"></td>
+                                <td>
+                                    <div><a href="#">Joe Bloggs</a> resolved the item: <a href="{% url 'dashboard:item' id='519b56fdde5b2ad608002fa0' %}">Item #2</a>.</div>
+                                    <small class="muted">5 hours ago<small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="label label-success">RESOLVED</span></td>
+                                <td><img src="http://placehold.it/32" class="img-rounded"></td>
+                                <td>
+                                    <div><a href="#">Joe Bloggs</a> resolved the item: <a href="{% url 'dashboard:item' id='519b56fdde5b2ad608002fa0' %}">Item #11</a>.</div>
+                                    <small class="muted">12 hours ago<small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="label label-important">OPENED</span></td>
+                                <td><img src="http://placehold.it/32" class="img-rounded"></td>
+                                <td>
+                                    <div><a href="#">Joe Bloggs</a> opened the item: <a href="{% url 'dashboard:item' id='519b56fdde5b2ad608002fa0' %}">Item #11</a>.</div>
+                                    <small class="muted">2 days ago<small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="label label-success">RESOLVED</span></td>
+                                <td><img src="http://placehold.it/32" class="img-rounded"></td>
+                                <td>
+                                    <div><a href="#">Joe Bloggs</a> resolved the item: <a href="{% url 'dashboard:item' id='519b56fdde5b2ad608002fa0' %}">Item #4</a>.</div>
+                                    <small class="muted">5 days ago<small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="label label-success">RESOLVED</span></td>
+                                <td><img src="http://placehold.it/32" class="img-rounded"></td>
+                                <td>
+                                    <div><a href="#">Joe Bloggs</a> resolved the item: <a href="{% url 'dashboard:item' id='519b56fdde5b2ad608002fa0' %}">Item #3</a>.</div>
+                                    <small class="muted">2 weeks ago<small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="label label-important">OPENED</span></td>
+                                <td><img src="http://placehold.it/32" class="img-rounded"></td>
+                                <td>
+                                    <div><a href="#">Joe Bloggs</a> opened the item: <a href="{% url 'dashboard:item' id='519b56fdde5b2ad608002fa0' %}">Item #10</a>.</div>
+                                    <small class="muted">3 weeks ago<small>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </div>
+
+        <div class="well">
+            <div class="row-fluid">
+                <div class="span6">
+                    <section>
+                        <h3>Lawyers</h3>
+                        <div class="row-fluid">
+                            <ul class="thumbnails clearfix">
+                                <li class="span4">
+                                    <a href="#" class="thumbnail"><img src="http://placehold.it/128"></a>
+                                </li>
+                                <li class="span4">
+                                    <a href="#" class="thumbnail"><img src="http://placehold.it/128"></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </section>
+                </div>
+                <div class="span6">
+                    <section>
+                        <h3>Team</h3>
+                        <div class="row-fluid">
+                            <ul class="thumbnails clearfix">
+                                <li class="span4">
+                                    <a href="#" class="thumbnail"><img src="http://placehold.it/128"></a>
+                                </li>
+                                <li class="span4">
+                                    <a href="#" class="thumbnail"><img src="http://placehold.it/128"></a>
+                                </li>
+                                <li class="span4">
+                                    <a href="#" class="thumbnail"><img src="http://placehold.it/128"></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
