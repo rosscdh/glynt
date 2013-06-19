@@ -248,11 +248,11 @@ HELPER_APPS = (
     'endless_pagination',
     # Celery Tasks
     'djcelery',
-<<<<<<< HEAD
+
     # Testing helpers
-    'django_jenkins',
-    'django-behave',
-=======
+    # 'django_jenkins',
+    # 'django-behave',
+
     # User switcher
     'debug_toolbar_user_panel',
 
@@ -268,16 +268,10 @@ HELPER_APPS = (
     # Notications
     'notifications',
     # Currency
->>>>>>> master
 )
 
 
 # Handle south and its breaking tests
-<<<<<<< HEAD
-if not IS_TESTING:
-    HELPER_APPS += (
-        # south migrations
-=======
 if IS_TESTING == True:
     # Log email to console
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -290,7 +284,6 @@ if IS_TESTING == True:
 else:
     HELPER_APPS = HELPER_APPS + (
         # Db Migrations
->>>>>>> master
         'south',
         # Search - inluded here to allow for loading of fixtures
         'haystack',
@@ -303,18 +296,18 @@ else:
 # the other apps will/can be tested seperately
 INSTALLED_APPS = DJANGO_APPS + HELPER_APPS + PROJECT_APPS 
 
-<<<<<<< HEAD
+
 # Custom test runner for this project
 TEST_RUNNER = 'glynt.test_runner.GlyntAppTestRunner'
 
 
 # disable celery for test
 BROKER_BACKEND = 'memory'
-=======
+
 COMMENTS_APP = 'fluent_comments'
 FLUENT_COMMENTS_USE_EMAIL_NOTIFICATION = False # We handle our own email notifications
 NOTIFY_USE_JSONFIELD = True
->>>>>>> master
+
 
 LOGIN_URL          = '/'
 LOGIN_REDIRECT_URL = '/logged-in/'
