@@ -16,6 +16,9 @@ from django.db.models import Q
 import re
 import json
 import urlparse
+import hashlib
+import datetime
+
 
 # hardcoded here cos i havent yet figured out how to reverse tastypie urls (?)
 API_URLS = {
@@ -24,6 +27,13 @@ API_URLS = {
     'states': '/api/v1/state/lite/?format=json&limit=15',
     'startups': '/api/v1/startup/lite/?format=json&limit=15',
 }
+
+
+def generate_unique_slug(instance):
+    """ Generate the unique slug for a model instance """
+    hash_val = u'%s-%s' % (instance.pk, datetime.datetime.utcnow())
+    h = hashlib.sha1(hash_val)
+    return h.hexdigest()
 
 
 class HttpResponseUnauthorized(HttpResponse):

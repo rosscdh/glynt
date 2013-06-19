@@ -34,21 +34,6 @@ class PublicHomepageView(TemplateView):
 
         return [template_name]
 
-    def render_to_response(self, context, **response_kwargs):
-        """
-        """
-        # @BUSINESS_RULE
-        # redirect the startup to the marketplace/lawyer-list
-        user_class_name = self.request.session.get('user_class_name', 'lawyer')
-
-        if self.request.user.is_authenticated() and user_class_name == 'founder':
-
-            return HttpResponseRedirect(redirect_to=reverse('lawyer:list'))
-
-        else:
-            return super(PublicHomepageView, self).render_to_response(context, **response_kwargs)
-
-
 
 class UserClassSessionRedirectView(RedirectView):
     """ View to set a session that helps us determine what class a user is logging in as,
@@ -59,17 +44,15 @@ class UserClassSessionRedirectView(RedirectView):
         """ if the user has already signed up and has set a password then continue normally
         otherwise show them the form """
 
-        user_class_name = kwargs.get('user_class_name', 'lawyer')
+        user_class_name = kwargs.get('user_class_name', 'founder') # default to founder
+        login_type = kwargs.get('login_type', 'linkedin') # default ot linkedin
 
         self.request.session['user_class_name'] = user_class_name
-        logging.debug('logging in as user_class_name: %s' % user_class_name)
 
-        if user_class_name == 'lawyer':
-            url = reverse('socialauth_begin', args=['linkedin'])
+        logging.debug('logging in as user_class_name: %s using %s' % (user_class_name, login_type))
 
-        elif user_class_name == 'founder':
-            url = reverse('socialauth_begin', args=['google-oauth2'])
-
+        if user_class_name:
+            url = reverse('socialauth_begin', args=[login_type])
         else:
             raise Http404("User Class %s is not Defined" % user_class_name)
 

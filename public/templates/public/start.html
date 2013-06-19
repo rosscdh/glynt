@@ -1,0 +1,36 @@
+{% extends 'base.html' %}{% load url from future %}
+
+{% block page_title %}LawPal - A better attorney-client relationship{% endblock %}
+{% block bodyclass %}start{% endblock %}
+{% block extrahead %}
+    <meta name="description" content="LawPal - A better attorney-client relationship">
+    <meta name="keywords"
+          content="incorporation, seed financing, convertible notes, venture capital, acquisition, angel investing">
+{% endblock %}
+{% block css %}
+    <link href="{{ STATIC_URL }}css/theme/home.css" rel="stylesheet" charset="utf-8"/>
+{% endblock %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block prebody %}
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="centered">
+        <div class="sign-in">
+            <img src="{{ STATIC_URL }}img/logo-nav-white.png" alt="LawPal" title="LawPal" class="logo">
+            <a href="{% url "public:auth_user_class_redirect" user_class_name="founder" login_type="google-oauth2" %}"
+               class="btn btn-primary"><img src="{{ STATIC_URL }}img/google-32.png">Sign in with Google</a>
+        </div>
+        <p class="start-lawyer">Are you a lawyer? <a href="{% url 'public:start-lawyer' %}">Click here</a></p>
+    </div>
+
+
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
