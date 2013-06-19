@@ -36,6 +36,8 @@ urlpatterns = patterns('',
     url(r'^transact/', include('glynt.apps.transact.urls', namespace='transact')),
 	# Comments - used by engage and documents
     url(r'^comments/', include('fluent_comments.urls')),
+    # Dashboard
+    url(r'^dashboard/', include('glynt.apps.dashboard.urls', namespace='dashboard')),
 	# The Authoring Tool
 	url(r'^author/', include('glynt.apps.author.urls', namespace='author')),
 	# The v2 Documents
