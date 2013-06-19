@@ -4,8 +4,8 @@ from django.core.urlresolvers import reverse
 
 from jsonfield import JSONField
 
+from glynt.apps.utils import generate_unique_slug
 from glynt.apps.engage import ENGAGEMENT_STATUS
-from glynt.apps.engage import generate_engagement_slug
 from glynt.apps.engage.services.actions import OpenEngagementService, CloseEngagementService, ReOpenEngagementService
 from glynt.apps.startup.models import Startup, Founder
 from glynt.apps.lawyer.models import Lawyer
@@ -77,7 +77,7 @@ class Engagement(models.Model):
     def save(self, *args, **kwargs):
         """ Ensure that we have a slug """
         if self.slug in [None, '']:
-            self.slug = generate_engagement_slug(engagement=self)
+            self.slug = generate_unique_slug(instance=self)
 
         return super(Engagement, self).save(*args, **kwargs)
 

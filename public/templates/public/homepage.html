@@ -1,138 +1,146 @@
-{% extends 'base.html' %}
-
-{% block page_title %}LawPal - Startup Legal Services Platform{% endblock %}
+{% extends 'base.html' %}{% load url from future %}
+{% block page_title %}LawPal - A better attorney-client relationship{% endblock %}
 {% block bodyclass %}homepage{% endblock %}
 {% block css %}
-<link href="{{ STATIC_URL }}css/theme/home.css" rel="stylesheet" charset="utf-8" />
-<!-- <link href="{{ STATIC_URL }}bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
- -->{% endblock %}
-
+    <link href="{{ STATIC_URL }}css/theme/home.css" rel="stylesheet" charset="utf-8"/>
+{% endblock %}
 {% block extrahead %}
-<meta name="description" content="LawPal helps startups find the perfect lawyer and manage the relationship.">
-<meta name="keywords" content="incorporation, seed financing, convertible notes, venture capital, acquisition, angel investing">
+    <meta name="description" content="LawPal - A better attorney-client relationship">
+    <meta name="keywords"
+          content="incorporation, seed financing, convertible notes, venture capital, acquisition, angel investing">
+{% endblock %}
+
+{% block navbar %}
+    {% include 'public/partials/nav.html' %}
 {% endblock %}
 
 {% block prebody %}
-<div id="hero" style="position:relative">
-   	<div class="container">
-	</div> 
-    <div class="search" style="position:absolute; bottom:0;">
-    	<div class="container">
-    		<form action="{% url 'lawyer:list' %}" method="GET">
-			<h1>A better attorney-client relationship</h1>
-			<a name="learn"></a>
-			I need a lawyer in <input id="id_q" name="q" value="San Francisco"> <!-- for a <input id="user_screen_name" value="Seed financing"> -->
-			<button type="submit" class="btn btn-onblack btn-large" onClick="_gaq.push(['_trackEvent', 'Homepage', 'Action', 'Search']);">Search</button>or  <a href="#signin-modal" role="button" class="btn btn-onblack btn-large" data-toggle="modal" onClick="_gaq.push(['_trackEvent', 'Homepage', 'Action', 'Sign In']);">Sign In</a>
-			</form>
-    	</div>
+    <div class="container-fluid hero-welcome">
+        <h1>A better attorney-client relationship</h1>
 
-	</div>
-</div>
+        <h3>Get it done with LawPal</h3>
+        <a href="#learn" class="btn" onClick="_gaq.push(['_trackEvent', 'Homepage', 'Action', 'Learn more']);">Learn
+            more</a>
+        <a href="{% url 'public:start' %}" class="btn btn-success"
+           onClick="_gaq.push(['_trackEvent', 'Homepage', 'Action', 'start']);">Start</a>
+    </div>
+{% endblock %}
 
-<div class="container">
-	<div class="row">
-		<div class="span12" id="learn-more">
-			<h3><a href="#learn" class=""  onClick="_gaq.push(['_trackEvent', 'Homepage', 'Action', 'Learn more']);">learn<br />more</a></h3>
-		</div>
-	</div>
-</div>
-<div class="container">
-	<div class="row">
-		<div class="span12 product-tour">
-			<h2>The LawPal Startup Marketplace</h2>
-			<h3>As a founder, it's an important relationship</h3>
-			<div class="row">
-				<div class="span6 values">
-					<img src="{{ STATIC_URL }}img/homepage/founder-values.jpg">
-					<img src="{{ STATIC_URL }}img/tick.png" class="tick1 hideme">
-					<img src="{{ STATIC_URL }}img/tick.png" class="tick2 hideme"> 	
- 					<img src="{{ STATIC_URL }}img/tick.png" class="tick3 hideme"> 	
- 	
-				</div>
-				<div class="span6">
-					<div class="desc">
-						<br />
-						LawPal lets you find and work with lawyers in an entirely new way. We believe that startups are stronger with quality legal advice from a qualified attorney. We are here to give founders greater choice and transparency so they can find the right lawyer and enjoy a better relationship.
-						<br />
-						<br />
-						<a href="/lawyers" class="btn btn-blue btn-large">Browse Marketplace</a>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="span12">
-					<img src="{{ STATIC_URL }}img/down.png" class="down-arrow hideme">
-					<img src="{{ STATIC_URL }}img/sample-profile.png" class="sample-profile hideme">
-<!-- 					<br />
-					<br />
-					<img src="{{ STATIC_URL }}img/supporters.png" class=""> -->
-					<a href="#signin-modal" role="button" class="btn btn-primary btn-huge btn-center" data-toggle="modal"  onClick="_gaq.push(['_trackEvent', 'Homepage', 'Action', 'Large Join']);">Join the Marketplace</a>
-				</div>
-			</div>
 
-		</div>
-	</div>
-</div>
-<div class="coming">
-	<div class="container">
-		<div class="row">
-			<div class="span12">
-					<span class="hideme">and coming</span> 
-					<div class="image-wrap hideme">
-						<img src="{{ STATIC_URL }}img/cal.png">
-					</div>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="container">
-	<div class="row">
-		<div class="span12 product-tour">
-			<h2>Tools to Manage Your Transactions</h2>
-			<h3>Beautifully simple tools to make your relationship more efficient and transparent</h3>
-			<br />
-			<img src="{{ STATIC_URL }}img/homepage/tools.png" style="margin-left:15px;" class="hideme"> 
-			<br />
-			<br />
-			<div class="desc full">
-				How many times have you asked yourself, "What's happening with my deal?". We're building a suite of tools to help visualize and manage transactions in a beautifully simple way by focusing both client and attorney on what needs to happen to get your deal closed. Sign in for more information. 
-			</div>
-			<br />
-		</div>
-	</div>
-</div>
-<div class="social-home">
-	<div class="container">
-		<div class="row">
-			<div class="span12">
-				<h1>Stay in Touch</h1>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="container">
-	<div class="row">
-		<div class="span12 product-tour">
-			<div class="desc full">
-				<a href="https://twitter.com/lawpalhq" class="twitter-follow-button" data-show-count="false" data-size="large">Follow @lawpalhq</a>
-				<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-					<a href="https://angel.co/lawpal?follow=1&type=Startup&id=149072"></a><script src="https://angel.co/javascripts/embed.js" type="text/javascript"></script>
-					 <iframe class="" frameborder="0" border="0" scrolling="no" allowtransparency="true" height="25" width="115" src="http://platform.tumblr.com/v1/follow_button.html?button_type=2&tumblelog=lawpal2&color_scheme=dark"></iframe>
-					<br />
-					<br />
-					<br />
-					<img src="{{ STATIC_URL }}img/logo-foot.png">
-			</div>
-		</div>
-	</div>
-</div>
-<script src="/static/homepage/assets/js/homepage.js"></script> 
-<script>
-$(document).ready(function(){
-	$('#id_q').live('click', function(event){
-		$(this).select()
-	});
-});
-</script> 
+{% block body %}
+    <div class="hide">
+        <div class="container">
+            <div class="row">
+                <div class="span12 product-tour">
+                    <h2>The LawPal Startup Marketplace</h2>
+
+                    <h3>As a founder, it's an important relationship</h3>
+
+                    <div class="row">
+                        <div class="span6 values">
+                            <img src="{{ STATIC_URL }}img/homepage/founder-values.jpg">
+                            <img src="{{ STATIC_URL }}img/tick.png" class="tick1 hideme">
+                            <img src="{{ STATIC_URL }}img/tick.png" class="tick2 hideme">
+                            <img src="{{ STATIC_URL }}img/tick.png" class="tick3 hideme">
+                        </div>
+                        <div class="span6">
+                            <div class="desc">
+                                <br/>
+                                LawPal lets you find and work with lawyers in an entirely new way. We believe that
+                                startups are stronger with quality legal advice from a qualified attorney. We are here
+                                to give founders greater choice and transparency so they can find the right lawyer and
+                                enjoy a better relationship.
+                                <br/>
+                                <br/>
+                                <a href="/lawyers" class="btn btn-blue btn-large">Browse Marketplace</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span12">
+                            <img src="{{ STATIC_URL }}img/down.png" class="down-arrow hideme">
+                            <img src="{{ STATIC_URL }}img/sample-profile.png" class="sample-profile hideme">
+                            <a href="#signin-modal" role="button" class="btn btn-primary btn-huge btn-center"
+                               data-toggle="modal"
+                               onClick="_gaq.push(['_trackEvent', 'Homepage', 'Action', 'Large Join']);">Join the
+                                Marketplace</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="coming">
+            <div class="container">
+                <div class="row">
+                    <div class="span12">
+                        <span class="hideme">and coming</span>
+
+                        <div class="image-wrap hideme">
+                            <img src="{{ STATIC_URL }}img/cal.png">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="span12 product-tour">
+                    <h2>Tools to Manage Your Transactions</h2>
+
+                    <h3>Beautifully simple tools to make your relationship more efficient and transparent</h3>
+                    <br/>
+                    <img src="{{ STATIC_URL }}img/homepage/tools.png" style="margin-left:15px;" class="hideme">
+                    <br/>
+                    <br/>
+
+                    <div class="desc full">
+                        How many times have you asked yourself, "What's happening with my deal?". We're building a suite
+                        of tools to help visualize and manage transactions in a beautifully simple way by focusing both
+                        client and attorney on what needs to happen to get your deal closed. Sign in for more
+                        information.
+                    </div>
+                    <br/>
+                </div>
+            </div>
+        </div>
+        <div class="social-home">
+            <div class="container">
+                <div class="row">
+                    <div class="span12">
+                        <h1>Stay in Touch</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="span12 product-tour">
+                    <div class="desc full">
+                        <a href="https://twitter.com/lawpalhq" class="twitter-follow-button" data-show-count="false"
+                           data-size="large">Follow @lawpalhq</a>
+                        <script>!function (d, s, id) {
+                            var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+                            if (!d.getElementById(id)) {
+                                js = d.createElement(s);
+                                js.id = id;
+                                js.src = p + '://platform.twitter.com/widgets.js';
+                                fjs.parentNode.insertBefore(js, fjs);
+                            }
+                        }(document, 'script', 'twitter-wjs');</script>
+                        <a href="https://angel.co/lawpal?follow=1&type=Startup&id=149072"></a>
+                        <script src="https://angel.co/javascripts/embed.js" type="text/javascript"></script>
+                        <iframe class="" frameborder="0" border="0" scrolling="no" allowtransparency="true" height="25"
+                                width="115"
+                                src="http://platform.tumblr.com/v1/follow_button.html?button_type=2&tumblelog=lawpal2&color_scheme=dark"></iframe>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <img src="{{ STATIC_URL }}img/logo-foot.png">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
