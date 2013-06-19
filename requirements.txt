@@ -17,6 +17,9 @@ django-cities-light
 # easydict lookups with dot notation
 bunch
 
+# utils for git
+gitpython
+
 django-extensions
 django-templated-email
 django-storages

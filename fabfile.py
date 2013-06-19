@@ -4,6 +4,8 @@ from fabric.contrib.console import confirm
 from fabric.context_managers import settings
 from fabric.contrib import files
 
+from git import *
+
 import os
 import json
 import getpass
@@ -16,6 +18,9 @@ from pprint import pprint
 debug = True
 
 env.local_project_path = os.path.dirname(os.path.realpath(__file__))
+
+env.repo = Repo(env.local_project_path)
+
 env.SHA1_FILENAME = None
 env.timestamp = time.time()
 env.is_predeploy = False
@@ -210,9 +215,8 @@ def db_restore(db='lawpal_production', db_file=None):
 @task
 def git_tags():
     """ returns list of tags """
-    #local('git fetch origin')
-    tags = local('git describe --tags', capture=True)
-    return tags.split()
+    tags = env.repo.tags
+    return tags
 
 @task
 def git_previous_tag():
@@ -223,10 +227,10 @@ def git_previous_tag():
 @task
 def git_suggest_tag():
     """ split into parts v1.0.0 drops v converts to ints and increaments and reassembles v1.0.1"""
-    previous = git_previous_tag().split('.')
-    mapped = map(int, previous[1:])
-    next = [int(previous[0].replace('v',''))] + mapped
-    next_rev = next[2] = mapped[-1] + 1
+    previous = git_previous_tag().name.split('.')
+    mapped = map(int, previous[1:]) # convert all digits to int but exclude the first one as it starts with v and cant be an int
+    next = [int(previous[0].replace('v',''))] + mapped #remove string v and append mapped list
+    next_rev = next[2] = mapped[-1] + 1 # increment the last digit
     return {
         'next': 'v%s' % '.'.join(map(str,next)), 
         'previous': '.'.join(previous)
@@ -234,12 +238,17 @@ def git_suggest_tag():
 
 @task
 def git_set_tag():
-    suggested = git_suggest_tag()
-    tag = prompt(colored('Please enter a tag: previous: %s suggested: %s' % (suggested['previous'], suggested['next']), 'yellow'), default=suggested['next'])
-    if tag:
-        comment = env.deploy_desc if 'deploy_desc' in env else prompt(colored('Please enter a tag comment', 'green'))
-        local('git tag -a %s -m "%s"' % (tag, comment))
-        local('git push origin %s' % tag)
+    proceed = prompt(colored('Do you want to tag this realease?', 'red'), default='y')
+    if proceed in env.truthy:
+        suggested = git_suggest_tag()
+        tag = prompt(colored('Please enter a tag: previous: %s suggested: %s' % (suggested['previous'], suggested['next']), 'yellow'), default=suggested['next'])
+        if tag:
+            tag = 'v%s' % tag if tag[0] != 'v' else tag # ensure we start with a "v"
+
+            message = env.deploy_desc if 'deploy_desc' in env else prompt(colored('Please enter a tag comment', 'green'))
+            env.repo.create_tag(message=message)
+#            local('git tag -a %s -m "%s"' % (tag, comment))
+#            local('git push origin %s' % tag)
 
 @task
 def git_export(branch='aws-sqs'):
@@ -556,16 +565,14 @@ def deploy(is_predeploy='False',full='False',db='False',search='False'):
     :is_predeploy=True - will deploy the latest MASTER SHA but not link it in: this allows for assets collection
     and requirements update etc...
     """
-    env.is_predeploy = True if is_predeploy.lower() in env.truthy else False
-    full = True if full.lower() in env.truthy else False
-    db = True if db.lower() in env.truthy else False
-    search = True if search.lower() in env.truthy else False
+    env.is_predeploy = is_predeploy.lower() in env.truthy
+    full = full.lower() in env.truthy
+    db = db.lower() in env.truthy
+    search = search.lower() in env.truthy
 
     diff()
     newrelic_note()
-
-    if env.environment == 'production':
-        set_tag()
+    git_set_tag()
 
     prepare_deploy()
     do_deploy()
