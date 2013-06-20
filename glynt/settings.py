@@ -164,6 +164,7 @@ DJANGO_APPS = (
     'django.contrib.markup',
     'django.contrib.humanize',
     'django.contrib.comments',
+    'django.contrib.formtools',
 )
 
 PROJECT_APPS = (
