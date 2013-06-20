@@ -6,8 +6,8 @@
       "price": "2000.00",
       "description": "Product explanation goes here, why it's awesome etc.",
       "data": {},
-      "slug": "seed-financing",
-      "title": "Seed financing"
+      "slug": "note-financing",
+      "title": "Note financing"
     }
   },
   {
@@ -28,8 +28,8 @@
       "price": "500.00",
       "description": "Production explanation goes here, why it's awesome etc.",
       "data": {},
-      "slug": "document-review",
-      "title": "Document review"
+      "slug": "equity-financing",
+      "title": "Equity Financing"
     }
   },
   {
