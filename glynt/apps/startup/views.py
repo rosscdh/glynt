@@ -4,7 +4,8 @@ from django.views.generic import DetailView
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
-from django.http import Http404
+from django.contrib.formtools.wizard.views import CookieWizardView
+from django.http import Http404, HttpResponseRedirect
 from services import EnsureFounderService
 from forms import StartupProfileSetupForm
 from models import Founder
@@ -88,3 +89,10 @@ class FounderProfileView(DetailView):
             raise Http404(_("No %(verbose_name)s found matching the query") %
                           {'verbose_name': queryset.model._meta.verbose_name})
         return obj
+
+
+class FounderQuestionnaireWizard(CookieWizardView):
+    template_name = 'startup/founder_questionnaire_form.html'
+
+    def done(self, form_list, **kwargs):
+        return HttpResponseRedirect('/')
