@@ -29,6 +29,10 @@ class BasicInformationForm(BootstrapMixin, forms.Form):
     fiscal_year_end = forms.DateField(label="Fiscal year end", help_text="", widget=forms.DateInput(attrs={'tabindex':'6'}))
 
 
+# WIZARD STEP THREE
+class OtherAgreementsForm(BootstrapMixin, forms.Form):
+    agreement_details = forms.CharField(label="Enter details here", help_text="", widget=forms.Textarea())
+
 
 # FOR REF...
 
