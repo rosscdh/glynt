@@ -172,3 +172,13 @@
         </div>
     </div>
 {% endblock %}
+
+{% block js %}
+    <script src="{{ STATIC_URL }}js/angularjs/lib/angular.min.js"></script>
+    <script src="{{ STATIC_URL }}js/angularjs/lib/angular-resource.min.js"></script>
+
+    <script src="{{ STATIC_URL }}todo/angularjs/app/js/app.js"></script>
+    <script src="{{ STATIC_URL }}todo/angularjs/app/js/controllers.js"></script>
+    <script src="{{ STATIC_URL }}todo/angularjs/app/js/services.js"></script>
+    <script src="{{ STATIC_URL }}todo/angularjs/app/js/directives.js"></script>
+{% endblock %}
