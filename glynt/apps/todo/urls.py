@@ -7,6 +7,6 @@ from glynt.apps.todo.views import MyToDoListView, ToDoDetailView
 
 
 urlpatterns = patterns('',
-    url(r'^(?P<id>[a-zA-Z0-9]{24})$', login_required(ToDoDetailView.as_view(), name='todo'),
+    url(r'^(?P<slug>.+)$', login_required(ToDoDetailView.as_view(), name='todo'),
     url(r'^$', login_required(MyToDoListView.as_view()), name='default'),
 )
