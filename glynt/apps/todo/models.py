@@ -19,17 +19,25 @@ from glynt.apps.engage.models import Engagement
 class ToDo(models.Model):
     """ ToDo Items that are associated with a user and perhaps with an engagement """
     user = models.ForeignKey(User)
-    engagement = models.ForeignKey(Engagement, blank=True)
+    engagement = models.ForeignKey(Engagement, blank=True, null=True)
     name = models.CharField(max_length=128)
     slug = models.SlugField()
     description = models.TextField(blank=True)
     status = models.IntegerField(choices=TODO_STATUS.get_choices(), default=TODO_STATUS.open, db_index=True)
     data = JSONField(default={})
-    date_due = models.DateField(blank=True, auto_now=False, auto_now_add=False)
-    date_created = models.DateField(auto_now=False, auto_now_add=True)
-    date_modified = models.DateField(auto_now=True, auto_now_add=True, db_index=True)
+    date_due = models.DateTimeField(blank=True, null=True, auto_now=False, auto_now_add=False)
+    date_created = models.DateTimeField(auto_now=False, auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True, auto_now_add=True, db_index=True)
 
     objects = DefaultToDoManager()
+
+    @property
+    def todo_type(self):
+        return '%s' % 'Generic' if not self.engagement else 'Need to hook up to engagement'
+
+    @property
+    def display_status(self):
+        return TODO_STATUS.get_desc_by_value(self.status)
 
     def save(self, *args, **kwargs):
         """ Ensure that we have a slug """
