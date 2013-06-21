@@ -2,15 +2,17 @@
 from django.contrib.formtools.wizard.views import CookieWizardView
 from django.http import HttpResponseRedirect
 
-from glynt.apps.transact.forms import PackagesForm, BasicInformationForm, OtherAgreementsForm
+from glynt.apps.transact.forms import PackagesForm, BasicInformationForm, OtherAgreementsForm, ExistingDocumentationForm
 
 FORMS = [("packages", PackagesForm),
          ('basic_information', BasicInformationForm),
-         ('other_agreements', OtherAgreementsForm)]
+         ('other_agreements', OtherAgreementsForm),
+         ('existing_documentation', ExistingDocumentationForm)]
 
 TEMPLATES = {"packages": "transact/packages_form.html",
              "basic_information": "transact/basic_information_form.html",
-             "other_agreements": "transact/other_agreements_form.html"}
+             "other_agreements": "transact/other_agreements_form.html",
+             "existing_documentation": "transact/existing_documentation_form.html"}
 
 
 class PackagesWizard(CookieWizardView):

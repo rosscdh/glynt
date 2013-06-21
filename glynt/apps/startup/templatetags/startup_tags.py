@@ -5,7 +5,7 @@ register = template.Library()
 
 @register.filter
 def as_percentage_of(part, whole):
-    part = (int(part)) + 1
+    part = (int(part))
     whole = (int(whole))
     try:
         return "%d%%" % (float(part) / float(whole) * 100)

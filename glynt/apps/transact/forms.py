@@ -31,7 +31,12 @@ class BasicInformationForm(BootstrapMixin, forms.Form):
 
 # WIZARD STEP THREE
 class OtherAgreementsForm(BootstrapMixin, forms.Form):
-    agreement_details = forms.CharField(label="Enter details here", help_text="", widget=forms.Textarea())
+    agreement_details = forms.CharField(required=False, label="Enter details here", help_text="", widget=forms.Textarea())
+
+
+# WIZARD STEP FOUR
+class ExistingDocumentationForm(BootstrapMixin, forms.Form):
+    dummy_file = forms.CharField(required=False, widget=forms.HiddenInput())
 
 
 # FOR REF...
