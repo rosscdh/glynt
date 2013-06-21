@@ -29,7 +29,7 @@ gitpython
 django-extensions
 django-templated-email
 django-storages
-django-tastypie
+django-tastypie>=0.9.15
 django-crispy-forms
 south
 -e git+https://github.com/django/django-localflavor-us#egg=django-localflavor-us

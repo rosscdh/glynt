@@ -1,30 +1,35 @@
+# coding: utf-8
 import ast
-from itertools import chain
-from tastypie.resources import ModelResource, ALL
+from tastypie.resources import ALL
 from tastypie.api import Api
 from tastypie import fields
-from tastypie.serializers import Serializer
 from tastypie.cache import SimpleCache
-from tastypie.authentication import Authentication, SessionAuthentication
-from tastypie.authorization import Authorization, DjangoAuthorization, ReadOnlyAuthorization
+from tastypie.authentication import Authentication
+from tastypie.authorization import Authorization
+
+from glynt.apps.api import BaseApiModelResource
 
 from django.contrib.auth.models import User
 
 from cities_light.models import City, Country, Region
+
 from glynt.apps.lawyer.models import Lawyer
+
 from glynt.apps.firm.models import Firm, Office
 from glynt.apps.startup.models import Startup
+
 from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
 from glynt.apps.sign.models import DocumentSignature
+
 from glynt.apps.engage.models import Engagement
 from glynt.apps.engage import ENGAGEMENT_STATUS
+
+from glynt.apps.todo.api import UserToDoCountResource
 
 from glynt.apps.startup.bunches import StartupProfileBunch
 
 
-v1_internal_api = Api(api_name='v1')
-
-available_formats = ['json']
+V1_INTERNAL_API = Api(api_name='v1')
 
 
 class UserLoggedInAuthorization(Authorization):
@@ -36,17 +41,6 @@ class UserLoggedInAuthorization(Authorization):
             return []
         else:
             return object_list.filter(founder=bundle.request.user.founder_profile)
-
-
-class BaseApiModelResource(ModelResource):
-    """
-    Base Resource that all other api resources extend
-    used to apply our filters and specific rulesets
-    """
-    class Meta:
-        serializer = Serializer(formats=available_formats)
-        cache = SimpleCache(timeout=300)
-        authentication = SessionAuthentication()
 
 
 class LocationSimpleResource(BaseApiModelResource):
@@ -140,7 +134,6 @@ class StartupLiteSimpleResource(BaseApiModelResource):
         bundle.data.pop('website')
         bundle.data.update({'name': '%s, %s' % (name, website,) })
         return bundle
-
 
 def _startup_profile(bundle):
     data = StartupProfileBunch(startup=bundle.obj)
@@ -317,18 +310,21 @@ class StartupEngagementResource(BaseApiModelResource):
 
 
 """ Register the api resources """
-v1_internal_api.register(LocationSimpleResource())
-v1_internal_api.register(StateSimpleResource())
-v1_internal_api.register(FirmSimpleResource())
-v1_internal_api.register(OfficeSimpleResource())
-v1_internal_api.register(StartupLiteSimpleResource())
+V1_INTERNAL_API.register(LocationSimpleResource())
+V1_INTERNAL_API.register(StateSimpleResource())
+V1_INTERNAL_API.register(FirmSimpleResource())
+V1_INTERNAL_API.register(OfficeSimpleResource())
+V1_INTERNAL_API.register(StartupLiteSimpleResource())
 
-v1_internal_api.register(UserBasicProfileResource())
-v1_internal_api.register(StartupBasicProfileResource())
+V1_INTERNAL_API.register(UserBasicProfileResource())
+V1_INTERNAL_API.register(StartupBasicProfileResource())
 
-v1_internal_api.register(LawyerResource())
-v1_internal_api.register(DocumentResource())
-v1_internal_api.register(ClientCreatedDocumentResource())
-v1_internal_api.register(SignatureResource())
+V1_INTERNAL_API.register(UserToDoCountResource())
 
-v1_internal_api.register(StartupEngagementResource())
+V1_INTERNAL_API.register(LawyerResource())
+V1_INTERNAL_API.register(DocumentResource())
+V1_INTERNAL_API.register(ClientCreatedDocumentResource())
+V1_INTERNAL_API.register(SignatureResource())
+
+V1_INTERNAL_API.register(StartupEngagementResource())
+
