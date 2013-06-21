@@ -18,7 +18,7 @@ class PackagesForm(BootstrapMixin, forms.Form):
 # WIZARD STEP TWO
 class BasicInformationForm(BootstrapMixin, forms.Form):
     contact_name = forms.CharField(label="Contact name", help_text="", widget=forms.TextInput(attrs={'tabindex':'1'}))
-    company_address = forms.CharField(label="Company address", help_text="", widget=forms.Textarea(attrs={'tabindex':'2'}))
+    company_address = forms.CharField(label="Company address", help_text="Please enter you full street address including post code.", widget=forms.Textarea(attrs={'tabindex':'2'}))
     company_email = forms.EmailField(label="Contact email address", widget=forms.TextInput(attrs={'tabindex':'3'}))
     telephone = forms.CharField(label="Telephone number", help_text="", widget=forms.TextInput(attrs={'tabindex':'4'}))
     PRIMARY_CONTACT_CHOICES = (

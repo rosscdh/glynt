@@ -28,7 +28,7 @@
         </div>
         <div class="span4">
             <div class="progress progress-striped intake-progress">
-                <div class="bar" style="width: {{ wizard.steps.count|as_percentage_of:wizard.steps.current }};"></div>
+                <div class="bar" style="width: {{ wizard.steps.index|as_percentage_of:wizard.steps.count }};"></div>
             </div>
         </div>
     </div>

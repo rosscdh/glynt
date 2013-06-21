@@ -28,8 +28,14 @@
         </div>
         <div class="span4">
             <div class="progress progress-striped intake-progress">
-                <div class="bar" style="width: {{ wizard.steps.count|as_percentage_of:wizard.steps.current }};"></div>
+                <div class="bar" style="width: {{ wizard.steps.index|as_percentage_of:wizard.steps.count }};"></div>
             </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <p>Please list any other promises and/or agreements that you have committed to verbally or otherwise, to
+                employees, advisors or 3rd parties.</p>
         </div>
     </div>
     <div class="row">
