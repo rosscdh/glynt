@@ -6,8 +6,8 @@
       "price": "2000.00",
       "description": "Product explanation goes here, why it's awesome etc.",
       "data": {},
-      "slug": "seed-financing",
-      "title": "Seed financing"
+      "slug": "ES",
+      "title": "Equity seed financing"
     }
   },
   {
@@ -17,8 +17,8 @@
       "price": "1500.00",
       "description": "Production explanation goes here, why it's awesome etc.",
       "data": {},
-      "slug": "incorporation",
-      "title": "Incorporation"
+      "slug": "CS",
+      "title": "Company Setup"
     }
   },
   {
@@ -28,19 +28,8 @@
       "price": "500.00",
       "description": "Production explanation goes here, why it's awesome etc.",
       "data": {},
-      "slug": "document-review",
-      "title": "Document review"
-    }
-  },
-  {
-    "pk": 4,
-    "model": "transact.transaction",
-    "fields": {
-      "price": "0.00",
-      "description": "Production explanation goes here, why it's awesome etc.",
-      "data": {},
-      "slug": "something-else",
-      "title": "Something else"
+      "slug": "SF",
+      "title": "Convertible seed financing"
     }
   }
 ]
