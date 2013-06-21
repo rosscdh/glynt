@@ -13,7 +13,7 @@ from glynt.apps.utils import generate_unique_slug
 from glynt.apps.todo import TODO_STATUS
 from glynt.apps.todo.managers import DefaultToDoManager
 
-from glynt.apps.engagement.models import Engagement
+from glynt.apps.engage.models import Engagement
 
 
 class ToDo(models.Model):
