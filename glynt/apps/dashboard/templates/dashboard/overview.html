@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %}{% load url from future %}{% load glynt_helpers %}
 
 {% block page_title %}Overview{% endblock %}
 {% block nav_overview %}<li class="active"><a href="{% url 'dashboard:overview' %}">Overview</a></li>{% endblock %}
@@ -17,7 +17,7 @@
             <h1>Overview</h1>
         </div>
         <div class="row">
-            <div class="span6">
+            <div id="progress" class="span6" ng-app="App" ng-controller="OverviewProgressCtrl">
                 <section>
                     <h3>Current Progress</h3>
                     <div class="well well-large" style="background-color: transparent;">
@@ -36,28 +36,13 @@
                     <div class="row-fluid">
                         <ul class="thumbnails clearfix">
                             <li class="span4">
-                                <div class="thumbnail" style="text-align: center; height: 120px; padding: 10px 0;">
-                                    <h1 style="font-size: 80px;">1</h1>
-                                    <div class="caption">
-                                        <h3 class="label-important" style="color: white;">OPEN</h3>
-                                    </div>
-                                </div>
+                                <div numopen></div>
                             </li>
                             <li class="span4">
-                                <div class="thumbnail" style="text-align: center; height: 120px; padding: 10px 0;">
-                                    <h1 style="font-size: 80px;">1</h1>
-                                    <div class="caption">
-                                        <h3 class="label-warning" style="color: white;">PENDING</h3>
-                                    </div>
-                                </div>
+                                <div numpending></div>
                             </li>
                             <li class="span4">
-                                <div class="thumbnail" style="text-align: center; height: 120px; padding: 10px 0;">
-                                    <h1 style="font-size: 80px;">1</h1>
-                                    <div class="caption">
-                                        <h3 class="label-success" style="color: white;">CLOSED</h3>
-                                    </div>
-                                </div>
+                                <div numclosed></div>
                             </li>
                         </ul>
                     </div>
@@ -165,4 +150,22 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block css %}
+<style>
+#progress div.thumbnail{
+    text-align: center; height: 120px; padding: 10px 0;
+}
+</style>
+{% endblock %}
+{% block js %}
+    {% moment_js %}
+    <script src="{{ STATIC_URL }}js/angularjs/lib/angular.min.js"></script>
+    <script src="{{ STATIC_URL }}js/angularjs/lib/angular-resource.min.js"></script>
+
+    <script src="{{ STATIC_URL }}dashboard/angularjs/app/js/app.js"></script>
+    <script src="{{ STATIC_URL }}dashboard/angularjs/app/js/controllers.js"></script>
+    <script src="{{ STATIC_URL }}dashboard/angularjs/app/js/services.js"></script>
+    <script src="{{ STATIC_URL }}dashboard/angularjs/app/js/directives.js"></script>
 {% endblock %}
