@@ -5,7 +5,7 @@ from django.views.generic.base import RedirectView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib import admin
 
-from glynt.apps.api.v1 import v1_internal_api
+from glynt.apps.api.v1 import V1_INTERNAL_API
 
 admin.autodiscover()
 
@@ -14,7 +14,7 @@ urlpatterns = patterns('',
 	# Admin
 	url(r'^admin/', include(admin.site.urls)),
 	# Api
-	url(r'^api/', include(v1_internal_api.urls, namespace='api')),
+	url(r'^api/', include(V1_INTERNAL_API.urls, namespace='api')),
     # image upload and crop
     url(r'^ajax-upload/', include('cicu.urls')),
     # Invite to join

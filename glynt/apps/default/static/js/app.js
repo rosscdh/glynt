@@ -1,3 +1,4 @@
+'use strict';
 // Little function which will show the next input field 
 
 $('.new-input').hide();

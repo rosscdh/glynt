@@ -30,21 +30,27 @@
                      {% endif %}
                       </a>
                 </li>
+                <li class="divider-vertical"></li>
                 {% cache 300 user_nav user.pk %}
-                 <li class="dropdown">
+                    {% if user.profile.is_founder %}
+                    <li><a href="{% url 'dashboard:overview' %}">Overview</a></li>
+                    <li><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>
+                    <li><a href="{% url 'dashboard:documents' %}">Documents</a></li>
+                    {% endif %}
+                    <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"> {{ user.get_full_name }}<b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a id="user-profile-form" class="" href="{% if user.profile.is_lawyer %}{% url 'lawyer:setup_profile' %}{% else %}{% url 'startup:setup_profile' %}{% endif %}">{% trans 'Edit Profile' %}</a></li>
-                        {% if user.profile.is_lawyer %}<li><a id="user-profile-form" class="" href="{% url 'lawyer:profile' slug=user.username %}">{% trans 'View Profile' %}</a></li>{% endif %}
-                        {% if PROJECT_ENVIRONMENT != 'prod' %}<li><a id="user-profile" class="" href="{% url 'userena_profile_detail' username=user.username %}">{% trans 'Account' %}</a></li>{% endif %}
-                        <li><a id="user-profile-form" class="" href="{% if user.profile.is_lawyer %}{% url 'lawyer:invite' %}{% else %}{% url 'startup:invite' %}{% endif %}">{% trans 'Invite Colleagues' %}</a></li>
-                        <li><a id="user-logout" class="" href="{% url 'logout' %}">{% trans 'Logout' %}</a></li>
+                    <li><a id="user-profile-form" class="" href="{% if user.profile.is_lawyer %}{% url 'lawyer:setup_profile' %}{% else %}{% url 'startup:setup_profile' %}{% endif %}">{% trans 'Edit Profile' %}</a></li>
+                    {% if user.profile.is_lawyer %}<li><a id="user-profile-form" class="" href="{% url 'lawyer:profile' slug=user.username %}">{% trans 'View Profile' %}</a></li>{% endif %}
+                    {% if PROJECT_ENVIRONMENT != 'prod' %}<li><a id="user-profile" class="" href="{% url 'userena_profile_detail' username=user.username %}">{% trans 'Account' %}</a></li>{% endif %}
+                    <li><a id="user-profile-form" class="" href="{% if user.profile.is_lawyer %}{% url 'lawyer:invite' %}{% else %}{% url 'startup:invite' %}{% endif %}">{% trans 'Invite Colleagues' %}</a></li>
+                    <li><a id="user-logout" class="" href="{% url 'logout' %}">{% trans 'Logout' %}</a></li>
                     </ul>
-                </li>
-                 {% endcache %}
-             {% else %}
-                 <li><a href="#signin-modal" role="button" data-toggle="modal"  onClick="_gaq.push(['_trackEvent', 'Nav', 'Action', 'Sign In']);">{% trans 'Sign In' %}</a></li>
-             {% endif %}
+                    </li>
+                {% endcache %}
+            {% else %}
+                <li><a href="#signin-modal" role="button" data-toggle="modal"  onClick="_gaq.push(['_trackEvent', 'Nav', 'Action', 'Sign In']);">{% trans 'Sign In' %}</a></li>
+            {% endif %}
             </ul>                 
         </div>
      </div>

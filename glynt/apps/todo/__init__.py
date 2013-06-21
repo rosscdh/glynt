@@ -3,7 +3,7 @@ from glynt.apps.utils import get_namedtuple_choices
 
 
 TODO_STATUS = get_namedtuple_choices('TODO_STATUS', (
-    (0, 'open', 'Open'),
-    (1, 'done', 'Done'),
-    (2, 'in_progress', 'In-Progress'),
+    (0, 'new', 'New'),
+    (1, 'open', 'Open'),
+    (2, 'closed', 'Closed'),
 ))
