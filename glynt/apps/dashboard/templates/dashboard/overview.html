@@ -1,4 +1,4 @@
-{% extends 'dashboard/base.html' %}
+{% extends 'base.html' %}
 
 {% block page_title %}Overview{% endblock %}
 {% block nav_overview %}<li class="active"><a href="{% url 'dashboard:overview' %}">Overview</a></li>{% endblock %}
@@ -77,7 +77,7 @@
                                 <td><span class="label label-success">RESOLVED</span></td>
                                 <td><img src="http://placehold.it/32" class="img-rounded"></td>
                                 <td>
-                                    <div><a href="#">Joe Bloggs</a> resolved the item: <a href="{% url 'dashboard:item' id='519b56fdde5b2ad608002fa0' %}">Item #2</a>.</div>
+                                    <div><a href="#">Joe Bloggs</a> resolved the item: <a href="{% url 'dashboard:item' slug='519b56fdde5b2ad608002fa0' %}">Item #2</a>.</div>
                                     <small class="muted">5 hours ago<small>
                                 </td>
                             </tr>
@@ -85,7 +85,7 @@
                                 <td><span class="label label-success">RESOLVED</span></td>
                                 <td><img src="http://placehold.it/32" class="img-rounded"></td>
                                 <td>
-                                    <div><a href="#">Joe Bloggs</a> resolved the item: <a href="{% url 'dashboard:item' id='519b56fdde5b2ad608002fa0' %}">Item #11</a>.</div>
+                                    <div><a href="#">Joe Bloggs</a> resolved the item: <a href="{% url 'dashboard:item' slug='519b56fdde5b2ad608002fa0' %}">Item #11</a>.</div>
                                     <small class="muted">12 hours ago<small>
                                 </td>
                             </tr>
@@ -93,7 +93,7 @@
                                 <td><span class="label label-important">OPENED</span></td>
                                 <td><img src="http://placehold.it/32" class="img-rounded"></td>
                                 <td>
-                                    <div><a href="#">Joe Bloggs</a> opened the item: <a href="{% url 'dashboard:item' id='519b56fdde5b2ad608002fa0' %}">Item #11</a>.</div>
+                                    <div><a href="#">Joe Bloggs</a> opened the item: <a href="{% url 'dashboard:item' slug='519b56fdde5b2ad608002fa0' %}">Item #11</a>.</div>
                                     <small class="muted">2 days ago<small>
                                 </td>
                             </tr>
@@ -101,7 +101,7 @@
                                 <td><span class="label label-success">RESOLVED</span></td>
                                 <td><img src="http://placehold.it/32" class="img-rounded"></td>
                                 <td>
-                                    <div><a href="#">Joe Bloggs</a> resolved the item: <a href="{% url 'dashboard:item' id='519b56fdde5b2ad608002fa0' %}">Item #4</a>.</div>
+                                    <div><a href="#">Joe Bloggs</a> resolved the item: <a href="{% url 'dashboard:item' slug='519b56fdde5b2ad608002fa0' %}">Item #4</a>.</div>
                                     <small class="muted">5 days ago<small>
                                 </td>
                             </tr>
@@ -109,7 +109,7 @@
                                 <td><span class="label label-success">RESOLVED</span></td>
                                 <td><img src="http://placehold.it/32" class="img-rounded"></td>
                                 <td>
-                                    <div><a href="#">Joe Bloggs</a> resolved the item: <a href="{% url 'dashboard:item' id='519b56fdde5b2ad608002fa0' %}">Item #3</a>.</div>
+                                    <div><a href="#">Joe Bloggs</a> resolved the item: <a href="{% url 'dashboard:item' slug='519b56fdde5b2ad608002fa0' %}">Item #3</a>.</div>
                                     <small class="muted">2 weeks ago<small>
                                 </td>
                             </tr>
@@ -117,7 +117,7 @@
                                 <td><span class="label label-important">OPENED</span></td>
                                 <td><img src="http://placehold.it/32" class="img-rounded"></td>
                                 <td>
-                                    <div><a href="#">Joe Bloggs</a> opened the item: <a href="{% url 'dashboard:item' id='519b56fdde5b2ad608002fa0' %}">Item #10</a>.</div>
+                                    <div><a href="#">Joe Bloggs</a> opened the item: <a href="{% url 'dashboard:item' slug='519b56fdde5b2ad608002fa0' %}">Item #10</a>.</div>
                                     <small class="muted">3 weeks ago<small>
                                 </td>
                             </tr>
