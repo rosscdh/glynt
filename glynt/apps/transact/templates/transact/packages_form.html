@@ -1,0 +1,64 @@
+{% extends 'base.html' %}{% load crispy_forms_tags startup_tags %}
+
+{% block head %}
+    {{ wizard.form.media }}
+{% endblock %}
+
+{% block css %}
+    <link href="{{ STATIC_URL }}css/theme/transaction.css" rel="stylesheet" charset="utf-8"/>
+{% endblock %}
+
+{% block prebody %}
+    <div id="hero">
+        <div class="container container-main">
+            <div class="row animated fadeInRight profile-details">
+                <h1>What do you need?</h1>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="package-choice package-red" data-package="CS">
+            <h2>Company Setup</h2>
+            <span>$2k</span>
+            <button class="btn">Start</button>
+        </div>
+
+        <div class="package-choice package-yellow" data-package="ES">
+            <h2>Equity seed financing</h2>
+            <span>$3k</span>
+            <button class="btn">Start</button>
+        </div>
+
+        <div class="package-choice package-blue" data-package="SF">
+            <h2>Convertible seed financing</h2>
+            <span>3k</span>
+            <button class="btn">Start</button>
+        </div>
+
+        <form id="" data-validate="parsley" action="" method="POST">{% csrf_token %}
+            {{ wizard.management_form }}
+            {% if wizard.form.forms %}
+                {{ wizard.form.management_form }}
+                {% for form in wizard.form.forms %}
+                    {{ form|crispy }}
+                {% endfor %}
+            {% else %}
+                {{ wizard.form|crispy }}
+            {% endif %}
+        </form>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(document).ready(function () {
+            $('.package-choice button').click(function () {
+                $('#id_packages-transaction_type').attr('value', $(this).parent().attr('data-package'));
+                $('form').submit();
+            });
+        });
+    </script>
+{% endblock %}
