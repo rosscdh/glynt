@@ -1,6 +1,6 @@
 # Create your views here.
-from django.contrib.formtools.wizard.views import CookieWizardView
 from django.http import HttpResponseRedirect
+from django.contrib.formtools.wizard.views import SessionWizardView
 
 from glynt.apps.transact.forms import PackagesForm, BasicInformationForm, OtherAgreementsForm, ExistingDocumentationForm
 
@@ -15,9 +15,9 @@ TEMPLATES = {"packages": "transact/packages_form.html",
              "existing_documentation": "transact/existing_documentation_form.html"}
 
 
-class PackagesWizard(CookieWizardView):
+class PackagesWizard(SessionWizardView):
     def get_template_names(self):
         return [TEMPLATES[self.steps.current]]
 
     def done(self, form_list, **kwargs):
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect('/dashboard/matching')
