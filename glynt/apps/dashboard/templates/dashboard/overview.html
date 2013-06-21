@@ -36,13 +36,13 @@
                     <div class="row-fluid">
                         <ul class="thumbnails clearfix">
                             <li class="span4">
-                                <div numopen></div>
+                                <div countType="open"></div>
                             </li>
                             <li class="span4">
-                                <div numpending></div>
+                                <div countType="pending"></div>
                             </li>
                             <li class="span4">
-                                <div numclosed></div>
+                                <div countType="closed"></div>
                             </li>
                         </ul>
                     </div>
@@ -156,6 +156,9 @@
 <style>
 #progress div.thumbnail{
     text-align: center; height: 120px; padding: 10px 0;
+}
+#progress div.thumbnail h3{
+    font-size:1em;
 }
 </style>
 {% endblock %}
