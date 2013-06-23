@@ -1,7 +1,14 @@
 LOCAL_SETTINGS = True
 from settings import *
 
-PROJECT_ENVIRONMENT = 'dev'
+PROJECT_ENVIRONMENT = 'test'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'dev.db',
+    }
+}
 
 # VERY IMPORTANT
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
