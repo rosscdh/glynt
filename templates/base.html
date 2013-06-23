@@ -1,4 +1,4 @@
-{% load i18n templatetag_handlebars glynt_helpers document_tags thumbnail compress %}{% load url from future %}
+{% load i18n templatetag_handlebars glynt_helpers thumbnail compress %}{% load url from future %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -88,7 +88,6 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/json2.min.js"></script>	 
 
     {% handlebars_js %}
-    {% comments_js %}
     {% moment_js %}
 
     {% compress js %}

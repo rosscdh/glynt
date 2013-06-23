@@ -1,8 +1,0 @@
-{% extends 'email/base.email' %}
-{% load glynt_helpers %}
-
-{% block plain %}
-You have been invited to sign "{{ document_name }}"
-
-Please go to {% current_site_domain %}{{ sign_url }} to review, comment and sign the document.
-{% endblock %}

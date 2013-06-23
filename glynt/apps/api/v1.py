@@ -14,8 +14,6 @@ from cities_light.models import City, Country, Region
 from glynt.apps.lawyer.models import Lawyer
 from glynt.apps.firm.models import Firm, Office
 from glynt.apps.startup.models import Startup
-from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
-from glynt.apps.sign.models import DocumentSignature
 from glynt.apps.engage.models import Engagement
 from glynt.apps.engage import ENGAGEMENT_STATUS
 
@@ -256,44 +254,6 @@ class LawyerResource(BaseApiModelResource):
         return bundle
 
 
-class DocumentResource(BaseApiModelResource):
-    class Meta(BaseApiModelResource.Meta):
-        list_allowed_methods = ['get']
-        queryset = DocumentTemplate.objects.all()
-        resource_name = 'document/templates'
-        excludes = ['body']
-
-
-class ClientCreatedDocumentResource(BaseApiModelResource):
-    class Meta(BaseApiModelResource.Meta):
-        list_allowed_methods = ['get']
-        queryset = ClientCreatedDocument.objects.all()
-        resource_name = 'client/documents'
-        excludes = ['body', 'data']
-        include_absolute_url = True
-
-    def dehydrate(self, bundle):
-        data = ast.literal_eval(bundle.data['meta_data'])
-        bundle.data.update(data)
-        del(bundle.data['meta_data'])
-        return bundle
-
-
-class SignatureResource(BaseApiModelResource):
-    class Meta(BaseApiModelResource.Meta):
-        list_allowed_methods = ['get']
-        queryset = DocumentSignature.objects.all()
-        resource_name = 'client/signatures'
-        excludes = ['key_hash', 'hash_data', 'signature']
-        include_absolute_url = True
-
-    def dehydrate(self, bundle):
-        data = ast.literal_eval(bundle.data['meta_data'])
-        bundle.data.update(data)
-        del(bundle.data['meta_data'])
-        return bundle
-
-
 class StartupEngagementResource(BaseApiModelResource):
     lawyer_id = fields.IntegerField('lawyer_id')
 
@@ -327,8 +287,5 @@ v1_internal_api.register(UserBasicProfileResource())
 v1_internal_api.register(StartupBasicProfileResource())
 
 v1_internal_api.register(LawyerResource())
-v1_internal_api.register(DocumentResource())
-v1_internal_api.register(ClientCreatedDocumentResource())
-v1_internal_api.register(SignatureResource())
 
 v1_internal_api.register(StartupEngagementResource())

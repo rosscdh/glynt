@@ -173,44 +173,26 @@ PROJECT_APPS = (
     'public.invite',
     # Older public site
     'glynt.apps.default', # depreciating @TODO end this
-
-
     # The Api
     'glynt.apps.api',
-    # The Graph
-    'glynt.apps.graph',
     # The Startups
     'glynt.apps.startup',
     # The Legal Firms
     'glynt.apps.firm',
     # The Lawyers
     'glynt.apps.lawyer',
-    # Deals that have gone down
-    'glynt.apps.deal',
-    # Endorsements by users
-    'glynt.apps.endorsement',
-    # The Flyform
-    #'glynt.apps.flyform',
-    # The primary document view system
-    'glynt.apps.document',
-    # The document authoring system
-    #'glynt.apps.author',
     # The End User - Client, those that consume the documents
     'glynt.apps.client',
-    # The v2 Document Signing system
-    #'glynt.apps.smoothe',
-    # The Document Signing system
-    #'glynt.apps.sign',
-    # The Document Export system
-    'glynt.apps.export',
-    # Remote and 3rd Party services (pdf/doc conversion)
-    #'glynt.apps.services',
     # Engagement App
     'glynt.apps.engage',
     # Startup & Lawyer Transactions
     'glynt.apps.transact',
     # Dashboard
     'glynt.apps.dashboard',
+    # Services
+    'glynt.apps.services',
+    # Graph
+    'glynt.apps.graph',
 )
 
 HELPER_APPS = (
@@ -388,14 +370,14 @@ SOCIAL_AUTH_PROTECTED_USER_FIELDS = ('first_name', 'last_name', 'full_name', 'em
 SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.social.social_auth_user',
     #'social_auth.backends.pipeline.associate.associate_by_email', # removed as we no longer need to provision poeple coming from preview.
-    'glynt.apps.graph.pipeline.get_username',
+    'glynt.apps.client.pipeline.get_username',
     'social_auth.backends.pipeline.user.create_user',
     'social_auth.backends.pipeline.social.associate_user',
     'social_auth.backends.pipeline.social.load_extra_data',
     'social_auth.backends.pipeline.user.update_user_details',
-    'glynt.apps.graph.pipeline.ensure_user_setup',
-    'glynt.apps.graph.pipeline.profile_extra_details',
-    'glynt.apps.graph.pipeline.graph_user_connections',
+    'glynt.apps.client.pipeline.ensure_user_setup',
+    'glynt.apps.client.pipeline.profile_extra_details',
+    'glynt.apps.client.pipeline.graph_user_connections',
 )
 
 POSTMAN_DISALLOW_ANONYMOUS = True

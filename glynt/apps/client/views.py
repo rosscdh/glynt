@@ -13,7 +13,6 @@ from django.contrib.auth.models import User
 
 from userena import signals as userena_signals
 
-from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
 from forms import ConfirmLoginDetailsForm, SignupForm, AuthenticationForm
 
 import logging
@@ -128,10 +127,6 @@ class DashboardView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
-
-        context['public_document_list'] = DocumentTemplate.public_objects.select_related('doc_category').all()
-        context['my_document_list'] = ClientCreatedDocument.active_objects.filter(owner=self.request.user)
-
         context['csrf_raw_token'] = get_token(self.request)
 
         return context
