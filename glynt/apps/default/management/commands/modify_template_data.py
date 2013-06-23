@@ -14,7 +14,7 @@ class Command(BaseCommand):
             search = args[0]
             replace = args[1]
         except IndexError:
-            print "You need to define search and replace manage.py modify_template_data <search> <replace>"
+            print("You need to define search and replace manage.py modify_template_data <search> <replace>")
             sys.exit(0)
         c = 0
         for i in DocumentTemplate.objects.all():

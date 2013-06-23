@@ -13,7 +13,7 @@ import datetime
 import time
 import requests
 from termcolor import colored
-from pprint import pprint
+from pprint(import pprint)
 
 debug = True
 
@@ -204,7 +204,7 @@ def db_restore(db='lawpal_production', db_file=None):
         if db_file is None:
             db_file = '/tmp/%s.bak' % db
             if not os.path.exists(db_file):
-                print colored('Database Backup %s does not exist...' % db_file, 'red')
+                print(colored('Database Backup %s does not exist...' % db_file, 'red'))
             else:
                 go = prompt(colored('Restore "%s" DB from a file entitled: "%s" in the "%s" environment: Proceed? (y,n)' % (db, db_file, env.environment,), 'yellow'))
                 if go in env.truthy:
@@ -268,7 +268,7 @@ def current_version_sha():
 @runs_once
 def diff_outgoing_with_current():
     diff = local('git diff %s %s' % (get_sha1(), current_version_sha(),), capture=True)
-    print diff
+    print(diff)
 
 @task
 @roles('worker')
@@ -376,7 +376,7 @@ def mispelling():
     for w in words:
         grp = local('cd %s;git grep "%s"' % (env.local_project_path, w,), capture=True)
         output.append(grp)
-    print output
+    print(output)
 
 # ------ END-SOURCE-VALIDATION ------#
 @task
@@ -525,7 +525,7 @@ def newrelic_note():
 @serial
 def newrelic_deploynote():
     if not env.deploy_desc:
-        print colored('No env.deploy_desc was defined cant post to new relic', 'yellow')
+        print(colored('No env.deploy_desc was defined cant post to new relic', 'yellow'))
     else:
         description = '[env:%s][%s@%s] %s' % (env.environment, env.user, env.host, env.deploy_desc)
         headers = {
@@ -548,7 +548,7 @@ def newrelic_deploynote():
         text = 'DeploymentNote Recorded OK' if is_ok is True else 'DeploymentNote Recorded Not OK: %s' % r.text
         color = 'green' if is_ok else 'red'
 
-        print colored('%s (%s)' % (text, r.status_code), color)
+        print(colored('%s (%s)' % (text, r.status_code), color))
 
 
 @task
@@ -557,7 +557,7 @@ def newrelic_deploynote():
 def diff():
     diff = prompt(colored("View diff? [y,n]", 'magenta'), default="y")
     if diff.lower() in ['y','yes', 1, '1']:
-        print diff_outgoing_with_current()
+        print(diff_outgoing_with_current())
 
 @task
 def conclude():
