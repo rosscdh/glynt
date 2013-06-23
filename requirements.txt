@@ -8,7 +8,7 @@ newrelic
 
 # Django
 Django
-django-simple-menu
+#django-simple-menu
 django-cities-light
 # django-jsonview # not required
 # model charts - will need to have brew graphiz installed
