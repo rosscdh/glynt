@@ -377,7 +377,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.user.update_user_details',
     'glynt.apps.client.pipeline.ensure_user_setup',
     'glynt.apps.client.pipeline.profile_extra_details',
-    'glynt.apps.client.pipeline.graph_user_connections',
+    'glynt.apps.graph.pipeline.graph_user_connections',
 )
 
 POSTMAN_DISALLOW_ANONYMOUS = True

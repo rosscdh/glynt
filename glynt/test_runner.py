@@ -4,13 +4,13 @@ import sys
 from django.conf import settings
 
 # from django_behave.runner import DjangoBehaveTestSuiteRunner
-# from django_nose import NoseTestSuiteRunner
-from django.test.simple import DjangoTestSuiteRunner
+from django_nose import NoseTestSuiteRunner
+# from django.test.simple import DjangoTestSuiteRunner
 
 os.getenv('DJANGO_SETTINGS_MODULE', 'settings')
 
 
-class GlyntAppTestRunner(DjangoBehave_Runner):
+class GlyntAppTestRunner(NoseTestSuiteRunner):
     def build_suite(self, test_labels, *args, **kwargs):
         PROJECT_APPS = sys.argv[2:]
         
