@@ -105,6 +105,7 @@ Werkzeug
 django-clear-cache
 
 # Testing
+BeautifulSoup
 -e git+https://github.com/kmmbvnr/django-jenkins.git#egg=django-jenkins
 HTTPretty
 django-nose
