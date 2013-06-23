@@ -1,4 +1,4 @@
-{% load i18n menu cache %}{% load url from future %}{% load cache %}
+{% load i18n cache %}{% load url from future %}{% load cache %}
 <a href="#" class="scrolltop">
     <span>up</span>
 </a>
@@ -6,7 +6,7 @@
 <div class="navbar navbar-fixed-top {% block nav_class %}{% endblock %}">
    <div class="navbar-inner">
      <div class="container">
-        {% generate_menu %}
+
         <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
