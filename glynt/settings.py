@@ -196,7 +196,6 @@ PROJECT_APPS = (
 )
 
 HELPER_APPS = (
-    'menu',
     'cicu',# image crop and upload
     'django_extensions',
     'templatetag_handlebars',
