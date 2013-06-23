@@ -196,6 +196,7 @@ PROJECT_APPS = (
 )
 
 HELPER_APPS = (
+    'guardian',
     'cicu',# image crop and upload
     'django_extensions',
     'templatetag_handlebars',
@@ -510,9 +511,14 @@ TEMPLATED_EMAIL_BACKEND = 'templated_email.backends.vanilla_django.TemplateBacke
 TEMPLATED_EMAIL_TEMPLATE_DIR = 'email/'
 TEMPLATED_EMAIL_FILE_EXTENSION = 'email'
 
-HELLOSIGN_AUTH = ("", "")
 
-DOCRAPTOR_KEY = "vIvrCmZtnQTC4p6V0k"
+JENKINS_TASKS = (
+    'django_jenkins.tasks.run_pylint',
+    'django_jenkins.tasks.with_coverage',
+    'django_jenkins.tasks.django_tests',
+)
+JENKINS_TEST_RUNNER='django_jenkins.nose_runner.CINoseTestSuiteRunner'
+
 
 LAWPAL_PRIVATE_BETA = True
 

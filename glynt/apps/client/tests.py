@@ -11,6 +11,8 @@ from forms import SignupForm, AuthenticationForm
 
 
 class ClientProfileCreateTest(TestCase):
+  fixtures = ['guardian_permissions.json']
+
   def setUp(self):
     self.subject = UserFactory.create()
 
