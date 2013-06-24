@@ -10,6 +10,7 @@ from django.shortcuts import redirect
 
 from public.forms import ContactForm
 from public.tasks import send_contactus_email
+from glynt.apps.startup.utils import FounderLoginLogic
 
 import logging
 logger = logging.getLogger('django.request')
@@ -20,8 +21,10 @@ class PublicHomepageView(TemplateView):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated():
-            if request.session.get('user_class_name', 'lawyer') == 'founder':
-                return redirect('dashboard:overview')
+            return FounderLoginLogic(user=request.user).redirect()
+
+            #if request.session.get('user_class_name', 'lawyer') == 'founder':
+            #    return redirect('dashboard:overview')
 
         return super(PublicHomepageView, self).dispatch(request, *args, **kwargs)
 
