@@ -3,10 +3,10 @@ html {
 }
 body {
 	position: relative;
-	padding-top: 69px;
 	-webkit-font-smoothing: antialiased;
 	font-family:  "HelveticaNeue", 'Lato', sans-serif !important;	
 	color: #5b5e60;
+	padding-top:69px;
 }
 
 html, body {
@@ -52,6 +52,9 @@ form a {
 	position: relative;
 	top: 7px;
 	left: 10px;
+}
+.navbar, .navbar-inner {
+	border:none;
 }
 .text-center {
 	text-align: center;
@@ -126,6 +129,9 @@ height:90px;
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#58daea', endColorstr='#3ac6df',GradientType=0 ); /* IE6-8 */
 	padding:7px 0px;
 }
+.navbar .our-lawyers {
+	color:#ccc;
+}
 .unread_counter {
 	background-color:#d24230;
 	color:white;
@@ -190,6 +196,78 @@ height:90px;
 	height:30px;
 	margin-top:5px;
 }
+
+    .navbar .nav > li > a {
+       -webkit-transition: none;
+        -moz-transition: none;
+        -ms-transition: none;
+        -o-transition: none;
+        font-weight: 200;
+    }
+
+    .navbar .nav li.nav-mail {
+        width: 45px;
+        text-align: center;
+        position: relative;
+        line-height: 35px;
+    }
+
+    .navbar .nav li.nav-support {
+        width: 55px;
+        text-align: center;
+        line-height: 28px;
+    }
+
+    .navbar .nav li.nav-mail a,
+    .navbar .nav li.nav-support a {
+        padding: 0;
+    }
+
+    .navbar .nav li.nav-mail i.icon-mail {
+        background: url('../../img/app/nav-sprite.png') no-repeat;
+        background-position: -1pt -24pt;
+        width: 26px;
+        height: 17px;
+        padding: 0;
+    }
+
+    .navbar .nav li.nav-support i.icon-support {
+        background: url('../../img/app/nav-sprite.png') no-repeat;
+        background-position: -1pt 0px;
+        height: 23px;
+        width: 24px;
+        padding: 0;
+    }
+
+    /*# navbar && any other span etc marked as unread-messages*/
+    .navbar .unread-messages, .unread-messages {
+        color: #fff;
+        position: absolute;
+        background: #ae564e;
+        width: 22px;
+        height: 22px;
+        line-height: 22px;
+        border-radius: 35px;
+        border: 2px solid #fff;
+        top: -3px;
+        left: -3px;
+        font-size: .8em;
+    }
+
+    .navbar .nav .divider-vertical {
+        border: none;
+        background: url('../../img/app/nav-sprite.png') no-repeat;
+        background-position: -21pt -39pt;
+        width: 2px;
+        height: 37px;
+        margin: 0 .4em 0 .8em;
+
+    }
+
+    span.unread-messages {
+        top: 12px;
+        left: 0px;
+    }
 .btn-dropnav {
     float: right;
     margin-left: 5px;

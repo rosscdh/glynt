@@ -5,5 +5,5 @@ from django.views.generic import TemplateView
 from views import PackagesWizard, FORMS
 
 urlpatterns = patterns('',
-    url(r'^$', PackagesWizard.as_view(FORMS)),
+    url(r'^$', PackagesWizard.as_view(FORMS), name='packages'),
 )

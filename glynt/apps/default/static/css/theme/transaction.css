@@ -24,6 +24,12 @@
     float: left;
 }
 
+.transaction-details h2 {
+    color: #383b3c;
+    font-family: helveticaneue;
+    font-weight: 300;
+}
+
 .btn-extra-margin {
     margin: 1.5em 0;
 }
@@ -36,4 +42,19 @@ p.intake-save a {
     display: block;
     margin: 1em 0;
     font-size: .8em;
+}
+
+.transaction-details .price {
+    font-size: 1.5em;
+    color: #49d1e4;
+}
+
+.lawyers-have h4 {
+    color: #383b3c;
+    margin-bottom: 1.2em;
+}
+
+.lawyers-have ul li {
+    margin-bottom: 1em;
+    color: #757c7e;
 }
