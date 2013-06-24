@@ -6,6 +6,7 @@ from django.views.generic.edit import FormView
 from django.views.generic import TemplateView
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.shortcuts import redirect
 
 from public.forms import ContactForm
 from public.tasks import send_contactus_email
@@ -16,6 +17,13 @@ logger = logging.getLogger('django.request')
 
 class PublicHomepageView(TemplateView):
     template_name='public/homepage.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated():
+            if request.session.get('user_class_name', 'lawyer') == 'founder':
+                return redirect('dashboard:overview')
+            
+        return super(PublicHomepageView, self).dispatch(request, *args, **kwargs)
 
     def get_template_names(self):
         # get from session
@@ -28,9 +36,6 @@ class PublicHomepageView(TemplateView):
             # we are logged in.. redirect based on the user_class_name
             if user_class_name == 'lawyer':
                 template_name = 'lawyer/welcome.html'
-
-            elif user_class_name == 'founder':
-                template_name = 'startup/welcome.html'
 
         return [template_name]
 
