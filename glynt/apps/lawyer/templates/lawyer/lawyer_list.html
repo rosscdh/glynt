@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load cache crispy_forms_tags lawyer_profile_tags %}
+{% extends 'base_bsv3.html' %}{% load cache crispy_forms_tags lawyer_profile_tags %}
 
 {% block page_title %}Marketplace{% endblock %}
 {% block bodyclass %}lawyer-welcome{% endblock %}
@@ -8,17 +8,18 @@
 <link rel="stylesheet" href="{{ STATIC_URL }}css/theme/lawyer-listing.css" type="text/css">
 
     
-<div id="hero">
+<div id="hero" class="jumbotron">
 	<div class="container">
-		<!-- starts carousel -->
 		<div class="row animated fadeInDown">
 			<div class="span12">
 				<h1>Find a lawyer for your startup</h1>
 			</div>
 		</div>
+<!-- Search removed for the moment.
+
 		<div class="dock">
             {% include 'lawyer/partials/search_form.html' %}
-		</div>
+		</div> -->
 	</div>
 </div>
 

@@ -1,69 +1,70 @@
 {% load i18n menu cache %}{% load url from future %}{% load cache %}
 
-<!-- begins navbar -->
-
-<div class="navbar">
-    <div class="container">
-
-        <a class="navbar-brand" href="/"><img src="{{ STATIC_URL }}img/logo-nav-white.png" alt="LawPal" title="LawPal"></a>
-
-        {% generate_menu %}
-
-        <ul class="nav navbar-nav pull-right">
-            {% if user.is_authenticated %}
-                {% cache 300 user_nav user.pk %}
-                    {% if user.profile.is_founder %}
-                        <li><a href="{% url 'lawyer:list' %}" class="our-lawyers">{% trans 'Our Lawyers' %}</a></li>
-                        <li><a href="{% url 'dashboard:overview' %}">Overview</a></li>
-                        <li><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>
-                        <li><a href="{% url 'dashboard:documents' %}">Documents</a></li>
-                    {% else %}
-                        <li><a href="{% url 'lawyer:list' %}" class="our-lawyers">{% trans 'Browse Lawyers' %}</a></li>
-
-                    {% endif %}
-                    <li class="divider-vertical"></li>
-
-                    <li class="nav-support" data-toggle="tooltip" title="Support"><a id="Intercom"
-                                                                                     href="mailto:xw4ux8lx@incoming.intercom.io"><i
-                        class="icon-support"></i></a></li>
-                    <li class="nav-mail" data-toggle="tooltip" title="Inbox"><a href="{% url 'engage:list' %}">
-                        {% if notification_unread != 0 %}
-                            <span class="unread-messages">{{ notification_unread }}</span> <i class="icon-mail"></i>
-                        {% else %}
-                            <i class="icon-mail"></i>
-                        {% endif %}
-                    </a>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> {{ user.get_full_name }}<b
-                            class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a id="user-profile-form" class="" href="
-                                {% if user.profile.is_lawyer %}{% url 'lawyer:setup_profile' %}{% else %}{% url 'startup:setup_profile' %}{% endif %}">{% trans 'Edit Profile' %}</a>
-                            </li>
-                            {% if user.profile.is_lawyer %}
-                                <li><a id="user-profile-form" class=""
-                                       href="{% url 'lawyer:profile' slug=user.username %}">{% trans 'View Profile' %}</a>
-                                </li>{% endif %}
-                            {% if PROJECT_ENVIRONMENT != 'prod' %}
-                                <li><a id="user-profile" class=""
-                                       href="{% url 'userena_profile_detail' username=user.username %}">{% trans 'Account' %}</a>
-                                </li>{% endif %}
-                            <li><a id="user-profile-form" class="" href="
-                                {% if user.profile.is_lawyer %}{% url 'lawyer:invite' %}{% else %}{% url 'startup:invite' %}{% endif %}">{% trans 'Invite Colleagues' %}</a>
-                            </li>
-                            <li><a id="user-logout" class="" href="{% url 'logout' %}">{% trans 'Logout' %}</a></li>
-                        </ul>
-                    </li>
-
-                {% endcache %}
+<div class="navbar navbar-fixed-top bs-docs-nav">
+  <div class="container">
+    <a class="navbar-brand" href="/"><img src="{{ STATIC_URL }}img/logo-nav-white.png" alt="LawPal" title="LawPal"></a>
+    <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <div class="nav-collapse collapse bs-navbar-collapse">
+      <ul class="nav navbar-nav pull-right">
+       {% if user.is_authenticated %}
+        {% cache 300 user_nav user.pk %}
+            {% if user.profile.is_founder %}
+                <li><a href="{% url 'lawyer:list' %}" class="our-lawyers">{% trans 'Our Lawyers' %}</a></li>
+                <li><a href="{% url 'dashboard:overview' %}">Overview</a></li>
+                <li><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>
+                <li><a href="{% url 'dashboard:documents' %}">Documents</a></li>
             {% else %}
-                <li><a href="{% url 'public:how-it-works' %}">How it works</a></li>
-                <li><a href="{% url 'public:our-services' %}">Our services</a></li>
-                <li><a href="{% url 'lawyer:list' %}">Meet our lawyers</a></li>
-                <li><a href="#signin-modal" role="button" data-toggle="modal"
-                       onClick="_gaq.push(['_trackEvent', 'Nav', 'Action', 'Sign In']);">{% trans 'Sign In' %}</a></li>
+                <li><a href="{% url 'lawyer:list' %}" class="our-lawyers">{% trans 'Browse Lawyers' %}</a></li>
+
             {% endif %}
-        </ul>
+            <li class="divider-vertical"></li>
+
+            <li class="nav-support" data-toggle="tooltip" title="Support"><a id="Intercom"
+                                                                             href="mailto:xw4ux8lx@incoming.intercom.io"><i
+                class="icon-support"></i></a></li>
+            <li class="nav-mail" data-toggle="tooltip" title="Inbox"><a href="{% url 'engage:list' %}">
+                {% if notification_unread != 0 %}
+                    <span class="unread-messages">{{ notification_unread }}</span> <i class="icon-mail"></i>
+                {% else %}
+                    <i class="icon-mail"></i>
+                {% endif %}
+            </a>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"> {{ user.get_full_name }}<b
+                    class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a id="user-profile-form" class="" href="
+                        {% if user.profile.is_lawyer %}{% url 'lawyer:setup_profile' %}{% else %}{% url 'startup:setup_profile' %}{% endif %}">{% trans 'Edit Profile' %}</a>
+                    </li>
+                    {% if user.profile.is_lawyer %}
+                        <li><a id="user-profile-form" class=""
+                               href="{% url 'lawyer:profile' slug=user.username %}">{% trans 'View Profile' %}</a>
+                        </li>{% endif %}
+                    {% if PROJECT_ENVIRONMENT != 'prod' %}
+                        <li><a id="user-profile" class=""
+                               href="{% url 'userena_profile_detail' username=user.username %}">{% trans 'Account' %}</a>
+                        </li>{% endif %}
+                    <li><a id="user-profile-form" class="" href="
+                        {% if user.profile.is_lawyer %}{% url 'lawyer:invite' %}{% else %}{% url 'startup:invite' %}{% endif %}">{% trans 'Invite Colleagues' %}</a>
+                    </li>
+                    <li><a id="user-logout" class="" href="{% url 'logout' %}">{% trans 'Logout' %}</a></li>
+                </ul>
+            </li>
+
+        {% endcache %}
+        {% else %}
+        <li><a href="{% url 'public:how-it-works' %}">How it works</a></li>
+        <li><a href="{% url 'public:our-services' %}">Our services</a></li>
+        <li><a href="{% url 'lawyer:list' %}">Meet our lawyers</a></li>
+        <li><a href="#signin-modal" role="button" data-toggle="modal"
+               onClick="_gaq.push(['_trackEvent', 'Nav', 'Action', 'Sign In']);">{% trans 'Sign In' %}</a></li>
+        {% endif %}
+      </ul>
     </div>
+  </div>
 </div>

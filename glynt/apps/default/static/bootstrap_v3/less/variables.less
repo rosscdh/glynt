@@ -19,14 +19,14 @@
 // Brand colors
 // -------------------------
 
-@brand-primary:         #428bca;
-@brand-success:         #5fd46e;
+@brand-primary:         #42d0e5;
+@brand-success:         #6bdb7e;
 @brand-warning:         #f0ad4e;
 @brand-danger:          #d9534f;
 @brand-info:            #5bc0de;
 
 @brand-black:           #212526;
-@brand-gray:            #8e8f8f;
+@brand-gray:            #757c7e;
 
 // Brand color borders
 // -------------------------
@@ -43,8 +43,8 @@
 // Links
 // -------------------------
 
-@link-color:            @brand-primary;
-@link-hover-color:      darken(@link-color, 15%);
+@link-color:            #42d0e5;
+@link-hover-color:      darken(@link-color, 20%);
 
 // Typography
 // -------------------------
@@ -62,8 +62,8 @@
 @line-height-base:        1.428571429; // 20/14
 @line-height-computed:    floor(@font-size-base * @line-height-base); // ~20px
 
-@headings-font-family:    @font-family-base;
-@headings-font-weight:    200;
+@headings-font-family:    "HelveticaNeue-light", 'Lato', sans-serif !important;
+@headings-font-weight:    100;
 @headings-line-height:    1.1;
 
 
@@ -71,18 +71,18 @@
 // -------------------------
 // Based on 14px font-size and 1.428 line-height (~20px to start)
 
-@padding-base-vertical:          8px;
+@padding-base-vertical:          6px;
 @padding-base-horizontal:        12px;
 
-@padding-large-vertical:         14px;
+@padding-large-vertical:         7px;
 @padding-large-horizontal:       16px;
 
 @padding-small-vertical:         5px;
 @padding-small-horizontal:       10px;
 
-@border-radius-base:             4px;
-@border-radius-large:            6px;
-@border-radius-small:            3px;
+@border-radius-base:             0px;
+@border-radius-large:            0px;
+@border-radius-small:            0px;
 
 @component-active-bg:            @brand-primary;
 
@@ -101,12 +101,12 @@
 // -------------------------
 
 @btn-default-color:              #fff;
-@btn-default-bg:                 #474949;
-@btn-default-border:             @btn-default-bg;
+@btn-default-bg:                 @brand-primary;
+@btn-default-border:             @brand-primary;
 
 @btn-primary-color:              @btn-default-color;
-@btn-primary-bg:                 @brand-primary;
-@btn-primary-border:             @btn-primary-bg;
+@btn-primary-bg:                 #f88172;
+@btn-primary-border:             #f88172;
 
 @btn-success-color:              @btn-default-color;
 @btn-success-bg:                 @brand-success;
@@ -145,8 +145,8 @@
 // Dropdowns
 // -------------------------
 
-@dropdown-bg:                    #fff;
-@dropdown-border:                rgba(0,0,0,.15);
+@dropdown-bg:                    #f2f2f2;
+@dropdown-border:                rgba(0,0,0,.40);
 @dropdown-divider-top:           #e5e5e5;
 @dropdown-divider-bottom:        #fff;
 
@@ -239,9 +239,9 @@
 // Jumbotron
 // -------------------------
 
-@jumbotron-bg:                   @gray-lighter;
-@jumbotron-heading-color:        inherit;
-@jumbotron-lead-color:           inherit;
+@jumbotron-bg:                   @brand-primary;
+@jumbotron-heading-color:        white;
+@jumbotron-lead-color:           white;
 
 
 // Form states and alerts

@@ -30,10 +30,6 @@
     font-weight: 300;
 }
 
-.btn-extra-margin {
-    margin: 1.5em 0;
-}
-
 .intake-progress {
     margin-top: 1.5em;
 }
@@ -55,6 +51,5 @@ p.intake-save a {
 }
 
 .lawyers-have ul li {
-    margin-bottom: 1em;
-    color: #757c7e;
+    margin-bottom: 0.3em;
 }
