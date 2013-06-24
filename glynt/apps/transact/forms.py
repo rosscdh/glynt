@@ -12,7 +12,8 @@ class PackagesForm(BootstrapMixin, forms.Form):
         ('ES', 'Equity seed financing'),
         ('SF', 'Convertible seed financing'),
     )
-    transaction_type = forms.ChoiceField(choices=TRANSACTION_CHOICES, widget=forms.HiddenInput())
+    #transaction_type = forms.ChoiceField(choices=TRANSACTION_CHOICES, widget=forms.HiddenInput())
+    transaction_type = forms.CharField(widget=forms.HiddenInput())
 
 
 # WIZARD STEP TWO

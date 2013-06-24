@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load crispy_forms_tags startup_tags %}
+{% extends 'base.html' %}{% load crispy_forms_tags startup_tags transaction_tags %}
 
 {% block head %}
     {{ wizard.form.media }}
@@ -20,45 +20,89 @@
 
 {% block body %}
     <div class="row">
-        <div class="package-choice package-red" data-package="CS">
-            <h2>Company Setup</h2>
-            <span>$2k</span>
-            <button class="btn">Start</button>
+        <div class="span8">
+            <p>Please select which transaction(s) you require:</p>
+            {% transactions transaction='SF' %}
+            {% transactions transaction='CS' %}
+            {% transactions transaction='ES' %}
+            <a href="#" class="btn btn-extra-margin">Not sure where to start?</a>
+            <btn id="continue" class="btn btn-primary btn-extra-margin pull-right">Continue</btn>
         </div>
-
-        <div class="package-choice package-yellow" data-package="ES">
-            <h2>Equity seed financing</h2>
-            <span>$3k</span>
-            <button class="btn">Start</button>
+        <div class="span4">
+            <div class="well">
+                <h4>LawPal lawyers have:</h4>
+                <ul class="unstyled">
+                    <li>7 years + experience</li>
+                    <li>Available to meet you locally</li>
+                    <li>Vetted by LawPal with a track</li>
+                    <li>record serving startups</li>
+                    <li>Approved by you before they</li>
+                    <li>start work</li>
+                    <li>Agreed to a ﬁxed price in advance</li>
+                </ul>
+            </div>
         </div>
-
-        <div class="package-choice package-blue" data-package="SF">
-            <h2>Convertible seed financing</h2>
-            <span>3k</span>
-            <button class="btn">Start</button>
-        </div>
-
-        <form id="" data-validate="parsley" action="" method="POST">{% csrf_token %}
-            {{ wizard.management_form }}
-            {% if wizard.form.forms %}
-                {{ wizard.form.management_form }}
-                {% for form in wizard.form.forms %}
-                    {{ form|crispy }}
-                {% endfor %}
-            {% else %}
-                {{ wizard.form|crispy }}
-            {% endif %}
-        </form>
     </div>
+
+    <form method="POST">{% csrf_token %}
+        {{ wizard.management_form }}
+        {% if wizard.form.forms %}
+            {{ wizard.form.management_form }}
+            {% for form in wizard.form.forms %}
+                {{ form|crispy }}
+            {% endfor %}
+        {% else %}
+            {{ wizard.form|crispy }}
+        {% endif %}
+    </form>
 {% endblock %}
 
 {% block js %}
     <script>
+
+        var selected_transactions = [];
+
+        function transaction_business_logic(element) {
+            var elm = $(element).attr('data-transaction');
+            if (elm === 'note-financing') {
+                transaction_deselection($('.transaction-choice[data-transaction="equity-financing"] .btn'));
+            } else if (elm === 'equity-financing') {
+                transaction_deselection($('.transaction-choice[data-transaction="note-financing"] .btn'));
+            }
+            transaction_selection(element.find('.btn'));
+        }
+
+        function transaction_selection(element) {
+            element.addClass('active').html('<i class="icon-ok icon-white"></i>');
+            selected_transactions.push(element.parent().attr('data-transaction'));
+        }
+
+        function transaction_deselection(element) {
+            element.removeClass('active').html('Add');
+            var index = selected_transactions.indexOf(element.parent().attr('data-transaction'));
+            if (index > -1) {
+                selected_transactions.splice(index, 1);
+            }
+        }
+
         $(document).ready(function () {
-            $('.package-choice button').click(function () {
-                $('#id_packages-transaction_type').attr('value', $(this).parent().attr('data-package'));
+
+            $('.transaction-choice .btn').bind('click', function () {
+                var elm = $(this);
+                if (!$(this).hasClass('active')) {
+                    // Check if Note financing and disable Equity financing if true (and visa versa)
+                    transaction_business_logic(elm.parent());
+                } else {
+                    transaction_deselection(elm);
+                }
+            });
+
+            $('#continue').click(function () {
+                $('#id_packages-transaction_type').attr('value', selected_transactions);
+                alert(selected_transactions);
                 $('form').submit();
             });
         });
+
     </script>
 {% endblock %}
