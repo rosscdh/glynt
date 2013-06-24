@@ -1,147 +1,67 @@
 {% load i18n menu cache %}{% load url from future %}{% load cache %}
-<a href="#" class="scrolltop">
-    <span>up</span>
-</a>
- <!-- begins navbar -->
-<div class="navbar navbar-fixed-top {% block nav_class %}{% endblock %}">
-   <div class="navbar-inner">
-     <div class="container">
-        {% generate_menu %}
-        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </a>
-        <a class="brand" data-section="body" href="/">
-           <img src="{{ STATIC_URL }}img/logo-nav-white.png" alt="LawPal"> 
-       </a>
 
-        <div class="nav-collapse">
-            <ul class="nav pull-right">
-             {% if user.is_authenticated %}
+<!-- begins navbar -->
+
+<div class="navbar">
+    <div class="container">
+
+        <a class="navbar-brand" href="/"><img src="{{ STATIC_URL }}img/logo-nav-white.png" alt="LawPal" title="LawPal"></a>
+
+        {% generate_menu %}
+
+        <ul class="nav navbar-nav pull-right">
+            {% if user.is_authenticated %}
                 <li><a href="{% url 'lawyer:list' %}">{% trans 'Marketplace' %}</a></li>
                 <li class="divider-vertical"></li>
-                 <li class="nav-support" data-toggle="tooltip" title="Support"><a id="Intercom" href="mailto:xw4ux8lx@incoming.intercom.io"><i class="icon-support"></i></a></li>
-                 <li class="nav-mail" data-toggle="tooltip" title="Inbox"><a href="{% url 'engage:list' %}">
-                     {% if notification_unread != 0  %}
+                <li class="nav-support" data-toggle="tooltip" title="Support"><a id="Intercom"
+                                                                                 href="mailto:xw4ux8lx@incoming.intercom.io"><i
+                    class="icon-support"></i></a></li>
+                <li class="nav-mail" data-toggle="tooltip" title="Inbox"><a href="{% url 'engage:list' %}">
+                    {% if notification_unread != 0 %}
                         <span class="unread-messages">{{ notification_unread }}</span> <i class="icon-mail"></i>
-                     {% else %}
+                    {% else %}
                         <i class="icon-mail"></i>
-                     {% endif %}
-                      </a>
-                </li>
-                <li class="divider-vertical"></li>
-                {% cache 300 user_nav user.pk %}
-                    {% if user.profile.is_founder %}
-                    <li><a href="{% url 'dashboard:overview' %}">Overview</a></li>
-                    <li><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>
-                    <li><a href="{% url 'dashboard:documents' %}">Documents</a></li>
                     {% endif %}
-                    <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> {{ user.get_full_name }}<b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                    <li><a id="user-profile-form" class="" href="{% if user.profile.is_lawyer %}{% url 'lawyer:setup_profile' %}{% else %}{% url 'startup:setup_profile' %}{% endif %}">{% trans 'Edit Profile' %}</a></li>
-                    {% if user.profile.is_lawyer %}<li><a id="user-profile-form" class="" href="{% url 'lawyer:profile' slug=user.username %}">{% trans 'View Profile' %}</a></li>{% endif %}
-                    {% if PROJECT_ENVIRONMENT != 'prod' %}<li><a id="user-profile" class="" href="{% url 'userena_profile_detail' username=user.username %}">{% trans 'Account' %}</a></li>{% endif %}
-                    <li><a id="user-profile-form" class="" href="{% if user.profile.is_lawyer %}{% url 'lawyer:invite' %}{% else %}{% url 'startup:invite' %}{% endif %}">{% trans 'Invite Colleagues' %}</a></li>
-                    <li><a id="user-logout" class="" href="{% url 'logout' %}">{% trans 'Logout' %}</a></li>
-                    </ul>
-                    </li>
-                {% endcache %}
+                </a>
+                </li>
+                <li>
+                    {% cache 300 user_nav user.pk %}
+                        {% if user.profile.is_founder %}
+                            <li><a href="{% url 'dashboard:overview' %}">Overview</a></li>
+                            <li><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>
+                            <li><a href="{% url 'dashboard:documents' %}">Documents</a></li>
+                        {% endif %}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"> {{ user.get_full_name }}<b
+                                class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a id="user-profile-form" class="" href="
+                                    {% if user.profile.is_lawyer %}{% url 'lawyer:setup_profile' %}{% else %}{% url 'startup:setup_profile' %}{% endif %}">{% trans 'Edit Profile' %}</a>
+                                </li>
+                                {% if user.profile.is_lawyer %}
+                                    <li><a id="user-profile-form" class=""
+                                           href="{% url 'lawyer:profile' slug=user.username %}">{% trans 'View Profile' %}</a>
+                                    </li>{% endif %}
+                                {% if PROJECT_ENVIRONMENT != 'prod' %}
+                                    <li><a id="user-profile" class=""
+                                           href="{% url 'userena_profile_detail' username=user.username %}">{% trans 'Account' %}</a>
+                                    </li>{% endif %}
+                                <li><a id="user-profile-form" class="" href="
+
+
+                                    {% if user.profile.is_lawyer %}{% url 'lawyer:invite' %}{% else %}{% url 'startup:invite' %}{% endif %}">{% trans 'Invite Colleagues' %}</a>
+                                </li>
+                                <li><a id="user-logout" class="" href="{% url 'logout' %}">{% trans 'Logout' %}</a></li>
+                            </ul>
+                        </li>
+                    {% endcache %}
             {% else %}
-                <li><a href="#signin-modal" role="button" data-toggle="modal"  onClick="_gaq.push(['_trackEvent', 'Nav', 'Action', 'Sign In']);">{% trans 'Sign In' %}</a></li>
+                <li><a href="#signin-modal" role="button" data-toggle="modal"
+                       onClick="_gaq.push(['_trackEvent', 'Nav', 'Action', 'Sign In']);">{% trans 'Sign In' %}</a>
+                </li>
             {% endif %}
-            </ul>                 
-        </div>
-     </div>
-   </div>
- </div>
- <!-- ends navbar -->
+        </ul>
+    </div>
+</div>
 
-{% block css %}
-<style>
-
-    .navbar .nav > li > a {
-       -webkit-transition: none;
-        -moz-transition: none;
-        -ms-transition: none;
-        -o-transition: none;
-        font-weight: 200;
-    }
-
-    .navbar .nav li.nav-mail {
-        width: 45px;
-        text-align: center;
-        position: relative;
-        line-height: 35px;
-    }
-
-    .navbar .nav li.nav-support {
-        width: 55px;
-        text-align: center;
-        line-height: 28px;
-    }
-
-    .navbar .nav li.nav-mail a,
-    .navbar .nav li.nav-support a {
-        padding: 0;
-    }
-
-    .navbar .nav li.nav-mail i.icon-mail {
-        background: url('{{ STATIC_URL }}img/app/nav-sprite.png') no-repeat;
-        background-position: -1pt -24pt;
-        width: 26px;
-        height: 17px;
-        padding: 0;
-    }
-
-    .navbar .nav li.nav-support i.icon-support {
-        background: url('{{ STATIC_URL }}img/app/nav-sprite.png') no-repeat;
-        background-position: -1pt 0px;
-        height: 23px;
-        width: 24px;
-        padding: 0;
-    }
-
-    /*# navbar && any other span etc marked as unread-messages*/
-    .navbar .unread-messages, .unread-messages {
-        color: #fff;
-        position: absolute;
-        background: #ae564e;
-        width: 22px;
-        height: 22px;
-        line-height: 22px;
-        border-radius: 35px;
-        border: 2px solid #fff;
-        top: -3px;
-        left: -3px;
-        font-size: .8em;
-    }
-
-    .navbar .nav .divider-vertical {
-        border: none;
-        background: url('{{ STATIC_URL }}img/app/nav-sprite.png') no-repeat;
-        background-position: -21pt -39pt;
-        width: 2px;
-        height: 37px;
-        margin: 0 .4em 0 .8em;
-
-    }
-
-    span.unread-messages {
-        top: 12px;
-        left: 0px;
-    }
-
-</style>
-{% endblock %}
-
-{% block js %}
-    <script>
-    $(document).ready(function() {
-       $('.navbar .nav li').tooltip({
-           placement: 'bottom'
-       })
-    });
-    </script>
-{% endblock %}
+<!-- ends navbar -->
