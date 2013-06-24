@@ -22,7 +22,7 @@ class PublicHomepageView(TemplateView):
         if request.user.is_authenticated():
             if request.session.get('user_class_name', 'lawyer') == 'founder':
                 return redirect('dashboard:overview')
-            
+
         return super(PublicHomepageView, self).dispatch(request, *args, **kwargs)
 
     def get_template_names(self):
