@@ -1,5 +1,8 @@
 # -*- coding: UTF-8 -*-
 from django import forms
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit
+
 from bootstrap.forms import BootstrapMixin
 
 from parsley.decorators import parsleyfy
@@ -8,13 +11,13 @@ from parsley.decorators import parsleyfy
 
 
 # WIZARD STEP ONE
-class PackagesForm(BootstrapMixin, forms.Form):
+class PackagesForm(forms.Form):
     transaction_type = forms.CharField(widget=forms.HiddenInput())
 
 
 # WIZARD STEP TWO
 @parsleyfy
-class BasicInformationForm(BootstrapMixin, forms.Form):
+class BasicInformationForm(forms.Form):
     company_name = forms.CharField(label="Company name", help_text="", widget=forms.TextInput(attrs={'tabindex':'1'}))
     company_address = forms.CharField(label="Company address", help_text="Please enter you full street address including post code.", widget=forms.Textarea(attrs={'tabindex':'2'}))
     company_phone = forms.CharField(label="Company phone", help_text="", widget=forms.TextInput(attrs={'tabindex':'3', 'data-type':'phone'}))
@@ -24,11 +27,32 @@ class BasicInformationForm(BootstrapMixin, forms.Form):
 
 
 # WIZARD STEP THREE
-class CorporateAgentsForm(BootstrapMixin, forms.Form):
+@parsleyfy
+class CorporateAgentsForm(forms.Form):
     agent_delaware_name = forms.CharField(label="Name", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
-    agent_delaware_address = forms.CharField(label="Address", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
-    agent_california_name = forms.CharField(label="Name", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
-    agent_california_address = forms.CharField(label="Address", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
+    agent_delaware_address = forms.CharField(label="Address", help_text="", widget=forms.Textarea(attrs={'tabindex':''}))
+    agent_california_name = forms.CharField(label="Name", required=False, help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
+    agent_california_address = forms.CharField(label="Address", required=False, help_text="", widget=forms.Textarea(attrs={'tabindex':''}))
+
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Fieldset(
+                'Registered agent in Delaware',
+                'agent_delaware_name',
+                'agent_delaware_address'
+            ),
+            Fieldset(
+                'Agent for service of process in California (if applicable)',
+                'agent_california_name',
+                'agent_california_address'
+            ),
+            ButtonHolder(
+                Submit('submit', 'Submit', css_class='btn btn-success')
+            )
+        )
+        super(CorporateAgentsForm, self).__init__(*args, **kwargs)
+
 
 
 # WIZARD STEP FOUR
@@ -41,6 +65,21 @@ class InitialDirectorsForm(BootstrapMixin, forms.Form):
     secretary = forms.CharField(label="Secretary", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
     treasurer_or_chief_financial_officer = forms.CharField(label="Treasurer/Chief Financial Office", widget=forms.TextInput(attrs={'tabindex':''}))
     other_initial_officers = forms.CharField(label="Other", widget=forms.TextInput(attrs={'tabindex':''}))
+
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            'initial_number_of_directors',
+            'names_of_directors',
+            Fieldset(
+                'Initial Officers',
+                'president_or_chief_executive_officer',
+                'secretary',
+                'treasurer_or_chief_financial_officer',
+                'other_initial_officers'
+            )
+        )
+        super(InitialDirectorsForm, self).__init__(*args, **kwargs)
 
 
 # WIZARD STEP FIVE
