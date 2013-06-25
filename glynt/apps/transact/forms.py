@@ -5,19 +5,23 @@ from bootstrap.forms import BootstrapMixin
 from parsley.decorators import parsleyfy
 
 
+
+
 # WIZARD STEP ONE
+@parsleyfy
 class PackagesForm(BootstrapMixin, forms.Form):
     transaction_type = forms.CharField(widget=forms.HiddenInput())
 
 
 # WIZARD STEP TWO
+@parsleyfy
 class BasicInformationForm(BootstrapMixin, forms.Form):
     company_name = forms.CharField(label="Company name", help_text="", widget=forms.TextInput(attrs={'tabindex':'1'}))
     company_address = forms.CharField(label="Company address", help_text="Please enter you full street address including post code.", widget=forms.Textarea(attrs={'tabindex':'2'}))
-    company_phone = forms.CharField(label="Company phone", help_text="", widget=forms.TextInput(attrs={'tabindex':'3'}))
-    fiscal_year_end = forms.DateField(label="Fiscal year end", help_text="", widget=forms.DateInput(attrs={'tabindex':'4'}))
+    company_phone = forms.CharField(label="Company phone", help_text="", widget=forms.TextInput(attrs={'tabindex':'3', 'data-type':'phone'}))
+    fiscal_year_end = forms.DateField(label="Fiscal year end", help_text="", widget=forms.DateInput(attrs={'tabindex':'4', 'placeholder':'MM/DD/YY', 'data-americandate':'true'}))
     brief_business_description = forms.CharField(label="Brief business description", help_text="", widget=forms.Textarea(attrs={'tabindex':'5'}))
-    electronic_signatures = forms.BooleanField(label="Would you like to use electronic signatures when possible to sign your legal docs?", help_text="", widget=forms.CheckboxInput(attrs={'tabindex':'6'}))
+    electronic_signatures = forms.BooleanField(label="Would you like to use electronic signatures when possible to sign your legal docs?", required=False, help_text="", widget=forms.CheckboxInput(attrs={'tabindex':'6'}))
 
 
 # WIZARD STEP THREE
