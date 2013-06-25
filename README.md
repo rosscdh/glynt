@@ -25,16 +25,29 @@
 14. Thats it you can now ```python manage.py runserver_plus```
 15. access http://local.weareml.com:8000/ (you may need to add 127.0.0.1 local.weareml.com to your /etc/hosts file)
 
+## Autoenv
+
+```brew install autoenv```
+
+1. cd into glynt dir and the .env file will do its magic
+
 ## Update requirments
 
 1. ```pip install --upgrade pip``` - ensure latest version
 2. ```pip install -r requirements.txt``` : install update the required libraries (append --upgrade if you are not sure)
+
+
+## Geos
+
+```brew install geos```
+
 
 ## Cities
 
 Load all the city data
 
 ```manage.py cities_light --force-all```
+
 
 ## Creating Fixtures
 
@@ -48,6 +61,7 @@ Load all the city data
 ## Model Graphs ##
 
 ```./manage.py graph_models -g -o  ~/Desktop/glynt-models.png firm lawyer deal endorsement auth```
+
 
 ## Fix Fixtures
 
