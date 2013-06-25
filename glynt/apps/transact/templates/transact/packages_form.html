@@ -21,7 +21,7 @@
 {% block body %}
     <div class="row">
         <div class="span8">
-            <p>Please select which transaction(s) you require:</p>
+            <p id="instructions">Please select which transaction(s) you require:</p>
             {% transactions transaction='SF' %}
             {% transactions transaction='CS' %}
             {% transactions transaction='ES' %}
@@ -85,7 +85,22 @@
             }
         }
 
+        function select_active_transactions() {
+            var actives = $('#id_packages-transaction_type').attr('value');
+
+            if (actives.length > 0) {
+                var split = actives.split(" ");
+
+                for (var i = 0; i < split.length; i++) {
+                    var elm = $('.transaction-choice[data-transaction="'+split[i]+'"]');
+                    transaction_business_logic(elm);
+                }
+            }
+        }
+
         $(document).ready(function () {
+
+            select_active_transactions();
 
             $('.transaction-choice .btn').bind('click', function () {
                 var elm = $(this);
@@ -98,8 +113,15 @@
             });
 
             $('#continue').click(function () {
-                $('#id_packages-transaction_type').attr('value', selected_transactions);
-                $('form').submit();
+                if (selected_transactions.length > 0) {
+                    $('#id_packages-transaction_type').attr('value', selected_transactions);
+                    $('form').submit();
+                } else {
+                    $('#instructions').addClass('animated shake');
+                     window.setTimeout( function(){
+			            $('#instructions').removeClass()
+                     }, 1300);
+                }
             });
         });
 

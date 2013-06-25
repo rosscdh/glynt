@@ -8,7 +8,6 @@ from parsley.decorators import parsleyfy
 
 
 # WIZARD STEP ONE
-@parsleyfy
 class PackagesForm(BootstrapMixin, forms.Form):
     transaction_type = forms.CharField(widget=forms.HiddenInput())
 
