@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 from django import forms
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit
+from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, HTML
 
 from bootstrap.forms import BootstrapMixin
 
@@ -48,7 +48,7 @@ class CorporateAgentsForm(forms.Form):
                 'agent_california_address'
             ),
             ButtonHolder(
-                Submit('submit', 'Submit', css_class='btn btn-success')
+                Submit('submit', 'Next', css_class='btn btn-success')
             )
         )
         super(CorporateAgentsForm, self).__init__(*args, **kwargs)
@@ -56,7 +56,8 @@ class CorporateAgentsForm(forms.Form):
 
 
 # WIZARD STEP FOUR
-class InitialDirectorsForm(BootstrapMixin, forms.Form):
+@parsleyfy
+class InitialDirectorsForm(forms.Form):
     initial_number_of_directors = forms.IntegerField(label="Initial number of directors", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
     names_of_directors = forms.CharField(label="Names of director(s)", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
 
@@ -64,7 +65,7 @@ class InitialDirectorsForm(BootstrapMixin, forms.Form):
     president_or_chief_executive_officer = forms.CharField(label="President/Chief Executive Officer", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
     secretary = forms.CharField(label="Secretary", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
     treasurer_or_chief_financial_officer = forms.CharField(label="Treasurer/Chief Financial Office", widget=forms.TextInput(attrs={'tabindex':''}))
-    other_initial_officers = forms.CharField(label="Other", widget=forms.TextInput(attrs={'tabindex':''}))
+    other_initial_officers = forms.CharField(label="Other", required=False, widget=forms.TextInput(attrs={'tabindex':''}))
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
@@ -76,7 +77,12 @@ class InitialDirectorsForm(BootstrapMixin, forms.Form):
                 'president_or_chief_executive_officer',
                 'secretary',
                 'treasurer_or_chief_financial_officer',
-                'other_initial_officers'
+                'other_initial_officers',
+                HTML("""
+            <p><a href="#" class="add-field" data-target-field="id_initial_directors-other_initial_officers">Add another</a></p>
+        """)),
+            ButtonHolder(
+                Submit('submit', 'Next', css_class='btn btn-success')
             )
         )
         super(InitialDirectorsForm, self).__init__(*args, **kwargs)
