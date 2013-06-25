@@ -17,6 +17,14 @@ p {
 }
 
 
+
+// Specific colors
+// -------------------------
+
+.alt {
+  color:@brand-primary-alt;
+}
+
 // Emphasis & misc
 // -------------------------
 
@@ -58,14 +66,16 @@ a.no-decoration:hover,
 
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
-  font-family: @headings-font-family;
+  font-family: @font-family-sans-serif;
   font-weight: @headings-font-weight;
   line-height: @headings-line-height;
+  color: @gray;
   small {
     font-weight: normal;
     line-height: 1;
     color: @gray-light;
   }
+  -webkit-font-smoothing: antialiased;
 }
 
 h1,
@@ -81,7 +91,11 @@ h6 {
   margin-bottom: (@line-height-computed / 2);
 }
 
-h1, .h1 { font-size: ceil(@font-size-base * 2.70); } // ~38px
+h1, .h1 { 
+font-size: ceil(@font-size-base * 3.00); 
+font-family: @headings-font-family;
+color: @gray-dark;
+} // ~38px
 h2, .h2 { font-size: ceil(@font-size-base * 2.25); } // ~32px
 h3, .h3 { font-size: ceil(@font-size-base * 1.70); } // ~24px
 h4, .h4 { font-size: ceil(@font-size-base * 1.25); } // ~18px

@@ -3,7 +3,6 @@ html {
 }
 body {
 	position: relative;
-	-webkit-font-smoothing: antialiased;
 	font-family:  "HelveticaNeue", 'Lato', sans-serif !important;	
 	color: #5b5e60;
 	padding-top:69px;
