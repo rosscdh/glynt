@@ -10,47 +10,47 @@
 {% endblock %}
 
 {% block body %}
-<div class="container">
-    <div class="row animated">
-        <h1>What do you need?</h1>
-    </div>
-    <div class="row">
-        <div class="col col-lg-8">
-        <p>Please select which transaction(s) you require:</p>
-            {% transactions transaction='SF' %}
-            {% transactions transaction='CS' %}
-            {% transactions transaction='ES' %}
-            <a href="#" class="btn btn-default">Not sure where to start?</a>
-            <btn id="continue" class="btn btn-primary btn-extra-margin pull-right">Continue</btn>
+    <div class="container">
+        <div class="row animated">
+            <h1>What do you need?</h1>
         </div>
-        <div class="col col-lg-4">
-            <div class="well lawyers-have">
-                <h4>LawPal lawyers have</h4>
-                <ul>
-                    <li>7 years + experience</li>
-                    <li>Available to meet you locally</li>
-                    <li>Vetted by LawPal with a track</li>
-                    <li>record serving startups</li>
-                    <li>Approved by you before they</li>
-                    <li>start work</li>
-                    <li>Agreed to a ﬁxed price in advance</li>
-                </ul>
+        <div class="row">
+            <div class="col col-lg-8">
+                <p id="instructions">Please select which transaction(s) you require:</p>
+                {% transactions transaction='SF' %}
+                {% transactions transaction='CS' %}
+                {% transactions transaction='ES' %}
+                <a href="#" class="btn btn-default">Not sure where to start?</a>
+                <btn id="continue" class="btn btn-primary btn-extra-margin pull-right">Continue</btn>
+            </div>
+            <div class="col col-lg-4">
+                <div class="well lawyers-have">
+                    <h4>LawPal lawyers have</h4>
+                    <ul>
+                        <li>7 years + experience</li>
+                        <li>Available to meet you locally</li>
+                        <li>Vetted by LawPal with a track</li>
+                        <li>record serving startups</li>
+                        <li>Approved by you before they</li>
+                        <li>start work</li>
+                        <li>Agreed to a ﬁxed price in advance</li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
 
-    <form method="POST">{% csrf_token %}
-        {{ wizard.management_form }}
-        {% if wizard.form.forms %}
-            {{ wizard.form.management_form }}
-            {% for form in wizard.form.forms %}
-                {{ form|crispy }}
-            {% endfor %}
-        {% else %}
-            {{ wizard.form|crispy }}
-        {% endif %}
-    </form>
-</div>
+        <form method="POST">{% csrf_token %}
+            {{ wizard.management_form }}
+            {% if wizard.form.forms %}
+                {{ wizard.form.management_form }}
+                {% for form in wizard.form.forms %}
+                    {{ form|crispy }}
+                {% endfor %}
+            {% else %}
+                {{ wizard.form|crispy }}
+            {% endif %}
+        </form>
+    </div>
 {% endblock %}
 
 {% block js %}
@@ -81,7 +81,22 @@
             }
         }
 
+        function select_active_transactions() {
+            var actives = $('#id_packages-transaction_type').attr('value');
+
+            if (actives.length > 0) {
+                var split = actives.split(" ");
+
+                for (var i = 0; i < split.length; i++) {
+                    var elm = $('.transaction-choice[data-transaction="' + split[i] + '"]');
+                    transaction_business_logic(elm);
+                }
+            }
+        }
+
         $(document).ready(function () {
+
+            select_active_transactions();
 
             $('.transaction-choice .btn').bind('click', function () {
                 var elm = $(this);
@@ -94,8 +109,15 @@
             });
 
             $('#continue').click(function () {
-                $('#id_packages-transaction_type').attr('value', selected_transactions);
-                $('form').submit();
+                if (selected_transactions.length > 0) {
+                    $('#id_packages-transaction_type').attr('value', selected_transactions);
+                    $('form').submit();
+                } else {
+                    $('#instructions').addClass('animated shake');
+                    window.setTimeout(function () {
+                        $('#instructions').removeClass()
+                    }, 1300);
+                }
             });
         });
 

@@ -20,11 +20,8 @@ class PublicHomepageView(TemplateView):
     template_name='public/homepage.html'
 
     def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated():
+        if request.session.get('user_class_name', 'lawyer') == 'founder':
             return FounderLoginLogic(user=request.user).redirect()
-
-            #if request.session.get('user_class_name', 'lawyer') == 'founder':
-            #    return redirect('dashboard:overview')
 
         return super(PublicHomepageView, self).dispatch(request, *args, **kwargs)
 
