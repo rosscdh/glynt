@@ -89,7 +89,7 @@
             var actives = $('#id_packages-transaction_type').attr('value');
 
             if (actives.length > 0) {
-                var split = actives.split(" ");
+                var split = actives.split(",");
 
                 for (var i = 0; i < split.length; i++) {
                     var elm = $('.transaction-choice[data-transaction="'+split[i]+'"]');
