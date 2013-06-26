@@ -21,10 +21,46 @@ import logging
 logger = logging.getLogger('lawpal.services')
 
 
-class IncorporationBunch(Bunch):
+class ToDoBlockNotFound(Exception):
+    message = 'Could not find the requested ToDo block'
+
+
+class BaseToDoBunch(Bunch):
+    name = None
+    transaction_slug = None
+    repeaters = []
+    todos = []
+
+    def todo_block(self, target_slug):
+        for slug, name, todos in self.todos:
+            if slug == target_slug:
+                return slug, name, todos
+        raise ToDoBlockNotFound
+
+
+    def generate_repeaters(self):
+        """ get sets of todo blocks that need to be repeated """
+        for local_slug, slug in self.repeaters:
+            num = 0
+            if hasattr(self, slug):
+                todo_block = self.todo_block(local_slug)
+                num = len(getattr(self, slug))
+                for i in xrange(0, num):
+                    new_slug = '%(local_slug)s_%(i)d'.format({'local_slug': local_slug, 'i': i})
+                    print new_slug
+
+
+
+class IncorporationBunch(BaseToDoBunch):
     """ class defined the names of fields to extract from a transaction data field """
     name = 'Incorporation'
     transaction_slug = 'incorporation'
+    repeaters = [
+        ('founders_docs', 'founder'),
+        ('options', 'options'),
+        ('directors_and_officers', 'director'),
+        ('employment_docs', 'employee'),
+    ]
     todos = (
         ('general', 'General Questions', (
             (ToDo(name='Certificate of Incorporation (DE)'), (),),
@@ -88,3 +124,7 @@ class IncorporationBunch(Bunch):
             (ToDo(name='Blue Sky Filings'), (),),
         )),
     )
+
+    def __init__(self, transaction, **kwargs):
+        self.transaction = transaction
+        super(IncorporationBunch, self).__init__(**kwargs)
