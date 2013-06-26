@@ -1,5 +1,6 @@
 # Create your views here.
 from django.http import HttpResponseRedirect
+from django.forms.models import inlineformset_factory
 from django.contrib.formtools.wizard.views import SessionWizardView
 
 from glynt.apps.transact.forms import PackagesForm, BasicInformationForm, CorporateAgentsForm, \
@@ -7,12 +8,13 @@ from glynt.apps.transact.forms import PackagesForm, BasicInformationForm, Corpor
     IntellectualPropertyForm, EmployeesConsultantsForm
 
 
-FORMS = [("packages", PackagesForm),
+FORMS = [("founders",FoundersForm),
+         ("packages", PackagesForm),
          ("basic_information", BasicInformationForm),
          ("corporate_agents", CorporateAgentsForm),
          ("initial_directors",InitialDirectorsForm),
          ("general_capitalization", GeneralCapitalizationForm),
-         ("founders",FoundersForm),
+         #        ("founders",FoundersForm),
          ("stock_plans", StockPlansForm),
          ("about_company_business", AboutCompanyBusinessForm),
          ("intellectual_property", IntellectualPropertyForm),
@@ -32,6 +34,7 @@ TEMPLATES = {"packages": "transact/packages_form.html",
              #"other_agreements": "transact/other_agreements_form.html",
              #"existing_documentation": "transact/existing_documentation_form.html"}
             }
+
 
 class PackagesWizard(SessionWizardView):
     def get_template_names(self):

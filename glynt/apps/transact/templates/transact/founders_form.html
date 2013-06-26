@@ -32,22 +32,23 @@
     </div>
     <div class="row">
         <div class="span11 offset1">
-            <form id="" data-validate="parsley" action="" method="POST" class="form-horizontal">{% csrf_token %}
+
+
+             <form id="" data-validate="parsley" action="" method="POST" class="form-horizontal">{% csrf_token %}
                 {{ wizard.management_form }}
                 {% if wizard.form.forms %}
                     {{ wizard.form.management_form }}
-                    {% for form in wizard.form.forms %}
-                        {{ form|crispy }}
-                    {% endfor %}
+                    {% crispy wizard.form %}
                 {% else %}
-                    {{ wizard.form|crispy }}
+                    {% crispy wizard.form %}
                 {% endif %}
-                <div class="control-group">
-                    <div class="controls">
-                        <button type="submit" class="btn btn-success">Next</button>
-                    </div>
-                </div>
+                <a href="#" class="btn save-founder" data-url="{% url 'startup:setup_founder' %}">Save founder</a>
+
             </form>
         </div>
     </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ STATIC_URL }}transact/js/intake-form.js"></script>
 {% endblock %}

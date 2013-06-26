@@ -10,6 +10,7 @@ logger = logging.getLogger('lawpal.services')
 class EnsureFounderService(object):
     """ Set up a startup founder """
     founder = None
+
     def __init__(self, user, **kwargs):
         self.user = user
         self.summary = kwargs.pop('summary', None)
@@ -17,8 +18,12 @@ class EnsureFounderService(object):
         self.photo = kwargs.pop('photo', None)
         self.data = kwargs
 
+    def user_info(self):
+        self.data['first_name'] = self.data.get('first_name', self.user.first_name)
+        self.data['last_name'] = self.data.get('last_name', self.user.last_name)
+
     def update_user_profile(self):
-        # update the is_stis_founderartup attribute
+        # update the is_founder attribute
         profile = self.user.profile
         profile.profile_data['is_founder'] = True
         profile.save(update_fields=['profile_data'])
@@ -38,10 +43,7 @@ class EnsureFounderService(object):
         self.founder, is_new = Founder.objects.get_or_create(user=self.user)
         logger.info("Processing founder %s (is_new: %s)" % (self.user.get_full_name(), is_new,))
 
-        if self.data.get('first_name'):
-            self.founder.user.first_name = self.data.get('first_name')
-        if self.data.get('last_name'):
-            self.founder.user.last_name = self.data.get('last_name')
+        self.user_info()
 
         if self.summary:
             self.founder.summary = self.summary

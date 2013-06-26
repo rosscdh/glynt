@@ -8,11 +8,9 @@ from bootstrap.forms import BootstrapMixin
 from parsley.decorators import parsleyfy
 
 
-
-
 # WIZARD STEP ONE
 class PackagesForm(forms.Form):
-    transaction_type = forms.CharField(widget=forms.HiddenInput())
+    transaction_type = forms.CharField(widget=forms.HiddenInput)
 
 
 # WIZARD STEP TWO
@@ -29,10 +27,10 @@ class BasicInformationForm(forms.Form):
 # WIZARD STEP THREE
 @parsleyfy
 class CorporateAgentsForm(forms.Form):
-    agent_delaware_name = forms.CharField(label="Name", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
-    agent_delaware_address = forms.CharField(label="Address", help_text="", widget=forms.Textarea(attrs={'tabindex':''}))
-    agent_california_name = forms.CharField(label="Name", required=False, help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
-    agent_california_address = forms.CharField(label="Address", required=False, help_text="", widget=forms.Textarea(attrs={'tabindex':''}))
+    agent_delaware_name = forms.CharField(label="Name", help_text="", widget=forms.TextInput(attrs={'tabindex':'1'}))
+    agent_delaware_address = forms.CharField(label="Address", help_text="", widget=forms.Textarea(attrs={'tabindex':'2'}))
+    agent_california_name = forms.CharField(label="Name", required=False, help_text="", widget=forms.TextInput(attrs={'tabindex':'3'}))
+    agent_california_address = forms.CharField(label="Address", required=False, help_text="", widget=forms.Textarea(attrs={'tabindex':'4'}))
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
@@ -54,32 +52,36 @@ class CorporateAgentsForm(forms.Form):
         super(CorporateAgentsForm, self).__init__(*args, **kwargs)
 
 
-
 # WIZARD STEP FOUR
 @parsleyfy
 class InitialDirectorsForm(forms.Form):
-    initial_number_of_directors = forms.IntegerField(label="Initial number of directors", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
-    names_of_directors = forms.CharField(label="Names of director(s)", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
+    initial_number_of_directors = forms.IntegerField(label="Initial number of directors", help_text="", widget=forms.TextInput(attrs={'tabindex':'1'}))
+    names_of_directors = forms.CharField(label="Names of director(s)", help_text="", widget=forms.TextInput(attrs={'tabindex':'2'}))
 
     # INITIAL OFFICERS
-    president_or_chief_executive_officer = forms.CharField(label="President/Chief Executive Officer", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
-    secretary = forms.CharField(label="Secretary", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
-    treasurer_or_chief_financial_officer = forms.CharField(label="Treasurer/Chief Financial Office", widget=forms.TextInput(attrs={'tabindex':''}))
-    other_initial_officers = forms.CharField(label="Other", required=False, widget=forms.TextInput(attrs={'tabindex':''}))
+    president_or_chief_executive_officer = forms.CharField(label="President/Chief Executive Officer", help_text="", widget=forms.TextInput(attrs={'tabindex':'3'}))
+    secretary = forms.CharField(label="Secretary", help_text="", widget=forms.TextInput(attrs={'tabindex':'4'}))
+    treasurer_or_chief_financial_officer = forms.CharField(label="Treasurer/Chief Financial Office", widget=forms.TextInput(attrs={'tabindex':'5'}))
+    other_initial_officer = forms.CharField(label="Other", required=False, widget=forms.TextInput(attrs={'tabindex':'6'}))
+    other_initial_officers = forms.CharField(required=False, widget=forms.HiddenInput)
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            'initial_number_of_directors',
-            'names_of_directors',
+            Fieldset(
+                'Initial Directors',
+                'initial_number_of_directors',
+                'names_of_directors',
+            ),
             Fieldset(
                 'Initial Officers',
                 'president_or_chief_executive_officer',
                 'secretary',
                 'treasurer_or_chief_financial_officer',
+                'other_initial_officer',
                 'other_initial_officers',
                 HTML("""
-            <p><a href="#" class="add-field" data-target-field="id_initial_directors-other_initial_officers">Add another</a></p>
+            <p><a href="#" class="add-field" data-target-field="id_initial_directors-other_initial_officer">Add another</a></p>
         """)),
             ButtonHolder(
                 Submit('submit', 'Next', css_class='btn btn-success')
@@ -89,7 +91,8 @@ class InitialDirectorsForm(forms.Form):
 
 
 # WIZARD STEP FIVE
-class GeneralCapitalizationForm(BootstrapMixin, forms.Form):
+@parsleyfy
+class GeneralCapitalizationForm(forms.Form):
     total_authorized_shares_of_common_stock = forms.CharField(label="Total authorized shares of common stock", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
     par_value_per_share = forms.CharField(label="Par value per share", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
     total_shares_founders = forms.CharField(label="Total shares to be purchased by founders", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
@@ -97,11 +100,13 @@ class GeneralCapitalizationForm(BootstrapMixin, forms.Form):
 
 
 # WIZARD STEP SIX
-class FoundersForm(BootstrapMixin, forms.Form):
-    investor_name = forms.CharField(label="Name", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
-    investor_address = forms.CharField(label="Address", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
-    investor_phone = forms.CharField(label="Company address", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
-    investor_email = forms.CharField(label="Email", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
+@parsleyfy
+class FoundersForm(forms.Form):
+    first_name = forms.CharField(label="First name", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
+    last_name = forms.CharField(label="Last name", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
+    address = forms.CharField(label="Address", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
+    phone = forms.CharField(label="Company address", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
+    email = forms.CharField(label="Email", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
     spouses_name = forms.CharField(label="Spouse’s name (if applicable)", required=False, help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
     work_visa = forms.CharField(label="Work Visa needed, or other immigration issues?", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
     shares_to_be_purchased = forms.CharField(label="Number of shares to be purchased", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
@@ -125,6 +130,42 @@ class FoundersForm(BootstrapMixin, forms.Form):
     single_trigger_termination = forms.BooleanField(label="Single trigger – termination without cause or leaving for good reason", help_text="", widget=forms.CheckboxInput(attrs={'tabindex':''}))
     st_termination_percentage_of_shares = forms.CharField(label="Percentage of shares accelerated on single trigger", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
     no_acceleration = forms.BooleanField(label="No acceleration of vesting", help_text="", widget=forms.CheckboxInput(attrs={'tabindex':''}))
+
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Fieldset(
+                'Founder Details',
+                'first_name',
+                'last_name',
+                'address',
+                'phone',
+                'email',
+                'spouses_name',
+                'work_visa',
+                'shares_to_be_purchased',
+                'total_purchase_price',
+                'non_cash_considerations',
+            ),
+            Fieldset(
+                'Vesting Details',
+                'vesting',
+                'vesting_describe',
+                'vesting_commencement_date',
+                'double_trigger',
+                'dt_percentage_of_shares',
+                'dt_months_termination',
+                'single_trigger_change',
+                'st_percentage_of_shares',
+                'single_trigger_termination',
+                'st_termination_percentage_of_shares',
+                'no_acceleration',
+            ),
+            ButtonHolder(
+                Submit('submit', 'Next', css_class='btn btn-success')
+            )
+        )
+        super(FoundersForm, self).__init__(*args, **kwargs)
 
 
 # WIZARD STEP SEVEN
