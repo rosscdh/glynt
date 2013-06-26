@@ -2,12 +2,45 @@
 """
 Test the todo bunches
 """
-
+import factory
 import mocktest 
-from glynt.apps.transact.bunches import IncorporationBunch
+from glynt.apps.transact.models import Transaction
+from glynt.apps.transact.bunches import BaseToDoBunch, IncorporationBunch
 
 
-class IncorporationBunchTest(mocktest.TestCase):
+class TransactionFactory(factory.Factory):
+    FACTORY_FOR = Transaction
+
+
+class BaseToDoBunchAttribsTest(mocktest.TestCase):
+    """ Test the base class that contains the core repeater and structure """
+    def setUp(self):
+        self.transaction = TransactionFactory.build()
+        self.subject = BaseToDoBunch()
+
+    def test_general_properties(self):
+        self.assertTrue(hasattr(self.subject, 'name'))
+        self.assertTrue(hasattr(self.subject, 'transaction_slug'))
+        self.assertTrue(hasattr(self.subject, 'todos'))
+
+    def test_attribute_types(self):
+        self.assertEqual(type(self.subject.todos), list) # to allow for appending of todos
+
+
+class BaseToDoBunchMethodsTest(mocktest.TestCase):
+    def setUp(self):
+        self.transaction = TransactionFactory.build()
+        self.subject = BaseToDoBunch()
+
+    def test_todo_block(self):
+        pass
+    def test_generate_repeaters(self):
+        pass
+    def test_update_todo_context(self):
+        pass
+
+
+class IncorporationBunchTest(BaseToDoBunchAttribsTest):
     """ Ensure the IncorporationBunch is setup correctly """
     expected_repeaters = [('founders_docs', 'founder'),
                             ('options', 'options'),
@@ -27,17 +60,12 @@ class IncorporationBunchTest(mocktest.TestCase):
                             ]
 
     def setUp(self):
-        self.subject = IncorporationBunch()
+        self.transaction = TransactionFactory.build()
+        self.subject = IncorporationBunch(transaction=self.transaction)
 
-    def test_general_properties(self):
-        self.assertTrue(hasattr(self.subject, 'name'))
+    def test_properties(self):
         self.assertEqual('Incorporation', self.subject.name)
-
-        self.assertTrue(hasattr(self.subject, 'transaction_slug'))
         self.assertEqual('incorporation', self.subject.transaction_slug)
-
-        self.assertTrue(hasattr(self.subject, 'todos'))
-        self.assertEqual(type(self.subject.todos), tuple)
 
     def test_repeaters(self):
         slugs = []

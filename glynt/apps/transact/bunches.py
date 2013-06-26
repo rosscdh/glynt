@@ -13,9 +13,9 @@ todos are defined as a tuple of tuples that define the general structure
 ))
 
 """
-from bunch import Bunch
-
+from django.template import Context, Template
 from glynt.apps.todo.models import ToDo
+from bunch import Bunch
 
 import logging
 logger = logging.getLogger('lawpal.services')
@@ -32,23 +32,37 @@ class BaseToDoBunch(Bunch):
     todos = []
 
     def todo_block(self, target_slug):
+        """ get sets of todo blocks that need to be repeated """
         for slug, name, todos in self.todos:
             if slug == target_slug:
-                return slug, name, todos
+                # return the values as a new tuple
+                return (slug, name, todos,)
+        # if not found, then raise an exception
         raise ToDoBlockNotFound
 
-
     def generate_repeaters(self):
-        """ get sets of todo blocks that need to be repeated """
+        """ copies and modifies the specific todo set to make it unique to the repeatable """
         for local_slug, slug in self.repeaters:
             num = 0
             if hasattr(self, slug):
-                todo_block = self.todo_block(local_slug)
+                # get the requested todo block
+                slug, name, todos = self.todo_block(local_slug)
+                # get the number of these items
                 num = len(getattr(self, slug))
+                # loop over the number of items and for each one, copy the relevant todos
                 for i in xrange(0, num):
                     new_slug = '%(local_slug)s_%(i)d'.format({'local_slug': local_slug, 'i': i})
-                    print new_slug
+                    # update the name with variables from context
+                    # @TODO self.update_todo_context(context, todos)
+                    # append the new todo set with personalised values to the class todos list
+                    self.todos.append( (new_slug, name, todos,) )
 
+    def update_todo_context(self, context, todos):
+        """ replace the todo name with variables it may contain """
+        for todo in todos:
+            t = Template(todo.name)
+            todo.name = t.render(Context(context))
+            todo.save(update_fields=['name'])
 
 
 class IncorporationBunch(BaseToDoBunch):
@@ -61,7 +75,7 @@ class IncorporationBunch(BaseToDoBunch):
         ('directors_and_officers', 'director'),
         ('employment_docs', 'employee'),
     ]
-    todos = (
+    todos = [
         ('general', 'General Questions', (
             (ToDo(name='Certificate of Incorporation (DE)'), (),),
             (ToDo(name='Action by Written Consent of Incorporator'), (),),
@@ -123,7 +137,7 @@ class IncorporationBunch(BaseToDoBunch):
             (ToDo(name='Stock Ledger'), (),),
             (ToDo(name='Blue Sky Filings'), (),),
         )),
-    )
+    ]
 
     def __init__(self, transaction, **kwargs):
         self.transaction = transaction
