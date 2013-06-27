@@ -373,7 +373,7 @@ h6,
   font-weight: normal;
   line-height: 1.1;
   color: #555555;
-  -webkit-font-smoothing: antialiased!important;
+  -webkit-font-smoothing: antialiased;
 }
 h1 small,
 h2 small,
@@ -407,7 +407,7 @@ h1,
 .h1 {
   font-size: 42px;
   font-family: "HelveticaNeue-Light", "Helvetica Neue Light", sans-serif;
-  color: #555555;
+  color: #333333;
 }
 h2,
 .h2 {
@@ -447,10 +447,6 @@ h4 small,
   padding-bottom: 9px;
   margin: 40px 0 20px;
   border-bottom: 1px solid #eeeeee;
-}
-.page-header h1 {
-  color: #f88172;
-  font-size: 49px;
 }
 ul,
 ol {
@@ -1591,7 +1587,8 @@ input[type="color"].input-small {
   padding: 6px 12px;
   margin-bottom: 0;
   font-size: 14px;
-  font-weight: bold;
+  font-weight: 300;
+  letter-spacing: 1px;
   line-height: 1.7142857148;
   text-align: center;
   vertical-align: middle;
@@ -3919,59 +3916,6 @@ button.close {
   border-top-right-radius: 0;
   border-top-left-radius: 0;
 }
-/* Signin Modal
--------------------------------------------------- */
-#signin-modal {
-  background-color: transparent;
-  outline-width: 0px;
-  border-radius: 0px;
-}
-#signin-modal .startup h3,
-#signin-modal .lawyer h3 {
-  color: white;
-  padding: 10px 30px 10px 30px;
-}
-#signin-modal .startup div,
-#signin-modal .lawyer div {
-  background: url('/static/img/coffee-tie.png') no-repeat;
-  width: 70px;
-  height: 104px;
-  margin: 0 auto;
-  margin-bottom: 10px;
-}
-#signin-modal .lawyer div {
-  background-position: 0px -105px;
-}
-#signin-modal .startup,
-#signin-modal .lawyer {
-  padding-bottom: 20px;
-}
-#signin-modal .startup {
-  width: 230px;
-  background-color: #f88172;
-  float: left;
-  text-align: center;
-  margin-left: 20px;
-}
-#signin-modal .startup .btn {
-  background-color: #f65e4b;
-  margin-top: 7px;
-  padding: 3px 14px 3px 8px;
-  border: 0px;
-}
-#signin-modal .lawyer {
-  width: 230px;
-  float: right;
-  background-color: #42d0e5;
-  text-align: center;
-  margin-right: 20px;
-}
-#signin-modal .lawyer .btn {
-  background-color: #1fc7df;
-  margin-top: 7px;
-  padding: 3px 14px 3px 8px;
-  border: 0px;
-}
 .navbar {
   position: relative;
   margin-bottom: 20px;
@@ -4605,7 +4549,6 @@ body {
 #footer a {
   color: #bfbfbf;
   font-size: 13px;
-  font-weight: normal;
 }
 #footer a:hover {
   color: #fff;
@@ -5476,9 +5419,6 @@ a.list-group-item.active > .badge,
 }
 .jumbotron p {
   line-height: 1.4;
-}
-.jumbotron-header {
-  padding: 40px 0px;
 }
 @media screen and (min-width: 768px) {
   .jumbotron {

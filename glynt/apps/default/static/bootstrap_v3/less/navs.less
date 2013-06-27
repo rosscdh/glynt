@@ -245,3 +245,60 @@
   // Remove the top rounded corners here since there is a hard edge above the menu
   .border-top-radius(0);
 }
+
+// Dropdown 
+// --------------------------
+
+/* Signin Modal
+-------------------------------------------------- */
+#signin-modal {
+  background-color: transparent;
+  outline-width: 0px;
+  border-radius: 0px;
+}
+#signin-modal .startup h3, #signin-modal .lawyer h3 {
+  color:white;
+  padding:10px 30px 10px 30px;
+}
+#signin-modal .startup div, #signin-modal .lawyer div {
+  background: url('/static/img/coffee-tie.png') no-repeat;
+  width:70px;
+  height:104px;
+  margin:0 auto;
+  margin-bottom: 10px;
+}
+#signin-modal .lawyer div {
+  background-position: 0px -105px;
+}
+#signin-modal .startup, #signin-modal .lawyer {
+  padding-bottom:20px;
+} 
+#signin-modal .startup {
+  width:230px;
+  background-color:@brand-primary-alt;
+  float:left;
+  text-align: center;
+  margin-left:20px;
+}
+#signin-modal .startup .btn {
+  background-color: darken(@brand-primary-alt, 8%);
+  margin-top:7px;
+  padding:3px 14px 3px 8px;
+  border:0px;
+}
+#signin-modal .lawyer {
+  width:230px;
+  float:right;
+  background-color:@brand-primary;
+  text-align: center;
+  margin-right:20px;
+}
+#signin-modal .lawyer .btn {
+  background-color: darken(@brand-primary, 8%);
+  margin-top:7px;
+  padding:3px 14px 3px 8px;
+  border:0px;
+
+}
+
+
