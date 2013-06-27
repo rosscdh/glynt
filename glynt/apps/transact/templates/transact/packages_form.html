@@ -9,24 +9,26 @@
     <link href="{{ STATIC_URL }}css/theme/transaction.css" rel="stylesheet" charset="utf-8"/>
 {% endblock %}
 
-{% block body %}
-    <div class="container">
-        <div class="row animated">
-           <div class="col col-lg-12">
-                <h1>What do you need?</h1>
-            </div>
+{% block prebody %}
+    <div class="jumbotron-header block-color">
+        <div class="container">
+            <h1 class="alt">What do you need?</h1>
         </div>
+    </div>
+    <div class="container">
         <div class="row">
             <div class="col col-lg-8">
-                <p id="instructions">Please select which transaction(s) you require:</p>
-                {% transactions transaction='SF' %}
+                <h3 id="instructions" class="softer">Please select which transaction(s) you require:</h3>
                 {% transactions transaction='CS' %}
+                {% transactions transaction='SF' %}
                 {% transactions transaction='ES' %}
                 <a href="#" class="btn btn-default">Not sure where to start?</a>
                 <btn id="continue" class="btn btn-primary btn-extra-margin pull-right">Continue</btn>
+                <br />
+                <br />
             </div>
             <div class="col col-lg-4">
-                <div class="well lawyers-have">
+                <div class="well lawyers-have hidden-sm">
                     <h4>LawPal lawyers have</h4>
                     <ul>
                         <li>7 years + experience</li>

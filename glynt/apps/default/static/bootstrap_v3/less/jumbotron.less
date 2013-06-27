@@ -5,7 +5,7 @@
 
 .jumbotron {
   padding: 30px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   font-size: (@font-size-base * 1.5);
   font-weight: 200;
   line-height: (@line-height-base * 1.5);
@@ -19,9 +19,16 @@
     line-height: 1.4;
   }
 }
-
+.jumbotron-header.block-color {
+  background-color: @brand-primary;
+  color: white;
+}
+.jumbotron-header.block-color h1 {
+  color: white;
+}
 .jumbotron-header {
-padding:40px 0px;
+  padding:40px 0px;
+  margin-bottom:10px;
 }
 
 @media screen and (min-width: @screen-tablet) {

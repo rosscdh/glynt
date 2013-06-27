@@ -299,8 +299,14 @@ p {
   font-weight: 200;
   line-height: 1.4;
 }
+.brand {
+  color: #42d0e5;
+}
 .alt {
   color: #f88172;
+}
+.softer {
+  color: #888888;
 }
 small {
   font-size: 85%;
@@ -1787,6 +1793,50 @@ fieldset[disabled] .btn-info:active,
 fieldset[disabled] .btn-info.active {
   background-color: #5bc0de;
   border-color: #5bc0de;
+}
+.btn-clear,
+.nav li a.btn {
+  color: #42d0e5;
+  background-color: #ffffff;
+  border-color: #42d0e5;
+}
+.btn-clear:hover,
+.nav li a.btn:hover,
+.btn-clear:focus,
+.nav li a.btn:focus,
+.btn-clear:active,
+.nav li a.btn:active,
+.btn-clear.active,
+.nav li a.btn.active {
+  background-color: #f2f2f2;
+  border-color: #1ebfd6;
+}
+.btn-clear.disabled:hover,
+.nav li a.btn.disabled:hover,
+.btn-clear[disabled]:hover,
+.nav li a.btn[disabled]:hover,
+fieldset[disabled] .btn-clear:hover,
+fieldset[disabled] .nav li a.btn:hover,
+.btn-clear.disabled:focus,
+.nav li a.btn.disabled:focus,
+.btn-clear[disabled]:focus,
+.nav li a.btn[disabled]:focus,
+fieldset[disabled] .btn-clear:focus,
+fieldset[disabled] .nav li a.btn:focus,
+.btn-clear.disabled:active,
+.nav li a.btn.disabled:active,
+.btn-clear[disabled]:active,
+.nav li a.btn[disabled]:active,
+fieldset[disabled] .btn-clear:active,
+fieldset[disabled] .nav li a.btn:active,
+.btn-clear.disabled.active,
+.nav li a.btn.disabled.active,
+.btn-clear[disabled].active,
+.nav li a.btn[disabled].active,
+fieldset[disabled] .btn-clear.active,
+fieldset[disabled] .nav li a.btn.active {
+  background-color: #ffffff;
+  border-color: #42d0e5;
 }
 .btn-link,
 .btn-link:active,
@@ -3662,13 +3712,10 @@ a.list-group-item.active .list-group-item-text {
 }
 .well {
   min-height: 20px;
-  padding: 19px;
+  padding: 15px 19px 15px 19px;
   margin-bottom: 20px;
   background-color: #f5f5f5;
-  border: 1px solid #e3e3e3;
   border-radius: 0px;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
 }
 .well blockquote {
   border-color: #ddd;
@@ -3750,6 +3797,10 @@ button.close {
 .nav > li > a:focus {
   text-decoration: none;
   background-color: #eeeeee;
+}
+.nav > li > a.btn {
+  padding: 7px 15px;
+  margin-top: 6px;
 }
 .nav > li.disabled > a {
   color: #bfbfbf;
@@ -5463,7 +5514,7 @@ a.list-group-item.active > .badge,
 }
 .jumbotron {
   padding: 30px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   font-size: 21px;
   font-weight: 200;
   line-height: 2.1428571435;
@@ -5477,8 +5528,16 @@ a.list-group-item.active > .badge,
 .jumbotron p {
   line-height: 1.4;
 }
+.jumbotron-header.block-color {
+  background-color: #42d0e5;
+  color: white;
+}
+.jumbotron-header.block-color h1 {
+  color: white;
+}
 .jumbotron-header {
   padding: 40px 0px;
+  margin-bottom: 10px;
 }
 @media screen and (min-width: 768px) {
   .jumbotron {
