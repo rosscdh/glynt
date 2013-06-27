@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import patterns, url
-from django.views.generic import TemplateView
+from django.contrib.auth.decorators import login_required
 
 from views import PackagesWizard, FORMS
 
 urlpatterns = patterns('',
-    url(r'^$', PackagesWizard.as_view(FORMS), name='packages'),
+    url(r'^$', login_required(PackagesWizard.as_view(FORMS)), name='packages'),
 )

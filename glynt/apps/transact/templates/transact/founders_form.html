@@ -32,17 +32,27 @@
     </div>
     <div class="row">
         <div class="span11 offset1">
-
-
-             <form id="" data-validate="parsley" action="" method="POST" class="form-horizontal">{% csrf_token %}
+            <dl class="founder-list hide">
+                <dt>Founders</dt>
+            </dl>
+            <form id="" data-validate="parsley" action="" method="POST"
+                  class="form-horizontal add-founder">{% csrf_token %}
                 {{ wizard.management_form }}
                 {% if wizard.form.forms %}
                     {{ wizard.form.management_form }}
-                    {% crispy wizard.form %}
+                    {% for form in wizard.form.forms %}
+                        {{ form|crispy }}
+                    {% endfor %}
                 {% else %}
-                    {% crispy wizard.form %}
+                    {{ wizard.form|crispy }}
                 {% endif %}
-                <a href="#" class="btn save-founder" data-url="{% url 'startup:setup_founder' %}">Save founder</a>
+                <div class="control-group">
+                    <div class="controls">
+                        <button class="btn save-founder">Save Founder</button>
+                        <button type="submit" class="btn btn-success">Next</button>
+                    </div>
+                </div>
+
 
             </form>
         </div>

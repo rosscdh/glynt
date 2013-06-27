@@ -104,32 +104,34 @@ class GeneralCapitalizationForm(forms.Form):
 class FoundersForm(forms.Form):
     first_name = forms.CharField(label="First name", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
     last_name = forms.CharField(label="Last name", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
-    address = forms.CharField(label="Address", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
-    phone = forms.CharField(label="Company address", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
-    email = forms.CharField(label="Email", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
+    address = forms.CharField(label="Address", required=False, help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
+    phone = forms.CharField(label="Company address", required=False, help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
+    email = forms.CharField(label="Email", required=False, help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
     spouses_name = forms.CharField(label="Spouse’s name (if applicable)", required=False, help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
-    work_visa = forms.CharField(label="Work Visa needed, or other immigration issues?", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
-    shares_to_be_purchased = forms.CharField(label="Number of shares to be purchased", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
-    total_purchase_price = forms.CharField(label="Total purchase price", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
-    non_cash_considerations = forms.CharField(label="Description of any non-cash consideration to be paid (including any assignment of intellectual property)", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
+    work_visa = forms.CharField(label="Work Visa needed, or other immigration issues?", required=False, help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
+    shares_to_be_purchased = forms.CharField(label="Number of shares to be purchased", required=False, help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
+    total_purchase_price = forms.CharField(label="Total purchase price", help_text="", required=False, widget=forms.TextInput(attrs={'tabindex':''}))
+    non_cash_considerations = forms.CharField(label="Description of any non-cash consideration to be paid (including any assignment of intellectual property)", required=False, help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
     VESTING_CHOICES = (
         ('FY', 'Four-year vesting, with 25% vested after one year and month-to-month vesting thereafter'),
         ('AS', 'All shares will be immediately vested'),
         ('OD', 'Other (describe)'),
     )
-    vesting = forms.ChoiceField(choices= VESTING_CHOICES, label="Vesting", help_text="", widget=forms.Select(attrs={'tabindex':''}))
-    vesting_describe = forms.CharField(label="Please describe vesting", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
-    vesting_commencement_date = forms.DateField(label="Vesting commencement date", help_text="", widget=forms.DateInput(attrs={'tabindex':''}))
+    vesting = forms.ChoiceField(choices= VESTING_CHOICES, required=False, label="Vesting", help_text="", widget=forms.Select(attrs={'tabindex':''}))
+    vesting_describe = forms.CharField(label="Please describe vesting", required=False, help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
+    vesting_commencement_date = forms.DateField(label="Vesting commencement date", required=False, help_text="", widget=forms.DateInput(attrs={'tabindex':''}))
 
     # Acceleration of vesting
-    double_trigger = forms.BooleanField(label="Double trigger (i.e., acceleration upon termination without “cause” after a change of control)", help_text="", widget=forms.CheckboxInput(attrs={'tabindex':''}))
-    dt_percentage_of_shares = forms.CharField(label="Percentage of shares accelerated on double trigger", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
-    dt_months_termination = forms.CharField(label="Number of months after a change of control during which a termination without “cause” will result in an acceleration of vesting", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
-    single_trigger_change = forms.BooleanField(label="Single trigger – change of control", help_text="", widget=forms.CheckboxInput(attrs={'tabindex':''}))
-    st_percentage_of_shares = forms.CharField(label="Percentage of shares accelerated on single trigger", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
-    single_trigger_termination = forms.BooleanField(label="Single trigger – termination without cause or leaving for good reason", help_text="", widget=forms.CheckboxInput(attrs={'tabindex':''}))
-    st_termination_percentage_of_shares = forms.CharField(label="Percentage of shares accelerated on single trigger", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
-    no_acceleration = forms.BooleanField(label="No acceleration of vesting", help_text="", widget=forms.CheckboxInput(attrs={'tabindex':''}))
+    double_trigger = forms.BooleanField(label="Double trigger (i.e., acceleration upon termination without “cause” after a change of control)", required=False, help_text="", widget=forms.CheckboxInput(attrs={'tabindex':''}))
+    dt_percentage_of_shares = forms.CharField(label="Percentage of shares accelerated on double trigger", required=False, help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
+    dt_months_termination = forms.CharField(label="Number of months after a change of control during which a termination without “cause” will result in an acceleration of vesting", required=False, help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
+    single_trigger_change = forms.BooleanField(label="Single trigger – change of control", required=False, help_text="", widget=forms.CheckboxInput(attrs={'tabindex':''}))
+    st_percentage_of_shares = forms.CharField(label="Percentage of shares accelerated on single trigger", required=False, help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
+    single_trigger_termination = forms.BooleanField(label="Single trigger – termination without cause or leaving for good reason", required=False, help_text="", widget=forms.CheckboxInput(attrs={'tabindex':''}))
+    st_termination_percentage_of_shares = forms.CharField(label="Percentage of shares accelerated on single trigger", required=False, help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
+    no_acceleration = forms.BooleanField(label="No acceleration of vesting", required=False, help_text="", widget=forms.CheckboxInput(attrs={'tabindex':''}))
+
+    founders = forms.CharField(widget=forms.HiddenInput)
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
@@ -161,9 +163,7 @@ class FoundersForm(forms.Form):
                 'st_termination_percentage_of_shares',
                 'no_acceleration',
             ),
-            ButtonHolder(
-                Submit('submit', 'Next', css_class='btn btn-success')
-            )
+            'founders'
         )
         super(FoundersForm, self).__init__(*args, **kwargs)
 
