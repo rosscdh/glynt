@@ -9,6 +9,7 @@ function save_to_localstorage(tag, data) {
 function delete_from_localstorage(tag) {
     localStorage.removeItem(tag);
     founder_list()
+    $('form')[0].reset()
 }
 
 function populate_form(tag) {
@@ -21,7 +22,7 @@ function founder_list() {
     for (var key in localStorage) {
         if (key.indexOf("founder-") !== -1) {
             key = key.replace('founder-', '');
-            founder_list.removeClass('hide').append('<dd><span>'+key+'</span><a href="#" class="btn edit-founder">Edit</a> <a href="#" class="btn remove-founder">Delete</a></dd>');
+            founder_list.removeClass('hide').append('<dd><span>' + key + '</span><a href="#" class="btn edit-founder">Edit</a> <a href="#" class="btn remove-founder">Delete</a></dd>');
         }
     }
 }
@@ -33,7 +34,7 @@ function save_founder() {
     form[0].reset();
     form.parsley('destroy');
 
-    if (form_mode === 'edit') {
+    if (form_mode === 'edit' && founder_name != active_founder) {
         delete_from_localstorage('founder-' + active_founder);
     }
 }
