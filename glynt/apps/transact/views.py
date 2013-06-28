@@ -8,13 +8,13 @@ from glynt.apps.transact.forms import PackagesForm, BasicInformationForm, Corpor
     IntellectualPropertyForm, EmployeesConsultantsForm
 
 
-FORMS = [("founders",FoundersForm),
+FORMS = [#("founders",FoundersForm),
          ("packages", PackagesForm),
          ("basic_information", BasicInformationForm),
          ("corporate_agents", CorporateAgentsForm),
          ("initial_directors",InitialDirectorsForm),
          ("general_capitalization", GeneralCapitalizationForm),
-         #        ("founders",FoundersForm),
+         ("founders",FoundersForm),
          ("stock_plans", StockPlansForm),
          ("about_company_business", AboutCompanyBusinessForm),
          ("intellectual_property", IntellectualPropertyForm),

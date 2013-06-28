@@ -131,7 +131,7 @@ class FoundersForm(forms.Form):
     st_termination_percentage_of_shares = forms.CharField(label="Percentage of shares accelerated on single trigger", required=False, help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
     no_acceleration = forms.BooleanField(label="No acceleration of vesting", required=False, help_text="", widget=forms.CheckboxInput(attrs={'tabindex':''}))
 
-    founders = forms.CharField(widget=forms.HiddenInput)
+    founders = forms.CharField(required=False, widget=forms.HiddenInput)
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()

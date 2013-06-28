@@ -49,16 +49,15 @@
                 <div class="control-group">
                     <div class="controls">
                         <button class="btn save-founder">Save Founder</button>
-                        <button type="submit" class="btn btn-success">Next</button>
                     </div>
                 </div>
-
-
             </form>
+            <button type="submit" class="btn btn-success founder-submit">Next</button>
         </div>
     </div>
 {% endblock %}
 
 {% block js %}
+    <script src="{{ STATIC_URL }}/js/jquery.deserialize.js"></script>
     <script src="{{ STATIC_URL }}transact/js/intake-form.js"></script>
 {% endblock %}
