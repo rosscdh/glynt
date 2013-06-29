@@ -375,7 +375,7 @@ h6,
 .h4,
 .h5,
 .h6 {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", sans-serif;
   font-weight: normal;
   line-height: 1.1;
   color: #555555;
@@ -1794,47 +1794,30 @@ fieldset[disabled] .btn-info.active {
   background-color: #5bc0de;
   border-color: #5bc0de;
 }
-.btn-clear,
-.nav li a.btn {
+.btn-clear {
   color: #42d0e5;
   background-color: #ffffff;
   border-color: #42d0e5;
 }
 .btn-clear:hover,
-.nav li a.btn:hover,
 .btn-clear:focus,
-.nav li a.btn:focus,
 .btn-clear:active,
-.nav li a.btn:active,
-.btn-clear.active,
-.nav li a.btn.active {
+.btn-clear.active {
   background-color: #f2f2f2;
   border-color: #1ebfd6;
 }
 .btn-clear.disabled:hover,
-.nav li a.btn.disabled:hover,
 .btn-clear[disabled]:hover,
-.nav li a.btn[disabled]:hover,
 fieldset[disabled] .btn-clear:hover,
-fieldset[disabled] .nav li a.btn:hover,
 .btn-clear.disabled:focus,
-.nav li a.btn.disabled:focus,
 .btn-clear[disabled]:focus,
-.nav li a.btn[disabled]:focus,
 fieldset[disabled] .btn-clear:focus,
-fieldset[disabled] .nav li a.btn:focus,
 .btn-clear.disabled:active,
-.nav li a.btn.disabled:active,
 .btn-clear[disabled]:active,
-.nav li a.btn[disabled]:active,
 fieldset[disabled] .btn-clear:active,
-fieldset[disabled] .nav li a.btn:active,
 .btn-clear.disabled.active,
-.nav li a.btn.disabled.active,
 .btn-clear[disabled].active,
-.nav li a.btn[disabled].active,
-fieldset[disabled] .btn-clear.active,
-fieldset[disabled] .nav li a.btn.active {
+fieldset[disabled] .btn-clear.active {
   background-color: #ffffff;
   border-color: #42d0e5;
 }
@@ -1871,6 +1854,10 @@ fieldset[disabled] .btn-link:hover,
 fieldset[disabled] .btn-link:focus {
   color: #333333;
   text-decoration: none;
+}
+.btn-huge {
+  padding: 11.9px 27.2px;
+  font-size: 16.2px;
 }
 .btn-large {
   padding: 9.1px 20.8px;
@@ -3998,7 +3985,7 @@ button.close {
   padding-bottom: 20px;
 }
 #signin-modal .startup {
-  width: 230px;
+  width: 240px;
   background-color: #f88172;
   float: left;
   text-align: center;
@@ -4011,7 +3998,7 @@ button.close {
   border: 0px;
 }
 #signin-modal .lawyer {
-  width: 230px;
+  width: 240px;
   float: right;
   background-color: #42d0e5;
   text-align: center;
@@ -5734,5 +5721,70 @@ td.hidden-lg {
   }
   .hidden-print {
     display: none !important;
+  }
+}
+.homepage #wrap .splash {
+  background: url('../../img/background-trans.jpeg');
+  background-position-y: -25px;
+  background-size: cover;
+  padding: 14% 0px 10% 0px;
+  color: #222222;
+  border-top: 1px solid #eeeeee;
+  border-bottom: 1px solid #eeeeee;
+  max-height: 420px;
+}
+.homepage #wrap .splash h1 {
+  color: #555555;
+  font-size: 37px;
+}
+.homepage #wrap .splash h3 {
+  color: #7c7c7c;
+  font-size: 24px;
+}
+.homepage #wrap .scroll {
+  padding: 30px 0px 20px 0;
+  color: #888888;
+  background: url('../../img/down-chev.png') center 60px no-repeat;
+  font-size: 16.8px;
+}
+.homepage #wrap .intro h1 {
+  font-size: 28px;
+  margin-bottom: 0px;
+}
+.homepage #wrap .intro h2 {
+  color: #888888;
+  font-size: 20px;
+  margin-top: 10px;
+}
+.homepage #wrap .feature-block h3 {
+  color: #42d0e5;
+  font-size: 20px;
+}
+.homepage #wrap .quote {
+  background-color: #fcd423;
+  color: white;
+  margin: 40px 0px;
+  padding: 30px;
+  font-size: 21px;
+}
+@media screen and (min-width: 768px) {
+  .homepage #wrap .splash {
+    padding: 80px 0px 30% 0px;
+  }
+  .homepage #wrap .splash h1 {
+    font-size: 49px;
+  }
+  .homepage #wrap .splash h3 {
+    font-size: 31px;
+  }
+  .homepage #wrap .intro h1 {
+    font-size: 35px;
+  }
+  .homepage #wrap .intro h2 {
+    font-size: 26px;
+  }
+  .homepage #wrap .feature-block h3 {
+    color: #42d0e5;
+    font-size: 26px;
   }
 }
