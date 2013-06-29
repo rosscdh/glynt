@@ -542,6 +542,7 @@ LAWPAL_PRIVATE_BETA = True
 
 ALLOWED_HOSTS = ['*']
 
+CRISPY_TEMPLATE_PACK = 'crispy/bootstrap3'
 
 # Neat trick http://www.robgolding.com/blog/2010/05/03/extending-settings-variables-with-local_settings-py-in-django/
 try:
