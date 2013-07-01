@@ -199,3 +199,8 @@ def profile_cards(context, **kwargs):
     context.update(kwargs)
     return context
 profile_cards.is_safe = True
+
+
+@register.inclusion_tag('comments/comments.js')
+def comments_js():
+    return {}
