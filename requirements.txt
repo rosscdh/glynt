@@ -8,9 +8,7 @@ newrelic
 
 # Django
 Django
-django-simple-menu
 django-cities-light
-# django-jsonview # not required
 # model charts - will need to have brew graphiz installed
 # pygraphviz
 
@@ -87,12 +85,12 @@ pillow<=1.9 # https://github.com/python-imaging/Pillow/issues/173
 -e git+https://github.com/rosscdh/clean-image-crop-uploader.git@rc_fixes#egg=clean-image-crop-uploader
 
 # Documents
-xhtml2pdf
--e git+https://github.com/jkeyes/python-docraptor.git#egg=python-docraptor
+#xhtml2pdf
+#-e git+https://github.com/jkeyes/python-docraptor.git#egg=python-docraptor
 
 # Signing
--e git+https://github.com/rosscdh/HelloSignApi.git#egg=HelloSignApi
--e git+https://github.com/rosscdh/python-signpad2image.git#egg=python-signpad2image
+#-e git+https://github.com/rosscdh/HelloSignApi.git#egg=HelloSignApi
+#-e git+https://github.com/rosscdh/python-signpad2image.git#egg=python-signpad2image
 
 # Workers
 django-celery
@@ -109,6 +107,7 @@ Werkzeug
 django-clear-cache
 
 # Testing
+BeautifulSoup
 -e git+https://github.com/kmmbvnr/django-jenkins.git#egg=django-jenkins
 HTTPretty
 django-nose

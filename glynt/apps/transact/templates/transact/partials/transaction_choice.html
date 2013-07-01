@@ -2,7 +2,7 @@
 
 {% for t in transactions %}
     <div class="transaction-choice clearfix" data-transaction="{{ t.slug }}">
-        <button class="btn btn-large">Add</button>
+        <button class="btn btn-large btn-primary">Add</button>
         <div class="transaction-details">
             <h2>{{ t.title }}</h2>
             <p class="price">${{ t.price|intcomma }}</p>
@@ -10,5 +10,5 @@
         </div>
     </div>
 {% empty %}
-    <p class="no-records">Transaction not found</p>
+    <p class="no-records">No transactions available.</p>
 {% endfor %}

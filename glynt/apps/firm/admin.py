@@ -15,7 +15,7 @@ class FirmAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'summary', 'num_offices')
     search_fields = ('name', 'summary')
     order = ('name')
-    filter_horizontal = ('lawyers', 'deals',)
+    filter_horizontal = ('lawyers',)
     inlines = [
         OfficeInline,
     ]

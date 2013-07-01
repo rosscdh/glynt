@@ -18,9 +18,6 @@ from glynt.apps.lawyer.models import Lawyer
 from glynt.apps.firm.models import Firm, Office
 from glynt.apps.startup.models import Startup
 
-from glynt.apps.document.models import DocumentTemplate, ClientCreatedDocument
-from glynt.apps.sign.models import DocumentSignature
-
 from glynt.apps.engage.models import Engagement
 from glynt.apps.engage import ENGAGEMENT_STATUS
 
@@ -89,7 +86,7 @@ class FirmSimpleResource(BaseApiModelResource):
         authentication = Authentication()
         list_allowed_methods = ['get']
         resource_name = 'firm/lite'
-        fields = ['pk','name']
+        fields = ['pk', 'name']
         filtering = {
             'name': ALL,
         }
@@ -102,7 +99,7 @@ class OfficeSimpleResource(BaseApiModelResource):
         authentication = Authentication()
         list_allowed_methods = ['get']
         resource_name = 'office/lite'
-        fields = ['pk','address']
+        fields = ['pk', 'address']
         filtering = {
             'name': ALL,
         }
@@ -121,7 +118,7 @@ class StartupLiteSimpleResource(BaseApiModelResource):
         authentication = Authentication()
         list_allowed_methods = ['get']
         resource_name = 'startup/lite'
-        fields = ['pk','name', 'website']
+        fields = ['pk', 'name', 'website']
         filtering = {
             'name': ALL,
         }
@@ -214,7 +211,7 @@ class UserBasicProfileResource(BaseApiModelResource):
         authentication = Authentication()
         list_allowed_methods = ['get']
         resource_name = 'user/profile'
-        fields = ['pk','username', 'is_active', 'last_login']
+        fields = ['pk', 'username', 'is_active', 'last_login']
         filtering = {
             'username': ALL,
         }
@@ -246,44 +243,6 @@ class LawyerResource(BaseApiModelResource):
         bundle.data.pop('role')
         bundle.data['name'] = bundle.obj.user.get_full_name()
         bundle.data['position'] = bundle.obj.position
-        return bundle
-
-
-class DocumentResource(BaseApiModelResource):
-    class Meta(BaseApiModelResource.Meta):
-        list_allowed_methods = ['get']
-        queryset = DocumentTemplate.objects.all()
-        resource_name = 'document/templates'
-        excludes = ['body']
-
-
-class ClientCreatedDocumentResource(BaseApiModelResource):
-    class Meta(BaseApiModelResource.Meta):
-        list_allowed_methods = ['get']
-        queryset = ClientCreatedDocument.objects.all()
-        resource_name = 'client/documents'
-        excludes = ['body', 'data']
-        include_absolute_url = True
-
-    def dehydrate(self, bundle):
-        data = ast.literal_eval(bundle.data['meta_data'])
-        bundle.data.update(data)
-        del(bundle.data['meta_data'])
-        return bundle
-
-
-class SignatureResource(BaseApiModelResource):
-    class Meta(BaseApiModelResource.Meta):
-        list_allowed_methods = ['get']
-        queryset = DocumentSignature.objects.all()
-        resource_name = 'client/signatures'
-        excludes = ['key_hash', 'hash_data', 'signature']
-        include_absolute_url = True
-
-    def dehydrate(self, bundle):
-        data = ast.literal_eval(bundle.data['meta_data'])
-        bundle.data.update(data)
-        del(bundle.data['meta_data'])
         return bundle
 
 
@@ -322,9 +281,6 @@ V1_INTERNAL_API.register(StartupBasicProfileResource())
 V1_INTERNAL_API.register(UserToDoCountResource())
 
 V1_INTERNAL_API.register(LawyerResource())
-V1_INTERNAL_API.register(DocumentResource())
-V1_INTERNAL_API.register(ClientCreatedDocumentResource())
-V1_INTERNAL_API.register(SignatureResource())
 
 V1_INTERNAL_API.register(StartupEngagementResource())
 

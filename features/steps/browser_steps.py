@@ -207,9 +207,9 @@ def step(context, text):
 def step(context, text, css_selector):
     found = False
     text = smart_unicode(text.strip())
-    print context.csss(css_selector)
+    print(context.csss(css_selector))
     for m in context.csss(css_selector):
-        print m.text_content()
+        print(m.text_content())
         if smart_unicode(m.text_content().strip()) == text:
             found = True
             break
@@ -272,13 +272,13 @@ def step(context, css_selector):
 # def step(context):
 #     pass
 
-@then(u'print current URL')
+@then(u'print(current URL'))
 def step(context):
-    print smart_unicode(context.browser.geturl().strip())
+    print(smart_unicode(context.browser.geturl().strip()))
 
-@then(u'print html')
+@then(u'print(html'))
 def print_html(context):
-    print smart_unicode(context.browser.response().read())
+    print(smart_unicode(context.browser.response().read()))
 
 
 # @then(u'show last response')

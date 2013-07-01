@@ -38,16 +38,6 @@ urlpatterns = patterns('',
     url(r'^comments/', include('fluent_comments.urls')),
     # Dashboard
     url(r'^dashboard/', include('glynt.apps.dashboard.urls', namespace='dashboard')),
-	# The Authoring Tool
-	url(r'^author/', include('glynt.apps.author.urls', namespace='author')),
-	# The v2 Documents
-	url(r'^document/', include('glynt.apps.smoothe.urls', namespace='doc')),
-	# The v1 Documents
-	url(r'^template/', include('glynt.apps.document.urls', namespace='document')),
-	# The Export
-	url(r'^export/', include('glynt.apps.export.urls', namespace='export')),
-	# The Document Signatures
-	url(r'^sign/doc/', include('glynt.apps.sign.urls', namespace='sign')),
     # favicon
     url(r'^favicon\.ico/$', RedirectView.as_view(url='%simg/favicon.ico' % settings.STATIC_URL)),
     url(r'', include('debug_toolbar_user_panel.urls')),

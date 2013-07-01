@@ -1,53 +1,35 @@
-{% extends 'base.html' %}{% load i18n %}{% load url from future %}
+{% extends 'base_bsv3.html' %}{% load i18n %}{% load url from future %}
 {% load crispy_forms_tags %}
 
 {% block title %}{% trans "Confirm your Account" %}{% endblock %}
 
 {% block prebody %}
-<div id="hero">
+<div class="jumbotron-header">
     <div class="container">
-        <!-- starts carousel -->
-        <div class="row animated fadeInDown">
-            <div class="span12">
-                <h1>Confirm your login details</h1>
-                <h2>Enter your details below to confirm your account information.</h2>
-            </div>
-        </div>
+            <h1 class="alt">Confirm your login details</h1>
+            <h3>Enter your details below to confirm your account information.</h3>
     </div>
 </div>
-{% endblock %}
-
-{% block body %}
-{{ form.errors }}
-<form id="lawyer-signin-details" data-validate="parsley" class="form-horizontal" action="{% url 'client:confirm_signup' slug=request.user.username %}" method="post">{% csrf_token %}
-  {{ form.username }}
-  <div class="row">
-      <div class="span5 offset3">
-
-          <div class="control-group">
-              {{ form.email|as_crispy_field }}
-          </div>
-          <div class="control-group">
-              {{ form.password|as_crispy_field }}
-          </div>
-          <div class="control-group">
-              {{ form.confirm_password|as_crispy_field }}
-          </div>
-          <div class="control-group">
-              <button id="lawyer-signin-details-submit" type="submit" class="submit btn btn-primary btn-large offset2">{% trans "Create Account" %}</button>
-          </div>
-      </div>
-  </div>
-
-</form>
 
 {% endblock %}
-{% block css %}
-<style>
-#hero {
-    text-align: center;
-    background-color:#555;
-    color:#f1f1f1;
-}
-</style>
+
+{% block bodyclear %}
+
+    {{ form.errors }}
+    <div class="form-wrap">
+        <div class="container">
+            <form id="lawyer-signin-details" data-validate="parsley" class="form-horizontal"
+                  action="{% url 'client:confirm_signup' slug=request.user.username %}" method="post">{% csrf_token %}
+                    {{ form.username }}
+                    {{ form.email|as_crispy_field }}
+                    {{ form.password|as_crispy_field }}
+                    {{ form.confirm_password|as_crispy_field }}
+                     <div class="row">
+                         <div class="col col-lg-10 col-offset-2">
+                            <button id="lawyer-signin-details-submit" type="submit" class=" btn btn-primary">{% trans "Create Account" %}</button>
+                        </div>
+                    </div>
+            </form>
+        </div>
+    </div>
 {% endblock %}

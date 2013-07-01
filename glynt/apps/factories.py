@@ -4,9 +4,6 @@ import factory
 from django.contrib.sites.models import Site
 from django.contrib.auth.models import User, AnonymousUser
 
-from glynt.apps.document.models import ClientCreatedDocument, DocumentTemplate, DocumentHTML
-from glynt.apps.sign.models import DocumentSignature
-
 import random
 
 
@@ -32,30 +29,3 @@ class UserFactory(factory.Factory):
 
 class AdminFactory(UserFactory):
     is_superuser = True
-
-
-class TemplateFactory(factory.Factory):
-    FACTORY_FOR = DocumentTemplate
-    owner = factory.SubFactory(UserFactory)
-    body = u'<p>body</p>'
-
-
-class DocumentFactory(factory.Factory):
-    FACTORY_FOR = ClientCreatedDocument
-    name = factory.LazyAttributeSequence(lambda a, n: 'Document_{0}'.format(n))
-    owner = factory.SubFactory(UserFactory)
-    source_document = factory.SubFactory(TemplateFactory)
-    doc_data = {'username':'test username', 'title': 'Title'}
-    body = u'<p>body</p>'
-
-
-class DocumentHTMLFactory(factory.Factory):
-    FACTORY_FOR = DocumentHTML
-    document = factory.SubFactory(DocumentFactory)
-
-
-class SignatureFactory(factory.Factory):
-    FACTORY_FOR = DocumentSignature
-    document = factory.SubFactory(DocumentFactory)
-    user = factory.SubFactory(UserFactory)
-    key_hash = factory.LazyAttributeSequence(lambda a, n: 'r3n{0}0m'.format(n))

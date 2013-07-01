@@ -45,17 +45,17 @@ class Migration(DataMigration):
             volume_incorp_setup = l.data.get('volume_incorp_setup',{})
 
             volume_seed_financing = l.data.get('volume_seed_financing',{})
-            #print volume_incorp_setup
+            #print(volume_incorp_setup)
             volume_series_a = l.data.get('volume_series_a',{})
-            #print volume_incorp_setup
+            #print(volume_incorp_setup)
             volume_ip = l.data.get('volume_ip',{})
-            #print volume_incorp_setup
+            #print(volume_incorp_setup)
             volume_other = l.data.get('volume_other',{})
-            #print volume_other
+            #print(volume_other)
             input = ensure_int([volume_incorp_setup, volume_seed_financing, volume_series_a, volume_ip, volume_other])
-            #print input
-            #print volume_incorp_setup
-            #print t
+            #print(input)
+            #print(volume_incorp_setup)
+            #print(t)
             l.data['volume_incorp_setup'] = avg_by_year(volume_incorp_setup)
             l.data['volume_seed_financing'] = avg_by_year(volume_seed_financing)
             l.data['volume_series_a'] = avg_by_year(volume_series_a)

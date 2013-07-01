@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load paginator glynt_helpers %}
+{% extends 'base_bsv3.html' %}{% load paginator glynt_helpers %}
 
 {% block page_title %}Checklist{% endblock %}
 {% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>{% endblock %}
@@ -6,28 +6,34 @@
 {% block body %}
     <div class="container">
         <div class="page-header" style="margin-bottom: 20px;">
-            <a class="btn btn-large btn-success pull-right" href="#">New Item</a>
-            <h1>Browse Checklist</h1>
+            <a class="btn btn-large btn-primary pull-right" href="#">New Item</a>
+            <h2>Browse Checklist</h2>
         </div>
         <div class="row">
-            <div class="span3">
-                <ul class="nav nav-pills nav-stacked">
+            <div class="col col-lg-4">
+              <div class="bs-sidebar affix">
+                <ul class="nav bs-sidenav">
                     <li class="active"><a href="#">All Items</a></li>
                     {% for p in engagements %}
                         <li><a href="#">{{ p}}</a></li>
                     {% endfor %}
+                    <li><a href="#">Seed financing</a></li>
+                    <li><a href="#">Convertible loan note</a></li>
+                    <li><a href="#">Incorporation</a></li>
+                    <li><a href="#">Show tunes</a></li>
                 </ul>
+              </div>     
             </div>
-            <div class="span9">
+            <div class="col col-lg-8">
                 <div class="options clearfix">
                     <div class="btn-group pull-left">
-                        <button class="btn">{{ counts.new }} New</button>
-                        <button class="btn">{{ counts.open }} Open</button>
-                        <button class="btn">{{ counts.closed }} Closed</button>
+                        <button class="btn btn-default">{{ counts.new }} New</button> 
+                        <button class="btn btn-default">{{ counts.open }} Open</button> 
+                        <button class="btn btn-default">{{ counts.closed }} Closed</button>
                     </div>
 
                     <div class="btn-group pull-right">
-                        <button class="btn dropdown-toggle" data-toggle="dropdown">Sort: <strong>Newest</strong> <span class="caret"></span></button>
+                        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Sort: <strong>Newest</strong> <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                             <li><a>Oldest</a></li>
                             <li><a>Newest</a></li>

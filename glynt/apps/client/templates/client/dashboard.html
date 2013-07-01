@@ -1,13 +1,15 @@
 {% extends 'client/base.html' %}
 {% load i18n humanize %}
-{% load glynt_helpers document_tags activity %}
+{% load glynt_helpers activity %}
 {% load templatetag_handlebars %}
 {% load url from future %}
 
 {% block bodyclass %}dashboard{% endblock %}
-    {% block navbar %}
-        {% include 'partials/nav_dark.html' %}
-    {% endblock %}
+
+{% block navbar %}
+    {% include 'partials/nav_dark.html' %}
+{% endblock %}
+
 {% block admin_panel %}
 <div class="offset1 span2 pull-right">
 <a href="{% url 'doc:create_template' %}" class="admin btn btn-link" id="toggle-docs">{% trans 'Create Template' %}</a>

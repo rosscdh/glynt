@@ -1,4 +1,5 @@
-{% extends 'base.html' %}{% load crispy_forms_tags startup_tags transaction_tags %}
+{% extends 'base_bsv3.html' %}{% load url from future %}
+{% load crispy_forms_tags startup_tags transaction_tags %}
 
 {% block head %}
     {{ wizard.form.media }}
@@ -9,52 +10,51 @@
 {% endblock %}
 
 {% block prebody %}
-    <div id="hero">
-        <div class="container container-main">
-            <div class="row animated fadeInRight profile-details">
-                <h1>What do you need?</h1>
-            </div>
+    <div class="jumbotron-header block-color">
+        <div class="container">
+            <h1 class="alt">What do you need?</h1>
         </div>
     </div>
-{% endblock %}
-
-{% block body %}
-    <div class="row">
-        <div class="span8">
-            <p id="instructions">Please select which transaction(s) you require:</p>
-            {% transactions transaction='SF' %}
-            {% transactions transaction='CS' %}
-            {% transactions transaction='ES' %}
-            <a href="#" class="btn btn-extra-margin">Not sure where to start?</a>
-            <btn id="continue" class="btn btn-primary btn-extra-margin pull-right">Continue</btn>
-        </div>
-        <div class="span4">
-            <div class="well lawyers-have">
-                <h4>LawPal lawyers have:</h4>
-                <ul class="unstyled">
-                    <li>7 years + experience</li>
-                    <li>Available to meet you locally</li>
-                    <li>Vetted by LawPal with a track</li>
-                    <li>record serving startups</li>
-                    <li>Approved by you before they</li>
-                    <li>start work</li>
-                    <li>Agreed to a ﬁxed price in advance</li>
-                </ul>
+    <div class="container">
+        <div class="row">
+            <div class="col col-lg-8">
+                <h3 id="instructions" class="softer">Please select which transaction(s) you require:</h3>
+                {% transactions transaction='CS' %}
+                {% transactions transaction='SF' %}
+                {% transactions transaction='ES' %}
+                <a href="#" class="btn btn-default">Not sure where to start?</a>
+                <btn id="continue" class="btn btn-primary btn-extra-margin pull-right">Continue</btn>
+                <br />
+                <br />
+            </div>
+            <div class="col col-lg-4">
+                <div class="well lawyers-have hidden-sm">
+                    <h4>LawPal lawyers have</h4>
+                    <ul>
+                        <li>7 years + experience</li>
+                        <li>Available to meet you locally</li>
+                        <li>Vetted by LawPal with a track</li>
+                        <li>record serving startups</li>
+                        <li>Approved by you before they</li>
+                        <li>start work</li>
+                        <li>Agreed to a ﬁxed price in advance</li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
 
-    <form method="POST">{% csrf_token %}
-        {{ wizard.management_form }}
-        {% if wizard.form.forms %}
-            {{ wizard.form.management_form }}
-            {% for form in wizard.form.forms %}
-                {{ form|crispy }}
-            {% endfor %}
-        {% else %}
-            {{ wizard.form|crispy }}
-        {% endif %}
-    </form>
+        <form method="POST">{% csrf_token %}
+            {{ wizard.management_form }}
+            {% if wizard.form.forms %}
+                {{ wizard.form.management_form }}
+                {% for form in wizard.form.forms %}
+                    {{ form|crispy }}
+                {% endfor %}
+            {% else %}
+                {{ wizard.form|crispy }}
+            {% endif %}
+        </form>
+    </div>
 {% endblock %}
 
 {% block js %}
@@ -92,7 +92,7 @@
                 var split = actives.split(",");
 
                 for (var i = 0; i < split.length; i++) {
-                    var elm = $('.transaction-choice[data-transaction="'+split[i]+'"]');
+                    var elm = $('.transaction-choice[data-transaction="' + split[i] + '"]');
                     transaction_business_logic(elm);
                 }
             }
@@ -118,9 +118,9 @@
                     $('form').submit();
                 } else {
                     $('#instructions').addClass('animated shake');
-                     window.setTimeout( function(){
-			            $('#instructions').removeClass()
-                     }, 1300);
+                    window.setTimeout(function () {
+                        $('#instructions').removeClass()
+                    }, 1300);
                 }
             });
         });

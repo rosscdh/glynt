@@ -1,7 +1,0 @@
-{% load i18n templatetag_handlebars %}{% verbatim %}
-<div id="signature_template">{{#each signatures}}
-  <div class="signature">
-    <img class="signature" class="{{#if has_signed}}has_signed{{/if}}" src="{{signature_image_url}}" data-postload_src="{{signature_image_url}}" />
-    <p><b>{{name}}</b> - {{email}}</p>{{#if is_signed}}<p><b>{% trans 'Signed on' %}:</b> {{date_signed}}<br><b>{% trans 'User IP Address' %}:</b> {{signee_ip}}</p>{{/if}}
-  </div>
-{{/each}}</div>{% endverbatim %}

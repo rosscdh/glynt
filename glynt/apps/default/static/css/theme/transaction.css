@@ -1,10 +1,13 @@
 .transaction-choice {
-    border-bottom: 1px solid #ccc;
-    padding: 1em 0;
+    border-bottom: 1px solid #f9f9f9;
+    padding: 0.5em 0;
+    margin-bottom:1.5em;
 }
-
+.transaction-choice:last {
+    border-bottom: none;
+}
 .transaction-choice .btn {
-    margin: .8em 1em 1em 0;
+    margin: .25em 1em 1em 0;
     font-weight: normal;
     display: block;
     float: left;
@@ -16,10 +19,6 @@
     font-size: 1.6em;
 }
 
-.transaction-choice p, .transaction-choice span {
-    font-size: 1.2em;
-}
-
 .transaction-details {
     float: left;
 }
@@ -28,10 +27,6 @@
     color: #383b3c;
     font-family: helveticaneue;
     font-weight: 300;
-}
-
-.btn-extra-margin {
-    margin: 1.5em 0;
 }
 
 .intake-progress {

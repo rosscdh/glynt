@@ -28,7 +28,6 @@ class Firm(models.Model):
     photo = models.ImageField(upload_to='firm', blank=True)
     data = JSONField(default={})
     lawyers = models.ManyToManyField(Lawyer, blank=True, related_name='firm_lawyers')
-    deals = models.ManyToManyField(Deal, blank=True, related_name='firm_deals')
 
     def __unicode__(self):
         return u'%s' % (self.name,)

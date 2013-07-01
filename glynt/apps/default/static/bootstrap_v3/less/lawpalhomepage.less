@@ -1,0 +1,87 @@
+//
+// LawPal Homepage
+// --------------------------------------------------
+
+
+
+
+// Top Page and Scroll down for more bit
+.homepage #wrap {
+	.splash {
+	    background:url('../../img/background-trans.jpeg');
+	    background-position-y:-25px;
+	    background-size: cover;
+	    padding:14% 0px 10% 0px;
+	    color:@gray-darker;
+	    border-top:1px solid @gray-lighter;
+	    border-bottom:1px solid @gray-lighter;
+	    max-height: 420px;
+	    h1 {
+	    	color:@gray;
+	    	font-size:ceil(@font-size-base * 2.6);
+	    }
+	    h3 {
+	    	color:lighten(@gray, 15%);
+	      	font-size:ceil(@font-size-base * 1.7);
+	    }
+  	}
+    .scroll {
+  		padding:30px 0px 20px 0;
+  		color: lighten(@gray, 20%);
+  		background:url('../../img/down-chev.png') center 60px no-repeat;
+  		font-size: @font-size-base * 1.2;
+  	}
+  	.intro {
+  		h1 {
+	    	font-size:ceil(@font-size-base * 2);
+	    	margin-bottom:0px;
+  		}
+  		h2 {
+  			color: lighten(@gray, 20%);
+  			font-size: ceil(@font-size-base * 1.4);
+ 	    	margin-top:10px;
+  		}
+  	}
+  	.feature-block {
+  		h3 {
+  			color: @brand-primary;
+  			font-size: ceil(@font-size-base * 1.4);
+  		}
+  	}
+  	.quote {
+  		background-color:@brand-primary-alt-2;
+  		color:white;
+  		margin:40px 0px;
+  		padding:30px;
+  		font-size: ceil(@font-size-base * 1.5);
+  	}
+}
+
+
+@media screen and (min-width: 768px) {
+	.homepage #wrap {
+		.splash {
+		    padding:80px 0px 30% 0px;
+		    h1 {
+		    	font-size:ceil(@font-size-base * 3.5);
+		    }
+		    h3 {
+		      	font-size:ceil(@font-size-base * 2.2);
+		    }
+		}
+		.intro {
+	  		h1 {
+		    	font-size:ceil(@font-size-base * 2.5);
+		    }
+		    h2 {
+	  			font-size: ceil(@font-size-base * 1.8);
+	  		}
+		}
+		.feature-block {
+  			h3 {
+  				color: @brand-primary;
+  				font-size: ceil(@font-size-base * 1.8);
+  			}
+  		}
+	}
+}
