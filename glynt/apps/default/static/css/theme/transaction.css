@@ -50,5 +50,15 @@ p.intake-save a {
 }
 
 .lawyers-have ul li {
-    margin-bottom: 0.3em;
+    margin-bottom: 1em;
+    color: #757c7e;
+}
+
+.founder-list span {
+    display: inline-block;
+    min-width: 200px;
+}
+
+.founder-list dd {
+    margin-bottom: .5em;
 }

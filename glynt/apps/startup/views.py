@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
-from django.views.generic import FormView
-from django.views.generic import DetailView
+from django.views.generic import DetailView, FormView, CreateView
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.http import Http404
+from django.template.defaultfilters import slugify
+
+from glynt.apps.utils import AjaxableResponseMixin
+
 from services import EnsureFounderService
 from forms import StartupProfileSetupForm
 from models import Founder
@@ -84,3 +87,23 @@ class FounderProfileView(DetailView):
             raise Http404(_("No %(verbose_name)s found matching the query") %
                           {'verbose_name': queryset.model._meta.verbose_name})
         return obj
+
+
+class CreateFounderView(AjaxableResponseMixin, CreateView):
+    model = Founder
+    http_method_names = [u'post']
+
+    def post(self, request, *args, **kwargs):
+        if request.is_ajax():
+            data = request.POST
+            first_name = data.__getitem__('founders-first_name')
+            last_name = data.__getitem__('founders-last_name')
+            user_name = "%s-%s" % (first_name, last_name)
+            user_email = data.__getitem__('founders-email')
+            user, is_new = User.objects.get_or_create(email=user_email, defaults={'username': user_name, 'first_name': first_name, 'last_name': last_name})
+            founder = EnsureFounderService(user=user)
+            founder.process()
+
+            # Save form to new founder data
+
+            return self.render_to_json_response({'message': "Founder saved", 'status': 200})

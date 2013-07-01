@@ -36,17 +36,10 @@
                 {{ wizard.management_form }}
                 {% if wizard.form.forms %}
                     {{ wizard.form.management_form }}
-                    {% for form in wizard.form.forms %}
-                        {{ form|crispy }}
-                    {% endfor %}
+                    {% crispy wizard.form %}
                 {% else %}
-                    {{ wizard.form|crispy }}
+                    {% crispy wizard.form %}
                 {% endif %}
-                <div class="control-group">
-                    <div class="controls">
-                        <button type="submit" class="btn btn-success">Next</button>
-                    </div>
-                </div>
             </form>
         </div>
     </div>

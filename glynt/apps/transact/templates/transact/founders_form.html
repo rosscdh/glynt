@@ -32,7 +32,11 @@
     </div>
     <div class="row">
         <div class="span11 offset1">
-            <form id="" data-validate="parsley" action="" method="POST" class="form-horizontal">{% csrf_token %}
+            <dl class="founder-list hide">
+                <dt>Founders</dt>
+            </dl>
+            <form id="" data-validate="parsley" action="" method="POST"
+                  class="form-horizontal add-founder">{% csrf_token %}
                 {{ wizard.management_form }}
                 {% if wizard.form.forms %}
                     {{ wizard.form.management_form }}
@@ -44,10 +48,16 @@
                 {% endif %}
                 <div class="control-group">
                     <div class="controls">
-                        <button type="submit" class="btn btn-success">Next</button>
+                        <button class="btn save-founder">Save Founder</button>
                     </div>
                 </div>
             </form>
+            <button type="submit" class="btn btn-success founder-submit">Next</button>
         </div>
     </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ STATIC_URL }}/js/jquery.deserialize.js"></script>
+    <script src="{{ STATIC_URL }}transact/js/intake-form.js"></script>
 {% endblock %}

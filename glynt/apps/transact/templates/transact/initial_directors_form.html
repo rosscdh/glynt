@@ -22,7 +22,7 @@
     </div>
     <div class="row">
         <div class="span8">
-            <h1>Initial Directors</h1>
+            <h1>Initial Directors and Officers</h1>
         </div>
         <div class="span4">
             <div class="progress progress-striped intake-progress">
@@ -36,18 +36,15 @@
                 {{ wizard.management_form }}
                 {% if wizard.form.forms %}
                     {{ wizard.form.management_form }}
-                    {% for form in wizard.form.forms %}
-                        {{ form|crispy }}
-                    {% endfor %}
+                    {% crispy wizard.form %}
                 {% else %}
-                    {{ wizard.form|crispy }}
+                    {% crispy wizard.form %}
                 {% endif %}
-                <div class="control-group">
-                    <div class="controls">
-                        <button type="submit" class="btn btn-success">Next</button>
-                    </div>
-                </div>
             </form>
         </div>
     </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ STATIC_URL }}transact/js/intake-form.js"></script>
 {% endblock %}
