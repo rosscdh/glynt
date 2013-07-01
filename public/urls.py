@@ -2,6 +2,7 @@
 from django.conf.urls import patterns, url
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
+from django.shortcuts import redirect
 
 from views import PublicHomepageView, ContactUsView, \
                     UserClassSessionRedirectView, UserClassLoggedInRedirectView
@@ -9,6 +10,8 @@ from views import PublicHomepageView, ContactUsView, \
 urlpatterns = patterns('',
     # about
     url(r'^about/$', TemplateView.as_view(template_name='public/about.html'), name='about'),
+    # lawyers
+    url(r'^lawyers/$', TemplateView.as_view(template_name='public/lawyers.html'), name='lawyers'),
     # T&C
     url(r'^legal/terms/$', TemplateView.as_view(template_name='public/terms-and-conditions.html'), name='terms'),
     # Privacy

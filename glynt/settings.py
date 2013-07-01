@@ -164,6 +164,7 @@ DJANGO_APPS = (
     'django.contrib.markup',
     'django.contrib.humanize',
     'django.contrib.comments',
+    'django.contrib.formtools',
 )
 
 PROJECT_APPS = (
@@ -187,6 +188,8 @@ PROJECT_APPS = (
     'glynt.apps.engage',
     # Startup & Lawyer Transactions
     'glynt.apps.transact',
+    # Checklist app
+    'glynt.apps.todo',
     # Dashboard
     'glynt.apps.dashboard',
     # Services
@@ -234,9 +237,6 @@ HELPER_APPS = (
     # Testing helpers
     # 'django_jenkins',
     # 'django-behave',
-
-    # User switcher
-    'debug_toolbar_user_panel',
 
     # Django Pagination,
     # 'pagination',
@@ -401,6 +401,10 @@ COMPRESS_OFFLINE = False
 if DEBUG:
     INSTALLED_APPS = INSTALLED_APPS + (
         'django.contrib.webdesign',
+        # User switcher
+        'debug_toolbar_user_panel',
+        # Debug toolbar panels
+        'template_timings_panel',
     )
 
     if not IS_TESTING:
@@ -445,6 +449,7 @@ DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.signals.SignalDebugPanel',
     'debug_toolbar.panels.logger.LoggingPanel',
     'debug_toolbar_user_panel.panels.UserPanel',
+    'template_timings_panel.panels.TemplateTimings.TemplateTimings',
 )
 
 
@@ -524,6 +529,7 @@ LAWPAL_PRIVATE_BETA = True
 
 ALLOWED_HOSTS = ['*']
 
+CRISPY_TEMPLATE_PACK = 'crispy/bootstrap3'
 
 # Neat trick http://www.robgolding.com/blog/2010/05/03/extending-settings-variables-with-local_settings-py-in-django/
 try:

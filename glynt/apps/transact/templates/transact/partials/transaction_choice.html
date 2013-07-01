@@ -1,0 +1,14 @@
+{% load humanize %}
+
+{% for t in transactions %}
+    <div class="transaction-choice clearfix" data-transaction="{{ t.slug }}">
+        <button class="btn btn-large btn-primary">Add</button>
+        <div class="transaction-details">
+            <h2>{{ t.title }}</h2>
+            <p class="price">${{ t.price|intcomma }}</p>
+            <p class="description">{{ t.description }}</p>
+        </div>
+    </div>
+{% empty %}
+    <p class="no-records">No transactions available.</p>
+{% endfor %}

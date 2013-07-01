@@ -5,11 +5,11 @@ from glynt.apps.todo import TODO_STATUS
 
 
 class DefaultToDoManager(models.Manager):
+    def new(self, **kwargs):
+        return self.filter(status=TODO_STATUS.new).filter(**kwargs)
+
     def open(self, **kwargs):
-        self.filter(status=TODO_STATUS.open).filter(**kwargs)
+        return self.filter(status=TODO_STATUS.open).filter(**kwargs)
 
-    def done(self, **kwargs):
-        self.filter(status=TODO_STATUS.done).filter(**kwargs)
-
-    def in_progress(self, **kwargs):
-        self.filter(status=TODO_STATUS.new).filter(**kwargs)
+    def closed(self, **kwargs):
+        return self.filter(status=TODO_STATUS.closed).filter(**kwargs)

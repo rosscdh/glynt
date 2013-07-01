@@ -5,10 +5,13 @@ from django.core.urlresolvers import reverse
 from jsonfield import JSONField
 
 from glynt.apps.utils import generate_unique_slug
-from glynt.apps.engage import ENGAGEMENT_STATUS
+
 from glynt.apps.engage.services.actions import OpenEngagementService, CloseEngagementService, ReOpenEngagementService
+
+from glynt.apps.transact.models import Transaction
 from glynt.apps.startup.models import Startup, Founder
 from glynt.apps.lawyer.models import Lawyer
+
 from glynt.apps.engage import ENGAGEMENT_STATUS
 
 from managers import DefaultEngagementManager
@@ -19,6 +22,7 @@ class Engagement(models.Model):
     Stores initial engagement details
     NB, slug is generated on save if it is not set
     """
+    transaction = models.ForeignKey(Transaction, null=True)
     engagement_status = models.IntegerField(choices=ENGAGEMENT_STATUS.get_choices(), default=ENGAGEMENT_STATUS.new, db_index=True)
     slug = models.SlugField(max_length=128, blank=False)
     startup = models.ForeignKey(Startup)
@@ -60,6 +64,10 @@ class Engagement(models.Model):
     @property
     def is_new(self):
         return ENGAGEMENT_STATUS.new == self.engagement_status
+
+    @property
+    def type(self):
+        return self.transaction.title
 
     @property
     def status(self):

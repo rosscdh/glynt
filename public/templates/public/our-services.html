@@ -1,14 +1,14 @@
-{% extends 'base.html' %}
+{% extends 'base_bsv3.html' %}
 
 {% block page_title %}Our Services{% endblock %}
 {% block bodyclass %}{% endblock %}
 
 {% block navbar %}
-    {% include 'public/partials/nav.html' %}
+    {% include 'partials/nav.html' %}
 {% endblock %}
 
 {% block prebody %}
-<div id="hero">
+<div class="jumbotron">
     <div class="container">
     <h1>Our Services</h1>
     </div>
@@ -17,10 +17,6 @@
 
 {% block body %}
 <div class="container">
-    <div class="row">
-        <div class="span7 legal">
             <p>Our Services</p>
-        </div>
-    </div>
 </div>
 {% endblock %}

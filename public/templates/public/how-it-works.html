@@ -1,16 +1,23 @@
-{% extends 'base.html' %}
-
-{% block page_title %}How it works{% endblock %}
+{% extends 'base_bsv3.html' %}{% load url from future %}
+{% block page_title %}LawPal - A better attorney-client relationship{% endblock %}
 {% block bodyclass %}{% endblock %}
+{% block css %}
+{% endblock %}
+{% block extrahead %}
+    <meta name="description" content="LawPal - A better attorney-client relationship">
+    <meta name="keywords"
+          content="incorporation, seed financing, convertible notes, venture capital, acquisition, angel investing">
+{% endblock %}
 
 {% block navbar %}
-    {% include 'public/partials/nav.html' %}
+    {% include 'partials/nav.html' %}
 {% endblock %}
 
 {% block prebody %}
-<div id="hero">
+<div class="jumbotron">
     <div class="container">
-    <h1>How it works</h1>
+    	<h1>How it works</h1>
+    	<h2>This is a test</h2>
     </div>
 </div>
 {% endblock %}
@@ -19,6 +26,8 @@
 <div class="container">
     <div class="row">
         <div class="span7 legal">
+        	    	<h1>How it works</h1>
+    	<h2>This is a test</h2>
             <p>How it works</p>
         </div>
     </div>

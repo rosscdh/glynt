@@ -5,9 +5,11 @@
 {% load url from future %}
 
 {% block bodyclass %}dashboard{% endblock %}
-    {% block navbar %}
-        {% include 'partials/nav_dark.html' %}
-    {% endblock %}
+
+{% block navbar %}
+    {% include 'partials/nav_dark.html' %}
+{% endblock %}
+
 {% block admin_panel %}
 <div class="offset1 span2 pull-right">
 <a href="{% url 'doc:create_template' %}" class="admin btn btn-link" id="toggle-docs">{% trans 'Create Template' %}</a>

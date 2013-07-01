@@ -11,29 +11,11 @@
         <link href="{{ STATIC_URL }}bootstrap/css/bootstrap.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/theme/theme.css">
         <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/theme/animate.css">
-        <!--[if lt IE 9]>
-        <link href="{{ STATIC_URL }}smoothe/fontawesome/css/font-awesome-ie7.css" rel="stylesheet" charset="utf-8" />
-        <![endif]-->
-<!--    <link href="{{ STATIC_URL }}css/jquery.signaturepad.css" rel="stylesheet" />-->
         {% endcompress %}
 
         {% block css %}{% endblock %}
 
         {% block extrahead %}{% endblock %}
-
-
-<!--         <link href="{{ STATIC_URL }}css/jquery-ui-theme.css" rel="stylesheet" />		
-        <link href="{{ STATIC_URL }}css/ml.css" rel="stylesheet" charset="utf-8" />
-	    <link href="{{ STATIC_URL }}js/select2/select2.css" rel="stylesheet" charset="utf-8" />
- 	    <link href="{{ STATIC_URL }}css/errors.css" rel="stylesheet" charset="utf-8" />
-	    <link href="{{ STATIC_URL }}smoothe/fontawesome/css/font-awesome.css" rel="stylesheet" charset="utf-8" />
-	    <link rel="apple-touch-icon" sizes="114x114" href="{{ STATIC_URL }}img/apple-touch-icon-114x114.png"> -->
-
-        <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-        <!--[if lt IE 9]> 
-        <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-
         {% block head_js %}{% endblock %}
         
     </head>
@@ -42,11 +24,11 @@
 
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
 
-<div id="main" class="page-wrap">
+{% block navbar %}
+    {% include 'partials/nav.html' %}
+{% endblock %}
 
-    {% block navbar %}
-        {% include 'partials/nav.html' %}
-    {% endblock %}
+<div id="main" class="page-wrap">
 
     {% if user.is_staff %}
         {% block admin_panel %}{% endblock %}
@@ -87,9 +69,6 @@
     <script type="text/javascript" src="{{ STATIC_URL }}handlebars-helpers.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/json2.min.js"></script>	 
 
-    {% handlebars_js %}
-    {% moment_js %}
-
     {% compress js %}
 	    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.cookie.js"></script>
 	    <script type="text/javascript" src="{{ STATIC_URL }}js/theme.js"></script>
@@ -99,6 +78,10 @@
 	    <script type="text/javascript" src="{{ STATIC_URL }}js/moment/moment.min.js"></script>
 	    <script type="text/javascript" src="{{ STATIC_URL }}js/sugar-1.3.9.min.js"></script>
     {% endcompress %}
+
+    {% handlebars_js %}
+    {% comments_js %}
+    {% moment_js %}
 
     {% handlebars_messages %}
     {% profile_cards %}

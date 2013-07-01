@@ -2,8 +2,8 @@
 from django.conf.urls import patterns, url
 from django.views.generic import TemplateView
 
+from views import PackagesWizard, FORMS
 
 urlpatterns = patterns('',
-    url(r'^$', TemplateView.as_view(template_name='transaction/selection.html'), name='selection'),
-    url(r'^second-stage/$', TemplateView.as_view(template_name='transaction/second_stage_tmp.html'), name='second_stage_tmp'),
+    url(r'^$', PackagesWizard.as_view(FORMS), name='packages'),
 )

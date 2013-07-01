@@ -1,10 +1,13 @@
 .transaction-choice {
-    border-bottom: 1px solid #ccc;
-    padding: 1em 0;
+    border-bottom: 1px solid #f9f9f9;
+    padding: 0.5em 0;
+    margin-bottom:1.5em;
 }
-
+.transaction-choice:last {
+    border-bottom: none;
+}
 .transaction-choice .btn {
-    margin: .8em 1em 1em 0;
+    margin: .25em 1em 1em 0;
     font-weight: normal;
     display: block;
     float: left;
@@ -16,15 +19,36 @@
     font-size: 1.6em;
 }
 
-.transaction-choice p, .transaction-choice span {
-    font-size: 1.2em;
-}
-
 .transaction-details {
     float: left;
 }
 
-.btn-extra-margin {
-    margin: 1.5em 0;
+.transaction-details h2 {
+    color: #383b3c;
+    font-family: helveticaneue;
+    font-weight: 300;
 }
 
+.intake-progress {
+    margin-top: 1.5em;
+}
+
+p.intake-save a {
+    display: block;
+    margin: 1em 0;
+    font-size: .8em;
+}
+
+.transaction-details .price {
+    font-size: 1.5em;
+    color: #49d1e4;
+}
+
+.lawyers-have h4 {
+    color: #383b3c;
+    margin-bottom: 1.2em;
+}
+
+.lawyers-have ul li {
+    margin-bottom: 0.3em;
+}

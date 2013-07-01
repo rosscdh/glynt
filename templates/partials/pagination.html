@@ -1,0 +1,14 @@
+{{tabs}}
+<div class="pagination pagination-centered">
+<ul>
+{% if page_obj.has_previous %}
+    <li><a href="?page={{ page_obj.previous_page_number }}">Prev</a></li>
+{% endif %}
+{% for t in tabs %}
+    <li><a href="?page={{ t }}">{{ t }}</a></li>
+{% endfor %}
+{% if page_obj.has_next %}
+    <li><a href="?page={{ page_obj.next_page_number }}">Next</a></li>
+{% endif %}
+</ul>
+</div>

@@ -5,14 +5,26 @@ from glynt.apps.engage import ENGAGEMENT_STATUS
 
 
 class DefaultEngagementManager(models.Manager):
+    def for_user(self, user):
+        """ get engagements for a user class"""
+        fltr = {}
+        if user.profile.is_founder:
+            fltr.update({'founder': user})
+        elif user.profile.is_lawyer:
+            fltr.update({'lawyer': user})
+        else:
+            raise Exception('Could not identify user class')
+
+        return self.filter(**fltr)
+
     def open(self, **kwargs):
-        self.filter(engagement_status=ENGAGEMENT_STATUS.open).filter(**kwargs)
+        return self.filter(engagement_status=ENGAGEMENT_STATUS.open).filter(**kwargs)
 
     def closed(self, **kwargs):
-        self.filter(engagement_status=ENGAGEMENT_STATUS.closed).filter(**kwargs)
+        return self.filter(engagement_status=ENGAGEMENT_STATUS.closed).filter(**kwargs)
 
     def new(self, **kwargs):
-        self.filter(engagement_status=ENGAGEMENT_STATUS.new).filter(**kwargs)
+        return self.filter(engagement_status=ENGAGEMENT_STATUS.new).filter(**kwargs)
 
     def historic(self, founder, lawyer):
         """ @BUSINESSRULE Method to get a Founders current Engagement 

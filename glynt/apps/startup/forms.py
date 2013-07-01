@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 from django import forms
+from django.utils.safestring import mark_safe
 from bootstrap.forms import BootstrapMixin
 
 from cicu.models import UploadedFile

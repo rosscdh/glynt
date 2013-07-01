@@ -1,0 +1,92 @@
+{% extends 'base_bsv3.html' %}{% load paginator glynt_helpers %}
+
+{% block page_title %}Checklist{% endblock %}
+{% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="page-header" style="margin-bottom: 20px;">
+            <a class="btn btn-large btn-primary pull-right" href="#">New Item</a>
+            <h2>Browse Checklist</h2>
+        </div>
+        <div class="row">
+            <div class="col col-lg-4">
+              <div class="bs-sidebar affix">
+                <ul class="nav bs-sidenav">
+                    <li class="active"><a href="#">All Items</a></li>
+                    {% for p in engagements %}
+                        <li><a href="#">{{ p}}</a></li>
+                    {% endfor %}
+                    <li><a href="#">Seed financing</a></li>
+                    <li><a href="#">Convertible loan note</a></li>
+                    <li><a href="#">Incorporation</a></li>
+                    <li><a href="#">Show tunes</a></li>
+                </ul>
+              </div>     
+            </div>
+            <div class="col col-lg-8">
+                <div class="options clearfix">
+                    <div class="btn-group pull-left">
+                        <button class="btn btn-default">{{ counts.new }} New</button> 
+                        <button class="btn btn-default">{{ counts.open }} Open</button> 
+                        <button class="btn btn-default">{{ counts.closed }} Closed</button>
+                    </div>
+
+                    <div class="btn-group pull-right">
+                        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Sort: <strong>Newest</strong> <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li><a>Oldest</a></li>
+                            <li><a>Newest</a></li>
+                            <li><a>Most commented</a></li>
+                            <li><a>Least commented</a></li>
+                            <li><a>Recently updated</a></li>
+                            <li><a>Least recently updated</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <table class="table table-striped">
+                    <thead>
+                        <th style="width: 48px;"></th>
+                        <th></th>
+                        <th style="width: 100px;"></th>
+                    </thead>
+                    <tbody>
+                    {% for t in todo_list %}
+                        <tr>
+                            <td><img src="http://placehold.it/48" class="img-rounded"></td>
+                            <td>
+                                <div>
+                                    <a href="{% url 'dashboard:item' slug=t.slug %}">{{ t.name }}</a>
+                                    <span class="label label-warning">{{ t.todo_type|upper }}</span>
+                                </div>
+                                <!-- @PROBLEM This does not really work.. as there is no guarantee that A user opened the issue... ie if its a standard issue, associated with an engagement.. who opened it -->
+                                <small class="muted">Opened by <a href="#">Joe Bloggs</a> <span>&middot;</span> {% moment t.date_created %}<small>
+                            </td>
+                            <td style="text-align: center; vertical-align: middle;"><span class="label label-success">{{ t.display_status|upper }}</span></td>
+                        </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3">No Records</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                {% paginator todo_list %}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    {% moment_js %}
+    <script src="{{ STATIC_URL }}js/angularjs/lib/angular.min.js"></script>
+    <script src="{{ STATIC_URL }}js/angularjs/lib/angular-resource.min.js"></script>
+
+    <script src="{{ STATIC_URL }}todo/angularjs/app/js/app.js"></script>
+    <script src="{{ STATIC_URL }}todo/angularjs/app/js/controllers.js"></script>
+    <script src="{{ STATIC_URL }}todo/angularjs/app/js/services.js"></script>
+    <script src="{{ STATIC_URL }}todo/angularjs/app/js/directives.js"></script>
+{% endblock %}

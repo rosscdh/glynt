@@ -9,10 +9,6 @@ from services import EnsureFounderService
 from forms import StartupProfileSetupForm
 from models import Founder
 
-from glynt.apps.utils import AjaxableResponseMixin
-
-import urlparse
-
 import logging
 logger = logging.getLogger('django.request')
 

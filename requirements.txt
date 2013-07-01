@@ -27,7 +27,7 @@ gitpython
 django-extensions
 django-templated-email
 django-storages
-django-tastypie
+django-tastypie>=0.9.15
 django-crispy-forms
 south
 -e git+https://github.com/django/django-localflavor-us#egg=django-localflavor-us
@@ -101,6 +101,8 @@ boto # required for AWS-SQS
 # Dev
 Werkzeug
 -e git+https://github.com/django-debug-toolbar/django-debug-toolbar.git#egg=django-debug-toolbar
+-e git+https://github.com/playfire/django-debug-toolbar-user-panel.git#egg=django-debug-toolbar-user-panel
+-e git+https://github.com/orf/django-debug-toolbar-template-timings.git#egg=django-debug-toolbar-template-timings
 # pygraphviz
 django-clear-cache
 
@@ -122,8 +124,6 @@ django-autoslug
 python-dateutil
 requests
 termcolor
-# debug toolbar for user switching
--e git+https://github.com/playfire/django-debug-toolbar-user-panel.git#egg=django-debug-toolbar-user-panel
 #google-api-python-client # coming soon
 #-e git+https://github.com/chrisglass/xhtml2pdf.git#egg=xhtml2pdf # not planning on using xhtml2pdf(pisa) too unstable
 #-e git+https://github.com/rosscdh/django-xhtml2pdf.git#egg=django-xhtml2pdf # not planning on using xhtml2pdf(pisa) too unstable

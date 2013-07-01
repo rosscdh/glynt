@@ -7,7 +7,6 @@ from django.core.urlresolvers import reverse_lazy
 
 from views import StartupProfileSetupView, FounderProfileView
 
-
 urlpatterns = patterns('',
     url(r'^profile/setup/$', login_required(StartupProfileSetupView.as_view()), name='setup_profile'),
     url(r'^invite/$', login_required(TemplateView.as_view(template_name='startup/invite.html')), name='invite'),
