@@ -10,7 +10,7 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         # Adding field 'Engagement.transaction'
         db.add_column(u'engage_engagement', 'transaction',
-                      self.gf('django.db.models.fields.related.ForeignKey')(default=1, to=orm['transact.Transaction']),
+                      self.gf('django.db.models.fields.related.ForeignKey')(to=orm['transact.Transaction'], null=True),
                       keep_default=False)
 
 
@@ -67,7 +67,7 @@ class Migration(SchemaMigration):
             'lawyer': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['lawyer.Lawyer']"}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '128'}),
             'startup': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['startup.Startup']"}),
-            'transaction': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['transact.Transaction']"})
+            'transaction': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['transact.Transaction']", 'null': 'True'})
         },
         u'lawyer.lawyer': {
             'Meta': {'object_name': 'Lawyer'},
