@@ -2,12 +2,7 @@
 from django.contrib import admin
 from django.db.models import Count
 
-from models import Firm, Office
-
-
-class OfficeInline(admin.TabularInline):
-    model = Office
-    extra = 1
+from models import Firm
 
 
 class FirmAdmin(admin.ModelAdmin):
@@ -16,11 +11,7 @@ class FirmAdmin(admin.ModelAdmin):
     search_fields = ('name', 'summary')
     order = ('name')
     filter_horizontal = ('lawyers',)
-    inlines = [
-        OfficeInline,
-    ]
 
 
 
 admin.site.register(Firm, FirmAdmin)
-admin.site.register([Office])

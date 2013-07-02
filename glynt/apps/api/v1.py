@@ -15,7 +15,7 @@ from cities_light.models import City, Country, Region
 
 from glynt.apps.lawyer.models import Lawyer
 
-from glynt.apps.firm.models import Firm, Office
+from glynt.apps.firm.models import Firm
 from glynt.apps.company.models import Company
 
 from glynt.apps.engage.models import Engagement
@@ -91,25 +91,6 @@ class FirmSimpleResource(BaseApiModelResource):
             'name': ALL,
         }
         cache = SimpleCache()
-
-
-class OfficeSimpleResource(BaseApiModelResource):
-    class Meta(BaseApiModelResource.Meta):
-        queryset = Office.objects.all()
-        authentication = Authentication()
-        list_allowed_methods = ['get']
-        resource_name = 'office/lite'
-        fields = ['pk', 'address']
-        filtering = {
-            'name': ALL,
-        }
-        cache = SimpleCache()
-
-    def dehydrate(self, bundle):
-        name = bundle.data.get('address', None)
-        bundle.data.pop('address')
-        bundle.data.update({'name': name})
-        return bundle
 
 
 class CompanyLiteSimpleResource(BaseApiModelResource):
@@ -271,8 +252,8 @@ class CompanyEngagementResource(BaseApiModelResource):
 """ Register the api resources """
 V1_INTERNAL_API.register(LocationSimpleResource())
 V1_INTERNAL_API.register(StateSimpleResource())
+
 V1_INTERNAL_API.register(FirmSimpleResource())
-V1_INTERNAL_API.register(OfficeSimpleResource())
 V1_INTERNAL_API.register(CompanyLiteSimpleResource())
 
 V1_INTERNAL_API.register(UserBasicProfileResource())

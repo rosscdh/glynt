@@ -152,7 +152,6 @@ class EnsureLawyerService(object):
         else:
             logger.info('Firm name "%s" was provided for lawyer %s ' % (self.firm_name, self.lawyer.user.username,))
             self.data.update({
-                'create_office': False, # May not create office, as the csv for Lawyers does not contain the right info.. use import_firms
                 'user': self.user,
                 'lawyer': self.lawyer
             })

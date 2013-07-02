@@ -44,40 +44,6 @@ class Firm(models.Model):
             return None
 
 
-class Office(models.Model):
-    """ The Firm Office
-    Model provides Offices related to a Firm
-    """
-    firm = models.ForeignKey(Firm)
-    address = models.CharField(max_length=255, db_index=True)
-    country = models.CharField(max_length=64, db_index=True, blank=True)
-    photo = models.ImageField(upload_to='office', blank=True)
-    data = JSONField(default={})
-
-    def __unicode__(self):
-        return u'%s - %s' % (self.firm.name, self.address,)
-
-    @property
-    def geo_location(self):
-        return u'%s' % self.data.get('geo_location', None)
-
-
-class tmpLawyerFirm(models.Model):
-    """ Temp Table to allow capture of lawyer data"""
-    data = JSONField()
-    def __unicode__(self):
-        return u'%s %s'% (self.full_name, self.firm,)
-    @property
-    def email(self):
-        return '%s' % self.data.get('email', 'noone@lawpal.com')
-    @property
-    def full_name(self):
-        return u'%s %s' % (self.data.get('first_name', None), self.data.get('last_name', None),)
-    @property
-    def firm(self):
-        return u'%s' % self.data.get('firm', 'No Firm')
-
-
 @receiver(post_save, sender=Firm, dispatch_uid='firm.new_firm', )
 def new_firm(sender, **kwargs):
     """ Capture the new Firm Creation """
