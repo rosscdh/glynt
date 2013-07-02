@@ -152,13 +152,13 @@
 				<div class="span4">
 					<h5>Transactions by year</h5>
 					<br />
-					<img src="/static/img/graph-year-placeholder.png" id="graph-year-placeholder">
+					<img src="{{ STATIC_URL }}img/graph-year-placeholder.png" id="graph-year-placeholder">
 					<canvas id="dealChart0" width="300" height="200"></canvas>
 				</div>
 				<div class="span4" style="position:relative;">
 					<h5>Transactions by type</h5>
 					<br />
-					<img src="/static/img/graph-type-placeholder.png" id="graph-type-placeholder">
+					<img src="{{ STATIC_URL }}img/graph-type-placeholder.png" id="graph-type-placeholder">
 					<canvas id="dealChart1" width="220" height="200"></canvas>
 					<div style="position:absolute;top:125px;right:-0px;opacity:0.3" id="type-legend">
 						<span class="label label-info" style="color:#F38630;background-color:white;">Series A</span>
