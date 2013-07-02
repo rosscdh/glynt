@@ -13,7 +13,7 @@ import datetime
 import time
 import requests
 from termcolor import colored
-from pprint(import pprint)
+from pprint import pprint
 
 debug = True
 
