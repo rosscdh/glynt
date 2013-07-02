@@ -7,27 +7,27 @@ import lxml.html
 from django.core.management.base import BaseCommand
 from django.core.files import File
 
-from glynt.apps.startup.services import EnsureStartupService
+from glynt.apps.company.services import EnsureCompanyService
 
 import logging
-logger = logging.getLogger('lawpal.commands.import_startups')
+logger = logging.getLogger('lawpal.commands.import_companies')
 
 
 class Command(BaseCommand):
-    """ Import Startups
-    Imports startups from 500 startups (http://500.co/startups)
+    """ Import Companies
+    Imports companies from 500 companies (http://500.co/companies)
     and angellist (http://angel.co)
     """
 
     def handle(self, *args, **options):
-        logger.info("Fetching 500startups")
-        # startups_500 = self.fetch_500startups()
-        # for s in startups_500:
+        logger.info("Fetching 500companies")
+        # companies_500 = self.fetch_500companies()
+        # for s in companies_500:
         #     self.create_startup(s)
 
         logger.info("Fetching angellist")
-        startups_angellist = self.fetch_angellist()
-        for s in startups_angellist:
+        companies_angellist = self.fetch_angellist()
+        for s in companies_angellist:
             self.create_startup(s)
 
     # common
@@ -35,7 +35,7 @@ class Command(BaseCommand):
     def create_startup(self, data):
         if 'photo_url' in data:
             data['photo'] = self.fetch_image(data['photo_url'])
-        service = EnsureStartupService(**data)
+        service = EnsureCompanyService(**data)
         service.process()
 
     def fetch_image(self, src):
@@ -45,7 +45,7 @@ class Command(BaseCommand):
     # angellist
 
     def fetch_angellist(self):
-        """ Fetches startups from angel.co
+        """ Fetches companies from angel.co
 
         They are pretty explicit about not using their api for scraping,
         so we'll just take a small sample (a couple hundred companies or so)
@@ -54,29 +54,29 @@ class Command(BaseCommand):
             Market: All Markets (9217)
             Location: Earth (1643)
 
-        If we select startups starting at these points, the assumption is
+        If we select companies starting at these points, the assumption is
         that we should hit every company in their database.
 
         However, for development data, we will concentrate on the
         following tag:
             Location: Earth: North America: United States (1688)
         """
-        startups = self.get_angellist_startups_for_tag(1688, limit=1000)
-        return startups
+        companies = self.get_angellist_companies_for_tag(1688, limit=1000)
+        return companies
 
-    def get_angellist_startups_for_tag(self, tag_id, limit=None):
+    def get_angellist_companies_for_tag(self, tag_id, limit=None):
         def get_page(page):
             logger.info("Fetching page %s for tag %s", page, tag_id)
-            r = requests.get('https://api.angel.co/1/tags/%s/startups' % tag_id, params={'page': page})
+            r = requests.get('https://api.angel.co/1/tags/%s/companies' % tag_id, params={'page': page})
             return r.json()
 
         page = 1
         results = []
 
-        logger.info("Fetching %s startups from angellist tag %s", limit if limit else 'all', tag_id)
+        logger.info("Fetching %s companies from angellist tag %s", limit if limit else 'all', tag_id)
         while True:
             response = get_page(page)
-            for startup in response['startups']:
+            for startup in response['companies']:
                 if startup.get('hidden') is False:
                     results.append(self.format_angellist_startup(startup))
 
@@ -93,20 +93,20 @@ class Command(BaseCommand):
         data['twitter'] = data.pop('twitter_url', None)
         return data
 
-    # 500startups
+    # 500companies
 
-    def fetch_500startups(self):
-        """ Fetches startups from 500.co/startups.
+    def fetch_500companies(self):
+        """ Fetches companies from 500.co/companies.
         """
         # get the list of startup urls
         # normally i would use lxml, but their html is horribly broken
         # not even beautifulsoup can handle it
-        r = requests.get('http://500.co/startups/')
+        r = requests.get('http://500.co/companies/')
         urls = list(set(re.findall(r'http://500\.co/startup-profiles/.+/', r.text)))
 
         # fetch each indidual startup
         results = []
-        logger.info("Got %s urls from 500startups:", len(urls))
+        logger.info("Got %s urls from 500companies:", len(urls))
         for url in urls:
             results.append(self.fetch_single_500startup(url))
             time.sleep(1)  # be (a little) nice

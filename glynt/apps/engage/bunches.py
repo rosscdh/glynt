@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 from bunch import Bunch
 
-from glynt.apps.startup.forms import StartupProfileIsCompleteValidator
+from glynt.apps.company.forms import CompanyProfileIsCompleteValidator
 
 import logging
 logger = logging.getLogger('lawpal.services')
 
 
-class StartupEngageLawyerBunch(Bunch):
+class CompanyEngageLawyerBunch(Bunch):
     def __init__(self, founder):
         startup = founder.primary_startup
-        return super(StartupEngageLawyerBunch, self).__init__(
+        return super(CompanyEngageLawyerBunch, self).__init__(
                     first_name = founder.user.first_name,
                     last_name = founder.user.last_name,
                     startup_name = startup.name,
@@ -22,5 +22,5 @@ class StartupEngageLawyerBunch(Bunch):
                 )
 
     def is_valid(self):
-        form = StartupProfileIsCompleteValidator({'first_name': self.first_name, 'last_name': self.last_name, 'startup_name': self.startup_name})
+        form = CompanyProfileIsCompleteValidator({'first_name': self.first_name, 'last_name': self.last_name, 'startup_name': self.startup_name})
         return form.is_valid()

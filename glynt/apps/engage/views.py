@@ -8,20 +8,20 @@ from django.http import Http404
 from glynt.apps.utils import AjaxableResponseMixin
 
 from glynt.apps.lawyer.models import Lawyer
-from glynt.apps.startup.services import EnsureFounderService
+from glynt.apps.company.services import EnsureFounderService
 from glynt.apps.engage.models import Engagement
 
-from bunches import StartupEngageLawyerBunch
+from bunches import CompanyEngageLawyerBunch
 
-from forms import EngageStartupLawyerForm
+from forms import EngageCompanyLawyerForm
 from signals import mark_engagement_notifications_as_read
 
 import logging
 logger = logging.getLogger('django.request')
 
 
-class StartupEngageLawyerView(AjaxableResponseMixin, FormView):
-    form_class = EngageStartupLawyerForm
+class CompanyEngageLawyerView(AjaxableResponseMixin, FormView):
+    form_class = EngageCompanyLawyerForm
     template_name = 'engage/startup-lawyer.html'
 
     def get_form(self, form_class):
@@ -37,7 +37,7 @@ class StartupEngageLawyerView(AjaxableResponseMixin, FormView):
         founder_service = EnsureFounderService(user=self.request.user)
         founder = founder_service.process()
 
-        initial = StartupEngageLawyerBunch(founder=founder)
+        initial = CompanyEngageLawyerBunch(founder=founder)
 
         if self.engagement is not None:
             initial.update({
@@ -60,7 +60,7 @@ class StartupEngageLawyerView(AjaxableResponseMixin, FormView):
 
     def get_context_data(self, **kwargs):
         """ """
-        context = super(StartupEngageLawyerView, self).get_context_data(**kwargs)
+        context = super(CompanyEngageLawyerView, self).get_context_data(**kwargs)
         context.update({
             'lawyer': self.lawyer,
             'engagement': self.engagement,

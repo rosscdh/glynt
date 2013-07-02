@@ -141,12 +141,12 @@
                         <div class="row">
                             <div class="span8">
 
-                                <p>{{ form.startups_advised_input.help_text }}</p>
+                                <p>{{ form.companies_advised_input.help_text }}</p>
                                 <div class="control-group">
-                                    <label class="control-label" for="inputEmail">{{ form.startups_advised_input.label }}</label>
+                                    <label class="control-label" for="inputEmail">{{ form.companies_advised_input.label }}</label>
                                     <div class="controls">
-                                        {{ form.startups_advised_input.errors }}
-                                        {{ form.startups_advised_input }}<button id="add-startup-btn" type="button" class="btn btn-link btn-small multi-add-btn" data-type="url" data-additem_callback="add_startup" data-data_target="id_startups_advised_input" data-target="startups-advised-list"><i class="icon-plus-sign"></i>&nbsp;Add</button>
+                                        {{ form.companies_advised_input.errors }}
+                                        {{ form.companies_advised_input }}<button id="add-startup-btn" type="button" class="btn btn-link btn-small multi-add-btn" data-type="url" data-additem_callback="add_startup" data-data_target="id_companies_advised_input" data-target="startups-advised-list"><i class="icon-plus-sign"></i>&nbsp;Add</button>
                                         {{ form.startups_advised }}<!-- hidden -->
                                     </div>
                                 </div>
@@ -737,7 +737,7 @@ $(document).ready(function(){
     $('.multi-add-btn').on('click', function(event){
         event.preventDefault();
         var e = $(this)
-        var element = $('#' + e.attr('data-data_target'));//$('#id_startups_advised_input');
+        var element = $('#' + e.attr('data-data_target'));//$('#id_companies_advised_input');
         var callback_name = e.attr('data-additem_callback')
         var callback = window[callback_name]
 

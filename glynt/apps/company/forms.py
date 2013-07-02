@@ -8,17 +8,17 @@ from cicu.widgets import CicuUploderInput
 
 from parsley.decorators import parsleyfy
 
-from models import Startup, Founder
+from models import Company, Founder
 
-from services import EnsureFounderService, EnsureStartupService
+from services import EnsureFounderService, EnsureCompanyService
 
 import logging
 logger = logging.getLogger('django.request')
 
 
 @parsleyfy
-class StartupProfileSetupForm(BootstrapMixin, forms.Form):
-    """ Form to allow startups to enter basic information about 
+class CompanyProfileSetupForm(BootstrapMixin, forms.Form):
+    """ Form to allow companies to enter basic information about 
     their setups
     """
     # django user ifo used to populate founder object
@@ -37,7 +37,7 @@ class StartupProfileSetupForm(BootstrapMixin, forms.Form):
     hidden_photo = forms.CharField(required=False, widget=forms.HiddenInput) # transports the id
 
     # startup
-    startup_name = forms.CharField(label="Startup Name", help_text="", widget=forms.TextInput(attrs={'placeholder':'Acme Inc', 'tabindex':'3'}))
+    startup_name = forms.CharField(label="Company Name", help_text="", widget=forms.TextInput(attrs={'placeholder':'Acme Inc', 'tabindex':'3'}))
     twitter = forms.CharField(required=False, label="Twitter", help_text="", widget=forms.TextInput(attrs={'tabindex':'6'}))
     summary = forms.CharField(label="Summary", widget=forms.Textarea(attrs={'placeholder':'A brief description of your startup', 'tabindex':'4', 'class':'input-large', 'data-rangelength':'[0,1024]', 'rows':'2'}))
     website = forms.URLField(label="URL", help_text="", widget=forms.TextInput(attrs={'placeholder':'http://acmeco.com', 'class':'input-large', 'tabindex':'4'}))
@@ -54,7 +54,7 @@ class StartupProfileSetupForm(BootstrapMixin, forms.Form):
         """ get request object and user """
         self.request = kwargs.pop('request', None)
         self.user = self.request.user
-        super(StartupProfileSetupForm, self).__init__(*args, **kwargs)
+        super(CompanyProfileSetupForm, self).__init__(*args, **kwargs)
 
     def clean_hidden_photo(self):
         hidden_photo = self.cleaned_data.get('hidden_photo', None)
@@ -64,7 +64,7 @@ class StartupProfileSetupForm(BootstrapMixin, forms.Form):
         data = self.cleaned_data
 
         #self.user
-        logger.info('StartupProfileSetupForm Starting')
+        logger.info('CompanyProfileSetupForm Starting')
 
         # @TODO should be in the clean_photo method
         hidden_photo = self.cleaned_data.get('hidden_photo', None)
@@ -77,13 +77,13 @@ class StartupProfileSetupForm(BootstrapMixin, forms.Form):
         founder_service = EnsureFounderService(user=self.user, **data)
         founder = founder_service.process()
 
-        startup_service = EnsureStartupService(name=data.get('startup_name'), founder=founder, **data)
+        startup_service = EnsureCompanyService(name=data.get('startup_name'), founder=founder, **data)
         startup = startup_service.process()
 
 
-class StartupProfileIsCompleteValidator(forms.Form):
+class CompanyProfileIsCompleteValidator(forms.Form):
     """ is used by the profile_complete template tag 
-    to evaluate the completeness of a startups profile """
+    to evaluate the completeness of a companies profile """
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
     startup_name = forms.CharField(required=True)

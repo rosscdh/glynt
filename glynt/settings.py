@@ -176,8 +176,8 @@ PROJECT_APPS = (
     'glynt.apps.default', # depreciating @TODO end this
     # The Api
     'glynt.apps.api',
-    # The Startups
-    'glynt.apps.startup',
+    # The Companies (companies)
+    'glynt.apps.company',
     # The Legal Firms
     'glynt.apps.firm',
     # The Lawyers
@@ -186,7 +186,7 @@ PROJECT_APPS = (
     'glynt.apps.client',
     # Engagement App
     'glynt.apps.engage',
-    # Startup & Lawyer Transactions
+    # Company & Lawyer Transactions
     'glynt.apps.transact',
     # Checklist app
     'glynt.apps.todo',

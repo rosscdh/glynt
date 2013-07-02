@@ -19,9 +19,9 @@ def _founder_upload_photo(instance, filename):
     return 'founder/%s%s' % (instance.user.username, ext)
 
 
-class Startup(models.Model):
-    """ The Startups
-    Stores various information related to startups,
+class Company(models.Model):
+    """ The Companies
+    Stores various information related to companies,
     including relationships to founders (Users)
     """
     name = models.CharField(max_length=255, db_index=True)
@@ -30,7 +30,7 @@ class Startup(models.Model):
     website = models.URLField(blank=True, null=True)
     twitter = models.CharField(max_length=64, blank=True, null=True)
     photo = models.ImageField(upload_to=_startup_upload_photo)
-    founders = models.ManyToManyField(User, related_name='startups')
+    founders = models.ManyToManyField(User, related_name='companies')
     data = JSONField(default={})
 
     def __unicode__(self):
@@ -45,7 +45,7 @@ class Startup(models.Model):
 
 
 class Founder(models.Model):
-    """ The founders
+    """ The founder
     Founders might be the best word choice. Think
     of this as a profile for a User involved in startup
     activity.
@@ -60,7 +60,7 @@ class Founder(models.Model):
         return u'%s' % (self.full_name,)
 
     def get_absolute_url(self):
-        return reverse('startup:founder_profile', kwargs={'slug': self.user.username})
+        return reverse('company:founder_profile', kwargs={'slug': self.user.username})
 
     @property
     def full_name(self):
@@ -71,13 +71,13 @@ class Founder(models.Model):
         return self.user.profile.get_mugshot_url()
 
     @property
-    def startups(self):
-        return self.user.startups.all()
+    def companies(self):
+        return self.user.companies.all()
 
     @property
     def primary_startup(self):
         try:
-            return self.startups[0]
+            return self.companies[0]
         except IndexError:
             # not found so return an empty instance
-            return Startup()
+            return Company()

@@ -90,7 +90,7 @@ class EnsureLawyerService(object):
 
     def volume_matrix(self, lawyer_data):
         # Updates to the JSON Data object for the Lawyer
-        volume_types = (('startups_advised', unicode('[]')), ('volume_incorp_setup', self.default_volume_matrix), \
+        volume_types = (('companies_advised', unicode('[]')), ('volume_incorp_setup', self.default_volume_matrix), \
                         ('volume_seed_financing', self.default_volume_matrix), ('volume_series_a', self.default_volume_matrix), \
                         ('volume_ip', self.default_volume_matrix), ('volume_other', self.default_volume_matrix), \
                         ('volume_by_year', self.default_volume_matrix_by_year),)

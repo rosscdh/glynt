@@ -69,7 +69,7 @@ class LawyerProfileSetupView(FormView):
         lawyer = self.lawyer = lawyer_service.lawyer
         firm = lawyer_service.firm
 
-        startups_advised = lawyer.data.get('startups_advised', [])
+        companies_advised = lawyer.data.get('companies_advised', [])
 
         kwargs.update({'initial': {
             'first_name': user.first_name,
@@ -87,7 +87,7 @@ class LawyerProfileSetupView(FormView):
             'summary': lawyer.summary,
             'bio': lawyer.bio,
             'if_i_wasnt_a_lawyer': lawyer.data.get('if_i_wasnt_a_lawyer', None),
-            'startups_advised': json.dumps(startups_advised),
+            'companies_advised': json.dumps(companies_advised),
 
             'photo': lawyer.photo,
             'twitter': lawyer.data.get('twitter',''),

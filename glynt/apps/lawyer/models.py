@@ -131,9 +131,9 @@ class Lawyer(models.Model):
 
 
     @property
-    def startups_advised(self):
+    def companies_advised(self):
         try:
-            return self.data.get('startups_advised', [])
+            return self.data.get('companies_advised', [])
         except:
             return []
 

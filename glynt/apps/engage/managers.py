@@ -37,7 +37,7 @@ class DefaultEngagementManager(models.Manager):
             return self.get(lawyer=lawyer, founder=founder).order_by('-id')
         except ObjectDoesNotExist:
             # @BUSINESSRULE
-            # does not have a previous engagement with this lawyer so look for this startups previous
+            # does not have a previous engagement with this lawyer so look for this companies previous
             # engagement and use that as a template
             try:
                 return self.filter(founder=founder).order_by('-id')[0]

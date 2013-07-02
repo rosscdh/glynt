@@ -9,23 +9,23 @@ from django.template.defaultfilters import slugify
 from glynt.apps.utils import AjaxableResponseMixin
 
 from services import EnsureFounderService
-from forms import StartupProfileSetupForm
+from forms import CompanyProfileSetupForm
 from models import Founder
 
 import logging
 logger = logging.getLogger('django.request')
 
 
-class StartupProfileSetupView(FormView):
-    form_class = StartupProfileSetupForm
+class CompanyProfileSetupView(FormView):
+    form_class = CompanyProfileSetupForm
     template_name = 'startup/profile-form.html'
 
     def get_success_url(self):
         messages.success(self.request, 'Thanks, your profile is complete.. now go find yourself a lawyer and get that funding')
-        return reverse('startup:welcome')
+        return reverse('company:welcome')
 
     def get_context_data(self, **kwargs):
-        context = super(StartupProfileSetupView, self).get_context_data(**kwargs)
+        context = super(CompanyProfileSetupView, self).get_context_data(**kwargs)
         context.update({
             'founder': self.founder,
         })
@@ -65,7 +65,7 @@ class StartupProfileSetupView(FormView):
 
     def form_valid(self, form):
         form.save()
-        return super(StartupProfileSetupView, self).form_valid(form=form)
+        return super(CompanyProfileSetupView, self).form_valid(form=form)
 
 
 class FounderProfileView(DetailView):

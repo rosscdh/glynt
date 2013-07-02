@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 
 from glynt.apps.lawyer.models import Lawyer
 from glynt.apps.lawyer.forms import LawyerProfileIsCompleteValidator
-from glynt.apps.startup.models import Startup
+from glynt.apps.company.models import Company
 
 
 import json
@@ -17,11 +17,11 @@ import logging
 logger = logging.getLogger('django.request')
 
 
-@register.inclusion_tag('lawyer/partials/startups_advised.html', takes_context=True)
-def startups_advised(context):
+@register.inclusion_tag('lawyer/partials/companies_advised.html', takes_context=True)
+def companies_advised(context):
     context.update({
         'lawyer': context.get('object', None),
-        'startups': lawyer.startups_advised,
+        'companies': lawyer.companies_advised,
     })
     return context
 

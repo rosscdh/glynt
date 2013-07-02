@@ -8,14 +8,14 @@ from bootstrap.forms import BootstrapMixin
 
 from parsley.decorators import parsleyfy
 
-from glynt.apps.engage.services.startup_engage_lawyer import EngageLawyerAsStartupService
+from glynt.apps.engage.services.startup_engage_lawyer import EngageLawyerAsCompanyService
 
 import logging
 logger = logging.getLogger('django.request')
 
 
 @parsleyfy
-class EngageStartupLawyerForm(BootstrapMixin, forms.Form):
+class EngageCompanyLawyerForm(BootstrapMixin, forms.Form):
     #
     # Part 1. May or may not show depending on wether or not the founder has completed their profile
     #
@@ -47,7 +47,7 @@ class EngageStartupLawyerForm(BootstrapMixin, forms.Form):
 
         initial_bunch = kwargs.get('initial')
 
-        super(EngageStartupLawyerForm, self).__init__(*args, **kwargs)
+        super(EngageCompanyLawyerForm, self).__init__(*args, **kwargs)
 
         if initial_bunch.is_valid():
             # the lawyer has already completed their profile
@@ -62,10 +62,10 @@ class EngageStartupLawyerForm(BootstrapMixin, forms.Form):
 
 
     def save(self, commit=True):
-        logger.info('Starting EngageStartupLawyerForm save')
+        logger.info('Starting EngageCompanyLawyerForm save')
         data = self.cleaned_data
 
-        engage_service = EngageLawyerAsStartupService(user=self.user, lawyer=self.lawyer, startup_name=data.pop('startup_name'), **data)
+        engage_service = EngageLawyerAsCompanyService(user=self.user, lawyer=self.lawyer, startup_name=data.pop('startup_name'), **data)
         engagement = engage_service.process()
 
         return engagement

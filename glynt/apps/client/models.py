@@ -15,7 +15,7 @@ from userena.managers import ASSIGNED_PERMISSIONS
 from userena import signals as userena_signals
 
 from glynt.apps.lawyer.services import EnsureLawyerService
-from glynt.apps.startup.services import EnsureFounderService, EnsureStartupService
+from glynt.apps.company.services import EnsureFounderService, EnsureCompanyService
 
 from guardian.shortcuts import assign_perm
 

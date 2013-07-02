@@ -69,8 +69,8 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     websites_input = forms.URLField(required=False, label="Website Address", help_text='Enter the domain name of your public website, if you have one.', widget=forms.TextInput(attrs={}))
     websites = forms.CharField(required=False, widget=forms.HiddenInput)
 
-    startups_advised_input = forms.URLField(required=False, label="Startups Advised", help_text='Enter the domain name of any startups you have advised and press "Add". It must be public knowledge that you have advised them.', widget=forms.TextInput(attrs={'data-trigger':'change','placeholder':'e.g. Instagram.com', 'class':'typeahead','autocomplete':'on','data-trigger':'focusout','data-provide':'ajax', 'data-items':4, 'data-source': API_URLS.get('startups'), 'data-filter':'name__istartswith'}))
-    startups_advised = forms.CharField(required=False, widget=forms.HiddenInput)
+    companies_advised_input = forms.URLField(required=False, label="Startups Advised", help_text='Enter the domain name of any companies you have advised and press "Add". It must be public knowledge that you have advised them.', widget=forms.TextInput(attrs={'data-trigger':'change','placeholder':'e.g. Instagram.com', 'class':'typeahead','autocomplete':'on','data-trigger':'focusout','data-provide':'ajax', 'data-items':4, 'data-source': API_URLS.get('companies'), 'data-filter':'name__istartswith'}))
+    companies_advised = forms.CharField(required=False, widget=forms.HiddenInput)
 
     volume_incorp_setup = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
     volume_seed_financing = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]

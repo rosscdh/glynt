@@ -5,10 +5,10 @@ import logging
 logger = logging.getLogger('lawpal.services')
 
 
-class StartupProfileBunch(Bunch):
+class CompanyProfileBunch(Bunch):
     def __init__(self, startup):
         data = startup.data
-        return super(StartupProfileBunch, self).__init__(
+        return super(CompanyProfileBunch, self).__init__(
                     status = data.get('status'),
                     community_profile =  False, 
                     crunchbase_url =  data.get('crunchbase_url'), 

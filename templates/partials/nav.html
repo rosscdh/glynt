@@ -35,7 +35,7 @@
                         class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a id="user-profile-form" class="" href="
-                            {% if user.profile.is_lawyer %}{% url 'lawyer:setup_profile' %}{% else %}{% url 'startup:setup_profile' %}{% endif %}">{% trans 'Edit Profile' %}</a>
+                            {% if user.profile.is_lawyer %}{% url 'lawyer:setup_profile' %}{% else %}{% url 'company:setup_profile' %}{% endif %}">{% trans 'Edit Profile' %}</a>
                         </li>
                         {% if user.profile.is_lawyer %}
                             <li><a id="user-profile-form" class=""
@@ -46,7 +46,7 @@
                                    href="{% url 'userena_profile_detail' username=user.username %}">{% trans 'Account' %}</a>
                             </li>{% endif %}
                         <li><a id="user-profile-form" class="" href="
-                            {% if user.profile.is_lawyer %}{% url 'lawyer:invite' %}{% else %}{% url 'startup:invite' %}{% endif %}">{% trans 'Invite Colleagues' %}</a>
+                            {% if user.profile.is_lawyer %}{% url 'lawyer:invite' %}{% else %}{% url 'company:invite' %}{% endif %}">{% trans 'Invite Colleagues' %}</a>
                         </li>
                         <li><a id="user-logout" class="" href="{% url 'logout' %}">{% trans 'Logout' %}</a></li>
                     </ul>

@@ -62,7 +62,7 @@ class Migration(DataMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'lawyer': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['lawyer.Lawyer']"}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '128', 'blank': 'True'}),
-            'startup': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['startup.Startup']"})
+            'startup': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['startup.Company']"})
         },
         u'lawyer.lawyer': {
             'Meta': {'object_name': 'Lawyer'},
@@ -85,9 +85,9 @@ class Migration(DataMigration):
             'user': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'founder_profile'", 'unique': 'True', 'to': u"orm['auth.User']"})
         },
         u'startup.startup': {
-            'Meta': {'object_name': 'Startup'},
+            'Meta': {'object_name': 'Company'},
             'data': ('jsonfield.fields.JSONField', [], {'default': '{}'}),
-            'founders': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'startups'", 'symmetrical': 'False', 'to': u"orm['auth.User']"}),
+            'founders': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'companies'", 'symmetrical': 'False', 'to': u"orm['auth.User']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'db_index': 'True'}),
             'photo': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'}),

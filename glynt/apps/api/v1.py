@@ -16,14 +16,14 @@ from cities_light.models import City, Country, Region
 from glynt.apps.lawyer.models import Lawyer
 
 from glynt.apps.firm.models import Firm, Office
-from glynt.apps.startup.models import Startup
+from glynt.apps.company.models import Company
 
 from glynt.apps.engage.models import Engagement
 from glynt.apps.engage import ENGAGEMENT_STATUS
 
 from glynt.apps.todo.api import UserToDoCountResource
 
-from glynt.apps.startup.bunches import StartupProfileBunch
+from glynt.apps.company.bunches import CompanyProfileBunch
 
 
 V1_INTERNAL_API = Api(api_name='v1')
@@ -112,9 +112,9 @@ class OfficeSimpleResource(BaseApiModelResource):
         return bundle
 
 
-class StartupLiteSimpleResource(BaseApiModelResource):
+class CompanyLiteSimpleResource(BaseApiModelResource):
     class Meta(BaseApiModelResource.Meta):
-        queryset = Startup.objects.all()
+        queryset = Company.objects.all()
         authentication = Authentication()
         list_allowed_methods = ['get']
         resource_name = 'startup/lite'
@@ -133,16 +133,16 @@ class StartupLiteSimpleResource(BaseApiModelResource):
         return bundle
 
 def _startup_profile(bundle):
-    data = StartupProfileBunch(startup=bundle.obj)
+    data = CompanyProfileBunch(startup=bundle.obj)
     data['profile_photo'] = data.photo_url if data.photo_url else bundle.obj.profile_photo
     data['username'] = bundle.obj.slug # required to integrate with GlyntProfile object
     data['is_startup'] = True
     return data
 
 
-class StartupBasicProfileResource(BaseApiModelResource):
+class CompanyBasicProfileResource(BaseApiModelResource):
     class Meta(BaseApiModelResource.Meta):
-        queryset = Startup.objects.all().select_related('founders', 'founders_user')
+        queryset = Company.objects.all().select_related('founders', 'founders_user')
         authentication = Authentication()
         list_allowed_methods = ['get']
         resource_name = 'startup/profile'
@@ -164,7 +164,7 @@ def _founder_profile(bundle):
     if bundle.obj.profile.is_founder:
         profile = bundle.obj.founder_profile
         try:
-            primary_startup = profile.startups[0]
+            primary_startup = profile.companies[0]
         except IndexError:
             primary_startup = {}
 
@@ -172,7 +172,7 @@ def _founder_profile(bundle):
             'profile_url': bundle.obj.founder_profile.get_absolute_url(),
             'summary': profile.summary,
             'bio': profile.bio,
-            'startups': [
+            'companies': [
                 {
                     'name': primary_startup.name,
                     'summary': primary_startup.summary,
@@ -246,7 +246,7 @@ class LawyerResource(BaseApiModelResource):
         return bundle
 
 
-class StartupEngagementResource(BaseApiModelResource):
+class CompanyEngagementResource(BaseApiModelResource):
     lawyer_id = fields.IntegerField('lawyer_id')
 
     class Meta(BaseApiModelResource.Meta):
@@ -273,14 +273,14 @@ V1_INTERNAL_API.register(LocationSimpleResource())
 V1_INTERNAL_API.register(StateSimpleResource())
 V1_INTERNAL_API.register(FirmSimpleResource())
 V1_INTERNAL_API.register(OfficeSimpleResource())
-V1_INTERNAL_API.register(StartupLiteSimpleResource())
+V1_INTERNAL_API.register(CompanyLiteSimpleResource())
 
 V1_INTERNAL_API.register(UserBasicProfileResource())
-V1_INTERNAL_API.register(StartupBasicProfileResource())
+V1_INTERNAL_API.register(CompanyBasicProfileResource())
 
 V1_INTERNAL_API.register(UserToDoCountResource())
 
 V1_INTERNAL_API.register(LawyerResource())
 
-V1_INTERNAL_API.register(StartupEngagementResource())
+V1_INTERNAL_API.register(CompanyEngagementResource())
 

@@ -3,7 +3,7 @@ from django.conf import settings
 
 from notifications import notify
 
-from glynt.apps.startup.services import EnsureFounderService, EnsureStartupService
+from glynt.apps.company.services import EnsureFounderService, EnsureCompanyService
 from glynt.apps.engage.models import Engagement
 
 import logging
@@ -12,7 +12,7 @@ logger = logging.getLogger('lawpal.services')
 site_email = settings.DEFAULT_FROM_EMAIL
 
 
-class EngageLawyerAsStartupService(object):
+class EngageLawyerAsCompanyService(object):
     """ Allow a startup to engage a Lawyer """
 
     def __init__(self, user, lawyer, startup_name, **kwargs):
@@ -28,7 +28,7 @@ class EngageLawyerAsStartupService(object):
         founder_service = EnsureFounderService(user=self.user, **self.data)
         self.founder = founder_service.process()
 
-        startup_service = EnsureStartupService(name=self.startup_name, founder=self.founder, **self.data)
+        startup_service = EnsureCompanyService(name=self.startup_name, founder=self.founder, **self.data)
         self.startup = startup_service.process()
 
         engagement, is_new = self.save_engagement()

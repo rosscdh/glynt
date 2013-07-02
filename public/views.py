@@ -10,7 +10,7 @@ from django.shortcuts import redirect
 
 from public.forms import ContactForm
 from public.tasks import send_contactus_email
-from glynt.apps.startup.utils import FounderLoginLogic
+from glynt.apps.company.utils import FounderLoginLogic
 
 import logging
 logger = logging.getLogger('django.request')

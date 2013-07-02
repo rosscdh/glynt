@@ -1,4 +1,6 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import redirect
+from django.core.exceptions import ObjectDoesNotExist
 
 from glynt.apps.engage.models import Engagement
 
@@ -14,7 +16,7 @@ class FounderLoginLogic(object):
     def redirect(self):
         try:
             founder = self.user.founder_profile
-        except DoesNotExist:
+        except ObjectDoesNotExist:
             founder = None
             logger.error("founder profile not found for %s" % self.user)
 

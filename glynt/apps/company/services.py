@@ -1,7 +1,7 @@
 # coding: utf-8
 import os
 from django.template.defaultfilters import slugify
-from .models import Startup, Founder
+from .models import Company, Founder
 
 import logging
 logger = logging.getLogger('lawpal.services')
@@ -63,7 +63,7 @@ class EnsureFounderService(object):
         return self.founder
 
 
-class EnsureStartupService(object):
+class EnsureCompanyService(object):
     """ Set up a startup """
     founder = None
     startup = None
@@ -82,13 +82,13 @@ class EnsureStartupService(object):
         if self.founder or founder:
             founder = founder if founder else self.founder
             if not self.startup:
-                raise Exception('Startup has not yet been defined for service, need to call .process()')
+                raise Exception('Company has not yet been defined for service, need to call .process()')
 
             self.startup.founders.remove(founder.user) # ensure he is not already assocaited with the startup
             self.startup.founders.add(founder.user)
 
     def process(self):
-        self.startup, is_new = Startup.objects.get_or_create(name=self.startup_name)
+        self.startup, is_new = Company.objects.get_or_create(name=self.startup_name)
         logger.info("Processing startup %s (is_new: %s)" % (self.startup, is_new,))
 
         self.add_founder(self.founder)

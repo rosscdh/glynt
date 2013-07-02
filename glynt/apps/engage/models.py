@@ -9,7 +9,7 @@ from glynt.apps.utils import generate_unique_slug
 from glynt.apps.engage.services.actions import OpenEngagementService, CloseEngagementService, ReOpenEngagementService
 
 from glynt.apps.transact.models import Transaction
-from glynt.apps.startup.models import Startup, Founder
+from glynt.apps.company.models import Company, Founder
 from glynt.apps.lawyer.models import Lawyer
 
 from glynt.apps.engage import ENGAGEMENT_STATUS
@@ -25,7 +25,7 @@ class Engagement(models.Model):
     transaction = models.ForeignKey(Transaction, null=True)
     engagement_status = models.IntegerField(choices=ENGAGEMENT_STATUS.get_choices(), default=ENGAGEMENT_STATUS.new, db_index=True)
     slug = models.SlugField(max_length=128, blank=False)
-    startup = models.ForeignKey(Startup)
+    startup = models.ForeignKey(Company)
     founder = models.ForeignKey(Founder)
     lawyer = models.ForeignKey(Lawyer)
     data = JSONField(default={})
