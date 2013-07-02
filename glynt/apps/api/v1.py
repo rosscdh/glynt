@@ -117,7 +117,7 @@ class CompanyLiteSimpleResource(BaseApiModelResource):
         queryset = Company.objects.all()
         authentication = Authentication()
         list_allowed_methods = ['get']
-        resource_name = 'startup/lite'
+        resource_name = 'company/lite'
         fields = ['pk', 'name', 'website']
         filtering = {
             'name': ALL,
@@ -132,7 +132,7 @@ class CompanyLiteSimpleResource(BaseApiModelResource):
         bundle.data.update({'name': '%s, %s' % (name, website,) })
         return bundle
 
-def _startup_profile(bundle):
+def _company_profile(bundle):
     data = CompanyProfileBunch(startup=bundle.obj)
     data['profile_photo'] = data.photo_url if data.photo_url else bundle.obj.profile_photo
     data['username'] = bundle.obj.slug # required to integrate with GlyntProfile object
@@ -155,7 +155,7 @@ class CompanyBasicProfileResource(BaseApiModelResource):
 
     def dehydrate(self, bundle):
         profile_data = bundle.data.pop('data')
-        bundle.data.update(_startup_profile(bundle))
+        bundle.data.update(_company_profile(bundle))
         return bundle
 
 

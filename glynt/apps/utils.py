@@ -25,7 +25,7 @@ API_URLS = {
     'firms': '/api/v1/firm/lite/?format=json&limit=15',
     'locations': '/api/v1/location/lite/?format=json&limit=15',
     'states': '/api/v1/state/lite/?format=json&limit=15',
-    'companies': '/api/v1/startup/lite/?format=json&limit=15',
+    'companies': '/api/v1/company/lite/?format=json&limit=15',
 }
 
 
