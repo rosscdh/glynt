@@ -4,7 +4,7 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.core import exceptions
-from django.utils import simplejson as json
+import json
 from django.core.urlresolvers import reverse
 from django.core.cache import cache
 from glynt.cache_utils_1_5 import make_template_fragment_key

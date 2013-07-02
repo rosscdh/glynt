@@ -5,7 +5,7 @@ from django.views.generic.edit import FormMixin
 from endless_pagination.views import AjaxListView
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.utils import simplejson as json
+import json
 
 from haystack.query import SQ, SearchQuerySet
 from haystack.inputs import Exact, Clean

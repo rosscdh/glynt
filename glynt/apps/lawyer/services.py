@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 from django.contrib.auth.models import User
-from django.utils import simplejson as json
+import json
 
 from models import Lawyer
 from glynt.apps.firm.services import EnsureFirmService
@@ -90,7 +90,7 @@ class EnsureLawyerService(object):
 
     def volume_matrix(self, lawyer_data):
         # Updates to the JSON Data object for the Lawyer
-        volume_types = (('companies_advised', unicode('[]')), ('volume_incorp_setup', self.default_volume_matrix), \
+        volume_types = (('companies_advised', unicode('[0]')), ('volume_incorp_setup', self.default_volume_matrix), \
                         ('volume_seed_financing', self.default_volume_matrix), ('volume_series_a', self.default_volume_matrix), \
                         ('volume_ip', self.default_volume_matrix), ('volume_other', self.default_volume_matrix), \
                         ('volume_by_year', self.default_volume_matrix_by_year),)
@@ -102,8 +102,11 @@ class EnsureLawyerService(object):
             except ValueError:
                 # errored out
                 val = default
-
-            lawyer_data[vt] = json.loads(val)
+            try:
+                val = json.loads(val)
+            except ValueError:
+                val = [0]
+            lawyer_data[vt] = val
 
         return lawyer_data
 
