@@ -26,8 +26,6 @@ urlpatterns = patterns('',
 	url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}, name='logout'),
     # Companies (companies)
     url(r'^company/', include('glynt.apps.company.urls', namespace='company')),
-    # Legal Firms
-    url(r'^firms/', include('glynt.apps.firm.urls', namespace='firm')),
     # lawyers
     url(r'^lawyers/', include('glynt.apps.lawyer.urls', namespace='lawyer')),
     # Engage app

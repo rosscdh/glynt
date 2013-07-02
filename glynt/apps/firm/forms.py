@@ -3,7 +3,7 @@ from django import forms
 from django.core import exceptions
 
 from bootstrap.forms import BootstrapMixin
-from models import tmpLawyerFirm
+#from models import tmpLawyerFirm
 
 
 class CreateLawyerFirmForm(BootstrapMixin, forms.Form):
@@ -22,11 +22,12 @@ class CreateLawyerFirmForm(BootstrapMixin, forms.Form):
 
     def clean_email(self):
         email = self.cleaned_data['email']
-        # Nasty
-        for l in tmpLawyerFirm.objects.all():
-            if l.email == email:
-                raise exceptions.ValidationError('Sorry but a Lawyer with that email already exists (id: %s)' % (l.pk) )
+        # # Nasty
+        # for l in tmpLawyerFirm.objects.all():
+        #     if l.email == email:
+        #         raise exceptions.ValidationError('Sorry but a Lawyer with that email already exists (id: %s)' % (l.pk) )
 
     def save(self, commit=True):
-        lawerfirm = tmpLawyerFirm(data=self.cleaned_data)
-        return lawerfirm.save()
+        # lawerfirm = tmpLawyerFirm(data=self.cleaned_data)
+        pass
+        # return lawerfirm.save()
