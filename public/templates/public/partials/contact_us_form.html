@@ -8,24 +8,23 @@
 {% else %}
   <form id="contact-us-form" data-validate="parsley" action="{% url 'public:contact_us' %}" method="POST" class="form-horizontal">{% csrf_token %}
 {% endif %}
-    <div class="control-group">
       {{ form.name|as_crispy_field }}
-    </div>
-    {% if form.email.is_hidden %}
+      {{ form.message|as_crispy_field }}
+          {% if form.email.is_hidden %}
       {{ form.email|as_crispy_field }}
     {% else %}
-    <div class="control-group">
       {{ form.email|as_crispy_field }}
-    </div>
     {% endif %}
-    <div class="control-group">
-      {{ form.message|as_crispy_field }}
-    </div>
 {% if is_modal %}
   </form>
 {% else %}
-    <div class="form-actions">
-      <input type="submit" class="btn btn-primary" value="Send Message" />
-    </div>
-  </form>
+   <div class="row">
+       <div class="col col-lg-10 col-offset-2">
+          <input type="submit" class="btn btn-primary" value="Send Message" />
+      </div>
+  </div>
+</form>
 {% endif %}
+
+
+
