@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.views.generic import ListView, DetailView
 
-from glynt.apps.engage.models import Engagement
+from glynt.apps.project.models import Project
 from glynt.apps.todo.models import ToDo
 
 
@@ -21,7 +21,7 @@ class MyToDoListView(ListView):
 
         # filter by the current user always
         # filter by the params passed in
-        queryset = self.model.objects.prefetch_related('user', 'engagement') \
+        queryset = self.model.objects.prefetch_related('user', 'project') \
                         .filter(user=self.request.user) \
                         .filter(**fltr)
 
@@ -30,7 +30,7 @@ class MyToDoListView(ListView):
     def get_context_data(self, **kwargs):
         context = super(MyToDoListView, self).get_context_data(**kwargs)
         context.update({
-            'engagements': Engagement.objects.for_user(user=self.request.user),
+            'projects': Project.objects.for_user(user=self.request.user),
             'counts': {
                 'new': self.model.objects.new(user=self.request.user).count(),
                 'open': self.model.objects.open(user=self.request.user).count(),

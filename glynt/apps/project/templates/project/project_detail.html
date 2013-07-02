@@ -5,7 +5,7 @@
 {% block breadcrumb %}
 <ul class="breadcrumb">
     <li><a href="/">Home</a> <span class="divider">/</span></li>
-    <li><a href="{% url 'engage:list' %}">Inbox</a> <span class="divider">/</span></li>
+    <li><a href="{% url 'project:list' %}">Inbox</a> <span class="divider">/</span></li>
     <li class="active">{% if user.profile.is_founder %}Request to: {{ object.lawyer.user.get_full_name }}{% else %}Request from: {{ object.founder.user.get_full_name }}{% endif %}</li>
 </ul>
 {% endblock %}
@@ -66,7 +66,7 @@
             </div>
             <div class="modal-footer">
                 <button data-dismiss="modal" aria-hidden="true" class="btn secondary">No</button>
-                <a href="#close-engagement" id="btn-confirm-close-engagement" data-url="{% if object.is_closed %}{% url 'engage:re-open' slug=object.slug %}{% else %}{% url 'engage:close' slug=object.slug %}{% endif %}" class="btn btn-danger">Yes</a>
+                <a href="#close-engagement" id="btn-confirm-close-engagement" data-url="{% if object.is_closed %}{% url 'project:re-open' slug=object.slug %}{% else %}{% url 'project:close' slug=object.slug %}{% endif %}" class="btn btn-danger">Yes</a>
             </div>
         </div>
     </div>

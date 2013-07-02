@@ -6,7 +6,7 @@
 
 <div class="modal-body">
     <p>Please fill in the form below to help the Lawyer with your enquiry.</p>
-    <form id="engage-lawyer-form" data-validate="parsley" class="" action="{% url 'engage:startup_lawyer' lawyer_pk=lawyer.pk %}" method="POST">{% csrf_token %}
+    <form id="engage-lawyer-form" data-validate="parsley" class="" action="{% url 'project:startup_lawyer' lawyer_pk=lawyer.pk %}" method="POST">{% csrf_token %}
         {{ form|crispy }}
         <p>Please select the type(s) of legal expertise required</p>
         <ul class="lawyer-options">

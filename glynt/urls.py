@@ -28,11 +28,11 @@ urlpatterns = patterns('',
     url(r'^company/', include('glynt.apps.company.urls', namespace='company')),
     # lawyers
     url(r'^lawyers/', include('glynt.apps.lawyer.urls', namespace='lawyer')),
-    # Engage app
-    url(r'^engage/', include('glynt.apps.engage.urls', namespace='engage')),
+    # Project app
+    url(r'^project/', include('glynt.apps.project.urls', namespace='project')),
     # Transaction
     url(r'^transact/', include('glynt.apps.transact.urls', namespace='transact')),
-	# Comments - used by engage and documents
+	# Comments
     url(r'^comments/', include('fluent_comments.urls')),
     # Dashboard
     url(r'^dashboard/', include('glynt.apps.dashboard.urls', namespace='dashboard')),

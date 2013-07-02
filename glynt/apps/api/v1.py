@@ -18,8 +18,8 @@ from glynt.apps.lawyer.models import Lawyer
 from glynt.apps.firm.models import Firm
 from glynt.apps.company.models import Company
 
-from glynt.apps.engage.models import Engagement
-from glynt.apps.engage import ENGAGEMENT_STATUS
+from glynt.apps.project.models import Project
+from glynt.apps.project import PROJECT_STATUS
 
 from glynt.apps.todo.api import UserToDoCountResource
 
@@ -227,24 +227,24 @@ class LawyerResource(BaseApiModelResource):
         return bundle
 
 
-class CompanyEngagementResource(BaseApiModelResource):
+class ProjectResource(BaseApiModelResource):
     lawyer_id = fields.IntegerField('lawyer_id')
 
     class Meta(BaseApiModelResource.Meta):
         authentication = Authentication()
         authorization = UserLoggedInAuthorization()
-        queryset = Engagement.objects.all()
-        resource_name = 'engagement'
-        fields = ['lawyer_id', 'engagement_status']
+        queryset = Project.objects.all()
+        resource_name = 'project'
+        fields = ['lawyer_id', 'project_status']
         include_resource_uri = False
         include_absolute_url = True
         filtering = {
-            'engagement_status': ALL,
+            'project_status': ALL,
         }
 
     def dehydrate(self, bundle):
         bundle.data.update({
-            'status': ENGAGEMENT_STATUS.get_desc_by_value(bundle.obj.engagement_status).lower(),
+            'status': PROJECT_STATUS.get_desc_by_value(bundle.obj.project_status).lower(),
         })
         return bundle
 
@@ -263,5 +263,5 @@ V1_INTERNAL_API.register(UserToDoCountResource())
 
 V1_INTERNAL_API.register(LawyerResource())
 
-V1_INTERNAL_API.register(CompanyEngagementResource())
+V1_INTERNAL_API.register(ProjectResource())
 

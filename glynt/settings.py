@@ -184,8 +184,8 @@ PROJECT_APPS = (
     'glynt.apps.lawyer',
     # The End User - Client, those that consume the documents
     'glynt.apps.client',
-    # Engagement App
-    'glynt.apps.engage',
+    # Customer Projects
+    'glynt.apps.project',
     # Company & Lawyer Transactions
     'glynt.apps.transact',
     # Checklist app
@@ -243,7 +243,7 @@ HELPER_APPS = (
 
     # Vast array of Storage types
     'storages',
-    # Engagement System
+    # Project System
     'fluent_comments',
     'threadedcomments',
 

@@ -13,13 +13,13 @@ from glynt.apps.utils import generate_unique_slug
 from glynt.apps.todo import TODO_STATUS
 from glynt.apps.todo.managers import DefaultToDoManager
 
-from glynt.apps.engage.models import Engagement
+from glynt.apps.project.models import Project
 
 
 class ToDo(models.Model):
-    """ ToDo Items that are associated with a user and perhaps with an engagement """
+    """ ToDo Items that are associated with a user and perhaps with a project """
     user = models.ForeignKey(User)
-    engagement = models.ForeignKey(Engagement, blank=True, null=True)
+    project = models.ForeignKey(Project, blank=True, null=True)
     name = models.CharField(max_length=128)
     slug = models.SlugField()
     description = models.TextField(blank=True)
@@ -33,7 +33,7 @@ class ToDo(models.Model):
 
     @property
     def todo_type(self):
-        return '%s' % 'Generic' if not self.engagement else 'Need to hook up to engagement'
+        return '%s' % 'Generic' if not self.project else 'Need to hook up to engagement'
 
     @property
     def display_status(self):

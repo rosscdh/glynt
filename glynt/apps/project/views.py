@@ -9,12 +9,12 @@ from glynt.apps.utils import AjaxableResponseMixin
 
 from glynt.apps.lawyer.models import Lawyer
 from glynt.apps.company.services import EnsureFounderService
-from glynt.apps.engage.models import Engagement
+from glynt.apps.project.models import Project
 
 from bunches import CompanyEngageLawyerBunch
 
 from forms import EngageCompanyLawyerForm
-from signals import mark_engagement_notifications_as_read
+from signals import mark_project_notifications_as_read
 
 import logging
 logger = logging.getLogger('django.request')
@@ -22,16 +22,15 @@ logger = logging.getLogger('django.request')
 
 class CompanyEngageLawyerView(AjaxableResponseMixin, FormView):
     form_class = EngageCompanyLawyerForm
-    template_name = 'engage/startup-lawyer.html'
+    template_name = 'project/startup-lawyer.html'
 
     def get_form(self, form_class):
         """
         """
         self.lawyer = get_object_or_404(Lawyer, pk=self.kwargs.get('lawyer_pk'))
 
-        self.engagement = Engagement.objects.historic(founder=self.request.user.founder_profile, lawyer=self.lawyer)
+        self.project = Project.objects.historic(founder=self.request.user.founder_profile, lawyer=self.lawyer)
 
-        #self.engagement = 
         kwargs = self.get_form_kwargs()
 
         founder_service = EnsureFounderService(user=self.request.user)
@@ -39,15 +38,15 @@ class CompanyEngageLawyerView(AjaxableResponseMixin, FormView):
 
         initial = CompanyEngageLawyerBunch(founder=founder)
 
-        if self.engagement is not None:
+        if self.project is not None:
             initial.update({
-                'engagement_statement': self.engagement.engagement_statement,
-                'engage_for_general': self.engagement.data.get('engage_for_general',False),
-                'engage_for_incorporation': self.engagement.data.get('engage_for_incorporation',False),
-                'engage_for_ip': self.engagement.data.get('engage_for_ip',False),
-                'engage_for_employment': self.engagement.data.get('engage_for_employment',False),
-                'engage_for_cofounders': self.engagement.data.get('engage_for_cofounders',False),
-                'engage_for_fundraise': self.engagement.data.get('engage_for_fundraise',False),
+                'project_statement': self.project.project_statement,
+                'engage_for_general': self.project.data.get('engage_for_general',False),
+                'engage_for_incorporation': self.project.data.get('engage_for_incorporation',False),
+                'engage_for_ip': self.project.data.get('engage_for_ip',False),
+                'engage_for_employment': self.project.data.get('engage_for_employment',False),
+                'engage_for_cofounders': self.project.data.get('engage_for_cofounders',False),
+                'engage_for_fundraise': self.project.data.get('engage_for_fundraise',False),
             })
 
         kwargs.update({
@@ -63,25 +62,25 @@ class CompanyEngageLawyerView(AjaxableResponseMixin, FormView):
         context = super(CompanyEngageLawyerView, self).get_context_data(**kwargs)
         context.update({
             'lawyer': self.lawyer,
-            'engagement': self.engagement,
+            'project': self.project,
         })
         return context
 
     def form_valid(self, form):
-        engagement = form.save()
+        project = form.save()
 
-        if engagement.pk:
-            msg = _("Thanks. That Lawyer has been contacted. <a href=\"%s\">Check here for updates</a>" % engagement.get_absolute_url())
+        if project.pk:
+            msg = _("Thanks. That Lawyer has been contacted. <a href=\"%s\">Check here for updates</a>" % project.get_absolute_url())
             status = 200
         else:
             msg = _("Sorry, contact could not be made wih this Lawyer.")
             status = 500
 
-        return self.render_to_json_response({'message': unicode(msg), 'status': status, 'instance': {'pk': engagement.pk, 'link': engagement.get_absolute_url()}})
+        return self.render_to_json_response({'message': unicode(msg), 'status': status, 'instance': {'pk': project.pk, 'link': project.get_absolute_url()}})
 
 
-class EngagementView(DetailView):
-    model = Engagement
+class ProjectView(DetailView):
+    model = Project
 
     def get_object(self, queryset=None):
         """"""
@@ -99,15 +98,15 @@ class EngagementView(DetailView):
         return obj
 
     def render_to_response(self, context, **response_kwargs):
-        """ @BUSINESSRULE if the viewing user is a founder, then mark their engagement notifications as read when they simply view the engagement """
+        """ @BUSINESSRULE if the viewing user is a founder, then mark their engagement notifications as read when they simply view the project """
         #if self.object.founder.user == self.request.user:
-        mark_engagement_notifications_as_read(user=self.request.user, engagement=self.object)
+        mark_project_notifications_as_read(user=self.request.user, project=self.object)
 
-        return super(EngagementView, self).render_to_response(context, **response_kwargs)
+        return super(ProjectView, self).render_to_response(context, **response_kwargs)
 
 
-class CloseEngagementView(AjaxableResponseMixin, UpdateView):
-    model = Engagement
+class CloseProjectView(AjaxableResponseMixin, UpdateView):
+    model = Project
     http_method_names = [u'post']
 
     def post(self, request, *args, **kwargs):
@@ -117,7 +116,7 @@ class CloseEngagementView(AjaxableResponseMixin, UpdateView):
         return self.render_to_json_response({'message': message, 'status': 200, 'instance': {'pk': self.object.pk, 'link': self.object.get_absolute_url()}})
 
 
-class ReOpenEngagementView(CloseEngagementView):
+class ReOpenProjectView(CloseProjectView):
     def post(self, request, *args, **kwargs):
         if request.is_ajax():
             self.object = self.get_object()
@@ -125,8 +124,8 @@ class ReOpenEngagementView(CloseEngagementView):
         return self.render_to_json_response({'message': message, 'status': 200, 'instance': {'pk': self.object.pk, 'link': self.object.get_absolute_url()}})
 
 
-class MyEngagementsView(ListView):
-    model = Engagement
+class MyProjectsView(ListView):
+    model = Project
     def get_queryset(self):
         """"""
         user = self.request.user

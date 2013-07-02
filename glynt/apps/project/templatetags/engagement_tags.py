@@ -5,20 +5,20 @@ register = template.Library()
 
 from notifications.models import Notification
 
-from glynt.apps.engage.models import Engagement
-from glynt.apps.engage.utils import ENGAGEMENT_CONTENT_TYPE
+from glynt.apps.project.models import Project
+from glynt.apps.project.utils import PROJECT_CONTENT_TYPE
 
 
-@register.inclusion_tag('engage/partials/engagement_intro.html', takes_context=True)
-def engagement_intro(context, engagement):
+@register.inclusion_tag('project/partials/project_intro.html', takes_context=True)
+def project_intro(context, project):
     context.update({
-        'engagement': engagement,
+        'project': project,
     })
     return context
 
 
-def engagement_dict(context, user=None):
-    engagements = []
+def project_dict(context, user=None):
+    projects = []
     user = context.get('user', user)
     lawyer = context.get('lawyer', None)
     is_own_profile = True if lawyer.user.pk == user.pk else False
@@ -27,29 +27,29 @@ def engagement_dict(context, user=None):
         if user.is_authenticated():
             if not is_own_profile:
                 if user.profile.is_founder:
-                    engagements = Engagement.objects.filter(lawyer=lawyer, founder=user.founder_profile)
+                    projects = Project.objects.filter(lawyer=lawyer, founder=user.founder_profile)
 
     return {
-        'engagements': engagements,
-        'num_engagements': len(engagements),
+        'projects': projects,
+        'num_projects': len(projects),
         'is_own_profile' : is_own_profile,
     }
 
 
-@register.inclusion_tag('engage/partials/engagement_with_lawyer.html', takes_context=True)
-def engagement_with_lawyer(context, lawyer):
+@register.inclusion_tag('project/partials/project_with_lawyer.html', takes_context=True)
+def project_with_lawyer(context, lawyer):
     context.update({
         'lawyer': lawyer,
     })
 
     context.update(
-        engagement_dict(context)
+        project_dict(context)
     )
 
     return context
 
 
-@register.inclusion_tag('engage/partials/engage_with_lawyer_button.html', takes_context=True)
+@register.inclusion_tag('project/partials/project_with_lawyer_button.html', takes_context=True)
 def engage_with_lawyer_button(context, lawyer=None, user=None):
     lawyer_enganged = False
     user = context.get('user', user)
@@ -58,24 +58,24 @@ def engage_with_lawyer_button(context, lawyer=None, user=None):
     data.update({
         'lawyer': lawyer,
     })
-    data.update(engagement_dict(context=context, user=user))
+    data.update(project_dict(context=context, user=user))
     data.update({
-        'has_engagements': True if data.get('engagements') else False,
+        'has_projects': True if data.get('projects') else False,
     })
     context.update(data)
     return context
 
 
-@register.inclusion_tag('engage/partials/user_engagement_notification_count.js', takes_context=False)
-def user_engagement_notification_count(user):
+@register.inclusion_tag('project/partials/user_project_notification_count.js', takes_context=False)
+def user_project_notification_count(user):
     unread = {}
     
     # get a grouped by result set
-    unread_qs = Notification.objects.filter(recipient=user, unread=True, target_content_type=ENGAGEMENT_CONTENT_TYPE)
+    unread_qs = Notification.objects.filter(recipient=user, unread=True, target_content_type=PROJECT_CONTENT_TYPE)
 
     # build a nice jsonifyable dict
     for u in unread_qs:
-        # target_object_id is the id of the content object (engagement)
+        # target_object_id is the id of the content object (project)
         if u.target_object_id not in unread:
             unread[u.target_object_id] = unread.get(u.target_object_id, 1)
         else:

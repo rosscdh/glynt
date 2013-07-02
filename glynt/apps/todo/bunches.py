@@ -1,6 +1,6 @@
 # coding: utf-8
-""" bunches that allow a simple means of adding a set of todos to an engagement
-per engagement type,
+""" bunches that allow a simple means of adding a set of todos to a project
+per project type,
 
 Bunches DO NOT perform database actions, they ONLY provide the data to be saved
 Services is where the magic happens
@@ -16,14 +16,14 @@ logger = logging.getLogger('lawpal.services')
 class BaseToDoBunch(Bunch):
     """ Sets up the todos per transaction + attachments etc """
     user = None
-    engagement = None
+    project = None
     transaction_slug = None
     required_todo_items = [] # list of todo tuples (name,description,attachements_list) to create. i.e. [('My ToDo', 'Is kinda cool', [FileObject1, FileObject2])]
     todos = []
 
-    def __init__(self, user, engagement=None, *args, **kwargs):
+    def __init__(self, user, project=None, *args, **kwargs):
         self.user = user
-        self.engagement = engagement
+        self.project = project
 
         self.transaction_todos()
 
@@ -35,9 +35,9 @@ class BaseToDoBunch(Bunch):
             # if we dont already have todos then setup a list
             for name, description, attachments in self.required_todo_items:
                 self.todos.push( ToDo( user=self.user, \
-                            engagement=self.engagement \
-                            name=self.engagement \
-                            description=self.engagement )
+                            project=self.project \
+                            name=self.project \
+                            description=self.project )
                 )
         return self.todos
 

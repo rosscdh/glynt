@@ -1,0 +1,11 @@
+{% if not request.user.is_authenticated %}
+    <a href="{% url 'public:auth_user_class_redirect' user_class_name='founder' login_type='google-oauth2' %}" id="" class="btn btn-large btn-primary right">Sign up to connect</a>
+{% else %}
+    {% if user.profile.is_founder  %}
+        {% if has_engagements %}
+            <a href="{% url 'project:list' %}?engagements={% for e in engagements %}{{ e.pk }}{% if not forloop.last %},{% endif %}{% endfor %}" class="btn btn-large btn-primary right">Contact lawyer</a>
+        {% else %}
+            <a href="{% url 'project:startup_lawyer' lawyer_pk=lawyer.pk %}" id="engage-lawyer" class="btn btn-large btn-primary right" data-toggle="modal">Contact Lawyer</a>
+        {% endif %}
+    {% endif %}
+{% endif %}

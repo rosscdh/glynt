@@ -2,7 +2,7 @@
 from glynt.apps.utils import get_namedtuple_choices
 
 
-ENGAGEMENT_STATUS = get_namedtuple_choices('ENGAGEMENT_STATUS', (
+PROJECT_STATUS = get_namedtuple_choices('PROJECT_STATUS', (
     (0, 'new', 'New'),
     (1, 'open', 'Open'),
     (2, 'closed', 'Closed'),

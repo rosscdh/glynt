@@ -2,7 +2,7 @@
 from django.shortcuts import redirect
 from django.core.exceptions import ObjectDoesNotExist
 
-from glynt.apps.engage.models import Engagement
+from glynt.apps.project.models import Project
 
 import logging
 logger = logging.getLogger('django.request')
@@ -20,9 +20,9 @@ class FounderLoginLogic(object):
             founder = None
             logger.error("founder profile not found for %s" % self.user)
 
-        engagements = Engagement.objects.filter(founder=founder)
+        projects = Project.objects.filter(founder=founder)
 
-        if engagements:
+        if projects:
             return redirect('dashboard:overview')
         else:
             return redirect('transact:packages')

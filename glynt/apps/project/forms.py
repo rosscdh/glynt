@@ -8,7 +8,7 @@ from bootstrap.forms import BootstrapMixin
 
 from parsley.decorators import parsleyfy
 
-from glynt.apps.engage.services.startup_engage_lawyer import EngageLawyerAsCompanyService
+from glynt.apps.project.services.startup_engage_lawyer import EngageLawyerAsCompanyService
 
 import logging
 logger = logging.getLogger('django.request')
@@ -37,7 +37,7 @@ class EngageCompanyLawyerForm(BootstrapMixin, forms.Form):
     engage_for_cofounders = forms.BooleanField(required=False, label='', widget=forms.HiddenInput(attrs={'data-target':'li#engage_for_cofounders'}))
     engage_for_fundraise = forms.BooleanField(required=False, label='', widget=forms.HiddenInput(attrs={'data-target':'li#engage_for_fundraise'}))
 
-    engagement_statement = forms.CharField(label='Your Requirements', help_text='', required=True, widget=forms.Textarea(attrs={'placeholder':'Your requirements', 'class': 'input-xlarge', 'tabindex':'1'}))
+    project_statement = forms.CharField(label='Your Requirements', help_text='', required=True, widget=forms.Textarea(attrs={'placeholder':'Your requirements', 'class': 'input-xlarge', 'tabindex':'1'}))
 
     def __init__(self, *args, **kwargs):
         """ Setup whether or not to show the Part1 aspect of the form """
@@ -66,6 +66,6 @@ class EngageCompanyLawyerForm(BootstrapMixin, forms.Form):
         data = self.cleaned_data
 
         engage_service = EngageLawyerAsCompanyService(user=self.user, lawyer=self.lawyer, startup_name=data.pop('startup_name'), **data)
-        engagement = engage_service.process()
+        project = engage_service.process()
 
-        return engagement
+        return project

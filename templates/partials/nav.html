@@ -22,7 +22,7 @@
                 {% endif %}
                 <li class="divider-vertical"></li>
                 <li class="nav-support" data-toggle="tooltip" title="Support"><a id="Intercom" href="mailto:xw4ux8lx@incoming.intercom.io"><i class="icon-support"></i></a></li>
-                <li class="nav-mail" data-toggle="tooltip" title="Inbox"><a href="{% url 'engage:list' %}">
+                <li class="nav-mail" data-toggle="tooltip" title="Inbox"><a href="{% url 'project:list' %}">
                     {% if notification_unread != 0 %}
                         <span class="unread-messages">{{ notification_unread }}</span> <i class="icon-mail"></i>
                     {% else %}
