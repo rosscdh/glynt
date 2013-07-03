@@ -144,9 +144,9 @@ def customer_profile(bundle):
     if bundle.obj.profile.is_customer:
         profile = bundle.obj.customer_profile
         try:
-            primary_startup = profile.companies[0]
+            primary_company = profile.companies[0]
         except IndexError:
-            primary_startup = {}
+            primary_company = {}
 
         data.update({
             'profile_url': bundle.obj.customer_profile.get_absolute_url(),
@@ -154,10 +154,10 @@ def customer_profile(bundle):
             'bio': profile.bio,
             'companies': [
                 {
-                    'name': primary_startup.name,
-                    'summary': primary_startup.summary,
-                    'url': primary_startup.website,
-                    'twitter': primary_startup.twitter}
+                    'name': primary_company.name,
+                    'summary': primary_company.summary,
+                    'url': primary_company.website,
+                    'twitter': primary_company.twitter}
             ],
         })
     return data

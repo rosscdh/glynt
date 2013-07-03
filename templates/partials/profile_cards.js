@@ -131,7 +131,7 @@ var GlyntProfileCards = {
                     profile_html = self.templates.lawyer(context);
                 } else if (profile.is_customer) {
                     self.log(profile.username + 'gets the founder template' )
-                    profile_html = self.templates.founder(context);
+                    profile_html = self.templates.customer(context);
                 } else if (profile.is_startup) {
                     self.log(profile.username + 'gets the startup template' )
                     profile_html = self.templates.startup(context);

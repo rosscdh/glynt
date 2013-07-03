@@ -10,7 +10,7 @@ import user_streams
 from notifications.models import Notification
 
 from glynt.apps.project.utils import PROJECT_CONTENT_TYPE
-from glynt.apps.project.models import Project, PROJECT_STATUS
+from glynt.apps.project.models import PROJECT_STATUS
 from glynt.apps.project.services.email import SendProjectEmailsService
 
 import logging
@@ -25,19 +25,18 @@ def save_project_comment_signal(sender, **kwargs):
     is_new = kwargs.get('created', False)
     comment = kwargs.get('instance', None)
 
-    logger.info('Comment is new: %s'%is_new)
+    logger.info('Comment is new: %s' % is_new)
 
     project = comment.content_object
 
     to_user = None
 
     if comment.user == project.lawyer.user:
-        to_user = project.founder.user
-    elif comment.user == project.founder.user:
+        to_user = project.customer.user
+    elif comment.user == project.customer.user:
         to_user = project.lawyer.user
     else:
         logger.error('Could not identify the to_user for the comment: %s' % comment.pk)
-
 
     logger.debug('comment is new, so send notification and add to user_stream')
     # send the comment notifications
@@ -64,7 +63,7 @@ def send_new_comment_notifications(comment, to_user, project):
     logger.debug('sending comment notifications to user: %s for project: %s'%(to_user,project.pk,))
     # send notification
     notify.send(comment.user, recipient=to_user, verb=u'replied', action_object=project,
-                description=comment.comment, target=project, project_action='new_project_comment', project_pk=project.pk, lawyer_pk=project.lawyer.user.pk, founder_pk=project.founder.user.pk)
+                description=comment.comment, target=project, project_action='new_project_comment', project_pk=project.pk, lawyer_pk=project.lawyer.user.pk, customer_pk=project.customer.user.pk)
     # Log activity to stream
     description = '%s commented on the project' % comment.user
     user_streams.add_stream_item(to_user, description, project)
@@ -72,7 +71,7 @@ def send_new_comment_notifications(comment, to_user, project):
 
 
 def mark_project_notifications_as_read(user, project):
-    """ used to mark the passed in users notifications for a specific project as read (can be either a lwayer or a founder) """
+    """ used to mark the passed in users notifications for a specific project as read (can be either a lawyer or a customer) """
     logger.debug('marking unred notifications as read for user: %s and project: %s'%(user, project.pk))
     Notification.objects.filter(recipient=user, target_object_id=project.pk, unread=True, target_content_type=PROJECT_CONTENT_TYPE).mark_all_as_read()
 
@@ -102,8 +101,6 @@ def on_comment_notification_created(sender, **kwargs):
     """
     Handle new notifications
     """
-    is_new = kwargs.get('created')
-
     notification = kwargs.get('instance')
     project_action = notification.data.get('project_action', None)
 
@@ -113,5 +110,3 @@ def on_comment_notification_created(sender, **kwargs):
 
         send = SendProjectEmailsService(project=project, sender=notification.actor, recipients=recipients, notification=notification)
         send.process()
-
-

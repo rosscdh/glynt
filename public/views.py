@@ -27,6 +27,7 @@ class PublicHomepageView(TemplateView):
     def get_template_names(self):
         # get from session
         user_class_name = self.request.session.get('user_class_name', 'lawyer')
+
         template_name = self.template_name
         if self.request.user.is_authenticated():
             # we are logged in.. redirect based on the user_class_name

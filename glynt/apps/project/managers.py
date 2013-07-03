@@ -26,7 +26,7 @@ class DefaultProjectManager(models.Manager):
     def new(self, **kwargs):
         return self.filter(project_status=PROJECT_STATUS.new).filter(**kwargs)
 
-    def historic(self, founder, lawyer):
+    def historic(self, customer, lawyer):
         """ @BUSINESSRULE Method to get a Customers current Project 
         with a specified lawyer, if none Found then try for the last that
         the Customer created; as we assume he still has the same requirements.
@@ -34,24 +34,24 @@ class DefaultProjectManager(models.Manager):
         lawyer the process repeats"""
         try:
             # has a previous project with this lawyer
-            return self.get(lawyer=lawyer, customer=founder).order_by('-id')
+            return self.get(lawyer=lawyer, customer=customer).order_by('-id')
         except ObjectDoesNotExist:
             # @BUSINESSRULE
             # does not have a previous project with this lawyer so look for this companies previous
             # project and use that as a template
             try:
-                return self.filter(customer=founder).order_by('-id')[0]
+                return self.filter(customer=customer).order_by('-id')[0]
             except IndexError:
                 return None
 
-    def new(self, founder, lawyer):
-        #get any new projects between the founder and lawyer
-        return self.filter(lawyer=lawyer, customer=founder, project_status=PROJECT_STATUS.new)
+    def new(self, customer, lawyer):
+        #get any new projects between the customer and lawyer
+        return self.filter(lawyer=lawyer, customer=customer, project_status=PROJECT_STATUS.new)
 
-    def open(self, founder, lawyer):
-        #filter out any closed projects between the founder and lawyer
-        return self.filter(lawyer=lawyer, customer=founder).exclude(project_status=PROJECT_STATUS.closed)
+    def open(self, customer, lawyer):
+        #filter out any closed projects between the customer and lawyer
+        return self.filter(lawyer=lawyer, customer=customer).exclude(project_status=PROJECT_STATUS.closed)
 
-    def closed(self, founder, lawyer):
-        #get any closed projects between the founder and lawyer
-        return self.filter(lawyer=lawyer, customer=founder, project_status=PROJECT_STATUS.closed)
+    def closed(self, customer, lawyer):
+        #get any closed projects between the customer and lawyer
+        return self.filter(lawyer=lawyer, customer=customer, project_status=PROJECT_STATUS.closed)

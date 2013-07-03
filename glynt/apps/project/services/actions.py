@@ -34,7 +34,7 @@ class BaseProjectService(object):
 
     @property
     def recipient(self):
-        return self.project.founder.user if self.actioning_user.profile.is_lawyer else self.project.lawyer.user
+        return self.project.customer.user if self.actioning_user.profile.is_lawyer else self.project.lawyer.user
 
     def notifications(self):
         # send notification
@@ -44,7 +44,7 @@ class BaseProjectService(object):
         notify.send(self.actioning_user, recipient=self.recipient, verb=self.verb, action_object=self.project,
                     description=description, target=self.project, project_pk=self.project.pk, \
                     closed_by=self.actioning_user.pk, directed_at=self.recipient.pk, \
-                    lawyer_pk=self.project.lawyer.user.pk, founder_pk=self.project.founder.user.pk, \
+                    lawyer_pk=self.project.lawyer.user.pk, customer_pk=self.project.customer.user.pk, \
                     date_closed=datetime.datetime.utcnow())
 
         # Log activity to stream

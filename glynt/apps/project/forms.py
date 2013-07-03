@@ -17,7 +17,7 @@ logger = logging.getLogger('django.request')
 @parsleyfy
 class EngageCompanyLawyerForm(BootstrapMixin, forms.Form):
     #
-    # Part 1. May or may not show depending on wether or not the founder has completed their profile
+    # Part 1. May or may not show depending on wether or not the customer has completed their profile
     #
     first_name = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'First name', 'tabindex':'1'}))
     last_name = forms.CharField(widget=forms.TextInput(attrs={'placeholder':'Last name','tabindex':'2'}))

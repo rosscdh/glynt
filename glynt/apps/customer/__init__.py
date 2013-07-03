@@ -20,7 +20,7 @@ class CustomerLoginLogic(object):
             customer = None
             logger.error("founder profile not found for %s" % self.user)
 
-        projects = Project.objects.filter(customer=founder)
+        projects = Project.objects.filter(customer=customer)
 
         if projects:
             return redirect('dashboard:overview')

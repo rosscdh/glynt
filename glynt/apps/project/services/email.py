@@ -52,7 +52,7 @@ class SendProjectEmailsService(object):
             'actor': notice.actor.get_full_name(),
             'verb': notice.verb,
             'action_object': notice.action_object,
-            'target': self.project.founder if self.sender_is_lawyer else self.project.lawyer,
+            'target': self.project.customer if self.sender_is_lawyer else self.project.lawyer,
             'timesince': notice.timesince()
         }
         return u'%(actor)s commented on the Project with %(target)s' % ctx

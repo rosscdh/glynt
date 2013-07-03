@@ -41,7 +41,7 @@ class CompanyProfileSetupView(FormView):
         customer_service = EnsureCustomerService(user=user)
         self.customer = customer_service.process()
         # get the startup
-        startup = self.customer.primary_startup
+        startup = self.customer.primary_company
 
         kwargs.update({'initial': {
             'first_name': self.customer.user.first_name,

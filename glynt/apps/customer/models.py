@@ -45,7 +45,7 @@ class Customer(models.Model):
         return self.user.companies.all()
 
     @property
-    def primary_startup(self):
+    def primary_company(self):
         try:
             return self.companies[0]
         except IndexError:

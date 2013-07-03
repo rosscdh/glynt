@@ -17,7 +17,7 @@ function populate_form(tag) {
 }
 
 function founder_list() {
-    var founder_list = $('.founder-list');
+    var founder_list = $('.customer-list');
     founder_list.find('dd').remove();
     for (var key in localStorage) {
         if (key.indexOf("founder-") !== -1) {
@@ -72,7 +72,7 @@ $(document).ready(function () {
         delete_from_localstorage('founder-' + name);
     });
 
-    $('.founder-submit').click(function (e) {
+    $('.customer-submit').click(function (e) {
         e.preventDefault();
         $('form').submit();
         return false;

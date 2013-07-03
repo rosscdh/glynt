@@ -95,8 +95,8 @@ class InitialDirectorsForm(forms.Form):
 class GeneralCapitalizationForm(forms.Form):
     total_authorized_shares_of_common_stock = forms.CharField(label="Total authorized shares of common stock", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
     par_value_per_share = forms.CharField(label="Par value per share", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
-    total_shares_founders = forms.CharField(label="Total shares to be purchased by founders", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
-    price_paid_founders = forms.CharField(label="Price per share to be paid by founders", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
+    total_shares_customers = forms.CharField(label="Total shares to be purchased by founders", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
+    price_paid_customers = forms.CharField(label="Price per share to be paid by founders", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
 
 
 # WIZARD STEP SIX
@@ -131,7 +131,7 @@ class CustomersForm(forms.Form):
     st_termination_percentage_of_shares = forms.CharField(label="Percentage of shares accelerated on single trigger", required=False, help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
     no_acceleration = forms.BooleanField(label="No acceleration of vesting", required=False, help_text="", widget=forms.CheckboxInput(attrs={'tabindex':''}))
 
-    founders = forms.CharField(required=False, widget=forms.HiddenInput)
+    customers = forms.CharField(required=False, widget=forms.HiddenInput)
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
@@ -163,7 +163,7 @@ class CustomersForm(forms.Form):
                 'st_termination_percentage_of_shares',
                 'no_acceleration',
             ),
-            'founders'
+            'customers'
         )
         super(CustomersForm, self).__init__(*args, **kwargs)
 

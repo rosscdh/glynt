@@ -36,7 +36,7 @@ class Project(models.Model):
     objects = DefaultProjectManager()
 
     def __unicode__(self):
-        return '%s of %s Project with %s' % (self.founder.user.get_full_name(), self.startup, self.lawyer.user.get_full_name(),)
+        return '%s of %s Project with %s' % (self.customer.user.get_full_name(), self.startup, self.lawyer.user.get_full_name(),)
 
     def get_absolute_url(self):
         return reverse('project:project', kwargs={'slug': self.slug})

@@ -10,7 +10,7 @@ class ProjectAdmin(admin.ModelAdmin):
     search_fields = ('startup', 'customer', 'lawyer')
 
     def queryset (self, request):
-        qs = Project.objects.select_related('startup', 'customer', 'founder__user', 'lawyer', 'lawyer__user').all()
+        qs = Project.objects.select_related('startup', 'customer', 'customer__user', 'lawyer', 'lawyer__user').all()
         ordering = self.get_ordering(request)
         if ordering:
             qs = qs.order_by(*ordering)

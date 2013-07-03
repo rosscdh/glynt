@@ -99,7 +99,7 @@ class ProjectView(DetailView):
 
     def render_to_response(self, context, **response_kwargs):
         """ @BUSINESSRULE if the viewing user is a founder, then mark their engagement notifications as read when they simply view the project """
-        #if self.object.founder.user == self.request.user:
+        #if self.object.customer.user == self.request.user:
         mark_project_notifications_as_read(user=self.request.user, project=self.object)
 
         return super(ProjectView, self).render_to_response(context, **response_kwargs)
