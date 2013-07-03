@@ -2,32 +2,27 @@
 
 LawPal is platfomr that aims to make certain legal process simpler and give both the client and the lawyer a clear overview of what has and what is yet to be done.
 
-The platform overview can be described as
+The platform can be described as:
 
-```
 every user of LawPal.com has a 
 
-"user" account
-    which has a "client" profile
-```
+"**user**" account
+    which has a "**client**" profile
 
-```
-a "user" can be a
-    customer
-    who has 1 or more "company"(ies)
+a "**user**" can be a
+    "**customer**"
+    who has 1 or more "**company**"(ies)
 
-OR a "user" can be a
-    "lawyer"
-    who has 1 "firm"
-```
+OR a "**user**" can be a
+    "**lawyer**"
+    who has 1 "**firm**"
 
-```
-a "customer"
+a "**customer**"
     can create 1 or more 
-    "project"(s)
-    which has 1 "transact"(ion) type
-    and has many "todo" items
-```
+    "**project**"(s)
+    which has 1 "**transact**"(ion) type
+    and has many "**todo**" items
+
 
 ## Basic Installation
 
