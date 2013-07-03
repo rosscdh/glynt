@@ -1,8 +1,8 @@
 # The Glynt Project #
 
-LawPal is platfomr that aims to make certain legal process simpler and give both the client and the lawyer a clear overview of what has and what is yet to be done.
+LawPal is platform that aims to make certain legal process simpler and give both the client and the lawyer a clear overview of what has and what is yet to be done.
 
-The platform can be described as:
+**The platform can be described as:**
 
 every user of LawPal.com has a 
 
