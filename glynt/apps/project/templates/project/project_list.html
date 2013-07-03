@@ -1,4 +1,4 @@
-{% extends "comments/base.html" %}{% load url from future %}{% load i18n engagement_tags %}
+{% extends "comments/base.html" %}{% load url from future %}{% load i18n project_tags %}
 
 {% block breadcrumb %}
 <ul class="breadcrumb">
@@ -19,7 +19,7 @@
                 {% for message in object_list %}
                 <li class="engage-status-{{ message.status|lower }}" data-pk="{{ message.pk }}" data-url="{{ message.get_absolute_url }}">
                     <a href="{{ message.get_absolute_url }}">
-                        {% if user.profile.is_founder %}
+                        {% if user.profile.is_customer %}
                         <span class="profile-card" data-template="mini" data-username="{{message.lawyer.user.username}}">
                             <img src="{{ STATIC_URL }}img/default_avatar.png" class="avatar">
                         </span>
@@ -27,8 +27,8 @@
                         <span class="message-date">{{ message.date_created|date:"d M" }}</span>
                         <span class="label engage-status engage-status-{{ message.status|lower }}">{{ message.status }}</span>
                         {% else %}
-                        <span class="profile-card" data-template="mini" data-username="{{message.founder.user.username}}"></span>
-                        <span class="message-sender">{{ message.startup }} @ {{ message.founder.user.get_full_name }}</span>
+                        <span class="profile-card" data-template="mini" data-username="{{message.customer.user.username}}"></span>
+                        <span class="message-sender">{{ message.startup }} @ {{ message.customer.user.get_full_name }}</span>
                         <span class="message-date">{{ message.date_created|date:"d M" }}</span>
                         <span class="label engage-status engage-status-{{ message.status|lower }}">{{ message.status }}</span>
                         {% endif %}
@@ -36,7 +36,6 @@
                 </li>
                 {% endfor %}
             </ul>
-            {% user_engagement_notification_count user %}
         {% else %}
             <p>You currently have no Engagements. Why not try searching for a Lawyer on the <a href="{% url 'lawyer:list' %}">marketplace</p>
         {% endif %}

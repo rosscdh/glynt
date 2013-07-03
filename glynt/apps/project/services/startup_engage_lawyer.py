@@ -3,7 +3,8 @@ from django.conf import settings
 
 from notifications import notify
 
-from glynt.apps.company.services import EnsureFounderService, EnsureCompanyService
+from glynt.apps.company.services import EnsureCompanyService
+from glynt.apps.customer.services import EnsureCustomerService
 from glynt.apps.project.models import Project
 
 import logging
@@ -25,10 +26,10 @@ class EngageLawyerAsCompanyService(object):
         self.data = kwargs
 
     def process(self):
-        founder_service = EnsureFounderService(user=self.user, **self.data)
-        self.founder = founder_service.process()
+        customer_service = EnsureCustomerService(user=self.user, **self.data)
+        self.customer = customer_service.process()
 
-        startup_service = EnsureCompanyService(name=self.startup_name, founder=self.founder, **self.data)
+        startup_service = EnsureCompanyService(name=self.startup_name, customer=self.founder, **self.data)
         self.startup = startup_service.process()
 
         project, is_new = self.save_project()
@@ -38,7 +39,7 @@ class EngageLawyerAsCompanyService(object):
         return self.project
 
     def save_project(self):
-        self.project, is_new = Project.objects.get_or_create(startup=self.startup, founder=self.founder, lawyer=self.lawyer)
+        self.project, is_new = Project.objects.get_or_create(startup=self.startup, customer=self.founder, lawyer=self.lawyer)
         self.project.data = self.data
         self.project.save(update_fields=['data'])
         return self.project, is_new

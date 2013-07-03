@@ -38,7 +38,7 @@
                               <span class="help-block">A good photo makes all the difference.</span>
                             </div>
                            <div class="controls">
-                                <img id="photo-preview" class="" vspace="10" width="130" height="130" src="{{ founder.profile_photo }}">
+                                <img id="photo-preview" class="" vspace="10" width="130" height="130" src="{{ customer.profile_photo }}">
                             </div>
                         </div>
                     </div>
@@ -130,7 +130,7 @@
 <script>
 function preparePhotoPreview(element) {
     var element = $('.cropped-imag-preview');
-    var cookie_data = $.parseJSON($.cookie('startup_profile_photo-{{ founder.pk }}'));
+    var cookie_data = $.parseJSON($.cookie('startup_profile_photo-{{ customer.pk }}'));
 
     $.each(element.find('img'), function(i,img){
         img = $(img)

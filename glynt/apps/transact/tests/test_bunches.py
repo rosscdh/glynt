@@ -42,14 +42,14 @@ class BaseToDoBunchMethodsTest(mocktest.TestCase):
 
 class IncorporationBunchTest(BaseToDoBunchAttribsTest):
     """ Ensure the IncorporationBunch is setup correctly """
-    expected_repeaters = [('founders_docs', 'founder'),
+    expected_repeaters = [('customer_docs', 'customer'),
                             ('options', 'options'),
                             ('directors_and_officers', 'director'),
                             ('employment_docs', 'employee'),
                         ]
     expected_subject_slug_and_names = [('general', 'General Questions'),
                                 ('qualification', 'Qualification to do business in other states or countries'),
-                                ('founders_docs', 'Founders Documents'),
+                                ('customer_docs', 'Customers Documents'),
                                 ('option_plan', 'Option Plan'),
                                 ('options', 'Option Issuance'),
                                 ('directors_and_officers', 'Directors and Officers'),

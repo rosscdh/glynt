@@ -29,7 +29,7 @@ def linkedin_profile_extra_details(backend, details, response, user=None, is_new
                                                 oauth_token_secret=api_data.get('oauth_token_secret')[0])
             profile = service.profile
 
-        userclass_profile = user.lawyer_profile if user.profile.is_lawyer else user.founder_profile
+        userclass_profile = user.lawyer_profile if user.profile.is_lawyer else user.customer_profile
 
         # logging info
         if not profile.get('photo_url'):

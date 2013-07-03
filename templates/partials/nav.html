@@ -12,7 +12,7 @@
         <ul class="nav navbar-nav pull-right">
         {% if user.is_authenticated %}
             {% cache 300 user_nav user.pk %}
-                {% if user.profile.is_founder %}
+                {% if user.profile.is_customer %}
                     <li><a href="{% url 'dashboard:overview' %}">Dashboard</a></li>
                     <li><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>
                     <li><a href="{% url 'dashboard:documents' %}">Documents</a></li>
@@ -30,18 +30,19 @@
                         class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a id="user-profile-form" class="" href="
-                            {% if user.profile.is_lawyer %}{% url 'lawyer:setup_profile' %}{% else %}{% url 'company:setup_profile' %}{% endif %}">{% trans 'Edit Profile' %}</a>
+                            {% if user.profile.is_lawyer %}{% url 'lawyer:setup_profile' %}{% else %}{% url 'company:setup_profile' %}{% endif %}">{% trans 'Account' %}</a>
                         </li>
                         {% if user.profile.is_lawyer %}
                             <li><a id="user-profile-form" class=""
                                    href="{% url 'lawyer:profile' slug=user.username %}">{% trans 'View Profile' %}</a>
                             </li>{% endif %}
                         {% if PROJECT_ENVIRONMENT != 'prod' %}
-                            <li><a id="user-profile" class=""
+<!--                             <li><a id="user-profile" class=""
                                    href="{% url 'userena_profile_detail' username=user.username %}">{% trans 'Account' %}</a>
-                            </li>{% endif %}
+                            </li> -->
+                        {% endif %}
                         <li><a id="user-profile-form" class="" href="
-                            {% if user.profile.is_lawyer %}{% url 'lawyer:invite' %}{% else %}{% url 'company:invite' %}{% endif %}">{% trans 'Invite Colleagues' %}</a>
+                            {% if user.profile.is_lawyer %}{% url 'lawyer:invite' %}{% else %}{% url 'customer:invite' %}{% endif %}">{% trans 'Invite Colleagues' %}</a>
                         </li>
                         <li><a id="user-logout" class="" href="{% url 'logout' %}">{% trans 'Logout' %}</a></li>
                     </ul>

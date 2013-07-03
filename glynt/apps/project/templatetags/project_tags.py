@@ -26,13 +26,13 @@ def project_dict(context, user=None):
     if user is not None:
         if user.is_authenticated():
             if not is_own_profile:
-                if user.profile.is_founder:
-                    projects = Project.objects.filter(lawyer=lawyer, founder=user.founder_profile)
+                if user.profile.is_customer:
+                    projects = Project.objects.filter(lawyer=lawyer, customer=user.customer_profile)
 
     return {
         'projects': projects,
         'num_projects': len(projects),
-        'is_own_profile' : is_own_profile,
+        'is_own_profile': is_own_profile
     }
 
 
@@ -51,7 +51,6 @@ def project_with_lawyer(context, lawyer):
 
 @register.inclusion_tag('project/partials/project_with_lawyer_button.html', takes_context=True)
 def engage_with_lawyer_button(context, lawyer=None, user=None):
-    lawyer_enganged = False
     user = context.get('user', user)
     lawyer = context.get('lawyer', lawyer)
     data = {}
@@ -69,7 +68,7 @@ def engage_with_lawyer_button(context, lawyer=None, user=None):
 @register.inclusion_tag('project/partials/user_project_notification_count.js', takes_context=False)
 def user_project_notification_count(user):
     unread = {}
-    
+
     # get a grouped by result set
     unread_qs = Notification.objects.filter(recipient=user, unread=True, target_content_type=PROJECT_CONTENT_TYPE)
 

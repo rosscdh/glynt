@@ -1,5 +1,5 @@
 var form_mode = 'new';
-var active_founder = '';
+var active_customer = '';
 
 function save_to_localstorage(tag, data) {
     localStorage.setItem(tag, data.serialize());
@@ -29,7 +29,7 @@ function founder_list() {
 
 function save_founder() {
     var form = $('form');
-    var founder_name = $('input#id_founders-first_name').val() + ' ' + $('input#id_founders-last_name').val();
+    var founder_name = $('input#id_customers-first_name').val() + ' ' + $('input#id_customers-last_name').val();
     save_to_localstorage('founder-' + founder_name, form);
     form[0].reset();
     form.parsley('destroy');
@@ -62,7 +62,7 @@ $(document).ready(function () {
         e.preventDefault();
         form_mode = 'edit';
         var name = $(this).parent().find('span').text();
-        active_founder = name;
+        active_customer = name;
         populate_form('founder-' + name);
     });
 

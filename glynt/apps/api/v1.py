@@ -1,5 +1,4 @@
 # coding: utf-8
-import ast
 from tastypie.resources import ALL
 from tastypie.api import Api
 from tastypie import fields
@@ -37,7 +36,7 @@ class UserLoggedInAuthorization(Authorization):
         if not bundle.request.user.is_authenticated():
             return []
         else:
-            return object_list.filter(founder=bundle.request.user.founder_profile)
+            return object_list.filter(customer=bundle.request.user.customer_profile)
 
 
 class LocationSimpleResource(BaseApiModelResource):
@@ -60,7 +59,7 @@ class LocationSimpleResource(BaseApiModelResource):
         region = bundle.data.get('region', None)
         bundle.data.pop('name')
         bundle.data.pop('region')
-        bundle.data.update({'name': '%s, %s' % (name, region) })
+        bundle.data.update({'name': '%s, %s' % (name, region)})
         return bundle
 
 
@@ -73,7 +72,7 @@ class StateSimpleResource(BaseApiModelResource):
         authentication = Authentication()
         list_allowed_methods = ['get']
         resource_name = 'state/lite'
-        fields = ['display_name',]
+        fields = ['display_name', ]
         filtering = {
             'name': ALL,
         }
@@ -110,20 +109,20 @@ class CompanyLiteSimpleResource(BaseApiModelResource):
         website = bundle.data.get('website', None)
         bundle.data.pop('name')
         bundle.data.pop('website')
-        bundle.data.update({'name': '%s, %s' % (name, website,) })
+        bundle.data.update({'name': '%s, %s' % (name, website,)})
         return bundle
 
 def _company_profile(bundle):
     data = CompanyProfileBunch(startup=bundle.obj)
     data['profile_photo'] = data.photo_url if data.photo_url else bundle.obj.profile_photo
-    data['username'] = bundle.obj.slug # required to integrate with GlyntProfile object
+    data['username'] = bundle.obj.slug  # required to integrate with GlyntProfile object
     data['is_startup'] = True
     return data
 
 
 class CompanyBasicProfileResource(BaseApiModelResource):
     class Meta(BaseApiModelResource.Meta):
-        queryset = Company.objects.all().select_related('founders', 'founders_user')
+        queryset = Company.objects.all().select_related('customers', 'customers_user')
         authentication = Authentication()
         list_allowed_methods = ['get']
         resource_name = 'startup/profile'
@@ -135,22 +134,22 @@ class CompanyBasicProfileResource(BaseApiModelResource):
         cache = SimpleCache()
 
     def dehydrate(self, bundle):
-        profile_data = bundle.data.pop('data')
+        bundle.data.pop('data')
         bundle.data.update(_company_profile(bundle))
         return bundle
 
 
-def _founder_profile(bundle):
+def customer_profile(bundle):
     data = {}
-    if bundle.obj.profile.is_founder:
-        profile = bundle.obj.founder_profile
+    if bundle.obj.profile.is_customer:
+        profile = bundle.obj.customer_profile
         try:
             primary_startup = profile.companies[0]
         except IndexError:
             primary_startup = {}
 
         data.update({
-            'profile_url': bundle.obj.founder_profile.get_absolute_url(),
+            'profile_url': bundle.obj.customer_profile.get_absolute_url(),
             'summary': profile.summary,
             'bio': profile.bio,
             'companies': [
@@ -158,8 +157,7 @@ def _founder_profile(bundle):
                     'name': primary_startup.name,
                     'summary': primary_startup.summary,
                     'url': primary_startup.website,
-                    'twitter': primary_startup.twitter,
-                }
+                    'twitter': primary_startup.twitter}
             ],
         })
     return data
@@ -199,15 +197,14 @@ class UserBasicProfileResource(BaseApiModelResource):
         cache = SimpleCache()
 
     def dehydrate(self, bundle):
-        profile = bundle.data.get('username', None)
         bundle.data.update({
             'is_lawyer': bundle.obj.profile.is_lawyer,
-            'is_founder': bundle.obj.profile.is_founder,
+            'is_customer': bundle.obj.profile.is_customer,
             'profile_photo': bundle.obj.profile.get_mugshot_url(),
             'profile_url': None,
         })
         bundle.data.update(_lawyer_profile(bundle))
-        bundle.data.update(_founder_profile(bundle))
+        bundle.data.update(customer_profile(bundle))
         return bundle
 
 
@@ -264,4 +261,3 @@ V1_INTERNAL_API.register(UserToDoCountResource())
 V1_INTERNAL_API.register(LawyerResource())
 
 V1_INTERNAL_API.register(ProjectResource())
-

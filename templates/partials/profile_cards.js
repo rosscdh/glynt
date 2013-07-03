@@ -1,7 +1,7 @@
 {% load templatetag_handlebars %}
 
 {% tplhandlebars "tpl-profile-mini" %}
-<img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - {{#if profile.is_lawyer }}Lawyer{{/if}}{{#if profile.is_founder }}Founder{{/if}}" />
+<img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - {{#if profile.is_lawyer }}Lawyer{{/if}}{{#if profile.is_customer }}Customer{{/if}}" />
 {% endtplhandlebars %}
 
 {% tplhandlebars "tpl-unknown-profile" %}
@@ -67,7 +67,7 @@
 {% endtplhandlebars %}
 
 {% tplhandlebars "tpl-founder-profile" %}
-    <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Founder" />
+    <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Customer" />
     <h5>{{ profile.name }}<br/><small>founder</small></h5>
     <dl>
         {{#if profile.phone }}
@@ -96,7 +96,7 @@ var GlyntProfileCards = {
     ,templates: {
         'mini': Handlebars.compile($('script#tpl-profile-mini').html())
         ,'startup': Handlebars.compile($('script#tpl-startup-profile').html())
-        ,'founder': Handlebars.compile($('script#tpl-founder-profile').html())
+        ,'customer': Handlebars.compile($('script#tpl-founder-profile').html())
         ,'lawyer': Handlebars.compile($('script#tpl-lawyer-profile').html())
         ,'unknown': Handlebars.compile($('script#tpl-unknown-profile').html())
     }
@@ -129,7 +129,7 @@ var GlyntProfileCards = {
                 if (profile.is_lawyer) {
                     self.log(profile.username + 'gets the lawyer template' )
                     profile_html = self.templates.lawyer(context);
-                } else if (profile.is_founder) {
+                } else if (profile.is_customer) {
                     self.log(profile.username + 'gets the founder template' )
                     profile_html = self.templates.founder(context);
                 } else if (profile.is_startup) {

@@ -15,7 +15,8 @@ from userena.managers import ASSIGNED_PERMISSIONS
 from userena import signals as userena_signals
 
 from glynt.apps.lawyer.services import EnsureLawyerService
-from glynt.apps.company.services import EnsureFounderService, EnsureCompanyService
+from glynt.apps.company.services import EnsureCompanyService
+from glynt.apps.customer.services import EnsureCustomerService
 
 from guardian.shortcuts import assign_perm
 
@@ -48,7 +49,7 @@ class ClientProfile(UserenaBaseProfile):
 
         if self.is_lawyer:
             pic = self.profile_data.get('linkedin_photo_url', None) or self.profile_data.get('facebook_photo_url', None)
-        if self.is_founder:
+        if self.is_customer:
             pic = self.profile_data.get('picture', None)
 
         return pic if pic is not None else p
@@ -62,15 +63,15 @@ class ClientProfile(UserenaBaseProfile):
         return True if self.user_class == 'lawyer' else False
 
     @property
-    def is_founder(self):
-        return True if self.user_class == 'founder' else False
+    def is_customer(self):
+        return True if self.user_class == 'customer' else False
 
     @property
     def non_specific_title(self):
         if self.is_lawyer:
             return 'The Lawyer'
-        if self.is_founder:
-            return 'The Founder'
+        if self.is_customer:
+            return 'The Customer'
         return None
 
     def short_name(self):
@@ -122,10 +123,10 @@ def create_glynt_profile(profile, is_new):
     if not is_new:
         logger.info('create_glynt_profile profile is not new User %s' % profile.user.pk)
     else:
-        if profile.is_founder:
-            logger.info('Creating Founder Profile for User %s' % user.username)
-            founder_service = EnsureFounderService(user=user)
-            founder_service.process()
+        if profile.is_customer:
+            logger.info('Creating Customer Profile for User %s' % user.username)
+            customer_service = EnsureCustomerService(user=user)
+            customer_service.process()
 
         elif profile.is_lawyer:
             logger.info('Creating Lawyer Profile for User %s' % user.username)

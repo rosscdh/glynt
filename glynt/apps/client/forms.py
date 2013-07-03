@@ -72,6 +72,7 @@ class ConfirmLoginDetailsForm(forms.ModelForm):
             user.save(update_fields=['password'])
         return user
 
+
 class SignupForm(BootstrapMixin, SignupFormOnlyEmail):
     """ The signup form overrides the Userena save method and hooks it up
     to our own UserSignup model and process allowing us to expand on fields saved """

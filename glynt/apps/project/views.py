@@ -8,7 +8,7 @@ from django.http import Http404
 from glynt.apps.utils import AjaxableResponseMixin
 
 from glynt.apps.lawyer.models import Lawyer
-from glynt.apps.company.services import EnsureFounderService
+from glynt.apps.customer.services import EnsureCustomerService
 from glynt.apps.project.models import Project
 
 from bunches import CompanyEngageLawyerBunch
@@ -29,14 +29,14 @@ class CompanyEngageLawyerView(AjaxableResponseMixin, FormView):
         """
         self.lawyer = get_object_or_404(Lawyer, pk=self.kwargs.get('lawyer_pk'))
 
-        self.project = Project.objects.historic(founder=self.request.user.founder_profile, lawyer=self.lawyer)
+        self.project = Project.objects.historic(customer=self.request.user.customer_profile, lawyer=self.lawyer)
 
         kwargs = self.get_form_kwargs()
 
-        founder_service = EnsureFounderService(user=self.request.user)
-        founder = founder_service.process()
+        customer_service = EnsureCustomerService(user=self.request.user)
+        customer = customer_service.process()
 
-        initial = CompanyEngageLawyerBunch(founder=founder)
+        initial = CompanyEngageLawyerBunch(customer=founder)
 
         if self.project is not None:
             initial.update({
@@ -87,7 +87,7 @@ class ProjectView(DetailView):
         queryset = self.get_queryset()
         # Next, try looking up by primary key.
         slug = self.kwargs.get(self.slug_url_kwarg, None)
-        queryset = queryset.select_related('startup','founder','lawyer','founder__user','lawyer__user').filter(slug=slug)
+        queryset = queryset.select_related('startup','customer','lawyer','founder__user','lawyer__user').filter(slug=slug)
 
         try:
             # Get the single item from the filtered queryset
@@ -134,8 +134,8 @@ class MyProjectsView(ListView):
 
         if user.profile.is_lawyer:
             fltr.update({'lawyer': user.lawyer_profile})
-        elif user.profile.is_founder:
-            fltr.update({'founder': user.founder_profile})
+        elif user.profile.is_customer:
+            fltr.update({'customer': user.customer_profile})
         else:
             """@BUSINESSRULE if they are neither a founder not a startup show them nothign
             @TODO this should all be in a manager """

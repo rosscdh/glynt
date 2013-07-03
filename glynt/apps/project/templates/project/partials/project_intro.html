@@ -1,12 +1,12 @@
 <div class="comment-item initial-lead message-{% if comment.user == user %}right{% else %}left{% endif %} clearfix">
 
-    <div class="profile-card message-avatar message-avatar" data-template="mini" data-username="{{ engagement.founder }}"></div>
+    <div class="profile-card message-avatar message-avatar" data-template="mini" data-username="{{ engagement.customer }}"></div>
 
     <div class="comment-text triangle-border">
         <p>{{ engagement.engagement_statement|linebreaks }} </p>
     </div>
 
-    <span class="comment-name">{{ engagement.founder.user.get_full_name }}</span>
+    <span class="comment-name">{{ engagement.customer.user.get_full_name }}</span>
 
     <span class="comment-date">{{ engagement.date_created }}</span>
 

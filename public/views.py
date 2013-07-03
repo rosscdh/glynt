@@ -4,54 +4,52 @@ from django.http import Http404
 from django.views.generic.base import RedirectView
 from django.views.generic.edit import FormView
 from django.views.generic import TemplateView
-from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from django.shortcuts import redirect
 
 from public.forms import ContactForm
 from public.tasks import send_contactus_email
-from glynt.apps.company.utils import FounderLoginLogic
+from glynt.apps.customer import CustomerLoginLogic
 
 import logging
 logger = logging.getLogger('django.request')
 
 
 class PublicHomepageView(TemplateView):
-    template_name='public/homepage.html'
+    template_name = 'public/homepage.html'
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated():
-            if request.session.get('user_class_name', 'lawyer') == 'founder':
-                return FounderLoginLogic(user=request.user).redirect()
+            if request.session.get('user_class_name', 'lawyer') == 'customer':
+                return CustomerLoginLogic(user=request.user).redirect()
 
         return super(PublicHomepageView, self).dispatch(request, *args, **kwargs)
 
     def get_template_names(self):
         # get from session
         user_class_name = self.request.session.get('user_class_name', 'lawyer')
-
-        if not self.request.user.is_authenticated():
-            # return the standard homepage if we are not logged in
-            template_name = self.template_name
-        else:
+        template_name = self.template_name
+        if self.request.user.is_authenticated():
             # we are logged in.. redirect based on the user_class_name
             if user_class_name == 'lawyer':
                 template_name = 'lawyer/welcome.html'
+            if user_class_name == 'customer':
+                template_name = 'customer/welcome.html'
 
         return [template_name]
 
 
 class UserClassSessionRedirectView(RedirectView):
     """ View to set a session that helps us determine what class a user is logging in as,
-    based on the session value 
+    based on the session value
     """
-    permanent = False # status = 302 not 301 (permanent)
+    permanent = False  # status = 302 not 301 (permanent)
+
     def get_redirect_url(self, **kwargs):
         """ if the user has already signed up and has set a password then continue normally
         otherwise show them the form """
 
-        user_class_name = kwargs.get('user_class_name', 'founder') # default to founder
-        login_type = kwargs.get('login_type', 'linkedin') # default ot linkedin
+        user_class_name = kwargs.get('user_class_name', 'customer')  # default to customer
+        login_type = kwargs.get('login_type', 'linkedin')  # default to linkedin
 
         self.request.session['user_class_name'] = user_class_name
 
@@ -63,7 +61,7 @@ class UserClassSessionRedirectView(RedirectView):
             raise Http404("User Class %s is not Defined" % user_class_name)
 
         logging.debug('redirecting user_class_name: %s to : %s' % (user_class_name, url,))
-        return url    
+        return url
 
 
 class UserClassLoggedInRedirectView(RedirectView):
@@ -102,14 +100,10 @@ class ContactUsView(FormView):
         return kwargs
 
     def form_valid(self, form):
-        logger.info('Contact us from: %s (%s) message: %s' % (form.cleaned_data['name'], form.cleaned_data['email'], form.cleaned_data['message'],) )
+        logger.info('Contact us from: %s (%s) message: %s' % (form.cleaned_data['name'], form.cleaned_data['email'], form.cleaned_data['message'],))
 
-        # try:
-        #     send_contactus_email.delay(from_name=form.cleaned_data['name'], from_email=form.cleaned_data['email'], message=form.cleaned_data['message'])
-        # except:
         send_contactus_email(from_name=form.cleaned_data['name'], from_email=form.cleaned_data['email'], message=form.cleaned_data['message'])
 
         messages.success(self.request, "Message sent, thanks!")
 
         return super(ContactUsView, self).form_valid(form)
-

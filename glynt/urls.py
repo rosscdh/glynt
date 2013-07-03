@@ -24,12 +24,14 @@ urlpatterns = patterns('',
 	url(r'^accounts/', include('userena.urls')),
 	url(r'^client/', include('glynt.apps.client.urls', namespace='client')),
 	url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}, name='logout'),
-    # Companies (companies)
-    url(r'^company/', include('glynt.apps.company.urls', namespace='company')),
+    # Companies
+    url(r'^companies/', include('glynt.apps.company.urls', namespace='company')),
+    # Customers
+    url(r'^customers/', include('glynt.apps.customer.urls', namespace='customer')),
     # lawyers
     url(r'^lawyers/', include('glynt.apps.lawyer.urls', namespace='lawyer')),
     # Project app
-    url(r'^project/', include('glynt.apps.project.urls', namespace='project')),
+    url(r'^projects/', include('glynt.apps.project.urls', namespace='project')),
     # Transaction
     url(r'^transact/', include('glynt.apps.transact.urls', namespace='transact')),
 	# Comments

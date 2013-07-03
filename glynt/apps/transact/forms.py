@@ -101,7 +101,7 @@ class GeneralCapitalizationForm(forms.Form):
 
 # WIZARD STEP SIX
 @parsleyfy
-class FoundersForm(forms.Form):
+class CustomersForm(forms.Form):
     first_name = forms.CharField(label="First name", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
     last_name = forms.CharField(label="Last name", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
     address = forms.CharField(label="Address", required=False, help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
@@ -137,7 +137,7 @@ class FoundersForm(forms.Form):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Fieldset(
-                'Founder Details',
+                'Customer Details',
                 'first_name',
                 'last_name',
                 'address',
@@ -165,7 +165,7 @@ class FoundersForm(forms.Form):
             ),
             'founders'
         )
-        super(FoundersForm, self).__init__(*args, **kwargs)
+        super(CustomersForm, self).__init__(*args, **kwargs)
 
 
 # WIZARD STEP SEVEN

@@ -1038,8 +1038,8 @@
     "pk": 117,
     "model": "auth.permission",
     "fields": {
-      "codename": "add_founder",
-      "name": "Can add founder",
+      "codename": "add_customer",
+      "name": "Can add customer",
       "content_type": 39
     }
   },
@@ -1047,8 +1047,8 @@
     "pk": 118,
     "model": "auth.permission",
     "fields": {
-      "codename": "change_founder",
-      "name": "Can change founder",
+      "codename": "change_customer",
+      "name": "Can change customer",
       "content_type": 39
     }
   },
@@ -1056,8 +1056,8 @@
     "pk": 119,
     "model": "auth.permission",
     "fields": {
-      "codename": "delete_founder",
-      "name": "Can delete founder",
+      "codename": "delete_customer",
+      "name": "Can delete customer",
       "content_type": 39
     }
   },
@@ -14112,7 +14112,7 @@
       "bio": "Leila Banijamali has founded businesses in the technology and fine arts industries and acts as business and outside general legal counsel to startups, entrepreneurs, and creative professionals. She is the founder of Bedrock, co-founder of Hive, which is an ideation and collaboration platform for entrepreneurs and idea-makers, and the lead singer and co-producer of the San Francisco band, Curse The Controls.\r\n\r\nLeila's areas of practice cover strategic business development and transactional work for startups, including the drafting and negotiation of web and service agreements, intellectual property licensing, trademark application and prosecution, brand strategy, and online advertising (sweepstakes and contests). She was born in Iran and raised and educated in North Africa and Canada, where she enjoyed a brief professional tennis career, before settling in San Francisco. She continues to travel for both business and pleasure to almost every major city in the world and is fluent in English and Farsi.",
       "photo": "lawyer/d84ba8aad84c43e99242bb6e83da85f5-Leila_Banijamali_photo_1.jpeg",
       "is_active": false,
-      "summary": "Startup Attorney in San Francisco with Significant Founder Experience",
+      "summary": "Startup Attorney in San Francisco with Significant Customer Experience",
       "role": 13,
       "user": 410,
       "data": {
@@ -14129,7 +14129,7 @@
           "2010": 0,
           "2012": 0
         },
-        "summary": "Startup Attorney in San Francisco with Significant Founder Experience",
+        "summary": "Startup Attorney in San Francisco with Significant Customer Experience",
         "phone": "415-369-9715",
         "startups_advised": [],
         "volume_incorp_setup": {

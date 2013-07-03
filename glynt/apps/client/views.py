@@ -3,15 +3,14 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import UpdateView
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
-from django.http import HttpResponse, Http404
-from django.shortcuts import get_object_or_404
+from django.http import Http404
 from django.contrib.auth import authenticate, login
 from django.middleware.csrf import get_token
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ObjectDoesNotExist
 
 from django.contrib.auth.models import User
 
-from userena import signals as userena_signals
 
 from forms import ConfirmLoginDetailsForm, SignupForm, AuthenticationForm
 
@@ -101,10 +100,10 @@ class LoginView(FormView):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
 
-        user = authenticate(username=request.POST.get('username',None), password=request.POST.get('password',None))
+        user = authenticate(username=request.POST.get('username', None), password=request.POST.get('password', None))
 
         if user is None:
-            logger.warn('Incorrect login attempt user: %s' % request.POST.get('username',None))
+            logger.warn('Incorrect login attempt user: %s' % request.POST.get('username', None))
         else:
             if user.is_active:
                 login(request, user)
@@ -117,7 +116,7 @@ class LoginView(FormView):
                 return self.form_valid(form)
             else:
                 messages.info(request, _('Sorry, but your Account has yet to be acivated.'))
-                logger.info('Inactive login attempt user: %s' % request.POST.get('username',None))
+                logger.info('Inactive login attempt user: %s' % request.POST.get('username', None))
 
         return self.form_invalid(form)
 

@@ -1,4 +1,4 @@
-{% extends "comments/base.html" %}{% load comments engagement_tags fluent_comments_tags %}
+{% extends "comments/base.html" %}{% load comments project_tags fluent_comments_tags %}
 
 {% block page_title %}Engagement Request{% endblock %}
 
@@ -6,7 +6,7 @@
 <ul class="breadcrumb">
     <li><a href="/">Home</a> <span class="divider">/</span></li>
     <li><a href="{% url 'project:list' %}">Inbox</a> <span class="divider">/</span></li>
-    <li class="active">{% if user.profile.is_founder %}Request to: {{ object.lawyer.user.get_full_name }}{% else %}Request from: {{ object.founder.user.get_full_name }}{% endif %}</li>
+    <li class="active">{% if user.profile.is_customer %}Request to: {{ object.lawyer.user.get_full_name }}{% else %}Request from: {{ object.customer.user.get_full_name }}{% endif %}</li>
 </ul>
 {% endblock %}
 
@@ -17,10 +17,10 @@
             <span>Request status: <strong>{{ object.status }}</strong></span>
         </div>
         <h3 class="engage-detail-title">
-            {% if user.profile.is_founder %}
+            {% if user.profile.is_customer %}
                 Request to: {{ object.lawyer.user.get_full_name }}
             {% else %}
-                Request from: {{ object.founder.user.get_full_name }}
+                Request from: {{ object.customer.user.get_full_name }}
             {% endif %}
         </h3>
         <span>{{ object.date_created }}</span>
@@ -35,12 +35,12 @@
     </div>
     <div class="span4 side-info-container">
         <div class="well">
-            {% if user.profile.is_founder %}
+            {% if user.profile.is_customer %}
             <div class="profile-card" data-username="{{ object.lawyer.user.username }}">&nbsp;</div>
             {% else %}
             <div class="startup-profile-card" data-username="{{ object.startup.slug }}">&nbsp;</div>
             <hr/>
-            <div class="profile-card" data-username="{{ object.founder.user.username }}">&nbsp;</div>
+            <div class="profile-card" data-username="{{ object.customer.user.username }}">&nbsp;</div>
             {% endif %}
         </div>
 

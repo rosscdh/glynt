@@ -9,7 +9,8 @@ from glynt.apps.utils import generate_unique_slug
 from glynt.apps.project.services.actions import OpenProjectService, CloseProjectService, ReOpenProjectService
 
 from glynt.apps.transact.models import Transaction
-from glynt.apps.company.models import Company, Founder
+from glynt.apps.company.models import Company
+from glynt.apps.customer.models import Customer
 from glynt.apps.lawyer.models import Lawyer
 
 from glynt.apps.project import PROJECT_STATUS
@@ -26,7 +27,7 @@ class Project(models.Model):
     project_status = models.IntegerField(choices=PROJECT_STATUS.get_choices(), default=PROJECT_STATUS.new, db_index=True)
     slug = models.SlugField(max_length=128, blank=False)
     startup = models.ForeignKey(Company)
-    founder = models.ForeignKey(Founder)
+    customer = models.ForeignKey(Customer)
     lawyer = models.ForeignKey(Lawyer)
     data = JSONField(default={})
     date_created = models.DateTimeField(auto_now_add=True)
@@ -79,7 +80,7 @@ class Project(models.Model):
 
     @property
     def project_types(self):
-        project_types = [('engage_for_general','General'), ('engage_for_incorporation','Incorporation'), ('engage_for_ip','Intellectual Property'), ('engage_for_employment','Employment Law'), ('engage_for_fundraise','Fundraising'), ('engage_for_cofounders','Co-Founder')]
+        project_types = [('engage_for_general','General'), ('engage_for_incorporation','Incorporation'), ('engage_for_ip','Intellectual Property'), ('engage_for_employment','Employment Law'), ('engage_for_fundraise','Fundraising'), ('engage_for_cofounders','Co-Customer')]
         return [(self.data.get(r,False),name) for r,name in project_types if self.data.get(r,False)]
 
     def save(self, *args, **kwargs):

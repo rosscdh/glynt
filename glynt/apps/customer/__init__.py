@@ -8,19 +8,19 @@ import logging
 logger = logging.getLogger('django.request')
 
 
-class FounderLoginLogic(object):
+class CustomerLoginLogic(object):
 
     def __init__(self, user):
         self.user = user
 
     def redirect(self):
         try:
-            founder = self.user.founder_profile
+            customer = self.user.customer_profile
         except ObjectDoesNotExist:
-            founder = None
+            customer = None
             logger.error("founder profile not found for %s" % self.user)
 
-        projects = Project.objects.filter(founder=founder)
+        projects = Project.objects.filter(customer=founder)
 
         if projects:
             return redirect('dashboard:overview')

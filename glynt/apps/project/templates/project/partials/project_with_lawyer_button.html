@@ -1,7 +1,7 @@
 {% if not request.user.is_authenticated %}
-    <a href="{% url 'public:auth_user_class_redirect' user_class_name='founder' login_type='google-oauth2' %}" id="" class="btn btn-large btn-primary right">Sign up to connect</a>
+    <a href="{% url 'public:auth_user_class_redirect' user_class_name='customer' login_type='google-oauth2' %}" id="" class="btn btn-large btn-primary right">Sign up to connect</a>
 {% else %}
-    {% if user.profile.is_founder  %}
+    {% if user.profile.is_customer  %}
         {% if has_engagements %}
             <a href="{% url 'project:list' %}?engagements={% for e in engagements %}{{ e.pk }}{% if not forloop.last %},{% endif %}{% endfor %}" class="btn btn-large btn-primary right">Contact lawyer</a>
         {% else %}

@@ -1,76 +1,20 @@
 # coding: utf-8
 import os
 from django.template.defaultfilters import slugify
-from .models import Company, Founder
+from glynt.apps.company.models import Company
 
 import logging
 logger = logging.getLogger('lawpal.services')
 
 
-class EnsureFounderService(object):
-    """ Set up a startup founder """
-    founder = None
-
-    def __init__(self, user, **kwargs):
-        self.user = user
-        self.summary = kwargs.pop('summary', None)
-        self.bio = kwargs.pop('bio', None)
-        self.photo = kwargs.pop('photo', None)
-        self.data = kwargs
-
-    def user_info(self):
-        self.data['first_name'] = self.data.get('first_name', self.user.first_name)
-        self.data['last_name'] = self.data.get('last_name', self.user.last_name)
-
-    def update_user_profile(self):
-        # update the is_founder attribute
-        profile = self.user.profile
-        profile.profile_data['is_founder'] = True
-        profile.save(update_fields=['profile_data'])
-
-    def save_photo(self, photo):
-        if photo and self.founder.photo != photo: # only if its not the same image
-            logger.info('New photo for %s' % self.founder)
-            photo_file = os.path.basename(self.photo.file.name)# get base name
-            try:
-                self.founder.photo.save(photo_file, photo.file)
-                self.founder.user.profile.mugshot.save(photo_file, photo.file)
-                logger.info('Saved new photo %s for %s' % (photo.file, self.founder))
-            except Exception as e:
-                logger.error('Could not save user photo %s for %s: %s' % (photo.file, self.founder, e))
-
-    def process(self):
-        self.founder, is_new = Founder.objects.get_or_create(user=self.user)
-        logger.info("Processing founder %s (is_new: %s)" % (self.user.get_full_name(), is_new,))
-
-        self.user_info()
-
-        if self.summary:
-            self.founder.summary = self.summary
-
-        if self.bio:
-            self.founder.bio = self.bio
-
-        if self.data:
-            self.founder.data = self.data
-
-        if self.photo:
-            # pop so it does not get serialized
-            self.save_photo(self.photo)
-
-        logger.info("Saving founder %s", self.user)
-        self.founder.save()
-        return self.founder
-
-
 class EnsureCompanyService(object):
     """ Set up a startup """
-    founder = None
+    customer = None
     startup = None
 
-    def __init__(self, name, founder=None, **kwargs):
-        self.startup_name = name
-        self.founder = founder
+    def __init__(self, name, customer=None, **kwargs):
+        self.company_name = name
+        self.customer = customer
         self.slug = kwargs.pop('slug', None)
         self.summary = kwargs.pop('summary', None)
         self.website = kwargs.pop('website', None)
@@ -78,36 +22,36 @@ class EnsureCompanyService(object):
         self.photo = kwargs.pop('photo', None)
         self.data = kwargs
 
-    def add_founder(self, founder=None):
-        if self.founder or founder:
-            founder = founder if founder else self.founder
-            if not self.startup:
+    def add_customer(self, customer=None):
+        if self.customer or customer:
+            customer = customer if customer else self.customer
+            if not self.company:
                 raise Exception('Company has not yet been defined for service, need to call .process()')
 
-            self.startup.founders.remove(founder.user) # ensure he is not already assocaited with the startup
-            self.startup.founders.add(founder.user)
+            self.company.customers.remove(customer.user) # ensure he is not already assocaited with the startup
+            self.company.customers.add(customer.user)
 
     def process(self):
-        self.startup, is_new = Company.objects.get_or_create(name=self.startup_name)
-        logger.info("Processing startup %s (is_new: %s)" % (self.startup, is_new,))
+        self.company, is_new = Company.objects.get_or_create(name=self.company_name)
+        logger.info("Processing startup %s (is_new: %s)" % (self.company, is_new,))
 
-        self.add_founder(self.founder)
+        self.add_customer(self.customer)
 
         if self.slug or is_new:
-            self.startup.slug = self.slug if self.slug else slugify(self.startup_name)
+            self.company.slug = self.slug if self.slug else slugify(self.company_name)
 
         if self.summary:
-            self.startup.summary = self.summary
+            self.company.summary = self.summary
 
         if self.website:
-            self.startup.website = self.website
+            self.company.website = self.website
 
         if self.twitter:
-            self.startup.twitter = self.twitter
+            self.company.twitter = self.twitter
 
         if self.data:
-            self.startup.data = self.data
+            self.company.data = self.data
 
-        logger.info("Saving startup %s", self.startup_name)
-        self.startup.save()
-        return self.startup
+        logger.info("Saving startup %s", self.company_name)
+        self.company.save()
+        return self.company

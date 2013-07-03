@@ -2,5 +2,5 @@
 from django.views.generic import TemplateView
 
 
-class FounderDashboardView(TemplateView):
+class CustomerDashboardView(TemplateView):
     template_name='dashboard/overview.html'

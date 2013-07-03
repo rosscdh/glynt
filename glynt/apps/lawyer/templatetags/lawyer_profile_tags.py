@@ -1,15 +1,8 @@
 # -*- coding: utf-8 -*-
-from itertools import chain
 from django import template
-from django.template.defaultfilters import slugify
 from django.core.urlresolvers import reverse
 
-from glynt.apps.lawyer.models import Lawyer
 from glynt.apps.lawyer.forms import LawyerProfileIsCompleteValidator
-from glynt.apps.company.models import Company
-
-
-import json
 
 register = template.Library()
 
@@ -19,8 +12,9 @@ logger = logging.getLogger('django.request')
 
 @register.inclusion_tag('lawyer/partials/companies_advised.html', takes_context=True)
 def companies_advised(context):
+    lawyer = context.get('object', None)
     context.update({
-        'lawyer': context.get('object', None),
+        'lawyer': lawyer,
         'companies': lawyer.companies_advised,
     })
     return context
@@ -41,6 +35,7 @@ def fee_packages(lawyer):
     }
     return context
 
+
 @register.inclusion_tag('lawyer/partials/fee_packages_mini.html', takes_context=False)
 def fee_packages_mini(fee_packages):
     context = {
@@ -48,11 +43,12 @@ def fee_packages_mini(fee_packages):
     }
     return context
 
+
 @register.filter(takes_context=False)
 def humanise_number(num):
-    if not isinstance(num, ( int, long )):
+    if not isinstance(num, (int, long)):
         num = 0
-        logger.debug('Value "num" passed to humanise_number must be a number is type: %s %s' % (type(num),num,))
+        logger.debug('Value "num" passed to humanise_number must be a number is type: %s %s' % (type(num), num,))
 
     magnitude = 0
 

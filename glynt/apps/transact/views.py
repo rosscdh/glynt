@@ -4,17 +4,17 @@ from django.forms.models import inlineformset_factory
 from django.contrib.formtools.wizard.views import SessionWizardView
 
 from glynt.apps.transact.forms import PackagesForm, BasicInformationForm, CorporateAgentsForm, \
-    InitialDirectorsForm, GeneralCapitalizationForm, FoundersForm, StockPlansForm, AboutCompanyBusinessForm, \
+    InitialDirectorsForm, GeneralCapitalizationForm, CustomersForm, StockPlansForm, AboutCompanyBusinessForm, \
     IntellectualPropertyForm, EmployeesConsultantsForm
 
 
-FORMS = [#("founders",FoundersForm),
+FORMS = [#("founders",CustomersForm),
          ("packages", PackagesForm),
          ("basic_information", BasicInformationForm),
          ("corporate_agents", CorporateAgentsForm),
          ("initial_directors",InitialDirectorsForm),
          ("general_capitalization", GeneralCapitalizationForm),
-         ("founders",FoundersForm),
+         ("founders",CustomersForm),
          ("stock_plans", StockPlansForm),
          ("about_company_business", AboutCompanyBusinessForm),
          ("intellectual_property", IntellectualPropertyForm),

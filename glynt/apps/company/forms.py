@@ -8,9 +8,10 @@ from cicu.widgets import CicuUploderInput
 
 from parsley.decorators import parsleyfy
 
-from models import Company, Founder
+from models import Company
 
-from services import EnsureFounderService, EnsureCompanyService
+from services import EnsureCompanyService
+from glynt.apps.customer.services import EnsureCustomerService
 
 import logging
 logger = logging.getLogger('django.request')
@@ -21,7 +22,7 @@ class CompanyProfileSetupForm(BootstrapMixin, forms.Form):
     """ Form to allow companies to enter basic information about 
     their setups
     """
-    # django user ifo used to populate founder object
+    # django user ifo used to populate customer object
     first_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'First name', 'tabindex':'1'}))
     last_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'Last name','tabindex':'2'}))
 
@@ -74,10 +75,10 @@ class CompanyProfileSetupForm(BootstrapMixin, forms.Form):
             except UploadedFile.DoesNotExist:
                 data['photo'] = None
 
-        founder_service = EnsureFounderService(user=self.user, **data)
-        founder = founder_service.process()
+        customer_service = EnsureCustomerService(user=self.user, **data)
+        customer = customer_service.process()
 
-        startup_service = EnsureCompanyService(name=data.get('startup_name'), founder=founder, **data)
+        startup_service = EnsureCompanyService(name=data.get('startup_name'), customer=customer, **data)
         startup = startup_service.process()
 
 

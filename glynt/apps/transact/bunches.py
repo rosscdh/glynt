@@ -70,7 +70,7 @@ class IncorporationBunch(BaseToDoBunch):
     name = 'Incorporation'
     transaction_slug = 'incorporation'
     repeaters = [
-        ('founders_docs', 'founder'),
+        ('customer_docs', 'customer'),
         ('options', 'options'),
         ('directors_and_officers', 'director'),
         ('employment_docs', 'employee'),
@@ -92,7 +92,7 @@ class IncorporationBunch(BaseToDoBunch):
             (ToDo(name='Other Country EIN'), ('if country != US'),),
         )),
         # repeat per number of founders
-        ('founders_docs', 'Founders Documents', (
+        ('customer_docs', 'Customers Documents', (
             (ToDo(name='Stock Purchase Agreement for {{ founder_name }}'), (),),
             (ToDo(name='Confidential Information and Invention Assignment Agreement for {{ founder_name }}'), (),),
             (ToDo(name='Notice of Stock Issuance for {{ founder_name }}'), (),),

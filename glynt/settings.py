@@ -173,17 +173,19 @@ PROJECT_APPS = (
     # The inviter app
     'public.invite',
     # Older public site
-    'glynt.apps.default', # depreciating @TODO end this
+    'glynt.apps.default',
     # The Api
     'glynt.apps.api',
-    # The Companies (companies)
+    # The User Profile
+    'glynt.apps.client',
+    # The Customers
+    'glynt.apps.customer',
+    # The Companies
     'glynt.apps.company',
     # The Legal Firms
     'glynt.apps.firm',
     # The Lawyers
     'glynt.apps.lawyer',
-    # The End User - Client, those that consume the documents
-    'glynt.apps.client',
     # Customer Projects
     'glynt.apps.project',
     # Company & Lawyer Transactions

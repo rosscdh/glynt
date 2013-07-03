@@ -7,25 +7,25 @@ from django.db import models
 class Migration(DataMigration):
 
     def forwards(self, orm):
-        "Change All previous values of user_class_name == startup to founder"
+        "Change All previous values of user_class_name == startup to customer"
         for c in orm['client.ClientProfile'].objects.all():
             if 'user_class_name' in c.profile_data:
                 if c.profile_data['user_class_name'] == 'startup':
-                    c.profile_data['user_class_name'] = 'founder'
-                    c.profile_data['is_founder'] = True
+                    c.profile_data['user_class_name'] = 'customer'
+                    c.profile_data['is_customer'] = True
                     if 'is_startup' in c.profile_data:
                         del c.profile_data['is_startup']
                     c.save(update_fields=['profile_data'])
 
     def backwards(self, orm):
-        "Change All previous values of user_class_name == startup to founder"
+        "Change All previous values of user_class_name == startup to customer"
         for c in orm['client.ClientProfile'].objects.all():
             if 'user_class_name' in c.profile_data:
-                if c.profile_data['user_class_name'] == 'founder':
+                if c.profile_data['user_class_name'] == 'customer':
                     c.profile_data['user_class_name'] = 'startup'
                     c.profile_data['is_startup'] = True
-                    if 'is_founder' in c.profile_data:
-                        del c.profile_data['is_founder']
+                    if 'is_customer' in c.profile_data:
+                        del c.profile_data['is_customer']
                     c.save(update_fields=['profile_data'])
 
     models = {
