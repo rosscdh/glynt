@@ -1,5 +1,34 @@
 # The Glynt Project #
 
+LawPal is platfomr that aims to make certain legal process simpler and give both the client and the lawyer a clear overview of what has and what is yet to be done.
+
+The platform overview can be described as
+
+```
+every user of LawPal.com has a 
+
+"user" account
+    which has a "client" profile
+```
+
+```
+a "user" can be a
+    customer
+    who has 1 or more "company"(ies)
+
+OR a "user" can be a
+    "lawyer"
+    who has 1 "firm"
+```
+
+```
+a "customer"
+    can create 1 or more 
+    "project"(s)
+    which has 1 "transact"(ion) type
+    and has many "todo" items
+```
+
 ## Basic Installation
 
 1. ```easy_install pip```
@@ -61,28 +90,6 @@ Load all the city data
 ## Model Graphs ##
 
 ```./manage.py graph_models -g -o  ~/Desktop/glynt-models.png firm lawyer deal endorsement auth```
-
-
-## Fix Fixtures
-
-### When manage.py dumpdata flyform.flyform --format=xml > ~/flyform.xml
-
-Remember to replace bad json:
-
-```vim glynt/apps/flyform/fixtures/flyform.xml```
-
-    :%s/u'/"/gc
-    :%s/',/\",/gc
-    :%s/':/\":/gc
-    :%s/'\}/\"\}/gc
-
-### When manage.py dumpdata document.document --format=xml > ~/document.xml
-
-Remember to remove invalid xml return characters using vim:
-
-```vim glynt/apps/document/fixtures/document.xml```
-
-    :%s/\%x0c/\r/gc
 
 
 ## Markdown
