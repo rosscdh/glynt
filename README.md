@@ -22,7 +22,7 @@ a "**customer**"
     "**project**"(s)
     which has 1 "**transact**"(ion) type
     and has many "**todo**" items
-
+    and has 1 "**lawyer**" assigned to it
 
 ## Basic Installation
 
