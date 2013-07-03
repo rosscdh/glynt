@@ -7,7 +7,6 @@ from autoslug.fields import AutoSlugField
 from jsonfield import JSONField
 
 from glynt.apps.lawyer.models import Lawyer
-from glynt.apps.deal.models import Deal
 
 from tasks import new_firm_email_task
 
