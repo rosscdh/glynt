@@ -7,6 +7,7 @@ from views import CustomerProfileView, CreateCustomerView
 
 urlpatterns = patterns('',
     url(r'^invite/$', login_required(TemplateView.as_view(template_name='customer/invite.html')), name='invite'),
+    url(r'^welcome/$', login_required(TemplateView.as_view(template_name='customer/welcome.html')), name='welcome'),
     url(r'^setup/$', login_required(CreateCustomerView.as_view()), name='setup_customer'),
     url(r'^(?P<slug>.+)/$', login_required(CustomerProfileView.as_view()), name='customer_profile'),
 )

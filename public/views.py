@@ -32,6 +32,7 @@ class PublicHomepageView(TemplateView):
             # we are logged in.. redirect based on the user_class_name
             if user_class_name == 'lawyer':
                 template_name = 'lawyer/welcome.html'
+
             if user_class_name == 'customer':
                 template_name = 'customer/welcome.html'
 
