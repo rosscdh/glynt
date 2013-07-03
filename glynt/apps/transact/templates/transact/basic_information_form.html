@@ -12,18 +12,15 @@
 {% block prebody %}
     <div class="container">
         <div class="row">
-            <div class="col col-lg-6">
-                <h4>Intake Questionnaire</h4>
-            </div>
-            <div class="col col-lg-6">
-                <p class="pull-right intake-save"><a href="#">Save and complete later</a></p>
+            <div class="col col-lg-12">
+                <p class="intake-save"><a href="#">Save and complete later</a></p>
             </div>
         </div>
         <div class="row">
-            <div class="col col-lg-8">
+            <div class="col col-lg-5 col-offset-2">
                 <h2>Your Basic Information</h2>
             </div>
-            <div class="col col-lg-4">
+            <div class="col col-lg-3">
                 <div class="progress progress-striped intake-progress">
                     <div class="bar" style="width: {{ wizard.steps.index|as_percentage_of:wizard.steps.count }};"></div>
                 </div>
@@ -46,7 +43,7 @@
                         {% endif %}
                         <div class="control-group">
                             <div class="controls">
-                                <button type="submit" class="btn btn-success">Next</button>
+                                <button type="submit" class="btn btn-success btn-large pull-right">Next</button>
                             </div>
                         </div>
                     </form>
