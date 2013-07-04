@@ -23,7 +23,7 @@ import logging
 logger = logging.getLogger('django.request')
 
 
-class ChangePasswordMixinBase(object):
+class ChangePasswordMixin(forms.Form):
     """ Mixin used to ensure passwords match """
     password = forms.CharField(widget=forms.PasswordInput(render_value=False))
     confirm_password = forms.CharField(widget=forms.PasswordInput)
@@ -38,17 +38,9 @@ class ChangePasswordMixinBase(object):
         return password
 
 
-class ChangePasswordMixinModelForm(ChangePasswordMixinBase, forms.ModelForm):
-    pass
-
-
-class ChangePasswordMixin(ChangePasswordMixinBase, forms.Form):
-    pass
-
-
-class ConfirmChangePasswordMixinBase(object):
+class ConfirmChangePasswordMixin(forms.Form):
     """ Mixin used to ensure that the current_password was entered properly """
-    current_password = forms.CharField(widget=forms.PasswordInput)
+    current_password = forms.CharField(label='Current Password', widget=forms.PasswordInput)
 
     def clean_current_password(self):
         if not self.user:
@@ -57,21 +49,13 @@ class ConfirmChangePasswordMixinBase(object):
         current_password = self.cleaned_data.get('current_password')
 
         if not self.user.check_password(current_password):
-            raise exceptions.ValidationError(_('The Password entered as "%s" is not correct' % (self.fields['current_password'].label,)))
+            raise exceptions.ValidationError(_('The Password entered for the "%s" field is not correct' % (self.fields['current_password'].label,)))
 
         return current_password
 
 
-class ConfirmChangePasswordMixinModelForm(ConfirmChangePasswordMixinBase, forms.ModelForm):
-    pass
-
-
-class ConfirmChangePasswordMixin(ConfirmChangePasswordMixinBase, forms.Form):
-    pass
-
-
 @parsleyfy
-class ConfirmLoginDetailsForm(BootstrapMixin, ConfirmChangePasswordMixinModelForm, forms.ModelForm):
+class ConfirmLoginDetailsForm(BootstrapMixin, ConfirmChangePasswordMixin, forms.Form):
     """ Shown to the user when they login using linked in
     Is the first form they see after signing in
     """
@@ -106,8 +90,8 @@ class ConfirmLoginDetailsForm(BootstrapMixin, ConfirmChangePasswordMixinModelFor
             pass
         return email
 
-    def save(self, commit=True):
-        user = super(ConfirmLoginDetailsForm, self).save(commit=False)
+    def save(self):
+        user = self.user
         user.set_password(self.cleaned_data["password"])
         if commit:
             user.save(update_fields=['password'])

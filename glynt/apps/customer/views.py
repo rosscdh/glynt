@@ -20,7 +20,7 @@ class CustomerProfileSetupView(FormView):
     template_name = 'customer/profile-form.html'
 
     def get_success_url(self):
-        messages.success(self.request, 'Thanks, your profile is complete.. now go find yourself a lawyer and get that funding')
+        messages.success(self.request, 'Success, you have updated your profile')
         return reverse('customer:welcome')
 
     def get_context_data(self, **kwargs):
@@ -32,8 +32,6 @@ class CustomerProfileSetupView(FormView):
         return context
 
     def get_form(self, form_class):
-        """
-        """
         kwargs = self.get_form_kwargs()
         kwargs.update({'request': self.request})  # add the request to the form
         user = self.request.user
@@ -46,10 +44,12 @@ class CustomerProfileSetupView(FormView):
         kwargs.update({'initial': {
             'first_name': user.first_name,
             'last_name': user.last_name,
-            'startup_name': startup.name,
+            'email': user.email,
+            'phone': user.profile.phone,
 
             'photo': self.customer.photo,
 
+            'company_name': startup.name,
             'website': startup.website,
             'summary': startup.summary,
 
