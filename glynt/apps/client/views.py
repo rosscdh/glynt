@@ -26,7 +26,7 @@ class ConfirmLoginDetailsView(UpdateView):
     form_class = ConfirmLoginDetailsForm
 
     def get_success_url(self):
-        return reverse('public:homepage')
+        return reverse('project:create')
 
     def get_form(self, form_class):
         kwargs = self.get_form_kwargs()
@@ -34,10 +34,9 @@ class ConfirmLoginDetailsView(UpdateView):
         kwargs.update({
             'request': self.request,
             'initial': {
-                    'first_name': user.first_name,
-                    'last_name': user.last_name,
-                    'email': user.email
-                }
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'email': user.email}
         })
         return form_class(**kwargs)
 
@@ -52,14 +51,6 @@ class ConfirmLoginDetailsView(UpdateView):
             raise Http404(_("No %(verbose_name)s found matching the query") %
                           {'verbose_name': queryset.model._meta.verbose_name})
         return obj
-
-    def get_initial(self):
-        user = self.request.user
-        return {
-            'username': user.username,
-            'email': user.email,
-            'password': user.password,
-        }
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()

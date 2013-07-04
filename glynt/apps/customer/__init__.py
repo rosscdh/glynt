@@ -25,4 +25,4 @@ class CustomerLoginLogic(object):
         if projects:
             return redirect('dashboard:overview')
         else:
-            return redirect('transact:packages')
+            return redirect('project:create')
