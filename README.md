@@ -44,7 +44,6 @@ a "**customer**"
 8. ```cd glynt```
 9. ```pip install -r requirements.txt``` : install update the required libraries (append --upgrade if you are not sure)
 10. ```python manage.py syncdb``` : sync the database; and create the default user if there is not already one
-10a. ```python manage.py migrate socialregistration --fake``` : there is a small issue with socialregistration at the moment and its migration needs to be faked
 11. ```python manage.py migrate``` : perform the rest of the migrations
 12. ```python manage.py loaddata sites lawyers cities_light transact legal```
 13. ```python manage.py check_permissions``` # Creates the userena permissions
