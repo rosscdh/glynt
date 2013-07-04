@@ -6,6 +6,17 @@ import logging
 logger = logging.getLogger('lawpal.services')
 
 
+class UserSetPasswordService(object):
+    """ Service used to reset a users password """
+    old_pass = None
+    new_pass = None
+    confirm_pass = None
+
+    def __init__(self, user):
+        self.user = user
+    
+
+
 class FullContactProfileDataService(object):
     """ Populate a user based on their FullContact data
     if any provided.

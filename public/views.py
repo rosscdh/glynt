@@ -19,7 +19,7 @@ class PublicHomepageView(TemplateView):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated():
-            if request.session.get('user_class_name', 'lawyer') == 'customer':
+            if request.user.profile.is_customer:
                 return CustomerLoginLogic(user=request.user).redirect()
 
         return super(PublicHomepageView, self).dispatch(request, *args, **kwargs)

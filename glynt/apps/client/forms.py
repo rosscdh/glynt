@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.forms import AuthenticationForm
-from django.template.defaultfilters import slugify
 from django.core import exceptions
 
 from django.contrib.auth.models import User
 
 from parsley.decorators import parsleyfy
-from bootstrap.forms import BootstrapMixin, Fieldset
+from bootstrap.forms import BootstrapMixin
 
-from userena.forms import SignupFormOnlyEmail
 from django_countries.countries import COUNTRIES_PLUS
+
+from glynt.apps.lawyer.services import EnsureLawyerService
 
 from glynt.apps.company.services import EnsureCompanyService
 from glynt.apps.customer.services import EnsureCustomerService
@@ -24,8 +23,55 @@ import logging
 logger = logging.getLogger('django.request')
 
 
+class ChangePasswordMixinBase(object):
+    """ Mixin used to ensure passwords match """
+    password = forms.CharField(widget=forms.PasswordInput(render_value=False))
+    confirm_password = forms.CharField(widget=forms.PasswordInput)
+
+    def clean_confirm_password(self):
+        password = self.cleaned_data['password']
+        confirm_password = self.cleaned_data['confirm_password']
+
+        if password != confirm_password:
+            raise exceptions.ValidationError(_('Passwords do not match'))
+
+        return password
+
+
+class ChangePasswordMixinModelForm(ChangePasswordMixinBase, forms.ModelForm):
+    pass
+
+
+class ChangePasswordMixin(ChangePasswordMixinBase, forms.Form):
+    pass
+
+
+class ConfirmChangePasswordMixinBase(object):
+    """ Mixin used to ensure that the current_password was entered properly """
+    current_password = forms.CharField(widget=forms.PasswordInput)
+
+    def clean_current_password(self):
+        if not self.user:
+            raise exceptions.ValidationError(_('No User was provided for this form'))
+
+        current_password = self.cleaned_data.get('current_password')
+
+        if not self.user.check_password(current_password):
+            raise exceptions.ValidationError(_('The Password entered as "%s" is not correct' % (self.fields['current_password'].label,)))
+
+        return current_password
+
+
+class ConfirmChangePasswordMixinModelForm(ConfirmChangePasswordMixinBase, forms.ModelForm):
+    pass
+
+
+class ConfirmChangePasswordMixin(ConfirmChangePasswordMixinBase, forms.Form):
+    pass
+
+
 @parsleyfy
-class ConfirmLoginDetailsForm(forms.ModelForm):
+class ConfirmLoginDetailsForm(BootstrapMixin, ConfirmChangePasswordMixinModelForm, forms.ModelForm):
     """ Shown to the user when they login using linked in
     Is the first form they see after signing in
     """
@@ -60,15 +106,6 @@ class ConfirmLoginDetailsForm(forms.ModelForm):
             pass
         return email
 
-    def clean_confirm_password(self):
-        password = self.cleaned_data['password']
-        confirm_password = self.cleaned_data['confirm_password']
-
-        if password != confirm_password:
-            raise exceptions.ValidationError(_('Passwords do not match'))
-
-        return password
-
     def save(self, commit=True):
         user = super(ConfirmLoginDetailsForm, self).save(commit=False)
         user.set_password(self.cleaned_data["password"])
@@ -79,39 +116,14 @@ class ConfirmLoginDetailsForm(forms.ModelForm):
             data.pop('password')
             data.pop('confirm_password')
 
-            customer_service = EnsureCustomerService(user=user, **data)
-            customer = customer_service.process()
+            if self.user.profile.is_lawyer:
+                lawyer_service = EnsureLawyerService(user=self.user, firm_name=data.get('company_name'), offices=[], form=self, **data)
+                lawyer_service.process()
 
-            comapny_service = EnsureCompanyService(name=data.pop('company'), customer=user.customer_profile, **data)
-            comapny_service.process()
+            if self.user.profile.is_customer:
+                customer_service = EnsureCustomerService(user=user, **data)
+                customer = customer_service.process()
+                company_service = EnsureCompanyService(name=data.pop('company'), customer=customer, **data)
+                company_service.process()
+
         return user
-
-
-class SignupForm(BootstrapMixin, SignupFormOnlyEmail):
-    """ The signup form overrides the Userena save method and hooks it up
-    to our own UserSignup model and process allowing us to expand on fields saved """
-    first_name = forms.CharField(max_length=24)
-    last_name = forms.CharField(max_length=24)
-    country = forms.ChoiceField(choices=COUNTRIES_PLUS, initial='GB')
-    state = forms.CharField(max_length=128)
-
-    class Meta:
-        layout = (
-            Fieldset("Login Details", "email", "password1", "password2"),
-            Fieldset("Your Account Details", "first_name", "last_name", "country", "state")
-        )
-
-    def generate_username_from_email(self, email):
-        username = slugify(email)
-
-        return '%s' % (username[0:30])
-
-
-class AuthenticationForm(BootstrapMixin, AuthenticationForm):
-    username = forms.CharField(label=_("Email or Username"), max_length=30, widget=forms.TextInput(attrs={'placeholder': 'username@example.com'}))
-    password = forms.CharField(label=_("Password"), max_length=30, widget=forms.PasswordInput(attrs={'placeholder': 'password'}))
-
-    class Meta:
-        layout = (
-            Fieldset("Please Login", "username", "password"),
-        )

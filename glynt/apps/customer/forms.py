@@ -7,6 +7,9 @@ from cicu.widgets import CicuUploderInput
 
 from parsley.decorators import parsleyfy
 
+from glynt.apps.client.forms import ChangePasswordMixin, ConfirmChangePasswordMixin
+
+from glynt.apps.firm.services import EnsureFirmService
 from glynt.apps.company.services import EnsureCompanyService
 from glynt.apps.customer.services import EnsureCustomerService
 
@@ -15,7 +18,7 @@ logger = logging.getLogger('django.request')
 
 
 @parsleyfy
-class CustomerProfileSetupForm(BootstrapMixin, forms.Form):
+class CustomerProfileSetupForm(BootstrapMixin, ChangePasswordMixin, ConfirmChangePasswordMixin, forms.Form):
     """ Form to allow companies to enter basic information about
     their setups
     """
@@ -24,10 +27,6 @@ class CustomerProfileSetupForm(BootstrapMixin, forms.Form):
     last_name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder': 'Last name', 'tabindex': '2'}))
     email = forms.EmailField(help_text="", widget=forms.TextInput(attrs={'placeholder': 'first.name@example.com', 'tabindex': '3'}))
     phone = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder': 'Contact Phone', 'tabindex': '4'}))
-
-    old_password = forms.CharField(label='Current Password', widget=forms.PasswordInput)
-    new_password = forms.CharField(widget=forms.PasswordInput)
-    confirm_password = forms.CharField(widget=forms.PasswordInput)
 
     photo = forms.ImageField(required=False, label="Main Photo", help_text="Please add a good quality photo to your profile. It really helps.", widget=CicuUploderInput(attrs={'data-trigger': 'change', 'data-required': 'false'}, options={
                 'ratioWidth': '110',       # fix-width ratio, default 0
@@ -76,5 +75,6 @@ class CustomerProfileSetupForm(BootstrapMixin, forms.Form):
         customer_service = EnsureCustomerService(user=self.user, **data)
         customer = customer_service.process()
 
-        startup_service = EnsureCompanyService(name=data.get('company_name'), customer=customer, **data)
-        startup_service.process()
+        if self.user.profile.is_customer:
+            company_service = EnsureCompanyService(name=data.get('company_name'), customer=customer, **data)
+            company_service.process()
