@@ -20,8 +20,8 @@ OR a "**user**" can be a
     who has 1 "**firm**"
 
 a "**customer**"
-    can create 1  
-    "**project**" at a time  
+    can create 1 or more  
+    "**project**"(s)
     each project has 1 or more "**transact**"(ions)  
     each "**transact**"(ion) has many "**todo**" items  
     the "**project**" has 1 "**lawyer**" (or more ?tbd) assigned to it  
