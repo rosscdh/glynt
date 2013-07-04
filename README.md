@@ -2,6 +2,8 @@
 
 LawPal is platform that aims to make certain legal process simpler and give both the client and the lawyer a clear overview of what has and what is yet to be done.
 
+Read more topics at: http://discourse.lawpal.com
+
 The platform can be described as:
 
 Every user of LawPal.com has a:
