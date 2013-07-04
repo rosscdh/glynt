@@ -13,7 +13,7 @@ Every user of LawPal.com has a:
 
 a "**user**" can be a  
     "**customer**"  
-    who has 1 or more "**company**"(ies)
+    who has 1 "**company**"
 
 OR a "**user**" can be a  
     "**lawyer**"  
