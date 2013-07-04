@@ -1,6 +1,6 @@
 {% extends 'base.html' %}{% load crispy_forms_tags invite_tags account_tags jsonify %}
 
-{% block page_title %}Start using LawPal{% endblock %}
+{% block page_title %}Edit your Account details{% endblock %}
 {% block bodyclass %}startup-form{% endblock %}
 {% block prebody %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/css/theme/social-buttons.css">
@@ -10,7 +10,7 @@
             <img src="{{ STATIC_URL }}img/welcome-circle.jpg" class="logo-head">
         </div>
         <div class="span8 pull-right">
-            <h1>Start using LawPal</h1>            
+            <h1>Edit your Account details</h1>
             <form id="startupSignUp" data-validate="parsley" action="" method="POST" class="form-horizontal compact">{% csrf_token %}
                 <div class="row">
                     <div class="span8">

@@ -30,7 +30,7 @@
                         class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a id="user-profile-form" class="" href="
-                            {% if user.profile.is_lawyer %}{% url 'lawyer:setup_profile' %}{% else %}{% url 'company:setup_profile' %}{% endif %}">{% trans 'Account' %}</a>
+                            {% if user.profile.is_lawyer %}{% url 'lawyer:setup_profile' %}{% else %}{% url 'customer:setup_profile' %}{% endif %}">{% trans 'Account' %}</a>
                         </li>
                         {% if user.profile.is_lawyer %}
                             <li><a id="user-profile-form" class=""

@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
-from django.views.generic import DetailView, CreateView
+from django.views.generic import DetailView, FormView
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+from django.contrib import messages
 from django.http import Http404
-
-from glynt.apps.utils import AjaxableResponseMixin
 
 from glynt.apps.customer.services import EnsureCustomerService
 from glynt.apps.customer.models import Customer
+
+from forms import CustomerProfileSetupForm
 
 import logging
 logger = logging.getLogger('django.request')
@@ -34,20 +36,53 @@ class CustomerProfileView(DetailView):
         return obj
 
 
-class CreateCustomerView(AjaxableResponseMixin, CreateView):
-    model = Customer
-    http_method_names = [u'post']
+class CustomerProfileSetupView(FormView):
+    form_class = CustomerProfileSetupForm
+    template_name = 'customer/profile-form.html'
 
-    def post(self, request, *args, **kwargs):
-        if request.is_ajax():
-            data = request.POST
-            first_name = data.__getitem__('customers-first_name')
-            last_name = data.__getitem__('customers-last_name')
-            user_name = "%s-%s" % (first_name, last_name)
-            user_email = data.__getitem__('customers-email')
-            user, is_new = User.objects.get_or_create(email=user_email, defaults={'username': user_name, 'first_name': first_name, 'last_name': last_name})
-            customer = EnsureCustomerService(user=user)
-            customer.process()
+    def get_success_url(self):
+        messages.success(self.request, 'Thanks, your profile is complete.. now go find yourself a lawyer and get that funding')
+        return reverse('customer:welcome')
 
-            # Save form to new customer data
-            return self.render_to_json_response({'message': "Customer saved", 'status': 200})
+    def get_context_data(self, **kwargs):
+        context = super(CustomerProfileSetupView, self).get_context_data(**kwargs)
+        context.update({
+            'customer': self.customer,
+        })
+        return context
+
+    def get_form(self, form_class):
+        """
+        """
+        kwargs = self.get_form_kwargs()
+        kwargs.update({'request': self.request})  # add the request to the form
+        user = self.request.user
+
+        customer_service = EnsureCustomerService(user=user)
+        self.customer = customer_service.process()
+        # get the startup
+        startup = self.customer.primary_company
+
+        kwargs.update({'initial': {
+            'first_name': self.customer.user.first_name,
+            'last_name': self.customer.user.last_name,
+            'startup_name': startup.name,
+
+            'photo': self.customer.photo,
+
+            'website': startup.website,
+            'summary': startup.summary,
+
+            'already_incorporated': startup.data.get('already_incorporated', False),
+            'already_raised_capital': startup.data.get('already_raised_capital', False),
+            'process_raising_capital': startup.data.get('process_raising_capital', False),
+
+            'incubator_or_accelerator_name': startup.data.get('incubator_or_accelerator_name'),
+
+            'agree_tandc': self.customer.data.get('agree_tandc', False),
+        }})
+        return form_class(**kwargs)
+
+    def form_valid(self, form):
+        form.save()
+        return super(CustomerProfileSetupView, self).form_valid(form=form)
