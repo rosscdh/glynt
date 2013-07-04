@@ -1,4 +1,4 @@
-from django.conf import settings
+# -*- coding: utf-8 -*-
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.forms import AuthenticationForm
@@ -11,13 +11,13 @@ from parsley.decorators import parsleyfy
 from bootstrap.forms import BootstrapMixin, Fieldset
 
 from userena.forms import SignupFormOnlyEmail
-from userena import settings as userena_settings
-from userena import signals as userena_signals
 from django_countries.countries import COUNTRIES_PLUS
+
+from glynt.apps.company.services import EnsureCompanyService
 
 ACCEPTED_COUNTRIES = ('GB',)
 
-COUNTRIES_PLUS = [(i,c) for i,c in COUNTRIES_PLUS if i in ACCEPTED_COUNTRIES]
+COUNTRIES_PLUS = [(i, c) for i, c in COUNTRIES_PLUS if i in ACCEPTED_COUNTRIES]
 
 import logging
 logger = logging.getLogger('django.request')
@@ -25,13 +25,17 @@ logger = logging.getLogger('django.request')
 
 @parsleyfy
 class ConfirmLoginDetailsForm(forms.ModelForm):
-    """ Shown to the user when they login using linked in 
+    """ Shown to the user when they login using linked in
     Is the first form they see after signing in
     """
+    first_name = forms.CharField(max_length=24, widget=forms.TextInput(attrs={'placeholder': 'John', 'tabindex': '1'}))
+    last_name = forms.CharField(max_length=24, widget=forms.TextInput(attrs={'placeholder': 'Doemann', 'tabindex': '2'}))
+    company = forms.CharField(label="Company Name", help_text='', widget=forms.TextInput(attrs={'placeholder': 'Acme Inc', 'tabindex': '3'}))
+    email = forms.EmailField(widget=forms.TextInput(attrs={'placeholder': 'john.doemann@example.com', 'tabindex': '4'}))
+    password = forms.CharField(widget=forms.PasswordInput(render_value=False, attrs={'tabindex': '5'}))
+    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'tabindex': '6'}))
+    agree_tandc = forms.BooleanField(label='', help_text='I agree to the terms &amp; Conditions', widget=forms.CheckboxInput(attrs={'tabindex': '7'}))
     username = forms.CharField(widget=forms.HiddenInput)
-    email = forms.EmailField()
-    password = forms.CharField(widget=forms.PasswordInput(render_value=False))
-    confirm_password = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
         model = User
@@ -70,6 +74,11 @@ class ConfirmLoginDetailsForm(forms.ModelForm):
         user.set_password(self.cleaned_data["password"])
         if commit:
             user.save(update_fields=['password'])
+            data = self.cleaned_data
+            data.pop('password')
+            data.pop('confirm_password')
+            comapny_service = EnsureCompanyService(name=data.pop('company'), customer=user.customer_profile, **data)
+            comapny_service.process()
         return user
 
 
@@ -83,8 +92,8 @@ class SignupForm(BootstrapMixin, SignupFormOnlyEmail):
 
     class Meta:
         layout = (
-          Fieldset("Login Details", "email", "password1", "password2"),
-          Fieldset("Your Account Details", "first_name", "last_name", "country", "state")
+            Fieldset("Login Details", "email", "password1", "password2"),
+            Fieldset("Your Account Details", "first_name", "last_name", "country", "state")
         )
 
     def generate_username_from_email(self, email):
@@ -96,7 +105,8 @@ class SignupForm(BootstrapMixin, SignupFormOnlyEmail):
 class AuthenticationForm(BootstrapMixin, AuthenticationForm):
     username = forms.CharField(label=_("Email or Username"), max_length=30, widget=forms.TextInput(attrs={'placeholder': 'username@example.com'}))
     password = forms.CharField(label=_("Password"), max_length=30, widget=forms.PasswordInput(attrs={'placeholder': 'password'}))
+
     class Meta:
         layout = (
-          Fieldset("Please Login", "username", "password"),
+            Fieldset("Please Login", "username", "password"),
         )

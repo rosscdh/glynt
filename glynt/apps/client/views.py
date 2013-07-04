@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import UpdateView
@@ -29,8 +30,14 @@ class ConfirmLoginDetailsView(UpdateView):
 
     def get_form(self, form_class):
         kwargs = self.get_form_kwargs()
+        user = self.request.user
         kwargs.update({
-            'request': self.request
+            'request': self.request,
+            'initial': {
+                    'first_name': user.first_name,
+                    'last_name': user.last_name,
+                    'email': user.email
+                }
         })
         return form_class(**kwargs)
 
