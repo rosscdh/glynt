@@ -14,6 +14,7 @@ from userena.forms import SignupFormOnlyEmail
 from django_countries.countries import COUNTRIES_PLUS
 
 from glynt.apps.company.services import EnsureCompanyService
+from glynt.apps.customer.services import EnsureCustomerService
 
 ACCEPTED_COUNTRIES = ('GB',)
 
@@ -34,8 +35,7 @@ class ConfirmLoginDetailsForm(forms.ModelForm):
     email = forms.EmailField(widget=forms.TextInput(attrs={'placeholder': 'john.doemann@example.com', 'tabindex': '4'}))
     password = forms.CharField(widget=forms.PasswordInput(render_value=False, attrs={'tabindex': '5'}))
     confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'tabindex': '6'}))
-    agree_tandc = forms.BooleanField(label='', help_text='I agree to the terms &amp; Conditions', widget=forms.CheckboxInput(attrs={'tabindex': '7'}))
-    username = forms.CharField(widget=forms.HiddenInput)
+    agree_tandc = forms.BooleanField(label='', help_text='I agree to the Terms &amp; Conditions', widget=forms.CheckboxInput(attrs={'tabindex': '7'}))
 
     class Meta:
         model = User
@@ -74,9 +74,14 @@ class ConfirmLoginDetailsForm(forms.ModelForm):
         user.set_password(self.cleaned_data["password"])
         if commit:
             user.save(update_fields=['password'])
-            data = self.cleaned_data
+
+            data = self.cleaned_data.copy()
             data.pop('password')
             data.pop('confirm_password')
+
+            customer_service = EnsureCustomerService(user=user, **data)
+            customer = customer_service.process()
+
             comapny_service = EnsureCompanyService(name=data.pop('company'), customer=user.customer_profile, **data)
             comapny_service.process()
         return user
