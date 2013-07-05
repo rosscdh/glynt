@@ -4,80 +4,186 @@
 {% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <div class="page-header" style="margin-bottom: 20px;">
-            <a class="btn btn-large btn-primary pull-right" href="#">New Item</a>
-            <h2>Browse Checklist</h2>
-        </div>
-        <div class="row">
-            <div class="col col-lg-4">
-              <div class="bs-sidebar affix">
-                <ul class="nav bs-sidenav">
-                    <li class="active"><a href="#">All Items</a></li>
+<div class="container">
+    <div class="page-header" style="margin-bottom: 20px;">
+        <h2>Checklist</h2>
+    </div>
+    <div class="row">
+        <div class="col col-lg-3">
+            <div class="subnav affix">
+                <ul class="nav nav-pills nav-stacked">
                     {% for p in engagements %}
-                        <li><a href="#">{{ p}}</a></li>
+                        <li><a href="#">{{ p }}</a></li>
                     {% endfor %}
-                    <li><a href="#">Seed financing</a></li>
-                    <li><a href="#">Convertible loan note</a></li>
-                    <li><a href="#">Incorporation</a></li>
-                    <li><a href="#">Show tunes</a></li>
+                    <li class="active"><a href="#incorporation-docs">Incorporation Docs</a></li>
+                    <li><a href="#qualification">Qualification</a></li>
+                    <li><a href="#founders-docs">Founders Docs</a></li>
+                    <li><a href="#option-plan">Option Plan</a></li>
+                    <li><a href="#directors-and-officers">Directors and Officers</a></li>
+                    <li><a href="#employment-documents">Employment Documents</a></li>
+                    <li><a href="#consultant-documents">Consultant Documents</a></li>
+                    <li><a href="#intellectual-property">Intellectual Property</a></li>
+                    <li><a href="#misc">Misc</a></li>
                 </ul>
-              </div>     
             </div>
-            <div class="col col-lg-8">
-                <div class="options clearfix">
-                    <div class="btn-group pull-left">
-                        <button class="btn btn-default">{{ counts.new }} New</button> 
-                        <button class="btn btn-default">{{ counts.open }} Open</button> 
-                        <button class="btn btn-default">{{ counts.closed }} Closed</button>
-                    </div>
-
-                    <div class="btn-group pull-right">
-                        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Sort: <strong>Newest</strong> <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            <li><a>Oldest</a></li>
-                            <li><a>Newest</a></li>
-                            <li><a>Most commented</a></li>
-                            <li><a>Least commented</a></li>
-                            <li><a>Recently updated</a></li>
-                            <li><a>Least recently updated</a></li>
-                        </ul>
-                    </div>
+        </div>
+        <div class="col col-lg-9">
+            <div class="clearfix">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-primary">{{ counts.open }} Open Items</button>
+                    <button type="button" class="btn btn-primary">{{ counts.closed }} Closed Items</button>
                 </div>
-
-                <table class="table table-striped">
-                    <thead>
-                        <th style="width: 48px;"></th>
-                        <th></th>
-                        <th style="width: 100px;"></th>
-                    </thead>
-                    <tbody>
-                    {% for t in todo_list %}
-                        <tr>
-                            <td><img src="http://placehold.it/48" class="img-rounded"></td>
-                            <td>
-                                <div>
-                                    <a href="{% url 'dashboard:item' slug=t.slug %}">{{ t.name }}</a>
-                                    <span class="label label-warning">{{ t.todo_type|upper }}</span>
-                                </div>
-                                <!-- @PROBLEM This does not really work.. as there is no guarantee that A user opened the issue... ie if its a standard issue, associated with an engagement.. who opened it -->
-                                <small class="muted">Opened by <a href="#">Joe Bloggs</a> <span>&middot;</span> {% moment t.date_created %}<small>
-                            </td>
-                            <td style="text-align: center; vertical-align: middle;"><span class="label label-success">{{ t.display_status|upper }}</span></td>
-                        </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="3">No Records</td>
-                    </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-
-                {% paginator todo_list %}
-
+                <div class="btn-group pull-right">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        Sort: Newest <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li class="nav-header">Sort options</li>
+                        <li><a href="#">Newest</a></li>
+                        <li><a href="#">Oldest</a></li>
+                        <li><a href="#">Most commented</a></li>
+                        <li><a href="#">Least commented</a></li>
+                        <li><a href="#">Recently updated</a></li>
+                        <li><a href="#">Least recently updated</a></li>
+                    </ul>
+                </div>
             </div>
+
+            <h3 id="incorporation">Incorporation Docs</h3>
+            <table class="table table-striped checklist">
+                <thead>
+                    <th class="item-icon"></th>
+                    <th class="item-info"></th>
+                    <th class="item-meta"></td>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="item-icon"><img src="http://placehold.it/64" class="img-circle"></td>
+                        <td class="item-info">
+                            <div>
+                                <h4><a href="#">Certificate of Incorporation</a></h4>
+                                <small class="muted">Last comment by <a href="#">Alex Halliday</a> <span>&middot;</span> 15 minutes ago<small>
+                            </div>
+                        </td>
+                        <td class="item-meta text-right">
+                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-comment"></i> <span>2</span></button>
+                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i></button>
+                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-file"></i> <span>2</span></button>
+                            <img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="48">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="item-icon"><img src="http://placehold.it/64" class="img-circle"></td>
+                        <td class="item-info">
+                            <div>
+                                <h4><a href="#">Action by Written Consent of Incorporator</a></h4>
+                                <small class="muted">Last comment by <a href="#">Alex Halliday</a> <span>&middot;</span> 15 minutes ago<small>
+                            </div>
+                        </td>
+                        <td class="item-meta text-right">
+                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-comment"></i> <span>2</span></button>
+                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i></button>
+                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-file"></i> <span>2</span></button>
+                            <img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="48">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="item-icon"><img src="http://placehold.it/64" class="img-circle"></td>
+                        <td class="item-info">
+                            <div>
+                                <h4><a href="#">Bylaws</a></h4>
+                                <small class="muted">Last comment by <a href="#">Alex Halliday</a> <span>&middot;</span> 15 minutes ago<small>
+                            </div>
+                        </td>
+                        <td class="item-meta text-right">
+                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-comment"></i> <span>2</span></button>
+                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i></button>
+                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-file"></i> <span>2</span></button>
+                            <img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="48">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 id="qualification">Qualification</h3>
+            <table class="table table-striped checklist">
+                <thead>
+                    <th class="item-icon"></th>
+                    <th class="item-info"></th>
+                    <th class="item-meta"></td>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="item-icon"><img src="http://placehold.it/64" class="img-circle"></td>
+                        <td class="item-info">
+                            <div>
+                                <h4><a href="#">Stock Purchase Agreement</a></h4>
+                                <small class="muted">Last comment by <a href="#">Alex Halliday</a> <span>&middot;</span> 15 minutes ago<small>
+                            </div>
+                        </td>
+                        <td class="item-meta text-right">
+                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-comment"></i> <span>2</span></button>
+                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i></button>
+                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-file"></i> <span>2</span></button>
+                            <img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="48">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="item-icon"><img src="http://placehold.it/64" class="img-circle"></td>
+                        <td class="item-info">
+                            <div>
+                                <h4><a href="#">Notice of Stock Issuance for Yael Citro</a></h4>
+                                <small class="muted">Last comment by <a href="#">Alex Halliday</a> <span>&middot;</span> 15 minutes ago<small>
+                            </div>
+                        </td>
+                        <td class="item-meta text-right">
+                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-comment"></i> <span>2</span></button>
+                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i></button>
+                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-file"></i> <span>2</span></button>
+                            <img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="48">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="item-icon"><img src="http://placehold.it/64" class="img-circle"></td>
+                        <td class="item-info">
+                            <div>
+                                <h4><a href="#">Notice of Stock Issuance for Ben Ling</a></h4>
+                                <small class="muted">Last comment by <a href="#">Alex Halliday</a> <span>&middot;</span> 15 minutes ago<small>
+                            </div>
+                        </td>
+                        <td class="item-meta text-right">
+                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-comment"></i> <span>2</span></button>
+                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i></button>
+                            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-file"></i> <span>2</span></button>
+                            <img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="48">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 id="founders-docs">Founders Docs</h3>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+            <h3 id="option-plan">Option Plan</h3>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+            <h3 id="directors-and-officers">Directors and Officers</h3>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+            <h3 id="employment-documents">Employment Documents</h3>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+            <h3 id="consultant-documents">Consultant Documents</h3>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+            <h3 id="intellectual-property">Intellectual Property</h3>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+            <h3 id="misc">Misc</h3>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br>
         </div>
     </div>
+</div>
 {% endblock %}
 
 {% block js %}
