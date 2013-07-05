@@ -88,9 +88,18 @@
 
 .checklist {
     .item-icon {
+        text-align: center;
         width: 80px;
+        [class^="icon-"],
+        [class*=" icon-"] {
+            font-size: 64px;
+        }
     }
     td.item-meta {
         vertical-align: middle;
     }
+    .icon-pending:before { color: lightgrey; content: @check-empty; }
+    .icon-draft:before { color: grey; content: @adjust; }
+    .icon-urgent:before { color: yellow; content: @exclamation-sign; }
+    .icon-complete:before { color: green; content: @ok-sign; }
 }
