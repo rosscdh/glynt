@@ -142,7 +142,7 @@ transaction:
                     attachment: []
 
 
-        Miscillaneous:
+        Miscellaneous:
             type: 'simple'
             checklist:
                 -   name: 'Cap Table'
