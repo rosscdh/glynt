@@ -45,5 +45,6 @@ urlpatterns = patterns('',
 
 
 if settings.DEBUG or settings.PROJECT_ENVIRONMENT == 'dev':
-	urlpatterns += staticfiles_urlpatterns()
-	urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += patterns('', url(r'^flyform/', include('glynt.apps.flyform.author.urls', namespace='flyform')))
+    urlpatterns += staticfiles_urlpatterns()
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

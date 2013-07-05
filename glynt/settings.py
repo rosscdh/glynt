@@ -198,6 +198,10 @@ PROJECT_APPS = (
     'glynt.apps.services',
     # Graph
     'glynt.apps.graph',
+
+    # FlyForm & Authoring
+    'glynt.apps.flyform',
+    'glynt.apps.flyform.author',
 )
 
 HELPER_APPS = (
@@ -235,13 +239,6 @@ HELPER_APPS = (
     'endless_pagination',
     # Celery Tasks
     'djcelery',
-
-    # Testing helpers
-    # 'django_jenkins',
-    # 'django-behave',
-
-    # Django Pagination,
-    # 'pagination',
 
     # Vast array of Storage types
     'storages',
