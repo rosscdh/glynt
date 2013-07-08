@@ -32,20 +32,22 @@ class BaseToDoBunch(Bunch):
     def __init__(self, *args, **kwargs):
         if not self.name:
             # Set name if not provided
-            self.name = self.__class__.__name__.lower().replace('bunch','')
+            self.name = self.__class__.__name__.lower().replace('bunch', '')
 
         super(BaseToDoBunch, self).__init__(*args, **kwargs)
         self.load_template()
 
     def load_template(self):
         if not self.template:
-            self.template = '%s.yml' % self.__class__.__name__.lower().replace('bunch','')
+            self.template = '%s.yml' % self.__class__.__name__.lower().replace('bunch', '')
 
         if self.template:
             yaml_file = os.path.join(YAML_TEMPLATE_PATH, 'templates/transactions/', self.template)
-
-            with open(yaml_file) as f:
-                self.__dict__.update(Bunch.fromDict(yaml.safe_load(f).get('transaction')))
+            try:
+                with open(yaml_file) as f:
+                    self.__dict__.update(Bunch.fromDict(yaml.safe_load(f).get('transaction')))
+            except Exception as ex:
+                logger.error('Could not Open %s, due to: %s' % (yaml_file, ex))
 
     def attachement(self, attachement_slug):
         """ accessor to allow loading of a document/attachment from the db """
