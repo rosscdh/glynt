@@ -3,7 +3,8 @@
 Test the todo bunches
 """
 import factory
-import mocktest 
+import mocktest
+from bunch import Bunch
 from glynt.apps.transact.models import Transaction
 from glynt.apps.transact.bunches import BaseToDoBunch, IncorporationBunch
 
@@ -20,76 +21,59 @@ class BaseToDoBunchAttribsTest(mocktest.TestCase):
 
     def test_general_properties(self):
         self.assertTrue(hasattr(self.subject, 'name'))
-        self.assertTrue(hasattr(self.subject, 'transaction_slug'))
-        self.assertTrue(hasattr(self.subject, 'todos'))
-
-    def test_attribute_types(self):
-        self.assertEqual(type(self.subject.todos), list) # to allow for appending of todos
-
-
-class BaseToDoBunchMethodsTest(mocktest.TestCase):
-    def setUp(self):
-        self.transaction = TransactionFactory.build()
-        self.subject = BaseToDoBunch()
-
-    def test_todo_block(self):
-        pass
-    def test_generate_repeaters(self):
-        pass
-    def test_update_todo_context(self):
-        pass
+        self.assertTrue(hasattr(self.subject, 'template'))
 
 
 class IncorporationBunchTest(BaseToDoBunchAttribsTest):
     """ Ensure the IncorporationBunch is setup correctly """
-    expected_repeaters = [('customer_docs', 'customer'),
-                            ('options', 'options'),
-                            ('directors_and_officers', 'director'),
-                            ('employment_docs', 'employee'),
-                        ]
-    expected_subject_slug_and_names = [('general', 'General Questions'),
-                                ('qualification', 'Qualification to do business in other states or countries'),
-                                ('customer_docs', 'Customers Documents'),
-                                ('option_plan', 'Option Plan'),
-                                ('options', 'Option Issuance'),
-                                ('directors_and_officers', 'Directors and Officers'),
-                                ('employment_docs', 'Employment Documents'),
-                                ('consultant_docs', 'Consultant Documents'),
-                                ('intellectual_property', 'Intellectual Property'),
-                                ('misc', 'Miscellaneous'),
+    expected_subject_names = ['General',
+                                'Qualification to do business in other states or countries',
+                                'Founders Documents',
+                                'Option Plan',
+                                'Option Holders',
+                                'Option Holders - International',
+                                'Directors & Officers',
+                                'Employment Documents',
+                                'Consultant Documents',
+                                'Intellectual Property',
+                                'Miscellaneous',
                             ]
+    expected_repeaters = [  'Founders Documents',
+                            'Option Holders',
+                            'Directors & Officers',
+                            'Employment Documents',
+                            'Consultant Documents',
+                         ]
 
     def setUp(self):
-        self.transaction = TransactionFactory.build()
-        self.subject = IncorporationBunch(transaction=self.transaction)
+        #self.transaction = TransactionFactory.build()
+        self.subject = IncorporationBunch()
 
     def test_properties(self):
+        """ name is set to the base class name """
         self.assertEqual('Incorporation', self.subject.name)
-        self.assertEqual('incorporation', self.subject.transaction_slug)
 
-    def test_repeaters(self):
-        slugs = []
-        names = []
-        for slug, name in self.subject.repeaters:
-            slugs.append(slug)
-            names.append(name)
+    def test_todos_are_set(self):
+        self.assertTrue(type(self.subject.todos) == Bunch)
+        todo_keys = dict(self.subject.todos).keys() # cast as dict
+        for e in self.expected_subject_names:
+            #print '%s %s' % (e, todo_keys)
+            self.assertEqual(True, e in todo_keys)
 
-        for slug, name in self.expected_repeaters:
-            self.assertTrue(slug in slugs)
-            self.assertTrue(name in names)
+    def test_repeaters_are_set_and_simple_types(self):
+        for name, value_dict in self.subject.todos.iteritems():
+            self.assertTrue(name in self.expected_subject_names)
 
-    def test_todo_keys(self):
-        slugs = []
-        names = []
-        for slug, name, todos in self.subject.todos:
-            slugs.append(slug)
-            names.append(name)
-            # test todos is a tuple
-            self.assertEqual(type(todos), tuple)
+            if name in self.expected_repeaters:
+                self.assertTrue(value_dict.type == 'repeater')
+            else:
+                self.assertTrue(value_dict.type == 'simple')
 
-        # test expected name and slug are in the set
-        for slug, name in self.expected_subject_slug_and_names:
-            self.assertTrue(slug in slugs)
-            self.assertTrue(name in names)
+    def test_checklist_items_are_set(self):
+        for name, value_dict in self.subject.todos.iteritems():
+            self.assertTrue(type(value_dict.checklist) == list)
+            self.assertTrue(len(value_dict.checklist) > 0)
+            for todo in value_dict.checklist:
+                self.assertTrue(hasattr(todo, 'name'))
 
-        
+
