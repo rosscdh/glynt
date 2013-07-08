@@ -45,7 +45,7 @@ a "**customer**"
 9. ```pip install -r requirements.txt``` : install update the required libraries (append --upgrade if you are not sure)
 10. ```python manage.py syncdb``` : sync the database; and create the default user if there is not already one
 11. ```python manage.py migrate``` : perform the rest of the migrations
-12. ```python manage.py loaddata sites lawyers cities_light transact legal```
+12. ```python manage.py loaddata sites cities_light transact```
 13. ```python manage.py check_permissions``` # Creates the userena permissions
 14. Thats it you can now ```python manage.py runserver_plus```
 15. access http://local.weareml.com:8000/ (you may need to add 127.0.0.1 local.weareml.com to your /etc/hosts file)
