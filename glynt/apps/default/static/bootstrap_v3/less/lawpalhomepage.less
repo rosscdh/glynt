@@ -86,7 +86,7 @@
 	}
 }
 
-.checklist {
+table.checklist {
     .item-icon {
         text-align: center;
         width: 80px;
@@ -101,5 +101,19 @@
     .icon-pending:before { color: lightgrey; content: @check-empty; }
     .icon-draft:before { color: grey; content: @adjust; }
     .icon-urgent:before { color: yellow; content: @exclamation-sign; }
-    .icon-complete:before { color: green; content: @ok-sign; }
+    .icon-complete:before { color: rgb(107, 219, 126); content: @ok-sign; }
+
+    tr.complete {
+        td {
+            background-color: fade(rgb(107, 219, 126), 10%);
+            a {
+                color: rgb(107, 219, 126);
+            }
+        }
+        .item-icon {
+            .icon-complete {
+                font-size: 36px;
+            }
+        }
+    }
 }
