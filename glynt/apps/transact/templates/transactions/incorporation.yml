@@ -1,0 +1,148 @@
+transaction:
+    name: 'Incorporation'
+    description: ''
+    note: ''
+    todos:
+
+        General:
+            type: 'simple'
+            checklist:
+                -   name: 'Certificate of Incorporation'
+                    attachment: []
+                -   name: 'Action by Written Consent of Incorporator'
+                    attachment: []
+                -   name: 'Initial Written Consent of Board in Lieu of First Meeting'
+                    attachment: []
+                -   name: 'Bylaws'
+                    attachment: []
+                -   name: 'Shareholders Agreement'
+                    attachment: []
+                -   name: 'Form SS-4 application for Employer Identification Number (EIN)'
+                    note: 'From IRS'
+                    attachment: []
+                -   name: 'EIN Assignment Letter from the IRS'
+                    attachment: []
+
+
+        Qualification to do business in other states or countries:
+            type: 'simple'
+            checklist:
+                -   name: 'File the Statement and Designation by Foreign Corporation with the California Secretary of State.'
+                    group: 'California'
+                    attachment: []
+                -   name: 'File Form DE-1 (State employer identification number for the Company in California)'
+                    group: 'California'
+                    attachment: []
+                -   name: 'Other US State Document'
+                    group: 'Other US State'
+                    note: 'Lawyer to add additional'
+                    attachment: []
+                -   name: 'Non-U.S. country Document'
+                    group: 'Non-U.S. countries'
+                    note: 'Lawyer to add additional'
+                    attachment: []
+
+
+        Founders Documents:
+            type: 'repeater'
+            checklist:
+                -   name: 'Stock Purchase Agreement for {{ full_name }}'
+                    attachment: []
+                -   name: 'Confidential Information and Invention Assignment Agreement for {{ full_name }}'
+                    attachment: []
+                -   name: 'Notice of Stock Issuance for {{ full_name }}'
+                    attachment: []
+                -   name: 'Stock Certificate(s) for {{ full_name }}'
+                    attachment: []
+                -   name: '83(b) Election for {{ full_name }}'
+                    attachment: []
+
+
+        Option Plan:
+            type: 'simple'
+            checklist:
+                -   name: 'Stock Plan'
+                    attachment: []
+                -   name: 'Stock Plan Summary'
+                    attachment: []
+                -   name: 'Forms of stock option grant and restricted stock purchase agreements under the stock plan'
+                    attachment: []
+                -   name: 'Board Approval of Stock Plan'
+                    attachment: []
+                -   name: 'Stockholder Approval of Stock Plan'
+                    attachment: []
+
+
+        Option Holders:
+            type: 'repeater'
+            checklist:
+                -   name: 'Stock option grant and restricted stock purchase agreements for {{ full_name }}'
+                    attachment: []
+                -   name: 'Board approval of Option Grant for {{ full_name }}'
+                    attachment: []
+                -   name: '83(b) Election Form for {{ full_name }}'
+                    attachment: []
+                -   name: 'Board Approval of Stock Plan'
+                    attachment: []
+
+
+        Option Holders - International:
+            type: 'simple'
+            checklist:
+                -   name: 'Option grants to persons outside of the US to be discussed with attorney'
+                    attachment: []
+
+
+        Directors & Officers:
+            type: 'repeater'
+            checklist:
+                -   name: 'Indemnification Agreement for {{ full_name }}'
+                    attachment: []
+                -   name: 'Stockholder Approval of Indemnification Agreement for {{ full_name }}'
+                    attachment: []
+
+
+        Employment Documents:
+            type: 'repeater'
+            checklist:
+                -   name: 'Employment Offer Letter for {{ full_name }}'
+                    attachment: []
+                -   name: 'Employment Agreement for {{ full_name }}'
+                    attachment: []
+                -   name: 'Confidential Information and Invention Assignment Agreement for {{ full_name }}'
+                    attachment: []
+                -   name: 'Nondisclosure Agreement for {{ full_name }}'
+                    attachment: []
+
+
+        Consultant Documents:
+            type: 'repeater'
+            checklist:
+                -   name: 'Consultant Agreement for {{ full_name }}'
+                    attachment: []
+                -   name: 'Confidential Information and Invention Assignment Agreement for {{ full_name }}'
+                    attachment: []
+                -   name: 'Nondisclosure Agreement for {{ full_name }}'
+                    attachment: []
+
+
+        Intellectual Property:
+            type: 'simple'
+            checklist:
+                -   name: 'IP created by persons no longer affiliated with the company'
+                    attachment: []
+                -   name: 'IP created by non-Founders'
+                    attachment: []
+                -   name: 'IP by persons affiliated with a university'
+                    attachment: []
+
+
+        Miscellaneous:
+            type: 'simple'
+            checklist:
+                -   name: 'Cap Table'
+                    attachment: []
+                -   name: 'Stock Ledger'
+                    attachment: []
+                -   name: 'Blue Sky Filings'
+                    attachment: []
