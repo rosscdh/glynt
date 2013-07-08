@@ -45,7 +45,6 @@ transaction:
 
         Founders Documents:
             type: 'repeater'
-            slug: 'founders-documents'
             checklist:
                 -   name: 'Stock Purchase Agreement for {{ full_name }}'
                     attachment: []
@@ -76,7 +75,6 @@ transaction:
 
         Option Holders:
             type: 'repeater'
-            slug: 'option-holders'
             checklist:
                 -   name: 'Stock option grant and restricted stock purchase agreements for {{ full_name }}'
                     attachment: []
@@ -97,7 +95,6 @@ transaction:
 
         Directors & Officers:
             type: 'repeater'
-            slug: 'directors-and-officers'
             checklist:
                 -   name: 'Indemnification Agreement for {{ full_name }}'
                     attachment: []
@@ -107,7 +104,6 @@ transaction:
 
         Employment Documents:
             type: 'repeater'
-            slug: 'employment-documents'
             checklist:
                 -   name: 'Employment Offer Letter for {{ full_name }}'
                     attachment: []
@@ -121,7 +117,6 @@ transaction:
 
         Consultant Documents:
             type: 'repeater'
-            slug: 'consultant-documents'
             checklist:
                 -   name: 'Consultant Agreement for {{ full_name }}'
                     attachment: []
