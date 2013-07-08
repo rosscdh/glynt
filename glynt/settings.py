@@ -198,10 +198,6 @@ PROJECT_APPS = (
     'glynt.apps.services',
     # Graph
     'glynt.apps.graph',
-
-    # FlyForm & Authoring
-    'glynt.apps.flyform',
-    'glynt.apps.flyform.author',
 )
 
 HELPER_APPS = (
