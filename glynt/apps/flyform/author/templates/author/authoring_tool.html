@@ -5,60 +5,54 @@
 {% block bodyclass %}review{% endblock %}
 
 
+{% block prebody %}
+    <div class="span2 sidebar">
+      <ul class="nav nav-list">
+        <li class="nav-header">{% trans 'Authoring' %}</li>
+          <li><a href="#/"> {% trans 'Steps & Fields' %}</a></li>
+          <li><a href="#/meta"> {% trans 'Form Meta' %}</a></li>
+          <li><a href="#/review/json"> {% trans 'JSON' %}</a></li>
+      </ul>
+    </div>
+{% endblock %}
+
 {% block body %}
+
 <div class="span12">
-  <h2>Document Author tool{% if object %} - {{ object.name }}{% endif %}</h2>
-</div>
+    <h2>Author FlyForm Tool</h2>
 
-<div class="span2 sidebar">
-  <ul class="nav nav-list">
-    <li class="nav-header">{% trans 'Authoring' %}</li>
-      <li><a href="#/"> {% trans 'Steps & Fields' %}</a></li>
-      <li><a href="#/meta"> {% trans 'Properties' %}</a></li>
-    <li class="nav-header">{% trans 'Document' %}</li>
-      <li><a href="#/doc"> {% trans 'Document' %}</a></li>
-    <li class="nav-header">{% trans 'Review' %}</li>
-      <li><a href="#/review/json"> {% trans 'Raw JSON' %}</a></li>
-    <li class="nav-header">{% trans 'Actions' %}</li>
-    {% if object %}
-    <li class="divider"></li>
-        <li><a href="{% url 'author:edit' pk=object.pk %}" class="btn btn-success" id="save-json">{% trans 'Save' %}</a></li>
-    {% endif %}
-  </ul>
-</div>
-
-<div id="authoring" class="row view default">
-    <div id="steps" class="span9">
-        <div id="steps_list"></div>
-    </div>
-
-    <div id="fields" class="span9 modal hide fade">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3 id="modal-header">&nbsp;</h3>
+    <div id="authoring" class="row view default border">
+        <div id="steps" class="span4">
+            <div id="steps_list"></div>
         </div>
-        <div id="fields_list" class="modal-body"></div>
-        <div class="modal-footer">
-            <a href="#/field/add" class="btn btn-mini btn-success pull-right" id="add_field" data-step_index=""><i class="icon-plus icon-white"></i> Add Field</a>
+
+        <div id="fields" class="span7">
+            <div id="fields_list"></div>
+            <div class="modal-footer">
+                <a href="#/field/add" class="btn btn-mini btn-success pull-right" id="add_field" data-step_index=""><i class="icon-plus icon-white"></i> Add Field</a>
+            </div>
         </div>
     </div>
-</div>
 
-<div id="meta" class="row span7 view hide">
-  Document Meta Properties
-</div>
+    <div id="meta" class="row span7 view hide">
+      Document Meta Properties
+    </div>
 
-<div id="json" class="row span9 view hide">
-    <textarea id="json-output" class="span9" style="height:640px;">{{ json|default:""|safe }}</textarea>
-</div>
+    <div id="json" class="row span9 view hide">
+        <textarea id="json-output" class="span9" style="height:640px;">{{ json|default:""|safe }}</textarea>
+    </div>
 
-<div id="doc" class="row span7 view hide">
-    Document coming soon
+    <div id="doc" class="row span7 view hide">
+        Document coming soon
+    </div>
 </div>
 {% endblock %}
 
 {% block css %}
 <style>
+.border{
+  border:solid #c00 1px;
+}
 .modal{
   border:solid #c00 1px;
    width:80%;
@@ -77,6 +71,11 @@ ol.step-field-list li {
 {{#each_with_key steps key="index"}}
 <div class="doc-body step info row" data-step_index="{{index}}">
 
+  <div class="">
+    {{#unless_eq index compare=0}}<a href="#step/delete" class="btn btn-danger btn-mini delete_step" data-step_index="{{index}}"><i class="icon-remove icon-white"></i> Delete Step</a>{{/unless_eq}}
+    <!--<a href="#/fields/view" class="pull-right btn btn-mini btn-success" id="show_fields" data-step_index="{{index}}"><i class="icon-list icon-white"></i> Show Fields</a>-->
+  </div>
+
   <form id="step-{{index}}" data-step_index="{{index}}" class="form-step span4">
 {% endverbatim %}
     {{ form_steps }}
@@ -84,12 +83,6 @@ ol.step-field-list li {
 
   <ol class="step-field-list span4"></ol>
 
-  {% verbatim %}
-  <div class="">
-    {{#unless_eq index compare=0}}<a href="#step/delete" class="btn btn-danger btn-mini delete_step" data-step_index="{{index}}"><i class="icon-remove icon-white"></i> Delete Step</a>{{/unless_eq}}
-    <a href="#/fields/view" class="pull-right btn btn-mini btn-success" id="show_fields" data-step_index="{{index}}"><i class="icon-list icon-white"></i> Show Fields</a>
-  </div>
-  {% endverbatim %}
 </div>
 <br/>
 {% verbatim %}{{/each_with_key}}{% endverbatim %}
@@ -182,7 +175,8 @@ $(document).ready(function(){
         self.step_json = {
           'type': 'step',
           'properties': {
-            'step_title': 'Step No. 1',
+            'step_title_template': 'Step No. {step_num}',
+            'step_title': null,
             'hide_from': '',
             'iteration_title': ''
             //'hide_to': ''
@@ -258,9 +252,10 @@ $(document).ready(function(){
             self.update_json();
         };
         self.add_field = function add_field(step_index) {
+          step_index = step_index || 0
           self.flyform_schema.steps[step_index].fields.push(self.clone(self.input_json));
-          self.render_fields(step_index);
           self.update_json();
+          self.render_fields(step_index);
         };
         self.delete_field = function delete_field(step_index, field_index) {
             self.flyform_schema.steps[step_index].fields.splice(field_index,1);
@@ -272,13 +267,11 @@ $(document).ready(function(){
         self.update_json = function update_json() {
             var pretty_json = JSON.stringify(self.flyform_schema, null, "\t");
             self.json_output.val(pretty_json);
-            $.cookie('auth_tool', pretty_json);
-//            self.bind_forms_to_data();
+            self.bind_forms_to_data();
         };
 
         self.load_data_from_source = function load_data_from_source() {
             data = $.parseJSON(self.json_output.val());
-            //data = $.parseJSON($.cookie('auth_tool'));
             if (data && typeof data == 'object' && data[0] != undefined && data[0].type != undefined) {
                 // is in the old format; wrap in the new @TODO.. phase this out before launch
                 self.flyform_schema.steps = data;
@@ -296,7 +289,7 @@ $(document).ready(function(){
         self.render = function render() {
           self.render_steps();
           self.render_fields(self.current_step);
-          self.render_doc();
+          //self.render_doc();
           self.render_meta();
           self.dispatch('bind_data', {});
         };
@@ -306,9 +299,9 @@ $(document).ready(function(){
         self.render_fields = function render_fields(step_index) {
           $( "div#fields_list" ).html(self.fields_view({'step': self.flyform_schema.steps[step_index]}));
         };
-        self.render_doc = function render_doc() {
-          $( "div#doc" ).html(self.doc_view({}));
-        };
+        // self.render_doc = function render_doc() {
+        //   $( "div#doc" ).html(self.doc_view({}));
+        // };
         self.render_meta = function render_meta() {
           $( "div#meta" ).html(self.meta_view({}));
         };
@@ -379,9 +372,10 @@ $(document).ready(function(){
                 step_attribs.type = self.flyform_schema.steps[step_index].type;
 
                 // set step legend
-                if (step_attribs['step_title'] != '') {
-                    form_step.find('legend').html(step_attribs['step_title']);
-                }
+                //if (step_attribs['step_title'] != '') {
+                    step_attribs.step_title = step_attribs.step_title_template.assign({'step_num': (step_index + 1)})
+                    form_step.find('legend').html(step_attribs.step_title);
+                //}
 
                 step_field_list = $('body').find('form#'+ form_id).closest('div.doc-body').find('ol.step-field-list');
                 hide_from_field = $('body').find('form#'+ form_id +' [name=hide_from]');
@@ -510,9 +504,13 @@ $(document).ready(function(){
                 var step = $(this).attr('data-step_index');
                 $(this).addClass('selected');
                 self.current_step = step;
-                self.render();
-                $('#modal-header').html(self.flyform_schema.steps[step].properties.step_title);
-                $('div#fields').modal('toggle')
+
+                //get the top offset of the target anchor
+                var target_offset = $("#"+trgt).offset();
+                var target_top = target_offset.top;
+
+                //goto that anchor by setting the body scroll top to anchor top
+                $('html, body').animate({scrollTop:target_top}, 1500, 'easeInSine');
             });
             $('[name=hide_from]').live('change', function(event){
                 var target_field = $(this).val();
