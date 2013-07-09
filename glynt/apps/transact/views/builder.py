@@ -34,15 +34,19 @@ class BuilderWizardView(SessionWizardView):
             self.add_form_to_set(current_form_set=form_list, form_set=TX_OPTIONS.get('INTAKE').get('forms'))
 
         # import the appropriate forms and their templates
+        tx_options_keys = TX_OPTIONS.keys()
         for tx in tx_range:
-            # @BUSINESSRULE - intake form must always be first
-            self.add_form_to_set(current_form_set=form_list, form_set=TX_OPTIONS.get(tx).get('forms'))
+            if tx in tx_options_keys:
+                # @BUSINESSRULE - intake form must always be first
+                self.add_form_to_set(current_form_set=form_list, form_set=TX_OPTIONS.get(tx).get('forms'))
         self.form_list = SortedDict(form_list)
 
     def add_form_to_set(self, current_form_set, form_set):
         length_of_current_form_set = len(current_form_set.keys())
         for i, item in enumerate(form_set):
-            current_form_set[unicode(length_of_current_form_set + i)] = item[1] # return the form and not its name
+            # increment i + 1 as steps start at 1 not 0
+            current_form_set[unicode(length_of_current_form_set + i + 1)] = item[1] # return the form and not its name
+
         return current_form_set
 
     def dispatch(self, request, *args, **kwargs):

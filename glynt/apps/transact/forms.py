@@ -32,6 +32,8 @@ class BasicInformationForm(forms.Form):
 # WIZARD STEP THREE
 @parsleyfy
 class CorporateAgentsForm(forms.Form):
+    page_title = 'Corporate Agents'
+    page_description = None
     agent_delaware_name = forms.CharField(label="Name", help_text="", widget=forms.TextInput(attrs={'tabindex':'1'}))
     agent_delaware_address = forms.CharField(label="Address", help_text="", widget=forms.Textarea(attrs={'tabindex':'2'}))
     agent_california_name = forms.CharField(label="Name", required=False, help_text="", widget=forms.TextInput(attrs={'tabindex':'3'}))
@@ -60,6 +62,8 @@ class CorporateAgentsForm(forms.Form):
 # WIZARD STEP FOUR
 @parsleyfy
 class InitialDirectorsForm(forms.Form):
+    page_title = 'Initial Directors'
+    page_description = None
     initial_number_of_directors = forms.IntegerField(label="Initial number of directors", help_text="", widget=forms.TextInput(attrs={'tabindex':'1'}))
     names_of_directors = forms.CharField(label="Names of director(s)", help_text="", widget=forms.TextInput(attrs={'tabindex':'2'}))
 
@@ -98,6 +102,8 @@ class InitialDirectorsForm(forms.Form):
 # WIZARD STEP FIVE
 @parsleyfy
 class GeneralCapitalizationForm(forms.Form):
+    page_title = 'General Capitalization'
+    page_description = None
     total_authorized_shares_of_common_stock = forms.CharField(label="Total authorized shares of common stock", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
     par_value_per_share = forms.CharField(label="Par value per share", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
     total_shares_customers = forms.CharField(label="Total shares to be purchased by founders", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
@@ -107,6 +113,8 @@ class GeneralCapitalizationForm(forms.Form):
 # WIZARD STEP SIX
 @parsleyfy
 class CustomersForm(forms.Form):
+    page_title = 'Customers'
+    page_description = None
     first_name = forms.CharField(label="First name", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
     last_name = forms.CharField(label="Last name", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
     address = forms.CharField(label="Address", required=False, help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
@@ -175,6 +183,8 @@ class CustomersForm(forms.Form):
 
 # WIZARD STEP SEVEN
 class StockPlansForm(BootstrapMixin, forms.Form):
+    page_title = 'Stock Plan'
+    page_description = None
     equity_incentive_plan = forms.BooleanField(label="Will the company have an equity incentive plan?", help_text="", widget=forms.CheckboxInput())
     # IF YES:
     shares_authorized = forms.CharField(label="Name", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
@@ -195,6 +205,8 @@ class StockPlansForm(BootstrapMixin, forms.Form):
 
 # WIZARD STEP EIGHT
 class AboutCompanyBusinessForm(BootstrapMixin, forms.Form):
+    page_title = 'The Company'
+    page_description = None
     date_company_begins_business = forms.DateField(label="Date on which the company will begin doing business", help_text="", widget=forms.DateInput(attrs={'tabindex':''}))
     states_countries_doing_business = forms.CharField(label="States and countries in which the company will be doing business", help_text="", widget=forms.TextInput(attrs={'tabindex':''}))
     detailed_business_description = forms.CharField(label="Detailed business description (e.g., describe the principal line of merchandise sold, products produced, services provided, etc.)", help_text="", widget=forms.Textarea(attrs={'tabindex':''}))
@@ -202,6 +214,8 @@ class AboutCompanyBusinessForm(BootstrapMixin, forms.Form):
 
 # WIZARD STEP NINE
 class IntellectualPropertyForm(BootstrapMixin, forms.Form):
+    page_title = 'Intellectual Property'
+    page_description = None
     intellectual_property = forms.CharField(label="List any patents, copyrights and trademarks that the company will own or license and/or will want to register", help_text="", widget=forms.Textarea(attrs={'tabindex':''}))
     domain_names_obtained = forms.BooleanField(label="Any Domain names obtained?", help_text="", widget=forms.CheckboxInput())
     # IF YES:
@@ -219,6 +233,8 @@ class IntellectualPropertyForm(BootstrapMixin, forms.Form):
 
 # WIZARD STEP TEN
 class EmployeesConsultantsForm(BootstrapMixin, forms.Form):
+    page_title = 'Employees & Consulatants'
+    page_description = None
     name = forms.CharField(label="Name", help_text="", widget=forms.TextInput(attrs={'tabindex':'1'}))
     EMPLOYMENT_TYPE_CHOICES = (
         ('EM', 'Employee'),
