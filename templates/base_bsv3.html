@@ -27,7 +27,7 @@
 
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
 
-<div id="wrap">
+<div id="{% block wrapclass %}wrap{% endblock %}">
 
 
     {% block navbar %}

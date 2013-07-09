@@ -10,7 +10,7 @@ form {
   margin: 0;
 }
 .form-wrap {
-  background-color: lighten(@gray-lighter, 3%);
+  background-color: lighten(@gray-lighter, 5%);
   padding:40px 0px;
 }
 fieldset {
@@ -34,7 +34,6 @@ legend {
 label {
   display: inline-block;
   margin-bottom: 5px;
-  font-weight: bold;
 }
 
 // Form controls
@@ -60,13 +59,13 @@ input[type="color"] {
   display: block;
   min-height: @input-height-base; // Make inputs at least the height of their button counterpart (base line-height + padding + border)
   padding: @padding-base-vertical @padding-base-horizontal;
-  font-size: @font-size-base;
+  font-size: @font-size-base * 1.2;
   line-height: @line-height-base;
   color: @gray;
   vertical-align: middle;
   background-color: @input-bg;
-  border: 2px solid @gray-lighter;
-  border-radius: 5px;
+  border: 1px solid @gray-lighter;
+  border-radius: 2px;
   .transition(~"border-color ease-in-out .15s, box-shadow ease-in-out .15s");
 
   &:focus {
@@ -178,6 +177,7 @@ textarea {
     margin-bottom: 0;
     font-weight: normal;
     cursor: pointer;
+    padding-left:0px
   }
 }
 .radio input[type="radio"],
@@ -280,10 +280,12 @@ input[type="color"] {
     margin-left:0px;
     padding-left:0px;
     font-weight:bold;
+    font-size:11px;
 }
-input.parsley-error, textarea.parsley-error {
+input.parsley-error, textarea.parsley-error, input.parsley-error:focus, textarea.parsley-error:focus  {
     border-color: @brand-warning;
 }
+
 
 
 
@@ -435,8 +437,15 @@ input.parsley-error, textarea.parsley-error {
     margin-top: 15px;
   }
   .control-label {
-    padding-top: 6px;
+    padding-top: 10px;
   }
+}
+.form-horizontal .col .col {
+  padding-right:4px;
+  padding-left: 4px;
+}
+.form-horizontal .col .col input {
+  max-width:95%;
 }
 
 // Only right aline form labels here when the columns stop stacking

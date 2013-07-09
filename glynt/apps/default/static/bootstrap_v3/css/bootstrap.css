@@ -1173,7 +1173,7 @@ form {
   margin: 0;
 }
 .form-wrap {
-  background-color: #f6f6f6;
+  background-color: #fbfbfb;
   padding: 40px 0px;
 }
 fieldset {
@@ -1195,7 +1195,6 @@ legend {
 label {
   display: inline-block;
   margin-bottom: 5px;
-  font-weight: bold;
 }
 select,
 textarea,
@@ -1214,15 +1213,15 @@ input[type="search"],
 input[type="tel"],
 input[type="color"] {
   display: block;
-  min-height: 34px;
-  padding: 6px 12px;
-  font-size: 14px;
+  min-height: 36px;
+  padding: 7px 12px;
+  font-size: 16.8px;
   line-height: 1.428571429;
   color: #555555;
   vertical-align: middle;
   background-color: #ffffff;
-  border: 2px solid #eeeeee;
-  border-radius: 5px;
+  border: 1px solid #eeeeee;
+  border-radius: 2px;
   -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
   -moz-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
   -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
@@ -1330,10 +1329,10 @@ input[type="checkbox"] {
 }
 select,
 input[type="file"] {
-  height: 34px;
+  height: 36px;
   /* In IE7, the height of the select element cannot be changed by height, only font-size. TODO: Check if this is still needed when dropping IE7 support */
 
-  line-height: 34px;
+  line-height: 36px;
 }
 select[multiple],
 select[size] {
@@ -1382,6 +1381,7 @@ textarea::-webkit-input-placeholder {
   margin-bottom: 0;
   font-weight: normal;
   cursor: pointer;
+  padding-left: 0px;
 }
 .radio input[type="radio"],
 .radio-inline input[type="radio"],
@@ -1529,9 +1529,12 @@ input[type="color"].input-small {
   margin-left: 0px;
   padding-left: 0px;
   font-weight: bold;
+  font-size: 11px;
 }
 input.parsley-error,
-textarea.parsley-error {
+textarea.parsley-error,
+input.parsley-error:focus,
+textarea.parsley-error:focus {
   border-color: #f88172;
 }
 .help-block {
@@ -1572,7 +1575,7 @@ textarea.parsley-error {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  padding: 6px 12px;
+  padding: 7px 12px;
   font-size: 14px;
   font-weight: normal;
   line-height: 1.428571429;
@@ -1645,7 +1648,14 @@ textarea.parsley-error {
   margin-top: 15px;
 }
 .form-horizontal .control-label {
-  padding-top: 6px;
+  padding-top: 10px;
+}
+.form-horizontal .col .col {
+  padding-right: 4px;
+  padding-left: 4px;
+}
+.form-horizontal .col .col input {
+  max-width: 95%;
 }
 @media (min-width: 992px) {
   .form-horizontal .control-label {
@@ -1654,7 +1664,7 @@ textarea.parsley-error {
 }
 .btn {
   display: inline-block;
-  padding: 6px 12px;
+  padding: 7px 12px;
   margin-bottom: 0;
   font-size: 14px;
   font-weight: bold;
@@ -4197,8 +4207,8 @@ button.close {
   margin-top: 4px;
 }
 .navbar-form {
-  margin-top: 8px;
-  margin-bottom: 8px;
+  margin-top: 7px;
+  margin-bottom: 7px;
 }
 .navbar-form input,
 .navbar-form select,
@@ -4344,7 +4354,7 @@ button.close {
   }
 }
 .navbar-btn {
-  margin-top: 8px;
+  margin-top: 7px;
 }
 .navbar-text {
   margin-top: 15px;
@@ -4700,6 +4710,7 @@ body {
   overflow: hidden;
   background-color: #212526;
   letter-spacing: 1px;
+  margin-top: 25px;
   font-weight: 100;
 }
 #footer p,
@@ -5053,7 +5064,7 @@ body {
   background-color: #fcf8e3;
   border: 1px solid #fbeed5;
   border-radius: 0px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
 }
 .alert h4,
@@ -5607,6 +5618,25 @@ a.list-group-item.active > .badge,
   .jumbotron h1 {
     font-size: 42px;
   }
+}
+.megatron {
+  background-color: #6bdb7e;
+  text-align: center;
+  margin-top: -70px;
+  padding-top: 90px;
+  padding-bottom: 20px;
+}
+.megatron * {
+  color: white;
+}
+.megatron i.glyphicon {
+  background-color: #31c94b;
+  border-radius: 50px;
+  color: #6bdb7e;
+  margin-bottom: 100px;
+}
+.megatron h1 {
+  margin: 30px 0px -10px 0px;
 }
 @font-face {
   font-family: 'Glyphicons Halflings';
