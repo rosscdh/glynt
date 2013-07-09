@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_bsv3.html' %}
 
 {% block page_title %}Welcome to LawPal{% endblock %}
 {% block bodyclass %}lawyer-welcome{% endblock %}
@@ -8,10 +8,10 @@
 	<div class="container">
 		<!-- starts carousel -->
 		<div class="row animated fadeInDown">
-			<div class="span12">
+			<div class="col col-lg-12">
 				<h1>Hey {{ user.first_name|default:user }}, a warm welcome to LawPal</h1>
-				<h3>We're up to something big and we want you to be part of it.<br />
-					We are launching a discovery platform to help founders find quality lawyers and firms.
+				<h3>Submit your profile for inclusion and we'll be in touch
+					
 				 </h3>
 				<br />
 				<br />
@@ -19,20 +19,10 @@
 		</div>
 	</div>
 </div>
-<div class="container screenshots">
-	<div class="row">
-		<div class="span6">
-			<img src="{{ STATIC_URL }}img/preview.jpg">
-		</div>
-		<div class="span6">
-			<img src="{{ STATIC_URL }}img/preview2.jpg">
-		</div>
-	</div>
-</div>
 <div class="container profile">
 	<div class="row">
-		<div class="span12">
-			<h1>Claim your profile and join the LawPal community</h1>
+		<div class="col col-lg-12">
+			<h2>Claim your profile and join the LawPal community</h2>
 			<br />
 			<a href="{% url 'lawyer:setup_profile' %}" class="btn btn-large btn-primary">Complete your profile</a>  or <a href="{% url 'lawyer:profile' slug=user.username %}" class="btn btn-large">Preview</a>
 			<br />
