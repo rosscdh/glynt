@@ -1,15 +1,13 @@
 # -*- coding: UTF-8 -*-
 from django.contrib.formtools.wizard.views import SessionWizardView
-from django.utils.decorators import classonlymethod
 from django.utils.datastructures import SortedDict
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
-from glynt.apps.transact.views.intake import (FORMS as INTAKE_FORMS,
-                                            TEMPLATES as INTAKE_TEMPLATES)
+from glynt.apps.transact.views.intake import (FORMS as INTAKE_FORMS,)
 
 TX_OPTIONS = {
-    'INTAKE': {'forms': INTAKE_FORMS, 'templates': INTAKE_TEMPLATES},
+    'INTAKE': {'forms': INTAKE_FORMS, 'templates': []},
     'CS': {'forms': [], 'templates': []},
     'SF': {'forms': [], 'templates': []},
     'ES': {'forms': [], 'templates': []},
@@ -22,7 +20,7 @@ class BuilderWizardView(SessionWizardView):
 
     def custom_forms(self):
         """ custom method """
-        self.form_list = SortedDict() # reset the class var
+        self.form_list = SortedDict()  # reset the class var
         form_list = {}
         tx_range = self.kwargs.get('tx_range', '').split(',')
         if type(tx_range) == str:
@@ -30,7 +28,7 @@ class BuilderWizardView(SessionWizardView):
 
         # if intake is in the list, then it should be done first
         if 'INTAKE' in tx_range:
-            tx_range.pop(tx_range.index('INTAKE')) # remove the INTAKE item from teh list
+            tx_range.pop(tx_range.index('INTAKE'))  # remove the INTAKE item from the list
             self.add_form_to_set(current_form_set=form_list, form_set=TX_OPTIONS.get('INTAKE').get('forms'))
 
         # import the appropriate forms and their templates
@@ -45,7 +43,7 @@ class BuilderWizardView(SessionWizardView):
         length_of_current_form_set = len(current_form_set.keys())
         for i, item in enumerate(form_set):
             # increment i + 1 as steps start at 1 not 0
-            current_form_set[unicode(length_of_current_form_set + i + 1)] = item[1] # return the form and not its name
+            current_form_set[unicode(length_of_current_form_set + i + 1)] = item[1]  # return the form and not its name
 
         return current_form_set
 
