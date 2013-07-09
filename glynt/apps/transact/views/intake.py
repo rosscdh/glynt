@@ -1,15 +1,14 @@
-# Create your views here.
+# -*- coding: UTF-8 -*-
 from django.http import HttpResponseRedirect
 from django.contrib.formtools.wizard.views import SessionWizardView
+from django.core.urlresolvers import reverse
 
-from glynt.apps.transact.forms import PackagesForm, BasicInformationForm, CorporateAgentsForm, \
+from glynt.apps.transact.forms import BasicInformationForm, CorporateAgentsForm, \
     InitialDirectorsForm, GeneralCapitalizationForm, CustomersForm, StockPlansForm, AboutCompanyBusinessForm, \
     IntellectualPropertyForm, EmployeesConsultantsForm
 
 
-FORMS = [#("founders",CustomersForm),
-        ("packages", PackagesForm),
-        ("basic_information", BasicInformationForm),
+FORMS = [("basic_information", BasicInformationForm),
         ("corporate_agents", CorporateAgentsForm),
         ("initial_directors",InitialDirectorsForm),
         ("general_capitalization", GeneralCapitalizationForm),
@@ -19,8 +18,7 @@ FORMS = [#("founders",CustomersForm),
         ("intellectual_property", IntellectualPropertyForm),
         ("employees_consultants", EmployeesConsultantsForm)]
 
-TEMPLATES = {"packages": "transact/packages_form.html",
-             "basic_information": "transact/basic_information_form.html",
+TEMPLATES = {"basic_information": "transact/basic_information_form.html",
              "corporate_agents": "transact/corporate_agents_form.html",
              "initial_directors": "transact/initial_directors_form.html",
              "general_capitalization": "transact/general_capitalization_form.html",
@@ -35,9 +33,11 @@ TEMPLATES = {"packages": "transact/packages_form.html",
             }
 
 
-class PackagesWizard(SessionWizardView):
+class IntakeWizard(SessionWizardView):
+    form_list = FORMS
+
     def get_template_names(self):
         return [TEMPLATES[self.steps.current]]
 
     def done(self, form_list, **kwargs):
-        return HttpResponseRedirect('/dashboard/matching')
+        return HttpResponseRedirect(reverse('dashboard:matching'))

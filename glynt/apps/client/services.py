@@ -6,14 +6,23 @@ import logging
 logger = logging.getLogger('lawpal.services')
 
 
-class UserSetPasswordService(object):
-    """ Service used to reset a users password """
-    old_pass = None
-    new_pass = None
-    confirm_pass = None
+class EnsureUserHasCompletedIntakeProcess(object):
+    """ Service used to test if the user has completed the intake form """
+    has_completed_intake = False
+    user = None
+    profile = None
 
     def __init__(self, user):
         self.user = user
+        self.profile = self.user.profile
+        self.process()
+
+    def complete(self):
+        return self.has_completed_intake
+
+    def process(self):
+        pass
+
     
 
 

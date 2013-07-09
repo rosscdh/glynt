@@ -7,15 +7,20 @@ from bootstrap.forms import BootstrapMixin
 
 from parsley.decorators import parsleyfy
 
-
+# Dummy form to allow builder url to work
+class DummyBuilderForm(forms.Form):
+    """ The SessionWizardView **requires** a form to be passed to it
+    Our builder does not know which forms it will be using at that stage
+    so fake it with this dummy form """
+    pass
 # WIZARD STEP ONE
-class PackagesForm(forms.Form):
-    transaction_type = forms.CharField(widget=forms.HiddenInput)
-
+# Defined in projects app
 
 # WIZARD STEP TWO
 @parsleyfy
 class BasicInformationForm(forms.Form):
+    page_title = 'Basic Information'
+    page_description = 'Please start with your basic information'
     company_name = forms.CharField(label="Company name", help_text="", widget=forms.TextInput(attrs={'tabindex':'1'}))
     company_address = forms.CharField(label="Company address", help_text="Please enter you full street address including post code.", widget=forms.Textarea(attrs={'tabindex':'2'}))
     company_phone = forms.CharField(label="Company phone", help_text="", widget=forms.TextInput(attrs={'tabindex':'3', 'data-type':'phone'}))
