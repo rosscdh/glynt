@@ -87,34 +87,43 @@
 }
 
 table.checklist {
-    .item-icon {
-        text-align: center;
-        width: 80px;
-        [class^="icon-"],
-        [class*=" icon-"] {
-            font-size: 64px;
-        }
+  .item-icon {
+    text-align: center;
+    width: 60px;
+    [class^="icon-"],
+    [class*=" icon-"] {
+      font-size: 36px;
     }
-    td.item-meta {
-        vertical-align: middle;
-        width: 220px;
+  }
+  .item-meta {
+    text-align: right;
+    vertical-align: middle;
+    width: 200px;
+  }
+  tr.pending {
+    color: @gray-lighter;
+  }
+  tr.draft {
+    color: @gray-light;
+  }
+  tr.urgent {
+    color: @btn-warning-bg;
+    td {
+      background-color: fade(@btn-warning-bg, 10%);
     }
-    .icon-pending:before { color: lightgrey; content: @check-empty; }
-    .icon-draft:before { color: grey; content: @adjust; }
-    .icon-urgent:before { color: yellow; content: @exclamation-sign; }
-    .icon-complete:before { color: rgb(107, 219, 126); content: @ok-sign; }
-
-    tr.complete {
-        td {
-            background-color: fade(rgb(107, 219, 126), 10%);
-            a {
-                color: rgb(107, 219, 126);
-            }
-        }
-        .item-icon {
-            .icon-complete {
-                font-size: 36px;
-            }
-        }
+  }
+  tr.complete {
+    color: @btn-success-bg;
+    td {
+      background-color: fade(@btn-success-bg, 10%);
+      a {
+        color: @btn-success-bg;
+      }
     }
+  }
 }
+
+.icon-pending:before                      { content: @check-empty; }
+.icon-draft:before                        { content: @adjust; }
+.icon-urgent:before                       { content: @exclamation-sign; }
+.icon-complete:before                     { content: @ok-sign; }
