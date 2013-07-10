@@ -1,4 +1,4 @@
-{% extends 'base_bsv3.html' %}{% load crispy_forms_tags company_tags %}
+{% extends 'base.html' %}{% load url from future %}{% load glynt_helpers crispy_forms_tags company_tags %}
 
 {% block head %}
     {{ wizard.form.media }}
@@ -10,7 +10,7 @@
 
 
 {% block prebody %}
-    <div class="container">
+    <div class="container" ng-app="App" ng-controller="TransactBuilderCtrl">
         <div class="row">
             <div class="col col-lg-5 col-offset-2">
                 {% if page_title %}<h2>{{ page_title }}</h2>{% endif %}
@@ -48,4 +48,15 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block js %}
+    {% moment_js %}
+    <script src="{{ STATIC_URL }}js/angularjs/lib/angular.min.js"></script>
+    <script src="{{ STATIC_URL }}js/angularjs/lib/angular-resource.min.js"></script>
+
+    <script src="{{ STATIC_URL }}transact/angularjs/app/js/app.js"></script>
+    <script src="{{ STATIC_URL }}transact/angularjs/app/js/controllers.js"></script>
+    <script src="{{ STATIC_URL }}transact/angularjs/app/js/services.js"></script>
+    <script src="{{ STATIC_URL }}transact/angularjs/app/js/directives.js"></script>
 {% endblock %}
