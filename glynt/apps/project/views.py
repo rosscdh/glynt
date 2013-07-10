@@ -1,28 +1,46 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, DetailView, ListView, UpdateView
-from django.shortcuts import get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse
+from django.contrib import messages
 from django.http import Http404
 
 from glynt.apps.utils import AjaxableResponseMixin
-
-from glynt.apps.lawyer.models import Lawyer
-from glynt.apps.customer.services import EnsureCustomerService
 from glynt.apps.project.models import Project
+from glynt.apps.project.forms import CreateProjectForm
+from glynt.apps.client.services import EnsureUserHasCompletedIntakeProcess
 
-from glynt.apps.transact.forms import PackagesForm
+from .signals import mark_project_notifications_as_read
 
-from bunches import CompanyEngageLawyerBunch
-
-from signals import mark_project_notifications_as_read
-
+import json
 import logging
 logger = logging.getLogger('django.request')
 
 
 class CreateProjectView(FormView):
-    form_class = PackagesForm
+    """ Start a new Project, by selecting 1 or more of the transactions """
+    template_name = 'project/create.html'
+    form_class = CreateProjectForm
+
+    def form_valid(self, form):
+        """
+        If the form is valid, redirect to the supplied URL.
+        """
+        transaction_type = form.cleaned_data.get('transaction_type', '').split(',')
+
+        if transaction_type == False:
+            logger.error('transaction_type was not set in CreateProjectView')
+            messages.error(self.request, _('Sorry, but we could not determine which transaction type you selected. Please try again.'))
+            self.success_url = reverse('project:create')
+
+        intake = EnsureUserHasCompletedIntakeProcess(user=self.request.user)
+        if intake.complete() is False:
+            if u'INTAKE' not in transaction_type:
+                transaction_type.insert(0, u'INTAKE')
+
+        self.success_url = reverse('transact:builder', kwargs={'tx_range': ','.join(transaction_type)})
+        return super(CreateProjectView, self).form_valid(form)
 
 
 class ProjectView(DetailView):
@@ -33,7 +51,7 @@ class ProjectView(DetailView):
         queryset = self.get_queryset()
         # Next, try looking up by primary key.
         slug = self.kwargs.get(self.slug_url_kwarg, None)
-        queryset = queryset.select_related('startup','customer','lawyer','founder__user','lawyer__user').filter(slug=slug)
+        queryset = queryset.select_related('startup', 'customer', 'lawyer', 'founder__user', 'lawyer__user').filter(slug=slug)
 
         try:
             # Get the single item from the filtered queryset

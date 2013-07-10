@@ -13,13 +13,13 @@ todos are defined as a tuple of tuples that define the general structure
 ))
 
 """
+import os
+import yaml
 from django.template import Context, Template
 
-from bunch import Bunch
-import yaml
+from . import TRANSACTION_TEMPLATE_PATH
 
-import os
-YAML_TEMPLATE_PATH = os.path.dirname(os.path.realpath(__file__))
+from bunch import Bunch
 
 import logging
 logger = logging.getLogger('lawpal.services')
@@ -42,12 +42,12 @@ class BaseToDoBunch(Bunch):
             self.template = '%s.yml' % self.__class__.__name__.lower().replace('bunch', '')
 
         if self.template:
-            yaml_file = os.path.join(YAML_TEMPLATE_PATH, 'templates/transactions/', self.template)
+            template_file = os.path.join(TRANSACTION_TEMPLATE_PATH, self.template)
             try:
-                with open(yaml_file) as f:
+                with open(template_file) as f:
                     self.__dict__.update(Bunch.fromDict(yaml.safe_load(f).get('transaction')))
             except Exception as ex:
-                logger.error('Could not Open %s, due to: %s' % (yaml_file, ex))
+                logger.error('Could not Open %s, due to: %s' % (template_file, ex))
 
     def attachement(self, attachement_slug):
         """ accessor to allow loading of a document/attachment from the db """

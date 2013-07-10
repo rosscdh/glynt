@@ -236,13 +236,6 @@ HELPER_APPS = (
     # Celery Tasks
     'djcelery',
 
-    # Testing helpers
-    # 'django_jenkins',
-    # 'django-behave',
-
-    # Django Pagination,
-    # 'pagination',
-
     # Vast array of Storage types
     'storages',
     # Project System
