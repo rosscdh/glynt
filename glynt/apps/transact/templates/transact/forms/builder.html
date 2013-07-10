@@ -1,5 +1,7 @@
 {% extends 'base.html' %}{% load url from future %}{% load glynt_helpers crispy_forms_tags company_tags %}
 
+{% block page_title %}{{ page_title|default:"Untitled Builder Step" }}{% endblock %}
+
 {% block head %}
     {{ wizard.form.media }}
 {% endblock %}
