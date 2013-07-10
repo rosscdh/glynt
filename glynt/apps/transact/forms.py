@@ -69,8 +69,8 @@ class CorporateAgentsForm(BuilderBaseForm):
 class InitialDirectorsForm(BuilderBaseForm):
     page_title = 'Initial Directors'
     page_description = None
-    initial_number_of_directors = forms.IntegerField(label="Initial number of directors", help_text="", widget=forms.TextInput(attrs={'tabindex': '1'}))
-    names_of_directors = forms.CharField(label="Names of director(s)", help_text="", widget=forms.TextInput(attrs={'tabindex': '2'}))
+    director_name = forms.CharField(label="Director Name", help_text="")
+    director_email = forms.EmailField(label="Director Email", help_text="")
 
     # INITIAL OFFICERS
     president_or_chief_executive_officer = forms.CharField(label="President/Chief Executive Officer", help_text="", widget=forms.TextInput(attrs={'tabindex': '3'}))
@@ -84,8 +84,9 @@ class InitialDirectorsForm(BuilderBaseForm):
         self.helper.layout = Layout(
             Fieldset(
                 'Initial Directors',
-                'initial_number_of_directors',
-                'names_of_directors',
+                    'director_name',
+                    'director_email',
+                **{'data-cloneable': 'true'}
             ),
             Fieldset(
                 'Initial Officers',
