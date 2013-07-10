@@ -37,7 +37,7 @@
                                 {{ form|crispy }}
                             {% endfor %}
                         {% else %}
-                            {{ wizard.form|crispy }}
+                            {% crispy wizard.form wizard.form.helper %}
                         {% endif %}
                         <div class="control-group">
                             <div class="controls">
