@@ -20,7 +20,7 @@
     > a {
       position: relative;
       display: block;
-      padding: 10px 15px;
+      padding: 10px 11px;
       &:hover,
       &:focus {
         text-decoration: none;
@@ -30,6 +30,11 @@
     > a.btn {
       padding: 7px 15px;
       margin-top:6px;
+      margin-left: 15px;
+      font-weight:normal;
+    }
+    > a.btn.btn-success {
+      .btn-pseudo-states(@btn-success-color, @btn-success-bg, @btn-success-border);
     }
 
     // Disabled state sets text to gray and nukes hover/tab effects
@@ -58,8 +63,8 @@
     background-color: @link-color;
     border-color: @link-color;
     .caret {
-      border-top-color: #fff;
-      border-bottom-color: #fff;
+      border-top-color: #ccc;
+      border-bottom-color: #ccc;
     }
   }
 
@@ -281,11 +286,12 @@
   padding-bottom:20px;
 } 
 #signin-modal .startup {
-  width:240px;
+  max-width:552px;
+  width:100%;
+  margin-right:20px;
   background-color:@brand-primary-alt;
   float:left;
   text-align: center;
-  margin-left:20px;
 }
 #signin-modal .startup .btn {
   background-color: darken(@brand-primary-alt, 8%);

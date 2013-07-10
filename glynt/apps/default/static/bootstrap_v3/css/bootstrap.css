@@ -3848,7 +3848,7 @@ button.close {
 .nav > li > a {
   position: relative;
   display: block;
-  padding: 10px 15px;
+  padding: 10px 11px;
 }
 .nav > li > a:hover,
 .nav > li > a:focus {
@@ -3858,6 +3858,35 @@ button.close {
 .nav > li > a.btn {
   padding: 7px 15px;
   margin-top: 6px;
+  margin-left: 15px;
+  font-weight: normal;
+}
+.nav > li > a.btn.btn-success {
+  color: #ffffff;
+  background-color: #6bdb7e;
+  border-color: #31c94b;
+}
+.nav > li > a.btn.btn-success:hover,
+.nav > li > a.btn.btn-success:focus,
+.nav > li > a.btn.btn-success:active,
+.nav > li > a.btn.btn-success.active {
+  background-color: #56d66c;
+  border-color: #27a03b;
+}
+.nav > li > a.btn.btn-success.disabled:hover,
+.nav > li > a.btn.btn-success[disabled]:hover,
+fieldset[disabled] .nav > li > a.btn.btn-success:hover,
+.nav > li > a.btn.btn-success.disabled:focus,
+.nav > li > a.btn.btn-success[disabled]:focus,
+fieldset[disabled] .nav > li > a.btn.btn-success:focus,
+.nav > li > a.btn.btn-success.disabled:active,
+.nav > li > a.btn.btn-success[disabled]:active,
+fieldset[disabled] .nav > li > a.btn.btn-success:active,
+.nav > li > a.btn.btn-success.disabled.active,
+.nav > li > a.btn.btn-success[disabled].active,
+fieldset[disabled] .nav > li > a.btn.btn-success.active {
+  background-color: #6bdb7e;
+  border-color: #31c94b;
 }
 .nav > li.disabled > a {
   color: #bfbfbf;
@@ -3882,8 +3911,8 @@ button.close {
 .nav.open > a .caret,
 .nav.open > a:hover .caret,
 .nav.open > a:focus .caret {
-  border-top-color: #fff;
-  border-bottom-color: #fff;
+  border-top-color: #ccc;
+  border-bottom-color: #ccc;
 }
 .nav > .pull-right {
   float: right;
@@ -4058,11 +4087,12 @@ button.close {
   padding-bottom: 20px;
 }
 #signin-modal .startup {
-  width: 240px;
+  max-width: 552px;
+  width: 100%;
+  margin-right: 20px;
   background-color: #f88172;
   float: left;
   text-align: center;
-  margin-left: 20px;
 }
 #signin-modal .startup .btn {
   background-color: #f65e4b;
@@ -6322,11 +6352,11 @@ td.hidden-lg {
   background: url('../../img/background-trans.jpeg');
   background-position-y: -25px;
   background-size: cover;
-  padding: 14% 0px 10% 0px;
+  padding: 14% 0px 15% 0px;
   color: #222222;
   border-top: 1px solid #eeeeee;
   border-bottom: 1px solid #eeeeee;
-  max-height: 420px;
+  max-height: 460px;
 }
 .homepage #wrap .splash h1 {
   color: #555555;
@@ -6336,50 +6366,70 @@ td.hidden-lg {
   color: #7c7c7c;
   font-size: 24px;
 }
+.homepage #wrap .splash a.btn-huge {
+  font-weight: normal;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", sans-serif;
+  font-size: 20px;
+  padding: 16px 35px 16px 35px;
+  margin-top: 20px;
+}
 .homepage #wrap .scroll {
   padding: 30px 0px 20px 0;
-  color: #888888;
+  color: #bfbfbf;
   background: url('../../img/down-chev.png') center 60px no-repeat;
-  font-size: 16.8px;
+  font-size: 19.599999999999998px;
+  font-weight: normal;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", sans-serif;
 }
 .homepage #wrap .intro h1 {
   font-size: 28px;
   margin-bottom: 0px;
+  text-align: center;
 }
 .homepage #wrap .intro h2 {
   color: #888888;
   font-size: 20px;
   margin-top: 10px;
+  text-align: center;
 }
 .homepage #wrap .feature-block h3 {
   color: #42d0e5;
-  font-size: 20px;
+  font-size: 18px;
+}
+.homepage #wrap .feature-block p {
+  color: #888888;
 }
 .homepage #wrap .quote {
   background-color: #fcd423;
   color: white;
   margin: 40px 0px;
-  padding: 30px;
+  padding: 30px 0px 20px 0px;
   font-size: 21px;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", sans-serif;
+  text-align: left;
+}
+.homepage #wrap .quote p {
+  border-left: 2px solid #ffffff;
+  padding-left: 15px;
 }
 @media screen and (min-width: 768px) {
   .homepage #wrap .splash {
-    padding: 80px 0px 30% 0px;
+    padding: 100px 0px 14% 0px;
   }
   .homepage #wrap .splash h1 {
-    font-size: 49px;
+    font-size: 56px;
   }
   .homepage #wrap .splash h3 {
     font-size: 31px;
   }
   .homepage #wrap .intro h1 {
-    font-size: 35px;
+    font-size: 41px;
   }
   .homepage #wrap .intro h2 {
     font-size: 26px;
   }
   .homepage #wrap .feature-block h3 {
     color: #42d0e5;
-    font-size: 26px;
+    font-size: 21px;
   }
 }

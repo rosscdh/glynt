@@ -52,9 +52,9 @@
 
         {% else %}
             <li><a href="{% url 'public:how-it-works' %}">How it works</a></li>
-            <li><a href="{% url 'public:our-services' %}">Our services</a></li>
             <li><a href="{% url 'lawyer:list' %}">Meet our lawyers</a></li>
-            <li><a href="#signin-modal" role="button" data-toggle="modal" onClick="_gaq.push(['_trackEvent', 'Nav', 'Action', 'Sign In']);">{% trans 'Sign In' %}</a></li>
+            <li><a href="{% url 'public:for-lawyers' %}">Are you a lawyer?</a></li>
+            <li><a href="#signin-modal" role="button" data-toggle="modal" class="btn btn-success" onClick="_gaq.push(['_trackEvent', 'Nav', 'Action', 'Sign In']);">{% trans 'Sign In' %}</a></li>
         {% endif %}
         </ul>
     </div>
