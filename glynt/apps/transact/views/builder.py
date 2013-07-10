@@ -15,8 +15,24 @@ TX_OPTIONS = {
 
 
 class BuilderWizardView(SessionWizardView):
+    """ Transaction Builder that compiles sets of form steps into a wizard """
     template_name = 'transact/forms/builder.html'
     form_list = []
+
+    def dispatch(self, request, *args, **kwargs):
+        # Inject custom forms here as we need the request object
+        self.custom_forms()
+        return super(BuilderWizardView, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, form, **kwargs):
+        """ @BUSINESRULE set the page_title and page_description from the form class vars
+        if they are present """
+        context = super(BuilderWizardView, self).get_context_data(form, **kwargs)
+        context.update({
+            'page_title': context.get('form').page_title,
+            'page_description': context.get('form').page_description
+        })
+        return context
 
     def custom_forms(self):
         """ custom method """
@@ -46,21 +62,6 @@ class BuilderWizardView(SessionWizardView):
             current_form_set[unicode(length_of_current_form_set + i + 1)] = item[1]  # return the form and not its name
 
         return current_form_set
-
-    def dispatch(self, request, *args, **kwargs):
-        # Inject custom forms here as we need the request object
-        self.custom_forms()
-        return super(BuilderWizardView, self).dispatch(request, *args, **kwargs)
-
-    def get_context_data(self, form, **kwargs):
-        """ @BUSINESRULE set the page_title and page_description from the form class vars
-        if they are present """
-        context = super(BuilderWizardView, self).get_context_data(form, **kwargs)
-        context.update({
-            'page_title': getattr(context.get('form').__class__, 'page_title', None),
-            'page_description': getattr(context.get('form').__class__, 'page_description', None)
-        })
-        return context
 
     def done(self, form_list, **kwargs):
         return HttpResponseRedirect(reverse('dashboard:matching'))
