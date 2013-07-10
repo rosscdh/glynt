@@ -13,3 +13,6 @@ FORMS = [("basic_information", BasicInformationForm),
         ("about_company_business", AboutCompanyBusinessForm),
         ("intellectual_property", IntellectualPropertyForm),
         ("employees_consultants", EmployeesConsultantsForm)]
+
+
+TEMPLATES = []
