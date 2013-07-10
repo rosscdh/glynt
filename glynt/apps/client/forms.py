@@ -1,71 +1,31 @@
 # -*- coding: utf-8 -*-
 from django import forms
-from django.utils.translation import ugettext_lazy as _
 from django.core import exceptions
 
 from django.contrib.auth.models import User
 
 from parsley.decorators import parsleyfy
-from bootstrap.forms import BootstrapMixin
 
-from django_countries.countries import COUNTRIES_PLUS
-
+from glynt.mixins import ModelFormChangePasswordMixin
 from glynt.apps.lawyer.services import EnsureLawyerService
 
 from glynt.apps.company.services import EnsureCompanyService
 from glynt.apps.customer.services import EnsureCustomerService
 
-ACCEPTED_COUNTRIES = ('GB',)
-
-COUNTRIES_PLUS = [(i, c) for i, c in COUNTRIES_PLUS if i in ACCEPTED_COUNTRIES]
-
 import logging
 logger = logging.getLogger('django.request')
 
 
-class ChangePasswordMixin(forms.Form):
-    """ Mixin used to ensure passwords match """
-    password = forms.CharField(widget=forms.PasswordInput(render_value=False))
-    confirm_password = forms.CharField(widget=forms.PasswordInput)
-
-    def clean_confirm_password(self):
-        password = self.cleaned_data['password']
-        confirm_password = self.cleaned_data['confirm_password']
-
-        if password != confirm_password:
-            raise exceptions.ValidationError(_('Passwords do not match'))
-
-        return password
-
-
-class ConfirmChangePasswordMixin(forms.Form):
-    """ Mixin used to ensure that the current_password was entered properly """
-    current_password = forms.CharField(label='Current Password', widget=forms.PasswordInput)
-
-    def clean_current_password(self):
-        if not self.user:
-            raise exceptions.ValidationError(_('No User was provided for this form'))
-
-        current_password = self.cleaned_data.get('current_password')
-
-        if not self.user.check_password(current_password):
-            raise exceptions.ValidationError(_('The Password entered for the "%s" field is not correct' % (self.fields['current_password'].label,)))
-
-        return current_password
-
-
 @parsleyfy
-class ConfirmLoginDetailsForm(BootstrapMixin, ConfirmChangePasswordMixin, forms.Form):
-    """ Shown to the user when they login using linked in
-    Is the first form they see after signing in
+class ConfirmLoginDetailsForm(ModelFormChangePasswordMixin, forms.ModelForm):
+    """ Form shown to the use after logging in, assists in capturing the correct email
+    and setting a user password
     """
-    first_name = forms.CharField(max_length=24, widget=forms.TextInput(attrs={'placeholder': 'John', 'tabindex': '1'}))
-    last_name = forms.CharField(max_length=24, widget=forms.TextInput(attrs={'placeholder': 'Doemann', 'tabindex': '2'}))
-    company = forms.CharField(label="Company Name", help_text='', widget=forms.TextInput(attrs={'placeholder': 'Acme Inc', 'tabindex': '3'}))
-    email = forms.EmailField(widget=forms.TextInput(attrs={'placeholder': 'john.doemann@example.com', 'tabindex': '4'}))
-    password = forms.CharField(widget=forms.PasswordInput(render_value=False, attrs={'tabindex': '5'}))
-    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'tabindex': '6'}))
-    agree_tandc = forms.BooleanField(label='', help_text='I agree to the Terms &amp; Conditions', widget=forms.CheckboxInput(attrs={'tabindex': '7'}))
+    first_name = forms.CharField(max_length=24, widget=forms.TextInput(attrs={'placeholder': 'John'}))
+    last_name = forms.CharField(max_length=24, widget=forms.TextInput(attrs={'placeholder': 'Doemann'}))
+    company = forms.CharField(label="Company Name", help_text='', widget=forms.TextInput(attrs={'placeholder': 'Acme Inc'}))
+    email = forms.EmailField(widget=forms.TextInput(attrs={'placeholder': 'john.doemann@example.com'}))
+    agree_tandc = forms.BooleanField(label='I agree to the Terms &amp; Conditions', help_text='', widget=forms.CheckboxInput(attrs={}))
 
     class Meta:
         model = User
@@ -90,7 +50,7 @@ class ConfirmLoginDetailsForm(BootstrapMixin, ConfirmChangePasswordMixin, forms.
             pass
         return email
 
-    def save(self):
+    def save(self, commit=True):
         user = self.user
         user.set_password(self.cleaned_data["password"])
         if commit:

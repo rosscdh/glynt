@@ -1,136 +1,96 @@
-{% extends 'base.html' %}{% load crispy_forms_tags invite_tags account_tags jsonify glynt_helpers %}
+{% extends 'base_bsv3.html' %}{% load crispy_forms_tags invite_tags account_tags jsonify glynt_helpers %}
 
 {% block page_title %}Edit your Account details{% endblock %}
 {% block bodyclass %}startup-form{% endblock %}
 {% block prebody %}
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/css/theme/social-buttons.css">
-<div id="hero">
-    <div class="container">
-        <div class="row">
-            <div class="span12">
-                <h1>Update your profile</h1>
+<div class="container">
+    <div class="row">
+        <div class="col col-lg-8 col-offset-2">
+            <h2 class="alt">Update Your Account</h2>
+            <br />
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col col-lg-8 col-offset-2">
+           {{ form.errors }}
+            <div class="alert alert-error hidden">Please correct all errors before submitting the form</div>
+            <ul id="profile-tab" class="nav nav-tabs">
+                <li class="active"><a href="#account" data-toggle="tab">Account </a></li>
+                <li><a href="#password" data-toggle="tab">Password </a></li>
+                <li><a href="#organization" data-toggle="tab">Organization </a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<br />
+<form id="customer-profile-form" data-validate="parsley" action="{% url 'customer:setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
+    <div class="form-wrap">
+        <div class="container">
+            <div class="row">
+                <div class="col col-lg-8 col-offset-2">
+                        <div class="tab-content">
+                            <div id="account" class="tab-pane active">
+                                <div class="row">
+                                    <div class="col col-lg-3 text-center">
+                                       <div class="text-center">
+                                            <img id="photo-preview" class="" vspace="10" width="130" height="130" src="{{ customer.profile_photo }}">
+                                        </div>
+                                        <div class="text-center">
+                                            {{ form.photo.errors }}
+                                            <div class="input text-center">
+                                                {{ form.photo }}
+                                                {{ form.hidden_photo }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col col-lg-8">
+                                        {{ form.first_name|as_crispy_field }}
+                                        {{ form.last_name|as_crispy_field }}
+                                        {{ form.email|as_crispy_field }}
+                                        {{ form.phone|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="password" class="tab-pane">
+                                    {{ form.current_password|as_crispy_field }}
+                                    {{ form.password|as_crispy_field }}
+                                    {{ form.confirm_password|as_crispy_field }}
+                            </div>
+                            <div id="organization" class="tab-pane">
+                                <div class="row">
+                                    <div class="col col-lg-6">
+                                            {{ form.company_name|as_crispy_field }}
+                                            {{ form.summary|as_crispy_field }}
+                                    </div>
+                                    <div class="col col-lg-5">
+                                            {{ form.website|as_crispy_field }}
+                                            {{ form.twitter|as_crispy_field }}
+                                    </div>
+                                </div>
+                            </div>
+                     </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="container profile">
-
-   {{ form.errors }}
-    <div class="alert alert-error hidden">Please correct all errors before submitting the form</div>
-
-    <div class="row">
-        <div class="span12">
-            <ul id="profile-tab" class="nav nav-tabs">
-                <li class="active"><a href="#account" data-toggle="tab">Account</a></li>
-                <li><a href="#password" data-toggle="tab">Password</a></li>
-                <li><a href="#organization" data-toggle="tab">Organization</a></li>
-            </ul>
-
-            <form id="customer-profile-form" data-validate="parsley" action="{% url 'customer:setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
-                <div class="tab-content">
-
-                    <div id="account" class="tab-pane active">
-                        <div class="row">
-                            <div class="span12">
-                                <legend>Account</legend>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="span2">
-                                <div class="control-group">
-                                   <div class="">
-                                        <img id="photo-preview" class="" vspace="10" width="130" height="130" src="{{ customer.profile_photo }}">
-                                    </div>
-                                    <div class="">
-                                        {{ form.photo.errors }}
-                                        <div class="input">
-                                            {{ form.photo }}
-                                            {{ form.hidden_photo }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="span9">
-                                <div class="control-group">
-                                    {{ form.first_name|as_crispy_field }}
-                                </div>
-                                <div class="control-group">
-                                    {{ form.last_name|as_crispy_field }}
-                                </div>
-                                <div class="control-group">
-                                    {{ form.email|as_crispy_field }}
-                                </div>
-                                <div class="control-group">
-                                    {{ form.phone|as_crispy_field }}
-                                </div>
-                            </div>
-                        </div>
+    <div class="container">
+        <div class="row">
+            <div class="col col-lg-8 col-offset-2">
+                <div id="form-submit" class="row">
+                    <div class="col col-lg-12 divide">
+                        <label class="checkbox">
+                            {{ form.agree_tandc|as_crispy_field }}
+                            <!-- <span id="i_agree_html">I agree to the LawPal <a href="{% url 'public:terms' %}">Terms and Conditions</a></span> -->
+                        </label>
+                        <button id="update-profile" type="submit" class="btn btn-success btn-large">Update Profile</button>
                     </div>
-
-                    <div id="password" class="tab-pane">
-                        <div class="row">
-                            <div class="span12">
-                                <legend>Password</legend>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="control-group">
-                                {{ form.current_password|as_crispy_field }}
-                            </div>
-                            <div class="control-group">
-                                {{ form.password|as_crispy_field }}
-                            </div>
-                            <div class="control-group">
-                                {{ form.confirm_password|as_crispy_field }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="organization" class="tab-pane">
-                        <div class="row">
-                            <div class="span12">
-                                <legend>Organization</legend>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="span6">
-                                <div class="control-group">
-                                    {{ form.company_name|as_crispy_field }}
-                                </div>
-                                <div class="control-group">
-                                    {{ form.summary|as_crispy_field }}
-                                </div>
-                            </div>
-                            <div class="span5">
-                                <div class="control-group">
-                                    {{ form.website|as_crispy_field }}
-                                </div>
-                                <div class="control-group">
-                                    {{ form.twitter|as_crispy_field }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="form-submit" class="row">
-                        <div class="span12 divide">
-                            <div class="form-actions">
-                            <label class="checkbox">
-                                {{ form.agree_tandc|as_crispy_field }}
-                                <span id="i_agree_html">I agree to the LawPal <a href="{% url 'public:terms' %}">Terms and Conditions</a></span>
-                            </label>
-
-                                <button id="update-profile" type="submit" class="btn btn-primary btn-large">Update Profile</button>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
-            </form>
-
+            </div>
         </div>
     </div>
-</div>
+</form>
 
 {% endblock %}
 
@@ -158,6 +118,12 @@
         margin-top:80px;
         font-size:50px;
         color:#ccc;
+    }
+    .cropped-imag-preview .upload-btn {
+        border:1px solid white;
+        bottom:auto;
+        left:auto;
+        position:relative;
     }
 </style>
 {% endblock %}
@@ -222,12 +188,12 @@ $(document).ready(function() {
         var errorCount = parseInt(tabPane.find('.parsley-error').length);
 
         tabPane.attr('data-error-count', errorCount);
-        targetTabLi.find('em').remove();
+        targetTabLi.find('span').remove();
 
         if (errorCount > 0) {
-            var errorTemplate = $('<em/>', {
-                html: '<span>{errorCount}</span>'.assign({'errorCount': errorCount})
-                ,class: 'unread_counter animated bounce'
+            var errorTemplate = $('<span/>', {
+                html: '<span class="">{errorCount}</span>'.assign({'errorCount': errorCount})
+                ,class: 'badge important'
             });
             targetTabLink.append(errorTemplate);
         }

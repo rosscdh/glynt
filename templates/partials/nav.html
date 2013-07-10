@@ -13,10 +13,11 @@
         {% if user.is_authenticated %}
             {% cache 300 user_nav user.pk %}
                 {% if user.profile.is_customer %}
-                    <li><a href="{% url 'dashboard:overview' %}">Dashboard</a></li>
+                    <li><a href="{% url 'dashboard:overview' %}">Projects</a></li>
                     <li><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>
-                    <li><a href="{% url 'dashboard:documents' %}">Documents</a></li>
-                {% endif %}
+                    <li><a href="#">|<span class="icon-bar-horizontal"></span></a></li>
+
+              {% endif %}
                 <li class="nav-support" data-toggle="tooltip" title="Support">
                     <a id="Intercom" href="mailto:xw4ux8lx@incoming.intercom.io">Help</a>
                 </li>
@@ -41,9 +42,9 @@
                                    href="{% url 'userena_profile_detail' username=user.username %}">{% trans 'Account' %}</a>
                             </li> -->
                         {% endif %}
-                        <li><a id="user-profile-form" class="" href="
+                        <!-- <li><a id="user-profile-form" class="" href="
                             {% if user.profile.is_lawyer %}{% url 'lawyer:invite' %}{% else %}{% url 'customer:invite' %}{% endif %}">{% trans 'Invite Colleagues' %}</a>
-                        </li>
+                        </li> -->
                         <li><a id="user-logout" class="" href="{% url 'logout' %}">{% trans 'Logout' %}</a></li>
                     </ul>
                 </li>
@@ -51,9 +52,9 @@
 
         {% else %}
             <li><a href="{% url 'public:how-it-works' %}">How it works</a></li>
-            <li><a href="{% url 'public:our-services' %}">Our services</a></li>
             <li><a href="{% url 'lawyer:list' %}">Meet our lawyers</a></li>
-            <li><a href="#signin-modal" role="button" data-toggle="modal" onClick="_gaq.push(['_trackEvent', 'Nav', 'Action', 'Sign In']);">{% trans 'Sign In' %}</a></li>
+            <li><a href="{% url 'public:for-lawyers' %}">Are you a lawyer?</a></li>
+            <li><a href="#signin-modal" role="button" data-toggle="modal" class="btn btn-success" onClick="_gaq.push(['_trackEvent', 'Nav', 'Action', 'Sign In']);">{% trans 'Sign In' %}</a></li>
         {% endif %}
         </ul>
     </div>

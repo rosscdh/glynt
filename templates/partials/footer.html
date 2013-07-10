@@ -5,6 +5,7 @@
         <div class="row copyright">
             <div class="col col-lg-8">
                 <ul class="list-inline">
+                    <li><a href="{% url 'lawyer:list' %}">Our Lawyers</a></li>
                     <li><a href="{% url 'public:about' %}">About Us</a></li>
                     <li><a href="http://blog.lawpal.com/" target="_BLANK">LawPal Blog</a></li>
                     <li><a href="{% url 'public:terms' %}">Terms and Conditions</a></li>
@@ -32,20 +33,13 @@
 <!-- Modal -->
 <div class="modal fade" id="signin-modal">
     <div class="modal-dialog">
-        <div class="mdodal-content">
-            <div class="moddal-body">
+        <div>
+            <div>
                 <div class="startup">
-                    <h3>I'm a startup</h3>
+                    <h3>LawPal for Startups</h3>
+                    <h4>For the moment, we are only offering legal services to startups.</h4>
                     <div></div>
                     <a href="{% url "public:auth_user_class_redirect" user_class_name="customer" login_type="google-oauth2" %}" class="btn btn-primary"><img src="{{ STATIC_URL }}img/google-32.png">Sign in with Google</a>
-                </div>
-                <div class="lawyer">
-                    <h3>I'm a lawyer</h3>
-                    <div></div>
-                    <a href="{% url "lawyer:list" %}" class="btn btn-primary"><img src="{{ STATIC_URL }}img/linkedin-32.png"> Learn more</a>
-                    {% if PROJECT_ENVIRONMENT = 'dev' %}
-                    <a href="{% url "public:auth_user_class_redirect" user_class_name="lawyer" login_type="linkedin" %}" class="btn btn-primary"><img src="{{ STATIC_URL }}img/google-32.png">Linkedin</a>
-                    {% endif %}
                 </div>
             </div>
         </div>

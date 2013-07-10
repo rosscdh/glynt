@@ -97,7 +97,7 @@ class ContactUsView(FormView):
     def get_context_data(self, **kwargs):
         kwargs = super(ContactUsView, self).get_context_data(**kwargs)
         kwargs.update({
-            'template_to_extend': 'base-slim.html' if self.request.is_ajax() else 'base_bsv3.html'
+            'template_to_extend': 'base-slim.html' if self.request.is_ajax() else 'base.html'
         })
         return kwargs
 
