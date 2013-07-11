@@ -23,6 +23,9 @@ bunch
 # utils for git
 gitpython
 
+# util for yaml validation of todos/transaction
+voluptuous
+
 
 django-extensions
 django-templated-email
