@@ -66,22 +66,13 @@ class BuilderWizardView(NamedUrlSessionWizardView):
     def get_step_url(self, step):
         return reverse(self.url_name, kwargs={'tx_range': self.kwargs.get('tx_range', ''), 'step': step})
 
-    def get_next_step(self, step=None):
+    def get_form_list(self):
         """
-        Overriden default method to ensure keys are in correct sequence
+        Overridden to allow for sort()
         """
-        if step is None:
-            step = self.steps.current
-        form_list = self.get_form_list()
-
-        # sort the keys
+        form_list = super(BuilderWizardView, self).get_form_list()
         form_list.keyOrder.sort()
-
-        key = form_list.keyOrder.index(step) + 1
-
-        if len(form_list.keyOrder) > key:
-            return form_list.keyOrder[key]
-        return None
+        return form_list
 
     def done(self, form_list, **kwargs):
         return HttpResponseRedirect(reverse('dashboard:matching'))
