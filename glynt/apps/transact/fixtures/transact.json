@@ -3,11 +3,11 @@
     "pk": 1,
     "model": "transact.transaction",
     "fields": {
-      "price": "2000.00",
+      "price": "4000.00",
       "description": "Product explanation goes here, why it's awesome etc.",
       "data": {},
       "slug": "ES",
-      "title": "Equity seed financing"
+      "title": "Seed Financing : Equity Round"
     }
   },
   {
@@ -18,7 +18,7 @@
       "description": "Production explanation goes here, why it's awesome etc.",
       "data": {},
       "slug": "CS",
-      "title": "Company Setup"
+      "title": "Incorporation and Setup"
     }
   },
   {
@@ -29,7 +29,7 @@
       "description": "Production explanation goes here, why it's awesome etc.",
       "data": {},
       "slug": "SF",
-      "title": "Convertible seed financing"
+      "title": "Seed Financing : Convertible Note Round"
     }
   }
 ]

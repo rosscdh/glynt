@@ -1,14 +1,15 @@
 {% load humanize %}
 
 {% for t in transactions %}
-    <div class="transaction-choice clearfix" data-transaction="{{ t.slug }}">
-        <button class="btn btn-large btn-primary">Add</button>
-        <div class="transaction-details">
-            <h2>{{ t.title }}</h2>
-            <p class="price">${{ t.price|intcomma }}</p>
-            <p class="description">{{ t.description }}</p>
-        </div>
-    </div>
+
+
+<div class="transaction-choice clearfix" data-transaction="{{ t.slug }}">
+    <button class="btn btn-large btn-primary"><i class="icon-plus icon-white"></i></button>
+    <div class="panel {% if t.slug == 'CS' %}{% else %}panel-success{% endif %}">
+		<div class="panel-heading">{{ t.title }} <p class="price pull-right">${{ t.price|intcomma }}</p></div>
+		{{ t.description }} {{t.slug}}
+	</div>
+</div>
 {% empty %}
     <p class="no-records">No transactions available.</p>
 {% endfor %}
