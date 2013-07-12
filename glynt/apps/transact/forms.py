@@ -69,6 +69,7 @@ class CorporateAgentsForm(BuilderBaseForm):
 class InitialDirectorsForm(BuilderBaseForm):
     page_title = 'Initial Directors'
     page_description = None
+
     director_name = forms.CharField(label="Director Name", help_text="")
     director_email = forms.EmailField(label="Director Email", help_text="")
 
@@ -86,7 +87,7 @@ class InitialDirectorsForm(BuilderBaseForm):
                 'Initial Directors',
                     'director_name',
                     'director_email',
-                **{'data-cloneable': 'true'}
+                **{'data-region-clone': 'true'}
             ),
             Fieldset(
                 'Initial Officers',
@@ -95,12 +96,7 @@ class InitialDirectorsForm(BuilderBaseForm):
                 'treasurer_or_chief_financial_officer',
                 'other_initial_officer',
                 'other_initial_officers',
-                HTML("""
-            <p><a href="#" class="add-field" data-target-field="id_initial_directors-other_initial_officer">Add another</a></p>
-        """)),
-            ButtonHolder(
-                Submit('submit', 'Next', css_class='btn btn-success')
-            )
+            ),
         )
         super(InitialDirectorsForm, self).__init__(*args, **kwargs)
 

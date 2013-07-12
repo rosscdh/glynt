@@ -29,22 +29,26 @@
         <div class="container">
             <div class="row">
                 <div class="col col-lg-8 col-offset-2">
-                    <form id="" data-validate="parsley" action="" method="POST" class="form-horizontal">{% csrf_token %}
+
+                    <form id="builder-form" data-validate="parsley" action="." method="POST" class="form-horizontal">{% csrf_token %}
                         {{ wizard.management_form }}
+
                         {% if wizard.form.forms %}
                             {{ wizard.form.management_form }}
                             {% for form in wizard.form.forms %}
-                                {{ form|crispy }}
+                                {% crispy form form.helper %}
                             {% endfor %}
                         {% else %}
-                            {% crispy wizard.form wizard.form.helper %}
+                            {% if wizard.form.helper %}
+                                {% crispy wizard.form %}
+                            {% else %}
+                                {{ wizard.form }}
+                            {% endif %}
                         {% endif %}
-                        <div class="control-group">
-                            <div class="controls">
-                                <button type="submit" class="btn btn-success btn-large pull-right">Next</button>
-                            </div>
-                        </div>
+
+                        <button type="submit" class="btn btn-success btn-large pull-right">Next</button>
                     </form>
+
                 </div>
             </div>
         </div>
@@ -53,12 +57,33 @@
 {% endblock %}
 
 {% block js %}
-    {% moment_js %}
-    <script src="{{ STATIC_URL }}js/angularjs/lib/angular.min.js"></script>
-    <script src="{{ STATIC_URL }}js/angularjs/lib/angular-resource.min.js"></script>
+    <script src="{{ STATIC_URL }}transact/js/jquery.plugin.region_clone.js"></script>
+    <script>
+    $(document).ready(function(){
+        var form = $( 'form#builder-form' );
+        $('fieldset[data-region-clone]').region_clone();
 
-    <script src="{{ STATIC_URL }}transact/angularjs/app/js/app.js"></script>
-    <script src="{{ STATIC_URL }}transact/angularjs/app/js/controllers.js"></script>
-    <script src="{{ STATIC_URL }}transact/angularjs/app/js/services.js"></script>
-    <script src="{{ STATIC_URL }}transact/angularjs/app/js/directives.js"></script>
+        /**
+        * Handle the Add cloned region event
+        **/
+        $(document).on("region_clone_add", function( event ){
+
+            $.each(event.cloned_region.find('input'), function(i, item) {
+                form.parsley( 'addItem', item );
+            })
+            
+        });
+
+        /**
+        * Handle the Remove cloned region event
+        **/
+        $(document).on("region_clone_remove", function( event ){
+
+            $.each(event.cloned_region.find('input'), function(i, item) {
+                form.parsley( 'removeItem', item );
+            })
+
+        });
+    });
+    </script>
 {% endblock %}
