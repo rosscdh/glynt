@@ -8,11 +8,23 @@
 
 {% block css %}
     <link href="{{ STATIC_URL }}css/theme/transaction.css" rel="stylesheet" charset="utf-8"/>
+<style>
+.border{
+    border:solid #c00 1px;
+}
+</style>
 {% endblock %}
 
 
-{% block prebody %}
-    <div class="container" ng-app="App" ng-controller="TransactBuilderCtrl">
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 border">
+            {% for s in wizard.steps.all %}
+            <a href="{% url 'transact:builder' tx_range=tx_range step=s %}" class="btn btn-info">{{ s }}</a>
+            {% endfor %}
+            </div>
+        </div>
         <div class="row">
             <div class="col col-lg-5 col-offset-2">
                 {% if page_title %}<h2>{{ page_title }}</h2>{% endif %}
