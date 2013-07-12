@@ -127,3 +127,44 @@ table.checklist {
 .icon-draft:before                        { content: @adjust; }
 .icon-urgent:before                       { content: @exclamation-sign; }
 .icon-complete:before                     { content: @ok-sign; }
+
+.overview {
+  border: 1px solid #ddd;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  height: 310px;
+  margin-bottom: -1px;
+  padding: 0 14px 14px;
+  position: relative;
+  h3 {
+    margin-bottom: 25px;
+  }
+  .item-count {
+    text-align: center;
+    span {
+      display: block;
+      font-size: 100px;
+      line-height: 100px;
+    }
+  }
+}
+.recent-activity {
+  border: 1px solid #ddd;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  height: 310px;
+  margin-bottom: -1px;
+  padding: 0 14px 14px;
+  position: relative;
+}
+
+table.stories {
+  .story {
+    .story-type {
+      width: 90px;
+    }
+    .story-actor {
+      width: 40px;
+    }
+  }
+}

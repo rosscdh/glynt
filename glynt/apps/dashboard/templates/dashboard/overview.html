@@ -1,174 +1,91 @@
-{% extends 'base_bsv3.html' %}{% load url from future %}{% load glynt_helpers %}
+{% extends 'base_bsv3.html' %}{% load paginator glynt_helpers %}
 
-{% block page_title %}Overview{% endblock %}
-{% block nav_overview %}<li class="active"><a href="{% url 'dashboard:overview' %}">Overview</a></li>{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:overview' %}">Dashboard</a></li>{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <div class="page-header" style="margin-bottom: 10px;">
-            <div class="btn-group pull-right">
-                <a class="btn btn-large dropdown-toggle" data-toggle="dropdown" href="#">Series Seed <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Incorporation</a></li>
-                    <li><a href="#">Note Financing</a></li>
-                    <li><a href="#">Series Seed</a></li>
-                </ul>
-            </div>
-            <h1>Overview</h1>
+<div class="container">
+    <div class="page-header">
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                Startup #1: Series Seed <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li class="nav-header">Active Projects</li>
+                <li><a href="#">Startup #1: Series Seed</a></li>
+                <li><a href="#">Startup #2: Setup &amp; Incorporation</a></li>
+            </ul>
         </div>
-        <div class="row">
-            <div id="progress" class="col-lg-6" ng-app="App" ng-controller="OverviewProgressCtrl">
-                <section>
+        <h2>Dashboard</h2>
+    </div>
+    <div class="row">
+        <div class="col col-lg-6">
+            <div class="overview">
+                <div class="current-progress">
                     <h3>Current Progress</h3>
-                    <div class="well well-large" style="background-color: transparent;">
-                        <div class="progress">
-                            <div class="bar bar-success" style="width: 35%"></div>
-                            <div class="bar bar-info" style="width: 10%"></div>
-                            <div class="bar bar-warning" style="width: 20%"></div>
-                            <div class="bar bar-danger" style="width: 10%"></div>
-                        </div>
-                        <span class="label label-success">Resolved</span>
-                        <span class="label label-info">Needs Signing</span>
-                        <span class="label label-warning">Pending</span>
-                        <span class="label label-important">Open</span>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-success" style="width: 35%"></div>
+                        <div class="progress-bar progress-bar-info" style="width: 10%"></div>
+                        <div class="progress-bar progress-bar-warning" style="width: 20%"></div>
+                        <div class="progress-bar progress-bar-danger" style="width: 10%"></div>
                     </div>
-
-                    <div class="row-fluid">
-                        <ul class="thumbnails clearfix">
-                            <li class="col-lg-4">
-                                <div countType="open"></div>
-                            </li>
-                            <li class="col-lg-4">
-                                <div countType="pending"></div>
-                            </li>
-                            <li class="col-lg-4">
-                                <div countType="closed"></div>
-                            </li>
-                        </ul>
-                    </div>
-                </section>
-            </div>
-            <div class="col-lg-6">
-                <section>
-                    <h3>Recent Activity</h3>
-                    <table>
-                        <thead>
-                            <th style="width: 80px;"></th>
-                            <th style="width: 42px;"></th>
-                            <th></th>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><span class="label label-success">RESOLVED</span></td>
-                                <td><img src="http://placehold.it/32" class="img-rounded"></td>
-                                <td>
-                                    <div><a href="#">Joe Bloggs</a> resolved the item: <a href="{% url 'dashboard:item' slug='519b56fdde5b2ad608002fa0' %}">Item #2</a>.</div>
-                                    <small class="muted">5 hours ago<small>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><span class="label label-success">RESOLVED</span></td>
-                                <td><img src="http://placehold.it/32" class="img-rounded"></td>
-                                <td>
-                                    <div><a href="#">Joe Bloggs</a> resolved the item: <a href="{% url 'dashboard:item' slug='519b56fdde5b2ad608002fa0' %}">Item #11</a>.</div>
-                                    <small class="muted">12 hours ago<small>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><span class="label label-important">OPENED</span></td>
-                                <td><img src="http://placehold.it/32" class="img-rounded"></td>
-                                <td>
-                                    <div><a href="#">Joe Bloggs</a> opened the item: <a href="{% url 'dashboard:item' slug='519b56fdde5b2ad608002fa0' %}">Item #11</a>.</div>
-                                    <small class="muted">2 days ago<small>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><span class="label label-success">RESOLVED</span></td>
-                                <td><img src="http://placehold.it/32" class="img-rounded"></td>
-                                <td>
-                                    <div><a href="#">Joe Bloggs</a> resolved the item: <a href="{% url 'dashboard:item' slug='519b56fdde5b2ad608002fa0' %}">Item #4</a>.</div>
-                                    <small class="muted">5 days ago<small>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><span class="label label-success">RESOLVED</span></td>
-                                <td><img src="http://placehold.it/32" class="img-rounded"></td>
-                                <td>
-                                    <div><a href="#">Joe Bloggs</a> resolved the item: <a href="{% url 'dashboard:item' slug='519b56fdde5b2ad608002fa0' %}">Item #3</a>.</div>
-                                    <small class="muted">2 weeks ago<small>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><span class="label label-important">OPENED</span></td>
-                                <td><img src="http://placehold.it/32" class="img-rounded"></td>
-                                <td>
-                                    <div><a href="#">Joe Bloggs</a> opened the item: <a href="{% url 'dashboard:item' slug='519b56fdde5b2ad608002fa0' %}">Item #10</a>.</div>
-                                    <small class="muted">3 weeks ago<small>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
+                    <span class="label label-success">Resolved</span>
+                    <span class="label label-info">Needs Signing</span>
+                    <span class="label label-warning">Pending</span>
+                    <span class="label label-important">Open</span>
+                </div>
+                <hr>
+                <div class="row item-counts">
+                    <div class="col-lg-4 item-count"><span>13</span> unread</div>
+                    <div class="col-lg-4 item-count"><span>12</span> pending</div>
+                    <div class="col-lg-4 item-count"><span>2</span> closed</div>
+                </div>
             </div>
         </div>
-
-        <div class="well">
-            <div class="row-fluid">
-                <div class="col-lg-6">
-                    <section>
-                        <h3>Lawyers</h3>
-                        <div class="row-fluid">
-                            <ul class="thumbnails clearfix">
-                                <li class="col-lg-4">
-                                    <a href="#" class="thumbnail"><img src="http://placehold.it/128"></a>
-                                </li>
-                                <li class="col-lg-4">
-                                    <a href="#" class="thumbnail"><img src="http://placehold.it/128"></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </section>
-                </div>
-                <div class="col-lg-6">
-                    <section>
-                        <h3>Team</h3>
-                        <div class="row-fluid">
-                            <ul class="thumbnails clearfix">
-                                <li class="col-lg-4">
-                                    <a href="#" class="thumbnail"><img src="http://placehold.it/128"></a>
-                                </li>
-                                <li class="col-lg-4">
-                                    <a href="#" class="thumbnail"><img src="http://placehold.it/128"></a>
-                                </li>
-                                <li class="col-lg-4">
-                                    <a href="#" class="thumbnail"><img src="http://placehold.it/128"></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </section>
-                </div>
+        <div class="col col-lg-6">
+            <div class="recent-activity">
+                <h3>Recent Activity</h3>
+                <table class="table table-striped stories">
+                    <tbody>
+                        <tr class="story">
+                            <td class="story-type"><span class="label label-success">RESOLVED</span></td>
+                            <td class="story-actor">
+                                <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="28"></a>
+                            </td>
+                            <td class="story-info"><a href="">Joe Bloggs</a> resolved the item: <a href="">Item #1</a> &middot; 2 hours ago</td>
+                        </tr>
+                        <tr class="story">
+                            <td class="story-type"><span class="label label-info">SIGNED</span></td>
+                            <td class="story-actor">
+                                <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="28"></a>
+                            </td>
+                            <td class="story-info"><a href="">Joe Bloggs</a> signed the item: <a href="">Item #2</a> &middot; 2 hours ago</td>
+                        </tr>
+                        <tr class="story">
+                            <td class="story-type"><span class="label label-success">RESOLVED</span></td>
+                            <td class="story-actor">
+                                <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="28"></a>
+                            </td>
+                            <td class="story-info"><a href="">Joe Bloggs</a> resolved the item: <a href="">Item #3</a> &middot; 2 hours ago</td>
+                        </tr>
+                        <tr class="story">
+                            <td class="story-type"><span class="label">OPENED</span></td>
+                            <td class="story-actor">
+                                <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="28"></a>
+                            </td>
+                            <td class="story-info"><a href="">Joe Bloggs</a> opened the item: <a href="">Item #4</a> &middot; 2 hours ago</td>
+                        </tr>
+                        <tr class="story">
+                            <td class="story-type"><span class="label">OPENED</span></td>
+                            <td class="story-actor">
+                                <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="28"></a>
+                            </td>
+                            <td class="story-info"><a href="">Joe Bloggs</a> opened the item: <a href="">Item #5</a> &middot; 2 hours ago</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
-{% endblock %}
-
-{% block css %}
-<style>
-#progress div.thumbnail{
-    text-align: center; height: 120px; padding: 10px 0;
-}
-#progress div.thumbnail h3{
-    font-size:1em;
-}
-</style>
-{% endblock %}
-{% block js %}
-    {% moment_js %}
-    <script src="{{ STATIC_URL }}js/angularjs/lib/angular.min.js"></script>
-    <script src="{{ STATIC_URL }}js/angularjs/lib/angular-resource.min.js"></script>
-
-    <script src="{{ STATIC_URL }}dashboard/angularjs/app/js/app.js"></script>
-    <script src="{{ STATIC_URL }}dashboard/angularjs/app/js/controllers.js"></script>
-    <script src="{{ STATIC_URL }}dashboard/angularjs/app/js/services.js"></script>
-    <script src="{{ STATIC_URL }}dashboard/angularjs/app/js/directives.js"></script>
+</div>
 {% endblock %}
