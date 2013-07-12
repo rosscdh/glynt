@@ -56,9 +56,6 @@ class CorporateAgentsForm(BuilderBaseForm):
                 'Agent for service of process in California (if applicable)',
                 'agent_california_name',
                 'agent_california_address'
-            ),
-            ButtonHolder(
-                Submit('submit', 'Next', css_class='btn btn-success')
             )
         )
         super(CorporateAgentsForm, self).__init__(*args, **kwargs)
