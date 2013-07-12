@@ -71,3 +71,11 @@ p.intake-save a {
 .customer-list dd {
     margin-bottom: .5em;
 }
+
+
+@media (max-width: 768px) {
+  .transaction-choice .btn {
+    margin: .5em .3em 0 .3em;
+  }
+}
+
