@@ -10,7 +10,8 @@
 	<div class="container">
 		<div class="row animated fadeInDown">
 			<div class="span12">
-				<h1>Meet our awesome lawyers</h1>
+				<h1>Meet your new lawyer</h1>
+                <h2>Local. Experienced. Available.</h2>
 			</div>
 		</div>
         <!-- Search removed for the moment.
@@ -27,12 +28,12 @@
 {% cache 300 lawyer_list_profile_message user.pk %}
 {% lawyer_profile_is_complete_message warning_type='flashing' %}
 {% endcache %}
-
-<div ng-app="App" ng-controller="MarketplaceCtrl">
-{% include page_template %}
+<div class="col col-lg-10 col-offset-1">
+    <div ng-app="App" ng-controller="MarketplaceCtrl">
+    {% include page_template %}
+    </div>
+    {% endblock %}
 </div>
-{% endblock %}
-
 {% block css %}
 {{ block.super }}
 <style>
