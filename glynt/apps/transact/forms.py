@@ -29,7 +29,7 @@ class BasicInformationForm(BuilderBaseForm):
     company_name = forms.CharField(label="Company name", help_text="", widget=forms.TextInput(attrs={'tabindex': '1'}))
     company_address = forms.CharField(label="Company address", help_text="Please enter you full street address including post code.", widget=forms.Textarea(attrs={'tabindex': '2'}))
     company_phone = forms.CharField(label="Company phone", help_text="", widget=forms.TextInput(attrs={'tabindex': '3', 'data-type': 'phone'}))
-    fiscal_year_end = forms.DateField(label="Fiscal year end", help_text="", widget=forms.DateInput(attrs={'tabindex': '4', 'placeholder': 'MM/DD/YY', 'data-americandate': 'true'}))
+    fiscal_year_end = forms.DateField(label="Fiscal year end", help_text="", widget=forms.DateInput(attrs={'tabindex': '4', 'placeholder': '', 'data-date-picker': 'true', 'data-default-date': 'today'}))
     brief_business_description = forms.CharField(label="Brief business description", help_text="", widget=forms.Textarea(attrs={'tabindex': '5'}))
     electronic_signatures = forms.BooleanField(label="Would you like to use electronic signatures when possible to sign your legal docs?", required=False, help_text="", widget=forms.CheckboxInput(attrs={'tabindex': '6'}))
 
