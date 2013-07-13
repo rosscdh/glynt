@@ -65,6 +65,26 @@
 					<p>{{ object.bio|default:"<div class=\"no-data\">No biography yet.</div>"|linebreaksbr }}</p>
 				</div>
 				<hr>
+			<div class="startups">
+				<h2>Startups Advised</h2>
+				{% for o in object.data.startups_advised %}
+					<col col-lg-><a href="http://{{ o }}" target="_BLANK" class="domain">{{ o }}</a></col col-lg->
+				{% empty %}
+					<ul class="unstyled">
+						<li class="nothing-found">Nothing yet.</li>
+					</ul>
+				{% endfor %}
+			</div>
+			<div class="startups">
+				<h2>Other Websites</h2>
+				{% for o in object.data.websites %}
+					<col col-lg-><a href="http://{{ o }}" target="_BLANK" class="domain">{{ o }}</a></col col-lg->
+				{% empty %}
+					<ul class="unstyled">
+						<li class="nothing-found">Nothing yet.</li>
+					</ul>
+				{% endfor %}
+			</div>
 		</div>
 		<div class="col col-lg-3 sidebar">
 			<div class="firm">
@@ -106,33 +126,6 @@
 					</div>
 			</div>
 
-		</div>
-
-		<div class="col col-lg-8">
-			<div class="startups">
-				<h2>Startups Advised</h2>
-				{% for o in object.data.startups_advised %}
-					<col col-lg-><a href="http://{{ o }}" target="_BLANK" class="domain">{{ o }}</a></col col-lg->
-				{% empty %}
-					<ul class="unstyled">
-						<li class="nothing-found">Nothing yet.</li>
-					</ul>
-				{% endfor %}
-			</div>
-		<hr>
-		</div>
-
-		<div class="col col-lg-8">
-			<div class="startups">
-				<h2>Other Websites</h2>
-				{% for o in object.data.websites %}
-					<col col-lg-><a href="http://{{ o }}" target="_BLANK" class="domain">{{ o }}</a></col col-lg->
-				{% empty %}
-					<ul class="unstyled">
-						<li class="nothing-found">Nothing yet.</li>
-					</ul>
-				{% endfor %}
-			</div>
 		</div>
 	</div>
 

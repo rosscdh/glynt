@@ -375,7 +375,7 @@ h6,
 .h4,
 .h5,
 .h6 {
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", sans-serif;
+  font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
   font-weight: normal;
   line-height: 1.1;
   color: #555555;
@@ -412,7 +412,7 @@ h6 {
 h1,
 .h1 {
   font-size: 42px;
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", sans-serif;
+  font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
   color: #555555;
 }
 h2,
@@ -4087,18 +4087,19 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
   padding-bottom: 20px;
 }
 #signin-modal .startup {
-  max-width: 552px;
+  max-width: 350px;
   width: 100%;
-  margin-right: 20px;
+  margin: 0 auto;
   background-color: #f88172;
-  float: left;
   text-align: center;
+  padding-top: 5px;
 }
 #signin-modal .startup .btn {
   background-color: #f65e4b;
   margin-top: 7px;
   padding: 3px 14px 3px 8px;
   border: 0px;
+  width: 90%;
 }
 #signin-modal .lawyer {
   width: 240px;
@@ -6357,7 +6358,7 @@ td.hidden-lg {
 }
 .homepage #wrap .splash a.btn-huge {
   font-weight: normal;
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", sans-serif;
+  font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
   font-size: 20px;
   padding: 16px 35px 16px 35px;
   margin-top: 20px;
@@ -6368,7 +6369,7 @@ td.hidden-lg {
   background: url('../../img/down-chev.png') center 60px no-repeat;
   font-size: 19.599999999999998px;
   font-weight: normal;
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", sans-serif;
+  font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
 }
 .homepage #wrap .intro h1 {
   font-size: 28px;
@@ -6394,7 +6395,7 @@ td.hidden-lg {
   margin: 40px 0px;
   padding: 30px 0px 20px 0px;
   font-size: 21px;
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", sans-serif;
+  font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
   text-align: left;
 }
 .homepage #wrap .quote p {
