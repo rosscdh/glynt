@@ -168,3 +168,38 @@ table.stories {
     }
   }
 }
+
+.item-view {
+  .page-header {
+    h2 {
+      margin-top: 0;
+    }
+    .btn {
+      margin-top: 15px;
+    }
+  }
+}
+
+.empty {
+  .empty-message {
+    margin: 130px auto;
+    position: relative;
+    width: 490px;
+  }
+  .empty-message::after {
+    background: @brand-success;
+    .border-radius(10px);
+    color: #ffffff;
+    content: "\e022";
+    display: block;
+    font-family: 'Glyphicons Halflings';
+    font-size: 30px;
+    height: 54px;
+    left: -70px;
+    line-height: 52px;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 54px;
+  }
+}

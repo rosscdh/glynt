@@ -1,0 +1,24 @@
+{% extends 'base_bsv3.html' %}{% load paginator glynt_helpers %}
+
+{% block page_title %}Shareholders Agreement — Incorporation{% endblock %}
+{% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>{% endblock %}
+
+{% block body %}
+<div class="container item-view">
+    <div class="page-header">
+        <button type="button" class="btn btn-default btn-large pull-right">Upload</button>
+        <span class="text-muted">Incorporation</span>
+        <h2>Shareholders Agreement</h2>
+    </div>
+    <div class="row">
+        <div class="col col-lg-12">
+            <div class="well empty">
+                <div class="empty-message">
+                    <h3>Awaiting first draft</h3>
+                    <p>Drag a file here or <a href="">browse</a> for a file to upload.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
