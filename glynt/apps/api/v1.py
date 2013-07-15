@@ -125,7 +125,7 @@ class CompanyBasicProfileResource(BaseApiModelResource):
         queryset = Company.objects.all().select_related('customers', 'customers_user')
         authentication = Authentication()
         list_allowed_methods = ['get']
-        resource_name = 'startup/profile'
+        resource_name = 'company/profile'
 
         filtering = {
             'name': ALL,

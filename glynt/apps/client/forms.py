@@ -1,41 +1,31 @@
 # -*- coding: utf-8 -*-
 from django import forms
-from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.forms import AuthenticationForm
-from django.template.defaultfilters import slugify
 from django.core import exceptions
 
 from django.contrib.auth.models import User
 
 from parsley.decorators import parsleyfy
-from bootstrap.forms import BootstrapMixin, Fieldset
 
-from userena.forms import SignupFormOnlyEmail
-from django_countries.countries import COUNTRIES_PLUS
+from glynt.mixins import ModelFormChangePasswordMixin
+from glynt.apps.lawyer.services import EnsureLawyerService
 
 from glynt.apps.company.services import EnsureCompanyService
 from glynt.apps.customer.services import EnsureCustomerService
-
-ACCEPTED_COUNTRIES = ('GB',)
-
-COUNTRIES_PLUS = [(i, c) for i, c in COUNTRIES_PLUS if i in ACCEPTED_COUNTRIES]
 
 import logging
 logger = logging.getLogger('django.request')
 
 
 @parsleyfy
-class ConfirmLoginDetailsForm(forms.ModelForm):
-    """ Shown to the user when they login using linked in
-    Is the first form they see after signing in
+class ConfirmLoginDetailsForm(ModelFormChangePasswordMixin, forms.ModelForm):
+    """ Form shown to the use after logging in, assists in capturing the correct email
+    and setting a user password
     """
-    first_name = forms.CharField(max_length=24, widget=forms.TextInput(attrs={'placeholder': 'John', 'tabindex': '1'}))
-    last_name = forms.CharField(max_length=24, widget=forms.TextInput(attrs={'placeholder': 'Doemann', 'tabindex': '2'}))
-    company = forms.CharField(label="Company Name", help_text='', widget=forms.TextInput(attrs={'placeholder': 'Acme Inc', 'tabindex': '3'}))
-    email = forms.EmailField(widget=forms.TextInput(attrs={'placeholder': 'john.doemann@example.com', 'tabindex': '4'}))
-    password = forms.CharField(widget=forms.PasswordInput(render_value=False, attrs={'tabindex': '5'}))
-    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'tabindex': '6'}))
-    agree_tandc = forms.BooleanField(label='', help_text='I agree to the Terms &amp; Conditions', widget=forms.CheckboxInput(attrs={'tabindex': '7'}))
+    first_name = forms.CharField(max_length=24, widget=forms.TextInput(attrs={'placeholder': 'John'}))
+    last_name = forms.CharField(max_length=24, widget=forms.TextInput(attrs={'placeholder': 'Doemann'}))
+    company = forms.CharField(label="Company Name", help_text='', widget=forms.TextInput(attrs={'placeholder': 'Acme Inc'}))
+    email = forms.EmailField(widget=forms.TextInput(attrs={'placeholder': 'john.doemann@example.com'}))
+    agree_tandc = forms.BooleanField(label='I agree to the Terms &amp; Conditions', help_text='', widget=forms.CheckboxInput(attrs={}))
 
     class Meta:
         model = User
@@ -60,17 +50,8 @@ class ConfirmLoginDetailsForm(forms.ModelForm):
             pass
         return email
 
-    def clean_confirm_password(self):
-        password = self.cleaned_data['password']
-        confirm_password = self.cleaned_data['confirm_password']
-
-        if password != confirm_password:
-            raise exceptions.ValidationError(_('Passwords do not match'))
-
-        return password
-
     def save(self, commit=True):
-        user = super(ConfirmLoginDetailsForm, self).save(commit=False)
+        user = self.user
         user.set_password(self.cleaned_data["password"])
         if commit:
             user.save(update_fields=['password'])
@@ -79,39 +60,14 @@ class ConfirmLoginDetailsForm(forms.ModelForm):
             data.pop('password')
             data.pop('confirm_password')
 
-            customer_service = EnsureCustomerService(user=user, **data)
-            customer = customer_service.process()
+            if self.user.profile.is_lawyer:
+                lawyer_service = EnsureLawyerService(user=self.user, firm_name=data.get('company_name'), offices=[], form=self, **data)
+                lawyer_service.process()
 
-            comapny_service = EnsureCompanyService(name=data.pop('company'), customer=user.customer_profile, **data)
-            comapny_service.process()
+            if self.user.profile.is_customer:
+                customer_service = EnsureCustomerService(user=user, **data)
+                customer = customer_service.process()
+                company_service = EnsureCompanyService(name=data.pop('company'), customer=customer, **data)
+                company_service.process()
+
         return user
-
-
-class SignupForm(BootstrapMixin, SignupFormOnlyEmail):
-    """ The signup form overrides the Userena save method and hooks it up
-    to our own UserSignup model and process allowing us to expand on fields saved """
-    first_name = forms.CharField(max_length=24)
-    last_name = forms.CharField(max_length=24)
-    country = forms.ChoiceField(choices=COUNTRIES_PLUS, initial='GB')
-    state = forms.CharField(max_length=128)
-
-    class Meta:
-        layout = (
-            Fieldset("Login Details", "email", "password1", "password2"),
-            Fieldset("Your Account Details", "first_name", "last_name", "country", "state")
-        )
-
-    def generate_username_from_email(self, email):
-        username = slugify(email)
-
-        return '%s' % (username[0:30])
-
-
-class AuthenticationForm(BootstrapMixin, AuthenticationForm):
-    username = forms.CharField(label=_("Email or Username"), max_length=30, widget=forms.TextInput(attrs={'placeholder': 'username@example.com'}))
-    password = forms.CharField(label=_("Password"), max_length=30, widget=forms.PasswordInput(attrs={'placeholder': 'password'}))
-
-    class Meta:
-        layout = (
-            Fieldset("Please Login", "username", "password"),
-        )

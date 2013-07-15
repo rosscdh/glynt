@@ -24,8 +24,6 @@ urlpatterns = patterns('',
 	url(r'^accounts/', include('userena.urls')),
 	url(r'^client/', include('glynt.apps.client.urls', namespace='client')),
 	url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}, name='logout'),
-    # Companies
-    url(r'^companies/', include('glynt.apps.company.urls', namespace='company')),
     # Customers
     url(r'^customers/', include('glynt.apps.customer.urls', namespace='customer')),
     # lawyers
@@ -47,5 +45,5 @@ urlpatterns = patterns('',
 
 
 if settings.DEBUG or settings.PROJECT_ENVIRONMENT == 'dev':
-	urlpatterns += staticfiles_urlpatterns()
-	urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += staticfiles_urlpatterns()
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
