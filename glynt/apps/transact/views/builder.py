@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 from django.contrib.formtools.wizard.views import NamedUrlSessionWizardView
+from django.views.generic import UpdateView
 from django.utils.datastructures import SortedDict
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -78,6 +79,9 @@ class BuilderWizardView(NamedUrlSessionWizardView):
     def get_step_url(self, step):
         return reverse(self.url_name, kwargs={'tx_range': self.kwargs.get('tx_range', ''), 'step': step})
 
+    def get_form_initial(self, step):
+        return self.initial_dict.get(step, {})
+
     def get_form_list(self):
         """
         Overridden to allow for sort()
@@ -88,3 +92,17 @@ class BuilderWizardView(NamedUrlSessionWizardView):
 
     def done(self, form_list, **kwargs):
         return HttpResponseRedirect(reverse('dashboard:matching'))
+
+
+class SaveStepView(UpdateView):
+def post(self, request, *args, **kwargs):
+    """
+    Handles POST requests, instantiating a form instance with the passed
+    POST variables and then checked for validity.
+    """
+    form_class = self.get_form_class()
+    form = self.get_form(form_class)
+    if form.is_valid():
+        return self.form_valid(form)
+    else:
+        return self.form_invalid(form)
