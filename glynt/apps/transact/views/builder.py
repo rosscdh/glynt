@@ -4,13 +4,15 @@ from django.utils.datastructures import SortedDict
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
+from bunch import Bunch
+
 from glynt.apps.transact.views.intake import (FORMS as INTAKE_FORMS,)
 
 TX_OPTIONS = {
-    'INTAKE': {'forms': INTAKE_FORMS, 'templates': []},
-    'CS': {'forms': [], 'templates': []},
-    'SF': {'forms': [], 'templates': []},
-    'ES': {'forms': [], 'templates': []},
+    'INTAKE': {'forms': INTAKE_FORMS, 'templates': [], 'data_provider': Bunch({})},
+    'CS': {'forms': [], 'templates': [], 'data_provider': Bunch({})},
+    'SF': {'forms': [], 'templates': [], 'data_provider': Bunch({})},
+    'ES': {'forms': [], 'templates': [], 'data_provider': Bunch({})},
 }
 
 
@@ -18,6 +20,15 @@ class BuilderWizardView(SessionWizardView):
     """ Transaction Builder that compiles sets of form steps into a wizard """
     template_name = 'transact/forms/builder.html'
     form_list = []
+    _step_data = Bunch({})
+
+    @property
+    def step_data(self):
+        return self._step_data
+
+    @step_data.setter
+    def step_data(self, value):
+        self._step_data = value
 
     def dispatch(self, request, *args, **kwargs):
         # Inject custom forms here as we need the request object
@@ -30,7 +41,8 @@ class BuilderWizardView(SessionWizardView):
         context = super(BuilderWizardView, self).get_context_data(form, **kwargs)
         context.update({
             'page_title': context.get('form').page_title,
-            'page_description': context.get('form').page_description
+            'page_description': context.get('form').page_description,
+            'builder_data': self.step_data,
         })
         return context
 
