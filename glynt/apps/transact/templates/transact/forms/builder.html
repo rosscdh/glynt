@@ -71,10 +71,12 @@
 {% block js %}
     <script src="{{ STATIC_URL }}js/jquery.dateentry/jquery.dateentry.min.js"></script>
     <script src="{{ STATIC_URL }}transact/js/jquery.plugin.region_clone.js"></script>
+    <script src="{{ STATIC_URL }}transact/js/jquery.plugin.show_when.js"></script>
     <script>
     $(document).ready(function(){
         var form = $( 'form#builder-form' );
         $('fieldset[data-region-clone]').region_clone();
+        $('[data-show-when]').show_when();
 
         /**
         * Date Elements

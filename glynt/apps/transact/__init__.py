@@ -25,3 +25,7 @@ class BuilderBaseForm(forms.Form):
     @property
     def page_description(self):
         return getattr(self.__class__, 'page_description', None)
+
+    @property
+    def initial_data_provider(self):
+        return getattr(self.__class__, 'initial_data_provider', None)

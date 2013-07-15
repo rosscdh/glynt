@@ -1,3 +1,4 @@
+'use strict';
 /**
 * Clone a region of a form
 * ------------------------
