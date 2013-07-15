@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-from django.contrib.formtools.wizard.views import SessionWizardView
+from django.contrib.formtools.wizard.views import NamedUrlSessionWizardView
 from django.utils.datastructures import SortedDict
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -16,7 +16,7 @@ TX_OPTIONS = {
 }
 
 
-class BuilderWizardView(SessionWizardView):
+class BuilderWizardView(NamedUrlSessionWizardView):
     """ Transaction Builder that compiles sets of form steps into a wizard """
     template_name = 'transact/forms/builder.html'
     form_list = []
@@ -74,6 +74,17 @@ class BuilderWizardView(SessionWizardView):
             current_form_set[unicode(length_of_current_form_set + i + 1)] = item[1]  # return the form and not its name
 
         return current_form_set
+
+    def get_step_url(self, step):
+        return reverse(self.url_name, kwargs={'tx_range': self.kwargs.get('tx_range', ''), 'step': step})
+
+    def get_form_list(self):
+        """
+        Overridden to allow for sort()
+        """
+        form_list = super(BuilderWizardView, self).get_form_list()
+        form_list.keyOrder.sort()
+        return form_list
 
     def done(self, form_list, **kwargs):
         return HttpResponseRedirect(reverse('dashboard:matching'))

@@ -8,11 +8,23 @@
 
 {% block css %}
     <link href="{{ STATIC_URL }}css/theme/transaction.css" rel="stylesheet" charset="utf-8"/>
+<style>
+.border{
+    border:solid #c00 1px;
+}
+</style>
 {% endblock %}
 
 
-{% block prebody %}
-    <div class="container" ng-app="App" ng-controller="TransactBuilderCtrl">
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-7 border">
+            {% for s in wizard.steps.all %}
+            <a href="{% url 'transact:builder' tx_range=tx_range step=s %}" class="btn btn-info">{{ s }}</a>
+            {% endfor %}
+            </div>
+        </div>
         <div class="row">
             <div class="col col-lg-5 col-offset-2">
                 {% if page_title %}<h2>{{ page_title }}</h2>{% endif %}
@@ -29,22 +41,26 @@
         <div class="container">
             <div class="row">
                 <div class="col col-lg-8 col-offset-2">
-                    <form id="" data-validate="parsley" action="" method="POST" class="form-horizontal">{% csrf_token %}
+
+                    <form id="builder-form" data-validate="parsley" action="." method="POST" class="form-horizontal">{% csrf_token %}
                         {{ wizard.management_form }}
+
                         {% if wizard.form.forms %}
                             {{ wizard.form.management_form }}
                             {% for form in wizard.form.forms %}
-                                {{ form|crispy }}
+                                {% crispy form form.helper %}
                             {% endfor %}
                         {% else %}
-                            {% crispy wizard.form wizard.form.helper %}
+                            {% if wizard.form.helper %}
+                                {% crispy wizard.form %}
+                            {% else %}
+                                {{ wizard.form }}
+                            {% endif %}
                         {% endif %}
-                        <div class="control-group">
-                            <div class="controls">
-                                <button type="submit" class="btn btn-success btn-large pull-right">Next</button>
-                            </div>
-                        </div>
+
+                        <button type="submit" class="btn btn-success btn-large pull-right">Next</button>
                     </form>
+
                 </div>
             </div>
         </div>
@@ -53,12 +69,46 @@
 {% endblock %}
 
 {% block js %}
-    {% moment_js %}
-    <script src="{{ STATIC_URL }}js/angularjs/lib/angular.min.js"></script>
-    <script src="{{ STATIC_URL }}js/angularjs/lib/angular-resource.min.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery.dateentry/jquery.dateentry.min.js"></script>
+    <script src="{{ STATIC_URL }}transact/js/jquery.plugin.region_clone.js"></script>
+    <script>
+    $(document).ready(function(){
+        var form = $( 'form#builder-form' );
+        $('fieldset[data-region-clone]').region_clone();
 
-    <script src="{{ STATIC_URL }}transact/angularjs/app/js/app.js"></script>
-    <script src="{{ STATIC_URL }}transact/angularjs/app/js/controllers.js"></script>
-    <script src="{{ STATIC_URL }}transact/angularjs/app/js/services.js"></script>
-    <script src="{{ STATIC_URL }}transact/angularjs/app/js/directives.js"></script>
+        /**
+        * Date Elements
+        **/
+        $.each($('[data-date-picker]'), function (i, item) {
+            var defaultDate = $(item).attr('data-default-date') || null;
+            if (defaultDate !== null) {
+                defaultDate = (defaultDate.match( /(today|now)/ ) == -1) ? new Date(defaultDate) : new Date() ;
+            }
+
+            $(item).dateEntry({'defaultDate': defaultDate});
+        })
+
+        /**
+        * Handle the Add cloned region event
+        **/
+        $(document).on("region_clone_add", function( event ){
+
+            $.each(event.cloned_region.find('input'), function(i, item) {
+                form.parsley( 'addItem', item );
+            })
+            
+        });
+
+        /**
+        * Handle the Remove cloned region event
+        **/
+        $(document).on("region_clone_remove", function( event ){
+
+            $.each(event.cloned_region.find('input'), function(i, item) {
+                form.parsley( 'removeItem', item );
+            })
+
+        });
+    });
+    </script>
 {% endblock %}

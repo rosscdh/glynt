@@ -39,7 +39,7 @@ class CreateProjectView(FormView):
             if u'INTAKE' not in transaction_type:
                 transaction_type.insert(0, u'INTAKE')
 
-        self.success_url = reverse('transact:builder', kwargs={'tx_range': ','.join(transaction_type)})
+        self.success_url = reverse('transact:builder', kwargs={'tx_range': ','.join(transaction_type), 'step': 1})
         return super(CreateProjectView, self).form_valid(form)
 
 

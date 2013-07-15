@@ -5221,6 +5221,7 @@ a.thumbnail:focus {
 .media-list {
   margin-left: 0;
   list-style: none;
+  padding-left: 0;
 }
 .label {
   display: inline;
@@ -6352,7 +6353,7 @@ td.hidden-lg {
 }
 .homepage #wrap .splash h3 {
   color: #7c7c7c;
-  font-size: 24px;
+  font-size: 21px;
 }
 .homepage #wrap .splash a.btn-huge {
   font-weight: normal;
@@ -6408,7 +6409,7 @@ td.hidden-lg {
     font-size: 56px;
   }
   .homepage #wrap .splash h3 {
-    font-size: 31px;
+    font-size: 28px;
   }
   .homepage #wrap .intro h1 {
     font-size: 41px;
