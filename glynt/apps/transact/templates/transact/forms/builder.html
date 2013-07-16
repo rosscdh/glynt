@@ -11,52 +11,73 @@
 {% endblock %}
 
 
-{% block body %}
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-7">
-            {% for s in wizard.steps.all %}
-            <a href="{% url 'transact:builder' tx_range=tx_range step=s %}" class="btn btn-info">{{ s }}</a>
-            {% endfor %}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col col-lg-5 col-offset-2">
-                {% if page_title %}<h2>{% transpose_company_data page_title %}</h2>{% endif %}
-                {% if page_description %}{{ page_description }}{% endif %}
-            </div>
-            <div class="col col-lg-3">
-                <div class="progress progress-striped intake-progress">
-                    <div class="bar" style="width: {{ wizard.steps.index|as_percentage_of:wizard.steps.count }};"></div>
+{% block prebody %}
+<!-- <div class="jumbotron-header">
+    <div class="col col-lg-5 col-offset-2">
+        <div class="container">
+            {% if page_title %}<h2 class="alt">{% transpose_company_data page_title %}</h2>{% endif %}
+             {% if page_description %}<p class="softer">{{ page_description }}</a>{% endif %}
+             <div class="row">
+                 <div class="col-lg-6">
+                   
+                </div>
+                <div class="col col-lg-6">
+                   
                 </div>
             </div>
         </div>
     </div>
-    <div class="form-wrap">
-        <div class="container">
-            <div class="row">
-                <div class="col col-lg-8 col-offset-2">
+</div> -->
 
-                    <form id="builder-form" data-validate="parsley" action="." method="POST" class="form-horizontal">{% csrf_token %}
-                        {{ wizard.management_form }}
-
-                        {% if wizard.form.forms %}
-                            {{ wizard.form.management_form }}
-                            {% for form in wizard.form.forms %}
-                                {% crispy form form.helper %}
+<div class="jumbotron-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-offset-2">
+                {% if wizard.steps.count > 1 %}
+                    <div class="row">
+                        <div class="col-lg-6">
+                            {% for s in wizard.steps.all %}
+                                 <a href="{% url 'transact:builder' tx_range=tx_range step=s %}" class="btn btn-info">{{ s }}</a>
                             {% endfor %}
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="progress progress-striped intake-progress">
+                                <div class="bar" style="width: {{ wizard.steps.index|as_percentage_of:wizard.steps.count }};"></div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if page_title %}<h2 class="alt">{% transpose_company_data page_title %}</h2>{% endif %}
+                {% if page_description %}<p class="softer">{{ page_description }}</a>{% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="form-wrap">
+    <div class="container">
+        <div class="row">
+            <div class="col col-lg-8 col-offset-2">
+
+                <form id="builder-form" data-validate="parsley" action="." method="POST" class="form-horizontal">{% csrf_token %}
+                    {{ wizard.management_form }}
+
+                    {% if wizard.form.forms %}
+                        {{ wizard.form.management_form }}
+                        {% for form in wizard.form.forms %}
+                            {% crispy form form.helper %}
+                        {% endfor %}
+                    {% else %}
+                        {% if wizard.form.helper %}
+                            {% crispy wizard.form wizard.form.helper %}
                         {% else %}
-                            {% if wizard.form.helper %}
-                                {% crispy wizard.form wizard.form.helper %}
-                            {% else %}
-                                {% crispy wizard.form %}
-                            {% endif %}
+                            {% crispy wizard.form %}
                         {% endif %}
+                    {% endif %}
+                    <br />
+                    <button type="submit" class="btn btn-success btn-large">Next Step</button>
+                </form>
 
-                        <button type="submit" class="btn btn-success btn-large pull-right">Next</button>
-                    </form>
-
-                </div>
             </div>
         </div>
     </div>

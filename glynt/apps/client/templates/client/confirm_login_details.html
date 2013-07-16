@@ -14,9 +14,9 @@
 </div>
 <div class="form-wrap">
     <div class="container">
-      <div class="col col-lg-8 col-offset-2">
+      <div class="col col-lg-10 col-offset-1">
        {{ form.errors }}
-         <form id="lawyer-signin-details" data-validate="parsley" class="form-horizontal"
+         <form id="lawyer-signin-details" data-validate="parsley" class="form-horizontal" autocomplete="off"
                 action="{% url 'client:confirm_signup' slug=request.user.username %}" method="post">{% csrf_token %}
                 <div class="row">
                     <div class="col col-lg-6">
