@@ -103,3 +103,156 @@
   		}
 	}
 }
+
+table.checklist {
+  .item-icon {
+    text-align: center;
+    width: 60px;
+    [class^="icon-"],
+    [class*=" icon-"] {
+      font-size: 36px;
+    }
+  }
+  .item-meta {
+    text-align: right;
+    vertical-align: middle;
+    width: 200px;
+  }
+  tr.pending {
+    color: @gray-lighter;
+  }
+  tr.draft {
+    color: @gray-light;
+  }
+  tr.urgent {
+    color: @btn-warning-bg;
+    td {
+      background-color: fade(@btn-warning-bg, 10%);
+    }
+  }
+  tr.complete {
+    color: @btn-success-bg;
+    td {
+      background-color: fade(@btn-success-bg, 10%);
+      a {
+        color: @btn-success-bg;
+      }
+    }
+  }
+}
+
+.icon-pending:before                      { content: @check-empty; }
+.icon-draft:before                        { content: @adjust; }
+.icon-urgent:before                       { content: @exclamation-sign; }
+.icon-complete:before                     { content: @ok-sign; }
+
+.overview {
+  border: 1px solid #ddd;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  height: 310px;
+  margin-bottom: -1px;
+  padding: 0 14px 14px;
+  position: relative;
+  h3 {
+    margin-bottom: 25px;
+  }
+  .item-count {
+    text-align: center;
+    span {
+      display: block;
+      font-size: 100px;
+      line-height: 100px;
+    }
+  }
+}
+.recent-activity {
+  border: 1px solid #ddd;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  height: 310px;
+  margin-bottom: -1px;
+  padding: 0 14px 14px;
+  position: relative;
+}
+
+table.stories {
+  .story {
+    .story-type {
+      width: 90px;
+    }
+    .story-actor {
+      width: 40px;
+    }
+  }
+}
+
+.item-view {
+  margin-bottom: 10px;
+  .page-header {
+    h2 {
+      margin-top: 0;
+    }
+    .btn {
+      margin-top: 15px;
+    }
+  }
+  .nav {
+    margin-bottom: 15px;
+  }
+}
+
+.empty {
+  .empty-message {
+    margin: 130px auto;
+    position: relative;
+    width: 490px;
+  }
+  .empty-message::after {
+    background: @brand-success;
+    .border-radius(10px);
+    color: #ffffff;
+    content: "\e022";
+    display: block;
+    font-family: 'Glyphicons Halflings';
+    font-size: 30px;
+    height: 54px;
+    left: -70px;
+    line-height: 52px;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 54px;
+  }
+}
+
+.document {
+  text-align: center;
+  iframe {
+    border: 1px solid #e7e7e7;
+  }
+}
+
+table.lawyer-list {
+  background-color: lighten(@brand-warning, 20%);
+  margin: 10px 0 0;
+  tr {
+    td {
+      border-top: 0;
+    }
+    .lawyer-picture {
+      width: 156px;
+    }
+    .lawyer-meta {
+      vertical-align: middle;
+      width: 100px;
+    }
+  }
+}
+
+.callout {
+  background-color: lighten(@brand-warning, 30%);
+  border-left: 5px solid @brand-warning;
+  margin: 20px 0;
+  padding: 15px 30px 15px 15px;
+}
