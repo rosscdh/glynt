@@ -26,12 +26,14 @@ class DummyBuilderForm(forms.Form):
 class BasicInformationForm(BuilderBaseForm):
     page_title = 'Basic Information'
     page_description = 'Please start with your basic information'
+    data_bag = 'glynt.apps.client.bunches.UserCompanyBunch'
     company_name = forms.CharField(label="Company name", help_text="", widget=forms.TextInput(attrs={'tabindex': '1'}))
     company_address = forms.CharField(label="Company address", help_text="Please enter you full street address including post code.", widget=forms.Textarea(attrs={'tabindex': '2'}))
     company_phone = forms.CharField(label="Company phone", help_text="", widget=forms.TextInput(attrs={'tabindex': '3', 'data-type': 'phone'}))
-    fiscal_year_end = forms.DateField(label="Fiscal year end", help_text="", widget=forms.DateInput(attrs={'tabindex': '4', 'placeholder': 'MM/DD/YY', 'data-americandate': 'true'}))
+    fiscal_year_end = forms.DateField(label="Fiscal year end", help_text="", widget=forms.DateInput(attrs={'tabindex': '4', 'placeholder': '', 'data-date-picker': 'true', 'data-default-date': 'today'}))
     brief_business_description = forms.CharField(label="Brief business description", help_text="", widget=forms.Textarea(attrs={'tabindex': '5'}))
     electronic_signatures = forms.BooleanField(label="Would you like to use electronic signatures when possible to sign your legal docs?", required=False, help_text="", widget=forms.CheckboxInput(attrs={'tabindex': '6'}))
+    awesomeness = forms.CharField(label="Awesome Test", help_text="", widget=forms.TextInput(attrs={'data-show-when': 'company_name gte 23'}))
 
 
 # WIZARD STEP THREE
@@ -39,6 +41,7 @@ class BasicInformationForm(BuilderBaseForm):
 class CorporateAgentsForm(BuilderBaseForm):
     page_title = 'Corporate Agents'
     page_description = None
+    data_bag = 'glynt.apps.client.bunches.UserCompanyBunch'
     agent_delaware_name = forms.CharField(label="Name", help_text="", widget=forms.TextInput(attrs={'tabindex': '1'}))
     agent_delaware_address = forms.CharField(label="Address", help_text="", widget=forms.Textarea(attrs={'tabindex': '2'}))
     agent_california_name = forms.CharField(label="Name", required=False, help_text="", widget=forms.TextInput(attrs={'tabindex': '3'}))
@@ -56,9 +59,6 @@ class CorporateAgentsForm(BuilderBaseForm):
                 'Agent for service of process in California (if applicable)',
                 'agent_california_name',
                 'agent_california_address'
-            ),
-            ButtonHolder(
-                Submit('submit', 'Next', css_class='btn btn-success')
             )
         )
         super(CorporateAgentsForm, self).__init__(*args, **kwargs)
@@ -69,8 +69,10 @@ class CorporateAgentsForm(BuilderBaseForm):
 class InitialDirectorsForm(BuilderBaseForm):
     page_title = 'Initial Directors'
     page_description = None
-    initial_number_of_directors = forms.IntegerField(label="Initial number of directors", help_text="", widget=forms.TextInput(attrs={'tabindex': '1'}))
-    names_of_directors = forms.CharField(label="Names of director(s)", help_text="", widget=forms.TextInput(attrs={'tabindex': '2'}))
+    data_bag = 'glynt.apps.client.bunches.UserCompanyOfficersBunch'
+
+    director_name = forms.CharField(label="Director Name", help_text="")
+    director_email = forms.EmailField(label="Director Email", help_text="")
 
     # INITIAL OFFICERS
     president_or_chief_executive_officer = forms.CharField(label="President/Chief Executive Officer", help_text="", widget=forms.TextInput(attrs={'tabindex': '3'}))
@@ -84,8 +86,9 @@ class InitialDirectorsForm(BuilderBaseForm):
         self.helper.layout = Layout(
             Fieldset(
                 'Initial Directors',
-                'initial_number_of_directors',
-                'names_of_directors',
+                    'director_name',
+                    'director_email',
+                **{'data-region-clone': 'true'}
             ),
             Fieldset(
                 'Initial Officers',
@@ -94,12 +97,7 @@ class InitialDirectorsForm(BuilderBaseForm):
                 'treasurer_or_chief_financial_officer',
                 'other_initial_officer',
                 'other_initial_officers',
-                HTML("""
-            <p><a href="#" class="add-field" data-target-field="id_initial_directors-other_initial_officer">Add another</a></p>
-        """)),
-            ButtonHolder(
-                Submit('submit', 'Next', css_class='btn btn-success')
-            )
+            ),
         )
         super(InitialDirectorsForm, self).__init__(*args, **kwargs)
 
@@ -109,6 +107,7 @@ class InitialDirectorsForm(BuilderBaseForm):
 class GeneralCapitalizationForm(BuilderBaseForm):
     page_title = 'General Capitalization'
     page_description = None
+    data_bag = 'glynt.apps.client.bunches.UserCompanyBunch'
     total_authorized_shares_of_common_stock = forms.CharField(label="Total authorized shares of common stock", help_text="", widget=forms.TextInput(attrs={'tabindex': ''}))
     par_value_per_share = forms.CharField(label="Par value per share", help_text="", widget=forms.TextInput(attrs={'tabindex': ''}))
     total_shares_customers = forms.CharField(label="Total shares to be purchased by founders", help_text="", widget=forms.TextInput(attrs={'tabindex': ''}))
@@ -120,6 +119,7 @@ class GeneralCapitalizationForm(BuilderBaseForm):
 class CustomersForm(BuilderBaseForm):
     page_title = 'Customers'
     page_description = None
+    data_bag = 'founders'
     first_name = forms.CharField(label="First name", help_text="", widget=forms.TextInput(attrs={'tabindex': ''}))
     last_name = forms.CharField(label="Last name", help_text="", widget=forms.TextInput(attrs={'tabindex': ''}))
     address = forms.CharField(label="Address", required=False, help_text="", widget=forms.TextInput(attrs={'tabindex': ''}))
@@ -190,6 +190,7 @@ class CustomersForm(BuilderBaseForm):
 class StockPlansForm(BootstrapMixin, BuilderBaseForm):
     page_title = 'Stock Plan'
     page_description = None
+    data_bag = 'glynt.apps.client.bunches.UserCompanyBunch'
     equity_incentive_plan = forms.BooleanField(label="Will the company have an equity incentive plan?", help_text="", widget=forms.CheckboxInput())
     # IF YES:
     shares_authorized = forms.CharField(label="Name", help_text="", widget=forms.TextInput(attrs={'tabindex': ''}))
@@ -212,6 +213,7 @@ class StockPlansForm(BootstrapMixin, BuilderBaseForm):
 class AboutCompanyBusinessForm(BootstrapMixin, BuilderBaseForm):
     page_title = 'The Company'
     page_description = None
+    data_bag = 'glynt.apps.client.bunches.UserCompanyBunch'
     date_company_begins_business = forms.DateField(label="Date on which the company will begin doing business", help_text="", widget=forms.DateInput(attrs={'tabindex': ''}))
     states_countries_doing_business = forms.CharField(label="States and countries in which the company will be doing business", help_text="", widget=forms.TextInput(attrs={'tabindex': ''}))
     detailed_business_description = forms.CharField(label="Detailed business description (e.g., describe the principal line of merchandise sold, products produced, services provided, etc.)", help_text="", widget=forms.Textarea(attrs={'tabindex': ''}))
@@ -221,6 +223,7 @@ class AboutCompanyBusinessForm(BootstrapMixin, BuilderBaseForm):
 class IntellectualPropertyForm(BootstrapMixin, BuilderBaseForm):
     page_title = 'Intellectual Property'
     page_description = None
+    data_bag = 'ip'
     intellectual_property = forms.CharField(label="List any patents, copyrights and trademarks that the company will own or license and/or will want to register", help_text="", widget=forms.Textarea(attrs={'tabindex': ''}))
     domain_names_obtained = forms.BooleanField(label="Any Domain names obtained?", help_text="", widget=forms.CheckboxInput())
     # IF YES:
@@ -240,6 +243,7 @@ class IntellectualPropertyForm(BootstrapMixin, BuilderBaseForm):
 class EmployeesConsultantsForm(BootstrapMixin, BuilderBaseForm):
     page_title = 'Employees & Consulatants'
     page_description = None
+    data_bag = 'consultants'
     name = forms.CharField(label="Name", help_text="", widget=forms.TextInput(attrs={'tabindex': '1'}))
     EMPLOYMENT_TYPE_CHOICES = (
         ('EM', 'Employee'),

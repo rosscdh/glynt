@@ -1,4 +1,4 @@
-{% extends 'base_bsv3.html' %}{% load paginator glynt_helpers %}
+{% extends 'base.html' %}{% load url from future %}{% load glynt_helpers %}
 
 {% block page_title %}Dashboard{% endblock %}
 {% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:overview' %}">Dashboard</a></li>{% endblock %}
@@ -16,13 +16,13 @@
                 <li><a href="#">Startup #2: Setup &amp; Incorporation</a></li>
             </ul>
         </div>
-        <h2>Dashboard <small>Series Seed Financing</small></h2>
+        <h2>Dashboard</h2>
     </div>
     <div class="row">
         <div class="col col-lg-6">
             <div class="overview">
                 <div class="current-progress">
-                    <h3>Checklist Progress</h3>
+                    <h3>Current Progress</h3>
                     <div class="progress">
                         <div class="progress-bar progress-bar-success" style="width: 35%"></div>
                         <div class="progress-bar progress-bar-info" style="width: 10%"></div>
