@@ -47,9 +47,9 @@
                             {% endfor %}
                         {% else %}
                             {% if wizard.form.helper %}
-                                {% crispy wizard.form %}
+                                {% crispy wizard.form wizard.form.helper %}
                             {% else %}
-                                {{ wizard.form }}
+                                {% crispy wizard.form %}
                             {% endif %}
                         {% endif %}
 
