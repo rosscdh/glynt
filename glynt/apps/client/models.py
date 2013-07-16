@@ -55,6 +55,10 @@ class ClientProfile(UserenaBaseProfile):
         return pic if pic is not None else p
 
     @property
+    def phone(self):
+        return self.profile_data.get('phone', None)
+
+    @property
     def user_class(self):
         return self.profile_data.get('user_class_name', None)
 

@@ -1,36 +1,67 @@
-{% extends 'base_bsv3.html' %}{% load i18n %}{% load url from future %}
+{% extends 'base.html' %}{% load i18n %}{% load url from future %}
 {% load crispy_forms_tags %}
 
 {% block title %}{% trans "Confirm your Account" %}{% endblock %}
-
+{% block navbar %}{% endblock %}
+{% block wrapclass %}a{% endblock %}
 {% block prebody %}
-<div class="jumbotron-header">
+<div class="megatron">
     <div class="container">
-            <h1 class="alt">Welcome to LawPal</h1>
-            <h3>Please confirm your details below &amp; then we can get started.</h3>
+        <h2><i class="glyphicon glyphicon-user" style="padding:27px 28px 22px 28px"></i></h2>
+        <h1>Welcome to LawPal</h1>
+        <h3>Let's create your account.</h3>
     </div>
 </div>
-    <div class="form-wrap">
-        <div class="container">
-          <div class="col col-lg-10 offset-1">
-           {{ form.errors }}
-             <form id="lawyer-signin-details" data-validate="parsley" class="form-horizontal"
-                    action="{% url 'client:confirm_signup' slug=request.user.username %}" method="post">{% csrf_token %}
-                      {{ form.first_name|as_crispy_field }}
-                      {{ form.last_name|as_crispy_field }}
+<div class="form-wrap">
+    <div class="container">
+      <div class="col col-lg-8 col-offset-2">
+       {{ form.errors }}
+         <form id="lawyer-signin-details" data-validate="parsley" class="form-horizontal"
+                action="{% url 'client:confirm_signup' slug=request.user.username %}" method="post">{% csrf_token %}
+                <div class="row">
+                    <div class="col col-lg-6">
+                        {{ form.first_name|as_crispy_field }}
+                    </div>
+                    <div class="col col-lg-6">
+                        {{ form.last_name|as_crispy_field }}
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col col-lg-6">
                       {{ form.company|as_crispy_field }}
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col col-lg-6">
                       {{ form.email|as_crispy_field }}
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col col-lg-6">
                       {{ form.password|as_crispy_field }}
+                    </div>
+                    <div class="col col-lg-6">
                       {{ form.confirm_password|as_crispy_field }}
-                       <div class="row">
-                           <div class="col col-lg-10 col-offset-2">
-                              {{ form.agree_tandc|as_crispy_field }}
-                              <button id="lawyer-signin-details-submit" type="submit" class=" btn btn-primary">{% trans "Continue" %}</button>
-                              {{ form.username }}
-                          </div>
+                    </div>
+                </div>
+                <hr>
+                 <div class="row">
+                     <div class="col col-lg-6 col-offset-8">                    
+                         {{ form.agree_tandc|as_crispy_field }}
                       </div>
-              </form>
-          </div>
-        </div>
+                  </div>
+
+                   <div class="row">
+                       <div class="col col-lg-12">
+                          <button id="lawyer-signin-details-submit" type="submit" class=" btn btn-success btn-large pull-right">{% trans "Continue" %}</button>
+                          {{ form.username }}
+                      </div>
+                  </div>
+          </form>
+      </div>
     </div>
+</div>
 {% endblock %}

@@ -23,7 +23,7 @@ urlpatterns = patterns('',
 
     # 
     url(r'^how-it-works/$', TemplateView.as_view(template_name='public/how-it-works.html'), name='how-it-works'),
-    url(r'^our-services/$', TemplateView.as_view(template_name='public/our-services.html'), name='our-services'),
+    url(r'^for-lawyers/$', TemplateView.as_view(template_name='public/for-lawyers.html'), name='for-lawyers'),
 
     # Start
     url(r'^start/$', TemplateView.as_view(template_name='public/start.html'), name='start'),

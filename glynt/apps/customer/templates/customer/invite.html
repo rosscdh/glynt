@@ -1,37 +1,37 @@
 {% extends 'base.html' %}
 {% load invite_tags account_tags %}
 
-{% block page_title %}Customer - Invite other startup founders{% endblock %}
+{% block page_title %}Startups - Invite other startup founders{% endblock %}
 {% block bodyclass %}lawyer-form{% endblock %}
 
 {% block prebody %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/css/theme/lawyer-invite.css">
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/css/theme/social-buttons.css">
 <div id="hero">
-    <div class="container">
-        <!-- starts carousel -->
-        <div class="row animated">
-            <div class="span12">
-                <h1>
-                    Build your network
-                </h1>
-                <h2>
-                    LawPal has a powerful recommendation engine which uses your existing social networks to help you find a lawyer.
-                </h2>
-            </div>
-        </div>
-    </div>
+	<div class="container">
+		<!-- starts carousel -->
+		<div class="row animated">
+			<div class="span12">
+				<h1>
+					Build your network
+				</h1>
+				<h2>
+					LawPal has a powerful recommendation engine which uses your existing social networks to help you find a lawyer.
+				</h2>
+			</div>
+		</div>
+	</div>
 </div>
 <div class="">
-    <div class="container recommend">
-        <h2>
-            Recommend to others
-        </h2>
-        <p>
-            LawPal works through referral. Please recommend us to other startup founders to help us expand the network.
-        </p>
-        {% invite_to_lawpal invite_type='startup' %}
-    </div>
+	<div class="container recommend">
+		<h2>
+			Recommend to other Startup Customers
+		</h2>
+		<p>
+			LawPal works through referral. Please recommend us to other startup founders to help us expand the network.
+		</p>
+		{% invite_to_lawpal invite_type='startup' %}
+	</div>
 </div>
 
 {% endblock %}

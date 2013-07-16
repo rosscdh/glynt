@@ -11,7 +11,7 @@ from jsonfield import JSONField
 
 def _startup_upload_photo(instance, filename):
     _, ext = os.path.splitext(filename)
-    return 'startup/%s%s' % (instance.slug, ext)
+    return 'company/%s%s' % (instance.slug, ext)
 
 
 class Company(models.Model):
