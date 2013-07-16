@@ -93,7 +93,7 @@
         /**
         * Handle the Add cloned region event
         **/
-        $(document).on("region_clone_add", function( event ){
+        $(document).on("region_clone_add", function (event) {
 
             $.each(event.cloned_region.find('input'), function(i, item) {
                 form.parsley( 'addItem', item );
@@ -104,7 +104,7 @@
         /**
         * Handle the Remove cloned region event
         **/
-        $(document).on("region_clone_remove", function( event ){
+        $(document).on("region_clone_remove", function (event) {
 
             $.each(event.cloned_region.find('input'), function(i, item) {
                 form.parsley( 'removeItem', item );

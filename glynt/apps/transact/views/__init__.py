@@ -1,2 +1,2 @@
 # -*- coding: UTF-8 -*-
-from .builder import BuilderWizardView, SaveStepView
+from .builder import BuilderWizardView

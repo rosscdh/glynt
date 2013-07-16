@@ -1,6 +1,5 @@
 # -*- coding: UTF-8 -*-
 from django.contrib.formtools.wizard.views import NamedUrlSessionWizardView
-from django.views.generic import UpdateView
 from django.utils.datastructures import SortedDict
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -21,15 +20,6 @@ class BuilderWizardView(NamedUrlSessionWizardView):
     """ Transaction Builder that compiles sets of form steps into a wizard """
     template_name = 'transact/forms/builder.html'
     form_list = []
-    _step_data = Bunch({})
-
-    @property
-    def step_data(self):
-        return self._step_data
-
-    @step_data.setter
-    def step_data(self, value):
-        self._step_data = value
 
     def dispatch(self, request, *args, **kwargs):
         # Inject custom forms here as we need the request object
@@ -43,7 +33,6 @@ class BuilderWizardView(NamedUrlSessionWizardView):
         context.update({
             'page_title': context.get('form').page_title,
             'page_description': context.get('form').page_description,
-            'builder_data': self.step_data,
         })
         return context
 
@@ -69,6 +58,9 @@ class BuilderWizardView(NamedUrlSessionWizardView):
         self.form_list = SortedDict(form_list)
 
     def add_form_to_set(self, current_form_set, form_set):
+        """
+        Dynamically build the form_list set based on the selected transactions
+        """
         length_of_current_form_set = len(current_form_set.keys())
         for i, item in enumerate(form_set):
             # increment i + 1 as steps start at 1 not 0
@@ -79,8 +71,23 @@ class BuilderWizardView(NamedUrlSessionWizardView):
     def get_step_url(self, step):
         return reverse(self.url_name, kwargs={'tx_range': self.kwargs.get('tx_range', ''), 'step': step})
 
+    def get_form_kwargs(self, step=None):
+        kwargs = super(BuilderWizardView, self).get_form_kwargs(step=step)
+        kwargs.update({
+            'request': self.request
+        })
+        return kwargs
+
     def get_form_initial(self, step):
-        return self.initial_dict.get(step, {})
+        """
+        Populate the form from our data_bag class
+        """
+        initial = super(BuilderWizardView, self).get_form_initial(step=step)
+
+        data = self.form_list[step].get_data_bag(user=self.request.user)
+        initial.update(data.get_data_bag())
+
+        return initial
 
     def get_form_list(self):
         """
@@ -92,17 +99,3 @@ class BuilderWizardView(NamedUrlSessionWizardView):
 
     def done(self, form_list, **kwargs):
         return HttpResponseRedirect(reverse('dashboard:matching'))
-
-
-class SaveStepView(UpdateView):
-    def post(self, request, *args, **kwargs):
-        """
-        Handles POST requests, instantiating a form instance with the passed
-        POST variables and then checked for validity.
-        """
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        if form.is_valid():
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
