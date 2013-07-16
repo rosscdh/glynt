@@ -1,6 +1,6 @@
 {% extends 'base.html' %}{% load crispy_forms_tags company_tags transaction_tags %}
 
-{% block page_title %}{{ page_title|default:"Untitled Builder Step" }}{% endblock %}
+{% block page_title %}{% transpose_company_data page_title %}{% endblock %}
 
 {% block head %}
     {{ wizard.form.media }}
