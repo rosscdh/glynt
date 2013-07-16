@@ -1,5 +1,7 @@
 {% extends 'base.html' %}{% load crispy_forms_tags company_tags transaction_tags %}
 
+{% block page_title %}{{ page_title|default:"Untitled Builder Step" }}{% endblock %}
+
 {% block head %}
     {{ wizard.form.media }}
 {% endblock %}
@@ -9,8 +11,15 @@
 {% endblock %}
 
 
-{% block prebody %}
+{% block body %}
     <div class="container">
+        <div class="row">
+            <div class="col-lg-7">
+            {% for s in wizard.steps.all %}
+            <a href="{% url 'transact:builder' tx_range=tx_range step=s %}" class="btn btn-info">{{ s }}</a>
+            {% endfor %}
+            </div>
+        </div>
         <div class="row">
             <div class="col col-lg-5 col-offset-2">
                 {% if page_title %}<h2>{% transpose_company_data page_title %}</h2>{% endif %}
@@ -27,25 +36,76 @@
         <div class="container">
             <div class="row">
                 <div class="col col-lg-8 col-offset-2">
-                    <form id="" data-validate="parsley" action="" method="POST" class="form-horizontal">{% csrf_token %}
+
+                    <form id="builder-form" data-validate="parsley" action="." method="POST" class="form-horizontal">{% csrf_token %}
                         {{ wizard.management_form }}
+
                         {% if wizard.form.forms %}
                             {{ wizard.form.management_form }}
                             {% for form in wizard.form.forms %}
-                                {{ form|crispy }}
+                                {% crispy form form.helper %}
                             {% endfor %}
                         {% else %}
-                            {{ wizard.form|crispy }}
+                            {% if wizard.form.helper %}
+                                {% crispy wizard.form %}
+                            {% else %}
+                                {{ wizard.form }}
+                            {% endif %}
                         {% endif %}
-                        <div class="control-group">
-                            <div class="controls">
-                                <button type="submit" class="btn btn-success btn-large pull-right">Next</button>
-                            </div>
-                        </div>
+
+                        <button type="submit" class="btn btn-success btn-large pull-right">Next</button>
                     </form>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ STATIC_URL }}js/jquery.dateentry/jquery.dateentry.min.js"></script>
+    <script src="{{ STATIC_URL }}transact/js/jquery.plugin.region_clone.js"></script>
+    <script src="{{ STATIC_URL }}transact/js/jquery.plugin.show_when.js"></script>
+    <script>
+    $(document).ready(function(){
+        var form = $( 'form#builder-form' );
+        $('fieldset[data-region-clone]').region_clone();
+        $('[data-show-when]').show_when();
+
+        /**
+        * Date Elements
+        **/
+        $.each($('[data-date-picker]'), function (i, item) {
+            var defaultDate = $(item).attr('data-default-date') || null;
+            if (defaultDate !== null) {
+                defaultDate = (defaultDate.match( /(today|now)/ ) == -1) ? new Date(defaultDate) : new Date() ;
+            }
+
+            $(item).dateEntry({'defaultDate': defaultDate});
+        })
+
+        /**
+        * Handle the Add cloned region event
+        **/
+        $(document).on("region_clone_add", function (event) {
+
+            $.each(event.cloned_region.find('input'), function(i, item) {
+                form.parsley( 'addItem', item );
+            })
+            
+        });
+
+        /**
+        * Handle the Remove cloned region event
+        **/
+        $(document).on("region_clone_remove", function (event) {
+
+            $.each(event.cloned_region.find('input'), function(i, item) {
+                form.parsley( 'removeItem', item );
+            })
+
+        });
+    });
+    </script>
 {% endblock %}

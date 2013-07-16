@@ -5,9 +5,17 @@ from glynt.apps.transact.forms import CompanyProfileForm
 #     InitialDirectorsForm, GeneralCapitalizationForm, CustomersForm, StockPlansForm, AboutCompanyBusinessForm, \
 #     IntellectualPropertyForm, EmployeesConsultantsForm
 
-
 FORMS = [("company_profile", CompanyProfileForm), ]
 
+# """
+# STEP FORMS
+# ----------
+# format: (key, form, template, data_provider,)
+# key: the key used to describe the set
+# form: the form used to capture the data
+# template: a specific template, should be None by default
+# data_provider: a bunch/dict that provides data specific to this form
+# """
 # FORMS = [("basic_information", BasicInformationForm),
 #         ("corporate_agents", CorporateAgentsForm),
 #         ("initial_directors",InitialDirectorsForm),

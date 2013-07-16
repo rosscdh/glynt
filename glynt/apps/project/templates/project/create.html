@@ -43,7 +43,7 @@
             </div>
         </div>
 
-        <form method="POST">{% csrf_token %}
+        <form id="transaction-form" method="POST">{% csrf_token %}
             {{ form }}
         </form>
     </div>
@@ -80,7 +80,7 @@ function transaction_deselection(element) {
 function select_active_transactions() {
     var actives = $('#id_transaction_type').attr('value');
 
-    if (actives.length > 0) {
+    if (actives && actives.length > 0) {
         var split = actives.split(",");
 
         for (var i = 0; i < split.length; i++) {
@@ -107,7 +107,7 @@ $(document).ready(function () {
     $('#continue').on('click', function () {
         if (selected_transactions.length > 0) {
             $('#id_transaction_type').attr('value', selected_transactions);
-            $('form').submit();
+            $('form#transaction-form').submit();
         } else {
             $('#instructions').addClass('animated shake');
             window.setTimeout(function () {
