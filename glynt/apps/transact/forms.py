@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 from django import forms
+
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, HTML
 
@@ -7,6 +8,7 @@ from bootstrap.forms import BootstrapMixin
 
 from parsley.decorators import parsleyfy
 
+from glynt.apps.company.forms import CompanyProfileForm
 from glynt.apps.transact import BuilderBaseForm
 
 
@@ -19,6 +21,10 @@ class DummyBuilderForm(forms.Form):
 
 # WIZARD STEP ONE
 # Defined in projects app
+@parsleyfy
+class CompanyProfileForm(BuilderBaseForm, CompanyProfileForm):
+    page_title = 'Tell us about {{ name }}'
+    page_description = 'We need a bit more information from you before we can continue.'
 
 
 # WIZARD STEP TWO
