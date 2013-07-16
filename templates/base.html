@@ -25,7 +25,8 @@
 
 <body data-spy="scroll" data-target=".subnav" data-offset="50" class="{% block bodyclass %}{% endblock %}">
 
-<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 
 <div id="wrap">
 
@@ -61,10 +62,10 @@
     <script type="text/javascript" src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/parsleyjs/parsley.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/parsleyjs/parsley.extend.min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/moment/moment.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/sugar-1.3.9.min.js"></script>
 {% endcompress %}
 
+<script type="text/javascript" src="{{ STATIC_URL }}js/moment/moment.min.js"></script>
 {% moment_js %}
 
 {% block js %}{% endblock %}
