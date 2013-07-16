@@ -1,5 +1,4 @@
 .transaction-choice {
-    padding: 0.3em 0;
     margin-bottom:0em;
 }
 .transaction-choice:last {
@@ -15,7 +14,17 @@
     height: 2em;
     padding:0px 0px 0px 1px;
     text-align: center;
+    border:0px;
 }
+.transaction-choice .panel {
+    border:none;
+    -webkit-box-shadow:none;
+    box-shadow:none;
+}
+.transaction-choice .panel-heading {
+border:none;
+}
+
 .btn.active, .btn:active {
     box-shadow:none;
     -webkit-box-shadow:none;

@@ -1,0 +1,21 @@
+{% extends 'base_bsv3.html' %}{% load paginator glynt_helpers %}
+
+{% block page_title %}Shareholders Agreement — Incorporation{% endblock %}
+{% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>{% endblock %}
+
+{% block body %}
+<div class="container item-view">
+    <div class="page-header">
+        <button type="button" class="btn btn-success btn-large pull-right">Review complete</button>
+        <span class="text-muted">Incorporation</span>
+        <h2>Shareholders Agreement</h2>
+    </div>
+    <div class="row">
+        <div class="col col-lg-12">
+            <div class="document well">
+                <iframe frameborder="0" height="600" width="100%" src="https://crocodoc.com/view/S-6AMNOUxS5mBsNhdSdKwk8535PGk6zbPJbtOGXDGcXKZpo1bM_dSFxMTj84cbhctT8pN24KQJ3ZBskJa48DQy69ZgaApQZn--UwOgZ-7Ik4Wb_6z_pDEPIhENBxoXFJ46SHIUtekSyewIz4wWnQY_ct2tpR17183ClWGd8xJ7fvFFjkGdq8EMuLQgIgvyNEmJQoL5MPj8IR_DpyVZo"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
