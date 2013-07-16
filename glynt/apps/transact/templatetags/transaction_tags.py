@@ -19,3 +19,16 @@ def transactions(context, transaction):
         'transactions': transaction
     })
     return context
+
+
+@register.simple_tag(takes_context=True)
+def transpose_company_data(context, value):
+    user = context.get('user')
+    if user:
+        try:
+            company = user.companies.all()[0]
+        except IndexError:
+            company = None
+    t = template.Template(value)
+    c = template.Context(company.__dict__)
+    return t.render(c)
