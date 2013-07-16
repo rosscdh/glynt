@@ -1,4 +1,4 @@
-{% extends 'base_bsv3.html' %}{% load paginator glynt_helpers %}
+{% extends 'base.html' %}{% load url from future %}{% load glynt_helpers %}
 
 {% block page_title %}Dashboard{% endblock %}
 {% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:overview' %}">Dashboard</a></li>{% endblock %}
