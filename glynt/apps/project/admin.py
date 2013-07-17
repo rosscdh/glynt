@@ -5,12 +5,12 @@ from glynt.apps.project.models import Project
 
 
 class ProjectAdmin(admin.ModelAdmin):
-    list_filter = ['project_status']
-    list_display = ('__unicode__', 'date_created' ,'slug')
-    search_fields = ('startup', 'customer', 'lawyer')
+    list_filter = ['status', 'transactions']
+    list_display = ('__unicode__', 'date_created', 'date_modified')
+    search_fields = ('company', 'customer', 'lawyers', 'transactions')
 
     def queryset (self, request):
-        qs = Project.objects.select_related('startup', 'customer', 'customer__user', 'lawyer', 'lawyer__user').all()
+        qs = Project.objects.select_related('company', 'customer', 'customer__user').all()
         ordering = self.get_ordering(request)
         if ordering:
             qs = qs.order_by(*ordering)
