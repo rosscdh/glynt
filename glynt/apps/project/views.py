@@ -35,7 +35,7 @@ class CreateProjectView(FormView):
             self.success_url = reverse('project:create')
 
         intake = EnsureUserHasCompletedIntakeProcess(user=self.request.user)
-        if intake.complete() is False:
+        if intake.is_complete() is False:
             if u'INTAKE' not in transaction_type:
                 transaction_type.insert(0, u'INTAKE')
 

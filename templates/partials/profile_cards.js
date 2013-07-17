@@ -1,91 +1,5 @@
-{% load templatetag_handlebars %}
 
-{% tplhandlebars "tpl-profile-mini" %}
-<img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - {{#if profile.is_lawyer }}Lawyer{{/if}}{{#if profile.is_customer }}Customer{{/if}}" />
-{% endtplhandlebars %}
-
-{% tplhandlebars "tpl-unknown-profile" %}
-        <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }}" />
-        <h3>{{ profile.name }}</h3>
-{% endtplhandlebars %}
-
-{% tplhandlebars "tpl-startup-profile" %}
-        <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Startup" />
-        <h5>{{ profile.name }}<br/><small>Startup</small></h5>
-        <dl>
-            <dt>Website</dt>
-            <dd><a href="{{ profile.website }}" target="_blank">{{ profile.website }} <i class="icon-share"></i></a></dd>
-            <dt>Summary</dt>
-            <dd>
-                {{ profile.summary }}
-            </dd>
-            <dt>
-                {{#if profile.already_incorporated }}Are already Incorporated{{ else }}Are not yet Incorporated{{/if}}
-            </dt>
-            
-            <dt>
-                {{#if profile.already_raised_capital }}Have already raised capital{{ else }}Have not yet raised capital{{/if}}
-            </dt>
-            <dt>
-                {{#if profile.process_raising_capital }}Are in the process of raising capital{{ else }}Are not yet trying to raising capital{{/if}}
-            </dt>
-            <dt>
-                {{#if profile.incubator_or_accelerator_name }}{{ profile.incubator_or_accelerator_name }}{{ else }} Are not part of an incubator or accelerator{{/if}}
-            </dt>
-            
-            {{#each profile.locations }}
-                {{this}}
-            {{/each}}
-
-            </dd>
-        </dl>
-{% endtplhandlebars %}
-
-{% tplhandlebars "tpl-lawyer-profile" %}
-
-    <a href="{{ profile.profile_url }}"><img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Lawyer" /></a>
-    <h5>{{ profile.name }}<br/><small>{{ profile.position }} at {{ profile.firm }}</small></h5>
-    <dl>
-        <dt>Summary</dt>
-        <dd>
-            {{ profile.summary }}
-        </dd>
-        {{#if profile.locations }}
-        <dt>Locations</dt>
-        <dd>
-        {{/if}}
-        {{#each profile.locations }}
-            {{this}}
-        {{/each}}
-        </dd>
-        {{#if profile.twitter }}
-        <dt>Twitter</dt>
-        <dd><a href="http://twitter.com/{{ profile.twitter }}"><i class="icon-twitter"></i>{{ profile.twitter }}</a></dd>
-        {{/if}}
-    </dl>
-    <p class="text-center"><a href="{{ profile.profile_url }}" class="btn btn-primary">View full profile</a></p>
-{% endtplhandlebars %}
-
-{% tplhandlebars "tpl-founder-profile" %}
-    <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Customer" />
-    <h5>{{ profile.name }}<br/><small>founder</small></h5>
-    <dl>
-        {{#if profile.phone }}
-        <dt>Phone</dt>
-        <dd>{{profile.phone}}</dd>
-        {{/if}}
-        <dt>Startups</dt>
-        {{#each profile.startups }}
-        <dd>
-            {{ name }}
-        </dd>
-        {{/each}}
-    </dl>
-{% endtplhandlebars %}
-
-<script type="text/javascript">
-
-var GlyntProfileCards = {
+var ProfileCards = {
     debug: {% if DEBUG %}true{% else %}false{% endif %}
     ,profile_api_url: '/api/v1/user/profile/?username__in={username_list}'
     ,selector: '.profile-card'
@@ -95,10 +9,11 @@ var GlyntProfileCards = {
     ,usernames: []
     ,templates: {
         'mini': Handlebars.compile($('script#tpl-profile-mini').html())
+        ,'small': Handlebars.compile($('script#tpl-small').html())
         ,'startup': Handlebars.compile($('script#tpl-startup-profile').html())
         ,'customer': Handlebars.compile($('script#tpl-founder-profile').html())
         ,'lawyer': Handlebars.compile($('script#tpl-lawyer-profile').html())
-        ,'unknown': Handlebars.compile($('script#tpl-unknown-profile').html())
+        ,'unknown': Handlebars.compile($('script#tpl-small').html())
     }
     ,log: function log(msg){
         var self = this;
@@ -111,7 +26,8 @@ var GlyntProfileCards = {
         var profile_html = null;
         var extra_context = self.extra_context || {}
 
-        $.each(self.profile_params[profile.username], function(i,params){
+        $.each(self.profile_params[profile.username], function(i, params){
+            console.log(params)
             var template = params.template || 'default';
 
             // add the profile to the context NB necessary as this is where the display variables are kept
@@ -277,13 +193,14 @@ var GlyntProfileCards = {
     ,parse_element: function parse_element(item) {
         var self = this;
         var elem = $(item);
-
+        var data = elem.data();
         // add the user details profile
+
         self.store_username_and_profile({
-            'username': elem.attr('data-username')
-            ,'action': elem.attr('data-action') || 'inject'
-            ,'template': elem.attr('data-template') || 'default'
-            ,'target': elem.attr('data-target') || elem // if target specified make jquery object and use other use simply user the current element
+            'username': data.username
+            ,'action': data.action || 'inject'
+            ,'template': data.template || 'default'
+            ,'target': data.target || elem // if target specified make jquery object and use other use simply user the current element
         });
     }
     ,listen: function listen() {
@@ -314,16 +231,17 @@ var GlyntProfileCards = {
     }
 }
 
-var GlyntStartupProfileCards = $.extend({}, GlyntProfileCards, {
+var StartupProfileCards = $.extend(true, {}, ProfileCards, {
     profile_api_url: '/api/v1/startup/profile/?slug__in={username_list}'
     ,selector: '.startup-profile-card'
 })
 
+
 $(document).ready(function(){
-    var gpc = GlyntProfileCards;
+    var gpc = ProfileCards;
     gpc.init();
     //
-    var gspc = GlyntStartupProfileCards;
+    var gspc = StartupProfileCards;
     gspc.init();
 });
-</script>
+

@@ -1,4 +1,6 @@
 # -*- coding: UTF-8 -*-
+from django.contrib import messages
+from django.utils.translation import ugettext_lazy as _
 from django.contrib.formtools.wizard.views import NamedUrlSessionWizardView
 from django.utils.datastructures import SortedDict
 from django.http import HttpResponseRedirect
@@ -22,9 +24,15 @@ class BuilderWizardView(NamedUrlSessionWizardView):
     form_list = []
 
     def dispatch(self, request, *args, **kwargs):
+        """
+        If we have no forms defined then redirect to done
+        """
         # Inject custom forms here as we need the request object
         self.custom_forms()
-        return super(BuilderWizardView, self).dispatch(request, *args, **kwargs)
+        if len(self.form_list) > 0:
+            return super(BuilderWizardView, self).dispatch(request, *args, **kwargs)
+        else:
+            return self.done(form_list=[])
 
     def get_context_data(self, form, **kwargs):
         """ @BUSINESRULE set the page_title and page_description from the form class vars
@@ -98,4 +106,6 @@ class BuilderWizardView(NamedUrlSessionWizardView):
         return form_list
 
     def done(self, form_list, **kwargs):
+        msg = _('Ok, You have created a new Project. Please read the instructions that follow.')
+        messages.info(self.request, msg)
         return HttpResponseRedirect(reverse('dashboard:matching'))

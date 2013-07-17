@@ -21,11 +21,12 @@ class ConfirmLoginDetailsForm(ModelFormChangePasswordMixin, forms.ModelForm):
     """ Form shown to the use after logging in, assists in capturing the correct email
     and setting a user password
     """
-    first_name = forms.CharField(max_length=24, widget=forms.TextInput(attrs={'placeholder': 'John'}))
-    last_name = forms.CharField(max_length=24, widget=forms.TextInput(attrs={'placeholder': 'Doemann'}))
-    company = forms.CharField(label="Company Name", help_text='', widget=forms.TextInput(attrs={'placeholder': 'Acme Inc'}))
-    email = forms.EmailField(widget=forms.TextInput(attrs={'placeholder': 'john.doemann@example.com'}))
-    agree_tandc = forms.BooleanField(label='I agree to the Terms &amp; Conditions', help_text='', widget=forms.CheckboxInput(attrs={}))
+    first_name = forms.CharField(max_length=24, widget=forms.TextInput(attrs={'tabindex': '1', 'placeholder': 'John'}))
+    last_name = forms.CharField(max_length=24, widget=forms.TextInput(attrs={'tabindex': '2', 'placeholder': 'Doemann'}))
+    company = forms.CharField(label="Company", help_text='', widget=forms.TextInput(attrs={'tabindex': '3', 'placeholder': 'Acme Inc'}))
+    email = forms.EmailField(widget=forms.TextInput(attrs={'tabindex': '4', 'placeholder': 'john.doemann@example.com'}))
+    telephone = forms.CharField(label="Phone number", widget=forms.TextInput(attrs={'tabindex': '5', 'data-type': 'phone', 'autocomplete': 'off'}))
+    agree_tandc = forms.BooleanField(label='I agree to the Terms &amp; Conditions', help_text='')
 
     class Meta:
         model = User
