@@ -1,0 +1,76 @@
+{% load templatetag_handlebars %}
+
+{% tplhandlebars "tpl-profile-mini" %}
+<img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - {{#if profile.is_lawyer }}Lawyer{{/if}}{{#if profile.is_customer }}Customer{{/if}}" />
+{% endtplhandlebars %}
+
+{% tplhandlebars "tpl-small" %}
+        <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }}" />
+        <strong>{{ profile.name }}</strong>
+{% endtplhandlebars %}
+
+{% tplhandlebars "tpl-startup-profile" %}
+        <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Startup" />
+        <h5>{{ profile.name }}<br/><small>Startup</small></h5>
+        <dl>
+            <dt>Website</dt>
+            <dd><a href="{{ profile.website }}" target="_blank">{{ profile.website }} <i class="icon-share"></i></a></dd>
+            <dt>Summary</dt>
+            <dd>
+                {{ profile.summary }}
+            </dd>
+            <dt>
+                {{#if profile.already_incorporated }}Are already Incorporated{{ else }}Are not yet Incorporated{{/if}}
+            </dt>
+            
+            <dt>
+                {{#if profile.already_raised_capital }}Have already raised capital{{ else }}Have not yet raised capital{{/if}}
+            </dt>
+            <dt>
+                {{#if profile.process_raising_capital }}Are in the process of raising capital{{ else }}Are not yet trying to raising capital{{/if}}
+            </dt>
+            <dt>
+                {{#if profile.incubator_or_accelerator_name }}{{ profile.incubator_or_accelerator_name }}{{ else }} Are not part of an incubator or accelerator{{/if}}
+            </dt>
+            
+            {{#each profile.practice_locations }}
+                {{this}}
+            {{/each}}
+
+            </dd>
+        </dl>
+{% endtplhandlebars %}
+
+{% tplhandlebars "tpl-lawyer-profile" %}
+
+    <a href="{{ profile.profile_url }}"><img class="avatar" src="{{ profile.profile_photo }}" width="120" height="120" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Lawyer" /></a>
+    <div class="span6">
+    <h2>{{ profile.name }}</h2>
+    {{#if profile.firm }}<p>{{ profile.position }} at {{ profile.firm }}</p>{{/if}}
+    {{#each profile.practice_locations }}
+        <p><i class="glyphicon glyphicon-map-marker"></i> {{this}}</p>
+    {{/each}}
+    {{#if profile.twitter }}
+        <p><a href="http://twitter.com/{{ profile.twitter }}"><i class="icon-twitter"></i>{{ profile.twitter }}</a></p>
+    {{/if}}
+    <p><a href="{{ profile.profile_url }}" class="btn btn-small btn-primary">Full profile</a></p>
+    </div>
+
+{% endtplhandlebars %}
+
+{% tplhandlebars "tpl-founder-profile" %}
+    <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Customer" />
+    <h5>{{ profile.name }}<br/><small>founder</small></h5>
+    <dl>
+        {{#if profile.phone }}
+        <dt>Phone</dt>
+        <dd>{{profile.phone}}</dd>
+        {{/if}}
+        <dt>Startups</dt>
+        {{#each profile.startups }}
+        <dd>
+            {{ name }}
+        </dd>
+        {{/each}}
+    </dl>
+{% endtplhandlebars %}

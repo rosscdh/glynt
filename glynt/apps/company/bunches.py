@@ -1,8 +1,37 @@
 # -*- coding: utf-8 -*-
 from bunch import Bunch
 
+from glynt.apps.company.services import EnsureCompanyService
+
 import logging
 logger = logging.getLogger('lawpal.services')
+
+
+class UserIntakeCompanyBunch(Bunch):
+    """
+    Bunch used to process intake form company data
+    """
+    def __init__(self, user, **kwargs):
+        self.user = user
+
+    def company(self):
+        try:
+            company = self.user.companies.all()[0]
+        except IndexError:
+            logger.error('Company not found for UserIntakeCompanyBunch user: "%s"' % (self.user,)) 
+            company = None
+
+        return company
+
+    def get_data_bag(self):
+        company = self.company()
+        return company.data if company else {}
+
+    def save(self, **kwargs):
+        company = self.company()
+        if company:
+            company_service = EnsureCompanyService(name=company.name, customer=self.user.customer_profile, **kwargs)
+            company_service.process()
 
 
 class CompanyProfileBunch(Bunch):

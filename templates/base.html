@@ -1,4 +1,4 @@
-{% load i18n templatetag_handlebars glynt_helpers thumbnail compress %}{% load url from future %}
+{% load i18n templatetag_handlebars glynt_helpers thumbnail compress glynt_helpers %}{% load url from future %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,6 +12,14 @@
         <link href="{{ STATIC_URL }}bootstrap_v3/css/bootstrap.css" rel="stylesheet">
 
         {% block css %}{% endblock %}
+
+        {% if PROJECT_ENVIRONMENT == 'dev' %}
+        <style>
+        .border {
+            border:solid #c00 1px;
+        }
+        </style>
+        {% endif %}
 
         {% block extrahead %}{% endblock %}
 
@@ -56,6 +64,7 @@
     {% include 'partials/footer.html' %}
 {% endblock %}
 
+{% profile_card_templates %}
 
 {% compress js %}
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.cookie.js"></script>
@@ -63,6 +72,9 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/parsleyjs/parsley.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/parsleyjs/parsley.extend.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/sugar-1.3.9.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}handlebars.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}handlebars-helpers.js"></script>
+    <script type="text/javascript">{% profile_card_js %}</script>
 {% endcompress %}
 
 <script type="text/javascript" src="{{ STATIC_URL }}js/moment/moment.min.js"></script>
