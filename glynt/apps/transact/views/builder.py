@@ -1,4 +1,6 @@
 # -*- coding: UTF-8 -*-
+from django.contrib import messages
+from django.utils.translation import ugettext_lazy as _
 from django.contrib.formtools.wizard.views import NamedUrlSessionWizardView
 from django.utils.datastructures import SortedDict
 from django.http import HttpResponseRedirect
@@ -98,4 +100,6 @@ class BuilderWizardView(NamedUrlSessionWizardView):
         return form_list
 
     def done(self, form_list, **kwargs):
+        msg = _('Ok, You have created a new Project. Please read the instructions that follow.')
+        messages.info(self.request, msg)
         return HttpResponseRedirect(reverse('dashboard:matching'))
