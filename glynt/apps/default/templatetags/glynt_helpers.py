@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.contrib.sites.models import Site
+from django.core.urlresolvers import reverse
 from django import template
 
-import hmac, hashlib
+import hmac
+import hashlib
 import time
 
 register = template.Library()
@@ -52,30 +54,26 @@ colorize_acronym.is_safe = True
 
 @register.inclusion_tag('document/partials/document_status.html')
 def document_status(document):
-  status = None
-  if document.num_signed == 0 and document.num_invited == 0:
-    status = 'no_invites'
-  elif document.num_invited in [0,None,'']:
-    status = 'no_invites'
-  elif document.num_signed == document.num_invited:
-    status = 'signed'
-  elif document.num_signed != document.num_invited:
-    status = 'out'
+    status = None
+    if document.num_signed == 0 and document.num_invited == 0:
+        status = 'no_invites'
+    elif document.num_invited in [0, None, '']:
+        status = 'no_invites'
+    elif document.num_signed == document.num_invited:
+        status = 'signed'
+    elif document.num_signed != document.num_invited:
+        status = 'out'
 
-  return {
-    'status': status,
-    'num_invited': document.num_invited,
-    'num_signed': document.num_signed,
-    'meta': document.meta_data,
-  }
+    return {'status': status,
+        'num_invited': document.num_invited,
+        'num_signed': document.num_signed,
+        'meta': document.meta_data}
 
 
 @register.inclusion_tag('moment/moment.js')
 def moment_js(selector=None):
-  selector = '[data-humanize-date]' if selector is None else selector
-  return {
-    'selector': selector
-  }
+    selector = '[data-humanize-date]' if selector is None else selector
+    return {'selector': selector}
 
 
 @register.inclusion_tag('moment/moment.html')
@@ -98,10 +96,8 @@ def moment(date_object, default_date=None):
 
 @register.inclusion_tag('comments/form.html')
 def comment_form(form, next):
-    return {
-      'form': form,
-      'next': next
-    }
+    return {'form': form,
+        'next': next}
 
 
 @register.filter
@@ -183,7 +179,7 @@ write_message_form.is_safe = True
 def handlebars_messages(context, **kwargs):
     output_target = kwargs.get('output_target', None)
     target_in_before_after = kwargs.get('target_in_before_after', None)
-    
+
     context.update({
         'output_target': output_target if output_target else 'div.navbar.navbar-fixed-top:first',
         'target_in_before_after': target_in_before_after if target_in_before_after else 'after'
@@ -191,14 +187,26 @@ def handlebars_messages(context, **kwargs):
     return context
 handlebars_messages.is_safe = True
 
-@register.inclusion_tag('partials/profile_cards.js', takes_context=True)
-def profile_cards(context, **kwargs):
+
+@register.inclusion_tag('partials/profile_card_templates.html', takes_context=True)
+def profile_card_templates(context, **kwargs):
     kwargs.update({
         'DEBUG': settings.DEBUG
     })
     context.update(kwargs)
     return context
-profile_cards.is_safe = True
+profile_card_templates.is_safe = True
+
+
+@register.inclusion_tag('partials/profile_cards.js', takes_context=False)
+def profile_card_js(**kwargs):
+    context = {}
+    kwargs.update({
+        'DEBUG': settings.DEBUG
+    })
+    context.update(kwargs)
+    return context
+profile_card_js.is_safe = True
 
 
 @register.inclusion_tag('comments/comments.js')
