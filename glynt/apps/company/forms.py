@@ -1,7 +1,10 @@
 # -*- coding: UTF-8 -*-
 from django import forms
 from django.utils.translation import ugettext_lazy as _
+
+from glynt.apps.transact import BuilderBaseForm
 from glynt.apps.utils import get_namedtuple_choices
+
 
 COMPANY_STATUS_CHOICES = get_namedtuple_choices('COMPANY_STATUS_CHOICES', (
                             (1, 'pre_funding', 'Pre-funding'),
@@ -19,7 +22,7 @@ class CompanyProfileIsCompleteValidator(forms.Form):
     startup_name = forms.CharField(required=True)
 
 
-class CompanyProfileForm(forms.Form):
+class CompanyProfileForm(BuilderBaseForm):
     """
     The Company Setup Form
     """
@@ -27,7 +30,7 @@ class CompanyProfileForm(forms.Form):
     current_status = forms.ChoiceField(label=_('Current funding status'), choices=COMPANY_STATUS_CHOICES.get_choices(), initial=COMPANY_STATUS_CHOICES.pre_funding, widget=forms.RadioSelect)
     profile_website = forms.URLField(label=_('Website or other profile'), help_text="", widget=forms.TextInput(attrs={'data-type': 'url', 'placeholder': 'http://angel.co/lawpal'}))
     description = forms.CharField(label=_('Short description of startup'), required=False, help_text="Skip this if you have entered a website or AngelList profile")
-    has_option_plan = forms.BooleanField(label=_('Do you have a stock option plan already in place?'), help_text="", initial=False)
+    has_option_plan = forms.BooleanField(label=_('Do you have a stock option plan already in place?'), help_text="", required=False, initial=False)
     target_states_and_countries = forms.CharField(label=_('States and countries where you will do business'), initial="California", help_text="Separate with a comma", widget=forms.TextInput(attrs={'placeholder': 'California'}))
     num_officers = forms.CharField(label=_('Initial number of directors and officers'), initial=0, widget=forms.TextInput(attrs={'data-type': 'number', 'class': 'input-smaller'}))
     num_employees = forms.CharField(label=_('How many employees do you currently have?'), initial=0, widget=forms.TextInput(attrs={'data-type': 'number', 'class': 'input-smaller'}))

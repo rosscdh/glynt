@@ -22,10 +22,10 @@ class DummyBuilderForm(forms.Form):
 # WIZARD STEP ONE
 # Defined in projects app
 @parsleyfy
-class CompanyProfileForm(BuilderBaseForm, CompanyProfileForm):
+class CompanyProfileForm(CompanyProfileForm):
     page_title = 'Tell us about {{ name }}'
     page_description = 'We need a bit more information from you before we can continue.'
-    data_bag = 'glynt.apps.client.bunches.UserCompanyBunch'
+    data_bag = 'glynt.apps.company.bunches.UserIntakeCompanyBunch'
 
 
 # WIZARD STEP TWO
