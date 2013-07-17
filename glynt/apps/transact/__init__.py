@@ -23,11 +23,13 @@ class BuilderBaseForm(forms.Form):
     that need to be defined in the form to allow us to modify the templates
     based on the form being viewed """
     def __init__(self, *args, **kwargs):
-        if hasattr(self, 'helper'):
-        	self.helper.form_tag = kwargs.get('use_crispy_form_tag', False)
+        if not hasattr(self, 'helper'):
+            self.helper = FormHelper()
+        # remove the double form creation
+        self.helper.form_tag = kwargs.get('use_crispy_form_tag', False)
 
-        self.request = kwargs.pop('request')
-        self.user = self.request.user if hasattr(self.request, 'user') else None
+        self.request = kwargs.pop('request', None)
+        self.user = self.request.user if self.request and hasattr(self.request, 'user') else None
 
         super(BuilderBaseForm, self).__init__(*args, **kwargs)
 
@@ -48,15 +50,16 @@ class BuilderBaseForm(forms.Form):
         data_bag_klass = import_module_class(self.data_bag)
         return data_bag_klass(**kwargs)
 
-
-    def is_valid(self, *args, **kwargs):
-        """
-        Call our custom save method
-        """
-        is_valid = super(BuilderBaseForm, self).is_valid(*args, **kwargs)
-        if is_valid:
-            self.save()
-        return is_valid
+    # def is_valid(self, *args, **kwargs):
+    #     """
+    #     Call our custom save method
+    #     this is not really great as calling save is assumed here, which is not natural behaviour
+    #     is_valid should only return if its valid or not. Need to find a better way
+    #     """
+    #     is_valid = super(BuilderBaseForm, self).is_valid(*args, **kwargs)
+    #     if is_valid:
+    #         self.save()
+    #     return is_valid
 
 
     def save(self, *args, **kwargs):

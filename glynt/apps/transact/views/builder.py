@@ -24,9 +24,15 @@ class BuilderWizardView(NamedUrlSessionWizardView):
     form_list = []
 
     def dispatch(self, request, *args, **kwargs):
+        """
+        If we have no forms defined then redirect to done
+        """
         # Inject custom forms here as we need the request object
         self.custom_forms()
-        return super(BuilderWizardView, self).dispatch(request, *args, **kwargs)
+        if len(self.form_list) > 0:
+            return super(BuilderWizardView, self).dispatch(request, *args, **kwargs)
+        else:
+            return self.done(form_list=[])
 
     def get_context_data(self, form, **kwargs):
         """ @BUSINESRULE set the page_title and page_description from the form class vars
