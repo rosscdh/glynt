@@ -202,30 +202,6 @@ table.stories {
   }
 }
 
-.empty {
-  .empty-message {
-    margin: 130px auto;
-    position: relative;
-    width: 490px;
-  }
-  .empty-message::after {
-    background: @brand-success;
-    .border-radius(10px);
-    color: #ffffff;
-    content: "\e022";
-    display: block;
-    font-family: 'Glyphicons Halflings';
-    font-size: 30px;
-    height: 54px;
-    left: -70px;
-    line-height: 52px;
-    position: absolute;
-    text-align: center;
-    top: 0;
-    width: 54px;
-  }
-}
-
 .document {
   text-align: center;
   iframe {
@@ -255,4 +231,41 @@ table.lawyer-list {
   border-left: 5px solid @brand-warning;
   margin: 20px 0;
   padding: 15px 30px 15px 15px;
+}
+
+.empty {
+  .empty-message {
+    margin: 0 auto;
+    position: relative;
+    width: percentage((6 / @grid-columns));
+  }
+  .empty-message::after {
+    .border-radius(10px);
+    display: block;
+    font-family: 'Glyphicons Halflings';
+    font-size: 30px;
+    height: 54px;
+    left: -70px;
+    line-height: 52px;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 54px;
+  }
+  .empty-message-document::after {
+    background: @brand-success;
+    color: #ffffff;
+    content: "\e022";
+  }
+  .empty-message-time::after {
+    background: @brand-warning;
+    color: #ffffff;
+    content: "\e023";
+  }
+}
+
+.well.empty {
+  .empty-message {
+    margin: 130px auto;
+  }
 }
