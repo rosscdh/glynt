@@ -23,7 +23,6 @@ class CompanyProfileForm(forms.Form):
     """
     The Company Setup Form
     """
-    # has_incubator = forms.BooleanField(label=_('We are part of an incubator/accelerator'), required=False, initial=False)
     incubator = forms.CharField(label=_('Name of incubator or accelerator (if applicable)'), required=False, help_text="If you are currently particpating in an accelerator please enter it here.")
     current_status = forms.ChoiceField(label=_('Current funding status'), choices=COMPANY_STATUS_CHOICES.get_choices(), initial=COMPANY_STATUS_CHOICES.pre_funding, widget=forms.RadioSelect)
     profile_website = forms.URLField(label=_('Website or other profile'), help_text="", widget=forms.TextInput(attrs={'data-type': 'url', 'placeholder': 'http://angel.co/lawpal'}))
