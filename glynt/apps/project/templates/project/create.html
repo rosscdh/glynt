@@ -108,7 +108,7 @@ $(document).ready(function () {
 
     select_active_transactions();
 
-    $('.transaction-choice .btn').bind('click', function () {
+    $('.transaction-choice .btn').on('click', function () {
         var elm = $(this);
         if (!$(this).hasClass('active')) {
             // Check if Note financing and disable Equity financing if true (and visa versa)
@@ -118,7 +118,7 @@ $(document).ready(function () {
         }
     });
 
-    $('#continue').click(function () {
+    $('#continue').on('click', function () {
         if (selected_transactions.length > 0) {
             $('#id_transaction_type').attr('value', selected_transactions);
             $('form#transaction-form').submit();

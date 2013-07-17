@@ -11,7 +11,7 @@ form {
 }
 .form-wrap {
   background-color: lighten(@gray-lighter, 5%);
-  padding:40px 0px;
+  padding:20px 0px;
 }
 fieldset {
   padding: 0;
@@ -33,7 +33,11 @@ legend {
 
 label {
   display: inline-block;
-  margin-bottom: 5px;
+  margin-bottom: 3px;
+  margin-top: 5px;
+  font-weight:bold;
+  font-size: @font-size-base;
+  color:lighten(@gray, 10%);
 }
 
 // Form controls
@@ -59,13 +63,12 @@ input[type="color"] {
   display: block;
   min-height: @input-height-base; // Make inputs at least the height of their button counterpart (base line-height + padding + border)
   padding: @padding-base-vertical @padding-base-horizontal;
-  font-size: @font-size-base * 1.2;
+  font-size: @font-size-base;
   line-height: @line-height-base;
   color: @gray;
   vertical-align: middle;
   background-color: @input-bg;
-  border: 1px solid @gray-lighter;
-  border-radius: 2px;
+  border: 1px solid lighten(@gray-light, 10%);
   .transition(~"border-color ease-in-out .15s, box-shadow ease-in-out .15s");
 
   &:focus {
@@ -85,12 +88,16 @@ input[type="color"] {
   }
 }
 
+.control-group{
+}
+
 // Reset appearance properties for textual inputs and textarea
 // Can't be on input[type=*] selectors or it's too specific
 input,
 select,
 textarea {
   width: 100%;
+  max-width:400px;
 }
 
 // Reset width of input images, buttons, radios, checkboxes
@@ -117,7 +124,7 @@ textarea {
 // Position radios and checkboxes better
 input[type="radio"],
 input[type="checkbox"] {
-  margin: 4px 0 0;
+  margin: 3px 0 0 2px;
   margin-top: 1px \9; /* IE8-9 */
   line-height: normal;
 }
@@ -168,8 +175,8 @@ textarea {
 .checkbox {
   display: block;
   min-height: @line-height-computed; // clear the floating input if there is no label text
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 6px;
+  margin-bottom: 5px;
   padding-left: 20px;
   vertical-align: middle;
   label {
@@ -188,8 +195,14 @@ textarea {
   margin-left: -20px;
 }
 .radio + .radio,
-.checkbox + .checkbox {
-  margin-top: -5px; // Move up sibling radios or checkboxes for tighter spacing
+.checkbox + .checkbox,
+.control-group .controls .checkbox  + .control-group .controls .checkbox {
+  margin-top: -3px; // Move up sibling radios or checkboxes for tighter spacing
+}
+
+label.checkbox, label.radio {
+  font-weight:normal;
+  padding-top:2px;
 }
 
 /*
@@ -243,14 +256,22 @@ input[type="color"] {
     padding: @padding-large-vertical @padding-large-horizontal;
     font-size: @font-size-large;
     border-radius: @border-radius-large;
+    max-width: 180px;
   }
   &.input-small {
     min-height: @input-height-small;
     padding: @padding-small-vertical @padding-small-horizontal;
     font-size: @font-size-small;
     border-radius: @border-radius-small;
+    max-width: 180px;
   }
+   &.input-smaller {
+      max-width:100px;
+    }
 }
+ 
+
+
 
 
 
@@ -294,9 +315,10 @@ input.parsley-error, textarea.parsley-error, input.parsley-error:focus, textarea
 
 .help-block {
   display: block; // account for any element using help-block
-  margin-top: 5px;
+  margin-top: 2px;
   margin-bottom: 10px;
-  color: lighten(@text-color, 25%); // lighten the text some for contrast
+  color: lighten(@text-color, 40%); // lighten the text some for contrast
+  font-size: @font-size-base * 0.9;
 }
 
 
@@ -432,22 +454,17 @@ input.parsley-error, textarea.parsley-error, input.parsley-error:focus, textarea
 // --------------------------------------------------
 // Horizontal forms are built on grid classes.
 
-.form-horizontal {
+
   .row + .row {
     margin-top: 15px;
   }
-  .control-label {
-    padding-top: 10px;
+  .control-group {
+    margin-top: 15px;
+    min-height:20px;
   }
-}
-.form-horizontal .col .col {
-  padding-right:4px;
-  padding-left: 4px;
-}
-.form-horizontal .col .col input {
-  max-width:95%;
-}
-
+  .label {
+    margin-top:0px;
+  }
 // Only right aline form labels here when the columns stop stacking
 @media (min-width: 992px) {
   .form-horizontal .control-label {

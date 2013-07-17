@@ -2,6 +2,9 @@
 from django.conf import settings
 from glynt.apps.graph.models import FullContactData
 
+from glynt.apps.company.bunches import UserIntakeCompanyBunch
+from glynt.apps.company.forms import CompanyProfileForm
+
 import logging
 logger = logging.getLogger('lawpal.services')
 
@@ -17,11 +20,14 @@ class EnsureUserHasCompletedIntakeProcess(object):
         self.profile = self.user.profile
         self.process()
 
-    def complete(self):
+    def is_complete(self):
         return self.has_completed_intake
 
     def process(self):
-        pass
+        bunch = UserIntakeCompanyBunch(user=self.user)
+        form = CompanyProfileForm(bunch.get_data_bag())
+        self.has_completed_intake = form.is_valid()
+        return self.has_completed_intake
 
     
 

@@ -33,7 +33,7 @@ class Firm(models.Model):
 
     @property
     def num_offices(self):
-        return self.office_set.count()
+        return 0 #self.office_set.count()
 
     @property
     def primary_office(self):
