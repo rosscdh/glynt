@@ -15,12 +15,12 @@
 	<div class="container container-main">
 		<!-- starts carousel -->
 		<div class="row animated fadeInRight profile-details">
-			<div class="span2">
+			<div class="col col-lg-2 col-offset-1">
 				<div class="avatar">
 					<img src="{{ object.profile_photo }}" alt="{{ object.user.get_full_name|default:object.user.username }}" />
 				</div>
 			</div>
-			<div class="span10">
+			<div class="col col-lg-7">
 				<h1>{{ object.user.get_full_name|default:object.user.username }}</h1>
 				<h3>{{ object.summary|truncatechars:155 }}</h3>
 			</div>
@@ -28,84 +28,65 @@
 	</div>
 	<div id="buttons">
 		<div class="container">
-			<div class="row12">
-				{% if user.is_staff %}
-					<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="false" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if not object.is_active %}hide{% endif %} btn right"><i class="icon-eye-close icon-white"></i> Disable</a>
-					<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="true" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if object.is_active %}hide{% endif %} btn right"><i class="icon-eye-close icon-white"></i> Approve</a>
-				{% endif %}
-				{% if user.username == object.user.username %}
-					<a href="{% url 'lawyer:setup_profile' %}" class="btn right-links" ><i class="icon-edit icon-white"></i> Edit profile</a>
-					<a href="{% url 'lawyer:invite' %}" class="btn right-links" ><i class="icon-heart icon-white"></i> Invite Lawyers</a>
-					{% if object.summary %}
-						{% if PROJECT_ENVIRONMENT != 'dev' %}
-					    <script>
-						  $(document).ready(function () {
-					     	  Intercom('update', {"Lawyer Profile": "Complete", "Firm": "{{ firm }}"});
-					   	 });
-						</script>
+			<div class="row">
+
+				<div class="col col-lg-10 col-offset-1">
+					{% if user.is_staff %}
+						<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="false" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if not object.is_active %}hide{% endif %} btn right"><i class="icon-eye-close icon-white"></i> Disable</a>
+						<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="true" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if object.is_active %}hide{% endif %} btn right"><i class="icon-eye-close icon-white"></i> Approve</a>
+					{% endif %}
+					{% if user.username == object.user.username %}
+						<a href="{% url 'lawyer:setup_profile' %}" class="btn right-links" ><i class="icon-edit icon-white"></i> Edit profile</a>
+						<a href="{% url 'lawyer:invite' %}" class="btn right-links" ><i class="icon-heart icon-white"></i> Invite Lawyers</a>
+						{% if object.summary %}
+							{% if PROJECT_ENVIRONMENT != 'dev' %}
+						    <script>
+							  $(document).ready(function () {
+						     	  Intercom('update', {"Lawyer Profile": "Complete", "Firm": "{{ firm }}"});
+						   	 });
+							</script>
+							{% endif %}
 						{% endif %}
 					{% endif %}
-				{% endif %}
 
-                <div class="pull-right engagement-container">
-                	{% engage_with_lawyer_button lawyer=object %}
-                </div>
+	                <div class="pull-right engagement-container">
+	                	{% engage_with_lawyer_button lawyer=object %}
+	                </div>
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
 <div class="container profile">
 	<div class="row">
-		<div class="span8">
+		<div class="col col-lg-7 col-offset-1">
 				<h2>About</h2>
 				<div>
 					<p>{{ object.bio|default:"<div class=\"no-data\">No biography yet.</div>"|linebreaksbr }}</p>
 				</div>
 				<hr>
-
-			<div class="row">
-            	<div class="span8">
-					<div class="row">
-						<div class="span8">
-							<h2>Transaction Pricing</h2>
-	                        {% fee_packages lawyer=object %}
-						</div>
-					</div>
-					<hr>
-					{% if PROJECT_ENVIRONMENT == 'dev' %}
-					<div class="row">
-						<div class="span6 endorsement">
-							<h2>Endorsements</h2>
-							<div class="link">
-							    <a href="#" onclick="return false;" class="btn btn--primary btn--counter comment" data-content='
-							    <textarea data-required="true" placeholder="Write your endorsement. It will be sent for approval before it appears." tabindex="1" type="text"></textarea>
-							    <a href="#" class="btn btn-primary btn-small">Endorse</a>
-								'>Endorse<span>32</span></a>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="span4">
-							<div class="endorsement">
-								<img src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn1/41686_715347325_1131784592_q.jpg" alt="Avatar (Placeholder)">
-								<p>Awesome to work with, responsive and helpful. Instrumental in getting Airbnb to where it is today</p>
-								<p class="source">Alex Halliday, DropBox</p>
-							</div>
-						</div>
-						<div class="span4">
-							<div class="endorsement">
-								<img src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash4/369196_508036857_212730382_q.jpg" alt="Avatar (Placeholder)">
-								<p>Awesome to work with, responsive and helpful. Instrumental in getting Airbnb to where it is today</p>
-								<p class="source">Alex Halliday, Box.net</p>
-							</div>
-						</div>
-					</div>
-					{% endif %}
-				</div>
-				<hr>
+			<div class="startups">
+				<h2>Startups Advised</h2>
+				{% for o in object.data.startups_advised %}
+					<col col-lg-><a href="http://{{ o }}" target="_BLANK" class="domain">{{ o }}</a></col col-lg->
+				{% empty %}
+					<ul class="unstyled">
+						<li class="nothing-found">Nothing yet.</li>
+					</ul>
+				{% endfor %}
+			</div>
+			<div class="startups">
+				<h2>Other Websites</h2>
+				{% for o in object.data.websites %}
+					<col col-lg-><a href="http://{{ o }}" target="_BLANK" class="domain">{{ o }}</a></col col-lg->
+				{% empty %}
+					<ul class="unstyled">
+						<li class="nothing-found">Nothing yet.</li>
+					</ul>
+				{% endfor %}
 			</div>
 		</div>
-		<div class="span4 pull-right sidebar">
+		<div class="col col-lg-3 sidebar">
 			<div class="firm">
 				{% if firm.photo %}
 					<img src="{{ MEDIA_URL }}{{ firm.photo|default:'firm/blank.gif' }}" alt="{{ firm.name }}" class="firm-logo" />
@@ -145,62 +126,6 @@
 					</div>
 			</div>
 
-		</div>
-		<div class="span8">
-			<h2>Transaction Snapshot</h2>
-			<div class="deal-charts row">
-				<div class="span4">
-					<h5>Transactions by year</h5>
-					<br />
-					<img src="{{ STATIC_URL }}img/graph-year-placeholder.png" id="graph-year-placeholder">
-					<canvas id="dealChart0" width="300" height="200"></canvas>
-				</div>
-				<div class="span4" style="position:relative;">
-					<h5>Transactions by type</h5>
-					<br />
-					<img src="{{ STATIC_URL }}img/graph-type-placeholder.png" id="graph-type-placeholder">
-					<canvas id="dealChart1" width="220" height="200"></canvas>
-					<div style="position:absolute;top:125px;right:-0px;opacity:0.3" id="type-legend">
-						<span class="label label-info" style="color:#F38630;background-color:white;">Series A</span>
-						<br />
-						<span class="label label-info" style="color:#6bdb7e;background-color:white;">Seed</span>
-						<br />
-						<span class="label label-info" style="color:#69D2E7;background-color:white;">Incorporation</span>
-						<br />
-						<span class="label label-info" style="color:#f88172;background-color:white;">IP</span>
-						<br />
-						<span class="label label-info" style="color:#69D2E7;background-color:white;">Other</span>
-					</div>
-				</div>
-			</div>
-		<hr>
-		</div>
-
-		<div class="span8">
-			<div class="startups">
-				<h2>Startups Advised</h2>
-				{% for o in object.data.startups_advised %}
-					<span><a href="http://{{ o }}" target="_BLANK" class="domain">{{ o }}</a></span>
-				{% empty %}
-					<ul class="unstyled">
-						<li class="nothing-found">Nothing yet.</li>
-					</ul>
-				{% endfor %}
-			</div>
-		<hr>
-		</div>
-
-		<div class="span8">
-			<div class="startups">
-				<h2>Other Websites</h2>
-				{% for o in object.data.websites %}
-					<span><a href="http://{{ o }}" target="_BLANK" class="domain">{{ o }}</a></span>
-				{% empty %}
-					<ul class="unstyled">
-						<li class="nothing-found">Nothing yet.</li>
-					</ul>
-				{% endfor %}
-			</div>
 		</div>
 	</div>
 

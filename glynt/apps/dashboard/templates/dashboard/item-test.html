@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block page_title %}Documents{% endblock %}
+{% block nav_documents %}<li class="active"><a href="{% url 'dashboard:documents' %}">Documents</a></li>{% endblock %}
+
+{% block body %}
+    
+<div class="row">
+	<div class="col-lg-12">
+		<div class="row">
+			<div class="col-lg-8">
+				<h2>Warrant purchase agreement <small>in Incorporation</small></h2>
+				<br />
+				<ul class="nav nav-tabs">
+					<li class="dropdown active">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+						Version 5 (Latest) <span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+						    <li class="active"><a href="#">Version 5 (Latest)</a></li>
+						    <li><a href="#">Version 4  <small class="pull-right">compare</small></a></li>
+						    <li><a href="#">Version 3  <small class="pull-right">compare</small></a></li>
+						    <li><a href="#">Version 2  <small class="pull-right">compare</small></a></li>
+						</ul>
+					</li>
+					<li class=""><a href="#">Questions <span class="badge">14</span></a></li>
+					<li><a href="#">History</a></li>
+					<li class=" pull-right"><a href="#" class="btn btn-small">Upload New Version</a></li>
+
+				</ul>
+				<br />
+				<div class="row">
+					<div class="col-lg-11">
+						  <!--docviewer.js-->
+						  <script src="//static-v2.crocodoc.com/core/docviewer.js"></script>
+
+						  <!--sets a global variable "_doc" that is needed for initialization-->
+						  <script src="//crocodoc.com/webservice/document.js?session=TdAN-eSM_wIdGVBpWZncRQCUIKJ431djdgTrza7rb-KX3mPBSxhHxYVqjLQVlRgVFqqe8jv9WmtIKJk_i94UekdBA0dGt1lFBdQ5kqgmS1Ogi9Q7F_mrALicF1cYiKrUlUXOO7N7nJ1ylVDec4OV_VP9Yh1waZ3kagwx"></script>
+
+						  <!--div for viewer-->
+						  <div id="DocViewer" style="width:500px; height:600px;"></div>
+
+						  <script type="text/javascript">
+						    //creates a document viewer using the "DocViewer" div
+						    var docviewer = new DocViewer({ "id": "DocViewer" });
+						  </script>
+						</div>
+				</div>
+			</div>
+			<div class="col-lg-4">
+				<div class="panel panel-success">
+					<div class="panel-heading">
+						Please review
+						<a href="#" class="btn btn-small btn-success pull-right">Review Complete</a>
+					</div>
+					<p>This document is assigned to you. Please review it and make any comments or annotations. Click here once complete.</p>
+				</div>
+				<div class="panel panel-primary">
+					<div class="panel-heading">Comments</div>
+					<ul class="media-list">
+					  <li class="media">
+					    <a class="pull-left" href="#">
+							<img class="media-object" alt="64x64" src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn2/275729_37001331_1638175595_q.jpg" style="width: 32px; height: 32px;">			    </a>
+					    </a>
+					    <div class="media-body">
+					      <h4 class="media-heading">What is this?</h4>
+					      Can you give me some clarity here?
+					    </div>
+					  </li>
+					  <li class="media">
+					    <a class="pull-left" href="#">
+							<img class="media-object" alt="64x64" src="https://profile-b.xx.fbcdn.net/hprofile-ash4/274430_500283591_1064416604_q.jpg" style="width: 32px; height: 32px;">			    </a>
+					    </a>
+					    <div class="media-body">
+					      <h4 class="media-heading">Better!</h4>
+					      I like this text more
+					    </div>
+					  </li>
+
+					  
+
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div> 
+<br />
+
+<br />
+
+
+
+{% endblock %}
