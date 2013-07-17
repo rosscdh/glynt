@@ -5,7 +5,7 @@
 
 {% block body %}
 <div class="container checklist-view">
-    <div class="page-header">
+    <div class="page-header clearfix">
         <h2>Checklist</h2>
     </div>
     <div class="row">
@@ -15,9 +15,9 @@
                     {% for p in engagements %}
                         <li><a href="#">{{ p }}</a></li>
                     {% endfor %}
-                    <li class="active"><a href="#incorporation-docs">Incorporation Docs</a></li>
+                    <li class="active"><a href="#incorporation-documents">Incorporation Documents</a></li>
                     <li><a href="#qualification">Qualification</a></li>
-                    <li><a href="#founders-docs">Founders Docs</a></li>
+                    <li><a href="#founders-documents">Founders Documents</a></li>
                     <li><a href="#option-plan">Option Plan</a></li>
                     <li><a href="#directors-and-officers">Directors and Officers</a></li>
                     <li><a href="#employment-documents">Employment Documents</a></li>
@@ -45,7 +45,12 @@
                 </div>
             </div>
 
-            <h3 id="incorporation">Incorporation Docs</h3>
+            <div id="incorporation" class="checklist-header clearfix">
+                <h3 class="pull-left">Incorporation Documents</h3>
+                <div class="add-new pull-right">
+                    <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
+                </div>
+            </div>
             <table class="table table-striped checklist">
                 <tbody>
                     <tr class="urgent">
@@ -105,7 +110,12 @@
                 </tbody>
             </table>
 
-            <h3 id="qualification">Qualification</h3>
+            <div id="qualification" class="checklist-header clearfix">
+                <h3 class="pull-left">Qualification</h3>
+                <div class="add-new pull-right">
+                    <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
+                </div>
+            </div>
             <table class="table table-striped checklist">
                 <tbody>
                     <tr class="pending">
@@ -125,7 +135,12 @@
                 </tbody>
             </table>
 
-            <h3 id="founders-docs">Founders Docs</h3>
+            <div id="founders-documents" class="checklist-header clearfix">
+                <h3 class="pull-left">Founders Documents</h3>
+                <div class="add-new pull-right">
+                    <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
+                </div>
+            </div>
             <table class="table table-striped checklist">
                 <tbody>
                     <tr class="pending">
@@ -219,7 +234,12 @@
                 </tbody>
             </table>
 
-            <h3 id="option-plan">Option Plan</h3>
+            <div id="option-plan" class="checklist-header clearfix">
+                <h3 class="pull-left">Option Plan</h3>
+                <div class="add-new pull-right">
+                    <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
+                </div>
+            </div>
             <table class="table table-striped checklist">
                 <tbody>
                     <tr class="pending">
@@ -277,7 +297,12 @@
                 </tbody>
             </table>
 
-            <h3 id="directors-and-officers">Directors and Officers</h3>
+            <div id="directors-and-officers" class="checklist-header clearfix">
+                <h3 class="pull-left">Directors and Officers</h3>
+                <div class="add-new pull-right">
+                    <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
+                </div>
+            </div>
             <table class="table table-striped checklist">
                 <tbody>
                     <tr class="pending">
@@ -303,7 +328,12 @@
                 </tbody>
             </table>
 
-            <h3 id="employment-documents">Employment Documents</h3>
+            <div id="employment-documents" class="checklist-header clearfix">
+                <h3 class="pull-left">Employment Documents</h3>
+                <div class="add-new pull-right">
+                    <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
+                </div>
+            </div>
             <table class="table table-striped checklist">
                 <tbody>
                     <tr class="pending">
@@ -393,7 +423,12 @@
                 </tbody>
             </table>
 
-            <h3 id="consultant-documents">Consultant Documents</h3>
+            <div id="consultant-documents" class="checklist-header clearfix">
+                <h3 class="pull-left">Constultant Documents</h3>
+                <div class="add-new pull-right">
+                    <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
+                </div>
+            </div>
             <table class="table table-striped checklist">
                 <tbody>
                     <tr class="pending">
@@ -463,14 +498,24 @@
                 </tbody>
             </table>
 
-            <h3 id="intellectual-property">Intellectual Property</h3>
+            <div id="intellectual-property" class="checklist-header clearfix">
+                <h3 class="pull-left">Intellectual Property</h3>
+                <div class="add-new pull-right">
+                    <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
+                </div>
+            </div>
             <table class="table table-striped checklist">
                 <tbody>
                     <tr><td class="text-center" colspan="3"><span class="text-muted">No items needed.</span></td></tr>
                 </tbody>
             </table>
 
-            <h3 id="misc">Misc</h3>
+            <div id="misc" class="checklist-header clearfix">
+                <h3 class="pull-left">Misc</h3>
+                <div class="add-new pull-right">
+                    <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
+                </div>
+            </div>
             <table class="table table-striped checklist">
                 <tbody>
                     <tr class="pending">
