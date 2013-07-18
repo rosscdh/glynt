@@ -182,7 +182,14 @@ table.stories {
       width: 90px;
     }
     .story-actor {
+      vertical-align: middle;
       width: 40px;
+    }
+    .story-info {
+      p {
+        color: @gray;
+        margin: 0;
+      }
     }
   }
 }
@@ -311,6 +318,33 @@ table.lawyer-list {
     &:focus {
       color: @gray;
       text-decoration: none;
+    }
+  }
+}
+
+.post {
+  border-bottom: 1px solid @gray-lighter;
+  padding: 10px 0;
+  .post-content {
+    p {
+      font-size: 17px;
+      font-weight: 200;
+      line-height: 1.4;
+      margin-bottom: 20px;
+    }
+    .post-actions {
+      margin: -10px 0 10px;
+    }
+    .post-meta {
+      display: block;
+      margin-bottom: 5px;
+    }
+  }
+  .post-reply {
+    textarea {
+      margin-bottom: 10px;
+      max-width: 100%;
+      width: 100%;
     }
   }
 }
