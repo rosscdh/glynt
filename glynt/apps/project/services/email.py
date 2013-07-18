@@ -20,7 +20,7 @@ class SendProjectEmailsService(object):
     """
     mail_template_name = 'project_notice_email'
 
-    def __init__(self, project, sender, recipients, notification, **kwargs):
+    def __init__(self, project, sender, recipients, notification=None, **kwargs):
         self.project = project
         self.is_new_project = kwargs.get('is_new_project', False)
         self.sender = sender
@@ -31,7 +31,7 @@ class SendProjectEmailsService(object):
 
         kwargs.update({
             'is_new': self.is_new_project,
-            'project_status': PROJECT_STATUS.get_desc_by_value(project.project_status),
+            'project_status': PROJECT_STATUS.get_desc_by_value(project.status),
             'sender_is_lawyer': self.sender_is_lawyer,
             'from_name': self.sender.get_full_name(),
             'from_email': self.sender.email,
@@ -43,6 +43,7 @@ class SendProjectEmailsService(object):
             'project_statement': self.project.project_statement,
             'site': self.site,
         })
+
         self.context = kwargs
 
     @property
@@ -75,11 +76,16 @@ class SendProjectEmailsService(object):
               context = self.context
         )
 
+
 class SendNewProjectEmailsService(SendProjectEmailsService):
     mail_template_name = 'project_created'
 
     def __init__(self, project, sender, **kwargs):
         super(SendNewProjectEmailsService, self).__init__(project=project, sender=sender, recipients=None, notification=None)
+        self.context.update({
+            'customer': self.project.customer,
+            'company': self.project.customer.primary_company,
+        })
 
     @property
     def message(self):
@@ -88,4 +94,5 @@ class SendNewProjectEmailsService(SendProjectEmailsService):
             'project': self.project,
             'id': self.project.pk,
         }
+
         return u'%(actor)s created a new Project (%(project)s):%(id)d which needs to be matched with a lawyer' % ctx

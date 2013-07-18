@@ -10,11 +10,14 @@ TRANSACTION_TEMPLATE_PATH = os.path.join(MODULE_PATH, 'templates/transactions/')
 
 
 def import_module_class(name):
-    components = name.split('.')
-    module_path = components[:-1]
-    klass = components[-1:]
-    mod = __import__('.'.join(module_path), fromlist=klass) # import the class and module
-    klass = getattr(mod, klass[0])
+    try:
+        components = name.split('.')
+        module_path = components[:-1]
+        klass = components[-1:]
+        mod = __import__('.'.join(module_path), fromlist=klass) # import the class and module
+        klass = getattr(mod, klass[0])
+    except AttributeError:
+        klass = None
     return klass
 
 
@@ -48,20 +51,23 @@ class BuilderBaseForm(forms.Form):
     @classmethod
     def get_data_bag(self, **kwargs):
         data_bag_klass = import_module_class(self.data_bag)
-        return data_bag_klass(**kwargs)
+        if data_bag_klass is not None:
+            return data_bag_klass(**kwargs)
+        else:
+            return None
 
-    # def is_valid(self, *args, **kwargs):
-    #     """
-    #     Call our custom save method
-    #     this is not really great as calling save is assumed here, which is not natural behaviour
-    #     is_valid should only return if its valid or not. Need to find a better way
-    #     """
-    #     is_valid = super(BuilderBaseForm, self).is_valid(*args, **kwargs)
-    #     if is_valid:
-    #         self.save()
-    #     return is_valid
-
+    def is_valid(self, *args, **kwargs):
+        """
+        Call our custom save method
+        this is not really great as calling save is assumed here, which is not natural behaviour
+        is_valid should only return if its valid or not. Need to find a better way
+        """
+        is_valid = super(BuilderBaseForm, self).is_valid(*args, **kwargs)
+        if is_valid:
+            self.save()
+        return is_valid
 
     def save(self, *args, **kwargs):
         data_bag = self.get_data_bag(user=self.user)
-        return data_bag.save(**self.cleaned_data)
+        if data_bag and hasattr(data_bag, 'save'):
+            return data_bag.save(**self.cleaned_data)

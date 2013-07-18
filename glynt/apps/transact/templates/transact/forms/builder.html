@@ -37,7 +37,7 @@
                     <div class="row">
                         <div class="col-lg-6">
                             {% for s in wizard.steps.all %}
-                                 <a href="{% url 'transact:builder' tx_range=tx_range step=s %}" class="btn btn-info">{{ s }}</a>
+                                 <a href="{% url 'transact:builder' project_uuid=project.uuid tx_range=tx_range step=s %}" class="btn btn-info">{{ s }}</a>
                             {% endfor %}
                         </div>
                         <div class="col-lg-6">

@@ -12,6 +12,8 @@ from glynt.apps.project.models import Project
 from glynt.apps.project.forms import CreateProjectForm
 from glynt.apps.project.services.ensure_project import EnsureProjectService
 
+from glynt.apps.project.services.ensure_project import PROJECT_CREATED
+
 from glynt.apps.client.services import EnsureUserHasCompletedIntakeProcess
 
 from glynt.apps.transact.models import Transaction
@@ -36,6 +38,14 @@ class CreateProjectView(FormView):
         project_service = EnsureProjectService(customer=customer, company=company, transactions=transactions)
         project_service.process()
 
+        self.project = project_service.project
+
+        # only perform this if we have no other transaction types to manage
+        if len(transaction_types) == 0:
+            PROJECT_CREATED.send(sender=project_service, instance=project_service.project, created=project_service.is_new)
+
+        return self.project
+
     def form_valid(self, form):
         """
         If the form is valid, redirect to the supplied URL.
@@ -52,9 +62,9 @@ class CreateProjectView(FormView):
             if u'INTAKE' not in transaction_types:
                 transaction_types.insert(0, u'INTAKE')
 
-        self.save(transaction_types=transaction_types)
+        project = self.save(transaction_types=transaction_types)
 
-        self.success_url = reverse('transact:builder', kwargs={'tx_range': ','.join(transaction_types), 'step': 1})
+        self.success_url = reverse('transact:builder', kwargs={'project_uuid': project.uuid, 'tx_range': ','.join(transaction_types), 'step': 1})
         return super(CreateProjectView, self).form_valid(form)
 
 

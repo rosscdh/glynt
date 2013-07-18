@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
+from django import dispatch
 from glynt.apps.project.models import Project
 
 
 import logging
 logger = logging.getLogger('lawpal.services')
+
+
+PROJECT_CREATED = dispatch.Signal(providing_args=["created", "instance"])
 
 
 class EnsureProjectService(object):

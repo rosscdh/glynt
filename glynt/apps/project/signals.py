@@ -1,23 +1,22 @@
 # -*- coding: utf-8 -*-
 """ Set of signals to handle when comments are posted and assigning notifications to the user """
-from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from threadedcomments.models import ThreadedComment # if we stop using threadedcomments this model will change
 from notifications import notify
-import user_streams
 
 from notifications.models import Notification
 
 from glynt.apps.project.utils import PROJECT_CONTENT_TYPE
-from glynt.apps.project.models import PROJECT_STATUS, Project
-from glynt.apps.project.services.email import SendProjectEmailsService, SendNewProjectEmailsService
+
+from glynt.apps.project.services.email import SendNewProjectEmailsService
+from glynt.apps.project.services.ensure_project import PROJECT_CREATED
+
 
 import logging
 logger = logging.getLogger('django.request')
 
 
-@receiver(post_save, sender=Project, dispatch_uid='project.on_project_created')
+@receiver(PROJECT_CREATED, dispatch_uid='project.on_project_created')
 def on_project_created(sender, **kwargs):
     """
     Handle new Project
@@ -25,7 +24,7 @@ def on_project_created(sender, **kwargs):
     is_new = kwargs.get('created')
     project = kwargs.get('instance')
 
-    if is_new is True:
+    if project:
         user = project.customer.user
         comment = u'{user} created this Project'.format(user=user.get_full_name())
         logger.debug(comment)
@@ -35,6 +34,13 @@ def on_project_created(sender, **kwargs):
 
         send = SendNewProjectEmailsService(project=project, sender=user)
         send.process()
+
+
+def mark_project_notifications_as_read(user, project):
+    """ used to mark the passed in users notifications for a specific project as read (can be either a lawyer or a customer) """
+    logger.debug('marking unred notifications as read for user: %s and project: %s'%(user, project.pk))
+    Notification.objects.filter(recipient=user, target_object_id=project.pk, unread=True, target_content_type=PROJECT_CONTENT_TYPE).mark_all_as_read()
+
 
 # @receiver(post_save, sender=ThreadedComment, dispatch_uid='project.save_project_comment_signal')
 # def save_project_comment_signal(sender, **kwargs):
@@ -89,23 +95,17 @@ def on_project_created(sender, **kwargs):
 #     user_streams.add_stream_item(comment.user, description, project)
 
 
-def mark_project_notifications_as_read(user, project):
-    """ used to mark the passed in users notifications for a specific project as read (can be either a lawyer or a customer) """
-    logger.debug('marking unred notifications as read for user: %s and project: %s'%(user, project.pk))
-    Notification.objects.filter(recipient=user, target_object_id=project.pk, unread=True, target_content_type=PROJECT_CONTENT_TYPE).mark_all_as_read()
+# @receiver(post_save, sender=Notification, dispatch_uid='project.on_comment_notification_created')
+# def on_comment_notification_created(sender, **kwargs):
+#     """
+#     Handle new notifications
+#     """
+#     notification = kwargs.get('instance')
+#     project_action = notification.data.get('project_action', None)
 
+#     if project_action == 'new_project_comment':
+#         recipients = [notification.recipient]
+#         project = notification.action_object
 
-@receiver(post_save, sender=Notification, dispatch_uid='project.on_comment_notification_created')
-def on_comment_notification_created(sender, **kwargs):
-    """
-    Handle new notifications
-    """
-    notification = kwargs.get('instance')
-    project_action = notification.data.get('project_action', None)
-
-    if project_action == 'new_project_comment':
-        recipients = [notification.recipient]
-        project = notification.action_object
-
-        send = SendProjectEmailsService(project=project, sender=notification.actor, recipients=recipients, notification=notification)
-        send.process()
+#         send = SendProjectEmailsService(project=project, sender=notification.actor, recipients=recipients, notification=notification)
+#         send.process()

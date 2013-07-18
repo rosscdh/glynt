@@ -2,3 +2,31 @@
 {{ message }}
 
 Please assign 2 matching lawyers to this project at: {% current_site_domain %}{% url 'admin:project_project_change' project.pk %}
+
+
+Customer Information
+--------------------
+
+first_name: {{ customer.data.first_name }}
+last_name: {{ customer.data.last_name }}
+company: {{ customer.data.company }}
+agree_tandc: {{ customer.data.agree_tandc }}
+telephone: {{ customer.data.telephone }}
+email: {{ customer.data.email }}
+
+
+Company Information
+-------------------
+
+incubator: {{ company.data.incubator }}
+current_status: {{ company.data.current_status }}
+profile_website: {{ company.data.profile_website }}
+description: {{ company.data.description }}
+has_option_plan: {{ company.data.has_option_plan }}
+target_states_and_countries: {{ company.data.target_states_and_countries }}
+num_officers: {{ company.data.num_officers }}
+num_employees: {{ company.data.num_employees }}
+num_consultants: {{ company.data.num_consultants }}
+ip_nolonger_affiliated: {{ company.data.ip_nolonger_affiliated }}
+ip_otherthan_founder: {{ company.data.ip_otherthan_founder }}
+ip_university_affiliation: {{ company.data.ip_university_affiliation }}
