@@ -10,6 +10,7 @@ from glynt.apps.utils import get_namedtuple_choices
 from managers import DefaultLawyerManager, ApprovedLawyerManager
 from transaction_packages import TransactionPackageBunch
 
+import os
 import logging
 logger = logging.getLogger('django.request')
 
@@ -97,7 +98,10 @@ class Lawyer(models.Model):
 
     @property
     def full_name(self):
-        return u'%s %s' % (self.data.get('first_name'), self.data.get('last_name'))
+        full_name = u'%s %s' % (self.data.get('first_name'), self.data.get('last_name'))
+        if not full_name.strip():
+            full_name = self.user.get_full_name()
+        return full_name
 
     def email(self):
         return self.user.email

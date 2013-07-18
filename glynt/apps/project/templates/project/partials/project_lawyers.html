@@ -1,18 +1,21 @@
 <div class="callout">
-    {% if num_lawyers > 0 %}<h4>We have found <strong>{{ num_lawyers }}</strong> matches for your project: <strong>{{ project.name }}</strong>.</h4>{% endif %}
+    {% if num_lawyers > 0 %}<h4>We have found <strong>{{ num_lawyers }}</strong> matches for your project: <strong>{{ project }}</strong>.</h4>{% endif %}
     <div class="row">
         {% for l in lawyers %}
         <div class="col col-lg-6">
+            
             <table class="table lawyer-list">
                 <tbody>
                     <tr>
                         <td class="lawyer-picture">
-                            <img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-rounded">
+                            <img src="{{ l.user.profile.get_mugshot_url }}" class="img-rounded">
                         </td>
                         <td class="lawyer-info">
-                            <h2>Alex Halliday</h2>
-                            <p>General Counsel to Tech, Media, Life Science Companies.</p>
-                            <p><i class="glyphicon glyphicon-map-marker"></i> San Francisco, CA.</p>
+                            <h2>{{ l.user.get_full_name }}</h2>
+                            <p>{{ l.position }} to {{ l.firm_name }}</p>
+                            {% for loc in practice_locations %}
+                                <p><i class="glyphicon glyphicon-map-marker"></i> {{ loc }}</p>
+                            {% endfor %}
                         </td>
                         <td class="lawyer-meta"><button type="button" class="btn btn-large btn-primary">Choose</button></td>
                     </tr>
