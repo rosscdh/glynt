@@ -1,11 +1,7 @@
 # -*- coding: UTF-8 -*-
 from django import forms
-from django.conf import settings
-from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.core import exceptions
-import json
-from django.core.urlresolvers import reverse
 from django.core.cache import cache
 from glynt.cache_utils_1_5 import make_template_fragment_key
 
