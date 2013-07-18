@@ -1,5 +1,4 @@
 # coding: utf-8
-import os
 from django.template.defaultfilters import slugify
 from glynt.apps.company.models import Company
 
@@ -54,4 +53,5 @@ class EnsureCompanyService(object):
 
         logger.info("Saving startup %s", self.company_name)
         self.company.save()
+
         return self.company
