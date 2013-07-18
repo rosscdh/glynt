@@ -27,10 +27,10 @@ class DefaultProjectManager(models.Manager):
         return self.filter(project_status=PROJECT_STATUS.new).filter(**kwargs)
 
     def historic(self, customer, lawyer):
-        """ @BUSINESSRULE Method to get a Customers current Project 
+        """ @BUSINESSRULE Method to get a Customers current Project
         with a specified lawyer, if none Found then try for the last that
         the Customer created; as we assume he still has the same requirements.
-        If his requirements have changed, then the next time he contacts a 
+        If his requirements have changed, then the next time he contacts a
         lawyer the process repeats"""
         try:
             # has a previous project with this lawyer
@@ -43,15 +43,3 @@ class DefaultProjectManager(models.Manager):
                 return self.filter(customer=customer).order_by('-id')[0]
             except IndexError:
                 return None
-
-    def new(self, customer, lawyer):
-        #get any new projects between the customer and lawyer
-        return self.filter(lawyer=lawyer, customer=customer, project_status=PROJECT_STATUS.new)
-
-    def open(self, customer, lawyer):
-        #filter out any closed projects between the customer and lawyer
-        return self.filter(lawyer=lawyer, customer=customer).exclude(project_status=PROJECT_STATUS.closed)
-
-    def closed(self, customer, lawyer):
-        #get any closed projects between the customer and lawyer
-        return self.filter(lawyer=lawyer, customer=customer, project_status=PROJECT_STATUS.closed)

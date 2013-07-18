@@ -26,7 +26,7 @@ gitpython
 # util for yaml validation of todos/transaction
 voluptuous
 
-
+django-uuidfield
 django-extensions
 django-templated-email
 django-storages
