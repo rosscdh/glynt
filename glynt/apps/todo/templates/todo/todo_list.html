@@ -4,6 +4,7 @@
 {% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>{% endblock %}
 
 {% block body %}
+<a data-toggle="modal" href="#myModal" class="btn btn-primary btn-large">Launch demo modal</a>
 <div class="container checklist-view">
     <div class="page-header clearfix">
         <h2>Checklist</h2>
@@ -47,9 +48,9 @@
 
             <div id="incorporation" class="checklist-header clearfix">
                 <h3 class="pull-left">Incorporation Documents</h3>
-                <div class="add-new pull-right">
-                    <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
-                </div>
+                <button type="button" class="btn btn-link pull-right" data-toggle="modal" data-target="#new-checklist-item">
+                    <i class="glyphicon glyphicon-plus-sign"></i>
+                </button>
             </div>
             <table class="table table-striped checklist">
                 <tbody>
@@ -112,9 +113,9 @@
 
             <div id="qualification" class="checklist-header clearfix">
                 <h3 class="pull-left">Qualification</h3>
-                <div class="add-new pull-right">
-                    <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
-                </div>
+                <button type="button" class="btn btn-link pull-right" data-toggle="modal" data-target="#new-checklist-item">
+                    <i class="glyphicon glyphicon-plus-sign"></i>
+                </button>
             </div>
             <table class="table table-striped checklist">
                 <tbody>
@@ -137,9 +138,9 @@
 
             <div id="founders-documents" class="checklist-header clearfix">
                 <h3 class="pull-left">Founders Documents</h3>
-                <div class="add-new pull-right">
-                    <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
-                </div>
+                <button type="button" class="btn btn-link pull-right" data-toggle="modal" data-target="#new-checklist-item">
+                    <i class="glyphicon glyphicon-plus-sign"></i>
+                </button>
             </div>
             <table class="table table-striped checklist">
                 <tbody>
@@ -236,9 +237,9 @@
 
             <div id="option-plan" class="checklist-header clearfix">
                 <h3 class="pull-left">Option Plan</h3>
-                <div class="add-new pull-right">
-                    <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
-                </div>
+                <button type="button" class="btn btn-link pull-right" data-toggle="modal" data-target="#new-checklist-item">
+                    <i class="glyphicon glyphicon-plus-sign"></i>
+                </button>
             </div>
             <table class="table table-striped checklist">
                 <tbody>
@@ -299,9 +300,9 @@
 
             <div id="directors-and-officers" class="checklist-header clearfix">
                 <h3 class="pull-left">Directors and Officers</h3>
-                <div class="add-new pull-right">
-                    <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
-                </div>
+                <button type="button" class="btn btn-link pull-right" data-toggle="modal" data-target="#new-checklist-item">
+                    <i class="glyphicon glyphicon-plus-sign"></i>
+                </button>
             </div>
             <table class="table table-striped checklist">
                 <tbody>
@@ -330,9 +331,9 @@
 
             <div id="employment-documents" class="checklist-header clearfix">
                 <h3 class="pull-left">Employment Documents</h3>
-                <div class="add-new pull-right">
-                    <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
-                </div>
+                <button type="button" class="btn btn-link pull-right" data-toggle="modal" data-target="#new-checklist-item">
+                    <i class="glyphicon glyphicon-plus-sign"></i>
+                </button>
             </div>
             <table class="table table-striped checklist">
                 <tbody>
@@ -425,9 +426,9 @@
 
             <div id="consultant-documents" class="checklist-header clearfix">
                 <h3 class="pull-left">Constultant Documents</h3>
-                <div class="add-new pull-right">
-                    <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
-                </div>
+                <button type="button" class="btn btn-link pull-right" data-toggle="modal" data-target="#new-checklist-item">
+                    <i class="glyphicon glyphicon-plus-sign"></i>
+                </button>
             </div>
             <table class="table table-striped checklist">
                 <tbody>
@@ -500,9 +501,9 @@
 
             <div id="intellectual-property" class="checklist-header clearfix">
                 <h3 class="pull-left">Intellectual Property</h3>
-                <div class="add-new pull-right">
-                    <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
-                </div>
+                <button type="button" class="btn btn-link pull-right" data-toggle="modal" data-target="#new-checklist-item">
+                    <i class="glyphicon glyphicon-plus-sign"></i>
+                </button>
             </div>
             <table class="table table-striped checklist">
                 <tbody>
@@ -512,9 +513,9 @@
 
             <div id="misc" class="checklist-header clearfix">
                 <h3 class="pull-left">Misc</h3>
-                <div class="add-new pull-right">
-                    <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
-                </div>
+                <button type="button" class="btn btn-link pull-right" data-toggle="modal" data-target="#new-checklist-item">
+                    <i class="glyphicon glyphicon-plus-sign"></i>
+                </button>
             </div>
             <table class="table table-striped checklist">
                 <tbody>
@@ -564,4 +565,25 @@
     <script src="{{ STATIC_URL }}todo/angularjs/app/js/controllers.js"></script>
     <script src="{{ STATIC_URL }}todo/angularjs/app/js/services.js"></script>
     <script src="{{ STATIC_URL }}todo/angularjs/app/js/directives.js"></script>
+{% endblock %}
+
+{% block modals %}
+<!-- Modal -->
+<div class="modal fade" id="new-checklist-item">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn" data-dismiss="modal">Close</a>
+                <a href="#" class="btn btn-primary">Save changes</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
