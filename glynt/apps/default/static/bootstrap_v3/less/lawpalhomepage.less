@@ -348,3 +348,29 @@ table.lawyer-list {
     }
   }
 }
+
+
+
+.sidebar:affix {
+  position: static;
+}
+
+@media screen and (min-width: 768px) {
+  .sidebar {
+    display: block;
+  }
+}
+
+@media only screen and (min-width : 992px) {
+  .sidebar.affix {
+    position: fixed;
+    top: 75px;
+    width: 213px;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .sidebar.affix {
+    width: 270px;
+  }
+}

@@ -10,21 +10,23 @@
     </div>
     <div class="row">
         <div class="col col-lg-3">
-            <div class="subnav affix">
-                <ul class="nav nav-pills nav-stacked">
-                    {% for p in engagements %}
-                        <li><a href="#">{{ p }}</a></li>
-                    {% endfor %}
-                    <li class="active"><a href="#incorporation-documents">Incorporation Documents</a></li>
-                    <li><a href="#qualification">Qualification</a></li>
-                    <li><a href="#founders-documents">Founders Documents</a></li>
-                    <li><a href="#option-plan">Option Plan</a></li>
-                    <li><a href="#directors-and-officers">Directors and Officers</a></li>
-                    <li><a href="#employment-documents">Employment Documents</a></li>
-                    <li><a href="#consultant-documents">Consultant Documents</a></li>
-                    <li><a href="#intellectual-property">Intellectual Property</a></li>
-                    <li><a href="#misc">Misc</a></li>
-                </ul>
+            <div class="sidebar">
+                <div class="sidenav">
+                    <ul class="nav nav-pills nav-stacked">
+                        {% for p in engagements %}
+                            <li><a href="#">{{ p }}</a></li>
+                        {% endfor %}
+                        <li class="active"><a href="#incorporation-documents">Incorporation Documents <span class="badge">1</span></a></li>
+                        <li><a href="#qualification">Qualification</a></li>
+                        <li><a href="#founders-documents">Founders Documents</a></li>
+                        <li><a href="#option-plan">Option Plan <span class="badge">2</span></a></li>
+                        <li><a href="#directors-and-officers">Directors and Officers</a></li>
+                        <li><a href="#employment-documents">Employment Documents</a></li>
+                        <li><a href="#consultant-documents">Consultant Documents</a></li>
+                        <li><a href="#intellectual-property">Intellectual Property</a></li>
+                        <li><a href="#misc">Misc</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="col col-lg-9">
@@ -242,8 +244,8 @@
             </div>
             <table class="table table-striped checklist">
                 <tbody>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
+                    <tr class="urgent">
+                        <td class="item-icon"><i class="icon-urgent"></i></td>
                         <td class="item-info"><h4><a href="#">Stock Plan</a></h4></td>
                         <td class="item-meta text-right">
                             <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
@@ -252,8 +254,8 @@
                             <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
                         </td>
                     </tr>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
+                    <tr class="urgent">
+                        <td class="item-icon"><i class="icon-urgent"></i></td>
                         <td class="item-info"><h4><a href="#">Stock Plan Summary</a></h4></td>
                         <td class="item-meta text-right">
                             <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
