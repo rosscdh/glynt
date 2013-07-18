@@ -22,7 +22,6 @@ from managers import DefaultProjectManager
 class Project(models.Model):
     """ Base Project object
     Stores initial project details
-    NB, slug is generated on save if it is not set
     """
     uuid = UUIDField(auto=True, db_index=True)
     customer = models.ForeignKey(Customer)
@@ -40,7 +39,7 @@ class Project(models.Model):
         return '%s of %s Project with %s' % (self.customer.user.get_full_name(), self.company, self.get_primary_lawyer(),)
 
     def get_absolute_url(self):
-        return reverse('project:project', kwargs={'slug': self.slug})
+        return reverse('project:project', kwargs={'slug': self.uuid})
 
     def get_primary_lawyer(self):
         try:
