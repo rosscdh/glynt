@@ -1,0 +1,4 @@
+{% load url from future %}{% load glynt_helpers %}
+{{ message }}
+
+Please assign 2 matching lawyers to this project at: {% current_site_domain %}{% url 'admin:project_project_change' project.pk %}
