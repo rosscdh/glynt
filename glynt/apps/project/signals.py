@@ -87,23 +87,23 @@ def on_project_created(sender, **kwargs):
 #     user_streams.add_stream_item(comment.user, description, project)
 
 
-# def mark_project_notifications_as_read(user, project):
-#     """ used to mark the passed in users notifications for a specific project as read (can be either a lawyer or a customer) """
-#     logger.debug('marking unred notifications as read for user: %s and project: %s'%(user, project.pk))
-#     Notification.objects.filter(recipient=user, target_object_id=project.pk, unread=True, target_content_type=PROJECT_CONTENT_TYPE).mark_all_as_read()
+def mark_project_notifications_as_read(user, project):
+    """ used to mark the passed in users notifications for a specific project as read (can be either a lawyer or a customer) """
+    logger.debug('marking unred notifications as read for user: %s and project: %s'%(user, project.pk))
+    Notification.objects.filter(recipient=user, target_object_id=project.pk, unread=True, target_content_type=PROJECT_CONTENT_TYPE).mark_all_as_read()
 
 
-# @receiver(post_save, sender=Notification, dispatch_uid='project.on_comment_notification_created')
-# def on_comment_notification_created(sender, **kwargs):
-#     """
-#     Handle new notifications
-#     """
-#     notification = kwargs.get('instance')
-#     project_action = notification.data.get('project_action', None)
+@receiver(post_save, sender=Notification, dispatch_uid='project.on_comment_notification_created')
+def on_comment_notification_created(sender, **kwargs):
+    """
+    Handle new notifications
+    """
+    notification = kwargs.get('instance')
+    project_action = notification.data.get('project_action', None)
 
-#     if project_action == 'new_project_comment':
-#         recipients = [notification.recipient]
-#         project = notification.action_object
+    if project_action == 'new_project_comment':
+        recipients = [notification.recipient]
+        project = notification.action_object
 
-#         send = SendProjectEmailsService(project=project, sender=notification.actor, recipients=recipients, notification=notification)
-#         send.process()
+        send = SendProjectEmailsService(project=project, sender=notification.actor, recipients=recipients, notification=notification)
+        send.process()
