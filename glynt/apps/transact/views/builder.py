@@ -108,4 +108,4 @@ class BuilderWizardView(NamedUrlSessionWizardView):
     def done(self, form_list, **kwargs):
         msg = _('Ok, You have created a new Project. Please read the instructions that follow.')
         messages.info(self.request, msg)
-        return HttpResponseRedirect(reverse('dashboard:matching'))
+        return HttpResponseRedirect(reverse('dashboard:overview'))
