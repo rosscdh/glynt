@@ -1,0 +1,19 @@
+{% extends 'base.html' %}{% load paginator glynt_helpers %}
+
+{% block page_title %}What's the current status?{% endblock %}
+{% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>{% endblock %}
+
+{% block body %}
+<div class="container item-view">
+    <div class="page-header">
+        <button type="button" class="btn btn-success btn-large pull-right">Resolve issue</button>
+        <span class="text-muted">Misc</span>
+        <h2>What's the current status?</h2>
+    </div>
+    <div class="row">
+        <div class="col col-lg-12">
+            <!-- Content -->
+        </div>
+    </div>
+</div>
+{% endblock %}
