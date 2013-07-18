@@ -18,6 +18,7 @@ class SendProjectEmailsService(object):
     """ Class to send email to appropriate persons involved in and project.
     is applied when creating an project; as well as commenting on an project
     """
+    mail_template_name = 'project_notice_email'
 
     def __init__(self, project, sender, recipients, notification, **kwargs):
         self.project = project
@@ -38,7 +39,7 @@ class SendProjectEmailsService(object):
             'project': self.project,
             'notification': self.notification,
             'message': self.message,
-            'comment': self.notification.description,
+            'comment': self.notification.description if self.notification else None,
             'project_statement': self.project.project_statement,
             'site': self.site,
         })
@@ -63,13 +64,28 @@ class SendProjectEmailsService(object):
             recipients = self.recipients
         else:
             recipients = [Bunch(name=u[0], email=u[1]) for u in settings.NOTICEGROUP_EMAIL]
-        return [u.email for u in self.recipients]
+        return [u.email for u in recipients]
 
     def process(self):
         send_templated_mail(
-              template_name = 'project_notice_email',
+              template_name = self.mail_template_name,
               template_prefix="email/",
               from_email = site_email,
               recipient_list = self.recipient_list,
               context = self.context
         )
+
+class SendNewProjectEmailsService(SendProjectEmailsService):
+    mail_template_name = 'project_created'
+
+    def __init__(self, project, sender, **kwargs):
+        super(SendNewProjectEmailsService, self).__init__(project=project, sender=sender, recipients=None, notification=None)
+
+    @property
+    def message(self):
+        ctx = {
+            'actor': self.sender,
+            'project': self.project,
+            'id': self.project.pk,
+        }
+        return u'%(actor)s created a new Project (%(project)s):%(id)d which needs to be matched with a lawyer' % ctx

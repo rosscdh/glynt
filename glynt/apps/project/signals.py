@@ -11,7 +11,7 @@ from notifications.models import Notification
 
 from glynt.apps.project.utils import PROJECT_CONTENT_TYPE
 from glynt.apps.project.models import PROJECT_STATUS, Project
-from glynt.apps.project.services.email import SendProjectEmailsService
+from glynt.apps.project.services.email import SendProjectEmailsService, SendNewProjectEmailsService
 
 import logging
 logger = logging.getLogger('django.request')
@@ -33,6 +33,8 @@ def on_project_created(sender, **kwargs):
         notify.send(user, recipient=user, verb=u'created', action_object=project,
                     description=comment, target=project, project_action='created_project', project_pk=project.pk, creating_user_pk=user.pk)
 
+        send = SendNewProjectEmailsService(project=project, sender=user)
+        send.process()
 
 # @receiver(post_save, sender=ThreadedComment, dispatch_uid='project.save_project_comment_signal')
 # def save_project_comment_signal(sender, **kwargs):
