@@ -564,6 +564,20 @@ def conclude():
     newrelic_deploynote()
 
 @task
+def rebuild_local():
+    if not os.path.exists('glynt/local_settings.py'):
+        local('cp conf/dev.local_settings.py glynt/local_settings.py')
+
+    if os.path.exists('./dev.db'):
+        local('rm ./dev.db')
+
+    local('python manage.py syncdb')
+    local('python manage.py migrate')
+    local('python manage.py loaddata sites cities_light transact')
+    local('python manage.py check_permissions')
+
+
+@task
 def deploy(is_predeploy='False',full='False',db='False',search='False'):
     """
     :is_predeploy=True - will deploy the latest MASTER SHA but not link it in: this allows for assets collection

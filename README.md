@@ -43,13 +43,16 @@ a "**customer**"
 7. ```git clone git@github.com:rosscdh/glynt.git```
 8. ```cd glynt```
 9. ```pip install -r requirements.txt``` : install update the required libraries (append --upgrade if you are not sure)
-10. ````cp conf/dev.local_settings.py glynt/local_settings.py```
-11. ```python manage.py syncdb``` : sync the database; and create the default user if there is not already one
-12. ```python manage.py migrate``` : perform the rest of the migrations
-13. ```python manage.py loaddata sites cities_light transact```
-14. ```python manage.py check_permissions``` # Creates the userena permissions
-15. Thats it you can now ```python manage.py runserver_plus```
-16. access http://local.weareml.com:8000/ (you may need to add 127.0.0.1 local.weareml.com to your /etc/hosts file)
+
+10. ```fab rebuild_local``` : will perform the following steps automatically:
+
+    1. ````cp conf/dev.local_settings.py glynt/local_settings.py```
+    2. ```python manage.py syncdb``` : sync the database; and create the default user if there is not already one
+    3. ```python manage.py migrate``` : perform the rest of the migrations
+    4. ```python manage.py loaddata sites cities_light transact```
+    5. ```python manage.py check_permissions``` # Creates the userena permissions
+    6. Thats it you can now ```python manage.py runserver_plus```
+    7. access http://local.weareml.com:8000/ (you may need to add 127.0.0.1 local.weareml.com to your /etc/hosts file)
 
 ## Autoenv
 
