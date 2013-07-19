@@ -569,6 +569,9 @@ def rebuild_local():
         local('cp conf/dev.local_settings.py glynt/local_settings.py')
 
     if os.path.exists('./dev.db'):
+        new_db_name = '/tmp/dev.%s.db.bak' % env.timestamp
+        local('cp ./dev.db %s' % new_db_name)
+        print colored('Local Database Backedup %s...' % new_db_name, 'green')
         local('rm ./dev.db')
 
     local('python manage.py syncdb')
