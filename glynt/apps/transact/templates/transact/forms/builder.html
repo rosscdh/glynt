@@ -12,22 +12,6 @@
 
 
 {% block prebody %}
-<!-- <div class="jumbotron-header">
-    <div class="col col-lg-5 col-offset-2">
-        <div class="container">
-            {% if page_title %}<h2 class="alt">{% transpose_company_data page_title %}</h2>{% endif %}
-             {% if page_description %}<p class="softer">{{ page_description }}</a>{% endif %}
-             <div class="row">
-                 <div class="col-lg-6">
-                   
-                </div>
-                <div class="col col-lg-6">
-                   
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
 
 <div class="jumbotron-header">
     <div class="container">
@@ -82,15 +66,23 @@
         </div>
     </div>
 </div>
+
 {% endblock %}
 
 {% block js %}
-    <script src="{{ STATIC_URL }}js/jquery.dateentry/jquery.dateentry.min.js"></script>
+    <script src="{{ STATIC_URL }}transact/js/jquery.plugin.form_json_data.js"></script>
     <script src="{{ STATIC_URL }}transact/js/jquery.plugin.region_clone.js"></script>
     <script src="{{ STATIC_URL }}transact/js/jquery.plugin.show_when.js"></script>
+
+    <script src="{{ STATIC_URL }}js/jquery.dateentry/jquery.dateentry.min.js"></script>
+
     <script>
     $(document).ready(function(){
         var form = $( 'form#builder-form' );
+
+        $('input[name={{ wizard.steps.current }}-form_json_data]').form_json_data({
+            'update_url': '/test/'
+        });
         $('fieldset[data-region-clone]').region_clone();
         $('[data-show-when]').show_when();
 
@@ -106,10 +98,11 @@
             $(item).dateEntry({'defaultDate': defaultDate});
         })
 
+
         /**
         * Handle the Add cloned region event
         **/
-        $(document).on("region_clone_add", function (event) {
+        $(document).on("ADD_CLONED_REGION_form_json_data", function (event) {
 
             $.each(event.cloned_region.find('input'), function(i, item) {
                 form.parsley( 'addItem', item );
@@ -120,7 +113,7 @@
         /**
         * Handle the Remove cloned region event
         **/
-        $(document).on("region_clone_remove", function (event) {
+        $(document).on("REMOVE_CLONED_REGION_form_json_data", function (event) {
 
             $.each(event.cloned_region.find('input'), function(i, item) {
                 form.parsley( 'removeItem', item );
