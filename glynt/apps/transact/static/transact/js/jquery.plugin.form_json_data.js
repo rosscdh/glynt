@@ -53,7 +53,7 @@ $(function() {
                 * Capture changes made to the form_json_data
                 */
                 $(document).on("SAVE_form_json_data", function (event) {
-console.log(self.options.update_url)
+
                     $.ajax({
                         type: 'POST',
                         url: self.options.update_url,
@@ -68,6 +68,7 @@ console.log(self.options.update_url)
                     .complete(function() {
                         self._log('complete SAVE_form_json_data')
                     });
+
                 });
             } else {
                 self._log('self.options.update_url does not exist');

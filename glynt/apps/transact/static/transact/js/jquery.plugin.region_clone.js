@@ -94,6 +94,10 @@ $(function() {
 				elem.prop('name', new_name);
 			}
 
+			// append json_id and json_name
+			elem.attr('data-json_id', elem.prop('id').replace(/^id_(\d+)\-/g,''));
+			elem.attr('data-json_name', elem.prop('name').replace(/^id_(\d+)\-/g,''));
+
 			elem.on('change', function (event) {
                 $.event.trigger({
                     type: "MODIFIED_CLONED_REGION_form_json_data",
