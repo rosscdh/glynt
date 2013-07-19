@@ -1,16 +1,16 @@
 {% load templatetag_handlebars %}
 
 {% tplhandlebars "tpl-profile-mini" %}
-<img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - {{#if profile.is_lawyer }}Lawyer{{/if}}{{#if profile.is_customer }}Customer{{/if}}" />
+<img class="avatar {{ img_class }}" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - {{#if profile.is_lawyer }}Lawyer{{/if}}{{#if profile.is_customer }}Customer{{/if}}" />
 {% endtplhandlebars %}
 
 {% tplhandlebars "tpl-small" %}
-        <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }}" />
+        <img class="avatar {{ img_class }}" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }}" />
         <strong>{{ profile.name }}</strong>
 {% endtplhandlebars %}
 
 {% tplhandlebars "tpl-startup-profile" %}
-        <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Startup" />
+        <img class="avatar {{ img_class }}" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Startup" />
         <h5>{{ profile.name }}<br/><small>Startup</small></h5>
         <dl>
             <dt>Website</dt>
@@ -42,8 +42,7 @@
 {% endtplhandlebars %}
 
 {% tplhandlebars "tpl-lawyer-profile" %}
-
-    <a href="{{ profile.profile_url }}"><img class="avatar" src="{{ profile.profile_photo }}" width="120" height="120" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Lawyer" /></a>
+    <a href="{{ profile.profile_url }}"><img class="avatar {{ img_class }}" src="{{ profile.profile_photo }}" width="120" height="120" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Lawyer" /></a>
     <div class="span6">
     <h2>{{ profile.name }}</h2>
     {{#if profile.firm }}<p>{{ profile.position }} at {{ profile.firm }}</p>{{/if}}
@@ -59,7 +58,7 @@
 {% endtplhandlebars %}
 
 {% tplhandlebars "tpl-founder-profile" %}
-    <img class="avatar" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Customer" />
+    <img class="avatar {{ img_class }}" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }} - Customer" />
     <h5>{{ profile.name }}<br/><small>founder</small></h5>
     <dl>
         {{#if profile.phone }}

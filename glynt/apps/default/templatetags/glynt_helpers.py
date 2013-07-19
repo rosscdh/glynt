@@ -212,3 +212,13 @@ profile_card_js.is_safe = True
 @register.inclusion_tag('comments/comments.js')
 def comments_js():
     return {}
+
+
+@register.filter
+def as_percentage_of(part, whole):
+    part = (int(part))
+    whole = (int(whole))
+    try:
+        return "%d%%" % (float(part) / float(whole) * 100)
+    except (ValueError, ZeroDivisionError):
+        return ""

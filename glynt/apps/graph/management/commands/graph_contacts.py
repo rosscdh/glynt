@@ -2,8 +2,6 @@
 """ 
 Command to collect user connections from various services
 """
-import sys
-from django.conf import settings
 from django.core.management.base import BaseCommand
 from optparse import make_option
 
@@ -82,7 +80,7 @@ class Command(BaseCommand):
 
             for u in contacts:
                 # linked in uses "id" and not uid
-                c = LinkedInProcessConnectionService(item=u, uid=u.get('id'), user=auth.user)
+                LinkedInProcessConnectionService(item=u, uid=u.get('id'), user=auth.user)
 
     def angel(self, auth):
         if auth.provider == 'angel':
@@ -112,6 +110,6 @@ class Command(BaseCommand):
                 logger.debug('AngelList in response:%s for %s '%(resp, auth.user.username,))
                 for u in contacts:
                     if u.get('id', None) is not None:
-                        c = AngelProcessConnectionService(uid=u.get('id'), item=u, user=auth.user)
+                        AngelProcessConnectionService(uid=u.get('id'), item=u, user=auth.user)
 
                 complete = bool(current_page >= last_page)

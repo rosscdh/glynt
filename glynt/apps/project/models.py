@@ -2,9 +2,10 @@
 from django.db import models
 from django.core.urlresolvers import reverse
 
-from jsonfield import JSONField
+from django_extensions.db.fields import CreationDateTimeField, ModificationDateTimeField
+from uuidfield import UUIDField
 
-from glynt.apps.utils import generate_unique_slug
+from jsonfield import JSONField
 
 from glynt.apps.project.services.actions import OpenProjectService, CloseProjectService, ReOpenProjectService
 
@@ -21,25 +22,30 @@ from managers import DefaultProjectManager
 class Project(models.Model):
     """ Base Project object
     Stores initial project details
-    NB, slug is generated on save if it is not set
     """
-    transaction = models.ForeignKey(Transaction, null=True)
-    project_status = models.IntegerField(choices=PROJECT_STATUS.get_choices(), default=PROJECT_STATUS.new, db_index=True)
-    slug = models.SlugField(max_length=128, blank=False)
-    startup = models.ForeignKey(Company)
+    uuid = UUIDField(auto=True, db_index=True)
     customer = models.ForeignKey(Customer)
-    lawyer = models.ForeignKey(Lawyer)
+    company = models.ForeignKey(Company)
+    transactions = models.ManyToManyField(Transaction)
+    lawyers = models.ManyToManyField(Lawyer, blank=True)
     data = JSONField(default={})
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True, null=True)
+    status = models.IntegerField(choices=PROJECT_STATUS.get_choices(), default=PROJECT_STATUS.new, db_index=True)
+    date_created = CreationDateTimeField()
+    date_modified = ModificationDateTimeField()
 
     objects = DefaultProjectManager()
 
     def __unicode__(self):
-        return '%s of %s Project with %s' % (self.customer.user.get_full_name(), self.startup, self.lawyer.user.get_full_name(),)
+        return '%s of %s Project with %s' % (self.customer.user.get_full_name(), self.company, self.get_primary_lawyer(),)
 
     def get_absolute_url(self):
-        return reverse('project:project', kwargs={'slug': self.slug})
+        return reverse('project:project', kwargs={'slug': self.uuid})
+
+    def get_primary_lawyer(self):
+        try:
+            return self.lawyers.select_related('user').all()[0]
+        except IndexError:
+            return None
 
     def open(self, actioning_user):
         """ Open the notification """
@@ -56,40 +62,28 @@ class Project(models.Model):
 
     @property
     def is_open(self):
-        return PROJECT_STATUS.open == self.project_status
+        return PROJECT_STATUS.open == self.status
 
     @property
     def is_closed(self):
-        return PROJECT_STATUS.closed == self.project_status
+        return PROJECT_STATUS.closed == self.status
 
     @property
     def is_new(self):
-        return PROJECT_STATUS.new == self.project_status
+        return PROJECT_STATUS.new == self.status
 
     @property
     def type(self):
         return self.transaction.title
 
     @property
-    def status(self):
-        return PROJECT_STATUS.get_desc_by_value(self.project_status)
+    def project_status(self):
+        return PROJECT_STATUS.get_desc_by_value(self.status)
 
     @property
     def project_statement(self):
         return self.data.get('project_statement', None)
 
-    @property
-    def project_types(self):
-        project_types = [('engage_for_general','General'), ('engage_for_incorporation','Incorporation'), ('engage_for_ip','Intellectual Property'), ('engage_for_employment','Employment Law'), ('engage_for_fundraise','Fundraising'), ('engage_for_cofounders','Co-Customer')]
-        return [(self.data.get(r,False),name) for r,name in project_types if self.data.get(r,False)]
-
-    def save(self, *args, **kwargs):
-        """ Ensure that we have a slug """
-        if self.slug in [None, '']:
-            self.slug = generate_unique_slug(instance=self)
-
-        return super(Project, self).save(*args, **kwargs)
-
 
 # import signals so they load on django load
-from glynt.apps.project.signals import save_project_comment_signal
+from glynt.apps.project.signals import on_project_created

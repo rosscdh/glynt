@@ -3,10 +3,38 @@ from django import template
 
 register = template.Library()
 
+import user_streams
 from notifications.models import Notification
 
 from glynt.apps.project.models import Project
 from glynt.apps.project.utils import PROJECT_CONTENT_TYPE
+
+
+@register.simple_tag(takes_context=True)
+def project_name(context, project, index=1):
+    user = context.get('user')
+    transactions = [t.title for t in project.transactions.all()]
+    return u'#{index} {company}: {transactions}'.format(**{'company': project.company, 'index': index, 'transactions': ', '.join(transactions)})
+
+
+@register.inclusion_tag('project/partials/activity_list.html')
+def project_activity_stream(project, limit=10):
+  return {
+    'object_list': Notification.objects.filter(target_object_id=project.pk, target_content_type=PROJECT_CONTENT_TYPE)[:limit]
+  }
+
+
+@register.inclusion_tag('project/partials/project_lawyers.html')
+def project_lawyers(project):
+    context = {}
+    lawyers = project.lawyers.all()
+    num_lawyers = len(lawyers)
+    context.update({
+        'project': project,
+        'lawyers': lawyers,
+        'num_lawyers': num_lawyers,
+    })
+    return context
 
 
 @register.inclusion_tag('project/partials/project_intro.html', takes_context=True)
