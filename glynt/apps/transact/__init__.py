@@ -10,14 +10,14 @@ TRANSACTION_TEMPLATE_PATH = os.path.join(MODULE_PATH, 'templates/transactions/')
 
 
 def import_module_class(name):
-    try:
-        components = name.split('.')
-        module_path = components[:-1]
-        klass = components[-1:]
-        mod = __import__('.'.join(module_path), fromlist=klass) # import the class and module
-        klass = getattr(mod, klass[0])
-    except AttributeError:
-        klass = None
+    #try:
+    components = name.split('.')
+    module_path = components[:-1]
+    klass = components[-1:]
+    mod = __import__('.'.join(module_path), fromlist=klass) # import the class and module
+    klass = getattr(mod, klass[0])
+    #except AttributeError:
+    #    klass = None
     return klass
 
 
@@ -25,6 +25,10 @@ class BuilderBaseForm(forms.Form):
     """ provide accessors for the page meta properties
     that need to be defined in the form to allow us to modify the templates
     based on the form being viewed """
+    page_title = None
+    page_description = None
+    data_bag = None
+
     def __init__(self, *args, **kwargs):
         if not hasattr(self, 'helper'):
             self.helper = FormHelper()
@@ -35,18 +39,6 @@ class BuilderBaseForm(forms.Form):
         self.user = self.request.user if self.request and hasattr(self.request, 'user') else None
 
         super(BuilderBaseForm, self).__init__(*args, **kwargs)
-
-    @property
-    def data_bag(self):
-        return getattr(self.__class__, 'data_bag', None)
-
-    @property
-    def page_title(self):
-        return getattr(self.__class__, 'page_title', None)
-
-    @property
-    def page_description(self):
-        return getattr(self.__class__, 'page_description', None)
 
     @classmethod
     def get_data_bag(self, **kwargs):
