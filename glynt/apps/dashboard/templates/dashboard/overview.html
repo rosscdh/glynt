@@ -8,9 +8,8 @@
     <div class="page-header">
         <div class="btn-group pull-right">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                Startup #1: Series Seed <span class="caret"></span>
+                Projects <span class="caret"></span>
             </button>
-
             <ul class="dropdown-menu">
                 <li class="nav-header">Active Projects</li>
                 {% for p in projects %}
@@ -83,6 +82,7 @@
                 <div class="callout callout-danger empty">
                     <div class="empty-message empty-message-exclamation-sign">
                         <h3>Please complete your transaction profile.</h3>
+                        <a href="{% url 'transact:builder' project_uuid=project.uuid tx_range='INTAKE' step='1' %}" class="btn btn-error">now</a>
                     </div>
                 </div>
                 <!-- <div class="callout callout-success empty"> -->
