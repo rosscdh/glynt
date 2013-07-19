@@ -92,8 +92,8 @@ $(function() {
             $(document).on("MODIFIED_CLONED_REGION_form_json_data", function (event) {
                 var elem = $(event.instance);
                 var cloned_region_key = event.cloned_region_key;
-                var elem_id = elem.prop('id');
-                var instance_dict = {'id': elem.prop('id'), 'name': elem.prop('name'), 'val': elem.val()}
+                var elem_id = elem.data('json_id');
+                var instance_dict = {'id': elem.data('json_id'), 'name': elem.data('json_name'), 'val': elem.val()}
 
                 self.options.source_data[cloned_region_key][elem_id] = instance_dict;
 
