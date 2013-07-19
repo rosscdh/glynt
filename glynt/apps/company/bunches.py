@@ -3,6 +3,7 @@ from bunch import Bunch
 
 from glynt.apps.company.services import EnsureCompanyService
 
+import json
 import logging
 logger = logging.getLogger('lawpal.services')
 
@@ -13,6 +14,10 @@ class UserIntakeCompanyBunch(Bunch):
     """
     def __init__(self, user, **kwargs):
         self.user = user
+        self.__dict__.update(kwargs)
+
+    def as_json(self):
+        return json.dumps(self.__dict__)
 
     def company(self):
         try:

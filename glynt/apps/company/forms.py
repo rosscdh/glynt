@@ -2,6 +2,9 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Fieldset
+
 from glynt.apps.transact import BuilderBaseForm
 from glynt.apps.company import COMPANY_STATUS_CHOICES
 
@@ -18,6 +21,9 @@ class CompanyProfileForm(BuilderBaseForm):
     """
     The Company Setup Form
     """
+    founder_name = forms.CharField()
+    founder_email = forms.EmailField()
+
     incubator = forms.CharField(label=_('Name of incubator or accelerator (if applicable)'), required=False, help_text="If you are currently particpating in an accelerator please enter it here.")
     current_status = forms.ChoiceField(label=_('Current funding status'), choices=COMPANY_STATUS_CHOICES.get_choices(), initial=COMPANY_STATUS_CHOICES.pre_funding, widget=forms.RadioSelect)
     profile_website = forms.URLField(label=_('Website or other profile'), help_text="", widget=forms.TextInput(attrs={'data-type': 'url', 'placeholder': 'http://angel.co/lawpal'}))
@@ -30,3 +36,30 @@ class CompanyProfileForm(BuilderBaseForm):
     ip_nolonger_affiliated = forms.BooleanField(label=_('Is anyone involved in the creation of IP and no longer affiliated with the Company?'), required=False, initial=False)
     ip_otherthan_founder = forms.BooleanField(label=_('Is anyone other than the founders listed above involved in the creation of IP?'), required=False, initial=False)
     ip_university_affiliation = forms.BooleanField(label=_('Is anyone involved in the creation of IP affiliated with a university at the time?'), required=False, initial=False)
+
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Fieldset(
+                'Founders',
+                'founder_name',
+                'founder_email',
+                **{'data-region-clone': 'true', 'data-region-name': 'founders'}
+            ),
+            Fieldset(
+                'About your Company',
+                'incubator',
+                'current_status',
+                'profile_website',
+                'description',
+                'has_option_plan',
+                'target_states_and_countries',
+                'num_officers',
+                'num_employees',
+                'num_consultants',
+                'ip_nolonger_affiliated',
+                'ip_otherthan_founder',
+                'ip_university_affiliation',
+            )
+        )
+        super(CompanyProfileForm, self).__init__(*args, **kwargs)
