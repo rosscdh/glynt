@@ -139,6 +139,23 @@ class CompanyBasicProfileResource(BaseApiModelResource):
         return bundle
 
 
+class CompanyDataBagResource(BaseApiModelResource):
+    class Meta(BaseApiModelResource.Meta):
+        queryset = Company.objects.all().select_related('customers', 'customers_user')
+        authorization = Authorization()
+        list_allowed_methods = ['get', 'put', 'patch']
+        resource_name = 'company/data'
+        fields = ['data']
+
+        filtering = {
+            'pk': ALL,
+            'slug': ALL,
+        }
+
+    def dehydrate_data(self, bundle):
+        return bundle.obj.data
+
+
 def customer_profile(bundle):
     data = {}
     if bundle.obj.profile.is_customer:
@@ -251,10 +268,13 @@ V1_INTERNAL_API.register(LocationSimpleResource())
 V1_INTERNAL_API.register(StateSimpleResource())
 
 V1_INTERNAL_API.register(FirmSimpleResource())
-V1_INTERNAL_API.register(CompanyLiteSimpleResource())
 
 V1_INTERNAL_API.register(UserBasicProfileResource())
+
+V1_INTERNAL_API.register(CompanyLiteSimpleResource())
 V1_INTERNAL_API.register(CompanyBasicProfileResource())
+V1_INTERNAL_API.register(CompanyDataBagResource())
+
 
 V1_INTERNAL_API.register(UserToDoCountResource())
 
