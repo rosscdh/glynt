@@ -39,7 +39,7 @@ class ProjectCheckListService(object):
                 #cat_slug = self.slug(category)
 
                 todos_by_cat[cat_slug] = todos_by_cat.get(cat_slug, [])
-                todos_by_cat[cat_slug] = item.checklist
+                todos_by_cat[cat_slug] += item.checklist
 
                 if item.type == 'repeater':
                     # need to repeat this segment X times by
@@ -54,7 +54,7 @@ class ProjectCheckListService(object):
         logger.info('Get Project transactions')
         cats = []
         for c in self.checklist:
-            cats += c.categories()
+            cats = list(set(cats + c.categories()))
         return sorted(cats)
 
     def process(self):

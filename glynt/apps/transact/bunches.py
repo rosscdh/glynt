@@ -27,5 +27,5 @@ class SeedFundingEquityRoundBunch(BaseToDoBunch):
     """ class defined the names of fields to extract from a transaction data field """
 
 
-class SeedFundingConvertibleNoteBunch(BaseToDoBunch):
+class SeedFundingConvertibleNoteRoundBunch(BaseToDoBunch):
     """ class defined the names of fields to extract from a transaction data field """

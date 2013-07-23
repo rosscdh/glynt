@@ -37,7 +37,7 @@
       "description": "Production explanation goes here, why it's awesome etc.",
       "data": {
         "checklist_bunches": [
-          "SeedFundingConvertibleBunch"
+          "SeedFundingConvertibleNoteRoundBunch"
         ]
       },
       "slug": "SF",
