@@ -1,6 +1,6 @@
 {% extends 'base.html' %}{% load paginator glynt_helpers %}
 
-{% block page_title %}Checklist{% endblock %}
+{% block page_title %}Checklist for: {{ project }}{% endblock %}
 {% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>{% endblock %}
 
 {% block body %}
@@ -50,7 +50,7 @@
                 <table class="table table-striped checklist">
                     <tbody>
                         <tr class="urgent">
-                            <td class="item-icon"><i class="icon-urgent"></i></td>
+                            <td class="item-icon"><i class="{% cycle 'item-draft' 'icon-pending' 'icon-urgent' 'icon-complete' %}"></i></td>
                             <td class="item-info"><h4><a href="#">{{ item.name }}</a></h4></td>
                             <td class="item-meta">
                                 <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
