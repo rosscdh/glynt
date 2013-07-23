@@ -12,10 +12,12 @@ class CustomerDashboardView(TemplateView):
     template_name = 'dashboard/overview.html'
 
     def qs_filter(self):
-        project_uuid = self.request.GET.get('p', None)
+        project_uuid = self.request.GET.get('p', self.kwargs.get('uuid'))
         qs_filter = {}
+
         if project_uuid is not None:
             qs_filter = {'uuid': project_uuid}
+
         qs_filter.update({
             'customer': self.request.user.customer_profile
         })
@@ -28,7 +30,6 @@ class CustomerDashboardView(TemplateView):
 
         if current_project is None:
             raise Http404('Project uuid: %s does not exist' % qs_filter.get('uuid'))
-
 
         projects = Bunch({
             'project': current_project,
