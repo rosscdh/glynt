@@ -82,6 +82,26 @@ p.intake-save a {
 }
 
 
+.founder-block .cloned-region legend {
+    display:none;
+}
+@media (min-width: 992px) {
+
+    .founder-block .row {
+        width:50%;
+        float:left;
+    }
+
+    .founder-block .row {
+        width:50%;
+        float:right;
+    }
+    .founder-block .row{
+        margin-top:10px;
+        margin-bottom:10px;
+
+    }
+}
 @media (max-width: 768px) {
   .transaction-choice .btn {
     margin: .5em .3em 0 .3em;

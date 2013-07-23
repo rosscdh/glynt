@@ -16,7 +16,7 @@
 <div class="jumbotron-header">
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 col-offset-2">
+            <div class="col-lg-10 col-offset-1">
                 {% if wizard.steps.count > 1 %}
                     <div class="row">
                         <div class="col-lg-6">
@@ -41,11 +41,9 @@
 <div class="form-wrap">
     <div class="container">
         <div class="row">
-            <div class="col col-lg-8 col-offset-2">
-
+            <div class="col col-lg-10 col-offset-1">
                 <form id="builder-form" data-validate="parsley" action="." method="POST" class="form-horizontal">{% csrf_token %}
                     {{ wizard.management_form }}
-
                     {% if wizard.form.forms %}
                         {{ wizard.form.management_form }}
                         {% for form in wizard.form.forms %}
@@ -59,9 +57,10 @@
                         {% endif %}
                     {% endif %}
                     <br />
-                    <button type="submit" class="btn btn-success btn-large">Next Step</button>
+                    <div class="col col-lg-6 col-offset-5">
+                         <button type="submit" class="btn btn-success btn-large">Next Step</button>
+                    </div>
                 </form>
-
             </div>
         </div>
     </div>
