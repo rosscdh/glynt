@@ -27,6 +27,9 @@ class BuilderWizardView(NamedUrlSessionWizardView):
     template_name = 'transact/forms/builder.html'
     form_list = []
 
+    def get_update_url(self, context, project):
+        return context.get('form').get_update_url(project=project)
+
     def dispatch(self, request, *args, **kwargs):
         """
         If we have no forms defined then redirect to done
@@ -47,6 +50,7 @@ class BuilderWizardView(NamedUrlSessionWizardView):
         context.update({
             'page_title': context.get('form').page_title,
             'page_description': context.get('form').page_description,
+            'update_url': self.get_update_url(context=context, project=self.project),
         })
         return context
 
