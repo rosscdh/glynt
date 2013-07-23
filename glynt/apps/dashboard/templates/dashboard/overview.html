@@ -6,14 +6,19 @@
 {% block body %}
 <div class="container dashboard-view">
     <div class="page-header">
+        <div class="btn-group">
+            <a class="btn btn-danger" href="{% url 'dashboard:checklist' uuid=project.uuid %}">Checklist</a>
+        </div>
+
         <div class="btn-group pull-right">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                 Projects <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
+                <li><a href="{% url 'dashboard:overview' %}">Overview</a></li>
                 <li class="nav-header">Active Projects</li>
                 {% for p in projects %}
-                <li><a href="{% url 'dashboard:overview' %}?p={{ p.uuid }}">{% project_name p forloop.counter %}</a></li>
+                <li><a href="{% url 'dashboard:project' uuid=p.uuid %}">{% project_name p forloop.counter %}</a></li>
                 {% empty %}
                 <li>No Projects</li>
                 {% endfor %}
@@ -79,7 +84,7 @@
         <div class="col col-lg-6">
             <div class="widget transaction-profile">
                 <h3>Transaction Profile</h3>
-                <div class="callout callout-danger empty">
+                <div class="callout callout-success empty">
                     <div class="empty-message empty-message-exclamation-sign">
                         <h3>Please complete your transaction profile.</h3>
                         <a href="{% url 'transact:builder' project_uuid=project.uuid tx_range='INTAKE' step='1' %}" class="btn btn-error">now</a>
