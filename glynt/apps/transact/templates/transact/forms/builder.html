@@ -66,7 +66,6 @@
         </div>
     </div>
 </div>
-
 {% endblock %}
 
 {% block js %}
@@ -80,10 +79,15 @@
     $(document).ready(function(){
         var form = $( 'form#builder-form' );
 
-        $('input[name={{ wizard.steps.current }}-form_json_data]').form_json_data({
-            'update_url': '/test/'
+        {% if update_url %}
+            $('input[name={{ wizard.steps.current }}-form_json_data]').form_json_data({
+                'update_url': '{{ update_url }}'
+            });
+        {% endif %}
+
+        $('fieldset[data-region-clone]').region_clone({
+            'current_step': {{ wizard.steps.current }}
         });
-        $('fieldset[data-region-clone]').region_clone();
         $('[data-show-when]').show_when();
 
         /**
