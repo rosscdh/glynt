@@ -37,6 +37,12 @@ class BaseToDoBunch(Bunch):
         super(BaseToDoBunch, self).__init__(*args, **kwargs)
         self.load_template()
 
+    def categories(self):
+        return self.todos.keys()
+
+    def checklist(self):
+        return self.todos
+
     def load_template(self):
         if not self.template:
             self.template = '%s.yml' % self.__class__.__name__.lower().replace('bunch', '')
