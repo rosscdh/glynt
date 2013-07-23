@@ -16,10 +16,10 @@ def import_module_class(name):
         components = name.split('.')
         module_path = components[:-1]
         klass = components[-1:]
-        mod = __import__('.'.join(module_path), fromlist=klass) # import the class and module
+        mod = __import__('.'.join(module_path), fromlist=klass)  # import the class and module
         klass = getattr(mod, klass[0])
     except AttributeError:
-       klass = None
+        klass = None
     return klass
 
 
@@ -32,12 +32,12 @@ class BuilderBaseForm(forms.Form):
     data_bag = None
 
     #  stores the JSON data used to handle repeatables etc
-    form_json_data = forms.CharField()
+    form_json_data = forms.CharField(widget=forms.HiddenInput)
 
     def __init__(self, *args, **kwargs):
         if not hasattr(self, 'helper'):
             self.helper = FormHelper()
-        
+
         if hasattr(self.helper, 'layout'):
             self.helper[:-1].wrap(Field, 'form_json_data')
 
