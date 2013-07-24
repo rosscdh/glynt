@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load paginator glynt_helpers %}
+{% extends 'base.html' %}{% load paginator glynt_helpers todo_tags %}
 
 {% block page_title %}Checklist for: {{ project }}{% endblock %}
 {% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>{% endblock %}
@@ -11,10 +11,7 @@
     <div class="row">
         <div class="col col-lg-3">
             <div class="subnav affix">
-                <ul class="nav nav-pills nav-stacked">
-                    {% for p in engagements %}
-                        <li><a href="#">{{ p }}</a></li>
-                    {% endfor %}
+                <ul id="checklist-categories" class="nav nav-pills nav-stacked">
                     {% for c in checklist.categories %}
                     <li class=""><a href="#{{ c|slugify }}">{{ c }}</a></li>
                     {% endfor %}
@@ -49,14 +46,14 @@
                 {% for item in items %}
                 <table class="table table-striped checklist">
                     <tbody>
-                        <tr class="urgent">
-                            <td class="item-icon"><i class="{% cycle 'item-draft' 'icon-pending' 'icon-urgent' 'icon-complete' %}"></i></td>
+                        <tr class="{{ item.display_status|todo_status_row_class }}">
+                            <td class="item-icon"><i class="{{ item.display_status|todo_status_icon }}"></i></td>
                             <td class="item-info"><h4><a href="#">{{ item.name }}</a></h4></td>
                             <td class="item-meta">
-                                <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                                <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                                <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                                <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
+                                <button type="button" title="Comments" data-tooltip="Comments" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>{{ item.num_comments }}</span></button>
+                                <button type="button" title="Edit" data-tooltip="Edit" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
+                                <button type="button" title="Attachments" data-tooltip="Attachments" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>{{ item.num_attachements }}</span></button>
+                                <a href="#">{% if item.user %}<div class="profile-card" data-username="{{ item.user.username }}" data-template="mini">&nbsp;</div>{% else %}<button type="button" title="Assign" data-tooltip="Assign" class="btn btn-small btn-default"><i class="icon-screenshot"></i></button>{% endif %}
                             </td>
                         </tr>
                     </tbody>
@@ -68,6 +65,16 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block css %}
+<style>
+    ul#checklist-categories a { 
+        display: inline-block; 
+        max-width: 250px; 
+        vertical-align: middle;
+    }
+</style>
 {% endblock %}
 
 {% block js %}
