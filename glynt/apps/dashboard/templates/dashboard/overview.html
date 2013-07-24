@@ -83,17 +83,20 @@
         <div class="col col-lg-6">
             <div class="widget transaction-profile">
                 <h3>Transaction Profile</h3>
+                {% if not profile_is_complete %}
                 <div class="callout callout-danger empty">
                     <div class="empty-message empty-message-exclamation-sign">
                         <h3>Please complete your transaction profile.</h3>
                         <a href="{% url 'transact:builder' project_uuid=project.uuid tx_range='INTAKE' step='1' %}" class="btn btn-error">now</a>
                     </div>
                 </div>
-                <!-- <div class="callout callout-success empty"> -->
-                    <!-- <div class="empty-message empty-message-ok"> -->
-                        <!-- <h3>Your transaction profile is up-to-date.</h3> -->
-                    <!-- </div> -->
-                <!-- </div> -->
+                {% else %}
+                <div class="callout callout-success empty">
+                    <div class="empty-message empty-message-ok">
+                        <h3>Your transaction profile is up-to-date.</h3>
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>

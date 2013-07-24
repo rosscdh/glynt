@@ -49,7 +49,7 @@ class EnsureCompanyService(object):
             self.company.twitter = self.twitter
 
         if self.data:
-            self.company.data = self.data
+            self.company.data.update(self.data)
 
         logger.info("Saving startup %s", self.company_name)
         self.company.save()
