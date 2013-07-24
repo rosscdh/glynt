@@ -24,7 +24,7 @@ transaction:
                     attachment: []
 
 
-        Qualification to do business in other states or countries:
+        Qualification to do business:
             type: 'simple'
             checklist:
                 -   name: 'File the Statement and Designation by Foreign Corporation with the California Secretary of State.'
@@ -45,6 +45,7 @@ transaction:
 
         Founders Documents:
             type: 'repeater'
+            repeater_key: 'founders'
             checklist:
                 -   name: 'Stock Purchase Agreement for {{ full_name }}'
                     attachment: []
@@ -75,6 +76,7 @@ transaction:
 
         Option Holders:
             type: 'repeater'
+            repeater_key: 'option_holders'
             checklist:
                 -   name: 'Stock option grant and restricted stock purchase agreements for {{ full_name }}'
                     attachment: []
@@ -95,6 +97,7 @@ transaction:
 
         Directors & Officers:
             type: 'repeater'
+            repeater_key: 'officers'
             checklist:
                 -   name: 'Indemnification Agreement for {{ full_name }}'
                     attachment: []
@@ -104,6 +107,7 @@ transaction:
 
         Employment Documents:
             type: 'repeater'
+            repeater_key: 'employees'
             checklist:
                 -   name: 'Employment Offer Letter for {{ full_name }}'
                     attachment: []
@@ -117,6 +121,7 @@ transaction:
 
         Consultant Documents:
             type: 'repeater'
+            repeater_key: 'consultants'
             checklist:
                 -   name: 'Consultant Agreement for {{ full_name }}'
                     attachment: []
