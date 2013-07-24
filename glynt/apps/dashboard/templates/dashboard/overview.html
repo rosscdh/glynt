@@ -15,7 +15,6 @@
                 Projects <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-                <li><a href="{% url 'dashboard:overview' %}">Overview</a></li>
                 <li class="nav-header">Active Projects</li>
                 {% for p in projects %}
                 <li><a href="{% url 'dashboard:project' uuid=p.uuid %}">{% project_name p forloop.counter %}</a></li>
