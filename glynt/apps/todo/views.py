@@ -39,8 +39,8 @@ class ProjectToDoView(ListView):
             'project': self.project,
             'checklist': self.checklist_service,
             'counts': {
-                'new': self.model.objects.new(project=self.project, user=self.request.user).count(),
-                'open': self.model.objects.open(project=self.project, user=self.request.user).count(),
+                'new': self.model.objects.unassigned(project=self.project, user=self.request.user).count(),
+                'open': self.model.objects.assigned(project=self.project, user=self.request.user).count(),
                 'closed': self.model.objects.closed(project=self.project, user=self.request.user).count(),
             }
         })
