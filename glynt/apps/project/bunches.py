@@ -27,6 +27,7 @@ class ProjectIntakeFormIsCompleteBunch(Bunch):
                         num_officers = self.company.data.get('num_officers'),
                         num_employees = self.company.data.get('num_employees'),
                         num_consultants = self.company.data.get('num_consultants'),
+                        num_option_holders = self.company.data.get('num_option_holders'),
                         ip_nolonger_affiliated = self.company.data.get('ip_nolonger_affiliated'),
                         ip_otherthan_founder = self.company.data.get('ip_otherthan_founder'),
                         ip_university_affiliation = self.company.data.get('ip_university_affiliation'),
