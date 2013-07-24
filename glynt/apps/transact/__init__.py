@@ -78,4 +78,8 @@ class BuilderBaseForm(forms.Form):
     def save(self, *args, **kwargs):
         data_bag = self.get_data_bag(user=self.user)
         if data_bag and hasattr(data_bag, 'save'):
+
+            # remove the unrequired fields
+            self.cleaned_data.pop('form_json_data')
+
             return data_bag.save(**self.cleaned_data)
