@@ -9,13 +9,6 @@ from glynt.apps.transact import BuilderBaseForm
 from glynt.apps.company import COMPANY_STATUS_CHOICES
 from glynt.apps.company import OPTION_PLAN_STATUS_CHOICES
 
-class CompanyProfileIsCompleteValidator(forms.Form):
-    """ is used by the profile_complete template tag
-    to evaluate the completeness of a companies profile """
-    first_name = forms.CharField(required=True)
-    last_name = forms.CharField(required=True)
-    startup_name = forms.CharField(required=True)
-
 
 class CompanyProfileForm(BuilderBaseForm):
     """
