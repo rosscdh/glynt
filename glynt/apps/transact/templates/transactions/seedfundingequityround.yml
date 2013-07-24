@@ -3,3 +3,8 @@ transaction:
     description: ''
     note: ''
     todos:
+
+        General:
+            type: 'simple'
+            checklist:
+                -   name: 'Item 1'
