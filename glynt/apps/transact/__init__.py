@@ -32,7 +32,7 @@ class BuilderBaseForm(forms.Form):
     data_bag = None
 
     #  stores the JSON data used to handle repeatables etc
-    form_json_data = forms.CharField(widget=forms.HiddenInput)
+    form_json_data = forms.CharField(required=False, widget=forms.HiddenInput)
 
     def __init__(self, *args, **kwargs):
         if not hasattr(self, 'helper'):

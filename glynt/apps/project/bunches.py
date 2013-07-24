@@ -12,8 +12,8 @@ class ProjectIntakeFormIsCompleteBunch(Bunch):
     def __init__(self, project):
         company = project.company
         return super(ProjectIntakeFormIsCompleteBunch, self).__init__(
-                    founder_name = company.data.get('founders', {}).get('founder_name'),
-                    founder_email = company.data.get('founders', {}).get('founder_email'),
+                    founder_name = company.data.get('founders', {}).get('founder_name').get('val'),
+                    founder_email = company.data.get('founders', {}).get('founder_email').get('val'),
                     incubator = company.data.get('incubator'),
                     current_status = company.data.get('current_status'),
                     profile_website = company.data.get('profile_website'),
@@ -29,7 +29,10 @@ class ProjectIntakeFormIsCompleteBunch(Bunch):
                 )
 
     def is_valid(self):
-        form = CompanyProfileForm(self.__dict__)
+        form = CompanyProfileForm(self)
         is_valid = form.is_valid()
-        self.errors = form.errors
+
+        if not is_valid:
+            self.errors = form.errors
+
         return is_valid
