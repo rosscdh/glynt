@@ -27,8 +27,8 @@ class BuilderWizardView(NamedUrlSessionWizardView):
     template_name = 'transact/forms/builder.html'
     form_list = []
 
-    def get_update_url(self, context, project):
-        return context.get('form').get_update_url(project=project)
+    def get_update_url(self, **kwargs):
+        return kwargs.get('context').get('form').get_update_url(**kwargs)
 
     def dispatch(self, request, *args, **kwargs):
         """
