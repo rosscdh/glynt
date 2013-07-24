@@ -12,32 +12,16 @@
 
 
 {% block prebody %}
-<!-- <div class="jumbotron-header">
-    <div class="col col-lg-5 col-offset-2">
-        <div class="container">
-            {% if page_title %}<h2 class="alt">{% transpose_company_data page_title %}</h2>{% endif %}
-             {% if page_description %}<p class="softer">{{ page_description }}</a>{% endif %}
-             <div class="row">
-                 <div class="col-lg-6">
-                   
-                </div>
-                <div class="col col-lg-6">
-                   
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
 
 <div class="jumbotron-header">
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 col-offset-2">
+            <div class="col-lg-10 col-offset-1">
                 {% if wizard.steps.count > 1 %}
                     <div class="row">
                         <div class="col-lg-6">
                             {% for s in wizard.steps.all %}
-                                 <a href="{% url 'transact:builder' tx_range=tx_range step=s %}" class="btn btn-info">{{ s }}</a>
+                                 <a href="{% url 'transact:builder' project_uuid=project.uuid tx_range=tx_range step=s %}" class="btn btn-info">{{ s }}</a>
                             {% endfor %}
                         </div>
                         <div class="col-lg-6">
@@ -57,11 +41,9 @@
 <div class="form-wrap">
     <div class="container">
         <div class="row">
-            <div class="col col-lg-8 col-offset-2">
-
+            <div class="col col-lg-10 col-offset-1">
                 <form id="builder-form" data-validate="parsley" action="." method="POST" class="form-horizontal">{% csrf_token %}
                     {{ wizard.management_form }}
-
                     {% if wizard.form.forms %}
                         {{ wizard.form.management_form }}
                         {% for form in wizard.form.forms %}
@@ -75,9 +57,10 @@
                         {% endif %}
                     {% endif %}
                     <br />
-                    <button type="submit" class="btn btn-success btn-large">Next Step</button>
+                    <div class="col col-lg-6 col-offset-5">
+                         <button type="submit" class="btn btn-success btn-large">Next Step</button>
+                    </div>
                 </form>
-
             </div>
         </div>
     </div>
@@ -85,13 +68,25 @@
 {% endblock %}
 
 {% block js %}
-    <script src="{{ STATIC_URL }}js/jquery.dateentry/jquery.dateentry.min.js"></script>
+    <script src="{{ STATIC_URL }}transact/js/jquery.plugin.form_json_data.js"></script>
     <script src="{{ STATIC_URL }}transact/js/jquery.plugin.region_clone.js"></script>
     <script src="{{ STATIC_URL }}transact/js/jquery.plugin.show_when.js"></script>
+
+    <script src="{{ STATIC_URL }}js/jquery.dateentry/jquery.dateentry.min.js"></script>
+
     <script>
     $(document).ready(function(){
         var form = $( 'form#builder-form' );
-        $('fieldset[data-region-clone]').region_clone();
+
+        {% if update_url %}
+            $('input[name={{ wizard.steps.current }}-form_json_data]').form_json_data({
+                'update_url': '{{ update_url }}'
+            });
+        {% endif %}
+
+        $('fieldset[data-region-clone]').region_clone({
+            'current_step': {{ wizard.steps.current }}
+        });
         $('[data-show-when]').show_when();
 
         /**
@@ -106,10 +101,11 @@
             $(item).dateEntry({'defaultDate': defaultDate});
         })
 
+
         /**
         * Handle the Add cloned region event
         **/
-        $(document).on("region_clone_add", function (event) {
+        $(document).on("ADD_CLONED_REGION_form_json_data", function (event) {
 
             $.each(event.cloned_region.find('input'), function(i, item) {
                 form.parsley( 'addItem', item );
@@ -120,7 +116,7 @@
         /**
         * Handle the Remove cloned region event
         **/
-        $(document).on("region_clone_remove", function (event) {
+        $(document).on("REMOVE_CLONED_REGION_form_json_data", function (event) {
 
             $.each(event.cloned_region.find('input'), function(i, item) {
                 form.parsley( 'removeItem', item );

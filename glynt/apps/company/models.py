@@ -1,9 +1,10 @@
 # coding: utf-8
 import os
 from django.conf import settings
-from django.core.urlresolvers import reverse
 from django.db import models
 from django.contrib.auth.models import User
+
+from glynt.apps.company import COMPANY_STATUS_CHOICES
 
 from autoslug.fields import AutoSlugField
 from jsonfield import JSONField
@@ -30,6 +31,10 @@ class Company(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    @property
+    def status(self):
+        return COMPANY_STATUS_CHOICES.get_desc_by_value(self.data.current_status)
 
     @property
     def profile_photo(self):

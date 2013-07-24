@@ -27,11 +27,10 @@ var ProfileCards = {
         var extra_context = self.extra_context || {}
 
         $.each(self.profile_params[profile.username], function(i, params){
-            console.log(params)
             var template = params.template || 'default';
 
             // add the profile to the context NB necessary as this is where the display variables are kept
-            context = $.extend({
+            context = $.extend(params, {
                 'profile': profile
             }, extra_context);
 
@@ -110,7 +109,7 @@ var ProfileCards = {
         $.each(profile_set, function(username,target_params){
             // loop over each instance of this users profile tags on the page
             // and populate with appropriate template
-            $.each(target_params, function(i,params){
+            $.each(target_params, function(i, params){
                 self.inject_into_element(params.target, username, params)
             })
 
@@ -174,7 +173,6 @@ var ProfileCards = {
             self.profile_params[params.username] =  [];
             is_new = true
         }
-
         // add dict to list for this username
         self.profile_params[params.username].push(params);
     }
@@ -198,6 +196,7 @@ var ProfileCards = {
 
         self.store_username_and_profile({
             'username': data.username
+            ,'img_class': data.img_class
             ,'action': data.action || 'inject'
             ,'template': data.template || 'default'
             ,'target': data.target || elem // if target specified make jquery object and use other use simply user the current element

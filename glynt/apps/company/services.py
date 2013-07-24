@@ -1,5 +1,4 @@
 # coding: utf-8
-import os
 from django.template.defaultfilters import slugify
 from glynt.apps.company.models import Company
 
@@ -50,8 +49,9 @@ class EnsureCompanyService(object):
             self.company.twitter = self.twitter
 
         if self.data:
-            self.company.data = self.data
+            self.company.data.update(self.data)
 
         logger.info("Saving startup %s", self.company_name)
         self.company.save()
+
         return self.company

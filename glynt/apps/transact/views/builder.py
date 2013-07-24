@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 from django.contrib import messages
+from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.formtools.wizard.views import NamedUrlSessionWizardView
 from django.utils.datastructures import SortedDict
@@ -7,6 +8,9 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
 from bunch import Bunch
+
+from glynt.apps.project.models import Project
+from glynt.apps.project.services.ensure_project import PROJECT_CREATED
 
 from glynt.apps.transact.views.intake import (FORMS as INTAKE_FORMS,)
 
@@ -23,10 +27,15 @@ class BuilderWizardView(NamedUrlSessionWizardView):
     template_name = 'transact/forms/builder.html'
     form_list = []
 
+    def get_update_url(self, **kwargs):
+        return kwargs.get('context').get('form').get_update_url(**kwargs)
+
     def dispatch(self, request, *args, **kwargs):
         """
         If we have no forms defined then redirect to done
         """
+        # setup the project
+        self.project = get_object_or_404(Project, uuid=self.kwargs.get('project_uuid'))
         # Inject custom forms here as we need the request object
         self.custom_forms()
         if len(self.form_list) > 0:
@@ -41,6 +50,7 @@ class BuilderWizardView(NamedUrlSessionWizardView):
         context.update({
             'page_title': context.get('form').page_title,
             'page_description': context.get('form').page_description,
+            'update_url': self.get_update_url(context=context, project=self.project),
         })
         return context
 
@@ -77,7 +87,7 @@ class BuilderWizardView(NamedUrlSessionWizardView):
         return current_form_set
 
     def get_step_url(self, step):
-        return reverse(self.url_name, kwargs={'tx_range': self.kwargs.get('tx_range', ''), 'step': step})
+        return reverse(self.url_name, kwargs={'project_uuid': self.project.uuid, 'tx_range': self.kwargs.get('tx_range', ''), 'step': step})
 
     def get_form_kwargs(self, step=None):
         kwargs = super(BuilderWizardView, self).get_form_kwargs(step=step)
@@ -108,4 +118,7 @@ class BuilderWizardView(NamedUrlSessionWizardView):
     def done(self, form_list, **kwargs):
         msg = _('Ok, You have created a new Project. Please read the instructions that follow.')
         messages.info(self.request, msg)
-        return HttpResponseRedirect(reverse('dashboard:matching'))
+
+        PROJECT_CREATED.send(sender=self, instance=self.project, created=False)
+
+        return HttpResponseRedirect(reverse('dashboard:overview'))

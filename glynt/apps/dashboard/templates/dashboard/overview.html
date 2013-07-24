@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load url from future %}{% load glynt_helpers %}
+{% extends 'base.html' %}{% load url from future %}{% load glynt_helpers crispy_forms_tags project_tags %}
 
 {% block page_title %}Dashboard{% endblock %}
 {% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:overview' %}">Dashboard</a></li>{% endblock %}
@@ -6,28 +6,38 @@
 {% block body %}
 <div class="container dashboard-view">
     <div class="page-header">
+        <div class="btn-group">
+            <a class="btn btn-danger" href="{% url 'dashboard:checklist' uuid=project.uuid %}">Checklist</a>
+        </div>
+
         <div class="btn-group pull-right">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                Startup #1: Series Seed <span class="caret"></span>
+                Projects <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
                 <li class="nav-header">Active Projects</li>
-                <li><a href="#">Startup #1: Series Seed</a></li>
-                <li><a href="#">Startup #2: Setup &amp; Incorporation</a></li>
+                {% for p in projects %}
+                <li><a href="{% url 'dashboard:project' uuid=p.uuid %}">{% project_name p forloop.counter %}</a></li>
+                {% empty %}
+                <li>No Projects</li>
+                {% endfor %}
             </ul>
         </div>
         <h2>Dashboard</h2>
     </div>
+
+    {% project_lawyers project %}
+
     <div class="row">
         <div class="col col-lg-6">
             <div class="widget overview">
                 <div class="current-progress">
                     <h3>Checklist Progress</h3>
                     <div class="progress">
-                        <div class="progress-bar progress-bar-success" style="width: 35%"></div>
+                        <div class="progress-bar progress-bar-success" style="width: {{ num_closed|as_percentage_of:num_total }}"></div>
                         <div class="progress-bar progress-bar-info" style="width: 10%"></div>
-                        <div class="progress-bar progress-bar-warning" style="width: 20%"></div>
-                        <div class="progress-bar progress-bar-danger" style="width: 10%"></div>
+                        <div class="progress-bar progress-bar-warning" style="width: {{ num_pending|as_percentage_of:num_total }}"></div>
+                        <div class="progress-bar progress-bar-danger" style="width: {{ num_unread|as_percentage_of:num_total }}"></div>
                     </div>
                     <span class="label label-success">Resolved</span>
                     <span class="label label-info">Needs Signing</span>
@@ -36,54 +46,16 @@
                 </div>
                 <hr>
                 <div class="row item-counts">
-                    <div class="col-lg-4 item-count"><span class="count">13</span> open</div>
-                    <div class="col-lg-4 item-count"><span class="count">12</span> pending</div>
-                    <div class="col-lg-4 item-count"><span class="count">2</span> assigned to me</div>
+                    <div class="col-lg-4 item-count"><span>{{ num_unread }}</span> unread</div>
+                    <div class="col-lg-4 item-count"><span>{{ num_pending }}</span> pending</div>
+                    <div class="col-lg-4 item-count"><span>{{ num_closed }}</span> closed</div>
                 </div>
             </div>
         </div>
         <div class="col col-lg-6">
             <div class="widget recent-activity">
                 <h3>Recent Activity</h3>
-                <table class="table table-striped stories">
-                    <tbody>
-                        <tr class="story">
-                            <td class="story-type"><span class="label label-success">RESOLVED</span></td>
-                            <td class="story-actor">
-                                <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="28"></a>
-                            </td>
-                            <td class="story-info"><a href="">Joe Bloggs</a> resolved the item: <a href="">Item #1</a> &middot; 2 hours ago</td>
-                        </tr>
-                        <tr class="story">
-                            <td class="story-type"><span class="label label-info">SIGNED</span></td>
-                            <td class="story-actor">
-                                <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="28"></a>
-                            </td>
-                            <td class="story-info"><a href="">Joe Bloggs</a> signed the item: <a href="">Item #2</a> &middot; 2 hours ago</td>
-                        </tr>
-                        <tr class="story">
-                            <td class="story-type"><span class="label label-success">RESOLVED</span></td>
-                            <td class="story-actor">
-                                <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="28"></a>
-                            </td>
-                            <td class="story-info"><a href="">Joe Bloggs</a> resolved the item: <a href="">Item #3</a> &middot; 2 hours ago</td>
-                        </tr>
-                        <tr class="story">
-                            <td class="story-type"><span class="label">OPENED</span></td>
-                            <td class="story-actor">
-                                <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="28"></a>
-                            </td>
-                            <td class="story-info"><a href="">Joe Bloggs</a> opened the item: <a href="">Item #4</a> &middot; 2 hours ago</td>
-                        </tr>
-                        <tr class="story">
-                            <td class="story-type"><span class="label">OPENED</span></td>
-                            <td class="story-actor">
-                                <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="28"></a>
-                            </td>
-                            <td class="story-info"><a href="">Joe Bloggs</a> opened the item: <a href="">Item #5</a> &middot; 2 hours ago</td>
-                        </tr>
-                    </tbody>
-                </table>
+                {% project_activity_stream project %}
             </div>
         </div>
     </div>
@@ -111,16 +83,20 @@
         <div class="col col-lg-6">
             <div class="widget transaction-profile">
                 <h3>Transaction Profile</h3>
+                {% if not profile_is_complete %}
                 <div class="callout callout-danger empty">
                     <div class="empty-message empty-message-exclamation-sign">
                         <h3>Please complete your transaction profile.</h3>
+                        <a href="{% url 'transact:builder' project_uuid=project.uuid tx_range='INTAKE' step='1' %}" class="btn btn-error">now</a>
                     </div>
                 </div>
-                <!-- <div class="callout callout-success empty"> -->
-                    <!-- <div class="empty-message empty-message-ok"> -->
-                        <!-- <h3>Your transaction profile is up-to-date.</h3> -->
-                    <!-- </div> -->
-                <!-- </div> -->
+                {% else %}
+                <div class="callout callout-success empty">
+                    <div class="empty-message empty-message-ok">
+                        <h3>Your transaction profile is up-to-date.</h3>
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
