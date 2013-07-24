@@ -1,6 +1,8 @@
 # -*- coding: UTF-8 -*-
 from collections import OrderedDict
+from django import template
 from django.template.defaultfilters import slugify
+
 
 from glynt.apps.todo import TODO_STATUS
 from glynt.apps.project.bunches import ProjectIntakeFormIsCompleteBunch
@@ -47,6 +49,8 @@ class ProjectCheckListService(object):
 
                     if hasattr(item, 'repeater_key'):
                         repeater_key = item.repeater_key
+                        singular = getattr(item, 'singular', None)
+
                         logger.info('Found repeater_key: %s' % repeater_key)
 
                         items = self.company_data.get(repeater_key, None)
@@ -73,6 +77,7 @@ class ProjectCheckListService(object):
 
                             # merge lists
                             for i in items:
+                                cloned_checklist = [self.item_context(item=cloned_item, full_name='{name} #{num}'.format(name=singular, num=i+1)) for i, cloned_item in enumerate(cloned_checklist)]
                                 item.checklist = list(item.checklist + cloned_checklist)
 
                     # parse the list and assign extra attribs
@@ -84,6 +89,14 @@ class ProjectCheckListService(object):
                     todos_by_cat[cat_slug] += item.checklist
 
         return  OrderedDict(sorted(todos_by_cat.items(), key=lambda t: t[0])), sorted(checklist)
+
+    def item_context(self, item, **kwargs):
+        t = template.Template(item.name)
+        c = template.Context(kwargs)
+
+        item.name = t.render(c)
+
+        return item
 
     def parse_checklist(self, checklist):
         for item in checklist:
