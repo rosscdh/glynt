@@ -37,7 +37,7 @@
             </div>
             {% for category, items in checklist.todos_by_cat.iteritems %}
                 <div id="{{ category|slugify }}" class="checklist-header clearfix">
-                    <h3 class="pull-left">{{ category }}</h3>
+                    <h3 class="pull-left">#{{ forloop.counter }} - {{ category }}</h3>
                     <div class="add-new pull-right">
                         <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
                     </div>
@@ -53,6 +53,7 @@
                                 <button type="button" title="Edit" data-tooltip="Edit" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
                                 <button type="button" title="Attachments" data-tooltip="Attachments" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>{{ item.num_attachements }}</span></button>
                                 <a href="#">{% if item.user %}<div class="profile-card" data-username="{{ item.user.username }}" data-template="mini">&nbsp;</div>{% else %}<button type="button" title="Assign" data-tooltip="Assign" class="btn btn-small btn-default"><i class="icon-screenshot"></i></button>{% endif %}
+                                #{{ forloop.counter }}
                             </td>
                         </tr>
                     </tbody>
