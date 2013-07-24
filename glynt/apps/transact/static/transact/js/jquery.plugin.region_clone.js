@@ -156,6 +156,9 @@ $(function() {
 			elem.attr('data-json_id', elem.prop('id').replace(/^id_(\d+)\-/g,''));
 			elem.attr('data-json_name', elem.prop('name').replace(/^(\d+)\-/g,''));
 
+			// set the value of this element blank
+			elem.val('');
+
 			elem.on('change', function (event) {
                 $.event.trigger({
                     type: "MODIFIED_CLONED_REGION_form_json_data",
