@@ -7,4 +7,4 @@ transaction:
         General:
             type: 'simple'
             checklist:
-                -   name: 'Ross Test'
+                -   name: 'Item 1'

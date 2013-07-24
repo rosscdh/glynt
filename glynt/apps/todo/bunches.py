@@ -30,7 +30,7 @@ class BaseToDoBunch(Bunch):
         self.load_template()
 
     def categories(self):
-        return self.todos.keys()
+        return self.todos.keys() if hasattr(self.todos, 'keys') else []
 
     def checklist(self):
         return self.todos
