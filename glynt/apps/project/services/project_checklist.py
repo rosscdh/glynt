@@ -3,6 +3,7 @@ from collections import OrderedDict
 from django.template.defaultfilters import slugify
 
 from glynt.apps.todo import TODO_STATUS
+from glynt.apps.project.bunches import ProjectIntakeFormIsCompleteBunch
 
 import logging
 logger = logging.getLogger('lawpal.services')
@@ -21,7 +22,7 @@ class ProjectCheckListService(object):
 
     def __init__(self, project, **kwargs):
         self.project = project
-        self.company_data = self.project.company.data
+        self.company_data = ProjectIntakeFormIsCompleteBunch(project=self.project)
 
         self.checklist = self.project.checklist()
         self.todos_by_cat, self.todos = self.get_todos()
@@ -39,27 +40,48 @@ class ProjectCheckListService(object):
         todos_by_cat = {}
 
         for c in self.checklist:
-            for category, item in c.todos.items():
+            if hasattr(c.todos, 'items'):
+                for category, item in c.todos.items():
+                    cat_slug = category
+                    #cat_slug = self.slug(category)
 
-                cat_slug = category
-                #cat_slug = self.slug(category)
+                    if hasattr(item, 'repeater_key'):
+                        repeater_key = item.repeater_key
+                        logger.info('Found repeater_key: %s' % repeater_key)
 
-                todos_by_cat[cat_slug] = todos_by_cat.get(cat_slug, [])
-                todos_by_cat[cat_slug] += item.checklist
+                        items = self.company_data.get(repeater_key, None)
+                        num_items = 0
 
-                if hasattr(item, 'repeater_key'):
-                    repeater_key = item.repeater_key
-                    print repeater_key
-                    items = self.company_data.get(repeater_key, None)
-                    if items:
-                        pass
-                    # need to repeat this segment X times by
-                    # field_name specified
+                        if not items and hasattr(self.company_data, repeater_key):
+                            items = getattr(self.company_data, repeater_key)
 
-                # parse the list and assign extra attribs
-                self.parse_checklist(checklist=item.checklist)
+                        if items:
+                            # handle being passed a [] or (), otherwise it should be an int
+                            if type(items) in [list]:
+                                num_items = len(items)  
+                            else:
+                                num_items = int(items)
+                                items = [i for i in xrange(1, num_items+1)]
+                                logger.info('repeater_key: %s num_items %s' % (repeater_key, num_items,))
 
-                checklist += item.checklist
+                        logger.info('All Items repeater_key: %s items: %s' % (repeater_key, items,))
+
+                        if items:
+                            # need to repeat this segment X times by
+                            # field_name specified
+                            cloned_checklist = list(item.checklist)  # clone the primary list
+
+                            # merge lists
+                            for i in items:
+                                item.checklist = list(item.checklist + cloned_checklist)
+
+                    # parse the list and assign extra attribs
+                    self.parse_checklist(checklist=item.checklist)
+
+                    checklist = list(checklist + item.checklist)
+
+                    todos_by_cat[cat_slug] = todos_by_cat.get(cat_slug, [])
+                    todos_by_cat[cat_slug] += item.checklist
 
         return  OrderedDict(sorted(todos_by_cat.items(), key=lambda t: t[0])), sorted(checklist)
 
