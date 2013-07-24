@@ -1,26 +1,35 @@
 # -*- coding: utf-8 -*-
 from bunch import Bunch
 
-from glynt.apps.company.forms import CompanyProfileIsCompleteValidator
+from glynt.apps.company.forms import CompanyProfileForm
 
 import logging
 logger = logging.getLogger('lawpal.services')
 
 
-class CompanyEngageLawyerBunch(Bunch):
-    def __init__(self, customer):
-        startup = customer.primary_company
-        return super(CompanyEngageLawyerBunch, self).__init__(
-                    first_name = customer.user.first_name,
-                    last_name = customer.user.last_name,
-                    startup_name = startup.name,
-                    already_incorporated = customer.data.get('already_incorporated', False),
-                    need_incorporation = customer.data.get('need_incorporation', False),
-                    already_raised_capital = customer.data.get('already_raised_capital', False),
-                    process_raising_capital = customer.data.get('process_raising_capital', False),
-                    incubator_or_accelerator_name = customer.data.get('incubator_or_accelerator_name'),
+class ProjectIntakeFormIsCompleteBunch(Bunch):
+    errors = None
+    def __init__(self, project):
+        company = project.company
+        return super(ProjectIntakeFormIsCompleteBunch, self).__init__(
+                    founder_name = company.data.get('founders', {}).get('founder_name'),
+                    founder_email = company.data.get('founders', {}).get('founder_email'),
+                    incubator = company.data.get('incubator'),
+                    current_status = company.data.get('current_status'),
+                    profile_website = company.data.get('profile_website'),
+                    description = company.data.get('description'),
+                    option_plan_status = company.data.get('option_plan_status'),
+                    target_states_and_countries = company.data.get('target_states_and_countries'),
+                    num_officers = company.data.get('num_officers'),
+                    num_employees = company.data.get('num_employees'),
+                    num_consultants = company.data.get('num_consultants'),
+                    ip_nolonger_affiliated = company.data.get('ip_nolonger_affiliated'),
+                    ip_otherthan_founder = company.data.get('ip_otherthan_founder'),
+                    ip_university_affiliation = company.data.get('ip_university_affiliation'),
                 )
 
     def is_valid(self):
-        form = CompanyProfileIsCompleteValidator({'first_name': self.first_name, 'last_name': self.last_name, 'startup_name': self.startup_name})
-        return form.is_valid()
+        form = CompanyProfileForm(self.__dict__)
+        is_valid = form.is_valid()
+        self.errors = form.errors
+        return is_valid

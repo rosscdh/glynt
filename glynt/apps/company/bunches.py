@@ -38,7 +38,7 @@ class UserIntakeCompanyBunch(Bunch):
             company_service = EnsureCompanyService(name=company.name, customer=self.user.customer_profile, **kwargs)
             company_service.process()
 
-
+#@TODO EVALUATE REMOVE?
 class CompanyProfileBunch(Bunch):
     def __init__(self, startup):
         data = startup.data
