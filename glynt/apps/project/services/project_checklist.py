@@ -46,6 +46,8 @@ class ProjectCheckListService(object):
                 for category, item in c.todos.items():
                     cat_slug = category
                     #cat_slug = self.slug(category)
+                    repeater_key = None
+                    num_items = 0
 
                     if hasattr(item, 'repeater_key'):
                         repeater_key = item.repeater_key
@@ -54,7 +56,6 @@ class ProjectCheckListService(object):
                         logger.info('Found repeater_key: %s' % repeater_key)
 
                         items = self.company_data.get(repeater_key, None)
-                        num_items = 0
 
                         if not items and hasattr(self.company_data, repeater_key):
                             items = getattr(self.company_data, repeater_key)
@@ -70,7 +71,9 @@ class ProjectCheckListService(object):
 
                         logger.info('All Items repeater_key: %s items: %s' % (repeater_key, items,))
 
-                        if items:
+                        if num_items == 0:
+                            item.checklist = None
+                        else:
                             # need to repeat this segment X times by
                             # field_name specified
                             cloned_checklist = list(item.checklist)  # clone the primary list
@@ -80,13 +83,13 @@ class ProjectCheckListService(object):
                                 cloned_checklist = [self.item_context(item=cloned_item, full_name='{name} #{num}'.format(name=singular, num=i+1)) for i, cloned_item in enumerate(cloned_checklist)]
                                 item.checklist = list(item.checklist + cloned_checklist)
 
-                    # parse the list and assign extra attribs
-                    self.parse_checklist(checklist=item.checklist)
+                    if item.checklist:
+                        # parse the list and assign extra attribs
+                        self.parse_checklist(checklist=item.checklist)
+                        checklist = list(checklist + item.checklist)
 
-                    checklist = list(checklist + item.checklist)
-
-                    todos_by_cat[cat_slug] = todos_by_cat.get(cat_slug, [])
-                    todos_by_cat[cat_slug] += item.checklist
+                        todos_by_cat[cat_slug] = todos_by_cat.get(cat_slug, [])
+                        todos_by_cat[cat_slug] += item.checklist
 
         return  OrderedDict(sorted(todos_by_cat.items(), key=lambda t: t[0])), sorted(checklist)
 
