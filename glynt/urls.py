@@ -11,36 +11,38 @@ admin.autodiscover()
 
 
 urlpatterns = patterns('',
-	# Admin
-	url(r'^admin/', include(admin.site.urls)),
-	# Api
-	url(r'^api/', include(V1_INTERNAL_API.urls, namespace='api')),
+        # Admin
+        url(r'^admin/', include(admin.site.urls)),
+        # Api
+        url(r'^api/', include(V1_INTERNAL_API.urls, namespace='api')),
     # image upload and crop
     url(r'^ajax-upload/', include('cicu.urls')),
     # Invite to join
     url(r'^invite/', include('public.invite.urls', namespace='invite')),
-	# Accounts & Registration
+        # Accounts & Registration
     url(r'', include('social_auth.urls')),
-	url(r'^accounts/', include('userena.urls')),
-	url(r'^client/', include('glynt.apps.client.urls', namespace='client')),
-	url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}, name='logout'),
+    url(r'^accounts/', include('userena.urls')),
+    url(r'^client/', include('glynt.apps.client.urls', namespace='client')),
+    url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}, name='logout'),
     # Customers
     url(r'^customers/', include('glynt.apps.customer.urls', namespace='customer')),
     # lawyers
     url(r'^lawyers/', include('glynt.apps.lawyer.urls', namespace='lawyer')),
     # Project app
     url(r'^projects/', include('glynt.apps.project.urls', namespace='project')),
+    # ToDo checklist items
+    url(r'^todo/', include('glynt.apps.todo.urls', namespace='todo')),
     # Transaction
     url(r'^transact/', include('glynt.apps.transact.urls', namespace='transact')),
-	# Comments
+        # Comments
     url(r'^comments/', include('fluent_comments.urls')),
     # Dashboard
     url(r'^dashboard/', include('glynt.apps.dashboard.urls', namespace='dashboard')),
     # favicon
     url(r'^favicon\.ico/$', RedirectView.as_view(url='%simg/favicon.ico' % settings.STATIC_URL)),
     url(r'', include('debug_toolbar_user_panel.urls')),
-	# The public site and theme
-	url(r'^', include('public.urls', namespace='public')),
+        # The public site and theme
+        url(r'^', include('public.urls', namespace='public')),
 )
 
 

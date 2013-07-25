@@ -41,6 +41,12 @@ class Project(models.Model):
     def get_absolute_url(self):
         return reverse('project:project', kwargs={'slug': self.uuid})
 
+    def checklist(self):
+        checklist_items = []
+        for t in self.transactions.all():
+            checklist_items += t.checklist()
+        return checklist_items
+
     def get_primary_lawyer(self):
         try:
             return self.lawyers.select_related('user').all()[0]

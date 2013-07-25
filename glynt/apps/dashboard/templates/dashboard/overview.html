@@ -8,18 +8,21 @@
     <div class="page-header">
         <div class="btn-group pull-right">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                Projects <span class="caret"></span>
+                {% project_name project %} <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
                 <li class="nav-header">Active Projects</li>
                 {% for p in projects %}
-                <li><a href="{% url 'dashboard:overview' %}?p={{ p.uuid }}">{% project_name p forloop.counter %}</a></li>
+                    <li><a href="{% url 'dashboard:project' uuid=p.uuid %}">{% project_name p forloop.counter %}</a></li>
                 {% empty %}
-                <li>No Projects</li>
+                    <li>No Projects</li>
                 {% endfor %}
             </ul>
         </div>
-        <h2>Dashboard</h2>
+        <ul class="nav nav-tabs header-nav">
+            <li class="active"><a href="{% url 'dashboard:overview' %}"><h3>Overview</h3></a></li>
+            <li><a href="{% url 'dashboard:checklist' uuid=project.uuid %}"><h3>Checklist</h3></a></li>
+        </ul>
     </div>
 
     {% project_lawyers project %}
@@ -28,7 +31,7 @@
         <div class="col col-lg-6">
             <div class="widget overview">
                 <div class="current-progress">
-                    <h3>Current Progress</h3>
+                    <h3>Checklist Progress</h3>
                     <div class="progress">
                         <div class="progress-bar progress-bar-success" style="width: {{ num_closed|as_percentage_of:num_total }}"></div>
                         <div class="progress-bar progress-bar-info" style="width: 10%"></div>
@@ -79,17 +82,21 @@
         <div class="col col-lg-6">
             <div class="widget transaction-profile">
                 <h3>Transaction Profile</h3>
+                {% if not profile_is_complete %}
                 <div class="callout callout-danger empty">
                     <div class="empty-message empty-message-exclamation-sign">
                         <h3>Please complete your transaction profile.</h3>
                         <a href="{% url 'transact:builder' project_uuid=project.uuid tx_range='INTAKE' step='1' %}" class="btn btn-error">now</a>
                     </div>
                 </div>
-                <!-- <div class="callout callout-success empty"> -->
-                    <!-- <div class="empty-message empty-message-ok"> -->
-                        <!-- <h3>Your transaction profile is up-to-date.</h3> -->
-                    <!-- </div> -->
-                <!-- </div> -->
+                {% else %}
+                <div class="callout callout-success empty">
+                    <div class="empty-message empty-message-ok">
+                        <h3>Your transaction profile is up-to-date.</h3>
+                        <a href="{% url 'transact:builder' project_uuid=project.uuid tx_range='INTAKE' step='1' %}" class="">update</a>
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>

@@ -58,7 +58,7 @@ class ConfirmLoginDetailsView(UpdateView):
         form = self.get_form(form_class)
 
         if form.is_valid():
-            messages.info(request, _('Welcome, you have successfully signed up.'))
+            # messages.info(request, _('Welcome, you have successfully signed up.'))
             form.save()
             logger.info('User %s has confirmed their account' % request.user)
             return self.form_valid(form)

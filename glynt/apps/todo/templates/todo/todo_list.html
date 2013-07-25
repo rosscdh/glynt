@@ -1,37 +1,31 @@
-{% extends 'base.html' %}{% load paginator glynt_helpers %}
+{% extends 'base.html' %}{% load paginator glynt_helpers todo_tags %}
 
-{% block page_title %}Checklist{% endblock %}
+{% block page_title %}Checklist for: {{ project }}{% endblock %}
 {% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>{% endblock %}
 
 {% block body %}
 <div class="container checklist-view">
     <div class="page-header clearfix">
-        <h2>Checklist</h2>
+        <ul class="nav nav-tabs header-nav">
+            <li><a href="{% url 'dashboard:overview' %}"><h3>Overview</h3></a></li>
+            <li class="active"><a href="{% url 'dashboard:checklist' uuid=project.uuid %}"><h3>Checklist</h3></a></li>
+        </ul>
     </div>
     <div class="row">
         <div class="col col-lg-3">
             <div class="subnav affix">
-                <ul class="nav nav-pills nav-stacked">
-                    {% for p in engagements %}
-                        <li><a href="#">{{ p }}</a></li>
+                <ul id="checklist-categories" class="nav nav-pills nav-stacked">
+                    {% for c in checklist.categories %}
+                    <li class=""><a href="#{{ c|slugify }}">{{ c }}</a></li>
                     {% endfor %}
-                    <li class="active"><a href="#incorporation-documents">Incorporation Documents</a></li>
-                    <li><a href="#qualification">Qualification</a></li>
-                    <li><a href="#founders-documents">Founders Documents</a></li>
-                    <li><a href="#option-plan">Option Plan</a></li>
-                    <li><a href="#directors-and-officers">Directors and Officers</a></li>
-                    <li><a href="#employment-documents">Employment Documents</a></li>
-                    <li><a href="#consultant-documents">Consultant Documents</a></li>
-                    <li><a href="#intellectual-property">Intellectual Property</a></li>
-                    <li><a href="#misc">Misc</a></li>
                 </ul>
             </div>
         </div>
         <div class="col col-lg-9">
             <div class="clearfix">
                 <div class="btn-group">
-                    <button type="button" class="btn btn-primary">All Items</button>
-                    <button type="button" class="btn btn-primary">Closed Items <span class="badge">38</span></button>
+                    <button type="button" class="btn btn-primary">All Items <span class="badge">{{ counts.all }}</span></button>
+                    <button type="button" class="btn btn-primary">Closed Items <span class="badge">{{ counts.closed }}</span></button>
                 </div>
                 <div class="btn-group pull-right">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -44,515 +38,43 @@
                     </ul>
                 </div>
             </div>
-
-            <div id="incorporation" class="checklist-header clearfix">
-                <h3 class="pull-left">Incorporation Documents</h3>
-                <div class="add-new pull-right">
-                    <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
+            {% for category, items in checklist.todos_by_cat.iteritems %}
+                <div id="{{ category|slugify }}" class="checklist-header clearfix">
+                    <h3 class="pull-left">{{ category }}</h3>
+                    <div class="add-new pull-right">
+                        <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
+                    </div>
                 </div>
-            </div>
-            <table class="table table-striped checklist">
-                <tbody>
-                    <tr class="urgent">
-                        <td class="item-icon"><i class="icon-urgent"></i></td>
-                        <td class="item-info"><h4><a href="#">Action by Written Consent of Incorporator</a></h4></td>
-                        <td class="item-meta">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="draft">
-                        <td class="item-icon"><i class="icon-draft"></i></td>
-                        <td class="item-info"><h4><a href="#">Bylaws</a></h4></td>
-                        <td class="item-meta">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="draft">
-                        <td class="item-icon"><i class="icon-draft"></i></td>
-                        <td class="item-info"><h4><a href="#">Shareholders Agreement</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="draft">
-                        <td class="item-icon"><i class="icon-draft"></i></td>
-                        <td class="item-info"><h4><a href="#">Form SS-4 Application for Employee Identification Number (EIN)</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="draft">
-                        <td class="item-icon"><i class="icon-draft"></i></td>
-                        <td class="item-info"><h4><a href="#">EIN Assignment Letter</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="complete">
-                        <td class="item-icon"><i class="icon-complete"></i></td>
-                        <td class="item-info" colspan="2"><h4><a href="#">Certificate of Incorporation</a></h4></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div id="qualification" class="checklist-header clearfix">
-                <h3 class="pull-left">Qualification</h3>
-                <div class="add-new pull-right">
-                    <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
-                </div>
-            </div>
-            <table class="table table-striped checklist">
-                <tbody>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info"><h4><a href="#">File Form DE-1</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="complete">
-                        <td class="item-icon"><i class="icon-complete"></i></td>
-                        <td class="item-info" colspan="2"><h4><a href="#">File the Statement and Designation by Foreign Corporation</a></h4></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div id="founders-documents" class="checklist-header clearfix">
-                <h3 class="pull-left">Founders Documents</h3>
-                <div class="add-new pull-right">
-                    <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
-                </div>
-            </div>
-            <table class="table table-striped checklist">
-                <tbody>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info"><h4><a href="#">Notice of Stock Issuance for Yael Citro</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info"><h4><a href="#">Notice of Stock Issuance for Ben Ling</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info"><h4><a href="#">Stock Certificate for Ben Ling</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info"><h4><a href="#">Stock Certificate for Yael Citro</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info">
-                            <h4><a href="#">Confidential Information and Invention Assignment Agreement for Ben Ling</a></h4>
-                        </td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info">
-                            <h4><a href="#">Confidential Information and Invention Assignment Agreement for Yael Citro</a></h4>
-                        </td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info"><h4><a href="#">83(b) Election for Ben Ling</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info"><h4><a href="#">83(b) Election for Yael Citro</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="complete">
-                        <td class="item-icon"><i class="icon-complete"></i></td>
-                        <td class="item-info" colspan="2"><h4><a href="#">Stock Purchase Agreement</a></h4></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div id="option-plan" class="checklist-header clearfix">
-                <h3 class="pull-left">Option Plan</h3>
-                <div class="add-new pull-right">
-                    <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
-                </div>
-            </div>
-            <table class="table table-striped checklist">
-                <tbody>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info"><h4><a href="#">Stock Plan</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info"><h4><a href="#">Stock Plan Summary</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info">
-                            <h4><a href="#">Forms of stock option grant and restricted stock purchase agreements under the stock plan</a></h4>
-                        </td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info"><h4><a href="#">Board Approval of Stock Plan</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info"><h4><a href="#">Stockholder Approval of Stock Plan</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div id="directors-and-officers" class="checklist-header clearfix">
-                <h3 class="pull-left">Directors and Officers</h3>
-                <div class="add-new pull-right">
-                    <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
-                </div>
-            </div>
-            <table class="table table-striped checklist">
-                <tbody>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info"><h4><a href="#">Indemnification Agreement for Yael Citro</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info"><h4><a href="#">Stockholder Agreement of Indemnification Agreement for Yael Citro</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div id="employment-documents" class="checklist-header clearfix">
-                <h3 class="pull-left">Employment Documents</h3>
-                <div class="add-new pull-right">
-                    <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
-                </div>
-            </div>
-            <table class="table table-striped checklist">
-                <tbody>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info"><h4><a href="#">Form of Employment Offer Letter</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info"><h4><a href="#">Form of Employment</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info">
-                            <h4><a href="#">Form of Confidential Information and Invention Assignment Agreement for employees</a></h4>
-                        </td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info"><h4><a href="#">Form of Nondisclosure Agreement for employees</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info"><h4><a href="#">Employment Offer Letter for Alex Halliday</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info"><h4><a href="#">Employment Agreement for Alex Halliday</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info">
-                            <h4><a href="#">Confidential Information and Invention Assignment Agreement for Alex Halliday</a></h4>
-                        </td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info"><h4><a href="#">Nondisclosure Agreement for Alex Halliday</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div id="consultant-documents" class="checklist-header clearfix">
-                <h3 class="pull-left">Constultant Documents</h3>
-                <div class="add-new pull-right">
-                    <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
-                </div>
-            </div>
-            <table class="table table-striped checklist">
-                <tbody>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info"><h4><a href="#">Form of Consultant Agreement</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info">
-                            <h4><a href="#">Form of Confidential Information and Invention Assignment Agreement for consultants</a></h4>
-                        </td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info"><h4><a href="#">Form of Nondisclosure Agreement for consultants</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info"><h4><a href="#">Consultant Agreement for Billie Halliday</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info">
-                            <h4><a href="#">Confidential Information and Invention Assignment Agreement for Billie Halliday</a></h4>
-                        </td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info"><h4><a href="#">Nondisclosure Agreement for Billie Halliday</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div id="intellectual-property" class="checklist-header clearfix">
-                <h3 class="pull-left">Intellectual Property</h3>
-                <div class="add-new pull-right">
-                    <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
-                </div>
-            </div>
-            <table class="table table-striped checklist">
-                <tbody>
-                    <tr><td class="text-center" colspan="3"><span class="text-muted">No items needed.</span></td></tr>
-                </tbody>
-            </table>
-
-            <div id="misc" class="checklist-header clearfix">
-                <h3 class="pull-left">Misc</h3>
-                <div class="add-new pull-right">
-                    <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
-                </div>
-            </div>
-            <table class="table table-striped checklist">
-                <tbody>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info"><h4><a href="#">Cap Table</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info"><h4><a href="#">Stock Ledger</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                    <tr class="pending">
-                        <td class="item-icon"><i class="icon-pending"></i></td>
-                        <td class="item-info"><h4><a href="#">Blue Sky Filings</a></h4></td>
-                        <td class="item-meta text-right">
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>2</span></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                            <button type="button" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>2</span></button>
-                            <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="36"></a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                <table class="table table-striped checklist">
+                    <tbody>
+                        {% for item in items %}
+                            <tr class="{{ item.display_status|todo_status_row_class }}">
+                                <td class="item-icon"><i class="{{ item.display_status|todo_status_icon }}"></i></td>
+                                <td class="item-info"><h4><a href="{% url 'dashboard:item-open' %}">{{ item.name }}</a></h4></td>
+                                <td class="item-meta">
+                                    <a href="{% url 'todo:comment' project_uuid=project.uuid slug=item.slug %}" title="Comments" data-tooltip="Comments" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>{{ item.num_comments }}</span></a>
+                                    <a href="{% url 'todo:edit' project_uuid=project.uuid slug=item.slug %}" title="Edit" data-tooltip="Edit" class="btn btn-small btn-default"><i class="icon-edit"></i></a>
+                                    <a href="{% url 'todo:attachment' project_uuid=project.uuid slug=item.slug %}" title="Attachments" data-tooltip="Attachments" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>{{ item.num_attachements }}</span></a>
+                                    <a href="{% url 'todo:assign' project_uuid=project.uuid slug=item.slug %}" title="Assign" data-tooltip="Assign" class="btn btn-small btn-default">{% if item.user %}<div class="profile-card" data-username="{{ item.user.username }}" data-template="mini">&nbsp;</div>{% else %}<i class="icon-screenshot"></i>{% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endfor %}
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block css %}
+<style>
+    ul#checklist-categories a {
+        display: inline-block;
+        max-width: 250px;
+        vertical-align: middle;
+    }
+</style>
 {% endblock %}
 
 {% block js %}
@@ -564,4 +86,61 @@
     <script src="{{ STATIC_URL }}todo/angularjs/app/js/controllers.js"></script>
     <script src="{{ STATIC_URL }}todo/angularjs/app/js/services.js"></script>
     <script src="{{ STATIC_URL }}todo/angularjs/app/js/directives.js"></script>
+{% endblock %}
+
+{% block modals %}
+<!-- Modal -->
+<div class="modal fade" id="new-checklist-item">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">New item</h4>
+            </div>
+            <div class="modal-body">
+
+                <form class="form-horizontal">
+                    <div class="row">
+                        <label for="inputName" class="col-lg-2 control-label">Name</label>
+                        <div class="col-lg-10">
+                            <input type="text" id="inputName" placeholder="Name">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="typeRadios" class="col-lg-2 control-label">Type</label>
+                        <div class="col-lg-10">
+                            <div class="radio-inline">
+                                <label><input type="radio" name="typeRadios"checked> Document</label>
+                            </div>
+                            <div class="radio-inline">
+                                <label><input type="radio" name="typeRadios"> Issue</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="inputCategory" class="col-lg-2 control-label">Category</label>
+                        <div class="col-lg-10">
+                            <select id="inputCategory">
+                                <option>Incorporation Documents</option>
+                                <option>Qualification</option>
+                                <option>Founders Documents</option>
+                                <option>Option Plan</option>
+                                <option>Directors and Officers</option>
+                                <option>Employment Documents</option>
+                                <option>Consultant Documents</option>
+                                <option>Intellectual Property</option>
+                                <option>Misc</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn" data-dismiss="modal">Close</a>
+                <a href="#" class="btn btn-primary">Create</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
