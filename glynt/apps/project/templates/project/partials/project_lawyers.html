@@ -1,33 +1,39 @@
 {% if num_lawyers > 0 %}
-    <div class="callout">
-        <h4>We have found <strong>{{ num_lawyers }}</strong> matches for your project: <strong>{{ project }}</strong>.</h4>
-        <div class="row">
-            {% for l in lawyers %}
-                <div class="col col-lg-6">
-                    <table class="table lawyer-list">
-                        <tbody>
-                            <tr>
-                                <td class="lawyer-picture">
-                                    <img src="{{ l.user.profile.get_mugshot_url }}" class="img-rounded">
-                                </td>
-                                <td class="lawyer-info">
-                                    <h2>{{ l.user.get_full_name }}</h2>
-                                    <p>{{ l.position }} at {{ l.firm_name }}</p>
-                                    <p>{% for loc in practice_locations %}<i class="glyphicon glyphicon-map-marker"></i> {{ loc }}{% endfor %}</p>
-                                </td>
-                                <td class="lawyer-meta"><button type="button" class="btn btn-large btn-primary">Get Introduced</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            {% endfor %}
-        </div>
-    </div>
+    {% for l in lawyers %}
+        <table class="table attorney-list">
+            <tbody>
+                <tr>
+                    <td class="attorney-picture">
+                        <img src="{{ l.user.profile.get_mugshot_url }}" class="img-rounded">
+                    </td>
+                    <td class="attorney-info">
+                        <h2>{{ l.user.get_full_name }}</h2>
+                        <p>{{ l.position }} at {{ l.firm_name }}</p>
+                        <p>{% for loc in practice_locations %}<i class="glyphicon glyphicon-map-marker"></i> {{ loc }}{% endfor %}</p>
+                    </td>
+                    <td class="attorney-meta"><button type="button" class="btn btn-large btn-primary">Get Introduced</button></td>
+                </tr>
+            </tbody>
+        </table>
+    {% endfor %}
 {% else %}
+    {% if display_type == 'generic' %}
     <div class="callout empty">
         <div class="empty-message empty-message-time">
             <h3>We're searching for available lawyers</h3>
             <p>We'll notify you when your options are available for review.</p>
         </div>
     </div>
+    {% else %}
+        <table class="table attorney-list">
+            <tbody>
+                <tr>
+                    <td class="attorney-info">
+                        <h2>You dont have one yet, sorry.</h2>
+                        <p>We are however, searching for one on your behalf. We'll notify you when your options are available for review.</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    {% endif %}
 {% endif %}

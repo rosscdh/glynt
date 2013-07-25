@@ -25,7 +25,7 @@ def project_activity_stream(project, limit=10):
 
 
 @register.inclusion_tag('project/partials/project_lawyers.html')
-def project_lawyers(project):
+def project_lawyers(project, display_type='default'):
     context = {}
     lawyers = project.lawyers.all()
     num_lawyers = len(lawyers)
@@ -33,6 +33,7 @@ def project_lawyers(project):
         'project': project,
         'lawyers': lawyers,
         'num_lawyers': num_lawyers,
+        'display_type': display_type
     })
     return context
 
