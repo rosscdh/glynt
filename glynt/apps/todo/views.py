@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.shortcuts import get_object_or_404
 
 from glynt.apps.project.services.project_checklist import ProjectCheckListService
@@ -24,8 +24,8 @@ class ProjectToDoView(ListView):
         # filter by the current user always
         # filter by the params passed in
         queryset = self.model.objects.prefetch_related('user', 'project') \
-                        .filter(user=self.request.user) \
-                        .filter(**fltr)
+                                     .filter(user=self.request.user) \
+                                     .filter(**fltr)
 
         return queryset.order_by(order_by)
 
@@ -47,40 +47,42 @@ class ProjectToDoView(ListView):
         return context
 
 
-# class MyToDoListView(ListView):
-#     model = ToDo
-#     paginate_by = 1#10
+class BaseToDoDetailView(DetailView):
+    model = ToDo
 
-#     def get_queryset(self):
-#         """
-#         Provide a list of todos for the current user
-#         """
-#         order_by = self.request.GET.get('order_by', '-id') # newest first
+    def get_object(self, queryset=None):
+        """
+        Returns the object the view is displaying.
+        By default this requires `self.queryset` and a `pk` or `slug` argument
+        in the URLconf, but subclasses can override this to return any object.
+        """
+        self.project = get_object_or_404(Project, uuid=self.kwargs.get('project_uuid'))
+        # Use a custom queryset if provided; this is required for subclasses
+        # like DateDetailView
+        if queryset is None:
+            queryset = self.get_queryset()
 
-#         fltr = {
-#             'status': self.request.GET.get('status', 1) # newest first
-#         }
+        slug = self.kwargs.get(self.slug_url_kwarg, None)
+        obj = self.model.objects.get_or_create(slug=slug, project=self.project)
 
-#         # filter by the current user always
-#         # filter by the params passed in
-#         queryset = self.model.objects.prefetch_related('user', 'project') \
-#                         .filter(user=self.request.user) \
-#                         .filter(**fltr)
-
-#         return queryset.order_by(order_by)
-
-#     def get_context_data(self, **kwargs):
-#         context = super(MyToDoListView, self).get_context_data(**kwargs)
-#         context.update({
-#             'projects': Project.objects.for_user(user=self.request.user),
-#             'counts': {
-#                 'new': self.model.objects.new(user=self.request.user).count(),
-#                 'open': self.model.objects.open(user=self.request.user).count(),
-#                 'closed': self.model.objects.closed(user=self.request.user).count(),
-#             }
-#         })
-#         return context
+        return obj
 
 
-# class ToDoDetailView(ListView):
-#     model = ToDo
+class ToDoDetailView(BaseToDoDetailView):
+    template_name = 'todo/todo_detail.html'
+
+
+class ToDoCommentView(BaseToDoDetailView):
+    template_name = 'todo/discussion.html'
+
+
+class ToDoEditView(BaseToDoDetailView):
+    template_name = 'todo/todo_form.html'
+
+
+class ToDoAttachmentView(BaseToDoDetailView):
+    template_name = 'todo/attachments.html'
+
+
+class ToDoAssignView(BaseToDoDetailView):
+    template_name = 'todo/assign.html'

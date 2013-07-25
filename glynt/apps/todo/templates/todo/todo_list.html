@@ -52,10 +52,10 @@
                                 <td class="item-icon"><i class="{{ item.display_status|todo_status_icon }}"></i></td>
                                 <td class="item-info"><h4><a href="{% url 'dashboard:item-open' %}">{{ item.name }}</a></h4></td>
                                 <td class="item-meta">
-                                    <button type="button" title="Comments" data-tooltip="Comments" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>{{ item.num_comments }}</span></button>
-                                    <button type="button" title="Edit" data-tooltip="Edit" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                                    <button type="button" title="Attachments" data-tooltip="Attachments" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>{{ item.num_attachements }}</span></button>
-                                    <a href="#">{% if item.user %}<div class="profile-card" data-username="{{ item.user.username }}" data-template="mini">&nbsp;</div>{% else %}<button type="button" title="Assign" data-tooltip="Assign" class="btn btn-small btn-default"><i class="icon-screenshot"></i></button>{% endif %}
+                                    <a href="{% url 'todo:comment' project_uuid=project.uuid slug=item.slug %}" title="Comments" data-tooltip="Comments" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>{{ item.num_comments }}</span></a>
+                                    <a href="{% url 'todo:edit' project_uuid=project.uuid slug=item.slug %}" title="Edit" data-tooltip="Edit" class="btn btn-small btn-default"><i class="icon-edit"></i></a>
+                                    <a href="{% url 'todo:attachment' project_uuid=project.uuid slug=item.slug %}" title="Attachments" data-tooltip="Attachments" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>{{ item.num_attachements }}</span></a>
+                                    <a href="{% url 'todo:assign' project_uuid=project.uuid slug=item.slug %}" title="Assign" data-tooltip="Assign" class="btn btn-small btn-default">{% if item.user %}<div class="profile-card" data-username="{{ item.user.username }}" data-template="mini">&nbsp;</div>{% else %}<i class="icon-screenshot"></i>{% endif %}
                                 </td>
                             </tr>
                         {% endfor %}

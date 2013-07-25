@@ -1,12 +1,14 @@
 # -*- coding: UTF-8 -*-
-from collections import OrderedDict
 from django import template
-from django.template.defaultfilters import slugify
-
 
 from glynt.apps.todo import TODO_STATUS
 from glynt.apps.project.bunches import ProjectIntakeFormIsCompleteBunch
 
+import pdb
+import copy
+from collections import OrderedDict
+import hashlib
+import json
 import logging
 logger = logging.getLogger('lawpal.services')
 
@@ -30,8 +32,12 @@ class ProjectCheckListService(object):
         self.todos_by_cat, self.todos = self.get_todos()
         self.categories = self.get_categories()
 
-    def slug(self, text):
-        return slugify(text)
+    def item_slug(self, item, **kwargs):
+        m = hashlib.sha1()
+        m.update(self.company_data.slug(item_name=item.name))
+        if len(kwargs.keys()) > 0:
+            m.update(json.dumps(kwargs))
+        return m.hexdigest()
 
     # def todo_objects(self):
     #     self.project.todo_set.all()
@@ -45,43 +51,8 @@ class ProjectCheckListService(object):
             if hasattr(c.todos, 'items'):
                 for category, item in c.todos.items():
                     cat_slug = category
-                    #cat_slug = self.slug(category)
-                    repeater_key = None
-                    num_items = 0
 
-                    if hasattr(item, 'repeater_key'):
-                        repeater_key = item.repeater_key
-                        singular = getattr(item, 'singular', None)
-
-                        logger.info('Found repeater_key: %s' % repeater_key)
-
-                        items = self.company_data.get(repeater_key, None)
-
-                        if not items and hasattr(self.company_data, repeater_key):
-                            items = getattr(self.company_data, repeater_key)
-
-                        if items:
-                            # handle being passed a [] or (), otherwise it should be an int
-                            if type(items) in [list]:
-                                num_items = len(items)  
-                            else:
-                                num_items = int(items)
-                                items = [i for i in xrange(1, num_items+1)]
-                                logger.info('repeater_key: %s num_items %s' % (repeater_key, num_items,))
-
-                        logger.info('All Items repeater_key: %s items: %s' % (repeater_key, items,))
-
-                        if num_items == 0:
-                            item.checklist = None
-                        else:
-                            # need to repeat this segment X times by
-                            # field_name specified
-                            cloned_checklist = list(item.checklist)  # clone the primary list
-
-                            # merge lists
-                            for i in items:
-                                cloned_checklist = [self.item_context(item=cloned_item, full_name='{name} #{num}'.format(name=singular, num=i+1)) for i, cloned_item in enumerate(cloned_checklist)]
-                                item.checklist = list(item.checklist + cloned_checklist)
+                    self.handle_repeater(item=item)
 
                     if item.checklist:
                         # parse the list and assign extra attribs
@@ -93,16 +64,71 @@ class ProjectCheckListService(object):
 
         return  OrderedDict(sorted(todos_by_cat.items(), key=lambda t: t[0])), sorted(checklist)
 
+    def handle_repeater(self, item):
+        repeater_key = None
+        num_items = 0
+        # does the item object contain a repeater_key
+        if hasattr(item, 'repeater_key'):
+            repeater_key = item.repeater_key
+            # singular reference for verbage; i.e. Founder(<-singular value) #1
+            singular = getattr(item, 'singular', None)
+
+            logger.info('Found repeater_key: %s' % repeater_key)
+
+            # get the repeater_key values from the company data
+            items = self.company_data.get(repeater_key, None)
+
+            # ok, we have no data form comapny_data based on the repeater_key
+            # therefor we need to see if we can extract the data from an attribute/method
+            # available on the company_data ProjectIntakeFormIsCompleteBunch object
+            if not items and hasattr(self.company_data, repeater_key):
+                items = getattr(self.company_data, repeater_key)
+
+            # do we have items yet? great now we need to see if its a list
+            # or an int, ie do we have a set of elements saved in the company_data
+            # or is it a simple int value ie. num_officers which then allows us to generate
+            if items:
+                # handle being passed a [] or (), otherwise it should be an int
+                if type(items) in [list]:
+                    num_items = len(items)
+                    logger.info('Created num_items from data key')
+                else:
+                    # should be an int
+                    num_items = int(items)
+                    items = [i for i in xrange(1, num_items+1)]
+                    logger.info('Created num_items from xrange')
+
+            logger.info('All Items repeater_key: %s items: %s' % (repeater_key, items,))
+
+            cloned_list = item.checklist[:]
+            item.checklist = []
+
+            if num_items > 0:
+                # need to repeat this segment X times by
+                # field_name specified
+                for num in xrange(1, num_items+1):
+                    # contextualize and replace teh textual values
+                    item.checklist += [self.item_context(item=copy.deepcopy(cloned_item), full_name='{name} #{num}'.format(name=singular, num=num)) for cloned_item in cloned_list]
+
     def item_context(self, item, **kwargs):
-        t = template.Template(item.name)
         c = template.Context(kwargs)
 
-        item.name = t.render(c)
+        # ensure we have a name and description
+        item.name = item.name if hasattr(item, 'name') else None
+        item.description = item.description if hasattr(item, 'description') else None
+
+        # render the template with variables from the context
+        item.name = self.templateize(context=c, value=item.name)
+        item.description = self.templateize(context=c, value=item.description)
 
         return item
 
+    def templateize(self, context, value):
+        t = template.Template(value)
+        return t.render(context)
+
     def parse_checklist(self, checklist):
-        for item in checklist:
+        for i, item in enumerate(checklist):
             # indicate attachment status
             try:
                 item.num_attachements = len(item.attachment)
@@ -112,6 +138,7 @@ class ProjectCheckListService(object):
                 item.has_attachment = False
                 item.attachment = []
 
+            item.slug = self.item_slug(item=item, i=i)
             item.num_comments = 0
             item.status = TODO_STATUS.unassigned
             item.display_status = TODO_STATUS.get_desc_by_value(item.status)

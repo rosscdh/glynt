@@ -93,6 +93,7 @@
                 <div class="callout callout-success empty">
                     <div class="empty-message empty-message-ok">
                         <h3>Your transaction profile is up-to-date.</h3>
+                        <a href="{% url 'transact:builder' project_uuid=project.uuid tx_range='INTAKE' step='1' %}" class="">update</a>
                     </div>
                 </div>
                 {% endif %}

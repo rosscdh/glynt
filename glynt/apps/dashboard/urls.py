@@ -14,6 +14,7 @@ urlpatterns = patterns('',
 
 
     url(r'^(?P<uuid>.+)/documents/$', login_required(TemplateView.as_view(template_name='dashboard/documents.html')), name='documents'),
+    # url(r'^(?P<uuid>.+)/checklist/(?P<item_status>.+)/$', login_required(ProjectToDoView.as_view()), name='checklist_by_status'),
     url(r'^(?P<uuid>.+)/checklist/$', login_required(ProjectToDoView.as_view()), name='checklist'),
     url(r'^(?P<uuid>.+)/$', login_required(CustomerDashboardView.as_view()), name='project'),
     url(r'^$', login_required(CustomerDashboardView.as_view()), name='overview'),

@@ -3,6 +3,8 @@ from bunch import Bunch
 
 from glynt.apps.company.forms import CompanyProfileForm
 
+import hashlib
+import json
 import logging
 logger = logging.getLogger('lawpal.services')
 
@@ -41,6 +43,13 @@ class ProjectIntakeFormIsCompleteBunch(Bunch):
         # for i in founders_dic.keys():
         #     pass
         return []
+
+    def slug(self, **kwargs):
+        m = hashlib.sha1()
+        m.update(str(self.project.pk) + '-' + str(self.company.pk))
+        if len(kwargs.keys()) > 0:
+            m.update(json.dumps(kwargs))
+        return m.hexdigest()
 
     def is_valid(self):
         form = CompanyProfileForm(self)

@@ -21,18 +21,19 @@ class ToDo(models.Model):
     project = models.ForeignKey(Project, blank=True, null=True)
     name = models.CharField(max_length=128)
     slug = models.SlugField()
+    category = models.CharField(max_length=128, db_index=True)
     description = models.TextField(blank=True)
     status = models.IntegerField(choices=TODO_STATUS.get_choices(), default=TODO_STATUS.unassigned, db_index=True)
     data = JSONField(default={})
-    date_due = models.DateTimeField(blank=True, null=True, auto_now=False, auto_now_add=False)
-    date_created = models.DateTimeField(auto_now=False, auto_now_add=True)
+    date_due = models.DateTimeField(blank=True, null=True, auto_now=False, auto_now_add=False, db_index=True)
+    date_created = models.DateTimeField(auto_now=False, auto_now_add=True, db_index=True)
     date_modified = models.DateTimeField(auto_now=True, auto_now_add=True, db_index=True)
 
     objects = DefaultToDoManager()
 
     @property
     def todo_type(self):
-        return '%s' % 'Generic' if not self.project else 'Need to hook up to engagement'
+        return '%s' % 'Generic' if not self.project else 'Need to hook up to project'
 
     @property
     def display_status(self):
