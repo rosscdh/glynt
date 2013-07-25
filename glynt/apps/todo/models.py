@@ -31,6 +31,9 @@ class ToDo(models.Model):
 
     objects = DefaultToDoManager()
 
+    def __unicode__(self):
+        return '{name}'.format(name=self.name)
+
     @property
     def todo_type(self):
         return '%s' % 'Generic' if not self.project else 'Need to hook up to project'

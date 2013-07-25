@@ -56,14 +56,22 @@ class BaseToDoDetailView(DetailView):
         By default this requires `self.queryset` and a `pk` or `slug` argument
         in the URLconf, but subclasses can override this to return any object.
         """
-        self.project = get_object_or_404(Project, uuid=self.kwargs.get('project_uuid'))
-        # Use a custom queryset if provided; this is required for subclasses
-        # like DateDetailView
-        if queryset is None:
-            queryset = self.get_queryset()
-
         slug = self.kwargs.get(self.slug_url_kwarg, None)
-        obj = self.model.objects.get_or_create(slug=slug, project=self.project)
+
+        self.project = get_object_or_404(Project, uuid=self.kwargs.get('project_uuid'))
+
+        project_service = ProjectCheckListService(project=self.project)
+        item = project_service.todo_item_by_slug(slug=slug)
+
+        obj, is_new = self.model.objects.get_or_create(slug=slug, project=self.project)
+
+        if is_new:
+            obj.name = item.name
+            obj.category = item.category
+            obj.description = item.description
+            obj.status = item.status
+            obj.data = item
+            obj.save()
 
         return obj
 

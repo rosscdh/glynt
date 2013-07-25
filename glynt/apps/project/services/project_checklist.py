@@ -56,7 +56,7 @@ class ProjectCheckListService(object):
 
                     if item.checklist:
                         # parse the list and assign extra attribs
-                        self.parse_checklist(checklist=item.checklist)
+                        self.parse_checklist(checklist=item.checklist, category=category)
                         checklist = list(checklist + item.checklist)
 
                         todos_by_cat[cat_slug] = todos_by_cat.get(cat_slug, [])
@@ -127,21 +127,24 @@ class ProjectCheckListService(object):
         t = template.Template(value)
         return t.render(context)
 
-    def parse_checklist(self, checklist):
+    def parse_checklist(self, checklist, **kwargs):
         for i, item in enumerate(checklist):
             # indicate attachment status
             try:
-                item.num_attachements = len(item.attachment)
-                item.has_attachment = item.num_attachements > 0
+                item.num_attachments = len(item.attachment)
+                item.has_attachment = item.num_attachments > 0
             except AttributeError:
-                item.num_attachements = 0
+                item.num_attachments = 0
                 item.has_attachment = False
                 item.attachment = []
 
             item.slug = self.item_slug(item=item, i=i)
+            item.description = item.description if hasattr(item, 'description') else None
             item.num_comments = 0
             item.status = TODO_STATUS.unassigned
             item.display_status = TODO_STATUS.get_desc_by_value(item.status)
+            # updated with various kwargs passed in
+            item.update(kwargs)
 
     def get_categories(self):
         logger.info('Get Project transactions')
@@ -149,6 +152,9 @@ class ProjectCheckListService(object):
         for c in self.checklist:
             cats = list(set(cats + c.categories()))
         return sorted(cats)
+
+    def todo_item_by_slug(self, slug):
+        return [item for item in self.todos if item.slug == slug][0]
 
     def process(self):
         logger.info('Process Project Checklist')

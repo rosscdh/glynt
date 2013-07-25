@@ -54,7 +54,7 @@
                                 <td class="item-meta">
                                     <a href="{% url 'todo:comment' project_uuid=project.uuid slug=item.slug %}" title="Comments" data-tooltip="Comments" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>{{ item.num_comments }}</span></a>
                                     <a href="{% url 'todo:edit' project_uuid=project.uuid slug=item.slug %}" title="Edit" data-tooltip="Edit" class="btn btn-small btn-default"><i class="icon-edit"></i></a>
-                                    <a href="{% url 'todo:attachment' project_uuid=project.uuid slug=item.slug %}" title="Attachments" data-tooltip="Attachments" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>{{ item.num_attachements }}</span></a>
+                                    <a href="{% url 'todo:attachment' project_uuid=project.uuid slug=item.slug %}" title="Attachments" data-tooltip="Attachments" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>{{ item.num_attachments }}</span></a>
                                     <a href="{% url 'todo:assign' project_uuid=project.uuid slug=item.slug %}" title="Assign" data-tooltip="Assign" class="btn btn-small btn-default">{% if item.user %}<div class="profile-card" data-username="{{ item.user.username }}" data-template="mini">&nbsp;</div>{% else %}<i class="icon-screenshot"></i>{% endif %}
                                 </td>
                             </tr>
