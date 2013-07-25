@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
-from django.views.generic import ListView, DetailView
 from django.shortcuts import get_object_or_404
+from django.views.generic import ListView, UpdateView, DetailView
+from django.views.generic.edit import ModelFormMixin
+from django.views.generic.detail import SingleObjectMixin
+from django.contrib import messages
 
 from glynt.apps.project.services.project_checklist import ProjectCheckListService
 from glynt.apps.project.models import Project
+
+from .forms import CutomerToDoForm
 from .models import ToDo
 
 
@@ -47,7 +52,7 @@ class ProjectToDoView(ListView):
         return context
 
 
-class BaseToDoDetailView(DetailView):
+class BaseToDoDetailMixin(SingleObjectMixin):
     model = ToDo
 
     def get_object(self, queryset=None):
@@ -76,21 +81,32 @@ class BaseToDoDetailView(DetailView):
         return obj
 
 
-class ToDoDetailView(BaseToDoDetailView):
+class ToDoDetailView(DetailView, BaseToDoDetailMixin):
     template_name = 'todo/todo_detail.html'
 
 
-class ToDoCommentView(BaseToDoDetailView):
+class ToDoCommentView(DetailView, BaseToDoDetailMixin):
     template_name = 'todo/discussion.html'
 
 
-class ToDoEditView(BaseToDoDetailView):
+class ToDoEditView(UpdateView, BaseToDoDetailMixin, ModelFormMixin):
     template_name = 'todo/todo_form.html'
+    form_class = CutomerToDoForm
 
+    def get_success_url(self):
+        return self.project.get_checklist_absolute_url()
 
-class ToDoAttachmentView(BaseToDoDetailView):
+    def form_valid(self, form):
+        messages.success(self.request, 'Sucessfully updated this item. <a href="{href}">view</a>'.format(href=self.object.get_absolute_url()), extra_tags='safe')
+        return super(ToDoEditView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'There was an error updating this item')
+        return super(ToDoEditView, self).form_valid(form)
+
+class ToDoAttachmentView(DetailView, BaseToDoDetailMixin):
     template_name = 'todo/attachments.html'
 
 
-class ToDoAssignView(BaseToDoDetailView):
+class ToDoAssignView(DetailView, BaseToDoDetailMixin):
     template_name = 'todo/assign.html'

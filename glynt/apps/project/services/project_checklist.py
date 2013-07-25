@@ -13,35 +13,11 @@ import logging
 logger = logging.getLogger('lawpal.services')
 
 
-class ProjectCheckListService(object):
+class ToDoItemsFromYamlMixin(object):
     """
-    Provide a set of checklist items that are
-    generated from the project transaction types
+    Mixin that provides extraction of todo checklist from
+    The YAML Checklists
     """
-    project = None
-    checklist = []
-    todos = []
-    todos_by_cat = {}
-    categories = []
-
-    def __init__(self, project, **kwargs):
-        self.project = project
-        self.company_data = ProjectIntakeFormIsCompleteBunch(project=self.project)
-
-        self.checklist = self.project.checklist()
-        self.todos_by_cat, self.todos = self.get_todos()
-        self.categories = self.get_categories()
-
-    def item_slug(self, item, **kwargs):
-        m = hashlib.sha1()
-        m.update(self.company_data.slug(item_name=item.name))
-        if len(kwargs.keys()) > 0:
-            m.update(json.dumps(kwargs))
-        return m.hexdigest()
-
-    # def todo_objects(self):
-    #     self.project.todo_set.all()
-
     def get_todos(self):
         logger.info('Get Project transactions')
         checklist = []
@@ -122,6 +98,33 @@ class ProjectCheckListService(object):
         item.description = self.templateize(context=c, value=item.description)
 
         return item
+
+
+class ProjectCheckListService(ToDoItemsFromYamlMixin):
+    """
+    Provide a set of checklist items that are
+    generated from the project transaction types
+    """
+    project = None
+    checklist = []
+    todos = []
+    todos_by_cat = {}
+    categories = []
+
+    def __init__(self, project, **kwargs):
+        self.project = project
+        self.company_data = ProjectIntakeFormIsCompleteBunch(project=self.project)
+
+        self.checklist = self.project.checklist()
+        self.todos_by_cat, self.todos = self.get_todos()
+        self.categories = self.get_categories()
+
+    def item_slug(self, item, **kwargs):
+        m = hashlib.sha1()
+        m.update(self.company_data.slug(item_name=item.name))
+        if len(kwargs.keys()) > 0:
+            m.update(json.dumps(kwargs))
+        return m.hexdigest()
 
     def templateize(self, context, value):
         t = template.Template(value)

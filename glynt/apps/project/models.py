@@ -41,6 +41,9 @@ class Project(models.Model):
     def get_absolute_url(self):
         return reverse('project:project', kwargs={'slug': self.uuid})
 
+    def get_checklist_absolute_url(self):
+        return reverse('dashboard:checklist', kwargs={'uuid': self.uuid})
+
     def checklist(self):
         checklist_items = []
         for t in self.transactions.all():
