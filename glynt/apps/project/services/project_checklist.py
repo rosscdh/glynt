@@ -100,7 +100,28 @@ class ToDoItemsFromYamlMixin(object):
         return item
 
 
-class ProjectCheckListService(ToDoItemsFromYamlMixin):
+class ToDoItemsFromDbMixin(object):
+    def append_todo_obj(self, todos):
+        """ Append obj to the todo item """
+        slugs = {}
+        for item in todos:
+            slugs[item.slug] = item
+
+        # get a set of todo items in the database
+        # and append them to the item object
+        for item in self.project.todo_set.filter(slug__in=slugs.keys()):
+            try:
+                slugs[item.slug].obj = item
+            except IndexError:
+                # if the index does not exist, it means its 
+                # a custom created item that the user has added
+                slugs[item.slug] = item
+                slugs[item.slug].obj = item
+        # return the actual items and not our temp dictionart
+        return slugs.values()
+
+
+class ProjectCheckListService(ToDoItemsFromYamlMixin, ToDoItemsFromDbMixin):
     """
     Provide a set of checklist items that are
     generated from the project transaction types
@@ -118,6 +139,7 @@ class ProjectCheckListService(ToDoItemsFromYamlMixin):
         self.checklist = self.project.checklist()
         self.todos_by_cat, self.todos = self.get_todos()
         self.categories = self.get_categories()
+        self.todos = self.append_todo_obj(self.todos)
 
     def item_slug(self, item, **kwargs):
         m = hashlib.sha1()

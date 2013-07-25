@@ -44,6 +44,10 @@ class ToDo(models.Model):
     def display_status(self):
         return TODO_STATUS.get_desc_by_value(self.status)
 
+    @property
+    def original_name(self):
+        return self.data.get('name', 'No original name was found, was created by user')
+
     def get_absolute_url(self):
         return reverse('todo:edit', kwargs={'project_uuid': self.project.uuid, 'slug': self.slug})
 
