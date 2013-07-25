@@ -6,7 +6,10 @@
 {% block body %}
 <div class="container checklist-view">
     <div class="page-header clearfix">
-        <h2>Checklist</h2>
+        <ul class="nav nav-tabs header-nav">
+            <li><a href="{% url 'dashboard:overview' %}"><h3>Overview</h3></a></li>
+            <li class="active"><a href="{% url 'dashboard:checklist' uuid=project.uuid %}"><h3>Checklist</h3></a></li>
+        </ul>
     </div>
     <div class="row">
         <div class="col col-lg-3">
@@ -37,28 +40,27 @@
             </div>
             {% for category, items in checklist.todos_by_cat.iteritems %}
                 <div id="{{ category|slugify }}" class="checklist-header clearfix">
-                    <h3 class="pull-left">#{{ forloop.counter }} - {{ category }}</h3>
+                    <h3 class="pull-left">{{ category }}</h3>
                     <div class="add-new pull-right">
                         <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
                     </div>
                 </div>
-                {% for item in items %}
                 <table class="table table-striped checklist">
                     <tbody>
-                        <tr class="{{ item.display_status|todo_status_row_class }}">
-                            <td class="item-icon"><i class="{{ item.display_status|todo_status_icon }}"></i></td>
-                            <td class="item-info"><h4><a href="#">{{ item.name }}</a></h4></td>
-                            <td class="item-meta">
-                                <button type="button" title="Comments" data-tooltip="Comments" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>{{ item.num_comments }}</span></button>
-                                <button type="button" title="Edit" data-tooltip="Edit" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
-                                <button type="button" title="Attachments" data-tooltip="Attachments" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>{{ item.num_attachements }}</span></button>
-                                <a href="#">{% if item.user %}<div class="profile-card" data-username="{{ item.user.username }}" data-template="mini">&nbsp;</div>{% else %}<button type="button" title="Assign" data-tooltip="Assign" class="btn btn-small btn-default"><i class="icon-screenshot"></i></button>{% endif %}
-                                #{{ forloop.counter }}
-                            </td>
-                        </tr>
+                        {% for item in items %}
+                            <tr class="{{ item.display_status|todo_status_row_class }}">
+                                <td class="item-icon"><i class="{{ item.display_status|todo_status_icon }}"></i></td>
+                                <td class="item-info"><h4><a href="{% url 'dashboard:item-open' %}">{{ item.name }}</a></h4></td>
+                                <td class="item-meta">
+                                    <button type="button" title="Comments" data-tooltip="Comments" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>{{ item.num_comments }}</span></button>
+                                    <button type="button" title="Edit" data-tooltip="Edit" class="btn btn-small btn-default"><i class="icon-edit"></i></button>
+                                    <button type="button" title="Attachments" data-tooltip="Attachments" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>{{ item.num_attachements }}</span></button>
+                                    <a href="#">{% if item.user %}<div class="profile-card" data-username="{{ item.user.username }}" data-template="mini">&nbsp;</div>{% else %}<button type="button" title="Assign" data-tooltip="Assign" class="btn btn-small btn-default"><i class="icon-screenshot"></i></button>{% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
-                {% endfor %}
             {% endfor %}
         </div>
     </div>
@@ -67,9 +69,9 @@
 
 {% block css %}
 <style>
-    ul#checklist-categories a { 
-        display: inline-block; 
-        max-width: 250px; 
+    ul#checklist-categories a {
+        display: inline-block;
+        max-width: 250px;
         vertical-align: middle;
     }
 </style>

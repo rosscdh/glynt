@@ -6,24 +6,23 @@
 {% block body %}
 <div class="container dashboard-view">
     <div class="page-header">
-        <div class="btn-group">
-            <a class="btn btn-danger" href="{% url 'dashboard:checklist' uuid=project.uuid %}">Checklist</a>
-        </div>
-
         <div class="btn-group pull-right">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                Projects <span class="caret"></span>
+                {% project_name project %} <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
                 <li class="nav-header">Active Projects</li>
                 {% for p in projects %}
-                <li><a href="{% url 'dashboard:project' uuid=p.uuid %}">{% project_name p forloop.counter %}</a></li>
+                    <li><a href="{% url 'dashboard:project' uuid=p.uuid %}">{% project_name p forloop.counter %}</a></li>
                 {% empty %}
-                <li>No Projects</li>
+                    <li>No Projects</li>
                 {% endfor %}
             </ul>
         </div>
-        <h2>Dashboard</h2>
+        <ul class="nav nav-tabs header-nav">
+            <li class="active"><a href="{% url 'dashboard:overview' %}"><h3>Overview</h3></a></li>
+            <li><a href="{% url 'dashboard:checklist' uuid=project.uuid %}"><h3>Checklist</h3></a></li>
+        </ul>
     </div>
 
     {% project_lawyers project %}

@@ -8,6 +8,11 @@ from glynt.apps.dashboard.views import CustomerDashboardView
 
 
 urlpatterns = patterns('',
+    url(r'^checklist/open/$', login_required(TemplateView.as_view(template_name='todo/item/open.html')), name='item-open'),
+    url(r'^checklist/pending/$', login_required(TemplateView.as_view(template_name='todo/item/pending.html')), name='item-pending'),
+    url(r'^checklist/resolved/$', login_required(TemplateView.as_view(template_name='todo/item/resolved.html')), name='item-resolved'),
+
+
     url(r'^(?P<uuid>.+)/documents/$', login_required(TemplateView.as_view(template_name='dashboard/documents.html')), name='documents'),
     url(r'^(?P<uuid>.+)/checklist/$', login_required(ProjectToDoView.as_view()), name='checklist'),
     url(r'^(?P<uuid>.+)/$', login_required(CustomerDashboardView.as_view()), name='project'),
@@ -19,8 +24,5 @@ urlpatterns = patterns('',
 
     url(r'^checklist/discussion/$', login_required(TemplateView.as_view(template_name='todo/item/discussion.html')), name='item-discussion'),
 
-    url(r'^checklist/open/$', login_required(TemplateView.as_view(template_name='todo/item/open.html')), name='item-open'),
-    url(r'^checklist/pending/$', login_required(TemplateView.as_view(template_name='todo/item/pending.html')), name='item-pending'),
-    url(r'^checklist/resolved/$', login_required(TemplateView.as_view(template_name='todo/item/resolved.html')), name='item-resolved'),
     # url(r'^checklist/(?P<slug>.+)/$', login_required(ToDoDetailView.as_view()), name='item'),
 )
