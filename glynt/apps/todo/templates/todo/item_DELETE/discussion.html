@@ -1,0 +1,154 @@
+{% extends 'base.html' %}{% load paginator glynt_helpers %}
+
+{% block page_title %}What's the current status?{% endblock %}
+{% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>{% endblock %}
+
+{% block prebody %}
+<style>
+.temp-col-avatar {
+    width:90px;
+    float:left;
+    padding-left:6px;
+}
+.temp-col-avatar img {
+    width:70px;
+}
+.temp-col-content {
+    width:490px;
+    float:left;
+    padding-left:6px;
+}
+.feedback-requested{
+    background-color:#f7fc7b;
+    font-weight:bold;
+}
+.story-info {
+    width: ;
+}
+</style>
+<div class="container item-view">
+    <a href="#" class="softer"><i class="icon-chaevron-left"></i> Back to checklist</a>
+</div>
+<div style="background-color:#42d0e5; color:#42d0e5;">
+    <div class="container" style="padding:10px 0px 14px 0px;"> 
+        <h2 style="color:white;">Note purchase agreement<span class="pull-right" style="opacity:0.6">In Progress</span></h2>
+    </div>
+</div>
+<div class="container"> 
+    <div class="row">
+        <div class="col col-lg-12">
+            <div class="row">
+                <div class="col col-lg-6" style="margin-top:10px;">
+                    <h3>Discuss</h3>
+                         
+                    <div class="row post">
+                        <div class="temp-col-avatar  post-avatar">
+                            <a href=""><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width=""></a>
+                        </div>
+                        <div class="temp-col-content  post-reply">
+                            <form>
+                                <textarea rows="3" placeholder="Leave a comment"></textarea>
+                                <div class="pull-right">
+                                    <button type="submit" class="btn btn-default">Comment</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="row post" style="">
+                        <div class="post-content">
+                            <span class="post-meta" style="font-weight:bold;"><a href="">Alex Halliday</a> requested feedback on <a href="#">Note purchase agreement draft 2.doc</a></span>
+
+                        </div>
+                    </div>
+                    <div class="row post">
+                        <div class="temp-col-avatar post-avatar">
+                            <a href=""><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="52"></a>
+                        </div>
+                        <div class="temp-col-content post-content">
+                            <span class="post-meta softer"><a href="">Alex Halliday</a> uploaded <a href="#">Note purchase agreement draft 2.doc</a></span>
+                            <h3><img src="http://media.diocesemo.org.s3.amazonaws.com/images/docIcon.png"> <a href="#">Note purchase agreement 2.docx</a></h3>
+                        </div>
+                    </div>
+
+                    <div class="row post">
+                        <div class="post-content">
+                            <span class="post-meta softer"><a href="">Sally Sparrow</a> marked <a href="#">Note purchase agreement draft 1.doc</a> as feedback complete</span>
+                            <span class="post-meta softer"><a href="">Sally Sparrow</a> commented on <a href="#">Note purchase agreement draft 1.doc</a></span>
+                            <span class="post-meta softer"><a href="">Alex Halliday</a> requested feedback on <a href="#">Note purchase agreement draft 1.doc</a></span>
+
+                        </div>
+                    </div>
+                    <div class="row post">
+                        <div class="temp-col-avatar post-avatar">
+                            <a href=""><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="52"></a>
+                        </div>
+                        <div class="temp-col-content post-content">
+                            <span class="post-meta softer"><a href="">Alex Halliday</a> uploaded <a href="#">Note purchase agreement draft 1.doc</a></span>
+                            <h3><img src="http://media.diocesemo.org.s3.amazonaws.com/images/docIcon.png"> <a href="#">Note purchase agreement 1.docx</a></h3>
+                        </div>
+                    </div>
+
+                    <div class="row post">
+                        <div class="temp-col-avatar post-avatar">
+                            <a href=""><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="52"></a>
+                        </div>
+                        <div class="temp-col-content post-content">
+                            <span class="post-meta softer"><a href="">Alex Halliday</a> commented on this issue 2 days ago</span>
+                            <p>Ok, I have everything i need. I'm going to upload the new draft shortly.</p>
+                            <ul class="list-inline post-actions">
+                                <li><a href="">Edit</a></li>
+                                <li class="seperator">&middot;</li>
+                                <li><a href="">Reply</a></li>
+                                <li class="seperator">&middot;</li>
+                                <li><a href="">Delete</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col col-lg-6">
+                    <div class="well">
+                        <h3 >Documents</h3>
+                        <div style="border:2px dashed #ccc;padding:20px;text-align:center;color:#ccc;border-radius:10px;">
+                            Upload a new document
+                        </div>
+                        <br />
+                        <table class="table stories">
+                            <tbody>
+                                <tr class="story feedback-requested">
+                                    <td class="story-actor">
+                                        <img src="http://media.diocesemo.org.s3.amazonaws.com/images/docIcon.png">
+                                    </td>
+                                    <td class="story-info">
+                                        <p><a href="#">Note purchase agreement draft 2.doc</a></p>
+                                        <span class="softer">2 hours ago by Alex Halliday</span>
+                                    </td>
+                                    <td class="story-action">
+                                        <a href="#" class="btn btn-primary">Give feedback</a>
+                                    </td>
+                                </tr>
+                                <tr class="story">
+                                    <td class="story-actor">
+                                        <img src="http://media.diocesemo.org.s3.amazonaws.com/images/docIcon.png">
+                                    </td>
+                                    <td class="story-info">
+                                        <p><a href="#">Note purchase agreement draft 1.doc</a></p>
+                                        <span class="softer">2 days ago by Alex Halliday</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

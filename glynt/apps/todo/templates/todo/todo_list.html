@@ -50,7 +50,7 @@
                         {% for item in items %}
                             <tr class="{{ item.display_status|todo_status_row_class }}">
                                 <td class="item-icon"><i class="{{ item.display_status|todo_status_icon }}"></i></td>
-                                <td class="item-info"><h4><a href="{% url 'dashboard:item-open' %}">{{ item.obj.name|default:item.name }}</a></h4></td>
+                                <td class="item-info"><h4><a href="{% url 'dashboard:item-discussion' %}">{{ item.obj.name|default:item.name }}</a></h4></td>
                                 <td class="item-meta">
                                     <a href="{% url 'todo:comment' project_uuid=project.uuid slug=item.slug %}" title="Comments" data-tooltip="Comments" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>{{ item.obj.num_comments|default:item.num_comments }}</span></a>
                                     <a href="{% url 'todo:edit' project_uuid=project.uuid slug=item.slug %}" title="Edit" data-tooltip="Edit" class="btn btn-small btn-danger"><i class="icon-edit"></i></a>
