@@ -1,5 +1,5 @@
 {% extends 'base.html' %}{% load url from future %}
-{% load crispy_forms_tags company_tags transaction_tags %}
+{% load i18n crispy_forms_tags company_tags transaction_tags %}
 
 {% block head %}
     {{ wizard.form.media }}
@@ -10,57 +10,44 @@
 {% endblock %}
 
 {% block prebody %}
-    <div class="jumbotron-header">
-        <div class="container text-center">
-            <h1 class="alt">What do you need?</h1>
-            <h3 id="instructions" class="softer">Pick a package or tell us what you need.</h3>
-
-        </div>
-    </div>
+<div class="megatron">
     <div class="container">
-        <div class="row">
-            <div class="col col-lg-6 col-offset-3">
-                {% transactions transaction='CS' %}
-                {% transactions transaction='SF' %}
-                {% transactions transaction='ES' %}
-                <div class="transaction-choice clearfix" data-transaction="custom">
-                    <button class="btn btn-large btn-primary"><i class="icon-plus icon-white"></i></button>
-                    <div class="panel panel-warning">
-                        <div class="panel-heading">Something else <p class="price pull-right">$Quote</p></div>
-                        Need something else? Just give us the details and we will get back to you asap.
-                    </div>
-                </div>
-                <br />
-            </div>
-            <div class="col col-lg-2 hidden-sm">
-                <btn id="continue" class="btn btn-success btn-huge btn-block">Continue</btn>
-                <br />
-                <a href="#" class="btn btn-warning">Talk to us</a>
-                <br />
-                <br />
-                <br />
-                {% comment %}
-                <img src="{{ STATIC_URL }}img/lawyers.png" style="padding-bottom:5px;displya:">
-                <div class="lawyers-have hidden-sm text-left" style="display:none;">
-                    <h4>Your LawPal Lawyer :</h4>
-                    <ul class="list-unstyled">
-                        <li></li>
-                        <li>7 years + experience</li>
-                        <li>Available to meet you locally</li>
-                        <li>Vetted by LawPal with a trackrecord serving startups</li>
-                        <li>Approved by you before they start work</li>
-                        <li>Agreed to a ﬁxed price in advance</li>
-                    </ul>
-                </div>
-                {% endcomment %}
-   
+        <h2><i class="glyphicon glyphicon-briefcase" style="padding: 27px 28px 22px 28px;"></i></h2>
+        <h1>What do you need?</h1>
+        <h3>Pick a package or tell us what you need.</h3>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+<div class="container packages-view">
+    <div class="row">
+        <div class="col col-lg-6">
+            {% transactions transaction='CS' %}
+            {% transactions transaction='SF' %}
+        </div>
+        <div class="col col-lg-6">
+            {% transactions transaction='ES' %}
+
+            <div class="callout callout-info clearfix">
+                <p class="lead pull-right">-</p>
+                <h4>Need something else?</h4>
+                <p>Just give us the details and we will get back to you ASAP.</p>
+                <p><button class="btn btn-info" data-toggle="modal" data-target="#custom-package"><i class="icon-envelope icon-white"></i> Contact us</button></p>
             </div>
         </div>
-
-        <form id="transaction-form" method="POST">{% csrf_token %}
-            {{ form }}
-        </form>
     </div>
+    <div class="row">
+        <div class="col col-lg-12">
+            <button id="continue" class="btn btn-success btn-huge pull-right">{% trans "Continue" %}</button>
+        </div>
+    </div>
+
+    <form id="transaction-form" method="POST">
+        {% csrf_token %}
+        {{ form }}
+    </form>
+</div>
 {% endblock %}
 
 {% block js %}
@@ -79,13 +66,15 @@ function transaction_business_logic(element) {
 }
 
 function transaction_selection(element) {
-    element.addClass('active btn-success').html('<i class="icon-ok icon-white"></i>');
-    selected_transactions.push(element.parent().attr('data-transaction'));
+    element.addClass('active btn-success').html('<i class="icon-ok icon-white"></i> Package added');
+    element.parent().parent().addClass('callout-success');
+    selected_transactions.push(element.parent().parent().attr('data-transaction'));
 }
 
 function transaction_deselection(element) {
-    element.removeClass('active btn-success').html('<i class="icon-plus icon-white"></i>');
-    var index = selected_transactions.indexOf(element.parent().attr('data-transaction'));
+    element.removeClass('active btn-success').html('<i class="icon-plus icon-white"></i> Add package');
+    element.parent().parent().removeClass('callout-success');
+    var index = selected_transactions.indexOf(element.parent().parent().attr('data-transaction'));
     if (index > -1) {
         selected_transactions.splice(index, 1);
     }
@@ -112,7 +101,7 @@ $(document).ready(function () {
         var elm = $(this);
         if (!$(this).hasClass('active')) {
             // Check if Note financing and disable Equity financing if true (and visa versa)
-            transaction_business_logic(elm.parent());
+            transaction_business_logic(elm.parent().parent());
         } else {
             transaction_deselection(elm);
         }
@@ -131,4 +120,46 @@ $(document).ready(function () {
     });
 });
 </script>
+{% endblock %}
+
+{% block modals %}
+<!-- Modal -->
+<div class="modal fade" id="custom-package">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Contact Us</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+                        <label for="inputSubject" class="col-lg-2 control-label">Subject</label>
+                        <div class="col-lg-10">
+                            <input type="text" id="inputSubject" placeholder="Subject">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="typeBody" class="col-lg-2 control-label">Body</label>
+                        <div class="col-lg-10">
+                            <textarea name="inputBody" rows="8"></textarea>
+                        </div>
+                        <!-- <div class="col-lg-10"> -->
+                            <!-- <div class="radio-inline"> -->
+                                <!-- <label><input type="radio" name="typeRadios"checked> Document</label> -->
+                            <!-- </div> -->
+                            <!-- <div class="radio-inline"> -->
+                                <!-- <label><input type="radio" name="typeRadios"> Issue</label> -->
+                            <!-- </div> -->
+                        <!-- </div> -->
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn" data-dismiss="modal">Close</a>
+                <a href="#" class="btn btn-primary">Send</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

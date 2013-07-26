@@ -31,13 +31,12 @@
         {% block head_js %}{% endblock %}
     </head>
 
-<body data-spy="scroll" data-target=".subnav" data-offset="50" class="{% block bodyclass %}{% endblock %}">
+<body data-spy="scroll" data-target=".sidenav" data-offset="50" class="{% block bodyclass %}{% endblock %}">
 
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 
 <div id="wrap">
-
 
     {% block navbar %}
         {% include 'partials/nav.html' %}
@@ -64,6 +63,9 @@
     {% include 'partials/footer.html' %}
 {% endblock %}
 
+{% block modals %}
+{% endblock %}
+
 {% profile_card_templates %}
 
 {% compress js %}
@@ -75,6 +77,8 @@
     <script type="text/javascript" src="{{ STATIC_URL }}handlebars.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}handlebars-helpers.js"></script>
     <script type="text/javascript">{% profile_card_js %}</script>
+
+    <script type="text/javascript" src="{{ STATIC_URL }}js/application.js"></script>
 {% endcompress %}
 
 <script type="text/javascript" src="{{ STATIC_URL }}js/moment/moment.min.js"></script>

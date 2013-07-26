@@ -1,43 +1,112 @@
 # -*- coding: utf-8 -*-
-from django.views.generic import ListView, DetailView
+from django.shortcuts import get_object_or_404
+from django.views.generic import ListView, UpdateView, DetailView
+from django.views.generic.edit import ModelFormMixin
+from django.views.generic.detail import SingleObjectMixin
+from django.contrib import messages
 
+from glynt.apps.project.services.project_checklist import ProjectCheckListService
 from glynt.apps.project.models import Project
-from glynt.apps.todo.models import ToDo
+
+from .forms import CutomerToDoForm
+from .models import ToDo
 
 
-class MyToDoListView(ListView):
+class ProjectToDoView(ListView):
     model = ToDo
-    paginate_by = 1#10
+    paginate_by = 1  # 10
 
     def get_queryset(self):
         """
         Provide a list of todos for the current user
         """
-        order_by = self.request.GET.get('order_by', '-id') # newest first
+        order_by = self.request.GET.get('order_by', '-id')  # newest first
 
         fltr = {
-            'status': self.request.GET.get('status', 1) # newest first
+            'status': self.request.GET.get('status', 1)  # newest first
         }
 
         # filter by the current user always
         # filter by the params passed in
         queryset = self.model.objects.prefetch_related('user', 'project') \
-                        .filter(user=self.request.user) \
-                        .filter(**fltr)
+                                     .filter(user=self.request.user) \
+                                     .filter(**fltr)
 
         return queryset.order_by(order_by)
 
     def get_context_data(self, **kwargs):
-        context = super(MyToDoListView, self).get_context_data(**kwargs)
+        context = super(ProjectToDoView, self).get_context_data(**kwargs)
+
+        self.project = get_object_or_404(Project, uuid=self.kwargs.get('uuid'))
+        self.checklist_service = ProjectCheckListService(project=self.project)
+
         context.update({
-            'projects': Project.objects.for_user(user=self.request.user),
+            'project': self.project,
+            'checklist': self.checklist_service,
             'counts': {
-                'new': self.model.objects.new(user=self.request.user).count(),
-                'open': self.model.objects.open(user=self.request.user).count(),
-                'closed': self.model.objects.closed(user=self.request.user).count(),
+                'new': self.model.objects.unassigned(project=self.project, user=self.request.user).count(),
+                'open': self.model.objects.assigned(project=self.project, user=self.request.user).count(),
+                'closed': self.model.objects.closed(project=self.project, user=self.request.user).count(),
             }
         })
         return context
 
-class ToDoDetailView(ListView):
+
+class BaseToDoDetailMixin(SingleObjectMixin):
     model = ToDo
+
+    def get_object(self, queryset=None):
+        """
+        Returns the object the view is displaying.
+        By default this requires `self.queryset` and a `pk` or `slug` argument
+        in the URLconf, but subclasses can override this to return any object.
+        """
+        slug = self.kwargs.get(self.slug_url_kwarg, None)
+
+        self.project = get_object_or_404(Project, uuid=self.kwargs.get('project_uuid'))
+
+        project_service = ProjectCheckListService(project=self.project)
+        item = project_service.todo_item_by_slug(slug=slug)
+
+        obj, is_new = self.model.objects.get_or_create(slug=slug, project=self.project)
+
+        if is_new:
+            obj.name = item.name
+            obj.category = item.category
+            obj.description = item.description
+            obj.status = item.status
+            obj.data = item
+            obj.save()
+
+        return obj
+
+
+class ToDoDetailView(DetailView, BaseToDoDetailMixin):
+    template_name = 'todo/todo_detail.html'
+
+
+class ToDoCommentView(DetailView, BaseToDoDetailMixin):
+    template_name = 'todo/discussion.html'
+
+
+class ToDoEditView(UpdateView, BaseToDoDetailMixin, ModelFormMixin):
+    template_name = 'todo/todo_form.html'
+    form_class = CutomerToDoForm
+
+    def get_success_url(self):
+        return self.project.get_checklist_absolute_url()
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Sucessfully updated this item. <a href="{href}">view</a>'.format(href=self.object.get_absolute_url()), extra_tags='safe')
+        return super(ToDoEditView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'There was an error updating this item')
+        return super(ToDoEditView, self).form_valid(form)
+
+class ToDoAttachmentView(DetailView, BaseToDoDetailMixin):
+    template_name = 'todo/attachments.html'
+
+
+class ToDoAssignView(DetailView, BaseToDoDetailMixin):
+    template_name = 'todo/assign.html'
