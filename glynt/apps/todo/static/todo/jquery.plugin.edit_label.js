@@ -67,6 +67,8 @@ $(function() {
             var slug = event.data.slug;
             var url = self.options.url;
 
+            $(document).unbind('keypress');
+
             url = url.assign(event.data);
 
             var context = $.extend(true, {
