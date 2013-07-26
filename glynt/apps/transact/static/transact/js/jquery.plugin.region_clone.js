@@ -14,7 +14,7 @@ $(function() {
 		options: {
 			label: 'Add another',
 			btn_remove: $('<button/>', {
-				class: 'right btn btn-danger delete-cloned-region',
+				class: 'pull-right close delete-cloned-region',
 				html: 'x'
 			})
 		},
@@ -125,7 +125,7 @@ $(function() {
 		},
 		btn_add_another: function () {
 			var btn_add_another_id = '{num_elements}_add_another'.assign({'num_elements': this.num_elements})
-			return $('<div id="{btn_add_another_id}"><button id="btn_add_another_{num_elements}" class="btn btn-inverse">{label}</button></div>'
+			return $('<div id="{btn_add_another_id}"><br /><button id="btn_add_another_{num_elements}" class="btn btn-success pull-right">{label}</button></div>'
 					.assign({
 							'btn_add_another_id': btn_add_another_id, 
 							'label': this.options.label
@@ -155,6 +155,9 @@ $(function() {
 			elem.attr('data-json_index', step_count);
 			elem.attr('data-json_id', elem.prop('id').replace(/^id_(\d+)\-/g,''));
 			elem.attr('data-json_name', elem.prop('name').replace(/^(\d+)\-/g,''));
+
+			// set the value of this element blank
+			elem.val('');
 
 			elem.on('change', function (event) {
                 $.event.trigger({

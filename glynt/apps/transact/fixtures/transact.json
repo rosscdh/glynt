@@ -3,9 +3,13 @@
     "pk": 1,
     "model": "transact.transaction",
     "fields": {
-      "price": "4000.00",
+      "price": "4000",
       "description": "Product explanation goes here, why it's awesome etc.",
-      "data": {},
+      "data": {
+        "checklist_bunches": [
+          "SeedFundingEquityRoundBunch"
+        ]
+      },
       "slug": "ES",
       "title": "Seed Financing : Equity Round"
     }
@@ -14,9 +18,13 @@
     "pk": 2,
     "model": "transact.transaction",
     "fields": {
-      "price": "1500.00",
+      "price": "1500",
       "description": "Production explanation goes here, why it's awesome etc.",
-      "data": {},
+      "data": {
+        "checklist_bunches": [
+          "IncorporationBunch"
+        ]
+      },
       "slug": "CS",
       "title": "Incorporation and Setup"
     }
@@ -25,9 +33,13 @@
     "pk": 3,
     "model": "transact.transaction",
     "fields": {
-      "price": "500.00",
+      "price": "500",
       "description": "Production explanation goes here, why it's awesome etc.",
-      "data": {},
+      "data": {
+        "checklist_bunches": [
+          "SeedFundingConvertibleNoteRoundBunch"
+        ]
+      },
       "slug": "SF",
       "title": "Seed Financing : Convertible Note Round"
     }

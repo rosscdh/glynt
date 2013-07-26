@@ -6,7 +6,8 @@ import factory
 import mocktest
 from bunch import Bunch
 from glynt.apps.transact.models import Transaction
-from glynt.apps.transact.bunches import BaseToDoBunch, IncorporationBunch
+from glynt.apps.todo.bunches import BaseToDoBunch
+from glynt.apps.transact.bunches import IncorporationBunch
 
 
 class TransactionFactory(factory.Factory):

@@ -5,7 +5,7 @@
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             {% if not messages %}<div class="close span1 pull-right">X</div>{% endif %}
             {% for message in messages %}
-                <span class="{% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</span><br />
+                <span class="{% if message.tags %}{{ message.tags }}{% endif %}">{{ message|safe }}</span><br />
             {% endfor %}
         </div>
     </div>

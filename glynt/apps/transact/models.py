@@ -3,6 +3,8 @@ from django.db import models
 
 from jsonfield import JSONField
 
+from . import import_module_class
+
 
 class Transaction(models.Model):
     title = models.CharField(max_length=128)
@@ -17,3 +19,11 @@ class Transaction(models.Model):
     @property
     def display_price(self):
         return "%01.2f" % self.price
+
+    def checklist(self):
+        checklist_items = []
+        for b in self.data.get('checklist_bunches', []):
+            BunchClass = import_module_class('glynt.apps.transact.bunches.%s' % b)
+            bunch = BunchClass()
+            checklist_items.append(bunch)
+        return checklist_items

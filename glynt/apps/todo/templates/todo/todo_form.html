@@ -1,0 +1,23 @@
+{% extends 'base.html' %}{% load url from future %}{% load i18n crispy_forms_tags %}
+
+{% block title %}{% trans "Edit Checklist Item" %}{% endblock %}
+
+{% block content_title %}fds{% endblock %}
+
+{% block body %}
+
+<div class="form-wrap">
+  <div class="container">
+    <div class="row">
+        <!-- {{ object.original_name }} -->
+        <a href="{% url 'dashboard:checklist' uuid=object.project.uuid %}" class="btn btn-warning">Return to Checklist<a/>
+    </div>
+    <div class="row">
+      <div class="col col-lg-10 col-offset-1">
+        {% crispy form %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

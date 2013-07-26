@@ -28,8 +28,8 @@ class CompanyProfileForm(CompanyProfileForm):
     page_description = 'We need a bit more information from you before we can continue.'
     data_bag = 'glynt.apps.company.bunches.UserIntakeCompanyBunch'
 
-    def get_update_url(self, project):
-        return '/api/v1/company/data/{pk}'.format(pk=project.company.pk)
+    def get_update_url(self, **kwargs):
+        return '/api/v1/company/data/{pk}'.format(pk=kwargs.get('project').company.pk)
 
 # WIZARD STEP TWO
 @parsleyfy
