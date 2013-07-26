@@ -12,6 +12,7 @@ $(function() {
         list_items: null,
         options: {
             'url': null,
+            'project_uuid': null,
             'edit_template': null,
             'remove_button': null,
             'target_selector': null
@@ -107,7 +108,8 @@ $(function() {
         update_name: function (url, kwargs) {
             var self = this;
             var data = {
-                'name': kwargs.val
+                'name': kwargs.val,
+                'project_uuid': self.options.project_uuid
             };
 
             $.ajax({

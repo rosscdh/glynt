@@ -91,6 +91,7 @@ $(document).ready( function () {
     });
 
     $('#list-items').edit_label({
+        'project_uuid': '{{ project.uuid }}',
         'url': '/api/v1/todo/name/{slug}',
         'edit_template': '<input type="text" id="{id}" name="{name}" value="{value}" data-original_value="{value}" data-update_name_url="{url}" />',
         'remove_button': '<a data-restore_label="true" href="javascript:;"><i class="icon-remove-sign"></i></a>',
