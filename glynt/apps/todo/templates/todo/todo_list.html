@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load paginator glynt_helpers todo_tags %}
+{% extends 'base.html' %}{% load paginator glynt_helpers todo_tags jsonify %}
 
 {% block page_title %}Checklist for: {{ project }}{% endblock %}
 {% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>{% endblock %}
@@ -23,9 +23,9 @@
         </div>
         <div class="col col-lg-9">
             <div class="clearfix">
-                <div class="btn-group">
-                    <button type="button" class="btn btn-primary">All Items <span class="badge">{{ counts.all }}</span></button>
-                    <button type="button" class="btn btn-primary">Closed Items <span class="badge">{{ counts.closed }}</span></button>
+                <div id="state_modifier" class="btn-group">
+                    <button type="button" data-modifier="all" class="btn btn-primary">All Items <span data-modifier_type="all" class="badge">&nbsp;</span></button>
+                    <button type="button" data-modifier="closed" class="btn btn-primary">Closed Items <span data-modifier_type="closed" class="badge">&nbsp;</span></button>
                 </div>
                 <div class="btn-group pull-right">
                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -38,6 +38,7 @@
                     </ul>
                 </div>
             </div>
+            <span id="list-items">
             {% for category, items in checklist.todos_by_cat.iteritems %}
                 <div id="{{ category|slugify }}" class="checklist-header clearfix">
                     <h3 class="pull-left">{{ category }}</h3>
@@ -48,9 +49,9 @@
                 <table class="table table-striped checklist">
                     <tbody>
                         {% for item in items %}
-                            <tr class="{{ item.display_status|todo_status_row_class }}">
-                                <td class="item-icon"><i class="{{ item.display_status|todo_status_icon }}"></i></td>
-                                <td class="item-info"><h4><a href="{% url 'dashboard:item-open' %}">{{ item.obj.name|default:item.name }}</a></h4></td>
+                            <tr data-edit_label="{{ item.slug }}" data-status="{{ item.obj.display_status|default:item.display_status|lower }}" class="{{ item.obj.status|default:item.status|todo_status_row_class }}">
+                                <td class="item-icon" tooltip="{{ item.obj.display_status|default:item.display_status }}" title="{{ item.obj.display_status|default:item.display_status }}"><i class="{{ item.obj.status|default:item.status|todo_status_icon }}"></i></td>
+                                <td class="item-info"><h4><a title="Press e to edit" href="{% url 'dashboard:item-open' %}">{{ item.obj.name|default:item.name }}</a></h4></td>
                                 <td class="item-meta">
                                     <a href="{% url 'todo:comment' project_uuid=project.uuid slug=item.slug %}" title="Comments" data-tooltip="Comments" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>{{ item.obj.num_comments|default:item.num_comments }}</span></a>
                                     <a href="{% url 'todo:edit' project_uuid=project.uuid slug=item.slug %}" title="Edit" data-tooltip="Edit" class="btn btn-small btn-danger"><i class="icon-edit"></i></a>
@@ -62,6 +63,7 @@
                     </tbody>
                 </table>
             {% endfor %}
+            </span>
         </div>
     </div>
 </div>
@@ -78,14 +80,25 @@
 {% endblock %}
 
 {% block js %}
-    {% moment_js %}
-    <script src="{{ STATIC_URL }}js/angularjs/lib/angular.min.js"></script>
-    <script src="{{ STATIC_URL }}js/angularjs/lib/angular-resource.min.js"></script>
+    <script src="{{ STATIC_URL }}js/jquery.hotkeys-0.8.js"></script>
+    <script src="{{ STATIC_URL }}todo/jquery.plugin.filter_status.js"></script>
+    <script src="{{ STATIC_URL }}todo/jquery.plugin.edit_label.js"></script>
+<script>
+$(document).ready( function () {
 
-    <script src="{{ STATIC_URL }}todo/angularjs/app/js/app.js"></script>
-    <script src="{{ STATIC_URL }}todo/angularjs/app/js/controllers.js"></script>
-    <script src="{{ STATIC_URL }}todo/angularjs/app/js/services.js"></script>
-    <script src="{{ STATIC_URL }}todo/angularjs/app/js/directives.js"></script>
+    $('#list-items').filter_status({
+        'state_modifier': $('#state_modifier')
+    });
+
+    $('#list-items').edit_label({
+        'url': '/api/v1/todo/name/{slug}',
+        'edit_template': '<input type="text" id="{id}" name="{name}" value="{value}" data-original_value="{value}" data-update_name_url="{url}" />',
+        'remove_button': '<a data-restore_label="true" href="javascript:;"><i class="icon-remove-sign"></i></a>',
+        'target_selector': 'a:first'
+    });
+
+});
+</script>
 {% endblock %}
 
 {% block modals %}
