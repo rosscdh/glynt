@@ -28,3 +28,12 @@ class UserToDoCountResource(BaseApiModelResource):
             }
         })
         return bundle
+
+
+class UserToDoLabelResource(BaseApiModelResource):
+    """ Api resource for creating or modifying todo item names """
+    class Meta(BaseApiModelResource.Meta):
+        queryset = User.objects.all()
+        resource_name = 'todo/name'
+        list_allowed_methods = ['post', 'patch']
+        fields = ['name']
