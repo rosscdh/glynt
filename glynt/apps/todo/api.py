@@ -35,5 +35,5 @@ class UserToDoLabelResource(BaseApiModelResource):
     class Meta(BaseApiModelResource.Meta):
         queryset = User.objects.all()
         resource_name = 'todo/name'
-        list_allowed_methods = ['post', 'patch']
+        list_allowed_methods = ['put']
         fields = ['name']
