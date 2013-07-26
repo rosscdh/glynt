@@ -109,16 +109,23 @@ class ToDoItemsFromDbMixin(object):
 
         # get a set of todo items in the database
         # and append them to the item object
-        for item in self.project.todo_set.filter(slug__in=slugs.keys()):
+        for db_item in self.project.todo_set.filter(slug__in=slugs.keys()):
             try:
-                slugs[item.slug].obj = item
+                slugs[db_item.slug].obj = db_item
             except IndexError:
                 # if the index does not exist, it means its 
                 # a custom created item that the user has added
-                slugs[item.slug] = item
-                slugs[item.slug].obj = item
+                slugs[db_item.slug] = db_item
+                slugs[db_item.slug].obj = db_item
+
+            self.modify_item_values(slugs[db_item.slug])
+
         # return the actual items and not our temp dictionart
         return slugs.values()
+
+    def modify_item_values(self, item):
+        item.__dict__.update(item.obj.__dict__)
+        logger.debug('checklist item status: %s %s' % (item.name, item.display_status,))
 
 
 class ProjectCheckListService(ToDoItemsFromYamlMixin, ToDoItemsFromDbMixin):
@@ -140,6 +147,7 @@ class ProjectCheckListService(ToDoItemsFromYamlMixin, ToDoItemsFromDbMixin):
         self.todos_by_cat, self.todos = self.get_todos()
         self.categories = self.get_categories()
         self.todos = self.append_todo_obj(self.todos)
+        self.kwargs = kwargs
 
     def item_slug(self, item, **kwargs):
         m = hashlib.sha1()
