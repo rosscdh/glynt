@@ -6697,10 +6697,10 @@ table.lawyer-list {
     display: block;
   }
 }
-@media only screen and (min-width: 992px) {
+@media screen and (min-width: 992px) {
   .sidebar.affix {
     position: fixed;
-    top: 75px;
+    top: 90px;
     width: 213px;
   }
 }
@@ -6708,4 +6708,7 @@ table.lawyer-list {
   .sidebar.affix {
     width: 270px;
   }
+}
+.page-header {
+  margin-top: 15px;
 }
