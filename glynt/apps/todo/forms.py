@@ -14,7 +14,8 @@ class ToDoForm(forms.ModelForm):
 
 class CutomerToDoForm(ToDoForm):
     class Meta(ToDoForm.Meta):
-        exclude = ['project', 'user', 'slug', 'status', 'description', 'data']
+        #exclude = ['project', 'user', 'slug', 'status', 'description', 'data']
+        exclude = ['project', 'user', 'slug', 'description', 'data']
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
@@ -28,6 +29,10 @@ class CutomerToDoForm(ToDoForm):
                 'Info',
                 'category',
                 'description',
+            ),
+            Fieldset(
+                'Temporary',
+                'status',
             ),
             ButtonHolder(
                 Submit('submit', 'Change', css_class='')
