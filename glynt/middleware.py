@@ -1,12 +1,28 @@
 # -*- coding: utf-8 -*-
-from django.conf import settings
-
 from django.contrib import messages
 from django.shortcuts import redirect
+from django.core.urlresolvers import reverse
 
 from social_auth.middleware import SocialAuthExceptionMiddleware
 from social_auth.exceptions import SocialAuthBaseException
-from social_auth.utils import backend_setting, get_backend_name
+from social_auth.utils import get_backend_name
+
+
+class EnsureUserHasCompanyMiddleware(object):
+    """ if the user is a is_customer
+    and has no company then get them to complete the signup form
+    """
+    def process_request(self, request):
+        if request.user.is_authenticated():
+            if request.user.profile.is_customer:
+                try:
+                    request.user.companies.all()[0]
+                except IndexError:
+                    signup_url = reverse('client:confirm_signup', kwargs={'slug': request.user.username})
+                    logout_url = reverse('logout')
+                    if request.get_full_path() not in [signup_url, logout_url]:
+                        return redirect(signup_url)
+        return None
 
 
 class LawpalSocialAuthExceptionMiddleware(SocialAuthExceptionMiddleware):
