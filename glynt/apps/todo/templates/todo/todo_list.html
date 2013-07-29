@@ -54,7 +54,7 @@
                                 <td class="item-info"><h4><a title="Press e to edit" href="{% url 'dashboard:item-open' %}">{{ item.obj.name|default:item.name }}</a></h4></td>
                                 <td class="item-meta">
                                     <a href="{% url 'todo:comment' project_uuid=project.uuid slug=item.slug %}" title="Comments" data-tooltip="Comments" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>{{ item.obj.num_comments|default:item.num_comments }}</span></a>
-                                    <a href="{% url 'todo:edit' project_uuid=project.uuid slug=item.slug %}" title="Edit" data-tooltip="Edit" class="btn btn-small btn-danger"><i class="icon-edit"></i></a>
+                                    <a href="{% url 'todo:edit' project_uuid=project.uuid slug=item.slug %}" data-toggle="modal" data-target="#modal-checklist-item" title="Edit" data-tooltip="Edit" class="btn btn-small btn-danger"><i class="icon-edit"></i></a>
                                     <a href="{% url 'todo:attachment' project_uuid=project.uuid slug=item.slug %}" title="Attachments" data-tooltip="Attachments" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>{{ item.obj.num_attachments|default:item.num_attachments }}</span></a>
                                     <a href="{% url 'todo:assign' project_uuid=project.uuid slug=item.slug %}" title="Assign" data-tooltip="Assign" class="btn btn-small btn-default">{% if item.obj.user %}<div class="profile-card" data-username="{{ item.obj.user.username }}" data-template="mini">&nbsp;</div>{% else %}<i class="icon-screenshot"></i>{% endif %}
                                 </td>
@@ -98,61 +98,46 @@ $(document).ready( function () {
     //     'target_selector': 'a:first'
     // });
 
+    $('#modal-checklist-item').on('shown.bs.modal', function (event) {
+        var target = $(event.currentTarget)
+        var title = target.find('.modal-title')
+        var body = target.find('.modal-body')
+        var action_button = $('.modal-footer .btn-primary:first');
+        var form = body.find('form:first');
+        var form_action = form.attr('action');
+
+        title.html('Edit - {name}'.assign({'name': form.find('input[type=text]:first').val()}));
+
+        action_button.on('click', function (event) {
+            event.preventDefault();
+            form.submit();
+        });
+        // $(document).on( 'click', action_button, function (event) {
+        //     event.preventDefault();
+        //     console.log(form.serialize())
+        // });
+
+    })
+
 });
 </script>
 {% endblock %}
 
 {% block modals %}
 <!-- Modal -->
-<div class="modal fade" id="new-checklist-item">
+<div class="modal fade" id="modal-checklist-item">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">New item</h4>
+                <h4 class="modal-title"></h4>
             </div>
             <div class="modal-body">
-
-                <form class="form-horizontal">
-                    <div class="row">
-                        <label for="inputName" class="col-lg-2 control-label">Name</label>
-                        <div class="col-lg-10">
-                            <input type="text" id="inputName" placeholder="Name">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label for="typeRadios" class="col-lg-2 control-label">Type</label>
-                        <div class="col-lg-10">
-                            <div class="radio-inline">
-                                <label><input type="radio" name="typeRadios"checked> Document</label>
-                            </div>
-                            <div class="radio-inline">
-                                <label><input type="radio" name="typeRadios"> Issue</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label for="inputCategory" class="col-lg-2 control-label">Category</label>
-                        <div class="col-lg-10">
-                            <select id="inputCategory">
-                                <option>Incorporation Documents</option>
-                                <option>Qualification</option>
-                                <option>Founders Documents</option>
-                                <option>Option Plan</option>
-                                <option>Directors and Officers</option>
-                                <option>Employment Documents</option>
-                                <option>Consultant Documents</option>
-                                <option>Intellectual Property</option>
-                                <option>Misc</option>
-                            </select>
-                        </div>
-                    </div>
-                </form>
 
             </div>
             <div class="modal-footer">
                 <a href="#" class="btn" data-dismiss="modal">Close</a>
-                <a href="#" class="btn btn-primary">Create</a>
+                <a href="#" class="btn btn-primary">Update</a>
             </div>
         </div>
     </div>
