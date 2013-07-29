@@ -18,8 +18,8 @@ class ProjectIntakeFormIsCompleteBunch(Bunch):
         self.project = project
         self.company = self.project.company
         return super(ProjectIntakeFormIsCompleteBunch, self).__init__(
-                        founder_name = self.company.data.get('founders', {}).get('founder_name').get('val'),
-                        founder_email = self.company.data.get('founders', {}).get('founder_email').get('val'),
+                        founder_name = self.company.data.get('founders', {}).get('founder_name', {}).get('val'),
+                        founder_email = self.company.data.get('founders', {}).get('founder_email', {}).get('val'),
                         incubator = self.company.data.get('incubator'),
                         current_status = self.company.data.get('current_status'),
                         profile_website = self.company.data.get('profile_website'),
