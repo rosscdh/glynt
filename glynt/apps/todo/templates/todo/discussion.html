@@ -8,7 +8,21 @@
 <div class="container" style="padding:5px 0px 0px 0px;"> 
     <h2>{{ object.name }}<!-- <span class="pull-right" style="opacity:0.6">{{ object.display_status }}</span> -->
         <div class="pull-right clearfix">
-                <a class="btn btn-warning disabled">IN PROGRESS <i class="icon-chevron-down"></i></a> 
+                <div class="btn-group">
+                  <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
+                    IN PROGRESS <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a href="#" class="text-muted">New</a></li>
+                    <li><a href="#"><strong>In Progress</strong></a></li>
+                    <li><a href="#">Complete</a></li>
+                  </ul>
+                </div>
+
+
+
+
+
             <div class="btn-group">
                 <button class="btn"><i class="icon-chevron-left"></i></button> 
                 <button class="btn"><i class="icon-home"></i></button> 
@@ -111,7 +125,7 @@
                         </div>
                         <br />
                         <br />
-                         <iframe src="https://crocodoc.com/view/IIs-mnN3MkteqLeQJ3px3XXFff7dn4IRWPWhZ5kswywl_11xfQgxKCo2jER5fIjc2toXX1FPaDcjjN9zGkUCJ3gIIjZGBXH3NT6_NCiILVsN_FBzuG65u8NU1VQs7uvTdOy_hMKOh6thj1r140z8oSEsI1HV1t-d90iYz-MkyKJ5NF0AUx_VJidszb_9imMcgRMjiMb7pQD9TbWGSwY7iVbW" width="100%" height="800px" frameborder="none"></iframe> 
+                         <iframe src="https://crocodoc.com/view/IIs-mnN3MkteqLeQJ3px3XXFff7dn4IRWPWhZ5kswywl_11xfQgxKCo2jER5fIjc2toXX1FPaDcjjN9zGkUCJ3gIIjZGBXH3NT6_NCiILVsN_FBzuG65u8NU1VQs7uvTdOy_hMKOh6thj1r140z8oSEsI1HV1t-d90iYz-MkyKJ5NF0AUx_VJidszb_9imMcgRMjiMb7pQD9TbWGSwY7iVbW" width="100%" height="550px" frameborder="none" style="margin-top:5px;"></iframe> 
                     </div>
                 </div>
             </div>
@@ -137,7 +151,10 @@
     padding-left:6px;
 }
 .alert {
-    margin-bottom:5px;
+    margin-bottom:10px;
+}
+.dropdown-menu > li > a {
+    font-size:16px;
 }
 /*
 .feedback-requested{
