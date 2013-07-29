@@ -13,12 +13,14 @@
     </div>
     <div class="row">
         <div class="col col-lg-3">
-            <div class="subnav affix">
-                <ul id="checklist-categories" class="nav nav-pills nav-stacked">
-                    {% for c in checklist.categories %}
-                    <li class=""><a href="#{{ c|slugify }}">{{ c }}</a></li>
-                    {% endfor %}
-                </ul>
+            <div class="sidebar" data-spy="affix" data-offset-top="80">
+                <div class="subnav">
+                    <ul id="checklist-categories" class="nav nav-pills nav-stacked">
+                        {% for c in checklist.categories %}
+                            <li class=""><a href="#{{ c|slugify }}">{{ c }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="col col-lg-9">
@@ -42,9 +44,9 @@
             {% for category, items in checklist.todos_by_cat.iteritems %}
                 <div id="{{ category|slugify }}" class="checklist-header clearfix">
                     <h3 class="pull-left">{{ category }}</h3>
-                    <div class="add-new pull-right">
-                        <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
-                    </div>
+                    <button type="button" class="btn btn-link pull-right" data-toggle="modal" data-target="#new-checklist-item">
+                        <i class="glyphicon glyphicon-plus-sign"></i>
+                    </button>
                 </div>
                 <table class="table table-striped checklist">
                     <tbody>
