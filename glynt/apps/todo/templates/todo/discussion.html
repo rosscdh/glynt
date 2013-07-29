@@ -3,146 +3,147 @@
 {% block page_title %}What's the current status?{% endblock %}
 {% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>{% endblock %}
 
-{% block body %}
-<div class="container item-view">
-    <div class="page-header">
-        <button type="button" class="btn btn-success btn-large pull-right">Resolve issue</button>
-        <span class="text-muted">Misc</span>
-        <h2>What's the current status?</h2>
+{% block prebody %}
+<style>
+.temp-col-avatar {
+    width:90px;
+    float:left;
+    padding-left:6px;
+}
+.temp-col-avatar img {
+    width:70px;
+}
+.temp-col-content {
+    width:490px;
+    float:left;
+    padding-left:6px;
+}
+.feedback-requested{
+    background-color:#f7fc7b;
+    font-weight:bold;
+}
+.btn-upload {
+margin:0 auto;
+}
+h3 {
+    font-size:28px;
+    margin-bottom:20px;
+}
+h3 span {
+    border-bottom: 3px solid #c4f0f7;
+}
+ul.activity li {
+    margin-bottom:10px;
+}
+</style>
+<!-- <div class="container item-view">
+    <a href="#" class="softer"><i class="icon-chaevron-left"></i> Back to checklist</a>
+</div> -->
+<div>
+    <div class="container" style="padding:10px 0px 14px 0px;"> 
+        <h2>Note purchase agreement<span class="pull-right" style="opacity:0.6">In Progress</span></h2>
+        <hr>
     </div>
+</div>
+
+<div class="container"> 
     <div class="row">
         <div class="col col-lg-12">
             <div class="row">
-                <div class="col col-lg-8">
-                    <div class="row post">
-                        <div class="col col-lg-2 post-avatar">
-                            <a href=""><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="128"></a>
-                        </div>
-                        <div class="col col-lg-10 post-content">
-                            <span class="post-meta text-muted"><a href="">Alex Halliday</a> opened this issue 2 days ago</span>
-                            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
-                            <p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
-                            <p>Typi non habent claritatem insitam.</p>
-                            <ul class="list-inline post-actions">
-                                <li><a href="">Edit</a></li>
-                                <li class="seperator">&middot;</li>
-                                <li><a href="">Reply</a></li>
-                                <li class="seperator">&middot;</li>
-                                <li><a href="">Delete</a></li>
+                <div class="col col-lg-6">
+                    <h3 class="brand"><span>Updates</span></h3>
+                     <div class="row">
+                        <div class="col col-lg-12">
+                            <ul class="list-unstyled activity">
+                                <li>
+                                <span class="post-meta"> <a href=""><i class="icon-chaevron-left"></i> Sally Sparrow</a> marked <a href="#">Note purchase agreement.doc</a> as feedback complete<span class="text-muted"> yesterday</span></span>
+                                </li>
+                                <li>
+                                <span class="post-meta"><a href="">Sally Sparrow</a> commented on <a href="#">Note purchase agreement draft 1.doc</a><span class="text-muted"> yesterday</span></span>
+                                 </li>
+                                <li>
+                                <span class="post-meta"><a href="">Alex Halliday</a> requested feedback on <a href="#">Note purchase agreement draft 1.doc</a><span class="text-muted"> yesterday</span></span>
                             </ul>
                         </div>
                     </div>
-
+                    <br />
+                    <h3 class="brand"><span>Comment</span></h3>
                     <div class="row post">
-                        <div class="col col-lg-2 post-avatar">
-                            <a href=""><img src="http://celebpictu.com/images/sally-sparrow-02.jpg" class="img-circle" width="128"></a>
+                        <div class="temp-col-avatar  post-avatar">
+                            <a href=""><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width=""></a>
                         </div>
-                        <div class="col col-lg-10 post-content">
-                            <span class="post-meta text-muted"><a href="">Sally Sparrow</a> commented on this issue 2 days ago</span>
-                            <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.</p>
-                            <ul class="list-inline post-actions">
-                                <li><a href="">Edit</a></li>
-                                <li class="seperator">&middot;</li>
-                                <li><a href="">Reply</a></li>
-                                <li class="seperator">&middot;</li>
-                                <li><a href="">Delete</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="row post">
-                        <div class="col col-lg-2 post-avatar">
-                            <a href=""><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="128"></a>
-                        </div>
-                        <div class="col col-lg-10 post-content">
-                            <span class="post-meta text-muted"><a href="">Alex Halliday</a> commented on this issue 2 days ago</span>
-                            <p>Mirum est notare quam littera gothica, quam nunc putamus parum claram, anteposuerit litterarum formas humanitatis per seacula quarta decima et quinta decima.</p>
-                            <ul class="list-inline post-actions">
-                                <li><a href="">Edit</a></li>
-                                <li class="seperator">&middot;</li>
-                                <li><a href="">Reply</a></li>
-                                <li class="seperator">&middot;</li>
-                                <li><a href="">Delete</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="row post">
-                        <div class="col col-lg-2 post-avatar">
-                            <a href=""><img src="http://celebpictu.com/images/sally-sparrow-02.jpg" class="img-circle" width="128"></a>
-                        </div>
-                        <div class="col col-lg-10 post-content">
-                            <span class="post-meta text-muted"><a href="">Sally Sparrow</a> commented on this issue 2 days ago</span>
-                            <p>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
-                            <ul class="list-inline post-actions">
-                                <li><a href="">Edit</a></li>
-                                <li class="seperator">&middot;</li>
-                                <li><a href="">Reply</a></li>
-                                <li class="seperator">&middot;</li>
-                                <li><a href="">Delete</a></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="row post">
-                        <div class="col col-lg-2 post-avatar">
-                            <a href=""><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="128"></a>
-                        </div>
-                        <div class="col col-lg-10 post-reply">
+                        <div class="temp-col-content  post-reply">
                             <form>
                                 <textarea rows="3" placeholder="Leave a comment"></textarea>
-                                <div class="pull-right">
-                                    <button type="submit" class="btn btn-success">Resolve</button>
-                                    <button type="submit" class="btn btn-default">Comment</button>
-                                </div>
+                                 <div class="pull-right">
+<!--                                     <button type="submit" class="btn btn-default">Comment</button>
+ -->                                </div>
                             </form>
                         </div>
                     </div>
+
+                    <div class="row post">
+                        <div class="temp-col-avatar post-avatar">
+                            <a href=""><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="52"></a>
+                        </div>
+                        <div class="temp-col-content post-content">
+                            <span class="post-meta softer"><a href="">Alex Halliday</a> commented on this issue 2 days ago</span>
+                            <p>Ok, I have everything i need. I'm going to upload the new draft shortly.</p>
+                            <ul class="list-inline post-actions">
+                                <li><a href="">Edit</a></li>
+                                <li class="seperator">&middot;</li>
+                                <li><a href="">Reply</a></li>
+                                <li class="seperator">&middot;</li>
+                                <li><a href="">Delete</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
                 </div>
 
-                <div class="col col-lg-4">
-                    <div class="well">
-                        <h3>Recent Activity</h3>
-                        <table class="table stories">
-                            <tbody>
-                                <tr class="story">
-                                    <td class="story-actor">
-                                        <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="28"></a>
-                                    </td>
-                                    <td class="story-info">
-                                        <p><a href="">Alex Halliday</a> opened the item.</p>
-                                        <span class="text-muted">2 hours ago</span>
-                                    </td>
-                                </tr>
-                                <tr class="story">
-                                    <td class="story-actor">
-                                        <a href="#"><img src="http://celebpictu.com/images/sally-sparrow-02.jpg" class="img-circle" width="28"></a>
-                                    </td>
-                                    <td class="story-info">
-                                        <p><a href="">Sally Sparrow</a> commented on the item.</p>
-                                        <span class="text-muted">2 hours ago</span>
-                                    </td>
-                                </tr>
-                                <tr class="story">
-                                    <td class="story-actor">
-                                        <a href="#"><img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-circle" width="28"></a>
-                                    </td>
-                                    <td class="story-info">
-                                        <p><a href="">Alex Halliday</a> commented on the item.</p>
-                                        <span class="text-muted">2 hours ago</span>
-                                    </td>
-                                </tr>
-                                <tr class="story">
-                                    <td class="story-actor">
-                                        <a href="#"><img src="http://celebpictu.com/images/sally-sparrow-02.jpg" class="img-circle" width="28"></a>
-                                    </td>
-                                    <td class="story-info">
-                                        <p><a href="">Sally Sparrow</a> commented on the item.</p>
-                                        <span class="text-muted">2 hours ago</span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <div class="col col-lg-6" style="">
+                    <div style="padding-left:20px;">
+                        <h3 class="brand"><span>Attachments</span> 
+                        <a href="#" class="btn btn-success btn-medium pull-right"><i class="icon-arrow-up"></i> Attach a file</a>
+
+                    
+                        </h3>
+
+                        <br />
+                        <ul class="media-list">
+                            <li class="media">
+                                <a class="pull-left" href="#">
+                                    <img src="/static/img/doc-doctype.png">
+                                </a>
+                                <div class="media-body">
+                                    <h4 class="media-heading">Convertible loan note draft1.doc</h4>
+                                    <p class="softer">
+                                        <div class="btn-group">
+                                            <a href="#" type="" class="dropdown-toggle" data-toggle="dropdown">Options</a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#">Dropdown link</a></li>
+                                                <li><a href="#">Dropdown link</a></li>
+                                                <li><a href="#">Dropdown link</a></li>
+                                            </ul>
+                                            <span class="softer">Added 2 weeks ago</span>
+                                       </div>
+                                   </p> 
+                                </div> 
+                            </li>
+                             <li class="media">
+                                <a class="pull-left" href="#">
+                                    <img src="/static/img/doc-doctype.png">
+                                </a>
+                                <div class="media-body">
+                                    <br />
+                                    <h4 class="media-heading">Convertible loan note draft1.doc</h4>
+                                    <p class="softer">Added 2 weeks ago </p>
+                                </div> 
+                            </li>
+
+                        </ul>
+                                        
+
                     </div>
                 </div>
             </div>

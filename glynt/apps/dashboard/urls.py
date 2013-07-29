@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     url(r'^checklist/open/$', login_required(TemplateView.as_view(template_name='todo/item_DELETE/open.html')), name='item-open'),
     url(r'^checklist/pending/$', login_required(TemplateView.as_view(template_name='todo/item_DELETE/pending.html')), name='item-pending'),
     url(r'^checklist/resolved/$', login_required(TemplateView.as_view(template_name='todo/item_DELETE/resolved.html')), name='item-resolved'),
+
     # url(r'^matching/$', login_required(TemplateView.as_view(template_name="dashboard/matching.html")), name='matching'),
     # url(r'^matched/$', login_required(TemplateView.as_view(template_name="dashboard/matched.html")), name='matched'),
     url(r'^checklist/discussion/$', login_required(TemplateView.as_view(template_name='todo/discussion.html')), name='item-discussion'),
@@ -21,5 +22,4 @@ urlpatterns = patterns('',
     url(r'^(?P<uuid>.+)/checklist/$', login_required(ProjectToDoView.as_view()), name='checklist'),
     url(r'^(?P<uuid>.+)/$', login_required(CustomerDashboardView.as_view()), name='project'),
     url(r'^$', login_required(CustomerDashboardView.as_view()), name='overview'),
-
 )
