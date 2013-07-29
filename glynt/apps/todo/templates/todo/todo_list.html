@@ -17,7 +17,7 @@
                 <div class="subnav">
                     <ul id="checklist-categories" class="nav nav-pills nav-stacked">
                         {% for c in checklist.categories %}
-                            <li class=""><a href="#{{ c|slugify }}">{{ c }}</a></li>
+                            <li class="{% if forloop.counter == 1 %}active{% endif %}"><a href="#{{ c|slugify }}">{{ c }}</a></li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -69,16 +69,6 @@
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block css %}
-<style>
-    ul#checklist-categories a {
-        display: inline-block;
-        max-width: 250px;
-        vertical-align: middle;
-    }
-</style>
 {% endblock %}
 
 {% block js %}
