@@ -4,47 +4,12 @@
 {% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>{% endblock %}
 
 {% block prebody %}
-<style>
-.temp-col-avatar {
-    width:90px;
-    float:left;
-    padding-left:6px;
-}
-.temp-col-avatar img {
-    width:70px;
-}
-.temp-col-content {
-    width:490px;
-    float:left;
-    padding-left:6px;
-}
-.feedback-requested{
-    background-color:#f7fc7b;
-    font-weight:bold;
-}
-.btn-upload {
-margin:0 auto;
-}
-h3 {
-    font-size:28px;
-    margin-bottom:20px;
-}
-h3 span {
-    border-bottom: 3px solid #c4f0f7;
-}
-ul.activity li {
-    margin-bottom:10px;
-}
-</style>
-<!-- <div class="container item-view">
-    <a href="#" class="softer"><i class="icon-chaevron-left"></i> Back to checklist</a>
-</div> -->
-<div>
-    <div class="container" style="padding:10px 0px 14px 0px;"> 
-        <h2>Note purchase agreement<span class="pull-right" style="opacity:0.6">In Progress</span></h2>
-        <hr>
-    </div>
+
+<div class="container" style="padding:10px 0px 14px 0px;"> 
+    <h2>{{ object.name }}<span class="pull-right" style="opacity:0.6">{{ object.display_status }}</span></h2>
+    <hr>
 </div>
+
 
 <div class="container"> 
     <div class="row">
@@ -150,4 +115,39 @@ ul.activity li {
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block css %}
+<style>
+.temp-col-avatar {
+    width:90px;
+    float:left;
+    padding-left:6px;
+}
+.temp-col-avatar img {
+    width:70px;
+}
+.temp-col-content {
+    width:490px;
+    float:left;
+    padding-left:6px;
+}
+.feedback-requested{
+    background-color:#f7fc7b;
+    font-weight:bold;
+}
+.btn-upload {
+margin:0 auto;
+}
+h3 {
+    font-size:28px;
+    margin-bottom:20px;
+}
+h3 span {
+    border-bottom: 3px solid #c4f0f7;
+}
+ul.activity li {
+    margin-bottom:10px;
+}
+</style>
 {% endblock %}
