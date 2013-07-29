@@ -8,16 +8,16 @@
 <div class="container" style="padding:5px 0px 0px 0px;"> 
     <h2>{{ object.name }}<!-- <span class="pull-right" style="opacity:0.6">{{ object.display_status }}</span> -->
         <div class="pull-right clearfix">
-                <div class="btn-group">
-                  <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
-                    IN PROGRESS <span class="caret"></span>
-                  </button>
-                  <ul class="dropdown-menu">
-                    <li><a href="#" class="text-muted">New</a></li>
-                    <li><a href="#"><strong>In Progress</strong></a></li>
-                    <li><a href="#">Complete</a></li>
-                  </ul>
-                </div>
+            <div class="btn-group">
+              <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
+                IN PROGRESS <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a href="#" class="text-muted">New</a></li>
+                <li><a href="#"><strong>In Progress</strong></a></li>
+                <li><a href="#">Complete</a></li>
+              </ul>
+            </div>
             <div class="btn-group">
                 <button class="btn"><i class="icon-chevron-left"></i></button> 
                 <button class="btn"><i class="icon-home"></i></button> 
@@ -34,7 +34,7 @@
     <div class="row">
         <div class="col col-lg-12">
             <div class="row">
-                <div class="col col-lg-4">
+                <div class="col col-lg-4 sidebar">
                     <div>
                         <h3 class="brand">
                             Attachments 
@@ -89,15 +89,15 @@
                     <h3 class="brand"><span>Updates</span></h3>
                      <div class="row">
                         <div class="col col-lg-12">
-                            <ul class="list-unstyled">
+                            <ul class="list-unstyled softer activity">
                                 <li>
-                                    <small><a href="">Sally Sparrow</a> marked <a href="#">Note purchase agreement.doc</a> as feedback complete<span class="text-muted"> yesterday</span></small>
+                                    <a href="">Sally Sparrow</a> marked <a href="#">Note purchase agreement.doc</a> as feedback complete<span class="text-muted"> yesterday</span>
                                 </li>
                                 <li>
-                                    <small><a href="">Sally Sparrow</a> commented on <a href="#">Note purchase agreement draft 1.doc</a><span class="text-muted"> yesterday</span> </small>
+                                    <a href="">Sally Sparrow</a> commented on <a href="#">Note purchase agreement draft 1.doc</a><span class="text-muted"> yesterday</span>
                                  </li>
                                 <li>
-                                   <small><span class="post-meta"><a href="">Alex Halliday</a> requested feedback on <a href="#">Note purchase agreement draft 1.doc</a><span class="text-muted"> yesterday</span></small>
+                                   <span class="post-meta"><a href="">Alex Halliday</a> requested feedback on <a href="#">Note purchase agreement draft 1.doc</a><span class="text-muted"> yesterday</span>
                             </ul>
                         </div>
                     </div>
@@ -106,13 +106,14 @@
 
                 <div class="col col-lg-8" style="">
                     <div style="">
-                        <div class="alert alert-block alert-success">
+                        <div class="alert alert-block alert-success text-center">
                           <p>Ross Crawford has requested your feedback on this document. </p>
                         </div>
                              
  
-<!--                         <button class="btn btn-primary pull-right">Request Feedback</button>
- -->                <button class="btn btn-success pull-right">Feedback Complete</button> 
+                    <!--  IF ATTORNEY
+                        <button class="btn btn-primary pull-right">Request Feedback</button>-->
+                     <button class="btn btn-success pull-right">Feedback Complete</button> 
                         <div class="btn-group pull-right">
                          <button class="btn btn-link pull-right">Download</button>
                          <button class="btn btn-link pull-right">Delete</button>
@@ -150,6 +151,13 @@
 }
 .dropdown-menu > li > a {
     font-size:16px;
+}
+.sidebar {
+    padding:15px 25px 150px 20px;
+    margin-top:-21px;
+border-right:1px solid #eee;}
+.activity li {
+    margin-bottom:10px;
 }
 /*
 .feedback-requested{
