@@ -266,12 +266,12 @@ textarea {
   line-height: inherit;
 }
 a {
-  color: #1aabc0;
+  color: #2ccae2;
   text-decoration: none;
 }
 a:hover,
 a:focus {
-  color: #0e5b66;
+  color: #148393;
   text-decoration: underline;
 }
 a:focus {
@@ -300,7 +300,7 @@ p {
   line-height: 1.4;
 }
 .brand {
-  color: #42d0e5;
+  color: #1ebfd6;
 }
 .alt {
   color: #f88172;
@@ -1706,6 +1706,7 @@ textarea.parsley-error:focus {
   cursor: pointer;
   border: 1px solid transparent;
   white-space: nowrap;
+  background-color: #cccccc;
 }
 .btn:focus {
   outline: thin dotted #333;
@@ -1946,14 +1947,14 @@ fieldset[disabled] .btn-link {
   border-color: transparent;
 }
 .btn-link {
-  color: #1aabc0;
+  color: #2ccae2;
   font-weight: normal;
   cursor: pointer;
   border-radius: 0;
 }
 .btn-link:hover,
 .btn-link:focus {
-  color: #0e5b66;
+  color: #148393;
   text-decoration: underline;
   background-color: transparent;
 }
@@ -3696,10 +3697,11 @@ a .icon-flip-vertical:before {
   line-height: 1.3;
 }
 a.list-group-item .list-group-item-heading {
-  color: #333;
+  color: #595959;
 }
 a.list-group-item .list-group-item-text {
-  color: #555;
+  color: #a2a2a2;
+  font-size: 12px;
 }
 a.list-group-item:hover,
 a.list-group-item:focus {
@@ -3945,8 +3947,8 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
 .nav.open > a:hover,
 .nav.open > a:focus {
   color: #fff;
-  background-color: #1aabc0;
-  border-color: #1aabc0;
+  background-color: #2ccae2;
+  border-color: #2ccae2;
 }
 .nav.open > a .caret,
 .nav.open > a:hover .caret,
@@ -4087,12 +4089,12 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
   display: block;
 }
 .nav .caret {
-  border-top-color: #1aabc0;
-  border-bottom-color: #1aabc0;
+  border-top-color: #2ccae2;
+  border-bottom-color: #2ccae2;
 }
 .nav a:hover .caret {
-  border-top-color: #0e5b66;
-  border-bottom-color: #0e5b66;
+  border-top-color: #148393;
+  border-bottom-color: #148393;
 }
 .nav-tabs .dropdown-menu {
   margin-top: -1px;
@@ -5223,7 +5225,7 @@ body {
 }
 a.thumbnail:hover,
 a.thumbnail:focus {
-  border-color: #1aabc0;
+  border-color: #2ccae2;
 }
 .thumbnail > img {
   display: block;
@@ -5266,7 +5268,7 @@ a.thumbnail:focus {
 .label {
   display: inline;
   padding: .25em .6em;
-  font-size: 75%;
+  font-size: 85%;
   font-weight: 500;
   line-height: 1;
   color: #fff;
@@ -5311,10 +5313,18 @@ a.thumbnail:focus {
 .label-info[href]:focus {
   background-color: #31b0d5;
 }
+.label-white {
+  background-color: white;
+  color: #42d0e5;
+}
+.label-white[href]:hover,
+.label-white[href]:focus {
+  background-color: white;
+}
 .badge {
   display: inline-block;
   min-width: 10px;
-  padding: 3px 7px;
+  padding: 3px 7px 5px;
   font-size: 12px;
   font-weight: bold;
   color: #fff;
@@ -5324,12 +5334,13 @@ a.thumbnail:focus {
   text-align: center;
   background-color: #bfbfbf;
   border-radius: 10px;
+  margin-top: -2px;
 }
 .badge:empty {
   display: none;
 }
 .badge.important {
-  background-color: #f0ad4e;
+  background-color: #f88172;
 }
 a.badge:hover,
 a.badge:focus {
@@ -5346,7 +5357,7 @@ a.badge:focus {
 }
 a.list-group-item.active > .badge,
 .nav-pills > .active > a > .badge {
-  color: #1aabc0;
+  color: #2ccae2;
   background-color: #fff;
 }
 .nav-pills > li > a > .badge {
@@ -6464,11 +6475,15 @@ td.hidden-lg {
 }
 table.checklist .item-icon {
   text-align: center;
+  vertical-align: middle;
   width: 60px;
 }
 table.checklist .item-icon [class^="icon-"],
 table.checklist .item-icon [class*=" icon-"] {
   font-size: 36px;
+}
+table.checklist .item-info h4 {
+  font-size: 16px;
 }
 table.checklist .item-meta {
   text-align: right;
@@ -6669,7 +6684,7 @@ table.lawyer-list {
   color: #bfbfbf;
   font-size: 32px;
   line-height: 32px;
-  margin: 15px 0 0;
+  margin: 0px 0 0;
 }
 .checklist-header .btn:hover,
 .checklist-header .btn:focus {
@@ -6706,10 +6721,10 @@ table.lawyer-list {
     display: block;
   }
 }
-@media only screen and (min-width: 992px) {
+@media screen and (min-width: 992px) {
   .sidebar.affix {
     position: fixed;
-    top: 75px;
+    top: 90px;
     width: 213px;
   }
 }
@@ -6717,4 +6732,7 @@ table.lawyer-list {
   .sidebar.affix {
     width: 270px;
   }
+}
+.page-header {
+  margin-top: 15px;
 }

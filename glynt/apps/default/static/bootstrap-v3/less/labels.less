@@ -5,7 +5,7 @@
 .label {
   display: inline;
   padding: .25em .6em;
-  font-size: 75%;
+  font-size: 85%;
   font-weight: 500;
   line-height: 1;
   color: #fff;
@@ -68,3 +68,14 @@
     }
   }
 }
+.label-white {
+  background-color: white;
+  &[href] {
+    &:hover,
+    &:focus {
+      background-color: white;
+    }
+  }
+  color: @brand-primary;
+}
+

@@ -51,10 +51,11 @@
 // Custom content within linked items
 a.list-group-item {
   .list-group-item-heading {
-    color: #333;
+    color: lighten(@text-color, 15%);
   }
   .list-group-item-text {
-    color: #555;
+    color: lighten(@gray,30%);
+    font-size: 12px;
   }
 }
 
@@ -71,7 +72,6 @@ a.list-group-item.active {
   color: @list-group-active-color;
   background-color: @list-group-active-bg;
   border-color: @list-group-active-border;
-
   // Force color to inherit for custom content
   .list-group-item-heading {
     color: inherit;
@@ -80,6 +80,8 @@ a.list-group-item.active {
     color: lighten(@list-group-active-bg, 40%);
   }
 }
+
+
 
 // Chevrons and badges within list items
 // -------------------------

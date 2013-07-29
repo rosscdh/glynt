@@ -53,13 +53,14 @@
                         {% for item in items %}
                             <tr data-edit_label="{{ item.slug }}" data-status="{{ item.obj.display_status|default:item.display_status|lower }}" class="{{ item.obj.status|default:item.status|todo_status_row_class }}">
                                 <td class="item-icon" tooltip="{{ item.obj.display_status|default:item.display_status }}" title="{{ item.obj.display_status|default:item.display_status }}"><i class="{{ item.obj.status|default:item.status|todo_status_icon }}"></i></td>
-                                <td class="item-info"><h4><a href="{% url 'todo:item' project_uuid=project.uuid slug=item.slug %}">{{ item.obj.name|default:item.name }}</a></h4></td>
+                                <td class="item-info"><h4><a href="{% url 'todo:discuss' project_uuid=project.uuid slug=item.slug %}">{{ item.obj.name|default:item.name }}</a></h4></td>
                                 <td class="item-meta">
-                                    <a href="{% url 'todo:discuss' project_uuid=project.uuid slug=item.slug %}" title="Discussion" data-tooltip="Discussion" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>{{ item.obj.num_comments|default:item.num_comments }}</span></a>
-                                    <a href="{% url 'todo:edit' project_uuid=project.uuid slug=item.slug %}" data-toggle="modal" data-target="#modal-checklist-item" title="Edit" data-tooltip="Edit" class="btn btn-small btn-danger"><i class="icon-edit"></i></a>
+                                    <a href="{% url 'todo:edit' project_uuid=project.uuid slug=item.slug %}" data-toggle="modal" data-target="#modal-checklist-item" title="Edit" data-tooltip="Edit" class="btn btn-small btn-link"><i class="icon-edit"></i></a>
+                             <!--  <a href="{% url 'todo:discuss' project_uuid=project.uuid slug=item.slug %}" title="Discussion" data-tooltip="Discussion" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>{{ item.obj.num_comments|default:item.num_comments }}</span></a>
                                     <a href="{% url 'todo:attachment' project_uuid=project.uuid slug=item.slug %}" title="Attachments" data-tooltip="Attachments" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>{{ item.obj.num_attachments|default:item.num_attachments }}</span></a>
                                     <a href="{% url 'todo:assign' project_uuid=project.uuid slug=item.slug %}" title="Assign" data-tooltip="Assign" class="btn btn-small btn-default">{% if item.obj.user %}<div class="profile-card" data-username="{{ item.obj.user.username }}" data-template="mini">&nbsp;</div>{% else %}<i class="icon-screenshot"></i>{% endif %}
-                                </td>
+                               -->
+                              </td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -117,7 +118,7 @@ $(document).ready( function () {
 
 {% block modals %}
 <!-- Modal -->
-<div class="modal fade" id="modal-checklist-item">
+<div class="modal" id="modal-checklist-item">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -125,9 +126,6 @@ $(document).ready( function () {
                 <h4 class="modal-title"></h4>
             </div>
             <div class="modal-body">
-
-<<<<<<< HEAD
-=======
                 <form class="form-horizontal">
                     <div class="row">
                         <label for="inputName" class="col-lg-2 control-label">Name</label>
@@ -152,12 +150,9 @@ $(document).ready( function () {
                         </div>
                     </div>
                 </form>
-
->>>>>>> checklist-tweaks
             </div>
             <div class="modal-footer">
-                <a href="#" class="btn" data-dismiss="modal">Close</a>
-                <a href="#" class="btn btn-primary">Update</a>
+                <a href="#" class="btn btn-success">Update</a>
             </div>
         </div>
     </div>
