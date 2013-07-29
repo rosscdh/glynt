@@ -7,7 +7,7 @@ from .views import (ToDoDetailView, ToDoCommentView, ToDoEditView, ToDoAttachmen
 
 
 urlpatterns = patterns('',
-    url(r'^(?P<project_uuid>.+)/(?P<slug>.+)/comment/$', login_required(ToDoCommentView.as_view()), name='comment'),
+    url(r'^(?P<project_uuid>.+)/(?P<slug>.+)/discussion/$', login_required(ToDoCommentView.as_view()), name='discussion'),
     url(r'^(?P<project_uuid>.+)/(?P<slug>.+)/edit/$', login_required(ToDoEditView.as_view()), name='edit'),
     url(r'^(?P<project_uuid>.+)/(?P<slug>.+)/attachment/$', login_required(ToDoAttachmentView.as_view()), name='attachment'),
     url(r'^(?P<project_uuid>.+)/(?P<slug>.+)/assign/$', login_required(ToDoAssignView.as_view()), name='assign'),

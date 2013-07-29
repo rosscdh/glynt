@@ -85,7 +85,7 @@ class ToDoDetailView(DetailView, BaseToDoDetailMixin):
     template_name = 'todo/todo_detail.html'
 
 
-class ToDoCommentView(DetailView, BaseToDoDetailMixin):
+class ToDoDiscussionView(DetailView, BaseToDoDetailMixin):
     template_name = 'todo/discussion.html'
 
 
