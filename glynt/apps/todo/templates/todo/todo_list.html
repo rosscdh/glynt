@@ -82,7 +82,7 @@
 {% block js %}
     <script src="{{ STATIC_URL }}js/jquery.hotkeys-0.8.js"></script>
     <script src="{{ STATIC_URL }}todo/jquery.plugin.filter_status.js"></script>
-    <script src="{{ STATIC_URL }}todo/jquery.plugin.edit_label.js"></script>
+    <!-- <script src="{{ STATIC_URL }}todo/jquery.plugin.edit_label.js"></script> -->
 <script>
 $(document).ready( function () {
 
@@ -90,13 +90,13 @@ $(document).ready( function () {
         'state_modifier': $('#state_modifier')
     });
 
-    $('#list-items').edit_label({
-        'project_uuid': '{{ project.uuid }}',
-        'url': '/api/v1/todo/name/{slug}',
-        'edit_template': '<input type="text" id="{id}" name="{name}" value="{value}" data-original_value="{value}" data-update_name_url="{url}" />',
-        'remove_button': '<a data-restore_label="true" href="javascript:;"><i class="icon-remove-sign"></i></a>',
-        'target_selector': 'a:first'
-    });
+    // $('#list-items').edit_label({
+    //     'project_uuid': '{{ project.uuid }}',
+    //     'url': '/api/v1/todo/name/{slug}',
+    //     'edit_template': '<input type="text" id="{id}" name="{name}" value="{value}" data-original_value="{value}" data-update_name_url="{url}" />',
+    //     'remove_button': '<a data-restore_label="true" href="javascript:;"><i class="icon-remove-sign"></i></a>',
+    //     'target_selector': 'a:first'
+    // });
 
 });
 </script>
