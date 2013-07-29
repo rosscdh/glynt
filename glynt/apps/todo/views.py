@@ -27,7 +27,7 @@ class ProjectToDoView(ListView):
         }
 
         # filter by the current user always
-        # filter by the params passed in
+        # & filter by the params passed in
         queryset = self.model.objects.prefetch_related('user', 'project') \
                                      .filter(user=self.request.user) \
                                      .filter(**fltr)
