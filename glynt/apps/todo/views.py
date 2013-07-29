@@ -65,8 +65,8 @@ class BaseToDoDetailMixin(SingleObjectMixin):
 
         self.project = get_object_or_404(Project, uuid=self.kwargs.get('project_uuid'))
 
-        project_service = ProjectCheckListService(project=self.project)
-        item = project_service.todo_item_by_slug(slug=slug)
+        self.project_service = ProjectCheckListService(project=self.project)
+        item = self.project_service.todo_item_by_slug(slug=slug)
 
         obj, is_new = self.model.objects.get_or_create(slug=slug, project=self.project)
 
@@ -95,6 +95,18 @@ class ToDoEditView(UpdateView, BaseToDoDetailMixin, ModelFormMixin):
 
     def get_success_url(self):
         return self.project.get_checklist_absolute_url()
+
+    def get_form_kwargs(self):
+        """
+        Returns the keyword arguments for instantiating the form.
+        """
+        kwargs = super(ToDoEditView, self).get_form_kwargs()
+        kwargs.update({
+            'project_service': self.project_service,
+            'project_uuid': self.kwargs.get('project_uuid'), 
+            'slug': self.kwargs.get('slug'), 
+        })
+        return kwargs
 
     def form_valid(self, form):
         messages.success(self.request, 'Sucessfully updated this item. <a href="{href}">view</a>'.format(href=self.object.get_absolute_url()), extra_tags='safe')

@@ -186,6 +186,9 @@ class ProjectCheckListService(ToDoItemsFromYamlMixin, ToDoItemsFromDbMixin):
             cats = list(set(cats + c.categories()))
         return sorted(cats)
 
+    def category_initial(self):
+        return ((c, c) for c in self.get_categories())
+
     def todo_item_by_slug(self, slug):
         return [item for item in self.todos if item.slug == slug][0]
 

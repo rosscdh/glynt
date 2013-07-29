@@ -1,8 +1,11 @@
 # -*- coding: UTF-8 -*-
 from django import forms
+from django.core.urlresolvers import reverse
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit
+from crispy_forms.layout import Layout, Fieldset
+
+from parsley.decorators import parsleyfy
 
 from .models import ToDo
 
@@ -12,30 +15,27 @@ class ToDoForm(forms.ModelForm):
         model = ToDo
 
 
+@parsleyfy
 class CutomerToDoForm(ToDoForm):
     class Meta(ToDoForm.Meta):
-        #exclude = ['project', 'user', 'slug', 'status', 'description', 'data']
-        exclude = ['project', 'user', 'slug', 'description', 'data']
+        exclude = ['project', 'user', 'slug', 'status', 'date_due', 'description', 'data']
 
     def __init__(self, *args, **kwargs):
+        self.project_service = kwargs.pop('project_service')
+        self.project_uuid = kwargs.pop('project_uuid')
+        self.slug = kwargs.pop('slug')
+
         self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.form_action = reverse('todo:edit', kwargs={'project_uuid': self.project_uuid, 'slug': self.slug})
+
         self.helper.layout = Layout(
             Fieldset(
                 'General',
                 'name',
-                'date_due',
-            ),
-            Fieldset(
-                'Info',
                 'category',
-                'description',
-            ),
-            Fieldset(
-                'Temporary',
-                'status',
-            ),
-            ButtonHolder(
-                Submit('submit', 'Change', css_class='')
             )
         )
         super(CutomerToDoForm, self).__init__(*args, **kwargs)
+
+        self.fields['category'] = forms.ChoiceField(choices=self.project_service.category_initial())
