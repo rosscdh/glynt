@@ -31,7 +31,7 @@ API_URLS = {
 
 def generate_unique_slug(instance):
     """ Generate the unique slug for a model instance """
-    hash_val = u'%s-%s' % (instance.pk, datetime.datetime.utcnow())
+    hash_val = u'%s-%s-%s' % (instance.__class__.__name__, instance.pk, datetime.datetime.utcnow())
     h = hashlib.sha1(hash_val)
     return h.hexdigest()
 
