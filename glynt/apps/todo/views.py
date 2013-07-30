@@ -8,7 +8,7 @@ from django.contrib import messages
 from glynt.apps.project.services.project_checklist import ProjectCheckListService
 from glynt.apps.project.models import Project
 
-from .forms import CutomerToDoForm
+from .forms import CutomerToDoForm, AttachmentForm
 from .models import ToDo
 
 
@@ -91,6 +91,13 @@ class BaseToDoDetailMixin(SingleObjectMixin):
 
 class ToDoDetailView(DetailView, BaseToDoDetailMixin):
     template_name = 'todo/todo_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ToDoDetailView, self).get_context_data(**kwargs)
+        context.update({
+            'attachment_form': AttachmentForm(initial={'project': self.project.pk}),
+        })
+        return context
 
 
 class ToDoDiscussionView(DetailView, BaseToDoDetailMixin):
