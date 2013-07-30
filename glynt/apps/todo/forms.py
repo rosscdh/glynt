@@ -27,8 +27,9 @@ class CutomerToDoForm(ToDoForm):
     Form to allow user to create and edit ToDo items
     category is set via url param
     """
+    project = forms.IntegerField(widget=forms.HiddenInput)
     class Meta(ToDoForm.Meta):
-        exclude = ['project', 'user', 'slug', 'status', 'date_due', 'description', 'data', 'attachments']
+        exclude = ['user', 'slug', 'status', 'date_due', 'description', 'data']
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request')
@@ -45,8 +46,17 @@ class CutomerToDoForm(ToDoForm):
                 'General',
                 'name',
                 'category',
+                'project',
             )
         )
         super(CutomerToDoForm, self).__init__(*args, **kwargs)
 
         self.fields['category'] = forms.ChoiceField(initial=self.request.GET.get('category', None), choices=self.project_service.category_initial())
+        self.fields['project'].initial = self.project_service.project.pk
+
+    def clean_project(self):
+        return self.project_service.project
+
+    def save(self, **kwargs):
+        
+        super(CutomerToDoForm, self).save(**kwargs)
