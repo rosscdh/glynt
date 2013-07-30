@@ -110,6 +110,7 @@ class ToDoEditView(UpdateView, BaseToDoDetailMixin, ModelFormMixin):
         """
         kwargs = super(ToDoEditView, self).get_form_kwargs()
         kwargs.update({
+            'request': self.request,
             'project_service': self.project_service,
             'project_uuid': self.kwargs.get('project_uuid'), 
             'slug': self.kwargs.get('slug'), 
@@ -126,7 +127,8 @@ class ToDoEditView(UpdateView, BaseToDoDetailMixin, ModelFormMixin):
 
 
 class ToDoCreateView(ToDoEditView):
-    pass
+    template_name = 'todo/todo_form.html'
+    form_class = CutomerToDoForm
 
 
 class ToDoAttachmentView(DetailView, BaseToDoDetailMixin):
