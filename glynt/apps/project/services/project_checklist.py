@@ -190,7 +190,10 @@ class ProjectCheckListService(ToDoItemsFromYamlMixin, ToDoItemsFromDbMixin):
         return ((c, c) for c in self.get_categories())
 
     def todo_item_by_slug(self, slug):
-        return [item for item in self.todos if item.slug == slug][0]
+        try:
+            return [item for item in self.todos if item.slug == slug][0]
+        except IndexError:
+            return None
 
     def process(self):
         logger.info('Process Project Checklist')
