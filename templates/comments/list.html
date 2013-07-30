@@ -1,5 +1,5 @@
 <div id="comments">
-    {% for comment in comment_list %}
+    {% for comment in comment_list reversed %}
         {% include 'comments/comment.html' %}
     {% endfor %}
 </div>
