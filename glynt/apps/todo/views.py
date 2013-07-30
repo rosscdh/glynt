@@ -124,6 +124,11 @@ class ToDoEditView(UpdateView, BaseToDoDetailMixin, ModelFormMixin):
         messages.error(self.request, 'There was an error updating this item')
         return super(ToDoEditView, self).form_valid(form)
 
+
+class ToDoCreateView(ToDoEditView):
+    pass
+
+
 class ToDoAttachmentView(DetailView, BaseToDoDetailMixin):
     template_name = 'todo/attachments.html'
 

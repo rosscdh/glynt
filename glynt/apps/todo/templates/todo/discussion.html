@@ -1,7 +1,6 @@
-{% extends 'base.html' %}{% load paginator glynt_helpers %}
+{% extends 'base.html' %}{% load comments %}
 
-{% block page_title %}What's the current status?{% endblock %}
-{% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>{% endblock %}
+{% block page_title %}Discussion - {{ object.name }}{% endblock %}
 
 {% block prebody %}
 
@@ -101,7 +100,6 @@
                             </ul>
                         </div>
                     </div>
-                    
                 </div>
 
                 <div class="col col-lg-8" style="">
@@ -109,19 +107,17 @@
                         <div class="alert alert-block alert-success text-center">
                           <p>Ross Crawford has requested your feedback on this document. </p>
                         </div>
-                             
- 
-                    <!--  IF ATTORNEY
+                        <!--  IF ATTORNEY
                         <button class="btn btn-primary pull-right">Request Feedback</button>-->
-                     <button class="btn btn-success pull-right">Feedback Complete</button> 
+                        <button class="btn btn-success pull-right">Feedback Complete</button> 
                         <div class="btn-group pull-right">
-                         <button class="btn btn-link pull-right">Download</button>
-                         <button class="btn btn-link pull-right">Delete</button>
-                         <button class="btn btn-link pull-right">Full Screen</button>
+                        <button class="btn btn-link pull-right">Download</button>
+                        <button class="btn btn-link pull-right">Delete</button>
+                        <button class="btn btn-link pull-right">Full Screen</button>
                         </div>
                         <br />
                         <br />
-                         <iframe src="https://crocodoc.com/view/IIs-mnN3MkteqLeQJ3px3XXFff7dn4IRWPWhZ5kswywl_11xfQgxKCo2jER5fIjc2toXX1FPaDcjjN9zGkUCJ3gIIjZGBXH3NT6_NCiILVsN_FBzuG65u8NU1VQs7uvTdOy_hMKOh6thj1r140z8oSEsI1HV1t-d90iYz-MkyKJ5NF0AUx_VJidszb_9imMcgRMjiMb7pQD9TbWGSwY7iVbW" width="100%" height="550px" frameborder="none" style="margin-top:5px;"></iframe> 
+                        <iframe src="https://crocodoc.com/view/IIs-mnN3MkteqLeQJ3px3XXFff7dn4IRWPWhZ5kswywl_11xfQgxKCo2jER5fIjc2toXX1FPaDcjjN9zGkUCJ3gIIjZGBXH3NT6_NCiILVsN_FBzuG65u8NU1VQs7uvTdOy_hMKOh6thj1r140z8oSEsI1HV1t-d90iYz-MkyKJ5NF0AUx_VJidszb_9imMcgRMjiMb7pQD9TbWGSwY7iVbW" width="100%" height="550px" frameborder="none" style="margin-top:5px;"></iframe> 
                     </div>
                 </div>
             </div>
@@ -131,6 +127,7 @@
 {% endblock %}
 
 {% block css %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fluent_comments/css/ajaxcomments.css" />
 <style>
 
 .temp-col-avatar img {
@@ -178,4 +175,8 @@ ul.activity li {
     margin-bottom:10px;
 }
 </style>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="{{ STATIC_URL }}fluent_comments/js/ajaxcomments.js"></script>
 {% endblock %}
