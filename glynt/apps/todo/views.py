@@ -55,6 +55,13 @@ class ProjectToDoView(ListView):
 class BaseToDoDetailMixin(SingleObjectMixin):
     model = ToDo
 
+    def get_context_data(self, **kwargs):
+        context = super(BaseToDoDetailMixin, self).get_context_data(**kwargs)
+        context.update({
+            'project': self.project,
+        })
+        return context
+
     def get_object(self, queryset=None):
         """
         Returns the object the view is displaying.
@@ -62,23 +69,24 @@ class BaseToDoDetailMixin(SingleObjectMixin):
         in the URLconf, but subclasses can override this to return any object.
         """
         slug = self.kwargs.get(self.slug_url_kwarg, None)
-
         self.project = get_object_or_404(Project, uuid=self.kwargs.get('project_uuid'))
-
         self.project_service = ProjectCheckListService(project=self.project)
         item = self.project_service.todo_item_by_slug(slug=slug)
 
-        obj, is_new = self.model.objects.get_or_create(slug=slug, project=self.project)
+        if item is None:
+            return None
+        else:
+            obj, is_new = self.model.objects.get_or_create(slug=slug, project=self.project)
 
-        if is_new:
-            obj.name = item.name
-            obj.category = item.category
-            obj.description = item.description
-            obj.status = item.status
-            obj.data = item
-            obj.save()
+            if is_new:
+                obj.name = item.name
+                obj.category = item.category
+                obj.description = item.description
+                obj.status = item.status
+                obj.data = item
+                obj.save()
 
-        return obj
+            return obj
 
 
 class ToDoDetailView(DetailView, BaseToDoDetailMixin):
