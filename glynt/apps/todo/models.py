@@ -25,11 +25,6 @@ def _attachment_upload_file(instance, filename):
     return '{project_uuid}/attachments/{slug}{ext}'.format(project_uuid=instance.project.uuid, slug=instance.slug, ext=ext)
 
 
-class Attachment(models.Model):
-    attachment = FPFileField(upload_to=_attachment_upload_file)
-    date_created = models.DateTimeField(auto_now=False, auto_now_add=True, db_index=True)
-
-
 class ToDo(models.Model):
     """ ToDo Items that are associated with a user and perhaps with a project """
     user = models.ForeignKey(User, blank=True, null=True)
@@ -38,7 +33,6 @@ class ToDo(models.Model):
     slug = models.SlugField()
     category = models.CharField(max_length=128, db_index=True)
     description = models.TextField(blank=True, null=True)
-    attachments = models.ManyToManyField(Attachment, related_name='attachments')
     status = models.IntegerField(choices=TODO_STATUS.get_choices(), default=TODO_STATUS.unassigned, db_index=True)
     data = JSONField(default={})
     date_due = models.DateTimeField(blank=True, null=True, auto_now=False, auto_now_add=False, db_index=True)
@@ -71,3 +65,9 @@ class ToDo(models.Model):
             self.slug = generate_unique_slug(instance=self)
 
         return super(ToDo, self).save(*args, **kwargs)
+
+
+class Attachment(models.Model):
+    attachment = FPFileField(upload_to=_attachment_upload_file)
+    project = models.ForeignKey(ToDo, related_name='attachments')
+    date_created = models.DateTimeField(auto_now=False, auto_now_add=True, db_index=True)
