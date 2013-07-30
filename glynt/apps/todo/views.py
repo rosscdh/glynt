@@ -58,7 +58,7 @@ class BaseToDoDetailMixin(SingleObjectMixin):
     def get_context_data(self, **kwargs):
         context = super(BaseToDoDetailMixin, self).get_context_data(**kwargs)
         context.update({
-            'project': self.project,
+            'project': self.project_service.project,
         })
         return context
 
