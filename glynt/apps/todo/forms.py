@@ -17,10 +17,15 @@ class ToDoForm(forms.ModelForm):
 
 @parsleyfy
 class CutomerToDoForm(ToDoForm):
+    """ 
+    Form to allow user to create and edit ToDo items
+    category is set via url param
+    """
     class Meta(ToDoForm.Meta):
-        exclude = ['project', 'user', 'slug', 'status', 'date_due', 'description', 'data']
+        exclude = ['project', 'user', 'slug', 'status', 'date_due', 'description', 'data', 'attachments']
 
     def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request')
         self.project_service = kwargs.pop('project_service')
         self.project_uuid = kwargs.pop('project_uuid')
         self.slug = kwargs.pop('slug')
@@ -38,4 +43,4 @@ class CutomerToDoForm(ToDoForm):
         )
         super(CutomerToDoForm, self).__init__(*args, **kwargs)
 
-        self.fields['category'] = forms.ChoiceField(choices=self.project_service.category_initial())
+        self.fields['category'] = forms.ChoiceField(initial=self.request.GET.get('category', None), choices=self.project_service.category_initial())
