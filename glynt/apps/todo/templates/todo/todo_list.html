@@ -13,12 +13,14 @@
     </div>
     <div class="row">
         <div class="col col-lg-3">
-            <div class="subnav affix">
-                <ul id="checklist-categories" class="nav nav-pills nav-stacked">
-                    {% for c in checklist.categories %}
-                    <li class=""><a href="#{{ c|slugify }}">{{ c }}</a></li>
-                    {% endfor %}
-                </ul>
+            <div class="sidebar" data-spy="affix" data-offset-top="80">
+                <div class="subnav">
+                    <ul id="checklist-categories" class="nav nav-pills nav-stacked">
+                        {% for c in checklist.categories %}
+                            <li class="{% if forloop.counter == 1 %}active{% endif %}"><a href="#{{ c|slugify }}">{{ c }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="col col-lg-9">
@@ -42,9 +44,9 @@
             {% for category, items in checklist.todos_by_cat.iteritems %}
                 <div id="{{ category|slugify }}" class="checklist-header clearfix">
                     <h3 class="pull-left">{{ category }}</h3>
-                    <div class="add-new pull-right">
-                        <a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a>
-                    </div>
+                    <button type="button" class="btn btn-link pull-right" data-toggle="modal" data-target="#new-checklist-item">
+                        <i class="glyphicon glyphicon-plus-sign"></i>
+                    </button>
                 </div>
                 <table class="table table-striped checklist">
                     <tbody>
@@ -67,16 +69,6 @@
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block css %}
-<style>
-    ul#checklist-categories a {
-        display: inline-block;
-        max-width: 250px;
-        vertical-align: middle;
-    }
-</style>
 {% endblock %}
 
 {% block js %}
@@ -134,6 +126,34 @@ $(document).ready( function () {
             </div>
             <div class="modal-body">
 
+<<<<<<< HEAD
+=======
+                <form class="form-horizontal">
+                    <div class="row">
+                        <label for="inputName" class="col-lg-2 control-label">Name</label>
+                        <div class="col-lg-10">
+                            <input type="text" id="inputName" placeholder="Name">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="inputCategory" class="col-lg-2 control-label">Category</label>
+                        <div class="col-lg-10">
+                            <select id="inputCategory">
+                                <option>Incorporation Documents</option>
+                                <option>Qualification</option>
+                                <option>Founders Documents</option>
+                                <option>Option Plan</option>
+                                <option>Directors and Officers</option>
+                                <option>Employment Documents</option>
+                                <option>Consultant Documents</option>
+                                <option>Intellectual Property</option>
+                                <option>Misc</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+
+>>>>>>> checklist-tweaks
             </div>
             <div class="modal-footer">
                 <a href="#" class="btn" data-dismiss="modal">Close</a>

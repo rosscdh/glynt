@@ -107,10 +107,16 @@
 table.checklist {
   .item-icon {
     text-align: center;
+    vertical-align: middle;
     width: 60px;
     [class^="icon-"],
     [class*=" icon-"] {
       font-size: 36px;
+    }
+  }
+  .item-info {
+    h4 {
+      font-size: 16px;
     }
   }
   .item-meta {
@@ -362,8 +368,6 @@ table.lawyer-list {
   }
 }
 
-
-
 .sidebar:affix {
   position: static;
 }
@@ -374,10 +378,10 @@ table.lawyer-list {
   }
 }
 
-@media only screen and (min-width : 992px) {
+@media screen and (min-width: 992px) {
   .sidebar.affix {
     position: fixed;
-    top: 75px;
+    top: 90px;
     width: 213px;
   }
 }
@@ -386,4 +390,8 @@ table.lawyer-list {
   .sidebar.affix {
     width: 270px;
   }
+}
+
+.page-header {
+  margin-top: 15px;
 }
