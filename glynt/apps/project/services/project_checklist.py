@@ -4,7 +4,7 @@ from django import template
 from glynt.apps.todo import TODO_STATUS
 from glynt.apps.project.bunches import ProjectIntakeFormIsCompleteBunch
 
-import pdb
+from bunch import Bunch
 import copy
 from collections import OrderedDict
 import hashlib
@@ -190,10 +190,24 @@ class ProjectCheckListService(ToDoItemsFromYamlMixin, ToDoItemsFromDbMixin):
         return ((c, c) for c in self.get_categories())
 
     def todo_item_by_slug(self, slug):
-        try:
-            return [item for item in self.todos if item.slug == slug][0]
-        except IndexError:
-            return None
+        items = Bunch(prev=None, current=None, next=None)
+        for c, item in enumerate(self.todos):
+            if item.slug == slug:
+                try:
+                    items.prev = self.todos[c-1]
+                except IndexError:
+                    items.prev = None
+
+                items.current = item
+
+                try:
+                    items.next = self.todos[c+1]
+                except IndexError:
+                    items.next = None
+                # exit the forloop
+                break
+
+        return items
 
     def process(self):
         logger.info('Process Project Checklist')

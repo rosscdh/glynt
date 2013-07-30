@@ -8,8 +8,12 @@ from django.contrib import messages
 from glynt.apps.project.services.project_checklist import ProjectCheckListService
 from glynt.apps.project.models import Project
 
+from bunch import Bunch
+
 from .forms import CutomerToDoForm, AttachmentForm
 from .models import ToDo
+
+import random
 
 
 class ProjectToDoView(ListView):
@@ -68,17 +72,25 @@ class BaseToDoDetailMixin(SingleObjectMixin):
         By default this requires `self.queryset` and a `pk` or `slug` argument
         in the URLconf, but subclasses can override this to return any object.
         """
-        slug = self.kwargs.get(self.slug_url_kwarg, None)
+        slug = self.kwargs.get(self.slug_url_kwarg, 'slug')
+
         self.project = get_object_or_404(Project, uuid=self.kwargs.get('project_uuid'))
         self.project_service = ProjectCheckListService(project=self.project)
-        item = self.project_service.todo_item_by_slug(slug=slug)
+
+        self.items = self.project_service.todo_item_by_slug(slug=slug)
+
+        item = self.items.current
 
         if item is None:
             return None
         else:
+            # if slug in [None, u'None']:
+            #     # TODO abstract this into a service method
+            #     slug = self.project_service.item_slug(item=Bunch(name=self.request.POST.get('name')), rand=random.random())
+
             obj, is_new = self.model.objects.get_or_create(slug=slug, project=self.project)
 
-            if is_new:
+            if is_new and item:
                 obj.name = item.name
                 obj.category = item.category
                 obj.description = item.description
@@ -96,6 +108,7 @@ class ToDoDetailView(DetailView, BaseToDoDetailMixin):
         context = super(ToDoDetailView, self).get_context_data(**kwargs)
         context.update({
             'attachment_form': AttachmentForm(initial={'project': self.project.pk}),
+            'back_and_forth': self.items,
         })
         return context
 
@@ -125,7 +138,7 @@ class ToDoEditView(UpdateView, BaseToDoDetailMixin, ModelFormMixin):
         return kwargs
 
     def form_valid(self, form):
-        messages.success(self.request, 'Sucessfully updated this item. <a href="{href}">view</a>'.format(href=self.object.get_absolute_url()), extra_tags='safe')
+        #messages.success(self.request, 'Sucessfully updated this item. <a href="{href}">view</a>'.format(href=self.object.get_absolute_url()), extra_tags='safe')
         return super(ToDoEditView, self).form_valid(form)
 
     def form_invalid(self, form):

@@ -19,10 +19,10 @@
               </ul>
             </div>
             <div class="btn-group">
-                <button class="btn"><i class="icon-chevron-left"></i></button> 
-                <button class="btn"><i class="icon-home"></i></button> 
-                <button class="btn"><i class="icon-chevron-right"></i></button> 
-                <button class="btn"><i class="icon-trash"></i></button>
+                {% if back_and_forth.prev %}<button class="btn btn-prev"><i class="icon-chevron-left"></i></button>{% endif %}
+                <button class="btn btn-home"><i class="icon-home"></i></button> 
+                {% if back_and_forth.next %}<button class="btn btn-next"><i class="icon-chevron-right"></i></button> {% endif %}
+                <button class="btn btn-delete"><i class="icon-trash"></i></button>
             </div>
         </div>
     </h2>
@@ -112,6 +112,27 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block js %}
+<script>
+$('.btn-home').on('click', function (event) {
+    event.preventDefault();
+    document.location = "{% url 'dashboard:checklist' uuid=project.uuid %}";
+});
+$('.btn-next').on('click', function (event) {
+    event.preventDefault();
+    document.location = "{% url 'todo:item' project_uuid=project.uuid slug=back_and_forth.next.slug %}";
+});
+$('.btn-prev').on('click', function (event) {
+    event.preventDefault();
+    document.location = "{% url 'todo:item' project_uuid=project.uuid slug=back_and_forth.prev.slug %}";
+});
+$('.btn-delete').on('click', function (event) {
+    event.preventDefault();
+    console.log('delete event')
+});
+</script>
 {% endblock %}
 
 {% block css %}
