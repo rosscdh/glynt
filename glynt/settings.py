@@ -107,6 +107,7 @@ MIDDLEWARE_CLASSES = (
     'glynt.middleware.EnsureUserHasCompanyMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'pagination.middleware.PaginationMiddleware',
+    'django_filepicker.middleware.URLFileMapperMiddleware',
 )
 
 
@@ -331,6 +332,7 @@ THUMBNAIL_ALIASES = {
     },
 }
 
+FILEPICKER_API_KEY = None
 
 FACEBOOK_API_KEY = '419217318130542'
 FACEBOOK_SECRET_KEY = 'a8a6359a83c2af62c0aadb8e507bd15f'
