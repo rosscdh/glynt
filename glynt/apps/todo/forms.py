@@ -7,7 +7,13 @@ from crispy_forms.layout import Layout, Fieldset
 
 from parsley.decorators import parsleyfy
 
-from .models import ToDo
+from .models import ToDo, Attachment
+
+
+class AttachmentForm(forms.ModelForm):
+    project = forms.IntegerField(widget=forms.HiddenInput)
+    class Meta:
+        model = Attachment
 
 
 class ToDoForm(forms.ModelForm):
