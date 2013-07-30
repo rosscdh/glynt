@@ -44,7 +44,7 @@
             {% for category, items in checklist.todos_by_cat.iteritems %}
                 <div id="{{ category|slugify }}" class="checklist-header clearfix">
                     <h3 class="pull-left">{{ category }}</h3>
-                    <button type="button" class="btn btn-link pull-right" data-toggle="modal" data-target="#new-checklist-item">
+                    <button type="button" class="btn btn-link pull-right" data-remote="{% url 'todo:create' project_uuid=project.uuid %}?category={{ category }}" data-toggle="modal" data-target="#modal-checklist-item">
                         <i class="glyphicon glyphicon-plus-sign"></i>
                     </button>
                 </div>
@@ -52,8 +52,12 @@
                     <tbody>
                         {% for item in items %}
                             <tr data-edit_label="{{ item.slug }}" data-status="{{ item.obj.display_status|default:item.display_status|lower }}" class="{{ item.obj.status|default:item.status|todo_status_row_class }}">
-                                <td class="item-icon" tooltip="{{ item.obj.display_status|default:item.display_status }}" title="{{ item.obj.display_status|default:item.display_status }}"><i class="{{ item.obj.status|default:item.status|todo_status_icon }}"></i></td>
-                                <td class="item-info"><h4><a href="{% url 'todo:item' project_uuid=project.uuid slug=item.slug %}">{{ item.obj.name|default:item.name }}</a></h4></td>
+                                <td class="item-icon" tooltip="{{ item.obj.display_status|default:item.display_status }}" title="{{ item.obj.display_status|default:item.display_status }}">
+                                    <i class="{{ item.obj.status|default:item.status|todo_status_icon }}"></i>
+                                </td>
+                                <td class="item-info">
+                                    <h4><a href="{% url 'todo:item' project_uuid=project.uuid slug=item.slug %}">{{ item.obj.name|default:item.name }}</a></h4>
+                                </td>
                                 <td class="item-meta">
                                     <a href="{% url 'todo:edit' project_uuid=project.uuid slug=item.slug %}" data-toggle="modal" data-target="#modal-checklist-item" title="Edit" data-tooltip="Edit" class="btn btn-small btn-link"><i class="icon-edit"></i></a>
                               </td>
@@ -87,24 +91,47 @@ $(document).ready( function () {
     //     'target_selector': 'a:first'
     // });
 
-    $('#modal-checklist-item').on('shown.bs.modal', function (event) {
-        var target = $(event.currentTarget)
-        var title = target.find('.modal-title')
-        var body = target.find('.modal-body')
-        var action_button = $('.modal-footer .btn-primary:first');
-        var form = body.find('form:first');
-        var form_action = form.attr('action');
+    /**
+    * For all the data toggles capture and modify the click event
+    * we want to populate the modal-body with our updated data
+    */
+    $('[data-toggle]').on('click', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
 
-        title.html('Edit - {name}'.assign({'name': form.find('input[type=text]:first').val()}));
+        var elem = $(this);
+        var url = elem.data('remote') || elem.attr('href');
+        var target = $('#modal-checklist-item');
+        var modal_body = target.find('.modal-body');
+
+        modal_body.html('');// clear html
+        modal_body.load(url, function (data) {
+            modal_body.html(data);
+            // fire the laod event only on successful load of url
+            target.modal('show'); // load html
+        });
+
+        
+    });
+    $('#modal-checklist-item').on('show.bs.modal', function (event) {
+        var target = $(event.currentTarget);
+        var title = target.find('.modal-title');
+        var body = target.find('.modal-body');
+        var action_button = $('.modal-footer .btn-success:first');
+        var form = body.find('form:first');
+        // var form_action = form.attr('action');
+        var name = form.find('input[type=text]:first').val();
+
+        if (name && name !== '') {
+            title.html('Edit - {name}'.assign({'name': name}));
+        } else {
+            title.html('Create new item');
+        }
 
         action_button.on('click', function (event) {
             event.preventDefault();
             form.submit();
         });
-        // $(document).on( 'click', action_button, function (event) {
-        //     event.preventDefault();
-        //     console.log(form.serialize())
-        // });
 
     })
 
@@ -121,32 +148,7 @@ $(document).ready( function () {
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title"></h4>
             </div>
-            <div class="modal-body">
-                <form class="form-horizontal">
-                    <div class="row">
-                        <label for="inputName" class="col-lg-2 control-label">Name</label>
-                        <div class="col-lg-10">
-                            <input type="text" id="inputName" placeholder="Name">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label for="inputCategory" class="col-lg-2 control-label">Category</label>
-                        <div class="col-lg-10">
-                            <select id="inputCategory">
-                                <option>Incorporation Documents</option>
-                                <option>Qualification</option>
-                                <option>Founders Documents</option>
-                                <option>Option Plan</option>
-                                <option>Directors and Officers</option>
-                                <option>Employment Documents</option>
-                                <option>Consultant Documents</option>
-                                <option>Intellectual Property</option>
-                                <option>Misc</option>
-                            </select>
-                        </div>
-                    </div>
-                </form>
-            </div>
+            <div class="modal-body">&nbsp;</div>
             <div class="modal-footer">
                 <a href="#" class="btn btn-success">Update</a>
             </div>
