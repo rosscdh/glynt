@@ -142,9 +142,9 @@ $(document).ready(function(){
 
     $(document).on( 'click', 'a.attachment-item', function(event) {
         console.log(event)
-        var elem = $(event.target);
+        var elem = $(event.currentTarget);
         var attachment_id = elem.data('attachment_id');
-
+console.log(attachment_id)
         var url = '/todo/attachment/{pk}/crocdoc/session/'.assign({'pk': attachment_id});
 
         $.getJSON(url, function (data) {
