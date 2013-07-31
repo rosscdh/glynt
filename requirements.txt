@@ -91,6 +91,7 @@ pillow<=1.9 # https://github.com/python-imaging/Pillow/issues/173
 # Documents
 #xhtml2pdf
 #-e git+https://github.com/jkeyes/python-docraptor.git#egg=python-docraptor
+crocodoc
 
 # Signing
 #-e git+https://github.com/rosscdh/HelloSignApi.git#egg=HelloSignApi
