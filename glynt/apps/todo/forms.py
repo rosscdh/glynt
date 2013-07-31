@@ -9,8 +9,8 @@ from crispy_forms.layout import Layout, Fieldset
 
 from parsley.decorators import parsleyfy
 
-from .models import ToDo, Attachment
-from django_filepicker.forms import FPFileField
+from .models import ToDo
+from django_filepicker.forms import FPUrlField
 
 
 FILEPICKER_API_KEY = getattr(settings, 'FILEPICKER_API_KEY', None)
@@ -18,12 +18,31 @@ if FILEPICKER_API_KEY is None:
     raise 'You must specify a FILEPICKER_API_KEY in your local_settings.py'
 
 
-class AttachmentForm(forms.ModelForm):
+class AttachmentForm(forms.Form):
     project = forms.IntegerField(widget=forms.HiddenInput)
-    attachment = FPFileField(label="Company", help_text='', apikey=FILEPICKER_API_KEY, additional_params={'data-fp-button-text' : 'Upload attachment', 'data-fp-button-class':'btn btn-primary'})
+    todo = forms.IntegerField(widget=forms.HiddenInput)
+    attachment = FPUrlField(label='', help_text='', apikey=FILEPICKER_API_KEY,
+                            additional_params={
+                                'data-api-url': '/api/v1/todo/attachment',
+                                'data-fp-button-text': 'Upload attachment',
+                                'data-fp-button-class': 'btn btn-primary',
+                                'onchange': 'HandleAttachment(event)'
+                            }
+    )
 
-    class Meta:
-        model = Attachment
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+
+        self.helper.layout = Layout(
+            Fieldset(
+                None,
+                'project',
+                'todo',
+                'attachment',
+            )
+        )
+        super(AttachmentForm, self).__init__(*args, **kwargs)
 
 
 class ToDoForm(forms.ModelForm):
@@ -33,11 +52,12 @@ class ToDoForm(forms.ModelForm):
 
 @parsleyfy
 class CutomerToDoForm(ToDoForm):
-    """ 
+    """
     Form to allow user to create and edit ToDo items
     category is set via url param
     """
     project = forms.IntegerField(widget=forms.HiddenInput)
+
     class Meta(ToDoForm.Meta):
         exclude = ['user', 'slug', 'status', 'date_due', 'description', 'data']
 
@@ -66,7 +86,3 @@ class CutomerToDoForm(ToDoForm):
 
     def clean_project(self):
         return self.project_service.project
-
-    def save(self, **kwargs):
-        
-        super(CutomerToDoForm, self).save(**kwargs)
