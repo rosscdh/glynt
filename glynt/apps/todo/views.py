@@ -107,7 +107,7 @@ class ToDoDetailView(DetailView, BaseToDoDetailMixin):
     def get_context_data(self, **kwargs):
         context = super(ToDoDetailView, self).get_context_data(**kwargs)
         context.update({
-            'attachment_form': AttachmentForm(initial={'project': self.project.pk}),
+            'attachment_form': AttachmentForm(initial={'project': self.project.pk, 'todo': self.object.pk}),
             'back_and_forth': self.items,
         })
         return context
