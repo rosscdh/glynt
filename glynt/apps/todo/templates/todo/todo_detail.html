@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load paginator glynt_helpers threadedcomments_tags crispy_forms_tags %}
+{% extends 'base.html' %}{% load paginator glynt_helpers threadedcomments_tags crispy_forms_tags templatetag_handlebars jsonify %}
 
 {% block page_title %}What's the current status?{% endblock %}
 {% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>{% endblock %}
@@ -43,18 +43,10 @@
                             {% crispy attachment_form %}
                             {{ attachment_form.media }}
                         <br />
-                        <div class="list-group">
-                            {% for a in object.attachments.all %}
-                                <a href="#" class="list-group-item">
-                                    <span class="glyphicon glyphicon-chevron-right"></span>
-                                    <h4 class="list-group-item-heading">{{ a.filename }}</h4>
-                                    <p class="list-group-item-text"><span>{% moment a.date_created %}</span></p>
-                                </a>
-                            {% empty %}
-                                <a href="#" class="list-group-item disabled">
-                                    <span class="softer">No attachments yet</span>
-                                </a>
-                            {% endfor %}
+                        <div id="attachments" class="list-group">
+                            <a id="no-attachments" href="#" class="list-group-item disabled">
+                                <span class="softer">No attachments yet</span>
+                            </a>
 <!--                             <a href="#" class="list-group-item active feedback">
                                 <span class="glyphicon glyphicon-chevron-right"></span>
                                 <h4 class="list-group-item-heading">Convertible loan note draft2.doc <span class="badge important">1</span></h4>
@@ -140,7 +132,39 @@ $(document).ready(function(){
     window.drop_pad = $('div.fpfilewidget').find('div:first');
     window.original_drop_pad_text = window.drop_pad.html()
 
+    /**
+    * Load attachments from url
+    */
+    var hb_attachments_source = $("script#tpl-attachment").html();
+    window.hb_attachments_list = Handlebars.compile(hb_attachments_source);
+    loadAttachments();
+
 });
+
+function loadAttachments() {
+    var attachments_elem = $('div#attachments');
+
+    $.each($('[data-api-url]'), function (i, elem) {
+        elem = $(elem);
+        var url = '{api_url}?todo={todo}'.assign({'api_url': elem.data('apiUrl'), 'todo': '{{ object.pk }}'});
+
+        $.getJSON(url,
+            function(data) {
+                console.log(data.meta.total_count)
+                if (data.meta.total_count >= 1) {
+                    attachments_elem.html('');
+                    $.each(data.objects, function (i, context) {
+                        addAttachment(attachments_elem, context);
+                    });
+                }
+        });
+    });
+}
+
+function addAttachment(elem, context) {
+    var html = window.hb_attachments_list(context);
+    elem.prepend(html);
+}
 
 /**
 * Method used to handle the InkFilePicker upload complete event
@@ -179,15 +203,25 @@ HandleAttachment = function HandleAttachment(event) {
             error: function(data, textStatus, jqXHR){
             },
             complete: function() {
-                document.location.reload();
-                // elem.val('')
-                // window.drop_pad.html(window.original_drop_pad_text);
+                loadAttachments();
+                elem.val('')
+                window.drop_pad.html(window.original_drop_pad_text);
             }
         });
     }
 }
 
 </script>
+
+
+{% tplhandlebars "tpl-attachment" %}
+<a href="javascript:;" class="list-group-item">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+    <h4 class="list-group-item-heading">{{ data.fpfile.filename }}</h4>
+    <p class="list-group-item-text"><span rel="tooltip" title="{{ date_created }}" data-humanize-date="{{ date_created_unix }}">{{ date_created }}</span></p>
+</a>
+{% endtplhandlebars %}
+
 {% endblock %}
 
 {% block css %}
