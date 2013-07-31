@@ -169,8 +169,11 @@ class AttachmentSessionView(JSONResponseMixin, DetailView):
         self.object = self.get_object()
         service = CrocdocAttachmentService(attachment=self.object)
 
+        params = {"user": {"name": request.user.username, "id": request.user.pk}, "sidebar": True, "editable": True, "admin": False, "downloadable": True, "copyprotected": False, "demo": False}
+        session_key = service.session_key(**params)
+
         context_dict = {
-            'session_key': service.session_key(),
+            'session_key': session_key,
             'uuid': service.uuid,
             'view_url': service.view_url(),
         }
