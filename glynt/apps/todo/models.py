@@ -70,7 +70,7 @@ class ToDo(models.Model):
 class Attachment(models.Model):
     attachment = FPFileField(upload_to=_attachment_upload_file, additional_params=None)
     project = models.ForeignKey(Project, related_name='attachments')
-    todo = models.ForeignKey(ToDo, related_name='attachments')
+    todo = models.ForeignKey(ToDo, blank=True, null=True, related_name='attachments')
     data = JSONField(default={})
     date_created = models.DateTimeField(auto_now=False, auto_now_add=True, db_index=True)
 
