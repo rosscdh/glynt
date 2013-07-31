@@ -1,9 +1,11 @@
 # coding: utf-8
 from django.contrib.auth.models import User
 
-from glynt.apps.api import BaseApiModelResource
+from tastypie import fields
+from tastypie.authorization import Authorization
 
-from glynt.apps.todo.models import ToDo
+from glynt.apps.api import BaseApiModelResource
+from glynt.apps.todo.models import ToDo, Attachment
 
 
 class UserToDoCountResource(BaseApiModelResource):
@@ -37,3 +39,20 @@ class UserToDoLabelResource(BaseApiModelResource):
         resource_name = 'todo/name'
         list_allowed_methods = ['put']
         fields = ['name']
+
+
+class AttachmentResource(BaseApiModelResource):
+    """ Api resource for creating or modifying attachments """
+    project = fields.IntegerField(attribute='project_id')
+    todo = fields.IntegerField(attribute='todo_id')
+
+    class Meta(BaseApiModelResource.Meta):
+        queryset = Attachment.objects.all()
+        authorization = Authorization()
+        resource_name = 'todo/attachment'
+        list_allowed_methods = ['get', 'post', 'delete']
+
+    def dehydrate(self, bundle):
+        bundle.data.pop('data')
+        bundle.data['data'] = bundle.obj.data
+        return bundle
