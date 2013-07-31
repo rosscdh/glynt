@@ -6485,14 +6485,23 @@ table.checklist .item-icon {
 table.checklist .item-icon [class^="icon-"],
 table.checklist .item-icon [class*=" icon-"] {
   font-size: 36px;
+  line-height: 1.1;
 }
 table.checklist .item-info h4 {
   font-size: 16px;
 }
+table.checklist .item-info h4 a {
+  color: #5bc0de;
+  font-weight: bold;
+}
 table.checklist .item-meta {
   text-align: right;
   vertical-align: middle;
-  width: 200px;
+  width: 100px;
+}
+table.checklist .item-meta a {
+  font-size: 16px;
+  line-height: 1.1;
 }
 table.checklist .item-meta a:hover {
   text-decoration: none;
@@ -6745,4 +6754,8 @@ table.lawyer-list {
 }
 .page-header {
   margin-top: 15px;
+}
+.modal-backdrop {
+  opacity: 0.5;
+  filter: alpha(opacity=50);
 }

@@ -114,19 +114,28 @@ table.checklist {
     [class^="icon-"],
     [class*=" icon-"] {
       font-size: 36px;
+      line-height: 1.1;
     }
   }
   .item-info {
     h4 {
       font-size: 16px;
+      a {
+        color: @brand-info;
+        font-weight: bold;
+      }
     }
   }
   .item-meta {
     text-align: right;
     vertical-align: middle;
-    width: 200px;
-    a:hover {
-      text-decoration: none;
+    width: 100px;
+    a {
+      font-size: 16px;
+      line-height: 1.1;
+      &:hover {
+        text-decoration: none;
+      }
     }
   }
   tr.pending {
@@ -400,4 +409,8 @@ table.lawyer-list {
 
 .page-header {
   margin-top: 15px;
+}
+
+.modal-backdrop {
+  .opacity(.5);
 }
