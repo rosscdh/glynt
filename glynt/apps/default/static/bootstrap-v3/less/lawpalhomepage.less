@@ -105,6 +105,8 @@
 }
 
 table.checklist {
+  border-bottom: 1px solid #dddddd;
+  margin-bottom: 0;
   .item-icon {
     text-align: center;
     vertical-align: middle;
@@ -123,6 +125,9 @@ table.checklist {
     text-align: right;
     vertical-align: middle;
     width: 200px;
+    a:hover {
+      text-decoration: none;
+    }
   }
   tr.pending {
     color: @gray-lighter;
@@ -328,6 +333,7 @@ table.lawyer-list {
 .account-attorney { height: 220px; }
 
 .checklist-header {
+  margin-top: 20px;
   .btn {
     color: @gray-light;
     font-size: 32px;

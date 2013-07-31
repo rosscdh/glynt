@@ -6473,6 +6473,10 @@ td.hidden-lg {
     font-size: 21px;
   }
 }
+table.checklist {
+  border-bottom: 1px solid #dddddd;
+  margin-bottom: 0;
+}
 table.checklist .item-icon {
   text-align: center;
   vertical-align: middle;
@@ -6489,6 +6493,9 @@ table.checklist .item-meta {
   text-align: right;
   vertical-align: middle;
   width: 200px;
+}
+table.checklist .item-meta a:hover {
+  text-decoration: none;
 }
 table.checklist tr.pending {
   color: #eeeeee;
@@ -6679,6 +6686,9 @@ table.lawyer-list {
 }
 .account-attorney {
   height: 220px;
+}
+.checklist-header {
+  margin-top: 20px;
 }
 .checklist-header .btn {
   color: #bfbfbf;
