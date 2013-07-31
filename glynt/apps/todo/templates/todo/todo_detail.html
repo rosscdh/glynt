@@ -144,10 +144,9 @@ $(document).ready(function(){
         console.log(event)
         var elem = $(event.target);
         var attachment_id = elem.data('attachment_id');
-console.log(event.target)
-console.log(elem.data())
+
         var url = '/todo/attachment/{pk}/crocdoc/session/'.assign({'pk': attachment_id});
-console.log(attachment_id)
+
         $.getJSON(url, function (data) {
             document_iframe.attr('src', data.view_url);
         });

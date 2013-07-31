@@ -9,7 +9,7 @@ logger = logging.getLogger('lawpal.services')
 
 CROCDOC_API_KEY = getattr(settings, 'CROCDOC_API_KEY', None)
 if CROCDOC_API_KEY is None:
-    raise "You must specify a CROCDOC_API_KEY in your local_settings.py"
+    raise Exception("You must specify a CROCDOC_API_KEY in your local_settings.py")
 
 import crocodoc
 

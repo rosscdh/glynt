@@ -15,7 +15,7 @@ from django_filepicker.forms import FPUrlField
 
 FILEPICKER_API_KEY = getattr(settings, 'FILEPICKER_API_KEY', None)
 if FILEPICKER_API_KEY is None:
-    raise 'You must specify a FILEPICKER_API_KEY in your local_settings.py'
+    raise Exception('You must specify a FILEPICKER_API_KEY in your local_settings.py')
 
 
 class AttachmentForm(forms.Form):
