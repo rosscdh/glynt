@@ -96,7 +96,7 @@
                         </div>
                         <br />
                         <br />
-                         <iframe src="https://crocodoc.com/view/IIs-mnN3MkteqLeQJ3px3XXFff7dn4IRWPWhZ5kswywl_11xfQgxKCo2jER5fIjc2toXX1FPaDcjjN9zGkUCJ3gIIjZGBXH3NT6_NCiILVsN_FBzuG65u8NU1VQs7uvTdOy_hMKOh6thj1r140z8oSEsI1HV1t-d90iYz-MkyKJ5NF0AUx_VJidszb_9imMcgRMjiMb7pQD9TbWGSwY7iVbW" width="100%" height="550px" frameborder="none" style="margin-top:5px;"></iframe> 
+                         <iframe id="crocdoc-viewer-iframe" src="" width="100%" height="550px" frameborder="none" style="margin-top:5px;"></iframe> 
                     </div>
                 </div>
             </div>
@@ -135,9 +135,23 @@ $(document).ready(function(){
     /**
     * Load attachments from url
     */
+    var document_iframe = $('iframe#crocdoc-viewer-iframe');
     var hb_attachments_source = $("script#tpl-attachment").html();
     window.hb_attachments_list = Handlebars.compile(hb_attachments_source);
     loadAttachments();
+
+    $(document).on( 'click', 'a.attachment-item', function(event) {
+        console.log(event)
+        var elem = $(event.target);
+        var attachment_id = elem.data('attachment_id');
+console.log(event.target)
+console.log(elem.data())
+        var url = '/todo/attachment/{pk}/crocdoc/session/'.assign({'pk': attachment_id});
+console.log(attachment_id)
+        $.getJSON(url, function (data) {
+            document_iframe.attr('src', data.view_url);
+        });
+    });
 
 });
 
@@ -215,7 +229,7 @@ HandleAttachment = function HandleAttachment(event) {
 
 
 {% tplhandlebars "tpl-attachment" %}
-<a href="javascript:;" class="list-group-item">
+<a href="javascript:;" data-attachment_id="{{ id }}" class="attachment-item list-group-item">
     <span class="glyphicon glyphicon-chevron-right"></span>
     <h4 class="list-group-item-heading">{{ data.fpfile.filename }}</h4>
     <p class="list-group-item-text"><span rel="tooltip" title="{{ date_created }}" data-humanize-date="{{ date_created_unix }}">{{ date_created }}</span></p>
