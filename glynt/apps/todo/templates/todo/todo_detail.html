@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load paginator glynt_helpers threadedcomments_tags %}
+{% extends 'base.html' %}{% load paginator glynt_helpers threadedcomments_tags crispy_forms_tags %}
 
 {% block page_title %}What's the current status?{% endblock %}
 {% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>{% endblock %}
@@ -40,15 +40,15 @@
                             Attachments 
                             <!--<a href="#" class="btn btn-default btn-small pull-right"><i class="icon-arrow-up"></i> Attach a file</a>-->
                         </h3>
-                            {{ attachment_form }}
+                            {% crispy attachment_form %}
                             {{ attachment_form.media }}
                         <br />
                         <div class="list-group">
                             {% for a in object.attachments.all %}
                                 <a href="#" class="list-group-item">
                                     <span class="glyphicon glyphicon-chevron-right"></span>
-                                    <h4 class="list-group-item-heading">Convertible loan note draft1.doc</h4>
-                                    <p class="list-group-item-text">Added 5 days ago by Joan Rivers</p>
+                                    <h4 class="list-group-item-heading">{{ a.filename }}</h4>
+                                    <p class="list-group-item-text"><span>{% moment a.date_created %}</span></p>
                                 </a>
                             {% empty %}
                                 <a href="#" class="list-group-item disabled">
@@ -115,22 +115,77 @@
 
 {% block js %}
 <script>
-$('.btn-home').on('click', function (event) {
-    event.preventDefault();
-    document.location = "{% url 'dashboard:checklist' uuid=project.uuid %}";
+$(document).ready(function(){
+
+    $('.btn-home').on('click', function (event) {
+        event.preventDefault();
+        document.location = "{% url 'dashboard:checklist' uuid=project.uuid %}";
+    });
+    $('.btn-next').on('click', function (event) {
+        event.preventDefault();
+        document.location = "{% url 'todo:item' project_uuid=project.uuid slug=back_and_forth.next.slug %}";
+    });
+    $('.btn-prev').on('click', function (event) {
+        event.preventDefault();
+        document.location = "{% url 'todo:item' project_uuid=project.uuid slug=back_and_forth.prev.slug %}";
+    });
+    $('.btn-delete').on('click', function (event) {
+        event.preventDefault();
+        console.log('delete event')
+    });
+
+    /**
+    * Variables used to re populate droppable area
+    **/
+    window.drop_pad = $('div.fpfilewidget').find('div:first');
+    window.original_drop_pad_text = window.drop_pad.html()
+
 });
-$('.btn-next').on('click', function (event) {
-    event.preventDefault();
-    document.location = "{% url 'todo:item' project_uuid=project.uuid slug=back_and_forth.next.slug %}";
-});
-$('.btn-prev').on('click', function (event) {
-    event.preventDefault();
-    document.location = "{% url 'todo:item' project_uuid=project.uuid slug=back_and_forth.prev.slug %}";
-});
-$('.btn-delete').on('click', function (event) {
-    event.preventDefault();
-    console.log('delete event')
-});
+
+/**
+* Method used to handle the InkFilePicker upload complete event
+* https://developers.inkfilepicker.com/docs/web/#widgets-pick
+**/
+HandleAttachment = function HandleAttachment(event) {
+    var elem = $(event.srcElement);
+    var form = elem.closest('form');
+    var url = elem.data('apiUrl');
+    var fpfile = event.fpfile || {};
+    var data = {};
+
+    // append our fpfile info to the data object
+    data.data = {'fpfile': fpfile};
+
+    $.each(form.serializeArray(), function (i, e) {
+        data[e.name] = e.value;
+    });
+    delete data.csrfmiddlewaretoken;
+
+    //if ( 1==2 && url && fpfile.url ) {
+    if ( url && fpfile.url ) {
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: JSON.stringify(data),
+            dataType: 'application/json',
+            contentType: "application/json",
+            beforeSend: function(jqXHR, settings) {
+                // Pull the token out of the DOM.
+                jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+            },
+            success: function(data, textStatus, jqXHR){
+                console.log(data)
+            },
+            error: function(data, textStatus, jqXHR){
+            },
+            complete: function() {
+                document.location.reload();
+                // elem.val('')
+                // window.drop_pad.html(window.original_drop_pad_text);
+            }
+        });
+    }
+}
 
 </script>
 {% endblock %}
@@ -160,12 +215,10 @@ $('.btn-delete').on('click', function (event) {
 .sidebar {
     padding:15px 25px 150px 20px;
     margin-top:-21px;
-border-right:1px solid #eee;}
+    border-right:1px solid #eee;
+}
 .activity li {
     margin-bottom:10px;
-}
-label[for=id_attachment]{
-    display:none;
 }
 .drop-pane {
     width:170px;
@@ -175,23 +228,5 @@ label[for=id_attachment]{
     border-radius: 2px;
     opacity:0.8;
 }
-/*
-.feedback-requested{
-    background-color:#f7fc7b;
-    font-weight:bold;
-}
-.btn-upload {
-margin:0 auto;
-}
-h3 {
-    font-size:28px;
-    margin-bottom:20px;
-}
-h3 span {
-    border-bottom: 3px solid #c4f0f7;
-}
-ul.activity li {
-    margin-bottom:10px;
-}*/
 </style>
 {% endblock %}
