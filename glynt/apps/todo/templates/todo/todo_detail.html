@@ -5,8 +5,8 @@
 
 {% block prebody %}
 
-<div class="container" style="padding:5px 0px 0px 0px;"> 
-    <h2>{{ object.name }}<!-- <span class="pull-right" style="opacity:0.6">{{ object.display_status }}</span> -->
+<div class="container" style="padding:15px 0px 0px 0px;"> 
+    <h3>{{ object.name }}<!-- <span class="pull-right" style="opacity:0.6">{{ object.display_status }}</span> -->
         <div class="pull-right clearfix">
             <div class="btn-group">
               <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
@@ -25,7 +25,7 @@
                 <button class="btn btn-delete"><i class="icon-trash"></i></button>
             </div>
         </div>
-    </h2>
+    </h3>
 </div>
 
     <hr>
@@ -38,10 +38,10 @@
                     <div>
                         <h3 class="brand">
                             Attachments 
-                            <a href="#" class="btn btn-default btn-small pull-right"><i class="icon-arrow-up"></i> Attach a file</a>
+                            <!--<a href="#" class="btn btn-default btn-small pull-right"><i class="icon-arrow-up"></i> Attach a file</a>-->
+                        </h3>
                             {{ attachment_form }}
                             {{ attachment_form.media }}
-                        </h3>
                         <br />
                         <div class="list-group">
                             {% for a in object.attachments.all %}
@@ -51,9 +51,8 @@
                                     <p class="list-group-item-text">Added 5 days ago by Joan Rivers</p>
                                 </a>
                             {% empty %}
-                                <a href="#" class="list-group-item">
-                                    <span class="glyphicon glyphicon-incorrect"></span>
-                                    <h4 class="list-group-item-heading">No Attachments Found</h4>
+                                <a href="#" class="list-group-item disabled">
+                                    <span class="softer">No attachments yet</span>
                                 </a>
                             {% endfor %}
 <!--                             <a href="#" class="list-group-item active feedback">
@@ -132,6 +131,7 @@ $('.btn-delete').on('click', function (event) {
     event.preventDefault();
     console.log('delete event')
 });
+
 </script>
 {% endblock %}
 
@@ -163,6 +163,17 @@ $('.btn-delete').on('click', function (event) {
 border-right:1px solid #eee;}
 .activity li {
     margin-bottom:10px;
+}
+label[for=id_attachment]{
+    display:none;
+}
+.drop-pane {
+    width:170px;
+    text-align: center;
+    color:#666!important;
+    padding:6px 0px!important;
+    border-radius: 2px;
+    opacity:0.8;
 }
 /*
 .feedback-requested{

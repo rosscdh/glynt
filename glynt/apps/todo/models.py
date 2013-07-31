@@ -68,6 +68,6 @@ class ToDo(models.Model):
 
 
 class Attachment(models.Model):
-    attachment = FPFileField(upload_to=_attachment_upload_file)
+    attachment = FPFileField(upload_to=_attachment_upload_file, additional_params=None)
     project = models.ForeignKey(ToDo, related_name='attachments')
     date_created = models.DateTimeField(auto_now=False, auto_now_add=True, db_index=True)

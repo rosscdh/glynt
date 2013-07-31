@@ -2,8 +2,8 @@
 <div class=" post-reply">
     <form action="{% comment_form_target %}" data-ajax-action="{% url 'comments-post-comment-ajax' %}" method="POST" class="js-comments-form comments-form form-wide clearfix">{% csrf_token %}
         {% if form.comment.errors %}{{ form.comment.errors }}{% endif %}
-        <label for="id_comment">Respond to latest comment</label>
-        <textarea rows="1" placeholder="{% trans 'Leave a comment' %}"></textarea>
+<!--         <label for="id_comment">Respond to latest comment</label>
+ -->        <textarea rows="1" placeholder="{% trans 'Leave a comment' %}"></textarea>
         {{ form.honeypot }}
         {{ form.content_type }}
         {{ form.object_pk }}
