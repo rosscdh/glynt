@@ -80,3 +80,15 @@ class Attachment(models.Model):
     @property
     def filename(self):
         return self.data.get('fpfile', {}).get('filename')
+
+    @property
+    def crocdoc_uuid(self):
+        return self.data.get('crocdoc', {}).get('uuid')
+
+    def get_url(self):
+        return self.attachment.name
+
+"""
+import signals
+"""
+from .signals import on_attachment_created
