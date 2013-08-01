@@ -95,6 +95,14 @@ class Attachment(models.Model):
     def crocdoc_uuid(self):
         return self.data.get('crocdoc', {}).get('uuid')
 
+    @property
+    def inkfilepicker_url(self):
+        return self.data.get('fpfile', {}).get('url')
+
+    @property
+    def s3_key(self):
+        return self.data.get('fpfile', {}).get('key')
+
     def get_url(self):
         return self.attachment.name
 
