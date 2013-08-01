@@ -7,12 +7,13 @@ class ToDoAdmin(admin.ModelAdmin):
     list_display = ('name', 'category', 'slug')
     search_fields = ('name', 'category', 'slug')
 
-    def queryset (self, request):
+    def queryset(self, request):
         qs = ToDo.objects.prefetch_related('project').all()
         ordering = self.get_ordering(request)
         if ordering:
             qs = qs.order_by(*ordering)
         return qs
+
 
 class AttachmentAdmin(admin.ModelAdmin):
     list_display = ('uuid', 'project', 'filename', 'mimetype', 'size', 'date_created')
