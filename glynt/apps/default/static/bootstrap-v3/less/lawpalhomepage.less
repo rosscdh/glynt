@@ -105,6 +105,8 @@
 }
 
 table.checklist {
+  border-bottom: 1px solid #dddddd;
+  margin-bottom: 0;
   .item-icon {
     text-align: center;
     vertical-align: middle;
@@ -112,17 +114,30 @@ table.checklist {
     [class^="icon-"],
     [class*=" icon-"] {
       font-size: 36px;
+      line-height: 1.1;
     }
   }
   .item-info {
+    padding-left: 0;
     h4 {
       font-size: 16px;
+      a {
+        color: @brand-info;
+        font-weight: bold;
+      }
     }
   }
   .item-meta {
     text-align: right;
     vertical-align: middle;
-    width: 200px;
+    width: 100px;
+    a {
+      font-size: 16px;
+      line-height: 1.1;
+      &:hover {
+        text-decoration: none;
+      }
+    }
   }
   tr.pending {
     color: @gray-lighter;
@@ -328,6 +343,7 @@ table.lawyer-list {
 .account-attorney { height: 220px; }
 
 .checklist-header {
+  margin-top: 20px;
   .btn {
     color: @gray-light;
     font-size: 32px;
@@ -394,4 +410,8 @@ table.lawyer-list {
 
 .page-header {
   margin-top: 15px;
+}
+
+.modal-backdrop {
+  .opacity(.5);
 }
