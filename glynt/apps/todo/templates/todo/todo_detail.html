@@ -80,7 +80,7 @@
                 </div>
 
                 <div class="col col-lg-8" style="">
-                    <div id="crocdoc-viewer-container" style="">
+                    <div id="crocdoc-viewer-container" class="hide">
 <!--                         <div class="alert alert-block alert-success text-center">
                           <p>Ross Crawford has requested your feedback on this document. </p>
                         </div> -->
@@ -184,11 +184,11 @@ $(document).ready(function(){
 
         $.getJSON(url, function (data) {
             document_iframe.attr('src', data.view_url);
+            $('.btn-delete').show();
+            $('#crocdoc-viewer-container').removeClass('hide')
             viewer_container.fadeIn('slow');
         });
     });
-
-    viewer_container.hide();
 });
 
 
