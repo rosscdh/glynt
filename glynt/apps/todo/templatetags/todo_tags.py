@@ -6,15 +6,15 @@ from glynt.apps.todo import TODO_STATUS
 register = template.Library()
 
 STATUS_CLASSES = {
-    TODO_STATUS.closed: 'closed',
-    TODO_STATUS.unassigned: 'closed',
-    TODO_STATUS.assigned: 'assigned',
+    TODO_STATUS.closed: 'complete',
+    TODO_STATUS.unassigned: 'pending',
+    TODO_STATUS.assigned: 'urgent',
 }
 
 STATUS_ICONS = {
-    TODO_STATUS.closed: 'icon-ok-sign',
-    TODO_STATUS.unassigned: 'icon-screenshot',
-    TODO_STATUS.assigned: 'icon-wrench',
+    TODO_STATUS.closed: 'icon-complete',
+    TODO_STATUS.unassigned: 'icon-pending',
+    TODO_STATUS.assigned: 'icon-urgent',
 }
 
 

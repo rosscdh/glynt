@@ -6473,6 +6473,10 @@ td.hidden-lg {
     font-size: 21px;
   }
 }
+table.checklist {
+  border-bottom: 1px solid #dddddd;
+  margin-bottom: 0;
+}
 table.checklist .item-icon {
   text-align: center;
   vertical-align: middle;
@@ -6481,14 +6485,29 @@ table.checklist .item-icon {
 table.checklist .item-icon [class^="icon-"],
 table.checklist .item-icon [class*=" icon-"] {
   font-size: 36px;
+  line-height: 1.1;
+}
+table.checklist .item-info {
+  padding-left: 0;
 }
 table.checklist .item-info h4 {
   font-size: 16px;
 }
+table.checklist .item-info h4 a {
+  color: #5bc0de;
+  font-weight: bold;
+}
 table.checklist .item-meta {
   text-align: right;
   vertical-align: middle;
-  width: 200px;
+  width: 100px;
+}
+table.checklist .item-meta a {
+  font-size: 16px;
+  line-height: 1.1;
+}
+table.checklist .item-meta a:hover {
+  text-decoration: none;
 }
 table.checklist tr.pending {
   color: #eeeeee;
@@ -6680,6 +6699,9 @@ table.lawyer-list {
 .account-attorney {
   height: 220px;
 }
+.checklist-header {
+  margin-top: 20px;
+}
 .checklist-header .btn {
   color: #bfbfbf;
   font-size: 32px;
@@ -6735,4 +6757,8 @@ table.lawyer-list {
 }
 .page-header {
   margin-top: 15px;
+}
+.modal-backdrop {
+  opacity: 0.5;
+  filter: alpha(opacity=50);
 }
