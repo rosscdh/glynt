@@ -23,13 +23,13 @@ class UserToDoCountResource(BaseApiModelResource):
         return super(UserToDoCountResource, self).get_object_list(request).filter(pk=request.user.pk)
 
     def dehydrate(self, bundle):
-        user_pk = bundle.data.pop('id')
+        bundle.data.pop('id')
 
         bundle.data.update({
             'counts': {
-                'new': ToDo.objects.new(user=user_pk).count(),
-                'open': ToDo.objects.open(user=user_pk).count(),
-                'closed': ToDo.objects.closed(user=user_pk).count(),
+                # 'new': ToDo.objects.new(user=user_pk).count(),
+                # 'open': ToDo.objects.open(user=user_pk).count(),
+                # 'closed': ToDo.objects.closed(user=user_pk).count(),
             }
         })
         return bundle
