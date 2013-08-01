@@ -127,6 +127,7 @@ pyquery
 # Misc
 django-autoslug
 python-dateutil
+hurry.filesize
 requests
 termcolor
 #google-api-python-client # coming soon

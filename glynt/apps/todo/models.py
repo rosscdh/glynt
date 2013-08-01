@@ -18,6 +18,7 @@ from . import TODO_STATUS
 from .managers import DefaultToDoManager
 
 from jsonfield import JSONField
+from hurry.filesize import size
 
 
 def _attachment_upload_file(instance, filename):
@@ -68,6 +69,7 @@ class ToDo(models.Model):
 
 
 class Attachment(models.Model):
+    uuid = models.CharField(max_length=255, blank=True, null=True, db_index=True)
     attachment = FPFileField(upload_to=_attachment_upload_file, additional_params=None)
     project = models.ForeignKey(Project, related_name='attachments')
     todo = models.ForeignKey(ToDo, blank=True, null=True, related_name='attachments')
@@ -80,6 +82,14 @@ class Attachment(models.Model):
     @property
     def filename(self):
         return self.data.get('fpfile', {}).get('filename')
+
+    @property
+    def mimetype(self):
+        return self.data.get('fpfile', {}).get('mimetype')
+
+    @property
+    def size(self):
+        return size(self.data.get('fpfile', {}).get('size', 0))
 
     @property
     def crocdoc_uuid(self):
