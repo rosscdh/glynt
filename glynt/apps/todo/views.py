@@ -8,12 +8,11 @@ from django.contrib import messages
 from glynt.apps.project.services.project_checklist import ProjectCheckListService
 from glynt.apps.project.models import Project
 
-from bunch import Bunch
+from braces.views import JSONResponseMixin
 
 from .forms import CutomerToDoForm, AttachmentForm
-from .models import ToDo
-
-import random
+from .models import ToDo, Attachment
+from .services import CrocdocAttachmentService
 
 
 class ProjectToDoView(ListView):
@@ -107,7 +106,7 @@ class ToDoDetailView(DetailView, BaseToDoDetailMixin):
     def get_context_data(self, **kwargs):
         context = super(ToDoDetailView, self).get_context_data(**kwargs)
         context.update({
-            'attachment_form': AttachmentForm(initial={'project': self.project.pk}),
+            'attachment_form': AttachmentForm(initial={'project': self.project.pk, 'todo': self.object.pk}),
             'back_and_forth': self.items,
         })
         return context
@@ -157,3 +156,26 @@ class ToDoAttachmentView(DetailView, BaseToDoDetailMixin):
 
 class ToDoAssignView(DetailView, BaseToDoDetailMixin):
     template_name = 'todo/assign.html'
+
+
+
+class AttachmentSessionView(JSONResponseMixin, DetailView):
+    model = Attachment
+    slug_field = 'pk'
+    slug_url_kwarg = 'pk'
+    json_dumps_kwargs = {'indent': 3}
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        service = CrocdocAttachmentService(attachment=self.object)
+
+        params = {"user": {"name": request.user.username, "id": request.user.pk}, "sidebar": True, "editable": True, "admin": False, "downloadable": True, "copyprotected": False, "demo": False}
+        session_key = service.session_key(**params)
+
+        context_dict = {
+            'session_key': session_key,
+            'uuid': service.uuid,
+            'view_url': service.view_url(),
+        }
+
+        return self.render_json_response(context_dict)

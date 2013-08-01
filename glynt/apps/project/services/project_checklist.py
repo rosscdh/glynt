@@ -101,24 +101,39 @@ class ToDoItemsFromYamlMixin(object):
 
 
 class ToDoItemsFromDbMixin(object):
+    slugs = None
+    db_todos_list = None
+
+    def db_todos(self):
+        if self.db_todos_list is None:
+            self.db_todos_list = self.project.todo_set.filter(project=self.project)
+        return self.db_todos_list
+
+    def todos_by_slug(self, todos):
+        if self.slugs is None:
+            self.slugs = {}
+            for item in todos:
+                self.slugs[item.slug] = item
+        return self.slugs
+
     def append_todo_obj(self, todos):
         """ Append obj to the todo item """
-        slugs = {}
-        for item in todos:
-            slugs[item.slug] = item
-
+        slugs = self.todos_by_slug(todos)
         # get a set of todo items in the database
         # and append them to the item object
-        for db_item in self.project.todo_set.filter(slug__in=slugs.keys()):
+        for db_item in self.db_todos():
             try:
                 slugs[db_item.slug].obj = db_item
-            except IndexError:
+            except KeyError:
                 # if the index does not exist, it means its 
                 # a custom created item that the user has added
                 slugs[db_item.slug] = db_item
                 slugs[db_item.slug].obj = db_item
 
             self.modify_item_values(slugs[db_item.slug])
+
+            self.todos_by_cat[db_item.category] = self.todos_by_cat.get(db_item.category, [])
+            self.todos_by_cat[db_item.category].append(db_item)
 
         # return the actual items and not our temp dictionart
         return slugs.values()
@@ -145,8 +160,8 @@ class ProjectCheckListService(ToDoItemsFromYamlMixin, ToDoItemsFromDbMixin):
 
         self.checklist = self.project.checklist()
         self.todos_by_cat, self.todos = self.get_todos()
-        self.categories = self.get_categories()
         self.todos = self.append_todo_obj(self.todos)
+        self.categories = self.get_categories()
         self.kwargs = kwargs
 
     def item_slug(self, item, **kwargs):

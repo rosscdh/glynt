@@ -69,5 +69,26 @@ class ToDo(models.Model):
 
 class Attachment(models.Model):
     attachment = FPFileField(upload_to=_attachment_upload_file, additional_params=None)
-    project = models.ForeignKey(ToDo, related_name='attachments')
+    project = models.ForeignKey(Project, related_name='attachments')
+    todo = models.ForeignKey(ToDo, blank=True, null=True, related_name='attachments')
+    data = JSONField(default={})
     date_created = models.DateTimeField(auto_now=False, auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ['-date_created']
+
+    @property
+    def filename(self):
+        return self.data.get('fpfile', {}).get('filename')
+
+    @property
+    def crocdoc_uuid(self):
+        return self.data.get('crocdoc', {}).get('uuid')
+
+    def get_url(self):
+        return self.attachment.name
+
+"""
+import signals
+"""
+from .signals import on_attachment_created

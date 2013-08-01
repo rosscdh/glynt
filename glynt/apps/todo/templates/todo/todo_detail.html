@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load paginator glynt_helpers threadedcomments_tags %}
+{% extends 'base.html' %}{% load paginator glynt_helpers threadedcomments_tags crispy_forms_tags templatetag_handlebars jsonify %}
 
 {% block page_title %}What's the current status?{% endblock %}
 {% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>{% endblock %}
@@ -40,21 +40,13 @@
                             Attachments 
                             <!--<a href="#" class="btn btn-default btn-small pull-right"><i class="icon-arrow-up"></i> Attach a file</a>-->
                         </h3>
-                            {{ attachment_form }}
+                            {% crispy attachment_form %}
                             {{ attachment_form.media }}
                         <br />
-                        <div class="list-group">
-                            {% for a in object.attachments.all %}
-                                <a href="#" class="list-group-item">
-                                    <span class="glyphicon glyphicon-chevron-right"></span>
-                                    <h4 class="list-group-item-heading">Convertible loan note draft1.doc</h4>
-                                    <p class="list-group-item-text">Added 5 days ago by Joan Rivers</p>
-                                </a>
-                            {% empty %}
-                                <a href="#" class="list-group-item disabled">
-                                    <span class="softer">No attachments yet</span>
-                                </a>
-                            {% endfor %}
+                        <div id="attachments" class="list-group">
+                            <a id="no-attachments" href="#" class="list-group-item disabled">
+                                <span class="softer">No attachments yet</span>
+                            </a>
 <!--                             <a href="#" class="list-group-item active feedback">
                                 <span class="glyphicon glyphicon-chevron-right"></span>
                                 <h4 class="list-group-item-heading">Convertible loan note draft2.doc <span class="badge important">1</span></h4>
@@ -104,7 +96,7 @@
                         </div>
                         <br />
                         <br />
-                         <iframe src="https://crocodoc.com/view/IIs-mnN3MkteqLeQJ3px3XXFff7dn4IRWPWhZ5kswywl_11xfQgxKCo2jER5fIjc2toXX1FPaDcjjN9zGkUCJ3gIIjZGBXH3NT6_NCiILVsN_FBzuG65u8NU1VQs7uvTdOy_hMKOh6thj1r140z8oSEsI1HV1t-d90iYz-MkyKJ5NF0AUx_VJidszb_9imMcgRMjiMb7pQD9TbWGSwY7iVbW" width="100%" height="550px" frameborder="none" style="margin-top:5px;"></iframe> 
+                         <iframe id="crocdoc-viewer-iframe" src="" width="100%" height="550px" frameborder="none" style="margin-top:5px;"></iframe> 
                     </div>
                 </div>
             </div>
@@ -115,24 +107,134 @@
 
 {% block js %}
 <script>
-$('.btn-home').on('click', function (event) {
-    event.preventDefault();
-    document.location = "{% url 'dashboard:checklist' uuid=project.uuid %}";
-});
-$('.btn-next').on('click', function (event) {
-    event.preventDefault();
-    document.location = "{% url 'todo:item' project_uuid=project.uuid slug=back_and_forth.next.slug %}";
-});
-$('.btn-prev').on('click', function (event) {
-    event.preventDefault();
-    document.location = "{% url 'todo:item' project_uuid=project.uuid slug=back_and_forth.prev.slug %}";
-});
-$('.btn-delete').on('click', function (event) {
-    event.preventDefault();
-    console.log('delete event')
+$(document).ready(function(){
+
+    $('.btn-home').on('click', function (event) {
+        event.preventDefault();
+        document.location = "{% url 'dashboard:checklist' uuid=project.uuid %}";
+    });
+    $('.btn-next').on('click', function (event) {
+        event.preventDefault();
+        document.location = "{% url 'todo:item' project_uuid=project.uuid slug=back_and_forth.next.slug %}";
+    });
+    $('.btn-prev').on('click', function (event) {
+        event.preventDefault();
+        document.location = "{% url 'todo:item' project_uuid=project.uuid slug=back_and_forth.prev.slug %}";
+    });
+    $('.btn-delete').on('click', function (event) {
+        event.preventDefault();
+        console.log('delete event')
+    });
+
+    /**
+    * Variables used to re populate droppable area
+    **/
+    window.drop_pad = $('div.fpfilewidget').find('div:first');
+    window.original_drop_pad_text = window.drop_pad.html()
+
+    /**
+    * Load attachments from url
+    */
+    var document_iframe = $('iframe#crocdoc-viewer-iframe');
+    var hb_attachments_source = $("script#tpl-attachment").html();
+    window.hb_attachments_list = Handlebars.compile(hb_attachments_source);
+    loadAttachments();
+
+    $(document).on( 'click', 'a.attachment-item', function(event) {
+        console.log(event)
+        var elem = $(event.currentTarget);
+        var attachment_id = elem.data('attachment_id');
+console.log(attachment_id)
+        var url = '/todo/attachment/{pk}/crocdoc/session/'.assign({'pk': attachment_id});
+
+        $.getJSON(url, function (data) {
+            document_iframe.attr('src', data.view_url);
+        });
+    });
+
 });
 
+function loadAttachments() {
+    var attachments_elem = $('div#attachments');
+
+    $.each($('[data-api-url]'), function (i, elem) {
+        elem = $(elem);
+        var url = '{api_url}?todo={todo}'.assign({'api_url': elem.data('apiUrl'), 'todo': '{{ object.pk }}'});
+
+        $.getJSON(url,
+            function(data) {
+                console.log(data.meta.total_count)
+                if (data.meta.total_count >= 1) {
+                    attachments_elem.html('');
+                    $.each(data.objects, function (i, context) {
+                        addAttachment(attachments_elem, context);
+                    });
+                }
+        });
+    });
+}
+
+function addAttachment(elem, context) {
+    var html = window.hb_attachments_list(context);
+    elem.prepend(html);
+}
+
+/**
+* Method used to handle the InkFilePicker upload complete event
+* https://developers.inkfilepicker.com/docs/web/#widgets-pick
+**/
+HandleAttachment = function HandleAttachment(event) {
+    var elem = $(event.srcElement);
+    var form = elem.closest('form');
+    var url = elem.data('apiUrl');
+    var fpfile = event.fpfile || {};
+    var data = {};
+
+    // append our fpfile info to the data object
+    data.data = {'fpfile': fpfile};
+
+    $.each(form.serializeArray(), function (i, e) {
+        data[e.name] = e.value;
+    });
+    delete data.csrfmiddlewaretoken;
+
+    //if ( 1==2 && url && fpfile.url ) {
+    if ( url && fpfile.url ) {
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: JSON.stringify(data),
+            dataType: 'application/json',
+            contentType: "application/json",
+            beforeSend: function(jqXHR, settings) {
+                // Pull the token out of the DOM.
+                jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+            },
+            success: function(data, textStatus, jqXHR){
+                console.log(data)
+            },
+            error: function(data, textStatus, jqXHR){
+            },
+            complete: function() {
+                loadAttachments();
+                elem.val('')
+                window.drop_pad.html(window.original_drop_pad_text);
+            }
+        });
+    }
+}
+
 </script>
+
+
+{% tplhandlebars "tpl-attachment" %}
+<a href="javascript:;" data-attachment_id="{{ id }}" class="attachment-item list-group-item">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+    <h4 class="list-group-item-heading">{{ data.fpfile.filename }}</h4>
+    <p class="list-group-item-text"><span rel="tooltip" title="{{ date_created }}" data-humanize-date="{{ date_created_unix }}">{{ date_created }}</span></p>
+</a>
+{% endtplhandlebars %}
+
 {% endblock %}
 
 {% block css %}
@@ -160,12 +262,10 @@ $('.btn-delete').on('click', function (event) {
 .sidebar {
     padding:15px 25px 150px 20px;
     margin-top:-21px;
-border-right:1px solid #eee;}
+    border-right:1px solid #eee;
+}
 .activity li {
     margin-bottom:10px;
-}
-label[for=id_attachment]{
-    display:none;
 }
 .drop-pane {
     width:170px;
@@ -175,23 +275,5 @@ label[for=id_attachment]{
     border-radius: 2px;
     opacity:0.8;
 }
-/*
-.feedback-requested{
-    background-color:#f7fc7b;
-    font-weight:bold;
-}
-.btn-upload {
-margin:0 auto;
-}
-h3 {
-    font-size:28px;
-    margin-bottom:20px;
-}
-h3 span {
-    border-bottom: 3px solid #c4f0f7;
-}
-ul.activity li {
-    margin-bottom:10px;
-}*/
 </style>
 {% endblock %}
