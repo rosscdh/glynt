@@ -81,22 +81,20 @@
 
                 <div class="col col-lg-8" style="">
                     <div style="">
-                        <div class="alert alert-block alert-success text-center">
+<!--                         <div class="alert alert-block alert-success text-center">
                           <p>Ross Crawford has requested your feedback on this document. </p>
-                        </div>
-                             
- 
-                    <!--  IF ATTORNEY
+                        </div> -->
+                        <!--  IF ATTORNEY
                         <button class="btn btn-primary pull-right">Request Feedback</button>-->
-                     <button class="btn btn-success pull-right">Feedback Complete</button> 
+                        <button class="btn btn-success pull-right">Feedback Complete</button> 
                         <div class="btn-group pull-right">
-                         <button class="btn btn-link pull-right">Download</button>
-                         <button class="btn btn-link pull-right">Delete</button>
-                         <button class="btn btn-link pull-right">Full Screen</button>
+                        <!-- Is part of the crocdoc functionality <button class="btn btn-link pull-right">Download</button> -->
+                        <button class="btn btn-link pull-right">Delete</button>
+                        <button class="btn btn-link pull-right">Full Screen</button>
                         </div>
                         <br />
                         <br />
-                         <iframe id="crocdoc-viewer-iframe" src="" width="100%" height="550px" frameborder="none" style="margin-top:5px;"></iframe> 
+                        <iframe id="crocdoc-viewer-iframe" src="" width="100%" height="550px" frameborder="none" style="margin-top:5px;"></iframe> 
                     </div>
                 </div>
             </div>
@@ -115,11 +113,15 @@ $(document).ready(function(){
     });
     $('.btn-next').on('click', function (event) {
         event.preventDefault();
+        {% if back_and_forth.next.slug %}
         document.location = "{% url 'todo:item' project_uuid=project.uuid slug=back_and_forth.next.slug %}";
+        {% endif %}
     });
     $('.btn-prev').on('click', function (event) {
         event.preventDefault();
+        {% if back_and_forth.prev.slug %}
         document.location = "{% url 'todo:item' project_uuid=project.uuid slug=back_and_forth.prev.slug %}";
+        {% endif %}
     });
     $('.btn-delete').on('click', function (event) {
         event.preventDefault();
@@ -144,8 +146,10 @@ $(document).ready(function(){
         console.log(event)
         var elem = $(event.currentTarget);
         var attachment_id = elem.data('attachment_id');
-console.log(attachment_id)
+
         var url = '/todo/attachment/{pk}/crocdoc/session/'.assign({'pk': attachment_id});
+
+        setActiveAttachment(elem);
 
         $.getJSON(url, function (data) {
             document_iframe.attr('src', data.view_url);
@@ -153,6 +157,16 @@ console.log(attachment_id)
     });
 
 });
+
+
+function setActiveAttachment(elem) {
+    $.each($('a.attachment-item'), function (i, elem) {
+        var elem = $(elem);
+        elem.removeClass('active');
+        elem.removeClass('feedback');
+    });
+    elem.addClass('active');
+}
 
 function loadAttachments() {
     var attachments_elem = $('div#attachments');
@@ -169,6 +183,7 @@ function loadAttachments() {
                     $.each(data.objects, function (i, context) {
                         addAttachment(attachments_elem, context);
                     });
+                    $('a.attachment-item:first').trigger('click');
                 }
         });
     });
@@ -198,7 +213,6 @@ HandleAttachment = function HandleAttachment(event) {
     });
     delete data.csrfmiddlewaretoken;
 
-    //if ( 1==2 && url && fpfile.url ) {
     if ( url && fpfile.url ) {
         $.ajax({
             type: 'POST',
