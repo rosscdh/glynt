@@ -80,7 +80,7 @@
                 </div>
 
                 <div class="col col-lg-8" style="">
-                    <div style="">
+                    <div id="crocdoc-viewer-container" style="">
 <!--                         <div class="alert alert-block alert-success text-center">
                           <p>Ross Crawford has requested your feedback on this document. </p>
                         </div> -->
@@ -89,8 +89,8 @@
                         <button class="btn btn-success pull-right">Feedback Complete</button> 
                         <div class="btn-group pull-right">
                         <!-- Is part of the crocdoc functionality <button class="btn btn-link pull-right">Download</button> -->
-                        <button class="btn btn-link pull-right">Delete</button>
-                        <button class="btn btn-link pull-right">Full Screen</button>
+                        <button class="btn btn-delete btn-link pull-right">Delete</button>
+                        <button class="btn btn-fullscreen btn-link pull-right">Full Screen</button>
                         </div>
                         <br />
                         <br />
@@ -105,6 +105,9 @@
 
 {% block js %}
 <script>
+
+var viewer_container = $('#crocdoc-viewer-container');
+
 $(document).ready(function(){
 
     $('.btn-home').on('click', function (event) {
@@ -126,6 +129,33 @@ $(document).ready(function(){
     $('.btn-delete').on('click', function (event) {
         event.preventDefault();
         console.log('delete event')
+        var elem = $(this);
+        elem.fadeOut('slow');
+
+        var target_elem = $('a.attachment-item.active:first');
+        var attachment_id = target_elem.data('attachment_id');
+
+        if (attachment_id) {
+            var url = 'http://local.weareml.com:8000/api/v1/todo/attachment/{attachment_id}'.assign({'attachment_id': attachment_id});
+            $.ajax({
+                type: 'DELETE',
+                url: url,
+                dataType: 'application/json',
+                contentType: 'application/json',
+                beforeSend: function(jqXHR, settings) {
+                    // Pull the token out of the DOM.
+                    jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]:first').val());
+                },
+                complete: function() {
+                    target_elem.remove();
+                    if ($('a.attachment-item:first').length > 0) {
+                        $('a.attachment-item:first').trigger('click');
+                    } else {
+                        viewer_container.hide();
+                    }
+                }
+            });
+        }
     });
 
     /**
@@ -144,6 +174,7 @@ $(document).ready(function(){
 
     $(document).on( 'click', 'a.attachment-item', function(event) {
         console.log(event)
+        viewer_container.fadeOut('slow');
         var elem = $(event.currentTarget);
         var attachment_id = elem.data('attachment_id');
 
@@ -153,9 +184,11 @@ $(document).ready(function(){
 
         $.getJSON(url, function (data) {
             document_iframe.attr('src', data.view_url);
+            viewer_container.fadeIn('slow');
         });
     });
 
+    viewer_container.hide();
 });
 
 
