@@ -36,8 +36,10 @@ class CrocdocAttachmentService(object):
             crocdoc = self.attachment.data.get('crocdoc', {})
             crocdoc['uuid'] = uuid
 
+            self.attachment.uuid = uuid
+
             self.attachment.data['crocdoc'] = crocdoc
-            self.attachment.save(update_fields=['data'])
+            self.attachment.save(update_fields=['uuid', 'data'])
 
             return uuid
         else:
