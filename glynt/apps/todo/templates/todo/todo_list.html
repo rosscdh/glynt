@@ -25,7 +25,7 @@
         </div>
         <div class="col col-lg-9">
             <div class="clearfix">
-                <div id="state_modifier" class="btn-group">
+                <div id="state_modifier" class="pull-left">
                     <button type="button" data-modifier="all" class="btn btn-primary">All Items <span data-modifier_type="all" class="badge">&nbsp;</span></button>
                     <button type="button" data-modifier="closed" class="btn btn-primary">Closed Items <span data-modifier_type="closed" class="badge">&nbsp;</span></button>
                 </div>
@@ -44,7 +44,7 @@
             {% for category, items in checklist.todos_by_cat.iteritems %}
                 <div id="{{ category|slugify }}" class="checklist-header clearfix">
                     <h3 class="pull-left">{{ category }}</h3>
-                    <button type="button" class="btn btn-link pull-right" data-toggle="modal" data-target="#new-checklist-item">
+                    <button type="button" class="btn btn-link pull-right" data-remote="{% url 'todo:create' project_uuid=project.uuid %}?category={{ category|urlencode }}" data-toggle="modal" data-target="#modal-checklist-item" title="Create new item">
                         <i class="glyphicon glyphicon-plus-sign"></i>
                     </button>
                 </div>
@@ -52,14 +52,27 @@
                     <tbody>
                         {% for item in items %}
                             <tr data-edit_label="{{ item.slug }}" data-status="{{ item.obj.display_status|default:item.display_status|lower }}" class="{{ item.obj.status|default:item.status|todo_status_row_class }}">
-                                <td class="item-icon" tooltip="{{ item.obj.display_status|default:item.display_status }}" title="{{ item.obj.display_status|default:item.display_status }}"><i class="{{ item.obj.status|default:item.status|todo_status_icon }}"></i></td>
-                                <td class="item-info"><h4><a href="{% url 'todo:item' project_uuid=project.uuid slug=item.slug %}">{{ item.obj.name|default:item.name }}</a></h4></td>
-                                <td class="item-meta">
-                                    <a href="{% url 'todo:discuss' project_uuid=project.uuid slug=item.slug %}" title="Discussion" data-tooltip="Discussion" class="btn btn-small btn-default"><i class="icon-comment"></i> <span>{{ item.obj.num_comments|default:item.num_comments }}</span></a>
-                                    <a href="{% url 'todo:edit' project_uuid=project.uuid slug=item.slug %}" data-toggle="modal" data-target="#modal-checklist-item" title="Edit" data-tooltip="Edit" class="btn btn-small btn-danger"><i class="icon-edit"></i></a>
-                                    <a href="{% url 'todo:attachment' project_uuid=project.uuid slug=item.slug %}" title="Attachments" data-tooltip="Attachments" class="btn btn-small btn-default"><i class="icon-file-text"></i> <span>{{ item.obj.num_attachments|default:item.num_attachments }}</span></a>
-                                    <a href="{% url 'todo:assign' project_uuid=project.uuid slug=item.slug %}" title="Assign" data-tooltip="Assign" class="btn btn-small btn-default">{% if item.obj.user %}<div class="profile-card" data-username="{{ item.obj.user.username }}" data-template="mini">&nbsp;</div>{% else %}<i class="icon-screenshot"></i>{% endif %}
+                                <td class="item-icon" tooltip="{{ item.obj.display_status|default:item.display_status }}" title="{{ item.obj.display_status|default:item.display_status }}">
+                                    <i class="{{ item.obj.status|default:item.status|todo_status_icon }}"></i>
                                 </td>
+                                {% if item.obj.status|default:item.status|todo_status_row_class == 'complete' %}
+                                    <td class="item-info" colspan="2">
+                                        <h4>
+                                            <a href="{% url 'todo:item' project_uuid=project.uuid slug=item.slug %}">{{ item.obj.name|default:item.name }}</a>
+                                        </h4>
+                                    </td>
+                                {% else %}
+                                    <td class="item-info">
+                                        <h4>
+                                            <a href="{% url 'todo:item' project_uuid=project.uuid slug=item.slug %}">{{ item.obj.name|default:item.name }}</a>
+                                        </h4>
+                                    </td>
+                                    <td class="item-meta">
+                                        <a href="{% url 'todo:edit' project_uuid=project.uuid slug=item.slug %}" data-toggle="modal" data-target="#modal-checklist-item" title="Edit" data-tooltip="Edit" class="btn btn-small btn-link item-edit">
+                                            <i class="glyphicon glyphicon-pencil"></i>
+                                        </a>
+                                    </td>
+                                {% endif %}
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -90,24 +103,47 @@ $(document).ready( function () {
     //     'target_selector': 'a:first'
     // });
 
-    $('#modal-checklist-item').on('shown.bs.modal', function (event) {
-        var target = $(event.currentTarget)
-        var title = target.find('.modal-title')
-        var body = target.find('.modal-body')
-        var action_button = $('.modal-footer .btn-primary:first');
-        var form = body.find('form:first');
-        var form_action = form.attr('action');
+    /**
+    * For all the data toggles capture and modify the click event
+    * we want to populate the modal-body with our updated data
+    */
+    $('[data-toggle="modal"]').click(function (event) {
+        event.preventDefault();
+        event.stopPropagation();
 
-        title.html('Edit - {name}'.assign({'name': form.find('input[type=text]:first').val()}));
+        var elem = $(this);
+        var url = elem.data('remote') || elem.attr('href');
+        var target = $('#modal-checklist-item');
+        var modal_body = target.find('.modal-body');
+
+        modal_body.html('');// clear html
+        modal_body.load(url, function (data) {
+            modal_body.html(data);
+            // fire the laod event only on successful load of url
+            target.modal('show'); // load html
+        });
+
+
+    });
+    $('#modal-checklist-item').on('show.bs.modal', function (event) {
+        var target = $(event.currentTarget);
+        var title = target.find('.modal-title');
+        var body = target.find('.modal-body');
+        var action_button = $('.modal-footer .btn-success:first');
+        var form = body.find('form:first');
+        // var form_action = form.attr('action');
+        var name = form.find('input[type=text]:first').val();
+
+        if (name && name !== '') {
+            title.html('Edit - {name}'.assign({'name': name}));
+        } else {
+            title.html('Create new item');
+        }
 
         action_button.on('click', function (event) {
             event.preventDefault();
             form.submit();
         });
-        // $(document).on( 'click', action_button, function (event) {
-        //     event.preventDefault();
-        //     console.log(form.serialize())
-        // });
 
     })
 
@@ -117,7 +153,7 @@ $(document).ready( function () {
 
 {% block modals %}
 <!-- Modal -->
-<div class="modal fade" id="modal-checklist-item">
+<div class="modal" id="modal-checklist-item">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -126,8 +162,7 @@ $(document).ready( function () {
             </div>
             <div class="modal-body">&nbsp;</div>
             <div class="modal-footer">
-                <a href="#" class="btn" data-dismiss="modal">Close</a>
-                <a href="#" class="btn btn-primary">Update</a>
+                <a href="#" class="btn btn-success">Update</a>
             </div>
         </div>
     </div>

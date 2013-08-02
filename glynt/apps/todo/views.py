@@ -8,8 +8,11 @@ from django.contrib import messages
 from glynt.apps.project.services.project_checklist import ProjectCheckListService
 from glynt.apps.project.models import Project
 
-from .forms import CutomerToDoForm
-from .models import ToDo
+from braces.views import JSONResponseMixin
+
+from .forms import CutomerToDoForm, AttachmentForm
+from .models import ToDo, Attachment
+from .services import CrocdocAttachmentService
 
 
 class ProjectToDoView(ListView):
@@ -55,34 +58,58 @@ class ProjectToDoView(ListView):
 class BaseToDoDetailMixin(SingleObjectMixin):
     model = ToDo
 
+    def get_context_data(self, **kwargs):
+        context = super(BaseToDoDetailMixin, self).get_context_data(**kwargs)
+        context.update({
+            'project': self.project_service.project,
+        })
+        return context
+
     def get_object(self, queryset=None):
         """
         Returns the object the view is displaying.
         By default this requires `self.queryset` and a `pk` or `slug` argument
         in the URLconf, but subclasses can override this to return any object.
         """
-        slug = self.kwargs.get(self.slug_url_kwarg, None)
+        slug = self.kwargs.get(self.slug_url_kwarg, 'slug')
 
         self.project = get_object_or_404(Project, uuid=self.kwargs.get('project_uuid'))
-
         self.project_service = ProjectCheckListService(project=self.project)
-        item = self.project_service.todo_item_by_slug(slug=slug)
 
-        obj, is_new = self.model.objects.get_or_create(slug=slug, project=self.project)
+        self.items = self.project_service.todo_item_by_slug(slug=slug)
 
-        if is_new:
-            obj.name = item.name
-            obj.category = item.category
-            obj.description = item.description
-            obj.status = item.status
-            obj.data = item
-            obj.save()
+        item = self.items.current
 
-        return obj
+        if item is None:
+            return None
+        else:
+            # if slug in [None, u'None']:
+            #     # TODO abstract this into a service method
+            #     slug = self.project_service.item_slug(item=Bunch(name=self.request.POST.get('name')), rand=random.random())
+
+            obj, is_new = self.model.objects.get_or_create(slug=slug, project=self.project)
+
+            if is_new and item:
+                obj.name = item.name
+                obj.category = item.category
+                obj.description = item.description
+                obj.status = item.status
+                obj.data = item
+                obj.save()
+
+            return obj
 
 
 class ToDoDetailView(DetailView, BaseToDoDetailMixin):
     template_name = 'todo/todo_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ToDoDetailView, self).get_context_data(**kwargs)
+        context.update({
+            'attachment_form': AttachmentForm(initial={'project': self.project.pk, 'todo': self.object.pk}),
+            'back_and_forth': self.items,
+        })
+        return context
 
 
 class ToDoDiscussionView(DetailView, BaseToDoDetailMixin):
@@ -102,6 +129,7 @@ class ToDoEditView(UpdateView, BaseToDoDetailMixin, ModelFormMixin):
         """
         kwargs = super(ToDoEditView, self).get_form_kwargs()
         kwargs.update({
+            'request': self.request,
             'project_service': self.project_service,
             'project_uuid': self.kwargs.get('project_uuid'), 
             'slug': self.kwargs.get('slug'), 
@@ -109,7 +137,7 @@ class ToDoEditView(UpdateView, BaseToDoDetailMixin, ModelFormMixin):
         return kwargs
 
     def form_valid(self, form):
-        messages.success(self.request, 'Sucessfully updated this item. <a href="{href}">view</a>'.format(href=self.object.get_absolute_url()), extra_tags='safe')
+        #messages.success(self.request, 'Sucessfully updated this item. <a href="{href}">view</a>'.format(href=self.object.get_absolute_url()), extra_tags='safe')
         return super(ToDoEditView, self).form_valid(form)
 
     def form_invalid(self, form):
@@ -118,7 +146,8 @@ class ToDoEditView(UpdateView, BaseToDoDetailMixin, ModelFormMixin):
 
 
 class ToDoCreateView(ToDoEditView):
-    pass
+    template_name = 'todo/todo_form.html'
+    form_class = CutomerToDoForm
 
 
 class ToDoAttachmentView(DetailView, BaseToDoDetailMixin):
@@ -127,3 +156,31 @@ class ToDoAttachmentView(DetailView, BaseToDoDetailMixin):
 
 class ToDoAssignView(DetailView, BaseToDoDetailMixin):
     template_name = 'todo/assign.html'
+
+
+
+class AttachmentSessionView(JSONResponseMixin, DetailView):
+    """
+    Obtain the appropriate crocdoc session to view a document
+    view allows us to specify certain capabilities based on user class
+    and type: https://github.com/crocodoc/crocodoc-python#session
+    """
+    model = Attachment
+    slug_field = 'pk'
+    slug_url_kwarg = 'pk'
+    json_dumps_kwargs = {'indent': 3}
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        service = CrocdocAttachmentService(attachment=self.object)
+
+        params = {"user": {"name": request.user.get_full_name(), "id": request.user.pk}, "sidebar": 'auto', "editable": True, "admin": False, "downloadable": True, "copyprotected": False, "demo": False}
+        session_key = service.session_key(**params)
+
+        context_dict = {
+            'session_key': session_key,
+            'uuid': service.uuid,
+            'view_url': service.view_url(),
+        }
+
+        return self.render_json_response(context_dict)

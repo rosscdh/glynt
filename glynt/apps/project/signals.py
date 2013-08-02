@@ -91,8 +91,6 @@ def mark_project_notifications_as_read(user, project):
 #                 description=comment.comment, target=project, project_action='new_project_comment', project_pk=project.pk, lawyer_pk=project.lawyer.user.pk, customer_pk=project.customer.user.pk)
 #     # Log activity to stream
 #     description = '%s commented on the project' % comment.user
-#     user_streams.add_stream_item(to_user, description, project)
-#     user_streams.add_stream_item(comment.user, description, project)
 
 
 # @receiver(post_save, sender=Notification, dispatch_uid='project.on_comment_notification_created')

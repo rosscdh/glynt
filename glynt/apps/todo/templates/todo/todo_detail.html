@@ -1,130 +1,336 @@
-{% extends 'base.html' %}{% load url from future %}
+{% extends 'base.html' %}{% load paginator todo_tags glynt_helpers threadedcomments_tags crispy_forms_tags templatetag_handlebars jsonify %}
 
-{% block page_title %}Item{% endblock %}
+{% block page_title %}What's the current status?{% endblock %}
 {% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>{% endblock %}
 
-{% block body %}
-    <div class="container">
-        <div class="page-header clearfix" style="margin-bottom: 20px;">
-            <div class="pull-right clearfix" style="margin-top: 15px;">
-                <div class="btn-group pull-left">
-                    <a class="btn btn-success disabled">RESOLVED</a>
-                </div>
-                <div class="btn-group pull-left">
-                    <button class="btn"><i class="icon-chevron-left"></i></button>
-                    <button class="btn"><i class="icon-chevron-right"></i></button>
-                </div>
-                <div class="btn-group pull-left">
-                    <button class="btn"><i class="icon-trash"></i></button>
-                </div>
+{% block prebody %}
+
+<div class="container" style="padding:15px 0px 0px 0px;"> 
+    <h3>{{ object.name }}<!-- <span class="pull-right" style="opacity:0.6">{{ object.display_status }}</span> -->
+        <div class="pull-right clearfix">
+            <div class="btn-group">
+              <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
+                IN PROGRESS <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a href="#" class="text-muted">New</a></li>
+                <li><a href="#"><strong>In Progress</strong></a></li>
+                <li><a href="#">Complete</a></li>
+              </ul>
             </div>
-            <div class="clearfix">
-                <h1 class="pull-left" style="margin-right: 10px;">Stock Plans</h1>
-                <div class="btn-group pull-left" style="margin-top: 15px;">
-                    <a class="btn btn-warning disabled">NOTE FINANCING</a>
-                </div>
+            <div class="btn-group">
+                {% if back_and_forth.prev %}<button class="btn btn-prev"><i class="icon-chevron-left"></i></button>{% endif %}
+                <button class="btn btn-home"><i class="icon-home"></i></button> 
+                {% if back_and_forth.next %}<button class="btn btn-next"><i class="icon-chevron-right"></i></button> {% endif %}
+                <button class="btn btn-delete"><i class="icon-trash"></i></button>
             </div>
         </div>
+    </h3>
+</div>
 
-        <div class="row">
-            <div class="span9">
-                <div>
-                    <ul class="nav nav-tabs">
-                        <li class="active"><a href="#">Discussion</a></li>
-                        <li><a href="#">Versions</a></li>
-                    </ul>
+    <hr>
+
+<div class="container"> 
+    <div class="row">
+        <div class="col col-lg-12">
+            <div class="row">
+                <div class="col col-lg-4 sidebar">
+                    <div>
+                        <h3 class="brand">
+                            Attachments 
+                            <!--<a href="#" class="btn btn-default btn-small pull-right"><i class="icon-arrow-up"></i> Attach a file</a>-->
+                        </h3>
+                            {% crispy attachment_form %}
+                            {{ attachment_form.media }}
+                        <br />
+                        <div id="attachments" class="list-group">
+                            <a id="no-attachments" href="#" class="list-group-item disabled">
+                                <span class="softer">No attachments yet</span>
+                            </a>
+<!--                             <a href="#" class="list-group-item active feedback">
+                                <span class="glyphicon glyphicon-chevron-right"></span>
+                                <h4 class="list-group-item-heading">Convertible loan note draft2.doc <span class="badge important">1</span></h4>
+                                <p class="list-group-item-text">Added 5 days ago by Joan Rivers</p>
+                            </a> -->
+                        </div>
+                    </div>
+                   
+                 <hr />
+                
+                    <h3 class="brand"><span>Discuss</span></h3>
+                    {% render_comment_form for object %}
+                    {% render_comment_list for object %}
+
+                    <h3 class="brand"><span>Updates</span></h3>
+                     <div class="row">
+                        <div class="col col-lg-12">
+                            {% todo_stream todo=object %}
+                        </div>
+                    </div>
+                    
                 </div>
 
-                <div>
-                    <ul class="unstyled">
-                        <li class="story">
-                            <a class="pull-left" href="#"><img class="img-rounded" style="width: 64px; height: 64px; margin-right: 10px;" src="http://placehold.it/64"></a>
-                            <div class="story-body">
-                                <p><small><a href="">Joe Bloggs</a> opened this item 2 days ago:</small></p>
-                                <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.</p>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
-                            </div>
-                            <div class="story-attachment well clearfix">
-                                <a href="#" class="thumbnail pull-left" style="width: 128px; margin-right: 10px;"><img src="http://placehold.it/128"></a>
-                                <h2 style="margin-bottom: 0;"><a href="">Stock Plans</a></h2>
-                                <p class="lead" style="margin-bottom: 0;">Version 1</p>
-                                <small>23 May 2013</small>
-                            </div>
-                        </li>
-                        <li class="divider"><hr></li>
-                        <li class="story">
-                            <a class="pull-left" href="#"><img class="img-rounded" style="width: 64px; height: 64px; margin-right: 10px;" src="http://placehold.it/64"></a>
-                            <div class="story-body">
-                                <p><small><a href="">Joe Bloggs</a> commented 1 day ago:</small></p>
-                                <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.</p>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
-                            </div>
-                        </li>
-                        <li class="divider"><hr></li>
-                        <li class="story">
-                            <a class="pull-left" href="#"><img class="img-rounded" style="width: 64px; height: 64px; margin-right: 10px;" src="http://placehold.it/64"></a>
-                            <div class="story-body">
-                                <p><small><a href="">Joe Bloggs</a> commented 1 day ago:</small></p>
-                                <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.</p>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
-                            </div>
-                        </li>
-                        <li class="divider"><hr></li>
-                        <li class="story">
-                            <a class="pull-left" href="#"><img class="img-rounded" style="width: 64px; height: 64px; margin-right: 10px;" src="http://placehold.it/64"></a>
-                            <div class="story-body">
-                                <p><small><a href="">Joe Bloggs</a> commented 1 day ago:</small></p>
-                                <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.</p>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
-                            </div>
-                            <div class="story-attachment well clearfix">
-                                <a href="#" class="thumbnail pull-left" style="width: 128px; margin-right: 10px;"><img src="http://placehold.it/128"></a>
-                                <h2 style="margin-bottom: 0;"><a href="">Stock Plans</a></h2>
-                                <p class="lead" style="margin-bottom: 0;">Version 2</p>
-                                <small>03 June 2013</small>
-                            </div>
-                        </li>
-                        <li class="divider"><hr></li>
-                        <li class="story">
-                            <a class="pull-left" href="#"><img class="img-rounded" style="width: 64px; height: 64px; margin-right: 10px;" src="http://placehold.it/64"></a>
-                            <div class="story-body">
-                                <p><small><a href="">Joe Bloggs</a> commented 1 day ago:</small></p>
-                                <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.</p>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.</p>
-                            </div>
-                        </li>
-                        <li class="divider"><hr></li>
-                        <li class="story clearfix">
-                            <span class="label label-success pull-left" style="margin-top: 7px; margin-right: 10px;">RESOLVED</span>
-                            <a class="pull-left" href="#"><img class="img-rounded" style="width: 32px; height: 32px; margin-right: 10px;" src="http://placehold.it/32"></a>
-                            <p class="muted pull-left" style="margin-top: 4px;"><a href="">Joe Bloggs</a> resolved this item 2 hours ago.</p>
-                        </li>
-                        <li class="divider"><hr></li>
-                        <li>
-                            <div class="alert alert-info" style="padding-right: 20px;">
-                                <button class="btn btn-large btn-info pull-right" type="button" style="margin-top: 3px;">Finalize</button>
-                                <strong style="font-size: 30px; line-height: 50px;">Finalize the Document</strong>
-                            </div>
-                        </li>
-                        <li class="divider"><hr></li>
-                        <li class="story">
-                            <a class="pull-left" href="#"><img class="img-rounded" style="width: 64px; height: 64px; margin-right: 10px;" src="http://placehold.it/64"></a>
-                            <div class="story-body">
-                                <textarea rows="7" style="width: 600px;"></textarea>
-                                <div class="clearfix">
-                                    <div class="btn-group pull-right" style="margin-left: 10px;">
-                                        <button type="button" class="btn">Comment</button>
-                                    </div>
-                                    <div class="btn-group pull-right" style="margin-left: 10px;">
-                                        <button type="button" class="btn btn-warning">Reopen</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="divider"><hr></li>
-                    </ul>
+                <div class="col col-lg-8" style="">
+                    <div id="crocdoc-viewer-empty" class="hide">
+                        <h2>No attachment present</h2>
+                        <p>Please <a trigger-upload href="">upload a document</a>, to continue</p>
+                    </div>
+                    <div id="crocdoc-viewer-container" class="hide">
+<!--                         <div class="alert alert-block alert-success text-center">
+                          <p>Ross Crawford has requested your feedback on this document. </p>
+                        </div> -->
+                        <!--  IF ATTORNEY
+                        <button class="btn btn-primary pull-right">Request Feedback</button>-->
+                        <button class="btn btn-success pull-right">Feedback Complete</button> 
+                        <div class="btn-group pull-right">
+                        <!-- Is part of the crocdoc functionality <button class="btn btn-link pull-right">Download</button> -->
+                        <button class="btn btn-delete btn-link pull-right">Delete</button>
+                        <button class="btn btn-fullscreen btn-link pull-right">Full Screen</button>
+                        </div>
+                        <br />
+                        <br />
+                        <iframe id="crocdoc-viewer-iframe" src="" width="100%" height="550px" frameborder="none" style="margin-top:5px;"></iframe> 
+                    </div>
                 </div>
-            </diV>
+            </div>
         </div>
     </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+
+var viewer_container = $('#crocdoc-viewer-container');
+var view_container_empty = $('#crocdoc-viewer-empty');
+
+
+$(document).ready(function(){
+
+
+    $('a[trigger-upload]').on('click', function (event) {
+        event.preventDefault();
+        $('div.fpfilewidget button.btn-primary:first').trigger('click');        
+    });
+
+    $('.btn-home').on('click', function (event) {
+        event.preventDefault();
+        document.location = "{% url 'dashboard:checklist' uuid=project.uuid %}";
+    });
+    $('.btn-next').on('click', function (event) {
+        event.preventDefault();
+        {% if back_and_forth.next.slug %}
+        document.location = "{% url 'todo:item' project_uuid=project.uuid slug=back_and_forth.next.slug %}";
+        {% endif %}
+    });
+    $('.btn-prev').on('click', function (event) {
+        event.preventDefault();
+        {% if back_and_forth.prev.slug %}
+        document.location = "{% url 'todo:item' project_uuid=project.uuid slug=back_and_forth.prev.slug %}";
+        {% endif %}
+    });
+    $('.btn-delete').on('click', function (event) {
+        event.preventDefault();
+
+        var elem = $(this);
+        elem.fadeOut('slow');
+
+        var target_elem = $('a.attachment-item.active:first');
+        var attachment_id = target_elem.data('attachment_id');
+
+        if (attachment_id) {
+            var url = 'http://local.weareml.com:8000/api/v1/todo/attachment/{attachment_id}'.assign({'attachment_id': attachment_id});
+            $.ajax({
+                type: 'DELETE',
+                url: url,
+                dataType: 'application/json',
+                contentType: 'application/json',
+                beforeSend: function(jqXHR, settings) {
+                    // Pull the token out of the DOM.
+                    jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]:first').val());
+                },
+                complete: function() {
+                    target_elem.remove();
+                    console.log($('a.attachment-item:first').length)
+                    if ($('a.attachment-item:first').length > 0) {
+                        $('a.attachment-item:first').trigger('click');
+                    } else {
+                        console.log('no items hide main show message')
+                        viewer_container.hide();
+                        view_container_empty.removeClass('hide').show();
+                    }
+                }
+            });
+        }
+    });
+
+    /**
+    * Variables used to re populate droppable area
+    **/
+    window.drop_pad = $('div.fpfilewidget').find('div:first');
+    window.original_drop_pad_text = window.drop_pad.html()
+
+    /**
+    * Load attachments from url
+    */
+    var document_iframe = $('iframe#crocdoc-viewer-iframe');
+    var hb_attachments_source = $("script#tpl-attachment").html();
+    window.hb_attachments_list = Handlebars.compile(hb_attachments_source);
+    loadAttachments();
+
+    $(document).on( 'click', 'a.attachment-item', function(event) {
+
+        viewer_container.fadeOut('slow');
+        var elem = $(event.currentTarget);
+        var attachment_id = elem.data('attachment_id');
+
+        var url = '/todo/attachment/{pk}/crocdoc/session/'.assign({'pk': attachment_id});
+
+        setActiveAttachment(elem);
+
+        $.getJSON(url, function (data) {
+            document_iframe.attr('src', data.view_url);
+            $('.btn-delete').show();
+            $('#crocdoc-viewer-container').removeClass('hide')
+            viewer_container.fadeIn('slow');
+        });
+    });
+});
+
+
+function setActiveAttachment(elem) {
+    $.each($('a.attachment-item'), function (i, elem) {
+        var elem = $(elem);
+        elem.removeClass('active');
+        elem.removeClass('feedback');
+    });
+    elem.addClass('active');
+}
+
+function loadAttachments() {
+    var attachments_elem = $('div#attachments');
+
+    $.each($('[data-api-url]'), function (i, elem) {
+        elem = $(elem);
+        var url = '{api_url}?todo={todo}'.assign({'api_url': elem.data('apiUrl'), 'todo': '{{ object.pk }}'});
+
+        $.getJSON(url, function (data) {
+                if (data.meta.total_count >= 1) {
+                    attachments_elem.html('');
+                    $.each(data.objects, function (i, context) {
+                        addAttachment(attachments_elem, context);
+                    });
+
+                    $('a.attachment-item:first').trigger('click');
+
+                } else {
+                    viewer_container.hide();
+                    view_container_empty.removeClass('hide').show();
+                }
+        });
+    });
+}
+
+function addAttachment(elem, context) {
+    var html = window.hb_attachments_list(context);
+    elem.prepend(html);
+    view_container_empty.hide();
+}
+
+/**
+* Method used to handle the InkFilePicker upload complete event
+* https://developers.inkfilepicker.com/docs/web/#widgets-pick
+**/
+HandleAttachment = function HandleAttachment(event) {
+    var elem = $(event.srcElement);
+    var form = elem.closest('form');
+    var url = elem.data('apiUrl');
+    var fpfile = event.fpfile || {};
+    var data = {};
+
+    // append our fpfile info to the data object
+    data.data = {'fpfile': fpfile};
+
+    $.each(form.serializeArray(), function (i, e) {
+        data[e.name] = e.value;
+    });
+    delete data.csrfmiddlewaretoken;
+
+    if ( url && fpfile.url ) {
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: JSON.stringify(data),
+            dataType: 'application/json',
+            contentType: "application/json",
+            beforeSend: function(jqXHR, settings) {
+                // Pull the token out of the DOM.
+                jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+            },
+            success: function(data, textStatus, jqXHR){
+                console.log(data)
+            },
+            error: function(data, textStatus, jqXHR){
+            },
+            complete: function() {
+                loadAttachments();
+                elem.val('')
+                window.drop_pad.html(window.original_drop_pad_text);
+            }
+        });
+    }
+}
+
+</script>
+
+
+{% tplhandlebars "tpl-attachment" %}
+<a href="javascript:;" data-attachment_id="{{ id }}" class="attachment-item list-group-item">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+    <h4 class="list-group-item-heading">{{ data.fpfile.filename }}</h4>
+    <p class="list-group-item-text"><span rel="tooltip" title="{{ date_created }}" data-humanize-date="{{ date_created_unix }}">{{ date_created }}</span></p>
+</a>
+{% endtplhandlebars %}
+
+{% endblock %}
+
+{% block css %}
+<style>
+
+.temp-col-avatar img {
+    width:20px;
+}
+.temp-col-avatar {
+    width:25px;
+    float:left;
+    padding-left:6px;
+}
+.temp-col-content {
+    width:340px;
+    float:left;
+    padding-left:6px;
+}
+.alert {
+    margin-bottom:10px;
+}
+.dropdown-menu > li > a {
+    font-size:16px;
+}
+.sidebar {
+    padding:15px 25px 150px 20px;
+    margin-top:-21px;
+    border-right:1px solid #eee;
+}
+.activity li {
+    margin-bottom:10px;
+}
+.drop-pane {
+    width:170px;
+    text-align: center;
+    color:#666!important;
+    padding:6px 0px!important;
+    border-radius: 2px;
+    opacity:0.8;
+}
+</style>
 {% endblock %}

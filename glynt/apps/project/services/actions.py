@@ -4,7 +4,6 @@ from django.conf import settings
 from glynt.apps.project import PROJECT_STATUS
 
 from notifications import notify
-import user_streams
 import datetime
 
 import logging
@@ -48,8 +47,7 @@ class BaseProjectService(object):
                     date_closed=datetime.datetime.utcnow())
 
         # Log activity to stream
-        user_streams.add_stream_item(self.recipient, description, self.project)
-        user_streams.add_stream_item(self.actioning_user, description, self.project)
+        # @TODO integrate django-activity-stream
 
         return description
 
