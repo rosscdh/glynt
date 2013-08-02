@@ -46,6 +46,7 @@ south
 -e git+https://github.com/rosscdh/django-fluent-comments.git@js-controls#egg=django-fluent-comments
 django-threadedcomments
 django-notifications-hq # this is for the activity notifications
+django-activity-stream 
 
 # JSON Field
 #django-jsonfield # This is the correct one, the bradjasper version does not save correctly (converts to string), but we probably need to patch it so that the loaddata works

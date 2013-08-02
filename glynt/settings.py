@@ -221,8 +221,7 @@ HELPER_APPS = (
     # Thumbnail generator
     'easy_thumbnails',
     # Activity stream
-    'user_streams',
-    'user_streams.backends.user_streams_single_table_backend',
+    'actstream',
     # Cities
     'cities_light',
     # getsentry.com
@@ -246,7 +245,6 @@ HELPER_APPS = (
 
     # Notications
     'notifications',
-    # Currency
 )
 
 
@@ -292,9 +290,6 @@ LOGIN_URL          = '/'
 LOGIN_REDIRECT_URL = '/logged-in/'
 LOGIN_ERROR_URL    = '/login-error/'
 
-
-USER_STREAMS_BACKEND = 'user_streams.backends.user_streams_single_table_backend.SingleTableDatabaseBackend'
-USER_STREAMS_USE_UTC = True
 
 HELLOSIGN_AUTH = ("sendrossemail@gmail.com", "test2007")
 
