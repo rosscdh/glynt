@@ -23,20 +23,18 @@ DATABASES = {
     }
 }
 
-BROKER_USER = AWS_ACCESS_KEY_ID
-BROKER_PASSWORD = AWS_SECRET_ACCESS_KEY
-BROKER_TRANSPORT = 'sqs'
+CELERY_DEFAULT_QUEUE = 'lawpal-local'
 BROKER_TRANSPORT_OPTIONS = {
-    'region': 'us-west-1',
+    'region': 'eu-west-1',
 }
-CELERY_DEFAULT_QUEUE = 'lawpal-development'
 CELERY_QUEUES = {
     CELERY_DEFAULT_QUEUE: {
         'exchange': CELERY_DEFAULT_QUEUE,
         'binding_key': CELERY_DEFAULT_QUEUE,
     }
 }
-#BROKER_BACKEND = 'memory'
+BROKER_URL = 'sqs://{BROKER_USER}:{BROKER_PASSWORD}@sqs.eu-west-1.amazonaws.com/562971026743/{CELERY_DEFAULT_QUEUE}'.format(BROKER_USER=AWS_ACCESS_KEY_ID, BROKER_PASSWORD=AWS_SECRET_ACCESS_KEY, CELERY_DEFAULT_QUEUE=CELERY_DEFAULT_QUEUE)
+
 
 GOOGLE_DISPLAY_NAME = 'LawPal.com - Development'
 GOOGLE_OAUTH2_CLIENT_ID = '316492043888-ac8ngfmlkn9fapo9ovvvgng4esnujrvg.apps.googleusercontent.com'
