@@ -160,6 +160,11 @@ class ToDoAssignView(DetailView, BaseToDoDetailMixin):
 
 
 class AttachmentSessionView(JSONResponseMixin, DetailView):
+    """
+    Obtain the appropriate crocdoc session to view a document
+    view allows us to specify certain capabilities based on user class
+    and type: https://github.com/crocodoc/crocodoc-python#session
+    """
     model = Attachment
     slug_field = 'pk'
     slug_url_kwarg = 'pk'
@@ -169,7 +174,7 @@ class AttachmentSessionView(JSONResponseMixin, DetailView):
         self.object = self.get_object()
         service = CrocdocAttachmentService(attachment=self.object)
 
-        params = {"user": {"name": request.user.username, "id": request.user.pk}, "sidebar": True, "editable": True, "admin": False, "downloadable": True, "copyprotected": False, "demo": False}
+        params = {"user": {"name": request.user.get_full_name(), "id": request.user.pk}, "sidebar": 'auto', "editable": True, "admin": False, "downloadable": True, "copyprotected": False, "demo": False}
         session_key = service.session_key(**params)
 
         context_dict = {
