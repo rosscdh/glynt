@@ -35,6 +35,9 @@ crocodoc.api_token = CROCDOC_API_KEY
 
 
 class CrocdocAttachmentService(object):
+    """
+    Service to manage uploading and general attribs of corcdoc attachments
+    """
     attachment = None
     session = None
 
@@ -44,6 +47,10 @@ class CrocdocAttachmentService(object):
 
     @property
     def uuid(self):
+        """
+        Calling this property will initiate an upload of the doc,
+        if it has not already been uploaded (i.e. we have a crocdoc uuid in the json data)
+        """
         if self.attachment.crocdoc_uuid is None:
             try:
                 uuid = self.upload_document()
