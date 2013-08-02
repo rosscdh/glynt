@@ -200,6 +200,8 @@ PROJECT_APPS = (
     'glynt.apps.services',
     # Graph
     'glynt.apps.graph',
+    # Crocdoc Helper
+    'glynt.apps.crocdoc',
 )
 
 HELPER_APPS = (
@@ -382,6 +384,15 @@ POSTMAN_MAILER_APP = 'django.core.mail'
 
 INTERCOM_API_SECRET = '-sjPyiyI5P44z3QsHLDUWfoLK8Rml7Wbg2wmj64L'
 
+
+ACTSTREAM_SETTINGS = {
+    'MODELS': ('auth.user', 'project.project', 'todo.todo', 'todo.attachment'),
+    'MANAGER': 'glynt.apps.streams.LawpalStreamActionManager',
+    'FETCH_RELATIONS': True,
+    'USE_PREFETCH': True,
+    'USE_JSONFIELD': True,
+    'GFK_FETCH_DEPTH': 1,
+}
 
 DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d %Y',
 '%b %d, %Y', '%d %b %Y', '%d %b, %Y', '%B %d %Y',

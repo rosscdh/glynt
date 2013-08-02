@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
@@ -19,11 +20,15 @@ urlpatterns = patterns('',
     url(r'^ajax-upload/', include('cicu.urls')),
     # Invite to join
     url(r'^invite/', include('public.invite.urls', namespace='invite')),
-        # Accounts & Registration
+    # Accounts & Registration
     url(r'', include('social_auth.urls')),
     url(r'^accounts/', include('userena.urls')),
     url(r'^client/', include('glynt.apps.client.urls', namespace='client')),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}, name='logout'),
+    # Activity stream
+    url('^activity/', include('actstream.urls')),
+    # Crocdoc Webhook Callbacks
+    url('^crocdoc/', include('glynt.apps.crocdoc.urls', namespace='crocdoc')),
     # Customers
     url(r'^customers/', include('glynt.apps.customer.urls', namespace='customer')),
     # lawyers
