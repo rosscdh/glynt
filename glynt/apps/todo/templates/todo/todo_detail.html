@@ -80,6 +80,10 @@
                 </div>
 
                 <div class="col col-lg-8" style="">
+                    <div id="crocdoc-viewer-empty" class="show">
+                        <h2>No attachment present</h2>
+                        <p>Please <a trigger-upload href="">upload a document</a>, to continue</p>
+                    </div>
                     <div id="crocdoc-viewer-container" class="hide">
 <!--                         <div class="alert alert-block alert-success text-center">
                           <p>Ross Crawford has requested your feedback on this document. </p>
@@ -109,6 +113,12 @@
 var viewer_container = $('#crocdoc-viewer-container');
 
 $(document).ready(function(){
+
+
+    $('a[trigger-upload]').on('click', function (event) {
+        event.preventDefault();
+        $('div.fpfilewidget button.btn-primary:first').trigger('click');        
+    });
 
     $('.btn-home').on('click', function (event) {
         event.preventDefault();
