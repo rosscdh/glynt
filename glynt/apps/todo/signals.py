@@ -6,8 +6,9 @@ from django.db.models.signals import post_save, post_delete
 # from notifications import notify
 # from notifications.models import Notification
 
+from .tasks import delete_attachment
 from .models import Attachment
-from .services import CrocdocAttachmentService, InkFilePickerAttachmentService
+from .services import CrocdocAttachmentService
 
 import logging
 logger = logging.getLogger('django.request')
@@ -18,7 +19,7 @@ def on_attachment_created(sender, **kwargs):
     """
     Handle Creation of attachments
     """
-    is_new = kwargs.get('created')
+    #is_new = kwargs.get('created')
     attachment = kwargs.get('instance')
 
     if attachment:
@@ -31,12 +32,13 @@ def on_attachment_deleted(sender, **kwargs):
     """
     Handle Deletions of attachments
     """
-    is_new = kwargs.get('created')
-    attachment = kwargs.get('instance')
+    is_new = kwargs.get('created', False)
+    attachment = kwargs.get('instance', None)
 
     if attachment:
-        crocdoc_service = CrocdocAttachmentService(attachment=attachment)
-        crocdoc_service.remove()
+        try:
+            delete_attachment.delay(is_new=is_new, attachment=attachment)
+        except Exception as e:
+            logger.error('Could not call delete_attachment via celery: {exception}'.format(exception=e))
+            delete_attachment(is_new=is_new, attachment=attachment, **kwargs)
 
-        inkfilepicker_service = InkFilePickerAttachmentService(attachment=attachment)
-        inkfilepicker_service.remove()
