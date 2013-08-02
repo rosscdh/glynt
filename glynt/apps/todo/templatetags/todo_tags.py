@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from django import template
 
+from actstream.models import model_stream
+
 from glynt.apps.todo import TODO_STATUS
 
 register = template.Library()
@@ -28,3 +30,10 @@ todo_status_row_class.is_safe = True
 def todo_status_icon(value):
     return STATUS_ICONS.get(value, 'icon-pending')
 todo_status_icon.is_safe = True
+
+
+@register.inclusion_tag('todo/stream/todo_list.html', takes_context=False)
+def todo_stream(todo):
+    return {
+        'stream': model_stream(todo).all()
+    }

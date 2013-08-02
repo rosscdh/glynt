@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load paginator glynt_helpers threadedcomments_tags crispy_forms_tags templatetag_handlebars jsonify %}
+{% extends 'base.html' %}{% load paginator todo_tags glynt_helpers threadedcomments_tags crispy_forms_tags templatetag_handlebars jsonify %}
 
 {% block page_title %}What's the current status?{% endblock %}
 {% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>{% endblock %}
@@ -64,16 +64,7 @@
                     <h3 class="brand"><span>Updates</span></h3>
                      <div class="row">
                         <div class="col col-lg-12">
-                            <ul class="list-unstyled softer activity">
-                                <li>
-                                    <a href="">Sally Sparrow</a> marked <a href="#">Note purchase agreement.doc</a> as feedback complete<span class="text-muted"> yesterday</span>
-                                </li>
-                                <li>
-                                    <a href="">Sally Sparrow</a> commented on <a href="#">Note purchase agreement draft 1.doc</a><span class="text-muted"> yesterday</span>
-                                 </li>
-                                <li>
-                                   <span class="post-meta"><a href="">Alex Halliday</a> requested feedback on <a href="#">Note purchase agreement draft 1.doc</a><span class="text-muted"> yesterday</span>
-                            </ul>
+                            {% todo_stream todo=object %}
                         </div>
                     </div>
                     
