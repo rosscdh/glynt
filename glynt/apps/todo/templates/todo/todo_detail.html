@@ -80,7 +80,7 @@
                 </div>
 
                 <div class="col col-lg-8" style="">
-                    <div id="crocdoc-viewer-empty" class="show">
+                    <div id="crocdoc-viewer-empty" class="hide">
                         <h2>No attachment present</h2>
                         <p>Please <a trigger-upload href="">upload a document</a>, to continue</p>
                     </div>
@@ -111,6 +111,8 @@
 <script>
 
 var viewer_container = $('#crocdoc-viewer-container');
+var view_container_empty = $('#crocdoc-viewer-empty');
+
 
 $(document).ready(function(){
 
@@ -138,7 +140,7 @@ $(document).ready(function(){
     });
     $('.btn-delete').on('click', function (event) {
         event.preventDefault();
-        console.log('delete event')
+
         var elem = $(this);
         elem.fadeOut('slow');
 
@@ -158,10 +160,13 @@ $(document).ready(function(){
                 },
                 complete: function() {
                     target_elem.remove();
+                    console.log($('a.attachment-item:first').length)
                     if ($('a.attachment-item:first').length > 0) {
                         $('a.attachment-item:first').trigger('click');
                     } else {
+                        console.log('no items hide main show message')
                         viewer_container.hide();
+                        view_container_empty.removeClass('hide').show();
                     }
                 }
             });
@@ -183,7 +188,7 @@ $(document).ready(function(){
     loadAttachments();
 
     $(document).on( 'click', 'a.attachment-item', function(event) {
-        console.log(event)
+
         viewer_container.fadeOut('slow');
         var elem = $(event.currentTarget);
         var attachment_id = elem.data('attachment_id');
@@ -218,15 +223,18 @@ function loadAttachments() {
         elem = $(elem);
         var url = '{api_url}?todo={todo}'.assign({'api_url': elem.data('apiUrl'), 'todo': '{{ object.pk }}'});
 
-        $.getJSON(url,
-            function(data) {
-                console.log(data.meta.total_count)
+        $.getJSON(url, function (data) {
                 if (data.meta.total_count >= 1) {
                     attachments_elem.html('');
                     $.each(data.objects, function (i, context) {
                         addAttachment(attachments_elem, context);
                     });
+
                     $('a.attachment-item:first').trigger('click');
+
+                } else {
+                    viewer_container.hide();
+                    view_container_empty.removeClass('hide').show();
                 }
         });
     });
@@ -235,6 +243,7 @@ function loadAttachments() {
 function addAttachment(elem, context) {
     var html = window.hb_attachments_list(context);
     elem.prepend(html);
+    view_container_empty.hide();
 }
 
 /**
