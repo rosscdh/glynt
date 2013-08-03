@@ -141,7 +141,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "glynt.context_processors.project_info",
     "glynt.context_processors.project_environment",
     "glynt.context_processors.default_profile_image",
-    "glynt.context_processors.notification_unread",
+    #"glynt.context_processors.notification_unread",
     "glynt.context_processors.USE_THREADEDCOMMENTS",
     "social_auth.context_processors.social_auth_by_type_backends",
     "social_auth.context_processors.social_auth_by_name_backends",
@@ -411,6 +411,22 @@ if DEBUG:
         'template_timings_panel',
     )
 
+    INTERNAL_IPS = ('127.0.0.1',)
+
+    DEBUG_TOOLBAR_PANELS = (
+        'debug_toolbar.panels.version.VersionDebugPanel',
+        'debug_toolbar.panels.timer.TimerDebugPanel',
+        'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
+        'debug_toolbar.panels.headers.HeaderDebugPanel',
+        'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
+        'debug_toolbar.panels.template.TemplateDebugPanel',
+        'debug_toolbar.panels.sql.SQLDebugPanel',
+        'debug_toolbar.panels.signals.SignalDebugPanel',
+        'debug_toolbar.panels.logger.LoggingPanel',
+        'debug_toolbar_user_panel.panels.UserPanel',
+        'template_timings_panel.panels.TemplateTimings.TemplateTimings',
+    )
+
     if not IS_TESTING:
         MIDDLEWARE_CLASSES += (
             'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -440,21 +456,6 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 USE_ELASTICSEARCH = True
-
-INTERNAL_IPS = ('127.0.0.1',)
-DEBUG_TOOLBAR_PANELS = (
-    'debug_toolbar.panels.version.VersionDebugPanel',
-    'debug_toolbar.panels.timer.TimerDebugPanel',
-    'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
-    'debug_toolbar.panels.headers.HeaderDebugPanel',
-    'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
-    'debug_toolbar.panels.template.TemplateDebugPanel',
-    'debug_toolbar.panels.sql.SQLDebugPanel',
-    'debug_toolbar.panels.signals.SignalDebugPanel',
-    'debug_toolbar.panels.logger.LoggingPanel',
-    'debug_toolbar_user_panel.panels.UserPanel',
-    'template_timings_panel.panels.TemplateTimings.TemplateTimings',
-)
 
 
 LOGGING = {
@@ -520,14 +521,12 @@ TEMPLATED_EMAIL_BACKEND = 'templated_email.backends.vanilla_django.TemplateBacke
 TEMPLATED_EMAIL_TEMPLATE_DIR = 'email/'
 TEMPLATED_EMAIL_FILE_EXTENSION = 'email'
 
-
 JENKINS_TASKS = (
     'django_jenkins.tasks.run_pylint',
     'django_jenkins.tasks.with_coverage',
     'django_jenkins.tasks.django_tests',
 )
 JENKINS_TEST_RUNNER='django_jenkins.nose_runner.CINoseTestSuiteRunner'
-
 
 LAWPAL_PRIVATE_BETA = True
 
