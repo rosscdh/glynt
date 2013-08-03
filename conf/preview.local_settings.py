@@ -17,7 +17,7 @@ TEMPLATE_DEBUG = DEBUG
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'lawpal_prelaunch',
+        'NAME': 'lawpal_preview',
         'USER': 'postgres',
         'PASSWORD': 'p7vgff9h197gnres0kj13btoos4',
         'HOST': 'ec2-50-18-97-221.us-west-1.compute.amazonaws.com',
