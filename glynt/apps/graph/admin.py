@@ -15,5 +15,5 @@ class FullContactDataAdmin(admin.ModelAdmin):
     list_display = ('user', 'full_name', 'social_profile_names', 'profile_pic',)
 
 
-admin.site.register(GraphConnection, GraphConnectionAdmin)
-admin.site.register(FullContactData, FullContactDataAdmin)
+#admin.site.register(GraphConnection, GraphConnectionAdmin)
+#admin.site.register(FullContactData, FullContactDataAdmin)

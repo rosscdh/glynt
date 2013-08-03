@@ -9,44 +9,34 @@ newrelic
 # Django
 Django
 django-cities-light
-# model charts - will need to have brew graphiz installed
-# pygraphviz
 
 # easydict lookups with dot notation
 bunch
 
-
-# currency/money
-#-e git+https://github.com/panosl/django-currencies.git#egg=django-currencies # integration with openexchange
-#-e git+https://github.com/poswald/python-money.git#egg=python-money
-
 # utils for git
 gitpython
-
-# util for yaml validation of todos/transaction
-voluptuous
 
 django-filepicker
 django-uuidfield
 django-extensions
+django-braces
 django-templated-email
 django-storages
 django-tastypie>=0.9.15
 django-crispy-forms
+django-pagination
+django-endless-pagination
+django-localflavor
 south
--e git+https://github.com/django/django-localflavor-us#egg=django-localflavor-us
--e git+https://github.com/jezdez/django_compressor.git#egg=django_compressor
--e git+https://github.com/alex/django-taggit.git#egg=django-taggit
--e git+https://github.com/rosscdh/django-countries.git#egg=django-countries
--e git+https://github.com/rosscdh/django-bootstrap.git#egg=bootstrap
--e git+https://github.com/brack3t/django-braces.git#egg=django-braces
--e git+https://github.com/lincolnloop/python-qrcode.git#egg=python-qrcode
 
-# Comments
+
+-e git+https://github.com/jezdez/django_compressor.git#egg=django_compressor
+
+# Stream & Comments
 -e git+https://github.com/rosscdh/django-fluent-comments.git@js-controls#egg=django-fluent-comments
-django-threadedcomments
-django-notifications-hq # this is for the activity notifications
-django-activity-stream 
+#django-threadedcomments
+#django-notifications-hq # this is for the activity notifications
+django-activity-stream
 
 # JSON Field
 #django-jsonfield # This is the correct one, the bradjasper version does not save correctly (converts to string), but we probably need to patch it so that the loaddata works
@@ -55,14 +45,13 @@ django-activity-stream
 -e git+https://github.com/rosscdh/django-jsonfield.git@lawpal#egg=django-jsonfield
 
 # Auth and Users
--e git+https://github.com/rosscdh/django-social-auth.git@rc_fixes#egg=django-social-auth
+-e git+https://github.com/rosscdh/django-social-auth.git@rc_fixes#egg=django-social-auth  # Note the @branch
 -e git+https://github.com/rosscdh/django-userena.git@lp#egg=django-userena  # Note the @branch
--e git+https://github.com/rosscdh/django-user-streams.git@extended_templates#egg=django-user-streams  # Note the @branch
+
 
 # Search
 -e git+https://github.com/toastdriven/django-haystack.git@bf1b48261a06d3e8f0a0008264d0c5f0465e773b#egg=django_haystack-dev
 pyelasticsearch
-# geopy # for spatial
 
 # Markup
 django-parsley
@@ -70,10 +59,8 @@ django_markup
 markup
 Markdown
 pyyaml
-pytidylib
-#lxml
-cssselect
-django-endless-pagination
+
+
 -e git+https://github.com/rosscdh/pybars.git#egg=pybars
 -e git+https://github.com/rosscdh/django-templatetag-handlebars.git#egg=django-templatetag-handlebars
 -e git+https://github.com/klen/django_markdown.git#egg=django_markdown
@@ -90,18 +77,12 @@ pillow<=1.9 # https://github.com/python-imaging/Pillow/issues/173
 -e git+https://github.com/rosscdh/clean-image-crop-uploader.git@rc_fixes#egg=clean-image-crop-uploader
 
 # Documents
-#xhtml2pdf
-#-e git+https://github.com/jkeyes/python-docraptor.git#egg=python-docraptor
 crocodoc
 
-# Signing
-#-e git+https://github.com/rosscdh/HelloSignApi.git#egg=HelloSignApi
-#-e git+https://github.com/rosscdh/python-signpad2image.git#egg=python-signpad2image
 
 # Workers
 django-celery
 boto # required for AWS-SQS
-#django-rq # potential but not sure
 
 
 # Dev
@@ -109,7 +90,7 @@ Werkzeug
 -e git+https://github.com/django-debug-toolbar/django-debug-toolbar.git#egg=django-debug-toolbar
 -e git+https://github.com/playfire/django-debug-toolbar-user-panel.git#egg=django-debug-toolbar-user-panel
 -e git+https://github.com/orf/django-debug-toolbar-template-timings.git#egg=django-debug-toolbar-template-timings
-# pygraphviz
+
 django-clear-cache
 
 # Testing
@@ -131,13 +112,3 @@ python-dateutil
 hurry.filesize
 requests
 termcolor
-#google-api-python-client # coming soon
-#-e git+https://github.com/chrisglass/xhtml2pdf.git#egg=xhtml2pdf # not planning on using xhtml2pdf(pisa) too unstable
-#-e git+https://github.com/rosscdh/django-xhtml2pdf.git#egg=django-xhtml2pdf # not planning on using xhtml2pdf(pisa) too unstable
-
-# Api access
-tweepy
-
-# Messaging App
--e hg+https://bitbucket.org/stard0g101/django-postman#egg=django-postman
-django-pagination
