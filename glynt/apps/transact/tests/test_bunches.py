@@ -28,7 +28,7 @@ class BaseToDoBunchAttribsTest(unittest.TestCase):
 class IncorporationBunchTest(BaseToDoBunchAttribsTest):
     """ Ensure the IncorporationBunch is setup correctly """
     expected_subject_names = ['General',
-                                'Qualification to do business in other states or countries',
+                                'Qualification to do business',
                                 'Founders Documents',
                                 'Option Plan',
                                 'Option Holders',
@@ -58,8 +58,8 @@ class IncorporationBunchTest(BaseToDoBunchAttribsTest):
         self.assertTrue(type(self.subject.todos) == Bunch)
         todo_keys = dict(self.subject.todos).keys() # cast as dict
         for e in self.expected_subject_names:
-            #print '%s %s' % (e, todo_keys)
-            self.assertEqual(True, e in todo_keys)
+            print '"%s" in %s' % (e, todo_keys)
+            self.assertEqual(True, e.strip() in todo_keys)
 
     def test_repeaters_are_set_and_simple_types(self):
         for name, value_dict in self.subject.todos.iteritems():
