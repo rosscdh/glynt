@@ -245,13 +245,13 @@ def git_set_tag():
         if tag:
             tag = 'v%s' % tag if tag[0] != 'v' else tag # ensure we start with a "v"
 
-            message = env.deploy_desc if 'deploy_desc' in env else prompt(colored('Please enter a tag comment', 'green'))
-            env.repo.create_tag(message=message)
+            #message = env.deploy_desc if 'deploy_desc' in env else prompt(colored('Please enter a tag comment', 'green'))
+            env.repo.create_tag(tag)
 #            local('git tag -a %s -m "%s"' % (tag, comment))
 #            local('git push origin %s' % tag)
 
 @task
-def git_export(branch='aws-sqs'):
+def git_export(branch='master'):
   env.SHA1_FILENAME = get_sha1()
   if not os.path.exists('/tmp/%s.zip' % env.SHA1_FILENAME):
       local('git archive --format zip --output /tmp/%s.zip --prefix=%s/ %s' % (env.SHA1_FILENAME, env.SHA1_FILENAME, branch,), capture=False)
@@ -319,14 +319,14 @@ def rebuild_index():
 @runs_once
 @roles('db-actor')
 def migrate():
-    with settings(host_string=env.db_host):
+    with settings():
         virtualenv('python %s%s/manage.py migrate' % (env.remote_project_path, env.project))
 
 @task
 @runs_once
 @roles('db-actor')
 def syncdb():
-    with settings(host_string=env.db_host):
+    with settings():
         virtualenv('python %s%s/manage.py syncdb' % (env.remote_project_path, env.project))
 
 @task
@@ -406,16 +406,13 @@ def deploy_archive_file():
     if not files.exists('%s/%s' % (env.deploy_archive_path, file_name)):
         as_sudo = env.environment_class in ['production', 'celery']
         put('/tmp/%s' % file_name, env.deploy_archive_path, use_sudo=as_sudo)
+        env_run('chown %s:%s %s' % (env.application_user, env.application_user, env.deploy_archive_path) )
 
 
 def clean_zip():
     file_name = '%s.zip' % env.SHA1_FILENAME
     if files.exists('%s%s' % (env.deploy_archive_path, file_name)):
         env_run('rm %s%s' % (env.deploy_archive_path, file_name,))
-
-@task
-def clear_cache():
-    virtualenv(cmd='python glynt/manage.py clear_cache')
 
 @task
 def relink():
@@ -453,7 +450,7 @@ def do_deploy():
     if env.environment_class in ['production', 'celery']:
         if not files.exists(version_path):
             env_run('mkdir -p %s' % version_path )
-        env_run('chown -R %s:%s %s' % (env.application_user, env.application_user, env.remote_project_path) )
+        sudo('chown -R %s:%s %s' % (env.application_user, env.application_user, env.remote_project_path) )
 
     deploy_archive_file()
 
