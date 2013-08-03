@@ -24,7 +24,7 @@ from glynt.apps.company.api import (CompanyLiteSimpleResource,
 from glynt.apps.project.api import (ProjectResource, 
                                     ProjectDataBagResource)
 
-from glynt.apps.todo.api import UserToDoCountResource
+from glynt.apps.todo.api import (UserToDoCountResource, AttachmentResource)
 
 V1_INTERNAL_API = Api(api_name='v1')
 
@@ -118,5 +118,6 @@ V1_INTERNAL_API.register(CompanyBasicProfileResource())
 V1_INTERNAL_API.register(CompanyDataBagResource())
 V1_INTERNAL_API.register(ProjectDataBagResource())
 V1_INTERNAL_API.register(UserToDoCountResource())
+V1_INTERNAL_API.register(AttachmentResource())
 V1_INTERNAL_API.register(LawyerResource())
 V1_INTERNAL_API.register(ProjectResource())

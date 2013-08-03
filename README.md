@@ -66,6 +66,11 @@ a "**customer**"
 2. ```pip install -r requirements.txt``` : install update the required libraries (append --upgrade if you are not sure)
 
 
+## Start Celery Worker
+
+```python manage.py celery worker --loglevel=info```
+
+
 ## Geos
 
 ```brew install geos```

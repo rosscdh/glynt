@@ -1,0 +1,6 @@
+{% for comment in comment_list reversed %}
+<div class="row">
+{% include 'comments/todo/comment.html' %}
+</div>
+<hr/>
+{% endfor %}

@@ -107,6 +107,7 @@ MIDDLEWARE_CLASSES = (
     'glynt.middleware.EnsureUserHasCompanyMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'pagination.middleware.PaginationMiddleware',
+    'django_filepicker.middleware.URLFileMapperMiddleware',
 )
 
 
@@ -199,6 +200,8 @@ PROJECT_APPS = (
     'glynt.apps.services',
     # Graph
     'glynt.apps.graph',
+    # Crocdoc Helper
+    'glynt.apps.crocdoc',
 )
 
 HELPER_APPS = (
@@ -220,8 +223,7 @@ HELPER_APPS = (
     # Thumbnail generator
     'easy_thumbnails',
     # Activity stream
-    'user_streams',
-    'user_streams.backends.user_streams_single_table_backend',
+    'actstream',
     # Cities
     'cities_light',
     # getsentry.com
@@ -245,7 +247,6 @@ HELPER_APPS = (
 
     # Notications
     'notifications',
-    # Currency
 )
 
 
@@ -292,9 +293,6 @@ LOGIN_REDIRECT_URL = '/logged-in/'
 LOGIN_ERROR_URL    = '/login-error/'
 
 
-USER_STREAMS_BACKEND = 'user_streams.backends.user_streams_single_table_backend.SingleTableDatabaseBackend'
-USER_STREAMS_USE_UTC = True
-
 HELLOSIGN_AUTH = ("sendrossemail@gmail.com", "test2007")
 
 ANONYMOUS_USER_ID = -1
@@ -331,6 +329,7 @@ THUMBNAIL_ALIASES = {
     },
 }
 
+FILEPICKER_API_KEY = None
 
 FACEBOOK_API_KEY = '419217318130542'
 FACEBOOK_SECRET_KEY = 'a8a6359a83c2af62c0aadb8e507bd15f'
@@ -385,6 +384,15 @@ POSTMAN_MAILER_APP = 'django.core.mail'
 
 INTERCOM_API_SECRET = '-sjPyiyI5P44z3QsHLDUWfoLK8Rml7Wbg2wmj64L'
 
+
+ACTSTREAM_SETTINGS = {
+    'MODELS': ('auth.user', 'project.project', 'todo.todo', 'todo.attachment'),
+    'MANAGER': 'glynt.apps.streams.LawpalStreamActionManager',
+    'FETCH_RELATIONS': True,
+    'USE_PREFETCH': True,
+    'USE_JSONFIELD': True,
+    'GFK_FETCH_DEPTH': 1,
+}
 
 DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d %Y',
 '%b %d, %Y', '%d %b %Y', '%d %b, %Y', '%B %d %Y',

@@ -1,0 +1,51 @@
+{% load comments fluent_comments_tags i18n %}
+<div class=" post-reply">
+    <form action="{% comment_form_target %}" data-ajax-action="{% url 'comments-post-comment-ajax' %}" method="POST" class="js-comments-form comments-form form-wide clearfix">{% csrf_token %}
+        {% if form.comment.errors %}{{ form.comment.errors }}{% endif %}
+<!--         <label for="id_comment">Respond to latest comment</label>
+ -->        <textarea rows="1" placeholder="{% trans 'Leave a comment' %}"></textarea>
+        {{ form.honeypot }}
+        {{ form.content_type }}
+        {{ form.object_pk }}
+        {{ form.timestamp }}
+        {{ form.security_hash }}
+        {% if next %}<div><input type="hidden" name="next" value="{{ next }}" /></div>{% endif %}
+        <!-- <div class="pull-right"><button id="btn-save_comment" class="btn btn-primary pull-right" type="submit">{% trans 'Respond Now' %}</button></div> -->
+        <!-- {% ajax_comment_tags %} -->
+    </form>
+</div>
+<br />
+<style>
+#id_honeypot {
+    display:none;
+}
+</style>
+<script id="comment-controls" type="text/javascript">
+
+$(document).ready( function () {
+
+    $('.delete-comment').on( 'click', function (event) {
+        event.preventDefault();
+        var elem = $(this);
+        var url = elem.attr('href');
+        var data = {
+        };
+        $.ajax({
+            type: 'DELETE',
+            url: url,
+            data: data,
+        },
+        beforeSend: function(jqXHR, settings) {
+            // Pull the token out of the DOM.
+            jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+        },
+        success: function(data, textStatus, jqXHR){
+        },
+        error: function(data, textStatus, jqXHR){
+        },
+        complete: function() {
+        });
+    });
+});
+
+</script>

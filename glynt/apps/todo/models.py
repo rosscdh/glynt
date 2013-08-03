@@ -4,6 +4,7 @@ App to enable founders to have a set of todo items per transaction type
 considering using https://github.com/bartTC/django-attachments for the
 todo attachments when the time comes
 """
+import os
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -11,10 +12,18 @@ from django.core.urlresolvers import reverse
 from glynt.apps.utils import generate_unique_slug
 from glynt.apps.project.models import Project
 
+from django_filepicker.models import FPFileField
+
 from . import TODO_STATUS
 from .managers import DefaultToDoManager
 
 from jsonfield import JSONField
+from hurry.filesize import size
+
+
+def _attachment_upload_file(instance, filename):
+    _, ext = os.path.splitext(filename)
+    return '{project_uuid}/attachments/{slug}{ext}'.format(project_uuid=instance.project.uuid, slug=instance.slug, ext=ext)
 
 
 class ToDo(models.Model):
@@ -57,3 +66,47 @@ class ToDo(models.Model):
             self.slug = generate_unique_slug(instance=self)
 
         return super(ToDo, self).save(*args, **kwargs)
+
+
+class Attachment(models.Model):
+    uuid = models.CharField(max_length=255, blank=True, null=True, db_index=True)
+    attachment = FPFileField(upload_to=_attachment_upload_file, additional_params=None)
+    project = models.ForeignKey(Project, related_name='attachments')
+    todo = models.ForeignKey(ToDo, blank=True, null=True, related_name='attachments')
+    data = JSONField(default={})
+    date_created = models.DateTimeField(auto_now=False, auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ['-date_created']
+
+    @property
+    def filename(self):
+        return self.data.get('fpfile', {}).get('filename')
+
+    @property
+    def mimetype(self):
+        return self.data.get('fpfile', {}).get('mimetype')
+
+    @property
+    def size(self):
+        return size(self.data.get('fpfile', {}).get('size', 0))
+
+    @property
+    def crocdoc_uuid(self):
+        return self.data.get('crocdoc', {}).get('uuid')
+
+    @property
+    def inkfilepicker_url(self):
+        return self.data.get('fpfile', {}).get('url')
+
+    @property
+    def s3_key(self):
+        return self.data.get('fpfile', {}).get('key')
+
+    def get_url(self):
+        return self.attachment.name
+
+"""
+import signals
+"""
+from glynt.apps.todo.signals import on_attachment_created, on_attachment_deleted
