@@ -4,8 +4,6 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset
 
-from bootstrap.forms import BootstrapMixin
-
 from parsley.decorators import parsleyfy
 
 from glynt.apps.company.forms import CompanyProfileForm
@@ -197,7 +195,7 @@ class CustomersForm(BuilderBaseForm):
 
 
 # WIZARD STEP SEVEN
-class StockPlansForm(BootstrapMixin, BuilderBaseForm):
+class StockPlansForm(BuilderBaseForm):
     page_title = 'Stock Plan'
     page_description = None
     data_bag = 'glynt.apps.client.bunches.UserCompanyBunch'
@@ -220,7 +218,7 @@ class StockPlansForm(BootstrapMixin, BuilderBaseForm):
 
 
 # WIZARD STEP EIGHT
-class AboutCompanyBusinessForm(BootstrapMixin, BuilderBaseForm):
+class AboutCompanyBusinessForm(BuilderBaseForm):
     page_title = 'The Company'
     page_description = None
     data_bag = 'glynt.apps.client.bunches.UserCompanyBunch'
@@ -230,7 +228,7 @@ class AboutCompanyBusinessForm(BootstrapMixin, BuilderBaseForm):
 
 
 # WIZARD STEP NINE
-class IntellectualPropertyForm(BootstrapMixin, BuilderBaseForm):
+class IntellectualPropertyForm(BuilderBaseForm):
     page_title = 'Intellectual Property'
     page_description = None
     data_bag = 'ip'
@@ -250,7 +248,7 @@ class IntellectualPropertyForm(BootstrapMixin, BuilderBaseForm):
 
 
 # WIZARD STEP TEN
-class EmployeesConsultantsForm(BootstrapMixin, BuilderBaseForm):
+class EmployeesConsultantsForm(BuilderBaseForm):
     page_title = 'Employees & Consulatants'
     page_description = None
     data_bag = 'consultants'
@@ -261,11 +259,3 @@ class EmployeesConsultantsForm(BootstrapMixin, BuilderBaseForm):
     )
     employment_type = forms.ChoiceField(choices= EMPLOYMENT_TYPE_CHOICES, label="Vesting", help_text="", widget=forms.Select(attrs={'tabindex': ''}))
     scope_of_work = forms.CharField(label="Scope of Work", help_text="", widget=forms.TextInput(attrs={'tabindex': '1'}))
-
-
-#class OtherAgreementsForm(BootstrapMixin, forms.Form):
-#    agreement_details = forms.CharField(required=False, label="Enter details here", help_text="", widget=forms.Textarea())
-
-
-#class ExistingDocumentationForm(BootstrapMixin, forms.Form):
-#    dummy_file = forms.CharField(required=False, widget=forms.HiddenInput())

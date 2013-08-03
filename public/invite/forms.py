@@ -3,15 +3,13 @@ from django import forms
 from django.conf import settings
 from django.contrib.auth.models import User
 
-from bootstrap.forms import BootstrapMixin
-
 from tasks import send_invite_email
 
 import logging
 logger = logging.getLogger('django.request')
 
 
-class InviteEmailForm(BootstrapMixin, forms.Form):
+class InviteEmailForm(forms.Form):
     invite_type = forms.CharField(initial='lawyer', widget=forms.HiddenInput)
     email = forms.EmailField(required=True, widget=forms.TextInput(attrs={'placeholder':'their.name@example.com', 'data-required':'true', 'data-type':'email', 'data-notblank':'true', 'data-minlength':'6'}))
     name = forms.CharField(required=True, widget=forms.TextInput(attrs={'placeholder':'John Doe', 'data-required':'true', 'data-notblank':'true', 'data-minlength':'5'}))

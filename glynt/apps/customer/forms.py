@@ -1,6 +1,5 @@
 # -*- coding: UTF-8 -*-
 from django import forms
-from bootstrap.forms import BootstrapMixin
 
 from cicu.models import UploadedFile
 from cicu.widgets import CicuUploderInput
@@ -17,7 +16,7 @@ logger = logging.getLogger('django.request')
 
 
 @parsleyfy
-class CustomerProfileSetupForm(BootstrapMixin, ChangePasswordMixin, ConfirmChangePasswordMixin, forms.Form):
+class CustomerProfileSetupForm(ChangePasswordMixin, ConfirmChangePasswordMixin, forms.Form):
     """ Form to allow companies to enter basic information about
     their setups
     """

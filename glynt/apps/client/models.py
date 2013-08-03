@@ -4,8 +4,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.core.validators import URLValidator
-from django.core.exceptions import ValidationError
-
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.management import call_command
 from django.db.models.signals import post_save
 
 from jsonfield import JSONField
@@ -94,6 +94,14 @@ def _get_or_create_user_profile(user):
 User.profile = property(lambda u: _get_or_create_user_profile(user=u)[0])
 
 
+def _assign_perms(user, profile):
+    for perm, name in ASSIGNED_PERMISSIONS.get('profile',()):
+        assign_perm(perm, user, profile)
+
+    # Give permissions to view and change itself
+    for perm, name in ASSIGNED_PERMISSIONS.get('user',()):
+        assign_perm(perm, user, user)
+
 @receiver(post_save, sender=ClientProfile, dispatch_uid='client.create_client_profile', )
 def create_client_profile(sender, **kwargs):
     """ Method creates the permissions required for the current user
@@ -105,12 +113,11 @@ def create_client_profile(sender, **kwargs):
         user = profile.user
         logger.info('Creating Profile Permissions for User %s' % user.username)
         # Give permissions to view and change profile
-        for perm, name in ASSIGNED_PERMISSIONS.get('profile',()):
-            assign_perm(perm, user, profile)
-
-        # Give permissions to view and change itself
-        for perm, name in ASSIGNED_PERMISSIONS.get('user',()):
-            assign_perm(perm, user, user)
+        try:
+            _assign_perms(user, profile)
+        except ObjectDoesNotExist:
+            call_command('check_permissions')
+            _assign_perms(user, profile)
 
         # Send the signup complete signal
         userena_signals.signup_complete.send(sender=None, user=user)

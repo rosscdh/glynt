@@ -1,11 +1,7 @@
 # -*- coding: UTF-8 -*-
 from django import forms
 
-from bootstrap.forms import BootstrapMixin
-#from models import tmpLawyerFirm
-
-
-class CreateLawyerFirmForm(BootstrapMixin, forms.Form):
+class CreateLawyerFirmForm(forms.Form):
     title = forms.CharField()
     first_name = forms.CharField()
     last_name = forms.CharField()

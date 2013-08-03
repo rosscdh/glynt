@@ -5,8 +5,6 @@ from django.core import exceptions
 from django.core.cache import cache
 from glynt.cache_utils_1_5 import make_template_fragment_key
 
-from bootstrap.forms import BootstrapMixin
-
 from cicu.models import UploadedFile
 from cicu.widgets import CicuUploderInput
 
@@ -23,7 +21,7 @@ logger = logging.getLogger('django.request')
 
 
 @parsleyfy
-class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
+class LawyerProfileSetupForm(forms.Form):
 
     ROLES = [display_name for name,display_name in Lawyer.LAWYER_ROLES.get_choices()]
 
@@ -131,7 +129,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
     def clean_email(self):
         email = self.cleaned_data['email']
         try:
-            lawyer_exists = User.objects.exclude(pk=self.user.pk).get(email=email)
+            User.objects.exclude(pk=self.user.pk).get(email=email)
             msg = 'Sorry but a User with that email already exists (id: %s)' % (self.user.pk)
             logging.error(msg)
             raise exceptions.ValidationError(msg)
@@ -206,7 +204,7 @@ class LawyerProfileSetupForm(BootstrapMixin, forms.Form):
 
 
 @parsleyfy
-class LawyerSearchForm(BootstrapMixin, forms.Form):
+class LawyerSearchForm(forms.Form):
     q = forms.CharField(label='', help_text='', required=False, widget=forms.TextInput(attrs={'placeholder':'Anywhere', 'tabindex':'1', 'class':'input-xlarge typeahead','autocomplete':'off','data-provide':'ajax', 'minLength':'2', 'data-items': 5, 'data-source': API_URLS.get('locations'), 'data-filter':'name__istartswith', 'tabindex':'2', 'data-toggle': 'tooltip', 'title': 'Enter a Location or just leave it blank'}))
 
     def __init__(self, *args, **kwargs):

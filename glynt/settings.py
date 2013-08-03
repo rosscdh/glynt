@@ -281,9 +281,9 @@ TEST_RUNNER = 'glynt.test_runner.GlyntAppTestRunner'
 # disable celery for test
 BROKER_BACKEND = 'memory'
 
-COMMENTS_APP = 'fluent_comments'
-FLUENT_COMMENTS_USE_EMAIL_NOTIFICATION = False # We handle our own email notifications
-NOTIFY_USE_JSONFIELD = True
+#COMMENTS_APP = 'fluent_comments'
+#FLUENT_COMMENTS_USE_EMAIL_NOTIFICATION = False # We handle our own email notifications
+#NOTIFY_USE_JSONFIELD = True
 
 
 LOGIN_URL          = '/'

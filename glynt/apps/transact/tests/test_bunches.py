@@ -3,7 +3,7 @@
 Test the todo bunches
 """
 import factory
-import mocktest
+import unittest
 from bunch import Bunch
 from glynt.apps.transact.models import Transaction
 from glynt.apps.todo.bunches import BaseToDoBunch
@@ -14,7 +14,7 @@ class TransactionFactory(factory.Factory):
     FACTORY_FOR = Transaction
 
 
-class BaseToDoBunchAttribsTest(mocktest.TestCase):
+class BaseToDoBunchAttribsTest(unittest.TestCase):
     """ Test the base class that contains the core repeater and structure """
     def setUp(self):
         self.transaction = TransactionFactory.build()
