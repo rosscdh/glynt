@@ -6,8 +6,9 @@
 {% block prebody %}
 
 <div class="container" style="padding:15px 0px 0px 0px;"> 
-    <h3>{{ object.name }}<!-- <span class="pull-right" style="opacity:0.6">{{ object.display_status }}</span> -->
+    <h3> {{ object.name }}<!-- <span class="pull-right" style="opacity:0.6">{{ object.display_status }}</span> -->
         <div class="pull-right clearfix">
+            <small class="softer">#{{ object.id }}</small>
             <div class="btn-group">
               <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
                 IN PROGRESS <span class="caret"></span>
@@ -38,31 +39,20 @@
                     <div>
                         <h3 class="brand">
                             Attachments 
-                            <!--<a href="#" class="btn btn-default btn-small pull-right"><i class="icon-arrow-up"></i> Attach a file</a>-->
                         </h3>
                             {% crispy attachment_form %}
                             {{ attachment_form.media }}
                         <br />
-                        <div id="attachments" class="list-group">
-                            <a id="no-attachments" href="#" class="list-group-item disabled">
-                                <span class="softer">No attachments yet</span>
-                            </a>
-<!--                             <a href="#" class="list-group-item active feedback">
-                                <span class="glyphicon glyphicon-chevron-right"></span>
-                                <h4 class="list-group-item-heading">Convertible loan note draft2.doc <span class="badge important">1</span></h4>
-                                <p class="list-group-item-text">Added 5 days ago by Joan Rivers</p>
-                            </a> -->
-                        </div>
+                        <div id="attachments" class="list-group"></div>
                     </div>
                    
                  <hr />
                 
-                    <h3 class="brand"><span>Discuss</span></h3>
+                    <h3 class="brand"><span>Discussion</span></h3>
                     {% render_comment_form for object %}
                     {#% render_comment_list for object %#}
 
-                    <h3 class="brand"><span>Updates</span></h3>
-                     <div class="row">
+                    <div class="row">
                         <div class="col col-lg-12">
                             {% todo_stream todo=object %}
                         </div>
@@ -71,10 +61,12 @@
                 </div>
 
                 <div class="col col-lg-8" style="">
-                    <div id="crocdoc-viewer-empty" class="hide">
-                        <h2>No attachment present</h2>
-                        <p>Please <a trigger-upload href="">upload a document</a>, to continue</p>
-                    </div>
+                    <div id="crocdoc-viewer-empty" class="hide text-center">
+                        <br />
+                        <h1 class="text-muted"><i class="icon-file-text"></i></h1>
+                        <h3 class="softer">No attachments yet</h3>
+<!--                         <p class="softer">Please <a trigger-upload href="" class="softer">upload a document</a> to make it visible in this checklist item.</p>
+ -->                    </div>
                     <div id="crocdoc-viewer-container" class="hide">
 <!--                         <div class="alert alert-block alert-success text-center">
                           <p>Ross Crawford has requested your feedback on this document. </p>
@@ -313,8 +305,8 @@ HandleAttachment = function HandleAttachment(event) {
 {% tplhandlebars "tpl-attachment" %}
 <a href="javascript:;" data-attachment_id="{{ id }}" class="attachment-item list-group-item">
     <span class="glyphicon glyphicon-chevron-right"></span>
-    <h4 class="list-group-item-heading">{{ data.fpfile.filename }}</h4>
-    <p class="list-group-item-text"><span rel="tooltip" title="{{ date_created }}" data-humanize-date="{{ date_created_unix }}">{{ date_created }}</span></p>
+    <h5 class="list-group-item-heading">{{ data.fpfile.filename }}</h5>
+    <p class="list-group-item-text"><span rel="tooltip" title="{{ date_created }}" data-humanize-date="{{ date_created_unix }}"><!-- {{ date_created }} --></span></p>
 </a>
 {% endtplhandlebars %}
 
@@ -348,16 +340,50 @@ HandleAttachment = function HandleAttachment(event) {
     margin-top:-21px;
     border-right:1px solid #eee;
 }
-.activity li {
+textarea#id_comment {
+    height:60px;
     margin-bottom:10px;
 }
-.drop-pane {
+.activity li {
+    margin-bottom:4px;
+    font-size:12px;
+    color:#989898;
+}
+.activity li blockquote{
+    background-color:#f6f3f3;
+    border-radius: 20px;
+    border-left:0px;
+    margin-bottom:0px;
+    font-size:13px;
+    padding:9px 10px 9px 15px;
+
+}
+.activity li.comment {
+    margin:15px 0px;
+    color:#777;
+    font-size:12px;
+}
+.activity li span {
+    font-size:10px;
+    white-space: nowrap;
+    padding-right:5px;
+}
+#comment-added-message, #comment-waiting {
+    color:#ccc;
+}
+#div_id_attachment .col-lg-7 {
+    width:100%;
+}
+#div_id_attachment .col-lg-7 .drop-pane {
     width:170px;
     text-align: center;
     color:#666!important;
     padding:6px 0px!important;
     border-radius: 2px;
     opacity:0.8;
+}
+a.list-group-item h5.list-group-item-heading  {
+    line-height:1.3em;
 }
 </style>
 {% endblock %}

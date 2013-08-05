@@ -27,7 +27,8 @@ class AttachmentForm(forms.Form):
                                 'data-fp-button-text': 'Upload attachment',
                                 'data-fp-button-class': 'btn btn-primary',
                                 'data-fp-mimetypes': 'application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.ms-powerpoint, application/vnd.ms-excel',
-                                'onchange': 'HandleAttachment(event)'
+                                'onchange': 'HandleAttachment(event)',
+                                'data-fp-drag-class': 'drop-pane pull-right'
                             }
     )
 

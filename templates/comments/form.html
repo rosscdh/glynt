@@ -7,7 +7,7 @@
         <form action="{% comment_form_target %}" data-ajax-action="{% url 'comments-post-comment-ajax' %}" method="POST" class="js-comments-form comments-form form-wide clearfix">{% csrf_token %}
             {% if form.comment.errors %}{{ form.comment.errors }}{% endif %}
             <label for="id_comment">Respond to latest comment</label>
-            <textarea id="id_comment" name="comment" rows="3" placeholder="Leave a comment"></textarea>
+            <textarea id="id_comment" name="comment" rows="2" placeholder="Leave a comment"></textarea>
             {{ form.honeypot }}
             {{ form.content_type }}
             {{ form.object_pk }}

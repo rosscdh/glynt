@@ -1,13 +1,15 @@
 {% load i18n %}
-<ul class="list-unstyled softer activity">
+<ul class="list-unstyled activity">
     {% for a in stream %}
-        <li>
-            {{ a.actor.get_full_name|default:a.actor.username }} {{ a.verb }} "<b>{{ a.data.attachment_name }}</b>
+        <li {% if a.data.content %}class="comment"{% endif %}>
+            {{ a.actor.get_full_name|default:a.actor.username }} {{ a.verb }} <b>{{ a.data.attachment_name }}</b>
             {% if a.data.page %}<br/><span class="text-muted pull-right">Page: {{ a.data.page }}</span>{% endif %}
-            <br/><span class="text-muted pull-right">{{ a.timestamp|timesince }} {% trans "ago" %}</span>
-            {% if a.data.content %}<blockquote><b>{{ a.data.content }}</b></blockquote>{% endif %}
+            <span class="text-muted pull-right">{{ a.timestamp|timesince }} <!-- {% trans "ago" %} --></span>
+            {% if a.data.content %}
+                <blockquote>{{ a.data.content }}</blockquote>
+            {% endif %}
         </li>
     {% empty %}
-        <li>{% trans 'No Updates' %}</li>
+        <li class="text-muted">{% trans 'No updates yet' %}</li>
     {% endfor %}
 </ul>
