@@ -66,6 +66,15 @@ a "**customer**"
 2. ```pip install -r requirements.txt``` : install update the required libraries (append --upgrade if you are not sure)
 
 
+## Webhook Callbacks - Crocdoc
+
+1. install https://ngrok.com
+2. run ```ngrok 127.0.0.1:8000```
+3. this will give you a url like: http://19b51bbe.ngrok.com
+4. register this url at the crocdoc url: https://crocodoc.com/settings/webhook/
+5. interact with an uploaded crocdoc item attachment
+    
+
 ## Start Celery Worker
 
 ```python manage.py celery worker --loglevel=info```
@@ -110,12 +119,6 @@ Load all the city data
 ## EC2 Account signin
 
 ```https://562971026743.signin.aws.amazon.com/console/ec2```
-
-
-## Postgres Backup and Restore
-
-    sudo -u postgres -s pg_dump --no-owner --no-acl -Fc lawpal_prelaunch > lawpal_prelaunch.bak
-    pg_restore -U rosscdh -h localhost -d lawpal_prelaunch -Fc lawpal_prelaunch.bak
 
 
 ## Deployment ##
