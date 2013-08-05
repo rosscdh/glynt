@@ -115,6 +115,24 @@ var COMMENT_CONTROLS = (window.COMMENT_CONTROLS !== undefined) ? window.COMMENT_
 
 $(document).ready(function(){
 
+    // Enable pusher logging - don't include this in production
+    Pusher.log = function(message) {
+      if (window.console && window.console.log) {
+        window.console.log(message);
+      }
+    };
+
+    var pusher = new Pusher('{{ PUSHER_KEY }}');
+    var channel = pusher.subscribe('{{ object.pusher_id }}');
+    channel.bind('todo.comment.created', function(data) {
+      console.log(data);
+      // console.log(data.label)
+      GlyntJsMessages.clear = true;
+      GlyntJsMessages.add_message(data.label);
+      GlyntJsMessages.add_message('<a href="javascript:document.location.reload();">Click to refresh</a>');
+      GlyntJsMessages.show();
+    });
+
 
     $('a[trigger-upload]').on('click', function (event) {
         event.preventDefault();

@@ -84,7 +84,7 @@
     {
         // Allow initialisation before scrolling.
         var $comment = $("#c" + id);
-        if( $comment.length == 0 ) {
+        if( $comment.length == 0 && COMMENT_CONTROLS.alerts ) {
             if( window.console ) console.warn("scrollToComment() - #c" + id + " not found.");
             return;
         }

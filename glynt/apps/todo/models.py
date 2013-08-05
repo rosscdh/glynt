@@ -46,6 +46,10 @@ class ToDo(models.Model):
         return '{name}'.format(name=self.name)
 
     @property
+    def pusher_id(self):
+        return self.slug
+
+    @property
     def todo_type(self):
         return '%s' % 'Generic' if not self.project else 'Need to hook up to project'
 
@@ -60,12 +64,12 @@ class ToDo(models.Model):
     def get_absolute_url(self):
         return reverse('todo:edit', kwargs={'project_uuid': self.project.uuid, 'slug': self.slug})
 
-    def save(self, *args, **kwargs):
-        """ Ensure that we have a slug """
-        if self.slug in [None, '']:
-            self.slug = generate_unique_slug(instance=self)
+    # def save(self, *args, **kwargs):
+    #     """ Ensure that we have a slug """
+    #     if self.slug in [None, '']:
+    #         self.slug = generate_unique_slug(instance=self)
 
-        return super(ToDo, self).save(*args, **kwargs)
+    #     return super(ToDo, self).save(*args, **kwargs)
 
 
 class Attachment(models.Model):
@@ -78,6 +82,10 @@ class Attachment(models.Model):
 
     class Meta:
         ordering = ['-date_created']
+
+    @property
+    def pusher_id(self):
+        return self.todo.pusher_id
 
     @property
     def filename(self):

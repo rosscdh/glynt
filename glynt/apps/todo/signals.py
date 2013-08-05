@@ -10,6 +10,8 @@ from .tasks import delete_attachment
 from .models import Attachment
 from .services import CrocdocAttachmentService
 
+from glynt.apps.services.pusher import PusherPublisherService
+
 from django.contrib.auth.models import User
 from actstream import action
 
@@ -70,8 +72,11 @@ def on_comment_created(sender, **kwargs):
         comment = kwargs.get('instance')
 
         if comment and is_new:
-            action.send(comment.user,
+            s = action.send(comment.user,
                         verb='Commented on Checklist Item',
                         action_object=comment,
                         target=comment.content_object,
                         content=comment.comment)
+
+            pusher_service = PusherPublisherService(channel=comment.content_object.pusher_id, event='todo.comment.created')
+            pusher_service.process(label='{name} has added a comment to this Checklist Item: {comment}'.format(name=comment.user.get_full_name(), comment=comment.comment))
