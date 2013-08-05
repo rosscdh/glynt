@@ -1,7 +1,12 @@
 {% load i18n %}
 <ul class="list-unstyled softer activity">
     {% for a in stream %}
-        <li>{{ a.actor.get_full_name|default:a.actor.username }} {{ a.verb }} "<b>{{ a.data.attachment_name }}</b> <br/><span class="text-muted">{{ a.timestamp|timesince }} {% trans "ago" %}</span></li>
+        <li>
+            {{ a.actor.get_full_name|default:a.actor.username }} {{ a.verb }} "<b>{{ a.data.attachment_name }}</b>
+            <br/><span class="text-muted pull-right">Page: {{ a.data.page }}</span>
+            <br/><span class="text-muted pull-right">{{ a.timestamp|timesince }} {% trans "ago" %}</span>
+            {% if a.data.content %}<blockquote><b>{{ a.data.content }}</b></blockquote>{% endif %}
+        </li>
     {% empty %}
         <li>{% trans 'No Updates' %}</li>
     {% endfor %}

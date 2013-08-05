@@ -2,6 +2,8 @@
 from django.views.generic import View
 from braces.views import JSONResponseMixin
 
+from .services import CrocdocWebhookService
+
 import logging
 logger = logging.getLogger('django.request')
 
@@ -23,8 +25,12 @@ class CrocdocCallbackView(JSONResponseMixin, View):
         # import pdb
         # pdb.set_trace()
 
-        payload = request.POST.get('payload', {})
-        logger.info('recived crocdoc webhook: {json}'.format(json=payload))
+        service = CrocdocWebhookService(payload=request.POST.get('payload', '[]'))
+        logger.info('recived crocdoc webhook: {json}'.format(json=service.items))
+
+        service.process()
+        # for c, i in enumerate(service.items):
+        #     logger.info('Item {num} event: {event}'.format(num=c, event=i))
 
         """
         status: payload
