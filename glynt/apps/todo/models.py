@@ -109,4 +109,4 @@ class Attachment(models.Model):
 """
 import signals
 """
-from glynt.apps.todo.signals import on_attachment_created, on_attachment_deleted
+from glynt.apps.todo.signals import (on_attachment_created, on_attachment_deleted, on_comment_created)

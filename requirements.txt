@@ -34,8 +34,9 @@ south
 -e git+https://github.com/jezdez/django_compressor.git#egg=django_compressor
 
 # Stream & Comments
+pusher
 -e git+https://github.com/rosscdh/django-fluent-comments.git@js-controls#egg=django-fluent-comments
-#django-threadedcomments
+django-threadedcomments
 django-notifications-hq # this is for the activity notifications
 django-activity-stream
 

@@ -4,8 +4,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete
 from django.contrib.admin.models import LogEntry
 
-# from notifications import notify
-# from notifications.models import Notification
+from threadedcomments.models import ThreadedComment
 
 from .tasks import delete_attachment
 from .models import Attachment
@@ -31,9 +30,9 @@ def on_attachment_created(sender, **kwargs):
             crocdoc_service = CrocdocAttachmentService(attachment=attachment)
             crocdoc_service.process()
 
-            action.send(User.objects.get(pk=1), 
-                        verb='Uploaded Attachment', 
-                        action_object=attachment, 
+            action.send(User.objects.get(pk=1),
+                        verb='Uploaded Attachment',
+                        action_object=attachment,
                         target=attachment.todo,
                         attachment_name=attachment.filename)
 
@@ -54,9 +53,25 @@ def on_attachment_deleted(sender, **kwargs):
                 logger.error('Could not call delete_attachment via celery: {exception}'.format(exception=e))
                 delete_attachment(is_new=is_new, attachment=attachment, **kwargs)
 
-        action.send(User.objects.get(pk=1), 
-                    verb='Deleted Attachment', 
-                    action_object=attachment, 
-                    target=attachment.todo,
-                    attachment_name=attachment.filename)
+            action.send(User.objects.get(pk=1),
+                        verb='Deleted Attachment',
+                        action_object=attachment,
+                        target=attachment.todo,
+                        attachment_name=attachment.filename)
 
+
+@receiver(post_save, sender=ThreadedComment, dispatch_uid='todo.comment.created')
+def on_comment_created(sender, **kwargs):
+    """
+    Handle Creation of attachments
+    """
+    if not isinstance(sender, LogEntry):
+        is_new = kwargs.get('created', False)
+        comment = kwargs.get('instance')
+
+        if comment and is_new:
+            action.send(comment.user,
+                        verb='Commented on Checklist Item',
+                        action_object=comment,
+                        target=comment.content_object,
+                        content=comment.comment)

@@ -3,7 +3,7 @@
     {% for a in stream %}
         <li>
             {{ a.actor.get_full_name|default:a.actor.username }} {{ a.verb }} "<b>{{ a.data.attachment_name }}</b>
-            <br/><span class="text-muted pull-right">Page: {{ a.data.page }}</span>
+            {% if a.data.page %}<br/><span class="text-muted pull-right">Page: {{ a.data.page }}</span>{% endif %}
             <br/><span class="text-muted pull-right">{{ a.timestamp|timesince }} {% trans "ago" %}</span>
             {% if a.data.content %}<blockquote><b>{{ a.data.content }}</b></blockquote>{% endif %}
         </li>

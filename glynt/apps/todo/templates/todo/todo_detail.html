@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load paginator todo_tags glynt_helpers crispy_forms_tags templatetag_handlebars jsonify %}
+{% extends 'base.html' %}{% load paginator todo_tags glynt_helpers crispy_forms_tags comments templatetag_handlebars jsonify %}
 
 {% block page_title %}What's the current status?{% endblock %}
 {% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>{% endblock %}
@@ -58,7 +58,7 @@
                  <hr />
                 
                     <h3 class="brand"><span>Discuss</span></h3>
-                    {#% render_comment_form for object %#}
+                    {% render_comment_form for object %}
                     {#% render_comment_list for object %#}
 
                     <h3 class="brand"><span>Updates</span></h3>
@@ -98,12 +98,20 @@
 </div>
 {% endblock %}
 
+
 {% block js %}
-<script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/ajax-comments.js"></script>
+<script type="text/javascript" src="//d3dy5gmtp8yhk7.cloudfront.net/2.1/pusher.min.js"></script>
+<script type="text/javascript">
 
 var viewer_container = $('#crocdoc-viewer-container');
 var view_container_empty = $('#crocdoc-viewer-empty');
 
+var COMMENT_CONTROLS = (window.COMMENT_CONTROLS !== undefined) ? window.COMMENT_CONTROLS : {
+    'is_reversed': true,
+    'scroll_to_comment': true,
+    'alerts': false,
+};
 
 $(document).ready(function(){
 
@@ -295,6 +303,7 @@ HandleAttachment = function HandleAttachment(event) {
 {% endblock %}
 
 {% block css %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fluent_comments/css/ajaxcomments.css" />
 <style>
 
 .temp-col-avatar img {

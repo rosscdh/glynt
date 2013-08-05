@@ -38,18 +38,17 @@ $(document).ready( function () {
             type: 'DELETE',
             url: url,
             data: data,
-        },
-        beforeSend: function(jqXHR, settings) {
-            // Pull the token out of the DOM.
-            jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
-        },
-        success: function(data, textStatus, jqXHR){
-        },
-        error: function(data, textStatus, jqXHR){
-        },
-        complete: function() {
+            beforeSend: function(jqXHR, settings) {
+                // Pull the token out of the DOM.
+                jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+            },
+            success: function(data, textStatus, jqXHR){
+            },
+            error: function(data, textStatus, jqXHR){
+            },
+            complete: function() {
+            }
         });
-    });
 });
 
 </script>
