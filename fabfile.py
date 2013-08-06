@@ -237,6 +237,7 @@ def git_suggest_tag():
     }
 
 @task
+@runs_once
 def git_set_tag():
     proceed = prompt(colored('Do you want to tag this realease?', 'red'), default='y')
     if proceed in env.truthy:
