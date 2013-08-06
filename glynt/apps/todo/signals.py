@@ -96,4 +96,14 @@ def on_action_created(sender, **kwargs):
         if hasattr(target, 'pusher_id'):
             if action and is_new:
                 pusher_service = PusherPublisherService(channel=target.pusher_id, event='action.created')
-                pusher_service.process(label=action.verb, comment=action.verb)
+
+                user_name = action.actor.get_full_name()
+
+                info_object = Bunch(name=user_name,
+                                        verb=action.verb,
+                                        target_name=unicode(action),
+                                        timestamp='',
+                                        content=action.data.get('content', ''))
+                logger.debug('process: {bunch}'.format(bunch=info_object.toJSON()))
+
+                pusher_service.process(label=action.verb, comment=action.verb, **info_object)
