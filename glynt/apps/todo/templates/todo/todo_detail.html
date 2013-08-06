@@ -119,33 +119,31 @@ $(document).ready(function(){
 
     function add_stream_item(context) {
 
-console.log(context)
-        var data = $.extend(true, {}, context, {
+        var data = $.extend(true, {
             'timestamp': 'just then',
-        });
-console.log(data)
+        }, context);
+
         var html = todo_list_tpl(data);
 
         $('#updates-stream').find('[data-stream_list]:first').prepend(html);
+        $('#updates-stream').find('[data-stream_list] li:first').effect("highlight", {}, 3500);
     };
 
     // Enable pusher logging - don't include this in production
-    Pusher.log = function(message) {
+    {% if DEBUG %}Pusher.log = function(message) {
       if (window.console && window.console.log) {
         window.console.log(message);
       }
-    };
+    };{% endif %}
 
     var pusher = new Pusher('{{ PUSHER_KEY }}');
     var channel = pusher.subscribe('{{ object.pusher_id }}');
     channel.bind_all(function(event_name, data) {
-
         if ( typeof data == 'object' && data.label ) {
             GlyntJsMessages.clear = true;
             GlyntJsMessages.add_message(data.label);
-            GlyntJsMessages.add_message('<a href="javascript:document.location.reload();">Click to refresh</a>');
+            //GlyntJsMessages.add_message('<a href="javascript:document.location.reload();">Click to refresh</a>');
             GlyntJsMessages.show();
-console.log(data)
             add_stream_item(data);
         }
 
@@ -338,7 +336,7 @@ HandleAttachment = function HandleAttachment(event) {
 
 {% tplhandlebars "tpl-todo_list" %}
 <li>
-    {{ name }} {{ verb }} "<b>{{ target }}</b>
+    {{ name }} {{ verb }} <b>{{ target }}</b>
     <br/><span class="text-muted pull-right">{{ timestamp }}</span>
     {{#if content }}<blockquote><b>{{ content }}</b></blockquote>{{/if}}
 </li>
