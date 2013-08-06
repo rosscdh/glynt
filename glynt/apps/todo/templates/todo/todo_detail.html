@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load paginator todo_tags glynt_helpers crispy_forms_tags comments templatetag_handlebars jsonify %}
+{% extends 'base.html' %}{% load i18n todo_tags glynt_helpers crispy_forms_tags comments templatetag_handlebars jsonify %}
 
 {% block page_title %}What's the current status?{% endblock %}
 {% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>{% endblock %}
@@ -63,7 +63,7 @@
 
                     <h3 class="brand"><span>Updates</span></h3>
                      <div class="row">
-                        <div class="col col-lg-12">
+                        <div id="updates-stream" class="col col-lg-12">
                             {% todo_stream todo=object %}
                         </div>
                     </div>
@@ -115,24 +115,39 @@ var COMMENT_CONTROLS = (window.COMMENT_CONTROLS !== undefined) ? window.COMMENT_
 
 $(document).ready(function(){
 
+    var todo_list_tpl = Handlebars.compile($('script#tpl-todo_list').html());
+
+    function add_stream_item(context) {
+
+        var data = $.extend(true, {
+            'timestamp': 'just then',
+        }, context);
+
+        var html = todo_list_tpl(data);
+
+        $('#updates-stream').find('[data-stream_list]:first').prepend(html);
+        $('#updates-stream').find('[data-stream_list] li:first').effect("highlight", {}, 3500);
+    };
+
     // Enable pusher logging - don't include this in production
-    Pusher.log = function(message) {
+    {% if DEBUG %}Pusher.log = function(message) {
       if (window.console && window.console.log) {
         window.console.log(message);
       }
-    };
+    };{% endif %}
 
     var pusher = new Pusher('{{ PUSHER_KEY }}');
     var channel = pusher.subscribe('{{ object.pusher_id }}');
-    channel.bind('todo.comment.created', function(data) {
-      console.log(data);
-      // console.log(data.label)
-      GlyntJsMessages.clear = true;
-      GlyntJsMessages.add_message(data.label);
-      GlyntJsMessages.add_message('<a href="javascript:document.location.reload();">Click to refresh</a>');
-      GlyntJsMessages.show();
-    });
+    channel.bind_all(function(event_name, data) {
+        if ( typeof data == 'object' && data.label ) {
+            GlyntJsMessages.clear = true;
+            GlyntJsMessages.add_message(data.label);
+            //GlyntJsMessages.add_message('<a href="javascript:document.location.reload();">Click to refresh</a>');
+            GlyntJsMessages.show();
+            add_stream_item(data);
+        }
 
+    });
 
     $('a[trigger-upload]').on('click', function (event) {
         event.preventDefault();
@@ -318,7 +333,18 @@ HandleAttachment = function HandleAttachment(event) {
 </a>
 {% endtplhandlebars %}
 
+
+{% tplhandlebars "tpl-todo_list" %}
+<li>
+    {{ name }} {{ verb }} <b>{{ target }}</b>
+    <br/><span class="text-muted pull-right">{{ timestamp }}</span>
+    {{#if content }}<blockquote><b>{{ content }}</b></blockquote>{{/if}}
+</li>
+{% endtplhandlebars %}
+
 {% endblock %}
+
+
 
 {% block css %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fluent_comments/css/ajaxcomments.css" />
