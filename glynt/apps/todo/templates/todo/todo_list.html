@@ -41,6 +41,115 @@
                 </div>
             </div>
             <span id="list-items">
+                <div class="checklist-header clearfix">
+                    <h3 class="pull-left">Testing</h3>
+                </div>
+                <table class="table table-striped checklist">
+                    <tbody>
+                        <!-- Item (status=new) -->
+                        <tr class="item state-new">
+                            <td class="item-status" tooltip="New" title="New">
+                                <i class="icon-state-new"></i>
+                            </td>
+                            <td class="item-info">
+                                <h4>
+                                    <a href="#">New Item</a>
+                                </h4>
+                            </td>
+                            <td class="item-meta">
+                                <a href="#"title="Edit" data-tooltip="Edit" class="btn btn-small btn-link item-edit">
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        <!-- Item (status=open) -->
+                        <tr class="item state-open">
+                            <td class="item-status" tooltip="New" title="New">
+                                <i class="icon-state-open"></i>
+                            </td>
+                            <td class="item-info">
+                                <h4>
+                                    <a href="#">Open Item</a>
+                                </h4>
+                            </td>
+                            <td class="item-meta">
+                                <a href="#"title="Edit" data-tooltip="Edit" class="btn btn-small btn-link item-edit">
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        <!-- Item (status=open) -->
+                        <tr class="item state-open assigned-to-user">
+                            <td class="item-status" tooltip="New" title="New">
+                                <i class="icon-state-open"></i>
+                            </td>
+                            <td class="item-info">
+                                <h4>
+                                    <a href="#">Open Item (Responsible Party is Me)</a>
+                                </h4>
+                            </td>
+                            <td class="item-meta">
+                                <a href="#"title="Edit" data-tooltip="Edit" class="btn btn-small btn-link item-edit">
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        <!-- Item (status=pending) -->
+                        <tr class="item state-pending">
+                            <td class="item-status" tooltip="New" title="New">
+                                <i class="icon-state-pending"></i>
+                            </td>
+                            <td class="item-info">
+                                <h4>
+                                    <a href="#">Pending Item</a>
+                                </h4>
+                            </td>
+                            <td class="item-meta">
+                                <a href="#"title="Edit" data-tooltip="Edit" class="btn btn-small btn-link item-edit">
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        <!-- Item (status=pending assigned-to-user≈) -->
+                        <tr class="item state-pending assigned-to-user">
+                            <td class="item-status" tooltip="New" title="New">
+                                <i class="icon-state-pending"></i>
+                            </td>
+                            <td class="item-info">
+                                <h4>
+                                    <a href="#">Pending Item (Responsible Party is Me)</a>
+                                </h4>
+                            </td>
+                            <td class="item-meta">
+                                <a href="#"title="Edit" data-tooltip="Edit" class="btn btn-small btn-link item-edit">
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        <!-- Item (status=resolved) -->
+                        <tr class="item state-resolved">
+                            <td class="item-status" tooltip="New" title="New">
+                                <i class="icon-state-resolved"></i>
+                            </td>
+                            <td class="item-info" colspan="2">
+                                <h4>
+                                    <a href="#">Resolved Item</a>
+                                </h4>
+                            </td>
+                        </tr>
+                        <!-- Item (status=closed) -->
+                        <tr class="item state-closed">
+                            <td class="item-status" tooltip="New" title="New">
+                                <i class="icon-state-closed"></i>
+                            </td>
+                            <td class="item-info" colspan="2">
+                                <h4>
+                                    <a href="#">Closed Item</a>
+                                </h4>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             {% for category, items in checklist.todos_by_cat.iteritems %}
                 <div id="{{ category|slugify }}" class="checklist-header clearfix">
                     <h3 class="pull-left">{{ category }}</h3>
