@@ -27,6 +27,7 @@ def _attachment_upload_file(instance, filename):
 
 
 class ToDo(models.Model):
+    TODO_STATUS_CHOICES = TODO_STATUS
     """ ToDo Items that are associated with a user and perhaps with a project """
     user = models.ForeignKey(User, blank=True, null=True)
     project = models.ForeignKey(Project, blank=True, null=True)
@@ -34,7 +35,7 @@ class ToDo(models.Model):
     slug = models.SlugField()
     category = models.CharField(max_length=128, db_index=True)
     description = models.TextField(blank=True, null=True)
-    status = models.IntegerField(choices=TODO_STATUS.get_choices(), default=TODO_STATUS.unassigned, db_index=True)
+    status = models.IntegerField(choices=TODO_STATUS_CHOICES.get_choices(), default=TODO_STATUS_CHOICES.unassigned, db_index=True)
     data = JSONField(default={})
     date_due = models.DateTimeField(blank=True, null=True, auto_now=False, auto_now_add=False, db_index=True)
     date_created = models.DateTimeField(auto_now=False, auto_now_add=True, db_index=True)
@@ -55,7 +56,7 @@ class ToDo(models.Model):
 
     @property
     def display_status(self):
-        return TODO_STATUS.get_desc_by_value(self.status)
+        return self.TODO_STATUS_CHOICES.get_desc_by_value(self.status)
 
     @property
     def original_name(self):
