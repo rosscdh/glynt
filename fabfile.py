@@ -160,7 +160,7 @@ def virtualenv(cmd, **kwargs):
 
 @task
 def pip_install():
-    virtualenv('pip install -e git+https://github.com/rosscdh/django-fluent-comments.git@js-controls#egg=django-fluent-comments --upgrade')
+    virtualenv('pip install pusher')
 
 @task
 def check_permissions():
@@ -514,12 +514,14 @@ def requirements():
 
 @task
 @serial
+@runs_once
 def newrelic_note():
     if not hasattr(env, 'deploy_desc'):
         env.deploy_desc = prompt(colored('Hi %s, Please provide a Deployment Note:' % env.local_user, 'yellow'))
 
 @task
 @serial
+@runs_once
 def newrelic_deploynote():
     if not env.deploy_desc:
         print(colored('No env.deploy_desc was defined cant post to new relic', 'yellow'))
