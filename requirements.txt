@@ -17,7 +17,7 @@ bunch
 gitpython
 
 django-filepicker
-django-uuidfield
+-e git+https://github.com/dcramer/django-uuidfield.git#egg=django-uuidfield
 django-extensions
 django-braces
 django-templated-email
