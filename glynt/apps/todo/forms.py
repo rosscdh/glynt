@@ -4,6 +4,8 @@ from django.conf import settings
 from django import forms
 from django.core.urlresolvers import reverse
 
+from glynt.apps.utils import generate_unique_slug
+
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset
 
@@ -53,7 +55,7 @@ class ToDoForm(forms.ModelForm):
 
 
 @parsleyfy
-class CutomerToDoForm(ToDoForm):
+class CustomerToDoForm(ToDoForm):
     """
     Form to allow user to create and edit ToDo items
     category is set via url param
@@ -81,10 +83,21 @@ class CutomerToDoForm(ToDoForm):
                 'project',
             )
         )
-        super(CutomerToDoForm, self).__init__(*args, **kwargs)
+        super(CustomerToDoForm, self).__init__(*args, **kwargs)
 
         self.fields['category'] = forms.ChoiceField(initial=self.request.GET.get('category', None), choices=self.project_service.category_initial())
         self.fields['project'].initial = self.project_service.project.pk
 
     def clean_project(self):
         return self.project_service.project
+
+    def save(self, *args, **kwargs):
+        """ Ensure that we have a slug, required for creating new items manually """
+        obj = super(CustomerToDoForm, self).save(*args, **kwargs)
+        if obj.slug in [None, '']:
+            obj.slug = generate_unique_slug(instance=obj)
+            obj.save(update_fields=['slug'])
+
+        return obj
+
+        

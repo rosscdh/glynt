@@ -11,7 +11,7 @@ from glynt.apps.project.models import Project
 from braces.views import JSONResponseMixin
 
 from glynt.apps.project.models import Project
-from .forms import CutomerToDoForm, AttachmentForm
+from .forms import CustomerToDoForm, AttachmentForm
 from .models import ToDo, Attachment
 from .services import CrocdocAttachmentService
 
@@ -119,7 +119,7 @@ class ToDoDiscussionView(DetailView, BaseToDoDetailMixin):
 
 class ToDoEditView(UpdateView, BaseToDoDetailMixin, ModelFormMixin):
     template_name = 'todo/todo_form.html'
-    form_class = CutomerToDoForm
+    form_class = CustomerToDoForm
 
     def get_success_url(self):
         return self.project.get_checklist_absolute_url()
@@ -148,7 +148,7 @@ class ToDoEditView(UpdateView, BaseToDoDetailMixin, ModelFormMixin):
 
 class ToDoCreateView(ToDoEditView):
     template_name = 'todo/todo_form.html'
-    form_class = CutomerToDoForm
+    form_class = CustomerToDoForm
 
 
 class ToDoAttachmentView(DetailView, BaseToDoDetailMixin):

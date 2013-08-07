@@ -9,7 +9,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 
-from glynt.apps.utils import generate_unique_slug
 from glynt.apps.project.models import Project
 
 from django_filepicker.models import FPFileField

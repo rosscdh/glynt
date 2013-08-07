@@ -4,8 +4,6 @@ import factory
 from django.contrib.sites.models import Site
 from django.contrib.auth.models import User, AnonymousUser
 
-import random
-
 
 class SiteFactory(factory.Factory):
     FACTORY_FOR = Site
