@@ -4,15 +4,18 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete
 from django.contrib.admin.models import LogEntry
 
-# from notifications import notify
-# from notifications.models import Notification
+from threadedcomments.models import ThreadedComment
+
+from bunch import Bunch
 
 from .tasks import delete_attachment
 from .models import Attachment
 from .services import CrocdocAttachmentService
 
-from django.contrib.auth.models import User
+from glynt.apps.services.pusher import PusherPublisherService
+
 from actstream import action
+from actstream.models import Action
 
 import logging
 logger = logging.getLogger('django.request')
@@ -31,12 +34,6 @@ def on_attachment_created(sender, **kwargs):
             crocdoc_service = CrocdocAttachmentService(attachment=attachment)
             crocdoc_service.process()
 
-            action.send(User.objects.get(pk=1), 
-                        verb='Uploaded Attachment', 
-                        action_object=attachment, 
-                        target=attachment.todo,
-                        attachment_name=attachment.filename)
-
 
 @receiver(post_delete, sender=Attachment, dispatch_uid='todo.attachment.deleted')
 def on_attachment_deleted(sender, **kwargs):
@@ -54,9 +51,59 @@ def on_attachment_deleted(sender, **kwargs):
                 logger.error('Could not call delete_attachment via celery: {exception}'.format(exception=e))
                 delete_attachment(is_new=is_new, attachment=attachment, **kwargs)
 
-        action.send(User.objects.get(pk=1), 
-                    verb='Deleted Attachment', 
-                    action_object=attachment, 
-                    target=attachment.todo,
-                    attachment_name=attachment.filename)
 
+@receiver(post_save, sender=ThreadedComment, dispatch_uid='todo.comment.created')
+def on_comment_created(sender, **kwargs):
+    """
+    Handle Creation of attachments
+    """
+    if not isinstance(sender, LogEntry):
+        is_new = kwargs.get('created', False)
+        comment = kwargs.get('instance')
+
+        if comment and is_new:
+            verb = 'Commented on Checklist Item'
+            action.send(comment.user,
+                        verb=verb,
+                        action_object=comment,
+                        target=comment.content_object,
+                        content=comment.comment)
+
+            user_name = comment.user.get_full_name()
+
+            pusher_service = PusherPublisherService(channel=comment.content_object.pusher_id, event='todo.comment.created')
+
+            info_object = Bunch(name=user_name,
+                                    verb=verb,
+                                    target_name=comment.content_object.name,
+                                    timestamp='',
+                                    content=comment.comment)
+            logger.debug('process: {bunch}'.format(bunch=info_object.toJSON()))
+            pusher_service.process( label='{name} has added a comment to this Checklist Item: {comment}'.format(name=user_name, comment=comment.comment), **info_object)
+
+
+@receiver(post_save, sender=Action, dispatch_uid='action.created')
+def on_action_created(sender, **kwargs):
+    """
+    Handle Creation of attachments
+    """
+    if not isinstance(sender, LogEntry):
+        is_new = kwargs.get('created', False)
+
+        action = kwargs.get('instance')
+        target = action.target
+
+        if hasattr(target, 'pusher_id'):
+            if action and is_new:
+                pusher_service = PusherPublisherService(channel=target.pusher_id, event='action.created')
+
+                user_name = action.actor.get_full_name()
+
+                info_object = Bunch(name=user_name,
+                                        verb=action.verb,
+                                        target_name=unicode(action),
+                                        timestamp='',
+                                        content=action.data.get('content', ''))
+                logger.debug('process: {bunch}'.format(bunch=info_object.toJSON()))
+
+                pusher_service.process(label=action.verb, comment=action.verb, **info_object)

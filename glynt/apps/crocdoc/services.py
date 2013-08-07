@@ -58,6 +58,7 @@ class CrocdocBaseEvent(Bunch):
     _deleted_verb = None
     _user = None
     _attachment = None
+    label = 'Crocdoc Webhook Callback'
     content = None
     event = None
     type = None
@@ -67,8 +68,8 @@ class CrocdocBaseEvent(Bunch):
     uuid = None
 
     def __init__(self, *args, **kwargs):
-        self.__dict__.update(kwargs)
         super(CrocdocBaseEvent, self).__init__(*args, **kwargs)
+        self.__dict__.update(kwargs)
 
     @property
     def user(self):

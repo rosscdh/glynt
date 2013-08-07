@@ -75,9 +75,10 @@
     <script type="text/javascript" src="{{ STATIC_URL }}handlebars.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}handlebars-helpers.js"></script>
     <script type="text/javascript">{% profile_card_js %}</script>
-
     <script type="text/javascript" src="{{ STATIC_URL }}js/application.js"></script>
 {% endcompress %}
+
+{% handlebars_messages %}
 
 <script type="text/javascript" src="{{ STATIC_URL }}js/moment/moment.min.js"></script>
 {% moment_js %}

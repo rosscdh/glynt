@@ -1,5 +1,5 @@
 {% load templatetag_handlebars %}
-{% tplhandlebars "tpl-messages" %}<div class="container">
+{% tplhandlebars "tpl-messages" %}<div class="tpl-messages-item container">
     <div class="row">
         <div class="alert {{alert_type}}">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -23,27 +23,35 @@ var GlyntJsMessages = {
         tags = tags || null
         this.messages.push({'message': new Handlebars.SafeString(msg), 'tags': tags});
     }
+    ,target_in_before_after: '{{ target_in_before_after }}'
+    ,clear: false
     ,render: function render(extra_context) {
         var self = this;
         extra_context = extra_context || {}
+
         context = $.extend({
             'messages': self.messages
         }, extra_context);
-        console.log(context)
+
         return this.template(context)
     }
     ,show: function show(){
         var self = this;
+        console.log(self.clear)
+        if (self.clear === true) {
+            $('.tpl-messages-item').remove();
+        }
+
         output = self.render();
-        {% if target_in_before_after == 'in' %}
-        self.output_target.html(output);
-        {% endif %}
-        {% if target_in_before_after == 'before' %}
-        self.output_target.before(output);
-        {% endif %}
-        {% if target_in_before_after == 'after' %}
-        self.output_target.after(output);
-        {% endif %}
+
+        if (self.target_in_before_after == 'in') {
+            self.output_target.html(output);
+        } else if (self.target_in_before_after == 'before') {
+            self.output_target.before(output);
+        } else if (self.target_in_before_after == 'after') {
+            self.output_target.after(output);
+        }
+        self.messages = [];
     }
     ,hide: function hide(){
         

@@ -24,10 +24,19 @@ def default_profile_image(request):
         'default_profile_image': os.path.abspath('%s%s' % (settings.STATIC_URL, image))
     }
 
+
 def USE_THREADEDCOMMENTS(request):
     return {
         'USE_THREADEDCOMMENTS': True if 'threadedcomments' in settings.INSTALLED_APPS else False
     }
+
+
+def PUSHER_DATA(request):
+    return {
+      'PUSHER_APP_ID': getattr(settings, 'PUSHER_APP_ID'),
+      'PUSHER_KEY': getattr(settings, 'PUSHER_KEY')
+    }
+
 
 def notification_unread(request):
     num_unread = 0

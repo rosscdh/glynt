@@ -1,8 +1,5 @@
-{% load url from future %}{% load i18n glynt_helpers %}
-
-<div id="c{{ comment.id }}" class="row post comment-item message-{% if comment.user.pk == user.pk %}right{% else %}left{% endif %}">
+{% load url from future %}{% load i18n glynt_helpers %}<div id="c{{ comment.id }}" class="row post comment-item message-{% if comment.user.pk == user.pk %}right{% else %}left{% endif %}">
     <div class="temp-col-avatar post-avatar profile-card" data-username="{{ comment.user.username }}" data-img_class="img-circle" data-template="mini">&nbsp;</div>
-
     <div class="temp-col-content post-content">
         <span class="post-meta softer"><a href="">{{ comment.user.get_full_name }}</a> commented <span>{% moment comment.submit_date %}</span></span>
         <p>{{ comment.comment|linebreaks }}</p>

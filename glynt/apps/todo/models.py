@@ -27,6 +27,7 @@ def _attachment_upload_file(instance, filename):
 
 
 class ToDo(models.Model):
+    TODO_STATUS_CHOICES = TODO_STATUS
     """ ToDo Items that are associated with a user and perhaps with a project """
     user = models.ForeignKey(User, blank=True, null=True)
     project = models.ForeignKey(Project, blank=True, null=True)
@@ -46,12 +47,16 @@ class ToDo(models.Model):
         return '{name}'.format(name=self.name)
 
     @property
+    def pusher_id(self):
+        return self.slug
+
+    @property
     def todo_type(self):
         return '%s' % 'Generic' if not self.project else 'Need to hook up to project'
 
     @property
     def display_status(self):
-        return TODO_STATUS.get_desc_by_value(self.status)
+        return self.TODO_STATUS_CHOICES.get_desc_by_value(self.status)
 
     @property
     def original_name(self):
@@ -60,12 +65,12 @@ class ToDo(models.Model):
     def get_absolute_url(self):
         return reverse('todo:edit', kwargs={'project_uuid': self.project.uuid, 'slug': self.slug})
 
-    def save(self, *args, **kwargs):
-        """ Ensure that we have a slug """
-        if self.slug in [None, '']:
-            self.slug = generate_unique_slug(instance=self)
+    # def save(self, *args, **kwargs):
+    #     """ Ensure that we have a slug """
+    #     if self.slug in [None, '']:
+    #         self.slug = generate_unique_slug(instance=self)
 
-        return super(ToDo, self).save(*args, **kwargs)
+    #     return super(ToDo, self).save(*args, **kwargs)
 
 
 class Attachment(models.Model):
@@ -78,6 +83,10 @@ class Attachment(models.Model):
 
     class Meta:
         ordering = ['-date_created']
+
+    @property
+    def pusher_id(self):
+        return self.todo.pusher_id
 
     @property
     def filename(self):
@@ -109,4 +118,4 @@ class Attachment(models.Model):
 """
 import signals
 """
-from glynt.apps.todo.signals import on_attachment_created, on_attachment_deleted
+from glynt.apps.todo.signals import (on_attachment_created, on_attachment_deleted, on_comment_created)

@@ -141,6 +141,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "glynt.context_processors.project_info",
     "glynt.context_processors.project_environment",
     "glynt.context_processors.default_profile_image",
+    "glynt.context_processors.PUSHER_DATA",
     "glynt.context_processors.USE_THREADEDCOMMENTS",
     "social_auth.context_processors.social_auth_by_type_backends",
     "social_auth.context_processors.social_auth_by_name_backends",
@@ -240,8 +241,8 @@ HELPER_APPS = (
     # Vast array of Storage types
     'storages',
     # Project System
-    # 'fluent_comments',
-    # 'threadedcomments',
+    'fluent_comments',
+    'threadedcomments',
 
     # Notications
     'notifications',
@@ -281,9 +282,12 @@ TEST_RUNNER = 'glynt.test_runner.GlyntAppTestRunner'
 # disable celery for test
 BROKER_BACKEND = 'memory'
 
-#COMMENTS_APP = 'fluent_comments'
-#FLUENT_COMMENTS_USE_EMAIL_NOTIFICATION = False # We handle our own email notifications
-#NOTIFY_USE_JSONFIELD = True
+# comments app
+COMMENTS_APP = 'fluent_comments'
+FLUENT_COMMENTS_USE_EMAIL_NOTIFICATION = False # We handle our own email notifications
+
+# notifications
+NOTIFY_USE_JSONFIELD = True
 
 
 LOGIN_URL          = '/'
@@ -384,7 +388,7 @@ INTERCOM_API_SECRET = '-sjPyiyI5P44z3QsHLDUWfoLK8Rml7Wbg2wmj64L'
 
 
 ACTSTREAM_SETTINGS = {
-    'MODELS': ('auth.user', 'project.project', 'todo.todo', 'todo.attachment'),
+    'MODELS': ('auth.user', 'project.project', 'todo.todo', 'todo.attachment', 'threadedcomments.threadedcomment'),
     'MANAGER': 'glynt.apps.streams.LawpalStreamActionManager',
     'FETCH_RELATIONS': True,
     'USE_PREFETCH': True,
@@ -399,50 +403,6 @@ DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d
 
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = False
-
-if DEBUG:
-    INSTALLED_APPS = INSTALLED_APPS + (
-        'django.contrib.webdesign',
-        # User switcher
-        'debug_toolbar_user_panel',
-        # Debug toolbar panels
-        'template_timings_panel',
-    )
-
-    INTERNAL_IPS = ('127.0.0.1',)
-
-    DEBUG_TOOLBAR_PANELS = (
-        'debug_toolbar.panels.version.VersionDebugPanel',
-        'debug_toolbar.panels.timer.TimerDebugPanel',
-        'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
-        'debug_toolbar.panels.headers.HeaderDebugPanel',
-        'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
-        'debug_toolbar.panels.template.TemplateDebugPanel',
-        'debug_toolbar.panels.sql.SQLDebugPanel',
-        'debug_toolbar.panels.signals.SignalDebugPanel',
-        'debug_toolbar.panels.logger.LoggingPanel',
-        'debug_toolbar_user_panel.panels.UserPanel',
-        'template_timings_panel.panels.TemplateTimings.TemplateTimings',
-    )
-
-    if not IS_TESTING:
-        MIDDLEWARE_CLASSES += (
-            'debug_toolbar.middleware.DebugToolbarMiddleware',
-        )
-        DEBUG_TOOLBAR_CONFIG = {
-            'INTERCEPT_REDIRECTS': False
-        }
-        INSTALLED_APPS = INSTALLED_APPS + (
-            'debug_toolbar',
-        )
-
-    if IS_TESTING:
-        INSTALLED_APPS = INSTALLED_APPS + (
-            'django_nose',
-        )
-        NOSE_ARGS = [
-            '--with-coverage',
-        ]
 
 # Process model updates in real time
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'

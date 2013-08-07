@@ -135,7 +135,7 @@ class ToDoItemsFromDbMixin(object):
             self.todos_by_cat[db_item.category] = self.todos_by_cat.get(db_item.category, [])
             self.todos_by_cat[db_item.category].append(db_item)
 
-        # return the actual items and not our temp dictionart
+        # return the actual items and not our temp dictionary
         return slugs.values()
 
     def modify_item_values(self, item):

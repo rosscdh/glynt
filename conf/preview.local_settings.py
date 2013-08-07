@@ -49,11 +49,19 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 SESSION_CACHE_ALIAS = 'session_cache'
 SESSION_COOKIE_SECURE = True
 
+
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
+
 
 AWS_FILESTORE_BUCKET = 'preview.lawpal.com'
 FILEPICKER_API_KEY = 'A4Ly2eCpkR72XZVBKwJ06z'
 CROCDOC_API_KEY = 'GT9FRcpXVs61rgauSjCIzb3Y'
+
+
+PUSHER_APP_ID = 44301
+PUSHER_KEY = '60281f610bbf5370aeaa'
+PUSHER_SECRET = '72b185ac8ba23bda3552'
+
 
 GOOGLE_DISPLAY_NAME = 'LawPal.com - Development'
 GOOGLE_OAUTH2_CLIENT_ID = '316492043888-mhcap930opo9uf2kj1rv9654odm6niqu.apps.googleusercontent.com'
