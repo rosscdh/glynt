@@ -74,12 +74,12 @@ def on_comment_created(sender, **kwargs):
             pusher_service = PusherPublisherService(channel=comment.content_object.pusher_id, event='todo.comment.created')
 
             info_object = Bunch(name=user_name,
-                                    verb=verb,
-                                    target_name=comment.content_object.name,
-                                    timestamp='',
-                                    content=comment.comment)
-            logger.debug('process: {bunch}'.format(bunch=info_object.toJSON()))
-            pusher_service.process( label='{name} has added a comment to this Checklist Item: {comment}'.format(name=user_name, comment=comment.comment), **info_object)
+                                verb=verb,
+                                target_name=comment.content_object.name,
+                                timestamp='',
+                                content=comment.comment)
+
+            pusher_service.process(label='{name} has added a comment to this Checklist Item: {comment}'.format(name=user_name, comment=comment.comment), **info_object)
 
 
 @receiver(post_save, sender=Action, dispatch_uid='action.created')
@@ -104,6 +104,5 @@ def on_action_created(sender, **kwargs):
                                         target_name=unicode(action),
                                         timestamp='',
                                         content=action.data.get('content', ''))
-                logger.debug('process: {bunch}'.format(bunch=info_object.toJSON()))
 
                 pusher_service.process(label=action.verb, comment=action.verb, **info_object)
