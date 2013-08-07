@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from django import template
+from django.contrib.contenttypes.models import ContentType
 
-from actstream.models import model_stream
+from actstream.models import Action
 
 from glynt.apps.todo import TODO_STATUS
 
@@ -43,6 +44,7 @@ def todo_status_assignedto_class(todo_user):
 
 @register.inclusion_tag('todo/stream/todo_list.html', takes_context=False)
 def todo_stream(todo):
+    todo_content_type = ContentType.objects.get(app_label="todo", model="todo")
     return {
-        'stream': model_stream(todo).all()
+        'stream': Action.objects.filter(action_object_object_id=todo.pk, action_object_content_type=todo_content_type)
     }
