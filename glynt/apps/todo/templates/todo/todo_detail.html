@@ -132,10 +132,12 @@ $(document).ready(function(){
     var channel = pusher.subscribe('{{ object.pusher_id }}');
     channel.bind_all(function(event_name, data) {
         if ( typeof data == 'object' && data.label ) {
+            /**
             GlyntJsMessages.clear = true;
             GlyntJsMessages.add_message(data.label);
-            //GlyntJsMessages.add_message('<a href="javascript:document.location.reload();">Click to refresh</a>');
+            GlyntJsMessages.add_message('<a href="javascript:document.location.reload();">Click to refresh</a>');
             GlyntJsMessages.show();
+            **/
             add_stream_item(data);
         }
 
