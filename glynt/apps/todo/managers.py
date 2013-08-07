@@ -4,6 +4,9 @@ from glynt.apps.todo import TODO_STATUS
 
 
 class DefaultToDoManager(models.Manager):
+    def deleted(self, **kwargs):
+        return self.filter(status=TODO_STATUS.new).filter(is_deleted=True, **kwargs)
+
     def new(self, **kwargs):
         return self.filter(status=TODO_STATUS.new).filter(**kwargs)
 

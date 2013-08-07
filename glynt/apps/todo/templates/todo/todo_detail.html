@@ -19,7 +19,7 @@
                 <li><a href="#">Complete</a></li>
               </ul>
             </div>
-            <div class="btn-group">
+            <div id="item-nav-controls" class="btn-group">
                 {% if back_and_forth.prev %}<button class="btn btn-prev"><i class="icon-chevron-left"></i></button>{% endif %}
                 <button class="btn btn-home"><i class="icon-home"></i></button> 
                 {% if back_and_forth.next %}<button class="btn btn-next"><i class="icon-chevron-right"></i></button> {% endif %}
@@ -145,7 +145,7 @@ $(document).ready(function(){
 
     $('a[trigger-upload]').on('click', function (event) {
         event.preventDefault();
-        $('div.fpfilewidget button.btn-primary:first').trigger('click');        
+        $('div.fpfilewidget button.btn-primary:first').trigger('click');
     });
 
     $('.btn-home').on('click', function (event) {
@@ -158,45 +158,45 @@ $(document).ready(function(){
         document.location = "{% url 'todo:item' project_uuid=project.uuid slug=back_and_forth.next.slug %}";
         {% endif %}
     });
+
     $('.btn-prev').on('click', function (event) {
         event.preventDefault();
         {% if back_and_forth.prev.slug %}
         document.location = "{% url 'todo:item' project_uuid=project.uuid slug=back_and_forth.prev.slug %}";
         {% endif %}
     });
+
     $('.btn-delete').on('click', function (event) {
         event.preventDefault();
 
         var elem = $(this);
         elem.fadeOut('slow');
 
-        var target_elem = $('a.attachment-item.active:first');
-        var attachment_id = target_elem.data('attachment_id');
+        var url = '/api/v1/todo/{pk}'.assign({'pk': '{{ object.pk }}'});
 
-        if (attachment_id) {
-            var url = 'http://local.weareml.com:8000/api/v1/todo/attachment/{attachment_id}'.assign({'attachment_id': attachment_id});
-            $.ajax({
-                type: 'DELETE',
-                url: url,
-                dataType: 'application/json',
-                contentType: 'application/json',
-                beforeSend: function(jqXHR, settings) {
-                    // Pull the token out of the DOM.
-                    jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]:first').val());
-                },
-                complete: function() {
-                    target_elem.remove();
-                    console.log($('a.attachment-item:first').length)
-                    if ($('a.attachment-item:first').length > 0) {
-                        $('a.attachment-item:first').trigger('click');
-                    } else {
-                        console.log('no items hide main show message')
-                        viewer_container.hide();
-                        view_container_empty.removeClass('hide').show();
-                    }
+        $.ajax({
+            type: 'PUT',
+            url: url,
+            data: JSON.stringify({'is_deleted': true}),
+            dataType: 'application/json',
+            contentType: 'application/json',
+            beforeSend: function(jqXHR, settings) {
+                // Pull the token out of the DOM.
+                jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]:first').val());
+            },
+            success: function() {
+                if ($('#item-nav-controls .btn-next:first').length > 0) {
+                    $('#item-nav-controls .btn-next:first').trigger('click');
+                } else {
+                    console.log('home')
+                    $('#item-nav-controls .btn-home:first').trigger('click');
                 }
-            });
-        }
+            },
+            complete: function() {
+                console.log('deleted')
+            }
+        });
+
     });
 
     /**

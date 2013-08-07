@@ -120,22 +120,34 @@ class ToDoItemsFromDbMixin(object):
                 self.slugs[item.slug] = item
         return self.slugs
 
+    def delete_item(self, item):
+        for cat, items in self.todos_by_cat.iteritems():
+            for c, i in enumerate(items):
+                if item.slug == i.slug:
+                    del items[c]
+                    break
+
+
     def append_todo_obj(self, todos):
         """ Append obj to the todo item """
         slugs = self.todos_by_slug(todos)
         # get a set of todo items in the database
         # and append them to the item object
         for db_item in self.db_todos():
-            try:
-                slugs[db_item.slug].obj = db_item
-                self.modify_item_values(slugs[db_item.slug])
-            except KeyError:
-                # if the index does not exist, it means its 
-                # a custom created item that the user has added
-                slugs[db_item.slug] = db_item
-                slugs[db_item.slug].obj = db_item
-                self.todos_by_cat[db_item.category] = self.todos_by_cat.get(db_item.category, [])
-                self.todos_by_cat[db_item.category].append(slugs[db_item.slug])
+            if db_item.is_deleted is True:
+                del slugs[db_item.slug]
+                self.delete_item(db_item)
+            else:
+                try:
+                    slugs[db_item.slug].obj = db_item
+                    self.modify_item_values(slugs[db_item.slug])
+                except KeyError:
+                    # if the index does not exist, it means its 
+                    # a custom created item that the user has added
+                    slugs[db_item.slug] = db_item
+                    slugs[db_item.slug].obj = db_item
+                    self.todos_by_cat[db_item.category] = self.todos_by_cat.get(db_item.category, [])
+                    self.todos_by_cat[db_item.category].append(slugs[db_item.slug])
 
         # return the actual items and not our temp dictionary
         return slugs.values()
@@ -223,11 +235,11 @@ class ProjectCheckListService(ToDoItemsFromYamlMixin, ToDoItemsFromDbMixin):
             try:
                 previous = temp_todo_list[c-1]
             except IndexError:
-                pass
+                previous = None
             try:
                 next = temp_todo_list[c+1]
             except IndexError:
-                pass
+                next = None
 
             logger.debug('slug: {slug} == {item_slug} type: {type} == {type_b}'.format(slug=item.slug, item_slug=slug, type=type(str(item.slug)), type_b=type(str(slug))))
 

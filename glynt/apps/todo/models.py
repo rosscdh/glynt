@@ -40,6 +40,7 @@ class ToDo(models.Model):
     date_due = models.DateTimeField(blank=True, null=True, auto_now=False, auto_now_add=False, db_index=True)
     date_created = models.DateTimeField(auto_now=False, auto_now_add=True, db_index=True)
     date_modified = models.DateTimeField(auto_now=True, auto_now_add=True, db_index=True)
+    is_deleted = models.BooleanField(default=False, db_index=True)
 
     objects = DefaultToDoManager()
 
