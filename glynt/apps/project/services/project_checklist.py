@@ -5,6 +5,7 @@ from glynt.apps.todo import TODO_STATUS
 from glynt.apps.project.bunches import ProjectIntakeFormIsCompleteBunch
 
 from bunch import Bunch
+
 import copy
 from collections import OrderedDict
 import hashlib
@@ -127,16 +128,14 @@ class ToDoItemsFromDbMixin(object):
         for db_item in self.db_todos():
             try:
                 slugs[db_item.slug].obj = db_item
+                self.modify_item_values(slugs[db_item.slug])
             except KeyError:
                 # if the index does not exist, it means its 
                 # a custom created item that the user has added
                 slugs[db_item.slug] = db_item
                 slugs[db_item.slug].obj = db_item
-
-            self.modify_item_values(slugs[db_item.slug])
-
-            self.todos_by_cat[db_item.category] = self.todos_by_cat.get(db_item.category, [])
-            self.todos_by_cat[db_item.category].append(db_item)
+                self.todos_by_cat[db_item.category] = self.todos_by_cat.get(db_item.category, [])
+                self.todos_by_cat[db_item.category].append(slugs[db_item.slug])
 
         # return the actual items and not our temp dictionary
         return slugs.values()
@@ -207,25 +206,36 @@ class ProjectCheckListService(ToDoItemsFromYamlMixin, ToDoItemsFromDbMixin):
     def category_initial(self):
         return ((c, c) for c in self.get_categories())
 
-    def todo_item_by_slug(self, slug):
-        items = Bunch(prev=None, current=None, next=None)
-        for c, item in enumerate(self.todos):
-            if item.slug == slug:
-                try:
-                    items.prev = self.todos[c-1]
-                except IndexError:
-                    items.prev = None
+    def navigation_items_object(self, slug):
+        """ flatten the items by category and then get prev and next based on sorted cat"""
+        temp_todo_list = []
+        navigation_items = Bunch(prev=None, current=None, next=None)
 
-                items.current = item
+        for cat, items in self.todos_by_cat.iteritems():
+            if items:
+                for i in items:
+                    temp_todo_list.append(i)
 
-                try:
-                    items.next = self.todos[c+1]
-                except IndexError:
-                    items.next = None
+        for c, item in enumerate(temp_todo_list):
+            try:
+                previous = temp_todo_list[c-1]
+            except IndexError:
+                pass
+            try:
+                next = temp_todo_list[c+1]
+            except IndexError:
+                pass
+
+            logger.debug('slug: {slug} == {item_slug} type: {type} == {type_b}'.format(slug=item.slug, item_slug=slug, type=type(str(item.slug)), type_b=type(str(slug))))
+
+            if str(item.slug) == str(slug):
+                navigation_items.prev = previous
+                navigation_items.current = item
+                navigation_items.next = next
                 # exit the forloop
                 break
 
-        return items
+        return navigation_items
 
     def process(self):
         logger.info('Process Project Checklist')
