@@ -36,7 +36,7 @@ class ToDoItemsFromYamlMixin(object):
                         todos_by_cat[cat_slug] = []
                     else:
                         # parse the list and assign extra attribs
-                        self.parse_checklist(checklist=item.checklist, category=category)
+                        self.parse_checklist(current_length=len(checklist), checklist=item.checklist, category=category)
                         checklist = list(checklist + item.checklist)
 
                         todos_by_cat[cat_slug] = todos_by_cat.get(cat_slug, [])
@@ -192,7 +192,7 @@ class ProjectCheckListService(ToDoItemsFromYamlMixin, ToDoItemsFromDbMixin):
         t = template.Template(value)
         return t.render(context)
 
-    def parse_checklist(self, checklist, **kwargs):
+    def parse_checklist(self, current_length, checklist, **kwargs):
         for i, item in enumerate(checklist):
             # indicate attachment status
             try:
@@ -208,8 +208,14 @@ class ProjectCheckListService(ToDoItemsFromYamlMixin, ToDoItemsFromDbMixin):
             item.num_comments = 0
             item.status = TODO_STATUS.new
             item.display_status = TODO_STATUS.get_desc_by_value(item.status)
+            item.sort_position = current_length + i
+            item.sort_position_by_cat = i
+            item.item_hash_num = self.item_hash_num(item) # ties in with model.item_hash_num()
             # updated with various kwargs passed in
             item.update(kwargs)
+
+    def item_hash_num(self, item):
+        return '#{primary}-{secondary}'.format(primary=int(item.get('sort_position', 0)), secondary=int(item.get('sort_position_by_cat', 0)))
 
     def get_categories(self):
         logger.info('Get Project transactions')

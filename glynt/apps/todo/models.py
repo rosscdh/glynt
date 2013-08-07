@@ -32,7 +32,7 @@ class ToDo(models.Model):
     user = models.ForeignKey(User, blank=True, null=True)
     project = models.ForeignKey(Project, blank=True, null=True)
     name = models.CharField(max_length=128)
-    slug = models.SlugField()
+    slug = models.SlugField() # inherited from the .yml list based on project_id and other mixins
     category = models.CharField(max_length=128, db_index=True)
     description = models.TextField(blank=True, null=True)
     status = models.IntegerField(choices=TODO_STATUS.get_choices(), default=TODO_STATUS.new, db_index=True)
@@ -63,15 +63,12 @@ class ToDo(models.Model):
     def original_name(self):
         return self.data.get('name', 'No original name was found, was created by user')
 
+    @property
+    def item_hash_num(self):
+        return '#{primary}-{secondary}'.format(primary=int(self.data.get('sort_position', 0)), secondary=int(self.data.get('sort_position_by_cat', 0)))
+
     def get_absolute_url(self):
         return reverse('todo:edit', kwargs={'project_uuid': self.project.uuid, 'slug': self.slug})
-
-    # def save(self, *args, **kwargs):
-    #     """ Ensure that we have a slug """
-    #     if self.slug in [None, '']:
-    #         self.slug = generate_unique_slug(instance=self)
-
-    #     return super(ToDo, self).save(*args, **kwargs)
 
 
 class Attachment(models.Model):

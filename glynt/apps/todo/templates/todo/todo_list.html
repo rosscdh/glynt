@@ -64,6 +64,7 @@
                                     </h4>
                                 </td>
                                 <td class="item-meta">
+                                    <small class="soft">{{ item.item_hash_num }}</small><br/>
                                     <a href="{% url 'todo:edit' project_uuid=project.uuid slug=item.slug %}" data-toggle="modal" data-target="#modal-checklist-item" title="Edit" data-tooltip="Edit" class="btn btn-small btn-link item-edit">
                                         <i class="glyphicon glyphicon-pencil"></i>
                                     </a>
@@ -89,83 +90,25 @@
     <script src="{{ STATIC_URL }}js/jquery.hotkeys-0.8.js"></script>
     <script src="{{ STATIC_URL }}todo/jquery.plugin.filter_status.js"></script>
     <!-- <script src="{{ STATIC_URL }}todo/jquery.plugin.edit_label.js"></script> -->
-<script>
-$(document).ready( function () {
+    <script>
+    $(document).ready( function () {
 
-    $('#list-items').filter_status({
-        'state_modifier': $('#state_modifier')
-    });
-
-    // $('#list-items').edit_label({
-    //     'project_uuid': '{{ project.uuid }}',
-    //     'url': '/api/v1/todo/name/{slug}',
-    //     'edit_template': '<input type="text" id="{id}" name="{name}" value="{value}" data-original_value="{value}" data-update_name_url="{url}" />',
-    //     'remove_button': '<a data-restore_label="true" href="javascript:;"><i class="icon-remove-sign"></i></a>',
-    //     'target_selector': 'a:first'
-    // });
-
-    /**
-    * For all the data toggles capture and modify the click event
-    * we want to populate the modal-body with our updated data
-    */
-    $('[data-toggle="modal"]').click(function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-
-        var elem = $(this);
-        var url = elem.data('remote') || elem.attr('href');
-        var target = $('#modal-checklist-item');
-        var modal_body = target.find('.modal-body');
-
-        modal_body.html('');// clear html
-        modal_body.load(url, function (data) {
-            modal_body.html(data);
-            // fire the laod event only on successful load of url
-            target.modal('show'); // load html
+        $('#list-items').filter_status({
+            'state_modifier': $('#state_modifier')
         });
 
+        // $('#list-items').edit_label({
+        //     'project_uuid': '{{ project.uuid }}',
+        //     'url': '/api/v1/todo/name/{slug}',
+        //     'edit_template': '<input type="text" id="{id}" name="{name}" value="{value}" data-original_value="{value}" data-update_name_url="{url}" />',
+        //     'remove_button': '<a data-restore_label="true" href="javascript:;"><i class="icon-remove-sign"></i></a>',
+        //     'target_selector': 'a:first'
+        // });
 
     });
-    $('#modal-checklist-item').on('show.bs.modal', function (event) {
-        var target = $(event.currentTarget);
-        var title = target.find('.modal-title');
-        var body = target.find('.modal-body');
-        var action_button = $('.modal-footer .btn-success:first');
-        var form = body.find('form:first');
-        // var form_action = form.attr('action');
-        var name = form.find('input[type=text]:first').val();
-
-        if (name && name !== '') {
-            title.html('Edit - {name}'.assign({'name': name}));
-        } else {
-            title.html('Create new item');
-        }
-
-        action_button.on('click', function (event) {
-            event.preventDefault();
-            form.submit();
-        });
-
-    })
-
-});
-</script>
+    </script>
 {% endblock %}
 
 {% block modals %}
-<!-- Modal -->
-<div class="modal" id="modal-checklist-item">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title"></h4>
-            </div>
-            <div class="modal-body">&nbsp;</div>
-            <div class="modal-footer">
-                <a href="#" class="btn btn-success">Update</a>
-            </div>
-        </div>
-    </div>
-</div>
+    {% include 'todo/modals/edit_checklist_item.html' %}
 {% endblock %}
