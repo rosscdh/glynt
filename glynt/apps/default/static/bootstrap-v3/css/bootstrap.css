@@ -6477,13 +6477,13 @@ table.checklist {
   border-bottom: 1px solid #dddddd;
   margin-bottom: 0;
 }
-table.checklist .item-icon {
+table.checklist .item-status {
   text-align: center;
   vertical-align: middle;
   width: 60px;
 }
-table.checklist .item-icon [class^="icon-"],
-table.checklist .item-icon [class*=" icon-"] {
+table.checklist .item-status [class^="icon-"],
+table.checklist .item-status [class*=" icon-"] {
   font-size: 36px;
   line-height: 1.1;
 }
@@ -6509,37 +6509,68 @@ table.checklist .item-meta a {
 table.checklist .item-meta a:hover {
   text-decoration: none;
 }
-table.checklist tr.pending {
+table.checklist tr.item.state-new {
   color: #eeeeee;
+  /*td a { color: @gray-light; }*/
+
 }
-table.checklist tr.draft {
+table.checklist tr.item.state-open {
   color: #bfbfbf;
+  /*td a { color: @gray-light; }*/
+
 }
-table.checklist tr.urgent {
-  color: #f0ad4e;
+table.checklist tr.item.state-pending {
+  color: #bfbfbf;
+  /*td a { color: @gray-light; }*/
+
 }
-table.checklist tr.urgent td {
-  background-color: rgba(240, 173, 78, 0.1);
+table.checklist tr.item.state-resolved {
+  color: #6bdb7e;
+  /*td a { color: @btn-success-bg; }*/
+
 }
-table.checklist tr.complete {
+table.checklist tr.item.state-closed {
   color: #6bdb7e;
 }
-table.checklist tr.complete td {
+table.checklist tr.item.state-closed td {
   background-color: rgba(107, 219, 126, 0.1);
 }
-table.checklist tr.complete td a {
+table.checklist tr.item.state-closed td a {
   color: #6bdb7e;
 }
-.icon-pending:before {
-  content: "\f096";
+table.checklist tr.item.urgent {
+  color: #f0ad4e;
 }
-.icon-draft:before {
-  content: "\f042";
-}
-.icon-urgent:before {
+table.checklist tr.item.urgent td [class^="icon-"]:before,
+table.checklist tr.item.urgent td [class*=" icon-"]:before {
   content: "\f06a";
 }
-.icon-complete:before {
+table.checklist tr.item.assigned-to-user td {
+  background-color: rgba(240, 173, 78, 0.1);
+}
+table.checklist tr.item.state-pending.assigned-to-user {
+  color: #fcd423;
+}
+table.checklist tr.item.state-pending.assigned-to-user td a {
+  color: #fcd423;
+}
+table.checklist tr.item.state-pending.assigned-to-user td [class^="icon-"]:before,
+table.checklist tr.item.state-pending.assigned-to-user td [class*=" icon-"]:before {
+  content: "\f059";
+}
+.icon-state-new:before {
+  content: "\f10c";
+}
+.icon-state-open:before {
+  content: "\f042";
+}
+.icon-state-pending:before {
+  content: "\f017";
+}
+.icon-state-resolved:before {
+  content: "\f058";
+}
+.icon-state-closed:before {
   content: "\f058";
 }
 .widget {

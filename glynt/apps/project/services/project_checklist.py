@@ -192,7 +192,7 @@ class ProjectCheckListService(ToDoItemsFromYamlMixin, ToDoItemsFromDbMixin):
             item.slug = self.item_slug(item=item, i=i)
             item.description = item.description if hasattr(item, 'description') else None
             item.num_comments = 0
-            item.status = TODO_STATUS.unassigned
+            item.status = TODO_STATUS.new
             item.display_status = TODO_STATUS.get_desc_by_value(item.status)
             # updated with various kwargs passed in
             item.update(kwargs)

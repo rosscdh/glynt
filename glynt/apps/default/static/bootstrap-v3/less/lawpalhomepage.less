@@ -107,7 +107,7 @@
 table.checklist {
   border-bottom: 1px solid #dddddd;
   margin-bottom: 0;
-  .item-icon {
+  .item-status {
     text-align: center;
     vertical-align: middle;
     width: 60px;
@@ -139,33 +139,65 @@ table.checklist {
       }
     }
   }
-  tr.pending {
-    color: @gray-lighter;
-  }
-  tr.draft {
-    color: @gray-light;
-  }
-  tr.urgent {
-    color: @btn-warning-bg;
-    td {
-      background-color: fade(@btn-warning-bg, 10%);
+
+  tr.item {
+    &.state-new {
+      color: @gray-lighter;
+      /*td a { color: @gray-light; }*/
     }
-  }
-  tr.complete {
-    color: @btn-success-bg;
-    td {
-      background-color: fade(@btn-success-bg, 10%);
-      a {
-        color: @btn-success-bg;
+    &.state-open {
+      color: @gray-light;
+      /*td a { color: @gray-light; }*/
+    }
+    &.state-pending {
+      color: @gray-light;
+       /*td a { color: @gray-light; }*/
+    }
+    &.state-resolved {
+      color: @btn-success-bg;
+      /*td a { color: @btn-success-bg; }*/
+    }
+    &.state-closed {
+      color: @btn-success-bg;
+      td {
+        background-color: fade(@btn-success-bg, 10%);
+        a {
+          color: @btn-success-bg;
+        }
+      }
+    }
+    &.urgent {
+      color: @btn-warning-bg;
+      td {
+        [class^="icon-"]:before,
+        [class*=" icon-"]:before {
+          content: @exclamation-sign;
+        }
+      }
+    }
+    &.assigned-to-user {
+      td {
+        background-color: fade(@btn-warning-bg, 10%);
+      }
+    }
+    &.state-pending.assigned-to-user {
+      color: @brand-primary-alt-2;
+      td {
+        a { color: @brand-primary-alt-2; }
+        [class^="icon-"]:before,
+        [class*=" icon-"]:before {
+          content: @question-sign;
+        }
       }
     }
   }
 }
 
-.icon-pending:before                      { content: @check-empty; }
-.icon-draft:before                        { content: @adjust; }
-.icon-urgent:before                       { content: @exclamation-sign; }
-.icon-complete:before                     { content: @ok-sign; }
+.icon-state-new:before                    { content: @circle-blank; }
+.icon-state-open:before                   { content: @adjust; }
+.icon-state-pending:before                { content: @time; }
+.icon-state-resolved:before               { content: @ok-sign; }
+.icon-state-closed:before                 { content: @ok-sign; }
 
 .widget {
   border: 1px solid #ddd;
