@@ -65,8 +65,54 @@ HAYSTACK_CONNECTIONS = {
     # },
 }
 
+
 # VERY IMPORTANT
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+if DEBUG:
+    INSTALLED_APPS = INSTALLED_APPS + (
+        # User switcher
+        'debug_toolbar_user_panel',
+        # Debug toolbar panels
+        'template_timings_panel',
+    )
+
+    INTERNAL_IPS = ('127.0.0.1',)
+
+    DEBUG_TOOLBAR_PANELS = (
+        'debug_toolbar.panels.version.VersionDebugPanel',
+        'debug_toolbar.panels.timer.TimerDebugPanel',
+        'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
+        'debug_toolbar.panels.headers.HeaderDebugPanel',
+        'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
+        'debug_toolbar.panels.template.TemplateDebugPanel',
+        'debug_toolbar.panels.sql.SQLDebugPanel',
+        'debug_toolbar.panels.signals.SignalDebugPanel',
+        'debug_toolbar.panels.logger.LoggingPanel',
+        'debug_toolbar_user_panel.panels.UserPanel',
+        'template_timings_panel.panels.TemplateTimings.TemplateTimings',
+    )
+
+    if not IS_TESTING:
+        MIDDLEWARE_CLASSES += (
+            'debug_toolbar.middleware.DebugToolbarMiddleware',
+        )
+        DEBUG_TOOLBAR_CONFIG = {
+            'INTERCEPT_REDIRECTS': False
+        }
+        INSTALLED_APPS = INSTALLED_APPS + (
+            'debug_toolbar',
+        )
+
+    if IS_TESTING:
+        INSTALLED_APPS = INSTALLED_APPS + (
+            'django_nose',
+        )
+        NOSE_ARGS = [
+            '--with-coverage',
+        ]
+
 
 LOGGING = {
     'version': 1,
