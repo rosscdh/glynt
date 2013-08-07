@@ -10,6 +10,7 @@ from glynt.apps.project.models import Project
 
 from braces.views import JSONResponseMixin
 
+from glynt.apps.project.models import Project
 from .forms import CutomerToDoForm, AttachmentForm
 from .models import ToDo, Attachment
 from .services import CrocdocAttachmentService
@@ -26,13 +27,12 @@ class ProjectToDoView(ListView):
         order_by = self.request.GET.get('order_by', '-id')  # newest first
 
         fltr = {
-            'status': self.request.GET.get('status', 1)  # newest first
+            'project': Project.objects.get(uuid=self.kwargs.get('uuid')),
         }
 
         # filter by the current user always
         # & filter by the params passed in
         queryset = self.model.objects.prefetch_related('user', 'project') \
-                                     .filter(user=self.request.user) \
                                      .filter(**fltr)
 
         return queryset.order_by(order_by)
