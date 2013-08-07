@@ -44,112 +44,6 @@
                 <div class="checklist-header clearfix">
                     <h3 class="pull-left">Testing</h3>
                 </div>
-                <table class="table table-striped checklist">
-                    <tbody>
-                        <!-- Item (status=new) -->
-                        <tr class="item state-new">
-                            <td class="item-status" tooltip="New" title="New">
-                                <i class="icon-state-new"></i>
-                            </td>
-                            <td class="item-info">
-                                <h4>
-                                    <a href="#">New Item</a>
-                                </h4>
-                            </td>
-                            <td class="item-meta">
-                                <a href="#"title="Edit" data-tooltip="Edit" class="btn btn-small btn-link item-edit">
-                                    <i class="glyphicon glyphicon-pencil"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        <!-- Item (status=open) -->
-                        <tr class="item state-open">
-                            <td class="item-status" tooltip="New" title="New">
-                                <i class="icon-state-open"></i>
-                            </td>
-                            <td class="item-info">
-                                <h4>
-                                    <a href="#">Open Item</a>
-                                </h4>
-                            </td>
-                            <td class="item-meta">
-                                <a href="#"title="Edit" data-tooltip="Edit" class="btn btn-small btn-link item-edit">
-                                    <i class="glyphicon glyphicon-pencil"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        <!-- Item (status=open) -->
-                        <tr class="item state-open assigned-to-user">
-                            <td class="item-status" tooltip="New" title="New">
-                                <i class="icon-state-open"></i>
-                            </td>
-                            <td class="item-info">
-                                <h4>
-                                    <a href="#">Open Item (Responsible Party is Me)</a>
-                                </h4>
-                            </td>
-                            <td class="item-meta">
-                                <a href="#"title="Edit" data-tooltip="Edit" class="btn btn-small btn-link item-edit">
-                                    <i class="glyphicon glyphicon-pencil"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        <!-- Item (status=pending) -->
-                        <tr class="item state-pending">
-                            <td class="item-status" tooltip="New" title="New">
-                                <i class="icon-state-pending"></i>
-                            </td>
-                            <td class="item-info">
-                                <h4>
-                                    <a href="#">Pending Item</a>
-                                </h4>
-                            </td>
-                            <td class="item-meta">
-                                <a href="#"title="Edit" data-tooltip="Edit" class="btn btn-small btn-link item-edit">
-                                    <i class="glyphicon glyphicon-pencil"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        <!-- Item (status=pending assigned-to-user≈) -->
-                        <tr class="item state-pending assigned-to-user">
-                            <td class="item-status" tooltip="New" title="New">
-                                <i class="icon-state-pending"></i>
-                            </td>
-                            <td class="item-info">
-                                <h4>
-                                    <a href="#">Pending Item (Responsible Party is Me)</a>
-                                </h4>
-                            </td>
-                            <td class="item-meta">
-                                <a href="#"title="Edit" data-tooltip="Edit" class="btn btn-small btn-link item-edit">
-                                    <i class="glyphicon glyphicon-pencil"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        <!-- Item (status=resolved) -->
-                        <tr class="item state-resolved">
-                            <td class="item-status" tooltip="New" title="New">
-                                <i class="icon-state-resolved"></i>
-                            </td>
-                            <td class="item-info" colspan="2">
-                                <h4>
-                                    <a href="#">Resolved Item</a>
-                                </h4>
-                            </td>
-                        </tr>
-                        <!-- Item (status=closed) -->
-                        <tr class="item state-closed">
-                            <td class="item-status" tooltip="New" title="New">
-                                <i class="icon-state-closed"></i>
-                            </td>
-                            <td class="item-info" colspan="2">
-                                <h4>
-                                    <a href="#">Closed Item</a>
-                                </h4>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
             {% for category, items in checklist.todos_by_cat.iteritems %}
                 <div id="{{ category|slugify }}" class="checklist-header clearfix">
                     <h3 class="pull-left">{{ category }}</h3>
@@ -160,28 +54,20 @@
                 <table class="table table-striped checklist">
                     <tbody>
                         {% for item in items %}
-                            <tr data-edit_label="{{ item.slug }}" data-status="{{ item.obj.display_status|default:item.display_status|lower }}" class="{{ item.obj.status|default:item.status|todo_status_row_class }}">
-                                <td class="item-icon" tooltip="{{ item.obj.display_status|default:item.display_status }}" title="{{ item.obj.display_status|default:item.display_status }}">
+                            <tr data-edit_label="{{ item.slug }}" data-status="{{ item.obj.display_status|default:item.display_status|lower }}" class="item {{ item.obj.status|default:item.status|todo_status_row_class }} {{ item.obj.user|todo_status_assignedto_class }}">
+                                <td class="item-status" tooltip="{{ item.obj.display_status|default:item.display_status }}" title="{{ item.obj.display_status|default:item.display_status }}">
                                     <i class="{{ item.obj.status|default:item.status|todo_status_icon }}"></i>
                                 </td>
-                                {% if item.obj.status|default:item.status|todo_status_row_class == 'complete' %}
-                                    <td class="item-info" colspan="2">
-                                        <h4>
-                                            <a href="{% url 'todo:item' project_uuid=project.uuid slug=item.slug %}">{{ item.obj.name|default:item.name }}</a>
-                                        </h4>
-                                    </td>
-                                {% else %}
-                                    <td class="item-info">
-                                        <h4>
-                                            <a href="{% url 'todo:item' project_uuid=project.uuid slug=item.slug %}">{{ item.obj.name|default:item.name }}</a>
-                                        </h4>
-                                    </td>
-                                    <td class="item-meta">
-                                        <a href="{% url 'todo:edit' project_uuid=project.uuid slug=item.slug %}" data-toggle="modal" data-target="#modal-checklist-item" title="Edit" data-tooltip="Edit" class="btn btn-small btn-link item-edit">
-                                            <i class="glyphicon glyphicon-pencil"></i>
-                                        </a>
-                                    </td>
-                                {% endif %}
+                                <td class="item-info">
+                                    <h4>
+                                        <a href="{% url 'todo:item' project_uuid=project.uuid slug=item.slug %}">{{ item.obj.name|default:item.name }}</a>
+                                    </h4>
+                                </td>
+                                <td class="item-meta">
+                                    <a href="{% url 'todo:edit' project_uuid=project.uuid slug=item.slug %}" data-toggle="modal" data-target="#modal-checklist-item" title="Edit" data-tooltip="Edit" class="btn btn-small btn-link item-edit">
+                                        <i class="glyphicon glyphicon-pencil"></i>
+                                    </a>
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>

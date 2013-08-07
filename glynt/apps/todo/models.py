@@ -34,7 +34,7 @@ class ToDo(models.Model):
     slug = models.SlugField()
     category = models.CharField(max_length=128, db_index=True)
     description = models.TextField(blank=True, null=True)
-    status = models.IntegerField(choices=TODO_STATUS.get_choices(), default=TODO_STATUS.unassigned, db_index=True)
+    status = models.IntegerField(choices=TODO_STATUS.get_choices(), default=TODO_STATUS.new, db_index=True)
     data = JSONField(default={})
     date_due = models.DateTimeField(blank=True, null=True, auto_now=False, auto_now_add=False, db_index=True)
     date_created = models.DateTimeField(auto_now=False, auto_now_add=True, db_index=True)

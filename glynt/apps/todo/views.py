@@ -47,8 +47,10 @@ class ProjectToDoView(ListView):
             'project': self.project,
             'checklist': self.checklist_service,
             'counts': {
-                'new': self.model.objects.unassigned(project=self.project, user=self.request.user).count(),
-                'open': self.model.objects.assigned(project=self.project, user=self.request.user).count(),
+                'new': self.model.objects.new(project=self.project, user=self.request.user).count(),
+                'open': self.model.objects.open(project=self.project, user=self.request.user).count(),
+                'pending': self.model.objects.pending(project=self.project, user=self.request.user).count(),
+                'resolved': self.model.objects.resolved(project=self.project, user=self.request.user).count(),
                 'closed': self.model.objects.closed(project=self.project, user=self.request.user).count(),
             }
         })
@@ -83,10 +85,6 @@ class BaseToDoDetailMixin(SingleObjectMixin):
         if item is None:
             return None
         else:
-            # if slug in [None, u'None']:
-            #     # TODO abstract this into a service method
-            #     slug = self.project_service.item_slug(item=Bunch(name=self.request.POST.get('name')), rand=random.random())
-
             obj, is_new = self.model.objects.get_or_create(slug=slug, project=self.project)
 
             if is_new and item:
