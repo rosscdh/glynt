@@ -15,6 +15,9 @@ from .forms import CutomerToDoForm, AttachmentForm
 from .models import ToDo, Attachment
 from .services import CrocdocAttachmentService
 
+import logging
+logger = logging.getLogger('django.request')
+
 
 class ProjectToDoView(ListView):
     model = ToDo
@@ -78,21 +81,21 @@ class BaseToDoDetailMixin(SingleObjectMixin):
         self.project = get_object_or_404(Project, uuid=self.kwargs.get('project_uuid'))
         self.project_service = ProjectCheckListService(project=self.project)
 
-        self.items = self.project_service.todo_item_by_slug(slug=slug)
+        self.navigation_items = self.project_service.navigation_items_object(slug=slug)
 
-        item = self.items.current
-
-        if item is None:
+        if self.navigation_items.current is None:
+            # does nto seem to exist need to log and error
+            logger.error('ToDo item does not exist in categories navigation_items but it should! {slug}, navigation_items: {navigation_items}'.format(slug=slug, navigation_items=self.navigation_items))
             return None
         else:
             obj, is_new = self.model.objects.get_or_create(slug=slug, project=self.project)
-
-            if is_new and item:
-                obj.name = item.name
-                obj.category = item.category
-                obj.description = item.description
-                obj.status = item.status
-                obj.data = item
+            nav_item = self.navigation_items.current
+            if is_new and nav_item:
+                obj.name = nav_item.name
+                obj.category = nav_item.category
+                obj.description = nav_item.description
+                obj.status = nav_item.status
+                obj.data = nav_item
                 obj.save()
 
             return obj
@@ -105,7 +108,7 @@ class ToDoDetailView(DetailView, BaseToDoDetailMixin):
         context = super(ToDoDetailView, self).get_context_data(**kwargs)
         context.update({
             'attachment_form': AttachmentForm(initial={'project': self.project.pk, 'todo': self.object.pk}),
-            'back_and_forth': self.items,
+            'back_and_forth': self.navigation_items,
         })
         return context
 
