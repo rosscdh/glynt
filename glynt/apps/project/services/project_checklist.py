@@ -30,7 +30,10 @@ class ToDoItemsFromYamlMixin(object):
 
                     self.handle_repeater(item=item)
 
-                    if item.checklist:
+                    if not item.checklist:
+                        # no repeater items found or empty category
+                        todos_by_cat[cat_slug] = []
+                    else:
                         # parse the list and assign extra attribs
                         self.parse_checklist(checklist=item.checklist, category=category)
                         checklist = list(checklist + item.checklist)
