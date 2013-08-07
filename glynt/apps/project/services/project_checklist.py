@@ -167,6 +167,9 @@ class ProjectCheckListService(ToDoItemsFromYamlMixin, ToDoItemsFromDbMixin):
         self.kwargs = kwargs
 
     def item_slug(self, item, **kwargs):
+        """ the slug has to be consistent for each item, even when pulled from yaml file
+        thus we cant use uuid here as it is generated unique every time; where as this is
+        based on a uniqe combo of the item details"""
         m = hashlib.sha1()
         m.update(self.company_data.slug(item_name=item.name))
         if len(kwargs.keys()) > 0:
