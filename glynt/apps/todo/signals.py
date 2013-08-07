@@ -57,6 +57,7 @@ def on_comment_created(sender, **kwargs):
     """
     Handle Creation of attachments
     """
+    logger.debug('GOT IT {type}'.format(type=type(sender)))
     if not isinstance(sender, LogEntry):
         is_new = kwargs.get('created', False)
         comment = kwargs.get('instance')
@@ -68,18 +69,6 @@ def on_comment_created(sender, **kwargs):
                         action_object=comment,
                         target=comment.content_object,
                         content=comment.comment)
-
-            user_name = comment.user.get_full_name()
-
-            pusher_service = PusherPublisherService(channel=comment.content_object.pusher_id, event='todo.comment.created')
-
-            info_object = Bunch(name=user_name,
-                                verb=verb,
-                                target_name=comment.content_object.name,
-                                timestamp='',
-                                content=comment.comment)
-
-            pusher_service.process(label='{name} has added a comment to this Checklist Item: {comment}'.format(name=user_name, comment=comment.comment), **info_object)
 
 
 @receiver(post_save, sender=Action, dispatch_uid='action.created')
