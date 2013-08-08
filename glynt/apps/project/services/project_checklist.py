@@ -135,7 +135,7 @@ class ToDoItemsFromDbMixin(object):
         # and append them to the item object
         for db_item in self.db_todos():
 
-            if db_item.is_deleted is True:
+            if db_item.is_deleted is True and db_item.slug in slugs:
                 del slugs[db_item.slug]
                 self.delete_item(db_item)
 
