@@ -334,11 +334,11 @@ def syncdb():
 def clean_versions():
     current_version = get_sha1()
     versions_path = '%sversions' % env.remote_project_path
-    cmd = 'ls %s/* | grep -v %s | xargs rm -Rf' % (versions_path ,current_version,)
+    cmd = 'ls %s/ | grep -v %s | xargs rm -R' % (versions_path ,current_version,)
     if env.environment_class is 'webfaction':
-        run(cmd)
+        virtualenv(cmd)
     else:
-        sudo(cmd)
+        virtualenv(cmd)
 
 # ------ RESTARTERS ------#
 @task
