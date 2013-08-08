@@ -27,7 +27,7 @@ class AttachmentForm(forms.Form):
     todo = forms.IntegerField(widget=forms.HiddenInput)
     attachment = FPUrlField(label='', help_text='', apikey=FILEPICKER_API_KEY,
                             additional_params={
-                                'data-api-url': '/api/v1/todo/attachment',
+                                'data-api-url': '/api/v1/attachment',
                                 'data-fp-button-text': 'Upload attachment',
                                 'data-fp-button-class': 'btn btn-primary',
                                 'data-fp-drag-class': 'drop-pane pull-right',

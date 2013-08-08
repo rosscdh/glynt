@@ -49,8 +49,8 @@ class ToDoResource(BaseApiModelResource):
     class Meta(BaseApiModelResource.Meta):
         queryset = ToDo.objects.all()
         authorization = Authorization()
-        resource_name = 'todo/'
-        list_allowed_methods = ['get', 'delete', 'put', 'patch']
+        resource_name = 'todo'
+        list_allowed_methods = ['get', 'put', 'patch']
         #fields = ['is_deleted']
         filtering = {
             'is_deleted': ['exact'],
@@ -65,7 +65,7 @@ class AttachmentResource(BaseApiModelResource):
     class Meta(BaseApiModelResource.Meta):
         queryset = Attachment.objects.all()
         authorization = Authorization()
-        resource_name = 'todo/attachment'
+        resource_name = 'attachment'
         list_allowed_methods = ['get', 'post', 'delete']
         filtering = {
             'project': ALL,
