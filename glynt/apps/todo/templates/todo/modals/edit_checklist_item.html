@@ -1,3 +1,4 @@
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.getPath.js"></script>
 <script>
 $(document).ready( function () {
     /**
@@ -9,9 +10,15 @@ $(document).ready( function () {
         event.stopPropagation();
 
         var elem = $(this);
+        var is_ajax = elem.data('is_ajax') || false;
+        var selector_path = $.getPath(elem);
+
         var url = elem.data('remote') || elem.attr('href');
         var target = $('#modal-checklist-item');
         var modal_body = target.find('.modal-body');
+
+        target.data('is_ajax', is_ajax);
+        target.data('target_toggle_object', selector_path);
 
         modal_body.html('');// clear html
         modal_body.load(url, function (data) {
@@ -19,8 +26,6 @@ $(document).ready( function () {
             // fire the laod event only on successful load of url
             target.modal('show'); // load html
         });
-
-
     });
     $('#modal-checklist-item').on('show.bs.modal', function (event) {
         var target = $(event.currentTarget);
@@ -31,6 +36,12 @@ $(document).ready( function () {
         // var form_action = form.attr('action');
         var name = form.find('input[type=text]:first').val();
 
+        var is_ajax = target.data('is_ajax') || false;
+        var target_toggle_object = target.data('target_toggle_object') || false;
+        if (target_toggle_object !== false) {
+            target_toggle_object = $(target_toggle_object);
+        }
+
         if (name && name !== '') {
             title.html('Edit - {name}'.assign({'name': name}));
         } else {
@@ -39,7 +50,27 @@ $(document).ready( function () {
 
         action_button.on('click', function (event) {
             event.preventDefault();
-            form.submit();
+            if (is_ajax === false) {
+                form.submit();
+            } else {
+                $.ajax({
+                    type: 'POST',
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    beforeSend: function(jqXHR, settings) {
+                        // Pull the token out of the DOM.
+                        jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]:first').val());
+                    },
+                    success: function(data, textStatus, jqXHR){
+                        var title = form.find('#id_name').val();
+                        document.title = title;
+                        target_toggle_object.html(title);
+                    },
+                    complete: function() {
+                        $('#modal-checklist-item').modal('hide');
+                    }
+                });
+            }
         });
 
     })
