@@ -6793,6 +6793,10 @@ table.lawyer-list {
   opacity: 0.5;
   filter: alpha(opacity=50);
 }
-.item-nav-controls i.glyphicon {
+.item-nav-controls i.glyphicon,
+.list-group-item-heading i.glyphicon {
   vertical-align: middle;
+}
+.pending-feedback {
+  background-color: rgba(240, 173, 78, 0.1);
 }
