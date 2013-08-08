@@ -17,7 +17,6 @@ if PUSHER_KEY is None:
 if PUSHER_SECRET is None:
     raise Exception("You must specify a PUSHER_SECRET in your local_settings.py")
 
-PUSHER = pusher.Pusher(app_id=PUSHER_APP_ID, key=PUSHER_KEY, secret=PUSHER_SECRET)
 
 class PusherPublisherService(object):
     """ Service to push data out to channels on pusher.com
@@ -39,7 +38,7 @@ class PusherPublisherService(object):
 
         logger.info('Initialized PusherPublisherService with {data}'.format(data=json.dumps(self.data)))
 
-        self.pusher = PUSHER
+        self.pusher = pusher.Pusher(app_id=PUSHER_APP_ID, key=PUSHER_KEY, secret=PUSHER_SECRET)
 
     def process(self, **kwargs):
         logger.info('Sending pusher event on #{channel}'.format(channel=self.channel))
