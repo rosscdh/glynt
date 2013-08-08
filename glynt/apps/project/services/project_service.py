@@ -18,9 +18,12 @@ class VisibleProjectsService(object):
             return None
 
     def get(self, **kwargs):
-        kwargs.update({'customer': self.user.customer_profile})
+        if self.user.profile.is_customer and 'customer' not in kwargs:
+            kwargs.update({'customer': self.user.customer_profile})
+
         if self.projects is None:
             if self.user:
                 self.projects = Project.objects.new(**kwargs).order_by('id') | Project.objects.open(**kwargs).order_by('id')
                 self.projects = self.projects.select_related('company', 'customer__user', 'transactions')
+
         return self.projects
