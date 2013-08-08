@@ -134,10 +134,13 @@ class ToDoItemsFromDbMixin(object):
         # get a set of todo items in the database
         # and append them to the item object
         for db_item in self.db_todos():
+
             if db_item.is_deleted is True:
                 del slugs[db_item.slug]
                 self.delete_item(db_item)
+
             else:
+
                 try:
                     slugs[db_item.slug].obj = db_item
                     self.modify_item_values(slugs[db_item.slug])

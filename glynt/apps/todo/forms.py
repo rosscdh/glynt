@@ -86,9 +86,10 @@ class CustomerToDoForm(ToDoForm):
                 'project',
             )
         )
+
         super(CustomerToDoForm, self).__init__(*args, **kwargs)
 
-        if self.is_create:
+        if self.is_create or self.request.method == 'POST':
             self.fields['category'] = forms.ChoiceField(initial=self.request.GET.get('category', None), choices=self.project_service.category_initial())
         else:
             del self.fields['category']
