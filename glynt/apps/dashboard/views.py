@@ -19,9 +19,16 @@ class CustomerDashboardView(TemplateView):
         if project_uuid is not None:
             qs_filter = {'uuid': project_uuid}
 
-        qs_filter.update({
-            'customer': self.request.user.customer_profile
-        })
+        if self.request.user.profile.is_customer:
+            qs_filter.update({
+                'customer': self.request.user.customer_profile
+            })
+
+        if self.request.user.profile.is_lawyer:
+            qs_filter.update({
+                'lawyers': self.request.user.lawyer_profile
+            })
+
         return qs_filter
 
     def get_context_data(self, **kwargs):
