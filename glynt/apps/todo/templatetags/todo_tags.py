@@ -49,3 +49,22 @@ def todo_stream(todo):
     return {
         'stream': Action.objects.filter(action_object_object_id=todo.pk, action_object_content_type=TODO_CONTENT_TYPE)
     }
+
+@register.inclusion_tag('todo/partials/primary_interface.html', takes_context=True)
+def todo_primary_interface(context, todo):
+    todo = context.get('object')
+
+    data = {
+        'project': context.get('project'),
+        'todo': todo,
+        'user': context.get('user'),
+        'back_and_forth': context.get('back_and_forth'),
+        'is_lawyer': context.get('user').profile.is_lawyer,
+        'is_customer': context.get('user').profile.is_customer,
+        'is_new': todo.status == TODO_STATUS.new,
+        'is_open': todo.status == TODO_STATUS.open,
+        'is_pending': todo.status == TODO_STATUS.pending,
+        'is_resolved': todo.status == TODO_STATUS.resolved,
+        'is_closed': todo.status == TODO_STATUS.closed,
+    }
+    return data

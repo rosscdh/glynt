@@ -56,6 +56,10 @@ class Project(models.Model):
         except IndexError:
             return None
 
+    @property
+    def has_lawyer(self):
+        return self.get_primary_lawyer is not None
+
     def open(self, actioning_user):
         """ Open the notification """
         service = OpenProjectService(project=self, actioning_user=actioning_user)

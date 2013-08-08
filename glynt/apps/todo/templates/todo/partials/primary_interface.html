@@ -1,0 +1,38 @@
+{{ project.has_lawyer }}
+{{ is_new }}
+{{is_lawyer}}
+<div id="item-nav-controls" class="btn-group">
+    <!--
+    Only responsible party: not coded yet
+    <button type="button" class="btn btn-success"><i class="glyphicon glyphicon-ok-circle"></i> Resolve Item</button>
+    -->
+    <!--
+    Only when the item is closed
+    <button type="button" class="btn btn-success" disabled="disabled"><i class="glyphicon glyphicon-ok-sign"></i> Closed</button>
+    -->
+    {% if back_and_forth.prev %}<button class="btn btn-prev"><i class="icon-chevron-left"></i></button>{% endif %}
+    <button class="btn btn-home"><i class="icon-home"></i></button> 
+    {% if back_and_forth.next %}<button class="btn btn-next"><i class="icon-chevron-right"></i></button> {% endif %}
+
+    {% if is_lawyer %}<button class="btn btn-delete" title="Delete Item"><i class="icon-trash"></i></button>{% endif %}
+    <!-- {% if is_lawyer %}<button class="btn btn-edit" title="Edit Item"><i class="icon-pencil"></i></button>{% endif %} -->
+    {% if is_lawyer %}<button type="button" class="btn btn-success"><i class="glyphicon glyphicon-ok-sign"></i> Close Item</button>{% endif %}
+
+
+{% if is_customer %}
+{% endif %}
+    <!-- IN PROGRESS <span class="caret"></span> -->
+  <!-- </button> -->
+  <!-- <ul class="dropdown-menu"> -->
+    <!-- <li><a href="#" class="text-muted">New</a></li> -->
+    <!-- <li><a href="#"><strong>In Progress</strong></a></li> -->
+    <!-- <li><a href="#">Complete</a></li> -->
+  <!-- </ul> -->
+<!-- </div> -->
+<!-- <div id="item-nav-controls" class="btn-group"> -->
+    <!-- {% if back_and_forth.prev %}<button class="btn btn-prev"><i class="icon-chevron-left"></i></button>{% endif %} -->
+    <!-- <button class="btn btn-home"><i class="icon-home"></i></button> -->
+    <!-- {% if back_and_forth.next %}<button class="btn btn-next"><i class="icon-chevron-right"></i></button> {% endif %} -->
+    <!-- <button class="btn btn-delete"><i class="icon-trash"></i></button> -->
+<!-- </div> -->
+</div>
