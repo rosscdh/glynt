@@ -7,7 +7,7 @@
 
 <div class="container" style="padding:15px 0px 0px 0px;"> 
     <h3><small class="softer">{{ object.category }}</small><br/>
-        <span href="{% url 'todo:edit' project_uuid=project.uuid slug=object.slug %}" data-toggle="modal" data-target="#modal-checklist-item">{{ object.name }}</span>
+        <span href="{% url 'todo:edit' project_uuid=project.uuid slug=object.slug %}" class="link" data-toggle="modal" data-target="#modal-checklist-item">{{ object.name }}</span>
         <div class="pull-right clearfix">
             <small class="softer">{{ object.item_hash_num }}</small>
             <div class="btn-group">
@@ -343,7 +343,10 @@ HandleAttachment = function HandleAttachment(event) {
 {% block css %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fluent_comments/css/ajaxcomments.css" />
 <style>
-
+.link {
+    cursor: pointer;
+    cursor: hand;
+}
 .temp-col-avatar img {
     width:20px;
 }
