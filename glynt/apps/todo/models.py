@@ -112,6 +112,21 @@ class Attachment(models.Model):
     def get_url(self):
         return self.attachment.name
 
+
+class FeedbackRequest(models.Model):
+    """ Feedback Request is used to associate requests for feedback 
+    from a user on an attachment; is the primary mechanisim to obtain
+    a response from a user on an attachment """
+    attachment = models.ForeignKey(Attachment)
+    assigned_by = models.ForeignKey(User, related_name='requestedfeedback')
+    assigned_to = models.ManyToManyField(User, related_name='feedbackrequested')
+    data = JSONField(default={})
+    date_created = models.DateTimeField(auto_now=False, auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ['-date_created']
+
+
 """
 import signals
 """
