@@ -6568,7 +6568,7 @@ table.checklist tr.item.state-pending.assigned-to-user td [class*=" icon-"]:befo
   content: "\f017";
 }
 .icon-state-resolved:before {
-  content: "\f058";
+  content: "\f05d";
 }
 .icon-state-closed:before {
   content: "\f058";
@@ -6792,4 +6792,7 @@ table.lawyer-list {
 .modal-backdrop {
   opacity: 0.5;
   filter: alpha(opacity=50);
+}
+.item-nav-controls i.glyphicon {
+  vertical-align: middle;
 }

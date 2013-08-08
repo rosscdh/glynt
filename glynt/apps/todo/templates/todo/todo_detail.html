@@ -5,50 +5,56 @@
 
 {% block prebody %}
 
-<div class="container" style="padding:15px 0px 0px 0px;"> 
+<div class="container" style="padding:15px 0px 0px 0px;">
     <h3><small class="softer">{{ object.category }}</small><br/>
         <span href="{% url 'todo:edit' project_uuid=project.uuid slug=object.slug %}" class="link" data-toggle="modal" data-target="#modal-checklist-item" data-is_ajax="true">{{ object.name }}</span>
         <div class="pull-right clearfix">
-            <small class="softer">{{ object.item_hash_num }}</small>
-            <div class="btn-group">
-              <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
-                IN PROGRESS <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu">
-                <li><a href="#" class="text-muted">New</a></li>
-                <li><a href="#"><strong>In Progress</strong></a></li>
-                <li><a href="#">Complete</a></li>
-              </ul>
-            </div>
-            <div id="item-nav-controls" class="btn-group">
-                {% if back_and_forth.prev %}<button class="btn btn-prev"><i class="icon-chevron-left"></i></button>{% endif %}
-                <button class="btn btn-home"><i class="icon-home"></i></button> 
-                {% if back_and_forth.next %}<button class="btn btn-next"><i class="icon-chevron-right"></i></button> {% endif %}
-                <button class="btn btn-delete"><i class="icon-trash"></i></button>
-            </div>
+            <div class="item-nav-controls">
+                <!--
+                Only responsible party: not coded yet
+                <button type="button" class="btn btn-success"><i class="glyphicon glyphicon-ok-circle"></i> Resolve Item</button>
+                -->
+                <button type="button" class="btn btn-success"><i class="glyphicon glyphicon-ok-sign"></i> Close Item</button>
+
+                <button class="btn btn-edit" title="Edit Item"><i class="icon-pencil"></i></button>
+                <button class="btn btn-delete" title="Delete Item"><i class="icon-trash"></i></button>
+                <!-- IN PROGRESS <span class="caret"></span> -->
+              <!-- </button> -->
+              <!-- <ul class="dropdown-menu"> -->
+                <!-- <li><a href="#" class="text-muted">New</a></li> -->
+                <!-- <li><a href="#"><strong>In Progress</strong></a></li> -->
+                <!-- <li><a href="#">Complete</a></li> -->
+              <!-- </ul> -->
+            <!-- </div> -->
+            <!-- <div id="item-nav-controls" class="btn-group"> -->
+                <!-- {% if back_and_forth.prev %}<button class="btn btn-prev"><i class="icon-chevron-left"></i></button>{% endif %} -->
+                <!-- <button class="btn btn-home"><i class="icon-home"></i></button> -->
+                <!-- {% if back_and_forth.next %}<button class="btn btn-next"><i class="icon-chevron-right"></i></button> {% endif %} -->
+                <!-- <button class="btn btn-delete"><i class="icon-trash"></i></button> -->
+            <!-- </div> -->
         </div>
     </h3>
 </div>
 
     <hr>
 
-<div class="container"> 
+<div class="container">
     <div class="row">
         <div class="col col-lg-12">
             <div class="row">
                 <div class="col col-lg-4 sidebar">
                     <div>
                         <h3 class="brand">
-                            Attachments 
+                            Attachments
                         </h3>
                             {% crispy attachment_form %}
                             {{ attachment_form.media }}
                         <br />
                         <div id="attachments" class="list-group"></div>
                     </div>
-                   
+
                  <hr />
-                
+
                     <h3 class="brand"><span>Discussion</span></h3>
                     {% render_comment_form for object %}
 
@@ -58,7 +64,7 @@
                             {% todo_stream todo=object %}
                         </div>
                     </div>
-                    
+
                 </div>
 
                 <div class="col col-lg-8" style="">
@@ -73,7 +79,7 @@
                         </div> -->
                         <!--  IF ATTORNEY
                         <button class="btn btn-primary pull-right">Request Feedback</button>-->
-                        <button class="btn btn-success pull-right">Feedback Complete</button> 
+                        <button class="btn btn-success pull-right">Feedback Complete</button>
                         <div class="btn-group pull-right">
                         <!-- Is part of the crocdoc functionality <button class="btn btn-link pull-right">Download</button> -->
                         <button class="btn btn-delete btn-link pull-right">Delete</button>
@@ -81,7 +87,7 @@
                         </div>
                         <br />
                         <br />
-                        <iframe id="crocdoc-viewer-iframe" src="" width="100%" height="550px" frameborder="none" style="margin-top:5px;"></iframe> 
+                        <iframe id="crocdoc-viewer-iframe" src="" width="100%" height="550px" frameborder="none" style="margin-top:5px;"></iframe>
                     </div>
                 </div>
             </div>
