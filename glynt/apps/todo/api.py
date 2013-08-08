@@ -49,7 +49,7 @@ class ToDoResource(BaseApiModelResource):
     class Meta(BaseApiModelResource.Meta):
         queryset = ToDo.objects.all()
         authorization = Authorization()
-        resource_name = 'todo'
+        resource_name = 'todo/'
         list_allowed_methods = ['get', 'delete', 'put', 'patch']
         #fields = ['is_deleted']
         filtering = {
