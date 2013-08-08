@@ -1,13 +1,13 @@
 {% extends 'base.html' %}{% load i18n todo_tags glynt_helpers crispy_forms_tags comments templatetag_handlebars jsonify %}
 
-{% block page_title %}What's the current status?{% endblock %}
+{% block page_title %}{{ object.name }}{% endblock %}
 {% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>{% endblock %}
 
 {% block prebody %}
 
 <div class="container" style="padding:15px 0px 0px 0px;"> 
     <h3><small class="softer">{{ object.category }}</small><br/>
-        <span href="{% url 'todo:edit' project_uuid=project.uuid slug=object.slug %}" class="link" data-toggle="modal" data-target="#modal-checklist-item">{{ object.name }}</span>
+        <span href="{% url 'todo:edit' project_uuid=project.uuid slug=object.slug %}" class="link" data-toggle="modal" data-target="#modal-checklist-item" data-is_ajax="true">{{ object.name }}</span>
         <div class="pull-right clearfix">
             <small class="softer">{{ object.item_hash_num }}</small>
             <div class="btn-group">

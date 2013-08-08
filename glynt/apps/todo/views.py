@@ -150,6 +150,12 @@ class ToDoCreateView(ToDoEditView):
     template_name = 'todo/todo_form.html'
     form_class = CustomerToDoForm
 
+    def get_form_kwargs(self):
+        kwargs = super(ToDoCreateView, self).get_form_kwargs()
+        kwargs.update({
+            'is_create': True,
+        })
+        return kwargs
 
 class ToDoAttachmentView(DetailView, BaseToDoDetailMixin):
     template_name = 'todo/attachments.html'

@@ -14,6 +14,8 @@ from parsley.decorators import parsleyfy
 from .models import ToDo
 from django_filepicker.forms import FPUrlField
 
+import logging
+logger = logging.getLogger('django.request')
 
 FILEPICKER_API_KEY = getattr(settings, 'FILEPICKER_API_KEY', None)
 if FILEPICKER_API_KEY is None:
@@ -70,6 +72,7 @@ class CustomerToDoForm(ToDoForm):
         self.project_service = kwargs.pop('project_service')
         self.project_uuid = kwargs.pop('project_uuid')
         self.slug = kwargs.pop('slug')
+        self.is_create = kwargs.pop('is_create', False)
 
         self.helper = FormHelper()
         self.helper.form_method = 'post'
@@ -85,8 +88,14 @@ class CustomerToDoForm(ToDoForm):
         )
         super(CustomerToDoForm, self).__init__(*args, **kwargs)
 
-        self.fields['category'] = forms.ChoiceField(initial=self.request.GET.get('category', None), choices=self.project_service.category_initial())
+        if self.is_create:
+            self.fields['category'] = forms.ChoiceField(initial=self.request.GET.get('category', None), choices=self.project_service.category_initial())
+        else:
+            del self.fields['category']
+            self._meta.exclude += ['category']
+
         self.fields['project'].initial = self.project_service.project.pk
+
 
     def clean_project(self):
         return self.project_service.project
