@@ -244,6 +244,7 @@ $(document).ready(function () {
             success: function (data, textStatus, jqXHR){
             },
             complete: function () {
+                $('a.attachment-item.active:first').trigger('click');
             }
         });
     });
@@ -273,6 +274,7 @@ $(document).ready(function () {
                 console.log(data);
             },
             complete: function () {
+                $('a.attachment-item.active:first').trigger('click');
             }
         });
     });
