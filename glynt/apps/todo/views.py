@@ -193,6 +193,7 @@ class ToDoAttachmentView(CrocdocAttachmentSessionContextMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(ToDoAttachmentView, self).get_context_data(**kwargs)
         context.update({
+            'has_lawyer': self.object.project.has_lawyer,
             'feedback_requests': self.object.feedbackrequest_set.all(),
         })
         return context

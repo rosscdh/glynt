@@ -1,24 +1,37 @@
 {% load i18n todo_tags glynt_helpers %}
+<h3>{{ object.filename }}</h3>
 <!-- if we have a lawyer involved in this project -->
+{% if has_lawyer %}
 <div class="row">
     <!-- if there is a feedback request in action -->
-    {% for f in feedback_requests %}
-        <div class="alert alert-block alert-success text-center">
-            <p>{{ f.assigned_by.get_full_name|default:f.assigned_by.username }} has requested your feedback on this attachment.</p>
-        </div>
-        <button class="btn btn-success pull-right">Feedback Complete</button>
+    {% for f in feedback_requests %}        
+        {% if f.assigned_by == user %}
+            <div class="alert alert-block alert-info text-center">
+                <div class="profile-card" data-template="mini" data-username="{{ f.assigned_to.all.0.username }}" data-img_class="img-circle"></div>
+                <p>You have requested feedback from {{ f.assigned_to.all.0.get_full_name|default:f.assigned_to.all.0.username }} on this attachment.</p>
+            </div>
+        {% else %}
+            <div class="alert alert-block alert-alert text-center">
+                <div class="profile-card" data-template="mini" data-username="{{ f.assigned_by.username }}" data-img_class="img-circle"></div>
+                <p>{{ f.assigned_by.get_full_name|default:f.assigned_by.username }} has requested your feedback on this attachment.</p>
+            </div>
+        {% endif %}
+        <button class="btn btn-success pull-right feedback-complete" data-pk="{{ f.pk }}">Feedback Complete</button>
     {% empty %}
         <!-- if no feedback request present -->
         <!-- and is_customer or is_lawyer -->
-        <button class="btn btn-primary pull-right">Request Feedback</button>
+        <button class="btn btn-primary pull-right request-feedback">Request Feedback</button>
     {% endfor %}
 </div>
+{% endif %}
+{% if not feedback_requests %}
 <div class="row">
     <div class="btn-group pull-right">
         <button class="btn btn-delete btn-link pull-right">Delete</button>
         <!-- <button class="btn btn-fullscreen btn-link pull-right">Full Screen</button> -->
     </div>
 </div>
+{% endif %}
 <br />
 <br />
 <iframe id="crocdoc-viewer-iframe" src="{{ view_url }}" width="100%" height="550px" frameborder="none" style="margin-top:5px;"></iframe>

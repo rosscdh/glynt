@@ -212,6 +212,47 @@ $(document).ready(function () {
             }
         });
     });
+
+
+    /**
+    * Feedback Reqeust Cycle 
+    * events
+    */
+    $(document).on( 'click', '.feedback-complete', function (event) {
+        event.preventDefault();
+        var elem = $(this);
+        var pk = elem.data('pk');
+        $.ajax({
+            type: 'PATCH',
+            url: "{% url 'todo:attachment' pk=0 %}".replace('0', '{pk}').assign({'pk': pk}),
+            beforeSend: function (jqXHR, settings) {
+                // Pull the token out of the DOM.
+                jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+            },
+            success: function (data, textStatus, jqXHR){
+            },
+            complete: function () {
+            }
+        });
+    });
+    $(document).on( 'click', '.request-feedback', function (event) {
+        event.preventDefault();
+        var elem = $(this);
+        var pk = elem.data('pk');
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'todo:attachment' pk=0 %}".replace('0', '{pk}').assign({'pk': pk}),
+            beforeSend: function (jqXHR, settings) {
+                // Pull the token out of the DOM.
+                jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+            },
+            success: function (data, textStatus, jqXHR){
+            },
+            complete: function () {
+            }
+        });
+    });
+
 });
 
 
