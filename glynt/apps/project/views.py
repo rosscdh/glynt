@@ -76,7 +76,8 @@ class ProjectView(DetailView):
         queryset = self.get_queryset()
         # Next, try looking up by primary key.
         slug = self.kwargs.get(self.slug_url_kwarg, None)
-        queryset = queryset.select_related('startup', 'customer', 'lawyer', 'founder__user', 'lawyer__user').filter(slug=slug)
+
+        queryset = queryset.select_related('startup', 'customer', 'lawyers', 'founder__user', 'lawyer__user').filter(uuid=slug)
 
         try:
             # Get the single item from the filtered queryset
