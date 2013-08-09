@@ -58,7 +58,7 @@ class Project(models.Model):
 
     @property
     def has_lawyer(self):
-        return self.get_primary_lawyer is not None
+        return self.get_primary_lawyer() is not None
 
     def open(self, actioning_user):
         """ Open the notification """
