@@ -4,15 +4,15 @@ from django.conf import settings
 from django import forms
 from django.core.urlresolvers import reverse
 
-from glynt.apps.utils import generate_unique_slug
-
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset
 
 from parsley.decorators import parsleyfy
+from django_filepicker.forms import FPUrlField
+
+from glynt.apps.utils import generate_unique_slug
 
 from .models import ToDo
-from django_filepicker.forms import FPUrlField
 
 import logging
 logger = logging.getLogger('django.request')
@@ -109,5 +109,3 @@ class CustomerToDoForm(ToDoForm):
             obj.save(update_fields=['slug'])
 
         return obj
-
-        

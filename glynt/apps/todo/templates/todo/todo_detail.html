@@ -222,9 +222,21 @@ $(document).ready(function () {
         event.preventDefault();
         var elem = $(this);
         var pk = elem.data('pk');
+        var url = '/api/v1/feedback_request/{pk}'.assign({'pk': pk});
+
+        var data = elem.data();
+        //data.id = pk;
+        delete data['pk'];
+        data.attachment = {'pk': data.attachment};
+        data.assigned_by = {'pk': data.assigned_by};
+        data.assigned_to = [{'pk': data.assigned_to}];
+
         $.ajax({
             type: 'PATCH',
-            url: "{% url 'todo:attachment' pk=0 %}".replace('0', '{pk}').assign({'pk': pk}),
+            url: url,
+            data: JSON.stringify(data),
+            dataType: 'application/json',
+            contentType: "application/json",
             beforeSend: function (jqXHR, settings) {
                 // Pull the token out of the DOM.
                 jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
@@ -239,14 +251,26 @@ $(document).ready(function () {
         event.preventDefault();
         var elem = $(this);
         var pk = elem.data('pk');
+        var url = '/api/v1/feedback_request';
+
+        var data = elem.data();
+        delete data['pk'];
+        data.attachment = {'pk': data.attachment};
+        data.assigned_by = {'pk': data.assigned_by};
+        data.assigned_to = [{'pk': data.assigned_to}];
+
         $.ajax({
             type: 'POST',
-            url: "{% url 'todo:attachment' pk=0 %}".replace('0', '{pk}').assign({'pk': pk}),
+            url: url,
+            data: JSON.stringify(data),
+            dataType: 'application/json',
+            contentType: "application/json",
             beforeSend: function (jqXHR, settings) {
                 // Pull the token out of the DOM.
                 jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
             },
             success: function (data, textStatus, jqXHR){
+                console.log(data);
             },
             complete: function () {
             }

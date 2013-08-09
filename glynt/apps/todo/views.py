@@ -8,10 +8,9 @@ from django.contrib import messages
 from glynt.apps.project.services.project_checklist import ProjectCheckListService
 from glynt.apps.project.models import Project
 
-from braces.views import JSONResponseMixin
 
 from . import FEEDBACK_STATUS
-from .forms import CustomerToDoForm, AttachmentForm, FeedbackRequestForm
+from .forms import CustomerToDoForm, AttachmentForm
 from .models import ToDo, Attachment
 from .services import CrocdocAttachmentService
 
