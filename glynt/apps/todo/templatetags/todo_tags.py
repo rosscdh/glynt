@@ -47,7 +47,7 @@ def todo_status_assignedto_class(todo_user):
 @register.inclusion_tag('todo/stream/todo_list.html', takes_context=False)
 def todo_stream(todo):
     return {
-        'stream': Action.objects.filter(action_object_object_id=todo.pk, action_object_content_type=TODO_CONTENT_TYPE)
+        'stream': Action.objects.filter(target_object_id=todo.pk, target_content_type=TODO_CONTENT_TYPE)
     }
 
 @register.inclusion_tag('todo/partials/primary_interface.html', takes_context=True)
