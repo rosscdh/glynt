@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import get_object_or_404
-from django.views.generic import ListView, UpdateView, DetailView
+from django.views.generic import View, ListView, UpdateView, DetailView
 from django.views.generic.edit import ModelFormMixin
 from django.views.generic.detail import SingleObjectMixin
 from django.contrib import messages
@@ -8,9 +8,8 @@ from django.contrib import messages
 from glynt.apps.project.services.project_checklist import ProjectCheckListService
 from glynt.apps.project.models import Project
 
-from braces.views import JSONResponseMixin
+#from braces.views import JSONResponseMixin
 
-from glynt.apps.project.models import Project
 from .forms import CustomerToDoForm, AttachmentForm
 from .models import ToDo, Attachment
 from .services import CrocdocAttachmentService
@@ -157,37 +156,46 @@ class ToDoCreateView(ToDoEditView):
         })
         return kwargs
 
-class ToDoAttachmentView(DetailView, BaseToDoDetailMixin):
-    template_name = 'todo/attachments.html'
+"""
+Attachment Views
+"""
 
 
-class ToDoAssignView(DetailView, BaseToDoDetailMixin):
-    template_name = 'todo/assign.html'
-
-
-
-class AttachmentSessionView(JSONResponseMixin, DetailView):
-    """
-    Obtain the appropriate crocdoc session to view a document
-    view allows us to specify certain capabilities based on user class
-    and type: https://github.com/crocodoc/crocodoc-python#session
-    """
-    model = Attachment
-    slug_field = 'pk'
-    slug_url_kwarg = 'pk'
-    json_dumps_kwargs = {'indent': 3}
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
+class CrocdocAttachmentSessionContextMixin(View):
+    def get_context_data(self, **kwargs):
+        context = super(CrocdocAttachmentSessionContextMixin, self).get_context_data(**kwargs)
         service = CrocdocAttachmentService(attachment=self.object)
 
-        params = {"user": {"name": request.user.get_full_name(), "id": request.user.pk}, "sidebar": 'auto', "editable": True, "admin": False, "downloadable": True, "copyprotected": False, "demo": False}
-        session_key = service.session_key(**params)
-
-        context_dict = {
-            'session_key': session_key,
-            'uuid': service.uuid,
-            'view_url': service.view_url(),
+        crocdoc_params = {
+                "user": { "name": self.request.user.get_full_name(), 
+                "id": self.request.user.pk
+            }, 
+            "sidebar": 'auto', 
+            "editable": True, 
+            "admin": False, 
+            "downloadable": True, 
+            "copyprotected": False, 
+            "demo": False
         }
 
-        return self.render_json_response(context_dict)
+        context.update({
+            'session_key': service.session_key(**crocdoc_params),
+            'uuid': service.uuid,
+            'view_url': service.view_url(),
+        })
+        return context
+
+
+class ToDoAttachmentView(CrocdocAttachmentSessionContextMixin, DetailView):
+    template_name = 'todo/attachment.html'
+    model = Attachment
+
+    def get_context_data(self, **kwargs):
+        context = super(ToDoAttachmentView, self).get_context_data(**kwargs)
+        context.update({
+            'feedback_requests': self.object.feedbackrequest_set.all(),
+        })
+        return context
+
+# class ToDoAssignView(DetailView, BaseToDoDetailMixin):
+#     template_name = 'todo/assign.html'
