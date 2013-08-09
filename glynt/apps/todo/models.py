@@ -81,6 +81,9 @@ class Attachment(models.Model):
     class Meta:
         ordering = ['-date_created']
 
+    def __unicode__(self):
+        return u'{filename} {mimetype} ({size})'.format(filename=self.filename, mimetype=self.mimetype, size=0)
+
     @property
     def pusher_id(self):
         return self.todo.pusher_id
