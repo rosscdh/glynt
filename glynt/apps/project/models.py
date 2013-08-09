@@ -39,7 +39,7 @@ class Project(models.Model):
         return '%s of %s Project with %s' % (self.customer.user.get_full_name(), self.company, self.get_primary_lawyer(),)
 
     def get_absolute_url(self):
-        return reverse('project:project', kwargs={'slug': self.uuid})
+        return reverse('dashboard:project', kwargs={'uuid': self.uuid})
 
     def get_checklist_absolute_url(self):
         return reverse('dashboard:checklist', kwargs={'uuid': self.uuid})
