@@ -11,7 +11,7 @@ TODO_STATUS = get_namedtuple_choices('TODO_STATUS', (
 ))
 
 
-ATTACHMENT_STATUS = get_namedtuple_choices('ATTACHMENT_STATUS', (
+FEEDBACK_STATUS = get_namedtuple_choices('FEEDBACK_STATUS', (
     (0, 'open', 'Open'),
     (1, 'acknowldeged', 'Acknowldeged'),
     (2, 'responded', 'Responded'),

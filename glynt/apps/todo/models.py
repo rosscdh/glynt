@@ -13,8 +13,8 @@ from glynt.apps.project.models import Project
 
 from django_filepicker.models import FPFileField
 
-from . import TODO_STATUS, ATTACHMENT_STATUS
-from .managers import DefaultToDoManager
+from . import TODO_STATUS, FEEDBACK_STATUS
+from .managers import DefaultToDoManager, DefaultFeedbackRequestManager
 
 from jsonfield import JSONField
 from hurry.filesize import size
@@ -123,9 +123,11 @@ class FeedbackRequest(models.Model):
     attachment = models.ForeignKey(Attachment)
     assigned_by = models.ForeignKey(User, related_name='requestedfeedback')
     assigned_to = models.ManyToManyField(User, related_name='feedbackrequested')
-    status = models.IntegerField(choices=ATTACHMENT_STATUS.get_choices(), default=ATTACHMENT_STATUS.open, db_index=True)
+    status = models.IntegerField(choices=FEEDBACK_STATUS.get_choices(), default=FEEDBACK_STATUS.open, db_index=True)
     data = JSONField(default={})
     date_created = models.DateTimeField(auto_now=False, auto_now_add=True, db_index=True)
+
+    objects = DefaultFeedbackRequestManager()
 
     class Meta:
         ordering = ['-date_created']

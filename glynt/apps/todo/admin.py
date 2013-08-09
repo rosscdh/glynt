@@ -17,7 +17,7 @@ class ToDoAdmin(admin.ModelAdmin):
 
 
 class AttachmentAdmin(admin.ModelAdmin):
-    list_display = ('uuid', 'project', 'filename', 'mimetype', 'size', 'date_created')
+    list_display = ('uuid', 'project', 'filename', 'mimetype', 'date_created')
     search_fields = ('uuid',)
 
     def queryset(self, request):

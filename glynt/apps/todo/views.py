@@ -8,12 +8,14 @@ from django.contrib import messages
 from glynt.apps.project.services.project_checklist import ProjectCheckListService
 from glynt.apps.project.models import Project
 
-#from braces.views import JSONResponseMixin
+from braces.views import JSONResponseMixin
 
-from .forms import CustomerToDoForm, AttachmentForm
+from . import FEEDBACK_STATUS
+from .forms import CustomerToDoForm, AttachmentForm, FeedbackRequestForm
 from .models import ToDo, Attachment
 from .services import CrocdocAttachmentService
 
+import json
 import logging
 logger = logging.getLogger('django.request')
 
@@ -49,11 +51,11 @@ class ProjectToDoView(ListView):
             'project': self.project,
             'checklist': self.checklist_service,
             'counts': {
-                'new': self.model.objects.new(project=self.project, user=self.request.user).count(),
-                'open': self.model.objects.open(project=self.project, user=self.request.user).count(),
-                'pending': self.model.objects.pending(project=self.project, user=self.request.user).count(),
-                'resolved': self.model.objects.resolved(project=self.project, user=self.request.user).count(),
-                'closed': self.model.objects.closed(project=self.project, user=self.request.user).count(),
+                # 'new': self.model.objects.new(project=self.project, user=self.request.user).count(),
+                # 'open': self.model.objects.open(project=self.project, user=self.request.user).count(),
+                # 'pending': self.model.objects.pending(project=self.project, user=self.request.user).count(),
+                # 'resolved': self.model.objects.resolved(project=self.project, user=self.request.user).count(),
+                # 'closed': self.model.objects.closed(project=self.project, user=self.request.user).count(),
             }
         })
         return context
@@ -156,6 +158,11 @@ class ToDoCreateView(ToDoEditView):
         })
         return kwargs
 
+
+# class ToDoAssignView(DetailView, BaseToDoDetailMixin):
+#     template_name = 'todo/assign.html'
+
+
 """
 Attachment Views
 """
@@ -186,17 +193,20 @@ class CrocdocAttachmentSessionContextMixin(View):
         return context
 
 
-class ToDoAttachmentView(CrocdocAttachmentSessionContextMixin, DetailView):
+class AttachmentView(CrocdocAttachmentSessionContextMixin, DetailView):
     template_name = 'todo/attachment.html'
     model = Attachment
 
+    @property
+    def opposite_user(self):
+        return self.object.project.get_primary_lawyer().user if self.request.user.profile.is_customer else self.object.project.customer.user
+
     def get_context_data(self, **kwargs):
-        context = super(ToDoAttachmentView, self).get_context_data(**kwargs)
+        context = super(AttachmentView, self).get_context_data(**kwargs)
         context.update({
             'has_lawyer': self.object.project.has_lawyer,
-            'feedback_requests': self.object.feedbackrequest_set.all(),
+            'feedback_requests': self.object.feedbackrequest_set.open(),
+            'opposite_user': self.opposite_user,
+            'FEEDBACK_STATUS': FEEDBACK_STATUS,
         })
         return context
-
-# class ToDoAssignView(DetailView, BaseToDoDetailMixin):
-#     template_name = 'todo/assign.html'
