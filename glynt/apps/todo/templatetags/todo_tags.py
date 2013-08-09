@@ -50,6 +50,7 @@ def todo_stream(todo):
         'stream': Action.objects.filter(target_object_id=todo.pk, target_content_type=TODO_CONTENT_TYPE)
     }
 
+
 @register.inclusion_tag('todo/partials/primary_interface.html', takes_context=True)
 def todo_primary_interface(context, todo):
     todo = context.get('object')
