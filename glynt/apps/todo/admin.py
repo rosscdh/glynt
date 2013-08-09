@@ -1,7 +1,8 @@
 # -*- coding: UTF-8 -*-
 from django.contrib import admin
 
-from models import ToDo, Attachment
+from models import ToDo, Attachment, FeedbackRequest
+
 
 class ToDoAdmin(admin.ModelAdmin):
     list_display = ('name', 'category', 'slug')
@@ -19,7 +20,7 @@ class AttachmentAdmin(admin.ModelAdmin):
     list_display = ('uuid', 'project', 'filename', 'mimetype', 'size', 'date_created')
     search_fields = ('uuid',)
 
-    def queryset (self, request):
+    def queryset(self, request):
         qs = Attachment.objects.prefetch_related('project').all()
         ordering = self.get_ordering(request)
         if ordering:
@@ -28,3 +29,5 @@ class AttachmentAdmin(admin.ModelAdmin):
 
 admin.site.register(ToDo, ToDoAdmin)
 admin.site.register(Attachment, AttachmentAdmin)
+
+admin.site.register([FeedbackRequest])
