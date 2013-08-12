@@ -14,7 +14,6 @@ from .forms import CustomerToDoForm, AttachmentForm
 from .models import ToDo, Attachment
 from .services import CrocdocAttachmentService
 
-import json
 import logging
 logger = logging.getLogger('django.request')
 
@@ -165,8 +164,6 @@ class ToDoCreateView(ToDoEditView):
 """
 Attachment Views
 """
-
-
 class CrocdocAttachmentSessionContextMixin(View):
     def get_context_data(self, **kwargs):
         context = super(CrocdocAttachmentSessionContextMixin, self).get_context_data(**kwargs)
