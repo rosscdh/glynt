@@ -16,7 +16,17 @@
                 <p>{{ f.assigned_by.get_full_name|default:f.assigned_by.username }} has requested your feedback on this attachment.</p>
             </div>
         {% endif %}
-        <button class="btn btn-success pull-right feedback-complete" data-pk="{{ f.pk }}" data-attachment="{{ object.pk }}" data-assigned_by="{{ user.pk }}" data-assigned_to="{{ opposite_user.pk }}" data-status="{{ FEEDBACK_STATUS.closed }}">Feedback Complete</button>
+
+        {% if f.status == FEEDBACK_STATUS.open %}
+
+            {% if f.assigned_by == user %}
+                <button class="btn btn-warning pull-right feedback-complete" data-pk="{{ f.pk }}" data-attachment="{{ object.pk }}" data-assigned_by="{{ user.pk }}" data-assigned_to="{{ opposite_user.pk }}" data-status="{{ FEEDBACK_STATUS.closed }}">Cancel Request</button>
+            {% else %}
+                <button class="btn btn-success pull-right feedback-complete" data-pk="{{ f.pk }}" data-attachment="{{ object.pk }}" data-assigned_by="{{ user.pk }}" data-assigned_to="{{ opposite_user.pk }}" data-status="{{ FEEDBACK_STATUS.closed }}">Feedback Complete</button>
+            {% endif %}
+
+        {% endif %}
+
     {% empty %}
         <!-- if no feedback request present -->
         <!-- and is_customer or is_lawyer -->
