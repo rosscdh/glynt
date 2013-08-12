@@ -44,10 +44,12 @@ class ProjectToDoView(ListView):
 
         self.project = get_object_or_404(Project, uuid=self.kwargs.get('uuid'))
         self.checklist_service = ProjectCheckListService(project=self.project)
+        self.feedback_requests = self.checklist_service.feedbackrequests_by_user_as_json(user=self.request.user)
 
         context.update({
             'project': self.project,
             'checklist': self.checklist_service,
+            'feedback_requests': self.feedback_requests,
             'counts': {
                 # 'new': self.model.objects.new(project=self.project, user=self.request.user).count(),
                 # 'open': self.model.objects.open(project=self.project, user=self.request.user).count(),
