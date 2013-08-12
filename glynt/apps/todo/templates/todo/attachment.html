@@ -7,8 +7,8 @@
     {% for f in feedback_requests %}        
         {% if f.assigned_by == user %}
             <div class="alert alert-block alert-info text-center">
-                <div class="profile-card" data-template="mini" data-username="{{ f.assigned_to.all.0.username }}" data-img_class="img-circle"></div>
-                <p>You have requested feedback from {{ f.assigned_to.all.0.get_full_name|default:f.assigned_to.all.0.username }} on this attachment.</p>
+                <div class="profile-card" data-template="mini" data-username="{{ f.primary_assigned_to.username }}" data-img_class="img-circle"></div>
+                <p>You have requested feedback from {{ f.primary_assigned_to.get_full_name|default:f.primary_assigned_to.username }} on this attachment.</p>
             </div>
         {% else %}
             <div class="alert alert-block alert-alert text-center">

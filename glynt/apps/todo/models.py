@@ -132,6 +132,13 @@ class FeedbackRequest(models.Model):
     class Meta:
         ordering = ['-date_created']
 
+    @property
+    def primary_assigned_to(self):
+        try:
+            return self.assigned_to.all()[0]
+        except IndexError:
+            return {}
+
 
 """
 import signals
