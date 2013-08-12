@@ -12,8 +12,8 @@ from bunch import Bunch
 from glynt.apps.todo import FEEDBACK_STATUS
 
 from .tasks import delete_attachment
-from .models import Attachment, FeedbackRequest
-from .services import CrocdocAttachmentService
+from .models import ToDo, Attachment, FeedbackRequest
+from .services import CrocdocAttachmentService, ToDoStatusService, ToDoAttachmentFeedbackRequestStatusService
 
 from glynt.apps.services.pusher import PusherPublisherService
 
@@ -24,6 +24,9 @@ import logging
 logger = logging.getLogger('django.request')
 
 
+"""
+Attachment handler events
+"""
 @receiver(post_save, sender=Attachment, dispatch_uid='todo.attachment.created')
 def on_attachment_created(sender, **kwargs):
     """
@@ -36,6 +39,9 @@ def on_attachment_created(sender, **kwargs):
         if attachment and is_new:
             crocdoc_service = CrocdocAttachmentService(attachment=attachment)
             crocdoc_service.process()
+
+            todostatus_service = ToDoStatusService(todo_item=attachment.todo)
+            todostatus_service.process()
 
 
 @receiver(post_delete, sender=Attachment, dispatch_uid='todo.attachment.deleted')
@@ -54,7 +60,9 @@ def on_attachment_deleted(sender, **kwargs):
                 logger.error('Could not call delete_attachment via celery: {exception}'.format(exception=e))
                 delete_attachment(is_new=is_new, attachment=attachment, **kwargs)
 
-
+"""
+Comment Events
+"""
 @receiver(post_save, sender=ThreadedComment, dispatch_uid='todo.comment.created')
 def on_comment_created(sender, **kwargs):
     """
@@ -67,13 +75,20 @@ def on_comment_created(sender, **kwargs):
 
         if comment and is_new:
             verb = 'Commented on Checklist Item'
+            todo = comment.content_object
             action.send(comment.user,
                         verb=verb,
                         action_object=comment,
-                        target=comment.content_object,
+                        target=todo,
                         content=comment.comment)
 
+            todostatus_service = ToDoStatusService(todo_item=todo)
+            todostatus_service.process()
 
+
+"""
+Feedback Request Change Events
+"""
 @receiver(m2m_changed, sender=FeedbackRequest.assigned_to.through, dispatch_uid='feedbackrequest.created')
 def feedbackrequest_created(sender, **kwargs):
     # please note the pk_set check here
@@ -89,16 +104,16 @@ def feedbackrequest_created(sender, **kwargs):
                         verb=verb,
                         action_object=feedbackrequest.attachment,
                         target=feedbackrequest.attachment.todo,
-                        content='for attachment "{attachment}"'.format(attachment=feedbackrequest.attachment.filename))
+                        content='for attachment "{attachment}" - "{todo}" is {status}'.format(attachment=feedbackrequest.attachment.filename, todo=feedbackrequest.attachment.todo.name, status=feedbackrequest.attachment.todo.display_status))
 
-        if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.responded:
-            verb = 'provided feedback to {assigned_by} on {attachment}'.format(assigned_by=feedbackrequest.assigned_by, attachment=feedbackrequest.attachment.filename)
-            action.send(feedbackrequest.assigned_by,
-                        verb=verb,
-                        action_object=feedbackrequest.attachment,
-                        target=feedbackrequest.attachment.todo,
-                        content='for attachment "{attachment}"'.format(attachment=feedbackrequest.attachment.filename),
-                        assigned_to=feedbackrequest.assigned_by)
+        # if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.responded:
+        #     verb = 'provided feedback to {assigned_by} on {attachment}'.format(assigned_by=feedbackrequest.assigned_by, attachment=feedbackrequest.attachment.filename)
+        #     action.send(feedbackrequest.assigned_by,
+        #                 verb=verb,
+        #                 action_object=feedbackrequest.attachment,
+        #                 target=feedbackrequest.attachment.todo,
+        #                 content='for attachment "{attachment}" - "{todo}" is {status}'.format(attachment=feedbackrequest.attachment.filename, todo=feedbackrequest.attachment.todo.name, status=feedbackrequest.attachment.todo.display_status),
+        #                 assigned_to=feedbackrequest.assigned_by)
 
         if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.closed:
             verb = 'closed the feedback request assigned to them'
@@ -106,9 +121,22 @@ def feedbackrequest_created(sender, **kwargs):
                         verb=verb,
                         action_object=feedbackrequest.attachment,
                         target=feedbackrequest.attachment.todo,
-                        content='for attachment "{attachment}"'.format(attachment=feedbackrequest.attachment.filename))
+                        content='for attachment "{attachment}" - "{todo}" is {status}'.format(attachment=feedbackrequest.attachment.filename, todo=feedbackrequest.attachment.todo.name, status=feedbackrequest.attachment.todo.display_status))
 
 
+@receiver(post_save, sender=FeedbackRequest, dispatch_uid='feedbackrequest.status_change')
+def feedbackrequest_status_change(sender, **kwargs):
+    feedback_request = kwargs.get('instance')
+    logger.debug('Starting ToDoAttachmentFeedbackRequestStatusService todo.status: {status}'.format(status=feedback_request.attachment.todo.display_status))
+    service = ToDoAttachmentFeedbackRequestStatusService(feedback_request=feedback_request)
+    service.process()
+    logger.debug('Completed ToDoAttachmentFeedbackRequestStatusService: todo.status: {status}'.format(status=feedback_request.attachment.todo.display_status))
+
+
+"""
+Action Created Events - which is involked everytime action.send is called
+@PRIMARY HANDLER
+"""
 @receiver(post_save, sender=Action, dispatch_uid='action.created')
 def on_action_created(sender, **kwargs):
     """
