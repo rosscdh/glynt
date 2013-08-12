@@ -67,7 +67,7 @@ class Lawyer(models.Model):
     @property
     def primary_firm(self):
         try:
-            return self.firm_lawyers.all().prefetch_related()[0]
+            return self.firm_lawyers.prefetch_related().all()[0]
         except IndexError:
             return None
 
