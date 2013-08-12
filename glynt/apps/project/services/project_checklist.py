@@ -110,7 +110,7 @@ class ToDoItemsFromDbMixin(object):
 
     def db_todos(self):
         if self.db_todos_list is None:
-            self.db_todos_list = self.project.todo_set.filter(project=self.project)
+            self.db_todos_list = self.project.todo_set.filter(project=self.project).select_related()
         return self.db_todos_list
 
     def todos_by_slug(self, todos):
@@ -160,7 +160,29 @@ class ToDoItemsFromDbMixin(object):
         logger.debug('checklist item status: %s %s' % (item.name, item.display_status,))
 
 
-class ProjectCheckListService(ToDoItemsFromYamlMixin, ToDoItemsFromDbMixin):
+class UserFeedbackRequestMixin(object):
+    def feedbackrequests_by_user(self, user):
+        user_feedback_requests = []
+        for t in self.todos:
+            if hasattr(t, 'obj'):
+                for a in t.obj.attachments.select_related().all():
+                    user_feedback_requests += a.feedbackrequest_set.open(assigned_to=user)
+        return user_feedback_requests
+
+    def feedbackrequests_by_user_as_json(self, user):
+        """
+        Return a set of attachment feedback requests
+        grouped by todo.slug
+        """
+        json_response = {}
+        for f in self.feedbackrequests_by_user(user=user):
+            json_response[f.attachment.todo.slug] = json_response.get(f.attachment.todo.slug, [])
+            json_response[f.attachment.todo.slug].append(Bunch(todo_slug=f.attachment.todo.slug))
+
+        return json_response
+
+
+class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin, ToDoItemsFromDbMixin):
     """
     Provide a set of checklist items that are
     generated from the project transaction types
