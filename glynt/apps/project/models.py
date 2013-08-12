@@ -54,7 +54,7 @@ class Project(models.Model):
         try:
             return self.lawyers.select_related('user').all()[0]
         except IndexError:
-            return None
+            return []
 
     @property
     def has_lawyer(self):
