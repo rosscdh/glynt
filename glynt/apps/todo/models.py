@@ -120,6 +120,7 @@ class FeedbackRequest(models.Model):
     """ Feedback Request is used to associate requests for feedback 
     from a user on an attachment; is the primary mechanisim to obtain
     a response from a user on an attachment """
+    FEEDBACK_STATUS_CHOICES = FEEDBACK_STATUS
     attachment = models.ForeignKey(Attachment)
     assigned_by = models.ForeignKey(User, related_name='requestedfeedback')
     assigned_to = models.ManyToManyField(User, related_name='feedbackrequested')
@@ -131,6 +132,13 @@ class FeedbackRequest(models.Model):
 
     class Meta:
         ordering = ['-date_created']
+
+    def __unicode__(self):
+        return '{display_status} by: {assigned_by}'.format(display_status=self.display_status, assigned_by=self.assigned_by.get_full_name())
+
+    @property
+    def display_status(self):
+        return self.FEEDBACK_STATUS_CHOICES.get_desc_by_value(self.status)
 
     @property
     def primary_assigned_to(self):
