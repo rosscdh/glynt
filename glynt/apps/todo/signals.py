@@ -1,15 +1,18 @@
 # -*- coding: utf-8 -*-
 """ Set of signals to handle when comments are posted and assigning notifications to the user """
 from django.dispatch import receiver
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_save, post_delete, m2m_changed
+
 from django.contrib.admin.models import LogEntry
 
 from threadedcomments.models import ThreadedComment
 
 from bunch import Bunch
 
+from glynt.apps.todo import FEEDBACK_STATUS
+
 from .tasks import delete_attachment
-from .models import Attachment
+from .models import Attachment, FeedbackRequest
 from .services import CrocdocAttachmentService
 
 from glynt.apps.services.pusher import PusherPublisherService
@@ -71,6 +74,41 @@ def on_comment_created(sender, **kwargs):
                         content=comment.comment)
 
 
+@receiver(m2m_changed, sender=FeedbackRequest.assigned_to.through, dispatch_uid='feedbackrequest.created')
+def feedbackrequest_created(sender, **kwargs):
+    # please note the pk_set check here
+    # this is required in order to catch the m2m model change 
+    # so we get access to the assigned_to.all() object
+    if kwargs.get('action') == 'post_add' and kwargs.get('pk_set') is not None:
+        #is_new = kwargs.get('created', False)
+        feedbackrequest = kwargs.get('instance')
+
+        if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.open:
+            verb = 'requested feedback from {assigned_to}'.format(assigned_to=', '.join([u.get_full_name() for u in feedbackrequest.assigned_to.all()]))
+            action.send(feedbackrequest.assigned_by,
+                        verb=verb,
+                        action_object=feedbackrequest.attachment,
+                        target=feedbackrequest.attachment.todo,
+                        content='for attachment "{attachment}"'.format(attachment=feedbackrequest.attachment.filename))
+
+        if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.responded:
+            verb = 'provided feedback to {assigned_by} on {attachment}'.format(assigned_by=feedbackrequest.assigned_by, attachment=feedbackrequest.attachment.filename)
+            action.send(feedbackrequest.assigned_by,
+                        verb=verb,
+                        action_object=feedbackrequest.attachment,
+                        target=feedbackrequest.attachment.todo,
+                        content='for attachment "{attachment}"'.format(attachment=feedbackrequest.attachment.filename),
+                        assigned_to=feedbackrequest.assigned_by)
+
+        if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.closed:
+            verb = 'closed the feedback request assigned to them'
+            action.send(feedbackrequest.assigned_by,
+                        verb=verb,
+                        action_object=feedbackrequest.attachment,
+                        target=feedbackrequest.attachment.todo,
+                        content='for attachment "{attachment}"'.format(attachment=feedbackrequest.attachment.filename))
+
+
 @receiver(post_save, sender=Action, dispatch_uid='action.created')
 def on_action_created(sender, **kwargs):
     """
@@ -78,7 +116,6 @@ def on_action_created(sender, **kwargs):
     """
     if not isinstance(sender, LogEntry):
         is_new = kwargs.get('created', False)
-
         action = kwargs.get('instance')
         target = action.target
 
