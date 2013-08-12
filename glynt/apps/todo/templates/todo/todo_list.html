@@ -99,26 +99,33 @@
             'state_modifier': $('#state_modifier')
         });
 
+        /**
+        * HILIGHT ITEMS WITH ASSIGNED
+        * Items with assignments to current user
+        * loop over items in the feedback_results and for each slug
+        * set the highlight class
+        */
         var user_feedback_requests = {{ feedback_requests|jsonify }};
         $.each(user_feedback_requests, function (slug, data) {
             var row = $('[data-edit_label={slug}]'.assign({'slug': slug}));
             row.removeClass('assigned-to-user').addClass('assigned-to-user');
         });
+        /**
+        * ASSIGN NUM ITEMS ASSIGNED TO USER COUNT
+        * Count the number of items assigned to the user
+        * per category and assign that number to the category list
+        * if the count is > 0
+        */
         $.each($('[data-category]'), function (i, elem) {
             var elem = $(elem);
             var cat = elem.data('category');
             var cat_row = $('#{cat}'.assign({'cat': cat}))
             var num_assigned_to_user = cat_row.children('table:first').find('tr.assigned-to-user').length;
-            //console.log(cat_row.find('.assigned-to-user'))
-            elem.find('.num_assigned_to_user').html(num_assigned_to_user);
+
+            if (num_assigned_to_user > 0)
+                elem.find('.num_assigned_to_user').html(num_assigned_to_user);
         });
-        // $('#list-items').edit_label({
-        //     'project_uuid': '{{ project.uuid }}',
-        //     'url': '/api/v1/todo/name/{slug}',
-        //     'edit_template': '<input type="text" id="{id}" name="{name}" value="{value}" data-original_value="{value}" data-update_name_url="{url}" />',
-        //     'remove_button': '<a data-restore_label="true" href="javascript:;"><i class="icon-remove-sign"></i></a>',
-        //     'target_selector': 'a:first'
-        // });
+
 
     });
     </script>
