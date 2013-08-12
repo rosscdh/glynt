@@ -4,6 +4,8 @@ Service that abstract the various creation processes todos
 """
 from django.conf import settings
 
+from . import TODO_STATUS, FEEDBACK_STATUS
+
 from boto.s3.connection import S3Connection
 
 import logging
@@ -126,3 +128,64 @@ class InkFilePickerAttachmentService(object):
         bucket = conn.get_bucket(AWS_FILESTORE_BUCKET)
         r = bucket.delete_key(self.attachment.s3_key)
         logger.info('InkFilePickerAttachmentService.remove_from_s3 for attachment: {pk} - to: {s3_key}, Response: {r}'.format(pk=self.attachment.pk, s3_key=self.attachment.s3_key, r=r))
+
+
+class ToDoStatusRulesetMixin(object):
+    todo_item = None
+    status = None
+
+    def todo_status(self):
+        return self.todo_status_by_feedbackrequest()
+
+    def todo_status_by_feedbackrequest(self):
+        """ if we have other feedback requests that are not closed
+        then the item status should be pending
+        otherwise its status should be open (for manual closing by lawyer)"""
+        open_items = []
+
+        for attachment in self.todo_item.attachments.all():
+            open_items += attachment.feedbackrequest_set.open()
+
+        if len(open_items) > 0:
+            #pdb.set_trace()
+            return TODO_STATUS.pending
+
+        return TODO_STATUS.open
+
+
+class ToDoStatusService(ToDoStatusRulesetMixin):
+    """
+    Service to update the ToDo status based on events
+    """
+    def __init__(self, todo_item, status=None, *args, **kwargs):
+        self.todo_item = todo_item
+        self.status = status
+
+    def process(self, **kwargs):
+        status = self.todo_status()
+        if status != self.todo_item.status:
+            self.todo_item.status = status
+            self.todo_item.save(update_fields=['status'])
+
+
+class ToDoAttachmentFeedbackRequestStatusService(ToDoStatusRulesetMixin):
+    """
+    Service to change the todo attachment feedback request
+    1. updates the request_feedback status
+    2. changes the todo parent status to pending when any attachment.feedback_request is present
+    """
+    feedback_request = None
+    attachment = None
+
+    def __init__(self, feedback_request, status=None, *args, **kwargs):
+        logger.debug('Starting ToDoAttachmentFeedbackRequestStatusService')
+        self.feedback_request = feedback_request
+        self.attachment = feedback_request.attachment
+        self.todo_item = feedback_request.attachment.todo
+        self.status = status
+
+    def process(self, **kwargs):
+        status = self.todo_status()
+        if status != self.todo_item.status:
+            self.todo_item.status = status
+            self.todo_item.save(update_fields=['status'])
