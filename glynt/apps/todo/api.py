@@ -5,7 +5,7 @@ from tastypie import fields
 from tastypie.authorization import Authorization
 from tastypie.resources import ALL
 
-from glynt.apps.api import BaseApiModelResource
+from glynt.apps.api.models import BaseApiModelResource
 from glynt.apps.todo.models import ToDo, Attachment, FeedbackRequest
 
 import time

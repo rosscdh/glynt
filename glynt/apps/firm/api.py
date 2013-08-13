@@ -3,7 +3,7 @@
 from tastypie.resources import ALL
 from tastypie.cache import SimpleCache
 
-from glynt.apps.api import BaseApiModelResource
+from glynt.apps.api.models import BaseApiModelResource
 
 from .models import Firm
 
