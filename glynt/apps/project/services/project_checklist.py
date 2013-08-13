@@ -2,7 +2,6 @@
 from django import template
 
 from glynt.apps.todo import TODO_STATUS
-from glynt.apps.todo.models import FeedbackRequest
 from glynt.apps.project.bunches import ProjectIntakeFormIsCompleteBunch
 
 from bunch import Bunch
@@ -181,6 +180,7 @@ class ToDoItemsFromDbMixin(object):
 
 class UserFeedbackRequestMixin(object):
     def feedbackrequests_by_user(self, user):
+        from glynt.apps.todo.models import FeedbackRequest
         return FeedbackRequest.objects.open(assigned_to=user)
 
     def feedbackrequests_by_user_as_json(self, user):

@@ -11,7 +11,6 @@ from glynt.apps.project.services.actions import OpenProjectService, CloseProject
 
 from glynt.apps.transact.models import Transaction
 from glynt.apps.company.models import Company
-from glynt.apps.customer.models import Customer
 from glynt.apps.lawyer.models import Lawyer
 
 from glynt.apps.project import PROJECT_STATUS
@@ -24,7 +23,7 @@ class Project(models.Model):
     Stores initial project details
     """
     uuid = UUIDField(auto=True, db_index=True)
-    customer = models.ForeignKey(Customer)
+    customer = models.ForeignKey('customer.Customer')
     company = models.ForeignKey(Company)
     transactions = models.ManyToManyField(Transaction)
     lawyers = models.ManyToManyField(Lawyer, blank=True)
