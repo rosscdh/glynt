@@ -37,8 +37,8 @@ class CompanyProfileForm(BuilderBaseForm):
         self.helper.layout = Layout(
             Fieldset(
                 'Founding Team',
-                'founder_email',
                 'founder_name',
+                'founder_email',
                 **{'data-region-clone': 'true', 'data-region-name': 'founders', 'class': 'founder-block'}
             ),
             Fieldset(
