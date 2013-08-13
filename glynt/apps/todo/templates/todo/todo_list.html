@@ -4,6 +4,7 @@
 {% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>{% endblock %}
 
 {% block body %}
+{% csrf_token %}
 <div class="container checklist-view">
     <div class="page-header clearfix">
         <ul class="nav nav-tabs header-nav">
@@ -48,9 +49,11 @@
                 <span id="{{ category|slugify }}">
                     <div class="checklist-header clearfix">
                         <h3 class="pull-left">{{ category }}</h3>
+                        {% if is_lawyer %}
                         <button type="button" class="btn btn-link pull-right" data-remote="{% url 'todo:create' project_uuid=project.uuid %}?category={{ category|urlencode }}" data-toggle="modal" data-target="#modal-checklist-item" title="Create new item">
                             <i class="glyphicon glyphicon-plus-sign"></i>
                         </button>
+                        {% endif %}
                     </div>
                     <table class="table table-striped checklist">
                         <tbody>
@@ -66,9 +69,14 @@
                                     </td>
                                     <td class="item-meta">
                                         <small class="soft">{{ item.item_hash_num }}</small><br/>
+                                        {% if is_lawyer %}
+                                        <a href="{% url 'todo:edit' project_uuid=project.uuid slug=item.slug %}" title="Delete Item" data-pk="{{ item.obj.pk }}" data-item_slug="{{ item.slug }}" data-tooltip="Delete Item" class="btn btn-small btn-link item-delete text-danger">
+                                            <i class="glyphicon glyphicon-remove text-danger"></i>
+                                        </a>
                                         <a href="{% url 'todo:edit' project_uuid=project.uuid slug=item.slug %}" data-toggle="modal" data-target="#modal-checklist-item" title="Edit" data-tooltip="Edit" class="btn btn-small btn-link item-edit">
                                             <i class="glyphicon glyphicon-pencil"></i>
                                         </a>
+                                        {% endif %}
                                     </td>
                                 </tr>
                             {% empty %}
@@ -126,6 +134,48 @@
                 elem.find('.num_assigned_to_user').html(num_assigned_to_user);
         });
 
+        {% if is_lawyer %}
+        /**
+        * DELETE ITEM LIST
+        */
+        $('tr.item .item-delete').hide();
+        $('tr.item').on('mouseout', function (event) {
+            var elem = $(this);
+            elem.find('.item-delete').toggle();
+        });
+        $('tr.item').on('mouseover', function (event) {
+            var elem = $(this);
+            elem.find('.item-delete').toggle();
+        });
+
+        $('.item-delete').on('click', function (event) {
+            event.preventDefault();
+            var elem = $(this);
+            var elem_tr = elem.closest('tr.item');
+            var pk = elem.data('pk');
+            var url = '/api/v1/todo/{pk}'.assign({'pk': pk});
+
+            console.log(elem_tr)
+            $.ajax({
+                type: 'PATCH',
+                url: url,
+                data: JSON.stringify({'is_deleted': true}),
+                dataType: 'application/json',
+                contentType: 'application/json',
+                beforeSend: function(jqXHR, settings) {
+                    // Pull the token out of the DOM.
+                    jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]:first').val());
+                },
+                error: function() {
+                    console.log('Error Deleting item')
+                },
+                complete: function() {
+                    //console.log('deleted')
+                    elem_tr.fadeOut();
+                }
+            });
+        });
+        {% endif %}
 
     });
     </script>

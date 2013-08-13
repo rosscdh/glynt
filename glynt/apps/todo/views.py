@@ -42,6 +42,7 @@ class ProjectToDoView(ListView):
     def get_context_data(self, **kwargs):
         context = super(ProjectToDoView, self).get_context_data(**kwargs)
 
+        user_profile = self.request.user.profile
         self.project = get_object_or_404(Project, uuid=self.kwargs.get('uuid'))
         self.checklist_service = ProjectCheckListService(project=self.project)
         self.feedback_requests = self.checklist_service.feedbackrequests_by_user_as_json(user=self.request.user)
@@ -50,6 +51,8 @@ class ProjectToDoView(ListView):
             'project': self.project,
             'checklist': self.checklist_service,
             'feedback_requests': self.feedback_requests,
+            'is_lawyer': user_profile.is_lawyer,
+            'is_customer': user_profile.is_customer,
             'counts': {
                 # 'new': self.model.objects.new(project=self.project, user=self.request.user).count(),
                 # 'open': self.model.objects.open(project=self.project, user=self.request.user).count(),

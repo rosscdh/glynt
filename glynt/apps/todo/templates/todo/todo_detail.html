@@ -141,38 +141,39 @@ $(document).ready(function () {
         {% endif %}
     });
 
-    $(document).on( 'click', '.btn-delete', function (event) {
-        event.preventDefault();
+    {% if user.profile.is_lawyer %}
+        $(document).on( 'click', '.btn-delete', function (event) {
+            event.preventDefault();
 
-        var elem = $(this);
-        elem.fadeOut('slow');
+            var elem = $(this);
+            elem.fadeOut('slow');
 
-        var url = '/api/v1/todo/{pk}'.assign({'pk': '{{ object.pk }}'});
+            var url = '/api/v1/todo/{pk}'.assign({'pk': '{{ object.pk }}'});
 
-        $.ajax({
-            type: 'PUT',
-            url: url,
-            data: JSON.stringify({'is_deleted': true}),
-            dataType: 'application/json',
-            contentType: 'application/json',
-            beforeSend: function (jqXHR, settings) {
-                // Pull the token out of the DOM.
-                jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]:first').val());
-            },
-            success: function () {
-                if ($('#item-nav-controls .btn-next:first').length > 0) {
-                    $('#item-nav-controls .btn-next:first').trigger('click');
-                } else {
-                    console.log('home')
-                    $('#item-nav-controls .btn-home:first').trigger('click');
+            $.ajax({
+                type: 'PUT',
+                url: url,
+                data: JSON.stringify({'is_deleted': true}),
+                dataType: 'application/json',
+                contentType: 'application/json',
+                beforeSend: function (jqXHR, settings) {
+                    // Pull the token out of the DOM.
+                    jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]:first').val());
+                },
+                success: function () {
+                    if ($('#item-nav-controls .btn-next:first').length > 0) {
+                        $('#item-nav-controls .btn-next:first').trigger('click');
+                    } else {
+                        console.log('home')
+                        $('#item-nav-controls .btn-home:first').trigger('click');
+                    }
+                },
+                complete: function () {
+                    console.log('deleted')
                 }
-            },
-            complete: function () {
-                console.log('deleted')
-            }
+            });
         });
-
-    });
+    {% endif %}
 
     /**
     * Variables used to re populate droppable area
@@ -248,6 +249,7 @@ $(document).ready(function () {
             }
         });
     });
+
     $(document).on( 'click', '.request-feedback', function (event) {
         event.preventDefault();
         var elem = $(this);

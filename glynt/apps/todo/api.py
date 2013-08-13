@@ -53,6 +53,7 @@ class ToDoResource(BaseApiModelResource):
         list_allowed_methods = ['get', 'put', 'patch']
         #fields = ['is_deleted']
         filtering = {
+            'slug': ['exact'],
             'is_deleted': ['exact'],
         }
 
