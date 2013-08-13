@@ -15,6 +15,7 @@ bunch
 
 # utils for git
 gitpython
+mimeparse
 
 django-filepicker
 -e git+https://github.com/dcramer/django-uuidfield.git#egg=django-uuidfield
