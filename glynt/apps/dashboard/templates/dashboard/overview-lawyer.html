@@ -12,7 +12,35 @@
     <div class="row">
         <ul>
         {% for p in projects %}
-            <li><a href="{{ p.get_absolute_url }}">{{ p }}</a></li>
+            <li class="span5">
+                <div class="">
+                    {% if PROJECT_LAWYER_STATUS.assigned == p.status %}
+                        <div class="callout callout-success">
+                            <div class="profile-card pull-right" data-template="small" data-username="{{ p.project.customer.user.username }}">&nbsp;</div>
+                            <p>You have been assigned to this project</p>
+                            <p><a href="{{ p.project.get_absolute_url }}">{{ p.project.company }} - <b>{{ p.display_status }}</b></a></p>
+                        </div>
+                        
+                    {% else %}
+                        {% if PROJECT_LAWYER_STATUS.rejected == p.status %}
+                            <div class="callout callout-warning">
+                                <div class="profile-card pull-right" data-template="small" data-username="{{ p.project.customer.user.username }}">&nbsp;</div>
+                                <p>You have been rejected from this project</p>
+                                <p>{{ p.project.company }} - <b>{{ p.display_status }}</b></p>
+                            </div>
+                        {% endif %}
+                        {% if PROJECT_LAWYER_STATUS.potential == p.status %}
+                            <div class="callout callout-info">
+                                <div class="profile-card pull-right" data-template="small" data-username="{{ p.project.customer.user.username }}">&nbsp;</div>
+                                <p>You are being considered for this project</p>
+                                <p>{{ p.project.company }} - <b>{{ p.display_status }}</b></p>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </li>
+        {% empty %}
+            <li>Sorry, you are not assigned to any projects</li>
         {% endfor %}
         </ul>
     </div>
