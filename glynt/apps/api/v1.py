@@ -25,7 +25,7 @@ from glynt.apps.project.api import (ProjectResource,
                                     ProjectDataBagResource)
 
 from glynt.apps.todo.api import (UserToDoCountResource, AttachmentResource, 
-                                ToDoResource)
+                                ToDoResource, FeedbackRequestResource)
 
 V1_INTERNAL_API = Api(api_name='v1')
 
@@ -81,6 +81,18 @@ class StateSimpleResource(BaseApiModelResource):
         cache = SimpleCache()
 
 
+class UserResource(BaseApiModelResource):
+    class Meta(BaseApiModelResource.Meta):
+        # Only filter by USA, allow freeform for others
+        queryset = User.objects.all()
+        authentication = Authentication()
+        authorization = Authorization()
+        resource_name = 'user'
+        filtering = {
+            'username': ALL,
+        }
+        cache = SimpleCache()
+
 
 class UserBasicProfileResource(BaseApiModelResource):
     name = fields.CharField(attribute='get_full_name', null=True)
@@ -110,6 +122,7 @@ class UserBasicProfileResource(BaseApiModelResource):
 
 
 """ Register the api resources """
+V1_INTERNAL_API.register(UserResource())
 V1_INTERNAL_API.register(LocationSimpleResource())
 V1_INTERNAL_API.register(StateSimpleResource())
 V1_INTERNAL_API.register(FirmSimpleResource())
@@ -119,7 +132,8 @@ V1_INTERNAL_API.register(CompanyBasicProfileResource())
 V1_INTERNAL_API.register(CompanyDataBagResource())
 V1_INTERNAL_API.register(ProjectDataBagResource())
 V1_INTERNAL_API.register(UserToDoCountResource())
-V1_INTERNAL_API.register(ToDoResource())
 V1_INTERNAL_API.register(AttachmentResource())
+V1_INTERNAL_API.register(ToDoResource())
+V1_INTERNAL_API.register(FeedbackRequestResource())
 V1_INTERNAL_API.register(LawyerResource())
 V1_INTERNAL_API.register(ProjectResource())

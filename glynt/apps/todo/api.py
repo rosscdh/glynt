@@ -6,7 +6,7 @@ from tastypie.authorization import Authorization
 from tastypie.resources import ALL
 
 from glynt.apps.api import BaseApiModelResource
-from glynt.apps.todo.models import ToDo, Attachment
+from glynt.apps.todo.models import ToDo, Attachment, FeedbackRequest
 
 import time
 
@@ -50,12 +50,13 @@ class ToDoResource(BaseApiModelResource):
         queryset = ToDo.objects.all()
         authorization = Authorization()
         resource_name = 'todo'
-        list_allowed_methods = ['get', 'delete', 'put', 'patch']
+        list_allowed_methods = ['get', 'put', 'patch']
         #fields = ['is_deleted']
         filtering = {
             'is_deleted': ['exact'],
         }
 
+from tastypie.authentication import Authentication
 
 class AttachmentResource(BaseApiModelResource):
     """ Api resource for creating or modifying attachments """
@@ -64,8 +65,9 @@ class AttachmentResource(BaseApiModelResource):
 
     class Meta(BaseApiModelResource.Meta):
         queryset = Attachment.objects.all()
+        authentication = Authentication()
         authorization = Authorization()
-        resource_name = 'todo/attachment'
+        resource_name = 'attachment'
         list_allowed_methods = ['get', 'post', 'delete']
         filtering = {
             'project': ALL,
@@ -77,3 +79,17 @@ class AttachmentResource(BaseApiModelResource):
         bundle.data['data'] = bundle.obj.data
         bundle.data['date_created_unix'] = time.mktime(bundle.obj.date_created.timetuple())
         return bundle
+
+
+class FeedbackRequestResource(BaseApiModelResource):
+    """ Api resource for creating or modifying feedback_requests """
+    attachment = fields.ToOneField('glynt.apps.todo.api.AttachmentResource', 'attachment')
+    assigned_by = fields.ToOneField('glynt.apps.api.v1.UserResource', 'assigned_by')
+    assigned_to = fields.ToManyField('glynt.apps.api.v1.UserResource', 'assigned_to')
+
+    class Meta(BaseApiModelResource.Meta):
+        queryset = FeedbackRequest.objects.all()
+        authorization = Authorization()
+        resource_name = 'feedback_request'
+        list_allowed_methods = ['get', 'post', 'patch']
+        fields = []

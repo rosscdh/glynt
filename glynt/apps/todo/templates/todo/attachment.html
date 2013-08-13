@@ -1,0 +1,47 @@
+{% load i18n todo_tags glynt_helpers %}
+<h3>{{ object.filename }}</h3>
+<!-- if we have a lawyer involved in this project -->
+{% if has_lawyer %}
+<div class="row">
+    <!-- if there is a feedback request in action -->
+    {% for f in feedback_requests %}        
+        {% if f.assigned_by == user %}
+            <div class="alert alert-block alert-info text-center">
+                <div class="profile-card" data-template="mini" data-username="{{ f.primary_assigned_to.username }}" data-img_class="img-circle"></div>
+                <p>You have requested feedback from {{ f.primary_assigned_to.get_full_name|default:f.primary_assigned_to.username }} on this attachment.</p>
+            </div>
+        {% else %}
+            <div class="alert alert-block alert-alert text-center">
+                <div class="profile-card" data-template="mini" data-username="{{ f.assigned_by.username }}" data-img_class="img-circle"></div>
+                <p>{{ f.assigned_by.get_full_name|default:f.assigned_by.username }} has requested your feedback on this attachment.</p>
+            </div>
+        {% endif %}
+
+        {% if f.status == FEEDBACK_STATUS.open %}
+
+            {% if f.assigned_by == user %}
+                <button class="btn btn-warning pull-right feedback-complete" data-pk="{{ f.pk }}" data-attachment="{{ object.pk }}" data-assigned_by="{{ user.pk }}" data-assigned_to="{{ opposite_user.pk }}" data-status="{{ FEEDBACK_STATUS.closed }}">Cancel Request</button>
+            {% else %}
+                <button class="btn btn-success pull-right feedback-complete" data-pk="{{ f.pk }}" data-attachment="{{ object.pk }}" data-assigned_by="{{ user.pk }}" data-assigned_to="{{ opposite_user.pk }}" data-status="{{ FEEDBACK_STATUS.closed }}">Feedback Complete</button>
+            {% endif %}
+
+        {% endif %}
+
+    {% empty %}
+        <!-- if no feedback request present -->
+        <!-- and is_customer or is_lawyer -->
+        <button class="btn btn-primary pull-right request-feedback" data-attachment="{{ object.pk }}" data-assigned_by="{{ user.pk }}" data-assigned_to="{{ opposite_user.pk }}" data-status="{{ FEEDBACK_STATUS.open }}">Request Feedback</button>
+    {% endfor %}
+</div>
+{% endif %}
+{% if not feedback_requests %}
+<div class="row">
+    <div class="btn-group pull-right">
+        <button class="btn btn-delete btn-link pull-right">Delete</button>
+        <!-- <button class="btn btn-fullscreen btn-link pull-right">Full Screen</button> -->
+    </div>
+</div>
+{% endif %}
+<br />
+<br />
+<iframe id="crocdoc-viewer-iframe" src="{{ view_url }}" width="100%" height="550px" frameborder="none" style="margin-top:5px;"></iframe>

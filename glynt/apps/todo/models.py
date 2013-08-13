@@ -9,13 +9,12 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 
-from glynt.apps.utils import generate_unique_slug
 from glynt.apps.project.models import Project
 
 from django_filepicker.models import FPFileField
 
-from . import TODO_STATUS
-from .managers import DefaultToDoManager
+from . import TODO_STATUS, FEEDBACK_STATUS
+from .managers import DefaultToDoManager, DefaultFeedbackRequestManager
 
 from jsonfield import JSONField
 from hurry.filesize import size
@@ -82,6 +81,9 @@ class Attachment(models.Model):
     class Meta:
         ordering = ['-date_created']
 
+    def __unicode__(self):
+        return u'{filename} {mimetype} ({size})'.format(filename=self.filename, mimetype=self.mimetype, size=0)
+
     @property
     def pusher_id(self):
         return self.todo.pusher_id
@@ -112,6 +114,39 @@ class Attachment(models.Model):
 
     def get_url(self):
         return self.attachment.name
+
+
+class FeedbackRequest(models.Model):
+    """ Feedback Request is used to associate requests for feedback 
+    from a user on an attachment; is the primary mechanisim to obtain
+    a response from a user on an attachment """
+    FEEDBACK_STATUS_CHOICES = FEEDBACK_STATUS
+    attachment = models.ForeignKey(Attachment)
+    assigned_by = models.ForeignKey(User, related_name='requestedfeedback')
+    assigned_to = models.ManyToManyField(User, related_name='feedbackrequested')
+    status = models.IntegerField(choices=FEEDBACK_STATUS.get_choices(), default=FEEDBACK_STATUS.open, db_index=True)
+    data = JSONField(default={})
+    date_created = models.DateTimeField(auto_now=False, auto_now_add=True, db_index=True)
+
+    objects = DefaultFeedbackRequestManager()
+
+    class Meta:
+        ordering = ['-date_created']
+
+    def __unicode__(self):
+        return '{display_status} by: {assigned_by}'.format(display_status=self.display_status, assigned_by=self.assigned_by.get_full_name())
+
+    @property
+    def display_status(self):
+        return self.FEEDBACK_STATUS_CHOICES.get_desc_by_value(self.status)
+
+    @property
+    def primary_assigned_to(self):
+        try:
+            return self.assigned_to.all()[0]
+        except IndexError:
+            return {}
+
 
 """
 import signals

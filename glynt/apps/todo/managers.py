@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 from django.db import models
-from glynt.apps.todo import TODO_STATUS
+from glynt.apps.todo import TODO_STATUS, FEEDBACK_STATUS
 
 
 class DefaultToDoManager(models.Manager):
@@ -21,3 +21,8 @@ class DefaultToDoManager(models.Manager):
 
     def closed(self, **kwargs):
         return self.filter(status=TODO_STATUS.closed).filter(**kwargs)
+
+
+class DefaultFeedbackRequestManager(models.Manager):
+    def open(self, **kwargs):
+        return self.filter(status=FEEDBACK_STATUS.open).filter(**kwargs)

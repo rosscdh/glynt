@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import get_object_or_404
-from django.views.generic import ListView, UpdateView, DetailView
+from django.views.generic import View, ListView, UpdateView, DetailView
 from django.views.generic.edit import ModelFormMixin
 from django.views.generic.detail import SingleObjectMixin
 from django.contrib import messages
@@ -8,10 +8,9 @@ from django.contrib import messages
 from glynt.apps.project.services.project_checklist import ProjectCheckListService
 from glynt.apps.project.models import Project
 
-from braces.views import JSONResponseMixin
 
-from glynt.apps.project.models import Project
-from .forms import CutomerToDoForm, AttachmentForm
+from . import FEEDBACK_STATUS
+from .forms import CustomerToDoForm, AttachmentForm
 from .models import ToDo, Attachment
 from .services import CrocdocAttachmentService
 
@@ -45,16 +44,18 @@ class ProjectToDoView(ListView):
 
         self.project = get_object_or_404(Project, uuid=self.kwargs.get('uuid'))
         self.checklist_service = ProjectCheckListService(project=self.project)
+        self.feedback_requests = self.checklist_service.feedbackrequests_by_user_as_json(user=self.request.user)
 
         context.update({
             'project': self.project,
             'checklist': self.checklist_service,
+            'feedback_requests': self.feedback_requests,
             'counts': {
-                'new': self.model.objects.new(project=self.project, user=self.request.user).count(),
-                'open': self.model.objects.open(project=self.project, user=self.request.user).count(),
-                'pending': self.model.objects.pending(project=self.project, user=self.request.user).count(),
-                'resolved': self.model.objects.resolved(project=self.project, user=self.request.user).count(),
-                'closed': self.model.objects.closed(project=self.project, user=self.request.user).count(),
+                # 'new': self.model.objects.new(project=self.project, user=self.request.user).count(),
+                # 'open': self.model.objects.open(project=self.project, user=self.request.user).count(),
+                # 'pending': self.model.objects.pending(project=self.project, user=self.request.user).count(),
+                # 'resolved': self.model.objects.resolved(project=self.project, user=self.request.user).count(),
+                # 'closed': self.model.objects.closed(project=self.project, user=self.request.user).count(),
             }
         })
         return context
@@ -119,7 +120,7 @@ class ToDoDiscussionView(DetailView, BaseToDoDetailMixin):
 
 class ToDoEditView(UpdateView, BaseToDoDetailMixin, ModelFormMixin):
     template_name = 'todo/todo_form.html'
-    form_class = CutomerToDoForm
+    form_class = CustomerToDoForm
 
     def get_success_url(self):
         return self.project.get_checklist_absolute_url()
@@ -148,40 +149,62 @@ class ToDoEditView(UpdateView, BaseToDoDetailMixin, ModelFormMixin):
 
 class ToDoCreateView(ToDoEditView):
     template_name = 'todo/todo_form.html'
-    form_class = CutomerToDoForm
+    form_class = CustomerToDoForm
+
+    def get_form_kwargs(self):
+        kwargs = super(ToDoCreateView, self).get_form_kwargs()
+        kwargs.update({
+            'is_create': True,
+        })
+        return kwargs
 
 
-class ToDoAttachmentView(DetailView, BaseToDoDetailMixin):
-    template_name = 'todo/attachments.html'
+# class ToDoAssignView(DetailView, BaseToDoDetailMixin):
+#     template_name = 'todo/assign.html'
 
 
-class ToDoAssignView(DetailView, BaseToDoDetailMixin):
-    template_name = 'todo/assign.html'
-
-
-
-class AttachmentSessionView(JSONResponseMixin, DetailView):
-    """
-    Obtain the appropriate crocdoc session to view a document
-    view allows us to specify certain capabilities based on user class
-    and type: https://github.com/crocodoc/crocodoc-python#session
-    """
-    model = Attachment
-    slug_field = 'pk'
-    slug_url_kwarg = 'pk'
-    json_dumps_kwargs = {'indent': 3}
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
+"""
+Attachment Views
+"""
+class CrocdocAttachmentSessionContextMixin(View):
+    def get_context_data(self, **kwargs):
+        context = super(CrocdocAttachmentSessionContextMixin, self).get_context_data(**kwargs)
         service = CrocdocAttachmentService(attachment=self.object)
 
-        params = {"user": {"name": request.user.get_full_name(), "id": request.user.pk}, "sidebar": 'auto', "editable": True, "admin": False, "downloadable": True, "copyprotected": False, "demo": False}
-        session_key = service.session_key(**params)
-
-        context_dict = {
-            'session_key': session_key,
-            'uuid': service.uuid,
-            'view_url': service.view_url(),
+        crocdoc_params = {
+                "user": { "name": self.request.user.get_full_name(), 
+                "id": self.request.user.pk
+            }, 
+            "sidebar": 'auto', 
+            "editable": True, 
+            "admin": False, 
+            "downloadable": True, 
+            "copyprotected": False, 
+            "demo": False
         }
 
-        return self.render_json_response(context_dict)
+        context.update({
+            'session_key': service.session_key(**crocdoc_params),
+            'uuid': service.uuid,
+            'view_url': service.view_url(),
+        })
+        return context
+
+
+class AttachmentView(CrocdocAttachmentSessionContextMixin, DetailView):
+    template_name = 'todo/attachment.html'
+    model = Attachment
+
+    @property
+    def opposite_user(self):
+        return self.object.project.get_primary_lawyer().user if self.request.user.profile.is_customer else self.object.project.customer.user
+
+    def get_context_data(self, **kwargs):
+        context = super(AttachmentView, self).get_context_data(**kwargs)
+        context.update({
+            'has_lawyer': self.object.project.has_lawyer,
+            'feedback_requests': self.object.feedbackrequest_set.open(),
+            'opposite_user': self.opposite_user,
+            'FEEDBACK_STATUS': FEEDBACK_STATUS,
+        })
+        return context

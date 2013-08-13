@@ -52,7 +52,7 @@ class Lawyer(models.Model):
     approved = ApprovedLawyerManager()
 
     def __unicode__(self):
-        return u'%s' % (self.full_name,)
+        return u'%s' % (self.user.get_full_name(),)
 
     def __getattr__(self, attr_name):
         """ leverage python to get the attr if its not already part of the model structure
@@ -67,7 +67,7 @@ class Lawyer(models.Model):
     @property
     def primary_firm(self):
         try:
-            return self.firm_lawyers.all().prefetch_related()[0]
+            return self.firm_lawyers.prefetch_related().all()[0]
         except IndexError:
             return None
 

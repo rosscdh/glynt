@@ -1,54 +1,39 @@
 {% extends 'base.html' %}{% load i18n todo_tags glynt_helpers crispy_forms_tags comments templatetag_handlebars jsonify %}
 
-{% block page_title %}What's the current status?{% endblock %}
+{% block page_title %}{{ object.name }}{% endblock %}
 {% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>{% endblock %}
 
 {% block prebody %}
 
-<div class="container" style="padding:15px 0px 0px 0px;"> 
+<div class="container" style="padding:15px 0px 0px 0px;">
     <h3><small class="softer">{{ object.category }}</small><br/>
-        <span href="{% url 'todo:edit' project_uuid=project.uuid slug=object.slug %}" data-toggle="modal" data-target="#modal-checklist-item">{{ object.name }}</span>
+        <span href="{% url 'todo:edit' project_uuid=project.uuid slug=object.slug %}" class="link" data-toggle="modal" data-target="#modal-checklist-item" data-is_ajax="true">{{ object.name }}</span>
         <div class="pull-right clearfix">
-            <small class="softer">{{ object.item_hash_num }}</small>
-            <div class="btn-group">
-              <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
-                IN PROGRESS <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu">
-                <li><a href="#" class="text-muted">New</a></li>
-                <li><a href="#"><strong>In Progress</strong></a></li>
-                <li><a href="#">Complete</a></li>
-              </ul>
-            </div>
-            <div id="item-nav-controls" class="btn-group">
-                {% if back_and_forth.prev %}<button class="btn btn-prev"><i class="icon-chevron-left"></i></button>{% endif %}
-                <button class="btn btn-home"><i class="icon-home"></i></button> 
-                {% if back_and_forth.next %}<button class="btn btn-next"><i class="icon-chevron-right"></i></button> {% endif %}
-                <button class="btn btn-delete"><i class="icon-trash"></i></button>
-            </div>
+            <div class="item-nav-controls">
+                {% todo_primary_interface todo=object %}
         </div>
     </h3>
 </div>
 
-    <hr>
+<hr>
 
-<div class="container"> 
+<div class="container">
     <div class="row">
         <div class="col col-lg-12">
             <div class="row">
                 <div class="col col-lg-4 sidebar">
                     <div>
                         <h3 class="brand">
-                            Attachments 
+                            Attachments
                         </h3>
                             {% crispy attachment_form %}
                             {{ attachment_form.media }}
                         <br />
                         <div id="attachments" class="list-group"></div>
                     </div>
-                   
+
                  <hr />
-                
+
                     <h3 class="brand"><span>Discussion</span></h3>
                     {% render_comment_form for object %}
 
@@ -58,7 +43,7 @@
                             {% todo_stream todo=object %}
                         </div>
                     </div>
-                    
+
                 </div>
 
                 <div class="col col-lg-8" style="">
@@ -67,22 +52,7 @@
                         <h1 class="text-muted"><i class="icon-file-text"></i></h1>
                         <h3 class="softer">No attachments yet</h3>
                     </div>
-                    <div id="crocdoc-viewer-container" class="hide">
-<!--                         <div class="alert alert-block alert-success text-center">
-                          <p>Ross Crawford has requested your feedback on this document. </p>
-                        </div> -->
-                        <!--  IF ATTORNEY
-                        <button class="btn btn-primary pull-right">Request Feedback</button>-->
-                        <button class="btn btn-success pull-right">Feedback Complete</button> 
-                        <div class="btn-group pull-right">
-                        <!-- Is part of the crocdoc functionality <button class="btn btn-link pull-right">Download</button> -->
-                        <button class="btn btn-delete btn-link pull-right">Delete</button>
-                        <button class="btn btn-fullscreen btn-link pull-right">Full Screen</button>
-                        </div>
-                        <br />
-                        <br />
-                        <iframe id="crocdoc-viewer-iframe" src="" width="100%" height="550px" frameborder="none" style="margin-top:5px;"></iframe> 
-                    </div>
+                    <div id="crocdoc-viewer-container" class="hide">&nbsp;</div>
                 </div>
             </div>
         </div>
@@ -105,7 +75,7 @@ var COMMENT_CONTROLS = (window.COMMENT_CONTROLS !== undefined) ? window.COMMENT_
     'alerts': false,
 };
 
-$(document).ready(function(){
+$(document).ready(function () {
 
     var todo_list_tpl = Handlebars.compile($('script#tpl-todo_list').html());
 
@@ -121,8 +91,11 @@ $(document).ready(function(){
         $('#updates-stream').find('[data-stream_list] li:first').effect("highlight", {}, 3500);
     };
 
+    /**
+    * Puser.com integration
+    */
     // Enable pusher logging - don't include this in production
-    {% if DEBUG %}Pusher.log = function(message) {
+    {% if DEBUG %}Pusher.log = function (message) {
       if (window.console && window.console.log) {
         window.console.log(message);
       }
@@ -130,7 +103,7 @@ $(document).ready(function(){
 
     var pusher = new Pusher('{{ PUSHER_KEY }}');
     var channel = pusher.subscribe('{{ object.pusher_id }}');
-    channel.bind_all(function(event_name, data) {
+    channel.bind_all(function (event_name, data) {
         if ( typeof data == 'object' && data.label ) {
             /**
             GlyntJsMessages.clear = true;
@@ -143,30 +116,32 @@ $(document).ready(function(){
 
     });
 
-    $('a[trigger-upload]').on('click', function (event) {
+    $(document).on( 'click', 'a[trigger-upload]', function (event) {
         event.preventDefault();
         $('div.fpfilewidget button.btn-primary:first').trigger('click');
     });
 
-    $('.btn-home').on('click', function (event) {
+
+    $(document).on( 'click', '.btn-home', function (event) {
         event.preventDefault();
         document.location = "{% url 'dashboard:checklist' uuid=project.uuid %}";
     });
-    $('.btn-next').on('click', function (event) {
+
+    $(document).on( 'click', '.btn-next', function (event) {
         event.preventDefault();
         {% if back_and_forth.next.slug %}
         document.location = "{% url 'todo:item' project_uuid=project.uuid slug=back_and_forth.next.slug %}";
         {% endif %}
     });
 
-    $('.btn-prev').on('click', function (event) {
+    $(document).on( 'click', '.btn-prev', function (event) {
         event.preventDefault();
         {% if back_and_forth.prev.slug %}
         document.location = "{% url 'todo:item' project_uuid=project.uuid slug=back_and_forth.prev.slug %}";
         {% endif %}
     });
 
-    $('.btn-delete').on('click', function (event) {
+    $(document).on( 'click', '.btn-delete', function (event) {
         event.preventDefault();
 
         var elem = $(this);
@@ -180,11 +155,11 @@ $(document).ready(function(){
             data: JSON.stringify({'is_deleted': true}),
             dataType: 'application/json',
             contentType: 'application/json',
-            beforeSend: function(jqXHR, settings) {
+            beforeSend: function (jqXHR, settings) {
                 // Pull the token out of the DOM.
                 jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]:first').val());
             },
-            success: function() {
+            success: function () {
                 if ($('#item-nav-controls .btn-next:first').length > 0) {
                     $('#item-nav-controls .btn-next:first').trigger('click');
                 } else {
@@ -192,7 +167,7 @@ $(document).ready(function(){
                     $('#item-nav-controls .btn-home:first').trigger('click');
                 }
             },
-            complete: function() {
+            complete: function () {
                 console.log('deleted')
             }
         });
@@ -213,23 +188,97 @@ $(document).ready(function(){
     window.hb_attachments_list = Handlebars.compile(hb_attachments_source);
     loadAttachments();
 
-    $(document).on( 'click', 'a.attachment-item', function(event) {
+    $(document).on( 'click', 'a.attachment-item', function (event) {
 
         viewer_container.fadeOut('slow');
         var elem = $(event.currentTarget);
         var attachment_id = elem.data('attachment_id');
 
-        var url = '/todo/attachment/{pk}/crocdoc/session/'.assign({'pk': attachment_id});
-
         setActiveAttachment(elem);
 
-        $.getJSON(url, function (data) {
-            document_iframe.attr('src', data.view_url);
-            $('.btn-delete').show();
-            $('#crocdoc-viewer-container').removeClass('hide')
-            viewer_container.fadeIn('slow');
+        $.ajax({
+            type: 'GET',
+            url: "{% url 'todo:attachment' pk=0 %}".replace('0', '{pk}').assign({'pk': attachment_id}),
+            beforeSend: function (jqXHR, settings) {
+                // Pull the token out of the DOM.
+                jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+            },
+            success: function (data, textStatus, jqXHR){
+                viewer_container.html(data);
+            },
+            complete: function () {
+                view_container_empty.addClass('hide').hide();
+                viewer_container.removeClass('hide').fadeIn();
+            }
         });
     });
+
+
+    /**
+    * Feedback Reqeust Cycle 
+    * events
+    */
+    $(document).on( 'click', '.feedback-complete', function (event) {
+        event.preventDefault();
+        var elem = $(this);
+        var pk = elem.data('pk');
+        var url = '/api/v1/feedback_request/{pk}'.assign({'pk': pk});
+
+        var data = elem.data();
+        //data.id = pk;
+        delete data['pk'];
+        data.attachment = {'pk': data.attachment};
+        data.assigned_by = {'pk': data.assigned_by};
+        data.assigned_to = [{'pk': data.assigned_to}];
+
+        $.ajax({
+            type: 'PATCH',
+            url: url,
+            data: JSON.stringify(data),
+            dataType: 'application/json',
+            contentType: "application/json",
+            beforeSend: function (jqXHR, settings) {
+                // Pull the token out of the DOM.
+                jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+            },
+            success: function (data, textStatus, jqXHR){
+            },
+            complete: function () {
+                $('a.attachment-item.active:first').trigger('click');
+            }
+        });
+    });
+    $(document).on( 'click', '.request-feedback', function (event) {
+        event.preventDefault();
+        var elem = $(this);
+        var pk = elem.data('pk');
+        var url = '/api/v1/feedback_request';
+
+        var data = elem.data();
+        delete data['pk'];
+        data.attachment = {'pk': data.attachment};
+        data.assigned_by = {'pk': data.assigned_by};
+        data.assigned_to = [{'pk': data.assigned_to}];
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: JSON.stringify(data),
+            dataType: 'application/json',
+            contentType: "application/json",
+            beforeSend: function (jqXHR, settings) {
+                // Pull the token out of the DOM.
+                jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+            },
+            success: function (data, textStatus, jqXHR){
+                console.log(data);
+            },
+            complete: function () {
+                $('a.attachment-item.active:first').trigger('click');
+            }
+        });
+    });
+
 });
 
 
@@ -298,16 +347,16 @@ HandleAttachment = function HandleAttachment(event) {
             data: JSON.stringify(data),
             dataType: 'application/json',
             contentType: "application/json",
-            beforeSend: function(jqXHR, settings) {
+            beforeSend: function (jqXHR, settings) {
                 // Pull the token out of the DOM.
                 jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
             },
-            success: function(data, textStatus, jqXHR){
+            success: function (data, textStatus, jqXHR){
                 console.log(data)
             },
-            error: function(data, textStatus, jqXHR){
+            error: function (data, textStatus, jqXHR){
             },
-            complete: function() {
+            complete: function () {
                 loadAttachments();
                 elem.val('')
                 window.drop_pad.html(window.original_drop_pad_text);
@@ -320,9 +369,14 @@ HandleAttachment = function HandleAttachment(event) {
 
 
 {% tplhandlebars "tpl-attachment" %}
+<!-- give the <a> a class of pending-feedback if the current user has needs to give feedback -->
 <a href="javascript:;" data-attachment_id="{{ id }}" class="attachment-item list-group-item">
     <span class="glyphicon glyphicon-chevron-right"></span>
-    <h5 class="list-group-item-heading">{{ data.fpfile.filename }}</h5>
+    <h5 class="list-group-item-heading"></i> {{ data.fpfile.filename }}</h5>
+    <!--
+    Extra exclamation sign (if the user needs to give feedback)
+    <h5 class="list-group-item-heading"><i class="glyphicon glyphicon-exclamation-sign"></i> {{ data.fpfile.filename }}</h5>
+    -->
     <p class="list-group-item-text"><span rel="tooltip" title="{{ date_created }}" data-humanize-date="{{ date_created_unix }}"><!-- {{ date_created }} --></span></p>
 </a>
 {% endtplhandlebars %}
@@ -343,7 +397,10 @@ HandleAttachment = function HandleAttachment(event) {
 {% block css %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}fluent_comments/css/ajaxcomments.css" />
 <style>
-
+.link {
+    cursor: pointer;
+    cursor: hand;
+}
 .temp-col-avatar img {
     width:20px;
 }

@@ -9,8 +9,16 @@ from glynt.apps.project.bunches import ProjectIntakeFormIsCompleteBunch
 from glynt.apps.project.models import Project
 
 
-class CustomerDashboardView(TemplateView):
+class DashboardView(TemplateView):
     template_name = 'dashboard/overview.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        """ if we are a lawyer, then use the lawyer overview template"""
+        if 'uuid' not in kwargs:
+            if request.user.profile.is_lawyer:
+                self.template_name = 'dashboard/overview-lawyer.html'
+
+        return super(DashboardView, self).dispatch(request, *args, **kwargs)
 
     def qs_filter(self):
         project_uuid = self.request.GET.get('p', self.kwargs.get('uuid'))
@@ -19,9 +27,16 @@ class CustomerDashboardView(TemplateView):
         if project_uuid is not None:
             qs_filter = {'uuid': project_uuid}
 
-        qs_filter.update({
-            'customer': self.request.user.customer_profile
-        })
+        if self.request.user.profile.is_customer:
+            qs_filter.update({
+                'customer': self.request.user.customer_profile
+            })
+
+        if self.request.user.profile.is_lawyer:
+            qs_filter.update({
+                'lawyers': self.request.user.lawyer_profile
+            })
+
         return qs_filter
 
     def get_context_data(self, **kwargs):

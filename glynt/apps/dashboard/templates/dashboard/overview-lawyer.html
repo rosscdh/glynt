@@ -1,0 +1,20 @@
+{% extends 'base.html' %}{% load url from future %}{% load glynt_helpers crispy_forms_tags project_tags %}
+
+{% block page_title %}Dashboard{% endblock %}
+{% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:overview' %}">Dashboard</a></li>{% endblock %}
+
+{% block body %}
+<div class="container dashboard-view">
+    <div class="page-header">
+        Lawyer Projects Overview
+    </div>
+
+    <div class="row">
+        <ul>
+        {% for p in projects %}
+            <li><a href="{{ p.get_absolute_url }}">{{ p }}</a></li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

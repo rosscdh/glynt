@@ -18,6 +18,7 @@ import json
 import urlparse
 import hashlib
 import datetime
+import random
 
 
 # hardcoded here cos i havent yet figured out how to reverse tastypie urls (?)
@@ -31,7 +32,8 @@ API_URLS = {
 
 def generate_unique_slug(instance):
     """ Generate the unique slug for a model instance """
-    hash_val = u'%s-%s-%s' % (instance.__class__.__name__, instance.pk, datetime.datetime.utcnow())
+    pk = instance.pk if hasattr(instance, 'pk') and type(instance.pk) is not None else random.random()
+    hash_val = u'%s-%s-%s' % (instance.__class__.__name__, pk, datetime.datetime.utcnow())
     h = hashlib.sha1(hash_val)
     return h.hexdigest()
 

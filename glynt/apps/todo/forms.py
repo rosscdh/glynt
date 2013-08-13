@@ -8,10 +8,14 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset
 
 from parsley.decorators import parsleyfy
-
-from .models import ToDo
 from django_filepicker.forms import FPUrlField
 
+from glynt.apps.utils import generate_unique_slug
+
+from .models import ToDo
+
+import logging
+logger = logging.getLogger('django.request')
 
 FILEPICKER_API_KEY = getattr(settings, 'FILEPICKER_API_KEY', None)
 if FILEPICKER_API_KEY is None:
@@ -23,7 +27,7 @@ class AttachmentForm(forms.Form):
     todo = forms.IntegerField(widget=forms.HiddenInput)
     attachment = FPUrlField(label='', help_text='', apikey=FILEPICKER_API_KEY,
                             additional_params={
-                                'data-api-url': '/api/v1/todo/attachment',
+                                'data-api-url': '/api/v1/attachment',
                                 'data-fp-button-text': 'Upload attachment',
                                 'data-fp-button-class': 'btn btn-primary',
                                 'data-fp-drag-class': 'drop-pane pull-right',
@@ -53,7 +57,7 @@ class ToDoForm(forms.ModelForm):
 
 
 @parsleyfy
-class CutomerToDoForm(ToDoForm):
+class CustomerToDoForm(ToDoForm):
     """
     Form to allow user to create and edit ToDo items
     category is set via url param
@@ -68,6 +72,7 @@ class CutomerToDoForm(ToDoForm):
         self.project_service = kwargs.pop('project_service')
         self.project_uuid = kwargs.pop('project_uuid')
         self.slug = kwargs.pop('slug')
+        self.is_create = kwargs.pop('is_create', False)
 
         self.helper = FormHelper()
         self.helper.form_method = 'post'
@@ -81,10 +86,26 @@ class CutomerToDoForm(ToDoForm):
                 'project',
             )
         )
-        super(CutomerToDoForm, self).__init__(*args, **kwargs)
 
-        self.fields['category'] = forms.ChoiceField(initial=self.request.GET.get('category', None), choices=self.project_service.category_initial())
+        super(CustomerToDoForm, self).__init__(*args, **kwargs)
+
+        if self.is_create or self.request.method == 'POST':
+            self.fields['category'] = forms.ChoiceField(initial=self.request.GET.get('category', None), choices=self.project_service.category_initial())
+        else:
+            del self.fields['category']
+            self._meta.exclude += ['category']
+
         self.fields['project'].initial = self.project_service.project.pk
+
 
     def clean_project(self):
         return self.project_service.project
+
+    def save(self, *args, **kwargs):
+        """ Ensure that we have a slug, required for creating new items manually """
+        obj = super(CustomerToDoForm, self).save(*args, **kwargs)
+        if obj.slug in [None, '']:
+            obj.slug = generate_unique_slug(instance=obj)
+            obj.save(update_fields=['slug'])
+
+        return obj

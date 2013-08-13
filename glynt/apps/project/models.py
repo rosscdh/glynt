@@ -39,7 +39,7 @@ class Project(models.Model):
         return '%s of %s Project with %s' % (self.customer.user.get_full_name(), self.company, self.get_primary_lawyer(),)
 
     def get_absolute_url(self):
-        return reverse('project:project', kwargs={'slug': self.uuid})
+        return reverse('dashboard:project', kwargs={'uuid': self.uuid})
 
     def get_checklist_absolute_url(self):
         return reverse('dashboard:checklist', kwargs={'uuid': self.uuid})
@@ -54,7 +54,11 @@ class Project(models.Model):
         try:
             return self.lawyers.select_related('user').all()[0]
         except IndexError:
-            return None
+            return []
+
+    @property
+    def has_lawyer(self):
+        return self.get_primary_lawyer() is not None
 
     def open(self, actioning_user):
         """ Open the notification """
