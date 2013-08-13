@@ -6716,6 +6716,11 @@ table.lawyer-list {
   color: #ffffff;
   content: "\e101";
 }
+.empty .empty-message-heart::after {
+  background: #d9534f;
+  color: #ffffff;
+  content: "\e143";
+}
 .empty .empty-message-ok::after {
   background: #6bdb7e;
   color: #ffffff;
