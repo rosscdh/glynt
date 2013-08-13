@@ -87,7 +87,7 @@ class UserResource(BaseApiModelResource):
         queryset = User.objects.all()
         authentication = Authentication()
         authorization = Authorization()
-        resource_name = 'user'
+        resource_name = 'users'
         filtering = {
             'username': ALL,
         }
