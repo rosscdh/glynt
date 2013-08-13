@@ -3,7 +3,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Fieldset
+from crispy_forms.layout import Layout, Fieldset, Div
 
 from glynt.apps.transact import BuilderBaseForm
 from glynt.apps.company import COMPANY_STATUS_CHOICES
@@ -37,9 +37,12 @@ class CompanyProfileForm(BuilderBaseForm):
         self.helper.layout = Layout(
             Fieldset(
                 'Founding Team',
-                'founder_name',
-                'founder_email',
-                **{'data-region-clone': 'true', 'data-region-name': 'founders', 'class': 'founder-block'}
+                Div(
+                    'founder_name',
+                    'founder_email',
+                    **{'class': 'founder-group clearfix'}
+                ),
+                **{'data-region-clone': 'true', 'data-region-name': 'founders', 'class': 'founder-block clearfix'}
             ),
             Fieldset(
                 'About your Startup',
