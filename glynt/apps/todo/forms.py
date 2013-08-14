@@ -12,7 +12,7 @@ from django_filepicker.forms import FPUrlField
 
 from glynt.apps.utils import generate_unique_slug
 
-from .models import ToDo
+from .models import ToDo, FeedbackRequest
 
 import logging
 logger = logging.getLogger('django.request')
@@ -20,6 +20,11 @@ logger = logging.getLogger('django.request')
 FILEPICKER_API_KEY = getattr(settings, 'FILEPICKER_API_KEY', None)
 if FILEPICKER_API_KEY is None:
     raise Exception('You must specify a FILEPICKER_API_KEY in your local_settings.py')
+
+
+@parsleyfy
+class FeedbackRequestForm(forms.Form):
+    comment = forms.CharField(widget=forms.Textarea)
 
 
 class AttachmentForm(forms.Form):
