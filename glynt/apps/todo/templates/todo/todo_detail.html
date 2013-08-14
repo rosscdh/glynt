@@ -79,6 +79,10 @@ $(document).ready(function () {
 
     var todo_list_tpl = Handlebars.compile($('script#tpl-todo_list').html());
 
+    function update_todo_status(data) {
+        $('#todo_display_status').html(data.instance_dispay_status)
+    }
+
     function add_stream_item(context) {
 
         var data = $.extend(true, {
@@ -111,7 +115,11 @@ $(document).ready(function () {
             GlyntJsMessages.add_message('<a href="javascript:document.location.reload();">Click to refresh</a>');
             GlyntJsMessages.show();
             **/
-            add_stream_item(data);
+            if (data.event == 'todo.status_change') {
+                update_todo_status(data);
+            } else {
+                add_stream_item(data);
+            }
         }
 
     });
@@ -162,7 +170,7 @@ $(document).ready(function () {
                     jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]:first').val());
                 },
                 complete: function () {
-                    document.location.reload();
+                    //document.location.reload();
                 }
             });
         });
@@ -186,7 +194,7 @@ $(document).ready(function () {
                     jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]:first').val());
                 },
                 complete: function () {
-                    document.location.reload();
+                    //document.location.reload();
                 }
             });
         });
