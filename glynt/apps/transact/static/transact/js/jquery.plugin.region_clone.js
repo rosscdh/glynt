@@ -241,9 +241,12 @@ console.log(kwargs)
 
 				$(this).closest('.cloned-region').remove();
 
+				$('input#id_1-num_officers').val(self.num_elements);
 			});
 
 			this.num_elements += 1;
+
+			$('input#id_1-num_officers').val(this.num_elements);
 		}
     });
 
