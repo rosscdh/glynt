@@ -64,7 +64,6 @@
 {% block js %}
 <script type="text/javascript" src="{{ STATIC_URL }}js/ajax-comments.js"></script>
 <script type="text/javascript" src="//d3dy5gmtp8yhk7.cloudfront.net/2.1/pusher.min.js"></script>
-<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.getPath.js"></script>
 <script type="text/javascript">
 
 var viewer_container = $('#crocdoc-viewer-container');
@@ -79,52 +78,6 @@ var COMMENT_CONTROLS = (window.COMMENT_CONTROLS !== undefined) ? window.COMMENT_
 $(document).ready(function () {
 
     var todo_list_tpl = Handlebars.compile($('script#tpl-todo_list').html());
-
-    /**
-    * GENERIC - modal window capture
-    */
-    $(document).on( 'click', '[data-toggle="modal"]', function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-
-        var elem = $(this);
-        var data = elem.data();
-        var is_ajax = data.is_ajax || false;
-        var selector_path = $.getPath(elem);
-
-        var url = elem.data('remote') || elem.attr('href');
-        var target = $('#modal-checklist-item');
-        if (data.target) {
-            target = $(data.target);
-        }
-        var form = target.find('form:first');
-
-        if (is_ajax === true) {
-            var modal_body = target.find('.modal-body');
-
-            target.data('is_ajax', is_ajax);
-            target.data('target_toggle_object', selector_path);
-
-            modal_body.html('');// clear html
-
-            modal_body.load(url, function (data) {
-                modal_body.html(data);
-                // fire the laod event only on successful load of url
-                target.modal('show'); // load html
-            });
-        } else {
-            // transfer the clicked elements data values to the target
-
-            delete data.target;
-            delete data.toggle;
-            delete data['bs.modal'];
-
-            // update the froms data with all the data
-            $.each(data, function (key, value) {
-                form.data(key, value);
-            });
-        }
-    });
 
     function add_stream_item(context) {
 

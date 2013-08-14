@@ -28,6 +28,7 @@ $(document).ready( function () {
         var form = $('#modal-feedback-form form:first');
         $('#modal-feedback-form form:first').trigger('submit');
         $('#modal-feedback-form').modal('hide');
+        form[0].reset();
     });
 
     /**

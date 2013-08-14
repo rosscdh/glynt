@@ -70,7 +70,7 @@ class CustomerToDoForm(ToDoForm):
     project = forms.IntegerField(widget=forms.HiddenInput)
 
     class Meta(ToDoForm.Meta):
-        exclude = ['user', 'slug', 'status', 'date_due', 'description', 'data']
+        exclude = ['user', 'slug', 'status', 'date_due', 'description', 'data', 'sort_position', 'sort_position_by_cat', 'item_hash_num']
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request')
@@ -94,8 +94,8 @@ class CustomerToDoForm(ToDoForm):
 
         super(CustomerToDoForm, self).__init__(*args, **kwargs)
 
-        if self.is_create or self.request.method == 'POST':
-            self.fields['category'] = forms.ChoiceField(initial=self.request.GET.get('category', None), choices=self.project_service.category_initial())
+        if self.is_create:
+            self.fields['category'] = forms.ChoiceField(initial=self.request.GET.get('category', self.instance.category), choices=self.project_service.category_initial())
         else:
             del self.fields['category']
             self._meta.exclude += ['category']

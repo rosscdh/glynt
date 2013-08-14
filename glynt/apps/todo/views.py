@@ -143,11 +143,9 @@ class ToDoEditView(UpdateView, BaseToDoDetailMixin, ModelFormMixin):
         return kwargs
 
     def form_valid(self, form):
-        #messages.success(self.request, 'Sucessfully updated this item. <a href="{href}">view</a>'.format(href=self.object.get_absolute_url()), extra_tags='safe')
         return super(ToDoEditView, self).form_valid(form)
 
     def form_invalid(self, form):
-        messages.error(self.request, 'There was an error updating this item')
         return super(ToDoEditView, self).form_valid(form)
 
 
