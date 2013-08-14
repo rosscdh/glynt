@@ -64,6 +64,7 @@
 {% block js %}
 <script type="text/javascript" src="{{ STATIC_URL }}js/ajax-comments.js"></script>
 <script type="text/javascript" src="//d3dy5gmtp8yhk7.cloudfront.net/2.1/pusher.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.getPath.js"></script>
 <script type="text/javascript">
 
 var viewer_container = $('#crocdoc-viewer-container');
@@ -78,6 +79,52 @@ var COMMENT_CONTROLS = (window.COMMENT_CONTROLS !== undefined) ? window.COMMENT_
 $(document).ready(function () {
 
     var todo_list_tpl = Handlebars.compile($('script#tpl-todo_list').html());
+
+    /**
+    * GENERIC - modal window capture
+    */
+    $(document).on( 'click', '[data-toggle="modal"]', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        var elem = $(this);
+        var data = elem.data();
+        var is_ajax = data.is_ajax || false;
+        var selector_path = $.getPath(elem);
+
+        var url = elem.data('remote') || elem.attr('href');
+        var target = $('#modal-checklist-item');
+        if (data.target) {
+            target = $(data.target);
+        }
+        var form = target.find('form:first');
+
+        if (is_ajax === true) {
+            var modal_body = target.find('.modal-body');
+
+            target.data('is_ajax', is_ajax);
+            target.data('target_toggle_object', selector_path);
+
+            modal_body.html('');// clear html
+
+            modal_body.load(url, function (data) {
+                modal_body.html(data);
+                // fire the laod event only on successful load of url
+                target.modal('show'); // load html
+            });
+        } else {
+            // transfer the clicked elements data values to the target
+
+            delete data.target;
+            delete data.toggle;
+            delete data['bs.modal'];
+
+            // update the froms data with all the data
+            $.each(data, function (key, value) {
+                form.data(key, value);
+            });
+        }
+    });
 
     function add_stream_item(context) {
 
@@ -210,73 +257,6 @@ $(document).ready(function () {
             complete: function () {
                 view_container_empty.addClass('hide').hide();
                 viewer_container.removeClass('hide').fadeIn();
-            }
-        });
-    });
-
-
-    /**
-    * Feedback Reqeust Cycle 
-    * events
-    */
-    $(document).on( 'click', '.feedback-complete', function (event) {
-        event.preventDefault();
-        var elem = $(this);
-        var pk = elem.data('pk');
-        var url = '/api/v1/feedback_request/{pk}'.assign({'pk': pk});
-
-        var data = elem.data();
-        //data.id = pk;
-        delete data['pk'];
-        data.attachment = {'pk': data.attachment};
-        data.assigned_by = {'pk': data.assigned_by};
-        data.assigned_to = [{'pk': data.assigned_to}];
-
-        $.ajax({
-            type: 'PATCH',
-            url: url,
-            data: JSON.stringify(data),
-            dataType: 'application/json',
-            contentType: "application/json",
-            beforeSend: function (jqXHR, settings) {
-                // Pull the token out of the DOM.
-                jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
-            },
-            success: function (data, textStatus, jqXHR){
-            },
-            complete: function () {
-                $('a.attachment-item.active:first').trigger('click');
-            }
-        });
-    });
-
-    $(document).on( 'click', '.request-feedback', function (event) {
-        event.preventDefault();
-        var elem = $(this);
-        var pk = elem.data('pk');
-        var url = '/api/v1/feedback_request';
-
-        var data = elem.data();
-        delete data['pk'];
-        data.attachment = {'pk': data.attachment};
-        data.assigned_by = {'pk': data.assigned_by};
-        data.assigned_to = [{'pk': data.assigned_to}];
-
-        $.ajax({
-            type: 'POST',
-            url: url,
-            data: JSON.stringify(data),
-            dataType: 'application/json',
-            contentType: "application/json",
-            beforeSend: function (jqXHR, settings) {
-                // Pull the token out of the DOM.
-                jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
-            },
-            success: function (data, textStatus, jqXHR){
-                console.log(data);
-            },
-            complete: function () {
-                $('a.attachment-item.active:first').trigger('click');
             }
         });
     });
@@ -477,4 +457,5 @@ a.list-group-item h5.list-group-item-heading  {
 
 {% block modals %}
     {% include 'todo/modals/edit_checklist_item.html' %}
+    {% include 'todo/modals/feedback_form.html' %}
 {% endblock %}

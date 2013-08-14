@@ -1,32 +1,9 @@
-<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.getPath.js"></script>
-<script>
+<script type="text/javascript">
 $(document).ready( function () {
     /**
     * For all the data toggles capture and modify the click event
     * we want to populate the modal-body with our updated data
     */
-    $('[data-toggle="modal"]').click(function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-
-        var elem = $(this);
-        var is_ajax = elem.data('is_ajax') || false;
-        var selector_path = $.getPath(elem);
-
-        var url = elem.data('remote') || elem.attr('href');
-        var target = $('#modal-checklist-item');
-        var modal_body = target.find('.modal-body');
-
-        target.data('is_ajax', is_ajax);
-        target.data('target_toggle_object', selector_path);
-
-        modal_body.html('');// clear html
-        modal_body.load(url, function (data) {
-            modal_body.html(data);
-            // fire the laod event only on successful load of url
-            target.modal('show'); // load html
-        });
-    });
     $('#modal-checklist-item').on('show.bs.modal', function (event) {
         var target = $(event.currentTarget);
         var title = target.find('.modal-title');
