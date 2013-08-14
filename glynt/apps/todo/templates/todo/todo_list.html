@@ -58,7 +58,7 @@
                     <table class="table table-striped checklist">
                         <tbody>
                             {% for item in items %}
-                                <tr data-edit_label="{{ item.slug }}" data-status="{{ item.obj.display_status|default:item.display_status|lower }}" class="item {{ item.obj.status|default:item.status|todo_status_row_class }} {{ item.obj.user|todo_status_assignedto_class }}">
+                                <tr data-edit_label="{{ item.slug }}" data-status="{{ item.obj.display_status|default:item.display_status|lower }}" class="item {{ item.obj.status|default:item.status|todo_status_row_class }}">
                                     <td class="item-status" tooltip="{{ item.obj.display_status|default:item.display_status }}" title="{{ item.obj.display_status|default:item.display_status }}">
                                         <i class="{{ item.obj.status|default:item.status|todo_status_icon }}"></i>
                                     </td>
@@ -155,7 +155,6 @@
             var pk = elem.data('pk');
             var url = '/api/v1/todo/{pk}'.assign({'pk': pk});
 
-            console.log(elem_tr)
             $.ajax({
                 type: 'PATCH',
                 url: url,
