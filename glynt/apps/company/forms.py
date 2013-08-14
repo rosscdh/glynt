@@ -24,7 +24,7 @@ class CompanyProfileForm(BuilderBaseForm):
     option_plan_status = forms.ChoiceField(label=_('Option plan'), choices=OPTION_PLAN_STATUS_CHOICES.get_choices(), initial=OPTION_PLAN_STATUS_CHOICES.would_like, widget=forms.RadioSelect)
 
     target_states_and_countries = forms.CharField(label=_('Where will you do business?'), initial="California", help_text="e.g. California, New York. Separate with a comma.", widget=forms.TextInput(attrs={'placeholder': 'California'}))
-    num_officers = forms.CharField(label=_('Number of Directors and Officers'), initial=0, widget=forms.TextInput(attrs={'data-type': 'number', 'class': 'input-smaller'}))
+    num_officers = forms.CharField(label=_('Number of Directors and Officers'), initial=1, widget=forms.TextInput(attrs={'data-type': 'number', 'class': 'input-smaller'}))
     num_employees = forms.CharField(label=_('Number of employees'), initial=0, widget=forms.TextInput(attrs={'data-type': 'number', 'class': 'input-smaller'}))
     num_consultants = forms.CharField(label=_('Number of consultants'), initial=0, widget=forms.TextInput(attrs={'data-type': 'number', 'class': 'input-smaller'}))
     num_option_holders = forms.CharField(label=_('Number of option holders'), initial=0, widget=forms.TextInput(attrs={'data-type': 'number', 'class': 'input-smaller'}))
