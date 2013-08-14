@@ -142,6 +142,55 @@ $(document).ready(function () {
     });
 
     {% if user.profile.is_lawyer %}
+
+        $(document).on( 'click', '.btn-close-item', function (event) {
+            event.preventDefault();
+
+            var elem = $(this);
+            elem.fadeOut('slow');
+
+            var url = '/api/v1/todo/{pk}'.assign({'pk': '{{ object.pk }}'});
+
+            $.ajax({
+                type: 'PATCH',
+                url: url,
+                data: JSON.stringify({'status': {{ TODO_STATUS.closed }} }),
+                dataType: 'application/json',
+                contentType: 'application/json',
+                beforeSend: function (jqXHR, settings) {
+                    // Pull the token out of the DOM.
+                    jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]:first').val());
+                },
+                complete: function () {
+                    document.location.reload();
+                }
+            });
+        });
+
+        $(document).on( 'click', '.btn-reopen-item', function (event) {
+            event.preventDefault();
+
+            var elem = $(this);
+            elem.fadeOut('slow');
+
+            var url = '/api/v1/todo/{pk}'.assign({'pk': '{{ object.pk }}'});
+
+            $.ajax({
+                type: 'PATCH',
+                url: url,
+                data: JSON.stringify({'status': {{ TODO_STATUS.open }} }),
+                dataType: 'application/json',
+                contentType: 'application/json',
+                beforeSend: function (jqXHR, settings) {
+                    // Pull the token out of the DOM.
+                    jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]:first').val());
+                },
+                complete: function () {
+                    document.location.reload();
+                }
+            });
+        });
+
         $(document).on( 'click', '.btn-delete', function (event) {
             event.preventDefault();
 

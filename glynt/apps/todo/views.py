@@ -3,13 +3,12 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import View, ListView, UpdateView, DetailView
 from django.views.generic.edit import ModelFormMixin
 from django.views.generic.detail import SingleObjectMixin
-from django.contrib import messages
 
 from glynt.apps.project.services.project_checklist import ProjectCheckListService
 from glynt.apps.project.models import Project
 
 
-from . import FEEDBACK_STATUS
+from . import TODO_STATUS, FEEDBACK_STATUS
 from .forms import CustomerToDoForm, AttachmentForm, FeedbackRequestForm
 from .models import ToDo, Attachment
 from .services import CrocdocAttachmentService
@@ -112,6 +111,7 @@ class ToDoDetailView(DetailView, BaseToDoDetailMixin):
     def get_context_data(self, **kwargs):
         context = super(ToDoDetailView, self).get_context_data(**kwargs)
         context.update({
+            'TODO_STATUS': TODO_STATUS,
             'attachment_form': AttachmentForm(initial={'project': self.project.pk, 'todo': self.object.pk}),
             'back_and_forth': self.navigation_items,
         })
@@ -159,10 +159,6 @@ class ToDoCreateView(ToDoEditView):
             'is_create': True,
         })
         return kwargs
-
-
-# class ToDoAssignView(DetailView, BaseToDoDetailMixin):
-#     template_name = 'todo/assign.html'
 
 
 """
