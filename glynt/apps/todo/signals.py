@@ -68,7 +68,6 @@ def on_comment_created(sender, **kwargs):
     """
     Handle Creation of attachments
     """
-    logger.debug('GOT IT {type}'.format(type=type(sender)))
     if not isinstance(sender, LogEntry):
         is_new = kwargs.get('created', False)
         comment = kwargs.get('instance')
@@ -104,7 +103,11 @@ def feedbackrequest_created(sender, **kwargs):
                         verb=verb,
                         action_object=feedbackrequest.attachment,
                         target=feedbackrequest.attachment.todo,
-                        content='for attachment "{attachment}" - "{todo}" is {status}'.format(attachment=feedbackrequest.attachment.filename, todo=feedbackrequest.attachment.todo.name, status=feedbackrequest.attachment.todo.display_status))
+                        content=feedbackrequest.comment,
+                        detail_statement='for attachment "{attachment}" - "{todo}" is {status}<br/>'.format(attachment=feedbackrequest.attachment.filename, todo=feedbackrequest.attachment.todo.name, status=feedbackrequest.attachment.todo.display_status),
+                        attachment=feedbackrequest.attachment.filename,
+                        todo=feedbackrequest.attachment.todo.name,
+                        status=feedbackrequest.attachment.todo.display_status)
 
         # if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.responded:
         #     verb = 'provided feedback to {assigned_by} on {attachment}'.format(assigned_by=feedbackrequest.assigned_by, attachment=feedbackrequest.attachment.filename)
@@ -121,7 +124,11 @@ def feedbackrequest_created(sender, **kwargs):
                         verb=verb,
                         action_object=feedbackrequest.attachment,
                         target=feedbackrequest.attachment.todo,
-                        content='for attachment "{attachment}" - "{todo}" is {status}'.format(attachment=feedbackrequest.attachment.filename, todo=feedbackrequest.attachment.todo.name, status=feedbackrequest.attachment.todo.display_status))
+                        content=feedbackrequest.comment,
+                        detail_statement='for attachment "{attachment}" - "{todo}" is {status}'.format(attachment=feedbackrequest.attachment.filename, todo=feedbackrequest.attachment.todo.name, status=feedbackrequest.attachment.todo.display_status),
+                        attachment=feedbackrequest.attachment.filename,
+                        todo=feedbackrequest.attachment.todo.name,
+                        status=feedbackrequest.attachment.todo.display_status)
 
 
 @receiver(post_save, sender=FeedbackRequest, dispatch_uid='feedbackrequest.status_change')
