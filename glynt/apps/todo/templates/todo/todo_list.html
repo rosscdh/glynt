@@ -42,7 +42,7 @@
             </div>
             <div id="list-items">
             {% for category, items in checklist.todos_by_cat.iteritems %}
-                <div id="{{ category|slugify }}">
+                <section id="{{ category|slugify }}" class="checklist-category">
                     <div class="checklist-header clearfix">
                         <h3 class="pull-left">{{ category }}</h3>
                         <button type="button" class="btn btn-link pull-right" data-remote="{% url 'todo:create' project_uuid=project.uuid %}?category={{ category|urlencode }}" data-toggle="modal" data-target="#modal-checklist-item" title="Create new item">
@@ -62,7 +62,7 @@
                                         </h4>
                                     </td>
                                     <td class="item-meta">
-                                        <small class="soft">{{ item.item_hash_num }}</small><br/>
+                                        <!-- <small class="soft">{{ item.item_hash_num }}</small><br/> -->
                                         <a href="{% url 'todo:edit' project_uuid=project.uuid slug=item.slug %}" data-toggle="modal" data-target="#modal-checklist-item" title="Edit" data-tooltip="Edit" class="btn btn-small btn-link item-edit">
                                             <i class="glyphicon glyphicon-pencil"></i>
                                         </a>
@@ -77,7 +77,7 @@
                             {% endfor %}
                         </tbody>
                     </table>
-                </div>
+                </section>
             {% endfor %}
             </div>
         </div>
