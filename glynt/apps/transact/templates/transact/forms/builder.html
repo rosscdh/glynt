@@ -12,7 +12,6 @@
 
 
 {% block prebody %}
-
 <div class="jumbotron-header">
     <div class="container">
         <div class="row">
@@ -74,6 +73,7 @@
 
     <script src="{{ STATIC_URL }}js/jquery.dateentry/jquery.dateentry.min.js"></script>
 
+
     <script>
     $(document).ready(function(){
         var form = $( 'form#builder-form' );
@@ -87,6 +87,10 @@
         $('fieldset[data-region-clone]').region_clone({
             'current_step': {{ wizard.steps.current }}
         });
+
+        $('input#id_1-founder_name').val('{{ user.get_full_name }}');
+        $('input#id_1-founder_email').val('{{ user.email }}');
+
         $('[data-show-when]').show_when();
 
         /**
@@ -110,7 +114,7 @@
             $.each(event.cloned_region.find('input'), function(i, item) {
                 form.parsley( 'addItem', item );
             })
-            
+
         });
 
         /**
