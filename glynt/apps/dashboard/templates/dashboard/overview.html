@@ -7,7 +7,7 @@
 <div class="container dashboard-view">
     <div class="page-header">
         <div class="btn-group pull-right">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
                 {% project_name project %} <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
@@ -26,7 +26,7 @@
     </div>
     {% if not profile_is_complete %}
         <div class="callout callout-danger empty">
-            <div class="empty-message empty-message-heart">
+            <div class="empty-message empty-message-exclamation-sign">
                 <h3>We need some more information from you</h3>
                 <p>We can't continue with your transaction until you tell us a bit more about your startup.</p>
                 <a href="{% url 'transact:builder' project_uuid=project.uuid tx_range='INTAKE' step='1' %}" class="btn btn-primary">Click here to complete your profile</a>

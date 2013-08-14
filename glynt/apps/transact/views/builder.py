@@ -116,7 +116,7 @@ class BuilderWizardView(NamedUrlSessionWizardView):
         return form_list
 
     def done(self, form_list, **kwargs):
-        msg = _('Ok, You have created a new Project. Please read the instructions that follow.')
+        msg = _('Your project has been created.')
         messages.info(self.request, msg)
 
         PROJECT_CREATED.send(sender=self, instance=self.project, created=False)
