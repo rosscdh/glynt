@@ -10,7 +10,7 @@ from glynt.apps.project.models import Project
 
 
 from . import FEEDBACK_STATUS
-from .forms import CustomerToDoForm, AttachmentForm
+from .forms import CustomerToDoForm, AttachmentForm, FeedbackRequestForm
 from .models import ToDo, Attachment
 from .services import CrocdocAttachmentService
 
@@ -71,6 +71,7 @@ class BaseToDoDetailMixin(SingleObjectMixin):
         context = super(BaseToDoDetailMixin, self).get_context_data(**kwargs)
         context.update({
             'project': self.project_service.project,
+            'feedback_form': FeedbackRequestForm(),
         })
         return context
 
