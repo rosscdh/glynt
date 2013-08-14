@@ -22,7 +22,6 @@ django-filepicker
 django-extensions
 django-braces
 django-templated-email
-django-storages
 django-tastypie>=0.9.15
 django-crispy-forms
 django-pagination
