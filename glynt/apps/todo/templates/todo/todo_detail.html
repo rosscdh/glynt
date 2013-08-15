@@ -376,7 +376,7 @@ HandleAttachment = function HandleAttachment(event) {
 
 {% tplhandlebars "tpl-todo_list" %}
 <li>
-    {{ name }} {{ verb }} <b>{{ target }}</b>
+    {{ verb }} <b>{{ target }}</b>
     <br/><span class="text-muted pull-right">{{ timestamp }}</span>
     {{#if content }}<blockquote><b>{{ content }}</b></blockquote>{{/if}}
 </li>
