@@ -3,12 +3,12 @@ div#hero {
     text-align: center;
     background-repeat:no-repeat;
     text-align: center;
-    min-height:470px;
+    min-height:300px;
     margin-bottom:30px;
     background:url('../../img/background-lawyers.jpg');
     background-size:cover;    
     background-position:0 -100px;
-    padding-top:240px;
+    padding-top:180px;
 }
 
 #hero h1 {

@@ -1966,8 +1966,8 @@ fieldset[disabled] .btn-link:focus {
   text-decoration: none;
 }
 .btn-huge {
-  padding: 11.9px 27.2px;
-  font-size: 16.2px;
+  padding: 9.799999999999999px 22.4px;
+  font-size: 12.6px;
 }
 .btn-large {
   padding: 9.1px 20.8px;
@@ -6410,8 +6410,10 @@ td.hidden-lg {
   font-weight: normal;
   font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
   font-size: 20px;
-  padding: 16px 35px 16px 35px;
+  padding: 10px 25px 10px 25px;
   margin-top: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 .homepage #wrap .scroll {
   padding: 30px 0px 20px 0;
@@ -6715,11 +6717,6 @@ table.lawyer-list {
   background: #d9534f;
   color: #ffffff;
   content: "\e101";
-}
-.empty .empty-message-heart::after {
-  background: #d9534f;
-  color: #ffffff;
-  content: "\e143";
 }
 .empty .empty-message-ok::after {
   background: #6bdb7e;

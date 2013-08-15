@@ -22,7 +22,8 @@ urlpatterns = patterns('',
     url(r'^contact-us/$', ContactUsView.as_view(), name='contact_us'),
 
     # 
-    url(r'^how-it-works/$', TemplateView.as_view(template_name='public/how-it-works.html'), name='how-it-works'),
+    url(r'^why-lawpal/$', TemplateView.as_view(template_name='public/why-lawpal.html'), name='why-lawpal'),
+    url(r'^must-reads/$', TemplateView.as_view(template_name='public/must-reads.html'), name='must-reads'),
     url(r'^for-lawyers/$', TemplateView.as_view(template_name='public/for-lawyers.html'), name='for-lawyers'),
 
     # Start
