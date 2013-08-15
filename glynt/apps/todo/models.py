@@ -7,7 +7,6 @@ todo attachments when the time comes
 import os
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
 
 from glynt.apps.project.models import Project
 
@@ -72,7 +71,9 @@ class ToDo(models.Model):
         return '#{primary}-{secondary}'.format(primary=int(self.data.get('sort_position', 0)), secondary=int(self.data.get('sort_position_by_cat', 0)))
 
     def get_absolute_url(self):
-        return reverse('todo:edit', kwargs={'project_uuid': self.project.uuid, 'slug': self.slug})
+        # need to import this HERE for some reason?
+        from django.core.urlresolvers import reverse
+        return reverse('todo:edit', kwargs={'project_uuid': self.project.uuid.__unicode__(), 'slug': self.slug})
 
 
 class Attachment(models.Model):
