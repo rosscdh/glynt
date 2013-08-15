@@ -17,6 +17,8 @@ from . import PROJECT_STATUS, PROJECT_LAWYER_STATUS
 
 from managers import DefaultProjectManager
 
+import itertools
+
 
 class Project(models.Model):
     """ Base Project object
@@ -54,6 +56,9 @@ class Project(models.Model):
             return self.lawyers.select_related('user').all()[0]
         except IndexError:
             return []
+
+    def notification_recipients(self):
+        return itertools.chain(self.company.customers.all(), self.lawyers.all())
 
     @property
     def has_lawyer(self):
