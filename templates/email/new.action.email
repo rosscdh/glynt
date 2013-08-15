@@ -1,0 +1,13 @@
+{% load glynt_helpers %}
+
+{% block subject %}{{ subject }}{% endblock %}
+
+{% block plain %}
+
+Dear {{ to_name }},
+
+{{ message }}
+
+{% if url %}To view it: {% current_site_domain %}{{ url }}{% endif %}
+{% include 'email/footer.email' %}
+{% endblock %}
