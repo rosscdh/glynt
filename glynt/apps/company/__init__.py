@@ -8,6 +8,8 @@ COMPANY_STATUS_CHOICES = get_namedtuple_choices('COMPANY_STATUS_CHOICES', (
                             (3, 'have_term_sheet', 'Have term sheet'),
                             (4, 'already_funded', 'Already funded'),
                          ))
+
+
 OPTION_PLAN_STATUS_CHOICES = get_namedtuple_choices('OPTION_PLAN_STATUS_CHOICES', (
                             (1, 'already_in_place', 'We already have an option plan in place'),
                             (2, 'would_like', 'We would like to implement an option plan'),

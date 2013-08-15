@@ -1,0 +1,85 @@
+{% load crispy_forms_tags %}
+<!-- Modal -->
+<div class="modal" id="modal-feedback-form">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Feedback</h4>
+            </div>
+            <div class="modal-body">
+                {% crispy feedback_form %}
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-success">Submit</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$(document).ready( function () {
+
+    /**
+    * Feedback Reqeust Cycle 
+    * events
+    */
+    $(document).on( 'click', '#modal-feedback-form .modal-footer a.btn-success', function (event) {
+        var elem = $(event.currentTarget);
+        var form = $('#modal-feedback-form form:first');
+        $('#modal-feedback-form form:first').trigger('submit');
+        $('#modal-feedback-form').modal('hide');
+        form[0].reset();
+    });
+
+    /**
+    * SEND THE FEEDBACK COMPLETE
+    */
+    $(document).on( 'submit', '#modal-feedback-form form:first', function (event) {
+        event.preventDefault();
+        var elem = $(this);
+        var data = elem.data();
+        
+        // create url
+        var url = data.href || false;
+
+        if ( url !== false ) {
+            // if we have a pl then its a PATCH otherwise its a POST
+            var method = (typeof data.pk == 'number') ? 'PATCH' : 'POST' ;
+
+            var comment_element = elem.find('#id_comment');
+            // append the coment to the data object
+            if ( comment_element.length > 0 ) {
+                data.comment = comment_element.val();
+            }
+
+            // remove unnecessart attribs
+            delete data.pk; // not required as part of the data package (as the RESTFUl url handles that /<item>/<pk>)
+            delete data.is_ajax;
+            delete data.href;
+
+            // massage the data sent to suite tastypie
+            data.attachment = {'pk': data.attachment};
+            data.assigned_by = {'pk': data.assigned_by};
+            data.assigned_to = [{'pk': data.assigned_to}];
+
+            $.ajax({
+                type: method,
+                url: url,
+                data: JSON.stringify(data),
+                dataType: 'application/json',
+                contentType: "application/json",
+                beforeSend: function (jqXHR, settings) {
+                    // Pull the token out of the DOM.
+                    jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+                },
+                success: function (data, textStatus, jqXHR){
+                },
+                complete: function () {
+                    $('a.attachment-item.active:first').trigger('click');
+                }
+            });
+        }
+    });
+
+});
+</script>

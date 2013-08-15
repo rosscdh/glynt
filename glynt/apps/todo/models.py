@@ -37,6 +37,11 @@ class ToDo(models.Model):
     status = models.IntegerField(choices=TODO_STATUS.get_choices(), default=TODO_STATUS.new, db_index=True)
     data = JSONField(default={})
     date_due = models.DateTimeField(blank=True, null=True, auto_now=False, auto_now_add=False, db_index=True)
+
+    sort_position = models.IntegerField(db_index=True)
+    sort_position_by_cat = models.IntegerField(db_index=True)
+    item_hash_num = models.CharField(max_length=24, db_index=True)
+
     date_created = models.DateTimeField(auto_now=False, auto_now_add=True, db_index=True)
     date_modified = models.DateTimeField(auto_now=True, auto_now_add=True, db_index=True)
     is_deleted = models.BooleanField(default=False, db_index=True)
@@ -124,6 +129,7 @@ class FeedbackRequest(models.Model):
     attachment = models.ForeignKey(Attachment)
     assigned_by = models.ForeignKey(User, related_name='requestedfeedback')
     assigned_to = models.ManyToManyField(User, related_name='feedbackrequested')
+    comment = models.CharField(max_length=255)
     status = models.IntegerField(choices=FEEDBACK_STATUS.get_choices(), default=FEEDBACK_STATUS.open, db_index=True)
     data = JSONField(default={})
     date_created = models.DateTimeField(auto_now=False, auto_now_add=True, db_index=True)

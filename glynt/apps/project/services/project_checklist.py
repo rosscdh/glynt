@@ -98,20 +98,23 @@ class ToDoItemsFromYamlMixin(object):
         item.description = item.description if hasattr(item, 'description') else None
 
         # render the template with variables from the context
-        item.name = self.templateize(context=c, value=item.name)
-        item.description = self.templateize(context=c, value=item.description)
+        if item.name is not None:
+            item.name = unicode(self.templateize(context=c, value=item.name))
+
+        if item.description is not None:
+            item.description = unicode(self.templateize(context=c, value=item.description))
 
         return item
 
 
 class ToDoItemsFromDbMixin(object):
     slugs = None
-    db_todos_list = None
+    _db_todos_list = None
 
     def db_todos(self):
-        if self.db_todos_list is None:
-            self.db_todos_list = self.project.todo_set.filter(project=self.project).select_related()
-        return self.db_todos_list
+        if self._db_todos_list is None:
+            self._db_todos_list = self.project.todo_set.filter(project=self.project).select_related()
+        return self._db_todos_list
 
     def todos_by_slug(self, todos):
         if self.slugs is None:
@@ -159,15 +162,26 @@ class ToDoItemsFromDbMixin(object):
         item.__dict__.update(item.obj.__dict__)
         logger.debug('checklist item status: %s %s' % (item.name, item.display_status,))
 
+    def bulk_create(self):
+        from glynt.apps.todo.models import ToDo
+        todo_list = []
+
+        for t in self.todos:
+            t = t.toDict()
+            t.pop('attachment', None)
+            t.pop('has_attachment', None)
+            t.pop('num_attachments', None)
+            t.pop('group', None)
+            t.pop('note', None)
+            todo_list.append(ToDo(**t))
+
+        ToDo.objects.bulk_create(todo_list)
+
 
 class UserFeedbackRequestMixin(object):
     def feedbackrequests_by_user(self, user):
-        user_feedback_requests = []
-        for t in self.todos:
-            if hasattr(t, 'obj'):
-                for a in t.obj.attachments.select_related().all():
-                    user_feedback_requests += a.feedbackrequest_set.open(assigned_to=user)
-        return user_feedback_requests
+        from glynt.apps.todo.models import FeedbackRequest
+        return FeedbackRequest.objects.open(assigned_to=user)
 
     def feedbackrequests_by_user_as_json(self, user):
         """
@@ -228,9 +242,10 @@ class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin, 
                 item.has_attachment = False
                 item.attachment = []
 
+            item.project = self.project
             item.slug = self.item_slug(item=item, i=i)
             item.description = item.description if hasattr(item, 'description') else None
-            item.num_comments = 0
+
             item.status = TODO_STATUS.new
             item.display_status = TODO_STATUS.get_desc_by_value(item.status)
             item.sort_position = current_length + i
@@ -240,7 +255,7 @@ class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin, 
             item.update(kwargs)
 
     def item_hash_num(self, item):
-        return '#{primary}-{secondary}'.format(primary=int(item.get('sort_position', 0)), secondary=int(item.get('sort_position_by_cat', 0)))
+        return '{primary}.{secondary}'.format(primary=int(item.get('sort_position', 0)), secondary=int(item.get('sort_position_by_cat', 0)))
 
     def get_categories(self):
         logger.info('Get Project transactions')

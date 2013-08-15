@@ -9,8 +9,8 @@ from notifications.models import Notification
 from glynt.apps.project.utils import PROJECT_CONTENT_TYPE
 
 from glynt.apps.project.services.email import SendNewProjectEmailsService
+from glynt.apps.project.services.project_checklist import ProjectCheckListService
 from glynt.apps.project.services.ensure_project import PROJECT_CREATED
-
 
 import logging
 logger = logging.getLogger('django.request')
@@ -31,6 +31,9 @@ def on_project_created(sender, **kwargs):
         # send notification
         notify.send(user, recipient=user, verb=u'created', action_object=project,
                     description=comment, target=project, project_action='created_project', project_pk=project.pk, creating_user_pk=user.pk)
+
+        checklist_service = ProjectCheckListService(project=project)
+        checklist_service.bulk_create()
 
         send = SendNewProjectEmailsService(project=project, sender=user)
         send.process()

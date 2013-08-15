@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """ Set of signals to handle when comments are posted and assigning notifications to the user """
 from django.dispatch import receiver
-from django.db.models.signals import post_save, post_delete, m2m_changed
+from django.db.models.signals import pre_save, post_save, post_delete, m2m_changed
 
 from django.contrib.admin.models import LogEntry
 
@@ -9,7 +9,7 @@ from threadedcomments.models import ThreadedComment
 
 from bunch import Bunch
 
-from glynt.apps.todo import FEEDBACK_STATUS
+from glynt.apps.todo import TODO_STATUS_ACTION, FEEDBACK_STATUS
 
 from .tasks import delete_attachment
 from .models import ToDo, Attachment, FeedbackRequest
@@ -68,7 +68,6 @@ def on_comment_created(sender, **kwargs):
     """
     Handle Creation of attachments
     """
-    logger.debug('GOT IT {type}'.format(type=type(sender)))
     if not isinstance(sender, LogEntry):
         is_new = kwargs.get('created', False)
         comment = kwargs.get('instance')
@@ -104,7 +103,11 @@ def feedbackrequest_created(sender, **kwargs):
                         verb=verb,
                         action_object=feedbackrequest.attachment,
                         target=feedbackrequest.attachment.todo,
-                        content='for attachment "{attachment}" - "{todo}" is {status}'.format(attachment=feedbackrequest.attachment.filename, todo=feedbackrequest.attachment.todo.name, status=feedbackrequest.attachment.todo.display_status))
+                        content=feedbackrequest.comment,
+                        detail_statement='for attachment "{attachment}" - "{todo}" is {status}<br/>'.format(attachment=feedbackrequest.attachment.filename, todo=feedbackrequest.attachment.todo.name, status=feedbackrequest.attachment.todo.display_status),
+                        attachment=feedbackrequest.attachment.filename,
+                        todo=feedbackrequest.attachment.todo.name,
+                        status=feedbackrequest.attachment.todo.display_status)
 
         # if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.responded:
         #     verb = 'provided feedback to {assigned_by} on {attachment}'.format(assigned_by=feedbackrequest.assigned_by, attachment=feedbackrequest.attachment.filename)
@@ -121,7 +124,11 @@ def feedbackrequest_created(sender, **kwargs):
                         verb=verb,
                         action_object=feedbackrequest.attachment,
                         target=feedbackrequest.attachment.todo,
-                        content='for attachment "{attachment}" - "{todo}" is {status}'.format(attachment=feedbackrequest.attachment.filename, todo=feedbackrequest.attachment.todo.name, status=feedbackrequest.attachment.todo.display_status))
+                        content=feedbackrequest.comment,
+                        detail_statement='for attachment "{attachment}" - "{todo}" is {status}'.format(attachment=feedbackrequest.attachment.filename, todo=feedbackrequest.attachment.todo.name, status=feedbackrequest.attachment.todo.display_status),
+                        attachment=feedbackrequest.attachment.filename,
+                        todo=feedbackrequest.attachment.todo.name,
+                        status=feedbackrequest.attachment.todo.display_status)
 
 
 @receiver(post_save, sender=FeedbackRequest, dispatch_uid='feedbackrequest.status_change')
@@ -130,7 +137,32 @@ def feedbackrequest_status_change(sender, **kwargs):
     logger.debug('Starting ToDoAttachmentFeedbackRequestStatusService todo.status: {status}'.format(status=feedback_request.attachment.todo.display_status))
     service = ToDoAttachmentFeedbackRequestStatusService(feedback_request=feedback_request)
     service.process()
-    logger.debug('Completed ToDoAttachmentFeedbackRequestStatusService: todo.status: {status}'.format(status=feedback_request.attachment.todo.display_status))
+
+
+@receiver(pre_save, sender=ToDo, dispatch_uid='todo.status_change')
+def todo_item_status_change(sender, **kwargs):
+    instance = kwargs.get('instance')
+    if instance.pk is not None:
+
+        if instance.user is not None:
+
+            # we have an existing item
+            prev_instance = ToDo.objects.get(pk=instance.pk)
+
+            if prev_instance.status != instance.status:
+
+                event_action = TODO_STATUS_ACTION[instance.status]
+                verb = '{user} {action} {name}'.format(name=instance.name, action=event_action, user=instance.user.get_full_name())
+
+                action.send(instance.user,
+                            verb=verb,
+                            action_object=instance,
+                            target=instance,
+                            content=None,
+                            instance_status=instance.status,
+                            instance_dispay_status=instance.display_status,
+                            event_action=event_action,
+                            event='todo.status_change')
 
 
 """
@@ -149,7 +181,10 @@ def on_action_created(sender, **kwargs):
 
         if hasattr(target, 'pusher_id'):
             if action and is_new:
-                pusher_service = PusherPublisherService(channel=target.pusher_id, event='action.created')
+
+                event = action.data.get('event', 'action.created')
+
+                pusher_service = PusherPublisherService(channel=target.pusher_id, event=event)
 
                 user_name = action.actor.get_full_name()
 
@@ -157,6 +192,6 @@ def on_action_created(sender, **kwargs):
                                         verb=action.verb,
                                         target_name=unicode(action),
                                         timestamp='',
-                                        content=action.data.get('content', ''))
+                                        **action.data)
 
                 pusher_service.process(label=action.verb, comment=action.verb, **info_object)
