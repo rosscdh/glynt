@@ -50,6 +50,6 @@ class InviteToJoinService(object):
                 template_prefix = "invite/email/",
                 from_email = '{from_name} via LawPal <{admin_email}>'.format(from_name=self.from_name, admin_email=admin_email),
                 recipient_list = [self.to_email],
-                bcc = ['amhalliday@gmail.com'],
+                bcc = ['founders@lawpal.com'],
                 context = self.context,
         )
