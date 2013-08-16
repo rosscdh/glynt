@@ -32,7 +32,7 @@
 {% if not feedback_requests %}
 <div class="row">
     <div class="btn-group pull-right">
-        <button class="btn btn-delete btn-link pull-right">Delete</button>
+        {% if is_lawyer %}<button class="btn btn-delete btn-link pull-right">Delete</button>{% endif %}
         <!-- <button class="btn btn-fullscreen btn-link pull-right">Full Screen</button> -->
     </div>
 </div>
