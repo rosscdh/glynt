@@ -24,8 +24,8 @@ class BaseEmailService(object):
     email_template = None
     base_email_template_location = 'email/'
 
-    subject = None
-    message = None
+    _subject = None
+    _message = None
 
     from_name = None
 
@@ -34,8 +34,6 @@ class BaseEmailService(object):
     to_email = None
 
     def __init__(self, **kwargs):
-        self.subject = kwargs.get('subject', self.subject)
-
         self.from_name = kwargs.get('from_name', admin_name)
         self.from_email = kwargs.get('from_email', admin_email)
 
@@ -77,19 +75,26 @@ class BaseEmailService(object):
             'from_email': self.from_email,
         })
 
-    def templatize_context(self, target, **kwargs):
+    def _templatize_context(self, target, **kwargs):
         t = template.Template(target)
         c = template.Context(kwargs)
         return t.render(c)
+
+    @property
+    def subject(self):
+        return self._templatize_context(target=self._subject, **self.context)
+
+    @property
+    def message(self):
+        return self._templatize_context(target=self._message, **self.context)
 
     def process(self, **kwargs):
         return self.send(**kwargs)
 
     def send(self, **kwargs):
-        if 'subject' in kwargs:
-            self.subject = kwargs.get('subject')
-        if 'message' in kwargs:
-            self.message = kwargs.get('message')
+        self._subject = kwargs.get('subject', self._subject)
+        self._message = kwargs.get('message', self._message)
+
         # merge kwargs into context
         self.context.update(kwargs)
 
@@ -102,8 +107,8 @@ class BaseEmailService(object):
             })
             # Update subject
             self.context.update({
-                'subject': self.templatize_context(target=self.subject, **self.context),
-                'message': self.templatize_context(target=self.message, **self.context) if self.message else None,
+                'subject': self.subject,
+                'message': self.message,
             })
 
             logger.info('Sending Email to: {to} email_template: {email_template} with context: {context}'.format(to=self.to_email, email_template=self.email_template, context=self.context))
