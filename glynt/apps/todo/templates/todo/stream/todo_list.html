@@ -2,7 +2,7 @@
 <ul data-stream_list class="list-unstyled activity">
     {% for a in stream %}
         <li {% if a.data.content %}class="comment"{% endif %}>
-            {{ a.actor.get_full_name|default:a.actor.username }} {{ a.verb }} <b>{{ a.data.attachment_name }}</b>
+            {{ a.verb }} <b>{{ a.data.attachment_name }}</b>
             {% if a.data.page %}<br/><span class="text-muted pull-right">Page: {{ a.data.page }}</span>{% endif %}
             <span class="text-muted pull-right">{{ a.timestamp|timesince }} <!-- {% trans "ago" %} --></span>
             {% if a.data.content %}

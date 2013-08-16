@@ -7,18 +7,19 @@ from django.contrib.admin.models import LogEntry
 
 from threadedcomments.models import ThreadedComment
 
-from bunch import Bunch
-
 from glynt.apps.todo import TODO_STATUS_ACTION, FEEDBACK_STATUS
 
 from .tasks import delete_attachment
 from .models import ToDo, Attachment, FeedbackRequest
 from .services import CrocdocAttachmentService, ToDoStatusService, ToDoAttachmentFeedbackRequestStatusService
 
+from glynt.apps.services.email import NewActionEmailService
 from glynt.apps.services.pusher import PusherPublisherService
 
 from actstream import action
 from actstream.models import Action
+
+from bunch import Bunch
 
 import logging
 logger = logging.getLogger('django.request')
@@ -43,6 +44,17 @@ def on_attachment_created(sender, **kwargs):
             todostatus_service = ToDoStatusService(todo_item=attachment.todo)
             todostatus_service.process()
 
+            verb = '{name} Uploaded an Attachment: "{filename}"'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename)
+            action.send(attachment.uploaded_by,
+                        verb=verb,
+                        action_object=attachment,
+                        target=attachment.todo,
+                        content=verb,
+                        attachment=attachment.filename,
+                        todo=attachment.todo.name,
+                        status=attachment.todo.display_status,
+                        event='todo.attachment.created')
+
 
 @receiver(post_delete, sender=Attachment, dispatch_uid='todo.attachment.deleted')
 def on_attachment_deleted(sender, **kwargs):
@@ -60,6 +72,17 @@ def on_attachment_deleted(sender, **kwargs):
                 logger.error('Could not call delete_attachment via celery: {exception}'.format(exception=e))
                 delete_attachment(is_new=is_new, attachment=attachment, **kwargs)
 
+            verb = '{name} Deleted an Attachment: "{filename}"'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename)
+            action.send(attachment.uploaded_by,
+                        verb=verb,
+                        action_object=attachment,
+                        target=attachment.todo,
+                        content=verb,
+                        attachment=attachment.filename,
+                        todo=attachment.todo.name,
+                        status=attachment.todo.display_status,
+                        event='todo.attachment.deleted')
+
 """
 Comment Events
 """
@@ -73,7 +96,7 @@ def on_comment_created(sender, **kwargs):
         comment = kwargs.get('instance')
 
         if comment and is_new:
-            verb = 'Commented on Checklist Item'
+            verb = '{name} commented on a checklist item'.format(name=comment.user.get_full_name())
             todo = comment.content_object
             action.send(comment.user,
                         verb=verb,
@@ -83,7 +106,6 @@ def on_comment_created(sender, **kwargs):
 
             todostatus_service = ToDoStatusService(todo_item=todo)
             todostatus_service.process()
-
 
 """
 Feedback Request Change Events
@@ -98,7 +120,7 @@ def feedbackrequest_created(sender, **kwargs):
         feedbackrequest = kwargs.get('instance')
 
         if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.open:
-            verb = 'requested feedback from {assigned_to}'.format(assigned_to=', '.join([u.get_full_name() for u in feedbackrequest.assigned_to.all()]))
+            verb = '{assigned_by} requested feedback from {assigned_to}'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), assigned_to=', '.join([u.get_full_name() for u in feedbackrequest.assigned_to.all()]))
             action.send(feedbackrequest.assigned_by,
                         verb=verb,
                         action_object=feedbackrequest.attachment,
@@ -119,7 +141,7 @@ def feedbackrequest_created(sender, **kwargs):
         #                 assigned_to=feedbackrequest.assigned_by)
 
         if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.closed:
-            verb = 'closed the feedback request assigned to them'
+            verb = '{assigned_by} closed the feedback request assigned to them'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), )
             action.send(feedbackrequest.assigned_by,
                         verb=verb,
                         action_object=feedbackrequest.attachment,
@@ -187,6 +209,7 @@ def on_action_created(sender, **kwargs):
                 pusher_service = PusherPublisherService(channel=target.pusher_id, event=event)
 
                 user_name = action.actor.get_full_name()
+                user_email = action.actor.email
 
                 info_object = Bunch(name=user_name,
                                         verb=action.verb,
@@ -195,3 +218,16 @@ def on_action_created(sender, **kwargs):
                                         **action.data)
 
                 pusher_service.process(label=action.verb, comment=action.verb, **info_object)
+
+                recipients = None
+                url = None
+
+                if type(action.target) == ToDo:
+                    logger.debug('action.target is a ToDo object')
+                    recipients = action.target.project.notification_recipients()
+                    url = action.target.get_absolute_url()
+
+                if recipients:
+                    logger.debug('recipients: {recipients}'.format(recipients=recipients))
+                    email = NewActionEmailService(subject=action.verb, from_name=user_name, from_email=user_email, recipients=recipients)
+                    email.send(url=url, message=action.verb)

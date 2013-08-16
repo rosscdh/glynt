@@ -21,6 +21,7 @@ env.local_project_path = os.path.dirname(os.path.realpath(__file__))
 
 env.repo = Repo(env.local_project_path)
 
+env.fixtures = 'sites test_cities document_category documenttemplate legal transact lawyers'
 env.SHA1_FILENAME = None
 env.timestamp = time.time()
 env.is_predeploy = False
@@ -493,7 +494,7 @@ def stop_service():
 @task
 def fixtures():
     # Activate virtualenv
-    virtualenv('python %s/%s/manage.py loaddata sites document_category documenttemplate legal lawyers' % (env.remote_project_path, env.project,))
+    virtualenv('python %s/%s/manage.py loaddata %s' % (env.remote_project_path, env.project, env.fixtures,))
 
 
 @task
@@ -576,7 +577,7 @@ def rebuild_local():
 
     local('python manage.py syncdb')
     local('python manage.py migrate')
-    local('python manage.py loaddata sites cities_light transact')
+    local('python manage.py loaddata {fixtures}'.format(fixtures=env.fixtures))
     local('python manage.py check_permissions')
 
 

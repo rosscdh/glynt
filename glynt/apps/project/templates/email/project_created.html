@@ -1,4 +1,6 @@
 {% load url from future %}{% load glynt_helpers %}
+
+{% block plain %}
 {{ message }}
 
 Please assign 2 matching lawyers to this project at: {% current_site_domain %}{% url 'admin:project_project_change' project.pk %}
@@ -30,3 +32,6 @@ num_consultants: {{ company.data.num_consultants }}
 ip_nolonger_affiliated: {{ company.data.ip_nolonger_affiliated }}
 ip_otherthan_founder: {{ company.data.ip_otherthan_founder }}
 ip_university_affiliation: {{ company.data.ip_university_affiliation }}
+
+{% include 'email/footer.email' %}
+{% endblock %}

@@ -195,12 +195,16 @@ class AttachmentView(CrocdocAttachmentSessionContextMixin, DetailView):
 
     @property
     def opposite_user(self):
-        return self.object.project.get_primary_lawyer().user if self.request.user.profile.is_customer else self.object.project.customer.user
+        try:
+            return self.object.project.get_primary_lawyer().user if self.request.user.profile.is_customer else self.object.project.customer.user
+        except AttributeError:
+            return None
 
     def get_context_data(self, **kwargs):
         context = super(AttachmentView, self).get_context_data(**kwargs)
         context.update({
             'has_lawyer': self.object.project.has_lawyer,
+            'is_lawyer': self.request.user.profile.is_lawyer,
             'feedback_requests': self.object.feedbackrequest_set.open(),
             'opposite_user': self.opposite_user,
             'FEEDBACK_STATUS': FEEDBACK_STATUS,
