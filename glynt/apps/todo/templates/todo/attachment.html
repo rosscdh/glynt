@@ -32,7 +32,7 @@
 {% if not feedback_requests %}
 <div class="row">
     <div class="btn-group pull-right">
-        {% if is_lawyer %}<button class="btn btn-delete btn-link pull-right">Delete</button>{% endif %}
+        {% if object.uploaded_by == user or is_lawyer %}<button class="btn btn-delete-attachment btn-link pull-right" data-pk="{{ object.pk }}">Delete</button>{% endif %}
         <!-- <button class="btn btn-fullscreen btn-link pull-right">Full Screen</button> -->
     </div>
 </div>
@@ -41,3 +41,37 @@
 <br />
 <br />
 <iframe id="crocdoc-viewer-iframe" src="{{ view_url }}" width="100%" height="550px" frameborder="none" style="margin-top:5px;"></iframe>
+
+<script type="text/javascript">
+$(document).ready(function () {
+    $(document).on( 'click', '.btn-delete-attachment', function (event) {
+        event.preventDefault();
+
+        var elem = $(this);
+        var pk = elem.data('pk');
+
+        elem.fadeOut('slow');
+
+        var url = '/api/v1/attachment/{pk}'.assign({'pk': pk});
+        var data = {
+            'deleted_by': {'pk': '{{ user.pk }}'}
+        };
+
+        $.ajax({
+            type: 'DELETE',
+            url: url,
+            data: JSON.stringify(data),
+            dataType: 'application/json',
+            contentType: 'application/json',
+            beforeSend: function (jqXHR, settings) {
+                // Pull the token out of the DOM.
+                jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]:first').val());
+            },
+            complete: function () {
+                loadAttachments();
+            }
+        });
+
+    });
+});
+</script>
