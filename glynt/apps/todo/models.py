@@ -78,6 +78,7 @@ class ToDo(models.Model):
 
 class Attachment(models.Model):
     uuid = models.CharField(max_length=255, blank=True, null=True, db_index=True)
+    uploaded_by = models.ForeignKey(User)
     attachment = FPFileField(upload_to=_attachment_upload_file, additional_params=None)
     project = models.ForeignKey(Project, related_name='attachments')
     todo = models.ForeignKey(ToDo, blank=True, null=True, related_name='attachments')
