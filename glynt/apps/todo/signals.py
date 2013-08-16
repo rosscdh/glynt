@@ -52,7 +52,8 @@ def on_attachment_created(sender, **kwargs):
                         content=verb,
                         attachment=attachment.filename,
                         todo=attachment.todo.name,
-                        status=attachment.todo.display_status)
+                        status=attachment.todo.display_status,
+                        event='todo.attachment.created')
 
 
 @receiver(post_delete, sender=Attachment, dispatch_uid='todo.attachment.deleted')
@@ -79,7 +80,8 @@ def on_attachment_deleted(sender, **kwargs):
                         content=verb,
                         attachment=attachment.filename,
                         todo=attachment.todo.name,
-                        status=attachment.todo.display_status)
+                        status=attachment.todo.display_status,
+                        event='todo.attachment.deleted')
 
 """
 Comment Events
