@@ -33,7 +33,7 @@
 <div class="row">
     <div class="btn-group pull-right">
         {% if object.uploaded_by == user or is_lawyer %}<button class="btn btn-delete-attachment btn-link pull-right" data-pk="{{ object.pk }}">Delete</button>{% endif %}
-        <!-- <button class="btn btn-fullscreen btn-link pull-right">Full Screen</button> -->
+        <button class="btn btn-fullscreen btn-link pull-right">Full Screen</button>
     </div>
 </div>
 {% endif %}
@@ -44,6 +44,15 @@
 
 <script type="text/javascript">
 $(document).ready(function () {
+    
+    $(document).on( 'click', '.btn-fullscreen', function (event) {
+        event.preventDefault();
+        var url = $('#crocdoc-viewer-iframe').attr('src');
+        if ( url ) {
+            window.open(url, 'crocdoc-fullscreen', 'width={width}, height={height}, left=0, top=0, scrollbars=yes, fullscreen=yes'.assign({'width': window.width, 'height':  window.height}));
+        }
+    });
+
     $(document).on( 'click', '.btn-delete-attachment', function (event) {
         event.preventDefault();
 
