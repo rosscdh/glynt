@@ -10,9 +10,6 @@
 		<div class="row animated fadeInDown">
 			<div class="col col-lg-12">
 				<h1>Hey {{ user.first_name|default:user }}, a warm welcome to LawPal</h1>
-				<h3>Submit your profile for inclusion and we'll be in touch
-					
-				 </h3>
 				<br />
 				<br />
 			</div>
@@ -22,16 +19,12 @@
 <div class="container profile">
 	<div class="row">
 		<div class="col col-lg-12">
-			<h2>Claim your profile and join the LawPal community</h2>
 			<br />
-			<a href="{% url 'lawyer:setup_profile' %}" class="btn btn-large btn-primary">Complete your profile</a>  or <a href="{% url 'lawyer:profile' slug=user.username %}" class="btn btn-large">Preview</a>
+			<a href="{% url 'lawyer:setup_profile' %}" class="btn btn-large btn-primary">Complete your profile</a>
 			<br />
 			<br />
 			<p>
-				We are building a platform which will allow you to connect with new startups seeking outside counsel. Soon you will be able to save your time and save your clients money by using LawPal to manage your new and existing relationships.
-			</p>
-			<p>	
-				 Your profile is already up and running, but why not add more information so founders can easily direct themselves to your page and find out all about you.
+				Please complete your profile for inclusion in the LawPal marketplace. 
 			</p>
 		
 		</div>

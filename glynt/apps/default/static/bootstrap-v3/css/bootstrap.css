@@ -295,7 +295,7 @@ p {
 }
 .lead {
   margin-bottom: 20px;
-  font-size: 21px;
+  font-size: 18.2px;
   font-weight: 200;
   line-height: 1.4;
 }
@@ -6510,6 +6510,12 @@ table.checklist .item-meta a {
 }
 table.checklist .item-meta a:hover {
   text-decoration: none;
+}
+table.checklist .item-meta .item-delete {
+  display: none;
+}
+table.checklist tr.item.state-new:hover .item-delete {
+  display: inline;
 }
 table.checklist tr.item.state-new {
   color: #eeeeee;
