@@ -24,6 +24,7 @@
             <li><a href="{% url 'dashboard:checklist' uuid=project.uuid %}"><h3>Checklist</h3></a></li>
         </ul>
     </div>
+    {{profile_is_complete}}
     {% if not profile_is_complete %}
         <div class="callout callout-danger empty">
             <div class="empty-message empty-message-exclamation-sign">

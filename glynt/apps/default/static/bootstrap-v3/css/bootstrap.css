@@ -4788,12 +4788,12 @@ body {
 }
 #footer p,
 #footer a {
-  color: #555555;
+  color: #bfbfbf;
   font-size: 13px;
   font-weight: normal;
 }
 #footer a:hover {
-  color: #bfbfbf;
+  color: #eeeeee;
 }
 /* Lastly, apply responsive CSS fixes as necessary */
 @media (max-width: 767px) {
@@ -6751,6 +6751,9 @@ table.lawyer-list {
 .checklist-header .btn:focus {
   color: #555555;
   text-decoration: none;
+}
+.checklist-header:first-of-type {
+  margin-top: 0px;
 }
 .post {
   border-bottom: 1px solid #eeeeee;
