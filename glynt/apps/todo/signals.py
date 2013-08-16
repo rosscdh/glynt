@@ -44,6 +44,16 @@ def on_attachment_created(sender, **kwargs):
             todostatus_service = ToDoStatusService(todo_item=attachment.todo)
             todostatus_service.process()
 
+            verb = '{name} Uploaded an Attachment: "{filename}"'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename)
+            action.send(attachment.uploaded_by,
+                        verb=verb,
+                        action_object=attachment,
+                        target=attachment.todo,
+                        content=verb,
+                        attachment=attachment.filename,
+                        todo=attachment.todo.name,
+                        status=attachment.todo.display_status)
+
 
 @receiver(post_delete, sender=Attachment, dispatch_uid='todo.attachment.deleted')
 def on_attachment_deleted(sender, **kwargs):
@@ -60,6 +70,16 @@ def on_attachment_deleted(sender, **kwargs):
             except Exception as e:
                 logger.error('Could not call delete_attachment via celery: {exception}'.format(exception=e))
                 delete_attachment(is_new=is_new, attachment=attachment, **kwargs)
+
+            verb = '{name} Deleted an Attachment: "{filename}"'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename)
+            action.send(attachment.uploaded_by,
+                        verb=verb,
+                        action_object=attachment,
+                        target=attachment.todo,
+                        content=verb,
+                        attachment=attachment.filename,
+                        todo=attachment.todo.name,
+                        status=attachment.todo.display_status)
 
 """
 Comment Events

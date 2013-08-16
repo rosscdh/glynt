@@ -325,7 +325,10 @@ HandleAttachment = function HandleAttachment(event) {
     var data = {};
 
     // append our fpfile info to the data object
-    data.data = {'fpfile': fpfile};
+    data.uploaded_by = {'pk': '{{ user.pk }}'};
+    data.data = {
+        'fpfile': fpfile,
+    };
 
     $.each(form.serializeArray(), function (i, e) {
         data[e.name] = e.value;
