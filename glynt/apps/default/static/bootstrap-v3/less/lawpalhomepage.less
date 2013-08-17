@@ -32,15 +32,27 @@
         margin-right:10px;
       }
   	}
-    .scroll {
+    .scroll, .telephone {
   		padding:30px 0px 20px 0;
   		color: lighten(@gray-light, 0%);
-  		background:url('../../img/down-chev.png') center 60px no-repeat;
   		font-size: @font-size-base * 1.4;
   		font-weight:normal;
   		font-family:@headings-font-family;
   	}
-  	.intro {
+    .scroll {
+      background:url('../../img/down-chev.png') center 60px no-repeat;
+    }
+    .telephone {
+      color: @gray;
+      .glyphicon {
+        font-size:15px;
+      }
+      .brand {
+        font-size:14px;
+        font-family:@font-family-sans-serif;
+      }
+    }
+    .intro {
   		h1 {
 	    	font-size:ceil(@font-size-base * 2);
 	    	margin-bottom:0px;
@@ -213,7 +225,7 @@ table.checklist {
 .icon-state-closed:before                 { content: @ok-sign; }
 
 .widget {
-  border: 1px solid #ddd;
+  border: 1px solid #eee;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   margin-bottom: -1px;
@@ -399,9 +411,6 @@ table.lawyer-list {
       color: @gray;
       text-decoration: none;
     }
-  }
-  &:first-of-type {
-    margin-top:0px;
   }
 }
 

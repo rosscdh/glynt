@@ -1,32 +1,34 @@
 {% load i18n todo_tags glynt_helpers %}
-<h3>{{ object.filename }}</h3>
+<h4 class="softer"><i class="glyphicon glyphicon-file" style="font-size:15px"></i> {{ object.filename }}</h4>
 <!-- if we have a lawyer involved in this project -->
 {% if has_lawyer %}
-<div class="row">
     <!-- if there is a feedback request in action -->
     {% for f in feedback_requests %}        
         {% if f.assigned_by == user %}
             <div class="alert alert-block alert-info text-center">
-                <div class="profile-card" data-template="mini" data-username="{{ f.primary_assigned_to.username }}" data-img_class="img-circle"></div>
-                <p>You have requested feedback from {{ f.primary_assigned_to.get_full_name|default:f.primary_assigned_to.username }} on this attachment.</p>
-            </div>
+                <div class="row">
+                    <div class="col-9">
+                        <p>You have requested feedback from {{ f.primary_assigned_to.get_full_name|default:f.primary_assigned_to.username }} on this attachment.</p>
+                    </div>
         {% else %}
             <div class="alert alert-block alert-alert text-center">
-                <div class="profile-card" data-template="mini" data-username="{{ f.assigned_by.username }}" data-img_class="img-circle"></div>
-                <p>{{ f.assigned_by.get_full_name|default:f.assigned_by.username }} has requested your feedback on this attachment.</p>
-            </div>
+                <div class="row">
+                    <div class="col-9">
+                        <!-- <div class="profile-card" data-template="mini" data-username="{{ f.assigned_by.username }}" data-img_class="img-circle"></div> -->
+                        <p>{{ f.assigned_by.get_full_name|default:f.assigned_by.username }} has requested your feedback on this attachment. Please review the document below, add comments if required and click 'Feedback Complete'</p>
+                    </div>
         {% endif %}
 
-        {% if f.status == FEEDBACK_STATUS.open %}
-            <button class="btn btn-success pull-right" data-href="/api/v1/feedback_request/{{ f.pk }}" data-toggle="modal" data-target="#modal-feedback-form" data-is_ajax="false" data-pk="{{ f.pk }}" data-attachment="{{ object.pk }}" data-assigned_by="{{ user.pk }}" data-assigned_to="{{ opposite_user.pk }}" data-status="{{ FEEDBACK_STATUS.closed }}">{% if f.assigned_by == user %}Cancel Request{% else %}Feedback Complete{% endif %}</button>
-        {% endif %}
-
+                    {% if f.status == FEEDBACK_STATUS.open %}
+                        <button class="btn btn-success pull-right" data-href="/api/v1/feedback_request/{{ f.pk }}" data-toggle="modal" data-target="#modal-feedback-form" data-is_ajax="false" data-pk="{{ f.pk }}" data-attachment="{{ object.pk }}" data-assigned_by="{{ user.pk }}" data-assigned_to="{{ opposite_user.pk }}" data-status="{{ FEEDBACK_STATUS.closed }}">{% if f.assigned_by == user %}Cancel Request{% else %}<i class="glyphicon glyphicon-ok"></i> Feedback Complete{% endif %}</button>
+                    {% endif %}
+             </div>
+         </div>
     {% empty %}
         <!-- if no feedback request present -->
         <!-- and is_customer or is_lawyer -->
         <button class="btn btn-primary pull-right" data-href="/api/v1/feedback_request" data-toggle="modal" data-target="#modal-feedback-form" data-attachment="{{ object.pk }}" data-assigned_by="{{ user.pk }}" data-assigned_to="{{ opposite_user.pk }}" data-status="{{ FEEDBACK_STATUS.open }}">Request Feedback</button>
     {% endfor %}
-</div>
 {% endif %}
 
 {% if not feedback_requests %}
@@ -37,8 +39,6 @@
     </div>
 </div>
 {% endif %}
-
-<br />
 <br />
 <iframe id="crocdoc-viewer-iframe" src="{{ view_url }}" width="100%" height="550px" frameborder="none" style="margin-top:5px;"></iframe>
 

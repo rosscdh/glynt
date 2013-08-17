@@ -1701,6 +1701,7 @@ textarea.parsley-error:focus {
   font-size: 14px;
   font-weight: bold;
   line-height: 1.7142857148;
+  font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
@@ -4017,7 +4018,7 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
   float: left;
 }
 .nav-pills > li > a {
-  border-radius: 5px;
+  border-radius: 2px;
 }
 .nav-pills > li + li > a {
   margin-left: 2px;
@@ -6415,13 +6416,26 @@ td.hidden-lg {
   margin-left: 10px;
   margin-right: 10px;
 }
-.homepage #wrap .scroll {
+.homepage #wrap .scroll,
+.homepage #wrap .telephone {
   padding: 30px 0px 20px 0;
   color: #bfbfbf;
-  background: url('../../img/down-chev.png') center 60px no-repeat;
   font-size: 19.599999999999998px;
   font-weight: normal;
   font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
+}
+.homepage #wrap .scroll {
+  background: url('../../img/down-chev.png') center 60px no-repeat;
+}
+.homepage #wrap .telephone {
+  color: #555555;
+}
+.homepage #wrap .telephone .glyphicon {
+  font-size: 15px;
+}
+.homepage #wrap .telephone .brand {
+  font-size: 14px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 .homepage #wrap .intro h1 {
   font-size: 28px;
@@ -6582,7 +6596,7 @@ table.checklist tr.item.state-pending.assigned-to-user td [class*=" icon-"]:befo
   content: "\f058";
 }
 .widget {
-  border: 1px solid #ddd;
+  border: 1px solid #eee;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   margin-bottom: -1px;
@@ -6751,9 +6765,6 @@ table.lawyer-list {
 .checklist-header .btn:focus {
   color: #555555;
   text-decoration: none;
-}
-.checklist-header:first-of-type {
-  margin-top: 0px;
 }
 .post {
   border-bottom: 1px solid #eeeeee;

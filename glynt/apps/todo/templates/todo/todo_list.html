@@ -49,7 +49,6 @@
                                         </h4>
                                     </td>
                                     <td class="item-meta">
-                                        <small class="soft">{{ item.item_hash_num }}</small><br/>
                                         {% if is_lawyer %}
                                         <a href="{% url 'todo:edit' project_uuid=project.uuid slug=item.slug %}" title="Delete Item" data-pk="{{ item.obj.pk }}" data-item_slug="{{ item.slug }}" data-tooltip="Delete Item" class="btn btn-small btn-link item-delete text-danger">
                                             <i class="glyphicon glyphicon-remove text-danger"></i>

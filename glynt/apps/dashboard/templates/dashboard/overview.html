@@ -24,7 +24,6 @@
             <li><a href="{% url 'dashboard:checklist' uuid=project.uuid %}"><h3>Checklist</h3></a></li>
         </ul>
     </div>
-    {{profile_is_complete}}
     {% if not profile_is_complete %}
         <div class="callout callout-danger empty">
             <div class="empty-message empty-message-exclamation-sign">
@@ -33,60 +32,59 @@
                 <a href="{% url 'transact:builder' project_uuid=project.uuid tx_range='INTAKE' step='1' %}" class="btn btn-primary">Click here to complete your profile</a>
             </div>
         </div>
-    {% else %}
-        {% project_lawyers project 'generic' %}
-
-        <div class="row">
-            <div class="col col-lg-6">
-                <div class="widget overview">
-                    <div class="current-progress">
-                        <h3>Checklist Progress</h3>
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-success" style="width: {{ num_closed|as_percentage_of:num_total }}"></div>
-                            <div class="progress-bar progress-bar-info" style="width: 10%"></div>
-                            <div class="progress-bar progress-bar-warning" style="width: {{ num_pending|as_percentage_of:num_total }}"></div>
-                            <div class="progress-bar progress-bar-danger" style="width: {{ num_unread|as_percentage_of:num_total }}"></div>
-                        </div>
-                        <span class="label label-success">Resolved</span>
-                        <span class="label label-info">Needs Signing</span>
-                        <span class="label label-warning">Pending</span>
-                        <span class="label label-important">Open</span>
-                    </div>
-                    <hr>
-                    <div class="row item-counts">
-                        <div class="col-lg-4 item-count"><span>{{ num_unread }}</span> unread</div>
-                        <div class="col-lg-4 item-count"><span>{{ num_pending }}</span> pending</div>
-                        <div class="col-lg-4 item-count"><span>{{ num_closed }}</span> closed</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col col-lg-6">
-                <div class="widget recent-activity">
-                    <h3>Recent Activity</h3>
-                    {% project_activity_stream project %}
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col col-lg-6">
-                <div class="widget account-attorney">
-                    <h3>Your Attorney</h3>
-                    {% project_lawyers project %}
-                </div>
-            </div>
-            <div class="col col-lg-6">
-                <div class="widget transaction-profile">
-                    <h3>Transaction Profile</h3>
-
-                    <div class="callout callout-success empty">
-                        <div class="empty-message empty-message-ok">
-                            <h3>Your transaction profile is up-to-date.</h3>
-                            {% if PROJECT_ENVIRONMENT == 'dev' %}<a href="{% url 'transact:builder' project_uuid=project.uuid tx_range='INTAKE' step='1' %}" class="">update</a>{% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     {% endif %}
+    {% project_lawyers project 'generic' %}
+
+    <!-- <div class="row">
+        <div class="col col-lg-6">
+            <div class="widget overview">
+                <div class="current-progress">
+                    <h3>Checklist Progress</h3>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-success" style="width: {{ num_closed|as_percentage_of:num_total }}"></div>
+                        <div class="progress-bar progress-bar-info" style="width: 10%"></div>
+                        <div class="progress-bar progress-bar-warning" style="width: {{ num_pending|as_percentage_of:num_total }}"></div>
+                        <div class="progress-bar progress-bar-danger" style="width: {{ num_unread|as_percentage_of:num_total }}"></div>
+                    </div>
+                    <span class="label label-success">Resolved</span>
+                    <span class="label label-info">Needs Signing</span>
+                    <span class="label label-warning">Pending</span>
+                    <span class="label label-important">Open</span>
+                </div>
+                <hr>
+                <div class="row item-counts">
+                    <div class="col-lg-4 item-count"><span>{{ num_unread }}</span> unread</div>
+                    <div class="col-lg-4 item-count"><span>{{ num_pending }}</span> pending</div>
+                    <div class="col-lg-4 item-count"><span>{{ num_closed }}</span> closed</div>
+                </div>
+            </div>
+        </div>
+        <div class="col col-lg-6">
+            <div class="widget recent-activity">
+                <h3>Recent Activity</h3>
+                {% project_activity_stream project %}
+            </div>
+        </div>
+    </div> -->
+    <div class="row">
+        <div class="col col-lg-6">
+            <div class="widget account-attorney">
+                <h3>Your Attorney</h3>
+                {% project_lawyers project %}
+            </div>
+        </div>
+        <div class="col col-lg-6">
+            <div class="widget transaction-profile">
+                <h3>Transaction Profile</h3>
+
+                <div class="callout callout-success empty">
+                    <div class="empty-message empty-message-ok">
+                        <h3>Your transaction profile is up-to-date.</h3>
+                        {% if PROJECT_ENVIRONMENT == 'dev' %}<a href="{% url 'transact:builder' project_uuid=project.uuid tx_range='INTAKE' step='1' %}" class="">update</a>{% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
