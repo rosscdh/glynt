@@ -165,6 +165,7 @@ class ToDoItemsFromDbMixin(object):
     def bulk_create(self):
         from glynt.apps.todo.models import ToDo
         todo_list = []
+        db_todo_slugs = [t.slug for t in self.db_todos()]
 
         for t in self.todos:
             t = t.toDict()
@@ -173,7 +174,8 @@ class ToDoItemsFromDbMixin(object):
             t.pop('num_attachments', None)
             t.pop('group', None)
             t.pop('note', None)
-            todo_list.append(ToDo(**t))
+            if t.get('slug') is not None and t.get('slug') not in db_todo_slugs:
+                todo_list.append(ToDo(**t))
 
         ToDo.objects.bulk_create(todo_list)
 
