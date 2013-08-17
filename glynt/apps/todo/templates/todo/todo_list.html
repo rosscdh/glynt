@@ -87,6 +87,7 @@
             'state_modifier': $('#state_modifier')
         });
 
+        {% if feedback_requests %}
         /**
         * HILIGHT ITEMS WITH ASSIGNED
         * Items with assignments to current user
@@ -98,6 +99,7 @@
             var row = $('[data-edit_label={slug}]'.assign({'slug': slug}));
             row.removeClass('assigned-to-user').addClass('assigned-to-user');
         });
+        {% endif %}
         /**
         * ASSIGN NUM ITEMS ASSIGNED TO USER COUNT
         * Count the number of items assigned to the user

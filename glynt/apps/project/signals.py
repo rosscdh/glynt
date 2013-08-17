@@ -24,7 +24,9 @@ def on_project_created(sender, **kwargs):
     is_new = kwargs.get('created')
     project = kwargs.get('instance')
 
-    if project:
+    # ensure that we have a project object and that is has NO pk 
+    # as we dont want this event to happen on change of a project
+    if project and project.pk is None:
         user = project.customer.user
         comment = u'{user} created this Project'.format(user=user.get_full_name())
         logger.debug(comment)
@@ -32,11 +34,13 @@ def on_project_created(sender, **kwargs):
         notify.send(user, recipient=user, verb=u'created', action_object=project,
                     description=comment, target=project, project_action='created_project', project_pk=project.pk, creating_user_pk=user.pk)
 
-        checklist_service = ProjectCheckListService(project=project)
-        checklist_service.bulk_create()
-
         send = SendNewProjectEmailsService(project=project, sender=user)
         send.process()
+
+    # perform the bulk create event
+    # to bring project up to date with any modifications made
+    checklist_service = ProjectCheckListService(project=project)
+    checklist_service.bulk_create()
 
 
 def mark_project_notifications_as_read(user, project):
