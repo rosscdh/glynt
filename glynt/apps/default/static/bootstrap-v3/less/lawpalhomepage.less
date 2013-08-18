@@ -138,9 +138,20 @@ table.checklist {
         text-decoration: none;
       }
     }
+
+    .item-delete{
+      display:none;
+    }
   }
 
   tr.item {
+    &.state-new {
+      &:hover {
+        .item-delete {
+          display:inline;
+        }
+      }
+    }
     &.state-new {
       color: @gray-lighter;
       /*td a { color: @gray-light; }*/

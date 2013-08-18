@@ -6,7 +6,7 @@ from tastypie.cache import SimpleCache
 from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
 
-from glynt.apps.api import BaseApiModelResource
+from glynt.apps.api.models import BaseApiModelResource
 
 from django.contrib.auth.models import User
 
@@ -87,7 +87,7 @@ class UserResource(BaseApiModelResource):
         queryset = User.objects.all()
         authentication = Authentication()
         authorization = Authorization()
-        resource_name = 'user'
+        resource_name = 'users'
         filtering = {
             'username': ALL,
         }

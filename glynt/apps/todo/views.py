@@ -3,14 +3,13 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import View, ListView, UpdateView, DetailView
 from django.views.generic.edit import ModelFormMixin
 from django.views.generic.detail import SingleObjectMixin
-from django.contrib import messages
 
 from glynt.apps.project.services.project_checklist import ProjectCheckListService
 from glynt.apps.project.models import Project
 
 
-from . import FEEDBACK_STATUS
-from .forms import CustomerToDoForm, AttachmentForm
+from . import TODO_STATUS, FEEDBACK_STATUS
+from .forms import CustomerToDoForm, AttachmentForm, FeedbackRequestForm
 from .models import ToDo, Attachment
 from .services import CrocdocAttachmentService
 
@@ -42,6 +41,7 @@ class ProjectToDoView(ListView):
     def get_context_data(self, **kwargs):
         context = super(ProjectToDoView, self).get_context_data(**kwargs)
 
+        user_profile = self.request.user.profile
         self.project = get_object_or_404(Project, uuid=self.kwargs.get('uuid'))
         self.checklist_service = ProjectCheckListService(project=self.project)
         self.feedback_requests = self.checklist_service.feedbackrequests_by_user_as_json(user=self.request.user)
@@ -50,6 +50,8 @@ class ProjectToDoView(ListView):
             'project': self.project,
             'checklist': self.checklist_service,
             'feedback_requests': self.feedback_requests,
+            'is_lawyer': user_profile.is_lawyer,
+            'is_customer': user_profile.is_customer,
             'counts': {
                 # 'new': self.model.objects.new(project=self.project, user=self.request.user).count(),
                 # 'open': self.model.objects.open(project=self.project, user=self.request.user).count(),
@@ -68,6 +70,7 @@ class BaseToDoDetailMixin(SingleObjectMixin):
         context = super(BaseToDoDetailMixin, self).get_context_data(**kwargs)
         context.update({
             'project': self.project_service.project,
+            'feedback_form': FeedbackRequestForm(),
         })
         return context
 
@@ -108,6 +111,7 @@ class ToDoDetailView(DetailView, BaseToDoDetailMixin):
     def get_context_data(self, **kwargs):
         context = super(ToDoDetailView, self).get_context_data(**kwargs)
         context.update({
+            'TODO_STATUS': TODO_STATUS,
             'attachment_form': AttachmentForm(initial={'project': self.project.pk, 'todo': self.object.pk}),
             'back_and_forth': self.navigation_items,
         })
@@ -139,11 +143,9 @@ class ToDoEditView(UpdateView, BaseToDoDetailMixin, ModelFormMixin):
         return kwargs
 
     def form_valid(self, form):
-        #messages.success(self.request, 'Sucessfully updated this item. <a href="{href}">view</a>'.format(href=self.object.get_absolute_url()), extra_tags='safe')
         return super(ToDoEditView, self).form_valid(form)
 
     def form_invalid(self, form):
-        messages.error(self.request, 'There was an error updating this item')
         return super(ToDoEditView, self).form_valid(form)
 
 
@@ -157,10 +159,6 @@ class ToDoCreateView(ToDoEditView):
             'is_create': True,
         })
         return kwargs
-
-
-# class ToDoAssignView(DetailView, BaseToDoDetailMixin):
-#     template_name = 'todo/assign.html'
 
 
 """
@@ -197,12 +195,16 @@ class AttachmentView(CrocdocAttachmentSessionContextMixin, DetailView):
 
     @property
     def opposite_user(self):
-        return self.object.project.get_primary_lawyer().user if self.request.user.profile.is_customer else self.object.project.customer.user
+        try:
+            return self.object.project.get_primary_lawyer().user if self.request.user.profile.is_customer else self.object.project.customer.user
+        except AttributeError:
+            return None
 
     def get_context_data(self, **kwargs):
         context = super(AttachmentView, self).get_context_data(**kwargs)
         context.update({
             'has_lawyer': self.object.project.has_lawyer,
+            'is_lawyer': self.request.user.profile.is_lawyer,
             'feedback_requests': self.object.feedbackrequest_set.open(),
             'opposite_user': self.opposite_user,
             'FEEDBACK_STATUS': FEEDBACK_STATUS,

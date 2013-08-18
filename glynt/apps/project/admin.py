@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 from django.contrib import admin
 
-from glynt.apps.project.models import Project
+from glynt.apps.project.models import Project, ProjectLawyer
 
 
 class ProjectAdmin(admin.ModelAdmin):
@@ -17,3 +17,4 @@ class ProjectAdmin(admin.ModelAdmin):
         return qs
 
 admin.site.register(Project, ProjectAdmin)
+admin.site.register([ProjectLawyer])

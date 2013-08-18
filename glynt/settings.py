@@ -235,11 +235,10 @@ HELPER_APPS = (
     'clear_cache',
     # engless pagination
     'endless_pagination',
+
     # Celery Tasks
     'djcelery',
 
-    # Vast array of Storage types
-    'storages',
     # Project System
     'fluent_comments',
     'threadedcomments',

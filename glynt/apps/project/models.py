@@ -11,12 +11,13 @@ from glynt.apps.project.services.actions import OpenProjectService, CloseProject
 
 from glynt.apps.transact.models import Transaction
 from glynt.apps.company.models import Company
-from glynt.apps.customer.models import Customer
 from glynt.apps.lawyer.models import Lawyer
 
-from glynt.apps.project import PROJECT_STATUS
+from . import PROJECT_STATUS, PROJECT_LAWYER_STATUS
 
 from managers import DefaultProjectManager
+
+import itertools
 
 
 class Project(models.Model):
@@ -24,10 +25,10 @@ class Project(models.Model):
     Stores initial project details
     """
     uuid = UUIDField(auto=True, db_index=True)
-    customer = models.ForeignKey(Customer)
+    customer = models.ForeignKey('customer.Customer')
     company = models.ForeignKey(Company)
     transactions = models.ManyToManyField(Transaction)
-    lawyers = models.ManyToManyField(Lawyer, blank=True)
+    lawyers = models.ManyToManyField(Lawyer, blank=True, through='project.ProjectLawyer')
     data = JSONField(default={})
     status = models.IntegerField(choices=PROJECT_STATUS.get_choices(), default=PROJECT_STATUS.new, db_index=True)
     date_created = CreationDateTimeField()
@@ -55,6 +56,9 @@ class Project(models.Model):
             return self.lawyers.select_related('user').all()[0]
         except IndexError:
             return []
+
+    def notification_recipients(self):
+        return itertools.chain(self.company.customers.all(), self.lawyers.all())
 
     @property
     def has_lawyer(self):
@@ -96,6 +100,25 @@ class Project(models.Model):
     @property
     def project_statement(self):
         return self.data.get('project_statement', None)
+
+
+class ProjectLawyer(models.Model):
+    """
+    The customised variation of a generic m2m model
+    msut be named ProjectLawyer(s) <-- this is not noraml for django
+    """
+    LAWYER_STATUS = PROJECT_LAWYER_STATUS
+
+    project = models.ForeignKey(Project)
+    lawyer = models.ForeignKey(Lawyer)
+    status = models.IntegerField(choices=LAWYER_STATUS.get_choices(), default=LAWYER_STATUS.potential, db_index=True)
+
+    class Meta:
+        db_table = 'project_project_lawyer'
+
+    @property
+    def display_status(self):
+        return self.LAWYER_STATUS.get_desc_by_value(self.status)
 
 
 # import signals so they load on django load

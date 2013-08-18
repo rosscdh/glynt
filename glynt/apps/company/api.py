@@ -4,7 +4,7 @@ from tastypie.cache import SimpleCache
 from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
 
-from glynt.apps.api import BaseApiModelResource
+from glynt.apps.api.models import BaseApiModelResource
 
 
 from glynt.apps.company.models import Company

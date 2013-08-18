@@ -1,5 +1,5 @@
 # coding: utf-8
-from glynt.apps.api import BaseApiModelResource
+from glynt.apps.api.models import BaseApiModelResource
 
 from glynt.apps.lawyer.models import Lawyer
 

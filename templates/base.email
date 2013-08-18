@@ -1,9 +1,0 @@
-{% load glynt_helpers %}{% block subject %}Invitations from {{ from_name }}{% endblock %}
-
-{% block plain %}{% endblock %}
-
-Thanks,
-
-The LawPal Team
-
-P.S. - Don't forget to add this email address (no-reply@lawpal.com) to your email whitelist or contact list. This way, you will be sure to receive emails from our service.

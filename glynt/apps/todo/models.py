@@ -7,7 +7,6 @@ todo attachments when the time comes
 import os
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
 
 from glynt.apps.project.models import Project
 
@@ -37,6 +36,11 @@ class ToDo(models.Model):
     status = models.IntegerField(choices=TODO_STATUS.get_choices(), default=TODO_STATUS.new, db_index=True)
     data = JSONField(default={})
     date_due = models.DateTimeField(blank=True, null=True, auto_now=False, auto_now_add=False, db_index=True)
+
+    sort_position = models.IntegerField(db_index=True)
+    sort_position_by_cat = models.IntegerField(db_index=True)
+    item_hash_num = models.CharField(max_length=24, db_index=True)
+
     date_created = models.DateTimeField(auto_now=False, auto_now_add=True, db_index=True)
     date_modified = models.DateTimeField(auto_now=True, auto_now_add=True, db_index=True)
     is_deleted = models.BooleanField(default=False, db_index=True)
@@ -67,11 +71,15 @@ class ToDo(models.Model):
         return '#{primary}-{secondary}'.format(primary=int(self.data.get('sort_position', 0)), secondary=int(self.data.get('sort_position_by_cat', 0)))
 
     def get_absolute_url(self):
-        return reverse('todo:edit', kwargs={'project_uuid': self.project.uuid, 'slug': self.slug})
+        # need to import this HERE for some reason?
+        from django.core.urlresolvers import reverse
+        return reverse('todo:edit', kwargs={'project_uuid': self.project.uuid.__unicode__(), 'slug': self.slug})
 
 
 class Attachment(models.Model):
     uuid = models.CharField(max_length=255, blank=True, null=True, db_index=True)
+    uploaded_by = models.ForeignKey(User, related_name='atatchments_uploaded')
+    deleted_by = models.ForeignKey(User, blank=True, null=True, related_name='atatchments_deleted')
     attachment = FPFileField(upload_to=_attachment_upload_file, additional_params=None)
     project = models.ForeignKey(Project, related_name='attachments')
     todo = models.ForeignKey(ToDo, blank=True, null=True, related_name='attachments')
@@ -124,6 +132,7 @@ class FeedbackRequest(models.Model):
     attachment = models.ForeignKey(Attachment)
     assigned_by = models.ForeignKey(User, related_name='requestedfeedback')
     assigned_to = models.ManyToManyField(User, related_name='feedbackrequested')
+    comment = models.CharField(max_length=255)
     status = models.IntegerField(choices=FEEDBACK_STATUS.get_choices(), default=FEEDBACK_STATUS.open, db_index=True)
     data = JSONField(default={})
     date_created = models.DateTimeField(auto_now=False, auto_now_add=True, db_index=True)

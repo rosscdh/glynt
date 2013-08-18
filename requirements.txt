@@ -15,13 +15,13 @@ bunch
 
 # utils for git
 gitpython
+mimeparse
 
 django-filepicker
 -e git+https://github.com/dcramer/django-uuidfield.git#egg=django-uuidfield
 django-extensions
 django-braces
 django-templated-email
-django-storages
 django-tastypie>=0.9.15
 django-crispy-forms
 django-pagination

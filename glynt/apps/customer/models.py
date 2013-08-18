@@ -3,10 +3,36 @@ import os
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.contrib.auth.models import User
+from django.shortcuts import redirect
+from django.core.exceptions import ObjectDoesNotExist
 
+from glynt.apps.project.models import Project
 from glynt.apps.company.models import Company
 
 from jsonfield import JSONField
+
+import logging
+logger = logging.getLogger('django.request')
+
+
+class CustomerLoginLogic(object):
+    """ Login logic used to determin what to show """
+    def __init__(self, user):
+        self.user = user
+
+    def redirect(self):
+        try:
+            customer = self.user.customer_profile
+        except ObjectDoesNotExist:
+            customer = None
+            logger.error("founder profile not found for %s" % self.user)
+
+        projects = Project.objects.filter(customer=customer)
+
+        if projects:
+            return redirect('dashboard:overview')
+        else:
+            return redirect('project:create')
 
 
 def _customer_upload_photo(instance, filename):

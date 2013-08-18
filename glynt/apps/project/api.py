@@ -3,7 +3,7 @@ from tastypie import fields
 from tastypie.resources import ALL
 from tastypie.authorization import Authorization
 
-from glynt.apps.api import BaseApiModelResource
+from glynt.apps.api.models import BaseApiModelResource
 
 from .models import Project
 from . import PROJECT_STATUS

@@ -39,11 +39,6 @@ def todo_status_icon(value):
 todo_status_icon.is_safe = True
 
 
-@register.filter
-def todo_status_assignedto_class(todo_user):
-    return 'assigned-to-user' if todo_user not in [None, ''] else ''
-
-
 @register.inclusion_tag('todo/stream/todo_list.html', takes_context=False)
 def todo_stream(todo):
     return {

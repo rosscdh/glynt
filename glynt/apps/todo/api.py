@@ -5,7 +5,7 @@ from tastypie import fields
 from tastypie.authorization import Authorization
 from tastypie.resources import ALL
 
-from glynt.apps.api import BaseApiModelResource
+from glynt.apps.api.models import BaseApiModelResource
 from glynt.apps.todo.models import ToDo, Attachment, FeedbackRequest
 
 import time
@@ -53,6 +53,7 @@ class ToDoResource(BaseApiModelResource):
         list_allowed_methods = ['get', 'put', 'patch']
         #fields = ['is_deleted']
         filtering = {
+            'slug': ['exact'],
             'is_deleted': ['exact'],
         }
 
@@ -62,6 +63,8 @@ class AttachmentResource(BaseApiModelResource):
     """ Api resource for creating or modifying attachments """
     project = fields.IntegerField(attribute='project_id')
     todo = fields.IntegerField(attribute='todo_id')
+    uploaded_by = fields.ToOneField('glynt.apps.api.v1.UserResource', 'uploaded_by')
+    deleted_by = fields.ToOneField('glynt.apps.api.v1.UserResource', 'deleted_by', null=True)
 
     class Meta(BaseApiModelResource.Meta):
         queryset = Attachment.objects.all()

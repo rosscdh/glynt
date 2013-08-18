@@ -11,6 +11,15 @@ TODO_STATUS = get_namedtuple_choices('TODO_STATUS', (
 ))
 
 
+TODO_STATUS_ACTION = {
+    TODO_STATUS.new: 'set as New',
+    TODO_STATUS.open: 'Opened',
+    TODO_STATUS.pending: 'set as Pending',
+    TODO_STATUS.resolved: 'Resolved',
+    TODO_STATUS.closed: 'Closed',
+}
+
+
 FEEDBACK_STATUS = get_namedtuple_choices('FEEDBACK_STATUS', (
     (0, 'open', 'Open'),
     (1, 'acknowledged', 'Acknowldeged'),
