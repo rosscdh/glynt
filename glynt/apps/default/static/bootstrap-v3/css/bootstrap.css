@@ -4430,6 +4430,10 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
 .navbar-btn {
   margin-top: 9px;
 }
+span.navbar-badge {
+  margin-top: 16.5px;
+  float: left;
+}
 .navbar-text {
   margin-top: 15px;
   margin-bottom: 15px;
@@ -4886,7 +4890,7 @@ body {
   padding: 20px;
 }
 .modal-footer {
-  margin-top: 15px;
+  margin-top: 5px;
   padding: 19px 20px 20px;
   text-align: right;
   border-top: 1px solid #e5e5e5;

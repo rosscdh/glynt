@@ -31,7 +31,7 @@ def project_lawyers(project, display_type='default'):
         'project': project,
         'lawyers': lawyers,
         'num_lawyers': num_lawyers,
-        'display_type': display_type
+        'display_type': display_type,
     })
     return context
 
