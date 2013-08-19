@@ -2,7 +2,7 @@
 /**
 * Clone a region of a form
 * ------------------------
-* 
+*
 */
 $(function() {
     // the widget definition, where "custom" is the namespace,
@@ -14,7 +14,7 @@ $(function() {
 		options: {
 			label: 'Add another',
 			btn_remove: $('<button/>', {
-				class: 'pull-right close delete-cloned-region',
+				class: 'close delete-cloned-region',
 				html: 'x'
 			})
 		},
@@ -48,15 +48,15 @@ $(function() {
 		},
 		_listen: function () {
 			var self = this;
-            
+
 			/**
-			* Assign change events to each input item 
+			* Assign change events to each input item
 			* in the cloned region
 			*/
 			$.each(this.element.children().find('input, select, checkbox, radio'), function (i, elem) {
 				self.add_element(elem, false)
 			});
-        
+
 	        /**
 	        * Handle the LOADED_form_json_data Event
 	        * create form elements based on the data in the JSON
@@ -125,9 +125,9 @@ $(function() {
 		},
 		btn_add_another: function () {
 			var btn_add_another_id = '{num_elements}_add_another'.assign({'num_elements': this.num_elements})
-			return $('<div id="{btn_add_another_id}"><br /><button id="btn_add_another_{num_elements}" class="btn btn-success pull-right">{label}</button></div>'
+			return $('<div id="{btn_add_another_id}"><button id="btn_add_another_{num_elements}" class="btn btn-success pull-right">{label}</button></div>'
 					.assign({
-							'btn_add_another_id': btn_add_another_id, 
+							'btn_add_another_id': btn_add_another_id,
 							'label': this.options.label
 					}));
 		},
@@ -184,13 +184,13 @@ console.log(kwargs)
 			* to consist of the current values + counter info
 			*/
 			legend.html('&nbsp;{label}'.assign({
-				'label': legend.html(), 
+				'label': legend.html(),
 				'current': this.num_elements,
 			}));
 			legend.prepend(btn_remove);
 
 			/**
-			* Assign change events to each input item 
+			* Assign change events to each input item
 			* in the cloned region
 			*/
 			self.num_elements_in_cloned_area = 0;
@@ -241,9 +241,12 @@ console.log(kwargs)
 
 				$(this).closest('.cloned-region').remove();
 
+				// $('input#id_1-num_officers').val(self.num_elements);
 			});
 
 			this.num_elements += 1;
+
+			// $('input#id_1-num_officers').val(this.num_elements);
 		}
     });
 

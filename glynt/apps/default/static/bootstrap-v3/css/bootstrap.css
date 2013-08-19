@@ -6509,6 +6509,12 @@ table.checklist .item-meta a {
 table.checklist .item-meta a:hover {
   text-decoration: none;
 }
+table.checklist .item-meta .item-delete {
+  display: none;
+}
+table.checklist tr.item.state-new:hover .item-delete {
+  display: inline;
+}
 table.checklist tr.item.state-new {
   color: #eeeeee;
   /*td a { color: @gray-light; }*/
@@ -6799,4 +6805,8 @@ table.lawyer-list {
 }
 .pending-feedback {
   background-color: rgba(240, 173, 78, 0.1);
+}
+section.checklist-category {
+  padding-top: 50px;
+  margin-top: -50px;
 }

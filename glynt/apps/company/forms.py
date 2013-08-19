@@ -3,7 +3,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Fieldset
+from crispy_forms.layout import Layout, Fieldset, Div
 
 from glynt.apps.transact import BuilderBaseForm
 from glynt.apps.company import COMPANY_STATUS_CHOICES
@@ -24,7 +24,7 @@ class CompanyProfileForm(BuilderBaseForm):
     option_plan_status = forms.ChoiceField(label=_('Option plan'), choices=OPTION_PLAN_STATUS_CHOICES.get_choices(), initial=OPTION_PLAN_STATUS_CHOICES.would_like, widget=forms.RadioSelect)
 
     target_states_and_countries = forms.CharField(label=_('Where will you do business?'), initial="California", help_text="e.g. California, New York. Separate with a comma.", widget=forms.TextInput(attrs={'placeholder': 'California'}))
-    num_officers = forms.CharField(label=_('Number of Directors and Officers'), initial=0, widget=forms.TextInput(attrs={'data-type': 'number', 'class': 'input-smaller'}))
+    num_officers = forms.CharField(label=_('Number of Directors and Officers'), initial=1, widget=forms.TextInput(attrs={'data-type': 'number', 'class': 'input-smaller'}))
     num_employees = forms.CharField(label=_('Number of employees'), initial=0, widget=forms.TextInput(attrs={'data-type': 'number', 'class': 'input-smaller'}))
     num_consultants = forms.CharField(label=_('Number of consultants'), initial=0, widget=forms.TextInput(attrs={'data-type': 'number', 'class': 'input-smaller'}))
     num_option_holders = forms.CharField(label=_('Number of option holders'), initial=0, widget=forms.TextInput(attrs={'data-type': 'number', 'class': 'input-smaller'}))
@@ -37,9 +37,12 @@ class CompanyProfileForm(BuilderBaseForm):
         self.helper.layout = Layout(
             Fieldset(
                 'Founding Team',
-                'founder_email',
-                'founder_name',
-                **{'data-region-clone': 'true', 'data-region-name': 'founders', 'class': 'founder-block'}
+                Div(
+                    'founder_name',
+                    'founder_email',
+                    **{'class': 'founder-group clearfix'}
+                ),
+                **{'data-region-clone': 'true', 'data-region-name': 'founders', 'class': 'founder-block clearfix'}
             ),
             Fieldset(
                 'About your Startup',
