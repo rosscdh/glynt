@@ -40,27 +40,28 @@
             </div>
         {% else %}
             {% project_lawyers project 'potential' %}
-        {% endif %}
 
-        <div class="row">
-            <div class="col col-lg-6">
-                <div class="widget account-attorney">
-                    <h3>Your Attorney</h3>
-                    {% project_lawyers project 'assigned' %}
+            <div class="row">
+                <div class="col col-lg-6">
+                    <div class="widget account-attorney">
+                        <h3>Your Attorney</h3>
+                        {% project_lawyers project 'assigned' %}
+                    </div>
                 </div>
-            </div>
-            <div class="col col-lg-6">
-                <div class="widget transaction-profile">
-                    <h3>Transaction Profile</h3>
+                <div class="col col-lg-6">
+                    <div class="widget transaction-profile">
+                        <h3>Transaction Profile</h3>
 
-                    <div class="callout callout-success empty">
-                        <div class="empty-message empty-message-ok">
-                            <h3>Your transaction profile is up-to-date.</h3>
-                            {% if PROJECT_ENVIRONMENT == 'dev' %}<a href="{% url 'transact:builder' project_uuid=project.uuid tx_range='INTAKE' step='1' %}" class="">update</a>{% endif %}
+                        <div class="callout callout-success empty">
+                            <div class="empty-message empty-message-ok">
+                                <h3>Your transaction profile is up-to-date.</h3>
+                                {% if PROJECT_ENVIRONMENT == 'dev' %}<a href="{% url 'transact:builder' project_uuid=project.uuid tx_range='INTAKE' step='1' %}" class="">update</a>{% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            {% endif %}
+
         </div>
     {% else %}
         <div class="alert">
