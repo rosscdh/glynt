@@ -18,7 +18,7 @@
         {% endif %}
 
         {% if f.status == FEEDBACK_STATUS.open %}
-            <button class="btn btn-success pull-right" data-href="/api/v1/feedback_request/{{ f.pk }}" data-toggle="modal" data-target="#modal-feedback-form" data-is_ajax="false" data-pk="{{ f.pk }}" data-attachment="{{ object.pk }}" data-assigned_by="{{ user.pk }}" data-assigned_to="{{ opposite_user.pk }}" data-status="{{ FEEDBACK_STATUS.closed }}">{% if f.assigned_by == user %}Cancel Request{% else %}Feedback Complete{% endif %}</button>
+            <button class="btn btn-success pull-right" data-href="/api/v1/feedback_request/{{ f.pk }}" data-toggle="modal" data-target="#modal-feedback-form" data-is_ajax="false" data-pk="{{ f.pk }}" data-attachment="{{ object.pk }}" data-assigned_by="{{ user.pk }}" data-assigned_to="{{ opposite_user.pk }}" data-status="{% if f.assigned_by == user %}{{ FEEDBACK_STATUS.cancelled }}{% else %}{{ FEEDBACK_STATUS.closed }}{% endif %}">{% if f.assigned_by == user %}Cancel Request{% else %}Feedback Complete{% endif %}</button>
         {% endif %}
 
     {% empty %}
