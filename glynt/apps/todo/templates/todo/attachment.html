@@ -10,6 +10,8 @@
                     <div class="col-9">
                         <p>You have requested feedback from {{ f.primary_assigned_to.get_full_name|default:f.primary_assigned_to.username }} on this attachment.</p>
                     </div>
+                 </div>
+             </div>
         {% else %}
             <div class="alert alert-block alert-alert text-center">
                 <div class="row">
@@ -17,12 +19,14 @@
                         <!-- <div class="profile-card" data-template="mini" data-username="{{ f.assigned_by.username }}" data-img_class="img-circle"></div> -->
                         <p>{{ f.assigned_by.get_full_name|default:f.assigned_by.username }} has requested your feedback on this attachment. Please review the document below, add comments if required and click 'Feedback Complete'</p>
                     </div>
+                 </div>
+             </div>
         {% endif %}
+
             {% if f.status == FEEDBACK_STATUS.open %}
                 <button class="btn btn-success pull-right" data-href="/api/v1/feedback_request/{{ f.pk }}" data-toggle="modal" data-target="#modal-feedback-form" data-is_ajax="false" data-pk="{{ f.pk }}" data-attachment="{{ object.pk }}" data-assigned_by="{{ user.pk }}" data-assigned_to="{{ opposite_user.pk }}" data-status="{% if f.assigned_by == user %}{{ FEEDBACK_STATUS.cancelled }}{% else %}{{ FEEDBACK_STATUS.closed }}{% endif %}">{% if f.assigned_by == user %}Cancel Request{% else %}Feedback Complete{% endif %}</button>
             {% endif %}
-             </div>
-         </div>
+
     {% empty %}
         <!-- if no feedback request present -->
         <!-- and is_customer or is_lawyer -->
