@@ -5347,6 +5347,9 @@ a.thumbnail:focus {
 .badge.important {
   background-color: #f88172;
 }
+.badge.assigned {
+  background-color: #fcd423;
+}
 a.badge:hover,
 a.badge:focus {
   color: #fff;

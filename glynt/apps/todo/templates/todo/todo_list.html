@@ -18,7 +18,7 @@
                 <div class="subnav">
                     <ul id="checklist-categories" class="nav nav-pills nav-stacked">
                         {% for c in checklist.categories %}
-                            <li data-category="{{ c|slugify }}" class="{% if forloop.counter == 1 %}active{% endif %}"><a href="#{{ c|slugify }}">{{ c }}</a><span class="num_assigned_to_user"></span></li>
+                            <li data-category="{{ c|slugify }}" class="{% if forloop.counter == 1 %}active{% endif %}"><a href="#{{ c|slugify }}">{{ c }}<span class="num_assigned_to_user badge assigned pull-right"></span></a></li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -62,7 +62,7 @@
                             {% empty %}
                                 <tr>
                                     <td colspan="4">
-                                        {% trans 'No items found' %}
+                                        <span class="text-muted">{% trans 'No items yet' %}</span>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -113,7 +113,7 @@
             var num_assigned_to_user = cat_row.children('table:first').find('tr.assigned-to-user').length;
 
             if (num_assigned_to_user > 0)
-                elem.find('.num_assigned_to_user').html(num_assigned_to_user);
+                elem.find('.num_assigned_to_user').html('<i class="icon-state-pending"></i> ' + num_assigned_to_user);
         });
 
         {% if is_lawyer %}
