@@ -131,17 +131,20 @@ def feedbackrequest_created(sender, **kwargs):
                         todo=feedbackrequest.attachment.todo.name,
                         status=feedbackrequest.attachment.todo.display_status)
 
-        # if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.responded:
-        #     verb = 'provided feedback to {assigned_by} on {attachment}'.format(assigned_by=feedbackrequest.assigned_by, attachment=feedbackrequest.attachment.filename)
-        #     action.send(feedbackrequest.assigned_by,
-        #                 verb=verb,
-        #                 action_object=feedbackrequest.attachment,
-        #                 target=feedbackrequest.attachment.todo,
-        #                 content='for attachment "{attachment}" - "{todo}" is {status}'.format(attachment=feedbackrequest.attachment.filename, todo=feedbackrequest.attachment.todo.name, status=feedbackrequest.attachment.todo.display_status),
-        #                 assigned_to=feedbackrequest.assigned_by)
-
         if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.closed:
-            verb = '{assigned_by} closed the feedback request assigned to them'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), )
+            verb = '{assigned_by} closed the feedback request that was assigned to them'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), )
+            action.send(feedbackrequest.assigned_by,
+                        verb=verb,
+                        action_object=feedbackrequest.attachment,
+                        target=feedbackrequest.attachment.todo,
+                        content=feedbackrequest.comment,
+                        detail_statement='for attachment "{attachment}" - "{todo}" is {status}'.format(attachment=feedbackrequest.attachment.filename, todo=feedbackrequest.attachment.todo.name, status=feedbackrequest.attachment.todo.display_status),
+                        attachment=feedbackrequest.attachment.filename,
+                        todo=feedbackrequest.attachment.todo.name,
+                        status=feedbackrequest.attachment.todo.display_status)
+
+        if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.cancelled:
+            verb = '{assigned_by} cancelled their feedback request'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), )
             action.send(feedbackrequest.assigned_by,
                         verb=verb,
                         action_object=feedbackrequest.attachment,

@@ -46,8 +46,8 @@ urlpatterns = patterns('',
     # favicon
     url(r'^favicon\.ico/$', RedirectView.as_view(url='%simg/favicon.ico' % settings.STATIC_URL)),
     url(r'', include('debug_toolbar_user_panel.urls')),
-        # The public site and theme
-        url(r'^', include('public.urls', namespace='public')),
+    # The public site and theme
+    url(r'^', include('public.urls', namespace='public')),
 )
 
 

@@ -15,7 +15,7 @@ from glynt.apps.lawyer.models import Lawyer
 
 from . import PROJECT_STATUS, PROJECT_LAWYER_STATUS
 
-from managers import DefaultProjectManager
+from .managers import DefaultProjectManager, ProjectLawyerManager
 
 import itertools
 
@@ -112,6 +112,8 @@ class ProjectLawyer(models.Model):
     project = models.ForeignKey(Project)
     lawyer = models.ForeignKey(Lawyer)
     status = models.IntegerField(choices=LAWYER_STATUS.get_choices(), default=LAWYER_STATUS.potential, db_index=True)
+
+    objects = ProjectLawyerManager()
 
     class Meta:
         db_table = 'project_project_lawyer'

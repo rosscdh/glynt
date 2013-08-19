@@ -35,7 +35,7 @@ class ClientProfile(UserenaBaseProfile):
     user = models.OneToOneField(User, unique=True, related_name='profile')
     profile_data = JSONField(default={})
     country = CountryField(default='US', null=True)
-    state = models.CharField(max_length=64, null=True)
+    state = models.CharField(max_length=64, blank=True, null=True)
 
     @classmethod
     def create(cls, **kwargs):

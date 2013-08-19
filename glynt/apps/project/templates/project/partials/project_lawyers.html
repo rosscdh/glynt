@@ -1,41 +1,3 @@
-  <!--       <div class="row">
-            <div class="col col-lg-6">
-                <table class="table lawyer-list">
-                    <tbody>
-                        <tr>
-                            <td class="lawyer-picture">
-                                <img src="https://si0.twimg.com/profile_images/3695837467/19d70ecfaf043c373c4476cac70a24da.jpeg" class="img-rounded">
-                            </td>
-                            <td class="lawyer-info">
-                                <h2>Alex Halliday</h2>
-                                <p>General Counsel to Tech, Media, Life Science Companies.</p>
-                                <p><i class="glyphicon glyphicon-map-marker"></i> San Francisco, CA.</p>
-                            </td>
-                            <td class="lawyer-meta"><button type="button" class="btn btn-large btn-primary">Get Introduced</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="col col-lg-6">
-                <table class="table lawyer-list">
-                    <tbody>
-                        <tr>
-                            <td class="lawyer-picture">
-                                <img src="http://celebpictu.com/images/sally-sparrow-02.jpg" class="img-rounded">
-                            </td>
-                            <td class="lawyer-info">
-                                <h2>Sally Sparrow</h2>
-                                <p>General Counsel to Tech, Media, Life Science Companies.</p>
-                                <p><i class="glyphicon glyphicon-map-marker"></i> San Francisco, CA.</p>
-                            </td>
-                            <td class="lawyer-meta"><button type="button" class="btn btn-large btn-primary">Get Introduced</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div> -->
-
-
 {% if num_lawyers > 0 %}
     {% for l in lawyers %}
         <table class="table attorney-list">
@@ -50,7 +12,7 @@
                         <p>{{ l.position }} at {{ l.firm_name }}</p>
                         <p>{% for loc in practice_locations %}<i class="glyphicon glyphicon-map-marker"></i> {{ loc }}{% endfor %}</p>
                     </td>
-                    <td class="attorney-meta"><button type="button" class="btn btn-large btn-primary">Get Introduced</button></td>
+                    <td class="attorney-meta"><a href="{% url 'lawyer:profile' slug=l.user.username %}" class="btn btn-large btn-primary">Get Introduced</a></td>
                 </tr>
             </tbody>
         </table>
@@ -64,7 +26,6 @@
         </div>
     </div>
     {% else %}
-
      <table class="table attorney-list">
         <tbody>
             <tr>

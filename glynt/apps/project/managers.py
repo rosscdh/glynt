@@ -1,7 +1,8 @@
 # -*- coding: UTF-8 -*-
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
-from glynt.apps.project import PROJECT_STATUS
+
+from . import PROJECT_STATUS, PROJECT_LAWYER_STATUS
 
 
 class DefaultProjectManager(models.Manager):
@@ -43,3 +44,14 @@ class DefaultProjectManager(models.Manager):
                 return self.filter(customer=customer).order_by('-id')[0]
             except IndexError:
                 return None
+
+
+class ProjectLawyerManager(models.Manager):
+    def potential(self, **kwargs):
+        return self.filter(status=PROJECT_LAWYER_STATUS.potential).filter(**kwargs)
+
+    def assigned(self, **kwargs):
+        return self.filter(status=PROJECT_LAWYER_STATUS.assigned).filter(**kwargs)
+
+    def rejected(self, **kwargs):
+        return self.filter(status=PROJECT_LAWYER_STATUS.rejected).filter(**kwargs)

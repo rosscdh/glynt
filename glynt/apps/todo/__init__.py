@@ -25,4 +25,5 @@ FEEDBACK_STATUS = get_namedtuple_choices('FEEDBACK_STATUS', (
     (1, 'acknowledged', 'Acknowldeged'),
     (2, 'responded', 'Responded'),
     (3, 'closed', 'Closed'),
+    (4, 'cancelled', 'Cancelled')
 ))
