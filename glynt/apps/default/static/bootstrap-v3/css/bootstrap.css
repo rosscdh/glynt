@@ -295,7 +295,7 @@ p {
 }
 .lead {
   margin-bottom: 20px;
-  font-size: 21px;
+  font-size: 18.2px;
   font-weight: 200;
   line-height: 1.4;
 }
@@ -1701,6 +1701,7 @@ textarea.parsley-error:focus {
   font-size: 14px;
   font-weight: bold;
   line-height: 1.7142857148;
+  font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
@@ -1966,8 +1967,8 @@ fieldset[disabled] .btn-link:focus {
   text-decoration: none;
 }
 .btn-huge {
-  padding: 11.9px 27.2px;
-  font-size: 16.2px;
+  padding: 9.799999999999999px 22.4px;
+  font-size: 12.6px;
 }
 .btn-large {
   padding: 9.1px 20.8px;
@@ -4017,7 +4018,7 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
   float: left;
 }
 .nav-pills > li > a {
-  border-radius: 5px;
+  border-radius: 2px;
 }
 .nav-pills > li + li > a {
   margin-left: 2px;
@@ -4429,6 +4430,10 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
 .navbar-btn {
   margin-top: 9px;
 }
+span.navbar-badge {
+  margin-top: 16.5px;
+  float: left;
+}
 .navbar-text {
   margin-top: 15px;
   margin-bottom: 15px;
@@ -4788,12 +4793,12 @@ body {
 }
 #footer p,
 #footer a {
-  color: #555555;
+  color: #bfbfbf;
   font-size: 13px;
   font-weight: normal;
 }
 #footer a:hover {
-  color: #bfbfbf;
+  color: #eeeeee;
 }
 /* Lastly, apply responsive CSS fixes as necessary */
 @media (max-width: 767px) {
@@ -4885,7 +4890,7 @@ body {
   padding: 20px;
 }
 .modal-footer {
-  margin-top: 15px;
+  margin-top: 5px;
   padding: 19px 20px 20px;
   text-align: right;
   border-top: 1px solid #e5e5e5;
@@ -6410,16 +6415,31 @@ td.hidden-lg {
   font-weight: normal;
   font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
   font-size: 20px;
-  padding: 16px 35px 16px 35px;
+  padding: 10px 25px 10px 25px;
   margin-top: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
-.homepage #wrap .scroll {
+.homepage #wrap .scroll,
+.homepage #wrap .telephone {
   padding: 30px 0px 20px 0;
   color: #bfbfbf;
-  background: url('../../img/down-chev.png') center 60px no-repeat;
   font-size: 19.599999999999998px;
   font-weight: normal;
   font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
+}
+.homepage #wrap .scroll {
+  background: url('../../img/down-chev.png') center 60px no-repeat;
+}
+.homepage #wrap .telephone {
+  color: #555555;
+}
+.homepage #wrap .telephone .glyphicon {
+  font-size: 15px;
+}
+.homepage #wrap .telephone .brand {
+  font-size: 14px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 .homepage #wrap .intro h1 {
   font-size: 28px;
@@ -6509,6 +6529,12 @@ table.checklist .item-meta a {
 table.checklist .item-meta a:hover {
   text-decoration: none;
 }
+table.checklist .item-meta .item-delete {
+  display: none;
+}
+table.checklist tr.item.state-new:hover .item-delete {
+  display: inline;
+}
 table.checklist tr.item.state-new {
   color: #eeeeee;
   /*td a { color: @gray-light; }*/
@@ -6574,7 +6600,7 @@ table.checklist tr.item.state-pending.assigned-to-user td [class*=" icon-"]:befo
   content: "\f058";
 }
 .widget {
-  border: 1px solid #ddd;
+  border: 1px solid #eee;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   margin-bottom: -1px;

@@ -9,7 +9,7 @@ PROJECT_STATUS = get_namedtuple_choices('PROJECT_STATUS', (
 ))
 
 PROJECT_LAWYER_STATUS = get_namedtuple_choices('PROJECT_LAWYER_STATUS', (
-    (0, 'potential', 'Potential'),
-    (1, 'assigned', 'Assigned'),
-    (2, 'rejected', 'Rejected'),
+    (0, 'potential', 'Proposed'),
+    (1, 'assigned', 'Engaged'),
+    (2, 'rejected', 'Unsuccessful'),
 ))

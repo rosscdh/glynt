@@ -4,13 +4,32 @@
 {% block bodyclass %}{% endblock %}
 
 {% block prebody %}
-<div class="jumbotron-header">
+<link rel="stylesheet" href="{{ STATIC_URL }}css/theme/lawyer-listing.css" type="text/css">
+    
+<div id="hero" class="jumbotron">
 	<div class="container">
-    	<h1 class="alt">For Lawyers</h1>
-    </div>
+		<div class="row animated fadeInDown">
+			<div class="span12">
+				<h1>Join LawPal</h1>
+				<h2>Enjoy a better way of working</h2>
+			</div>
+		</div>
+	</div>
 </div>
 <div class="container">
-		<p>yael to sell to her countrymen here</p>
-        <a href="{% url 'public:start-lawyer' %}">Signup</a>
-</div>  
+	<div class="col col-8 col-offset-2 lead">
+		<br />
+
+		<p>Starting a business is one of the most exciting yet challenging things anyone can do.  A lawyer is often a startup's first outside advisor, sometimes arriving on the scene even before the investors. </p>
+
+		<p>A good lawyer can provide a founding team with a roadmap early in the game.  Better lawyers draw better maps.
+
+		<p>But, when founders engage a lawyer they are often thinking one thing: I can't afford this.  In fact, what they don't realize is that you may be thinking the exact same thing - you can’t afford them.  You love the team, you know you can add value,  you want to build the relationship - but you cannot afford to take the long-term gamble on the bill.  
+
+		<p>We created LawPal because we want great clients to find great lawyers and we want to make working together easy and affordable for everyone. We believe that technology should be used to encourage and support the attorney-client relationship in a "win-win" environment. 
+		<br />
+		<br />
+		 <a href="mailto:yael@lawpal.com" class="btn btn-huge btn-success">Talk To Us</a>
+	</div>
+</div>
 {% endblock %}

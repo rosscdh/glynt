@@ -1,4 +1,7 @@
-<span id="todo_display_status" class="softer">{{ todo.display_status }}</span>
+<br />
+<br />
+<span id="todo_display_status"><span class="label label-info">{{ todo.display_status }}</span></span>
+
 <div id="item-nav-controls" class="btn-group">
     <!--
     Only responsible party: not coded yet
@@ -8,19 +11,21 @@
     Only when the item is closed
     <button type="button" class="btn btn-success" disabled="disabled"><i class="glyphicon glyphicon-ok-sign"></i> Closed</button>
     -->
-    {% if back_and_forth.prev %}<button class="btn btn-prev"><i class="icon-chevron-left"></i></button>{% endif %}
-    <button class="btn btn-home"><i class="icon-home"></i></button> 
-    {% if back_and_forth.next %}<button class="btn btn-next"><i class="icon-chevron-right"></i></button> {% endif %}
+    <div class="btn-group">
+        {% if back_and_forth.prev %}<button class="btn btn-link btn-prev"><i class="icon-chevron-left"></i></button>{% endif %}
+        <button class="btn btn-link btn-home"><i class="icon-home"></i></button> 
+        {% if back_and_forth.next %}<button class="btn btn-link btn-next"><i class="icon-chevron-right"></i></button> {% endif %}
 
-    {% if is_lawyer %}
-        <button class="btn btn-delete" title="Delete Item"><i class="icon-trash"></i></button>
-        <!-- <button class="btn btn-edit" title="Edit Item"><i class="icon-pencil"></i></button> -->
-        {% if is_closed %}
-            <button class="btn btn-warning btn-reopen-item" type="button"><i class="glyphicon glyphicon-repeat"></i> Re-Open Item</button>
-        {% else %}
-            <button class="btn btn-success btn-close-item" type="button"><i class="glyphicon glyphicon-ok-sign"></i> Close Item</button>
+        {% if is_lawyer %}
+            <button class="btn btn-link btn-delete" title="Delete Item"><i class="icon-trash text-muted"></i></button>
+            <!-- <button class="btn btn-edit" title="Edit Item"><i class="icon-pencil"></i></button> -->
+            {% if is_closed %}
+                <button class="btn btn-warning btn-reopen-item" type="button"><i class="glyphicon glyphicon-repeat"></i> Re-Open Item</button>
+            {% else %}
+                <button class="btn btn-success btn-close-item" type="button"><i class="glyphicon glyphicon-ok-sign"></i> Close Item</button>
+            {% endif %}
         {% endif %}
-    {% endif %}
+    </div>
 
 {% if is_customer %}
 {% endif %}

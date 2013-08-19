@@ -24,7 +24,8 @@ if FILEPICKER_API_KEY is None:
 
 @parsleyfy
 class FeedbackRequestForm(forms.Form):
-    comment = forms.CharField(widget=forms.Textarea)
+    #comment = forms.CharField(widget=forms.Textarea)
+    comment = forms.CharField(required=False, label="Optional Comment", widget=forms.Textarea(attrs={'placeholder': 'Enter an optional comment here...', 'data-rangelength': '[0,1024]', 'rows': '2'}))
 
 
 class AttachmentForm(forms.Form):

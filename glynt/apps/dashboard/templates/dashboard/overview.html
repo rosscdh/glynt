@@ -7,7 +7,7 @@
 <div class="container dashboard-view">
     <div class="page-header">
         <div class="btn-group pull-right">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
                 {% project_name project %} <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
@@ -21,70 +21,74 @@
         </div>
         <ul class="nav nav-tabs header-nav">
             <li class="active"><a href="{% url 'dashboard:overview' %}"><h3>Overview</h3></a></li>
-            <li><a href="{% url 'dashboard:checklist' uuid=project.uuid %}"><h3>Checklist</h3></a></li>
+            {% if not profile_is_complete and not user.profile.is_lawyer %}
+                <li  data-toggle="tooltip" title="Not yet active"><a data-toggle="modal" href="#myModal" ><h3 class="text-muted"><i class="glyphicon glyphicon-time"></i> Checklist</h3></a></li>
+            {% else %}
+                <li><a href="{% url 'dashboard:checklist' uuid=project.uuid %}"><h3>Checklist</h3></a></li>
+            {% endif %}
         </ul>
     </div>
 
-    {% project_lawyers project 'potential' %}
+    {% if not user.profile.is_lawyer %}
+        {% if not profile_is_complete %}
+            <div class="callout callout-danger empty">
+                <div class="empty-message empty-message-exclamation-sign">
+                    <h3>We need some more information from you</h3>
+                    <p>We can't continue with your transaction until you tell us a bit more about your startup.</p>
+                    <a href="{% url 'transact:builder' project_uuid=project.uuid tx_range='INTAKE' step='1' %}" class="btn btn-primary">Click here to complete your profile</a>
+                </div>
+            </div>
+        {% else %}
+            {% project_lawyers project 'potential' %}
+        {% endif %}
 
-    <div class="row">
-        <div class="col col-lg-6">
-            <div class="widget overview">
-                <div class="current-progress">
-                    <h3>Checklist Progress</h3>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-success" style="width: {{ num_closed|as_percentage_of:num_total }}"></div>
-                        <div class="progress-bar progress-bar-info" style="width: 10%"></div>
-                        <div class="progress-bar progress-bar-warning" style="width: {{ num_pending|as_percentage_of:num_total }}"></div>
-                        <div class="progress-bar progress-bar-danger" style="width: {{ num_unread|as_percentage_of:num_total }}"></div>
-                    </div>
-                    <span class="label label-success">Resolved</span>
-                    <span class="label label-info">Needs Signing</span>
-                    <span class="label label-warning">Pending</span>
-                    <span class="label label-important">Open</span>
-                </div>
-                <hr>
-                <div class="row item-counts">
-                    <div class="col-lg-4 item-count"><span>{{ num_unread }}</span> unread</div>
-                    <div class="col-lg-4 item-count"><span>{{ num_pending }}</span> pending</div>
-                    <div class="col-lg-4 item-count"><span>{{ num_closed }}</span> closed</div>
+        <div class="row">
+            <div class="col col-lg-6">
+                <div class="widget account-attorney">
+                    <h3>Your Attorney</h3>
+                    {% project_lawyers project %}
                 </div>
             </div>
-        </div>
-        <div class="col col-lg-6">
-            <div class="widget recent-activity">
-                <h3>Recent Activity</h3>
-                {% project_activity_stream project %}
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col col-lg-6">
-            <div class="widget account-attorney">
-                <h3>Your Attorney</h3>
-                {% project_lawyers project 'assigned' %}
-            </div>
-        </div>
-        <div class="col col-lg-6">
-            <div class="widget transaction-profile">
-                <h3>Transaction Profile</h3>
-                {% if not profile_is_complete %}
-                <div class="callout callout-danger empty">
-                    <div class="empty-message empty-message-exclamation-sign">
-                        <h3>Please complete your transaction profile.</h3>
-                        <a href="{% url 'transact:builder' project_uuid=project.uuid tx_range='INTAKE' step='1' %}" class="btn btn-error">now</a>
+            <div class="col col-lg-6">
+                <div class="widget transaction-profile">
+                    <h3>Transaction Profile</h3>
+
+                    <div class="callout callout-success empty">
+                        <div class="empty-message empty-message-ok">
+                            <h3>Your transaction profile is up-to-date.</h3>
+                            {% if PROJECT_ENVIRONMENT == 'dev' %}<a href="{% url 'transact:builder' project_uuid=project.uuid tx_range='INTAKE' step='1' %}" class="">update</a>{% endif %}
+                        </div>
                     </div>
                 </div>
-                {% else %}
-                <div class="callout callout-success empty">
-                    <div class="empty-message empty-message-ok">
-                        <h3>Your transaction profile is up-to-date.</h3>
-                        {% if PROJECT_ENVIRONMENT == 'dev' %}<a href="{% url 'transact:builder' project_uuid=project.uuid tx_range='INTAKE' step='1' %}" class="">update</a>{% endif %}
-                    </div>
-                </div>
-                {% endif %}
             </div>
         </div>
-    </div>
+    {% else %}
+        <div class="alert">
+            The Attorney Transaction dashboard is coming shortly. For now, please review the Checklist.
+        </div>
+    {% endif %}
 </div>
+<script>
+       $(function () {
+        $("[data-toggle='tooltip']").tooltip();
+    });
+</script>
+
+  <!-- Modal -->
+  <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Your Checklist Is Coming</h4>
+        </div>
+        <div class="modal-body">
+          <p>Once you select your attorney, your transaction checklist will appear here. It will contain all of the tasks and documents required to complete your transaction on LawPal.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
 {% endblock %}

@@ -3,46 +3,50 @@
 {% block page_title %}Dashboard{% endblock %}
 {% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:overview' %}">Dashboard</a></li>{% endblock %}
 
-{% block body %}
+{% block prebody %}
 <div class="container dashboard-view">
     <div class="page-header">
-        Lawyer Projects Overview
+        <br />
+        <br />
+        <h1>Your LawPal Projects <a id="Intercom" href="mailto:xw4ux8lx@incoming.intercom.io" class="btn btn-info btn-large pull-right">Contact LawPal</a></h1>
     </div>
 
     <div class="row">
-        <ul>
-        {% for p in projects %}
-            <li class="span5">
-                <div class="">
-                    {% if PROJECT_LAWYER_STATUS.assigned == p.status %}
-                        <div class="callout callout-success">
-                            <div class="profile-card pull-right" data-template="small" data-username="{{ p.project.customer.user.username }}">&nbsp;</div>
-                            <p>You have been assigned to this project</p>
-                            <p><a href="{{ p.project.get_absolute_url }}">{{ p.project.company }} - <b>{{ p.display_status }}</b></a></p>
-                        </div>
-                        
-                    {% else %}
-                        {% if PROJECT_LAWYER_STATUS.rejected == p.status %}
-                            <div class="callout callout-warning">
-                                <div class="profile-card pull-right" data-template="small" data-username="{{ p.project.customer.user.username }}">&nbsp;</div>
-                                <p>You have been rejected from this project</p>
-                                <p>{{ p.project.company }} - <b>{{ p.display_status }}</b></p>
+        <div class="col-12">
+            <hr />
+            <ul class="list-unstyled">
+            {% for p in projects %}
+                <li class="span5">
+                    <div class="">
+                        {% if PROJECT_LAWYER_STATUS.assigned == p.status %}
+                            <div class="callout callout-success">
+                                    <h4><div class="profile-card pull-right" data-template="small" data-username="{{ p.project.customer.user.username }}">&nbsp;</div></h4>
+                                    <h3><i class="glyphicon glyphicon-ok text-success"></i>  <a href="{{ p.project.get_absolute_url }}" class="text-success">{{ p.project.company }} ({{ p.display_status }})</a></h3>
+                                    <p>You have been assigned to this project.</p>
                             </div>
+                            
+                        {% else %}
+                            {% if PROJECT_LAWYER_STATUS.rejected == p.status %}
+                                <div class="">
+                                    <h5 class="softer">{{ p.project.company }} - {{ p.display_status }} (Client selected another attorney)</h5>
+                                </div>
+                            {% endif %}
+                            {% if PROJECT_LAWYER_STATUS.potential == p.status %}
+                                <div class="callout callout-info">
+                                    <h4><div class="profile-card pull-right" data-template="small" data-username="{{ p.project.customer.user.username }}">&nbsp;</div></h4>
+                                    <h3>{{ p.project.company }} ({{ p.display_status }})</h3>
+
+                                    <p>You have been proposed to this client. Awaiting client decision.</p>
+                                </div>
+                            {% endif %}
                         {% endif %}
-                        {% if PROJECT_LAWYER_STATUS.potential == p.status %}
-                            <div class="callout callout-info">
-                                <div class="profile-card pull-right" data-template="small" data-username="{{ p.project.customer.user.username }}">&nbsp;</div>
-                                <p>You are being considered for this project</p>
-                                <p>{{ p.project.company }} - <b>{{ p.display_status }}</b></p>
-                            </div>
-                        {% endif %}
-                    {% endif %}
-                </div>
-            </li>
-        {% empty %}
-            <li>Sorry, you are not assigned to any projects</li>
-        {% endfor %}
-        </ul>
+                    </div>
+                </li>
+            {% empty %}
+                <li><h3 class="softer"><i class="glyphicon glyphicon-time "></i> Your introductions and active projects will appear here shortly. </h3></li>
+            {% endfor %}
+            </ul>
+        </div>
     </div>
 </div>
 {% endblock %}
