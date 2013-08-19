@@ -5,7 +5,7 @@ register = template.Library()
 
 from notifications.models import Notification
 
-from glynt.apps.project.models import Project
+from glynt.apps.project.models import Project, ProjectLawyer
 from glynt.apps.project.utils import PROJECT_CONTENT_TYPE
 
 
@@ -25,11 +25,21 @@ def project_activity_stream(project, limit=10):
 @register.inclusion_tag('project/partials/project_lawyers.html')
 def project_lawyers(project, display_type='default'):
     context = {}
-    lawyers = project.lawyers.all()
-    num_lawyers = len(lawyers)
+
+    if display_type == 'assigned':
+        lawyer_join = ProjectLawyer.objects.assigned(project=project).prefetch_related('project', 'lawyer')
+
+    elif display_type == 'potential':
+        lawyer_join = ProjectLawyer.objects.potential(project=project).prefetch_related('project', 'lawyer')
+
+    else:
+        lawyer_join = ProjectLawyer.objects.filter(project=project)
+
+    num_lawyers = len(lawyer_join)
+
     context.update({
         'project': project,
-        'lawyers': lawyers,
+        'lawyers': [j.lawyer for j in lawyer_join],
         'num_lawyers': num_lawyers,
         'display_type': display_type
     })
