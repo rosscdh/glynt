@@ -8,9 +8,10 @@ from glynt.apps.project.services.project_service import VisibleProjectsService
 from glynt.apps.project.bunches import ProjectIntakeFormIsCompleteBunch
 from glynt.apps.project.models import Project
 from glynt.apps.project import PROJECT_LAWYER_STATUS
+from glynt.apps.todo.views import ToDoCountMixin
 
 
-class DashboardView(TemplateView):
+class DashboardView(ToDoCountMixin, TemplateView):
     """
     @TODO clean this mess up
     This view is used by both the customer and the lawyer (eek)
@@ -65,15 +66,10 @@ class DashboardView(TemplateView):
         self.project_service = VisibleProjectsService(user=self.request.user)
         current_project = self.project_service.project(**qs_filter)
 
-        kwargs.update({'project': current_project,
-                        'counts': {
-                            'new': current_project.todo_set.new(user=self.request.user).count(),
-                            'open': current_project.todo_set.open(user=self.request.user).count(),
-                            'pending': current_project.todo_set.pending(user=self.request.user).count(),
-                            'awaiting_feedback_from_user': 0,
-                            'total': 0,
-                        }
-        })
+        kwargs.update({'project': current_project})
+        # append counts
+        kwargs.update(self.todo_counts(qs_objects=current_project.todo_set, project=current_project))
+
         kwargs['counts']['total'] = kwargs['counts']['new'] + kwargs['counts']['open'] + kwargs['counts']['pending']
 
         if self.request.user.profile.is_customer:

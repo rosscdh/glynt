@@ -18,7 +18,20 @@ import logging
 logger = logging.getLogger('django.request')
 
 
-class ProjectToDoView(RulezMixin, ListView):
+class ToDoCountMixin(object):
+    def todo_counts(self, qs_objects, project=None):
+        project = project if project is not None else self.project
+        return {'counts': {
+                    'new': qs_objects.new(project=project, user=self.request.user).count(),
+                    'open': qs_objects.open(project=project, user=self.request.user).count(),
+                    'pending': qs_objects.pending(project=project, user=self.request.user).count(),
+                    'awaiting_feedback_from_user': 0,
+                    'total': 0,
+                    }
+                }
+
+
+class ProjectToDoView(RulezMixin, ToDoCountMixin, ListView):
     model = ToDo
     paginate_by = 1  # 10
 
@@ -56,14 +69,10 @@ class ProjectToDoView(RulezMixin, ListView):
             'feedback_requests': self.feedback_requests,
             'is_lawyer': user_profile.is_lawyer,
             'is_customer': user_profile.is_customer,
-            'counts': {
-                'new': self.model.objects.new(project=self.project, user=self.request.user).count(),
-                'open': self.model.objects.open(project=self.project, user=self.request.user).count(),
-                'pending': self.model.objects.pending(project=self.project, user=self.request.user).count(),
-                'awaiting_feedback_from_user': 0,
-                'total': 0,
-            }
         })
+        # append counts
+        context.update(self.todo_counts(qs_objects=self.model.objects))
+
         context['counts']['total'] = context['counts']['new'] + context['counts']['open'] + context['counts']['pending']
         return context
 
