@@ -501,7 +501,7 @@ except NameError:
         print("Could not load local_settings")
 
 if IS_TESTING:
-        try:
-            from test_settings import *
-        except ImportError:
-            print("Could not load test_settings")
+    try:
+        from test_settings import *
+    except ImportError:
+        print("Could not load test_settings")
