@@ -14,8 +14,9 @@ from glynt.apps.company.models import Company
 from glynt.apps.lawyer.models import Lawyer
 
 from . import PROJECT_STATUS, PROJECT_LAWYER_STATUS
-
 from .managers import DefaultProjectManager, ProjectLawyerManager
+
+from rulez import registry
 
 import itertools
 
@@ -24,6 +25,8 @@ class Project(models.Model):
     """ Base Project object
     Stores initial project details
     """
+    _primary_lawyer = False
+
     uuid = UUIDField(auto=True, db_index=True)
     customer = models.ForeignKey('customer.Customer')
     company = models.ForeignKey(Company)
@@ -37,7 +40,13 @@ class Project(models.Model):
     objects = DefaultProjectManager()
 
     def __unicode__(self):
-        return 'Project for {company} with {lawyer}'.format(company=self.company.name, lawyer=self.get_primary_lawyer())
+        return 'Project for {company}'.format(company=self.company.name)
+
+    def can_read(self, user):
+        return True if user.pk in [u.pk for u in self.notification_recipients()] else False
+
+    def can_edit(self, user):
+        return True if user.pk in [u.pk for u in self.notification_recipients()] else False
 
     def get_absolute_url(self):
         return reverse('dashboard:project', kwargs={'uuid': self.uuid})
@@ -52,17 +61,19 @@ class Project(models.Model):
         return checklist_items
 
     def get_primary_lawyer(self):
-        try:
-            return self.lawyers.select_related('user').all()[0]
-        except:
-            return None
+        if self._primary_lawyer is False:
+            try:
+                _primary_lawyer = self.lawyers.select_related('user').all()[0]
+            except:
+                _primary_lawyer = None
+        return _primary_lawyer
 
     def notification_recipients(self):
-        return itertools.chain(self.company.customers.all(), self.lawyers.all())
+        return itertools.chain(self.company.customers.all(), [l.user for l in self.lawyers.all()])
 
     @property
     def has_lawyer(self):
-        return self.get_primary_lawyer() is not None
+        return ProjectLawyer.objects.assigned(project=self) is not None
 
     def open(self, actioning_user):
         """ Open the notification """
@@ -100,6 +111,9 @@ class Project(models.Model):
     @property
     def project_statement(self):
         return self.data.get('project_statement', None)
+
+registry.register("can_read", Project)
+registry.register("can_edit", Project)
 
 
 class ProjectLawyer(models.Model):

@@ -4,6 +4,7 @@ from django.views.generic import View, ListView, UpdateView, DetailView
 from django.views.generic.edit import ModelFormMixin
 from django.views.generic.detail import SingleObjectMixin
 
+from glynt.apps.rulez import RulezMixin
 from glynt.apps.project.services.project_checklist import ProjectCheckListService
 from glynt.apps.project.models import Project
 
@@ -17,7 +18,7 @@ import logging
 logger = logging.getLogger('django.request')
 
 
-class ProjectToDoView(ListView):
+class ProjectToDoView(RulezMixin, ListView):
     model = ToDo
     paginate_by = 1  # 10
 
@@ -42,7 +43,10 @@ class ProjectToDoView(ListView):
         context = super(ProjectToDoView, self).get_context_data(**kwargs)
 
         user_profile = self.request.user.profile
+
         self.project = get_object_or_404(Project, uuid=self.kwargs.get('uuid'))
+        self.can_read(self.project)
+
         self.checklist_service = ProjectCheckListService(project=self.project)
         self.feedback_requests = self.checklist_service.feedbackrequests_by_user_as_json(user=self.request.user)
 
@@ -64,7 +68,7 @@ class ProjectToDoView(ListView):
         return context
 
 
-class BaseToDoDetailMixin(SingleObjectMixin):
+class BaseToDoDetailMixin(RulezMixin, SingleObjectMixin):
     model = ToDo
 
     def get_context_data(self, **kwargs):
@@ -102,6 +106,8 @@ class BaseToDoDetailMixin(SingleObjectMixin):
                 obj.status = nav_item.status
                 obj.data = nav_item
                 obj.save()
+
+            self.can_read(obj)
 
             return obj
 

@@ -245,6 +245,9 @@ HELPER_APPS = (
 
     # Notications
     'notifications',
+
+    # Object rules and permissions
+    'rulez',
 )
 
 

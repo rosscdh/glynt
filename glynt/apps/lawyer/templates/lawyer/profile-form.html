@@ -539,6 +539,7 @@ img#photo-preview{
 {{ form.media }}
 
 <script type="text/javascript">
+'use strict';
 
 function preparePhotoPreview(element) {
     var element = $('.cropped-imag-preview');
@@ -546,9 +547,8 @@ function preparePhotoPreview(element) {
 
     $.each(element.find('img'), function(i,img){
         img = $(img)
-        src = img.attr('src');
-
-        photo_id = null;
+        var src = img.attr('src');
+        var photo_id = null;
 
         /**
         * Stores the photo ID in a field
@@ -682,7 +682,7 @@ $(document).ready(function(){
     /**
     * Dynamic selector functions based on form api urls
     */
-    ajax_lookup = function(url, filter, callback) {
+    var ajax_lookup = function(url, filter, callback) {
         var object_list = []
         url = (filter === undefined)? url: url + '&' + filter;
         $.ajax({
@@ -721,13 +721,26 @@ $(document).ready(function(){
 
     $.each($('.typeahead[data-provide="ajax"]'), function(i, element) {
         var e = $(element);
+        var url = e.data('source')
+        var filter = e.data('filter');
+        if ( filter !== undefined ) {
+            url = filter + '=' + e.val() ;
+        }
+
         e.typeahead({
-            remote: function(query, process_callback) {
-                var provide = e.attr('data-provide');
-                var url = e.attr('data-source');
-                var filter = e.attr('data-filter');
-                filter = (filter === undefined)? filter : filter + '=' + query ;
-                ajax_lookup(url, filter, process_callback);
+            remote: {
+                beforeSend: function(jqXHR, settings) {
+                    // Pull the token out of the DOM.
+                    jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+                },
+                url: e.data('source'),
+                filter: function (data) {
+                    var object_list = [];
+                    $.each(data.objects, function(i,item){
+                        object_list.push(item.name)
+                    });
+                    return object_list;
+                }
             }
             ,limit: 15
         });
@@ -744,7 +757,7 @@ $(document).ready(function(){
         var callback = window[callback_name]
 
         // remove and then re-add
-        parsleyConstraints = e.attr('data-type') || false
+        var parsleyConstraints = e.attr('data-type') || false
 
         if (parsleyConstraints) {
             element.closest('form').parsley( 'removeItem', '#' + element.attr('id') )
@@ -755,7 +768,7 @@ $(document).ready(function(){
             })
             
         }
-
+        //console.log('parsleyConstraints: {parsleyConstraints}, parsley.validate: {validate}'.assign({'parsleyConstraints': parsleyConstraints, 'validate': element.parsley( 'validate' )}))
         if ( parsleyConstraints === false || element.parsley( 'validate' ) === true ) {
             var item = element.val();
             element.val('');
@@ -778,7 +791,7 @@ $(document).ready(function(){
         remove_multi_add_item(item, cookie_name)
     })
 
-    add_startup = function add_startup(startup, force){
+    window.add_startup = function add_startup(startup, force){
         var force = force || false
         var cookie_name = 'startup_list-{{ user.pk }}';
         var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
@@ -786,7 +799,7 @@ $(document).ready(function(){
         add_generic_list_element(startup, $('ol#startups-advised-list'), $('#id_startups_advised'), cookie_name, cookie_data, force)
     }
 
-    add_website = function add_website(website, force){
+    window.add_website = function add_website(website, force){
         var force = force || false
         var cookie_name = 'website_list-{{ user.pk }}';
         var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
@@ -794,7 +807,7 @@ $(document).ready(function(){
         add_generic_list_element(website, $('ol#personal-website-list'), $('#id_websites'), cookie_name, cookie_data, force)
     }
 
-    add_bar_membership = function add_bar_membership(bar_membership, force){
+    window.add_bar_membership = function add_bar_membership(bar_membership, force){
         var force = force || false
         var cookie_name = 'bar_membership_list-{{ user.pk }}';
         var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
@@ -803,7 +816,7 @@ $(document).ready(function(){
         add_generic_list_element(bar_membership, $('ol#bar-membership-list'), $('#id_bar_membership'), cookie_name, cookie_data, force)
     }
 
-    add_generic_list_element = function add_generic_list_element(item, target_element, target_data_element, cookie_name, cookie_data, force) {
+    window.add_generic_list_element = function add_generic_list_element(item, target_element, target_data_element, cookie_name, cookie_data, force) {
         if (force === false && cookie_data.indexOf(item) >= 0) {
             // is already present
             return false
@@ -812,7 +825,7 @@ $(document).ready(function(){
                 cookie_data.push(item);
             }
 
-            cookie_string = JSON.stringify(cookie_data);
+            var cookie_string = JSON.stringify(cookie_data);
             $.cookie(cookie_name, cookie_string);
             // set the form value
             target_data_element.val(cookie_string);
@@ -829,7 +842,7 @@ $(document).ready(function(){
             target_element.append(li);
         }
     }
-    remove_multi_add_item = function remove_multi_add_item(item, cookie_name){
+    window.remove_multi_add_item= function remove_multi_add_item(item, cookie_name){
         //var cookie_name = 'startup_list-{{ user.pk }}';
         var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
         item = item.compact()
@@ -840,9 +853,9 @@ $(document).ready(function(){
         $.cookie(cookie_name, cookie_string);
     }
 
-    function process_startups() {
+    window.process_startups = function process_startups() {
         var cookie_name = 'startup_list-{{ user.pk }}';
-        var cookie_data = $.parseJSON($.cookie(cookie_name)) || $.parseJSON($('#id_startups_advised').val()) || [];
+        var cookie_data = $.parseJSON($.cookie(cookie_name)) || $.parseJSON($('#id_startups_advised').val() || '[]') || [];
         var force = true;
         $.each(cookie_data, function(i,startup){
             add_startup(startup, force);
@@ -850,9 +863,9 @@ $(document).ready(function(){
     }
     process_startups();
 
-    function process_websites() {
+    window.process_websites = function process_websites() {
         var cookie_name = 'website_list-{{ user.pk }}';
-        var cookie_data = $.parseJSON($.cookie(cookie_name)) || $.parseJSON($('#id_websites').val()) || [];
+        var cookie_data = $.parseJSON($.cookie(cookie_name)) || $.parseJSON($('#id_websites').val() || '[]') || [];
         var force = true;
         $.each(cookie_data, function(i,website){
             add_website(website, force);
@@ -860,9 +873,9 @@ $(document).ready(function(){
     }
     process_websites();
 
-    function process_bar_membership() {
+    window.process_bar_membership = function process_bar_membership() {
         var cookie_name = 'bar_membership_list-{{ user.pk }}';
-        var cookie_data = $.parseJSON($.cookie(cookie_name)) || $.parseJSON($('#id_bar_membership').val()) || [];
+        var cookie_data = $.parseJSON($.cookie(cookie_name)) || $.parseJSON($('#id_bar_membership').val() || '[]') || [];
         var force = true;
         $.each(cookie_data, function(i,bar_membership){
             add_bar_membership(bar_membership, force);
@@ -960,14 +973,14 @@ $(document).ready(function(){
     /**
     * handle volume changes
     */
-    single_value = function single_value(element, volume_type, target_element, element_value) {
+    var single_value = function single_value(element, volume_type, target_element, element_value) {
         $(target_element).val(element_value)
         window[volume_type + '_object'] = element_value
         target_element.val(window[volume_type + '_object'])
         return window[volume_type + '_object']
     }
 
-    json_value = function json_value(element, volume_type, target_element, element_value) {
+    var json_value = function json_value(element, volume_type, target_element, element_value) {
         var json_taget_name = target_element.attr('id')
         var element_value = $.parseJSON(element_value);
 
