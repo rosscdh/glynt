@@ -15,6 +15,8 @@ from django_filepicker.models import FPFileField
 from . import TODO_STATUS, FEEDBACK_STATUS
 from .managers import DefaultToDoManager, DefaultFeedbackRequestManager
 
+from rulez import registry
+
 from jsonfield import JSONField
 from hurry.filesize import size
 
@@ -50,6 +52,12 @@ class ToDo(models.Model):
     def __unicode__(self):
         return '{name}'.format(name=self.name)
 
+    def can_read(self, user):
+        return True if user in self.project.notification_recipients() else False
+
+    def can_edit(self, user):
+        return True if user in self.project.notification_recipients() else False
+
     @property
     def pusher_id(self):
         return self.slug
@@ -74,6 +82,9 @@ class ToDo(models.Model):
         # need to import this HERE for some reason?
         from django.core.urlresolvers import reverse
         return reverse('todo:edit', kwargs={'project_uuid': self.project.uuid.__unicode__(), 'slug': self.slug})
+
+registry.register("can_read", ToDo)
+registry.register("can_edit", ToDo)
 
 
 class Attachment(models.Model):

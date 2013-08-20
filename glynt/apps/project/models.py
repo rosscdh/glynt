@@ -14,8 +14,9 @@ from glynt.apps.company.models import Company
 from glynt.apps.lawyer.models import Lawyer
 
 from . import PROJECT_STATUS, PROJECT_LAWYER_STATUS
-
 from .managers import DefaultProjectManager, ProjectLawyerManager
+
+from rulez import registry
 
 import itertools
 
@@ -38,6 +39,12 @@ class Project(models.Model):
 
     def __unicode__(self):
         return 'Project for {company} with {lawyer}'.format(company=self.company.name, lawyer=self.get_primary_lawyer())
+
+    def can_read(self, user):
+        return True if user in self.notification_recipients() else False
+
+    def can_edit(self, user):
+        return True if user in self.notification_recipients() else False
 
     def get_absolute_url(self):
         return reverse('dashboard:project', kwargs={'uuid': self.uuid})
@@ -100,6 +107,9 @@ class Project(models.Model):
     @property
     def project_statement(self):
         return self.data.get('project_statement', None)
+
+registry.register("can_read", Project)
+registry.register("can_edit", Project)
 
 
 class ProjectLawyer(models.Model):

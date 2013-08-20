@@ -28,6 +28,7 @@ django-pagination
 django-endless-pagination
 django-localflavor
 django-countries
+django-rulez
 south
 
 
