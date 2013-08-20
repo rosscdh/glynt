@@ -35,9 +35,10 @@
 
         {% else %}
             <li><a href="/"><i class="glyphicon glyphicon-home small"></i></a></li>
+            <li><a href="{% url 'public:about' %}">About</a></li>
             <li><a href="{% url 'public:why-lawpal' %}">Why LawPal</a></li>
             <li><a href="{% url 'public:must-reads' %}">Must Reads</a></li>
-            <li><a href="{% url 'public:for-lawyers' %}">For Lawyers</a></li>
+            <li><a href="{% url 'public:for-lawyers' %}"><span class="softer">For Lawyers</span></a></li>
             <li><a href="#signin-modal" role="button" data-toggle="modal" class="signin" onClick="_gaq.push(['_trackEvent', 'Nav', 'Action', 'Sign In']);">{% trans 'Sign In' %}</a></li>
         {% endif %}
         </ul>
