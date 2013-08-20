@@ -2,7 +2,18 @@
 LOCAL_SETTINGS = True
 from settings import *
 
+import hashlib
+import random
+
 PROJECT_ENVIRONMENT = 'test'
+
+INSTALLED_APPS = INSTALLED_APPS + (
+    'django_nose',
+)
+NOSE_ARGS = [
+    #'--with-coverage',
+]
+
 
 LOGGING = {
     'version': 1,
@@ -55,4 +66,13 @@ LOGGING = {
             'propagate': True,
         }
     }
+}
+
+def AutoSlugFieldGenerator():
+    hash_val = '{r}'.format(r=random.random())
+    h = hashlib.sha1(hash_val)
+    return h.hexdigest()
+
+MOMMY_CUSTOM_FIELDS_GEN = {
+    'autoslug.fields.AutoSlugField': AutoSlugFieldGenerator,
 }
