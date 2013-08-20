@@ -266,6 +266,17 @@ else:
         'haystack',
     )
 
+    # Process model updates in real time
+    HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+    HAYSTACK_CONNECTIONS = {
+        'default': {
+            'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+            'URL': 'http://jsy06hdx:km5ugyiy90yy17qg@banyan-8252692.us-east-1.bonsai.io',
+            'INDEX_NAME': 'dev-lawyers',
+        },
+    }
+    USE_ELASTICSEARCH = True
+
 
 
 # Primary installed apps goes here
@@ -403,17 +414,6 @@ DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = False
 
-# Process model updates in real time
-HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
-HAYSTACK_CONNECTIONS = {
-    'default': {
-        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
-        'URL': 'http://jsy06hdx:km5ugyiy90yy17qg@banyan-8252692.us-east-1.bonsai.io',
-        'INDEX_NAME': 'dev-lawyers',
-    },
-}
-USE_ELASTICSEARCH = True
-
 
 LOGGING = {
     'version': 1,
@@ -424,6 +424,10 @@ LOGGING = {
         }
     },
     'handlers': {
+        'null': {
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler',
+        },
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
