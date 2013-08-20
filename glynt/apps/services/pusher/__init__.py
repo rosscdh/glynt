@@ -37,11 +37,11 @@ class PusherPublisherService(object):
         self.data.update(kwargs)
 
         logger.info('Initialized PusherPublisherService with {data}'.format(data=json.dumps(self.data)))
-
-        self.pusher = pusher.Pusher(app_id=PUSHER_APP_ID, key=PUSHER_KEY, secret=PUSHER_SECRET)
+        if not settings.IS_TESTING:
+            self.pusher = pusher.Pusher(app_id=PUSHER_APP_ID, key=PUSHER_KEY, secret=PUSHER_SECRET)
 
     def process(self, **kwargs):
         logger.info('Sending pusher event on #{channel}'.format(channel=self.channel))
-
-        self.data.update(kwargs)
-        self.pusher[self.channel].trigger(self.event, self.data)
+        if not settings.IS_TESTING:
+            self.data.update(kwargs)
+            self.pusher[self.channel].trigger(self.event, self.data)
