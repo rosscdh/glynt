@@ -1,30 +1,64 @@
 {% if num_lawyers > 0 %}
-    {% for l in lawyers %}
-        <table class="table attorney-list">
-            <tbody>
-                <tr>
-                    <td class="attorney-picture">
-                        <img src="{{ l.user.profile.get_mugshot_url }}" class="img-rounded">
-                    </td>
-                    <td class="attorney-info">
-                        a{{ l.status }}b
-                        <h2>{{ l.user.get_full_name }}</h2>
-                        <p>{{ l.position }} at {{ l.firm_name }}</p>
-                        <p>{% for loc in practice_locations %}<i class="glyphicon glyphicon-map-marker"></i> {{ loc }}{% endfor %}</p>
-                    </td>
-                    <td class="attorney-meta"><a href="{% url 'lawyer:profile' slug=l.user.username %}" class="btn btn-large btn-primary">Get Introduced</a></td>
-                </tr>
-            </tbody>
-        </table>
-    {% endfor %}
-{% else %}
-    {% if display_type == 'generic' %}
-    <div class="callout empty">
-        <div class="empty-message empty-message-time">
-            <h3>We're searching for available lawyers</h3>
-            <p>We'll notify you when your options are available for review.</p>
-        </div>
+    {% if display_type == 'potential' and not project.has_lawyer %}
+        <h2 class="text-warning"><i class="glyphicon glyphicon-star-empty"></i> Review your matches</h2>
+    {% endif %}
+    <div class="row">
+        {% for l in lawyers %}
+            {% if display_type == 'potential' %}
+                {% if not project.has_lawyer %}
+
+                <div class="col col-lg-6">
+                    <table class="table lawyer-list">
+                        <tbody>
+                            <tr>
+                                <td class="lawyer-picture">
+                                    <img src="{{ l.user.profile.get_mugshot_url }}" class="img-rounded">
+                                </td>
+                                <td class="lawyer-info">
+                                    <h3>{{ l.user.get_full_name }}</h3>
+                                    <p>{{ l.position }} at {{ l.firm_name }}</p>
+                                    <p>{% for loc in practice_locations %}<i class="glyphicon glyphicon-map-marker"></i> {{ loc }}{% endfor %}</p>
+                                </td>
+                                <td class="lawyer-meta"><a href="{% url 'lawyer:profile' slug=l.user.username %}" class="btn btn-large btn-primary">Get Introduced</a>  <a data-toggle="modal" href="#myModal" class="btn btn-primary btn-lg">Launch demo modal</a>
+
+                                <a data-toggle="modal" href="{% url 'lawyer:profile' slug=l.user.username %}" data-target="#lawyerprofileModal">Click me</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                {% endif %}
+            {% else %}
+                <div class="col col-lg-12">
+                    <table class="table lawyer-list active">
+                        <tbody>
+                            <tr>
+                                <td class="lawyer-picture">
+                                    <img src="{{ l.user.profile.get_mugshot_url }}" class="img-rounded">
+                                </td>
+                                <td class="lawyer-info">
+                                    <h3>{{ l.user.get_full_name }}</h3>
+                                    <p>{{ l.position }} at {{ l.firm_name }}</p>
+                                    <p>{% for loc in practice_locations %}<i class="glyphicon glyphicon-map-marker"></i> {{ loc }}{% endfor %}</p>
+                                </td>
+                                <td class="attorney-meta"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        {% endfor %}
     </div>
+{% else %}
+    {% if display_type == 'potential' %}
+        {% if not project.has_lawyer %}
+            <div class="callout empty">
+                <div class="empty-message empty-message-time">
+                    <h3>We're searching for available lawyers</h3>
+                    <p>We'll notify you when new options are available for review.</p>
+                </div>
+            </div>
+        {% endif %}
     {% else %}
      <table class="table attorney-list">
         <tbody>
@@ -38,3 +72,11 @@
     </table>
     {% endif %}
 {% endif %}
+
+<div class="modal" id="lawyerprofileModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body"></div>
+        </div>
+    </div>
+</div>

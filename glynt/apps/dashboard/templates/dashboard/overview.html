@@ -40,27 +40,28 @@
             </div>
         {% else %}
             {% project_lawyers project 'potential' %}
-        {% endif %}
 
-        <div class="row">
-            <div class="col col-lg-6">
-                <div class="widget account-attorney">
-                    <h3>Your Attorney</h3>
-                    {% project_lawyers project 'assigned' %}
+            <div class="row">
+                <div class="col col-lg-6">
+                    <div class="widget account-attorney">
+                        <h3>Your Attorney</h3>
+                        {% project_lawyers project 'assigned' %}
+                    </div>
                 </div>
-            </div>
-            <div class="col col-lg-6">
-                <div class="widget transaction-profile">
-                    <h3>Transaction Profile</h3>
+                <div class="col col-lg-6">
+                    <div class="widget transaction-profile">
+                        <h3>Transaction Profile</h3>
 
-                    <div class="callout callout-success empty">
-                        <div class="empty-message empty-message-ok">
-                            <h3>Your transaction profile is up-to-date.</h3>
-                            {% if PROJECT_ENVIRONMENT == 'dev' %}<a href="{% url 'transact:builder' project_uuid=project.uuid tx_range='INTAKE' step='1' %}" class="">update</a>{% endif %}
+                        <div class="callout callout-success empty">
+                            <div class="empty-message empty-message-ok">
+                                <h3>Your transaction profile is up-to-date.</h3>
+                                {% if PROJECT_ENVIRONMENT == 'dev' %}<a href="{% url 'transact:builder' project_uuid=project.uuid tx_range='INTAKE' step='1' %}" class="">update</a>{% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            {% endif %}
+
         </div>
     {% else %}
         <div class="alert">
@@ -74,21 +75,23 @@
     });
 </script>
 
-  <!-- Modal -->
-  <div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">Your Checklist Is Coming</h4>
-        </div>
-        <div class="modal-body">
-          <p>Once you select your attorney, your transaction checklist will appear here. It will contain all of the tasks and documents required to complete your transaction on LawPal.</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-        </div>
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->
+<!-- Modal -->
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h4 class="modal-title">Your Checklist Is Coming</h4>
+    </div>
+    <div class="modal-body">
+      <p>Once you select your attorney, your transaction checklist will appear here. It will contain all of the tasks and documents required to complete your transaction on LawPal.</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+    </div>
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
 {% endblock %}
