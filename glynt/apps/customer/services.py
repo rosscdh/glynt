@@ -1,7 +1,11 @@
 # coding: utf-8
 import os
 
-from glynt.apps.customer.models import Customer
+try:
+    from glynt.apps.customer.models import Customer
+except ImportError:
+    # Customer appears to already be in sys.modules
+    pass
 
 import logging
 logger = logging.getLogger('lawpal.services')

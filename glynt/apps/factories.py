@@ -18,7 +18,8 @@ class LoggedOutUserFactory(factory.Factory):
 class UserFactory(factory.Factory):
     FACTORY_FOR = User
     first_name = 'Test'
-    last_name = 'User'
+    last_name = factory.LazyAttributeSequence(lambda a, n: 'User_{num}'.format(num=n).lower())
+
     is_superuser = False
     username = factory.LazyAttributeSequence(lambda a, n: '{0}_{1}'.format(a.first_name, n).lower())
     email = factory.LazyAttributeSequence(lambda a, n: '{0}.{1}+{2}@lawpal.com'.format(a.first_name, a.last_name, n).lower())
@@ -27,3 +28,5 @@ class UserFactory(factory.Factory):
 
 class AdminFactory(UserFactory):
     is_superuser = True
+    admin = True
+    groups = 'admin'
