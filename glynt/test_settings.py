@@ -24,6 +24,10 @@ LOGGING = {
         }
     },
     'handlers': {
+        'null': {
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler',
+        },
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
@@ -36,32 +40,32 @@ LOGGING = {
     },
     'loggers': {
         'django.test': {
-            'handlers': ['console'],
+            'handlers': ['null'],
             'level': 'INFO',
             'propagate': True,
         },
         'django.test.behave': {
-            'handlers': ['console'],
+            'handlers': ['null'],
             'level': 'INFO',
             'propagate': True,
         },
         'django.request': {
-            'handlers': ['console'],
+            'handlers': ['null'],
             'level': 'ERROR',
             'propagate': True,
         },
         'lawpal.services': {
-            'handlers': ['console'],
+            'handlers': ['null'],
             'level': 'INFO',
             'propagate': True,
         },
         'lawpal.graph': {
-            'handlers': ['console'],
+            'handlers': ['null'],
             'level': 'INFO',
             'propagate': True,
         },
         'lawpal.commands': {
-            'handlers': ['console'],
+            'handlers': ['null'],
             'level': 'INFO',
             'propagate': True,
         }
