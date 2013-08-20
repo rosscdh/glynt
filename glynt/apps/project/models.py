@@ -24,6 +24,8 @@ class Project(models.Model):
     """ Base Project object
     Stores initial project details
     """
+    _primary_lawyer = False
+
     uuid = UUIDField(auto=True, db_index=True)
     customer = models.ForeignKey('customer.Customer')
     company = models.ForeignKey(Company)
@@ -37,7 +39,7 @@ class Project(models.Model):
     objects = DefaultProjectManager()
 
     def __unicode__(self):
-        return 'Project for {company} with {lawyer}'.format(company=self.company.name, lawyer=self.get_primary_lawyer())
+        return 'Project for {company}'.format(company=self.company.name)
 
     def get_absolute_url(self):
         return reverse('dashboard:project', kwargs={'uuid': self.uuid})
@@ -52,10 +54,12 @@ class Project(models.Model):
         return checklist_items
 
     def get_primary_lawyer(self):
-        try:
-            return self.lawyers.select_related('user').all()[0]
-        except:
-            return None
+        if self._primary_lawyer is False:
+            try:
+                _primary_lawyer = self.lawyers.select_related('user').all()[0]
+            except:
+                _primary_lawyer = None
+        return _primary_lawyer
 
     def notification_recipients(self):
         return itertools.chain(self.company.customers.all(), self.lawyers.all())
