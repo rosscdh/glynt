@@ -37,7 +37,7 @@ class Project(models.Model):
     objects = DefaultProjectManager()
 
     def __unicode__(self):
-        return '%s of %s Project with %s' % (self.customer.user.get_full_name(), self.company, self.get_primary_lawyer(),)
+        return 'Project for {company} with {lawyer}'.format(company=self.company.name, lawyer=self.get_primary_lawyer())
 
     def get_absolute_url(self):
         return reverse('dashboard:project', kwargs={'uuid': self.uuid})
@@ -54,8 +54,8 @@ class Project(models.Model):
     def get_primary_lawyer(self):
         try:
             return self.lawyers.select_related('user').all()[0]
-        except IndexError:
-            return []
+        except:
+            return None
 
     def notification_recipients(self):
         return itertools.chain(self.company.customers.all(), self.lawyers.all())
