@@ -72,7 +72,8 @@ a "**customer**"
 2. run ```ngrok 127.0.0.1:8000```
 3. this will give you a url like: http://19b51bbe.ngrok.com
 4. register this url at the crocdoc url: https://crocodoc.com/settings/webhook/
-5. interact with an uploaded crocdoc item attachment
+5. in the form: ```http://19b51bbe.ngrok.com/crocdoc/webhook/```
+6. interact with an uploaded crocdoc item attachment
     
 
 ## Start Celery Worker
