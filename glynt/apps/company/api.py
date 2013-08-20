@@ -29,7 +29,7 @@ class CompanyLiteSimpleResource(BaseApiModelResource):
         website = bundle.data.get('website', None)
         bundle.data.pop('name')
         bundle.data.pop('website')
-        bundle.data.update({'name': '%s, %s' % (name, website,)})
+        bundle.data.update({'name': '{name}'.format(name= website if website is not None else name)})
         return bundle
 
 
