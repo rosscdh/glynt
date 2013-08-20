@@ -255,7 +255,7 @@ body {
   line-height: 1.428571429;
   color: #333333;
   background-color: #ffffff;
-  padding-top: 70px;
+  padding-top: 80px;
 }
 input,
 button,
@@ -298,6 +298,7 @@ p {
   font-size: 18.2px;
   font-weight: 200;
   line-height: 1.4;
+  color: #555555;
 }
 .brand {
   color: #1ebfd6;
@@ -308,7 +309,8 @@ p {
 .softer {
   color: #a2a2a2;
 }
-small {
+small,
+.small {
   font-size: 85%;
 }
 strong {
@@ -1202,7 +1204,7 @@ label {
   margin-top: 5px;
   font-weight: bold;
   font-size: 14px;
-  color: #6f6f6f;
+  color: #555555;
 }
 select,
 textarea,
@@ -3899,7 +3901,7 @@ button.close {
 }
 .nav > li > a.btn {
   padding: 7px 15px;
-  margin-top: 6px;
+  margin-top: 10px;
   margin-left: 15px;
   font-weight: normal;
 }
@@ -4160,11 +4162,13 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
 .navbar {
   position: relative;
   margin-bottom: 20px;
-  padding-top: 10px;
+  padding-top: 0px;
+  padding-bottom: 0px;
   padding-left: 15px;
   padding-right: 15px;
   background-color: rgba(255, 255, 255, 0.93);
   border-radius: 0px;
+  border-bottom: 1px solid #e1e4e6;
 }
 .navbar:before,
 .navbar:after {
@@ -4195,11 +4199,20 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
   margin-bottom: 15px;
 }
 .navbar-nav > li > a {
-  padding-top: 15px;
-  padding-bottom: 15px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  padding-right: 18px;
+  padding-left: 18px;
   color: #666666;
   line-height: 20px;
   border-radius: 0px;
+  background-color: #fbfbfb;
+  font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
+  font-size: 16px;
+}
+.navbar-nav > li > a.signin {
+  background-color: #6bdb7e;
+  color: white;
 }
 .navbar-nav > li > a:hover,
 .navbar-nav > li > a:focus {
@@ -4250,6 +4263,8 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
   line-height: 20px;
   color: #666666;
   text-align: center;
+  padding-top: 25px;
+  padding-bottom: 20px;
 }
 .navbar-brand:hover,
 .navbar-brand:focus {
@@ -5669,6 +5684,7 @@ a.list-group-item.active > .badge,
   line-height: 2.1428571435;
   color: #ffffff;
   background-color: #42d0e5;
+  margin-top: -10px;
 }
 .jumbotron h1 {
   line-height: 1;
@@ -5703,6 +5719,7 @@ a.list-group-item.active > .badge,
   padding-top: 50px;
   padding-bottom: 20px;
   margin-bottom: 20px;
+  margin-top: -10px;
 }
 .megatron * {
   color: white;
@@ -5714,7 +5731,7 @@ a.list-group-item.active > .badge,
   margin-bottom: 100px;
 }
 .megatron h1 {
-  margin: 30px 0px -10px 0px;
+  margin: 30px 0px -5px 0px;
 }
 @font-face {
   font-family: 'Glyphicons Halflings';
@@ -6401,6 +6418,7 @@ td.hidden-lg {
   background-position-y: -25px;
   background-size: cover;
   padding: 14% 0px 15% 0px;
+  margin-top: -10px;
   color: #222222;
   border-top: 1px solid #eeeeee;
   border-bottom: 1px solid #eeeeee;
