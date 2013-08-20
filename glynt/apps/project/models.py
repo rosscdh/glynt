@@ -43,10 +43,10 @@ class Project(models.Model):
         return 'Project for {company}'.format(company=self.company.name)
 
     def can_read(self, user):
-        return True if user in self.notification_recipients() else False
+        return True if user.pk in [u.pk for u in self.notification_recipients()] else False
 
     def can_edit(self, user):
-        return True if user in self.notification_recipients() else False
+        return True if user.pk in [u.pk for u in self.notification_recipients()] else False
 
     def get_absolute_url(self):
         return reverse('dashboard:project', kwargs={'uuid': self.uuid})
@@ -69,11 +69,11 @@ class Project(models.Model):
         return _primary_lawyer
 
     def notification_recipients(self):
-        return itertools.chain(self.company.customers.all(), self.lawyers.all())
+        return itertools.chain(self.company.customers.all(), [l.user for l in self.lawyers.all()])
 
     @property
     def has_lawyer(self):
-        return self.get_primary_lawyer() is not None
+        return ProjectLawyer.objects.assigned(project=self) is not None
 
     def open(self, actioning_user):
         """ Open the notification """
