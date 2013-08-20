@@ -66,11 +66,15 @@ class DashboardView(TemplateView):
         current_project = self.project_service.project(**qs_filter)
 
         kwargs.update({'project': current_project,
-                        'num_unread': Project.objects.new(**qs_filter).count(),
-                        'num_pending': Project.objects.open(**qs_filter).count(),
-                        'num_closed': Project.objects.closed(**qs_filter).count(),
+                        'counts': {
+                            'new': current_project.todo_set.new(user=self.request.user).count(),
+                            'open': current_project.todo_set.open(user=self.request.user).count(),
+                            'pending': current_project.todo_set.pending(user=self.request.user).count(),
+                            'awaiting_feedback_from_user': 0,
+                            'total': 0,
+                        }
         })
-        kwargs['num_total'] = kwargs['num_unread'] + kwargs['num_pending'] + kwargs['num_closed']
+        kwargs['counts']['total'] = kwargs['counts']['new'] + kwargs['counts']['open'] + kwargs['counts']['pending']
 
         if self.request.user.profile.is_customer:
 

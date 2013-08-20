@@ -53,13 +53,14 @@ class ProjectToDoView(ListView):
             'is_lawyer': user_profile.is_lawyer,
             'is_customer': user_profile.is_customer,
             'counts': {
-                # 'new': self.model.objects.new(project=self.project, user=self.request.user).count(),
-                # 'open': self.model.objects.open(project=self.project, user=self.request.user).count(),
-                # 'pending': self.model.objects.pending(project=self.project, user=self.request.user).count(),
-                # 'resolved': self.model.objects.resolved(project=self.project, user=self.request.user).count(),
-                # 'closed': self.model.objects.closed(project=self.project, user=self.request.user).count(),
+                'new': self.model.objects.new(project=self.project, user=self.request.user).count(),
+                'open': self.model.objects.open(project=self.project, user=self.request.user).count(),
+                'pending': self.model.objects.pending(project=self.project, user=self.request.user).count(),
+                'awaiting_feedback_from_user': 0,
+                'total': 0,
             }
         })
+        context['counts']['total'] = context['counts']['new'] + context['counts']['open'] + context['counts']['pending']
         return context
 
 
