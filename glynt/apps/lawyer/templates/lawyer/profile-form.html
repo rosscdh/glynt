@@ -713,7 +713,7 @@ $(document).ready(function(){
     $.each($('.typeahead[data-provide="local"]'), function(i, element) {
         var e = $(element);
         e.typeahead({
-            source: $.parseJSON(e.attr('data-source'))
+            prefetch: $.parseJSON(e.attr('data-source'))
             ,limit: 10
         });
     });
@@ -722,7 +722,7 @@ $(document).ready(function(){
     $.each($('.typeahead[data-provide="ajax"]'), function(i, element) {
         var e = $(element);
         e.typeahead({
-            source: function(query, process_callback) {
+            remote: function(query, process_callback) {
                 var provide = e.attr('data-provide');
                 var url = e.attr('data-source');
                 var filter = e.attr('data-filter');
@@ -736,7 +736,7 @@ $(document).ready(function(){
     /**
     * handle startup additions
     */
-    $('.multi-add-btn').on('click', function(event){
+    $(document).on( 'click', '.multi-add-btn', function (event) {
         event.preventDefault();
         var e = $(this)
         var element = $('#' + e.attr('data-data_target'));//$('#id_companies_advised_input');
@@ -768,7 +768,8 @@ $(document).ready(function(){
             
         }
     });
-    $('.remove-multi-add-btn').live('click', function(event){
+
+    $(document).on( 'click', '.remove-multi-add-btn', function (event) {
         event.preventDefault();
         var element = $(this);
         var item = element.closest('li').text();
