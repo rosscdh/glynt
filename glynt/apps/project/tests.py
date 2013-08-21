@@ -4,13 +4,16 @@ from django.test import TestCase
 from model_mommy import mommy
 
 from glynt.apps.lawyer.models import Lawyer
+from glynt.apps.project import PROJECT_LAWYER_STATUS
 
 
 class ProjectModelMethodsTest(TestCase):
     def setUp(self):
-        lawyer = mommy.make('lawyer.Lawyer')
+        self.lawyer = mommy.make('lawyer.Lawyer')
         self.project_with_lawyer = mommy.make('project.Project')
-        self.project_lawyer = mommy.make('project.ProjectLawyer', project=self.project_with_lawyer, lawyer=lawyer)
+        mommy.make('project.ProjectLawyer', project=self.project_with_lawyer, lawyer=self.lawyer, status=PROJECT_LAWYER_STATUS.assigned)
+
+        self.assertEqual(True, self.project_with_lawyer.has_lawyer)
 
         self.project_without_lawyer = mommy.make('project.Project')
 
@@ -32,5 +35,7 @@ class ProjectModelMethodsTest(TestCase):
         """
         Test the has lawyer facility works
         """
+        print self.project_with_lawyer.has_lawyer
         self.assertEqual(True, self.project_with_lawyer.has_lawyer)
+
         self.assertEqual(False, self.project_without_lawyer.has_lawyer)
