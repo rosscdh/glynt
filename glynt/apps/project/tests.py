@@ -18,8 +18,6 @@ class ProjectModelMethodsTest(TestCase):
 
         mommy.make('project.ProjectLawyer', project=self.project_with_lawyer, lawyer=self.lawyer, status=PROJECT_LAWYER_STATUS.assigned)
 
-        self.assertEqual(True, self.project_with_lawyer.has_lawyer)
-
         self.project_without_lawyer = mommy.make('project.Project', company=self.company)
 
     def test_project_status(self):
