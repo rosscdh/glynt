@@ -14,29 +14,29 @@
     <div class="row">
         <div class="col-12">
             <hr />
-            <ul class="list-unstyled">
+            <ul id="project-list" class="list-unstyled">
             {% for p in projects %}
-                <li class="span5">
-                    <div class="">
+                <li class="project-list-item span5">
+                    <div class="{{ p.display_status|lower }}">
                         {% if PROJECT_LAWYER_STATUS.assigned == p.status %}
                             <div class="callout callout-success">
                                     <h4><div class="profile-card pull-right" data-template="small" data-username="{{ p.project.customer.user.username }}">&nbsp;</div></h4>
                                     <h3><i class="glyphicon glyphicon-ok text-success"></i>  <a href="{{ p.project.get_absolute_url }}" class="text-success">{{ p.project.company }} ({{ p.display_status }})</a></h3>
-                                    <p>You have been assigned to this project.</p>
+                                    <p class="msg">You have been assigned to this project.</p>
                             </div>
                             
                         {% else %}
                             {% if PROJECT_LAWYER_STATUS.rejected == p.status %}
                                 <div class="">
-                                    <h5 class="softer">{{ p.project.company }} - {{ p.display_status }} (Client selected another attorney)</h5>
+                                    <h5 class="softer">{{ p.project.company }} - {{ p.display_status }}</h5>
+                                    <p class="msg">Client selected another attorney.</p>
                                 </div>
                             {% endif %}
                             {% if PROJECT_LAWYER_STATUS.potential == p.status %}
                                 <div class="callout callout-info">
                                     <h4><div class="profile-card pull-right" data-template="small" data-username="{{ p.project.customer.user.username }}">&nbsp;</div></h4>
                                     <h3>{{ p.project.company }} ({{ p.display_status }})</h3>
-
-                                    <p>You have been proposed to this client. Awaiting client decision.</p>
+                                    <p class="msg">You have been proposed to this client. Awaiting client decision.</p>
                                 </div>
                             {% endif %}
                         {% endif %}

@@ -12,6 +12,7 @@ PROJECT_ENVIRONMENT = 'test'
 
 INSTALLED_APPS = INSTALLED_APPS + (
     'django_nose',
+    'casper',
 )
 NOSE_ARGS = [
     #'--with-coverage',
