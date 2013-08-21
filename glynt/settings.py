@@ -288,10 +288,6 @@ else:
 INSTALLED_APPS = DJANGO_APPS + HELPER_APPS + PROJECT_APPS 
 
 
-# Custom test runner for this project
-TEST_RUNNER = 'glynt.test_runner.GlyntAppTestRunner'
-
-
 # disable celery for test
 BROKER_BACKEND = 'memory'
 
