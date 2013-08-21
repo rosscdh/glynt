@@ -255,7 +255,6 @@ body {
   line-height: 1.428571429;
   color: #333333;
   background-color: #ffffff;
-  padding-top: 80px;
 }
 input,
 button,
@@ -1223,8 +1222,8 @@ input[type="search"],
 input[type="tel"],
 input[type="color"] {
   display: block;
-  min-height: 32px;
-  padding: 5px 9px;
+  min-height: 34px;
+  padding: 6px 12px;
   font-size: 14px;
   line-height: 1.428571429;
   color: #555555;
@@ -1339,10 +1338,10 @@ input[type="checkbox"] {
 }
 select,
 input[type="file"] {
-  height: 32px;
+  height: 34px;
   /* In IE7, the height of the select element cannot be changed by height, only font-size. TODO: Check if this is still needed when dropping IE7 support */
 
-  line-height: 32px;
+  line-height: 34px;
 }
 select[multiple],
 select[size] {
@@ -1612,7 +1611,7 @@ textarea.parsley-error:focus {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  padding: 5px 9px;
+  padding: 6px 12px;
   font-size: 14px;
   font-weight: normal;
   line-height: 1.428571429;
@@ -1698,7 +1697,7 @@ textarea.parsley-error:focus {
 }
 .btn {
   display: inline-block;
-  padding: 5px 9px;
+  padding: 6px 12px;
   margin-bottom: 0;
   font-size: 14px;
   font-weight: bold;
@@ -3892,7 +3891,7 @@ button.close {
 .nav > li > a {
   position: relative;
   display: block;
-  padding: 10px 11px;
+  padding: 10px 15px;
 }
 .nav > li > a:hover,
 .nav > li > a:focus {
@@ -4199,8 +4198,8 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
   margin-bottom: 15px;
 }
 .navbar-nav > li > a {
-  padding-top: 25px;
-  padding-bottom: 25px;
+  padding-top: 41.66666666666667px;
+  padding-bottom: 41.66666666666667px;
   padding-right: 18px;
   padding-left: 18px;
   color: #666666;
@@ -4263,7 +4262,7 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
   line-height: 20px;
   color: #666666;
   text-align: center;
-  padding-top: 25px;
+  padding-top: 41.66666666666667px;
   padding-bottom: 20px;
 }
 .navbar-brand:hover,
@@ -4296,8 +4295,8 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
   margin-top: 4px;
 }
 .navbar-form {
-  margin-top: 9px;
-  margin-bottom: 9px;
+  margin-top: 18px;
+  margin-bottom: 18px;
 }
 .navbar-form input,
 .navbar-form select,
@@ -4443,15 +4442,15 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
   }
 }
 .navbar-btn {
-  margin-top: 9px;
+  margin-top: 18px;
 }
 span.navbar-badge {
-  margin-top: 16.5px;
+  margin-top: 26.5px;
   float: left;
 }
 .navbar-text {
-  margin-top: 15px;
-  margin-bottom: 15px;
+  margin-top: 25px;
+  margin-bottom: 25px;
 }
 .navbar-link {
   color: #666666;
@@ -6413,6 +6412,131 @@ td.hidden-lg {
     display: none !important;
   }
 }
+.btn {
+  line-height: 1.428571429;
+  border-radius: 0px;
+}
+.navbar {
+  min-height: 70px;
+  margin-bottom: 20px;
+  padding: 0;
+  background-color: #ffffff;
+  border: 1px solid #eeeeee;
+}
+@media (min-width: 768px) {
+  .navbar {
+    border-radius: 0px;
+  }
+}
+.navbar-header {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.navbar-header:before,
+.navbar-header:after {
+  content: " ";
+  /* 1 */
+
+  display: table;
+  /* 2 */
+
+}
+.navbar-header:after {
+  clear: both;
+}
+.navbar-header:before,
+.navbar-header:after {
+  content: " ";
+  /* 1 */
+
+  display: table;
+  /* 2 */
+
+}
+.navbar-header:after {
+  clear: both;
+}
+@media (min-width: 768px) {
+  .navbar-header {
+    float: left;
+  }
+}
+.navbar-fixed-top,
+.navbar-fixed-bottom {
+  border-width: 0 0 1px;
+}
+.navbar-brand {
+  padding-top: 25px;
+  padding-bottom: 25px;
+}
+.navbar-toggle {
+  position: relative;
+  top: 0;
+  right: 0;
+  float: right;
+  padding: 9px 10px;
+  margin-top: 18px;
+  margin-bottom: 18px;
+  border: 1px solid #dddddd;
+  border-radius: 0px;
+}
+.navbar-toggle:hover,
+.navbar-toggle:focus {
+  background-color: #dddddd;
+}
+.navbar-toggle .icon-bar {
+  background-color: #cccccc;
+}
+.navbar-nav {
+  padding-top: 12.5px;
+  padding-bottom: 12.5px;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: -15px;
+  margin-right: -15px;
+}
+.navbar-nav > li > a {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  line-height: 20px;
+}
+@media (min-width: 768px) {
+  .navbar-nav {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .navbar-nav > li > a {
+    padding-top: 25px;
+    padding-bottom: 25px;
+  }
+}
+.navbar-btn {
+  margin-top: 18px;
+  margin-bottom: 18px;
+}
+.breadcrumb {
+  background-color: #f5f5f5;
+}
+.breadcrumb > li {
+  text-shadow: none;
+}
+.breadcrumb > li + li:before {
+  content: "/\00a0";
+  padding: 0 5px;
+  color: #cccccc;
+}
+.breadcrumb > li:after {
+  content: none;
+}
+.breadcrumb > .active {
+  color: #bfbfbf;
+}
+.nav-pills.active > a,
+.nav-pills.active > a:hover,
+.nav-pills.active > a:focus {
+  color: #ffffff;
+  background-color: #42d0e5;
+}
 .homepage #wrap .splash {
   background: url('../../img/background-trans.jpeg');
   background-position-y: -25px;
@@ -6850,4 +6974,11 @@ table.lawyer-list.active {
 }
 .pending-feedback {
   background-color: rgba(240, 173, 78, 0.1);
+}
+.navbar {
+  margin-bottom: 0;
+}
+.navbar-brand {
+  padding-top: 23.5px;
+  padding-bottom: 23.5px;
 }
