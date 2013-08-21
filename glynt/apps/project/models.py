@@ -73,7 +73,7 @@ class Project(models.Model):
 
     @property
     def has_lawyer(self):
-        return ProjectLawyer.objects.assigned(project=self) is not None
+        return ProjectLawyer.objects.assigned(project=self).count() > 0
 
     def open(self, actioning_user):
         """ Open the notification """
