@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+""" @TODO need to replace notifications with actstream """
 from django.conf import settings
 
 from glynt.apps.project import PROJECT_STATUS
@@ -24,16 +25,16 @@ class BaseProjectService(object):
         self.actioning_user = actioning_user
 
     def process(self):
-        """ set the project project_status
+        """ set the project status
         and return the notification description so that it can be rendered
         in json response """
-        self.project.project_status = self.target_status
-        self.project.save(update_fields=['project_status'])
+        self.project.status = self.target_status
+        self.project.save(update_fields=['status'])
         return self.notifications()
 
     @property
     def recipient(self):
-        return self.project.customer.user if self.actioning_user.profile.is_lawyer else self.project.lawyer.user
+        return self.project.customer.user if self.actioning_user.profile.is_lawyer else self.project.get_primary_lawyer().user if self.project.get_primary_lawyer() is not None else None
 
     def notifications(self):
         # send notification
