@@ -67,10 +67,10 @@ class DashboardView(ToDoCountMixin, TemplateView):
         current_project = self.project_service.project(**qs_filter)
 
         kwargs.update({'project': current_project})
-        # append counts
-        kwargs.update(self.todo_counts(qs_objects=current_project.todo_set, project=current_project))
 
-        kwargs['counts']['total'] = kwargs['counts']['new'] + kwargs['counts']['open'] + kwargs['counts']['pending']
+        if current_project:
+            # append counts
+            kwargs.update(self.todo_counts(qs_objects=current_project.todo_set, project=current_project))
 
         if self.request.user.profile.is_customer:
 

@@ -19,16 +19,20 @@ logger = logging.getLogger('django.request')
 
 
 class ToDoCountMixin(object):
-    def todo_counts(self, qs_objects, project=None):
+    def todo_counts(self, qs_objects, project=None, **kwargs):
         project = project if project is not None else self.project
-        return {'counts': {
-                    'new': qs_objects.new(project=project, user=self.request.user).count(),
-                    'open': qs_objects.open(project=project, user=self.request.user).count(),
-                    'pending': qs_objects.pending(project=project, user=self.request.user).count(),
+
+        counts = {'counts': {
+                    'new': qs_objects.new(project=project, **kwargs).count(),
+                    'open': qs_objects.open(project=project, **kwargs).count(),
+                    'pending': qs_objects.pending(project=project, **kwargs).count(),
                     'awaiting_feedback_from_user': 0,
                     'total': 0,
                     }
                 }
+        counts['counts']['total'] = counts['counts']['new'] + counts['counts']['open'] + counts['counts']['pending']
+
+        return counts
 
 
 class ProjectToDoView(RulezMixin, ToDoCountMixin, ListView):
