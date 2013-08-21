@@ -95,8 +95,8 @@ class CustomerToDoForm(ToDoForm):
 
         super(CustomerToDoForm, self).__init__(*args, **kwargs)
 
-        if self.is_create:
-            self.fields['category'] = forms.ChoiceField(initial=self.request.GET.get('category', self.instance.category), choices=self.project_service.category_initial())
+        if self.is_create or self.request.POST.get('category', None) is not None:
+            self.fields['category'] = forms.ChoiceField(initial=self.request.GET.get('category', self.request.POST.get('category', self.instance.category)), choices=self.project_service.category_initial())
         else:
             del self.fields['category']
             self._meta.exclude += ['category']
@@ -110,6 +110,7 @@ class CustomerToDoForm(ToDoForm):
     def save(self, *args, **kwargs):
         """ Ensure that we have a slug, required for creating new items manually """
         obj = super(CustomerToDoForm, self).save(*args, **kwargs)
+
         if obj.slug in [None, '']:
             obj.slug = generate_unique_slug(instance=obj)
             obj.save(update_fields=['slug'])
