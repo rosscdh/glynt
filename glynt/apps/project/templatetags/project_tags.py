@@ -12,7 +12,7 @@ from glynt.apps.project.utils import PROJECT_CONTENT_TYPE
 @register.simple_tag(takes_context=True)
 def project_name(context, project, index=1):
     transactions = [t.title for t in project.transactions.all()]
-    return u'#{index} {company}: {transactions}'.format(**{'company': project.company, 'index': index, 'transactions': ', '.join(transactions)})
+    return u'{company} — {transactions}'.format(**{'company': project.company, 'transactions': ', '.join(transactions)})
 
 
 @register.inclusion_tag('project/partials/activity_list.html')
