@@ -98,7 +98,7 @@ class Lawyer(models.Model):
 
     @property
     def full_name(self):
-        full_name = u'%s %s' % (self.data.get('first_name'), self.data.get('last_name'))
+        full_name = u'%s %s' % (self.data.get('first_name', '').strip(), self.data.get('last_name', '').strip())
         if not full_name.strip():
             full_name = self.user.get_full_name()
         return full_name
