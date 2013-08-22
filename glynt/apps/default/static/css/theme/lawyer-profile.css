@@ -411,7 +411,7 @@
 
 /* Startups Advised */
 
-    .startups .domain {
+    .domain-links a, .startups, .domain {
     font-size:18px;
     text-transform: lowercase;
     margin-right:20px;
