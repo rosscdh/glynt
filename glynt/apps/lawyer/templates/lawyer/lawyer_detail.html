@@ -48,10 +48,11 @@
 							{% endif %}
 						{% endif %}
 					{% endif %}
-
+					{% if user.username != object.user.username %}
 	                <div class="pull-right engagement-container">
 	                	{% engage_with_lawyer_button lawyer=object %}
 	                </div>
+	                {% endif %}
 				</div>
 			</div>
 		</div>
@@ -60,13 +61,15 @@
 <div class="container profile">
 	<div class="row">
 		<div class="col col-lg-7 col-offset-1">
-				<h2>About</h2>
-				<div>
-					<p>{{ object.bio|default:"<div class=\"no-data\">No biography yet.</div>"|linebreaksbr }}</p>
-				</div>
-				<hr>
+			<h2>About</h2>
+			<div>
+				<p>{{ object.bio|default:"<div class=\"no-data\">No biography yet.</div>"|linebreaksbr }}</p>
+			</div>
+			<hr>
+
 			<div class="startups">
 				<h2>Startups Advised</h2>
+				{{object.data}}
 				{% for o in object.data.startups_advised %}
 					<col col-lg-><a href="http://{{ o }}" target="_BLANK" class="domain">{{ o }}</a></col col-lg->
 				{% empty %}
@@ -176,7 +179,7 @@ $(document).ready(function () {
 	$('.tip').tooltip();
 
 	{% if user.is_staff %}
-	$('[data-provide=ajax]').live('click', function(event){
+	$(document).on( 'click', '[data-provide=ajax]', function (event) {
 		event.preventDefault();
 
 		var link_object = $(this)
@@ -227,6 +230,7 @@ $(document).ready(function () {
 	});
 	{% endif %}
 
+	/*
 	//Get context with jQuery - using jQuery's .get() method.
 	var ctx0 = $("#dealChart0").get(0).getContext("2d");
 	var ctx1 = $("#dealChart1").get(0).getContext("2d");
@@ -279,6 +283,7 @@ $(document).ready(function () {
 	 }else{
 	 	$("#dealChart1").hide();
 	 }
+	 */
 });
 
 </script>

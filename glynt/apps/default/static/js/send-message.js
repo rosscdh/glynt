@@ -10,17 +10,17 @@ $(document).ready(function() {
     });
 
     // Activate parsley form validation when the modal has finished loading
-    $('#send-message-modal').live('shown', function() {
+    $(document).on( 'shown', '#send-message-modal', function (event) {
         $('#send-message-form').parsley();
     });
 
     // Simulate input submit
-    $('#submit-modal-message').live('click', function() {
+    $(document).on( 'click', '#submit-modal-message', function (event) {
         $('#send-message-form').submit();
     });
 
     // Submit form
-    $('#send-message-form').live('submit', function(event) {
+    $(document).on( 'submit', '#send-message-form', function (event) {
         event.preventDefault();
         $.ajax({
             type: $(this).attr('method'),
