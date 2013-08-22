@@ -31,6 +31,10 @@ env.environment = 'local'
 env.truthy = ['true','t','y','yes','1',1]
 env.falsy = ['false','f','n','no','0',0]
 
+# Removed hosts
+# 'ec2-54-241-224-100.us-west-1.compute.amazonaws.com'
+#
+
 @task
 def prod_db():
     env.project = 'glynt'
@@ -74,7 +78,7 @@ def production():
     env.user = 'ubuntu'
     env.application_user = 'app'
     # connect to the port-forwarded ssh
-    env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com', 'ec2-54-241-224-100.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
+    env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
     env.celery_name = 'celery-production' # taken from chef cookbook
 
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
@@ -101,7 +105,7 @@ def preview():
     env.user = 'ubuntu'
     env.application_user = 'app'
     # connect to the port-forwarded ssh
-    env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com', 'ec2-54-241-224-100.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
+    env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
     env.celery_name = 'celery-preview' # taken from chef cookbook
 
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
@@ -161,7 +165,7 @@ def virtualenv(cmd, **kwargs):
 
 @task
 def pip_install():
-    virtualenv('pip install pusher')
+    virtualenv('pip install django-rulez')
 
 @task
 def check_permissions():

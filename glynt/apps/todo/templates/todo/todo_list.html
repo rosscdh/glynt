@@ -36,7 +36,7 @@
                         <div class="checklist-header clearfix">
                             <h3 class="pull-left">{{ category }}</h3>
                             {% if is_lawyer %}
-                            <button type="button" class="btn btn-link pull-right" data-remote="{% url 'todo:create' project_uuid=project.uuid %}?category={{ category|urlencode }}" data-toggle="modal" data-target="#modal-checklist-item" title="Create new item">
+                            <button type="button" class="btn btn-link pull-right create-item" data-category="{{ category|slugify }}" data-remote="{% url 'todo:create' project_uuid=project.uuid %}?category={{ category|urlencode }}" data-toggle="modal" data-target="#modal-checklist-item" title="Create new item">
                                 <i class="glyphicon glyphicon-plus-sign"></i>
                             </button>
                             {% endif %}

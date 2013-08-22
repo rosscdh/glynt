@@ -34,6 +34,7 @@ class BaseEmailService(object):
     to_email = None
 
     def __init__(self, **kwargs):
+        self._subject = kwargs.get('subject', self._subject)
         self.from_name = kwargs.get('from_name', admin_name)
         self.from_email = kwargs.get('from_email', admin_email)
 
