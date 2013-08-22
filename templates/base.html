@@ -30,13 +30,13 @@
 
         {% if user.is_staff %}{% block admin_panel %}{% endblock %}{% endif %}
 
-        {% include 'partials/messages.html' %}
-
         {% block prebody %}{% endblock %}
 
         <!-- Main Content -->
         <main id="content" role="main">
             {% block header %}{% endblock %}
+
+            {% include 'partials/messages.html' %}
 
             <div class="container">
                 {% block body %}{% endblock %}
