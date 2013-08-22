@@ -5,9 +5,6 @@
 
 {% block breadcrumbs %}
     <ol class="breadcrumb">
-        {% if user.profile.is_lawyer %}
-            <li><a href="#">{{ project.company }}</a></li>
-        {% endif %}
         <li><a href="{% url 'dashboard:checklist' uuid=project.uuid %}">{% trans 'Checklist' %}</a></li>
         <li><a href="{% url 'dashboard:checklist' uuid=project.uuid %}#{{ object.category | slugify }}">{{ object.category }}</a></li>
     </ol>
