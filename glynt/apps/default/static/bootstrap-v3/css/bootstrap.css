@@ -4161,7 +4161,7 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
 .navbar {
   position: relative;
   margin-bottom: 20px;
-  padding-top: 0px;
+  padding-top: 10px;
   padding-bottom: 0px;
   padding-left: 15px;
   padding-right: 15px;
