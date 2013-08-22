@@ -7,6 +7,11 @@
 @navbar-color:                #777;
 @navbar-bg:                   #fff;
 
+// Breadcrumbs
+@breadcrumb-bg:               transparent;
+@breadcrumb-color:            lighten(@brand-primary, 30%);
+@breadcrumb-active-color:     #fff;
+
 
 //
 // Navbars
@@ -18,4 +23,41 @@
 .navbar-brand {
   padding-top: ((@navbar-height - 23) / 2);
   padding-bottom: ((@navbar-height - 23) / 2);
+}
+
+
+//
+// Type
+// --------------------------------------------------
+
+// Page header
+.page-header {
+  padding-top: ((@line-height-computed / 2) - 1);
+  padding-bottom: ((@line-height-computed / 2) - 1);
+  margin: 0;
+  margin-bottom: @line-height-computed;
+  border-bottom: 1px solid @gray-lighter;
+  background-color: @brand-primary;
+  .clearfix();
+
+  h1 {
+    color: white;
+    font-size: ceil(@font-size-base * 2.25);
+    margin-top: 0;
+  }
+}
+
+
+//
+// Breadcrumbs
+// --------------------------------------------------
+
+.breadcrumb {
+  margin-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
+
+  > li > a {
+    color: #fff;
+  }
 }

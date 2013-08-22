@@ -6515,7 +6515,7 @@ td.hidden-lg {
   margin-bottom: 18px;
 }
 .breadcrumb {
-  background-color: #f5f5f5;
+  background-color: transparent;
 }
 .breadcrumb > li {
   text-shadow: none;
@@ -6523,13 +6523,13 @@ td.hidden-lg {
 .breadcrumb > li + li:before {
   content: "/\00a0";
   padding: 0 5px;
-  color: #cccccc;
+  color: #c8f1f8;
 }
 .breadcrumb > li:after {
   content: none;
 }
 .breadcrumb > .active {
-  color: #bfbfbf;
+  color: #ffffff;
 }
 .nav-pills.active > a,
 .nav-pills.active > a:hover,
@@ -6981,4 +6981,49 @@ table.lawyer-list.active {
 .navbar-brand {
   padding-top: 23.5px;
   padding-bottom: 23.5px;
+}
+.page-header {
+  padding-top: 9px;
+  padding-bottom: 9px;
+  margin: 0;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eeeeee;
+  background-color: #42d0e5;
+}
+.page-header:before,
+.page-header:after {
+  content: " ";
+  /* 1 */
+
+  display: table;
+  /* 2 */
+
+}
+.page-header:after {
+  clear: both;
+}
+.page-header:before,
+.page-header:after {
+  content: " ";
+  /* 1 */
+
+  display: table;
+  /* 2 */
+
+}
+.page-header:after {
+  clear: both;
+}
+.page-header h1 {
+  color: white;
+  font-size: 32px;
+  margin-top: 0;
+}
+.breadcrumb {
+  margin-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+.breadcrumb > li > a {
+  color: #fff;
 }
