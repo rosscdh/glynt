@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.test import LiveServerTestCase
+from django.test.client import Client
+
+from model_mommy import mommy
 from pyquery import PyQuery as pq
 from .base import BaseCasperJs
+
+from glynt.apps.transact.models import Transaction
 
 
 class PyQueryMixin(LiveServerTestCase):
@@ -10,6 +15,7 @@ class PyQueryMixin(LiveServerTestCase):
     https://pypi.python.org/pypi/pyquery
     """
     def setUp(self):
+        super(PyQueryMixin, self).setUp()
         self.pq = pq
 
 
@@ -18,9 +24,10 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
     Base mixin for a Setup to be used in lawyer/customer/project analysis
     https://github.com/dobarkod/django-casper/
     """
-    fixtures = ['cities_light.json']
+    fixtures = ['cities_light.json', 'transact.json']
 
     def setUp(self):
+        super(BaseLawyerCustomerProjectCaseMixin, self).setUp()
         self.client = Client()
 
         self.password = 'password'
@@ -51,4 +58,4 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
         self.assertTrue(self.lawyer_user.profile.is_lawyer)
         self.assertTrue(self.customer_user.profile.is_customer)
         
-        self.project = mommy.make('project.Project', customer=self.customer, lawyers=(self.lawyer,))
+        self.project = mommy.make('project.Project', customer=self.customer, lawyers=(self.lawyer,), transactions=(Transaction.objects.get(slug='CS'), Transaction.objects.get(slug='SF'),))
