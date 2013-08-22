@@ -29,7 +29,7 @@
                 <li{% if user.password != "!" %} class="active"{% endif %}><a href="#general" data-toggle="tab">General</a></li>
 <!--                 <li><a href="#fees-packages" data-toggle="tab">Fees and Packages</a></li>
  -->                <li><a href="#profile" data-toggle="tab">Profile</a></li>
-                <li><a href="#transactions-and-startups" data-toggle="tab">Transactions &amp; Startups</a></li>
+                <li><a href="#transactions-and-companies" data-toggle="tab">Transactions &amp; Startups</a></li>
                 <li><a href="#connected-accounts" data-toggle="tab">Connected Accounts</a></li>
             </ul>
 
@@ -134,10 +134,10 @@
                         </div>
                     </div>
 
-                    <div id="transactions-and-startups" class="tab-pane">
+                    <div id="transactions-and-companies" class="tab-pane">
                         <div class="row">
                             <div class="col col-12">
-                                <legend>Startups Advised</legend>
+                                <legend>Companies Advised</legend>
                             </div>
                         </div>
                         <div class="row">
@@ -148,14 +148,14 @@
                                     <label class="control-label" for="inputEmail">{{ form.companies_advised_input.label }}</label>
                                     <div class="controls">
                                         {{ form.companies_advised_input.errors }}
-                                        {{ form.companies_advised_input }}<button id="add-startup-btn" type="button" class="btn btn-link btn-small multi-add-btn" data-type="url" data-additem_callback="add_startup" data-data_target="id_companies_advised_input" data-target="startups-advised-list"><i class="icon-plus-sign"></i>&nbsp;Add</button>
-                                        {{ form.startups_advised }}<!-- hidden -->
+                                        {{ form.companies_advised_input }}<button id="add-company-btn" type="button" class="btn btn-link btn-small multi-add-btn" data-type="url" data-additem_callback="add_company" data-data_target="id_companies_advised_input" data-target="companies-advised-list"><i class="icon-plus-sign"></i>&nbsp;Add</button>
+                                        {{ form.companies_advised }}<!-- hidden -->
                                     </div>
                                 </div>
                                 
                             </div>
                             <div class="col col-4">
-                                <ol id="startups-advised-list">
+                                <ol id="companies-advised-list">
                                 </ol>
                             </div>
                         </div>
@@ -272,7 +272,7 @@
                         </div>
                         <div class="row">
                             <div class="col col-12">
-                                <p>The more accounts you connect, the more likely it is that startups will find you.<p>
+                                <p>The more accounts you connect, the more likely it is that companys will find you.<p>
                                 <div class="buttons">
                                 {% social_associate social_auth %}
                                 </div>
@@ -747,7 +747,7 @@ $(document).ready(function(){
     });
 
     /**
-    * handle startup additions
+    * handle company additions
     */
     $(document).on( 'click', '.multi-add-btn', function (event) {
         event.preventDefault();
@@ -787,16 +787,16 @@ $(document).ready(function(){
         var element = $(this);
         var item = element.closest('li').text();
         element.closest('li').remove();
-        var cookie_name = element.attr('data-cookie_name');//'startup_list-{{ user.pk }}';
+        var cookie_name = element.attr('data-cookie_name');//'company_list-{{ user.pk }}';
         remove_multi_add_item(item, cookie_name)
     })
 
-    window.add_startup = function add_startup(startup, force){
+    window.add_company = function add_company(company, force){
         var force = force || false
-        var cookie_name = 'startup_list-{{ user.pk }}';
+        var cookie_name = 'company_list-{{ user.pk }}';
         var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
-        startup = startup.compact(startup, $('ol#startups-advised-list'), cookie_name, cookie_data, force)
-        add_generic_list_element(startup, $('ol#startups-advised-list'), $('#id_startups_advised'), cookie_name, cookie_data, force)
+        company = company.compact(company, $('ol#companies-advised-list'), cookie_name, cookie_data, force)
+        add_generic_list_element(company, $('ol#companies-advised-list'), $('#id_companies_advised'), cookie_name, cookie_data, force)
     }
 
     window.add_website = function add_website(website, force){
@@ -843,7 +843,7 @@ $(document).ready(function(){
         }
     }
     window.remove_multi_add_item= function remove_multi_add_item(item, cookie_name){
-        //var cookie_name = 'startup_list-{{ user.pk }}';
+        //var cookie_name = 'company_list-{{ user.pk }}';
         var cookie_data = $.parseJSON($.cookie(cookie_name)) || [];
         item = item.compact()
 
@@ -853,15 +853,15 @@ $(document).ready(function(){
         $.cookie(cookie_name, cookie_string);
     }
 
-    window.process_startups = function process_startups() {
-        var cookie_name = 'startup_list-{{ user.pk }}';
-        var cookie_data = $.parseJSON($.cookie(cookie_name)) || $.parseJSON($('#id_startups_advised').val() || '[]') || [];
+    window.process_companies = function process_companies() {
+        var cookie_name = 'company_list-{{ user.pk }}';
+        var cookie_data = $.parseJSON($.cookie(cookie_name)) || $.parseJSON($('#id_companies_advised').val() || '[]') || [];
         var force = true;
-        $.each(cookie_data, function(i,startup){
-            add_startup(startup, force);
+        $.each(cookie_data, function(i,company){
+            add_company(company, force);
         })
     }
-    process_startups();
+    process_companies();
 
     window.process_websites = function process_websites() {
         var cookie_name = 'website_list-{{ user.pk }}';
@@ -1059,7 +1059,7 @@ $(document).ready(function(){
         }
     });
 
-    $('#transactions-and-startups input[data-type="number"]').each(function () {
+    $('#transactions-and-companies input[data-type="number"]').each(function () {
        if ($(this).attr('value') != 0) {
            tabTransaction = true;
            return false;

@@ -67,21 +67,20 @@
 			</div>
 			<hr>
 
-			<div class="startups">
+			<div class="startups domain-links">
 				<h2>Startups Advised</h2>
-				{{object.data}}
-				{% for o in object.data.startups_advised %}
-					<col col-lg-><a href="http://{{ o }}" target="_BLANK" class="domain">{{ o }}</a></col col-lg->
+				{% for o in object.data.companies_advised %}
+					<col col-lg->{{ o|urlize }}</col col-lg->
 				{% empty %}
 					<ul class="unstyled">
 						<li class="nothing-found">Nothing yet.</li>
 					</ul>
 				{% endfor %}
 			</div>
-			<div class="startups">
+			<div class="startups domain-links">
 				<h2>Other Websites</h2>
 				{% for o in object.data.websites %}
-					<col col-lg-><a href="http://{{ o }}" target="_BLANK" class="domain">{{ o }}</a></col col-lg->
+					<col col-lg->{{ o|urlize }}</col col-lg->
 				{% empty %}
 					<ul class="unstyled">
 						<li class="nothing-found">Nothing yet.</li>
