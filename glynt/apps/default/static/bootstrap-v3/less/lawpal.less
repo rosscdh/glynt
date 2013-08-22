@@ -7,6 +7,10 @@
 @navbar-color:                #777;
 @navbar-bg:                   #fff;
 
+// Pills
+@nav-pills-active-link-hover-bg:            @component-active-bg;
+@nav-pills-active-link-hover-color:         #fff;
+
 // Breadcrumbs
 @breadcrumb-bg:               transparent;
 @breadcrumb-color:            lighten(@brand-primary, 30%);
@@ -44,6 +48,29 @@
     color: white;
     font-size: ceil(@font-size-base * 2.25);
     margin-top: 0;
+  }
+
+  .nav-pills > li {
+    margin-left: 10px;
+    > a {
+      border: 1px solid transparent;
+      border-radius: 5px;
+      color: #fff;
+
+      &:hover,
+      &:focus {
+        background: transparent;
+        border: 1px solid #fff;
+      }
+    }
+
+    // Active state
+    &.active > a,
+    &.active > a:hover,
+    &.active > a:focus {
+      color: @brand-primary;
+      background-color: #fff;
+    }
   }
 }
 

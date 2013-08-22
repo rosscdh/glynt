@@ -7019,6 +7019,25 @@ table.lawyer-list.active {
   font-size: 32px;
   margin-top: 0;
 }
+.page-header .nav-pills > li {
+  margin-left: 10px;
+}
+.page-header .nav-pills > li > a {
+  border: 1px solid transparent;
+  border-radius: 5px;
+  color: #fff;
+}
+.page-header .nav-pills > li > a:hover,
+.page-header .nav-pills > li > a:focus {
+  background: transparent;
+  border: 1px solid #fff;
+}
+.page-header .nav-pills > li.active > a,
+.page-header .nav-pills > li.active > a:hover,
+.page-header .nav-pills > li.active > a:focus {
+  color: #42d0e5;
+  background-color: #fff;
+}
 .breadcrumb {
   margin-bottom: 0;
   padding-left: 0;
