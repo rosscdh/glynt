@@ -14,7 +14,7 @@
             </ol>
 
             <!-- Header -->
-            <h1 href="{% url 'todo:edit' project_uuid=project.uuid slug=object.slug %}" data-toggle="modal" data-target="#edit-checklist-item-modal" data-is_ajax="true" class="link pull-left">{{ object.name }}</h1>
+            <h1 href="{% url 'todo:edit' project_uuid=project.uuid slug=object.slug %}" data-toggle="modal" data-target="#modal-checklist-item" data-is_ajax="true" class="link pull-left">{{ object.name }}</h1>
 
             <div class="pull-right">
                 {% todo_primary_interface todo=object %}
