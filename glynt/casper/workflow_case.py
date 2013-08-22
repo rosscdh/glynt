@@ -31,7 +31,7 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
         self.client = Client()
 
         self.password = 'password'
-        self.customer_user = mommy.make('auth.User', username='customer', first_name='Customer', last_name='A')
+        self.customer_user = mommy.make('auth.User', username='customer', first_name='Customer', last_name='A', email='customer+test@lawpal.com')
         self.customer_user.set_password(self.password)
         self.customer_user.save()
 
@@ -44,7 +44,7 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
 
         self.customer = mommy.make('customer.Customer', user=self.customer_user)
 
-        self.lawyer_user = mommy.make('auth.User', username='lawyer', first_name='Lawyer', last_name='A')
+        self.lawyer_user = mommy.make('auth.User', username='lawyer', first_name='Lawyer', last_name='A', email='lawyer+test@lawpal.com')
         self.lawyer_user.set_password(self.password)
         self.lawyer_user.save()
 

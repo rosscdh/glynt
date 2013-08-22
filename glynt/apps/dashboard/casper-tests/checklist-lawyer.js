@@ -37,23 +37,34 @@ helper.scenario(casper.cli.options.url,
         
     },
     function() {
-        var self = this;
-        casper.test.comment('Test edit item shows modal');
+        casper.test.comment('Test checklist feedback request indicator is working');
 
-        this.evaluate(function() {
-            var selector = $('tr.item a.item-edit:first');
-            selector.trigger('click');
-        });
+        // the general cat has the span with the right class
+        this.test.assertExists('li[data-category="general"] span.num_assigned_to_user');
+        // the span contains the value
+        this.test.assertSelectorHasText('li[data-category="general"] span.num_assigned_to_user', '1');
+        // test we have the little span indicator
+        this.test.assertExists('li[data-category="general"] span.num_assigned_to_user i.icon-state-pending');
 
-        casper.waitFor(function check() {
-            return this.evaluate(function() {
-                return $('#modal-checklist-item').length > 0;
-            });
-        }, function then() {
-            this.capture('/tmp/modal_click.png')
-            this.captureSelector('/tmp/yoursitelist.png', 'div#modal-checklist-item');
-        });
     }
+    // function() {
+    //     var self = this;
+    //     casper.test.comment('Test edit item shows modal');
+
+    //     this.evaluate(function() {
+    //         var selector = $('tr.item a.item-edit:first');
+    //         selector.trigger('click');
+    //     });
+
+    //     casper.waitFor(function check() {
+    //         return this.evaluate(function() {
+    //             return $('#modal-checklist-item').length > 0;
+    //         });
+    //     }, function then() {
+    //         this.capture('/tmp/modal_click.png')
+    //         this.captureSelector('/tmp/yoursitelist.png', 'div#modal-checklist-item');
+    //     });
+    // }
 );
 
 helper.run();
