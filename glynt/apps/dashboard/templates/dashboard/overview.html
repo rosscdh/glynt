@@ -1,7 +1,10 @@
 {% extends 'base.html' %}{% load url from future %}{% load glynt_helpers crispy_forms_tags project_tags %}
 
-{% block page_title %}Dashboard{% endblock %}
-{% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:overview' %}">Dashboard</a></li>{% endblock %}
+{% block page_title %}Overview &mdash; {% project_name project %}{% endblock %}
+
+{% block header %}
+    <h1>Overview</h1>
+{% endblock %}
 
 {% block body %}
 <div class="container dashboard-view">
