@@ -14,7 +14,8 @@
 
 {% block body %}
 <div class="container dashboard-view">
-    {% comment %}HERE:{{ counts }}{% endcomment %}
+    {{project.has_lawyer}}
+    HERE:{{ counts }}
 
     {% if not user.profile.is_lawyer %}
         {% if not profile_is_complete %}

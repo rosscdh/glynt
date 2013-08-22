@@ -6533,7 +6533,7 @@ td.hidden-lg {
   color: #ffffff;
   background-color: #42d0e5;
 }
-.homepage #wrap .splash {
+#wrap .splash {
   background: url('../../img/background-trans.jpeg');
   background-position-y: -25px;
   background-size: cover;
@@ -6544,15 +6544,15 @@ td.hidden-lg {
   border-bottom: 1px solid #eeeeee;
   max-height: 460px;
 }
-.homepage #wrap .splash h1 {
+#wrap .splash h1 {
   color: #555555;
   font-size: 37px;
 }
-.homepage #wrap .splash h3 {
+#wrap .splash h3 {
   color: #7c7c7c;
   font-size: 21px;
 }
-.homepage #wrap .splash a.btn-huge {
+#wrap .splash a.btn-huge {
   font-weight: normal;
   font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
   font-size: 20px;
@@ -6561,46 +6561,49 @@ td.hidden-lg {
   margin-left: 10px;
   margin-right: 10px;
 }
-.homepage #wrap .scroll,
-.homepage #wrap .telephone {
+#wrap .splash .main {
+  min-height: 200px;
+}
+#wrap .scroll,
+#wrap .telephone {
   padding: 30px 0px 20px 0;
   color: #bfbfbf;
   font-size: 19.599999999999998px;
   font-weight: normal;
   font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
 }
-.homepage #wrap .scroll {
+#wrap .scroll {
   background: url('../../img/down-chev.png') center 60px no-repeat;
 }
-.homepage #wrap .telephone {
+#wrap .telephone {
   color: #555555;
 }
-.homepage #wrap .telephone .glyphicon {
+#wrap .telephone .glyphicon {
   font-size: 15px;
 }
-.homepage #wrap .telephone .brand {
+#wrap .telephone .brand {
   font-size: 14px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-.homepage #wrap .intro h1 {
+#wrap .intro h1 {
   font-size: 28px;
   margin-bottom: 0px;
   text-align: center;
 }
-.homepage #wrap .intro h2 {
+#wrap .intro h2 {
   color: #888888;
   font-size: 20px;
   margin-top: 10px;
   text-align: center;
 }
-.homepage #wrap .feature-block h3 {
+#wrap .feature-block h3 {
   color: #42d0e5;
   font-size: 18px;
 }
-.homepage #wrap .feature-block p {
+#wrap .feature-block p {
   color: #888888;
 }
-.homepage #wrap .quote {
+#wrap .quote {
   background-color: #fcd423;
   color: white;
   margin: 40px 0px;
@@ -6609,7 +6612,7 @@ td.hidden-lg {
   font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
   text-align: left;
 }
-.homepage #wrap .quote p {
+#wrap .quote p {
   border-left: 2px solid #ffffff;
   padding-left: 15px;
 }

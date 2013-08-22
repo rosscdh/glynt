@@ -11,7 +11,7 @@ from glynt.apps.project.models import Project
 
 from . import TODO_STATUS, FEEDBACK_STATUS
 from .forms import CustomerToDoForm, AttachmentForm, FeedbackRequestForm
-from .models import ToDo, Attachment
+from .models import ToDo, Attachment, FeedbackRequest
 from .services import CrocdocAttachmentService
 
 import logging
@@ -19,16 +19,22 @@ logger = logging.getLogger('django.request')
 
 
 class ToDoCountMixin(object):
-    def todo_counts(self, qs_objects, project=None):
+    def todo_counts(self, qs_objects, project=None, **kwargs):
         project = project if project is not None else self.project
-        return {'counts': {
-                    'new': qs_objects.new(project=project, user=self.request.user).count(),
-                    'open': qs_objects.open(project=project, user=self.request.user).count(),
-                    'pending': qs_objects.pending(project=project, user=self.request.user).count(),
-                    'awaiting_feedback_from_user': 0,
+
+        awaiting_feedback_from_user = FeedbackRequest.objects.prefetch_related('attachment', 'attachment__project').filter(attachment__project=project, assigned_to=self.request.user).count()
+
+        counts = {'counts': {
+                    'new': qs_objects.new(project=project, **kwargs).count(),
+                    'open': qs_objects.open(project=project, **kwargs).count(),
+                    'pending': qs_objects.pending(project=project, **kwargs).count(),
+                    'awaiting_feedback_from_user': awaiting_feedback_from_user,
                     'total': 0,
                     }
                 }
+        counts['counts']['total'] = counts['counts']['new'] + counts['counts']['open'] + counts['counts']['pending']
+
+        return counts
 
 
 class ProjectToDoView(RulezMixin, ToDoCountMixin, ListView):

@@ -5,33 +5,79 @@
 
 {% block prebody %}
 
-<div class="jumbotron-header" style="background:url(/static/img/background-about.jpg);background-size:cover;height:512px;background-position:0 -200px; margin-top:-10px;">
-	<div class="container">
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-		<br />
-	<br />
-		<br />
-		<br />
-		<br />
-    	<h1 style="color:white;">About LawPal</h1>
+<div class="splash" style="background:url(/static/img/background-about.jpg);background-size:cover;background-position:0 -150px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center main">
+                
+            </div>
+        </div>
     </div>
 </div>
 <div class="container">
+	<div class="row">
+		<div class="col-6 col-offset-4 lead">
 			<br />
-		<br />
-		<br />
-		<p>Starting a business is one of the most exciting yet challenging things anyone can do. During your first year you will likely have several legal needs including incorporating and completing your initial fund raise. Deciding when to engage a lawyer can be stressful, especially for startups who need to conserve cash. Whilst there are "cost-effective" self-service alternatives, they don't provide the quality or protection that comes from working with an experienced lawyer.</p>
+			<h1>About LawPal</h1>
+			<br />
+			<p>We created LawPal because we want to make working with a great lawyer at the early stages of your business as easy and affordable as possible. We believe that technology should be used to encourage and support the attorney-client relationship in a "win-win" environment.  We want to help your lawyer help you.</p>
 
-		<p>We created LawPal because we want to make working with a great lawyer at the early stages of your business as easy and affordable as possible. We believe that technology should be used to encourage and support the attorney-client relationship in a "win-win" environment.  We want to help your lawyer help you.</p>
+			<p>LawPal is the first relationship management platform focused exclusively on the attorney-client relationship, beginning with start-ups.</p>
+				
+			<p>For more information, please check out our <a href="http://blog.lawpal.com/">blog</a>, <a href="mailto:founders@lawpal.com">email us</a> or check back soon.</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-8 col-offset-2 lead">
+			<hr /> 	
+			<h2>Founding Team</h2>
+			<br />
+			<div class="row">
+				<div class="col-4">
+					<div class="media">
+					  <a class="pull-left" href="#">
+					    <img src="{{ STATIC_URL }}img/alex-face.jpg" class="img-rounded" style="width:95px">
+					  </a>
+					  <div class="media-body">
+					    <h4 class="media-heading">Alex Halliday</h4>
+						<h5><a href="#">@alexhalliday</a> <small><a href="mailto:ross@lawpal.com"><i class="glyphicon glyphicon-envelope"></i></a></small></h5>
+					    <h5 class="text-muted">CEO</h5>
+					  </div>
+					</div>
+				</div>
+				<div class="col-4">
+					<div class="media">
+					  <a class="pull-left" href="#">
+					    <img src="{{ STATIC_URL }}img/yael-face.jpg" class="img-rounded" style="width:95px">
+					  </a>
+					  <div class="media-body">
+					    <h4 class="media-heading">Yael Citro</h4>
+						<h5><a href="#">@yaelmc</a> <small><a href="mailto:ross@lawpal.com"><i class="glyphicon glyphicon-envelope"></i></a></small></h5>
+					    <h5 class="text-muted">GC</h5>
+					  </div>
+					</div>
+				</div>		
+				<div class="col-4">
+					<div class="media">
+					  <a class="pull-left" href="#">
+					    <img src="{{ STATIC_URL }}img/alex-face.jpg" class="img-rounded" style="width:95px">
+					  </a>
+					  <div class="media-body">
+					    <h4 class="media-heading">Ross CDH</h4>
+						<h5><a href="#">@rosscdh</a> <small><a href="mailto:ross@lawpal.com"><i class="glyphicon glyphicon-envelope"></i></a></small></h5>
+					    <h5 class="text-muted">CTO</h5>
+					  </div>
+					</div>
+				</div>		
+			</div>
+			<br />
+		<hr />
+		</div>
+	</div>
+	<div class="col-6 col-offset-4 lead">
+		<h2>A choice quote</h2>
+		<blockquote>Much of what good lawyers do cannot be replicated by computer systems. The “digital substitution” model of legal e-commerce is not a compelling one. But most of what good lawyers do can be accomplished much more effectively through appropriate automation. Call it the “digital enhancement” model. Better tools and better communication media make for better lawyers. Lawyers doing good work at reasonable prices is good for just about everyone.</blockquote>
 
-		<p>LawPal is launching the first marketplace and relationship management platform focused exclusively on the attorney-client relationship, beginning with start-ups.</p>
-
-		<p>We are preparing a beautiful, curated directory of outstanding lawyers currently advising startups throughout the world. We are working with top investors and incubators to ensure that a stream of quality, funded startups are coming through the LawPal platform. Customers will be able to contact lawyers and manage elements of the workflow through a growing set of intuitive tools.</p>
-		
-		<p>For more information, please check out our <a href="http://blog.lawpal.com/">blog</a>, <a href="mailto:founders@lawpal.com">email us</a> or check back soon.</p> 	
+	</div>
 </div>
 {% endblock %}

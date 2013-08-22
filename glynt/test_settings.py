@@ -5,10 +5,14 @@ from settings import *
 import hashlib
 import random
 
+# Custom test runner for this project
+TEST_RUNNER = 'glynt.test_runner.GlyntAppTestRunner'
+
 PROJECT_ENVIRONMENT = 'test'
 
 INSTALLED_APPS = INSTALLED_APPS + (
     'django_nose',
+    'casper',
 )
 NOSE_ARGS = [
     #'--with-coverage',

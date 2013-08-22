@@ -70,5 +70,41 @@
          "email":"userC@weareml.com",
          "date_joined":"2012-07-31T06:03:59.544Z"
       }
+   },
+   {
+      "pk":4,
+      "model":"auth.user",
+      "fields":{
+         "username":"customer",
+         "first_name":"Customer",
+         "last_name":"A",
+         "is_active":true,
+         "is_superuser":false,
+         "is_staff":false,
+         "last_login":"2012-07-31T06:03:59.544Z",
+         "groups":[],
+         "user_permissions":[],
+         "password":"pbkdf2_sha256$10000$iT74wXbqP02X$p5afWekJs5wksiF3QSFVR9DD/2RDMvOPWikve+3A1GA=",
+         "email":"customer+test@lawpal.com",
+         "date_joined":"2012-07-31T06:03:59.544Z"
+      }
+   },
+   {
+      "pk":4,
+      "model":"auth.user",
+      "fields":{
+         "username":"lawyer",
+         "first_name":"Lawyer",
+         "last_name":"A",
+         "is_active":true,
+         "is_superuser":false,
+         "is_staff":false,
+         "last_login":"2012-07-31T06:03:59.544Z",
+         "groups":[],
+         "user_permissions":[],
+         "password":"pbkdf2_sha256$10000$iT74wXbqP02X$p5afWekJs5wksiF3QSFVR9DD/2RDMvOPWikve+3A1GA=",
+         "email":"lawyer+test@lawpal.com",
+         "date_joined":"2012-07-31T06:03:59.544Z"
+      }
    }
 ]

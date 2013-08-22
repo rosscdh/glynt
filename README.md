@@ -132,3 +132,9 @@ fab $TARGET_ENV deploy assets
 fab $TARGET_ENV requirements clean_pyc syncdb migrate
 ```
 
+## CasperJS ##
+
+### OSX ###
+
+1. ```brew update```
+2. ```brew install casperjs```

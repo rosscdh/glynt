@@ -55,13 +55,11 @@ $(document).ready( function () {
         var target = $(event.currentTarget);
         var title = target.find('.modal-title');
         var body = target.find('.modal-body');
-        var action_button = $('.modal-footer .btn-success:first');
-        var form = body.find('form:first');
-        // var form_action = form.attr('action');
-        var name = form.find('input[type=text]:first').val();
+        var action_button = target.find('.modal-footer .btn-success:first');
 
         var is_ajax = target.data('is_ajax') || false;
-        // target_toggle_object is prgramatically tied in by using the $.getPath selector of the click event
+
+        // target_toggle_object is programatically tied in by using the $.getPath selector of the click event
         var target_toggle_object = target.data('target_toggle_object') || false;
         if (target_toggle_object !== false) {
             target_toggle_object = $(target_toggle_object);
@@ -75,9 +73,16 @@ $(document).ready( function () {
 
         action_button.on('click', function (event) {
             event.preventDefault();
+
+            var form = target.find('.modal-body form:first');
+            var name = form.find('input[type=text]:first').val();
+
             if (is_ajax === false) {
+                console.log('submit the form')
+                console.log(form)
                 form.submit();
             } else {
+                console.log('submit the form via ajax')
                 $.ajax({
                     type: 'POST',
                     url: form.attr('action'),
