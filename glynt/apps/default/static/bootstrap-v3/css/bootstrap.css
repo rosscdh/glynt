@@ -4209,10 +4209,6 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
   font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
   font-size: 16px;
 }
-.navbar-nav > li > a.signin {
-  background-color: #6bdb7e;
-  color: white;
-}
 .navbar-nav > li > a:hover,
 .navbar-nav > li > a:focus {
   color: #333333;
@@ -6974,6 +6970,10 @@ table.lawyer-list.active {
 }
 .pending-feedback {
   background-color: rgba(240, 173, 78, 0.1);
+}
+.navbar-nav > li.nav-signin > a {
+  background-color: #6bdb7e;
+  color: white;
 }
 .navbar {
   margin-bottom: 0;
