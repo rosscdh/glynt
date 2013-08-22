@@ -3,18 +3,23 @@
 
 {% block page_title %}{{ object.name }} &mdash; {% project_name project %}{% endblock %}
 
-{% block breadcrumbs %}
-    <ol class="breadcrumb">
-        <li><a href="{% url 'dashboard:checklist' uuid=project.uuid %}">{% trans 'Checklist' %}</a></li>
-        <li><a href="{% url 'dashboard:checklist' uuid=project.uuid %}#{{ object.category | slugify }}">{{ object.category }}</a></li>
-    </ol>
-{% endblock %}
-
 {% block header %}
-    <h1 href="{% url 'todo:edit' project_uuid=project.uuid slug=object.slug %}" data-toggle="modal" data-target="#edit-checklist-item-modal" data-is_ajax="true" class="link pull-left">{{ object.name }}</h1>
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <!-- Breadcrumbs -->
+            <ol class="breadcrumb">
+                <li><a href="{% url 'dashboard:checklist' uuid=project.uuid %}">{% trans 'Checklist' %}</a></li>
+                <li><a href="{% url 'dashboard:checklist' uuid=project.uuid %}#{{ object.category | slugify }}">{{ object.category }}</a></li>
+            </ol>
 
-    <div class="pull-right">
-        {% todo_primary_interface todo=object %}
+            <!-- Header -->
+            <h1 href="{% url 'todo:edit' project_uuid=project.uuid slug=object.slug %}" data-toggle="modal" data-target="#edit-checklist-item-modal" data-is_ajax="true" class="link pull-left">{{ object.name }}</h1>
+
+            <div class="pull-right">
+                {% todo_primary_interface todo=object %}
+            </div>
+        </div>
     </div>
 {% endblock %}
 
