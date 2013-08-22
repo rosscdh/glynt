@@ -6983,7 +6983,7 @@ table.lawyer-list.active {
   padding-bottom: 23.5px;
 }
 .page-header {
-  padding-top: 9px;
+  padding-top: 20px;
   padding-bottom: 9px;
   margin: 0;
   margin-bottom: 20px;
@@ -7040,6 +7040,7 @@ table.lawyer-list.active {
 }
 .breadcrumb {
   margin-bottom: 0;
+  padding-top: 0;
   padding-left: 0;
   padding-right: 0;
 }
