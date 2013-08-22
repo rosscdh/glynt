@@ -1,4 +1,5 @@
 {% load cache i18n project_tags %}{% load url from future %}
+
 <header class="navbar navbar-fixed-top" role="banner">
     <div class="container">
         <div class="navbar-header">
@@ -7,7 +8,15 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="{% url 'dashboard:overview' %}" class="navbar-brand"><img src="{{ STATIC_URL }}img/logo-nav-white.png" alt="LawPal" title="LawPal"></a>
+            {% if user.is_authenticated %}
+                {% if user.profile.is_customer and not project %}
+                    <a href="{% url 'project:create' %}" class="navbar-brand"><img src="{{ STATIC_URL }}img/logo-nav-white.png" alt="LawPal" title="LawPal"></a>
+                {% else %}
+                    <a href="{% url 'dashboard:overview' %}" class="navbar-brand"><img src="{{ STATIC_URL }}img/logo-nav-white.png" alt="LawPal" title="LawPal"></a>
+                {% endif %}
+            {% else %}
+                <a href="/" class="navbar-brand"><img src="{{ STATIC_URL }}img/logo-nav-white.png" alt="LawPal" title="LawPal"></a>
+            {% endif %}
         </div>
 
         <nav class="collapse nav-collapse navbar-collapse" role="navigation">
@@ -26,7 +35,7 @@
                             </ul>
                         </li>
                     {% else %}
-                        <li><a class="disabled"><span>{% project_name project %}</span></a></li>
+                        <li><a href="{% url 'dashboard:project' uuid=project.uuid %}"><span>{% project_name project %}</span></a></li>
                     {% endif %}
                 </ul>
             {% endif %}
