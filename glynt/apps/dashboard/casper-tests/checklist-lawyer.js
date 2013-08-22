@@ -47,24 +47,6 @@ helper.scenario(casper.cli.options.url,
         this.test.assertExists('li[data-category="general"] span.num_assigned_to_user i.icon-state-pending');
 
     }
-    // function() {
-    //     var self = this;
-    //     casper.test.comment('Test edit item shows modal');
-
-    //     this.evaluate(function() {
-    //         var selector = $('tr.item a.item-edit:first');
-    //         selector.trigger('click');
-    //     });
-
-    //     casper.waitFor(function check() {
-    //         return this.evaluate(function() {
-    //             return $('#modal-checklist-item').length > 0;
-    //         });
-    //     }, function then() {
-    //         this.capture('/tmp/modal_click.png')
-    //         this.captureSelector('/tmp/yoursitelist.png', 'div#modal-checklist-item');
-    //     });
-    // }
 );
 
 helper.run();
