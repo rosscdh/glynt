@@ -63,8 +63,8 @@ class LawyerProfileSetupForm(forms.Form):
     websites_input = forms.URLField(required=False, label="Website Address", help_text='Enter the domain name of your public website, if you have one.', widget=forms.TextInput(attrs={}))
     websites = forms.CharField(required=False, widget=forms.HiddenInput)
 
-    companies_advised_input = forms.URLField(required=False, label="Startups Advised", help_text='Enter the domain name of any companies you have advised and press "Add". It must be public knowledge that you have advised them.', widget=forms.TextInput(attrs={'data-trigger':'change','placeholder':'e.g. Instagram.com', 'class':'typeahead','autocomplete':'on','data-trigger':'focusout','data-provide':'ajax', 'data-items':4, 'data-source': API_URLS.get('companies'), 'data-filter':'name__istartswith'}))
-    companies_advised = forms.CharField(required=False, widget=forms.HiddenInput)
+    companies_advised_input = forms.URLField(required=False, label="Companies Advised", help_text='Enter the domain name of any companies you have advised and press "Add". It must be public knowledge that you have advised them.', widget=forms.TextInput(attrs={'data-trigger':'change','placeholder':'e.g. Instagram.com', 'class':'typeahead','autocomplete':'on','data-trigger':'focusout','data-provide':'ajax', 'data-items':4, 'data-source': API_URLS.get('companies'), 'data-filter':'name__istartswith'}))
+    companies_advised = forms.CharField(required=False)#, widget=forms.HiddenInput)
 
     volume_incorp_setup = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
     volume_seed_financing = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
@@ -165,7 +165,7 @@ class LawyerProfileSetupForm(forms.Form):
         """ Remove the lawyer_profile cookie set when photo is uploaded """
         self.delete_cookie('lawyer_profile_photo-%d' % self.user.pk)
         # startup list
-        self.delete_cookie('startup_list-%d' % self.user.pk)
+        self.delete_cookie('company_list-%d' % self.user.pk)
         # websites list
         self.delete_cookie('website_list-%d' % self.user.pk)
         # bar_membership list
