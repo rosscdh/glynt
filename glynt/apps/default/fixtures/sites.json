@@ -1,7 +1,7 @@
 [
     {
         "fields": {
-            "domain": "http://www.lawpal.com", 
+            "domain": "https://www.lawpal.com", 
             "name": "Prod Lawpal.com"
         }, 
         "model": "sites.site", 
@@ -9,7 +9,7 @@
     },
     {
         "fields": {
-            "domain": "http://preview.lawpal.com", 
+            "domain": "https://preview.lawpal.com", 
             "name": "Preview Prod Lawpal.com"
         }, 
         "model": "sites.site", 
