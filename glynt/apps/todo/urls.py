@@ -11,5 +11,5 @@ urlpatterns = patterns('',
     url(r'^(?P<project_uuid>.+)/create/$', login_required(ToDoCreateView.as_view()), name='create'),
     url(r'^(?P<project_uuid>.+)/(?P<slug>.+)/discussion/$', login_required(ToDoDiscussionView.as_view()), name='discuss'),    
     url(r'^(?P<project_uuid>.+)/(?P<slug>.+)/edit/$', login_required(ToDoEditView.as_view()), name='edit'),
-    url(r'^(?P<project_uuid>.+)/(?P<slug>.+)$', login_required(ToDoDetailView.as_view()), name='item'),
+    url(r'^(?P<project_uuid>.+)/(?P<slug>.+)/$', login_required(ToDoDetailView.as_view()), name='item'),
 )
