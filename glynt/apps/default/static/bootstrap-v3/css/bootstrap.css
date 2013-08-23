@@ -7050,3 +7050,7 @@ table.lawyer-list.active {
 .breadcrumb > li > a {
   color: #fff;
 }
+
+section.checklist-category {
+  padding-top: 50px;
+  margin-top: -50px;

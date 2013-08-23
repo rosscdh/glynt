@@ -29,8 +29,8 @@ class ChangePasswordMixin(forms.Form):
 
 class ModelFormChangePasswordMixin(forms.ModelForm):
     """ MODEL FORM: Mixin used to ensure passwords match """
-    password = forms.CharField(widget=forms.PasswordInput(render_value=False))
-    confirm_password = forms.CharField(widget=forms.PasswordInput)
+    password = forms.CharField(widget=forms.PasswordInput(render_value=False, attrs={'data-equalTo': '#id_confirm_password'}))
+    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={'data-equalTo': '#id_password'}))
 
     def clean_confirm_password(self):
         password = self.cleaned_data['password']
