@@ -81,6 +81,12 @@ def AutoSlugFieldGenerator():
     h = hashlib.sha1(hash_val)
     return h.hexdigest()
 
+
+def FPFileFieldGenerator():
+    return '/tmp/test-file.pdf'
+
+
 MOMMY_CUSTOM_FIELDS_GEN = {
     'autoslug.fields.AutoSlugField': AutoSlugFieldGenerator,
+    'django_filepicker.models.FPFileField': FPFileFieldGenerator,
 }

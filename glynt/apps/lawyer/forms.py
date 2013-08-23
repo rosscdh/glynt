@@ -64,7 +64,7 @@ class LawyerProfileSetupForm(forms.Form):
     websites = forms.CharField(required=False, widget=forms.HiddenInput)
 
     companies_advised_input = forms.URLField(required=False, label="Companies Advised", help_text='Enter the domain name of any companies you have advised and press "Add". It must be public knowledge that you have advised them.', widget=forms.TextInput(attrs={'data-trigger':'change','placeholder':'e.g. Instagram.com', 'class':'typeahead','autocomplete':'on','data-trigger':'focusout','data-provide':'ajax', 'data-items':4, 'data-source': API_URLS.get('companies'), 'data-filter':'name__istartswith'}))
-    companies_advised = forms.CharField(required=False)#, widget=forms.HiddenInput)
+    companies_advised = forms.CharField(required=False, widget=forms.HiddenInput)
 
     volume_incorp_setup = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
     volume_seed_financing = forms.CharField(required=False, widget=forms.HiddenInput) # list of lists :[[2010,2011,2012]]
