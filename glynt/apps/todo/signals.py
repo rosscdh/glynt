@@ -134,7 +134,7 @@ def feedbackrequest_created(sender, **kwargs):
                         status=feedbackrequest.attachment.todo.display_status)
 
         if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.closed:
-            verb = '{assigned_by} closed the feedback request that was assigned to them on checklist item {todo} for {project}'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), todo=feedbackrequest.attachment.todo, project=feedbackrequest.attachment.project))
+            verb = '{assigned_by} closed the feedback request that was assigned to them on checklist item {todo} for {project}'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), todo=feedbackrequest.attachment.todo, project=feedbackrequest.attachment.project)
             action.send(feedbackrequest.assigned_by,
                         verb=verb,
                         action_object=feedbackrequest.attachment,
@@ -146,7 +146,7 @@ def feedbackrequest_created(sender, **kwargs):
                         status=feedbackrequest.attachment.todo.display_status)
 
         if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.cancelled:
-            verb = '{assigned_by} cancelled their feedback request on checklist item {todo} for {project}'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), todo=feedbackrequest.attachment.todo, project=feedbackrequest.attachment.project))
+            verb = '{assigned_by} cancelled their feedback request on checklist item {todo} for {project}'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), todo=feedbackrequest.attachment.todo, project=feedbackrequest.attachment.project)
             action.send(feedbackrequest.assigned_by,
                         verb=verb,
                         action_object=feedbackrequest.attachment,
@@ -174,7 +174,6 @@ def projectlawyer_assigned(sender, **kwargs):
     excluding those todos that already have a user
     """
     instance = kwargs.get('instance')
-    is_new = kwargs.get('created', False)
 
     if instance.status == ProjectLawyer.LAWYER_STATUS.assigned:
         logger.info('Assigned Lawyer: {lawyer} to Project: {project}'.format(lawyer=instance.lawyer, project=instance.project))
