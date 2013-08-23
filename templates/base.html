@@ -2,69 +2,64 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>{% block page_title %}{% endblock %}</title>
-        <meta name="description" content="{% block meta_description %}{% endblock %}"/>
-        <meta name="keywords" content="{% block meta_keywords %}{% endblock %}"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+    <meta charset="utf-8">
+    <title>{% block page_title %}{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}{% endblock %}"/>
+    <meta name="keywords" content="{% block meta_keywords %}{% endblock %}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <link href="{{ STATIC_URL }}bootstrap-v3/css/bootstrap.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}bootstrap-v3/css/bootstrap.css" rel="stylesheet">
 
-        {% block css %}{% endblock %}
+    {% block css %}{% endblock %}
 
-        {% if PROJECT_ENVIRONMENT == 'dev' %}
-        <style>
-        .border {
-            border:solid #c00 1px;
-        }
-        </style>
-        {% endif %}
+    {% block extrahead %}{% endblock %}
 
-        {% block extrahead %}{% endblock %}
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 
-        <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-        <!--[if lt IE 9]>
-        <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-
-        {% block head_js %}{% endblock %}
+    {% block head_js %}{% endblock %}
 </head>
-<body data-spy="scroll" data-target=".subnav" data-offset="50" class="{% block bodyclass %}{% endblock %}">
+<body data-spy="scroll" data-target=".subnav" class="{% block bodyclass %}{% endblock %}" style="padding-top: 70px;">
+
+    <div id="wrap">
+        <!-- Nav -->
+        {% block navbar %}{% include 'partials/nav.html' %}{% endblock %}
+
+        {% if user.is_staff %}{% block admin_panel %}{% endblock %}{% endif %}
+
+        {% block prebody %}{% endblock %}
+
+        <!-- Main Content -->
+        <main id="content" role="main">
+            {% block header %}{% endblock %}
+
+            {% include 'partials/messages.html' %}
+
+            <div class="container">
+                {% block body %}{% endblock %}
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    {% block footer %}{% include 'partials/footer.html' %}{% endblock %}
+
+    <!-- Modals -->
+    {% if user.is_authenticated %}
+        {% include 'partials/modals/checklist-coming.html' %}
+    {% else %}
+        {% include 'partials/modals/signin.html' %}
+    {% endif %}
+    {% block modals %}{% endblock %}
+
+
+{% profile_card_templates %}
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-
-<div id="wrap">
-
-    {% block navbar %}
-        {% include 'partials/nav.html' %}
-    {% endblock %}
-
-    {% if user.is_staff %}
-        {% block admin_panel %}{% endblock %}
-    {% endif %}
-
-    {% include 'partials/messages.html' %}
-
-    {% block prebody %}
-    {% endblock %}
-
-    <div class="container main-container">
-        {% block breadcrumb %}{% endblock %}
-        {% block body %}{% endblock %}
-    </div>
-        {% block bodyclear %}{% endblock %}
-
-</div>
-
-{% block footer %}
-    {% include 'partials/footer.html' %}
-{% endblock %}
-
-{% block modals %}{% endblock %}
-
-{% profile_card_templates %}
 
 {% compress js %}
     <script type="text/javascript" src="{{ STATIC_URL }}bootstrap-v3/js/bootstrap.min.js"></script>

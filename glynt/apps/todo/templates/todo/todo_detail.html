@@ -1,45 +1,42 @@
-{% extends 'base.html' %}{% load i18n todo_tags glynt_helpers crispy_forms_tags comments templatetag_handlebars jsonify %}
+{% extends 'base.html' %}
+{% load url from future %}{% load i18n todo_tags glynt_helpers crispy_forms_tags comments templatetag_handlebars jsonify project_tags %}
 
-{% block page_title %}{{ object.name }}{% endblock %}
-{% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:checklist' %}">Checklist</a></li>{% endblock %}
+{% block page_title %}{{ object.name }} &mdash; {% project_name project %}{% endblock %}
 
-{% block prebody %}
+{% block header %}
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <!-- Breadcrumbs -->
+            <ol class="breadcrumb">
+                <li><a href="{% url 'dashboard:checklist' uuid=project.uuid %}">{% trans 'Checklist' %}</a></li>
+                <li><a href="{% url 'dashboard:checklist' uuid=project.uuid %}#{{ object.category | slugify }}">{{ object.category }}</a></li>
+            </ol>
 
-<div class="container">
-    <div class="row">
-        <div class="col col-lg-6">   
-            <h3><small class="softer">{{ object.category }}</small><br/>
-                <span href="{% url 'todo:edit' project_uuid=project.uuid slug=object.slug %}" class="link" data-toggle="modal" data-target="#modal-checklist-item" data-is_ajax="true">{{ object.name }}</span>
-            </h3>
-        </div>
-        <div class="col col-lg-6">   
-            <div class="pull-right clearfix">
-                <div class="item-nav-controls">
-                    {% todo_primary_interface todo=object %}
-                </div>
+            <!-- Header -->
+            <h1 href="{% url 'todo:edit' project_uuid=project.uuid slug=object.slug %}" data-toggle="modal" data-target="#modal-checklist-item" data-is_ajax="true" class="link pull-left">{{ object.name }}</h1>
+
+            <div class="pull-right">
+                {% todo_primary_interface todo=object %}
             </div>
         </div>
     </div>
-</div>
+{% endblock %}
 
-<hr>
-
-<div class="container">
+{% block body %}
     <div class="row">
         <div class="col col-lg-12">
             <div class="row">
                 <div class="col col-lg-4 sidebar">
                     <div>
-                        <h3 class="brand">
-                            Attachments
-                        </h3>
-                            {% crispy attachment_form %}
-                            {{ attachment_form.media }}
+                        <h3 class="brand">Attachments</h3>
+                        {% crispy attachment_form %}
+                        {{ attachment_form.media }}
                         <br />
                         <div id="attachments" class="list-group"></div>
                     </div>
 
-                 <hr />
+                    <hr />
 
                     <h3 class="brand"><span>Discussion</span></h3>
                     {% render_comment_form for object %}
@@ -50,7 +47,6 @@
                             {% todo_stream todo=object %}
                         </div>
                     </div>
-
                 </div>
 
                 <div class="col col-lg-8" style="">
@@ -64,9 +60,7 @@
             </div>
         </div>
     </div>
-</div>
 {% endblock %}
-
 
 {% block js %}
 <script type="text/javascript" src="{{ STATIC_URL }}js/ajax-comments.js"></script>
@@ -177,7 +171,8 @@ $(document).ready(function () {
                     jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]:first').val());
                 },
                 complete: function () {
-                    //document.location.reload();
+                    // redirect back to main list when closed
+                    document.location = '{% url "dashboard:checklist" uuid=project.uuid %}';
                 }
             });
         });
@@ -201,7 +196,7 @@ $(document).ready(function () {
                     jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]:first').val());
                 },
                 complete: function () {
-                    //document.location.reload();
+                    document.location.reload();
                 }
             });
         });

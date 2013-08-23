@@ -4,7 +4,7 @@ transaction:
     note: ''
     todos:
 
-        General:
+        - General:
             type: 'simple'
             checklist:
                 -   name: 'Item 1'

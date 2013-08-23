@@ -1,10 +1,10 @@
 {% load i18n %}{% load url from future %}
-<!-- starts footer -->
-<div id="footer" class="no-decoration">
+
+<footer id="footer" role="contentinfo">
     <div class="container">
         <div class="row copyright">
             <div class="col col-lg-8">
-                <ul class="list-inline">
+                <ul class="list-inline no-decoration">
                     <li><a href="{% url 'public:about' %}">About Us</a></li>
                     <li><a href="http://blog.lawpal.com/" target="_BLANK">LawPal Blog</a></li>
                     <li><a href="{% url 'public:terms' %}">Terms and Conditions</a></li>
@@ -15,7 +15,7 @@
                 </ul>
             </div>
             <div class="col col-lg-4">
-                <ul class="list-inline pull-right">
+                <ul class="list-inline no-decoration pull-right">
                     <li><a href="//facebook.com/lawpalhq"><i class="icon-facebook"></i></a></li>
                     <li><a href="//twitter.com/lawpalhq"><i class="icon-twitter"></i></a></li>
                 </ul>
@@ -27,20 +27,4 @@
             </div>
         </div>
     </div>
-</div>
-
-<!-- Modal -->
-<div class="modal" id="signin-modal">
-    <div class="modal-dialog">
-        <div>
-            <div>
-                <div class="startup">
-                    <h3>LawPal for Startups</h3>
-                    <h4>For now we are only offering legal services to startups in California.</h4>
-                    <div></div>
-                    <a href="{% url "public:auth_user_class_redirect" user_class_name="customer" login_type="google-oauth2" %}" class="btn btn-primary"><img src="{{ STATIC_URL }}img/google-32.png">Sign in with Google</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div><!-- /.modal -->
+</footer>

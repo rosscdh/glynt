@@ -1,34 +1,19 @@
 {% extends 'base.html' %}{% load url from future %}{% load glynt_helpers crispy_forms_tags project_tags %}
 
-{% block page_title %}Dashboard{% endblock %}
-{% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:overview' %}">Dashboard</a></li>{% endblock %}
+{% block page_title %}Overview &mdash; {% project_name project %}{% endblock %}
+
+{% block header %}
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <!-- Header -->
+            <h1>Overview</h1>
+        </div>
+    </div>
+{% endblock %}
 
 {% block body %}
 <div class="container dashboard-view">
-    <div class="page-header">
-        <div class="btn-group pull-right">
-            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
-                {% project_name project %} <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li class="nav-header">Active Projects</li>
-                {% for p in projects %}
-                    <li><a href="{% url 'dashboard:project' uuid=p.uuid %}">{% project_name p forloop.counter %}</a></li>
-                {% empty %}
-                    <li>No Projects</li>
-                {% endfor %}
-            </ul>
-        </div>
-        <ul class="nav nav-tabs header-nav">
-            <li class="active"><a href="{% url 'dashboard:overview' %}"><h3>Overview</h3></a></li>
-            {% if not profile_is_complete and not user.profile.is_lawyer %}
-                <li  data-toggle="tooltip" title="Not yet active"><a data-toggle="modal" href="#myModal" ><h3 class="text-muted"><i class="glyphicon glyphicon-time"></i> Checklist</h3></a></li>
-            {% else %}
-                <li><a href="{% url 'dashboard:checklist' uuid=project.uuid %}"><h3>Checklist</h3></a></li>
-            {% endif %}
-        </ul>
-    </div>
-
     {% if not user.profile.is_lawyer %}
         {% if not profile_is_complete %}
             <div class="callout callout-danger empty">
@@ -75,24 +60,5 @@
         $("[data-toggle='tooltip']").tooltip();
     });
 </script>
-
-<!-- Modal -->
-<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-<div class="modal-dialog">
-  <div class="modal-content">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-      <h4 class="modal-title">Your Checklist Is Coming</h4>
-    </div>
-    <div class="modal-body">
-      <p>Once you select your attorney, your transaction checklist will appear here. It will contain all of the tasks and documents required to complete your transaction on LawPal.</p>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-    </div>
-  </div><!-- /.modal-content -->
-</div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
 
 {% endblock %}

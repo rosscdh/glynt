@@ -18,7 +18,7 @@ def project_name(context, project, index=1):
         if project.transactions:
             transactions = [t.title for t in project.transactions.all()]
 
-    return u'#{index} {company}: {transactions}'.format(**{'company': company, 'index': index, 'transactions': ', '.join(transactions)})
+    return u'{company} — {transactions}'.format(**{'company': company, 'transactions': ', '.join(transactions)})
 
 
 @register.inclusion_tag('project/partials/activity_list.html')
