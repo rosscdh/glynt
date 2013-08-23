@@ -57,19 +57,15 @@ p.intake-save a {
     display:none;
 }
 @media (min-width: 992px) {
-
-    .founder-block .row {
-        width:50%;
-        float:left;
+    .founder-group {
+        margin: 10px 0;
     }
-
-    .founder-block .row {
-        width:50%;
-        float:right;
+    .founder-group .row {
+        float: left;
+        margin: 10px 0;
+        width: 50%;
     }
-    .founder-block .row{
-        margin-top:10px;
-        margin-bottom:10px;
-
+    .founder-block .btn {
+        margin-right: 15px;
     }
 }

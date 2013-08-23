@@ -6854,3 +6854,7 @@ table.lawyer-list.active {
 .pending-feedback {
   background-color: rgba(240, 173, 78, 0.1);
 }
+section.checklist-category {
+  padding-top: 50px;
+  margin-top: -50px;
+}
