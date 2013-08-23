@@ -79,7 +79,6 @@ class ProjectToDoView(RulezMixin, ToDoCountMixin, ListView):
         # append counts
         context.update(self.todo_counts(qs_objects=self.model.objects))
 
-        context['counts']['total'] = context['counts']['new'] + context['counts']['open'] + context['counts']['pending']
         return context
 
 
