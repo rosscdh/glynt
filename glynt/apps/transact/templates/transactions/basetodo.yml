@@ -3,9 +3,3 @@ transaction:
     description: ''
     note: ''
     todos:
-
-        - Heading:
-            type: 'simple'
-            checklist:
-                -   name: 'Name of checklist item'
-                    attachment: []

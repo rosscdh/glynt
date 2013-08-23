@@ -11,6 +11,7 @@ from glynt.apps.transact.models import Transaction
 from glynt.apps.todo.bunches import BaseToDoBunch
 from glynt.apps.transact.bunches import IncorporationBunch
 
+#from nose.tools import set_trace; set_trace()
 
 class TransactionFactory(factory.Factory):
     FACTORY_FOR = Transaction
@@ -65,6 +66,7 @@ class IncorporationBunchTest(BaseToDoBunchAttribsTest):
 
     def test_repeaters_are_set_and_simple_types(self):
         for name, value_dict in self.subject.todos.iteritems():
+
             self.assertTrue(name in self.expected_subject_names)
 
             if name in self.expected_repeaters:
