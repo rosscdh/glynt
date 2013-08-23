@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-from django.conf import settings
 import os
+from django.conf import settings
+
+from glynt.apps.project.models import Project, ProjectLawyer
 
 
 
@@ -37,11 +39,28 @@ def PUSHER_DATA(request):
       'PUSHER_KEY': getattr(settings, 'PUSHER_KEY')
     }
 
+def user_projects(request):
+    """
+    Ensures the users projects and project are in the context at all times
+    """
+    projects = []
+    project = None
 
-def notification_unread(request):
-    num_unread = 0
-    if request.user.is_authenticated():
-        num_unread = len(request.user.notifications.unread())
+    if request.user.is_authenticated() and not request.user.is_staff and not request.user.is_superuser:
+
+        if request.user.profile.is_lawyer:
+            projects = [join.project for join in ProjectLawyer.objects.assigned(lawyer=request.user.lawyer_profile)]
+            try:
+                project = projects[0]
+            except IndexError:
+                pass
+        elif request.user.profile.is_customer:
+            projects = Project.objects.current(customer=request.user.customer_profile)
+            try:
+                project = projects[0]
+            except IndexError:
+                pass
     return {
-        'notification_unread': num_unread
+        'projects': projects,
+        'project': project,
     }

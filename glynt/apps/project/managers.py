@@ -18,14 +18,17 @@ class DefaultProjectManager(models.Manager):
 
         return self.filter(**fltr)
 
+    def current(self, **kwargs):
+        return self.filter(status__in=[PROJECT_STATUS.open, PROJECT_STATUS.new]).filter(**kwargs)
+
+    def new(self, **kwargs):
+        return self.filter(status=PROJECT_STATUS.new).filter(**kwargs)
+
     def open(self, **kwargs):
         return self.filter(status=PROJECT_STATUS.open).filter(**kwargs)
 
     def closed(self, **kwargs):
         return self.filter(status=PROJECT_STATUS.closed).filter(**kwargs)
-
-    def new(self, **kwargs):
-        return self.filter(status=PROJECT_STATUS.new).filter(**kwargs)
 
     def historic(self, customer, lawyer):
         """ @BUSINESSRULE Method to get a Customers current Project
