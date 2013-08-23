@@ -6,15 +6,12 @@
     <!-- Page Header -->
     <div class="page-header">
         <div class="container">
-            <!-- Header -->
             <h1>Overview</h1>
         </div>
     </div>
 {% endblock %}
 
 {% block body %}
-<br />
-<br />
 <div class="container dashboard-view">
     {% if not profile_is_complete and not user.profile.is_lawyer%}
         <div class="callout callout-danger empty">

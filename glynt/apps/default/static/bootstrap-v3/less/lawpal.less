@@ -1,0 +1,91 @@
+//
+// Variables
+// --------------------------------------------------
+
+// Navbar
+@navbar-height:               70px;
+@navbar-color:                #777;
+@navbar-bg:                   #fff;
+
+// Pills
+@nav-pills-active-link-hover-bg:            @component-active-bg;
+@nav-pills-active-link-hover-color:         #fff;
+
+// Breadcrumbs
+@breadcrumb-bg:               transparent;
+@breadcrumb-color:            lighten(@brand-primary, 30%);
+@breadcrumb-active-color:     #fff;
+
+
+//
+// Navbars
+// --------------------------------------------------
+.navbar {
+  margin-bottom: 0;
+}
+
+.navbar-brand {
+  padding-top: ((@navbar-height - 23) / 2);
+  padding-bottom: ((@navbar-height - 23) / 2);
+}
+
+
+//
+// Type
+// --------------------------------------------------
+
+// Page header
+.page-header {
+  padding-top: @line-height-computed;
+  padding-bottom: ((@line-height-computed / 2) - 1);
+  margin: 0;
+  margin-bottom: @line-height-computed;
+  border-bottom: 1px solid @gray-lighter;
+  background-color: @brand-primary;
+  .clearfix();
+
+  h1 {
+    color: white;
+    font-size: ceil(@font-size-base * 2.25);
+    margin-top: 0;
+  }
+
+  .nav-pills > li {
+    margin-left: 10px;
+    > a {
+      border: 1px solid transparent;
+      border-radius: 5px;
+      color: #fff;
+
+      &:hover,
+      &:focus {
+        background: transparent;
+        border: 1px solid #fff;
+      }
+    }
+
+    // Active state
+    &.active > a,
+    &.active > a:hover,
+    &.active > a:focus {
+      color: @brand-primary;
+      background-color: #fff;
+    }
+  }
+}
+
+
+//
+// Breadcrumbs
+// --------------------------------------------------
+
+.breadcrumb {
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-left: 0;
+  padding-right: 0;
+
+  > li > a {
+    color: #fff;
+  }
+}

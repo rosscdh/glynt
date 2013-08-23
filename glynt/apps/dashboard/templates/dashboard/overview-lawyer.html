@@ -1,19 +1,21 @@
 {% extends 'base.html' %}{% load url from future %}{% load glynt_helpers crispy_forms_tags project_tags %}
 
-{% block page_title %}Dashboard{% endblock %}
-{% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:overview' %}">Dashboard</a></li>{% endblock %}
+{% block page_title %}Overview{% endblock %}
 
-{% block prebody %}
-<div class="container dashboard-view">
-    <div class="">
-        <br />
-        <br />
-        <h1>Your LawPal Projects <a id="Intercom" href="mailto:xw4ux8lx@incoming.intercom.io" class="btn btn-info btn-large pull-right">Contact LawPal</a></h1>
+{% block header %}
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <!-- Header -->
+            <h1>Your LawPal Projects</h1>
+        </div>
     </div>
+{% endblock %}
 
+{% block body %}
+<div class="container dashboard-view">
     <div class="row">
         <div class="col-12">
-            <hr />
             <ul id="project-list" class="list-unstyled">
             {% for p in projects %}
                 <li class="project-list-item span5">
@@ -24,7 +26,7 @@
                                     <h3><i class="glyphicon glyphicon-ok text-success"></i>  <a href="{{ p.project.get_absolute_url }}" class="text-success">{{ p.project.company }} ({{ p.display_status }})</a></h3>
                                     <p class="msg">You have been assigned to this project.</p>
                             </div>
-                            
+
                         {% else %}
                             {% if PROJECT_LAWYER_STATUS.rejected == p.status %}
                                 <div class="">

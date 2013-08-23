@@ -1,0 +1,189 @@
+//
+// Variables
+// --------------------------------------------------
+
+// Components
+@padding-base-vertical:            6px;
+@padding-base-horizontal:          12px;
+
+// Basics of a navbar
+@navbar-height:                    50px;
+@navbar-margin-bottom:             @line-height-computed;
+@navbar-color:                     #777;
+@navbar-bg:                        #f8f8f8;
+@navbar-border:                    darken(@navbar-bg, 6.5%);
+@navbar-border-radius:             @border-radius-base;
+@navbar-padding-horizontal:        floor(@grid-gutter-width / 2);
+@navbar-padding-vertical:          ((@navbar-height - @line-height-computed) / 2);
+
+// Navbar toggle
+@navbar-toggle-hover-bg:           #ddd;
+@navbar-toggle-icon-bar-bg:        #ccc;
+@navbar-toggle-border-color:       #ddd;
+
+// Pills
+@nav-pills-active-link-hover-bg:            @component-active-bg;
+@nav-pills-active-link-hover-color:         #fff;
+
+// Breadcrumbs
+@breadcrumb-bg:               #f5f5f5;
+@breadcrumb-color:            #ccc;
+@breadcrumb-active-color:     @gray-light;
+
+
+//
+// Buttons
+// --------------------------------------------------
+
+// Core styles
+.btn {
+  line-height: @line-height-base;
+  border-radius: @border-radius-base;
+}
+
+
+//
+// Navbars
+// --------------------------------------------------
+
+// Wrapper and base class
+.navbar {
+  min-height: @navbar-height; // Ensure a navbar always shows (e.g., without a .navbar-brand in collapsed mode)
+  margin-bottom: @navbar-margin-bottom;
+  padding: 0;
+  background-color: @navbar-bg;
+  border: 1px solid @navbar-border;
+
+  @media (min-width: @grid-float-breakpoint) {
+    border-radius: @navbar-border-radius;
+  }
+}
+
+// Navbar heading
+//
+// Groups `.navbar-brand` and `.navbar-toggle` into a single component for easy
+// styling of responsive aspects.
+
+.navbar-header {
+  padding-left:  @navbar-padding-horizontal;
+  padding-right: @navbar-padding-horizontal;
+  .clearfix();
+
+  @media (min-width: @grid-float-breakpoint) {
+    float: left;
+  }
+}
+
+
+// Navbar alignment options
+.navbar-fixed-top,
+.navbar-fixed-bottom {
+  border-width: 0 0 1px;
+}
+
+
+// Brand/project name
+.navbar-brand {
+  padding-top: @navbar-padding-vertical;
+  padding-bottom: @navbar-padding-vertical;
+}
+
+
+// Navbar toggle
+
+// Navbar toggle
+.navbar-toggle {
+  position: relative;
+  top: 0;
+  right: 0;
+  float: right;
+  padding: 9px 10px;
+  .navbar-vertical-align(34px);
+  border: 1px solid @navbar-toggle-border-color;
+  border-radius: @border-radius-base;
+
+  &:hover,
+  &:focus {
+    background-color: @navbar-toggle-hover-bg;
+  }
+
+  // Bars
+  .icon-bar {
+    background-color: @navbar-toggle-icon-bar-bg;
+  }
+}
+
+
+// Navbar nav links
+//
+// Builds on top of the `.nav` components with it's own modifier class to make
+// the nav the full height of the horizontal nav (above 768px).
+
+.navbar-nav {
+  padding-top:    (@navbar-padding-vertical / 2);
+  padding-bottom: (@navbar-padding-vertical / 2);
+  margin-top:    0;
+  margin-bottom: 0;
+  margin-left:   -@navbar-padding-horizontal;
+  margin-right:  -@navbar-padding-horizontal;
+  > li > a {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    line-height: @line-height-computed;
+  }
+  @media (min-width: @grid-float-breakpoint) {
+    padding-top: 0;
+    padding-bottom: 0;
+    > li > a {
+      padding-top: ((@navbar-height - @line-height-computed) / 2);
+      padding-bottom: ((@navbar-height - @line-height-computed) / 2);
+    }
+  }
+}
+
+// Buttons in navbars
+//
+// Vertically center a button within a navbar (when *not* in a form).
+.navbar-btn {
+  .navbar-vertical-align(@input-height-base);
+}
+
+
+//
+// Breadcrumbs
+// --------------------------------------------------
+
+.breadcrumb {
+  background-color: @breadcrumb-bg;
+  > li {
+    text-shadow: none;
+    &+li:before {
+      content: "/\00a0"; // Unicode space added since inline-block means non-collapsing white-space
+      padding: 0 5px;
+      color: @breadcrumb-color;
+    }
+    &:after {
+      content: none;
+    }
+  }
+  > .active {
+    color: @breadcrumb-active-color;
+  }
+}
+
+
+//
+// Navs
+// --------------------------------------------------
+
+// Pills
+
+.nav-pills {
+  // Active state
+  &.active > a,
+  &.active > a:hover,
+  &.active > a:focus {
+    color: @nav-pills-active-link-hover-color;
+    background-color: @nav-pills-active-link-hover-bg;
+  }
+}
