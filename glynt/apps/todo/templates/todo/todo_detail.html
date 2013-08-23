@@ -171,7 +171,8 @@ $(document).ready(function () {
                     jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]:first').val());
                 },
                 complete: function () {
-                    //document.location.reload();
+                    // redirect back to main list when closed
+                    document.location = '{% url "dashboard:checklist" uuid=project.uuid %}';
                 }
             });
         });
@@ -195,7 +196,7 @@ $(document).ready(function () {
                     jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]:first').val());
                 },
                 complete: function () {
-                    //document.location.reload();
+                    document.location.reload();
                 }
             });
         });
