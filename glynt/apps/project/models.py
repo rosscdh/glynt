@@ -7,7 +7,7 @@ from uuidfield import UUIDField
 
 from jsonfield import JSONField
 
-from glynt.apps.project.services.actions import OpenProjectService, CloseProjectService, ReOpenProjectService
+#from glynt.apps.project.services.actions import OpenProjectService, CloseProjectService, ReOpenProjectService
 
 from glynt.apps.transact.models import Transaction
 from glynt.apps.company.models import Company
@@ -55,9 +55,15 @@ class Project(models.Model):
         return reverse('dashboard:checklist', kwargs={'uuid': self.uuid})
 
     def checklist(self):
+        """
+        Load all of the projects transaction types
+        and extract their bunch classes (based on yml files)
+        """
         checklist_items = []
+
         for t in self.transactions.all():
             checklist_items += t.checklist()
+
         return checklist_items
 
     def get_primary_lawyer(self):

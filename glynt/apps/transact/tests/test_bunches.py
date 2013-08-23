@@ -4,11 +4,14 @@ Test the todo bunches
 """
 import factory
 import unittest
-from bunch import Bunch
+
+from collections import OrderedDict
+
 from glynt.apps.transact.models import Transaction
 from glynt.apps.todo.bunches import BaseToDoBunch
 from glynt.apps.transact.bunches import IncorporationBunch
 
+#from nose.tools import set_trace; set_trace()
 
 class TransactionFactory(factory.Factory):
     FACTORY_FOR = Transaction
@@ -55,14 +58,15 @@ class IncorporationBunchTest(BaseToDoBunchAttribsTest):
         self.assertEqual('Incorporation', self.subject.name)
 
     def test_todos_are_set(self):
-        self.assertTrue(type(self.subject.todos) == Bunch)
-        todo_keys = dict(self.subject.todos).keys() # cast as dict
+        self.assertTrue(type(self.subject.todos) == OrderedDict)
+        todo_keys = self.subject.todos.keys()
         for e in self.expected_subject_names:
             print '"%s" in %s' % (e, todo_keys)
             self.assertEqual(True, e.strip() in todo_keys)
 
     def test_repeaters_are_set_and_simple_types(self):
         for name, value_dict in self.subject.todos.iteritems():
+
             self.assertTrue(name in self.expected_subject_names)
 
             if name in self.expected_repeaters:

@@ -4,16 +4,7 @@ transaction:
     note: ''
     todos:
 
-        Setup Documents:
-            type: 'simple'
-            checklist:
-                -   name: 'Engagement Letter'
-                    attachment: []
-                -   name: 'Term Sheet'
-                    attachment: []
-
-
-        General:
+        - General:
             type: 'simple'
             checklist:
                 -   name: 'Certificate of Incorporation'
@@ -33,7 +24,7 @@ transaction:
                     attachment: []
 
 
-        Qualification to do business:
+        - Qualification to do business:
             type: 'simple'
             checklist:
                 -   name: 'File the Statement and Designation by Foreign Corporation with the California Secretary of State.'
@@ -52,7 +43,7 @@ transaction:
                     attachment: []
 
 
-        Founders Documents:
+        - Founders Documents:
             type: 'repeater'
             repeater_key: 'founders'
             singular: 'Founder'
@@ -69,7 +60,7 @@ transaction:
                     attachment: []
 
 
-        Option Plan:
+        - Option Plan:
             type: 'simple'
             checklist:
                 -   name: 'Stock Plan'
@@ -84,7 +75,7 @@ transaction:
                     attachment: []
 
 
-        Option Holders:
+        - Option Holders:
             type: 'repeater'
             repeater_key: 'num_option_holders'
             singular: 'Option Holder'
@@ -99,14 +90,14 @@ transaction:
                     attachment: []
 
 
-        Option Holders - International:
+        - Option Holders - International:
             type: 'simple'
             checklist:
                 -   name: 'Option grants to persons outside of the US to be discussed with attorney'
                     attachment: []
 
 
-        Directors & Officers:
+        - Directors & Officers:
             type: 'repeater'
             repeater_key: 'num_officers'
             singular: 'Officer or Director'
@@ -117,7 +108,7 @@ transaction:
                     attachment: []
 
 
-        Employment Documents:
+        - Employment Documents:
             type: 'repeater'
             repeater_key: 'num_employees'
             singular: 'Employee'
@@ -132,7 +123,7 @@ transaction:
                     attachment: []
 
 
-        Consultant Documents:
+        - Consultant Documents:
             type: 'repeater'
             repeater_key: 'num_consultants'
             singular: 'Consultant'
@@ -145,7 +136,7 @@ transaction:
                     attachment: []
 
 
-        Intellectual Property:
+        - Intellectual Property:
             type: 'simple'
             checklist:
                 -   name: 'IP created by persons no longer affiliated with the company'
@@ -156,7 +147,7 @@ transaction:
                     attachment: []
 
 
-        Miscellaneous:
+        - Miscellaneous:
             type: 'simple'
             checklist:
                 -   name: 'Cap Table'

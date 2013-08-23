@@ -18,7 +18,6 @@ class BaseCasperJs(CasperTestCase):
                                  casper_test_folder_path,
                                  js_file
                                 )
-        print test_path
         kwargs.update({
             'casper_helper_js_path': kwargs.get('casper_helper_js_path', os.path.join(settings.SITE_ROOT, 'glynt/casper/jslib/djangocasper.js'))
         })

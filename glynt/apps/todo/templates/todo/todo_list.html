@@ -14,8 +14,6 @@
 
 {% block body %}
     {% csrf_token %}
-
-    {% comment %}HERE:{{ counts }}{% endcomment %}
     <div class="container checklist-view">
         <div class="row">
             <div class="col col-lg-3">
@@ -29,10 +27,11 @@
                     </div>
                 </div>
             </div>
+
             <div class="col col-lg-9">
-                <span id="list-items">
-                {% for category, items in checklist.todos_by_cat.iteritems %}
-                    <span id="{{ category|slugify }}">
+                <div id="list-items">
+                    {% for category, items in checklist.todos_by_cat.iteritems %}
+                    <section id="{{ category|slugify }}" class="checklist-category">
                         <div class="checklist-header clearfix">
                             <h3 class="pull-left">{{ category }}</h3>
                             {% if is_lawyer %}
@@ -44,38 +43,38 @@
                         <table class="table table-striped checklist">
                             <tbody>
                                 {% for item in items %}
-                                    <tr data-edit_label="{{ item.slug }}" data-status="{{ item.obj.display_status|default:item.display_status|lower }}" class="item {{ item.obj.status|default:item.status|todo_status_row_class }}">
-                                        <td class="item-status" tooltip="{{ item.obj.display_status|default:item.display_status }}" title="{{ item.obj.display_status|default:item.display_status }}">
-                                            <i class="{{ item.obj.status|default:item.status|todo_status_icon }}"></i>
-                                        </td>
-                                        <td class="item-info">
-                                            <h4>
-                                                <a id="item-name-{{ item.slug }}" href="{% url 'todo:item' project_uuid=project.uuid slug=item.slug %}">{{ item.obj.name|default:item.name }}</a>
-                                            </h4>
-                                        </td>
-                                        <td class="item-meta">
-                                            {% if is_lawyer %}
-                                            <a href="{% url 'todo:edit' project_uuid=project.uuid slug=item.slug %}" title="Delete Item" data-pk="{{ item.obj.pk }}" data-item_slug="{{ item.slug }}" data-tooltip="Delete Item" class="btn btn-small btn-link item-delete text-danger">
-                                                <i class="glyphicon glyphicon-remove text-danger"></i>
-                                            </a>
-                                            <a href="{% url 'todo:edit' project_uuid=project.uuid slug=item.slug %}" data-toggle="modal" data-target="#modal-checklist-item" data-is_ajax="true" data-target_toggle_object="#item-name-{{ item.slug }}" title="Edit" data-tooltip="Edit" class="btn btn-small btn-link item-edit">
-                                                <i class="glyphicon glyphicon-pencil"></i>
-                                            </a>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
+                                <tr data-edit_label="{{ item.slug }}" data-status="{{ item.obj.display_status|default:item.display_status|lower }}" class="item {{ item.obj.status|default:item.status|todo_status_row_class }}">
+                                    <td class="item-status" tooltip="{{ item.obj.display_status|default:item.display_status }}" title="{{ item.obj.display_status|default:item.display_status }}">
+                                        <i class="{{ item.obj.status|default:item.status|todo_status_icon }}"></i>
+                                    </td>
+                                    <td class="item-info">
+                                        <h4>
+                                            <a id="item-name-{{ item.slug }}" href="{% url 'todo:item' project_uuid=project.uuid slug=item.slug %}">{{ item.obj.name|default:item.name }}</a>
+                                        </h4>
+                                    </td>
+                                    <td class="item-meta">
+                                        {% if is_lawyer %}
+                                        <a href="{% url 'todo:edit' project_uuid=project.uuid slug=item.slug %}" title="Delete Item" data-pk="{{ item.obj.pk }}" data-item_slug="{{ item.slug }}" data-tooltip="Delete Item" class="btn btn-small btn-link item-delete text-danger">
+                                            <i class="glyphicon glyphicon-remove text-danger"></i>
+                                        </a>
+                                        <a href="{% url 'todo:edit' project_uuid=project.uuid slug=item.slug %}" data-toggle="modal" data-target="#modal-checklist-item" data-is_ajax="true" data-target_toggle_object="#item-name-{{ item.slug }}" title="Edit" data-tooltip="Edit" class="btn btn-small btn-link item-edit">
+                                            <i class="glyphicon glyphicon-pencil"></i>
+                                        </a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
                                 {% empty %}
-                                    <tr>
-                                        <td colspan="4">
-                                            <span class="text-muted">{% trans 'No items yet' %}</span>
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        <span class="text-muted">{% trans 'No items yet' %}</span>
+                                    </td>
+                                </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
-                    </span>
-                {% endfor %}
-                </span>
+                    </section>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>

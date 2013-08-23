@@ -13,6 +13,8 @@ from .tasks import delete_attachment
 from .models import ToDo, Attachment, FeedbackRequest
 from .services import CrocdocAttachmentService, ToDoStatusService, ToDoAttachmentFeedbackRequestStatusService
 
+from glynt.apps.project.models import ProjectLawyer
+
 from glynt.apps.services.email import NewActionEmailService
 from glynt.apps.services.pusher import PusherPublisherService
 
@@ -44,7 +46,7 @@ def on_attachment_created(sender, **kwargs):
             todostatus_service = ToDoStatusService(todo_item=attachment.todo)
             todostatus_service.process()
 
-            verb = '{name} Uploaded an Attachment: "{filename}"'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename)
+            verb = '{name} Uploaded an Attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project)
             action.send(attachment.uploaded_by,
                         verb=verb,
                         action_object=attachment,
@@ -72,7 +74,7 @@ def on_attachment_deleted(sender, **kwargs):
                 logger.error('Could not call delete_attachment via celery: {exception}'.format(exception=e))
                 delete_attachment(is_new=is_new, attachment=attachment, **kwargs)
 
-            verb = '{name} Deleted an Attachment: "{filename}"'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename)
+            verb = '{name} Deleted Attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project)
             action.send(attachment.uploaded_by,
                         verb=verb,
                         action_object=attachment,
@@ -96,8 +98,8 @@ def on_comment_created(sender, **kwargs):
         comment = kwargs.get('instance')
 
         if comment and is_new:
-            verb = '{name} commented on a checklist item'.format(name=comment.user.get_full_name())
             todo = comment.content_object
+            verb = '{name} commented on checklist item {todo} for {project}'.format(name=comment.user.get_full_name(), project=todo.project, todo=todo.name)
             action.send(comment.user,
                         verb=verb,
                         action_object=comment,
@@ -120,7 +122,7 @@ def feedbackrequest_created(sender, **kwargs):
         feedbackrequest = kwargs.get('instance')
 
         if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.open:
-            verb = '{assigned_by} requested feedback from {assigned_to}'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), assigned_to=', '.join([u.get_full_name() for u in feedbackrequest.assigned_to.all()]))
+            verb = '{assigned_by} requested feedback from {assigned_to} on checklist item {todo} for {project}'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), assigned_to=', '.join([u.get_full_name() for u in feedbackrequest.assigned_to.all()]), todo=feedbackrequest.attachment.todo, project=feedbackrequest.attachment.project)
             action.send(feedbackrequest.assigned_by,
                         verb=verb,
                         action_object=feedbackrequest.attachment,
@@ -132,7 +134,7 @@ def feedbackrequest_created(sender, **kwargs):
                         status=feedbackrequest.attachment.todo.display_status)
 
         if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.closed:
-            verb = '{assigned_by} closed the feedback request that was assigned to them'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), )
+            verb = '{assigned_by} closed the feedback request that was assigned to them on checklist item {todo} for {project}'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), todo=feedbackrequest.attachment.todo, project=feedbackrequest.attachment.project)
             action.send(feedbackrequest.assigned_by,
                         verb=verb,
                         action_object=feedbackrequest.attachment,
@@ -144,7 +146,7 @@ def feedbackrequest_created(sender, **kwargs):
                         status=feedbackrequest.attachment.todo.display_status)
 
         if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.cancelled:
-            verb = '{assigned_by} cancelled their feedback request'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), )
+            verb = '{assigned_by} cancelled their feedback request on checklist item {todo} for {project}'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), todo=feedbackrequest.attachment.todo, project=feedbackrequest.attachment.project)
             action.send(feedbackrequest.assigned_by,
                         verb=verb,
                         action_object=feedbackrequest.attachment,
@@ -162,6 +164,32 @@ def feedbackrequest_status_change(sender, **kwargs):
     logger.debug('Starting ToDoAttachmentFeedbackRequestStatusService todo.status: {status}'.format(status=feedback_request.attachment.todo.display_status))
     service = ToDoAttachmentFeedbackRequestStatusService(feedback_request=feedback_request)
     service.process()
+
+
+@receiver(post_save, sender=ProjectLawyer, dispatch_uid='projectlawyer.assigned')
+def projectlawyer_assigned(sender, **kwargs):
+    """
+    On save of a ProjectLawyer instance where the status is ASSIGNED
+    Set all the todos.user of that project to the lawyer
+    excluding those todos that already have a user
+    """
+    instance = kwargs.get('instance')
+
+    if instance.status == ProjectLawyer.LAWYER_STATUS.assigned:
+        logger.info('Assigned Lawyer: {lawyer} to Project: {project}'.format(lawyer=instance.lawyer, project=instance.project))
+        instance.project.todo_set.filter(user=None).update(user=instance.lawyer.user)
+
+
+@receiver(post_delete, sender=ProjectLawyer, dispatch_uid='projectlawyer.delete')
+def projectlawyer_deleted(sender, **kwargs):
+    """
+    On delete of a ProjectLawyer instance
+    Set all the todos.user of that project to None
+    where those todos.user == instance.lawyer
+    """
+    instance = kwargs.get('instance')
+    logger.info('Deleted Lawyer: {lawyer} to Project: {project}'.format(lawyer=instance.lawyer, project=instance.project))
+    instance.project.todo_set.filter(user=instance.lawyer.user).update(user=None)
 
 
 @receiver(pre_save, sender=ToDo, dispatch_uid='todo.status_change')

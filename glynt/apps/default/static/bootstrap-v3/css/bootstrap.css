@@ -6866,3 +6866,7 @@ table.lawyer-list.active {
 .potential-container {
   border-bottom: 2px solid #f0ad4e;
 }
+
+section.checklist-category {
+  padding-top: 50px;
+  margin-top: -50px;
