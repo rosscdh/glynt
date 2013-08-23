@@ -6627,7 +6627,7 @@ table.checklist tr.item.state-pending.assigned-to-user td [class*=" icon-"]:befo
   border: 1px solid #eee;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
-  margin-bottom: -1px;
+  margin-bottom: 15px;
   padding: 0 14px 14px;
   position: relative;
 }
@@ -6781,9 +6781,6 @@ table.lawyer-list.active {
 .transaction-profile {
   height: 220px;
 }
-.account-attorney {
-  height: 220px;
-}
 .checklist-header {
   margin-top: 20px;
 }
@@ -6797,6 +6794,10 @@ table.lawyer-list.active {
 .checklist-header .btn:focus {
   color: #555555;
   text-decoration: none;
+}
+.widget.checklist h1 {
+  display: inline-block;
+  padding-right: 10px;
 }
 .post {
   border-bottom: 1px solid #eeeeee;
@@ -6853,4 +6854,15 @@ table.lawyer-list.active {
 }
 .pending-feedback {
   background-color: rgba(240, 173, 78, 0.1);
+}
+.navbar-nav > li.nav-signin > a {
+  background-color: #6bdb7e;
+  color: white;
+}
+.potential-title {
+  border-top: 2px solid #f0ad4e;
+  padding-top: 7px;
+}
+.potential-container {
+  border-bottom: 2px solid #f0ad4e;
 }

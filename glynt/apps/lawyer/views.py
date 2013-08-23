@@ -41,6 +41,8 @@ class LawyerProfileView(DetailView):
         })
         return context
 
+class LawyerLiteProfileView(LawyerProfileView):
+    template_name = 'lawyer/lawyer_detail_lite.html'
 
 class LawyerProfileSetupView(FormView):
     form_class = LawyerProfileSetupForm

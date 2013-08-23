@@ -102,6 +102,7 @@
     margin: 0.25em 0 0 0;
     line-height: 0.8 !important;
     margin-top:38px;
+    text-align: center;
     }
     #hero h3 {
     margin: .5em 0 0 0 !important;
@@ -109,6 +110,7 @@
     font-size:20px;
     color:#aaa;
     line-height: 1.2em;
+    text-align: center;
     }
     #hero #buttons {
     background-color:#757c7e;
@@ -118,7 +120,7 @@
     padding:8px 0px 8px 0px;
     }
     #hero .container-main {
-    margin-bottom:-20px;
+    margin-bottom:20px;
     }    
     #hero .profile-details {
     padding-bottom:0px;
@@ -147,9 +149,8 @@
     #hero .avatar img {
     border: 8px solid rgba(255,255,255,0.46);
     box-shadow: 0 0 10px rgba(0,0,0,0.23);
-    border-radius: px;
+    border-radius: 20px;
     width:170px;
-    float:right;
     }
 
 

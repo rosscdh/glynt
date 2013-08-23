@@ -5,14 +5,7 @@
 
 {% block body %}
 {% csrf_token %}
-HERE:{{ counts }}
 <div class="container checklist-view">
-    <div class="page-header clearfix">
-        <ul class="nav nav-tabs header-nav">
-            <li><a href="{{ project.get_absolute_url }}"><h3>Overview</h3></a></li>
-            <li class="active"><a href="{% url 'dashboard:checklist' uuid=project.uuid %}"><h3>Checklist</h3></a></li>
-        </ul>
-    </div>
     <div class="row">
         <div class="col col-lg-3">
             <div class="sidebar" data-spy="affix" data-offset-top="80">

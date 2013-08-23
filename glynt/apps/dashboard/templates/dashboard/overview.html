@@ -1,100 +1,86 @@
 {% extends 'base.html' %}{% load url from future %}{% load glynt_helpers crispy_forms_tags project_tags %}
 
-{% block page_title %}Dashboard{% endblock %}
-{% block nav_checklist %}<li class="active"><a href="{% url 'dashboard:overview' %}">Dashboard</a></li>{% endblock %}
+{% block page_title %}Overview &mdash; {% project_name project %}{% endblock %}
+
+{% block header %}
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <!-- Header -->
+            <h1>Overview</h1>
+        </div>
+    </div>
+{% endblock %}
 
 {% block body %}
+<br />
+<br />
 <div class="container dashboard-view">
-    <div class="page-header">
-        <div class="btn-group pull-right">
-            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
-                {% project_name project %} <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li class="nav-header">Active Projects</li>
-                {% for p in projects %}
-                    <li><a href="{% url 'dashboard:project' uuid=p.uuid %}">{% project_name p forloop.counter %}</a></li>
-                {% empty %}
-                    <li>No Projects</li>
-                {% endfor %}
-            </ul>
-        </div>
-        <ul class="nav nav-tabs header-nav">
-            <li class="active"><a href="{% url 'dashboard:overview' %}"><h3>Overview</h3></a></li>
-            {% if not profile_is_complete and not user.profile.is_lawyer %}
-                <li  data-toggle="tooltip" title="Not yet active"><a data-toggle="modal" href="#myModal" ><h3 class="text-muted"><i class="glyphicon glyphicon-time"></i> Checklist</h3></a></li>
-            {% else %}
-                <li><a href="{% url 'dashboard:checklist' uuid=project.uuid %}"><h3>Checklist</h3></a></li>
-            {% endif %}
-        </ul>
-    </div>
-{{project.has_lawyer}}
-HERE:{{ counts }}
-
-    {% if not user.profile.is_lawyer %}
-        {% if not profile_is_complete %}
-            <div class="callout callout-danger empty">
-                <div class="empty-message empty-message-exclamation-sign">
-                    <h3>We need some more information from you</h3>
-                    <p>We can't continue with your transaction until you tell us a bit more about your startup.</p>
-                    <a href="{% url 'transact:builder' project_uuid=project.uuid tx_range='INTAKE' step='1' %}" class="btn btn-primary">Click here to complete your profile</a>
-                </div>
+    {% if not profile_is_complete and not user.profile.is_lawyer%}
+        <div class="callout callout-danger empty">
+            <div class="empty-message empty-message-exclamation-sign">
+                <h3>We need some more information from you</h3>
+                <p>We can't continue with your transaction until you tell us a bit more about your startup.</p>
+                <a href="{% url 'transact:builder' project_uuid=project.uuid tx_range='INTAKE' step='1' %}" class="btn btn-primary">Click here to complete your profile</a>
             </div>
-        {% else %}
+        </div>
+    {% else %}
 
+        {% if not project.has_lawyer %}
             {% project_lawyers project 'potential' %}
-
-            <div class="row">
-                <div class="col col-lg-6">
-                    <div class="widget account-attorney">
-                        <h3>Your Attorney</h3>
-                        {% project_lawyers project 'assigned' %}
+            <br />
+        {% endif %}
+        {% if counts.awaiting_feedback_from_user > 0 %}
+            <div class="alert"><i class="glyphicon glyphicon-time"></i> You have one more checklist items awaiting feedback. Visit your checklist to respond to them.</div>
+        {% endif %}
+        <div class="row">
+            <div class="col col-lg-6">
+                <div class="widget checklist">
+                    <h3>Transaction Checklist <span class="pull-right softer small">{{counts.closed}}/{{counts.total}} complete</span></h3>
+                    <div class="row">
+                        <div class="col col-3" class="softer"><h1  class="softer">{{counts.new}}</h1><small  class="softer">New</small></div>
+                        <div class="col col-3"><h1>{{counts.open}}</h1><small>Open</small></div>
+                        <div class="col col-3"><h1 class="text-warning">{{counts.awaiting_feedback_from_user}}</h1><small class="text-warning">Feedback</small></div>
+                        <div class="col col-3"><h1 class="text-success">{{counts.closed}}</h1><small class="text-success">Closed</small></div>
                     </div>
                 </div>
-                <div class="col col-lg-6">
-                    <div class="widget transaction-profile">
-                        <h3>Transaction Profile</h3>
-
-                        <div class="callout callout-success empty">
-                            <div class="empty-message empty-message-ok">
-                                <h3>Your transaction profile is up-to-date.</h3>
-                                {% if PROJECT_ENVIRONMENT == 'dev' %}<a href="{% url 'transact:builder' project_uuid=project.uuid tx_range='INTAKE' step='1' %}" class="">update</a>{% endif %}
-                            </div>
+                <div class="widget account-attorney">
+                    <h3>LawPal Account Manager</h3>
+                    <div class="row">
+                        <div class="col-10">
+                            <img src="{{STATIC_URL}}img/yael-contact-face.jpg" class="img-circle pull-left" style="width:40px; padding-right :8px;padding-top:6px;">
+                            <h4>Yael Citro <small class="pull-right"><a href="mailto:xw4ux8lx@incoming.intercom.io" class="btn btn-info btn-small" style="margin-top:-4px">Contact Yael</a></small>  <small>Co-Founder at LawPal </small></h4> 
                         </div>
                     </div>
                 </div>
-            {% endif %}
+            </div>
+            <div class="col col-lg-6">
+                {% if project.has_lawyer %}
+                    <div class="widget account-attorney">
+                        <h3>Project Attorney</h3>
+                        {% project_lawyers project 'assigned' %}
+                    </div>
+                {% endif %}
+                <div class="widget transaction-profile">
+                    <h3>Transaction Profile</h3>
 
-        </div>
-    {% else %}
-        <div class="alert">
-            The Attorney Transaction dashboard is coming shortly. For now, please review the Checklist.
-        </div>
-    {% endif %}
+                    <div class="callout callout-success empty">
+                        <div class="empty-message empty-message-ok">
+                            <h3>Your transaction profile is up-to-date.</h3>
+                            {% if PROJECT_ENVIRONMENT == 'dev' %}<a href="{% url 'transact:builder' project_uuid=project.uuid tx_range='INTAKE' step='1' %}" class="">update</a>{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+
+    </div>
 </div>
 <script>
        $(function () {
         $("[data-toggle='tooltip']").tooltip();
     });
 </script>
-
-<!-- Modal -->
-<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-<div class="modal-dialog">
-  <div class="modal-content">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-      <h4 class="modal-title">Your Checklist Is Coming</h4>
-    </div>
-    <div class="modal-body">
-      <p>Once you select your attorney, your transaction checklist will appear here. It will contain all of the tasks and documents required to complete your transaction on LawPal.</p>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-    </div>
-  </div><!-- /.modal-content -->
-</div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
 
 {% endblock %}

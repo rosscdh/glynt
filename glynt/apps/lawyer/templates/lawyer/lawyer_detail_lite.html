@@ -9,20 +9,22 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/Chart.min.js"></script>
 {% endblock %}
 
-{% block prebody %}
+{% block navbar %}{% endblock %}
 
-<div id="hero">
+
+{% block prebody %}
+<div id="">
 	<div class="container container-main">
 		<!-- starts carousel -->
 		<div class="row animated fadeInRight profile-details">
 			<div class="col col-lg-12 text-center">
 				<div class="avatar text-center">
-					<img src="{{ object.profile_photo }}" alt="{{ object.user.get_full_name|default:object.user.username }}" />
+					<img src="{{ object.profile_photo }}" alt="{{ object.user.get_full_name|default:object.user.username }}" class="img-rounded" />
 				</div>
 			</div>
-			<div class="col col-lg-12">
-				<h1>{{ object.user.get_full_name|default:object.user.username }}</h1>
-				<h3>{{ object.summary|truncatechars:155 }}</h3>
+			<div class="col col-lg-12 text-center">
+				<h2>{{ object.user.get_full_name|default:object.user.username }}</h2>
+				<h4 class="softer">{{ object.primary_firm }}</h4>
 			</div>
 		</div>
 	</div>
@@ -30,23 +32,6 @@
 		<div class="container">
 			<div class="row">
 				<div class="col col-lg-12 text-center">
-					{% if user.is_staff %}
-						<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="false" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if not object.is_active %}hide{% endif %} btn "><i class="icon-eye-close icon-white"></i> Disable</a>
-						<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="true" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if object.is_active %}hide{% endif %} btn "><i class="icon-eye-close icon-white"></i> Approve</a>
-					{% endif %}
-					{% if user.username == object.user.username %}
-						<a href="{% url 'lawyer:setup_profile' %}" class="btn right-links" ><i class="icon-edit icon-white"></i> Edit profile</a>
-						<a href="{% url 'lawyer:invite' %}" class="btn right-links" ><i class="icon-heart icon-white"></i> Invite Lawyers</a>
-						{% if object.summary %}
-							{% if PROJECT_ENVIRONMENT != 'dev' %}
-						    <script>
-							  $(document).ready(function () {
-						     	  Intercom('update', {"Lawyer Profile": "Complete", "Firm": "{{ firm }}"});
-						   	 });
-							</script>
-							{% endif %}
-						{% endif %}
-					{% endif %}
 					{% if user.username != object.user.username %}
 	                <div class="engagement-container">
 	                	{% engage_with_lawyer_button lawyer=object %}
@@ -59,52 +44,18 @@
 </div>
 <div class="container profile">
 	<div class="row">
-		<div class="col col-lg-7 col-offset-1">
-			<h2>About</h2>
-			<div>
-				<p>{{ object.bio|default:"<div class=\"no-data\">No biography yet.</div>"|linebreaksbr }}</p>
-			</div>
-			<hr>
-
-			<div class="startups domain-links">
-				<h2>Startups Advised</h2>
-				{% for o in object.data.companies_advised %}
-					<col col-lg->{{ o|urlize }}</col col-lg->
-				{% empty %}
-					<ul class="unstyled">
-						<li class="nothing-found">Nothing yet.</li>
-					</ul>
-				{% endfor %}
-			</div>
-			<div class="startups domain-links">
-				<h2>Other Websites</h2>
-				{% for o in object.data.websites %}
-					<col col-lg->{{ o|urlize }}</col col-lg->
-				{% empty %}
-					<ul class="unstyled">
-						<li class="nothing-found">Nothing yet.</li>
-					</ul>
-				{% endfor %}
-			</div>
-		</div>
-		<div class="col col-lg-3 sidebar">
-			<div class="firm">
-				{% if firm.photo %}
-					<img src="{{ MEDIA_URL }}{{ firm.photo|default:'firm/blank.gif' }}" alt="{{ firm.name }}" class="firm-logo" />
-				{% else %}
-					{% if firm %}
-						<h2>{{ firm }}</h2>
-					{% else %}
-						<br />
-					{% endif %}
-				{% endif %}
-			</div>
+		<div class="col col-lg-12">
+			<br />
+			<br />
+			<p class="lead text-center">{{ object.summary|truncatechars:155 }}</p>
+			<br />
+			<br />
 			<div class="map">
 				{% if object.data.practice_location_1 and not object.data.practice_location_2 %}
-					<img src="//maps.googleapis.com/maps/api/staticmap?size=300x145&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_1 }}&sensor=false&maptype=roadmap">
+					<img src="//maps.googleapis.com/maps/api/staticmap?size=497x145&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_1 }}&sensor=false&maptype=roadmap">
 				{% endif %}
 				{% if object.data.practice_location_1 and object.data.practice_location_2 %}
-					<img src="//maps.googleapis.com/maps/api/staticmap?size=150x145&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_1 }}&sensor=false"><img src="http://maps.googleapis.com/maps/api/staticmap?size=149x145&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_2 }}&sensor=false">
+					<img src="//maps.googleapis.com/maps/api/staticmap?size=246x145&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_1 }}&sensor=false"><img src="http://maps.googleapis.com/maps/api/staticmap?size=246x145&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_2 }}&sensor=false">
 				{% endif %}
 				<ul class="key-points">
 					{% for practice_location in object.practice_locations  %}
@@ -116,15 +67,19 @@
 					<!-- <li class="friends"><img src="{{ STATIC_URL }}img/app/small-avatar.jpg" alt="Avatar" /> Benjamin Ling is a mutual contact</li> -->
 				</ul>
             </div>
-					<div id="other-profiles" class="other-profiles">
-						<h5>Other Profiles</h5>
-						{% social_profiles object.user %}
-		 			</div>
-		 			<hr>
-					<div id="bar-license" class="bar-license">
-						<h5>Licensed In</h5>
-						{% simple_name_list data_list=object.data.bar_membership %}
-					</div>
+ 			<h2>About</h2>
+			<div>
+				<p>{{ object.bio|default:"<div class=\"no-data\">No biography yet.</div>"|linebreaksbr }}</p>
+			</div>
+			<hr>
+			<div id="other-profiles" class="other-profiles">
+				<h5>Other Profiles</h5>
+				{% social_profiles object.user %}
+ 			</div>
+ 			<hr>
+			<div id="bar-license" class="bar-license">
+				<h5>Licensed In</h5>
+				{% simple_name_list data_list=object.data.bar_membership %}
 			</div>
 
 		</div>
@@ -302,3 +257,4 @@ $(document).ready(function () {
 });
 </script>
 {% endblock %}
+{% block footer %}{% endblock %}

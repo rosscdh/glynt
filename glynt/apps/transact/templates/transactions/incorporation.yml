@@ -4,6 +4,15 @@ transaction:
     note: ''
     todos:
 
+        Setup Documents:
+            type: 'simple'
+            checklist:
+                -   name: 'Engagement Letter'
+                    attachment: []
+                -   name: 'Term Sheet'
+                    attachment: []
+
+
         General:
             type: 'simple'
             checklist:

@@ -29,6 +29,8 @@ class ToDoCountMixin(object):
                     'open': qs_objects.open(project=project, **kwargs).count(),
                     'pending': qs_objects.pending(project=project, **kwargs).count(),
                     'awaiting_feedback_from_user': awaiting_feedback_from_user,
+                    'closed': qs_objects.closed(project=project, **kwargs).count(),
+
                     'total': 0,
                     }
                 }
