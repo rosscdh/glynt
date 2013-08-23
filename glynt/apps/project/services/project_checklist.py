@@ -22,10 +22,11 @@ class ToDoItemsFromYamlMixin(object):
     def get_todos(self):
         logger.info('Get Project transactions')
         checklist = []
-        todos_by_cat = {}
+        todos_by_cat = OrderedDict()
 
         for c in self.checklist:
             if hasattr(c.todos, 'items'):
+                #import pdb;pdb.set_trace()
                 for category, item in c.todos.items():
                     cat_slug = category
 
@@ -42,7 +43,7 @@ class ToDoItemsFromYamlMixin(object):
                         todos_by_cat[cat_slug] = todos_by_cat.get(cat_slug, [])
                         todos_by_cat[cat_slug] += item.checklist
 
-        return  OrderedDict(sorted(todos_by_cat.items(), key=lambda t: t[0])), sorted(checklist)
+        return  todos_by_cat, sorted(checklist)
 
     def handle_repeater(self, item):
         repeater_key = None
@@ -214,9 +215,13 @@ class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin, 
         self.company_data = ProjectIntakeFormIsCompleteBunch(project=self.project)
 
         self.checklist = self.project.checklist()
+
         self.todos_by_cat, self.todos = self.get_todos()
+
         self.todos = self.append_todo_obj(self.todos)
+
         self.categories = self.get_categories()
+
         self.kwargs = kwargs
 
     def item_slug(self, item, **kwargs):
@@ -260,11 +265,7 @@ class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin, 
         return '{primary}.{secondary}'.format(primary=int(item.get('sort_position', 0)), secondary=int(item.get('sort_position_by_cat', 0)))
 
     def get_categories(self):
-        logger.info('Get Project transactions')
-        cats = []
-        for c in self.checklist:
-            cats = list(set(cats + c.categories()))
-        return sorted(cats)
+        return self.todos_by_cat.keys()
 
     def category_initial(self):
         return ((c, c) for c in self.get_categories())
