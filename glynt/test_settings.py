@@ -18,6 +18,9 @@ NOSE_ARGS = [
     #'--with-coverage',
 ]
 
+PASSWORD_HASHERS = (
+    'django.contrib.auth.hashers.MD5PasswordHasher',
+)
 
 LOGGING = {
     'version': 1,
