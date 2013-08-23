@@ -4,7 +4,7 @@
     {% if back_and_forth.prev %}<li><a href="#" class="btn-prev" title="Previous Item"><i class="icon-chevron-left"></i></a></li>{% endif %}
     {% if back_and_forth.next %}<li><a href="#" class="btn-next" title="Next Item"><i class="icon-chevron-right"></i></a></li>{% endif %}
 
-    {% if not is_lawyer %}
+    {% if is_lawyer %}
         {% if is_closed %}
             <li><a href="#" class="btn-reopen-item" title="Reopen Item"><i class="icon-repeat"></i> Reopen</a></li>
         {% else %}
