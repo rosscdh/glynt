@@ -25,19 +25,19 @@
                                         <tr>
                                             <td align="left" width="40" style="display: block;">&nbsp;</td>
                                             <td align="center" width="100%">
-                                                <h1 style="color: #22282b; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 36px; font-weight: normal; letter-spacing: -1px; line-height: 1.6em; margin: 0; padding: 0;">Subject</h1>
-                                                <h2 style="color: #6c797c !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5em; margin: 0 0 25px; padding: 0;">Here is a quick summary of what we found.</h2>
+                                                <h1 style="color: #22282b; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 28px; font-weight: normal; letter-spacing: -1px; line-height: 1.6em; margin: 0; padding: 0;">{% block title %}{% endblock %}</h1>
+                                                <h2 style="color: #6c797c !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5em; margin: 0 0 25px; padding: 0;">{% block message %}{% endblock %}</h2>
                                             </td>
                                             <td align="left" width="40" style="display: block;">&nbsp;</td>
                                         </tr>
                                         <!-- Action Button -->
                                         <tr>
                                             <td align="center" colspan="3" width="100%">
-                                                <a href="#" target="_blank" style="background-color: #6bdb7e; border-color: #6bdb7e; border-style: solid; border-width: 14px 48px; color: #ffffff; display: inline-block; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: normal; margin: 4px 0; text-decoration: none; white-space: nowrap;">Click to Action</a>
+                                                <a href="{% block action_btn_url %}{% current_site_domain %}{% endblock %}" target="_blank" style="background-color: #6bdb7e; border-color: #6bdb7e; border-style: solid; border-width: 14px 48px; color: #ffffff; display: inline-block; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: normal; margin: 4px 0; text-decoration: none; white-space: nowrap;">{% block action_btn %}Visit site{% endblock %}</a>
                                             </td>
                                         </tr>
-                                        <tr><td align="left" colspan="3" height="40" width="100%" style="font-size: 0; line-height: 0;">&nbsp;</td></tr>
                                         <!-- End Action Button -->
+                                        <tr><td align="left" colspan="3" height="40" width="100%" style="font-size: 0; line-height: 0;">&nbsp;</td></tr>
                                     </table>
                                 </td>
                             </tr>
