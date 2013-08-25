@@ -1,15 +1,9 @@
-{% extends 'email/base.email' %}
-
-{% load glynt_helpers %}
+{% extends 'email/base.email' %}{% load glynt_helpers %}
 
 {% block subject %}{{ subject }}{% endblock %}
 
-{% block plain %}
+{% block title %}{{ subject }}{% endblock %}
+{% block message %}{% endblock %}
 
-Dear {{ to_name }},
-
-{{ message }}
-
-{% if url %}To view it: {% current_site_domain %}{{ url }}{% endif %}
-{% include 'email/footer.email' %}
-{% endblock %}
+{% block action_btn %}See item{% endblock %}
+{% block action_btn_url %}{% current_site_domain %}{{ url }}{% endblock %}
