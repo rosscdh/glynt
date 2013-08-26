@@ -3,9 +3,12 @@ from django.contrib import messages
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
 
+from glynt.apps.project.services.project_service import VisibleProjectsService
 from social_auth.middleware import SocialAuthExceptionMiddleware
 from social_auth.exceptions import SocialAuthBaseException
 from social_auth.utils import get_backend_name
+
+from glynt.apps.project.models import Project, ProjectLawyer
 
 
 class EnsureUserHasCompanyMiddleware(object):
@@ -51,3 +54,21 @@ class LawpalSocialAuthExceptionMiddleware(SocialAuthExceptionMiddleware):
                 if backend_name:
                     url += '&backend=' + backend_name
             return redirect(url)
+
+
+class LawpalCurrentProjectsMiddleware(object):
+    """
+    Middleware to ensure that the template has access to the
+    {
+        projects: [], # relative to customer or lawyer user_class
+        project:,
+    }
+    object
+    """
+    def process_request(self, request):
+        projects_service = VisibleProjectsService(user=request.user)
+
+        request.projects = projects_service.projects
+        request.project = projects_service.project
+
+        return None

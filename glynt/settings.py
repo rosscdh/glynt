@@ -105,6 +105,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'glynt.middleware.LawpalSocialAuthExceptionMiddleware',
     'glynt.middleware.EnsureUserHasCompanyMiddleware',
+    'glynt.middleware.LawpalCurrentProjectsMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'pagination.middleware.PaginationMiddleware',
     'django_filepicker.middleware.URLFileMapperMiddleware',
@@ -120,12 +121,12 @@ TASTYPIE_ALLOW_MISSING_SLASH = True
 WSGI_APPLICATION = 'glynt.wsgi.application'
 
 AUTHENTICATION_BACKENDS = (
-    'social_auth.backends.contrib.angel.AngelBackend',
+    #'social_auth.backends.contrib.angel.AngelBackend',
     'social_auth.backends.contrib.linkedin.LinkedinBackend',
     'social_auth.backends.google.GoogleOAuth2Backend',
-    'glynt.backends.EmailOrUsernameBackend',
-    'userena.backends.UserenaAuthenticationBackend',
-    'guardian.backends.ObjectPermissionBackend',
+    #'glynt.backends.EmailOrUsernameBackend',
+    #'userena.backends.UserenaAuthenticationBackend',
+    #'guardian.backends.ObjectPermissionBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -146,7 +147,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "glynt.context_processors.USE_THREADEDCOMMENTS",
     "social_auth.context_processors.social_auth_by_type_backends",
     "social_auth.context_processors.social_auth_by_name_backends",
-    "django.core.context_processors.request",
 )
 
 TEMPLATE_DIRS = (
