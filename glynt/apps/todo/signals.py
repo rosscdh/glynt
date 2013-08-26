@@ -195,6 +195,7 @@ def projectlawyer_deleted(sender, **kwargs):
 @receiver(pre_save, sender=ToDo, dispatch_uid='todo.status_change')
 def todo_item_status_change(sender, **kwargs):
     instance = kwargs.get('instance')
+
     if instance.pk is not None:
 
         if instance.user is not None:
@@ -216,8 +217,7 @@ def todo_item_status_change(sender, **kwargs):
                             instance_dispay_status=instance.display_status,
                             event_action=event_action,
                             event='todo.status_change')
-                import pdb
-                pdb.set_trace()
+
                 if instance.status in [TODO_STATUS.closed, TODO_STATUS.resolved]:
                     """
                     @BUSINESS RULE Update the FeedbackRequest objects that are currently open to closed
