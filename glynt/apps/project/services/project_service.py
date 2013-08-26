@@ -13,9 +13,12 @@ class VisibleProjectsService(object):
     project = None
 
     def __init__(self, *args, **kwargs):
+        projects = self.projects
+        project = self.project
+
         self.user = kwargs.get('user', None)
 
-        if self.user.is_authenticated() and not self.user.is_staff and not self.user.is_superuser:
+        if self.user is not None and self.user.is_authenticated() and not self.user.is_staff and not self.user.is_superuser:
 
             if self.user.profile.is_lawyer:
 
@@ -33,8 +36,10 @@ class VisibleProjectsService(object):
                 except IndexError:
                     pass
 
-        self.projects = projects
-        self.project = project
+        if projects:
+            self.projects = projects
+        if project:
+            self.project = project
 
         def get(self):
             return (self.projects, self.project, )
