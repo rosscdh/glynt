@@ -48,36 +48,39 @@ class DashboardView(ToDoCountMixin, TemplateView):
         return qs_filter
 
     def lawyer_context(self):
-        return Bunch({'projects': self.project_service.lawyer_projects() if 'uuid' not in self.kwargs else self.project_service.get(),
+        return Bunch({
                     'PROJECT_LAWYER_STATUS': PROJECT_LAWYER_STATUS,
                })
 
-    def customer_context(self, current_project):
-        intake_complete = ProjectIntakeFormIsCompleteBunch(project=current_project)
+    def customer_context(self, project):
+        intake_complete = ProjectIntakeFormIsCompleteBunch(project=self.request.project)
         profile_is_complete = intake_complete.is_valid()
 
-        return Bunch({'projects': self.project_service.get(),
+        return Bunch({
                         'profile_is_complete': profile_is_complete,
                   })
         
     def get_context_data(self, **kwargs):
         profile_is_complete = False
         qs_filter = self.qs_filter()
-        self.project_service = VisibleProjectsService(user=self.request.user)
-        current_project = self.project_service.project(**qs_filter)
 
-        kwargs.update({'project': current_project})
+        kwargs.update({
+            'projects': self.request.projects,
+            'project': self.request.project,
+        })
 
-        if current_project:
+        if self.request.project:
             # append counts
-            kwargs.update(self.todo_counts(qs_objects=current_project.todo_set, project=current_project))
+            kwargs.update(self.todo_counts(qs_objects=self.request.project.todo_set, project=self.request.project))
 
         if self.request.user.profile.is_customer:
 
-            if current_project is None:
+            if self.request.project is None:
                 raise Http404('Project uuid: %s does not exist' % qs_filter.get('uuid'))
 
-            kwargs.update(self.customer_context(current_project=current_project))
+            kwargs.update(
+                self.customer_context(project=self.request.project)
+            )
 
         elif self.request.user.profile.is_lawyer:
 
