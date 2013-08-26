@@ -7,7 +7,7 @@ from django.contrib.admin.models import LogEntry
 
 from threadedcomments.models import ThreadedComment
 
-from glynt.apps.todo import TODO_STATUS_ACTION, FEEDBACK_STATUS
+from glynt.apps.todo import TODO_STATUS, TODO_STATUS_ACTION, FEEDBACK_STATUS
 
 from .tasks import delete_attachment
 from .models import ToDo, Attachment, FeedbackRequest
@@ -195,6 +195,7 @@ def projectlawyer_deleted(sender, **kwargs):
 @receiver(pre_save, sender=ToDo, dispatch_uid='todo.status_change')
 def todo_item_status_change(sender, **kwargs):
     instance = kwargs.get('instance')
+
     if instance.pk is not None:
 
         if instance.user is not None:
@@ -205,7 +206,7 @@ def todo_item_status_change(sender, **kwargs):
             if prev_instance.status != instance.status:
 
                 event_action = TODO_STATUS_ACTION[instance.status]
-                verb = '{user} {action} {name}'.format(name=instance.name, action=event_action, user=instance.user.get_full_name())
+                verb = '{user} {action} the checklist item "{name}"'.format(name=instance.name, action=event_action, user=instance.user.get_full_name())
 
                 action.send(instance.user,
                             verb=verb,
@@ -216,6 +217,12 @@ def todo_item_status_change(sender, **kwargs):
                             instance_dispay_status=instance.display_status,
                             event_action=event_action,
                             event='todo.status_change')
+
+                if instance.status in [TODO_STATUS.closed, TODO_STATUS.resolved]:
+                    """
+                    @BUSINESS RULE Update the FeedbackRequest objects that are currently open to closed
+                    """
+                    FeedbackRequest.objects.close_by_todo(todo=instance)
 
 
 """
