@@ -6,29 +6,35 @@ from glynt.apps.project import PROJECT_STATUS
 class VisibleProjectsService(object):
     """
     Retrieve projects that are visible in the users
-    Project list dropdown
+    Project list dropdown.
+    Cater projects being from a lawyer or a customer user_class
     """
-    projects = None
+    projects = []
+    project = None
+
     def __init__(self, *args, **kwargs):
         self.user = kwargs.get('user', None)
 
-    def project(self, *args, **kwargs):
-        try:
-            return self.get(**kwargs).order_by('id')[0]
-        except IndexError:
-            return None
+        if self.user.is_authenticated() and not self.user.is_staff and not self.user.is_superuser:
 
-    def lawyer_projects(self, **kwargs):
-        return ProjectLawyer.objects.filter(lawyer=self.user.lawyer_profile).filter(**kwargs)
+            if self.user.profile.is_lawyer:
 
-    def get(self, **kwargs):
-        if self.user.profile.is_customer and 'customer' not in kwargs:
-            kwargs.update({'customer': self.user.customer_profile})
+                projects = [join.project for join in ProjectLawyer.objects.assigned(lawyer=self.user.lawyer_profile)]
+                try:
+                    project = projects[0]
+                except IndexError:
+                    pass
 
-        if self.projects is None:
-            if self.user:
-                #self.projects = Project.objects.new(**kwargs).order_by('id') | Project.objects.open(**kwargs).order_by('id')
-                self.projects = Project.objects.filter(status__in=[PROJECT_STATUS.open, PROJECT_STATUS.new], **kwargs)
-                self.projects = self.projects.select_related('company', 'customer__user', 'transactions')
+            elif self.user.profile.is_customer:
 
-        return self.projects
+                projects = Project.objects.current(customer=self.user.customer_profile)
+                try:
+                    project = projects[0]
+                except IndexError:
+                    pass
+
+        self.projects = projects
+        self.project = project
+
+        def get(self):
+            return (self.projects, self.project, )
