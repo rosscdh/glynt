@@ -2,36 +2,32 @@
 from django.test import LiveServerTestCase
 from django.test.client import Client
 
+from glynt.casper import BaseLawyerCustomerProjectCaseMixin
 from model_mommy import mommy
 
 from actstream.models import Action
-from glynt.apps.todo import TODO_STATUS
+from glynt.apps.todo import TODO_STATUS, TODO_STATUS_ACTION
 
 
-class TestToDoSignals(LiveServerTestCase):
-    fixtures = ['test_cities']
-
-    def setUp(self):
-        self.client = Client()
-
-        self.user = mommy.make('auth.User', first_name='FirstName', last_name='Surname', email='test@lawpal.com')
-        self.customer = mommy.make('customer.Customer', user=self.user)
-        self.lawyer = mommy.make('lawyer.Lawyer')
-
-        self.project = mommy.make('project.Project', customer=self.customer)
-        mommy.make('project.ProjectLawyer', project=self.project, lawyer=self.lawyer)
-
-        self.todo = mommy.make('todo.ToDo', user=self.user, project=self.project)
-
+#from nose.tools import set_trace; set_trace()
+class TestToDoSignals(BaseLawyerCustomerProjectCaseMixin):
     def test_todo_item_status_change(self):
-        """ Should use mocks here """
+        """
+        Test that when a todo items status is changed
+        1. a new action element is created
+        1a. with the appropriate text as the event action
+        """
+        for ts in TODO_STATUS:
+            #from nose.tools import set_trace; set_trace()
+            Action.objects.all().delete() # remove all other action elements
+            # there are no actions
+            self.assertTrue(len(Action.objects.all()) == 0)
 
-        self.assertTrue(self.todo.pk is not None)
+            self.todo.status = TODO_STATUS[ts]
+            self.todo.save()
 
-        # there are no actions
-        self.assertTrue(len(Action.objects.all()) == 0)
+            actions = Action.objects.filter(action_object_object_id=self.todo.pk)
 
-        self.todo.status = TODO_STATUS.pending
-        self.todo.save()
+            self.assertTrue(len(actions) == 1) # we want only 1 to be created
 
-        self.assertTrue(len(Action.objects.filter(action_object_object_id=self.todo.pk)) == 1)
+            self.assertEqual(actions[0].data.get('event_action'), TODO_STATUS_ACTION[ts]) # must match the event type

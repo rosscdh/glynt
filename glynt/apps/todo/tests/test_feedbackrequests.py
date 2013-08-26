@@ -16,7 +16,6 @@ class FeedbackRequestManagerTest(BaseLawyerCustomerProjectCaseMixin):
         super(FeedbackRequestManagerTest, self).setUp()
 
         self.todo = mommy.make('todo.ToDo', status=TODO_STATUS.open, project=self.project, user=self.lawyer_user, category='General')
-        self.assertEqual(self.todo.status, TODO_STATUS.open)
         self.attachment = mommy.make('todo.Attachment', project=self.project, todo=self.todo, uploaded_by=self.customer_user)
 
         self.feedback_request = mommy.make('todo.FeedbackRequest', status=FEEDBACK_STATUS.open, attachment=self.attachment, assigned_by=self.customer_user, assigned_to=(self.lawyer_user,), comment='What are your thoughts on this test file with ümlauts')

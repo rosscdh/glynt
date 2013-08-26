@@ -6,6 +6,7 @@ from model_mommy import mommy
 from pyquery import PyQuery as pq
 from .base import BaseCasperJs
 
+from glynt.apps.todo import TODO_STATUS
 from glynt.apps.transact.models import Transaction
 
 
@@ -24,7 +25,7 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
     Base mixin for a Setup to be used in lawyer/customer/project analysis
     https://github.com/dobarkod/django-casper/
     """
-    fixtures = ['cities_light.json', 'transact.json']
+    fixtures = ['test_cities', 'transact.json']
 
     def setUp(self):
         super(BaseLawyerCustomerProjectCaseMixin, self).setUp()
@@ -59,3 +60,6 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
         self.assertTrue(self.customer_user.profile.is_customer)
         
         self.project = mommy.make('project.Project', customer=self.customer, lawyers=(self.lawyer,), transactions=(Transaction.objects.get(slug='CS'), Transaction.objects.get(slug='SF'),))
+
+        self.todo = mommy.make('todo.ToDo', status=TODO_STATUS.open, project=self.project, user=self.lawyer_user, category='General')
+        self.attachment = mommy.make('todo.Attachment', project=self.project, todo=self.todo, uploaded_by=self.customer_user)
