@@ -13,7 +13,7 @@ from .tasks import delete_attachment
 from .models import ToDo, Attachment, FeedbackRequest
 from .services import CrocdocAttachmentService, ToDoStatusService, ToDoAttachmentFeedbackRequestStatusService
 
-from glynt.apps.project.models import ProjectLawyer
+from glynt.apps.project.models import Project, ProjectLawyer
 
 from glynt.apps.services.email import NewActionEmailService
 from glynt.apps.services.pusher import PusherPublisherService
@@ -74,16 +74,19 @@ def on_attachment_deleted(sender, **kwargs):
                 logger.error('Could not call delete_attachment via celery: {exception}'.format(exception=e))
                 delete_attachment(is_new=is_new, attachment=attachment, **kwargs)
 
-            verb = '{name} Deleted Attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project)
-            action.send(attachment.uploaded_by,
-                        verb=verb,
-                        action_object=attachment,
-                        target=attachment.todo,
-                        content=verb,
-                        attachment=attachment.filename,
-                        todo=attachment.todo.name,
-                        status=attachment.todo.display_status,
-                        event='todo.attachment.deleted')
+            try:
+                verb = '{name} Deleted Attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project)
+                action.send(attachment.uploaded_by,
+                            verb=verb,
+                            action_object=attachment,
+                            target=attachment.todo,
+                            content=verb,
+                            attachment=attachment.filename,
+                            todo=attachment.todo.name,
+                            status=attachment.todo.display_status,
+                            event='todo.attachment.deleted')
+            except ToDo.DoesNotExist:
+                pass
 
 """
 Comment Events
@@ -188,8 +191,11 @@ def projectlawyer_deleted(sender, **kwargs):
     where those todos.user == instance.lawyer
     """
     instance = kwargs.get('instance')
-    logger.info('Deleted Lawyer: {lawyer} to Project: {project}'.format(lawyer=instance.lawyer, project=instance.project))
-    instance.project.todo_set.filter(user=instance.lawyer.user).update(user=None)
+    try:
+        logger.info('Deleted Lawyer: {lawyer} to Project: {project}'.format(lawyer=instance.lawyer, project=instance.project))
+        instance.project.todo_set.filter(user=instance.lawyer.user).update(user=None)
+    except Project.DoesNotExist:
+        pass
 
 
 @receiver(pre_save, sender=ToDo, dispatch_uid='todo.status_change')
