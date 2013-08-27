@@ -15,7 +15,7 @@
                 <tr>
                     <td align="center" valign="top" id="#bodyCell">
                         <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
-                            {% include 'email/partials/header.email' %}
+                            {% include 'email/partials/header-html.email' %}
 
                             <!-- Content Section -->
                             <tr>
@@ -43,7 +43,7 @@
                             </tr>
                             <!-- End Content Section -->
 
-                            {% include 'email/partials/footer.email' %}
+                            {% include 'email/partials/footer-html.email' %}
                         </table>
                     </td>
                 </tr>
