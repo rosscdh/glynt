@@ -2,8 +2,14 @@
 
 {% block subject %}{{ subject }}{% endblock %}
 
-{% block title %}{{ subject }}{% endblock %}
-{% block message %}{% endblock %}
+{% block title %}Hi {{ to_name }}{% endblock %}
+{% block message %}{{ message }}{% endblock %}
 
 {% block action_btn %}See item{% endblock %}
 {% block action_btn_url %}{% current_site_domain %}{{ url }}{% endblock %}
+
+{% block plain_body %}
+{{ message }}
+
+See item: {% current_site_domain %}{{ url }}
+{% endblock %}
