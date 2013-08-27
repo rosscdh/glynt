@@ -36,9 +36,9 @@
                 {% if user.is_authenticated %}
                     {% if project %}
                         <li><a href="{% url 'dashboard:project' uuid=project.uuid %}">{% trans 'Overview' %}</a></li>
-                        {% if not profile_is_complete and not user.profile.is_lawyer %}
+                        {% if not project.has_lawyer and not user.profile.is_lawyer %}
                             <li data-toggle="tooltip" title="{% trans 'Not yet active' %}">
-                                <a href="#checklist-coming-modal" data-toggle="modal">{% trans 'Checklist' %}</a>
+                                <a href="#checklist-coming-modal" data-toggle="modal" class="softer">{% trans 'Checklist' %}</a>
                             </li>
                         {% else %}
                             <li><a href="{% url 'dashboard:checklist' uuid=project.uuid %}">{% trans 'Checklist' %}</a></li>
