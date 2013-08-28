@@ -135,3 +135,7 @@ fab $TARGET_ENV requirements clean_pyc syncdb migrate
 
 1. ```brew update```
 2. ```brew install casperjs```
+
+## UBUNTU ##
+
+1. ```sudo apt-get install libxml2-dev libxslt1-dev```
