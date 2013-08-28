@@ -62,7 +62,7 @@ django-activity-stream
 pyelasticsearch
 
 # Markup
-parsley
+pip install -e git+https://github.com/agiliq/Django-parsley.git#egg=django-parsley
 django_markup
 markup
 Markdown
