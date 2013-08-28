@@ -95,6 +95,13 @@ class ProjectView(DetailView):
         return super(ProjectView, self).render_to_response(context, **response_kwargs)
 
 
+class LawyerContactProjectView(ProjectView):
+    """
+    View to allow user to contact project lawyer
+    """
+    template_name = 'project/lawyer_contact.html'
+
+
 class CloseProjectView(AjaxableResponseMixin, UpdateView):
     model = Project
     http_method_names = [u'post']

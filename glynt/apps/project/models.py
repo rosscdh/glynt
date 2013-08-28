@@ -66,6 +66,10 @@ class Project(models.Model):
 
         return checklist_items
 
+    @property
+    def primary_lawyer(self):
+        return self.get_primary_lawyer()
+
     def get_primary_lawyer(self):
         if self._primary_lawyer is False:
             try:

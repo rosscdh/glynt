@@ -10,6 +10,7 @@ import json
 from haystack.query import SQ, SearchQuerySet
 from haystack.inputs import Exact, Clean
 
+from glynt.apps.default.views import AjaxBaseTemplateMixin
 from glynt.apps.lawyer.services import EnsureLawyerService
 from glynt.apps.utils import get_query
 
@@ -22,8 +23,7 @@ import logging
 logger = logging.getLogger('django.request')
 
 
-
-class LawyerProfileView(DetailView):
+class LawyerProfileView(AjaxBaseTemplateMixin, DetailView):
     model = Lawyer
     slug_field = 'user__username'
 
@@ -37,7 +37,7 @@ class LawyerProfileView(DetailView):
         context = super(LawyerProfileView, self).get_context_data(**kwargs)
 
         context.update({
-            'firm': self.object.primary_firm
+            'firm': self.object.primary_firm,
         })
         return context
 

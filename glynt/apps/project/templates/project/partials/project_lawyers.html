@@ -5,29 +5,28 @@
     <div class="row">
         {% for l in lawyers %}
             {% if display_type == 'potential' %}
-                {% if not project.has_lawyer %}
 
                 <div class="col col-lg-6">
                     <table class="table lawyer-list">
                         <tbody>
                             <tr>
                                 <td class="lawyer-picture">
-                                    <img src="{{ l.user.profile.get_mugshot_url }}" class="img-rounded">
+                                    <img src="{{ l.user.profile.get_mugshot_url }}" class="img-rounded" title="" alt="Photo of {{ l.user.get_full_name }}" />
                                 </td>
                                 <td class="lawyer-info">
                                     <h3>{{ l.user.get_full_name }}</h3>
                                     <p>{{ l.position }} at {{ l.firm_name }}</p>
                                     <p>{% for loc in practice_locations %}<i class="glyphicon glyphicon-map-marker"></i> {{ loc }}{% endfor %}</p>
                                 </td>
-                                <td class="lawyer-meta"><a href="{% url 'lawyer:profile' slug=l.user.username %}" class="btn btn-large btn-primary">Get Introduced</a>  <a data-toggle="modal" href="#myModal" class="btn btn-primary btn-lg">Launch demo modal</a>
-
-                                <a data-toggle="modal" href="{% url 'lawyer:profile' slug=l.user.username %}" data-target="#lawyerprofileModal">Click me</a>
+                                <td class="lawyer-meta">
+                                    <a href="{% url 'lawyer:profile' slug=l.user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-info">View Profile</a>
+                                    <a href="{% url 'project:project_contact' slug=project.uuid lawyer=l.user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-primary btn-lg">Contact &amp; Engage</a>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                {% endif %}
+
             {% else %}
                 <div class="col col-lg-12">
                     <table class="table lawyer-list active">
@@ -73,7 +72,7 @@
     {% endif %}
 {% endif %}
 
-<div class="modal" id="lawyerprofileModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal" id="overview-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body"></div>
