@@ -54,11 +54,6 @@ a "**customer**"
     6. Thats it you can now ```python manage.py runserver_plus```
     7. access http://local.weareml.com:8000/ (you may need to add 127.0.0.1 local.weareml.com to your /etc/hosts file)
 
-## Autoenv
-
-```brew install autoenv```
-
-1. cd into glynt dir and the .env file will do its magic
 
 ## Update requirments
 
