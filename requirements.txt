@@ -2,9 +2,6 @@
 python-memcached
 #psycopg2 # required for production postgres db
 
-# Deployment
-raven
-newrelic
 
 # Django
 Django
@@ -13,9 +10,17 @@ django-cities-light
 # easydict lookups with dot notation
 bunch
 
+# termcolor for fabric warnings
+termcolor
+
 # utils for git
-gitpython
 mimeparse
+
+# Deployment
+fabric
+gitpython
+raven
+newrelic
 
 django-filepicker
 -e git+https://github.com/dcramer/django-uuidfield.git#egg=django-uuidfield
