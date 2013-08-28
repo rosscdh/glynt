@@ -1,0 +1,47 @@
+{% extends 'email/base.email' %}{% load glynt_helpers %}
+
+{% block subject %}{{ subject }}{% endblock %}
+
+{% block content %}
+    <tr>
+        <td align="left" colspan="3" height="40" width="100%" style="font-size: 0; line-height: 0;">&nbsp;</td>
+    </tr>
+    <tr>
+        <td class="small-width" align="left" width="40" style="display: block;">&nbsp;</td>
+        <td>
+            <h1 style="color: #22282b !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 28px; font-weight: normal; letter-spacing: -1px; line-height: 1.6em; margin: 0; padding: 0;">A new project has been posted!</h1>
+            <h2 style="color: #6c797c !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5em; padding: 0;">Paragraph #1</h2>
+            <ul style="color: #6c797c !important">
+                <li style="margin-left: 0;"><p style="font-size: 14px;">List #1</p></li>
+                <li style="margin-left: 0;"><p style="font-size: 14px;">List #2</p></li>
+                <li style="margin-left: 0;"><p style="font-size: 14px;">List #3</p></li>
+            </ul>
+            <h2 style="color: #6c797c !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5em; margin: 0 0 25px; padding: 0;">Paragraph #2</h2>
+        </td>
+        <td class="small-width" align="left" width="40" style="display: block;">&nbsp;</td>
+    </tr>
+    <!-- Action Button -->
+    <tr>
+        <td align="center" colspan="3" width="100%">
+            <a href="{% current_site_domain %}{{ url }}" target="_blank" class="action-btn" style="background-color: #6bdb7e; border-color: #6bdb7e; border-style: solid; border-width: 14px 48px; color: #ffffff; display: inline-block; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: normal; margin: 4px 0; text-decoration: none; white-space: nowrap;">See project</a>
+        </td>
+    </tr>
+    <!-- End Action Button -->
+    <tr>
+        <td align="left" colspan="3" height="40" width="100%" style="font-size: 0; line-height: 0;">&nbsp;</td>
+    </tr>
+{% endblock %}
+
+{% block plain_body %}
+A new project has been posted!
+
+Paragraph #1
+
+• List #1
+• List #2
+• List #3
+
+Paragraph #2
+
+See project: {% current_site_domain %}{{ url }}
+{% endblock %}
