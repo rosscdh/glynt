@@ -64,27 +64,7 @@
                             <tr>
                                 <td align="left" valign="top" width="100%">
                                     <table class="rounded" align="center" bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-top: 1px solid #eae9e9; border-bottom: 1px solid #b2b1b1; border-left: 1px solid #d4d2d3; border-right: 1px solid #d4d2d3; padding: 0;">
-                                        <tr>
-                                            <td align="left" colspan="3" height="40" width="100%" style="font-size: 0; line-height: 0;">&nbsp;</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="small-width" align="left" width="40" style="display: block;">&nbsp;</td>
-                                            <td align="center">
-                                                <h1 style="color: #22282b; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 28px; font-weight: normal; letter-spacing: -1px; line-height: 1.6em; margin: 0; padding: 0;">{% block title %}{% endblock %}</h1>
-                                                <h2 style="color: #6c797c !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5em; margin: 0 0 25px; padding: 0;">{% block message %}{% endblock %}</h2>
-                                            </td>
-                                            <td class="small-width" align="left" width="40" style="display: block;">&nbsp;</td>
-                                        </tr>
-                                        <!-- Action Button -->
-                                        <tr>
-                                            <td align="center" colspan="3" width="100%">
-                                                <a href="{% block action_btn_url %}{% current_site_domain %}{% endblock %}" target="_blank" class="action-btn" style="background-color: #6bdb7e; border-color: #6bdb7e; border-style: solid; border-width: 14px 48px; color: #ffffff; display: inline-block; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: normal; margin: 4px 0; text-decoration: none; white-space: nowrap;">{% block action_btn %}Visit Website{% endblock %}</a>
-                                            </td>
-                                        </tr>
-                                        <!-- End Action Button -->
-                                        <tr>
-                                            <td align="left" colspan="3" height="40" width="100%" style="font-size: 0; line-height: 0;">&nbsp;</td>
-                                        </tr>
+                                        {% block content %}{% endblock %}
                                     </table>
                                 </td>
                             </tr>
