@@ -32,10 +32,12 @@ a "**customer**"
 2. ```pip install virtualenv virtualenvwrapper```
 3. Perform these steps
 
-    export WORKON_HOME=~/.virtualenvs
-    mkdir -p $WORKON_HOME
-    source /usr/local/bin/virtualenvwrapper.sh
-    echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bash_profile
+```
+export WORKON_HOME=~/.virtualenvs
+mkdir -p $WORKON_HOME
+source /usr/local/bin/virtualenvwrapper.sh
+echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bash_profile
+```
 
 4. mkvirtualenv --no-site-packages glynt
 5. ```mkdir -p ~/Projects```
