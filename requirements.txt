@@ -62,7 +62,7 @@ django-activity-stream
 pyelasticsearch
 
 # Markup
-django-parsley
+parsley
 django_markup
 markup
 Markdown
