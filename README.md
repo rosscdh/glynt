@@ -73,17 +73,28 @@ echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bash_profile
 6. interact with an uploaded crocdoc item attachment
     
 
+# Notes
+
+The following sections are simply notes and are not necessary for getting running in dev.
+
+
 ## Start Celery Worker
+
+Only run the celery worker if you want to test async processes
 
 ```python manage.py celery worker --loglevel=info```
 
 
 ## Geos
 
+Not necessary for dev.local
+
 ```brew install geos```
 
 
 ## Cities
+
+Not necessary for dev.local
 
 Load all the city data
 
