@@ -1,5 +1,5 @@
 # Drivers
-python-memcached
+#python-memcached # only in production
 #psycopg2 # required for production postgres db
 
 
