@@ -28,7 +28,7 @@ class CrocdocWebhookService(object):
             if i.get('page') is not None:
                 page = i.get('page')
 
-            print "{event} is of type {event_type} on page: {page}".format(event_type=event_type, event=event, page=page)
+            #print "{event} is of type {event_type} on page: {page}".format(event_type=event_type, event=event, page=page)
 
             if event == 'comment.create':
                 i = CrocdocCommentCreateEvent(page=page, **i)
