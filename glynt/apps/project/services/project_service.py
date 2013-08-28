@@ -13,33 +13,44 @@ class VisibleProjectsService(object):
     project = None
 
     def __init__(self, *args, **kwargs):
-        projects = self.projects
-        project = self.project
+        projects, project = self.anonymous()
 
         self.user = kwargs.get('user', None)
 
-        if self.user is not None and self.user.is_authenticated() and not self.user.is_staff and not self.user.is_superuser:
+        if not self.user.is_authenticated():
+            self.projects, self.project = self.anonymous()
 
-            if self.user.profile.is_lawyer:
+        else:
+            if not self.user.is_staff and not self.user.is_superuser:
 
-                projects = [join.project for join in ProjectLawyer.objects.assigned(lawyer=self.user.lawyer_profile)]
-                try:
-                    project = projects[0]
-                except IndexError:
-                    pass
+                if self.user.profile.is_customer == True:
+                    self.projects, self.project = self.customer()
 
-            elif self.user.profile.is_customer:
+                elif self.user.profile.is_lawyer == True:
+                    self.projects, self.project = self.lawyer()
 
-                projects = Project.objects.current(customer=self.user.customer_profile)
-                try:
-                    project = projects[0]
-                except IndexError:
-                    pass
+    def anonymous(self):
+        return ([], None,)
 
-        if projects:
-            self.projects = projects
-        if project:
-            self.project = project
+    def customer(self):
+        projects = Project.objects.current(customer=self.user.customer_profile)
 
-        def get(self):
-            return (self.projects, self.project, )
+        try:
+            project = projects[0]
+        except IndexError:
+            project = None
+
+        return (projects, project,)
+
+    def lawyer(self):
+        projects = [join.project for join in ProjectLawyer.objects.assigned(lawyer=self.user.lawyer_profile)]
+
+        try:
+            project = projects[0]
+        except IndexError:
+            project = None
+
+        return (projects, project,)
+
+    def get(self):
+        return (self.projects, self.project, )
