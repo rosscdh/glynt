@@ -148,4 +148,4 @@ class ProjectLawyer(models.Model):
 
 
 # import signals so they load on django load
-from glynt.apps.project.signals import on_project_created
+from glynt.apps.project.signals import on_project_created, on_lawyer_assigned
