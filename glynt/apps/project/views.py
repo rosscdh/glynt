@@ -8,7 +8,7 @@ from django.http import Http404
 
 from glynt.apps.utils import AjaxableResponseMixin
 
-from glynt.apps.project.models import Project
+from glynt.apps.project.models import Project, ProjectLawyer
 from glynt.apps.project.forms import CreateProjectForm
 from glynt.apps.project.services.ensure_project import EnsureProjectService
 
@@ -20,6 +20,7 @@ from glynt.apps.transact.models import Transaction
 
 
 from .signals import mark_project_notifications_as_read
+from . import PROJECT_LAWYER_STATUS
 
 import logging
 logger = logging.getLogger('django.request')
@@ -87,12 +88,12 @@ class ProjectView(DetailView):
                           {'verbose_name': queryset.model._meta.verbose_name})
         return obj
 
-    def render_to_response(self, context, **response_kwargs):
-        """ @BUSINESSRULE if the viewing user is a founder, then mark their engagement notifications as read when they simply view the project """
-        #if self.object.customer.user == self.request.user:
-        mark_project_notifications_as_read(user=self.request.user, project=self.object)
+    # def render_to_response(self, context, **response_kwargs):
+    #     """ @BUSINESSRULE if the viewing user is a founder, then mark their engagement notifications as read when they simply view the project """
+    #     #if self.object.customer.user == self.request.user:
+    #     mark_project_notifications_as_read(user=self.request.user, project=self.object)
 
-        return super(ProjectView, self).render_to_response(context, **response_kwargs)
+    #     return super(ProjectView, self).render_to_response(context, **response_kwargs)
 
 
 class LawyerContactProjectView(ProjectView):
@@ -100,6 +101,14 @@ class LawyerContactProjectView(ProjectView):
     View to allow user to contact project lawyer
     """
     template_name = 'project/lawyer_contact.html'
+    def get_context_data(self, **kwargs):
+        context = super(LawyerContactProjectView, self).get_context_data(**kwargs)
+        context.update({
+            'PROJECT_LAWYER_STATUS': PROJECT_LAWYER_STATUS,
+            'project_lawyer': ProjectLawyer.objects.get(project=self.object, lawyer=self.object.primary_lawyer),
+        })
+
+        return context
 
 
 class CloseProjectView(AjaxableResponseMixin, UpdateView):
