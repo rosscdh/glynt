@@ -132,6 +132,9 @@ $(document).ready(function () {
                 <h4 class="modal-title">Contact Us</h4>
             </div>
             <div class="modal-body">
+                {% crispy contact_form %}
+
+                {% comment %}
                 <form class="form-horizontal">
                     <div class="row">
                         <label for="inputSubject" class="col-lg-2 control-label">Subject</label>
@@ -154,6 +157,7 @@ $(document).ready(function () {
                         <!-- </div> -->
                     </div>
                 </form>
+                {% endcomment %}
             </div>
             <div class="modal-footer">
                 <a href="#" class="btn btn-primary">Send</a>
