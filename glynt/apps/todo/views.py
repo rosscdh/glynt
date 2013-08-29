@@ -47,8 +47,11 @@ class ProjectToDoView(RulezMixin, ToDoCountMixin, ListView):
         """
         order_by = self.request.GET.get('order_by', '-id')  # newest first
 
+        self.project = get_object_or_404(Project, uuid=self.kwargs.get('uuid'))
+        self.can_read(self.project)
+
         fltr = {
-            'project': Project.objects.get(uuid=self.kwargs.get('uuid')),
+            'project': self.project,
         }
 
         # filter by the current user always
@@ -59,12 +62,10 @@ class ProjectToDoView(RulezMixin, ToDoCountMixin, ListView):
         return queryset.order_by(order_by)
 
     def get_context_data(self, **kwargs):
+
         context = super(ProjectToDoView, self).get_context_data(**kwargs)
 
         user_profile = self.request.user.profile
-
-        self.project = get_object_or_404(Project, uuid=self.kwargs.get('uuid'))
-        self.can_read(self.project)
 
         self.checklist_service = ProjectCheckListService(project=self.project)
         self.feedback_requests = self.checklist_service.feedbackrequests_by_user_as_json(user=self.request.user)
