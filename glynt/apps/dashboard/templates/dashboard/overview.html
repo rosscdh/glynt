@@ -80,8 +80,8 @@
                 jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]:first').val());
             },
             complete: function () {
-                // redirect back to main list when closed
-                //document.location.reload();
+                // reload the page to show updated lawyer info
+                document.location.reload();
             }
         });
     });
