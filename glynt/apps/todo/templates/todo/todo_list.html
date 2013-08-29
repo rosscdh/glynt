@@ -81,10 +81,33 @@
 {% endblock %}
 
 {% block js %}
-    <script src="{{ STATIC_URL }}js/jquery.hotkeys-0.8.js"></script>
+    <!--<script src="{{ STATIC_URL }}js/jquery.hotkeys-0.8.js"></script>-->
     <script src="{{ STATIC_URL }}todo/jquery.plugin.filter_status.js"></script>
     <script src="{{ STATIC_URL }}todo/jquery.plugin.edit_label.js"></script>
     <script>
+
+    /**
+    * LawPal Data object used by AngularJS
+    */
+    var LawPal = {
+        /**
+        * Primary list of the checklist items
+        */
+        checklist_data: function () {
+            return {{ checklist_json|safe }};
+        },
+        /**
+        * Feedback requests are requests that are associated
+        * with an item that applies to the currentuser
+        */
+        feedback_requests: function () {
+            return {{ feedback_requests|jsonify }}
+        },
+        is_lawyer: {{ is_lawyer|jsonify }},
+        is_customer: {{ is_customer|jsonify }},
+
+    };
+
     $(document).ready( function () {
 
         $('#list-items').filter_status({
