@@ -15,7 +15,7 @@ $(function() {
 			label: 'Add another',
 			btn_remove: $('<button/>', {
 				class: 'close delete-cloned-region',
-				html: 'x'
+				html: '&times;'
 			})
 		},
 		region_key: null,
@@ -177,7 +177,7 @@ console.log(kwargs)
 			var cloneable_html = $(this.cloneable_html).clone();
 
 			var legend = $(cloneable_html[0]);
-			var btn_remove = $(this.btn_remove.clone())
+			var btn_remove = $(this.btn_remove.clone());
 
 			/**
 			* Update the legend
@@ -187,7 +187,7 @@ console.log(kwargs)
 				'label': legend.html(),
 				'current': this.num_elements,
 			}));
-			legend.prepend(btn_remove);
+			// legend.prepend(btn_remove);
 
 			/**
 			* Assign change events to each input item
@@ -209,6 +209,8 @@ console.log(kwargs)
 				'data-region_key': self.region_key,
 				'data-index': self.num_elements
 			});
+
+            cloned_html.prepend(btn_remove);
 
 			/**
 			* Add the cloned HTML to the document
