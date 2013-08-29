@@ -24,6 +24,14 @@
 </head>
 <body data-spy="scroll" data-target=".subnav" class="{% block bodyclass %}{% endblock %}" style="padding-top: 70px;">
 
+    <!-- Modals -->
+    {% if user.is_authenticated %}
+        {% include 'partials/modals/checklist-coming.html' %}
+    {% else %}
+        {% include 'partials/modals/signin.html' %}
+    {% endif %}
+    {% block modals %}{% endblock %}
+    
     <div id="wrap">
         <!-- Nav -->
         {% block navbar %}{% include 'partials/nav.html' %}{% endblock %}
@@ -46,15 +54,6 @@
 
     <!-- Footer -->
     {% block footer %}{% include 'partials/footer.html' %}{% endblock %}
-
-    <!-- Modals -->
-    {% if user.is_authenticated %}
-        {% include 'partials/modals/checklist-coming.html' %}
-    {% else %}
-        {% include 'partials/modals/signin.html' %}
-    {% endif %}
-    {% block modals %}{% endblock %}
-
 
 {% profile_card_templates %}
 
