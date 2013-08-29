@@ -46,6 +46,8 @@ class UserToDoLabelResource(BaseApiModelResource):
 
 class ToDoResource(BaseApiModelResource):
     """ Api resource for creating or modifying todo item names """
+    project = fields.IntegerField(attribute='project_id')
+
     class Meta(BaseApiModelResource.Meta):
         queryset = ToDo.objects.all()
         authorization = Authorization()
@@ -55,6 +57,7 @@ class ToDoResource(BaseApiModelResource):
         filtering = {
             'slug': ['exact'],
             'is_deleted': ['exact'],
+            'project': ['exact'],
         }
 
 from tastypie.authentication import Authentication
