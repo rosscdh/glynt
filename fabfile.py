@@ -609,8 +609,9 @@ def deploy(is_predeploy='False',full='False',db='False',search='False'):
     if full or db:
         syncdb()
         migrate()
-    if full or search:
-        update_index()
+    # removed as we dont use haystack yet 
+    # if full or search:
+    #     update_index()
 
     relink()
     assets()
