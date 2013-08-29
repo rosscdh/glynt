@@ -56,8 +56,34 @@
     {% endif %}
 </div>
 <script>
-       $(function () {
+    $(function () {
         $("[data-toggle='tooltip']").tooltip();
+    });
+
+    $(document).on( 'click', '[data-engage]', function (event) {
+        event.preventDefault();
+
+        var elem = $(this);
+        var pk = elem.data('engage');
+        var status = elem.data('status');
+        var url = '/api/v1/project_lawyer/{pk}'.assign({'pk': pk});
+        elem.fadeOut();
+
+        $.ajax({
+            type: 'PATCH',
+            url: url,
+            data: JSON.stringify({'status': status }),
+            dataType: 'application/json',
+            contentType: 'application/json',
+            beforeSend: function (jqXHR, settings) {
+                // Pull the token out of the DOM.
+                jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]:first').val());
+            },
+            complete: function () {
+                // redirect back to main list when closed
+                //document.location.reload();
+            }
+        });
     });
 </script>
 
