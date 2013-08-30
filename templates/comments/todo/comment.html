@@ -1,7 +1,6 @@
-{% load glynt_helpers %}
 <div id="c{{ comment.id }}" class="message-{% if comment.user.pk == user.pk %}right{% else %}left{% endif %} col-lg-12 col-12">
     <div class="post-content">
-        <span class="post-meta text-muted"><a href="">{{ comment.user.get_full_name }}</a> {% moment comment.submit_date %}</span>
+        <span class="post-meta text-muted"><a href="">{{ comment.user.get_full_name }}</a> {{ comment.submit_date|timesince }}</span>
         <p>{{ comment.comment|linebreaks }}</p>
     </div>
 </div>
