@@ -7,16 +7,17 @@
     var COMMENT_SCROLL_TOP_OFFSET = 40;
     var PREVIEW_SCROLL_TOP_OFFSET = 20;
 
+    var COMMENT_CONTROLS = (window.COMMENT_CONTROLS !== undefined) ? window.COMMENT_CONTROLS : {
+        'comment_form': $('form.js-comments-form'),
+        'is_reversed': false,
+        'scroll_to_comment': true,
+        'alerts': true,
+    };
+
     $.fn.ready(function()
     {
+        var commentform = COMMENT_CONTROLS.comment_form;
 
-        var COMMENT_CONTROLS = (window.COMMENT_CONTROLS !== undefined) ? window.COMMENT_CONTROLS : {
-            'is_reversed': false,
-            'scroll_to_comment': true,
-            'alerts': true,
-        };
-
-        var commentform = $('form.js-comments-form');
         if( commentform.length > 0 )
         {
             // Detect last active input.
@@ -207,7 +208,7 @@
     function commentSuccess(data)
     {
         // Clean form
-        $('form.js-comments-form textarea').last().val("");
+        COMMENT_CONTROLS.comment_form.find('textarea').last().val("");
         $('#id_comment').val('');
         cancelThreadedReplyForm();  // in case threaded comments are used.
 
@@ -290,8 +291,8 @@
 
     function removeErrors()
     {
-        $('form.js-comments-form .js-errors').remove();
-        $('form.js-comments-form .control-group.error').removeClass('error');
+        COMMENT_CONTROLS.comment_form.find('.js-errors').remove();
+        COMMENT_CONTROLS.comment_form.find('.control-group.error').removeClass('error');
     }
 
     function getCommentsDiv()

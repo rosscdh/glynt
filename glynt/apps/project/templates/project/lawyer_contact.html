@@ -28,5 +28,7 @@
 <hr/>
 {% endwith %}
 
+<script type="text/javascript" src="{{ STATIC_URL }}js/ajax-comments.js"></script>
+
 {% render_comment_list_reversed for project %}
 {% render_comment_form for project %}
