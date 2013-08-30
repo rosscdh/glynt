@@ -35,6 +35,7 @@ class BaseEmailService(object):
 
     def __init__(self, **kwargs):
         self._subject = kwargs.get('subject', self._subject)
+        self._message = kwargs.get('message', self._message)
         self.from_name = kwargs.get('from_name', admin_name)
         self.from_email = kwargs.get('from_email', admin_email)
 
@@ -56,14 +57,16 @@ class BaseEmailService(object):
         if self.recipients:
             """ extract list of recipients name, email from the passed in recipients """
             assert type(self.recipients) in [list, tuple, itertools.chain]
-            if type(self.recipients) == itertools.chain:
-                recipients = []
-                for u in self.recipients:
-                    if type(u) in [User]:
-                        """ dont add email to recipient if its the same as the from_email """
-                        if u.email != self.from_email:
-                            recipients.append((u.get_full_name(), u.email,))
-                self.recipients = recipients
+
+            recipients = []
+
+            for u in self.recipients:
+                if type(u) in [User]:
+                    """ dont add email to recipient if its the same as the from_email """
+                    if u.email != self.from_email:
+                        recipients.append((u.get_full_name(), u.email,))
+            self.recipients = recipients
+
         else:
             assert self.to_name
             assert self.to_email

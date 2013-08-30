@@ -1,0 +1,55 @@
+{% extends base_template %}{% load account_tags glynt_helpers lawyer_profile_tags project_tags jsonify thumbnail humanize project_tags cache %}
+
+{% block body %}
+{% csrf_token %}
+<div id="hero">
+	<div class="container">
+		<div class="row profile-details">
+			<div class="col col-lg-2 col-offset-1">
+				<div class="avatar">
+					<img src="{{ object.profile_photo }}" alt="{{ object.user.get_full_name|default:object.user.username }}" />
+				</div>
+			</div>
+			<div class="col col-lg-7">
+				<h1>{{ object.user.get_full_name|default:object.user.username }}</h1>
+				<h3>{{ object.primary_firm }}</h3>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container profile">
+	<div class="row">
+        <div class="col col-lg-7 col-offset-1">
+            <p>{{ object.summary|default:"&nbsp;" }}</p>
+        </div>
+		<div class="col col-lg-7 col-offset-1">
+			<p>{{ object.bio|default:"<div class=\"no-data\">No biography yet.</div>"|linebreaksbr }}</p>
+		</div>
+	</div>
+    <div class="row">
+		<div class="map">
+			{% if object.data.practice_location_1 and not object.data.practice_location_2 %}
+				<img src="//maps.googleapis.com/maps/api/staticmap?size=300x145&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_1 }}&sensor=false&maptype=roadmap">
+			{% endif %}
+			{% if object.data.practice_location_1 and object.data.practice_location_2 %}
+				<img src="//maps.googleapis.com/maps/api/staticmap?size=150x145&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_1 }}&sensor=false"><img src="http://maps.googleapis.com/maps/api/staticmap?size=149x145&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_2 }}&sensor=false">
+			{% endif %}
+			<ul class="key-points">
+				{% for practice_location in object.practice_locations  %}
+					<li class="marker">{{ practice_location }}</li>
+				{% endfor %}
+                {% if object.data.years_practiced > 0 %}
+                    <li class="tick">{{ object.data.years_practiced }} Years Practicing</li>
+                {% endif %}
+			</ul>
+	    </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block css %}
+<link href="{{ STATIC_URL }}css/theme/lawyer-profile.css" rel="stylesheet" charset="utf-8" />
+{% endblock %}
+{% block js %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/Chart.min.js"></script>
+{% endblock %}

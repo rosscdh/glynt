@@ -2,6 +2,8 @@
 from glynt.apps.project.models import Project, ProjectLawyer
 from glynt.apps.project import PROJECT_STATUS
 
+import itertools
+
 
 class VisibleProjectsService(object):
     """
@@ -43,7 +45,9 @@ class VisibleProjectsService(object):
         return (projects, project,)
 
     def lawyer(self):
-        projects = [join.project for join in ProjectLawyer.objects.assigned(lawyer=self.user.lawyer_profile)]
+        project_lawyers = itertools.chain(ProjectLawyer.objects.potential(lawyer=self.user.lawyer_profile), \
+                                          ProjectLawyer.objects.assigned(lawyer=self.user.lawyer_profile))
+        projects = [join.project for join in project_lawyers]
 
         try:
             project = projects[0]

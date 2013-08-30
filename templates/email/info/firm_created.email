@@ -1,13 +1,27 @@
-{% load glynt_helpers %}
+{% extends 'email/base.email' %}{% load glynt_helpers %}
 
 {% block subject %}A Firm has been Created on {% current_site_domain %}{% endblock %}
 
-{% block plain %}
+{% block content %}
+    <tr>
+        <td align="left" colspan="3" height="40" width="100%" style="font-size: 0; line-height: 0;">
+        <h2>A Firm has been Created on {% current_site_domain %}</h2>
+        <ul>
+        <li><b>Name:</b> {{ firm.name }}</li>
+        <li><b>Id:</b> {{ firm.pk }}</li>
+        <ul>
+
+        <h4>Please validate it.</h4>
+        </td>
+    </tr>
+{% endblock %}
+
+{% block plain_body %}
+
 A Firm has been Created on {% current_site_domain %}
 
 Name: {{ firm.name }}
 Id: {{ firm.pk }}
 
 Please validate it.
-{% include 'email/footer.email' %}
 {% endblock %}

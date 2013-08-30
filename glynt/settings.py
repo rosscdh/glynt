@@ -249,13 +249,15 @@ HELPER_APPS = (
 
     # Object rules and permissions
     'rulez',
+    # Haystack Search
+    'haystack',
 )
 
 
 # Handle south and its breaking tests
 if IS_TESTING == True:
     # Log email to console
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
     # disable celery for test
     BROKER_BACKEND = 'memory'
 
@@ -266,20 +268,16 @@ else:
     HELPER_APPS = HELPER_APPS + (
         # Db Migrations
         'south',
-        # Search - inluded here to allow for loading of fixtures
-        'haystack',
     )
 
-    # Process model updates in real time
-    HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
-    HAYSTACK_CONNECTIONS = {
-        'default': {
-            'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
-            'URL': 'http://jsy06hdx:km5ugyiy90yy17qg@banyan-8252692.us-east-1.bonsai.io',
-            'INDEX_NAME': 'dev-lawyers',
-        },
-    }
-    USE_ELASTICSEARCH = True
+# Process model updates in real time
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
+    },
+}
+USE_ELASTICSEARCH = True
 
 
 

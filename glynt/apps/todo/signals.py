@@ -101,16 +101,18 @@ def on_comment_created(sender, **kwargs):
         comment = kwargs.get('instance')
 
         if comment and is_new:
-            todo = comment.content_object
-            verb = '{name} commented on checklist item {todo} for {project}'.format(name=comment.user.get_full_name(), project=todo.project, todo=todo.name)
-            action.send(comment.user,
-                        verb=verb,
-                        action_object=comment,
-                        target=todo,
-                        content=comment.comment)
+            # If its a comment on a ToDo Object
+            if type(comment.content_object) == ToDo:
+                todo = comment.content_object
+                verb = '{name} commented on checklist item {todo} for {project}'.format(name=comment.user.get_full_name(), project=todo.project, todo=todo.name)
+                action.send(comment.user,
+                            verb=verb,
+                            action_object=comment,
+                            target=todo,
+                            content=comment.comment)
 
-            todostatus_service = ToDoStatusService(todo_item=todo)
-            todostatus_service.process()
+                todostatus_service = ToDoStatusService(todo_item=todo)
+                todostatus_service.process()
 
 """
 Feedback Request Change Events

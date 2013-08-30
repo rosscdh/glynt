@@ -7,6 +7,7 @@ from glynt.apps.todo import TODO_STATUS, FEEDBACK_STATUS
 from model_mommy import mommy
 
 import os
+import httpretty
 
 #from nose.tools import set_trace; set_trace()
 class FeedbackRequestManagerTest(BaseLawyerCustomerProjectCaseMixin):
@@ -20,12 +21,18 @@ class FeedbackRequestManagerTest(BaseLawyerCustomerProjectCaseMixin):
 
         self.feedback_request = mommy.make('todo.FeedbackRequest', status=FEEDBACK_STATUS.open, attachment=self.attachment, assigned_by=self.customer_user, assigned_to=(self.lawyer_user,), comment='What are your thoughts on this test file with ümlauts')
 
-
+    @httpretty.activate
     def test_close_todo_sets_feedbackrequest_to_canceled(self):
         """
         When the todo item gets closed
         then all open FeedbackRequests should be set to cancelled and have a closed message
+        @MOCK crocdoc
         """
+        httpretty.register_uri(httpretty.POST, "https://crocodoc.com/api/v2/document/upload",
+                       body='{"success": true, "uuid": "123-test-123-uuid"}',
+                       status=200,
+                       content_type='text/json')
+
         self.assertTrue(self.todo.pk is not None)
         self.assertEqual(self.todo.status, TODO_STATUS.pending) # because we have assigned a feedback request to it
         self.assertEqual(self.feedback_request.status, FEEDBACK_STATUS.open)

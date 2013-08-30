@@ -3,7 +3,7 @@
 <tbody>
 {% for n in object_list %}
 <tr class="story">
-    <td class="story-type"><span class="label label-success">{{ n.project_status }}</span></td>
+    <td class="story-type"><span class="label label-success">{{ n.display_status }}</span></td>
     <td class="story-actor">
     <div class="profile-card" data-username="{{ n.actor.username }}" data-img_class="img-circle" data-template="mini">&nbsp;</div>
     <td class="story-info">{{ n.description }} &middot; <span>{% moment n.timestamp %}</span></td>

@@ -9,7 +9,7 @@ class AjaxBaseTemplateMixin(object):
         context = super(AjaxBaseTemplateMixin, self).get_context_data(*args, **kwargs)
 
         context.update({
-            'base_template': 'base.html' if not self.request.is_ajax else 'base-slim.html',
+            'base_template': 'base-slim.html' if self.request.is_ajax() else 'base.html',
         })
 
         return context

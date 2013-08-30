@@ -10,9 +10,6 @@ django-cities-light
 # easydict lookups with dot notation
 bunch
 
-# termcolor for fabric warnings
-termcolor
-
 # utils for git
 mimeparse
 
@@ -62,7 +59,7 @@ django-activity-stream
 pyelasticsearch
 
 # Markup
-pip install -e git+https://github.com/agiliq/Django-parsley.git#egg=django-parsley
+-e git+https://github.com/agiliq/Django-parsley.git#egg=django-parsley
 django_markup
 markup
 Markdown

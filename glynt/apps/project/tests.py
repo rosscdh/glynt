@@ -93,8 +93,8 @@ class ProjectModelMethodsTest(TestCase):
 
     def test_project_status(self):
         """ Test the Display name is the same as the named_tuple description"""
-        self.assertEqual(self.project_with_lawyer.project_status, PROJECT_STATUS.get_desc_by_value(self.project_with_lawyer.status))
-        self.assertEqual(self.project_with_lawyer.project_status, 'New')
+        self.assertEqual(self.project_with_lawyer.display_status, PROJECT_STATUS.get_desc_by_value(self.project_with_lawyer.status))
+        self.assertEqual(self.project_with_lawyer.display_status, 'New')
         self.assertEqual(self.project_with_lawyer.is_new, True)
         self.assertEqual(self.project_with_lawyer.is_open, False)
         self.assertEqual(self.project_with_lawyer.is_closed, False)

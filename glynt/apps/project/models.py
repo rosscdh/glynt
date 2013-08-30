@@ -115,7 +115,7 @@ class Project(models.Model):
         return [t.title for t in self.transactions.all()]
 
     @property
-    def project_status(self):
+    def display_status(self):
         return PROJECT_STATUS.get_desc_by_value(self.status)
 
     @property
@@ -148,4 +148,4 @@ class ProjectLawyer(models.Model):
 
 
 # import signals so they load on django load
-from glynt.apps.project.signals import on_project_created
+from glynt.apps.project.signals import on_project_created, on_lawyer_assigned
