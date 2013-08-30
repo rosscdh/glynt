@@ -115,7 +115,7 @@ class Project(models.Model):
         return [t.title for t in self.transactions.all()]
 
     @property
-    def project_status(self):
+    def display_status(self):
         return PROJECT_STATUS.get_desc_by_value(self.status)
 
     @property

@@ -10,7 +10,8 @@ urlpatterns = patterns('',
     url(r'^create/$', login_required(CreateProjectView.as_view()), name='create'),
     # url(r'^my/$', login_required(MyProjectsView.as_view()), name='list'),
 
-    url(r'^(?P<slug>.+)/(?P<lawyer>.+)/contact/$', login_required(LawyerContactProjectView.as_view()), name='project_contact'),
+    url(r'^(?P<slug>.+)/(?P<lawyer>.+)/lawyer-contact/$', login_required(LawyerContactProjectView.as_view()), name='project_contact'),
+    #url(r'^(?P<slug>.+)/(?P<lawyer>.+)/project-contact/$', login_required(LawyerContactProjectView.as_view()), name='project_contact'),
 
     url(r'^(?P<slug>.+)/close/$', login_required(CloseProjectView.as_view()), name='close'),
     url(r'^(?P<slug>.+)/re-open/$', login_required(ReOpenProjectView.as_view()), name='re-open'),

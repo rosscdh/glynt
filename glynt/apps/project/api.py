@@ -24,7 +24,7 @@ class ProjectResource(BaseApiModelResource):
 
     def dehydrate(self, bundle):
         bundle.data.update({
-            'status': PROJECT_STATUS.get_desc_by_value(bundle.obj.project_status).lower(),
+            'status': PROJECT_STATUS.get_desc_by_value(bundle.obj.display_status).lower(),
         })
         return bundle
 
@@ -62,6 +62,6 @@ class ProjectLawyerResource(BaseApiModelResource):
 
     # def dehydrate(self, bundle):
     #     bundle.data.update({
-    #         'status': PROJECT_STATUS.get_desc_by_value(bundle.obj.project_status).lower(),
+    #         'status': PROJECT_STATUS.get_desc_by_value(bundle.obj.display_status).lower(),
     #     })
     #     return bundle

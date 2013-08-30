@@ -130,7 +130,7 @@ def on_lawyer_assigned(sender, **kwargs):
 #             #     mark_project_notifications_as_read(user=comment.user, project=project)
 
 #             """ @BUSINESSRULE if the project request is marked "new" then set it to open only once the lawyer responds """
-#             if project.project_status == PROJECT_STATUS.new:
+#             if project.display_status == PROJECT_STATUS.new:
 #                 if comment.user.profile.is_lawyer:
 #                     project.open(actioning_user=comment.user)
 
