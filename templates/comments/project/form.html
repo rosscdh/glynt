@@ -1,0 +1,27 @@
+{% load comments fluent_comments_tags i18n %}
+<div class="container post-reply">
+    <form action="{% comment_form_target %}" data-ajax-action="{% url 'comments-post-comment-ajax' %}" method="POST" class="js-comments-form comments-form form-wide clearfix">
+        {% csrf_token %}
+        {% if next %}<div><input type="hidden" name="next" value="{{ next }}" /></div>{% endif %}
+        {% if form.comment.errors %}{{ form.comment.errors }}{% endif %}
+        <div class="span4">
+        {{ form.comment }}
+        </div>
+        {{ form.honeypot }}
+        {{ form.content_type }}
+        {{ form.object_pk }}
+        {{ form.timestamp }}
+        {{ form.security_hash }}
+        <div class="pull-right"><button id="btn-save_comment" class="btn btn-primary pull-right" type="submit">{% trans 'Send' %}</button></div>
+        {#% ajax_comment_tags %#}
+    </form>
+</div>
+<br />
+<style>
+#id_comment {
+    height:80px;
+}
+#id_honeypot {
+    display:none;
+}
+</style>

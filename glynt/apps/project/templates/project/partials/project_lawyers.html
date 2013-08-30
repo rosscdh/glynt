@@ -20,7 +20,7 @@
                                 </td>
                                 <td class="lawyer-meta">
                                     <a href="{% url 'lawyer:profile_lite' slug=l.user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-info">View Profile</a>
-                                    <a href="{% url 'project:project_contact' slug=project.uuid lawyer=l.user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-primary btn-lg">Contact &amp; Engage</a>
+                                    <a href="{% url 'project:project_contact' slug=project.uuid lawyer=l.user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-primary btn-lg">Contact</a>
                                 </td>
                             </tr>
                         </tbody>

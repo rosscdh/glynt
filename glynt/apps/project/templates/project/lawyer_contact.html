@@ -1,4 +1,7 @@
-{% load url from future %}{% csrf_token %}
+{% load url from future %}{% load comments fluent_comments_tags %}
+{% csrf_token %}
+
+
 <h3>{{ project_lawyer.display_status }} Lawyer</h3>
 
 <div class="">Message {{ project.primary_lawyer.user.get_full_name }} below to work out if they are suitable for your transaction. You can meet all of our participating lawyers in person.</div>
@@ -21,3 +24,6 @@
     </div>
 </div>
 <hr/>
+
+{% render_comment_form for project %}
+{% render_comment_list for project %}
