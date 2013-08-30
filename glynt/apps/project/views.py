@@ -2,6 +2,7 @@
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, DetailView, ListView, UpdateView
 from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.http import Http404
@@ -9,6 +10,7 @@ from django.http import Http404
 from glynt.apps.utils import AjaxableResponseMixin
 
 from glynt.apps.project.models import Project, ProjectLawyer
+from glynt.apps.lawyer.models import Lawyer
 from glynt.apps.project.forms import CreateProjectForm
 from glynt.apps.project.services.ensure_project import EnsureProjectService
 
@@ -103,9 +105,13 @@ class LawyerContactProjectView(ProjectView):
     template_name = 'project/lawyer_contact.html'
     def get_context_data(self, **kwargs):
         context = super(LawyerContactProjectView, self).get_context_data(**kwargs)
+
+        lawyer = get_object_or_404(Lawyer.objects.prefetch_related('user'), user__username=self.kwargs.get('lawyer'))
+
         context.update({
             'PROJECT_LAWYER_STATUS': PROJECT_LAWYER_STATUS,
-            'project_lawyer': ProjectLawyer.objects.get(project=self.object, lawyer=self.object.primary_lawyer),
+            'project_lawyer_join': ProjectLawyer.objects.get(project=self.object, lawyer=self.object.primary_lawyer),
+            'lawyer': lawyer,
         })
 
         return context

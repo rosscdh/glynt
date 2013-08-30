@@ -48,9 +48,7 @@ class DashboardView(ToDoCountMixin, TemplateView):
         return qs_filter
 
     def lawyer_context(self):
-        return Bunch({
-                    'PROJECT_LAWYER_STATUS': PROJECT_LAWYER_STATUS,
-               })
+        return Bunch({})
 
     def customer_context(self, project):
         intake_complete = ProjectIntakeFormIsCompleteBunch(project=self.request.project)
@@ -65,6 +63,7 @@ class DashboardView(ToDoCountMixin, TemplateView):
         qs_filter = self.qs_filter()
 
         kwargs.update({
+            'PROJECT_LAWYER_STATUS': PROJECT_LAWYER_STATUS,
             'projects': self.request.projects,
             'project': self.request.project,
         })

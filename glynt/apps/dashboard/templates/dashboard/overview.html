@@ -1,4 +1,5 @@
-{% extends 'base.html' %}{% load url from future %}{% load glynt_helpers crispy_forms_tags project_tags %}
+{% extends 'base.html' %}
+{% load url from future %}{% load glynt_helpers crispy_forms_tags project_tags comments fluent_comments_tags %}
 
 {% block page_title %}Overview &mdash; {% project_name project %}{% endblock %}
 
@@ -37,7 +38,6 @@
                 <div class="col col-lg-6">
                     <div class="widget transaction-profile">
                         <h3>Transaction Profile</h3>
-
                         <div class="callout callout-success empty">
                             <div class="empty-message empty-message-ok">
                                 <h3>Your transaction profile is up-to-date.</h3>
@@ -46,9 +46,23 @@
                         </div>
                     </div>
                 </div>
+            </div>
+
+            {% if project.projectlawyer_set.all.0.status == PROJECT_LAWYER_STATUS.assigned %}
+            <div class="row">
+                <div class="col col-lg-6">
+                    <div class="widget">
+                        <h3>Discussion</h3>
+                        {% render_comment_form for project %}
+                        {% render_comment_list for project %}
+                    </div>
+                </div>
+            </div>
             {% endif %}
 
-        </div>
+        {% endif %}
+
+
     {% else %}
         <div class="alert">
             The Attorney Transaction dashboard is coming shortly. For now, please review the Checklist.
@@ -58,6 +72,7 @@
 {% endblock %}
 
 {% block js %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/ajax-comments.js"></script>
 <script>
     $(function () {
         $("[data-toggle='tooltip']").tooltip();
