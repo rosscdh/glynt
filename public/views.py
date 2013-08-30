@@ -1,14 +1,18 @@
 # -*- coding: utf-8 -*-
 from django.contrib import messages
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.views.generic.base import RedirectView
 from django.views.generic.edit import FormView
 from django.views.generic import TemplateView
 from django.core.urlresolvers import reverse
 
+import json
+
 from public.forms import ContactForm
 from public.tasks import send_contactus_email
 from glynt.apps.customer.models import CustomerLoginLogic
+
+from glynt.apps.utils import AjaxableResponseMixin
 
 import logging
 logger = logging.getLogger('django.request')
@@ -79,7 +83,7 @@ class UserClassLoggedInRedirectView(RedirectView):
         return url
 
 
-class ContactUsView(FormView):
+class ContactUsView(AjaxableResponseMixin, FormView):
     template_name = 'public/contact-us.html'
     form_class = ContactForm
 
@@ -106,6 +110,13 @@ class ContactUsView(FormView):
 
         send_contactus_email(from_name=form.cleaned_data['name'], from_email=form.cleaned_data['email'], message=form.cleaned_data['message'])
 
-        messages.success(self.request, "Message sent, thanks!")
+        payload = { 'success': True, 'message': "Message sent, thanks!" }
 
-        return super(ContactUsView, self).form_valid(form)
+        if self.request.is_ajax():
+            return HttpResponse(json.dumps(payload),
+                content_type='application/json',
+            )
+        else:
+            messages.success(self.request, "Message sent, thanks!")
+
+            return super(ContactUsView, self).form_valid(form)
