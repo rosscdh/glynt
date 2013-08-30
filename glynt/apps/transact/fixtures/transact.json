@@ -33,7 +33,7 @@
     "pk": 3,
     "model": "transact.transaction",
     "fields": {
-      "price": "500",
+      "price": "3000",
       "description": "The standard package includes providing advice to founders and preparing and negotiating documents for closing your seed convertible note financing. They will also review any documents prepared to date and assist with necessary clean-up of the company’s corporate legal documents.",
       "data": {
         "checklist_bunches": [
