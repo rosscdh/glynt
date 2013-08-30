@@ -1,5 +1,11 @@
 <div id="comments" class="row">
 {% for comment in comment_list reversed %}
-    {% include 'comments/project/comment.html' %}
+    <div id="c{{ comment.id }}" class="message-{% if comment.user.pk == user.pk %}right{% else %}left{% endif %} col-lg-12 col-12">
+        <div class="post-content">
+            <span class="post-meta text-muted {% cycle "" "pull-right" %}"><a href="">{{ comment.user.get_full_name }}</a> {{ comment.submit_date|timesince }}</span>
+            <p>{{ comment.comment|linebreaks }}</p>
+        </div>
+    </div>
+    <hr/>
 {% endfor %}
 </div>
