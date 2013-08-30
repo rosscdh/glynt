@@ -58,7 +58,7 @@ class CrocdocAttachmentService(object):
                 uuid = self.upload_document()
                 logger.info('CrocdocAttachmentService.uuid: {uuid}'.format(uuid=uuid))
             except Exception as e:
-                logger.error('CrocdocAttachmentService.uuid: Failed to Generate uuid'.format(uuid=uuid))
+                logger.error('CrocdocAttachmentService.uuid: Failed to Generate uuid')
                 raise e
 
             crocdoc = self.attachment.data.get('crocdoc', {})
