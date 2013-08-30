@@ -3,6 +3,7 @@ from django import forms
 from django.core.urlresolvers import reverse
 
 from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Div, Field, Layout, Submit
 
 from public.forms import ContactForm
 
@@ -14,8 +15,22 @@ class ContactUsForm(ContactForm):
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.form_id = 'example-form'
         self.helper.form_method = 'post'
         self.helper.form_action = reverse('public:contact_us')
+
+        self.helper.add_layout(Layout(
+            Div(
+                Field('name'),
+                Field('message'),
+                css_class='modal-body'
+            ),
+            Div(
+                Submit('send', 'Send'),
+                css_class='modal-footer'
+            ),
+        ))
 
         super(ContactUsForm, self).__init__(*args, **kwargs)
 
