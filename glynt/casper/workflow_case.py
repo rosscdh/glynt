@@ -9,6 +9,8 @@ from .base import BaseCasperJs
 from glynt.apps.todo import TODO_STATUS
 from glynt.apps.transact.models import Transaction
 
+import httpretty
+
 
 class PyQueryMixin(LiveServerTestCase):
     """
@@ -27,7 +29,14 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
     """
     fixtures = ['test_cities', 'transact.json']
 
+    @httpretty.activate
     def setUp(self):
+        # mock the attachment upload
+        httpretty.register_uri(httpretty.POST, "https://crocodoc.com/api/v2/document/upload",
+                       body='{"success": true, "uuid": "123-test-123-uuid"}',
+                       status=200,
+                       content_type='text/json')
+
         super(BaseLawyerCustomerProjectCaseMixin, self).setUp()
         self.client = Client()
 

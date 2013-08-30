@@ -8,7 +8,9 @@ from glynt.apps.project.models import Project, ProjectLawyer
 
 from model_mommy import mommy
 
+import httpretty
 import os
+
 
 #from nose.tools import set_trace; set_trace()
 class DashboardLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
@@ -79,7 +81,13 @@ class ChecklistLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
             # test we have 1 delete link
             self.assertTrue(len(elem.find('a.item-delete')) == 1)
 
+    @httpretty.activate
     def test_lawyer_dashboard_js(self):
+        httpretty.register_uri(httpretty.POST, "https://crocodoc.com/api/v2/document/upload",
+                       body='{"success": true, "uuid": "123-test-123-uuid"}',
+                       status=200,
+                       content_type='text/json')
+
         self.client.login(username=self.lawyer_user.username, password=self.password)
 
         # Create feedback request for testing of assigned to indicator on checklist

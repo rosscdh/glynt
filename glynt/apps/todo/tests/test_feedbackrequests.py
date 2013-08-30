@@ -29,7 +29,7 @@ class FeedbackRequestManagerTest(BaseLawyerCustomerProjectCaseMixin):
         @MOCK crocdoc
         """
         httpretty.register_uri(httpretty.POST, "https://crocodoc.com/api/v2/document/upload",
-                       body='{"success": true}',
+                       body='{"success": true, "uuid": "123-test-123-uuid"}',
                        status=200,
                        content_type='text/json')
 
