@@ -1,29 +1,32 @@
 {% load url from future %}{% load comments fluent_comments_tags %}
 {% csrf_token %}
 
+{% with lawyer=project.primary_lawyer lawyer_user=project.primary_lawyer.user%}
 
 <h3>{{ project_lawyer.display_status }} Lawyer</h3>
 
-<div class="">Message {{ project.primary_lawyer.user.get_full_name }} below to work out if they are suitable for your transaction. You can meet all of our participating lawyers in person.</div>
-{{ project.primary_lawyer.user.username }}
+<div class="">Message {{ lawyer_user.get_full_name }} below to work out if they are suitable for your transaction. You can meet all of our participating lawyers in person.</div>
+{{ lawyer_user.username }}
 
 <div class="row animated fadeInRight profile-details">
     <div class="col col-lg-2 col-offset-1">
         <div class="avatar">
-            <img class="img-rounded" src="{{ project.primary_lawyer.profile_photo }}" alt="{{ project.primary_lawyer.user.get_full_name|default:project.primary_lawyer.user.username }}" />
+            <img class="img-rounded" src="{{ lawyer.profile_photo }}" alt="{{ lawyer_user.get_full_name|default:lawyer_user.username }}" />
         </div>
     </div>
     <div class="col col-lg-7">
-        <h1>{{ project.primary_lawyer.user.get_full_name|default:project.primary_lawyer.user.username }}</h1>
-        <h3>{{ project.primary_lawyer.primary_firm }}</h3>
+        <h1>{{ lawyer_user.get_full_name|default:lawyer_user.username }}</h1>
+        <h3>{{ lawyer.primary_firm }}</h3>
     </div>
     <div class="col col-lg-7">
         {% if project_lawyer.status == PROJECT_LAWYER_STATUS.potential %}
-        <button data-engage="{{ project_lawyer.pk }}" data-status="{{ PROJECT_LAWYER_STATUS.assigned }}" class="btn btn-success">Engage</button>
+        <button data-engage="{{ project_lawyer.pk }}" data-status="{{ PROJECT_LAWYER_STATUS.assigned }}" class="btn btn-success">Engage {{ lawyer_user.get_full_name|default:lawyer_user.username }}</button>
         {% endif %}
+        <a href="{% url 'lawyer:profile' slug=lawyer_user.username %}" class="btn btn-success">View Profile</a>
     </div>
 </div>
 <hr/>
+{% endwith %}
 
 {% render_comment_list_reversed for project %}
 {% render_comment_form for project %}
