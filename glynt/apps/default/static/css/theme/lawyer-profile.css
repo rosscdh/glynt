@@ -174,32 +174,32 @@
     font-size: 14px;
 
     }
-    .map ul.key-points {
+    ul.key-points {
     padding: 18px;
     padding-bottom:10px;
     margin: 0;
     }
-    .map ul li {
+    ul.key-points li {
     padding: 0;
     margin: 0 0 0.5em 0;
     list-style-type: none;
 
     }
-    .map ul li.marker, .map ul li.tick, .map ul li.star {
+    ul.key-points li.marker, ul.key-points li.tick, ul.key-points li.star {
     padding: 0 0 0 20px;
     background: url(../../img/app/map-sprite.png) 0 5px no-repeat;
     }
-    .map ul li.tick {
+    ul.key-points li.tick {
     background-position: 0 -53px;
     }
-    .map ul li.star {
+    ul.key-points li.star {
     background-position: 0 -119px;
     }
-    .map ul li.friends {
+    ul.key-points li.friends {
     padding-top: 1em;
     font-size: 12px;
     }
-    .map ul li.friends img {
+    ul.key-points li.friends img {
     margin-right: 4px;
     }
     ul.social-buttons {

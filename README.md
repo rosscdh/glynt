@@ -32,10 +32,12 @@ a "**customer**"
 2. ```pip install virtualenv virtualenvwrapper```
 3. Perform these steps
 
-    export WORKON_HOME=~/.virtualenvs
-    mkdir -p $WORKON_HOME
-    source /usr/local/bin/virtualenvwrapper.sh
-    echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bash_profile
+```
+export WORKON_HOME=~/.virtualenvs
+mkdir -p $WORKON_HOME
+source /usr/local/bin/virtualenvwrapper.sh
+echo "source /usr/local/bin/virtualenvwrapper.sh" >> ~/.bash_profile
+```
 
 4. mkvirtualenv --no-site-packages glynt
 5. ```mkdir -p ~/Projects```
@@ -54,11 +56,6 @@ a "**customer**"
     6. Thats it you can now ```python manage.py runserver_plus```
     7. access http://local.weareml.com:8000/ (you may need to add 127.0.0.1 local.weareml.com to your /etc/hosts file)
 
-## Autoenv
-
-```brew install autoenv```
-
-1. cd into glynt dir and the .env file will do its magic
 
 ## Update requirments
 
@@ -76,17 +73,28 @@ a "**customer**"
 6. interact with an uploaded crocdoc item attachment
     
 
+# Notes
+
+The following sections are simply notes and are not necessary for getting running in dev.
+
+
 ## Start Celery Worker
+
+Only run the celery worker if you want to test async processes
 
 ```python manage.py celery worker --loglevel=info```
 
 
 ## Geos
 
+Not necessary for dev.local
+
 ```brew install geos```
 
 
 ## Cities
+
+Not necessary for dev.local
 
 Load all the city data
 
@@ -138,3 +146,7 @@ fab $TARGET_ENV requirements clean_pyc syncdb migrate
 
 1. ```brew update```
 2. ```brew install casperjs```
+
+## UBUNTU ##
+
+1. ```sudo apt-get install libxml2-dev libxslt1-dev```

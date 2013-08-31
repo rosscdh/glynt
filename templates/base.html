@@ -24,14 +24,10 @@
 </head>
 <body data-spy="scroll" data-target=".subnav" class="{% block bodyclass %}{% endblock %}" style="padding-top: 70px;">
 
-    <!-- Modals -->
-    {% if user.is_authenticated %}
-        {% include 'partials/modals/checklist-coming.html' %}
-    {% else %}
-        {% include 'partials/modals/signin.html' %}
-    {% endif %}
-    {% block modals %}{% endblock %}
-    
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+
+
     <div id="wrap">
         <!-- Nav -->
         {% block navbar %}{% include 'partials/nav.html' %}{% endblock %}
@@ -55,12 +51,20 @@
     <!-- Footer -->
     {% block footer %}{% include 'partials/footer.html' %}{% endblock %}
 
+    <!-- Modals -->
+    {% if user.is_authenticated %}
+        {% include 'partials/modals/checklist-coming.html' %}
+    {% else %}
+        {% include 'partials/modals/signin.html' %}
+    {% endif %}
+    {% block modals %}{% endblock %}
+
 {% profile_card_templates %}
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.getPath.js"></script>
 
 {% compress js %}
+
     <script type="text/javascript" src="{{ STATIC_URL }}bootstrap-v3/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.cookie.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/typeahead.js"></script>
@@ -69,8 +73,8 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/sugar-1.3.9.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}handlebars.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}handlebars-helpers.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/lawpal.modal.js"></script>
     <script type="text/javascript">{% profile_card_js %}</script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/application.js"></script>
 {% endcompress %}
 
 {% handlebars_messages %}

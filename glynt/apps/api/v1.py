@@ -22,7 +22,7 @@ from glynt.apps.company.api import (CompanyLiteSimpleResource,
                                     CompanyBasicProfileResource, CompanyDataBagResource)
 
 from glynt.apps.project.api import (ProjectResource, 
-                                    ProjectDataBagResource)
+                                    ProjectDataBagResource, ProjectLawyerResource)
 
 from glynt.apps.todo.api import (UserToDoCountResource, AttachmentResource, 
                                 ToDoResource, FeedbackRequestResource)
@@ -130,10 +130,13 @@ V1_INTERNAL_API.register(UserBasicProfileResource())
 V1_INTERNAL_API.register(CompanyLiteSimpleResource())
 V1_INTERNAL_API.register(CompanyBasicProfileResource())
 V1_INTERNAL_API.register(CompanyDataBagResource())
-V1_INTERNAL_API.register(ProjectDataBagResource())
+
 V1_INTERNAL_API.register(UserToDoCountResource())
 V1_INTERNAL_API.register(AttachmentResource())
 V1_INTERNAL_API.register(ToDoResource())
 V1_INTERNAL_API.register(FeedbackRequestResource())
 V1_INTERNAL_API.register(LawyerResource())
+
 V1_INTERNAL_API.register(ProjectResource())
+V1_INTERNAL_API.register(ProjectLawyerResource())
+V1_INTERNAL_API.register(ProjectDataBagResource())

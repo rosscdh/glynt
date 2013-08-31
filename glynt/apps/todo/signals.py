@@ -7,13 +7,13 @@ from django.contrib.admin.models import LogEntry
 
 from threadedcomments.models import ThreadedComment
 
-from glynt.apps.todo import TODO_STATUS_ACTION, FEEDBACK_STATUS
+from glynt.apps.todo import TODO_STATUS, TODO_STATUS_ACTION, FEEDBACK_STATUS
 
 from .tasks import delete_attachment
 from .models import ToDo, Attachment, FeedbackRequest
 from .services import CrocdocAttachmentService, ToDoStatusService, ToDoAttachmentFeedbackRequestStatusService
 
-from glynt.apps.project.models import ProjectLawyer
+from glynt.apps.project.models import Project, ProjectLawyer
 
 from glynt.apps.services.email import NewActionEmailService
 from glynt.apps.services.pusher import PusherPublisherService
@@ -74,16 +74,19 @@ def on_attachment_deleted(sender, **kwargs):
                 logger.error('Could not call delete_attachment via celery: {exception}'.format(exception=e))
                 delete_attachment(is_new=is_new, attachment=attachment, **kwargs)
 
-            verb = '{name} Deleted Attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project)
-            action.send(attachment.uploaded_by,
-                        verb=verb,
-                        action_object=attachment,
-                        target=attachment.todo,
-                        content=verb,
-                        attachment=attachment.filename,
-                        todo=attachment.todo.name,
-                        status=attachment.todo.display_status,
-                        event='todo.attachment.deleted')
+            try:
+                verb = '{name} Deleted Attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project)
+                action.send(attachment.uploaded_by,
+                            verb=verb,
+                            action_object=attachment,
+                            target=attachment.todo,
+                            content=verb,
+                            attachment=attachment.filename,
+                            todo=attachment.todo.name,
+                            status=attachment.todo.display_status,
+                            event='todo.attachment.deleted')
+            except ToDo.DoesNotExist:
+                pass
 
 """
 Comment Events
@@ -98,16 +101,18 @@ def on_comment_created(sender, **kwargs):
         comment = kwargs.get('instance')
 
         if comment and is_new:
-            todo = comment.content_object
-            verb = '{name} commented on checklist item {todo} for {project}'.format(name=comment.user.get_full_name(), project=todo.project, todo=todo.name)
-            action.send(comment.user,
-                        verb=verb,
-                        action_object=comment,
-                        target=todo,
-                        content=comment.comment)
+            # If its a comment on a ToDo Object
+            if type(comment.content_object) == ToDo:
+                todo = comment.content_object
+                verb = '{name} commented on checklist item {todo} for {project}'.format(name=comment.user.get_full_name(), project=todo.project, todo=todo.name)
+                action.send(comment.user,
+                            verb=verb,
+                            action_object=comment,
+                            target=todo,
+                            content=comment.comment)
 
-            todostatus_service = ToDoStatusService(todo_item=todo)
-            todostatus_service.process()
+                todostatus_service = ToDoStatusService(todo_item=todo)
+                todostatus_service.process()
 
 """
 Feedback Request Change Events
@@ -188,13 +193,17 @@ def projectlawyer_deleted(sender, **kwargs):
     where those todos.user == instance.lawyer
     """
     instance = kwargs.get('instance')
-    logger.info('Deleted Lawyer: {lawyer} to Project: {project}'.format(lawyer=instance.lawyer, project=instance.project))
-    instance.project.todo_set.filter(user=instance.lawyer.user).update(user=None)
+    try:
+        logger.info('Deleted Lawyer: {lawyer} to Project: {project}'.format(lawyer=instance.lawyer, project=instance.project))
+        instance.project.todo_set.filter(user=instance.lawyer.user).update(user=None)
+    except Project.DoesNotExist:
+        pass
 
 
 @receiver(pre_save, sender=ToDo, dispatch_uid='todo.status_change')
 def todo_item_status_change(sender, **kwargs):
     instance = kwargs.get('instance')
+
     if instance.pk is not None:
 
         if instance.user is not None:
@@ -205,7 +214,7 @@ def todo_item_status_change(sender, **kwargs):
             if prev_instance.status != instance.status:
 
                 event_action = TODO_STATUS_ACTION[instance.status]
-                verb = '{user} {action} {name}'.format(name=instance.name, action=event_action, user=instance.user.get_full_name())
+                verb = '{user} {action} the checklist item "{name}"'.format(name=instance.name, action=event_action, user=instance.user.get_full_name())
 
                 action.send(instance.user,
                             verb=verb,
@@ -216,6 +225,12 @@ def todo_item_status_change(sender, **kwargs):
                             instance_dispay_status=instance.display_status,
                             event_action=event_action,
                             event='todo.status_change')
+
+                if instance.status in [TODO_STATUS.closed, TODO_STATUS.resolved]:
+                    """
+                    @BUSINESS RULE Update the FeedbackRequest objects that are currently open to closed
+                    """
+                    FeedbackRequest.objects.close_by_todo(todo=instance)
 
 
 """

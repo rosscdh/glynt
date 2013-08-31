@@ -61,7 +61,7 @@ class IncorporationBunchTest(BaseToDoBunchAttribsTest):
         self.assertTrue(type(self.subject.todos) == OrderedDict)
         todo_keys = self.subject.todos.keys()
         for e in self.expected_subject_names:
-            print '"%s" in %s' % (e, todo_keys)
+            #print '"%s" in %s' % (e, todo_keys)
             self.assertEqual(True, e.strip() in todo_keys)
 
     def test_repeaters_are_set_and_simple_types(self):

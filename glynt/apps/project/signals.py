@@ -1,16 +1,21 @@
 # -*- coding: utf-8 -*-
 """ Set of signals to handle when comments are posted and assigning notifications to the user """
 from django.dispatch import receiver
+from django.db.models.signals import pre_save
 
 from notifications import notify
 
 from notifications.models import Notification
+
+from glynt.apps.services.email import NewActionEmailService
 
 from glynt.apps.project.utils import PROJECT_CONTENT_TYPE
 
 from glynt.apps.project.services.email import SendNewProjectEmailsService
 from glynt.apps.project.services.project_checklist import ProjectCheckListService
 from glynt.apps.project.services.ensure_project import PROJECT_CREATED
+
+from .models import ProjectLawyer
 
 import logging
 logger = logging.getLogger('django.request')
@@ -49,6 +54,45 @@ def mark_project_notifications_as_read(user, project):
     Notification.objects.filter(recipient=user, target_object_id=project.pk, unread=True, target_content_type=PROJECT_CONTENT_TYPE).mark_all_as_read()
 
 
+@receiver(pre_save, sender=ProjectLawyer, dispatch_uid='project.lawyer_assigned')
+def on_lawyer_assigned(sender, **kwargs):
+    instance = kwargs.get('instance')
+
+    if instance.pk is not None:
+        # we have an existing item
+        prev_instance = ProjectLawyer.objects.get(pk=instance.pk)
+
+        if prev_instance.status != instance.status:
+
+            if instance.status == instance.LAWYER_STATUS.assigned:
+                logger.info('Sending ProjectLawyer.assigned email')
+                # send email of congratulations to lawyer in question
+                subject = 'Congratulations, You have been selected for a LawPal.com project'
+
+                message = 'You have been selected to work on a project for {customer} of {company}. \
+                The project consists of the following transaction types: {transactions}\
+                Please review the project at the url below'.format(customer=instance.project.customer, \
+                                                                   company=instance.project.company, \
+                                                                   transactions=','.join(instance.project.transaction_types))
+                recipients = (instance.lawyer.user,)
+                from_name = instance.project.customer.user.get_full_name()
+                from_email = instance.project.customer.user.email
+
+                url = instance.project.get_absolute_url()
+
+                logger.info('Sending ProjectLawyer.assigned url:{url}'.format(url=url))
+
+                email = NewActionEmailService(subject=subject, message=message, from_name=from_name, from_email=from_email, recipients=recipients)
+                email.send(url=url)
+
+                # set all other projectLawyer objects for this project to .rejected
+                logger.info('Updating other lawyers assigned as potential ProjectLawyer.assigned email')
+                ProjectLawyer.objects \
+                                    .exclude(pk=instance.pk) \
+                                    .filter(project=instance.project, \
+                                            status=instance.LAWYER_STATUS.potential) \
+                                    .update(status=instance.LAWYER_STATUS.rejected)
+
 # @receiver(post_save, sender=ThreadedComment, dispatch_uid='project.save_project_comment_signal')
 # def save_project_comment_signal(sender, **kwargs):
 #     """ on save of a comment create a notification for the recipient of the comment
@@ -86,7 +130,7 @@ def mark_project_notifications_as_read(user, project):
 #             #     mark_project_notifications_as_read(user=comment.user, project=project)
 
 #             """ @BUSINESSRULE if the project request is marked "new" then set it to open only once the lawyer responds """
-#             if project.project_status == PROJECT_STATUS.new:
+#             if project.display_status == PROJECT_STATUS.new:
 #                 if comment.user.profile.is_lawyer:
 #                     project.open(actioning_user=comment.user)
 

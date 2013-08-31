@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
+
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import user_passes_test
+
 from django.views.generic import FormView, DetailView
 from django.views.generic.edit import FormMixin
 from endless_pagination.views import AjaxListView
@@ -10,11 +14,13 @@ import json
 from haystack.query import SQ, SearchQuerySet
 from haystack.inputs import Exact, Clean
 
+from glynt.apps.default.views import AjaxBaseTemplateMixin
 from glynt.apps.lawyer.services import EnsureLawyerService
 from glynt.apps.utils import get_query
 
-from models import Lawyer
-from forms import LawyerProfileSetupForm, LawyerSearchForm
+from . import LawyerRequiredViewMixin
+from .models import Lawyer
+from .forms import LawyerProfileSetupForm, LawyerSearchForm
 
 import urlparse
 
@@ -22,8 +28,7 @@ import logging
 logger = logging.getLogger('django.request')
 
 
-
-class LawyerProfileView(DetailView):
+class LawyerProfileView(AjaxBaseTemplateMixin, DetailView):
     model = Lawyer
     slug_field = 'user__username'
 
@@ -37,14 +42,21 @@ class LawyerProfileView(DetailView):
         context = super(LawyerProfileView, self).get_context_data(**kwargs)
 
         context.update({
-            'firm': self.object.primary_firm
+            'firm': self.object.primary_firm,
         })
         return context
 
 class LawyerLiteProfileView(LawyerProfileView):
     template_name = 'lawyer/lawyer_detail_lite.html'
 
-class LawyerProfileSetupView(FormView):
+class LawyerLiteProfileView(LawyerProfileView):
+    """
+    Lite Lawyer Profile, reduced amount of info
+    """
+    template_name = 'lawyer/lawyer_detail_lite.html'
+
+
+class LawyerProfileSetupView(LawyerRequiredViewMixin, FormView):
     form_class = LawyerProfileSetupForm
     template_name = 'lawyer/profile-form.html'
 

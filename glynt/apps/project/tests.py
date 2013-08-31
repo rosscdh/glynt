@@ -1,15 +1,86 @@
 """
 """
 from django.test import TestCase
+from django.test import LiveServerTestCase
+from django.test.client import Client
+from django.core.urlresolvers import reverse
+from django.db.models.query import QuerySet
 from model_mommy import mommy
 
+from glynt.casper import BaseLawyerCustomerProjectCaseMixin
+
 from glynt.apps.lawyer.models import Lawyer
+from glynt.apps.project.models import Project
 from glynt.apps.project import PROJECT_STATUS, PROJECT_LAWYER_STATUS
 
 import itertools
 
+#from nose.tools import set_trace; set_trace()
+class EnsureProjectsAreAvailableInContextOnAllPagesTest(BaseLawyerCustomerProjectCaseMixin):
+    """
+    Test a random set of urls for the presence of the projects and projects objects
+    """
+    def setUp(self):
+        super(EnsureProjectsAreAvailableInContextOnAllPagesTest, self).setUp()
+
+        self.urls = [
+                        reverse('public:why-lawpal'),
+                        reverse('public:for-lawyers'),
+                        reverse('public:terms'),
+                        reverse('public:about'),
+                    ]
+
+        self.auth_urls = self.urls + [
+            reverse('dashboard:overview'),
+            #reverse('dashboard:checklist', kwargs={'uuid': self.project.uuid}),
+        ]
+
+    def test_projects_are_always_available_unauthorised(self):
+        for u in self.urls:
+            resp = self.client.get(u)
+
+            self.assertTrue('project' in resp.context)
+            self.assertTrue(resp.context['project'] is None)
+
+            self.assertTrue('projects' in resp.context)
+            self.assertTrue(type(resp.context['projects']) is list)
+            self.assertEqual(len(resp.context['projects']), 0)
+
+    def test_projects_are_always_available_lawyer(self):
+        """
+        """
+        self.client.login(username=self.lawyer_user.username, password=self.password)
+
+        for u in self.auth_urls:
+            resp = self.client.get(u)
+
+            self.assertTrue('project' in resp.context)
+            self.assertTrue(type(resp.context['project']) == Project)
+
+            self.assertTrue('projects' in resp.context)
+            self.assertTrue(type(resp.context['projects']) is list)
+            self.assertEqual(len(resp.context['projects']), 1)
+
+    def test_projects_are_always_available_customer(self):
+        """
+        """
+        self.client.login(username=self.customer_user.username, password=self.password)
+
+        for u in self.auth_urls:
+            resp = self.client.get(u)
+
+            self.assertTrue('project' in resp.context)
+            self.assertTrue(type(resp.context['project']) == Project)
+
+            self.assertTrue('projects' in resp.context)
+            self.assertTrue(type(resp.context['projects']) is QuerySet)
+            self.assertEqual(len(resp.context['projects']), 1)
+
 
 class ProjectModelMethodsTest(TestCase):
+    """
+    Test the project model methods
+    """
     def setUp(self):
         self.user = mommy.make('auth.User')
         self.company = mommy.make('company.Company', customers=[self.user])
@@ -22,8 +93,8 @@ class ProjectModelMethodsTest(TestCase):
 
     def test_project_status(self):
         """ Test the Display name is the same as the named_tuple description"""
-        self.assertEqual(self.project_with_lawyer.project_status, PROJECT_STATUS.get_desc_by_value(self.project_with_lawyer.status))
-        self.assertEqual(self.project_with_lawyer.project_status, 'New')
+        self.assertEqual(self.project_with_lawyer.display_status, PROJECT_STATUS.get_desc_by_value(self.project_with_lawyer.status))
+        self.assertEqual(self.project_with_lawyer.display_status, 'New')
         self.assertEqual(self.project_with_lawyer.is_new, True)
         self.assertEqual(self.project_with_lawyer.is_open, False)
         self.assertEqual(self.project_with_lawyer.is_closed, False)

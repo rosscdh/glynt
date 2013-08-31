@@ -105,6 +105,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'glynt.middleware.LawpalSocialAuthExceptionMiddleware',
     'glynt.middleware.EnsureUserHasCompanyMiddleware',
+    'glynt.middleware.LawpalCurrentProjectsMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'pagination.middleware.PaginationMiddleware',
     'django_filepicker.middleware.URLFileMapperMiddleware',
@@ -120,12 +121,12 @@ TASTYPIE_ALLOW_MISSING_SLASH = True
 WSGI_APPLICATION = 'glynt.wsgi.application'
 
 AUTHENTICATION_BACKENDS = (
-    'social_auth.backends.contrib.angel.AngelBackend',
+    #'social_auth.backends.contrib.angel.AngelBackend',
     'social_auth.backends.contrib.linkedin.LinkedinBackend',
     'social_auth.backends.google.GoogleOAuth2Backend',
-    'glynt.backends.EmailOrUsernameBackend',
-    'userena.backends.UserenaAuthenticationBackend',
-    'guardian.backends.ObjectPermissionBackend',
+    #'glynt.backends.EmailOrUsernameBackend',
+    #'userena.backends.UserenaAuthenticationBackend',
+    #'guardian.backends.ObjectPermissionBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -146,7 +147,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "glynt.context_processors.USE_THREADEDCOMMENTS",
     "social_auth.context_processors.social_auth_by_type_backends",
     "social_auth.context_processors.social_auth_by_name_backends",
-    "django.core.context_processors.request",
 )
 
 TEMPLATE_DIRS = (
@@ -249,13 +249,15 @@ HELPER_APPS = (
 
     # Object rules and permissions
     'rulez',
+    # Haystack Search
+    'haystack',
 )
 
 
 # Handle south and its breaking tests
 if IS_TESTING == True:
     # Log email to console
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
     # disable celery for test
     BROKER_BACKEND = 'memory'
 
@@ -266,20 +268,16 @@ else:
     HELPER_APPS = HELPER_APPS + (
         # Db Migrations
         'south',
-        # Search - inluded here to allow for loading of fixtures
-        'haystack',
     )
 
-    # Process model updates in real time
-    HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
-    HAYSTACK_CONNECTIONS = {
-        'default': {
-            'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
-            'URL': 'http://jsy06hdx:km5ugyiy90yy17qg@banyan-8252692.us-east-1.bonsai.io',
-            'INDEX_NAME': 'dev-lawyers',
-        },
-    }
-    USE_ELASTICSEARCH = True
+# Process model updates in real time
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
+    },
+}
+USE_ELASTICSEARCH = True
 
 
 

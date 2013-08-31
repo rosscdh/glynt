@@ -1,10 +1,7 @@
 # Drivers
-python-memcached
+#python-memcached # only in production
 #psycopg2 # required for production postgres db
 
-# Deployment
-raven
-newrelic
 
 # Django
 Django
@@ -14,8 +11,13 @@ django-cities-light
 bunch
 
 # utils for git
-gitpython
 mimeparse
+
+# Deployment
+fabric
+gitpython
+raven
+newrelic
 
 django-filepicker
 -e git+https://github.com/dcramer/django-uuidfield.git#egg=django-uuidfield
@@ -57,7 +59,7 @@ django-activity-stream
 pyelasticsearch
 
 # Markup
-django-parsley
+-e git+https://github.com/agiliq/Django-parsley.git#egg=django-parsley
 django_markup
 markup
 Markdown

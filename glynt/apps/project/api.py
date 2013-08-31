@@ -5,7 +5,7 @@ from tastypie.authorization import Authorization
 
 from glynt.apps.api.models import BaseApiModelResource
 
-from .models import Project
+from .models import Project, ProjectLawyer
 from . import PROJECT_STATUS
 
 
@@ -24,7 +24,7 @@ class ProjectResource(BaseApiModelResource):
 
     def dehydrate(self, bundle):
         bundle.data.update({
-            'status': PROJECT_STATUS.get_desc_by_value(bundle.obj.project_status).lower(),
+            'status': PROJECT_STATUS.get_desc_by_value(bundle.obj.display_status).lower(),
         })
         return bundle
 
@@ -44,3 +44,24 @@ class ProjectDataBagResource(BaseApiModelResource):
 
     def dehydrate_data(self, bundle):
         return bundle.obj.data
+
+
+class ProjectLawyerResource(BaseApiModelResource):
+    lawyer_id = fields.IntegerField('lawyer_id')
+    project_id = fields.IntegerField('project_id')
+
+    class Meta(BaseApiModelResource.Meta):
+        queryset = ProjectLawyer.objects.all()
+        authorization = Authorization()
+        resource_name = 'project_lawyer'
+        list_allowed_methods = ['get', 'patch']
+        filtering = {
+            'project': ['exact'],
+            'lawyer': ['exact'],
+        }
+
+    # def dehydrate(self, bundle):
+    #     bundle.data.update({
+    #         'status': PROJECT_STATUS.get_desc_by_value(bundle.obj.display_status).lower(),
+    #     })
+    #     return bundle

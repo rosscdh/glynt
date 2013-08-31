@@ -28,7 +28,7 @@ class CrocdocWebhookService(object):
             if i.get('page') is not None:
                 page = i.get('page')
 
-            print "{event} is of type {event_type} on page: {page}".format(event_type=event_type, event=event, page=page)
+            logger.info("{event} is of type {event_type} on page: {page}".format(event_type=event_type, event=event, page=page))
 
             if event == 'comment.create':
                 i = CrocdocCommentCreateEvent(page=page, **i)
@@ -93,75 +93,41 @@ class CrocdocBaseEvent(Bunch):
         else:
             return self._verb
 
+    def process(self):
+        try:
+            action.send(self.user, 
+                        verb=self.verb,
+                        action_object=self.attachment, 
+                        target=self.attachment.todo,
+                        attachment_name=self.attachment.filename,
+                        **self.toDict())
+        except Exception as e:
+            logger.error('There was an exception with the CrocdocWebhookService: {error}'.format(error=e))
+
 
 class CrocdocCommentCreateEvent(CrocdocBaseEvent):
-    def process(self):
-        action.send(self.user, 
-                    verb='Commented on an Attachment',
-                    action_object=self.attachment, 
-                    target=self.attachment.todo,
-                    attachment_name=self.attachment.filename,
-                    **self.toDict())
+    _verb = 'Commented on an Attachment'
 
 
 class CrocdocCommentDeleteEvent(CrocdocBaseEvent):
-    def process(self):
-        action.send(self.user, 
-                    verb='Deleted a Commented on an Attachment',
-                    action_object=self.attachment, 
-                    target=self.attachment.todo,
-                    attachment_name=self.attachment.filename,
-                    **self.toDict())
+    _verb = 'Deleted a Commented on an Attachment'
 
 
 class CrocdocAnnotationHighlightEvent(CrocdocBaseEvent):
     _verb = 'Hilighted some text on an Attachment'
     _deleted_verb = 'Deleted a Hilighted of some text on an Attachment'
 
-    def process(self):
-        action.send(self.user, 
-                    verb=self.verb,
-                    action_object=self.attachment,
-                    target=self.attachment.todo,
-                    attachment_name=self.attachment.filename,
-                    **self.toDict())
-
 
 class CrocdocAnnotationStrikeoutEvent(CrocdocBaseEvent):
     _verb = 'Struck out some text on an Attachment'
     _deleted_verb = 'Deleted the Strikeout of some text on an Attachment'
-
-    def process(self):
-        action.send(self.user, 
-                    verb=self.verb,
-                    action_object=self.attachment,
-                    target=self.attachment.todo,
-                    attachment_name=self.attachment.filename,
-                    **self.toDict())
-
 
 
 class CrocdocAnnotationTextboxEvent(CrocdocBaseEvent):
     _verb = 'Added a text element on an Attachment'
     _deleted_verb = 'Deleted a text element on an Attachment'
 
-    def process(self):
-        action.send(self.user, 
-                    verb=self.verb,
-                    action_object=self.attachment,
-                    target=self.attachment.todo,
-                    attachment_name=self.attachment.filename,
-                    **self.toDict())
-
 
 class CrocdocAnnotationDrawingEvent(CrocdocBaseEvent):
     _verb = 'Added a drawing element on an Attachment'
     _deleted_verb = 'Deleted a drawing element on an Attachment'
-
-    def process(self):
-        action.send(self.user, 
-                    verb=self.verb,
-                    action_object=self.attachment,
-                    target=self.attachment.todo,
-                    attachment_name=self.attachment.filename,
-                    **self.toDict())

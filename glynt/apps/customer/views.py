@@ -9,13 +9,14 @@ from django.http import Http404
 from glynt.apps.customer.services import EnsureCustomerService
 from glynt.apps.customer.models import Customer
 
-from forms import CustomerProfileSetupForm
+from . import CustomerRequiredViewMixin
+from .forms import CustomerProfileSetupForm
 
 import logging
 logger = logging.getLogger('django.request')
 
 
-class CustomerProfileSetupView(FormView):
+class CustomerProfileSetupView(CustomerRequiredViewMixin, FormView):
     form_class = CustomerProfileSetupForm
     template_name = 'customer/profile-form.html'
 
