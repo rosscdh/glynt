@@ -1231,8 +1231,6 @@ input[type="color"] {
   background-color: #ffffff;
   border: 1px solid #d9d9d9;
   -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-  -moz-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-  -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
   transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
 select:focus,
@@ -1997,8 +1995,6 @@ input[type="button"].btn-block {
 .fade {
   opacity: 0;
   -webkit-transition: opacity 0.15s linear;
-  -moz-transition: opacity 0.15s linear;
-  -o-transition: opacity 0.15s linear;
   transition: opacity 0.15s linear;
 }
 .fade.in {
@@ -2009,8 +2005,6 @@ input[type="button"].btn-block {
   height: 0;
   overflow: hidden;
   -webkit-transition: height 0.35s ease;
-  -moz-transition: height 0.35s ease;
-  -o-transition: height 0.35s ease;
   transition: height 0.35s ease;
 }
 .collapse.in {
@@ -4837,8 +4831,6 @@ body {
 .modal.fade {
   top: -25%;
   -webkit-transition: opacity 0.3s linear, top 0.3s ease-out;
-  -moz-transition: opacity 0.3s linear, top 0.3s ease-out;
-  -o-transition: opacity 0.3s linear, top 0.3s ease-out;
   transition: opacity 0.3s linear, top 0.3s ease-out;
 }
 .modal.fade.in {
@@ -5228,8 +5220,6 @@ body {
   border: 1px solid #dddddd;
   border-radius: 0px;
   -webkit-transition: all 0.2s ease-in-out;
-  -moz-transition: all 0.2s ease-in-out;
-  -o-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 }
 .thumbnail {
@@ -5442,8 +5432,6 @@ a.list-group-item.active > .badge,
   -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
   -webkit-transition: width 0.6s ease;
-  -moz-transition: width 0.6s ease;
-  -o-transition: width 0.6s ease;
   transition: width 0.6s ease;
 }
 .progress-striped .progress-bar {
@@ -5539,8 +5527,6 @@ a.list-group-item.active > .badge,
   display: none;
   position: relative;
   -webkit-transition: 0.6s ease-in-out left;
-  -moz-transition: 0.6s ease-in-out left;
-  -o-transition: 0.6s ease-in-out left;
   transition: 0.6s ease-in-out left;
   text-align: center;
 }
@@ -6425,7 +6411,6 @@ td.hidden-lg {
   }
 }
 .navbar-header {
-  padding-left: 15px;
   padding-right: 15px;
 }
 .navbar-header:before,
@@ -6745,8 +6730,8 @@ table.checklist tr.item.state-pending.assigned-to-user td [class*=" icon-"]:befo
 }
 .widget {
   border: 1px solid #eee;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
   margin-bottom: 15px;
   padding: 0 14px 14px;
   position: relative;
@@ -6808,7 +6793,7 @@ table.attorney-list tr .attorney-picture,
 table.lawyer-list tr .attorney-picture,
 table.attorney-list tr .lawyer-picture,
 table.lawyer-list tr .lawyer-picture {
-  width: 156px;
+  width: 120px;
 }
 table.attorney-list tr .attorney-info h2,
 table.lawyer-list tr .attorney-info h2 {
@@ -6916,8 +6901,12 @@ table.lawyer-list.active {
   text-decoration: none;
 }
 .widget.checklist h1 {
-  display: inline-block;
-  padding-right: 10px;
+  font-size: 40px;
+  text-align: center;
+  margin-bottom: 2px;
+}
+.widget.checklist small {
+  opacity: 0.8;
 }
 .post {
   border-bottom: 1px solid #eeeeee;

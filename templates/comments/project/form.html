@@ -1,27 +1,59 @@
 {% load comments fluent_comments_tags i18n %}
-<div class="container post-reply">
+<div class="row post-reply">
     <form action="{% comment_form_target %}" data-ajax-action="{% url 'comments-post-comment-ajax' %}" method="POST" class="js-comments-form comments-form form-wide clearfix">
         {% csrf_token %}
         {% if next %}<div><input type="hidden" name="next" value="{{ next }}" /></div>{% endif %}
         {% if form.comment.errors %}{{ form.comment.errors }}{% endif %}
-        <div class="span4">
-        {{ form.comment }}
+        <div class="media col-12">
+            <div class="pull-left">
+                <img src="http://placehold.it/60x60" class="media-object">
+            </div>
+            <div class="media-body">
+                {{ form.comment }}
+                <button id="btn-save_comment" class="btn btn-primary" type="submit">{% trans 'Post Message' %}</button>
+                {{ form.honeypot }}
+                {{ form.content_type }}
+                {{ form.object_pk }}
+                {{ form.timestamp }}
+                {{ form.security_hash }}
+            </div>
         </div>
-        {{ form.honeypot }}
-        {{ form.content_type }}
-        {{ form.object_pk }}
-        {{ form.timestamp }}
-        {{ form.security_hash }}
-        <div class="pull-right"><button id="btn-save_comment" class="btn btn-primary pull-right" type="submit">{% trans 'Send' %}</button></div>
         {#% ajax_comment_tags %#}
     </form>
 </div>
 <br />
 <style>
 #id_comment {
-    height:80px;
+    height:60px;
 }
 #id_honeypot {
     display:none;
 }
+textarea#id_comment {
+    float:left;
+}
+#btn-save_comment {
+    margin:5px 0px 0px 6px;
+    padding:14px;
+}
+.post-reply {
+    background-color:#eff6f8;
+    padding:5px 0px 15px 0px;
+}
 </style>
+
+
+<div id="comments" class="">
+{% for comment in comment_list reversed %}
+    <div id="c{{ comment.id }}" class="clearfix media">
+        <div class="pull-left">
+            <img src="http://placehold.it/60x60" class="media-object">
+        </div>
+        <div class="post-content media-body">
+            <span class="text-muted"><a href="">{{ comment.user.get_full_name }}</a> {{ comment.submit_date|timesince }}</span>
+            {{ comment.comment|linebreaks }}
+        </div>
+    </div>
+{% endfor %}
+</div>
+

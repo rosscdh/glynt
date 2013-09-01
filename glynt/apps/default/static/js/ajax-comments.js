@@ -4,8 +4,8 @@
     var active_input = '';
 
     // Settings
-    var COMMENT_SCROLL_TOP_OFFSET = 40;
-    var PREVIEW_SCROLL_TOP_OFFSET = 20;
+    var COMMENT_SCROLL_TOP_OFFSET = 100;
+    var PREVIEW_SCROLL_TOP_OFFSET = 200;
 
     var COMMENT_CONTROLS = (window.COMMENT_CONTROLS !== undefined) ? window.COMMENT_CONTROLS : {
         'comment_form': $('form.js-comments-form'),

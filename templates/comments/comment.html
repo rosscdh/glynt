@@ -1,16 +1,22 @@
-{% load url from future %}{% load i18n glynt_helpers %}<div id="c{{ comment.id }}" class="row post comment-item message-{% if comment.user.pk == user.pk %}right{% else %}left{% endif %}">
-    <div class="temp-col-avatar post-avatar profile-card" data-username="{{ comment.user.username }}" data-img_class="img-circle" data-template="mini">&nbsp;</div>
-    <div class="temp-col-content post-content">
-        <span class="post-meta softer"><a href="">{{ comment.user.get_full_name }}</a> commented <span>{% moment comment.submit_date %}</span></span>
-        <p>{{ comment.comment|linebreaks }}</p>
+{% load url from future %}{% load i18n glynt_helpers %}<div id="c{{ comment.id }}" class="comment-item message-{% if comment.user.pk == user.pk %}right{% else %}left{% endif %} media">
+    <div class="pull-left">
+        <div class="temp-col-avatar post-avatar profile-card" data-username="{{ comment.user.username }}" data-img_class="img-circle media-object" data-template="mini">&nbsp;</div>
+    </div>
+    <div class="media-body">
+        <span class="softer">
+            {{ comment.user.get_full_name }} commented <span>{% moment comment.submit_date %}</span>
+        </span>
+        {{ comment.comment|linebreaks }}
         {% if user.is_authenticated and comment.user == user %}
-            <ul class="list-inline post-actions">
-                <li><a href="" class="edit-comment">Edit</a></li>
-                <li class="seperator">&middot;</li>
-                <li><a href="" class="reply_to-comment">Reply</a></li>
-                <li class="seperator">&middot;</li>
-                <li><a href="{% url 'django.contrib.comments.views.moderation.delete' comment.id %}" class="delete-comment">Delete</a></li>
-            </ul>
+            <div class="text-right softer">
+                <small>
+                    <a href="" class="edit-comment">Edit</a></li>
+                    &middot;
+                    <a href="" class="reply_to-comment">Reply</a></li>
+                    &middot;
+                    <a href="{% url 'django.contrib.comments.views.moderation.delete' comment.id %}" class="delete-comment">Delete</a></li>
+                </small>   
+            </div>
         {% endif %}
     </div>
 </div>

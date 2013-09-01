@@ -230,8 +230,8 @@ table.checklist {
 
 .widget {
   border: 1px solid #eee;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
   margin-bottom: 15px;
   padding: 0 14px 14px;
   position: relative;
@@ -306,7 +306,7 @@ table.lawyer-list {
     }
     .attorney-picture,
     .lawyer-picture {
-      width: 156px;
+      width: 120px;
     }
     .attorney-info {
       h2 {
@@ -421,8 +421,12 @@ table.lawyer-list.active {
 }
 .widget.checklist {
   h1 {
-    display:inline-block;
-    padding-right:10px;
+    font-size:40px;
+    text-align:center;
+    margin-bottom:2px;
+  }
+  small {
+    opacity:0.8
   }
 }
 
