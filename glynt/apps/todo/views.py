@@ -73,6 +73,7 @@ class ProjectToDoView(RulezMixin, ToDoCountMixin, ListView):
         context.update({
             'project': self.project,
             'checklist': self.checklist_service,
+            'checklist_json': self.checklist_service.asJSON(request=self.request),
             'feedback_requests': self.feedback_requests,
             'is_lawyer': user_profile.is_lawyer,
             'is_customer': user_profile.is_customer,

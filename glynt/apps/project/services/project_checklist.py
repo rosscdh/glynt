@@ -100,10 +100,10 @@ class ToDoItemsFromYamlMixin(object):
 
         # render the template with variables from the context
         if item.name is not None:
-            item.name = unicode(self.templateize(context=c, value=item.name))
+            item.name = unicode(self.templatize(context=c, value=item.name))
 
         if item.description is not None:
-            item.description = unicode(self.templateize(context=c, value=item.description))
+            item.description = unicode(self.templatize(context=c, value=item.description))
 
         return item
 
@@ -181,6 +181,30 @@ class ToDoItemsFromDbMixin(object):
         ToDo.objects.bulk_create(todo_list)
 
 
+class TodoAsJSONMixin(object):
+    """
+    Mixin that provides JSON response of the checklist todos
+    Currently makes use of TastyPie Resources
+    """
+    def bundelize(self, resource, request, list_result):
+        bundles = []
+
+        for obj in list_result:
+            bundle = resource.build_bundle(obj=obj, request=request)
+            bundles.append(resource.full_dehydrate(bundle, for_list=True))
+
+        return bundles
+
+    def asJSON(self, request):
+        from glynt.apps.todo.api import ToDoResource
+        res = ToDoResource()
+        request_bundle = res.build_bundle(request=request)
+        
+        bundles = self.bundelize(resource=res, request=request, list_result=res.obj_get_list(request_bundle))
+
+        return res.serialize(None, bundles, "application/json")
+
+
 class UserFeedbackRequestMixin(object):
     def feedbackrequests_by_user(self, user):
         from glynt.apps.todo.models import FeedbackRequest
@@ -199,7 +223,7 @@ class UserFeedbackRequestMixin(object):
         return json_response
 
 
-class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin, ToDoItemsFromDbMixin):
+class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin, ToDoItemsFromDbMixin, TodoAsJSONMixin):
     """
     Provide a set of checklist items that are
     generated from the project transaction types
@@ -234,7 +258,7 @@ class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin, 
             m.update(json.dumps(kwargs))
         return m.hexdigest()
 
-    def templateize(self, context, value):
+    def templatize(self, context, value):
         t = template.Template(value)
         return t.render(context)
 
