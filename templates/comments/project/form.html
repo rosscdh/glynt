@@ -6,7 +6,7 @@
         {% if form.comment.errors %}{{ form.comment.errors }}{% endif %}
         <div class="media col-12">
             <div class="pull-left">
-                <img src="http://placehold.it/60x60" class="media-object">
+                <div class="profile-card media-object" data-template="mini" data-username="{{ user.username }}">&nbsp;</div>
             </div>
             <div class="media-body">
                 {{ form.comment }}
@@ -41,19 +41,3 @@ textarea#id_comment {
     padding:5px 0px 15px 0px;
 }
 </style>
-
-
-<div id="comments" class="">
-{% for comment in comment_list reversed %}
-    <div id="c{{ comment.id }}" class="clearfix media">
-        <div class="pull-left">
-            <img src="http://placehold.it/60x60" class="media-object">
-        </div>
-        <div class="post-content media-body">
-            <span class="text-muted"><a href="">{{ comment.user.get_full_name }}</a> {{ comment.submit_date|timesince }}</span>
-            {{ comment.comment|linebreaks }}
-        </div>
-    </div>
-{% endfor %}
-</div>
-
