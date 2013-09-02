@@ -2,7 +2,7 @@
 {% for comment in comment_list reversed %}
     <div id="c{{ comment.id }}" class="clearfix media">
     	<div class="pull-left">
-    		<img src="http://placehold.it/60x60" class="media-object">
+            <div class="profile-card media-object" data-template="mini" data-username="{{ comment.user.username }}">&nbsp;</div>
     	</div>
         <div class="post-content media-body">
             <span class="text-muted"><a href="">{{ comment.user.get_full_name }}</a> {{ comment.submit_date|timesince }}</span>

@@ -101,6 +101,13 @@
 {% block js %}
 <script type="text/javascript" src="{{ STATIC_URL }}js/ajax-comments.js"></script>
 <script>
+
+    window.COMMENT_CONTROLS = {
+        'is_reversed': false,
+        'scroll_to_comment': false,
+        'alerts': false,
+    };
+
     $(function () {
         $("[data-toggle='tooltip']").tooltip();
     });

@@ -4,17 +4,20 @@
     </div>
     <div class="media-body">
         <span class="softer">
-            {{ comment.user.get_full_name }} commented <span>{% moment comment.submit_date %}</span>
+            {{ comment.user.get_full_name }} commented <span>{{ comment.submit_date|timesince }}</span>
         </span>
         {{ comment.comment|linebreaks }}
-        {% if user.is_authenticated and comment.user == user %}
+        {% if user.is_authenticated %}
             <div class="text-right softer">
                 <small>
+                    {% if comment.user == user %}
                     <a href="" class="edit-comment">Edit</a></li>
-                    &middot;
+                    &middot;{% endif %}
+                    {% if comment.user != user %}
                     <a href="" class="reply_to-comment">Reply</a></li>
-                    &middot;
-                    <a href="{% url 'django.contrib.comments.views.moderation.delete' comment.id %}" class="delete-comment">Delete</a></li>
+                    &middot;{% endif %}
+                    {% if comment.user == user %}
+                    <a href="{% url 'django.contrib.comments.views.moderation.delete' comment.id %}" class="delete-comment">Delete</a></li>{% endif %}
                 </small>   
             </div>
         {% endif %}
