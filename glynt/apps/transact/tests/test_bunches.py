@@ -30,7 +30,8 @@ class BaseToDoBunchAttribsTest(unittest.TestCase):
 
 class IncorporationBunchTest(BaseToDoBunchAttribsTest):
     """ Ensure the IncorporationBunch is setup correctly """
-    expected_subject_names = ['General',
+    expected_subject_names = ['Transaction Setup',
+                                'General',
                                 'Qualification to do business',
                                 'Founders Documents',
                                 'Option Plan',
