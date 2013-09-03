@@ -33,7 +33,7 @@
         </div>
         <div class="col col-lg-7">
             {% if project_lawyer_join.status == PROJECT_LAWYER_STATUS.potential %}
-            <button data-engage="{{ lawyer.pk }}" data-status="{{ PROJECT_LAWYER_STATUS.assigned }}" class="btn btn-success">Engage {{ lawyer.user.get_full_name|default:lawyer.user.username }}</button>
+            <button data-engage="{{ project_lawyer_join.pk }}" data-status="{{ PROJECT_LAWYER_STATUS.assigned }}" class="btn btn-success">Engage {{ lawyer.user.get_full_name|default:lawyer.user.username }}</button>
             {% endif %}
             <a href="{% url 'lawyer:profile_lite' slug=lawyer.user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-info">View Profile</a>
         </div>
