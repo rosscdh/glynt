@@ -18,6 +18,9 @@ class CompanyProfileForm(BuilderBaseForm):
     This form only appears if they are doing an incorporation only. 
 
     """
+    page_title = 'Your Company Profile'
+    page_description = 'Enter some basic details about your company'
+
     founder_name = forms.CharField()
     founder_email = forms.EmailField()
 
@@ -73,6 +76,9 @@ class FinancingProfileForm(BuilderBaseForm):
     """
     The Financing Setup Form (if they select either seed financing equity or convertible only)
     """
+    page_title = 'Financing Questions'
+    page_description = 'Enter some basic details about your finance round requirements'
+
     founder_name = forms.CharField()
     founder_email = forms.EmailField()
 
@@ -143,6 +149,9 @@ class CompanyAndFinancingProfileForm(CompanyProfileForm, FinancingProfileForm):
     The Setup AND Financing Form (both selected)
     Basically we are combining the two forms and only showing the following fields. Not sure how to code this. 
     """
+    page_title = 'Company & Financing Questions'
+    page_description = 'Enter some basic details about your company and your finance round requirements'
+
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
         self.helper.layout = Layout(
