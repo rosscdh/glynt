@@ -18,3 +18,4 @@ class BaseApiModelResource(ModelResource):
         authorization = ReadOnlyAuthorization()
         include_resource_uri = False
         include_absolute_url = False
+        always_return_data = True

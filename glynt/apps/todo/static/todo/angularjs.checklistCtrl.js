@@ -79,24 +79,36 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		}
 	};
 
-	$scope.assignedPerCategory = function( categoryLabel ) {
+	$scope.assignedPerCategory = function( category ) {
 		var numAssigned = 0;
-		var checkListItems = $scope.model.checklist;
+		var categoryLabel = category.label.unescapeHTML(); /* sugar.js */
+		var checkListItems = $scope.model.checklist.filter(function( item ){
+			/* .filter is sugar.js */
+			return item.category === categoryLabel;
+		});
+		var assigned;
+		var item;
 
 		for(var i=0;i<checkListItems.length;i++) {
-
+			item = checkListItems[i];
+			assigned = $scope.isChecklistItemAssigned( item );
+			if(assigned)
+				numAssigned++;
 		}
+
+		return numAssigned || ""; 
+	};
+
+	$scope.isChecklistItemAssigned = function( item ) {
+		var assigned = false;
+		var feedbackRequests = $scope.model.feedbackRequests;
 		var itemSlug = item.slug || null;
 
 		if( feedbackRequests[itemSlug] ) {
 			assigned = (feedbackRequests[itemSlug].length>0);
 		}
 
-		return assigned; 
-	};
-
-	$scope.isChecklistItemAssigned = function( item ) {
-		var feedbackRequests = $scope.model.feedbackRequests;
+		return assigned;
 	};
 
 	/**
@@ -174,7 +186,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 
 	$scope.loadFeedbackRequests = function() {
 		// Load initial checklist items
-		var promise = lawPalService.getFeedbackRequests( 'sort_position_by_cat' );
+		var promise = lawPalService.getFeedbackRequests();
 		promise.then( 
 			function( results ) { /* Success */
 				$scope.model.feedbackRequests = results;
