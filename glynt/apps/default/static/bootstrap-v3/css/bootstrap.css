@@ -4850,7 +4850,7 @@ body {
   background-color: #fff;
   border: 1px solid #999;
   border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 6px;
+  border-radius: 0px;
   -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
   box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
   -webkit-background-clip: padding-box;
@@ -6551,7 +6551,7 @@ td.hidden-lg {
 }
 #wrap .scroll,
 #wrap .telephone {
-  padding: 15px 0px 10px 0;
+  padding: 10px 0px 5px 0;
   color: #bfbfbf;
   font-size: 19.599999999999998px;
   font-weight: normal;
