@@ -2,6 +2,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
+from parsley.decorators import parsleyfy
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, Div
 
@@ -10,6 +11,7 @@ from glynt.apps.company import COMPANY_STATUS_CHOICES
 from glynt.apps.company import OPTION_PLAN_STATUS_CHOICES
 
 
+@parsleyfy
 class CompanyProfileForm(BuilderBaseForm):
     """
     The Company Setup Form
@@ -66,6 +68,7 @@ class CompanyProfileForm(BuilderBaseForm):
         super(CompanyProfileForm, self).__init__(*args, **kwargs)
 
 
+@parsleyfy
 class FinancingProfileForm(BuilderBaseForm):
     """
     The Financing Setup Form (if they select either seed financing equity or convertible only)
@@ -134,6 +137,7 @@ class FinancingProfileForm(BuilderBaseForm):
         super(FinancingProfileForm, self).__init__(*args, **kwargs)
 
 
+@parsleyfy
 class CompanyAndFinancingProfileForm(CompanyProfileForm, FinancingProfileForm):
     """
     The Setup AND Financing Form (both selected)
