@@ -8,8 +8,8 @@ from bunch import Bunch
 
 import copy
 from collections import OrderedDict
-import hashlib
-import json
+import shortuuid
+
 import logging
 logger = logging.getLogger('lawpal.services')
 
@@ -114,7 +114,7 @@ class ToDoItemsFromDbMixin(object):
 
     def db_todos(self):
         if self._db_todos_list is None:
-            self._db_todos_list = self.project.todo_set.filter(project=self.project).select_related()
+            self._db_todos_list = self.project.todo_set.all().select_related()
         return self._db_todos_list
 
     def todos_by_slug(self, todos):
@@ -178,6 +178,7 @@ class ToDoItemsFromDbMixin(object):
             if t.get('slug') is not None and t.get('slug') not in db_todo_slugs:
                 todo_list.append(ToDo(**t))
 
+        #import pdb;pdb.set_trace()
         ToDo.objects.bulk_create(todo_list)
 
 
@@ -252,11 +253,12 @@ class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin, 
         """ the slug has to be consistent for each item, even when pulled from yaml file
         thus we cant use uuid here as it is generated unique every time; where as this is
         based on a uniqe combo of the item details"""
-        m = hashlib.sha1()
-        m.update(self.company_data.slug(item_name=item.name))
+        name = self.company_data.slug(item_name=item.name)
+
         if len(kwargs.keys()) > 0:
-            m.update(json.dumps(kwargs))
-        return m.hexdigest()
+            name = '{name}{extra}'.format(name=name, extra='-'.join([unicode(i) for i in kwargs.values()]))
+
+        return shortuuid.uuid(name=name)
 
     def templatize(self, context, value):
         t = template.Template(value)
