@@ -24,9 +24,8 @@
 </head>
 <body data-spy="scroll" data-target=".subnav" class="{% block bodyclass %}{% endblock %}" style="padding-top: 70px;">
 
-<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 
     <div id="wrap">
         <!-- Nav -->
@@ -64,7 +63,6 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.getPath.js"></script>
 
 {% compress js %}
-
     <script type="text/javascript" src="{{ STATIC_URL }}bootstrap-v3/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.cookie.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/typeahead.js"></script>
@@ -97,9 +95,9 @@
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
 </script>
-
-{% intercom_script %}
-
+{% if PROJECT_ENVIRONMENT != 'dev' %}
+    {% intercom_script %}
+{% endif %}
 
 </body>
 </html>

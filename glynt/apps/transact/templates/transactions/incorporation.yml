@@ -4,6 +4,16 @@ transaction:
     note: ''
     todos:
 
+        - Transaction Setup:
+            type: 'simple'
+            checklist:
+                -   name: 'Engagement Letter'
+                    attachment: []
+                -   name: 'Founder Questionnaire'
+                    attachment: []
+                -   name: 'Term Sheet (if applicable)'
+                    attachment: []
+
         - General:
             type: 'simple'
             checklist:

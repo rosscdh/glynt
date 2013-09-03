@@ -37,7 +37,7 @@
       }
   	}
     .scroll, .telephone {
-  		padding:30px 0px 20px 0;
+  		padding:10px 0px 5px 0;
   		color: lighten(@gray-light, 0%);
   		font-size: @font-size-base * 1.4;
   		font-weight:normal;
@@ -77,20 +77,37 @@
   		p {
   			color: lighten(@gray, 20%);
   		}
+      &.frame {
+        border-left: 3px solid @brand-primary;
+      }
   	}
   	.quote {
-  		background-color:@brand-primary-alt-2;
+  		background-color:@brand-primary;
   		color:white;
   		margin:40px 0px;
-  		padding:30px 0px 20px 0px;
-  		font-size: ceil(@font-size-base * 1.5);
-  		font-family: @headings-font-family;
-  		text-align:left;
-  		p {
-  			border-left:2px solid lighten(@brand-primary-alt-2, 60%);
-  			padding-left:15px;
-  		}
+  		padding:21px 0px 20px 0px;
+  		h1,h2 {
+        margin:0px 0px 10px 0px;
+        small {
+          opacity:0.6;
+        }
+      }
+      * {
+        color:white;
+      }
   	}
+    .call-to-action {
+      background-color:@brand-success;
+      padding:20px 20px 30px 20px;
+      color:white;
+      margin-top:15px;
+      * {
+        color:white;
+      }
+    }
+    .attorney-feature {
+      margin-top:0px;
+    }
 }
 
 
@@ -230,9 +247,9 @@ table.checklist {
 
 .widget {
   border: 1px solid #eee;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-  margin-bottom: -1px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  margin-bottom: 15px;
   padding: 0 14px 14px;
   position: relative;
 }
@@ -306,7 +323,7 @@ table.lawyer-list {
     }
     .attorney-picture,
     .lawyer-picture {
-      width: 156px;
+      width: 120px;
     }
     .attorney-info {
       h2 {
@@ -328,8 +345,6 @@ table.lawyer-list.active {
   background-color: transparent;
   margin: 10px 0 0;
 }
-
-
 .callout {
   background-color: lighten(@brand-warning-alt-2, 35%);
   border-left: 5px solid @brand-warning-alt-2;
@@ -406,7 +421,6 @@ table.lawyer-list.active {
 }
 
 .transaction-profile { height: 220px; }
-.account-attorney { height: 220px; }
 
 .checklist-header {
   margin-top: 20px;
@@ -420,6 +434,16 @@ table.lawyer-list.active {
       color: @gray;
       text-decoration: none;
     }
+  }
+}
+.widget.checklist {
+  h1 {
+    font-size:40px;
+    text-align:center;
+    margin-bottom:2px;
+  }
+  small {
+    opacity:0.8
   }
 }
 
@@ -496,6 +520,13 @@ table.lawyer-list.active {
   color: white;
 }
 
+.potential-title {
+  border-top:2px solid @brand-warning;
+  padding-top:7px;
+}
+.potential-container {
+  border-bottom:2px solid @brand-warning;
+}
 section.checklist-category {
   padding-top: 50px;
   margin-top: -50px;

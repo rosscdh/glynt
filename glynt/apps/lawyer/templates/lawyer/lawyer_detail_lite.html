@@ -1,7 +1,12 @@
 {% extends base_template %}{% load account_tags glynt_helpers lawyer_profile_tags project_tags jsonify thumbnail humanize project_tags cache %}
+{% block page_title %}{{ object.user.get_full_name|default:object.user.username }} {% if firm %} - {{ firm }}{% endif %}{% endblock %}
+{% block bodyclass %}lawyer-profile{% endblock %}
 
-{% block body %}
+
+{% block prebody %}
+
 {% csrf_token %}
+
 <div id="hero">
 	<div class="container">
 		<div class="row profile-details">
@@ -45,6 +50,7 @@
 	    </div>
     </div>
 </div>
+
 {% endblock %}
 
 {% block css %}

@@ -16,11 +16,11 @@
                 <ul class="nav navbar-nav pull-left">
                     {% if projects.count > 1 %}
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <span>{% project_name project %}</span>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="account-menu">
+                                <span><small>{% project_name project %}</small></span>
                                 <span class="caret"></span>
                             </a>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="account-menu">
                                 {% for p in projects %}
                                     <li><a href="{% url 'dashboard:project' uuid=p.uuid %}">{% project_name p forloop.counter %}</a></li>
                                 {% endfor %}
@@ -31,14 +31,14 @@
                     {% endif %}
                 </ul>
             {% endif %}
-
+            
             <ul class="nav navbar-nav pull-right">
                 {% if user.is_authenticated %}
                     {% if project %}
                         <li><a href="{% url 'dashboard:project' uuid=project.uuid %}">{% trans 'Overview' %}</a></li>
-                        {% if not profile_is_complete and not user.profile.is_lawyer %}
-                            <li data-toggle="tooltip" title="{% trans 'Not yet active' %}">
-                                <a href="#checklist-coming-modal" data-toggle="modal">{% trans 'Checklist' %}</a>
+                        {% if not project.has_lawyer and not user.profile.is_lawyer %}
+                            <li title="{% trans 'Not yet active' %}">
+                                  <a data-toggle="modal" href="#myModal" class="">{% trans 'Checklist' %}</a>
                             </li>
                         {% else %}
                             <li><a href="{% url 'dashboard:checklist' uuid=project.uuid %}">{% trans 'Checklist' %}</a></li>
@@ -65,9 +65,9 @@
                     {% endcache %}
                 {% else %}
                     <!-- <li><a href="/"><i class="glyphicon glyphicon-home"></i></a></li> -->
-                    <li><a href="{% url 'public:about' %}">{% trans 'About' %}</a></li>
-                    <li><a href="{% url 'public:why-lawpal' %}">{% trans 'Why LawPal' %}</a></li>
-                    <li><a href="{% url 'public:must-reads' %}">{% trans 'Must Reads' %}</a></li>
+<!--                     <li><a href="{% url 'public:about' %}">{% trans 'About' %}</a></li>
+ -->                    <li><a href="{% url 'public:why-lawpal' %}">{% trans "Why We're Better" %}</a></li>
+                    <li><a href="{% url 'public:must-reads' %}">{% trans 'LawPal Pulse' %}</a></li>
                     <li><a href="{% url 'public:for-lawyers' %}"><span class="softer">{% trans 'For Lawyers' %}</span></a></li>
                     <li class="nav-signin">
                         <a href="#signin-modal" class="" data-toggle="modal" onclick="_gaq.push(['_trackEvent', 'Nav', 'Action', 'Sign In']);">{% trans 'Sign in' %}</a>

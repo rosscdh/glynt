@@ -14,38 +14,66 @@
 {% endblock %}
 
 {% block prebody %}
-<div class="jumbotron">
+{% endblock %}
 
-    <div class="container">
-        <div class="col col-8 col-offset-2 text-center softer">
-            <br />
-            <h1>Why LawPal</h1>
-            <br />
+{% block body %}
+<br />
+<br />
 
-    <!--    	<p>Legal services are expensive and should reflect the skills of the professionals involved and the quality of the work delivered.  Lawyers bring a great deal of  knowledge and expertise to any team, and they deserve to be fairly compensated.  At the same time, we want to ensure that clients receive good value for the money they spend on lawyers. 
+<div class="container">
+    <div class="row">
+        <div class="col-5 lead">
+
+
+            <img src="{{STATIC_URL}}img/why-were-better.gif" vspace="35">
+
+            <p>Legal services are expensive and should reflect the skills of the professionals involved and the quality of the work delivered.  Lawyers bring a great deal of  knowledge and expertise to any team, and they deserve to be fairly compensated.  At the same time, we want to ensure that clients receive good value for the money they spend on legal advice. 
              <p>
             The best way to ensure both fair payment and good value is to manage every matter closely, emphasizing communication and shared responsibility. 
             <p>
             Welcome to LawPal...where forward-thinking 21st Century lawyers and clients are changing how they do business and managing their deals … together.
-            </p> -->
-        </div>
-    </div>
-</div>
-{% endblock %}
+            </p>
+            <p>
 
-{% block body %}
+            </p>
             <br />
-
-                        <br />
-
-<div class="container">
-    <div class="row">
-        <div class="col-sp-12 legal text-center">
+<!--             <img src="http://local.weareml.com:8000/static/img/background-about.jpg">
+ -->            <br />
+            <h2>The Team</h2>
+            <div class="row">
+                <div class="col-4">
+                    <div class="text-center">
+                        <img src="{{ STATIC_URL }}img/alex-face.jpg" class="img-rounded" vspace="10">
+                        Alex Halliday<br />
+                        <small> CEO, <a href="mailto:alex@lawpal.com">Contact</a></small>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="text-center">
+                        <img src="{{ STATIC_URL }}img/yael-face.jpg" class="img-rounded"  vspace="10" width="137px">
+                        Yael Citro<br />
+                        <small> GC, <a href="mailto:yael@lawpal.com">Contact</a></small>
+                    </div>
+                </div>      
+                <div class="col-4">
+                    <div class="text-center">
+                        <img src="{{ STATIC_URL }}img/ross-face.jpg" class="img-rounded"  vspace="10" width="137px">
+                        Ross Crawford<br />
+                        <small> CTO, <a href="mailto:ross@lawpal.com">Contact</a></small>
+                    </div>
+                </div>      
+            </div>
+        </div>
+        <div class="col-5  col-offset-1 legal text-center">
+            <br />
+            <br />
+            <br />
             <img src="{{ STATIC_URL }}img/why-lawpal-1.gif">
             <img src="{{ STATIC_URL }}img/why-lawpal-2.gif">
             <img src="{{ STATIC_URL }}img/why-lawpal-3.gif">
             <img src="{{ STATIC_URL }}img/why-lawpal-4.gif">
             <img src="{{ STATIC_URL }}img/why-lawpal-5.gif">
+            <img src="{{ STATIC_URL }}img/why-lawpal-6.gif">
         </div>
     </div>
 </div>
