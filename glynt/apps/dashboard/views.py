@@ -48,7 +48,9 @@ class DashboardView(ToDoCountMixin, TemplateView):
         return qs_filter
 
     def lawyer_context(self):
-        return Bunch({})
+        return Bunch({
+            'project_lawyer_joins': self.request.user.lawyer_profile.projectlawyer_set.all(),
+            })
 
     def customer_context(self, project):
         intake_complete = ProjectIntakeFormIsCompleteBunch(project=self.request.project)
