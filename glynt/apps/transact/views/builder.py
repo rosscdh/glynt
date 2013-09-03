@@ -14,11 +14,14 @@ from glynt.apps.project.services.ensure_project import PROJECT_CREATED
 
 from glynt.apps.transact.views.intake import (FORMS as INTAKE_FORMS,)
 
+from glynt.apps.transact.views.intake import CS_FORMS, SF_FORMS, CS_SF_FORMS
+
 TX_OPTIONS = {
-    'INTAKE': {'forms': INTAKE_FORMS, 'templates': [], 'data_provider': Bunch({})},
-    'CS': {'forms': [], 'templates': [], 'data_provider': Bunch({})},
-    'SF': {'forms': [], 'templates': [], 'data_provider': Bunch({})},
-    'ES': {'forms': [], 'templates': [], 'data_provider': Bunch({})},
+    #'INTAKE': {'forms': INTAKE_FORMS, 'templates': [], 'data_provider': Bunch({})},
+    'CS': {'forms': CS_FORMS, 'templates': [], 'data_provider': Bunch({})},
+    'SF': {'forms': SF_FORMS, 'templates': [], 'data_provider': Bunch({})},
+    'ES': {'forms': SF_FORMS, 'templates': [], 'data_provider': Bunch({})},
+    'CS_SF_ES': {'forms': CS_SF_FORMS, 'templates': [], 'data_provider': Bunch({})},
 }
 
 
@@ -28,7 +31,11 @@ class BuilderWizardView(NamedUrlSessionWizardView):
     form_list = []
 
     def get_update_url(self, **kwargs):
-        return kwargs.get('context').get('form').get_update_url(**kwargs)
+        form = kwargs.get('context').get('form')
+        if hasattr(form, 'get_update_url'):
+            return form.get_update_url(**kwargs)
+        else:
+            return None
 
     def dispatch(self, request, *args, **kwargs):
         """
@@ -103,7 +110,8 @@ class BuilderWizardView(NamedUrlSessionWizardView):
         initial = super(BuilderWizardView, self).get_form_initial(step=step)
 
         data = self.form_list[step].get_data_bag(user=self.request.user)
-        initial.update(data.get_data_bag())
+        if data is not None and hasattr(data, 'get_data_bag'):
+            initial.update(data.get_data_bag())
 
         return initial
 

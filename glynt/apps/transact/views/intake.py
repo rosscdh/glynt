@@ -1,11 +1,17 @@
 # -*- coding: UTF-8 -*-
-from glynt.apps.transact.forms import CompanyProfileForm
+from glynt.apps.company.forms import CompanyProfileForm, FinancingProfileForm, CompanyAndFinancingProfileForm
+#from glynt.apps.transact.forms import CompanyProfileForm
 
 # from glynt.apps.transact.forms import BasicInformationForm, CorporateAgentsForm, \
 #     InitialDirectorsForm, GeneralCapitalizationForm, CustomersForm, StockPlansForm, AboutCompanyBusinessForm, \
 #     IntellectualPropertyForm, EmployeesConsultantsForm
 
 FORMS = [("company_profile", CompanyProfileForm), ]
+
+CS_FORMS = [("company_profile", CompanyProfileForm), ]
+SF_FORMS = [("company_profile", FinancingProfileForm), ]
+CS_SF_FORMS = [("company_profile", CompanyAndFinancingProfileForm), ]
+
 
 # """
 # STEP FORMS
