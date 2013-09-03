@@ -50,7 +50,7 @@
                         <table class="table table-striped checklist">
                             <tbody>
                                 <!-- start: AngularJS: checklist item controller //-->
-                                <tr ng-repeat="item in model.checklist | filter: { 'category': category.label } | filter: { is_deleted: model.showDeletedItems }" class="item state-{[{getItemStatus(item)}]}" ng-controller="checklistItemCtrl">
+                                <tr ng-repeat="item in model.checklist | filter: { 'category': category.label } | filter: { is_deleted: model.showDeletedItems }" class="item state-{[{getItemStatus(item)}]}" ng-class="{'assigned-to-user':getAssignedStatus()}" ng-controller="checklistItemCtrl">
                                     <!-- Checklist item status //-->
                                     <td class="item-status">
                                         <i class="icon-state-{[{getItemStatus(item)}]}"></i>

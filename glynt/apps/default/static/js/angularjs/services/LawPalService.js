@@ -51,6 +51,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 
 			return deferred.promise;
 		},
+
 		/**
 		 * Returns the list of check list items, ordered by the sort by parameter
 		 * @param  {String} 	sortByProperty used to dermine which attribute to sort the data by
@@ -59,6 +60,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		"getChecklist": function (sortByProperty) {
 			// Set up a promise, because this method might retrieve information from the API directly in the future
 			var deferred = $q.defer();
+			var checklist = [];
 
 			$timeout(function () {
 				if (lawPalInterface && lawPalInterface.checklist_data) {
@@ -69,8 +71,32 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 					// Return checklist
 					deferred.resolve(checklist);
 				} else {
-					// Ohh nooo! and error
+					// Ohh nooo! an error
 					deferred.reject(checklist);
+				}
+			}, 100);
+
+			return deferred.promise;
+		},
+
+		/**
+		 * Returns the list of feedback requests
+		 * @return {Function}   Promise
+		 */
+		"getFeedbackRequests": function (sortByProperty) {
+			// Set up a promise, because this method might retrieve information from the API directly in the future
+			var deferred = $q.defer();
+			var feedbackRequests = [];
+
+			$timeout(function () {
+				if (lawPalInterface && lawPalInterface.feedback_requests) {
+					// Retrieve checklist items
+					feedbackRequests = lawPalInterface.feedback_requests() || [];
+					// Return checklist
+					deferred.resolve(feedbackRequests);
+				} else {
+					// Ohh nooo! an error
+					deferred.reject(feedbackRequests);
 				}
 			}, 100);
 

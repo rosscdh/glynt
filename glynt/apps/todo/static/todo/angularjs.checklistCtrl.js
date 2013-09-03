@@ -9,6 +9,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 	$scope.model = {
 		'project': { 'uuid': null }, // Project details
 		'categories': [], // Array of checklist categories
+		'feedbackRequests': [],
 		'alerts': [], // Used to display alerts at the top of the page
 		'checklist': [], // Contains all checklist items
 		'usertype': lawPalService.getUserType(), // is_lawyer, is_customer
@@ -26,6 +27,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 			// Load data
 			$scope.loadCategories();
 			$scope.loadChecklist();
+			$scope.loadFeedbackRequests();
 		} else {
 			$scope.addAlert( "Unable to load items at this this, please try again later", "error" );
 		}
@@ -144,6 +146,18 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		promise.then( 
 			function( results ) { /* Success */
 				$scope.model.checklist = results;
+			},
+			function( details ) { /* Error */
+			}
+		);
+	};
+
+	$scope.loadFeedbackRequests = function() {
+		// Load initial checklist items
+		var promise = lawPalService.getFeedbackRequests( 'sort_position_by_cat' );
+		promise.then( 
+			function( results ) { /* Success */
+				$scope.model.feedbackRequests = results;
 			},
 			function( details ) { /* Error */
 			}
