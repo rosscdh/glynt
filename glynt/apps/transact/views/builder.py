@@ -17,7 +17,7 @@ from glynt.apps.transact.views.intake import (FORMS as INTAKE_FORMS,)
 from glynt.apps.transact.views.intake import CS_FORMS, SF_FORMS, CS_SF_FORMS
 
 TX_OPTIONS = {
-    #'INTAKE': {'forms': INTAKE_FORMS, 'templates': [], 'data_provider': Bunch({})},
+    'INTAKE': {'forms': INTAKE_FORMS, 'templates': [], 'data_provider': Bunch({})},
     'CS': {'forms': CS_FORMS, 'templates': [], 'data_provider': Bunch({})},
     'SF': {'forms': SF_FORMS, 'templates': [], 'data_provider': Bunch({})},
     'ES': {'forms': SF_FORMS, 'templates': [], 'data_provider': Bunch({})},
