@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load url from future %}
+{% extends 'base.html' %}{% load url from future %}{% load email_obfuscator %}
 {% block page_title %}LawPal - A better attorney-client relationship{% endblock %}
 {% block bodyclass %}{% endblock %}
 {% block css %}
@@ -45,21 +45,21 @@
                     <div class="text-center">
                         <img src="{{ STATIC_URL }}img/alex-face.jpg" class="img-rounded" vspace="10">
                         Alex Halliday<br />
-                        <small> CEO, <a href="mailto:alex@lawpal.com">Contact</a></small>
+                        <small> CEO, <a href="mailto:{{ 'alex@lawpal.com'|obfuscate }}">Contact</a></small>
                     </div>
                 </div>
                 <div class="col-4">
                     <div class="text-center">
                         <img src="{{ STATIC_URL }}img/yael-face.jpg" class="img-rounded"  vspace="10" width="137px">
                         Yael Citro<br />
-                        <small> GC, <a href="mailto:yael@lawpal.com">Contact</a></small>
+                        <small> GC, <a href="mailto:{{ 'yael@lawpal.com'|obfuscate }}">Contact</a></small>
                     </div>
                 </div>      
                 <div class="col-4">
                     <div class="text-center">
                         <img src="{{ STATIC_URL }}img/ross-face.jpg" class="img-rounded"  vspace="10" width="137px">
                         Ross Crawford<br />
-                        <small> CTO, <a href="mailto:ross@lawpal.com">Contact</a></small>
+                        <small> CTO, <a href="mailto:{{ 'ross@lawpal.com'|obfuscate }}">Contact</a></small>
                     </div>
                 </div>      
             </div>
