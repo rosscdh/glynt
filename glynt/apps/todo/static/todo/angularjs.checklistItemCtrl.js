@@ -43,16 +43,9 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [ '$scope', 'lawPalSer
 	 * @return {Boolean} true if assigned
 	 */
 	$scope.getAssignedStatus = function() {
-		var assigned = false;
 		var item = $scope.item;
-		var feedbackRequests = $scope.model.feedbackRequests;
-		var itemSlug = item.slug || null;
 
-		if( feedbackRequests[itemSlug] ) {
-			assigned = (feedbackRequests[itemSlug].length>0);
-		}
-
-		return assigned;
+		return $scope.isChecklistItemAssigned(item);
 	};
 
 	/**
