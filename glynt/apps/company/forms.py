@@ -131,45 +131,49 @@ class FinancingProfileForm(BuilderBaseForm):
                 'doc_exists_stock_option_plan'
             )
         )
-        super(CompanyProfileForm, self).__init__(*args, **kwargs)
+        super(FinancingProfileForm, self).__init__(*args, **kwargs)
 
 
-class CompanyandFinancingProfileForm(BuilderBaseForm):
+class CompanyAndFinancingProfileForm(CompanyProfileForm, FinancingProfileForm):
     """
     The Setup AND Financing Form (both selected)
     Basically we are combining the two forms and only showing the following fields. Not sure how to code this. 
     """
-    Fieldset(
-        'Founding Team',
-        Div(
-            'founder_name',
-            'founder_email',
-            **{'class': 'founder-group clearfix'}
-        ),
-        **{'data-region-clone': 'true', 'data-region-name': 'founders', 'class': 'founder-block clearfix'}
-    ),
-    Fieldset(
-        'About Your Round',
-        'investment_terms',
-        'num_investors',
-        'num_investor_states',
-        'incubator',
-        'already_incorp',
-    ),
-    Fieldset(
-        'About your Startup',
-        'incubator',
-        'current_status',
-        'profile_website',
-        'description',
-        'target_states_and_countries',
-        'num_officers',
-        'num_employees',
-        'num_consultants',
-        'option_plan_status',
-        'num_option_holders',
-        'ip_nolonger_affiliated',
-        'ip_otherthan_founder',
-        'ip_university_affiliation',
-    )
-
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Fieldset(
+                'Founding Team',
+                Div(
+                    'founder_name',
+                    'founder_email',
+                    **{'class': 'founder-group clearfix'}
+                ),
+                **{'data-region-clone': 'true', 'data-region-name': 'founders', 'class': 'founder-block clearfix'}
+            ),
+            Fieldset(
+                'About Your Round',
+                'investment_terms',
+                'num_investors',
+                'num_investor_states',
+                'incubator',
+                'already_incorp',
+            ),
+            Fieldset(
+                'About your Startup',
+                'incubator',
+                'current_status',
+                'profile_website',
+                'description',
+                'target_states_and_countries',
+                'num_officers',
+                'num_employees',
+                'num_consultants',
+                'option_plan_status',
+                'num_option_holders',
+                'ip_nolonger_affiliated',
+                'ip_otherthan_founder',
+                'ip_university_affiliation',
+            )
+        )
+        super(CompanyAndFinancingProfileForm, self).__init__(*args, **kwargs)
