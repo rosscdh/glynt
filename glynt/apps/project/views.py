@@ -60,10 +60,15 @@ class CreateProjectView(FormView):
             messages.error(self.request, _('Sorry, but we could not determine which transaction type you selected. Please try again.'))
             self.success_url = reverse('project:create')
 
-        intake = EnsureUserHasCompletedIntakeProcess(user=self.request.user)
-        if intake.is_complete() is False:
-            if u'INTAKE' not in transaction_types:
-                transaction_types.insert(0, u'INTAKE')
+        # intake = EnsureUserHasCompletedIntakeProcess(user=self.request.user)
+        # if intake.is_complete() is False:
+        #     if u'INTAKE' not in transaction_types:
+        #         transaction_types.insert(0, u'INTAKE')
+        """
+        @BUSINESSRULE if we have a multiple selected it must be the combined transaction form
+        """
+        if len(transaction_types) > 1:
+            transaction_types = ['CS_SF_ES']
 
         project = self.save(transaction_types=transaction_types)
 
