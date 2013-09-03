@@ -208,6 +208,7 @@ PROJECT_APPS = (
 HELPER_APPS = (
     'guardian',
     'cicu',# image crop and upload
+    'email_obfuscator',
     'django_extensions',
     'templatetag_handlebars',
     'django_markdown',
