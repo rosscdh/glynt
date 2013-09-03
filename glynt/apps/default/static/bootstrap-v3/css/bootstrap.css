@@ -6551,7 +6551,7 @@ td.hidden-lg {
 }
 #wrap .scroll,
 #wrap .telephone {
-  padding: 30px 0px 20px 0;
+  padding: 15px 0px 10px 0;
   color: #bfbfbf;
   font-size: 19.599999999999998px;
   font-weight: normal;
@@ -6588,18 +6588,37 @@ td.hidden-lg {
 #wrap .feature-block p {
   color: #888888;
 }
+#wrap .feature-block.frame {
+  border-left: 3px solid #42d0e5;
+}
 #wrap .quote {
-  background-color: #fcd423;
+  background-color: #42d0e5;
   color: white;
   margin: 40px 0px;
-  padding: 30px 0px 20px 0px;
-  font-size: 21px;
-  font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
-  text-align: left;
+  padding: 21px 0px 20px 0px;
 }
-#wrap .quote p {
-  border-left: 2px solid #ffffff;
-  padding-left: 15px;
+#wrap .quote h1,
+#wrap .quote h2 {
+  margin: 0px 0px 10px 0px;
+}
+#wrap .quote h1 small,
+#wrap .quote h2 small {
+  opacity: 0.6;
+}
+#wrap .quote * {
+  color: white;
+}
+#wrap .call-to-action {
+  background-color: #6bdb7e;
+  padding: 20px 20px 30px 20px;
+  color: white;
+  margin-top: 15px;
+}
+#wrap .call-to-action * {
+  color: white;
+}
+#wrap .attorney-feature {
+  margin-top: 0px;
 }
 @media screen and (min-width: 768px) {
   .homepage #wrap .splash {
