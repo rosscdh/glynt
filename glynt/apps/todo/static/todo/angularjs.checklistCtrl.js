@@ -16,6 +16,15 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		'showDeletedItems': false // If true deleted items are displayed also
 	};
 
+	/*
+	// @@ remove: quick async test and intermediate test to see if socket style updates will work
+	setTimeout( function(){
+		//debugger;
+		$scope.model.feedbackRequests["1dfefcfe4f86d49254cd2ddd57331b17deff2295"] = [{"todo_slug":"1dfefcfe4f86d49254cd2ddd57331b17deff2295"}];
+		$scope.$apply();
+	}, 2000);
+	*/
+
 	// When the controller is ready ng-init calls initialise, with project details such as uuid
 	$scope.initalise = function( options ){
 		// If there are no options
@@ -79,6 +88,36 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		}
 	};
 
+	/**
+	 * Watch for changed to feed Requests and update category details
+	 */
+	$scope.$watch('model.feedbackRequests', function(){
+		// Create the list ok feedback_requests keys
+		var itemSlugs = Object.keys($scope.model.feedbackRequests);
+
+		if( angular.isArray(itemSlugs) ) {
+			// For each key (slug) find the corresponding checklist item
+			itemSlugs.forEach( function( slug ){
+				var item = $scope.itemBySlug(slug);
+				if( item && item.category ) {
+					// Locate the corresponding category
+					var category = $scope.model.categories.find( function(cat){
+						return cat.label == item.category;
+					});
+
+					// Update number of assigned items in this category
+					$scope.assignedPerCategory( category );
+				}
+			});
+		}
+	}, true);
+
+	/**
+	 * Increments a numeric value, representing the number of feedback items assigned to the current user
+	 * @param  {Object} category Category object
+	 *
+	 * @todo : change count to an array of slugs, then use .length in view
+	 */
 	$scope.assignedPerCategory = function( category ) {
 		var numAssigned = 0;
 		var categoryLabel = category.label.unescapeHTML(); /* sugar.js */
@@ -96,7 +135,8 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 				numAssigned++;
 		}
 
-		return numAssigned || ""; 
+		category.numAssigned = numAssigned;
+		//return numAssigned || ""; 
 	};
 
 	$scope.isChecklistItemAssigned = function( item ) {
@@ -153,6 +193,21 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		}
 
 		return -1;
+	};
+
+	/**
+	 * Locate a specific item in the checklist
+	 * @param  {Object} item JSON object representing a checklist item
+	 * @return {Number}      Index in the array or -1
+	 */
+	$scope.itemBySlug = function( slug ) {
+		var list = $scope.model.checklist;
+		for( var i=0; i<list.length; i++) {
+			if( list[i].slug === slug )
+				return list[i];
+		}
+
+		return null;
 	};
 
 	/**
