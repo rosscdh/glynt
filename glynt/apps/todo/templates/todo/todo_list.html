@@ -14,57 +14,63 @@
 
 {% block body %}
     {% csrf_token %}
-    <div class="container checklist-view">
+    <!-- start: AngularJS: checklist controller //-->
+    <div class="container checklist-view" ng-controller="checklistCtrl" ng-init="initalise( { 'project': { 'uuid': '{{ project.uuid }}' } } )">
         <div class="row">
             <div class="col col-lg-3">
                 <div class="sidebar" data-spy="affix" data-offset-top="80">
                     <div class="subnav">
                         <ul id="checklist-categories" class="nav nav-pills nav-stacked">
-                            {% for c in checklist.categories %}
-                                <li data-category="{{ c|slugify }}" class="{% if forloop.counter == 1 %}active{% endif %}"><a href="#{{ c|slugify }}">{{ c }}<span class="num_assigned_to_user badge assigned pull-right"></span></a></li>
-                            {% endfor %}
+                            <li ng-repeat="category in model.categories">
+                                <a href="#{[{category.slug}]}"><span ng-bind-html-unsafe="category.label"></span><span class="num_assigned_to_user badge assigned pull-right"></span></a>
+                            </li>
                         </ul>
                     </div>
                 </div>
             </div>
 
             <div class="col col-lg-9">
-                <!-- start: AngularJS: checklist controller //-->
-                <div ng-controller="checklistCtrl" id="list-items" ng-init="initalise( { 'project': { 'uuid': '{{ project.uuid }}' } } )">
-                    {% for category, items in checklist.todos_by_cat.iteritems %}
-                    <section id="{{ category|slugify }}" class="checklist-category">
-                        <div class="checklist-header clearfix">
-                            <h3 class="pull-left">{{ category }}</h3>
-                            <!-- TODO: Change to angular-ui directive //-->
-                            <button type="button" class="btn btn-link pull-right create-item" data-category="{{ category|slugify }}" data-remote="{% url 'todo:create' project_uuid=project.uuid %}?category={{ category|urlencode }}" data-toggle="modal" data-target="#modal-checklist-item" title="Create new item">
+
+                <alert ng-repeat="alert in model.alerts" type="alert.type" close="closeAlert($index)">
+                    <span ng-bind="alert.message"></span>
+                </alert>
+                
+                <div id="list-items">
+                    <section ng-repeat="category in model.categories">
+                        <div id="{[{category.slug}]}" class="checklist-header clearfix">
+                            <h3 class="pull-left" ng-bind-html-unsafe="category.label"></h3>
+                            {% if is_lawyer %}
+                            <!-- Add new checklist item //-->
+                            <button type="button" class="btn btn-link pull-right create-item" title="Create new item" data-tooltip="Create new checklist item" ng-click="createItem( category )">
                                     <i class="glyphicon glyphicon-plus-sign"></i>
                             </button>
+                            {% endif %}
                         </div>
-                        
+
                         <table class="table table-striped checklist">
                             <tbody>
-                                <tr ng-repeat="item in model.checklist | filter: { category: '{{ category }}' } | filter: { is_deleted: false }" class="row">
+                                <!-- start: AngularJS: checklist item controller //-->
+                                <tr ng-repeat="item in model.checklist | filter: { 'category': category.label } | filter: { is_deleted: model.showDeletedItems }" class="item state-{[{getItemStatus(item)}]}" ng-controller="checklistItemCtrl">
+                                    <!-- Checklist item status //-->
                                     <td class="item-status">
                                         <i class="icon-state-{[{getItemStatus(item)}]}"></i>
                                     </td>
-                                    <td class="item-info">
-                                        <h4 ng-bind="item.name"></h4>
-                                    </td>
+                                    <!-- Checklist item name //-->
+                                    <td class="item-info" checklist-item-link ng-click="viewItem( item )"></td>
                                     {% if is_lawyer %}
-                                    <td class="item-meta">
-                                        <div class="col-lg-2 checklist-item-actions" data-url="{% url 'todo:edit' project_uuid=':project_uuid' slug=':slug' %}"></div>
-                                    </td>
+                                    <!-- Checklist item actions //-->
+                                    <td class="item-meta" checklist-item-actions></td>
                                     {% endif %}
                                 </tr>
+                                <!-- end: AngularJS: checklist item controller //-->
                             </tbody>
                         </table>
-                        
+                        <!-- Table //-->
                     </section>
-                    {% endfor %}
                 </div>
-                <!-- end: AngularJS: checklist controller //-->
         </div>
     </div>
+    <!-- end: AngularJS: checklist controller //-->
 {% endblock %}
 
 {% block js %}
@@ -72,6 +78,7 @@
     <script src="{{ STATIC_URL }}todo/jquery.plugin.filter_status.js"></script>
     <script src="{{ STATIC_URL }}todo/jquery.plugin.edit_label.js"></script>
     <script src="{{ STATIC_URL }}todo/angularjs.checklistCtrl.js"></script>
+    <script src="{{ STATIC_URL }}todo/angularjs.checklistItemCtrl.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}todo/angularjs.checklistItemDirective.js"></script>
 
     <script>
@@ -83,19 +90,47 @@
         /**
         * Primary list of the checklist items
         */
-        checklist_data: function () {
+        "checklist_data": function () {
             return {{ checklist_json|safe }};
         },
         /**
         * Feedback requests are requests that are associated
         * with an item that applies to the currentuser
         */
-        feedback_requests: function () {
+        "feedback_requests": function () {
             return {{ feedback_requests|jsonify }}
         },
-        is_lawyer: {{ is_lawyer|jsonify }},
-        is_customer: {{ is_customer|jsonify }},
+        "is_lawyer": {{ is_lawyer|jsonify }},
+        "is_customer": {{ is_customer|jsonify }},
+        "checklist_categories": function() {
+            return [{% for c in checklist.categories %}{% if forloop.counter != 1 %},{% endif %}{ "label": "{{c}}", "slug": "{{ c|slugify }}" } {% endfor %}];
+        },
+        "getEndpoint": function() {
+            var urls = {
+                "checklist" : 
+                    {
+                        "item" : {
+                            "view": "{% url 'todo:item' project_uuid=':project_uuid' slug=':slug' %}",
+                            "create": "{% url 'todo:create' project_uuid=':project_uuid' %}?category=:categoryLabel",
+                            "form": "{% url 'todo:edit' project_uuid=':project_uuid' slug=':slug' %}"
+                        } 
+                    }
+            };
 
+            return function( path ) {
+                var url = urls;
+                if( angular.isArray(path) )
+                {
+                    for(var i=0;i<path.length;i++) {
+                        url = url[ path[i] ];
+                    }
+                    if( angular.isString(url) )
+                        return url;
+                    else
+                        return null;
+                }
+            }
+        }
     };
 
     $(document).ready( function () {
@@ -137,6 +172,7 @@
         /**
         * DELETE ITEM LIST
         */
+       /*
         $('tr.item .item-delete').hide();
         $('tr.item').on('mouseout', function (event) {
             var elem = $(this);
@@ -173,6 +209,7 @@
                 }
             });
         });
+        */
         {% endif %}
 
     });

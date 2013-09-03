@@ -1,26 +1,52 @@
 /**
- * 
+ * @description LawPal checklist item GUI directives
+ * @author <a href="mailtolee.j.sinclair@gmail.com">Lee Sinclair</a>
+ * Date: 2 Sept 2013
  */
 
-lawPalApp.directive('checklistItemActions', function () {
+/**
+ * Displays edit and delete buttons
+ * @param  {Factory} lawPalUrls Enables access to determine which forms to display
+ * @return {Object}            AngularJS directive
+ */
+lawPalApp.directive('checklistItemActions', [ 'lawPalUrls', function ( lawPalUrls ) {
 	return {
-		"restrict": 'C',
-		"link": function (scope, elem, attrs) {
-			console.log( attrs );
-			
-			var url = attrs["url"];
-			url = url.replace(":project_uuid", scope.model.project.uuid).replace(":slug", scope.item.slug );
+		"restrict": 'A',
+		"link": function (scope, elem, attrs) {		
+			//var url = attrs["url"];
+			var url = lawPalUrls.checklistItemFormUrl( scope.model.project.uuid, scope.item );
+			//url = url.replace(":project_uuid", scope.model.project.uuid).replace(":slug", scope.item.slug );
 
-			scope.url = url;
+			scope.editUrl = url;
 		},
 		"controller": [ '$scope', '$resource' , function( $scope, $resource ) {
-			var options = { 'project_uuid': $scope.model.project.uuid , 'slug': $scope.slug };
-			/*
-			var options ={ 'project_uuid': $scope.model.project.uuid, 'slug': $scope.slug };
-			*/
+
 		}
 		],
-		"template": '<button href="{[{url}]}" data-toggle="modal" data-target="#modal-checklist-item" data-is_ajax="true" data-target_toggle_object="#item-name-{[{item.slug}]}" title="Edit" data-tooltip="Edit" class="btn btn-small btn-link item-edit"><i class="glyphicon glyphicon-pencil"></i></button>'+
-					'<button data-tooltip="Delete Item" class="btn btn-small btn-link text-danger" ng-click="deleteItem(item)"><i class="glyphicon glyphicon-remove text-danger"></i></button>'
+		"template": '<a tooltip="Delete Item" class="btn btn-small btn-link text-danger item-delete" ng-click="deleteItem(item)"><i class="glyphicon glyphicon-remove text-danger"></i></a>'+
+					'<a xhref="{[{editUrl}]}" ng-click="editItem()" title="Edit" data-tooltip="Edit" class="btn btn-small btn-link item-edit"><i class="glyphicon glyphicon-pencil"></i></a>'
 	};
-});
+}]);
+
+/**
+ * Displays checklist item heading
+ * @param  {Factory} lawPalUrls Enables access to determine which forms to display
+ * @return {Object}            AngularJS directive
+ */
+lawPalApp.directive('checklistItemLink', [ 'lawPalUrls', function ( lawPalUrls ) {
+	return {
+		"restrict": 'A',
+		'transclude': true,
+		"link": function (scope, elem, attrs) {
+			var url = lawPalUrls.checklistItemDetailUrl( scope.model.project.uuid, scope.item );
+			//url = url.replace(":project_uuid", scope.model.project.uuid).replace(":slug", scope.item.slug );
+
+			scope.viewUrl = url;
+		},
+		"controller": [ '$scope' , function( $scope ) {
+			$scope.test = alert;
+		}
+		],
+		"template": '<h4><a href="{[{viewUrl}]}" ng-bind="item.name"></a></h4>'
+	};
+}]);

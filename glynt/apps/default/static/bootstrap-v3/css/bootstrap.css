@@ -1514,6 +1514,9 @@ input[type="color"].input-smaller {
   border-color: #f0ad4e;
   background-color: #fcf8e3;
 }
+input.ng-invalid {
+  border: 1px solid #b94a48;
+}
 .has-error .control-label {
   color: #b94a48;
 }
@@ -4825,7 +4828,7 @@ body {
 .modal {
   display: none;
   overflow: auto;
-  overflow-y: scroll;
+  overflow-y: auto /*scroll*/;
   position: fixed;
   top: 0;
   right: 0;
@@ -4844,6 +4847,8 @@ body {
 .modal.fade.in {
   top: 0;
 }
+/* Style added for AngularJS modal dialogs */
+.modal-show { display: block;}
 .modal-dialog {
   position: relative;
   top: 0;
@@ -6653,6 +6658,11 @@ table.checklist .item-status [class*=" icon-"] {
 }
 table.checklist .item-info {
   padding-left: 0;
+  /* Increasing the clickable area for */
+  cursor: pointer;
+}
+table.checklist .item-info:hover a {
+  text-decoration: underline;
 }
 table.checklist .item-info h4 {
   font-size: 16px;
@@ -7050,7 +7060,10 @@ table.lawyer-list.active {
 .breadcrumb > li > a {
   color: #fff;
 }
-
+/*
+@@ removed, this created rollover bugs for checklists in chrome for the last item in the checlist before a section heading
 section.checklist-category {
   padding-top: 50px;
   margin-top: -50px;
+}
+*/
