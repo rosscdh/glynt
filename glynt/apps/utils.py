@@ -16,7 +16,7 @@ from django.db.models import Q
 import re
 import json
 import urlparse
-import hashlib
+import shortuuid
 import datetime
 import random
 
@@ -30,12 +30,15 @@ API_URLS = {
 }
 
 
-def generate_unique_slug(instance):
+def generate_unique_slug(instance=None):
     """ Generate the unique slug for a model instance """
-    pk = instance.pk if hasattr(instance, 'pk') and type(instance.pk) is not None else random.random()
-    hash_val = u'%s-%s-%s' % (instance.__class__.__name__, pk, datetime.datetime.utcnow())
-    h = hashlib.sha1(hash_val)
-    return h.hexdigest()
+    if instance is not None:
+        pk = instance.pk if hasattr(instance, 'pk') and type(instance.pk) is not None else random.random()
+        hash_val = u'%s-%s-%s' % (instance.__class__.__name__, pk, datetime.datetime.utcnow())
+
+        return shortuuid.uuid(name=hash_val)
+    else:
+        return shortuuid.uuid()
 
 
 class HttpResponseUnauthorized(HttpResponse):
