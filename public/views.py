@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib import messages
-from django.http import Http404, HttpResponse
+from django.http import Http404
 from django.views.generic.base import RedirectView
 from django.views.generic.edit import FormView
 from django.views.generic import TemplateView
@@ -109,14 +109,11 @@ class ContactUsView(AjaxableResponseMixin, FormView):
         logger.info('Contact us from: %s (%s) message: %s' % (form.cleaned_data['name'], form.cleaned_data['email'], form.cleaned_data['message'],))
 
         send_contactus_email(from_name=form.cleaned_data['name'], from_email=form.cleaned_data['email'], message=form.cleaned_data['message'])
-
-        payload = { 'success': True, 'message': "Message sent, thanks!" }
+        message = "Message sent, thanks!"
 
         if self.request.is_ajax():
-            return HttpResponse(json.dumps(payload),
-                content_type='application/json',
-            )
+            return self.render_to_json_response({ 'message': message, 'status': 200 })
         else:
-            messages.success(self.request, "Message sent, thanks!")
+            messages.success(self.request, message)
 
             return super(ContactUsView, self).form_valid(form)
