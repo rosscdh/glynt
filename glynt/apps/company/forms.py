@@ -9,9 +9,8 @@ from glynt.apps.transact import BuilderBaseForm
 from glynt.apps.company import COMPANY_STATUS_CHOICES
 from glynt.apps.company import OPTION_PLAN_STATUS_CHOICES
 
+
 class CompanyProfileForm(BuilderBaseForm):
-
-
     """
     The Company Setup Form
     This form only appears if they are doing an incorporation only. 
@@ -65,6 +64,7 @@ class CompanyProfileForm(BuilderBaseForm):
             )
         )
         super(CompanyProfileForm, self).__init__(*args, **kwargs)
+
 
 class FinancingProfileForm(BuilderBaseForm):
     """
@@ -133,42 +133,43 @@ class FinancingProfileForm(BuilderBaseForm):
         )
         super(CompanyProfileForm, self).__init__(*args, **kwargs)
 
+
 class CompanyandFinancingProfileForm(BuilderBaseForm):
-            """
-            The Setup AND Financing Form (both selected)
-            Basically we are combining the two forms and only showing the following fields. Not sure how to code this. 
-            """
-            Fieldset(
-                'Founding Team',
-                Div(
-                    'founder_name',
-                    'founder_email',
-                    **{'class': 'founder-group clearfix'}
-                ),
-                **{'data-region-clone': 'true', 'data-region-name': 'founders', 'class': 'founder-block clearfix'}
-            ),
-            Fieldset(
-                'About Your Round',
-                'investment_terms',
-                'num_investors',
-                'num_investor_states',
-                'incubator',
-                'already_incorp',
-            ),
-            Fieldset(
-                'About your Startup',
-                'incubator',
-                'current_status',
-                'profile_website',
-                'description',
-                'target_states_and_countries',
-                'num_officers',
-                'num_employees',
-                'num_consultants',
-                'option_plan_status',
-                'num_option_holders',
-                'ip_nolonger_affiliated',
-                'ip_otherthan_founder',
-                'ip_university_affiliation',
-            )
+    """
+    The Setup AND Financing Form (both selected)
+    Basically we are combining the two forms and only showing the following fields. Not sure how to code this. 
+    """
+    Fieldset(
+        'Founding Team',
+        Div(
+            'founder_name',
+            'founder_email',
+            **{'class': 'founder-group clearfix'}
+        ),
+        **{'data-region-clone': 'true', 'data-region-name': 'founders', 'class': 'founder-block clearfix'}
+    ),
+    Fieldset(
+        'About Your Round',
+        'investment_terms',
+        'num_investors',
+        'num_investor_states',
+        'incubator',
+        'already_incorp',
+    ),
+    Fieldset(
+        'About your Startup',
+        'incubator',
+        'current_status',
+        'profile_website',
+        'description',
+        'target_states_and_countries',
+        'num_officers',
+        'num_employees',
+        'num_consultants',
+        'option_plan_status',
+        'num_option_holders',
+        'ip_nolonger_affiliated',
+        'ip_otherthan_founder',
+        'ip_university_affiliation',
+    )
 
