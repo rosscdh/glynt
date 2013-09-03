@@ -79,6 +79,26 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		}
 	};
 
+	$scope.assignedPerCategory = function( categoryLabel ) {
+		var numAssigned = 0;
+		var checkListItems = $scope.model.checklist;
+
+		for(var i=0;i<checkListItems.length;i++) {
+
+		}
+		var itemSlug = item.slug || null;
+
+		if( feedbackRequests[itemSlug] ) {
+			assigned = (feedbackRequests[itemSlug].length>0);
+		}
+
+		return assigned; 
+	};
+
+	$scope.isChecklistItemAssigned = function( item ) {
+		var feedbackRequests = $scope.model.feedbackRequests;
+	};
+
 	/**
 	 * Remove alert from display
 	 * @param  {Number} index Index of alert to remove
