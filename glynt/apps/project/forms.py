@@ -19,6 +19,7 @@ class ContactUsForm(ContactForm):
         self.helper.form_id = 'example-form'
         self.helper.form_method = 'post'
         self.helper.form_action = reverse('public:contact_us')
+        self.helper.attrs = { 'data_validate': 'parsley' }
 
         self.helper.add_layout(Layout(
             Div(
