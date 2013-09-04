@@ -150,15 +150,15 @@ $(document).ready(function() {
             url: form.attr('action'),
             data: form.serialize()
         })
-        .done(function() {
-            alert('done');
-        })
+        .done(function() {})
         .fail(function(data, textStatus, jqXHR) {
             // validation errors handled by parsley, so just log
             // this to the console
             console.log(data.responseText);
         })
-        .complete(function() {})
+        .complete(function() {
+            $('#custom-package').modal('hide');
+        })
     });
 });
 </script>
