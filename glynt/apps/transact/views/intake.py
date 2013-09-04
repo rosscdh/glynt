@@ -1,6 +1,5 @@
 # -*- coding: UTF-8 -*-
-from glynt.apps.company.forms import CompanyProfileForm, FinancingProfileForm, CompanyAndFinancingProfileForm
-#from glynt.apps.transact.forms import CompanyProfileForm
+from glynt.apps.company.forms import (CompanyProfileForm, FinancingProfileForm, CompanyAndFinancingProfileForm,)
 
 # from glynt.apps.transact.forms import BasicInformationForm, CorporateAgentsForm, \
 #     InitialDirectorsForm, GeneralCapitalizationForm, CustomersForm, StockPlansForm, AboutCompanyBusinessForm, \
