@@ -6,7 +6,7 @@ from parsley.decorators import parsleyfy
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, Div
 
-from glynt.apps.transact import BuilderBaseForm
+from glynt.apps.transact import BuilderBaseForm, CrispyExFieldsetFieldRemovalMixin
 from glynt.apps.company import COMPANY_STATUS_CHOICES
 from glynt.apps.company import OPTION_PLAN_STATUS_CHOICES
 
@@ -20,6 +20,7 @@ class CompanyProfileForm(BuilderBaseForm):
     """
     page_title = 'Your Company Profile'
     page_description = 'Enter some basic details about your company'
+    #data_bag = 'glynt.apps.company.bunches.UserIntakeCompanyBunch'
 
     founder_name = forms.CharField()
     founder_email = forms.EmailField()
@@ -69,6 +70,9 @@ class CompanyProfileForm(BuilderBaseForm):
             )
         )
         super(CompanyProfileForm, self).__init__(*args, **kwargs)
+
+    def get_update_url(self, **kwargs):
+        return '/api/v1/company/data/{pk}'.format(pk=kwargs.get('project').company.pk)
 
 
 @parsleyfy
@@ -144,7 +148,7 @@ class FinancingProfileForm(BuilderBaseForm):
 
 
 @parsleyfy
-class CompanyAndFinancingProfileForm(CompanyProfileForm, FinancingProfileForm):
+class CompanyAndFinancingProfileForm(CrispyExFieldsetFieldRemovalMixin, CompanyProfileForm, FinancingProfileForm):
     """
     The Setup AND Financing Form (both selected)
     Basically we are combining the two forms and only showing the following fields. Not sure how to code this. 
@@ -190,3 +194,4 @@ class CompanyAndFinancingProfileForm(CompanyProfileForm, FinancingProfileForm):
             )
         )
         super(CompanyAndFinancingProfileForm, self).__init__(*args, **kwargs)
+        self.unify_fields()
