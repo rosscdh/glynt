@@ -26,12 +26,15 @@ TX_OPTIONS = {
 
 
 class BuilderWizardView(NamedUrlSessionWizardView):
-    """ Transaction Builder that compiles sets of form steps into a wizard """
+    """
+    Transaction Builder that compiles sets of form steps into a wizard
+    """
     template_name = 'transact/forms/builder.html'
     form_list = []
 
     def get_update_url(self, **kwargs):
         form = kwargs.get('context').get('form')
+
         if hasattr(form, 'get_update_url'):
             return form.get_update_url(**kwargs)
         else:
@@ -43,50 +46,67 @@ class BuilderWizardView(NamedUrlSessionWizardView):
         """
         # setup the project
         self.project = get_object_or_404(Project, uuid=self.kwargs.get('project_uuid'))
+
         # Inject custom forms here as we need the request object
         self.custom_forms()
+
         if len(self.form_list) > 0:
             return super(BuilderWizardView, self).dispatch(request, *args, **kwargs)
         else:
             return self.done(form_list=[])
 
+    def custom_forms(self):
+        """ 
+        Custom Method that will inject our custom collection of forms
+        as the Wizard formset
+        """
+        self.form_list = SortedDict()  # reset the class var
+        form_list = {}
+        tx_range = self.kwargs.get('tx_range', '').split(',')
+
+        if type(tx_range) == str:
+            tx_range = [tx_range]
+
+        # if intake is in the list, then it should be done first
+        # if 'INTAKE' in tx_range:
+        #     tx_range.pop(tx_range.index('INTAKE'))  # remove the INTAKE item from the list
+        #     self.add_form_to_set(current_form_set=form_list, form_set=TX_OPTIONS.get('INTAKE').get('forms'))
+
+        # import the appropriate forms and their templates
+        tx_options_keys = TX_OPTIONS.keys()
+
+        """
+        @BUSINESSRULE if we have a multiple selected it must be the combined transaction form
+        """
+        if len(tx_options_keys) > 1:
+            tx_range = ['CS_SF_ES']
+
+        for tx in tx_range:
+            if tx in tx_options_keys:
+                # @BUSINESSRULE - intake form must always be first
+                self.add_form_to_set(current_form_set=form_list, form_set=TX_OPTIONS.get(tx).get('forms'))
+
+        self.form_list = SortedDict(form_list)
+
     def get_context_data(self, form, **kwargs):
         """ @BUSINESRULE set the page_title and page_description from the form class vars
         if they are present """
         context = super(BuilderWizardView, self).get_context_data(form, **kwargs)
+
         context.update({
             'page_title': context.get('form').page_title,
             'page_description': context.get('form').page_description,
             'update_url': self.get_update_url(context=context, project=self.project),
         })
+
         return context
-
-    def custom_forms(self):
-        """ custom method """
-        self.form_list = SortedDict()  # reset the class var
-        form_list = {}
-        tx_range = self.kwargs.get('tx_range', '').split(',')
-        if type(tx_range) == str:
-            tx_range = [tx_range]
-
-        # if intake is in the list, then it should be done first
-        if 'INTAKE' in tx_range:
-            tx_range.pop(tx_range.index('INTAKE'))  # remove the INTAKE item from the list
-            self.add_form_to_set(current_form_set=form_list, form_set=TX_OPTIONS.get('INTAKE').get('forms'))
-
-        # import the appropriate forms and their templates
-        tx_options_keys = TX_OPTIONS.keys()
-        for tx in tx_range:
-            if tx in tx_options_keys:
-                # @BUSINESSRULE - intake form must always be first
-                self.add_form_to_set(current_form_set=form_list, form_set=TX_OPTIONS.get(tx).get('forms'))
-        self.form_list = SortedDict(form_list)
 
     def add_form_to_set(self, current_form_set, form_set):
         """
         Dynamically build the form_list set based on the selected transactions
         """
         length_of_current_form_set = len(current_form_set.keys())
+
         for i, item in enumerate(form_set):
             # increment i + 1 as steps start at 1 not 0
             current_form_set[unicode(length_of_current_form_set + i + 1)] = item[1]  # return the form and not its name
@@ -98,9 +118,11 @@ class BuilderWizardView(NamedUrlSessionWizardView):
 
     def get_form_kwargs(self, step=None):
         kwargs = super(BuilderWizardView, self).get_form_kwargs(step=step)
+
         kwargs.update({
             'request': self.request
         })
+
         return kwargs
 
     def get_form_initial(self, step):
@@ -110,6 +132,7 @@ class BuilderWizardView(NamedUrlSessionWizardView):
         initial = super(BuilderWizardView, self).get_form_initial(step=step)
 
         data = self.form_list[step].get_data_bag(user=self.request.user)
+
         if data is not None and hasattr(data, 'get_data_bag'):
             initial.update(data.get_data_bag())
 
@@ -121,6 +144,7 @@ class BuilderWizardView(NamedUrlSessionWizardView):
         """
         form_list = super(BuilderWizardView, self).get_form_list()
         form_list.keyOrder.sort()
+
         return form_list
 
     def done(self, form_list, **kwargs):
