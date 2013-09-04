@@ -64,15 +64,11 @@ class CreateProjectView(FormView):
         # if intake.is_complete() is False:
         #     if u'INTAKE' not in transaction_types:
         #         transaction_types.insert(0, u'INTAKE')
-        """
-        @BUSINESSRULE if we have a multiple selected it must be the combined transaction form
-        """
-        if len(transaction_types) > 1:
-            transaction_types = ['CS_SF_ES']
 
         project = self.save(transaction_types=transaction_types)
 
         self.success_url = reverse('transact:builder', kwargs={'project_uuid': project.uuid, 'tx_range': ','.join(transaction_types), 'step': 1})
+
         return super(CreateProjectView, self).form_valid(form)
 
 
