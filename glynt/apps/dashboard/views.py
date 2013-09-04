@@ -4,9 +4,7 @@ from django.views.generic import TemplateView
 
 from bunch import Bunch
 
-from glynt.apps.project.services.project_service import VisibleProjectsService
 from glynt.apps.project.bunches import ProjectIntakeFormIsCompleteBunch
-from glynt.apps.project.models import Project
 from glynt.apps.project import PROJECT_LAWYER_STATUS
 from glynt.apps.todo.views import ToDoCountMixin
 
@@ -50,18 +48,17 @@ class DashboardView(ToDoCountMixin, TemplateView):
     def lawyer_context(self):
         return Bunch({
             'project_lawyer_joins': self.request.user.lawyer_profile.projectlawyer_set.all(),
-            })
+        })
 
     def customer_context(self, project):
         intake_complete = ProjectIntakeFormIsCompleteBunch(project=self.request.project)
         profile_is_complete = intake_complete.is_valid()
 
         return Bunch({
-                        'profile_is_complete': profile_is_complete,
-                  })
-        
+            'profile_is_complete': profile_is_complete,
+        })
+
     def get_context_data(self, **kwargs):
-        profile_is_complete = False
         qs_filter = self.qs_filter()
 
         kwargs.update({
