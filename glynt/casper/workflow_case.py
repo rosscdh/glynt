@@ -68,9 +68,9 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
         self.project = mommy.make('project.Project', customer=self.customer, lawyers=(self.lawyer,), transactions=(Transaction.objects.get(slug='CS'), Transaction.objects.get(slug='SF'),))
 
         # set the join to status engaged
-        project_lawyer_join = self.project.projectlawyer_set.all()[0]
-        project_lawyer_join.status = project_lawyer_join.LAWYER_STATUS.assigned
-        project_lawyer_join.save(update_fields=['status'])
+        self.project_lawyer_join = self.project.projectlawyer_set.all()[0]
+        self.project_lawyer_join.status = self.project_lawyer_join.LAWYER_STATUS.assigned
+        self.project_lawyer_join.save(update_fields=['status'])
 
 
         self.todo = mommy.make('todo.ToDo', status=TODO_STATUS.open, project=self.project, user=self.lawyer_user, category='General')
