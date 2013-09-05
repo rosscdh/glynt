@@ -4,19 +4,20 @@
     var active_input = '';
 
     // Settings
-    var COMMENT_SCROLL_TOP_OFFSET = 40;
-    var PREVIEW_SCROLL_TOP_OFFSET = 20;
+    var COMMENT_SCROLL_TOP_OFFSET = 100;
+    var PREVIEW_SCROLL_TOP_OFFSET = 200;
+
+    var COMMENT_CONTROLS = $.extend(true, {
+        'comment_form': $('form.js-comments-form'),
+        'is_reversed': false,
+        'scroll_to_comment': true,
+        'alerts': true,
+    }, window.COMMENT_CONTROLS);
 
     $.fn.ready(function()
     {
+        var commentform = COMMENT_CONTROLS.comment_form;
 
-        var COMMENT_CONTROLS = (window.COMMENT_CONTROLS !== undefined) ? window.COMMENT_CONTROLS : {
-            'is_reversed': false,
-            'scroll_to_comment': true,
-            'alerts': true,
-        };
-
-        var commentform = $('form.js-comments-form');
         if( commentform.length > 0 )
         {
             // Detect last active input.
@@ -207,7 +208,7 @@
     function commentSuccess(data)
     {
         // Clean form
-        $('form.js-comments-form textarea').last().val("");
+        COMMENT_CONTROLS.comment_form.find('textarea').last().val("");
         $('#id_comment').val('');
         cancelThreadedReplyForm();  // in case threaded comments are used.
 
@@ -234,7 +235,7 @@
         //var $new_comment;
 
         // define the action by which the comment is inserted at the top of the list or the bottom
-        var insert_action = (COMMENT_CONTROLS && COMMENT_CONTROLS.is_reversed === true) ? 'prepend' : 'append' ;
+        var insert_action = (COMMENT_CONTROLS.is_reversed === true) ? 'append' : 'prepend' ;
 
         if(parent_id)
         {
@@ -290,8 +291,8 @@
 
     function removeErrors()
     {
-        $('form.js-comments-form .js-errors').remove();
-        $('form.js-comments-form .control-group.error').removeClass('error');
+        COMMENT_CONTROLS.comment_form.find('.js-errors').remove();
+        COMMENT_CONTROLS.comment_form.find('.control-group.error').removeClass('error');
     }
 
     function getCommentsDiv()

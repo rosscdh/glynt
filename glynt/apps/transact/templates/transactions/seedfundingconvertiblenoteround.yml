@@ -4,7 +4,83 @@ transaction:
     note: ''
     todos:
 
-        - General:
+        - Transaction Setup:
             type: 'simple'
             checklist:
-                -   name: 'Item 1'
+                -   name: 'Engagement Letter'
+                    attachment: []
+                -   name: 'Founder Questionnaire'
+                    attachment: []
+                -   name: 'Term Sheet (if applicable)'
+                    attachment: []
+                -   name: 'Restated Certificate'
+                    attachment: []
+
+        - Note Purchase Agreement:
+            type: 'simple'
+            checklist:
+                -   name: 'Schedule of Purchasers'
+                    attachment: []
+                -   name: 'Security Agreement'
+                    attachment: []
+                -   name: 'Subordination Agreement'
+                    attachment: []
+                -   name: 'Schedule of Exceptions'
+                    attachment: []
+
+        - Corporate Approvals:
+            type: 'simple'
+            checklist:
+                -   name: 'Board Authorization'
+                    attachment: []
+                -   name: 'Stockholder Approval'
+                    attachment: []
+
+        - Due Diligence:
+            type: 'simple'
+            checklist:
+                -   name: 'Board Authorization'
+                    attachment: []
+                -   name: 'Stockholder Approval'
+                    attachment: []
+                -   name: 'Board/Stockholder Minutes'
+                    attachment: []
+                -   name: 'Certificate of Incorporation/Bylaws'
+                    attachment: []
+                -   name: 'Material Agreements (Exhibit A)'
+                    attachment: []
+                -   name: '401(k) Plan'
+                    attachment: []
+                -   name: 'Stock Plans'
+                    attachment: []
+                -   name: 'Employee Agreements'
+                    attachment: []
+                -   name: 'Stock Ledger/Option Tables'
+                    attachment: []
+                -   name: 'Blue Sky'
+                    attachment: []
+
+
+        - Closing Documents:
+            type: 'simple'
+            checklist:
+                -   name: 'Restated Certificate'
+                    attachment: []
+                -   name: 'Tax Good Standing (Delaware)'
+                    attachment: []
+                -   name: 'Tax Good Standing (California)'
+                    attachment: []
+                -   name: 'Corp. Good Standing (Delaware)'
+                    attachment: []
+                -   name: 'Certificate of Status (California)'
+                    attachment: []
+                -   name: 'Officer’s Certificate'
+                    attachment: []
+                -   name: 'Secretary’s Certificate'
+                    attachment: []
+                -   name: 'Form W-8 BEN/W-9 for each Purchaser'
+                    attachment: []
+                -   name: 'Notes'
+                    attachment: []
+                -   name: 'Warrants'
+                    attachment: []

@@ -9,6 +9,8 @@ from .base import BaseCasperJs
 from glynt.apps.todo import TODO_STATUS
 from glynt.apps.transact.models import Transaction
 
+import httpretty
+
 
 class PyQueryMixin(LiveServerTestCase):
     """
@@ -27,7 +29,14 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
     """
     fixtures = ['test_cities', 'transact.json']
 
+    @httpretty.activate
     def setUp(self):
+        # mock the attachment upload
+        httpretty.register_uri(httpretty.POST, "https://crocodoc.com/api/v2/document/upload",
+                       body='{"success": true, "uuid": "123-test-123-uuid"}',
+                       status=200,
+                       content_type='text/json')
+
         super(BaseLawyerCustomerProjectCaseMixin, self).setUp()
         self.client = Client()
 
@@ -59,9 +68,9 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
         self.project = mommy.make('project.Project', customer=self.customer, lawyers=(self.lawyer,), transactions=(Transaction.objects.get(slug='CS'), Transaction.objects.get(slug='SF'),))
 
         # set the join to status engaged
-        project_lawyer_join = self.project.projectlawyer_set.all()[0]
-        project_lawyer_join.status = project_lawyer_join.LAWYER_STATUS.assigned
-        project_lawyer_join.save(update_fields=['status'])
+        self.project_lawyer_join = self.project.projectlawyer_set.all()[0]
+        self.project_lawyer_join.status = self.project_lawyer_join.LAWYER_STATUS.assigned
+        self.project_lawyer_join.save(update_fields=['status'])
 
 
         self.todo = mommy.make('todo.ToDo', status=TODO_STATUS.open, project=self.project, user=self.lawyer_user, category='General')

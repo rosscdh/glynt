@@ -1,0 +1,43 @@
+{% load comments fluent_comments_tags i18n %}
+<div class="row post-reply">
+    <form action="{% comment_form_target %}" data-ajax-action="{% url 'comments-post-comment-ajax' %}" method="POST" class="js-comments-form comments-form form-wide clearfix">
+        {% csrf_token %}
+        {% if next %}<div><input type="hidden" name="next" value="{{ next }}" /></div>{% endif %}
+        {% if form.comment.errors %}{{ form.comment.errors }}{% endif %}
+        <div class="media col-12">
+            <div class="pull-left">
+                <div class="profile-card media-object" data-template="mini" data-username="{{ user.username }}">&nbsp;</div>
+            </div>
+            <div class="media-body">
+                {{ form.comment }}
+                <button id="btn-save_comment" class="btn btn-primary" type="submit">{% trans 'Post Message' %}</button>
+                {{ form.honeypot }}
+                {{ form.content_type }}
+                {{ form.object_pk }}
+                {{ form.timestamp }}
+                {{ form.security_hash }}
+            </div>
+        </div>
+        {#% ajax_comment_tags %#}
+    </form>
+</div>
+<br />
+<style>
+#id_comment {
+    height:60px;
+}
+#id_honeypot {
+    display:none;
+}
+textarea#id_comment {
+    float:left;
+}
+#btn-save_comment {
+    margin:5px 0px 0px 6px;
+    padding:14px;
+}
+.post-reply {
+    background-color:#eff6f8;
+    padding:5px 0px 15px 0px;
+}
+</style>

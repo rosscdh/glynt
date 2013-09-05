@@ -14,7 +14,7 @@
             {{ form.timestamp }}
             {{ form.security_hash }}
             {% if next %}<div><input type="hidden" name="next" value="{{ next }}" /></div>{% endif %}
-            <div class="pull-right"><button id="btn-save_comment" class="btn btn-primary pull-right" type="submit">Respond Now</button></div>
+            <div class="pull-right"><button id="btn-save_comment" class="btn btn-primary pull-right" type="submit">Post</button></div>
             {% ajax_comment_tags %}
         </form>
     </div>

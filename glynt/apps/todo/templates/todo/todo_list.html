@@ -127,11 +127,11 @@
         $('tr.item .item-delete').hide();
         $('tr.item').on('mouseout', function (event) {
             var elem = $(this);
-            elem.find('.item-delete').toggle();
+            elem.find('.item-delete').hide();
         });
         $('tr.item').on('mouseover', function (event) {
             var elem = $(this);
-            elem.find('.item-delete').toggle();
+            elem.find('.item-delete').show();
         });
 
         $('.item-delete').on('click', function (event) {

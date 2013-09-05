@@ -131,34 +131,35 @@ $(document).ready(function () {
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title">Contact Us</h4>
             </div>
-            <div class="modal-body">
-                <form class="form-horizontal">
-                    <div class="row">
-                        <label for="inputSubject" class="col-lg-2 control-label">Subject</label>
-                        <div class="col-lg-10">
-                            <input type="text" id="inputSubject" placeholder="Subject">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label for="typeBody" class="col-lg-2 control-label">Body</label>
-                        <div class="col-lg-10">
-                            <textarea name="inputBody" rows="8"></textarea>
-                        </div>
-                        <!-- <div class="col-lg-10"> -->
-                            <!-- <div class="radio-inline"> -->
-                                <!-- <label><input type="radio" name="typeRadios"checked> Document</label> -->
-                            <!-- </div> -->
-                            <!-- <div class="radio-inline"> -->
-                                <!-- <label><input type="radio" name="typeRadios"> Issue</label> -->
-                            <!-- </div> -->
-                        <!-- </div> -->
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <a href="#" class="btn btn-primary">Send</a>
-            </div>
+
+            {% crispy contact_form %}
+
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#example-form').on('submit', function(event) {
+        event.preventDefault();
+
+        var form = $(this);
+
+        $.ajax({
+            type: 'POST',
+            url: form.attr('action'),
+            data: form.serialize()
+        })
+        .done(function() {})
+        .fail(function(data, textStatus, jqXHR) {
+            // validation errors handled by parsley, so just log
+            // this to the console
+            console.log(data.responseText);
+        })
+        .complete(function() {
+            $('#custom-package').modal('hide');
+        })
+    });
+});
+</script>
 {% endblock %}

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load url from future %}{% load glynt_helpers crispy_forms_tags project_tags %}
+{% extends 'base.html' %}{% load url from future %}{% load glynt_helpers crispy_forms_tags project_tags comments fluent_comments_tags %}
 
 {% block page_title %}Overview &mdash; {% project_name project %}{% endblock %}
 
@@ -6,15 +6,20 @@
     <!-- Page Header -->
     <div class="page-header">
         <div class="container">
-            <!-- Header -->
-            <h1>Overview</h1>
+            <div class="row">
+                <div class="col-12">
+                    <h1>Overview</h1>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
 
 {% block body %}
+
+  <!-- Button trigger modal -->
 <div class="container dashboard-view">
-    {% if not user.profile.is_lawyer %}
+    {% if user.profile.is_customer %}
         {% if not profile_is_complete %}
             <div class="callout callout-danger empty">
                 <div class="empty-message empty-message-exclamation-sign">
@@ -24,40 +29,112 @@
                 </div>
             </div>
         {% else %}
-
-            {% project_lawyers project 'potential' %}
-
+            {% if not project.has_lawyer %}
+                {% project_lawyers project 'potential' %}
+                <br />
+            {% endif %}
+            {% if counts.awaiting_feedback_from_user > 0 %}
+                <div class="alert"><i class="glyphicon glyphicon-time"></i> You have one more checklist items awaiting feedback. Visit your checklist to respond to them.</div>
+            {% endif %}
             <div class="row">
-                <div class="col col-lg-6">
+                <div class="col col-lg-5">
+                    {% if project.has_lawyer %}
+                        <div class="widget account-attorney">
+                            <h3>Project Attorney</h3>
+                            {% project_lawyers project 'assigned' %}
+                        </div>
+                    {% endif %}                    
                     <div class="widget account-attorney">
-                        <h3>Your Attorney</h3>
-                        {% project_lawyers project 'assigned' %}
-                    </div>
-                </div>
-                <div class="col col-lg-6">
-                    <div class="widget transaction-profile">
-                        <h3>Transaction Profile</h3>
-
-                        <div class="callout callout-success empty">
-                            <div class="empty-message empty-message-ok">
-                                <h3>Your transaction profile is up-to-date.</h3>
-                                {% if PROJECT_ENVIRONMENT == 'dev' %}<a href="{% url 'transact:builder' project_uuid=project.uuid tx_range='INTAKE' step='1' %}" class="">update</a>{% endif %}
+                        <h3>LawPal Account Manager</h3>
+                        <div class="row">
+                            <div class="col-12">
+                                <img src="{{STATIC_URL}}img/yael-contact-face.jpg" class="img-circle pull-left" style="width:40px; padding-right :8px;padding-top:6px;">
+                                <h4>Yael Citro <small class="pull-right"><a href="mailto:xw4ux8lx@incoming.intercom.io" class="btn btn-info btn-small" style="margin-top:-4px">Contact Yael</a></small>  <small>Co-Founder at LawPal </small></h4> 
                             </div>
                         </div>
                     </div>
+                    <div class="callout callout-success empty">
+                        <div class="empty-message empty-message-ok">
+                            <h4>Your transaction profile is complete.</h4>
+                            {% if PROJECT_ENVIRONMENT == 'dev' %}<a href="{% url 'transact:builder' project_uuid=project.uuid tx_range='INTAKE' step='1' %}" class="">update</a>{% endif %}
+                        </div>
+                    </div>
                 </div>
-            {% endif %}
-
-        </div>
+                <div class="col col-lg-7">
+                    <div class="widget checklist">
+                        <a href="{% url 'dashboard:checklist' uuid=project.uuid %}"><h3>Transaction Checklist </h3></a>
+                        <div class="row">
+                            <div class="col col-3 text-center" class="softer"><h1  class="softer">{{counts.new}}</h1><small  class="softer">New</small></div>
+                            <div class="col col-3 text-center"><h1>{{counts.open}}</h1><small>Open</small></div>
+                            <div class="col col-3 text-center"><h1 class="text-warning">{{counts.awaiting_feedback_from_user}}</h1><small class="text-warning">Feedback</small></div>
+                            <div class="col col-3 text-center"><h1 class="text-success">{{counts.closed}}</h1><small class="text-success">Closed</small></div>
+                        </div>
+                    </div>
+                    {% if project.projectlawyer_set.all.0.status == PROJECT_LAWYER_STATUS.assigned %}
+                    <div class="widget discuss">
+                        <h3>Project Discussion</h3>
+                        {% render_comment_form for project %}
+                        {% render_comment_list for project %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
     {% else %}
         <div class="alert">
             The Attorney Transaction dashboard is coming shortly. For now, please review the Checklist.
         </div>
     {% endif %}
 </div>
+{% endblock %}
+{% block css %}
+    <style>
+        main {background-color:#fbfbfb;}
+        .widget {background-color:white;}
+        .widget h3 {border-bottom:1px solid #f1f1f1;padding-bottom:8px;}
+        .widget.discuss h3 {border-bottom:0px;padding-bottom:3px;}
+    </style>
+{% endblock %}
+
+
+{% block js %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/ajax-comments.js"></script>
 <script>
-       $(function () {
+
+    window.COMMENT_CONTROLS = {
+        'is_reversed': false,
+        'scroll_to_comment': false,
+        'alerts': false,
+    };
+
+    $(function () {
         $("[data-toggle='tooltip']").tooltip();
+    });
+
+    $(document).on( 'click', '[data-engage]', function (event) {
+        event.preventDefault();
+
+        var elem = $(this);
+        var pk = elem.data('engage');
+        var status = elem.data('status');
+        var url = '/api/v1/project_lawyer/{pk}'.assign({'pk': pk});
+        elem.fadeOut();
+
+        $.ajax({
+            type: 'PATCH',
+            url: url,
+            data: JSON.stringify({'status': status }),
+            dataType: 'application/json',
+            contentType: 'application/json',
+            beforeSend: function (jqXHR, settings) {
+                // Pull the token out of the DOM.
+                jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]:first').val());
+            },
+            complete: function () {
+                // reload the page to show updated lawyer info
+                document.location.reload();
+            }
+        });
     });
 </script>
 

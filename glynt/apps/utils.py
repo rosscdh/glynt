@@ -73,16 +73,16 @@ class AjaxableResponseMixin(object):
 
     def form_valid(self, form):
         """ save the form but also render via ajax if ajax request """
-        form.instance.save()
-
         if self.request.is_ajax():
-            data = {
-                'pk': form.instance.pk,
-                'url': form.instance.get_absolute_url() if hasattr(form.instance, 'get_absolute_url') else None,
-            }
-            return self.render_to_json_response(data)
-        else:
-            return super(AjaxableResponseMixin, self).form_valid(form)
+            if hasattr(form, 'instance'):
+                form.instance.save()
+                data = {
+                    'pk': form.instance.pk,
+                    'url': form.instance.get_absolute_url() if hasattr(form.instance, 'get_absolute_url') else None,
+                }
+                return self.render_to_json_response(data)
+
+        return super(AjaxableResponseMixin, self).form_valid(form)
 
 
 def get_namedtuple_choices(name, choices_tuple):

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %}{% load email_obfuscator %}
 
 {% block page_title %}Privacy Policy{% endblock %}
 {% block bodyclass %}{% endblock %}
@@ -137,7 +137,7 @@
 				 Effective Date: April 1, 2013
 			</p>
 			<p>
-				Contact us at <a href="mailto:support@lawpal.com">support@lawpal.com</a>
+				Contact us at <a href="mailto:{{ 'support@lawpal.com'|obfuscate }}">{{ 'support@lawpal.com'|obfuscate }}</a>
 			</p>
 			<p>
 				Effective Date: April 1, 2013

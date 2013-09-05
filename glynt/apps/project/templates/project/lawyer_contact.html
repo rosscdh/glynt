@@ -1,19 +1,48 @@
-<div class="">Message {{ project.primary_lawyer.user.get_full_name }} below to work out if they are suitable for your transaction. You can meet all of our participating lawyers in person.</div>
-{{ project.primary_lawyer.user.username }}
+{% load url from future %}{% load comments fluent_comments_tags %}
+{% csrf_token %}
 
-<div class="row animated fadeInRight profile-details">
-    <div class="col col-lg-2 col-offset-1">
-        <div class="avatar">
-            <img class="img-rounded" src="{{ project.primary_lawyer.profile_photo }}" alt="{{ project.primary_lawyer.user.get_full_name|default:project.primary_lawyer.user.username }}" />
+{% if project_lawyer_join.lawyer == request.user.lawyer_profile %}
+<!-- Message seen by lawyer -->
+    {% with project_lawyer_join.project.customer as customer %}
+    <h3>Customer proposing a project for you</h3>
+    <div class="">Message {{ customer.user.get_full_name }} below to discover more about their project.</div>
+    <div class="row animated fadeInRight profile-details">
+        <div class="col col-lg-2 col-offset-1">
+            <div class="avatar">
+                <img class="img-rounded" src="{{ customer.profile_photo }}" alt="{{ customer.user.get_full_name|default:customer.user.username }}" />
+            </div>
+        </div>
+        <div class="col col-lg-7">
+            <h1>{{ customer.user.get_full_name|default:customer.user.username }}</h1>
         </div>
     </div>
-    <div class="col col-lg-7">
-        <h1>{{ project.primary_lawyer.user.get_full_name|default:project.primary_lawyer.user.username }}</h1>
-        <h3>{{ project.primary_lawyer.primary_firm }}</h3>
+    {% endwith %}
+{% else %}
+<!-- Message seen by customer -->
+    <h3>Engage this Lawyer</h3>
+    <div class="">Message {{ lawyer.user.get_full_name }} below to work out if they are suitable for your transaction. You can meet all of our participating lawyers in person.</div>
+    <div class="row animated fadeInRight profile-details">
+        <div class="col col-lg-2 col-offset-1">
+            <div class="avatar">
+                <img class="img-rounded" src="{{ lawyer.profile_photo }}" alt="{{ lawyer.user.get_full_name|default:lawyer.user.username }}" />
+            </div>
+        </div>
+        <div class="col col-lg-7">
+            <h1>{{ lawyer.user.get_full_name|default:lawyer.user.username }}</h1>
+            <h3>{{ lawyer.primary_firm }}</h3>
+        </div>
+        <div class="col col-lg-7">
+            {% if project_lawyer_join.status == PROJECT_LAWYER_STATUS.potential %}
+            <button data-engage="{{ project_lawyer_join.pk }}" data-status="{{ PROJECT_LAWYER_STATUS.assigned }}" class="btn btn-success">Engage {{ lawyer.user.get_full_name|default:lawyer.user.username }}</button>
+            {% endif %}
+            <a href="{% url 'lawyer:profile_lite' slug=lawyer.user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-info">View Profile</a>
+        </div>
     </div>
-    <div class="col col-lg-7">
-        <button class="btn btn-success">Engage {{ project.primary_lawyer.user.get_full_name|default:project.primary_lawyer.user.username }}</button>
-        <button class="btn btn-success">View Profile</button>
-    </div>
-</div>
+{% endif %}
 <hr/>
+
+<!-- Comments -->
+<script type="text/javascript" src="{{ STATIC_URL }}js/ajax-comments.js"></script>
+{% render_comment_list_reversed for project_lawyer_join %}
+{% render_comment_form for project_lawyer_join %}
+<!-- End Comments -->

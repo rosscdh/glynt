@@ -7,13 +7,14 @@ from django.core.urlresolvers import reverse
 from django.db.models.query import QuerySet
 from model_mommy import mommy
 
-from glynt.casper import BaseLawyerCustomerProjectCaseMixin
+from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin
 
 from glynt.apps.lawyer.models import Lawyer
 from glynt.apps.project.models import Project
 from glynt.apps.project import PROJECT_STATUS, PROJECT_LAWYER_STATUS
 
 import itertools
+import os
 
 #from nose.tools import set_trace; set_trace()
 class EnsureProjectsAreAvailableInContextOnAllPagesTest(BaseLawyerCustomerProjectCaseMixin):
@@ -93,8 +94,8 @@ class ProjectModelMethodsTest(TestCase):
 
     def test_project_status(self):
         """ Test the Display name is the same as the named_tuple description"""
-        self.assertEqual(self.project_with_lawyer.project_status, PROJECT_STATUS.get_desc_by_value(self.project_with_lawyer.status))
-        self.assertEqual(self.project_with_lawyer.project_status, 'New')
+        self.assertEqual(self.project_with_lawyer.display_status, PROJECT_STATUS.get_desc_by_value(self.project_with_lawyer.status))
+        self.assertEqual(self.project_with_lawyer.display_status, 'New')
         self.assertEqual(self.project_with_lawyer.is_new, True)
         self.assertEqual(self.project_with_lawyer.is_open, False)
         self.assertEqual(self.project_with_lawyer.is_closed, False)
@@ -145,3 +146,12 @@ class ProjectModelMethodsTest(TestCase):
     # def test_project_status_to_open(self):
     #     self.project_with_lawyer.open(self.user)
     #     self.assertEqual(self.project_with_lawyer.is_open, False)
+
+class ContactUsModalTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
+    test_path = os.path.dirname(__file__)
+
+    def test_contact_us_modal_js(self):
+        # self.client.login(username=self.customer_user.username, password=self.password)
+
+        url = reverse('project:create')
+        self.assertTrue(self.load_casper_file(js_file='contact-us-modal.js', test_label='Test the Contact Us modal', url=url))

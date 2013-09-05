@@ -1,0 +1,14 @@
+<div id="comments" class="">
+{% for comment in comment_list reversed %}
+    <div id="c{{ comment.id }}" class="clearfix media">
+    	<div class="pull-left">
+            <div class="profile-card media-object" data-template="mini" data-username="{{ comment.user.username }}">&nbsp;</div>
+    	</div>
+        <div class="post-content media-body">
+            <span class="text-muted"><a href="">{{ comment.user.get_full_name }}</a> {{ comment.submit_date|timesince }}</span>
+            {{ comment.comment|linebreaks }}
+        </div>
+    </div>
+{% endfor %}
+</div>
+
