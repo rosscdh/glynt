@@ -34,8 +34,8 @@ def generate_unique_slug(instance=None):
     """ Generate the unique slug for a model instance """
     if instance is not None:
         pk = instance.pk if hasattr(instance, 'pk') and type(instance.pk) is not None else random.random()
-        hash_val = u'%s-%s-%s' % (instance.__class__.__name__, pk, datetime.datetime.utcnow())
-
+        hash_val = '%s-%s-%s' % (instance.__class__.__name__, pk, datetime.datetime.utcnow())
+        import pdb;pdb.set_trace()
         return shortuuid.uuid(name=hash_val)
     else:
         return shortuuid.uuid()
