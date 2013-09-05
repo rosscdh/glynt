@@ -9,10 +9,13 @@ from glynt.apps.transact import BuilderBaseForm
 from glynt.apps.company import COMPANY_STATUS_CHOICES
 from glynt.apps.company import OPTION_PLAN_STATUS_CHOICES
 
-
 class CompanyProfileForm(BuilderBaseForm):
+
+
     """
     The Company Setup Form
+    This form only appears if they are doing an incorporation only. 
+
     """
     founder_name = forms.CharField()
     founder_email = forms.EmailField()
@@ -62,3 +65,110 @@ class CompanyProfileForm(BuilderBaseForm):
             )
         )
         super(CompanyProfileForm, self).__init__(*args, **kwargs)
+
+class FinancingProfileForm(BuilderBaseForm):
+    """
+    The Financing Setup Form (if they select either seed financing equity or convertible only)
+    """
+    founder_name = forms.CharField()
+    founder_email = forms.EmailField()
+
+    investment_terms = forms.CharField(label=_('Investment terms'), required=False, help_text="Briefly describe the source(s) and terms of your investment", widget=forms.Textarea)
+    num_investors = forms.CharField(label=_('Number of investors'), initial=1, widget=forms.TextInput(attrs={'data-type': 'number', 'class': 'input-smaller'}))
+    num_investor_states = forms.CharField(label=_('Number of investor states'), initial=1, help_text="The number of seperate states that your investors reside in", widget=forms.TextInput(attrs={'data-type': 'number', 'class': 'input-smaller'}))
+ 
+    incubator = forms.CharField(label=_('Incubator or accelerator'), required=False, help_text="If you are currently particpating in an accelerator please enter it here.")
+    already_incorp = forms.BooleanField(label=_('We have already incorporated'), required=False, initial=False)
+
+    doc_exists_cert_incorm = forms.BooleanField(label=_('Certificate of Incorporation'), required=False, initial=True)
+    doc_exists_action_written_consent = forms.BooleanField(label=_('Action by Written Consent of Incorporator'), required=False, initial=True)
+    doc_exists_initial_written_consent = forms.BooleanField(label=_('Initial Written Consent of Board in Lieu of First Meeting'), required=False, initial=True)
+    doc_exists_bylaws = forms.BooleanField(label=_('Bylaws'), required=False, initial=True)
+    doc_exists_shareholder_agr = forms.BooleanField(label=_('Shareholder Agreement'), required=False, initial=True)
+    doc_exists_ein_letter = forms.BooleanField(label=_('EIN Assignment Letter from the IRS'), required=False, initial=True)
+    doc_exists_stock_purchase_agreement = forms.BooleanField(label=_('Stock Purchase Agreement for each founder'), required=False, initial=True)
+    doc_exists_ip_assignment = forms.BooleanField(label=_('Confidential Information and Invention Assignment Agreement for each Founder'), required=False, initial=True)
+    doc_exists_notice_of_stock_issuance = forms.BooleanField(label=_('Notice of Stock Issuance for each founder '), required=False, initial=True)
+    doc_exists_stock_certs = forms.BooleanField(label=_('Stock Certificate for each Founder'), required=False, initial=True)
+    doc_exists_83b = forms.BooleanField(label=_('83(b) Election for each Founder'), required=False, initial=True)
+    doc_exists_stock_option_plan = forms.BooleanField(label=_('Stock Option Plan'), required=False, initial=True)
+
+
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Fieldset(
+                'Founding Team',
+                Div(
+                    'founder_name',
+                    'founder_email',
+                    **{'class': 'founder-group clearfix'}
+                ),
+                **{'data-region-clone': 'true', 'data-region-name': 'founders', 'class': 'founder-block clearfix'}
+            ),
+            Fieldset(
+                'About Your Round',
+                'investment_terms',
+                'num_investors',
+                'num_investor_states',
+                'incubator',
+                'already_incorp',
+            ),
+            # @todo Only show this fieldset if Already incorp is true
+            Fieldset(
+                'Which of the following do you have?',
+                'doc_exists_cert_incorm',
+                'doc_exists_action_written_consent',
+                'doc_exists_initial_written_consent', 
+                'doc_exists_bylaws', 
+                'doc_exists_shareholder_agr', 
+                'doc_exists_ein_letter',
+                'doc_exists_stock_purchase_agreement',
+                'doc_exists_ip_assignment',
+                'doc_exists_notice_of_stock_issuance',
+                'doc_exists_stock_certs', 
+                'doc_exists_83b', 
+                'doc_exists_stock_option_plan'
+            )
+        )
+        super(CompanyProfileForm, self).__init__(*args, **kwargs)
+
+class CompanyandFinancingProfileForm(BuilderBaseForm):
+            """
+            The Setup AND Financing Form (both selected)
+            Basically we are combining the two forms and only showing the following fields. Not sure how to code this. 
+            """
+            Fieldset(
+                'Founding Team',
+                Div(
+                    'founder_name',
+                    'founder_email',
+                    **{'class': 'founder-group clearfix'}
+                ),
+                **{'data-region-clone': 'true', 'data-region-name': 'founders', 'class': 'founder-block clearfix'}
+            ),
+            Fieldset(
+                'About Your Round',
+                'investment_terms',
+                'num_investors',
+                'num_investor_states',
+                'incubator',
+                'already_incorp',
+            ),
+            Fieldset(
+                'About your Startup',
+                'incubator',
+                'current_status',
+                'profile_website',
+                'description',
+                'target_states_and_countries',
+                'num_officers',
+                'num_employees',
+                'num_consultants',
+                'option_plan_status',
+                'num_option_holders',
+                'ip_nolonger_affiliated',
+                'ip_otherthan_founder',
+                'ip_university_affiliation',
+            )
+

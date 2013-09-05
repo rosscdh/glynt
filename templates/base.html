@@ -22,11 +22,10 @@
 
     {% block head_js %}{% endblock %}
 </head>
-<body data-spy="scroll" data-target=".subnav" class="{% block bodyclass %}{% endblock %}" style="padding-top: 70px;">
+<body data-spy="scroll" data-target=".subnav" class="{% block bodyclass %}{% endblock %}" style="padding-top: 69px;">
 
-<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 
     <div id="wrap">
         <!-- Nav -->
@@ -64,7 +63,6 @@
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.getPath.js"></script>
 
 {% compress js %}
-
     <script type="text/javascript" src="{{ STATIC_URL }}bootstrap-v3/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.cookie.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/typeahead.js"></script>
@@ -74,20 +72,18 @@
     <script type="text/javascript" src="{{ STATIC_URL }}handlebars.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}handlebars-helpers.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/lawpal.modal.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/angular.min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/angular-resource.min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/ui-bootstrap-0.5.0.min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lawpal.app.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/services/LawPalService.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/services/LawPalUrls.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/services/LawPalDialog.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}todo/angularjs.checklistCtrl.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}todo/angularjs.checklistItemCtrl.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}todo/angularjs.checklistItemDirective.js"></script>
+    
 
     <script type="text/javascript">{% profile_card_js %}</script>
 {% endcompress %}
 
+<script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/angular.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/angular-resource.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/ui-bootstrap-tpls-0.5.0.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lawpal.app.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/services/LawPalService.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/services/LawPalUrls.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/services/LawPalDialog.js"></script>
 {% handlebars_messages %}
 
 <script type="text/javascript" src="{{ STATIC_URL }}js/moment/moment.min.js"></script>
@@ -108,9 +104,9 @@
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
 </script>
-
-{% intercom_script %}
-
+{% if PROJECT_ENVIRONMENT != 'dev' %}
+    {% intercom_script %}
+{% endif %}
 
 </body>
 </html>

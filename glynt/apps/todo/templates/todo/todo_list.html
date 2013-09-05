@@ -77,6 +77,9 @@
     <!--<script src="{{ STATIC_URL }}js/jquery.hotkeys-0.8.js"></script>-->
     <script src="{{ STATIC_URL }}todo/jquery.plugin.filter_status.js"></script>
     <script src="{{ STATIC_URL }}todo/jquery.plugin.edit_label.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}todo/angularjs.checklistCtrl.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}todo/angularjs.checklistItemCtrl.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}todo/angularjs.checklistItemDirective.js"></script>
 
     <script>
 
@@ -131,10 +134,11 @@
     };
 
     $(document).ready( function () {
-
+        /*
         $('#list-items').filter_status({
             'state_modifier': $('#state_modifier')
         });
+        */
 
         {% if feedback_requests %}
         /**
@@ -143,11 +147,13 @@
         * loop over items in the feedback_results and for each slug
         * set the highlight class
         */
+        /*
         var user_feedback_requests = {{ feedback_requests|jsonify }};
         $.each(user_feedback_requests, function (slug, data) {
             var row = $('[data-edit_label={slug}]'.assign({'slug': slug}));
             row.removeClass('assigned-to-user').addClass('assigned-to-user');
         });
+        */
         {% endif %}
         /**
         * ASSIGN NUM ITEMS ASSIGNED TO USER COUNT
@@ -155,6 +161,7 @@
         * per category and assign that number to the category list
         * if the count is > 0
         */
+       /*
         $.each($('[data-category]'), function (i, elem) {
             var elem = $(elem);
             var cat = elem.data('category');
@@ -164,7 +171,7 @@
             if (num_assigned_to_user > 0)
                 elem.find('.num_assigned_to_user').html('<i class="icon-state-pending"></i> ' + num_assigned_to_user);
         });
-
+        */
         {% if is_lawyer %}
         /**
         * DELETE ITEM LIST
@@ -173,11 +180,11 @@
         $('tr.item .item-delete').hide();
         $('tr.item').on('mouseout', function (event) {
             var elem = $(this);
-            elem.find('.item-delete').toggle();
+            elem.find('.item-delete').hide();
         });
         $('tr.item').on('mouseover', function (event) {
             var elem = $(this);
-            elem.find('.item-delete').toggle();
+            elem.find('.item-delete').show();
         });
 
         $('.item-delete').on('click', function (event) {

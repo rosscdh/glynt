@@ -7,8 +7,11 @@ class DefaultToDoManager(models.Manager):
     """
     Manager for ToDos
     """
+    def get_queryset(self):
+            return super(DefaultToDoManager, self).get_queryset().filter(is_deleted=False)
+
     def deleted(self, **kwargs):
-        return self.filter(status=TODO_STATUS.new).filter(is_deleted=True, **kwargs)
+        return self.filter(is_deleted=True, **kwargs)
 
     def new(self, **kwargs):
         return self.filter(status=TODO_STATUS.new).filter(**kwargs)

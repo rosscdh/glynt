@@ -26,24 +26,21 @@ class ToDoItemsFromYamlMixin(object):
 
         for c in self.checklist:
             if hasattr(c.todos, 'items'):
-                #import pdb;pdb.set_trace()
                 for category, item in c.todos.items():
-                    cat_slug = category
 
                     self.handle_repeater(item=item)
 
-                    if not item.checklist:
-                        # no repeater items found or empty category
-                        todos_by_cat[cat_slug] = []
-                    else:
+                    todos_by_cat[category] = []
+
+                    if item.checklist:
                         # parse the list and assign extra attribs
                         self.parse_checklist(current_length=len(checklist), checklist=item.checklist, category=category)
+
+                        todos_by_cat[category] = item.checklist
                         checklist = list(checklist + item.checklist)
 
-                        todos_by_cat[cat_slug] = todos_by_cat.get(cat_slug, [])
-                        todos_by_cat[cat_slug] += item.checklist
 
-        return  todos_by_cat, sorted(checklist)
+        return  todos_by_cat, checklist
 
     def handle_repeater(self, item):
         repeater_key = None
@@ -242,7 +239,7 @@ class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin, 
         self.checklist = self.project.checklist()
 
         self.todos_by_cat, self.todos = self.get_todos()
-
+        #import pdb;pdb.set_trace()
         self.todos = self.append_todo_obj(self.todos)
 
         self.categories = self.get_categories()

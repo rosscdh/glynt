@@ -14,8 +14,10 @@ from glynt.apps.project.utils import PROJECT_CONTENT_TYPE
 from glynt.apps.project.services.email import SendNewProjectEmailsService
 from glynt.apps.project.services.project_checklist import ProjectCheckListService
 from glynt.apps.project.services.ensure_project import PROJECT_CREATED
+from glynt.apps.project.services.engage_lawyer_comments import EngageLawyerCommentsMoveService
 
 from .models import ProjectLawyer
+
 
 import logging
 logger = logging.getLogger('django.request')
@@ -81,14 +83,17 @@ def on_lawyer_assigned(sender, **kwargs):
                 url = instance.project.get_absolute_url()
 
                 logger.info('Sending ProjectLawyer.assigned url:{url}'.format(url=url))
-
                 email = NewActionEmailService(subject=subject, message=message, from_name=from_name, from_email=from_email, recipients=recipients)
                 email.send(url=url)
 
+                # copy the comments from the ProjectLawyer object to The Project object to
+                # continue the flow
+                comments_service = EngageLawyerCommentsMoveService(project_lawyer_join=instance)
+                comments_service.process()
+
                 # set all other projectLawyer objects for this project to .rejected
                 logger.info('Updating other lawyers assigned as potential ProjectLawyer.assigned email')
-                ProjectLawyer.objects \
-                                    .exclude(pk=instance.pk) \
+                ProjectLawyer.objects.exclude(pk=instance.pk) \
                                     .filter(project=instance.project, \
                                             status=instance.LAWYER_STATUS.potential) \
                                     .update(status=instance.LAWYER_STATUS.rejected)

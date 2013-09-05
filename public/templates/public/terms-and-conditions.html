@@ -1,6 +1,11 @@
-<p>
-	{% extends 'base.html' %} {% block page_title %}Terms and Conditions of Use{% endblock %} {% block bodyclass %}lawyer-form{% endblock %} {% block prebody %}
-</p>
+{% extends 'base.html' %}{% load email_obfuscator %}
+
+{% block page_title %}Terms and Conditions of Use{% endblock %}
+
+{% block bodyclass %}lawyer-form{% endblock %} 
+
+{% block prebody %}
+
 <style>
 h3{text-transform: capitalize;}
 
@@ -172,7 +177,7 @@ h3{text-transform: capitalize;}
 				Account Registration
 			</h3>
 			<p>
-				As part of the registration process, you will provide an e-mail address and create a password. These are your credentials for accessing the Services that are only available to members ("Credentials"). You should keep your Credentials private and not share your Credentials with anyone else. You are responsible for notifying us if your password has been hacked or stolen. You may notify us by sending an email to <a href="mailto:support@lawpal.com">support@lawpal.com</a>
+				As part of the registration process, you will provide an e-mail address and create a password. These are your credentials for accessing the Services that are only available to members ("Credentials"). You should keep your Credentials private and not share your Credentials with anyone else. You are responsible for notifying us if your password has been hacked or stolen. You may notify us by sending an email to <a href="mailto:{{ 'support@lawpal.com'|obfuscate }}">{{ 'support@lawpal.com'|obfuscate }}</a>
 			</p>
 			<p>
 				In consideration of your use of the Site, you agree to (a) provide accurate, current and complete information about you as may be prompted by any registration forms on the Site ("Registration Data"); (b) maintain the security of your password and identification; (c) maintain and promptly update the Registration Data, and any other information you provide to Company, to keep it accurate, current and complete; and (d) accept all risks of unauthorized access to the Registration Data and any other information you provide to Company. In addition, you agree not to access or use, or attempt to access or use, the Site or any part thereof using the identity or the Registration Data of any person other than yourself.  
@@ -363,7 +368,7 @@ h3{text-transform: capitalize;}
 				 1000 March Road Menlo Park,<br>
 				California 94025. <br>
 				Phone: (415) 230-0581; <br>  
-				Email to: <a href="mailto:support@lawpal.com">support@lawpal.com</a>
+				Email to: <a href="mailto:{{ 'support@lawpal.com'|obfuscate }}">{{ 'support@lawpal.com'|obfuscate }}</a>
 			</p>
 			<h3>
 				Trademarks

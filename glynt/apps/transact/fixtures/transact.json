@@ -4,7 +4,7 @@
     "model": "transact.transaction",
     "fields": {
       "price": "4000",
-      "description": "Product explanation goes here, why it's awesome etc.",
+      "description": "The standard package includes providing advice to founders and preparing and negotiating documents for closing your see equity financing. They will also review any documents prepared to date and assist with necessary clean-up of the company’s corporate legal documents.",
       "data": {
         "checklist_bunches": [
           "SeedFundingEquityRoundBunch"
@@ -19,29 +19,29 @@
     "model": "transact.transaction",
     "fields": {
       "price": "1500",
-      "description": "Production explanation goes here, why it's awesome etc.",
+      "description": "The standard incorporation package for startups includes providing advice to founders and preparing set-up documents for the company. Your lawyer will advise you on appropriate initial capitalization, vesting schedules and employee incentives. If applicable, your lawyer will also qualify the company to transact business in California and handle all securities laws filings.",
       "data": {
         "checklist_bunches": [
           "IncorporationBunch"
         ]
       },
       "slug": "CS",
-      "title": "Incorporation and Setup"
+      "title": "Company Incorporation, Formation and Setup"
     }
   },
   {
     "pk": 3,
     "model": "transact.transaction",
     "fields": {
-      "price": "500",
-      "description": "Production explanation goes here, why it's awesome etc.",
+      "price": "3000",
+      "description": "The standard package includes providing advice to founders and preparing and negotiating documents for closing your seed convertible note financing. They will also review any documents prepared to date and assist with necessary clean-up of the company’s corporate legal documents.",
       "data": {
         "checklist_bunches": [
           "SeedFundingConvertibleNoteRoundBunch"
         ]
       },
       "slug": "SF",
-      "title": "Seed Financing : Convertible Note Round"
+      "title": "Seed Financing : Convertible Note"
     }
   }
 ]

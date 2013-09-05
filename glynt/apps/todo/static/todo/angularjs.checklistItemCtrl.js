@@ -36,6 +36,8 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [ '$scope', 'lawPalSer
 			case 3: return "resolved";
 			case 4: return "closed";
 		}
+
+		return "unknown";
 	};
 
 	/**

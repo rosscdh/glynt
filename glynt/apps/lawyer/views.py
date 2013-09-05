@@ -46,6 +46,8 @@ class LawyerProfileView(AjaxBaseTemplateMixin, DetailView):
         })
         return context
 
+class LawyerLiteProfileView(LawyerProfileView):
+    template_name = 'lawyer/lawyer_detail_lite.html'
 
 class LawyerLiteProfileView(LawyerProfileView):
     """

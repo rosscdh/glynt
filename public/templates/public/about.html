@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load url from future %}
+{% extends 'base.html' %}{% load url from future %}{% load email_obfuscator %}
 
 {% block page_title %}About LawPal{% endblock %}
 {% block bodyclass %}{% endblock %}
@@ -24,7 +24,7 @@
 
 			<p>LawPal is the first relationship management platform focused exclusively on the attorney-client relationship, beginning with start-ups.</p>
 				
-			<p>For more information, please check out our <a href="http://blog.lawpal.com/">blog</a>, <a href="mailto:founders@lawpal.com">email us</a> or check back soon.</p>
+			<p>For more information, please check out our <a href="http://blog.lawpal.com/">blog</a>, <a href="mailto:{{ 'founders@lawpal.com'|obfuscate }}">email us</a> or check back soon.</p>
 		</div>
 	</div>
 	<div class="row">
@@ -40,7 +40,7 @@
 					  </a>
 					  <div class="media-body">
 					    <h4 class="media-heading">Alex Halliday</h4>
-						<h5><a href="#">@alexhalliday</a> <small><a href="mailto:ross@lawpal.com"><i class="glyphicon glyphicon-envelope"></i></a></small></h5>
+						<h5><a href="#">@alexhalliday</a> <small><a href="mailto:{{ 'ross@lawpal.com'|obfuscate }}"><i class="glyphicon glyphicon-envelope"></i></a></small></h5>
 					    <h5 class="text-muted">CEO</h5>
 					  </div>
 					</div>
@@ -52,7 +52,7 @@
 					  </a>
 					  <div class="media-body">
 					    <h4 class="media-heading">Yael Citro</h4>
-						<h5><a href="#">@yaelmc</a> <small><a href="mailto:ross@lawpal.com"><i class="glyphicon glyphicon-envelope"></i></a></small></h5>
+						<h5><a href="#">@yaelmc</a> <small><a href="mailto:{{ 'ross@lawpal.com'|obfuscate }}"><i class="glyphicon glyphicon-envelope"></i></a></small></h5>
 					    <h5 class="text-muted">GC</h5>
 					  </div>
 					</div>
@@ -64,7 +64,7 @@
 					  </a>
 					  <div class="media-body">
 					    <h4 class="media-heading">Ross CDH</h4>
-						<h5><a href="#">@rosscdh</a> <small><a href="mailto:ross@lawpal.com"><i class="glyphicon glyphicon-envelope"></i></a></small></h5>
+						<h5><a href="#">@rosscdh</a> <small><a href="mailto:{{ 'ross@lawpal.com'|obfuscate }}"><i class="glyphicon glyphicon-envelope"></i></a></small></h5>
 					    <h5 class="text-muted">CTO</h5>
 					  </div>
 					</div>

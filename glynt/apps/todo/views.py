@@ -29,6 +29,8 @@ class ToDoCountMixin(object):
                     'open': qs_objects.open(project=project, **kwargs).count(),
                     'pending': qs_objects.pending(project=project, **kwargs).count(),
                     'awaiting_feedback_from_user': awaiting_feedback_from_user,
+                    'closed': qs_objects.closed(project=project, **kwargs).count(),
+
                     'total': 0,
                     }
                 }
@@ -116,6 +118,8 @@ class BaseToDoDetailMixin(RulezMixin, SingleObjectMixin):
             obj, is_new = self.model.objects.get_or_create(slug=slug, project=self.project)
             nav_item = self.navigation_items.current
             if is_new and nav_item:
+                nav_item.project = unicode(nav_item.get('project'))
+
                 obj.name = nav_item.name
                 obj.category = nav_item.category
                 obj.description = nav_item.description

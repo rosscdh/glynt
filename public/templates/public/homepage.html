@@ -17,86 +17,105 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
-                <h1>Simplified legal services for startups</h1>
-                <h3>Experienced lawyers, fixed prices, beautifully delivered.</h3>
-                <br />
-                <a href="#signin-modal" role="button" data-toggle="modal" class="btn btn-success btn-huge"  onClick="_gaq.push(['_trackEvent', 'Homepage', 'Action', 'start']);">Sign in to start</a>
-                 <a href="#signin-modal" role="button" data-toggle="modal" class="btn btn-info btn-huge"  onClick="_gaq.push(['_trackEvent', 'Homepage', 'Action', 'start']);">Learn more</a>
-
+                <div class="inner-wrap">
+                    <h1>Legal services for startups</h1>
+                    <h3>Welcome to the future of law, a better way to work together</h3>
+                     <a href="#signin-modal" role="button" data-toggle="modal" class="btn btn-success btn-huge"  onClick="_gaq.push(['_trackEvent', 'Homepage', 'Action', 'start']);">Sign in to start</a>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<div style="background-color:#fdfdfd">
+<div style="background-color:#fafafa">
     <div class="container">
         <div class="row">
-            <div class="col-3 pull-right telephone">
-                <p class="pull-right"><span class="brand"> Question? Call Us</span> <i class="glyphicon glyphyicon-phone"></i> (415) 691 6069</p>
-            </div>
-            <div class="col-6 col-offset-3 text-center scroll">
-                <p class="learn-more">Scroll to learn more</p>
+            <div class="col-12 telephone text-center">
+                <p><span class=""> Initially, we're just serving startups in California. Questions? Call Us</span> <i class="glyphicon glyphyicon-phone"></i> (415) 691 6069</p>
             </div>
         </div>
     </div>
 </div>
 <div class="container">
     <div class="row">
-        <div class="col-lg-10 col-offset-1 intro">
+        <div class="col-lg-10 col-offset-1 text-center">
+            <br />
+            <img src="{{ STATIC_URL }}img/tiny-mark.gif" style="margin-bottom:-10px;margin-top:20px;">
+            <h1 class="text-center">Experienced startup lawyers</h1>
+            <h3 class="softer text-center">Choose a lawyer that fits your team</h3>
+            <br />
+            <div class="row text-left">
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="attorney-feature quote">
+    <div class="container">
+        <div class="row">
+            <div class="col-2 col-offset-1">
+                <img src="{{ STATIC_URL }}img/crandon-face.jpg" class="img-rounded">
+            </div>
+            <div class="col-lg-9">
+                <br />
+                <small>ATTORNEY SPOTLIGHT</small>
+                <h2>John Crandon <small>Partner at Crandon Law</small></h2>
+                <div class="row">
+                    <div class="col-10">
+                        <p>I am a corporate, private equity, and transactions attorney based in SF. Previously, I practiced law for over 7 years with Gibson Dunn (which is consistently ranked in the top 15 corporate firms in the US and top 2 in CA).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>          
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 intro">
             <h1>A reimagined legal experience</h1>
-            <h2>Transparent, affordable and efficient</h2>
+            <h2>Tools to make your transaction more efficient and transparent</h2>
+            <br />
             <div class="row">
-                <div class="col-lg-12">
-                    <div id="carousel-example-generic" class="carousel slide">
-                          <!-- Indicators -->
-                          <ol class="carousel-indicators">
-                            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-<!--                             <li data-target="#carousel-example-generic" data-slide-to="2"></li>
- -->                          </ol>
-
-                          <!-- Wrapper for slides -->
-                          <div class="carousel-inner">
-                            <div class="item text-center active">
-                              <img src="{{ STATIC_URL }}img/home-screenshot.png" alt="">
-                            </div>
-                            <div class="item text-center">
-                              <img src="{{ STATIC_URL }}img/home-screenshot-2.png" alt="">
-                            </div>
-<!--                             <div class="item text-center">
-                              <img src="{{ STATIC_URL }}img/home-screenshot3.png" alt="">
-                            </div> -->
-                          </div>
-
-                          <!-- Controls -->
-                          <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
-                            <span class="glyphicon glyphicon-chevron-left"></span>
-                          </a>
-                          <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
-                            <span class="glyphicon glyphicon-chevron-right"></span>
-                          </a>
-                        </div>
+                <div class="col-lg-5 col-offset-1">
+                    <div class=" feature-block frame">
+                        <h3>A lawyer you can actually talk to</h3>
+                        <p>Your attorney is available at the end of the phone and we'll even buy you both a coffee when you want to meet up.</p>
+                        <p>We support the lawyer-client relationship - both online, and offline.</p>
+                    </div>
+                   <div class="feature-block frame">
+                        <h3>A transparent experience</h3>
+                        <p>LawPal instantly gives you complete visibility on the deal. See outstanding issues at a glance, what's moved forward and what hasn't. Our workflow tools include a centralized checklist to help focus everyone at a glance issues and closing the deal as quickly as possible.</p>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                     <div class="feature-block frame">
+                        <h3>Fixed prices</h3>
+                        <p>Every dollar counts.  When you raise your seed round, getting an invoice for $15,000 in legal fees hurts no matter when you have to pay it. That's one less developer working for three months. With LawPal, you get the benefits of engaging a lawyer without writing a blank check  - No more “sticker shock” when the invoice arrives. </p>
+                    </div>
+                    <div class="feature-block frame">
+                        <h3>Document storage and workflow</h3>
+                        <p>LawPal gives you a single secure location for all of your transaction documents. You decide who has access to your documents and who doesn’t. Your lawyer will upload documents for review and you can give feedback directly through our platform.</p>
+                    </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-6 feature-block">
-                    <h3>Fixed prices. Really.</h3>
-                    <p>Budget your legal spend - No more “bill shock” when the invoice arrives. <!-- View our prices. --> </p>
-                </div>
-                <div class="col-lg-6 feature-block">
-                    <h3>A lawyer you can actually talk to</h3>
-                    <p>Your attorney is available at the end of the phone and we'll even buy you both a coffee when you want to meet up. Once we receive your project, we'll give you a choice of attorneys and you can choose.(This needs work).</p>
-                </div>
+               <div class="col-5 col-offset-1"><img src="{{STATIC_URL}}img/home-ss-1.jpg"></div>
+               <div class="col-5"><img src="{{STATIC_URL}}img/home-ss-2.jpg"></div>
             </div>
-            <div class="row">
-                <div class="col-lg-6 feature-block">
-                    <h3>A transparent experience</h3>
-                    <p>LawPal instantly gives you complete visibility on the deal. See outstanding issues at a glance, what's moved forward and what hasn't. Our workflow tools include a centralized checklist to help focus everyone at a glance issues and closing the deal as quickly as possible.</p>
-                </div>
-                <div class="col-lg-6 feature-block">
-                    <h3>Document storage and workflow</h3>
-                    <p>LawPal gives you a single secure location for all of your transaction documents. You decide who has access to your documents and who doesn’t. Your lawyer will upload documents for review and you can give feedback directly through our platform.</p>
-                </div>
-            </div>
+        </div>
+    </div>
+</div>
+<div class="call-to-action">
+    <div class="container text-center">
+        <h2>Ready to start your transaction? <a href="#signin-modal" class="" data-toggle="modal" onclick="_gaq.push(['_trackEvent', 'Nav', 'Action', 'Sign In']);">Let's get going</a>. </h2>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-12 text-center">
+           <br />
+           <br />
+           <p class="lead text-muted"><i class="glyphicon glyphicon-map-marker"></i> LawPal is based in Founders Den, SOMA, San Francisco.</p>
         </div>
     </div>
 </div>

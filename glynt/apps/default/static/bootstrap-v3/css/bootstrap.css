@@ -1231,8 +1231,6 @@ input[type="color"] {
   background-color: #ffffff;
   border: 1px solid #d9d9d9;
   -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-  -moz-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-  -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
   transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
 select:focus,
@@ -2000,8 +1998,6 @@ input[type="button"].btn-block {
 .fade {
   opacity: 0;
   -webkit-transition: opacity 0.15s linear;
-  -moz-transition: opacity 0.15s linear;
-  -o-transition: opacity 0.15s linear;
   transition: opacity 0.15s linear;
 }
 .fade.in {
@@ -2012,8 +2008,6 @@ input[type="button"].btn-block {
   height: 0;
   overflow: hidden;
   -webkit-transition: height 0.35s ease;
-  -moz-transition: height 0.35s ease;
-  -o-transition: height 0.35s ease;
   transition: height 0.35s ease;
 }
 .collapse.in {
@@ -4840,8 +4834,6 @@ body {
 .modal.fade {
   top: -25%;
   -webkit-transition: opacity 0.3s linear, top 0.3s ease-out;
-  -moz-transition: opacity 0.3s linear, top 0.3s ease-out;
-  -o-transition: opacity 0.3s linear, top 0.3s ease-out;
   transition: opacity 0.3s linear, top 0.3s ease-out;
 }
 .modal.fade.in {
@@ -4863,7 +4855,7 @@ body {
   background-color: #fff;
   border: 1px solid #999;
   border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 6px;
+  border-radius: 0px;
   -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
   box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
   -webkit-background-clip: padding-box;
@@ -5233,8 +5225,6 @@ body {
   border: 1px solid #dddddd;
   border-radius: 0px;
   -webkit-transition: all 0.2s ease-in-out;
-  -moz-transition: all 0.2s ease-in-out;
-  -o-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 }
 .thumbnail {
@@ -5447,8 +5437,6 @@ a.list-group-item.active > .badge,
   -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
   -webkit-transition: width 0.6s ease;
-  -moz-transition: width 0.6s ease;
-  -o-transition: width 0.6s ease;
   transition: width 0.6s ease;
 }
 .progress-striped .progress-bar {
@@ -5544,8 +5532,6 @@ a.list-group-item.active > .badge,
   display: none;
   position: relative;
   -webkit-transition: 0.6s ease-in-out left;
-  -moz-transition: 0.6s ease-in-out left;
-  -o-transition: 0.6s ease-in-out left;
   transition: 0.6s ease-in-out left;
   text-align: center;
 }
@@ -6430,7 +6416,6 @@ td.hidden-lg {
   }
 }
 .navbar-header {
-  padding-left: 15px;
   padding-right: 15px;
 }
 .navbar-header:before,
@@ -6539,30 +6524,37 @@ td.hidden-lg {
   background-color: #42d0e5;
 }
 #wrap .splash {
-  background: url('../../img/background-trans.jpeg');
+  background: url('../../img/background.jpeg');
   background-position-y: -25px;
   background-size: cover;
-  padding: 14% 0px 15% 0px;
+  padding: 28% 0px 0% 0px;
   margin-top: -10px;
   color: #222222;
   border-top: 1px solid #eeeeee;
   border-bottom: 1px solid #eeeeee;
-  max-height: 460px;
+  max-height: 500px;
+  overflow: hidden;
+}
+#wrap .splash .inner-wrap {
+  background-color: rgba(0, 0, 0, 0.45);
+  margin-left: -200px;
+  margin-right: -200px;
+  padding: 30px 0px 25px 0px;
 }
 #wrap .splash h1 {
-  color: #555555;
-  font-size: 37px;
+  color: white;
+  font-size: 28px;
 }
 #wrap .splash h3 {
-  color: #7c7c7c;
-  font-size: 21px;
+  color: white;
+  font-size: 18px;
 }
 #wrap .splash a.btn-huge {
   font-weight: normal;
   font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
   font-size: 20px;
   padding: 10px 25px 10px 25px;
-  margin-top: 20px;
+  margin-top: 5px;
   margin-left: 10px;
   margin-right: 10px;
 }
@@ -6571,9 +6563,8 @@ td.hidden-lg {
 }
 #wrap .scroll,
 #wrap .telephone {
-  padding: 30px 0px 20px 0;
-  color: #bfbfbf;
-  font-size: 19.599999999999998px;
+  padding: 10px 0px 5px 0;
+  font-size: 15.400000000000002px;
   font-weight: normal;
   font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
 }
@@ -6581,14 +6572,7 @@ td.hidden-lg {
   background: url('../../img/down-chev.png') center 60px no-repeat;
 }
 #wrap .telephone {
-  color: #555555;
-}
-#wrap .telephone .glyphicon {
-  font-size: 15px;
-}
-#wrap .telephone .brand {
-  font-size: 14px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #888888;
 }
 #wrap .intro h1 {
   font-size: 28px;
@@ -6601,6 +6585,9 @@ td.hidden-lg {
   margin-top: 10px;
   text-align: center;
 }
+#wrap .feature-block {
+  margin-bottom: 25px;
+}
 #wrap .feature-block h3 {
   color: #42d0e5;
   font-size: 18px;
@@ -6608,22 +6595,43 @@ td.hidden-lg {
 #wrap .feature-block p {
   color: #888888;
 }
-#wrap .quote {
-  background-color: #fcd423;
-  color: white;
-  margin: 40px 0px;
-  padding: 30px 0px 20px 0px;
-  font-size: 21px;
-  font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
-  text-align: left;
-}
-#wrap .quote p {
-  border-left: 2px solid #ffffff;
+#wrap .feature-block.frame {
+  border-left: 3px solid #42d0e5;
   padding-left: 15px;
+  margin-left: 10px;
+}
+#wrap .quote {
+  background-color: #42d0e5;
+  color: white;
+  margin: 40px 0px 25px 0px;
+  padding: 21px 0px 20px 0px;
+}
+#wrap .quote h1,
+#wrap .quote h2 {
+  margin: 0px 0px 10px 0px;
+}
+#wrap .quote h1 small,
+#wrap .quote h2 small {
+  opacity: 0.6;
+}
+#wrap .quote * {
+  color: white;
+}
+#wrap .call-to-action {
+  background-color: #6bdb7e;
+  padding: 20px 20px 30px 20px;
+  color: white;
+  margin-top: 15px;
+}
+#wrap .call-to-action * {
+  color: white;
+}
+#wrap .attorney-feature {
+  margin-top: 0px;
 }
 @media screen and (min-width: 768px) {
   .homepage #wrap .splash {
-    padding: 100px 0px 14% 0px;
+    padding: 230px 0px 0% 0px;
   }
   .homepage #wrap .splash h1 {
     font-size: 56px;
@@ -6755,9 +6763,9 @@ table.checklist tr.item.state-pending.assigned-to-user td [class*=" icon-"]:befo
 }
 .widget {
   border: 1px solid #eee;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-  margin-bottom: -1px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  margin-bottom: 15px;
   padding: 0 14px 14px;
   position: relative;
 }
@@ -6818,7 +6826,7 @@ table.attorney-list tr .attorney-picture,
 table.lawyer-list tr .attorney-picture,
 table.attorney-list tr .lawyer-picture,
 table.lawyer-list tr .lawyer-picture {
-  width: 156px;
+  width: 120px;
 }
 table.attorney-list tr .attorney-info h2,
 table.lawyer-list tr .attorney-info h2 {
@@ -6911,9 +6919,6 @@ table.lawyer-list.active {
 .transaction-profile {
   height: 220px;
 }
-.account-attorney {
-  height: 220px;
-}
 .checklist-header {
   margin-top: 20px;
 }
@@ -6927,6 +6932,14 @@ table.lawyer-list.active {
 .checklist-header .btn:focus {
   color: #555555;
   text-decoration: none;
+}
+.widget.checklist h1 {
+  font-size: 40px;
+  text-align: center;
+  margin-bottom: 2px;
+}
+.widget.checklist small {
+  opacity: 0.8;
 }
 .post {
   border-bottom: 1px solid #eeeeee;
@@ -6988,6 +7001,20 @@ table.lawyer-list.active {
   background-color: #6bdb7e;
   color: white;
 }
+.potential-title {
+  border-top: 2px solid #f0ad4e;
+  padding-top: 7px;
+}
+.potential-container {
+  border-bottom: 2px solid #f0ad4e;
+}
+/*
+@@ removed, this created rollover bugs for checklists in chrome for the last item in the checlist before a section heading
+section.checklist-category {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+*/
 .navbar {
   margin-bottom: 0;
 }
@@ -7060,10 +7087,3 @@ table.lawyer-list.active {
 .breadcrumb > li > a {
   color: #fff;
 }
-/*
-@@ removed, this created rollover bugs for checklists in chrome for the last item in the checlist before a section heading
-section.checklist-category {
-  padding-top: 50px;
-  margin-top: -50px;
-}
-*/
