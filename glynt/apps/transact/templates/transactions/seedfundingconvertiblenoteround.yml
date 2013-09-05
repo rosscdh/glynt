@@ -16,7 +16,7 @@ transaction:
                 -   name: 'Restated Certificate'
                     attachment: []
 
-         - Note Purchase Agreement:
+        - Note Purchase Agreement:
             type: 'simple'
             checklist:
                 -   name: 'Schedule of Purchasers'
@@ -28,7 +28,7 @@ transaction:
                 -   name: 'Schedule of Exceptions'
                     attachment: []
 
-         - Corporate Approvals:
+        - Corporate Approvals:
             type: 'simple'
             checklist:
                 -   name: 'Board Authorization'
@@ -36,7 +36,7 @@ transaction:
                 -   name: 'Stockholder Approval'
                     attachment: []
 
-         - Due Diligence:
+        - Due Diligence:
             type: 'simple'
             checklist:
                 -   name: 'Board Authorization'
@@ -47,21 +47,21 @@ transaction:
                     attachment: []
                 -   name: 'Certificate of Incorporation/Bylaws'
                     attachment: []
-               	-   name: 'Material Agreements (Exhibit A)'
+                -   name: 'Material Agreements (Exhibit A)'
                     attachment: []
                 -   name: '401(k) Plan'
                     attachment: []
-               	-   name: 'Stock Plans'
+                -   name: 'Stock Plans'
                     attachment: []
                 -   name: 'Employee Agreements'
                     attachment: []
-               	-   name: 'Stock Ledger/Option Tables'
+                -   name: 'Stock Ledger/Option Tables'
                     attachment: []
                 -   name: 'Blue Sky'
                     attachment: []
 
 
-         - Closing Documents:
+        - Closing Documents:
             type: 'simple'
             checklist:
                 -   name: 'Restated Certificate'
@@ -72,15 +72,15 @@ transaction:
                     attachment: []
                 -   name: 'Corp. Good Standing (Delaware)'
                     attachment: []
-               	-   name: 'Certificate of Status (California)'
+                -   name: 'Certificate of Status (California)'
                     attachment: []
                 -   name: 'Officer’s Certificate'
                     attachment: []
-               	-   name: 'Secretary’s Certificate'
+                -   name: 'Secretary’s Certificate'
                     attachment: []
                 -   name: 'Form W-8 BEN/W-9 for each Purchaser'
                     attachment: []
-               	-   name: 'Notes'
+                -   name: 'Notes'
                     attachment: []
                 -   name: 'Warrants'
                     attachment: []
