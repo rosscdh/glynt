@@ -18,6 +18,7 @@ composer.lock
 ._*
 .DS_Store
 .idea*
+.venv
 /reports/*
 /bdd/vendor/*
 /bdd/results/*
