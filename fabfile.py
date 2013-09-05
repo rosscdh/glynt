@@ -21,7 +21,7 @@ env.local_project_path = os.path.dirname(os.path.realpath(__file__))
 
 env.repo = Repo(env.local_project_path)
 
-env.fixtures = 'sites test_cities document_category documenttemplate legal transact lawyers'
+env.fixtures = 'sites test_cities transact lawyers'
 env.SHA1_FILENAME = None
 env.timestamp = time.time()
 env.is_predeploy = False
@@ -165,7 +165,7 @@ def virtualenv(cmd, **kwargs):
 
 @task
 def pip_install():
-    virtualenv('pip install django-rulez')
+    virtualenv('pip install django --upgrade')
 
 @task
 def check_permissions():

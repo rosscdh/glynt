@@ -15,12 +15,12 @@
 	<div class="container container-main">
 		<!-- starts carousel -->
 		<div class="row animated fadeInRight profile-details">
-			<div class="col col-lg-2 col-offset-1">
-				<div class="avatar">
+			<div class="col col-lg-12 text-center">
+				<div class="avatar text-center">
 					<img src="{{ object.profile_photo }}" alt="{{ object.user.get_full_name|default:object.user.username }}" />
 				</div>
 			</div>
-			<div class="col col-lg-7">
+			<div class="col col-lg-12">
 				<h1>{{ object.user.get_full_name|default:object.user.username }}</h1>
 				<h3>{{ object.summary|truncatechars:155 }}</h3>
 			</div>
@@ -29,11 +29,10 @@
 	<div id="buttons">
 		<div class="container">
 			<div class="row">
-
-				<div class="col col-lg-10 col-offset-1">
+				<div class="col col-lg-12 text-center">
 					{% if user.is_staff %}
-						<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="false" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if not object.is_active %}hide{% endif %} btn right"><i class="icon-eye-close icon-white"></i> Disable</a>
-						<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="true" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if object.is_active %}hide{% endif %} btn right"><i class="icon-eye-close icon-white"></i> Approve</a>
+						<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="false" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if not object.is_active %}hide{% endif %} btn "><i class="icon-eye-close icon-white"></i> Disable</a>
+						<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="true" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if object.is_active %}hide{% endif %} btn "><i class="icon-eye-close icon-white"></i> Approve</a>
 					{% endif %}
 					{% if user.username == object.user.username %}
 						<a href="{% url 'lawyer:setup_profile' %}" class="btn right-links" ><i class="icon-edit icon-white"></i> Edit profile</a>
@@ -49,7 +48,7 @@
 						{% endif %}
 					{% endif %}
 					{% if user.username != object.user.username %}
-	                <div class="pull-right engagement-container">
+	                <div class="engagement-container">
 	                	{% engage_with_lawyer_button lawyer=object %}
 	                </div>
 	                {% endif %}
