@@ -28,7 +28,9 @@ $(function() {
             var self = this;
             this.form = $(this.element).closest('form');
 
-            this.options.source_data = JSON.parse(this.element.val()) || this.options.source_data;
+            var source_data = this.element.val() || this.options.source_data;
+            this.option.source_data = (typeof source_data === 'string') ? JSON.parse(source_data) : source_data ;
+
             self._listen();
         },
         _listen: function () {
