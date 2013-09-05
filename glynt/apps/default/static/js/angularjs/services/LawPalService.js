@@ -122,6 +122,11 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			//
 			var deferred = $q.defer();
 
+			if( item.project )
+				item.project = {'pk': parseInt(item.project)};
+
+			delete item.csrfmiddlewaretoken;
+
 			if( item.id ) {
 				var options = {
 					"id": item.id
