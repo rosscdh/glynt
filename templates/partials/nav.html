@@ -27,7 +27,7 @@
                             </ul>
                         </li>
                     {% else %}
-                        <li><a href="{% url 'dashboard:project' uuid=project.uuid %}"><span>{{ p.long_name }}</span></a></li>
+                        <li><a href="{% url 'dashboard:project' uuid=project.uuid %}"><span>{{ project.long_name }}</span></a></li>
                     {% endif %}
                 </ul>
             {% endif %}
