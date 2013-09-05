@@ -16,34 +16,32 @@ helper.scenario(casper.cli.options.url,
     },
     function() {
         casper.test.comment('Test checklist categories exist');
+        casper.wait(1000, function() {
+            this.test.assertExists('ul#checklist-categories')
+            this.test.assertExists('ul#checklist-categories li')
 
-        this.test.assertExists('ul#checklist-categories')
-        this.test.assertExists('ul#checklist-categories li')
-    },
-    function() {
-        casper.test.comment('Test checklist items exist');
+            casper.test.comment('Test checklist items exist');
 
-        this.test.assertExists('tr.item')
-        this.test.assertExists('button.create-item')
+            this.test.assertExists('tr.item')
+            this.test.assertExists('button.create-item')
 
-        casper.test.comment('Test checklist items edit button exists and is visible');
-        this.test.assertExists('tr.item a.item-edit')
-        this.test.assertVisible('tr.item a.item-edit')
+            casper.test.comment('Test checklist items edit button exists and is visible');
+            this.test.assertExists('tr.item a.item-edit')
+            this.test.assertVisible('tr.item a.item-edit')
 
-        casper.test.comment('Test checklist items delete button exists and is not visible');
-        this.test.assertExists('tr.item a.item-delete')
-        this.test.assertNotVisible('tr.item a.item-delete')
+            casper.test.comment('Test checklist items delete button exists and is not visible');
+            this.test.assertExists('tr.item a.item-delete')
+            this.test.assertNotVisible('tr.item a.item-delete')
         
-    },
-    function() {
-        casper.test.comment('Test checklist feedback request indicator is working');
+            casper.test.comment('Test checklist feedback request indicator is working');
 
-        // the general cat has the span with the right class
-        this.test.assertExists('li[data-category="general"] span.num_assigned_to_user');
-        // the span contains the value
-        this.test.assertSelectorHasText('li[data-category="general"] span.num_assigned_to_user', '1');
-        // test we have the little span indicator
-        this.test.assertExists('li[data-category="general"] span.num_assigned_to_user i.icon-state-pending');
+            // the general cat has the span with the right class
+            this.test.assertExists('li[data-category="general"] span.num_assigned_to_user');
+            // the span contains the value
+            this.test.assertSelectorHasText('li[data-category="general"] span.num_assigned_to_user', '1');
+            // test we have the little span indicator
+            this.test.assertExists('li[data-category="general"] span.num_assigned_to_user i.icon-state-pending');
+        });
 
     }
 );
