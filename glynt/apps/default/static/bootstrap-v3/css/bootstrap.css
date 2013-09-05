@@ -7008,10 +7008,13 @@ table.lawyer-list.active {
 .potential-container {
   border-bottom: 2px solid #f0ad4e;
 }
+/*
+@@ removed, this created rollover bugs for checklists in chrome for the last item in the checlist before a section heading
 section.checklist-category {
   padding-top: 50px;
   margin-top: -50px;
 }
+*/
 .navbar {
   margin-bottom: 0;
 }
@@ -7083,4 +7086,8 @@ section.checklist-category {
 }
 .breadcrumb > li > a {
   color: #fff;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 4e8a1c3a9a66c9a2f7dc76107bc443da91512b2c

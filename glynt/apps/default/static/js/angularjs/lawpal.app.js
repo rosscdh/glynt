@@ -6,8 +6,6 @@ lawPalApp.filter( 'checkListCategoryFilter', function(){
 		debugger;
 		if (!angular.isArray(items)) return items;
 
-		debugger;
-
 		arrayToReturn = [];
 		for ( var i = 0; i < items.length; i++)
 			{

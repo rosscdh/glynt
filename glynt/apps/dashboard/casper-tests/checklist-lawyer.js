@@ -8,7 +8,7 @@ var helper = require(casper.cli.options.casper_helper_js_path);
 helper.scenario(casper.cli.options.url,
     function() {
         casper.test.comment('Test Page General Access and Title');
-        //this.echo(this.getHTML());
+        this.echo(this.getHTML());
         this.echo(this.getTitle());
         this.test.assertHttpStatus(200);
 
