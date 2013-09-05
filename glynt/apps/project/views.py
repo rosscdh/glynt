@@ -43,10 +43,6 @@ class CreateProjectView(FormView):
 
         self.project = project_service.project
 
-        # only perform this if we have no other transaction types to manage
-        if len(transaction_types) == 0:
-            PROJECT_CREATED.send(sender=project_service, instance=project_service.project, created=project_service.is_new)
-
         return self.project
 
     def form_valid(self, form):
@@ -60,14 +56,15 @@ class CreateProjectView(FormView):
             messages.error(self.request, _('Sorry, but we could not determine which transaction type you selected. Please try again.'))
             self.success_url = reverse('project:create')
 
-        intake = EnsureUserHasCompletedIntakeProcess(user=self.request.user)
-        if intake.is_complete() is False:
-            if u'INTAKE' not in transaction_types:
-                transaction_types.insert(0, u'INTAKE')
+        # intake = EnsureUserHasCompletedIntakeProcess(user=self.request.user)
+        # if intake.is_complete() is False:
+        #     if u'INTAKE' not in transaction_types:
+        #         transaction_types.insert(0, u'INTAKE')
 
         project = self.save(transaction_types=transaction_types)
 
         self.success_url = reverse('transact:builder', kwargs={'project_uuid': project.uuid, 'tx_range': ','.join(transaction_types), 'step': 1})
+
         return super(CreateProjectView, self).form_valid(form)
 
 

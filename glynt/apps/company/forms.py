@@ -2,21 +2,26 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
+from parsley.decorators import parsleyfy
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, Div
 
-from glynt.apps.transact import BuilderBaseForm
+from glynt.apps.transact import BuilderBaseForm, CrispyExFieldsetFieldRemovalMixin
 from glynt.apps.company import COMPANY_STATUS_CHOICES
 from glynt.apps.company import OPTION_PLAN_STATUS_CHOICES
 
+
+@parsleyfy
 class CompanyProfileForm(BuilderBaseForm):
-
-
     """
     The Company Setup Form
     This form only appears if they are doing an incorporation only. 
 
     """
+    page_title = 'Your Company Profile'
+    page_description = 'Enter some basic details about your company'
+    #data_bag = 'glynt.apps.company.bunches.UserIntakeCompanyBunch'
+
     founder_name = forms.CharField()
     founder_email = forms.EmailField()
 
@@ -66,10 +71,18 @@ class CompanyProfileForm(BuilderBaseForm):
         )
         super(CompanyProfileForm, self).__init__(*args, **kwargs)
 
+    def get_update_url(self, **kwargs):
+        return '/api/v1/company/data/{pk}'.format(pk=kwargs.get('project').company.pk)
+
+
+@parsleyfy
 class FinancingProfileForm(BuilderBaseForm):
     """
     The Financing Setup Form (if they select either seed financing equity or convertible only)
     """
+    page_title = 'Financing Questions'
+    page_description = 'Enter some basic details about your finance round requirements'
+
     founder_name = forms.CharField()
     founder_email = forms.EmailField()
 
@@ -131,13 +144,21 @@ class FinancingProfileForm(BuilderBaseForm):
                 'doc_exists_stock_option_plan'
             )
         )
-        super(CompanyProfileForm, self).__init__(*args, **kwargs)
+        super(FinancingProfileForm, self).__init__(*args, **kwargs)
 
-class CompanyandFinancingProfileForm(BuilderBaseForm):
-            """
-            The Setup AND Financing Form (both selected)
-            Basically we are combining the two forms and only showing the following fields. Not sure how to code this. 
-            """
+
+@parsleyfy
+class CompanyAndFinancingProfileForm(CrispyExFieldsetFieldRemovalMixin, CompanyProfileForm, FinancingProfileForm):
+    """
+    The Setup AND Financing Form (both selected)
+    Basically we are combining the two forms and only showing the following fields. Not sure how to code this. 
+    """
+    page_title = 'Company & Financing Questions'
+    page_description = 'Enter some basic details about your company and your finance round requirements'
+
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
             Fieldset(
                 'Founding Team',
                 Div(
@@ -171,4 +192,6 @@ class CompanyandFinancingProfileForm(BuilderBaseForm):
                 'ip_otherthan_founder',
                 'ip_university_affiliation',
             )
-
+        )
+        super(CompanyAndFinancingProfileForm, self).__init__(*args, **kwargs)
+        self.unify_fields()
