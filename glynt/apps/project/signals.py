@@ -34,9 +34,14 @@ def on_project_created(sender, **kwargs):
     # ensure that we have a project object and that is has NO pk 
     # as we dont want this event to happen on change of a project
     if project and project.pk is None:
+        # set the project profile_is_complete to True
+        project.data['profile_is_complete'] = True
+        project.save(update_fields=['data'])
+
         user = project.customer.user
         comment = u'{user} created this Project'.format(user=user.get_full_name())
         logger.debug(comment)
+
         # send notification
         notify.send(user, recipient=user, verb=u'created', action_object=project,
                     description=comment, target=project, project_action='created_project', project_pk=project.pk, creating_user_pk=user.pk)
