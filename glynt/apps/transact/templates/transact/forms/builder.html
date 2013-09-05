@@ -43,6 +43,9 @@
             <div class="col col-lg-10 col-offset-1">
                 <form id="builder-form" data-validate="parsley" action="." method="POST" class="form-horizontal">{% csrf_token %}
                     {{ wizard.management_form }}
+
+                    {{ wizard.form.errors }}
+
                     {% if wizard.form.forms %}
                         {{ wizard.form.management_form }}
                         {% for form in wizard.form.forms %}

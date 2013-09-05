@@ -11,7 +11,7 @@ from glynt.apps.utils import AjaxableResponseMixin
 
 from glynt.apps.project.models import Project, ProjectLawyer
 from glynt.apps.lawyer.models import Lawyer
-from glynt.apps.project.forms import CreateProjectForm
+from glynt.apps.project.forms import ContactUsForm, CreateProjectForm
 from glynt.apps.project.services.ensure_project import EnsureProjectService
 
 from glynt.apps.project.services.ensure_project import PROJECT_CREATED
@@ -33,6 +33,14 @@ class CreateProjectView(FormView):
     template_name = 'project/create.html'
     form_class = CreateProjectForm
 
+    def get_context_data(self, **kwargs):
+        context = super(CreateProjectView, self).get_context_data(**kwargs)
+        context.update({
+            'contact_form': ContactUsForm(initial={}, request=self.request),
+        })
+
+        return context
+
     def save(self, transaction_types):
         customer = self.request.user.customer_profile
         company = customer.primary_company
@@ -42,10 +50,6 @@ class CreateProjectView(FormView):
         project_service.process()
 
         self.project = project_service.project
-
-        # only perform this if we have no other transaction types to manage
-        if len(transaction_types) == 0:
-            PROJECT_CREATED.send(sender=project_service, instance=project_service.project, created=project_service.is_new)
 
         return self.project
 
@@ -60,14 +64,15 @@ class CreateProjectView(FormView):
             messages.error(self.request, _('Sorry, but we could not determine which transaction type you selected. Please try again.'))
             self.success_url = reverse('project:create')
 
-        intake = EnsureUserHasCompletedIntakeProcess(user=self.request.user)
-        if intake.is_complete() is False:
-            if u'INTAKE' not in transaction_types:
-                transaction_types.insert(0, u'INTAKE')
+        # intake = EnsureUserHasCompletedIntakeProcess(user=self.request.user)
+        # if intake.is_complete() is False:
+        #     if u'INTAKE' not in transaction_types:
+        #         transaction_types.insert(0, u'INTAKE')
 
         project = self.save(transaction_types=transaction_types)
 
         self.success_url = reverse('transact:builder', kwargs={'project_uuid': project.uuid, 'tx_range': ','.join(transaction_types), 'step': 1})
+
         return super(CreateProjectView, self).form_valid(form)
 
 

@@ -13,7 +13,7 @@ from glynt.apps.project.utils import PROJECT_CONTENT_TYPE
 
 from glynt.apps.project.services.email import SendNewProjectEmailsService
 from glynt.apps.project.services.project_checklist import ProjectCheckListService
-from glynt.apps.project.services.ensure_project import PROJECT_CREATED
+from glynt.apps.project.services.ensure_project import PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE
 from glynt.apps.project.services.engage_lawyer_comments import EngageLawyerCommentsMoveService
 
 from .models import ProjectLawyer
@@ -33,10 +33,12 @@ def on_project_created(sender, **kwargs):
 
     # ensure that we have a project object and that is has NO pk 
     # as we dont want this event to happen on change of a project
-    if project and project.pk is None:
+    if not is_new:
+
         user = project.customer.user
         comment = u'{user} created this Project'.format(user=user.get_full_name())
         logger.debug(comment)
+
         # send notification
         notify.send(user, recipient=user, verb=u'created', action_object=project,
                     description=comment, target=project, project_action='created_project', project_pk=project.pk, creating_user_pk=user.pk)
@@ -48,6 +50,18 @@ def on_project_created(sender, **kwargs):
     # to bring project up to date with any modifications made
     checklist_service = ProjectCheckListService(project=project)
     checklist_service.bulk_create()
+
+
+@receiver(PROJECT_PROFILE_IS_COMPLETE, dispatch_uid='project.on_project_profile_is_complete')
+def on_project_profile_is_complete(sender, **kwargs):
+    """
+    Handle Project Profile being set as complete
+    """
+    project = kwargs.get('instance')
+    if project:
+        # set the project profile_is_complete to True
+        project.data['profile_is_complete'] = True
+        project.save(update_fields=['data'])
 
 
 def mark_project_notifications_as_read(user, project):

@@ -6,9 +6,13 @@ from django.views.generic.edit import FormView
 from django.views.generic import TemplateView
 from django.core.urlresolvers import reverse
 
+import json
+
 from public.forms import ContactForm
 from public.tasks import send_contactus_email
 from glynt.apps.customer.models import CustomerLoginLogic
+
+from glynt.apps.utils import AjaxableResponseMixin
 
 import logging
 logger = logging.getLogger('django.request')
@@ -79,7 +83,7 @@ class UserClassLoggedInRedirectView(RedirectView):
         return url
 
 
-class ContactUsView(FormView):
+class ContactUsView(AjaxableResponseMixin, FormView):
     template_name = 'public/contact-us.html'
     form_class = ContactForm
 
@@ -105,7 +109,11 @@ class ContactUsView(FormView):
         logger.info('Contact us from: %s (%s) message: %s' % (form.cleaned_data['name'], form.cleaned_data['email'], form.cleaned_data['message'],))
 
         send_contactus_email(from_name=form.cleaned_data['name'], from_email=form.cleaned_data['email'], message=form.cleaned_data['message'])
+        message = "Message sent, thanks!"
 
-        messages.success(self.request, "Message sent, thanks!")
+        if self.request.is_ajax():
+            return self.render_to_json_response({ 'message': message, 'status': 200 })
+        else:
+            messages.success(self.request, message)
 
-        return super(ContactUsView, self).form_valid(form)
+            return super(ContactUsView, self).form_valid(form)
