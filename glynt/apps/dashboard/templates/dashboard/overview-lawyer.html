@@ -17,33 +17,32 @@
     <div class="row">
         <div class="col-12">
             <ul id="project-list" class="list-unstyled">
-            {% for p in projects %}
+            {% for p in project_lawyer_joins %}
+                {% with p.project as project %}
                 <li class="project-list-item span5">
                     <div class="{{ p.display_status|lower }}">
                         {% if PROJECT_LAWYER_STATUS.assigned == p.status %}
                             <div class="callout callout-success">
-                                <h4><div class="profile-card pull-right" data-template="small" data-username="{{ p.customer.user.username }}">&nbsp;</div></h4>
-                                <h3><i class="glyphicon glyphicon-ok text-success"></i>  <a href="{{ p.get_absolute_url }}" class="text-success">{{ p.company }} ({{ p.display_status }})</a></h3>
+                                <h4><div class="profile-card pull-right" data-template="small" data-username="{{ project.customer.user.username }}">&nbsp;</div></h4>
+                                <h3><i class="glyphicon glyphicon-ok text-success"></i>  <a href="{{ project.get_absolute_url }}" class="text-success">{{ project.company }} ({{ p.display_status }})</a></h3>
                                 <p class="msg">You have been assigned to this project.</p>
                             </div>
-                        {% else %}
-                            {% if PROJECT_LAWYER_STATUS.rejected == p.status %}
-                                <div class="">
-                                    <h5 class="softer">{{ p.company }} - {{ p.display_status }}</h5>
-                                    <p class="msg">Client selected another attorney.</p>
-                                </div>
-                            {% endif %}
-                            {% if PROJECT_LAWYER_STATUS.potential == p.status %}
-                                <div class="callout callout-info">
-                                    <a href="{% url 'project:project_contact' slug=p.uuid lawyer=user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-primary btn-lg pull-right">Discussion</a>
-                                    <h4><div class="profile-card pull-right" data-template="small" data-username="{{ p.customer.user.username }}">&nbsp;</div></h4>
-                                    <h3>{{ p.company }} ({{ p.display_status }})</h3>
-                                    <p class="msg">You have been proposed to this client. Awaiting client decision.</p>
-                                </div>
-                            {% endif %}
+                        {% elif PROJECT_LAWYER_STATUS.rejected == p.status %}
+                            <div class="">
+                                <h5 class="softer">{{ project.company }} - {{ p.display_status }}</h5>
+                                <p class="msg">Client selected another attorney.</p>
+                            </div>
+                        {% elif PROJECT_LAWYER_STATUS.potential == p.status %}
+                            <div class="callout callout-info">
+                                <a href="{% url 'project:project_contact' slug=project.uuid lawyer=user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-primary btn-lg pull-right">Discussion</a>
+                                <h4><div class="profile-card pull-right" data-template="small" data-username="{{ project.customer.user.username }}">&nbsp;</div></h4>
+                                <h3>{{ project.company }} ({{ p.display_status }})</h3>
+                                <p class="msg">You have been proposed to this client. Awaiting client decision.</p>
+                            </div>
                         {% endif %}
                     </div>
                 </li>
+                {% endwith %}
             {% empty %}
                 <li><h3 class="softer"><i class="glyphicon glyphicon-time "></i> Your introductions and active projects will appear here shortly. </h3></li>
             {% endfor %}

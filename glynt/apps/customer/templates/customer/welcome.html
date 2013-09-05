@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %}{% load email_obfuscator %}
 
 {% block page_title %}Welcome to LawPal{% endblock %}
 {% block bodyclass %}lawyer-welcome{% endblock %}
@@ -28,7 +28,7 @@
                 We are building a platform which will allow you to connect with new startups seeking outside counsel. Once your profile has been completed we will begin to send you leads via email. 
             </p>
             <p class="softer">
-                Please contact <a href="mailto:yael@lawpal.com">Yael Citro</a> if you have any questions and we look forward to having you on board!
+                Please contact <a href="mailto:{{ 'yael@lawpal.com'|obfuscate }}">Yael Citro</a> if you have any questions and we look forward to having you on board!
             </p>
         </div>
     </div>
