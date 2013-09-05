@@ -33,13 +33,13 @@ module.exports = (function() {
             inject_cookies();
 
             casper.options.clientScripts = [
-                                                '/Users/rosscdh/Projects/lawpal/glynt/glynt/apps/default/static/js/jquery.min.js',
-                                                '/Users/rosscdh/Projects/lawpal/glynt/glynt/apps/default/static/js/jquery.getPath.js'
+                                                casper.cli.options.STATIC_PATH + 'js/jquery.min.js',
+                                                casper.cli.options.STATIC_PATH + 'js/jquery.getPath.js'
                                             ];
 
-            casper.options.timeout = 60000;
+            casper.options.timeout = casper.cli.options.timeout || 30000;
             casper.options.onTimeout = function() {
-                casper.die("Timed out after 60 seconds.", 1);
+                casper.die("Timed out after "+ casper.options.timeout/1000 +" seconds.", 1);
             };
 
             casper.start(start_url, arguments[1]);
