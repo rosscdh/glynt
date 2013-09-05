@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse
 from bunch import Bunch
 
 from glynt.apps.project.models import Project
-from glynt.apps.project.services.ensure_project import PROJECT_CREATED
+from glynt.apps.project.services.ensure_project import PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE
 
 from glynt.apps.transact.views.intake import (FORMS as INTAKE_FORMS,)
 
@@ -151,6 +151,7 @@ class BuilderWizardView(NamedUrlSessionWizardView):
         msg = _('Your project has been created.')
         messages.info(self.request, msg)
 
-        PROJECT_CREATED.send(sender=self, instance=self.project, created=False)
+        PROJECT_PROFILE_IS_COMPLETE.send(sender=self, instance=self.project)
+        PROJECT_CREATED.send(sender=self, instance=self.project, created=self.project.pk is None)
 
         return HttpResponseRedirect(reverse('dashboard:overview'))
