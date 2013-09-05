@@ -11,7 +11,7 @@ from glynt.apps.utils import AjaxableResponseMixin
 
 from glynt.apps.project.models import Project, ProjectLawyer
 from glynt.apps.lawyer.models import Lawyer
-from glynt.apps.project.forms import CreateProjectForm
+from glynt.apps.project.forms import ContactUsForm, CreateProjectForm
 from glynt.apps.project.services.ensure_project import EnsureProjectService
 
 from glynt.apps.project.services.ensure_project import PROJECT_CREATED
@@ -32,6 +32,14 @@ class CreateProjectView(FormView):
     """ Start a new Project, by selecting 1 or more of the transactions """
     template_name = 'project/create.html'
     form_class = CreateProjectForm
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateProjectView, self).get_context_data(**kwargs)
+        context.update({
+            'contact_form': ContactUsForm(initial={}, request=self.request),
+        })
+
+        return context
 
     def save(self, transaction_types):
         customer = self.request.user.customer_profile
