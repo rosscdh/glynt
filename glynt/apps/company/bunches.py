@@ -20,11 +20,14 @@ class UserIntakeCompanyBunch(Bunch):
         return json.dumps(self.__dict__)
 
     def company(self):
+        company = None
+
         try:
             company = self.user.companies.all()[0]
+        except AttributeError:
+            logger.error('User was not provided for UserIntakeCompanyBunch')
         except IndexError:
-            logger.error('Company not found for UserIntakeCompanyBunch user: "%s"' % (self.user,)) 
-            company = None
+            logger.error('Company not found for UserIntakeCompanyBunch user: "{user}"'.format(user=self.user))
 
         return company
 
