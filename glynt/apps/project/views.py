@@ -43,10 +43,6 @@ class CreateProjectView(FormView):
 
         self.project = project_service.project
 
-        # only perform this if we have no other transaction types to manage
-        if len(transaction_types) == 0:
-            PROJECT_CREATED.send(sender=project_service, instance=project_service.project, created=project_service.is_new)
-
         return self.project
 
     def form_valid(self, form):
