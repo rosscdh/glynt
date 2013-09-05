@@ -54,14 +54,14 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		lawPalDialog.open( "Create item", url, {} ).then( 
 			function(result) { /* Success */
 				var item = result;
-				var csrf = null;
 				/* Update model */
 				if( result && result.name )  {
-					csrf= result.csrfmiddlewaretoken || null;
-					delete item.csrf;
 
-					$scope.saveItem( item, csrf );
+					$scope.saveItem( item );
 				}
+			},
+			function(result) { /* Error */
+				console.log( result );
 			}
 		);
 	};
@@ -69,15 +69,19 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 	/**
 	 * Saves item through API
 	 * @param  {Object} item JSON object representation of checklist item
-	 * @param  {String} csrf CSRF string for checking validity
 	 */
-	$scope.saveItem = function( item, csrf ) {
+	$scope.saveItem = function( item ) {
 		if( item && item.name ) {
 			/* Update item update */
-			var promise = lawPalService.updateChecklistItem( item, csrf );
+			var promise = lawPalService.updateChecklistItem( item );
 			promise.then(
 				function( results ) { /* Success */
 					$scope.addAlert( "Item updated", "success" );
+					var newItem = results;
+					if( $scope.findItemIndex( newItem ) === -1 )
+						{
+							$scope.addItemToChecklist( newItem );
+						}
 				},
 				function( details ) { /* Error */
 					$scope.addAlert( "Unable to updated item", "error" );
@@ -86,6 +90,11 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		} else {
 
 		}
+	};
+
+	$scope.addItemToChecklist = function( item ) {
+		//
+		$scope.model.checklist.push( item );
 	};
 
 	/**
@@ -151,6 +160,15 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		return assigned;
 	};
 
+	$scope.delayedAlertClose = function( alert ) {
+		setTimeout( function() {
+			var alerts = $scope.model.alerts;
+			for(var i=0;i<alerts.length;i++) {
+				if(alerts[i].timeStamp===alert.timeStamp) $scope.closeAlert( i );
+			}
+		}, 6000);
+	};
+
 	/**
 	 * Remove alert from display
 	 * @param  {Number} index Index of alert to remove
@@ -165,9 +183,16 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 	 * @param {String} type    type of alert to display e.g. error, success, worning, info
 	 */
 	$scope.addAlert = function( message, type ) {
+		var alert;
+
 		type = type || "info";
-		$scope.model.alerts.push({ "type": type, "message": message });
+		alert = { "type": type, "message": message, "timeStamp": new Date().getTime() };
+
+		$scope.model.alerts.push( alert );
 		$("html, body").animate({ scrollTop: 0 }, 600);
+		if( type==="success" ) {
+			$scope.delayedAlertClose( alert );
+		}
 	};
 
 	/**
@@ -277,6 +302,7 @@ function dialogController( $scope, dialog ) {
 			result[ item.name ] = item.value;
 		});
 
+		result = Object.clone(result);
 		// Proceed to call the success function(s) with the newly calculated JSON data
 		dialog.close( result, $scope );
 	};

@@ -23,12 +23,15 @@ angular.module('lawpal').factory( "lawPalDialog", [ "$q", "$http", "$dialog", fu
 				  '<button ng-click="close(null)" class="close" aria-hidden="true">&times;</button>'+
 				  '<h4>{{title}}</h4>'+
 				  '</div>'+
+				  '<form ng-submit="save(\'.{modalId}\')">'+
 				  '<div class="modal-body">';
 			   	var templateFooter = '</div>'+
 				  '<div class="modal-footer">'+
-				  '<button ng-click="close()" class="btn" >Cancel</button>'+
-				  '<button ng-click="save( \'.' + modalId + '\')" class="btn btn-primary" >Save</button>'+
-				  '</div></div></div>';
+				  '<input type="button" ng-click="close()" class="btn" value="Cancel" />'+
+				  '<input type="submit" value="Save" class="btn btn-primary" />'+
+				  '</div>'+
+				  '</form>'+
+				  '</div></div>';
 
 				 // Configure modal dialog
 				var dialogOptions = {
@@ -44,10 +47,13 @@ angular.module('lawpal').factory( "lawPalDialog", [ "$q", "$http", "$dialog", fu
 
 				// Retrieve HTML form
 				$http.get( url ).success( function( html ) {
+					html = html.replace("form>","span>");
 					// Wrap the HTML inside the header and footer
 					template = templateHeader + html + templateFooter;
 					// Insert title
 					dialogOptions.template = template.replace("{{title}}", title);
+					dialogOptions.template = dialogOptions.template.replace("{modalId}", modalId);
+					dialogOptions.template = dialogOptions.template.replace("data-required=\"true\"", "required data-required");
 
 					// Open dialog
 					var d = $dialog.dialog( dialogOptions );

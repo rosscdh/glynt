@@ -50,7 +50,7 @@
                         <table class="table table-striped checklist">
                             <tbody>
                                 <!-- start: AngularJS: checklist item controller //-->
-                                <tr ng-repeat="item in model.checklist | filter: { 'category': category.label } | filter: { is_deleted: model.showDeletedItems }" class="item state-{[{getItemStatus(item)}]}" ng-class="{'assigned-to-user':getAssignedStatus()}" ng-controller="checklistItemCtrl">
+                                <tr ng-repeat="item in model.checklist | filter: { 'category': category.label } | filter: { is_deleted: model.showDeletedItems } | orderBy: item.sort_position_by_cat" class="item state-{[{getItemStatus(item)}]}" ng-class="{'assigned-to-user':getAssignedStatus()}" ng-controller="checklistItemCtrl">
                                     <!-- Checklist item status //-->
                                     <td class="item-status">
                                         <i class="icon-state-{[{getItemStatus(item)}]}"></i>
@@ -82,7 +82,6 @@
     <script type="text/javascript" src="{{ STATIC_URL }}todo/angularjs.checklistItemDirective.js"></script>
 
     <script>
-
     /**
     * LawPal Data object used by AngularJS
     */
@@ -132,91 +131,6 @@
             }
         }
     };
-
-    $(document).ready( function () {
-        /*
-        $('#list-items').filter_status({
-            'state_modifier': $('#state_modifier')
-        });
-        */
-
-        {% if feedback_requests %}
-        /**
-        * HILIGHT ITEMS WITH ASSIGNED
-        * Items with assignments to current user
-        * loop over items in the feedback_results and for each slug
-        * set the highlight class
-        */
-        /*
-        var user_feedback_requests = {{ feedback_requests|jsonify }};
-        $.each(user_feedback_requests, function (slug, data) {
-            var row = $('[data-edit_label={slug}]'.assign({'slug': slug}));
-            row.removeClass('assigned-to-user').addClass('assigned-to-user');
-        });
-        */
-        {% endif %}
-        /**
-        * ASSIGN NUM ITEMS ASSIGNED TO USER COUNT
-        * Count the number of items assigned to the user
-        * per category and assign that number to the category list
-        * if the count is > 0
-        */
-       /*
-        $.each($('[data-category]'), function (i, elem) {
-            var elem = $(elem);
-            var cat = elem.data('category');
-            var cat_row = $('#{cat}'.assign({'cat': cat}))
-            var num_assigned_to_user = cat_row.children('table:first').find('tr.assigned-to-user').length;
-
-            if (num_assigned_to_user > 0)
-                elem.find('.num_assigned_to_user').html('<i class="icon-state-pending"></i> ' + num_assigned_to_user);
-        });
-        */
-        {% if is_lawyer %}
-        /**
-        * DELETE ITEM LIST
-        */
-       /*
-        $('tr.item .item-delete').hide();
-        $('tr.item').on('mouseout', function (event) {
-            var elem = $(this);
-            elem.find('.item-delete').hide();
-        });
-        $('tr.item').on('mouseover', function (event) {
-            var elem = $(this);
-            elem.find('.item-delete').show();
-        });
-
-        $('.item-delete').on('click', function (event) {
-            event.preventDefault();
-            var elem = $(this);
-            var elem_tr = elem.closest('tr.item');
-            var pk = elem.data('pk');
-            var url = '/api/v1/todo/{pk}'.assign({'pk': pk});
-
-            $.ajax({
-                type: 'PATCH',
-                url: url,
-                data: JSON.stringify({'is_deleted': true}),
-                dataType: 'application/json',
-                contentType: 'application/json',
-                beforeSend: function(jqXHR, settings) {
-                    // Pull the token out of the DOM.
-                    jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]:first').val());
-                },
-                error: function() {
-                    console.log('Error Deleting item')
-                },
-                complete: function() {
-                    //console.log('deleted')
-                    elem_tr.fadeOut();
-                }
-            });
-        });
-        */
-        {% endif %}
-
-    });
     </script>
 {% endblock %}
 

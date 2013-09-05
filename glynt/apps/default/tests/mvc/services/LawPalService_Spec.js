@@ -23,7 +23,7 @@ describe('lawPalService tests', function () {
 
 	it('should send the msg and return the response.', function (){
 		var test = {
-	      handler: function(data) { console.log(data);}
+	      handler: function(data) {}
 	    };
 
 	    spyOn(test, 'handler');
@@ -32,7 +32,7 @@ describe('lawPalService tests', function () {
 		var returnedPromise = svc.getCategories();
 		
 		//use the handler you're spying on to handle the resolution of the promise.
-		returnedPromise.then( function( data ) { console.log(data); test.handler( data ) });
+		returnedPromise.then( test.handler() );
 		
 		//check your spy to see if it's been called with the returned value.	
 		expect(test.handler).toHaveBeenCalled();
