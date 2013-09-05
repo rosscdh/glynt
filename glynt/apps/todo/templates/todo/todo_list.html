@@ -1,6 +1,6 @@
 {% extends 'base.html' %}{% load i18n glynt_helpers todo_tags jsonify project_tags %}
 
-{% block page_title %}Checklist &mdash; {% project_name project %}{% endblock %}
+{% block page_title %}Checklist &mdash; {{ project.long_name }}{% endblock %}
 
 {% block header %}
     <!-- Page Header -->

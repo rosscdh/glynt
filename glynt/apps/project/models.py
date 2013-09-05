@@ -26,6 +26,7 @@ class Project(models.Model):
     Stores initial project details
     """
     _primary_lawyer = False
+    _long_name = None
 
     uuid = UUIDField(auto=True, db_index=True)
     customer = models.ForeignKey('customer.Customer')
@@ -65,6 +66,13 @@ class Project(models.Model):
             checklist_items += t.checklist()
 
         return checklist_items
+
+    @property
+    def long_name(self):
+        if self._long_name is None:
+            transactions = self.transactions.all()
+            self._long_name = u'{company} — {transactions}'.format(company=self.company, transactions=', '.join([t.title for t in transactions]))
+        return self._long_name
 
     @property
     def primary_lawyer(self):

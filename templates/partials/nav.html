@@ -17,17 +17,17 @@
                     {% if projects.count > 1 %}
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="account-menu">
-                                <span><small>{% project_name project %}</small></span>
+                                <span><small>{{ project.long_name }}</small></span>
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu" aria-labelledby="account-menu">
                                 {% for p in projects %}
-                                    <li><a href="{% url 'dashboard:project' uuid=p.uuid %}">{% project_name p forloop.counter %}</a></li>
+                                    <li><a href="{% url 'dashboard:project' uuid=p.uuid %}">{{ p.long_name }}</a></li>
                                 {% endfor %}
                             </ul>
                         </li>
                     {% else %}
-                        <li><a href="{% url 'dashboard:project' uuid=project.uuid %}"><span>{% project_name project %}</span></a></li>
+                        <li><a href="{% url 'dashboard:project' uuid=project.uuid %}"><span>{{ p.long_name }}</span></a></li>
                     {% endif %}
                 </ul>
             {% endif %}

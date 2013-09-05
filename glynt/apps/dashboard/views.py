@@ -19,9 +19,11 @@ class DashboardView(ToDoCountMixin, TemplateView):
 
     def dispatch(self, request, *args, **kwargs):
         """ if we are a lawyer, then use the lawyer overview template"""
-        if 'uuid' not in kwargs:
-            if request.user.profile.is_lawyer:
+        if request.user.profile.is_lawyer:
+            if 'uuid' in kwargs:
                 self.template_name = 'dashboard/overview-lawyer.html'
+            else:
+                self.template_name = 'project/project_list-lawyer.html'
 
         return super(DashboardView, self).dispatch(request, *args, **kwargs)
 
@@ -46,8 +48,10 @@ class DashboardView(ToDoCountMixin, TemplateView):
         return qs_filter
 
     def lawyer_context(self):
+        project_lawyer_joins = self.request.user.lawyer_profile.projectlawyer_set.all()
         return Bunch({
-            'project_lawyer_joins': self.request.user.lawyer_profile.projectlawyer_set.all(),
+            'project_lawyer_joins': project_lawyer_joins,
+            'project_lawyer_join': project_lawyer_joins.get(project=self.request.project),
         })
 
     def customer_context(self, project):

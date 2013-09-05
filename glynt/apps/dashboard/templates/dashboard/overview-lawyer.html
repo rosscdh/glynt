@@ -1,55 +1,31 @@
-{% extends 'base.html' %}{% load url from future %}{% load glynt_helpers crispy_forms_tags project_tags %}
+{% extends 'dashboard/overview.html' %}{% load url from future %}{% load glynt_helpers crispy_forms_tags project_tags %}
 
-{% block page_title %}Overview{% endblock %}
+{% block page_title %}Lawyer Project Overview{% endblock %}
 
 {% block header %}
     <!-- Page Header -->
     <div class="page-header">
         <div class="container">
-            <!-- Header -->
-            <h1>Your LawPal Projects</h1>
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="span3 pull-right">{{ project_lawyer_join.display_status }}</h2>
+                    <h1>{{ project.long_name }}</h1>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
 
-{% block body %}
-<div class="container dashboard-view">
-    <div class="row">
-        <div class="col-12">
-            <ul id="project-list" class="list-unstyled">
-            {% for p in project_lawyer_joins %}
-                {% with p.project as project %}
-                <li class="project-list-item span5">
-                    <div class="{{ p.display_status|lower }}">
-                        {% if PROJECT_LAWYER_STATUS.assigned == p.status %}
-                            <div class="callout callout-success">
-                                <h4><div class="profile-card pull-right" data-template="small" data-username="{{ project.customer.user.username }}">&nbsp;</div></h4>
-                                <h3><i class="glyphicon glyphicon-ok text-success"></i>  <a href="{{ project.get_absolute_url }}" class="text-success">{{ project.company }} ({{ p.display_status }})</a></h3>
-                                <p class="msg">You have been assigned to this project.</p>
-                            </div>
-                        {% elif PROJECT_LAWYER_STATUS.rejected == p.status %}
-                            <div class="">
-                                <h5 class="softer">{{ project.company }} - {{ p.display_status }}</h5>
-                                <p class="msg">Client selected another attorney.</p>
-                            </div>
-                        {% elif PROJECT_LAWYER_STATUS.potential == p.status %}
-                            <div class="callout callout-info">
-                                <a href="{% url 'project:project_contact' slug=project.uuid lawyer=user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-primary btn-lg pull-right">Discussion</a>
-                                <h4><div class="profile-card pull-right" data-template="small" data-username="{{ project.customer.user.username }}">&nbsp;</div></h4>
-                                <h3>{{ project.company }} ({{ p.display_status }})</h3>
-                                <p class="msg">You have been proposed to this client. Awaiting client decision.</p>
-                            </div>
-                        {% endif %}
-                    </div>
-                </li>
-                {% endwith %}
-            {% empty %}
-                <li><h3 class="softer"><i class="glyphicon glyphicon-time "></i> Your introductions and active projects will appear here shortly. </h3></li>
-            {% endfor %}
-            </ul>
-        </div>
-    </div>
-</div>
+{% block project_potential_assigned %}
+Show client profile
+{% endblock %}
 
-{% include 'dashboard/modals/overview-modal.html' %}
+{% block project_team %}
+Show client profile
+{% endblock %}
+
+{% block transaction_profile_info %}
+    {% comment %}
+    <!-- Never show the transaction status block for lawyers -->
+    {% endcomment %}
 {% endblock %}

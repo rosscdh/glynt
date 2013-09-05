@@ -1,6 +1,6 @@
 {% extends 'base.html' %}{% load url from future %}{% load glynt_helpers crispy_forms_tags project_tags comments fluent_comments_tags %}
 
-{% block page_title %}Overview &mdash; {% project_name project %}{% endblock %}
+{% block page_title %}Overview &mdash; {{ project.long_name }}{% endblock %}
 
 {% block header %}
     <!-- Page Header -->
@@ -19,7 +19,8 @@
 
   <!-- Button trigger modal -->
 <div class="container dashboard-view">
-    {% if user.profile.is_customer %}
+
+        {% comment %}
         {% if not profile_is_complete %}
             <div class="callout callout-danger empty">
                 <div class="empty-message empty-message-exclamation-sign">
@@ -29,21 +30,33 @@
                 </div>
             </div>
         {% else %}
-            {% if not project.has_lawyer %}
-                {% project_lawyers project 'potential' %}
-                <br />
-            {% endif %}
-            {% if counts.awaiting_feedback_from_user > 0 %}
-                <div class="alert"><i class="glyphicon glyphicon-time"></i> You have one more checklist items awaiting feedback. Visit your checklist to respond to them.</div>
-            {% endif %}
+        {% endcomment %}
+
+            {% block project_potential_assigned %}
+                {% if not project.has_lawyer %}
+                    {% project_lawyers project 'potential' %}
+                    <br />
+                {% endif %}
+            {% endblock %}
+
+            {% block awaiting_feedback_info %}
+                {% if counts.awaiting_feedback_from_user > 0 %}
+                    <div class="alert"><i class="glyphicon glyphicon-time"></i> You have one more checklist items awaiting feedback. Visit your checklist to respond to them.</div>
+                {% endif %}
+            {% endblock %}
+
             <div class="row">
                 <div class="col col-lg-5">
-                    {% if project.has_lawyer %}
-                        <div class="widget account-attorney">
-                            <h3>Project Attorney</h3>
-                            {% project_lawyers project 'assigned' %}
-                        </div>
-                    {% endif %}                    
+                    {% block project_team %}
+                        {% if project.has_lawyer %}
+                            <div class="widget account-attorney">
+                                <h3>Project Attorney</h3>
+                                {% project_lawyers project 'assigned' %}
+                            </div>
+                        {% endif %}
+                    {% endblock %}
+
+                    {% block account_manager %}
                     <div class="widget account-attorney">
                         <h3>LawPal Account Manager</h3>
                         <div class="row">
@@ -53,38 +66,47 @@
                             </div>
                         </div>
                     </div>
+                    {% endblock %}
+
+                    {% block transaction_profile_info %}
                     <div class="callout callout-success empty">
                         <div class="empty-message empty-message-ok">
                             <h4>Your transaction profile is complete.</h4>
                             {% if PROJECT_ENVIRONMENT == 'dev' %}<a href="{% url 'transact:builder' project_uuid=project.uuid tx_range='INTAKE' step='1' %}" class="">update</a>{% endif %}
                         </div>
                     </div>
+                    {% endblock %}
+
                 </div>
                 <div class="col col-lg-7">
-                    <div class="widget checklist">
-                        <a href="{% url 'dashboard:checklist' uuid=project.uuid %}"><h3>Transaction Checklist </h3></a>
-                        <div class="row">
-                            <div class="col col-3 text-center" class="softer"><h1  class="softer">{{counts.new}}</h1><small  class="softer">New</small></div>
-                            <div class="col col-3 text-center"><h1>{{counts.open}}</h1><small>Open</small></div>
-                            <div class="col col-3 text-center"><h1 class="text-warning">{{counts.awaiting_feedback_from_user}}</h1><small class="text-warning">Feedback</small></div>
-                            <div class="col col-3 text-center"><h1 class="text-success">{{counts.closed}}</h1><small class="text-success">Closed</small></div>
+
+                    {% block transaction_checklist %}
+                        <div class="widget checklist">
+                            <a href="{% url 'dashboard:checklist' uuid=project.uuid %}"><h3>Transaction Checklist </h3></a>
+                            <div class="row">
+                                <div class="col col-3 text-center" class="softer"><h1  class="softer">{{counts.new}}</h1><small  class="softer">New</small></div>
+                                <div class="col col-3 text-center"><h1>{{counts.open}}</h1><small>Open</small></div>
+                                <div class="col col-3 text-center"><h1 class="text-warning">{{counts.awaiting_feedback_from_user}}</h1><small class="text-warning">Feedback</small></div>
+                                <div class="col col-3 text-center"><h1 class="text-success">{{counts.closed}}</h1><small class="text-success">Closed</small></div>
+                            </div>
                         </div>
-                    </div>
-                    {% if project.projectlawyer_set.all.0.status == PROJECT_LAWYER_STATUS.assigned %}
-                    <div class="widget discuss">
-                        <h3>Project Discussion</h3>
-                        {% render_comment_form for project %}
-                        {% render_comment_list for project %}
-                    </div>
-                    {% endif %}
+                    {% endblock %}
+
+                    {% block discussion %}
+                        {% if project.has_lawyer %}
+                        <div class="widget discuss">
+                            <h3>Project Discussion</h3>
+                            {% render_comment_form for project %}
+                            {% render_comment_list for project %}
+                        </div>
+                        {% endif %}
+                    {% endblock %}
                 </div>
             </div>
+        {% comment %}
         {% endif %}
-    {% else %}
-        <div class="alert">
-            The Attorney Transaction dashboard is coming shortly. For now, please review the Checklist.
-        </div>
-    {% endif %}
+        {% endcomment %}
+
 </div>
 {% endblock %}
 {% block css %}

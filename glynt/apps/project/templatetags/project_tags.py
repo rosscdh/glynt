@@ -9,18 +9,6 @@ from glynt.apps.project.models import Project, ProjectLawyer
 from glynt.apps.project.utils import PROJECT_CONTENT_TYPE
 
 
-@register.simple_tag(takes_context=True)
-def project_name(context, project, index=1):
-    company = None
-    transactions = []
-    if project:
-        company = project.company
-        if project.transactions:
-            transactions = [t.title for t in project.transactions.all()]
-
-    return u'{company} — {transactions}'.format(**{'company': company, 'transactions': ', '.join(transactions)})
-
-
 @register.inclusion_tag('project/partials/activity_list.html')
 def project_activity_stream(project, limit=10):
     return {
