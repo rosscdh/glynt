@@ -48,7 +48,7 @@ class ProjectIntakeFormIsCompleteBunch(Bunch):
         name = str(self.project.pk) + '-' + str(self.company.pk)
 
         if len(kwargs.keys()) > 0:
-            name = '{name}{extra}'.format(name=name, extra='-'.join([str(i) for i in kwargs.values()]))
+            name = '{name}{extra}'.format(name=name, extra='-'.join([i for i in kwargs.values()]))
 
         return shortuuid.uuid(name=name)
 
