@@ -19,7 +19,7 @@ class BaseCasperJs(CasperTestCase):
                                  js_file
                                 )
         kwargs.update({
-            'timeout': 5000,
+            'timeout': 30000,
             'casper_helper_js_path': kwargs.get('casper_helper_js_path', os.path.join(settings.SITE_ROOT, 'glynt/casper/jslib/djangocasper.js')),
             'STATIC_PATH': kwargs.get('STATIC_PATH', os.path.join(settings.SITE_ROOT, 'glynt/apps/default/static/')),
         })
