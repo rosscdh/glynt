@@ -18,7 +18,6 @@ from glynt.apps.default.views import AjaxBaseTemplateMixin
 from glynt.apps.lawyer.services import EnsureLawyerService
 from glynt.apps.utils import get_query
 
-from . import LawyerRequiredViewMixin
 from .models import Lawyer
 from .forms import LawyerProfileSetupForm, LawyerSearchForm
 
@@ -26,6 +25,16 @@ import urlparse
 
 import logging
 logger = logging.getLogger('django.request')
+
+
+class LawyerRequiredViewMixin(object):
+    """
+    Mixin to ensure that only a lawyer user 
+    can view this view
+    """
+    @method_decorator(user_passes_test(lambda u: u.profile.is_lawyer))
+    def dispatch(self, *args, **kwargs):
+        return super(LawyerRequiredViewMixin, self).dispatch(*args, **kwargs)
 
 
 class LawyerProfileView(AjaxBaseTemplateMixin, DetailView):
@@ -46,8 +55,6 @@ class LawyerProfileView(AjaxBaseTemplateMixin, DetailView):
         })
         return context
 
-class LawyerLiteProfileView(LawyerProfileView):
-    template_name = 'lawyer/lawyer_detail_lite.html'
 
 class LawyerLiteProfileView(LawyerProfileView):
     """

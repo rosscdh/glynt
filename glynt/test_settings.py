@@ -14,8 +14,18 @@ INSTALLED_APPS = INSTALLED_APPS + (
     'django_nose',
     'casper',
 )
+
+def get_testable_apps():
+    return ' '.join([app for app in PROJECT_APPS])
+
+def get_excluded_apps():
+    return ','.join([app for app in DJANGO_APPS + HELPER_APPS])
+
 NOSE_ARGS = [
-    #'--with-coverage',
+    # '--with-coverage',
+    # '--all-modules'
+    #'--exclude={exclude}'.format(exclude=get_excluded_apps()),
+    '{tests}'.format(tests=get_testable_apps()),
 ]
 
 PASSWORD_HASHERS = (

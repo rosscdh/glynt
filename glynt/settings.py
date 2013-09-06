@@ -481,13 +481,6 @@ TEMPLATED_EMAIL_BACKEND = 'templated_email.backends.vanilla_django.TemplateBacke
 TEMPLATED_EMAIL_TEMPLATE_DIR = 'email/'
 TEMPLATED_EMAIL_FILE_EXTENSION = 'email'
 
-JENKINS_TASKS = (
-    'django_jenkins.tasks.run_pylint',
-    'django_jenkins.tasks.with_coverage',
-    'django_jenkins.tasks.django_tests',
-)
-JENKINS_TEST_RUNNER='django_jenkins.nose_runner.CINoseTestSuiteRunner'
-
 LAWPAL_PRIVATE_BETA = True
 
 ALLOWED_HOSTS = ['*']
