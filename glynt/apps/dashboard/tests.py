@@ -86,7 +86,7 @@ class ChecklistLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
             edit = self.pq(elem.find('a.item-edit'))
             self.assertTrue(edit.attr('data-toggle') == 'modal') # is a modal link
             self.assertTrue(edit.attr('data-target') == '#modal-checklist-item') # and the modal target is correct
-            
+
             # test we have 1 delete link
             self.assertTrue(len(elem.find('a.item-delete')) == 1)
 
@@ -100,3 +100,13 @@ class ChecklistLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
         url = reverse('dashboard:checklist', kwargs={'uuid': self.project.uuid})
         self.assertTrue(self.load_casper_file(js_file='checklist-lawyer.js', test_label='Test the Checklist View for a Lawyer', url=url))
         # from nose.tools import set_trace; set_trace()
+
+
+class TransactionBuilderTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
+    test_path = os.path.dirname(__file__)
+
+    def test_remove_founder_region_js(self):
+        self.client.login(username=self.customer_user.username, password=self.password)
+
+        url = reverse('transact:builder', kwargs={ 'project_uuid': self.project.uuid, 'tx_range': 'CS', 'step': 1 })
+        self.assertTrue(self.load_casper_file(js_file='founder-region.js', test_label='Test the founder region', url=url))
