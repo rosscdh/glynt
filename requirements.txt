@@ -104,7 +104,6 @@ django-clear-cache
 BeautifulSoup
 -e git+https://github.com/kmmbvnr/django-jenkins.git#egg=django-jenkins
 HTTPretty
-django-nose
 # for javascript testing
 django-casper
 mocktest
