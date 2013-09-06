@@ -19,7 +19,10 @@ class BaseCasperJs(CasperTestCase):
                                  js_file
                                 )
         kwargs.update({
-            'casper_helper_js_path': kwargs.get('casper_helper_js_path', os.path.join(settings.SITE_ROOT, 'glynt/casper/jslib/djangocasper.js'))
+            'timeout': 30000,
+            'casper_helper_js_path': kwargs.get('casper_helper_js_path', os.path.join(settings.SITE_ROOT, 'glynt/casper/jslib/djangocasper.js')),
+            'STATIC_PATH': kwargs.get('STATIC_PATH', os.path.join(settings.SITE_ROOT, 'glynt/apps/default/static/')),
         })
+        #from nose.tools import set_trace; set_trace()
 
         return self.casper(test_path, **kwargs)
