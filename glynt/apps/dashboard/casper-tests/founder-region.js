@@ -11,8 +11,17 @@ helper.scenario(casper.cli.options.url,
 
         // test the add founder block works
         this.test.assertElementCount('.founder-group', 1);
+        casper.test.assertElementCount('button.delete-cloned-region', 0);
+
         this.click('button#btn_add_another');
         casper.test.assertElementCount('.founder-group', 2);
+        casper.test.assertElementCount('button.delete-cloned-region', 1);
+
+        this.click('button#btn_add_another');
+        casper.test.assertElementCount('.founder-group', 3);
+        casper.test.assertElementCount('button.delete-cloned-region', 2);
+
+        this.test.comment('Test the removal of a cloned founder region');
     }
 );
 
