@@ -49,9 +49,6 @@ angular.module('lawpal').factory( "lawPalDialog", [ "$q", "$http", "$dialog", fu
 				// Retrieve HTML form
 				$http.get( url ).success( function( html ) {
 					html = html.replace("form>","span>");
-					//html = html.replace(/ id=\"id_/g," ng-model=\"");
-					html = html.replace(/ng-init/g,"xng-init");
-					//html = html.replace(/ng-model=\"/g,"ng-model=\"item.");
 					
 					// Wrap the HTML inside the header and footer
 					template = templateHeader + html + templateFooter;
