@@ -52,7 +52,7 @@ class ToDoResource(BaseApiModelResource):
         queryset = ToDo.objects.all()
         authorization = Authorization()
         resource_name = 'todo'
-        list_allowed_methods = ['get', 'put', 'patch']
+        list_allowed_methods = ['get', 'put', 'patch', 'post']
         #fields = ['is_deleted']
         filtering = {
             'slug': ['exact'],

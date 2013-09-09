@@ -73,5 +73,5 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
         self.project_lawyer_join.save(update_fields=['status'])
 
 
-        self.todo = mommy.make('todo.ToDo', status=TODO_STATUS.open, project=self.project, user=self.lawyer_user, category='General')
+        self.todo = mommy.make('todo.ToDo', status=TODO_STATUS.open, project=self.project, user=self.lawyer_user, category='General', name="My Todo")
         self.attachment = mommy.make('todo.Attachment', project=self.project, todo=self.todo, uploaded_by=self.customer_user)

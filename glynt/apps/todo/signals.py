@@ -7,6 +7,8 @@ from django.contrib.admin.models import LogEntry
 
 from threadedcomments.models import ThreadedComment
 
+from glynt.apps.utils import generate_unique_slug
+
 from glynt.apps.todo import TODO_STATUS, TODO_STATUS_ACTION, FEEDBACK_STATUS
 
 from .tasks import delete_attachment
@@ -204,7 +206,11 @@ def projectlawyer_deleted(sender, **kwargs):
 def todo_item_status_change(sender, **kwargs):
     instance = kwargs.get('instance')
 
-    if instance.pk is not None:
+    if instance.pk is None:
+        # ensure the slug is present
+        if instance.slug in [None, '']:
+            instance.slug = generate_unique_slug(instance=instance)
+    else:
 
         if instance.user is not None:
 
