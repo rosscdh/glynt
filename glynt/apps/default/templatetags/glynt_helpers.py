@@ -21,13 +21,6 @@ current_date_format.is_safe = True
 
 
 @register.simple_tag
-def navactive(request, urls):
-    if request.path in ( reverse(url) for url in urls.split() ):
-        return "active"
-    return ""
-
-
-@register.simple_tag
 def current_site_domain():
     site = Site.objects.get_current()
     return site.domain
@@ -52,24 +45,6 @@ def colorize_acronym(acronym):
 colorize_acronym.is_safe = True
 
 
-@register.inclusion_tag('document/partials/document_status.html')
-def document_status(document):
-    status = None
-    if document.num_signed == 0 and document.num_invited == 0:
-        status = 'no_invites'
-    elif document.num_invited in [0, None, '']:
-        status = 'no_invites'
-    elif document.num_signed == document.num_invited:
-        status = 'signed'
-    elif document.num_signed != document.num_invited:
-        status = 'out'
-
-    return {'status': status,
-        'num_invited': document.num_invited,
-        'num_signed': document.num_signed,
-        'meta': document.meta_data}
-
-
 @register.inclusion_tag('moment/moment.js')
 def moment_js(selector=None):
     selector = '[data-humanize-date]' if selector is None else selector
@@ -92,21 +67,6 @@ def moment(date_object, default_date=None):
         'unix_timestamp': unix_timestamp,
         'default_date': default_date
     }
-
-
-@register.inclusion_tag('comments/form.html')
-def comment_form(form, next):
-    return {'form': form,
-        'next': next}
-
-
-@register.filter
-def ensure_number(num):
-    if not isinstance(num, ( int, long )):
-        num = 0
-
-    ensure_number = num
-    return ensure_number
 
 
 @register.filter(takes_context=False)

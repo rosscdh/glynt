@@ -185,18 +185,3 @@ class TestHumaniseNumber(unittest.TestCase, TemplateRendererMixin):
 
         self.assertEqual(result, '0')
 
-
-class EnsureNumber(unittest.TestCase, TemplateRendererMixin):
-    def setUp(self):
-        self.context = {
-            'no_number': 'None',
-        }
-
-    def test_ensure_number_converts_string_to_zero(self):
-        result = self.render_template(
-            '{% load glynt_helpers %}'
-            ,'{{ no_number|ensure_number }}'
-            , context=self.context
-        )
-
-        self.assertEqual(result, '0')
