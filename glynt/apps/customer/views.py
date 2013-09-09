@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import user_passes_test
 from django.views.generic import DetailView, FormView
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
@@ -9,11 +11,20 @@ from django.http import Http404
 from glynt.apps.customer.services import EnsureCustomerService
 from glynt.apps.customer.models import Customer
 
-from . import CustomerRequiredViewMixin
 from .forms import CustomerProfileSetupForm
 
 import logging
 logger = logging.getLogger('django.request')
+
+
+class CustomerRequiredViewMixin(object):
+    """
+    Mixin to ensure that only a lawyer user 
+    can view this view
+    """
+    @method_decorator(user_passes_test(lambda u: u.profile.is_customer))
+    def dispatch(self, *args, **kwargs):
+        return super(CustomerRequiredViewMixin, self).dispatch(*args, **kwargs)
 
 
 class CustomerProfileSetupView(CustomerRequiredViewMixin, FormView):

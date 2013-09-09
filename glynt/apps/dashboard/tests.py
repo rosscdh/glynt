@@ -11,19 +11,24 @@ from model_mommy import mommy
 import httpretty
 import os
 
+#assert False
 
 #from nose.tools import set_trace; set_trace()
 class DashboardLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
     test_path = os.path.dirname(__file__)
+    def setUp(self):
+        super(DashboardLawyerTest, self).setUp()
+
+        self.url = reverse('dashboard:overview')
 
     def test_dashboard_lawyer_access_anonymous(self):
-        resp = self.client.get('/dashboard/')
+        resp = self.client.get(self.url)
         self.assertEqual(resp.status_code, 302)
 
     def test_dashboard_access(self):
         self.client.login(username=self.lawyer_user.username, password=self.password)
 
-        resp = self.client.get('/dashboard/')
+        resp = self.client.get(self.url)
 
         self.assertEqual(resp.status_code, 200)
         self.assertTrue('project' in resp.context)
@@ -42,8 +47,7 @@ class DashboardLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
         self.project_lawyer_join.status = self.project_lawyer_join.LAWYER_STATUS.potential
         self.project_lawyer_join.save(update_fields=['status'])
 
-        url = reverse('dashboard:overview')
-        self.assertTrue(self.load_casper_file(js_file='dashboard.js', test_label='Test the Dashboard View for a Lawyer', url=url))
+        self.assertTrue(self.load_casper_file(js_file='dashboard.js', test_label='Test the Dashboard View for a Lawyer', url=self.url))
         # from nose.tools import set_trace; set_trace()
 
 
