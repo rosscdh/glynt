@@ -20,7 +20,7 @@ class CompanyProfileForm(BuilderBaseForm):
     """
     page_title = 'Your Company Profile'
     page_description = 'Enter some basic details about your company'
-    #data_bag = 'glynt.apps.company.bunches.UserIntakeCompanyBunch'
+    data_bag = 'glynt.apps.project.bunches.ProjectIntakeBunch'
 
     founder_name = forms.CharField()
     founder_email = forms.EmailField()
@@ -70,9 +70,6 @@ class CompanyProfileForm(BuilderBaseForm):
             )
         )
         super(CompanyProfileForm, self).__init__(*args, **kwargs)
-
-    def get_update_url(self, **kwargs):
-        return '/api/v1/company/data/{pk}'.format(pk=kwargs.get('project').company.pk)
 
 
 @parsleyfy

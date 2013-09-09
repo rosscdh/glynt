@@ -16,8 +16,6 @@ from glynt.apps.project.services.ensure_project import EnsureProjectService
 
 from glynt.apps.project.services.ensure_project import PROJECT_CREATED
 
-from glynt.apps.client.services import EnsureUserHasCompletedIntakeProcess
-
 from glynt.apps.transact.models import Transaction
 
 
@@ -64,11 +62,6 @@ class CreateProjectView(FormView):
             messages.error(self.request, _('Sorry, but we could not determine which transaction type you selected. Please try again.'))
             self.success_url = reverse('project:create')
 
-        # intake = EnsureUserHasCompletedIntakeProcess(user=self.request.user)
-        # if intake.is_complete() is False:
-        #     if u'INTAKE' not in transaction_types:
-        #         transaction_types.insert(0, u'INTAKE')
-
         project = self.save(transaction_types=transaction_types)
 
         self.success_url = reverse('transact:builder', kwargs={'project_uuid': project.uuid, 'tx_range': ','.join(transaction_types), 'step': 1})
@@ -94,13 +87,6 @@ class ProjectView(DetailView):
             raise Http404(_("No %(verbose_name)s found matching the query") %
                           {'verbose_name': queryset.model._meta.verbose_name})
         return obj
-
-    # def render_to_response(self, context, **response_kwargs):
-    #     """ @BUSINESSRULE if the viewing user is a founder, then mark their engagement notifications as read when they simply view the project """
-    #     #if self.object.customer.user == self.request.user:
-    #     mark_project_notifications_as_read(user=self.request.user, project=self.object)
-
-    #     return super(ProjectView, self).render_to_response(context, **response_kwargs)
 
 
 class LawyerContactProjectView(ProjectView):

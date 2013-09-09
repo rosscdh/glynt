@@ -97,7 +97,7 @@ class BuilderBaseForm(forms.Form):
     def initial_form_json_data(self, **kwargs):
         """ Populate the form_json_data field """
         if self.data_bag is not None:
-            self.fields['form_json_data'].initial = self.get_data_bag(user=self.user, **kwargs.get('initial', {})).as_json()
+            self.fields['form_json_data'].initial = self.get_data_bag(instance=self.request.project, request=self.request, user=self.user, **kwargs.get('initial', {})).as_json()
 
     def is_valid(self, *args, **kwargs):
         """
@@ -106,15 +106,16 @@ class BuilderBaseForm(forms.Form):
         is_valid should only return if its valid or not. Need to find a better way
         """
         is_valid = super(BuilderBaseForm, self).is_valid(*args, **kwargs)
+
         if is_valid:
             self.save()
+
         return is_valid
 
     def save(self, *args, **kwargs):
-        data_bag = self.get_data_bag(user=self.user)
-        if data_bag and hasattr(data_bag, 'save'):
+        data_bag = self.get_data_bag(instance=self.request.project, request=self.request, user=self.user, **kwargs)
 
-            # remove the unrequired fields
-            self.cleaned_data.pop('form_json_data', None)
+        # remove the unrequired fields
+        self.cleaned_data.pop('form_json_data', None)
 
-            return data_bag.save(**self.cleaned_data)
+        return data_bag.save(**self.cleaned_data)

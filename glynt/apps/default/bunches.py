@@ -2,7 +2,7 @@
 """
 """
 from bunch import Bunch
-
+import json
 import logging
 logger = logging.getLogger('lawpal.services')
 
@@ -20,21 +20,26 @@ class BaseDataBagBunch(Bunch):
     _model_data_key = None
     _instance = None
 
-    def __init__(self, instance, **kwargs):
+    def __init__(self, **kwargs):
+        instance = kwargs.get('instance')
+
         if self._model_databag_field is None:
             raise ModelDataBagFieldNotDefinedException
 
-        if not hasattr(instance, self._model_databag_field):
+        if instance and not hasattr(instance, self._model_databag_field):
             raise ModelDataBagFieldDoesNotExistException
 
         self._instance = instance
+
+    def as_json(self):
+        return json.dumps(self.data_bag)
 
     @property
     def data_bag(self):
         # set default value
         _data_bag = {}
 
-        # try to extract the feild but return the _data_bag dict if none found
+        # try to extract the field but return the _data_bag dict if none found
         _data_bag = getattr(self._instance, self._model_databag_field, _data_bag)
 
         # Return entire databag model field
