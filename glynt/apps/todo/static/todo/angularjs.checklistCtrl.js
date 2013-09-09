@@ -283,12 +283,15 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
  * @param  {Object} $scope The modal forms scope object
  * @param  {dialog} dialog The dialog object, which contains references to the dom (e.g. dialog.modelEl), functions etc.
  */
-function dialogController( $scope, dialog ) {
+function dialogController( $scope, dialog, dialogsModel ) {
 	$scope.formData = {};
 
-	this.setData = function() {
-		console.log(arguments)
-	};
+	var key;
+
+    // hook the passed data to the popin scope
+    for (key in dialogsModel) {
+        $scope[key] = dialogsModel[key];
+    }
 
 	/**
 	 * Close the modal dialog no further action required
