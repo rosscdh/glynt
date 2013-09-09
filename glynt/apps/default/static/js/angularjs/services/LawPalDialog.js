@@ -12,7 +12,7 @@ angular.module('lawpal').factory( "lawPalDialog", [ "$q", "$http", "$dialog", fu
 			 * @param  {String} url   URL of HTML form to retrieve
 			 * @return {Function}       promise for completion either save or cancel
 			 */
-			"open": function( title, url ) {
+			"open": function( title, url, itemScope ) {
 				var deferred = $q.defer();
 				var template = '';
 				var modalId = 'modal-' + new Date().getTime(); // ModalID is a class, but is also unique. A class is used because there is no method available to set the ID of the modal dialo div
@@ -23,12 +23,15 @@ angular.module('lawpal').factory( "lawPalDialog", [ "$q", "$http", "$dialog", fu
 				  '<button ng-click="close(null)" class="close" aria-hidden="true">&times;</button>'+
 				  '<h4>{{title}}</h4>'+
 				  '</div>'+
+				  '<form ng-submit="save(\'.{modalId}\')">'+
 				  '<div class="modal-body">';
 			   	var templateFooter = '</div>'+
 				  '<div class="modal-footer">'+
-				  '<button ng-click="close()" class="btn" >Cancel</button>'+
-				  '<button ng-click="save( \'.' + modalId + '\')" class="btn btn-primary" >Save</button>'+
-				  '</div></div></div>';
+				  '<input type="button" ng-click="close()" class="btn" value="Cancel" />'+
+				  '<input type="submit" value="Save" class="btn btn-primary" />'+
+				  '</div>'+
+				  '</form>'+
+				  '</div></div>';
 
 				 // Configure modal dialog
 				var dialogOptions = {
@@ -37,17 +40,24 @@ angular.module('lawpal').factory( "lawPalDialog", [ "$q", "$http", "$dialog", fu
 					keyboard: true,
 					dialogFade: true,
 					backdropClick: true,
-					controller: "dialogController"
+					scope: itemScope,
+					controller: dialogController
 				};
 
 				title = title || "";
 
 				// Retrieve HTML form
 				$http.get( url ).success( function( html ) {
+					html = html.replace("form>","span>");
+					//html = html.replace(/ id=\"id_/g," ng-model=\"");
+					//html = html.replace(/ value=\"(.*?)\"/g," ng-init=\"name='{1}'\"");
+					
 					// Wrap the HTML inside the header and footer
 					template = templateHeader + html + templateFooter;
 					// Insert title
 					dialogOptions.template = template.replace("{{title}}", title);
+					dialogOptions.template = dialogOptions.template.replace("{modalId}", modalId);
+					dialogOptions.template = dialogOptions.template.replace("data-required=\"true\"", "required data-required");
 
 					// Open dialog
 					var d = $dialog.dialog( dialogOptions );

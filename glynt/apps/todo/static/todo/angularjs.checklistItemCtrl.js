@@ -69,16 +69,18 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [ '$scope', 'lawPalSer
 		var url = lawPalUrls.checklistItemFormUrl( $scope.model.project.uuid, item );
 
 		// Open edit form + dialog
-		lawPalDialog.open( "Edit item", url, item ).then( 
+		lawPalDialog.open( "Edit item", url, $scope ).then( 
 			function(result) { /* Success */
-				var csrf = null;
 				/* Update model */
 				if( result && result.name )  {
-					csrf= result.csrfmiddlewaretoken || null;
 					item.name = result.name;
 
-					$scope.saveItem( item, csrf );
+					$scope.saveItem( item );
 				}
+			},
+			function(result) { /* Error */
+				/* Update model */
+				console.error(result);
 			}
 		);
 	};

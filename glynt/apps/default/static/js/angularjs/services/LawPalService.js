@@ -118,9 +118,11 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		 * @param  {String} csrf [description]
 		 * @return {Function}	  promise for AJAX request
 		 */
-		"updateChecklistItem": function( item, csrf ) {
+		"updateChecklistItem": function( item ) {
 			//
 			var deferred = $q.defer();
+
+			delete item.csrfmiddlewaretoken;
 
 			if( item.id ) {
 				var options = {
@@ -157,7 +159,6 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			var actionDetails = {
 				"is_deleted": true
 			};
-
 
 			checkListItemResources.remove.save(options, actionDetails, function (results) { /* Success */
 				deferred.resolve(results);
