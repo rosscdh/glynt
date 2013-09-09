@@ -12,7 +12,7 @@ angular.module('lawpal').factory( "lawPalDialog", [ "$q", "$http", "$dialog", fu
 			 * @param  {String} url   URL of HTML form to retrieve
 			 * @return {Function}       promise for completion either save or cancel
 			 */
-			"open": function( title, url ) {
+			"open": function( title, url, itemScope ) {
 				var deferred = $q.defer();
 				var template = '';
 				var modalId = 'modal-' + new Date().getTime(); // ModalID is a class, but is also unique. A class is used because there is no method available to set the ID of the modal dialo div
@@ -40,7 +40,8 @@ angular.module('lawpal').factory( "lawPalDialog", [ "$q", "$http", "$dialog", fu
 					keyboard: true,
 					dialogFade: true,
 					backdropClick: true,
-					controller: "dialogController"
+					scope: itemScope,
+					controller: dialogController
 				};
 
 				title = title || "";
@@ -48,6 +49,9 @@ angular.module('lawpal').factory( "lawPalDialog", [ "$q", "$http", "$dialog", fu
 				// Retrieve HTML form
 				$http.get( url ).success( function( html ) {
 					html = html.replace("form>","span>");
+					//html = html.replace(/ id=\"id_/g," ng-model=\"");
+					//html = html.replace(/ value=\"(.*?)\"/g," ng-init=\"name='{1}'\"");
+					
 					// Wrap the HTML inside the header and footer
 					template = templateHeader + html + templateFooter;
 					// Insert title

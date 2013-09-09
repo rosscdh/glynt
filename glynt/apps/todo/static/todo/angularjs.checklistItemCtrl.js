@@ -69,7 +69,7 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [ '$scope', 'lawPalSer
 		var url = lawPalUrls.checklistItemFormUrl( $scope.model.project.uuid, item );
 
 		// Open edit form + dialog
-		lawPalDialog.open( "Edit item", url, item ).then( 
+		lawPalDialog.open( "Edit item", url, $scope ).then( 
 			function(result) { /* Success */
 				/* Update model */
 				if( result && result.name )  {

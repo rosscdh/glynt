@@ -286,6 +286,10 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 function dialogController( $scope, dialog ) {
 	$scope.formData = {};
 
+	this.setData = function() {
+		console.log(arguments)
+	};
+
 	/**
 	 * Close the modal dialog no further action required
 	 */
