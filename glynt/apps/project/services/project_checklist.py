@@ -158,7 +158,7 @@ class ToDoItemsFromDbMixin(object):
 
     def modify_item_values(self, item):
         item.__dict__.update(item.obj.__dict__)
-        logger.debug('checklist item status: %s %s' % (item.name, item.display_status,))
+        logger.debug('checklist item status: %s (%s)' % (item.name, item.display_status,))
 
     def bulk_create(self):
         from glynt.apps.todo.models import ToDo
@@ -287,7 +287,7 @@ class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin, 
             except IndexError:
                 next = None
 
-            logger.debug('slug: {slug} == {item_slug} type: {type} == {type_b}'.format(slug=item.slug, item_slug=slug, type=type(str(item.slug)), type_b=type(str(slug))))
+            #logger.debug('slug: {slug} == {item_slug} type: {type} == {type_b}'.format(slug=item.slug, item_slug=slug, type=type(str(item.slug)), type_b=type(str(slug))))
 
             if str(item.slug) == str(slug):
                 navigation_items.prev = previous
