@@ -20,8 +20,7 @@ class BaseDataBagBunch(Bunch):
     _model_data_key = None
     _instance = None
 
-    def __init__(self, **kwargs):
-        instance = kwargs.get('instance')
+    def __init__(self, instance, **kwargs):
 
         if self._model_databag_field is None:
             raise ModelDataBagFieldNotDefinedException
