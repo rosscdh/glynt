@@ -16,8 +16,6 @@ class AngularAttribsFormFieldsMixin(object):
 
             attrs.update({
                 'data-ng-model': field,
-                # use the form.initial before trying the field.initial otherwise its jsut an empty string
-                'data-ng-init': self.initial[field] if field in self.initial and self.initial[field] is not None else self.fields[field].initial if self.fields[field].initial is not None else '',
             })
 
             self.fields[field].widget.attrs = attrs
