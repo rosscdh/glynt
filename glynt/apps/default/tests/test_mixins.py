@@ -32,11 +32,9 @@ class TestAngularAttribsFormFieldsMixin(unittest.TestCase):
         self.html = str(self.subject)
 
     def test_angular_added_to_name_with_initial(self):
-        self.assertIn('data-ng-init="{field}"'.format(field="field=&#39;We have Initial&#39;"), self.html)
         self.assertIn('data-ng-model="name_with_initial"', self.html)
 
     def test_angular_added_to_name_without_initial(self):
-        self.assertIn('data-ng-init=""', self.html)
         self.assertIn('data-ng-model="name_without_initial"', self.html)
 
 
@@ -49,9 +47,7 @@ class TestAngularAttribsFormFieldsMixin_Initialized(unittest.TestCase):
         self.html = str(self.subject)
 
     def test_angular_added_to_name_with_initial(self):
-        self.assertIn('data-ng-init="{field}"'.format(field="field=&#39;We have a different Initial Value now&#39;"), self.html)
         self.assertIn('data-ng-model="name_with_initial"', self.html)
 
     def test_angular_added_to_name_without_initial(self):
-        self.assertIn('data-ng-init=""', self.html)
         self.assertIn('data-ng-model="name_without_initial"', self.html)
