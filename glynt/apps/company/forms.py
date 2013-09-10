@@ -20,7 +20,7 @@ class CompanyProfileForm(BuilderBaseForm):
     """
     page_title = 'Your Company Profile'
     page_description = 'Enter some basic details about your company'
-    #data_bag = 'glynt.apps.company.bunches.UserIntakeCompanyBunch'
+    data_bag = 'glynt.apps.project.bunches.ProjectIntakeBunch'
 
     founder_name = forms.CharField()
     founder_email = forms.EmailField()
@@ -70,9 +70,6 @@ class CompanyProfileForm(BuilderBaseForm):
             )
         )
         super(CompanyProfileForm, self).__init__(*args, **kwargs)
-
-    def get_update_url(self, **kwargs):
-        return '/api/v1/company/data/{pk}'.format(pk=kwargs.get('project').company.pk)
 
 
 @parsleyfy
@@ -157,7 +154,10 @@ class CompanyAndFinancingProfileForm(CrispyExFieldsetFieldRemovalMixin, CompanyP
     page_description = 'Enter some basic details about your company and your finance round requirements'
 
     def __init__(self, *args, **kwargs):
-        self.helper = FormHelper()
+        super(CompanyAndFinancingProfileForm, self).__init__(*args, **kwargs)
+
+        self.helper = FormHelper() if not self.helper else self.helper
+
         self.helper.layout = Layout(
             Fieldset(
                 'Founding Team',
@@ -191,7 +191,21 @@ class CompanyAndFinancingProfileForm(CrispyExFieldsetFieldRemovalMixin, CompanyP
                 'ip_nolonger_affiliated',
                 'ip_otherthan_founder',
                 'ip_university_affiliation',
+            ),
+            Fieldset(
+                'Which of the following do you have?',
+                'doc_exists_cert_incorm',
+                'doc_exists_action_written_consent',
+                'doc_exists_initial_written_consent', 
+                'doc_exists_bylaws', 
+                'doc_exists_shareholder_agr', 
+                'doc_exists_ein_letter',
+                'doc_exists_stock_purchase_agreement',
+                'doc_exists_ip_assignment',
+                'doc_exists_notice_of_stock_issuance',
+                'doc_exists_stock_certs', 
+                'doc_exists_83b', 
+                'doc_exists_stock_option_plan'
             )
         )
-        super(CompanyAndFinancingProfileForm, self).__init__(*args, **kwargs)
         self.unify_fields()

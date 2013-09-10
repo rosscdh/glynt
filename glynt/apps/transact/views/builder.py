@@ -67,21 +67,15 @@ class BuilderWizardView(NamedUrlSessionWizardView):
         if type(tx_range) == str:
             tx_range = [tx_range]
 
-        # if intake is in the list, then it should be done first
-        # if 'INTAKE' in tx_range:
-        #     tx_range.pop(tx_range.index('INTAKE'))  # remove the INTAKE item from the list
-        #     self.add_form_to_set(current_form_set=form_list, form_set=TX_OPTIONS.get('INTAKE').get('forms'))
-
-        # import the appropriate forms and their templates
-        tx_options_keys = TX_OPTIONS.keys()
-
         """
         @BUSINESSRULE if we have a multiple selected it must be the combined transaction form
         """
-        if len(tx_options_keys) > 1:
+        if len(tx_range) > 1:
             tx_range = ['CS_SF_ES']
 
         for tx in tx_range:
+            tx_options_keys = TX_OPTIONS.keys()
+
             if tx in tx_options_keys:
                 # @BUSINESSRULE - intake form must always be first
                 self.add_form_to_set(current_form_set=form_list, form_set=TX_OPTIONS.get(tx).get('forms'))
@@ -131,10 +125,10 @@ class BuilderWizardView(NamedUrlSessionWizardView):
         """
         initial = super(BuilderWizardView, self).get_form_initial(step=step)
 
-        data = self.form_list[step].get_data_bag(user=self.request.user)
+        data = self.form_list[step].get_data_bag(instance=self.request.project, request=self.request, user=self.request.user)
 
-        if data is not None and hasattr(data, 'get_data_bag'):
-            initial.update(data.get_data_bag())
+        if data is not None and hasattr(data, 'data_bag'):
+            initial.update(data.data_bag)
 
         return initial
 
