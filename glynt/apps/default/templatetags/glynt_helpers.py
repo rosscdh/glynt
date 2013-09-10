@@ -27,6 +27,14 @@ def current_site_domain():
 current_site_domain.is_safe = True
 
 
+@register.filter
+def desluggerize(slug):
+    for r in ['-', '_']:
+        slug = slug.replace(r, ' ')
+    return slug
+desluggerize.is_safe = True
+
+
 @register.simple_tag
 def colorize_acronym(acronym):
     color_class = None

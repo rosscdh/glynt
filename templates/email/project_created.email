@@ -12,10 +12,10 @@
             <h2>Customer Information</h2>
             
             <ul>
-                <li><b>first_name:</b> {{ customer.data.first_name }}</li>
-                <li><b>last_name:</b> {{ customer.data.last_name }}</li>
+                <li><b>first name:</b> {{ customer.data.first_name }}</li>
+                <li><b>last name:</b> {{ customer.data.last_name }}</li>
                 <li><b>company:</b> {{ customer.data.company }}</li>
-                <li><b>agree_tandc:</b> {{ customer.data.agree_tandc }}</li>
+                <li><b>agree t and c:</b> {{ customer.data.agree_tandc }}</li>
                 <li><b>telephone:</b> {{ customer.data.telephone }}</li>
                 <li><b>email:</b> {{ customer.data.email }}</li>
             </ul>
@@ -23,7 +23,7 @@
             <h2>Project Information</h2>
             <ul>
             {% for key, value in project_data.iteritems %}
-                <li><b>{{ key }}:</b> {{ value }}</li>
+                <li><b>{{ key|desluggerize|title }}:</b> {{ value|urlize }}</li>
             {% endfor %}
             </ul>
         </td>
@@ -39,19 +39,18 @@ Please assign 2 matching lawyers to this project at: {% current_site_domain %}{%
 Customer Information
 --------------------
 
-**first_name**: {{ customer.data.first_name }}
-**last_name**: {{ customer.data.last_name }}
+**first name**: {{ customer.data.first_name }}
+**last name**: {{ customer.data.last_name }}
 **company**: {{ customer.data.company }}
-**agree_tandc**: {{ customer.data.agree_tandc }}
+**agree t and c**: {{ customer.data.agree_tandc }}
 **telephone**: {{ customer.data.telephone }}
 **email**: {{ customer.data.email }}
 
 
 Project Information
 -------------------
-
 {% for key, value in project_data.iteritems %}
-**{{ key }}**: {{ value }}
+**{{ key|desluggerize|title }}**: {{ value }}
 {% endfor %}
 
 {% endblock %}

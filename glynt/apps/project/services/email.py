@@ -86,9 +86,12 @@ class SendNewProjectEmailsService(SendProjectEmailsService):
     def __init__(self, project, sender, **kwargs):
         super(SendNewProjectEmailsService, self).__init__(project=project, sender=sender, recipients=None, notification=None)
 
+        company = self.project.customer.primary_company
+
         self.context.update({
+            'subject': '{company} created a new project'.format(company=company),
             'customer': self.project.customer,
-            'company': self.project.customer.primary_company,
+            'company': company,
             'project_data': self.project.data,
         })
 
