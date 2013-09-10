@@ -29,8 +29,7 @@
                     {% else %}
                         <li class="project-block">
                             <a href="{% url 'dashboard:project' uuid=project.uuid %}">
-                                {# <span>{{ 'Startup, Inc. &mdash; Company Incorporation, Formation and Setup; Seed Financing: Convertible' | truncatechars:80 }}</span> #}
-                                <span class="project-name">Startup, Inc. &mdash; Company Incorporation, Formation and Setup; Seed Financing: Convertible</span>
+                                <span class="project-name">{% project_name project %}</span>
                             </a>
                         </li>
                     {% endif %}
