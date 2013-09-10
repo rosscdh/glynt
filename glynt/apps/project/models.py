@@ -68,7 +68,7 @@ class Project(models.Model):
 
     @property
     def pusher_id(self):
-        return self.uuid
+        return str(self.uuid)
 
     @property
     def primary_lawyer(self):
