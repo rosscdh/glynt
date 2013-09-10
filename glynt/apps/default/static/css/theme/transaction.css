@@ -53,8 +53,11 @@ p.intake-save a {
 }
 
 
+.founder-block .cloned-region .close {
+    margin: 15px -15px 0 0;
+}
 .founder-block .cloned-region legend {
-    display:none;
+    display: none;
 }
 @media (min-width: 992px) {
     .founder-group {
