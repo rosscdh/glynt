@@ -133,9 +133,18 @@
         }
     };
 
+
     $(document).ready(function () {
+
+        // Enable pusher logging - don't include this in production
+        {% if DEBUG %}Pusher.log = function (message) {
+          if (window.console && window.console.log) {
+            window.console.log(message);
+          }
+        };{% endif %}
         var pusher = new Pusher('{{ PUSHER_KEY }}');
-        var channel = pusher.subscribe('{{ object.pusher_id }}');
+        var channel = pusher.subscribe('{{ project.pusher_id }}');
+
         channel.bind_all(function (event_name, data) {
             if ( typeof data == 'object' && data.label ) {
                 /**
@@ -144,10 +153,11 @@
                 GlyntJsMessages.add_message('<a href="javascript:document.location.reload();">Click to refresh</a>');
                 GlyntJsMessages.show();
                 **/
+
                 if (data.event == 'todo.status_change') {
-                    update_todo_status(data);
+                    
                 } else {
-                    add_stream_item(data);
+                    
                 }
             }
 
