@@ -258,8 +258,6 @@ def on_action_created(sender, **kwargs):
 
                 event = action.data.get('event', 'action.created')
 
-                pusher_service = PusherPublisherService(channel=target.pusher_id, event=event)
-
                 user_name = action.actor.get_full_name()
                 user_email = action.actor.email
 
@@ -269,7 +267,16 @@ def on_action_created(sender, **kwargs):
                                         timestamp='',
                                         **action.data)
 
+                pusher_service = PusherPublisherService(channel=target.pusher_id, event=event)
                 pusher_service.process(label=action.verb, comment=action.verb, **info_object)
+
+                # if the target has a project attached to it
+                if hasattr(target, 'project'):
+                    # send the same event to the project channel
+                    # so that the other project channel subscribers
+                    # can hear it
+                    project_pusher_service = PusherPublisherService(channel=target.project.pusher_id, event=event)
+                    project_pusher_service.process(label=action.verb, comment=action.verb, **info_object)
 
                 recipients = None
                 url = None
