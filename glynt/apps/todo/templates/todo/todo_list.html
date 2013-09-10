@@ -80,6 +80,7 @@
     <script type="text/javascript" src="{{ STATIC_URL }}todo/angularjs.checklistCtrl.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}todo/angularjs.checklistItemCtrl.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}todo/angularjs.checklistItemDirective.js"></script>
+    <script type="text/javascript" src="//d3dy5gmtp8yhk7.cloudfront.net/2.1/pusher.min.js"></script>
 
     <script>
     /**
@@ -131,6 +132,27 @@
             }
         }
     };
+
+    $(document).ready(function () {
+        var pusher = new Pusher('{{ PUSHER_KEY }}');
+        var channel = pusher.subscribe('{{ object.pusher_id }}');
+        channel.bind_all(function (event_name, data) {
+            if ( typeof data == 'object' && data.label ) {
+                /**
+                GlyntJsMessages.clear = true;
+                GlyntJsMessages.add_message(data.label);
+                GlyntJsMessages.add_message('<a href="javascript:document.location.reload();">Click to refresh</a>');
+                GlyntJsMessages.show();
+                **/
+                if (data.event == 'todo.status_change') {
+                    update_todo_status(data);
+                } else {
+                    add_stream_item(data);
+                }
+            }
+
+        });
+    });
     </script>
 {% endblock %}
 
