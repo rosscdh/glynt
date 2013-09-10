@@ -7002,6 +7002,25 @@ section.checklist-category {
   padding-top: 50px;
   margin-top: -50px;
 }
+.project-block {
+  width: 200px;
+}
+@media (min-width: 992px) {
+  .project-block {
+    width: 400px;
+  }
+}
+@media (min-width: 1200px) {
+  .project-block {
+    width: 600px;
+  }
+}
+.project-name {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .navbar {
   margin-bottom: 0;
 }
