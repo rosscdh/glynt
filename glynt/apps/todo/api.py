@@ -60,6 +60,11 @@ class ToDoResource(BaseApiModelResource):
             'project': ['exact'],
         }
 
+    def dehydrate(self, bundle):
+        # Add display_status to the bundled object
+        bundle.data['display_status'] = bundle.obj.display_status
+        return bundle
+
 from tastypie.authentication import Authentication
 
 class AttachmentResource(BaseApiModelResource):
