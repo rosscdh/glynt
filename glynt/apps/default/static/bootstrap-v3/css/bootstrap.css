@@ -300,13 +300,13 @@ p {
   color: #555555;
 }
 .brand {
-  color: #1ebfd6;
+  color: #1aabc0;
 }
 .alt {
   color: #f65641;
 }
 .softer {
-  color: #a2a2a2;
+  color: #7c7c7c;
 }
 small,
 .small {
@@ -1967,7 +1967,8 @@ fieldset[disabled] .btn-link:focus {
 }
 .btn-huge {
   padding: 9.799999999999999px 22.4px;
-  font-size: 12.6px;
+  font-size: 18px;
+  font-weight: normal;
 }
 .btn-large {
   padding: 9.1px 20.8px;
