@@ -15,7 +15,9 @@
 {% block body %}
     {% csrf_token %}
     <!-- start: AngularJS: checklist controller //-->
-    <div class="container checklist-view" ng-controller="checklistCtrl" ng-init="initalise( { 'project': { 'uuid': '{{ project.uuid }}' } } )">
+    <!-- var pusher = new Pusher('{{ PUSHER_KEY }}');
+        var channel = pusher.subscribe('{{ project.pusher_id }}');//-->
+    <div class="container checklist-view" ng-controller="checklistCtrl" ng-init="initalise( { 'project': { 'uuid': '{{ project.uuid }}' }, 'pusher': { 'key':'{{ PUSHER_KEY }}', 'channel':'{{ project.pusher_id }}' } } )">
         <div class="row">
             <div class="col col-lg-3">
                 <div class="sidebar" data-spy="affix" data-offset-top="80">
@@ -135,8 +137,9 @@
 
     $(document).ready(function () {
         var pusher = new Pusher('{{ PUSHER_KEY }}');
-        var channel = pusher.subscribe('{{ object.pusher_id }}');
+        var channel = pusher.subscribe('{{ project.pusher_id }}');
         channel.bind_all(function (event_name, data) {
+            console.log( "data", data );
             if ( typeof data == 'object' && data.label ) {
                 /**
                 GlyntJsMessages.clear = true;
@@ -145,9 +148,9 @@
                 GlyntJsMessages.show();
                 **/
                 if (data.event == 'todo.status_change') {
-                    update_todo_status(data);
+                    console.log( 'status change', data );
                 } else {
-                    add_stream_item(data);
+                    console.log( 'unhndled event', data.event, data );
                 }
             }
 

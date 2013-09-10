@@ -16,6 +16,10 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		'showDeletedItems': false // If true deleted items are displayed also
 	};
 
+	$scope.config = {
+		'pusher': {}
+	}
+
 	/*
 	// @@ remove: quick async test and intermediate test to see if socket style updates will work
 	setTimeout( function(){
@@ -37,6 +41,11 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 			$scope.loadCategories();
 			$scope.loadChecklist();
 			$scope.loadFeedbackRequests();
+
+			if( options.pusher ) {
+				$scope.config.pusher = options.pusher;
+				console.log( $scope.config );
+			}
 		} else {
 			$scope.addAlert( "Unable to load items at this this, please try again later", "error" );
 		}
@@ -73,7 +82,8 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 	$scope.saveItem = function( item ) {
 		if( item && item.name ) {
 			/* Update item update */
-			var promise = lawPalService.updateChecklistItem( item );
+			debugger;
+			var promise = lawPalService.updateChecklistItem( item, $scope.config.pusher );
 			promise.then(
 				function( results ) { /* Success */
 					$scope.addAlert( "Item updated", "success" );

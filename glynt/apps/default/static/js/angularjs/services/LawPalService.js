@@ -118,12 +118,15 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		 * @param  {String} csrf [description]
 		 * @return {Function}	  promise for AJAX request
 		 */
-		"updateChecklistItem": function( item ) {
+		"updateChecklistItem": function( item, pusherConfig ) {
 			//
 			var deferred = $q.defer();
 
 			delete item.csrfmiddlewaretoken;
 
+			if( pusherConfig && pusherConfig.channel )
+					item.pusher_id = pusherConfig.channel;
+				
 			if( item.id ) {
 				var options = {
 					"id": item.id
