@@ -140,12 +140,17 @@ fab $TARGET_ENV deploy assets
 fab $TARGET_ENV requirements clean_pyc syncdb migrate
 ```
 
-## CasperJS ##
+## CasperJS && PhantomJS ##
 
 ### OSX ###
 
+Should be >= casperjs: 1.1.0-DEV
+Should be >= phantomjs: 1.9.0
+
 1. ```brew update```
-2. ```brew install casperjs```
+2. ```brew install phantomjs```
+2. ```brew install casperjs --devel```
+
 
 ## UBUNTU ##
 
