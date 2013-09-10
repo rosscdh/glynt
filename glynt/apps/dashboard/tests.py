@@ -86,7 +86,7 @@ class ChecklistLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
             edit = self.pq(elem.find('a.item-edit'))
             self.assertTrue(edit.attr('data-toggle') == 'modal') # is a modal link
             self.assertTrue(edit.attr('data-target') == '#modal-checklist-item') # and the modal target is correct
-            
+
             # test we have 1 delete link
             self.assertTrue(len(elem.find('a.item-delete')) == 1)
 

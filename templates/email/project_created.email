@@ -20,7 +20,7 @@
             <h2>Project Information</h2>
             <ul>
             {% for key, value in project_data.iteritems %}
-                <li><b>{{ key }}:</b> {{ value }}</li>
+                <li><b>{{ key|desluggerize|title }}:</b> {{ value|urlize }}</li>
             {% endfor %}
             </ul>
         </td>
@@ -36,18 +36,17 @@
 Customer Information
 --------------------
 
-**First Name**: {{ customer.data.first_name }}
-**Last Name**: {{ customer.data.last_name }}
-**Company**: {{ customer.data.company }}
-**Telephone**: {{ customer.data.telephone }}
-**Email**: {{ customer.data.email }}
+**first name**: {{ customer.data.first_name }}
+**last name**: {{ customer.data.last_name }}
+**company**: {{ customer.data.company }}
+**telephone**: {{ customer.data.telephone }}
+**email**: {{ customer.data.email }}
 
 
 Project Information
 -------------------
-
 {% for key, value in project_data.iteritems %}
-**{{ key }}**: {{ value }}
+**{{ key|desluggerize|title }}**: {{ value }}
 {% endfor %}
 
 {% endblock %}

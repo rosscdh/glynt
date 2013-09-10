@@ -535,3 +535,27 @@ section.checklist-category {
   padding-top: 50px;
   margin-top: -50px;
 }
+
+
+
+.project-block {
+  width: 200px;
+}
+// Medium and large device columns (desktop and up)
+@media (min-width: @screen-desktop) {
+  .project-block {
+    width: 400px;
+  }
+}
+// Large desktops and up
+@media (min-width: @screen-large-desktop) {
+  .project-block {
+    width: 600px;
+  }
+}
+.project-name {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

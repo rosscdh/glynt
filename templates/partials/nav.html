@@ -15,9 +15,9 @@
             {% if project %}
                 <ul class="nav navbar-nav pull-left">
                     {% if projects.count > 1 %}
-                        <li class="dropdown">
+                        <li class="dropdown project-block">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" id="account-menu">
-                                <span><small>{% project_name project %}</small></span>
+                                <span class="project-name"><small>{% project_name project %}</small></span>
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu" aria-labelledby="account-menu">
@@ -27,11 +27,15 @@
                             </ul>
                         </li>
                     {% else %}
-                        <li><a href="{% url 'dashboard:project' uuid=project.uuid %}"><span>{% project_name project %}</span></a></li>
+                        <li class="project-block">
+                            <a href="{% url 'dashboard:project' uuid=project.uuid %}">
+                                <span class="project-name">{% project_name project %}</span>
+                            </a>
+                        </li>
                     {% endif %}
                 </ul>
             {% endif %}
-            
+
             <ul class="nav navbar-nav pull-right">
                 {% if user.is_authenticated %}
                     {% if project %}
@@ -66,9 +70,10 @@
                 {% else %}
                     <!-- <li><a href="/"><i class="glyphicon glyphicon-home"></i></a></li> -->
 <!--                     <li><a href="{% url 'public:about' %}">{% trans 'About' %}</a></li>
- -->  
+ -->
 <!--                   <li class="text-muted"><a href="#" class="text-muted"><i class="glyphicon glyphicon-time"></i> {% trans "Prices" %}</a></li>
- -->                   <li><a href="{% url 'public:why-lawpal' %}">{% trans "Why We're Better" %}</a></li>
+ -->
+                    <li><a href="{% url 'public:why-lawpal' %}">{% trans "Why We're Better" %}</a></li>
                     <li><a href="{% url 'public:must-reads' %}">{% trans 'LawPal Pulse' %}</a></li>
                     <li><a href="{% url 'public:for-lawyers' %}"><span class="softer">{% trans 'For Lawyers' %}</span></a></li>
                     <li class="nav-signin">
