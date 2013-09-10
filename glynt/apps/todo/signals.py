@@ -28,6 +28,19 @@ from bunch import Bunch
 import logging
 logger = logging.getLogger('django.request')
 
+def get_todo_info_object(todo):
+    return {
+        'instance': {
+            'pk': todo.pk,
+            'slug': todo.slug,
+            'name': todo.name,
+            'display_status': todo.display_status,
+            'status': todo.status,
+            'is_deleted': todo.is_deleted,
+            'uri': todo.get_absolute_url(),
+        }
+    }
+
 
 """
 Attachment handler events
@@ -202,6 +215,32 @@ def projectlawyer_deleted(sender, **kwargs):
         pass
 
 
+@receiver(post_save, sender=ToDo, dispatch_uid='todo.item_crud')
+def todo_item_crud(sender, **kwargs):
+    is_new = kwargs.get('created', False)
+    instance = kwargs.get('instance')
+
+    pusher_service = PusherPublisherService(channel=instance.project.pusher_id, event='todo.post_save')
+
+    info_object = get_todo_info_object(todo=instance)
+
+    if is_new == True:
+        pusher_service.event = 'todo.is_new'
+        comment = label = 'Created new item "{name}"'.format(name=instance.name)
+
+    elif instance.is_deleted == True:
+        pusher_service.event = 'todo.is_deleted'
+        comment = label = 'Deleted "{name}"'.format(name=instance.name)
+
+    else:
+        pusher_service.event = 'todo.is_updated'
+        comment = label = 'Updated "{name}"'.format(name=instance.name)
+
+    pusher_service.process(label=label, comment=comment, **info_object)
+
+
+
+
 @receiver(pre_save, sender=ToDo, dispatch_uid='todo.status_change')
 def todo_item_status_change(sender, **kwargs):
     instance = kwargs.get('instance')
@@ -227,10 +266,9 @@ def todo_item_status_change(sender, **kwargs):
                             action_object=instance,
                             target=instance,
                             content=None,
-                            instance_status=instance.status,
-                            instance_dispay_status=instance.display_status,
                             event_action=event_action,
-                            event='todo.status_change')
+                            event='todo.status_change',
+                            **get_todo_info_object(todo=instance))
 
                 if instance.status in [TODO_STATUS.closed, TODO_STATUS.resolved]:
                     """
@@ -267,16 +305,17 @@ def on_action_created(sender, **kwargs):
                                         timestamp='',
                                         **action.data)
 
-                pusher_service = PusherPublisherService(channel=target.pusher_id, event=event)
-                pusher_service.process(label=action.verb, comment=action.verb, **info_object)
-
                 # if the target has a project attached to it
                 if hasattr(target, 'project'):
                     # send the same event to the project channel
                     # so that the other project channel subscribers
                     # can hear it
-                    project_pusher_service = PusherPublisherService(channel=target.project.pusher_id, event=event)
-                    project_pusher_service.process(label=action.verb, comment=action.verb, **info_object)
+                    channels = [target.project.pusher_id, target.pusher_id]
+                    pusher_service = PusherPublisherService(channel=channels, event=event)
+                else:
+                    pusher_service = PusherPublisherService(channel=target.pusher_id, event=event)
+
+                pusher_service.process(label=action.verb, comment=action.verb, **info_object)
 
                 recipients = None
                 url = None
