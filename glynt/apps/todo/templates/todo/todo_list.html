@@ -90,6 +90,15 @@
     */
     var LawPal = {
         /**
+        * Current User Object
+        */
+        "user": {
+            'pk': {{ user.pk|default:'null'|jsonify }},
+            'username': '{{ user.username }}',
+            'full_name': '{{ user.get_full_name }}',
+            'is_authenticated': {{ user.is_authenticated|jsonify }},
+        },
+        /**
         * Primary list of the checklist items
         */
         "checklist_data": function () {
