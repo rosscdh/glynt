@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from glynt.apps.default.bunches import BaseDataBagBunch
 from bunch import Bunch
 
 import shortuuid
@@ -7,7 +8,18 @@ import logging
 logger = logging.getLogger('lawpal.services')
 
 
+class ProjectIntakeBunch(BaseDataBagBunch):
+    """
+    Bunch is used to Save Intake form data to the appropriate
+    data_bag (project.data)
+    """
+
+
 class ProjectIntakeFormIsCompleteBunch(Bunch):
+    """
+    Bunch is used to test if the project profile has been completed
+    integrated in views and in the middleware
+    """
     errors = None
     project = None
     company = None

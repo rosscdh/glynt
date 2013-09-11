@@ -4,36 +4,24 @@
 
 {% block content %}
     <tr>
-        <td align="left" colspan="3" height="40" width="100%" style="font-size: 0; line-height: 0;">
+        <td align="left">
             <p>{{ message }}</p>
 
-            <p>Please assign 2 matching lawyers to this project at: {% current_site_domain %}{% url 'admin:project_project_change' project.pk %}</p>
+            <p>{{ customer.data.company }} is looking for a lawyer to help with **Project Names**. If you are interested in working with this client, please reply to this email.</p>
 
             <h2>Customer Information</h2>
-            
             <ul>
-                <li><b>first_name:</b> {{ customer.data.first_name }}</li>
-                <li><b>last_name:</b> {{ customer.data.last_name }}</li>
-                <li><b>company:</b> {{ customer.data.company }}</li>
-                <li><b>agree_tandc:</b> {{ customer.data.agree_tandc }}</li>
-                <li><b>telephone:</b> {{ customer.data.telephone }}</li>
-                <li><b>email:</b> {{ customer.data.email }}</li>
-            <ul>
+                <li><b>Name :</b> {{ customer.data.first_name }} {{ customer.data.last_name }}</li>
+                <li><b>Company:</b> {{ customer.data.company }}</li>
+                <li><b>Telephone:</b> {{ customer.data.telephone }}</li>
+                <li><b>Email:</b> <a href="{{ customer.data.email }}">{{ customer.data.email }}</a></li>
+            </ul>
 
-            <h2>Company Information</h2>
+            <h2>Project Information</h2>
             <ul>
-                <li><b>incubator:</b> {{ company.data.incubator }}</li>
-                <li><b>current_status:</b> {{ company.data.current_status }}</li>
-                <li><b>profile_website:</b> {{ company.data.profile_website }}</li>
-                <li><b>description:</b> {{ company.data.description }}</li>
-                <li><b>has_option_plan:</b> {{ company.data.has_option_plan }}</li>
-                <li><b>target_states_and_countries:</b> {{ company.data.target_states_and_countries }}</li>
-                <li><b>num_officers:</b> {{ company.data.num_officers }}</li>
-                <li><b>num_employees:</b> {{ company.data.num_employees }}</li>
-                <li><b>num_consultants:</b> {{ company.data.num_consultants }}</li>
-                <li><b>ip_nolonger_affiliated:</b> {{ company.data.ip_nolonger_affiliated }}</li>
-                <li><b>ip_otherthan_founder:</b> {{ company.data.ip_otherthan_founder }}</li>
-                <li><b>ip_university_affiliation:</b> {{ company.data.ip_university_affiliation }}</li>
+            {% for key, value in project_data.iteritems %}
+                <li><b>{{ key|desluggerize|title }}:</b> {{ value|urlize }}</li>
+            {% endfor %}
             </ul>
         </td>
     </tr>
@@ -42,34 +30,23 @@
 {% block plain_body %}
 {{ message }}
 
-Please assign 2 matching lawyers to this project at: {% current_site_domain %}{% url 'admin:project_project_change' project.pk %}
+{{ customer.data.company }} is looking for a lawyer to help with **Project Names**. If you are interested in working with this client, please reply to this email.
 
 
 Customer Information
 --------------------
 
-first_name: {{ customer.data.first_name }}
-last_name: {{ customer.data.last_name }}
-company: {{ customer.data.company }}
-agree_tandc: {{ customer.data.agree_tandc }}
-telephone: {{ customer.data.telephone }}
-email: {{ customer.data.email }}
+**first name**: {{ customer.data.first_name }}
+**last name**: {{ customer.data.last_name }}
+**company**: {{ customer.data.company }}
+**telephone**: {{ customer.data.telephone }}
+**email**: {{ customer.data.email }}
 
 
-Company Information
+Project Information
 -------------------
-
-incubator: {{ company.data.incubator }}
-current_status: {{ company.data.current_status }}
-profile_website: {{ company.data.profile_website }}
-description: {{ company.data.description }}
-has_option_plan: {{ company.data.has_option_plan }}
-target_states_and_countries: {{ company.data.target_states_and_countries }}
-num_officers: {{ company.data.num_officers }}
-num_employees: {{ company.data.num_employees }}
-num_consultants: {{ company.data.num_consultants }}
-ip_nolonger_affiliated: {{ company.data.ip_nolonger_affiliated }}
-ip_otherthan_founder: {{ company.data.ip_otherthan_founder }}
-ip_university_affiliation: {{ company.data.ip_university_affiliation }}
+{% for key, value in project_data.iteritems %}
+**{{ key|desluggerize|title }}**: {{ value }}
+{% endfor %}
 
 {% endblock %}

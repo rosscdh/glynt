@@ -54,7 +54,7 @@ class ToDo(models.Model):
     objects = DefaultToDoManager()
 
     def __unicode__(self):
-        return '{name}'.format(name=self.name)
+        return u'{name}'.format(name=unicode(self.name))
 
     def can_read(self, user):
         return True if user in self.project.notification_recipients() else False

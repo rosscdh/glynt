@@ -25,7 +25,7 @@
                 <div class="empty-message empty-message-exclamation-sign">
                     <h3>We need some more information from you</h3>
                     <p>We can't continue with your transaction until you tell us a bit more about your startup.</p>
-                    <a href="{% url 'transact:builder' project_uuid=project.uuid tx_range='INTAKE' step='1' %}" class="btn btn-primary">Click here to complete your profile</a>
+                    <a href="{% url 'transact:builder' project_uuid=project.uuid tx_range=project.tx_range step='1' %}" class="btn btn-primary">Click here to complete your profile</a>
                 </div>
             </div>
         {% else %}
@@ -49,14 +49,14 @@
                         <div class="row">
                             <div class="col-12">
                                 <img src="{{STATIC_URL}}img/yael-contact-face.jpg" class="img-circle pull-left" style="width:40px; padding-right :8px;padding-top:6px;">
-                                <h4>Yael Citro <small class="pull-right"><a href="mailto:xw4ux8lx@incoming.intercom.io" class="btn btn-info btn-small" style="margin-top:-4px">Contact Yael</a></small>  <small>Co-Founder at LawPal </small></h4> 
+                                <h4>Yael Citro <small class="pull-right"><a href="mailto:xw4ux8lx@incoming.intercom.io" class="btn btn-info btn-small intercom" style="margin-top:-4px">Contact Yael</a></small>  <small>Co-Founder at LawPal </small></h4> 
                             </div>
                         </div>
                     </div>
                     <div class="callout callout-success empty">
                         <div class="empty-message empty-message-ok">
                             <h4>Your transaction profile is complete.</h4>
-                            {% if PROJECT_ENVIRONMENT == 'dev' %}<a href="{% url 'transact:builder' project_uuid=project.uuid tx_range='INTAKE' step='1' %}" class="">update</a>{% endif %}
+                            {% if PROJECT_ENVIRONMENT == 'dev' %}<a href="{% url 'transact:builder' project_uuid=project.uuid tx_range=project.tx_range step='1' %}" class="">update</a>{% endif %}
                         </div>
                     </div>
                 </div>

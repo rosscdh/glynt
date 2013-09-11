@@ -299,8 +299,8 @@ function loadAttachments() {
                     $.each(data.objects, function (i, context) {
                         addAttachment(attachments_elem, context);
                     });
-
-                    $('a.attachment-item:first').trigger('click');
+                    // Load the most recent item first
+                    $('a.attachment-item:last').trigger('click');
 
                 } else {
                     viewer_container.hide();

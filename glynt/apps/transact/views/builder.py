@@ -125,10 +125,10 @@ class BuilderWizardView(NamedUrlSessionWizardView):
         """
         initial = super(BuilderWizardView, self).get_form_initial(step=step)
 
-        data = self.form_list[step].get_data_bag(user=self.request.user)
+        data = self.form_list[step].get_data_bag(instance=self.request.project, request=self.request, user=self.request.user)
 
-        if data is not None and hasattr(data, 'get_data_bag'):
-            initial.update(data.get_data_bag())
+        if data is not None and hasattr(data, 'data_bag'):
+            initial.update(data.data_bag)
 
         return initial
 

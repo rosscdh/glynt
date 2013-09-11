@@ -353,7 +353,7 @@ p {
 }
 
 .brand {
-  color: #1ebfd6;
+  color: #1aabc0;
 }
 
 .alt {
@@ -361,7 +361,7 @@ p {
 }
 
 .softer {
-  color: #a2a2a2;
+  color: #7c7c7c;
 }
 
 small,
@@ -2231,7 +2231,8 @@ fieldset[disabled] .btn-link:focus {
 
 .btn-huge {
   padding: 9.799999999999999px 22.4px;
-  font-size: 12.6px;
+  font-size: 18px;
+  font-weight: normal;
 }
 
 .btn-large {
@@ -7880,6 +7881,7 @@ td.hidden-lg {
 }
 
 #wrap .feature-block.frame {
+  border-left: 2px solid #c8f1f8;
   padding-left: 15px;
   margin-left: 10px;
   border-left: 3px solid #42d0e5;
@@ -8388,6 +8390,27 @@ section.checklist-category {
   margin-top: -50px;
 }
 */
+
+.project-block {
+  width: 200px;
+}
+@media (min-width: 992px) {
+  .project-block {
+    width: 400px;
+  }
+}
+@media (min-width: 1200px) {
+  .project-block {
+    width: 600px;
+  }
+}
+.project-name {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .navbar {
   margin-bottom: 0;
 }

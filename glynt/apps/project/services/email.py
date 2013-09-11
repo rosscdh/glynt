@@ -63,9 +63,12 @@ class SendProjectEmailsService(object):
     def recipient_list(self):
         if type(self.recipients) in [list, tuple]:
             recipients = self.recipients
+
         else:
             recipients = [Bunch(name=u[0], email=u[1]) for u in settings.NOTICEGROUP_EMAIL]
+
         return [u.email for u in recipients]
+
 
     def process(self):
         send_templated_mail(
@@ -82,9 +85,14 @@ class SendNewProjectEmailsService(SendProjectEmailsService):
 
     def __init__(self, project, sender, **kwargs):
         super(SendNewProjectEmailsService, self).__init__(project=project, sender=sender, recipients=None, notification=None)
+
+        company = self.project.customer.primary_company
+
         self.context.update({
+            'subject': '{company} created a new project'.format(company=company),
             'customer': self.project.customer,
-            'company': self.project.customer.primary_company,
+            'company': company,
+            'project_data': self.project.data,
         })
 
     @property

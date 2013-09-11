@@ -119,6 +119,10 @@ class Project(models.Model):
         return [t.title for t in self.transactions.all()]
 
     @property
+    def tx_range(self):
+        return ','.join([t.slug for t in self.transactions.all()])
+
+    @property
     def display_status(self):
         return PROJECT_STATUS.get_desc_by_value(self.status)
 

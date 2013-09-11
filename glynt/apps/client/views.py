@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
-from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import UpdateView
-from django.views.generic.base import TemplateView
 from django.http import Http404
-from django.middleware.csrf import get_token
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -58,19 +55,9 @@ class ConfirmLoginDetailsView(UpdateView):
         form = self.get_form(form_class)
 
         if form.is_valid():
-            # messages.info(request, _('Welcome, you have successfully signed up.'))
             form.save()
             logger.info('User %s has confirmed their account' % request.user)
+
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
-
-
-class DashboardView(TemplateView):
-    template_name = 'client/dashboard.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(DashboardView, self).get_context_data(**kwargs)
-        context['csrf_raw_token'] = get_token(self.request)
-
-        return context

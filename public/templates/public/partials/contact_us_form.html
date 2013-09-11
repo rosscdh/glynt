@@ -3,9 +3,14 @@
 {% if is_modal %}
 
   {% include 'partials/messages.html' %}
-
   <form id="contact-us-form-modal" data-validate="parsley" action="{% url 'public:contact_us' %}" method="POST" class="form-horizontal">{% csrf_token %}
 {% else %}
+<div class="row">
+   <div class="col-10 col-offset-1">
+
+    <p class="lead">Email us directly at <a href="mailto:founders@lawpal.com">founders@lawpal.com</a> or fill out the form below. <br />Alternatively, come and see us at Founders Den in SoMa, San Francisco. </p>
+  </div>
+</div>
   <form id="contact-us-form" data-validate="parsley" action="{% url 'public:contact_us' %}" method="POST" class="form-horizontal">{% csrf_token %}
 {% endif %}
       {{ form.name|as_crispy_field }}
