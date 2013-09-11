@@ -67,6 +67,10 @@ class Project(models.Model):
         return checklist_items
 
     @property
+    def pusher_id(self):
+        return str(self.uuid)
+
+    @property
     def primary_lawyer(self):
         return self.get_primary_lawyer()
 

@@ -21,6 +21,7 @@ newrelic
 
 django-filepicker
 -e git+https://github.com/dcramer/django-uuidfield.git#egg=django-uuidfield
+shortuuid
 django-extensions
 django-braces
 django-templated-email
