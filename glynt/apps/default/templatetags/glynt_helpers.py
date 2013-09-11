@@ -53,6 +53,15 @@ def colorize_acronym(acronym):
 colorize_acronym.is_safe = True
 
 
+@register.filter
+def ensure_number(num):
+    if not isinstance(num, ( int, long, float )):
+        num = 0
+
+    ensure_number = num
+    return ensure_number
+
+
 @register.inclusion_tag('moment/moment.js')
 def moment_js(selector=None):
     selector = '[data-humanize-date]' if selector is None else selector
