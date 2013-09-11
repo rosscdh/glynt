@@ -143,6 +143,8 @@ def feedbackrequest_created(sender, **kwargs):
         #is_new = kwargs.get('created', False)
         feedbackrequest = kwargs.get('instance')
 
+        assigned = {'from': feedbackrequest.assigned_by.pk, 'to': [t.pk for t in feedbackrequest.assigned_to.all()]}
+
         if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.open:
             verb = '{assigned_by} requested feedback from {assigned_to} on checklist item {todo} for {project}'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), assigned_to=', '.join([u.get_full_name() for u in feedbackrequest.assigned_to.all()]), todo=feedbackrequest.attachment.todo, project=feedbackrequest.attachment.project)
             action.send(feedbackrequest.assigned_by,
@@ -154,7 +156,7 @@ def feedbackrequest_created(sender, **kwargs):
                         attachment=feedbackrequest.attachment.filename,
                         todo=feedbackrequest.attachment.todo.name,
                         status=feedbackrequest.attachment.todo.display_status,
-                        assigned={'from': feedbackrequest.assigned_by.pk, 'to': feedbackrequest.assigned_to.pk})
+                        assigned=assigned)
 
         if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.closed:
             verb = '{assigned_by} closed the feedback request that was assigned to them on checklist item {todo} for {project}'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), todo=feedbackrequest.attachment.todo, project=feedbackrequest.attachment.project)
@@ -167,7 +169,7 @@ def feedbackrequest_created(sender, **kwargs):
                         attachment=feedbackrequest.attachment.filename,
                         todo=feedbackrequest.attachment.todo.name,
                         status=feedbackrequest.attachment.todo.display_status,
-                        assigned={'from': feedbackrequest.assigned_by.pk, 'to': feedbackrequest.assigned_to.pk})
+                        assigned=assigned)
 
         if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.cancelled:
             verb = '{assigned_by} cancelled their feedback request on checklist item {todo} for {project}'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), todo=feedbackrequest.attachment.todo, project=feedbackrequest.attachment.project)
@@ -180,7 +182,7 @@ def feedbackrequest_created(sender, **kwargs):
                         attachment=feedbackrequest.attachment.filename,
                         todo=feedbackrequest.attachment.todo.name,
                         status=feedbackrequest.attachment.todo.display_status,
-                        assigned={'from': feedbackrequest.assigned_by.pk, 'to': feedbackrequest.assigned_to.pk})
+                        assigned=assigned)
 
 
 @receiver(post_save, sender=FeedbackRequest, dispatch_uid='feedbackrequest.status_change')
