@@ -3,7 +3,8 @@
  * @author <a href="mailtolee.j.sinclair@gmail.com">Lee Sinclair</a>
  * Date: 2 Sept 2013
  */
-angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService', 'lawPalUrls', 'lawPalDialog', '$location', '$anchorScroll', function( $scope, lawPalService, lawPalUrls, lawPalDialog, $location, $anchorScroll ) {
+angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService', 'lawPalUrls', 'lawPalDialog', '$location', '$anchorScroll', 'angularPusher', 
+	function( $scope, lawPalService, lawPalUrls, lawPalDialog, $location, $anchorScroll, angularPusher ) {
 
 	// Data is stored within a JavaSCript object to avoid any nasty scope overides
 	$scope.model = {
@@ -44,7 +45,10 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 
 			if( options.pusher ) {
 				$scope.config.pusher = options.pusher;
+				var key = options.pusher.key;
+				var channel = options.pusher.channel;
 				console.log( $scope.config );
+				angularPusher( key, channel );
 			}
 		} else {
 			$scope.addAlert( "Unable to load items at this this, please try again later", "error" );
@@ -82,7 +86,6 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 	$scope.saveItem = function( item ) {
 		if( item && item.name ) {
 			/* Update item update */
-			debugger;
 			var promise = lawPalService.updateChecklistItem( item, $scope.config.pusher );
 			promise.then(
 				function( results ) { /* Success */
@@ -223,7 +226,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 	$scope.findItemIndex = function( item ) {
 		var list = $scope.model.checklist;
 		for( var i=0; i<list.length; i++) {
-			if( list[i].id === item.id )
+			if( list[i].slug === item.slug )
 				return i;
 		}
 
@@ -285,6 +288,66 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 			}
 		);
 	};
+
+	/**
+	 * Given a JSON object update an existing checklist item with new data
+	 * @param  {Object} newData Object containg new data
+	 */
+	$scope.partialItemUpdate = function( newData ){
+		if( newData.slug ) {
+			// find checklist item
+			var checklistItem = $scope.itemBySlug( newData.slug );
+			// update details
+			if( typeof(checklistItem)==="object" ) {
+				for( key in newData ) {
+					checklistItem[key] = newData[key];
+				}
+				// As this event has not been invoked through the normal angular channels update the scope
+				$scope.$apply();
+			}
+		}
+	};
+
+	/**
+	 * Recieves messages to update one of the existing checklist items
+	 * @param  {Event} e    broadcast event
+	 * @param  {Object} data Data from the update event
+	 */
+	$scope.$on("todo.is_updated", function( e, data ){
+		if( typeof(data)==="object" && data.instance ) {
+			$scope.partialItemUpdate( data.instance );
+		}
+	});
+
+	/**
+	 * Recieves mesages to remove items from the checklist (is_deleted = true ), in fact this is the same as an update message
+	 * @param  {Event} e    Broadvast event
+	 * @param  {Object} data Data from the new checklist item event
+	 */
+	$scope.$on("todo.is_deleted", function( e, data ){
+		if( typeof(data)==="object" && data.instance ) {
+			$scope.partialItemUpdate( data.instance );
+		}
+	});
+
+	/**
+	 * Recieves messages to add new todo items
+	 * @param  {Event} e    Broadvast event
+	 * @param  {Object} data Data from the new checklist item event
+	 */
+	$scope.$on("todo.is_new", function( e, data ){
+		var newItem = null;
+
+		if( typeof(data)==="object" && data.instance ) {
+			newItem = data.instance;
+
+			if( $scope.findItemIndex( newItem ) === -1 )
+				{
+					$scope.addItemToChecklist( newItem );
+					$scope.$apply();
+				}
+		}
+	});
 
 }]);
 
