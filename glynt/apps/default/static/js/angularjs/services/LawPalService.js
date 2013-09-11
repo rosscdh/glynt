@@ -91,7 +91,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			$timeout(function () {
 				if (lawPalInterface && lawPalInterface.feedback_requests) {
 					// Retrieve checklist items
-					feedbackRequests = lawPalInterface.feedback_requests() || [];
+					feedbackRequests = lawPalInterface.feedback_requests() || {};
 					// Return checklist
 					deferred.resolve(feedbackRequests);
 				} else {
@@ -176,6 +176,10 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 
 		"getProjectId": function() {
 			return LawPal.project.id;
+		},
+
+		"getCurrentUser": function() {
+			return (LawPal.user && LawPal.user.is_authenticated?LawPal.user:null);
 		}
 	};
 

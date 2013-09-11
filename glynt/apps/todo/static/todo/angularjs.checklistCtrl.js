@@ -161,7 +161,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		}
 
 		category.numAssigned = numAssigned;
-		//return numAssigned || ""; 
+		return numAssigned || ""; 
 	};
 
 	$scope.isChecklistItemAssigned = function( item ) {
@@ -361,6 +361,63 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 					$scope.$apply();
 				}
 		}
+	});
+
+	$scope.$on("action.created", function( e, data){
+		var slug = null;
+		var user = lawPalService.getCurrentUser();
+		var action = {};
+
+		if( user && data.status ) {
+			if(data.status==="Pending"){
+				if( angular.isArray(data.assigned.to) && data.assigned.to.indexOf(user.pk)>=0) {
+					// add request for feedback
+					slug = data.instance.slug||null;
+					if( slug ) {
+						$scope.model.feedbackRequests[slug] = [ { "todo_slug": slug} ];
+						$scope.$apply();
+					}
+				}
+			} else if( data.instance && data.instance.slug ) {
+				slug = data.instance.slug||null;
+				// remove request
+				if( slug ) {
+					delete $scope.model.feedbackRequests[slug];
+					$scope.$apply();
+				}
+			}
+		}
+		/* assigned: Object
+from: 3
+to: Array[1]
+0: 4
+length: 1
+__proto__: Array[0]
+__proto__: Object
+attachment: "Katharine Hansen_v1.0.pdf"
+channel: "b88c089da3d94337aa11fd2fcc2c4970"
+comment: "Test  Lawyer requested feedback from Lee Sinclair on checklist item Request feedback 1 for Project for My company"
+content: "comment here"
+detail_statement: "for attachment "Katharine Hansen_v1.0.pdf" - "Request feedback 1" is Pending<br/>"
+event: "action.created"
+instance: Object
+category: "Transaction Setup"
+display_status: "Pending"
+id: 9
+is_deleted: false
+name: "Request feedback 1"
+project: 1
+slug: "9CaPTmSZq4MAnFrPFS9NMi"
+status: 2
+uri: "/todo/b88c089da3d94337aa11fd2fcc2c4970/9CaPTmSZq4MAnFrPFS9NMi/edit/"
+__proto__: Object
+label: "Test  Lawyer requested feedback from Lee Sinclair on checklist item Request feedback 1 for Project for My company"
+name: "Test  Lawyer"
+status: "Pending"
+target_name: "test-lawyer Test  Lawyer requested feedback from Lee Sinclair on checklist item Request feedback 1 for Project for My company Katharine Hansen_v1.0.pdf application/pdf (0) on Request feedback 1 0 minutes ago"
+timestamp: ""
+todo: "Request feedback 1"
+verb: "Test  Lawyer requested feedback from Lee Sinclair on checklist item Request feedback 1 for Project for My company" */
 	});
 
 }]);
