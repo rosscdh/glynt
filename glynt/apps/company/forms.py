@@ -173,11 +173,10 @@ class CompanyAndFinancingProfileForm(CrispyExFieldsetFieldRemovalMixin, CompanyP
                 'investment_terms',
                 'num_investors',
                 'num_investor_states',
-                'incubator',
-                'already_incorp',
             ),
             Fieldset(
                 'About your Startup',
+                'already_incorp',
                 'incubator',
                 'current_status',
                 'profile_website',
@@ -191,21 +190,6 @@ class CompanyAndFinancingProfileForm(CrispyExFieldsetFieldRemovalMixin, CompanyP
                 'ip_nolonger_affiliated',
                 'ip_otherthan_founder',
                 'ip_university_affiliation',
-            ),
-            Fieldset(
-                'Which of the following do you have?',
-                'doc_exists_cert_incorm',
-                'doc_exists_action_written_consent',
-                'doc_exists_initial_written_consent', 
-                'doc_exists_bylaws', 
-                'doc_exists_shareholder_agr', 
-                'doc_exists_ein_letter',
-                'doc_exists_stock_purchase_agreement',
-                'doc_exists_ip_assignment',
-                'doc_exists_notice_of_stock_issuance',
-                'doc_exists_stock_certs', 
-                'doc_exists_83b', 
-                'doc_exists_stock_option_plan'
             )
         )
         self.unify_fields()
