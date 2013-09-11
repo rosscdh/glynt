@@ -353,7 +353,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 			newItem = data.instance;
 
 			if( $scope.findItemIndex( newItem ) === -1 )
-				{
+				{			
 					$scope.addItemToChecklist( newItem );
 					$scope.$apply();
 				}

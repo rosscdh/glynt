@@ -45,6 +45,15 @@ AngularPusher = function( $q, $rootScope, key, channelName ) {
             console.log( "Pusher event", event_name, data );
             if ( typeof (data) === 'object' ) {
             	console.log("broadcasting", event_name );
+            	// Convert pusher data into standard data
+            	if( data.instance && data.instance.project && data.instance.project.pk )
+            		data.instance.project = data.instance.project.pk;
+
+            	if( data.instance && data.instance.pk ) {
+            		data.instance.id = data.instance.pk;
+            		delete data.instance.pk;
+            	}
+
             	$rootScope.$broadcast( event_name, data );
             }
 

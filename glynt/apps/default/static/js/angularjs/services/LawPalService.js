@@ -125,7 +125,9 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			delete item.csrfmiddlewaretoken;
 
 			if( pusherConfig && pusherConfig.channel )
-					item.pusher_id = pusherConfig.channel;
+				item.pusher_id = pusherConfig.channel;
+
+			item = angular.fromJson(angular.toJson(item));
 				
 			if( item.id ) {
 				var options = {
