@@ -85,6 +85,9 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 	 */
 	$scope.saveItem = function( item ) {
 		if( item && item.name ) {
+			/* Ensure project is allocated properly, esp for new items */
+			var projectId = lawPalService.getProjectId();
+			item.project = (projectId?projectId:item.project);
 			/* Update item update */
 			var promise = lawPalService.updateChecklistItem( item, $scope.config.pusher );
 			promise.then(

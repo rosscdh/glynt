@@ -92,6 +92,9 @@
         /**
         * Current User Object
         */
+       "project": {
+            "id": {{project.id}}
+       },
         "user": {
             'pk': {{ user.pk|default:'null'|jsonify }},
             'username': '{{ user.username }}',

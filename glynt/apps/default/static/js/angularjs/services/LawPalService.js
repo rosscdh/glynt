@@ -172,6 +172,10 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			});
 
 			return deferred.promise;
+		},
+
+		"getProjectId": function() {
+			return LawPal.project.id;
 		}
 	};
 
