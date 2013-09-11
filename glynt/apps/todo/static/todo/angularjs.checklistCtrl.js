@@ -326,7 +326,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 	 */
 	$scope.$on("todo.is_updated", function( e, data ){
 		if( typeof(data)==="object" && data.instance ) {
-			$scope.partialItemUpdate( data.instance, "Item '" + data.name + "' updated" );
+			$scope.partialItemUpdate( data.instance, data.comment );
 		}
 	});
 
@@ -337,7 +337,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 	 */
 	$scope.$on("todo.is_deleted", function( e, data ){
 		if( typeof(data)==="object" && data.instance ) {
-			$scope.partialItemUpdate( data.instance, "Item '" + data.name + "' removed" );
+			$scope.partialItemUpdate( data.instance, data.comment );
 		}
 	});
 
