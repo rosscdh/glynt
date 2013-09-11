@@ -14,7 +14,7 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [ '$scope', 'lawPalSer
 		promise.then( 
 			function( results ) { /* Success */
 				$scope.removeItemFromArray( item );
-				$scope.addAlert( "Item removed", "success" );
+				//$scope.addAlert( "Item removed", "success" );
 			},
 			function( details ) { /* Error */
 				$scope.addAlert( "Unable to remove item", "error" );

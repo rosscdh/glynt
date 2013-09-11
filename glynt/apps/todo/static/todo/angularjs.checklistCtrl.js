@@ -89,7 +89,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 			var promise = lawPalService.updateChecklistItem( item, $scope.config.pusher );
 			promise.then(
 				function( results ) { /* Success */
-					$scope.addAlert( "Item updated", "success" );
+					//$scope.addAlert( "Item updated", "success" );
 					var newItem = results;
 					if( $scope.findItemIndex( newItem ) === -1 )
 						{
@@ -179,6 +179,8 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 			for(var i=0;i<alerts.length;i++) {
 				if(alerts[i].timeStamp===alert.timeStamp) $scope.closeAlert( i );
 			}
+
+			$scope.$apply();
 		}, 6000);
 	};
 
@@ -213,9 +215,14 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 	 * @param  {Object} item JSON object representing a checklist item
 	 */
 	$scope.removeItemFromArray = function( item ) {
+		/*
 		var index = $scope.findItemIndex( item );
 		if( index !== null )
 			$scope.model.checklist.splice( index, 1 );
+		*/
+		if( item ) {
+			item.is_deleted = true;
+		}
 	};
 
 	/**
@@ -293,7 +300,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 	 * Given a JSON object update an existing checklist item with new data
 	 * @param  {Object} newData Object containg new data
 	 */
-	$scope.partialItemUpdate = function( newData ){
+	$scope.partialItemUpdate = function( newData, successMsg ){
 		if( newData.slug ) {
 			// find checklist item
 			var checklistItem = $scope.itemBySlug( newData.slug );
@@ -302,6 +309,10 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 				for( key in newData ) {
 					checklistItem[key] = newData[key];
 				}
+
+				if( successMsg )
+					$scope.addAlert( successMsg, "success" );
+
 				// As this event has not been invoked through the normal angular channels update the scope
 				$scope.$apply();
 			}
@@ -315,7 +326,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 	 */
 	$scope.$on("todo.is_updated", function( e, data ){
 		if( typeof(data)==="object" && data.instance ) {
-			$scope.partialItemUpdate( data.instance );
+			$scope.partialItemUpdate( data.instance, "Item '" + data.name + "' updated" );
 		}
 	});
 
@@ -326,7 +337,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 	 */
 	$scope.$on("todo.is_deleted", function( e, data ){
 		if( typeof(data)==="object" && data.instance ) {
-			$scope.partialItemUpdate( data.instance );
+			$scope.partialItemUpdate( data.instance, "Item '" + data.name + "' removed" );
 		}
 	});
 
