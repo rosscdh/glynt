@@ -32,30 +32,38 @@ angular.module("Pusher").factory("angularPusher", [ "$q", "$rootScope",
 	}
 ]);
 
+/**
+ * Handles incomming data from remove Pusher service and broadcasts it through the rootScope
+ * @param {Function} $q          deferred function (angular function)
+ * @param {Function} $rootScope  access to angular root scope
+ * @param {String} key         Pusher.com key
+ * @param {String} channelName Pusher.com channel ID
+ */
 AngularPusher = function( $q, $rootScope, key, channelName ) {
-	this._q = $q;
-	this._rootscope = $rootScope;
-	this._initial = true;
-
-	this._key = key;
-	this._channel = channelName;
 	this._pusher = new Pusher(key);
     this._channel = this._pusher.subscribe(channelName);
-    this._channel.bind_all(function (event_name, data) {
-            console.log( "Pusher event", event_name, data );
+    this._channel.bind_all(
+    	/**
+    	 * Catch all pusher events
+    	 * @param  {String} event_name Name of the event being sent
+    	 * @param  {Object} data       JSON object being transmitted
+    	 */
+    	function (event_name, data) {
             if ( typeof (data) === 'object' ) {
-            	console.log("broadcasting", event_name );
             	// Convert pusher data into standard data
+            	// 1. Fix for project ID
             	if( data.instance && data.instance.project && data.instance.project.pk )
             		data.instance.project = data.instance.project.pk;
 
+            	// 2. Fix for checklist item ID
             	if( data.instance && data.instance.pk ) {
             		data.instance.id = data.instance.pk;
             		delete data.instance.pk;
             	}
 
+            	// Send message to all controllers
             	$rootScope.$broadcast( event_name, data );
             }
-
-    });
+        }
+    );
 };

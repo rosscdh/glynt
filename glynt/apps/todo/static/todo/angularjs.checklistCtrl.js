@@ -324,7 +324,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 
 	/**
 	 * Recieves messages to update one of the existing checklist items
-	 * @param  {Event} e    broadcast event
+	 * @param  {Event} e    Broadcast event
 	 * @param  {Object} data Data from the update event
 	 */
 	$scope.$on("todo.is_updated", function( e, data ){
@@ -335,7 +335,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 
 	/**
 	 * Recieves mesages to remove items from the checklist (is_deleted = true ), in fact this is the same as an update message
-	 * @param  {Event} e    Broadvast event
+	 * @param  {Event} e    Broadcast event
 	 * @param  {Object} data Data from the new checklist item event
 	 */
 	$scope.$on("todo.is_deleted", function( e, data ){
@@ -346,7 +346,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 
 	/**
 	 * Recieves messages to add new todo items
-	 * @param  {Event} e    Broadvast event
+	 * @param  {Event} e    Broadcast event
 	 * @param  {Object} data Data from the new checklist item event
 	 */
 	$scope.$on("todo.is_new", function( e, data ){
@@ -363,6 +363,11 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		}
 	});
 
+	/**
+	 * Recieves messages to modify the feedback status of checklist items
+	 * @param  {Event} e    Broadcast event
+	 * @param  {Object} data Data from the pusher, containing details about the action
+	 */
 	$scope.$on("action.created", function( e, data){
 		var slug = null;
 		var user = lawPalService.getCurrentUser();
@@ -370,54 +375,25 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 
 		if( user && data.status ) {
 			if(data.status==="Pending"){
+				// Feedback requested
 				if( angular.isArray(data.assigned.to) && data.assigned.to.indexOf(user.pk)>=0) {
-					// add request for feedback
 					slug = data.instance.slug||null;
 					if( slug ) {
+						// Add request for feedback
 						$scope.model.feedbackRequests[slug] = [ { "todo_slug": slug} ];
 						$scope.$apply();
 					}
 				}
 			} else if( data.instance && data.instance.slug ) {
+				//Feedback request removed
 				slug = data.instance.slug||null;
-				// remove request
 				if( slug ) {
+					// remove request from feedback object
 					delete $scope.model.feedbackRequests[slug];
 					$scope.$apply();
 				}
 			}
 		}
-		/* assigned: Object
-from: 3
-to: Array[1]
-0: 4
-length: 1
-__proto__: Array[0]
-__proto__: Object
-attachment: "Katharine Hansen_v1.0.pdf"
-channel: "b88c089da3d94337aa11fd2fcc2c4970"
-comment: "Test  Lawyer requested feedback from Lee Sinclair on checklist item Request feedback 1 for Project for My company"
-content: "comment here"
-detail_statement: "for attachment "Katharine Hansen_v1.0.pdf" - "Request feedback 1" is Pending<br/>"
-event: "action.created"
-instance: Object
-category: "Transaction Setup"
-display_status: "Pending"
-id: 9
-is_deleted: false
-name: "Request feedback 1"
-project: 1
-slug: "9CaPTmSZq4MAnFrPFS9NMi"
-status: 2
-uri: "/todo/b88c089da3d94337aa11fd2fcc2c4970/9CaPTmSZq4MAnFrPFS9NMi/edit/"
-__proto__: Object
-label: "Test  Lawyer requested feedback from Lee Sinclair on checklist item Request feedback 1 for Project for My company"
-name: "Test  Lawyer"
-status: "Pending"
-target_name: "test-lawyer Test  Lawyer requested feedback from Lee Sinclair on checklist item Request feedback 1 for Project for My company Katharine Hansen_v1.0.pdf application/pdf (0) on Request feedback 1 0 minutes ago"
-timestamp: ""
-todo: "Request feedback 1"
-verb: "Test  Lawyer requested feedback from Lee Sinclair on checklist item Request feedback 1 for Project for My company" */
 	});
 
 }]);

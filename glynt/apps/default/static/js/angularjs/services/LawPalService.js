@@ -174,10 +174,18 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			return deferred.promise;
 		},
 
+		/**
+		 * Get current project ID if available
+		 * @return {Number} project Id
+		 */
 		"getProjectId": function() {
 			return LawPal.project.id;
 		},
 
+		/**
+		 * Get current user
+		 * @return {Object} Current user
+		 */
 		"getCurrentUser": function() {
 			return (LawPal.user && LawPal.user.is_authenticated?LawPal.user:null);
 		}
