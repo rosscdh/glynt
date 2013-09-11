@@ -34,6 +34,8 @@ def get_todo_info_object(todo):
             'pk': todo.pk,
             'slug': todo.slug,
             'name': todo.name,
+            'category': todo.category,
+            'project': {'pk': todo.project.pk},
             'display_status': todo.display_status,
             'status': todo.status,
             'is_deleted': todo.is_deleted,
