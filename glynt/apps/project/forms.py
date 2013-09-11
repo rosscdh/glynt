@@ -16,7 +16,7 @@ class ContactUsForm(ContactForm):
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
         self.helper.form_class = 'form-horizontal'
-        self.helper.form_id = 'example-form'
+        self.helper.form_id = 'contact-us-form'
         self.helper.form_method = 'post'
         self.helper.form_action = reverse('public:contact_us')
         self.helper.attrs = { 'data_validate': 'parsley' }

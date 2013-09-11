@@ -151,7 +151,7 @@ class ContactUsModalTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
     test_path = os.path.dirname(__file__)
 
     def test_contact_us_modal_js(self):
-        # self.client.login(username=self.customer_user.username, password=self.password)
+        self.client.login(username=self.customer_user.username, password=self.password)
 
         url = reverse('project:create')
         self.assertTrue(self.load_casper_file(js_file='contact-us-modal.js', test_label='Test the Contact Us modal', url=url))
