@@ -50,10 +50,19 @@ class VisibleProjectsService(object):
         # if we have a current key use that
         if self.current_key:
             try:
-                project = projects.get(uuid=self.current_key)
-            except Project.DoesNotExist:
+                # if its a queryset it should have get, but lists have no get
+                if hasattr(projects, 'get'):
+                    project = projects.get(uuid=self.current_key)
+
+                else:
+                    #  must be a lawyer at this point as we return a list and not a queryset
+                    #  thus calling .get on the list will fail
+                    project = [p for p in projects if p.uuid == self.current_key][0]
+
+            except IndexError, Project.DoesNotExist:
                 pass
 
+        # we still have no project set
         if project is None:
             try:
                 project = projects[0]
