@@ -2,7 +2,7 @@
 from django import forms
 
 from cicu.models import UploadedFile
-from cicu.widgets import CicuUploderInput
+from cicu.widgets import CicuUploaderInput
 
 from parsley.decorators import parsleyfy
 
@@ -26,7 +26,7 @@ class CustomerProfileSetupForm(ChangePasswordMixin, ConfirmChangePasswordMixin, 
     email = forms.EmailField(help_text="", widget=forms.TextInput(attrs={'placeholder': 'first.name@example.com'}))
     phone = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder': 'Contact Phone', 'data-type':'phone'}))
 
-    photo = forms.ImageField(required=False, label="Main Photo", help_text="Please add a good quality photo to your profile.", widget=CicuUploderInput(attrs={'data-trigger': 'change', 'data-required': 'false'}, options={
+    photo = forms.ImageField(required=False, label="Main Photo", help_text="Please add a good quality photo to your profile.", widget=CicuUploaderInput(attrs={'data-trigger': 'change', 'data-required': 'false'}, options={
                 'ratioWidth': '110',       # fix-width ratio, default 0
                 'ratioHeight': '110',      # fix-height ratio , default 0
                 'sizeWarning': 'False',    # if True the crop selection have to respect minimal ratio size defined above. Default 'False'
