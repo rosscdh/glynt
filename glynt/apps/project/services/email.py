@@ -98,9 +98,9 @@ class SendNewProjectEmailsService(SendProjectEmailsService):
     @property
     def message(self):
         ctx = {
-            'actor': self.sender,
+            'actor': self.sender.get_full_name(),
             'project': self.project,
             'id': self.project.pk,
         }
 
-        return u'%(actor)s created a new Project (%(project)s):%(id)d which needs to be matched with a lawyer' % ctx
+        return u'%(actor)s created a new project (%(project)s):%(id)d which will need to be matched with a lawyer.' % ctx

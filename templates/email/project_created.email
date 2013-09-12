@@ -4,26 +4,49 @@
 
 {% block content %}
     <tr>
-        <td align="left">
-            <p>{{ message }}</p>
-
-            <p>{{ customer.data.company }} is looking for a lawyer to help with **Project Names**. If you are interested in working with this client, please reply to this email.</p>
-
-            <h2>Customer Information</h2>
-            <ul>
-                <li><b>Name :</b> {{ customer.data.first_name }} {{ customer.data.last_name }}</li>
-                <li><b>Company:</b> {{ customer.data.company }}</li>
-                <li><b>Telephone:</b> {{ customer.data.telephone }}</li>
-                <li><b>Email:</b> <a href="{{ customer.data.email }}">{{ customer.data.email }}</a></li>
+        <td align="left" colspan="3" height="40" width="100%" style="font-size: 0; line-height: 0;">&nbsp;</td>
+    </tr>
+    <tr>
+        <td class="small-width" align="left" width="40" style="display: block;">&nbsp;</td>
+        <td>
+            <h1 style="color: #22282b !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 28px; font-weight: normal; letter-spacing: -1px; line-height: 1.6em; margin: 0; padding: 0;">A new project has been posted!</h1>
+            <h2 style="color: #6c797c !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5em; margin: 0 0 25px; padding: 0;">{{ message }}</h2>
+            <h2 style="color: #6c797c !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5em; margin: 0 0 25px; padding: 0;">{{ customer.data.company }} is looking for a lawyer to help with **Project Names**. If you are interested in working with this client, please reply to this email.</h2>
+            <h2 style="color: #6c797c !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5em; padding: 0;">Customer Information:</h2>
+            <ul style="color: #6c797c !important;">
+                <li style="margin-left: 0;">
+                    <p style="font-size: 14px;"><strong>Name:</strong> {{ customer.data.first_name }} {{ customer.data.last_name }}</p>
+                </li>
+                <li style="margin-left: 0;">
+                    <p style="font-size: 14px;"><strong>Company:</strong> {{ customer.data.company }}</p>
+                </li>
+                <li style="margin-left: 0;">
+                    <p style="font-size: 14px;"><strong>Telephone:</strong> {{ customer.data.telephone }}</p>
+                </li>
+                <li style="margin-left: 0;">
+                    <p style="font-size: 14px;"><strong>Email:</strong> {{ customer.data.email }}</p>
+                </li>
             </ul>
-
-            <h2>Project Information</h2>
-            <ul>
-            {% for key, value in project_data.iteritems %}
-                <li><b>{{ key|desluggerize|title }}:</b> {{ value|urlize }}</li>
-            {% endfor %}
+            <h2 style="color: #6c797c !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5em; padding: 0;">Project Information:</h2>
+            <ul style="color: #6c797c !important; margin: 0 0 25px;">
+                {% for key, value in project_data.iteritems %}
+                    <li style="margin-left: 0;">
+                        <p style="font-size: 14px;"><strong>{{ key | desluggerize | title }}:</strong> {{ value | urlize }}</p>
+                    </li>
+                {% endfor %}
             </ul>
         </td>
+        <td class="small-width" align="left" width="40" style="display: block;">&nbsp;</td>
+    </tr>
+    <!-- Action Button -->
+    <tr>
+        <td align="center" colspan="3" width="100%">
+            <a href="{% current_site_domain %}{% url 'dashboard:project' uuid=project.uuid %}" target="_blank" class="action-btn" style="background-color: #6bdb7e; border-color: #6bdb7e; border-style: solid; border-width: 14px 48px; color: #ffffff; display: inline-block; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: normal; margin: 4px 0; text-decoration: none; white-space: nowrap;">See project</a>
+        </td>
+    </tr>
+    <!-- End Action Button -->
+    <tr>
+        <td align="left" colspan="3" height="40" width="100%" style="font-size: 0; line-height: 0;">&nbsp;</td>
     </tr>
 {% endblock %}
 
@@ -36,8 +59,7 @@
 Customer Information
 --------------------
 
-**first name**: {{ customer.data.first_name }}
-**last name**: {{ customer.data.last_name }}
+**name**: {{ customer.data.first_name }} {{ customer.data.last_name }}
 **company**: {{ customer.data.company }}
 **telephone**: {{ customer.data.telephone }}
 **email**: {{ customer.data.email }}
@@ -46,7 +68,8 @@ Customer Information
 Project Information
 -------------------
 {% for key, value in project_data.iteritems %}
-**{{ key|desluggerize|title }}**: {{ value }}
+**{{ key | desluggerize | title }}**: {{ value | urlize }}
 {% endfor %}
 
+See project: {% current_site_domain %}{% url 'dashboard:project' uuid=project.uuid %}
 {% endblock %}
