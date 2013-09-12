@@ -31,7 +31,7 @@ workspace = os.path.dirname(project)
 sys.path.append(workspace)
 
 import newrelic.agent
-newrelic.agent.initialize('/var/apps/lawpal/glynt/glynt/newrelic.ini')
+newrelic.agent.initialize('/var/apps/preview-lawpal/glynt/glynt/newrelic.ini')
 
 # Celery
 import djcelery
