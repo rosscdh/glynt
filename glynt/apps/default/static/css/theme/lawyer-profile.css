@@ -7,7 +7,7 @@
 
     hr {
     border-top:1px solid #f3f3f3;
-    width:50%;
+    width:100%;
     }
     h5 {
     font-size:19px;
@@ -88,13 +88,28 @@
 
     #hero {
     background: #f6f9f9;
+    background:url('../../img/app/marketplace-background.jpg');
     background-size: cover;
     text-align: left;
     padding-bottom:0px;
     color:#666;
-    padding-top:55px;
-    margin-bottom:35px;
+    padding-top:45px;
+    padding-bottom:2px;
+    margin-bottom:15px;
     }
+    #hero.mini {
+    margin-top:10px;
+    padding-top:15px;
+    padding-bottom:10px;
+    margin-bottom:0px;
+    }
+    #hero.mini .avatar img {
+    width:100px;
+    height:100px;
+    }
+   #hero.mini h1 {
+    margin-top:10px;
+   }
     #hero .container {
         margin-bottom:0px;
     }
@@ -103,21 +118,22 @@
     line-height: 0.8 !important;
     margin-top:38px;
     text-align: center;
+    color:white;
     }
     #hero h3 {
     margin: .5em 0 0 0 !important;
     padding: 0 !important;
     font-size:20px;
-    color:#aaa;
+    color:#fff;
     line-height: 1.2em;
     text-align: center;
     }
     #hero #buttons {
-    background-color:#757c7e;
+    background-color:#23241d;
 
 /*    background-color:#42d0e5;
 */
-    padding:8px 0px 8px 0px;
+    padding:0px 0px 8px 0px;
     }
     #hero .container-main {
     margin-bottom:20px;
@@ -158,6 +174,10 @@
 
     .firm{
     text-align:center;
+    margin-bottom:20px;
+    }
+    .firm span{
+    white-space: nowrap;
     }
     .firm h2{
     font-size:20px;
@@ -414,7 +434,6 @@
 
     .domain-links a, .startups, .domain {
     font-size:18px;
-    text-transform: lowercase;
     margin-right:20px;
     color:#929292;
     }
