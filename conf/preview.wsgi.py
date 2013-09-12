@@ -17,6 +17,7 @@ import os, sys, site
 
 # Tell wsgi to add the Python site-packages to its path. 
 site.addsitedir('/var/apps/lib/python2.7/site-packages')
+site.addsitedir('/var/apps/.lawpal-preview-venv/lib/python2.7/site-packages')
 site.addsitedir('/var/apps/preview-lawpal/glynt')
 site.addsitedir('/var/apps/preview-lawpal/glynt/glynt')
 
@@ -31,7 +32,7 @@ workspace = os.path.dirname(project)
 sys.path.append(workspace)
 
 import newrelic.agent
-newrelic.agent.initialize('/var/apps/lawpal/glynt/glynt/newrelic.ini')
+newrelic.agent.initialize('/var/apps/preview-lawpal/glynt/glynt/newrelic.ini')
 
 # Celery
 import djcelery

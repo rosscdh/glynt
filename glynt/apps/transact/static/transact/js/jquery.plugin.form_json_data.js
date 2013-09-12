@@ -26,25 +26,27 @@ $(function() {
         // the constructor
         _create: function () {
             var self = this;
-            this.form = $(this.element).closest('form');
+            self.form = $(self.element).closest('form');
 
-            var source_data = this.element.val() || this.options.source_data;
-            this.option.source_data = (typeof source_data === 'string') ? JSON.parse(source_data) : source_data ;
+            var source_data = self.element.val() || self.options.source_data;
+            self.options.source_data = (typeof source_data === 'string') ? JSON.parse(source_data) : source_data ;
 
             self._listen();
+
+            /**
+            * Send off the reference to teh source data.
+            * may be modified by various listeners
+            */
+            $.event.trigger({
+                type: "LOADED_form_json_data",
+                form_json_data: self.options.source_data
+            });
+
         },
         _listen: function () {
             var self = this;
-            $(document).on("ready", function (event) {
 
-                /**
-                * Send off the reference to teh source data.
-                * may be modified by various listeners
-                */
-                $.event.trigger({
-                    type: "LOADED_form_json_data",
-                    form_json_data: self.options.source_data
-                });
+            $(document).on("ready", function (event) {
                 self._refresh()
             });
 
@@ -57,13 +59,13 @@ $(function() {
                 $.each(event.cloned_region.find('input, select, checkbox, radio'), function (i, elem) {
                     elem = $(elem);
                     var json_id = elem.prop('id').replace(/^id_(\d+)\-/g,'');
-                    console.log(elem.data())
+
                     /**
                     * Remove the object
                     */
                     delete self.options.source_data[cloned_region_key][json_id];
-                    console.log(self.options.source_data[cloned_region_key])
-                    console.log(json_id)
+                    self._log(self.options.source_data[cloned_region_key])
+                    self._log(json_id)
                 });
 
                 self._refresh()
@@ -80,6 +82,8 @@ $(function() {
             * Capture changes made to Cloned Region items
             */
             $(document).on("MODIFIED_CLONED_REGION_form_json_data", function (event) {
+                self._log('recieved MODIFIED_CLONED_REGION_form_json_data:')
+
                 var elem = $(event.instance);
                 var cloned_region_key = event.cloned_region_key;
 
@@ -107,14 +111,14 @@ $(function() {
             * Capture changes made to the form_json_data
             */
             $(document).on("SAVE_form_json_data", function (event) {
-
+                self._log('recieved SAVE_form_json_data:')
                 self._send(self.options.source_data);
 
             });
 
         },
         _refresh: function() {
-            this._log('_refresh');
+            this._log('performing ._refresh');
             var json_data = JSON.stringify(this.options.source_data);
             $(this.element).val(json_data)
         },
@@ -124,11 +128,13 @@ $(function() {
             * Prepare for structure that we are saving as
             * {data: {}}
             */
-            data = {'data': data}
-            var json_data = JSON.stringify(data);
+            if ( [undefined, null, 'null', ''].indexOf(self.options.update_url) == -1 ) {
 
-            if (self.options.update_url) {
-                self._log('Save DAta URL: {url} send: {data}'.assign({'url': self.options.update_url, 'data': data}))
+                data = {'data': data}
+                var json_data = JSON.stringify(data);
+
+                self._log('Save Data URL: {url} send: {data}'.assign({'url': self.options.update_url, 'data': data}))
+
                 /**
                 * Capture changes made to the form_json_data
                 */
@@ -155,7 +161,7 @@ $(function() {
 
             } else {
 
-                self._log('self.options.update_url does not exist');
+                self._log('self.options.update_url not defined');
 
             }
         }

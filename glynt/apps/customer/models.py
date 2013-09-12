@@ -17,22 +17,28 @@ logger = logging.getLogger('django.request')
 
 class CustomerLoginLogic(object):
     """ Login logic used to determin what to show """
+    user = None
+    customer = None
+
     def __init__(self, user):
         self.user = user
-
-    def redirect(self):
         try:
-            customer = self.user.customer_profile
+            self.customer = self.user.customer_profile
         except ObjectDoesNotExist:
-            customer = None
+            self.customer = None
             logger.error("founder profile not found for %s" % self.user)
 
-        projects = Project.objects.filter(customer=customer)
+    @property
+    def url(self):
+        num_projects = Project.objects.filter(customer=self.customer).count()
 
-        if projects:
-            return redirect('dashboard:overview')
+        if num_projects > 0:
+            return reverse('dashboard:overview')
         else:
-            return redirect('project:create')
+            return reverse('project:create')
+
+    def redirect(self):
+        return redirect(self.url)
 
 
 def _customer_upload_photo(instance, filename):

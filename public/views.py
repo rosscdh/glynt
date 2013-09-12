@@ -78,7 +78,10 @@ class UserClassLoggedInRedirectView(RedirectView):
         if self.request.user.password == '!':
             url = reverse('client:confirm_signup', kwargs={'slug': self.request.user.username})
         else:
-            url = reverse('public:homepage')
+            if self.request.user.is_authenticated() and self.request.user.profile.is_customer:
+                url = CustomerLoginLogic(user=self.request.user).url
+            else:
+                url = reverse('public:homepage')
 
         return url
 

@@ -12,7 +12,7 @@ from django_filepicker.forms import FPUrlField
 
 from glynt.apps.utils import generate_unique_slug
 
-from .models import ToDo, FeedbackRequest
+from .models import ToDo
 
 import logging
 logger = logging.getLogger('django.request')
@@ -31,7 +31,9 @@ class FeedbackRequestForm(forms.Form):
 class AttachmentForm(forms.Form):
     project = forms.IntegerField(widget=forms.HiddenInput)
     todo = forms.IntegerField(widget=forms.HiddenInput)
-    attachment = FPUrlField(label='', help_text='', apikey=FILEPICKER_API_KEY,
+    attachment = FPUrlField(label='',
+                            help_text='',
+                            apikey=FILEPICKER_API_KEY,
                             additional_params={
                                 'data-api-url': '/api/v1/attachment',
                                 'data-fp-button-text': 'Upload attachment',

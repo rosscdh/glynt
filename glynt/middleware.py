@@ -66,7 +66,7 @@ class LawpalCurrentProjectsMiddleware(object):
     object
     """
     def process_request(self, request):
-        projects_service = VisibleProjectsService(user=request.user)
+        projects_service = VisibleProjectsService(request=request)
 
         request.projects = projects_service.projects
         request.project = projects_service.project

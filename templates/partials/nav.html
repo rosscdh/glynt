@@ -21,7 +21,7 @@
                             </a>
                             <ul class="dropdown-menu" role="menu" aria-labelledby="account-menu">
                                 {% for p in projects %}
-                                    <li><a href="{% url 'dashboard:project' uuid=p.uuid %}">{% project_name p forloop.counter %}</a></li>
+                                    <li><a href="{% url 'dashboard:project' uuid=p.uuid %}?puid={{ p.uuid }}">{% project_name p forloop.counter %}</a></li>
                                 {% endfor %}
                             </ul>
                         </li>

@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+from django.conf import settings
 from django import forms
 from django.contrib.auth.models import User
 from django.core import exceptions
@@ -6,7 +7,7 @@ from django.core.cache import cache
 from glynt.cache_utils_1_5 import make_template_fragment_key
 
 from cicu.models import UploadedFile
-from cicu.widgets import CicuUploderInput
+from cicu.widgets import CicuUploaderInput
 
 from glynt.apps.lawyer.models import Lawyer
 
@@ -47,7 +48,7 @@ class LawyerProfileSetupForm(forms.Form):
     bio = forms.CharField(required=False, widget=forms.Textarea(attrs={'data-trigger':'change','class':'input-xxlarge', 'data-rangelength':'[0,4024]','placeholder':'A bit more about you.','title':'A bit longer, but still make it personal.'}))
     if_i_wasnt_a_lawyer = forms.CharField(label="If I wasn't a lawyer", required=False, widget=forms.TextInput(attrs={'data-trigger':'change','class':'input-xxlarge','placeholder':'e.g. Astronaut and part-time Pastry Chef','title':'If I wasn\'t a lawyer, I would be a...'}))
 
-    photo = forms.ImageField(required=False, label="Main Photo", help_text="Please add a good quality photo to your profile. It really helps.", widget=CicuUploderInput(attrs={'data-trigger':'change','data-required': 'false'}, options={
+    photo = forms.ImageField(required=False, label="Main Photo", help_text="Please add a good quality photo to your profile. It really helps.", widget=CicuUploaderInput(attrs={'data-trigger':'change','data-required': 'false'}, options={
                 'ratioWidth': '110',       #fix-width ratio, default 0
                 'ratioHeight':'110',       #fix-height ratio , default 0
                 'sizeWarning': 'False',    #if True the crop selection have to respect minimal ratio size defined above. Default 'False'
