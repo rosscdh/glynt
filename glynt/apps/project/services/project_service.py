@@ -11,13 +11,26 @@ class VisibleProjectsService(object):
     Project list dropdown.
     Cater projects being from a lawyer or a customer user_class
     """
+    current_key = None
+    request = None
+    user = None
+
     projects = []
     project = None
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, request, *args, **kwargs):
         projects, project = self.anonymous()
 
-        self.user = kwargs.get('user', None)
+        self.user = kwargs.get('user', request.user)
+
+        self.request = request
+
+        puid = self.request.GET.get('puid', None)
+        if puid is not None:
+            self.request.session['current_project_uuid'] = puid
+
+        self.current_key = self.request.session.get('current_project_uuid')
+
 
         if not self.user.is_authenticated():
             self.projects, self.project = self.anonymous()
@@ -31,16 +44,30 @@ class VisibleProjectsService(object):
                 elif self.user.profile.is_lawyer == True:
                     self.projects, self.project = self.lawyer()
 
+    def current_project(self, projects):
+        project = None
+
+        # if we have a current key use that
+        if self.current_key:
+            try:
+                project = projects.get(uuid=self.current_key)
+            except Project.DoesNotExist:
+                pass
+
+        if project is None:
+            try:
+                project = projects[0]
+            except IndexError:
+                project = None
+
+        return project
+
     def anonymous(self):
         return ([], None,)
 
     def customer(self):
         projects = Project.objects.current(customer=self.user.customer_profile)
-
-        try:
-            project = projects[0]
-        except IndexError:
-            project = None
+        project = self.current_project(projects)
 
         return (projects, project,)
 
@@ -49,10 +76,7 @@ class VisibleProjectsService(object):
                                           ProjectLawyer.objects.assigned(lawyer=self.user.lawyer_profile))
         projects = [join.project for join in project_lawyers]
 
-        try:
-            project = projects[0]
-        except IndexError:
-            project = None
+        project = self.current_project(projects)
 
         return (projects, project,)
 
