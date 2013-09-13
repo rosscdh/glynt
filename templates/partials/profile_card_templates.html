@@ -6,7 +6,7 @@
 
 {% tplhandlebars "tpl-small" %}
         <img class="avatar {{ img_class }}" src="{{ profile.profile_photo }}" width="50" height="50" alt="Photo of {{ profile.name }}" title="{{ profile.name }}" />
-        <strong>{{ profile.name }}</strong>
+        {{ profile.name }}
 {% endtplhandlebars %}
 
 {% tplhandlebars "tpl-startup-profile" %}

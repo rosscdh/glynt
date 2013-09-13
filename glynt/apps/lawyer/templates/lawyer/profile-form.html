@@ -6,14 +6,16 @@
 
 {% block prebody %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/css/theme/social-buttons.css">
-<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/css/theme/lawyer-profile.css">
-
-<div id="hero">
-    <div class="container">
-        <div class="row">
-            <div class="col col-12">
-                <h1>Update your profile</h1>
-            </div>
+<!-- <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}/css/theme/lawyer-profile.css">
+ -->
+<div class="container">
+    <div class="row">
+        <div class="col col-12">   
+            <br />
+            <br />
+            <h1>Update your profile</h1>
+            <br />
+            <br />
         </div>
     </div>
 </div>
@@ -27,12 +29,11 @@
             <ul id="profile-tab" class="nav nav-tabs">
                 {% if user.password == "!" %}<li class="active"><a href="#login-details" data-toggle="tab">Account Setup</a></li>{% endif %}
                 <li{% if user.password != "!" %} class="active"{% endif %}><a href="#general" data-toggle="tab">General</a></li>
-<!--                 <li><a href="#fees-packages" data-toggle="tab">Fees and Packages</a></li>
- -->                <li><a href="#profile" data-toggle="tab">Profile</a></li>
+                <!--<li><a href="#fees-packages" data-toggle="tab">Fees and Packages</a></li>-->
+                <li><a href="#profile" data-toggle="tab">Profile</a></li>
                 <li><a href="#transactions-and-companies" data-toggle="tab">Transactions &amp; Startups</a></li>
-                <li><a href="#connected-accounts" data-toggle="tab">Connected Accounts</a></li>
+                <!-- <li><a href="#connected-accounts" data-toggle="tab">Connected Accounts</a></li>-->
             </ul>
-
             <form id="lawyer-profile-form" data-validate="parsley" action="{% url 'lawyer:setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
                 <div class="tab-content">
 
@@ -100,8 +101,8 @@
 
                                 <p>{{ form.bar_membership.help_text }}</p>
                                 <div class="control-group">
-                                    <label class="control-label" for="inputEmail">{{ form.bar_membership_input.label }}</label>
-                                    <div class="controls">
+                                    <label class="col-lg-5 text-right" for="inputEmail">{{ form.bar_membership_input.label }}</label>
+                                    <div class="col-lg-7">
                                         {{ form.bar_membership_input.errors }}
                                         {{ form.bar_membership_input }}<button id="add-bar-membership-btn" type="button" class="btn btn-link btn-small multi-add-btn" data-type="" data-additem_callback="add_bar_membership" data-data_target="id_bar_membership_input" data-target="bar-membership-list"><i class="icon-plus-sign"></i>&nbsp;Add</button>
                                         {{ form.bar_membership }}<!-- hidden -->
@@ -141,7 +142,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col col-8">
+                            <div class="col col-6">
 
                                 <p>{{ form.companies_advised_input.help_text }}</p>
                                 <div class="control-group">
@@ -157,65 +158,6 @@
                             <div class="col col-4">
                                 <ol id="companies-advised-list">
                                 </ol>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col col-12">
-                                <legend>Approximate Transaction Volume</legend>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col col-10">
-                                <p>This data is shown on your profile as an indication of the type and volume of work you undertake. <br />You can always update this later.</p>
-                                <br />
-                                <table class="table table-center">
-
-                                    <tr>
-                                        <th class="col col-3"></th>
-                                        <th>Incorporation and Setup</th>
-                                        <th>Seed Financing</th>
-                                        <th>Series A</th>
-                                        <th>Intellectual Property</th>
-                                        <th>Other</th>
-                                    </tr>
-                                    <tr>
-                                        <th>Average annual transactions</th>
-                                        <td><input class="col col-1 volume parsley-validate" data-type="number" data-required="true" data-volume_type="incorp_setup" type="text"></td>
-                                        <td><input class="col col-1 volume parsley-validate" data-type="number" data-required="true" data-volume_type="seed_financing" type="text"></td>
-                                        <td><input class="col col-1 volume parsley-validate" data-type="number" data-required="true" data-volume_type="series_a" type="text"></td>
-                                        <td><input class="col col-1 volume parsley-validate" data-type="number" data-required="true" data-volume_type="ip" type="text"></td>
-                                        <td><input class="col col-1 volume parsley-validate" data-type="number" data-required="true" data-volume_type="other" type="text"></td>
-                                    </tr>
-
-                                </table>
-
-                                <table class="table table-center">
-
-                                    <tr>
-                                        <th class="col col-3"></th>
-                                        <th>2010</th>
-                                        <th>2011</th>
-                                        <th>2012</th>
-                                        <th>2013</th>
-                                    </tr>
-
-                                    <tr>
-                                        <th>Approximate total by year</th>
-                                        <td><input class="col col-1 json_volume parsley-validate" data-type="number" data-required="true" data-json_target="volume_by_year" data-volume_type="2010" type="text"></td>
-                                        <td><input class="col col-1 json_volume parsley-validate" data-type="number" data-required="true" data-json_target="volume_by_year" data-volume_type="2011" type="text"></td>
-                                        <td><input class="col col-1 json_volume parsley-validate" data-type="number" data-required="true" data-json_target="volume_by_year" data-volume_type="2012" type="text"></td>
-                                        <td><input class="col col-1 json_volume parsley-validate" data-type="number" data-required="true" data-json_target="volume_by_year" data-volume_type="2013" type="text"></td>
-                                    </tr>
-
-                                </table>
-
-                                {{ form.volume_incorp_setup }}
-                                {{ form.volume_seed_financing }}
-                                {{ form.volume_series_a }}
-                                {{ form.volume_ip }}
-                                {{ form.volume_other }}
-                                {{ form.volume_by_year }}
-
                             </div>
                         </div>
                     </div>
@@ -245,7 +187,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col col-8">
+                            <div class="col col-4 col-offset-3">
                                 <div class="control-group">
                                     <label class="control-label" for="inputPassword">{{ form.photo.label }}</label>
                                     <div class="controls">
@@ -254,7 +196,7 @@
                                             {{ form.photo }}
                                             {{ form.hidden_photo }}
                                         </div>
-                                      <col col- class="help-block">A good photo makes all the difference.</col col->
+                                      <div class="help-block">A good photo makes all the difference.</div>
                                     </div>
                                 </div>
                             </div>
@@ -327,16 +269,16 @@
                                 <label class="control-label">Seed Financing</label>
                                 <div class="controls">
                                     <div class="input-prepend">
-                                        <col col- class="add-on">$</col col->
+                                        <div class="add-on">$</div>
                                         {{ form.seed_financing_amount_min }}
                                     </div>
                                     <div class="input-prepend slight-nudge">
-                                        <col col- class="add-on">$</col col->
+                                        <div class="add-on">$</div>
                                         {{ form.seed_financing_amount_max }}
                                     </div>
                                 </div>
                             </div>
-                            <div class="col col-6 control-group-inline-right">
+                            <div class="col col-lg-6 control-group-inline-right">
                                 <div class="control-group">
                                     {{ form.seed_fee_cap_available|as_crispy_field }}
                                     {{ form.seed_deferred_fees_available|as_crispy_field }}
@@ -359,7 +301,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col col-6 control-group-inline-right">
+                            <div class="col col-lg-6 control-group-inline-right">
                                 <div class="control-group">
                                     {{ form.inc_fee_cap_available|as_crispy_field }}
                                     {{ form.inc_deferred_fees_available|as_crispy_field }}
@@ -373,16 +315,16 @@
                                 {{ form.optional_funding }}
                                 <div class="controls">
                                     <div class="input-prepend">
-                                        <col col- class="add-on">$</col col->
+                                        <div class="add-on">$</div>
                                         {{ form.optional_min }}
                                     </div>
                                     <div class="input-prepend slight-nudge">
-                                        <col col- class="add-on">$</col col->
+                                        <div class="add-on">$</div>
                                         {{ form.optional_max }}
                                     </div>
                                 </div>
                             </div>
-                            <div class="col col-6 control-group-inline-right">
+                            <div class="col col-lg-6 control-group-inline-right">
                                 <div class="control-group">
                                     {{ form.optional_fee_cap_available|as_crispy_field }}
                                     {{ form.optional_deferred_fees_available|as_crispy_field }}
@@ -405,7 +347,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col col-6 control-group-inline-right">
+                            <div class="col col-lg-6 control-group-inline-right">
                                 <div class="control-group">
                                     {{ form.optional_fee_cap_available2|as_crispy_field }}
                                     {{ form.optional_deferred_fees_available2|as_crispy_field }}
@@ -419,16 +361,16 @@
                                 {{ form.optional_funding3 }}
                                 <div class="controls">
                                     <div class="input-prepend">
-                                        <col col- class="add-on">$</col col->
+                                        <div class="add-on">$</div>
                                         {{ form.optional_min3 }}
                                     </div>
                                     <div class="input-prepend slight-nudge">
-                                        <col col- class="add-on">$</col col->
+                                        <div class="add-on">$</div>
                                         {{ form.optional_max3 }}
                                     </div>
                                 </div>
                             </div>
-                            <div class="col col-6 control-group-inline-right">
+                            <div class="col col-lg-6 control-group-inline-right">
                                 <div class="control-group">
                                     {{ form.optional_fee_cap_available3|as_crispy_field }}
                                     {{ form.optional_deferred_fees_available3|as_crispy_field }}
@@ -447,14 +389,17 @@
 
                     <div id="form-submit" class="row">
                         <div class="col col-12 divide">
+                            <br />
                             <div class="form-actions">
-                            <label class="checkbox">
-                                {{ form.agree_tandc|as_crispy_field }}
-                                <col col- id="i_agree_html">I agree to the LawPal <a href="{% url 'public:terms' %}">Terms and Conditions</a></col col->
-                            </label>
-
+                                <label class="checkbox">
+                                    <div class="col-lg-1">{{ form.agree_tandc|as_crispy_field }}</div>
+                                    <div class="col-lg-8" id="i_agree_html">I agree to the LawPal <a href="{% url 'public:terms' %}">Terms and Conditions</a></div>
+                                </label>
+                                <br />
+                                <br />
                                 <button id="update-profile" type="submit" class="btn btn-primary btn-large">Update Profile</button>
-                            </div>
+                                </div>
+                            <br />
                         </div>
                     </div>
 
@@ -528,7 +473,9 @@ img#photo-preview{
 .profile-live a:hover, .needs-completing a:hover {
     text-decoration: none;
 }
-
+legend {
+    margin:30px 0px 0px 0px;
+}
 
 </style>
 {% endblock %}
