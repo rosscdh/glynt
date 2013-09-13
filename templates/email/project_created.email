@@ -52,9 +52,7 @@
 {% endblock %}
 
 {% block plain_body %}
-{{ message }}
-
-{{ customer.data.company }} is looking for a lawyer to help with **Project Names**. If you are interested in working with this client, please reply to this email.
+{{ customer.data.company }} is looking for a lawyer to help with {{ transactions }}. If you are interested in working with this client, please reply to this email.
 
 
 Customer Information
@@ -72,5 +70,5 @@ Project Information
 **{{ key | desluggerize | title }}**: {{ value | urlize }}
 {% endfor %}
 
-See project: {% current_site_domain %}{% url 'dashboard:project' uuid=project.uuid %}
+{# See project: {% current_site_domain %}{% url 'dashboard:project' uuid=project.uuid %} #}
 {% endblock %}
