@@ -12,6 +12,7 @@ $(function() {
 		num_elements: 1,
 		num_elements_in_cloned_area: 1,
 		options: {
+			debug: true,
 			label: 'Add another',
 			btn_remove: $('<button/>', {
 				class: 'close delete-cloned-region',
@@ -63,6 +64,9 @@ $(function() {
 	        **/
 	        $(document).on("LOADED_form_json_data", function (event) {
 	            self.form_json_data = event.form_json_data;
+
+	        	self._log('LOADED_form_json_data: {data}'.assign({data: JSON.stringify(self.form_json_data)}))
+
 	            self.ensure_key(self.form_json_data)
 	            self._refresh();
 	        });
@@ -106,14 +110,14 @@ $(function() {
 
 				if (matched_count !== null) {
 					//element_count_id = parseInt(matched_count[0].replace('_', ''));
-					//console.log(elem.attr('id'))
+					//self._log(elem.attr('id'))
 					// var id = elem.attr('id').replace(/_(\d+)$/gi, '_{element_count_id}'.assign({'element_count_id': element_count_id}));
 					// elem.attr('id', id);
 					// var name = elem.attr('name').replace(/_(\d+)$/gi, '_{element_count_id}'.assign({'element_count_id': element_count_id}));
 					// elem.attr('name', name);
 
-					//console.log(elem)
-					//console.log(elem.attr('name'))
+					//self._log(elem)
+					//self._log(elem.attr('name'))
 				}
 
             });
@@ -149,6 +153,9 @@ $(function() {
 				// update the id and name props
 				elem.prop('id', new_id);
 				elem.prop('name', new_name);
+
+				// set the value of this element blank
+				elem.val('');
 			}
 
 			// append json_id and json_name
@@ -156,16 +163,16 @@ $(function() {
 			elem.attr('data-json_id', elem.prop('id').replace(/^id_(\d+)\-/g,''));
 			elem.attr('data-json_name', elem.prop('name').replace(/^(\d+)\-/g,''));
 
-			// set the value of this element blank
-			elem.val('');
-
 			elem.on('change', function (event) {
+				self._log('triggering MODIFIED_CLONED_REGION_form_json_data')
+
                 $.event.trigger({
                     type: "MODIFIED_CLONED_REGION_form_json_data",
                     instance: $(this),
 					cloned_region_key: self.region_key
                 });
 			});
+
 			return elem;
 		},
 		add_region: function ( event, kwargs ) {
@@ -173,7 +180,7 @@ $(function() {
 			var self = this;
 			var kwargs = $.extend(true, {'region_id': self.num_elements}, kwargs);
 			//var current_num_cloneable_regions = $('[data-region-name={region_key}] .cloned_region'.assign({'region_key': self.region_key})).length
-console.log(kwargs)
+
 			var cloneable_html = $(this.cloneable_html).clone();
 
 			var legend = $(cloneable_html[0]);

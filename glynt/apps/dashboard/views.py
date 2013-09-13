@@ -16,17 +16,24 @@ class DashboardView(ToDoCountMixin, TemplateView):
     there are some ugly rules here;
     """
     template_name = 'dashboard/overview.html'
+    project_uuid = None
+
+    def get_project_uuid(self):
+        return self.kwargs.get('uuid', None)
 
     def dispatch(self, request, *args, **kwargs):
         """ if we are a lawyer, then use the lawyer overview template"""
-        if 'uuid' not in kwargs:
+        if 'uuid' in kwargs:
+            self.project_uuid = self.get_project_uuid()
+
+        else:
             if request.user.profile.is_lawyer:
                 self.template_name = 'dashboard/overview-lawyer.html'
 
         return super(DashboardView, self).dispatch(request, *args, **kwargs)
 
     def qs_filter(self):
-        project_uuid = self.kwargs.get('uuid')
+        project_uuid = self.get_project_uuid()
 
         qs_filter = {}
 

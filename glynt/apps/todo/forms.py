@@ -32,7 +32,9 @@ class FeedbackRequestForm(forms.Form):
 class AttachmentForm(forms.Form):
     project = forms.IntegerField(widget=forms.HiddenInput)
     todo = forms.IntegerField(widget=forms.HiddenInput)
-    attachment = FPUrlField(label='', help_text='', apikey=FILEPICKER_API_KEY,
+    attachment = FPUrlField(label='',
+                            help_text='',
+                            apikey=FILEPICKER_API_KEY,
                             additional_params={
                                 'data-api-url': '/api/v1/attachment',
                                 'data-fp-button-text': 'Upload attachment',

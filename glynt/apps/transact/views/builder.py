@@ -11,10 +11,10 @@ from bunch import Bunch
 
 from glynt.apps.project.models import Project
 from glynt.apps.project.services.ensure_project import PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE
-
 from glynt.apps.transact.views.intake import (FORMS as INTAKE_FORMS,)
-
 from glynt.apps.transact.views.intake import CS_FORMS, SF_FORMS, CS_SF_FORMS
+
+import json
 
 TX_OPTIONS = {
     'INTAKE': {'forms': INTAKE_FORMS, 'templates': [], 'data_provider': Bunch({})},
@@ -129,6 +129,7 @@ class BuilderWizardView(NamedUrlSessionWizardView):
 
         if data is not None and hasattr(data, 'data_bag'):
             initial.update(data.data_bag)
+            initial['form_json_data'] = json.dumps(data.data_bag)
 
         return initial
 

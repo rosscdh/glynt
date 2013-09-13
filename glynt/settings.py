@@ -139,10 +139,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
     "django.core.context_processors.request",
-    "glynt.context_processors.user_projects",
     "glynt.context_processors.project_info",
     "glynt.context_processors.project_environment",
     "glynt.context_processors.default_profile_image",
+    "glynt.context_processors.SESSION_PROJECT_UUID",
     "glynt.context_processors.PUSHER_DATA",
     "glynt.context_processors.USE_THREADEDCOMMENTS",
     "social_auth.context_processors.social_auth_by_type_backends",
@@ -383,7 +383,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.user.update_user_details',
     'glynt.apps.client.pipeline.ensure_user_setup',
     'glynt.apps.client.pipeline.profile_extra_details',
-    'glynt.apps.graph.pipeline.graph_user_connections',
+    #'glynt.apps.graph.pipeline.graph_user_connections',
 )
 
 POSTMAN_DISALLOW_ANONYMOUS = True

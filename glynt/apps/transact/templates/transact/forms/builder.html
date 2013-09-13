@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load crispy_forms_tags company_tags transaction_tags %}
+{% extends 'base.html' %}{% load crispy_forms_tags company_tags transaction_tags jsonify %}
 
 {% block page_title %}{% transpose_company_data page_title %}{% endblock %}
 
@@ -72,47 +72,23 @@
 {% block js %}
     <script src="{{ STATIC_URL }}transact/js/jquery.plugin.form_json_data.js"></script>
     <script src="{{ STATIC_URL }}transact/js/jquery.plugin.region_clone.js"></script>
-    <script src="{{ STATIC_URL }}transact/js/jquery.plugin.show_when.js"></script>
-
-    <script src="{{ STATIC_URL }}js/jquery.dateentry/jquery.dateentry.min.js"></script>
+    <!-- <script src="{{ STATIC_URL }}transact/js/jquery.plugin.show_when.js"></script> -->
+    <!-- <script src="{{ STATIC_URL }}js/jquery.dateentry/jquery.dateentry.min.js"></script> -->
 
 
     <script>
     $(document).ready(function(){
         var form = $( 'form#builder-form' );
 
-        {% if update_url %}
-            $('input[name={{ wizard.steps.current }}-form_json_data]').form_json_data({
-                'update_url': '{{ update_url }}'
-            });
-        {% endif %}
-
+        /**
+        * REGION CLONE SERIVCE
+        * Manage regions that can be cloned and the
+        * update of their set of elements
+        */
         $('fieldset[data-region-clone]').region_clone({
+            'debug': {{ DEBUG|jsonify }},
             'current_step': {{ wizard.steps.current }}
         });
-
-        // if ($('input#id_1-founder_name').val() == '') {
-            // $('input#id_1-founder_name').val('{{ user.get_full_name }}');
-        // }
-        // if ($('input#id_1-founder_email').val() == '') {
-            // $('input#id_1-founder_email').val('{{ user.email }}');
-        // }
-
-        $('[data-show-when]').show_when();
-
-        /**
-        * Date Elements
-        **/
-        $.each($('[data-date-picker]'), function (i, item) {
-            var defaultDate = $(item).attr('data-default-date') || null;
-            if (defaultDate !== null) {
-                defaultDate = (defaultDate.match( /(today|now)/ ) == -1) ? new Date(defaultDate) : new Date() ;
-            }
-
-            $(item).dateEntry({'defaultDate': defaultDate});
-        })
-
-
         /**
         * Handle the Add cloned region event
         **/
@@ -123,7 +99,6 @@
             })
 
         });
-
         /**
         * Handle the Remove cloned region event
         **/
@@ -134,6 +109,35 @@
             })
 
         });
+
+        /**
+        * FORM JSON DATA SERVICE
+        * Manage the form json_data field which is used to save
+        * extra from data on post
+        */
+        $('input[name={{ wizard.steps.current }}-form_json_data]').form_json_data({
+            'debug': {{ DEBUG|jsonify }},
+            'update_url': '{{ update_url|jsonify }}'
+        });
+
+        /**
+        * SHOW WHEN
+        * Manage Display of elements and such basd
+        * on simple rule-sets
+        */
+        // $('[data-show-when]').show_when();
+
+        /**
+        * Date Elements
+        **/
+        // $.each($('[data-date-picker]'), function (i, item) {
+        //     var defaultDate = $(item).attr('data-default-date') || null;
+        //     if (defaultDate !== null) {
+        //         defaultDate = (defaultDate.match( /(today|now)/ ) == -1) ? new Date(defaultDate) : new Date() ;
+        //     }
+
+        //     $(item).dateEntry({'defaultDate': defaultDate});
+        // })
     });
     </script>
 {% endblock %}

@@ -5,48 +5,50 @@ $(document).ready( function () {
     * GENERIC - modal window capture
     */
     $(document).on( 'click', '[data-toggle="modal"]', function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-
         var elem = $(this);
         var data = elem.data();
         var target = data.target || false;
-        var is_ajax = data.is_ajax || false;
+        var form = false;
 
-        //var selector_path = data.target_toggle_object || $.getPath(elem);
+        if ( target) {
 
-        var url = elem.data('remote') || elem.attr('href');
-        
-        if (target) {
             target = $(target);
-        }
+            form = target.find('form:first');
 
-        var form = target.find('form:first');
+            event.preventDefault();
+            event.stopPropagation();
 
-        if (is_ajax === true) {
-            var modal_body = target.find('.modal-body');
+            var is_ajax = data.is_ajax || false;
 
-            target.data('is_ajax', is_ajax);
-            //target.data('target_toggle_object', selector_path);
+            var url = elem.data('remote') || elem.attr('href');
+        
+            if ( target && form ) {
+                if (is_ajax === true) {
+                    var modal_body = target.find('.modal-body');
 
-            modal_body.html('');// clear html
+                    target.data('is_ajax', is_ajax);
+                    //target.data('target_toggle_object', selector_path);
 
-            modal_body.load(url, function (data) {
-                modal_body.html(data);
-                // fire the laod event only on successful load of url
-                //target.modal('show'); // load html
-            });
-        } else {
-            // transfer the clicked elements data values to the target
+                    modal_body.html('');// clear html
 
-            delete data.target;
-            delete data.toggle;
-            delete data['bs.modal'];
+                    modal_body.load(url, function (data) {
+                        modal_body.html(data);
+                        // fire the laod event only on successful load of url
+                        //target.modal('show'); // load html
+                    });
+                } else {
+                    // transfer the clicked elements data values to the target
 
-            // update the froms data with all the local data
-            $.each(data, function (key, value) {
-                form.data(key, value);
-            });
+                    delete data.target;
+                    delete data.toggle;
+                    delete data['bs.modal'];
+
+                    // update the froms data with all the local data
+                    $.each(data, function (key, value) {
+                        form.data(key, value);
+                    });
+                }
+            }
         }
     });
 

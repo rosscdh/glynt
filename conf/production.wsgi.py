@@ -17,6 +17,7 @@ import os, sys, site
 
 # Tell wsgi to add the Python site-packages to its path. 
 site.addsitedir('/var/apps/lib/python2.7/site-packages')
+site.addsitedir('/var/apps/.lawpal-live-venv/lib/python2.7/site-packages')
 site.addsitedir('/var/apps/lawpal/glynt')
 site.addsitedir('/var/apps/lawpal/glynt/glynt')
 

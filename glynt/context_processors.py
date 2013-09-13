@@ -37,22 +37,11 @@ def PUSHER_DATA(request):
     }
 
 
-def user_projects(request):
+def SESSION_PROJECT_UUID(request):
     """
-    Ensures the users projects and project are in the context at all times
-    the request.projects and request.project objects are passed in via the
-    project.services.project_service:VisibleProjectsService
+    provides the current SESSION_PROJECT_UUID
+    the session is set in glynt/middleware:LawpalCurrentProjectsMiddleware Service
     """
-    projects = []
-    project = None
-
-    try:
-        projects = request.projects
-        project = request.project
-    except:
-        pass
-
     return {
-        'projects': projects,
-        'project': project,
+        'SESSION_PROJECT_UUID': request.session.get('current_project_uuid', None)
     }

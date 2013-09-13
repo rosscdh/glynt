@@ -18,7 +18,7 @@ class ModelDataBagFieldDoesNotExistException(Exception):
 class BaseDataBagBunch(Bunch):
     _model_databag_field = 'data'
     _model_data_key = None
-    _instance = None
+    instance = None
 
     def __init__(self, instance, **kwargs):
 
@@ -28,7 +28,7 @@ class BaseDataBagBunch(Bunch):
         if instance and not hasattr(instance, self._model_databag_field):
             raise ModelDataBagFieldDoesNotExistException
 
-        self._instance = instance
+        self.instance = instance
 
     def as_json(self):
         return json.dumps(self.data_bag)
@@ -39,7 +39,7 @@ class BaseDataBagBunch(Bunch):
         _data_bag = {}
 
         # try to extract the field but return the _data_bag dict if none found
-        _data_bag = getattr(self._instance, self._model_databag_field, _data_bag)
+        _data_bag = getattr(self.instance, self._model_databag_field, _data_bag)
 
         # Return entire databag model field
         return _data_bag
@@ -59,6 +59,6 @@ class BaseDataBagBunch(Bunch):
             data.update(kwargs)
 
             # set the model field to the updated databag
-            setattr(self._instance, self._model_databag_field, data)
+            setattr(self.instance, self._model_databag_field, data)
 
-            return self._instance.save(update_fields=[self._model_databag_field])
+            return self.instance.save(update_fields=[self._model_databag_field])

@@ -5,6 +5,7 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Field
 
+import json
 import logging
 logger = logging.getLogger('django.request')
 
@@ -114,6 +115,12 @@ class BuilderBaseForm(forms.Form):
 
     def save(self, *args, **kwargs):
         data_bag = self.get_data_bag(instance=self.request.project, request=self.request, user=self.user, **kwargs)
+
+        if data_bag._model_databag_field:
+            data = json.loads(self.cleaned_data.get('form_json_data', '{}'))
+            if data.keys():
+                data_bag.save(**data)
+
 
         # remove the unrequired fields
         self.cleaned_data.pop('form_json_data', None)
