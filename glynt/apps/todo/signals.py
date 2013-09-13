@@ -7,6 +7,8 @@ from django.contrib.admin.models import LogEntry
 
 from threadedcomments.models import ThreadedComment
 
+from glynt.apps.utils import generate_unique_slug
+
 from glynt.apps.todo import TODO_STATUS, TODO_STATUS_ACTION, FEEDBACK_STATUS
 
 from .tasks import delete_attachment
@@ -25,6 +27,21 @@ from bunch import Bunch
 
 import logging
 logger = logging.getLogger('django.request')
+
+def get_todo_info_object(todo):
+    return {
+        'instance': {
+            'pk': todo.pk,
+            'slug': todo.slug,
+            'name': todo.name,
+            'category': todo.category,
+            'project': {'pk': todo.project.pk},
+            'display_status': todo.display_status,
+            'status': todo.status,
+            'is_deleted': todo.is_deleted,
+            'uri': todo.get_absolute_url(),
+        }
+    }
 
 
 """
@@ -126,6 +143,8 @@ def feedbackrequest_created(sender, **kwargs):
         #is_new = kwargs.get('created', False)
         feedbackrequest = kwargs.get('instance')
 
+        assigned = {'from': feedbackrequest.assigned_by.pk, 'to': [t.pk for t in feedbackrequest.assigned_to.all()]}
+
         if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.open:
             verb = '{assigned_by} requested feedback from {assigned_to} on checklist item {todo} for {project}'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), assigned_to=', '.join([u.get_full_name() for u in feedbackrequest.assigned_to.all()]), todo=feedbackrequest.attachment.todo, project=feedbackrequest.attachment.project)
             action.send(feedbackrequest.assigned_by,
@@ -136,7 +155,8 @@ def feedbackrequest_created(sender, **kwargs):
                         detail_statement='for attachment "{attachment}" - "{todo}" is {status}<br/>'.format(attachment=feedbackrequest.attachment.filename, todo=feedbackrequest.attachment.todo.name, status=feedbackrequest.attachment.todo.display_status),
                         attachment=feedbackrequest.attachment.filename,
                         todo=feedbackrequest.attachment.todo.name,
-                        status=feedbackrequest.attachment.todo.display_status)
+                        status=feedbackrequest.attachment.todo.display_status,
+                        assigned=assigned)
 
         if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.closed:
             verb = '{assigned_by} closed the feedback request that was assigned to them on checklist item {todo} for {project}'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), todo=feedbackrequest.attachment.todo, project=feedbackrequest.attachment.project)
@@ -148,7 +168,8 @@ def feedbackrequest_created(sender, **kwargs):
                         detail_statement='for attachment "{attachment}" - "{todo}" is {status}'.format(attachment=feedbackrequest.attachment.filename, todo=feedbackrequest.attachment.todo.name, status=feedbackrequest.attachment.todo.display_status),
                         attachment=feedbackrequest.attachment.filename,
                         todo=feedbackrequest.attachment.todo.name,
-                        status=feedbackrequest.attachment.todo.display_status)
+                        status=feedbackrequest.attachment.todo.display_status,
+                        assigned=assigned)
 
         if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.cancelled:
             verb = '{assigned_by} cancelled their feedback request on checklist item {todo} for {project}'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), todo=feedbackrequest.attachment.todo, project=feedbackrequest.attachment.project)
@@ -160,7 +181,8 @@ def feedbackrequest_created(sender, **kwargs):
                         detail_statement='for attachment "{attachment}" - "{todo}" is {status}'.format(attachment=feedbackrequest.attachment.filename, todo=feedbackrequest.attachment.todo.name, status=feedbackrequest.attachment.todo.display_status),
                         attachment=feedbackrequest.attachment.filename,
                         todo=feedbackrequest.attachment.todo.name,
-                        status=feedbackrequest.attachment.todo.display_status)
+                        status=feedbackrequest.attachment.todo.display_status,
+                        assigned=assigned)
 
 
 @receiver(post_save, sender=FeedbackRequest, dispatch_uid='feedbackrequest.status_change')
@@ -200,11 +222,41 @@ def projectlawyer_deleted(sender, **kwargs):
         pass
 
 
+@receiver(post_save, sender=ToDo, dispatch_uid='todo.item_crud')
+def todo_item_crud(sender, **kwargs):
+    is_new = kwargs.get('created', False)
+    instance = kwargs.get('instance')
+
+    pusher_service = PusherPublisherService(channel=instance.project.pusher_id, event='todo.post_save')
+
+    info_object = get_todo_info_object(todo=instance)
+
+    if is_new == True:
+        pusher_service.event = 'todo.is_new'
+        comment = label = 'Created new item "{name}"'.format(name=instance.name)
+
+    elif instance.is_deleted == True:
+        pusher_service.event = 'todo.is_deleted'
+        comment = label = 'Deleted "{name}"'.format(name=instance.name)
+
+    else:
+        pusher_service.event = 'todo.is_updated'
+        comment = label = 'Updated "{name}"'.format(name=instance.name)
+
+    pusher_service.process(label=label, comment=comment, **info_object)
+
+
+
+
 @receiver(pre_save, sender=ToDo, dispatch_uid='todo.status_change')
 def todo_item_status_change(sender, **kwargs):
     instance = kwargs.get('instance')
 
-    if instance.pk is not None:
+    if instance.pk is None:
+        # ensure the slug is present
+        if instance.slug in [None, '']:
+            instance.slug = generate_unique_slug(instance=instance)
+    else:
 
         if instance.user is not None:
 
@@ -221,10 +273,9 @@ def todo_item_status_change(sender, **kwargs):
                             action_object=instance,
                             target=instance,
                             content=None,
-                            instance_status=instance.status,
-                            instance_dispay_status=instance.display_status,
                             event_action=event_action,
-                            event='todo.status_change')
+                            event='todo.status_change',
+                            **get_todo_info_object(todo=instance))
 
                 if instance.status in [TODO_STATUS.closed, TODO_STATUS.resolved]:
                     """
@@ -252,8 +303,6 @@ def on_action_created(sender, **kwargs):
 
                 event = action.data.get('event', 'action.created')
 
-                pusher_service = PusherPublisherService(channel=target.pusher_id, event=event)
-
                 user_name = action.actor.get_full_name()
                 user_email = action.actor.email
 
@@ -262,6 +311,16 @@ def on_action_created(sender, **kwargs):
                                         target_name=unicode(action),
                                         timestamp='',
                                         **action.data)
+
+                # if the target has a project attached to it
+                if hasattr(target, 'project'):
+                    # send the same event to the project channel
+                    # so that the other project channel subscribers
+                    # can hear it
+                    channels = [target.project.pusher_id, target.pusher_id]
+                    pusher_service = PusherPublisherService(channel=channels, event=event)
+                else:
+                    pusher_service = PusherPublisherService(channel=target.pusher_id, event=event)
 
                 pusher_service.process(label=action.verb, comment=action.verb, **info_object)
 

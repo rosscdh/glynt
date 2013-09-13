@@ -27,8 +27,12 @@ def _attachment_upload_file(instance, filename):
 
 
 class ToDo(models.Model):
+    """
+    ToDo Items that are associated with a user 
+    and perhaps with a project
+    """
     TODO_STATUS_CHOICES = TODO_STATUS
-    """ ToDo Items that are associated with a user and perhaps with a project """
+
     user = models.ForeignKey(User, blank=True, null=True)
     project = models.ForeignKey(Project, blank=True, null=True)
     name = models.CharField(max_length=128)
