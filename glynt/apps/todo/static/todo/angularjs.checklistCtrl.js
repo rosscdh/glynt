@@ -69,8 +69,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 				var item = result;
 				/* Update model */
 				if( result && result.name )  {
-
-					$scope.saveItem( item );
+					$scope.saveItem( item, true );
 				}
 			},
 			function(result) { /* Error */
@@ -83,7 +82,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 	 * Saves item through API
 	 * @param  {Object} item JSON object representation of checklist item
 	 */
-	$scope.saveItem = function( item ) {
+	$scope.saveItem = function( item, isNewItem ) {
 		if( item && item.name ) {
 			/* Ensure project is allocated properly, esp for new items */
 			var projectId = lawPalService.getProjectId();
@@ -92,7 +91,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 			var promise = lawPalService.updateChecklistItem( item, $scope.config.pusher );
 			promise.then(
 				function( results ) { /* Success */
-					//$scope.addAlert( "Item updated", "success" );
+					$scope.addAlert( "Updating: " + item.name , (isNewItem?"success":"info"), "Saving changes" );
 					var newItem = results;
 					if( $scope.findItemIndex( newItem ) === -1 )
 						{
@@ -200,18 +199,14 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 	 * @param {String} message Message to display
 	 * @param {String} type    type of alert to display e.g. error, success, worning, info
 	 */
-	$scope.addAlert = function( message, type ) {
-		//var alert;
-		var title;
-
+	$scope.addAlert = function( message, type, title ) {
 		type = type || "info";
-		title = "Update";
-		switch( type )
-			{
-				case "error":
-					title = "Error";
-					break;
-			}
+		if( typeof(title)==="undefined" ) {
+			title = "Update";
+
+			if( type=="Error" )
+				title = "Error";
+		}
 
 		toaster.pop( type, title, message );
 		/*
@@ -326,7 +321,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 				}
 
 				if( successMsg )
-					$scope.addAlert( successMsg, "success" );
+					$scope.addAlert( successMsg, "success", "Item updated" );
 
 				// As this event has not been invoked through the normal angular channels update the scope
 				$scope.$apply();
@@ -368,8 +363,9 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 			newItem = data.instance;
 
 			if( $scope.findItemIndex( newItem ) === -1 )
-				{			
+				{
 					$scope.addItemToChecklist( newItem );
+					$scope.addAlert( newItem.name , "success", "New item" );
 					$scope.$apply();
 				}
 		}
