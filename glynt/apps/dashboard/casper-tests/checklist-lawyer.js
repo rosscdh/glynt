@@ -22,8 +22,6 @@ helper.scenario(casper.cli.options.url,
     function() {
         /* Checklist categories */
         casper.waitForSelector('#checklist-categories li a', function() {
-        	this.echo(this.getHTML());
-
 	        casper.test.comment('Test checklist categories exist');
 	        this.test.assertExists('ul#checklist-categories')
 
@@ -44,8 +42,6 @@ helper.scenario(casper.cli.options.url,
         /* Checklist items */
         casper.test.comment('Test checklist items exist');
         casper.waitForSelector('div#list-items section td', function() {
-            this.echo(this.getHTML());
-
             casper.test.comment('Test checklist items')
             this.test.assertExists('div#list-items')
             
@@ -63,8 +59,6 @@ helper.scenario(casper.cli.options.url,
 
         casper.test.comment('Test checklist items exist');
         casper.waitForSelector('div#list-items section td', function() {
-            this.echo(this.getHTML());
-
             casper.test.comment('Test checklist items')
             this.test.assertExists('div#list-items')
             
@@ -77,9 +71,6 @@ helper.scenario(casper.cli.options.url,
 
         casper.test.comment('Test checklist items options for lawyers');
         casper.waitForSelector('div#list-items section td', function() {
-
-            this.echo(this.getHTML());
-
             casper.test.comment('Test checklist items create button')
             this.test.assertExists('div#list-items div#transaction-setup button.create-item')
 
@@ -103,6 +94,51 @@ helper.scenario(casper.cli.options.url,
         });
     }
     */
+    ,
+    function() {
+    	/* Text messages */
+    	//casper.viewport(2048, 1024);
+    	casper.test.comment('Test displaying messages')
+    	this.click('a.item-edit');
+
+    	casper.waitForSelector('div#div_id_name', function() {
+    		casper.test.comment('Test edit form displays')
+    		this.test.assertExists('div#div_id_name input');
+
+    		this.fill('div.modal form', {
+                name: "Modified item name"
+            }, true);
+
+            casper.test.comment('Submit form')
+            this.click('div.modal input[type=submit]');
+
+            casper.waitForText('Modified item name', function(){
+            	casper.test.comment('Wait for toaster')
+	            casper.waitForText('Saving changes', function(){
+	            	this.test.assertTextExists('Saving changes');
+	            });
+            });
+    	});
+    }
 );
+
+var captureRequest = 0;
+function capturePage() {
+	var wait;
+	captureRequest++;
+	wait = captureRequest * 1000;
+	delayCapturePage( wait );
+}
+
+function delayCapturePage( delay ) {
+	casper.wait(delay, function() {
+    	this.capture('/tmp/page_' + delay + '.png', {
+	        top: 0,
+	        left: 0,
+	        width: 2048,
+	        height: 1024
+	    });
+    });
+}
 
 helper.run();

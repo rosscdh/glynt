@@ -21,6 +21,7 @@ module.exports = function(config) {
       'static/js/angularjs/lib/angular-resource.js',
       'static/js/angularjs/lib/ui-bootstrap-tpls-0.5.0.min.js',
       'static/js/angularjs/lib/angular-mocks.js', /* Required for testing */
+      'static/js/angularjs/lib/angularjs-toaster.js', /* Cool toasters */
       'static/js/angularjs/lawpal.app.js',
       'static/js/angularjs/services/LawPalService.js',
       'static/js/angularjs/services/LawPalUrls.js',

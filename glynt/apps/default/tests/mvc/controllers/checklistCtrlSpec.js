@@ -98,6 +98,7 @@ describe('Testing checklistCtrl', function() {
 		// There should only be one
 		expect(item).toEqual(null);
 	});
+	/*
 
 	// Test checklist items assigned to the current user #2
 	it('should return 1 alert with message "Hello World"', function() {
@@ -120,4 +121,5 @@ describe('Testing checklistCtrl', function() {
 		// There should only be one
 		expect(count).toEqual(1);
 	});
+	*/
 });
