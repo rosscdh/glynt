@@ -30,12 +30,7 @@
                 </div>
             </div>
 
-            <div class="col col-lg-9">
-
-                <alert ng-repeat="alert in model.alerts" type="alert.type" close="closeAlert($index)">
-                    <span ng-bind="alert.message"></span>
-                </alert>
-                
+            <div class="col col-lg-9">                
                 <div id="list-items">
                     <section ng-repeat="category in model.categories">
                         <div id="{[{category.slug}]}" class="checklist-header clearfix">
