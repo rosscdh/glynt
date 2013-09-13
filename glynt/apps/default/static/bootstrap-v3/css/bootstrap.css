@@ -416,7 +416,13 @@ a.text-success:hover,
 a.text-success:focus {
   color: #356635;
 }
-
+.text-text {
+  color: #555555;
+}
+a.text-text:hover,
+a.text-text:focus {
+  color: #3c3c3c;
+}
 .text-left {
   text-align: left;
 }
@@ -4971,9 +4977,9 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
 .navbar {
   position: relative;
   padding-top: 10px;
-  padding-right: 15px;
-  padding-bottom: 0;
+  padding-bottom: -1px;
   padding-left: 15px;
+  padding-right: 15px;
   margin-bottom: 20px;
   background-color: rgba(255, 255, 255, 0.93);
   border-bottom: 1px solid #e1e4e6;
@@ -8156,6 +8162,12 @@ table.stories .story .story-info p {
   border: 1px solid #e7e7e7;
 }
 
+table.attorney-list,
+table.lawyer-list {
+  border-left: 2px solid #ffd37e;
+  padding-right: 15px;
+}
+
 table.attorney-list tr td,
 table.lawyer-list tr td {
   border-top: 0;
@@ -8165,12 +8177,19 @@ table.attorney-list tr .attorney-picture,
 table.lawyer-list tr .attorney-picture,
 table.attorney-list tr .lawyer-picture,
 table.lawyer-list tr .lawyer-picture {
-  width: 120px;
+  width: 140px;
 }
 
-table.attorney-list tr .attorney-info h2,
-table.lawyer-list tr .attorney-info h2 {
+table.attorney-list tr .lawyer-info h1,
+table.lawyer-list tr .lawyer-info h1 {
   margin-top: 10px;
+  font-size: 30px;
+}
+table.attorney-list tr .lawyer-info h2,
+table.lawyer-list tr .lawyer-info h2 {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #555555;
 }
 
 table.attorney-list tr .attorney-meta,
@@ -8182,6 +8201,7 @@ table.lawyer-list tr .lawyer-meta {
 }
 
 table.lawyer-list {
+  background-color: white;
   margin: 10px 0 0;
   background-color: #fdf3e4;
 }

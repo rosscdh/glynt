@@ -1,8 +1,6 @@
 """
 """
 from django.test import TestCase
-from django.test import LiveServerTestCase
-from django.test.client import Client
 from django.core.urlresolvers import reverse
 from django.db.models.query import QuerySet
 from model_mommy import mommy
@@ -16,7 +14,7 @@ from glynt.apps.project import PROJECT_STATUS, PROJECT_LAWYER_STATUS
 import itertools
 import os
 
-#from nose.tools import set_trace; set_trace()
+
 class EnsureProjectsAreAvailableInContextOnAllPagesTest(BaseLawyerCustomerProjectCaseMixin):
     """
     Test a random set of urls for the presence of the projects and projects objects
@@ -31,36 +29,41 @@ class EnsureProjectsAreAvailableInContextOnAllPagesTest(BaseLawyerCustomerProjec
                         reverse('public:about'),
                     ]
 
-        self.auth_urls = self.urls + [
+        #self.auth_urls = self.urls + [
+        self.auth_urls = [
             reverse('dashboard:overview'),
-            #reverse('dashboard:checklist', kwargs={'uuid': self.project.uuid}),
+            reverse('dashboard:checklist', kwargs={'uuid': self.project.uuid}),
+            reverse('dashboard:project', kwargs={'uuid': self.project.uuid}),
         ]
 
-    def test_projects_are_always_available_unauthorised(self):
+    def test_projects_are_never_available_to_unauthorised_users(self):
         for u in self.urls:
             resp = self.client.get(u)
+            request = resp.context['request']
 
-            self.assertTrue('project' in resp.context)
-            self.assertTrue(resp.context['project'] is None)
+            self.assertTrue(hasattr(request, 'project'))
+            self.assertTrue(request.project is None)
+            
+            self.assertTrue(type(request.projects) is list)
+            self.assertEqual(len(request.projects), 0)
 
-            self.assertTrue('projects' in resp.context)
-            self.assertTrue(type(resp.context['projects']) is list)
-            self.assertEqual(len(resp.context['projects']), 0)
-
-    def test_projects_are_always_available_lawyer(self):
+    def test_projects_are_always_available_to_lawyer_user(self):
         """
+        The Dashboard url for the LAWYER does not contain project info
+        It is a list of projects associated with the lawyer in question
         """
         self.client.login(username=self.lawyer_user.username, password=self.password)
 
         for u in self.auth_urls:
             resp = self.client.get(u)
+            request = resp.context['request']
 
-            self.assertTrue('project' in resp.context)
-            self.assertTrue(type(resp.context['project']) == Project)
+            self.assertTrue(hasattr(request, 'project'))
+            self.assertTrue(type(request.project) == Project)
 
-            self.assertTrue('projects' in resp.context)
-            self.assertTrue(type(resp.context['projects']) is list)
-            self.assertEqual(len(resp.context['projects']), 1)
+            self.assertTrue(hasattr(request, 'projects'))
+            self.assertTrue(type(request.projects) is list)
+            self.assertEqual(len(request.projects), 1)
 
     def test_projects_are_always_available_customer(self):
         """
@@ -69,13 +72,14 @@ class EnsureProjectsAreAvailableInContextOnAllPagesTest(BaseLawyerCustomerProjec
 
         for u in self.auth_urls:
             resp = self.client.get(u)
+            request = resp.context['request']
 
-            self.assertTrue('project' in resp.context)
-            self.assertTrue(type(resp.context['project']) == Project)
+            self.assertTrue(hasattr(request, 'project'))
+            self.assertTrue(type(request.project) == Project)
 
-            self.assertTrue('projects' in resp.context)
-            self.assertTrue(type(resp.context['projects']) is QuerySet)
-            self.assertEqual(len(resp.context['projects']), 1)
+            self.assertTrue(hasattr(request, 'projects'))
+            self.assertTrue(type(request.projects) is QuerySet)
+            self.assertEqual(len(request.projects), 1)
 
 
 class ProjectModelMethodsTest(TestCase):
@@ -104,7 +108,7 @@ class ProjectModelMethodsTest(TestCase):
         """ returns a list of the type of transaction associated with this project """
         self.assertEqual(type(self.project_with_lawyer.transaction_types), list)
 
-    def test_get_primary_lawyer(self):
+    def test_get_primary_lawyer_not_present(self):
         """
         Test that we return a primary lawyer if present
         """
@@ -125,7 +129,7 @@ class ProjectModelMethodsTest(TestCase):
         self.assertEqual(True, self.project_with_lawyer.has_lawyer)
         self.assertEqual(False, self.project_without_lawyer.has_lawyer)
 
-    def test_get_primary_lawyer(self):
+    def test_get_primary_lawyer_present(self):
         self.assertTrue(self.project_with_lawyer.get_primary_lawyer() is not None)
         self.assertEqual(type(self.project_with_lawyer.get_primary_lawyer()), Lawyer)
 

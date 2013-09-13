@@ -325,18 +325,27 @@ table.stories {
 
 table.attorney-list,
 table.lawyer-list {
+  border-left: 2px solid #ffd37e;
+  padding-right:15px;
   tr {
     td {
       border-top: 0;
     }
     .attorney-picture,
     .lawyer-picture {
-      width: 120px;
+      width: 140px;
     }
-    .attorney-info {
+    .lawyer-info {
+      h1 {
+        margin-top: 10px;
+        font-size:30px;
+        }
       h2 {
         margin-top: 10px;
-      }
+        font-size:16px;
+        color:@gray;
+        }
+
     }
     .attorney-meta,
     .lawyer-meta {
@@ -346,7 +355,7 @@ table.lawyer-list {
   }
 }
 table.lawyer-list {
-  background-color: lighten(@brand-warning, 32%);
+  background-color: white;
   margin: 10px 0 0;
 }
 table.lawyer-list.active {

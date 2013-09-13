@@ -38,6 +38,7 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
                        content_type='text/json')
 
         super(BaseLawyerCustomerProjectCaseMixin, self).setUp()
+
         self.client = Client()
 
         self.password = 'password'
@@ -71,7 +72,6 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
         self.project_lawyer_join = self.project.projectlawyer_set.all()[0]
         self.project_lawyer_join.status = self.project_lawyer_join.LAWYER_STATUS.assigned
         self.project_lawyer_join.save(update_fields=['status'])
-
 
         self.todo = mommy.make('todo.ToDo', status=TODO_STATUS.open, project=self.project, user=self.lawyer_user, category='General', name="My Todo")
         self.attachment = mommy.make('todo.Attachment', project=self.project, todo=self.todo, uploaded_by=self.customer_user)

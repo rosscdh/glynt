@@ -16,73 +16,66 @@
 {% endblock %}
 
 {% block body %}
-
   <!-- Button trigger modal -->
 <div class="container dashboard-view">
-    {% if user.profile.is_customer %}
-        {% if not profile_is_complete %}
-            <div class="callout callout-danger empty">
-                <div class="empty-message empty-message-exclamation-sign">
-                    <h3>We need some more information from you</h3>
-                    <p>We can't continue with your transaction until you tell us a bit more about your startup.</p>
-                    <a href="{% url 'transact:builder' project_uuid=project.uuid tx_range=project.tx_range step='1' %}" class="btn btn-primary">Click here to complete your profile</a>
-                </div>
+    {% if not profile_is_complete and user.profile.is_customer %}
+        <div class="callout callout-danger empty">
+            <div class="empty-message empty-message-exclamation-sign">
+                <h3>We need some more information from you</h3>
+                <p>We can't continue with your transaction until you tell us a bit more about your startup.</p>
+                <a href="{% url 'transact:builder' project_uuid=project.uuid tx_range=project.tx_range step='1' %}" class="btn btn-primary">Click here to complete your profile</a>
             </div>
-        {% else %}
-            {% if not project.has_lawyer %}
-                {% project_lawyers project 'potential' %}
-                <br />
-            {% endif %}
-            {% if counts.awaiting_feedback_from_user > 0 %}
-                <div class="alert"><i class="glyphicon glyphicon-time"></i> You have one more checklist items awaiting feedback. Visit your checklist to respond to them.</div>
-            {% endif %}
-            <div class="row">
-                <div class="col col-lg-5">
-                    {% if project.has_lawyer %}
-                        <div class="widget account-attorney">
-                            <h3>Project Attorney</h3>
-                            {% project_lawyers project 'assigned' %}
-                        </div>
-                    {% endif %}                    
-                    <div class="widget account-attorney">
-                        <h3>LawPal Account Manager</h3>
-                        <div class="row">
-                            <div class="col-12">
-                                <img src="{{STATIC_URL}}img/yael-contact-face.jpg" class="img-circle pull-left" style="width:40px; padding-right :8px;padding-top:6px;">
-                                <h4>Yael Citro <small class="pull-right"><a href="mailto:xw4ux8lx@incoming.intercom.io" class="btn btn-info btn-small intercom" style="margin-top:-4px">Contact Yael</a></small>  <small>Co-Founder at LawPal </small></h4> 
-                            </div>
-                        </div>
-                    </div>
-                    <div class="callout callout-success empty">
-                        <div class="empty-message empty-message-ok">
-                            <h4>Your transaction profile is complete.</h4>
-                            {% if PROJECT_ENVIRONMENT == 'dev' %}<a href="{% url 'transact:builder' project_uuid=project.uuid tx_range=project.tx_range step='1' %}" class="">update</a>{% endif %}
-                        </div>
-                    </div>
-                </div>
-                <div class="col col-lg-7">
-                    <div class="widget checklist">
-                        <a href="{% url 'dashboard:checklist' uuid=project.uuid %}"><h3>Transaction Checklist </h3></a>
-                        <div class="row">
-                            <div class="col col-3 text-center" class="softer"><h1  class="softer">{{counts.new}}</h1><small  class="softer">New</small></div>
-                            <div class="col col-3 text-center"><h1>{{counts.open}}</h1><small>Open</small></div>
-                            <div class="col col-3 text-center"><h1 class="text-warning">{{counts.awaiting_feedback_from_user}}</h1><small class="text-warning">Feedback</small></div>
-                            <div class="col col-3 text-center"><h1 class="text-success">{{counts.closed}}</h1><small class="text-success">Closed</small></div>
-                        </div>
-                    </div>
-                    {% if project.projectlawyer_set.all.0.status == PROJECT_LAWYER_STATUS.assigned %}
-                    <div class="widget discuss">
-                        <h3>Project Discussion</h3>
-                        {% render_comment_form for project %}
-                        {% render_comment_list for project %}
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
-        {% endif %}
+        </div>
     {% else %}
-        <div class="alert">
-            The Attorney Transaction dashboard is coming shortly. For now, please review the Checklist.
+        {% if not project.has_lawyer and user.profile.is_customer %}
+            {% project_lawyers project 'potential' %}
+            <br />
+        {% endif %}
+        {% if counts.awaiting_feedback_from_user > 0 %}
+            <div class="alert"><i class="glyphicon glyphicon-time"></i> You have one more checklist items awaiting feedback. Visit your checklist to respond to them.</div>
+        {% endif %}
+        <div class="row">
+            <div class="col col-lg-5">
+                {% if project.has_lawyer %}
+                    <div class="widget account-attorney">
+                        <h3>Project Attorney</h3>
+                        {% project_lawyers project 'assigned' %}
+                    </div>
+                {% endif %}                    
+                <div class="widget account-attorney">
+                    <h3>LawPal Account Manager</h3>
+                    <div class="row">
+                        <div class="col-12">
+                            <img src="{{STATIC_URL}}img/yael-contact-face.jpg" class="img-circle pull-left" style="width:40px; padding-right :8px;padding-top:6px;">
+                            <h4>Yael Citro <small class="pull-right"><a href="mailto:xw4ux8lx@incoming.intercom.io" class="btn btn-info btn-small intercom" style="margin-top:-4px">Contact Yael</a></small>  <small>Co-Founder at LawPal </small></h4> 
+                        </div>
+                    </div>
+                </div>
+                <div class="callout callout-success empty">
+                    <div class="empty-message empty-message-ok">
+                        <h4>Your transaction profile is complete.</h4>
+                        {% if PROJECT_ENVIRONMENT == 'dev' %}<a href="{% url 'transact:builder' project_uuid=project.uuid tx_range=project.tx_range step='1' %}" class="">update</a>{% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col col-lg-7">
+                <div class="widget checklist">
+                    <a href="{% url 'dashboard:checklist' uuid=project.uuid %}"><h3>Transaction Checklist </h3></a>
+                    <div class="row">
+                        <div class="col col-3 text-center" class="softer"><h1  class="softer">{{counts.new}}</h1><small  class="softer">New</small></div>
+                        <div class="col col-3 text-center"><h1>{{counts.open}}</h1><small>Open</small></div>
+                        <div class="col col-3 text-center"><h1 class="text-warning">{{counts.awaiting_feedback_from_user}}</h1><small class="text-warning">Feedback</small></div>
+                        <div class="col col-3 text-center"><h1 class="text-success">{{counts.closed}}</h1><small class="text-success">Closed</small></div>
+                    </div>
+                </div>
+                {% if project.projectlawyer_set.all.0.status == PROJECT_LAWYER_STATUS.assigned %}
+                <div class="widget discuss">
+                    <h3>Project Discussion</h3>
+                    {% render_comment_form for project %}
+                    {% render_comment_list for project %}
+                </div>
+                {% endif %}
+            </div>
         </div>
     {% endif %}
 </div>

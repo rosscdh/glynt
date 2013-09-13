@@ -83,7 +83,15 @@ class Project(models.Model):
         return _primary_lawyer
 
     def notification_recipients(self):
-        return itertools.chain(self.company.customers.all(), [l.user for l in self.lawyers.all()])
+        """
+        provide access to the customer, the lawyer
+        ### not yet ### as well as any user associated with the customers company ## end not yet ##
+        """
+        customer_user = self.customer.user
+        return itertools.chain( [customer_user],
+                                [l.lawyer.user for l in ProjectLawyer.objects.assigned(project=self)],
+                                #[u for u in self.company.customers.exclude(pk=customer_user.pk)]
+                              )
 
     @property
     def has_lawyer(self):
