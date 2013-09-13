@@ -25,6 +25,7 @@ module.exports = function(config) {
       'static/js/angularjs/services/LawPalService.js',
       'static/js/angularjs/services/LawPalUrls.js',
       'static/js/angularjs/services/LawPalDialog.js',
+      'static/js/angularjs/services/PusherService.js',
       '../todo/static/todo/angularjs.checklistCtrl.js',
       '../todo/static/todo/angularjs.checklistItemCtrl.js',
       '../todo/static/todo/angularjs.checklistItemDirective.js',
