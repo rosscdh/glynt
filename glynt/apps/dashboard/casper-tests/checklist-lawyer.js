@@ -22,37 +22,28 @@ helper.scenario(casper.cli.options.url,
     function() {
         /* Checklist categories */
         casper.waitForSelector('#checklist-categories li a', function() {
+        	this.echo(this.getHTML());
 
-            this.echo(this.getHTML());
+	        casper.test.comment('Test checklist categories exist');
+	        this.test.assertExists('ul#checklist-categories')
 
-            casper.test.comment('Test checklist categories exist');
+	        casper.test.comment('Test checklist categories exist');
+	        this.test.assertExists('ul#checklist-categories li')
 
-            casper.test.comment('Test checklist categories exist');
-            this.test.assertExists('ul#checklist-categories')
+	        casper.test.comment('Test for category name HTML node')
+	        this.test.assertExists('section h3')
+	           
+	        casper.test.comment('Test for number assigned container spans')
+	        this.test.assertExists('ul#checklist-categories span.num_assigned_to_user');
 
-            casper.test.comment('Test checklist categories exist');
-            this.test.assertExists('ul#checklist-categories li')
-
-            casper.test.comment('Test for category name HTML node')
-            this.test.assertExists('section h3')
-
-            /*
-            casper.test.comment('Test for category name')
-            this.test.assertSelectorHasText('section h3,','General')
-            */
-           
-           casper.test.comment('Test for number assigned container spans')
-           this.test.assertExists('ul#checklist-categories span.num_assigned_to_user');
-
-           casper.test.comment('Test for number of assigned tasks per category')
-           this.test.assertSelectorHasText('ul#checklist-categories span.num_assigned_to_user', '1');
+	        casper.test.comment('Test for number of assigned tasks per category')
+	        this.test.assertSelectorHasText('ul#checklist-categories span.num_assigned_to_user', '1');
         });
     },
     function() {
         /* Checklist items */
         casper.test.comment('Test checklist items exist');
         casper.waitForSelector('div#list-items section td', function() {
-
             this.echo(this.getHTML());
 
             casper.test.comment('Test checklist items')
@@ -64,42 +55,6 @@ helper.scenario(casper.cli.options.url,
             casper.test.comment('Test for to do, as provided by workflow')
             this.test.assertTextExists('My Todo')
         });
-        /*
-        casper.wait(1000, function() {
-            casper.test.comment('Test checklist categories exist');
-            this.test.assertExists('ul#checklist-categories')
-            
-            this.test.assertExists('ul#checklist-categories li')
-
-            casper.test.comment('Test checklist items')
-            casper.test.assertExists('div#list-items')
-            casper.test.comment('Test checklist items create button')
-            casper.test.assertExists('div#list-items section div#transaction-setup button.create-item')
-            
-            casper.test.comment('Test checklist items exist');
-
-            this.test.assertExists('tr.item')
-            this.test.assertExists('button.create-item')
-
-            casper.test.comment('Test checklist items edit button exists and is visible');
-            this.test.assertExists('tr.item a.item-edit')
-            this.test.assertVisible('tr.item a.item-edit')
-
-            casper.test.comment('Test checklist items delete button exists and is not visible');
-            this.test.assertExists('tr.item a.item-delete')
-            this.test.assertNotVisible('tr.item a.item-delete')
-        
-            casper.test.comment('Test checklist feedback request indicator is working');
-
-            // the general cat has the span with the right class
-            this.test.assertExists('li[data-category="general"] span.num_assigned_to_user');
-            // the span contains the value
-            this.test.assertSelectorHasText('li[data-category="general"] span.num_assigned_to_user', '1');
-            // test we have the little span indicator
-            this.test.assertExists('li[data-category="general"] span.num_assigned_to_user i.icon-state-pending');
-            
-        });
-        */
     },
     function() {
         /* Lawyer specific tests */
@@ -108,7 +63,6 @@ helper.scenario(casper.cli.options.url,
 
         casper.test.comment('Test checklist items exist');
         casper.waitForSelector('div#list-items section td', function() {
-
             this.echo(this.getHTML());
 
             casper.test.comment('Test checklist items')
@@ -137,7 +91,18 @@ helper.scenario(casper.cli.options.url,
             this.test.assertExists('div#list-items tr.item a.item-delete')
             this.test.assertNotVisible('div#list-items tr.item a.item-delete')
         });
+    }/*,
+    function() {
+    	// Real-time tests
+    	casper.test.comment('Test for real-time update')
+    	casper.waitForSelector('div#list-items section td', function() {
+            window.mock_Pusher("todo.is_new", { "name": "New item 999", "project":"1", "category": "General", "status": 0, "slug": "new-slug", "id":999 });
+            this.echo(this.getHTML());
+
+            this.test.assertTextExists('New item 999')
+        });
     }
+    */
 );
 
 helper.run();
