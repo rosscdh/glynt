@@ -3,8 +3,8 @@
  * @author <a href="mailtolee.j.sinclair@gmail.com">Lee Sinclair</a>
  * Date: 2 Sept 2013
  */
-angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService', 'lawPalUrls', 'lawPalDialog', '$location', '$anchorScroll', 'angularPusher', 
-	function( $scope, lawPalService, lawPalUrls, lawPalDialog, $location, $anchorScroll, angularPusher ) {
+angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService', 'lawPalUrls', 'lawPalDialog', '$location', '$anchorScroll', 'angularPusher', 'toaster',
+	function( $scope, lawPalService, lawPalUrls, lawPalDialog, $location, $anchorScroll, angularPusher, toaster ) {
 
 	// Data is stored within a JavaSCript object to avoid any nasty scope overides
 	$scope.model = {
@@ -201,9 +201,20 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 	 * @param {String} type    type of alert to display e.g. error, success, worning, info
 	 */
 	$scope.addAlert = function( message, type ) {
-		var alert;
+		//var alert;
+		var title;
 
 		type = type || "info";
+		title = "Update";
+		switch( type )
+			{
+				case "error":
+					title = "Error";
+					break;
+			}
+
+		toaster.pop( type, title, message );
+		/*
 		alert = { "type": type, "message": message, "timeStamp": new Date().getTime() };
 
 		$scope.model.alerts.push( alert );
@@ -211,6 +222,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		if( type==="success" ) {
 			$scope.delayedAlertClose( alert );
 		}
+		*/
 	};
 
 	/**
