@@ -38,6 +38,7 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
                        content_type='text/json')
 
         super(BaseLawyerCustomerProjectCaseMixin, self).setUp()
+
         self.client = Client()
 
         self.password = 'password'

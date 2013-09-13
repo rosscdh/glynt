@@ -16,13 +16,16 @@
 <div class="container dashboard-view">
     <div class="row">
         <div class="col-12">
-            <table class="table table-bordered">
+            <table id="lawyer-projects" class="table table-bordered">
+                <thead>
                 <tr>
                     <th>Company</th>
                     <th class="" colspan="2">Client Contact</th>
                     <th class="text-center">Status</th>
                     <th>Note</th>
                 </tr>
+                </thead>
+                <tbody>
             {% for p in project_lawyer_joins %}
                 {% with p.project as project %}
                 <tr class="project-list-item {{ p.display_status|lower }}">
@@ -66,6 +69,7 @@
             {% empty %}
                 <tr><td colspan="5" class="text-center"><h3 class="softer"><small><i class="glyphicon glyphicon-time "></i></small> Your introductions and active projects will appear here shortly. </h3></td></tr>
             {% endfor %}
+                </tbody>
             </table>
             <br />
             <hr />

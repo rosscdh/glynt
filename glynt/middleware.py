@@ -34,9 +34,6 @@ class LawpalSocialAuthExceptionMiddleware(SocialAuthExceptionMiddleware):
     def process_exception(self, request, exception):
         self.backend = self.get_backend(request, exception)
 
-        # if self.raise_exception(request, exception):
-        #     return
-
         if isinstance(exception, SocialAuthBaseException):
             backend_name = get_backend_name(self.backend)
             message = self.get_message(request, exception)
@@ -60,15 +57,14 @@ class LawpalCurrentProjectsMiddleware(object):
     """
     Middleware to ensure that the template has access to the
     {
-        projects: [], # relative to customer or lawyer user_class
-        project:,
+        projects: [Project, Project], # relative to customer or lawyer user_class
+        project: Project,
     }
     object
     """
     def process_request(self, request):
         projects_service = VisibleProjectsService(request=request)
 
-        request.projects = projects_service.projects
-        request.project = projects_service.project
+        request.projects, request.project = projects_service.get()
 
         return None
