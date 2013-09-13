@@ -69,14 +69,13 @@ class SendProjectEmailsService(object):
 
         return [u.email for u in recipients]
 
-
     def process(self):
         send_templated_mail(
-              template_name = self.mail_template_name,
-              template_prefix="email/",
-              from_email = site_email,
-              recipient_list = self.recipient_list,
-              context = self.context
+            template_name=self.mail_template_name,
+            template_prefix="email/",
+            from_email=site_email,
+            recipient_list=self.recipient_list,
+            context=self.context
         )
 
 
@@ -88,11 +87,15 @@ class SendNewProjectEmailsService(SendProjectEmailsService):
 
         company = self.project.customer.primary_company
 
+        if project.transactions:
+            transactions = [t.title for t in project.transactions.all()]
+
         self.context.update({
             'subject': '{company} created a new project'.format(company=company),
             'customer': self.project.customer,
             'company': company,
             'project_data': self.project.data,
+            'transactions': ', '.join(transactions),
         })
 
     @property

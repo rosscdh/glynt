@@ -10,7 +10,7 @@
         <td class="small-width" align="left" width="40" style="display: block;">&nbsp;</td>
         <td>
             <h1 style="color: #22282b !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 28px; font-weight: normal; letter-spacing: -1px; line-height: 1.6em; margin: 0; padding: 0;">A new project has been posted!</h1>
-            <h2 style="color: #6c797c !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5em; margin: 0 0 25px; padding: 0;">{{ customer.data.company }} is looking for a lawyer to help with **Project Names**. If you are interested in working with this client, please reply to this email.</h2>
+            <h2 style="color: #6c797c !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5em; margin: 0 0 25px; padding: 0;">{{ customer.data.company }} is looking for a lawyer to help with {{ transactions }}. If you are interested in working with this client, please reply to this email.</h2>
             <h2 style="color: #6c797c !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5em; padding: 0;">Customer Information:</h2>
             <ul style="color: #6c797c !important;">
                 <li style="margin-left: 0;">
