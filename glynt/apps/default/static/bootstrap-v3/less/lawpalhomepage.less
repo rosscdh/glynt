@@ -157,6 +157,7 @@ table.checklist {
     }
   }
   .item-info {
+  	cursor: pointer;
     padding-left: 0;
     h4 {
       font-size: 16px;
@@ -164,6 +165,9 @@ table.checklist {
         color: @brand-info;
         font-weight: bold;
       }
+    }
+    &:hover a {
+    	text-decoration: underline;
     }
   }
   .item-meta {

@@ -52,13 +52,18 @@ class ToDoResource(BaseApiModelResource):
         queryset = ToDo.objects.all()
         authorization = Authorization()
         resource_name = 'todo'
-        list_allowed_methods = ['get', 'put', 'patch']
+        list_allowed_methods = ['get', 'put', 'patch', 'post']
         #fields = ['is_deleted']
         filtering = {
             'slug': ['exact'],
             'is_deleted': ['exact'],
             'project': ['exact'],
         }
+
+    def dehydrate(self, bundle):
+        # Add display_status to the bundled object
+        bundle.data['display_status'] = bundle.obj.display_status
+        return bundle
 
 from tastypie.authentication import Authentication
 
