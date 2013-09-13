@@ -56,8 +56,9 @@
                             </a>
                             <ul class="dropdown-menu">
                                 {% if user.profile.is_lawyer %}
-                                    <li><a href="{% url 'lawyer:profile' slug=user.username %}">{% trans 'Lawyer Profile' %}</a></li>
-                                    <li><a href="{% url 'lawyer:setup_profile' %}">{% trans 'Settings' %}</a></li>
+                                    <li><a href="{% url 'dashboard:overview' %}">{% trans 'View Projects' %}</a></li>
+                                    <li><a href="{% url 'lawyer:profile' slug=user.username %}">{% trans 'View Profile' %}</a></li>
+                                    <li><a href="{% url 'lawyer:setup_profile' %}">{% trans 'Setup Profile' %}</a></li>
                                     <li class="divider"></li>
                                 {% else %}
                                     <li><a href="{% url 'customer:setup_profile' %}">{% trans 'Settings' %}</a></li>
@@ -67,11 +68,6 @@
                         </li>
                     {% endcache %}
                 {% else %}
-                    <!-- <li><a href="/"><i class="glyphicon glyphicon-home"></i></a></li> -->
-<!--                     <li><a href="{% url 'public:about' %}">{% trans 'About' %}</a></li>
- -->
-<!--                   <li class="text-muted"><a href="#" class="text-muted"><i class="glyphicon glyphicon-time"></i> {% trans "Prices" %}</a></li>
- -->
                     <li><a href="{% url 'public:why-lawpal' %}">{% trans "Why We're Better" %}</a></li>
                     <li><a href="{% url 'public:must-reads' %}">{% trans 'LawPal Pulse' %}</a></li>
                     <li><a href="{% url 'public:for-lawyers' %}"><span class="softer">{% trans 'For Lawyers' %}</span></a></li>

@@ -1,48 +1,67 @@
 {% load url from future %}{% load comments fluent_comments_tags %}
 {% csrf_token %}
+{% block css %}
+    <link href="{{ STATIC_URL }}css/theme/lawyer-profile.css" rel="stylesheet" charset="utf-8" />
+    <style>
+        .media-body #btn-save_comment {float:right; padding:10px 10px 10px 10px;margin-right:38px;}
+    </style>
+{% endblock %}
+
+<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
 {% if project_lawyer_join.lawyer == request.user.lawyer_profile %}
-<!-- Message seen by lawyer -->
-    {% with project_lawyer_join.project.customer as customer %}
-    <h3>Customer proposing a project for you</h3>
-    <div class="">Message {{ customer.user.get_full_name }} below to discover more about their project.</div>
-    <div class="row animated fadeInRight profile-details">
-        <div class="col col-lg-2 col-offset-1">
-            <div class="avatar">
-                <img class="img-rounded" src="{{ customer.profile_photo }}" alt="{{ customer.user.get_full_name|default:customer.user.username }}" />
+     {% with project_lawyer_join.project.customer as customer %}
+        <div id="hero-mini">
+            <div class="container container-main">
+                <!-- starts carousel -->
+                <div class="row profile-details">
+                    <div class="col col-sm-4 text-center">
+                        <div class="avatar text-center">
+                            <img class="img-rounded" src="{{ customer.profile_photo }}" alt="{{ customer.user.get_full_name|default:customer.user.username }}" />
+                        </div>
+                    </div>
+                    <div class="col col-sm-8">
+                        <h1>{{ customer.user.get_full_name|default:customer.user.username }}</h1>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col col-lg-7">
-            <h1>{{ customer.user.get_full_name|default:customer.user.username }}</h1>
-        </div>
-    </div>
     {% endwith %}
 {% else %}
-<!-- Message seen by customer -->
-    <h3>Engage this Lawyer</h3>
-    <div class="">Message {{ lawyer.user.get_full_name }} below to work out if they are suitable for your transaction. You can meet all of our participating lawyers in person.</div>
-    <div class="row animated fadeInRight profile-details">
-        <div class="col col-lg-2 col-offset-1">
-            <div class="avatar">
-                <img class="img-rounded" src="{{ lawyer.profile_photo }}" alt="{{ lawyer.user.get_full_name|default:lawyer.user.username }}" />
+<div id="hero-mini">
+    <div class="container container-main">
+        <!-- starts carousel -->
+        <div class="row profile-details">
+            <div class="col col-sm-4 text-center">
+                <div class="avatar text-center">
+                    <img src="{{ lawyer.profile_photo }}" alt="{{ lawyer.user.get_full_name|default:lawyer.user.username }}" />
+                </div>
+            </div>
+            <div class="col col-sm-8">
+                <h1>{{ lawyer.user.get_full_name|default:lawyer.user.username }}</h1>
+                <div class="firm">
+                    <h2 style="text-info">
+                        {% if lawyer.primary_firm %}
+                            <span>{{ lawyer.primary_firm }}</span> <br /> 
+                        {% endif %} 
+                    </h2>
+                </div>
+                <div id="buttons">
+                    {% if project_lawyer_join.status == PROJECT_LAWYER_STATUS.potential %}
+                        <button data-engage="{{ project_lawyer_join.pk }}" data-status="{{ PROJECT_LAWYER_STATUS.assigned }}" class="btn btn-success">Engage {{ lawyer.user.get_full_name|default:lawyer.user.username }}</button>
+                    {% endif %}
+                    <a href="{% url 'lawyer:profile_lite' slug=lawyer.user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-info">View Profile</a>
+                </div>
             </div>
         </div>
-        <div class="col col-lg-7">
-            <h1>{{ lawyer.user.get_full_name|default:lawyer.user.username }}</h1>
-            <h3>{{ lawyer.primary_firm }}</h3>
-        </div>
-        <div class="col col-lg-7">
-            {% if project_lawyer_join.status == PROJECT_LAWYER_STATUS.potential %}
-            <button data-engage="{{ project_lawyer_join.pk }}" data-status="{{ PROJECT_LAWYER_STATUS.assigned }}" class="btn btn-success">Engage {{ lawyer.user.get_full_name|default:lawyer.user.username }}</button>
-            {% endif %}
-            <a href="{% url 'lawyer:profile_lite' slug=lawyer.user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-info">View Profile</a>
-        </div>
     </div>
+</div>
 {% endif %}
 <hr/>
 
 <!-- Comments -->
 <script type="text/javascript" src="{{ STATIC_URL }}js/ajax-comments.js"></script>
-{% render_comment_list_reversed for project_lawyer_join %}
 {% render_comment_form for project_lawyer_join %}
+<br />
+{% render_comment_list_reversed for project_lawyer_join %}
 <!-- End Comments -->

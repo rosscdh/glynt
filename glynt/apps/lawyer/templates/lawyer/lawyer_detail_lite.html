@@ -7,97 +7,91 @@
 {% endblock %}
 
 {% block prebody %}
+<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
-<div id="hero" class="mini">
+<div id="hero-mini">
 	<div class="container container-main">
 		<!-- starts carousel -->
-		<div class="row animated fadeInRight profile-details">
-			<div class="col col-lg-12 text-center">
+		<div class="row profile-details">
+			<div class="col col-lg-4 text-center">
 				<div class="avatar text-center">
 					<img src="{{ object.profile_photo }}" alt="{{ object.user.get_full_name|default:object.user.username }}" />
 				</div>
 			</div>
-			<div class="col col-lg-12">
+			<div class="col col-lg-8">
 				<h1>{{ object.user.get_full_name|default:object.user.username }}</h1>
+				<div class="firm">
+					<h2 style="text-info">
+						{% if firm %}
+							<span>{{ firm }}</span> <br /> 
+						{% endif %} 
+						{% if object.data.years_practiced > 0 %}
+							<span>{{ object.data.years_practiced }} Years Practicing</span>
+						{% endif %}
+					</h2>
+				</div>
+				<div id="buttons">
+					{% if user.is_staff %}
+						<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="false" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if not object.is_active %}hide{% endif %} btn "><i class="icon-eye-close icon-white"></i> Disable</a>
+						<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="true" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if object.is_active %}hide{% endif %} btn "><i class="icon-eye-close icon-white"></i> Approve</a>
+					{% endif %}
+					{% if user.username == object.user.username %}
+						<a href="{% url 'lawyer:setup_profile' %}" class="btn btn-huge btn-success right-links" ><i class="icon-edit icon-white"></i> Edit profile</a>
+						<a href="{% url 'lawyer:invite' %}" class="btn btn-huge right-links btn-info" ><i class="icon-heart icon-white"></i> Invite Lawyers</a>
+						{% if object.summary %}
+							{% if PROJECT_ENVIRONMENT != 'dev' %}
+						    <script>
+							  $(document).ready(function () {
+						     	  Intercom('update', {"Lawyer Profile": "Complete", "Firm": "{{ firm }}"});
+						   	 });
+							</script>
+							{% endif %}
+						{% endif %}
+					{% endif %}
+					{% if user.username != object.user.username %}
+	                	{% engage_with_lawyer_button lawyer=object %}
+		                 <a href="#" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-info btn-lg">Contact</a>
+	                {% endif %}
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
 <div class="container profile">
-	<div class="map">
+	<div class="row">
+		<div class="col col-lg-12">
+			<p class="lead attorney-quote">{{ object.data.summary }}</p>
+		</div>	
+	</div>
+	<div class="">
 		<div class="row">
+			<div class="col col-9 col-offset-1">
+				<h2><i class="glyphicon glyphicon-map-marker text-success"></i>{{ object.user.first_name }}'s Location</h2>
+			</div>
 			{% if object.data.practice_location_1 and not object.data.practice_location_2 %}
 				<div class="col col-12">
-					<div style="background:url('//maps.googleapis.com/maps/api/staticmap?size=1100x100&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_1 }}&sensor=false&maptype=roadmap');height:100px;"></div>
+					<div style="background:url('//maps.googleapis.com/maps/api/staticmap?size=1100x100&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_1 }}&sensor=false&maptype=roadmap');height:100px;background-position:center; "></div>
 				</div>
 			{% endif %}
 			{% if object.data.practice_location_1 and object.data.practice_location_2 %}
 				<div class="col col-6" style="background:url('//maps.googleapis.com/maps/api/staticmap?size=450x100&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_1 }}&sensor=false');height:100px;background-position:center;">
 				</div>
-				<div class="col col-6" style="background:url('//maps.googleapis.com/maps/api/staticmap?size=450x100&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_2 }}&sensor=false');height:100px;background-position:center center">dsads
+				<div class="col col-6" style="background:url('//maps.googleapis.com/maps/api/staticmap?size=450x100&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_2 }}&sensor=false');height:100px;background-position:center center">
 				</div>
 			{% endif %}
 		</div>
 	</div>
-	<br />
 	<div class="row">	
-		<div class="col col-lg-12">
-			<p class="text-center lead">{{ object.data.summary }}</p>
-		</div>
-		<div class="col col-lg-12">
-			<div class="firm">
-				<h2 style="text-info">
-					{% if firm %}
-						<span>{{ firm }}</span> <br /> 
-					{% endif %} 
-					{% if object.data.years_practiced > 0 %}
-						<span>{{ object.data.years_practiced }} Years Practicing</span>
-					{% endif %}
-				</h2>
-			</div>
-	    </div>
-	    <br />
-		<div id="buttons">
-			<div class="container">
-				<div class="row">
-					<div class="col col-lg-10 col-offset-1 text-center">
-						<br />
-						{% if user.is_staff %}
-							<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="false" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if not object.is_active %}hide{% endif %} btn "><i class="icon-eye-close icon-white"></i> Disable</a>
-							<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="true" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if object.is_active %}hide{% endif %} btn "><i class="icon-eye-close icon-white"></i> Approve</a>
-						{% endif %}
-						{% if user.username == object.user.username %}
-							<a href="{% url 'lawyer:setup_profile' %}" class="btn btn-huge btn-success right-links" ><i class="icon-edit icon-white"></i> Edit profile</a>
-							<a href="{% url 'lawyer:invite' %}" class="btn btn-huge right-links btn-info" ><i class="icon-heart icon-white"></i> Invite Lawyers</a>
-							{% if object.summary %}
-								{% if PROJECT_ENVIRONMENT != 'dev' %}
-							    <script>
-								  $(document).ready(function () {
-							     	  Intercom('update', {"Lawyer Profile": "Complete", "Firm": "{{ firm }}"});
-							   	 });
-								</script>
-								{% endif %}
-							{% endif %}
-						{% endif %}
-						{% if user.username != object.user.username %}
-		                <div class="engagement-container">
-		                	{% engage_with_lawyer_button lawyer=object %}
-		                </div>
-		                {% endif %}
-					</div>
-				</div>
-			</div>
-		</div>	
-		<div class="col col-lg-10 col-offset-1">
+		<div class="col col-lg-9 col-offset-1">
 			<hr />
-			<h1 class="text-center">About {{ object.user.first_name }}</h1>
-			<div>
+			<h2><i class="glyphicon glyphicon-user text-success"></i>About {{ object.user.first_name }}</h2>
+			<div class="softer">
 				<p>{{ object.bio|default:"<div class=\"no-data\">No biography yet.</div>"|linebreaksbr }}</p>
 			</div>
 			<hr>
 
 			<div class="startups domain-links">
-				<h2 class="text-center">Startups Advised</h2>
+				<h2><i class="glyphicon glyphicon-signal text-success"></i>Startups Advised</h2>
 				{% for o in object.data.companies_advised %}
 					<div>{{ o|urlize }}</div>
 				{% empty %}
@@ -108,7 +102,7 @@
 			</div>
 			<div class="startups domain-links">
 				<hr />
-				<h2 class="text-center">Other Websites</h2>
+				<h2><i class="glyphicon glyphicon-globe text-success"></i>Other Websites</h2>
 				{% for o in object.data.websites %}
 					<col col-lg->{{ o|urlize }}</col col-lg->
 				{% empty %}
@@ -121,7 +115,7 @@
 		<div class="col col-lg-10 col-offset-1">
  			<hr>
 			<div id="bar-license" class="bar-license">
-				<h2 class="text-center">Licensed In</h2>
+				<h2><i class="glyphicon glyphicon-ok-sign text-success"></i>Licensed In</h2>
 				{% simple_name_list data_list=object.data.bar_membership %}
 			</div>
 		</div>
@@ -164,14 +158,15 @@
 
 $(document).ready(function () {
 
-
-	$('.comment').popover({ html : true});
-
-
-	$("a.comment").click(function() {
-	    $(this).toggleClass('faded');
-	});
-	$('.tip').tooltip();
+   $("#engage-lawyer").click(function(ev) {
+        ev.preventDefault();
+        var url = $(this).attr('href');
+        console.log(url)
+        $("#engage-lawyer-modal").load(url, function() {
+            $(this).modal('show');
+        });
+        return false;
+    });
 
 	{% if user.is_staff %}
 	$(document).on( 'click', '[data-provide=ajax]', function (event) {
@@ -225,77 +220,8 @@ $(document).ready(function () {
 	});
 	{% endif %}
 
-	/*
-	//Get context with jQuery - using jQuery's .get() method.
-	var ctx0 = $("#dealChart0").get(0).getContext("2d");
-	var ctx1 = $("#dealChart1").get(0).getContext("2d");
-
-	linedefaults = { scaleShowLabels : false, scaleOverride : true,	scaleStartValue : 0, 	scaleStepWidth : 10, scaleSteps : 15 }
-
-	if($.isNumeric('{{ object.data.volume_by_year.2011 }}')) {
-		new Chart(ctx0).Line({
-			labels : ["2010","2011","2012"],
-			datasets : [{
-					fillColor : "rgba(151,187,205,0.5)",
-					strokeColor : "rgba(151,187,205,1)",
-					pointColor : "rgba(151,187,205,1)",
-					pointStrokeColor : "#fff",
-					data : [{{ object.data.volume_by_year.2010 }},{{ object.data.volume_by_year.2011 }},{{ object.data.volume_by_year.2012 }}]
-				}]
-			}
-			,linedefaults);
-			$("#graph-year-placeholder").hide();
-
-	}else{
-	 	$("#dealChart0").hide();
-	}
-	if($.isNumeric('{{ object.data.volume_series_a }}')){
-		new Chart(ctx1).Doughnut([
-			{
-				value: {{ object.data.volume_series_a|jsonify }},
-				color:"#F38630"
-			},
-			{
-				value: {{ object.data.volume_seed_financing|jsonify }},
-				color : "#6bdb7e"
-			},
-			{
-				value : {{ object.data.volume_incorp_setup|jsonify }},
-				color : "#69D2E7"
-			},
-			{
-				value: {{ object.data.volume_other|jsonify }},
-				color : "#3a87ad"
-			},
-			{
-				value : {{ object.data.volume_ip|jsonify }},
-				color : "#f88172"
-			}
-		]);
-		$("#graph-type-placeholder").hide();
-		$("#type-legend").css({ opacity: 1 });
-
-	 }else{
-	 	$("#dealChart1").hide();
-	 }
-	 */
 });
-
 </script>
-
 <script type="text/javascript" src="{{ STATIC_URL }}/js/send-message.js"></script>
 
-<script>
-$(document).ready(function () {
-    $("#engage-lawyer").click(function(ev) {
-        ev.preventDefault();
-        var url = $(this).attr('href');
-        console.log(url)
-        $("#engage-lawyer-modal").load(url, function() {
-            $(this).modal('show');
-        });
-        return false;
-    });
-});
-</script>
 {% endblock %}

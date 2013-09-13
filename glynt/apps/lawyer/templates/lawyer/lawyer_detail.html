@@ -99,7 +99,7 @@
 			<hr>
 
 			<div class="startups domain-links">
-				<h2 class="text-center">Startups Advised</h2>
+				<h2 class="">Startups Advised</h2>
 				{% for o in object.data.companies_advised %}
 					<div>{{ o|urlize }}</div>
 				{% empty %}
@@ -110,7 +110,7 @@
 			</div>
 			<div class="startups domain-links">
 				<hr />
-				<h2 class="text-center">Other Websites</h2>
+				<h2 class="">Other Websites</h2>
 				{% for o in object.data.websites %}
 					<col col-lg->{{ o|urlize }}</col col-lg->
 				{% empty %}
@@ -123,7 +123,7 @@
 		<div class="col col-lg-6 col-offset-3">
  			<hr>
 			<div id="bar-license" class="bar-license">
-				<h2 class="text-center">Licensed In</h2>
+				<h2 class="">Licensed In</h2>
 				{% simple_name_list data_list=object.data.bar_membership %}
 			</div>
 		</div>

@@ -16,37 +16,60 @@
 <div class="container dashboard-view">
     <div class="row">
         <div class="col-12">
-            <ul id="project-list" class="list-unstyled">
+            <table class="table table-bordered">
+                <tr>
+                    <th>Company</th>
+                    <th class="" colspan="2">Client Contact</th>
+                    <th class="text-center">Status</th>
+                    <th>Note</th>
+                </tr>
             {% for p in project_lawyer_joins %}
                 {% with p.project as project %}
-                <li class="project-list-item span5">
-                    <div class="{{ p.display_status|lower }}">
+                <tr class="project-list-item {{ p.display_status|lower }}">
                         {% if PROJECT_LAWYER_STATUS.assigned == p.status %}
-                            <div class="callout callout-success">
-                                <h4><div class="profile-card pull-right" data-template="small" data-username="{{ project.customer.user.username }}">&nbsp;</div></h4>
-                                <h3><i class="glyphicon glyphicon-ok text-success"></i>  <a href="{{ project.get_absolute_url }}" class="text-success">{{ project.company }} ({{ p.display_status }})</a></h3>
-                                <p class="msg">You have been assigned to this project.</p>
-                            </div>
+                            <td>  
+                                <h4>{{ project.company }}</h4>
+                            </td>
+                            <td> 
+                                <div class="profile-card" data-template="small" data-username="{{ project.customer.user.username }}">&nbsp;</div>
+                            </td>
+                            <td><a href="{{ project.get_absolute_url }}" class="text-success btn btn-success">View Project</a></td>
+                            <td class="text-center text-success"> 
+                                 <strong>{{ p.display_status }}</strong>
+                            </td>
+                            <td>
+                                <small>You have been assigned to this project.</small>
+                            </td>
                         {% elif PROJECT_LAWYER_STATUS.rejected == p.status %}
-                            <div class="">
-                                <h5 class="softer">{{ project.company }} - {{ p.display_status }}</h5>
-                                <p class="msg">Client selected another attorney.</p>
-                            </div>
+                            <td class="" colspan="5">
+                                <span class="text-muted">{{ project.company }} - {{ p.display_status }} (Client selected another attorney)</span>
+                            </td>
                         {% elif PROJECT_LAWYER_STATUS.potential == p.status %}
-                            <div class="callout callout-info">
-                                <a href="{% url 'project:project_contact' slug=project.uuid lawyer=user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-primary btn-lg pull-right">Discussion</a>
-                                <h4><div class="profile-card pull-right" data-template="small" data-username="{{ project.customer.user.username }}">&nbsp;</div></h4>
-                                <h3>{{ project.company }} ({{ p.display_status }})</h3>
-                                <p class="msg">You have been proposed to this client. Awaiting client decision.</p>
-                            </div>
+                            <td>  
+                                <h4>{{ project.company }}</h4>
+                            </td>
+                            <td> 
+                                <div class="profile-card" data-template="small" data-username="{{ project.customer.user.username }}">&nbsp;</div>
+                            </td>
+                            <td class="text-left">
+                                <a href="{% url 'project:project_contact' slug=project.uuid lawyer=user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-primary btn-lg">Discuss</a>
+                            </td>
+                            <td class="text-center text-warning"> 
+                                 <strong>{{ p.display_status }}</strong>
+                            </td>
+                            <td>
+                                <small>You have been proposed to this client. Awaiting client decision. Press the Discuss link to send a message directly to them.</small>
+                            </td>
                         {% endif %}
-                    </div>
-                </li>
+                </tr>
                 {% endwith %}
             {% empty %}
-                <li><h3 class="softer"><i class="glyphicon glyphicon-time "></i> Your introductions and active projects will appear here shortly. </h3></li>
+                <tr><td colspan="5" class="text-center"><h3 class="softer"><small><i class="glyphicon glyphicon-time "></i></small> Your introductions and active projects will appear here shortly. </h3></td></tr>
             {% endfor %}
-            </ul>
+            </table>
+            <br />
+            <hr />
+            <h4>Have a question? <a href="mailto:xw4ux8lx@incoming.intercom.io" class="intercom">Contact the LawPal Team</a>.</h4> 
         </div>
     </div>
 </div>
