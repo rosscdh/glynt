@@ -6,6 +6,7 @@ from glynt.apps.project.models import Project, ProjectLawyer
 
 class ProjectLawyerInline(admin.TabularInline):
     model = ProjectLawyer
+    extra = 2
 
 
 class ProjectAdmin(admin.ModelAdmin):
