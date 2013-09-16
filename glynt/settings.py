@@ -265,10 +265,6 @@ if IS_TESTING == True:
     EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
     # disable celery for test
     BROKER_BACKEND = 'memory'
-
-    HELPER_APPS = HELPER_APPS + (
-        'django_jenkins',
-    )
 else:
     HELPER_APPS = HELPER_APPS + (
         # Db Migrations

@@ -15,8 +15,11 @@ PROJECT_ENVIRONMENT = 'test'
 
 INSTALLED_APPS = INSTALLED_APPS + (
     'casper',
+    'django_jenkins',
 )
 
+SOUTH_TESTS_MIGRATE = False
+SKIP_SOUTH_TESTS = True
 
 PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.MD5PasswordHasher',

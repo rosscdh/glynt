@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.test.simple import DjangoTestSuiteRunner
+from django_jenkins.runner import CITestSuiteRunner
 
-
-class GlyntAppTestRunner(DjangoTestSuiteRunner):
+class GlyntAppTestRunner(CITestSuiteRunner):
     def build_suite(self, test_labels, *args, **kwargs):
         # not args passed in
         if not test_labels:
