@@ -186,6 +186,13 @@ def profile_card_js(**kwargs):
 profile_card_js.is_safe = True
 
 
+@register.inclusion_tag('partials/pusher.js', takes_context=True)
+def pusher_js(context, **kwargs):
+    context.update(kwargs)
+    return context
+pusher_js.is_safe = True
+
+
 @register.inclusion_tag('comments/comments.js')
 def comments_js():
     return {}
