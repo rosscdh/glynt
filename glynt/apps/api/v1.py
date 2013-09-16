@@ -70,7 +70,7 @@ class StateSimpleResource(BaseApiModelResource):
 
     class Meta(BaseApiModelResource.Meta):
         # Only filter by USA, allow freeform for others
-        queryset = Region.objects.filter(country_id=Country.objects.get(code3='USA'))
+        queryset = Region.objects.filter()
         authentication = Authentication()
         list_allowed_methods = ['get']
         resource_name = 'state/lite'
