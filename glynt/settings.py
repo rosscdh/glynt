@@ -27,7 +27,7 @@ MANAGERS = ADMINS + (
 )
 
 NOTICEGROUP_EMAIL = (
- ("LawPal Tech", 'jamie@lawpal.com'),
+ ("LawPal Tech", 'tech@lawpal.com'),
 )
 
 DEFAULT_FROM_EMAIL = 'noreply@localhost'
