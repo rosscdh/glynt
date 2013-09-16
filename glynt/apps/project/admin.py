@@ -5,8 +5,8 @@ from glynt.apps.project.models import Project, ProjectLawyer
 
 
 class ProjectAdmin(admin.ModelAdmin):
-    list_filter = ['status', 'transactions']
     list_display = ('__unicode__', 'date_created', 'date_modified')
+    list_filter = ['status', 'transactions']
     search_fields = ('company', 'customer', 'lawyers', 'transactions')
 
     def queryset (self, request):
@@ -16,5 +16,19 @@ class ProjectAdmin(admin.ModelAdmin):
             qs = qs.order_by(*ordering)
         return qs
 
+
+class ProjectLawyerAdmin(admin.ModelAdmin):
+    list_display = ('project', 'lawyer', 'display_status',)
+    list_filter = ['status']
+    search_fields = ('project', 'lawyer',)
+
+    def queryset (self, request):
+        qs = ProjectLawyer.objects.select_related('project__company', 'project__customer', 'project__customer__user').all()
+        ordering = self.get_ordering(request)
+        if ordering:
+            qs = qs.order_by(*ordering)
+        return qs
+
+
 admin.site.register(Project, ProjectAdmin)
-admin.site.register([ProjectLawyer])
+admin.site.register(ProjectLawyer, ProjectLawyerAdmin)
