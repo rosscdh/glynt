@@ -2,11 +2,53 @@
 """
 """
 from django.test import TestCase
+from django.core.urlresolvers import reverse
 from model_mommy import mommy
+
+from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin
 
 from glynt.apps.lawyer.transaction_packages import TransactionPackageBunch
 
 from glynt.apps.lawyer.models import Lawyer
+from glynt.apps.project.models import Project
+
+
+class LawyerNavDropDownTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
+    """
+    Test the nav dropdown contains projects based on VisibleProjectService
+    """
+    def test_assigned_lawyer_sees_projects(self):
+        """
+        If a lawyer has assigned projects then we should see them in the request.projects
+        """
+        self.client.login(username=self.lawyer_user.username, password=self.password)
+        resp = self.client.get(reverse('dashboard:overview'))
+
+        self.assertTrue(len(resp.context['request'].projects) == 1)
+        self.assertTrue(resp.context['request'].projects == [self.project])
+
+        self.assertTrue(type(resp.context['request'].project) == Project)
+        self.assertTrue(resp.context['request'].project == self.project)
+
+        c = self.pq(resp.content)
+        self.assertEqual(len(c('ul#project-set')), 1) # we see navigation project-set list
+        self.assertEqual(len(c('ul#project-set li.dropdown')), 1) # we see navigation project-set list
+
+    def test_unassigned_lawyer_sees_no_projects(self):
+        """
+        If a lawyer has no assigned projects then nothing shoudl show in the request.projects
+        """
+        unassigned_lawyer_user = self.make_user(username='unassigned_lawyer', first_name='UnAssigned', last_name='Lawyer', email='unassigned_lawyer+test@lawpal.com')
+        unassigned_lawyer = mommy.make('lawyer.Lawyer', user=unassigned_lawyer_user)
+
+        self.client.login(username=unassigned_lawyer.user.username, password=self.password)
+        resp = self.client.get(reverse('public:homepage'))
+
+        self.assertTrue(resp.context['request'].projects == [])
+        self.assertTrue(resp.context['request'].project is None)
+
+        c = self.pq(resp.content)
+        self.assertEqual(len(c('ul#project-set')), 0) # we have 0 navigation project-set list
 
 
 class LawyerModelMethodsTest(TestCase):

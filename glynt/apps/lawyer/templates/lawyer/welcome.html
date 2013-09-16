@@ -7,18 +7,18 @@
 <div id="hero">
 	<div class="container">
 		<!-- starts carousel -->
-		<div class="row animated fadeInDown">
-			<div class="col col-lg-12">
+		<div class="row">
+			<div class="col col-lg-12 text-center">
+				<br />
+				<br />
 				<h1>Hey {{ user.first_name|default:user }}, a warm welcome to LawPal</h1>
-				<br />
-				<br />
 			</div>
 		</div>
 	</div>
 </div>
 <div class="container profile">
 	<div class="row">
-		<div class="col col-lg-12">
+		<div class="col col-lg-12 text-center">
 			<br />
 			<a href="{% url 'lawyer:setup_profile' %}" class="btn btn-large btn-primary">Update your profile</a> or 			<a href="{% url 'dashboard:overview' %}" class="btn btn-large btn-info">Review your projects</a>
 

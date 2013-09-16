@@ -2,8 +2,7 @@
 from glynt.apps.default.bunches import BaseDataBagBunch
 from bunch import Bunch
 
-import hashlib
-import json
+import shortuuid
 
 import logging
 logger = logging.getLogger('lawpal.services')
@@ -31,13 +30,12 @@ class ProjectIntakeFormIsCompleteBunch(Bunch):
         return super(ProjectIntakeFormIsCompleteBunch, self).__init__()
 
     def slug(self, **kwargs):
-        m = hashlib.sha1()
-        m.update(str(self.project.pk) + '-' + str(self.company.pk))
+        name = str(self.project.pk) + '-' + str(self.company.pk)
 
-        if len(kwargs.keys()) > 0:
-            m.update(json.dumps(kwargs))
+        #if len(kwargs.keys()) > 0:
+        #    name = '{name}{extra}'.format(name=name, extra='-'.join([i for i in kwargs.values()]))
 
-        return m.hexdigest()
+        return shortuuid.uuid(name=name)
 
     def is_valid(self):
         is_valid = self.project.data.get('profile_is_complete', False)

@@ -65,13 +65,12 @@
 {% block js %}
 <script type="text/javascript" src="{{ STATIC_URL }}js/ajax-comments.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.getPath.js"></script>
-<script type="text/javascript" src="//d3dy5gmtp8yhk7.cloudfront.net/2.1/pusher.min.js"></script>
 <script type="text/javascript">
 
 var viewer_container = $('#crocdoc-viewer-container');
 var view_container_empty = $('#crocdoc-viewer-empty');
 
-var COMMENT_CONTROLS = (window.COMMENT_CONTROLS !== undefined) ? window.COMMENT_CONTROLS : {
+window.COMMENT_CONTROLS = {
     'is_reversed': true,
     'scroll_to_comment': true,
     'alerts': false,
@@ -82,7 +81,7 @@ $(document).ready(function () {
     var todo_list_tpl = Handlebars.compile($('script#tpl-todo_list').html());
 
     function update_todo_status(data) {
-        $('#todo_display_status').html(data.instance_dispay_status)
+        $('#todo_display_status').html(data.instance.dispay_status)
     }
 
     function add_stream_item(context) {
@@ -100,13 +99,6 @@ $(document).ready(function () {
     /**
     * Puser.com integration
     */
-    // Enable pusher logging - don't include this in production
-    {% if DEBUG %}Pusher.log = function (message) {
-      if (window.console && window.console.log) {
-        window.console.log(message);
-      }
-    };{% endif %}
-
     var pusher = new Pusher('{{ PUSHER_KEY }}');
     var channel = pusher.subscribe('{{ object.pusher_id }}');
     channel.bind_all(function (event_name, data) {

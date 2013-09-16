@@ -34,7 +34,8 @@ module.exports = (function() {
 
             casper.options.clientScripts = [
                                                 casper.cli.options.STATIC_PATH + 'js/jquery.min.js',
-                                                casper.cli.options.STATIC_PATH + 'js/jquery.getPath.js'
+                                                casper.cli.options.STATIC_PATH + 'js/jquery.getPath.js',
+                                                casper.cli.options.STATIC_PATH + 'js/angularjs/mocks/PusherMock.js'
                                             ];
 
             casper.options.timeout = casper.cli.options.timeout || 30000;

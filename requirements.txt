@@ -4,7 +4,7 @@
 
 
 # Django
-Django>=1.5.3
+Django>=1.5.4
 django-cities-light
 
 # easydict lookups with dot notation
@@ -21,6 +21,7 @@ newrelic
 
 django-filepicker
 -e git+https://github.com/dcramer/django-uuidfield.git#egg=django-uuidfield
+shortuuid
 django-extensions
 django-braces
 django-templated-email
@@ -109,8 +110,6 @@ mocktest
 mock
 factory_boy # depreciating use model.mommey instead for tests
 -e git+https://github.com/vandersonmota/model_mommy.git#egg=model_mommy
-behave
-#-e git+https://github.com/rosscdh/django-behave.git#egg=django-behave
 pyquery
 
 # Misc

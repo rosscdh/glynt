@@ -121,7 +121,7 @@ TASTYPIE_ALLOW_MISSING_SLASH = True
 WSGI_APPLICATION = 'glynt.wsgi.application'
 
 AUTHENTICATION_BACKENDS = (
-    #'social_auth.backends.contrib.angel.AngelBackend',
+    'social_auth.backends.contrib.angel.AngelBackend',
     'social_auth.backends.contrib.linkedin.LinkedinBackend',
     'social_auth.backends.google.GoogleOAuth2Backend',
     #'glynt.backends.EmailOrUsernameBackend',
@@ -132,11 +132,10 @@ AUTHENTICATION_BACKENDS = (
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.debug",
-    "django.core.context_processors.i18n",
+    #"django.core.context_processors.i18n",
     "django.core.context_processors.media",
     "django.core.context_processors.static",
-    "django.core.context_processors.tz",
+    #"django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
     "django.core.context_processors.request",
     "glynt.context_processors.project_info",
@@ -148,6 +147,11 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "social_auth.context_processors.social_auth_by_type_backends",
     "social_auth.context_processors.social_auth_by_name_backends",
 )
+
+if DEBUG:
+    TEMPLATE_CONTEXT_PROCESSORS += (
+        "django.core.context_processors.debug",
+    )
 
 TEMPLATE_DIRS = (
     os.path.join(SITE_ROOT, 'templates'),
@@ -261,10 +265,6 @@ if IS_TESTING == True:
     EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
     # disable celery for test
     BROKER_BACKEND = 'memory'
-
-    HELPER_APPS = HELPER_APPS + (
-        'django_jenkins',
-    )
 else:
     HELPER_APPS = HELPER_APPS + (
         # Db Migrations

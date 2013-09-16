@@ -8,8 +8,8 @@ from bunch import Bunch
 
 import copy
 from collections import OrderedDict
-import hashlib
-import json
+import shortuuid
+
 import logging
 logger = logging.getLogger('lawpal.services')
 
@@ -97,10 +97,10 @@ class ToDoItemsFromYamlMixin(object):
 
         # render the template with variables from the context
         if item.name is not None:
-            item.name = unicode(self.templateize(context=c, value=item.name))
+            item.name = unicode(self.templatize(context=c, value=item.name))
 
         if item.description is not None:
-            item.description = unicode(self.templateize(context=c, value=item.description))
+            item.description = unicode(self.templatize(context=c, value=item.description))
 
         return item
 
@@ -111,7 +111,7 @@ class ToDoItemsFromDbMixin(object):
 
     def db_todos(self):
         if self._db_todos_list is None:
-            self._db_todos_list = self.project.todo_set.filter(project=self.project).select_related()
+            self._db_todos_list = self.project.todo_set.all().select_related()
         return self._db_todos_list
 
     def todos_by_slug(self, todos):
@@ -180,6 +180,30 @@ class ToDoItemsFromDbMixin(object):
             ToDo.objects.bulk_create(todo_list)
 
 
+class TodoAsJSONMixin(object):
+    """
+    Mixin that provides JSON response of the checklist todos
+    Currently makes use of TastyPie Resources
+    """
+    def bundelize(self, resource, request, list_result):
+        bundles = []
+
+        for obj in list_result:
+            bundle = resource.build_bundle(obj=obj, request=request)
+            bundles.append(resource.full_dehydrate(bundle, for_list=True))
+
+        return bundles
+
+    def asJSON(self, request):
+        from glynt.apps.todo.api import ToDoResource
+        res = ToDoResource()
+        request_bundle = res.build_bundle(request=request)
+        
+        bundles = self.bundelize(resource=res, request=request, list_result=res.obj_get_list(request_bundle))
+
+        return res.serialize(None, bundles, "application/json")
+
+
 class UserFeedbackRequestMixin(object):
     def feedbackrequests_by_user(self, user):
         from glynt.apps.todo.models import FeedbackRequest
@@ -198,7 +222,7 @@ class UserFeedbackRequestMixin(object):
         return json_response
 
 
-class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin, ToDoItemsFromDbMixin):
+class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin, ToDoItemsFromDbMixin, TodoAsJSONMixin):
     """
     Provide a set of checklist items that are
     generated from the project transaction types
@@ -227,13 +251,14 @@ class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin, 
         """ the slug has to be consistent for each item, even when pulled from yaml file
         thus we cant use uuid here as it is generated unique every time; where as this is
         based on a uniqe combo of the item details"""
-        m = hashlib.sha1()
-        m.update(self.company_data.slug(item_name=item.name))
-        if len(kwargs.keys()) > 0:
-            m.update(json.dumps(kwargs))
-        return m.hexdigest()
+        name = self.company_data.slug(item_name=item.name)
 
-    def templateize(self, context, value):
+        if len(kwargs.keys()) > 0:
+            name = '{name}{extra}'.format(name=name, extra='-'.join([unicode(i) for i in kwargs.values()]))
+
+        return shortuuid.uuid(name=name)
+
+    def templatize(self, context, value):
         t = template.Template(value)
         return t.render(context)
 

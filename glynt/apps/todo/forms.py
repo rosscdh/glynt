@@ -11,6 +11,7 @@ from parsley.decorators import parsleyfy
 from django_filepicker.forms import FPUrlField
 
 from glynt.apps.utils import generate_unique_slug
+from glynt.apps.default.mixins import AngularAttribsFormFieldsMixin
 
 from .models import ToDo
 
@@ -59,20 +60,16 @@ class AttachmentForm(forms.Form):
         super(AttachmentForm, self).__init__(*args, **kwargs)
 
 
-class ToDoForm(forms.ModelForm):
-    class Meta:
-        model = ToDo
-
-
 @parsleyfy
-class CustomerToDoForm(ToDoForm):
+class CustomerToDoForm(AngularAttribsFormFieldsMixin, forms.ModelForm):
     """
     Form to allow user to create and edit ToDo items
     category is set via url param
     """
     project = forms.IntegerField(widget=forms.HiddenInput)
 
-    class Meta(ToDoForm.Meta):
+    class Meta:
+        model = ToDo
         exclude = ['user', 'slug', 'status', 'date_due', 'description', 'data', 'sort_position', 'sort_position_by_cat', 'item_hash_num']
 
     def __init__(self, *args, **kwargs):
@@ -97,6 +94,7 @@ class CustomerToDoForm(ToDoForm):
 
         super(CustomerToDoForm, self).__init__(*args, **kwargs)
 
+        # Show the category dropdown only when its a new and or posted item
         if self.is_create or self.request.POST.get('category', None) is not None:
             self.fields['category'] = forms.ChoiceField(initial=self.request.GET.get('category', self.request.POST.get('category', self.instance.category)), choices=self.project_service.category_initial())
         else:
