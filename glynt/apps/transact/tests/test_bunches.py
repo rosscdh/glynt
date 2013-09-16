@@ -9,7 +9,7 @@ from collections import OrderedDict
 from model_mommy import mommy
 
 import factory
-import unittest
+from django.utils import unittest
 
 
 class BaseToDoBunchAttribs(unittest.TestCase):

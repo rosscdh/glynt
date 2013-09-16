@@ -5,7 +5,7 @@ from django.utils import unittest
 from django.test.utils import override_settings
 from nose.tools import *
 
-import unittest
+from django.utils import unittest
 
 from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin
 

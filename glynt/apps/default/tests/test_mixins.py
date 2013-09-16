@@ -3,7 +3,7 @@
 Test the Various Mixins for this app
 """
 from django import forms
-import unittest
+from django.utils import unittest
 
 from model_mommy import mommy
 

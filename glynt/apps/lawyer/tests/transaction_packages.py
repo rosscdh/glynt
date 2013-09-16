@@ -6,7 +6,7 @@ from django.test import TestCase
 from django import template
 from django.test.utils import override_settings
 
-import unittest
+from django.utils import unittest
 import json
 
 from glynt.apps.lawyer.transaction_packages import TransactionPackageBunch
