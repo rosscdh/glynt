@@ -48,6 +48,7 @@
                 .viewport a.action-btn {
                     font-size: 14px !important;
                 }
+                .to-hide { display: none !important; }
             }
             /*]]>*/
         </style>
