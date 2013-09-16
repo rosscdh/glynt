@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 LOCAL_SETTINGS = True
+import sys
 from settings import *
 
 import hashlib
@@ -9,11 +10,10 @@ import logging
 logging.disable(logging.CRITICAL)
 
 # Custom test runner for this project
-
-if sys.argv[1:2] == 'test':
+if sys.argv[1:2][0] == 'test':
     TEST_RUNNER = 'glynt.test_runner.GlyntAppTestRunner'
 
-elif sys.argv[1:2] == 'jenkins':
+elif sys.argv[1:2][0] == 'jenkins':
     TEST_RUNNER = 'glynt.test_runner.GlyntAppJenkinsRunner'
 
 
