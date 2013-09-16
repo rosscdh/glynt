@@ -7,11 +7,13 @@ from nose.tools import *
 
 import unittest
 
+from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin
+
 from glynt.tests import TemplateRendererMixin
 from glynt.apps.factories import UserFactory, LoggedOutUserFactory
 
-from glynt.apps.default.templatetags.glynt_helpers import colorize_acronym,  \
-        moment_js, intercom_script
+from glynt.apps.default.templatetags.glynt_helpers import (colorize_acronym,  \
+        pusher_js, moment_js, intercom_script, )
 
 
 class TestTemplateTags(unittest.TestCase):
@@ -36,6 +38,35 @@ class TestTemplateTags(unittest.TestCase):
 
         result = moment_js('#monkey')
         assert result.get('selector') == '#monkey'
+
+
+class TestPusherJavascript(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
+    def setUp(self):
+        super(TestPusherJavascript, self).setUp()
+        self.client.login(username=self.lawyer_user.username, password=self.password)
+
+    @override_settings(PROJECT_ENVIRONMENT='live')
+    def test_pusher_js_production(self):
+        css_selector = 'script#pusher-live-script'
+
+        self.resp = self.client.get('/')
+        c = self.pq(self.resp.content)
+        css_object = c(css_selector)
+
+        self.assertTrue(len(css_object) == 1)
+        self.assertEqual('/static/js/pusher.2.1.2.min.js', css_object.attr['src'])
+
+    @override_settings(PROJECT_ENVIRONMENT='test')
+    def test_pusher_js_test(self):
+        css_selector = 'script#pusher-test-env-mock-script'
+
+        self.resp = self.client.get('/')
+        c = self.pq(self.resp.content)
+        css_object = c(css_selector)
+
+        self.assertTrue(len(css_object) == 1)
+        self.assertEqual('/static/js/angularjs/mocks/PusherMock.js', css_object.attr['src'])
+
 
 
 class TestTemplateTag_ShowLoadingModal(unittest.TestCase):
