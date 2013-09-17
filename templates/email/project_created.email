@@ -1,6 +1,7 @@
-{% extends 'email/base.email' %}{% load glynt_helpers %}
+{% extends 'email/base.email' %}
+{% load glynt_helpers i18n %}
 
-{% block subject %}{{ customer.data.company }} has posted a new project on LawPal{% endblock %}
+{% block subject_line %}{{ customer.data.company }} has posted a new project on LawPal{% endblock %}
 
 {% block content %}
     <tr>
