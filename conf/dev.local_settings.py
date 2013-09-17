@@ -15,7 +15,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': './dev.db',
-        
+
     }
 }
 
@@ -100,14 +100,6 @@ if DEBUG:
         INSTALLED_APPS = INSTALLED_APPS + (
             'debug_toolbar',
         )
-
-    if IS_TESTING:
-        INSTALLED_APPS = INSTALLED_APPS + (
-            'django_nose',
-        )
-        NOSE_ARGS = [
-            '--with-coverage',
-        ]
 
 
 LOGGING = {
