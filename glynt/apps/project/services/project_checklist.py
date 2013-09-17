@@ -4,9 +4,7 @@ from django import template
 from glynt.apps.todo import TODO_STATUS
 from glynt.apps.project.bunches import ProjectIntakeFormIsCompleteBunch
 
-from .mixins import (UserFeedbackRequestMixin, ToDoItemsFromYamlMixin,
-                    RegionCloneItemsMixin, ToDoItemsFromDbMixin,
-                    TodoAsJSONMixin,)
+from .mixins import UserFeedbackRequestMixin, ToDoItemsFromYamlMixin, ExtractJavascrptGeneratedRepeaterMixin, ToDoItemsFromDbMixin, TodoAsJSONMixin
 
 from bunch import Bunch
 import shortuuid
@@ -15,7 +13,7 @@ import logging
 logger = logging.getLogger('lawpal.services')
 
 
-class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin, RegionCloneItemsMixin, ToDoItemsFromDbMixin, TodoAsJSONMixin):
+class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin, ExtractJavascrptGeneratedRepeaterMixin, ToDoItemsFromDbMixin, TodoAsJSONMixin):
     """
     Provide a set of checklist items that are
     generated from the project transaction types
@@ -33,7 +31,9 @@ class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin, 
         self.checklist = self.project.checklist()
 
         self.todos_by_cat, self.todos = self.get_todos()
+        #import pdb;pdb.set_trace()
         self.todos = self.append_todo_obj(self.todos)
+
         self.categories = self.get_categories()
 
         self.kwargs = kwargs
@@ -52,22 +52,6 @@ class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin, 
     def templatize(self, context, value):
         t = template.Template(value)
         return t.render(context)
-
-    def item_context(self, item, **kwargs):
-        c = template.Context(kwargs)
-
-        # ensure we have a name and description
-        item.name = item.name if hasattr(item, 'name') else None
-        item.description = item.description if hasattr(item, 'description') else None
-
-        # render the template with variables from the context
-        if item.name is not None:
-            item.name = unicode(self.templatize(context=c, value=item.name))
-
-        if item.description is not None:
-            item.description = unicode(self.templatize(context=c, value=item.description))
-
-        return item
 
     def parse_checklist(self, current_length, checklist, **kwargs):
         for i, item in enumerate(checklist):

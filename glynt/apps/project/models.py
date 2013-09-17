@@ -7,12 +7,18 @@ from uuidfield import UUIDField
 
 from jsonfield import JSONField
 
+#from glynt.apps.project.services.actions import OpenProjectService, CloseProjectService, ReOpenProjectService
+
+from glynt.apps.transact.models import Transaction
+from glynt.apps.company.models import Company
 from glynt.apps.lawyer.models import Lawyer
 
-from glynt.apps.project import PROJECT_STATUS
-from glynt.apps.project.managers import DefaultProjectManager
+from . import PROJECT_STATUS, PROJECT_LAWYER_STATUS
+from .managers import DefaultProjectManager, ProjectLawyerManager
 
 from rulez import registry
+
+import itertools
 
 
 class Project(models.Model):
@@ -23,8 +29,8 @@ class Project(models.Model):
 
     uuid = UUIDField(auto=True, db_index=True)
     customer = models.ForeignKey('customer.Customer')
-    company = models.ForeignKey('company.Company')
-    transactions = models.ManyToManyField('transact.Transaction')
+    company = models.ForeignKey(Company)
+    transactions = models.ManyToManyField(Transaction)
     lawyers = models.ManyToManyField(Lawyer, blank=True, through='project.ProjectLawyer')
     data = JSONField(default={})
     status = models.IntegerField(choices=PROJECT_STATUS.get_choices(), default=PROJECT_STATUS.new, db_index=True)
@@ -81,18 +87,28 @@ class Project(models.Model):
         provide access to the customer, the lawyer
         ### not yet ### as well as any user associated with the customers company ## end not yet ##
         """
-        import itertools
-        from glynt.apps.project.models.project_lawyer import ProjectLawyer
         customer_user = self.customer.user
-        return itertools.chain([customer_user],
+        return itertools.chain( [customer_user],
                                 [l.lawyer.user for l in ProjectLawyer.objects.assigned(project=self)],
                                 #[u for u in self.company.customers.exclude(pk=customer_user.pk)]
                               )
 
     @property
     def has_lawyer(self):
-        from glynt.apps.project.models.project_lawyer import ProjectLawyer
         return ProjectLawyer.objects.assigned(project=self).count() > 0
+
+    # def open(self, actioning_user):
+    #     """ Open the notification """
+    #     service = OpenProjectService(project=self, actioning_user=actioning_user)
+    #     return service.process()
+
+    # def close(self, actioning_user):
+    #     service = CloseProjectService(project=self, actioning_user=actioning_user)
+    #     return service.process()
+
+    # def reopen(self, actioning_user):
+    #     service = ReOpenProjectService(project=self, actioning_user=actioning_user)
+    #     return service.process()
 
     @property
     def is_open(self):
@@ -124,6 +140,28 @@ class Project(models.Model):
 
 registry.register("can_read", Project)
 registry.register("can_edit", Project)
+
+
+class ProjectLawyer(models.Model):
+    """
+    The customised variation of a generic m2m model
+    msut be named ProjectLawyer(s) <-- this is not noraml for django
+    """
+    LAWYER_STATUS = PROJECT_LAWYER_STATUS
+
+    project = models.ForeignKey(Project)
+    lawyer = models.ForeignKey(Lawyer)
+    status = models.IntegerField(choices=LAWYER_STATUS.get_choices(), default=LAWYER_STATUS.potential, db_index=True)
+
+    objects = ProjectLawyerManager()
+
+    class Meta:
+        db_table = 'project_project_lawyer'
+
+    @property
+    def display_status(self):
+        return self.LAWYER_STATUS.get_desc_by_value(self.status)
+
 
 # import signals so they load on django load
 from glynt.apps.project.signals import on_project_created, on_lawyer_assigned

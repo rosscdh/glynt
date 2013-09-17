@@ -8,6 +8,8 @@ import os
 from django.db import models
 from django.contrib.auth.models import User
 
+from glynt.apps.project.models import Project
+
 from django_filepicker.models import FPFileField
 
 from . import TODO_STATUS, FEEDBACK_STATUS
@@ -32,7 +34,7 @@ class ToDo(models.Model):
     TODO_STATUS_CHOICES = TODO_STATUS
 
     user = models.ForeignKey(User, blank=True, null=True)
-    project = models.ForeignKey('project.Project', blank=True, null=True)
+    project = models.ForeignKey(Project, blank=True, null=True)
     name = models.CharField(max_length=128)
     slug = models.SlugField() # inherited from the .yml list based on project_id and other mixins
     category = models.CharField(max_length=128, db_index=True)
@@ -94,7 +96,7 @@ class Attachment(models.Model):
     uploaded_by = models.ForeignKey(User, related_name='atatchments_uploaded')
     deleted_by = models.ForeignKey(User, blank=True, null=True, related_name='atatchments_deleted')
     attachment = FPFileField(upload_to=_attachment_upload_file, additional_params=None)
-    project = models.ForeignKey('project.Project', related_name='attachments')
+    project = models.ForeignKey(Project, related_name='attachments')
     todo = models.ForeignKey(ToDo, blank=True, null=True, related_name='attachments')
     data = JSONField(default={})
     date_created = models.DateTimeField(auto_now=False, auto_now_add=True, db_index=True)

@@ -17,35 +17,6 @@ import logging
 logger = logging.getLogger('django.request')
 
 
-class CustomerLoginLogic(object):
-    """
-    Login logic used to determine what to show
-    when the customer logs in
-    """
-    user = None
-    customer = None
-
-    def __init__(self, user):
-        self.user = user
-        try:
-            self.customer = self.user.customer_profile
-        except ObjectDoesNotExist:
-            self.customer = None
-            logger.error("founder profile not found for %s" % self.user)
-
-    @property
-    def url(self):
-        num_projects = Project.objects.filter(customer=self.customer).count()
-
-        if num_projects > 0:
-            return reverse('dashboard:overview')
-        else:
-            return reverse('project:create')
-
-    def redirect(self):
-        return redirect(self.url)
-
-
 class CustomerRequiredViewMixin(object):
     """
     Mixin to ensure that only a lawyer user 
