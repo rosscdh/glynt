@@ -58,15 +58,15 @@ transaction:
             repeater_key: 'founders'
             singular: 'Founder'
             checklist:
-                -   name: 'Stock Purchase Agreement for {{ full_name }}'
+                -   name: 'Stock Purchase Agreement for {{ founder_name }} - {{ generic_name }}'
                     attachment: []
-                -   name: 'Confidential Information and Invention Assignment Agreement for {{ full_name }}'
+                -   name: 'Confidential Information and Invention Assignment Agreement for {{ founder_name }} - {{ generic_name }}'
                     attachment: []
-                -   name: 'Notice of Stock Issuance for {{ full_name }}'
+                -   name: 'Notice of Stock Issuance for {{ founder_name }} - {{ generic_name }}'
                     attachment: []
-                -   name: 'Stock Certificate(s) for {{ full_name }}'
+                -   name: 'Stock Certificate(s) for {{ founder_name }} - {{ generic_name }}'
                     attachment: []
-                -   name: '83(b) Election for {{ full_name }}'
+                -   name: '83(b) Election for {{ founder_name }} - {{ generic_name }}'
                     attachment: []
 
 
@@ -90,11 +90,11 @@ transaction:
             repeater_key: 'num_option_holders'
             singular: 'Option Holder'
             checklist:
-                -   name: 'Stock option grant and restricted stock purchase agreements for {{ full_name }}'
+                -   name: 'Stock option grant and restricted stock purchase agreements for {{ generic_name }}'
                     attachment: []
-                -   name: 'Board approval of Option Grant for {{ full_name }}'
+                -   name: 'Board approval of Option Grant for {{ generic_name }}'
                     attachment: []
-                -   name: '83(b) Election Form for {{ full_name }}'
+                -   name: '83(b) Election Form for {{ generic_name }}'
                     attachment: []
                 -   name: 'Board Approval of Stock Plan'
                     attachment: []
@@ -112,9 +112,9 @@ transaction:
             repeater_key: 'num_officers'
             singular: 'Officer or Director'
             checklist:
-                -   name: 'Indemnification Agreement for {{ full_name }}'
+                -   name: 'Indemnification Agreement for {{ generic_name }}'
                     attachment: []
-                -   name: 'Stockholder Approval of Indemnification Agreement for {{ full_name }}'
+                -   name: 'Stockholder Approval of Indemnification Agreement for {{ generic_name }}'
                     attachment: []
 
 
@@ -123,13 +123,13 @@ transaction:
             repeater_key: 'num_employees'
             singular: 'Employee'
             checklist:
-                -   name: 'Employment Offer Letter for {{ full_name }}'
+                -   name: 'Employment Offer Letter for {{ generic_name }}'
                     attachment: []
-                -   name: 'Employment Agreement for {{ full_name }}'
+                -   name: 'Employment Agreement for {{ generic_name }}'
                     attachment: []
-                -   name: 'Confidential Information and Invention Assignment Agreement for {{ full_name }}'
+                -   name: 'Confidential Information and Invention Assignment Agreement for {{ generic_name }}'
                     attachment: []
-                -   name: 'Nondisclosure Agreement for {{ full_name }}'
+                -   name: 'Nondisclosure Agreement for {{ generic_name }}'
                     attachment: []
 
 
@@ -138,11 +138,11 @@ transaction:
             repeater_key: 'num_consultants'
             singular: 'Consultant'
             checklist:
-                -   name: 'Consultant Agreement for {{ full_name }}'
+                -   name: 'Consultant Agreement for {{ generic_name }}'
                     attachment: []
-                -   name: 'Confidential Information and Invention Assignment Agreement for {{ full_name }}'
+                -   name: 'Confidential Information and Invention Assignment Agreement for {{ generic_name }}'
                     attachment: []
-                -   name: 'Nondisclosure Agreement for {{ full_name }}'
+                -   name: 'Nondisclosure Agreement for {{ generic_name }}'
                     attachment: []
 
 

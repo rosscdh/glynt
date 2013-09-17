@@ -97,19 +97,6 @@ class Project(models.Model):
     def has_lawyer(self):
         return ProjectLawyer.objects.assigned(project=self).count() > 0
 
-    # def open(self, actioning_user):
-    #     """ Open the notification """
-    #     service = OpenProjectService(project=self, actioning_user=actioning_user)
-    #     return service.process()
-
-    # def close(self, actioning_user):
-    #     service = CloseProjectService(project=self, actioning_user=actioning_user)
-    #     return service.process()
-
-    # def reopen(self, actioning_user):
-    #     service = ReOpenProjectService(project=self, actioning_user=actioning_user)
-    #     return service.process()
-
     @property
     def is_open(self):
         return PROJECT_STATUS.open == self.status
