@@ -85,7 +85,6 @@ class ToDoItemsFromYamlMixin(ExtractJavascrptGeneratedRepeater):
                 for category, item in c.todos.items():
 
                     self.handle_repeater(item=item)
-
                     todos_by_cat[category] = []
 
                     if item.checklist:
@@ -107,7 +106,7 @@ class ToDoItemsFromYamlMixin(ExtractJavascrptGeneratedRepeater):
             # singular reference for verbage; i.e. Founder(<-singular value) #1
             singular = getattr(item, 'singular', None)
 
-            logger.info('Found repeater_key: %s' % repeater_key)
+            logger.debug('Found repeater_key: %s' % repeater_key)
 
             # get the repeater_key values from the project_data
             items = self.project_data.get(repeater_key, None)
@@ -125,20 +124,20 @@ class ToDoItemsFromYamlMixin(ExtractJavascrptGeneratedRepeater):
                 # handle being passed a [] or (), otherwise it should be an int
                 if type(items) in [list]:
                     num_items = len(items)
-                    logger.info('Created {num_items} from list data'.format(num_items=num_items))
+                    logger.debug('Created {num_items} from list data'.format(num_items=num_items))
 
                 elif type(items) in [dict]:
                     # if were pased a dict of repeater items
                     items = self.parse_repeater_dict(items=items)
                     num_items = len(items)
-                    logger.info('Created {num_items} from dict data'.format(num_items=num_items))
+                    logger.debug('Created {num_items} from dict data'.format(num_items=num_items))
                 else:
                     # should be an int
                     num_items = int(items)
                     items = [i for i in xrange(1, num_items+1)]
-                    logger.info('Created {num_items} from xrange'.format(num_items=num_items))
+                    logger.debug('Created {num_items} from xrange'.format(num_items=num_items))
 
-            logger.info('All Items repeater_key: %s items: %s' % (repeater_key, items,))
+            logger.debug('All Items repeater_key: %s items: %s' % (repeater_key, items,))
 
             cloned_list = item.checklist[:]
             item.checklist = []
@@ -146,9 +145,12 @@ class ToDoItemsFromYamlMixin(ExtractJavascrptGeneratedRepeater):
             if num_items > 0:
                 # need to repeat this segment X times by
                 # field_name specified
+                #import pdb;pdb.set_trace()
                 for num in xrange(0, num_items):
                     # contextualize and replace teh textual values
                     display_num = num + 1
+                    logger.debug('Creating repeater {repeater_key}, {num}/{display_num}'.format(repeater_key=repeater_key, num=num, display_num=display_num))
+                    # append to the item.checklist
                     item.checklist += [self.item_context(item=copy.deepcopy(cloned_item), num=display_num, full_name='{name} #{num}'.format(name=singular, num=display_num)) for cloned_item in cloned_list]
 
     def item_context(self, item, **kwargs):
@@ -225,6 +227,8 @@ class ToDoItemsFromDbMixin(object):
 
     def bulk_create(self):
         from glynt.apps.todo.models import ToDo
+        logger.debug('start bulk_create')
+
         todo_list = []
         db_todo_slugs = [t.slug for t in self.db_todos()]
 
