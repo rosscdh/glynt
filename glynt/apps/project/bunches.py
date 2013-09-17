@@ -27,7 +27,14 @@ class ProjectIntakeFormIsCompleteBunch(Bunch):
     def __init__(self, project):
         self.project = project
         self.company = self.project.company
-        return super(ProjectIntakeFormIsCompleteBunch, self).__init__()
+
+        # create a combined dict to provide data
+        # to the Bunch
+        kwargs = {}
+        kwargs.update(self.company.data)
+        kwargs.update(self.project.data)
+
+        return super(ProjectIntakeFormIsCompleteBunch, self).__init__(**kwargs)
 
     def slug(self, **kwargs):
         name = str(self.project.pk) + '-' + str(self.company.pk)
