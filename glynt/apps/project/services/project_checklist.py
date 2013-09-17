@@ -6,15 +6,71 @@ from glynt.apps.project.bunches import ProjectIntakeFormIsCompleteBunch
 
 from bunch import Bunch
 
+import re
 import copy
-from collections import OrderedDict
-import shortuuid
-
 import logging
+import shortuuid
+from collections import OrderedDict
 logger = logging.getLogger('lawpal.services')
 
+RE_FIND_END_NUMERAL = re.compile(r'_(\d+)$')
 
-class ToDoItemsFromYamlMixin(object):
+
+class ExtractJavascrptGeneratedRepeater(object):
+    def extract_keys(self, items):
+        keys = []
+        for key in items.keys():
+            match = RE_FIND_END_NUMERAL.search(key)
+
+            if match is not None:
+                k = key.replace(match.group(), '')
+
+                if k is not None and k not in keys:
+                    keys.append(k)
+        return keys
+
+    def extract_repeater_values(self, items):
+        cleaned_items = []
+        for key, item_value in sorted(items.items()):
+            id = item_value.get('id')
+            val = item_value.get('val')
+
+            match = RE_FIND_END_NUMERAL.search(key)
+            if match is None:
+                # this is the primary first item (as it has no *_<int>)
+                index = 0
+            else:
+                # these are secondary items (as they have *_<int>)
+                index = int(match.group().replace('_', ''))  # remove the _ and convert to integer
+
+            # remove the _<int> from the id
+            # if it exists
+            match = RE_FIND_END_NUMERAL.search(id)
+            if match is not None:
+                id = key.replace(match.group(), '')
+
+            logger.debug('\n{index} - {id}: {val}\n\n'.format(index=index, id=id, val=val))
+
+            try:
+                obj = cleaned_items[index]
+                obj[id] = val
+                cleaned_items[index] = obj
+                logger.debug("updated new item {obj}\n".format(obj=obj))
+            except IndexError:
+                obj = {}
+                obj[id] = val
+                cleaned_items.insert(index, obj)
+                logger.debug("inserted new item {obj}\n".format(obj=obj))
+            logger.debug("cleaned_items: {cleaned_items}\n".format(cleaned_items=cleaned_items))
+
+        return cleaned_items
+
+    def parse_repeater_dict(self, items):
+        keys = self.extract_keys(items)
+        return self.extract_repeater_values(items)
+
+
+class ToDoItemsFromYamlMixin(ExtractJavascrptGeneratedRepeater):
     """
     Mixin that provides extraction of todo checklist from
     The YAML Checklists
@@ -53,28 +109,34 @@ class ToDoItemsFromYamlMixin(object):
 
             logger.info('Found repeater_key: %s' % repeater_key)
 
-            # get the repeater_key values from the company data
-            items = self.company_data.get(repeater_key, None)
+            # get the repeater_key values from the project_data
+            items = self.project_data.get(repeater_key, None)
 
             # ok, we have no data form comapny_data based on the repeater_key
             # therefor we need to see if we can extract the data from an attribute/method
-            # available on the company_data ProjectIntakeFormIsCompleteBunch object
-            if not items and hasattr(self.company_data, repeater_key):
-                items = getattr(self.company_data, repeater_key)
+            # available on the project_data ProjectIntakeFormIsCompleteBunch object
+            if not items and hasattr(self.project_data, repeater_key):
+                items = getattr(self.project_data, repeater_key)
 
             # do we have items yet? great now we need to see if its a list
-            # or an int, ie do we have a set of elements saved in the company_data
+            # or an int, ie do we have a set of elements saved in the project_data
             # or is it a simple int value ie. num_officers which then allows us to generate
             if items:
                 # handle being passed a [] or (), otherwise it should be an int
                 if type(items) in [list]:
                     num_items = len(items)
-                    logger.info('Created num_items from data key')
+                    logger.info('Created {num_items} from list data'.format(num_items=num_items))
+
+                elif type(items) in [dict]:
+                    # if were pased a dict of repeater items
+                    items = self.parse_repeater_dict(items=items)
+                    num_items = len(items)
+                    logger.info('Created {num_items} from dict data'.format(num_items=num_items))
                 else:
                     # should be an int
                     num_items = int(items)
                     items = [i for i in xrange(1, num_items+1)]
-                    logger.info('Created num_items from xrange')
+                    logger.info('Created {num_items} from xrange'.format(num_items=num_items))
 
             logger.info('All Items repeater_key: %s items: %s' % (repeater_key, items,))
 
@@ -84,9 +146,10 @@ class ToDoItemsFromYamlMixin(object):
             if num_items > 0:
                 # need to repeat this segment X times by
                 # field_name specified
-                for num in xrange(1, num_items+1):
+                for num in xrange(0, num_items):
                     # contextualize and replace teh textual values
-                    item.checklist += [self.item_context(item=copy.deepcopy(cloned_item), full_name='{name} #{num}'.format(name=singular, num=num)) for cloned_item in cloned_list]
+                    display_num = num + 1
+                    item.checklist += [self.item_context(item=copy.deepcopy(cloned_item), num=display_num, full_name='{name} #{num}'.format(name=singular, num=display_num)) for cloned_item in cloned_list]
 
     def item_context(self, item, **kwargs):
         c = template.Context(kwargs)
@@ -235,7 +298,7 @@ class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin, 
 
     def __init__(self, project, **kwargs):
         self.project = project
-        self.company_data = ProjectIntakeFormIsCompleteBunch(project=self.project)
+        self.project_data = ProjectIntakeFormIsCompleteBunch(project=self.project)
 
         self.checklist = self.project.checklist()
 
@@ -251,7 +314,7 @@ class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin, 
         """ the slug has to be consistent for each item, even when pulled from yaml file
         thus we cant use uuid here as it is generated unique every time; where as this is
         based on a uniqe combo of the item details"""
-        name = self.company_data.slug(item_name=item.name)
+        name = self.project_data.slug(item_name=item.name)
 
         if len(kwargs.keys()) > 0:
             name = '{name}{extra}'.format(name=name, extra='-'.join([unicode(i) for i in kwargs.values()]))
