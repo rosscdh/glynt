@@ -17,18 +17,6 @@ RE_FIND_END_NUMERAL = re.compile(r'_(\d+)$')
 
 
 class ExtractJavascrptGeneratedRepeater(object):
-    def extract_keys(self, items):
-        keys = []
-        for key in items.keys():
-            match = RE_FIND_END_NUMERAL.search(key)
-
-            if match is not None:
-                k = key.replace(match.group(), '')
-
-                if k is not None and k not in keys:
-                    keys.append(k)
-        return keys
-
     def extract_repeater_values(self, items):
         cleaned_items = []
         for key, item_value in sorted(items.items()):
@@ -61,12 +49,12 @@ class ExtractJavascrptGeneratedRepeater(object):
                 obj[id] = val
                 cleaned_items.insert(index, obj)
                 logger.debug("inserted new item {obj}\n".format(obj=obj))
+
             logger.debug("cleaned_items: {cleaned_items}\n".format(cleaned_items=cleaned_items))
 
         return cleaned_items
 
     def parse_repeater_dict(self, items):
-        keys = self.extract_keys(items)
         return self.extract_repeater_values(items)
 
 
@@ -121,16 +109,19 @@ class ToDoItemsFromYamlMixin(ExtractJavascrptGeneratedRepeater):
             # or an int, ie do we have a set of elements saved in the project_data
             # or is it a simple int value ie. num_officers which then allows us to generate
             if items:
+                has_extra_dict = False
                 # handle being passed a [] or (), otherwise it should be an int
-                if type(items) in [list]:
-                    num_items = len(items)
-                    logger.debug('Created {num_items} from list data'.format(num_items=num_items))
-
-                elif type(items) in [dict]:
+                if type(items) in [dict]:
                     # if were pased a dict of repeater items
+                    has_extra_dict = True
                     items = self.parse_repeater_dict(items=items)
                     num_items = len(items)
                     logger.debug('Created {num_items} from dict data'.format(num_items=num_items))
+
+                elif type(items) in [list]:
+                    num_items = len(items)
+                    logger.debug('Created {num_items} from list data'.format(num_items=num_items))
+
                 else:
                     # should be an int
                     num_items = int(items)
@@ -150,8 +141,16 @@ class ToDoItemsFromYamlMixin(ExtractJavascrptGeneratedRepeater):
                     # contextualize and replace teh textual values
                     display_num = num + 1
                     logger.debug('Creating repeater {repeater_key}, {num}/{display_num}'.format(repeater_key=repeater_key, num=num, display_num=display_num))
+
+                    # set the extra dict to be passed in if it exists
+                    extra = items[num] if has_extra_dict is True else {}
+
                     # append to the item.checklist
-                    item.checklist += [self.item_context(item=copy.deepcopy(cloned_item), num=display_num, full_name='{name} #{num}'.format(name=singular, num=display_num)) for cloned_item in cloned_list]
+                    item.checklist += [self.item_context(item=copy.deepcopy(cloned_item),
+                                                        num=display_num,
+                                                        generic_name='{name} #{num}'.format(name=singular,
+                                                                                        num=display_num),
+                                                        **extra) for cloned_item in cloned_list]
 
     def item_context(self, item, **kwargs):
         c = template.Context(kwargs)
