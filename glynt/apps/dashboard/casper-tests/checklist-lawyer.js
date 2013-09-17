@@ -150,14 +150,43 @@ helper.scenario(casper.cli.options.url,
     }
 );
 
+/**
+ * captureRequest: Increments by one each time a capturePage request is made
+ *                 this variable is used to save unique image filename for each page capture taken
+ * @type {Number}
+ */
 var captureRequest = 0;
+
+/**
+ * capturePageTimelapse: captures the page 1 per second for numFrames (keep in mind that each test has a timeout of 5 seconds  )
+ * usage:
+ *                       capturePageTimelapse(4);
+ * 
+ * @param  {Number} numFrames Number of frames to capture
+ */
+function capturePageTimelapse( numFrames ) {
+    for(var i=0;i<numFrames;i++) {
+        capturePage();
+    }
+}
+
+/**
+ * capturePage: Initiates a capture request, a screen capture will be taken in n seconds where n = captureRequest * 1000
+ *              images will be saved into /tmp/
+ * usage:
+ *              capturePage();
+ */
 function capturePage() {
 	var wait;
 	captureRequest++;
-	wait = captureRequest * 1000;
+	wait = captureRequest * 1000; // wait n seconds before taking screen capture
 	delayCapturePage( wait );
 }
 
+/**
+ * delayCapturePage: when called invokes a screen capture in [delay] seconds
+ * @param  {Number} delay Number of seconds to wait until taking the screen capture
+ */
 function delayCapturePage( delay ) {
 	casper.wait(delay, function() {
     	this.capture('/tmp/page_' + delay + '.png', {
