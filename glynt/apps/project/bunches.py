@@ -39,8 +39,8 @@ class ProjectIntakeFormIsCompleteBunch(Bunch):
     def slug(self, **kwargs):
         name = str(self.project.pk) + '-' + str(self.company.pk)
 
-        #if len(kwargs.keys()) > 0:
-        #    name = '{name}{extra}'.format(name=name, extra='-'.join([i for i in kwargs.values()]))
+        if len(kwargs.keys()) > 0:
+           name = '{name}{extra}'.format(name=name, extra='-'.join([i for i in kwargs.values()]))
 
         return shortuuid.uuid(name=name)
 
