@@ -152,22 +152,6 @@ class ToDoItemsFromYamlMixin(object):
                                                                                         num=display_num),
                                                         **extra) for cloned_item in cloned_list]
 
-    def item_context(self, item, **kwargs):
-        c = template.Context(kwargs)
-
-        # ensure we have a name and description
-        item.name = item.name if hasattr(item, 'name') else None
-        item.description = item.description if hasattr(item, 'description') else None
-
-        # render the template with variables from the context
-        if item.name is not None:
-            item.name = unicode(self.templatize(context=c, value=item.name))
-
-        if item.description is not None:
-            item.description = unicode(self.templatize(context=c, value=item.description))
-
-        return item
-
 
 class ToDoItemsFromDbMixin(object):
     slugs = None

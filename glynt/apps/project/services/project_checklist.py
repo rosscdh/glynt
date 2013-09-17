@@ -53,6 +53,22 @@ class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin, 
         t = template.Template(value)
         return t.render(context)
 
+    def item_context(self, item, **kwargs):
+        c = template.Context(kwargs)
+
+        # ensure we have a name and description
+        item.name = item.name if hasattr(item, 'name') else None
+        item.description = item.description if hasattr(item, 'description') else None
+
+        # render the template with variables from the context
+        if item.name is not None:
+            item.name = unicode(self.templatize(context=c, value=item.name))
+
+        if item.description is not None:
+            item.description = unicode(self.templatize(context=c, value=item.description))
+
+        return item
+
     def parse_checklist(self, current_length, checklist, **kwargs):
         for i, item in enumerate(checklist):
             # indicate attachment status
@@ -104,8 +120,6 @@ class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin, 
                 next = temp_todo_list[c+1]
             except IndexError:
                 next = None
-
-            #logger.debug('slug: {slug} == {item_slug} type: {type} == {type_b}'.format(slug=item.slug, item_slug=slug, type=type(str(item.slug)), type_b=type(str(slug))))
 
             if str(item.slug) == str(slug):
                 navigation_items.prev = previous
