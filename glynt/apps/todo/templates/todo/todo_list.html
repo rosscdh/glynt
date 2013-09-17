@@ -14,155 +14,132 @@
 
 {% block body %}
     {% csrf_token %}
-    <div class="container checklist-view">
+    <!-- start: AngularJS: checklist controller //-->
+    <toaster-container toaster-options="{'time-out': 3000}"></toaster-container>
+    <div class="container checklist-view" ng-controller="checklistCtrl" ng-init="initalise( { 'project': { 'uuid': '{{ project.uuid }}' }, 'pusher': { 'key':'{{ PUSHER_KEY }}', 'channel':'{{ project.pusher_id }}' } } )">
         <div class="row">
             <div class="col col-lg-3">
                 <div class="sidebar" data-spy="affix" data-offset-top="80">
                     <div class="subnav">
                         <ul id="checklist-categories" class="nav nav-pills nav-stacked">
-                            {% for c in checklist.categories %}
-                                <li data-category="{{ c|slugify }}" class="{% if forloop.counter == 1 %}active{% endif %}"><a href="#{{ c|slugify }}">{{ c }}<span class="num_assigned_to_user badge assigned pull-right"></span></a></li>
-                            {% endfor %}
+                            <li ng-repeat="category in model.categories" ng-class="{'active':$first}">
+                                <a href="#{[{category.slug}]}"><span ng-bind-html-unsafe="category.label"></span><span class="num_assigned_to_user badge assigned pull-right" ng-bind="assignedPerCategory(category)" xng-bind="category.numAssigned"></span></a>
+                            </li>
                         </ul>
                     </div>
                 </div>
             </div>
 
-            <div class="col col-lg-9">
+            <div class="col col-lg-9">                
                 <div id="list-items">
-                    {% for category, items in checklist.todos_by_cat.iteritems %}
-                    <section id="{{ category|slugify }}" class="checklist-category">
-                        <div class="checklist-header clearfix">
-                            <h3 class="pull-left">{{ category }}</h3>
+                    <section ng-repeat="category in model.categories">
+                        <div id="{[{category.slug}]}" class="checklist-header clearfix">
+                            <h3 class="pull-left" ng-bind-html-unsafe="category.label"></h3>
                             {% if is_lawyer %}
-                            <button type="button" class="btn btn-link pull-right create-item" data-category="{{ category|slugify }}" data-remote="{% url 'todo:create' project_uuid=project.uuid %}?category={{ category|urlencode }}" data-toggle="modal" data-target="#modal-checklist-item" title="Create new item">
-                                <i class="glyphicon glyphicon-plus-sign"></i>
+                            <!-- Add new checklist item //-->
+                            <button type="button" class="btn btn-link pull-right create-item" title="Create new item" data-tooltip="Create new checklist item" ng-click="createItem( category )">
+                                    <i class="glyphicon glyphicon-plus-sign"></i>
                             </button>
                             {% endif %}
                         </div>
+
                         <table class="table table-striped checklist">
                             <tbody>
-                                {% for item in items %}
-                                <tr data-edit_label="{{ item.slug }}" data-status="{{ item.obj.display_status|default:item.display_status|lower }}" class="item {{ item.obj.status|default:item.status|todo_status_row_class }}">
-                                    <td class="item-status" tooltip="{{ item.obj.display_status|default:item.display_status }}" title="{{ item.obj.display_status|default:item.display_status }}">
-                                        <i class="{{ item.obj.status|default:item.status|todo_status_icon }}"></i>
+                                <!-- start: AngularJS: checklist item controller //-->
+                                <tr ng-repeat="item in model.checklist | filter: { 'category': category.label } | filter: { is_deleted: model.showDeletedItems } | orderBy: item.sort_position_by_cat" class="item state-{[{getItemStatus(item)}]}" ng-class="{'assigned-to-user':getAssignedStatus()}" ng-controller="checklistItemCtrl">
+                                    <!-- Checklist item status //-->
+                                    <td class="item-status">
+                                        <i class="icon-state-{[{getItemStatus(item)}]}"></i>
                                     </td>
-                                    <td class="item-info">
-                                        <h4>
-                                            <a id="item-name-{{ item.slug }}" href="{% url 'todo:item' project_uuid=project.uuid slug=item.slug %}">{{ item.obj.name|default:item.name }}</a>
-                                        </h4>
-                                    </td>
-                                    <td class="item-meta">
-                                        {% if is_lawyer %}
-                                        <a href="{% url 'todo:edit' project_uuid=project.uuid slug=item.slug %}" title="Delete Item" data-pk="{{ item.obj.pk }}" data-item_slug="{{ item.slug }}" data-tooltip="Delete Item" class="btn btn-small btn-link item-delete text-danger">
-                                            <i class="glyphicon glyphicon-remove text-danger"></i>
-                                        </a>
-                                        <a href="{% url 'todo:edit' project_uuid=project.uuid slug=item.slug %}" data-toggle="modal" data-target="#modal-checklist-item" data-is_ajax="true" data-target_toggle_object="#item-name-{{ item.slug }}" title="Edit" data-tooltip="Edit" class="btn btn-small btn-link item-edit">
-                                            <i class="glyphicon glyphicon-pencil"></i>
-                                        </a>
-                                        {% endif %}
-                                    </td>
+                                    <!-- Checklist item name //-->
+                                    <td class="item-info" checklist-item-link ng-click="viewItem( item )"></td>
+                                    {% if is_lawyer %}
+                                    <!-- Checklist item actions //-->
+                                    <td class="item-meta" checklist-item-actions></td>
+                                    {% endif %}
                                 </tr>
-                                {% empty %}
-                                <tr>
-                                    <td colspan="4">
-                                        <span class="text-muted">{% trans 'No items yet' %}</span>
-                                    </td>
-                                </tr>
-                                {% endfor %}
+                                <!-- end: AngularJS: checklist item controller //-->
                             </tbody>
                         </table>
+                        <!-- Table //-->
                     </section>
-                    {% endfor %}
                 </div>
-            </div>
         </div>
     </div>
+    <!-- end: AngularJS: checklist controller //-->
 {% endblock %}
 
 {% block js %}
-    <script src="{{ STATIC_URL }}js/jquery.hotkeys-0.8.js"></script>
+    <!--<script src="{{ STATIC_URL }}js/jquery.hotkeys-0.8.js"></script>-->
     <script src="{{ STATIC_URL }}todo/jquery.plugin.filter_status.js"></script>
     <script src="{{ STATIC_URL }}todo/jquery.plugin.edit_label.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}todo/angularjs.checklistCtrl.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}todo/angularjs.checklistItemCtrl.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}todo/angularjs.checklistItemDirective.js"></script>
+
     <script>
-    $(document).ready( function () {
-
-        $('#list-items').filter_status({
-            'state_modifier': $('#state_modifier')
-        });
-
-        {% if feedback_requests %}
+    /**
+    * LawPal Data object used by AngularJS
+    */
+    var LawPal = {
         /**
-        * HILIGHT ITEMS WITH ASSIGNED
-        * Items with assignments to current user
-        * loop over items in the feedback_results and for each slug
-        * set the highlight class
+        * Current User Object
         */
-        var user_feedback_requests = {{ feedback_requests|jsonify }};
-        $.each(user_feedback_requests, function (slug, data) {
-            var row = $('[data-edit_label={slug}]'.assign({'slug': slug}));
-            row.removeClass('assigned-to-user').addClass('assigned-to-user');
-        });
-        {% endif %}
+       "project": {
+            "id": {{project.id}}
+       },
+        "user": {
+            'pk': {{ user.pk|default:'null'|jsonify }},
+            'username': '{{ user.username }}',
+            'full_name': '{{ user.get_full_name }}',
+            'is_authenticated': {{ user.is_authenticated|jsonify }},
+        },
         /**
-        * ASSIGN NUM ITEMS ASSIGNED TO USER COUNT
-        * Count the number of items assigned to the user
-        * per category and assign that number to the category list
-        * if the count is > 0
+        * Primary list of the checklist items
         */
-        $.each($('[data-category]'), function (i, elem) {
-            var elem = $(elem);
-            var cat = elem.data('category');
-            var cat_row = $('#{cat}'.assign({'cat': cat}))
-            var num_assigned_to_user = cat_row.children('table:first').find('tr.assigned-to-user').length;
-
-            if (num_assigned_to_user > 0)
-                elem.find('.num_assigned_to_user').html('<i class="icon-state-pending"></i> ' + num_assigned_to_user);
-        });
-
-        {% if is_lawyer %}
+        "checklist_data": function () {
+            return {{ checklist_json|safe }};
+        },
         /**
-        * DELETE ITEM LIST
+        * Feedback requests are requests that are associated
+        * with an item that applies to the currentuser
         */
-        $('tr.item .item-delete').hide();
-        $('tr.item').on('mouseout', function (event) {
-            var elem = $(this);
-            elem.find('.item-delete').hide();
-        });
-        $('tr.item').on('mouseover', function (event) {
-            var elem = $(this);
-            elem.find('.item-delete').show();
-        });
+        "feedback_requests": function () {
+            return {{ feedback_requests|jsonify }}
+        },
+        "is_lawyer": {{ is_lawyer|jsonify }},
+        "is_customer": {{ is_customer|jsonify }},
+        "checklist_categories": function() {
+            return [{% for c in checklist.categories %}{% if forloop.counter != 1 %},{% endif %}{ "label": "{{c}}", "slug": "{{ c|slugify }}" } {% endfor %}];
+        },
+        "getEndpoint": function() {
+            var urls = {
+                "checklist" : 
+                    {
+                        "item" : {
+                            "view": "{% url 'todo:item' project_uuid=':project_uuid' slug=':slug' %}",
+                            "create": "{% url 'todo:create' project_uuid=':project_uuid' %}?category=:categoryLabel",
+                            "form": "{% url 'todo:edit' project_uuid=':project_uuid' slug=':slug' %}"
+                        } 
+                    }
+            };
 
-        $('.item-delete').on('click', function (event) {
-            event.preventDefault();
-            var elem = $(this);
-            var elem_tr = elem.closest('tr.item');
-            var pk = elem.data('pk');
-            var url = '/api/v1/todo/{pk}'.assign({'pk': pk});
-
-            $.ajax({
-                type: 'PATCH',
-                url: url,
-                data: JSON.stringify({'is_deleted': true}),
-                dataType: 'application/json',
-                contentType: 'application/json',
-                beforeSend: function(jqXHR, settings) {
-                    // Pull the token out of the DOM.
-                    jqXHR.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]:first').val());
-                },
-                error: function() {
-                    console.log('Error Deleting item')
-                },
-                complete: function() {
-                    //console.log('deleted')
-                    elem_tr.fadeOut();
+            return function( path ) {
+                var url = urls;
+                if( angular.isArray(path) )
+                {
+                    for(var i=0;i<path.length;i++) {
+                        url = url[ path[i] ];
+                    }
+                    if( angular.isString(url) )
+                        return url;
+                    else
+                        return null;
                 }
-            });
-        });
-        {% endif %}
+            }
+        }
+    };
 
-    });
     </script>
 {% endblock %}
 

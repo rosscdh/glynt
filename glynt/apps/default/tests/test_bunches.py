@@ -1,7 +1,7 @@
 # coding: utf-8
 """
 """
-import unittest
+from django.utils import unittest
 
 from model_mommy import mommy
 

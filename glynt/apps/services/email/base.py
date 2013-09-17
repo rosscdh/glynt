@@ -77,6 +77,7 @@ class BaseEmailService(object):
             'message': self.message,
             'from_name': self.from_name,
             'from_email': self.from_email,
+            'STATIC_URL': settings.STATIC_URL,
         })
 
     def _templatize_context(self, target, **kwargs):

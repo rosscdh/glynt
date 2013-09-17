@@ -31,16 +31,17 @@ class VisibleProjectsService(object):
 
         self.current_key = self.request.session.get('current_project_uuid')
 
-
+        # not logged in
         if not self.user.is_authenticated():
             self.projects, self.project = self.anonymous()
 
         else:
+            # they are not staff and not an admin
             if not self.user.is_staff and not self.user.is_superuser:
-
+                # are a customer
                 if self.user.profile.is_customer == True:
                     self.projects, self.project = self.customer()
-
+                # are a lawyer
                 elif self.user.profile.is_lawyer == True:
                     self.projects, self.project = self.lawyer()
 
@@ -81,8 +82,9 @@ class VisibleProjectsService(object):
         return (projects, project,)
 
     def lawyer(self):
-        project_lawyers = itertools.chain(ProjectLawyer.objects.potential(lawyer=self.user.lawyer_profile), \
-                                          ProjectLawyer.objects.assigned(lawyer=self.user.lawyer_profile))
+        # project_lawyers = itertools.chain(ProjectLawyer.objects.potential(lawyer=self.user.lawyer_profile), \
+        #                                   ProjectLawyer.objects.assigned(lawyer=self.user.lawyer_profile))
+        project_lawyers = ProjectLawyer.objects.assigned(lawyer=self.user.lawyer_profile)
         projects = [join.project for join in project_lawyers]
 
         project = self.current_project(projects)

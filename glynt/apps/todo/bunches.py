@@ -26,6 +26,8 @@ class BaseToDoBunch(Bunch):
     _todos = OrderedDict()
 
     def __init__(self, *args, **kwargs):
+        self._todos = OrderedDict()
+
         if not self.name:
             # Set name if not provided
             self.name = self.__class__.__name__.lower().replace('bunch', '')
@@ -46,7 +48,7 @@ class BaseToDoBunch(Bunch):
         Load the .yml template from the templates directory based on class name
         i.e. IncorporationBunch : would load : transact/templates/transactions/incorporation.yml
         """
-        if not self.template:
+        if self.template is None:
             self.template = '%s.yml' % self.__class__.__name__.lower().replace('bunch', '')
 
         if self.template:

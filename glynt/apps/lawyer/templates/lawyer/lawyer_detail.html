@@ -22,54 +22,86 @@
 			</div>
 			<div class="col col-lg-12">
 				<h1>{{ object.user.get_full_name|default:object.user.username }}</h1>
-				<h3>{{ object.summary|truncatechars:155 }}</h3>
+				<br />
 			</div>
 		</div>
 	</div>
-	<div id="buttons">
-		<div class="container">
-			<div class="row">
-				<div class="col col-lg-12 text-center">
-					{% if user.is_staff %}
-						<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="false" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if not object.is_active %}hide{% endif %} btn "><i class="icon-eye-close icon-white"></i> Disable</a>
-						<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="true" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if object.is_active %}hide{% endif %} btn "><i class="icon-eye-close icon-white"></i> Approve</a>
-					{% endif %}
-					{% if user.username == object.user.username %}
-						<a href="{% url 'lawyer:setup_profile' %}" class="btn right-links" ><i class="icon-edit icon-white"></i> Edit profile</a>
-						<a href="{% url 'lawyer:invite' %}" class="btn right-links" ><i class="icon-heart icon-white"></i> Invite Lawyers</a>
-						{% if object.summary %}
-							{% if PROJECT_ENVIRONMENT != 'dev' %}
-						    <script>
-							  $(document).ready(function () {
-						     	  Intercom('update', {"Lawyer Profile": "Complete", "Firm": "{{ firm }}"});
-						   	 });
-							</script>
-							{% endif %}
-						{% endif %}
-					{% endif %}
-					{% if user.username != object.user.username %}
-	                <div class="engagement-container">
-	                	{% engage_with_lawyer_button lawyer=object %}
-	                </div>
-	                {% endif %}
-				</div>
-			</div>
-		</div>
-	</div>
+
 </div>
 <div class="container profile">
-	<div class="row">
-		<div class="col col-lg-7 col-offset-1">
-			<h2>About</h2>
+	<div class="row">	
+		<div class="col col-lg-8 col-offset-2">
+			<p class="lead text-center">{{ object.data.summary }}</p>
+			<hr />
+			<div class="firm">
+				<h2 style="text-info">
+					{% if firm %}
+						<span>{{ firm }}</span> &middot; 
+					{% endif %} 
+					{% if object.data.years_practiced > 0 %}
+						<span>{{ object.data.years_practiced }} Years Practicing</span>
+					{% endif %}
+				</h2>
+			</div>
+			<div class="map">
+				<div class="row">
+					{% if object.data.practice_location_1 and not object.data.practice_location_2 %}
+						<div class="col-12" style="background:url('//maps.googleapis.com/maps/api/staticmap?size=1100x200&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_1 }}&sensor=false&maptype=roadmap');height:200px;">
+						</div>
+					{% endif %}
+					{% if object.data.practice_location_1 and object.data.practice_location_2 %}
+						<div class="col-6" style="background:url('//maps.googleapis.com/maps/api/staticmap?size=450x200&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_1 }}&sensor=false');height:180px;background-position:center;">
+						</div>
+						<div class="col-6" style="background:url('//maps.googleapis.com/maps/api/staticmap?size=450x200&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_2 }}&sensor=false');height:180px;background-position:center center">dsads
+						</div>
+					{% endif %}
+				</div>
+	        </div>
+	    </div>
+	    <br />
+		<div id="buttons">
+			<div class="container">
+				<div class="row">
+					<div class="col col-lg-8 col-offset-2 text-center">
+						<br />
+						{% if user.is_staff %}
+							<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="false" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if not object.is_active %}hide{% endif %} btn "><i class="icon-eye-close icon-white"></i> Disable</a>
+							<a href="#" data-url="/api/v1/lawyers/{{ object.pk }}/" data-method="PATCH" data-is_active="true" data-provide="ajax" data-toggle_class="btn-is_active" class="btn-is_active {% if object.is_active %}hide{% endif %} btn "><i class="icon-eye-close icon-white"></i> Approve</a>
+						{% endif %}
+						{% if user.username == object.user.username %}
+							<a href="{% url 'lawyer:setup_profile' %}" class="btn btn-huge btn-success right-links" ><i class="icon-edit icon-white"></i> Edit profile</a>
+							<a href="{% url 'lawyer:invite' %}" class="btn btn-huge right-links btn-info" ><i class="icon-heart icon-white"></i> Invite Lawyers</a>
+							{% if object.summary %}
+								{% if PROJECT_ENVIRONMENT != 'dev' %}
+							    <script>
+								  $(document).ready(function () {
+							     	  Intercom('update', {"Lawyer Profile": "Complete", "Firm": "{{ firm }}"});
+							   	 });
+								</script>
+								{% endif %}
+							{% endif %}
+						{% endif %}
+						{% if user.username != object.user.username %}
+		                <div class="engagement-container">
+		                	{% engage_with_lawyer_button lawyer=object %}
+		                </div>
+		                {% endif %}
+					</div>
+				</div>
+			</div>
+		</div>	
+		<div class="col col-lg-6 col-offset-3">
+			<hr />
+			<h1 class="text-center">About {{ object.user.first_name }}</h1>
 			<div>
 				<p>{{ object.bio|default:"<div class=\"no-data\">No biography yet.</div>"|linebreaksbr }}</p>
 			</div>
 			<hr>
 
 			<div class="startups domain-links">
-				<h2>Startups Advised</h2>
+				<h2 class="">Startups Advised</h2>
 				{% for o in object.data.companies_advised %}
-					<col col-lg->{{ o|urlize }}</col col-lg->
+					<div>{{ o|urlize }}</div>
 				{% empty %}
 					<ul class="unstyled">
 						<li class="nothing-found">Nothing yet.</li>
@@ -77,7 +109,8 @@
 				{% endfor %}
 			</div>
 			<div class="startups domain-links">
-				<h2>Other Websites</h2>
+				<hr />
+				<h2 class="">Other Websites</h2>
 				{% for o in object.data.websites %}
 					<col col-lg->{{ o|urlize }}</col col-lg->
 				{% empty %}
@@ -87,46 +120,12 @@
 				{% endfor %}
 			</div>
 		</div>
-		<div class="col col-lg-3 sidebar">
-			<div class="firm">
-				{% if firm.photo %}
-					<img src="{{ MEDIA_URL }}{{ firm.photo|default:'firm/blank.gif' }}" alt="{{ firm.name }}" class="firm-logo" />
-				{% else %}
-					{% if firm %}
-						<h2>{{ firm }}</h2>
-					{% else %}
-						<br />
-					{% endif %}
-				{% endif %}
+		<div class="col col-lg-6 col-offset-3">
+ 			<hr>
+			<div id="bar-license" class="bar-license">
+				<h2 class="">Licensed In</h2>
+				{% simple_name_list data_list=object.data.bar_membership %}
 			</div>
-			<div class="map">
-				{% if object.data.practice_location_1 and not object.data.practice_location_2 %}
-					<img src="//maps.googleapis.com/maps/api/staticmap?size=300x145&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_1 }}&sensor=false&maptype=roadmap">
-				{% endif %}
-				{% if object.data.practice_location_1 and object.data.practice_location_2 %}
-					<img src="//maps.googleapis.com/maps/api/staticmap?size=150x145&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_1 }}&sensor=false"><img src="http://maps.googleapis.com/maps/api/staticmap?size=149x145&markers=color:blue%7Clabel:S%7C{{ object.data.practice_location_2 }}&sensor=false">
-				{% endif %}
-				<ul class="key-points">
-					{% for practice_location in object.practice_locations  %}
-						<li class="marker">{{ practice_location }}</li>
-					{% endfor %}
-					{% if object.data.years_practiced > 0 %}
-						<li class="tick">{{ object.data.years_practiced }} Years Practicing</li>
-					{% endif %}
-					<!-- <li class="friends"><img src="{{ STATIC_URL }}img/app/small-avatar.jpg" alt="Avatar" /> Benjamin Ling is a mutual contact</li> -->
-				</ul>
-            </div>
-					<div id="other-profiles" class="other-profiles">
-						<h5>Other Profiles</h5>
-						{% social_profiles object.user %}
-		 			</div>
-		 			<hr>
-					<div id="bar-license" class="bar-license">
-						<h5>Licensed In</h5>
-						{% simple_name_list data_list=object.data.bar_membership %}
-					</div>
-			</div>
-
 		</div>
 	</div>
 

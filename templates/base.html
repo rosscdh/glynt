@@ -22,7 +22,7 @@
 
     {% block head_js %}{% endblock %}
 </head>
-<body data-spy="scroll" data-target=".subnav" class="{% block bodyclass %}{% endblock %}" style="padding-top: 69px;">
+<body data-spy="scroll" data-target=".subnav" class="{% block bodyclass %}{% endblock %}" style="padding-top: 69px;" ng-app="lawpal">
 
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
@@ -72,9 +72,21 @@
     <script type="text/javascript" src="{{ STATIC_URL }}handlebars.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}handlebars-helpers.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/lawpal.modal.js"></script>
+
+    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/angular.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/angular-resource.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/ui-bootstrap-tpls-0.5.0.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/angularjs-toaster.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lawpal.app.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/services/LawPalService.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/services/LawPalUrls.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/services/LawPalDialog.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/services/PusherService.js"></script>
+    
     <script type="text/javascript">{% profile_card_js %}</script>
 {% endcompress %}
 
+{% pusher_js %}
 {% handlebars_messages %}
 
 <script type="text/javascript" src="{{ STATIC_URL }}js/moment/moment.min.js"></script>
