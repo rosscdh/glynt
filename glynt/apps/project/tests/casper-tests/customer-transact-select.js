@@ -98,35 +98,6 @@ helper.scenario(casper.cli.options.url,
         this.test.assertExists('button#SF-select.active');
         // but the original SF-select.active is REMOVED
         this.test.assertNotExists('button#ES-select.active');
-    },
-    function () {
-        var self = this;
-        casper.test.comment('Test Custom Package Contact Us Click Event')
-
-        casper.then(function() {
-            // Click on 1st result link
-            self.click('button#contact-us-btn');
-
-            // wait for modal to show
-            casper.waitForSelector('div#custom-package-modal form#contact-us-form', function() {
-                // complete a message
-                self.fill('form#contact-us-form', {
-                    message: "This is my test message, are you getting it"
-                }, true);
-
-                // submit the form
-                self.click('div#custom-package-modal .modal-footer input.btn.btn-primary[value]');
-
-                // hide the modal
-                self.test.assertNotVisible('div#custom-package-modal');
-
-                // a message should be presented
-                casper.waitForText('Thanks, your message has been sent');
-            });
-
-        });
-
     }
 );
-
 helper.run();
