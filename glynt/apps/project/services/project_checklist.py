@@ -4,16 +4,23 @@ from django import template
 from glynt.apps.todo import TODO_STATUS
 from glynt.apps.project.bunches import ProjectIntakeFormIsCompleteBunch
 
-from .mixins import UserFeedbackRequestMixin, ToDoItemsFromYamlMixin, ExtractJavascrptGeneratedRepeaterMixin, ToDoItemsFromDbMixin, TodoAsJSONMixin
-
+from glynt.apps.project.services.mixins import (UserFeedbackRequestMixin,
+                                                ToDoItemsFromYamlMixin,
+                                                JavascriptRegionCloneMixin,
+                                                ToDoItemsFromDbMixin,
+                                                ToDoAsJSONMixin)
 from bunch import Bunch
 import shortuuid
+
 
 import logging
 logger = logging.getLogger('lawpal.services')
 
 
-class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin, ExtractJavascrptGeneratedRepeaterMixin, ToDoItemsFromDbMixin, TodoAsJSONMixin):
+class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin,
+                              JavascriptRegionCloneMixin,
+                              ToDoItemsFromDbMixin,
+                              ToDoAsJSONMixin):
     """
     Provide a set of checklist items that are
     generated from the project transaction types
@@ -31,7 +38,7 @@ class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin, 
         self.checklist = self.project.checklist()
 
         self.todos_by_cat, self.todos = self.get_todos()
-        #import pdb;pdb.set_trace()
+
         self.todos = self.append_todo_obj(self.todos)
 
         self.categories = self.get_categories()

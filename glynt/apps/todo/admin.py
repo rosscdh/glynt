@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 from django.contrib import admin
 
-from models import ToDo, Attachment, FeedbackRequest
+from glynt.apps.todo.models import ToDo, Attachment, FeedbackRequest
 
 
 class ToDoAdmin(admin.ModelAdmin):
