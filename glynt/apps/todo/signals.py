@@ -158,7 +158,7 @@ def feedbackrequest_created(sender, **kwargs):
                         todo=feedbackrequest.attachment.todo.name,
                         status=feedbackrequest.attachment.todo.display_status,
                         assigned=assigned,
-                        event='feedbackrequest.created.open')
+                        event='feedbackrequest.opened')
 
         if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.closed:
             verb = '{assigned_by} closed the feedback request that was assigned to them on checklist item {todo} for {project}'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), todo=feedbackrequest.attachment.todo, project=feedbackrequest.attachment.project)
@@ -172,7 +172,7 @@ def feedbackrequest_created(sender, **kwargs):
                         todo=feedbackrequest.attachment.todo.name,
                         status=feedbackrequest.attachment.todo.display_status,
                         assigned=assigned,
-                        event='feedbackrequest.created.closed')
+                        event='feedbackrequest.closed')
 
         if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.cancelled:
             verb = '{assigned_by} cancelled their feedback request on checklist item {todo} for {project}'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), todo=feedbackrequest.attachment.todo, project=feedbackrequest.attachment.project)
@@ -186,7 +186,7 @@ def feedbackrequest_created(sender, **kwargs):
                         todo=feedbackrequest.attachment.todo.name,
                         status=feedbackrequest.attachment.todo.display_status,
                         assigned=assigned,
-                        event='feedbackrequest.created.cancelled')
+                        event='feedbackrequest.cancelled')
 
 
 @receiver(post_save, sender=FeedbackRequest, dispatch_uid='feedbackrequest.status_change')

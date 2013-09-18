@@ -14,8 +14,8 @@ class NewActionEmailService(BaseEmailService):
     whitelist_actions=[
         'todo.attachment.created',
         'todo.comment.created',
-        'feedbackrequest.created.open',
-        'feedbackrequest.created.closed',
+        'feedbackrequest.opened',
+        'feedbackrequest.closed',
         'project.lawyer_assigned',
     ]
 
