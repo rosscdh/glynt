@@ -63,7 +63,7 @@ def on_attachment_created(sender, **kwargs):
             todostatus_service = ToDoStatusService(todo_item=attachment.todo)
             todostatus_service.process()
 
-            verb = '{name} Uploaded an Attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project)
+            verb = '{name} uploaded an attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project)
             action.send(attachment.uploaded_by,
                         verb=verb,
                         action_object=attachment,
@@ -92,7 +92,7 @@ def on_attachment_deleted(sender, **kwargs):
                 delete_attachment(is_new=is_new, attachment=attachment, **kwargs)
 
             try:
-                verb = '{name} Deleted Attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project)
+                verb = '{name} deleted attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project)
                 action.send(attachment.uploaded_by,
                             verb=verb,
                             action_object=attachment,
@@ -340,9 +340,11 @@ def on_action_created(sender, **kwargs):
                     logger.debug('recipients: {recipients}'.format(recipients=recipients))
                     email = NewActionEmailService(
                         verb=event,
-                        subject=action.verb,
                         from_name=user_name,
                         from_email=user_email,
-                        recipients=recipients
+                        recipients=recipients,
+                        actor=action.actor,
+                        object=target,
+                        project=target.project,
                     )
                     email.send(url=url, message=action.verb)
