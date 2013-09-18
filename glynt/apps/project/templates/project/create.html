@@ -132,6 +132,7 @@ $(document).ready(function () {
         event.preventDefault();
 
         var form = $(this);
+        GlyntJsMessages.clear = true;
 
         if ( form.parsley( 'isValid' ) ) {
 
