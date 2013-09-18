@@ -87,23 +87,18 @@ class SendNewProjectEmailsService(SendProjectEmailsService):
 
         company = self.project.customer.primary_company
 
-        if project.transactions:
-            transactions = [t.title for t in project.transactions.all()]
-
         self.context.update({
             'subject': '{company} created a new project'.format(company=company),
             'customer': self.project.customer,
             'company': company,
             'project_data': self.project.data,
-            'transactions': ', '.join(transactions),
+            'transactions': ', '.join(self.project.transaction_types),
         })
 
     @property
     def message(self):
-        ctx = {
-            'actor': self.sender.get_full_name(),
-            'project': self.project,
-            'id': self.project.pk,
-        }
-
-        return u'%(actor)s created a new project (%(project)s):%(id)d which will need to be matched with a lawyer.' % ctx
+        return '{actor} created a new project ({project}):{id} which will need to be matched with a lawyer'.format(
+            actor=self.sender,
+            project=self.project,
+            id=self.project.pk
+        )
