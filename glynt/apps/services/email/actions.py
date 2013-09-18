@@ -7,6 +7,7 @@ class NewActionEmailService(BaseEmailService):
     Email Service
     Inform the relevant parties of a new action
     """
+    email_template = 'new.action'
     verb = None
     whitelist_actions = [
         'todo.attachment.created',
@@ -24,10 +25,6 @@ class NewActionEmailService(BaseEmailService):
     @property
     def can_send(self):
         return self.verb in self.whitelist_actions
-
-    @property
-    def email_template(self):
-        return self.verb
 
     def send(self, **kwargs):
         if self.can_send:
