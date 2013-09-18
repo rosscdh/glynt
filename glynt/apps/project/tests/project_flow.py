@@ -12,7 +12,7 @@ class CustomerCreateProjectTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin
         """
         Test that the Customer has a list of transaction types to select from
         """
-        self.client.login(username=self.lawyer_user.username, password=self.password)
+        self.client.login(username=self.customer_user.username, password=self.password)
 
         url = reverse('project:create')
         self.assertTrue(self.load_casper_file(js_file='customer-transact-select.js', test_label='Test a Customer can select transactions', url=url))

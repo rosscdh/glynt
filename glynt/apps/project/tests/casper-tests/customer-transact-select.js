@@ -56,6 +56,9 @@ helper.scenario(casper.cli.options.url,
         this.test.assertNotEquals(form_values.name, '') // must have a value
         this.test.assertNotEquals(form_values.email, '') // must have a value
         this.test.assertEquals(form_values.message, '') // must NOT have a value
+        // test actual values
+        this.test.assertEquals('Customer A', form_values.name);
+        this.test.assertEquals('customer+test@lawpal.com', form_values.email);
 
         // submit button
         this.test.assertExists('div#custom-package-modal .modal-footer input.btn.btn-primary')

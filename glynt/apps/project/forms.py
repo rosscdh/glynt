@@ -29,8 +29,8 @@ class ContactUsForm(ContactForm):
                 css_class='modal-body'
             ),
             Div(
-                Submit('send', 'Send'),
-                css_class='modal-footer'
+                Submit('send', 'Send', css_id='send-contact-us-modal'),
+                css_class='modal-footer',
             ),
         ))
 

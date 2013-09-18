@@ -127,7 +127,8 @@ $(document).ready(function () {
     * Submit handler for the contact-us form
     * which is used for custom package requests
     */
-    $('#contact-us-form').on('submit', function(event) {
+    $('form#contact-us-form').parsley();
+    $('form#contact-us-form').on('submit', function(event) {
         event.preventDefault();
 
         var form = $(this);
