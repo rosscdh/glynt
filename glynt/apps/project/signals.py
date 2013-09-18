@@ -66,8 +66,13 @@ def on_project_profile_is_complete(sender, **kwargs):
 
 def mark_project_notifications_as_read(user, project):
     """ used to mark the passed in users notifications for a specific project as read (can be either a lawyer or a customer) """
-    logger.debug('marking unred notifications as read for user: %s and project: %s'%(user, project.pk))
-    Notification.objects.filter(recipient=user, target_object_id=project.pk, unread=True, target_content_type=PROJECT_CONTENT_TYPE).mark_all_as_read()
+    logger.debug('marking unred notifications as read for user: %s and project: %s' % (user, project.pk))
+    Notification.objects.filter(
+        recipient=user,
+        target_object_id=project.pk,
+        unread=True,
+        target_content_type=PROJECT_CONTENT_TYPE
+    ).mark_all_as_read()
 
 
 @receiver(pre_save, sender=ProjectLawyer, dispatch_uid='project.lawyer_assigned')
@@ -91,7 +96,6 @@ def on_lawyer_assigned(sender, **kwargs):
 
                 logger.info('Sending ProjectLawyer.assigned url:{url}'.format(url=url))
                 email = NewActionEmailService(
-                    message=message,
                     from_name=from_name,
                     from_email=from_email,
                     recipients=recipients,
@@ -106,7 +110,11 @@ def on_lawyer_assigned(sender, **kwargs):
 
                 # set all other projectLawyer objects for this project to .rejected
                 logger.info('Updating other lawyers assigned as potential ProjectLawyer.assigned email')
-                ProjectLawyer.objects.exclude(pk=instance.pk) \
-                                    .filter(project=instance.project, \
-                                            status=instance.LAWYER_STATUS.potential) \
-                                    .update(status=instance.LAWYER_STATUS.rejected)
+                ProjectLawyer.objects.exclude(
+                    pk=instance.pk
+                ).filter(
+                    project=instance.project,
+                    status=instance.LAWYER_STATUS.potential
+                ).update(
+                    status=instance.LAWYER_STATUS.rejected
+                )
