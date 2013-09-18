@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- coding: UTF-8 -*-
 import os
 from django.core.urlresolvers import reverse
 from django.db import models

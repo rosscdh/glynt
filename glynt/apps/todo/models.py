@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- coding: UTF-8 -*-
 """
 App to enable founders to have a set of todo items per transaction type
 considering using https://github.com/bartTC/django-attachments for the
