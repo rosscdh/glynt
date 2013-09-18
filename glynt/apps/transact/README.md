@@ -32,4 +32,4 @@ class IncorporationBunch(BaseToDoBunch):
 '''
 
 1. Attachments in the yml file need to be defined as a "slug"
-2. this slug will refer to teh slug associated with the attachment uploaded to the system
+2. this slug will refer to the slug associated with the attachment uploaded to the system
