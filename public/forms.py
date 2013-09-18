@@ -7,7 +7,7 @@ from parsley.decorators import parsleyfy
 @parsleyfy
 class ContactForm(forms.Form):
     name = forms.CharField(help_text="", widget=forms.TextInput(attrs={'placeholder':'Name', 'tabindex':'1'}))
-    message = forms.CharField(help_text="", widget=forms.Textarea(attrs={'placeholder':'Message', 'tabindex':'3'}))
+    message = forms.CharField(required=True, help_text="", widget=forms.Textarea(attrs={'placeholder':'Message', 'tabindex':'3'}))
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request')
