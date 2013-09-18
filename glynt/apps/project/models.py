@@ -9,9 +9,9 @@ from jsonfield import JSONField
 
 #from glynt.apps.project.services.actions import OpenProjectService, CloseProjectService, ReOpenProjectService
 
-from glynt.apps.transact.models import Transaction
-from glynt.apps.company.models import Company
-from glynt.apps.lawyer.models import Lawyer
+# from glynt.apps.transact.models import Transaction
+# from glynt.apps.company.models import Company
+# from glynt.apps.lawyer.models import Lawyer
 
 from . import PROJECT_STATUS, PROJECT_LAWYER_STATUS
 from .managers import DefaultProjectManager, ProjectLawyerManager
@@ -29,9 +29,9 @@ class Project(models.Model):
 
     uuid = UUIDField(auto=True, db_index=True)
     customer = models.ForeignKey('customer.Customer')
-    company = models.ForeignKey(Company)
-    transactions = models.ManyToManyField(Transaction)
-    lawyers = models.ManyToManyField(Lawyer, blank=True, through='project.ProjectLawyer')
+    company = models.ForeignKey('company.Company')
+    transactions = models.ManyToManyField('transact.Transaction')
+    lawyers = models.ManyToManyField('lawyer.Lawyer', blank=True, through='project.ProjectLawyer')
     data = JSONField(default={})
     status = models.IntegerField(choices=PROJECT_STATUS.get_choices(), default=PROJECT_STATUS.new, db_index=True)
     date_created = CreationDateTimeField()
@@ -136,8 +136,8 @@ class ProjectLawyer(models.Model):
     """
     LAWYER_STATUS = PROJECT_LAWYER_STATUS
 
-    project = models.ForeignKey(Project)
-    lawyer = models.ForeignKey(Lawyer)
+    project = models.ForeignKey('project.Project')
+    lawyer = models.ForeignKey('lawyer.Lawyer')
     status = models.IntegerField(choices=LAWYER_STATUS.get_choices(), default=LAWYER_STATUS.potential, db_index=True)
 
     objects = ProjectLawyerManager()
@@ -148,7 +148,3 @@ class ProjectLawyer(models.Model):
     @property
     def display_status(self):
         return self.LAWYER_STATUS.get_desc_by_value(self.status)
-
-
-# import signals so they load on django load
-from glynt.apps.project.signals import on_project_created, on_lawyer_assigned

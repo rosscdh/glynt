@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- coding: UTF-8 -*-
 """
 Service that abstract the various creation processes todos
 """

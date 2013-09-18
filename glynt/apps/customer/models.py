@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- coding: UTF-8 -*-
 import os
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -13,32 +13,6 @@ from jsonfield import JSONField
 
 import logging
 logger = logging.getLogger('django.request')
-
-
-class CustomerLoginLogic(object):
-    """ Login logic used to determin what to show """
-    user = None
-    customer = None
-
-    def __init__(self, user):
-        self.user = user
-        try:
-            self.customer = self.user.customer_profile
-        except ObjectDoesNotExist:
-            self.customer = None
-            logger.error("founder profile not found for %s" % self.user)
-
-    @property
-    def url(self):
-        num_projects = Project.objects.filter(customer=self.customer).count()
-
-        if num_projects > 0:
-            return reverse('dashboard:overview')
-        else:
-            return reverse('project:create')
-
-    def redirect(self):
-        return redirect(self.url)
 
 
 def _customer_upload_photo(instance, filename):

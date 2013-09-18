@@ -13,7 +13,7 @@ from django_filepicker.forms import FPUrlField
 from glynt.apps.utils import generate_unique_slug
 from glynt.apps.default.mixins import AngularAttribsFormFieldsMixin
 
-from .models import ToDo
+from glynt.apps.todo.models import ToDo
 
 import logging
 logger = logging.getLogger('django.request')
