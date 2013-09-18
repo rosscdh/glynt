@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- coding: UTF-8 -*-
 """ Bunches that prepare and save the pre-validation questions
 as well as the transactional info
 

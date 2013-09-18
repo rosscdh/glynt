@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- coding: UTF-8 -*-
 from tastypie.resources import ALL
 from tastypie.cache import SimpleCache
 from tastypie.authentication import Authentication

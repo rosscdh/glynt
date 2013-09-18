@@ -5,12 +5,6 @@ from django.contrib.sites.models import Site
 from django.contrib.auth.models import User, AnonymousUser
 
 
-class SiteFactory(factory.Factory):
-    FACTORY_FOR = Site
-    domain = factory.LazyAttributeSequence(lambda a, n: 'http://www.example-{0}.com'.format(n))
-    name = factory.LazyAttributeSequence(lambda a, n: 'Test Domain Example {0}'.format(n))
-
-
 class LoggedOutUserFactory(factory.Factory):
     FACTORY_FOR = AnonymousUser
 
