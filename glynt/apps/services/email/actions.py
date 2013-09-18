@@ -13,6 +13,7 @@ class NewActionEmailService(BaseEmailService):
         'todo.comment.created',
         'feedbackrequest.created.open',
         'feedbackrequest.created.closed',
+        'project.lawyer_assigned',
     ]
 
     def __init__(self, **kwargs):

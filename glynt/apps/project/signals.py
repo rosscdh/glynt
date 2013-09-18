@@ -31,7 +31,7 @@ def on_project_created(sender, **kwargs):
     is_new = kwargs.get('created')
     project = kwargs.get('instance')
 
-    # ensure that we have a project object and that is has NO pk 
+    # ensure that we have a project object and that is has NO pk
     # as we dont want this event to happen on change of a project
     if not is_new:
 
@@ -97,7 +97,14 @@ def on_lawyer_assigned(sender, **kwargs):
                 url = instance.project.get_absolute_url()
 
                 logger.info('Sending ProjectLawyer.assigned url:{url}'.format(url=url))
-                email = NewActionEmailService(subject=subject, message=message, from_name=from_name, from_email=from_email, recipients=recipients)
+                email = NewActionEmailService(
+                    subject=subject,
+                    message=message,
+                    from_name=from_name,
+                    from_email=from_email,
+                    recipients=recipients,
+                    event='project.lawyer_assigned'
+                )
                 email.send(url=url)
 
                 # copy the comments from the ProjectLawyer object to The Project object to
