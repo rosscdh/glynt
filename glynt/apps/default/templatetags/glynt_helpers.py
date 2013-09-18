@@ -158,7 +158,7 @@ def handlebars_messages(context, **kwargs):
     target_in_before_after = kwargs.get('target_in_before_after', None)
 
     context.update({
-        'output_target': output_target if output_target else 'div.navbar.navbar-fixed-top:first',
+        'output_target': output_target if output_target else 'header.navbar.navbar-fixed-top:first',
         'target_in_before_after': target_in_before_after if target_in_before_after else 'after'
     })
     return context
