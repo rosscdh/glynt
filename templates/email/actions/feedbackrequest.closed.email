@@ -1,7 +1,7 @@
 {% extends 'email/base.email' %}
 {% load glynt_helpers %}
 
-{% block subject_line %}feedbackrequest.closed{% endblock %}
+{% block subject_line %}{{ actor }} has closed the feedback request on {{ object }} for {{ project }}{% endblock %}
 
 {% block content %}
     <tr>

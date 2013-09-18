@@ -1,7 +1,7 @@
 {% extends 'email/base.email' %}
 {% load glynt_helpers %}
 
-{% block subject_line %}todo.comment.created{% endblock %}
+{% block subject_line %}{{ actor }} commented on {{ object }} for {{ project }}{% endblock %}
 
 {% block content %}
     <tr>
