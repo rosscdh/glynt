@@ -83,13 +83,6 @@ def on_lawyer_assigned(sender, **kwargs):
             if instance.status == instance.LAWYER_STATUS.assigned:
                 logger.info('Sending ProjectLawyer.assigned email')
                 # send email of congratulations to lawyer in question
-                subject = 'Congratulations, You have been selected for a LawPal.com project'
-
-                message = 'You have been selected to work on a project for {customer} of {company}. \
-                The project consists of the following transaction types: {transactions}\
-                Please review the project at the url below'.format(customer=instance.project.customer, \
-                                                                   company=instance.project.company, \
-                                                                   transactions=','.join(instance.project.transaction_types))
                 recipients = (instance.lawyer.user,)
                 from_name = instance.project.customer.user.get_full_name()
                 from_email = instance.project.customer.user.email
@@ -98,7 +91,6 @@ def on_lawyer_assigned(sender, **kwargs):
 
                 logger.info('Sending ProjectLawyer.assigned url:{url}'.format(url=url))
                 email = NewActionEmailService(
-                    subject=subject,
                     message=message,
                     from_name=from_name,
                     from_email=from_email,
