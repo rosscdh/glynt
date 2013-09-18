@@ -7,8 +7,13 @@ class NewActionEmailService(BaseEmailService):
     Email Service
     Inform the relevant parties of a new action
     """
-    verb = 'new.action'
-    whitelist_actions = ['new.action']
+    verb = None
+    whitelist_actions = [
+        'todo.attachment.created',
+        'todo.comment.created',
+        'feedbackrequest.created.open',
+        'feedbackrequest.created.closed',
+    ]
 
     def __init__(self, **kwargs):
         self.verb = kwargs.get('verb', self.verb)
