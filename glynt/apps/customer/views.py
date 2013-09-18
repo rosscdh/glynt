@@ -5,11 +5,13 @@ from django.views.generic import DetailView, FormView
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+from django.shortcuts import redirect
 from django.contrib import messages
 from django.http import Http404
 
 from glynt.apps.customer.services import EnsureCustomerService
 from glynt.apps.customer.models import Customer
+from glynt.apps.project.models import Project
 
 from .forms import CustomerProfileSetupForm
 

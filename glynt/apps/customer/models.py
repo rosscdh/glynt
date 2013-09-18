@@ -1,16 +1,12 @@
 # -*- coding: UTF-8 -*-
-import os
-from django.core.urlresolvers import reverse
 from django.db import models
+from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
-from django.shortcuts import redirect
-from django.core.exceptions import ObjectDoesNotExist
-
-from glynt.apps.project.models import Project
 from glynt.apps.company.models import Company
 
 from jsonfield import JSONField
 
+import os
 import logging
 logger = logging.getLogger('django.request')
 
