@@ -69,14 +69,13 @@ class SendProjectEmailsService(object):
 
         return [u.email for u in recipients]
 
-
     def process(self):
         send_templated_mail(
-              template_name = self.mail_template_name,
-              template_prefix="email/",
-              from_email = site_email,
-              recipient_list = self.recipient_list,
-              context = self.context
+            template_name=self.mail_template_name,
+            template_prefix="email/",
+            from_email=site_email,
+            recipient_list=self.recipient_list,
+            context=self.context
         )
 
 
@@ -93,14 +92,13 @@ class SendNewProjectEmailsService(SendProjectEmailsService):
             'customer': self.project.customer,
             'company': company,
             'project_data': self.project.data,
+            'transactions': ', '.join(self.project.transaction_types),
         })
 
     @property
     def message(self):
-        ctx = {
-            'actor': self.sender,
-            'project': self.project,
-            'id': self.project.pk,
-        }
-
-        return u'%(actor)s created a new Project (%(project)s):%(id)d which needs to be matched with a lawyer' % ctx
+        return '{actor} created a new project ({project}):{id} which will need to be matched with a lawyer'.format(
+            actor=self.sender,
+            project=self.project,
+            id=self.project.pk
+        )

@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- coding: UTF-8 -*-
 """ bunches that allow a simple means of adding a set of todos to a project
 per project type,
 

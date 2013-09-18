@@ -11,10 +11,10 @@ from glynt.apps.utils import generate_unique_slug
 
 from glynt.apps.todo import TODO_STATUS, TODO_STATUS_ACTION, FEEDBACK_STATUS
 
-from .tasks import delete_attachment
-from .models import ToDo, Attachment, FeedbackRequest
-from .services import CrocdocAttachmentService, ToDoStatusService, ToDoAttachmentFeedbackRequestStatusService
-
+from glynt.apps.todo.tasks import delete_attachment
+from glynt.apps.todo.models import ToDo, Attachment, FeedbackRequest
+from glynt.apps.todo.services import (CrocdocAttachmentService, ToDoStatusService,
+                                      ToDoAttachmentFeedbackRequestStatusService)
 from glynt.apps.project.models import Project, ProjectLawyer
 
 from glynt.apps.services.email import NewActionEmailService

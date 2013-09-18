@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- coding: UTF-8 -*-
 from tastypie.resources import ModelResource
 from tastypie.serializers import Serializer
 from tastypie.authentication import SessionAuthentication
