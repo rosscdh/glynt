@@ -27,7 +27,7 @@ MANAGERS = ADMINS + (
 )
 
 NOTICEGROUP_EMAIL = (
- ("LawPal Tech", 'tech@lawpal.com'),   
+ ("LawPal Tech", 'tech@lawpal.com'),
 )
 
 DEFAULT_FROM_EMAIL = 'noreply@localhost'
@@ -285,7 +285,7 @@ USE_ELASTICSEARCH = True
 # Primary installed apps goes here
 # we do this so that we only test our apps
 # the other apps will/can be tested seperately
-INSTALLED_APPS = DJANGO_APPS + HELPER_APPS + PROJECT_APPS 
+INSTALLED_APPS = DJANGO_APPS + HELPER_APPS + PROJECT_APPS
 
 
 # disable celery for test
