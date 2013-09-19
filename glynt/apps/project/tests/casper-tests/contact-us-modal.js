@@ -36,7 +36,7 @@ helper.scenario(casper.cli.options.url,
                     }, true);
 
                     var form_values = this.getFormValues('form#contact-us-form');
-                    this.echo(JSON.stringify(form_values));
+
                     // submit the form
                     this.click('#send-contact-us-modal');
 

@@ -10,7 +10,7 @@ helper.scenario(casper.cli.options.url,
         /* Basic page title test */
         casper.test.comment('Test Page General Access and Title');
         this.test.assertHttpStatus(200);
-        this.echo(this.getTitle());
+
         this.test.assertMatch(this.getTitle(), /^Checklist \—/ig);
         // --
     },

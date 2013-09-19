@@ -28,7 +28,6 @@ helper.scenario(casper.cli.options.url,
         this.test.assertElementCount('div.transaction-choice[data-transaction]', 3)
         this.test.assertElementCount('div.transaction-choice[data-transaction] button.btn', 3)
         this.test.assertElementCount('div#custom-package.callout-info', 1)
-        this.echo(this.debugHTML());
 
         /**
         * Inspect the contact us div
