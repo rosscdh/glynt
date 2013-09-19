@@ -2,7 +2,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<headng ng-app="lawpal">
+<head>
     <meta charset="utf-8">
     <title>{% block page_title %}{% endblock %}</title>
     <meta name="description" content="{% block meta_description %}{% endblock %}"/>
@@ -22,7 +22,7 @@
 
     {% block head_js %}{% endblock %}
 </head>
-<body data-spy="scroll" data-target=".subnav" class="{% block bodyclass %}{% endblock %}" style="padding-top: 69px;">
+<body data-spy="scroll" data-target=".subnav" class="{% block bodyclass %}{% endblock %}" style="padding-top: 69px;" ng-app="lawpal">
 
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
@@ -84,8 +84,6 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/services/PusherService.js"></script>
     
     <script type="text/javascript">{% profile_card_js %}</script>
-
-
 {% endcompress %}
 
 {% pusher_js %}

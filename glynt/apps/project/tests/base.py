@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 """
 """
 from django.test import TestCase
@@ -150,6 +151,7 @@ class ProjectModelMethodsTest(TestCase):
     # def test_project_status_to_open(self):
     #     self.project_with_lawyer.open(self.user)
     #     self.assertEqual(self.project_with_lawyer.is_open, False)
+
 
 class ContactUsModalTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
     test_path = os.path.dirname(__file__)

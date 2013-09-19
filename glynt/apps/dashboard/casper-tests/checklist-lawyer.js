@@ -10,15 +10,15 @@ helper.scenario(casper.cli.options.url,
         /* Basic page title test */
         casper.test.comment('Test Page General Access and Title');
         this.test.assertHttpStatus(200);
-        this.echo(this.getTitle());
+
         this.test.assertMatch(this.getTitle(), /^Checklist \—/ig);
         // --
     },
-    function() {
-        /* Basic User UI tests */
+    /*function() {
+        // Basic User UI tests
         casper.test.comment('Company name test')
         this.test.assertTextExists('Company Incorporation', 'Company name exists')
-    },
+    },*/
     function() {
         /* Checklist categories */
         casper.waitForSelector('#checklist-categories li a', function() {
@@ -82,21 +82,49 @@ helper.scenario(casper.cli.options.url,
             this.test.assertExists('div#list-items tr.item a.item-delete')
             this.test.assertNotVisible('div#list-items tr.item a.item-delete')
         });
-    }/*,
+    },
     function() {
-    	// Real-time tests
-    	casper.test.comment('Test for real-time update')
-    	casper.waitForSelector('div#list-items section td', function() {
-            window.mock_Pusher("todo.is_new", { "name": "New item 999", "project":"1", "category": "General", "status": 0, "slug": "new-slug", "id":999 });
-            this.echo(this.getHTML());
+        // Real-time tests
+        casper.test.comment('New item: Real-time Pusher Mock')
 
-            this.test.assertTextExists('New item 999')
-        });
-    }
-    */
-    ,
+        var test = {
+                "comment": "Created new item \"Pushed checklist item",
+                "label": "Created new item \"Pushed checklist item",
+                "instance": {
+                    "category": "General",
+                    "project": {
+                        "pk": 1
+                    },
+                    "is_deleted": false,
+                    "status": 0,
+                    "name": "Pushed checklist item: new",
+                    "display_status": "New",
+                    "pk": 990,
+                    "slug": "new-checklist-item",
+                    "uri": "/todo/b88c089da3d94337aa11fd2fcc2c4970/eWYNGcGo442oKP4fpX6Ld3/edit/"
+                }
+        };
+
+    	// Test new item
+        casper.evaluate(function( data ) {
+            // Run script in window session
+            window.mock_Pusher.send_message("todo.is_new", data);
+        }, test);
+
+        this.test.assertTextExists('Pushed checklist item: new');
+
+        // Test edit item
+        casper.test.comment('Edit item: Real-time Pusher Mock');
+        test.instance.name = 'Pushed checklist item: edited';
+
+        casper.evaluate(function( data ) {
+            window.mock_Pusher.send_message("todo.is_updated", data);
+        }, test);
+
+        this.test.assertTextExists('Pushed checklist item: edited');
+    },
     function() {
-    	/* Text messages */
+    	// Text messages
     	//casper.viewport(2048, 1024);
     	casper.test.comment('Test displaying messages')
     	this.click('a.item-edit');
@@ -105,7 +133,7 @@ helper.scenario(casper.cli.options.url,
     		casper.test.comment('Test edit form displays')
     		this.test.assertExists('div#div_id_name input');
 
-    		this.fill('div.modal form', {
+            this.fill('div.modal form', {
                 name: "Modified item name"
             }, true);
 
@@ -122,14 +150,43 @@ helper.scenario(casper.cli.options.url,
     }
 );
 
+/**
+ * captureRequest: Increments by one each time a capturePage request is made
+ *                 this variable is used to save unique image filename for each page capture taken
+ * @type {Number}
+ */
 var captureRequest = 0;
+
+/**
+ * capturePageTimelapse: captures the page 1 per second for numFrames (keep in mind that each test has a timeout of 5 seconds  )
+ * usage:
+ *                       capturePageTimelapse(4);
+ * 
+ * @param  {Number} numFrames Number of frames to capture
+ */
+function capturePageTimelapse( numFrames ) {
+    for(var i=0;i<numFrames;i++) {
+        capturePage();
+    }
+}
+
+/**
+ * capturePage: Initiates a capture request, a screen capture will be taken in n seconds where n = captureRequest * 1000
+ *              images will be saved into /tmp/
+ * usage:
+ *              capturePage();
+ */
 function capturePage() {
 	var wait;
 	captureRequest++;
-	wait = captureRequest * 1000;
+	wait = captureRequest * 1000; // wait n seconds before taking screen capture
 	delayCapturePage( wait );
 }
 
+/**
+ * delayCapturePage: when called invokes a screen capture in [delay] seconds
+ * @param  {Number} delay Number of seconds to wait until taking the screen capture
+ */
 function delayCapturePage( delay ) {
 	casper.wait(delay, function() {
     	this.capture('/tmp/page_' + delay + '.png', {

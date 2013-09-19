@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- coding: UTF-8 -*-
 from django.template.defaultfilters import slugify
 from glynt.apps.company.models import Company
 
