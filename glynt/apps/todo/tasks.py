@@ -15,8 +15,10 @@ def delete_attachment(is_new, attachment, **kwargs):
     """
     """
     if attachment:
-        crocdoc_service = CrocdocAttachmentService(attachment=attachment, **kwargs)
-        crocdoc_service.remove()
+        if attachment.crocdoc_uuid is not None:
+            crocdoc_service = CrocdocAttachmentService(attachment=attachment, **kwargs)
+            crocdoc_service.remove()
 
-        inkfilepicker_service = InkFilePickerAttachmentService(attachment=attachment, **kwargs)
-        inkfilepicker_service.remove()
+        if attachment.inkfilepicker_url is not None:
+            inkfilepicker_service = InkFilePickerAttachmentService(attachment=attachment, **kwargs)
+            inkfilepicker_service.remove()
