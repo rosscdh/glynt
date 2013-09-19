@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- coding: UTF-8 -*-
 from django.contrib.auth.models import User
 
 from tastypie import fields

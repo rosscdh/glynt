@@ -13,3 +13,5 @@ PROJECT_LAWYER_STATUS = get_namedtuple_choices('PROJECT_LAWYER_STATUS', (
     (1, 'assigned', 'Engaged'),
     (2, 'rejected', 'Unsuccessful'),
 ))
+
+from .signals import on_project_created, on_lawyer_assigned

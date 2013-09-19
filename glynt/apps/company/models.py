@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- coding: UTF-8 -*-
 import os
 from django.conf import settings
 from django.db import models

@@ -59,6 +59,7 @@ class ChecklistLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
         self.assertEqual(resp.status_code, 302)
 
     def test_checklist_lawyer_access(self):
+        #import pdb;pdb.set_trace()
         self.client.login(username=self.lawyer_user.username, password=self.password)
 
         resp = self.client.get(reverse('dashboard:checklist', kwargs={'uuid': self.project.uuid}))
@@ -72,26 +73,7 @@ class ChecklistLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
 
         self.assertTrue(len(c('tr.item')) >= 1) # we have 1 or more add item buttons
 
-        # Test we have the required item attribs
-        #required_attribs = ['data-edit_label', 'data-status']
-        #for e in c('tr.item'):
-        #    elem = self.pq(e)
-
-        #    for a in required_attribs:
-        #        self.assertTrue(elem.attr(a))
-
-            # test we have an edit link
-        #    self.assertTrue(len(elem.find('a.item-edit')) == 1)
-            # is it modal and does it have the correct attribs
-        #    edit = self.pq(elem.find('a.item-edit'))
-        #    self.assertTrue(edit.attr('data-toggle') == 'modal') # is a modal link
-        #    self.assertTrue(edit.attr('data-target') == '#modal-checklist-item') # and the modal target is correct
-
-            # test we have 1 delete link
-        #    self.assertTrue(len(elem.find('a.item-delete')) == 1)
-
     def test_lawyer_dashboard_js(self):
-
         self.client.login(username=self.lawyer_user.username, password=self.password)
 
         # Create feedback request for testing of assigned to indicator on checklist

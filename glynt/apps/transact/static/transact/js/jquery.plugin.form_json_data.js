@@ -34,7 +34,7 @@ $(function() {
             self._listen();
 
             /**
-            * Send off the reference to teh source data.
+            * Send off the reference to the source data.
             * may be modified by various listeners
             */
             $.event.trigger({
