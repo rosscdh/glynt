@@ -1,6 +1,6 @@
 {% load comments fluent_comments_tags i18n %}
 <div class="row post-reply">
-    <form action="{% comment_form_target %}" data-ajax-action="{% url 'comments-post-comment-ajax' %}" method="POST" class="js-comments-form comments-form form-wide clearfix">
+    <form action="{% comment_form_target %}" data-ajax-action="{% url 'comments-post-comment-ajax' %}" method="POST" class="js-comments-form js-ajax-comments-form comments-form form-wide clearfix">
         {% csrf_token %}
         {% if next %}<div><input type="hidden" name="next" value="{{ next }}" /></div>{% endif %}
         {% if form.comment.errors %}{{ form.comment.errors }}{% endif %}
@@ -10,6 +10,8 @@
             </div>
             <div class="media-body">
                 {{ form.comment }}
+                <span id="comment-added-message"></span>
+                <span id="comment-moderated-message"></span>
                 <button id="btn-save_comment" class="btn btn-primary" type="submit">{% trans 'Post Message' %}</button>
                 {{ form.honeypot }}
                 {{ form.content_type }}
@@ -18,7 +20,6 @@
                 {{ form.security_hash }}
             </div>
         </div>
-        {#% ajax_comment_tags %#}
     </form>
 </div>
 <br />
@@ -41,3 +42,13 @@ textarea#id_comment {
     padding:5px 0px 15px 0px;
 }
 </style>
+
+<script id="project-contact-script" type="text/javascript">
+$(document).ready(function () {
+    $( ".js-comments-form" ).fluent_comments({
+        'is_reversed': false,
+        'scroll_to_comment': true,
+        'submit_element': $('button#btn-save_comment')
+    });
+});
+</script>
