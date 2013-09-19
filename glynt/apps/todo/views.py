@@ -113,23 +113,12 @@ class BaseToDoDetailMixin(RulezMixin, SingleObjectMixin):
         if self.navigation_items.current is None:
             # does nto seem to exist need to log and error
             logger.error('ToDo item does not exist in categories navigation_items but it should! {slug}, navigation_items: {navigation_items}'.format(slug=slug, navigation_items=self.navigation_items))
-            return None
-        else:
-            obj, is_new = self.model.objects.get_or_create(slug=slug, project=self.project)
-            nav_item = self.navigation_items.current
-            if is_new and nav_item:
-                nav_item.project = unicode(nav_item.get('project'))
 
-                obj.name = nav_item.name
-                obj.category = nav_item.category
-                obj.description = nav_item.description
-                obj.status = nav_item.status
-                obj.data = nav_item
-                obj.save()
+        obj = get_object_or_404(self.model, slug=slug)
 
-            self.can_read(obj)
+        self.can_read(obj)
 
-            return obj
+        return obj
 
 
 class ToDoDetailView(DetailView, BaseToDoDetailMixin):

@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+from django.http import HttpRequest
 from glynt.apps.todo.api import ToDoResource
 
 
@@ -18,6 +19,11 @@ class ToDoAsJSONMixin(object):
 
     def asJSON(self, request):
         res = ToDoResource()
+
+        # Filter by project with custom request object
+        request = HttpRequest()
+        request.GET = {'project': self.project.pk}
+
         request_bundle = res.build_bundle(request=request)
 
         bundles = self.bundelize(resource=res, request=request,
