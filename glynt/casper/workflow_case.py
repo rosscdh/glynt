@@ -22,21 +22,25 @@ class PyQueryMixin(LiveServerTestCase):
         self.pq = pq
 
 
+@httpretty.activate
 class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
     """
     Base mixin for a Setup to be used in lawyer/customer/project analysis
     https://github.com/dobarkod/django-casper/
     """
+    # mock the attachment upload
+    httpretty.register_uri(httpretty.POST, "https://crocodoc.com/api/v2/document/upload",
+                   body='{"success": true, "uuid": "123-test-123-uuid"}',
+                   status=200,
+                   content_type='text/json')
+    httpretty.register_uri(httpretty.POST, "https://crocodoc.com/api/v2/document/delete",
+                   data='{"token": "pRzHhZS4jaGes193db28cwyu", "uuid": "123-test-123-uuid"}',
+                   body='{"success": true}',
+                   status=200)
+
     fixtures = ['test_cities', 'transact.json']
 
-    @httpretty.activate
     def setUp(self):
-        # mock the attachment upload
-        httpretty.register_uri(httpretty.POST, "https://crocodoc.com/api/v2/document/upload",
-                       body='{"success": true, "uuid": "123-test-123-uuid"}',
-                       status=200,
-                       content_type='text/json')
-
         super(BaseLawyerCustomerProjectCaseMixin, self).setUp()
 
         self.client = Client()

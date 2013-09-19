@@ -133,7 +133,7 @@ helper.scenario(casper.cli.options.url,
     		casper.test.comment('Test edit form displays')
     		this.test.assertExists('div#div_id_name input');
 
-    		this.fill('div.modal form', {
+            this.fill('div.modal form', {
                 name: "Modified item name"
             }, true);
 
