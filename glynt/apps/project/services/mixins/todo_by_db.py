@@ -66,7 +66,7 @@ class ToDoItemsFromDbMixin(object):
 
     def modify_item_values(self, item):
         item.__dict__.update(item.obj.__dict__)
-        logger.debug('checklist item status: {name} (display_status)'.format(name=item.name, display_status=item.display_status))
+        logger.debug('checklist item status: {name} (display_status)'.format(name=item.name.encode('utf-8'), display_status=item.display_status))
 
     def bulk_create(self):
         logger.debug('start bulk_create')
