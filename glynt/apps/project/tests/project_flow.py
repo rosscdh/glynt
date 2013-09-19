@@ -40,5 +40,4 @@ class CustomerCreateProjectTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin
 
         url = reverse('transact:builder', kwargs={'project_uuid': self.project.uuid, 'tx_range': self.project.tx_range, 'step': 1})
         url_checklist = reverse('dashboard:checklist', kwargs={'uuid': self.project.uuid})
-        import pdb;pdb.set_trace()
         self.assertTrue(self.load_casper_file(js_file='customer-incorporation-form.js', test_label='Test a Customer can complete the Incorporation form', url=url, url_checklist=url_checklist))
