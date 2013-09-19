@@ -25,17 +25,9 @@
     <div class="alert alert-error hidden">Please correct all errors before submitting the form</div>
 
     <div class="row">
-        <div class="col col-12">
-            <ul id="profile-tab" class="nav nav-tabs">
-                {% if user.password == "!" %}<li class="active"><a href="#login-details" data-toggle="tab">Account Setup</a></li>{% endif %}
-                <li{% if user.password != "!" %} class="active"{% endif %}><a href="#general" data-toggle="tab">General</a></li>
-                <!--<li><a href="#fees-packages" data-toggle="tab">Fees and Packages</a></li>-->
-                <li><a href="#profile" data-toggle="tab">Profile</a></li>
-                <li><a href="#transactions-and-companies" data-toggle="tab">Transactions &amp; Startups</a></li>
-                <!-- <li><a href="#connected-accounts" data-toggle="tab">Connected Accounts</a></li>-->
-            </ul>
+        <div class="col col-10 col-offset-1">
             <form id="lawyer-profile-form" data-validate="parsley" action="{% url 'lawyer:setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
-                <div class="tab-content">
+                <div class="">
 
                     {% if user.password == "!" %}
                     <div id="login-details" class="tab-pane active">
@@ -60,7 +52,7 @@
                     </div>
                     {% endif %}
 
-                    <div id="general" class="tab-pane{% if user.password != "!" %} active{% endif %}">
+                    <div id="general" class="">
                         <div class="row">
                             <div class="col col-12">
                                 <legend>General</legend>
@@ -97,25 +89,29 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col col-8">
-
+                            <div class="col col-6">
                                 <p>{{ form.bar_membership.help_text }}</p>
                                 <div class="control-group">
                                     <label class="col-lg-5 text-right" for="inputEmail">{{ form.bar_membership_input.label }}</label>
-                                    <div class="col-lg-7">
+                                    <div class="col-lg-5">
                                         {{ form.bar_membership_input.errors }}
-                                        {{ form.bar_membership_input }}<button id="add-bar-membership-btn" type="button" class="btn btn-link btn-small multi-add-btn" data-type="" data-additem_callback="add_bar_membership" data-data_target="id_bar_membership_input" data-target="bar-membership-list"><i class="icon-plus-sign"></i>&nbsp;Add</button>
-                                        {{ form.bar_membership }}<!-- hidden -->
+                                        <div class="row">
+                                            <div class="col-8">
+                                                {{ form.bar_membership_input }}
+                                            </div>
+                                            <div class="col-4">
+                                                  <button id="add-bar-membership-btn" type="button" class="btn btn-link btn-small multi-add-btn pull-right" data-type="" data-additem_callback="add_bar_membership" data-data_target="id_bar_membership_input" data-target="bar-membership-list"><i class="icon-plus-sign"></i>&nbsp;Add</button>
+                                            </div>
+                                        </div>
+                                        {{ form.bar_membership }}
                                     </div>
                                 </div>
-                                
                             </div>
                             <div class="col col-4">
                                 <ol id="bar-membership-list">
                                 </ol>
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col col-12">
                                 <legend>Your Practice Locations</legend>
@@ -134,22 +130,26 @@
                             </div>
                         </div>
                     </div>
-
-                    <div id="transactions-and-companies" class="tab-pane">
+                    <br />
+                    <br />
+                    <div id="transactions-and-companies">
                         <div class="row">
                             <div class="col col-12">
                                 <legend>Companies Advised</legend>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col col-6">
-
+                            <div class="col col-8">
                                 <p>{{ form.companies_advised_input.help_text }}</p>
-                                <div class="control-group">
-                                    <label class="control-label" for="inputEmail">{{ form.companies_advised_input.label }}</label>
-                                    <div class="controls">
-                                        {{ form.companies_advised_input.errors }}
-                                        {{ form.companies_advised_input }}<button id="add-company-btn" type="button" class="btn btn-link btn-small multi-add-btn" data-type="url" data-additem_callback="add_company" data-data_target="id_companies_advised_input" data-target="companies-advised-list"><i class="icon-plus-sign"></i>&nbsp;Add</button>
+                                <div class="row">
+                                    <div class="col-7">
+                                        <label class="control-label" for="inputEmail">{{ form.companies_advised_input.label }}</label>
+                                            {{ form.companies_advised_input.errors }}
+                                            {{ form.companies_advised_input }}
+                                    </div>
+                                    <div class="col-4">
+                                        <br />
+                                        <button id="add-company-btn" type="button" class="btn btn-link btn-small multi-add-btn" data-type="url" data-additem_callback="add_company" data-data_target="id_companies_advised_input" data-target="companies-advised-list"><i class="icon-plus-sign"></i>&nbsp;Add Company</button>
                                         {{ form.companies_advised }}<!-- hidden -->
                                     </div>
                                 </div>
@@ -162,7 +162,7 @@
                         </div>
                     </div>
 
-                    <div id="profile" class="tab-pane">
+                    <div id="profile">
                         <div class="row">
                             <div class="col col-12">
                                 <legend>Profile</legend>
@@ -206,7 +206,7 @@
                         </div>
                     </div>
 
-                    <div id="connected-accounts" class="tab-pane">
+            {% comment %}    <div id="connected-accounts" class="tab-pane">
                         <div class="row">
                             <div class="col col-12">
                                 <legend>Connected Accounts</legend>
@@ -256,7 +256,7 @@
                         </div>
                     </div>
 
-                    <div id="fees-packages" class="tab-pane">
+                    <div id="fees-packages" class="">
                         <div class="row">
                             <div class="col col-12">
                                 <legend>Fees and Packages</legend>
@@ -385,7 +385,7 @@
                             </div>
                         </div>
 
-                    </div>
+                    </div> {% endcomment %}
 
                     <div id="form-submit" class="row">
                         <div class="col col-12 divide">
