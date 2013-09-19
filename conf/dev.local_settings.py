@@ -4,7 +4,17 @@ from settings import *
 
 PROJECT_ENVIRONMENT = 'dev'
 
+DEBUG = True
 COMPRESSION_ENABLED = False
+
+# For when running Debug = False
+if DEBUG == False:
+    # need to start http server in glynt/
+    # cd root of glynt
+    # python -mSimpleHTTPServer 8081
+    # ./manage.py collectstatic
+    MEDIA_URL = 'http://127.0.0.1:8081/media/'
+    STATIC_URL = 'http://127.0.0.1:8081/static/'
 
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
@@ -37,8 +47,6 @@ GOOGLE_OAUTH2_CLIENT_ID = '316492043888-ac8ngfmlkn9fapo9ovvvgng4esnujrvg.apps.go
 GOOGLE_OAUTH2_CLIENT_SECRET = 'BjKXmFGh7d98zvowf9B31Bqv'
 GOOGLE_OAUTH_EXTRA_SCOPE = ['https://www.googleapis.com/auth/plus.me']
 
-
-
 NEO4J_DATABASES = {
     'default' : {
         'HOST':'localhost',
@@ -46,7 +54,6 @@ NEO4J_DATABASES = {
         'ENDPOINT':'/db/data'
     }
 }
-
 
 HAYSTACK_CONNECTIONS = {
     'default': {
