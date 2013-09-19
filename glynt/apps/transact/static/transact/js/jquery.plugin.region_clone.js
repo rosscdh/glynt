@@ -1,4 +1,5 @@
 'use strict';
+
 /**
 * Clone a region of a form
 * ------------------------
@@ -128,8 +129,8 @@ $(function() {
 			self._log('ensure that the item "{region_key}" is represented in the data: {data}'.assign({'region_key': self.region_key, 'data': form_json_data[this.region_key]}))
 		},
 		btn_add_another: function () {
-			var btn_add_another_id = '{num_elements}_add_another'.assign({'num_elements': this.num_elements})
-			return $('<div id="{btn_add_another_id}"><button id="btn_add_another" class="btn btn-success pull-right">{label}</button></div>'
+			var btn_add_another_id = '{region_key}_add_another'.assign({'region_key': this.region_key})
+			return $('<div id="{btn_add_another_id}-parent"><button id="{btn_add_another_id}" class="btn btn-success pull-right">{label}</button></div>'
 					.assign({
 							'btn_add_another_id': btn_add_another_id,
 							'label': this.options.label
@@ -185,6 +186,7 @@ $(function() {
 
 			var legend = $(cloneable_html[0]);
 			var btn_remove = $(this.btn_remove.clone());
+			btn_remove.attr('id', 'region-clone-remove_{id}'.assign({'id': this.num_elements}));
 
 			/**
 			* Update the legend
