@@ -215,12 +215,13 @@ $(function() {
             var had_preview = self.removePreview();
             var $new_comment = self.addComment(data);
 
-            // if( had_preview )
-            //     // Avoid double jump when preview was removed. Instead refade to final comment.
-            //     $new_comment.hide().fadeIn(600);
-            // else
-            //     // Smooth introduction to the new comment.
-            //     $new_comment.hide().show(600);
+            if( had_preview ) {
+                // Avoid double jump when preview was removed. Instead refade to final comment.
+                $new_comment.hide().fadeIn(600);
+            } else {
+                // Smooth introduction to the new comment.
+                $new_comment.hide().show(600);
+            }
 
             return $new_comment;
         },
@@ -279,8 +280,9 @@ $(function() {
         scrollToElement: function( $element, speed, offset ) {
             var self = this;
 
-            if( $element.length && self.options.scroll_to_comment === true )
+            if( $element.length && self.options.scroll_to_comment === true ) {
                 self.scrollElement.animate( {'scrollTop': $element.offset().top - (offset || 0) }, speed || 1000 );
+            }
         },
         removeWaitAnimation: function () {
             // Remove the wait animation and message
