@@ -48,9 +48,11 @@
             </ul>
             <h2 style="color: #6c797c !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5em; padding: 0;"><strong>Company Founders</strong>:</h2>
             <ul style="color: #6c797c !important;">
-                <li style="margin-left: 0;">
-                    <p style="font-size: 14px;"><span style="color: #999999;">Name:</span> {{ company }}</p>
-                </li>
+                {% for founder in founders %}
+                    <li style="margin-left: 0;">
+                        <p style="font-size: 14px;">{{ founder.founder_name }} (<span style="color: #999999;">{{ founder.founder_email }}</span>)</p>
+                    </li>
+                {% endfor %}
             </ul>
 
             {% if 'CS' in transaction_slugs %}
@@ -60,13 +62,6 @@
             {% if 'ES' in transaction_slugs or 'SF' in transaction_slugs %}
                 {% include 'email/partials/transactions/seed-financing-html.email' %}
             {% endif %}
-
-            <hr/>
-            {% for key, value in project_data.iteritems %}
-                <li style="margin-left: 0;">
-                    <p style="font-size: 14px;"><strong>{{ key | desluggerize | title }}:</strong> {{ value | urlize }}</p>
-                </li>
-            {% endfor %}
         </td>
         <td class="small-width" align="left" width="40" style="display: block;">&nbsp;</td>
     </tr>
