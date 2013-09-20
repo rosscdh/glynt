@@ -10,20 +10,17 @@
  -->
 <div class="container">
     <div class="row">
-        <div class="col col-12">   
+        <div class="col col-10 col-offset-1">   
             <br />
             <br />
             <h1>Update your profile</h1>
-            <br />
-            <br />
+            <p class="lead">Your profile will be presented to the startups you indicate interest in.</p>
         </div>
     </div>
 </div>
 <div class="container profile">
     {% lawyer_profile_is_complete_message warning_type='alert' %}
-
     <div class="alert alert-error hidden">Please correct all errors before submitting the form</div>
-
     <div class="row">
         <div class="col col-10 col-offset-1">
             <form id="lawyer-profile-form" data-validate="parsley" action="{% url 'lawyer:setup_profile' %}" method="POST" class="form-horizontal" enctype="multipart/form-data">{% csrf_token %}
@@ -93,13 +90,13 @@
                                 <p>{{ form.bar_membership.help_text }}</p>
                                 <div class="control-group">
                                     <label class="col-lg-5 text-right" for="inputEmail">{{ form.bar_membership_input.label }}</label>
-                                    <div class="col-lg-5">
+                                    <div class="col-lg-6">
                                         {{ form.bar_membership_input.errors }}
                                         <div class="row">
-                                            <div class="col-8">
+                                            <div class="col-9">
                                                 {{ form.bar_membership_input }}
                                             </div>
-                                            <div class="col-4">
+                                            <div class="col-3">
                                                   <button id="add-bar-membership-btn" type="button" class="btn btn-link btn-small multi-add-btn pull-right" data-type="" data-additem_callback="add_bar_membership" data-data_target="id_bar_membership_input" data-target="bar-membership-list"><i class="icon-plus-sign"></i>&nbsp;Add</button>
                                             </div>
                                         </div>
@@ -164,12 +161,12 @@
 
                     <div id="profile">
                         <div class="row">
-                            <div class="col col-12">
+                            <div class="col col-8">
                                 <legend>Profile</legend>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col col-12">
+                            <div class="col col-8">
                                 <div class="control-group">
                                     {{ form.summary|as_crispy_field }}
                                 </div>
@@ -187,7 +184,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col col-4 col-offset-3">
+                            <div class="col col-4 col-offset-1">
                                 <div class="control-group">
                                     <label class="control-label" for="inputPassword">{{ form.photo.label }}</label>
                                     <div class="controls">
@@ -241,17 +238,6 @@
                             <div class="col col-4">
                                 <ol id="personal-website-list">
                                 </ol>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col col-12">
-                                <legend>Extra</legend>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="control-group">
-                                {{ form.twitter|as_crispy_field }}
                             </div>
                         </div>
                     </div>
@@ -386,14 +372,24 @@
                         </div>
 
                     </div> {% endcomment %}
+                    <div class="row">
+                        <div class="col">
+                            <legend>Other Profiles</legend>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class=" col-8">
+                            {{ form.twitter|as_crispy_field }}
+                            {{ form.linkedin|as_crispy_field }}
 
+                        </div>
+                    </div>
                     <div id="form-submit" class="row">
-                        <div class="col col-12 divide">
+                        <div class="col col-10 col-offset-1 divide">
                             <br />
                             <div class="form-actions">
                                 <label class="checkbox">
-                                    <div class="col-lg-1">{{ form.agree_tandc|as_crispy_field }}</div>
-                                    <div class="col-lg-8" id="i_agree_html">I agree to the LawPal <a href="{% url 'public:terms' %}">Terms and Conditions</a></div>
+                                    <div class="col-12 text-left">{{ form.agree_tandc|as_crispy_field }} I agree to the LawPal <a href="{% url 'public:terms' %}">Terms and Conditions</a></div>
                                 </label>
                                 <br />
                                 <br />
@@ -611,12 +607,12 @@ $(document).ready(function(){
     });
 
     /** stop the form submitting on enter, must push de button */
-    $('form#lawyer-profile-form').bind("keypress", function(e) {
-        if (e.keyCode == 13) {
-            e.preventDefault();
-            return false;
-        }
-    });
+    // $('form#lawyer-profile-form').bind("keypress", function(e) {
+    //     if (e.keyCode == 13) {
+    //         e.preventDefault();
+    //         return false;
+    //     }
+    // });
 
     /**
     * Handle the placement of the t&c text which is placed strangely due to the form

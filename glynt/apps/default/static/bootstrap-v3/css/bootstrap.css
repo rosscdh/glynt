@@ -1716,7 +1716,8 @@ textarea.parsley-error:focus {
   cursor: pointer;
   border: 1px solid transparent;
   white-space: nowrap;
-  background-color: #cccccc;
+  background-color: #bfbfbf;
+  color: white;
 }
 .btn:focus {
   outline: thin dotted #333;
