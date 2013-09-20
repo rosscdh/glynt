@@ -92,7 +92,8 @@ class SendNewProjectEmailsService(SendProjectEmailsService):
             'customer': self.project.customer,
             'company': company,
             'project_data': self.project.data,
-            'transactions': ', '.join(self.project.transaction_types),
+            'transactions': self.project.transactions.all(),
+            'transaction_types': ', '.join(self.project.transaction_types),
         })
 
     @property
