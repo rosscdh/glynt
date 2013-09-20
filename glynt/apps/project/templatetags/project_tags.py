@@ -7,6 +7,7 @@ from notifications.models import Notification
 
 from glynt.apps.project.models import Project, ProjectLawyer
 from glynt.apps.project.utils import PROJECT_CONTENT_TYPE
+from glynt.apps.project import PROJECT_LAWYER_STATUS
 
 
 @register.simple_tag(takes_context=True)
@@ -45,9 +46,11 @@ def project_lawyers(project, display_type='default'):
 
     context.update({
         'project': project,
-        'lawyers': [j.lawyer for j in lawyer_join],
+        'lawyer_join': lawyer_join,
+        #'lawyers': [j.lawyer for j in lawyer_join],
         'num_lawyers': num_lawyers,
-        'display_type': display_type
+        'display_type': display_type,
+        'PROJECT_LAWYER_STATUS': PROJECT_LAWYER_STATUS
     })
     return context
 

@@ -16,7 +16,8 @@
 {% endblock %}
 
 {% block body %}
-  <!-- Button trigger modal -->
+{% csrf_token %}
+<!-- Button trigger modal -->
 <div class="container dashboard-view">
     {% if not profile_is_complete and user.profile.is_customer %}
         <div class="callout callout-danger empty">
