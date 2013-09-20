@@ -43,7 +43,7 @@ $(document).ready(function(){
 
     var complete_msg = Handlebars.compile($('script#hb-success').html());
 
-    $('#add-btn').live('click', function(event){
+    $(document).on( 'click', '#add-btn', function (event) {
         event.preventDefault();
 
         var clone = repeatable.clone()
@@ -68,7 +68,7 @@ $(document).ready(function(){
         clone.find('input:first').select()
     });
 
-    $('.close').live('click', function(event){
+    $(document).on( 'click', '.close', function (event) {
         event.preventDefault();
         var self = $(this);
         var form = self.closest('form');
@@ -80,8 +80,7 @@ $(document).ready(function(){
         container.remove();
     });
 
-    $('#invite-btn').live('click', function(event){
-
+    $(document).on( 'click', '#invite-btn', function (event) {
 		var self = $(this);
         var form = self.closest('form');
 
