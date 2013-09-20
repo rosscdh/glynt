@@ -112,7 +112,7 @@ $(function() {
             // Add a wait animation
             if( ! preview )
                 self.comment_waiting.fadeIn(1000);
-console.log('fdsafd')
+
             // Use AJAX to post the comment.
             $.ajax({
                 type: 'POST',
@@ -121,8 +121,7 @@ console.log('fdsafd')
                 dataType: 'json',
                 success: function ( data ) {
                     self.commentBusy = false;
-console.log('fdsafd')
-console.log(data)
+
                     self.removeWaitAnimation();
                     self.removeErrors();
 
@@ -143,12 +142,11 @@ console.log(data)
                 error: function ( data ) {
                     self.commentBusy = false;
                     self.removeWaitAnimation();
-console.log('error')
+
                     // Submit as non-ajax instead
                     //$form.unbind('submit').submit();
                 },
                 complete: function () {
-console.log('complete')
                 }
             });
 

@@ -72,7 +72,9 @@
     </table>
     {% endif %}
 {% endif %}
-    {% if display_type == 'potential' and not project.has_lawyer %}
-        <hr />
-    {% endif %}
+
+{% if display_type == 'potential' and not project.has_lawyer %}
+    <hr />
+{% endif %}
+
 {% include 'dashboard/modals/overview-modal.html' %}

@@ -1,6 +1,6 @@
 {% load comments fluent_comments_tags i18n %}
 <div class="row post-reply">
-    <form action="{% comment_form_target %}" data-ajax-action="{% url 'comments-post-comment-ajax' %}" method="POST" class="js-comments-form js-ajax-comments-form comments-form form-wide clearfix">
+    <form action="{% comment_form_target %}" data-ajax-action="{% url 'comments-post-comment-ajax' %}" method="POST" class="js-comments-form comments-form form-wide clearfix">
         {% csrf_token %}
         {% if next %}<div><input type="hidden" name="next" value="{{ next }}" /></div>{% endif %}
         {% if form.comment.errors %}{{ form.comment.errors }}{% endif %}
@@ -43,7 +43,9 @@ textarea#id_comment {
 }
 </style>
 
-<script id="project-contact-script" type="text/javascript">
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.plugin.fluent_comments.js"></script>
+
+<script id="project-fluent_comments" type="text/javascript">
 $(document).ready(function () {
     $( ".js-comments-form" ).fluent_comments({
         'is_reversed': false,
