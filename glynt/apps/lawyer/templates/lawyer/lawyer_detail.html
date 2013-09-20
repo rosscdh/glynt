@@ -5,12 +5,9 @@
 {% block css %}
 <link href="{{ STATIC_URL }}css/theme/lawyer-profile.css" rel="stylesheet" charset="utf-8" />
 {% endblock %}
-{% block js %}
-<script type="text/javascript" src="{{ STATIC_URL }}js/Chart.min.js"></script>
-{% endblock %}
 
-{% block prebody %}
 
+{% block body %}
 <div id="hero">
 	<div class="container container-main">
 		<!-- starts carousel -->
@@ -70,7 +67,7 @@
 						{% endif %}
 						{% if user.username == object.user.username %}
 							<a href="{% url 'lawyer:setup_profile' %}" class="btn btn-huge btn-success right-links" ><i class="icon-edit icon-white"></i> Edit profile</a>
-							<a href="{% url 'lawyer:invite' %}" class="btn btn-huge right-links btn-info" ><i class="icon-heart icon-white"></i> Invite Lawyers</a>
+							{% comment %}<a href="{% url 'lawyer:invite' %}" class="btn btn-huge right-links btn-info" ><i class="icon-heart icon-white"></i> Invite Lawyers</a>{% endcomment %}
 							{% if object.summary %}
 								{% if PROJECT_ENVIRONMENT != 'dev' %}
 							    <script>
@@ -100,7 +97,7 @@
 
 			<div class="startups domain-links">
 				<h2 class="">Startups Advised</h2>
-				{% for o in object.data.companies_advised %}
+				{% for o in object.companies_advised %}
 					<div>{{ o|urlize }}</div>
 				{% empty %}
 					<ul class="unstyled">
@@ -160,9 +157,9 @@
 {% csrf_token %}
 {% endblock %}
 
-{% block body %}
-
-<script>
+{% block js %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/Chart.min.js"></script>
+<script type="text/javascript">
 
 $(document).ready(function () {
 
@@ -226,68 +223,13 @@ $(document).ready(function () {
 
 	});
 	{% endif %}
-
-	/*
-	//Get context with jQuery - using jQuery's .get() method.
-	var ctx0 = $("#dealChart0").get(0).getContext("2d");
-	var ctx1 = $("#dealChart1").get(0).getContext("2d");
-
-	linedefaults = { scaleShowLabels : false, scaleOverride : true,	scaleStartValue : 0, 	scaleStepWidth : 10, scaleSteps : 15 }
-
-	if($.isNumeric('{{ object.data.volume_by_year.2011 }}')) {
-		new Chart(ctx0).Line({
-			labels : ["2010","2011","2012"],
-			datasets : [{
-					fillColor : "rgba(151,187,205,0.5)",
-					strokeColor : "rgba(151,187,205,1)",
-					pointColor : "rgba(151,187,205,1)",
-					pointStrokeColor : "#fff",
-					data : [{{ object.data.volume_by_year.2010 }},{{ object.data.volume_by_year.2011 }},{{ object.data.volume_by_year.2012 }}]
-				}]
-			}
-			,linedefaults);
-			$("#graph-year-placeholder").hide();
-
-	}else{
-	 	$("#dealChart0").hide();
-	}
-	if($.isNumeric('{{ object.data.volume_series_a }}')){
-		new Chart(ctx1).Doughnut([
-			{
-				value: {{ object.data.volume_series_a|jsonify }},
-				color:"#F38630"
-			},
-			{
-				value: {{ object.data.volume_seed_financing|jsonify }},
-				color : "#6bdb7e"
-			},
-			{
-				value : {{ object.data.volume_incorp_setup|jsonify }},
-				color : "#69D2E7"
-			},
-			{
-				value: {{ object.data.volume_other|jsonify }},
-				color : "#3a87ad"
-			},
-			{
-				value : {{ object.data.volume_ip|jsonify }},
-				color : "#f88172"
-			}
-		]);
-		$("#graph-type-placeholder").hide();
-		$("#type-legend").css({ opacity: 1 });
-
-	 }else{
-	 	$("#dealChart1").hide();
-	 }
-	 */
 });
 
 </script>
 
 <script type="text/javascript" src="{{ STATIC_URL }}/js/send-message.js"></script>
 
-<script>
+<script type="text/javascript">
 $(document).ready(function () {
     $("#engage-lawyer").click(function(ev) {
         ev.preventDefault();
