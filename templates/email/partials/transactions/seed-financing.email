@@ -1,0 +1,5 @@
+About the round
+===============
+Investment Terms: {{ project_data.investment_terms }}
+Number of investors: {{ project_data.num_investors }}
+Number of Investor States: {{ project_data.num_investor_states }}

@@ -80,23 +80,34 @@
 {% endblock %}
 
 {% block plain_body %}
-{{ company }} is looking for a lawyer to help with {{ transactions }}. If you are interested in working with this client, please reply to this email.
+{{ company }} is looking for a lawyer to help with {{ transaction_types }}.
 
+If you are interested in working with this client, please reply to this email.
 
-Customer Information
---------------------
+Client Information
+==================
+Name: {{ customer }}
+Email: {{ customer.data.email }}
+Telephone: {{ customer.data.telephone }}
 
-**name**: {{ customer.data.first_name }} {{ customer.data.last_name }}
-**company**: {{ company }}
-**telephone**: {{ customer.data.telephone }}
-**email**: {{ customer.data.email }}
+Company Information
+===================
+Name: {{ company }}
+{% if project_data.description %}Description: {{ project_data.description }}{% endif %}
+{% if project_data.profile_website %}Website: {{ project_data.profile_website }}{% endif %}
+{% if project_data.already_incorp %}They have already incorporated{% endif %}
 
+Company Founders
+================
+{% for founder in founders %}{{ founder.founder_name }} ({{ founder.founder_email }}){% endfor %}
 
-Project Information
--------------------
-{% for key, value in project_data.iteritems %}
-**{{ key | desluggerize | title }}**: {{ value | urlize }}
-{% endfor %}
+{% if 'CS' in transaction_slugs %}
+    {% include 'email/partials/transactions/incorporation.email' %}
+{% endif %}
+
+{% if 'ES' in transaction_slugs or 'SF' in transaction_slugs %}
+    {% include 'email/partials/transactions/seed-financing.email' %}
+{% endif %}
 
 {# See project: {% current_site_domain %}{% url 'dashboard:project' uuid=project.uuid %} #}
 {% endblock %}
