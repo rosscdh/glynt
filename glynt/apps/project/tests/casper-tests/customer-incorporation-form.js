@@ -100,30 +100,7 @@ helper.scenario(casper.cli.options.url,
 
         casper.test.comment('Test the form can be submitted and we are redirected');
 
-        casper.then(function() {
-            this.click(btn_submit_form);
-            this.capture('/tmp/submit.png')
-        });
-    }
-);
-
-helper.run();
-
-helper.scenario(casper.cli.options.url_checklist,
-    function() {
-        /* Basic page title test */
-        casper.test.comment('Test Page General Access and Title');
-        this.test.assertHttpStatus(200);
-
-        this.test.assertMatch(this.getTitle(), /^Checklist \—/ig);
-        // --
-    },
-    function() {
-        casper.then(function() {
-            this.capture('/tmp/complete.png')
-            this.echo(casper.cli.options.url_checklist)
-            this.echo(casper.getCurrentUrl())
-        });
+        this.click(btn_submit_form);
     }
 );
 
