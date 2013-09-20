@@ -43,7 +43,7 @@ class ConfirmLoginDetailsForm(ModelFormChangePasswordMixin, forms.ModelForm):
         try:
             lawyer_exists = User.objects.exclude(pk=self.user.pk).filter(email=email)
             if len(lawyer_exists) > 0:
-                msg = 'Sorry but a User with that email already exists (email: %s)' % (email)
+                msg = 'Sorry but a user with that email already exists. Please contact Support.'
                 logging.error(msg)
                 raise exceptions.ValidationError(msg)
         except User.DoesNotExist:

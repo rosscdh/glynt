@@ -122,6 +122,7 @@ class LawyerProfileSetupView(LawyerRequiredViewMixin, FormView):
             'photo': lawyer.photo,
             'twitter': lawyer.data.get('twitter',''),
 
+            'linkedin': lawyer.data.get('linkedin',''),
             'agree_tandc': lawyer.data.get('agree_tandc', None),
         }})
         return form_class(**kwargs)
