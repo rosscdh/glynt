@@ -70,7 +70,7 @@
 						{% endif %}
 						{% if user.username == object.user.username %}
 							<a href="{% url 'lawyer:setup_profile' %}" class="btn btn-huge btn-success right-links" ><i class="icon-edit icon-white"></i> Edit profile</a>
-							<a href="{% url 'lawyer:invite' %}" class="btn btn-huge right-links btn-info" ><i class="icon-heart icon-white"></i> Invite Lawyers</a>
+							{% comment %}<a href="{% url 'lawyer:invite' %}" class="btn btn-huge right-links btn-info" ><i class="icon-heart icon-white"></i> Invite Lawyers</a>{% endcomment %}
 							{% if object.summary %}
 								{% if PROJECT_ENVIRONMENT != 'dev' %}
 							    <script>
@@ -100,7 +100,7 @@
 
 			<div class="startups domain-links">
 				<h2 class="">Startups Advised</h2>
-				{% for o in object.data.companies_advised %}
+				{% for o in object.companies_advised %}
 					<div>{{ o|urlize }}</div>
 				{% empty %}
 					<ul class="unstyled">
