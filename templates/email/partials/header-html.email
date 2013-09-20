@@ -1,11 +1,11 @@
-{% load glynt_helpers %}
+{% load glynt_helpers staticfiles %}
 
 <!-- Branding Header -->
 <tr><td class="small-height" height="40" width="100%" style="font-size: 0; line-height: 0;">&nbsp;</td></tr>
 <tr>
     <td align="center" valign="top" width="100%">
         <a href="{% current_site_domain %}" class="logo">
-            <img alt="LawPal" src="{% current_site_domain %}{{ STATIC_URL }}img/logo.png" border="0" height="70" width="70" />
+            <img alt="LawPal" src="{% current_site_domain %}{% static 'img/logo.png' %}" border="0" height="70" width="70" />
         </a>
     </td>
 </tr>
