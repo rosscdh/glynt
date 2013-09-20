@@ -5,13 +5,10 @@ from django.template.defaultfilters import slugify
 from social_auth.models import UserSocialAuth
 
 from glynt.apps.client.models import _get_or_create_user_profile, create_glynt_profile
-
 from glynt.apps.services.linkedin.pipeline import linkedin_profile_extra_details
 from glynt.apps.services.google.pipeline import google_profile_extra_details
 
-
 import uuid
-
 import logging
 logger = logging.getLogger('lawpal.graph')
 
@@ -35,19 +32,21 @@ def ensure_user_setup(*args, **kwargs):
 
 
 def profile_extra_details(backend, details, response, user=None, is_new=False, \
-                        *args, **kwargs):
+                          *args, **kwargs):
     """ process the backend based on the backend type """
     if backend.name == 'linkedin':
         logger.info('Pipeline.profile_extra_details backend is linkedin')
 
-        linkedin_profile_extra_details(backend=backend, details=details, response=response, user=user, is_new=is_new, \
-                        *args, **kwargs)
+        linkedin_profile_extra_details(backend=backend, details=details,
+                                       response=response, user=user,
+                                       is_new=is_new, *args, **kwargs)
 
     elif backend.name == 'google-oauth2':
         logger.info('Pipeline.profile_extra_details backend is google-oauth2')
 
-        google_profile_extra_details(backend=backend, details=details, response=response, user=user, is_new=is_new, \
-                                *args, **kwargs)
+        google_profile_extra_details(backend=backend, details=details,
+                                       response=response, user=user,
+                                       is_new=is_new, *args, **kwargs)
 
     else:
         logger.error('Pipeline.profile_extra_details backend is Unknown')
@@ -93,6 +92,6 @@ def get_username(details, user=None,
 
             final_username = slugify(UserSocialAuth.clean_username(username))
 
-        logger.info('Pipeline: username will be : %s for %s' % (final_username,user))
+        logger.info('Pipeline: username will be : %s for %s' % (final_username, user))
 
     return {'username': final_username}
