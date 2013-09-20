@@ -100,7 +100,7 @@ helper.scenario(casper.cli.options.url,
 
         casper.test.comment('Test the form can be submitted and we are redirected');
 
-        this.click(btn_submit_form);
+        //this.click(btn_submit_form);
     }
 );
 
