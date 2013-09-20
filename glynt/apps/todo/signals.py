@@ -222,7 +222,7 @@ def projectlawyer_deleted(sender, **kwargs):
     try:
         logger.info('Deleted Lawyer: {lawyer} to Project: {project}'.format(lawyer=instance.lawyer, project=instance.project))
         instance.project.todo_set.filter(user=instance.lawyer.user).update(user=None)
-    except Project.DoesNotExist:
+    except:
         pass
 
 
