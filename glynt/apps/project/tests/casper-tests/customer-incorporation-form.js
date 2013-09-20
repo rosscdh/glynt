@@ -4,8 +4,8 @@ casper.test.comment(casper.cli.options.test_label);
 
 var helper = require(casper.cli.options.casper_helper_js_path);
 
-var btn_submit_form = 'button[type="submit"].btn.btn-success.btn-large';
-var btn_add_another_founders = 'fieldset[data-region-name="founders"] button#btn_add_another';
+var btn_submit_form = 'button#submit-builder';
+var btn_add_another_founders = 'fieldset[data-region-name="founders"] button#founders_add_another';
 
 /**
 * Test for the Checklist Url like: /transact/build/925f383b4dde40fa91f03ef99e3b08d9/CS/1/
@@ -59,16 +59,28 @@ helper.scenario(casper.cli.options.url,
 
         this.test.assertElementCount('input#id_1-founder_email_1', 0);
         this.click(btn_add_another_founders);
+        this.test.assertExists('button#region-clone-remove_1')
         this.test.assertElementCount('input#id_1-founder_email_1', 1);
 
         this.test.assertElementCount('button.close.delete-cloned-region', 1);
 
-        casper.test.comment('Test the Add a third button works');
 
+        casper.test.comment('Test the Add a third button works');
         this.test.assertElementCount('input#id_1-founder_email_2', 0);
         this.click(btn_add_another_founders);
+        this.test.assertExists('button#region-clone-remove_2')
         this.test.assertElementCount('input#id_1-founder_email_2', 1);
+        this.test.assertElementCount('button.close.delete-cloned-region', 2);
 
+        // add a test delete item
+        casper.test.comment('Test theat we can delete region clones items');
+        this.test.assertElementCount('input#id_1-founder_email_3', 0);
+        this.click(btn_add_another_founders);
+        this.test.assertExists('button#region-clone-remove_3')
+        this.test.assertElementCount('input#id_1-founder_email_3', 1);
+
+        this.test.assertElementCount('button.close.delete-cloned-region', 3);
+        this.click('button#region-clone-remove_3'); // 2 and not 3 because its 0 based and there should only be 2 showing at this point
         this.test.assertElementCount('button.close.delete-cloned-region', 2);
 
         this.fill('form#builder-form', {
@@ -88,15 +100,7 @@ helper.scenario(casper.cli.options.url,
 
         casper.test.comment('Test the form can be submitted and we are redirected');
 
-        this.click(btn_submit_form);
-        casper.then(function() {
-            this.capture('/tmp/complete.png')
-            this.echo(casper.cli.options.url_checklist)
-            this.echo(casper.getCurrentUrl())
-            // this.waitForUrl(casper.cli.options.url_checklist, function () {
-            //     this.test.pass('Continued on to the checklist URL')
-            // });
-        });
+        //this.click(btn_submit_form);
     }
 );
 

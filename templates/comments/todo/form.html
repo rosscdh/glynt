@@ -9,8 +9,10 @@
         {{ form.timestamp }}
         {{ form.security_hash }}
         {% if next %}<div><input type="hidden" name="next" value="{{ next }}" /></div>{% endif %}
+        <span id="comment-added-message"></span>
+        <span id="comment-moderated-message"></span>
         <div class="pull-right"><button id="btn-save_comment" class="btn btn-primary pull-right" type="submit">{% trans 'Comment' %}</button></div>
-        {% ajax_comment_tags %}
+        {#% ajax_comment_tags %#}
     </form>
 </div>
 <br />
@@ -22,3 +24,14 @@
     display:none;
 }
 </style>
+
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.plugin.fluent_comments.js"></script>
+<script id="todo-fluent_comments" type="text/javascript">
+$(document).ready(function () {
+    $( ".js-comments-form" ).fluent_comments({
+        'is_reversed': false,
+        'scroll_to_comment': true,
+        'show_comments': false
+    });
+});
+</script>

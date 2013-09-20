@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
 from django import template
 
 import hmac
@@ -55,7 +54,7 @@ colorize_acronym.is_safe = True
 
 @register.filter
 def ensure_number(num):
-    if not isinstance(num, ( int, long, float )):
+    if not isinstance(num, (int, long, float)):
         num = 0
 
     ensure_number = num
@@ -88,9 +87,9 @@ def moment(date_object, default_date=None):
 
 @register.filter(takes_context=False)
 def humanise_number(num):
-    if not isinstance(num, ( int, long )):
+    if not isinstance(num, (int, long)):
         num = 0
-        logger.info('Value "num" passed to humanise_number must be a number is type: %s %s' % (type(num),num,))
+        logger.info('Value "num" passed to humanise_number must be a number is type: %s %s' % (type(num), num,))
 
     magnitude = 0
 
@@ -151,6 +150,7 @@ def write_message_form(context, is_modal=None, **kwargs):
     })
     return context
 write_message_form.is_safe = True
+
 
 @register.inclusion_tag('partials/handlebars_messages.js', takes_context=True)
 def handlebars_messages(context, **kwargs):

@@ -16,7 +16,8 @@
 {% endblock %}
 
 {% block body %}
-  <!-- Button trigger modal -->
+{% csrf_token %}
+<!-- Button trigger modal -->
 <div class="container dashboard-view">
     {% if not profile_is_complete and user.profile.is_customer %}
         <div class="callout callout-danger empty">
@@ -91,15 +92,7 @@
 
 
 {% block js %}
-<script type="text/javascript" src="{{ STATIC_URL }}js/ajax-comments.js"></script>
 <script>
-
-    window.COMMENT_CONTROLS = {
-        'is_reversed': false,
-        'scroll_to_comment': false,
-        'alerts': false,
-    };
-
     $(function () {
         $("[data-toggle='tooltip']").tooltip();
     });

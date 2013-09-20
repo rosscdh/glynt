@@ -37,7 +37,7 @@
 					{% endif %}
 					{% if user.username == object.user.username %}
 						<a href="{% url 'lawyer:setup_profile' %}" class="btn btn-huge btn-success right-links" ><i class="icon-edit icon-white"></i> Edit profile</a>
-						<a href="{% url 'lawyer:invite' %}" class="btn btn-huge right-links btn-info" ><i class="icon-heart icon-white"></i> Invite Lawyers</a>
+						{% comment %}<a href="{% url 'lawyer:invite' %}" class="btn btn-huge right-links btn-info" ><i class="icon-heart icon-white"></i> Invite Lawyers</a>{% endcomment %}
 						{% if object.summary %}
 							{% if PROJECT_ENVIRONMENT != 'dev' %}
 						    <script>
@@ -49,8 +49,8 @@
 						{% endif %}
 					{% endif %}
 					{% if user.username != object.user.username %}
-	                	{% engage_with_lawyer_button lawyer=object %}
-		                 <a href="#" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-info btn-lg">Contact</a>
+	                	{% comment %}{% engage_with_lawyer_button lawyer=object %}{% endcomment %}
+		                {% comment %}<a href="{% url 'lawyer:contact' slug=object.user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-link">Contact</a>{% endcomment %}
 	                {% endif %}
 				</div>
 			</div>

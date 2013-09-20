@@ -63,7 +63,7 @@ def on_attachment_created(sender, **kwargs):
             todostatus_service = ToDoStatusService(todo_item=attachment.todo)
             todostatus_service.process()
 
-            verb = '{name} Uploaded an Attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project)
+            verb = '{name} uploaded an attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project)
             action.send(attachment.uploaded_by,
                         verb=verb,
                         action_object=attachment,
@@ -92,7 +92,7 @@ def on_attachment_deleted(sender, **kwargs):
                 delete_attachment(is_new=is_new, attachment=attachment, **kwargs)
 
             try:
-                verb = '{name} Deleted Attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project)
+                verb = '{name} deleted attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project)
                 action.send(attachment.uploaded_by,
                             verb=verb,
                             action_object=attachment,
@@ -126,7 +126,8 @@ def on_comment_created(sender, **kwargs):
                             verb=verb,
                             action_object=comment,
                             target=todo,
-                            content=comment.comment)
+                            content=comment.comment,
+                            event='todo.comment.created')
 
                 todostatus_service = ToDoStatusService(todo_item=todo)
                 todostatus_service.process()
@@ -137,7 +138,7 @@ Feedback Request Change Events
 @receiver(m2m_changed, sender=FeedbackRequest.assigned_to.through, dispatch_uid='feedbackrequest.created')
 def feedbackrequest_created(sender, **kwargs):
     # please note the pk_set check here
-    # this is required in order to catch the m2m model change 
+    # this is required in order to catch the m2m model change
     # so we get access to the assigned_to.all() object
     if kwargs.get('action') == 'post_add' and kwargs.get('pk_set') is not None:
         #is_new = kwargs.get('created', False)
@@ -156,7 +157,8 @@ def feedbackrequest_created(sender, **kwargs):
                         attachment=feedbackrequest.attachment.filename,
                         todo=feedbackrequest.attachment.todo.name,
                         status=feedbackrequest.attachment.todo.display_status,
-                        assigned=assigned)
+                        assigned=assigned,
+                        event='feedbackrequest.opened')
 
         if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.closed:
             verb = '{assigned_by} closed the feedback request that was assigned to them on checklist item {todo} for {project}'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), todo=feedbackrequest.attachment.todo, project=feedbackrequest.attachment.project)
@@ -169,7 +171,8 @@ def feedbackrequest_created(sender, **kwargs):
                         attachment=feedbackrequest.attachment.filename,
                         todo=feedbackrequest.attachment.todo.name,
                         status=feedbackrequest.attachment.todo.display_status,
-                        assigned=assigned)
+                        assigned=assigned,
+                        event='feedbackrequest.closed')
 
         if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.cancelled:
             verb = '{assigned_by} cancelled their feedback request on checklist item {todo} for {project}'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), todo=feedbackrequest.attachment.todo, project=feedbackrequest.attachment.project)
@@ -182,7 +185,8 @@ def feedbackrequest_created(sender, **kwargs):
                         attachment=feedbackrequest.attachment.filename,
                         todo=feedbackrequest.attachment.todo.name,
                         status=feedbackrequest.attachment.todo.display_status,
-                        assigned=assigned)
+                        assigned=assigned,
+                        event='feedbackrequest.cancelled')
 
 
 @receiver(post_save, sender=FeedbackRequest, dispatch_uid='feedbackrequest.status_change')
@@ -218,7 +222,7 @@ def projectlawyer_deleted(sender, **kwargs):
     try:
         logger.info('Deleted Lawyer: {lawyer} to Project: {project}'.format(lawyer=instance.lawyer, project=instance.project))
         instance.project.todo_set.filter(user=instance.lawyer.user).update(user=None)
-    except Project.DoesNotExist:
+    except:
         pass
 
 
@@ -334,5 +338,13 @@ def on_action_created(sender, **kwargs):
 
                 if recipients:
                     logger.debug('recipients: {recipients}'.format(recipients=recipients))
-                    email = NewActionEmailService(subject=action.verb, from_name=user_name, from_email=user_email, recipients=recipients)
+                    email = NewActionEmailService(
+                        verb=event,
+                        from_name=user_name,
+                        from_email=user_email,
+                        recipients=recipients,
+                        actor=action.actor,
+                        object=target,
+                        project=target.project,
+                    )
                     email.send(url=url, message=action.verb)

@@ -3,8 +3,7 @@ from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 from django.dispatch import receiver
-from django.core.validators import URLValidator
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.management import call_command
 from django.db.models.signals import post_save
 
@@ -15,7 +14,6 @@ from userena.managers import ASSIGNED_PERMISSIONS
 from userena import signals as userena_signals
 
 from glynt.apps.lawyer.services import EnsureLawyerService
-from glynt.apps.company.services import EnsureCompanyService
 from glynt.apps.customer.services import EnsureCustomerService
 
 from guardian.shortcuts import assign_perm
@@ -27,7 +25,6 @@ import logging
 logger = logging.getLogger('django.request')
 
 LAWPAL_PRIVATE_BETA = getattr(settings, 'LAWPAL_PRIVATE_BETA', False)
-
 
 
 class ClientProfile(UserenaBaseProfile):
@@ -153,8 +150,8 @@ def create_userarena_signup(sender, **kwargs):
     profile = kwargs.get('instance', None)
     is_new = kwargs.get('created', None)
 
-    if profile is not None and is_new == True:
+    if profile is not None and is_new is True:
         user = profile.user
         logger.info('Creating UserenaSignup object for User %s' % user.username)
-        userena_signup = UserenaSignup.objects.create_userena_profile(user=user)
+        UserenaSignup.objects.create_userena_profile(user=user)
 

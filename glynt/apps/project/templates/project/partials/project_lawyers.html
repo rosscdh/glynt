@@ -3,50 +3,54 @@
         <h2 class="text-warning">Review your matches</h2>
     {% endif %}
     <div class="row">
-        {% for l in lawyers %}
-            {% if display_type == 'potential' %}
-                <div class="col col-lg-6">
-                    <table class="table lawyer-list">
-                        <tbody>
-                            <tr>
-                                <td class="lawyer-picture">
-                                    <a href="{% url 'lawyer:profile_lite' slug=l.user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class=""><img src="{{ l.user.profile.get_mugshot_url }}" class="img-rounded" title="" alt="Photo of {{ l.user.get_full_name }}" /></a>
-                                </td>
-                                <td class="lawyer-info">
-                                    <button type="button" class="close text-warning" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                    <h1>
-                                    <a href="{% url 'lawyer:profile_lite' slug=l.user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="text-text">{{ l.user.get_full_name }}</a>
-                                    </h1>
-                                    <h2>{{ l.position }} at {{ l.firm_name }}</h2>
-                                    <p>{% for loc in practice_locations %}<i class="glyphicon glyphicon-map-marker"></i> {{ loc }}{% endfor %}</p>
-                                    <a href="{% url 'lawyer:profile_lite' slug=l.user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-info btn-small">View Profile</a>
-                                    <a href="{% url 'project:project_contact' slug=project.uuid lawyer=l.user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-link">Contact</a>
-                                    <a href="{% url 'project:project_contact' slug=project.uuid lawyer=l.user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-success pull-right">Engage</a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+        {% for join in lawyer_join %}
+            {% with join.lawyer as l %}
+                {% if display_type == 'potential' %}
+                    <div class="col col-lg-6">
+                        <table class="table lawyer-list">
+                            <tbody>
+                                <tr>
+                                    <td class="lawyer-picture">
+                                        <a href="{% url 'lawyer:profile_lite' slug=l.user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class=""><img src="{{ l.user.profile.get_mugshot_url }}" class="img-rounded" title="" alt="Photo of {{ l.user.get_full_name }}" /></a>
+                                    </td>
+                                    <td class="lawyer-info">
+                                        <button type="button" class="close text-warning" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h1>
+                                        <a href="{% url 'lawyer:profile_lite' slug=l.user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="text-text">{{ l.user.get_full_name }}</a>
+                                        </h1>
+                                        <h2>{{ l.position }} at {{ l.firm_name }}</h2>
+                                        <p>{% for loc in practice_locations %}<i class="glyphicon glyphicon-map-marker"></i> {{ loc }}{% endfor %}</p>
+                                        <a href="{% url 'lawyer:profile_lite' slug=l.user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-info btn-small">View Profile</a>
+                                        <a href="{% url 'project:project_contact' slug=project.uuid lawyer=l.user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-link">Contact</a>
+                                        <!-- <a href="{% url 'project:project_contact' slug=project.uuid lawyer=l.user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-success pull-right">Engage</a> -->
+                                        <button data-engage="{{ join.pk }}" data-status="{{ PROJECT_LAWYER_STATUS.assigned }}" class="btn btn-success btn-small pull-right">Engage</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-            {% else %}
-                <div class="col col-lg-12">
-                    <table class="table lawyer-list active">
-                        <tbody>
-                            <tr>
-                                <td class="lawyer-picture">
-                                    <img src="{{ l.user.profile.get_mugshot_url }}" class="img-rounded">
-                                </td>
-                                <td class="lawyer-info">
-                                    <h3>{{ l.user.get_full_name }}</h3>
-                                    <p>{{ l.position }} at {{ l.firm_name }}</p>
-                                    <p>{% for loc in practice_locations %}<i class="glyphicon glyphicon-map-marker"></i> {{ loc }}{% endfor %}</p>
-                                </td>
-                                <td class="attorney-meta"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            {% endif %}
+                {% else %}
+
+                    <div class="col col-lg-12">
+                        <table class="table lawyer-list active">
+                            <tbody>
+                                <tr>
+                                    <td class="lawyer-picture">
+                                        <img src="{{ l.user.profile.get_mugshot_url }}" class="img-rounded">
+                                    </td>
+                                    <td class="lawyer-info">
+                                        <h3>{{ l.user.get_full_name }}</h3>
+                                        <p>{{ l.position }} at {{ l.firm_name }}</p>
+                                        <p>{% for loc in practice_locations %}<i class="glyphicon glyphicon-map-marker"></i> {{ loc }}{% endfor %}</p>
+                                        <a href="{% url 'lawyer:profile_lite' slug=l.user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-info btn-small">View Profile</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+            {% endwith %}
         {% endfor %}
     </div>
 {% else %}
@@ -72,7 +76,9 @@
     </table>
     {% endif %}
 {% endif %}
-    {% if display_type == 'potential' and not project.has_lawyer %}
-        <hr />
-    {% endif %}
+
+{% if display_type == 'potential' and not project.has_lawyer %}
+    <hr />
+{% endif %}
+
 {% include 'dashboard/modals/overview-modal.html' %}
