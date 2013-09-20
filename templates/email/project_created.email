@@ -30,14 +30,42 @@
                 <li style="margin-left: 0;">
                     <p style="font-size: 14px;"><span style="color: #999999;">Name:</span> {{ company }}</p>
                 </li>
+                {% if project_data.description %}
+                    <li style="margin-left: 0;">
+                        <p style="font-size: 14px;"><span style="color: #999999;">Description:</span> {{ project_data.description }}</p>
+                    </li>
+                {% endif %}
+                {% if project_data.profile_website %}
+                    <li style="margin-left: 0;">
+                        <p style="font-size: 14px;"><span style="color: #999999;">Website:</span> {{ project_data.profile_website }}</p>
+                    </li>
+                {% endif %}
+                {% if project_data.already_incorp %}
+                    <li style="margin-left: 0;">
+                        <p style="font-size: 14px;">They have already incorporated</p>
+                    </li>
+                {% endif %}
+            </ul>
+            <h2 style="color: #6c797c !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5em; padding: 0;"><strong>Company Founders</strong>:</h2>
+            <ul style="color: #6c797c !important;">
                 <li style="margin-left: 0;">
-                    <p style="font-size: 14px;"><span style="color: #999999;">Description:</span> {{ project_data.description }}</p>
+                    <p style="font-size: 14px;"><span style="color: #999999;">Name:</span> {{ company }}</p>
                 </li>
             </ul>
-            {% for transaction in transactions %}
-                {% with template_name=transaction.slug|lower|stringformat:'s'|add:'-html.email' %}
-                    {% include 'email/partials/transactions/'|add:template_name %}
-                {% endwith %}
+
+            {% if 'CS' in transaction_slugs %}
+                {% include 'email/partials/transactions/incorporation-html.email' %}
+            {% endif %}
+
+            {% if 'ES' in transaction_slugs or 'SF' in transaction_slugs %}
+                {% include 'email/partials/transactions/seed-financing-html.email' %}
+            {% endif %}
+
+            <hr/>
+            {% for key, value in project_data.iteritems %}
+                <li style="margin-left: 0;">
+                    <p style="font-size: 14px;"><strong>{{ key | desluggerize | title }}:</strong> {{ value | urlize }}</p>
+                </li>
             {% endfor %}
         </td>
         <td class="small-width" align="left" width="40" style="display: block;">&nbsp;</td>
