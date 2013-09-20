@@ -152,3 +152,6 @@ class ProjectLawyer(models.Model):
     @property
     def display_status(self):
         return self.LAWYER_STATUS.get_desc_by_value(self.status)
+
+    def get_absolute_url(self):
+        return None
