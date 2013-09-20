@@ -26,19 +26,21 @@ $(function() {
         previewAutoAdded: null,
         commentBusy: false,
         options: {
-            'submit_element': undefined,
-            'comment_element': undefined,
-            'comments_container': undefined,
-            'preview_area': undefined,
-            'comment_moderated_message': undefined,
-            'comment_added_message': undefined,
-            'comment_waiting': undefined,
-            'show_preview': false,
-            'is_reversed': false,
-            'scroll_to_comment': true,
-            'debug': true,
-            'COMMENT_SCROLL_TOP_OFFSET': 100,
-            'PREVIEW_SCROLL_TOP_OFFSET': 200,
+            'submit_element': undefined,                // -- The element that when clicked will issue the submit event
+            'comment_element': undefined,               // -- the textarea/input that holds the coment text
+            'comments_container': undefined,            // -- the contianing ul/div that holds the comments list
+            'preview_area': undefined,                  // -- the area used for preview
+            'comment_moderated_message': undefined,     // -- the area used to show the comments are moderated message
+            'comment_added_message': undefined,         // -- the area used to show the comment added message
+            'comment_waiting': undefined,               // -- the area used to show the please wait submitting message
+            'show_preview': false,                      // -- whether or not to show the preview
+            'show_comments': true,                      // -- whether or not to actually show the comment (edge case)
+            'is_reversed': false,                       // -- add the comment to the top or the bottom of the comments_container
+            'scroll_to_comment': true,                  // -- scroll the window to the new comment when added
+            'submit_on_error': false,                   // -- on ajax error try to submit the form normally
+            'debug': true,                              // -- show debug messages
+            'COMMENT_SCROLL_TOP_OFFSET': 100,           // -- scrolling offsets
+            'PREVIEW_SCROLL_TOP_OFFSET': 200,           // -- scrolling offsets
         },
         _log: function (msg) {
             var self = this;
@@ -54,11 +56,11 @@ $(function() {
         },
         _listen: function () {
             var self = this;
-            self.comments_container = $(self.options.comments_container || "#comments") || $("body");
-            self.preview_area = $(self.options.preview_area || '#comment-preview-area') || $("body");
+            self.comments_container = (self.options.comments_container) ? $(self.options.comments_container) : ($("#comments").length > 0) ? $("#comments") : $("body");
+            self.preview_area = (self.options.preview_area) ? $(self.options.preview_area) : ($('#comment-preview-area').length > 0) ? $('#comment-preview-area') : $("body");
 
-            self.submit_element = $(self.options.submit_element || self.element.find('input[type="submit"]:last')) || $(self.element.find('button[type="submit"]:last'));
-            self.comment_element = $(self.options.comment_element || self.element.find('input#id_comment')) || $(self.element.find('textarea:last'));
+            self.submit_element = (self.options.submit_element) ? $(self.options.submit_element) : ($(self.element.find('input[type="submit"]:last')).length > 0) ? $(self.element.find('input[type="submit"]:last')) : $(self.element.find('button[type="submit"]:last'));
+            self.comment_element = (self.options.comment_element) ? $(self.options.comment_element) : ($(self.element.find('input#id_comment')).length > 0) ? $(self.element.find('input#id_comment')) : $(self.element.find('textarea:last'));
             self.comment_waiting = $(self.options.comment_element || '#comment-waiting');
 
             self.comment_moderated_message = $(self.options.comment_moderated_message || "#comment-moderated-message");
@@ -78,7 +80,7 @@ $(function() {
             if( $comments.length == 0 ) {
                 self._log("Internal error - unable to display comment.\n\nreason: container is missing in the page.");
             }
-            return $comments;
+            return (self.options.show_comments === false) ? undefined : $comments;
         },
         onSubmitCommentForm: function (event) {
             event.preventDefault();  // only after ajax call worked.
@@ -94,24 +96,26 @@ $(function() {
         },
         submitAjaxComment: function (form, args) {
             var self = this;
-            var onsuccess = args.onsuccess;
-            var preview = !!args.preview;
 
             $('div.comment-error').remove();
             if (self.commentBusy) {
+                self._log('commentBusy is true');
                 return false;
             }
+            var onsuccess = args.onsuccess;
+            var preview = !!args.preview;
 
-            self.commentBusy = true;
-
+            var $added;
             var $form = this.element;
             var comment = $form.serialize() + (preview ? '&preview=1' : '');
             var url = $form.attr('action') || './';
             var ajaxurl = $form.attr('data-ajax-action');
 
             // Add a wait animation
-            if( ! preview )
+            if( ! preview ) {
+                self._log('no preview found');
                 self.comment_waiting.fadeIn(1000);
+            }
 
             // Use AJAX to post the comment.
             $.ajax({
@@ -119,34 +123,47 @@ $(function() {
                 url: ajaxurl || url,
                 data: comment,
                 dataType: 'json',
+                beforeSend: function () {
+                    self._log('Send beforeSend');
+                    self.commentBusy = true;
+                },
                 success: function ( data ) {
-                    self.commentBusy = false;
-
+                    self._log('Successfully posted comment');
                     self.removeWaitAnimation();
                     self.removeErrors();
 
-                    if ( data.success ) {
-                        var $added;
-                        if( preview )
-                            $added = self.commentPreview(data);
-                        else
-                            $added = self.commentSuccess(data);
+                    // Clean form
+                    self.comment_element.val('');
 
-                        if( onsuccess )
-                            args.onsuccess(data.comment_id, data.is_moderated, $added);
-                    }
-                    else {
-                        self.commentFailure(data);
+                    if ( self.options.show_comments === true ) {
+                        if ( data.success ) {
+                            if ( preview ) {
+                                $added = self.commentPreview(data);
+                            } else {
+                                $added = self.commentSuccess(data);
+                            }
+
+                            // if( onsuccess )
+                            //     args.onsuccess(data.comment_id, data.is_moderated, $added);
+                        }
+                        else {
+                            self.commentFailure(data);
+                        }
                     }
                 },
                 error: function ( data ) {
-                    self.commentBusy = false;
+                    self._log('There was an error posting comment');
                     self.removeWaitAnimation();
 
                     // Submit as non-ajax instead
-                    //$form.unbind('submit').submit();
+                    if ( self.options.submit_on_error === true ) {
+                        self._log('try to submit the form normally');
+                        self.element.unbind('submit').submit();
+                    }
                 },
                 complete: function () {
+                    self._log('Completed the submit process');
+                    self.commentBusy = false;
                 }
             });
 
@@ -159,9 +176,12 @@ $(function() {
             {
                 // If not explicitly added to the HTML, include a previewarea in the comments.
                 // This should at least give the same markup.
-                getCommentsDiv().append('<div id="comment-preview-area"></div>').addClass('has-preview');
-                $previewarea = $("#comment-preview-area");
-                self.previewAutoAdded = true;
+                var comments_div = self.getCommentsDiv();
+                if ( comments_div ) {
+                    comments_div.append('<div id="comment-preview-area"></div>').addClass('has-preview');
+                    $previewarea = self.preview_area;
+                    self.previewAutoAdded = true;
+                }
             }
 
             var had_preview = $previewarea.hasClass('has-preview-loaded');
@@ -188,9 +208,6 @@ $(function() {
         },
         commentSuccess: function (data) {
             var self = this;
-            // Clean form
-            console.log('fds')
-            self.comment_element.val('');
             // @TODO: cancelThreadedReplyForm
             //self.cancelThreadedReplyForm();  // in case threaded comments are used.
 
@@ -198,12 +215,12 @@ $(function() {
             var had_preview = self.removePreview();
             var $new_comment = self.addComment(data);
 
-            if( had_preview )
-                // Avoid double jump when preview was removed. Instead refade to final comment.
-                $new_comment.hide().fadeIn(600);
-            else
-                // Smooth introduction to the new comment.
-                $new_comment.hide().show(600);
+            // if( had_preview )
+            //     // Avoid double jump when preview was removed. Instead refade to final comment.
+            //     $new_comment.hide().fadeIn(600);
+            // else
+            //     // Smooth introduction to the new comment.
+            //     $new_comment.hide().show(600);
 
             return $new_comment;
         },
@@ -276,18 +293,25 @@ $(function() {
         },
         removePreview: function () {
             var self = this;
+            var had_preview = false;
             var $previewarea = self.preview_area;
-            var had_preview = $previewarea.hasClass('has-preview-loaded');
 
-            if ( self.previewAutoAdded === true ) {
-                $previewarea.remove();  // make sure it's added at the end again later.
+            if ( self.options.show_preview === true ) {
+                self._log('removePreview: ');
+                had_preview = $previewarea.hasClass('has-preview-loaded');
+
+                if ( self.previewAutoAdded === true ) {
+                    $previewarea.remove();  // make sure it's added at the end again later.
+                } else {
+                    $previewarea.html('');
+                }
+
+                // Update classes. allowing CSS to add/remove margins for example.
+                $previewarea.removeClass('has-preview-loaded')
+                self.comments_container.removeClass('has-preview');
             } else {
-                $previewarea.html('');
+                self._log('no preview area set removePreview: ');
             }
-
-            // Update classes. allowing CSS to add/remove margins for example.
-            $previewarea.removeClass('has-preview-loaded')
-            self.comments_container.removeClass('has-preview');
 
             return had_preview;
         }
