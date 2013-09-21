@@ -331,7 +331,7 @@ def on_action_created(sender, **kwargs):
                 recipients = None
                 url = None
 
-                if type(action.target) == ToDo:
+                if type(target) == ToDo:
                     logger.debug('action.target is a ToDo object')
                     recipients = action.target.project.notification_recipients()
                     url = action.target.get_absolute_url()
@@ -344,7 +344,7 @@ def on_action_created(sender, **kwargs):
                         from_email=user_email,
                         recipients=recipients,
                         actor=action.actor,
-                        object=target,
+                        target=target,
                         project=target.project,
                     )
                     email.send(url=url, message=action.verb)
