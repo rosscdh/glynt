@@ -99,6 +99,7 @@ class BaseEmailService(object):
     def send(self, **kwargs):
         self._subject = kwargs.get('subject', self._subject)
         self._message = kwargs.get('message', self._message)
+        logger.debug('Preparing to send email: {subject} to {recipients}'.format(subject=self._subject, recipients=self.recipients))
 
         # merge kwargs into context
         self.context.update(kwargs)
