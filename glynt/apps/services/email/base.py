@@ -44,8 +44,6 @@ class BaseEmailService(object):
         self.to_email = kwargs.get('to_email')
         self.recipients = kwargs.get('recipients', [])
 
-        logger.info('Initialized BaseEmailService with: {kwargs}'.format(kwargs=kwargs))
-
         # set email template context
         self.context = kwargs
 
@@ -79,6 +77,8 @@ class BaseEmailService(object):
             'from_email': self.from_email,
             'STATIC_URL': settings.STATIC_URL,
         })
+
+        logger.info('Initialized BaseEmailService with context: {context}'.format(context=self.context))
 
     def _templatize_context(self, target, **kwargs):
         t = template.Template(target)

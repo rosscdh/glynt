@@ -42,6 +42,7 @@ class SendProjectEmailsService(object):
             'comment': self.notification.description if self.notification else None,
             'project_statement': self.project.project_statement,
             'site': self.site,
+            'STATIC_URL': settings.STATIC_URL
         })
 
         self.context = kwargs
