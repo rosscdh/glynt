@@ -28,7 +28,7 @@ current_site_domain.is_safe = True
 
 
 @register.simple_tag
-def ABSOLUTE_STATIC_URL(path=''):
+def ABSOLUTE_STATIC_URL(path=None):
     path = '' if path is None else path
     url = '{domain}{STATIC_URL}{path}'.format(domain=CURRENT_SITE.domain,
                                               STATIC_URL=settings.STATIC_URL,
