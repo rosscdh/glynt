@@ -12,6 +12,8 @@ register = template.Library()
 import logging
 logger = logging.getLogger('django.request')
 
+CURRENT_SITE = Site.objects.get_current()
+
 
 @register.simple_tag
 def current_date_format():
@@ -21,9 +23,18 @@ current_date_format.is_safe = True
 
 @register.simple_tag
 def current_site_domain():
-    site = Site.objects.get_current()
-    return site.domain
+    return CURRENT_SITE.domain
 current_site_domain.is_safe = True
+
+
+@register.simple_tag
+def ABSOLUTE_STATIC_URL(path=None):
+    path = '' if path is None else path
+    url = '{domain}{STATIC_URL}{path}'.format(domain=CURRENT_SITE.domain,
+                                              STATIC_URL=settings.STATIC_URL,
+                                              path=path)
+    return url
+ABSOLUTE_STATIC_URL.is_safe = True
 
 
 @register.filter
