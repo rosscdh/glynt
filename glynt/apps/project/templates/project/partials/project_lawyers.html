@@ -11,7 +11,9 @@
                             <tbody>
                                 <tr>
                                     <td class="lawyer-picture">
-                                        <a href="{% url 'lawyer:profile_lite' slug=l.user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class=""><img src="{{ l.user.profile.get_mugshot_url }}" class="img-rounded" title="" alt="Photo of {{ l.user.get_full_name }}" /></a>
+                                        <a href="{% url 'lawyer:profile_lite' slug=l.user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="">
+                                            <img src="{{ l.profile_photo }}" class="img-rounded" title="" alt="Photo of {{ l.user.get_full_name }}" />
+                                        </a>
                                     </td>
                                     <td class="lawyer-info">
                                         <button type="button" class="close text-warning" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -37,7 +39,7 @@
                             <tbody>
                                 <tr>
                                     <td class="lawyer-picture">
-                                        <img src="{{ l.user.profile.get_mugshot_url }}" class="img-rounded">
+                                        <img src="{{ l.profile_photo }}" class="img-rounded">
                                     </td>
                                     <td class="lawyer-info">
                                         <h3>{{ l.user.get_full_name }}</h3>
