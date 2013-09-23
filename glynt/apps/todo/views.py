@@ -103,6 +103,7 @@ class BaseToDoDetailMixin(RulezMixin, SingleObjectMixin):
         By default this requires `self.queryset` and a `pk` or `slug` argument
         in the URLconf, but subclasses can override this to return any object.
         """
+        obj = None
         slug = self.kwargs.get(self.slug_url_kwarg, 'slug')
 
         self.project = get_object_or_404(Project, uuid=self.kwargs.get('project_uuid'))
@@ -114,9 +115,9 @@ class BaseToDoDetailMixin(RulezMixin, SingleObjectMixin):
             # does nto seem to exist need to log and error
             logger.error('ToDo item does not exist in categories navigation_items but it should! {slug}, navigation_items: {navigation_items}'.format(slug=slug, navigation_items=self.navigation_items))
 
-        obj = get_object_or_404(self.model, slug=slug)
-
-        self.can_read(obj)
+        if self.kwargs.get('slug') is not None:
+            obj = get_object_or_404(self.model, slug=slug)
+            self.can_read(obj)
 
         return obj
 
