@@ -14,9 +14,6 @@ import logging
 logger = logging.getLogger('django.request')
 
 
-_CURRENT_SITE = CURRENT_SITE()
-
-
 @register.simple_tag
 def current_date_format():
     return settings.DATE_FORMAT
@@ -25,6 +22,7 @@ current_date_format.is_safe = True
 
 @register.simple_tag
 def current_site_domain():
+    _CURRENT_SITE = CURRENT_SITE()
     return _CURRENT_SITE.domain
 current_site_domain.is_safe = True
 
