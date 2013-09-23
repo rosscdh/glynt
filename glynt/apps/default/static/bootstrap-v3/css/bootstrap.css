@@ -416,13 +416,16 @@ a.text-success:hover,
 a.text-success:focus {
   color: #356635;
 }
+
 .text-text {
   color: #555555;
 }
+
 a.text-text:hover,
 a.text-text:focus {
   color: #3c3c3c;
 }
+
 .text-left {
   text-align: left;
 }
@@ -4977,9 +4980,9 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
 .navbar {
   position: relative;
   padding-top: 10px;
+  padding-right: 15px;
   padding-bottom: -1px;
   padding-left: 15px;
-  padding-right: 15px;
   margin-bottom: 20px;
   background-color: rgba(255, 255, 255, 0.93);
   border-bottom: 1px solid #e1e4e6;
@@ -8164,8 +8167,8 @@ table.stories .story .story-info p {
 
 table.attorney-list,
 table.lawyer-list {
-  border-left: 2px solid #ffd37e;
   padding-right: 15px;
+  border-left: 2px solid #ffd37e;
 }
 
 table.attorney-list tr td,
@@ -8185,6 +8188,7 @@ table.lawyer-list tr .lawyer-info h1 {
   margin-top: 10px;
   font-size: 30px;
 }
+
 table.attorney-list tr .lawyer-info h2,
 table.lawyer-list tr .lawyer-info h2 {
   margin-top: 10px;
@@ -8201,9 +8205,8 @@ table.lawyer-list tr .lawyer-meta {
 }
 
 table.lawyer-list {
-  background-color: white;
   margin: 10px 0 0;
-  background-color: #fdf3e4;
+  background-color: white;
 }
 
 table.lawyer-list.active {
@@ -8312,6 +8315,10 @@ table.lawyer-list.active {
 .checklist-header .btn:focus {
   color: #555555;
   text-decoration: none;
+}
+
+.ui-sortable .checklist-header h3 {
+  cursor: move;
 }
 
 .widget.checklist h1 {

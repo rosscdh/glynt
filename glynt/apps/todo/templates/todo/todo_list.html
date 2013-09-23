@@ -32,6 +32,7 @@
 
             <div class="col col-lg-9">                
                 <div id="list-items">
+                    <div {% if is_lawyer %}ui-sortable="config.categorySort" ng-model="model.categories"{% endif %}>
                     <section ng-repeat="category in model.categories">
                         <div id="{[{category.slug}]}" class="checklist-header clearfix">
                             <h3 class="pull-left" ng-bind-html-unsafe="category.label"></h3>
@@ -63,6 +64,7 @@
                         </table>
                         <!-- Table //-->
                     </section>
+                    </div>
                 </div>
         </div>
     </div>

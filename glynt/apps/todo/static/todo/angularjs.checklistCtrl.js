@@ -18,7 +18,12 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 	};
 
 	$scope.config = {
-		'pusher': {}
+		'pusher': {},
+		'categorySort': {
+    		'update': function(e, ui) {
+    			$scope.saveCategoryOrder( e, ui );
+    		}
+		 }
 	}
 
 	/*
@@ -275,6 +280,19 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 				$scope.model.categories = results;
 			},
 			function( details ) { /* Error */
+			}
+		);
+	};
+
+	$scope.saveCategoryOrder = function( newValue, oldValue ){
+		var categories = $scope.model.categories;
+		var promise = lawPalService.updateCategoryOrder( categories );
+		promise.then( 
+			function( results ) { /* Success */
+				$scope.addAlert( "Categories re-ordered", "success", "Update complete" );
+			},
+			function( details ) { /* Error */
+				$scope.addAlert( "Unable to save order of categories", "error" );
 			}
 		);
 	};
