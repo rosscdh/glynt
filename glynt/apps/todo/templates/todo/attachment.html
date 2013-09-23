@@ -49,14 +49,10 @@
 $(document).ready(function () {
     
     $(document).on( 'click', '.btn-fullscreen', function (event) {
-        var newWindow;
         event.preventDefault();
         var url = $('#crocdoc-viewer-iframe').attr('src');
         if ( url ) {
-            newWindow = window.open(url, 'crocdoc-fullscreen', 'width={width}, height={height}, left=0, top=0, scrollbars=yes, fullscreen=yes'.assign({'width': window.width, 'height':  window.height}));
-            newWindow.onunload = function() {
-                alert("close window");
-            }
+            window.open(url, 'crocdoc-fullscreen', 'width={width}, height={height}, left=0, top=0, scrollbars=yes, fullscreen=yes'.assign({'width': window.width, 'height':  window.height}));
         }
     });
 
