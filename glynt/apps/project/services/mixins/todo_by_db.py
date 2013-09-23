@@ -43,7 +43,7 @@ class ToDoItemsFromDbMixin(object):
             if db_item.is_deleted is True and db_item.slug in slugs:
                 del slugs[db_item.slug]
                 self.delete_item(db_item)
-
+                logger.debug('Deleted the todolist slug: {slug}'.format(slug=db_item.slug))
             else:
 
                 try:

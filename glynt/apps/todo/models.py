@@ -54,6 +54,9 @@ class ToDo(models.Model):
 
     objects = DefaultToDoManager()
 
+    class Meta:
+        ordering = ['sort_position']  # Maintain the sort order defined in yml
+
     def __unicode__(self):
         return u'{name}'.format(name=unicode(self.name))
 

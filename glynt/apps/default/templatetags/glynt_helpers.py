@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
 from django import template
 
 import hmac
@@ -13,6 +12,8 @@ register = template.Library()
 import logging
 logger = logging.getLogger('django.request')
 
+CURRENT_SITE = Site.objects.get_current()
+
 
 @register.simple_tag
 def current_date_format():
@@ -22,9 +23,18 @@ current_date_format.is_safe = True
 
 @register.simple_tag
 def current_site_domain():
-    site = Site.objects.get_current()
-    return site.domain
+    return CURRENT_SITE.domain
 current_site_domain.is_safe = True
+
+
+@register.simple_tag
+def ABSOLUTE_STATIC_URL(path=None):
+    path = '' if path is None else path
+    url = '{domain}{STATIC_URL}{path}'.format(domain=CURRENT_SITE.domain,
+                                              STATIC_URL=settings.STATIC_URL,
+                                              path=path)
+    return url
+ABSOLUTE_STATIC_URL.is_safe = True
 
 
 @register.filter
@@ -55,7 +65,7 @@ colorize_acronym.is_safe = True
 
 @register.filter
 def ensure_number(num):
-    if not isinstance(num, ( int, long, float )):
+    if not isinstance(num, (int, long, float)):
         num = 0
 
     ensure_number = num
@@ -88,9 +98,9 @@ def moment(date_object, default_date=None):
 
 @register.filter(takes_context=False)
 def humanise_number(num):
-    if not isinstance(num, ( int, long )):
+    if not isinstance(num, (int, long)):
         num = 0
-        logger.info('Value "num" passed to humanise_number must be a number is type: %s %s' % (type(num),num,))
+        logger.info('Value "num" passed to humanise_number must be a number is type: %s %s' % (type(num), num,))
 
     magnitude = 0
 
@@ -151,6 +161,7 @@ def write_message_form(context, is_modal=None, **kwargs):
     })
     return context
 write_message_form.is_safe = True
+
 
 @register.inclusion_tag('partials/handlebars_messages.js', takes_context=True)
 def handlebars_messages(context, **kwargs):

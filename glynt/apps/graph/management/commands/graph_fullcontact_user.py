@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-""" 
+"""
 Command to collect user connections from various services
 """
-import sys
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from optparse import make_option
@@ -23,13 +22,13 @@ FULLCONTACT_API_KEY = getattr(settings, 'FULLCONTACT_API_KEY', None)
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
         make_option('--pk',
-            dest='pk',
-            default=None,
-            help='A specific user to populate'),
+                    dest='pk',
+                    default=None,
+                    help='A specific user to populate'),
         make_option('--update_user_profile',
-            dest='update_user_profile',
-            default=True,
-            help='Update the user profile data from FullContact'),
+                    dest='update_user_profile',
+                    default=True,
+                    help='Update the user profile data from FullContact'),
     )
     help = 'Collects the Fullcontact.com information about a user and optionally updates their profile data'
 
@@ -45,13 +44,12 @@ class Command(BaseCommand):
         self.pk = options.get('pk', None)
         self.pk = int(self.pk) if self.pk is not None else self.pk
 
-
         if self.pk is not None and type(self.pk) != int:
             raise Exception('--pk must be an integer')
-        
+
         if self.pk is not None and type(self.pk) is int:
             logger.info('FullContact import PK has been specified: %s' % self.pk)
-            self.process_single_user(self.get_queryset(filter_options={'pk':self.pk})[0])
+            self.process_single_user(self.get_queryset(filter_options={'pk': self.pk})[0])
 
         else:
             logger.info('Process all Users')
@@ -77,7 +75,9 @@ class Command(BaseCommand):
         logger.info('Checking FullContact info for %s' % user.pk)
         # Get the user FC data object
         fc_data, is_new = FullContactData.objects.get_or_create(user=user)
-        if fc_data.extra_data.get('contactInfo',None) is not None:
+
+        if fc_data.extra_data.get('contactInfo', None) is not None:
+
             logger.info('FullContact User needs data from FullContact: %s (%s) is_new: %s' % (user.username, user.pk, is_new,))
 
             client = FullContactConnectionService(access_token=self.access_token, email=user.email)

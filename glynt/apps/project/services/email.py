@@ -14,6 +14,7 @@ import logging
 logger = logging.getLogger('lawpal.services')
 
 site_email = settings.DEFAULT_FROM_EMAIL
+CURRENT_SITE = Site.objects.get_current()
 
 
 class SendProjectEmailsService(object):
@@ -29,7 +30,7 @@ class SendProjectEmailsService(object):
         self.sender_is_lawyer = sender.profile.is_lawyer
         self.recipients = recipients
         self.notification = notification
-        self.site = Site.objects.get_current()
+        self.site = CURRENT_SITE
 
         kwargs.update({
             'is_new': self.is_new_project,
@@ -44,6 +45,7 @@ class SendProjectEmailsService(object):
             'comment': self.notification.description if self.notification else None,
             'project_statement': self.project.project_statement,
             'site': self.site,
+            'STATIC_URL': settings.STATIC_URL
         })
 
         self.context = kwargs

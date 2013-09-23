@@ -90,6 +90,7 @@
 			</div>
 			<hr>
 
+			{% if object.data.companies_advised %}
 			<div class="startups domain-links">
 				<h2 class="">Startups Advised</h2>
 				{% for o in object.companies_advised %}
@@ -100,6 +101,8 @@
 					</ul>
 				{% endfor %}
 			</div>
+			{% endif %}
+			{% if object.data.websites %}
 			<div class="startups domain-links">
 				<hr />
 				<h2 class="">Other Websites</h2>
@@ -111,6 +114,7 @@
 					</ul>
 				{% endfor %}
 			</div>
+			{% endif %}
 		</div>
 		<div class="col col-lg-6 col-offset-3">
  			<hr>

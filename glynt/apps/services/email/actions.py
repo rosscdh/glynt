@@ -1,17 +1,20 @@
 # -*- coding: UTF-8 -*-
 from . import BaseEmailService
 
+import logging
+logger = logging.getLogger('lawpal.services')
+
 
 class NewActionEmailService(BaseEmailService):
     """
     Email Service
     Inform the relevant parties of a new action
     """
-    actor=None
-    object=None
-    project=None
-    verb=None
-    whitelist_actions=[
+    actor = None
+    target = None
+    project = None
+    verb = None
+    whitelist_actions = [
         'todo.attachment.created',
         'todo.comment.created',
         'feedbackrequest.opened',
@@ -20,16 +23,17 @@ class NewActionEmailService(BaseEmailService):
     ]
 
     def __init__(self, **kwargs):
-        self.actor = kwargs.get('actor', self.actor)
-        self.object = kwargs.get('object', self.object)
-        self.project = kwargs.get('project', self.project)
-        self.verb = kwargs.get('verb', self.verb)
+        self.actor = kwargs.pop('actor', None)
 
+        self.target = kwargs.pop('target', None)
+        self.project = kwargs.pop('project', None)
+        self.verb = kwargs.pop('verb', None)
+        
         super(NewActionEmailService, self).__init__(**kwargs)
 
         self.context.update({
             'actor': self.actor,
-            'object': self.object,
+            'object': self.target,
             'project': self.project,
         })
 
@@ -43,4 +47,6 @@ class NewActionEmailService(BaseEmailService):
 
     def send(self, **kwargs):
         if self.can_send:
+            logger.debug('Can Send Email {verb}'.format(verb=self.verb))
+
             super(NewActionEmailService, self).send(**kwargs)
