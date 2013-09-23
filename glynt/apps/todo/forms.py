@@ -15,6 +15,10 @@ from glynt.apps.default.mixins import AngularAttribsFormFieldsMixin
 
 from glynt.apps.todo.models import ToDo
 
+# for decoding url entiteis
+from urllib import unquote
+import HTMLParser
+
 import logging
 logger = logging.getLogger('django.request')
 
@@ -96,7 +100,10 @@ class CustomerToDoForm(AngularAttribsFormFieldsMixin, forms.ModelForm):
 
         # Show the category dropdown only when its a new and or posted item
         if self.is_create or self.request.POST.get('category', None) is not None:
-            self.fields['category'] = forms.ChoiceField(initial=self.request.GET.get('category', self.request.POST.get('category', self.instance.category)), choices=self.project_service.category_initial())
+            htmlparser = HTMLParser.HTMLParser()
+            initial_category = self.request.GET.get('category', self.request.POST.get('category', self.instance.category))
+            self.fields['category'] = forms.ChoiceField(initial=htmlparser.unescape(unquote(initial_category)), choices=self.project_service.category_initial())
+
         else:
             del self.fields['category']
             self._meta.exclude += ['category']

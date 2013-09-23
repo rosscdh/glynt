@@ -28,6 +28,7 @@ angular.module('lawpal').factory( "lawPalUrls", [ function()
 
 				var url = getUrl( ["checklist", "item", "create"] );
 				if( url ) {
+					category = category.escapeHTML().escapeURL(true);
 					url = url.replace(":project_uuid", projectUuid).replace(":categoryLabel", category );
 
 					return url;
