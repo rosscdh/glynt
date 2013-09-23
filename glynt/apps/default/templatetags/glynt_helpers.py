@@ -3,6 +3,8 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django import template
 
+from glynt.apps.utils import CURRENT_SITE
+
 import hmac
 import hashlib
 import time
@@ -12,7 +14,6 @@ register = template.Library()
 import logging
 logger = logging.getLogger('django.request')
 
-CURRENT_SITE = Site.objects.get_current()
 
 
 @register.simple_tag

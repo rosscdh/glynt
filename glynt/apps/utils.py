@@ -29,6 +29,11 @@ API_URLS = {
     'companies': '/api/v1/company/lite/?format=json&limit=15',
 }
 
+_CURRENT_SITE = None
+def CURRENT_SITE():
+    if _CURRENT_SITE is None:
+        _CURRENT_SITE = Site.objects.get_current()
+    return _CURRENT_SITE
 
 def generate_unique_slug(instance=None):
     """ Generate the unique slug for a model instance """

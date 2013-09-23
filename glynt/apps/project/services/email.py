@@ -12,7 +12,6 @@ import logging
 logger = logging.getLogger('lawpal.services')
 
 site_email = settings.DEFAULT_FROM_EMAIL
-CURRENT_SITE = Site.objects.get_current()
 
 
 class SendProjectEmailsService(object):
@@ -42,7 +41,6 @@ class SendProjectEmailsService(object):
             'message': self.message,
             'comment': self.notification.description if self.notification else None,
             'project_statement': self.project.project_statement,
-            'site': self.site,
             'STATIC_URL': settings.STATIC_URL
         })
 
