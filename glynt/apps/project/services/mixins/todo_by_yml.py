@@ -84,7 +84,7 @@ class ToDoItemsFromYamlMixin(object):
             if num_items > 0:
                 # need to repeat this segment X times by
                 # field_name specified
-                #import pdb;pdb.set_trace()
+
                 for num in xrange(0, num_items):
                     # contextualize and replace the textual values
                     display_num = num + 1

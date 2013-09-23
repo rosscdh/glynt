@@ -59,7 +59,6 @@ class ChecklistLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
         self.assertEqual(resp.status_code, 302)
 
     def test_checklist_lawyer_access(self):
-        #import pdb;pdb.set_trace()
         self.client.login(username=self.lawyer_user.username, password=self.password)
 
         resp = self.client.get(reverse('dashboard:checklist', kwargs={'uuid': self.project.uuid}))
