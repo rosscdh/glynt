@@ -54,7 +54,6 @@ class CrispyExFieldsetFieldRemovalMixin(object):
                 specified_fields = set(specified_fields)  # convert to a set
 
                 for f in form_fields:
-                    #import pdb; pdb.set_trace()
                     if f not in specified_fields:
                         del self.fields[f]
 
