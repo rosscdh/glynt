@@ -1,6 +1,13 @@
 # -*- coding: UTF-8 -*-
 from django.conf.urls import patterns, url
 from django.contrib import admin
+from django.contrib.admin.util import unquote
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+
+from bunch import Bunch
+from templated_email import send_templated_mail
 
 from glynt.apps.project.models import Project, ProjectLawyer
 
@@ -26,7 +33,8 @@ class ProjectAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super(ProjectAdmin, self).get_urls()
 
-        my_urls = patterns('',
+        my_urls = patterns(
+            '',
             url(
                 r'^(.+)/send_matches_email/$',
                 self.admin_site.admin_view(self.send_matches_email_view),
@@ -38,7 +46,24 @@ class ProjectAdmin(admin.ModelAdmin):
 
     def send_matches_email_view(self, request, object_id, extra_context=None):
         "The 'send matches email' admin view for this model."
-        pass
+        model = self.model
+        project = get_object_or_404(self.get_queryset(request), pk=unquote(object_id))
+
+        email = Bunch(
+            template_name='project_matches',
+            from_email='noreply@lawpal.com',
+            recipient_list=['jamie@lawpal.com'],
+            bcc=['founders@lawpal.com'],
+            context={
+                'lawyers': project.lawyers.all()
+            }
+        )
+
+        send_templated_mail(**email)
+
+        post_url = reverse('admin:project_project_changelist', current_app=self.admin_site.name)
+
+        return HttpResponseRedirect(post_url)
 
 
 class ProjectLawyerAdmin(admin.ModelAdmin):
