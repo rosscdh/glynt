@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
-from django.contrib.sites.models import Site
 from django import template
 
 from glynt.apps.utils import CURRENT_SITE
@@ -15,6 +14,8 @@ import logging
 logger = logging.getLogger('django.request')
 
 
+_CURRENT_SITE = CURRENT_SITE()
+
 
 @register.simple_tag
 def current_date_format():
@@ -24,14 +25,14 @@ current_date_format.is_safe = True
 
 @register.simple_tag
 def current_site_domain():
-    return CURRENT_SITE.domain
+    return _CURRENT_SITE.domain
 current_site_domain.is_safe = True
 
 
 @register.simple_tag
 def ABSOLUTE_STATIC_URL(path=None):
     path = '' if path is None else path
-    url = '{domain}{STATIC_URL}{path}'.format(domain=CURRENT_SITE.domain,
+    url = '{domain}{STATIC_URL}{path}'.format(domain=_CURRENT_SITE.domain,
                                               STATIC_URL=settings.STATIC_URL,
                                               path=path)
     return url
