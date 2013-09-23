@@ -149,5 +149,10 @@ class ProjectLawyer(models.Model):
     def display_status(self):
         return self.LAWYER_STATUS.get_desc_by_value(self.status)
 
+    def notification_recipients(self):
+        """
+        """
+        return [self.project.customer.user, self.lawyer.user]
+
     def get_absolute_url(self):
         return None
