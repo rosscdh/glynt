@@ -1,0 +1,58 @@
+{% load glynt_helpers %}
+
+<h2 style="color: #6c797c !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5em; padding: 0;"><strong>About the startup</strong>:</h2>
+<ul style="color: #6c797c !important;">
+    <li style="margin-left: 0;">
+        <p style="font-size: 14px;"><span style="color: #999999;">Incubator:</span> {{ project_data.incubator }}</p>
+    </li>
+    <li style="margin-left: 0;">
+        {% if project_data.current_status == '1' %}
+            <p style="font-size: 14px;"><span style="color: #999999;">Current funding status:</span> Pre-funding</p>
+        {% elif project_data.current_status == '2' %}
+            <p style="font-size: 14px;"><span style="color: #999999;">Current funding status:</span> Currently fund raising</p>
+        {% elif project_data.current_status == '3' %}
+            <p style="font-size: 14px;"><span style="color: #999999;">Current funding status:</span> Have term sheet</p>
+        {% elif project_data.current_status == '4' %}
+            <p style="font-size: 14px;"><span style="color: #999999;">Current funding status:</span> Already funded</p>
+        {% endif %}
+    </li>
+    <li style="margin-left: 0;">
+        <p style="font-size: 14px;"><span style="color: #999999;">Where will they do business:</span> {{ project_data.target_states_and_countries }}</p>
+    </li>
+    <li style="margin-left: 0;">
+        <p style="font-size: 14px;"><span style="color: #999999;">Number of Directors and Officers:</span> {{ project_data.num_officers }}</p>
+    </li>
+    <li style="margin-left: 0;">
+        <p style="font-size: 14px;"><span style="color: #999999;">Number of employees:</span> {{ project_data.num_employees }}</p>
+    </li>
+    <li style="margin-left: 0;">
+        <p style="font-size: 14px;"><span style="color: #999999;">Number of consultants:</span> {{ project_data.num_consultants }}</p>
+    </li>
+    <li style="margin-left: 0;">
+        {% if project_data.option_plan_status == '1' %}
+            <p style="font-size: 14px;">We already have an option plan in place</p>
+        {% elif project_data.option_plan_status == '2' %}
+            <p style="font-size: 14px;">We would like to implement an option plan</p>
+        {% elif project_data.option_plan_status == '3' %}
+            <p style="font-size: 14px;">We do not need an option at this time</p>
+        {% endif %}
+    </li>
+    <li style="margin-left: 0;">
+        <p style="font-size: 14px;"><span style="color: #999999;">Number of option holders:</span> {{ project_data.num_option_holders }}</p>
+    </li>
+    {% if project_data.ip_nolonger_affiliated %}
+        <li style="margin-left: 0;">
+            <p style="font-size: 14px;">Someone involved in the creation of IP is no longer affiliated with the Company</p>
+        </li>
+    {% endif %}
+    {% if project_data.ip_otherthan_founder %}
+        <li style="margin-left: 0;">
+            <p style="font-size: 14px;">Someone other than the founders listed was involved in the creation of IP</p>
+        </li>
+    {% endif %}
+    {% if project_data.ip_university_affiliation %}
+        <li style="margin-left: 0;">
+            <p style="font-size: 14px;">Someone involved in the creation of IP was affiliated with a university at the time</p>
+        </li>
+    {% endif %}
+</ul>

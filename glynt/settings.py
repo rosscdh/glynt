@@ -397,7 +397,7 @@ INTERCOM_API_SECRET = '-sjPyiyI5P44z3QsHLDUWfoLK8Rml7Wbg2wmj64L'
 
 
 ACTSTREAM_SETTINGS = {
-    'MODELS': ('auth.user', 'project.project', 'todo.todo', 'todo.attachment', 'threadedcomments.threadedcomment'),
+    'MODELS': ('auth.user', 'project.project', 'project.projectlawyer', 'todo.todo', 'todo.attachment', 'threadedcomments.threadedcomment'),
     'MANAGER': 'glynt.apps.streams.LawpalStreamActionManager',
     'FETCH_RELATIONS': True,
     'USE_PREFETCH': True,

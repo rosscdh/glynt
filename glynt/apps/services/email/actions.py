@@ -15,11 +15,13 @@ class NewActionEmailService(BaseEmailService):
     project = None
     verb = None
     whitelist_actions = [
+        'project.comment.created',
+        'project.lawyer_engage.comment.created',
+        'project.lawyer_assigned',
         'todo.attachment.created',
         'todo.comment.created',
         'feedbackrequest.opened',
         'feedbackrequest.closed',
-        'project.lawyer_assigned',
     ]
 
     def __init__(self, **kwargs):
@@ -38,15 +40,5 @@ class NewActionEmailService(BaseEmailService):
         })
 
     @property
-    def can_send(self):
-        return self.verb in self.whitelist_actions
-
-    @property
     def email_template(self):
         return 'actions/{template}'.format(template=self.verb)
-
-    def send(self, **kwargs):
-        if self.can_send:
-            logger.debug('Can Send Email {verb}'.format(verb=self.verb))
-
-            super(NewActionEmailService, self).send(**kwargs)

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import get_object_or_404
+from django.template.defaultfilters import slugify
 from django.views.generic import View, ListView, UpdateView, DetailView
 from django.views.generic.edit import ModelFormMixin
 from django.views.generic.detail import SingleObjectMixin
@@ -79,6 +80,7 @@ class ProjectToDoView(RulezMixin, ToDoCountMixin, ListView):
             'feedback_requests': self.feedback_requests,
             'is_lawyer': user_profile.is_lawyer,
             'is_customer': user_profile.is_customer,
+            'checklist_categories': [{'label': c, 'slug': slugify(c) } for c in self.checklist_service.categories]
         })
         # append counts
         context.update(self.todo_counts(qs_objects=self.model.objects))

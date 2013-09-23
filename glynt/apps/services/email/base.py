@@ -33,6 +33,8 @@ class BaseEmailService(object):
     from_email = None
     to_email = None
 
+    whitelist_actions = ['*']
+
     def __init__(self, **kwargs):
         self._subject = kwargs.get('subject', self._subject)
         self._message = kwargs.get('message', self._message)
@@ -96,37 +98,41 @@ class BaseEmailService(object):
     def process(self, **kwargs):
         return self.send(**kwargs)
 
+    @property
+    def can_send(self):
+        return '*' in self.whitelist_actions or self.verb in self.whitelist_actions
+
     def send(self, **kwargs):
-        self._subject = kwargs.get('subject', self._subject)
-        self._message = kwargs.get('message', self._message)
-        logger.debug('Preparing to send email: {subject} to {recipients}'.format(subject=self._subject, recipients=self.recipients))
+        if self.can_send:
+            logger.debug('Can Send Email {verb}'.format(verb=self.verb))
 
-        # merge kwargs into context
-        self.context.update(kwargs)
+            self._subject = kwargs.get('subject', self._subject)
+            self._message = kwargs.get('message', self._message)
+            logger.debug('Preparing to send email: {subject} to {recipients}'.format(subject=self._subject, recipients=self.recipients))
 
-        # Loop over the recipients list
-        for to_name, to_email in self.recipients:
+            # merge kwargs into context
+            self.context.update(kwargs)
 
-            self.context.update({
-                'to_name': to_name,
-                'to_email': to_email,
-            })
-            # Update subject
-            self.context.update({
-                'subject': self.subject,
-                'message': self.message,
-            })
+            # Loop over the recipients list
+            for to_name, to_email in self.recipients:
 
-            logger.info('Sending Email to: {to} email_template: {email_template} with context: {context}'.format(to=self.to_email, email_template=self.email_template, context=self.context))
+                self.context.update({
+                    'to_name': to_name,
+                    'to_email': to_email,
+                })
+                # Update subject
+                self.context.update({
+                    'subject': self.subject,
+                    'message': self.message,
+                })
 
-            email = Bunch(template_name=self.email_template,
-                          template_prefix=self.base_email_template_location,
-                          from_email='{from_name} via LawPal <{from_email}>'.format(from_name=self.from_name, from_email=self.from_email),
-                          recipient_list=[to_email],
-                          bcc=['founders@lawpal.com'],
-                          context=self.context)
+                logger.info('Sending Email to: {to} email_template: {email_template} with context: {context}'.format(to=self.to_email, email_template=self.email_template, context=self.context))
 
-            if settings.DEBUG == True:
-                email.pop('bcc')
+                email = Bunch(template_name=self.email_template,
+                              template_prefix=self.base_email_template_location,
+                              from_email='{from_name} via LawPal <{from_email}>'.format(from_name=self.from_name, from_email=self.from_email),
+                              recipient_list=[to_email],
+                              bcc=['founders@lawpal.com'] if settings.DEBUG is False else [],  # only bcc us in on live mails
+                              context=self.context)
 
-            send_templated_mail(**email)
+                send_templated_mail(**email)

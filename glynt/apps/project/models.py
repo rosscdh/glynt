@@ -110,12 +110,16 @@ class Project(models.Model):
         return PROJECT_STATUS.new == self.status
 
     @property
+    def transaction_slugs(self):
+        return [t.slug for t in self.transactions.all()]
+
+    @property
     def transaction_types(self):
         return [t.title for t in self.transactions.all()]
 
     @property
     def tx_range(self):
-        return ','.join([t.slug for t in self.transactions.all()])
+        return ','.join(self.transaction_slugs)
 
     @property
     def display_status(self):
@@ -148,6 +152,11 @@ class ProjectLawyer(models.Model):
     @property
     def display_status(self):
         return self.LAWYER_STATUS.get_desc_by_value(self.status)
+
+    def notification_recipients(self):
+        """
+        """
+        return [self.project.customer.user, self.lawyer.user]
 
     def get_absolute_url(self):
         return None
