@@ -16,7 +16,9 @@ class ToDoItemsFromYamlMixin(object):
         todos_by_cat = OrderedDict()
 
         for c in self.checklist:
+
             if hasattr(c.todos, 'items'):
+
                 for category, item in c.todos.items():
 
                     self.handle_repeater(item=item)
