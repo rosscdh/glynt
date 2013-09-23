@@ -114,23 +114,45 @@ def on_comment_created(sender, **kwargs):
     Handle Creation of attachments
     """
     if not isinstance(sender, LogEntry):
+        send = False
         is_new = kwargs.get('created', False)
         comment = kwargs.get('instance')
 
         if comment and is_new:
-            # If its a comment on a ToDo Object
-            if type(comment.content_object) == ToDo:
-                todo = comment.content_object
-                verb = '{name} commented on checklist item {todo} for {project}'.format(name=comment.user.get_full_name(), project=todo.project, todo=todo.name)
-                action.send(comment.user,
-                            verb=verb,
-                            action_object=comment,
-                            target=todo,
-                            content=comment.comment,
-                            event='todo.comment.created')
+            content_object_type = type(comment.content_object)
+            logger.debug('New Comment on object type: {content_object_type}'.format(content_object_type=content_object_type))
 
+            # If its a comment on a ToDo Object
+            if content_object_type == ToDo:
+                send = True
+                target = todo = comment.content_object
+                event = 'todo.comment.created'
+                verb = '{name} commented on checklist item {todo} for {project}'.format(name=comment.user.get_full_name(), project=todo.project, todo=todo.name)
+
+                # update the ToDo Status as its been interacted with
                 todostatus_service = ToDoStatusService(todo_item=todo)
                 todostatus_service.process()
+
+            elif content_object_type == Project:
+                send = True
+                target = project = comment.content_object
+                event = 'project.comment.created'
+                verb = '{name} commented on the {project} project'.format(name=comment.user.get_full_name(), project=project)
+
+            elif content_object_type == ProjectLawyer:
+                send = True
+                target = comment_target = comment.content_object
+                event = 'project.lawyer_engage.comment.created'
+                verb = '{name} commented on the Lawyer Engagement conversation for {project}'.format(name=comment.user.get_full_name(), project=comment_target.project)
+
+        if send is True:
+            logger.debug('send action: {event} {verb} content: {content}'.format(event=event, verb=verb, content=comment.comment))
+            action.send(comment.user,
+                        verb=verb,
+                        action_object=comment,
+                        target=target,
+                        content=comment.comment,
+                        event=event)
 
 """
 Feedback Request Change Events
@@ -302,21 +324,21 @@ def on_action_created(sender, **kwargs):
         action = kwargs.get('instance')
         target = action.target
 
-        if hasattr(target, 'pusher_id'):
-            if action and is_new:
+        if action and is_new:
 
-                event = action.data.get('event', 'action.created')
+            event = action.data.get('event', 'action.created')
 
-                user_name = action.actor.get_full_name()
-                user_email = action.actor.email
+            user_name = action.actor.get_full_name()
+            user_email = action.actor.email
 
-                info_object = Bunch(name=user_name,
-                                        verb=action.verb,
-                                        target_name=unicode(action),
-                                        timestamp='',
-                                        **action.data)
+            info_object = Bunch(name=user_name,
+                                    verb=action.verb,
+                                    target_name=unicode(action),
+                                    timestamp='',
+                                    **action.data)
 
-                # if the target has a project attached to it
+            # if the target has a project attached to it
+            if hasattr(target, 'pusher_id'):
                 if hasattr(target, 'project'):
                     # send the same event to the project channel
                     # so that the other project channel subscribers
@@ -328,23 +350,40 @@ def on_action_created(sender, **kwargs):
 
                 pusher_service.process(label=action.verb, comment=action.verb, **info_object)
 
-                recipients = None
-                url = None
+            recipients = None
+            url = None
 
-                if type(target) == ToDo:
-                    logger.debug('action.target is a ToDo object')
-                    recipients = action.target.project.notification_recipients()
-                    url = action.target.get_absolute_url()
+            target_type = type(target)
 
-                if recipients:
-                    logger.debug('recipients: {recipients}'.format(recipients=recipients))
-                    email = NewActionEmailService(
-                        verb=event,
-                        from_name=user_name,
-                        from_email=user_email,
-                        recipients=recipients,
-                        actor=action.actor,
-                        target=target,
-                        project=target.project,
-                    )
-                    email.send(url=url, message=action.verb)
+            if target_type == Project:
+                logger.debug('action.target is a Project object')
+                project = target
+                recipients = project.notification_recipients()
+                url = project.get_absolute_url()
+
+            elif target_type == ProjectLawyer:
+                logger.debug('action.target is a ProjectLawyer object')
+                project = target.project
+                recipients = target.notification_recipients()
+                url = project.get_absolute_url() # @TODO need to change this to be the actual engagement element link and write a js trigger to show the modal
+
+            elif target_type == ToDo:
+                logger.debug('action.target is a ToDo object')
+                project = action.target.project
+                recipients = project.notification_recipients()
+                url = project.get_absolute_url()
+
+
+            if recipients:
+                logger.debug('recipients: {recipients}'.format(recipients=recipients))
+                email = NewActionEmailService(
+                    verb=event,
+                    from_name=user_name,
+                    from_email=user_email,
+                    recipients=recipients,
+                    actor=action.actor,
+                    target=target,
+                    project=project,
+                    **action.data  # append kwargs sent in via: https://django-activity-stream.readthedocs.org/en/latest/data.html
+                )
+                email.send(url=url, message=action.verb)
