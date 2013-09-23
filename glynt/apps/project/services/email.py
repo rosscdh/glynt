@@ -5,6 +5,8 @@ from django.contrib.sites.models import Site
 
 from glynt.apps.project import PROJECT_STATUS
 
+from glynt.apps.project.services.mixins import JavascriptRegionCloneMixin
+
 from templated_email import send_templated_mail
 from bunch import Bunch
 
@@ -78,7 +80,7 @@ class SendProjectEmailsService(object):
         )
 
 
-class SendNewProjectEmailsService(SendProjectEmailsService):
+class SendNewProjectEmailsService(SendProjectEmailsService, JavascriptRegionCloneMixin):
     mail_template_name = 'project_created'
 
     def __init__(self, project, sender, **kwargs):
@@ -90,8 +92,10 @@ class SendNewProjectEmailsService(SendProjectEmailsService):
             'subject': '{company} created a new project'.format(company=company),
             'customer': self.project.customer,
             'company': company,
+            'founders': self.parse_repeater_dict(items=self.project.data.get('founders')),
             'project_data': self.project.data,
-            'transactions': ', '.join(self.project.transaction_types),
+            'transaction_slugs': self.project.transaction_slugs,
+            'transaction_types': ', '.join(self.project.transaction_types),
         })
 
     @property
