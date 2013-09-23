@@ -110,7 +110,7 @@
         "is_lawyer": {{ is_lawyer|jsonify }},
         "is_customer": {{ is_customer|jsonify }},
         "checklist_categories": function() {
-            return [{% for c in checklist.categories %}{% if forloop.counter != 1 %},{% endif %}{ "label": "{{c}}", "slug": "{{ c|slugify }}" } {% endfor %}];
+            return {{ checklist_categories|jsonify }};
         },
         "getEndpoint": function() {
             var urls = {
