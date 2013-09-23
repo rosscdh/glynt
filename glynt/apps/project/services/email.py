@@ -27,7 +27,6 @@ class SendProjectEmailsService(object):
         self.sender_is_lawyer = sender.profile.is_lawyer
         self.recipients = recipients
         self.notification = notification
-        self.site = CURRENT_SITE
 
         kwargs.update({
             'is_new': self.is_new_project,
