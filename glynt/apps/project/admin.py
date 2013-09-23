@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+from django.conf.urls import patterns, url
 from django.contrib import admin
 
 from glynt.apps.project.models import Project, ProjectLawyer
@@ -15,12 +16,29 @@ class ProjectAdmin(admin.ModelAdmin):
     list_filter = ['status', 'transactions']
     search_fields = ('company', 'customer', 'lawyers', 'transactions')
 
-    def queryset(self, request):
+    def get_queryset(self, request):
         qs = Project.objects.select_related('company', 'customer', 'customer__user').all()
         ordering = self.get_ordering(request)
         if ordering:
             qs = qs.order_by(*ordering)
         return qs
+
+    def get_urls(self):
+        urls = super(ProjectAdmin, self).get_urls()
+
+        my_urls = patterns('',
+            url(
+                r'^(.+)/send_matches_email/$',
+                self.admin_site.admin_view(self.send_matches_email_view),
+                name='project_project_send_matches_email'
+            ),
+        )
+
+        return my_urls + urls
+
+    def send_matches_email_view(self, request, object_id, extra_context=None):
+        "The 'send matches email' admin view for this model."
+        pass
 
 
 class ProjectLawyerAdmin(admin.ModelAdmin):
@@ -28,7 +46,7 @@ class ProjectLawyerAdmin(admin.ModelAdmin):
     list_filter = ['status']
     search_fields = ('project', 'lawyer',)
 
-    def queryset(self, request):
+    def get_queryset(self, request):
         qs = ProjectLawyer.objects.select_related('project__company', 'project__customer', 'project__customer__user').all()
         ordering = self.get_ordering(request)
         if ordering:
