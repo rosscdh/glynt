@@ -26,7 +26,7 @@
 
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.plugin.fluent_comments.js"></script>
     <div id="wrap">
         <!-- Nav -->
         {% block navbar %}{% include 'partials/nav.html' %}{% endblock %}
@@ -82,7 +82,6 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/services/LawPalUrls.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/services/LawPalDialog.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/services/PusherService.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.plugin.fluent_comments.js"></script>
 
     <script type="text/javascript">{% profile_card_js %}</script>
 {% endcompress %}
