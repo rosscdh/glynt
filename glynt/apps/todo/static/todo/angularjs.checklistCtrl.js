@@ -21,8 +21,14 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		'pusher': {},
 		'categorySort': {
     		'update': function(e, ui) {
-    			$scope.saveCategoryOrder( e, ui );
-    		}
+    			$scope.config.categorySort.updatePending = true;
+    		},
+    		'stop': function(e, ui) {
+    			if($scope.config.categorySort.updatePending)
+    				$scope.saveCategoryOrder( e, ui );
+    			$scope.config.categorySort.updatePending = false;
+    		},
+    		'updatePending': false
 		 }
 	}
 

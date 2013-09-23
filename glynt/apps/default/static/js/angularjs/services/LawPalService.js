@@ -65,7 +65,8 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			var options = { "id": projectId };
 			var cats = reOrderedCategories.map( 
 				function( item, i ) { 
-					return  { "label": item.label.unescapeHTML(), "order": i }; 
+					//return  { "label": item.label.unescapeHTML(), "order": i }; 
+					return  item.label.unescapeHTML(); 
 				}
 			);
 			var data = { "project": projectId, "categories": cats };
