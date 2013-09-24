@@ -59,8 +59,9 @@ class DashboardView(ToDoCountMixin, TemplateView):
         })
 
     def customer_context(self, project):
-        intake_complete = ProjectIntakeFormIsCompleteBunch(project=self.request.project)
-        profile_is_complete = intake_complete.is_valid()
+        if project is not None:
+            intake_complete = ProjectIntakeFormIsCompleteBunch(project=project)
+            profile_is_complete = intake_complete.is_valid()
 
         return {
             'profile_is_complete': profile_is_complete,
@@ -80,12 +81,13 @@ class DashboardView(ToDoCountMixin, TemplateView):
         else:
             project = get_object_or_404(Project, uuid=self.project_uuid)
 
-        kwargs.update({
-            'project': project,
-        })
+        if project is not None:
+            kwargs.update({
+                'project': project,
+            })
 
-        # append counts
-        kwargs.update(self.todo_counts(qs_objects=project.todo_set, project=project))
+            # append counts
+            kwargs.update(self.todo_counts(qs_objects=project.todo_set, project=project))
 
         if self.request.user.profile.is_customer:
             kwargs.update(
