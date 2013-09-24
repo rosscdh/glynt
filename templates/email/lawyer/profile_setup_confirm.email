@@ -11,6 +11,5 @@ Login at :
 Registered email address :
 {{ to_email }}
 
-
-{% include 'email/footer.email' %}
+{% include 'email/partials/footer.email' %}
 {% endblock %}

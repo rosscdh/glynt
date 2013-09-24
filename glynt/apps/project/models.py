@@ -159,4 +159,4 @@ class ProjectLawyer(models.Model):
         return [self.project.customer.user, self.lawyer.user]
 
     def get_absolute_url(self):
-        return None
+        return reverse('project:project_contact', kwargs={'slug': self.project.uuid, 'lawyer': self.lawyer.user.username})

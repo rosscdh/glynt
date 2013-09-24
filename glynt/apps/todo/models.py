@@ -89,7 +89,7 @@ class ToDo(models.Model):
     def get_absolute_url(self):
         # need to import this HERE for some reason?
         from django.core.urlresolvers import reverse
-        return reverse('todo:edit', kwargs={'project_uuid': self.project.uuid.__unicode__(), 'slug': self.slug})
+        return reverse('todo:edit', kwargs={'project_uuid': self.project.uuid, 'slug': self.slug})
 
 registry.register("can_read", ToDo)
 registry.register("can_edit", ToDo)
