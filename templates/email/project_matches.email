@@ -20,60 +20,23 @@
             <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-top: 1px solid #cad1cf;">
                 {% for lawyer in lawyers %}
                     <tr>
-                        <td class="list-cell small-width" width="20" style="background: #f8f9f9; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">&nbsp;</td>
-                        <td class="list-cell avatar-cell" valign="top" width="74" style="background: #f8f9f9; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">
-                            <img class="avatar" alt="Joe Bloggs" height="64" src="https://si0.twimg.com/profile_images/378800000173380922/721c0781c8b10d03a5f50a4ef08c3979_bigger.jpeg" style="display: block;" width="64">
+                        <td class="list-cell small-width" width="20" style="background: {% cycle '#f8f9f9' '#fff' %}; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">&nbsp;</td>
+                        <td class="list-cell avatar-cell" valign="top" width="74" style="background: {% cycle '#f8f9f9' '#fff' %}; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">
+                            <img class="avatar" alt="{{ lawyer.user.get_full_name }}" height="64" src="{{ lawyer.photo }}" style="display: block;" width="64">
                         </td>
-                        <td class="list-cell" valign="middle" style="background: #f8f9f9; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">
+                        <td class="list-cell" valign="middle" style="background: {% cycle '#f8f9f9' '#fff' %}; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">
                             <div>
                                 <a href="#" class="list-link" style="color: #1d1d21 !important; display: block; font-size: 16px; font-weight: bold; margin: 0 0 5px; padding: 0; text-decoration: none !important;">{{ lawyer.user.get_full_name }}</a>
                             </div>
                             <p>{{ lawyer.position }} at {{ lawyer.firm_name }}</p>
                         </td>
-                        <td class="list-cell small-width to-hide" width="20" style="background: #f8f9f9; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">&nbsp;</td>
-                        <td class="list-cell to-hide" valign="middle" width="100" style="background: #f8f9f9; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">
-                            <a href="#" target="_blank" style="background-color: #5bc0de; border-color: #5bc0de; border-style: solid; border-width: 7px 24px; color: #ffffff; display: inline-block; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 12px; font-weight: normal; margin: 4px 0; text-decoration: none; white-space: nowrap;">View profile</a>
+                        <td class="list-cell small-width to-hide" width="20" style="background: {% cycle '#f8f9f9' '#fff' %}; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">&nbsp;</td>
+                        <td class="list-cell to-hide" valign="middle" width="100" style="background: {% cycle '#f8f9f9' '#fff' %}; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">
+                            <a href="{% current_site_domain %}{{ lawyer.get_absolute_url }}" target="_blank" style="background-color: #5bc0de; border-color: #5bc0de; border-style: solid; border-width: 7px 24px; color: #ffffff; display: inline-block; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 12px; font-weight: normal; margin: 4px 0; text-decoration: none; white-space: nowrap;">View profile</a>
                         </td>
-                        <td class="list-cell small-width to-hide" width="20" style="background: #f8f9f9; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">&nbsp;</td>
+                        <td class="list-cell small-width to-hide" width="20" style="background: {% cycle '#f8f9f9' '#fff' %}; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">&nbsp;</td>
                     </tr>
                 {% endfor %}
-
-                {% comment %}
-                <tr>
-                    <td class="list-cell small-width" width="20" style="background: #fff; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">&nbsp;</td>
-                    <td class="list-cell avatar-cell" valign="top" width="74" style="background: #fff; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">
-                        <img class="avatar" alt="Joe Bloggs" height="64" src="https://si0.twimg.com/profile_images/378800000173380922/721c0781c8b10d03a5f50a4ef08c3979_bigger.jpeg" style="display: block;" width="64">
-                    </td>
-                    <td class="list-cell" valign="middle" style="background: #fff; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">
-                        <div>
-                            <a href="#" class="list-link" style="color: #1d1d21 !important; display: block; font-size: 16px; font-weight: bold; margin: 0 0 5px; padding: 0; text-decoration: none !important;">Lawyer Name</a>
-                        </div>
-                        <p>Position at Firm Name, LLP</p>
-                    </td>
-                    <td class="list-cell small-width to-hide" width="20" style="background: #fff; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">&nbsp;</td>
-                    <td class="list-cell to-hide" valign="middle" width="100" style="background: #fff; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">
-                        <a href="#" target="_blank" style="background-color: #5bc0de; border-color: #5bc0de; border-style: solid; border-width: 7px 24px; color: #ffffff; display: inline-block; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 12px; font-weight: normal; margin: 4px 0; text-decoration: none; white-space: nowrap;">View profile</a>
-                    </td>
-                    <td class="list-cell small-width to-hide" width="20" style="background: #fff; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">&nbsp;</td>
-                </tr>
-                <tr>
-                    <td class="list-cell small-width" width="20" style="background: #f8f9f9; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">&nbsp;</td>
-                    <td class="list-cell avatar-cell" valign="top" width="74" style="background: #f8f9f9; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">
-                        <img class="avatar" alt="Joe Bloggs" height="64" src="https://si0.twimg.com/profile_images/378800000173380922/721c0781c8b10d03a5f50a4ef08c3979_bigger.jpeg" style="display: block;" width="64">
-                    </td>
-                    <td class="list-cell" valign="middle" style="background: #f8f9f9; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">
-                        <div>
-                            <a href="#" class="list-link" style="color: #1d1d21 !important; display: block; font-size: 16px; font-weight: bold; margin: 0 0 5px; padding: 0; text-decoration: none !important;">Lawyer Name</a>
-                        </div>
-                        <p>Position at Firm Name, LLP</p>
-                    </td>
-                    <td class="list-cell small-width to-hide" width="20" style="background: #f8f9f9; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">&nbsp;</td>
-                    <td class="list-cell to-hide" valign="middle" width="100" style="background: #f8f9f9; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">
-                        <a href="#" target="_blank" style="background-color: #5bc0de; border-color: #5bc0de; border-style: solid; border-width: 7px 24px; color: #ffffff; display: inline-block; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 12px; font-weight: normal; margin: 4px 0; text-decoration: none; white-space: nowrap;">View profile</a>
-                    </td>
-                    <td class="list-cell small-width to-hide" width="20" style="background: #f8f9f9; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">&nbsp;</td>
-                </tr>
-                {% endcomment %}
             </table>
         </td>
     </tr>

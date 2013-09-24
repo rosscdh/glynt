@@ -53,9 +53,10 @@ class ProjectAdmin(admin.ModelAdmin):
             template_name='project_matches',
             from_email='noreply@lawpal.com',
             recipient_list=['jamie@lawpal.com'],
-            bcc=['founders@lawpal.com'],
+            # bcc=['founders@lawpal.com'],
             context={
-                'lawyers': project.lawyers.all()
+                'lawyers': project.lawyers.all(),
+                'url': reverse('dashboard:overview'),
             }
         )
 
