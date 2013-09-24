@@ -10,8 +10,6 @@ import time
 
 register = template.Library()
 
-_CURRENT_SITE = CURRENT_SITE()
-
 import logging
 logger = logging.getLogger('django.request')
 
@@ -24,6 +22,7 @@ current_date_format.is_safe = True
 
 @register.simple_tag
 def current_site_domain():
+    _CURRENT_SITE = CURRENT_SITE()
     return _CURRENT_SITE.domain
 current_site_domain.is_safe = True
 
