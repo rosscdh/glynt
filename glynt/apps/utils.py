@@ -31,7 +31,7 @@ API_URLS = {
 }
 
 def CURRENT_SITE():
-    return Site.objects.get_current()
+    return Site.objects.get(pk=settings.SITE_ID)
 
 def generate_unique_slug(instance=None):
     """ Generate the unique slug for a model instance """
