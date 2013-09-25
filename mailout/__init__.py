@@ -33,7 +33,7 @@ class UserGetOrCreateMixin(object):
     _access_token = None
     _user = None
     _email_hash = None
-    _h = httplib2.Http(".cache")
+    _h = httplib2.Http("/tmp/urllib.cache" if settings.DEBUG is True else None)
 
     @property
     def access_token(self):
