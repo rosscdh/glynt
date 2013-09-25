@@ -59,6 +59,8 @@ class DashboardView(ToDoCountMixin, TemplateView):
         })
 
     def customer_context(self, project):
+        profile_is_complete = False
+
         if project is not None:
             intake_complete = ProjectIntakeFormIsCompleteBunch(project=project)
             profile_is_complete = intake_complete.is_valid()
@@ -78,6 +80,8 @@ class DashboardView(ToDoCountMixin, TemplateView):
 
         if self.project_uuid is None:
             project = self.request.project
+            if project is None:
+                raise Http404
         else:
             project = get_object_or_404(Project, uuid=self.project_uuid)
 
