@@ -5,4 +5,19 @@ from . import MailoutConnectionBase
 
 
 class AbridgeMailoutService(MailoutConnectionBase):
-    pass
+    def create_event(self, content, **kwargs):
+        if kwargs is None:
+            kwargs = {}
+
+        event_data = {
+          "user_hash": self._user.get('user_hash'),
+          "project": settings.ABRIDGE_PROJECT,
+          "content": content,
+          "data": kwargs
+        }
+
+        resp, content = self.request(path='event/', data=event_data, method='POST')
+
+        if resp.status not in [201]:
+            raise Exception('Could not create_event {content}'.format(content=content))
+        return content

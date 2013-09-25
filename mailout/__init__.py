@@ -62,9 +62,16 @@ class UserGetOrCreateMixin(object):
             self._email_hash = hashlib.md5(self.user.email).hexdigest()
 
             resp, content = self._h.request(self.get_url(path='user/{email_hash}/'.format(email_hash=self._email_hash)), "GET")
-            
+
             if resp.status in [404]:
                 self._user = self.create_user()
+            else:
+                self._user = json.loads(content)
+
+        subscriptions = self._user.get('subscriptions', [])
+
+        if len(subscriptions) == 0 or ABRIDGE_PROJECT not in subscriptions:
+            self.subscribe()
 
         return self._user
 
@@ -78,6 +85,16 @@ class UserGetOrCreateMixin(object):
 
         return json.loads(content)
 
+    def subscribe(self):
+        subscription_data = {
+            'subscriptions': ABRIDGE_PROJECT
+        }
+
+        resp, content = self.request(path='user/{user_hash}/'.format(user_hash=self._user.get('user_hash')), data=subscription_data, method='PATCH')
+
+        if resp.status not in [200]:
+            raise Exception('Could not subscribe to {subscription}'.format(subscription=ABRIDGE_PROJECT))
+
 
 class MailoutConnectionBase(UserGetOrCreateMixin):
     client = None
@@ -90,14 +107,27 @@ class MailoutConnectionBase(UserGetOrCreateMixin):
         # append kwargs to class
         self.__dict__.update(kwargs)
 
+        self.mailout_user()
+
     def get_url(self, path):
         return '{base}{path}'.format(base=self.base_uri, path=path)
 
     def request(self, path, data=None, method='GET', **kwargs):
         headers = {
-                    'Authorization': 'Bearer 63f04de9e2ad088d29c8d418adc0206f996d307b',
-                    'Content-type': 'application/x-www-form-urlencoded',
+                    'Authorization': 'Bearer {access_token}'.format(access_token=self.access_token),
+                    'Content-Type': 'application/x-www-form-urlencoded',
                 }
-        data = urllib.urlencode(data) if data is not None else None
-        resp, content = self._h.request(self.get_url(path=path), method, headers=headers, body=data)
-        return json.loads(content)
+
+        if type(data) == dict:
+            # is json
+            data = json.dumps(data)
+            content_length = len(data)
+
+            headers.update({
+                'Content-Type': 'application/json',
+                'Content-Length': str(content_length),
+            })
+        else:
+            data = urllib.urlencode(data) if data is not None else None
+
+        return self._h.request(self.get_url(path=path), method, headers=headers, body=data)
