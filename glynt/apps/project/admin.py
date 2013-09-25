@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+from django.conf import settings
 from django.conf.urls import patterns, url
 from django.contrib import admin
 from django.contrib.admin.util import unquote
@@ -10,6 +11,9 @@ from bunch import Bunch
 from templated_email import send_templated_mail
 
 from glynt.apps.project.models import Project, ProjectLawyer
+
+import logging
+logger = logging.getLogger('lawpal.project')
 
 
 class ProjectLawyerInline(admin.TabularInline):
@@ -49,16 +53,26 @@ class ProjectAdmin(admin.ModelAdmin):
         model = self.model
         project = get_object_or_404(self.get_queryset(request), pk=unquote(object_id))
 
+        client = project.customer.user
+        lawyers = project.lawyers.all()
+
+        logger.info('Sending project matches email')
+
+        recipient = '"{name}" <{email}>'.format(name=client.get_full_name(), email=client.email)
+
         email = Bunch(
             template_name='project_matches',
-            from_email='noreply@lawpal.com',
-            recipient_list=['jamie@lawpal.com'],
-            # bcc=['founders@lawpal.com'],
+            from_email='"LawPal ({company})" <noreply@lawpal.com>'.format(company=project.company),
+            recipient_list=[recipient],
+            bcc=['founders@lawpal.com'],
             context={
-                'lawyers': project.lawyers.all(),
+                'lawyers': lawyers,
                 'url': reverse('dashboard:overview'),
             }
         )
+
+        if settings.DEBUG == True:
+            email.pop('bcc')
 
         send_templated_mail(**email)
 
