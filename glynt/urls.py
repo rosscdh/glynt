@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.conf.urls import patterns, include, url
+from django.views.generic import TemplateView
 from django.conf.urls.static import static
 from django.views.generic.base import RedirectView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
@@ -61,11 +62,13 @@ urlpatterns = patterns('',
     url(r'^', include('public.urls', namespace='public')),
 
     # favicon & Utils
-    url(r'^favicon\.ico/$', RedirectView.as_view(url='%simg/favicon.ico' % settings.STATIC_URL)),
-    url(r'', include('debug_toolbar_user_panel.urls')),
+    url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': {}}),  # @TODO need to set this up with alex
+    url(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),  # @TODO need to set this up with alex
+    url(r'^favicon\.ico/$', RedirectView.as_view(url='%simg/favicon.ico' % settings.STATIC_URL)),  # @TODO need to set this up with alex
 )
 
 
 if settings.DEBUG or settings.PROJECT_ENVIRONMENT == 'dev':
+    urlpatterns +=  patterns('', url(r'', include('debug_toolbar_user_panel.urls')))
     urlpatterns += staticfiles_urlpatterns()
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- coding: UTF-8 -*-
 import os
 from django.conf import settings
 from django.db import models
@@ -30,7 +30,7 @@ class Company(models.Model):
     data = JSONField(default={})
 
     def __unicode__(self):
-        return self.name
+        return u'{name}'.format(name=self.name)
 
     @property
     def status(self):

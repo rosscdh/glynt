@@ -94,14 +94,17 @@ class LawyerContactProjectView(ProjectView):
     View to allow user to contact project lawyer
     """
     template_name = 'project/lawyer_contact.html'
+
     def get_context_data(self, **kwargs):
         context = super(LawyerContactProjectView, self).get_context_data(**kwargs)
 
         lawyer = get_object_or_404(Lawyer.objects.prefetch_related('user'), user__username=self.kwargs.get('lawyer'))
+        project_lawyer_join = ProjectLawyer.objects.filter(project=self.object, lawyer=self.object.primary_lawyer)
 
         context.update({
             'PROJECT_LAWYER_STATUS': PROJECT_LAWYER_STATUS,
-            'project_lawyer_join': ProjectLawyer.objects.get(project=self.object, lawyer=self.object.primary_lawyer),
+            'project_lawyer_join': project_lawyer_join,
+            'primary_join': project_lawyer_join[0],
             'lawyer': lawyer,
         })
 

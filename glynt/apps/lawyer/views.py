@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-from django.conf import settings
 
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import user_passes_test
-
+from django.shortcuts import get_object_or_404
 from django.views.generic import FormView, DetailView
 from django.views.generic.edit import FormMixin
 from endless_pagination.views import AjaxListView
@@ -12,11 +11,10 @@ from django.core.urlresolvers import reverse
 import json
 
 from haystack.query import SQ, SearchQuerySet
-from haystack.inputs import Exact, Clean
+from haystack.inputs import Clean
 
 from glynt.apps.default.views import AjaxBaseTemplateMixin
 from glynt.apps.lawyer.services import EnsureLawyerService
-from glynt.apps.utils import get_query
 
 from .models import Lawyer
 from .forms import LawyerProfileSetupForm, LawyerSearchForm
@@ -54,6 +52,17 @@ class LawyerProfileView(AjaxBaseTemplateMixin, DetailView):
             'firm': self.object.primary_firm,
         })
         return context
+
+
+class LawyerContactView(DetailView):
+    """
+    View to allow user to contact lawyer
+    """
+    model = Lawyer
+    template_name = 'lawyer/contact.html'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Lawyer.objects.prefetch_related('user'), user__username=self.kwargs.get('slug'))
 
 
 class LawyerLiteProfileView(LawyerProfileView):
@@ -113,6 +122,7 @@ class LawyerProfileSetupView(LawyerRequiredViewMixin, FormView):
             'photo': lawyer.photo,
             'twitter': lawyer.data.get('twitter',''),
 
+            'linkedin': lawyer.data.get('linkedin',''),
             'agree_tandc': lawyer.data.get('agree_tandc', None),
         }})
         return form_class(**kwargs)

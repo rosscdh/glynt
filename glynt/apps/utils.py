@@ -5,6 +5,7 @@ This class provides a simple lookup mechnism which allows static reference to na
 instead of having to hardcode the numeric variable
 """
 from django.conf import settings
+from django.contrib.sites.models import Site
 from django.utils.translation import ugettext_lazy as _
 from collections import namedtuple
 from django.http import HttpResponseRedirect
@@ -29,6 +30,8 @@ API_URLS = {
     'companies': '/api/v1/company/lite/?format=json&limit=15',
 }
 
+def CURRENT_SITE():
+    return Site.objects.get(pk=settings.SITE_ID)
 
 def generate_unique_slug(instance=None):
     """ Generate the unique slug for a model instance """

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import get_object_or_404
+from django.template.defaultfilters import slugify
 from django.views.generic import View, ListView, UpdateView, DetailView
 from django.views.generic.edit import ModelFormMixin
 from django.views.generic.detail import SingleObjectMixin
@@ -9,10 +10,10 @@ from glynt.apps.project.services.project_checklist import ProjectCheckListServic
 from glynt.apps.project.models import Project
 
 
-from . import TODO_STATUS, FEEDBACK_STATUS
-from .forms import CustomerToDoForm, AttachmentForm, FeedbackRequestForm
-from .models import ToDo, Attachment, FeedbackRequest
-from .services import CrocdocAttachmentService
+from glynt.apps.todo import TODO_STATUS, FEEDBACK_STATUS
+from glynt.apps.todo.forms import CustomerToDoForm, AttachmentForm, FeedbackRequestForm
+from glynt.apps.todo.models import ToDo, Attachment, FeedbackRequest
+from glynt.apps.todo.services import CrocdocAttachmentService
 
 import logging
 logger = logging.getLogger('django.request')
@@ -79,6 +80,7 @@ class ProjectToDoView(RulezMixin, ToDoCountMixin, ListView):
             'feedback_requests': self.feedback_requests,
             'is_lawyer': user_profile.is_lawyer,
             'is_customer': user_profile.is_customer,
+            'checklist_categories': [{'label': c, 'slug': slugify(c) } for c in self.checklist_service.categories]
         })
         # append counts
         context.update(self.todo_counts(qs_objects=self.model.objects))
@@ -103,6 +105,7 @@ class BaseToDoDetailMixin(RulezMixin, SingleObjectMixin):
         By default this requires `self.queryset` and a `pk` or `slug` argument
         in the URLconf, but subclasses can override this to return any object.
         """
+        obj = None
         slug = self.kwargs.get(self.slug_url_kwarg, 'slug')
 
         self.project = get_object_or_404(Project, uuid=self.kwargs.get('project_uuid'))
@@ -113,23 +116,12 @@ class BaseToDoDetailMixin(RulezMixin, SingleObjectMixin):
         if self.navigation_items.current is None:
             # does nto seem to exist need to log and error
             logger.error('ToDo item does not exist in categories navigation_items but it should! {slug}, navigation_items: {navigation_items}'.format(slug=slug, navigation_items=self.navigation_items))
-            return None
-        else:
-            obj, is_new = self.model.objects.get_or_create(slug=slug, project=self.project)
-            nav_item = self.navigation_items.current
-            if is_new and nav_item:
-                nav_item.project = unicode(nav_item.get('project'))
 
-                obj.name = nav_item.name
-                obj.category = nav_item.category
-                obj.description = nav_item.description
-                obj.status = nav_item.status
-                obj.data = nav_item
-                obj.save()
-
+        if self.kwargs.get('slug') is not None:
+            obj = get_object_or_404(self.model, slug=slug)
             self.can_read(obj)
 
-            return obj
+        return obj
 
 
 class ToDoDetailView(DetailView, BaseToDoDetailMixin):

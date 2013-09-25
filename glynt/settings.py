@@ -5,7 +5,7 @@ import sys
 PROJECT_ENVIRONMENT = 'prod'
 
 IS_TESTING = False
-for test_app in ['loaddata','jenkins','testserver','test']:
+for test_app in ['jenkins','testserver','test']:
     if test_app in sys.argv[1:2]:
         IS_TESTING = True
 
@@ -27,7 +27,7 @@ MANAGERS = ADMINS + (
 )
 
 NOTICEGROUP_EMAIL = (
- ("LawPal Tech", 'tech@lawpal.com'),   
+ ("LawPal Tech", 'tech@lawpal.com'),
 )
 
 DEFAULT_FROM_EMAIL = 'noreply@localhost'
@@ -285,7 +285,7 @@ USE_ELASTICSEARCH = True
 # Primary installed apps goes here
 # we do this so that we only test our apps
 # the other apps will/can be tested seperately
-INSTALLED_APPS = DJANGO_APPS + HELPER_APPS + PROJECT_APPS 
+INSTALLED_APPS = DJANGO_APPS + HELPER_APPS + PROJECT_APPS
 
 
 # disable celery for test
@@ -370,7 +370,7 @@ TWITTER_CONSUMER_KEY = 'q4iigBXEJj7OBuIYHVF99g'
 TWITTER_CONSUMER_SECRET = 'Ka9XGTeRlu1v7XRs2GSdK43Sd0l4j0eXXE2gI4iXd8E'
 
 SOCIAL_AUTH_SLUGIFY_USERNAMES = True
-SOCIAL_AUTH_UUID_LENGTH = 3 # greater than 0 otehrwise it defaults to 3
+SOCIAL_AUTH_UUID_LENGTH = 3 # greater than 0 otherwise it defaults to 3
 SOCIAL_AUTH_BACKEND_ERROR_URL = '/'
 SOCIAL_AUTH_PROTECTED_USER_FIELDS = ('first_name', 'last_name', 'full_name', 'email',)
 SOCIAL_AUTH_PIPELINE = (
@@ -397,7 +397,7 @@ INTERCOM_API_SECRET = '-sjPyiyI5P44z3QsHLDUWfoLK8Rml7Wbg2wmj64L'
 
 
 ACTSTREAM_SETTINGS = {
-    'MODELS': ('auth.user', 'project.project', 'todo.todo', 'todo.attachment', 'threadedcomments.threadedcomment'),
+    'MODELS': ('auth.user', 'project.project', 'project.projectlawyer', 'todo.todo', 'todo.attachment', 'threadedcomments.threadedcomment'),
     'MANAGER': 'glynt.apps.streams.LawpalStreamActionManager',
     'FETCH_RELATIONS': True,
     'USE_PREFETCH': True,

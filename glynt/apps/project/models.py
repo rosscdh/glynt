@@ -9,9 +9,9 @@ from jsonfield import JSONField
 
 #from glynt.apps.project.services.actions import OpenProjectService, CloseProjectService, ReOpenProjectService
 
-from glynt.apps.transact.models import Transaction
-from glynt.apps.company.models import Company
-from glynt.apps.lawyer.models import Lawyer
+# from glynt.apps.transact.models import Transaction
+# from glynt.apps.company.models import Company
+# from glynt.apps.lawyer.models import Lawyer
 
 from . import PROJECT_STATUS, PROJECT_LAWYER_STATUS
 from .managers import DefaultProjectManager, ProjectLawyerManager
@@ -29,9 +29,9 @@ class Project(models.Model):
 
     uuid = UUIDField(auto=True, db_index=True)
     customer = models.ForeignKey('customer.Customer')
-    company = models.ForeignKey(Company)
-    transactions = models.ManyToManyField(Transaction)
-    lawyers = models.ManyToManyField(Lawyer, blank=True, through='project.ProjectLawyer')
+    company = models.ForeignKey('company.Company')
+    transactions = models.ManyToManyField('transact.Transaction')
+    lawyers = models.ManyToManyField('lawyer.Lawyer', blank=True, through='project.ProjectLawyer')
     data = JSONField(default={})
     status = models.IntegerField(choices=PROJECT_STATUS.get_choices(), default=PROJECT_STATUS.new, db_index=True)
     date_created = CreationDateTimeField()
@@ -40,7 +40,7 @@ class Project(models.Model):
     objects = DefaultProjectManager()
 
     def __unicode__(self):
-        return 'Project for {company}'.format(company=self.company.name)
+        return u'Project for {company}'.format(company=self.company.name)
 
     def can_read(self, user):
         return True if user.pk in [u.pk for u in self.notification_recipients()] else False
@@ -97,19 +97,6 @@ class Project(models.Model):
     def has_lawyer(self):
         return ProjectLawyer.objects.assigned(project=self).count() > 0
 
-    # def open(self, actioning_user):
-    #     """ Open the notification """
-    #     service = OpenProjectService(project=self, actioning_user=actioning_user)
-    #     return service.process()
-
-    # def close(self, actioning_user):
-    #     service = CloseProjectService(project=self, actioning_user=actioning_user)
-    #     return service.process()
-
-    # def reopen(self, actioning_user):
-    #     service = ReOpenProjectService(project=self, actioning_user=actioning_user)
-    #     return service.process()
-
     @property
     def is_open(self):
         return PROJECT_STATUS.open == self.status
@@ -123,12 +110,16 @@ class Project(models.Model):
         return PROJECT_STATUS.new == self.status
 
     @property
+    def transaction_slugs(self):
+        return [t.slug for t in self.transactions.all()]
+
+    @property
     def transaction_types(self):
         return [t.title for t in self.transactions.all()]
 
     @property
     def tx_range(self):
-        return ','.join([t.slug for t in self.transactions.all()])
+        return ','.join(self.transaction_slugs)
 
     @property
     def display_status(self):
@@ -149,8 +140,8 @@ class ProjectLawyer(models.Model):
     """
     LAWYER_STATUS = PROJECT_LAWYER_STATUS
 
-    project = models.ForeignKey(Project)
-    lawyer = models.ForeignKey(Lawyer)
+    project = models.ForeignKey('project.Project')
+    lawyer = models.ForeignKey('lawyer.Lawyer')
     status = models.IntegerField(choices=LAWYER_STATUS.get_choices(), default=LAWYER_STATUS.potential, db_index=True)
 
     objects = ProjectLawyerManager()
@@ -162,6 +153,10 @@ class ProjectLawyer(models.Model):
     def display_status(self):
         return self.LAWYER_STATUS.get_desc_by_value(self.status)
 
+    def notification_recipients(self):
+        """
+        """
+        return [self.project.customer.user, self.lawyer.user]
 
-# import signals so they load on django load
-from glynt.apps.project.signals import on_project_created, on_lawyer_assigned
+    def get_absolute_url(self):
+        return reverse('project:project_contact', kwargs={'slug': self.project.uuid, 'lawyer': self.lawyer.user.username})

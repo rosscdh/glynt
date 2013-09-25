@@ -33,7 +33,7 @@ class LawyerProfileSetupForm(forms.Form):
 
     firm_name = forms.CharField(widget=forms.TextInput(attrs={'tabindex': '3' }))
 
-    phone = forms.CharField(help_text="", widget=forms.TextInput(attrs={'data-trigger': 'change', 'placeholder': '+1 415 225 6464', 'title': 'Shows on your profile. Include country code.', 'tabindex': '4'}))
+    phone = forms.CharField(help_text="", widget=forms.TextInput(attrs={'data-trigger': 'change', 'placeholder': '+1 415 225 6464', 'tabindex': '4'}))
 
     position = forms.ChoiceField(choices=Lawyer.LAWYER_ROLES.get_choices(), label="Position")
     years_practiced = forms.IntegerField(label="Years Practicing", initial="3", widget=forms.TextInput(attrs={'data-trigger': 'change', 'class': 'input-mini', 'tabindex': '6'}))
@@ -48,7 +48,7 @@ class LawyerProfileSetupForm(forms.Form):
     bio = forms.CharField(required=False, widget=forms.Textarea(attrs={'data-trigger': 'change', 'class': 'input-xxlarge', 'data-rangelength': '[0,4024]', 'placeholder': 'A bit more about you.', 'title': 'A bit longer, but still make it personal.'}))
     if_i_wasnt_a_lawyer = forms.CharField(label="If I wasn't a lawyer", required=False, widget=forms.TextInput(attrs={'data-trigger': 'change', 'class': 'input-xxlarge', 'placeholder': 'e.g. Astronaut and part-time Pastry Chef', 'title': 'If I wasn\'t a lawyer, I would be a...'}))
 
-    photo = forms.ImageField(required=False, label="Main Photo", help_text="Please add a good quality photo to your profile. It really helps.", widget=CicuUploaderInput(attrs={'data-trigger': 'change', 'data-required': 'false'}, options={
+    photo = forms.ImageField(required=False, label="Main Photo", help_text="Please add a good quality photo to your profile. It really helps.", widget=CicuUploaderInput(attrs={'data-trigger': 'change', 'data-required': 'false', 'class':'btn-info'}, options={
                 'ratioWidth': '110',       #fix-width ratio, default 0
                 'ratioHeight': '110',       #fix-height ratio , default 0
                 'sizeWarning': 'False',    #if True the crop selection have to respect minimal ratio size defined above. Default 'False'
@@ -59,7 +59,9 @@ class LawyerProfileSetupForm(forms.Form):
     
     hidden_photo = forms.CharField(required=False, widget=forms.HiddenInput) # transports the id
 
-    twitter = forms.CharField(required=False, label="twitter.com/", help_text="", widget=forms.TextInput(attrs={}))
+    twitter = forms.CharField(required=False, label="Twitter Profile", help_text="If you use Twitter, add your username here", widget=forms.TextInput(attrs={'placeholder':'@username'}))
+    linkedin = forms.CharField(required=False, label="LinkedIn  Profile", help_text="Helps us show common connections", widget=forms.TextInput(attrs={'placeholder':'http://linkedin.com/profile'}))
+
 
     websites_input = forms.URLField(required=False, label="Website Address", help_text='Enter the domain name of your public website, if you have one.', widget=forms.TextInput(attrs={}))
     websites = forms.CharField(required=False, widget=forms.HiddenInput)
@@ -225,6 +227,4 @@ class LawyerProfileIsCompleteValidator(forms.Form):
     phone = forms.CharField(required=True)
     position = forms.CharField(required=True)
     years_practiced = forms.IntegerField(required=True)
-    practice_location_1 = forms.CharField(required=True)
-    fee_packages = forms.CharField(required=True)
     summary = forms.CharField(required=True)
