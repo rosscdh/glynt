@@ -7,7 +7,12 @@
     <div class="page-header">
         <div class="container">
             <!-- Header -->
-            <h1>Checklist</h1>
+            <h1 class="pull-left">Checklist</h1>
+            <!-- <div class="pull-right">
+                <ul class="nav nav-pills">
+                    <li><a href="#" class="btn-checklist-setup" title="Setup Checklist"><i class="glyphicon glyphicon-s"></i> Checklist Setup</a></li>
+                </ul>
+            </div> -->
         </div>
     </div>
 {% endblock %}
@@ -53,10 +58,25 @@
                                     </td>
                                     <!-- Checklist item name //-->
                                     <td class="item-info" checklist-item-link ng-click="viewItem( item )"></td>
+ 
                                     {% if is_lawyer %}
-                                    <!-- Checklist item actions //-->
+
                                     <td class="item-meta" checklist-item-actions></td>
+
                                     {% endif %}
+                                    <!-- Checklist item actions //-->
+                                     <td class="item-assets" checklist-item-assets>
+                                        <div class="item-resp-party">
+                                            <ul class="party list-inline  pull-right">
+<!--                                                 <li class="lawyer" data-tooltip="Yael Citro is responsible for this">YC</li>
+ -->                                                <li class="client" data-tooltip="Alex Halliday is responsible for this">AH</li>
+
+                                            </ul>
+                                            <ul class="assets list-inline pull-right">
+                                                <li class="files" data-tooltip="3 documents attached">3 <i class="glyphicon glyphicon-file"></i></li>
+                                            </ul>
+                                        </div>
+                                     </td>
                                 </tr>
                                 <!-- end: AngularJS: checklist item controller //-->
                             </tbody>

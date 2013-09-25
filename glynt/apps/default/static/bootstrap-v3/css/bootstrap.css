@@ -6667,6 +6667,9 @@ td.hidden-lg {
     font-size: 21px;
   }
 }
+#list-items section:first-child .checklist-header {
+  margin-top: 0px;
+}
 table.checklist {
   border-bottom: 1px solid #dddddd;
   margin-bottom: 0;
@@ -6695,19 +6698,64 @@ table.checklist .item-info h4 a {
 table.checklist .item-info:hover a {
   text-decoration: underline;
 }
-table.checklist .item-meta {
+table.checklist .item-meta,
+table.checklist .item-assets {
   text-align: right;
   vertical-align: middle;
   width: 100px;
 }
-table.checklist .item-meta a {
+table.checklist .item-meta a,
+table.checklist .item-assets a {
   font-size: 16px;
   line-height: 1.1;
 }
-table.checklist .item-meta a:hover {
+table.checklist .item-meta a:hover,
+table.checklist .item-assets a:hover {
   text-decoration: none;
 }
-table.checklist .item-meta .item-delete {
+table.checklist .item-meta ul.assets li,
+table.checklist .item-assets ul.assets li,
+table.checklist .item-meta ul.party li,
+table.checklist .item-assets ul.party li {
+  border-bottom: 2px solid;
+  border-top: 2px solid;
+  padding: 4px 6px 4px 6px;
+  margin: 3px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 15px;
+  margin-top: 1px;
+}
+table.checklist .item-meta ul.assets li i,
+table.checklist .item-assets ul.assets li i {
+  font-size: 12px;
+}
+table.checklist .item-meta ul.party,
+table.checklist .item-assets ul.party,
+table.checklist .item-meta ul.assets,
+table.checklist .item-assets ul.assets {
+  margin-bottom: 0px;
+  margin-top: 2px;
+}
+table.checklist .item-meta ul.party li.lawyer,
+table.checklist .item-assets ul.party li.lawyer {
+  color: #5bc0de;
+  border-color: #5bc0de;
+  opacity: 0.5;
+}
+table.checklist .item-meta ul.party li.client,
+table.checklist .item-assets ul.party li.client {
+  color: #6bdb7e;
+  border-color: #6bdb7e;
+}
+table.checklist .item-meta ul.assets li.files,
+table.checklist .item-assets ul.assets li.files {
+  color: white;
+  background-color: #bfbfbf;
+  border-color: #bfbfbf;
+}
+table.checklist .item-meta .item-delete,
+table.checklist .item-assets .item-delete {
   display: none;
 }
 table.checklist tr.item.state-new:hover .item-delete {
@@ -6865,7 +6913,7 @@ table.lawyer-list tr .attorney-meta,
 table.attorney-list tr .lawyer-meta,
 table.lawyer-list tr .lawyer-meta {
   vertical-align: middle;
-  width: 100px;
+  width: 90px;
 }
 table.lawyer-list {
   background-color: white;
@@ -6949,6 +6997,10 @@ table.lawyer-list.active {
 }
 .checklist-header {
   margin-top: 20px;
+}
+.checklist-header h3 {
+  color: #bfbfbf;
+  font-size: 20px;
 }
 .checklist-header .btn {
   color: #bfbfbf;

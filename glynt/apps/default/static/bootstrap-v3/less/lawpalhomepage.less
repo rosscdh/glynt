@@ -148,7 +148,9 @@ background-position: 50% 50%;	    background-size: cover;
   		}
 	}
 }
-
+  #list-items section:first-child .checklist-header{
+    margin-top:0px;
+  }
 table.checklist {
   border-bottom: 1px solid #dddddd;
   margin-bottom: 0;
@@ -176,7 +178,7 @@ table.checklist {
     	text-decoration: underline;
     }
   }
-  .item-meta {
+  .item-meta, .item-assets {
     text-align: right;
     vertical-align: middle;
     width: 100px;
@@ -187,7 +189,37 @@ table.checklist {
         text-decoration: none;
       }
     }
-
+    ul.assets li, ul.party li{
+      border-bottom: 2px solid;
+      border-top: 2px solid;
+      padding:4px 6px 4px 6px;
+      margin:3px;
+      text-align:center;
+      font-weight:bold;
+      font-size:15px;
+      margin-top:1px;
+    }
+    ul.assets li i {
+      font-size:12px;
+    }
+    ul.party, ul.assets  {
+      margin-bottom:0px;
+      margin-top:2px;
+    }
+    ul.party li.lawyer {
+      color: @brand-info;
+      border-color: @brand-info;
+      opacity:0.5
+    }
+    ul.party li.client {
+      color: @brand-success;
+      border-color: @brand-success;
+    }
+    ul.assets li.files {
+      color: white;
+      background-color: @gray-light;
+      border-color: @gray-light;
+    }
     .item-delete{
       display:none;
     }
@@ -356,7 +388,7 @@ table.lawyer-list {
     .attorney-meta,
     .lawyer-meta {
       vertical-align: middle;
-      width: 100px;
+      width: 90px;
     }
   }
 }
@@ -447,6 +479,10 @@ table.lawyer-list.active {
 
 .checklist-header {
   margin-top: 20px;
+  h3 {
+    color: @gray-light;
+    font-size:20px;
+  }
   .btn {
     color: @gray-light;
     font-size: 32px;
