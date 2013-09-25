@@ -6,7 +6,6 @@ import json
 from . import MailoutConnectionBase
 
 
-
 class AbridgeMailoutService(MailoutConnectionBase):
     def create_event(self, content, **kwargs):
         event_data = {

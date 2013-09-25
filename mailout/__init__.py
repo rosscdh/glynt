@@ -29,6 +29,7 @@ if ABRIDGE_USERNAME is None:
 if ABRIDGE_PASSWORD is None:
     raise Exception("You must specify a ABRIDGE_PASSWORD in your settings.py")
 
+
 class UserGetOrCreateMixin(object):
     _access_token = None
     _user = None
@@ -86,14 +87,19 @@ class UserGetOrCreateMixin(object):
         return json.loads(content)
 
     def subscribe(self):
+        subscriptions = self._user.get('subscriptions', [])
+        subscriptions.append(ABRIDGE_PROJECT)
+
         subscription_data = {
-            'subscriptions': ABRIDGE_PROJECT
+            'subscriptions': subscriptions
         }
 
         resp, content = self.request(path='user/{user_hash}/'.format(user_hash=self._user.get('user_hash')), data=subscription_data, method='PATCH')
 
         if resp.status not in [200]:
             raise Exception('Could not subscribe to {subscription}'.format(subscription=ABRIDGE_PROJECT))
+
+        return content
 
 
 class MailoutConnectionBase(UserGetOrCreateMixin):
