@@ -1,0 +1,14 @@
+{% load glynt_helpers %}
+
+<h2 style="color: #6c797c !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5em; padding: 0;"><strong>About the round</strong>:</h2>
+<ul style="color: #6c797c !important;">
+    <li style="margin-left: 0;">
+        <p style="font-size: 14px;"><span style="color: #999999;">Investment Terms:</span> {{ project_data.investment_terms }}</p>
+    </li>
+    <li style="margin-left: 0;">
+        <p style="font-size: 14px;"><span style="color: #999999;">Number of investors:</span> {{ project_data.num_investors }}</p>
+    </li>
+    <li style="margin-left: 0;">
+        <p style="font-size: 14px;"><span style="color: #999999;">Number of Investor States:</span> {{ project_data.num_investor_states }}</p>
+    </li>
+</ul>

@@ -1,5 +1,5 @@
-# coding: utf-8
-# coding: utf-8
+# -*- coding: UTF-8 -*-
+# -*- coding: UTF-8 -*-
 from tastypie.resources import ALL
 from tastypie.cache import SimpleCache
 

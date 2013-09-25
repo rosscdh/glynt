@@ -2,12 +2,13 @@
 from django import forms
 from django.core.urlresolvers import reverse
 
+from parsley.decorators import parsleyfy
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Field, Layout, Submit
 
 from public.forms import ContactForm
 
-
+@parsleyfy
 class ContactUsForm(ContactForm):
     """
     Form to handle contacting us when we don't offer the service required
@@ -19,17 +20,17 @@ class ContactUsForm(ContactForm):
         self.helper.form_id = 'contact-us-form'
         self.helper.form_method = 'post'
         self.helper.form_action = reverse('public:contact_us')
-        self.helper.attrs = { 'data_validate': 'parsley' }
 
         self.helper.add_layout(Layout(
             Div(
                 Field('name'),
                 Field('message'),
+                Field('email'),
                 css_class='modal-body'
             ),
             Div(
-                Submit('send', 'Send'),
-                css_class='modal-footer'
+                Submit('send', 'Send', css_id='send-contact-us-modal'),
+                css_class='modal-footer',
             ),
         ))
 

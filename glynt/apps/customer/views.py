@@ -5,16 +5,44 @@ from django.views.generic import DetailView, FormView
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+from django.shortcuts import redirect
 from django.contrib import messages
 from django.http import Http404
 
 from glynt.apps.customer.services import EnsureCustomerService
 from glynt.apps.customer.models import Customer
+from glynt.apps.project.models import Project
 
 from .forms import CustomerProfileSetupForm
 
 import logging
 logger = logging.getLogger('django.request')
+
+
+class CustomerLoginLogic(object):
+    """ Login logic used to determin what to show """
+    user = None
+    customer = None
+
+    def __init__(self, user):
+        self.user = user
+        try:
+            self.customer = self.user.customer_profile
+        except ObjectDoesNotExist:
+            self.customer = None
+            logger.error("founder profile not found for %s" % self.user)
+
+    @property
+    def url(self):
+        num_projects = Project.objects.filter(customer=self.customer).count()
+
+        if num_projects > 0:
+            return reverse('dashboard:overview')
+        else:
+            return reverse('project:create')
+
+    def redirect(self):
+        return redirect(self.url)
 
 
 class CustomerRequiredViewMixin(object):

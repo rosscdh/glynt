@@ -10,7 +10,7 @@ import json
 
 from public.forms import ContactForm
 from public.tasks import send_contactus_email
-from glynt.apps.customer.models import CustomerLoginLogic
+from glynt.apps.customer.views import CustomerLoginLogic
 
 from glynt.apps.utils import AjaxableResponseMixin
 

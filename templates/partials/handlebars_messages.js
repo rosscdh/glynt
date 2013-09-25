@@ -37,7 +37,7 @@ var GlyntJsMessages = {
     }
     ,show: function show(){
         var self = this;
-        console.log(self.clear)
+
         if (self.clear === true) {
             $('.tpl-messages-item').remove();
         }

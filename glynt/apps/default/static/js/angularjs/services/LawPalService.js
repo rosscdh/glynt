@@ -234,7 +234,10 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		if (angular.isArray(categories) && categories.length > 0) {
 			for (var i = 0; i < categories.length; i++){
 				var cat = categories[i];
-				if (cat && cat.label !== "") cleanCats.push(cat);
+				if (cat && cat.label !== "") {
+					cat.label = cat.label.unescapeHTML();
+					cleanCats.push(cat);
+				}
 			}
 		}
 

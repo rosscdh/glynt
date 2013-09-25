@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
-from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
 from django import template
+
+from glynt.apps.utils import CURRENT_SITE
 
 import hmac
 import hashlib
@@ -22,9 +22,20 @@ current_date_format.is_safe = True
 
 @register.simple_tag
 def current_site_domain():
-    site = Site.objects.get_current()
-    return site.domain
+    _CURRENT_SITE = CURRENT_SITE()
+    return _CURRENT_SITE.domain
 current_site_domain.is_safe = True
+
+
+@register.simple_tag
+def ABSOLUTE_STATIC_URL(path=None):
+    _CURRENT_SITE = CURRENT_SITE()
+    path = '' if path is None else path
+    url = '{domain}{STATIC_URL}{path}'.format(domain=_CURRENT_SITE.domain,
+                                              STATIC_URL=settings.STATIC_URL,
+                                              path=path)
+    return url
+ABSOLUTE_STATIC_URL.is_safe = True
 
 
 @register.filter
@@ -55,7 +66,7 @@ colorize_acronym.is_safe = True
 
 @register.filter
 def ensure_number(num):
-    if not isinstance(num, ( int, long, float )):
+    if not isinstance(num, (int, long, float)):
         num = 0
 
     ensure_number = num
@@ -88,9 +99,9 @@ def moment(date_object, default_date=None):
 
 @register.filter(takes_context=False)
 def humanise_number(num):
-    if not isinstance(num, ( int, long )):
+    if not isinstance(num, (int, long)):
         num = 0
-        logger.info('Value "num" passed to humanise_number must be a number is type: %s %s' % (type(num),num,))
+        logger.info('Value "num" passed to humanise_number must be a number is type: %s %s' % (type(num), num,))
 
     magnitude = 0
 
@@ -152,13 +163,14 @@ def write_message_form(context, is_modal=None, **kwargs):
     return context
 write_message_form.is_safe = True
 
+
 @register.inclusion_tag('partials/handlebars_messages.js', takes_context=True)
 def handlebars_messages(context, **kwargs):
     output_target = kwargs.get('output_target', None)
     target_in_before_after = kwargs.get('target_in_before_after', None)
 
     context.update({
-        'output_target': output_target if output_target else 'div.navbar.navbar-fixed-top:first',
+        'output_target': output_target if output_target else 'header.navbar.navbar-fixed-top:first',
         'target_in_before_after': target_in_before_after if target_in_before_after else 'after'
     })
     return context
