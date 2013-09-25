@@ -95,7 +95,7 @@ class GraphConnection(models.Model):
         unique_together = (('provider', 'provider_uid', 'full_name'),)
 
     def __unicode__(self):
-        return self.full_name
+        return u'{name}'.format(name=self.full_name)
 
 """
 These classes are abstractions to allow massage
@@ -124,11 +124,11 @@ class LawpalBaseConnection(object):
     def get_full_name_from_data(self):
         raise Exception('Not Implemented')
 
-    def __str__(self):
-        return '%s' % self.__unicode__().encode(sys.stdout.encoding)
+    # def __str__(self):
+    #     return u'%s' % str(self).encode(sys.stdout.encoding)
 
     def __unicode__(self):
-        return self.full_name
+        return u'{name}'.format(name=self.full_name)
 
     def associate(self, user):
         """ Create or associate this object with the specified user """

@@ -162,7 +162,7 @@ class FeedbackRequest(models.Model):
         ordering = ['-date_created']
 
     def __unicode__(self):
-        return '{display_status} by: {assigned_by}'.format(display_status=self.display_status, assigned_by=self.assigned_by.get_full_name())
+        return u'{display_status} by: {assigned_by}'.format(display_status=self.display_status, assigned_by=self.assigned_by.get_full_name())
 
     @property
     def display_status(self):
