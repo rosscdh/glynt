@@ -29,14 +29,14 @@ class Customer(models.Model):
     photo = models.ImageField(upload_to=_customer_upload_photo)
 
     def __unicode__(self):
-        return u'%s' % (self.full_name,)
+        return u'%s' % (self.user.get_full_name(),)
 
     def get_absolute_url(self):
         return reverse('customer:customer_profile', kwargs={'slug': self.user.username})
 
     @property
     def full_name(self):
-        return u'%s %s' % (self.data.get('first_name'), self.data.get('last_name'))
+        return u'%s %s' % (self.data.get('first_name', ''), self.data.get('last_name', ''), )
 
     @property
     def profile_photo(self):
