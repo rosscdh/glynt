@@ -71,7 +71,7 @@ class ProjectAdmin(admin.ModelAdmin):
             }
         )
 
-        if settings.DEBUG == True:
+        if settings.DEBUG:
             email.pop('bcc')
 
         send_templated_mail(**email)
