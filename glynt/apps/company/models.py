@@ -30,7 +30,7 @@ class Company(models.Model):
     data = JSONField(default={})
 
     def __unicode__(self):
-        return self.name
+        return u'{name}'.format(name=self.name)
 
     @property
     def status(self):
