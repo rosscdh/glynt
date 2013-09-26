@@ -22,7 +22,11 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		"create": 
 			$resource("/api/v1/todo", {},
 				{ "save": { "method": "POST", headers: { "Content-Type": "application/json" } } 
-			})
+			}),
+		"reorder": $resource("/api/v1/project/:id/items", {}, 
+			/* This is done to ensure the content type of PATCH is sent through */
+			{ "save": { "method": "PATCH", headers: { "Content-Type": "application/json" } } 
+		})
 	};
 
 	var checkListCategories = {
@@ -76,7 +80,37 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 					deferred.resolve(results);
 				}, function (results) { /* Error */
 					deferred.reject(results);
-				});
+				}
+			);
+
+			return deferred.promise;
+		},
+
+		/**
+		 * Posts the new checklist item order to the API
+		 * @param  {Array} categories array of categories (with nested checklist items)
+		 * @return {Function}            promise
+		 */
+		"updateChecklistItemOrder": function( categories ) {
+			var projectId = this.getProjectId();
+			var slugItems = [];
+			var options = { "id": projectId };
+			var data = { "slugs": [] };
+			var deferred = $q.defer();
+
+			angular.forEach( categories, function( item, index ) {
+				var items = item.items;
+				for( var i=0; i<items.length; i++ ) {
+					data.slugs.push( items[i].slug );
+				}
+			});
+
+			checkListItemResources.reorder.save(options, data, function (results) { /* Success */
+					deferred.resolve(results);
+				}, function (results) { /* Error */
+					deferred.reject(results);
+				}
+			);
 
 			return deferred.promise;
 		},

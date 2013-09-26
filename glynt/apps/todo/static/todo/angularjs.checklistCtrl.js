@@ -6,10 +6,13 @@
 angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService', 'lawPalUrls', 'lawPalDialog', '$location', '$anchorScroll', 'angularPusher', 'toaster',
 	function( $scope, lawPalService, lawPalUrls, lawPalDialog, $location, $anchorScroll, angularPusher, toaster ) {
 
+	$scope.loadStatus = 0;
+
 	// Data is stored within a JavaSCript object to avoid any nasty scope overides
 	$scope.model = {
 		'project': { 'uuid': null }, // Project details
 		'categories': [], // Array of checklist categories
+		'data': [],
 		'feedbackRequests': [],
 		'alerts': [], // Used to display alerts at the top of the page
 		'checklist': [], // Contains all checklist items
@@ -28,7 +31,21 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
     				$scope.saveCategoryOrder( e, ui );
     			$scope.config.categorySort.updatePending = false;
     		},
-    		'updatePending': false
+    		'updatePending': false,
+    		'axis': 'y'
+		 },
+		'itemSort': {
+    		'update': function(e, ui) {
+    			$scope.config.categorySort.updatePending = true;
+    		},
+    		'stop': function(e, ui) {
+    			if($scope.config.categorySort.updatePending)
+    				$scope.saveItemOrder( e, ui );
+    			$scope.config.categorySort.updatePending = false;
+    		},
+    		'axis': 'y',
+    		'updatePending': false,
+    		'cachedOrder': {}
 		 }
 	}
 
@@ -117,10 +134,37 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 
 		}
 	};
-
+	/**
+	 * Adds a checklist item to the checklist
+	 * @param {Object} item item to add to checklist array
+	 */
 	$scope.addItemToChecklist = function( item ) {
-		//
+		// 1. Push item into main checklist array
 		$scope.model.checklist.push( item );
+
+		// 2. Add item into 
+		var category = $scope.findCategoryByLabel( item.category );
+		category.items.push( item );
+	};
+
+	/**
+	 * Given a label find the working category JSON object
+	 * @param  {String} label category label
+	 * @return {Object}       category object
+	 */
+	$scope.findCategoryByLabel = function( label ) {
+		var categories = $scope.model.data;
+		var category = {
+			"info": { "label": label },
+			"items": []
+		};
+		angular.forEach( categories, function( cat, index ) {
+			if( cat.info.label == label ) {
+				category = cat;
+			}
+		});
+
+		return category;
 	};
 
 	/**
@@ -284,14 +328,53 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		var promise = lawPalService.getCategories().then( 
 			function( results ) { /* Success */
 				$scope.model.categories = results;
+				$scope.mergeChecklistCategories();
 			},
 			function( details ) { /* Error */
 			}
 		);
 	};
 
-	$scope.saveCategoryOrder = function( newValue, oldValue ){
-		var categories = $scope.model.categories;
+	$scope.mergeChecklistCategories = function() {
+		var categories, checklist;
+		$scope.loadStatus++;
+		if( $scope.loadStatus === 2) {
+			categories = $scope.model.categories;
+			checklist = $scope.model.checkListItems;
+
+			angular.forEach( categories, function( item, index ) {
+				$scope.model.data.push(
+					{ 
+						"info": item,
+						"items": $scope.checklistItemsByCategory( item )
+					}
+				);
+			});
+
+			console.log($scope.model.data);
+		}
+	};
+
+	$scope.checklistItemsByCategory = function( category ) {
+		var items = [], checkListItems = $scope.model.checklist;
+		for( var i=0; i<checkListItems.length; i++ ) {
+			if( checkListItems[i].category === category.label && !checkListItems[i].is_deleted ) {
+				items.push(checkListItems[i]);
+			}
+		}
+
+		return items;
+	};
+
+	/**
+	 * Event triggered by releasing drag when re-organising categories
+	 * @param  {Event} evt    event that incepted this action
+	 * @param  {DOMNode} uiItem DOM node that this action was performed on
+	 */
+	$scope.saveCategoryOrder = function( evt, uiItem ){
+		var categories = $.map($scope.model.data, function( cat ){
+			return cat.info;
+		});
 		var promise = lawPalService.updateCategoryOrder( categories );
 		promise.then( 
 			function( results ) { /* Success */
@@ -299,6 +382,20 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 			},
 			function( details ) { /* Error */
 				$scope.addAlert( "Unable to save order of categories", "error" );
+			}
+		);
+	};
+
+	$scope.saveItemOrder = function( evt, uiItem ) {
+		var categories = $scope.model.data;
+
+		var promise = lawPalService.updateChecklistItemOrder( categories );
+		promise.then( 
+			function( results ) { /* Success */
+				$scope.addAlert( "Items re-ordered", "success", "Update complete" );
+			},
+			function( details ) { /* Error */
+				$scope.addAlert( "Unable to save order of items", "error" );
 			}
 		);
 	};
@@ -312,6 +409,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		promise.then( 
 			function( results ) { /* Success */
 				$scope.model.checklist = results;
+				$scope.mergeChecklistCategories();
 			},
 			function( details ) { /* Error */
 			}
@@ -427,6 +525,37 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 			}
 		}
 	});
+
+	$scope.$on("feedbackrequest.opened", function( e, data ){
+		if(data.status) {
+			if( data.instance && data.instance.slug ) {
+				slug = data.instance.slug||null;
+				if( slug ) {
+					// Add request for feedback
+					$scope.model.feedbackRequests[slug] = [ { "todo_slug": slug} ];
+					$scope.$apply();
+					$scope.addAlert( "Feedback requested", "info", "Feedback" );
+					console.log($scope.model.feedbackRequests);
+				}
+			}
+		}
+	});
+
+	$scope.$on("feedbackrequest.cancelled", function( e, data ){
+		if(data.status) {
+			if( data.instance && data.instance.slug ) {
+				slug = data.instance.slug||null;
+				if( slug ) {
+					// Add request for feedback
+					delete $scope.model.feedbackRequests[slug];
+					$scope.$apply();
+					$scope.addAlert( "Feedback cancelled", "info", "Feedback" );
+				}
+			}
+		}
+	});
+
+	// feedbackrequest.cancelled
 
 }]);
 

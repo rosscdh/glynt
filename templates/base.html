@@ -73,6 +73,10 @@
     <script type="text/javascript" src="{{ STATIC_URL }}handlebars-helpers.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/lawpal.modal.js"></script>
 
+    
+
+    <script type="text/javascript">{% profile_card_js %}</script>
+{% endcompress %}
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/angular.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/angular-resource.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/ui-bootstrap-tpls-0.5.0.min.js"></script>
@@ -82,10 +86,6 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/services/LawPalUrls.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/services/LawPalDialog.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/services/PusherService.js"></script>
-
-    <script type="text/javascript">{% profile_card_js %}</script>
-{% endcompress %}
-
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/angular-ui-sortable.js"></script>
 
 {% pusher_js %}
