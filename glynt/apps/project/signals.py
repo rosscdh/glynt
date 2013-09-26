@@ -13,8 +13,12 @@ from glynt.apps.project.utils import PROJECT_CONTENT_TYPE
 
 from glynt.apps.project.services.email import SendNewProjectEmailsService
 from glynt.apps.project.services.project_checklist import ProjectCheckListService
-from glynt.apps.project.services.ensure_project import PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE
 from glynt.apps.project.services.engage_lawyer_comments import EngageLawyerCommentsMoveService
+
+from glynt.apps.services.pusher import PusherPublisherService
+
+from . import (PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE,
+               PROJECT_CHECKLIST_ITEMS_SORT_UPDATED)
 
 from .models import ProjectLawyer
 

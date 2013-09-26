@@ -14,13 +14,11 @@ from glynt.apps.lawyer.models import Lawyer
 from glynt.apps.project.forms import ContactUsForm, CreateProjectForm
 from glynt.apps.project.services.ensure_project import EnsureProjectService
 
-from glynt.apps.project.services.ensure_project import PROJECT_CREATED
-
 from glynt.apps.transact.models import Transaction
-
 
 from .signals import mark_project_notifications_as_read
 from . import PROJECT_LAWYER_STATUS
+from . import PROJECT_CREATED
 
 import logging
 logger = logging.getLogger('django.request')
