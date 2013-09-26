@@ -45,13 +45,13 @@ class EnsureProjectService(object):
         if self.pk is False:
 
             try:
-                Project.objects.get(customer=self.customer, company=self.company)
-                is_new = False
+                self.project = Project.objects.get(customer=self.customer, company=self.company)
+                self.is_new = False
                 logger.debug('Project exists')
 
             except Project.DoesNotExist:
-                Project.objects.create(customer=self.customer, company=self.company)
-                is_new = True
+                self.project = Project.objects.create(customer=self.customer, company=self.company)
+                self.is_new = True
                 logger.debug('Project created')
 
             #self.project, self.is_new = Project.objects.get_or_create(**{'customer': self.customer, 'company': self.company}) # Causes big problems
