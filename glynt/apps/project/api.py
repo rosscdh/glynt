@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- coding: UTF-8 -*-
 from tastypie import fields
 from tastypie.resources import ALL
 from tastypie.authorization import Authorization

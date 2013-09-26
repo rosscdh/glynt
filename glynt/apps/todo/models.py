@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- coding: UTF-8 -*-
 """
 App to enable founders to have a set of todo items per transaction type
 considering using https://github.com/bartTC/django-attachments for the
@@ -12,8 +12,9 @@ from glynt.apps.project.models import Project
 
 from django_filepicker.models import FPFileField
 
-from . import TODO_STATUS, FEEDBACK_STATUS
-from .managers import DefaultToDoManager, DefaultFeedbackRequestManager
+from glynt.apps.todo import TODO_STATUS, FEEDBACK_STATUS
+from glynt.apps.todo.managers import (DefaultToDoManager,
+                                      DefaultFeedbackRequestManager)
 
 from rulez import registry
 
@@ -53,6 +54,9 @@ class ToDo(models.Model):
 
     objects = DefaultToDoManager()
 
+    class Meta:
+        ordering = ['sort_position']  # Maintain the sort order defined in yml
+
     def __unicode__(self):
         return u'{name}'.format(name=unicode(self.name))
 
@@ -85,7 +89,7 @@ class ToDo(models.Model):
     def get_absolute_url(self):
         # need to import this HERE for some reason?
         from django.core.urlresolvers import reverse
-        return reverse('todo:edit', kwargs={'project_uuid': self.project.uuid.__unicode__(), 'slug': self.slug})
+        return reverse('todo:edit', kwargs={'project_uuid': self.project.uuid, 'slug': self.slug})
 
 registry.register("can_read", ToDo)
 registry.register("can_edit", ToDo)
@@ -158,7 +162,7 @@ class FeedbackRequest(models.Model):
         ordering = ['-date_created']
 
     def __unicode__(self):
-        return '{display_status} by: {assigned_by}'.format(display_status=self.display_status, assigned_by=self.assigned_by.get_full_name())
+        return u'{display_status} by: {assigned_by}'.format(display_status=self.display_status, assigned_by=self.assigned_by.get_full_name())
 
     @property
     def display_status(self):
@@ -175,7 +179,7 @@ class FeedbackRequest(models.Model):
 """
 import signals
 """
-from glynt.apps.todo.signals import (on_attachment_created, on_attachment_deleted, \
+from .signals import (on_attachment_created, on_attachment_deleted, \
                                         on_comment_created, feedbackrequest_created, \
                                         feedbackrequest_status_change, projectlawyer_assigned, \
                                         projectlawyer_deleted, todo_item_status_change, \

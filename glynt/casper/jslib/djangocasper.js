@@ -32,12 +32,21 @@ module.exports = (function() {
         if (first_scenario) {
             inject_cookies();
 
+            var viewports = {
+              'smartphone_portrait': {width: 320, height: 480},
+              'smartphone_landscape': {width: 480, height: 320},
+              'tablet_portrait': {width: 768, height: 1024},
+              'tablet_landscape': {width: 1024, height: 768},
+              'desktop_standard': {width: 1280, height: 1024}
+            };
+
             casper.options.clientScripts = [
                                                 casper.cli.options.STATIC_PATH + 'js/jquery.min.js',
                                                 casper.cli.options.STATIC_PATH + 'js/jquery.getPath.js',
                                                 casper.cli.options.STATIC_PATH + 'js/angularjs/mocks/PusherMock.js'
                                             ];
 
+            casper.options.viewportSize = viewports.desktop_standard;
             casper.options.timeout = casper.cli.options.timeout || 30000;
             casper.options.onTimeout = function() {
                 casper.die("Timed out after "+ casper.options.timeout/1000 +" seconds.", 1);
