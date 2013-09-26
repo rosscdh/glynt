@@ -104,8 +104,10 @@ class ProjectChecklistCategoriesSortResource(BaseApiModelResource):
 
         project = Project.objects.get(uuid=uuid)         # get the appropiate project @TODO can this use the tastypie method?
 
-        # override the value with our passed in value
-        project.data['category_order'] = cats
-        project.save(update_fields=['data'])
+        # only if the lists are not the same
+        if project.data.get('category_order', []) != cats:
+            # override the value with our passed in value
+            project.data['category_order'] = cats
+            project.save(update_fields=['data'])
 
-        PROJECT_CATEGORY_SORT_UPDATED.send(sender=self, instance=project, user=request.user, categories=cats)
+            PROJECT_CATEGORY_SORT_UPDATED.send(sender=self, instance=project, user=request.user, categories=cats)
