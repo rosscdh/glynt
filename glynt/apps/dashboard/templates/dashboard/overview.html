@@ -69,7 +69,7 @@
                         <div class="col col-3 text-center"><h1 class="text-success">{{counts.closed}}</h1><small class="text-success">Closed</small></div>
                     </div>
                 </div>
-                {% if project.projectlawyer_set.all.0.status == PROJECT_LAWYER_STATUS.assigned %}
+                {% if project.has_lawyer %}
                 <div class="widget discuss">
                     <h3>Project Discussion</h3>
                     {% render_comment_form for project %}
