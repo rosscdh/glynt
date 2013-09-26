@@ -10,6 +10,7 @@ from glynt.apps.api.models import BaseApiModelResource
 
 from .models import Project, ProjectLawyer
 from . import PROJECT_STATUS
+from . import PROJECT_CATEGORY_SORT_UPDATED
 
 import json
 
@@ -106,3 +107,5 @@ class ProjectChecklistCategoriesSortResource(BaseApiModelResource):
         # override the value with our passed in value
         project.data['category_order'] = cats
         project.save(update_fields=['data'])
+
+        PROJECT_CATEGORY_SORT_UPDATED.send(sender=self, instance=project, user=request.user, categories=cats)
