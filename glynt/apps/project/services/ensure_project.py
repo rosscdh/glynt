@@ -40,9 +40,22 @@ class EnsureProjectService(object):
                 self.project.lawyers.add(lawyer)
 
     def process(self):
-        logger.info('Processing Project')
+        logger.debug('Processing Project')
+
         if self.pk is False:
-            self.project, self.is_new = Project.objects.get_or_create(**{'customer': self.customer, 'company': self.company})
+
+            try:
+                Project.objects.get(customer=self.customer, company=self.company)
+                is_new = False
+                logger.debug('Project exists')
+
+            except Project.DoesNotExist:
+                Project.objects.create(customer=self.customer, company=self.company)
+                is_new = True
+                logger.debug('Project created')
+
+            #self.project, self.is_new = Project.objects.get_or_create(**{'customer': self.customer, 'company': self.company}) # Causes big problems
+
         else:
             self.project = Project.objects.filter(pk=self.pk)
             self.is_new = False
