@@ -83,8 +83,8 @@ def production():
 
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
 
-    env.start_service = 'supervisorctl start uwsgi'
-    env.stop_service = 'supervisorctl stop uwsgi'
+    env.start_service = 'supervisorctl start uwsgi-live'
+    env.stop_service = 'supervisorctl stop uwsgi-live'
     env.light_restart = "kill -HUP `cat /tmp/lawpal.pid`"
 
 @task
@@ -110,8 +110,8 @@ def preview():
 
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
 
-    env.start_service = 'supervisorctl start uwsgi'
-    env.stop_service = 'supervisorctl stop uwsgi'
+    env.start_service = 'supervisorctl start uwsgi-preview'
+    env.stop_service = 'supervisorctl stop uwsgi-preview'
     env.light_restart = "kill -HUP `cat /tmp/preview-lawpal.pid`"
 
 @task
