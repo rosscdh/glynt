@@ -13,8 +13,12 @@ from glynt.apps.project.utils import PROJECT_CONTENT_TYPE
 
 from glynt.apps.project.services.email import SendNewProjectEmailsService
 from glynt.apps.project.services.project_checklist import ProjectCheckListService
-from glynt.apps.project.services.ensure_project import PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE
 from glynt.apps.project.services.engage_lawyer_comments import EngageLawyerCommentsMoveService
+
+from glynt.apps.services.pusher import PusherPublisherService
+
+from . import (PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE,
+               PROJECT_CATEGORY_SORT_UPDATED)
 
 from .models import ProjectLawyer
 
@@ -50,6 +54,16 @@ def on_project_created(sender, **kwargs):
     # to bring project up to date with any modifications made
     checklist_service = ProjectCheckListService(project=project)
     checklist_service.bulk_create()
+
+
+@receiver(PROJECT_CATEGORY_SORT_UPDATED, dispatch_uid='project.project_categories_sort_updated')
+def on_project_categories_sort_updated(sender, instance, user, categories, **kwargs):
+    pusher_service = PusherPublisherService(channel=instance.pusher_id, event='project.project_categories_sort_updated')
+
+    name = user.get_full_name() if hasattr(user, 'get_full_name') else 'An Anonymous user'
+    comment = '{name} changed the order of the project categories for {project}'.format(name=name, project=instance.__unicode__())
+
+    pusher_service.process(comment=comment)
 
 
 @receiver(PROJECT_PROFILE_IS_COMPLETE, dispatch_uid='project.on_project_profile_is_complete')
