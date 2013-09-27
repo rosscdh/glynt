@@ -76,6 +76,7 @@ class ProjectAdmin(admin.ModelAdmin):
             bcc=['founders@lawpal.com'],
             context={
                 'lawyers': lawyers,
+                'to_name': client.first_name,
                 'url': reverse('dashboard:overview'),
             }
         )
