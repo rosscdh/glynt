@@ -179,7 +179,7 @@ table.checklist {
   .item-meta {
     text-align: right;
     vertical-align: middle;
-    width: 100px;
+    width: 140px;
     a {
       font-size: 16px;
       line-height: 1.1;
@@ -188,9 +188,10 @@ table.checklist {
       }
     }
 
-    .item-delete{
+    .item-delete, .item-move {
       display:none;
     }
+    .item-move { cursor: move; }
   }
 
   tr.item {
@@ -200,6 +201,11 @@ table.checklist {
           display:inline;
         }
       }
+    }
+    &:hover {
+      .item-move {
+          display:inline;
+        }
     }
     &.state-new {
       color: @gray-lighter;
@@ -254,7 +260,17 @@ table.checklist {
 }
 
 /* Hide delete and edit buttons while dragging */
-.ui-sortable-helper .item-meta { visibility: hidden; }
+.ui-sortable-helper {
+  display: block; background-color: #f9f9f9;
+  cursor: move !important;
+}
+tr.ui-sortable-helper, li.ui-sortable-helper a {
+  border-top: 2px solid #42d0e5; border-bottom: 2px solid #42d0e5;
+  cursor: move !important;
+}
+.ui-sortable-helper td {
+color: #CCC; background-color: transparent !important;
+}
 
 .icon-state-new:before                    { content: @circle-blank; }
 .icon-state-open:before                   { content: @adjust; }
@@ -468,6 +484,7 @@ table.lawyer-list.active {
 
 .ui-sortable-helper {
   min-width: 50%;
+  display:block;
   .item-meta { visibility: hidden; }
 }
 .ui-sortable-placeholder { 
