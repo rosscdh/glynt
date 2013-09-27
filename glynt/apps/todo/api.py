@@ -2,6 +2,7 @@
 from django.contrib.auth.models import User
 
 from tastypie import fields
+from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
 from tastypie.resources import ALL
 
@@ -65,7 +66,6 @@ class ToDoResource(BaseApiModelResource):
         bundle.data['display_status'] = bundle.obj.display_status
         return bundle
 
-from tastypie.authentication import Authentication
 
 class AttachmentResource(BaseApiModelResource):
     """ Api resource for creating or modifying attachments """

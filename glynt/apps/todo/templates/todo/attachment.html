@@ -47,12 +47,24 @@
 
 <script type="text/javascript">
 $(document).ready(function () {
+    var docViewer = $('#crocdoc-viewer-iframe');
+    var win = null;
     
+    /**
+     * Attach onclick behaviour to "Full Screen" button
+     * @param  {Event} event Javascript event object, most likely click event
+     */
     $(document).on( 'click', '.btn-fullscreen', function (event) {
         event.preventDefault();
-        var url = $('#crocdoc-viewer-iframe').attr('src');
-        if ( url ) {
-            window.open(url, 'crocdoc-fullscreen', 'width={width}, height={height}, left=0, top=0, scrollbars=yes, fullscreen=yes'.assign({'width': window.width, 'height':  window.height}));
+        win = win || null;
+
+        if( !win || win.closed===true ) {
+            // Open window
+            win = openFullScreen( docViewer.attr('src') );
+        }
+        else if( win && $(".btn-fullscreen").attr("data-toggle")==="true") {
+            // Close window
+            closeFullScreen( win );
         }
     });
 
@@ -85,5 +97,60 @@ $(document).ready(function () {
         });
 
     });
+
+    /**
+     * Open crocodoc fullscreen
+     * @param  {String} url Url to open
+     * @return {Object}     Javascript Window object
+     */
+    function openFullScreen( url ) {
+        if ( url ) {
+            newWindow = window.open(url, 'crocdoc-fullscreen', 'width={width}, height={height}, left=0, top=0, scrollbars=yes, fullscreen=yes'.assign({'width': window.width, 'height':  window.height}));
+            // Fade out preview
+            docViewer.fadeTo( "slow", 0.25);
+            // Set text of Full screen button
+            $(".btn-fullscreen").html("Close Full Screen").attr("data-toggle","true");
+            // Attach onClose event listener
+            onWindowClose( newWindow, function(){
+                closeFullScreen( newWindow, url );
+            });
+
+            // Even if window has been opened before try to bing it to the front, this will not work in some browsers
+            try { newWindow.focus(); } catch(e) {}
+
+            return newWindow;
+        }
+    }
+    /**
+     * Close full screen window, to make preview area opaque again
+     * @param  {Object} win Javascript window object
+     * @param  {String} url URL of the crocodoc
+     */
+    function closeFullScreen( win, url ) {
+        try { win.close(); } catch(e) {}
+
+        if( url ) {
+            $(".btn-fullscreen").html("Full Screen").attr("data-toggle","false");
+            // Fade out preview
+            docViewer.fadeTo( 2000, 1);
+            docViewer.attr('src', url);
+        }
+    }
+
+    /**
+     * Checks to see if the browser window opened previously is closed
+     *     A pollingtechnique is done to aviod cross browser and cross domain issues
+     * @param   {Object}    win Window object
+     * @param   {Function}  fn  Function to call when the window is closed
+     */
+    function onWindowClose( win, fn ) {
+        var checker =  setInterval( function(){
+            if( win.closed === true )
+            {
+                clearInterval(checker);
+                fn();
+            }
+        }, 2000);
+    }
 });
 </script>

@@ -7,10 +7,6 @@ import logging
 logger = logging.getLogger('lawpal.services')
 
 
-PROJECT_CREATED = dispatch.Signal(providing_args=["created", "instance"])
-PROJECT_PROFILE_IS_COMPLETE = dispatch.Signal(providing_args=["instance"])
-
-
 class EnsureProjectService(object):
     """
     Ensure that a project exists given:
@@ -40,9 +36,22 @@ class EnsureProjectService(object):
                 self.project.lawyers.add(lawyer)
 
     def process(self):
-        logger.info('Processing Project')
+        logger.debug('Processing Project')
+
         if self.pk is False:
-            self.project, self.is_new = Project.objects.get_or_create(**{'customer': self.customer, 'company': self.company})
+
+            try:
+                self.project = Project.objects.get(customer=self.customer, company=self.company)
+                self.is_new = False
+                logger.debug('Project exists')
+
+            except Project.DoesNotExist:
+                self.project = Project.objects.create(customer=self.customer, company=self.company)
+                self.is_new = True
+                logger.debug('Project created')
+
+            #self.project, self.is_new = Project.objects.get_or_create(**{'customer': self.customer, 'company': self.company}) # Causes big problems
+
         else:
             self.project = Project.objects.filter(pk=self.pk)
             self.is_new = False

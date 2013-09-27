@@ -175,9 +175,12 @@ def check_permissions():
 @task
 def clean_all():
     with cd(env.remote_project_path):
+        virtualenv(cmd='python %s%s/manage.py clean_pyc' % (env.remote_project_path, env.project))
         virtualenv(cmd='python %s%s/manage.py cleanup' % (env.remote_project_path, env.project))
         virtualenv(cmd='python %s%s/manage.py clean_nonces' % (env.remote_project_path, env.project))
         virtualenv(cmd='python %s%s/manage.py clean_associations' % (env.remote_project_path, env.project))
+        virtualenv(cmd='python %s%s/manage.py clear_cache' % (env.remote_project_path, env.project))
+        virtualenv(cmd='python %s%s/manage.py clean_pyc' % (env.remote_project_path, env.project))
 
 @task
 def clear_cache():
@@ -339,7 +342,7 @@ def syncdb():
 def clean_versions():
     current_version = get_sha1()
     versions_path = '%sversions' % env.remote_project_path
-    cmd = 'ls %s/ | grep -v %s | xargs rm -R' % (versions_path ,current_version,)
+    cmd = 'cd %s; ls %s/ | grep -v %s | xargs rm -R' % (versions_path, versions_path ,current_version,)
     if env.environment_class is 'webfaction':
         virtualenv(cmd)
     else:
@@ -358,6 +361,21 @@ def supervisord_restart():
 def restart_lite():
     with settings(warn_only=True):
         sudo(env.light_restart)
+
+@task
+def stop_nginx():
+    with settings(warn_only=True):
+        sudo('service nginx stop')
+
+@task
+def start_nginx():
+    with settings(warn_only=True):
+        sudo('service nginx start')
+
+@task
+def restart_nginx():
+    with settings(warn_only=True):
+        sudo('service nginx restart')
 
 @task
 def restart_service(heavy_handed=False):

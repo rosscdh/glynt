@@ -8,7 +8,7 @@ SITE_ID = 4
 
 SECRET_KEY = 'i6=)1=4in#zyp&amp;g)^j2nl1abaeu)@2)^$ox5w7ac*uhml!uy-5'
 
-DEBUG = True
+DEBUG = False
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = False
 TEMPLATE_DEBUG = DEBUG

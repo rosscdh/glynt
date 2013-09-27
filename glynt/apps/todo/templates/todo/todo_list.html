@@ -21,9 +21,10 @@
             <div class="col col-lg-3">
                 <div class="sidebar" data-spy="affix" data-offset-top="80">
                     <div class="subnav">
-                        <ul id="checklist-categories" class="nav nav-pills nav-stacked">
-                            <li ng-repeat="category in model.categories" ng-class="{'active':$first}">
-                                <a href="#{[{category.slug}]}"><span ng-bind-html-unsafe="category.label"></span><span class="num_assigned_to_user badge assigned pull-right" ng-bind="assignedPerCategory(category)" xng-bind="category.numAssigned"></span></a>
+                        <!-- {% if is_lawyer %}ui-sortable="config.categorySort" ng-model="categories"{% endif %} //-->
+                        <ul id="checklist-categories" class="nav nav-pills nav-stacked" {% if is_lawyer %}ui-sortable="config.categorySort" ng-model="categories"{% endif %}>
+                            <li ng-repeat="category in categories" ng-class="{'active':$first}">
+                                <a href="#{[{category.info.slug}]}"><span ng-bind-html-unsafe="category.info.label"></span><span class="num_assigned_to_user badge assigned pull-right" ng-bind="assignedPerCategory(category.info)" xng-bind="category.numAssigned"></span>{% if is_lawyer %}<i class="icon icon-move"></i>{% endif %}</a>
                             </li>
                         </ul>
                     </div>
@@ -32,37 +33,36 @@
 
             <div class="col col-lg-9">                
                 <div id="list-items">
-                    <section ng-repeat="category in model.categories">
-                        <div id="{[{category.slug}]}" class="checklist-header clearfix">
-                            <h3 class="pull-left" ng-bind-html-unsafe="category.label"></h3>
-                            {% if is_lawyer %}
-                            <!-- Add new checklist item //-->
-                            <button type="button" class="btn btn-link pull-right create-item" title="Create new item" data-tooltip="Create new checklist item" ng-click="createItem( category )">
-                                    <i class="glyphicon glyphicon-plus-sign"></i>
-                            </button>
-                            {% endif %}
-                        </div>
 
-                        <table class="table table-striped checklist">
-                            <tbody>
-                                <!-- start: AngularJS: checklist item controller //-->
-                                <tr ng-repeat="item in model.checklist | filter: { 'category': category.label } | filter: { is_deleted: model.showDeletedItems } | orderBy: item.sort_position_by_cat" class="item state-{[{getItemStatus(item)}]}" ng-class="{'assigned-to-user':getAssignedStatus()}" ng-controller="checklistItemCtrl">
-                                    <!-- Checklist item status //-->
-                                    <td class="item-status">
-                                        <i class="icon-state-{[{getItemStatus(item)}]}"></i>
-                                    </td>
-                                    <!-- Checklist item name //-->
-                                    <td class="item-info" checklist-item-link ng-click="viewItem( item )"></td>
-                                    {% if is_lawyer %}
-                                    <!-- Checklist item actions //-->
-                                    <td class="item-meta" checklist-item-actions></td>
-                                    {% endif %}
-                                </tr>
-                                <!-- end: AngularJS: checklist item controller //-->
-                            </tbody>
-                        </table>
-                        <!-- Table //-->
-                    </section>
+                        <section ng-repeat="category in categories">
+                            <div id="{[{category.info.slug}]}" class="checklist-header clearfix">
+                                <h3 class="pull-left" ng-bind-html-unsafe="category.info.label"></h3>
+
+                                {% if is_lawyer %}
+                                <!-- Add new checklist item //-->
+                                <button type="button" class="btn btn-link pull-right create-item" title="Create new item" data-tooltip="Create new checklist item" ng-click="createItem( category.info )">
+                                        <i class="glyphicon glyphicon-plus-sign"></i>
+                                </button>
+                                {% endif %}
+
+                                <table class="table table-striped checklist">
+                                    <tbody {% if is_lawyer %}ui-sortable="config.itemSort" ng-model="category.items"{% endif %}>
+                                        <tr ng-repeat="item in category.items | filter: { is_deleted: model.showDeletedItems }" class="item state-{[{getItemStatus(item)}]}" ng-controller="checklistItemCtrl">
+                                            <!-- Checklist item status //-->
+                                            <td class="item-status">
+                                                <i class="icon-state-{[{getItemStatus(item)}]}"></i>
+                                            </td>
+                                            <td class="item-info" checklist-item-link ng-click="viewItem( item )"></td>
+                                            {% if is_lawyer %}
+                                            <!-- Checklist item actions //-->
+                                            <td class="item-meta" checklist-item-actions></td>
+                                            {% endif %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+
                 </div>
         </div>
     </div>
@@ -86,7 +86,8 @@
         * Current User Object
         */
        "project": {
-            "id": {{project.id}}
+            "id": {{ project.id }},
+            "uuid": "{{ project.uuid }}"
        },
         "user": {
             'pk': {{ user.pk|default:'null'|jsonify }},

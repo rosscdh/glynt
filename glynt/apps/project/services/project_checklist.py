@@ -8,7 +8,8 @@ from glynt.apps.project.services.mixins import (UserFeedbackRequestMixin,
                                                 ToDoItemsFromYamlMixin,
                                                 JavascriptRegionCloneMixin,
                                                 ToDoItemsFromDbMixin,
-                                                ToDoAsJSONMixin)
+                                                ToDoAsJSONMixin,
+                                                OrderedCategoriesMixin)
 from bunch import Bunch
 import shortuuid
 
@@ -20,7 +21,8 @@ logger = logging.getLogger('lawpal.services')
 class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin,
                               JavascriptRegionCloneMixin,
                               ToDoItemsFromDbMixin,
-                              ToDoAsJSONMixin):
+                              ToDoAsJSONMixin,
+                              OrderedCategoriesMixin):
     """
     Provide a set of checklist items that are
     generated from the project transaction types
@@ -102,14 +104,10 @@ class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin,
     def item_hash_num(self, item):
         return '{primary}.{secondary}'.format(primary=int(item.get('sort_position', 0)), secondary=int(item.get('sort_position_by_cat', 0)))
 
-    def get_categories(self):
-        return self.todos_by_cat.keys()
-
-    def category_initial(self):
-        return ((c, c) for c in self.get_categories())
-
     def navigation_items_object(self, slug):
-        """ flatten the items by category and then get prev and next based on sorted cat"""
+        """
+        Flatten the items by category and then get prev and next based on sorted cat
+        """
         temp_todo_list = []
         navigation_items = Bunch(prev=None, current=None, next=None)
 
@@ -119,10 +117,12 @@ class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin,
                     temp_todo_list.append(i)
 
         for c, item in enumerate(temp_todo_list):
+
             try:
                 previous = temp_todo_list[c-1]
             except IndexError:
                 previous = None
+
             try:
                 next = temp_todo_list[c+1]
             except IndexError:
