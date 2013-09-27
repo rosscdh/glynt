@@ -23,14 +23,14 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			$resource("/api/v1/todo", {},
 				{ "save": { "method": "POST", headers: { "Content-Type": "application/json" } } 
 			}),
-		"reorder": $resource("/api/v1/project/:id/items/sort", {}, 
+		"reorder": $resource("/api/v1/project/:id/items/sort/", {}, 
 			/* This is done to ensure the content type of PATCH is sent through */
 			{ "save": { "method": "PATCH", headers: { "Content-Type": "application/json" }, "isArray": true } 
 		})
 	};
 
 	var checkListCategories = {
-		"reorder": $resource("/api/v1/project/:id/checklist/sort", {}, 
+		"reorder": $resource("/api/v1/project/:id/checklist/sort/", {}, 
 			/* This is done to ensure the content type of PATCH is sent through */
 			{ "save": { "method": "PATCH", headers: { "Content-Type": "application/json" }, "isArray": true } 
 		})
