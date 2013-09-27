@@ -7,10 +7,6 @@ import logging
 logger = logging.getLogger('lawpal.services')
 
 
-PROJECT_CREATED = dispatch.Signal(providing_args=["created", "instance"])
-PROJECT_PROFILE_IS_COMPLETE = dispatch.Signal(providing_args=["instance"])
-
-
 class EnsureProjectService(object):
     """
     Ensure that a project exists given:
