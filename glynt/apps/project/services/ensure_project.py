@@ -38,16 +38,20 @@ class EnsureProjectService(object):
     def process(self):
         logger.debug('Processing Project')
 
-        try:
-            self.project = Project.objects.get(customer=self.customer, company=self.company)
-            self.is_new = False
-            logger.debug('Project exists')
+        if self.customer and self.company:
+            try:
+                self.project = Project.objects.get(customer=self.customer, company=self.company)
+                self.is_new = False
+                logger.debug('Project exists')
 
-        except:
-            self.project = Project.objects.create(customer=self.customer, company=self.company)
-            self.is_new = True
-            logger.debug('Project created')
+            except:
+                self.project = Project.objects.create(customer=self.customer, company=self.company)
+                self.is_new = True
+                logger.debug('Project created')
 
-        self.process_transactions()
-        self.process_lawyers()
-        self.project.save()
+            self.process_transactions()
+            self.process_lawyers()
+            self.project.save()
+
+        else:
+            logger.critical('Proken ensure_project process customer "%s" or company "%s" not present' % (self.customer, self.company,))
