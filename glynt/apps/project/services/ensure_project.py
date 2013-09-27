@@ -46,12 +46,13 @@ class EnsureProjectService(object):
 
             except:
                 self.project = Project.objects.create(customer=self.customer, company=self.company)
+                self.project.data['company_name'] = self.company.name
+                self.project.save()
                 self.is_new = True
                 logger.debug('Project created')
 
             self.process_transactions()
             self.process_lawyers()
-            self.project.save()
 
         else:
             logger.critical('Proken ensure_project process customer "%s" or company "%s" not present' % (self.customer, self.company,))

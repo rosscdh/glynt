@@ -38,7 +38,7 @@ class Project(models.Model):
     objects = DefaultProjectManager()
 
     def __unicode__(self):
-        return u'Project for {company_name}'.format(company_name=self.company.name)
+        return u'Project for {company_name}'.format(company_name=self.data.get('company_name', ''))
 
     def can_read(self, user):
         return True if user.pk in [u.pk for u in self.notification_recipients()] else False
