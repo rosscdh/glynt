@@ -11,7 +11,7 @@ from glynt.apps.api.models import BaseApiModelResource
 
 from .models import Project, ProjectLawyer
 from . import PROJECT_STATUS
-from . import PROJECT_CHECKLIST_ITEMS_SORT_UPDATED
+from . import PROJECT_CATEGORY_SORT_UPDATED
 
 import json
 
