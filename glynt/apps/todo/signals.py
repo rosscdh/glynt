@@ -50,7 +50,7 @@ def is_sort_order_update(**kwargs):
 
     # if we have a specific update that is the sort_position changed update
     # then do nothing
-    if len(update_fields) == 1 and 'sort_position' in update_fields:
+    if type(update_fields) is frozenset and len(update_fields) == 1 and 'sort_position' in update_fields:
         # Do absolutely nothing
         return True
     return False
