@@ -92,7 +92,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		 * @return {Function}            promise
 		 */
 		"updateChecklistItemOrder": function( categories ) {
-			var projectId = this.getProjectId();
+			var projectId = this.getProjectUuid();
 			var slugItems = [];
 			var options = { "id": projectId };
 			var data = { "slugs": [] };
