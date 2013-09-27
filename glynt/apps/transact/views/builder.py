@@ -7,12 +7,13 @@ from django.utils.datastructures import SortedDict
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
-from bunch import Bunch
-
 from glynt.apps.project.models import Project
 from glynt.apps.project import PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE
+
 from glynt.apps.transact.views.intake import (FORMS as INTAKE_FORMS,)
 from glynt.apps.transact.views.intake import CS_FORMS, SF_FORMS, CS_SF_FORMS
+
+from bunch import Bunch
 
 import json
 

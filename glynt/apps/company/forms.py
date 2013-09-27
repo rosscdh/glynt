@@ -79,6 +79,7 @@ class FinancingProfileForm(BuilderBaseForm):
     """
     page_title = 'Financing Questions'
     page_description = 'Enter some basic details about your finance round requirements'
+    data_bag = 'glynt.apps.project.bunches.ProjectIntakeBunch'
 
     founder_name = forms.CharField()
     founder_email = forms.EmailField()
@@ -152,6 +153,7 @@ class CompanyAndFinancingProfileForm(CrispyExFieldsetFieldRemovalMixin, CompanyP
     """
     page_title = 'Company & Financing Questions'
     page_description = 'Enter some basic details about your company and your finance round requirements'
+    data_bag = 'glynt.apps.project.bunches.ProjectIntakeBunch'
 
     def __init__(self, *args, **kwargs):
         super(CompanyAndFinancingProfileForm, self).__init__(*args, **kwargs)

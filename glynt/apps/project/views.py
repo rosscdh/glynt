@@ -18,9 +18,9 @@ from glynt.apps.project import PROJECT_CREATED
 
 from glynt.apps.transact.models import Transaction
 
-
 from .signals import mark_project_notifications_as_read
 from . import PROJECT_LAWYER_STATUS
+from . import PROJECT_CREATED
 
 import logging
 logger = logging.getLogger('django.request')

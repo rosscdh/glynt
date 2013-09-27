@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django import dispatch
+
 from glynt.apps.utils import get_namedtuple_choices
 
 PROJECT_STATUS = get_namedtuple_choices('PROJECT_STATUS', (
@@ -17,6 +18,6 @@ PROJECT_LAWYER_STATUS = get_namedtuple_choices('PROJECT_LAWYER_STATUS', (
 PROJECT_CREATED = dispatch.Signal(providing_args=["created", "instance"])
 PROJECT_PROFILE_IS_COMPLETE = dispatch.Signal(providing_args=["instance"])
 
-PROJECT_CATEGORY_SORT_UPDATED = dispatch.Signal(providing_args=["instance", "user", "categories"])
+PROJECT_CHECKLIST_ITEMS_SORT_UPDATED = dispatch.Signal(providing_args=["instance", "user", "items"])
 
 from .signals import on_project_created, on_lawyer_assigned

@@ -8,7 +8,6 @@ from views import (ProjectView, CreateProjectView, CloseProjectView,
 
 urlpatterns = patterns('',
     url(r'^create/$', login_required(CreateProjectView.as_view()), name='create'),
-    # url(r'^my/$', login_required(MyProjectsView.as_view()), name='list'),
 
     url(r'^(?P<slug>.+)/(?P<lawyer>.+)/project-contact/$', login_required(LawyerContactProjectView.as_view()), name='project_contact'),
 

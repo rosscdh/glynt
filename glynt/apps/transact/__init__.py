@@ -114,14 +114,16 @@ class BuilderBaseForm(forms.Form):
 
     def save(self, *args, **kwargs):
         data_bag = self.get_data_bag(instance=self.request.project, request=self.request, user=self.user, **kwargs)
+        if data_bag is None:
+            return None
+        else:
+            if data_bag._model_databag_field:
+                data = json.loads(self.cleaned_data.get('form_json_data', '{}'))
+                if data.keys():
+                    data_bag.save(**data)
 
-        if data_bag._model_databag_field:
-            data = json.loads(self.cleaned_data.get('form_json_data', '{}'))
-            if data.keys():
-                data_bag.save(**data)
 
+            # remove the unrequired fields
+            self.cleaned_data.pop('form_json_data', None)
 
-        # remove the unrequired fields
-        self.cleaned_data.pop('form_json_data', None)
-
-        return data_bag.save(**self.cleaned_data)
+            return data_bag.save(**self.cleaned_data)

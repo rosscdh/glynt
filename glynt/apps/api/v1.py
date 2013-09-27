@@ -21,9 +21,8 @@ from glynt.apps.customer.api import _customer_profile
 from glynt.apps.company.api import (CompanyLiteSimpleResource,
                                     CompanyBasicProfileResource, CompanyDataBagResource)
 
-from glynt.apps.project.api import (ProjectResource, ProjectDataBagResource,
-                                    ProjectLawyerResource,
-                                    ProjectChecklistCategoriesSortResource)
+from glynt.apps.project.api import (ProjectResource, 
+                                    ProjectDataBagResource, ProjectLawyerResource, ProjectChecklistSortResource)
 
 from glynt.apps.todo.api import (UserToDoCountResource, AttachmentResource,
                                 ToDoResource, FeedbackRequestResource)
@@ -138,7 +137,8 @@ V1_INTERNAL_API.register(ToDoResource())
 V1_INTERNAL_API.register(FeedbackRequestResource())
 V1_INTERNAL_API.register(LawyerResource())
 
-V1_INTERNAL_API.register(ProjectResource())
 V1_INTERNAL_API.register(ProjectLawyerResource())
 V1_INTERNAL_API.register(ProjectDataBagResource())
-V1_INTERNAL_API.register(ProjectChecklistCategoriesSortResource())
+V1_INTERNAL_API.register(ProjectChecklistSortResource())
+V1_INTERNAL_API.register(ProjectResource())
+

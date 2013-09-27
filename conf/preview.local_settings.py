@@ -8,8 +8,8 @@ SITE_ID = 3
 
 SECRET_KEY = 'g5ched^#zkyf!va9!2nwzzav3r@h8s+p%u2oeolg)@qak$!plc'
 
-DEBUG = False
-COMPRESS_ENABLED = False
+DEBUG = True
+COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = False
 TEMPLATE_DEBUG = DEBUG
 
