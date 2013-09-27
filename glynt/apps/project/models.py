@@ -25,8 +25,6 @@ class Project(models.Model):
     """ Base Project object
     Stores initial project details
     """
-    _primary_lawyer = False
-
     uuid = UUIDField(auto=True, db_index=True)
     customer = models.ForeignKey('customer.Customer')
     company = models.ForeignKey('company.Company')
@@ -75,12 +73,11 @@ class Project(models.Model):
         return self.get_primary_lawyer()
 
     def get_primary_lawyer(self):
-        if self._primary_lawyer is False:
-            try:
-                _primary_lawyer = self.lawyers.select_related('user').all()[0]
-            except:
-                _primary_lawyer = None
-        return _primary_lawyer
+        try:
+            primary_lawyer_join = ProjectLawyer.objects.assigned(project=self)[0]
+            return primary_lawyer_join.lawyer
+        except:
+            return None
 
     def notification_recipients(self):
         """
