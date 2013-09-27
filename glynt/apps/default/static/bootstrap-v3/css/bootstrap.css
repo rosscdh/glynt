@@ -7963,6 +7963,22 @@ td.hidden-lg {
   }
 }
 
+ul#checklist-categories li {
+  position: relative;
+}
+
+ul#checklist-categories li:hover i.icon-move {
+  display: block;
+}
+
+ul#checklist-categories i.icon-move {
+  position: absolute;
+  top: 12px;
+  right: 45px;
+  display: none;
+  cursor: move;
+}
+
 table.checklist {
   margin-bottom: 0;
   border-bottom: 1px solid #dddddd;
