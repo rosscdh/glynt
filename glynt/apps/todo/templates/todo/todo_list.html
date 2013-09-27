@@ -86,7 +86,8 @@
         * Current User Object
         */
        "project": {
-            "id": {{project.id}}
+            "id": {{ project.id }},
+            "uuid": "{{ project.uuid }}"
        },
         "user": {
             'pk': {{ user.pk|default:'null'|jsonify }},
