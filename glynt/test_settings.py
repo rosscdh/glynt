@@ -19,14 +19,6 @@ elif sys.argv[1:2][0] == 'jenkins':
 
 PROJECT_ENVIRONMENT = 'test'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': './dev.db',
-        
-    }
-}
-
 INSTALLED_APPS = INSTALLED_APPS + (
     'casper',
     'django_jenkins',
