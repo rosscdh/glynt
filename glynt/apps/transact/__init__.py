@@ -98,11 +98,17 @@ class BuilderBaseForm(forms.Form):
             return None
 
     def initial_form_json_data(self, **kwargs):
-        """ Populate the form_json_data field """
+        """
+        Populate the form_json_data field
+        """
         if self.data_bag is not None:
             self.fields['form_json_data'].initial = self.get_data_bag(instance=self.request.project, request=self.request, user=self.user, **kwargs.get('initial', {})).as_json()
 
     def save_data_bag(self, cleaned_data, **kwargs):
+        """
+        Custom save method called by builder.py when saving our the completed
+        is_valid form
+        """
         data_bag = self.get_data_bag(instance=self.request.project, request=self.request, user=self.user, **kwargs)
 
         form_json_data = json.loads(cleaned_data.pop('form_json_data', '{}'))
