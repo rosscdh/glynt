@@ -83,6 +83,11 @@ class ProjectLawyerResource(BaseApiModelResource):
 
 
 class ProjectChecklistSortResource(BaseApiModelResource):
+    """
+    Endpoint to handle the sorting of Checklist Items
+    dont get confused with the category sort calss
+    ProjectChecklistCategoriesSortResource
+    """
     class Meta:
         queryset = Project.objects.all()
         resource_name = 'project_checklist_sort'
@@ -123,6 +128,9 @@ class ProjectChecklistSortResource(BaseApiModelResource):
 
 
 class ProjectChecklistCategoriesSortResource(BaseApiModelResource):
+    """
+    Endpoint to handle the sorting of Checklist Categories
+    """
     class Meta:
         queryset = Project.objects.all()
         resource_name = 'project_categories_sort'
