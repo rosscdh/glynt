@@ -2,7 +2,7 @@
 """ Set of signals to handle when comments are posted and assigning notifications to the user """
 from django.dispatch import receiver
 from django.db.models.signals import pre_save, post_save, post_delete, m2m_changed
-
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.admin.models import LogEntry
 
 from threadedcomments.models import ThreadedComment
@@ -116,7 +116,7 @@ def on_attachment_deleted(sender, **kwargs):
                             todo=attachment.todo.name,
                             status=attachment.todo.display_status,
                             event='todo.attachment.deleted')
-            except ToDo.DoesNotExist:
+            except ObjectDoesNotExist:
                 pass
 
 """
