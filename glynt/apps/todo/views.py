@@ -221,6 +221,7 @@ class AttachmentView(CrocdocAttachmentSessionContextMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(AttachmentView, self).get_context_data(**kwargs)
+
         context.update({
             'has_lawyer': self.object.project.has_lawyer,
             'is_lawyer': self.request.user.profile.is_lawyer,
@@ -228,4 +229,5 @@ class AttachmentView(CrocdocAttachmentSessionContextMixin, DetailView):
             'opposite_user': self.opposite_user,
             'FEEDBACK_STATUS': FEEDBACK_STATUS,
         })
+
         return context
