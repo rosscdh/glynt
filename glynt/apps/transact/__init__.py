@@ -3,7 +3,7 @@ import os
 from django import forms
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Field
+from crispy_forms.layout import Field, Fieldset
 
 import json
 import logging
@@ -67,14 +67,17 @@ class BuilderBaseForm(forms.Form):
     data_bag = None
 
     #  stores the JSON data used to handle repeatables etc
-    form_json_data = forms.CharField(required=False, widget=forms.HiddenInput)
+    form_json_data = forms.CharField(required=True, widget=forms.HiddenInput)
 
     def __init__(self, *args, **kwargs):
         if not hasattr(self, 'helper'):
             self.helper = FormHelper()
 
         if hasattr(self.helper, 'layout'):
-            self.helper[:-1].wrap(Field, 'form_json_data')
+            # create a default fieldset with no label and contains our hidden
+            # form_json_data field
+            form_json_data_fieldset = Fieldset(None, 'form_json_data')
+            self.helper.layout.fields.insert(0, form_json_data_fieldset)
 
         # remove the double form creation
         self.helper.form_tag = kwargs.get('use_crispy_form_tag', False)
@@ -99,31 +102,16 @@ class BuilderBaseForm(forms.Form):
         if self.data_bag is not None:
             self.fields['form_json_data'].initial = self.get_data_bag(instance=self.request.project, request=self.request, user=self.user, **kwargs.get('initial', {})).as_json()
 
-    def is_valid(self, *args, **kwargs):
-        """
-        Call our custom save method
-        this is not really great as calling save is assumed here, which is not natural behaviour
-        is_valid should only return if its valid or not. Need to find a better way
-        """
-        is_valid = super(BuilderBaseForm, self).is_valid(*args, **kwargs)
-
-        if is_valid:
-            self.save()
-
-        return is_valid
-
-    def save(self, *args, **kwargs):
+    def save_data_bag(self, cleaned_data, **kwargs):
         data_bag = self.get_data_bag(instance=self.request.project, request=self.request, user=self.user, **kwargs)
+
+        form_json_data = json.loads(cleaned_data.pop('form_json_data', '{}'))
+
         if data_bag is None:
             return None
         else:
             if data_bag._model_databag_field:
-                data = json.loads(self.cleaned_data.get('form_json_data', '{}'))
-                if data.keys():
-                    data_bag.save(**data)
+                if form_json_data is not None:
+                    data_bag.save(**form_json_data)
 
-
-            # remove the unrequired fields
-            self.cleaned_data.pop('form_json_data', None)
-
-            return data_bag.save(**self.cleaned_data)
+        return form_json_data
