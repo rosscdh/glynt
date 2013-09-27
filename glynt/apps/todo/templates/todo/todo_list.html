@@ -21,9 +21,9 @@
             <div class="col col-lg-3">
                 <div class="sidebar" data-spy="affix" data-offset-top="80">
                     <div class="subnav">
-                        <!-- {% if is_lawyer %}ui-sortable="config.categorySort" ng-model="model.data"{% endif %} //-->
-                        <ul id="checklist-categories" class="nav nav-pills nav-stacked" {% if is_lawyer %}ui-sortable="config.categorySort" ng-model="model.data"{% endif %}>
-                            <li ng-repeat="category in model.data" ng-class="{'active':$first}">
+                        <!-- {% if is_lawyer %}ui-sortable="config.categorySort" ng-model="categories"{% endif %} //-->
+                        <ul id="checklist-categories" class="nav nav-pills nav-stacked" {% if is_lawyer %}ui-sortable="config.categorySort" ng-model="categories"{% endif %}>
+                            <li ng-repeat="category in categories" ng-class="{'active':$first}">
                                 <a href="#{[{category.info.slug}]}"><span ng-bind-html-unsafe="category.info.label"></span><span class="num_assigned_to_user badge assigned pull-right" ng-bind="assignedPerCategory(category.info)" xng-bind="category.numAssigned"></span></a>
                             </li>
                         </ul>
@@ -33,8 +33,8 @@
 
             <div class="col col-lg-9">                
                 <div id="list-items">
-                    <div {% if is_lawyer %}ui-sortable="config.categorySort" ng-model="model.data"{% endif %}>
-                        <section ng-repeat="category in model.data">
+                    <div {% if is_lawyer %}ui-sortable="config.categorySort" ng-model="categories"{% endif %}>
+                        <section ng-repeat="category in categories">
                             <div id="{[{category.info.slug}]}" class="checklist-header clearfix">
                                 <h3 class="pull-left" ng-bind-html-unsafe="category.info.label"></h3>
 

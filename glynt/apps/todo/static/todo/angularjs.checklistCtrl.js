@@ -8,17 +8,31 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 
 	$scope.loadStatus = 0;
 
-	// Data is stored within a JavaSCript object to avoid any nasty scope overides
+	/**
+	 * Data is stored within a JavaSCript object to avoid any nasty scope overides
+	 * @type {Object} project 		Project details
+	 * @type {Array} categories 	Array of category objects (from API directly), the JSON object contains:
+	 *     							{String} slug, {String} label
+
+	 * @type {Array} checklist 		Array of checklist items (from API directly), the JSON object contains:
+	 *       						{String} category, {String} date_created. {String} date due, {String} date modified
+	 *       						{String} description, {String} display_status, {String} id, {Boolean} is_deleted
+	 *       						{String} name, {Number} project, {String} slug, {Number} sort_position
+	 *       						{Number} sort_position_by_cat, {Number} status
+	 * @type
+	 */
 	$scope.model = {
-		'project': { 'uuid': null }, // Project details
-		'categories': [], // Array of checklist categories
-		'data': [],
+		'project': { 'uuid': null }, // 
+		'categories': [],
+		'checklist': [], // from API: Contains all checklist items
+		/*'data': [],	// Working copy of the data*/
 		'feedbackRequests': [],
 		'alerts': [], // Used to display alerts at the top of the page
-		'checklist': [], // Contains all checklist items
 		'usertype': lawPalService.getUserType(), // is_lawyer, is_customer
 		'showDeletedItems': false // If true deleted items are displayed also
 	};
+
+	$scope.categories = [];
 
 	$scope.config = {
 		'pusher': {},
@@ -153,7 +167,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 	 * @return {Object}       category object
 	 */
 	$scope.findCategoryByLabel = function( label ) {
-		var categories = $scope.model.data;
+		var categories = $scope.categories;
 		var category = {
 			"info": { "label": label },
 			"items": []
@@ -343,7 +357,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 			checklist = $scope.model.checkListItems;
 
 			angular.forEach( categories, function( item, index ) {
-				$scope.model.data.push(
+				$scope.categories.push(
 					{ 
 						"info": item,
 						"items": $scope.checklistItemsByCategory( item )
@@ -351,7 +365,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 				);
 			});
 
-			console.log($scope.model.data);
+			console.log($scope.categories);
 		}
 	};
 
@@ -372,7 +386,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 	 * @param  {DOMNode} uiItem DOM node that this action was performed on
 	 */
 	$scope.saveCategoryOrder = function( evt, uiItem ){
-		var categories = $.map($scope.model.data, function( cat ){
+		var categories = $.map($scope.categories, function( cat ){
 			return cat.info;
 		});
 		var promise = lawPalService.updateCategoryOrder( categories );
@@ -387,7 +401,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 	};
 
 	$scope.saveItemOrder = function( evt, uiItem ) {
-		var categories = $scope.model.data;
+		var categories = $scope.categories;
 
 		var promise = lawPalService.updateChecklistItemOrder( categories );
 		promise.then( 

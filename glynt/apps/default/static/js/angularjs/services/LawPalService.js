@@ -25,14 +25,14 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			}),
 		"reorder": $resource("/api/v1/project/:id/items", {}, 
 			/* This is done to ensure the content type of PATCH is sent through */
-			{ "save": { "method": "PATCH", headers: { "Content-Type": "application/json" } } 
+			{ "save": { "method": "PATCH", headers: { "Content-Type": "application/json" }, "isArray": true } 
 		})
 	};
 
 	var checkListCategories = {
-		"reorder": $resource("/api/v1/project/:id/categories", {}, 
+		"reorder": $resource("/project/:id/checklist/sort/", {}, 
 			/* This is done to ensure the content type of PATCH is sent through */
-			{ "save": { "method": "PATCH", headers: { "Content-Type": "application/json" } } 
+			{ "save": { "method": "PATCH", headers: { "Content-Type": "application/json" }, "isArray": true } 
 		})
 	};
 
@@ -76,7 +76,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			var data = { "project": projectId, "categories": cats };
 			var deferred = $q.defer();
 
-			checkListCategories.reorder.save(options, data, function (results) { /* Success */
+			checkListCategories.reorder.save(options, data.categories, function (results) { /* Success */
 					deferred.resolve(results);
 				}, function (results) { /* Error */
 					deferred.reject(results);
@@ -105,7 +105,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 				}
 			});
 
-			checkListItemResources.reorder.save(options, data, function (results) { /* Success */
+			checkListItemResources.reorder.save(options, data.slugs, function (results) { /* Success */
 					deferred.resolve(results);
 				}, function (results) { /* Error */
 					deferred.reject(results);
