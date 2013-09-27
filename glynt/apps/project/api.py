@@ -11,7 +11,7 @@ from glynt.apps.api.models import BaseApiModelResource
 
 from .models import Project, ProjectLawyer
 from . import PROJECT_STATUS
-from . import PROJECT_CHECKLIST_ITEMS_SORT_UPDATED
+from . import PROJECT_CATEGORY_SORT_UPDATED
 
 import json
 
@@ -83,6 +83,11 @@ class ProjectLawyerResource(BaseApiModelResource):
 
 
 class ProjectChecklistSortResource(BaseApiModelResource):
+    """
+    Endpoint to handle the sorting of Checklist Items
+    dont get confused with the category sort calss
+    ProjectChecklistCategoriesSortResource
+    """
     class Meta:
         queryset = Project.objects.all()
         resource_name = 'project_checklist_sort'
@@ -121,4 +126,43 @@ class ProjectChecklistSortResource(BaseApiModelResource):
                 todo.sort_position = found_index
                 todo.save(update_fields=['sort_position'])
 
-                PROJECT_CHECKLIST_ITEMS_SORT_UPDATED.send(sender=self, instance=project, user=request.user, items=slugs)
+
+class ProjectChecklistCategoriesSortResource(BaseApiModelResource):
+    """
+    Endpoint to handle the sorting of Checklist Categories
+    """
+    class Meta:
+        queryset = Project.objects.all()
+        resource_name = 'project_categories_sort'
+        authentication = Authentication()
+        authorization = Authorization()
+        list_allowed_methods = ['get']
+        detail_allowed_methods = ['get', 'patch']
+
+    def prepend_urls(self):
+        return [
+            url(r"^project/(?P<uuid>.+)/checklist/categories/sort/$", self.wrap_view('dispatch_detail'), name='project_categories_sort'),
+        ]
+
+    def patch_detail(self, request, **kwargs):
+        """
+        PATCH request posts in a List like so
+        ['JZ7GhrcRqeFHLYcH8RD6aZ', 'Ytqp4yLcRATz7RkK98FevJ', ... ]
+        this list is the new order of the project checklist todo items
+        we need to update our set, but only those that change
+        this event will send pusher events on change
+        """
+        uuid = kwargs.get('uuid', None)
+
+        json_cats = request.read()                       # read in the submited list of slugs
+        cats = json.loads(json_cats)                     # convert to json
+
+        project = Project.objects.get(uuid=uuid)         # get the appropiate project @TODO can this use the tastypie method?
+
+        # only if the lists are not the same
+        if project.data.get('category_order', []) != cats:
+            # override the value with our passed in value
+            project.data['category_order'] = cats
+            project.save(update_fields=['data'])
+
+            PROJECT_CATEGORY_SORT_UPDATED.send(sender=self, instance=project, user=request.user, categories=cats)
