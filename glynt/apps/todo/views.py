@@ -23,7 +23,12 @@ class ToDoCountMixin(object):
     def todo_counts(self, qs_objects, project=None, **kwargs):
         project = project if project is not None else self.project
 
-        awaiting_feedback_from_user = FeedbackRequest.objects.prefetch_related('attachment', 'attachment__project').filter(attachment__project=project, assigned_to=self.request.user).count()
+        awaiting_feedback_from_user = FeedbackRequest.objects \
+                                                     .prefetch_related('attachment',
+                                                                       'attachment__project') \
+                                                     .filter(attachment__project=project,
+                                                             assigned_to=self.request.user) \
+                                                     .count()
 
         counts = {'counts': {
                     'new': qs_objects.new(project=project, **kwargs).count(),
