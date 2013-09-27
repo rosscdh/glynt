@@ -11,26 +11,26 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 
 	/* Define API interfaces for check list items */
 	var checkListItemResources = {
-		"remove": $resource("/api/v1/todo/:id", {}, 
+		"remove": $resource("/api/v1/todo/:id\\/", {}, 
 			/* This is done to ensure the content type of PATCH is sent through */
 			{ "save": { "method": "PATCH", headers: { "Content-Type": "application/json" } } 
 		}),
 		"update": 
-			$resource("/api/v1/todo/:id", {},
+			$resource("/api/v1/todo/:id\\/", {},
 				{ "save": { "method": "PUT", headers: { "Content-Type": "application/json" } } 
 			}),
 		"create": 
-			$resource("/api/v1/todo", {},
+			$resource("/api/v1/todo\\/", {},
 				{ "save": { "method": "POST", headers: { "Content-Type": "application/json" } } 
 			}),
-		"reorder": $resource("/api/v1/project/:id/checklist/sort/", {}, 
+		"reorder": $resource("/api/v1/project/:id/checklist/sort\\/", {}, 
 			/* This is done to ensure the content type of PATCH is sent through */
 			{ "save": { "method": "PATCH", headers: { "Content-Type": "application/json" }, "isArray": true } 
 		})
 	};
 
 	var checkListCategories = {
-		"reorder": $resource("/api/v1/project/:id/checklist/categories/sort/", {}, 
+		"reorder": $resource("/api/v1/project/:id/checklist/categories/sort\\/", {}, 
 			/* This is done to ensure the content type of PATCH is sent through */
 			{ "save": { "method": "PATCH", headers: { "Content-Type": "application/json" }, "isArray": true } 
 		})
