@@ -147,8 +147,74 @@ helper.scenario(casper.cli.options.url,
 	            });
             });
     	});
-    }
+    },
+    function() {
+        // Order categories
+        casper.viewport(1024, 768);
+        casper.test.comment('Order categories');
+
+        casper.waitForSelector("#checklist-categories li:nth-child(2) .ng-binding:nth-child(1)",
+            function success() {
+                var secondItemText1, secondItemText2;
+                // Read text in current 2nd item position
+                secondItemText1 = this.getHTML('#checklist-categories li:nth-child(2) a span:nth-child(1)');
+                // Drag and drop
+                moveMouse.call( casper, [150,225], [150,300], 20);
+                // Read text in current 2nd item position
+                secondItemText2 = this.getHTML('#checklist-categories li:nth-child(2) a span:nth-child(1)');
+                
+                this.wait(1000);
+                // Is the text in the second category the same as before (it should not be)
+                this.test.assertNotEquals( secondItemText1, secondItemText2 );
+            }
+        );
+    }/*,
+    function() {
+        // Order items
+        casper.viewport(1024, 768);
+        casper.test.comment('Order categories');
+
+        casper.waitForSelector(".item-info h4 a",
+            function success() {
+                var secondItemText1, secondItemText2;
+                // Read text in current 2nd item position
+                secondItemText1 = this.getHTML('.item-info h4 a');
+                // Drag and drop
+                snapshotPage.call( this, 11);
+                moveMouse.call( casper, [450,405], [450,475], 20);
+                // Read text in current 2nd item position
+                secondItemText2 = this.getHTML('.item-info h4 a');
+                
+                this.wait(1000);
+                snapshotPage.call( this, 12);
+                // Is the text in the second category the same as before (it should not be)
+                this.test.assertNotEquals( secondItemText1, secondItemText2 );
+            }
+        );
+    }*/
 );
+
+/**
+ * Drag and drop from x,y position to a,b position
+ * @param  {Array} origin      [x,y]
+ * @param  {Array} destination [x,y]
+ * @param  {Number} steps       Number > 0
+ */
+function moveMouse( origin, destination, steps ) {
+    //steps = (steps && steps>0) || 20;
+    var stepx = parseInt((destination[0] - origin[0]) / steps);
+    var stepy = parseInt((destination[1] - origin[1]) / steps);
+    var x = origin[0];
+    var y = origin[1];
+
+    casper.page.sendEvent("mousedown", x, y, "left");
+
+    for(var i=0;i<steps;i++) {
+        this.page.sendEvent("mousemove", x + (stepx*i), y + (stepy*i));
+    }
+
+    casper.page.sendEvent("mouseup", x + (stepx*i), y + (stepy*i));
+}
 
 /**
  * captureRequest: Increments by one each time a capturePage request is made
@@ -177,10 +243,10 @@ function capturePageTimelapse( numFrames ) {
  *              capturePage();
  */
 function capturePage() {
-	var wait;
-	captureRequest++;
-	wait = captureRequest * 1000; // wait n seconds before taking screen capture
-	delayCapturePage( wait );
+    var wait;
+    captureRequest++;
+    wait = captureRequest * 1000; // wait n seconds before taking screen capture
+    delayCapturePage( wait );
 }
 
 /**
@@ -188,14 +254,24 @@ function capturePage() {
  * @param  {Number} delay Number of seconds to wait until taking the screen capture
  */
 function delayCapturePage( delay ) {
-	casper.wait(delay, function() {
-    	this.capture('/tmp/page_' + delay + '.png', {
-	        top: 0,
-	        left: 0,
-	        width: 2048,
-	        height: 1024
-	    });
+    casper.wait(delay, function() {
+        this.capture('/tmp/page_' + delay + '.png', {
+            top: 0,
+            left: 0,
+            width: 2048,
+            height: 1024
+        });
     });
 }
+
+function snapshotPage( num ) {
+    this.capture('/tmp/page_' + num + '.png', {
+        top: 0,
+        left: 0,
+        width: 2048,
+        height: 1024
+    });
+}
+
 
 helper.run();
