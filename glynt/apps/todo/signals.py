@@ -187,7 +187,8 @@ def feedbackrequest_created(sender, **kwargs):
         assigned = {'from': feedbackrequest.assigned_by.pk, 'to': [t.pk for t in feedbackrequest.assigned_to.all()]}
 
         if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.open:
-            verb = '{assigned_by} requested feedback from {assigned_to} on checklist item {todo} for {project}'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), assigned_to=', '.join([u.get_full_name() for u in feedbackrequest.assigned_to.all()]), todo=feedbackrequest.attachment.todo, project=feedbackrequest.attachment.project)
+            assigned_to = feedbackrequest.primary_assigned_to.get_full_name()
+            verb = '{assigned_by} requested feedback from {assigned_to} on checklist item {todo} for {project}'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), assigned_to=assigned_to, todo=feedbackrequest.attachment.todo, project=feedbackrequest.attachment.project)
             action.send(feedbackrequest.assigned_by,
                         verb=verb,
                         action_object=feedbackrequest.attachment,
