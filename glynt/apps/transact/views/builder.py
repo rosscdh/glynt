@@ -143,6 +143,17 @@ class BuilderWizardView(NamedUrlSessionWizardView):
 
         return form_list
 
+    def process_step(self, form):
+        """
+        has a fully valid form passed in
+        use this to save our databag data
+        """
+        if hasattr(form, 'save_data_bag'):
+            form.save_data_bag(cleaned_data=form.cleaned_data)
+
+        # must return data in order to pregress in forms list
+        return super(BuilderWizardView, self).process_step(form=form)
+
     def done(self, form_list, **kwargs):
         msg = _('Your project has been created.')
         messages.info(self.request, msg)
