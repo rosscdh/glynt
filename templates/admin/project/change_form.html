@@ -2,6 +2,6 @@
 {% load admin_urls i18n %}
 
 {% block object-tools-items %}
-    <li><a href="{% url opts|admin_urlname:'send_matches_email' original.pk|admin_urlquote %}">{% trans "Send matches email" %}</a></li>
+    <li><a href="{% url opts|admin_urlname:'send_matches' original.pk|admin_urlquote %}">{% trans "Send matches email" %}</a></li>
     {{ block.super }}
 {% endblock %}
