@@ -1,29 +1,34 @@
 # -*- coding: utf-8 -*-
 from django import template
-from django.test import LiveServerTestCase
 from django.utils import unittest
 from django.test.utils import override_settings
 
-from django.utils import unittest
+from model_mommy import mommy
 
 from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin
-
 from glynt.tests import TemplateRendererMixin
-from glynt.apps.factories import UserFactory, LoggedOutUserFactory
 
-from glynt.apps.default.templatetags.glynt_helpers import (colorize_acronym,  \
-        pusher_js, moment_js, intercom_script, )
+from django.contrib.auth.models import AnonymousUser
+
+from glynt.apps.default.templatetags.glynt_helpers import (colorize_acronym,
+                                                           pusher_js,
+                                                           moment_js,
+                                                           intercom_script,)
 
 
 class TestTemplateTags(unittest.TestCase):
     def test_current_date_format(self):
         pass
+
     def test_current_site_domain(self):
         pass
+
     def test_document_status(self):
         pass
+
     def test_comment_form(self):
         pass
+
     def test_colorize_acronym(self):
         assert colorize_acronym('monkey') == 'c5'
         assert colorize_acronym('cl') == 'c1'
@@ -77,12 +82,12 @@ class TestTemplateTag_Intercom(unittest.TestCase):
     fixtures = ['test_cities']
     def setUp(self):
 
-        self.user = UserFactory.create()
+        self.user = mommy.make('auth.User')
         self.context = {
             'user': self.user
         }
 
-        self.loggedout_user = LoggedOutUserFactory.create()
+        self.loggedout_user = AnonymousUser()
         self.loggedout_context = {
             'user': self.loggedout_user
         }
@@ -130,7 +135,7 @@ class TestTemplateTag_Intercom(unittest.TestCase):
         intercom_result = intercom_script(self.context)
         result = self.render_template(
             '{% load glynt_helpers %}'
-            ,'{% intercom_script %}'
+            , '{% intercom_script %}'
             , context=self.context
         )
 
@@ -163,7 +168,7 @@ class TestHumaniseNumber(unittest.TestCase, TemplateRendererMixin):
     def test_humanise(self):
         result = self.render_template(
             '{% load glynt_helpers %}'
-            ,'{{ big_number|humanise_number }}'
+            , '{{ big_number|humanise_number }}'
             , context=self.context
         )
 
@@ -173,7 +178,7 @@ class TestHumaniseNumber(unittest.TestCase, TemplateRendererMixin):
     def test_humanise_converts_strings_to_zero(self):
         result = self.render_template(
             '{% load glynt_helpers %}'
-            ,'{{ no_strings_allowed|humanise_number }}'
+            , '{{ no_strings_allowed|humanise_number }}'
             , context=self.context
         )
 
@@ -182,7 +187,7 @@ class TestHumaniseNumber(unittest.TestCase, TemplateRendererMixin):
     def test_humanise_converts_unicode_to_zero(self):
         result = self.render_template(
             '{% load glynt_helpers %}'
-            ,'{{ no_unicode_allowed|humanise_number }}'
+            , '{{ no_unicode_allowed|humanise_number }}'
             , context=self.context
         )
 
@@ -191,7 +196,7 @@ class TestHumaniseNumber(unittest.TestCase, TemplateRendererMixin):
     def test_humanise_converts_empty_string_to_zero(self):
         result = self.render_template(
             '{% load glynt_helpers %}'
-            ,'{{ no_empty_strings_allowed|humanise_number }}'
+            , '{{ no_empty_strings_allowed|humanise_number }}'
             , context=self.context
         )
 
@@ -200,7 +205,7 @@ class TestHumaniseNumber(unittest.TestCase, TemplateRendererMixin):
     def test_humanise_converts_negative_integers_to_zero(self):
         result = self.render_template(
             '{% load glynt_helpers %}'
-            ,'{{ no_neg_integers_allowed|humanise_number }}'
+            , '{{ no_neg_integers_allowed|humanise_number }}'
             , context=self.context
         )
 
@@ -209,9 +214,8 @@ class TestHumaniseNumber(unittest.TestCase, TemplateRendererMixin):
     def test_humanise_converts_floating_to_zero(self):
         result = self.render_template(
             '{% load glynt_helpers %}'
-            ,'{{ no_floating_allowed|humanise_number }}'
+            , '{{ no_floating_allowed|humanise_number }}'
             , context=self.context
         )
 
         self.assertEqual(result, '0')
-

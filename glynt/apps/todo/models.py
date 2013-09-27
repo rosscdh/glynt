@@ -29,8 +29,7 @@ def _attachment_upload_file(instance, filename):
 
 class ToDo(models.Model):
     """
-    ToDo Items that are associated with a user 
-    and perhaps with a project
+    ToDo Items that are associated with a project
     """
     TODO_STATUS_CHOICES = TODO_STATUS
 
@@ -96,6 +95,9 @@ registry.register("can_edit", ToDo)
 
 
 class Attachment(models.Model):
+    """
+    Files that can be attached to our todo items
+    """
     uuid = models.CharField(max_length=255, blank=True, null=True, db_index=True)
     uploaded_by = models.ForeignKey(User, related_name='atatchments_uploaded')
     deleted_by = models.ForeignKey(User, blank=True, null=True, related_name='atatchments_deleted')
@@ -148,6 +150,7 @@ class FeedbackRequest(models.Model):
     from a user on an attachment; is the primary mechanisim to obtain
     a response from a user on an attachment """
     FEEDBACK_STATUS_CHOICES = FEEDBACK_STATUS
+
     attachment = models.ForeignKey(Attachment)
     assigned_by = models.ForeignKey(User, related_name='requestedfeedback')
     assigned_to = models.ManyToManyField(User, related_name='feedbackrequested')
@@ -179,9 +182,11 @@ class FeedbackRequest(models.Model):
 """
 import signals
 """
-from .signals import (on_attachment_created, on_attachment_deleted, \
-                                        on_comment_created, feedbackrequest_created, \
-                                        feedbackrequest_status_change, projectlawyer_assigned, \
-                                        projectlawyer_deleted, todo_item_status_change, \
-                                        on_action_created
-                                    )
+from .signals import (on_attachment_created, on_attachment_deleted,
+                      on_comment_created,
+                      feedbackrequest_created,
+                      feedbackrequest_status_change,
+                      projectlawyer_assigned,
+                      projectlawyer_deleted,
+                      todo_item_status_change,
+                      on_action_created)
