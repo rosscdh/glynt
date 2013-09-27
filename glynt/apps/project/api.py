@@ -121,4 +121,4 @@ class ProjectChecklistSortResource(BaseApiModelResource):
                 todo.sort_position = found_index
                 todo.save(update_fields=['sort_position'])
 
-                PROJECT_CATEGORY_SORT_UPDATED.send(sender=self, instance=project, user=request.user, items=slugs)
+                PROJECT_CHECKLIST_ITEMS_SORT_UPDATED.send(sender=self, instance=project, user=request.user, items=slugs)
