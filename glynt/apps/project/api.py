@@ -5,6 +5,7 @@ from tastypie import fields
 from tastypie.resources import ALL
 from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
+from tastypie.utils import trailing_slash
 
 from glynt.apps.api.models import BaseApiModelResource
 
@@ -30,7 +31,6 @@ class ProjectResource(BaseApiModelResource):
         }
 
     def base_urls(self):
-        from tastypie.utils import trailing_slash
         return [
             url(r"^(?P<resource_name>%s)%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('dispatch_list'), name="api_dispatch_list"),
             url(r"^(?P<resource_name>%s)/schema%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_schema'), name="api_get_schema"),

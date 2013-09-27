@@ -24,7 +24,7 @@ from glynt.apps.company.api import (CompanyLiteSimpleResource,
 from glynt.apps.project.api import (ProjectResource, 
                                     ProjectDataBagResource, ProjectLawyerResource, ProjectChecklistSortResource)
 
-from glynt.apps.todo.api import (UserToDoCountResource, AttachmentResource, 
+from glynt.apps.todo.api import (UserToDoCountResource, AttachmentResource,
                                 ToDoResource, FeedbackRequestResource)
 
 V1_INTERNAL_API = Api(api_name='v1')

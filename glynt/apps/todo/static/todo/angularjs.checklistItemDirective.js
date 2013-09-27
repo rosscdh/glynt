@@ -24,6 +24,7 @@ lawPalApp.directive('checklistItemActions', [ 'lawPalUrls', function ( lawPalUrl
 		}
 		],
 		"template": '<a tooltip="Delete Item" class="btn btn-small btn-link text-danger item-delete" ng-click="deleteItem(item)"><i class="glyphicon glyphicon-remove text-danger"></i></a>'+
+					'<a class="btn btn-link item-move"><i class="icon icon-move"></i></a>'+
 					'<a xhref="{[{editUrl}]}" ng-click="editItem()" title="Edit" data-tooltip="Edit" class="btn btn-small btn-link item-edit"><i class="glyphicon glyphicon-pencil"></i></a>'
 	};
 }]);

@@ -17,8 +17,7 @@ from glynt.apps.project.services.engage_lawyer_comments import EngageLawyerComme
 
 from glynt.apps.services.pusher import PusherPublisherService
 
-from . import (PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE,
-               PROJECT_CHECKLIST_ITEMS_SORT_UPDATED)
+from . import (PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE)
 
 from .models import ProjectLawyer
 
@@ -54,7 +53,6 @@ def on_project_created(sender, **kwargs):
     # to bring project up to date with any modifications made
     checklist_service = ProjectCheckListService(project=project)
     checklist_service.bulk_create()
-
 
 @receiver(PROJECT_PROFILE_IS_COMPLETE, dispatch_uid='project.on_project_profile_is_complete')
 def on_project_profile_is_complete(sender, **kwargs):
