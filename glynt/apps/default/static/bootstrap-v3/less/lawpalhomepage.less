@@ -149,6 +149,16 @@ background-position: 50% 50%;	    background-size: cover;
 	}
 }
 
+ul#checklist-categories {
+  li { 
+    position: relative; 
+    &:hover i.icon-move {
+      display: block;
+    }
+  }
+  i.icon-move { position: absolute; right: 45px; top: 12px; cursor: move; display: none; }
+}
+
 table.checklist {
   border-bottom: 1px solid #dddddd;
   margin-bottom: 0;
