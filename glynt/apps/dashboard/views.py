@@ -80,7 +80,13 @@ class DashboardView(ToDoCountMixin, TemplateView):
 
         if self.project_uuid is None:
             project = self.request.project
-            if project is None:
+            #
+            # if we are a customer and no project is present, due to an admin
+            # deleting my project then rase an http.
+            # not for lawyers because they need to see the projects listing when
+            # they hit this view
+            #
+            if self.request.user.profile.is_customer and project is None:
                 raise Http404
         else:
             project = get_object_or_404(Project, uuid=self.project_uuid)
