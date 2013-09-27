@@ -20,7 +20,7 @@ class EnsureProjectService(object):
         self.company = company
         self.transactions = transactions
         self.data = kwargs
-        self.pk = kwargs.get('pk', False)
+
         self.lawyers = kwargs.get('lawyers', [])
 
     def process_transactions(self):
@@ -38,26 +38,15 @@ class EnsureProjectService(object):
     def process(self):
         logger.debug('Processing Project')
 
-        if self.pk is False:
-
-            try:
-                self.project = Project.objects.get(customer=self.customer, company=self.company)
-                self.is_new = False
-                logger.debug('Project exists')
-
-            except Project.DoesNotExist:
-                self.project = Project.objects.create(customer=self.customer, company=self.company)
-                self.is_new = True
-                logger.debug('Project created')
-
-            #self.project, self.is_new = Project.objects.get_or_create(**{'customer': self.customer, 'company': self.company}) # Causes big problems
-
-        else:
-            self.project = Project.objects.filter(pk=self.pk)
+        try:
+            self.project = Project.objects.get(customer=self.customer, company=self.company)
             self.is_new = False
+            logger.debug('Project exists')
 
-        self.project.customer = self.customer
-        self.project.company = self.company
+        except:
+            self.project = Project.objects.create(customer=self.customer, company=self.company)
+            self.is_new = True
+            logger.debug('Project created')
 
         self.process_transactions()
         self.process_lawyers()
