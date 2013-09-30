@@ -57,7 +57,7 @@ lawPalApp.directive('checklistItemLink', [ 'lawPalUrls', function ( lawPalUrls )
  * @param  {Factory} lawPalUrls Enables access to determine which forms to display
  * @return {Object}            AngularJS directive
  */
-lawPalApp.directive('checklistItemAttachments', [ 'lawPalUrls', function ( lawPalUrls ) {
+lawPalApp.directive('checklistItemDetails', [ 'lawPalUrls', function ( lawPalUrls ) {
 	return {
 		"restrict": 'A',
 		"link": function (scope, elem, attrs) {		
@@ -67,6 +67,6 @@ lawPalApp.directive('checklistItemAttachments', [ 'lawPalUrls', function ( lawPa
 
 		}
 		],
-		"template": '<a tooltip="2 Attachments" class="btn btn-small btn-link"><i class="glyphicon glyphicon-file"></i><span class="badge">2</span></a>'
+		"template": '<a tooltip="{[{item.num_attachments}]} Attachments" class="btn btn-small btn-link" ng-show="item.num_attachments!=0" ng-click="viewItem( item )"><i class="glyphicon glyphicon-file"></i><span class="badge" ng-bind="item.num_attachments"></span></a>'
 	};
 }]);

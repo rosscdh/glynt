@@ -7994,6 +7994,7 @@ table.checklist .item-status [class^="icon-"],
 table.checklist .item-status [class*=" icon-"] {
   font-size: 36px;
   line-height: 1.1;
+  cursor: pointer;
 }
 
 table.checklist .item-info {
@@ -8015,40 +8016,39 @@ table.checklist .item-info:hover a {
 }
 
 table.checklist .item-meta,
-table.checklist .item-attachments {
+table.checklist .item-details {
   width: 140px;
   text-align: right;
   vertical-align: middle;
 }
 
 table.checklist .item-meta a,
-table.checklist .item-attachments a {
+table.checklist .item-details a {
   font-size: 16px;
   line-height: 1.1;
 }
 
 table.checklist .item-meta a:hover,
-table.checklist .item-attachments a:hover {
+table.checklist .item-details a:hover {
   text-decoration: none;
 }
 
 table.checklist .item-meta .item-delete,
-table.checklist .item-attachments .item-delete,
+table.checklist .item-details .item-delete,
 table.checklist .item-meta .item-move,
-table.checklist .item-attachments .item-move {
+table.checklist .item-details .item-move {
   display: none;
 }
 
 table.checklist .item-meta .item-move,
-table.checklist .item-attachments .item-move {
+table.checklist .item-details .item-move {
   cursor: move;
 }
 
-table.checklist .item-attachments .btn span.badge {
-  padding: 1px 5px 3px;
+table.checklist .item-details .btn span.badge {
   margin-top: 10px;
   margin-left: -8px;
-  font-size: 8px;
+  font-size: 10px;
   background-color: #42d0e5;
 }
 
@@ -8370,13 +8370,13 @@ table.lawyer-list.active {
 }
 
 .checklist-header {
-  margin-top: 20px;
+  margin-top: 0;
 }
 
 .checklist-header .btn {
-  margin: 0 0 0;
-  font-size: 32px;
-  line-height: 32px;
+  margin: 0;
+  font-size: 24px;
+  line-height: 24px;
   color: #bfbfbf;
 }
 

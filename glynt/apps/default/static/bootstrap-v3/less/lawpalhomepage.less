@@ -150,8 +150,8 @@ background-position: 50% 50%;	    background-size: cover;
 }
 
 ul#checklist-categories {
-  li { 
-    position: relative; 
+  li {
+    position: relative;
     &:hover i.icon-move {
       display: block;
     }
@@ -168,6 +168,7 @@ table.checklist {
     width: 60px;
     [class^="icon-"],
     [class*=" icon-"] {
+      cursor: pointer;
       font-size: 36px;
       line-height: 1.1;
     }
@@ -186,7 +187,7 @@ table.checklist {
     	text-decoration: underline;
     }
   }
-  .item-meta, .item-attachments {
+  .item-meta, .item-details {
     text-align: right;
     vertical-align: middle;
     width: 140px;
@@ -204,8 +205,8 @@ table.checklist {
     .item-move { cursor: move; }
   }
 
-  .item-attachments .btn {
-    span.badge { margin-left: -8px; margin-top:10px; font-size: 8px; background-color: @brand-primary; padding: 1px 5px 3px;}
+  .item-details .btn {
+    span.badge { margin-left: -8px; margin-top:10px; font-size: 10px; background-color: @brand-primary; /*padding: 1px 5px 3px;*/}
   }
 
   tr.item {
@@ -479,12 +480,12 @@ table.lawyer-list.active {
 .transaction-profile { height: 220px; }
 
 .checklist-header {
-  margin-top: 20px;
+  margin-top: 0px;
   .btn {
     color: @gray-light;
-    font-size: 32px;
-    line-height: 32px;
-    margin: 0px 0 0;
+    font-size: 24px;
+    line-height: 24px;
+    margin: 0;
     &:hover,
     &:focus {
       color: @gray;
@@ -501,7 +502,7 @@ table.lawyer-list.active {
   display:block;
   .item-meta { visibility: hidden; }
 }
-.ui-sortable-placeholder { 
+.ui-sortable-placeholder {
   border: 2px dashed #CCC; margin: 10px 0;
   visibility: visible !important;
   background-color: rgba(0,0,0,0.025);
