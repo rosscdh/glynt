@@ -47,12 +47,13 @@
 
                                 <table class="table table-striped checklist">
                                     <tbody {% if is_lawyer %}ui-sortable="config.itemSort" ng-model="category.items"{% endif %}>
-                                        <tr ng-repeat="item in category.items | filter: { is_deleted: model.showDeletedItems }" class="item state-{[{getItemStatus(item)}]}" ng-controller="checklistItemCtrl">
+                                        <tr ng-repeat="item in category.items | filter: { is_deleted: model.showDeletedItems }" class="item state-{[{getItemStatus(item)}]} {[{pendingFeedback(item)}]}" ng-controller="checklistItemCtrl">
                                             <!-- Checklist item status //-->
                                             <td class="item-status" ng-click="viewItem( item )">
                                                 <i class="icon-state-{[{getItemStatus(item)}]}"></i>
                                             </td>
                                             <td class="item-info" checklist-item-link ng-click="viewItem( item )"></td>
+                                            <td class="item-details" checklist-item-details></td>
                                             {% if is_lawyer %}
                                             <!-- Checklist item actions //-->
                                             <td class="item-meta" checklist-item-actions></td>
