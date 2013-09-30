@@ -51,3 +51,22 @@ lawPalApp.directive('checklistItemLink', [ 'lawPalUrls', function ( lawPalUrls )
 		"template": '<h4><a href="{[{viewUrl}]}" ng-bind="item.name"></a></h4>'
 	};
 }]);
+
+/**
+ * Displays checklist item heading
+ * @param  {Factory} lawPalUrls Enables access to determine which forms to display
+ * @return {Object}            AngularJS directive
+ */
+lawPalApp.directive('checklistItemAttachments', [ 'lawPalUrls', function ( lawPalUrls ) {
+	return {
+		"restrict": 'A',
+		"link": function (scope, elem, attrs) {		
+
+		},
+		"controller": [ '$scope', '$resource' , function( $scope, $resource ) {
+
+		}
+		],
+		"template": '<a tooltip="2 Attachments" class="btn btn-small btn-link"><i class="glyphicon glyphicon-file"></i><span class="badge">2</span></a>'
+	};
+}]);

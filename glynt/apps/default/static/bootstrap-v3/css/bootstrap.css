@@ -8014,28 +8014,42 @@ table.checklist .item-info:hover a {
   text-decoration: underline;
 }
 
-table.checklist .item-meta {
+table.checklist .item-meta,
+table.checklist .item-attachments {
   width: 140px;
   text-align: right;
   vertical-align: middle;
 }
 
-table.checklist .item-meta a {
+table.checklist .item-meta a,
+table.checklist .item-attachments a {
   font-size: 16px;
   line-height: 1.1;
 }
 
-table.checklist .item-meta a:hover {
+table.checklist .item-meta a:hover,
+table.checklist .item-attachments a:hover {
   text-decoration: none;
 }
 
 table.checklist .item-meta .item-delete,
-table.checklist .item-meta .item-move {
+table.checklist .item-attachments .item-delete,
+table.checklist .item-meta .item-move,
+table.checklist .item-attachments .item-move {
   display: none;
 }
 
-table.checklist .item-meta .item-move {
+table.checklist .item-meta .item-move,
+table.checklist .item-attachments .item-move {
   cursor: move;
+}
+
+table.checklist .item-attachments .btn span.badge {
+  padding: 1px 5px 3px;
+  margin-top: 10px;
+  margin-left: -8px;
+  font-size: 8px;
+  background-color: #42d0e5;
 }
 
 table.checklist tr.item.state-new:hover .item-delete {

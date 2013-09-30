@@ -186,7 +186,7 @@ table.checklist {
     	text-decoration: underline;
     }
   }
-  .item-meta {
+  .item-meta, .item-attachments {
     text-align: right;
     vertical-align: middle;
     width: 140px;
@@ -202,6 +202,10 @@ table.checklist {
       display:none;
     }
     .item-move { cursor: move; }
+  }
+
+  .item-attachments .btn {
+    span.badge { margin-left: -8px; margin-top:10px; font-size: 8px; background-color: @brand-primary; padding: 1px 5px 3px;}
   }
 
   tr.item {
