@@ -11,18 +11,20 @@ class NumAttachmentsMixin(object):
     """
     @property
     def num_attachments(self):
-        num = self.data.get('num_attachments', 0)
-        if self.pk and num is 0:
+        num = self.data.get('num_attachments', None)
+        if num is None:
             num = self.attachments.count()
             self.data['num_attachments'] = num
-            self.save(update_fields=['data'])
+            if self.pk is not None:
+                self.save(update_fields=['data'])
         return num
 
     @num_attachments.setter
     def num_attachments(self, num):
         if self.pk and type(num) is int:
             self.data['num_attachments'] = num
-            self.save(update_fields=['data'])
+            if self.pk is not None:
+                self.save(update_fields=['data'])
             return num
         else:
             return 0
