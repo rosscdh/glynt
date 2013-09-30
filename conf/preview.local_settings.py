@@ -174,11 +174,16 @@ LOGGING = {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'logfile': {
+            'class': 'logging.handlers.WatchedFileHandler',
+            'filename': '/var/log/django/lawpal-{env}.log'.format(env=PROJECT_ENVIRONMENT),
+            'formatter': 'verbose'
         }
     },
     'loggers': {
         'django': {
-            'handlers': ['console'],
+            'handlers': ['console', 'logfile'],
             'propagate': True,
             'level': 'INFO',
         },
@@ -187,15 +192,10 @@ LOGGING = {
             'level': 'INFO',
             'propagate': False,
         },
-        'lawpal.services': {
-            'handlers': ['splunkstorm'],
+        'lawpal': {
+            'handlers': ['splunkstorm', 'logfile'],
             'level': 'INFO',
-            'propagate': False,
-        },
-        'lawpal.graph': {
-            'handlers': ['splunkstorm'],
-            'level': 'INFO',
-            'propagate': False,
+            'propagate': True,
         }
     }
 }
