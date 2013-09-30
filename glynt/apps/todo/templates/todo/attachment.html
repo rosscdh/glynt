@@ -34,14 +34,16 @@
     {% endfor %}
 {% endif %}
 
-{% if not feedback_requests %}
+
 <div class="row">
     <div class="btn-group pull-right">
+        {% if not feedback_requests %}
         {% if object.uploaded_by == user or is_lawyer %}<button class="btn btn-delete-attachment btn-link pull-right" data-pk="{{ object.pk }}">Delete</button>{% endif %}
+        {% endif %}
         <button class="btn btn-fullscreen btn-link pull-right">Full Screen</button>
     </div>
 </div>
-{% endif %}
+
 <br />
 <iframe id="crocdoc-viewer-iframe" src="{{ view_url }}" width="100%" height="550px" frameborder="none" style="margin-top:5px;"></iframe>
 
