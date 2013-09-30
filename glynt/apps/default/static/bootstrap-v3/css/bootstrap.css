@@ -8467,8 +8467,9 @@ table.lawyer-list.active {
   vertical-align: middle;
 }
 
-.pending-feedback {
-  background-color: rgba(240, 173, 78, 0.1);
+.pending-feedback,
+.pending-feedback td {
+  background-color: rgba(240, 173, 78, 0.1) !important;
 }
 
 .navbar-nav > li.nav-signin > a {
