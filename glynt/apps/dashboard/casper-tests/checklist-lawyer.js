@@ -29,7 +29,7 @@ helper.scenario(casper.cli.options.url,
 	        this.test.assertExists('ul#checklist-categories li')
 
 	        casper.test.comment('Test for category name HTML node')
-	        this.test.assertExists('section h3')
+	        this.test.assertExists('section h4')
 	           
 	        casper.test.comment('Test for number assigned container spans')
 	        this.test.assertExists('ul#checklist-categories span.num_assigned_to_user');
