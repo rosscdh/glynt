@@ -88,7 +88,8 @@ def on_attachment_created(sender, **kwargs):
             todostatus_service = ToDoStatusService(todo_item=todo)
             todostatus_service.process()
 
-            todo.num_attachments_plus()  # increment the attachment count
+            # increment the attachment count
+            todo.num_attachments_plus()
 
             verb = '{name} uploaded an attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project)
             action.send(attachment.uploaded_by,
@@ -113,12 +114,9 @@ def on_attachment_deleted(sender, **kwargs):
         todo = attachment.todo
 
         if attachment:
-            try:
-                delete_attachment.delay(is_new=is_new, attachment=attachment)
-            except Exception as e:
-                logger.error('Could not call delete_attachment via celery: {exception}'.format(exception=e))
-                delete_attachment(is_new=is_new, attachment=attachment, **kwargs)
+            delete_attachment(is_new=is_new, attachment=attachment, **kwargs)
 
+            # decrement num_attachments
             todo.num_attachments_minus()  # increment the attachment count
 
             try:

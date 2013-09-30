@@ -18,15 +18,22 @@ class NumAttachmentsMixin(object):
             self.save(update_fields=['data'])
         return num
 
+    @num_attachments.setter
+    def num_attachments(self, num):
+        if type(num) is int:
+            self.data['num_attachments'] = num
+            self.save(update_fields=['data'])
+            return num
+        else:
+            return False
+
     def num_attachments_plus(self):
         num_attachments = self.data.get('num_attachments', 0)
         num_attachments += 1
-        self.data['num_attachments'] = num_attachments
-        self.save(update_fields=['data'])
+        self.num_attachments = num_attachments
 
     def num_attachments_minus(self):
         num_attachments = self.data.get('num_attachments', 0)
         if num_attachments > 0:
             num_attachments -= 1
-            self.data['num_attachments'] = num_attachments
-            self.save(update_fields=['data'])
+            self.num_attachments = num_attachments
