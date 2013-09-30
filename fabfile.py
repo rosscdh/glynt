@@ -78,7 +78,7 @@ def production():
     env.user = 'ubuntu'
     env.application_user = 'app'
     # connect to the port-forwarded ssh
-    env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
+    env.hosts = ['ec2-184-169-191-190.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
     env.celery_name = 'celery-production' # taken from chef cookbook
 
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
@@ -105,7 +105,7 @@ def preview():
     env.user = 'ubuntu'
     env.application_user = 'app'
     # connect to the port-forwarded ssh
-    env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
+    env.hosts = ['ec2-184-169-191-190.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
     env.celery_name = 'celery-preview' # taken from chef cookbook
 
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
@@ -149,7 +149,7 @@ env.roledefs.update({
     'db': ['ec2-50-18-97-221.us-west-1.compute.amazonaws.com'], # the actual db host
     'db-actor': ['ec2-54-241-224-100.us-west-1.compute.amazonaws.com'], # database action host
     'search': ['ec2-54-241-224-100.us-west-1.compute.amazonaws.com'], # elastic search action host
-    'web': ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com'],
+    'web': ['ec2-184-169-191-190.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com'],
     'worker': ['ec2-54-241-224-100.us-west-1.compute.amazonaws.com'],
 })
 
