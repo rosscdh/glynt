@@ -55,6 +55,16 @@ def is_sort_order_update(**kwargs):
         return True
     return False
 
+def is_data_field_update(**kwargs):
+    update_fields = kwargs.get('update_fields', frozenset())
+
+    # if we have a specific update that is the sort_position changed update
+    # then do nothing
+    if type(update_fields) is frozenset and len(update_fields) == 1 and 'data' in update_fields:
+        # Do absolutely nothing
+        return True
+    return False
+
 
 """
 Attachment handler events
@@ -278,7 +288,8 @@ def todo_item_crud(sender, **kwargs):
     is_new = kwargs.get('created', False)
     instance = kwargs.get('instance')
 
-    if is_sort_order_update(**kwargs) is False:
+    if is_sort_order_update(**kwargs) is False and is_data_field_update(**kwargs) is False:
+
         info_object = get_todo_info_object(todo=instance)
         pusher_service = PusherPublisherService(channel=instance.project.pusher_id, event='todo.post_save')
 
