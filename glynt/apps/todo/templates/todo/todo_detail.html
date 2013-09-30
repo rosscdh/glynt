@@ -101,35 +101,6 @@ $(document).ready(function () {
             node.html(node.attr("data-label"));
         }, 5000);
     });
-    /**
-     * Update the display status of the current checklist item based on a JSON object representing the checklist item
-     * @param  {Object} item JSON representation of the boject
-     */
-    function updateChecklistItemStatus( item ) {
-
-        var btnNode = $("#btn-save_comment");
-
-        // Update checklist item display status
-        if( item.instance && item.instance.status>=0 ) {
-            var updateNode = $("#checklist_item_status_label");
-            if(updateNode) {
-                switch(item.instance.status) {
-                    case 0:
-                        updateNode.html("New");
-                        break;
-                    case 1:
-                        updateNode.html("Open");
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-
-        // Update button
-        if(btnNode && btnNode.attr("data-label"))
-            btnNode.html(btnNode.attr("data-label"));
-    }
 
     /**
     * Puser.com integration
@@ -302,6 +273,36 @@ $(document).ready(function () {
     });
 
 });
+
+/**
+ * Update the display status of the current checklist item based on a JSON object representing the checklist item
+ * @param  {Object} item JSON representation of the boject
+ */
+function updateChecklistItemStatus( item ) {
+
+    var btnNode = $("#btn-save_comment");
+
+    // Update checklist item display status
+    if( item.instance && item.instance.status>=0 ) {
+        var updateNode = $("#checklist_item_status_label");
+        if(updateNode) {
+            switch(item.instance.status) {
+                case 0:
+                    updateNode.html("New");
+                    break;
+                case 1:
+                    updateNode.html("Open");
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    // Update button
+    if(btnNode && btnNode.attr("data-label"))
+        btnNode.html(btnNode.attr("data-label"));
+}
 
 
 function setActiveAttachment(elem) {
