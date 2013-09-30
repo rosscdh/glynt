@@ -31,12 +31,12 @@
                 </div>
             </div>
 
-            <div class="col col-lg-9">                
+            <div class="col col-lg-9">
                 <div id="list-items">
 
                         <section ng-repeat="category in categories">
                             <div id="{[{category.info.slug}]}" class="checklist-header clearfix">
-                                <h3 class="pull-left" ng-bind-html-unsafe="category.info.label"></h3>
+                                <h4 class="pull-left" ng-bind-html-unsafe="category.info.label"></h4>
 
                                 {% if is_lawyer %}
                                 <!-- Add new checklist item //-->
@@ -49,7 +49,7 @@
                                     <tbody {% if is_lawyer %}ui-sortable="config.itemSort" ng-model="category.items"{% endif %}>
                                         <tr ng-repeat="item in category.items | filter: { is_deleted: model.showDeletedItems }" class="item state-{[{getItemStatus(item)}]}" ng-controller="checklistItemCtrl">
                                             <!-- Checklist item status //-->
-                                            <td class="item-status">
+                                            <td class="item-status" ng-click="viewItem( item )">
                                                 <i class="icon-state-{[{getItemStatus(item)}]}"></i>
                                             </td>
                                             <td class="item-info" checklist-item-link ng-click="viewItem( item )"></td>
@@ -115,13 +115,13 @@
         },
         "getEndpoint": function() {
             var urls = {
-                "checklist" : 
+                "checklist" :
                     {
                         "item" : {
                             "view": "{% url 'todo:item' project_uuid=':project_uuid' slug=':slug' %}",
                             "create": "{% url 'todo:create' project_uuid=':project_uuid' %}?category=:categoryLabel",
                             "form": "{% url 'todo:edit' project_uuid=':project_uuid' slug=':slug' %}"
-                        } 
+                        }
                     }
             };
 

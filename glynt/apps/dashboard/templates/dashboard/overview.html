@@ -42,13 +42,13 @@
                         <h3>Project Attorney</h3>
                         {% project_lawyers project 'assigned' %}
                     </div>
-                {% endif %}                    
+                {% endif %}
                 <div class="widget account-attorney">
                     <h3>LawPal Account Manager</h3>
                     <div class="row">
                         <div class="col-12">
                             <img src="{{STATIC_URL}}img/yael-contact-face.jpg" class="img-circle pull-left" style="width:40px; padding-right :8px;padding-top:6px;">
-                            <h4>Yael Citro <small class="pull-right"><a href="mailto:xw4ux8lx@incoming.intercom.io" class="btn btn-info btn-small intercom" style="margin-top:-4px">Contact Yael</a></small>  <small>Co-Founder at LawPal </small></h4> 
+                            <h4>Yael Citro <small class="pull-right"><a href="mailto:xw4ux8lx@incoming.intercom.io" class="btn btn-info btn-small intercom" style="margin-top:-4px">Contact Yael</a></small>  <small>Co-Founder at LawPal </small></h4>
                         </div>
                     </div>
                 </div>
@@ -61,12 +61,40 @@
             </div>
             <div class="col col-lg-7">
                 <div class="widget checklist">
-                    <a href="{% url 'dashboard:checklist' uuid=project.uuid %}"><h3>Transaction Checklist </h3></a>
+                    <a href="{% url 'dashboard:checklist' uuid=project.uuid %}"><h3>Transaction Checklist</h3></a>
                     <div class="row">
-                        <div class="col col-3 text-center" class="softer"><h1  class="softer">{{counts.new}}</h1><small  class="softer">New</small></div>
-                        <div class="col col-3 text-center"><h1>{{counts.open}}</h1><small>Open</small></div>
-                        <div class="col col-3 text-center"><h1 class="text-warning">{{counts.awaiting_feedback_from_user}}</h1><small class="text-warning">Feedback</small></div>
-                        <div class="col col-3 text-center"><h1 class="text-success">{{counts.closed}}</h1><small class="text-success">Closed</small></div>
+                        <div class="col col-3 text-center">
+                            <h1>
+                                <a href="{% url 'dashboard:checklist' uuid=project.uuid %}" class="text-muted">{{ counts.new }}</a>
+                            </h1>
+                            <a href="{% url 'dashboard:checklist' uuid=project.uuid %}">
+                                <small class="softer">New</small>
+                            </a>
+                        </div>
+                        <div class="col col-3 text-center">
+                            <h1>
+                                <a href="{% url 'dashboard:checklist' uuid=project.uuid %}" class="text-info">{{ counts.open }}</a>
+                            </h1>
+                            <a href="{% url 'dashboard:checklist' uuid=project.uuid %}">
+                                <small class="softer">Open</small>
+                            </a>
+                        </div>
+                        <div class="col col-3 text-center">
+                            <h1>
+                                <a href="{% url 'dashboard:checklist' uuid=project.uuid %}" class="text-warning">{{ counts.awaiting_feedback_from_user }}</a>
+                            </h1>
+                            <a href="{% url 'dashboard:checklist' uuid=project.uuid %}">
+                                <small class="softer">Feedback</small>
+                            </a>
+                        </div>
+                        <div class="col col-3 text-center">
+                            <h1>
+                                <a href="{% url 'dashboard:checklist' uuid=project.uuid %}" class="text-success">{{ counts.closed }}</a>
+                            </h1>
+                            <a href="{% url 'dashboard:checklist' uuid=project.uuid %}">
+                                <small class="softer">Closed</small>
+                            </a>
+                        </div>
                     </div>
                 </div>
                 {% if project.has_lawyer %}
