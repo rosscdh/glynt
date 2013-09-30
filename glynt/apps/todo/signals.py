@@ -100,6 +100,7 @@ def on_attachment_deleted(sender, **kwargs):
     if not isinstance(sender, LogEntry):
         is_new = kwargs.get('created', False)
         attachment = kwargs.get('instance', None)
+        todo = attachment.todo
 
         if attachment:
             try:
