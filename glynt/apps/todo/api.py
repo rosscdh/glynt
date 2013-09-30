@@ -48,6 +48,7 @@ class UserToDoLabelResource(BaseApiModelResource):
 class ToDoResource(BaseApiModelResource):
     """ Api resource for creating or modifying todo item names """
     project = fields.IntegerField(attribute='project_id')
+    num_attachments = fields.IntegerField(attribute='num_attachments')
 
     class Meta(BaseApiModelResource.Meta):
         queryset = ToDo.objects.all()
@@ -55,6 +56,7 @@ class ToDoResource(BaseApiModelResource):
         resource_name = 'todo'
         list_allowed_methods = ['get', 'put', 'patch', 'post']
         #fields = ['is_deleted']
+        excludes = ('data',)
         filtering = {
             'slug': ['exact'],
             'is_deleted': ['exact'],

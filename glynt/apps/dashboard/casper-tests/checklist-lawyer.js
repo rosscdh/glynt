@@ -168,7 +168,8 @@ helper.scenario(casper.cli.options.url,
                 this.test.assertNotEquals( secondItemText1, secondItemText2 );
             }
         );
-    }/*,
+    }
+    /*,
     function() {
         // Order items
         casper.viewport(1024, 768);
