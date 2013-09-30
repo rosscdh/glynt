@@ -15,6 +15,7 @@ from django_filepicker.models import FPFileField
 from glynt.apps.todo import TODO_STATUS, FEEDBACK_STATUS
 from glynt.apps.todo.managers import (DefaultToDoManager,
                                       DefaultFeedbackRequestManager)
+from .mixins import NumAttachmentsMixin
 
 from rulez import registry
 
@@ -27,7 +28,7 @@ def _attachment_upload_file(instance, filename):
     return '{project_uuid}/attachments/{slug}{ext}'.format(project_uuid=instance.project.uuid, slug=instance.slug, ext=ext)
 
 
-class ToDo(models.Model):
+class ToDo(NumAttachmentsMixin, models.Model):
     """
     ToDo Items that are associated with a project
     """
