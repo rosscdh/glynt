@@ -134,39 +134,37 @@ LOGGING = {
     'handlers': {
         'null': {
             'level': 'DEBUG',
-            'class': 'django.utils.log.NullHandler',
-        },
-        'splunkstorm':{
-            'level': 'INFO',
-            'class': 'glynt.logger.SplunkStormLogger',
-            'formatter': 'verbose'
-        },
-        'console':{
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'simple'
+            'class': 'logging.NullHandler',
         },
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
         },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
         'logfile': {
             'class': 'logging.handlers.WatchedFileHandler',
-            'filename': '/var/log/django/abridge-{env}.log'.format(env=PROJECT_ENVIRONMENT),
-            'formatter': 'verbose'
+            'filename': '/tmp/lawpal-{env}.log'.format(env=PROJECT_ENVIRONMENT)
         }
     },
     'loggers': {
-        'django': {
-            'handlers': ['console', 'logfile'],
-            'propagate': True,
+        'django.test': {
+            'handlers': ['console'],
             'level': 'INFO',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
         },
         'django.request': {
             'handlers': ['console', 'logfile'],
-            'level': 'INFO',
-            'propagate': False,
+            'level': 'DEBUG',
+            'propagate': True,
         },
         'lawpal': {
             'handlers': ['console', 'logfile'],

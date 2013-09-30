@@ -165,7 +165,7 @@ LOGGING = {
         },
         'logfile': {
             'class': 'logging.handlers.WatchedFileHandler',
-            'filename': '/var/log/django/abridge-{env}.log'.format(env=PROJECT_ENVIRONMENT),
+            'filename': '/var/log/django/lawpal-{env}.log'.format(env=PROJECT_ENVIRONMENT),
             'formatter': 'verbose'
         }
     },
