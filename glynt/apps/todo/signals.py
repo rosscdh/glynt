@@ -74,8 +74,11 @@ def on_attachment_created(sender, **kwargs):
             crocdoc_service = CrocdocAttachmentService(attachment=attachment)
             crocdoc_service.process()
 
-            todostatus_service = ToDoStatusService(todo_item=attachment.todo)
+            todo = attachment.todo
+            todostatus_service = ToDoStatusService(todo_item=todo)
             todostatus_service.process()
+
+            todo.num_attachments_plus()  # increment the attachment count
 
             verb = '{name} uploaded an attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project)
             action.send(attachment.uploaded_by,
@@ -104,6 +107,8 @@ def on_attachment_deleted(sender, **kwargs):
             except Exception as e:
                 logger.error('Could not call delete_attachment via celery: {exception}'.format(exception=e))
                 delete_attachment(is_new=is_new, attachment=attachment, **kwargs)
+
+            todo.num_attachments_minus()  # increment the attachment count
 
             try:
                 verb = '{name} deleted attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project)
