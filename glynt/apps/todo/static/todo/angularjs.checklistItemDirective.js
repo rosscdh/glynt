@@ -53,7 +53,7 @@ lawPalApp.directive('checklistItemLink', [ 'lawPalUrls', function ( lawPalUrls )
 }]);
 
 /**
- * Displays checklist item heading
+ * Displays associated details about the checklist item such as attachment count
  * @param  {Factory} lawPalUrls Enables access to determine which forms to display
  * @return {Object}            AngularJS directive
  */
