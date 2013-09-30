@@ -16,8 +16,8 @@ class NumAttachmentsMixinText(TestCase):
     def setUp(self):
         super(NumAttachmentsMixinText, self).setUp()
 
-        project = mommy.make('project.Project')
-        self.todo = mommy.make('todo.ToDo', status=TODO_STATUS.open, project=project, category='General')
+        self.project = mommy.make('project.Project')
+        self.todo = mommy.make('todo.ToDo', status=TODO_STATUS.open, project=self.project, category='General')
         # self.attachment = mommy.make('todo.Attachment', project=self.project, todo=self.todo, uploaded_by=self.customer_user)
 
 
@@ -25,6 +25,11 @@ class NumAttachmentsMixinText(TestCase):
         self.assertTrue(hasattr(self.todo, 'num_attachments'))
         self.assertTrue(hasattr(self.todo, 'num_attachments_plus'))
         self.assertTrue(hasattr(self.todo, 'num_attachments_minus'))
+
+    def test_not_set_until_has_pk(self):
+        todo = mommy.prepare('todo.ToDo', status=TODO_STATUS.open, project=self.project, category='General')
+        self.assertEqual(None, todo.pk)
+        self.assertEqual(0, todo.num_attachments)
 
     def test_num_attachments_sets_value_if_not_present(self):
         self.assertTrue('num_attachments' not in self.todo.data)
