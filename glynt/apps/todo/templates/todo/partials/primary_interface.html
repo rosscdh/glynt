@@ -1,5 +1,5 @@
 <ul class="nav nav-pills">
-    <li class="active"><a class="disabled">{{ todo.display_status }}</a></li>
+    <li class="active"><a class="disabled" id="checklist_item_status_label">{{ todo.display_status }}</a></li>
 
     {% if back_and_forth.prev %}<li><a href="#" class="btn-prev" title="Previous Item"><i class="icon-chevron-left"></i></a></li>{% endif %}
     {% if back_and_forth.next %}<li><a href="#" class="btn-next" title="Next Item"><i class="icon-chevron-right"></i></a></li>{% endif %}

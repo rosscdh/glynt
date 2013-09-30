@@ -86,7 +86,50 @@ $(document).ready(function () {
 
         $('#updates-stream').find('[data-stream_list]:first').prepend(html);
         $('#updates-stream').find('[data-stream_list] li:first').effect("highlight", {}, 3500);
+        
+        updateChecklistItemStatus( context ); // Update display status if required
     };
+
+    /**
+     * Attach behaviour to show spinner when user clicks 'Comment button'
+     */
+    $("#btn-save_comment").on("click", function(){
+        var node = $(this);
+        node.attr("data-label", node.html());
+        node.html('<i class="icon icon-spinner icon-spin"></i> Comment');
+        setTimeout(function(){
+            node.html(node.attr("data-label"));
+        }, 5000);
+    });
+    /**
+     * Update the display status of the current checklist item based on a JSON object representing the checklist item
+     * @param  {Object} item JSON representation of the boject
+     */
+    function updateChecklistItemStatus( item ) {
+
+        var btnNode = $("#btn-save_comment");
+
+        // Update checklist item display status
+        if( item.instance && item.instance.status>=0 ) {
+            var updateNode = $("#checklist_item_status_label");
+            if(updateNode) {
+                switch(item.instance.status) {
+                    case 0:
+                        updateNode.html("New");
+                        break;
+                    case 1:
+                        updateNode.html("Open");
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        // Update button
+        if(btnNode && btnNode.attr("data-label"))
+            btnNode.html(btnNode.attr("data-label"));
+    }
 
     /**
     * Puser.com integration
