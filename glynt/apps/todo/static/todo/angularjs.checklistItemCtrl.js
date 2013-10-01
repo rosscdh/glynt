@@ -11,7 +11,7 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [ '$scope', 'lawPalSer
 	$scope.deleteItem = function() {
 		var item = $scope.item;
 		var promise = lawPalService.deleteChecklistItem( item );
-		promise.then( 
+		promise.then(
 			function( results ) { /* Success */
 				$scope.removeItemFromArray( item );
 				//$scope.addAlert( "Item removed", "success" );
@@ -38,6 +38,24 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [ '$scope', 'lawPalSer
 		}
 
 		return "unknown";
+	};
+
+	/**
+	 * Determines the checklist item display status of an item
+	 * @return {String} status name for display
+	 */
+	$scope.getItemDisplayStatus = function() {
+		var item = $scope.item;
+		switch( item.status )
+		{
+			case 0: return "New";
+			case 1: return "Open";
+			case 2: return "Pending";
+			case 3: return "Resolved";
+			case 4: return "Closed";
+		}
+
+		return "Unknown";
 	};
 
 	/**
@@ -69,7 +87,7 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [ '$scope', 'lawPalSer
 		var url = lawPalUrls.checklistItemFormUrl( $scope.model.project.uuid, item );
 
 		// Open edit form + dialog
-		lawPalDialog.open( "Edit item", url, item ).then( 
+		lawPalDialog.open( "Edit item", url, item ).then(
 			function(result) { /* Success */
 				/* Update model */
 				if( result && result.name )  {
