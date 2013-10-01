@@ -7,21 +7,17 @@ from uuidfield import UUIDField
 
 from jsonfield import JSONField
 
-#from glynt.apps.project.services.actions import OpenProjectService, CloseProjectService, ReOpenProjectService
-
-# from glynt.apps.transact.models import Transaction
-# from glynt.apps.company.models import Company
-# from glynt.apps.lawyer.models import Lawyer
-
 from . import PROJECT_STATUS, PROJECT_LAWYER_STATUS
+
 from .managers import DefaultProjectManager, ProjectLawyerManager
+from .mixins import ProjectCategoriesMixin
 
 from rulez import registry
 
 import itertools
 
 
-class Project(models.Model):
+class Project(ProjectCategoriesMixin, models.Model):
     """ Base Project object
     Stores initial project details
     """
