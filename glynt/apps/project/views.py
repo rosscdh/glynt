@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import FormView, DetailView, ListView, UpdateView
+from django.views.generic import FormView, DetailView, UpdateView, CreateView
+from django.views.generic.edit import DeletionMixin
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
@@ -14,14 +16,12 @@ from glynt.apps.lawyer.models import Lawyer
 from glynt.apps.project.forms import ContactUsForm, CreateProjectForm
 from glynt.apps.project.services.ensure_project import EnsureProjectService
 
-from glynt.apps.project import PROJECT_CREATED
-
 from glynt.apps.transact.models import Transaction
 
-from .signals import mark_project_notifications_as_read
 from . import PROJECT_LAWYER_STATUS
-from . import PROJECT_CREATED
+from .forms import ProjectCategoryForm
 
+import json
 import logging
 logger = logging.getLogger('django.request')
 
@@ -100,7 +100,7 @@ class LawyerContactProjectView(ProjectView):
 
         lawyer = get_object_or_404(Lawyer.objects.prefetch_related('user'), user__username=self.kwargs.get('lawyer'))
         project_lawyer_join = ProjectLawyer.objects.get(project=self.object, lawyer=lawyer)
-        
+
         context.update({
             'PROJECT_LAWYER_STATUS': PROJECT_LAWYER_STATUS,
             'project_lawyer_join': project_lawyer_join,
@@ -130,22 +130,69 @@ class ReOpenProjectView(CloseProjectView):
         return self.render_to_json_response({'message': message, 'status': 200, 'instance': {'pk': self.object.pk, 'link': self.object.get_absolute_url()}})
 
 
-class MyProjectsView(ListView):
+class ProjectCategoryView(AjaxableResponseMixin, DeletionMixin, CreateView):
     model = Project
-    def get_queryset(self):
-        """"""
-        user = self.request.user
-        queryset = self.model.objects
-        fltr = {}
+    slug_field = 'uuid'
+    form_class = ProjectCategoryForm
+    template_name = 'project/project_category_form.html'
 
-        if user.profile.is_lawyer:
-            fltr.update({'lawyer': user.lawyer_profile})
-        elif user.profile.is_customer:
-            fltr.update({'customer': user.customer_profile})
-        else:
-            """@BUSINESSRULE if they are neither a founder not a startup show them nothign
-            @TODO this should all be in a manager """
-            # is not a valid user type, show them nothing
-            fltr.update({'pk': -1})
+    def delete(self, request, *args, **kwargs):
+        """
+        Calls the delete() method on the fetched object and then
+        redirects to the success URL.
+        """
+        self.object = self.get_object()
 
-        return queryset.filter(**fltr)
+        try:
+            delete_data = json.loads(self.request.read()) # expect a json structure
+            self.object.delete_categories(delete_data.get('category'))
+            self.object.save(update_fields=['data'])
+            message = 'Deleted the Category "{category}" from project "{project}"'.format(category=delete_data.get('category', None), project=self.object)
+        except:
+            message = 'Could not delete category "{category}" for project "{project}"'.format(category=delete_data.get('category', None), project=self.object)
+            logger.error(message)
+
+        return self.render_to_json_response({'message': message,
+                                             'status': 200, 
+                                             'instance': {'pk': self.object.pk,
+                                                          'link': self.object.get_absolute_url()
+                                                         }
+                                            })
+
+    def form_invalid(self, form):
+        return self.render_to_json_response({'message': json.dumps(form.errors),
+                                             'status': 200, 
+                                             'instance': {'pk': self.object.pk,
+                                                          'link': self.object.get_absolute_url()
+                                                         }
+                                            })
+
+    def form_valid(self, form):
+        form.save()
+        return self.render_to_json_response({'message': form.message,
+                                             'status': 200, 
+                                             'instance': {'pk': self.object.pk,
+                                                          'link': self.object.get_absolute_url()
+                                                         }
+                                            })
+
+    def get_category(self):
+        return self.request.GET.get('category', None)
+
+    def get_initial(self):
+        initial = self.initial.copy()
+        initial.update({
+            'category': self.get_category()
+        })
+        return initial
+
+    def get_form_kwargs(self):
+        self.object = self.get_object()
+
+        kwargs = super(ProjectCategoryView, self).get_form_kwargs()
+
+        kwargs.update({
+            'project_uuid': self.object.uuid,
+            'original_category': self.get_category()
+        })
+        return kwargs

@@ -98,6 +98,28 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 	};
 
 	/**
+	 * Create new checklist category
+	 */
+	$scope.createCategory = function() {
+		// open dialog
+		var url = lawPalUrls.checklistCategoryCreateFormUrl( $scope.model.project.uuid );
+
+		// Open edit form + dialog
+		lawPalDialog.open( "Create category", url, {} ).then( 
+			function(result) { /* Success */
+				var item = result;
+				/* Update model */
+				if( result && result.name )  {
+					$scope.saveItem( item, true );
+				}
+			},
+			function(result) { /* Error */
+				console.log( result );
+			}
+		);
+	};
+
+	/**
 	 * Create new checklist item
 	 * @param  {String} category Full category name, under which the new checklist item will be saved
 	 */
