@@ -2,11 +2,13 @@
 from django.test import TestCase
 
 from glynt.apps.todo import TODO_STATUS
+from glynt.apps.todo.models import ToDo
+from glynt.apps.todo.mixins import NumAttachmentsMixin
 
 from model_mommy import mommy
 
 
-class NumAttachmentsMixinText(TestCase):
+class NumAttachmentsMixinTest(TestCase):
     """
     Test the NumAttachmentsMixin ToDo object mixin
     which is responsible for getting setting and storing the 
@@ -14,7 +16,7 @@ class NumAttachmentsMixinText(TestCase):
     """
 
     def setUp(self):
-        super(NumAttachmentsMixinText, self).setUp()
+        super(NumAttachmentsMixinTest, self).setUp()
 
         self.project = mommy.make('project.Project')
         self.todo = mommy.make('todo.ToDo', status=TODO_STATUS.open, project=self.project, category='General')
@@ -22,6 +24,8 @@ class NumAttachmentsMixinText(TestCase):
 
 
     def test_mixin_is_present(self):
+        self.assertTrue(issubclass(ToDo, NumAttachmentsMixin))  # inherits the mixin
+
         self.assertTrue(hasattr(self.todo, 'num_attachments'))
         self.assertTrue(hasattr(self.todo, 'num_attachments_plus'))
         self.assertTrue(hasattr(self.todo, 'num_attachments_minus'))
