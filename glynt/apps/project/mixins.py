@@ -38,3 +38,13 @@ class ProjectCategoriesMixin(object):
         # rebuild the list based on wether its in the list or not
         # update with our new filtered list
         self.categories = [c for c in self.categories if c not in delete_categories]
+
+        # delete category items
+        self.delete_items_by_category(delete_categories=delete_categories)
+
+    def delete_items_by_category(self, delete_categories):
+        # ensure we have an array
+        delete_categories = [delete_categories] if type(delete_categories) not in [list] else delete_categories
+
+        # select set and update is_deleted
+        self.todo_set.filter(category__in=delete_categories).update(is_deleted=True)
