@@ -93,8 +93,42 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 				angularPusher( key, channel );
 			}
 		} else {
-			$scope.addAlert( "Unable to load items at this this, please try again later", "error" );
+			$scope.addAlert( "Unable to load items at this this, please try again later", "warning", "Error!" );
 		}
+	};
+
+	/**
+	 * Create new checklist category
+	 */
+	$scope.createCategory = function() {
+		// open dialog
+		var url = lawPalUrls.checklistCategoryCreateFormUrl( $scope.model.project.uuid );
+
+		// Open edit form + dialog
+		lawPalDialog.open( "Create category", url, {} ).then( 
+			function(result) { /* Success */
+				var item = result;
+				var promise;
+				
+				if( result && result.category )  {
+					/* Data is valied enough */
+					promise = lawPalService.addCategory( item, true );
+					promise.then(
+						function( response ) { /* success */
+							$scope.model.categories.push( response ); /* required data : { "label": String, "slug": String } */
+							$scope.insertCategory( response, [] );
+							$scope.addAlert( "New category added", "success", "Success!" );
+						},
+						function( error ) { /* error */
+							$scope.addAlert( "Unable to add category", "warning", "Error!" );
+						}
+					);
+				}
+			},
+			function(result) { /* Error */
+				console.log( result );
+			}
+		);
 	};
 
 	/**
@@ -141,7 +175,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 						}
 				},
 				function( details ) { /* Error */
-					$scope.addAlert( "Unable to updated item", "error" );
+					$scope.addAlert( "Unable to updated item", "warning", "Error!" );
 				}
 			);
 		} else {
@@ -357,16 +391,28 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 			checklist = $scope.model.checkListItems;
 
 			angular.forEach( categories, function( item, index ) {
+				$scope.insertCategory( item, $scope.checklistItemsByCategory( item ) );
+				/*
 				$scope.categories.push(
 					{ 
 						"info": item,
 						"items": $scope.checklistItemsByCategory( item )
 					}
 				);
+				*/
 			});
 
 			console.log($scope.categories);
 		}
+	};
+
+	$scope.insertCategory = function( category, items ) {
+		$scope.categories.push(
+			{ 
+				"info": category,
+				"items": items
+			}
+		);
 	};
 
 	$scope.checklistItemsByCategory = function( category ) {
@@ -395,7 +441,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 				$scope.addAlert( "Categories re-ordered", "success", "Update complete" );
 			},
 			function( details ) { /* Error */
-				$scope.addAlert( "Unable to save order of categories", "error" );
+				$scope.addAlert( "Unable to save order of categories", "warning", "Error!" );
 			}
 		);
 	};
@@ -409,7 +455,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 				$scope.addAlert( "Items re-ordered", "success", "Update complete" );
 			},
 			function( details ) { /* Error */
-				$scope.addAlert( "Unable to save order of items", "error" );
+				$scope.addAlert( "Unable to save order of items", "warning", "Error!" );
 			}
 		);
 	};
