@@ -162,8 +162,12 @@ class ProjectCategoryView(AjaxableResponseMixin, CreateView, DeletionMixin):
     def form_invalid(self, form):
         return self.render_to_json_response({'message': json.dumps(form.errors),
                                              'status': 200, 
-                                             'instance': {'pk': self.object.pk,
-                                                          'link': self.object.get_absolute_url()
+                                             'instance': {  'pk': self.object.pk,
+                                                            'link': self.object.get_absolute_url(),
+                                                            'category': {
+                                                                'name': form.category,
+                                                                'slug': form.category_slug
+                                                            }
                                                          }
                                             })
 
@@ -171,8 +175,12 @@ class ProjectCategoryView(AjaxableResponseMixin, CreateView, DeletionMixin):
         form.save()
         return self.render_to_json_response({'message': form.message,
                                              'status': 200, 
-                                             'instance': {'pk': self.object.pk,
-                                                          'link': self.object.get_absolute_url()
+                                             'instance': {  'pk': self.object.pk,
+                                                            'link': self.object.get_absolute_url(),
+                                                            'category': {
+                                                                'name': form.category,
+                                                                'slug': form.category_slug
+                                                            }
                                                          }
                                             })
 

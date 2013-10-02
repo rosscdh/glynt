@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 from django import forms
 from django.core.urlresolvers import reverse
+from django.template.defaultfilters import slugify
 
 from parsley.decorators import parsleyfy
 from crispy_forms.helper import FormHelper
@@ -93,6 +94,10 @@ class ProjectCategoryForm(forms.ModelForm):
         should probably be a mixin
         """
         category = self.cleaned_data.get('category', None)
+        # Used in the view
+        self.category = category
+        self.category_slug = slugify(category)
+
         categories = self.instance.categories
 
         # delete the old original category if present
