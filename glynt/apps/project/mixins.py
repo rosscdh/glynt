@@ -29,7 +29,7 @@ class ProjectCategoriesMixin(object):
     @property
     def original_categories(self):
         # get a set of original categories in the order of creation
-        return set(OrderedDict.fromkeys([todo.category for todo in self.todo_set.all()]))
+        return list(set(OrderedDict.fromkeys([todo.category for todo in self.todo_set.all()])))
 
     def delete_categories(self, delete_categories):
         # ensure we have a list of at least 1
