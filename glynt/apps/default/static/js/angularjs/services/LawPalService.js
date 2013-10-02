@@ -36,6 +36,9 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			}),
 		"add": $resource( "/projects/:id/category\\/", {},
 				{ "save": { "method": "POST", "headers" : {'Content-Type': 'application/x-www-form-urlencoded'}, "transformRequest": transformToFormData } 
+			}),
+		"delete": $resource( "/projects/:id/category\\/", {},
+				{ "save": { "method": "DELETE", "headers" : { "Content-Type": "application/json" } } 
 			})
 	};
 
@@ -116,13 +119,25 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			    }).error(function(err){
 			    	deferred.reject(err);
 			    });
-				/*
-				checkListCategories.add.save(options, details, function (results) {
-					deferred.resolve(results);
-				}, function (error) {
-					deferred.reject(error);
-				});
-				*/
+			}
+
+			return deferred.promise;
+		},
+
+		"removeCategory": function( details ) {
+			var deferred = $q.defer();
+
+			var projectId = this.getProjectUuid();
+			var options = { "id": projectId };
+
+			if( details && details.info.label ) {
+				var data = { "category": details.info.label };
+				checkListCategories.delete.save(options, data, function (results) { /* Success */
+						deferred.resolve(results);
+					}, function (results) { /* Error */
+						deferred.reject(results);
+					}
+				);
 			}
 
 			return deferred.promise;

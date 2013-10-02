@@ -8394,6 +8394,14 @@ table.lawyer-list.active {
   font-size: 24px;
 }
 
+.reveal-child .reveal-me {
+  display: none;
+}
+
+.reveal-child:hover .reveal-me {
+  display: inline-block;
+}
+
 .btn.create-category {
   margin: 0;
   font-size: 24px;
@@ -8550,6 +8558,15 @@ section.checklist-category {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.item-list {
+  list-style: none;
+  list-style-type: none;
+}
+
+.item-list li {
+  padding: 10px 0;
 }
 
 .navbar {
