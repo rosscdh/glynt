@@ -3,6 +3,7 @@ from django.conf import settings
 from django.test.simple import DjangoTestSuiteRunner
 from django_jenkins.runner import CITestSuiteRunner
 
+
 class GlyntAppTestRunner(DjangoTestSuiteRunner):
     def build_suite(self, test_labels, *args, **kwargs):
         # not args passed in
