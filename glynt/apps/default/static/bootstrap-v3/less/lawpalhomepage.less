@@ -475,19 +475,28 @@ table.lawyer-list.active {
 
 .transaction-profile { height: 220px; }
 
+.grey-btn {
+  color: @gray-light;
+  font-size: 24px;
+  line-height: 24px;
+  margin: 0;
+  &:hover,
+  &:focus {
+    color: @gray;
+    text-decoration: none;
+  }
+  i { font-size: 24px; }
+}
+
 .checklist-header {
   margin-top: 0px;
   .btn {
-    color: @gray-light;
-    font-size: 24px;
-    line-height: 24px;
-    margin: 0;
-    &:hover,
-    &:focus {
-      color: @gray;
-      text-decoration: none;
-    }
+    .grey-btn;
   }
+}
+
+.btn.create-category {
+  .grey-btn;
 }
 .ui-sortable .checklist-header {
   h3 { cursor: move; }
