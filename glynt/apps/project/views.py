@@ -130,7 +130,7 @@ class ReOpenProjectView(CloseProjectView):
         return self.render_to_json_response({'message': message, 'status': 200, 'instance': {'pk': self.object.pk, 'link': self.object.get_absolute_url()}})
 
 
-class ProjectCategoryView(AjaxableResponseMixin, DeletionMixin, CreateView):
+class ProjectCategoryView(AjaxableResponseMixin, CreateView, DeletionMixin):
     model = Project
     slug_field = 'uuid'
     form_class = ProjectCategoryForm
