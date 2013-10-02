@@ -6,6 +6,7 @@ import mock
 
 from glynt.apps.transact.models import Transaction
 from glynt.apps.project.mixins import ProjectCategoriesMixin
+from glynt.apps.project.models import Project
 
 
 class ProjectCategoriesMixinTest(TestCase):
@@ -18,6 +19,14 @@ class ProjectCategoriesMixinTest(TestCase):
     def setUp(self):
         self.project = mommy.make('project.Project', transactions=(Transaction.objects.get(slug='CS'), Transaction.objects.get(slug='SF'),))
         self.todo =  mommy.make('todo.Todo', project=self.project, category='Delete Me Category')
+
+    def test_categories_mixin_present(self):
+        self.assertTrue(issubclass(Project, ProjectCategoriesMixin))  # inherits the mixin
+
+        self.assertTrue(hasattr(self.project, 'categories'))
+        self.assertTrue(hasattr(self.project, 'original_categories'))
+        self.assertTrue(hasattr(self.project, 'delete_categories'))
+        self.assertTrue(hasattr(self.project, 'delete_items_by_category'))
 
     def test_categories(self):
         # ensure that the category_order key has not yet been set
