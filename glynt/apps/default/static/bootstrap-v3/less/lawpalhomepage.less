@@ -187,7 +187,7 @@ table.checklist {
     	text-decoration: underline;
     }
   }
-  .item-meta {
+  .item-meta, .item-details {
     text-align: right;
     vertical-align: middle;
     width: 140px;
@@ -203,6 +203,10 @@ table.checklist {
       display:none;
     }
     .item-move { cursor: move; }
+  }
+
+  .item-details .btn {
+    span.badge { margin-left: -8px; margin-top:10px; font-size: 10px; background-color: @brand-primary; /*padding: 1px 5px 3px;*/}
   }
 
   tr.item {
@@ -579,8 +583,8 @@ table.lawyer-list.active {
   vertical-align: middle;
 }
 
-.pending-feedback {
-  background-color: fade(@btn-warning-bg, 10%);
+.pending-feedback, .pending-feedback td {
+  background-color: fade(@btn-warning-bg, 10%) !important;
 }
 
 .navbar-nav > li.nav-signin > a {

@@ -14,11 +14,6 @@ helper.scenario(casper.cli.options.url,
         this.test.assertMatch(this.getTitle(), /^Checklist \—/ig);
         // --
     },
-    /*function() {
-        // Basic User UI tests
-        casper.test.comment('Company name test')
-        this.test.assertTextExists('Company Incorporation', 'Company name exists')
-    },*/
     function() {
         /* Checklist categories */
         casper.waitForSelector('#checklist-categories li a', function() {
@@ -81,6 +76,13 @@ helper.scenario(casper.cli.options.url,
             casper.test.comment('Test checklist items delete button exists and is visible');
             this.test.assertExists('div#list-items tr.item a.item-delete')
             this.test.assertNotVisible('div#list-items tr.item a.item-delete')
+        });
+    },
+    function() {
+        /* Test for attachment GUI elements */
+        casper.waitForSelector('div#list-items section td', function() {
+            casper.test.comment('Test checklist item had an attachment count of 1')
+            this.test.assertSelectorHasText('td.item-details span.badge', '1', 'Attachment count exists');
         });
     },
     function() {
