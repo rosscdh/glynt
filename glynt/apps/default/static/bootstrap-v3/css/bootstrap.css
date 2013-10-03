@@ -8369,6 +8369,23 @@ table.lawyer-list.active {
   height: 220px;
 }
 
+.grey-btn {
+  margin: 0;
+  font-size: 24px;
+  line-height: 24px;
+  color: #bfbfbf;
+}
+
+.grey-btn:hover,
+.grey-btn:focus {
+  color: #555555;
+  text-decoration: none;
+}
+
+.grey-btn i {
+  font-size: 24px;
+}
+
 .checklist-header {
   margin-top: 0;
 }
@@ -8384,6 +8401,35 @@ table.lawyer-list.active {
 .checklist-header .btn:focus {
   color: #555555;
   text-decoration: none;
+}
+
+.checklist-header .btn i {
+  font-size: 24px;
+}
+
+.reveal-child .reveal-me {
+  display: none;
+}
+
+.reveal-child:hover .reveal-me {
+  display: inline-block;
+}
+
+.btn.create-category {
+  margin: 0;
+  font-size: 24px;
+  line-height: 24px;
+  color: #bfbfbf;
+}
+
+.btn.create-category:hover,
+.btn.create-category:focus {
+  color: #555555;
+  text-decoration: none;
+}
+
+.btn.create-category i {
+  font-size: 24px;
 }
 
 .ui-sortable .checklist-header h3 {
@@ -8526,6 +8572,15 @@ section.checklist-category {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.item-list {
+  list-style: none;
+  list-style-type: none;
+}
+
+.item-list li {
+  padding: 10px 0;
 }
 
 .navbar {

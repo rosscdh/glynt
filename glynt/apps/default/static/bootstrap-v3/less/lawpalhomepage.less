@@ -479,19 +479,39 @@ table.lawyer-list.active {
 
 .transaction-profile { height: 220px; }
 
+.grey-btn {
+  color: @gray-light;
+  font-size: 24px;
+  line-height: 24px;
+  margin: 0;
+  &:hover,
+  &:focus {
+    color: @gray;
+    text-decoration: none;
+  }
+  i { font-size: 24px; }
+}
+
 .checklist-header {
   margin-top: 0px;
   .btn {
-    color: @gray-light;
-    font-size: 24px;
-    line-height: 24px;
-    margin: 0;
-    &:hover,
-    &:focus {
-      color: @gray;
-      text-decoration: none;
+    .grey-btn;
+  }
+}
+
+.reveal-child {
+  .reveal-me {
+    display: none;
+  }
+  &:hover {
+    .reveal-me {
+      display: inline-block;
     }
   }
+}
+
+.btn.create-category {
+  .grey-btn;
 }
 .ui-sortable .checklist-header {
   h3 { cursor: move; }
@@ -626,4 +646,11 @@ section.checklist-category {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+
+.item-list { 
+  list-style: none;
+  list-style-type: none;
+  li { padding: 10px 0; }
 }

@@ -23,9 +23,23 @@
                     <div class="subnav">
                         <!-- {% if is_lawyer %}ui-sortable="config.categorySort" ng-model="categories"{% endif %} //-->
                         <ul id="checklist-categories" class="nav nav-pills nav-stacked" {% if is_lawyer %}ui-sortable="config.categorySort" ng-model="categories"{% endif %}>
-                            <li ng-repeat="category in categories" ng-class="{'active':$first}">
-                                <a href="#{[{category.info.slug}]}"><span ng-bind-html-unsafe="category.info.label"></span><span class="num_assigned_to_user badge assigned pull-right" ng-bind="assignedPerCategory(category.info)" xng-bind="category.numAssigned"></span>{% if is_lawyer %}<i class="icon icon-move"></i>{% endif %}</a>
+                            <li ng-repeat="category in categories" ng-class="{'active':$first}" class="reveal-child">
+                                <a href="#{[{category.info.slug}]}" class="category-{[{category.info.slug}]}">
+                                    <span ng-bind-html-unsafe="category.info.label"></span>
+                                    <span class="num_assigned_to_user badge assigned pull-right" ng-bind="assignedPerCategory(category.info)" xng-bind="category.numAssigned"></span>
+                                    {% if is_lawyer %}
+                                    <i class="glyphicon glyphicon-remove text-danger pull-right category-remove reveal-me" ng-show="assignedPerCategory(category.info)==0" ng-click="removeCategory(category)"></i>
+                                    <i class="icon icon-move"></i>
+                                    {% endif %}
+                                </a>
                             </li>
+                            {% if is_lawyer %}
+                            <li>
+                                <button type="button" class="btn btn-link pull-right create-item create-category" ng-click="createCategory( category.info )">
+                                    <i class="glyphicon glyphicon-plus-sign" data-tooltip="Create new category" tooltip-position="right"></i>
+                                </button>
+                            </li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>
@@ -118,6 +132,10 @@
             var urls = {
                 "checklist" :
                     {
+                        "category" : {
+                            "form": "{% url 'project:category' slug=':project_uuid' %}",
+                        },
+
                         "item" : {
                             "view": "{% url 'todo:item' project_uuid=':project_uuid' slug=':slug' %}",
                             "create": "{% url 'todo:create' project_uuid=':project_uuid' %}?category=:categoryLabel",
