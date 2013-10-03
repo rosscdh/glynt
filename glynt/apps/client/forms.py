@@ -6,7 +6,6 @@ from django.contrib.auth.models import User
 
 from parsley.decorators import parsleyfy
 
-from glynt.mixins import ModelFormChangePasswordMixin
 from glynt.apps.lawyer.services import EnsureLawyerService
 
 from glynt.apps.company.services import EnsureCompanyService
@@ -17,9 +16,8 @@ logger = logging.getLogger('django.request')
 
 
 @parsleyfy
-class ConfirmLoginDetailsForm(ModelFormChangePasswordMixin, forms.ModelForm):
+class ConfirmLoginDetailsForm(forms.ModelForm):
     """ Form shown to the use after logging in, assists in capturing the correct email
-    and setting a user password
     """
     first_name = forms.CharField(max_length=24, widget=forms.TextInput(attrs={'placeholder': 'John'}))
     last_name = forms.CharField(max_length=24, widget=forms.TextInput(attrs={'placeholder': 'Doemann'}))
@@ -30,7 +28,7 @@ class ConfirmLoginDetailsForm(ModelFormChangePasswordMixin, forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['email', 'password', 'confirm_password']
+        fields = ['email']
 
     def __init__(self, *args, **kwargs):
         """ get request object and user """
@@ -53,13 +51,11 @@ class ConfirmLoginDetailsForm(ModelFormChangePasswordMixin, forms.ModelForm):
 
     def save(self, commit=True):
         user = self.user
-        user.set_password(self.cleaned_data["password"])
+
         if commit:
-            user.save(update_fields=['password'])
+            user.save()
 
             data = self.cleaned_data.copy()
-            data.pop('password')
-            data.pop('confirm_password')
 
             if self.user.profile.is_lawyer:
                 lawyer_service = EnsureLawyerService(user=self.user, firm_name=data.get('company_name'), offices=[], form=self, **data)
