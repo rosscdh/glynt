@@ -2,7 +2,7 @@
 """ Set of signals to handle when comments are posted and assigning notifications to the user """
 from django.dispatch import receiver
 from django.db.models.signals import pre_save, post_save, post_delete, m2m_changed
-
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.admin.models import LogEntry
 
 from threadedcomments.models import ThreadedComment
@@ -28,6 +28,7 @@ from bunch import Bunch
 import logging
 logger = logging.getLogger('django.request')
 
+
 def get_todo_info_object(todo):
     return {
         'instance': {
@@ -44,9 +45,32 @@ def get_todo_info_object(todo):
     }
 
 
+def is_sort_order_update(**kwargs):
+    update_fields = kwargs.get('update_fields', frozenset())
+
+    # if we have a specific update that is the sort_position changed update
+    # then do nothing
+    if type(update_fields) is frozenset and len(update_fields) == 1 and 'sort_position' in update_fields:
+        # Do absolutely nothing
+        return True
+    return False
+
+def is_data_field_update(**kwargs):
+    update_fields = kwargs.get('update_fields', frozenset())
+
+    # if we have a specific update that is the sort_position changed update
+    # then do nothing
+    if type(update_fields) is frozenset and len(update_fields) == 1 and 'data' in update_fields:
+        # Do absolutely nothing
+        return True
+    return False
+
+
 """
 Attachment handler events
 """
+
+
 @receiver(post_save, sender=Attachment, dispatch_uid='todo.attachment.created')
 def on_attachment_created(sender, **kwargs):
     """
@@ -60,8 +84,12 @@ def on_attachment_created(sender, **kwargs):
             crocdoc_service = CrocdocAttachmentService(attachment=attachment)
             crocdoc_service.process()
 
-            todostatus_service = ToDoStatusService(todo_item=attachment.todo)
+            todo = attachment.todo
+            todostatus_service = ToDoStatusService(todo_item=todo)
             todostatus_service.process()
+
+            # increment the attachment count
+            todo.num_attachments_plus()
 
             verb = '{name} uploaded an attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project)
             action.send(attachment.uploaded_by,
@@ -83,13 +111,13 @@ def on_attachment_deleted(sender, **kwargs):
     if not isinstance(sender, LogEntry):
         is_new = kwargs.get('created', False)
         attachment = kwargs.get('instance', None)
+        todo = attachment.todo
 
         if attachment:
-            try:
-                delete_attachment.delay(is_new=is_new, attachment=attachment)
-            except Exception as e:
-                logger.error('Could not call delete_attachment via celery: {exception}'.format(exception=e))
-                delete_attachment(is_new=is_new, attachment=attachment, **kwargs)
+            delete_attachment(is_new=is_new, attachment=attachment, **kwargs)
+
+            # decrement num_attachments
+            todo.num_attachments_minus()  # increment the attachment count
 
             try:
                 verb = '{name} deleted attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project)
@@ -102,12 +130,14 @@ def on_attachment_deleted(sender, **kwargs):
                             todo=attachment.todo.name,
                             status=attachment.todo.display_status,
                             event='todo.attachment.deleted')
-            except ToDo.DoesNotExist:
+            except ObjectDoesNotExist:
                 pass
 
 """
 Comment Events
 """
+
+
 @receiver(post_save, sender=ThreadedComment, dispatch_uid='todo.comment.created')
 def on_comment_created(sender, **kwargs):
     """
@@ -157,6 +187,8 @@ def on_comment_created(sender, **kwargs):
 """
 Feedback Request Change Events
 """
+
+
 @receiver(m2m_changed, sender=FeedbackRequest.assigned_to.through, dispatch_uid='feedbackrequest.created')
 def feedbackrequest_created(sender, **kwargs):
     # please note the pk_set check here
@@ -169,7 +201,8 @@ def feedbackrequest_created(sender, **kwargs):
         assigned = {'from': feedbackrequest.assigned_by.pk, 'to': [t.pk for t in feedbackrequest.assigned_to.all()]}
 
         if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.open:
-            verb = '{assigned_by} requested feedback from {assigned_to} on checklist item {todo} for {project}'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), assigned_to=', '.join([u.get_full_name() for u in feedbackrequest.assigned_to.all()]), todo=feedbackrequest.attachment.todo, project=feedbackrequest.attachment.project)
+            assigned_to = feedbackrequest.primary_assigned_to.get_full_name()
+            verb = '{assigned_by} requested feedback from {assigned_to} on checklist item {todo} for {project}'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), assigned_to=assigned_to, todo=feedbackrequest.attachment.todo, project=feedbackrequest.attachment.project)
             action.send(feedbackrequest.assigned_by,
                         verb=verb,
                         action_object=feedbackrequest.attachment,
@@ -253,25 +286,24 @@ def todo_item_crud(sender, **kwargs):
     is_new = kwargs.get('created', False)
     instance = kwargs.get('instance')
 
-    pusher_service = PusherPublisherService(channel=instance.project.pusher_id, event='todo.post_save')
+    if is_sort_order_update(**kwargs) is False and is_data_field_update(**kwargs) is False:
 
-    info_object = get_todo_info_object(todo=instance)
+        info_object = get_todo_info_object(todo=instance)
+        pusher_service = PusherPublisherService(channel=instance.project.pusher_id, event='todo.post_save')
 
-    if is_new == True:
-        pusher_service.event = 'todo.is_new'
-        comment = label = 'Created new item "{name}"'.format(name=instance.name)
+        if is_new is True:
+            pusher_service.event = 'todo.is_new'
+            comment = label = 'Created new item "{name}"'.format(name=instance.name)
 
-    elif instance.is_deleted == True:
-        pusher_service.event = 'todo.is_deleted'
-        comment = label = 'Deleted "{name}"'.format(name=instance.name)
+        elif instance.is_deleted is True:
+            pusher_service.event = 'todo.is_deleted'
+            comment = label = 'Deleted "{name}"'.format(name=instance.name)
 
-    else:
-        pusher_service.event = 'todo.is_updated'
-        comment = label = 'Updated "{name}"'.format(name=instance.name)
+        else:
+            pusher_service.event = 'todo.is_updated'
+            comment = label = 'Updated "{name}"'.format(name=instance.name)
 
-    pusher_service.process(label=label, comment=comment, **info_object)
-
-
+        pusher_service.process(label=label, comment=comment, **info_object)
 
 
 @receiver(pre_save, sender=ToDo, dispatch_uid='todo.status_change')
@@ -314,6 +346,8 @@ def todo_item_status_change(sender, **kwargs):
 Action Created Events - which is involked everytime action.send is called
 @PRIMARY HANDLER
 """
+
+
 @receiver(post_save, sender=Action, dispatch_uid='action.created')
 def on_action_created(sender, **kwargs):
     """
@@ -332,10 +366,10 @@ def on_action_created(sender, **kwargs):
             user_email = action.actor.email
 
             info_object = Bunch(name=user_name,
-                                    verb=action.verb,
-                                    target_name=unicode(action),
-                                    timestamp='',
-                                    **action.data)
+                                verb=action.verb,
+                                target_name=unicode(action),
+                                timestamp='',
+                                **action.data)
 
             # if the target has a project attached to it
             if hasattr(target, 'pusher_id'):
@@ -372,7 +406,6 @@ def on_action_created(sender, **kwargs):
                 project = action.target.project
                 recipients = project.notification_recipients()
                 url = project.get_absolute_url()
-
 
             if recipients:
                 logger.debug('recipients: {recipients}'.format(recipients=recipients))

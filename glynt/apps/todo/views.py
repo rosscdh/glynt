@@ -23,7 +23,12 @@ class ToDoCountMixin(object):
     def todo_counts(self, qs_objects, project=None, **kwargs):
         project = project if project is not None else self.project
 
-        awaiting_feedback_from_user = FeedbackRequest.objects.prefetch_related('attachment', 'attachment__project').filter(attachment__project=project, assigned_to=self.request.user).count()
+        awaiting_feedback_from_user = FeedbackRequest.objects \
+                                                     .prefetch_related('attachment',
+                                                                       'attachment__project') \
+                                                     .filter(attachment__project=project,
+                                                             assigned_to=self.request.user) \
+                                                     .count()
 
         counts = {'counts': {
                     'new': qs_objects.new(project=project, **kwargs).count(),
@@ -221,6 +226,7 @@ class AttachmentView(CrocdocAttachmentSessionContextMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(AttachmentView, self).get_context_data(**kwargs)
+
         context.update({
             'has_lawyer': self.object.project.has_lawyer,
             'is_lawyer': self.request.user.profile.is_lawyer,
@@ -228,4 +234,5 @@ class AttachmentView(CrocdocAttachmentSessionContextMixin, DetailView):
             'opposite_user': self.opposite_user,
             'FEEDBACK_STATUS': FEEDBACK_STATUS,
         })
+
         return context

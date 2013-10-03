@@ -8,14 +8,12 @@ from glynt.apps.project.models import Project, ProjectLawyer
 
 from model_mommy import mommy
 
-import httpretty
 import os
 
-#assert False
 
-#from nose.tools import set_trace; set_trace()
 class DashboardLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
     test_path = os.path.dirname(__file__)
+
     def setUp(self):
         super(DashboardLawyerTest, self).setUp()
 
@@ -40,7 +38,7 @@ class DashboardLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
     def test_lawyer_dashboard_js(self):
         """
         """
-        pl_join = ProjectLawyer.objects.filter(project=self.project, lawyer=self.lawyer)
+        ProjectLawyer.objects.filter(project=self.project, lawyer=self.lawyer)
 
         self.client.login(username=self.lawyer_user.username, password=self.password)
 
@@ -76,8 +74,11 @@ class ChecklistLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
         self.client.login(username=self.lawyer_user.username, password=self.password)
 
         # Create feedback request for testing of assigned to indicator on checklist
-        feedback_request = mommy.make('todo.FeedbackRequest', attachment=self.attachment, assigned_by=self.customer_user, assigned_to=(self.lawyer_user,), comment='What are your thoughts on this test file with ümlauts')
+        mommy.make('todo.FeedbackRequest', attachment=self.attachment, assigned_by=self.customer_user, assigned_to=(self.lawyer_user,), comment='What are your thoughts on this test file with ümlauts')
 
         url = reverse('dashboard:checklist', kwargs={'uuid': self.project.uuid})
         self.assertTrue(self.load_casper_file(js_file='checklist-lawyer.js', test_label='Test the Checklist View for a Lawyer', url=url))
-        # from nose.tools import set_trace; set_trace()
+        self.assertTrue(self.load_casper_file(js_file='checklist-lawyer-categories.js', test_label='Test the Checklist View ability to move Categories', url=url))
+        self.assertTrue(self.load_casper_file(js_file='checklist-lawyer-attachments.js', test_label='Test the Checklist View attachment counts', url=url))
+        self.assertTrue(self.load_casper_file(js_file='checklist-lawyer-pusher.js', test_label='Test the Checklist View pusher events', url=url))
+

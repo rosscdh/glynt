@@ -10,6 +10,19 @@ angular.module('lawpal').factory( "lawPalUrls", [ function()
 		var getUrl = (lawPalInterface.getEndpoint?lawPalInterface.getEndpoint():null);
 
 		return {
+			"checklistCategoryCreateFormUrl": function ( projectUuid ) {
+				if( typeof(getUrl)==="undefined" || !getUrl) return null;
+
+				var url = getUrl( ["checklist", "category", "form"] );
+				if( url ) {
+					url = url.replace(":project_uuid", projectUuid);
+
+					return url;
+				}
+
+				return null;
+			},
+
 			"checklistItemDetailUrl": function( projectUuid, item ) {
 				if( typeof(getUrl)==="undefined" || !getUrl) return null;
 

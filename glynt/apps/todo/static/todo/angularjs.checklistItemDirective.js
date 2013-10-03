@@ -24,6 +24,7 @@ lawPalApp.directive('checklistItemActions', [ 'lawPalUrls', function ( lawPalUrl
 		}
 		],
 		"template": '<a tooltip="Delete Item" class="btn btn-small btn-link text-danger item-delete" ng-click="deleteItem(item)"><i class="glyphicon glyphicon-remove text-danger"></i></a>'+
+					'<a class="btn btn-link item-move"><i class="icon icon-move"></i></a>'+
 					'<a xhref="{[{editUrl}]}" ng-click="editItem()" title="Edit" data-tooltip="Edit" class="btn btn-small btn-link item-edit"><i class="glyphicon glyphicon-pencil"></i></a>'
 	};
 }]);
@@ -48,5 +49,24 @@ lawPalApp.directive('checklistItemLink', [ 'lawPalUrls', function ( lawPalUrls )
 		}
 		],
 		"template": '<h4><a href="{[{viewUrl}]}" ng-bind="item.name"></a></h4>'
+	};
+}]);
+
+/**
+ * Displays associated details about the checklist item such as attachment count
+ * @param  {Factory} lawPalUrls Enables access to determine which forms to display
+ * @return {Object}            AngularJS directive
+ */
+lawPalApp.directive('checklistItemDetails', [ 'lawPalUrls', function ( lawPalUrls ) {
+	return {
+		"restrict": 'A',
+		"link": function (scope, elem, attrs) {		
+
+		},
+		"controller": [ '$scope', '$resource' , function( $scope, $resource ) {
+
+		}
+		],
+		"template": '<a tooltip="{[{item.num_attachments}]} Attachments" class="btn btn-small btn-link" ng-show="item.num_attachments!=0" ng-click="viewItem( item )"><i class="glyphicon glyphicon-file"></i><span class="badge" ng-bind="item.num_attachments"></span></a>'
 	};
 }]);

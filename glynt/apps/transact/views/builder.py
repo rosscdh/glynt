@@ -7,12 +7,13 @@ from django.utils.datastructures import SortedDict
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
-from bunch import Bunch
-
 from glynt.apps.project.models import Project
-from glynt.apps.project.services.ensure_project import PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE
+from glynt.apps.project import PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE
+
 from glynt.apps.transact.views.intake import (FORMS as INTAKE_FORMS,)
 from glynt.apps.transact.views.intake import CS_FORMS, SF_FORMS, CS_SF_FORMS
+
+from bunch import Bunch
 
 import json
 
@@ -141,6 +142,17 @@ class BuilderWizardView(NamedUrlSessionWizardView):
         form_list.keyOrder.sort()
 
         return form_list
+
+    def process_step(self, form):
+        """
+        has a fully valid form passed in
+        use this to save our databag data
+        """
+        if hasattr(form, 'save_data_bag'):
+            form.save_data_bag(cleaned_data=form.cleaned_data)
+
+        # must return data in order to pregress in forms list
+        return super(BuilderWizardView, self).process_step(form=form)
 
     def done(self, form_list, **kwargs):
         msg = _('Your project has been created.')

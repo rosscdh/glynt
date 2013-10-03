@@ -53,7 +53,14 @@ class VisibleProjectsService(object):
             try:
                 # if its a queryset it should have get, but lists have no get
                 if hasattr(projects, 'get'):
-                    project = projects.get(uuid=self.current_key)
+                    try:
+                        project = projects.get(uuid=self.current_key)
+                    except Project.DoesNotExist:
+                        # fix for the crazy nonsensical bug of Sep2013 that was first production killer
+                        # if you are creating projects and someone deletes your project
+                        # you are still left with that session which causes havok
+                        project = None
+                        del self.request.session['current_project_uuid']
 
                 else:
                     #  must be a lawyer at this point as we return a list and not a queryset

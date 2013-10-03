@@ -78,13 +78,13 @@ def production():
     env.user = 'ubuntu'
     env.application_user = 'app'
     # connect to the port-forwarded ssh
-    env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
+    env.hosts = ['ec2-184-169-191-190.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
     env.celery_name = 'celery-production' # taken from chef cookbook
 
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
 
-    env.start_service = 'supervisorctl start uwsgi'
-    env.stop_service = 'supervisorctl stop uwsgi'
+    env.start_service = 'supervisorctl start uwsgi-live'
+    env.stop_service = 'supervisorctl stop uwsgi-live'
     env.light_restart = "kill -HUP `cat /tmp/lawpal.pid`"
 
 @task
@@ -105,13 +105,13 @@ def preview():
     env.user = 'ubuntu'
     env.application_user = 'app'
     # connect to the port-forwarded ssh
-    env.hosts = ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
+    env.hosts = ['ec2-184-169-191-190.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com'] if not env.hosts else env.hosts
     env.celery_name = 'celery-preview' # taken from chef cookbook
 
     env.key_filename = '%s/../lawpal-chef/chef-machines.pem' % env.local_project_path
 
-    env.start_service = 'supervisorctl start uwsgi'
-    env.stop_service = 'supervisorctl stop uwsgi'
+    env.start_service = 'supervisorctl start uwsgi-preview'
+    env.stop_service = 'supervisorctl stop uwsgi-preview'
     env.light_restart = "kill -HUP `cat /tmp/preview-lawpal.pid`"
 
 @task
@@ -149,9 +149,10 @@ env.roledefs.update({
     'db': ['ec2-50-18-97-221.us-west-1.compute.amazonaws.com'], # the actual db host
     'db-actor': ['ec2-54-241-224-100.us-west-1.compute.amazonaws.com'], # database action host
     'search': ['ec2-54-241-224-100.us-west-1.compute.amazonaws.com'], # elastic search action host
-    'web': ['ec2-204-236-152-5.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com'],
+    'web': ['ec2-184-169-191-190.us-west-1.compute.amazonaws.com', 'ec2-184-72-21-48.us-west-1.compute.amazonaws.com'],
     'worker': ['ec2-54-241-224-100.us-west-1.compute.amazonaws.com'],
 })
+
 
 @task
 def virtualenv(cmd, **kwargs):
@@ -181,6 +182,7 @@ def clean_all():
         virtualenv(cmd='python %s%s/manage.py clean_associations' % (env.remote_project_path, env.project))
         virtualenv(cmd='python %s%s/manage.py clear_cache' % (env.remote_project_path, env.project))
         virtualenv(cmd='python %s%s/manage.py clean_pyc' % (env.remote_project_path, env.project))
+        virtualenv(cmd='python %s%s/manage.py compile_pyc' % (env.remote_project_path, env.project))
 
 @task
 def clear_cache():
@@ -193,6 +195,10 @@ def clean_pyc():
         virtualenv('python %s%s/manage.py clean_pyc' % (env.remote_project_path, env.project))
 
 @task
+def precompile_pyc():
+    virtualenv(cmd='python %s%s/manage.py compile_pyc' % (env.remote_project_path, env.project))
+
+@task
 def manage(cmd='validate'):
     virtualenv('python %s%s/manage.py %s' % (env.remote_project_path, env.project, cmd))
 
@@ -201,13 +207,13 @@ def get_sha1():
   return local('git rev-parse --short --verify HEAD', capture=True)
 
 @task
-def db_backup(db='lawpal_production'):
+def db_backup(db='abridge_production'):
     db_backup_name = '%s.bak' % db
     sudo('pg_dump --no-owner --no-acl -Fc %s > /tmp/%s' % (db, db_backup_name,), user='postgres')
     local('scp -i %s %s@%s:/tmp/%s /tmp/' % (env.key_filename, env.user, env.host, db_backup_name,))
 
 @task
-def db_restore(db='lawpal_production', db_file=None):
+def db_restore(db='abridge_production', db_file=None):
     with settings(warn_only=True): # only warning as we will often have errors importing
         if db_file is None:
             db_file = '/tmp/%s.bak' % db
@@ -392,17 +398,6 @@ def restart_service(heavy_handed=False):
 
 # ------ END-RESTARTERS ------#
 
-# ------ SOURCE-VALIDATION ------#
-@task
-def mispelling():
-    words = ['of council', 'teh']
-    output = []
-    for w in words:
-        grp = local('cd %s;git grep "%s"' % (env.local_project_path, w,), capture=True)
-        output.append(grp)
-    print(output)
-
-# ------ END-SOURCE-VALIDATION ------#
 @task
 def chores():
     sudo('aptitude --assume-yes install build-essential python-setuptools python-dev apache2-utils uwsgi-plugin-python libjpeg8 libjpeg62-dev libfreetype6 libfreetype6-dev easy_install nmap htop vim unzip')
@@ -458,9 +453,9 @@ def clean_start():
     clean_pyc()
     clear_cache()
     restart_service()
-
+    clean_pyc()
+    precompile_pyc()
     clean_zip()
-
 
 @task
 def do_deploy():
@@ -626,10 +621,7 @@ def deploy(is_predeploy='False',full='False',db='False',search='False'):
         requirements()
     if full or db:
         syncdb()
-        migrate()
-    # removed as we dont use haystack yet 
-    # if full or search:
-    #     update_index()
+        #migrate()
 
     relink()
     assets()

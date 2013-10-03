@@ -50,7 +50,7 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
         self.customer_user.set_password(self.password)
         self.customer_user.save()
 
-        self.company = mommy.make('company.Company', customers=(self.customer_user,))
+        self.company = mommy.make('company.Company', name='Test Company', customers=(self.customer_user,))
 
         customer_profile = self.customer_user.profile
         customer_profile.profile_data['user_class_name'] = 'customer'
@@ -69,8 +69,8 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
         lawyer_profile.save()
 
         self.lawyer = mommy.make('lawyer.Lawyer', user=self.lawyer_user)
-        
-        self.project = mommy.make('project.Project', customer=self.customer, lawyers=(self.lawyer,), transactions=(Transaction.objects.get(slug='CS'), Transaction.objects.get(slug='SF'),))
+
+        self.project = mommy.make('project.project', customer=self.customer, company=self.company, lawyers=(self.lawyer,), transactions=(Transaction.objects.get(slug='CS'), Transaction.objects.get(slug='SF'),))
 
         # set the join to status engaged
         self.project_lawyer_join = self.project.projectlawyer_set.all()[0]

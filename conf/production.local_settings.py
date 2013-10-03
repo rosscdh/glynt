@@ -8,7 +8,7 @@ SITE_ID = 4
 
 SECRET_KEY = 'i6=)1=4in#zyp&amp;g)^j2nl1abaeu)@2)^$ox5w7ac*uhml!uy-5'
 
-DEBUG = True
+DEBUG = False
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = False
 TEMPLATE_DEBUG = DEBUG
@@ -123,7 +123,7 @@ CACHES = {
     },
     'fallback': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': '/tmp/glynt.cache',
+        'LOCATION': '/tmp/glynt.production.cache',
     }
 }
 
@@ -162,11 +162,16 @@ LOGGING = {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'logfile': {
+            'class': 'logging.handlers.WatchedFileHandler',
+            'filename': '/var/log/django/lawpal-{env}.log'.format(env=PROJECT_ENVIRONMENT),
+            'formatter': 'verbose'
         }
     },
     'loggers': {
         'django': {
-            'handlers': ['console'],
+            'handlers': ['console', 'logfile'],
             'propagate': True,
             'level': 'INFO',
         },
@@ -175,15 +180,10 @@ LOGGING = {
             'level': 'INFO',
             'propagate': False,
         },
-        'lawpal.services': {
-            'handlers': ['splunkstorm'],
+        'lawpal': {
+            'handlers': ['splunkstorm', 'logfile'],
             'level': 'INFO',
-            'propagate': False,
-        },
-        'lawpal.graph': {
-            'handlers': ['splunkstorm'],
-            'level': 'INFO',
-            'propagate': False,
+            'propagate': True,
         }
     }
 }

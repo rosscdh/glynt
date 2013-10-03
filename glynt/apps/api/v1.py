@@ -10,7 +10,7 @@ from glynt.apps.api.models import BaseApiModelResource
 
 from django.contrib.auth.models import User
 
-from cities_light.models import (City, Country, Region)
+from cities_light.models import (City, Region)
 
 from glynt.apps.lawyer.api import (_lawyer_profile, LawyerResource)
 
@@ -19,12 +19,16 @@ from glynt.apps.firm.api import FirmSimpleResource
 from glynt.apps.customer.api import _customer_profile
 
 from glynt.apps.company.api import (CompanyLiteSimpleResource,
-                                    CompanyBasicProfileResource, CompanyDataBagResource)
+                                    CompanyBasicProfileResource,
+                                    CompanyDataBagResource)
 
 from glynt.apps.project.api import (ProjectResource, 
-                                    ProjectDataBagResource, ProjectLawyerResource)
+                                    ProjectDataBagResource,
+                                    ProjectLawyerResource,
+                                    ProjectChecklistSortResource,
+                                    ProjectChecklistCategoriesSortResource)
 
-from glynt.apps.todo.api import (UserToDoCountResource, AttachmentResource, 
+from glynt.apps.todo.api import (UserToDoCountResource, AttachmentResource,
                                 ToDoResource, FeedbackRequestResource)
 
 V1_INTERNAL_API = Api(api_name='v1')
@@ -137,6 +141,9 @@ V1_INTERNAL_API.register(ToDoResource())
 V1_INTERNAL_API.register(FeedbackRequestResource())
 V1_INTERNAL_API.register(LawyerResource())
 
-V1_INTERNAL_API.register(ProjectResource())
 V1_INTERNAL_API.register(ProjectLawyerResource())
 V1_INTERNAL_API.register(ProjectDataBagResource())
+V1_INTERNAL_API.register(ProjectChecklistSortResource())
+V1_INTERNAL_API.register(ProjectChecklistCategoriesSortResource())
+V1_INTERNAL_API.register(ProjectResource())
+

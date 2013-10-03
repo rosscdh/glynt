@@ -108,7 +108,6 @@ HTTPretty
 django-casper
 mocktest
 mock
-factory_boy # depreciating use model.mommey instead for tests
 -e git+https://github.com/vandersonmota/model_mommy.git#egg=model_mommy
 pyquery
 

@@ -7,26 +7,20 @@ from uuidfield import UUIDField
 
 from jsonfield import JSONField
 
-#from glynt.apps.project.services.actions import OpenProjectService, CloseProjectService, ReOpenProjectService
-
-# from glynt.apps.transact.models import Transaction
-# from glynt.apps.company.models import Company
-# from glynt.apps.lawyer.models import Lawyer
-
 from . import PROJECT_STATUS, PROJECT_LAWYER_STATUS
+
 from .managers import DefaultProjectManager, ProjectLawyerManager
+from .mixins import ProjectCategoriesMixin
 
 from rulez import registry
 
 import itertools
 
 
-class Project(models.Model):
+class Project(ProjectCategoriesMixin, models.Model):
     """ Base Project object
     Stores initial project details
     """
-    _primary_lawyer = False
-
     uuid = UUIDField(auto=True, db_index=True)
     customer = models.ForeignKey('customer.Customer')
     company = models.ForeignKey('company.Company')
@@ -40,7 +34,7 @@ class Project(models.Model):
     objects = DefaultProjectManager()
 
     def __unicode__(self):
-        return u'Project for {company}'.format(company=self.company.name)
+        return u'Project for {company_name}'.format(company_name=self.data.get('company_name', ''))
 
     def can_read(self, user):
         return True if user.pk in [u.pk for u in self.notification_recipients()] else False
@@ -75,12 +69,11 @@ class Project(models.Model):
         return self.get_primary_lawyer()
 
     def get_primary_lawyer(self):
-        if self._primary_lawyer is False:
-            try:
-                _primary_lawyer = self.lawyers.select_related('user').all()[0]
-            except:
-                _primary_lawyer = None
-        return _primary_lawyer
+        try:
+            primary_lawyer_join = ProjectLawyer.objects.assigned(project=self)[0]
+            return primary_lawyer_join.lawyer
+        except:
+            return None
 
     def notification_recipients(self):
         """

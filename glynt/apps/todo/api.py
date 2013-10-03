@@ -2,6 +2,7 @@
 from django.contrib.auth.models import User
 
 from tastypie import fields
+from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
 from tastypie.resources import ALL
 
@@ -47,6 +48,7 @@ class UserToDoLabelResource(BaseApiModelResource):
 class ToDoResource(BaseApiModelResource):
     """ Api resource for creating or modifying todo item names """
     project = fields.IntegerField(attribute='project_id')
+    num_attachments = fields.IntegerField(attribute='num_attachments')
 
     class Meta(BaseApiModelResource.Meta):
         queryset = ToDo.objects.all()
@@ -54,6 +56,7 @@ class ToDoResource(BaseApiModelResource):
         resource_name = 'todo'
         list_allowed_methods = ['get', 'put', 'patch', 'post']
         #fields = ['is_deleted']
+        excludes = ('data',)
         filtering = {
             'slug': ['exact'],
             'is_deleted': ['exact'],
@@ -65,7 +68,6 @@ class ToDoResource(BaseApiModelResource):
         bundle.data['display_status'] = bundle.obj.display_status
         return bundle
 
-from tastypie.authentication import Authentication
 
 class AttachmentResource(BaseApiModelResource):
     """ Api resource for creating or modifying attachments """

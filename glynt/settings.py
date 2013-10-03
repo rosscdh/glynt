@@ -438,6 +438,10 @@ LOGGING = {
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
+        },
+        'logfile': {
+            'class': 'logging.handlers.WatchedFileHandler',
+            'filename': '/tmp/lawpal-{env}.log'.format(env=PROJECT_ENVIRONMENT)
         }
     },
     'loggers': {
@@ -452,22 +456,12 @@ LOGGING = {
             'propagate': True,
         },
         'django.request': {
-            'handlers': ['console'],
+            'handlers': ['console', 'logfile'],
             'level': 'DEBUG',
             'propagate': True,
         },
-        'lawpal.services': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-        'lawpal.graph': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-        'lawpal.commands': {
-            'handlers': ['console'],
+        'lawpal': {
+            'handlers': ['console', 'logfile'],
             'level': 'DEBUG',
             'propagate': True,
         }

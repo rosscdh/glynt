@@ -3,32 +3,65 @@
  * @author <a href="mailtolee.j.sinclair@gmail.com">Lee Sinclair</a>
  * Date: 2 Sept 2013
  */
-angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService', 'lawPalUrls', 'lawPalDialog', '$location', '$anchorScroll', 'angularPusher', 'toaster',
-	function( $scope, lawPalService, lawPalUrls, lawPalDialog, $location, $anchorScroll, angularPusher, toaster ) {
+angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService', 'lawPalUrls', 'lawPalDialog', 'deleteCategoryConfirmDialog', '$location', '$anchorScroll', 'angularPusher', 'toaster',
+	function( $scope, lawPalService, lawPalUrls, lawPalDialog, deleteCategoryConfirmDialog, $location, $anchorScroll, angularPusher, toaster ) {
 
-	// Data is stored within a JavaSCript object to avoid any nasty scope overides
+	$scope.loadStatus = 0;
+
+	/**
+	 * Data is stored within a JavaSCript object to avoid any nasty scope overides
+	 * @type {Object} project 		Project details
+	 * @type {Array} categories 	Array of category objects (from API directly), the JSON object contains:
+	 *     							{String} slug, {String} label
+
+	 * @type {Array} checklist 		Array of checklist items (from API directly), the JSON object contains:
+	 *       						{String} category, {String} date_created. {String} date due, {String} date modified
+	 *       						{String} description, {String} display_status, {String} id, {Boolean} is_deleted
+	 *       						{String} name, {Number} project, {String} slug, {Number} sort_position
+	 *       						{Number} sort_position_by_cat, {Number} status
+	 * @type
+	 */
 	$scope.model = {
-		'project': { 'uuid': null }, // Project details
-		'categories': [], // Array of checklist categories
+		'project': { 'uuid': null }, // 
+		'categories': [],
+		'checklist': [], // from API: Contains all checklist items
+		/*'data': [],	// Working copy of the data*/
 		'feedbackRequests': [],
 		'alerts': [], // Used to display alerts at the top of the page
-		'checklist': [], // Contains all checklist items
 		'usertype': lawPalService.getUserType(), // is_lawyer, is_customer
 		'showDeletedItems': false // If true deleted items are displayed also
 	};
 
-	$scope.config = {
-		'pusher': {}
-	}
+	$scope.categories = [];
 
-	/*
-	// @@ remove: quick async test and intermediate test to see if socket style updates will work
-	setTimeout( function(){
-		//debugger;
-		$scope.model.feedbackRequests["1dfefcfe4f86d49254cd2ddd57331b17deff2295"] = [{"todo_slug":"1dfefcfe4f86d49254cd2ddd57331b17deff2295"}];
-		$scope.$apply();
-	}, 2000);
-	*/
+	$scope.config = {
+		'pusher': {},
+		'categorySort': {
+    		'update': function(e, ui) {
+    			$scope.config.categorySort.updatePending = true;
+    		},
+    		'stop': function(e, ui) {
+    			if($scope.config.categorySort.updatePending)
+    				$scope.saveCategoryOrder( e, ui );
+    			$scope.config.categorySort.updatePending = false;
+    		},
+    		'updatePending': false,
+    		'axis': 'y'
+		 },
+		'itemSort': {
+    		'update': function(e, ui) {
+    			$scope.config.categorySort.updatePending = true;
+    		},
+    		'stop': function(e, ui) {
+    			if($scope.config.categorySort.updatePending)
+    				$scope.saveItemOrder( e, ui );
+    			$scope.config.categorySort.updatePending = false;
+    		},
+    		'axis': 'y',
+    		'updatePending': false,
+    		'cachedOrder': {}
+		 }
+	}
 
 	// When the controller is ready ng-init calls initialise, with project details such as uuid
 	$scope.initalise = function( options ){
@@ -51,7 +84,86 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 				angularPusher( key, channel );
 			}
 		} else {
-			$scope.addAlert( "Unable to load items at this this, please try again later", "error" );
+			$scope.addAlert( "Unable to load items at this this, please try again later", "warning", "Error!" );
+		}
+	};
+
+	/**
+	 * Create new checklist category, opens a dialog asking for a category name
+	 */
+	$scope.createCategory = function() {
+		// open dialog
+		var url = lawPalUrls.checklistCategoryCreateFormUrl( $scope.model.project.uuid );
+
+		// Open edit form + dialog
+		lawPalDialog.open( "Create category", url, {} ).then( 
+			function(result) { /* Success */
+				var item = result;
+				var promise;
+				
+				if( result && result.category )  {
+					/* Data is valied enough */
+					promise = lawPalService.addCategory( item, true );
+					promise.then(
+						function( response ) { /* success */
+							$scope.model.categories.push( response ); /* required data : { "label": String, "slug": String } */
+							$scope.insertCategory( response, [] );
+							$scope.addAlert( "New category added", "success", "Success!" );
+						},
+						function( error ) { /* error */
+							$scope.addAlert( "Unable to add category", "warning", "Error!" );
+						}
+					);
+				}
+			},
+			function(result) { /* Error */
+				console.log( result );
+			}
+		);
+	};
+
+	/**
+	 * Remove category, 
+	 * @param {Object} category JSON object containing the category to be deleted
+	 * @return {Object} category object
+	 */
+	$scope.removeCategory = function( category ) {
+		if( category && category.items && category.items.length>0) {
+			deleteCategoryConfirmDialog.open( category ).then(
+				function( cat ) {
+					/* Yes delete */
+					lawPalService.removeCategory( category ).then(
+						function(){
+							console.log("success");
+							var index = $scope.findCategoryIndex(category.info.label);
+							if(index) {
+								$scope.categories.splice(index, 1);
+							}
+
+							$scope.addAlert( "Category removed", "success", "Success!" );
+						},
+						function(){
+							$scope.addAlert( "Unable to remove category", "warning", "Error!" );
+						}
+					);
+				}
+			);
+		} else {
+			/* No checklist items: just delete it */
+			lawPalService.removeCategory( category ).then(
+				function(){
+					console.log("success");
+					var index = $scope.findCategoryIndex(category.info.label);
+					if(index) {
+						$scope.categories.splice(index, 1);
+					}
+
+					$scope.addAlert( "Category removed", "success", "Success!" );
+				},
+				function(){
+					$scope.addAlert( "Unable to remove category", "warning", "Error!" );
+				}
+			);
 		}
 	};
 
@@ -99,17 +211,61 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 						}
 				},
 				function( details ) { /* Error */
-					$scope.addAlert( "Unable to updated item", "error" );
+					$scope.addAlert( "Unable to updated item", "warning", "Error!" );
 				}
 			);
 		} else {
 
 		}
 	};
-
+	/**
+	 * Adds a checklist item to the checklist
+	 * @param {Object} item item to add to checklist array
+	 */
 	$scope.addItemToChecklist = function( item ) {
-		//
+		// 1. Push item into main checklist array
 		$scope.model.checklist.push( item );
+
+		// 2. Add item into 
+		var category = $scope.findCategoryByLabel( item.category );
+		category.items.push( item );
+	};
+
+	/**
+	 * Given a label find the working category JSON object
+	 * @param  {String} label category label
+	 * @return {Object}       category object
+	 */
+	$scope.findCategoryByLabel = function( label ) {
+		var categories = $scope.categories;
+		var category = {
+			"info": { "label": label },
+			"items": []
+		};
+		angular.forEach( categories, function( cat, index ) {
+			if( cat.info.label == label ) {
+				category = cat;
+			}
+		});
+
+		return category;
+	};
+
+	/**
+	 * Given a label find index of a category
+	 * @param  {String} label category label
+	 * @return {Number}       index of category object
+	 */
+	$scope.findCategoryIndex = function( label ) {
+		var categories = $scope.categories;
+		var i = -1;
+		angular.forEach( categories, function( cat, index ) {
+			if( cat.info.label == label ) {
+				i = index;
+			}
+		});
+
+		return i;
 	};
 
 	/**
@@ -163,6 +319,11 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		return numAssigned || ""; 
 	};
 
+	/**
+	 * Returns true if a specific checklist item
+	 * @param  {Object}  item JSON checklist item
+	 * @return {Boolean}      true if has assigned items
+	 */
 	$scope.isChecklistItemAssigned = function( item ) {
 		var assigned = false;
 		var feedbackRequests = $scope.model.feedbackRequests;
@@ -173,17 +334,6 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		}
 
 		return assigned;
-	};
-
-	$scope.delayedAlertClose = function( alert ) {
-		setTimeout( function() {
-			var alerts = $scope.model.alerts;
-			for(var i=0;i<alerts.length;i++) {
-				if(alerts[i].timeStamp===alert.timeStamp) $scope.closeAlert( i );
-			}
-
-			$scope.$apply();
-		}, 6000);
 	};
 
 	/**
@@ -209,15 +359,6 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		}
 
 		toaster.pop( type, title, message );
-		/*
-		alert = { "type": type, "message": message, "timeStamp": new Date().getTime() };
-
-		$scope.model.alerts.push( alert );
-		$("html, body").animate({ scrollTop: 0 }, 600);
-		if( type==="success" ) {
-			$scope.delayedAlertClose( alert );
-		}
-		*/
 	};
 
 	/**
@@ -273,8 +414,101 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		var promise = lawPalService.getCategories().then( 
 			function( results ) { /* Success */
 				$scope.model.categories = results;
+				$scope.mergeChecklistCategories();
 			},
 			function( details ) { /* Error */
+			}
+		);
+	};
+
+	$scope.mergeChecklistCategories = function() {
+		var categories, checklist;
+		$scope.loadStatus++;
+		if( $scope.loadStatus === 2) {
+			categories = $scope.model.categories;
+			checklist = $scope.model.checkListItems;
+
+			angular.forEach( categories, function( item, index ) {
+				$scope.insertCategory( item, $scope.checklistItemsByCategory( item ) );
+				/*
+				$scope.categories.push(
+					{ 
+						"info": item,
+						"items": $scope.checklistItemsByCategory( item )
+					}
+				);
+				*/
+			});
+
+			console.log($scope.categories);
+		}
+	};
+
+	/**
+	 * Insert category into working array of categories, this might occur when a response is received from the API notifing that a new category has been inserted
+	 * @param  {Object} category JSON category object
+	 * @param  {Array} items    Array of checklist items to add
+	 */
+	$scope.insertCategory = function( category, items ) {
+		$scope.categories.push(
+			{ 
+				"info": category,
+				"items": items
+			}
+		);
+	};
+
+	/**
+	 * Return a list of checlist items for a specific category
+	 * @param  {Object} category JSON category object
+	 * @return {Array}          an array of checklist items assigned to a specific category
+	 */
+	$scope.checklistItemsByCategory = function( category ) {
+		var items = [], checkListItems = $scope.model.checklist;
+		for( var i=0; i<checkListItems.length; i++ ) {
+			if( checkListItems[i].category === category.label && !checkListItems[i].is_deleted ) {
+				items.push(checkListItems[i]);
+			}
+		}
+
+		return items;
+	};
+
+	/**
+	 * Event triggered by releasing drag when re-organising categories
+	 * @param  {Event} evt    event that incepted this action
+	 * @param  {DOMNode} uiItem DOM node that this action was performed on
+	 */
+	$scope.saveCategoryOrder = function( evt, uiItem ){
+		var categories = $.map($scope.categories, function( cat ){
+			return cat.info;
+		});
+		var promise = lawPalService.updateCategoryOrder( categories );
+		promise.then( 
+			function( results ) { /* Success */
+				$scope.addAlert( "Categories re-ordered", "success", "Update complete" );
+			},
+			function( details ) { /* Error */
+				$scope.addAlert( "Unable to save order of categories", "warning", "Error!" );
+			}
+		);
+	};
+
+	/**
+	 * Post changes to the order of checklist categories to the API
+	 * @param  {Event} evt    Event that was fired
+	 * @param  {uiItem} uiItem DOM node
+	 */
+	$scope.saveItemOrder = function( evt, uiItem ) {
+		var categories = $scope.categories;
+
+		var promise = lawPalService.updateChecklistItemOrder( categories );
+		promise.then( 
+			function( results ) { /* Success */
+				$scope.addAlert( "Items re-ordered", "success", "Update complete" );
+			},
+			function( details ) { /* Error */
+				$scope.addAlert( "Unable to save order of items", "warning", "Error!" );
 			}
 		);
 	};
@@ -288,6 +522,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		promise.then( 
 			function( results ) { /* Success */
 				$scope.model.checklist = results;
+				$scope.mergeChecklistCategories();
 			},
 			function( details ) { /* Error */
 			}
@@ -404,41 +639,35 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		}
 	});
 
+	$scope.$on("feedbackrequest.opened", function( e, data ){
+		if(data.status) {
+			if( data.instance && data.instance.slug ) {
+				slug = data.instance.slug||null;
+				if( slug ) {
+					// Add request for feedback
+					$scope.model.feedbackRequests[slug] = [ { "todo_slug": slug} ];
+					$scope.$apply();
+					$scope.addAlert( "Feedback requested", "info", "Feedback" );
+					console.log($scope.model.feedbackRequests);
+				}
+			}
+		}
+	});
+
+	$scope.$on("feedbackrequest.cancelled", function( e, data ){
+		if(data.status) {
+			if( data.instance && data.instance.slug ) {
+				slug = data.instance.slug||null;
+				if( slug ) {
+					// Add request for feedback
+					delete $scope.model.feedbackRequests[slug];
+					$scope.$apply();
+					$scope.addAlert( "Feedback cancelled", "info", "Feedback" );
+				}
+			}
+		}
+	});
+
+	// feedbackrequest.cancelled
+
 }]);
-
-/**
- * This controller provides a bridget between the crispy form system and Angular
- * @param  {Object} $scope The modal forms scope object
- * @param  {dialog} dialog The dialog object, which contains references to the dom (e.g. dialog.modelEl), functions etc.
- */
-function dialogController( $scope, dialog, dialogsModel ) {
-	$scope.formData = {};
-
-	var key;
-
-    // hook the passed data to the popin scope
-    for (key in dialogsModel) {
-        $scope[key] = dialogsModel[key];
-    }
-
-	/**
-	 * Close the modal dialog no further action required
-	 */
-	$scope.close = function() {
-		dialog.close( null, $scope );
-	};
-
-	$scope.save = function( nodeId ) {
-		// result needs to be built up in order to map the form data to JSON
-		var result = {};
-
-		// The below code is writter such as to provide the critical bridge between static HTML forms and AngularJS objects
-		$.map( $(nodeId + " form").serializeArray(), function( item, i ) {
-			result[ item.name ] = item.value;
-		});
-
-		result = Object.clone(result);
-		// Proceed to call the success function(s) with the newly calculated JSON data
-		dialog.close( result, $scope );
-	};
-}

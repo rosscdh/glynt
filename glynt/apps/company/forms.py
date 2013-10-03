@@ -156,9 +156,7 @@ class CompanyAndFinancingProfileForm(CrispyExFieldsetFieldRemovalMixin, CompanyP
     data_bag = 'glynt.apps.project.bunches.ProjectIntakeBunch'
 
     def __init__(self, *args, **kwargs):
-        super(CompanyAndFinancingProfileForm, self).__init__(*args, **kwargs)
-
-        self.helper = FormHelper() if not self.helper else self.helper
+        self.helper = FormHelper()
 
         self.helper.layout = Layout(
             Fieldset(
@@ -194,4 +192,6 @@ class CompanyAndFinancingProfileForm(CrispyExFieldsetFieldRemovalMixin, CompanyP
                 'ip_university_affiliation',
             )
         )
+        super(CompanyAndFinancingProfileForm, self).__init__(*args, **kwargs)
+        # remove duplicate repeated fields
         self.unify_fields()
