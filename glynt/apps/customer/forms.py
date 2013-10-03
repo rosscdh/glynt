@@ -43,9 +43,6 @@ class CustomerProfileSetupForm(ChangePasswordMixin, ConfirmChangePasswordMixin, 
     twitter = forms.CharField(required=False, label="Twitter", help_text="", widget=forms.TextInput(attrs={}))
     summary = forms.CharField(required=False, label="Summary", widget=forms.Textarea(attrs={'placeholder': 'A brief description of your company', 'data-rangelength': '[0,1024]', 'rows': '2'}))
 
-
-    agree_tandc = forms.BooleanField(label='I agree to the Terms &amp; Conditions', widget=forms.CheckboxInput(attrs={}))
-
     def __init__(self, *args, **kwargs):
         """ get request object and user """
         self.request = kwargs.pop('request', None)
