@@ -6,8 +6,6 @@ from cicu.widgets import CicuUploaderInput
 
 from parsley.decorators import parsleyfy
 
-from glynt.mixins import ChangePasswordMixin, ConfirmChangePasswordMixin
-
 from glynt.apps.company.services import EnsureCompanyService
 from glynt.apps.customer.services import EnsureCustomerService
 
