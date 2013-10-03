@@ -7,8 +7,6 @@ from django.contrib.admin.models import LogEntry
 
 from threadedcomments.models import ThreadedComment
 
-from glynt.apps.services.abridge import LawPalAbridgeService
-
 from glynt.apps.utils import generate_unique_slug
 
 from glynt.apps.todo import TODO_STATUS, TODO_STATUS_ACTION, FEEDBACK_STATUS
@@ -412,8 +410,6 @@ def on_action_created(sender, **kwargs):
             if recipients:
                 logger.debug('recipients: {recipients}'.format(recipients=recipients))
 
-                recipients = list(recipients)
-
                 email = NewActionEmailService(
                     verb=event,
                     from_name=user_name,
@@ -425,11 +421,3 @@ def on_action_created(sender, **kwargs):
                     **action.data  # append kwargs sent in via: https://django-activity-stream.readthedocs.org/en/latest/data.html
                 )
                 email.send(url=url, message=action.verb)
-
-                abridge_service = LawPalAbridgeService(user=Bunch(email=user_email), content_group=project.__unicode__())
-
-                for r in recipients:
-                    abridge_service.add_event(content=action.verb, user=r)
-                abridge_service.send()
-
-
