@@ -36,7 +36,6 @@ class BaseEmailService(SendEmailAsAbridgeEventMixin):
     whitelist_actions = ['*']
 
     def __init__(self, *args, **kwargs):
-        super(BaseEmailService, self).__init__(*args, **kwargs)
 
         self._subject = kwargs.get('subject', self._subject)
         self._message = kwargs.get('message', self._message)
@@ -83,6 +82,7 @@ class BaseEmailService(SendEmailAsAbridgeEventMixin):
         })
 
         logger.info('Initialized BaseEmailService with context: {context}'.format(context=self.context))
+        super(BaseEmailService, self).__init__(*args, **kwargs)
 
     def _templatize_context(self, target, **kwargs):
         t = template.Template(target)
