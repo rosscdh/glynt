@@ -18,6 +18,9 @@ class SendEmailAsAbridgeEventMixin(object):
         self.abridge_content_group = kwargs.pop('content_group', False)
         self.use_abridge = True if self.abridge_content_group is not False else False
 
+        if self.from_email is None:
+            raise Exception('You must define a self.from_email')
+
         if self.use_abridge is True:
             self.abridge_service = LawPalAbridgeService(user=Bunch(email=self.from_email),
                                                         content_group=self.abridge_content_group,
