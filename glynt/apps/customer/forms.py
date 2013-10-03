@@ -16,7 +16,7 @@ logger = logging.getLogger('django.request')
 
 
 @parsleyfy
-class CustomerProfileSetupForm(ChangePasswordMixin, ConfirmChangePasswordMixin, forms.Form):
+class CustomerProfileSetupForm(forms.Form):
     """ Form to allow companies to enter basic information about
     their setups
     """
