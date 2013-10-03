@@ -109,7 +109,7 @@ angular.module('lawpal').factory( "deleteCategoryConfirmDialog", [ "$q", "$modal
 			   	var templateFooter = '</div>'+
 				  '<div class="modal-footer">'+
 				  '<input type="button" ng-click="close()" class="btn" value="Cancel" />'+
-				  '<input type="submit" value="Delete" class="btn btn-primary" />'+
+				  '<input type="submit" value="Delete" class="btn btn-primary" id="delete-category-button" />'+
 				  '</div>'+
 				  '</form>'+
 				  '</div></div>';

@@ -129,16 +129,16 @@ helper.scenario(casper.cli.options.url,
     	casper.test.comment('Test displaying messages')
     	this.click('a.item-edit');
 
-    	casper.waitForSelector('div#div_id_name', function() {
-    		casper.test.comment('Test edit form displays')
-    		this.test.assertExists('div#div_id_name input');
+    	casper.waitForSelector('input#id_name', function() {
+    		casper.test.comment('Test edit form displays');
+    		this.test.assertExists('input#id_name');
 
             this.fill('div.modal form', {
                 name: "Modified item name"
             }, true);
 
-            casper.test.comment('Submit form')
-            this.click('div.modal input[type=submit]');
+            //casper.test.comment('Submit form')
+            //this.click('div.modal input[type=submit]');
 
             casper.waitForText('Modified item name', function(){
             	casper.test.comment('Wait for toaster')
@@ -166,6 +166,55 @@ helper.scenario(casper.cli.options.url,
                 this.wait(1000);
                 // Is the text in the second category the same as before (it should not be)
                 this.test.assertNotEquals( secondItemText1, secondItemText2 );
+            }
+        );
+    },
+    function() {
+        /* Add category */
+        casper.test.comment('Add category');
+        casper.waitForSelector("button.create-category", 
+            function success() {
+                casper.test.comment('Click create button');
+                this.click('button.create-category');
+                // Wait for form...
+                casper.waitForSelector("input#id_category", 
+                    function success(){
+                        // Fill in form fields
+                        casper.test.comment('Fill in category form')
+                        this.fill('div.modal form', {
+                            'category': "Test category name"
+                        }, true);
+
+                        casper.test.comment('Submit form');
+                        //this.click('div.modal input[type=submit]');
+
+                        casper.test.comment('Test for success');
+                        casper.waitForText("Test category name"/* ".toast-title"*/, 
+                            function success(){
+                                this.test.assertSelectorHasText('.toast-title', 'Success');
+                            }
+                        );
+                    }
+                );
+
+            }
+        );
+    },
+    function() {
+        //capturePageTimelapse(10);
+        /* Add category */
+        casper.test.comment('Delete category');
+
+        casper.test.comment('Click remove button');
+        this.test.assertSelectorExists('#checklist-categories a.category-general i.category-remove');
+        this.click('#checklist-categories a.category-general i.category-remove');
+
+        // Wait for form...
+        casper.test.comment('Test for success');
+
+        casper.waitForSelector("div.modal input[type=submit]"/* ".toast-title"*/, 
+            function success(){
+                this.test.assertTextExists('Delete General', 'Delete dialog exists')
             }
         );
     }
@@ -265,7 +314,7 @@ function delayCapturePage( delay ) {
     });
 }
 
-function snapshotPage( num ) {
+function snapshotPage(num ) {
     this.capture('/tmp/page_' + num + '.png', {
         top: 0,
         left: 0,
