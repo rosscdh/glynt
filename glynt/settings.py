@@ -416,6 +416,10 @@ DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = False
 
+#
+# Abridge Integration
+#
+ABRIDGE_ENABLED = False  # disabled by default
 
 LOGGING = {
     'version': 1,
