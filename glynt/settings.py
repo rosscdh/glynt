@@ -252,6 +252,9 @@ HELPER_APPS = (
     # Notications
     'notifications',
 
+    # Abridge mailout
+    'abridge',
+
     # Object rules and permissions
     'rulez',
     # Haystack Search
