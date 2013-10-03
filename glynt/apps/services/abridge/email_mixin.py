@@ -22,9 +22,13 @@ class SendEmailAsAbridgeEventMixin(object):
             raise Exception('You must define a self.from_email')
 
         if self.use_abridge is True:
-            self.abridge_service = LawPalAbridgeService(user=Bunch(email=self.from_email),
-                                                        content_group=self.abridge_content_group,
-                                                        check_user=False)
+            try:
+                self.abridge_service = LawPalAbridgeService(user=Bunch(email=self.from_email),
+                                                            content_group=self.abridge_content_group,
+                                                            check_user=False)
+            except Exception as e:
+                logger.critical('Could not send to the Abridge Service: %s' % e)
+                self.use_abridge = False
 
     def abridge_send(self, context, recipients):
         """
@@ -38,19 +42,19 @@ class SendEmailAsAbridgeEventMixin(object):
             except:
                 profile_photo = None
 
-            # try:
+            try:
 
-            for to_name, to_email in recipients:
-                # add the notification event
+                for to_name, to_email in recipients:
+                    # add the notification event
 
-                self.abridge_service.add_event(content=context.get('message'),
-                                               user=Bunch(email=to_email, first_name='', last_name=''),
-                                               url=context.get('url'),
-                                               profile_photo=profile_photo)
+                    self.abridge_service.add_event(content=context.get('message'),
+                                                   user=Bunch(email=to_email, first_name='', last_name=''),
+                                                   url=context.get('url'),
+                                                   profile_photo=profile_photo)
 
-            self.abridge_service.send()
-            return True
+                self.abridge_service.send()
+                return True
 
-            # except Exception as e:
-            #     logger.critical('Could not send to the Abridge Service: %s' % e)
-            #     return False
+            except Exception as e:
+                logger.critical('Could not send to the Abridge Service: %s' % e)
+                return False
