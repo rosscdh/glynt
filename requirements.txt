@@ -111,6 +111,9 @@ mock
 -e git+https://github.com/vandersonmota/model_mommy.git#egg=model_mommy
 pyquery
 
+# Abridge integration
+-e git+https://github.com/rosscdh/django-abridge.git#egg=django-abridge
+
 # Misc
 django-autoslug
 python-dateutil
