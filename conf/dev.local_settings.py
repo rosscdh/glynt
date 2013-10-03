@@ -72,6 +72,17 @@ HAYSTACK_CONNECTIONS = {
 # VERY IMPORTANT
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+AWS_FILESTORE_BUCKET = 'local.lawpal.com'
+
+FILEPICKER_API_KEY = 'A4Ly2eCpkR72XZVBKwJ06z'
+CROCDOC_API_KEY = 'pRzHhZS4jaGes193db28cwyu'
+
+PUSHER_APP_ID = 44301
+PUSHER_KEY = '60281f610bbf5370aeaa'
+PUSHER_SECRET = '72b185ac8ba23bda3552'
+
+TWITTER_CONSUMER_KEY = 's4S1EAIeNded9aX5EBWwKQ'
+TWITTER_CONSUMER_SECRET = 'GwkDznb11TzxHxQAsb5B5NbmzklpIlqpXcsXXB5sI'
 
 if DEBUG:
     INSTALLED_APPS = INSTALLED_APPS + (
@@ -123,50 +134,42 @@ LOGGING = {
     'handlers': {
         'null': {
             'level': 'DEBUG',
-            'class': 'django.utils.log.NullHandler',
-        },
-        'console':{
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'simple'
+            'class': 'logging.NullHandler',
         },
         'mail_admins': {
             'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+        'logfile': {
+            'class': 'logging.handlers.WatchedFileHandler',
+            'filename': '/tmp/lawpal-{env}.log'.format(env=PROJECT_ENVIRONMENT)
         }
     },
     'loggers': {
-        'django': {
+        'django.test': {
             'handlers': ['console'],
-            'propagate': True,
             'level': 'INFO',
+            'propagate': True,
         },
         'django.request': {
-            'handlers': ['console'],
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['console', 'logfile'],
             'level': 'DEBUG',
-            'propagate': False,
+            'propagate': True,
         },
-        'lawpal.services': {
-            'handlers': ['console'],
-            'level': 'INFO',
-            'propagate': False,
-        },
-        'lawpal.graph': {
-            'handlers': ['console'],
-            'level': 'INFO',
-            'propagate': False,
+        'lawpal': {
+            'handlers': ['console', 'logfile'],
+            'level': 'DEBUG',
+            'propagate': True,
         }
     }
 }
-
-AWS_FILESTORE_BUCKET = 'local.lawpal.com'
-
-FILEPICKER_API_KEY = 'A4Ly2eCpkR72XZVBKwJ06z'
-CROCDOC_API_KEY = 'pRzHhZS4jaGes193db28cwyu'
-
-PUSHER_APP_ID = 44301
-PUSHER_KEY = '60281f610bbf5370aeaa'
-PUSHER_SECRET = '72b185ac8ba23bda3552'
-
-TWITTER_CONSUMER_KEY = 's4S1EAIeNded9aX5EBWwKQ'
-TWITTER_CONSUMER_SECRET = 'GwkDznb11TzxHxQAsb5B5NbmzklpIlqpXcsXXB5sI'

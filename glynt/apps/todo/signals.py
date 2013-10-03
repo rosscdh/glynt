@@ -55,6 +55,16 @@ def is_sort_order_update(**kwargs):
         return True
     return False
 
+def is_data_field_update(**kwargs):
+    update_fields = kwargs.get('update_fields', frozenset())
+
+    # if we have a specific update that is the sort_position changed update
+    # then do nothing
+    if type(update_fields) is frozenset and len(update_fields) == 1 and 'data' in update_fields:
+        # Do absolutely nothing
+        return True
+    return False
+
 
 """
 Attachment handler events
@@ -74,8 +84,12 @@ def on_attachment_created(sender, **kwargs):
             crocdoc_service = CrocdocAttachmentService(attachment=attachment)
             crocdoc_service.process()
 
-            todostatus_service = ToDoStatusService(todo_item=attachment.todo)
+            todo = attachment.todo
+            todostatus_service = ToDoStatusService(todo_item=todo)
             todostatus_service.process()
+
+            # increment the attachment count
+            todo.num_attachments_plus()
 
             verb = '{name} uploaded an attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project)
             action.send(attachment.uploaded_by,
@@ -97,13 +111,13 @@ def on_attachment_deleted(sender, **kwargs):
     if not isinstance(sender, LogEntry):
         is_new = kwargs.get('created', False)
         attachment = kwargs.get('instance', None)
+        todo = attachment.todo
 
         if attachment:
-            try:
-                delete_attachment.delay(is_new=is_new, attachment=attachment)
-            except Exception as e:
-                logger.error('Could not call delete_attachment via celery: {exception}'.format(exception=e))
-                delete_attachment(is_new=is_new, attachment=attachment, **kwargs)
+            delete_attachment(is_new=is_new, attachment=attachment, **kwargs)
+
+            # decrement num_attachments
+            todo.num_attachments_minus()  # increment the attachment count
 
             try:
                 verb = '{name} deleted attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project)
@@ -272,7 +286,8 @@ def todo_item_crud(sender, **kwargs):
     is_new = kwargs.get('created', False)
     instance = kwargs.get('instance')
 
-    if is_sort_order_update(**kwargs) is False:
+    if is_sort_order_update(**kwargs) is False and is_data_field_update(**kwargs) is False:
+
         info_object = get_todo_info_object(todo=instance)
         pusher_service = PusherPublisherService(channel=instance.project.pusher_id, event='todo.post_save')
 
