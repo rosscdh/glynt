@@ -3,20 +3,20 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django import template
 
-
 from templated_email import send_templated_mail
 
 admin_name, admin_email = settings.ADMINS[0]
 
-from bunch import Bunch
+from glynt.apps.services.abridge import SendEmailAsAbridgeEventMixin
 
 import itertools
+from bunch import Bunch
 
 import logging
 logger = logging.getLogger('lawpal.services')
 
 
-class BaseEmailService(object):
+class BaseEmailService(SendEmailAsAbridgeEventMixin):
     """
     Base Email Service
     Provides template and basic sending properties
@@ -35,7 +35,9 @@ class BaseEmailService(object):
 
     whitelist_actions = ['*']
 
-    def __init__(self, **kwargs):
+    def __init__(self, *args, **kwargs):
+        super(BaseEmailService, self).__init__(*args, **kwargs)
+
         self._subject = kwargs.get('subject', self._subject)
         self._message = kwargs.get('message', self._message)
         self.from_name = kwargs.get('from_name', admin_name)
@@ -104,6 +106,7 @@ class BaseEmailService(object):
 
     def send(self, **kwargs):
         if self.can_send:
+
             logger.debug('Can Send Email {verb}'.format(verb=self.verb))
 
             self._subject = kwargs.get('subject', self._subject)
@@ -113,26 +116,30 @@ class BaseEmailService(object):
             # merge kwargs into context
             self.context.update(kwargs)
 
-            # Loop over the recipients list
-            for to_name, to_email in self.recipients:
+            # in case of Abridge service exception
+            if self.abridge_send(context=self.context, recipients=self.recipients) is False:
 
-                self.context.update({
-                    'to_name': to_name,
-                    'to_email': to_email,
-                })
-                # Update subject
-                self.context.update({
-                    'subject': self.subject,
-                    'message': self.message,
-                })
+                # Loop over the recipients list
+                for to_name, to_email in self.recipients:
 
-                logger.info('Sending Email to: {to} email_template: {email_template} with context: {context}'.format(to=self.to_email, email_template=self.email_template, context=self.context))
+                    self.context.update({
+                        'to_name': to_name,
+                        'to_email': to_email,
+                    })
+                    # Update subject
+                    self.context.update({
+                        'subject': self.subject,
+                        'message': self.message,
+                    })
 
-                email = Bunch(template_name=self.email_template,
-                              template_prefix=self.base_email_template_location,
-                              from_email='{from_name} via LawPal <{from_email}>'.format(from_name=self.from_name, from_email=self.from_email),
-                              recipient_list=[to_email],
-                              bcc=['founders@lawpal.com'] if settings.DEBUG is False else [],  # only bcc us in on live mails
-                              context=self.context)
+                    logger.info('Sending Email to: {to} email_template: {email_template} with context: {context}'.format(to=self.to_email, email_template=self.email_template, context=self.context))
 
-                send_templated_mail(**email)
+                    # ensure that the user is notified via the standard email method
+                    email = Bunch(template_name=self.email_template,
+                                  template_prefix=self.base_email_template_location,
+                                  from_email='{from_name} via LawPal <{from_email}>'.format(from_name=self.from_name, from_email=self.from_email),
+                                  recipient_list=[to_email],
+                                  bcc=['founders@lawpal.com'] if settings.DEBUG is False else [],  # only bcc us in on live mails
+                                  context=self.context)
+
+                    send_templated_mail(**email)
