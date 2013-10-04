@@ -43,6 +43,10 @@ class Customer(models.Model):
         return self.user.profile.get_mugshot_url()
 
     @property
+    def phone(self):
+        return self.data.get('telephone', '123123123')
+
+    @property
     def companies(self):
         return self.user.companies.all()
 
