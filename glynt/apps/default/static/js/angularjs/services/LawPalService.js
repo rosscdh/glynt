@@ -11,10 +11,10 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 
 	/* Define API interfaces for check list items */
 	var checkListItemResources = {
-		"remove": $resource("/api/v1/todo/:id\\/", {}, 
-				/* This is done to ensure the content type of PATCH is sent through */
-				{ "save": { "method": "PATCH", headers: { "Content-Type": "application/json" } } 
-			}),
+		"remove": $resource("/api/v1/todo/:id", {}, 
+			/* This is done to ensure the content type of PATCH is sent through */
+			{ "save": { "method": "PATCH", headers: { "Content-Type": "application/json" } } 
+		}),
 		"update": 
 			$resource("/api/v1/todo/:id\\/", {},
 				{ "save": { "method": "PUT", headers: { "Content-Type": "application/json" } } 
