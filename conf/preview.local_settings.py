@@ -135,7 +135,7 @@ CACHES = {
     },
     'fallback': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': '/tmp/glynt.cache',
+        'LOCATION': '/tmp/glynt.preview.cache',
     }
 }
 

@@ -3,7 +3,7 @@
  * @author <a href="mailtolee.j.sinclair@gmail.com">Lee Sinclair</a>
  * Date: 2 Sept 2013
  */
-angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource', function ($q, $timeout, $resource) { /* Load the LawPal local interface */
+angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource', '$http', function ($q, $timeout, $resource, $http) { /* Load the LawPal local interface */
 	var lawPalInterface = LawPal;
 	var userType = "is_customer";
 	var checklist = [];
@@ -11,7 +11,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 
 	/* Define API interfaces for check list items */
 	var checkListItemResources = {
-		"remove": $resource("/api/v1/todo/:id\\/", {}, 
+		"remove": $resource("/api/v1/todo/:id", {}, 
 			/* This is done to ensure the content type of PATCH is sent through */
 			{ "save": { "method": "PATCH", headers: { "Content-Type": "application/json" } } 
 		}),
@@ -32,9 +32,20 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 	var checkListCategories = {
 		"reorder": $resource("/api/v1/project/:id/checklist/categories/sort\\/", {}, 
 			/* This is done to ensure the content type of PATCH is sent through */
-			{ "save": { "method": "PATCH", headers: { "Content-Type": "application/json" }, "isArray": true } 
-		})
+				{ "save": { "method": "PATCH", headers: { "Content-Type": "application/json" }, "isArray": true } 
+			}),
+		"add": $resource( "/projects/:id/category\\/", {},
+				{ "save": { "method": "POST", "headers" : {'Content-Type': 'application/x-www-form-urlencoded'}, "transformRequest": transformToFormData } 
+			}),
+		"delete": $resource( "/projects/:id/category\\/", {},
+				{ "save": { "method": "DELETE", "headers" : { "Content-Type": "application/json" } } 
+			})
 	};
+
+	var transformToFormData = function(data){
+		console.log("data", data);
+        return $.param(data);
+    }
 
 	var checkList = {};
 
@@ -82,6 +93,52 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 					deferred.reject(results);
 				}
 			);
+
+			return deferred.promise;
+		},
+
+		"addCategory": function( details ) {
+			var deferred = $q.defer();
+
+			var projectId = this.getProjectUuid();
+			var url = "/projects/" + projectId  + "/category/";
+
+			if( details && details.category ) {
+				$http.post(url, details, {
+			        "headers": { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+			        "transformRequest": transformToFormData
+			    }).success(function(response) {
+			        //do stuff with response
+			        if( response && response.instance && response.instance.category ) {
+			        	if( !response.instance.category.label )
+			        		response.instance.category.label = response.instance.category.name;
+			        	deferred.resolve(response.instance.category);
+			        } else {
+			        	deferred.reject(response);
+			        }
+			    }).error(function(err){
+			    	deferred.reject(err);
+			    });
+			}
+
+			return deferred.promise;
+		},
+
+		"removeCategory": function( details ) {
+			var deferred = $q.defer();
+
+			var projectId = this.getProjectUuid();
+			var options = { "id": projectId };
+
+			if( details && details.info.label ) {
+				var data = { "category": details.info.label };
+				checkListCategories.delete.save(options, data, function (results) { /* Success */
+						deferred.resolve(results);
+					}, function (results) { /* Error */
+						deferred.reject(results);
+					}
+				);
+			}
 
 			return deferred.promise;
 		},
