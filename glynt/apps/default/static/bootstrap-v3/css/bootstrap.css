@@ -8583,6 +8583,30 @@ section.checklist-category {
   padding: 10px 0;
 }
 
+.vcard {
+  margin-bottom: 10px;
+}
+
+.vcard .fn {
+  padding-top: 0;
+  margin-top: 0;
+  margin-bottom: 0.25em;
+}
+
+.vcard .photo,
+.vcard .company {
+  padding: 0;
+  margin: 0;
+}
+
+.vcard .action {
+  font-size: 0.9em;
+}
+
+.vcard.remove {
+  opacity: 0.5;
+}
+
 .navbar {
   margin-bottom: 0;
 }

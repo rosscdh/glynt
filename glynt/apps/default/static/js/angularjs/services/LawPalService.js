@@ -42,14 +42,61 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			})
 	};
 
+	var projectResource = {
+		"patch": $resource("/api/v1/project/:id/:entity\\/", {}, 
+			/* This is done to ensure the content type of PATCH is sent through */
+				{ "array": { "method": "PATCH", headers: { "Content-Type": "application/json" }, "isArray": true } 
+			})
+	};
+
 	var transformToFormData = function(data){
-		console.log("data", data);
+		// Convert JSON to form post
         return $.param(data);
     }
 
 	var checkList = {};
 
 	return {
+		/**
+		 * Retreive current project
+		 * @return {Function} promise
+		 */
+		"currentProject": function() {
+			var deferred = $q.defer();
+			var projectDetails = {};
+
+			// Get lawpal object
+			$timeout(function () {
+				if (lawPalInterface && typeof(lawPalInterface.project)==="function") {
+					// Retrieve project details
+					var projectDetails = lawPalInterface.project();
+					// Return project details
+					deferred.resolve(projectDetails);
+				} else {
+					deferred.reject(projectDetails);
+				}
+			}, 100);
+
+			return deferred.promise;
+		},
+
+		"updateProjectTeam": function( team ) {
+			var deferred = $q.defer();
+			var options = { "id": this.getProjectUuid(), "entity": "users" };
+
+			projectResource.patch.array( options, team, 
+				function success( response ) {
+					// Return project details
+					deferred.resolve(response);
+				},
+				function error( err ) {
+					deferred.reject( err );
+				}
+			);
+
+			return deferred.promise;
+		},
+
 		/**
 		 * Request the list of categories
 		 * @return {Function} promise for categories
@@ -75,6 +122,11 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			return deferred.promise;
 		},
 
+		/**
+		 * Sends a PATCH request to update the category order
+		 * @param  {Array} reOrderedCategories Array of catgeory names
+		 * @return {Function}                  promise
+		 */
 		"updateCategoryOrder": function( reOrderedCategories ) {
 			var projectId = this.getProjectUuid();
 			var options = { "id": projectId };
@@ -312,6 +364,17 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		 */
 		"getCurrentUser": function() {
 			return (LawPal.user && LawPal.user.is_authenticated?LawPal.user:null);
+		},
+
+		"emailSearch": function( str ) {
+			var deferred = $q.defer();
+
+			$timeout(function () {
+				var results = lawPalInterface._mockSearch(str);
+				deferred.resolve(results);
+			}, 1500);
+
+			return deferred.promise;
 		}
 	};
 
