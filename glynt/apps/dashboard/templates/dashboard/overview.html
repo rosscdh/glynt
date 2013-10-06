@@ -439,8 +439,12 @@ var LawPal = {
                         </div>
                         <div class="col col-lg-6 details">
                             <p class="action" ng-show="user.primary"><i class="icon icon-star"></i> Primary {[{user.role | titleCase}]} Contact</p>
-                            <p class="action" ng-show="!user.primary"><a href="javascript:;" ng-click="removeUser(user)"><i class="icon icon-remove text-danger"></i> Remove</a> |
-                            <a href="javascript:;" ng-click="makePrimary(user)"><i class="icon icon-star-empty"></i> Make primary</a></p>
+                            <p class="action" ng-show="!user.primary">
+                                <a href="javascript:;" ng-click="removeUser(user)" ng-show="!user.is_deleted"><i class="icon icon-remove text-danger"></i> Remove</a>
+                                <a href="javascript:;" ng-click="removeUser(user)" ng-show="user.is_deleted"><i class="icon icon-undo"></i> Undo remove</a>
+                                <span ng-show="!user.is_deleted">|</span>
+                                <a href="javascript:;" ng-click="makePrimary(user)" ng-show="!user.is_deleted"><i class="icon icon-star-empty"></i> Make primary</a>
+                            </p>
                         </div>
                     </div>
 
@@ -462,10 +466,10 @@ var LawPal = {
                                 typeahead-wait-ms="600"
                                 typeahead-min-length="3"
                                 typeahead-loading="searchingEmail"
-                                ng-model="selectedEmail" />
+                                ng-model="searchAttrs.selectedEmail" />
                         </div>
                         <div class="col col-lg-4">
-                            <button type="submit" class="btn btn-default" ng-click="addToProject(selectedEmail, emailSearchResults)" ng-disabled="searchingEmail"><i class="icon {[{emailSearchClass(searchingEmail)}]}"></i> Add to project</button>
+                            <button type="submit" class="btn btn-default" ng-click="addToProject(searchAttrs.selectedEmail, emailSearchResults)" ng-disabled="searchingEmail"><i class="icon {[{emailSearchClass(searchingEmail)}]}"></i> Add to project</button>
                         </div>
                             
                     </div>

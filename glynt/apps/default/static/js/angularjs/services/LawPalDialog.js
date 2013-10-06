@@ -216,6 +216,10 @@ angular.module('lawpal').controller( 'manageTeamDialogCtrl', [ '$scope', '$modal
 		$scope.selectedEmail = null;
 		$scope.searchingEmail = "";
 
+		$scope.searchAttrs = {
+			"selectedEmail": null,
+		};
+
 		angular.copy( team, $scope.revert );
 
 		/**
@@ -298,6 +302,8 @@ angular.module('lawpal').controller( 'manageTeamDialogCtrl', [ '$scope', '$modal
 
 			if( selectedUser )
 				$scope.team.push( selectedUser );
+
+			$scope.searchAttrs.selectedEmail = "";
 		};
 
 		/**
