@@ -104,7 +104,9 @@ class SendEmailAsAbridgeEventMixin(object):
         Try to send the notification via Abridge
         """
         # send the notification to our abridge service
-        if self.abridge_service is not None:
+        if self.abridge_service is None:
+            return False
+        else:
 
             card_kwargs = self.card_properties()
 
