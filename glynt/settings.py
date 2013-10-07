@@ -107,8 +107,9 @@ MIDDLEWARE_CLASSES = (
     'glynt.middleware.EnsureUserHasCompanyMiddleware',
     'glynt.middleware.LawpalCurrentProjectsMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'pagination.middleware.PaginationMiddleware',
+    #'pagination.middleware.PaginationMiddleware',
     'django_filepicker.middleware.URLFileMapperMiddleware',
+    'waffle.middleware.WaffleMiddleware',
 )
 
 
@@ -254,6 +255,9 @@ HELPER_APPS = (
 
     # Abridge mailout
     'abridge',
+
+    # feature switcher
+    'waffle',
 
     # Object rules and permissions
     'rulez',

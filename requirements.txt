@@ -33,6 +33,7 @@ django-localflavor
 django-countries
 django-rulez
 django-email-obfuscator
+django-waffle
 south
 
 
