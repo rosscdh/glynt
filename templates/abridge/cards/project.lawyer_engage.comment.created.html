@@ -1,0 +1,18 @@
+{% load glynt_helpers %}
+<tr>
+    <td align="left" colspan="3" height="40" width="100%" style="font-size: 0; line-height: 0;">&nbsp;</td>
+</tr>
+<tr>
+    <td class="small-width" align="left" width="40" style="display: block;">&nbsp;</td>
+    <td align="center">
+        <h2 style="color: #6c797c !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5em; margin: 0 0 25px; padding: 0;">{{ actor }} has commented on <a href="{% current_site_domain %}{{ url }}">{{ project }}</a></h2>
+    </td>
+    <td class="small-width" align="left" width="40" style="display: block;">&nbsp;</td>
+</tr>
+<tr>
+    <td class="small-width" align="left" width="40" style="display: block;">&nbsp;</td>
+    <td align="center">
+        <p>{{ content }}</p>
+    </td>
+    <td class="small-width" align="left" width="40" style="display: block;">&nbsp;</td>
+</tr>
