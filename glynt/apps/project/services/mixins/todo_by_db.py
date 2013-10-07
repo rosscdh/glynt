@@ -1,14 +1,33 @@
 # -*- coding: UTF-8 -*-
 from bunch import Bunch
+from collections import OrderedDict
 
 from glynt.apps.todo.models import ToDo
-
 from glynt.apps.project.services import logger
 
 
 class ToDoItemsFromDbMixin(object):
     slugs = None
     _db_todos_list = None
+
+    def get_db_todos(self):
+        """
+        return the (cat, todos) tuple for create
+        """
+        checklist = []
+        todos_by_cat = OrderedDict()
+
+        logger.info('Get Project db todo items and category')
+
+        for todo in self.db_todos():
+            checklist.append(todo)
+
+            if todo.category not in todos_by_cat:
+                todos_by_cat[todo.category] = []
+
+            todos_by_cat[todo.category].append(todo)
+
+        return (todos_by_cat, checklist)
 
     def db_todos(self):
         if self._db_todos_list is None:
