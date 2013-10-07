@@ -2,7 +2,7 @@
 
 <ul class="nav nav-pills">
     <li class="active">
-        <a class="disabled"><i class="{{ todo.status | todo_status_icon }}"></i> {{ todo.display_status }}</a>
+        <a id="checklist_item_status_label" class="disabled"><i class="{{ todo.status | todo_status_icon }}"></i> {{ todo.display_status }}</a>
     </li>
 
     {% if back_and_forth.prev %}<li><a href="#" class="btn-prev" title="Previous item"><i class="icon-chevron-left"></i></a></li>{% endif %}
