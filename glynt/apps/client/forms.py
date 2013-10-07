@@ -53,8 +53,6 @@ class ConfirmLoginDetailsForm(forms.ModelForm):
         user = self.user
 
         if commit:
-            user.save()
-
             data = self.cleaned_data.copy()
 
             if self.user.profile.is_lawyer:
