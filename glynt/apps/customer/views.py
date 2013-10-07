@@ -78,6 +78,7 @@ class CustomerProfileSetupView(CustomerRequiredViewMixin, FormView):
 
         customer_service = EnsureCustomerService(user=user)
         self.customer = customer_service.process()
+
         # get the startup
         startup = self.customer.primary_company
 

@@ -56,6 +56,8 @@ class EnsureCustomerService(object):
             self.customer.bio = self.bio
 
         if self.data:
+            # ensure we update the data with the customers current data
+            self.data.update(**self.customer.data)
             self.customer.data = self.data
 
         if self.photo:
