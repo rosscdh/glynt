@@ -36,27 +36,15 @@ class LawPalAbridgeService(object):
 
         date = datetime.datetime.utcnow()
 
-        card_kwargs = {
+        kwargs.update({
             'url': kwargs.get('url', False),
             'profile_photo': kwargs.get('profile_photo', False),
             'event_date': date,
             'natural_event_date': naturaltime(date),
-
-            # for our email templates
-            'from_name': getattr(self, 'from_name', None),
-            'from_email': getattr(self, 'from_email', None),
-            'to_name': getattr(self, 'to_name', None),
-            'to_email': getattr(self, 'to_email', None),
-
-            'actor': getattr(self, 'actor', None),
-            'target': getattr(self, 'target', None),
-            'project': getattr(self, 'project', None),
-            'verb': getattr(self, 'verb', None),
-        }
+        })
 
         card_service = CardService(content=content,
-                                   template_name=kwargs.get('template_name', None),
-                                   **card_kwargs)
+                                   **kwargs)
 
         logger.debug('Successfully appended card to event.kwargs')
 
@@ -67,8 +55,8 @@ class LawPalAbridgeService(object):
         """
         add our custom event object
         """
-
         content_group = kwargs.pop('content_group', self.content_group)
+
         user = kwargs.pop('user', self.user)
 
         user = Bunch(email=user.email, first_name=user.first_name, last_name=user.last_name)

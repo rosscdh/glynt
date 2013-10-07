@@ -4,6 +4,7 @@ from .abridge_service import LawPalAbridgeService
 from glynt.apps.default.templatetags.glynt_helpers import current_site_domain
 
 from bunch import Bunch
+from urlparse import urlparse
 
 import waffle
 
@@ -25,6 +26,22 @@ class SendEmailAsAbridgeEventMixin(object):
 
         if self.from_email is None:
             raise Exception('You must define a self.from_email')
+
+    def card_properties(self):
+        return {
+            # for our email templates
+            'from_name': getattr(self, 'from_name', ''),
+            'from_email': getattr(self, 'from_email', ''),
+            'to_name': getattr(self, 'to_name', ''),
+            'to_email': getattr(self, 'to_email', ''),
+
+            'actor': self.actor.get_full_name() if getattr(self.actor, 'get_full_name') else self.actor.username,
+            'target': unicode(getattr(self, 'target', '')),
+            'project': unicode(getattr(self, 'project', '')),
+            'verb': getattr(self, 'verb', ''),
+
+            'profile_photo': self.abridge_profile_photo(user=getattr(self, 'actor', '')),
+        }
 
     def use_abridge(self, content_group):
         """
@@ -69,8 +86,16 @@ class SendEmailAsAbridgeEventMixin(object):
         """
         send the notification to our abridge service
         """
+        mugshot = user.profile.get_mugshot_url()
+        url = urlparse(mugshot)
         try:
-            return '{base}{path}'.format(base=current_site_domain(), path=user.profile.get_mugshot_url()) 
+            # if we dont already have the scheme appended to the url
+            if url.scheme is '':
+                return '{base}{path}'.format(base=current_site_domain(), path=mugshot) 
+            else:
+                # scheme present just return it
+                return mugshot
+
         except:
             return None
 
@@ -81,19 +106,17 @@ class SendEmailAsAbridgeEventMixin(object):
         # send the notification to our abridge service
         if self.abridge_service is not None:
 
-            # get teh senders photo
-            # @TODO this should be cleaned up and moved higher up in the chain
-            profile_photo = self.abridge_profile_photo(user=context.get('actor'))
+            card_kwargs = self.card_properties()
 
             # Try to send the event
             try:
                 for to_name, to_email in recipients:
                     # add the notification event
-                    self.abridge_service.add_event(content=context.get('message'),
+                    self.abridge_service.add_event(content=context.get('content'),
                                                    user=Bunch(email=to_email, first_name='', last_name=''),
                                                    url=context.get('url'),
-                                                   profile_photo=profile_photo,
-                                                   template_name=template_name)
+                                                   template_name=template_name,
+                                                   **card_kwargs)
 
                 self.abridge_service.send()
                 return True
