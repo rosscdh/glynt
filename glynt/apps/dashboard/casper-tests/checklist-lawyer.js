@@ -68,7 +68,9 @@ helper.scenario(casper.cli.options.url,
         casper.test.comment('Test checklist items options for lawyers');
         casper.waitForSelector('div#list-items section td', function() {
             casper.test.comment('Test checklist items create button')
-            this.test.assertExists('div#list-items div#transaction-setup button.create-item')
+
+            this.test.assertExists('div#list-items div#general button.create-item', 'check that we have a create-item element in the general category')
+            this.test.assertElementCount('div#list-items button.create-item', 10, 'Should be 10 create-item buttons for the lawyer in this project')
 
             casper.test.comment('Test checklist items edit button exists and is visible');
             this.test.assertExists('div#list-items tr.item a.item-edit')
