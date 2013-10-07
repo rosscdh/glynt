@@ -314,6 +314,13 @@ def todo_item_status_change(sender, **kwargs):
         # ensure the slug is present
         if instance.slug in [None, '']:
             instance.slug = generate_unique_slug(instance=instance)
+            # @BUSINESSRULE ensure we have a sort_position
+            if not instance.sort_position:
+                instance.sort_position = instance.project.todo_set.all().count() + 1
+            # @BUSINESSRULE ensure we have a sort_position_by_cat
+            if not instance.sort_position_by_cat:
+                instance.sort_position_by_cat = instance.sort_position
+                
     else:
 
         if instance.user is not None:
