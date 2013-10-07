@@ -37,7 +37,12 @@ def on_project_created(sender, **kwargs):
 
     # ensure that we have a project object and that is has NO pk
     # as we dont want this event to happen on change of a project
-    if not is_new:
+    if is_new:
+
+        # perform the bulk create event
+        # to bring project up to date with any modifications made
+        checklist_service = ProjectCheckListService(is_new=is_new, project=project)
+        checklist_service.bulk_create()
 
         user = project.customer.user
         comment = u'{user} created this Project'.format(user=user.get_full_name())
@@ -49,11 +54,6 @@ def on_project_created(sender, **kwargs):
 
         send = SendNewProjectEmailsService(project=project, sender=user)
         send.process()
-
-    # perform the bulk create event
-    # to bring project up to date with any modifications made
-    checklist_service = ProjectCheckListService(project=project)
-    checklist_service.bulk_create()
 
 
 @receiver(PROJECT_CATEGORY_SORT_UPDATED, dispatch_uid='project.project_categories_sort_updated')

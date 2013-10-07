@@ -134,9 +134,9 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 					/* Yes delete */
 					lawPalService.removeCategory( category ).then(
 						function(){
-							console.log("success");
 							var index = $scope.findCategoryIndex(category.info.label);
-							if(index) {
+							/* Use index >=0 instead of is true */
+							if(index>=0) {
 								$scope.categories.splice(index, 1);
 							}
 
@@ -152,9 +152,8 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 			/* No checklist items: just delete it */
 			lawPalService.removeCategory( category ).then(
 				function(){
-					console.log("success");
 					var index = $scope.findCategoryIndex(category.info.label);
-					if(index) {
+					if(index>=0) {
 						$scope.categories.splice(index, 1);
 					}
 
@@ -179,7 +178,10 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		lawPalDialog.open( "Create item", url, {} ).then( 
 			function(result) { /* Success */
 				var item = result;
-				/* Update model */
+				// Put item at bottom of list in sort order
+				item.sort_position = $scope.model.checklist.length + 1;
+
+				/* Start save process i.e. POST to API */
 				if( result && result.name )  {
 					$scope.saveItem( item, true );
 				}
