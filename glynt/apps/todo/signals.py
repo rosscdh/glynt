@@ -117,7 +117,7 @@ def on_attachment_deleted(sender, **kwargs):
             delete_attachment(is_new=is_new, attachment=attachment, **kwargs)
 
             # decrement num_attachments
-            todo.num_attachments_minus()  # increment the attachment count
+            todo.num_attachments_minus()  # decrement the attachment count
 
             try:
                 verb = '{name} deleted attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project)
@@ -311,12 +311,15 @@ def todo_item_status_change(sender, **kwargs):
     instance = kwargs.get('instance')
 
     if instance.pk is None:
+
         # ensure the slug is present
         if instance.slug in [None, '']:
             instance.slug = generate_unique_slug(instance=instance)
+
             # @BUSINESSRULE ensure we have a sort_position
             if not instance.sort_position:
                 instance.sort_position = instance.project.todo_set.all().count() + 1
+
             # @BUSINESSRULE ensure we have a sort_position_by_cat
             if not instance.sort_position_by_cat:
                 instance.sort_position_by_cat = instance.sort_position
