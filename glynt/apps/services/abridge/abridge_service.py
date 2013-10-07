@@ -26,34 +26,42 @@ class LawPalAbridgeService(object):
         self.events = []
         self.content_group = kwargs.get('content_group', 'General')
 
-        self.check_user = kwargs.get('check_user', False)
-        self.abridge = AbridgeService(user=user, check_user=self.check_user)
+        self.abridge = AbridgeService(user=user,
+                                      check_user=kwargs.get('check_user', False))
 
         logger.debug('Initialized LawPalAbridgeService')
 
     def append_card(self, content, **kwargs):
         logger.debug('Trying to append card to event.kwargs')
 
-        try:
-            date = datetime.datetime.utcnow()
+        date = datetime.datetime.utcnow()
 
-            card_kwargs = {
-                'url': kwargs.get('url', False),
-                'profile_photo': kwargs.get('profile_photo', False),
-                'event_date': date,
-                'natural_event_date': naturaltime(date),
-            }
+        card_kwargs = {
+            'url': kwargs.get('url', False),
+            'profile_photo': kwargs.get('profile_photo', False),
+            'event_date': date,
+            'natural_event_date': naturaltime(date),
 
-            card_service = CardService(content=content, **card_kwargs)
+            # for our email templates
+            'from_name': getattr(self, 'from_name', None),
+            'from_email': getattr(self, 'from_email', None),
+            'to_name': getattr(self, 'to_name', None),
+            'to_email': getattr(self, 'to_email', None),
 
-            logger.debug('Successfully appended card to event.kwargs')
+            'actor': getattr(self, 'actor', None),
+            'target': getattr(self, 'target', None),
+            'project': getattr(self, 'project', None),
+            'verb': getattr(self, 'verb', None),
+        }
 
-            # send our card through
-            return card_service.card()
+        card_service = CardService(content=content,
+                                   template_name=kwargs.get('template_name', None),
+                                   **card_kwargs)
 
-        except Exception as e:
-            logger.error('Caught Abridge Card Exception: %s' % e)
-            return None
+        logger.debug('Successfully appended card to event.kwargs')
+
+        # send our rendered card through
+        return card_service.preview()
 
     def add_event(self, content, **kwargs):
         """
@@ -66,6 +74,7 @@ class LawPalAbridgeService(object):
         user = Bunch(email=user.email, first_name=user.first_name, last_name=user.last_name)
 
         card = self.append_card(content=content, **kwargs)
+
         if card is not None:
             # if we have a card then return it and use it in the data
             kwargs.update({

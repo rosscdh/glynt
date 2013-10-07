@@ -7,6 +7,7 @@ from templated_email import send_templated_mail
 
 from glynt.apps.services.abridge import SendEmailAsAbridgeEventMixin
 
+import os
 import itertools
 from bunch import Bunch
 
@@ -105,6 +106,15 @@ class BaseEmailService(SendEmailAsAbridgeEventMixin):
     def can_send(self):
         return '*' in self.whitelist_actions or self.verb in self.whitelist_actions
 
+    @property
+    def full_abridge_template_path(self):
+        """
+        work around for working with templated_email which does not require full
+        path passed in but rather ugly parts thereof
+        """
+        email_template = os.path.basename(self.email_template)
+        return 'abridge/cards/{email_template}.html'.format(email_template=email_template)
+
     def send(self, **kwargs):
         if self.can_send:
 
@@ -118,7 +128,9 @@ class BaseEmailService(SendEmailAsAbridgeEventMixin):
             self.context.update(kwargs)
 
             # in case of Abridge service exception
-            if self.abridge_send(context=self.context, recipients=self.recipients) is False:
+            if self.abridge_send(context=self.context,
+                                 recipients=self.recipients,
+                                 template_name=self.full_abridge_template_path) is False:
 
                 # Loop over the recipients list
                 for to_name, to_email in self.recipients:
