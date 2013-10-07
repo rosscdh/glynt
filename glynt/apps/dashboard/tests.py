@@ -78,4 +78,7 @@ class ChecklistLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
 
         url = reverse('dashboard:checklist', kwargs={'uuid': self.project.uuid})
         self.assertTrue(self.load_casper_file(js_file='checklist-lawyer.js', test_label='Test the Checklist View for a Lawyer', url=url))
-        # from nose.tools import set_trace; set_trace()
+        self.assertTrue(self.load_casper_file(js_file='checklist-lawyer-categories.js', test_label='Test the Checklist View ability to move Categories', url=url))
+        self.assertTrue(self.load_casper_file(js_file='checklist-lawyer-attachments.js', test_label='Test the Checklist View attachment counts', url=url))
+        self.assertTrue(self.load_casper_file(js_file='checklist-lawyer-pusher.js', test_label='Test the Checklist View pusher events', url=url))
+

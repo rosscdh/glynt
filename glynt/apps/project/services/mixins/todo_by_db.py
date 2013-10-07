@@ -68,6 +68,14 @@ class ToDoItemsFromDbMixin(object):
         item.__dict__.update(item.obj.__dict__)
         logger.debug('checklist item status: {name} (display_status)'.format(name=item.name.encode('utf-8'), display_status=item.display_status))
 
+    def todo_data_defaults(self, todo):
+        """
+        append requried data attribs and values to a todo object
+        before being used in bulk_create
+        """
+        todo.data['num_attachments'] = 0
+        return todo
+
     def bulk_create(self):
         logger.debug('start bulk_create')
 
@@ -83,7 +91,10 @@ class ToDoItemsFromDbMixin(object):
                 t.pop('group', None)
                 t.pop('note', None)
                 if t.get('slug') is not None and t.get('slug') not in db_todo_slugs:
-                    todo_list.append(ToDo(**t))
+
+                    todo = self.todo_data_defaults(ToDo(**t))
+
+                    todo_list.append(todo)
 
         if todo_list:
             ToDo.objects.bulk_create(todo_list)

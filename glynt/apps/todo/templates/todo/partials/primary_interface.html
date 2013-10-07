@@ -1,15 +1,19 @@
-<ul class="nav nav-pills">
-    <li class="active"><a class="disabled" id="checklist_item_status_label">{{ todo.display_status }}</a></li>
+{% load todo_tags %}
 
-    {% if back_and_forth.prev %}<li><a href="#" class="btn-prev" title="Previous Item"><i class="icon-chevron-left"></i></a></li>{% endif %}
-    {% if back_and_forth.next %}<li><a href="#" class="btn-next" title="Next Item"><i class="icon-chevron-right"></i></a></li>{% endif %}
+<ul class="nav nav-pills">
+    <li class="active">
+        <a class="disabled"><i class="{{ todo.status | todo_status_icon }}"></i> {{ todo.display_status }}</a>
+    </li>
+
+    {% if back_and_forth.prev %}<li><a href="#" class="btn-prev" title="Previous item"><i class="icon-chevron-left"></i></a></li>{% endif %}
+    {% if back_and_forth.next %}<li><a href="#" class="btn-next" title="Next item"><i class="icon-chevron-right"></i></a></li>{% endif %}
 
     {% if is_lawyer %}
         {% if is_closed %}
-            <li><a href="#" class="btn-reopen-item" title="Reopen Item"><i class="icon-repeat"></i> Reopen</a></li>
+            <li><a href="#" class="btn-reopen-item" title="Reopen the item"><i class="icon-repeat"></i> Reopen item</a></li>
         {% else %}
-            <li><a href="#" class="btn-close-item" title="Close Item"><i class="icon-ok-sign"></i> Close</a></li>
+            <li><a href="#" class="btn-close-item" title="Close the item"><i class="icon-ok-sign"></i> Close item</a></li>
         {% endif %}
-        <li><a href="#" class="btn-delete" title="Delete Item"><i class="icon-trash"></i></a></li>
+        <li><a href="#" class="btn-delete" title="Delete the item"><i class="icon-trash"></i></a></li>
     {% endif %}
 </ul>

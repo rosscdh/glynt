@@ -7994,6 +7994,7 @@ table.checklist .item-status [class^="icon-"],
 table.checklist .item-status [class*=" icon-"] {
   font-size: 36px;
   line-height: 1.1;
+  cursor: pointer;
 }
 
 table.checklist .item-info {
@@ -8014,28 +8015,41 @@ table.checklist .item-info:hover a {
   text-decoration: underline;
 }
 
-table.checklist .item-meta {
+table.checklist .item-meta,
+table.checklist .item-details {
   width: 140px;
   text-align: right;
   vertical-align: middle;
 }
 
-table.checklist .item-meta a {
+table.checklist .item-meta a,
+table.checklist .item-details a {
   font-size: 16px;
   line-height: 1.1;
 }
 
-table.checklist .item-meta a:hover {
+table.checklist .item-meta a:hover,
+table.checklist .item-details a:hover {
   text-decoration: none;
 }
 
 table.checklist .item-meta .item-delete,
-table.checklist .item-meta .item-move {
+table.checklist .item-details .item-delete,
+table.checklist .item-meta .item-move,
+table.checklist .item-details .item-move {
   display: none;
 }
 
-table.checklist .item-meta .item-move {
+table.checklist .item-meta .item-move,
+table.checklist .item-details .item-move {
   cursor: move;
+}
+
+table.checklist .item-details .btn span.badge {
+  margin-top: 10px;
+  margin-left: -8px;
+  font-size: 10px;
+  background-color: #42d0e5;
 }
 
 table.checklist tr.item.state-new:hover .item-delete {
@@ -8355,14 +8369,31 @@ table.lawyer-list.active {
   height: 220px;
 }
 
+.grey-btn {
+  margin: 0;
+  font-size: 24px;
+  line-height: 24px;
+  color: #bfbfbf;
+}
+
+.grey-btn:hover,
+.grey-btn:focus {
+  color: #555555;
+  text-decoration: none;
+}
+
+.grey-btn i {
+  font-size: 24px;
+}
+
 .checklist-header {
-  margin-top: 20px;
+  margin-top: 0;
 }
 
 .checklist-header .btn {
-  margin: 0 0 0;
-  font-size: 32px;
-  line-height: 32px;
+  margin: 0;
+  font-size: 24px;
+  line-height: 24px;
   color: #bfbfbf;
 }
 
@@ -8370,6 +8401,35 @@ table.lawyer-list.active {
 .checklist-header .btn:focus {
   color: #555555;
   text-decoration: none;
+}
+
+.checklist-header .btn i {
+  font-size: 24px;
+}
+
+.reveal-child .reveal-me {
+  display: none;
+}
+
+.reveal-child:hover .reveal-me {
+  display: inline-block;
+}
+
+.btn.create-category {
+  margin: 0;
+  font-size: 24px;
+  line-height: 24px;
+  color: #bfbfbf;
+}
+
+.btn.create-category:hover,
+.btn.create-category:focus {
+  color: #555555;
+  text-decoration: none;
+}
+
+.btn.create-category i {
+  font-size: 24px;
 }
 
 .ui-sortable .checklist-header h3 {
@@ -8467,8 +8527,9 @@ table.lawyer-list.active {
   vertical-align: middle;
 }
 
-.pending-feedback {
-  background-color: rgba(240, 173, 78, 0.1);
+.pending-feedback,
+.pending-feedback td {
+  background-color: rgba(240, 173, 78, 0.1) !important;
 }
 
 .navbar-nav > li.nav-signin > a {
@@ -8511,6 +8572,15 @@ section.checklist-category {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.item-list {
+  list-style: none;
+  list-style-type: none;
+}
+
+.item-list li {
+  padding: 10px 0;
 }
 
 .navbar {

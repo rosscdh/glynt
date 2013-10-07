@@ -40,6 +40,14 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [ '$scope', 'lawPalSer
 		return "unknown";
 	};
 
+	$scope.pendingFeedback = function() {
+		var item = $scope.item;
+		var slug = item.slug;
+
+		return $scope.isChecklistItemAssigned(item)?"pending-feedback":"";
+		
+	};
+
 	/**
 	 * Determine if checklist item is assigned to the current user
 	 * @return {Boolean} true if assigned

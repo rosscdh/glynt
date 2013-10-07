@@ -438,7 +438,7 @@ LOGGING = {
         },
         'logfile': {
             'class': 'logging.handlers.WatchedFileHandler',
-            'filename': '/tmp/django/abridge-{env}.log'.format(env=PROJECT_ENVIRONMENT)
+            'filename': '/tmp/lawpal-{env}.log'.format(env=PROJECT_ENVIRONMENT)
         }
     },
     'loggers': {

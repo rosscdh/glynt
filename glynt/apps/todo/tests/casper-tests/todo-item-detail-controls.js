@@ -7,7 +7,7 @@ helper.scenario(casper.cli.options.url,
     	/* Elements exist */
         //this.echo(this.getHTML());
         this.viewport(1200, 800);
-        //snapshotPage.call( this, 0 );
+        //helper.snapshotPage.call( this, 0 );
         this.test.assertHttpStatus(200);
         this.debugHTML();
 
@@ -62,62 +62,5 @@ helper.scenario(casper.cli.options.url,
         this.test.assertSelectorHasText('#checklist_item_status_label', 'Open', 'Checklist item status changed');
     }
 );
-
-/**
- * captureRequest: Increments by one each time a capturePage request is made
- *                 this variable is used to save unique image filename for each page capture taken
- * @type {Number}
- */
-var captureRequest = 0;
-
-/**
- * capturePageTimelapse: captures the page 1 per second for numFrames (keep in mind that each test has a timeout of 5 seconds  )
- * usage:
- *                       capturePageTimelapse(4);
- * 
- * @param  {Number} numFrames Number of frames to capture
- */
-function capturePageTimelapse( numFrames ) {
-    for(var i=0;i<numFrames;i++) {
-        capturePage();
-    }
-}
-
-/**
- * capturePage: Initiates a capture request, a screen capture will be taken in n seconds where n = captureRequest * 1000
- *              images will be saved into /tmp/
- * usage:
- *              capturePage();
- */
-function capturePage() {
-	var wait;
-	captureRequest++;
-	wait = captureRequest * 1000; // wait n seconds before taking screen capture
-	delayCapturePage( wait );
-}
-
-/**
- * delayCapturePage: when called invokes a screen capture in [delay] seconds
- * @param  {Number} delay Number of seconds to wait until taking the screen capture
- */
-function delayCapturePage( delay ) {
-	casper.wait(delay, function() {
-    	this.capture('/tmp/page_' + delay + '.png', {
-	        top: 0,
-	        left: 0,
-	        width: 2048,
-	        height: 1024
-	    });
-    });
-}
-
-function snapshotPage( num ) {
-	this.capture('/tmp/page_' + num + '.png', {
-        top: 0,
-        left: 0,
-        width: 2048,
-        height: 1024
-    });
-}
 
 helper.run();

@@ -150,8 +150,8 @@ background-position: 50% 50%;	    background-size: cover;
 }
 
 ul#checklist-categories {
-  li { 
-    position: relative; 
+  li {
+    position: relative;
     &:hover i.icon-move {
       display: block;
     }
@@ -168,6 +168,7 @@ table.checklist {
     width: 60px;
     [class^="icon-"],
     [class*=" icon-"] {
+      cursor: pointer;
       font-size: 36px;
       line-height: 1.1;
     }
@@ -186,7 +187,7 @@ table.checklist {
     	text-decoration: underline;
     }
   }
-  .item-meta {
+  .item-meta, .item-details {
     text-align: right;
     vertical-align: middle;
     width: 140px;
@@ -202,6 +203,10 @@ table.checklist {
       display:none;
     }
     .item-move { cursor: move; }
+  }
+
+  .item-details .btn {
+    span.badge { margin-left: -8px; margin-top:10px; font-size: 10px; background-color: @brand-primary; /*padding: 1px 5px 3px;*/}
   }
 
   tr.item {
@@ -474,19 +479,39 @@ table.lawyer-list.active {
 
 .transaction-profile { height: 220px; }
 
+.grey-btn {
+  color: @gray-light;
+  font-size: 24px;
+  line-height: 24px;
+  margin: 0;
+  &:hover,
+  &:focus {
+    color: @gray;
+    text-decoration: none;
+  }
+  i { font-size: 24px; }
+}
+
 .checklist-header {
-  margin-top: 20px;
+  margin-top: 0px;
   .btn {
-    color: @gray-light;
-    font-size: 32px;
-    line-height: 32px;
-    margin: 0px 0 0;
-    &:hover,
-    &:focus {
-      color: @gray;
-      text-decoration: none;
+    .grey-btn;
+  }
+}
+
+.reveal-child {
+  .reveal-me {
+    display: none;
+  }
+  &:hover {
+    .reveal-me {
+      display: inline-block;
     }
   }
+}
+
+.btn.create-category {
+  .grey-btn;
 }
 .ui-sortable .checklist-header {
   h3 { cursor: move; }
@@ -497,7 +522,7 @@ table.lawyer-list.active {
   display:block;
   .item-meta { visibility: hidden; }
 }
-.ui-sortable-placeholder { 
+.ui-sortable-placeholder {
   border: 2px dashed #CCC; margin: 10px 0;
   visibility: visible !important;
   background-color: rgba(0,0,0,0.025);
@@ -578,8 +603,8 @@ table.lawyer-list.active {
   vertical-align: middle;
 }
 
-.pending-feedback {
-  background-color: fade(@btn-warning-bg, 10%);
+.pending-feedback, .pending-feedback td {
+  background-color: fade(@btn-warning-bg, 10%) !important;
 }
 
 .navbar-nav > li.nav-signin > a {
@@ -621,4 +646,11 @@ section.checklist-category {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+
+.item-list { 
+  list-style: none;
+  list-style-type: none;
+  li { padding: 10px 0; }
 }
