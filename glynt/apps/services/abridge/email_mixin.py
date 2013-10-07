@@ -5,6 +5,10 @@ from glynt.apps.default.templatetags.glynt_helpers import current_site_domain
 
 from bunch import Bunch
 
+import waffle
+import logging
+logger = logging.getLogger('lawpal.services')
+
 
 class SendEmailAsAbridgeEventMixin(object):
     """
@@ -16,37 +20,73 @@ class SendEmailAsAbridgeEventMixin(object):
     def __init__(self, *args, **kwargs):
         # initializers
         self.abridge_content_group = kwargs.pop('content_group', False)
-        self.use_abridge = True if self.abridge_content_group is not False else False
+
+        self.abridge_service = self.use_abridge()
 
         if self.from_email is None:
             raise Exception('You must define a self.from_email')
 
-        if self.use_abridge is True:
-            try:
-                self.abridge_service = LawPalAbridgeService(user=Bunch(email=self.from_email),
-                                                            content_group=self.abridge_content_group,
-                                                            check_user=False)
-            except Exception as e:
-                logger.critical('Could not send to the Abridge Service: %s' % e)
-                self.use_abridge = False
+    def use_abridge(self):
+        """
+        Use the waffle system to ensure we can use abridge
+        """
+        abridge_service = None
+
+        if waffle.switch_is_active('abridge-mailout'):
+            logger.info('Waffle abridge-mailout key is Active')
+
+            # Must have content group
+            use_abridge = True if self.abridge_content_group is not False else False
+
+            if use_abridge is not True:
+                logger.info('Abridge Content Group has not been defined')
+
+            else:
+                try:
+                    abridge_service = LawPalAbridgeService(user=Bunch(email=self.from_email),
+                                                                content_group=self.abridge_content_group,
+                                                                check_user=False)
+                    use_abridge = True
+
+                    logger.info('Created an abridge_service instance content: {content_group}'.format(content_group=self.abridge_content_group))
+
+                except Exception as e:
+                    logger.critical('Could not create to the Abridge Service: %s' % e)
+                    use_abridge = False
+
+        else:
+            logger.info('Waffle abridge-mailout key is Not Active')
+            use_abridge = False
+
+        if use_abridge is True and abrdge_service is not None:
+            return abridge_service
+        else:
+            return None
+
+    def abridge_profile_photo(self, user):
+        # send the notification to our abridge service
+        try:
+            return '{base}{path}'.format(base=current_site_domain(), path=user.profile.get_mugshot_url()) 
+        except:
+            return None
 
     def abridge_send(self, context, recipients):
         """
         Try to send the notification via Abridge
         """
         # send the notification to our abridge service
-        if self.use_abridge is True:
-            # send the notification to our abridge service
-            try:
-                profile_photo = '{base}{path}'.format(base=current_site_domain(), path=context.get('actor').profile.get_mugshot_url()) 
-            except:
-                profile_photo = None
+        if self.abridge_service is not None:
 
-            try:
+            # get teh senders photo
+            # @TODO this should be cleaned up and moved higher up in the chain
+            profile_photo = self.abridge_profile_photo(user=context.get('actor'))
 
+            #
+            # Try to send the event
+            #
+            try:
                 for to_name, to_email in recipients:
                     # add the notification event
-
                     self.abridge_service.add_event(content=context.get('message'),
                                                    user=Bunch(email=to_email, first_name='', last_name=''),
                                                    url=context.get('url'),
