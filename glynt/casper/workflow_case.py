@@ -8,6 +8,7 @@ from .base import BaseCasperJs
 
 from glynt.apps.todo import TODO_STATUS
 from glynt.apps.transact.models import Transaction
+from glynt.apps.project import PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE
 
 import httpretty
 
@@ -71,6 +72,10 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
         self.lawyer = mommy.make('lawyer.Lawyer', user=self.lawyer_user)
 
         self.project = mommy.make('project.project', customer=self.customer, company=self.company, lawyers=(self.lawyer,), transactions=(Transaction.objects.get(slug='CS'), Transaction.objects.get(slug='SF'),))
+        # send the create signals so that
+        # the create todo items gets fired
+        PROJECT_CREATED.send(sender=self, instance=self.project, created=True)
+        PROJECT_PROFILE_IS_COMPLETE.send(sender=self, instance=self.project)
 
         # set the join to status engaged
         self.project_lawyer_join = self.project.projectlawyer_set.all()[0]

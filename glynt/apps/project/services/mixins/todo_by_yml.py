@@ -10,10 +10,14 @@ class ToDoItemsFromYamlMixin(object):
     Mixin that provides extraction of todo checklist from
     The YAML Checklists
     """
-    def get_todos(self):
-        logger.info('Get Project transactions')
+    def get_yml_todos(self):
+        """
+        return the (cat, todos) tuple for create
+        """
         checklist = []
         todos_by_cat = OrderedDict()
+
+        logger.info('Get Project yml todo items and category')
 
         for c in self.checklist:
 
@@ -31,7 +35,7 @@ class ToDoItemsFromYamlMixin(object):
                         todos_by_cat[category] = item.checklist
                         checklist = list(checklist + item.checklist)
 
-        return  todos_by_cat, checklist
+        return  (todos_by_cat, checklist)
 
     def handle_repeater(self, item):
         repeater_key = None
