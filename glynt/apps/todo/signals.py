@@ -108,16 +108,20 @@ def on_attachment_deleted(sender, **kwargs):
     """
     Handle Deletions of attachments
     """
+    is_new = kwargs.get('created', False)
+    attachment = kwargs.get('instance', None)
+
     if not isinstance(sender, LogEntry):
-        is_new = kwargs.get('created', False)
-        attachment = kwargs.get('instance', None)
-        todo = attachment.todo
 
         if attachment:
-            delete_attachment(is_new=is_new, attachment=attachment, **kwargs)
+            try:
+                todo = attachment.todo
+                # decrement num_attachments
+                todo.num_attachments_minus()  # increment the attachment count
+            except:
+                logger.info('todo does not exist for on_attachment_deleted')
 
-            # decrement num_attachments
-            todo.num_attachments_minus()  # increment the attachment count
+            delete_attachment(is_new=is_new, attachment=attachment, **kwargs)
 
             try:
                 verb = '{name} deleted attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project)
