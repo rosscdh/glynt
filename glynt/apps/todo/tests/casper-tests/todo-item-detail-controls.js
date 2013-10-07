@@ -42,6 +42,24 @@ helper.scenario(casper.cli.options.url,
     	casper.test.comment('Close Full Screen Button exists');
     	this.click('button.btn-fullscreen');
     	this.test.assertSelectorHasText('button', 'Full Screen', 'Full Screen Button exists');
+    },
+
+    function() {
+        //snapshotPage.call(this,0);
+        /* Change item status */
+        casper.evaluate(function() {
+            // Run script in window session
+            window.updateChecklistItemStatus({ "instance": { "status": 0 } });
+        });
+
+        this.test.assertSelectorHasText('#checklist_item_status_label', 'New', 'Checklist item status changed');
+
+        casper.evaluate(function() {
+            // Run script in window session
+            window.updateChecklistItemStatus({ "instance": { "status": 1 } });
+        });
+
+        this.test.assertSelectorHasText('#checklist_item_status_label', 'Open', 'Checklist item status changed');
     }
 );
 
