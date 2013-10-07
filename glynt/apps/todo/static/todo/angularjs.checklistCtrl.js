@@ -136,7 +136,6 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 						function(){
 							var index = $scope.findCategoryIndex(category.info.label);
 							/* Use index >=0 instead of is true */
-							console.log("success", index, "@");
 							if(index>=0) {
 								$scope.categories.splice(index, 1);
 							}
@@ -153,7 +152,6 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 			/* No checklist items: just delete it */
 			lawPalService.removeCategory( category ).then(
 				function(){
-					console.log("success");
 					var index = $scope.findCategoryIndex(category.info.label);
 					if(index>=0) {
 						$scope.categories.splice(index, 1);
