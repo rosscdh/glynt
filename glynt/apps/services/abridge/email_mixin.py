@@ -6,6 +6,7 @@ from glynt.apps.default.templatetags.glynt_helpers import current_site_domain
 from bunch import Bunch
 
 import waffle
+
 import logging
 logger = logging.getLogger('lawpal.services')
 

@@ -3,10 +3,10 @@ from django.contrib.humanize.templatetags.humanize import naturaltime
 from abridge.services import AbridgeService
 from abridge.services import CardService
 
-
 from bunch import Bunch
 
 import datetime
+
 import logging
 logger = logging.getLogger('django.request')
 

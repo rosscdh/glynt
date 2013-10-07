@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-from . import BaseEmailService
+from .base import BaseEmailService
 
 import logging
 logger = logging.getLogger('lawpal.services')

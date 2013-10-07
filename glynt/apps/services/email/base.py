@@ -5,8 +5,6 @@ from django import template
 
 from templated_email import send_templated_mail
 
-admin_name, admin_email = settings.ADMINS[0]
-
 from glynt.apps.services.abridge import SendEmailAsAbridgeEventMixin
 
 import itertools
@@ -14,6 +12,8 @@ from bunch import Bunch
 
 import logging
 logger = logging.getLogger('lawpal.services')
+
+admin_name, admin_email = settings.ADMINS[0]
 
 
 class BaseEmailService(SendEmailAsAbridgeEventMixin):
@@ -82,6 +82,7 @@ class BaseEmailService(SendEmailAsAbridgeEventMixin):
         })
 
         logger.info('Initialized BaseEmailService with context: {context}'.format(context=self.context))
+
         super(BaseEmailService, self).__init__(*args, **kwargs)
 
     def _templatize_context(self, target, **kwargs):
