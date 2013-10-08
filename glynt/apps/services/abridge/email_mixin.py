@@ -41,6 +41,7 @@ class SendEmailAsAbridgeEventMixin(object):
             'project': unicode(getattr(self, 'project', '')),
             'verb': getattr(self, 'verb', ''),
 
+            'attachment': unicode(context.get('attachment', '')),
             'profile_photo': self.abridge_profile_photo(user=getattr(self, 'actor', '')),
         }
 

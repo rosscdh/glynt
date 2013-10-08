@@ -5,6 +5,9 @@
         <img src="{{ profile_photo }}" height="24" width="24" style="display: inline; vertical-align: top;">
     </span>{% endif %}
     <p style="display: inline; margin: 0;">
-        {{ actor }} uploaded a document to <a href="{% current_site_domain %}{{ url }}">{{ object }}</a>
+        {{ actor }} uploaded a new document to <a href="{% current_site_domain %}{{ url }}">{{ object }}</a>
     </p>
+    {% if attachment %}
+        <p>"{{ attachment }}"</p>
+    {% endif %}
 </div>
