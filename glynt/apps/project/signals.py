@@ -7,8 +7,6 @@ from notifications import notify
 
 from notifications.models import Notification
 
-from glynt.apps.services.email import NewActionEmailService
-
 from glynt.apps.project.utils import PROJECT_CONTENT_TYPE
 
 from glynt.apps.project.services.email import SendNewProjectEmailsService
@@ -16,6 +14,8 @@ from glynt.apps.project.services.project_checklist import ProjectCheckListServic
 from glynt.apps.project.services.engage_lawyer_comments import EngageLawyerCommentsMoveService
 
 from glynt.apps.services.pusher import PusherPublisherService
+
+from glynt.apps.services.email import NewActionEmailService
 
 from . import (PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE,
                PROJECT_CATEGORY_SORT_UPDATED)

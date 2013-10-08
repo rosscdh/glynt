@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-from . import BaseEmailService
+from .base import BaseEmailService
 
 import logging
 logger = logging.getLogger('lawpal.services')
@@ -30,7 +30,10 @@ class NewActionEmailService(BaseEmailService):
         self.target = kwargs.pop('target', None)
         self.project = kwargs.pop('project', None)
         self.verb = kwargs.pop('verb', None)
-        
+
+        # pass in content group so that abridge service can be used
+        kwargs['content_group'] = self.project.__unicode__()
+
         super(NewActionEmailService, self).__init__(**kwargs)
 
         self.context.update({

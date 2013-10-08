@@ -315,12 +315,15 @@ def todo_item_status_change(sender, **kwargs):
     instance = kwargs.get('instance')
 
     if instance.pk is None:
+
         # ensure the slug is present
         if instance.slug in [None, '']:
             instance.slug = generate_unique_slug(instance=instance)
+
             # @BUSINESSRULE ensure we have a sort_position
             if not instance.sort_position:
                 instance.sort_position = instance.project.todo_set.all().count() + 1
+
             # @BUSINESSRULE ensure we have a sort_position_by_cat
             if not instance.sort_position_by_cat:
                 instance.sort_position_by_cat = instance.sort_position
@@ -416,10 +419,11 @@ def on_action_created(sender, **kwargs):
                 logger.debug('action.target is a ToDo object')
                 project = action.target.project
                 recipients = project.notification_recipients()
-                url = project.get_absolute_url()
+                url = target.get_absolute_url()  # get the todos absolute url
 
             if recipients:
                 logger.debug('recipients: {recipients}'.format(recipients=recipients))
+
                 email = NewActionEmailService(
                     verb=event,
                     from_name=user_name,
