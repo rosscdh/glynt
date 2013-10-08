@@ -35,11 +35,11 @@ class SendEmailAsAbridgeEventMixin(object):
             'to_name': getattr(self, 'to_name', ''),
             'to_email': getattr(self, 'to_email', ''),
 
+            'verb': getattr(self, 'verb', ''),
             'actor': self.actor.get_full_name() if getattr(self.actor, 'get_full_name') else self.actor.username,
             'target': unicode(context.get('target', '')),
             'object': unicode(context.get('object', '')),
-            'project': unicode(getattr(self, 'project', '')),
-            'verb': getattr(self, 'verb', ''),
+            'project': unicode(context.get('project', '')),
 
             'attachment': unicode(context.get('attachment', '')),
             'profile_photo': self.abridge_profile_photo(user=getattr(self, 'actor', '')),
