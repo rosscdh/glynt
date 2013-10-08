@@ -57,7 +57,10 @@
                 </div>
 
                 <div class="widget project-checklist-progress-widget">
-                    <h3>Transaction checklist</h3>
+                    <h3>
+                        Transaction checklist
+                        <a href="{% url 'dashboard:checklist' uuid=project.uuid %}" class="btn btn-small btn-info pull-right">View checklist</a>
+                    </h3>
 
                     <!--<progress percent="project.checklist.percentageStack" auto-type="true"></progress>//-->
                     <div project-progress-bar counts="project.checklist.counts"></div>
@@ -71,6 +74,7 @@
                 </div>
             </div>
             <div class="col col-lg-7">
+                <!--
                 <div class="widget checklist">
                     <a href="{% url 'dashboard:checklist' uuid=project.uuid %}"><h3>Transaction Checklist</h3></a>
                     <div class="row">
@@ -108,6 +112,7 @@
                         </div>
                     </div>
                 </div>
+                //-->
                 {% if project.has_lawyer %}
                 <div class="widget discuss">
                     <h3>Project Discussion</h3>
