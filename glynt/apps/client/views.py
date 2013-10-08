@@ -28,12 +28,16 @@ class ConfirmLoginDetailsView(UpdateView):
     def get_form(self, form_class):
         kwargs = self.get_form_kwargs()
         user = self.request.user
+        customer = self.request.user.customer_profile
         kwargs.update({
             'request': self.request,
             'initial': {
                 'first_name': user.first_name,
                 'last_name': user.last_name,
-                'email': user.email}
+                'email': user.email,
+                'company': customer.primary_company,
+                'phone': customer.phone
+            }
         })
         return form_class(**kwargs)
 
