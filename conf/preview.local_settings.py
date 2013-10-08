@@ -189,7 +189,7 @@ LOGGING = {
         },
         'logfile': {
             'class': 'logging.handlers.WatchedFileHandler',
-            'filename': '/var/log/django/lawpal-{env}.log'.format(env=PROJECT_ENVIRONMENT),
+            'filename': '/var/log/django/lawpal-{env}.log'.format(env='preview'),
             'formatter': 'verbose'
         }
     },
@@ -200,13 +200,13 @@ LOGGING = {
             'level': 'INFO',
         },
         'django.request': {
-            'handlers': ['splunkstorm'],
-            'level': 'INFO',
+            'handlers': ['console', 'logfile', 'splunkstorm'],
+            'level': 'DEBUG',
             'propagate': False,
         },
         'lawpal': {
-            'handlers': ['splunkstorm', 'logfile'],
-            'level': 'INFO',
+            'handlers': ['splunkstorm', 'logfile', 'splunkstorm'],
+            'level': 'DEBUG',
             'propagate': True,
         }
     }
