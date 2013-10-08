@@ -39,3 +39,12 @@ lawPalApp.filter('titleCase', function () {
     return words.join(' ');
   }
 });
+
+lawPalApp.filter('firstLetter', function () {
+  return function (input) {
+    if( typeof input=== "string")
+    	return input[0];
+    else
+    	return null;
+  }
+});

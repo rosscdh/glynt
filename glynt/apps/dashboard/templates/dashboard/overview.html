@@ -38,11 +38,14 @@
         <div class="row">
             <div class="col col-lg-5">
                 {% if project.has_lawyer %}
+                    <!--
                     <div class="widget account-attorney">
                         <h3>Project Attorney</h3>
                         {% project_lawyers project 'assigned' %}
                     </div>
+                    //-->
                 {% endif %}
+                <!--
                 <div class="widget account-attorney">
                     <h3>LawPal Account Manager</h3>
                     <div class="row">
@@ -52,9 +55,22 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <button class="btn btn-info btn-small" ng-click="openManageTeamDialog()">Manage team</button>
+                //-->
+
+                <div class="widget project-team clearfix">
+                    <button class="btn btn-info btn-small pull-right widget-title-button" ng-click="openManageTeamDialog()">Edit team</button>
+                    <h3>Project team</h3>
+                    <button class="btn btn-link col-lg-4 vcard role-{[{user.role}]}" ng-repeat="user in project.users" ng-click="contactUser(user)">
+                        <div class="vcard-wrapper clearfix" tooltip-append-to-body="true" tooltip="{[{user.firstName}]} {[{user.lastName}]} ({[{user.role}]}), contact now">
+                            <img class="photo col-lg-4" ng-src="{[{user.photo}]}" />
+                            <h3 class="col-lg-8">
+                                <span ng-bind="user.firstName | firstLetter"></span><span ng-bind="user.lastName | firstLetter"></span>
+                            </h3>
+                        </div>
+                    </button>
                 </div>
+                
+                
                 <div class="callout callout-success empty">
                     <div class="empty-message empty-message-ok">
                         <h4>Your transaction profile is complete.</h4>

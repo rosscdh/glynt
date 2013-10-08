@@ -21,6 +21,12 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 		}
 	);
 
+	$scope.contactUser = function( user ) {
+		if( user && user.email ) {
+			window.location.href = "mailto://" + user.email, "email_window";
+		}
+	};
+
 	/**
 	 * Request team update by sending request to the API
 	 * @param  {Object} updatedTeam New team object
