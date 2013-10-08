@@ -419,7 +419,7 @@ def on_action_created(sender, **kwargs):
                 logger.debug('action.target is a ToDo object')
                 project = action.target.project
                 recipients = project.notification_recipients()
-                url = project.get_absolute_url()
+                url = target.get_absolute_url()  # get the todos absolute url
 
             if recipients:
                 logger.debug('recipients: {recipients}'.format(recipients=recipients))
