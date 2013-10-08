@@ -27,7 +27,7 @@ class SendEmailAsAbridgeEventMixin(object):
         if self.from_email is None:
             raise Exception('You must define a self.from_email')
 
-    def card_properties(self):
+    def card_properties(self, context):
         return {
             # for our email templates
             'from_name': getattr(self, 'from_name', ''),
@@ -36,7 +36,8 @@ class SendEmailAsAbridgeEventMixin(object):
             'to_email': getattr(self, 'to_email', ''),
 
             'actor': self.actor.get_full_name() if getattr(self.actor, 'get_full_name') else self.actor.username,
-            'target': unicode(getattr(self, 'target', '')),
+            'target': unicode(context.get('target', '')),
+            'object': unicode(context.get('object', '')),
             'project': unicode(getattr(self, 'project', '')),
             'verb': getattr(self, 'verb', ''),
 
@@ -67,7 +68,7 @@ class SendEmailAsAbridgeEventMixin(object):
                                                                 check_user=False)
                     use_abridge = True
 
-                    logger.info('Created an abridge_service instance content: {content_group}'.format(content_group=content_group))
+                    logger.info('Created an abridge_service instance content_group: {content_group}'.format(content_group=content_group))
 
                 except Exception as e:
                     logger.critical('Could not create to the Abridge Service: %s' % e)
@@ -105,10 +106,11 @@ class SendEmailAsAbridgeEventMixin(object):
         """
         # send the notification to our abridge service
         if self.abridge_service is None:
+            logger.error('Abridge Service is set as None' % e)
             return False
         else:
 
-            card_kwargs = self.card_properties()
+            card_kwargs = self.card_properties(context=context)
 
             # Try to send the event
             try:
