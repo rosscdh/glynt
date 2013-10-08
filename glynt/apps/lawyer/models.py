@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from jsonfield import JSONField
 from glynt.apps.utils import get_namedtuple_choices
 
-from managers import DefaultLawyerManager, ApprovedLawyerManager
+from managers import LawyerManager
 from transaction_packages import TransactionPackageBunch
 
 import os
@@ -48,8 +48,7 @@ class Lawyer(models.Model):
     photo = models.ImageField(upload_to=_lawyer_upload_photo, blank=True)
     is_active = models.BooleanField(default=False, db_index=True)
 
-    objects = DefaultLawyerManager()
-    approved = ApprovedLawyerManager()
+    objects = LawyerManager()
 
     def __unicode__(self):
         return u'%s' % (self.user.get_full_name(),)
