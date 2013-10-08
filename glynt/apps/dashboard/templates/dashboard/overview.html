@@ -58,13 +58,9 @@
 
                 <div class="widget project-checklist-progress-widget">
                     <h3>Transaction checklist</h3>
-                    <progress percent="project.checklist.percentageStack" auto-type="true"></progress>
-                    <div class="row">
-                        <h5 class="text-info col-lg-3">{[{project.checklist.counts.new}]} New</h5>
-                        <h5 class="text-warning col-lg-3">{[{project.checklist.counts.open}]} Open</h5>
-                        <h5 class="text-danger col-lg-3">{[{project.checklist.counts.awaiting}]} Pending</h5>
-                        <h5 class="text-success col-lg-3">{[{project.checklist.counts.closed}]} Closed</h5>
-                    </div>
+
+                    <!--<progress percent="project.checklist.percentageStack" auto-type="true"></progress>//-->
+                    <div project-progress-bar counts="project.checklist.counts"></div>
                 </div>
 
                 <div class="callout callout-success empty">
@@ -168,6 +164,7 @@
 </script>
 
 <script type="text/javascript" src="{{ STATIC_URL }}dashboard/angularjs-projectCtrl.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}dashboard/angularjs-progressBarDirective.js"></script>
 
 <script type="text/javascript">
 var LawPal = {
