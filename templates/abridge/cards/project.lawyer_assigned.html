@@ -1,11 +1,10 @@
 {% load glynt_helpers %}
-<tr>
-    <td align="left" colspan="3" height="40" width="100%" style="font-size: 0; line-height: 0;">&nbsp;</td>
-</tr>
-<tr>
-    <td class="small-width" align="left" width="40" style="display: block;">&nbsp;</td>
-    <td align="center">
-        <h2 style="color: #6c797c !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5em; margin: 0 0 25px; padding: 0;">You have been selected by {{ actor }} ({{ company }}) to work on their <a href="{% current_site_domain %}{{ url }}">{{ project.transaction_types }}.</a></h2>
-    </td>
-    <td class="small-width" align="left" width="40" style="display: block;">&nbsp;</td>
-</tr>
+<div style="color: #6c797c !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: normal; line-height: 1.5em; margin: 0 0 10px 0; padding: 0;">
+    {% if profile_photo %}
+    <span style="margin: 0 2px 0 0;">
+        <img src="{{ profile_photo }}" height="24" width="24" style="display: inline; vertical-align: top;">
+    </span>{% endif %}
+    <p style="display: inline; margin: 0;">
+        You have been selected by {{ actor }} ({{ company }}) to work on their <a href="{% current_site_domain %}{{ url }}">{{ project.transaction_types }}
+    </p>
+</div>
