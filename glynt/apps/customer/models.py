@@ -26,7 +26,7 @@ class Customer(models.Model):
     summary = models.CharField(max_length=255)
     bio = models.TextField()
     data = JSONField(default={})
-    photo = models.ImageField(upload_to=_customer_upload_photo)
+    photo = models.ImageField(upload_to=_customer_upload_photo, blank=True)
 
     def __unicode__(self):
         return u'%s' % (self.user.get_full_name(),)
