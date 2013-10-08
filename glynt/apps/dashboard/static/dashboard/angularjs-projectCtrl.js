@@ -7,7 +7,10 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 	function( $scope, lawPalService, lawPalUrls, $location, $anchorScroll, angularPusher, toaster, $modal ) {
 
 	// Load project details
-	$scope.project = {};
+	$scope.project = {
+		"checklist": {}
+	};
+
 	/**
 	 * Load current project
 	 */
@@ -15,6 +18,7 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 		function success( project ) {
 			$scope.project = project;
 			$scope.project.users = $scope.project.users || [];
+			$scope.project.checklist.percentageStack = $scope.projectChecklistStack();
 		},
 		function error( err ) {
 			toaster.pop( "warning", "Load error", "Unable to load project details" );
@@ -36,6 +40,23 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 			}
 		);
 	};
+
+	$scope.projectChecklistStack = function() {
+		if(!$scope.project.checklist)
+			$scope.project.checklist = {};
+		
+		var counts = $scope.project.checklist.counts || { "new": 0, "open": 0, "awaiting": 0, "closed": 0 };
+
+		var total = counts.new + counts.open + counts.awaiting + counts.closed;
+		return [
+			{ "value": (100*counts.new/total), "type": "info" },
+			{ "value": (100*counts.open/total), "type": "warning" },
+			{ "value": (100*counts.awaiting/total), "type": "danger" },
+			{ "value": (100*counts.closed/total), "type": "success" }
+		];
+	};
+
+	$scope.project.checklist.percentageStack = $scope.projectChecklistStack();
 
 	/**
 	 * Open manage team dialog

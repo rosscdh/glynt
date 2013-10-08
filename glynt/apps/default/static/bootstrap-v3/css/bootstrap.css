@@ -8607,6 +8607,33 @@ section.checklist-category {
   opacity: 0.5;
 }
 
+/* Progress bars */
+
+.progress .bar {
+  float: left;
+  height: 100%;
+}
+
+.progress .bar.bar-info {
+  background-color: #5bc0de;
+}
+
+.progress .bar.bar-warning {
+  background-color: #f0ad4e;
+}
+
+.progress .bar.bar-danger {
+  background-color: #d9534f;
+}
+
+.progress .bar.bar-success {
+  background-color: #6bdb7e;
+}
+
+h5.text-info {
+  color: #5bc0de;
+}
+
 .navbar {
   margin-bottom: 0;
 }

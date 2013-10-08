@@ -55,6 +55,18 @@
                 <div class="form-group">
                     <button class="btn btn-info btn-small" ng-click="openManageTeamDialog()">Manage team</button>
                 </div>
+
+                <div class="widget project-checklist-progress-widget">
+                    <h3>Transaction checklist</h3>
+                    <progress percent="project.checklist.percentageStack" auto-type="true"></progress>
+                    <div class="row">
+                        <h5 class="text-info col-lg-3">{[{project.checklist.counts.new}]} New</h5>
+                        <h5 class="text-warning col-lg-3">{[{project.checklist.counts.open}]} Open</h5>
+                        <h5 class="text-danger col-lg-3">{[{project.checklist.counts.awaiting}]} Pending</h5>
+                        <h5 class="text-success col-lg-3">{[{project.checklist.counts.closed}]} Closed</h5>
+                    </div>
+                </div>
+
                 <div class="callout callout-success empty">
                     <div class="empty-message empty-message-ok">
                         <h4>Your transaction profile is complete.</h4>
@@ -232,7 +244,16 @@ var LawPal = {
                             "slug": "a071dab9-e1a0-45e2-adbc-51b64e8c99ae"
                         }
                     }
-                ]
+                ],
+                "checklist": {
+                    "counts": {
+                        "new": {{ counts.new }},
+                        "open": {{ counts.open }},
+                        "awaiting": {{ counts.awaiting_feedback_from_user }},
+                        "closed": {{ counts.closed }}
+                    },
+                    "data": []
+                }
             }
         },
 
