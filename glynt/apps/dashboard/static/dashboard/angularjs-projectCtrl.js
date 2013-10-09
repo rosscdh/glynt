@@ -8,6 +8,8 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 
 	// Load project details
 	$scope.project = {};
+	$scope.ancilliary = {}; /* Non core project data e.g. dicussions */
+	$scope.discussionCategories = [ "issue", "discussion" ];
 	/**
 	 * Load current project
 	 */
@@ -15,6 +17,7 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 		function success( project ) {
 			$scope.project = project;
 			$scope.project.users = $scope.project.users || [];
+			$scope.loadDiscussions();
 		},
 		function error( err ) {
 			toaster.pop( "warning", "Load error", "Unable to load project details" );
@@ -33,6 +36,17 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 			},
 			function error( err ) {
 				toaster.pop( "warning", "Update error", "Unable to update team details, please try again later" );
+			}
+		);
+	};
+
+	$scope.loadDiscussions = function() {
+		lawPalService.discussionList().then(
+			function success( results ) {
+				$scope.ancilliary.discussions = results;
+			},
+			function error( err ) {
+
 			}
 		);
 	};

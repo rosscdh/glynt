@@ -8607,6 +8607,67 @@ section.checklist-category {
   opacity: 0.5;
 }
 
+.issue-list td.status-column {
+  width: 44px;
+  text-align: center;
+}
+
+.issue-list td.column-subject {
+  width: 25%;
+}
+
+.issue-list td.vcard-column {
+  width: 30%;
+}
+
+.issue-list td.actions-column {
+  width: 35%;
+}
+
+.discussion-list td.status-column {
+  width: 44px;
+  text-align: center;
+}
+
+.discussion-list td.column-subject {
+  width: 30%;
+}
+
+.discussion-list td.vcard-column {
+  width: 35%;
+}
+
+.discussion-list td.actions-column {
+  width: 25%;
+}
+
+td.vcard-column {
+  white-space: nowrap;
+}
+
+td.vcard-column .vcard {
+  margin: 0;
+}
+
+td.vcard-column .time {
+  padding-left: 37px;
+  clear: both;
+  white-space: nowrap;
+}
+
+.user-mini-profile img.photo {
+  float: left;
+  max-width: 28px;
+  max-height: 28px;
+  margin-right: 10px;
+}
+
+.user-mini-profile h3.fn,
+.user-mini-profile h5.fn {
+  display: block;
+  float: left;
+}
+
 .navbar {
   margin-bottom: 0;
 }

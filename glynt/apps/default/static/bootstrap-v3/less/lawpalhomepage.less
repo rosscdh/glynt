@@ -664,3 +664,48 @@ section.checklist-category {
     opacity: 0.5;
   }
 }
+
+.issue-list {
+  td.status-column {
+    width: 44px;
+    text-align: center;
+  }
+  td.column-subject {
+    width: 25%;
+  }
+  td.vcard-column {
+    width: 30%;
+  }
+  td.actions-column {
+    width: 35%;
+  }
+}
+
+.discussion-list {
+  td.status-column {
+    width: 44px;
+    text-align: center;
+  }
+  td.column-subject {
+    width: 30%;
+  }
+  td.vcard-column {
+    width: 35%;
+  }
+  td.actions-column {
+    width: 25%;
+  }
+}
+
+td.vcard-column {
+  white-space: nowrap;
+  .vcard { margin:0; }
+  .time { clear:both; white-space: nowrap; padding-left: 37px; }
+}
+
+.user-mini-profile {
+  img.photo { float: left; max-width: 28px; max-height: 28px; margin-right: 10px; }
+  h3, h5 {
+    &.fn { display:block; float: left; }
+  }
+}

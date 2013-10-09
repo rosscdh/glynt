@@ -375,7 +375,22 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			}, 1500);
 
 			return deferred.promise;
-		}
+		},
+
+		"discussionList": function( tag ) {
+			var deferred = $q.defer();
+
+			if( !angular.isString(tag) ) {
+				tag = void 0;
+			}
+
+			$timeout(function () {
+				var results = lawPalInterface._mockDiscussionService(tag);
+				deferred.resolve(results);
+			}, 100);
+
+			return deferred.promise;
+		},
 	};
 
 	/**
