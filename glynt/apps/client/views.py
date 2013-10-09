@@ -35,7 +35,7 @@ class ConfirmLoginDetailsView(UpdateView):
                 'first_name': user.first_name,
                 'last_name': user.last_name,
                 'email': user.email,
-                'company_name': customer.company_name,
+                'company_name': customer.primary_company,
                 'phone': customer.phone
             }
         })

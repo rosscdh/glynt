@@ -44,7 +44,7 @@ class Customer(models.Model):
 
     @property
     def phone(self):
-        return self.data.get('phone', None)
+        return self.data.get('phone', '')
 
     @property
     def companies(self):
