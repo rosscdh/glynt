@@ -35,6 +35,14 @@ def glynt_mock_http_requests(view_func):
                    content_type='text/json')
 
     #
+    # Ink filepicker? @TODO are these called at all
+    #
+
+    #
+    # s3? @TODO are these called at all
+    #
+
+    #
     # Crocdoc
     #
     httpretty.register_uri(httpretty.POST, "https://crocodoc.com/api/v2/session/create",
