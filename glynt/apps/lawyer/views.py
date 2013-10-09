@@ -27,7 +27,7 @@ logger = logging.getLogger('django.request')
 
 class LawyerRequiredViewMixin(object):
     """
-    Mixin to ensure that only a lawyer user 
+    Mixin to ensure that only a lawyer user
     can view this view
     """
     @method_decorator(user_passes_test(lambda u: u.profile.is_lawyer))
@@ -106,7 +106,7 @@ class LawyerProfileSetupView(LawyerRequiredViewMixin, FormView):
             'last_name': user.last_name,
             'email': user.email,
 
-            'position': lawyer.role,
+            'role': lawyer.role,
             'phone': lawyer.phone if lawyer.phone not in [None,'None'] else '',
 
             'firm_name': getattr(firm, 'name', None),
@@ -145,7 +145,7 @@ class LawyerListView(AjaxListView, FormMixin):
     form_class = LawyerSearchForm
 
     def get_queryset(self):
-        """ return the approved lawyers 
+        """ return the approved lawyers
         if we have a query string then use that to filter """
         logger.info('Using ElasticSearch')
         sq = SQ()
