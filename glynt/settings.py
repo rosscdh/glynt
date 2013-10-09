@@ -107,8 +107,9 @@ MIDDLEWARE_CLASSES = (
     'glynt.middleware.EnsureUserHasCompanyMiddleware',
     'glynt.middleware.LawpalCurrentProjectsMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'pagination.middleware.PaginationMiddleware',
+    #'pagination.middleware.PaginationMiddleware',
     'django_filepicker.middleware.URLFileMapperMiddleware',
+    'waffle.middleware.WaffleMiddleware',
 )
 
 
@@ -251,6 +252,12 @@ HELPER_APPS = (
 
     # Notications
     'notifications',
+
+    # Abridge mailout
+    'abridge',
+
+    # feature switcher
+    'waffle',
 
     # Object rules and permissions
     'rulez',
@@ -413,6 +420,10 @@ DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = False
 
+#
+# Abridge Integration
+#
+ABRIDGE_ENABLED = False  # disabled by default
 
 LOGGING = {
     'version': 1,

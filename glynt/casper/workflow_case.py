@@ -22,6 +22,29 @@ def glynt_mock_http_requests(view_func):
     A generic decorator to be called on all methods that do somethign with 
     external apis
     """
+    #
+    # Abridge
+    #
+    httpretty.register_uri(httpretty.POST, re.compile("http://abridge.local.dev/(.+)"),
+                   body='{"success": true}',
+                   status=200,
+                   content_type='text/json')
+    httpretty.register_uri(httpretty.GET, re.compile("http://abridge.local.dev/(.+)"),
+                   body='{"success": true}',
+                   status=200,
+                   content_type='text/json')
+
+    #
+    # Ink filepicker? @TODO are these called at all
+    #
+
+    #
+    # s3? @TODO are these called at all
+    #
+
+    #
+    # Crocdoc
+    #
     httpretty.register_uri(httpretty.POST, "https://crocodoc.com/api/v2/session/create",
                    body='{"success": true}',
                    status=200,
