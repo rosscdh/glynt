@@ -32,7 +32,8 @@ class NewActionEmailService(BaseEmailService):
         self.verb = kwargs.pop('verb', None)
 
         # pass in content group so that abridge service can be used
-        kwargs['content_group'] = self.project.__unicode__()
+        kwargs['content_group'] = self.project.__unicode__() if self.project is not None else None
+
 
         super(NewActionEmailService, self).__init__(**kwargs)
 
