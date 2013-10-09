@@ -107,7 +107,7 @@ class SendEmailAsAbridgeEventMixin(object):
         """
         # send the notification to our abridge service
         if self.abridge_service is None:
-            logger.error('Abridge Service is set as None' % e)
+            logger.error('Abridge Service is set as None')
             return False
         else:
 
