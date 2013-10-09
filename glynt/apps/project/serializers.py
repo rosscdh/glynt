@@ -61,8 +61,8 @@ class DiscussionSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = ThreadedComment
-        fields = ('title', 'comment', 'user', 'user_url',
-                  'timestamp', 'comment_info')
+        queryset = ThreadedComment.objects.prefetch_related('user').all()
+        fields = ('title', 'comment', 'user', 'timestamp', 'comment_info')
 
     def get_user(self, obj):
         user = obj.user
@@ -72,6 +72,7 @@ class DiscussionSerializer(serializers.HyperlinkedModelSerializer):
             'full_name': obj.user_name,
             'photo': user.profile.get_mugshot_url(),
         }
+
     def get_timestamp(self, obj):
         return obj.submit_date.strftime('%s')
 
