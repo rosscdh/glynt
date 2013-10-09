@@ -25,7 +25,13 @@ shortuuid
 django-extensions
 django-braces
 django-templated-email
+
+# Api
+# tastypie is being depreciated for rest framework
 django-tastypie>=0.9.15
+djangorestframework
+django-filter
+
 django-crispy-forms
 django-pagination
 django-endless-pagination
