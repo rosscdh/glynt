@@ -55,6 +55,7 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class DiscussionSerializer(serializers.HyperlinkedModelSerializer):
+    pk = serializers.Field(source='id')
     user = serializers.SerializerMethodField('get_user')
     timestamp = serializers.SerializerMethodField('get_timestamp')
     comment_info =  serializers.SerializerMethodField('get_comment_tree')
@@ -62,7 +63,7 @@ class DiscussionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ThreadedComment
         queryset = ThreadedComment.objects.prefetch_related('user').all()
-        fields = ('title', 'comment', 'user', 'timestamp', 'comment_info')
+        fields = ('pk', 'title', 'comment', 'user', 'timestamp', 'comment_info')
 
     def get_user(self, obj):
         user = obj.user
@@ -78,9 +79,9 @@ class DiscussionSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_comment_tree(self, obj):
         return {
-            'pk': obj.id,
             'is_removed': obj.is_removed,
             'tree_path': obj.tree_path,
+            'parent_id': obj.parent_id,
             'last_child': obj.last_child,
             'is_public': obj.is_public
         }
