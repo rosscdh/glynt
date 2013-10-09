@@ -24,7 +24,7 @@ class EnsureLawyerService(object):
         self.offices = offices
 
         self.form = kwargs.pop('form', None)
-        self.role = kwargs.pop('position', None)
+        self.role = kwargs.pop('role', None)
 
         # remove unwanted fields
         kwargs.pop('bar_membership_input', None)
@@ -82,7 +82,7 @@ class EnsureLawyerService(object):
                 logger.info('Saved new photo %s for %s' % (photo.file, self.lawyer))
             except Exception as e:
                 logger.error('Could not save user photo %s for %s: %s' % (photo.file, self.lawyer, e))
-            
+
 
     def send_congratulations_email(self, user):
         # Send profile email
@@ -142,7 +142,7 @@ class EnsureLawyerService(object):
 
         # add the JSON object and perform lawyer save on that field only
         self.lawyer.data = lawyer_data
-        self.lawyer.save(update_fields=['data'])
+        self.lawyer.save()
 
         # Primary lawyer update query
         # Will always be present due to the previous get_or_create
