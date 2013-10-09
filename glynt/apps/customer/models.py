@@ -53,7 +53,7 @@ class Customer(models.Model):
     @property
     def primary_company(self):
         try:
-            return self.companies[0]
+            return self.user.companies.get(name=self.data.get('company_name'))
         except IndexError:
             # not found so return an empty instance
             return Company()
