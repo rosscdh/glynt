@@ -2,6 +2,8 @@
 from django.test import LiveServerTestCase
 from django.test.client import Client
 
+from functools import wraps
+
 from model_mommy import mommy
 from pyquery import PyQuery as pq
 from .base import BaseCasperJs
@@ -10,7 +12,66 @@ from glynt.apps.todo import TODO_STATUS
 from glynt.apps.transact.models import Transaction
 from glynt.apps.project import PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE
 
+import re
 import httpretty
+
+
+@httpretty.activate
+def glynt_mock_http_requests(view_func):
+    """
+    A generic decorator to be called on all methods that do somethign with 
+    external apis
+    """
+    #
+    # Abridge
+    #
+    httpretty.register_uri(httpretty.POST, re.compile("http://abridge.local.dev/(.+)"),
+                   body='{"success": true}',
+                   status=200,
+                   content_type='text/json')
+    httpretty.register_uri(httpretty.GET, re.compile("http://abridge.local.dev/(.+)"),
+                   body='{"success": true}',
+                   status=200,
+                   content_type='text/json')
+
+    #
+    # Ink filepicker? @TODO are these called at all
+    #
+
+    #
+    # s3? @TODO are these called at all
+    #
+
+    #
+    # Crocdoc
+    #
+    httpretty.register_uri(httpretty.POST, "https://crocodoc.com/api/v2/session/create",
+                   body='{"success": true}',
+                   status=200,
+                   content_type='text/json')
+    httpretty.register_uri(httpretty.GET, "https://crocodoc.com/api/v2/document/status",
+                   body='{"success": true}',
+                   status=200,
+                   content_type='text/json')
+    httpretty.register_uri(httpretty.POST, "https://crocodoc.com/api/v2/document/upload",
+                   body='{"success": true, "uuid": "123-test-123-uuid"}',
+                   status=200,
+                   content_type='text/json')
+    httpretty.register_uri(httpretty.POST, "https://crocodoc.com/api/v2/document/delete",
+                   data='{"token": "pRzHhZS4jaGes193db28cwyu", "uuid": "123-test-123-uuid"}',
+                   body='{"success": true}',
+                   status=200)
+    httpretty.register_uri(httpretty.GET, re.compile("https://crocodoc.com/view/(.+)"),
+                   body='{"success": true}',
+                   status=200)
+
+
+    def _decorator(request, *args, **kwargs):
+        # maybe do something before the view_func call
+        response = view_func(request, *args, **kwargs)
+        # maybe do something after the view_func call
+        return response
+    return wraps(view_func)(_decorator)
 
 
 class PyQueryMixin(LiveServerTestCase):
@@ -23,25 +84,16 @@ class PyQueryMixin(LiveServerTestCase):
         self.pq = pq
 
 
-@httpretty.activate
 class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
     """
     Base mixin for a Setup to be used in lawyer/customer/project analysis
     https://github.com/dobarkod/django-casper/
     """
-    # mock the attachment upload
-    httpretty.register_uri(httpretty.POST, "https://crocodoc.com/api/v2/document/upload",
-                   body='{"success": true, "uuid": "123-test-123-uuid"}',
-                   status=200,
-                   content_type='text/json')
-    httpretty.register_uri(httpretty.POST, "https://crocodoc.com/api/v2/document/delete",
-                   data='{"token": "pRzHhZS4jaGes193db28cwyu", "uuid": "123-test-123-uuid"}',
-                   body='{"success": true}',
-                   status=200)
-
     fixtures = ['test_cities', 'transact.json']
 
+    @glynt_mock_http_requests
     def setUp(self):
+
         super(BaseLawyerCustomerProjectCaseMixin, self).setUp()
 
         self.client = Client()

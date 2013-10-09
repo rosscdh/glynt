@@ -10,7 +10,7 @@
  -->
 <div class="container">
     <div class="row">
-        <div class="col col-10 col-offset-1">   
+        <div class="col col-10 col-offset-1">
             <br />
             <br />
             <h1>Update your profile</h1>
@@ -72,7 +72,7 @@
                                     {{ form.last_name|as_crispy_field }}
                                 </div>
                                 <div class="control-group">
-                                    {{ form.position|as_crispy_field }}
+                                    {{ form.role|as_crispy_field }}
                                 </div>
                                 <div class="control-group">
                                     {{ form.years_practiced|as_crispy_field }}
@@ -150,7 +150,7 @@
                                         {{ form.companies_advised }}<!-- hidden -->
                                     </div>
                                 </div>
-                                
+
                             </div>
                             <div class="col col-4">
                                 <ol id="companies-advised-list">
@@ -707,9 +707,9 @@ $(document).ready(function(){
             element.closest('form').parsley( 'addItem', '#' + element.attr('id') )
             // loop over data-type as defined in the html attribute and ensure constraint is applied
             $.each(parsleyConstraints.split(','), function(i,e){
-                element.parsley( 'addConstraint', { e: true } );    
+                element.parsley( 'addConstraint', { e: true } );
             })
-            
+
         }
         //console.log('parsleyConstraints: {parsleyConstraints}, parsley.validate: {validate}'.assign({'parsleyConstraints': parsleyConstraints, 'validate': element.parsley( 'validate' )}))
         if ( parsleyConstraints === false || element.parsley( 'validate' ) === true ) {
@@ -721,7 +721,7 @@ $(document).ready(function(){
             } else {
                 console.log('Callback {cb_name} for add-website-btn was not defined'.assign({'cb_name': callback_name}))
             }
-            
+
         }
     });
 
@@ -935,7 +935,7 @@ $(document).ready(function(){
         window[var_name][volume_type] = (typeof(element_value) == 'number') ? element_value : (typeof(element_value) == 'object') ? element_value[volume_type] : 0
 
         if (typeof(window[var_name][volume_type]) == 'undefined') {
-            window[var_name][volume_type] = 0   
+            window[var_name][volume_type] = 0
         }
         return window[var_name][volume_type]
     }
@@ -961,7 +961,7 @@ $(document).ready(function(){
             target_element.val(JSON.stringify(window[var_name]))
         })
     });
-    
+
     $.each($('.volume'), function(i, element) {
         var e = $(element);
         var volume_type = e.attr('data-volume_type');
@@ -1034,7 +1034,7 @@ $(document).ready(function(){
 
     if(window.location.hash) {
        var hashValue = window.location.hash;
-        $('#profile-tab a[href='+hashValue+']').trigger('click'); 
+        $('#profile-tab a[href='+hashValue+']').trigger('click');
     }
 });
 </script>
