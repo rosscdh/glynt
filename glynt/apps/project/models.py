@@ -61,6 +61,11 @@ class Project(ProjectCategoriesMixin, models.Model):
         return checklist_items
 
     @property
+    def content_type_id(self):
+        from . import PROJECT_CONTENT_TYPE
+        return PROJECT_CONTENT_TYPE.pk
+
+    @property
     def pusher_id(self):
         return str(self.uuid)
 

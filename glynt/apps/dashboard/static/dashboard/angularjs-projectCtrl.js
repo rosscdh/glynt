@@ -8,15 +8,21 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 
 	// Load project details
 	$scope.project = {};
-	$scope.ancilliary = {}; /* Non core project data e.g. dicussions */
-	$scope.discussionCategories = [ "issue", "discussion" ];
+	$scope.data = {
+		"project": {},
+		"users": [],
+		"discussions": {},
+		"discussionCategories": [ "issue", "discussion" ]
+	};
+
 	/**
 	 * Load current project
 	 */
 	lawPalService.currentProject().then(
 		function success( project ) {
-			$scope.project = project;
-			$scope.project.users = $scope.project.users || [];
+			$scope.data.project = project;
+			$scope.data.users = project.users;
+			console.log( "users", $scope.data.users );
 			$scope.loadDiscussions();
 		},
 		function error( err ) {
@@ -43,7 +49,7 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 	$scope.loadDiscussions = function() {
 		lawPalService.discussionList().then(
 			function success( results ) {
-				$scope.ancilliary.discussions = results;
+				$scope.data.discussions = results;
 			},
 			function error( err ) {
 
@@ -61,7 +67,7 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 			"controller": 'manageTeamDialogCtrl',
 			"resolve": {
 				"team": function () {
-					return $scope.project.users;
+					return $scope.data.users;
 				}
 			}
 		});
@@ -69,6 +75,25 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 		modalInstance.result.then(
 			function ok( updatedTeam ) {
 				$scope.updateTeam( updatedTeam );
+			}, function cancel() {
+				console.info('Modal dismissed at: ' + new Date());
+			}
+		);
+	};
+
+	/**
+	 * Open manage team dialog
+	 */
+	$scope.openDiscussionDialog = function() {
+		var modalInstance = $modal.open({
+			"windowClass": "modal modal-show",
+			"templateUrl": 'newDiscussion.html',
+			"controller": 'newDiscussionDialogCtrl'
+		});
+
+		modalInstance.result.then(
+			function ok( updatedTeam ) {
+				console.log();
 			}, function cancel() {
 				console.info('Modal dismissed at: ' + new Date());
 			}

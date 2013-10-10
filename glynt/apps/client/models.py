@@ -1,5 +1,4 @@
 # -*- coding: UTF-8 -*-
-from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 from django.dispatch import receiver
@@ -23,8 +22,6 @@ from django_countries import CountryField
 
 import logging
 logger = logging.getLogger('django.request')
-
-LAWPAL_PRIVATE_BETA = getattr(settings, 'LAWPAL_PRIVATE_BETA', False)
 
 
 class ClientProfile(UserenaBaseProfile):
@@ -84,7 +81,7 @@ class ClientProfile(UserenaBaseProfile):
 def _get_or_create_user_profile(user):
     # set the profile
     # This is what triggers the whole cleint profile creation process in pipeline.py:ensure_user_setup
-    profile, is_new = ClientProfile.objects.get_or_create(user=user) # added like this so django noobs can see the result of get_or_create
+    profile, is_new = ClientProfile.objects.get_or_create(user=user)  # added like this so django noobs can see the result of get_or_create
     return (profile, is_new,)
 
 # used to trigger profile creation by accidental refernce. Rather use the _create_user_profile def above
@@ -92,11 +89,11 @@ User.profile = property(lambda u: _get_or_create_user_profile(user=u)[0])
 
 
 def _assign_perms(user, profile):
-    for perm, name in ASSIGNED_PERMISSIONS.get('profile',()):
+    for perm, name in ASSIGNED_PERMISSIONS.get('profile', ()):
         assign_perm(perm, user, profile)
 
     # Give permissions to view and change itself
-    for perm, name in ASSIGNED_PERMISSIONS.get('user',()):
+    for perm, name in ASSIGNED_PERMISSIONS.get('user', ()):
         assign_perm(perm, user, user)
 
 @receiver(post_save, sender=ClientProfile, dispatch_uid='client.create_client_profile', )
@@ -106,7 +103,7 @@ def create_client_profile(sender, **kwargs):
     profile = kwargs.get('instance', None)
     is_new = kwargs.get('created', False)
 
-    if profile is not None and is_new == True:
+    if profile is not None and is_new is True:
         user = profile.user
         logger.info('Creating Profile Permissions for User %s' % user.username)
         # Give permissions to view and change profile
@@ -154,4 +151,3 @@ def create_userarena_signup(sender, **kwargs):
         user = profile.user
         logger.info('Creating UserenaSignup object for User %s' % user.username)
         UserenaSignup.objects.create_userena_profile(user=user)
-
