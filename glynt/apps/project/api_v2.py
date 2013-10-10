@@ -2,7 +2,7 @@
 from django.shortcuts import get_object_or_404
 
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView
 
 from threadedcomments.models import ThreadedComment
 
@@ -24,6 +24,23 @@ class DiscussionListView(ListCreateAPIView):
     """
     Endpoint that shows discussion threads
     django_comments & threaded_comments & fluent_comments
+    """
+    queryset = ThreadedComment.objects.all()
+    serializer_class = DiscussionSerializer
+
+    def get_queryset(self):
+        """
+        """
+        project_uuid = self.kwargs.get('uuid')
+        project = get_object_or_404(Project, uuid=project_uuid)
+
+        return self.queryset.filter(content_type=PROJECT_CONTENT_TYPE,
+                                    object_pk=project.pk)
+
+
+class TeamListView(ListCreateAPIView, RetrieveUpdateAPIView):
+    """
+    Endpoint that shows team for a project
     """
     queryset = ThreadedComment.objects.all()
     serializer_class = DiscussionSerializer
