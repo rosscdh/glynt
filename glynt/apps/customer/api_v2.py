@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
 
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import ListAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView
@@ -28,3 +29,15 @@ class UserViewSet(ModelViewSet):
     queryset = User.objects.select_related('profile').all()
     serializer_class = UserSerializer
     filter_class = UserFilter
+    
+    def create(self, request):
+        raise PermissionDenied
+
+    def update(self, request, pk=None):
+        raise PermissionDenied
+
+    def partial_update(self, request, pk=None):
+        raise PermissionDenied
+
+    def destroy(self, request, pk=None):
+        raise PermissionDenied
