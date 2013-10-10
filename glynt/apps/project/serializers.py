@@ -14,6 +14,10 @@ UUID4HEX_LONG = re.compile('[0-9a-f]{32}\Z', re.I)
 UUID4HEX_SHORT = re.compile('[0-9a-f]{11}\Z', re.I)
 
 class GetContentObjectByTypeAndPkMixin(object):
+    """
+    Mixin to allow searching for ContentType objects
+    by pk or by uuid
+    """
     def is_uuid(self, value):
         if type(value) in [unicode, str]:
             if UUID4HEX_LONG.match(value) or UUID4HEX_SHORT.match(value):
@@ -21,9 +25,13 @@ class GetContentObjectByTypeAndPkMixin(object):
                 return True
         return False
 
+    def get_content_type_obj(self, content_type_id):
+        return ContentType.objects.get(pk=content_type_id)
+
     def get_object_by_key(self, content_type_id, key):
         # get the type of object
-        content_type = ContentType.objects.get(pk=content_type_id)
+        content_type = self.get_content_type_obj(content_type_id=content_type_id)
+
         # get the specific object being referenced
         if self.is_uuid(value=key):
             return content_type.get_object_for_this_type(uuid=key)
