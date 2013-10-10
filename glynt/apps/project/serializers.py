@@ -64,12 +64,12 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 
 class DiscussionSerializer(serializers.ModelSerializer):
-    site_id = serializers.IntegerField(default=settings.SITE_ID)
+    site_id = serializers.IntegerField(default=settings.SITE_ID, required=False)
 
     content_type_id = serializers.IntegerField()
     object_pk = serializers.IntegerField()
     parent_id = serializers.IntegerField(required=False)
-    last_child = serializers.IntegerField(source='last_child_id', read_only=True)
+    last_child = serializers.IntegerField(source='last_child_id', required=False, read_only=True)
 
     user = serializers.IntegerField(source='user_id')
     title = serializers.CharField(required=False)
@@ -84,6 +84,13 @@ class DiscussionSerializer(serializers.ModelSerializer):
         fields = ('id', 'object_pk', 'title', 'comment', 'user',
                   'content_type_id', 'parent_id', 'last_child',
                   'meta', 'site_id')
+
+    def validate_site_id(self, attrs, source):
+        """
+        force correct site_id
+        """
+        attrs[source] = settings.SITE_ID
+        return attrs
 
     def get_meta(self, obj):
         if obj is not None:
