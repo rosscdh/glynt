@@ -35,7 +35,7 @@ class LawyerProfileSetupForm(forms.Form):
 
     phone = forms.CharField(help_text="", widget=forms.TextInput(attrs={'data-trigger': 'change', 'placeholder': '+1 415 225 6464', 'tabindex': '4'}))
 
-    position = forms.ChoiceField(choices=Lawyer.LAWYER_ROLES.get_choices(), label="Position")
+    role = forms.ChoiceField(choices=Lawyer.LAWYER_ROLES.get_choices(), label="Position")
     years_practiced = forms.IntegerField(label="Years Practicing", initial="3", widget=forms.TextInput(attrs={'data-trigger': 'change', 'class': 'input-mini', 'tabindex': '6'}))
 
     bar_membership_input = forms.CharField(required=False, label="Bar Location", help_text='Enter the location of your bar memberships.', widget=forms.TextInput(attrs={'class': 'input-large', 'placeholder': 'California', 'title': 'The state you are licensed in', 'tabindex': '7'}))
@@ -56,7 +56,7 @@ class LawyerProfileSetupForm(forms.Form):
                 'onReady': 'preparePhotoPreview',
                 'onCrop': 'photoCrop'
             }))
-    
+
     hidden_photo = forms.CharField(required=False, widget=forms.HiddenInput) # transports the id
 
     twitter = forms.CharField(required=False, label="Twitter Profile", help_text="If you use Twitter, add your username here", widget=forms.TextInput(attrs={'placeholder':'@username'}))
@@ -173,7 +173,7 @@ class LawyerProfileSetupForm(forms.Form):
         self.delete_cookie('website_list-%d' % self.user.pk)
         # bar_membership list
         self.delete_cookie('bar_membership-%d' % self.user.pk)
-        
+
 
     def save(self, commit=True):
         logger.info('Ensuring the LawyerProfile Exists')
@@ -219,7 +219,7 @@ class LawyerSearchForm(forms.Form):
 
 
 class LawyerProfileIsCompleteValidator(forms.Form):
-    """ is used by the profile_complete template tag 
+    """ is used by the profile_complete template tag
     to evaluate the completeness of a lawyers profile """
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)

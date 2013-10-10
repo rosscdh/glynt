@@ -111,6 +111,18 @@ BROKER_URL = 'sqs://{BROKER_USER}:{BROKER_PASSWORD}@sqs.eu-west-1.amazonaws.com/
 SPLUNKSTORM_ENDPOINT = 'logs2.splunkstorm.com'
 SPLUNKSTORM_PORT = 20824
 
+#
+# Abridge mailout service
+#
+ABRIDGE_ENABLED = True  # disabled by default
+ABRIDGE_API_URL = 'https://abridge.lawpal.com/'
+ABRIDGE_PROJECT = 'lawpal-digest'
+
+ABRIDGE_ACCESS_KEY_ID = 'e4b38a5758caf486e21c'
+ABRIDGE_SECRET_ACCESS_KEY = '2a2c7c6104c80855a12d53bd846e117fbf81f41c'
+ABRIDGE_USERNAME = 'lawpal-production'
+ABRIDGE_PASSWORD = 'production123'
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
