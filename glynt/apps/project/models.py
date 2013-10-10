@@ -87,11 +87,6 @@ class Project(ProjectCategoriesMixin, models.Model):
         ### not yet ### as well as any user associated with the customers company ## end not yet ##
         """
         return self.participants.all()
-        # customer_user = self.customer.user
-        # return itertools.chain( [customer_user],
-        #                         [l.lawyer.user for l in ProjectLawyer.objects.assigned(project=self)],
-        #                         #[u for u in self.company.customers.exclude(pk=customer_user.pk)]
-        #                       )
 
     @property
     def has_lawyer(self):
