@@ -69,6 +69,7 @@ class DiscussionSerializer(serializers.ModelSerializer):
     content_type_id = serializers.IntegerField()
     object_pk = serializers.IntegerField()
     parent_id = serializers.IntegerField(required=False)
+    last_child = serializers.IntegerField(source='last_child_id', read_only=True)
 
     user = serializers.IntegerField(source='user_id')
     title = serializers.CharField(required=False)
@@ -81,7 +82,7 @@ class DiscussionSerializer(serializers.ModelSerializer):
         queryset = ThreadedComment.objects.prefetch_related('user').all()
 
         fields = ('id', 'object_pk', 'title', 'comment', 'user',
-                  'content_type_id', 'parent_id',
+                  'content_type_id', 'parent_id', 'last_child',
                   'meta', 'site_id')
 
     def get_meta(self, obj):
