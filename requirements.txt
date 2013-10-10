@@ -30,7 +30,7 @@ django-templated-email
 # tastypie is being depreciated for rest framework
 django-tastypie>=0.9.15
 djangorestframework
-django-filter
+-e git+https://github.com/alex/django-filter.git#egg=django-filter
 
 django-crispy-forms
 django-pagination
