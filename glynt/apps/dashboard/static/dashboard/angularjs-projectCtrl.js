@@ -92,10 +92,33 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 		});
 
 		modalInstance.result.then(
-			function ok( updatedTeam ) {
-				console.log();
+			function ok( message ) {
+				$scope.newDiscussion( message );
 			}, function cancel() {
 				console.info('Modal dismissed at: ' + new Date());
+			}
+		);
+	};
+
+	$scope.newDiscussion = function( message ) {
+		var userPk = lawPalService.getCurrentUser().pk;
+		var messageDetails = {
+			"object_pk": $scope.data.project.uuid, 
+			"title": message.subject, 
+			"comment": message.comment, 
+			"user": userPk, 
+			"content_type_id": lawPalService.projectContentTypeId(),
+			"parent_id": null
+		};
+
+		console.log( "messageDetails", messageDetails );
+
+		lawPalService.addDiscussion( messageDetails).then(
+			function success( results ) {
+				toaster.pop( "success", "Discussion item added" );
+			},
+			function error( err ) {
+				toaster.pop( "warning", "Error", "Unable to post discussion item" );
 			}
 		);
 	};

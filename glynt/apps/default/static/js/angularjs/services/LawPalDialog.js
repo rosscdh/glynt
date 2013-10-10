@@ -355,7 +355,7 @@ angular.module('lawpal').controller( 'manageTeamDialogCtrl', [ '$scope', '$modal
 angular.module('lawpal').controller( 'newDiscussionDialogCtrl', [ '$scope', '$modalInstance', 'lawPalService', '$q',
 	function ($scope, $modalInstance, lawPalService, $q) {
 		$scope.message = {
-			"title": null,
+			"subject": null,
 			"comment": null,
 			"type": "discussion"
 		};
@@ -363,7 +363,7 @@ angular.module('lawpal').controller( 'newDiscussionDialogCtrl', [ '$scope', '$mo
 		 * User clicked the OK/Save button
 		 */
 		$scope.ok = function () {
-			$modalInstance.close($scope.team);
+			$modalInstance.close($scope.message);
 		};
 
 		/**

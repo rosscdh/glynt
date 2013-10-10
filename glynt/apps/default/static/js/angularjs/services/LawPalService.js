@@ -68,6 +68,15 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			)
 	};
 
+	var discussionResource = {
+		"project": $resource( "/api/v2/project/:uuid/discussion\\/", {},
+				{
+					"get": { "method": "GET", "headers": { "Content-Type": "application/json" } },
+					"save": { "method": "POST", "headers": { "Content-Type": "application/json" } }
+				}
+			)
+	};
+
 	var transformToFormData = function(data){
 		// Convert JSON to form post
         return $.param(data);
@@ -417,6 +426,13 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 				return LawPal.project.uuid;
 		},
 
+		"projectContentTypeId": function() {
+			if( typeof(LawPal.project)==="function")
+				return LawPal.project().content_type_id;
+			else
+				return LawPal.project.content_type_id || 14;
+		},
+
 		/**
 		 * Get current user
 		 * @return {Object} Current user
@@ -452,20 +468,45 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			return deferred.promise;
 		},
 
-		"discussionList": function( tag ) {
+		"discussionList": function() {
 			var deferred = $q.defer();
+			var projectUuid = this.getProjectUuid();
+			var options = { "uuid": projectUuid };
 
-			if( !angular.isString(tag) ) {
-				tag = void 0;
-			}
-
+			discussionResource.project.get( options,
+				function success( data ) {
+					deferred.resolve(data.results);
+				},
+				function error( err ) {
+					deferred.reject(err);
+				}
+			);
+			/*
 			$timeout(function () {
 				var results = lawPalInterface._mockDiscussionService(tag);
 				deferred.resolve(results);
 			}, 100);
+			*/
 
 			return deferred.promise;
 		},
+
+		"addDiscussion": function( message ) {
+			var deferred = $q.defer();
+			var projectUuid = this.getProjectUuid();
+			var options = { "uuid": projectUuid };
+
+			discussionResource.project.save( options, message,
+				function success( result ) {
+					deferred.resolve(result);
+				},
+				function error( err ) {
+					deferred.reject(err);
+				}
+			);
+
+			return deferred.promise;
+		}
 	};
 
 	/**
