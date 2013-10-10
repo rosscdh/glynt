@@ -15,6 +15,9 @@ from .models import Project, ProjectLawyer
 from .serializers import (ProjectSerializer, TeamSerializer,
                           DiscussionSerializer, )
 
+import logging
+logger = logging.getLogger('django.request')
+
 
 class ProjectViewSet(ModelViewSet):
     """
@@ -81,9 +84,9 @@ class TeamListView(RetrieveUpdateAPIView):
         """
         save all our bits
         """
-        self.save_participants()
         self.save_lawyers()
         self.save_customer()
+        self.save_participants()
 
     def save_lawyers(self):
         if len(self.lawyers) > 0:
@@ -96,6 +99,9 @@ class TeamListView(RetrieveUpdateAPIView):
             for lawyer in project_lawyers:
                 if lawyer not in self.lawyers:
                     ProjectLawyer.objects.get(project=project, lawyer=lawyer).delete()
+
+            # update the set
+            project_lawyers = project.lawyers.all()
 
             # add new ones
             for lawyer in self.lawyers:
@@ -116,7 +122,26 @@ class TeamListView(RetrieveUpdateAPIView):
         this is important as its participants that form
         the notification chain
         """
-        pass
+        if len(self.participants) > 0:
+            project = self.project
+
+            # get the current participants
+            project_participants = project.participants.all()
+
+            # remove those no longer present
+            for participant in project_participants:
+                if participant not in self.participants:
+                    project.participants.remove(participant)
+                    logger.debug('Removing participant: %s' % participant)
+
+            # update the set
+            project_participants = project.participants.all()
+
+            # add new ones
+            for participant in self.participants:
+                if participant not in project_participants:
+                    project.participants.add(participant)
+                    logger.debug('Adding participant: %s' % participant)
 
 
 
