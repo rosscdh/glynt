@@ -2,7 +2,7 @@
 from django.shortcuts import get_object_or_404
 
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.generics import ListAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 
 from threadedcomments.models import ThreadedComment
 
@@ -20,7 +20,7 @@ class ProjectViewSet(ModelViewSet):
     lookup_field = 'uuid'
 
 
-class DiscussionListView(ListAPIView):
+class DiscussionListView(ListCreateAPIView):
     """
     Endpoint that shows discussion threads
     django_comments & threaded_comments & fluent_comments
@@ -38,5 +38,5 @@ class DiscussionListView(ListAPIView):
                                     object_pk=project.pk)
 
 
-class DiscussionDetailView(RetrieveUpdateAPIView, DiscussionListView):
+class DiscussionDetailView(RetrieveUpdateDestroyAPIView, DiscussionListView):
     lookup_field = 'pk'
