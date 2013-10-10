@@ -68,12 +68,11 @@
                         </li>
                     {% endcache %}
                 {% else %}
-                    <li><a href="{% url 'public:why-lawpal' %}">{% trans "Why We're Better" %}</a></li>
+                    <li><a href="{% url 'lawyer:list' %}">{% trans "Our Lawyers" %}</a></li>
                     <li><a href="{% url 'public:must-reads' %}">{% trans 'LawPal Pulse' %}</a></li>
-                    <li><a href="{% url 'lawyer:list' %}">{% trans "Lawyers" %}</a></li>
-
-                    <li><a href="{% url 'public:for-lawyers' %}"><span class="softer">{% trans 'For Lawyers' %}</span></a></li>
-                    <li class="nav-signin">
+                    <li><a href="{% url 'public:why-lawpal' %}">{% trans "Why We're Better" %}</a></li>
+<!--                     <li><a href="{% url 'public:for-lawyers' %}"><span class="softer">{% trans 'For Lawyers' %}</span></a></li>
+ -->                    <li class="nav-signin">
                         <a href="#signin-modal" class="" data-toggle="modal" onclick="_gaq.push(['_trackEvent', 'Nav', 'Action', 'Sign In']);">{% trans 'Sign in' %}</a>
                     </li>
                 {% endif %}

@@ -1,7 +1,17 @@
 {% load lawyer_profile_tags endless jsonify glynt_helpers project_tags humanize %}
 {% lazy_paginate object_list %}
+<div class="row">
 
 {% for l in object_list %}
+<div class="col-4 text-center">
+    <a href="{% url 'lawyer:profile_lite' slug=l.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class=""><img src="{{ l.profile_photo }}" class="img-circle "/></a>
+    <h3><a href="{% url 'lawyer:profile_lite' slug=l.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" >{{ l.full_name|truncatechars:26 }}</a>
+         <script type="IN/MemberProfile" data-id="http://www.linkedin.com/in/alexhalliday" data-format="hover"></script></h3>
+    {% if l.firm_name %}
+         <p>{{ l.position }} <br /> <span class="softer">{{ l.firm_name }}</p> 
+    {% endif %}
+</div>
+<!-- 
     <div class="clearfix partner">
         <a class="partner-avatar" href="{% url 'lawyer:profile' slug=l.username %}">
             <img src="{{ l.profile_photo }}"/>
@@ -22,14 +32,13 @@
                 </li>
             </ul>
         </div>
-
+ -->
       <!--   {% if l.fee_packages %}
         <div class="card-bordered card-transaction">
             {% fee_packages_mini fee_packages=l.fee_packages %}
             <a href="{% url 'lawyer:profile' slug=l.username %}" class="transaction-view-all"><span>View all</span></a>
         </div>
         {% endif %} -->
-    </div>
 {% empty %}
  <div class="row">
     <div class="span12">
@@ -39,20 +48,14 @@
     </div>
 </div>
 {% endfor %}
+</div>
 
 {% show_more %}
 
 {% block js %}
-    <script src="{{ STATIC_URL }}js/angularjs/lib/angular.min.js"></script>
-    <script src="{{ STATIC_URL }}js/angularjs/lib/angular-resource.min.js"></script>
-
-    <script src="{{ STATIC_URL }}lawyer/angularjs/app/js/app.js"></script>
-    <script src="{{ STATIC_URL }}lawyer/angularjs/app/js/controllers.js"></script>
-    <script src="{{ STATIC_URL }}lawyer/angularjs/app/js/services.js"></script>
-    <script src="{{ STATIC_URL }}lawyer/angularjs/app/js/directives.js"></script>
 
 <!-- <script src="{{ STATIC_URL }}lawyer/angularjs/test/lib/angular-mocks.js"></script> -->
-
+ <script src="//platform.linkedin.com/in.js" type="text/javascript"></script>
     <script>
         $(document).ready(function () {
             $('.tip').tooltip();
