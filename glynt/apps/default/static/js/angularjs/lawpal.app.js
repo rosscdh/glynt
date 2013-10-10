@@ -42,24 +42,21 @@ lawPalApp.filter('titleCase', function () {
 
 lawPalApp.filter('discussionIconStatus', function () {
   return function ( statusNum ) {
-  	debugger;
-  	console.log( statusNum )
   	switch( statusNum ) {
   		case 0: 
-  			return "icon-state-new icon-circle-blank";
+  			return "new";
   			break;
   		case 1: 
-  			return "icon-state-open icon-adjust";
+  			return "open";
   			break;
   		case 2: 
-  			return "icon-warning-sign";
+  			return "pending";
   			break;
   		case 3: 
-  			return "icon-state-resolved icon-ok";
+  			return "resolved";
   			break;
-
   		default:
-  			return "icon-state-open icon-adjust"
+  			return "open"
   	}
   }
 });
@@ -87,7 +84,6 @@ lawPalApp.filter('timeAgo', function () {
   	var now = new Date().getTime(),diff;
 
   	if( timeStamp ) {
-  		console.log(now - timeStamp);
   		if( now - timeStamp < minute ) {
   			return "Just now";
   		}

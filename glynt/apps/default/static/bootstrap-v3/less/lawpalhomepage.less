@@ -655,7 +655,9 @@ section.checklist-category {
   li { padding: 10px 0; }
 }
 
+/* Generic profile display styles */
 .vcard {
+  position: relative;
   margin-bottom: 10px;
   .fn { margin-top:0; padding-top: 0; margin-bottom: 0.25em; }
   .photo, .company { padding:0; margin: 0; }
@@ -663,12 +665,42 @@ section.checklist-category {
   &.remove {
     opacity: 0.5;
   }
+  a.icon-envelope {
+    position: absolute;
+    top: 1em;
+    left: 1em;
+    color: #FFF;
+    opacity: 0.5;
+  }
+  &:hover {
+    a.icon-envelope {
+      opacity: 0.75;
+    }
+  }
+}
+
+/* User profile (mini) */
+.user-mini-profile {
+  img.photo { float: left; max-width: 28px; max-height: 28px; margin-right: 10px; }
+  h3, h5 {
+    &.fn { display:block; float: left; }
+  }
+}
+
+/* dashboard discussion/issues list */
+.widget.discussion, .widget.issue {
+  h3 { margin-bottom: 0; border-bottom: 0; }
+  td.actions-column button {
+    width: 90px;
+  }
 }
 
 .issue-list {
   td.status-column {
     width: 44px;
     text-align: center;
+    background-color: @brand-warning !important;
+    color: #FFF;
   }
   td.column-subject {
     width: 25%;
@@ -677,7 +709,7 @@ section.checklist-category {
     width: 30%;
   }
   td.actions-column {
-    width: 35%;
+    width: 200px;
   }
 }
 
@@ -685,6 +717,8 @@ section.checklist-category {
   td.status-column {
     width: 44px;
     text-align: center;
+    background-color: @brand-info !important;
+    color: #FFF;
   }
   td.column-subject {
     width: 30%;
@@ -693,7 +727,7 @@ section.checklist-category {
     width: 35%;
   }
   td.actions-column {
-    width: 25%;
+    width: 100px;
   }
 }
 
@@ -701,11 +735,4 @@ td.vcard-column {
   white-space: nowrap;
   .vcard { margin:0; }
   .time { clear:both; white-space: nowrap; padding-left: 37px; }
-}
-
-.user-mini-profile {
-  img.photo { float: left; max-width: 28px; max-height: 28px; margin-right: 10px; }
-  h3, h5 {
-    &.fn { display:block; float: left; }
-  }
 }

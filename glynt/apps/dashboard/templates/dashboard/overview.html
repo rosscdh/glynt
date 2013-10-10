@@ -102,40 +102,47 @@
                 </div>
 
                 <div class="widget discussion">
+                    <button class="btn btn-info btn-small pull-right">
+                        <i class="icon icon-plus"></i>
+                        &nbsp;New
+                    </button>
                     <h3>Discussion and Issues</h3>
-                    <!-- Issues and discussions //-->
-                    <table class="table table-striped {[{tag}]}-list" ng-repeat="tag in discussionCategories">
-                        <tbody>
-                            <tr>
-                                <th colspan="2" ng-bind="tag | titleCase"></th>
-                                <th>Last response by</th>
-                                <th>Actions</th>
-                            </tr>
-                            <tr ng-repeat="discussion in ancilliary.discussions | openStatus:2 | filter: { tags: tag }">
-                                <td class="status-column">
-                                    <i class="icon {[{ discussion.status | discussionIconStatus }]}"></i>
-                                </td>
-                                <td ng-bind="discussion.subject" class="subject-column"></td>
-                                <td class="vcard vcard-column">
-                                    <div class="fn" user-mini-widget user="discussion.mostRecentResponse.user"></div>
-                                    <div class="time text-muted">
-                                        <i class="icon icon-time"></i>
-                                        <small ng-bind="discussion.timeStamp | timeAgo"></small>
-                                    </div>
-                                </td>
-                                <td nowrap class="actions-column">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-info btn-small">
-                                            <i class="icon icon-reply"></i> Respond
-                                        </button><button type="button" class="btn btn-success btn-small" ng-show="tag=='issue'">
-                                            <i class="icon icon-ok"></i> Resolved
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <section class="{[{tag}]}-list" ng-repeat="tag in discussionCategories">
+                        <!-- Issues and discussions //-->
+                        <table class="table table-striped">
+                            <tbody>
+                                <tr>
+                                    <th colspan="2"><h4 ng-bind="tag | titleCase"></h4></th>
+                                    <th><h4>Last response by</h4></th>
+                                    <th><h4>Actions</h4></th>
+                                </tr>
+                                <tr ng-repeat="discussion in ancilliary.discussions | openStatus:2 | filter: { tags: tag }">
+                                    <td class="status-column" tooltip="{[{ discussion.status | discussionIconStatus | titleCase }]}" tooltip-append-to-body="true">
+                                        <i class="icon icon-state-{[{ discussion.status | discussionIconStatus }]}"></i>
+                                    </td>
+                                    <td ng-bind="discussion.subject" class="subject-column"></td>
+                                    <td class="vcard vcard-column">
+                                        <div class="fn" user-mini-widget user="discussion.mostRecentResponse.user"></div>
+                                        <div class="time text-muted">
+                                            <i class="icon icon-time"></i>
+                                            <small ng-bind="discussion.timeStamp | timeAgo"></small>
+                                        </div>
+                                    </td>
+                                    <td nowrap class="actions-column">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-info btn-small" tooltip="Respond now">
+                                                <i class="icon icon-reply"></i> Respond
+                                            </button><button type="button" class="btn btn-success btn-small" ng-show="tag=='issue'" tooltip="Mark as resolved">
+                                                <i class="icon icon-ok"></i> Resolved
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
                 </div>
+                <!--
                 {% if project.has_lawyer %}
                 <div class="widget discuss">
                     <h3>Project Discussion</h3>
@@ -144,6 +151,7 @@
 
                 </div>
                 {% endif %}
+                //-->
             </div>
         </div>
     {% endif %}
