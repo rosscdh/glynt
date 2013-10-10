@@ -8,6 +8,10 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 	var userType = "is_customer";
 	var checklist = [];
 	var getEndpoint = (lawPalInterface.getEndpoint ? lawPalInterface.getEndpoint() : null);
+	var data = {
+		"project": {},
+		"users": []
+	};
 
 	/* Define API interfaces for check list items */
 	var checkListItemResources = {
@@ -43,10 +47,25 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 	};
 
 	var projectResource = {
-		"patch": $resource("/api/v1/project/:id/:entity\\/", {}, 
-			/* This is done to ensure the content type of PATCH is sent through */
-				{ "array": { "method": "PATCH", headers: { "Content-Type": "application/json" }, "isArray": true } 
-			})
+		"details": $resource("/api/v2/project/:uuid\\/", {}, 
+				{ 
+					"get": { "method": "GET", "headers": { "Content-Type": "application/json" } },
+					"patch": { "method": "PATCH", "headers": { "Content-Type": "application/json" } } 
+				}
+			),
+		"team": $resource("/api/v2/project/:uuid/team\\/", {}, 
+				{ 
+					"update": { "method": "PATCH", "headers": { "Content-Type": "application/json" }, "isArray": true } 
+				}
+			)
+	};
+
+	var userResource = {
+		"email": $resource( "/api/v2/user/?email=:searchFor", {},
+				{
+					"search": { "method": "GET", "headers": { "Content-Type": "application/json" } }
+				}
+			)
 	};
 
 	var transformToFormData = function(data){
@@ -64,27 +83,62 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		"currentProject": function() {
 			var deferred = $q.defer();
 			var projectDetails = {};
+			var projectUuid = this.getProjectUuid();
+			var _this = this;
+
+			if (lawPalInterface && typeof(lawPalInterface.project)==="function") {
+				projectDetails = lawPalInterface.project();
+			}
 
 			// Get lawpal object
-			$timeout(function () {
-				if (lawPalInterface && typeof(lawPalInterface.project)==="function") {
-					// Retrieve project details
-					var projectDetails = lawPalInterface.project();
-					// Return project details
-					deferred.resolve(projectDetails);
-				} else {
-					deferred.reject(projectDetails);
+			projectResource.details.get( { "uuid": projectUuid },
+				function success( results ) {
+					projectDetails = Object.merge( projectDetails, results );
+					data.project = projectDetails;
+					data.project.users = _this.mergedProjectTeam( projectDetails );
+					deferred.resolve( projectDetails );
+				},
+				function error( err ) {
+					deferred.reject( err );
 				}
-			}, 100);
+			);
 
 			return deferred.promise;
 		},
 
+		/**
+		 * Merge different user types into a single array for the purpose of displaying them in a list
+		 * @return {Array} Array of users
+		 */
+		"mergedProjectTeam": function( project ) {
+			//
+			var users = [];
+			if( angular.isArray( project.lawyers ) ) {
+				users = project.lawyers.map( function(item) {
+					return Object.merge( item, {
+						"role": "lawyer"
+					});
+				});
+			}
+
+			if( project.customer ) {
+				project.customer.role = "client";
+				project.customer.primary = true;
+				users.push( project.customer );
+			}
+
+			return users;
+		},
+
 		"updateProjectTeam": function( team ) {
 			var deferred = $q.defer();
-			var options = { "id": this.getProjectUuid(), "entity": "users" };
+			// Update lawyers
+			var options = { "uuid": this.getProjectUuid() };
+			var data = team.map( function( item ) {
+				return item.pk
+			});
 
-			projectResource.patch.array( options, team, 
+			projectResource.team.update( options, data, 
 				function success( response ) {
 					// Return project details
 					deferred.resolve(response);
@@ -93,6 +147,9 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 					deferred.reject( err );
 				}
 			);
+
+			// Update customers
+			
 
 			return deferred.promise;
 		},
@@ -355,7 +412,10 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		},
 
 		"getProjectUuid": function() {
-			return LawPal.project.uuid;
+			if( typeof(LawPal.project)==="function")
+				return LawPal.project().uuid;
+			else
+				return LawPal.project.uuid;
 		},
 
 		/**
@@ -369,10 +429,26 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		"emailSearch": function( str ) {
 			var deferred = $q.defer();
 
+			var options = { "searchFor": str };
+
+			userResource.email.search( options, 
+				function success( data ) {
+					if( data.results ) {
+						deferred.resolve( data.results );
+					} else {
+						deferred.reject( data );
+					}
+				},
+				function error( err ) {
+					deferred.reject( err );
+				}
+			);
+			/*
 			$timeout(function () {
 				var results = lawPalInterface._mockSearch(str);
 				deferred.resolve(results);
 			}, 1500);
+			*/
 
 			return deferred.promise;
 		}
