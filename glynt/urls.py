@@ -17,6 +17,9 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     # Api
+    # v2 rest_framework
+    url(r'^api/v2/', include('glynt.apps.api.v2', namespace='api_v2')),
+    # v1 (tastypie to be depreciated)
     url(r'^api/', include(V1_INTERNAL_API.urls, namespace='api')),
 
     # image upload and crop

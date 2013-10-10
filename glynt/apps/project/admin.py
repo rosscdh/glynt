@@ -33,9 +33,9 @@ class ProjectLawyerInline(admin.TabularInline):
 
 class ProjectAdmin(admin.ModelAdmin):
     inlines = [ProjectLawyerInline]
-    list_display = ('__unicode__', 'date_created', 'date_modified')
+    list_display = ('__unicode__', 'date_created', 'date_modified', 'uuid')
     list_filter = ['status', 'transactions']
-    search_fields = ('company', 'customer', 'lawyers', 'transactions')
+    search_fields = ('company', 'customer', 'lawyers', 'transactions', 'uuid')
     send_matches_confirmation_template = None
 
     def get_queryset(self, request):
