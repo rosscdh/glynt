@@ -25,7 +25,8 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
         user = obj.customer.user
         return {
             'pk': user.pk,
-            'full_name': user.get_full_name(),
+            'username': user.username,
+            'full_name': obj.user_name,
             'photo': user.profile.get_mugshot_url(),
         }
 
@@ -39,6 +40,7 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
         return [{
                     'pk': lawyer.pk,
                     'user_pk': lawyer.user.pk,
+                    'username': lawyer.user.username,
                     'full_name': lawyer.user.get_full_name(),
                     'photo': lawyer.profile_photo,
                     'url': lawyer.get_absolute_url(),
@@ -56,6 +58,7 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
 
 class DiscussionSerializer(serializers.HyperlinkedModelSerializer):
     pk = serializers.Field(source='id')
+    content_type_id = serializers.Field(source='content_type_id')
     user = serializers.SerializerMethodField('get_user')
     timestamp = serializers.SerializerMethodField('get_timestamp')
     comment_info =  serializers.SerializerMethodField('get_comment_tree')
@@ -63,12 +66,13 @@ class DiscussionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ThreadedComment
         queryset = ThreadedComment.objects.prefetch_related('user').all()
-        fields = ('pk', 'title', 'comment', 'user', 'timestamp', 'comment_info')
+        fields = ('pk', 'content_type_id', 'title', 'comment', 'user', 'timestamp', 'comment_info')
 
     def get_user(self, obj):
         user = obj.user
         return {
             'pk': user.pk,
+            'username': user.username,
             'full_name': obj.user_name,
             'photo': user.profile.get_mugshot_url(),
         }
