@@ -24,8 +24,7 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     def get_customer(self, obj):
         user = obj.customer.user
         return {
-            'pk': obj.pk,
-            'user_pk': user.pk,
+            'pk': user.pk,
             'full_name': user.get_full_name(),
             'photo': user.profile.get_mugshot_url(),
         }
