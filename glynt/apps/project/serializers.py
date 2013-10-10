@@ -1,11 +1,15 @@
 # -*- coding: UTF-8 -*-
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
+
 from rest_framework import serializers
 
 from .models import Project
 from threadedcomments.models import ThreadedComment
 
 
-class ProjectSerializer(serializers.HyperlinkedModelSerializer):
+class ProjectSerializer(serializers.ModelSerializer):
     name = serializers.Field(source='__unicode__')
     customer = serializers.SerializerMethodField('get_customer')
     company = serializers.SerializerMethodField('get_company')
@@ -22,70 +26,73 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
                   'status',)
 
     def get_customer(self, obj):
-        user = obj.customer.user
-        return {
-            'pk': user.pk,
-            'username': user.username,
-            'full_name': obj.user_name,
-            'photo': user.profile.get_mugshot_url(),
-        }
+        if obj is not None:
+            user = obj.customer.user
+            return {
+                'pk': user.pk,
+                'full_name': user.get_full_name(),
+                'photo': user.profile.get_mugshot_url(),
+            }
 
     def get_company(self, obj):
-        return {
-            'pk': obj.company.pk,
-            'name': obj.data.get('company_name'),
-        }
+        if obj is not None:
+            return {
+                'pk': obj.company.pk,
+                'name': obj.data.get('company_name'),
+            }
 
     def get_lawyers(self, obj):
-        return [{
-                    'pk': lawyer.pk,
-                    'user_pk': lawyer.user.pk,
-                    'username': lawyer.user.username,
-                    'full_name': lawyer.user.get_full_name(),
-                    'photo': lawyer.profile_photo,
-                    'url': lawyer.get_absolute_url(),
-                } for lawyer in obj.lawyers.all()]
+        if obj is not None:
+            return [{
+                        'pk': lawyer.pk,
+                        'user_pk': lawyer.user.pk,
+                        'full_name': lawyer.user.get_full_name(),
+                        'photo': lawyer.profile_photo,
+                        'url': lawyer.get_absolute_url(),
+                    } for lawyer in obj.lawyers.all()]
 
     def get_transactions(self, obj):
-        return [{'type': t.slug, 'name': t.title} for t in obj.transactions.all()]
+        if obj is not None:
+            return [{'type': t.slug, 'name': t.title} for t in obj.transactions.all()]
 
     def get_status(self, obj):
-        return {
-            'id': obj.status,
-            'name': obj.display_status,
-        }
+        if obj is not None:
+            return {
+                'id': obj.status,
+                'name': obj.display_status,
+            }
 
 
-class DiscussionSerializer(serializers.HyperlinkedModelSerializer):
-    pk = serializers.Field(source='id')
-    content_type_id = serializers.Field(source='content_type_id')
-    user = serializers.SerializerMethodField('get_user')
-    timestamp = serializers.SerializerMethodField('get_timestamp')
-    comment_info =  serializers.SerializerMethodField('get_comment_tree')
+class DiscussionSerializer(serializers.ModelSerializer):
+    site_id = serializers.IntegerField(default=settings.SITE_ID)
+
+    content_type_id = serializers.IntegerField()
+    object_pk = serializers.IntegerField()
+    parent_id = serializers.IntegerField(required=False)
+
+    user = serializers.IntegerField(source='user_id')
+    title = serializers.CharField(required=False)
+    comment = serializers.CharField()
+
+    meta = serializers.SerializerMethodField('get_meta')
 
     class Meta:
         model = ThreadedComment
         queryset = ThreadedComment.objects.prefetch_related('user').all()
-        fields = ('pk', 'content_type_id', 'title', 'comment', 'user', 'timestamp', 'comment_info')
 
-    def get_user(self, obj):
-        user = obj.user
-        return {
-            'pk': user.pk,
-            'username': user.username,
-            'full_name': obj.user_name,
-            'photo': user.profile.get_mugshot_url(),
-        }
+        fields = ('id', 'object_pk', 'title', 'comment', 'user',
+                  'content_type_id', 'parent_id',
+                  'meta', 'site_id')
 
-    def get_timestamp(self, obj):
-        return obj.submit_date.strftime('%s')
-
-    def get_comment_tree(self, obj):
-        return {
-            'is_removed': obj.is_removed,
-            'tree_path': obj.tree_path,
-            'parent_id': obj.parent_id,
-            'last_child': obj.last_child,
-            'is_public': obj.is_public
-        }
-        
+    def get_meta(self, obj):
+        if obj is not None:
+            user = obj.user
+            return {
+                'timestamp': obj.submit_date.strftime('%s'),
+                'user': {
+                            'pk': user.pk,
+                            'username': user.username,
+                            'full_name': user.get_full_name(),
+                            'photo': user.profile.get_mugshot_url()
+                        }
+            }
