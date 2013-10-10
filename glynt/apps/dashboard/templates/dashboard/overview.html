@@ -366,17 +366,14 @@ var LawPal = {
                         <div class="col col-lg-1 photo">
                             <img ng-src="{[{user.photo}]}"/>
                         </div>
-                        <div class="col col-lg-5 details">
+                        <div class="col col-lg-7 details">
                             <h5 class="fn">{[{user.full_name}]}</h5>
                             <h6 class="company"><a href="/profile/{[{user.company.slug}]}">{[{user.company.name}]}</a></h6>
                         </div>
-                        <div class="col col-lg-6 details">
-                            <p class="action" ng-show="user.primary"><i class="icon icon-star"></i> Primary {[{user.role | titleCase}]} Contact</p>
-                            <p class="action" ng-show="!user.primary">
+                        <div class="col col-lg-4 details">
+                            <p class="action pull-right" ng-show="!user.primary">
                                 <a href="javascript:;" ng-click="removeUser(user)" ng-show="!user.is_deleted"><i class="icon icon-remove text-danger"></i> Remove</a>
                                 <a href="javascript:;" ng-click="removeUser(user)" ng-show="user.is_deleted"><i class="icon icon-undo"></i> Undo remove</a>
-                                <span ng-show="!user.is_deleted">|</span>
-                                <a href="javascript:;" ng-click="makePrimary(user)" ng-show="!user.is_deleted"><i class="icon icon-star-empty"></i> Make primary</a>
                             </p>
                         </div>
                     </div>
@@ -395,7 +392,7 @@ var LawPal = {
                                 type="text" 
                                 class="form-control search-query pull-left searching-{[{searchingEmail}]}" 
                                 placeholder="Email address" 
-                                typeahead="item.email for item in searchEmails($viewValue)" 
+                                typeahead="item.username for item in searchEmails($viewValue)" 
                                 typeahead-wait-ms="600"
                                 typeahead-min-length="3"
                                 typeahead-loading="searchingEmail"

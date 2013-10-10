@@ -60,6 +60,14 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			)
 	};
 
+	var userResource = {
+		"profile": $resource( "/api/v1/user/profile/?:searchWhat__:searchType=:searchFor", {},
+				{
+					"search": { "method": "GET", "headers": { "Content-Type": "application/json" } }
+				}
+			)
+	};
+
 	var transformToFormData = function(data){
 		// Convert JSON to form post
         return $.param(data);
@@ -115,6 +123,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 
 			if( project.customer ) {
 				project.customer.role = "client";
+				project.customer.primary = true;
 				users.push( project.customer );
 			}
 
@@ -419,10 +428,26 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		"emailSearch": function( str ) {
 			var deferred = $q.defer();
 
+			var options = { "searchWhat": "email", "searchType": "startswith", "searchFor": str };
+
+			userResource.profile.search( options, 
+				function success( result ) {
+					if( result.objects ) {
+						deferred.resolve( result.objects );
+					} else {
+						deferred.reject( result );
+					}
+				},
+				function error( err ) {
+					deferred.reject( err );
+				}
+			);
+			/*
 			$timeout(function () {
 				var results = lawPalInterface._mockSearch(str);
 				deferred.resolve(results);
 			}, 1500);
+			*/
 
 			return deferred.promise;
 		}
