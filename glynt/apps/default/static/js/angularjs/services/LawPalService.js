@@ -61,7 +61,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 	};
 
 	var userResource = {
-		"profile": $resource( "/api/v1/user/profile/?:searchWhat__:searchType=:searchFor", {},
+		"email": $resource( "/api/v1/user/profile/?email__startswith=:searchFor", {},
 				{
 					"search": { "method": "GET", "headers": { "Content-Type": "application/json" } }
 				}
@@ -428,9 +428,9 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		"emailSearch": function( str ) {
 			var deferred = $q.defer();
 
-			var options = { "searchWhat": "email", "searchType": "startswith", "searchFor": str };
+			var options = { "searchFor": str };
 
-			userResource.profile.search( options, 
+			userResource.email.search( options, 
 				function success( result ) {
 					if( result.objects ) {
 						deferred.resolve( result.objects );
