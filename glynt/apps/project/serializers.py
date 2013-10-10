@@ -68,8 +68,7 @@ class DiscussionSerializer(serializers.HyperlinkedModelSerializer):
     def get_user(self, obj):
         user = obj.user
         return {
-            'pk': obj.pk,
-            'user_pk': user.pk,
+            'pk': user.pk,
             'full_name': obj.user_name,
             'photo': user.profile.get_mugshot_url(),
         }
