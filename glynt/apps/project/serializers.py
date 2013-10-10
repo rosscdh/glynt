@@ -79,7 +79,7 @@ class DiscussionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ThreadedComment
-        queryset = ThreadedComment.objects.prefetch_related('user').all()
+        queryset = ThreadedComment.objects.prefetch_related('user').all().order_by('-id')
 
         fields = ('id', 'object_pk', 'title', 'comment', 'user',
                   'content_type_id', 'parent_id', 'last_child',
