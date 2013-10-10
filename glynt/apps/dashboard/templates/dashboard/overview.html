@@ -164,6 +164,7 @@ var LawPal = {
             return {
                 "name": "Fantastic startup",
                 "uuid": "c0c0160855304e63ae804630d0020d93",
+                "content_type_id": {{ project.content_type_id|default:None|jsonify }},
                 "users": [
                     {
                         "firstName": "Test",
