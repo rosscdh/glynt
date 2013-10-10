@@ -83,13 +83,6 @@
 	</div>
 	<div class="row">	
 		<div class="col col-lg-9 col-offset-1">
-			<hr />
-			<h2><i class="glyphicon glyphicon-user text-success"></i>About {{ object.user.first_name }}</h2>
-			<div class="softer">
-				<p>{{ object.bio|default:"<div class=\"no-data\">No biography yet.</div>"|linebreaksbr }}</p>
-			</div>
-			<hr>
-
 			{% if object.data.companies_advised %}
 			<div class="startups domain-links">
 				<h2><i class="glyphicon glyphicon-signal text-success"></i>Startups Advised</h2>
@@ -101,8 +94,14 @@
 					</ul>
 				{% endfor %}
 			</div>
+			<hr />
 			{% endif %}
+			<h2><i class="glyphicon glyphicon-user text-success"></i>About {{ object.user.first_name }}</h2>
+			<div class="softer">
+				<p>{{ object.bio|default:"<div class=\"no-data\">No biography yet.</div>"|linebreaksbr }}</p>
+			</div>
 			{% if object.data.websites %}
+			<hr>
 			<div class="startups domain-links">
 				<hr />
 				<h2><i class="glyphicon glyphicon-globe text-success"></i>Other Websites</h2>
