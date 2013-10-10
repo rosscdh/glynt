@@ -6,6 +6,7 @@ from threadedcomments.models import ThreadedComment
 
 
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
+    name = serializers.Field(source='__unicode__')
     customer = serializers.SerializerMethodField('get_customer')
     company = serializers.SerializerMethodField('get_company')
     transactions = serializers.SerializerMethodField('get_transactions')
@@ -16,7 +17,7 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Project
         queryset = Project.objects.prefetch_related('customer', 'customer__user', 'company', 'transactions', 'lawyers', 'lawyers__user').all()
-        fields = ('uuid', 'customer', 'company',
+        fields = ('uuid', 'name', 'customer', 'company',
                   'transactions', 'lawyers',
                   'status',)
 
