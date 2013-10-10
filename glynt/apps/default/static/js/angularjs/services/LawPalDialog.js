@@ -207,8 +207,8 @@ var dialogController = function( $scope, $modalInstance, dialogsModel ) {
  * @param  {Object} lawPalService 	List of methods used to acccess the LawPAl API
  * @param  {Object} $q				Promise library
  */
-angular.module('lawpal').controller( 'manageTeamDialogCtrl', [ '$scope', '$modalInstance', 'team', 'lawPalService', '$q',
-	function ($scope, $modalInstance, team, lawPalService, $q) {
+angular.module('lawpal').controller( 'manageTeamDialogCtrl', [ '$scope', '$modalInstance', 'team', 'lawPalService', '$q', 'toaster',
+	function ($scope, $modalInstance, team, lawPalService, $q, toaster) {
 		$scope.revert = [];
 		$scope.emailSearchStr = null;
 		$scope.team = team;
@@ -310,12 +310,14 @@ angular.module('lawpal').controller( 'manageTeamDialogCtrl', [ '$scope', '$modal
 
 			var exisingUser = $scope.team.filter(
 				function( user ) {
-					return (user.username === selectedUser.username);
+					return (user.email === selectedUser.email);
 				}
 			);
 
 			if( selectedUser && exisingUser.length <= 0 )
 				$scope.team.push( selectedUser );
+			else
+				toaster.pop("info", "Team management", selectedUser.full_name + " Has already been added");
 
 			$scope.searchAttrs.selectedEmail = "";
 		};
