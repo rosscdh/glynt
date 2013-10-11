@@ -65,7 +65,14 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 				{
 					"search": { "method": "GET", "headers": { "Content-Type": "application/json" } }
 				}
+			),
+		"username": $resource( "/api/v1/user/profile/?username__in=:searchFor", {},
+				{
+					"search": { "method": "GET", "headers": { "Content-Type": "application/json" } }
+				}
 			)
+
+		// loadFullProfileDetails
 	};
 
 	var transformToFormData = function(data){
@@ -150,9 +157,6 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 					deferred.reject( err );
 				}
 			);
-
-			// Update customers
-			
 
 			return deferred.promise;
 		},
@@ -427,6 +431,48 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		 */
 		"getCurrentUser": function() {
 			return (LawPal.user && LawPal.user.is_authenticated?LawPal.user:null);
+		},
+
+		"usernameSearch": function( users ) {
+			var deferred = $q.defer();
+			var userList = [];
+			var searchList  = "";
+			var retreivedUsers = [];
+
+			if( angular.isArray( users ) ) {
+				userList = users.map( function( user ){
+					return user["username"];
+				});
+
+				searchList = userList.join(",");
+			} else {
+				searchList= users;
+			}
+
+			var options = { "searchFor": searchList }
+
+			userResource.username.search( options, 
+				function success( data ) {
+					if( data.objects || data.results ) {
+						retreivedUsers = data.objects || data.results;
+						for( var i=0; i<retreivedUsers.length; i++ ) {
+							for( var j=0; j<users.length; j++ ) {
+								if(retreivedUsers[i].username===users[j].username) {
+									$.extend( users[j], retreivedUsers[i] );
+								}
+							}
+						}
+						deferred.resolve( data.objects );
+					} else {
+						deferred.reject( data );
+					}
+				},
+				function error( err ) {
+					deferred.reject( err );
+				}
+			);
+
+			return deferred.promise;
 		},
 
 		"emailSearch": function( str ) {

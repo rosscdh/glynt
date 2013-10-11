@@ -20,7 +20,14 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 		function success( project ) {
 			$scope.data.project = project;
 			$scope.data.users = project.users;
-			console.log( "users", $scope.data.users );
+			lawPalService.usernameSearch( $scope.data.users ).then(
+				function success( results ) {
+					console.log( "full users", $scope.data.users );
+				},
+				function error( err ) {
+
+				}
+			);
 		},
 		function error( err ) {
 			toaster.pop( "warning", "Load error", "Unable to load project details" );
