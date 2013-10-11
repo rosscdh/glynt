@@ -8,7 +8,6 @@ from glynt.apps.transact.bunches import IncorporationBunch, SeedFundingEquityRou
 from collections import OrderedDict
 from model_mommy import mommy
 
-import factory
 from django.utils import unittest
 
 
