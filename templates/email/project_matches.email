@@ -34,7 +34,7 @@
                         </td>
                         <td class="list-cell small-width to-hide" width="20" style="background: {% cycle '#f8f9f9' '#fff' %}; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">&nbsp;</td>
                         <td class="list-cell to-hide" valign="middle" width="100" style="background: {% cycle '#f8f9f9' '#fff' %}; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">
-                            <a href="{% current_site_domain %}{{ lawyer.get_absolute_url }}" target="_blank" style="background-color: #5bc0de; border-color: #5bc0de; border-style: solid; border-width: 7px 24px; color: #ffffff; display: inline-block; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 12px; font-weight: normal; margin: 4px 0; text-decoration: none; white-space: nowrap;">View profile</a>
+                            <a href="{% current_site_domain %}{{ url }}" target="_blank" style="background-color: #5bc0de; border-color: #5bc0de; border-style: solid; border-width: 7px 24px; color: #ffffff; display: inline-block; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 12px; font-weight: normal; margin: 4px 0; text-decoration: none; white-space: nowrap;">View profile</a>
                         </td>
                         <td class="list-cell small-width to-hide" width="20" style="background: {% cycle '#f8f9f9' '#fff' %}; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">&nbsp;</td>
                     </tr>
