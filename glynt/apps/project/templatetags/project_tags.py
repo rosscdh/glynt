@@ -29,32 +29,6 @@ def project_activity_stream(project, limit=10):
     }
 
 
-@register.inclusion_tag('project/partials/project_lawyers.html')
-def project_lawyers(project, display_type='default'):
-    context = {}
-
-    if display_type == 'assigned':
-        lawyer_join = ProjectLawyer.objects.assigned(project=project).prefetch_related('project', 'lawyer')
-
-    elif display_type == 'potential':
-        lawyer_join = ProjectLawyer.objects.potential(project=project).prefetch_related('project', 'lawyer')
-
-    else:
-        lawyer_join = ProjectLawyer.objects.filter(project=project)
-
-    num_lawyers = len(lawyer_join)
-
-    context.update({
-        'project': project,
-        'lawyer_join': lawyer_join,
-        #'lawyers': [j.lawyer for j in lawyer_join],
-        'num_lawyers': num_lawyers,
-        'display_type': display_type,
-        'PROJECT_LAWYER_STATUS': PROJECT_LAWYER_STATUS
-    })
-    return context
-
-
 def project_dict(context, user=None):
     projects = []
     user = context.get('user', user)
