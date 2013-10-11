@@ -1,7 +1,7 @@
 {% extends 'email/base.email' %}
 {% load glynt_helpers %}
 
-{% block subject_line %}You have new matches{% endblock %}
+{% block subject_line %}Choose an attorney{% endblock %}
 
 {% block content %}
     <tr>
