@@ -19,7 +19,7 @@ import httpretty
 @httpretty.activate
 def glynt_mock_http_requests(view_func):
     """
-    A generic decorator to be called on all methods that do somethign with 
+    A generic decorator to be called on all methods that do somethign with
     external apis
     """
     #
@@ -111,6 +111,8 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
         customer_profile.save()
 
         self.customer = mommy.make('customer.Customer', user=self.customer_user)
+        self.customer.data['company_name'] = self.company.name
+        self.customer.save()
 
         self.lawyer_user = mommy.make('auth.User', username='lawyer', first_name='Lawyer', last_name='A', email='lawyer+test@lawpal.com')
         self.lawyer_user.set_password(self.password)
