@@ -111,9 +111,9 @@ class TeamSerializer(serializers.Serializer):
 
             # append potential lawyers as they are not naturally provided
             # by project.notification_recipients
-            potential_lawyers = ProjectLawyer.objects.potential(project=obj)
-            if potential_lawyers:
-                participants += [join.lawyer.user for join in potential_lawyers]
+            # potential_lawyers = ProjectLawyer.objects.potential(project=obj)
+            # if potential_lawyers:
+            #     participants += [join.lawyer.user for join in potential_lawyers]
 
             for u in participants:
                 yield UserSerializer(u).data
