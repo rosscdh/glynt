@@ -207,8 +207,8 @@ var dialogController = function( $scope, $modalInstance, dialogsModel ) {
  * @param  {Object} lawPalService 	List of methods used to acccess the LawPAl API
  * @param  {Object} $q				Promise library
  */
-angular.module('lawpal').controller( 'manageTeamDialogCtrl', [ '$scope', '$modalInstance', 'team', 'lawPalService', '$q',
-	function ($scope, $modalInstance, team, lawPalService, $q) {
+angular.module('lawpal').controller( 'manageTeamDialogCtrl', [ '$scope', '$modalInstance', 'team', 'lawPalService', '$q', 'toaster',
+	function ($scope, $modalInstance, team, lawPalService, $q, toaster) {
 		$scope.revert = [];
 		$scope.emailSearchStr = null;
 		$scope.team = team;
@@ -234,6 +234,7 @@ angular.module('lawpal').controller( 'manageTeamDialogCtrl', [ '$scope', '$modal
 		 * Set the selected user at the primary contact for this user type, also unsets primary on all other users of the same type
 		 * @param  {Object} user JSON object containing the user details
 		 */
+		/*
 		$scope.makePrimary = function( user ) {
 			var users = $scope.team;
 			var role = user.role;
@@ -247,6 +248,7 @@ angular.module('lawpal').controller( 'manageTeamDialogCtrl', [ '$scope', '$modal
 
 			user.primary = true;
 		};
+		*/
 
 		/**
 		 * Determine removed DOM class
@@ -297,11 +299,25 @@ angular.module('lawpal').controller( 'manageTeamDialogCtrl', [ '$scope', '$modal
 		$scope.addToProject = function( selectedEmail, results ) {
 			var selectedUser = results.filter(
 				function(item){
-					return item.email === selectedEmail;
+					return (item.email === selectedEmail) || (item.username === selectedEmail);
 				})[0] || null;
 
-			if( selectedUser )
+			if( selectedUser.profile_photo )
+				selectedUser.photo = selectedUser.profile_photo;
+
+			if( selectedUser.name )
+				selectedUser.full_name = selectedUser.name;
+
+			var exisingUser = $scope.team.filter(
+				function( user ) {
+					return (user.email === selectedUser.email);
+				}
+			);
+
+			if( selectedUser && exisingUser.length <= 0 )
 				$scope.team.push( selectedUser );
+			else
+				toaster.pop("info", "Team management", selectedUser.full_name + " Has already been added");
 
 			$scope.searchAttrs.selectedEmail = "";
 		};

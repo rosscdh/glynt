@@ -7,8 +7,10 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 	function( $scope, lawPalService, lawPalUrls, $location, $anchorScroll, angularPusher, toaster, $modal ) {
 
 	// Load project details
-	$scope.project = {
-		"checklist": {}
+	$scope.data = {
+		"project": {},
+		"checklist": {},
+		"users": []
 	};
 
 	/**
@@ -16,8 +18,9 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 	 */
 	lawPalService.currentProject().then(
 		function success( project ) {
-			$scope.project = project;
-			$scope.project.users = $scope.project.users || [];
+			$scope.data.project = project;
+			$scope.data.users = project.users;
+			console.log( "users", $scope.data.users );
 		},
 		function error( err ) {
 			toaster.pop( "warning", "Load error", "Unable to load project details" );
@@ -50,7 +53,7 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 			"controller": 'manageTeamDialogCtrl',
 			"resolve": {
 				"team": function () {
-					return $scope.project.users;
+					return $scope.data.users;
 				}
 			}
 		});
