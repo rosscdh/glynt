@@ -47,13 +47,13 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 	};
 
 	var projectResource = {
-		"details": $resource("/api/v2/project/:uuid//", {}, 
+		"details": $resource("/api/v2/project/:uuid/?format=json", {}, /* use ?format=json to avoid trailing slash issues*/
 				{ 
 					"get": { "method": "GET", "headers": { "Content-Type": "application/json" } },
 					"patch": { "method": "PATCH", "headers": { "Content-Type": "application/json" } } 
 				}
 			),
-		"team": $resource("/api/v2/project/:uuid/team//", {}, 
+		"team": $resource("/api/v2/project/:uuid/team/?format=json", {}, 
 				{ 
 					"update": { "method": "PATCH", "headers": { "Content-Type": "application/json" }, "isArray": true },
 					"get": { "method": "GET", "headers": { "Content-Type": "application/json" } }
@@ -174,7 +174,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 				"role": "account manager",
 				"position": "Co-Founder",
 				"company": "LawPal",
-				"summary": "I'm an entrepreneurial lawyer who helps small businesses and solopreneurs develop \"legal strategies\" to protect and grow their businesses.",
+				"summary": null,
 				"pk": null,
 				"is_deleted": false
 			};
