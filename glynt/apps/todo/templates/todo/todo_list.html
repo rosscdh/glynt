@@ -107,6 +107,7 @@
        },
         "user": {
             'pk': {{ user.pk|default:'null'|jsonify }},
+            'email': {{ user.email|default:'null'|jsonify }},
             'username': '{{ user.username }}',
             'full_name': '{{ user.get_full_name }}',
             'is_authenticated': {{ user.is_authenticated|jsonify }},
