@@ -12,7 +12,7 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 		"project": {},
 		"users": [],
 		"discussions": {},
-		"discussionCategories": [ "issue", "discussion" ]
+		"discussionCategories": [ /*"issue", */"discussion" ]
 	};
 
 	/**
@@ -49,6 +49,7 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 	$scope.loadDiscussions = function() {
 		lawPalService.discussionList().then(
 			function success( results ) {
+				debugger;
 				$scope.data.discussions = results;
 			},
 			function error( err ) {

@@ -116,16 +116,16 @@
                                     <th><h4>Last response by</h4></th>
                                     <th><h4>Actions</h4></th>
                                 </tr>
-                                <tr ng-repeat="discussion in data.discussions | openStatus:2 | filter: { tags: tag }">
+                                <tr ng-repeat="discussion in data.discussions | orderBy:discussion.meta.timestamp:reverse"><!--  | openStatus:2 | filter: { tags: tag } //-->
                                     <td class="status-column" tooltip="{[{ discussion.status | discussionIconStatus | titleCase }]}" tooltip-append-to-body="true">
                                         <i class="icon icon-state-{[{ discussion.status | discussionIconStatus }]}"></i>
                                     </td>
-                                    <td ng-bind="discussion.subject" class="subject-column"></td>
+                                    <td ng-bind="discussion.title" class="subject-column"></td>
                                     <td class="vcard vcard-column">
-                                        <div class="fn" user-mini-widget user="discussion.mostRecentResponse.user"></div>
+                                        <div class="fn" user-mini-widget user="discussion.meta.user"></div>
                                         <div class="time text-muted">
                                             <i class="icon icon-time"></i>
-                                            <small ng-bind="discussion.timeStamp | timeAgo"></small>
+                                            <small ng-bind="discussion.meta.timestamp | timeAgo"></small>
                                         </div>
                                     </td>
                                     <td nowrap class="actions-column">

@@ -82,6 +82,10 @@ lawPalApp.filter('timeAgo', function () {
   var day = hour * 24;
   return function ( timeStamp ) {
   	var now = new Date().getTime(),diff;
+  	timeStamp = parseInt(timeStamp);
+  	if( timeStamp < now/1000 ) {
+  		timeStamp = timeStamp * 1000;
+  	}
 
   	if( timeStamp ) {
   		if( now - timeStamp < minute ) {

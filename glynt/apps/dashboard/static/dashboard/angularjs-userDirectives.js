@@ -7,10 +7,9 @@ angular.module('lawpal').directive('userMiniWidget', function () {
   	"restrict": "A",
   	"template": 
   		'<div class="vcard user-mini-profile"><img class="user-photo photo" ng-src="{[{user.photo}]}" class="photo">'+
-  		'<h5 class="fn">'+
-        '<span class="user-firstname" ng-bind="user.firstName"></span> '+
-        '<span class="user-lastname" ng-bind="user.lastName"></span>'+
-      '</h5><a ng-show="!hasContact()" class="icon icon-envelope clickable" tooltip="Contact {[{ user.firstName | titleCase }]}" tooltip-append-to-body="true" ng-click="contactUser()" href="javascript:;"></a></div>',
+  		'<h5 class="fn" ng-bind="user.full_name"></h5>'+
+      '</div>',
+      /*'<a ng-show="!hasContact()" class="icon icon-envelope clickable" tooltip="Contact {[{ user.firstName | titleCase }]}" tooltip-append-to-body="true" ng-click="contactUser()" href="javascript:;"></a>*/
   	"scope": {
   		"user": "=user"
   	},
