@@ -8171,6 +8171,10 @@ li.ui-sortable-helper a {
   border-top-left-radius: 0;
 }
 
+.widget .btn-link:hover {
+  text-decoration: none;
+}
+
 .overview {
   height: 310px;
 }
