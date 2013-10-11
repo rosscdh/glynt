@@ -192,7 +192,7 @@ var LawPal = {
                             <img ng-src="{[{user.photo}]}"/>
                         </div>
                         <div class="col col-lg-7 details">
-                            <h5 class="fn">{[{user.full_name}]}</h5>
+                            <h5 class="fn">{[{user.full_name}]}<span ng-show="user.is_authenticated"> (you)</span></h5>
                             <h6 class="company"><a href="/profile/{[{user.company.slug}]}">{[{user.company.name}]}</a></h6>
                         </div>
                         <div class="col col-lg-4 details">
