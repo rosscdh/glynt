@@ -5,13 +5,14 @@ from django.shortcuts import get_object_or_404
 
 from bunch import Bunch
 
+from glynt.apps.rulez import RulezMixin
 from glynt.apps.project.models import Project
 from glynt.apps.project.bunches import ProjectIntakeFormIsCompleteBunch
 from glynt.apps.project import PROJECT_LAWYER_STATUS
 from glynt.apps.todo.views import ToDoCountMixin
 
 
-class DashboardView(ToDoCountMixin, TemplateView):
+class DashboardView(RulezMixin, ToDoCountMixin, TemplateView):
     """
     @TODO clean this mess up
     This view is used by both the customer and the lawyer (eek)
@@ -111,5 +112,7 @@ class DashboardView(ToDoCountMixin, TemplateView):
             'PROJECT_LAWYER_STATUS': PROJECT_LAWYER_STATUS,
             'projects': self.request.projects,
         })
+
+        self.can_read(project, user=self.request.user)
 
         return kwargs
