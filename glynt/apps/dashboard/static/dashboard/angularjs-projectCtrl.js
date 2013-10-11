@@ -7,9 +7,9 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 	function( $scope, lawPalService, lawPalUrls, $location, $anchorScroll, angularPusher, toaster, $modal ) {
 
 	// Load project details
-	$scope.project = {};
 	$scope.data = {
 		"project": {},
+		"checklist": {},
 		"users": []
 	};
 

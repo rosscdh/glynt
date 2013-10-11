@@ -134,7 +134,10 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			var deferred = $q.defer();
 			// Update lawyers
 			var options = { "uuid": this.getProjectUuid() };
-			var data = team.map( function( item ) {
+			var updatedTeam = team.filter( function( user ){
+				return user.is_deleted !== true;
+			});
+			var data = updatedTeam.map( function( item ) {
 				return item.pk
 			});
 

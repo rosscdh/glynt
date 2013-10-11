@@ -8583,7 +8583,10 @@ section.checklist-category {
   padding: 10px 0;
 }
 
+/* Generic profile display styles */
+
 .vcard {
+  position: relative;
   margin-bottom: 10px;
 }
 
@@ -8607,31 +8610,96 @@ section.checklist-category {
   opacity: 0.5;
 }
 
-/* Progress bars */
+.vcard a.icon-envelope {
+  position: absolute;
+  top: 1em;
+  left: 1em;
+  color: #FFF;
+  opacity: 0.5;
+}
 
-.progress .bar {
+.vcard:hover a.icon-envelope {
+  opacity: 0.75;
+}
+
+/* User profile (mini) */
+
+.user-mini-profile img.photo {
   float: left;
-  height: 100%;
+  max-width: 28px;
+  max-height: 28px;
+  margin-right: 10px;
 }
 
-.progress .bar.bar-info {
-  background-color: #5bc0de;
+.user-mini-profile h3.fn,
+.user-mini-profile h5.fn {
+  display: block;
+  float: left;
 }
 
-.progress .bar.bar-warning {
-  background-color: #f0ad4e;
+/* dashboard discussion/issues list */
+
+.widget.discussion h3,
+.widget.issue h3 {
+  margin-bottom: 0;
+  border-bottom: 0;
 }
 
-.progress .bar.bar-danger {
-  background-color: #d9534f;
+.widget.discussion td.actions-column button,
+.widget.issue td.actions-column button {
+  width: 90px;
 }
 
-.progress .bar.bar-success {
-  background-color: #6bdb7e;
+.issue-list td.status-column {
+  width: 44px;
+  color: #FFF;
+  text-align: center;
+  background-color: #f0ad4e !important;
 }
 
-h5.text-info {
-  color: #5bc0de;
+.issue-list td.column-subject {
+  width: 25%;
+}
+
+.issue-list td.vcard-column {
+  width: 30%;
+}
+
+.issue-list td.actions-column {
+  width: 200px;
+}
+
+.discussion-list td.status-column {
+  width: 44px;
+  color: #FFF;
+  text-align: center;
+  background-color: #5bc0de !important;
+}
+
+.discussion-list td.column-subject {
+  width: 30%;
+}
+
+.discussion-list td.vcard-column {
+  width: 35%;
+}
+
+.discussion-list td.actions-column {
+  width: 100px;
+}
+
+td.vcard-column {
+  white-space: nowrap;
+}
+
+td.vcard-column .vcard {
+  margin: 0;
+}
+
+td.vcard-column .time {
+  padding-left: 37px;
+  clear: both;
+  white-space: nowrap;
 }
 
 .navbar {
