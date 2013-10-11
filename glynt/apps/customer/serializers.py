@@ -1,7 +1,8 @@
 # -*- coding: UTF-8 -*-
-
 from django.contrib.auth.models import User
 from rest_framework import serializers
+
+from .models import Customer
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -16,3 +17,8 @@ class UserSerializer(serializers.ModelSerializer):
 
         fields = ('id', 'username', 'email', 'last_name', 'full_name',
             'first_name', 'photo', 'is_lawyer', 'is_customer')
+
+
+class CustomerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Customer
