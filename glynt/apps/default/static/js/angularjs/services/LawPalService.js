@@ -163,6 +163,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 				if( user.id ) user.pk = user.id;
 
 				if( user.username == data.project.customer.username ) user.primary = true;
+				if( data.project.lawyers[0] && user.username == data.project.lawyers[0].username ) user.primary = true;
 			}
 
 			// Add Yael Citro
