@@ -625,7 +625,9 @@ section.checklist-category {
   margin-top: -50px;
 }
 
-
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
 
 .project-block {
   width: 200px;
@@ -660,8 +662,34 @@ section.checklist-category {
   margin-bottom: 10px;
   .fn { margin-top:0; padding-top: 0; margin-bottom: 0.25em; }
   .photo, .company { padding:0; margin: 0; }
+  .photo { max-width: 72px; max-height: 72px; }
   .action { font-size: 0.9em;}
   &.remove {
     opacity: 0.5;
   }
+  &.role-customer {
+    h2, h3,h4,h5 { color: @brand-primary }
+  }
+  &.role-lawyer, &.role-account-manager {
+    h2, h3,h4,h5 { color: @brand-primary-alt; }
+  }
+}
+
+button.vcard {
+  margin-top: 0; margin-bottom: 5px; margin-top: 5px; padding: 0 10px 0 0;
+}
+
+.project-team .vcard {
+  .vcard-wrapper {
+    border: 1px solid #eee;
+  }
+  h5, h3 {
+    margin: 0; 
+    padding: 10px 10px 3px 0;
+    border-bottom: 0;
+  }
+}
+
+.widget-title-button {
+  margin: 0.7em 0 0 0;
 }
