@@ -88,6 +88,9 @@ class TeamListView(RetrieveUpdateAPIView):
         self.save_customer()
         self.save_participants()
 
+        # Save the changes made to the participants and lawyers
+        self.project.save()
+
     def save_lawyers(self):
         if len(self.lawyers) > 0:
             project = self.project
