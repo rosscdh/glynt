@@ -61,7 +61,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 	};
 
 	var userResource = {
-		"email": $resource( "/api/v1/user/profile/?email__startswith=:searchFor", {},
+		"email": $resource( "/api/v2/user/?email=:searchFor", {},
 				{
 					"search": { "method": "GET", "headers": { "Content-Type": "application/json" } }
 				}
@@ -142,11 +142,15 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		"updateProjectTeam": function( team ) {
 			var deferred = $q.defer();
 			// Update lawyers
-			var options = { "id": this.getProjectUuid() };
+			var options = { "uuid": this.getProjectUuid() };
+			var updatedTeam = team.filter( function( user ){
+				return user.is_deleted !== true;
+			});
+			var data = updatedTeam.map( function( item ) {
+				return item.pk
+			});
 
-			debugger;
-
-			projectResource.team.update( options, team, 
+			projectResource.team.update( options, data, 
 				function success( response ) {
 					// Return project details
 					deferred.resolve(response);
@@ -447,11 +451,11 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			var options = { "searchFor": str };
 
 			userResource.email.search( options, 
-				function success( result ) {
-					if( result.objects ) {
-						deferred.resolve( result.objects );
+				function success( data ) {
+					if( data.results ) {
+						deferred.resolve( data.results );
 					} else {
-						deferred.reject( result );
+						deferred.reject( data );
 					}
 				},
 				function error( err ) {

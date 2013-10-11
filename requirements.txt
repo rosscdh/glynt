@@ -30,7 +30,9 @@ django-templated-email
 # tastypie is being depreciated for rest framework
 django-tastypie>=0.9.15
 djangorestframework
-django-filter
+-e git+https://github.com/alex/django-filter.git#egg=django-filter
+django-taggit
+
 
 django-crispy-forms
 django-pagination
@@ -73,7 +75,7 @@ markup
 Markdown
 pyyaml
 
-
+# text editing and markup/down
 -e git+https://github.com/rosscdh/pybars.git#egg=pybars
 -e git+https://github.com/rosscdh/django-templatetag-handlebars.git#egg=django-templatetag-handlebars
 -e git+https://github.com/klen/django_markdown.git#egg=django_markdown
@@ -103,7 +105,6 @@ Werkzeug
 -e git+https://github.com/django-debug-toolbar/django-debug-toolbar.git#egg=django-debug-toolbar
 -e git+https://github.com/playfire/django-debug-toolbar-user-panel.git#egg=django-debug-toolbar-user-panel
 -e git+https://github.com/orf/django-debug-toolbar-template-timings.git#egg=django-debug-toolbar-template-timings
-
 django-clear-cache
 
 # Testing

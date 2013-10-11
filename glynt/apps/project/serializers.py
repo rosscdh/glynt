@@ -5,15 +5,23 @@ from django.contrib.contenttypes.models import ContentType
 
 from rest_framework import serializers
 
-from .models import Project
+from .models import Project, ProjectLawyer
 from threadedcomments.models import ThreadedComment
 
+from glynt.apps.customer.serializers import UserSerializer
+
 import re
+import itertools
 
 UUID4HEX_LONG = re.compile('[0-9a-f]{32}\Z', re.I)
 UUID4HEX_SHORT = re.compile('[0-9a-f]{11}\Z', re.I)
 
+
 class GetContentObjectByTypeAndPkMixin(object):
+    """
+    Mixin to allow searching for ContentType objects
+    by pk or by uuid
+    """
     def is_uuid(self, value):
         if type(value) in [unicode, str]:
             if UUID4HEX_LONG.match(value) or UUID4HEX_SHORT.match(value):
@@ -21,9 +29,13 @@ class GetContentObjectByTypeAndPkMixin(object):
                 return True
         return False
 
+    def get_content_type_obj(self, content_type_id):
+        return ContentType.objects.get(pk=content_type_id)
+
     def get_object_by_key(self, content_type_id, key):
         # get the type of object
-        content_type = ContentType.objects.get(pk=content_type_id)
+        content_type = self.get_content_type_obj(content_type_id=content_type_id)
+
         # get the specific object being referenced
         if self.is_uuid(value=key):
             return content_type.get_object_for_this_type(uuid=key)
@@ -83,6 +95,28 @@ class ProjectSerializer(serializers.ModelSerializer):
                 'id': obj.status,
                 'name': obj.display_status,
             }
+
+
+class TeamSerializer(serializers.Serializer):
+    """
+    Compile a set of user objects that make up a Projects team
+    customer, lawyers, parties
+    """
+    team = serializers.SerializerMethodField('get_team')
+
+    def get_team(self, obj):
+        if obj is not None:
+
+            participants = list(obj.notification_recipients())  # returns itertools chain
+
+            # append potential lawyers as they are not naturally provided
+            # by project.notification_recipients
+            potential_lawyers = ProjectLawyer.objects.potential(project=obj)
+            if potential_lawyers:
+                participants += [join.lawyer.user for join in potential_lawyers]
+
+            for u in participants:
+                yield UserSerializer(u).data
 
 
 class DiscussionSerializer(GetContentObjectByTypeAndPkMixin, serializers.ModelSerializer):

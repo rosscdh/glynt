@@ -3,7 +3,10 @@ from django.conf.urls import patterns, url
 from rest_framework import routers
 
 # import the Endpoints & ViewSets
-from glynt.apps.project.api_v2 import (ProjectViewSet, DiscussionListView, DiscussionDetailView, )
+from glynt.apps.customer.api_v2 import (UserViewSet,)
+
+from glynt.apps.project.api_v2 import (ProjectViewSet, DiscussionListView,
+                                       TeamListView, DiscussionDetailView, )
 
 
 # Setup routers
@@ -12,9 +15,12 @@ router = routers.DefaultRouter()
 
 # setup Custom urls
 urlpatterns = patterns('',
+    url(r'^project/(?P<uuid>.+)/team/$',
+                                              TeamListView.as_view(),
+                                              name='project_team'),
     url(r'^project/(?P<uuid>.+)/discussion/$',
                                               DiscussionListView.as_view(),
-                                              name='project_discussion_list'),
+                                              name='project_discussion'),
     url(r'^project/(?P<uuid>.+)/discussion/(?P<pk>.+)/$',
                                               DiscussionDetailView.as_view(),
                                               name='project_discussion_detail'),
@@ -23,6 +29,7 @@ urlpatterns = patterns('',
 
 # register Viewsets with router
 router.register(r'project', ProjectViewSet)
+router.register(r'user', UserViewSet)
 
 
 # Main urlpatterns used by django

@@ -26,6 +26,7 @@ class Project(ProjectCategoriesMixin, models.Model):
     company = models.ForeignKey('company.Company')
     transactions = models.ManyToManyField('transact.Transaction')
     lawyers = models.ManyToManyField('lawyer.Lawyer', blank=True, through='project.ProjectLawyer')
+    participants = models.ManyToManyField('auth.User', blank=True)
     data = JSONField(default={})
     status = models.IntegerField(choices=PROJECT_STATUS.get_choices(), default=PROJECT_STATUS.new, db_index=True)
     date_created = CreationDateTimeField()
@@ -85,11 +86,7 @@ class Project(ProjectCategoriesMixin, models.Model):
         provide access to the customer, the lawyer
         ### not yet ### as well as any user associated with the customers company ## end not yet ##
         """
-        customer_user = self.customer.user
-        return itertools.chain( [customer_user],
-                                [l.lawyer.user for l in ProjectLawyer.objects.assigned(project=self)],
-                                #[u for u in self.company.customers.exclude(pk=customer_user.pk)]
-                              )
+        return self.participants.all()
 
     @property
     def has_lawyer(self):
