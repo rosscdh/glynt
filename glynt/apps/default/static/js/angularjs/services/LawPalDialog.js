@@ -231,26 +231,6 @@ angular.module('lawpal').controller( 'manageTeamDialogCtrl', [ '$scope', '$modal
 		};
 
 		/**
-		 * Set the selected user at the primary contact for this user type, also unsets primary on all other users of the same type
-		 * @param  {Object} user JSON object containing the user details
-		 */
-		/*
-		$scope.makePrimary = function( user ) {
-			var users = $scope.team;
-			var role = user.role;
-
-			for(var i=0;i<team.length;i++) {
-				if( team[i].role === role ) {
-					team[i].primary = false;
-					team[i].is_deleted = false;
-				}
-			}
-
-			user.primary = true;
-		};
-		*/
-
-		/**
 		 * Determine removed DOM class
 		 * @param  {Object}  user [description]
 		 * @return {String}      remove or ""
@@ -349,6 +329,28 @@ angular.module('lawpal').controller( 'manageTeamDialogCtrl', [ '$scope', '$modal
 				}
 			}
 
+			$modalInstance.dismiss('cancel');
+		};
+	}]
+);
+
+/**
+ * Manageteam dialog controller
+ * @param  {Object} $scope         	Modal $scope
+ * @param  {Object} $modalInstance 	Modal object instance, allow it to close itself etc
+ * @param  {Array} team           	List of team users
+ * @param  {Object} lawPalService 	List of methods used to acccess the LawPAl API
+ * @param  {Object} $q				Promise library
+ */
+angular.module('lawpal').controller( 'profileDialogCtrl', [ '$scope', '$modalInstance', 'user', 'lawPalService', '$q', 'toaster',
+	function ($scope, $modalInstance, user, lawPalService, $q, toaster) {
+		$scope.user = user;
+
+		$scope.ok = function () {
+			$modalInstance.close($scope.user);
+		};
+
+		$scope.cancel = function () {
 			$modalInstance.dismiss('cancel');
 		};
 	}]

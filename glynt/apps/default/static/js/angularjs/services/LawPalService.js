@@ -127,6 +127,19 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 				users.push( project.customer );
 			}
 
+			// Add Yael Citro
+			var accountManager = {
+				"full_name": "Yael Citro",
+				"email": "xw4ux8lx@incoming.intercom.io",
+				"photo": "/static/img/yael-contact-face.jpg",
+				"role": "account manager",
+				"title": "Co-Founder",
+				"company": "LawPal",
+				"pk": 0
+			};
+
+			users.push( accountManager );
+
 			return users;
 		},
 

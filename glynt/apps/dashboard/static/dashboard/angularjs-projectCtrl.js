@@ -28,9 +28,8 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 	);
 
 	$scope.contactUser = function( user ) {
-		if( user && user.email ) {
-			window.location.href = "mailto://" + user.email, "email_window";
-		}
+			//window.location.href = "mailto://" + user.email, "email_window";
+			$scope.openProfileDialog( user );
 	};
 
 	/**
@@ -69,6 +68,28 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 				$scope.updateTeam( updatedTeam );
 			}, function cancel() {
 				console.info('Modal dismissed at: ' + new Date());
+			}
+		);
+	};
+
+	$scope.openProfileDialog = function( user ) {
+		// profileDialogCtrl
+		var modalInstance = $modal.open({
+			"windowClass": "modal modal-show",
+			"templateUrl": 'profileDialog.html',
+			"controller": 'profileDialogCtrl',
+			"resolve": {
+				"user": function () {
+					return user;
+				}
+			}
+		});
+
+		modalInstance.result.then(
+			function ok( updatedTeam ) {
+				
+			}, function cancel() {
+				
 			}
 		);
 	};
