@@ -13,6 +13,11 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 		"users": []
 	};
 
+	$scope.loading = {
+		"project": true,
+		"users": true
+	};
+
 	/**
 	 * Load current project
 	 */
@@ -20,12 +25,13 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 		function success( project ) {
 			$scope.data.project = project;
 			$scope.data.users = project.users;
+			$scope.loading.project = false;
 			lawPalService.usernameSearch( $scope.data.users ).then(
 				function success( results ) {
-					console.log( "full users", $scope.data.users );
+					$scope.loading.users = false;
 				},
 				function error( err ) {
-
+					$scope.loading.users = false;
 				}
 			);
 		},

@@ -47,13 +47,13 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 	};
 
 	var projectResource = {
-		"details": $resource("/api/v2/project/:uuid\/", {}, 
+		"details": $resource("/api/v2/project/:uuid//", {}, 
 				{ 
 					"get": { "method": "GET", "headers": { "Content-Type": "application/json" } },
 					"patch": { "method": "PATCH", "headers": { "Content-Type": "application/json" } } 
 				}
 			),
-		"team": $resource("/api/v2/project/:uuid/team/", {}, 
+		"team": $resource("/api/v2/project/:uuid/team//", {}, 
 				{ 
 					"update": { "method": "PATCH", "headers": { "Content-Type": "application/json" }, "isArray": true },
 					"get": { "method": "GET", "headers": { "Content-Type": "application/json" } }

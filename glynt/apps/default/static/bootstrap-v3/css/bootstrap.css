@@ -8171,6 +8171,10 @@ li.ui-sortable-helper a {
   border-top-left-radius: 0;
 }
 
+.widget .btn-link:hover {
+  text-decoration: none;
+}
+
 .overview {
   height: 310px;
 }
@@ -8549,6 +8553,15 @@ table.lawyer-list.active {
 section.checklist-category {
   padding-top: 50px;
   margin-top: -50px;
+}
+
+[ng\:cloak],
+[ng-cloak],
+[data-ng-cloak],
+[x-ng-cloak],
+.ng-cloak,
+.x-ng-cloak {
+  display: none !important;
 }
 
 .project-block {
