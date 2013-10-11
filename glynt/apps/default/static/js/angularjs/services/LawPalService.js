@@ -113,6 +113,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		"mergedProjectTeam": function( project ) {
 			//
 			var users = [];
+			var currentUser = this.getCurrentUser();
 			if( angular.isArray( project.lawyers ) ) {
 				users = project.lawyers.map( function(item) {
 					return Object.merge( item, {
@@ -131,14 +132,28 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			var accountManager = {
 				"full_name": "Yael Citro",
 				"email": "xw4ux8lx@incoming.intercom.io",
+				"phone": "781-676-1900",
 				"photo": "/static/img/yael-contact-face.jpg",
 				"role": "account manager",
-				"title": "Co-Founder",
+				"position": "Co-Founder",
 				"company": "LawPal",
+				"practice_locations": [
+					"Boulder, CO",
+					"Cambridge, MA"
+					],
+				"summary": "I'm an entrepreneurial lawyer who helps small businesses and solopreneurs develop \"legal strategies\" to protect and grow their businesses.",
 				"pk": 0
 			};
 
 			users.push( accountManager );
+
+			for (var i=0;i<users.length;i++) {
+				if( users[i].full_name == currentUser.full_name ) {
+					users[i].is_authenticated = true;
+				}
+				if(!users[i].is_deleted)
+					users[i].is_deleted = false;
+			}
 
 			return users;
 		},

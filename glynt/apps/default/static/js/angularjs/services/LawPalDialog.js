@@ -222,6 +222,12 @@ angular.module('lawpal').controller( 'manageTeamDialogCtrl', [ '$scope', '$modal
 
 		angular.copy( team, $scope.revert );
 
+		$scope.canRemove = function( user ) {
+			if(!user.role)
+				user.role = "";
+			return !user.is_authenticated && ( user.role!=="account manager") && !user.primary;
+		};
+
 		/**
 		 * Set user as deleted
 		 * @param  {Object} user JSON object containing the user details
@@ -287,6 +293,8 @@ angular.module('lawpal').controller( 'manageTeamDialogCtrl', [ '$scope', '$modal
 
 			if( selectedUser.name )
 				selectedUser.full_name = selectedUser.name;
+
+			selectedUser.is_deleted = false;
 
 			var exisingUser = $scope.team.filter(
 				function( user ) {
