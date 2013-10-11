@@ -8612,20 +8612,20 @@ section.checklist-category {
   opacity: 0.5;
 }
 
-.vcard.role-client h2,
-.vcard.role-client h3,
-.vcard.role-client h4,
-.vcard.role-client h5 {
+.vcard.role-customer h2,
+.vcard.role-customer h3,
+.vcard.role-customer h4,
+.vcard.role-customer h5 {
   color: #42d0e5;
 }
 
-.vcard.role-attorney h2,
+.vcard.role-lawyer h2,
 .vcard.role-account-manager h2,
-.vcard.role-attorney h3,
+.vcard.role-lawyer h3,
 .vcard.role-account-manager h3,
-.vcard.role-attorney h4,
+.vcard.role-lawyer h4,
 .vcard.role-account-manager h4,
-.vcard.role-attorney h5,
+.vcard.role-lawyer h5,
 .vcard.role-account-manager h5 {
   color: #f88172;
 }

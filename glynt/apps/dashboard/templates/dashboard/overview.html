@@ -256,58 +256,97 @@ var LawPal = {
 </script>
 
 <script type="text/ng-template" id="profileDialog.html">
+    <link href="/static/css/theme/lawyer-profile.css" rel="stylesheet" />
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <button class="close" ng-click="cancel()">&times;</button>
-                <h3>{[{user.full_name}]}</h3>
-                <h4 class="text-muted">{[{user.company}]} {[{user.position}]}</h4>
-            </div>
+
+
             <div class="modal-body">
-               <div class="row profile-details clearfix">
-                    <div class="col col-lg-4 text center">
-                        <img ng-src="{[{user.photo}]}" alt="{[{user.full_name}]}" />
-                    </div>
-                    <div class="col col-lg-8">
-                        <div class="firm" ng-show="user.years_practiced">
-                            <h2>{[{user.years_practiced}]} Years Practicing</h2>
+                <button type="button" class="close" ng-click="cancel()" aria-hidden="true">×</button>
+                <div id="hero-mini">
+                    <div class="container container-main">
+                        <!-- starts carousel -->
+                        <div class="row profile-details">
+                            <div class="col col-lg-4 text-center">
+                                <div class="avatar text-center">
+                                    <img ng-src="{[{user.photo}]}" alt="{[{user.full_name}]}" />
+                                </div>
+                            </div>
+                            <div class="col col-lg-8">
+                                <h1>{[{user.full_name}]}</h1>
+                                <h5 style="text-info">
+                                    <span ng-bind="user.role | titleCase"></span>
+                                </h5>
+                                <div class="firm">
+                                    <h2 style="text-info">
+                                        <span ng-show="user.years_practiced">{[{user.years_practiced}]} Years Practicing</span>
+                                    </h2>
+                                </div>
+                                <ul class="list-unstyled">
+                                    <li>
+                                        <i class="icon-envelope"></i>
+                                        <a href="mailto:{[{user.email}]}" class="btn btn-link" target="_blank">
+                                            {[{user.full_name}]}
+                                        </a>
+                                    </li>
+
+                                    <li ng-show="user.phone">
+                                        <i class="icon-phone"></i> {[{user.phone}]}
+                                    </li>
+                                </ul>
+
+                                <div id="buttons">
+                                    <span ng-show="user.is_lawyer">
+                                        <a class="btn btn-success btn-large" ng-show="user.is_authenticated" href="{% url 'lawyer:setup_profile' %}">
+                                            <i class="icon-pencil"></i>
+                                            Edit profile
+                                        </a>
+                                    </span>
+
+                                    <span ng-show="user.is_customer">
+                                        <a class="btn btn-success btn-large" ng-show="user.is_authenticated" href="{% url 'customer:setup_profile' %}">
+                                            <i class="icon-pencil"></i>
+                                            Edit profile
+                                        </a>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
-
-                        <h5 class="bio">
-                            {[{user.summary}]}
-                        </h5>
-
-                        <ul class="list-unstyled">
-                            <li>
-                                <i class="icon icon-envelope"></i>
-                                <a href="mailto:{[{user.email}]}" class="btn btn-link" target="_blank">
-                                    {[{user.full_name}]}
-                                </a>
-                            </li>
-
-                            <li ng-show="user.phone">
-                                <i class="icon icon-phone"></i>
-                                <a href="skype:{[{user.phone}]}" class="btn btn-link">
-                                    {[{user.phone}]}
-                                </a>
-                            </li>
-                        </ul>
-
-                        <a class="btn btn-success btn-large" ng-show="user.is_authenticated" href="/lawyers/profile/setup/">
-                            <i class="icon-pencil"></i>
-                            Edit profile
-                        </a>
                     </div>
                 </div>
-                <div class="row softer" ng-show="user.practice_locations">
-                    <div class="col-lg-12">
-                        <hr />
-                        <h2>Location</h2>
+
+
+                <div class="container profile">
+                    <div class="row">
+                        <div class="col col-lg-12">
+                            <p class="lead attorney-quote" ng-bind="user.summary" ng-show="user.summary"></p>
+                        </div>  
                     </div>
+                    <div ng-show="user.practice_locations">
+                        <div class="row">
+                            <div class="col col-9 col-offset-1">
+                                <h2><i class="glyphicon glyphicon-map-marker text-success"></i>Location</h2>
+                            </div>
+                            <div ng-show="user.practice_locations" class="col col-lg-6" ng-repeat="location in user.practice_locations" style="background:url('//maps.googleapis.com/maps/api/staticmap?size=450x100&amp;markers=color:blue%7Clabel:S%7C{[{location}]}&amp;sensor=false');height:100px;background-position:center;"></div>
+                        </div>
+                    </div>
+                    <div class="row">   
+
+                        <div class="col col-lg-10 col-offset-1" ng-show="user.is_lawyer">
+                            <hr>
+                            <div id="bar-license" class="bar-license">
+                                <h2><i class="glyphicon glyphicon-ok-sign text-success"></i>Licensed In</h2>
+                                
+                                    <ul class="unstyled">
+                                        <li class="nothing-found">Nothing yet</li>
+                                    </ul>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-                <div class="row">
-                    <div ng-show="user.practice_locations" class="col col-lg-6" ng-repeat="location in user.practice_locations" style="background:url('//maps.googleapis.com/maps/api/staticmap?size=450x100&amp;markers=color:blue%7Clabel:S%7C{[{location}]}&amp;sensor=false');height:100px;background-position:center;"></div>
-                </div>
+
+
             </div>
             <div class="modal-footer">
                 <button class="btn btn-primary" ng-click="cancel()">Close</button>
