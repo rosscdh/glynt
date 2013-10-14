@@ -12,6 +12,7 @@ class ProjectTeamManagementApiEndpointTest(BaseLawyerCustomerProjectCaseMixin):
         super(ProjectTeamManagementApiEndpointTest, self).setUp()
 
         self.url = reverse('api_v2:project_team', kwargs={'uuid': self.project.uuid})
+        self.client.login(username=self.customer_user.username, password=self.password)
 
     def valid_patch_object(self, team_ids):
         assert type(team_ids) is list
@@ -63,12 +64,12 @@ class ProjectTeamManagementApiEndpointTest(BaseLawyerCustomerProjectCaseMixin):
         self.assertEqual(2, len(json_response['team']))
 
         # test team item 0 keys (customer)
-        team = json_response['team'][0]
+        team = json_response['team'][1]
         self.assertEqual([u'username', u'first_name', u'last_name', u'is_customer', u'photo', u'email', u'is_lawyer', u'full_name', u'id'], team.keys())
         self.assertEqual([u'customer', u'Customer', u'A', True, u'/static/img/default_avatar.png', u'customer+test@lawpal.com', False, u'Customer A', self.customer_user.pk], team.values())
 
         # test item 1 keys (lawyer)
-        team = json_response['team'][1]
+        team = json_response['team'][0]
         self.assertEqual([u'username', u'first_name', u'last_name', u'is_customer', u'photo', u'email', u'is_lawyer', u'full_name', u'id'], team.keys())
         self.assertEqual([u'lawyer', u'Lawyer', u'A', False, u'/static/img/default_avatar.png', u'lawyer+test@lawpal.com', True, u'Lawyer A', self.lawyer_user.pk], team.values())
 
