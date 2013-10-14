@@ -26,6 +26,7 @@ try:
 except:
     PROJECT_CONTENT_TYPE = None
 
-from .signals import (on_project_created, on_lawyer_assigned,
+from .signals import (on_project_created, on_save_ensure_user_in_participants, 
+                      on_lawyer_assigned,
                       lawyer_on_save_ensure_participants,
                       lawyer_on_delete_ensure_participants,)
