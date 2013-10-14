@@ -130,6 +130,7 @@ class Project(ProjectCategoriesMixin, models.Model):
 
 registry.register("can_read", Project)
 registry.register("can_edit", Project)
+registry.register("can_delete", Project)
 
 
 class ProjectLawyer(models.Model):

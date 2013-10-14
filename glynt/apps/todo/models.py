@@ -96,6 +96,7 @@ class ToDo(NumAttachmentsMixin, models.Model):
 
 registry.register("can_read", ToDo)
 registry.register("can_edit", ToDo)
+registry.register("can_delete", ToDo)
 
 
 class Attachment(models.Model):
@@ -156,6 +157,10 @@ class Attachment(models.Model):
 
     def get_url(self):
         return self.attachment.name
+
+registry.register("can_read", Attachment)
+registry.register("can_edit", Attachment)
+registry.register("can_delete", Attachment)
 
 
 class FeedbackRequest(models.Model):
