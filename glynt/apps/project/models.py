@@ -8,7 +8,6 @@ from uuidfield import UUIDField
 from jsonfield import JSONField
 
 from . import PROJECT_STATUS, PROJECT_LAWYER_STATUS
-
 from .managers import DefaultProjectManager, ProjectLawyerManager
 from .mixins import ProjectCategoriesMixin
 
@@ -26,6 +25,7 @@ class Project(ProjectCategoriesMixin, models.Model):
     company = models.ForeignKey('company.Company')
     transactions = models.ManyToManyField('transact.Transaction')
     lawyers = models.ManyToManyField('lawyer.Lawyer', blank=True, through='project.ProjectLawyer')
+    participants = models.ManyToManyField('auth.User', blank=True)
     data = JSONField(default={})
     status = models.IntegerField(choices=PROJECT_STATUS.get_choices(), default=PROJECT_STATUS.new, db_index=True)
     date_created = CreationDateTimeField()
@@ -40,7 +40,12 @@ class Project(ProjectCategoriesMixin, models.Model):
         return True if user.pk in [u.pk for u in self.notification_recipients()] else False
 
     def can_edit(self, user):
-        return True if user.pk in [u.pk for u in self.notification_recipients()] else False
+        editors = [self.customer.user] + list([l.user for l in self.lawyers.all()])
+        return True if user.pk in [u.pk for u in editors] else False
+
+    def can_delete(self, user):
+        editors = [self.customer.user] + list([l.user for l in self.lawyers.all()])
+        return True if user.pk in [u.pk for u in editors] else False
 
     def get_absolute_url(self):
         return reverse('dashboard:project', kwargs={'uuid': self.uuid})
@@ -59,6 +64,11 @@ class Project(ProjectCategoriesMixin, models.Model):
             checklist_items += t.checklist()
 
         return checklist_items
+
+    @property
+    def content_type_id(self):
+        from .utils import PROJECT_CONTENT_TYPE
+        return PROJECT_CONTENT_TYPE.pk
 
     @property
     def pusher_id(self):
@@ -80,11 +90,7 @@ class Project(ProjectCategoriesMixin, models.Model):
         provide access to the customer, the lawyer
         ### not yet ### as well as any user associated with the customers company ## end not yet ##
         """
-        customer_user = self.customer.user
-        return itertools.chain( [customer_user],
-                                [l.lawyer.user for l in ProjectLawyer.objects.assigned(project=self)],
-                                #[u for u in self.company.customers.exclude(pk=customer_user.pk)]
-                              )
+        return self.participants.all()
 
     @property
     def has_lawyer(self):
@@ -124,6 +130,7 @@ class Project(ProjectCategoriesMixin, models.Model):
 
 registry.register("can_read", Project)
 registry.register("can_edit", Project)
+registry.register("can_delete", Project)
 
 
 class ProjectLawyer(models.Model):

@@ -44,6 +44,7 @@ DATABASES = {
     }
 }
 
+ALLOWED_HOSTS = ['*']
 
 TIME_ZONE = 'Europe/London'
 
@@ -261,6 +262,11 @@ HELPER_APPS = (
 
     # Object rules and permissions
     'rulez',
+
+    # Api (v2)
+    'rest_framework',
+    'django_filters',
+
     # Haystack Search
     'haystack',
 )
@@ -420,10 +426,23 @@ DATE_INPUT_FORMATS = ('%a, %d %b %Y', '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = False
 
+DEFAULT_MUGSHOT_URL = 'http://placehold.it/30x30'
+
+# Signature Image generator
+BLANK_SIG_IMAGE = os.path.join(STATIC_ROOT, 'signature/blank_sig.png'),
+NO_SIG_IMAGE = os.path.join(STATIC_ROOT, 'signature/no_sig.png'),
+
+TEMPLATED_EMAIL_BACKEND = 'templated_email.backends.vanilla_django.TemplateBackend'
+TEMPLATED_EMAIL_TEMPLATE_DIR = 'email/'
+TEMPLATED_EMAIL_FILE_EXTENSION = 'email'
+
+CRISPY_TEMPLATE_PACK = 'crispy/bootstrap3'
+
 #
 # Abridge Integration
 #
 ABRIDGE_ENABLED = False  # disabled by default
+
 
 LOGGING = {
     'version': 1,
@@ -476,21 +495,25 @@ LOGGING = {
     }
 }
 
-DEFAULT_MUGSHOT_URL = 'http://placehold.it/30x30'
+REST_FRAMEWORK = {
+    # Use hyperlinked styles by default.
+    # Only used if the `serializer_class` attribute is not set on a view.
+    'DEFAULT_MODEL_SERIALIZER_CLASS':
+        'rest_framework.serializers.HyperlinkedModelSerializer',
 
-# Signature Image generator
-BLANK_SIG_IMAGE = os.path.join(STATIC_ROOT, 'signature/blank_sig.png'),
-NO_SIG_IMAGE = os.path.join(STATIC_ROOT, 'signature/no_sig.png'),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+    ),
 
-TEMPLATED_EMAIL_BACKEND = 'templated_email.backends.vanilla_django.TemplateBackend'
-TEMPLATED_EMAIL_TEMPLATE_DIR = 'email/'
-TEMPLATED_EMAIL_FILE_EXTENSION = 'email'
-
-LAWPAL_PRIVATE_BETA = True
-
-ALLOWED_HOSTS = ['*']
-
-CRISPY_TEMPLATE_PACK = 'crispy/bootstrap3'
+    'DEFAULT_FILTER_BACKENDS': (
+        ('rest_framework.filters.DjangoFilterBackend',)
+    ),
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'PAGINATE_BY': 10,
+}
 
 # Neat trick http://www.robgolding.com/blog/2010/05/03/extending-settings-variables-with-local_settings-py-in-django/
 try:

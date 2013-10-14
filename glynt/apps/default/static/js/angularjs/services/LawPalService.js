@@ -8,6 +8,10 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 	var userType = "is_customer";
 	var checklist = [];
 	var getEndpoint = (lawPalInterface.getEndpoint ? lawPalInterface.getEndpoint() : null);
+	var data = {
+		"project": {},
+		"users": []
+	};
 
 	/* Define API interfaces for check list items */
 	var checkListItemResources = {
@@ -42,14 +46,176 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			})
 	};
 
+	var projectResource = {
+		"details": $resource("/api/v2/project/:uuid/?format=json", {}, /* use ?format=json to avoid trailing slash issues*/
+				{ 
+					"get": { "method": "GET", "headers": { "Content-Type": "application/json" } },
+					"patch": { "method": "PATCH", "headers": { "Content-Type": "application/json" } } 
+				}
+			),
+		"team": $resource("/api/v2/project/:uuid/team/?format=json", {}, 
+				{ 
+					"update": { "method": "PATCH", "headers": { "Content-Type": "application/json" } },
+					"get": { "method": "GET", "headers": { "Content-Type": "application/json" } }
+				}
+			)
+	};
+
+	var userResource = {
+		"email": $resource( "/api/v2/user/?email=:searchFor", {},
+				{
+					"search": { "method": "GET", "headers": { "Content-Type": "application/json" } }
+				}
+			),
+		"username": $resource( "/api/v1/user/profile/?username__in=:searchFor", {},
+				{
+					"search": { "method": "GET", "headers": { "Content-Type": "application/json" } }
+				}
+			)
+
+		// loadFullProfileDetails
+	};
+
 	var transformToFormData = function(data){
-		console.log("data", data);
+		// Convert JSON to form post
         return $.param(data);
     }
 
 	var checkList = {};
 
 	return {
+		/**
+		 * Retreive current project
+		 * @return {Function} promise
+		 */
+		"currentProject": function() {
+			var deferred = $q.defer();
+			var projectDetails = {};
+			var projectUuid = this.getProjectUuid();
+			var _this = this;
+
+			if (lawPalInterface && typeof(lawPalInterface.project)==="function") {
+				projectDetails = lawPalInterface.project;
+			}
+
+			// Get lawpal object
+			projectResource.details.get( { "uuid": projectUuid },
+				function success( results ) {
+					projectDetails = Object.merge( projectDetails, results );
+					data.project = projectDetails;
+					_this.loadProjectTeamMembers( projectDetails ).then(
+						function success( team ) {
+							data.project.users = _this.mergedProjectTeam( projectDetails, team )
+							deferred.resolve( projectDetails );
+						},
+						function error() {
+							deferred.resolve( projectDetails );
+						}
+					);
+					
+				},
+				function error( err ) {
+					deferred.reject( err );
+				}
+			);
+
+			return deferred.promise;
+		},
+
+		"loadProjectTeamMembers": function( projectDetails ) {
+			// 
+			var projectUuid = this.getProjectUuid();
+			var deferred = $q.defer();
+
+			projectResource.team.get( { "uuid": projectUuid },
+				function success( results ) {
+					deferred.resolve( results.team );
+				},
+				function error( err ) {
+					deferred.reject( err );
+				}
+			);
+
+			return deferred.promise;
+		},
+
+		/**
+		 * Merge different user types into a single array for the purpose of displaying them in a list
+		 * @return {Array} Array of users
+		 */
+		"mergedProjectTeam": function( project, team ) {
+			//
+			var user;
+			var users = team || [];
+			var currentUser = this.getCurrentUser();
+
+			for (var i=0;i<team.length;i++) {
+				user = team[i];
+
+				if( user.username == currentUser.username ) {
+					user.is_authenticated = true;
+				}
+				if(!user.is_deleted)
+					user.is_deleted = false;
+
+				if( user.is_lawyer ) user.role = "lawyer";
+				if( user.is_customer ) user.role = "customer";
+				if( user.id ) user.pk = user.id;
+
+				if( user.username == data.project.customer.username ) user.primary = true;
+				if( data.project.lawyers[0] && user.username == data.project.lawyers[0].username ) user.primary = true;
+			}
+
+			// Add Yael Citro
+			var accountManager = {
+				"full_name": "Yael Citro",
+				"email": "xw4ux8lx@incoming.intercom.io",
+				"photo": "/static/img/yael-contact-face.jpg",
+				"role": "account manager",
+				"position": "Co-Founder",
+				"company": "LawPal",
+				"summary": null,
+				"pk": null,
+				"is_deleted": false
+			};
+
+			users.push( accountManager );
+
+			
+
+			return users;
+		},
+
+		"updateProjectTeam": function( team ) {
+			var deferred = $q.defer();
+			// Update lawyers
+			var options = { "uuid": this.getProjectUuid() };
+			var updatedTeam = team.filter( function( user ){
+				return user.is_deleted !== true;
+			});
+			var data = updatedTeam.map( function( item ) {
+				return item.pk || item.id;
+			});
+
+			data = data.filter( function( id ) {
+				return id !==null && id>=0;
+			});
+
+			var obj = { "team": data };
+
+			projectResource.team.update( options, obj, 
+				function success( response ) {
+					// Return project details
+					deferred.resolve(response);
+				},
+				function error( err ) {
+					deferred.reject( err );
+				}
+			);
+
+			return deferred.promise;
+		},
+
 		/**
 		 * Request the list of categories
 		 * @return {Function} promise for categories
@@ -75,6 +241,11 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			return deferred.promise;
 		},
 
+		/**
+		 * Sends a PATCH request to update the category order
+		 * @param  {Array} reOrderedCategories Array of catgeory names
+		 * @return {Function}                  promise
+		 */
 		"updateCategoryOrder": function( reOrderedCategories ) {
 			var projectId = this.getProjectUuid();
 			var options = { "id": projectId };
@@ -312,6 +483,86 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		 */
 		"getCurrentUser": function() {
 			return (LawPal.user && LawPal.user.is_authenticated?LawPal.user:null);
+		},
+
+		"usernameSearch": function( users ) {
+			var deferred = $q.defer();
+			var userList = [];
+			var searchList  = "";
+			var retreivedUsers = [];
+			var user, updatedUser;
+
+			if( angular.isArray( users ) ) {
+				userList = users.map( function( user ){
+					return user["username"];
+				});
+
+				searchList = userList.join(",");
+			} else {
+				searchList= users;
+			}
+
+			var options = { "searchFor": searchList }
+
+			userResource.username.search( options, 
+				function success( data ) {
+					if( data.objects || data.results ) {
+						retreivedUsers = data.objects || data.results;
+						for( var i=0; i<retreivedUsers.length; i++ ) {
+							for( var j=0; j<users.length; j++ ) {
+								if(retreivedUsers[i].username===users[j].username) {
+									user = users[j]; 
+									updatedUser = retreivedUsers[i];
+									user.practice_locations = updatedUser.practice_locations;
+									user.companies = updatedUser.companies;
+									user.is_active = updatedUser.is_active;
+									user.is_customer = updatedUser.is_customer;
+									user.is_lawyer = updatedUser.is_lawyer;
+									user.summary = updatedUser.summary;
+									user.years_practiced = updatedUser.years_practiced;
+									user.phone = updatedUser.phone;
+									user.firm = updatedUser.firm;
+								}
+							}
+						}
+						deferred.resolve( data.objects );
+					} else {
+						deferred.reject( data );
+					}
+				},
+				function error( err ) {
+					deferred.reject( err );
+				}
+			);
+
+			return deferred.promise;
+		},
+
+		"emailSearch": function( str ) {
+			var deferred = $q.defer();
+
+			var options = { "searchFor": str };
+
+			userResource.email.search( options, 
+				function success( data ) {
+					if( data.results ) {
+						deferred.resolve( data.results );
+					} else {
+						deferred.reject( data );
+					}
+				},
+				function error( err ) {
+					deferred.reject( err );
+				}
+			);
+			/*
+			$timeout(function () {
+				var results = lawPalInterface._mockSearch(str);
+				deferred.resolve(results);
+			}, 1500);
+			*/
+
+			return deferred.promise;
 		}
 	};
 
