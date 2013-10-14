@@ -28,6 +28,10 @@
             </div>
         </div>
     {% else %}
+        {% if not project.has_lawyer and user.profile.is_customer %}
+            {% project_lawyers project 'potential' %}
+            <br />
+        {% endif %}
         {% if counts.awaiting_feedback_from_user > 0 %}
             <div class="alert"><i class="glyphicon glyphicon-time"></i> You have one more checklist items awaiting feedback. Visit your checklist to respond to them.</div>
         {% endif %}
