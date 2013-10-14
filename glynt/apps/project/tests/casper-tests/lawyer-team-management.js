@@ -77,19 +77,17 @@ helper.scenario(casper.cli.options.url,
 		casper.waitForSelector('.modal h3', function() {
 			/* Wait for modal to drop down */
 			casper.wait(1000, function() {
-				helper.snapshotPage.call( this, 1 );
 			    this.test.assertSelectorHasText('.modal h3', 'Project team');
 				this.test.assertSelectorHasText('.modal .form-search button', 'Add to project');
 				this.test.assertExists('.modal .modal-footer button.btn-default'); /* Close button */
+				/* Click remove link */
 				this.click('.modal .user-linda-russo a.remove-link');
 
 	            /* Wait for angular data sync */
 	            casper.wait(200, function() {
-	            	helper.snapshotPage.call( this, 2 );
 				    /* Save changes */
 				    this.click('.modal .btn-primary');
-				    /* Check She has been added to team */
-				    helper.snapshotPage.call( this, 2 );
+				    /* Check She has been removed from team */
 				    this.test.assertSelectorDoesntHaveText('.vcard h3', 'LR');
 				});
 
