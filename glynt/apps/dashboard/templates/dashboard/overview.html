@@ -186,7 +186,7 @@ var LawPal = {
                 <p>Primary project contacts can add and remove team members</p>
             </div>
             <div class="modal-body">
-                <div class="row vcard team-member {[{isRemovedClass(user)}]}" ng-repeat="user in team">
+                <div class="row vcard team-member {[{isRemovedClass(user)}]} user-{[{user.username}]}" ng-repeat="user in team">
                     <div class="col col-lg-12">
                         <div class="col col-lg-1 photo">
                             <img ng-src="{[{user.photo}]}"/>
@@ -197,8 +197,8 @@ var LawPal = {
                         </div>
                         <div class="col col-lg-4 details">
                             <p class="action pull-right" ng-show="canRemove(user)">
-                                <a href="javascript:;" ng-click="removeUser(user)" ng-show="!user.is_deleted"><i class="icon icon-remove text-danger"></i> Remove</a>
-                                <a href="javascript:;" ng-click="removeUser(user)" ng-show="user.is_deleted"><i class="icon icon-undo"></i> Undo remove</a>
+                                <a href="javascript:;" ng-click="removeUser(user)" ng-show="!user.is_deleted" class="remove-link"><i class="icon icon-remove text-danger"></i> Remove</a>
+                                <a href="javascript:;" ng-click="removeUser(user)" ng-show="user.is_deleted" class="undo-remove-link"><i class="icon icon-undo"></i> Undo remove</a>
                             </p>
                         </div>
                     </div>
@@ -215,6 +215,7 @@ var LawPal = {
                         <div class="col col-lg-8">
                             <input 
                                 type="text" 
+                                name="email"
                                 class="form-control search-query pull-left searching-{[{searchingEmail}]}" 
                                 placeholder="Email address" 
                                 typeahead="item.email for item in searchEmails($viewValue)" 
