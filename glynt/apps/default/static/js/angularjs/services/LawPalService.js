@@ -95,7 +95,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			var _this = this;
 
 			if (lawPalInterface && typeof(lawPalInterface.project)==="function") {
-				projectDetails = lawPalInterface.project();
+				projectDetails = lawPalInterface.project;
 			}
 
 			// Get lawpal object
@@ -474,10 +474,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		},
 
 		"getProjectUuid": function() {
-			if( typeof(LawPal.project)==="function")
-				return LawPal.project().uuid;
-			else
-				return LawPal.project.uuid;
+			return LawPal.project.uuid;
 		},
 
 		/**

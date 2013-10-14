@@ -161,12 +161,10 @@
 <script type="text/javascript">
 var LawPal = {
         /* @HEY ROSS: /api/v2/project/:uuid/ */
-        "project": function() {
-            return {
-                "name": "Fantastic startup",
-                "uuid": "{{ project.uuid }}",
-                "content_type_id": {{ project.content_type_id|default:None|jsonify }}
-            }
+        "project": {
+            "name": "Fantastic startup",
+            "uuid": "{{ project.uuid }}",
+            "content_type_id": {{ project.content_type_id|default:None|jsonify }}
         },
         "user": {
             'pk': {{ user.pk|default:'null'|jsonify }},
