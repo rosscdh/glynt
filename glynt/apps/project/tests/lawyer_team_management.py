@@ -17,4 +17,4 @@ class LawyerProjectTeamManagementTest(BaseLawyerCustomerProjectCaseMixin):
         self.client.login(username=self.lawyer_user.username, password=self.password)
 
         url = reverse('dashboard:project', kwargs={'uuid': self.project.uuid})
-        self.assertTrue(self.load_casper_file(js_file='lawyer-team-management.js', test_label='Test the Lawyer can manage the project team', url=url, url_checklist=url_checklist))
+        self.assertTrue(self.load_casper_file(js_file='lawyer-team-management.js', test_label='Test the Lawyer can manage the project team', url=url))
