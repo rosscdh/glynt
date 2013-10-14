@@ -1,6 +1,5 @@
 # -*- coding: UTF-8 -*-
 from django.core.urlresolvers import reverse
-
 from glynt.casper import BaseLawyerCustomerProjectCaseMixin
 
 from model_mommy import mommy
@@ -13,6 +12,17 @@ class ProjectTeamManagementApiEndpointTest(BaseLawyerCustomerProjectCaseMixin):
         super(ProjectTeamManagementApiEndpointTest, self).setUp()
 
         self.url = reverse('api_v2:project_team', kwargs={'uuid': self.project.uuid})
+
+    def valid_patch_object(self, team_ids):
+        assert type(team_ids) is list
+        return {"team": team_ids}
+
+    def invalid_patch_object(self, team_ids):
+        """
+        return an incorrect patch object
+        """
+        assert type(team_ids) is list
+        return team_ids
 
     def ensure_correct_team_response(self, resp, expected_status=200):
         """
@@ -62,6 +72,10 @@ class ProjectTeamManagementApiEndpointTest(BaseLawyerCustomerProjectCaseMixin):
         self.assertEqual([u'username', u'first_name', u'last_name', u'is_customer', u'photo', u'email', u'is_lawyer', u'full_name', u'id'], team.keys())
         self.assertEqual([u'lawyer', u'Lawyer', u'A', False, u'/static/img/default_avatar.png', u'lawyer+test@lawpal.com', True, u'Lawyer A', 1], team.values())
 
+    def test_invalid_PATCH_object(self):
+        resp = self.client.patch(path=self.url, data=self.invalid_patch_object(team_ids=[1, 2, 3, 4, 5]), content_type='application/json')
+        self.assertEqual(400, resp.status_code)
+
     def test_project_participants_api_endpoint_PATCH(self):
         """
         Add a new user to the participants endpoint
@@ -75,6 +89,8 @@ class ProjectTeamManagementApiEndpointTest(BaseLawyerCustomerProjectCaseMixin):
 
         # add new_user pk to the team
         team.append(new_user.pk)
+        # convert list to valid object
+        team = self.valid_patch_object(team_ids=team)
         json_team = json.dumps(team)
 
         resp = self.client.patch(path=self.url, data=json_team, content_type='application/json')
@@ -93,7 +109,11 @@ class ProjectTeamManagementApiEndpointTest(BaseLawyerCustomerProjectCaseMixin):
         # test participant removal
         team = [i['id'] for i in json_response['team']]
         team.remove(new_user.pk)
+        # convert list to valid object
+        team = self.valid_patch_object(team_ids=team)
+
         json_team = json.dumps(team)
+
         resp = self.client.patch(path=self.url, data=json_team, content_type='application/json')
         json_response = json.loads(resp.content)
         team = json_response['team']
