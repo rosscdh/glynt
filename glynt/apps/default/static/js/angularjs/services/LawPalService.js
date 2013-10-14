@@ -77,7 +77,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 	};
 
 	var discussionResource = {
-		"project": $resource( "/api/v2/project/:uuid/discussion\\/", {},
+		"project": $resource( "/api/v2/project/:uuid/discussion/?format=json", {},
 				{
 					"get": { "method": "GET", "headers": { "Content-Type": "application/json" } },
 					"save": { "method": "POST", "headers": { "Content-Type": "application/json" } }

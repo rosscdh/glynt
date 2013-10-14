@@ -342,12 +342,13 @@ angular.module('lawpal').controller( 'manageTeamDialogCtrl', [ '$scope', '$modal
 	}]
 );
 
-angular.module('lawpal').controller( 'newDiscussionDialogCtrl', [ '$scope', '$modalInstance', 'lawPalService', '$q',
-	function ($scope, $modalInstance, lawPalService, $q) {
+angular.module('lawpal').controller( 'newDiscussionDialogCtrl', [ '$scope', '$modalInstance', 'parent', 'lawPalService', '$q',
+	function ($scope, $modalInstance, parent, lawPalService, $q) {
 		$scope.message = {
 			"subject": null,
 			"comment": null,
-			"type": "discussion"
+			"type": "discussion",
+			"parent_id": parent && parent.id?parent.id:null
 		};
 		/**
 		 * User clicked the OK/Save button
