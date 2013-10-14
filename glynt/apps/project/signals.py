@@ -54,11 +54,6 @@ def on_project_created(sender, **kwargs):
         send = SendNewProjectEmailsService(project=project, sender=user)
         send.process()
 
-    # perform the bulk create event
-    # to bring project up to date with any modifications made
-    checklist_service = ProjectCheckListService(project=project)
-    checklist_service.bulk_create()
-
 
 @receiver(post_save, sender=Project, dispatch_uid='project.on_save_ensure_user_in_participants')
 def on_save_ensure_user_in_participants(sender, **kwargs):
