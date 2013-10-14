@@ -40,7 +40,12 @@ class Project(ProjectCategoriesMixin, models.Model):
         return True if user.pk in [u.pk for u in self.notification_recipients()] else False
 
     def can_edit(self, user):
-        return True if user.pk in [u.pk for u in self.notification_recipients()] else False
+        editors = [self.customer.user] + list([l.user for l in self.lawyers.all()])
+        return True if user.pk in [u.pk for u in editors] else False
+
+    def can_delete(self, user):
+        editors = [self.customer.user] + list([l.user for l in self.lawyers.all()])
+        return True if user.pk in [u.pk for u in editors] else False
 
     def get_absolute_url(self):
         return reverse('dashboard:project', kwargs={'uuid': self.uuid})

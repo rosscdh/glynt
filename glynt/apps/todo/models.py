@@ -61,10 +61,13 @@ class ToDo(NumAttachmentsMixin, models.Model):
         return u'{name}'.format(name=unicode(self.name))
 
     def can_read(self, user):
-        return True if user in self.project.notification_recipients() else False
+        return self.project.can_read(user=user)
 
     def can_edit(self, user):
-        return True if user in self.project.notification_recipients() else False
+        return self.project.can_edit(user=user)
+
+    def can_delete(self, user):
+        return self.project.can_delete(user=user)
 
     @property
     def pusher_id(self):
@@ -113,6 +116,15 @@ class Attachment(models.Model):
 
     def __unicode__(self):
         return u'{filename} {mimetype} ({size})'.format(filename=self.filename, mimetype=self.mimetype, size=0)
+
+    def can_read(self, user):
+        return self.project.can_read(user=user)
+
+    def can_edit(self, user):
+        return self.project.can_edit(user=user)
+
+    def can_delete(self, user):
+        return self.project.can_delete(user=user)
 
     @property
     def pusher_id(self):
