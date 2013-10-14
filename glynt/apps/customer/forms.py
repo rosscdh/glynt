@@ -6,8 +6,6 @@ from cicu.widgets import CicuUploaderInput
 
 from parsley.decorators import parsleyfy
 
-from glynt.mixins import ChangePasswordMixin, ConfirmChangePasswordMixin
-
 from glynt.apps.company.services import EnsureCompanyService
 from glynt.apps.customer.services import EnsureCustomerService
 
@@ -16,7 +14,7 @@ logger = logging.getLogger('django.request')
 
 
 @parsleyfy
-class CustomerProfileSetupForm(ChangePasswordMixin, ConfirmChangePasswordMixin, forms.Form):
+class CustomerProfileSetupForm(forms.Form):
     """ Form to allow companies to enter basic information about
     their setups
     """
@@ -42,9 +40,6 @@ class CustomerProfileSetupForm(ChangePasswordMixin, ConfirmChangePasswordMixin, 
     website = forms.URLField(required=False, label="URL", help_text="", widget=forms.TextInput(attrs={'placeholder': 'http://acmeco.com'}))
     twitter = forms.CharField(required=False, label="Twitter", help_text="", widget=forms.TextInput(attrs={}))
     summary = forms.CharField(required=False, label="Summary", widget=forms.Textarea(attrs={'placeholder': 'A brief description of your company', 'data-rangelength': '[0,1024]', 'rows': '2'}))
-
-
-    agree_tandc = forms.BooleanField(label='I agree to the Terms &amp; Conditions', widget=forms.CheckboxInput(attrs={}))
 
     def __init__(self, *args, **kwargs):
         """ get request object and user """
