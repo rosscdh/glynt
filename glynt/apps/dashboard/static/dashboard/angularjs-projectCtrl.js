@@ -50,7 +50,6 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 	 * @param  {Object} updatedTeam New team object
 	 */
 	$scope.updateTeam = function( updatedTeam ) {
-		console.log("updated team", updatedTeam );
 		lawPalService.updateProjectTeam(updatedTeam).then(
 			function success( response ) {
 				toaster.pop( "success", "Update successful" );
