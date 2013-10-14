@@ -76,7 +76,7 @@ class ProjectTeamManagementApiEndpointTest(BaseLawyerCustomerProjectCaseMixin):
         # add new_user pk to the team
         team.append(new_user.pk)
         json_team = json.dumps(team)
-        
+
         resp = self.client.patch(path=self.url, data=json_team, content_type='application/json')
 
         json_response = self.ensure_correct_team_response(resp=resp, expected_status=202)
