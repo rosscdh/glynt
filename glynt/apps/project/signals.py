@@ -9,11 +9,10 @@ from notifications.models import Notification
 
 from glynt.apps.services.email import NewActionEmailService
 
-from glynt.apps.project.utils import PROJECT_CONTENT_TYPE
-
-from glynt.apps.project.services.email import SendNewProjectEmailsService
-from glynt.apps.project.services.project_checklist import ProjectCheckListService
-from glynt.apps.project.services.engage_lawyer_comments import EngageLawyerCommentsMoveService
+from .utils import PROJECT_CONTENT_TYPE
+from .services.email import SendNewProjectEmailsService
+from .services.project_checklist import ProjectCheckListService
+from .services.engage_lawyer_comments import EngageLawyerCommentsMoveService
 
 from glynt.apps.services.pusher import PusherPublisherService
 

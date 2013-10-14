@@ -8,7 +8,6 @@ from uuidfield import UUIDField
 from jsonfield import JSONField
 
 from . import PROJECT_STATUS, PROJECT_LAWYER_STATUS
-
 from .managers import DefaultProjectManager, ProjectLawyerManager
 from .mixins import ProjectCategoriesMixin
 
@@ -63,7 +62,7 @@ class Project(ProjectCategoriesMixin, models.Model):
 
     @property
     def content_type_id(self):
-        from . import PROJECT_CONTENT_TYPE
+        from .utils import PROJECT_CONTENT_TYPE
         return PROJECT_CONTENT_TYPE.pk
 
     @property
