@@ -20,7 +20,7 @@ from glynt.apps.services.pusher import PusherPublisherService
 from . import (PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE,
                PROJECT_CATEGORY_SORT_UPDATED)
 
-from .models import ProjectLawyer
+from .models import Project, ProjectLawyer
 
 
 import logging
@@ -54,6 +54,16 @@ def on_project_created(sender, **kwargs):
     # to bring project up to date with any modifications made
     checklist_service = ProjectCheckListService(project=project)
     checklist_service.bulk_create()
+
+@receiver(post_save, sender=Project, dispatch_uid='project.on_save_ensure_user_in_participants')
+def on_save_ensure_user_in_participants(sender, **kwargs):
+    project = kwargs.get('instance')
+    if project:
+        user = project.customer.user
+
+        if user not in project.participants.all():
+            project.participants.add(user)
+            project.save()
 
 
 @receiver(PROJECT_CATEGORY_SORT_UPDATED, dispatch_uid='project.project_categories_sort_updated')

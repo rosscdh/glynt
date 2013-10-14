@@ -139,11 +139,11 @@ class ProjectModelMethodsTest(TestCase):
         self.assertEqual(type(self.project_without_lawyer.get_primary_lawyer()), type(None))
 
     def test_notification_recipients(self):
-        self.assertEqual(type(self.project_with_lawyer.notification_recipients()), itertools.chain)
+        self.assertEqual(type(self.project_with_lawyer.notification_recipients()), QuerySet)
         # there should be 2 recipients here.. the customer and the 1 assigned lawyer
         self.assertEqual(len(list(self.project_with_lawyer.notification_recipients())), 2)
 
-        self.assertEqual(type(self.project_without_lawyer.notification_recipients()), itertools.chain)
+        self.assertEqual(type(self.project_without_lawyer.notification_recipients()), QuerySet)
         # there should be 1 recipients here.. jsut the customer as we have no lawyers
         self.assertEqual(len(list(self.project_without_lawyer.notification_recipients())), 1)
 
