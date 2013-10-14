@@ -27,13 +27,15 @@ class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin,
     Provide a set of checklist items that are
     generated from the project transaction types
     """
+    is_new = None
     project = None
     checklist = []
     todos = []
     todos_by_cat = {}
     categories = []
 
-    def __init__(self, project, **kwargs):
+    def __init__(self, is_new, project, **kwargs):
+        self.is_new = is_new
         self.project = project
         self.project_data = ProjectIntakeFormIsCompleteBunch(project=self.project)
 
@@ -46,6 +48,19 @@ class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin,
         self.categories = self.get_categories()
 
         self.kwargs = kwargs
+
+    def get_todos(self):
+        """
+        wrapper to determine should we get yml todos
+        or db todos
+        """
+        if self.is_new:
+            # if its a new project then create the todo items from the yml
+            # templates
+            return self.get_yml_todos()
+        else:
+            # check for existing todos
+            return self.get_db_todos()
 
     def item_slug(self, item, **kwargs):
         """ the slug has to be consistent for each item, even when pulled from yaml file

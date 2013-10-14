@@ -123,6 +123,18 @@ BROKER_URL = 'sqs://{BROKER_USER}:{BROKER_PASSWORD}@sqs.eu-west-1.amazonaws.com/
 SPLUNKSTORM_ENDPOINT = 'logs2.splunkstorm.com'
 SPLUNKSTORM_PORT = 20824
 
+#
+# Abridge mailout service
+#
+ABRIDGE_ENABLED = True  # disabled by default
+ABRIDGE_API_URL = 'https://abridge-preview.lawpal.com/'
+ABRIDGE_PROJECT = 'lawpal-digest'
+
+ABRIDGE_ACCESS_KEY_ID = 'd2cb78e5e9ccc2495c32'
+ABRIDGE_SECRET_ACCESS_KEY = 'b2b42777c8953d99efb95e80722b3b76b956a7cd'
+ABRIDGE_USERNAME = 'lawpal-preview'
+ABRIDGE_PASSWORD = 'preview123'
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
@@ -177,7 +189,7 @@ LOGGING = {
         },
         'logfile': {
             'class': 'logging.handlers.WatchedFileHandler',
-            'filename': '/var/log/django/lawpal-{env}.log'.format(env=PROJECT_ENVIRONMENT),
+            'filename': '/var/log/django/lawpal-{env}.log'.format(env='preview'),
             'formatter': 'verbose'
         }
     },
@@ -188,13 +200,13 @@ LOGGING = {
             'level': 'INFO',
         },
         'django.request': {
-            'handlers': ['splunkstorm'],
-            'level': 'INFO',
+            'handlers': ['console', 'logfile', 'splunkstorm'],
+            'level': 'DEBUG',
             'propagate': False,
         },
         'lawpal': {
-            'handlers': ['splunkstorm', 'logfile'],
-            'level': 'INFO',
+            'handlers': ['splunkstorm', 'logfile', 'splunkstorm'],
+            'level': 'DEBUG',
             'propagate': True,
         }
     }

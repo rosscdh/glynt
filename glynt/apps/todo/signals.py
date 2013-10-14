@@ -108,16 +108,20 @@ def on_attachment_deleted(sender, **kwargs):
     """
     Handle Deletions of attachments
     """
+    is_new = kwargs.get('created', False)
+    attachment = kwargs.get('instance', None)
+
     if not isinstance(sender, LogEntry):
-        is_new = kwargs.get('created', False)
-        attachment = kwargs.get('instance', None)
-        todo = attachment.todo
 
         if attachment:
-            delete_attachment(is_new=is_new, attachment=attachment, **kwargs)
+            try:
+                todo = attachment.todo
+                # decrement num_attachments
+                todo.num_attachments_minus()  # increment the attachment count
+            except:
+                logger.info('todo does not exist for on_attachment_deleted')
 
-            # decrement num_attachments
-            todo.num_attachments_minus()  # increment the attachment count
+            delete_attachment(is_new=is_new, attachment=attachment, **kwargs)
 
             try:
                 verb = '{name} deleted attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project)
@@ -311,12 +315,15 @@ def todo_item_status_change(sender, **kwargs):
     instance = kwargs.get('instance')
 
     if instance.pk is None:
+
         # ensure the slug is present
         if instance.slug in [None, '']:
             instance.slug = generate_unique_slug(instance=instance)
+
             # @BUSINESSRULE ensure we have a sort_position
             if not instance.sort_position:
                 instance.sort_position = instance.project.todo_set.all().count() + 1
+
             # @BUSINESSRULE ensure we have a sort_position_by_cat
             if not instance.sort_position_by_cat:
                 instance.sort_position_by_cat = instance.sort_position
@@ -412,10 +419,11 @@ def on_action_created(sender, **kwargs):
                 logger.debug('action.target is a ToDo object')
                 project = action.target.project
                 recipients = project.notification_recipients()
-                url = project.get_absolute_url()
+                url = target.get_absolute_url()  # get the todos absolute url
 
             if recipients:
                 logger.debug('recipients: {recipients}'.format(recipients=recipients))
+
                 email = NewActionEmailService(
                     verb=event,
                     from_name=user_name,

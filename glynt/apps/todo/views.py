@@ -24,9 +24,10 @@ class ToDoCountMixin(object):
         project = project if project is not None else self.project
 
         awaiting_feedback_from_user = FeedbackRequest.objects \
-                                                     .prefetch_related('attachment',
+                                                     .exclude(attachment__todo__is_deleted=True) \
+                                                     .prefetch_related('attachment', \
                                                                        'attachment__project') \
-                                                     .filter(attachment__project=project,
+                                                     .filter(attachment__project=project, \
                                                              assigned_to=self.request.user) \
                                                      .count()
 
@@ -75,7 +76,7 @@ class ProjectToDoView(RulezMixin, ToDoCountMixin, ListView):
 
         user_profile = self.request.user.profile
 
-        self.checklist_service = ProjectCheckListService(project=self.project)
+        self.checklist_service = ProjectCheckListService(is_new=False, project=self.project)
         self.feedback_requests = self.checklist_service.feedbackrequests_by_user_as_json(user=self.request.user)
 
         context.update({
@@ -114,7 +115,7 @@ class BaseToDoDetailMixin(RulezMixin, SingleObjectMixin):
         slug = self.kwargs.get(self.slug_url_kwarg, 'slug')
 
         self.project = get_object_or_404(Project, uuid=self.kwargs.get('project_uuid'))
-        self.project_service = ProjectCheckListService(project=self.project)
+        self.project_service = ProjectCheckListService(is_new=False, project=self.project)
 
         self.navigation_items = self.project_service.navigation_items_object(slug=slug)
 

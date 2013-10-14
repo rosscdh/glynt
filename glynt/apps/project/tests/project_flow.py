@@ -1,13 +1,14 @@
 # -*- coding: UTF-8 -*-
 from django.core.urlresolvers import reverse
 
-from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin
+from glynt.casper import BaseLawyerCustomerProjectCaseMixin
+from glynt.casper import glynt_mock_http_requests
 from glynt.apps.transact.models import Transaction
 
 import os
 
 
-class CustomerSelectTransactionTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
+class CustomerSelectTransactionTest(BaseLawyerCustomerProjectCaseMixin):
     test_path = os.path.dirname(__file__)
 
     def test_customer_transact_select_js(self):
@@ -20,7 +21,7 @@ class CustomerSelectTransactionTest(BaseLawyerCustomerProjectCaseMixin, PyQueryM
         self.assertTrue(self.load_casper_file(js_file='customer-transact-select.js', test_label='Test a Customer can select transactions', url=url))
 
 
-class CustomerCreateProjectTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
+class CustomerCreateProjectTest(BaseLawyerCustomerProjectCaseMixin):
     test_path = os.path.dirname(__file__)
 
     def setUp(self):
@@ -32,6 +33,7 @@ class CustomerCreateProjectTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin
         self.project.todo_set.all().delete()
         self.project_lawyer_join.delete()
 
+    @glynt_mock_http_requests
     def test_customer_incorporation_form_js(self):
         """
         Test that the Customer has a list of transaction types to select from

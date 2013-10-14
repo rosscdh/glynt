@@ -6,7 +6,6 @@ from django.contrib.auth.models import User
 
 from parsley.decorators import parsleyfy
 
-from glynt.mixins import ModelFormChangePasswordMixin
 from glynt.apps.lawyer.services import EnsureLawyerService
 
 from glynt.apps.company.services import EnsureCompanyService
@@ -17,20 +16,19 @@ logger = logging.getLogger('django.request')
 
 
 @parsleyfy
-class ConfirmLoginDetailsForm(ModelFormChangePasswordMixin, forms.ModelForm):
+class ConfirmLoginDetailsForm(forms.ModelForm):
     """ Form shown to the use after logging in, assists in capturing the correct email
-    and setting a user password
     """
     first_name = forms.CharField(max_length=24, widget=forms.TextInput(attrs={'placeholder': 'John'}))
     last_name = forms.CharField(max_length=24, widget=forms.TextInput(attrs={'placeholder': 'Doemann'}))
-    company = forms.CharField(label="Company", help_text='', widget=forms.TextInput(attrs={'placeholder': 'Acme Inc'}))
+    company_name = forms.CharField(label="Company", help_text='', widget=forms.TextInput(attrs={'placeholder': 'Acme Inc'}))
     email = forms.EmailField(widget=forms.TextInput(attrs={'placeholder': 'john.doemann@example.com'}))
-    telephone = forms.CharField(label="Phone number", widget=forms.TextInput(attrs={'data-type': 'phone', 'autocomplete': 'off'}))
+    phone = forms.CharField(label="Phone number", widget=forms.TextInput(attrs={'data-type': 'phone', 'autocomplete': 'off'}))
     agree_tandc = forms.BooleanField(label='I agree to the Terms &amp; Conditions', help_text='')
 
     class Meta:
         model = User
-        fields = ['email', 'password', 'confirm_password']
+        fields = ['email']
 
     def __init__(self, *args, **kwargs):
         """ get request object and user """
@@ -53,13 +51,9 @@ class ConfirmLoginDetailsForm(ModelFormChangePasswordMixin, forms.ModelForm):
 
     def save(self, commit=True):
         user = self.user
-        user.set_password(self.cleaned_data["password"])
-        if commit:
-            user.save(update_fields=['password'])
 
+        if commit:
             data = self.cleaned_data.copy()
-            data.pop('password')
-            data.pop('confirm_password')
 
             if self.user.profile.is_lawyer:
                 lawyer_service = EnsureLawyerService(user=self.user, firm_name=data.get('company_name'), offices=[], form=self, **data)
@@ -68,7 +62,7 @@ class ConfirmLoginDetailsForm(ModelFormChangePasswordMixin, forms.ModelForm):
             if self.user.profile.is_customer:
                 customer_service = EnsureCustomerService(user=user, **data)
                 customer = customer_service.process()
-                company_service = EnsureCompanyService(name=data.pop('company'), customer=customer, **data)
+                company_service = EnsureCompanyService(name=data.pop('company_name'), customer=customer, **data)
                 company_service.process()
 
         return user

@@ -7,14 +7,14 @@ from notifications import notify
 
 from notifications.models import Notification
 
-from glynt.apps.services.email import NewActionEmailService
-
 from .utils import PROJECT_CONTENT_TYPE
 from .services.email import SendNewProjectEmailsService
 from .services.project_checklist import ProjectCheckListService
 from .services.engage_lawyer_comments import EngageLawyerCommentsMoveService
 
 from glynt.apps.services.pusher import PusherPublisherService
+
+from glynt.apps.services.email import NewActionEmailService
 
 from . import (PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE,
                PROJECT_CATEGORY_SORT_UPDATED)
@@ -36,7 +36,12 @@ def on_project_created(sender, **kwargs):
 
     # ensure that we have a project object and that is has NO pk
     # as we dont want this event to happen on change of a project
-    if not is_new:
+    if is_new:
+
+        # perform the bulk create event
+        # to bring project up to date with any modifications made
+        checklist_service = ProjectCheckListService(is_new=is_new, project=project)
+        checklist_service.bulk_create()
 
         user = project.customer.user
         comment = u'{user} created this Project'.format(user=user.get_full_name())
@@ -53,6 +58,7 @@ def on_project_created(sender, **kwargs):
     # to bring project up to date with any modifications made
     checklist_service = ProjectCheckListService(project=project)
     checklist_service.bulk_create()
+
 
 @receiver(post_save, sender=Project, dispatch_uid='project.on_save_ensure_user_in_participants')
 def on_save_ensure_user_in_participants(sender, **kwargs):

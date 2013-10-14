@@ -1,33 +1,37 @@
 {% extends 'base.html' %}{% load cache crispy_forms_tags lawyer_profile_tags %}
-
+{% load url from future %}
 {% block page_title %}Marketplace{% endblock %}
 {% block bodyclass %}lawyer-welcome{% endblock %}
 
 {% block prebody %}
-<link rel="stylesheet" href="{{ STATIC_URL }}css/theme/lawyer-listing.css" type="text/css">
-    
-<div id="hero" class="jumbotron">
-	<div class="container">
-		<div class="row animated fadeInDown">
-			<div class="span12">
-				<h1>Meet your new lawyer</h1>
-                <h2>Local. Experienced. Available.</h2>
-			</div>
-		</div>
-        <!-- Search removed for the moment.
-		  <div class="dock">
-              {% include 'lawyer/partials/search_form.html' %}
-		  </div> -->
-	</div>
-</div>
-
+    <div class="jumbotron-header">
+        <div class="container text-center">
+            <div class="row">
+                <div class="col-6 col-offset-3">
+                    <h1 class="brand">Meet the LawPal Lawyers</h1>
+                    <h4 class="softer">Vetted, experienced, Silicon Valley startup attorneys working differently through the LawPal platform. </h4>
+                    <br />
+                    <br />
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block body %}
-
+<div class="modal" id="overview-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p class="lead softer text-center">Loading...</p>
+            </div>
+        </div>
+    </div>
+</div>
 {% cache 300 lawyer_list_profile_message user.pk %}
 {% lawyer_profile_is_complete_message warning_type='flashing' %}
 {% endcache %}
+
 <div class="col col-lg-10 col-offset-1">
     <div ng-app="App" ng-controller="MarketplaceCtrl">
     {% include page_template %}
