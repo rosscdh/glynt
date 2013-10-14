@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load url from future %}{% load glynt_helpers crispy_forms_tags project_tags comments fluent_comments_tags %}
+{% extends 'base.html' %}{% load url from future %}{% load glynt_helpers crispy_forms_tags project_tags comments fluent_comments_tags jsonify %}
 
 {% block page_title %}Overview &mdash; {% project_name project %}{% endblock %}
 
@@ -18,7 +18,7 @@
 {% block body %}
 {% csrf_token %}
 <!-- Button trigger modal -->
-<div class="container dashboard-view">
+<div class="container dashboard-view" ng-controller="ProjectCtrl">
     {% if not profile_is_complete and user.profile.is_customer %}
         <div class="callout callout-danger empty">
             <div class="empty-message empty-message-exclamation-sign">
@@ -28,30 +28,34 @@
             </div>
         </div>
     {% else %}
-        {% if not project.has_lawyer and user.profile.is_customer %}
-            {% project_lawyers project 'potential' %}
-            <br />
-        {% endif %}
         {% if counts.awaiting_feedback_from_user > 0 %}
             <div class="alert"><i class="glyphicon glyphicon-time"></i> You have one more checklist items awaiting feedback. Visit your checklist to respond to them.</div>
         {% endif %}
         <div class="row">
             <div class="col col-lg-5">
-                {% if project.has_lawyer %}
-                    <div class="widget account-attorney">
-                        <h3>Project Attorney</h3>
-                        {% project_lawyers project 'assigned' %}
-                    </div>
-                {% endif %}
-                <div class="widget account-attorney">
-                    <h3>LawPal Account Manager</h3>
-                    <div class="row">
-                        <div class="col-12">
-                            <img src="{{STATIC_URL}}img/yael-contact-face.jpg" class="img-circle pull-left" style="width:40px; padding-right :8px;padding-top:6px;">
-                            <h4>Yael Citro <small class="pull-right"><a href="mailto:xw4ux8lx@incoming.intercom.io" class="btn btn-info btn-small intercom" style="margin-top:-4px">Contact Yael</a></small>  <small>Co-Founder at LawPal </small></h4>
-                        </div>
-                    </div>
+
+                <div class="widget project-team clearfix">
+                    <button class="btn btn-link btn-small pull-right widget-title-button" ng-click="openManageTeamDialog()" tooltip="Add/Remove team members">
+                        <i class="icon-pencil"></i>
+                        &nbsp;Manage team
+                    </button>
+                    <h3>Project team</h3>
+                    <span ng-cloak>
+                        <button class="btn btn-link col-lg-4 vcard role-{[{user.role}]}" ng-repeat="user in data.project.users | filter: { is_deleted: false }" ng-click="contactUser(user)">
+                            <div class="vcard-wrapper clearfix" tooltip-append-to-body="true" tooltip="{[{user.full_name}]} ({[{user.role}]}), contact now">
+                                <img class="photo col-lg-4" ng-src="{[{user.photo}]}" />
+                                <h3 class="col-lg-8">
+                                    <span ng-bind="user.full_name | firstLetters">
+                                        <i class="icon-spinner icon-spin"></i>
+                                    </span>
+                                </h3>
+                            </div>
+                        </button>
+                    </span>
+                    <i ng-show="loading.users" class="icon-spinner icon-spin text-muted"></i>
                 </div>
+                
+                
                 <div class="callout callout-success empty">
                     <div class="empty-message empty-message-ok">
                         <h4>Your transaction profile is complete.</h4>
@@ -150,6 +154,190 @@
             }
         });
     });
+</script>
+
+<script type="text/javascript" src="{{ STATIC_URL }}dashboard/angularjs-projectCtrl.js"></script>
+
+<script type="text/javascript">
+var LawPal = {
+        /* @HEY ROSS: /api/v2/project/:uuid/ */
+        "project": {
+            "name": "Fantastic startup",
+            "uuid": "{{ project.uuid }}",
+            "content_type_id": {{ project.content_type_id|default:None|jsonify }}
+        },
+        "user": {
+            'pk': {{ user.pk|default:'null'|jsonify }},
+            'email': {{ user.email|default:'null'|jsonify }},
+            'username': '{{ user.username }}',
+            'full_name': '{{ user.get_full_name }}',
+            'is_authenticated': {{ user.is_authenticated|jsonify }},
+        }
+};
+</script>
+<toaster-container toaster-options="{'time-out': 3000}"></toaster-container>
+<script type="text/ng-template" id="manageTeam.html">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Project team</h3>
+                <p>Primary project contacts can add and remove team members</p>
+            </div>
+            <div class="modal-body">
+                <div class="row vcard team-member {[{isRemovedClass(user)}]} user-{[{user.username}]}" ng-repeat="user in team">
+                    <div class="col col-lg-12">
+                        <div class="col col-lg-1 photo">
+                            <img ng-src="{[{user.photo}]}"/>
+                        </div>
+                        <div class="col col-lg-7 details">
+                            <h5 class="fn">{[{user.full_name}]}<span ng-show="user.is_authenticated"> (you)</span></h5>
+                            <h6 class="company"><a href="/profile/{[{user.company.slug}]}">{[{user.company.name}]}</a></h6>
+                        </div>
+                        <div class="col col-lg-4 details">
+                            <p class="action pull-right" ng-show="canRemove(user)">
+                                <a href="javascript:;" ng-click="removeUser(user)" ng-show="!user.is_deleted" class="remove-link"><i class="icon icon-remove text-danger"></i> Remove</a>
+                                <a href="javascript:;" ng-click="removeUser(user)" ng-show="user.is_deleted" class="undo-remove-link"><i class="icon icon-undo"></i> Undo remove</a>
+                            </p>
+                        </div>
+                    </div>
+
+                </div><!-- row //-->
+                <form class="form-search form-horizontal">
+                    <div class="row">
+                        <div class="col col-lg-12">
+                            <h4>Add someone</h4>
+                            <p class="help-block">You can only add people that have registered with LawPal at this time.</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-lg-8">
+                            <input 
+                                type="text" 
+                                name="email"
+                                autocomplete="off"
+                                class="form-control search-query pull-left searching-{[{searchingEmail}]}" 
+                                placeholder="Email address" 
+                                typeahead="item.email for item in searchEmails($viewValue)" 
+                                typeahead-wait-ms="600"
+                                typeahead-min-length="3"
+                                typeahead-loading="searchingEmail"
+                                ng-model="searchAttrs.selectedEmail" />
+                        </div>
+                        <div class="col col-lg-4">
+                            <button type="submit" class="btn btn-default" ng-click="addToProject(searchAttrs.selectedEmail, emailSearchResults)" ng-disabled="searchingEmail"><i class="icon {[{emailSearchClass(searchingEmail)}]}"></i> Add to project</button>
+                        </div>
+                            
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+                <button class="btn btn-primary" ng-click="ok()">Save</button>
+            </div>
+        </div>
+    </div>
+
+</script>
+
+<script type="text/ng-template" id="profileDialog.html">
+    <link href="/static/css/theme/lawyer-profile.css" rel="stylesheet" />
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+
+            <div class="modal-body">
+                <button type="button" class="close" ng-click="cancel()" aria-hidden="true">×</button>
+                <div id="hero-mini">
+                    <div class="container container-main">
+                        <!-- starts carousel -->
+                        <div class="row profile-details">
+                            <div class="col col-lg-4 text-center">
+                                <div class="avatar text-center">
+                                    <img ng-src="{[{user.photo}]}" alt="{[{user.full_name}]}" />
+                                </div>
+                            </div>
+                            <div class="col col-lg-8">
+                                <h1>{[{user.full_name}]}</h1>
+                                <h5 style="text-info">
+                                    <span ng-bind="user.role | titleCase"></span>
+                                </h5>
+                                <div class="firm">
+                                    <h2 style="text-info">
+                                        <span ng-show="user.years_practiced">{[{user.years_practiced}]} Years Practicing</span>
+                                    </h2>
+                                </div>
+                                <ul class="list-unstyled">
+                                    <li>
+                                        <i class="icon-envelope"></i>
+                                        <a href="mailto:{[{user.email}]}" class="btn btn-link" target="_blank">
+                                            {[{user.full_name}]}
+                                        </a>
+                                    </li>
+
+                                    <li ng-show="user.phone">
+                                        <i class="icon-phone"></i> {[{user.phone}]}
+                                    </li>
+                                </ul>
+
+                                <div id="buttons">
+                                    <span ng-show="user.is_lawyer">
+                                        <a class="btn btn-success btn-large" ng-show="user.is_authenticated" href="{% url 'lawyer:setup_profile' %}">
+                                            <i class="icon-pencil"></i>
+                                            Edit profile
+                                        </a>
+                                    </span>
+
+                                    <span ng-show="user.is_customer">
+                                        <a class="btn btn-success btn-large" ng-show="user.is_authenticated" href="{% url 'customer:setup_profile' %}">
+                                            <i class="icon-pencil"></i>
+                                            Edit profile
+                                        </a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="container profile">
+                    <div class="row">
+                        <div class="col col-lg-12">
+                            <p class="lead attorney-quote" ng-bind="user.summary" ng-show="user.summary"></p>
+                        </div>  
+                    </div>
+                    <div ng-show="user.practice_locations">
+                        <div class="row">
+                            <div class="col col-9 col-offset-1">
+                                <h2><i class="glyphicon glyphicon-map-marker text-success"></i>Location</h2>
+                            </div>
+                            <div ng-show="user.practice_locations" class="col col-lg-6" ng-repeat="location in user.practice_locations" style="background:url('//maps.googleapis.com/maps/api/staticmap?size=450x100&amp;markers=color:blue%7Clabel:S%7C{[{location}]}&amp;sensor=false');height:100px;background-position:center;"></div>
+                        </div>
+                    </div>
+                    <div class="row">   
+
+                        <div class="col col-lg-10 col-offset-1" ng-show="user.is_lawyer">
+                            <hr>
+                            <div id="bar-license" class="bar-license">
+                                <h2><i class="glyphicon glyphicon-ok-sign text-success"></i>Licensed In</h2>
+                                
+                                    <ul class="unstyled">
+                                        <li class="nothing-found">Nothing yet</li>
+                                    </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" ng-click="cancel()">Close</button>
+            </div>
+        </div>
+    </div>
+
 </script>
 
 {% endblock %}

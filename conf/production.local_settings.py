@@ -123,6 +123,25 @@ ABRIDGE_SECRET_ACCESS_KEY = '2a2c7c6104c80855a12d53bd846e117fbf81f41c'
 ABRIDGE_USERNAME = 'lawpal-production'
 ABRIDGE_PASSWORD = 'production123'
 
+REST_FRAMEWORK = {
+    # Use hyperlinked styles by default.
+    # Only used if the `serializer_class` attribute is not set on a view.
+    'DEFAULT_MODEL_SERIALIZER_CLASS':
+        'rest_framework.serializers.HyperlinkedModelSerializer',
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+
+    'DEFAULT_FILTER_BACKENDS': (
+        ('rest_framework.filters.DjangoFilterBackend',)
+    ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'glynt.apps.api.v2_permissions.GlyntObjectPermission',
+    ],
+    'PAGINATE_BY': 10,
+}
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',

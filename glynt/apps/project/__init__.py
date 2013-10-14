@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from django import dispatch
+from django.contrib.contenttypes.models import ContentType
+
 from glynt.apps.utils import get_namedtuple_choices
 
 PROJECT_STATUS = get_namedtuple_choices('PROJECT_STATUS', (
@@ -19,7 +21,7 @@ PROJECT_PROFILE_IS_COMPLETE = dispatch.Signal(providing_args=["instance"])
 
 PROJECT_CATEGORY_SORT_UPDATED = dispatch.Signal(providing_args=["instance", "user", "categories"])
 
-"""
-import signals
-"""
-from .signals import (on_project_created, on_lawyer_assigned)
+from .signals import (on_project_created, on_save_ensure_user_in_participants, 
+                      on_lawyer_assigned,
+                      lawyer_on_save_ensure_participants,
+                      lawyer_on_delete_ensure_participants,)

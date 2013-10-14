@@ -29,3 +29,27 @@ lawPalApp.config( [ '$interpolateProvider', '$httpProvider', function( $interpol
 	$httpProvider.defaults.headers.common['X-CSRFToken'] = $('input[name=csrfmiddlewaretoken]').val();
 	$httpProvider.defaults.headers.common['Content-Type']='application/json';
 }]);
+
+lawPalApp.filter('titleCase', function () {
+  return function (input) {
+    var words = input.split(' ');
+    for (var i = 0; i < words.length; i++) {
+      words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+    }
+    return words.join(' ');
+  }
+});
+
+lawPalApp.filter('firstLetters', function () {
+  return function (input) {
+    if( typeof input=== "string") {
+    	var stringEls = input.split(" ");
+    	var letters = "";
+    	for(var i=0;i<stringEls.length;i++)
+    		letters+=(stringEls[i].length>0?stringEls[i][0]:"");
+    	return letters;
+    }
+    else
+    	return null;
+  }
+});

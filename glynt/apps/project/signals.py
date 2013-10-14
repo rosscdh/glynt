@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 """ Set of signals to handle when comments are posted and assigning notifications to the user """
 from django.dispatch import receiver
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save, pre_delete
 
 from notifications import notify
 
 from notifications.models import Notification
 
-from glynt.apps.project.utils import PROJECT_CONTENT_TYPE
-
-from glynt.apps.project.services.email import SendNewProjectEmailsService
-from glynt.apps.project.services.project_checklist import ProjectCheckListService
-from glynt.apps.project.services.engage_lawyer_comments import EngageLawyerCommentsMoveService
+from .utils import PROJECT_CONTENT_TYPE
+from .services.email import SendNewProjectEmailsService
+from .services.project_checklist import ProjectCheckListService
+from .services.engage_lawyer_comments import EngageLawyerCommentsMoveService
 
 from glynt.apps.services.pusher import PusherPublisherService
 
@@ -20,7 +19,7 @@ from glynt.apps.services.email import NewActionEmailService
 from . import (PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE,
                PROJECT_CATEGORY_SORT_UPDATED)
 
-from .models import ProjectLawyer
+from .models import Project, ProjectLawyer
 
 
 import logging
@@ -54,6 +53,22 @@ def on_project_created(sender, **kwargs):
 
         send = SendNewProjectEmailsService(project=project, sender=user)
         send.process()
+
+    # perform the bulk create event
+    # to bring project up to date with any modifications made
+    checklist_service = ProjectCheckListService(project=project)
+    checklist_service.bulk_create()
+
+
+@receiver(post_save, sender=Project, dispatch_uid='project.on_save_ensure_user_in_participants')
+def on_save_ensure_user_in_participants(sender, **kwargs):
+    project = kwargs.get('instance')
+    if project:
+        user = project.customer.user
+
+        if user not in project.participants.all():
+            project.participants.add(user)
+            project.save()
 
 
 @receiver(PROJECT_CATEGORY_SORT_UPDATED, dispatch_uid='project.project_categories_sort_updated')
@@ -101,6 +116,7 @@ def on_lawyer_assigned(sender, **kwargs):
 
             if instance.status == instance.LAWYER_STATUS.assigned:
                 logger.info('Sending ProjectLawyer.assigned email')
+
                 # send email of congratulations to lawyer in question
                 recipients = (instance.lawyer.user,)
                 from_name = instance.project.customer.user.get_full_name()
@@ -109,6 +125,7 @@ def on_lawyer_assigned(sender, **kwargs):
                 url = instance.project.get_absolute_url()
 
                 logger.info('Sending ProjectLawyer.assigned url:{url}'.format(url=url))
+
                 email = NewActionEmailService(
                     from_name=from_name,
                     from_email=from_email,
@@ -132,3 +149,29 @@ def on_lawyer_assigned(sender, **kwargs):
                 ).update(
                     status=instance.LAWYER_STATUS.rejected
                 )
+
+@receiver(post_save, sender=ProjectLawyer, dispatch_uid='project.lawyer_on_save_ensure_participants')
+def lawyer_on_save_ensure_participants(sender, **kwargs):
+    instance = kwargs.get('instance')
+
+    lawyer = instance.lawyer
+    lawyer_user = lawyer.user
+    project = instance.project
+    participants = project.participants.all()
+
+    if lawyer_user not in participants:
+        project.participants.add(lawyer_user)
+
+@receiver(pre_delete, sender=ProjectLawyer, dispatch_uid='project.lawyer_on_delete_ensure_participants')
+def lawyer_on_delete_ensure_participants(sender, **kwargs):
+    instance = kwargs.get('instance')
+
+    lawyer = instance.lawyer
+    lawyer_user = lawyer.user
+    project = instance.project
+
+    participants = project.participants.all()
+
+    if lawyer_user in participants:
+        project.participants.remove(lawyer_user)
+
