@@ -55,7 +55,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			),
 		"team": $resource("/api/v2/project/:uuid/team/?format=json", {}, 
 				{ 
-					"update": { "method": "PATCH", "headers": { "Content-Type": "application/json" }, "isArray": true },
+					"update": { "method": "PATCH", "headers": { "Content-Type": "application/json" } },
 					"get": { "method": "GET", "headers": { "Content-Type": "application/json" } }
 				}
 			)
@@ -201,7 +201,9 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 				return id !==null && id>=0;
 			});
 
-			projectResource.team.update( options, data, 
+			var obj = { "team": data };
+
+			projectResource.team.update( options, obj, 
 				function success( response ) {
 					// Return project details
 					deferred.resolve(response);
