@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 from django.contrib.auth.models import User
+from django.db.models.query import QuerySet
 from django.conf import settings
 from django import template
 
@@ -56,7 +57,7 @@ class BaseEmailService(object):
 
         if self.recipients:
             """ extract list of recipients name, email from the passed in recipients """
-            assert type(self.recipients) in [list, tuple, itertools.chain]
+            assert type(self.recipients) in [list, tuple, QuerySet, itertools.chain]
 
             recipients = []
 

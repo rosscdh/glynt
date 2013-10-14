@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 from django.shortcuts import get_object_or_404
-from django.core.exceptions import PermissionDenied
+from django.http import HttpResponseNotAllowed, HttpResponseBadRequest
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 
@@ -40,8 +40,15 @@ class TeamListView(RetrieveUpdateAPIView):
     serializer_class = TeamSerializer
     lookup_field = 'uuid'
 
+    def __init__(self, *args, **kwargs):
+        super(TeamListView, self).__init__(*args, **kwargs)
+        # full reset
+        self.lawyers = []
+        self.customers = []
+        self.participants = []
+
     def put(self, request, **kwargs):
-        raise PermissionDenied
+        return HttpResponseNotAllowed('PUT not allowed')
 
     def patch(self, request, **kwargs):
         """
@@ -49,10 +56,14 @@ class TeamListView(RetrieveUpdateAPIView):
         we then calculate the user type and update the appropriate field
         on the project
         """
-        user_ids = request.DATA
+        project_team = request.DATA
+        if type(project_team) not in [dict] or project_team.get('team', False) is False:
+            return HttpResponseBadRequest('You must PATCH a dict in the following form into this view e.g. PATCH:{"team": [74, 3, 22]}')
+
+        user_ids = project_team['team']
 
         if type(user_ids) not in [list] or len(user_ids) is 0:
-            raise ValidationError('You must PATCH a list into this view e.g. PATCH:[74,3,22]')
+            return HttpResponseBadRequest('You must PATCH a dict in the following form into this view e.g. PATCH:{"team": [74, 3, 22]}')
         
         self.project = self.get_object()
 
@@ -61,15 +72,9 @@ class TeamListView(RetrieveUpdateAPIView):
 
         self.save_all()
 
-        serializer = self.get_serializer()
+        serializer = self.get_serializer(self.project)
 
-        return Response(data=serializer.get_team(obj=self.project), status=202)
-
-    def set_lawyer(self, lawyer_profile):
-        self.lawyers.append(lawyer_profile)
-
-    def set_customer(self, customer_profile):
-        self.customers.append(customer_profile)
+        return Response(data=serializer.data, status=202)
 
     def set_participant(self, user):
         self.participants.append(user)
@@ -80,6 +85,12 @@ class TeamListView(RetrieveUpdateAPIView):
         elif user.profile.is_customer is True:
             self.set_customer(customer_profile=user.customer_profile)
 
+    def set_lawyer(self, lawyer_profile):
+        self.lawyers.append(lawyer_profile)
+
+    def set_customer(self, customer_profile):
+        self.customers.append(customer_profile)
+
     def save_all(self):
         """
         save all our bits
@@ -87,6 +98,9 @@ class TeamListView(RetrieveUpdateAPIView):
         self.save_lawyers()
         self.save_customer()
         self.save_participants()
+
+        # Save the changes made to the participants and lawyers
+        self.project.save()
 
     def save_lawyers(self):
         if len(self.lawyers) > 0:
@@ -112,7 +126,7 @@ class TeamListView(RetrieveUpdateAPIView):
 
     def save_customer(self):
         """
-        customer never changes
+        customer never changes @NOTE this may change in the future thus the interface
         """
         pass
 
@@ -142,7 +156,6 @@ class TeamListView(RetrieveUpdateAPIView):
                 if participant not in project_participants:
                     project.participants.add(participant)
                     logger.debug('Adding participant: %s' % participant)
-
 
 
 class DiscussionListView(ListCreateAPIView):

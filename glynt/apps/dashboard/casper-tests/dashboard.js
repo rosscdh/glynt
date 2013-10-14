@@ -7,7 +7,7 @@ helper.scenario(casper.cli.options.url,
         //this.echo(this.debugHTML())
         this.test.assertHttpStatus(200);
         this.test.assertTitle('Overview')
-        this.test.assertSelectorHasText('h1', 'Your LawPal Projects', 'Header Text on Page')
+        this.test.assertSelectorHasText('h1', 'Your LawPal Projects', 'Header Text on Page');
         
         this.test.assertExists('table#lawyer-projects')
         this.test.assertSelectorHasText('table#lawyer-projects th:nth-child(1)', 'Company')

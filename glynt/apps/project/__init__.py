@@ -21,6 +21,12 @@ PROJECT_PROFILE_IS_COMPLETE = dispatch.Signal(providing_args=["instance"])
 
 PROJECT_CATEGORY_SORT_UPDATED = dispatch.Signal(providing_args=["instance", "user", "categories"])
 
-PROJECT_CONTENT_TYPE = ContentType.objects.get(app_label="project", model="project")
+try:
+    PROJECT_CONTENT_TYPE = ContentType.objects.get(app_label="project", model="project")
+except:
+    PROJECT_CONTENT_TYPE = None
 
-from .signals import on_project_created, on_lawyer_assigned
+from .signals import (on_project_created, on_save_ensure_user_in_participants, 
+                      on_lawyer_assigned,
+                      lawyer_on_save_ensure_participants,
+                      lawyer_on_delete_ensure_participants,)

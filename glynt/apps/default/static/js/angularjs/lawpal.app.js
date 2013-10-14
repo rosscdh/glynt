@@ -105,3 +105,17 @@ lawPalApp.filter('timeAgo', function () {
     return "";
   }
 });
+
+lawPalApp.filter('firstLetters', function () {
+  return function (input) {
+    if( typeof input=== "string") {
+      var stringEls = input.split(" ");
+      var letters = "";
+      for(var i=0;i<stringEls.length;i++)
+        letters+=(stringEls[i].length>0?stringEls[i][0]:"");
+      return letters;
+    }
+    else
+      return null;
+  }
+});

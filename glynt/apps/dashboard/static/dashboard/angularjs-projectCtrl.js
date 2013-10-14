@@ -15,6 +15,11 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 		"discussionCategories": [ /*"issue", */"discussion" ]
 	};
 
+	$scope.loading = {
+		"project": true,
+		"users": true
+	};
+
 	/**
 	 * Load current project
 	 */
@@ -22,13 +27,26 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 		function success( project ) {
 			$scope.data.project = project;
 			$scope.data.users = project.users;
-			console.log( "users", $scope.data.users );
 			$scope.loadDiscussions();
+			$scope.loading.project = false;
+			lawPalService.usernameSearch( $scope.data.users ).then(
+				function success( results ) {
+					$scope.loading.users = false;
+				},
+				function error( err ) {
+					$scope.loading.users = false;
+				}
+			);
 		},
 		function error( err ) {
 			toaster.pop( "warning", "Load error", "Unable to load project details" );
 		}
 	);
+
+	$scope.contactUser = function( user ) {
+			//window.location.href = "mailto://" + user.email, "email_window";
+			$scope.openProfileDialog( user );
+	};
 
 	/**
 	 * Request team update by sending request to the API
@@ -120,6 +138,27 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 			},
 			function error( err ) {
 				toaster.pop( "warning", "Error", "Unable to post discussion item" );
+			}
+		);
+	};
+
+	$scope.openProfileDialog = function( user ) {
+		// profileDialogCtrl
+		var modalInstance = $modal.open({
+			"windowClass": "modal modal-show",
+			"templateUrl": 'profileDialog.html',
+			"controller": 'profileDialogCtrl',
+			"resolve": {
+				"user": function () {
+					return user;
+				}
+			}
+		});
+
+		modalInstance.result.then(
+			function ok( updatedTeam ) {
+				
+			}, function cancel() {
 			}
 		);
 	};

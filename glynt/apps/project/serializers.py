@@ -62,11 +62,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     def get_customer(self, obj):
         if obj is not None:
             user = obj.customer.user
-            return {
-                'pk': user.pk,
-                'full_name': user.get_full_name(),
-                'photo': user.profile.get_mugshot_url(),
-            }
+            return UserSerializer(user).data
 
     def get_company(self, obj):
         if obj is not None:
@@ -80,6 +76,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             return [{
                         'pk': lawyer.pk,
                         'user_pk': lawyer.user.pk,
+                        'username': lawyer.user.username,
                         'full_name': lawyer.user.get_full_name(),
                         'photo': lawyer.profile_photo,
                         'url': lawyer.get_absolute_url(),
@@ -111,9 +108,9 @@ class TeamSerializer(serializers.Serializer):
 
             # append potential lawyers as they are not naturally provided
             # by project.notification_recipients
-            potential_lawyers = ProjectLawyer.objects.potential(project=obj)
-            if potential_lawyers:
-                participants += [join.lawyer.user for join in potential_lawyers]
+            # potential_lawyers = ProjectLawyer.objects.potential(project=obj)
+            # if potential_lawyers:
+            #     participants += [join.lawyer.user for join in potential_lawyers]
 
             for u in participants:
                 yield UserSerializer(u).data
