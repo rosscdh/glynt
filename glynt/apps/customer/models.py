@@ -54,6 +54,6 @@ class Customer(models.Model):
     def primary_company(self):
         try:
             return self.user.companies.get(name=self.data.get('company_name'))
-        except IndexError:
+        except Company.DoesNotExist:
             # not found so return an empty instance
             return Company()
