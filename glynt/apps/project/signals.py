@@ -54,11 +54,6 @@ def on_project_created(sender, **kwargs):
         send = SendNewProjectEmailsService(project=project, sender=user)
         send.process()
 
-    # perform the bulk create event
-    # to bring project up to date with any modifications made
-    checklist_service = ProjectCheckListService(project=project)
-    checklist_service.bulk_create()
-
 
 @receiver(post_save, sender=Project, dispatch_uid='project.on_save_ensure_user_in_participants')
 def on_save_ensure_user_in_participants(sender, **kwargs):
@@ -159,8 +154,11 @@ def lawyer_on_save_ensure_participants(sender, **kwargs):
     project = instance.project
     participants = project.participants.all()
 
-    if lawyer_user not in participants:
-        project.participants.add(lawyer_user)
+    if instance.status is instance.LAWYER_STATUS.potential:
+        project.participants.remove(lawyer_user)
+    else:
+        if lawyer_user not in participants:
+            project.participants.add(lawyer_user)
 
 @receiver(pre_delete, sender=ProjectLawyer, dispatch_uid='project.lawyer_on_delete_ensure_participants')
 def lawyer_on_delete_ensure_participants(sender, **kwargs):

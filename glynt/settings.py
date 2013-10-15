@@ -110,7 +110,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     #'pagination.middleware.PaginationMiddleware',
     'django_filepicker.middleware.URLFileMapperMiddleware',
-    'waffle.middleware.WaffleMiddleware',
 )
 
 
@@ -258,7 +257,6 @@ HELPER_APPS = (
     'abridge',
 
     # feature switcher
-    'waffle',
 
     # Object rules and permissions
     'rulez',
@@ -438,6 +436,7 @@ TEMPLATED_EMAIL_FILE_EXTENSION = 'email'
 
 CRISPY_TEMPLATE_PACK = 'crispy/bootstrap3'
 
+
 #
 # Abridge Integration
 #
@@ -502,6 +501,7 @@ REST_FRAMEWORK = {
         'rest_framework.serializers.HyperlinkedModelSerializer',
 
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
     ),
 
     'DEFAULT_FILTER_BACKENDS': (
@@ -510,7 +510,8 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+        #'rest_framework.permissions.AllowAny',
+        'glynt.apps.api.v2_permissions.GlyntObjectPermission',
     ],
     'PAGINATE_BY': 10,
 }

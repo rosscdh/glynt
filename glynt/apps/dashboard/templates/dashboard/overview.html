@@ -28,6 +28,10 @@
             </div>
         </div>
     {% else %}
+        {% if not project.has_lawyer and user.profile.is_customer %}
+            {% project_lawyers project 'potential' %}
+            <br />
+        {% endif %}
         {% if counts.awaiting_feedback_from_user > 0 %}
             <div class="alert"><i class="glyphicon glyphicon-time"></i> You have one more checklist items awaiting feedback. Visit your checklist to respond to them.</div>
         {% endif %}
@@ -267,13 +271,6 @@ var LawPal = {
                                     </h2>
                                 </div>
                                 <ul class="list-unstyled">
-                                    <li>
-                                        <i class="icon-envelope"></i>
-                                        <a href="mailto:{[{user.email}]}" class="btn btn-link" target="_blank">
-                                            {[{user.full_name}]}
-                                        </a>
-                                    </li>
-
                                     <li ng-show="user.phone">
                                         <i class="icon-phone"></i> {[{user.phone}]}
                                     </li>
@@ -314,20 +311,7 @@ var LawPal = {
                             <div ng-show="user.practice_locations" class="col col-lg-6" ng-repeat="location in user.practice_locations" style="background:url('//maps.googleapis.com/maps/api/staticmap?size=450x100&amp;markers=color:blue%7Clabel:S%7C{[{location}]}&amp;sensor=false');height:100px;background-position:center;"></div>
                         </div>
                     </div>
-                    <div class="row">   
-
-                        <div class="col col-lg-10 col-offset-1" ng-show="user.is_lawyer">
-                            <hr>
-                            <div id="bar-license" class="bar-license">
-                                <h2><i class="glyphicon glyphicon-ok-sign text-success"></i>Licensed In</h2>
-                                
-                                    <ul class="unstyled">
-                                        <li class="nothing-found">Nothing yet</li>
-                                    </ul>
-                            </div>
-                        </div>
-                    </div>
-
+                    
                 </div>
 
 
