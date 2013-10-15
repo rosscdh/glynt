@@ -42,6 +42,19 @@ class ProjectTeamManagementApiEndpointTest(BaseLawyerCustomerProjectCaseMixin):
 
         return json_response
 
+    def test_invalid_unauthorised_user_access(self):
+        self.client.logout()
+        resp = self.client.put(self.url)
+        self.assertEqual(403, resp.status_code)  #forbidden
+
+        random_customer_user = mommy.make('auth.User', username='unauthorised-customer', first_name='Unuathorised', last_name='Customer', email='customer+unauthorised@lawpal.com')
+        password = 'test'
+        random_customer_user.set_password(password)
+
+        self.client.login(username=random_customer_user.username, password=password)
+        resp = self.client.put(self.url)
+        self.assertEqual(403, resp.status_code)  #forbidden
+
     def test_project_participants_api_endpoint_invalid_request_types(self):
         """
         PUT should throw a 403
