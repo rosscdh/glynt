@@ -8,7 +8,6 @@ from uuidfield import UUIDField
 from jsonfield import JSONField
 
 from . import PROJECT_STATUS, PROJECT_LAWYER_STATUS
-
 from .managers import DefaultProjectManager, ProjectLawyerManager
 from .mixins import ProjectCategoriesMixin
 
@@ -41,7 +40,12 @@ class Project(ProjectCategoriesMixin, models.Model):
         return True if user.pk in [u.pk for u in self.notification_recipients()] else False
 
     def can_edit(self, user):
-        return True if user.pk in [u.pk for u in self.notification_recipients()] else False
+        editors = [self.customer.user] + list([l.user for l in self.lawyers.all()])
+        return True if user.pk in [u.pk for u in editors] else False
+
+    def can_delete(self, user):
+        editors = [self.customer.user] + list([l.user for l in self.lawyers.all()])
+        return True if user.pk in [u.pk for u in editors] else False
 
     def get_absolute_url(self):
         return reverse('dashboard:project', kwargs={'uuid': self.uuid})
@@ -63,7 +67,7 @@ class Project(ProjectCategoriesMixin, models.Model):
 
     @property
     def content_type_id(self):
-        from . import PROJECT_CONTENT_TYPE
+        from .utils import PROJECT_CONTENT_TYPE
         return PROJECT_CONTENT_TYPE.pk
 
     @property
@@ -126,6 +130,7 @@ class Project(ProjectCategoriesMixin, models.Model):
 
 registry.register("can_read", Project)
 registry.register("can_edit", Project)
+registry.register("can_delete", Project)
 
 
 class ProjectLawyer(models.Model):

@@ -10,7 +10,7 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, Re
 
 from threadedcomments.models import ThreadedComment
 
-from . import PROJECT_CONTENT_TYPE
+from .utils import PROJECT_CONTENT_TYPE
 from .models import Project, ProjectLawyer
 from .serializers import (ProjectSerializer, TeamSerializer,
                           DiscussionSerializer, )

@@ -47,7 +47,7 @@ class CustomerLoginLogic(object):
 
 class CustomerRequiredViewMixin(object):
     """
-    Mixin to ensure that only a lawyer user 
+    Mixin to ensure that only a lawyer user
     can view this view
     """
     @method_decorator(user_passes_test(lambda u: u.profile.is_customer))
@@ -61,7 +61,7 @@ class CustomerProfileSetupView(CustomerRequiredViewMixin, FormView):
 
     def get_success_url(self):
         messages.success(self.request, 'Success, you have updated your profile')
-        return reverse('customer:welcome')
+        return reverse('public:homepage')
 
     def get_context_data(self, **kwargs):
         context = super(CustomerProfileSetupView, self).get_context_data(**kwargs)
@@ -78,6 +78,7 @@ class CustomerProfileSetupView(CustomerRequiredViewMixin, FormView):
 
         customer_service = EnsureCustomerService(user=user)
         self.customer = customer_service.process()
+
         # get the startup
         startup = self.customer.primary_company
 
@@ -85,11 +86,11 @@ class CustomerProfileSetupView(CustomerRequiredViewMixin, FormView):
             'first_name': user.first_name,
             'last_name': user.last_name,
             'email': user.email,
-            'phone': user.profile.phone,
+            'phone': self.customer.phone,
 
             'photo': self.customer.photo,
 
-            'company_name': startup.name,
+            'company_name': startup,
             'website': startup.website,
             'summary': startup.summary,
 
