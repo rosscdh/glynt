@@ -110,7 +110,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     #'pagination.middleware.PaginationMiddleware',
     'django_filepicker.middleware.URLFileMapperMiddleware',
-    'waffle.middleware.WaffleMiddleware',
 )
 
 
@@ -258,7 +257,6 @@ HELPER_APPS = (
     'abridge',
 
     # feature switcher
-    'waffle',
 
     # Object rules and permissions
     'rulez',
@@ -437,6 +435,7 @@ TEMPLATED_EMAIL_TEMPLATE_DIR = 'email/'
 TEMPLATED_EMAIL_FILE_EXTENSION = 'email'
 
 CRISPY_TEMPLATE_PACK = 'crispy/bootstrap3'
+
 
 #
 # Abridge Integration
