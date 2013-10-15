@@ -100,13 +100,17 @@ class LawyerContactProjectView(ProjectView):
 
     def mark_notifications(self, project_lawyer_join):
         """
-        if the user is a lawyer then remove the notifications
+        if the user has notifications then remove them here as weve seen them
         """
-        if self.request.user.profile.is_lawyer:
-            Notification.objects.filter(recipient=self.request.user,
-                                        target_object_id=project_lawyer_join.project.pk,
-                                        target_content_type=PROJECT_CONTENT_TYPE)  \
-                                .delete()
+        objects = Notification.objects.filter(recipient=self.request.user,
+                                    target_object_id=project_lawyer_join.project.pk,
+                                    target_content_type=PROJECT_CONTENT_TYPE)  \
+
+        if self.request.user.profile.is_customer:
+            #delete only the comments specific to the lawyer being viewd
+            objects = objects.filter(actor_object_id=project_lawyer_join.lawyer.user.pk,)
+
+        objects.delete()
 
     def get_context_data(self, **kwargs):
         context = super(LawyerContactProjectView, self).get_context_data(**kwargs)

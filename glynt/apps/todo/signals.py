@@ -183,8 +183,12 @@ def on_comment_created(sender, **kwargs):
 
                 # notify the lawyer (used for discussion counts)
                 if comment.user.profile.is_customer:
-                    notify.send(comment.user, recipient=comment.content_object.lawyer.user, verb=u'added to discussion', action_object=comment_target.project,
-                        description=comment.comment, target=comment_target.project, project_action='added_discussion_item', project_pk=comment_target.project.pk, creating_user_pk=comment.user.pk)
+                    recipient = comment.content_object.lawyer.user
+                else:
+                    recipient = comment.content_object.project.customer.user
+                # send notification
+                notify.send(comment.user, recipient=recipient, verb=u'added to discussion', action_object=comment_target.project,
+                    description=comment.comment, target=comment_target.project, project_action='added_discussion_item', project_pk=comment_target.project.pk, creating_user_pk=comment.user.pk)
 
         if send is True:
             logger.debug('send action: {event} {verb} content: {content}'.format(event=event, verb=verb, content=comment.comment))
