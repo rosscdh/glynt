@@ -154,8 +154,11 @@ def lawyer_on_save_ensure_participants(sender, **kwargs):
     project = instance.project
     participants = project.participants.all()
 
-    if lawyer_user not in participants:
-        project.participants.add(lawyer_user)
+    if instance.status is instance.LAWYER_STATUS.potential:
+        project.participants.remove(lawyer_user)
+    else:
+        if lawyer_user not in participants:
+            project.participants.add(lawyer_user)
 
 @receiver(pre_delete, sender=ProjectLawyer, dispatch_uid='project.lawyer_on_delete_ensure_participants')
 def lawyer_on_delete_ensure_participants(sender, **kwargs):
