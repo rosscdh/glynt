@@ -29,9 +29,22 @@ def project_activity_stream(project, limit=10):
     }
 
 
-@register.inclusion_tag('project/partials/project_lawyers.html')
-def project_lawyers(project, display_type='default'):
-    context = {}
+@register.simple_tag(takes_context=True)
+def discussion_notification_count(context, project_lawyer_join):
+    user = context.get('user')
+    objects = Notification.objects.filter(recipient=user,
+                                          target_object_id=project_lawyer_join.project.pk,
+                                          target_content_type=PROJECT_CONTENT_TYPE)
+    if user.profile.is_customer:
+        # must do this for the customer as they may have multiple objects
+        # of this type so need to filter by specific lawyer
+        objects = objects.filter(actor_object_id=project_lawyer_join.lawyer.user.pk,)
+
+    return objects.count()
+
+
+@register.inclusion_tag('project/partials/project_lawyers.html', takes_context=True)
+def project_lawyers(context, project, display_type='default'):
 
     if display_type == 'assigned':
         lawyer_join = ProjectLawyer.objects.assigned(project=project).prefetch_related('project', 'lawyer')
