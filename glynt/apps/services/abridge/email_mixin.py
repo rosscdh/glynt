@@ -6,7 +6,7 @@ from glynt.apps.default.templatetags.glynt_helpers import current_site_domain
 from bunch import Bunch
 from urlparse import urlparse
 
-import waffle
+#import waffle
 
 import logging
 logger = logging.getLogger('lawpal.services')
@@ -53,8 +53,9 @@ class SendEmailAsAbridgeEventMixin(object):
         """
         abridge_service = None
 
-        if waffle.switch_is_active('abridge-mailout'):
-            logger.info('Waffle abridge-mailout key is Active')
+        #if waffle.switch_is_active('abridge-mailout'):
+        if True:
+            logger.info('Use abridge-mailout key is Active')
 
             # Must have content group
             use_abridge = True if content_group is not False else False
@@ -76,7 +77,7 @@ class SendEmailAsAbridgeEventMixin(object):
                     use_abridge = False
 
         else:
-            logger.info('Waffle abridge-mailout key is Not Active')
+            logger.info('Use abridge-mailout key is Not Active')
             use_abridge = False
 
         if use_abridge is True and abridge_service is not None:
