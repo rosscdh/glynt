@@ -63,7 +63,6 @@ def on_save_ensure_user_in_participants(sender, **kwargs):
 
         if user not in project.participants.all():
             project.participants.add(user)
-            project.save()
 
 
 @receiver(PROJECT_CATEGORY_SORT_UPDATED, dispatch_uid='project.project_categories_sort_updated')
