@@ -3,9 +3,9 @@
  * @author <a href="mailtolee.j.sinclair@gmail.com">Lee Sinclair</a>
  * Date: 2 Sept 2013
  */
-angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService', 'lawPalUrls', '$location', '$anchorScroll', 'angularPusher', 'toaster', '$modal',
+angular.module("lawpal").controller( "ProjectCtrl", [ "$scope", "lawPalService", "lawPalUrls", "$location", "$anchorScroll", "angularPusher", "toaster", "$modal",
 	function( $scope, lawPalService, lawPalUrls, $location, $anchorScroll, angularPusher, toaster, $modal ) {
-
+	"use strict";
 	// Load project details
 	$scope.project = {};
 	$scope.data = {
@@ -38,15 +38,15 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 			$scope.loadDiscussions();
 			$scope.loading.project = false;
 			lawPalService.usernameSearch( $scope.data.users ).then(
-				function success( results ) {
+				function success() {
 					$scope.loading.users = false;
 				},
-				function error( err ) {
+				function error() {
 					$scope.loading.users = false;
 				}
 			);
 		},
-		function error( err ) {
+		function error() {
 			toaster.pop( "warning", "Load error", "Unable to load project details" );
 		}
 	);
@@ -61,12 +61,11 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 	 * @param  {Object} updatedTeam New team object
 	 */
 	$scope.updateTeam = function( updatedTeam ) {
-		console.log("updated team", updatedTeam );
 		lawPalService.updateProjectTeam(updatedTeam).then(
-			function success( response ) {
+			function success( /*response*/ ) {
 				toaster.pop( "success", "Update successful" );
 			},
-			function error( err ) {
+			function error( /*err*/ ) {
 				toaster.pop( "warning", "Update error", "Unable to update team details, please try again later" );
 			}
 		);
@@ -78,9 +77,7 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 				$scope.data.discussions = results;
 				$scope.generateWorkingDiscussionData();
 			},
-			function error( err ) {
-
-			}
+			function error( /*err*/ ) { }
 		);
 	};
 
@@ -93,11 +90,9 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 		else {
 			return working.dicussions[obj]||null;
 		}
-		console.log(working.dicussions);
 	}
 
 	$scope.generateWorkingDiscussionData = function( parentId, childId ) {
-		var responses;
 		var discussionItem;
 		var data = [];
 
@@ -131,8 +126,8 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 	$scope.openManageTeamDialog = function() {
 		var modalInstance = $modal.open({
 			"windowClass": "modal modal-show",
-			"templateUrl": 'manageTeam.html',
-			"controller": 'manageTeamDialogCtrl',
+			"templateUrl": "manageTeam.html",
+			"controller": "manageTeamDialogCtrl",
 			"resolve": {
 				"team": function () {
 					return $scope.data.users;
@@ -144,7 +139,6 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 			function ok( updatedTeam ) {
 				$scope.updateTeam( updatedTeam );
 			}, function cancel() {
-				console.info('Modal dismissed at: ' + new Date());
 			}
 		);
 	};
@@ -155,10 +149,10 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 	$scope.openDiscussionDialog = function( parent ) {
 		var modalInstance = $modal.open({
 			"windowClass": "modal modal-show",
-			"templateUrl": 'newDiscussion.html',
-			"controller": 'newDiscussionDialogCtrl',
+			"templateUrl": "newDiscussion.html",
+			"controller": "newDiscussionDialogCtrl",
 			"resolve": {
-				"parent": function () {
+				"parent": function(){
 					return parent;
 				}
 			}
@@ -168,7 +162,6 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 			function ok( message ) {
 				$scope.newDiscussion( message );
 			}, function cancel() {
-				console.info('Modal dismissed at: ' + new Date());
 			}
 		);
 	};
@@ -176,15 +169,13 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 	$scope.newDiscussion = function( message ) {
 		var userPk = lawPalService.getCurrentUser().pk;
 		var messageDetails = {
-			"object_pk": $scope.data.project.uuid, 
-			"title": message.subject, 
-			"comment": message.comment, 
-			"user": userPk, 
+			"object_pk": $scope.data.project.uuid,
+			"title": message.subject,
+			"comment": message.comment,
+			"user": userPk,
 			"content_type_id": lawPalService.projectContentTypeId(),
 			"parent_id": message.parent_id
 		};
-
-		console.log( "messageDetails", messageDetails );
 
 		lawPalService.addDiscussion( messageDetails).then(
 			function success( response ) {
@@ -192,7 +183,7 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 				toaster.pop( "success", "Discussion item added" );
 				$scope.generateWorkingDiscussionData(  message.parent_id, response.id );
 			},
-			function error( err ) {
+			function error( /*err*/ ) {
 				toaster.pop( "warning", "Error", "Unable to post discussion item" );
 			}
 		);
@@ -202,8 +193,8 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 		// profileDialogCtrl
 		var modalInstance = $modal.open({
 			"windowClass": "modal modal-show",
-			"templateUrl": 'profileDialog.html',
-			"controller": 'profileDialogCtrl',
+			"templateUrl": "profileDialog.html",
+			"controller": "profileDialogCtrl",
 			"resolve": {
 				"user": function () {
 					return user;
@@ -212,7 +203,7 @@ angular.module('lawpal').controller( 'ProjectCtrl', [ '$scope', 'lawPalService',
 		});
 
 		modalInstance.result.then(
-			function ok( updatedTeam ) {
+			function ok() {
 				
 			}, function cancel() {
 			}

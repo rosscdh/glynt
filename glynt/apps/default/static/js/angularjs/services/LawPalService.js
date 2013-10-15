@@ -3,73 +3,74 @@
  * @author <a href="mailtolee.j.sinclair@gmail.com">Lee Sinclair</a>
  * Date: 2 Sept 2013
  */
-angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource', '$http', function ($q, $timeout, $resource, $http) { /* Load the LawPal local interface */
+angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource', '$http', function ($q, $timeout, $resource, $http) { /* Load the LawPal local interface */
+	'use strict';
 	var lawPalInterface = LawPal;
-	var userType = "is_customer";
+	var userType = 'is_customer';
 	var checklist = [];
 	var getEndpoint = (lawPalInterface.getEndpoint ? lawPalInterface.getEndpoint() : null);
 	var data = {
-		"project": {},
-		"users": []
+		'project': {},
+		'users': []
 	};
 
 	/* Define API interfaces for check list items */
 	var checkListItemResources = {
-		"remove": $resource("/api/v1/todo/:id", {}, 
+		'remove': $resource('/api/v1/todo/:id', {}, 
 			/* This is done to ensure the content type of PATCH is sent through */
-			{ "save": { "method": "PATCH", headers: { "Content-Type": "application/json" } } 
+			{ 'save': { 'method': 'PATCH', headers: { 'Content-Type': 'application/json' } } 
 		}),
-		"update": 
-			$resource("/api/v1/todo/:id\\/", {},
-				{ "save": { "method": "PUT", headers: { "Content-Type": "application/json" } } 
+		'update': 
+			$resource('/api/v1/todo/:id\\/', {},
+				{ 'save': { 'method': 'PUT', headers: { 'Content-Type': 'application/json' } } 
 			}),
-		"create": 
-			$resource("/api/v1/todo\\/", {},
-				{ "save": { "method": "POST", headers: { "Content-Type": "application/json" } } 
+		'create': 
+			$resource('/api/v1/todo\\/', {},
+				{ 'save': { 'method': 'POST', headers: { 'Content-Type': 'application/json' } } 
 			}),
-		"reorder": $resource("/api/v1/project/:id/checklist/sort\\/", {}, 
+		'reorder': $resource('/api/v1/project/:id/checklist/sort\\/', {}, 
 			/* This is done to ensure the content type of PATCH is sent through */
-			{ "save": { "method": "PATCH", headers: { "Content-Type": "application/json" }, "isArray": true } 
+			{ 'save': { 'method': 'PATCH', headers: { 'Content-Type': 'application/json' }, 'isArray': true } 
 		})
 	};
 
 	var checkListCategories = {
-		"reorder": $resource("/api/v1/project/:id/checklist/categories/sort\\/", {}, 
+		'reorder': $resource('/api/v1/project/:id/checklist/categories/sort\\/', {}, 
 			/* This is done to ensure the content type of PATCH is sent through */
-				{ "save": { "method": "PATCH", headers: { "Content-Type": "application/json" }, "isArray": true } 
+				{ 'save': { 'method': 'PATCH', headers: { 'Content-Type': 'application/json' }, 'isArray': true } 
 			}),
-		"add": $resource( "/projects/:id/category\\/", {},
-				{ "save": { "method": "POST", "headers" : {'Content-Type': 'application/x-www-form-urlencoded'}, "transformRequest": transformToFormData } 
+		'add': $resource( '/projects/:id/category\\/', {},
+				{ 'save': { 'method': 'POST', 'headers' : {'Content-Type': 'application/x-www-form-urlencoded'}, 'transformRequest': transformToFormData } 
 			}),
-		"delete": $resource( "/projects/:id/category\\/", {},
-				{ "save": { "method": "DELETE", "headers" : { "Content-Type": "application/json" } } 
+		'delete': $resource( '/projects/:id/category\\/', {},
+				{ 'save': { 'method': 'DELETE', 'headers' : { 'Content-Type': 'application/json' } } 
 			})
 	};
 
 	var projectResource = {
-		"details": $resource("/api/v2/project/:uuid/?format=json", {}, /* use ?format=json to avoid trailing slash issues*/
+		'details': $resource('/api/v2/project/:uuid/?format=json', {}, /* use ?format=json to avoid trailing slash issues*/
 				{ 
-					"get": { "method": "GET", "headers": { "Content-Type": "application/json" } },
-					"patch": { "method": "PATCH", "headers": { "Content-Type": "application/json" } } 
+					'get': { 'method': 'GET', 'headers': { 'Content-Type': 'application/json' } },
+					'patch': { 'method': 'PATCH', 'headers': { 'Content-Type': 'application/json' } } 
 				}
 			),
-		"team": $resource("/api/v2/project/:uuid/team/?format=json", {}, 
+		'team': $resource('/api/v2/project/:uuid/team/?format=json', {}, 
 				{ 
-					"update": { "method": "PATCH", "headers": { "Content-Type": "application/json" } },
-					"get": { "method": "GET", "headers": { "Content-Type": "application/json" } }
+					'update': { 'method': 'PATCH', 'headers': { 'Content-Type': 'application/json' } },
+					'get': { 'method': 'GET', 'headers': { 'Content-Type': 'application/json' } }
 				}
 			)
 	};
 
 	var userResource = {
-		"email": $resource( "/api/v2/user/?email=:searchFor", {},
+		'email': $resource( '/api/v2/user/?email=:searchFor', {},
 				{
-					"search": { "method": "GET", "headers": { "Content-Type": "application/json" } }
+					'search': { 'method': 'GET', 'headers': { 'Content-Type': 'application/json' } }
 				}
 			),
-		"username": $resource( "/api/v1/user/profile/?username__in=:searchFor", {},
+		'username': $resource( '/api/v1/user/profile/?username__in=:searchFor', {},
 				{
-					"search": { "method": "GET", "headers": { "Content-Type": "application/json" } }
+					'search': { 'method': 'GET', 'headers': { 'Content-Type': 'application/json' } }
 				}
 			)
 
@@ -77,10 +78,10 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 	};
 
 	var discussionResource = {
-		"project": $resource( "/api/v2/project/:uuid/discussion/?format=json", {},
+		'project': $resource( '/api/v2/project/:uuid/discussion/?format=json', {},
 				{
-					"get": { "method": "GET", "headers": { "Content-Type": "application/json" } },
-					"save": { "method": "POST", "headers": { "Content-Type": "application/json" } }
+					'get': { 'method': 'GET', 'headers': { 'Content-Type': 'application/json' } },
+					'save': { 'method': 'POST', 'headers': { 'Content-Type': 'application/json' } }
 				}
 			)
 	};
@@ -97,18 +98,18 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		 * Retreive current project
 		 * @return {Function} promise
 		 */
-		"currentProject": function() {
+		'currentProject': function() {
 			var deferred = $q.defer();
 			var projectDetails = {};
 			var projectUuid = this.getProjectUuid();
 			var _this = this;
 
-			if (lawPalInterface && typeof(lawPalInterface.project)==="function") {
+			if (lawPalInterface && typeof(lawPalInterface.project)==='function') {
 				projectDetails = lawPalInterface.project();
 			}
 
 			// Get lawpal object
-			projectResource.details.get( { "uuid": projectUuid },
+			projectResource.details.get( { 'uuid': projectUuid },
 				function success( results ) {
 					projectDetails = Object.merge( projectDetails, results );
 					data.project = projectDetails;
@@ -131,12 +132,12 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			return deferred.promise;
 		},
 
-		"loadProjectTeamMembers": function( projectDetails ) {
+		'loadProjectTeamMembers': function( projectDetails ) {
 			// 
 			var projectUuid = this.getProjectUuid();
 			var deferred = $q.defer();
 
-			projectResource.team.get( { "uuid": projectUuid },
+			projectResource.team.get( { 'uuid': projectUuid },
 				function success( results ) {
 					deferred.resolve( results.team );
 				},
@@ -152,7 +153,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		 * Merge different user types into a single array for the purpose of displaying them in a list
 		 * @return {Array} Array of users
 		 */
-		"mergedProjectTeam": function( project, team ) {
+		'mergedProjectTeam': function( project, team ) {
 			//
 			var user;
 			var users = team || [];
@@ -167,8 +168,8 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 				if(!user.is_deleted)
 					user.is_deleted = false;
 
-				if( user.is_lawyer ) user.role = "lawyer";
-				if( user.is_customer ) user.role = "customer";
+				if( user.is_lawyer ) user.role = 'lawyer';
+				if( user.is_customer ) user.role = 'customer';
 				if( user.id ) user.pk = user.id;
 
 				if( user.username == data.project.customer.username ) user.primary = true;
@@ -177,15 +178,15 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 
 			// Add Yael Citro
 			var accountManager = {
-				"full_name": "Yael Citro",
-				"email": "xw4ux8lx@incoming.intercom.io",
-				"photo": "/static/img/yael-contact-face.jpg",
-				"role": "account manager",
-				"position": "Co-Founder",
-				"company": "LawPal",
-				"summary": null,
-				"pk": null,
-				"is_deleted": false
+				'full_name': 'Yael Citro',
+				'email': 'xw4ux8lx@incoming.intercom.io',
+				'photo': '/static/img/yael-contact-face.jpg',
+				'role': 'account manager',
+				'position': 'Co-Founder',
+				'company': 'LawPal',
+				'summary': null,
+				'pk': null,
+				'is_deleted': false
 			};
 
 			users.push( accountManager );
@@ -195,10 +196,10 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			return users;
 		},
 
-		"updateProjectTeam": function( team ) {
+		'updateProjectTeam': function( team ) {
 			var deferred = $q.defer();
 			// Update lawyers
-			var options = { "uuid": this.getProjectUuid() };
+			var options = { 'uuid': this.getProjectUuid() };
 			var updatedTeam = team.filter( function( user ){
 				return user.is_deleted !== true;
 			});
@@ -210,7 +211,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 				return id !==null && id>=0;
 			});
 
-			var obj = { "team": data };
+			var obj = { 'team': data };
 
 			projectResource.team.update( options, obj, 
 				function success( response ) {
@@ -229,7 +230,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		 * Request the list of categories
 		 * @return {Function} promise for categories
 		 */
-		"getCategories": function () {
+		'getCategories': function () {
 			// Set up a promise, because this method might retrieve information from the API directly in the future
 			var deferred = $q.defer();
 			var categories = [];
@@ -255,16 +256,16 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		 * @param  {Array} reOrderedCategories Array of catgeory names
 		 * @return {Function}                  promise
 		 */
-		"updateCategoryOrder": function( reOrderedCategories ) {
+		'updateCategoryOrder': function( reOrderedCategories ) {
 			var projectId = this.getProjectUuid();
-			var options = { "id": projectId };
+			var options = { 'id': projectId };
 			var cats = reOrderedCategories.map( 
 				function( item, i ) { 
-					//return  { "label": item.label.unescapeHTML(), "order": i }; 
+					//return  { 'label': item.label.unescapeHTML(), 'order': i }; 
 					return  item.label.unescapeHTML(); 
 				}
 			);
-			var data = { "project": projectId, "categories": cats };
+			var data = { 'project': projectId, 'categories': cats };
 			var deferred = $q.defer();
 
 			checkListCategories.reorder.save(options, data.categories, function (results) { /* Success */
@@ -277,16 +278,16 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			return deferred.promise;
 		},
 
-		"addCategory": function( details ) {
+		'addCategory': function( details ) {
 			var deferred = $q.defer();
 
 			var projectId = this.getProjectUuid();
-			var url = "/projects/" + projectId  + "/category/";
+			var url = '/projects/' + projectId  + '/category/';
 
 			if( details && details.category ) {
 				$http.post(url, details, {
-			        "headers": { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-			        "transformRequest": transformToFormData
+			        'headers': { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+			        'transformRequest': transformToFormData
 			    }).success(function(response) {
 			        //do stuff with response
 			        if( response && response.instance && response.instance.category ) {
@@ -304,14 +305,14 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			return deferred.promise;
 		},
 
-		"removeCategory": function( details ) {
+		'removeCategory': function( details ) {
 			var deferred = $q.defer();
 
 			var projectId = this.getProjectUuid();
-			var options = { "id": projectId };
+			var options = { 'id': projectId };
 
 			if( details && details.info.label ) {
-				var data = { "category": details.info.label };
+				var data = { 'category': details.info.label };
 				checkListCategories.delete.save(options, data, function (results) { /* Success */
 						deferred.resolve(results);
 					}, function (results) { /* Error */
@@ -328,11 +329,11 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		 * @param  {Array} categories array of categories (with nested checklist items)
 		 * @return {Function}            promise
 		 */
-		"updateChecklistItemOrder": function( categories ) {
+		'updateChecklistItemOrder': function( categories ) {
 			var projectId = this.getProjectUuid();
 			var slugItems = [];
-			var options = { "id": projectId };
-			var data = { "slugs": [] };
+			var options = { 'id': projectId };
+			var data = { 'slugs': [] };
 			var deferred = $q.defer();
 
 			angular.forEach( categories, function( item, index ) {
@@ -357,7 +358,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		 * @param  {String} 	sortByProperty used to dermine which attribute to sort the data by
 		 * @return {Function}   Promise
 		 */
-		"getChecklist": function (sortByProperty) {
+		'getChecklist': function (sortByProperty) {
 			// Set up a promise, because this method might retrieve information from the API directly in the future
 			var deferred = $q.defer();
 			var checklist = [];
@@ -383,7 +384,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		 * Returns the list of feedback requests
 		 * @return {Function}   Promise
 		 */
-		"getFeedbackRequests": function (sortByProperty) {
+		'getFeedbackRequests': function (sortByProperty) {
 			// Set up a promise, because this method might retrieve information from the API directly in the future
 			var deferred = $q.defer();
 			var feedbackRequests = [];
@@ -405,10 +406,10 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 
 		/**
 		 * Get current users profile type
-		 * @return {String} "is_lawyer" or "_is_customer"
+		 * @return {String} 'is_lawyer' or '_is_customer'
 		 */
-		"getUserType": function () {
-			if (lawPalInterface.is_lawyer) return "is_lawyer";
+		'getUserType': function () {
+			if (lawPalInterface.is_lawyer) return 'is_lawyer';
 			else return userType;
 		},
 
@@ -418,7 +419,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		 * @param  {String} csrf [description]
 		 * @return {Function}	  promise for AJAX request
 		 */
-		"updateChecklistItem": function( item, pusherConfig ) {
+		'updateChecklistItem': function( item, pusherConfig ) {
 			//
 			var deferred = $q.defer();
 
@@ -431,7 +432,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 				
 			if( item.id ) {
 				var options = {
-					"id": item.id
+					'id': item.id
 				};
 
 				checkListItemResources.update.save(options, item, function (results) { /* Success */
@@ -455,14 +456,14 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		 * @param  {Object} 	item JSON object representing the check list item to remove
 		 * @return {Function}   promise to delete item
 		 */
-		"deleteChecklistItem": function (item) {
+		'deleteChecklistItem': function (item) {
 			var deferred = $q.defer();
 			var options = {
-				"id": item.id
+				'id': item.id
 			};
 
 			var actionDetails = {
-				"is_deleted": true
+				'is_deleted': true
 			};
 
 			checkListItemResources.remove.save(options, actionDetails, function (results) { /* Success */
@@ -478,19 +479,19 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		 * Get current project ID if available
 		 * @return {Number} project Id
 		 */
-		"getProjectId": function() {
+		'getProjectId': function() {
 			return LawPal.project.id;
 		},
 
-		"getProjectUuid": function() {
-			if( typeof(LawPal.project)==="function")
+		'getProjectUuid': function() {
+			if( typeof(LawPal.project)==='function')
 				return LawPal.project().uuid;
 			else
 				return LawPal.project.uuid;
 		},
 
-		"projectContentTypeId": function() {
-			if( typeof(LawPal.project)==="function")
+		'projectContentTypeId': function() {
+			if( typeof(LawPal.project)==='function')
 				return LawPal.project().content_type_id;
 			else
 				return LawPal.project.content_type_id || 14;
@@ -500,28 +501,28 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		 * Get current user
 		 * @return {Object} Current user
 		 */
-		"getCurrentUser": function() {
+		'getCurrentUser': function() {
 			return (LawPal.user && LawPal.user.is_authenticated?LawPal.user:null);
 		},
 
-		"usernameSearch": function( users ) {
+		'usernameSearch': function( users ) {
 			var deferred = $q.defer();
 			var userList = [];
-			var searchList  = "";
+			var searchList  = '';
 			var retreivedUsers = [];
 			var user, updatedUser;
 
 			if( angular.isArray( users ) ) {
 				userList = users.map( function( user ){
-					return user["username"];
+					return user['username'];
 				});
 
-				searchList = userList.join(",");
+				searchList = userList.join(',');
 			} else {
 				searchList= users;
 			}
 
-			var options = { "searchFor": searchList }
+			var options = { 'searchFor': searchList }
 
 			userResource.username.search( options, 
 				function success( data ) {
@@ -557,10 +558,10 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			return deferred.promise;
 		},
 
-		"emailSearch": function( str ) {
+		'emailSearch': function( str ) {
 			var deferred = $q.defer();
 
-			var options = { "searchFor": str };
+			var options = { 'searchFor': str };
 
 			userResource.email.search( options, 
 				function success( data ) {
@@ -584,10 +585,10 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			return deferred.promise;
 		},
 
-		"discussionList": function() {
+		'discussionList': function() {
 			var deferred = $q.defer();
 			var projectUuid = this.getProjectUuid();
-			var options = { "uuid": projectUuid };
+			var options = { 'uuid': projectUuid };
 
 			discussionResource.project.get( options,
 				function success( data ) {
@@ -607,10 +608,10 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			return deferred.promise;
 		},
 
-		"addDiscussion": function( message ) {
+		'addDiscussion': function( message ) {
 			var deferred = $q.defer();
 			var projectUuid = this.getProjectUuid();
-			var options = { "uuid": projectUuid };
+			var options = { 'uuid': projectUuid };
 
 			discussionResource.project.save( options, message,
 				function success( result ) {
@@ -639,7 +640,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		if (angular.isArray(categories) && categories.length > 0) {
 			for (var i = 0; i < categories.length; i++){
 				var cat = categories[i];
-				if (cat && cat.label !== "") {
+				if (cat && cat.label !== '') {
 					cat.label = cat.label.unescapeHTML();
 					cleanCats.push(cat);
 				}
