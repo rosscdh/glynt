@@ -29,13 +29,15 @@ helper.scenario(casper.cli.options.url,
 			this.click('.modal .btn-primary');
 
 			/* Account manager role */
+			/*
 			this.click('button.role-account');
 			casper.waitForSelector('.modal .profile-details', function() {
 				this.test.assertSelectorHasText('.modal h1', 'Yael Citro');
 				this.test.assertNotVisible('.modal .btn-success');
-				this.test.assertExists('.modal .btn-primary'); /* Close button */
+				this.test.assertExists('.modal .btn-primary'); // Close button
 				this.click('.modal .btn-primary');
 			});
+			*/
 		});
 	},
 	function () {
