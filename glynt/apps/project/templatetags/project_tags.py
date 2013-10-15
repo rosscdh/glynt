@@ -6,7 +6,7 @@ register = template.Library()
 from notifications.models import Notification
 
 from glynt.apps.project.models import Project, ProjectLawyer
-from glynt.apps.project.utils import PROJECT_CONTENT_TYPE, PROJECTLAWYER_CONTENT_TYPE
+from glynt.apps.project.utils import PROJECT_CONTENT_TYPE
 from glynt.apps.project import PROJECT_LAWYER_STATUS
 
 
@@ -29,11 +29,14 @@ def project_activity_stream(project, limit=10):
     }
 
 
-@register.simple_tag(takes_context=False)
-def discussion_notification_count(project_lawyer_join):
-    return Notification.objects.filter(recipient=project_lawyer_join.lawyer,
-                                       target_object_id=project_lawyer_join.pk,
-                                       target_content_type=PROJECTLAWYER_CONTENT_TYPE).count()
+@register.simple_tag(takes_context=True)
+def discussion_notification_count(context, project_lawyer_join):
+    user = context.get('user')
+    objects = Notification.objects.filter(recipient=user,
+                                          target_object_id=project_lawyer_join.project.pk,
+                                          target_content_type=PROJECT_CONTENT_TYPE,
+                                          unread=True)
+    return objects.count()
 
 
 @register.inclusion_tag('project/partials/project_lawyers.html')

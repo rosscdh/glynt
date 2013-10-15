@@ -9,12 +9,15 @@ from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.http import Http404
 
+from notifications.models import Notification
+
 from glynt.apps.utils import AjaxableResponseMixin
 
 from glynt.apps.project.models import Project, ProjectLawyer
 from glynt.apps.lawyer.models import Lawyer
 from glynt.apps.project.forms import ContactUsForm, CreateProjectForm
 from glynt.apps.project.services.ensure_project import EnsureProjectService
+from glynt.apps.project.utils import PROJECT_CONTENT_TYPE
 
 from glynt.apps.transact.models import Transaction
 
@@ -95,11 +98,23 @@ class LawyerContactProjectView(ProjectView):
     """
     template_name = 'project/lawyer_contact.html'
 
+    def mark_notifications(self, project_lawyer_join):
+        """
+        if the user is a lawyer then remove the notifications
+        """
+        if self.request.user.profile.is_lawyer:
+            Notification.objects.filter(recipient=self.request.user,
+                                        target_object_id=project_lawyer_join.project.pk,
+                                        target_content_type=PROJECT_CONTENT_TYPE)  \
+                                .delete()
+
     def get_context_data(self, **kwargs):
         context = super(LawyerContactProjectView, self).get_context_data(**kwargs)
 
         lawyer = get_object_or_404(Lawyer.objects.prefetch_related('user'), user__username=self.kwargs.get('lawyer'))
         project_lawyer_join = ProjectLawyer.objects.get(project=self.object, lawyer=lawyer)
+
+        self.mark_notifications(project_lawyer_join=project_lawyer_join)
 
         context.update({
             'PROJECT_LAWYER_STATUS': PROJECT_LAWYER_STATUS,
