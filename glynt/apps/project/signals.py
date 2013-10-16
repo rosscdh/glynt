@@ -6,25 +6,27 @@ Please Note:
 The recievers are handled here. But must be connected in the project.models due to the way
 signals are imported a number of the imports in this file will cause circular imports
 """
+from django.dispatch import receiver
+from django.db.models.signals import pre_save, post_save, pre_delete
+
 from notifications import notify
 
-from notifications.models import Notification
-
-from .utils import _PROJECT_CONTENT_TYPE
+from .models import Project, ProjectLawyer
 from .services.email import SendNewProjectEmailsService
 from .services.project_checklist import ProjectCheckListService
 from .services.engage_lawyer_comments import EngageLawyerCommentsMoveService
+from . import (PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE,
+               PROJECT_CATEGORY_SORT_UPDATED)
 
 from glynt.apps.services.pusher import PusherPublisherService
 from glynt.apps.services.email import NewActionEmailService
 
-from .models import ProjectLawyer
 
 import logging
 logger = logging.getLogger('django.request')
 
 
-#@receiver(PROJECT_CREATED, dispatch_uid='project.on_project_created')
+@receiver(PROJECT_CREATED, dispatch_uid='project.on_project_created')
 def on_project_created(sender, **kwargs):
     """
     Handle new Project
@@ -53,17 +55,7 @@ def on_project_created(sender, **kwargs):
         send.process()
 
 
-#@receiver(post_save, sender=Project, dispatch_uid='project.on_save_ensure_user_in_participants')
-def on_save_ensure_user_in_participants(sender, **kwargs):
-    project = kwargs.get('instance')
-    if project:
-        user = project.customer.user
-
-        if user not in project.participants.all():
-            project.participants.add(user)
-
-
-#@receiver(PROJECT_CATEGORY_SORT_UPDATED, dispatch_uid='project.project_categories_sort_updated')
+@receiver(PROJECT_CATEGORY_SORT_UPDATED, dispatch_uid='project.project_categories_sort_updated')
 def on_project_categories_sort_updated(sender, instance, user, categories, **kwargs):
     pusher_service = PusherPublisherService(channel=instance.pusher_id, event='project.project_categories_sort_updated')
 
@@ -73,7 +65,7 @@ def on_project_categories_sort_updated(sender, instance, user, categories, **kwa
     pusher_service.process(comment=comment)
 
 
-#@receiver(PROJECT_PROFILE_IS_COMPLETE, dispatch_uid='project.on_project_profile_is_complete')
+@receiver(PROJECT_PROFILE_IS_COMPLETE, dispatch_uid='project.on_project_profile_is_complete')
 def on_project_profile_is_complete(sender, **kwargs):
     """
     Handle Project Profile being set as complete
@@ -85,18 +77,16 @@ def on_project_profile_is_complete(sender, **kwargs):
         project.save(update_fields=['data'])
 
 
-def mark_project_notifications_as_read(user, project):
-    """ used to mark the passed in users notifications for a specific project as read (can be either a lawyer or a customer) """
-    logger.debug('marking unred notifications as read for user: %s and project: %s' % (user, project.pk))
-    Notification.objects.filter(
-        recipient=user,
-        target_object_id=project.pk,
-        unread=True,
-        target_content_type=_PROJECT_CONTENT_TYPE()
-    ).mark_all_as_read()
+@receiver(post_save, sender=Project, dispatch_uid='project.on_save_ensure_user_in_participants')
+def on_save_ensure_user_in_participants(sender, **kwargs):
+    project = kwargs.get('instance')
+    user = project.customer.user
+
+    if user not in project.participants.all():
+        project.participants.add(user)
 
 
-#@receiver(pre_save, sender=ProjectLawyer, dispatch_uid='project.lawyer_assigned')
+@receiver(pre_save, sender=ProjectLawyer, dispatch_uid='project.lawyer_assigned')
 def on_lawyer_assigned(sender, **kwargs):
     instance = kwargs.get('instance')
 
@@ -106,7 +96,7 @@ def on_lawyer_assigned(sender, **kwargs):
 
         if prev_instance.status != instance.status:
 
-            if instance.status == instance.LAWYER_STATUS.assigned:
+            if instance.status == instance._LAWYER_STATUS.assigned:
                 logger.info('Sending ProjectLawyer.assigned email')
 
                 # send email of congratulations to lawyer in question
@@ -137,12 +127,12 @@ def on_lawyer_assigned(sender, **kwargs):
                     pk=instance.pk
                 ).filter(
                     project=instance.project,
-                    status=instance.LAWYER_STATUS.potential
+                    status=instance._LAWYER_STATUS.potential
                 ).update(
-                    status=instance.LAWYER_STATUS.rejected
+                    status=instance._LAWYER_STATUS.rejected
                 )
 
-#@receiver(post_save, sender=ProjectLawyer, dispatch_uid='project.lawyer_on_save_ensure_participants')
+@receiver(post_save, sender=ProjectLawyer, dispatch_uid='project.lawyer_on_save_ensure_participants')
 def lawyer_on_save_ensure_participants(sender, **kwargs):
     instance = kwargs.get('instance')
 
@@ -154,7 +144,7 @@ def lawyer_on_save_ensure_participants(sender, **kwargs):
     if lawyer_user not in participants:
         project.participants.add(lawyer_user)
 
-#@receiver(pre_delete, sender=ProjectLawyer, dispatch_uid='project.lawyer_on_delete_ensure_participants')
+@receiver(pre_delete, sender=ProjectLawyer, dispatch_uid='project.lawyer_on_delete_ensure_participants')
 def lawyer_on_delete_ensure_participants(sender, **kwargs):
     instance = kwargs.get('instance')
 

@@ -121,8 +121,8 @@ class TeamListView(RetrieveUpdateAPIView):
             for lawyer in self.lawyers:
                 if lawyer not in project_lawyers:
                     #project.lawyers.add(lawyer) # CANT USE ADD due to custom through table
-                    # ProjectLawyer.objects.get_or_create(project=project, lawyer=lawyer, status=ProjectLawyer.LAWYER_STATUS.potential)  # removed temporarily until we talk about status
-                    ProjectLawyer.objects.get_or_create(project=project, lawyer=lawyer, status=ProjectLawyer.LAWYER_STATUS.assigned)
+                    # ProjectLawyer.objects.get_or_create(project=project, lawyer=lawyer, status=ProjectLawyer._LAWYER_STATUS.potential)  # removed temporarily until we talk about status
+                    ProjectLawyer.objects.get_or_create(project=project, lawyer=lawyer, status=ProjectLawyer._LAWYER_STATUS.assigned)
 
     def save_customer(self):
         """

@@ -276,7 +276,7 @@ def projectlawyer_assigned(sender, **kwargs):
     """
     instance = kwargs.get('instance')
 
-    if instance.status == ProjectLawyer.LAWYER_STATUS.assigned:
+    if instance.status == ProjectLawyer._LAWYER_STATUS.assigned:
         logger.info('Assigned Lawyer: {lawyer} to Project: {project}'.format(lawyer=instance.lawyer, project=instance.project))
         instance.project.todo_set.filter(user=None).update(user=instance.lawyer.user)
 
