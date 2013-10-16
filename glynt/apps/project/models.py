@@ -160,3 +160,9 @@ class ProjectLawyer(models.Model):
 
     def get_absolute_url(self):
         return reverse('project:project_contact', kwargs={'slug': self.project.uuid, 'lawyer': self.lawyer.user.username})
+
+
+from .signals import (on_project_created, on_save_ensure_user_in_participants, 
+                      on_lawyer_assigned,
+                      lawyer_on_save_ensure_participants,
+                      lawyer_on_delete_ensure_participants,)
