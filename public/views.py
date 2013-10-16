@@ -75,13 +75,16 @@ class UserClassLoggedInRedirectView(RedirectView):
     def get_redirect_url(self, **kwargs):
         """ if the user has already signed up and has set a password then continue normally
         otherwise show them the form """
-        if self.request.user.password == '!':
-            url = reverse('client:confirm_signup', kwargs={'slug': self.request.user.username})
+        #
+        # @BUSINESSRULE Removed password test, as we dont actually use password (yet)
+        #
+        #if self.request.user.password == '!':
+        #    url = reverse('client:confirm_signup', kwargs={'slug': self.request.user.username})
+        #else:
+        if self.request.user.is_authenticated() and self.request.user.profile.is_customer:
+            url = CustomerLoginLogic(user=self.request.user).url
         else:
-            if self.request.user.is_authenticated() and self.request.user.profile.is_customer:
-                url = CustomerLoginLogic(user=self.request.user).url
-            else:
-                url = reverse('public:homepage')
+            url = reverse('public:homepage')
 
         return url
 
