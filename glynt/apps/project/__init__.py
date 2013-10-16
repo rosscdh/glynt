@@ -20,8 +20,3 @@ PROJECT_CREATED = dispatch.Signal(providing_args=["created", "instance"])
 PROJECT_PROFILE_IS_COMPLETE = dispatch.Signal(providing_args=["instance"])
 
 PROJECT_CATEGORY_SORT_UPDATED = dispatch.Signal(providing_args=["instance", "user", "categories"])
-
-from .signals import (on_project_created, on_save_ensure_user_in_participants, 
-                      on_lawyer_assigned,
-                      lawyer_on_save_ensure_participants,
-                      lawyer_on_delete_ensure_participants,)

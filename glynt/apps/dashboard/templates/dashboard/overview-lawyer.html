@@ -55,7 +55,7 @@
                                 <div class="profile-card" data-template="small" data-username="{{ project.customer.user.username }}">&nbsp;</div>
                             </td>
                             <td class="text-left">
-                                <a href="{% url 'project:project_contact' slug=project.uuid lawyer=user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-primary btn-lg">Discuss</a>
+                                <a href="{% url 'project:project_contact' slug=project.uuid lawyer=user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-primary btn-lg">Discuss&nbsp;<span class="badge">{% discussion_notification_count project_lawyer_join=p %}</span></a>
                             </td>
                             <td class="text-center text-warning"> 
                                  <strong>{{ p.display_status }}</strong>

@@ -1,3 +1,4 @@
+{% load project_tags %}
 {% if num_lawyers > 0 %}
     {% if display_type == 'potential' and not project.has_lawyer %}
         <h2 class="text-warning">Review your matches</h2>
@@ -23,7 +24,7 @@
                                         <h2>{{ l.position }} at {{ l.firm_name }}</h2>
                                         <p>{% for loc in practice_locations %}<i class="glyphicon glyphicon-map-marker"></i> {{ loc }}{% endfor %}</p>
                                         <a href="{% url 'lawyer:profile_lite' slug=l.user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-info btn-small">View Profile</a>
-                                        <a href="{% url 'project:project_contact' slug=project.uuid lawyer=l.user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-link">Contact</a>
+                                        <a href="{% url 'project:project_contact' slug=project.uuid lawyer=l.user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-link">Contact&nbsp;<span class="badge">{% discussion_notification_count project_lawyer_join=join %}</span></a>
                                         <!-- <a href="{% url 'project:project_contact' slug=project.uuid lawyer=l.user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-success pull-right">Engage</a> -->
                                         <button data-engage="{{ join.pk }}" data-status="{{ PROJECT_LAWYER_STATUS.assigned }}" class="btn btn-success btn-small pull-right">Engage</button>
                                     </td>

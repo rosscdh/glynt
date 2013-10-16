@@ -52,16 +52,17 @@ class ConfirmLoginDetailsForm(forms.ModelForm):
     def save(self, commit=True):
         user = self.user
 
-        if commit:
+        if commit is True:
             data = self.cleaned_data.copy()
 
             if self.user.profile.is_lawyer:
                 lawyer_service = EnsureLawyerService(user=self.user, firm_name=data.get('company_name'), offices=[], form=self, **data)
                 lawyer_service.process()
 
-            if self.user.profile.is_customer:
+            elif self.user.profile.is_customer:
                 customer_service = EnsureCustomerService(user=user, **data)
                 customer = customer_service.process()
+
                 company_service = EnsureCompanyService(name=data.pop('company_name'), customer=customer, **data)
                 company_service.process()
 
