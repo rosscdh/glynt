@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
+#from django.dispatch import receiver
+from django.db.models.signals import pre_save, post_save, pre_delete
+
 from django.db import models
-from django.core.urlresolvers import reverse
 from django_extensions.db.fields import CreationDateTimeField, ModificationDateTimeField
 
 from uuidfield import UUIDField
 from jsonfield import JSONField
+
+from . import (PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE,
+               PROJECT_CATEGORY_SORT_UPDATED)
 
 from . import PROJECT_STATUS, PROJECT_LAWYER_STATUS
 from .managers import DefaultProjectManager, ProjectLawyerManager
@@ -12,8 +17,6 @@ from .mixins import ProjectCategoriesMixin
 from .utils import _PROJECT_CONTENT_TYPE
 
 from rulez import registry
-
-import itertools
 
 
 class Project(ProjectCategoriesMixin, models.Model):
@@ -48,9 +51,11 @@ class Project(ProjectCategoriesMixin, models.Model):
         return True if user.pk in [u.pk for u in editors] else False
 
     def get_absolute_url(self):
+        from django.core.urlresolvers import reverse
         return reverse('dashboard:project', kwargs={'uuid': str(self.uuid)})
 
     def get_checklist_absolute_url(self):
+        from django.core.urlresolvers import reverse
         return reverse('dashboard:checklist', kwargs={'uuid': str(self.uuid)})
 
     def checklist(self):
@@ -160,8 +165,23 @@ class ProjectLawyer(models.Model):
     def get_absolute_url(self):
         return reverse('project:project_contact', kwargs={'slug': self.project.uuid, 'lawyer': self.lawyer.user.username})
 
-
+"""
+The signal connections are handled here as the signals are imported a number of
+the imports in this file will cause circular imports
+"""
 from .signals import (on_project_created, on_save_ensure_user_in_participants, 
-                      on_lawyer_assigned,
+                      on_lawyer_assigned, on_project_categories_sort_updated,
+                      on_project_profile_is_complete,
                       lawyer_on_save_ensure_participants,
                       lawyer_on_delete_ensure_participants,)
+
+# Model Connect signals
+post_save.connect(on_save_ensure_user_in_participants, sender=Project)
+pre_save.connect(on_lawyer_assigned, sender=ProjectLawyer)
+post_save.connect(lawyer_on_save_ensure_participants, sender=ProjectLawyer)
+pre_delete.connect(lawyer_on_delete_ensure_participants, sender=ProjectLawyer)
+
+# Custom Signals
+PROJECT_CREATED.connect(on_project_created)
+PROJECT_CATEGORY_SORT_UPDATED.connect(on_project_categories_sort_updated)
+PROJECT_PROFILE_IS_COMPLETE.connect(on_project_profile_is_complete)
