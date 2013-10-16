@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 
-from django.contrib.sites.models import Site
-
 from glynt.apps.project import PROJECT_STATUS
-
 from glynt.apps.project.services.mixins import JavascriptRegionCloneMixin
 
 from templated_email import send_templated_mail

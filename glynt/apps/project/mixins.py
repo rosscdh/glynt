@@ -5,6 +5,26 @@ Mixins that relate to the Project app
 from collections import OrderedDict
 
 
+class ProjectRulezMixin(object):
+    """
+    Mixin to use django-rulez with Project model
+    needs to register the methods
+    >> registry.register("can_read", Project)
+    >> registry.register("can_edit", Project)
+    >> registry.register("can_delete", Project)
+    """
+    def can_read(self, user):
+        return True if user.pk in [u.pk for u in self.notification_recipients()] else False
+
+    def can_edit(self, user):
+        editors = [self.customer.user] + list([l.user for l in self.lawyers.all()])
+        return True if user.pk in [u.pk for u in editors] else False
+
+    def can_delete(self, user):
+        editors = [self.customer.user] + list([l.user for l in self.lawyers.all()])
+        return True if user.pk in [u.pk for u in editors] else False
+
+
 class ProjectCategoriesMixin(object):
     """
     A mixin specifically and only for Project ORM objects
