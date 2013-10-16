@@ -7,7 +7,7 @@ from notifications import notify
 
 from notifications.models import Notification
 
-from .utils import PROJECT_CONTENT_TYPE
+from .utils import _PROJECT_CONTENT_TYPE
 from .services.email import SendNewProjectEmailsService
 from .services.project_checklist import ProjectCheckListService
 from .services.engage_lawyer_comments import EngageLawyerCommentsMoveService
@@ -94,7 +94,7 @@ def mark_project_notifications_as_read(user, project):
         recipient=user,
         target_object_id=project.pk,
         unread=True,
-        target_content_type=PROJECT_CONTENT_TYPE
+        target_content_type=_PROJECT_CONTENT_TYPE()
     ).mark_all_as_read()
 
 

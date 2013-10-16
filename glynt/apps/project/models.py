@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.core.urlresolvers import reverse
-
 from django_extensions.db.fields import CreationDateTimeField, ModificationDateTimeField
-from uuidfield import UUIDField
 
+from uuidfield import UUIDField
 from jsonfield import JSONField
 
 from . import PROJECT_STATUS, PROJECT_LAWYER_STATUS
 from .managers import DefaultProjectManager, ProjectLawyerManager
 from .mixins import ProjectCategoriesMixin
+from .utils import _PROJECT_CONTENT_TYPE
 
 from rulez import registry
 
@@ -48,10 +48,10 @@ class Project(ProjectCategoriesMixin, models.Model):
         return True if user.pk in [u.pk for u in editors] else False
 
     def get_absolute_url(self):
-        return reverse('dashboard:project', kwargs={'uuid': self.uuid})
+        return reverse('dashboard:project', kwargs={'uuid': str(self.uuid)})
 
     def get_checklist_absolute_url(self):
-        return reverse('dashboard:checklist', kwargs={'uuid': self.uuid})
+        return reverse('dashboard:checklist', kwargs={'uuid': str(self.uuid)})
 
     def checklist(self):
         """
@@ -67,8 +67,7 @@ class Project(ProjectCategoriesMixin, models.Model):
 
     @property
     def content_type_id(self):
-        from .utils import PROJECT_CONTENT_TYPE
-        return PROJECT_CONTENT_TYPE.pk
+        return _PROJECT_CONTENT_TYPE().pk
 
     @property
     def pusher_id(self):

@@ -9,7 +9,7 @@ helper.scenario(casper.cli.options.url,
         this.viewport(1200, 800);
         //helper.snapshotPage.call( this, 0 );
         this.test.assertHttpStatus(200);
-        this.debugHTML();
+        //this.debugHTML();
 
         /* Test for Full Screen Button */
         casper.test.comment('Full Screen Button exists');
