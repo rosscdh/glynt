@@ -49,7 +49,7 @@ class Project(ProjectCategoriesMixin, ProjectRulezMixin, models.Model):
 
     @property
     def has_lawyer(self):
-        #from glynt.apps.project.models import ProjectLawyer
+        from glynt.apps.project.models import ProjectLawyer
         return ProjectLawyer.objects.assigned(project=self).count() > 0
 
     @property
