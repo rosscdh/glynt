@@ -22,7 +22,7 @@
                     <p style="font-size: 14px;"><span style="color: #999999;">Email:</span> {{ customer.data.email }}</p>
                 </li>
                 <li style="margin-left: 0;">
-                    <p style="font-size: 14px;"><span style="color: #999999;">Telephone:</span> {{ customer.data.telephone }}</p>
+                    <p style="font-size: 14px;"><span style="color: #999999;">Telephone:</span> {{ customer.data.phone }}</p>
                 </li>
             </ul>
             <h2 style="color: #6c797c !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5em; padding: 0;"><strong>Company Information</strong>:</h2>
