@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
+from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.db.models.query import QuerySet
 
+from model_mommy import mommy
+
 from glynt.casper import BaseLawyerCustomerProjectCaseMixin
+from glynt.apps.company.models import Company
 
 
 class CustomerModelTest(BaseLawyerCustomerProjectCaseMixin):
@@ -24,6 +28,26 @@ class CustomerModelTest(BaseLawyerCustomerProjectCaseMixin):
 
     def test_primary_company(self):
         self.assertEqual(self.company, self.customer.primary_company)
+
+
+class InvalidCompanyOnCustomerModelTest(TestCase):
+    def setUp(self):
+        self.customer_user = mommy.make('auth.User', username='customer', first_name='Customer', last_name='A', email='customer+test@lawpal.com')
+        self.customer_user.set_password('test')
+        self.customer = mommy.make('customer.Customer', user=self.customer_user)
+
+    def test_companies(self):
+        self.assertEqual(QuerySet, type(self.customer.companies))
+        self.assertEqual(0, len(self.customer.companies))
+
+    def test_primary_company(self):
+        """
+        shuld return an empty company
+        """
+        primary_company = self.customer.primary_company
+        self.assertEqual(Company, type(primary_company))
+        self.assertEqual(Company(), primary_company)
+        self.assertEqual(None, primary_company.pk)
 
 
 class CustomerProfileSetupFormTest(BaseLawyerCustomerProjectCaseMixin):

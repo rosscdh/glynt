@@ -7,6 +7,8 @@ from django.contrib.admin.models import LogEntry
 
 from threadedcomments.models import ThreadedComment
 
+from notifications import notify
+
 from glynt.apps.utils import generate_unique_slug
 
 from glynt.apps.todo import TODO_STATUS, TODO_STATUS_ACTION, FEEDBACK_STATUS
@@ -179,6 +181,15 @@ def on_comment_created(sender, **kwargs):
                 event = 'project.lawyer_engage.comment.created'
                 verb = '{name} commented on the Lawyer Engagement conversation for {project}'.format(name=comment.user.get_full_name(), project=comment_target.project)
 
+                # notify the lawyer (used for discussion counts)
+                if comment.user.profile.is_customer:
+                    recipient = comment.content_object.lawyer.user
+                else:
+                    recipient = comment.content_object.project.customer.user
+                # send notification
+                notify.send(comment.user, recipient=recipient, verb=u'added to discussion', action_object=comment_target.project,
+                    description=comment.comment, target=comment_target.project, project_action='added_discussion_item', project_pk=comment_target.project.pk, creating_user_pk=comment.user.pk)
+
         if send is True:
             logger.debug('send action: {event} {verb} content: {content}'.format(event=event, verb=verb, content=comment.comment))
             action.send(comment.user,
@@ -265,7 +276,7 @@ def projectlawyer_assigned(sender, **kwargs):
     """
     instance = kwargs.get('instance')
 
-    if instance.status == ProjectLawyer.LAWYER_STATUS.assigned:
+    if instance.status == ProjectLawyer._LAWYER_STATUS.assigned:
         logger.info('Assigned Lawyer: {lawyer} to Project: {project}'.format(lawyer=instance.lawyer, project=instance.project))
         instance.project.todo_set.filter(user=None).update(user=instance.lawyer.user)
 

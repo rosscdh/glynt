@@ -108,7 +108,6 @@ MIDDLEWARE_CLASSES = (
     'glynt.middleware.EnsureUserHasCompanyMiddleware',
     'glynt.middleware.LawpalCurrentProjectsMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    #'pagination.middleware.PaginationMiddleware',
     'django_filepicker.middleware.URLFileMapperMiddleware',
 )
 

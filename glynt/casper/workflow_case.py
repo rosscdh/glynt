@@ -155,7 +155,7 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
 
         # set the join to status engaged
         self.project_lawyer_join = self.project.projectlawyer_set.all()[0]
-        self.project_lawyer_join.status = self.project_lawyer_join.LAWYER_STATUS.assigned
+        self.project_lawyer_join.status = self.project_lawyer_join._LAWYER_STATUS.assigned
         self.project_lawyer_join.save(update_fields=['status'])
 
         self.todo = mommy.make('todo.ToDo', status=TODO_STATUS.open, project=self.project, user=self.lawyer_user, category='General', name="My Todo")
