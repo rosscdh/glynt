@@ -13,6 +13,9 @@ bunch
 # utils for git
 mimeparse
 
+# user switcher
+django-impersonate
+
 # Deployment
 fabric
 gitpython

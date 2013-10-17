@@ -15,6 +15,8 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Admin
     url(r'^admin/', include(admin.site.urls)),
+    # User Switcher
+    url(r'^impersonate/', include('impersonate.urls')),
 
     # Api
     # v2 rest_framework

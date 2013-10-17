@@ -257,6 +257,9 @@ HELPER_APPS = (
 
     # feature switcher
 
+    # user switcher
+    'impersonate',
+
     # Object rules and permissions
     'rulez',
 
