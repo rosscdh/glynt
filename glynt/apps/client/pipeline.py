@@ -99,7 +99,7 @@ def get_username(details, user=None,
     return {'username': final_username}
 
 
-def ensure_lawyer_not_as_client(*args, **kwargs):
+def ensure_mutually_exclusive_userclass(*args, **kwargs):
     is_lawyer = False
     request = kwargs.get('request', None)
 
@@ -108,22 +108,37 @@ def ensure_lawyer_not_as_client(*args, **kwargs):
 
     # if this user is trying to sign in as a customer
     if user_class_name == 'customer':
+        opposite_user_classname = 'lawyer'
 
-        # get their email, as we need to see if they are already present
-        # as a lawyer
-        email = kwargs.get('details', {"email": None})['email']
+    elif user_class_name == 'lawyer':
+        opposite_user_classname = 'customer'
 
-        if email is not None:
-            # try to see if there is a user
-            try:
-                user = User.objects.filter(email=email)[0]
-                is_lawyer = user.profile.is_lawyer
-            except IndexError:
-                logger.info('User is brand new no affiliation yet')
+    # get their email, as we need to see if they are already present
+    # as a lawyer
+    email = kwargs.get('details', {"email": None})['email']
 
-            # oh dear lawyer trying to log in as a customer
-            import pdb;pdb.set_trace()
-            if is_lawyer is True:
-                return HttpResponseRedirect(reverse('public:sorry_are_lawyer'))
+    if email is not None:
+        # try to see if there is a user
+        try:
+            user = User.objects.filter(email=email).order_by('date_joined')[0]
+            current_user_class_name = user.profile.user_class
+
+        except IndexError:
+            logger.info('User is brand new no affiliation yet')
+            current_user_class_name = None
+
+        # oh dear class trying to log in as the opposite class
+        #import pdb;pdb.set_trace()
+        if current_user_class_name == opposite_user_classname:
+
+            if opposite_user_classname == 'customer':
+                # is a customer trying to be a lawyer
+                url = reverse('public:sorry_are_customer')
+
+            else:
+                # is a lawyer trying to be a customer
+                url = reverse('public:sorry_are_lawyer')
+
+            return HttpResponseRedirect(url)
     # nothing hapened continue one
     return None
