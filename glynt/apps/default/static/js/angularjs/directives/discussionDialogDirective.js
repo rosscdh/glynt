@@ -19,8 +19,8 @@ angular.module('lawpal')
 				$rootScope.$broadcast('discussion-show');
 		};
 }])
-.directive('discussionViewerContainer', ['$compile', '$timeout', 'discussionViewer',
-function ($compile, $timeout, discussionViewer ) {
+.directive('discussionViewerContainer', ['$compile', '$timeout', 'discussionViewer', '$anchorScroll',
+function ($compile, $timeout, discussionViewer, $anchorScroll ) {
 	return {
 		'replace': true,
 		'restrict': 'EAC',
