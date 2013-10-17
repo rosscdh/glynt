@@ -49,13 +49,13 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 
 	var projectResource = {
 		'details': $resource('/api/v2/project/:uuid/?format=json', {}, /* use ?format=json to avoid trailing slash issues*/
-				{ 
+				{
 					'get': { 'method': 'GET', 'headers': { 'Content-Type': 'application/json' } },
 					'patch': { 'method': 'PATCH', 'headers': { 'Content-Type': 'application/json' } } 
 				}
 			),
-		'team': $resource('/api/v2/project/:uuid/team/?format=json', {}, 
-				{ 
+		'team': $resource('/api/v2/project/:uuid/team/?format=json', {},
+				{
 					'update': { 'method': 'PATCH', 'headers': { 'Content-Type': 'application/json' } },
 					'get': { 'method': 'GET', 'headers': { 'Content-Type': 'application/json' } }
 				}
@@ -88,10 +88,8 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 
 	var transformToFormData = function(data){
 		// Convert JSON to form post
-        return $.param(data);
-    }
-
-	var checkList = {};
+		return $.param(data);
+	};
 
 	return {
 		/**
@@ -114,7 +112,7 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 					data.project = projectDetails;
 					_this.loadProjectTeamMembers( projectDetails ).then(
 						function success( team ) {
-							data.project.users = _this.mergedProjectTeam( projectDetails, team )
+							data.project.users = _this.mergedProjectTeam( projectDetails, team );
 							deferred.resolve( projectDetails );
 						},
 						function error() {
@@ -131,8 +129,7 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 			return deferred.promise;
 		},
 
-		'loadProjectTeamMembers': function( projectDetails ) {
-			// 
+		'loadProjectTeamMembers': function( ) {
 			var projectUuid = this.getProjectUuid();
 			var deferred = $q.defer();
 
@@ -167,30 +164,14 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 				if(!user.is_deleted)
 					user.is_deleted = false;
 
-				if( user.is_lawyer ) user.role = 'lawyer';
-				if( user.is_customer ) user.role = 'customer';
+				if( user.is_lawyer ) user.role = "lawyer";
+				if( user.is_customer ) user.role = "client";
+
 				if( user.id ) user.pk = user.id;
 
 				if( user.username == data.project.customer.username ) user.primary = true;
 				if( data.project.lawyers[0] && user.username == data.project.lawyers[0].username ) user.primary = true;
 			}
-
-			// Add Yael Citro
-			var accountManager = {
-				'full_name': 'Yael Citro',
-				'email': 'xw4ux8lx@incoming.intercom.io',
-				'photo': '/static/img/yael-contact-face.jpg',
-				'role': 'account manager',
-				'position': 'Co-Founder',
-				'company': 'LawPal',
-				'summary': null,
-				'pk': null,
-				'is_deleted': false
-			};
-
-			users.push( accountManager );
-
-			
 
 			return users;
 		},
@@ -212,7 +193,7 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 
 			var obj = { 'team': data };
 
-			projectResource.team.update( options, obj, 
+			projectResource.team.update( options, obj,
 				function success( response ) {
 					// Return project details
 					deferred.resolve(response);
@@ -253,15 +234,14 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 		/**
 		 * Sends a PATCH request to update the category order
 		 * @param  {Array} reOrderedCategories Array of catgeory names
-		 * @return {Function}                  promise
+		 * @return {Function}				  promise
 		 */
 		'updateCategoryOrder': function( reOrderedCategories ) {
 			var projectId = this.getProjectUuid();
 			var options = { 'id': projectId };
-			var cats = reOrderedCategories.map( 
-				function( item, i ) { 
-					//return  { 'label': item.label.unescapeHTML(), 'order': i }; 
-					return  item.label.unescapeHTML(); 
+			var cats = reOrderedCategories.map(
+				function( item ) {
+					return  item.label.unescapeHTML();
 				}
 			);
 			var data = { 'project': projectId, 'categories': cats };
@@ -285,20 +265,20 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 
 			if( details && details.category ) {
 				$http.post(url, details, {
-			        'headers': { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-			        'transformRequest': transformToFormData
-			    }).success(function(response) {
-			        //do stuff with response
-			        if( response && response.instance && response.instance.category ) {
-			        	if( !response.instance.category.label )
-			        		response.instance.category.label = response.instance.category.name;
-			        	deferred.resolve(response.instance.category);
-			        } else {
-			        	deferred.reject(response);
-			        }
-			    }).error(function(err){
-			    	deferred.reject(err);
-			    });
+					'headers': { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+					'transformRequest': transformToFormData
+				}).success(function(response) {
+					//do stuff with response
+					if( response && response.instance && response.instance.category ) {
+						if( !response.instance.category.label )
+							response.instance.category.label = response.instance.category.name;
+						deferred.resolve(response.instance.category);
+					} else {
+						deferred.reject(response);
+					}
+				}).error(function(err){
+					deferred.reject(err);
+				});
 			}
 
 			return deferred.promise;
@@ -326,16 +306,15 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 		/**
 		 * Posts the new checklist item order to the API
 		 * @param  {Array} categories array of categories (with nested checklist items)
-		 * @return {Function}            promise
+		 * @return {Function}			promise
 		 */
 		'updateChecklistItemOrder': function( categories ) {
 			var projectId = this.getProjectUuid();
-			var slugItems = [];
 			var options = { 'id': projectId };
 			var data = { 'slugs': [] };
 			var deferred = $q.defer();
 
-			angular.forEach( categories, function( item, index ) {
+			angular.forEach( categories, function( item ) {
 				var items = item.items;
 				for( var i=0; i<items.length; i++ ) {
 					data.slugs.push( items[i].slug );
@@ -354,10 +333,10 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 
 		/**
 		 * Returns the list of check list items, ordered by the sort by parameter
-		 * @param  {String} 	sortByProperty used to dermine which attribute to sort the data by
-		 * @return {Function}   Promise
+		 * @param  {String}		sortByProperty used to dermine which attribute to sort the data by
+		 * @return {Function}	Promise
 		 */
-		'getChecklist': function (sortByProperty) {
+		'getChecklist': function () {
 			// Set up a promise, because this method might retrieve information from the API directly in the future
 			var deferred = $q.defer();
 			var checklist = [];
@@ -383,7 +362,7 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 		 * Returns the list of feedback requests
 		 * @return {Function}   Promise
 		 */
-		'getFeedbackRequests': function (sortByProperty) {
+		'getFeedbackRequests': function () {
 			// Set up a promise, because this method might retrieve information from the API directly in the future
 			var deferred = $q.defer();
 			var feedbackRequests = [];
@@ -452,7 +431,7 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 
 		/**
 		 * Deletes item from checklist
-		 * @param  {Object} 	item JSON object representing the check list item to remove
+		 * @param  {Object}		item JSON object representing the check list item to remove
 		 * @return {Function}   promise to delete item
 		 */
 		'deleteChecklistItem': function (item) {
@@ -510,7 +489,7 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 
 			if( angular.isArray( users ) ) {
 				userList = users.map( function( user ){
-					return user['username'];
+					return user.username;
 				});
 
 				searchList = userList.join(',');
@@ -518,16 +497,16 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 				searchList= users;
 			}
 
-			var options = { 'searchFor': searchList }
+			var options = { 'searchFor': searchList };
 
-			userResource.username.search( options, 
+			userResource.username.search( options,
 				function success( data ) {
 					if( data.objects || data.results ) {
 						retreivedUsers = data.objects || data.results;
 						for( var i=0; i<retreivedUsers.length; i++ ) {
 							for( var j=0; j<users.length; j++ ) {
 								if(retreivedUsers[i].username===users[j].username) {
-									user = users[j]; 
+									user = users[j];
 									updatedUser = retreivedUsers[i];
 									user.practice_locations = updatedUser.practice_locations;
 									user.companies = updatedUser.companies;
@@ -559,7 +538,7 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 
 			var options = { 'searchFor': str };
 
-			userResource.email.search( options, 
+			userResource.email.search( options,
 				function success( data ) {
 					if( data.results ) {
 						deferred.resolve( data.results );

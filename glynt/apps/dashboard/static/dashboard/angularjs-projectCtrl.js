@@ -14,14 +14,16 @@ angular.module("lawpal").controller( "ProjectCtrl", [ "$scope", "lawPalService",
 		"discussions": {},
 		"discussionCategories": [ /*"issue", */"discussion" ]
 	};
-
+	/*
 	$scope.working = {
 		"discussions": {}
 	};
-
+	*/
+	/*
 	var working = {
 		"dicussions": {}
 	};
+	*/
 
 	$scope.loading = {
 		"project": true,
@@ -75,12 +77,12 @@ angular.module("lawpal").controller( "ProjectCtrl", [ "$scope", "lawPalService",
 		lawPalService.discussionList().then(
 			function success( results ) {
 				$scope.data.discussions = results;
-				$scope.generateWorkingDiscussionData();
+				//$scope.generateWorkingDiscussionData();
 			},
 			function error( /*err*/ ) { }
 		);
 	};
-
+	/*
 	function discussionLookup( obj ) {
 		if(angular.isArray(obj)) {
 			for (var i=0;i<obj.length;i++) {
@@ -91,7 +93,8 @@ angular.module("lawpal").controller( "ProjectCtrl", [ "$scope", "lawPalService",
 			return working.dicussions[obj]||null;
 		}
 	}
-
+	*/
+	/*
 	$scope.generateWorkingDiscussionData = function( parentId, childId ) {
 		var discussionItem;
 		var data = [];
@@ -112,13 +115,17 @@ angular.module("lawpal").controller( "ProjectCtrl", [ "$scope", "lawPalService",
 			if( parentId && childId && parentId===dis[i].id ) {
 				dis[i].last_child = childId;
 			}
-			discussionItem = { "original": dis[i], "latest": discussionLookup(dis[i].last_child) || dis[i] };
+			discussionItem = {
+				"original": dis[i],
+				"latest": discussionLookup(dis[i].last_child) || dis[i]
+			};
 
 			data.push(discussionItem);
 		}
 
 		$scope.working.discussions = data; //$scope.data.discussions;
 	};
+	*/
 
 	/**
 	 * Open manage team dialog
@@ -161,11 +168,12 @@ angular.module("lawpal").controller( "ProjectCtrl", [ "$scope", "lawPalService",
 		modalInstance.result.then(
 			function ok( message ) {
 				$scope.newDiscussion( message );
-			}, function cancel() {
+			},
+			function cancel() {
 			}
 		);
 	};
-
+	/*
 	$scope.newDiscussion = function( message ) {
 		var userPk = lawPalService.getCurrentUser().pk;
 		var messageDetails = {
@@ -183,10 +191,19 @@ angular.module("lawpal").controller( "ProjectCtrl", [ "$scope", "lawPalService",
 				toaster.pop( "success", "Discussion item added" );
 				$scope.generateWorkingDiscussionData(  message.parent_id, response.id );
 			},
-			function error( /*err*/ ) {
+			function error( err ) {
 				toaster.pop( "warning", "Error", "Unable to post discussion item" );
 			}
 		);
+	};
+	*/
+
+	$scope.currentUser = function() {
+		return lawPalService.getCurrentUser();
+	};
+
+	$scope.isCurrentUser = function( upk ) {
+		return lawPalService.getCurrentUser().pk===upk;
 	};
 
 	$scope.openProfileDialog = function( user ) {

@@ -342,31 +342,6 @@ angular.module('lawpal').controller( 'manageTeamDialogCtrl', [ '$scope', '$modal
 	}]
 );
 
-angular.module('lawpal').controller( 'newDiscussionDialogCtrl', [ '$scope', '$modalInstance', 'parent', 'lawPalService', '$q',
-	function ($scope, $modalInstance, parent, lawPalService, $q) {
-		$scope.message = {
-			"subject": null,
-			"comment": null,
-			"type": "discussion",
-			"parent_id": parent && parent.id?parent.id:null
-		};
-		/**
-		 * User clicked the OK/Save button
-		 */
-		$scope.ok = function () {
-			$modalInstance.close($scope.message);
-		};
-
-		/**
-		 * User clicked the cancel button, reset team to original state
-		 * @return {[type]} [description]
-		 */
-		$scope.cancel = function () {
-			$modalInstance.dismiss('cancel');
-		};
-	}]
-);
-
 /**
  * Manageteam dialog controller
  * @param  {Object} $scope         	Modal $scope

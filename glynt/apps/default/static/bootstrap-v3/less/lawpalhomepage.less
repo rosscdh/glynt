@@ -2,12 +2,15 @@
 // LawPal Homepage
 // --------------------------------------------------
 
+.text-primary {
+  color: @brand-primary;
+}
 
 // Top Page and Scroll down for more bit
 #wrap {
 	.splash {
 	    background:url('../../img/background-lawyers.jpg') center bottom no-repeat;
-background-position: 50% 50%;	    background-size: cover;
+      background-position: 50% 50%;	    background-size: cover;
 	    padding:28% 0px 0% 0px;
       margin-top:-10px;
 	    color:@gray-darker;
@@ -581,6 +584,18 @@ table.lawyer-list.active {
   .sidebar {
     display: block;
   }
+  /* The new/reply to discussion dialog is woder than other dialogs */
+  .discussion-modal {
+    width: 50%; 
+    left: 45%;
+  }
+  .discussion-modal form {
+    max-width: 100%;
+    input, select, textarea {
+      max-width: 100%;
+    }
+
+  }
 }
 
 @media screen and (min-width: 992px) {
@@ -650,6 +665,7 @@ section.checklist-category {
     width: 600px;
   }
 }
+
 .project-name {
   display: block;
   overflow: hidden;
@@ -724,33 +740,42 @@ section.checklist-category {
 }
 
 .discussion-list {
+  tr.byme-false {
+    .comment { font-weight: bold; }
+  } 
   td.status-column {
     width: 44px;
     text-align: center;
     background-color: @brand-info !important;
     color: #FFF;
-  }
-  td.column-subject {
-    width: 30%;
+    padding: 10px 5px;
+
+    i { font-size: 24px; top: 22px; }
+    small { font-size: 10px; padding: 7px 0 !important; width: 24px; text-align: center; }
   }
   td.vcard-column {
-    width: 35%;
+    width: 50px;
   }
-  td.actions-column {
-    width: 100px;
+  td.more-column {
+    width: 30px;
+    vertical-align: middle;
   }
 }
 
-td.vcard-column {
+td.vcard-column, .vcard {
   white-space: nowrap;
   .vcard { margin:0; }
-  .time { clear:both; white-space: nowrap; padding-left: 37px; }
-  &.role-customer {
+  .time { clear:both; white-space: nowrap; /*padding-left: 37px;*/ }
+  &.role-client {
     h2, h3,h4,h5 { color: @brand-primary }
   }
   &.role-lawyer, &.role-account-manager {
     h2, h3,h4,h5 { color: @brand-primary-alt; }
   }
+}
+
+td.vcard-column {
+  img.photo { float: left; max-width: 48px; max-height: 48px; margin-right: 0px; }
 }
 
 button.vcard {
@@ -771,3 +796,6 @@ button.vcard {
 .widget-title-button {
   margin: 0.7em 0 0 0;
 }
+
+.nest { position:relative; }
+.nested { position: absolute; left: 0; top: 0; }

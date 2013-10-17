@@ -20,14 +20,14 @@ lawPalApp.filter('timeAgo', function () {
 			}
 			if( now - timeStamp < minute * 60 ) {
 				diff = parseInt(( now - timeStamp )/minute,10);
-				return	diff + " minute" + (diff>1?"s":"") + " ago";
+				return	diff + "m"/* + (diff>1?"s":"") + " ago"*/;
 			}
 			if( now - timeStamp < day ) {
 				diff = parseInt(( now - timeStamp )/hour, 10);
-				return	diff + " hour" + (diff>1?"s":"") + " ago";
+				return	diff + "h"/* + (diff>1?"s":"") + " ago"*/;
 			}
 			diff = parseInt(( now - timeStamp )/day, 10);
-			return diff + " day" + (diff>1?"s":"") + " ago";
+			return diff + "d"/* + (diff>1?"s":"") + " ago"*/;
 		}
 		return "";
 	};

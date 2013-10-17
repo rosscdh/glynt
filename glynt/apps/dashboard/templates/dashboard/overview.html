@@ -117,44 +117,11 @@
                 </div>
 
                 <div class="widget discussion">
-                    <button class="btn btn-link btn-small pull-right widget-title-button" ng-click="openDiscussionDialog(null)">
-                        <i class="icon icon-plus"></i>
-                        &nbsp;New
-                    </button>
-                    <h3>Discussion and Issues</h3>
+                    
+
                     <section class="{[{tag}]}-list" ng-repeat="tag in data.discussionCategories">
-                        <!-- Issues and discussions //-->
-                        <table class="table table-striped">
-                            <tbody>
-                                <tr>
-                                    <th colspan="2"><h4 ng-bind="tag | titleCase"></h4></th>
-                                    <th><h4>Last response by</h4></th>
-                                    <th><h4>Actions</h4></th>
-                                </tr>
-                                <tr ng-repeat="discussion in working.discussions | orderBy:'latest.id':true"><!--  | openStatus:2 | filter: { tags: tag } //-->
-                                    <td class="status-column" tooltip="{[{ discussion.latest.status | discussionIconStatus | titleCase }]}" tooltip-append-to-body="true">
-                                        <i class="icon icon-state-{[{ discussion.latest.status | discussionIconStatus }]}"></i>
-                                    </td>
-                                    <td ng-bind="discussion.original.title" class="subject-column"></td>
-                                    <td class="vcard vcard-column">
-                                        <div class="fn" user-mini-widget user="discussion.latest.meta.user"></div>
-                                        <div class="time text-muted">
-                                            <i class="icon icon-time"></i>
-                                            <small ng-bind="discussion.latest.meta.timestamp | timeAgo"></small>
-                                        </div>
-                                    </td>
-                                    <td nowrap class="actions-column">
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-info btn-small" tooltip="Respond now"  ng-click="openDiscussionDialog(discussion.original)">
-                                                <i class="icon icon-reply"></i> Respond
-                                            </button><button type="button" class="btn btn-success btn-small" ng-show="tag=='issue'" tooltip="Mark as resolved">
-                                                <i class="icon icon-ok"></i> Resolved
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <h3 class="pull-left">Discussion and Issues</h3>
+                        <div discussion-list data-discussion="data.discussions" data-tag="tag"></div>
                     </section>
                 </div>
                 <!--
@@ -298,12 +265,12 @@ var LawPal = {
 </script>
 
 <script type="text/ng-template" id="newDiscussion.html">
-    <div class="modal-dialog">
+    <div class="modal-dialog discussion-modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>New Discussion</h3>
             </div>
-            <form class="form-search" ng-submit="ok()">
+            <form class="form-discussion" ng-submit="ok()">
                 <div class="modal-body">
                         <div class="form-group">
                             <label for="discussionComment" class="sr-only">Message</label>
@@ -354,13 +321,6 @@ var LawPal = {
                                     </h2>
                                 </div>
                                 <ul class="list-unstyled">
-                                    <li>
-                                        <i class="icon-envelope"></i>
-                                        <a href="mailto:{[{user.email}]}" class="btn btn-link" target="_blank">
-                                            {[{user.full_name}]}
-                                        </a>
-                                    </li>
-
                                     <li ng-show="user.phone">
                                         <i class="icon-phone"></i> {[{user.phone}]}
                                     </li>
@@ -401,20 +361,7 @@ var LawPal = {
                             <div ng-show="user.practice_locations" class="col col-lg-6" ng-repeat="location in user.practice_locations" style="background:url('//maps.googleapis.com/maps/api/staticmap?size=450x100&amp;markers=color:blue%7Clabel:S%7C{[{location}]}&amp;sensor=false');height:100px;background-position:center;"></div>
                         </div>
                     </div>
-                    <div class="row">   
-
-                        <div class="col col-lg-10 col-offset-1" ng-show="user.is_lawyer">
-                            <hr>
-                            <div id="bar-license" class="bar-license">
-                                <h2><i class="glyphicon glyphicon-ok-sign text-success"></i>Licensed In</h2>
-                                
-                                    <ul class="unstyled">
-                                        <li class="nothing-found">Nothing yet</li>
-                                    </ul>
-                            </div>
-                        </div>
-                    </div>
-
+                    
                 </div>
 
 
