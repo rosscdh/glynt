@@ -33,6 +33,7 @@ function ($compile, $timeout, discussionViewer ) {
 			scope.discussions = [];
 			scope.$on('discussion-show', function () {
 				showDiscussion(discussionViewer.discussion);
+        $anchorScroll();
 			});
 		},
 		'controller': function($scope/*, $element, $attrs*/) {
@@ -42,12 +43,12 @@ function ($compile, $timeout, discussionViewer ) {
 			};
 		},
 		'template':
-		'<div class="full-dialog-underlay"></div><div class="full-dialog-container">' +
-			'<div ng-animate="\'animateToaster\'" ng-repeat="discussion in discussions">' +
+		'<div class="full-dialog-container">' +
+			'<div ng-animate="\'animateToaster\'" ng-repeat="discussion in discussions"><div class="full-dialog-underlay"></div>' +
 				'<div class="full-dialog">' +
 					'<div class="container full-dialog-content">\n'+
-					'	 <button class="close" ng-click="close()">&times</button>\n'+
-					'	 <div class="row">\n' +
+					'	 <div class="clearfix"><button class="close" ng-click="close()">&times</button></div>\n'+
+					'	 <div class="row clearfix">\n' +
           // Start: avatar column
 					'		 <div class="col-lg-1">\n'+
 					'			  <div class="fn fn-lg clearfix" user-mini-widget user="discussion.latest.meta.user" data-show-props="photo"></div>\n'+
