@@ -2,9 +2,9 @@
 from django.contrib.contenttypes.models import ContentType
 
 
-def _PROJECT_CONTENT_TYPE():
-    return ContentType.objects.get(app_label="project", model="project")
-
-
-def _PROJECTLAWYER_CONTENT_TYPE():
-    return ContentType.objects.get(app_label="project", model="projectlawyer")
+try:
+    _PROJECT_CONTENT_TYPE = ContentType.objects.get(app_label="project", model="project")
+    _PROJECTLAWYER_CONTENT_TYPE = ContentType.objects.get(app_label="project", model="projectlawyer")
+except:
+    # for when there are no contenttype obejcts yet
+    pass

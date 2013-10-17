@@ -104,7 +104,7 @@ class LawyerContactProjectView(ProjectView):
         """
         objects = Notification.objects.filter(recipient=self.request.user,
                                     target_object_id=project_lawyer_join.project.pk,
-                                    target_content_type=_PROJECT_CONTENT_TYPE())  \
+                                    target_content_type=_PROJECT_CONTENT_TYPE)  \
 
         if self.request.user.profile.is_customer:
             #delete only the comments specific to the lawyer being viewd

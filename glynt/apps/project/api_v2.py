@@ -172,7 +172,7 @@ class DiscussionListView(ListCreateAPIView):
         project_uuid = self.kwargs.get('uuid')
         project = get_object_or_404(Project, uuid=project_uuid)
 
-        return self.queryset.filter(content_type=_PROJECT_CONTENT_TYPE(),
+        return self.queryset.filter(content_type=_PROJECT_CONTENT_TYPE,
                                     object_pk=project.pk)
 
 

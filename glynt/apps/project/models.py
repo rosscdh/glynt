@@ -37,7 +37,7 @@ class Project(ProjectCategoriesMixin, ProjectRulezMixin, models.Model):
 
     @property
     def content_type_id(self):
-        return _PROJECT_CONTENT_TYPE().pk
+        return _PROJECT_CONTENT_TYPE.pk
 
     @property
     def pusher_id(self):
