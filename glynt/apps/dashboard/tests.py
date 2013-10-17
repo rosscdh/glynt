@@ -42,7 +42,7 @@ class DashboardLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
 
         self.client.login(username=self.lawyer_user.username, password=self.password)
 
-        self.project_lawyer_join.status = self.project_lawyer_join.LAWYER_STATUS.potential
+        self.project_lawyer_join.status = self.project_lawyer_join._LAWYER_STATUS.potential
         self.project_lawyer_join.save(update_fields=['status'])
 
         self.assertTrue(self.load_casper_file(js_file='dashboard.js', test_label='Test the Dashboard View for a Lawyer', url=self.url))

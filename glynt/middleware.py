@@ -8,8 +8,6 @@ from social_auth.middleware import SocialAuthExceptionMiddleware
 from social_auth.exceptions import SocialAuthBaseException
 from social_auth.utils import get_backend_name
 
-from glynt.apps.project.models import Project, ProjectLawyer
-
 
 class EnsureUserHasCompanyMiddleware(object):
     """ if the user is a is_customer
@@ -17,12 +15,16 @@ class EnsureUserHasCompanyMiddleware(object):
     """
     def process_request(self, request):
         if request.user.is_authenticated():
+
             if request.user.profile.is_customer:
+
                 try:
                     request.user.companies.all()[0]
+
                 except IndexError:
                     signup_url = reverse('client:confirm_signup', kwargs={'slug': request.user.username})
                     logout_url = reverse('logout')
+
                     if request.get_full_path() not in [signup_url, logout_url]:
                         return redirect(signup_url)
         return None

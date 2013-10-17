@@ -58,7 +58,17 @@
                     </span>
                     <i ng-show="loading.users" class="icon-spinner icon-spin text-muted"></i>
                 </div>
-                
+
+                <div class="widget account-attorney">
+                    <h3>LawPal Account Manager</h3>
+                    <div class="row">
+                        <div class="col-12">
+                            <img src="{{STATIC_URL}}img/yael-contact-face.jpg" class="img-circle pull-left" style="width:40px; padding-right :8px;padding-top:6px;">
+                            <h4>Yael Citro <small class="pull-right"><a href="mailto:xw4ux8lx@incoming.intercom.io" class="btn btn-info btn-small intercom" style="margin-top:-4px">Contact Yael</a></small>  <small>Co-Founder at LawPal </small></h4>
+                        </div>
+                    </div>
+                </div>
+
                 
                 <div class="callout callout-success empty">
                     <div class="empty-message empty-message-ok">
@@ -271,13 +281,6 @@ var LawPal = {
                                     </h2>
                                 </div>
                                 <ul class="list-unstyled">
-                                    <li>
-                                        <i class="icon-envelope"></i>
-                                        <a href="mailto:{[{user.email}]}" class="btn btn-link" target="_blank">
-                                            {[{user.full_name}]}
-                                        </a>
-                                    </li>
-
                                     <li ng-show="user.phone">
                                         <i class="icon-phone"></i> {[{user.phone}]}
                                     </li>
@@ -318,20 +321,7 @@ var LawPal = {
                             <div ng-show="user.practice_locations" class="col col-lg-6" ng-repeat="location in user.practice_locations" style="background:url('//maps.googleapis.com/maps/api/staticmap?size=450x100&amp;markers=color:blue%7Clabel:S%7C{[{location}]}&amp;sensor=false');height:100px;background-position:center;"></div>
                         </div>
                     </div>
-                    <div class="row">   
-
-                        <div class="col col-lg-10 col-offset-1" ng-show="user.is_lawyer">
-                            <hr>
-                            <div id="bar-license" class="bar-license">
-                                <h2><i class="glyphicon glyphicon-ok-sign text-success"></i>Licensed In</h2>
-                                
-                                    <ul class="unstyled">
-                                        <li class="nothing-found">Nothing yet</li>
-                                    </ul>
-                            </div>
-                        </div>
-                    </div>
-
+                    
                 </div>
 
 
