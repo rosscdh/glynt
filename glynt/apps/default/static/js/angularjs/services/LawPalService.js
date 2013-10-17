@@ -159,29 +159,12 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 					user.is_deleted = false;
 
 				if( user.is_lawyer ) user.role = "lawyer";
-				if( user.is_customer ) user.role = "customer";
+				if( user.is_customer ) user.role = "client";
 				if( user.id ) user.pk = user.id;
 
 				if( user.username == data.project.customer.username ) user.primary = true;
 				if( data.project.lawyers[0] && user.username == data.project.lawyers[0].username ) user.primary = true;
 			}
-
-			// Add Yael Citro
-			var accountManager = {
-				"full_name": "Yael Citro",
-				"email": "xw4ux8lx@incoming.intercom.io",
-				"photo": "/static/img/yael-contact-face.jpg",
-				"role": "account manager",
-				"position": "Co-Founder",
-				"company": "LawPal",
-				"summary": null,
-				"pk": null,
-				"is_deleted": false
-			};
-
-			users.push( accountManager );
-
-			
 
 			return users;
 		},
