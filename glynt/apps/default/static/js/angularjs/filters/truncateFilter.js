@@ -1,5 +1,17 @@
-angular.module('truncate', [])
-    .filter('characters', function () {
+/**
+ * This project is a filter for Angularjs to truncate text strings to a set number of characters or words and add ellipses when needed.
+ * @author : sparkalow
+ * source: https://github.com/sparkalow/angular-truncate
+ * Date: Oct 17 2013
+ */
+/*
+ Usage: 
+    <p>
+        {{ text | characters:25 }} or {{ text | words:5 }}
+    </p>
+ */
+lawPalApp.filter('characters', function () {
+        'use strict';
         return function (input, chars, breakOnWord) {
             if (isNaN(chars)) return input;
             if (chars <= 0) return '';
@@ -23,6 +35,7 @@ angular.module('truncate', [])
         };
     })
     .filter('words', function () {
+        'use strict';
         return function (input, words) {
             if (isNaN(words)) return input;
             if (words <= 0) return '';
