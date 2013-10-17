@@ -230,7 +230,7 @@ var LawPal = {
             'pk': {{ user.pk|default:'null'|jsonify }},
             'username': '{{ user.username }}',
             'full_name': '{{ user.get_full_name }}',
-            'is_authenticated': {{ user.is_authenticated|jsonify }},
+            'is_authenticated': {{ user.is_authenticated|jsonify }}
         }
 };
 </script>
@@ -306,23 +306,18 @@ var LawPal = {
             <form class="form-search" ng-submit="ok()">
                 <div class="modal-body">
                         <div class="form-group">
-                            <label for="discussionTitle" class="sr-only">Subject</label>
-                            <input id="discussionTitle" type="text" required="true" ng-model="message.subject" class="form-control" />
-                        </div>
-                        <div class="form-group">
                             <label for="discussionComment" class="sr-only">Message</label>
                             <textarea id="discussionComment" required="true" ng-model="message.comment" class="form-control" rows="5"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="discussionType" class="sr-only">Message type</label>
-                            
+                            <select name="discussionType" id="discussionType" ng-model="message.type">
+                                <option value="discussion">Project discussion</option>
+                                <option value="issue">Issue</option>
+                            </select>
                         </div>
                 </div>
                 <div class="modal-footer">
-                    <select name="discussionType" id="discussionType" ng-model="message.type">
-                        <option value="discussion">Project discussion</option>
-                        <option value="issue">Issue</option>
-                    </select>
                     <button class="btn btn-default" ng-click="cancel()">Cancel</button>
                     <button class="btn btn-primary" type="submit">Save</button>
                 </div>
