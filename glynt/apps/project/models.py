@@ -154,8 +154,10 @@ class ProjectLawyer(models.Model):
 The signal connections are handled here as the signals are imported a number of
 the imports in this file will cause circular imports
 """
-from .signals import (on_project_created, on_save_ensure_user_in_participants, 
-                      on_lawyer_assigned, on_project_categories_sort_updated,
+from .signals import (on_project_created,
+                      on_save_ensure_user_in_participants, 
+                      on_lawyer_assigned,
+                      on_project_categories_sort_updated,
                       on_project_profile_is_complete,
                       lawyer_on_save_ensure_participants,
                       lawyer_on_delete_ensure_participants,)

@@ -12,8 +12,6 @@ from django.db.models.signals import pre_save, post_save, pre_delete
 from notifications import notify
 
 from .models import Project, ProjectLawyer
-from .services.email import SendNewProjectEmailsService
-from .services.project_checklist import ProjectCheckListService
 from .services.engage_lawyer_comments import EngageLawyerCommentsMoveService
 from . import (PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE,
                PROJECT_CATEGORY_SORT_UPDATED)
@@ -37,6 +35,10 @@ def on_project_created(sender, **kwargs):
     # ensure that we have a project object and that is has NO pk
     # as we dont want this event to happen on change of a project
     if is_new:
+        # this sucks
+        from .services.email import SendNewProjectEmailsService
+        # so does this
+        from .services.project_checklist import ProjectCheckListService
 
         # perform the bulk create event
         # to bring project up to date with any modifications made
@@ -132,6 +134,7 @@ def on_lawyer_assigned(sender, **kwargs):
                     status=instance._LAWYER_STATUS.rejected
                 )
 
+
 @receiver(post_save, sender=ProjectLawyer, dispatch_uid='project.lawyer_on_save_ensure_participants')
 def lawyer_on_save_ensure_participants(sender, **kwargs):
     instance = kwargs.get('instance')
@@ -143,6 +146,7 @@ def lawyer_on_save_ensure_participants(sender, **kwargs):
 
     if lawyer_user not in participants:
         project.participants.add(lawyer_user)
+
 
 @receiver(pre_delete, sender=ProjectLawyer, dispatch_uid='project.lawyer_on_delete_ensure_participants')
 def lawyer_on_delete_ensure_participants(sender, **kwargs):
