@@ -8640,13 +8640,6 @@ section.checklist-category {
 
 /* User profile (mini) */
 
-.user-mini-profile img.photo {
-  float: left;
-  max-width: 28px;
-  max-height: 28px;
-  margin-right: 10px;
-}
-
 .user-mini-profile h3.fn,
 .user-mini-profile h5.fn {
   display: block;
@@ -8773,6 +8766,27 @@ td.vcard-column img.photo {
   margin-right: 0;
 }
 
+.fn img.photo {
+  float: left;
+  max-width: 28px;
+  max-height: 28px;
+  margin-right: 10px;
+}
+
+.fn-sm img.photo {
+  float: left;
+  max-width: 28px;
+  max-height: 28px;
+  margin-right: 10px;
+}
+
+.fn-lg img.photo {
+  float: left;
+  max-width: 48px;
+  max-height: 48px;
+  margin-right: 0;
+}
+
 button.vcard {
   padding: 0 10px 0 0;
   margin-top: 0;
@@ -8803,6 +8817,27 @@ button.vcard {
   position: absolute;
   top: 0;
   left: 0;
+}
+
+.animate-slide-up {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.full-dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 100%;
+  background-color: #fbfbfb;
+}
+
+.full-dialog .full-dialog-content {
+  padding-top: 80px;
 }
 
 .navbar {

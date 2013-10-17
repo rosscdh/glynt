@@ -1,9 +1,9 @@
 /**
- * Displays the percentage comparison between new, open, pending and closed checklist items
- * @return {Object} AngularJS directive
+ * Displays a discussion list
+ * @author : Lee Sinclair
+ * date 17 Oct 2013
  */
-
-angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster', '$modal', function ( lawPalService, toaster, $modal ) {
+angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster', '$modal', 'discussionViewer', function ( lawPalService, toaster, $modal, discussionViewer ) {
 	'use strict';
 	return {
 		"restrict": "A",
@@ -24,11 +24,21 @@ angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster
 				"discussions": {}
 			};
 			
+			/**
+			 * Returns true if the discussion item was last responded to by the current user
+			 * @param  {Integer} pk Primary key of the user who write the discussion item/response
+			 * @return {Boolean}    tre if writter by current user
+			 */
 			$scope.byMe = function( pk ) {
 				var userPk = lawPalService.getCurrentUser().pk;
 				return userPk && userPk === pk;
 			};
 
+			/**
+			 * Generate working copy of discission list. includes original and lastest response data
+			 * @param  {Integer} parentId PK of comment of the parent (optional)
+			 * @param  {Integer} childId  PK of the child comment (optional)
+			 */
 			$scope.generateWorkingDiscussionData = function( parentId, childId ) {
 				var discussionItem;
 				var data = [];
@@ -60,10 +70,20 @@ angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster
 				$scope.working.discussions = data; //$scope.data.discussions;
 			};
 
+			/**
+			 * Watch the discussions variable for changes (deep watch)
+			 */
 			$scope.$watch( 'discussions', function () {
 				$scope.generateWorkingDiscussionData();
 			}, true);
 
+			$scope.toggleView = function( discussion ) {
+				discussionViewer.show( discussion );
+			};
+
+			/**
+			 * Incept process to add comment or respond to a comment. Opens a modal dialog
+			 */
 			$scope.addDiscussion = function( parent ) {
 				var modalInstance = $modal.open({
 					"windowClass": "modal modal-show",
@@ -85,6 +105,10 @@ angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster
 				);
 			};
 
+			/**
+			 * Requests that the API service saves the discussion item
+			 * @param  {Object} message Message data
+			 */
 			$scope.actionAddDiscussion = function( message ) {
 				var userPk = lawPalService.getCurrentUser().pk;
 				var messageDetails = {
@@ -98,7 +122,7 @@ angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster
 
 				lawPalService.addDiscussion( messageDetails ).then(
 					function success( response ) {
-						$scope.data.discussions.push( response );
+						$scope.discussions.push( response );
 						toaster.pop( "success", "Discussion item added" );
 						$scope.generateWorkingDiscussionData(  message.parent_id, response.id );
 					},
@@ -108,6 +132,12 @@ angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster
 				);
 			};
 
+			/**
+			 * Given and Object attempt to find it quickly, uses object keys for speed. If an object is not passed through then the working list is generated.
+			 * Please note that working is not in $scope. This is to avoid angular watching for changes and reducing page speed
+			 * @param  {Array/String} obj Array of discussion items or a look up string
+			 * @return {Object}     Discussion item
+			 */
 			function discussionLookup( obj ) {
 				if(angular.isArray(obj)) {
 					for (var i=0;i<obj.length;i++) {
@@ -129,21 +159,22 @@ angular.module('lawpal').run(["$templateCache", function($templateCache) {
 		'	<i class="icon icon-plus"></i>\n'+
 		'		&nbsp;New\n'+
 		'</button>\n'+
+		'<h3>Discussions and Issues</h3>\n'+
 		'<table class="table table-striped">\n'+
 		'	<tr ng-repeat="discussion in working.discussions  | orderBy:\'latest.id\':true" class="byme-{[{byMe(discussion.latest.meta.user.pk)}]}">\n'+
 		'		<td class="status-column">\n'+
 		'			<i class="icon icon-comment nest">\n'+
-		'				<small class="nested text-primary" ng-bind="discussion.lastest.id">999</small>\n'+
+		'				<small class="nested text-primary" ng-bind="discussion.latest.id">999</small>\n'+
 		'			</i>\n'+
 		'		</td>\n'+
 		'		<td class="vcard-column">\n'+
-		'			<div class="fn vcard" user-mini-widget user="discussion.latest.meta.user" data-show-props="photo"></div>\n'+
+		'			<div class="fn fn-large vcard" user-mini-widget user="discussion.latest.meta.user" data-show-props="photo"></div>\n'+
 		'			<div class="time text-muted">\n'+
 		'				<i class="icon icon-time"></i>\n'+
 		'				<small ng-bind="discussion.latest.meta.timestamp | timeAgo"></small>\n'+
 		'			</div>\n'+
 		'		</td>\n'+
-		'		<td class="comment-column">\n'+
+		'		<td class="comment-column" ng-click="toggleView(discussion)">\n'+
 		'			<div class="comment" ng-bind="discussion.latest.comment | characters:200"></div>\n'+
 		'			<div><button type="button" class="btn btn-link btn-small pull-right" tooltip="Respond now" ng-click="addDiscussion(discussion.original)">\n'+
 		'				<i class="icon icon-reply"></i> Respond\n'+

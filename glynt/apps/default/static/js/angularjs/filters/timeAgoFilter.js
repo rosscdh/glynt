@@ -11,7 +11,7 @@ lawPalApp.filter('timeAgo', function () {
 		var now = new Date().getTime(),diff;
 		timeStamp = parseInt(timeStamp, 10);
 		if( timeStamp < now/1000 ) {
-			timeStamp = timeStamp * 1000;
+			timeStamp = timeStamp * 1000; // Convert unix timestamp to milliseconds
 		}
 
 		if( timeStamp ) {

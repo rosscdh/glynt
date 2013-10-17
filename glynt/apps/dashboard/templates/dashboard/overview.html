@@ -117,25 +117,13 @@
                 </div>
 
                 <div class="widget discussion">
-                    
-
                     <section class="{[{tag}]}-list" ng-repeat="tag in data.discussionCategories">
-                        <h3 class="pull-left">Discussion and Issues</h3>
                         <div discussion-list data-discussion="data.discussions" data-tag="tag"></div>
                     </section>
                 </div>
-                <!--
-                {% if project.has_lawyer %}
-                <div class="widget discuss">
-                    <h3>Project Discussion</h3>
-                    {% render_comment_form for project %}
-                    {% render_comment_list for project %}
-
-                </div>
-                {% endif %}
-                //-->
             </div>
         </div>
+        <div class="discussion-viewer-container"></div>
     {% endif %}
 </div>
 {% endblock %}

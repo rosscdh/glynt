@@ -707,7 +707,6 @@ section.checklist-category {
 
 /* User profile (mini) */
 .user-mini-profile {
-  img.photo { float: left; max-width: 28px; max-height: 28px; margin-right: 10px; }
   h3, h5 {
     &.fn { display:block; float: left; }
   }
@@ -778,6 +777,16 @@ td.vcard-column {
   img.photo { float: left; max-width: 48px; max-height: 48px; margin-right: 0px; }
 }
 
+.fn {
+  img.photo { float: left; max-width: 28px; max-height: 28px; margin-right: 10px; }
+}
+.fn-sm {
+  img.photo { float: left; max-width: 28px; max-height: 28px; margin-right: 10px; }
+}
+.fn-lg {
+  img.photo { float: left; max-width: 48px; max-height: 48px; margin-right: 0px; }
+}
+
 button.vcard {
   margin-top: 0; margin-bottom: 5px; margin-top: 5px; padding: 0 10px 0 0;
 }
@@ -799,3 +808,29 @@ button.vcard {
 
 .nest { position:relative; }
 .nested { position: absolute; left: 0; top: 0; }
+
+.animate-slide-up {
+  height: 0;
+  overflow: hidden;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
+.full-dialog-underlay {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background-color: #fbfbfb;
+}
+
+.full-dialog {
+  position: absolute;
+  top:0;
+  left: 0;
+  width:100%;
+  min-height: 100%;
+  .full-dialog-content {
+    padding-top: 80px;
+  }
+}
