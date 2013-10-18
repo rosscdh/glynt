@@ -8819,6 +8819,10 @@ button.vcard {
   left: 0;
 }
 
+.clickable {
+  cursor: pointer;
+}
+
 .animate-slide-up {
   position: absolute;
   bottom: 0;

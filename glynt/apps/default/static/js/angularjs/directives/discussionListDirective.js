@@ -8,7 +8,6 @@ angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster
 	return {
 		"restrict": "AC",
 		"templateUrl":'template/lawpal/discussion/list.html',
-			/*'<a ng-show="!hasContact()" class="icon icon-envelope clickable" tooltip="Contact {[{ user.firstName | titleCase }]}" tooltip-append-to-body="true" ng-click="contactUser()" href="javascript:;"></a>*/
 		"scope": {
 			"discussions": "=discussion",
 			"tag": "=tag"
@@ -21,7 +20,8 @@ angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster
 			};
 
 			$scope.working = {
-				"discussions": {}
+				"discussions": {},
+				"loading": true
 			};
 			
 			/**
@@ -67,6 +67,7 @@ angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster
 					data.push(dItem);
 				}
 
+				$scope.working.loading = false;
 				$scope.working.discussions = data; //$scope.data.discussions;
 			};
 
@@ -139,6 +140,7 @@ angular.module('lawpal').run(["$templateCache", function($templateCache) {
 		'		&nbsp;New\n'+
 		'</button>\n'+
 		'<h3>Discussions and Issues</h3>\n'+
+		'<span ng-show="working.loading" class="text-muted"><i class="icon icon-spinner icon-spin"></i> Loading discussions</span>\n'+
 		'<table class="table table-striped">\n'+
 		'	<tr ng-repeat="discussion in working.discussions  | orderBy:\'latest.id\':true" class="byme-{[{byMe(discussion.latest.meta.user.pk)}]}">\n'+
 		'		<td class="status-column">\n'+
@@ -154,13 +156,13 @@ angular.module('lawpal').run(["$templateCache", function($templateCache) {
 		'			</div>\n'+
 		'		</td>\n'+
 		'		<td class="comment-column">\n'+
-		'			<div class="comment" ng-bind="discussion.latest.comment | characters:200" ng-click="displayDiscussion(discussion)"></div>\n'+
+		'			<div class="comment clickable" ng-bind="discussion.latest.comment | characters:200" ng-click="displayDiscussion(discussion)"></div>\n'+
 		'			<div><button type="button" class="btn btn-link btn-small pull-right" tooltip="Respond now" ng-click="reply(discussion.original)">\n'+
 		'				<i class="icon icon-reply"></i> Respond\n'+
 		'			</button></div>\n'+
 		'		</td>\n'+
-		'		<td class="more-column">\n'+
-		'			<i class="icon icon-chevron-right text-muted"></i>\n'+
+		'		<td class="more-column clickable">\n'+
+		'			<i class="icon icon-chevron-right text-muted" ng-click="displayDiscussion(discussion)"></i>\n'+
 		'		</td>\n'+
 		'	</tr>\n'+
 		'</table>\n'
