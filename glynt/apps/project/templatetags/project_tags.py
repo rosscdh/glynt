@@ -6,7 +6,6 @@ register = template.Library()
 from notifications.models import Notification
 
 from glynt.apps.project.models import Project, ProjectLawyer
-from glynt.apps.project.utils import _PROJECT_CONTENT_TYPE
 from glynt.apps.project import PROJECT_LAWYER_STATUS
 
 
@@ -25,7 +24,7 @@ def project_name(context, project, index=1):
 @register.inclusion_tag('project/partials/activity_list.html')
 def project_activity_stream(project, limit=10):
     return {
-        'object_list': Notification.objects.filter(target_object_id=project.pk, target_content_type=_PROJECT_CONTENT_TYPE)[:limit]
+        'object_list': Notification.objects.filter(target_object_id=project.pk, target_content_type=project.content_type())[:limit]
     }
 
 
@@ -34,7 +33,7 @@ def discussion_notification_count(context, project_lawyer_join):
     user = context.get('user')
     objects = Notification.objects.filter(recipient=user,
                                           target_object_id=project_lawyer_join.project.pk,
-                                          target_content_type=_PROJECT_CONTENT_TYPE)
+                                          target_content_type=project_lawyer_join.project.content_type())
     if user.profile.is_customer:
         # must do this for the customer as they may have multiple objects
         # of this type so need to filter by specific lawyer
