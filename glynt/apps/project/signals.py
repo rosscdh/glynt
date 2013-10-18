@@ -35,7 +35,9 @@ def on_project_created(sender, **kwargs):
     # ensure that we have a project object and that is has NO pk
     # as we dont want this event to happen on change of a project
     if is_new:
+        # this sucks
         from .services.email import SendNewProjectEmailsService
+        # so does this
         from .services.project_checklist import ProjectCheckListService
 
         # perform the bulk create event
@@ -147,6 +149,7 @@ def lawyer_on_save_ensure_participants(sender, **kwargs):
     else:
         if lawyer_user not in participants:
             project.participants.add(lawyer_user)
+
 
 
 @receiver(pre_delete, sender=ProjectLawyer, dispatch_uid='project.lawyer_on_delete_ensure_participants')
