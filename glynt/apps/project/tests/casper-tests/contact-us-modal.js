@@ -45,7 +45,7 @@ helper.scenario(casper.cli.options.url,
                     this.test.assertVisible('form#contact-us-form');
 
                     // a message should be presented
-                    this.test.assertSelectorHasText('div#div_id_message ul.parsley-error-list li', 'This value is required.');
+                    this.test.assertSelectorHasText('div#div_id_message ul.parsley-error-list li', 'This field is required.');
                 });
             });
         });
