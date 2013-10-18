@@ -828,6 +828,10 @@ button.vcard {
   height: 100%;
   width: 100%;
   background-color: #fbfbfb;
+  /* Top shadow */
+  -webkit-box-shadow: inset 0px 75px 5px 0px rgba(0,0,0,0.08);
+  -moz-box-shadow: inset 0px 75px 5px 0px rgba(0,0,0,0.08);
+  box-shadow: inset 0px 75px 5px 0px rgba(0,0,0,0.08);
 }
 
 .full-dialog {
@@ -836,7 +840,28 @@ button.vcard {
   left: 0;
   width:100%;
   min-height: 100%;
+
   .full-dialog-content {
-    padding-top: 80px;
+    margin-top: 70px;
+    padding-top: 10px;
+    padding-bottom: 60px;
   }
+  .vcard .user-photo { margin-right: 10px; }
+  .vcard .fn { font-weight: bold; }
+}
+
+.full-dialog-toolbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background-color: #fdfdfd;
+  /* Shadow on toolbar */
+  -webkit-box-shadow: 0px -5px 5px rgba(0, 0, 0, 0.08);
+  -moz-box-shadow:    0px -5px 5px rgba(0, 0, 0, 0.08);
+  box-shadow:         0px -5px 5px rgba(0, 0, 0, 0.08);
+  z-index: 1029;
+  vertical-align: middle;
+  button { margin: 16px 0 0 10px;}
 }

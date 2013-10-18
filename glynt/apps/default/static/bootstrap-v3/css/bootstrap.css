@@ -8839,6 +8839,9 @@ button.vcard {
   width: 100%;
   height: 100%;
   background-color: #fbfbfb;
+  -webkit-box-shadow: inset 0 75px 5px 0px rgba(0, 0, 0, 0.08);
+     -moz-box-shadow: inset 0 75px 5px 0px rgba(0, 0, 0, 0.08);
+          box-shadow: inset 0 75px 5px 0px rgba(0, 0, 0, 0.08);
 }
 
 .full-dialog {
@@ -8850,7 +8853,35 @@ button.vcard {
 }
 
 .full-dialog .full-dialog-content {
-  padding-top: 80px;
+  padding-top: 10px;
+  padding-bottom: 60px;
+  margin-top: 70px;
+}
+
+.full-dialog .vcard .user-photo {
+  margin-right: 10px;
+}
+
+.full-dialog .vcard .fn {
+  font-weight: bold;
+}
+
+.full-dialog-toolbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 1029;
+  width: 100%;
+  height: 60px;
+  vertical-align: middle;
+  background-color: #fdfdfd;
+  -webkit-box-shadow: 0 -5px 5px rgba(0, 0, 0, 0.08);
+     -moz-box-shadow: 0 -5px 5px rgba(0, 0, 0, 0.08);
+          box-shadow: 0 -5px 5px rgba(0, 0, 0, 0.08);
+}
+
+.full-dialog-toolbar button {
+  margin: 16px 0 0 10px;
 }
 
 .navbar {

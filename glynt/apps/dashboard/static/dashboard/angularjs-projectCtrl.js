@@ -82,50 +82,6 @@ angular.module("lawpal").controller( "ProjectCtrl", [ "$scope", "lawPalService",
 			function error( /*err*/ ) { }
 		);
 	};
-	/*
-	function discussionLookup( obj ) {
-		if(angular.isArray(obj)) {
-			for (var i=0;i<obj.length;i++) {
-				working.dicussions[obj[i].id] = obj[i];
-			}
-		}
-		else {
-			return working.dicussions[obj]||null;
-		}
-	}
-	*/
-	/*
-	$scope.generateWorkingDiscussionData = function( parentId, childId ) {
-		var discussionItem;
-		var data = [];
-
-		discussionLookup($scope.data.discussions);
-		
-		if( !angular.isArray($scope.data.discussions) ) {
-			return [];
-		}
-
-		var dis = $scope.data.discussions.filter(
-			function( item ) {
-				return item.parent_id===null;
-			}
-		);
-
-		for( var i=0; i<dis.length;i++) {
-			if( parentId && childId && parentId===dis[i].id ) {
-				dis[i].last_child = childId;
-			}
-			discussionItem = {
-				"original": dis[i],
-				"latest": discussionLookup(dis[i].last_child) || dis[i]
-			};
-
-			data.push(discussionItem);
-		}
-
-		$scope.working.discussions = data; //$scope.data.discussions;
-	};
-	*/
 
 	/**
 	 * Open manage team dialog
@@ -149,54 +105,6 @@ angular.module("lawpal").controller( "ProjectCtrl", [ "$scope", "lawPalService",
 			}
 		);
 	};
-
-	/**
-	 * Open manage team dialog
-	 */
-	$scope.openDiscussionDialog = function( parent ) {
-		var modalInstance = $modal.open({
-			"windowClass": "modal modal-show",
-			"templateUrl": "newDiscussion.html",
-			"controller": "newDiscussionDialogCtrl",
-			"resolve": {
-				"parent": function(){
-					return parent;
-				}
-			}
-		});
-
-		modalInstance.result.then(
-			function ok( message ) {
-				$scope.newDiscussion( message );
-			},
-			function cancel() {
-			}
-		);
-	};
-	/*
-	$scope.newDiscussion = function( message ) {
-		var userPk = lawPalService.getCurrentUser().pk;
-		var messageDetails = {
-			"object_pk": $scope.data.project.uuid,
-			"title": message.subject,
-			"comment": message.comment,
-			"user": userPk,
-			"content_type_id": lawPalService.projectContentTypeId(),
-			"parent_id": message.parent_id
-		};
-
-		lawPalService.addDiscussion( messageDetails).then(
-			function success( response ) {
-				$scope.data.discussions.push( response );
-				toaster.pop( "success", "Discussion item added" );
-				$scope.generateWorkingDiscussionData(  message.parent_id, response.id );
-			},
-			function error( err ) {
-				toaster.pop( "warning", "Error", "Unable to post discussion item" );
-			}
-		);
-	};
-	*/
 
 	$scope.currentUser = function() {
 		return lawPalService.getCurrentUser();
