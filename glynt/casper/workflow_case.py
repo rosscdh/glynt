@@ -16,6 +16,7 @@ from glynt.apps.project import PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE
 import re
 import httpretty
 
+
 class DjangoTestClientWithPATCH(Client):
     """
     Construct a second test client which can do PATCH requests.
