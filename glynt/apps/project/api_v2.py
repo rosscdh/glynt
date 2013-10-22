@@ -6,13 +6,15 @@ from django.contrib.auth.models import User
 
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import (RetrieveAPIView, ListCreateAPIView,
+                                     RetrieveUpdateAPIView,
+                                     RetrieveUpdateDestroyAPIView)
 
 from threadedcomments.models import ThreadedComment
 
 from .models import Project, ProjectLawyer
 from .serializers import (ProjectSerializer, TeamSerializer,
-                          DiscussionSerializer, )
+                          DiscussionSerializer, DiscussionThreadSerializer)
 
 import logging
 logger = logging.getLogger('django.request')
@@ -175,5 +177,15 @@ class DiscussionListView(ListCreateAPIView):
                                     object_pk=project.pk)
 
 
-class DiscussionDetailView(RetrieveUpdateDestroyAPIView, DiscussionListView):
+class DiscussionDetailView(RetrieveAPIView):
+    queryset = ThreadedComment.objects.all()
+    serializer_class = DiscussionThreadSerializer
     lookup_field = 'pk'
+
+    def get_queryset(self):
+        parent_pk = self.kwargs.get('pk')
+        project_uuid = self.kwargs.get('uuid')
+        project = get_object_or_404(Project, uuid=project_uuid)
+        # import pdb;pdb.set_trace()
+        return self.queryset.filter(pk=parent_pk)
+
