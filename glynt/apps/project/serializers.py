@@ -128,6 +128,7 @@ class DiscussionSerializer(GetContentObjectByTypeAndPkMixin, serializers.ModelSe
     comment = serializers.CharField()
 
     meta = serializers.SerializerMethodField('get_meta')
+    last_child = serializers.SerializerMethodField('get_last_child')
 
     class Meta:
         model = ThreadedComment
@@ -135,7 +136,7 @@ class DiscussionSerializer(GetContentObjectByTypeAndPkMixin, serializers.ModelSe
 
         fields = ('id', 'object_pk', 'title', 'comment', 'user',
                   'content_type_id', 'parent_id', 'last_child',
-                  'meta', 'site_id')
+                  'meta', 'last_child', 'site_id')
 
 
     def validate_object_pk(self, attrs, source):
@@ -170,17 +171,21 @@ class DiscussionSerializer(GetContentObjectByTypeAndPkMixin, serializers.ModelSe
                         }
             }
 
+    def get_last_child(self, obj):
+        if obj is not None and obj.last_child is not None:
+            return DiscussionSerializer(obj.last_child).data
+        else:
+            return None
+
 
 class DiscussionThreadSerializer(DiscussionSerializer):
     thread = serializers.SerializerMethodField('get_thread')
 
     class Meta(DiscussionSerializer.Meta):
         fields = ('id', 'object_pk', 'title', 'comment', 'user',
-                  'content_type_id', 'parent_id', 'last_child',
-                  'thread', 'site_id')
+                  'content_type_id', 'parent_id',
+                  'meta', 'thread', 'site_id')
 
     def get_thread(self, obj):
-        for comment in ThreadedComment.objects.prefetch_related('user').filter(parent_id=obj.pk,
-                                                                content_type=obj.content_type,
-                                                                object_pk=obj.object_pk):
+        for comment in obj.children.all():
             yield DiscussionSerializer(comment).data    
