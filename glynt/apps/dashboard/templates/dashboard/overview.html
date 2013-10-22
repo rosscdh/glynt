@@ -79,35 +79,43 @@
                 <div class="widget checklist">
                     <a href="{% url 'dashboard:checklist' uuid=project.uuid %}"><h3>Checklist</h3></a>
                     <div class="row">
-                        <div class="col col-3 text-center">
+                        <div class="col col-2 text-center">
                             <h1>
-                                <a href="{% url 'dashboard:checklist' uuid=project.uuid %}" class="text-muted">{{ counts.new }}</a>
+                                <a href="{% url 'dashboard:checklist' uuid=project.uuid %}#new" class="text-muted">{{ counts.new }}</a>
                             </h1>
-                            <a href="{% url 'dashboard:checklist' uuid=project.uuid %}">
+                            <a href="{% url 'dashboard:checklist' uuid=project.uuid %}#new">
                                 <small class="softer">New</small>
                             </a>
                         </div>
-                        <div class="col col-3 text-center">
+                        <div class="col col-2 text-center">
                             <h1>
-                                <a href="{% url 'dashboard:checklist' uuid=project.uuid %}" class="text-info">{{ counts.open }}</a>
+                                <a href="{% url 'dashboard:checklist' uuid=project.uuid %}#open" class="text-info">{{ counts.open }}</a>
                             </h1>
-                            <a href="{% url 'dashboard:checklist' uuid=project.uuid %}">
+                            <a href="{% url 'dashboard:checklist' uuid=project.uuid %}#open">
                                 <small class="softer">Open</small>
                             </a>
                         </div>
-                        <div class="col col-3 text-center">
+                        <div class="col col-2 text-center">
                             <h1>
-                                <a href="{% url 'dashboard:checklist' uuid=project.uuid %}" class="text-warning">{{ counts.awaiting_feedback_from_user }}</a>
+                                <a href="{% url 'dashboard:checklist' uuid=project.uuid %}#feedback" class="text-danger">{{ counts.awaiting_feedback_from_user }}</a>
                             </h1>
-                            <a href="{% url 'dashboard:checklist' uuid=project.uuid %}">
+                            <a href="{% url 'dashboard:checklist' uuid=project.uuid %}#feedback">
+                                <small class="softer">Your Feedback</small>
+                            </a>
+                        </div>
+                        <div class="col col-2 text-center">
+                            <h1>
+                                <a href="{% url 'dashboard:checklist' uuid=project.uuid %}#pending" class="text-warning">{{ counts.pending }}</a>
+                            </h1>
+                            <a href="{% url 'dashboard:checklist' uuid=project.uuid %}#pending">
                                 <small class="softer">Feedback</small>
                             </a>
                         </div>
-                        <div class="col col-3 text-center">
+                        <div class="col col-2 text-center">
                             <h1>
-                                <a href="{% url 'dashboard:checklist' uuid=project.uuid %}" class="text-success">{{ counts.closed }}</a>
+                                <a href="{% url 'dashboard:checklist' uuid=project.uuid %}#closed" class="text-success">{{ counts.closed }}</a>
                             </h1>
-                            <a href="{% url 'dashboard:checklist' uuid=project.uuid %}">
+                            <a href="{% url 'dashboard:checklist' uuid=project.uuid %}#closed">
                                 <small class="softer">Closed</small>
                             </a>
                         </div>
