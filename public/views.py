@@ -5,6 +5,7 @@ from django.views.generic.base import RedirectView
 from django.views.generic.edit import FormView
 from django.views.generic import TemplateView
 from django.core.urlresolvers import reverse
+from django.contrib.auth import logout
 
 import json
 
@@ -123,3 +124,26 @@ class ContactUsView(AjaxableResponseMixin, FormView):
             messages.success(self.request, message)
 
             return super(ContactUsView, self).form_valid(form)
+
+
+class LogUserOutMixin(object):
+    """
+    Mixin that will log the current user out
+    and continue showing the view as an non authenticated user
+    """
+    def dispatch(self, request, *args, **kwargs):
+        """
+        If the user is logged in log them out
+        """
+        if request.user.is_authenticated() is True:
+            logout(request)
+
+        return super(LogUserOutMixin, self).dispatch(request, *args, **kwargs)
+
+
+class CustomerStartView(LogUserOutMixin, TemplateView):
+    template_name='public/start.html'
+
+
+class LawyerStartView(LogUserOutMixin, TemplateView):
+    template_name='public/start-lawyer.html'

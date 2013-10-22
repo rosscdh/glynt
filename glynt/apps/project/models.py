@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from django.contrib.contenttypes.models import ContentType
 from django_extensions.db.fields import CreationDateTimeField, ModificationDateTimeField
 
 from uuidfield import UUIDField
@@ -8,7 +9,6 @@ from jsonfield import JSONField
 from glynt.apps.project import PROJECT_STATUS, PROJECT_LAWYER_STATUS
 from glynt.apps.project.managers import DefaultProjectManager, ProjectLawyerManager
 from glynt.apps.project.mixins import ProjectCategoriesMixin, ProjectRulezMixin
-from glynt.apps.project.utils import _PROJECT_CONTENT_TYPE
 
 from rulez import registry as rulez_registry
 
@@ -35,9 +35,16 @@ class Project(ProjectCategoriesMixin, ProjectRulezMixin, models.Model):
     def __unicode__(self):
         return u'Project for {company_name}'.format(company_name=self.data.get('company_name', ''))
 
+    @staticmethod
+    def content_type():
+        """
+        Static method used to access the content type of projects
+        """
+        return ContentType.objects.get_for_model(Project)
+
     @property
     def content_type_id(self):
-        return _PROJECT_CONTENT_TYPE().pk
+        return Project.content_type().pk
 
     @property
     def pusher_id(self):

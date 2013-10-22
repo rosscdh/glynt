@@ -113,6 +113,9 @@ class BuilderBaseForm(forms.Form):
 
         form_json_data = json.loads(cleaned_data.pop('form_json_data', '{}'))
 
+        # must save the cleaned_data as well
+        form_json_data.update(**cleaned_data)
+
         if data_bag is None:
             return None
         else:

@@ -17,7 +17,6 @@ from glynt.apps.project.models import Project, ProjectLawyer
 from glynt.apps.lawyer.models import Lawyer
 from glynt.apps.project.forms import ContactUsForm, CreateProjectForm
 from glynt.apps.project.services.ensure_project import EnsureProjectService
-from glynt.apps.project.utils import _PROJECT_CONTENT_TYPE
 
 from glynt.apps.transact.models import Transaction
 
@@ -104,7 +103,7 @@ class LawyerContactProjectView(ProjectView):
         """
         objects = Notification.objects.filter(recipient=self.request.user,
                                     target_object_id=project_lawyer_join.project.pk,
-                                    target_content_type=_PROJECT_CONTENT_TYPE())  \
+                                    target_content_type=project_lawyer_join.project.content_type())  \
 
         if self.request.user.profile.is_customer:
             #delete only the comments specific to the lawyer being viewd

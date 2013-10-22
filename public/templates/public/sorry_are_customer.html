@@ -1,0 +1,30 @@
+{% extends 'base.html' %}{% load url from future %}{% load email_obfuscator %}
+
+{% block page_title %}You are a customer trying to sign in as a lawyer{% endblock %}
+{% block bodyclass %}{% endblock %}
+
+{% block prebody %}
+<div class="page-header">
+    <div class="container">
+        <h1>You have already signed up as a customer using that email address</h1>
+    </div>
+</div>
+<div class="splash" style="background:url(/static/img/background-about.jpg);background-size:cover;background-position:0 -150px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center main">
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <p>&nbsp;</p>
+        <p class="lead text-center"><a href="{% url 'public:start' %}">Click here</a> to sign in with your customer account</p>
+    </div>
+</div>
+{% endblock %}
