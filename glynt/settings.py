@@ -124,7 +124,7 @@ AUTHENTICATION_BACKENDS = (
     'social_auth.backends.contrib.angel.AngelBackend',
     'social_auth.backends.contrib.linkedin.LinkedinBackend',
     'social_auth.backends.google.GoogleOAuth2Backend',
-    #'glynt.backends.EmailOrUsernameBackend',
+    'glynt.backends.EmailOrUsernameBackend',
     #'userena.backends.UserenaAuthenticationBackend',
     #'guardian.backends.ObjectPermissionBackend',
     'django.contrib.auth.backends.ModelBackend',
