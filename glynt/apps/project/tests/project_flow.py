@@ -6,6 +6,7 @@ from glynt.casper import glynt_mock_http_requests
 from glynt.apps.transact.models import Transaction
 
 import os
+from model_mommy import mommy
 
 
 class CustomerSelectTransactionTest(BaseLawyerCustomerProjectCaseMixin):
@@ -26,14 +27,10 @@ class CustomerCreateProjectTest(BaseLawyerCustomerProjectCaseMixin):
 
     def setUp(self):
         super(CustomerCreateProjectTest, self).setUp()
-        # Remove the base
-        self.project.transactions.clear()
-        self.project.transactions.add(Transaction.objects.get(slug='CS'))
-        self.project.attachments.all().delete()
-        self.project.todo_set.all().delete()
-        self.project_lawyer_join.delete()
+        # re-create the project but without the associated todos and attachments
+        # causes issues with httprettynot mocking out the crocdoc delete calls
+        self.project = mommy.make('project.project', customer=self.customer, company=self.company, lawyers=(self.lawyer,), transactions=(Transaction.objects.get(slug='CS'),))
 
-    @glynt_mock_http_requests
     def test_customer_incorporation_form_js(self):
         """
         Test that the Customer has a list of transaction types to select from

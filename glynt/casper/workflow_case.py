@@ -16,6 +16,7 @@ from glynt.apps.project import PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE
 import re
 import httpretty
 
+
 class DjangoTestClientWithPATCH(Client):
     """
     Construct a second test client which can do PATCH requests.
@@ -38,57 +39,56 @@ class DjangoTestClientWithPATCH(Client):
         return self.request(**r)
 
 
-@httpretty.activate
 def glynt_mock_http_requests(view_func):
     """
     A generic decorator to be called on all methods that do somethign with
     external apis
     """
-    #
-    # Abridge
-    #
-    httpretty.register_uri(httpretty.POST, re.compile("http://abridge.local.dev/(.+)"),
-                   body='{"success": true}',
-                   status=200,
-                   content_type='text/json')
-    httpretty.register_uri(httpretty.GET, re.compile("http://abridge.local.dev/(.+)"),
-                   body='{"success": true}',
-                   status=200,
-                   content_type='text/json')
-
-    #
-    # Ink filepicker? @TODO are these called at all
-    #
-
-    #
-    # s3? @TODO are these called at all
-    #
-
-    #
-    # Crocdoc
-    #
-    httpretty.register_uri(httpretty.POST, "https://crocodoc.com/api/v2/session/create",
-                   body='{"success": true}',
-                   status=200,
-                   content_type='text/json')
-    httpretty.register_uri(httpretty.GET, "https://crocodoc.com/api/v2/document/status",
-                   body='{"success": true}',
-                   status=200,
-                   content_type='text/json')
-    httpretty.register_uri(httpretty.POST, "https://crocodoc.com/api/v2/document/upload",
-                   body='{"success": true, "uuid": "123-test-123-uuid"}',
-                   status=200,
-                   content_type='text/json')
-    httpretty.register_uri(httpretty.POST, "https://crocodoc.com/api/v2/document/delete",
-                   data='{"token": "pRzHhZS4jaGes193db28cwyu", "uuid": "123-test-123-uuid"}',
-                   body='{"success": true}',
-                   status=200)
-    httpretty.register_uri(httpretty.GET, re.compile("https://crocodoc.com/view/(.+)"),
-                   body='{"success": true}',
-                   status=200)
-
-
+    @httpretty.activate
     def _decorator(request, *args, **kwargs):
+        #
+        # Abridge
+        #
+        httpretty.register_uri(httpretty.POST, re.compile("http://abridge.local.dev/(.+)"),
+                       body='{"success": true}',
+                       status=200,
+                       content_type='text/json')
+        httpretty.register_uri(httpretty.GET, re.compile("http://abridge.local.dev/(.+)"),
+                       body='{"success": true}',
+                       status=200,
+                       content_type='text/json')
+
+        #
+        # Ink filepicker? @TODO are these called at all
+        #
+
+        #
+        # s3? @TODO are these called at all
+        #
+
+        #
+        # Crocdoc
+        #
+        httpretty.register_uri(httpretty.POST, "https://crocodoc.com/api/v2/session/create",
+                       body='{"success": true}',
+                       status=200,
+                       content_type='text/json')
+        httpretty.register_uri(httpretty.GET, "https://crocodoc.com/api/v2/document/status",
+                       body='{"success": true}',
+                       status=200,
+                       content_type='text/json')
+        httpretty.register_uri(httpretty.POST, "https://crocodoc.com/api/v2/document/upload",
+                       body='{"success": true, "uuid": "123-test-123-uuid"}',
+                       status=200,
+                       content_type='text/json')
+        httpretty.register_uri(httpretty.POST, "https://crocodoc.com/api/v2/document/delete",
+                       data='{"token": "pRzHhZS4jaGes193db28cwyu", "uuid": "123-test-123-uuid"}',
+                       body='{"success": true}',
+                       status=200)
+        httpretty.register_uri(httpretty.GET, re.compile("https://crocodoc.com/view/(.+)"),
+                       body='{"success": true}',
+                       status=200)
+
         # maybe do something before the view_func call
         response = view_func(request, *args, **kwargs)
         # maybe do something after the view_func call

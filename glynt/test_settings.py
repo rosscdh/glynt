@@ -57,3 +57,8 @@ ABRIDGE_ACCESS_KEY_ID = '12345'
 ABRIDGE_SECRET_ACCESS_KEY = 'abcdefghijklmnopqrstuvwxyz12345678910'
 ABRIDGE_USERNAME = 'test'
 ABRIDGE_PASSWORD = 'test'
+
+
+HAYSTACK_CONNECTIONS = {
+    'default': {}
+}
