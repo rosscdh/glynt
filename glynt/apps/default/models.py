@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from threadedcomments.models import ThreadedComment
+from taggit.managers import TaggableManager
 import cities_light
 
 
@@ -14,7 +15,9 @@ cities_light.signals.city_items_pre_import.connect(filter_city_import)
 
 """
 Patch the django-rulez permissions on to our 
-Threadedcomment Class
+Threadedcomment Class.
+
+Patch django-taggit
 """
 def threadedcomment_can_read(self, **kwargs):
     project = self.content_object
@@ -35,3 +38,5 @@ def threadedcomment_can_delete(self, **kwargs):
 ThreadedComment.add_to_class('can_read', threadedcomment_can_read)
 ThreadedComment.add_to_class('can_edit', threadedcomment_can_edit)
 ThreadedComment.add_to_class('can_delete', threadedcomment_can_delete)
+
+ThreadedComment.add_to_class('tags', TaggableManager())

@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 from django.test import TestCase
-
+from taggit.managers import TaggableManager
 from threadedcomments.models import ThreadedComment
 
 
@@ -23,3 +23,7 @@ class ThreadedCommentsTest(TestCase):
 
     def test_as_can_delete(self):
         self.assertTrue(hasattr(self.subject, 'can_delete'))
+
+    def test_has_tags_manager(self):
+        self.assertTrue(hasattr(self.subject, 'tags'))
+        self.assertEqual('_TaggableManager', self.subject.tags.__class__.__name__)
