@@ -127,6 +127,7 @@ class DiscussionSerializer(GetContentObjectByTypeAndPkMixin, serializers.ModelSe
     title = serializers.CharField(required=False)
     comment = serializers.CharField()
 
+    tags = serializers.IntegerField(source='tags.all')
     meta = serializers.SerializerMethodField('get_meta')
     last_child = serializers.SerializerMethodField('get_last_child')
 
@@ -136,7 +137,8 @@ class DiscussionSerializer(GetContentObjectByTypeAndPkMixin, serializers.ModelSe
 
         fields = ('id', 'object_pk', 'title', 'comment', 'user',
                   'content_type_id', 'parent_id', 'last_child',
-                  'meta', 'last_child', 'site_id')
+                  'meta', 'tags',
+                  'site_id')
 
 
     def validate_object_pk(self, attrs, source):
@@ -184,7 +186,8 @@ class DiscussionThreadSerializer(DiscussionSerializer):
     class Meta(DiscussionSerializer.Meta):
         fields = ('id', 'object_pk', 'title', 'comment', 'user',
                   'content_type_id', 'parent_id',
-                  'meta', 'thread', 'site_id')
+                  'meta', 'thread', 'tags',
+                  'site_id')
 
     def get_thread(self, obj):
         for comment in obj.children.all():
