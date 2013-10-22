@@ -56,9 +56,11 @@ class CrocdocAttachmentService(object):
         if it has not already been uploaded (i.e. we have a crocdoc uuid in the json data)
         """
         if self.attachment.crocdoc_uuid is None:
+
             try:
                 uuid = self.upload_document()
                 logger.info('CrocdocAttachmentService.uuid: {uuid}'.format(uuid=uuid))
+
             except Exception as e:
                 logger.error('CrocdocAttachmentService.uuid: Failed to Generate uuid')
                 raise e
@@ -77,7 +79,7 @@ class CrocdocAttachmentService(object):
 
     def session_key(self, **kwargs):
         if self.session is None:
-            self.session = crocodoc.session.create(self.uuid, **kwargs)
+            self.session = crocodoc.session.create(self.uuid, **kwargs) if not settings.IS_TESTING else '123-123-123'
         return self.session
 
     def upload_document(self):
@@ -86,7 +88,7 @@ class CrocdocAttachmentService(object):
         return crocodoc.document.upload(url=url)
 
     def view_url(self):
-        url = 'https://crocodoc.com/view/{session_key}'.format(session_key=self.session_key())
+        url = 'https://crocodoc.com/view/{session_key}'.format(session_key=self.session_key()) if not settings.IS_TESTING else 'http://example.com'
         logger.info('provide crocdoc view_url: {url}'.format(url=url))
         return url
 
