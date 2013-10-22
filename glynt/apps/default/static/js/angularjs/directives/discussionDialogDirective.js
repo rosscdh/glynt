@@ -14,6 +14,7 @@ angular.module('lawpal').directive('discussionViewerContainer', ['$compile', '$t
 
         function showDiscussion(discussion) {
           scope.discussions.push(discussion);
+          $(".full-dialog-container").hide().fadeIn("slow");  // To be replaced with ngAnimate when it becomes standard
         }
 
         scope.discussions = [];
@@ -26,7 +27,9 @@ angular.module('lawpal').directive('discussionViewerContainer', ['$compile', '$t
       'controller': function ($scope /*, $element, $attrs*/ ) {
 
         $scope.close = function () {
-          $scope.discussions = [];
+          $(".full-dialog-container").fadeOut("slow",
+            function() { $scope.discussions = []; }
+          );  // To be replaced with ngAnimate when it becomes standard
         };
 
         $scope.reply = function (discussion) {
@@ -42,7 +45,7 @@ angular.module('lawpal').directive('discussionViewerContainer', ['$compile', '$t
         '  <div class="clearfix"><button class="close" ng-click="close()">&times</button></div>\n' +
         '  <div class="row clearfix">\n' +
       // Start: avatar column
-      '    <div class="col-lg-2 col-offset-1">\n' +
+        '    <div class="col-lg-2 col-offset-1">\n' +
         '       <div class="fn fn-lg clearfix" user-mini-widget user="discussion.latest.meta.user" data-show-props="photo,name"></div>\n' +
         '       <div class="time text-muted">\n' +
         '          <i class="icon icon-time"></i>\n' +
