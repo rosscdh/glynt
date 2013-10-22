@@ -2,7 +2,6 @@
 from django.core.urlresolvers import reverse
 
 from glynt.casper import BaseLawyerCustomerProjectCaseMixin
-from glynt.casper import glynt_mock_http_requests
 from glynt.apps.transact.models import Transaction
 
 import os
