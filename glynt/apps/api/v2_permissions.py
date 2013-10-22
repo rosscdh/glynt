@@ -9,17 +9,17 @@ class GlyntObjectPermission(IsAuthenticated):
     """
     def can_edit(self, request, view, obj):
         if hasattr(obj, 'can_edit'):
-            return obj.can_edit(user=request.user, request=request)
+            return obj.can_edit(user=request.user)
         return False
 
     def can_delete(self, request, view, obj):
         if hasattr(obj, 'can_delete'):
-            return obj.can_delete(user=request.user, request=request)
+            return obj.can_delete(user=request.user)
         return False
 
     def can_read(self, request, view, obj):
         if hasattr(obj, 'can_read'):
-            return obj.can_read(user=request.user, request=request)
+            return obj.can_read(user=request.user)
         return False
 
     def has_object_permission(self, request, view, obj):
