@@ -38,6 +38,9 @@ urlpatterns = patterns('',
     url(r'^logged-in/$', UserClassLoggedInRedirectView.as_view(), name='auth_user_class_logged_in_redirect'),
     url(r'^login-error/$', TemplateView.as_view(template_name='public/login-error.html'), name='login_error'),
 
+    url(r'^sorry-you-are-a-lawyer/$', TemplateView.as_view(template_name='public/sorry_are_lawyer.html'), name='sorry_are_lawyer'),
+    url(r'^sorry-you-are-a-customer/$', TemplateView.as_view(template_name='public/sorry_are_customer.html'), name='sorry_are_customer'),
+
     # home
     url(r'^$', PublicHomepageView.as_view(), name='homepage'),
 )
