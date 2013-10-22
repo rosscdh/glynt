@@ -1,6 +1,5 @@
 # -*- coding: UTF-8 -*-
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 
 from rest_framework import serializers
@@ -170,3 +169,18 @@ class DiscussionSerializer(GetContentObjectByTypeAndPkMixin, serializers.ModelSe
                             'photo': user.profile.get_mugshot_url()
                         }
             }
+
+
+class DiscussionThreadSerializer(DiscussionSerializer):
+    thread = serializers.SerializerMethodField('get_thread')
+
+    class Meta(DiscussionSerializer.Meta):
+        fields = ('id', 'object_pk', 'title', 'comment', 'user',
+                  'content_type_id', 'parent_id', 'last_child',
+                  'thread', 'site_id')
+
+    def get_thread(self, obj):
+        for comment in ThreadedComment.objects.prefetch_related('user').filter(parent_id=obj.pk,
+                                                                content_type=obj.content_type,
+                                                                object_pk=obj.object_pk):
+            yield DiscussionSerializer(comment).data    
