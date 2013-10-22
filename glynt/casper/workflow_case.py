@@ -51,17 +51,17 @@ def glynt_mock_http_requests(view_func):
         #
         httpretty.register_uri(httpretty.POST, re.compile("http://abridge.local.dev/(.+)"),
                        body='{"success": true}',
-                       status=200,
-                       content_type='text/json')
+                       status=200)
         httpretty.register_uri(httpretty.GET, re.compile("http://abridge.local.dev/(.+)"),
                        body='{"success": true}',
-                       status=200,
-                       content_type='text/json')
+                       status=200)
 
         #
         # Ink filepicker? @TODO are these called at all
         #
-
+        httpretty.register_uri(httpretty.GET, re.compile("https://www.filepicker.io/api/(.+)"),
+                       body='{"success": true}',
+                       status=200)
         #
         # s3? @TODO are these called at all
         #
@@ -70,23 +70,19 @@ def glynt_mock_http_requests(view_func):
         # Crocdoc
         #
         httpretty.register_uri(httpretty.POST, "https://crocodoc.com/api/v2/session/create",
-                       body='{"success": true}',
-                       status=200,
-                       content_type='text/json')
+                       body='{"session": i_12345-123_123_123-12345_123}',
+                       status=200)
         httpretty.register_uri(httpretty.GET, "https://crocodoc.com/api/v2/document/status",
                        body='{"success": true}',
-                       status=200,
-                       content_type='text/json')
+                       status=200)
         httpretty.register_uri(httpretty.POST, "https://crocodoc.com/api/v2/document/upload",
                        body='{"success": true, "uuid": "123-test-123-uuid"}',
-                       status=200,
-                       content_type='text/json')
+                       status=200)
         httpretty.register_uri(httpretty.POST, "https://crocodoc.com/api/v2/document/delete",
-                       data='{"token": "pRzHhZS4jaGes193db28cwyu", "uuid": "123-test-123-uuid"}',
-                       body='{"success": true}',
+                       body='{"token": "pRzHhZS4jaGes193db28cwyu", "uuid": "123-test-123-uuid"}',
                        status=200)
         httpretty.register_uri(httpretty.GET, re.compile("https://crocodoc.com/view/(.+)"),
-                       body='{"success": true}',
+                       body='This is a document',
                        status=200)
 
         # maybe do something before the view_func call
