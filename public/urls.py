@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from django.shortcuts import redirect
 
+from glynt.apps.default.views import ManualLoginView
+
 from views import (PublicHomepageView, ContactUsView,
                     UserClassSessionRedirectView, 
                     UserClassLoggedInRedirectView,
@@ -40,6 +42,9 @@ urlpatterns = patterns('',
 
     url(r'^sorry-you-are-a-lawyer/$', TemplateView.as_view(template_name='public/sorry_are_lawyer.html'), name='sorry_are_lawyer'),
     url(r'^sorry-you-are-a-customer/$', TemplateView.as_view(template_name='public/sorry_are_customer.html'), name='sorry_are_customer'),
+
+    # manual login
+    url(r'^l/$', ManualLoginView.as_view(), name='login'),
 
     # home
     url(r'^$', PublicHomepageView.as_view(), name='homepage'),

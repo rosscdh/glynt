@@ -1,0 +1,12 @@
+{% extends 'layout/base.html' %}
+
+{% block page_title %}Login Manually{% endblock %}
+
+{% block body %}
+
+<form action="." method="POST">{% csrf_token %}
+{{ form }}
+<input type="submit" value="Login"/>
+</form>
+
+{% endblock %}
