@@ -739,6 +739,9 @@ section.checklist-category {
 }
 
 .discussion-list {
+  button.widget-title-button {
+    margin-top:0;
+  }
   tr.byme-false {
     .comment { font-weight: bold; }
   } 
@@ -755,9 +758,18 @@ section.checklist-category {
   td.vcard-column {
     width: 50px;
   }
+  td.comment-column {
+    div.comment {
+      min-height: 4em;
+    }
+    p { margin-bottom: 0; }
+  }
   td.more-column {
     width: 30px;
     vertical-align: middle;
+    &:hover i {
+      color: #999;
+    }
   }
 }
 
