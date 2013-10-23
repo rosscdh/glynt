@@ -176,7 +176,10 @@ class DiscussionListView(ListCreateAPIView):
         """
         project_uuid = self.kwargs.get('uuid')
         project = get_object_or_404(Project, uuid=project_uuid)
-
+        #
+        # @BUSINESS RULE: /discussion/ shoudl only return the top level parents
+        # but include the last child object if present
+        #
         return self.queryset.filter(content_type=Project.content_type(),
                                     object_pk=project.pk,
                                     parent_id=None)
@@ -191,14 +194,25 @@ class DiscussionDetailView(RetrieveAPIView):
         parent_pk = self.kwargs.get('pk')
         project_uuid = self.kwargs.get('uuid')
         get_object_or_404(Project, uuid=project_uuid)  # ensure that we have the project
-
+        #
+        # @BUSINESS RULE: /discussion/:pk/ should return the parent
+        # as well as a the children as a "thread": []
+        #
         return self.queryset.filter(pk=parent_pk)
 
 
 class DiscussionTagView(APIView):
+    """
+    Discussion tags have their own endpoint as they are patched
+    in using django-taggit. and need to be handled in a specific manner
+    """
     queryset = ThreadedComment.objects.prefetch_related('user').all().order_by('-id')
 
     def get_params(self):
+        """
+        extract out the pk and uuid params from kwargs
+        also test that the project is valid
+        """
         parent_pk = self.kwargs.get('pk')
         project_uuid = self.kwargs.get('uuid')
         get_object_or_404(Project, uuid=project_uuid)  # ensure that we have the project
@@ -235,6 +249,10 @@ class DiscussionTagView(APIView):
         return self.response(status=201)
 
     def delete(self, request, **kwargs):
+        """
+        DELETE is handled by passing in a /tags/:tag/ value as django does not
+        provide access to DELETE body (not supported generally)
+        """
         posted_tag = kwargs.get('tag', None)
 
         if posted_tag in [None, '']:
