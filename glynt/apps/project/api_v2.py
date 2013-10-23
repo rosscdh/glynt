@@ -178,7 +178,8 @@ class DiscussionListView(ListCreateAPIView):
         project = get_object_or_404(Project, uuid=project_uuid)
 
         return self.queryset.filter(content_type=Project.content_type(),
-                                    object_pk=project.pk)
+                                    object_pk=project.pk,
+                                    parent_id=None)
 
 
 class DiscussionDetailView(RetrieveAPIView):
