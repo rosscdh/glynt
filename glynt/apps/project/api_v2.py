@@ -197,11 +197,14 @@ class DiscussionDetailView(RetrieveAPIView):
 class DiscussionTagView(APIView):
     queryset = ThreadedComment.objects.prefetch_related('user').all().order_by('-id')
 
-    def get_queryset(self):
+    def get_params(self):
         parent_pk = self.kwargs.get('pk')
         project_uuid = self.kwargs.get('uuid')
         get_object_or_404(Project, uuid=project_uuid)  # ensure that we have the project
+        return (parent_pk, project_uuid)
 
+    def get_queryset(self):
+        parent_pk, project_uuid = self.get_params()
         return self.queryset.get(pk=parent_pk).tags
 
     def response(self, status):
