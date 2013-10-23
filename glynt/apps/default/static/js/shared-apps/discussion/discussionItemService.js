@@ -60,7 +60,7 @@ angular.module('lawpal')
     this.openDialog = function( parent ) {
       var modalInstance = $modal.open({
           "windowClass": "modal modal-show",
-          "templateUrl": "newDiscussion.html",
+          "templateUrl": "template/lawpal/discussion/newDiscussion.html",
           "controller": "newDiscussionDialogCtrl",
           "resolve": {
             "parent": function(){
