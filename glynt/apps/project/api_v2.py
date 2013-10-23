@@ -168,7 +168,7 @@ class DiscussionListView(ListCreateAPIView):
     Endpoint that shows discussion threads
     django_comments & threaded_comments & fluent_comments
     """
-    queryset = ThreadedComment.objects.prefetch_related('user').all().order_by('-id')
+    queryset = ThreadedComment.objects.select_related('user', 'tagged_items__tag').all().order_by('-id')
     serializer_class = DiscussionSerializer
 
     def get_queryset(self):
@@ -186,7 +186,7 @@ class DiscussionListView(ListCreateAPIView):
 
 
 class DiscussionDetailView(RetrieveAPIView):
-    queryset = ThreadedComment.objects.prefetch_related('user').all().order_by('-id')
+    queryset = ThreadedComment.objects.select_related('user', 'tagged_items__tag').all().order_by('-id')
     serializer_class = DiscussionThreadSerializer
     lookup_field = 'pk'
 
@@ -206,7 +206,7 @@ class DiscussionTagView(APIView):
     Discussion tags have their own endpoint as they are patched
     in using django-taggit. and need to be handled in a specific manner
     """
-    queryset = ThreadedComment.objects.prefetch_related('user').all().order_by('-id')
+    queryset = ThreadedComment.objects.select_related('user', 'tagged_items__tag').all().order_by('-id')
 
     def get_params(self):
         """
