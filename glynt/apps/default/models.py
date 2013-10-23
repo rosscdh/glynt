@@ -43,8 +43,7 @@ def threadedcomment_absolute_deeplink_url(self, **kwargs):
     else:
         # we have an absolute url
         parent_id = self.parent_id if self.parent_id is not None else self.pk
-        return '{url}{path}#/discussion/{parent_id}'.format(url=CURRENT_SITE().domain,
-                                                            path=self.content_object.get_absolute_url(),
+        return '{path}#/discussion/{parent_id}'.format(path=self.content_object.get_absolute_url(),
                                                             parent_id=parent_id)
 
 ThreadedComment.add_to_class('can_read', threadedcomment_can_read)

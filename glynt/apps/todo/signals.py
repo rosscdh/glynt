@@ -425,19 +425,19 @@ def on_action_created(sender, **kwargs):
                 logger.debug('action.target is a Project object')
                 project = target
                 recipients = project.notification_recipients()
-                url = project.get_absolute_url()
+                url = action.data.get('url', project.get_absolute_url())
 
             elif target_type == ProjectLawyer:
                 logger.debug('action.target is a ProjectLawyer object')
                 project = target.project
                 recipients = target.notification_recipients()
-                url = project.get_absolute_url() # @TODO need to change this to be the actual engagement element link and write a js trigger to show the modal
+                url = action.data.get('url', project.get_absolute_url()) # @TODO need to change this to be the actual engagement element link and write a js trigger to show the modal
 
             elif target_type == ToDo:
                 logger.debug('action.target is a ToDo object')
                 project = action.target.project
                 recipients = project.notification_recipients()
-                url = target.get_absolute_url()  # get the todos absolute url
+                url = action.data.get('url', target.get_absolute_url())  # get the todos absolute url
 
             if recipients:
                 logger.debug('recipients: {recipients}'.format(recipients=recipients))

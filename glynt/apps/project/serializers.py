@@ -132,12 +132,12 @@ class DiscussionSerializer(GetContentObjectByTypeAndPkMixin, serializers.ModelSe
 
     class Meta:
         model = ThreadedComment
-        queryset = ThreadedComment.objects.prefetch_related('user').all().order_by('-id')
+        queryset = ThreadedComment.objects.select_related('user', 'tagged_items__tag').all().order_by('-id')
 
         fields = ('id', 'object_pk', 'title', 'comment', 'user',
-                  'content_type_id', 'parent_id', 'last_child',
-                  'meta', 'tags',
-                  'site_id')
+                  'content_type_id', 'parent_id',
+                  'tags', 'site_id',
+                  'last_child', 'meta',)
 
 
     def validate_object_pk(self, attrs, source):
@@ -185,8 +185,8 @@ class DiscussionThreadSerializer(DiscussionSerializer):
     class Meta(DiscussionSerializer.Meta):
         fields = ('id', 'object_pk', 'title', 'comment', 'user',
                   'content_type_id', 'parent_id',
-                  'meta', 'thread', 'tags',
-                  'site_id')
+                  'tags', 'site_id',
+                  'meta', 'thread',)
 
     def get_thread(self, obj):
         for comment in obj.children.all():
