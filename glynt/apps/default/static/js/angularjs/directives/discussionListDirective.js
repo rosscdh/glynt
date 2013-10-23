@@ -163,7 +163,10 @@ angular.module('lawpal').run(["$templateCache", function($templateCache) {
 		'			</div>\n'+
 		'		</td>\n'+
 		'		<td class="comment-column">\n'+
-		'			<p class="comment clickable" ng-bind="discussion.latest.comment | characters:200" ng-click="displayDiscussion(discussion)"></p>\n'+
+		'			<div class="comment clickable" ng-click="displayDiscussion(discussion)">\n'+
+		'			    <p ng-show="discussion.original.title"><strong ng-bind="discussion.original.title | characters:50"></strong></p>\n'+
+		'			    <p ng-bind="discussion.latest.comment | characters:200"></p>\n'+
+		'			</div>\n'+
 		'			<div><button type="button" class="btn btn-link btn-small pull-right" tooltip="Respond now" ng-click="reply(discussion.original)">\n'+
 		'				<i class="icon icon-reply"></i> Respond\n'+
 		'			</button></div>\n'+

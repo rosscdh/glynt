@@ -82,6 +82,7 @@ angular.module('lawpal')
         
         var messageDetails = {
           "object_pk": lawPalService.getProjectUuid(),
+          "title": message.subject,
           "comment": message.comment,
           "user": userPk,
           "content_type_id": lawPalService.projectContentTypeId(),

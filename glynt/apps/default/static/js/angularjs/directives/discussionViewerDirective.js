@@ -7,63 +7,78 @@
  * Discussion objects are expected in the following format:
  *   { "original": {}, "lastest": {} }
  */
-angular.module('lawpal').directive('discussionViewer', ['$compile', '$timeout', 'discussionItemService', '$anchorScroll',
-  function ($compile, $timeout, discussionItemService, $anchorScroll) {
+angular.module('lawpal').directive('discussionViewer', ['$compile', '$timeout', 'discussionItemService', '$anchorScroll', '$location',
+  function ($compile, $timeout, discussionItemService, $anchorScroll, $location ) {
     'use strict';
     return {
       'replace': true,
       'restrict': 'EAC',
-      'link': function (scope /*, elm, attrs*/ ) {
-
+      'link': function ( /*scope , elm, attrs*/ ) {
+      },
+      'controller': function ($scope /*, $element, $attrs*/ ) {
         // Contains the original discussion, it's an array so the we can take advantage of ngAnimate later
-        scope.discussions = [];
+        $scope.discussions = [];
         // An array of replies for the current discussion
-        scope.replies = [];
+        $scope.replies = [];
+
+        $scope.close = function () {
+          $(".full-dialog-container").fadeOut("slow",
+            function() { $scope.discussions = []; }
+          );  // To be replaced with ngAnimate when it becomes standard
+          $location.path('/');
+        };
+
+        $scope.reply = function (discussion) {
+          discussionItemService.reply(discussion);
+        };
 
         /**
          * Start the process of showing a full discussion
          * @param  {Object} discussion Discussion object
          */
         function showDiscussion(discussion) {
-          scope.discussions.push(discussion);
+          $scope.discussions.push(discussion);
           $(".full-dialog-container").hide().fadeIn("slow");  // To be replaced with ngAnimate when it becomes standard
-          scope.loadFullDiscussion( discussion );
+          $location.path('/discussion/' + discussion.original.id);
+          $scope.loadFullDiscussion( discussion.original.id );
         }
 
         /**
          * Start the process of loading the full discussion
          * @param  {Object} discussion Discussion object
          */
-        scope.loadFullDiscussion = function( discussion ) {
-          discussionItemService.load( discussion.original.id, function( err, results){
-            scope.replies = results.thread;
+        $scope.loadFullDiscussion = function( discussionId ) {
+          discussionItemService.load( discussionId, function( err, results){
+            $scope.replies = results.thread;
+            if( $scope.discussions.length===0 ) {
+              $scope.discussions.push({
+                "original": results,
+                "latest": results.last_child
+              });
+            }
           });
         };
 
         /* Listen when the user requests to see a full discussion */
-        scope.$on('discussion-show', function ( evt, discussion ) {
+        $scope.$on('discussion-show', function ( evt, discussion ) {
           showDiscussion( discussion );
           $anchorScroll();
         });
 
         /* Listen for when new discussion items are added */
-        scope.$on('discussion-new-item', function ( evt, postedData, response ) {
-          if( scope.discussions.length===1 && response.parent_id && response.parent_id === scope.discussions[0].original.id ) {
-            scope.replies.push(response);
+        $scope.$on('discussion-new-item', function ( evt, postedData, response ) {
+          if( $scope.discussions.length===1 && response.parent_id && response.parent_id === $scope.discussions[0].original.id ) {
+            $scope.replies.push(response);
           }
         });
-      },
-      'controller': function ($scope /*, $element, $attrs*/ ) {
 
-        $scope.close = function () {
-          $(".full-dialog-container").fadeOut("slow",
-            function() { $scope.discussions = []; }
-          );  // To be replaced with ngAnimate when it becomes standard
-        };
+        /* While controllers are sperated: i.e. not using ngRoutes @@ngRoutes */
 
-        $scope.reply = function (discussion) {
-          discussionItemService.reply(discussion);
-        };
+        if( $location.path().indexOf("/discussion/")>=0 ) {
+          var paths = $location.path().split("/");
+          var discussionId = paths[paths.length-1];
+          $scope.loadFullDiscussion( discussionId );
+        }
       },
       'template': '<div class="full-dialog-container">' +
         '<div ng-animate="\'animateToaster\'" ng-repeat="discussion in discussions">\n' +
@@ -72,6 +87,7 @@ angular.module('lawpal').directive('discussionViewer', ['$compile', '$timeout', 
         '<div class="full-dialog">' +
         '<div class="container full-dialog-content">\n' +
         '  <div class="clearfix"><button class="close" ng-click="close()">&times</button></div>\n' +
+        '  <div class="row" ng-show="discussion.original.title"><div class="col-lg-5 col-offset-3"><h3 ng-bind="discussion.original.title"></h3></div></div>'+
         '  <div class="row clearfix" ng-repeat="reply in replies | orderBy:\'meta.timestamp\':true">\n'+
         // Start: avatar column
         '    <div class="col-lg-2 col-offset-1">\n' +

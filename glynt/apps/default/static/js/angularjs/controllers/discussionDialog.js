@@ -8,9 +8,14 @@ angular.module('lawpal').controller( 'newDiscussionDialogCtrl', [ '$scope', '$mo
 		$scope.message = {
 			"tags": [ "project", "discussion" ],
 			"comment": null,
+			"subject": null,
 			"type": "discussion",
 			"parent_id": parent && parent.id?parent.id:null
 		};
+
+		$scope.hasParent = parent && parent.id?true:false; // USed to determine if to show subject field
+		$scope.title = !$scope.hasParent?"New discussion":"Respond"; // Dialog title
+		
 		/**
 		 * User clicked the OK/Save button
 		 */
