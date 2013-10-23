@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django import template
 from django.utils import unittest
+from django.test import TestCase
 from django.test.utils import override_settings
 
 from model_mommy import mommy
@@ -10,13 +11,16 @@ from glynt.tests import TemplateRendererMixin
 
 from django.contrib.auth.models import AnonymousUser
 
-from glynt.apps.default.templatetags.glynt_helpers import (colorize_acronym,
+from glynt.apps.default.templatetags.glynt_helpers import (ABSOLUTE_STATIC_URL,
+                                                           colorize_acronym,
                                                            pusher_js,
                                                            moment_js,
                                                            intercom_script,)
 
 
-class TestTemplateTags(unittest.TestCase):
+class TestTemplateTags(TestCase):
+    fixtures = ['sites']
+
     def test_current_date_format(self):
         pass
 
@@ -28,6 +32,10 @@ class TestTemplateTags(unittest.TestCase):
 
     def test_comment_form(self):
         pass
+
+    @override_settings(SITE_ID=4)
+    def test_ABSOLUTE_STATIC_URL(self):
+        self.assertEqual(ABSOLUTE_STATIC_URL(), 'https://www.lawpal.com/static/')
 
     def test_colorize_acronym(self):
         assert colorize_acronym('monkey') == 'c5'

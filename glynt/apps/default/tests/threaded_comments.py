@@ -27,3 +27,6 @@ class ThreadedCommentsTest(TestCase):
     def test_has_tags_manager(self):
         self.assertTrue(hasattr(self.subject, 'tags'))
         self.assertEqual('_TaggableManager', self.subject.tags.__class__.__name__)
+
+    def test_has_absolute_deeplink_url(self):
+        self.assertTrue(hasattr(self.subject, 'absolute_deeplink_url'))
