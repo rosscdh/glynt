@@ -7,8 +7,6 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 	'use strict';
 	var lawPalInterface = LawPal;
 	var userType = 'is_customer';
-	var checklist = [];
-	var getEndpoint = (lawPalInterface.getEndpoint ? lawPalInterface.getEndpoint() : null);
 	var data = {
 		'project': {},
 		'users': []
@@ -16,34 +14,34 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 
 	/* Define API interfaces for check list items */
 	var checkListItemResources = {
-		'remove': $resource('/api/v1/todo/:id', {}, 
+		'remove': $resource('/api/v1/todo/:id', {},
 			/* This is done to ensure the content type of PATCH is sent through */
-			{ 'save': { 'method': 'PATCH', headers: { 'Content-Type': 'application/json' } } 
+			{ 'save': { 'method': 'PATCH', headers: { 'Content-Type': 'application/json' } }
 		}),
-		'update': 
-			$resource('/api/v1/todo/:id\\/', {},
-				{ 'save': { 'method': 'PUT', headers: { 'Content-Type': 'application/json' } } 
+		'update':
+			$resource('/api/v1/todo/:id/?format=json', {},
+				{ 'save': { 'method': 'PUT', headers: { 'Content-Type': 'application/json' } }
 			}),
-		'create': 
-			$resource('/api/v1/todo\\/', {},
-				{ 'save': { 'method': 'POST', headers: { 'Content-Type': 'application/json' } } 
+		'create':
+			$resource('/api/v1/todo/?format=json', {},
+				{ 'save': { 'method': 'POST', headers: { 'Content-Type': 'application/json' } }
 			}),
-		'reorder': $resource('/api/v1/project/:id/checklist/sort\\/', {}, 
+		'reorder': $resource('/api/v1/project/:id/checklist/sort/?format=json', {},
 			/* This is done to ensure the content type of PATCH is sent through */
-			{ 'save': { 'method': 'PATCH', headers: { 'Content-Type': 'application/json' }, 'isArray': true } 
+			{ 'save': { 'method': 'PATCH', headers: { 'Content-Type': 'application/json' }, 'isArray': true }
 		})
 	};
 
 	var checkListCategories = {
-		'reorder': $resource('/api/v1/project/:id/checklist/categories/sort\\/', {}, 
+		'reorder': $resource('/api/v1/project/:id/checklist/categories/sort/?format=json', {},
 			/* This is done to ensure the content type of PATCH is sent through */
-				{ 'save': { 'method': 'PATCH', headers: { 'Content-Type': 'application/json' }, 'isArray': true } 
+				{ 'save': { 'method': 'PATCH', headers: { 'Content-Type': 'application/json' }, 'isArray': true }
 			}),
 		'add': $resource( '/projects/:id/category\\/', {},
-				{ 'save': { 'method': 'POST', 'headers' : {'Content-Type': 'application/x-www-form-urlencoded'}, 'transformRequest': transformToFormData } 
+				{ 'save': { 'method': 'POST', 'headers' : {'Content-Type': 'application/x-www-form-urlencoded'}, 'transformRequest': transformToFormData }
 			}),
 		'delete': $resource( '/projects/:id/category\\/', {},
-				{ 'save': { 'method': 'DELETE', 'headers' : { 'Content-Type': 'application/json' } } 
+				{ 'save': { 'method': 'DELETE', 'headers' : { 'Content-Type': 'application/json' } }
 			})
 	};
 
@@ -51,7 +49,7 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 		'details': $resource('/api/v2/project/:uuid/?format=json', {}, /* use ?format=json to avoid trailing slash issues*/
 				{
 					'get': { 'method': 'GET', 'headers': { 'Content-Type': 'application/json' } },
-					'patch': { 'method': 'PATCH', 'headers': { 'Content-Type': 'application/json' } } 
+					'patch': { 'method': 'PATCH', 'headers': { 'Content-Type': 'application/json' } }
 				}
 			),
 		'team': $resource('/api/v2/project/:uuid/team/?format=json', {},
@@ -555,12 +553,6 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 					deferred.reject( err );
 				}
 			);
-			/*
-			$timeout(function () {
-				var results = lawPalInterface._mockSearch(str);
-				deferred.resolve(results);
-			}, 1500);
-			*/
 
 			return deferred.promise;
 		},

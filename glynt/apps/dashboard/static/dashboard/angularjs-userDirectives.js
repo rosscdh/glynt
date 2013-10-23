@@ -14,25 +14,27 @@ angular.module('lawpal').directive('userMiniWidget', function () {
 		"scope": {
 			"user": "=user"
 		},
+		/*
 		"link": function (scope, iElement, iAttrs) {
 		},
+		*/
 		"controller": [ '$scope', '$element', '$attrs', function( $scope, $element, $attrs ) {
-      $scope.show = {
-        "name": false,
-        "photo": false
-      };
 
-      if( $attrs.showProps ) {
-        var showProps = $attrs.showProps.split(',');
-        for(var i=0;i<showProps.length;i++) {
-          $scope.show[showProps[i]]=true;
-        }
-      } else {
-        for(var key in $scope.show) {
-          $scope.show[key]=true;
-        }
-      }
-      console.log('$attrs', $attrs);
+			$scope.show = {
+				"name": false,
+				"photo": false
+			};
+
+			if( $attrs.showProps ) {
+				var showProps = $attrs.showProps.split(',');
+				for(var i=0;i<showProps.length;i++) {
+					$scope.show[showProps[i]]=true;
+				}
+			} else {
+				for(var key in $scope.show) {
+					$scope.show[key]=true;
+				}
+			}
 			$scope.contactUser = function() {
 				console.log("Contact user");
 			};
