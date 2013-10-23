@@ -3,6 +3,9 @@
  * 1. requries a tag on the page somewhere
  *   <div class="discussion-viewer-container"></div>
  * 2. Recieves a broadcast message to display a specific discussion item (most likely a parent)
+ *
+ * Discussion objects are expected in the following format:
+ *   { "original": {}, "lastest": {} }
  */
 angular.module('lawpal').directive('discussionViewer', ['$compile', '$timeout', 'discussionItemService', '$anchorScroll',
   function ($compile, $timeout, discussionItemService, $anchorScroll) {
@@ -12,28 +15,39 @@ angular.module('lawpal').directive('discussionViewer', ['$compile', '$timeout', 
       'restrict': 'EAC',
       'link': function (scope /*, elm, attrs*/ ) {
 
+        // Contains the original discussion, it's an array so the we can take advantage of ngAnimate later
         scope.discussions = [];
+        // An array of replies for the current discussion
         scope.replies = [];
 
+        /**
+         * Start the process of showing a full discussion
+         * @param  {Object} discussion Discussion object
+         */
         function showDiscussion(discussion) {
           scope.discussions.push(discussion);
           $(".full-dialog-container").hide().fadeIn("slow");  // To be replaced with ngAnimate when it becomes standard
           scope.loadFullDiscussion( discussion );
         }
 
+        /**
+         * Start the process of loading the full discussion
+         * @param  {Object} discussion Discussion object
+         */
         scope.loadFullDiscussion = function( discussion ) {
           discussionItemService.load( discussion.original.id, function( err, results){
             scope.replies = results.thread;
           });
         };
 
+        /* Listen when the user requests to see a full discussion */
         scope.$on('discussion-show', function ( evt, discussion ) {
-          showDiscussion(/*discussionItemService.*/discussion);
+          showDiscussion( discussion );
           $anchorScroll();
         });
 
+        /* Listen for when new discussion items are added */
         scope.$on('discussion-new-item', function ( evt, postedData, response ) {
-          //debugger;
           if( scope.discussions.length===1 && response.parent_id && response.parent_id === scope.discussions[0].original.id ) {
             scope.replies.push(response);
           }
@@ -63,7 +77,7 @@ angular.module('lawpal').directive('discussionViewer', ['$compile', '$timeout', 
         '    <div class="col-lg-2 col-offset-1">\n' +
         '       <div class="fn fn-lg clearfix" user-mini-widget user="reply.meta.user" data-show-props="photo,name"></div>\n' +
         '       <div class="time text-muted">\n' +
-        '          <i class="icon icon-time"></i>\n' +
+        /*'          <i class="icon icon-time"></i>\n' +*/
         '          <small ng-bind="reply.meta.timestamp | timeAgo"></small>\n' +
         '       </div>\n' +
         '    </div>\n' +
@@ -78,7 +92,7 @@ angular.module('lawpal').directive('discussionViewer', ['$compile', '$timeout', 
         '    <div class="col-lg-2 col-offset-1">\n' +
         '       <div class="fn fn-lg clearfix" user-mini-widget user="discussion.original.meta.user" data-show-props="photo,name"></div>\n' +
         '       <div class="time text-muted">\n' +
-        '          <i class="icon icon-time"></i>\n' +
+        /*'          <i class="icon icon-time"></i>\n' +*/
         '          <small ng-bind="discussion.original.meta.timestamp | timeAgo"></small>\n' +
         '       </div>\n' +
         '    </div>\n' +
