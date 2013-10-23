@@ -4,13 +4,12 @@ from django.contrib.contenttypes.models import ContentType
 
 from rest_framework import serializers
 
-from .models import Project, ProjectLawyer
+from .models import Project
 from threadedcomments.models import ThreadedComment
 
 from glynt.apps.customer.serializers import UserSerializer
 
 import re
-import itertools
 
 UUID4HEX_LONG = re.compile('[0-9a-f]{32}\Z', re.I)
 UUID4HEX_SHORT = re.compile('[0-9a-f]{11}\Z', re.I)
@@ -127,7 +126,7 @@ class DiscussionSerializer(GetContentObjectByTypeAndPkMixin, serializers.ModelSe
     title = serializers.CharField(required=False)
     comment = serializers.CharField()
 
-    tags = serializers.IntegerField(source='tags.all')
+    tags = serializers.IntegerField(source='tags.all', required=False)
     meta = serializers.SerializerMethodField('get_meta')
     last_child = serializers.SerializerMethodField('get_last_child')
 

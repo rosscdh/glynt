@@ -1,21 +1,25 @@
 # -*- coding: UTF-8 -*-
-from django.shortcuts import get_object_or_404
-from django.http import HttpResponseNotAllowed, HttpResponseBadRequest
-from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
+from django.utils.encoding import smart_unicode
+from django.http import HttpResponseNotAllowed, HttpResponseBadRequest
 
+from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.parsers import JSONParser
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.exceptions import ParseError
 from rest_framework.generics import (RetrieveAPIView, ListCreateAPIView,
-                                     RetrieveUpdateAPIView,
-                                     RetrieveUpdateDestroyAPIView)
+                                     RetrieveUpdateAPIView)
+
 
 from threadedcomments.models import ThreadedComment
 
 from .models import Project, ProjectLawyer
 from .serializers import (ProjectSerializer, TeamSerializer,
-                          DiscussionSerializer, DiscussionThreadSerializer)
+                          DiscussionSerializer, DiscussionThreadSerializer,)
 
+import StringIO
 import logging
 logger = logging.getLogger('django.request')
 
@@ -185,7 +189,54 @@ class DiscussionDetailView(RetrieveAPIView):
     def get_queryset(self):
         parent_pk = self.kwargs.get('pk')
         project_uuid = self.kwargs.get('uuid')
-        project = get_object_or_404(Project, uuid=project_uuid)
-        # import pdb;pdb.set_trace()
+        get_object_or_404(Project, uuid=project_uuid)  # ensure that we have the project
+
         return self.queryset.filter(pk=parent_pk)
 
+
+class DiscussionTagView(APIView):
+    queryset = ThreadedComment.objects.prefetch_related('user').all().order_by('-id')
+
+    def get_queryset(self):
+        parent_pk = self.kwargs.get('pk')
+        project_uuid = self.kwargs.get('uuid')
+        get_object_or_404(Project, uuid=project_uuid)  # ensure that we have the project
+
+        return self.queryset.get(pk=parent_pk).tags
+
+    def response(self, status):
+        qs = self.get_queryset()
+        return Response([tag.name for tag in qs.all()], status=status)
+
+    def decode_from_body(self, data):
+        stream = StringIO.StringIO(data.encode("utf-8"))
+        posted_tags = JSONParser().parse(stream)
+
+        if type(posted_tags) not in [list]:
+            raise ParseError(detail='Must post a list of at least 1 tag ["tag number 1"]')
+
+        posted_tags = [smart_unicode(tag) for tag in posted_tags]  # decode to unicode
+
+        return posted_tags
+
+    def get(self, request, **kwargs):
+        return self.response(status=200)
+
+    def post(self, request, **kwargs):
+        posted_tags = self.decode_from_body(data=request.POST.get("_content"))
+
+        qs = self.get_queryset()
+        qs.add(*posted_tags)
+
+        return self.response(status=201)
+
+    def delete(self, request, **kwargs):
+        posted_tag = kwargs.get('tag', None)
+
+        if posted_tag in [None, '']:
+            raise ParseError(detail='Must include a tag in the url i.e. /api/v2/project/:project_uuid/discussion/:discussion_pk/tags/:tag/')
+
+        qs = self.get_queryset()
+        qs.remove(posted_tag)
+
+        return self.response(status=202)

@@ -6,7 +6,8 @@ from rest_framework import routers
 from glynt.apps.customer.api_v2 import (UserViewSet,)
 
 from glynt.apps.project.api_v2 import (ProjectViewSet, DiscussionListView,
-                                       TeamListView, DiscussionDetailView, )
+                                       TeamListView, DiscussionDetailView,
+                                       DiscussionTagView, )
 
 
 # Setup routers
@@ -21,7 +22,10 @@ urlpatterns = patterns('',
     url(r'^project/(?P<uuid>.+)/discussion/$',
                                               DiscussionListView.as_view(),
                                               name='project_discussion'),
-    url(r'^project/(?P<uuid>.+)/discussion/(?P<pk>.+)/$',
+    url(r'^project/(?P<uuid>.+)/discussion/(?P<pk>\d+)/tags((\/(?P<tag>.+))?)/$',
+                                              DiscussionTagView.as_view(),
+                                              name='project_discussion_tags'),
+    url(r'^project/(?P<uuid>.+)/discussion/(?P<pk>\d+)/$',
                                               DiscussionDetailView.as_view(),
                                               name='project_discussion_detail'),
 )
