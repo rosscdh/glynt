@@ -127,7 +127,7 @@ class DiscussionSerializer(GetContentObjectByTypeAndPkMixin, serializers.ModelSe
     title = serializers.CharField(required=False)
     comment = serializers.CharField()
 
-    tags = serializers.IntegerField(source='tags.all')
+    tags = serializers.IntegerField(source='tags.all', required=False)
     meta = serializers.SerializerMethodField('get_meta')
     last_child = serializers.SerializerMethodField('get_last_child')
 

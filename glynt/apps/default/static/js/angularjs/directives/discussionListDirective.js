@@ -39,11 +39,9 @@ angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster
 			 * @param  {Integer} parentId PK of comment of the parent (optional)
 			 * @param  {Integer} childId  PK of the child comment (optional)
 			 */
-			$scope.generateWorkingDiscussionData = function( parentId, childId ) {
+			$scope.generateWorkingDiscussionData = function() {
 				var dItem;
 				var data = [];
-
-				discussionLookup($scope.discussions);
 				
 				if( !angular.isArray($scope.discussions) ) {
 					return [];
@@ -56,12 +54,9 @@ angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster
 				);
 
 				for( var i=0; i<dis.length;i++) {
-					if( parentId && childId && parentId===dis[i].id ) {
-						dis[i].last_child = childId;
-					}
 					dItem = {
 						"original": dis[i],
-						"latest": discussionLookup(dis[i].last_child) || dis[i]
+						"latest": dis[i].last_child || dis[i]
 					};
 
 					data.push(dItem);
@@ -109,8 +104,17 @@ angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster
 			 */
 			$scope.$on('discussion-new-item', function ( evt, message, response ) {
 				$scope.discussions.push( response );
-				$scope.generateWorkingDiscussionData(  message.parent_id, response.id );
+				addLastChild( message.parent_id, response );
+				$scope.generateWorkingDiscussionData(  /*message.parent_id, response.id*/ );
 			});
+
+			var addLastChild = function( parentId, newItem ) {
+				for(var i=0;i< $scope.discussions.length;i++ ) {
+					if( $scope.discussions[i].id===parentId) {
+						$scope.discussions[i].last_child = newItem;
+					}
+				}
+			};
 
 			/**
 			 * Given and Object attempt to find it quickly, uses object keys for speed. If an object is not passed through then the working list is generated.
@@ -118,6 +122,7 @@ angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster
 			 * @param  {Array/String} obj Array of discussion items or a look up string
 			 * @return {Object}	 Discussion item
 			 */
+			/*
 			function discussionLookup( obj ) {
 				if(angular.isArray(obj)) {
 					for (var i=0;i<obj.length;i++) {
@@ -128,6 +133,7 @@ angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster
 					return working.dicussions[obj]||null;
 				}
 			}
+			*/
 		}]
 	};
 }]);
@@ -141,11 +147,12 @@ angular.module('lawpal').run(["$templateCache", function($templateCache) {
 		'</button>\n'+
 		'<h3>Discussions and Issues</h3>\n'+
 		'<span ng-show="working.loading" class="text-muted"><i class="icon icon-spinner icon-spin"></i> Loading discussions</span>\n'+
+		'<p ng-show="working.discussions.length==0" class="text-muted"><button class="btn btn-link" ng-click="new(null)">Start a discussion</button></p>\n'+
 		'<table class="table table-striped">\n'+
 		'	<tr ng-repeat="discussion in working.discussions  | orderBy:\'latest.id\':true" class="byme-{[{byMe(discussion.latest.meta.user.pk)}]}">\n'+
 		'		<td class="status-column">\n'+
 		'			<i class="icon icon-comment nest">\n'+
-		'				<small class="nested text-primary" ng-bind="discussion.latest.id">999</small>\n'+
+		'				<small class="nested text-primary" ng-bind="discussion.original.count">1</small>\n'+
 		'			</i>\n'+
 		'		</td>\n'+
 		'		<td class="vcard-column">\n'+
@@ -156,7 +163,7 @@ angular.module('lawpal').run(["$templateCache", function($templateCache) {
 		'			</div>\n'+
 		'		</td>\n'+
 		'		<td class="comment-column">\n'+
-		'			<div class="comment clickable" ng-bind="discussion.latest.comment | characters:200" ng-click="displayDiscussion(discussion)"></div>\n'+
+		'			<p class="comment clickable" ng-bind="discussion.latest.comment | characters:200" ng-click="displayDiscussion(discussion)"></p>\n'+
 		'			<div><button type="button" class="btn btn-link btn-small pull-right" tooltip="Respond now" ng-click="reply(discussion.original)">\n'+
 		'				<i class="icon icon-reply"></i> Respond\n'+
 		'			</button></div>\n'+

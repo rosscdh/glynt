@@ -20,6 +20,14 @@ angular.module('lawpal')
 				$rootScope.$broadcast('discussion-show', discussion);
 		};
 
+    this.load = function( discussionId, callback ) {
+      lawPalService.fullDiscussion( discussionId ).then(
+        function( results ) {
+          callback( null, results );
+        }
+      );
+    };
+
     /**
      * Open a dialog to add a new discussion
      */
@@ -71,9 +79,9 @@ angular.module('lawpal')
     this.saveDiscussion = function( message ) {
         toaster.pop( "info", "Saving" );
         var userPk = lawPalService.getCurrentUser().pk;
+        
         var messageDetails = {
           "object_pk": lawPalService.getProjectUuid(),
-          "title": message.subject,
           "comment": message.comment,
           "user": userPk,
           "content_type_id": lawPalService.projectContentTypeId(),
