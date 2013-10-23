@@ -8723,7 +8723,7 @@ section.checklist-category {
   vertical-align: middle;
 }
 
-.discussion-list td.more-column:hover i {
+.discussion-list tr:hover td.more-column i {
   color: #999;
 }
 
