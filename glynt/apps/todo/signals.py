@@ -148,11 +148,14 @@ Comment Events
 def on_comment_created(sender, **kwargs):
     """
     Handle Creation of attachments
+    @TODO: This needs to be abstracted!
+    @CODESMELL
     """
     if not isinstance(sender, LogEntry):
         send = False
         is_new = kwargs.get('created', False)
         comment = kwargs.get('instance')
+        extra = {}
 
         if comment and is_new:
             content_object_type = type(comment.content_object)
@@ -174,6 +177,9 @@ def on_comment_created(sender, **kwargs):
                 target = project = comment.content_object
                 event = 'project.comment.created'
                 verb = '{name} commented on the {project} project'.format(name=comment.user.get_full_name(), project=project)
+                extra.update({
+                    'url': comment.absolute_deeplink_url()  # append url to the comment deeplink
+                })
 
             elif content_object_type == ProjectLawyer:
                 send = True
@@ -197,7 +203,8 @@ def on_comment_created(sender, **kwargs):
                         action_object=comment,
                         target=target,
                         content=comment.comment,
-                        event=event)
+                        event=event,
+                        **extra)
 
 """
 Feedback Request Change Events
