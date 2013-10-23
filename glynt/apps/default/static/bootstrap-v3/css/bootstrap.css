@@ -8678,6 +8678,10 @@ section.checklist-category {
   width: 200px;
 }
 
+.discussion-list button.widget-title-button {
+  margin-top: 0;
+}
+
 .discussion-list tr.byme-false .comment {
   font-weight: bold;
 }
@@ -8706,9 +8710,21 @@ section.checklist-category {
   width: 50px;
 }
 
+.discussion-list td.comment-column div.comment {
+  min-height: 4em;
+}
+
+.discussion-list td.comment-column p {
+  margin-bottom: 0;
+}
+
 .discussion-list td.more-column {
   width: 30px;
   vertical-align: middle;
+}
+
+.discussion-list td.more-column:hover i {
+  color: #999;
 }
 
 td.vcard-column,
