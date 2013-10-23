@@ -270,13 +270,7 @@ var LawPal = {
                             <label for="discussionComment" class="sr-only">Message</label>
                             <textarea id="discussionComment" required="true" ng-model="message.comment" class="form-control" rows="5"></textarea>
                         </div>
-                        <div class="form-group">
-                            <label for="discussionType" class="sr-only">Message type</label>
-                            <select name="discussionType" id="discussionType" ng-model="message.type">
-                                <option value="discussion">Project discussion</option>
-                                <option value="issue">Issue</option>
-                            </select>
-                        </div>
+
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default" ng-click="cancel()">Cancel</button>

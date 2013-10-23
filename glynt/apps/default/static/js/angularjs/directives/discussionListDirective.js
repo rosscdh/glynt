@@ -158,7 +158,7 @@ angular.module('lawpal').run(["$templateCache", function($templateCache) {
 		'		<td class="vcard-column">\n'+
 		'			<div class="fn fn-large vcard" user-mini-widget user="discussion.latest.meta.user" data-show-props="photo"></div>\n'+
 		'			<div class="time text-muted">\n'+
-		'				<i class="icon icon-time"></i>\n'+
+		/*'				<i class="icon icon-time"></i>\n'+*/
 		'				<small ng-bind="discussion.latest.meta.timestamp | timeAgo"></small>\n'+
 		'			</div>\n'+
 		'		</td>\n'+
