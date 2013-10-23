@@ -6,7 +6,7 @@ angular.module('lawpal').controller( 'newDiscussionDialogCtrl', [ '$scope', '$mo
 	function ($scope, $modalInstance, parent) {
 		'use strict';
 		$scope.message = {
-			"subject": "",
+			"tags": [ "project", "discussion" ],
 			"comment": null,
 			"type": "discussion",
 			"parent_id": parent && parent.id?parent.id:null

@@ -83,6 +83,11 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 					'get': { 'method': 'GET', 'headers': { 'Content-Type': 'application/json' } },
 					'save': { 'method': 'POST', 'headers': { 'Content-Type': 'application/json' } }
 				}
+			),
+		"discussion": $resource( '/api/v2/project/:uuid/discussion/:pk/?format=json', {},
+				{
+					'get': { 'method': 'GET', 'headers': { 'Content-Type': 'application/json' } }
+				}
 			)
 	};
 
@@ -573,12 +578,23 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 					deferred.reject(err);
 				}
 			);
-			/*
-			$timeout(function () {
-				var results = lawPalInterface._mockDiscussionService(tag);
-				deferred.resolve(results);
-			}, 100);
-			*/
+
+			return deferred.promise;
+		},
+
+		'fullDiscussion': function( discussionId ) {
+			var deferred = $q.defer();
+			var projectUuid = this.getProjectUuid();
+			var options = { 'uuid': projectUuid, 'pk': discussionId };
+
+			discussionResource.discussion.get( options,
+				function success( data ) {
+					deferred.resolve(data);
+				},
+				function error( err ) {
+					deferred.reject(err);
+				}
+			);
 
 			return deferred.promise;
 		},
