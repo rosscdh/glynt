@@ -10,7 +10,7 @@ var helper = require(casper.cli.options.casper_helper_js_path);
 helper.scenario(casper.cli.options.url,
 	function () {
 		/* Test add discussion button */
-		casper.waitForSelector(".discussion-list button.widget-title-button",
+		casper.waitForSelector(".discussion-list button.widget-title-button", /* + New (button) */
 			function success() {
 				this.test.assertExists(".discussion-list button.widget-title-button");
 				this.click(".discussion-list button.widget-title-button");
@@ -68,20 +68,77 @@ helper.scenario(casper.cli.options.url,
 	},
 	function () {
 		// Submit form
-		casper.waitForSelector("form.form-discussion .btn.btn-primary",
+		this.fill('form.form-discussion', {
+			'discussionSubject':'Test subject',
+			'discussionComment':'Test message'
+		}, true);
+
+		/* Wait for success message */
+		casper.waitForText("Discussion item saved",
 			function success() {
-				helper.snapshotPage.call( this, 1 );
-				this.test.assertExists("form.form-discussion .btn.btn-primary");
-				this.fill('form.form-discussion', {
-					'discussionSubject':'Test subject',
-					'discussionComment':'Test message'
-				}, true);
+				this.test.assertExists(".comment-column p");
+				this.test.assertSelectorHasText('.discussion-list', 'Test subject');
+				this.test.assertSelectorHasText('.discussion-list', 'Test message');
 			},
 			function fail() {
-				this.test.assertExists("form.form-discussion .btn.btn-primary");
+				this.test.assertSelectorHasText('.discussion-list', 'Test subject');
 			}
 		);
+	},
+	function () {
+		// Test response button
+		casper.waitForSelector(".comment-column button.btn-respond",
+		    function success() {
+		        this.test.assertExists(".comment-column button.btn-respond");
+		        this.click(".comment-column button.btn-respond");
+		    },
+		    function fail() {
+		        this.test.assertExists(".comment-column button.btn-respond");
+		});
+	},
+	function () {
+		// Test response form
+		this.fill('form.form-discussion', {
+			'discussionComment':'Test response'
+		}, true);
+		/* Wait for success message */
+		casper.waitForText("Discussion item saved",
+			function success() {
+				this.test.assertExists(".comment-column p");
+				this.test.assertSelectorHasText('.discussion-list', 'Test subject');
+				this.test.assertSelectorHasText('.discussion-list', 'Test response'); // Updated discussion content on page
+			},
+			function fail() {
+				this.test.assertTextExists('Discussion item saved');
+			}
+		);
+	},
+	function () {
+		// Open full view
+		casper.waitForSelector(".comment-column",
+		    function success() {
+		        this.test.assertExists(".comment-column");
+		        this.click(".comment-column");
+		    },
+		    function fail() {
+		        this.test.assertExists(".comment-column");
+		});
+	},
+	function () {
+		// Check items in full view
+		casper.waitForSelector(".full-dialog h3",
+		    function success() {
+		        this.test.assertExists(".full-dialog h3");
+		        this.test.assertSelectorHasText('.full-dialog h3', 'Test subject');	// Subject line
+		        this.test.assertSelectorHasText('.full-dialog .comment', 'Test message'); // Original message
+		        this.test.assertSelectorHasText('.full-dialog .comment', 'Test response'); // Response message
+		        this.click(".full-dialog-toolbar button.btn-primary"); // Close Dialog
+		    },
+		    function fail() {
+		        this.test.assertExists(".comment-column");
+		});
 	}
+	//
 );
 helper.run();
 
