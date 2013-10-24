@@ -10,11 +10,11 @@ angular.module('lawpal').run(["$templateCache", function($templateCache) {
 		'				<div class="modal-body">\n'+
 		'					<div class="form-group" ng-show="!hasParent">\n'+
 		'						<label for="discussionSubject" class="sr-only">Subject</label>\n'+
-		'						<input type="text" id="discussionSubject" ng-model="message.subject" class="form-control" />\n'+
+		'						<input type="text" id="discussionSubject" name="discussionSubject" ng-model="message.subject" class="form-control" />\n'+
 		'					</div>\n'+
 		'					<div class="form-group">\n'+
 		'						<label for="discussionComment" class="sr-only">Message</label>\n'+
-		'						<textarea id="discussionComment" required="true" ng-model="message.comment" class="form-control" rows="5"></textarea>\n'+
+		'						<textarea id="discussionComment" name="discussionComment" required="true" ng-model="message.comment" class="form-control" rows="5"></textarea>\n'+
 		'					</div>\n'+
 		'				</div>\n'+
 		'				<div class="modal-footer">\n'+
