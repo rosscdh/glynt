@@ -24,7 +24,7 @@ angular.module('lawpal').run(["$templateCache", function($templateCache) {
         '    </div>\n' +
         // End: avatar column
         '    <div class="col-lg-6">\n' +
-        '       <div class="comment" ng-bind="reply.comment"></div>\n' +
+        '       <div class="comment" ng-bind-html-unsafe="reply.comment | plainTextToParagraphs"></div>\n' +
         '    </div>\n' +
         // End: comment column
         '  </div>\n'+
@@ -39,7 +39,7 @@ angular.module('lawpal').run(["$templateCache", function($templateCache) {
         '    </div>\n' +
         // End: avatar column
         '    <div class="col-lg-6">\n' +
-        '       <div class="comment" ng-bind="discussion.original.comment"></div>\n' +
+        '       <div class="comment" ng-bind-html-unsafe="discussion.original.comment | plainTextToParagraphs"></div>\n' +
         '    </div>\n' +
         // End: comment column
         '  </div>\n' + // .row
