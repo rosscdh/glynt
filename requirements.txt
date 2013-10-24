@@ -113,7 +113,7 @@ django-clear-cache
 # Testing
 BeautifulSoup
 -e git+https://github.com/kmmbvnr/django-jenkins.git#egg=django-jenkins
-HTTPretty
+-e git+https://github.com/gabrielfalcao/HTTPretty.git#egg=HTTPretty
 # for javascript testing
 django-casper
 mocktest
