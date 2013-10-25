@@ -9,12 +9,13 @@ logger = logging.getLogger('django.request')
 
 @receiver(user_logged_in, dispatch_uid='user.on_user_logged_in')
 def on_user_logged_in(sender, **kwargs):
-    logger.info('User: {user} has logged in'.format(user=kwargs['request'].get('user').username))
+    username = kwargs['user'].username
+    logger.info('User: {user} has logged in'.format(user=username))
 
     next = kwargs['request'].session.get('next', None)
 
     if next is not None:
-        logger.info('User {user} has a redirect {next}'.format(user=kwargs['request'].get('user').username, next=next))
+        logger.info('User {user} has a redirect {next}'.format(user=username, next=next))
 
         del kwargs['request'].session['next']  # delete the key
 
