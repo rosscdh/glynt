@@ -312,7 +312,7 @@ FLUENT_COMMENTS_USE_EMAIL_NOTIFICATION = False # We handle our own email notific
 NOTIFY_USE_JSONFIELD = True
 
 
-LOGIN_URL          = '/'
+LOGIN_URL          = '/start/'
 LOGIN_REDIRECT_URL = '/logged-in/'
 LOGIN_ERROR_URL    = '/login-error/'
 
