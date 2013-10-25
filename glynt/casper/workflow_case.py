@@ -14,6 +14,7 @@ from glynt.apps.transact.models import Transaction
 from glynt.apps.project import PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE
 
 import re
+import time
 import httpretty
 
 
@@ -85,6 +86,7 @@ def glynt_mock_http_requests(view_func):
                        body='This is a document',
                        status=200)
 
+        #time.sleep(2)
         # maybe do something before the view_func call
         response = view_func(request, *args, **kwargs)
         # maybe do something after the view_func call
@@ -109,9 +111,7 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
     """
     fixtures = ['test_cities', 'transact.json']
 
-    @glynt_mock_http_requests
     def setUp(self):
-
         super(BaseLawyerCustomerProjectCaseMixin, self).setUp()
 
         self.client = DjangoTestClientWithPATCH()

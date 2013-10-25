@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.db.models.query import QuerySet
 from model_mommy import mommy
 
-from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin, glynt_mock_http_requests
+from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin
 from glynt.apps.lawyer.models import Lawyer
 from glynt.apps.project.models import Project
 from glynt.apps.project import PROJECT_STATUS, PROJECT_LAWYER_STATUS
@@ -155,7 +155,6 @@ class ProjectModelMethodsTest(TestCase):
 class ContactUsModalTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
     test_path = os.path.dirname(__file__)
 
-    @glynt_mock_http_requests
     def test_contact_us_modal_js(self):
         self.client.login(username=self.customer_user.username, password=self.password)
 
