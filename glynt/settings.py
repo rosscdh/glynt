@@ -5,7 +5,7 @@ import sys
 PROJECT_ENVIRONMENT = 'prod'
 
 IS_TESTING = False
-for test_app in ['jenkins','testserver','test']:
+for test_app in ['testserver','test']:
     if test_app in sys.argv[1:2]:
         IS_TESTING = True
 
