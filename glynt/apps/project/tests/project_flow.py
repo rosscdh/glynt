@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 from django.core.urlresolvers import reverse
 
-from glynt.casper import BaseLawyerCustomerProjectCaseMixin
+from glynt.casper import BaseLawyerCustomerProjectCaseMixin, glynt_mock_http_requests
 from glynt.apps.transact.models import Transaction
 
 import os
@@ -11,6 +11,7 @@ from model_mommy import mommy
 class CustomerSelectTransactionTest(BaseLawyerCustomerProjectCaseMixin):
     test_path = os.path.dirname(__file__)
 
+    @glynt_mock_http_requests
     def test_customer_transact_select_js(self):
         """
         Test that the Customer has a list of transaction types to select from
@@ -30,6 +31,7 @@ class CustomerCreateProjectTest(BaseLawyerCustomerProjectCaseMixin):
         # causes issues with httprettynot mocking out the crocdoc delete calls
         self.project = mommy.make('project.project', customer=self.customer, company=self.company, lawyers=(self.lawyer,), transactions=(Transaction.objects.get(slug='CS'),))
 
+    @glynt_mock_http_requests
     def test_customer_incorporation_form_js(self):
         """
         Test that the Customer has a list of transaction types to select from

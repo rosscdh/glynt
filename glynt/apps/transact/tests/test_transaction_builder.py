@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 import os
 import json
 
-from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin
+from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin, glynt_mock_http_requests
 
 
 class TransactionBuilderTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
@@ -74,11 +74,13 @@ class TransactionBuilderTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
                     # add to checked (radio items)
                     have_checked.append(field.name)
 
+    @glynt_mock_http_requests
     def test_form_builder_js(self):
         self.client.login(username=self.customer_user.username, password=self.password)
         url = reverse('transact:builder', kwargs={ 'project_uuid': self.project.uuid, 'tx_range': 'CS', 'step': 1 })
         self.assertTrue(self.load_casper_file(js_file='transact-builder-form.js', test_label='Test the form completes successfully', url=url))
 
+    @glynt_mock_http_requests
     def test_remove_founder_region_js(self):
         self.client.login(username=self.customer_user.username, password=self.password)
 

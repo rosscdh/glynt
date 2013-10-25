@@ -3,8 +3,10 @@
 @TODO set test descriptor
 """
 from django.core.urlresolvers import reverse
-from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin
+
+from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin, glynt_mock_http_requests
 from glynt.apps.project.models import Project, ProjectLawyer
+
 
 from model_mommy import mommy
 
@@ -35,6 +37,7 @@ class DashboardLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
         self.assertTrue('counts' in resp.context)
         self.assertEqual(type(resp.context['counts']), dict)
 
+    @glynt_mock_http_requests
     def test_lawyer_dashboard_js(self):
         """
         """
@@ -70,6 +73,7 @@ class ChecklistLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
 
         self.assertTrue(len(c('tr.item')) >= 1) # we have 1 or more add item buttons
 
+    @glynt_mock_http_requests
     def test_lawyer_dashboard_js(self):
         self.client.login(username=self.lawyer_user.username, password=self.password)
 
