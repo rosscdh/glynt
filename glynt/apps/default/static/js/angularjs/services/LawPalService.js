@@ -464,8 +464,6 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 					//console.log(JSON.stringify(new_inkblob));
 					data.attachment = new_inkblob.url.toString();
 					data.data = { "fpfile": new_inkblob };
-
-					debugger;
 					
 					if ( new_inkblob && new_inkblob.url ) {
 						$http.post( lawPalUrl, data, function success( response ){

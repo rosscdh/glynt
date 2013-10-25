@@ -131,7 +131,8 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [ '$scope', 'lawPalSer
 	 */
 	$scope.$on("todo.attachment.created", function( e, data ){
 		if( typeof(data)==="object" && data.instance && data.instance.name == $scope.item.name ) {
-			$scope.item.num_attachments = $scope.item.num_attachments?$scope.item.num_attachments++:1;
+			$scope.item.num_attachments = $scope.item.num_attachments?$scope.item.num_attachments+1:1;
+			toaster.pop("success", "Attachment added", data.instance.name );
 		}
 	});
 }]);
