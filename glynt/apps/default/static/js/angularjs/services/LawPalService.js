@@ -449,11 +449,68 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		},
 
 		"attachFileChecklistItem": function( item, file ) {
-			var url = "/api/v1/attachment";// "/api/v1/todo/"+ item.id+"/attach";
+			var lawPalUrl = "/api/v1/attachment";// "/api/v1/todo/"+ item.id+"/attach";
+			// https://www.filepicker.io/api/store/S3?key=A4Ly2eCpkR72XZVBKwJ06z&filename=smartchoice_UserExperience.pdf&_cacheBust=1382677533494
+			//var fpUrl = "https://www.filepicker.io/api/store/S3?key=A4Ly2eCpkR72XZVBKwJ06z&filename=" + file.name + "&_cacheBust=" + new Date().getTime();
 			var data = {
 				"project": this.getProjectId(),
 				"todo": item.id,
-				"uploaded_by": this.getCurrentUser().pk
+				"uploaded_by": { "pk": this.getCurrentUser().pk }
+			};
+
+			filepicker.setKey('A4Ly2eCpkR72XZVBKwJ06z');
+			filepicker.store(file,
+				function success(new_inkblob){
+					//console.log(JSON.stringify(new_inkblob));
+					data.attachment = new_inkblob.url.toString();
+					data.data = new_inkblob;
+					debugger;
+					$http.post( lawPalUrl, data, function success( response ){
+						console.log( "success", response );
+					}, function error( err ) {
+						console.error( "error", err );
+					});
+				},
+				function error( fpError ) {
+
+				},
+				function progress( fpProgress ) {
+
+				}
+			);
+			/*
+			
+			filename: "Katharine Hansen_v1.0.pdf"
+			key: "s2Gct2yoT8fMItwqhAWd_Katharine Hansen_v1.0.pdf"
+			size: 69770
+			type: "application/pdf"
+			url: "https://www.filepicker.io/api/file/tYluVwxxQJmU2yOYqGki"
+
+			$http.uploadFile(
+				{
+					"url": url, //upload.php script, node.js route, or servlet upload url
+					// headers: {'optional', 'value'}
+					"file": file,
+					"fileUpload": file
+				}
+			)
+			.progress(
+				function(evt) {
+						console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total, 10));
+				}
+			)
+			.then(
+				function(data) {
+					// file is uploaded successfully
+					console.log(data);
+				}
+			);
+			*/
+			/*
+			var data = {
+				"project": this.getProjectId(),
+				"todo": item.id,
+				"uploaded_by": { "pk": this.getCurrentUser().pk }
 			};
 
 			$http.uploadFile(
@@ -470,11 +527,12 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 				}
 			)
 			.then(
-				function(data/*, status, headers, config*/) {
+				function(data/) { // data, status, headers, config
 					// file is uploaded successfully
 					console.log(data);
 				}
 			);
+			*/
 		},
 
 		/**

@@ -366,6 +366,8 @@ HandleAttachment = function HandleAttachment(event) {
     });
     delete data.csrfmiddlewaretoken;
 
+    debugger;
+
     if ( url && fpfile.url ) {
         $.ajax({
             type: 'POST',
