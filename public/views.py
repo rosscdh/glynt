@@ -141,7 +141,21 @@ class LogUserOutMixin(object):
         return super(LogUserOutMixin, self).dispatch(request, *args, **kwargs)
 
 
-class CustomerStartView(LogUserOutMixin, TemplateView):
+class SaveNextUrlInSessionMixin(object):
+    """
+    A mixin that will save a ?next=/path/to/next/page
+    url in the session
+    """
+    def get(self, request, *args, **kwargs):
+        next = request.GET.get('next', None)
+
+        if next is not None:
+            self.request.session['next'] = next
+
+        return super(SaveNextUrlInSessionMixin, self).get(request, *args, **kwargs)
+
+
+class CustomerStartView(LogUserOutMixin, SaveNextUrlInSessionMixin, TemplateView):
     template_name='public/start.html'
 
 
