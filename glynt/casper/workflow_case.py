@@ -111,6 +111,9 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
     """
     fixtures = ['test_cities', 'transact.json']
 
+    def tearDown(self, *args, **kwargs):
+        time.sleep(0.5)
+
     def setUp(self):
         super(BaseLawyerCustomerProjectCaseMixin, self).setUp()
 
