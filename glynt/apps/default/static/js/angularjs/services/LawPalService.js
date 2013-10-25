@@ -78,8 +78,8 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 
 	var transformToFormData = function(data){
 		// Convert JSON to form post
-        return $.param(data);
-    }
+		return $.param(data);
+	}
 
 	var checkList = {};
 
@@ -227,7 +227,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		/**
 		 * Sends a PATCH request to update the category order
 		 * @param  {Array} reOrderedCategories Array of catgeory names
-		 * @return {Function}                  promise
+		 * @return {Function}				  promise
 		 */
 		"updateCategoryOrder": function( reOrderedCategories ) {
 			var projectId = this.getProjectUuid();
@@ -259,20 +259,20 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 
 			if( details && details.category ) {
 				$http.post(url, details, {
-			        "headers": { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-			        "transformRequest": transformToFormData
-			    }).success(function(response) {
-			        //do stuff with response
-			        if( response && response.instance && response.instance.category ) {
-			        	if( !response.instance.category.label )
-			        		response.instance.category.label = response.instance.category.name;
-			        	deferred.resolve(response.instance.category);
-			        } else {
-			        	deferred.reject(response);
-			        }
-			    }).error(function(err){
-			    	deferred.reject(err);
-			    });
+					"headers": { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+					"transformRequest": transformToFormData
+				}).success(function(response) {
+					//do stuff with response
+					if( response && response.instance && response.instance.category ) {
+						if( !response.instance.category.label )
+							response.instance.category.label = response.instance.category.name;
+						deferred.resolve(response.instance.category);
+					} else {
+						deferred.reject(response);
+					}
+				}).error(function(err){
+					deferred.reject(err);
+				});
 			}
 
 			return deferred.promise;
@@ -300,7 +300,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		/**
 		 * Posts the new checklist item order to the API
 		 * @param  {Array} categories array of categories (with nested checklist items)
-		 * @return {Function}            promise
+		 * @return {Function}			promise
 		 */
 		"updateChecklistItemOrder": function( categories ) {
 			var projectId = this.getProjectUuid();
@@ -446,6 +446,35 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			});
 
 			return deferred.promise;
+		},
+
+		"attachFileChecklistItem": function( item, file ) {
+			var url = "/api/v1/attachment";// "/api/v1/todo/"+ item.id+"/attach";
+			var data = {
+				"project": this.getProjectId(),
+				"todo": item.id,
+				"uploaded_by": this.getCurrentUser().pk
+			};
+
+			$http.uploadFile(
+				{
+					"url": url, //upload.php script, node.js route, or servlet upload url
+					// headers: {'optional', 'value'}
+					"data": data,
+					"file": file
+				}
+			)
+			.progress(
+				function(evt) {
+						console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total, 10));
+				}
+			)
+			.then(
+				function(data/*, status, headers, config*/) {
+					// file is uploaded successfully
+					console.log(data);
+				}
+			);
 		},
 
 		/**

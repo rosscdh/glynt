@@ -3,7 +3,7 @@
  * @author <a href="mailtolee.j.sinclair@gmail.com">Lee Sinclair</a>
  * Date: 3 Sept 2013
  */
-angular.module('lawpal').controller( 'checklistItemCtrl', [ '$scope', 'lawPalService', 'lawPalUrls', 'lawPalDialog', '$location', function( $scope, lawPalService, lawPalUrls, lawPalDialog, $location ) {
+angular.module('lawpal').controller( 'checklistItemCtrl', [ '$scope', 'lawPalService', 'lawPalUrls', 'lawPalDialog', '$location', 'toaster', function( $scope, lawPalService, lawPalUrls, lawPalDialog, $location, toaster ) {
 	/**
 	 * Removes an item from the checklist
 	 * @param  {Object} item JSON object representing a checklist item
@@ -109,5 +109,18 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [ '$scope', 'lawPalSer
 				console.error(result);
 			}
 		);
+	};
+
+	$scope.onFileSelect = function( files ) {
+		var allowedTypes = [ "application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.ms-powerpoint", "application/vnd.ms-excel" ];
+		files.each( function( file ){
+			var fileType = file.type;
+			if( fileType && allowedTypes.indexOf(fileType)>=0 ) {
+				toaster.pop("info", "Starting file upload", file.name );
+				lawPalService.attachFileChecklistItem( $scope.item, file );
+			} else {
+				toaster.pop("error", "File type not allowed", file.name );
+			}
+		});
 	};
 }]);
