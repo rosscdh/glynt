@@ -123,4 +123,15 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [ '$scope', 'lawPalSer
 			}
 		});
 	};
+
+	/**
+	 * Recieves messages that an attachment has been added
+	 * @param  {Event} e	Broadcast event
+	 * @param  {Object} data Data from the update event
+	 */
+	$scope.$on("todo.attachment.created", function( e, data ){
+		if( typeof(data)==="object" && data.instance && data.instance.name == $scope.item.name ) {
+			$scope.item.num_attachments = $scope.item.num_attachments?$scope.item.num_attachments++:1;
+		}
+	});
 }]);
