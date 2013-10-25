@@ -6,3 +6,6 @@ def filter_city_import(sender, items, **kwargs):
         raise cities_light.InvalidItems()
 
 cities_light.signals.city_items_pre_import.connect(filter_city_import)
+
+
+from .signals import on_user_logged_in
