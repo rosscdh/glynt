@@ -3,7 +3,7 @@
  * @author <a href="mailtolee.j.sinclair@gmail.com">Lee Sinclair</a>
  * Date: 2 Sept 2013
  */
-angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource', '$http', function ($q, $timeout, $resource, $http) { /* Load the LawPal local interface */
+angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource', '$http', 'multiProgressService', function ($q, $timeout, $resource, $http, multiProgressService) { /* Load the LawPal local interface */
 	var lawPalInterface = LawPal;
 	var userType = "is_customer";
 	var checklist = [];
@@ -449,14 +449,15 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		},
 
 		"attachFileChecklistItem": function( item, file ) {
-			var lawPalUrl = "/api/v1/attachment";// "/api/v1/todo/"+ item.id+"/attach";
-			// https://www.filepicker.io/api/store/S3?key=A4Ly2eCpkR72XZVBKwJ06z&filename=smartchoice_UserExperience.pdf&_cacheBust=1382677533494
-			//var fpUrl = "https://www.filepicker.io/api/store/S3?key=A4Ly2eCpkR72XZVBKwJ06z&filename=" + file.name + "&_cacheBust=" + new Date().getTime();
+			var deferred = $q.defer();
+			var lawPalUrl = "/api/v1/attachment";
 			var data = {
 				"project": this.getProjectId(),
 				"todo": item.id,
 				"uploaded_by": { "pk": this.getCurrentUser().pk }
 			};
+
+			var fileProgressHandle = multiProgressService.push( { "label": file.name, "percent": 0, "type": "info" } );
 
 			filepicker.setKey('A4Ly2eCpkR72XZVBKwJ06z');
 			filepicker.store(file,
@@ -464,77 +465,30 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 					//console.log(JSON.stringify(new_inkblob));
 					data.attachment = new_inkblob.url.toString();
 					data.data = { "fpfile": new_inkblob };
+					fileProgressHandle.type = "success";
+					fileProgressHandle.label = "Processing: " + fileProgressHandle.label;
 					
 					if ( new_inkblob && new_inkblob.url ) {
-						$http.post( lawPalUrl, data, function success( response ){
-							console.log( "success", response );
+						$http.post( lawPalUrl, data).then( function success( response ){
+							multiProgressService.remove( fileProgressHandle );
+							deferred.resolve(response);
 						}, function error( err ) {
-							console.error( "error", err );
+							fileProgressHandle.type = "danger";
+							deferred.reject( err );
 						});
 					}
 				},
 				function error( fpError ) {
-
+					deferred.reject(fpError);
 				},
 				function progress( fpProgress ) {
-
+					console.log( fpProgress );
+					multiProgressService.updateProgress( fileProgressHandle, fpProgress);
+					//fileProgressHandle.percent = fpProgress;
 				}
 			);
-			/*
 			
-			filename: "Katharine Hansen_v1.0.pdf"
-			key: "s2Gct2yoT8fMItwqhAWd_Katharine Hansen_v1.0.pdf"
-			size: 69770
-			type: "application/pdf"
-			url: "https://www.filepicker.io/api/file/tYluVwxxQJmU2yOYqGki"
-
-			$http.uploadFile(
-				{
-					"url": url, //upload.php script, node.js route, or servlet upload url
-					// headers: {'optional', 'value'}
-					"file": file,
-					"fileUpload": file
-				}
-			)
-			.progress(
-				function(evt) {
-						console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total, 10));
-				}
-			)
-			.then(
-				function(data) {
-					// file is uploaded successfully
-					console.log(data);
-				}
-			);
-			*/
-			/*
-			var data = {
-				"project": this.getProjectId(),
-				"todo": item.id,
-				"uploaded_by": { "pk": this.getCurrentUser().pk }
-			};
-
-			$http.uploadFile(
-				{
-					"url": url, //upload.php script, node.js route, or servlet upload url
-					// headers: {'optional', 'value'}
-					"data": data,
-					"file": file
-				}
-			)
-			.progress(
-				function(evt) {
-						console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total, 10));
-				}
-			)
-			.then(
-				function(data/) { // data, status, headers, config
-					// file is uploaded successfully
-					console.log(data);
-				}
-			);
-			*/
+			return deferred.promise;
 		},
 
 		/**
