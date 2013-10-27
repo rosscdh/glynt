@@ -482,9 +482,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 					deferred.reject(fpError);
 				},
 				function progress( fpProgress ) {
-					console.log( fpProgress );
 					multiProgressService.updateProgress( fileProgressHandle, fpProgress);
-					//fileProgressHandle.percent = fpProgress;
 				}
 			);
 			

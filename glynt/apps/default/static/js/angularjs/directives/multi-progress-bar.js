@@ -51,7 +51,6 @@
 	multiWidgetsModule.controller('multiProgressCtrl', [ '$scope', '$attrs', '$element', 'multiProgressService', function( $scope, $attrs, $element, multiProgressService ) {
 		$scope.progressBars = multiProgressService.getProgressStates();
 		$scope.$watch( 'progressBars', function(){
-			console.log( "progressBars", $scope.progressBars.length );
 			if($scope.progressBars.length===0) {
 				$($element).css('display','none');
 			} else {

@@ -61,7 +61,6 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 					$scope.config.pusher = options.pusher;
 					var key = options.pusher.key;
 					var channel = options.pusher.channel;
-					console.log( $scope.config );
 					angularPusher( key, channel );
 				}
 			} else {
@@ -411,17 +410,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 
 				angular.forEach( categories, function( item/*, index*/ ) {
 					$scope.insertCategory( item, $scope.checklistItemsByCategory( item ) );
-					/*
-					$scope.categories.push(
-						{ 
-							"info": item,
-							"items": $scope.checklistItemsByCategory( item )
-						}
-					);
-					*/
 				});
-
-				console.log($scope.categories);
 			}
 		};
 
@@ -649,7 +638,6 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 						$scope.model.feedbackRequests[slug] = [ { "todo_slug": slug} ];
 						$scope.$apply();
 						$scope.addAlert( "Feedback requested", "info", "Feedback" );
-						console.log($scope.model.feedbackRequests);
 					}
 				}
 			}

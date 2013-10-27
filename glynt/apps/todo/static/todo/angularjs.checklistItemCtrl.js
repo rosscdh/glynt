@@ -143,7 +143,7 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [
 			//console.log("data:", data.todo, "item:",$scope.item.name, data.instance.name == $scope.item.name);
 			if( typeof(data)==="object" && data.instance && data.todo == $scope.item.name ) {
 				$scope.item.num_attachments = $scope.item.num_attachments?$scope.item.num_attachments+1:1;
-				toaster.pop("success", "Attachment added", data.instance.name );
+				toaster.pop("success", data.todo || "Attachment", "attached: " + data.attachment );
 				$scope.$apply();
 			}
 		});
