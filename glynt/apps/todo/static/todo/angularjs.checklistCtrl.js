@@ -37,32 +37,13 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		$scope.config = {
 			'pusher': {},
 			'categorySort': {
-				'update': function(/*e, ui*/) {
-					$scope.config.categorySort.updatePending = true;
-				},
-				'stop': function(e, ui) {
-					if($scope.config.categorySort.updatePending)
-						$scope.saveCategoryOrder( e, ui );
-					$scope.config.categorySort.updatePending = false;
-				},
-				'updatePending': false,
 				'axis': 'y'
 			 },
 			'itemSort': {
-				'update': function(/*e, ui*/) {
-					$scope.config.categorySort.updatePending = true;
-				},
-				'stop': function(e, ui) {
-					if($scope.config.categorySort.updatePending)
-						$scope.saveItemOrder( e, ui );
-					$scope.config.categorySort.updatePending = false;
-				},
 				'axis': 'y',
-				'updatePending': false,
-				'cachedOrder': {}
+				'updatePending': false
 			 }
 		};
-
 		// When the controller is ready ng-init calls initialise, with project details such as uuid
 		$scope.initalise = function( options ){
 			// If there are no options
@@ -473,6 +454,34 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 
 			return items;
 		};
+
+		/**
+		 * Watch for changes in the order of items
+		 * @param  {Object} nv New value, the updated value that has been changed
+		 * @param  {Object} ov Old value what it used to look like
+		 */
+		$scope.$watch('categories', function( nv, ov ){
+			var nv_items = [], ov_items = [];
+			// Find out if order has changed
+			var hasChanged_Category = ov.some( function( item, idx ){ return item.info.slug!=nv[idx].info.slug; } );
+
+			if(hasChanged_Category) {
+				// Save order change
+				$scope.saveCategoryOrder();
+			} else {
+				// Find out if the order of items has been changed
+				for(var i=0;i<ov.length;i++) {
+					nv_items = nv_items.union( nv[i].items );
+					ov_items = ov_items.union( ov[i].items );
+				}
+
+				var hasChanged_Items = ov_items.some( function( item, idx ){ return item.slug!=nv_items[idx].slug; } );
+				if(hasChanged_Items) {
+					// Save order change
+					$scope.saveItemOrder();
+				}
+			}
+		}, true);
 
 		/**
 		 * Event triggered by releasing drag when re-organising categories

@@ -72,6 +72,6 @@ lawPalApp.directive('checklistItemDetails', [ 'lawPalUrls', function ( ) {
 
 		}
 		],*/
-		"template": '<a tooltip="{[{item.num_attachments}]} Attachments" class="btn btn-small btn-link" ng-show="item.num_attachments!=0" ng-click="viewItem( item )"><i class="glyphicon glyphicon-file"></i><span class="badge" ng-bind="item.num_attachments"></span></a>'
+		"template": '<a tooltip="{[{item.num_attachments}]} Attachments" class="btn btn-small btn-link" ng-show="item.num_attachments" ng-click="viewItem( item )"><i class="glyphicon glyphicon-file"></i><span class="badge" ng-bind="item.num_attachments"></span></a>'
 	};
 }]);
