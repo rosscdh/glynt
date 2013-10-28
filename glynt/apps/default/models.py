@@ -14,8 +14,6 @@ def filter_city_import(sender, items, **kwargs):
 cities_light.signals.city_items_pre_import.connect(filter_city_import)
 
 
-
-
 """
 Patch the django-rulez permissions on to our 
 Threadedcomment Class.
@@ -53,3 +51,9 @@ ThreadedComment.add_to_class('can_delete', threadedcomment_can_delete)
 ThreadedComment.add_to_class('absolute_deeplink_url', threadedcomment_absolute_deeplink_url)
 
 ThreadedComment.add_to_class('tags', TaggableManager(blank=True))
+
+
+"""
+Import our on_user_logged_in
+"""
+from .signals import on_user_logged_in

@@ -11,9 +11,7 @@
         <td class="small-width" align="left" width="40" style="display: block;">&nbsp;</td>
         <td>
             <h1 style="color: #22282b !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 28px; font-weight: normal; letter-spacing: -1px; line-height: 1.6em; margin: 0; padding: 0;">Hi {{ to_name }}</h1>
-            <h2 style="color: #6c797c !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5em; margin: 0 0 25px; padding: 0;">The following lawyers are interested in working with you.</h2>
-            <h2 style="color: #6c797c !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5em; margin: 0 0 25px; padding: 0;">At this stage we recommend speaking with one or more of the lawyers below. Once you are happy to proceed with a particular lawyer, you can engage them from your Project Overview.</h2>
-            <h2 style="color: #6c797c !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5em; margin: 0 0 25px; padding: 0;">If you have any questions, please contact your project manager Yael Citro at yael@lawpal.com or (415) 691 6069.</h2>
+            {{ intro_content }}
         </td>
         <td class="small-width" align="left" width="40" style="display: block;">&nbsp;</td>
     </tr>

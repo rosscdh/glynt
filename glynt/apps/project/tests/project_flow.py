@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 from django.core.urlresolvers import reverse
 
-from glynt.casper import BaseLawyerCustomerProjectCaseMixin
+from glynt.casper import BaseLawyerCustomerProjectCaseMixin, glynt_mock_http_requests
 from glynt.apps.transact.models import Transaction
 
 import os
@@ -24,6 +24,7 @@ class CustomerSelectTransactionTest(BaseLawyerCustomerProjectCaseMixin):
 class CustomerCreateProjectTest(BaseLawyerCustomerProjectCaseMixin):
     test_path = os.path.dirname(__file__)
 
+    @glynt_mock_http_requests
     def setUp(self):
         super(CustomerCreateProjectTest, self).setUp()
         # re-create the project but without the associated todos and attachments

@@ -14,8 +14,6 @@ from cities_light.models import (City, Region)
 
 from glynt.apps.lawyer.api import (_lawyer_profile, LawyerResource)
 
-from glynt.apps.firm.api import FirmSimpleResource
-
 from glynt.apps.customer.api import _customer_profile
 
 from glynt.apps.company.api import (CompanyLiteSimpleResource,
@@ -129,7 +127,6 @@ class UserBasicProfileResource(BaseApiModelResource):
 V1_INTERNAL_API.register(UserResource())
 V1_INTERNAL_API.register(LocationSimpleResource())
 V1_INTERNAL_API.register(StateSimpleResource())
-V1_INTERNAL_API.register(FirmSimpleResource())
 V1_INTERNAL_API.register(UserBasicProfileResource())
 V1_INTERNAL_API.register(CompanyLiteSimpleResource())
 V1_INTERNAL_API.register(CompanyBasicProfileResource())
