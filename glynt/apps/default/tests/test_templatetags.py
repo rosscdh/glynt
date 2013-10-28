@@ -119,7 +119,7 @@ class TestTemplateTag_Intercom(unittest.TestCase):
         self.assertTrue(result.get('intercomio_userhash') is None)
         self.assertTrue(result.get('show_widget') is False)
 
-    @override_settings(PROJECT_ENVIRONMENT='test')
+    @override_settings(PROJECT_ENVIRONMENT='prod')
     def test_not_authenticated_shows_but_no_hash(self):
         self.assertFalse(self.loggedout_user.is_authenticated())
 
@@ -128,7 +128,7 @@ class TestTemplateTag_Intercom(unittest.TestCase):
         self.assertTrue(result.get('intercomio_userhash') is None)
         self.assertTrue(result.get('show_widget') is False)
 
-    @override_settings(PROJECT_ENVIRONMENT='test')
+    @override_settings(PROJECT_ENVIRONMENT='prod')
     def test_is_authenticated_and_shows_hash(self):
         self.assertTrue(self.user.is_authenticated())
 
@@ -138,7 +138,7 @@ class TestTemplateTag_Intercom(unittest.TestCase):
         self.assertTrue(result.get('show_widget') is True)
 
 
-    @override_settings(PROJECT_ENVIRONMENT='test')
+    @override_settings(PROJECT_ENVIRONMENT='prod')
     def test_presence(self):
         intercom_result = intercom_script(self.context)
         result = self.render_template(
@@ -148,6 +148,7 @@ class TestTemplateTag_Intercom(unittest.TestCase):
         )
 
         self.assertTrue(intercom_result.get('show_widget') is True)
+
         assert 'user_hash:' in result
         assert 'user_id:' in result
         assert 'name:' in result
