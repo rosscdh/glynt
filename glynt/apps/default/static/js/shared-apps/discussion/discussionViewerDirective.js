@@ -22,15 +22,24 @@ angular.module('lawpal').directive('discussionViewer', ['$compile', '$timeout', 
         // An array of replies for the current discussion
         $scope.replies = [];
 
+        $scope.message = {
+          "comment": ""
+        };
+
         $scope.close = function () {
-          $(".full-dialog-container").fadeOut("slow",
-            function() { $scope.discussions = []; }
-          );  // To be replaced with ngAnimate when it becomes standard
+          $scope.discussions = [];
           $location.path('/');
         };
 
         $scope.reply = function (discussion) {
-          discussionItemService.reply(discussion);
+          var reply = discussionItemService.makeReply( $scope.message.comment, discussion);
+          if( reply ) {
+            discussionItemService.saveDiscussion( reply, function( err ){
+              if(!err) {
+                $scope.message.comment = "";
+              }
+            });
+          }
         };
 
         /**
@@ -39,7 +48,7 @@ angular.module('lawpal').directive('discussionViewer', ['$compile', '$timeout', 
          */
         function showDiscussion(discussion) {
           $scope.discussions.push(discussion);
-          $(".full-dialog-container").hide().fadeIn("slow");  // To be replaced with ngAnimate when it becomes standard
+          //$(".full-dialog-container").hide().fadeIn("slow");  // To be replaced with ngAnimate when it becomes standard
           $location.path('/discussion/' + discussion.original.id);
           $scope.loadFullDiscussion( discussion.original.id );
         }

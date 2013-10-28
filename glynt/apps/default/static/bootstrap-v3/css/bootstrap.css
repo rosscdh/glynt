@@ -8719,12 +8719,8 @@ section.checklist-category {
 }
 
 .discussion-list td.more-column {
-  width: 30px;
+  width: 70px;
   vertical-align: middle;
-}
-
-.discussion-list tr:hover td.more-column i {
-  color: #999;
 }
 
 td.vcard-column,
@@ -8884,6 +8880,10 @@ button.vcard {
 
 .full-dialog .vcard .fn {
   font-weight: bold;
+}
+
+.full-dialog textarea {
+  margin-bottom: 0.5em;
 }
 
 .full-dialog-toolbar {

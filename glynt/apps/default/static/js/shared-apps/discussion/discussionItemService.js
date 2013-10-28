@@ -62,6 +62,7 @@ angular.module('lawpal')
           "windowClass": "modal modal-show",
           "templateUrl": "template/lawpal/discussion/newDiscussion.html",
           "controller": "newDiscussionDialogCtrl",
+          "animate": false,
           "resolve": {
             "parent": function(){
               return parent;
@@ -72,11 +73,19 @@ angular.module('lawpal')
         return modalInstance;
     };
 
+    this.makeReply = function( comment, parentDiscussion ) {
+      return {
+        "comment": comment,
+        "parent_id": parentDiscussion.id,
+        "subject": ""
+      };
+    };
+
     /**
      * Requests that the API service saves the discussion item
      * @param  {Object} message Message data
      */
-    this.saveDiscussion = function( message ) {
+    this.saveDiscussion = function( message, callback ) {
         toaster.pop( "info", "Saving" );
         var userPk = lawPalService.getCurrentUser().pk;
         
@@ -93,6 +102,9 @@ angular.module('lawpal')
           function success( response ) {
             $rootScope.$broadcast('discussion-new-item', message, response );
             toaster.pop( "success", "Discussion item saved" );
+            if( typeof(callback)==="function" ) {
+              callback(null, response);
+            }
           },
           function error( /*err*/ ) {
             toaster.pop( "warning", "Error", "Unable to post discussion item" );
