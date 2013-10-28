@@ -87,13 +87,13 @@ helper.scenario(casper.cli.options.url,
 	},
 	function () {
 		// Test response button
-		casper.waitForSelector(".comment-column button.btn-respond",
+		casper.waitForSelector(".discussion-list button.btn-respond",
 		    function success() {
-		        this.test.assertExists(".comment-column button.btn-respond");
-		        this.click(".comment-column button.btn-respond");
+		        this.test.assertExists(".discussion-list button.btn-respond");
+		        this.click(".discussion-list button.btn-respond");
 		    },
 		    function fail() {
-		        this.test.assertExists(".comment-column button.btn-respond");
+		        this.test.assertExists(".discussion-list button.btn-respond");
 		});
 	},
 	function () {
