@@ -11,7 +11,7 @@ angular.module('lawpal').run(["$templateCache", function($templateCache) {
         // Start: Dialog
         '<div class="full-dialog">' +
         '<div class="container full-dialog-content">\n' +
-        '  <div class="clearfix"><button class="close" ng-click="close()">&times</button></div>\n' +
+        '  <div class="row"><div class="col-lg-10"><button class="close" ng-click="close()">&times</button></div></div>'+
         '  <div class="row" ng-show="discussion.original.title"><div class="col-lg-5 col-offset-2"><h3 ng-bind="discussion.original.title"></h3></div></div>'+
         // Reply
         '  <div class="row clearfix">\n'+
