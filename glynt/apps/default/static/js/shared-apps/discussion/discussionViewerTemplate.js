@@ -62,7 +62,7 @@ angular.module('lawpal').run(["$templateCache", function($templateCache) {
         '<div class="full-dialog-toolbar">\n' +
         '   <div class="container">\n' +
         '       <div class="col-lg-10">\n' +
-        '         <button class="btn btn-primary pull-right" ng-click="close()"><i class="icon icon-remove"> Close</button>\n' +
+        '         <button class="btn btn-primary pull-right" ng-click="close()"><i class="icon icon-remove"></i> Close</button>\n' +
         '       </div>\n' +
         '   </div>\n' +
         '</div>\n' +
