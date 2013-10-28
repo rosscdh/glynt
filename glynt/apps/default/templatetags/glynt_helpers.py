@@ -130,11 +130,11 @@ def show_loading(**kwargs):
 def intercom_script(context, **kwargs):
     user = context.get('user', None)
     intercomio_userhash = None
-    show_widget = getattr(settings, 'PROJECT_ENVIRONMENT', None) != 'dev' and user is not None and user.is_authenticated()
+    show_widget = getattr(settings, 'PROJECT_ENVIRONMENT', None) not in ['dev', 'test'] and user is not None and user.is_authenticated()
+
     # were not in dev (because we dont want intercom to record us devs)
-    if show_widget:
-        if user and user.is_authenticated():
-            intercomio_userhash = hmac.new(settings.INTERCOM_API_SECRET, str(user.pk), digestmod=hashlib.sha256).hexdigest()
+    if show_widget is True:
+        intercomio_userhash = hmac.new(settings.INTERCOM_API_SECRET, str(user.pk), digestmod=hashlib.sha256).hexdigest()
 
     context.update({
         'show_widget': show_widget,

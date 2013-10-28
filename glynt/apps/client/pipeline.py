@@ -102,6 +102,7 @@ def get_username(details, user=None,
 def ensure_mutually_exclusive_userclass(*args, **kwargs):
     is_lawyer = False
     request = kwargs.get('request', None)
+    opposite_user_classname = None
 
     # this session var must be present as they clicked on a link that set it
     user_class_name = request.session.get('user_class_name', None)

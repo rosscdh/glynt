@@ -57,7 +57,7 @@ class CustomerProfileSetupFormTest(BaseLawyerCustomerProjectCaseMixin):
         # User not logged in
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, 302)
-        self.assertEqual(resp['Location'], 'http://testserver/?next=/customers/setup/')
+        self.assertEqual(resp['Location'], 'http://testserver/start/?next=/customers/setup/')
 
         self.client.login(username=self.customer_user.username, password=self.password)
 

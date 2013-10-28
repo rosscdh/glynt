@@ -112,13 +112,13 @@ django-clear-cache
 
 # Testing
 BeautifulSoup
--e git+https://github.com/kmmbvnr/django-jenkins.git#egg=django-jenkins
 HTTPretty
 # for javascript testing
 django-casper
 mocktest
 mock
 -e git+https://github.com/vandersonmota/model_mommy.git#egg=model_mommy
+-e git+git://github.com/neubloc/django-colortools#egg=django-colortools
 pyquery
 
 # Abridge integration

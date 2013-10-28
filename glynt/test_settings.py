@@ -10,18 +10,13 @@ import logging
 logging.disable(logging.CRITICAL)
 
 # Custom test runner for this project
-if sys.argv[1:2][0] == 'test':
-    TEST_RUNNER = 'glynt.test_runner.GlyntAppTestRunner'
-
-elif sys.argv[1:2][0] == 'jenkins':
-    TEST_RUNNER = 'glynt.test_runner.GlyntAppJenkinsRunner'
-
+TEST_RUNNER = 'glynt.test_runner.GlyntAppTestRunner'
 
 PROJECT_ENVIRONMENT = 'test'
 
 INSTALLED_APPS = INSTALLED_APPS + (
     'casper',
-    'django_jenkins',
+    'colortools',
 )
 
 SOUTH_TESTS_MIGRATE = False
