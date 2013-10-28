@@ -48,4 +48,8 @@ urlpatterns = patterns('',
 
     # home
     url(r'^$', PublicHomepageView.as_view(), name='homepage'),
+
+    # new home
+    url(r'^new/$', TemplateView.as_view(template_name='public/homepage-new.html'), name='homepage-new'),
+
 )
