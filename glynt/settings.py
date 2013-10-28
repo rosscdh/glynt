@@ -255,7 +255,8 @@ HELPER_APPS = (
     # Abridge mailout
     'abridge',
 
-    # feature switcher
+    # tags
+    'taggit',
 
     # user switcher
     'impersonate',

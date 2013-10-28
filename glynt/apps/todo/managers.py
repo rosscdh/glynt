@@ -14,19 +14,19 @@ class DefaultToDoManager(models.Manager):
         return self.filter(is_deleted=True, **kwargs)
 
     def new(self, **kwargs):
-        return self.filter(status=TODO_STATUS.new).filter(**kwargs)
+        return self.filter(status=TODO_STATUS.new, is_deleted=False).filter(**kwargs)
 
     def open(self, **kwargs):
-        return self.filter(status=TODO_STATUS.open).filter(**kwargs)
+        return self.filter(status=TODO_STATUS.open, is_deleted=False).filter(**kwargs)
 
     def pending(self, **kwargs):
-        return self.filter(status=TODO_STATUS.pending).filter(**kwargs)
+        return self.filter(status=TODO_STATUS.pending, is_deleted=False).filter(**kwargs)
 
     def resolved(self, **kwargs):
-        return self.filter(status=TODO_STATUS.resolved).filter(**kwargs)
+        return self.filter(status=TODO_STATUS.resolved, is_deleted=False).filter(**kwargs)
 
     def closed(self, **kwargs):
-        return self.filter(status=TODO_STATUS.closed).filter(**kwargs)
+        return self.filter(status=TODO_STATUS.closed, is_deleted=False).filter(**kwargs)
 
 
 class DefaultFeedbackRequestManager(models.Manager):

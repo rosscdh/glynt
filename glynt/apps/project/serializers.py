@@ -1,17 +1,15 @@
 # -*- coding: UTF-8 -*-
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 
 from rest_framework import serializers
 
-from .models import Project, ProjectLawyer
+from .models import Project
 from threadedcomments.models import ThreadedComment
 
 from glynt.apps.customer.serializers import UserSerializer
 
 import re
-import itertools
 
 UUID4HEX_LONG = re.compile('[0-9a-f]{32}\Z', re.I)
 UUID4HEX_SHORT = re.compile('[0-9a-f]{11}\Z', re.I)
@@ -128,15 +126,18 @@ class DiscussionSerializer(GetContentObjectByTypeAndPkMixin, serializers.ModelSe
     title = serializers.CharField(required=False)
     comment = serializers.CharField()
 
+    tags = serializers.IntegerField(source='tags.all', required=False)
     meta = serializers.SerializerMethodField('get_meta')
+    last_child = serializers.SerializerMethodField('get_last_child')
 
     class Meta:
         model = ThreadedComment
-        queryset = ThreadedComment.objects.prefetch_related('user').all().order_by('-id')
+        queryset = ThreadedComment.objects.select_related('user', 'tagged_items__tag').all().order_by('-id')
 
         fields = ('id', 'object_pk', 'title', 'comment', 'user',
-                  'content_type_id', 'parent_id', 'last_child',
-                  'meta', 'site_id')
+                  'content_type_id', 'parent_id',
+                  'tags', 'site_id',
+                  'last_child', 'meta',)
 
 
     def validate_object_pk(self, attrs, source):
@@ -170,3 +171,23 @@ class DiscussionSerializer(GetContentObjectByTypeAndPkMixin, serializers.ModelSe
                             'photo': user.profile.get_mugshot_url()
                         }
             }
+
+    def get_last_child(self, obj):
+        if obj is not None and obj.last_child is not None:
+            return DiscussionSerializer(obj.last_child).data
+        else:
+            return None
+
+
+class DiscussionThreadSerializer(DiscussionSerializer):
+    thread = serializers.SerializerMethodField('get_thread')
+
+    class Meta(DiscussionSerializer.Meta):
+        fields = ('id', 'object_pk', 'title', 'comment', 'user',
+                  'content_type_id', 'parent_id',
+                  'tags', 'site_id',
+                  'meta', 'thread',)
+
+    def get_thread(self, obj):
+        for comment in obj.children.all():
+            yield DiscussionSerializer(comment).data    

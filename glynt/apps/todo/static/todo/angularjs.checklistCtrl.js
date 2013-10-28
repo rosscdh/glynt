@@ -80,7 +80,6 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 				$scope.config.pusher = options.pusher;
 				var key = options.pusher.key;
 				var channel = options.pusher.channel;
-				console.log( $scope.config );
 				angularPusher( key, channel );
 			}
 		} else {
@@ -441,8 +440,6 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 				);
 				*/
 			});
-
-			console.log($scope.categories);
 		}
 	};
 
