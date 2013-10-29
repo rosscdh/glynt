@@ -24,7 +24,6 @@ helper.scenario(casper.cli.options.url,
 		/* Wait for dialog to open */
 		casper.waitForSelector("form input#discussionSubject",
 			function success() {
-				helper.snapshotPage.call( this, 0 );
 				this.test.assertExists("form input#discussionSubject");
 				this.click("form input#discussionSubject");
 			},
@@ -102,7 +101,7 @@ helper.scenario(casper.cli.options.url,
 			'discussionComment':'Test response'
 		}, true);
 		/* Wait for success message */
-		casper.waitForText("Discussion item saved",
+		casper.waitForText("Test response",
 			function success() {
 				this.test.assertExists(".comment-column p");
 				this.test.assertSelectorHasText('.discussion-list', 'Test subject');
