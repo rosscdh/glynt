@@ -166,7 +166,7 @@ def virtualenv(cmd, **kwargs):
 
 @task
 def pip_install():
-    virtualenv('pip install django --upgrade')
+    virtualenv('pip install -e git+https://github.com/rosscdh/django-tastypie.git@fix-username-assumption#egg=django_tastypie --upgrade')
 
 @task
 def check_permissions():
@@ -450,11 +450,12 @@ def relink():
 
 @task
 def clean_start():
+    stop_service()
     clean_pyc()
     clear_cache()
-    restart_service()
     clean_pyc()
     precompile_pyc()
+    start_service()
     clean_zip()
 
 @task
