@@ -7,7 +7,6 @@ from django.db.models.query import QuerySet
 from model_mommy import mommy
 
 from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin
-
 from glynt.apps.lawyer.models import Lawyer
 from glynt.apps.project.models import Project
 from glynt.apps.project import PROJECT_STATUS, PROJECT_LAWYER_STATUS

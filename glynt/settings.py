@@ -5,7 +5,7 @@ import sys
 PROJECT_ENVIRONMENT = 'prod'
 
 IS_TESTING = False
-for test_app in ['jenkins','testserver','test']:
+for test_app in ['testserver','test']:
     if test_app in sys.argv[1:2]:
         IS_TESTING = True
 
@@ -255,7 +255,8 @@ HELPER_APPS = (
     # Abridge mailout
     'abridge',
 
-    # feature switcher
+    # tags
+    'taggit',
 
     # user switcher
     'impersonate',
@@ -312,7 +313,7 @@ FLUENT_COMMENTS_USE_EMAIL_NOTIFICATION = False # We handle our own email notific
 NOTIFY_USE_JSONFIELD = True
 
 
-LOGIN_URL          = '/'
+LOGIN_URL          = '/start/'
 LOGIN_REDIRECT_URL = '/logged-in/'
 LOGIN_ERROR_URL    = '/login-error/'
 

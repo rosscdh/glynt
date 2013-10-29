@@ -3,8 +3,10 @@
 @TODO set test descriptor
 """
 from django.core.urlresolvers import reverse
-from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin
+
+from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin, glynt_mock_http_requests
 from glynt.apps.project.models import Project, ProjectLawyer
+
 
 from model_mommy import mommy
 

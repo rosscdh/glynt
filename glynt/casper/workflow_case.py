@@ -14,6 +14,7 @@ from glynt.apps.transact.models import Transaction
 from glynt.apps.project import PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE
 
 import re
+import time
 import httpretty
 
 
@@ -46,6 +47,22 @@ def glynt_mock_http_requests(view_func):
     """
     @httpretty.activate
     def _decorator(request, *args, **kwargs):
+        httpretty.register_uri(httpretty.GET, re.compile("http://127.0.0.1/(.+)"),
+                       body='{"success": true}',
+                       status=200)
+        # httpretty.register_uri(httpretty.POST, re.compile("(.+)"),
+        #                body='{"success": true}',
+        #                status=200)
+        # httpretty.register_uri(httpretty.PUT, re.compile("(.+)"),
+        #                body='{"success": true}',
+        #                status=200)
+        # httpretty.register_uri(httpretty.PATCH, re.compile("(.+)"),
+        #                body='{"success": true}',
+        #                status=200)
+        # httpretty.register_uri(httpretty.DELETE, re.compile("(.+)"),
+        #                body='{"success": true}',
+        #                status=200)
+
         #
         # Abridge
         #
@@ -53,6 +70,22 @@ def glynt_mock_http_requests(view_func):
                        body='{"success": true}',
                        status=200)
         httpretty.register_uri(httpretty.GET, re.compile("http://abridge.local.dev/(.+)"),
+                       body='{"success": true}',
+                       status=200)
+
+        #
+        # Intercom & misc
+        #
+        httpretty.register_uri(httpretty.GET, re.compile("https://api.intercom.io/(.+)"),
+                       body='{"success": true}',
+                       status=200)
+        httpretty.register_uri(httpretty.GET, re.compile("http://www.google-analytics.com/ga.js"),
+                       body='{"success": true}',
+                       status=200)
+        #
+        # Pusher.com? @TODO are these called at all
+        #
+        httpretty.register_uri(httpretty.GET, re.compile("https://api.pusherapp.com/(.+)"),
                        body='{"success": true}',
                        status=200)
 
@@ -85,6 +118,7 @@ def glynt_mock_http_requests(view_func):
                        body='This is a document',
                        status=200)
 
+        #time.sleep(2)
         # maybe do something before the view_func call
         response = view_func(request, *args, **kwargs)
         # maybe do something after the view_func call
@@ -109,9 +143,10 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
     """
     fixtures = ['test_cities', 'transact.json']
 
-    @glynt_mock_http_requests
-    def setUp(self):
+    def tearDown(self, *args, **kwargs):
+        time.sleep(0.5)
 
+    def setUp(self):
         super(BaseLawyerCustomerProjectCaseMixin, self).setUp()
 
         self.client = DjangoTestClientWithPATCH()

@@ -246,7 +246,6 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 					i = index;
 				}
 			});
-
 			return i;
 		};
 

@@ -7804,6 +7804,10 @@ td.hidden-lg {
   background-color: #42d0e5;
 }
 
+.text-primary {
+  color: #42d0e5;
+}
+
 #wrap .splash {
   max-height: 500px;
   padding: 28% 0 0% 0px;
@@ -8497,8 +8501,24 @@ table.lawyer-list.active {
 }
 
 @media screen and (min-width: 768px) {
+  {
+    /* The new/reply to discussion dialog is woder than other dialogs */
+  
+  }
   .sidebar {
     display: block;
+  }
+  .discussion-modal {
+    left: 45%;
+    width: 50%;
+  }
+  .discussion-modal form {
+    max-width: 100%;
+  }
+  .discussion-modal form input,
+  .discussion-modal form select,
+  .discussion-modal form textarea {
+    max-width: 100%;
   }
 }
 
@@ -8595,7 +8615,10 @@ section.checklist-category {
   padding: 10px 0;
 }
 
+/* Generic profile display styles */
+
 .vcard {
+  position: relative;
   margin-bottom: 10px;
 }
 
@@ -8624,22 +8647,177 @@ section.checklist-category {
   opacity: 0.5;
 }
 
+.vcard a.icon-envelope {
+  position: absolute;
+  top: 1em;
+  left: 1em;
+  color: #FFF;
+  opacity: 0.5;
+}
+
+.vcard:hover a.icon-envelope {
+  opacity: 0.75;
+}
+
+/* User profile (mini) */
+
+.user-mini-profile h3.fn,
+.user-mini-profile h5.fn {
+  display: block;
+  float: left;
+}
+
+/* dashboard discussion/issues list */
+
+.widget.discussion h3,
+.widget.issue h3 {
+  margin-bottom: 0;
+  border-bottom: 0;
+}
+
+.widget.discussion td.actions-column button,
+.widget.issue td.actions-column button {
+  width: 90px;
+}
+
+.issue-list td.status-column {
+  width: 44px;
+  color: #FFF;
+  text-align: center;
+  background-color: #f0ad4e !important;
+}
+
+.issue-list td.column-subject {
+  width: 25%;
+}
+
+.issue-list td.vcard-column {
+  width: 30%;
+}
+
+.issue-list td.actions-column {
+  width: 200px;
+}
+
+.discussion-list button.widget-title-button {
+  margin-top: 0;
+}
+
+.discussion-list tr.byme-false .comment {
+  font-weight: bold;
+}
+
+.discussion-list td.status-column {
+  width: 44px;
+  padding: 10px 5px;
+  color: #FFF;
+  text-align: center;
+  background-color: #5bc0de !important;
+}
+
+.discussion-list td.status-column i {
+  top: 22px;
+  font-size: 24px;
+}
+
+.discussion-list td.status-column small {
+  width: 24px;
+  padding: 7px 0 !important;
+  font-size: 10px;
+  text-align: center;
+}
+
+.discussion-list td.vcard-column {
+  width: 50px;
+}
+
+.discussion-list td.comment-column div.comment {
+  min-height: 4em;
+}
+
+.discussion-list td.comment-column p {
+  margin-bottom: 0;
+}
+
+.discussion-list td.more-column {
+  width: 70px;
+  vertical-align: middle;
+}
+
+td.vcard-column,
+.vcard {
+  white-space: nowrap;
+}
+
+td.vcard-column .vcard,
+.vcard .vcard {
+  margin: 0;
+}
+
+td.vcard-column .time,
+.vcard .time {
+  clear: both;
+  white-space: nowrap;
+  /*padding-left: 37px;*/
+
+}
+
+td.vcard-column.role-client h2,
 .vcard.role-client h2,
+td.vcard-column.role-client h3,
 .vcard.role-client h3,
+td.vcard-column.role-client h4,
 .vcard.role-client h4,
+td.vcard-column.role-client h5,
 .vcard.role-client h5 {
   color: #42d0e5;
 }
 
+td.vcard-column.role-lawyer h2,
 .vcard.role-lawyer h2,
+td.vcard-column.role-account-manager h2,
 .vcard.role-account-manager h2,
+td.vcard-column.role-lawyer h3,
 .vcard.role-lawyer h3,
+td.vcard-column.role-account-manager h3,
 .vcard.role-account-manager h3,
+td.vcard-column.role-lawyer h4,
 .vcard.role-lawyer h4,
+td.vcard-column.role-account-manager h4,
 .vcard.role-account-manager h4,
+td.vcard-column.role-lawyer h5,
 .vcard.role-lawyer h5,
+td.vcard-column.role-account-manager h5,
 .vcard.role-account-manager h5 {
   color: #f88172;
+}
+
+td.vcard-column img.photo {
+  float: left;
+  max-width: 48px;
+  max-height: 48px;
+  margin-right: 0;
+}
+
+.fn img.photo {
+  float: left;
+  max-width: 28px;
+  max-height: 28px;
+  margin-right: 10px;
+}
+
+.fn-sm img.photo {
+  float: left;
+  max-width: 28px;
+  max-height: 28px;
+  margin-right: 10px;
+}
+
+.fn-lg img.photo {
+  float: left;
+  max-width: 48px;
+  max-height: 48px;
+  margin-right: 0;
 }
 
 button.vcard {
@@ -8662,6 +8840,89 @@ button.vcard {
 
 .widget-title-button {
   margin: 0.7em 0 0 0;
+}
+
+.nest {
+  position: relative;
+}
+
+.nested {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.animate-slide-up {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.full-dialog-underlay,
+.full-dialog {
+  z-index: 1029;
+}
+
+.full-dialog-underlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fbfbfb;
+  -webkit-box-shadow: inset 0 75px 5px 0px rgba(0, 0, 0, 0.08);
+     -moz-box-shadow: inset 0 75px 5px 0px rgba(0, 0, 0, 0.08);
+          box-shadow: inset 0 75px 5px 0px rgba(0, 0, 0, 0.08);
+}
+
+.full-dialog {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 100%;
+}
+
+.full-dialog .full-dialog-content {
+  padding-top: 10px;
+  padding-bottom: 80px;
+  margin-top: 70px;
+}
+
+.full-dialog .vcard .user-photo {
+  margin-right: 10px;
+}
+
+.full-dialog .vcard .fn {
+  font-weight: bold;
+}
+
+.full-dialog textarea {
+  margin-bottom: 0.5em;
+}
+
+.full-dialog-toolbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 1029;
+  width: 100%;
+  height: 60px;
+  vertical-align: middle;
+  background-color: #fdfdfd;
+  -webkit-box-shadow: 0 -5px 5px rgba(0, 0, 0, 0.08);
+     -moz-box-shadow: 0 -5px 5px rgba(0, 0, 0, 0.08);
+          box-shadow: 0 -5px 5px rgba(0, 0, 0, 0.08);
+}
+
+.full-dialog-toolbar button {
+  margin: 16px 0 0 10px;
 }
 
 .multi-progress-container {
