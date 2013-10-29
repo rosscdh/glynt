@@ -132,6 +132,7 @@
         <div class="discussion-viewer"></div>
     {% endif %}
 </div>
+<div position="bottom" class="multi-progress"></div>
 {% endblock %}
 {% block css %}
     <style>
@@ -196,32 +197,5 @@ var LawPal = {
 };
 </script>
 <toaster-container toaster-options="{'time-out': 3000}"></toaster-container>
-
-<script type="text/ng-template" id="newDiscussion.html">
-    <div class="modal-dialog discussion-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 ng-bind="title"></h3>
-            </div>
-            <form class="form-discussion" ng-submit="ok()">
-                <div class="modal-body">
-                    <div class="form-group" ng-show="!hasParent">
-                        <label for="discussionSubject" class="sr-only">Subject</label>
-                        <input type="text" id="discussionSubject" ng-model="message.subject" class="form-control" />
-                    </div>
-                    <div class="form-group">
-                        <label for="discussionComment" class="sr-only">Message</label>
-                        <textarea id="discussionComment" required="true" ng-model="message.comment" class="form-control" rows="5"></textarea>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
-                    <button class="btn btn-primary" type="submit">Save</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</script>
 
 {% endblock %}
