@@ -47,6 +47,22 @@ def glynt_mock_http_requests(view_func):
     """
     @httpretty.activate
     def _decorator(request, *args, **kwargs):
+        httpretty.register_uri(httpretty.GET, re.compile("http://127.0.0.1/(.+)"),
+                       body='{"success": true}',
+                       status=200)
+        # httpretty.register_uri(httpretty.POST, re.compile("(.+)"),
+        #                body='{"success": true}',
+        #                status=200)
+        # httpretty.register_uri(httpretty.PUT, re.compile("(.+)"),
+        #                body='{"success": true}',
+        #                status=200)
+        # httpretty.register_uri(httpretty.PATCH, re.compile("(.+)"),
+        #                body='{"success": true}',
+        #                status=200)
+        # httpretty.register_uri(httpretty.DELETE, re.compile("(.+)"),
+        #                body='{"success": true}',
+        #                status=200)
+
         #
         # Abridge
         #
@@ -54,6 +70,22 @@ def glynt_mock_http_requests(view_func):
                        body='{"success": true}',
                        status=200)
         httpretty.register_uri(httpretty.GET, re.compile("http://abridge.local.dev/(.+)"),
+                       body='{"success": true}',
+                       status=200)
+
+        #
+        # Intercom & misc
+        #
+        httpretty.register_uri(httpretty.GET, re.compile("https://api.intercom.io/(.+)"),
+                       body='{"success": true}',
+                       status=200)
+        httpretty.register_uri(httpretty.GET, re.compile("http://www.google-analytics.com/ga.js"),
+                       body='{"success": true}',
+                       status=200)
+        #
+        # Pusher.com? @TODO are these called at all
+        #
+        httpretty.register_uri(httpretty.GET, re.compile("https://api.pusherapp.com/(.+)"),
                        body='{"success": true}',
                        status=200)
 

@@ -1,1 +1,0 @@
-[{"pk": 1, "model": "waffle.switch", "fields": {"active": true, "note": "Should we use the Django Abridge System", "name": "abridge-mailout", "modified": "2013-10-07T06:59:50.418Z", "created": "2013-10-07T06:59:27Z"}}]

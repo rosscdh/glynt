@@ -50,11 +50,14 @@ helper.scenario(casper.cli.options.url,
     },
     function() {
         // Text messages
-        //casper.viewport(2048, 1024);
+        casper.viewport(2048, 1024);
+        
+        //helper.snapshotPage.call(this,0);
         casper.test.comment('Test displaying messages')
         this.click('a.item-edit');
 
-        casper.waitForSelector('input#id_name', function() {
+        casper.waitForText('Edit item', function() {
+            //helper.snapshotPage.call(this,1);
             casper.test.comment('Test edit form displays');
             this.test.assertExists('input#id_name');
 
