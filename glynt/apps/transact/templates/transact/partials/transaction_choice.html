@@ -1,12 +1,23 @@
 {% load humanize %}
 
 {% for t in transactions %}
-<div class="callout transaction-choice clearfix" data-transaction="{{ t.slug }}">
-    <!-- <p class="lead pull-right">${{ t.price | intcomma }}</p> -->
-    <h4>{{ t.title }}</h4>
-    <p>{{ t.description }}</p>
-    <p><button id="{{ t.slug }}-select" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add package</button></p>
-</div>
+	<div class="transaction-choice row" data-transaction="{{ t.slug }}">
+        <div class="col-md-8">
+            <h2>{{ t.title }} (${{ t.price | intcomma }})</h2>
+            <p class="lead">{{ t.description }}</p>
+        </div>
+        <div class="col-md-4">
+            <p class="text-center">
+                <button type="button" class="btn btn-lg btn-primary btn-next-step">Choose Package »</button>
+                <!-- id="{{ t.slug }}-select" -->
+            </p>
+        </div>
+    </div>
+    <hr>
 {% empty %}
-<p class="no-records">No transactions available.</p>
+	<p class="no-records">No transactions available.</p>
 {% endfor %}
+
+{% comment %}
+<p><button id="{{ t.slug }}-select" class="btn btn-primary"><i class="icon-plus icon-white"></i> Add package</button>
+{% endcomment %}

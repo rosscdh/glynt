@@ -1,6 +1,5 @@
-<!--
-    Fixed Fees: Incorporation
--->
+{% load transaction_tags %}
+
 <section id="fixed-fee-incorporation" class="slide">
     <div class="slide-header">
         <div class="container">
@@ -11,29 +10,8 @@
 
     <div class="slide-content">
         <div class="container">
-            <div class="row">
-                <div class="col-md-8">
-                    <h2>Incorporation ($950)</h2>
-                    <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna...</p>
-                </div>
-                <div class="col-md-4">
-                    <p class="text-center">
-                        <button type="button" class="btn btn-lg btn-primary btn-next-step">Choose Package »</button>
-                    </p>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="col-md-8">
-                    <h2>Bigger Incorporation ($1500)</h2>
-                    <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna...</p>
-                </div>
-                <div class="col-md-4">
-                    <p class="text-center">
-                        <button type="button" class="btn btn-lg btn-primary btn-next-step">Choose Package »</button>
-                    </p>
-                </div>
-            </div>
+            {% transactions transaction='CS' %}
+            {% transactions transaction='CS' %}
         </div>
     </div>
 </section>
