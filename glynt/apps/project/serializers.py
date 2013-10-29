@@ -4,7 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 
 from rest_framework import serializers
 
-from .models import Project
+from .models import Project, ProjectLawyer
 from threadedcomments.models import ThreadedComment
 
 from glynt.apps.customer.serializers import UserSerializer
@@ -70,15 +70,24 @@ class ProjectSerializer(serializers.ModelSerializer):
             }
 
     def get_lawyers(self, obj):
+        result = []
         if obj is not None:
-            return [{
-                        'pk': lawyer.pk,
-                        'user_pk': lawyer.user.pk,
-                        'username': lawyer.user.username,
-                        'full_name': lawyer.user.get_full_name(),
-                        'photo': lawyer.profile_photo,
-                        'url': lawyer.get_absolute_url(),
-                    } for lawyer in obj.lawyers.all()]
+            for join in ProjectLawyer.objects.filter(project=obj):
+                lawyer = join.lawyer
+                lawyer_user = join.lawyer.user
+                result.append({
+                            'pk': lawyer.pk,
+                            'user_pk': lawyer_user.pk,
+                            'username': lawyer_user.username,
+                            'full_name': lawyer_user.get_full_name(),
+                            'status': {
+                                'id': join.status,
+                                'name': join.display_status,
+                            },
+                            'photo': lawyer.profile_photo,
+                            'url': lawyer.get_absolute_url(),
+                        })
+        return result
 
     def get_transactions(self, obj):
         if obj is not None:
