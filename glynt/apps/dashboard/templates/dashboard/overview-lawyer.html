@@ -13,8 +13,33 @@
 {% endblock %}
 
 {% block body %}
-{{ json|safe }}
-<div class="container dashboard-view">
+<div class="container dashboard-view" ng-controller="projectsOverviewCtrl">
+    <div class="row">
+        <div class="col-12">
+            <div class="col-lg-6" ng-repeat="project in data.projects">
+                <div class="widget project clearfix">
+                    <span class="text-success pull-right engagement-{[{currentUserEngagement|lowercase}]}" ng-bind="project.currentUserEngagement"></span>
+                    <a class="btn btn-link pull-right" ng-href="{% url 'dashboard:overview' %}{[{project.uuid}]}/">View</a>
+                    <h3 ng-bind="project.company.name"></h3>
+                    <div class="row">
+                        <div class="col-3">
+                            <em>Action required</em>
+                            <div class="widget-content">
+                                <button class="btn btn-danger project-action">
+                                    <em>1</em>
+                                    <span class="label">Feedback</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-9">
+                            <em>Discussion 1/3</em>
+                            <p>Discussion here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-12">
             <table id="lawyer-projects" class="table table-bordered">
@@ -80,4 +105,20 @@
 </div>
 
 {% include 'dashboard/modals/overview-modal.html' %}
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="{{ STATIC_URL }}dashboard/angularjs-projectOverviewCtrl.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}dashboard/angularjs-userDirectives.js"></script>
+<script language="javaScript">
+    LawPal =  {
+        "user": {
+            'pk': {{ user.pk|default:'null'|jsonify }},
+            'username': '{{ user.username }}',
+            'full_name': '{{ user.get_full_name }}',
+            'is_authenticated': {{ user.is_authenticated|jsonify }}
+        },
+        'overview': {{ json|jsonify }}
+    }
+</script>;
 {% endblock %}
