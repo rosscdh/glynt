@@ -32,6 +32,12 @@ class ProjectViewSet(ModelViewSet):
     serializer_class = ProjectSerializer
     lookup_field = 'uuid'
 
+    def get_queryset(self):
+        """
+        Filter by the current user
+        """
+        qs = super(ProjectViewSet, self).get_queryset()
+        return qs.filter(participants__in=[self.request.user])
 
 class TeamListView(RetrieveUpdateAPIView):
     """
