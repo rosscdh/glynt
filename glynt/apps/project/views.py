@@ -30,7 +30,7 @@ logger = logging.getLogger('django.request')
 
 class CreateProjectView(FormView):
     """ Start a new Project, by selecting 1 or more of the transactions """
-    template_name = 'project/create.html'
+    template_name = 'project/create/index.html'
     form_class = CreateProjectForm
 
     def get_context_data(self, **kwargs):

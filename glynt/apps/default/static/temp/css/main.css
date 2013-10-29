@@ -1,0 +1,39 @@
+html, body {
+    min-width: 1024px;
+    overflow-y: hidden;
+    -webkit-transition: opacity 400ms;
+       -moz-transition: opacity 400ms;
+            transition: opacity 400ms;
+}
+body {
+    bottom: 0;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 100%;
+}
+.slide {
+    display: block;
+    height: 100%;
+    left: 0;
+    min-width: 980px;
+    overflow: hidden;
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    z-index: 19;
+    -webkit-transform: translateZ(0);
+}
+
+/* sequential slides */
+#start { top: 0%; }
+#selection { top: 100%; }
+#qualification-incorporation { top: 200%; }
+#fixed-fee-incorporation { top: 300%; }
+#fixed-fee-financing { top: 400%; }
+#intake-form-incorporation { top: 500%; }
+#intake-form-financing { top: 600%; }
+#finished { top: 700%; }
+#not-ready-yet { top: 800%; }
