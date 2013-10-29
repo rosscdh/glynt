@@ -5,9 +5,10 @@ from django.contrib.contenttypes.models import ContentType
 from rest_framework import serializers
 
 from .models import Project, ProjectLawyer
-from threadedcomments.models import ThreadedComment
-
+from glynt.apps.todo.views import ToDoCountMixin
 from glynt.apps.customer.serializers import UserSerializer
+
+from threadedcomments.models import ThreadedComment
 
 import re
 
@@ -47,6 +48,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     company = serializers.SerializerMethodField('get_company')
     transactions = serializers.SerializerMethodField('get_transactions')
     lawyers = serializers.SerializerMethodField('get_lawyers')
+    counts = serializers.SerializerMethodField('get_counts')
 
     status = serializers.SerializerMethodField('get_status')
 
@@ -54,7 +56,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         model = Project
         queryset = Project.objects.prefetch_related('customer', 'customer__user', 'company', 'transactions', 'lawyers', 'lawyers__user').all()
         fields = ('uuid', 'name', 'customer', 'company',
-                  'transactions', 'lawyers',
+                  'transactions', 'lawyers', 'counts',
                   'status',)
 
     def get_customer(self, obj):
@@ -92,6 +94,13 @@ class ProjectSerializer(serializers.ModelSerializer):
     def get_transactions(self, obj):
         if obj is not None:
             return [{'type': t.slug, 'name': t.title} for t in obj.transactions.all()]
+
+    def get_counts(self, obj):
+        if obj is not None:
+            todomixin = ToDoCountMixin()
+            todomixin.request = self.context.get("request", None)
+
+            return todomixin.todo_counts(qs_objects=obj.todo_set, project=obj).get("counts")
 
     def get_status(self, obj):
         if obj is not None:
