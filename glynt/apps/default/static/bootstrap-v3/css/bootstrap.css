@@ -1942,6 +1942,40 @@ fieldset[disabled] .btn-clear.active {
   background-color: #ffffff;
   border-color: #ffffff;
 }
+.btn-clear-border {
+  color: #5bc0de;
+  background-color: #ffffff;
+  border-color: #5bc0de;
+}
+.btn-clear-border:hover,
+.btn-clear-border:focus,
+.btn-clear-border:active,
+.btn-clear-border.active {
+  background-color: #f2f2f2;
+  border-color: #31b0d5;
+  color: #5bc0de;
+}
+.btn-clear-border.disabled:hover,
+.btn-clear-border[disabled]:hover,
+fieldset[disabled] .btn-clear-border:hover,
+.btn-clear-border.disabled:focus,
+.btn-clear-border[disabled]:focus,
+fieldset[disabled] .btn-clear-border:focus,
+.btn-clear-border.disabled:active,
+.btn-clear-border[disabled]:active,
+fieldset[disabled] .btn-clear-border:active,
+.btn-clear-border.disabled.active,
+.btn-clear-border[disabled].active,
+fieldset[disabled] .btn-clear-border.active {
+  background-color: #ffffff;
+  border-color: #5bc0de;
+}
+.btn-clear-border.active {
+  background-color: #5bc0de;
+  color: white;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
 .btn-link,
 .btn-link:active,
 .btn-link[disabled],
@@ -6533,11 +6567,147 @@ td.hidden-lg {
   color: #ffffff;
   background-color: #42d0e5;
 }
-.homepage h2 {
+body.homepage {
+  padding-top: 30px!important;
+}
+body.homepage h2 {
   font-size: 43px;
 }
-.homepage h3 {
+body.homepage h3 {
   font-size: 21px;
+}
+body.homepage section .container {
+  margin-top: 1em;
+}
+body.homepage .btn-huge {
+  border-width: 2px;
+  font-size: 15px;
+  padding: 8px 26px;
+}
+body.homepage section#top {
+  background-image: url(../../img/background-lawyers.jpg);
+  background-size: cover;
+  position: relative;
+}
+body.homepage section#top .inner {
+  position: relative;
+  height: 100%;
+}
+body.homepage section#top .bar {
+  background-color: #6bdb7e;
+  color: white;
+  position: absolute;
+  bottom: 0;
+  padding: 20px 0px 50px 0px;
+  width: 100%;
+}
+body.homepage section#top .bar h1,
+body.homepage section#top .bar h2 {
+  color: white;
+  text-align: center;
+}
+body.homepage section#top .bar h1 {
+  font-size: 53px;
+}
+body.homepage section#top .bar h2 {
+  font-size: 23px;
+}
+body.homepage section#better-solution {
+  font-size: 16.5px;
+  color: #757c7e;
+}
+body.homepage section#better-solution h4 {
+  font-size: 27px;
+  color: #62d871;
+}
+body.homepage section#veteran-lawyers {
+  background-color: #f9f9f9;
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
+  background-image: url('../../img/home-2/firms.png');
+  background-repeat: none;
+  background-position: center center;
+}
+body.homepage section#veteran-lawyers .img-circle {
+  max-width: 80%;
+  border: 4px solid #ecebeb;
+}
+body.homepage section#veteran-lawyers h3 {
+  margin-bottom: 5px;
+}
+body.homepage section#veteran-lawyers h4 {
+  margin-top: 0px;
+  font-size: 15px;
+}
+body.homepage section#pricing {
+  background-color: #42d0e5;
+}
+body.homepage section#pricing h3 span {
+  border-bottom: 1px dotted white;
+  font-style: italic;
+}
+body.homepage section#pricing * {
+  color: white;
+}
+body.homepage section#pricing .sub-text {
+  line-height: 1.6em;
+  opacity: 0.8;
+  font-size: 16px;
+}
+body.homepage section#pricing h2 {
+  font-size: 25px;
+  margin-bottom: 0px;
+  margin-top: 45px;
+}
+body.homepage section#pricing span.big {
+  font-size: 62px;
+  font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
+}
+body.homepage section#pricing span.small {
+  font-size: 23px;
+  opacity: 0.7;
+}
+body.homepage section#pricing .btn {
+  background-color: transparent;
+  color: white;
+  border-color: white;
+  font-size: 20px;
+}
+body.homepage section#get-started {
+  background-color: #fcd423;
+}
+body.homepage section#get-started h2 {
+  font-size: 30px;
+}
+body.homepage section#get-started .jump-block {
+  padding: 20px 10px 30px 10px;
+  border: 1px solid #fcd423;
+  margin-top: 15px;
+}
+body.homepage section#get-started .jump-block:hover {
+  border: 1px solid #fde477;
+  background-color: #fcd839;
+}
+body.homepage section#get-started * {
+  color: #222;
+}
+body.homepage section#features {
+  background-color: #f9f9f9;
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
+}
+body.homepage section#co-pilot {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+body.homepage section#co-pilot > .btn {
+  position: relative;
+  float: left;
+}
+body.homepage section#co-pilot > .btn:hover,
+body.homepage section#co-pilot > .btn:active {
+  z-index: 2;
 }
 ul#checklist-categories li {
   position: relative;

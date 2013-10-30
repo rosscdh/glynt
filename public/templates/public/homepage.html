@@ -1,8 +1,7 @@
 {% extends 'base.html' %}{% load url from future %}
 {% block page_title %}LawPal - A better attorney-client relationship{% endblock %}
 {% block bodyclass %}homepage{% endblock %}
-{% block css %}
-{% endblock %}
+{% block css %}{% endblock %}
 {% block extrahead %}
     <meta name="description" content="LawPal - A better attorney-client relationship">
     <meta name="keywords" content="incorporation, seed financing, convertible notes, venture capital, acquisition, angel investing">
@@ -28,129 +27,277 @@
 </div>
  -->`
 <!--A better legal solution for startups-->
-<div class="container">
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="text-center">LawPal is a better legal solution for startups</h1>
-            <h3 class="softer text-center">LawPal offers startups a platform to work with veteran startup lawyers to accurately, affordably, and efficiently reach their goals.</h3>
+<style>
+section {
+    padding-top:30px;
+}
+@media screen and (min-height: 768px) {  
+  section { padding-top: 100px; }
+  section h1 { font-size:50px;}
 
-            <div class="row text-left">
-                <div class="col-lg-4 text-center">
-                    <h4>Cruise with a Co-Pilot</h4>
-                    <p>Navigate your startup’s course with one (or more) of our veteran startup lawyers experienced in your legal needs at any stage.</p>
-                </div>
-                <div class="col-lg-4 text-center">
-                    <h4>Fixed Fee Flexibility</h4>
-                    <p>LawPal lawyers offer fixed legal fees for startup legal services from incorporation to equity 
-rounds and more.</p>
-                </div>
-                <div class="col-lg-4 text-center">
-                    <h4>Enjoy Legal Ease</h4>
+}
+@media screen and (min-height: 900px) {  
+  section { padding-top: 150px; }
+  section h1 { font-size:55px; margin-bottom:5px;}
+}
+</style>
 
-                </div>
+<div class="main">
+    <section id="top">
+        <div class="inner">
+            <div class="bar">
+                <h1>Get it done. Accurately.</h1>
+                <h2>Better legal solutions for startups.</h2>
             </div>
         </div>
-    </div>
-</div>
-<!--Veteran startup lawyers-->
-
-<!--Co-pilot-->
-
-<!--Predictable pricing-->
-
-<!--Deal visibility-->
-
-<!--Features-->
-
-<!--Get started-->
-
-<!--Love for LawPal-->
-
-
-
-
-
-<!-- 
-
-
-<div class="attorney-feature quote">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-2 col-offset-1">
-                <img src="{{ STATIC_URL }}img/crandon-face.jpg" class="img-circle">
-                <br />
-            </div>
-            <div class="col-9">
-                <small>ATTORNEY SPOTLIGHT</small>
-                <h2>John Crandon <small>Partner at Crandon Law</small></h2>
+    </section>
+    <section id="better-solution">
+        <div class="vert-wrap">
+            <div class="container">
                 <div class="row">
-                    <div class="col-10">
-                        <p>I am a corporate, private equity, and transactions attorney based in SF. Previously, I practiced law for over 7 years with Gibson Dunn (which is consistently ranked in the top 15 corporate firms in the US and top 2 in CA).</p>
-                        <p>I have worked with startups in the Bay Area for over 15 years, and I'm constantly amazed by the creativity and diversity of the founders that we work with.  It is a privilege helping them to change the world.</p>
+                    <div class="col-lg-12">
+                        <h1 class="text-center">LawPal is a better legal solution for startups</h1>
+                        <div class="row">
+                            <div class="col-8 col-offset-2">
+                                <h3 class="softer text-center">LawPal offers startups a platform to work with veteran startup lawyers to accurately, affordably, and efficiently reach their goals.</h3>
+                                <br />
+                            </div>
+                        </div>
+                        <div class="row text-left">
+                            <div class="col-lg-4 text-center">
+                                <img src="{{ STATIC_URL }}img/home-2/1-envelope.gif">
+                                <h4>Cruise with a Co-Pilot</h4>
+                                <p>Navigate your startup’s course with one (or more) of our veteran startup lawyers experienced in your legal needs at any stage.</p>
+                                <br />
+                                <a href="#" class="btn btn-clear-border btn-huge">Learn more</a>
+                            </div>
+                            <div class="col-lg-4 text-center">
+                                <img src="{{ STATIC_URL }}img/home-2/1-fixed.gif">
+                                <h4>Fixed Fee Flexibility</h4>
+                                <p>LawPal lawyers offer fixed legal fees for startup legal services from incorporation to equity rounds and more.</p>
+                                <br />                    
+                                <a href="#" class="btn btn-clear-border btn-huge">Learn more</a>
+                            </div>
+                            <div class="col-lg-4 text-center">
+                                <img src="{{ STATIC_URL }}img/home-2/1-glasses.gif">
+                                <h4>Enjoy Legal Ease</h4>
+                                <p>Get complete visibility of your legal workflow and streamline your startup transactions at every stage, from idea to exit.</p>
+                                <br />
+                                <a href="#" class="btn btn-clear-border btn-huge">Learn more</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="DivHelper"></div>
 
+    </section>
+    <!--Veteran startup lawyers-->
+    <section id="veteran-lawyers">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 col-offset-1">
+                    <h1 class="text-center">Veteran Startup Lawyers</h1>
+                    <div class="row">
+                        <div class="col-10 col-offset-1">
+                            <h3 class="softer text-center">Experienced specialist startup lawyers to meet your needs.</h3>
+                            <br />
+                        </div>
+                    </div>
+                    <div class="row text-left">
+                        <div class="col-lg-3 text-center animated fadeInDown">
+                            <img src="{{ STATIC_URL }}img/crandon-face.jpg" class="img-circle">
+                            <h3>John Crandon</h3>
+                            <h4 class="softer">13 Years Experience</h4>
+                        </div>
+                        <div class="col-lg-3 text-center animated fadeInDown">
+                            <img src="{{ STATIC_URL }}img/bend-face.png" class="img-circle">
+                            <h3>Doug Bend</h3>
+                            <h4 class="softer">13 Years Experience</h4>
+                        </div>
+                        <div class="col-lg-3 text-center animated fadeInDown">
+                            <img src="https://lawpal.com/media/lawyer/david-campbell.jpg" class="img-circle">
+                            <h3>David Cambell</h3>
+                            <h4 class="softer">13 Years Experience</h4>
+                        </div>
+                        <div class="col-lg-3 text-center animated fadeInDown">
+                            <img src="{{ STATIC_URL }}img/bier-face.png" class="img-circle">
+                            <h3>Adam Bier</h3>
+                            <h4 class="softer">13 Years Experience</h4>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>          
-</div>
-<div class="container">
-    <div class="row">
-        <div class="col-lg-12 intro">
-            <h1>A reimagined legal experience</h1>
-            <h2>Tools to make your transaction more efficient and transparent</h2>
-            <br />
-            <div class="row">
-                <div class="col-lg-5 col-offset-1">
-                    <div class=" feature-block frame">
-                        <h3>A lawyer you can actually talk to</h3>
-                        <p>Your attorney is available at the end of the phone and we'll even buy you both a coffee when you want to meet up.</p>
-                        <p>We support the lawyer-client relationship - both online, and offline.</p>
-                    </div>
-                   <div class="feature-block frame">
-                        <h3>A transparent experience</h3>
-                        <p>LawPal instantly gives you complete visibility on the deal. See outstanding issues at a glance, what's moved forward and what hasn't. Our workflow tools include a centralized checklist to help focus everyone on resolving open issues and closing the deal as quickly as possible.</p>
-                    </div>
-                </div>
-                <div class="col-lg-5">
-                     <div class="feature-block frame">
-                        <h3>Fixed prices</h3>
-                        <p>Every dollar counts.  When you raise your seed round, getting an invoice for $15,000 in legal fees hurts no matter when you have to pay it. That's one less developer working for three months. With LawPal, you get the benefits of engaging a lawyer without writing a blank check  - No more “sticker shock” when the invoice arrives. </p>
-                    </div>
-                    <div class="feature-block frame">
-                        <h3>Document storage and workflow</h3>
-                        <p>LawPal gives you a single secure location for all of your transaction documents. You decide who has access to your documents and who doesn’t. Your lawyer will upload documents for review and you can give feedback directly through our platform.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <br />
-               <div class="col-lg-5 col-offset-1"><img src="{{STATIC_URL}}img/home-ss-1.jpg"></div>
-               <div class="col-lg-5"><img src="{{STATIC_URL}}img/home-ss-2.jpg"></div>
-               <br />
-               <br />
+    </section>
 
+    <!--Co-pilot-->
+   <section id="co-pilot">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 col-offset-1">
+                    <h1 class="text-center">Your Lawyer. Your Co-Pilot.</h1>
+                    <div class="row">
+                        <div class="col-10 col-offset-1 text-center">
+                            <h3 class="softer text-center">From idea to exit, our lawyers are here to help you along your journey.</h3>
+                            <br />
+                            <div class="btn-group btn-group-lg" id="copilot-toggle">
+                              <button type="button" class="btn btn-clear-border btn-huge active" href="#home">Define your Needs</button>
+                              <button type="button" class="btn btn-clear-border btn-huge"  href="#profile">Manage your Project</button>
+                              <button type="button" class="btn btn-clear-border btn-huge" href="#dropdown1">Complete and Store</button>
+                            </div>
+                            <div id="myTabContent" class="tab-content">
+                            <div class="tab-pane fade in active" id="home">
+                              <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+                            </div>
+                            <div class="tab-pane fade" id="profile">
+                              <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>
+                            </div>
+                            <div class="tab-pane fade" id="dropdown1">
+                              <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free, carles pitchfork biodiesel fixie etsy retro mlkshk vice blog. Scenester cred you probably haven't heard of them, vinyl craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr.</p>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    
+                </div>
             </div>
         </div>
-    </div>
-</div>
-<br />
-<br />
-<div class="call-to-action">
-    <div class="container text-center">
-        <h2>Ready to start your transaction? <a href="#signin-modal" class="" data-toggle="modal" onclick="_gaq.push(['_trackEvent', 'Nav', 'Action', 'Sign In']);">Let's get going</a>. </h2>
-    </div>
-</div>
-<div class="container">
-    <div class="row">
-        <div class="col-12 text-center">
-           <br />
-           <br />
-           <p class="lead text-muted"><i class="glyphicon glyphicon-map-marker"></i> LawPal is based in Founders Den, SoMa, San Francisco.</p>
+    </section>
+    <!--Predictable pricing-->
+    <section id="pricing">
+        <div class="container">
+            <div class="row">
+                <div class="col-10 col-offset-1">
+                    <br />
+                    <br />
+                    <h1 class="text-center">Predictable pricing.</h1>
+                    <br />
+                    <p class="text-center sub-text">
+                         When raising your seed round, every dollar counts. <br />
+                        Getting an invoice for $15,000 in legal fees hurts. With LawPal, you get <br />
+                        the benefits of engaging an experienced startup lawyer <br />
+                        without writing a blank check for an unknown amount of billable hours.
+                    </p>
+                    <div class="row">
+                        <div class="col-4 text-right">
+                            <h2>Company Formation.</h2>
+                            <span class="small">from</span> <span class="big">$950</span>
+                        </div>
+                        <div class="col-4 text-right">
+                            <h2>Bridge/Note Financing.</h2>
+                            <span class="big">$2,500</span>
+                        </div>
+                        <div class="col-4 text-right">
+                            <h2>Priced/Equity Round.</h2>
+                            <span class="small">from</span> <span class="big">$4,000</span>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <div class="text-center">
+                        <a href="#" class="btn btn-clear-border btn-huge">Get Started</a>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-</div> -->
+    </section>
+    <!--Deal visibility-->
+    <section id="deal-visibility">
+        <div class="container">
+            <div class="row" id="better-solution">
+                <div class="col-lg-12">
+                    <h1 class="text-center">Know where your deal is.</h1>
+                    <div class="row">
+                        <div class="col-8 col-offset-2">
+                            <h3 class="softer text-center">Complete transparency of your legal workflow and the right set of tools to keep your startup and your Lawpal legal team moving forward quickly.</h3>
+                            <br />
+                            <img src="http://placehold.it/700x350">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--Features-->
+    <section id="features">
+        <div class="container">
+            <div class="row" id="better-solution">
+                <div class="col-lg-12">
+                    <h1 class="text-center">Features</h1>
+                    <div class="row">
+                        <div class="col-8 col-offset-2">
+                            <h3 class="softer text-center">The LawPal platform is designed with your startup's goals in mind.</h3>
+                            <br />
+                            <img src="{{STATIC_URL}}img/home-2/6-features.png">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--Get started-->
+    <section id="get-started">
+        <div class="container">
+            <div class="row" id="better-solution">
+                <div class="col-lg-12">
+                    <br />
+                    <h1 class="text-center">Get Started with LawPal</h1>
+                    <h3 class="softer text-center">Where are you with your startup?</h3>
+                    <br />
+                    <h2 class="text-center">Select your Stage</h2>
+                    <div class="row">
+                        <div class="col-4 text-center">
+                            <div class="jump-block">
+                                <img src="{{STATIC_URL}}img/home-2/7-b1.png">
+                                <h3>Ideas stage</h3>
+                                <p>You’re exploring startup ideas or talking to potential cofounders about starting something.</p>
+                            </div>
+                        </div>
+                        <div class="col-4 text-center">
+                            <div class="jump-block">
+                                <img src="{{STATIC_URL}}img/home-2/7-b2.png">
+                                <h3>Ready to form a company</h3>
+                                <p>You are ready to form a company and get started! You may have seed financing lined up as well.</p>
+                            </div>
+                        </div>
+                        <div class="col-4 text-center">
+                            <div class="jump-block">
+                                <img src="{{STATIC_URL}}img/home-2/7-b3.png">
+                                <h3>Up and running!</h3>
+                                <p>Your company is formed and you are up and running. You may be exploring new funding rounds or IP.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+<!--Love for LawPal-->
+</div>
+<script type="text/javascript" src="{{ STATIC_URL }}js/scroll/jquery.onepage-scroll.js"></script>
+<link href="{{ STATIC_URL }}js/scroll/onepage-scroll.css" rel="stylesheet">
+<link href="{{ STATIC_URL }}css/theme/animate.css" rel="stylesheet">
+
+<script>
+$(".main").onepage_scroll({
+   sectionContainer: "section", // sectionContainer accepts any kind of selector in case you don't want to use section
+   animationTime: 1000, // AnimationTime let you define how long each section takes to animate
+   pagination: true, // You can either show or hide the pagination. Toggle true for show, false for hide.
+   updateURL: true // Toggle this true if you want the URL to be updated automatically when the user scroll to each page.
+});
+$('#copilot-toggle button').click(function (e) {
+  e.preventDefault()
+  $('#copilot-toggle button').removeClass('active')
+  $(this).addClass('active')
+  $(this).tab('show')
+})
+</script>
+
 {% endblock %}
 
 {% block body %}
 {% endblock %}
+
+

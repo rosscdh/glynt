@@ -22,12 +22,11 @@
 
     {% block head_js %}{% endblock %}
 </head>
-<body data-spy="scroll" data-target=".subnav" class="{% block bodyclass %}{% endblock %}" style="padding-top: 69px;" ng-app="lawpal">
+<body data-spy="scroll" data-target="#navbar-nav" class="{% block bodyclass %}{% endblock %}" style="padding-top: 69px;" ng-app="lawpal">
 
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.plugin.fluent_comments.js"></script>
-    <div id="wrap">
         <!-- Nav -->
         {% block navbar %}{% include 'partials/nav.html' %}{% endblock %}
 
@@ -45,7 +44,6 @@
                 {% block body %}{% endblock %}
             </div>
         </main>
-    </div>
 
     <!-- Footer -->
     {% block footer %}{% include 'partials/footer.html' %}{% endblock %}
