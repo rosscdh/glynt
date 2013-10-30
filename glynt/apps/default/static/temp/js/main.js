@@ -1,17 +1,15 @@
-// Set up the blank defaults
-window['fixed-fees'] = [];
-window['intake-forms'] = [];
-window['needs-qualification'] = [];
-window['selected-transactions'] = [];
-window['services'] = [];
-
 // SELECTION SCENE EVENTS
 // ======================
 $(document).on('click', '[data-scene="selection"] .btn-next-step', function(e) {
     var $this  = $(e.target);
     var $slide = $(this).closest('section.slide');
 
-    window['services'] = [];
+    // set up the blank defaults
+    window['fixed-fees']            = [];
+    window['intake-forms']          = [];
+    window['needs-qualification']   = [];
+    window['selected-transactions'] = [];
+    window['services']              = [];
 
     e.preventDefault();
 
