@@ -73,19 +73,13 @@
     <script type="text/javascript" src="{{ STATIC_URL }}handlebars-helpers.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/lawpal.modal.js"></script>
 
-    
-
-    
-    <script type="text/javascript">{% profile_card_js %}</script>
-{% endcompress %}
-
-<script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/angular.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/angular.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/angular-resource.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/ui-bootstrap-tpls-0.6.0.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/angularjs-toaster.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/angular-ui-sortable.js"></script>
 
-<script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lawpal.app.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lawpal.app.js"></script>
 
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/services/LawPalService.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/services/LawPalUrls.js"></script>
@@ -111,6 +105,9 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/shared-apps/profile/profileDialogTemplate.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/shared-apps/profile/manageTeamCtrl.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/shared-apps/profile/manageTeamTemplate.js"></script>
+    
+    <script type="text/javascript">{% profile_card_js %}</script>
+{% endcompress %}
 
 {% pusher_js %}
 {% handlebars_messages %}
