@@ -55,7 +55,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         queryset = Project.objects.prefetch_related('customer', 'customer__user', 'company', 'transactions', 'lawyers', 'lawyers__user').all()
-        fields = ('uuid', 'name', 'customer', 'company',
+        fields = ('id', 'uuid', 'name', 'customer', 'company',
                   'transactions', 'lawyers', 'counts',
                   'status',)
 
