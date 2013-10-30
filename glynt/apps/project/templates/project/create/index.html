@@ -21,8 +21,15 @@
 <body>
     <div id="main" role="main">
         {% include 'project/create/slides/start.html' %}
-        {% include 'project/create/slides/selection.html' %}
+        
+        <!-- Selection -->
+        {% include 'project/create/slides/selection/ready-to-go.html' %}
+        {% include 'project/create/slides/selection/already-going.html' %}
+
+        <!-- Qualification -->
         {% include 'project/create/slides/qualification/incorporation.html' %}
+
+        <!-- Fixed Fees -->
         {% include 'project/create/slides/fixed-fee/incorporation.html' %}
         {% include 'project/create/slides/fixed-fee/financing.html' %}
     </div>

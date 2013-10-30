@@ -29,11 +29,8 @@ body {
 
 /* sequential slides */
 #start { top: 0%; }
-#selection { top: 100%; }
-#qualification-incorporation { top: 200%; }
-#fixed-fee-incorporation { top: 300%; }
-#fixed-fee-financing { top: 400%; }
-#intake-form-incorporation { top: 500%; }
-#intake-form-financing { top: 600%; }
-#finished { top: 700%; }
-#not-ready-yet { top: 800%; }
+#selection-ready-to-go { top: 100%; }
+#selection-already-going { top: 200%; }
+#qualification-incorporation { top: 300%; }
+#fixed-fee-incorporation { top: 400%; }
+#fixed-fee-financing { top: 500%; }
