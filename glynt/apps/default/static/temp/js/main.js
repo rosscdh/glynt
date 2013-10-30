@@ -2,31 +2,16 @@
 window['fixed-fees'] = [];
 window['intake-forms'] = [];
 window['needs-qualification'] = [];
+window['selected-transactions'] = [];
 window['services'] = [];
 
-// $.blah('section#intake-form-financing', {
-    // validate: function(e) {
-        // var $this = $(e.target);
-        // var $slide = $this.closest('section.slide');
-    // }
-// });
+// SELECTION SCENE EVENTS
+// ======================
+$(document).on('click', '[data-scene="selection"] .btn-next-step', function(e) {
+    var $this  = $(e.target);
+    var $slide = $(this).closest('section.slide');
 
-// $('data-spy="scene"').scene();
-
-// how to handle the individual slides and all the submissions
-    // events?
-        // pre/post submission
-        // add in validation and these custom controls that way?!?!
-
-// $(document).on('submit.lp.slide.data-api')
-
-// blah
-// use all the scene crack
-    // sets up the onclick of the btn-next-step
-
-$(document).on('click', 'section#selection .btn-next-step', function(e) {
-    var $this    = $(e.target);
-    var $slide   = $this.closest('section.slide');
+    window['services'] = [];
 
     e.preventDefault();
 
@@ -56,13 +41,17 @@ $(document).on('click', 'section#selection .btn-next-step', function(e) {
     window['needs-qualification'] = $.unique(window['needs-qualification']);
     window['services'] = $.unique(window['services']);
 
-    // only go forward if one has been selected
+    // only go forward if more than one has been selected
+    if (window['services'].length > 0) {
         nextStep();
+    }
 });
 
-$(document).on('click', 'section#qualification-incorporation .btn-next-step', function(e) {
-    // var $this    = $(e.target);
-    // var $slide   = $this.closest('section.slide');
+// QUALIFICATION SCENE EVENTS
+// ==========================
+$(document).on('click', '[data-scene="qualification"] .btn-next-step', function(e) {
+    var $this  = $(e.target);
+    var $slide = $this.closest('section.slide');
 
     e.preventDefault();
 
@@ -70,9 +59,11 @@ $(document).on('click', 'section#qualification-incorporation .btn-next-step', fu
         nextStep();
 });
 
-$(document).on('click', 'section#fixed-fee-incorporation .btn-next-step', function(e) {
-    // var $this    = $(e.target);
-    // var $slide   = $this.closest('section.slide');
+// FIXED FEE SCENE EVENTS
+// ======================
+$(document).on('click', '[data-scene="fixed-fee"] .btn-next-step', function(e) {
+    var $this  = $(e.target);
+    var $slide = $this.closest('section.slide');
 
     e.preventDefault();
 
@@ -80,35 +71,6 @@ $(document).on('click', 'section#fixed-fee-incorporation .btn-next-step', functi
         nextStep();
 });
 
-$(document).on('click', 'section#fixed-fee-financing .btn-next-step', function(e) {
-    // var $this    = $(e.target);
-    // var $slide   = $this.closest('section.slide');
-
-    e.preventDefault();
-
-    // has the form been filled out properly
-        nextStep();
-});
-
-$(document).on('click', 'section#intake-form-incorporation .btn-next-step', function(e) {
-    // var $this    = $(e.target);
-    // var $slide   = $this.closest('section.slide');
-
-    e.preventDefault();
-
-    // has the form been filled out properly
-        nextStep();
-});
-
-$(document).on('click', 'section#intake-form-financing .btn-next-step', function(e) {
-    // var $this    = $(e.target);
-    // var $slide   = $this.closest('section.slide');
-
-    e.preventDefault();
-
-    // has the form been filled out properly
-        nextStep();
-});
 
 var nextStep = function() {
     // are there any qualification steps needed?
@@ -122,12 +84,4 @@ var nextStep = function() {
         var nextStep = window['fixed-fees'].shift();
         return window.location.hash = "#fixed-fee-" + nextStep;
     }
-
-    // do we have any intake questions?
-    if (window['intake-forms'].length > 0) {
-        var nextStep = window['intake-forms'].shift();
-        return window.location.hash = "#intake-form-" + nextStep;
-    }
-
-    return window.location.hash = '#finished';
 }
