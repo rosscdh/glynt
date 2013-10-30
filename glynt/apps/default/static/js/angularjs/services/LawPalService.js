@@ -335,6 +335,30 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 		},
 
 		/**
+		 * Returns the list of projects for the current user
+		 * @return {Function}	Promise
+		 */
+		'getUsersProjects': function () {
+			// Set up a promise, because this method might retrieve information from the API directly in the future
+			var deferred = $q.defer();
+			var projects = [];
+
+			$timeout(function () {
+				if (lawPalInterface && lawPalInterface.overview) {
+					// Retrieve checklist items
+					projects = lawPalInterface.overview.projects.results;
+					// Return checklist
+					deferred.resolve(projects);
+				} else {
+					// Ohh nooo! an error
+					deferred.reject(projects);
+				}
+			}, 10);
+
+			return deferred.promise;
+		},
+
+		/**
 		 * Returns the list of check list items, ordered by the sort by parameter
 		 * @param  {String}		sortByProperty used to dermine which attribute to sort the data by
 		 * @return {Function}	Promise

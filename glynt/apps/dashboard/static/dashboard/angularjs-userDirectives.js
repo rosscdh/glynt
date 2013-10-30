@@ -5,7 +5,7 @@
 angular.module('lawpal').directive('userMiniWidget', function () {
   'use strict';
 	return {
-		"restrict": "A",
+		"restrict": "AC",
 		"template":
 			'<div class="vcard user-mini-profile"><img class="user-photo photo" ng-src="{[{user.photo}]}" class="photo" ng-show="show.photo">'+
 			'<h5 class="fn" ng-bind="user.full_name" ng-show="show.name"></h5>'+

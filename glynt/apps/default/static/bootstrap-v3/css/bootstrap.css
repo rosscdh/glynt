@@ -8342,6 +8342,82 @@ table.lawyer-list.active {
   border-bottom: 1px solid #f1f1f1;
 }
 
+.dashboard-view .widget.project em {
+  font-size: 0.85em;
+  font-style: normal;
+  color: #bfbfbf;
+}
+
+.dashboard-view .widget.project .vcard {
+  display: table-cell;
+  width: 108px;
+  height: 8em;
+  padding-top: 0.7em;
+  padding-bottom: 0.2em;
+  text-align: center;
+  vertical-align: middle;
+  background-color: #f1f1f1;
+}
+
+.dashboard-view .widget.project .vcard img {
+  width: 48px;
+  height: 48px;
+}
+
+.dashboard-view .widget.project .vcard h5 {
+  float: none;
+  margin: 0.7em 0 0 0;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.dashboard-view .project-primary-action .btn {
+  height: 8em;
+  padding-top: 0.7em;
+  padding-bottom: 0.2em;
+}
+
+.dashboard-view .project-primary-action .btn h1,
+.dashboard-view .project-primary-action .btn h2,
+.dashboard-view .project-primary-action .btn h3 {
+  color: white;
+}
+
+.dashboard-view .project-primary-action .btn span.label {
+  font-size: 1em;
+}
+
+.dashboard-view .project-primary-action .btn-open {
+  color: #ffffff;
+  background-color: #5bc0de;
+  border-color: #5bc0de;
+}
+
+.dashboard-view .project-primary-action .btn-open:hover,
+.dashboard-view .project-primary-action .btn-open:focus,
+.dashboard-view .project-primary-action .btn-open:active,
+.dashboard-view .project-primary-action .btn-open.active {
+  color: #ffffff;
+  background-color: #46b8da;
+  border-color: #31b0d5;
+}
+
+.dashboard-view .project-primary-action .btn-open.disabled:hover,
+.dashboard-view .project-primary-action .btn-open[disabled]:hover,
+fieldset[disabled] .dashboard-view .project-primary-action .btn-open:hover,
+.dashboard-view .project-primary-action .btn-open.disabled:focus,
+.dashboard-view .project-primary-action .btn-open[disabled]:focus,
+fieldset[disabled] .dashboard-view .project-primary-action .btn-open:focus,
+.dashboard-view .project-primary-action .btn-open.disabled:active,
+.dashboard-view .project-primary-action .btn-open[disabled]:active,
+fieldset[disabled] .dashboard-view .project-primary-action .btn-open:active,
+.dashboard-view .project-primary-action .btn-open.disabled.active,
+.dashboard-view .project-primary-action .btn-open[disabled].active,
+fieldset[disabled] .dashboard-view .project-primary-action .btn-open.active {
+  background-color: #5bc0de;
+  border-color: #5bc0de;
+}
+
 .empty .empty-message {
   position: relative;
   width: 50%;

@@ -3,8 +3,8 @@
  * @author <a href="mailtolee.j.sinclair@gmail.com">Lee Sinclair</a>
  * Date: 2 Sept 2013
  */
-angular.module("lawpal").controller( "projectsOverviewCtrl", [ "$scope", "lawPalService", "lawPalUrls", "$location", "$anchorScroll", "angularPusher", "toaster", "$modal",
-	function( $scope, lawPalService, lawPalUrls, $location, $anchorScroll, angularPusher, toaster, $modal ) {
+angular.module("lawpal").controller( "projectsOverviewCtrl", [ "$scope", "lawPalService", "lawPalUrls", "$location", "$anchorScroll", "angularPusher", "toaster", "$modal", "$window",
+	function( $scope, lawPalService, lawPalUrls, $location, $anchorScroll, angularPusher, toaster, $modal, $window ) {
 	"use strict";
 	// Load project details
 	$scope.project = {};
@@ -16,12 +16,16 @@ angular.module("lawpal").controller( "projectsOverviewCtrl", [ "$scope", "lawPal
 	};
 
 	$scope.loadProjects = function() {
-		var projects = LawPal.overview.projects.results;
-		for(var i=0;i<projects.length;i++) {
-			projects[i].currentUserEngagement = $scope.engagement(projects[i]);
-		}
-		
-		return projects;
+		lawPalService.getUsersProjects().then(
+			function success( projects ) {
+				// Calculate user Engagement string for easier template usage
+				for(var i=0;i<projects.length;i++) {
+					projects[i].currentUserEngagement = $scope.engagement(projects[i]);
+				}
+				
+				$scope.data.projects = projects;
+			}
+		);
 	};
 
 	$scope.contactUser = function( user ) {
@@ -59,8 +63,7 @@ angular.module("lawpal").controller( "projectsOverviewCtrl", [ "$scope", "lawPal
 		return engagementStatus;
 	};
 
-	$scope.data.projects = $scope.loadProjects();
-	debugger;
+	$scope.loadProjects();
 
 	$scope.openProfileDialog = function( user ) {
 		// profileDialogCtrl
@@ -83,12 +86,8 @@ angular.module("lawpal").controller( "projectsOverviewCtrl", [ "$scope", "lawPal
 		);
 	};
 
+	$scope.viewChecklist = function( baseUrl, project ) {
+		$window.location.href = baseUrl + project.uuid + '/';
+	};
+
 }]);
-/*
-angular.module('lawpal').run(["$templateCache", function($templateCache) {
-	'use strict';
-	$templateCache.put("template/lawpal/project/manageTeam.html",
-		''
-	);
-}]);
-*/

@@ -452,6 +452,31 @@ table.lawyer-list.active {
       border-bottom: 1px solid @light-grey-border-color;
       padding-bottom: 8px;
     }
+    &.project {
+      em { font-style: normal; .text-muted; font-size: 0.85em; }
+      .vcard {
+        display: table-cell;
+        width: 108px;
+        background-color: @light-grey-border-color; 
+        padding-top: 0.7em; 
+        padding-bottom: 0.2em;
+        height: 8em;
+        text-align: center;
+        vertical-align: middle;
+        img { width: 48px; height: 48px; }
+        h5 { float: none; margin: 0.7em 0 0 0; font-size: 1em; font-weight: bold; }
+      }
+    }
+  }
+
+  .project-primary-action {
+    .btn {
+      height: 8em;
+      h1,h2,h3 { color: white;}
+      padding-top: 0.7em; padding-bottom: 0.2em; 
+      span.label { font-size: 1em; }
+    }
+    .btn-open { .btn-info; }
   }
 }
 

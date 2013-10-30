@@ -3,14 +3,13 @@
  * @author : Lee Sinclair
  * date 17 Oct 2013
  */
-angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster', '$modal', 'discussionItemService', function ( lawPalService, toaster, $modal, discussionItemService ) {
+angular.module('lawpal').directive('discussionList', [ function ( lawPalService, toaster, $modal, discussionItemService ) {
 	'use strict';
 	return {
 		"restrict": "AC",
 		"templateUrl":'template/lawpal/discussion/list.html',
 		"scope": {
-			"discussions": "=discussion",
-			"tag": "=tag"
+			"counts": "=counts"
 		},
 		"link": function (/*scope, iElement, iAttrs*/) {
 		},
