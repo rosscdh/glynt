@@ -18,7 +18,10 @@
         <div class="col-12">
             <div class="col-lg-6" ng-repeat="project in data.projects">
                 <div class="widget project clearfix">
-                    <span class="text-success pull-right engagement-{[{project.currentUserEngagement|lowercase}]}" ng-bind="project.currentUserEngagement"></span>
+                    <span class="pull-right engagement-{[{project.currentUserEngagement|lowercase}]}">
+                        <i class="icon icon-ok" ng-show="project.currentUserEngagement=='Engaged'"></i>
+                        <span ng-bind="project.currentUserEngagement"></span>
+                    </span>
                     <a class="btn btn-link pull-right" ng-href="{% url 'dashboard:overview' %}{[{project.uuid}]}/" ng-show="project.currentUserEngagement=='Engaged'">View</a>
                     <h3 ng-bind="project.company.name"></h3>
                     <div class="row">

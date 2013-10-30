@@ -8324,6 +8324,24 @@ table.lawyer-list.active {
   border: 0;
 }
 
+.dashboard-view [class^="engagement-"],
+.dashboard-view [class*=" engagement-"] {
+  padding: 6px 12px;
+}
+
+.dashboard-view .engagement-engaged {
+  color: #468847;
+}
+
+.dashboard-view .engagement-proposed {
+  color: #f0ad4e;
+}
+
+.dashboard-view .widget h3 {
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f1f1f1;
+}
+
 .empty .empty-message {
   position: relative;
   width: 50%;

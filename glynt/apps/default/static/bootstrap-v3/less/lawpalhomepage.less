@@ -1,6 +1,7 @@
 //
 // LawPal Homepage
 // --------------------------------------------------
+@light-grey-border-color: #f1f1f1;
 
 .text-primary {
   color: @brand-primary;
@@ -71,7 +72,7 @@
   		}
   	}
     .pricing {
-      background-color:#f1f1f1;
+      background-color:@light-grey-border-color;
       .price {
         background-color:white;
         padding:30px 18px;
@@ -433,6 +434,25 @@ table.lawyer-list.active {
 .dashboard-view .page-header,
 .checklist-view .page-header {
   border: 0;
+}
+
+.dashboard-view {
+  [class^="engagement-"], [class*=" engagement-"] {
+      padding: 6px 12px;
+  }
+
+  .engagement-engaged { 
+    .text-success;
+  }
+  .engagement-proposed { .text-warning; }
+
+
+  .widget {
+    h3 {
+      border-bottom: 1px solid @light-grey-border-color;
+      padding-bottom: 8px;
+    }
+  }
 }
 
 .empty {
