@@ -5,15 +5,18 @@
 angular.module('lawpal').run(["$templateCache", function($templateCache) {
 	'use strict';
 	$templateCache.put("template/lawpal/discussion/list.html",
-		'<button class="btn btn-link btn-small pull-right widget-title-button" ng-click="new(null)">\n'+
+		'<button class="btn btn-link btn-small pull-right widget-title-button" ng-click="new(null)" ng-show="title">\n'+
 		'	<i class="icon icon-plus"></i>\n'+
 		'		&nbsp;New\n'+
 		'</button>\n'+
-		'<h3>Discussions and Issues</h3>\n'+
+		'<h3 ng-show="title" ng-bind="title">Discussions and Issues</h3>\n'+
 		'<span ng-show="working.loading" class="text-muted"><i class="icon icon-spinner icon-spin"></i> Loading discussions</span>\n'+
-		'<p ng-show="working.discussions.length==0" class="text-muted"><button class="btn btn-link" ng-click="new(null)">Start a discussion</button></p>\n'+
+		'<em><span ng-show="paging" class="text-muted">Discussion {[{starting+1}]}/{[{working.discussions.length}]}</span>\n'+
+		'<a ng-show="paging" class="text-muted" ng-click="movePage(-1)">&lt; previous</a>\n'+
+		'<a ng-show="paging" class="text-muted" ng-click="movePage(+1)">next &gt;</a></em>\n'+
+		'<p ng-show="working.discussions.length==0"><button class="btn btn-link" ng-click="new(null)">Start a discussion</button></p>\n'+
 		'<table class="table table-striped">\n'+
-		'	<tr ng-repeat="discussion in working.discussions  | orderBy:\'latest.id\':true" class="byme-{[{byMe(discussion.latest.meta.user.pk)}]} discussion-item"  ng-click="displayDiscussion( $event, discussion)">\n'+
+		'	<tr ng-repeat="discussion in working.discussions | startFrom: starting | limitTo: pageLimit" class="byme-{[{byMe(discussion.latest.meta.user.pk)}]} discussion-item"  ng-click="displayDiscussion( $event, discussion)">\n'+
 		'		<td class="status-column clickable">\n'+
 		'			<i class="icon icon-comment nest">\n'+
 		'				<small class="nested text-primary" ng-bind="discussion.original.count">1</small>\n'+
@@ -29,7 +32,7 @@ angular.module('lawpal').run(["$templateCache", function($templateCache) {
 		'		<td class="comment-column">\n'+
 		'			<div class="comment clickable">\n'+
 		'			    <p class="discussion-title"><strong ng-bind="discussion.original.title | characters:50">&nbsp;</strong></p>\n'+
-		'			    <p ng-bind="discussion.latest.comment | characters:200"></p>\n'+
+		'			    <p ng-bind="discussion.latest.comment | characters:descriptionTextLimit"></p>\n'+
 		'			</div>\n'+
 		'		</td>\n'+
 		'		<td class="more-column clickable" tooltip="Respond now" tooltip-append-to-body="true" ng-click="reply( $event, discussion.original)">\n'+
@@ -39,6 +42,6 @@ angular.module('lawpal').run(["$templateCache", function($templateCache) {
 		/*'			<i class="icon icon-chevron-right text-muted"></i>\n'+*/
 		'		</td>\n'+
 		'	</tr>\n'+
-		'</table>\n'
-	);
+		'</table>\n'+
+	'');
 }]);

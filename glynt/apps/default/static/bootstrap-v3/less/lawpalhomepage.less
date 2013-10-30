@@ -454,7 +454,7 @@ table.lawyer-list.active {
     }
     &.project {
       em { font-style: normal; .text-muted; font-size: 0.85em; }
-      .vcard {
+      .client .vcard {
         display: table-cell;
         width: 108px;
         background-color: @light-grey-border-color; 
@@ -466,6 +466,8 @@ table.lawyer-list.active {
         img { width: 48px; height: 48px; }
         h5 { float: none; margin: 0.7em 0 0 0; font-size: 1em; font-weight: bold; }
       }
+      .col-9 { padding-left: 0; }
+      .discussion-item { height: 8em; }
     }
   }
 
@@ -477,6 +479,8 @@ table.lawyer-list.active {
       span.label { font-size: 1em; }
     }
     .btn-open { .btn-info; }
+    .btn-pending { .btn-warning; }
+    .btn-awaiting_feedback_from_user { .btn-danger; }
   }
 }
 

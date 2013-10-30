@@ -46,19 +46,19 @@ angular.module('lawpal').directive('discussionViewer', ['$compile', '$timeout', 
          * Start the process of showing a full discussion
          * @param  {Object} discussion Discussion object
          */
-        function showDiscussion(discussion) {
+        function showDiscussion( discussion, projectUuid ) {
           $scope.discussions.push(discussion);
           //$(".full-dialog-container").hide().fadeIn("slow");  // To be replaced with ngAnimate when it becomes standard
           $location.path('/discussion/' + discussion.original.id);
-          $scope.loadFullDiscussion( discussion.original.id );
+          $scope.loadFullDiscussion( discussion.original.id, projectUuid );
         }
 
         /**
          * Start the process of loading the full discussion
          * @param  {Object} discussion Discussion object
          */
-        $scope.loadFullDiscussion = function( discussionId ) {
-          discussionItemService.load( discussionId, function( err, results){
+        $scope.loadFullDiscussion = function( discussionId, projectUuid ) {
+          discussionItemService.load( discussionId, projectUuid, function( err, results){
             $scope.replies = results.thread;
             if( $scope.discussions.length===0 ) {
               $scope.discussions.push({
@@ -70,8 +70,8 @@ angular.module('lawpal').directive('discussionViewer', ['$compile', '$timeout', 
         };
 
         /* Listen when the user requests to see a full discussion */
-        $scope.$on('discussion-show', function ( evt, discussion ) {
-          showDiscussion( discussion );
+        $scope.$on('discussion-show', function ( evt, discussion, projectUuid ) {
+          showDiscussion( discussion, projectUuid );
           $anchorScroll();
         });
 

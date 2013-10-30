@@ -33,8 +33,7 @@
                                     <div class="project-primary-action" data-counts="project.counts" data-project-uuid="project.uuid" data-base-url="'{% url 'dashboard:overview' %}'"></div>
                                 </div>
                                 <div class="col-9">
-                                    <em>Discussion 1/3</em>
-                                    <p>Discussion here</p>
+                                    <div class="discussion-list" data-discussion="project.discussions" data-tag="'discussion'" data-page-limit="1" data-project-uuid="project.uuid" data-description-text-limit="80" order-by-date="false"></div>
                                 </div>
                             </div>
                         </span>
@@ -47,14 +46,14 @@
                         <span>
                             <h3 ng-bind="project.company.name"></h3>
                             <div class="row">
-                                <div class="col-3">
+                                <div class="col-3 client">
                                     <em>Client</em>
                                     <div class="widget-content user-mini-widget" data-user="project.customer">
                                     </div>
                                 </div>
                                 <div class="col-9">
-                                    <em>Discussion 1/3</em>
-                                    <p>Discussion here</p>
+                                    <em>Discussion <span ng-show="project.discussions.length>0">1/{[{project.discussions.length}]}</span></em>
+                                    <div class="discussion-list" data-discussion="project.discussions" data-tag="'discussion'" data-page-limit="1" data-project-uuid="project.uuid"></div>
                                 </div>
                             </div>
                         </span>
@@ -128,7 +127,7 @@
         </div>
     </div>
 </div>
-
+<div class="discussion-viewer"></div>
 {% include 'dashboard/modals/overview-modal.html' %}
 {% endblock %}
 
@@ -145,7 +144,10 @@
             'full_name': '{{ user.get_full_name }}',
             'is_authenticated': {{ user.is_authenticated|jsonify }}
         },
-        'overview': {{ json|jsonify }}
+        'overview': {{ json|jsonify }},
+        'project': {
+            'content_type_id': {{ project.content_type_id|default:None|jsonify }}
+        }
     }
 </script>;
 {% endblock %}

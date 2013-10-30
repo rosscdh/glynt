@@ -8348,7 +8348,7 @@ table.lawyer-list.active {
   color: #bfbfbf;
 }
 
-.dashboard-view .widget.project .vcard {
+.dashboard-view .widget.project .client .vcard {
   display: table-cell;
   width: 108px;
   height: 8em;
@@ -8359,16 +8359,24 @@ table.lawyer-list.active {
   background-color: #f1f1f1;
 }
 
-.dashboard-view .widget.project .vcard img {
+.dashboard-view .widget.project .client .vcard img {
   width: 48px;
   height: 48px;
 }
 
-.dashboard-view .widget.project .vcard h5 {
+.dashboard-view .widget.project .client .vcard h5 {
   float: none;
   margin: 0.7em 0 0 0;
   font-size: 1em;
   font-weight: bold;
+}
+
+.dashboard-view .widget.project .col-9 {
+  padding-left: 0;
+}
+
+.dashboard-view .widget.project .discussion-item {
+  height: 8em;
 }
 
 .dashboard-view .project-primary-action .btn {
@@ -8416,6 +8424,68 @@ fieldset[disabled] .dashboard-view .project-primary-action .btn-open:active,
 fieldset[disabled] .dashboard-view .project-primary-action .btn-open.active {
   background-color: #5bc0de;
   border-color: #5bc0de;
+}
+
+.dashboard-view .project-primary-action .btn-pending {
+  color: #ffffff;
+  background-color: #f0ad4e;
+  border-color: #f0ad4e;
+}
+
+.dashboard-view .project-primary-action .btn-pending:hover,
+.dashboard-view .project-primary-action .btn-pending:focus,
+.dashboard-view .project-primary-action .btn-pending:active,
+.dashboard-view .project-primary-action .btn-pending.active {
+  color: #ffffff;
+  background-color: #eea236;
+  border-color: #ec971f;
+}
+
+.dashboard-view .project-primary-action .btn-pending.disabled:hover,
+.dashboard-view .project-primary-action .btn-pending[disabled]:hover,
+fieldset[disabled] .dashboard-view .project-primary-action .btn-pending:hover,
+.dashboard-view .project-primary-action .btn-pending.disabled:focus,
+.dashboard-view .project-primary-action .btn-pending[disabled]:focus,
+fieldset[disabled] .dashboard-view .project-primary-action .btn-pending:focus,
+.dashboard-view .project-primary-action .btn-pending.disabled:active,
+.dashboard-view .project-primary-action .btn-pending[disabled]:active,
+fieldset[disabled] .dashboard-view .project-primary-action .btn-pending:active,
+.dashboard-view .project-primary-action .btn-pending.disabled.active,
+.dashboard-view .project-primary-action .btn-pending[disabled].active,
+fieldset[disabled] .dashboard-view .project-primary-action .btn-pending.active {
+  background-color: #f0ad4e;
+  border-color: #f0ad4e;
+}
+
+.dashboard-view .project-primary-action .btn-awaiting_feedback_from_user {
+  color: #ffffff;
+  background-color: #d9534f;
+  border-color: #d9534f;
+}
+
+.dashboard-view .project-primary-action .btn-awaiting_feedback_from_user:hover,
+.dashboard-view .project-primary-action .btn-awaiting_feedback_from_user:focus,
+.dashboard-view .project-primary-action .btn-awaiting_feedback_from_user:active,
+.dashboard-view .project-primary-action .btn-awaiting_feedback_from_user.active {
+  color: #ffffff;
+  background-color: #d43f3a;
+  border-color: #c9302c;
+}
+
+.dashboard-view .project-primary-action .btn-awaiting_feedback_from_user.disabled:hover,
+.dashboard-view .project-primary-action .btn-awaiting_feedback_from_user[disabled]:hover,
+fieldset[disabled] .dashboard-view .project-primary-action .btn-awaiting_feedback_from_user:hover,
+.dashboard-view .project-primary-action .btn-awaiting_feedback_from_user.disabled:focus,
+.dashboard-view .project-primary-action .btn-awaiting_feedback_from_user[disabled]:focus,
+fieldset[disabled] .dashboard-view .project-primary-action .btn-awaiting_feedback_from_user:focus,
+.dashboard-view .project-primary-action .btn-awaiting_feedback_from_user.disabled:active,
+.dashboard-view .project-primary-action .btn-awaiting_feedback_from_user[disabled]:active,
+fieldset[disabled] .dashboard-view .project-primary-action .btn-awaiting_feedback_from_user:active,
+.dashboard-view .project-primary-action .btn-awaiting_feedback_from_user.disabled.active,
+.dashboard-view .project-primary-action .btn-awaiting_feedback_from_user[disabled].active,
+fieldset[disabled] .dashboard-view .project-primary-action .btn-awaiting_feedback_from_user.active {
+  background-color: #d9534f;
+  border-color: #d9534f;
 }
 
 .empty .empty-message {

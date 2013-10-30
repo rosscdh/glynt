@@ -21,6 +21,9 @@ angular.module("lawpal").controller( "projectsOverviewCtrl", [ "$scope", "lawPal
 				// Calculate user Engagement string for easier template usage
 				for(var i=0;i<projects.length;i++) {
 					projects[i].currentUserEngagement = $scope.engagement(projects[i]);
+					projects[i].discussions = [];
+					projects[i].discussionItemNum = 0;
+					$scope.loadProjectDiscussions( projects[i] );
 				}
 				
 				$scope.data.projects = projects;
@@ -28,9 +31,22 @@ angular.module("lawpal").controller( "projectsOverviewCtrl", [ "$scope", "lawPal
 		);
 	};
 
+	$scope.loadProjectDiscussions = function( project ) {
+		var user = lawPalService.getCurrentUser();
+		lawPalService.getRecentDiscussions( project.id, user.pk ).then(
+			function success( discussions ) {
+				project.discussions = discussions;
+			}
+		);
+	};
+
 	$scope.contactUser = function( user ) {
 			//window.location.href = "mailto://" + user.email, "email_window";
 			$scope.openProfileDialog( user );
+	};
+
+	$scope.projectDiscussions = function( project ) {
+		return project.discussions || [];
 	};
 
 	$scope.loadDiscussions = function() {
@@ -43,17 +59,9 @@ angular.module("lawpal").controller( "projectsOverviewCtrl", [ "$scope", "lawPal
 		);
 	};
 
-	$scope.currentUser = function() {
-		return lawPalService.getCurrentUser();
-	};
-
-	$scope.isCurrentUser = function( upk ) {
-		return lawPalService.getCurrentUser().pk===upk;
-	};
-
 	$scope.engagement = function( project ) {
 		var engagementStatus = "Proposed";
-		var user = LawPal.user;
+		var user = lawPalService.getCurrentUser();
 
 		var lawyers = project.lawyers || [];
 		engagementStatus = lawyers.filter( function( lawyer ){
@@ -88,6 +96,10 @@ angular.module("lawpal").controller( "projectsOverviewCtrl", [ "$scope", "lawPal
 
 	$scope.viewChecklist = function( baseUrl, project ) {
 		$window.location.href = baseUrl + project.uuid + '/';
+	};
+
+	$scope.incrementDiscussionPage = function( project ) {
+		project.discussionItemNum = project.discussionItemNum+1;
 	};
 
 }]);

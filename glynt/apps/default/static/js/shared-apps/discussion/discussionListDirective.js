@@ -3,24 +3,53 @@
  * @author : Lee Sinclair
  * date 17 Oct 2013
  */
-angular.module('lawpal').directive('discussionList', [ function ( lawPalService, toaster, $modal, discussionItemService ) {
+angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster', '$modal', 'discussionItemService', function ( lawPalService, toaster, $modal, discussionItemService ) {
 	'use strict';
 	return {
 		"restrict": "AC",
 		"templateUrl":'template/lawpal/discussion/list.html',
 		"scope": {
-			"counts": "=counts"
+			"discussions": "=discussion",
+			"tag": "=tag",
+			"title": "=title",
+			"projectUuid": "=projectUuid"
 		},
 		"link": function (/*scope, iElement, iAttrs*/) {
 		},
-		"controller": [ '$scope', '$element', '$attrs', function( $scope/*, $element, $attrs*/ ) {
-			var working = {
-				"dicussions": {}
+		"controller": [ '$scope', '$element', '$attrs', function( $scope, $element, $attrs ) {
+			$scope.working = {
+				"discussions": [],
+				"loading": true
 			};
 
-			$scope.working = {
-				"discussions": {},
-				"loading": true
+			$scope.pageLimit = 100;
+			$scope.page = 0;
+			$scope.starting = 0;
+			$scope.paging = false;
+			$scope.maxPages = 100;
+			$scope.descriptionTextLimit = 200;
+			$scope.orderByDate = true;
+
+			if( $attrs.pageLimit ) {
+				$scope.pageLimit = parseInt($attrs.pageLimit, 10);
+				$scope.page = $attrs.page || 0;
+				$scope.starting = $scope.page * $scope.pageLimit;
+			}
+
+			if($attrs.orderByDate) {
+				$scope.orderByDate = $attrs.orderByDate==="false"?false:true;
+			}
+
+			if($attrs.descriptionTextLimit) {
+				$scope.descriptionTextLimit = parseInt($attrs.descriptionTextLimit,10);
+			}
+
+			$scope.movePage = function( amt ) {
+				var maxPages = parseInt($scope.working.discussions.length / $scope.pageLimit, 10) -1;
+				$scope.page = $scope.page + amt;
+				$scope.page = Math.min(maxPages,$scope.page);
+				$scope.page = $scope.page>=0?$scope.page:0;
+				$scope.starting = $scope.page * $scope.pageLimit;
 			};
 			
 			/**
@@ -38,15 +67,15 @@ angular.module('lawpal').directive('discussionList', [ function ( lawPalService,
 			 * @param  {Integer} parentId PK of comment of the parent (optional)
 			 * @param  {Integer} childId  PK of the child comment (optional)
 			 */
-			$scope.generateWorkingDiscussionData = function() {
+			$scope.generateWorkingDiscussionData = function( discussions ) {
 				var dItem;
 				var data = [];
 				
-				if( !angular.isArray($scope.discussions) ) {
+				if( !angular.isArray(discussions) ) {
 					return [];
 				}
 
-				var dis = $scope.discussions.filter(
+				var dis = discussions.filter(
 					function( item ) {
 						return item.parent_id===null;
 					}
@@ -61,15 +90,27 @@ angular.module('lawpal').directive('discussionList', [ function ( lawPalService,
 					data.push(dItem);
 				}
 
+				if( $scope.orderByDate && data.length>0 ) {
+					console.log("ordering");
+					data = data.sort( function( item1, item2 ){
+						return item1.latest.id < item2.latest.id;
+					});
+				}
+
 				$scope.working.loading = false;
 				$scope.working.discussions = data; //$scope.data.discussions;
+				if( data.length>0 && $attrs.pageLimit ) {
+					$scope.paging = true;
+				}
 			};
 
 			/**
 			 * Watch the discussions variable for changes (deep watch)
 			 */
-			$scope.$watch( 'discussions', function () {
-				$scope.generateWorkingDiscussionData();
+			$scope.$watch( 'discussions', function ( nv ) {
+				if( typeof(nv)!=="undefined" && nv ) {
+					$scope.generateWorkingDiscussionData( nv );
+				}
 			}, true);
 
 			/**
@@ -77,7 +118,8 @@ angular.module('lawpal').directive('discussionList', [ function ( lawPalService,
 			 * @param  {Object} discussion Discussion item to display
 			 */
 			$scope.displayDiscussion = function( $event, discussion ) {
-				discussionItemService.show( discussion );
+				$scope.projectUuid;
+				discussionItemService.show( discussion, $scope.projectUuid );
 			};
 
 			/**
@@ -93,7 +135,7 @@ angular.module('lawpal').directive('discussionList', [ function ( lawPalService,
 			 */
 			$scope.reply = function( $event, discussion ){
 				$event.stopPropagation();
-				discussionItemService.reply( discussion );
+				discussionItemService.reply( discussion, $scope.projectUuid );
 			};
 
 			/**
@@ -123,3 +165,12 @@ angular.module('lawpal').directive('discussionList', [ function ( lawPalService,
 		}]
 	};
 }]);
+
+//We already have a limitTo filter built-in to angular,
+//let's make a startFrom filter
+angular.module('lawpal').filter('startFrom', function() {
+    return function(input, start) {
+        start = +start; //parse to int
+        return input.slice(start);
+    }
+});
