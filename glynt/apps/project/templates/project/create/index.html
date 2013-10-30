@@ -34,6 +34,11 @@
         {% include 'project/create/slides/fixed-fee/financing.html' %}
     </div>
 
+    <form id="transaction-form" method="POST">
+        {% csrf_token %}
+        {{ form }}
+    </form>
+
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="{{ STATIC_URL }}temp/js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
     <script src="{{ STATIC_URL }}temp/js/bootstrap.min.js"></script>
