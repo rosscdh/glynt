@@ -6,7 +6,7 @@ helper.scenario(casper.cli.options.url,
     function() {
         // Test existance of core elements
         //this.echo(this.debugHTML())
-        this.test.assertHttpStatus(200);
+        //this.test.assertHttpStatus(200);
         this.test.assertTitle('Overview');
         this.test.assertSelectorHasText('h1', 'Your LawPal Projects', 'Header Text on Page');
 
@@ -40,7 +40,8 @@ helper.scenario(casper.cli.options.url,
             function fail() {
                 this.test.assertExists(".widget .engagement-proposed");
         });
-
+    },
+    function () {
         // Displays customer name
         casper.waitForSelector(".project-proposed .user-mini-widget h5",
             function success() {
