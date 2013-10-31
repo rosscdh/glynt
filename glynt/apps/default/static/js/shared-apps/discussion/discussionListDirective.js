@@ -44,6 +44,10 @@ angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster
 				$scope.descriptionTextLimit = parseInt($attrs.descriptionTextLimit,10);
 			}
 
+			/**
+			 * Page through discussions by page size
+			 * @param  {Number} amt -1 or 1 page which direction to page through
+			 */
 			$scope.movePage = function( amt ) {
 				var maxPages = parseInt($scope.working.discussions.length / $scope.pageLimit, 10) -1;
 				$scope.page = $scope.page + amt;

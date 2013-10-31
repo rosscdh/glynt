@@ -559,10 +559,18 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 			return LawPal.project.id;
 		},
 
+		/**
+		 * Returns the current project UUID
+		 * @return {String} Project UUID
+		 */
 		"getProjectUuid": function() {
 			return LawPal.project.uuid;
 		},
 
+		/**
+		 * Returns the content type ID for the project content type
+		 * @return {Number} Project content type ID
+		 */
 		'projectContentTypeId': function() {
 			if( typeof(LawPal.project)==='function')
 				return LawPal.project().content_type_id;
@@ -578,6 +586,11 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 			return (LawPal.user && LawPal.user.is_authenticated?LawPal.user:null);
 		},
 
+		/**
+		 * Given an array of usernames search for full user profiles
+		 * @param  {Array} users Array of usernames
+		 * @return {Function}       promise
+		 */
 		'usernameSearch': function( users ) {
 			var deferred = $q.defer();
 			var userList = [];
@@ -631,6 +644,11 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 			return deferred.promise;
 		},
 
+		/**
+		 * Search for users using their email addresses
+		 * @param  {String} str Email address partial
+		 * @return {Function}     promise
+		 */
 		'emailSearch': function( str ) {
 			var deferred = $q.defer();
 
@@ -652,6 +670,10 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 			return deferred.promise;
 		},
 
+		/**
+		 * Retrieve discussions for a specific project
+		 * @return {Function} promise
+		 */
 		'discussionList': function() {
 			var deferred = $q.defer();
 			var projectUuid = this.getProjectUuid();
@@ -669,6 +691,12 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 			return deferred.promise;
 		},
 
+		/**
+		 * Retrieve a full discussion for a specific discussion base
+		 * @param  {Number} discussionId discussion ID
+		 * @param  {String} pUuid        project UUID (optinal)
+		 * @return {Function}              promise
+		 */
 		'fullDiscussion': function( discussionId, pUuid ) {
 			var deferred = $q.defer();
 			var projectUuid = pUuid || this.getProjectUuid();
@@ -686,6 +714,12 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 			return deferred.promise;
 		},
 
+		/**
+		 * Post discussion to API
+		 * @param  {Object} message Discussion object
+		 * @param  {String} pUuid   Project UUID (optional)
+		 * @return {Function}         promise
+		 */
 		'addDiscussion': function( message, pUuid ) {
 			var deferred = $q.defer();
 			var projectUuid = pUuid || this.getProjectUuid();
