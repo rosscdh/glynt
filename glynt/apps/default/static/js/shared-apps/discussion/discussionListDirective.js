@@ -34,8 +34,9 @@ angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster
 				$scope.pageLimit = parseInt($attrs.pageLimit, 10);
 				$scope.page = $attrs.page || 0;
 				$scope.starting = $scope.page * $scope.pageLimit;
+				$scope.maxPages = parseInt($scope.working.discussions.length / $scope.pageLimit, 10) -1;
 			}
-
+			
 			if($attrs.orderByDate) {
 				$scope.orderByDate = $attrs.orderByDate==="false"?false:true;
 			}
@@ -49,9 +50,9 @@ angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster
 			 * @param  {Number} amt -1 or 1 page which direction to page through
 			 */
 			$scope.movePage = function( amt ) {
-				var maxPages = parseInt($scope.working.discussions.length / $scope.pageLimit, 10) -1;
+				$scope.maxPages = parseInt($scope.working.discussions.length / $scope.pageLimit, 10) -1;
 				$scope.page = $scope.page + amt;
-				$scope.page = Math.min(maxPages,$scope.page);
+				$scope.page = Math.min($scope.maxPages,$scope.page);
 				$scope.page = $scope.page>=0?$scope.page:0;
 				$scope.starting = $scope.page * $scope.pageLimit;
 			};
@@ -102,7 +103,8 @@ angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster
 				}
 
 				$scope.working.loading = false;
-				$scope.working.discussions = data; //$scope.data.discussions;
+				$scope.working.discussions = data;
+				// Set paging flag, which is used in the HTML to determine if the pagination controlls should e displayed
 				if( data.length>0 && $attrs.pageLimit ) {
 					$scope.paging = true;
 				}

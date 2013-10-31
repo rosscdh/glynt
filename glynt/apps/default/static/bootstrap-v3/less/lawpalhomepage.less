@@ -473,7 +473,6 @@ table.lawyer-list.active {
       .discussion-item { height: 8em; }
       em button {
         padding: 0 3px;
-        &[disabled="disabled"] { .text-muted; }
       }
       .progress { margin-bottom: 0; }
       padding-bottom: 0;
@@ -496,6 +495,10 @@ table.lawyer-list.active {
   .btn-awaiting_feedback_from_user { .btn-danger; }
   .btn-closed { .btn-success; }
   .btn-8em { height: 8em; text-align: center; background-color: @light-grey-border-color; padding-top: 3.5em; padding-bottom: 3.5em; }
+}
+
+.btn-link {
+  &[disabled="disabled"] { .text-muted; }
 }
 
 .empty {

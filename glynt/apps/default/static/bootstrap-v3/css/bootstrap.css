@@ -8396,10 +8396,6 @@ table.lawyer-list.active {
   padding: 0 3px;
 }
 
-.dashboard-view .widget.project em button[disabled="disabled"] {
-  color: #bfbfbf;
-}
-
 .dashboard-view .widget.project .progress {
   margin-bottom: 0;
 }
@@ -8556,6 +8552,10 @@ fieldset[disabled] .dashboard-view .btn-closed.active {
   padding-bottom: 3.5em;
   text-align: center;
   background-color: #f1f1f1;
+}
+
+.btn-link[disabled="disabled"] {
+  color: #bfbfbf;
 }
 
 .empty .empty-message {
