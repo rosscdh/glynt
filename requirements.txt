@@ -120,6 +120,8 @@ mock
 -e git+https://github.com/vandersonmota/model_mommy.git#egg=model_mommy
 -e git+git://github.com/neubloc/django-colortools#egg=django-colortools
 pyquery
+# in mem storage for files helps speed up tests
+django-inmemorystorage
 
 # Abridge integration
 -e git+https://github.com/rosscdh/django-abridge.git#egg=django-abridge
