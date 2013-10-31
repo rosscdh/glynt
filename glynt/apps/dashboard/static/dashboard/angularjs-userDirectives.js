@@ -35,10 +35,18 @@ angular.module('lawpal').directive('userMiniWidget', function () {
 					$scope.show[key]=true;
 				}
 			}
+
+			/**
+			 * Not yet implemented, the idea here is that this would show a contact dialog, instead of a direct email link
+			 */
 			$scope.contactUser = function() {
 				console.log("Contact user");
 			};
 
+			/**
+			 * Returns true if contact/user has contact information
+			 * @return {Boolean} has contact info true || false
+			 */
 			$scope.hasContact = function() {
 				// return true if user has an email address
 				return (typeof($scope.user.email) === "string" );

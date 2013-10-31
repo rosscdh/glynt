@@ -1,5 +1,7 @@
 /**
  * Primary action directive
+ * 	Determines which action feedback, pending, open, new or closed is most important to the end user
+ * 	It displays a big button representing the primary action
  * @author : Lee Sinclair
  * date 3- Oct 2013
  */
@@ -16,7 +18,7 @@ angular.module('lawpal').directive('projectPrimaryAction', [ function ( ) {
 		"link": function (/*scope, iElement, iAttrs*/) {
 		},
 		"controller": [ '$scope', '$element', '$attrs', function( $scope/*, $element, $attrs*/ ) {
-			console.log( "s", $scope );
+			
 			var counts = $scope.counts;
 			$scope.weightings = [
 				{ "name": "awaiting_feedback_from_user", "weighting": ( counts.awaiting_feedback_from_user?1:0 ) * 5, "value": counts.awaiting_feedback_from_user, "label": "Feedback" },
@@ -30,8 +32,10 @@ angular.module('lawpal').directive('projectPrimaryAction', [ function ( ) {
 				return item1.weighting < item2.weighting;
 			});
 
-			console.log($scope.weightings);
-
+			/**
+			 * topPriority is the action determined as having the highest importance
+			 * @type {Object}
+			 */
 			$scope.topPriority = $scope.weightings[0];
 			$scope.topPriority.url = $scope.baseUrl + $scope.projectUuid + '/checklist/#' + $scope.topPriority.label;
 

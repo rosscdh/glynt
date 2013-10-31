@@ -15,6 +15,9 @@ angular.module("lawpal").controller( "projectsOverviewCtrl", [ "$scope", "lawPal
 		"discussionCategories": [ /*"issue", */"discussion" ]
 	};
 
+	/**
+	 * Load an array of projects for which the current user has an association
+	 */
 	$scope.loadProjects = function() {
 		lawPalService.getUsersProjects().then(
 			function success( projects ) {
@@ -31,6 +34,10 @@ angular.module("lawpal").controller( "projectsOverviewCtrl", [ "$scope", "lawPal
 		);
 	};
 
+	/**
+	 * Load discussions for a speicfic project
+	 * @param  {Object} project project object
+	 */
 	$scope.loadProjectDiscussions = function( project ) {
 		var user = lawPalService.getCurrentUser();
 		lawPalService.getRecentDiscussions( project.id, user.pk ).then(
@@ -40,25 +47,11 @@ angular.module("lawpal").controller( "projectsOverviewCtrl", [ "$scope", "lawPal
 		);
 	};
 
-	$scope.contactUser = function( user ) {
-			//window.location.href = "mailto://" + user.email, "email_window";
-			$scope.openProfileDialog( user );
-	};
-
-	$scope.projectDiscussions = function( project ) {
-		return project.discussions || [];
-	};
-
-	$scope.loadDiscussions = function() {
-		lawPalService.discussionList().then(
-			function success( results ) {
-				$scope.data.discussions = results;
-				//$scope.generateWorkingDiscussionData();
-			},
-			function error( /*err*/ ) { }
-		);
-	};
-
+	/**
+	 * Determine the project engagement status for a specific project for the current user
+	 * @param  {Object} project Project Object
+	 * @return {String}         'Engaged' / 'Proposed'
+	 */
 	$scope.engagement = function( project ) {
 		var engagementStatus = "Proposed";
 		var user = lawPalService.getCurrentUser();
@@ -73,6 +66,10 @@ angular.module("lawpal").controller( "projectsOverviewCtrl", [ "$scope", "lawPal
 
 	$scope.loadProjects();
 
+	/**
+	 * Display profile details
+	 * @param  {Object} user User profile object
+	 */
 	$scope.openProfileDialog = function( user ) {
 		// profileDialogCtrl
 		var modalInstance = $modal.open({
@@ -94,13 +91,12 @@ angular.module("lawpal").controller( "projectsOverviewCtrl", [ "$scope", "lawPal
 		);
 	};
 
+	/**
+	 * Display checklist view
+	 * @param  {String} baseUrl Base URL string
+	 * @param  {Object} project Project object
+	 */
 	$scope.viewChecklist = function( baseUrl, project ) {
 		$window.location.href = baseUrl + project.uuid + '/';
-	};
-
-	$scope.percentageComplete = function( project ) {
-		var complete = (project&&project.counts&&project.counts.closed)?project.counts.closed:0;
-		var total = (project&&project.counts&&project.counts.total)?project.counts.total:1;
-		return parseInt(complete / total * 100,10);
 	};
 }]);
