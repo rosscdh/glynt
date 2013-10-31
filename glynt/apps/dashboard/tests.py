@@ -31,14 +31,13 @@ class DashboardLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
         resp = self.client.get(self.url)
 
         self.assertEqual(resp.status_code, 200)
-        """
-        self.assertTrue('project' in resp.context)
-        self.assertEqual(type(resp.context['project']), Project)
 
-        self.assertTrue('counts' in resp.context)
-        self.assertEqual(type(resp.context['counts']), dict)
-        import pdb;pdb.set_trace()
-        """
+        self.assertTrue('project' in resp.context_data)
+        self.assertEqual(type(resp.context_data['project']), Project)
+
+        self.assertTrue('counts' in resp.context_data)
+        self.assertEqual(type(resp.context_data['counts']), dict)
+
         self.assertTrue(self.load_casper_file(js_file='dashboard_access.js', test_label='Test the Dashboard Access for a Lawyer Acce', url=self.url))
 
     def test_lawyer_dashboard_js(self):
@@ -52,7 +51,6 @@ class DashboardLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
         self.project_lawyer_join.save(update_fields=['status'])
 
         self.assertTrue(self.load_casper_file(js_file='dashboard.js', test_label='Test the Dashboard View for a Lawyer', url=self.url))
-        # from nose.tools import set_trace; set_trace()
 
 
 class ChecklistLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
