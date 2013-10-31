@@ -4,16 +4,15 @@
 """
 from django.core.urlresolvers import reverse
 
-from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin, glynt_mock_http_requests
+from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin
 from glynt.apps.project.models import Project, ProjectLawyer
-
 
 from model_mommy import mommy
 
 import os
 
 
-class DashboardLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
+class DashboardLawyerTest(BaseLawyerCustomerProjectCaseMixin):
     test_path = os.path.dirname(__file__)
 
     def setUp(self):
@@ -38,7 +37,7 @@ class DashboardLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
         self.assertTrue('counts' in resp.context_data)
         self.assertEqual(type(resp.context_data['counts']), dict)
 
-        self.assertTrue(self.load_casper_file(js_file='dashboard_access.js', test_label='Test the Dashboard Access for a Lawyer Acce', url=self.url))
+        self.assertTrue(self.load_casper_file(js_file='dashboard_access.js', test_label='Test the Dashboard Access for a Lawyer', url=self.url))
 
     def test_lawyer_dashboard_js(self):
         """
