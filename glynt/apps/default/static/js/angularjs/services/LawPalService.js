@@ -380,6 +380,9 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 						}
 					} else if ( angular.isArray(workingDiscussions) && workingDiscussions.length==1 ) {
 						discussions = workingDiscussions[0];
+						if(discussions.results) {
+							discussions = discussions.results;
+						}
 					}
 
 					// Filter dicussions by project

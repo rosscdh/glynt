@@ -10,8 +10,6 @@ helper.scenario(casper.cli.options.url,
         this.test.assertTitle('Overview');
         this.test.assertSelectorHasText('h1', 'Your LawPal Projects', 'Header Text on Page');
 
-        helper.capturePageTimelapse( 5 );
-
         // Widget exists
         casper.waitForSelector(".widget.project",
             function success() {
