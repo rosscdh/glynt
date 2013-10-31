@@ -335,6 +335,99 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 		},
 
 		/**
+		 * Returns the list of projects for the current user
+		 * @return {Function}	Promise
+		 */
+		'getUsersProjects': function () {
+			// Set up a promise, because this method might retrieve information from the API directly in the future
+			var deferred = $q.defer();
+			var projects = [];
+
+			$timeout(function () {
+				if (lawPalInterface && lawPalInterface.overview) {
+					// Retrieve checklist items
+					projects = lawPalInterface.overview.projects.results;
+					// Return checklist
+					deferred.resolve(projects);
+				} else {
+					// Ohh nooo! an error
+					deferred.reject(projects);
+				}
+			}, 10);
+
+			return deferred.promise;
+		},
+
+		/**
+		 * Returns the list of projects for the current user
+		 * @return {Function}	Promise
+		 */
+		'getRecentDiscussions': function ( projectId, userId ) {
+			// Set up a promise, because this method might retrieve information from the API directly in the future
+			var deferred = $q.defer();
+			var discussions = [];
+			var workingDiscussions = [];
+
+			$timeout(function () {
+				if (lawPalInterface && lawPalInterface.overview) {
+					// Retrieve discussion items
+					workingDiscussions = lawPalInterface.overview.discussions;
+					// Merge discussions
+					if( angular.isArray(workingDiscussions) && workingDiscussions.length>1 ) {
+						discussions = workingDiscussions[0].results;
+						for(var i=1;i<workingDiscussions.length;i++) {
+							discussions = discussions.union(workingDiscussions[i].results);
+						}
+					} else if ( angular.isArray(workingDiscussions) && workingDiscussions.length==1 ) {
+						discussions = workingDiscussions[0];
+					}
+
+					// Filter dicussions by project
+					if( projectId ) {
+						discussions = discussions.filter( function(item){
+							return parseInt(item.object_pk,10)===projectId;
+						});
+					}
+
+					// Standardise last_child, so that it can be referenced easily
+					for(var di=0;di<discussions.length;di++) {
+						if( !discussions[di].last_child ) {
+							discussions[di].last_child = Object.clone(discussions[di]);
+						}
+					}
+
+					discussions = discussions.sort(function(item1,item2){
+						// If item1 has the current user and the second itesm does not switch them in order
+						return item1.last_child.id > item2.last_child.id;
+					});
+
+					if( userId ) {
+						// Sort discussions that need responding to first to the top
+						var myDiscussions = discussions.filter(function(item){
+							// If item1 has the current user and the second itesm does not switch them in order
+							return item.last_child.meta.user.pk === userId;
+						});
+
+						var theirDiscussions = discussions.filter(function(item){
+							// If item1 has the current user and the second itesm does not switch them in order
+							return item.last_child.meta.user.pk !== userId;
+						});
+
+						discussions = [].union(theirDiscussions, myDiscussions);
+					}
+
+					// Return checklist
+					deferred.resolve(discussions);
+				} else {
+					// Ohh nooo! an error
+					deferred.reject(discussions);
+				}
+			}, 10);
+
+			return deferred.promise;
+		},
+
+		/**
 		 * Returns the list of check list items, ordered by the sort by parameter
 		 * @param  {String}		sortByProperty used to dermine which attribute to sort the data by
 		 * @return {Function}	Promise
@@ -464,10 +557,18 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 			return LawPal.project.id;
 		},
 
+		/**
+		 * Returns the current project UUID
+		 * @return {String} Project UUID
+		 */
 		"getProjectUuid": function() {
 			return LawPal.project.uuid;
 		},
 
+		/**
+		 * Returns the content type ID for the project content type
+		 * @return {Number} Project content type ID
+		 */
 		'projectContentTypeId': function() {
 			if( typeof(LawPal.project)==='function')
 				return LawPal.project().content_type_id;
@@ -483,6 +584,11 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 			return (LawPal.user && LawPal.user.is_authenticated?LawPal.user:null);
 		},
 
+		/**
+		 * Given an array of usernames search for full user profiles
+		 * @param  {Array} users Array of usernames
+		 * @return {Function}       promise
+		 */
 		'usernameSearch': function( users ) {
 			var deferred = $q.defer();
 			var userList = [];
@@ -536,6 +642,11 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 			return deferred.promise;
 		},
 
+		/**
+		 * Search for users using their email addresses
+		 * @param  {String} str Email address partial
+		 * @return {Function}     promise
+		 */
 		'emailSearch': function( str ) {
 			var deferred = $q.defer();
 
@@ -557,6 +668,10 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 			return deferred.promise;
 		},
 
+		/**
+		 * Retrieve discussions for a specific project
+		 * @return {Function} promise
+		 */
 		'discussionList': function() {
 			var deferred = $q.defer();
 			var projectUuid = this.getProjectUuid();
@@ -574,26 +689,40 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 			return deferred.promise;
 		},
 
-		'fullDiscussion': function( discussionId ) {
+		/**
+		 * Retrieve a full discussion for a specific discussion base
+		 * @param  {Number} discussionId discussion ID
+		 * @param  {String} pUuid        project UUID (optinal)
+		 * @return {Function}              promise
+		 */
+		'fullDiscussion': function( discussionId, pUuid ) {
 			var deferred = $q.defer();
-			var projectUuid = this.getProjectUuid();
+			var projectUuid = pUuid || this.getProjectUuid();
 			var options = { 'uuid': projectUuid, 'pk': discussionId };
 
-			discussionResource.discussion.get( options,
-				function success( data ) {
-					deferred.resolve(data);
-				},
-				function error( err ) {
-					deferred.reject(err);
-				}
-			);
+			if(projectUuid) {
+				discussionResource.discussion.get( options,
+					function success( data ) {
+						deferred.resolve(data);
+					},
+					function error( err ) {
+						deferred.reject(err);
+					}
+				);
+			}
 
 			return deferred.promise;
 		},
 
-		'addDiscussion': function( message ) {
+		/**
+		 * Post discussion to API
+		 * @param  {Object} message Discussion object
+		 * @param  {String} pUuid   Project UUID (optional)
+		 * @return {Function}         promise
+		 */
+		'addDiscussion': function( message, pUuid ) {
 			var deferred = $q.defer();
-			var projectUuid = this.getProjectUuid();
+			var projectUuid = pUuid || this.getProjectUuid();
 			var options = { 'uuid': projectUuid };
 
 			discussionResource.project.save( options, message,

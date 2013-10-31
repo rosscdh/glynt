@@ -15,13 +15,23 @@ angular.module('lawpal')
    * Send a request to display a specific discussion
    * @param  {Object} discussion Discussion object
    */
-		this.show = function ( discussion ) {
+    this.projectUuid = null;
+		this.show = function ( discussion, projectUuid ) {
 				this.discussion = discussion;
-				$rootScope.$broadcast('discussion-show', discussion);
+        if( projectUuid ) {
+          this.projectUuid = projectUuid;
+        }
+				$rootScope.$broadcast('discussion-show', discussion, projectUuid);
 		};
 
-    this.load = function( discussionId, callback ) {
-      lawPalService.fullDiscussion( discussionId ).then(
+    /**
+     * Load full discussion from API
+     * @param  {Number}   discussionId discussion ID
+     * @param  {String}   projectUuid  project UUID (optional)
+     * @param  {Function} callback     Called back once results are retrieved
+     */
+    this.load = function( discussionId, projectUuid, callback ) {
+      lawPalService.fullDiscussion( discussionId, projectUuid ).then(
         function( results ) {
           callback( null, results );
         }
@@ -30,21 +40,29 @@ angular.module('lawpal')
 
     /**
      * Open a dialog to add a new discussion
+     * @param {String} projectUuid Project UUID (optional) required on pages that have no specifically assigned project
      */
-    this.add = function() {
-      this.reply( null );
+    this.add = function( projectUuid ) {
+      this.reply( null, projectUuid );
     };
 
     /**
      * Open a dialog to reply to a discussion
      * @param  {Object} discussion Parent discussion object
      */
-    this.reply = function( discussion ) {
+    this.reply = function( discussion, projectUuid ) {
       var modal = this.openDialog( discussion );
       var _this = this;
 
+      if( projectUuid ) {
+        this.projectUuid = projectUuid;
+      }
+
       modal.result.then(
           function ok( message ) {
+            if( projectUuid ) {
+              message.project_uuid = projectUuid;
+            }
             _this.saveDiscussion( message );
           },
           function cancel() {
@@ -73,6 +91,11 @@ angular.module('lawpal')
         return modalInstance;
     };
 
+    /**
+     * Create reply data object
+     * @param  {String} comment          Comment made by someone
+     * @param  {Object} parentDiscussion The original discussion
+     */
     this.makeReply = function( comment, parentDiscussion ) {
       return {
         "comment": comment,
@@ -88,9 +111,10 @@ angular.module('lawpal')
     this.saveDiscussion = function( message, callback ) {
         toaster.pop( "info", "Saving" );
         var userPk = lawPalService.getCurrentUser().pk;
+        var projectUuid = this.projectUuid || lawPalService.getProjectUuid();
         
         var messageDetails = {
-          "object_pk": lawPalService.getProjectUuid(),
+          "object_pk": projectUuid,
           "title": message.subject||"",
           "comment": message.comment,
           "user": userPk,
@@ -98,7 +122,7 @@ angular.module('lawpal')
           "parent_id": message.parent_id
         };
 
-        lawPalService.addDiscussion( messageDetails ).then(
+        lawPalService.addDiscussion( messageDetails, projectUuid ).then(
           function success( response ) {
             $rootScope.$broadcast('discussion-new-item', message, response );
             toaster.pop( "success", "Discussion item saved" );

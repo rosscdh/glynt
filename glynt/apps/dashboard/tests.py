@@ -25,17 +25,21 @@ class DashboardLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
         resp = self.client.get(self.url)
         self.assertEqual(resp.status_code, 302)
 
-    def test_dashboard_access(self):
+    def test_dashboard_access_js(self):
         self.client.login(username=self.lawyer_user.username, password=self.password)
 
         resp = self.client.get(self.url)
 
         self.assertEqual(resp.status_code, 200)
+        """
         self.assertTrue('project' in resp.context)
         self.assertEqual(type(resp.context['project']), Project)
 
         self.assertTrue('counts' in resp.context)
         self.assertEqual(type(resp.context['counts']), dict)
+        import pdb;pdb.set_trace()
+        """
+        self.assertTrue(self.load_casper_file(js_file='dashboard_access.js', test_label='Test the Dashboard Access for a Lawyer Acce', url=self.url))
 
     def test_lawyer_dashboard_js(self):
         """
