@@ -80,6 +80,123 @@ helper.scenario(casper.cli.options.url,
             function fail() {
                 this.test.assertExists("form.form-discussion .btn-default");
         });
+    },
+    function() {
+        // Test discussions
+        // Start discussion
+        casper.waitForSelector(".discussion-list button.start-discussion",
+            function success() {
+                this.test.assertExists(".discussion-list button.start-discussion");
+                this.click(".discussion-list button.start-discussion");
+            },
+            function fail() {
+                this.test.assertExists(".discussion-list button.start-discussion");
+        });
+
+        // Enter data
+        // Subject
+        casper.waitForSelector("form input[name='discussionSubject']",
+            function success() {
+                this.test.assertExists("form input[name='discussionSubject']");
+                this.click("form input[name='discussionSubject']");
+            },
+            function fail() {
+                this.test.assertExists("form input[name='discussionSubject']");
+        });
+
+        casper.waitForSelector("input[name='discussionSubject']",
+            function success() {
+                this.sendKeys("input[name='discussionSubject']", "Test subject");
+            },
+            function fail() {
+                this.test.assertExists("input[name='discussionSubject']");
+        });
+
+        // Message
+        casper.waitForSelector("#discussionComment",
+            function success() {
+                this.test.assertExists("#discussionComment");
+                this.click("#discussionComment");
+            },
+            function fail() {
+                this.test.assertExists("#discussionComment");
+        });
+        casper.waitForSelector("textarea[name='discussionComment']",
+            function success() {
+                this.sendKeys("textarea[name='discussionComment']", "Test message");
+            },
+            function fail() {
+                this.test.assertExists("textarea[name='discussionComment']");
+        });
+
+        // Submit form
+        casper.waitForSelector(".form-discussion .btn-primary",
+            function success() {
+                this.test.assertExists(".form-discussion .btn-primary");
+                this.click(".form-discussion .btn-primary");
+            },
+            function fail() {
+                this.test.assertExists(".form-discussion .btn-primary");
+        });
+        
+
+        // Check text has been added
+        casper.waitForSelector(".discussion-item .discussion-title",
+            function success() {
+                // Subject
+                this.test.assertExists(".discussion-item .discussion-title");
+                this.test.assertSelectorHasText('.discussion-item .discussion-title', 'Test subject');
+
+                // Comment
+                this.test.assertExists(".discussion-item .discussion-comment");
+                this.test.assertSelectorHasText('.discussion-item .discussion-comment', 'Test message');
+                this.click(".discussion-item .discussion-comment"); // Open discussion
+            },
+            function fail() {
+                this.test.assertExists(".discussion-item .discussion-comment");
+        });
+
+        // Test item is displayed
+        casper.waitForSelector("#discussionComment",
+            function success() {
+                this.test.assertExists("#discussionComment");
+                this.click("#discussionComment");
+            },
+            function fail() {
+                this.test.assertExists("#discussionComment");
+        });
+
+        // Test response
+        casper.waitForSelector("textarea[name='discussionComment']",
+            function success() {
+                this.sendKeys("textarea[name='discussionComment']", "Test response A");
+            },
+            function fail() {
+                this.test.assertExists("textarea[name='discussionComment']");
+        });
+
+        // Submit response
+        casper.waitForSelector(".form-discussion [type='submit']",
+            function success() {
+                // Subject
+                this.test.assertExists(".form-discussion [type='submit']");
+                this.click(".form-discussion [type='submit']"); // Open discussion
+            },
+            function fail() {
+                this.test.assertExists(".form-discussion [type='submit']");
+        });        
+    },
+    function() {
+        // Submit response
+        casper.waitForSelector(".discussion-item .discussion-title",
+            function success() {
+                // Subject
+                this.test.assertExists(".discussion-item .discussion-title");
+                this.test.assertSelectorHasText('.discussion-item .discussion-comment', 'Test response A');
+            },
+            function fail() {
+                this.test.assertExists(".discussion-item .discussion-title");
+        });
     }
 );
 
