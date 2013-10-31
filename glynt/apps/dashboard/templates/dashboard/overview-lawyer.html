@@ -58,7 +58,7 @@
                                     <table class="table no-pad"  ng-show="project.discussions.length==0">
                                         <tr class="discussion-item">
                                             <td class="status-column"><i class="icon icon-comment nest"> <small class="nested text-primary ng-binding" ng-bind="discussion.original.count"></small></i></td>
-                                            <td class="no-pad"><a href="/projects/{[{project.uuid}]}/{{ user.username }}/project-contact/" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-block btn-link btn-8em"><i class="icon icon-plus"></i> New Discussion&nbsp;</a></td>
+                                            <td class="no-pad"><a href="/projects/{[{project.uuid}]}/{{ user.username }}/project-contact/" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-block btn-link btn-8em">Discussion&nbsp; <span class="badge" ng-bind="project.proposed_discussions"></span></a></td>
                                         </tr>
                                     </table>
 
@@ -101,7 +101,20 @@
         'overview': {{ json|jsonify }},
         'project': {
             'content_type_id': {{ project.content_type_id|default:None|jsonify }}
+        },
+        'proposed_discussions': {
+            {% for p in project_lawyer_joins %}
+                {% with p.project as project %}
+                        {% if PROJECT_LAWYER_STATUS.assigned == p.status %}
+                        {% elif PROJECT_LAWYER_STATUS.potential == p.status %}
+                            '{{ project.pk }}' : {% discussion_notification_count project_lawyer_join=p %} 
+                        {% endif %}
+                {% endwith %}
+            {% endfor %}
         }
     }
-</script>;
+</script>
+
+
+
 {% endblock %}

@@ -26,6 +26,7 @@ angular.module("lawpal").controller( "projectsOverviewCtrl", [ "$scope", "lawPal
 					projects[i].currentUserEngagement = $scope.engagement(projects[i]);
 					projects[i].discussions = [];
 					projects[i].discussionItemNum = 0;
+					projects[i].proposed_discussions = LawPal.proposed_discussions[ projects[i].id.toString() ];
 					$scope.loadProjectDiscussions( projects[i] );
 				}
 				
