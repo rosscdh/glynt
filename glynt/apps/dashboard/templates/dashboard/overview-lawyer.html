@@ -13,13 +13,14 @@
 {% endblock %}
 
 {% block body %}
+{% csrf_token %}
 <div class="container dashboard-view" ng-controller="projectsOverviewCtrl">
     <div class="row">
         <div class="col-12">
             <div class="col-lg-6" ng-repeat="project in data.projects">
                 <div ng-switch="project.currentUserEngagement">
             
-                    <div class="widget project clearfix" ng-switch-when="Engaged">
+                    <div class="widget project clearfix project-engaged" ng-switch-when="Engaged">
                         <span class="pull-right engagement-{[{project.currentUserEngagement|lowercase}]}">
                             <i class="icon icon-ok"></i>
                             <span ng-bind="project.currentUserEngagement"></span>
@@ -31,9 +32,10 @@
                                 <div class="col-3">
                                     <em>Action required</em>
                                     <div class="project-primary-action" data-counts="project.counts" data-project-uuid="project.uuid" data-base-url="'{% url 'dashboard:overview' %}'"></div>
+                                    <em>{[{project.counts.closed}]} of {[{project.counts.total}]} Complete</em>
                                 </div>
                                 <div class="col-9">
-                                    <div class="discussion-list" data-discussion="project.discussions" data-tag="'discussion'" data-page-limit="1" data-project-uuid="project.uuid" data-description-text-limit="80" order-by-date="false"></div>
+                                    <div class="discussion-list" data-discussion="project.discussions" data-tag="'discussion'" data-page-limit="1" data-project-uuid="project.uuid" data-description-text-limit="100" order-by-date="false"></div>
                                 </div>
                             </div>
                         </span>
@@ -48,12 +50,21 @@
                             <div class="row">
                                 <div class="col-3 client">
                                     <em>Client</em>
-                                    <div class="widget-content user-mini-widget" data-user="project.customer">
-                                    </div>
+                                    <div class="widget-content user-mini-widget" data-user="project.customer"></div>
+                                    <em>Awaiting decision</em>
                                 </div>
                                 <div class="col-9">
                                     <em>Discussion <span ng-show="project.discussions.length>0">1/{[{project.discussions.length}]}</span></em>
-                                    <div class="discussion-list" data-discussion="project.discussions" data-tag="'discussion'" data-page-limit="1" data-project-uuid="project.uuid"></div>
+                                    <table class="table no-pad"  ng-show="project.discussions.length==0">
+                                        <tr class="discussion-item">
+                                            <td class="status-column"><i class="icon icon-comment nest"> <small class="nested text-primary ng-binding" ng-bind="discussion.original.count"></small></i></td>
+                                            <td class="no-pad"><a href="/projects/{[{project.uuid}]}/{{ user.username }}/project-contact/" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-block btn-link btn-8em"><i class="icon icon-plus"></i> New Discussion&nbsp;</a></td>
+                                        </tr>
+                                    </table>
+
+                                    <div class="discussion-list clearfix" ng-show="project.discussions.length>0" data-discussion="project.discussions" data-tag="'discussion'" data-page-limit="1" data-project-uuid="project.uuid" data-description-text-limit="80" order-by-date="false"></div>
+
+                                    <em>Press the Discuss link to send a message directly to them.</em>
                                 </div>
                             </div>
                         </span>
@@ -66,68 +77,11 @@
     </div>
     <div class="row">
         <div class="col-12">
-            <table id="lawyer-projects" class="table table-bordered">
-                <thead>
-                <tr>
-                    <th>Company</th>
-                    <th class="" colspan="2">Client Contact</th>
-                    <th class="text-center">Status</th>
-                    <th>Note</th>
-                </tr>
-                </thead>
-                <tbody>
-            {% for p in project_lawyer_joins %}
-                {% with p.project as project %}
-                <tr class="project-list-item {{ p.display_status|lower }}">
-                        {% if PROJECT_LAWYER_STATUS.assigned == p.status %}
-                            <td>  
-                                <h4>{{ project.company }}</h4>
-                            </td>
-                            <td> 
-                                <div class="profile-card" data-template="small" data-username="{{ project.customer.user.username }}">&nbsp;</div>
-                            </td>
-                            <td><a href="{{ project.get_absolute_url }}" class="text-success btn btn-success">View Project</a></td>
-                            <td class="text-center text-success"> 
-                                 <strong>{{ p.display_status }}</strong>
-                            </td>
-                            <td>
-                                <small>You have been assigned to this project.</small>
-                            </td>
-                        {% elif PROJECT_LAWYER_STATUS.rejected == p.status %}
-                            <td class="" colspan="5">
-                                <span class="text-muted">{{ project.company }} - {{ p.display_status }} (Client selected another attorney)</span>
-                            </td>
-                        {% elif PROJECT_LAWYER_STATUS.potential == p.status %}
-                            <td>  
-                                <h4>{{ project.company }}</h4>
-                            </td>
-                            <td> 
-                                <div class="profile-card" data-template="small" data-username="{{ project.customer.user.username }}">&nbsp;</div>
-                            </td>
-                            <td class="text-left">
-                                <a href="{% url 'project:project_contact' slug=project.uuid lawyer=user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-primary btn-lg">Discuss&nbsp;<span class="badge">{% discussion_notification_count project_lawyer_join=p %}</span></a>
-                            </td>
-                            <td class="text-center text-warning"> 
-                                 <strong>{{ p.display_status }}</strong>
-                            </td>
-                            <td>
-                                <small>You have been proposed to this client. Awaiting client decision. Press the Discuss link to send a message directly to them.</small>
-                            </td>
-                        {% endif %}
-                </tr>
-                {% endwith %}
-            {% empty %}
-                <tr><td colspan="5" class="text-center"><h3 class="softer"><small><i class="glyphicon glyphicon-time "></i></small> Your introductions and active projects will appear here shortly. </h3></td></tr>
-            {% endfor %}
-                </tbody>
-            </table>
-            <br />
-            <hr />
-            <h4>Have a question? <a href="mailto:xw4ux8lx@incoming.intercom.io" class="intercom">Contact the LawPal Team</a>.</h4> 
+           <small class="text-muted">Key: <i class="icon icon-circle text-muted" tooltip="New"></i> <i class="icon icon-circle text-primary" tooltip="Open"></i> <i class="icon icon-circle text-danger" tooltip="Requires you feedback"></i> <i class="icon icon-circle text-warning" tooltip="Feedback required"></i> <i class="icon icon-circle text-success" tooltip="Closed"></i> </small> 
         </div>
     </div>
-</div>
 <div class="discussion-viewer"></div>
+<toaster-container toaster-options="{'time-out': 3000}"></toaster-container>
 {% include 'dashboard/modals/overview-modal.html' %}
 {% endblock %}
 
@@ -151,3 +105,30 @@
     }
 </script>;
 {% endblock %}
+
+http://local.weareml.com:8000/api/v2/project/caa4e89a259d4560ac9a47efc0205d11/discussion/?format=json
+comment: "test"
+content_type_id: 44
+object_pk: "caa4e89a259d4560ac9a47efc0205d11"
+parent_id: 35
+title: ""
+user: 3
+
+http://local.weareml.com:8000/api/v2/project/caa4e89a259d4560ac9a47efc0205d11/discussion/?format=json
+comment: "test"
+content_type_id: 44
+object_pk: "caa4e89a259d4560ac9a47efc0205d11"
+parent_id: 35
+title: ""
+user: 3
+djdt=hide; csrftoken=8Gpv9e0VVll1lKAKpOn1KN6GCDG1Axw3; sessionid=d5nmnl2i0x5h8n1e8zsr5rpuxysxzska; __utma=113034649.2073902533.1377690721.1383116815.1383126783.95; __utmc=113034649; __utmz=113034649.1377690721.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); __utmv=113034649.|1=env=dev=1
+
+-- didn't work --
+http://local.weareml.com:8000/api/v2/project/caa4e89a259d4560ac9a47efc0205d11/discussion/?format=json
+comment: "test response"
+content_type_id: 44
+object_pk: "caa4e89a259d4560ac9a47efc0205d11"
+parent_id: 35
+title: ""
+user: 3
+djdt=hide; csrftoken=8Gpv9e0VVll1lKAKpOn1KN6GCDG1Axw3; sessionid=d5nmnl2i0x5h8n1e8zsr5rpuxysxzska; __utma=113034649.2073902533.1377690721.1383116815.1383126783.95; __utmc=113034649; __utmz=113034649.1377690721.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); __utmv=113034649.|1=env=dev=1

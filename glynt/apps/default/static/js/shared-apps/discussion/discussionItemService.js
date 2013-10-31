@@ -35,8 +35,8 @@ angular.module('lawpal')
     /**
      * Open a dialog to add a new discussion
      */
-    this.add = function() {
-      this.reply( null );
+    this.add = function( projectUuid ) {
+      this.reply( null, projectUuid );
     };
 
     /**
@@ -53,6 +53,9 @@ angular.module('lawpal')
 
       modal.result.then(
           function ok( message ) {
+            if( projectUuid ) {
+              message.project_uuid = projectUuid;
+            }
             _this.saveDiscussion( message );
           },
           function cancel() {

@@ -118,7 +118,6 @@ angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster
 			 * @param  {Object} discussion Discussion item to display
 			 */
 			$scope.displayDiscussion = function( $event, discussion ) {
-				$scope.projectUuid;
 				discussionItemService.show( discussion, $scope.projectUuid );
 			};
 
@@ -126,7 +125,7 @@ angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster
 			 * Request a new discussion item
 			 */
 			$scope.new = function( ){
-				discussionItemService.add();
+				discussionItemService.add( $scope.projectUuid );
 			};
 
 			/**
@@ -145,9 +144,17 @@ angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster
 			 * @param  {Object} response Discussion item sent back from the API in response to the "message"
 			 */
 			$scope.$on('discussion-new-item', function ( evt, message, response ) {
-				$scope.discussions.push( response );
-				addLastChild( message.parent_id, response );
-				$scope.generateWorkingDiscussionData(  /*message.parent_id, response.id*/ );
+				var addToList = true;
+				// $scope.projectUuid can be used if there are multiple discussion lists on the page
+				if( message.project_uuid && $scope.projectUuid ) {
+					// Should the project Id's of the message and the dicussion list not match set addToList to false
+					addToList = message.project_uuid === $scope.projectUuid;
+				}
+				if( addToList ) {
+					$scope.discussions.push( response );
+					addLastChild( message.parent_id, response );
+					$scope.generateWorkingDiscussionData(  /*message.parent_id, response.id*/ );
+				}
 			});
 
 			/**
@@ -165,12 +172,3 @@ angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster
 		}]
 	};
 }]);
-
-//We already have a limitTo filter built-in to angular,
-//let's make a startFrom filter
-angular.module('lawpal').filter('startFrom', function() {
-    return function(input, start) {
-        start = +start; //parse to int
-        return input.slice(start);
-    }
-});

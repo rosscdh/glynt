@@ -98,8 +98,9 @@ angular.module("lawpal").controller( "projectsOverviewCtrl", [ "$scope", "lawPal
 		$window.location.href = baseUrl + project.uuid + '/';
 	};
 
-	$scope.incrementDiscussionPage = function( project ) {
-		project.discussionItemNum = project.discussionItemNum+1;
+	$scope.percentageComplete = function( project ) {
+		var complete = (project&&project.counts&&project.counts.closed)?project.counts.closed:0;
+		var total = (project&&project.counts&&project.counts.total)?project.counts.total:1;
+		return parseInt(complete / total * 100,10);
 	};
-
 }]);

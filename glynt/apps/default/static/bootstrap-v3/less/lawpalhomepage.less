@@ -7,6 +7,8 @@
   color: @brand-primary;
 }
 
+.no-pad { padding: 0 !important; margin: 0 !important; }
+
 // Top Page and Scroll down for more bit
 #wrap {
 	.splash {
@@ -467,7 +469,14 @@ table.lawyer-list.active {
         h5 { float: none; margin: 0.7em 0 0 0; font-size: 1em; font-weight: bold; }
       }
       .col-9 { padding-left: 0; }
+      .discussion-list table { margin-bottom: 0; }
       .discussion-item { height: 8em; }
+      em button {
+        padding: 0 3px;
+        &[disabled="disabled"] { .text-muted; }
+      }
+      .progress { margin-bottom: 0; }
+      padding-bottom: 0;
     }
   }
 
@@ -478,10 +487,15 @@ table.lawyer-list.active {
       padding-top: 0.7em; padding-bottom: 0.2em; 
       span.label { font-size: 1em; }
     }
-    .btn-open { .btn-info; }
-    .btn-pending { .btn-warning; }
-    .btn-awaiting_feedback_from_user { .btn-danger; }
   }
+
+  .col-3 .col-lg-2 { padding:0; margin:0; width: 20%; }
+
+  .btn-open { .btn-info; }
+  .btn-pending { .btn-warning; }
+  .btn-awaiting_feedback_from_user { .btn-danger; }
+  .btn-closed { .btn-success; }
+  .btn-8em { height: 8em; text-align: center; background-color: @light-grey-border-color; padding-top: 3.5em; padding-bottom: 3.5em; }
 }
 
 .empty {
@@ -794,6 +808,25 @@ section.checklist-category {
   tr.byme-false {
     .comment { font-weight: bold; }
   } 
+  td.vcard-column {
+    width: 50px;
+  }
+  td.comment-column {
+    div.comment {
+      min-height: 4em;
+    }
+    p { 
+      margin-bottom: 0; 
+      &.discussion-comment { font-size: 0.9em; } 
+    }
+  }
+  td.more-column {
+    width: 70px;
+    vertical-align: middle;
+  }
+}
+
+.discussion-item {
   td.status-column {
     width: 44px;
     text-align: center;
@@ -803,19 +836,6 @@ section.checklist-category {
 
     i { font-size: 24px; top: 22px; }
     small { font-size: 10px; padding: 7px 0 !important; width: 24px; text-align: center; }
-  }
-  td.vcard-column {
-    width: 50px;
-  }
-  td.comment-column {
-    div.comment {
-      min-height: 4em;
-    }
-    p { margin-bottom: 0; }
-  }
-  td.more-column {
-    width: 70px;
-    vertical-align: middle;
   }
 }
 
@@ -924,4 +944,18 @@ button.vcard {
   z-index: 1029;
   vertical-align: middle;
   button { margin: 16px 0 0 10px;}
+}
+
+/* Progress bars */
+.progress .bar {
+  height:100%;
+  float:left;
+  &.bar-info { background-color: @brand-info; }
+  &.bar-warning { background-color: @brand-warning; }
+  &.bar-danger { background-color: @brand-danger; }
+  &.bar-success { background-color: @brand-success; }
+}
+
+h5.text-info {
+  color: @brand-info;
 }
