@@ -26,7 +26,7 @@ class TransactionBuilderTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
         form_values = {
             "builder_wizard_view-current_step": "1",
             "csrfmiddlewaretoken": csrfmiddlewaretoken,
-            "1-form_json_data": '{"ip_otherthan_founder":true,"description":"","option_plan_status":"2","num_employees":"2","founder_name":"Ross Crawford","num_consultants":"1","target_states_and_countries":"California","incubator":"FoundersDen","num_option_holders":"0","ip_university_affiliation":false,"company_name":"LawPal.com","founder_email":"ross@lawpal.com","founders":{"founder_name":{"id":"founder_name","val":"Ross Crawford","name":"founder_name"},"founder_email":{"id":"founder_email","val":"ross@lawpal.com","name":"founder_email"}},"ip_nolonger_affiliated":false,"profile_website":"http://angel.com/lawpal","current_status":"1","num_officers":"22","profile_is_complete":true}',
+            "1-form_json_data": '{"ip_otherthan_founder":true,"description":"","option_plan_status":"2","num_employees":"2","founder_name":"Ross Crawford","num_consultants":"1","target_states_and_countries":"California","incubator":"FoundersDen","num_option_holders":"0","ip_university_affiliation":false,"company_name":"Test Company","founder_email":"ross@lawpal.com","founders":{"founder_name":{"id":"founder_name","val":"Ross Crawford","name":"founder_name"},"founder_email":{"id":"founder_email","val":"ross@lawpal.com","name":"founder_email"}},"ip_nolonger_affiliated":false,"profile_website":"http://angel.com/lawpal","current_status":"1","num_officers":"22","profile_is_complete":true}',
             "1-founder_name": "Ross Crawford",
             "1-founder_email": "ross@lawpal.com",
             "1-incubator": "FoundersDen",
@@ -53,7 +53,7 @@ class TransactionBuilderTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
         css = self.pq(resp.content)
         form_object = css('form#builder-form')
 
-        expected_form_json_data = json.loads('{"ip_otherthan_founder": true, "num_officers": "22", "description": "My Description", "option_plan_status": "1", "num_employees": "2", "founder_email": "ross@lawpal.com", "num_consultants": "1", "target_states_and_countries": "California", "incubator": "FoundersDen", "num_option_holders": "0", "ip_university_affiliation": true, "company_name": "LawPal.com", "founder_name": "Ross Crawford", "founders": {"founder_name": {"id": "founder_name", "val": "Ross Crawford", "name": "founder_name"}, "founder_email": {"id": "founder_email", "val": "ross@lawpal.com", "name": "founder_email"}}, "ip_nolonger_affiliated": true, "current_status": "1", "profile_website": "http://angel.com/lawpal", "profile_is_complete": true}')
+        expected_form_json_data = json.loads('{"ip_otherthan_founder": true, "num_officers": "22", "description": "My Description", "option_plan_status": "1", "num_employees": "2", "founder_email": "ross@lawpal.com", "num_consultants": "1", "target_states_and_countries": "California", "incubator": "FoundersDen", "num_option_holders": "0", "ip_university_affiliation": true, "company_name": "Test Company", "founder_name": "Ross Crawford", "founders": {"founder_name": {"id": "founder_name", "val": "Ross Crawford", "name": "founder_name"}, "founder_email": {"id": "founder_email", "val": "ross@lawpal.com", "name": "founder_email"}}, "ip_nolonger_affiliated": true, "current_status": "1", "profile_website": "http://angel.com/lawpal", "profile_is_complete": true}')
         have_checked = []
 
         # loop over inputs
