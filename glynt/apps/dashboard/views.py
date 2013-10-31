@@ -62,6 +62,10 @@ class DashboardView(RulezMixin, ToDoCountMixin, v2ApiClientMixin, TemplateView):
         and no the lawyer_project join used for the lawyer
         """
         if self.request.user.profile.is_lawyer:
+            #
+            # cant rely on the middleware.LawpalCurrentProjectsMiddleware as it does not show pending
+            # projects
+            #
             return [p.project for p in self.request.user.lawyer_profile.projectlawyer_set.all()]
         else:
             return self.request.projects
