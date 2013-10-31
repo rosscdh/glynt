@@ -9,12 +9,12 @@ from glynt.apps.rulez import RulezMixin
 from glynt.apps.project.models import Project
 from glynt.apps.project.bunches import ProjectIntakeFormIsCompleteBunch
 from glynt.apps.project import PROJECT_LAWYER_STATUS
+from glynt.apps.project.api_v2 import ProjectViewSet
 
 from glynt.apps.todo.views import ToDoCountMixin
-from glynt.apps.api.views import v2ApiClientMixin
 
 
-class DashboardView(RulezMixin, ToDoCountMixin, v2ApiClientMixin, TemplateView):
+class DashboardView(RulezMixin, ToDoCountMixin, TemplateView):
     """
     @TODO clean this mess up
     This view is used by both the customer and the lawyer (eek)
@@ -131,10 +131,6 @@ class DashboardView(RulezMixin, ToDoCountMixin, v2ApiClientMixin, TemplateView):
         kwargs.update({
             'PROJECT_LAWYER_STATUS': PROJECT_LAWYER_STATUS,
             'projects': self.get_projects(),
-            'json': {
-                'projects': self.api_query(request=self.request, url='/api/v2/project/').api_resp_as_json(),
-                'discussions': [self.api_query(request=self.request, url='/api/v2/project/{uuid}/discussion/'.format(uuid=p.uuid)).api_resp_as_json() for p in self.get_projects()],
-            }
         })
 
         return kwargs
