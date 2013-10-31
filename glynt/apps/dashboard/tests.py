@@ -49,6 +49,8 @@ class DashboardLawyerTest(BaseLawyerCustomerProjectCaseMixin):
         self.project_lawyer_join.status = self.project_lawyer_join._LAWYER_STATUS.potential
         self.project_lawyer_join.save(update_fields=['status'])
 
+        #import pdb;pdb.set_trace()
+
         self.assertTrue(self.load_casper_file(js_file='dashboard.js', test_label='Test the Dashboard View for a Lawyer', url=self.url))
 
 

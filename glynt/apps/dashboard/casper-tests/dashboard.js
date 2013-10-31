@@ -24,7 +24,8 @@ helper.scenario(casper.cli.options.url,
         casper.waitForSelector(".widget.project h3",
             function success() {
                 this.test.assertExists(".widget.project h3");
-                // Need to test for company name
+                // Test for company name
+                this.test.assertSelectorHasText('.widget.project h3', 'Test Company');
             },
             function fail() {
                 this.test.assertExists(".widget.project h3");
