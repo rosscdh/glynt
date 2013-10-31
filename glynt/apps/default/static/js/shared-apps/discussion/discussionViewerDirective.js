@@ -31,6 +31,10 @@ angular.module('lawpal').directive('discussionViewer', ['$compile', '$timeout', 
           $location.path('/');
         };
 
+        /**
+         * Incept process to POST a reply to the API
+         * @param  {Object} discussion Original discussion object
+         */
         $scope.reply = function (discussion) {
           var reply = discussionItemService.makeReply( $scope.message.comment, discussion);
           if( reply ) {

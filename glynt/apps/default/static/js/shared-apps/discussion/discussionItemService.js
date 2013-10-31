@@ -24,6 +24,12 @@ angular.module('lawpal')
 				$rootScope.$broadcast('discussion-show', discussion, projectUuid);
 		};
 
+    /**
+     * Load full discussion from API
+     * @param  {Number}   discussionId discussion ID
+     * @param  {String}   projectUuid  project UUID (optional)
+     * @param  {Function} callback     Called back once results are retrieved
+     */
     this.load = function( discussionId, projectUuid, callback ) {
       lawPalService.fullDiscussion( discussionId, projectUuid ).then(
         function( results ) {
@@ -34,6 +40,7 @@ angular.module('lawpal')
 
     /**
      * Open a dialog to add a new discussion
+     * @param {String} projectUuid Project UUID (optional) required on pages that have no specifically assigned project
      */
     this.add = function( projectUuid ) {
       this.reply( null, projectUuid );
@@ -84,6 +91,11 @@ angular.module('lawpal')
         return modalInstance;
     };
 
+    /**
+     * Create reply data object
+     * @param  {String} comment          Comment made by someone
+     * @param  {Object} parentDiscussion The original discussion
+     */
     this.makeReply = function( comment, parentDiscussion ) {
       return {
         "comment": comment,
