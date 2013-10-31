@@ -37,6 +37,10 @@ angular.module('lawpal').directive('projectPrimaryAction', [ function ( ) {
 			 * @type {Object}
 			 */
 			$scope.topPriority = $scope.weightings[0];
+			// Check if topPriority Count is 0, if so set the topPriority to be new items
+			if($scope.topPriority.weighting===0) {
+				$scope.topPriority = $scope.weightings[3];
+			}
 			$scope.topPriority.url = $scope.baseUrl + $scope.projectUuid + '/checklist/#' + $scope.topPriority.label;
 
 		}]

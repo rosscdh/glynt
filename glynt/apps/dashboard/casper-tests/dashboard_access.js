@@ -33,52 +33,52 @@ helper.scenario(casper.cli.options.url,
         });
 
         // Proposed state
-        casper.waitForSelector(".widget .engagement-proposed",
+        casper.waitForSelector(".widget .engagement-engaged",
             function success() {
-                this.test.assertExists(".widget .engagement-proposed");
-                this.test.assertSelectorHasText('.widget .engagement-proposed', 'Proposed');
+                this.test.assertExists(".widget .engagement-engaged");
+                this.test.assertSelectorHasText('.widget .engagement-engaged', 'Engaged');
             },
             function fail() {
-                this.test.assertExists(".widget .engagement-proposed");
+                this.test.assertExists(".widget .engagement-engaged");
         });
 
-        // Displays customer name
-        casper.waitForSelector(".project-proposed .user-mini-widget h5",
+        // Primary action displayed
+        casper.waitForSelector(".project-engaged .btn-new",
             function success() {
-                this.test.assertExists(".project-proposed .user-mini-widget h5");
-                this.test.assertSelectorHasText('.project-proposed .user-mini-widget h5', 'Customer A');
+                this.test.assertExists(".project-engaged .btn-new");
+                this.test.assertSelectorHasText('.project-engaged .btn-new', 'New');
             },
             function fail() {
-                this.test.assertExists(".project-proposed .user-mini-widget h5");
+                this.test.assertExists(".project-engaged .btn-new");
         });
 
-        // Displays client caption
-        casper.waitForSelector(".project-proposed .client",
+        // View link
+        casper.waitForSelector(".project-engaged a",
             function success() {
-                this.test.assertExists(".project-proposed .client");
-                this.test.assertSelectorHasText('.project-proposed .client', 'Client');
+                this.test.assertExists(".project-engaged a");
+                this.test.assertSelectorHasText('.project-engaged a', 'View');
             },
             function fail() {
-                this.test.assertExists(".project-proposed .user-mini-widget h5");
+                this.test.assertExists(".project-engaged a");
         });
 
         // Displays discussion modal
-        casper.waitForSelector(".project a[data-toggle='modal']",
+        casper.waitForSelector(".project-engaged button.start-discussion",
             function success() {
-                this.click(".project a[data-toggle='modal']");
+                this.click(".project-engaged button.start-discussion");
             },
             function fail() {
-                this.test.assertExists(".project a[data-toggle='modal']");
+                this.test.assertExists(".project-engaged button.start-discussion");
         });
 
         // Close modal
-        casper.waitForSelector("#overview-modal .close",
+        casper.waitForSelector("form.form-discussion .btn-default",
             function success() {
-                this.test.assertExists("#overview-modal .close");
-                this.click("#overview-modal .close");
+                this.test.assertExists("form.form-discussion .btn-default");
+                this.click("form.form-discussion .btn-default"); // Cancel
             },
             function fail() {
-                this.test.assertExists("#overview-modal .close");
+                this.test.assertExists("form.form-discussion .btn-default");
         });
     }
 );

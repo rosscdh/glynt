@@ -17,7 +17,7 @@ angular.module('lawpal').run(["$templateCache", function($templateCache) {
 		'  <button ng-click="movePage(+1)" href="javascript:;" class="btn-link" ng-disabled="page==maxPages">next &gt;</button>\n'+
 		'  <button ng-click="new(null)" href="javascript:;" class="btn-link pull-right"><i class="icon icon-plus"></i> New</button>\n'+
 		'</em>\n'+
-		'<p ng-show="working.discussions.length==0"><button class="btn btn-link" ng-click="new(null)">Start a discussion</button></p>\n'+
+		'<p ng-show="working.discussions.length==0"><button class="btn btn-link start-discussion" ng-click="new(null)">Start a discussion</button></p>\n'+
 		'<table class="table table-striped">\n'+
 		'	<tr ng-repeat="discussion in working.discussions | startFrom: starting | limitTo: pageLimit" class="byme-{[{byMe(discussion.latest.meta.user.pk)}]} discussion-item"  ng-click="displayDiscussion( $event, discussion)">\n'+
 		'		<td class="status-column clickable">\n'+

@@ -368,8 +368,6 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 			var discussions = [];
 			var workingDiscussions = [];
 
-			console.log( userId );
-
 			$timeout(function () {
 				if (lawPalInterface && lawPalInterface.overview) {
 					// Retrieve discussion items
@@ -702,14 +700,16 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 			var projectUuid = pUuid || this.getProjectUuid();
 			var options = { 'uuid': projectUuid, 'pk': discussionId };
 
-			discussionResource.discussion.get( options,
-				function success( data ) {
-					deferred.resolve(data);
-				},
-				function error( err ) {
-					deferred.reject(err);
-				}
-			);
+			if(projectUuid) {
+				discussionResource.discussion.get( options,
+					function success( data ) {
+						deferred.resolve(data);
+					},
+					function error( err ) {
+						deferred.reject(err);
+					}
+				);
+			}
 
 			return deferred.promise;
 		},
