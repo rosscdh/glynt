@@ -76,7 +76,8 @@ class LawPalAbridgeService(object):
             'data': kwargs
         })
 
-        self.events.append(event)
+        self.events.append(event)  # add teh event to be sent
+
         logger.debug('Added event {content_group}'.format(content_group=content_group))
 
     def send(self):
