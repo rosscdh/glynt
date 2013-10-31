@@ -16,6 +16,13 @@
 @breadcrumb-color:            lighten(@brand-primary, 30%);
 @breadcrumb-active-color:     #fff;
 
+// Slides
+@slide-bg:                   @brand-success;
+@slide-color:                white;
+@slide-heading-color:        inherit;
+@slide-font-size:            ceil(@font-size-base * 1.5);
+@slide-padding:              30px;
+
 
 //
 // Navbars
@@ -89,3 +96,84 @@
     color: #fff;
   }
 }
+
+
+//
+// Slides
+// --------------------------------------------------
+
+
+// Base styles
+// -------------------------
+
+.slide-group {
+  bottom: 0;
+  height: 100%;
+  left: 0;
+  min-width: 1024px;
+  overflow-y: hidden;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+  .transition(opacity 400ms);
+}
+
+.slide {
+  display: block;
+  height: 100%;
+  left: 0;
+  min-width: 980px;
+  overflow: hidden;
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  z-index: 19;
+  /*-webkit-transform: translateZ(0);*/
+}
+
+
+// Headers
+// -------------------------
+
+.slide-header {
+  background-color: @slide-bg;
+  color: @slide-color;
+  font-size: @slide-font-size;
+  font-weight: 200;
+  line-height: (@line-height-base * 1.5);
+  margin-bottom: @slide-padding;
+  padding: @slide-padding;
+  text-align: center;
+
+  h1 {
+    color: @slide-heading-color;
+    line-height: 1;
+  }
+  p {
+    line-height: 1.4;
+  }
+  .glyphicon {
+    background-color: darken(@slide-bg, 15%);
+    border-radius: 50px;
+    color: @slide-heading-color;
+    padding: 27px 28px 22px 28px;
+  }
+}
+
+
+// Slide Hierarchy
+// -------------------------
+
+// Mixin
+.slide-order(@index) {
+  top: percentage(@index);
+}
+
+// Order
+#start                       { .slide-order(0); }
+#selection-ready-to-go       { .slide-order(1); }
+#selection-already-going     { .slide-order(2); }
+#qualification-incorporation { .slide-order(3); }
+#fixed-fee-incorporation     { .slide-order(4); }
+#fixed-fee-financing         { .slide-order(5); }
