@@ -6569,12 +6569,15 @@ body.homepage header.navbar {
 }
 body.homepage.viewing-page-2 header.navbar,
 body.homepage.viewing-page-3 header.navbar,
-body.homepage.viewing-page-4 header.navbar {
+body.homepage.viewing-page-4 header.navbar,
+body.homepage.viewing-page-5 header.navbar,
+body.homepage.viewing-page-6 header.navbar {
   background-color: transparent;
   border-bottom: none;
 }
 body.homepage.viewing-page-7 header.navbar {
   background-color: transparent;
+  border-bottom: none;
 }
 body.homepage.viewing-page-7 header.navbar a {
   color: #222;
@@ -6667,6 +6670,11 @@ body.homepage section#veteran-lawyers {
   background-repeat: none;
   background-position: center center;
   background-size: cover;
+}
+body.homepage section#veteran-lawyers h1,
+body.homepage section#veteran-lawyers h2,
+body.homepage section#veteran-lawyers h3 {
+  color: white;
 }
 body.homepage section#veteran-lawyers .img-circle {
   max-width: 80%;

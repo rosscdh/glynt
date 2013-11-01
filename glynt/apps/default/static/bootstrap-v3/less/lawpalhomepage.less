@@ -12,15 +12,15 @@ body.homepage {
     border-bottom-color:#6a7247;
     transition: background-color 0.6s ease;
   }
-  &.viewing-page-2 header.navbar, &.viewing-page-3 header.navbar, &.viewing-page-4 header.navbar {
+  &.viewing-page-2 header.navbar, &.viewing-page-3 header.navbar, &.viewing-page-4 header.navbar, &.viewing-page-5 header.navbar, &.viewing-page-6 header.navbar   {
     background-color:transparent;
     border-bottom:none;
   }
   &.viewing-page-7 header.navbar {
     background-color:transparent;
+    border-bottom:none;
     a {
-          color: #222;
-
+      color: #222;
     }
   }
     .navbar-nav li a, .navbar {
@@ -80,7 +80,7 @@ body.homepage {
       overflow: hidden;
       font-size: 22px;
       transition: height 1.2s, background-color 0.5s;
-  transform-origin: top;  
+      transform-origin: top;  
       &:hover{
         height:180px;
         transition: height 1.2s;
@@ -112,6 +112,9 @@ body.homepage {
     background-repeat: none;
     background-position:center center;
     background-size:cover;
+    h1, h2, h3 {
+      color:white;
+    }
     .img-circle {
       max-width:80%;
       border:4px solid #ecebeb;
@@ -183,6 +186,7 @@ body.homepage {
   }
   section#co-pilot {
     background-color:#f57f76;
+
     text-align:center;
     color:white;
     h1, h3 {
