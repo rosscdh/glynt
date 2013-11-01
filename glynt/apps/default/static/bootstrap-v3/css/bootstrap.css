@@ -6448,7 +6448,6 @@ td.hidden-lg {
   border-radius: 0px;
 }
 .navbar {
-  min-height: 70px;
   margin-bottom: 20px;
   padding: 0;
   background-color: #ffffff;
@@ -6495,10 +6494,6 @@ td.hidden-lg {
 .navbar-fixed-bottom {
   border-width: 0 0 1px;
 }
-.navbar-brand {
-  padding-top: 25px;
-  padding-bottom: 25px;
-}
 .navbar-toggle {
   position: relative;
   top: 0;
@@ -6536,8 +6531,8 @@ td.hidden-lg {
     padding-bottom: 0;
   }
   .navbar-nav > li > a {
-    padding-top: 25px;
-    padding-bottom: 25px;
+    padding-top: 16.666666666666668px;
+    padding-bottom: 16.666666666666668px;
   }
 }
 .navbar-btn {
@@ -6567,8 +6562,27 @@ td.hidden-lg {
   color: #ffffff;
   background-color: #42d0e5;
 }
-body.homepage {
-  padding-top: 30px!important;
+body.homepage header.navbar {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-bottom-color: #6a7247;
+  transition: background-color 0.6s ease;
+}
+body.homepage.viewing-page-2 header.navbar,
+body.homepage.viewing-page-3 header.navbar,
+body.homepage.viewing-page-4 header.navbar {
+  background-color: transparent;
+  border-bottom: none;
+}
+body.homepage.viewing-page-7 header.navbar {
+  background-color: transparent;
+}
+body.homepage.viewing-page-7 header.navbar a {
+  color: #222;
+}
+body.homepage .navbar-nav li a,
+body.homepage .navbar {
+  background-color: transparent;
+  color: white;
 }
 body.homepage h2 {
   font-size: 43px;
@@ -6585,48 +6599,74 @@ body.homepage .btn-huge {
   padding: 8px 26px;
 }
 body.homepage section#top {
-  background-image: url(../../img/background-lawyers.jpg);
+  background-image: url(../../img/home-2/top2.png);
   background-size: cover;
+  background-repeat: no-repeat;
   position: relative;
+}
+body.homepage section#top .strap {
+  max-width: 140px;
+  margin-top: 30%;
+  margin-bottom: 15px;
+}
+body.homepage section#top h1,
+body.homepage section#top h2 {
+  color: #FFF;
+}
+body.homepage section#top h1 {
+  font-size: 42px;
+}
+body.homepage section#top h2 {
+  font-size: 19px;
+  line-height: 1.3em;
 }
 body.homepage section#top .inner {
   position: relative;
   height: 100%;
 }
 body.homepage section#top .bar {
-  background-color: #6bdb7e;
-  color: white;
+  color: #e9e9e9;
+  background-color: rgba(0, 0, 0, 0.2);
+  text-align: left;
   position: absolute;
   bottom: 0;
-  padding: 20px 0px 50px 0px;
+  padding: 15px 0px 15px 0px;
   width: 100%;
+  height: 65px;
+  overflow: hidden;
+  font-size: 22px;
+  transition: height 1.2s, background-color 0.5s;
+  transform-origin: top;
 }
-body.homepage section#top .bar h1,
-body.homepage section#top .bar h2 {
-  color: white;
-  text-align: center;
+body.homepage section#top .bar:hover {
+  height: 180px;
+  transition: height 1.2s;
+  transform-origin: top;
+  background-color: rgba(0, 0, 0, 0.6);
 }
-body.homepage section#top .bar h1 {
-  font-size: 53px;
+body.homepage section#top .bar:hover p {
+  opacity: 0.9;
 }
-body.homepage section#top .bar h2 {
-  font-size: 23px;
+body.homepage section#top .bar p {
+  font-size: 16px;
+  opacity: 0.1;
 }
 body.homepage section#better-solution {
-  font-size: 16.5px;
+  font-size: 15px;
   color: #757c7e;
 }
 body.homepage section#better-solution h4 {
   font-size: 27px;
-  color: #62d871;
+  color: #56d66c;
 }
 body.homepage section#veteran-lawyers {
   background-color: #f9f9f9;
   border-top: 1px solid #e5e5e5;
   border-bottom: 1px solid #e5e5e5;
-  background-image: url('../../img/home-2/firms.png');
+  background-image: url('../../img/home-2/lawyer-back.jpg');
   background-repeat: none;
   background-position: center center;
+  background-size: cover;
 }
 body.homepage section#veteran-lawyers .img-circle {
   max-width: 80%;
@@ -6697,17 +6737,67 @@ body.homepage section#features {
   border-bottom: 1px solid #e5e5e5;
 }
 body.homepage section#co-pilot {
-  position: relative;
-  display: inline-block;
-  vertical-align: middle;
+  background-color: #f57f76;
+  text-align: center;
+  color: white;
 }
-body.homepage section#co-pilot > .btn {
-  position: relative;
-  float: left;
+body.homepage section#co-pilot h1,
+body.homepage section#co-pilot h3 {
+  color: white;
 }
-body.homepage section#co-pilot > .btn:hover,
-body.homepage section#co-pilot > .btn:active {
-  z-index: 2;
+body.homepage section#co-pilot .step-block {
+  background-color: white;
+  margin-right: 20px;
+  margin-top: 50px;
+  position: relative;
+  height: 330px;
+}
+body.homepage section#co-pilot .step-block div.number {
+  background-color: #555555;
+  color: white;
+  width: 46px;
+  height: 46px;
+  border-radius: 30px;
+  line-height: 46px;
+  font-size: 20px;
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  margin-left: -23px;
+}
+body.homepage section#co-pilot .step-block div.right {
+  position: absolute;
+  right: -38px;
+  top: 45%;
+  width: 30px;
+  height: 30px;
+  background: url('../../img/home-2/chevron-right-white.png') no-repeat center center;
+}
+body.homepage section#co-pilot .step-block h2 {
+  font-size: 22px;
+  padding-top: 15px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+body.homepage section#co-pilot .step-block h3 {
+  font-size: 16px;
+  color: #888888;
+  margin-bottom: 20px;
+}
+body.homepage section#co-pilot .step-block ul li {
+  font-size: 16px;
+  padding: 4px 0px 10px 35px;
+  color: #a2a2a2;
+  text-align: left;
+}
+body.homepage section#co-pilot .step-block li.active {
+  background-image: url('../../img/home-2/tick.png');
+  background-repeat: no-repeat;
+  background-position: top 20px;
+  color: #6f6f6f;
+}
+body.homepage section#co-pilot .step-block li.active.signed {
+  color: #70df7e;
+  margin-top: 20px;
 }
 ul#checklist-categories li {
   position: relative;
@@ -7266,8 +7356,8 @@ button.vcard {
   margin-bottom: 0;
 }
 .navbar-brand {
-  padding-top: 23.5px;
-  padding-bottom: 23.5px;
+  padding-top: 15.666666666666666px;
+  padding-bottom: 15.666666666666666px;
 }
 .page-header {
   padding-top: 20px;
