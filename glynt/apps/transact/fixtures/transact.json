@@ -43,5 +43,109 @@
       "slug": "SF",
       "title": "Seed Financing : Convertible Note"
     }
+  },
+  {
+    "pk": 4,
+    "model": "transact.transaction",
+    "fields": {
+      "price": "0",
+      "description": "...",
+      "data": {
+        "checklist_bunches": []
+      },
+      "slug": "INC",
+      "title": "Incorporation"
+    }
+  },
+  {
+    "pk": 5,
+    "model": "transact.transaction",
+    "fields": {
+      "price": "0",
+      "description": "...",
+      "data": {
+        "checklist_bunches": []
+      },
+      "slug": "FIN",
+      "title": "Financing"
+    }
+  },
+  {
+    "pk": 6,
+    "model": "transact.transaction",
+    "fields": {
+      "price": "0",
+      "description": "...",
+      "data": {
+        "checklist_bunches": []
+      },
+      "slug": "IP",
+      "title": "Intellectual Property"
+    }
+  },
+  {
+    "pk": 7,
+    "model": "transact.transaction",
+    "fields": {
+      "price": "0",
+      "description": "...",
+      "data": {
+        "checklist_bunches": []
+      },
+      "slug": "IMM",
+      "title": "Immigration"
+    }
+  },
+  {
+    "pk": 8,
+    "model": "transact.transaction",
+    "fields": {
+      "price": "0",
+      "description": "...",
+      "data": {
+        "checklist_bunches": []
+      },
+      "slug": "EMP",
+      "title": "Employees"
+    }
+  },
+  {
+    "pk": 9,
+    "model": "transact.transaction",
+    "fields": {
+      "price": "0",
+      "description": "...",
+      "data": {
+        "checklist_bunches": []
+      },
+      "slug": "NDA",
+      "title": "Non-Disclosure Agreement"
+    }
+  },
+  {
+    "pk": 10,
+    "model": "transact.transaction",
+    "fields": {
+      "price": "0",
+      "description": "...",
+      "data": {
+        "checklist_bunches": []
+      },
+      "slug": "PRI",
+      "title": "Privacy and Terms"
+    }
+  },
+  {
+    "pk": 11,
+    "model": "transact.transaction",
+    "fields": {
+      "price": "0",
+      "description": "...",
+      "data": {
+        "checklist_bunches": []
+      },
+      "slug": "OTH",
+      "title": "Other"
+    }
   }
 ]
