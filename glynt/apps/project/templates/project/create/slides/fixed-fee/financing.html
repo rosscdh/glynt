@@ -1,18 +1,22 @@
 {% load transaction_tags %}
 
-<section id="fixed-fee-financing" class="slide" data-scene="fixed-fee" data-transaction-type="financing">
-    <div class="slide-header">
-        <div class="container">
-            <span class="glyphicon glyphicon-adjust"></span>
-            <h1>Financing Services</h1>
-            <p>Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper.</p>
+<!-- data-scene="fixed-fee" data-transaction-type="financing" -->
+<section id="financing-services" class="scene">
+    <div class="scene-content">
+        <div class="masthead">
+            <div class="container">
+                <h1>Financing Services</h1>
+                <p>Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper.</p>
+            </div>
         </div>
-    </div>
 
-    <div class="slide-content">
-        <div class="container">
-            {% transactions transaction='SF' %}
-            {% transactions transaction='ES' %}
+        <div class="content">
+            <div class="container">
+                <form role="form">
+                    {% transactions transaction='SF' %}
+                    {% transactions transaction='ES' %}
+                </form>
+            </div>
         </div>
     </div>
 </section>

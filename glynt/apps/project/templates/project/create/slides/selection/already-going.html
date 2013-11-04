@@ -1,42 +1,107 @@
-<section id="selection-already-going" class="slide" data-scene="selection">
-    <div class="slide-header">
-        <div class="container">
-            <span class="glyphicon glyphicon-adjust"></span>
-            <h1>What do you want?</h1>
-            <p>Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper.</p>
-        </div>
-    </div>
-
-    <div class="slide-content">
-        <div class="container">
-            <div data-toggle="buttons">
-                <label class="btn btn-block btn-lg btn-outline btn-default">
-                    <input type="checkbox" name="incorporation" data-fixed-fee="true" data-intake-form="true" data-needs-qualification="true"> Incorporation
-                </label>
-                <label class="btn btn-block btn-lg btn-outline btn-default">
-                    <input type="checkbox" name="financing" data-fixed-fee="true" data-intake-form="financing"> Financing
-                </label>
-                <label class="btn btn-block btn-lg btn-outline btn-default">
-                    <input type="checkbox" name="intellectual-property"> Intellectual Property
-                </label>
-                <label class="btn btn-block btn-lg btn-outline btn-default">
-                    <input type="checkbox" name="immigration"> Immigration
-                </label>
-                <label class="btn btn-block btn-lg btn-outline btn-default">
-                    <input type="checkbox" name="employees"> Employees
-                </label>
-                <label class="btn btn-block btn-lg btn-outline btn-default">
-                    <input type="checkbox" name="non-disclosure-agreements"> Non-disclosure Agreement
-                </label>
-                <label class="btn btn-block btn-lg btn-outline btn-default">
-                    <input type="checkbox" name="privacy-and-terms"> Privacy &amp; Terms
-                </label>
-                <label class="btn btn-block btn-lg btn-outline btn-default">
-                    <input type="checkbox" name="other"> Other
-                </label>
+<!-- data-stage="selection" -->
+<section id="already-going" class="scene">
+    <div class="scene-content">
+        <div class="masthead">
+            <div class="container">
+                <h1>What are you looking for?</h1>
+                <p>Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper.</p>
             </div>
+        </div>
 
-            <p><button type="button" class="btn btn-block btn-lg btn-primary btn-next-step">Next Step »</button></p>
+        <div class="content">
+            <div class="container">
+                <form role="form">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="checkbox">
+                                <label>
+                                    <!-- data-fixed-fee="true" data-intake-form="true" data-needs-qualification="true" -->
+                                    <input type="checkbox" name="services[]" value="incorporation" data-mincheck="1">
+                                    <h4>Incorporation</h4>
+                                    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="checkbox">
+                                <label>
+                                    <!-- data-fixed-fee="true" data-intake-form="financing" -->
+                                    <input type="checkbox" name="services[]" value="financing" data-mincheck="1">
+                                    <h4>Financing</h4>
+                                    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="services[]" value="intellectual-property" data-mincheck="1">
+                                    <h4>Intellectual Property</h4>
+                                    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="services[]" value="immigration" data-mincheck="1">
+                                    <h4>Immigration</h4>
+                                    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="services[]" value="employees" data-mincheck="1">
+                                    <h4>Employees</h4>
+                                    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="services[]" value="non-disclosure-agreement" data-mincheck="1">
+                                    <h4>Non-Disclosure Agreement</h4>
+                                    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="services[]" value="privacy-and-terms" data-mincheck="1">
+                                    <h4>Privacy &amp; Terms</h4>
+                                    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="services[]" value="other" data-mincheck="1">
+                                    <h4>Other</h4>
+                                    <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <p class="text-center">
+                            <input type="hidden" value="blah">
+                            <button type="submit" class="btn btn-success btn-huge">Next Step »</button>
+                        </p>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </section>

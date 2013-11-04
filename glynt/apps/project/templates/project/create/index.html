@@ -1,17 +1,12 @@
 {% extends 'base-slides.html' %}
 
-{% block slides %}
-    {% include 'project/create/slides/start.html' %}
-
+{% block scenes %}
     <!-- Selection -->
-    {# {% if true %} #}
-    	{% include 'project/create/slides/selection/ready-to-go.html' %}
-    {# {% else %} #}
-    	{% include 'project/create/slides/selection/already-going.html' %}
-    {# {% endif %} #}
+    {% include 'project/create/slides/selection/ready-to-go.html' %}
+    {# {% include 'project/create/slides/selection/already-going.html' %} #}
 
     <!-- Qualification -->
-    {% include 'project/create/slides/qualification/incorporation.html' %}
+    {% include 'project/create/slides/qualification.html' %}
 
     <!-- Fixed Fees -->
     {% include 'project/create/slides/fixed-fee/incorporation.html' %}
