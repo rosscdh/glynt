@@ -10,12 +10,13 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
     <link href="{{ STATIC_URL }}bootstrap-v3/css/bootstrap.css" rel="stylesheet">
+
     <script src="{{ STATIC_URL }}temp/js/vendor/modernizr-2.6.2.min.js"></script>
 
     {% block css %}{% endblock %}
 </head>
 <body>
-    <div id="main" role="main" data-ride="something">
+    <div id="main" role="main" data-ride="steptacular">
         {% block scenes %}{% endblock %}
     </div>
 
@@ -24,9 +25,13 @@
         {{ form }}
     </form>
 
+
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="{{ STATIC_URL }}temp/js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
-    <script src="{{ STATIC_URL }}temp/js/bootstrap.min.js"></script>
+    <script src="{{ STATIC_URL }}bootstrap-v3/js/bootstrap.min.js"></script>
+    <script src="{{ STATIC_URL }}js/parsleyjs/parsley.min.js"></script>
+    <script src="{{ STATIC_URL }}js/parsleyjs/parsley.extend.min.js"></script>
+
     <script src="{{ STATIC_URL }}temp/js/plugins.js"></script>
     <script src="{{ STATIC_URL }}temp/js/main.js"></script>
 </body>
