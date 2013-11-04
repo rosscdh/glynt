@@ -16,12 +16,16 @@
 @breadcrumb-color:            lighten(@brand-primary, 30%);
 @breadcrumb-active-color:     #fff;
 
-// Slides
-@slide-bg:                   @brand-success;
-@slide-color:                white;
-@slide-heading-color:        inherit;
-@slide-font-size:            ceil(@font-size-base * 1.5);
-@slide-padding:              30px;
+// Masthead
+@masthead-bg:                     @brand-success;
+@masthead-border-color:           @gray-lighter;
+@masthead-color:                  #fff;
+@masthead-heading-font-family:    @font-family-base;
+@masthead-heading-font-weight:    500;
+@masthead-heading-color:          inherit;
+@masthead-heading-line-height:    1.1;
+@masthead-font-size:              ceil(@font-size-base * 1.3);
+@masthead-padding:                30px;
 
 
 //
@@ -99,81 +103,116 @@
 
 
 //
-// Slides
+// Masthead
 // --------------------------------------------------
 
+.masthead {
+  background-color: @masthead-bg;
+  border-bottom: 1px solid @masthead-border-color;
+  color: @masthead-color;
+  font-size: @masthead-font-size;
+  font-weight: 200;
+  line-height: (@line-height-base * 1.5);
+  margin-bottom: @masthead-padding;
+  padding: @masthead-padding;
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .15);
 
-// Base styles
-// -------------------------
+  h1 {
+    color: @masthead-heading-color;
+    font-family: @masthead-heading-font-family;
+    font-weight: @masthead-heading-font-weight;
+    line-height: @masthead-heading-line-height;
+    margin: 0;
+  }
+  p {
+    font-weight: 300;
+    line-height: 1.4;
+    margin: 0;
+  }
+  .container {
+    position: relative;
+  }
 
-.slide-group {
+  @media (min-width: @screen-small) {
+    text-align: left;
+  }
+}
+
+
+//
+// Stage
+// --------------------------------------------------
+
+html,
+body {
+  min-width: 1024px;
+  overflow-x: hidden;
+  /*.transition(opacity 400ms);*/
+}
+
+body {
   bottom: 0;
   height: 100%;
   left: 0;
-  min-width: 1024px;
-  overflow-y: hidden;
   position: absolute;
   right: 0;
   top: 0;
   width: 100%;
-  .transition(opacity 400ms);
+  *zoom: 1;
 }
+
+html,
+.stage {
+  display: block;
+  height: 100%;
+  padding: 0;
+  position: static;
+  width: 100%;
+  *zoom: 1;
+}
+
+.stage {
+  position: relative;
+  z-index: 10;
+  /*.transition(all .6s ease-in-out);*/
+}
+
+
+//
+// Slides
+// --------------------------------------------------
 
 .slide {
   display: block;
   height: 100%;
-  left: 0;
+  left: 100%;
   min-width: 980px;
   overflow: hidden;
+    overflow-y: scroll;
   position: absolute;
-  top: 100%;
+  top: 0;
   width: 100%;
   z-index: 19;
+  *zoom: 1;
   /*-webkit-transform: translateZ(0);*/
 }
 
-
-// Headers
-// -------------------------
-
-.slide-header {
-  background-color: @slide-bg;
-  color: @slide-color;
-  font-size: @slide-font-size;
-  font-weight: 200;
-  line-height: (@line-height-base * 1.5);
-  margin-bottom: @slide-padding;
-  padding: @slide-padding;
-  text-align: center;
-
-  h1 {
-    color: @slide-heading-color;
-    line-height: 1;
-  }
-  p {
-    line-height: 1.4;
-  }
-  .glyphicon {
-    background-color: darken(@slide-bg, 15%);
-    border-radius: 50px;
-    color: @slide-heading-color;
-    padding: 27px 28px 22px 28px;
-  }
+.slide-content {
+  display: block;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1;
 }
 
-
-// Slide Hierarchy
+// Scene order
 // -------------------------
 
-// Mixin
-.slide-order(@index) {
-  top: percentage(@index);
-}
-
-// Order
-#start                       { .slide-order(0); }
-#selection-ready-to-go       { .slide-order(1); }
-#selection-already-going     { .slide-order(2); }
-#qualification-incorporation { .slide-order(3); }
-#fixed-fee-incorporation     { .slide-order(4); }
-#fixed-fee-financing         { .slide-order(5); }
+#ready-to-go            { left: 0%; }
+#already-going          { left: 0%; }
+#qualification          { left: 100% };
+#incorporation-services { left: 200% };
+#financing-services     { left: 300% };
