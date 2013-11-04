@@ -43,8 +43,7 @@ class LawPalAbridgeService(object):
             'natural_event_date': naturaltime(date),
         })
 
-        card_service = CardService(content=content,
-                                   **kwargs)
+        card_service = CardService(content=content, **kwargs)
 
         logger.debug('Successfully appended card to event.kwargs')
 
