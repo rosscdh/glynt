@@ -15,7 +15,9 @@
 
     {% block css %}{% endblock %}
 </head>
-<body>
+<body style="padding-top: 69px;">
+    {% block navbar %}{% include 'partials/nav.html' %}{% endblock %}
+
     <div id="main" role="main" data-ride="steptacular">
         {% block scenes %}{% endblock %}
     </div>
