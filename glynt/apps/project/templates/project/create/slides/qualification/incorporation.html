@@ -9,7 +9,7 @@
 
         <div class="content">
             <div class="container">
-                <form class="form-inline" role="form">
+                <form class="form-inline" role="form" data-stage="qualification">
                     <div class="row">
                         <div class="col-lg-7">
                             <h3>How many founders and where are they based?</h3>
@@ -17,7 +17,7 @@
                         </div>
                         <div class="col-lg-5" style="margin-top: 20px;">
                             <div class="form-group text-right">
-                                <select id="" name="" class="form-control" style="width: 50px;" data-max="3" required>
+                                <select id="company-founders" name="company_founders" class="form-control" data-max="3" required>
                                     <option value=""></option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
@@ -26,7 +26,7 @@
                                     <option value="5+">5+</option>
                                 </select>
                                 <span>founder(s) located</span>
-                                <select id="founders-location" name="" class="form-control" style="width: 250px;" data-regexp="inside" required>
+                                <select id="company-founders-location" name="company_founders_location" class="form-control" data-regexp="inside" required>
                                     <option></option>
                                     <option value="inside">inside the United States</option>
                                     <option value="outside">outside the United States</option>
@@ -43,7 +43,7 @@
                         </div>
                         <div class="col-lg-5" style="margin-top: 20px;">
                             <div class="form-group text-right">
-                                <select id="" name="" class="form-control" data-regexp="no" required>
+                                <select id="company-incorporated" name="company_incorporated" class="form-control" data-regexp="no" required>
                                     <option value=""></option>
                                     <option value="yes">Yes, the company is already incorporated</option>
                                     <option value="no">No, the company is not incorporated</option>
@@ -59,7 +59,7 @@
                         </div>
                         <div class="col-lg-5" style="margin-top: 20px;">
                             <div class="form-group text-right">
-                                <select id="" name="" class="form-control" data-regexp="no" required>
+                                <select id="company-paperwork" name="company_paperwork" class="form-control" data-regexp="no" required>
                                     <option value=""></option>
                                     <option value="yes">Yes, there is some pre-existing paperwork and/or agreements</option>
                                     <option value="no">No, there is no paperwork and/or agreements</option>
