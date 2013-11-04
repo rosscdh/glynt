@@ -7,74 +7,102 @@
     <meta name="keywords" content="incorporation, seed financing, convertible notes, venture capital, acquisition, angel investing">
 {% endblock %}
 
-{% block navbar %}
-    {% include 'partials/nav.html' %}
+{% block navbar %}   
+<header class="navbar navbar-fixed-top" role="banner">
+    <div class="container">
+        <div class="navbar-header">
+            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <ul class="onepage-pagination list-unstyled">
+            <li class=""><a href="#1" data-index="1"  class="navbar-brand"><img src="{{ STATIC_URL }}img/logo-nav-white-on-dark.png" alt="LawPal" title="LawPal"></a></li>
+            </ul>
+        </div>
+        <nav class="collapse nav-collapse navbar-collapse" role="navigation" id="navbar">
+            <ul class="nav navbar-nav pull-right onepage-pagination">
+                <li title="How It Works">
+                    <a data-index="2" href="#2" class="">How It Works</a>
+                </li>
+                <li title="Features">
+                    <a data-index="3" href="#3" class="">Features</a>
+                </li>
+                <li title="Our Lawyers">
+                    <a data-index="4" href="#4" class="">Our Lawyers</a>
+                </li>
+                <li title="Pricing">
+                    <a data-index="5" href="#5" class="">Pricing</a>
+                </li>
+                <li title="Get Started">
+                    <a data-index="6" href="#6" class="">Get Started</a>
+                </li>
+                <li title="Sign In">
+                    <a data-index="7" href="#7" class="">Sign In</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>
 {% endblock %}
 
 {% block prebody %}
 <!--A better legal solution for startups-->
 <style>
-section {
-    padding-top:30px;
-}
-@media screen and (min-height: 768px) {  
-  section { padding-top: 100px; }
-  section h1 { font-size:50px;}
-
-}
-@media screen and (min-height: 900px) {  
-  section { padding-top: 150px; }
-  section h1 { font-size:55px; margin-bottom:5px;}
-}
 </style>
-
-<div class="main">
+<div class="main" data-spy="scroll" data-target="#navbar" id="content">
     <section id="top">
         <div class="container">
             <div class="inner">
                 <div class="row">
-                    <div class="col-sm-4">     
+                    <div class="col-sm-6 col-12 col-lg-5">     
                         <img src="{{ STATIC_URL }}img/home-2/top-logo.png" class="strap">
                         <h1>Transparent legal solutions for your startup. </h1>
                         <h2>Work easily with a veteran startup lawyer to accurately, affordably and efficiently reach your goals. </h2>
+                        <a href="#" class="btn btn-clear-border btn-home btn-huge" id="play-video">Watch the Video</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="bar">
-            <div class="col-10 col-offset-1">
-                <div class="row">
-                    <div class="col-sm-4">
-                        Enjoy Legal Ease
-                        <p>Get complete visibility of your legal workflow and streamline your legal projects at every stage.</p>
-                    </div>
-                    <div class="col-sm-4">
-                        Trust Your Co-Pilot
-                        <p>Navigate your way with our veteran startup lawyers experienced in your legal needs at any stage.</p>
-                    </div>
-                    <div class="col-sm-4">
-                        Fixed Legal Fees
-                        <p>Expect predictable pricing for legal services from incorporation to financing and beyond.</p>
+        <div class="bar visible-lg">
+            <div class="container">
+                <div class="col-10 col-12">
+                    <div class="row onepage-pagination ">
+                        <div class="col-lg-4 col-4">
+                            <h3>Enjoy Legal Ease</h3>
+                            <p>Get complete visibility of your legal workflow and streamline your legal projects at every stage.</p>
+                            <a data-index="2" href="#2"><img src="{{STATIC_URL}}img/home-2/down-arrow.png" class="da"></a>
+                        </div>
+                        <div class="col-lg-4 col-4">
+                            <h3>Trust Your Co-Pilot</h3>
+                            <p>Navigate your way with our veteran startup lawyers experienced in your legal needs at any stage.</p>
+                             <a data-index="4" href="#4"><img src="{{STATIC_URL}}img/home-2/down-arrow.png" class="da"></a>
+                        </div>
+                        <div class="col-lg-4 col-4">
+                            <h3>Fixed Legal Fees</h3>
+                            <p>Expect predictable pricing for legal services from incorporation to financing and beyond.</p>
+                             <a data-index="5" href="#5"><img src="{{STATIC_URL}}img/home-2/down-arrow.png" class="da"></a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!--Co-pilot-->
+    <!--Co-pilot/How it works-->
     <section id="co-pilot">
         <div class="container">
             <div class="row">
-                <div class="col-lg-10 col-offset-1">
-                    <div class="row">
+                <div class="col-lg-12">
+                    <div class="row wrap">
                         <div class="col-sm-4">
                             <div class="step-block">
                                 <div class="row">
-                                    <div class="right"></div>
-                                    <div class="col-sm-10 col-offset-1">
+                                    <div class="right  hidden-sm"></div>
+                                    <div class="col-sm-10 col-push-1">
                                         <div class="number">1</div>
                                         <h2>Define your project</h2>
                                         <h3>Tell us what you need</h3>
-                                        <ul class="list-unstyled">
+                                        <ul class="list-unstyled  hidden-sm">
                                             <li class="active">Incorporation</li>
                                             <li>Financing</li>
                                             <li class="active">Intellectual Property</li>
@@ -89,12 +117,12 @@ section {
                         <div class="col-sm-4">
                             <div class="step-block">
                                 <div class="row">
-                                    <div class="right"></div>
-                                    <div class="col-sm-10 col-offset-1">
+                                    <div class="right hidden-sm"></div>
+                                    <div class="col-sm-10 col-push-1">
                                         <div class="number">2</div>
                                         <h2>Select your lawyer</h2>
                                         <h3>Receive responses from our attorneys</h3>
-                                        <img src="{{STATIC_URL}}img/home-2/lawyer.png">
+                                        <img src="{{STATIC_URL}}img/home-2/lawyer.png" class="hidden-sm">
                                     </div>            
                                 </div>
                             </div>
@@ -102,11 +130,11 @@ section {
                         <div class="col-sm-4">
                             <div class="step-block">
                                 <div class="row">
-                                    <div class="col-sm-10 col-offset-1">
+                                    <div class="col-sm-10 col-push-1">
                                         <div class="number">3</div>
                                         <h2>Co-pilot your deal</h2>
                                         <h3>Manage your deal through the LawPal platform</h3>
-                                        <ul class="list-unstyled">
+                                        <ul class="list-unstyled hidden-sm">
                                             <li class="active">Shareholders agreement</li>
                                             <li class="active">Founder IP assignment</li>
                                             <li class="active">Note purchase agreement</li>
@@ -125,11 +153,66 @@ section {
             </div>
         </div>
     </section>
+    <!--Featres-->
+    <section id="deal-visibility">
+        <br />
+        <br />
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="text-right">Know where your deal is.</h1>
+                    <div class="row">
+                        <div class="col-sm-6 col-push-6 text-right">
+                            <h3 class="softer text-right">Complete transparency of your legal workflow and the right set of tools to keep your startup and your Lawpal legal team moving forward quickly.</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bar">
+            <div class="container">
+                <div class="row feature">
+                    <div class="col-4 collab">
+                        <div></div>
+                        <h3>Team Collaboration</h3>
+                        <p>Choose what team members can contribute to your project at any time.</p>
+                    </div>
+                    <div class="col-4 discuss">
+                        <div></div>
+                        <h3>Centralized Discussions</h3>
+                        <p>Keep your team messaging on each topic communicated in one place.</p>
+                    </div>
+                    <div class="col-4 progress-vis">
+                        <div></div>
+                        <h3>Progress Visibility</h3>
+                        <p>See the status of every project and always know who's court the ball is in.</p>
+                    </div>
+                    <div class="col-4 sync">
+                        <div></div>
+                        <h3>Cloud Sync and Storage</h3>
+                        <p>Work knowing your documents are saved and retrievable from any device.</p>
+                    </div>
+                    <div class="col-4 sign">
+                        <div></div>
+                        <h3>Annotation and Signing</h3>
+                        <p>Easily update and sign your documents through our editing platform.</p>
+                    </div>
+                    <div class="col-4 lock">
+                        <div></div>
+                        <h3>Bank-Grade Security</h3>
+                        <p>Know your projects are kept private with our secure server infrastructure.</p>
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+    </section>
+
     <!--Veteran startup lawyers-->
     <section id="veteran-lawyers">
         <div class="container">
             <div class="row">
-                <div class="col-6">
+                <div class="col-sm-6 col-10">
                     <br />
                     <br />
                     <br />
@@ -153,74 +236,43 @@ section {
     <section id="pricing">
         <div class="container">
             <div class="row">
-                <div class="col-10 col-offset-1">
+                <div class="col-12">
+                    <br />
                     <br />
                     <br />
                     <h1 class="text-center">Predictable pricing.</h1>
                     <br />
                     <p class="text-center sub-text">
                          When raising your seed round, every dollar counts. <br />
-                        Getting an invoice for $15,000 in legal fees hurts. With LawPal, you get <br />
-                        the benefits of engaging an experienced startup lawyer <br />
+                        Getting an invoice for $15,000 in legal fees hurts. With LawPal, you get
+                        the benefits of engaging an experienced startup lawyer
                         without writing a blank check for an unknown amount of billable hours.
                     </p>
                     <div class="row">
-                        <div class="col-4 text-right">
+                        <div class="col-sm-4 col-12">
                             <h2>Company Formation.</h2>
                             <span class="small">from</span> <span class="big">$950</span>
                         </div>
-                        <div class="col-4 text-right">
+                        <div class="col-sm-4 col-12">
                             <h2>Bridge/Note Financing.</h2>
                             <span class="big">$2,500</span>
                         </div>
-                        <div class="col-4 text-right">
-                            <h2>Priced/Equity Round.</h2>
-                            <span class="small">from</span> <span class="big">$4,000</span>
+                        <div class="col-sm-4 col-12">
+                            <h2>Anything Else.</h2>
+                            <span class="small">from</span> <span class="big">$Quote</span>
+                        </div>
+                        <div class="col-12 text-center link onepage-pagination">
+                            <br />
+                            <a data-index="6" href="#6" class="btn btn-clear-border btn-home btn-huge">Get Started</a>
                         </div>
                     </div>
                     <br />
                     <br />
-                    <div class="text-center">
-                        <a href="#" class="btn btn-clear-border btn-huge">Get Started</a>
-                    </div>
                 </div>
             </div>
         </div>
     </section>
-    <!--Deal visibility-->
-    <section id="deal-visibility">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="text-center">Know where your deal is.</h1>
-                    <div class="row">
-                        <div class="col-8 col-offset-2">
-                            <h3 class="softer text-center">Complete transparency of your legal workflow and the right set of tools to keep your startup and your Lawpal legal team moving forward quickly.</h3>
-                            <br />
-                            <img src="http://placehold.it/700x350">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!--Features-->
-    <section id="features">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="text-center">Features</h1>
-                    <div class="row">
-                        <div class="col-8 col-offset-2">
-                            <h3 class="softer text-center">The LawPal platform is designed with your startup's goals in mind.</h3>
-                            <br />
-                            <img src="{{STATIC_URL}}img/home-2/6-features.png">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+
     <!--Get started-->
     <section id="get-started">
         <div class="container">
@@ -260,6 +312,24 @@ section {
     </section>
 <!--Love for LawPal-->
 </div>
+
+<!--Dialog for Homepage Video-->
+
+<div id="videoModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <iframe width="100%" height="300" frameborder="0" allowfullscreen=""></iframe>
+                <div class="text-right">   
+                    <button type="button" class="btn btn-clear-border text-right" data-dismiss="modal" aria-hidden="true">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <script type="text/javascript" src="{{ STATIC_URL }}js/scroll/jquery.onepage-scroll.js"></script>
 <link href="{{ STATIC_URL }}js/scroll/onepage-scroll.css" rel="stylesheet">
 <link href="{{ STATIC_URL }}css/theme/animate.css" rel="stylesheet">
@@ -269,14 +339,25 @@ $(".main").onepage_scroll({
    sectionContainer: "section", // sectionContainer accepts any kind of selector in case you don't want to use section
    animationTime: 600, // AnimationTime let you define how long each section takes to animate
    pagination: true, // You can either show or hide the pagination. Toggle true for show, false for hide.
-   updateURL: false // Toggle this true if you want the URL to be updated automatically when the user scroll to each page.
+   updateURL: true // Toggle this true if you want the URL to be updated automatically when the user scroll to each page.
+
 });
-$('#copilot-toggle button').click(function (e) {
-  e.preventDefault()
-  $('#copilot-toggle button').removeClass('active')
-  $(this).addClass('active')
-  $(this).tab('show')
-})
+
+$(function() {
+    $('[data-spy="scroll"]').each(function () {
+        var $spy = $(this).scrollspy('refresh')
+    });
+
+});
+$('#play-video').click(function () {
+    var src = 'http://www.youtube.com/v/V0IXvhgjNBo&amp;autoplay=1';
+    $('#videoModal').modal('show');
+    $('#videoModal iframe').attr('src', src);
+});
+$('#videoModal').on('hidden.bs.modal', function () {
+    $('#videoModal iframe').removeAttr('src');
+});
+
 </script>
 
 {% endblock %}

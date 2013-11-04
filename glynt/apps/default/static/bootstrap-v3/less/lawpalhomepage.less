@@ -7,15 +7,15 @@
 
 // Top Page and Scroll down for more bit
 body.homepage {
-    header.navbar {
-    background-color:  rgba(0,0,0,0.2);
-    border-bottom-color:#6a7247;
+  header.navbar {
+    background-color:  rgba(0,0,0,0.15);
+    border-bottom:none;;
     transition: background-color 0.6s ease;
   }
   &.viewing-page-2 header.navbar, &.viewing-page-3 header.navbar, &.viewing-page-4 header.navbar, &.viewing-page-5 header.navbar, &.viewing-page-6 header.navbar   {
-    background-color:transparent;
-    border-bottom:none;
-  }
+      background-color:transparent;
+      border-bottom:none;
+  } 
   &.viewing-page-7 header.navbar {
     background-color:transparent;
     border-bottom:none;
@@ -23,66 +23,102 @@ body.homepage {
       color: #222;
     }
   }
-    .navbar-nav li a, .navbar {
+  .navbar-nav li a, .navbar {
     background-color:transparent;
     color:white;
+    font-size:14px;
+    padding-left:8px;
   }
 
+  .navbar-nav li a {
+    opacity:0.6;
+    transition: opacity 0.6s ease;
+
+  }
+
+  .navbar-nav li a.active {
+    opacity:1
+  }
   h2 {
-    font-size: 43px;
+    font-size: 35px;
   }
   h3 {
     font-size: 21px;
   }
+  .btn-home {
+    background-color:transparent;
+    color:white;
+    border-color:white;
+    font-size:16px;
+    font-weight:normal;
+    font-family:@headings-font-family;
+  }
   section .container{
     margin-top:1em;
-  }
-  section {
   }
   .btn-huge {
     border-width:2px;
     font-size:15px;
     padding: 8px 26px;
+    text-shadow: none;
   }
   section#top {
-    background-image:url(../../img/home-2/top2.png);
+    background-image:url(../../img/home-2/top2.jpg);
     background-size:cover;
     background-repeat:no-repeat;
     position:relative;
     .strap {
       max-width:140px;
-      margin-top: 30%;
+      margin-top: 24%;
       margin-bottom:15px;
     }
     h1, h2 {
       color:#FFF;
     }
     h1 {
-      font-size:42px;
+      font-size:35px;
+      font-family: @font-family-sans-serif;
+      text-shadow: -1px 1px 2px #4a442e;
+
     }
     h2 {
-      font-size:19px;
+      font-size:23px;
       line-height: 1.3em;
+      margin-bottom:30px;
     }
     .inner {
       position:relative;
       height:100%;
     }
+    .da {
+      width:30px;
+      opacity:0.8;
+    }
     .bar {
       color:#e9e9e9;
-      background-color:  rgba(0,0,0,0.2);
+      background-color:  rgba(0,0,0,0.4);
       text-align:left;
       position:absolute;
       bottom:0;
-      padding:15px 0px 15px 0px;
+      padding:0px 0px 15px 0px;
       width:100%;
       height: 65px;
       overflow: hidden;
       font-size: 22px;
       transition: height 1.2s, background-color 0.5s;
-      transform-origin: top;  
+      transform-origin: top;
+      h3 {
+        font-size:21px;
+        color:white;
+        margin-top:0px;
+      }  
+      p {
+        font-size:14px;
+        opacity:0.1;
+      }
       &:hover{
         height:180px;
+        color: #ccc;
         transition: height 1.2s;
         transform-origin: top;
         background-color:  rgba(0,0,0,0.6);
@@ -90,99 +126,7 @@ body.homepage {
           opacity:0.9;
         }
       }
-      p {
-        font-size:16px;
-        opacity:0.1;
-      }
     }
-  }
-  section#better-solution {
-    font-size: 15px;
-    color: #757c7e;
-    h4 {
-      font-size: 27px;
-      color: darken(@brand-success, 5%);
-    }
-  }
-  section#veteran-lawyers {
-    background-color: #f9f9f9;
-    border-top: 1px solid #e5e5e5;
-    border-bottom: 1px solid #e5e5e5;
-    background-image:url('../../img/home-2/lawyer-back.jpg');
-    background-repeat: none;
-    background-position:center center;
-    background-size:cover;
-    h1, h2, h3 {
-      color:white;
-    }
-    .img-circle {
-      max-width:80%;
-      border:4px solid #ecebeb;
-    }
-    h3 {
-      margin-bottom:5px;
-    }
-    h4 {
-      margin-top:0px;
-      font-size:15px;
-    }
-  }
-  section#pricing {
-    background-color:@brand-primary;
-    h3 span {
-      border-bottom:1px dotted white;
-      font-style:italic;
-    }
-    * {
-      color:white;
-    }
-    .sub-text {
-      line-height:1.6em;
-      opacity:0.8;
-      font-size:16px;
-    }
-    h2 {
-      font-size:25px;
-      margin-bottom:0px;
-      margin-top:45px;
-    }
-    span.big {
-      font-size:62px;
-      font-family:@headings-font-family;
-    }
-    span.small {
-      font-size:23px;
-      opacity:0.7;
-    }
-    .btn {
-      background-color:transparent;
-      color:white;
-      border-color:white;
-      font-size:20px;
-    }
-  }
-  section#get-started {
-    background-color:#fcd423;
-    h2 {
-      font-size:30px;
-    }
-    .jump-block {
-      padding:20px 10px 30px 10px;
-      border:1px solid #fcd423;
-      margin-top:15px;
-    }
-    .jump-block:hover {
-      border:1px solid #fde477;
-      background-color:#fcd839;
-    }
-    * { 
-     color:#222;
-    }
-  }
-  section#features {
-    background-color:#f9f9f9;
-    border-top:1px solid #e5e5e5;
-    border-bottom:1px solid #e5e5e5;
   }
   section#co-pilot {
     background-color:#f57f76;
@@ -197,7 +141,9 @@ body.homepage {
       margin-right:20px;
       margin-top:50px;
       position:relative;
-      height: 330px;
+      h1 {
+        font-size:35px;
+      }
       div.number {
         background-color:@gray;
         color:white;
@@ -249,7 +195,223 @@ body.homepage {
       }
     }
   }
+  section#better-solution {
+    font-size: 15px;
+    color: #757c7e;
+    h4 {
+      font-size: 27px;
+      color: darken(@brand-success, 5%);
+    }
+  }
+  section#veteran-lawyers {
+    background-color: #f9f9f9;
+    border-top: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+    background-image:url('../../img/home-2/lawyer-back.jpg');
+    background-repeat: none;
+    background-position:center center;
+    background-size:cover;
+    h1, h2, h3 {
+      color:white;
+    }
+    .img-circle {
+      max-width:80%;
+      border:4px solid #ecebeb;
+    }
+    h3 {
+      margin-bottom:5px;
+    }
+    h4 {
+      margin-top:0px;
+      font-size:15px;
+    }
+  }
+  section#pricing {
+    background-color:@brand-primary;
+    h3 span {
+      border-bottom:1px dotted white;
+      font-style:italic;
+    }
+    * {
+      color:white;
+      text-align:center;
+    }
+    .sub-text {
+      line-height:1.6em;
+      opacity:0.8;
+      font-size:13px;
+    }
+    h2 {
+      font-size:25px;
+      margin-bottom:0px;
+      margin-top:15px;
+    }
+    span.big {
+      font-size:25px;
+      font-family:@headings-font-family;
+      text-align:center;
+    }
+    span.small {
+      font-size:16px;
+      opacity:0.7;
+      text-align:center;
+    }
+  }
+  section#get-started {
+    background-color:#fcd423;
+    h2 {
+      font-size:30px;
+    }
+    .jump-block {
+      padding:20px 10px 30px 10px;
+      border:1px solid #fcd423;
+      margin-top:15px;
+    }
+    .jump-block:hover {
+      border:1px solid #fde477;
+      background-color:#fcd839;
+    }
+    * { 
+     color:#222;
+    }
+  }
+  section#deal-visibility {
+    background-color:#f9f9f9;
+    background-image:url('../../img/home-2/product-features.png');
+    background-repeat: none;
+    position:relative;
+    background-position:center center;
+    background-size:cover;    border-top:1px solid #e5e5e5;
+    border-bottom:1px solid #e5e5e5;
+    .bar {
+      background:rgba(0,0,0,0.5);
+      padding:5px 0px 20px 0px;
+      position:absolute;
+      bottom:0;
+      width:100%;
+    }
+    * {
+      color:white;
+    }
+    .row.feature {
+      color:white;
+      h3 {
+        margin: 15px 0px 5px 0px;
+        color:white;
+      }
+      p {
+        color:#ccc;
+      }
+    }
+
+    // collab discuss progress sync  sign  lock
+
+  }
 }
+
+
+
+
+// Tablets and up
+@media (min-width: @screen-tablet) {
+  body.homepage {
+    section {
+      padding-top:100px;
+    }
+    section#pricing {
+      h3 span {
+      }
+      .sub-text {
+      }
+      h2 {
+        margin-top:35px;
+      }
+      span.big {
+        font-size:40px;
+      }
+      span.small {
+        font-size:25px;
+      }
+    }
+  }
+} 
+// Medium and large device columns (desktop and up)
+@media (min-width: @screen-desktop) {
+  body.homepage {
+    section {
+      padding-top:100px;
+    }
+    .modal-dialog {
+      padding-top:80px;
+      width:750px;
+      margin-left:-375px;
+      iframe {
+        height:417px;
+      }
+    }
+    section#top {
+      h1 {
+        font-size: 42px;
+      }
+      h2 {
+      }
+      h3 {
+      }
+    }
+    section#co-pilot {
+      .step-block {
+        height:335px;
+        h1 {
+          font-size:42px;
+        }
+      }
+    }
+    section#pricing {
+      .sub-text {
+        font-size:18px;
+      }
+    }
+
+  }
+}
+@media (min-width: @screen-large-desktop) {
+  body.homepage {
+    section#co-pilot {
+      .wrap {
+        padding-right:90px;
+        padding-left:90px;
+      }
+    }
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //
 // Other Stuff

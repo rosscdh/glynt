@@ -97,7 +97,20 @@
         "transition": "all " + settings.animationTime + "ms " + settings.easing
       });
     }
-    
+    $.fn.transformPageSimple = function(settings, pos) {
+      $(this).css({
+        "-webkit-transform": "translate3d(0, " + pos + "%, 0)", 
+        "-webkit-transition": "all 0ms " + settings.easing,
+        "-moz-transform": "translate3d(0, " + pos + "%, 0)", 
+        "-moz-transition": "all 0ms " + settings.easing,
+        "-ms-transform": "translate3d(0, " + pos + "%, 0)", 
+        "-ms-transition": "all " + "0ms " + settings.easing,
+        "transform": "translate3d(0, " + pos + "%, 0)", 
+        "transition": "all 0ms " + settings.easing
+      });
+    }    
+
+
     $.fn.moveDown = function() {
       var el = $(this)
       index = $(settings.sectionContainer +".active").data("index");
@@ -190,9 +203,9 @@
     
     // Create Pagination and Display Them
     if(settings.pagination == true) {
-      $("<ul class='onepage-pagination'>" + paginationList + "</ul>").prependTo("body");
-      posTop = (el.find(".onepage-pagination").height() / 2) * -1;
-      el.find(".onepage-pagination").css("margin-top", posTop);
+      //$("<ul class='onepage-pagination onepage-pagination-style'>" + paginationList + "</ul>").prependTo("body");
+      //posTop = (el.find(".onepage-pagination").height() / 2) * -1;
+      //el.find(".onepage-pagination").css("margin-top", posTop);
     }
     
     if(window.location.hash != "" && window.location.hash != "#1") {
@@ -213,7 +226,7 @@
         }
       }
       pos = ((init_index - 1) * 100) * -1;
-      el.transformPage(settings, pos);
+      el.transformPageSimple(settings, pos);
       
     }else{
       $(settings.sectionContainer + "[data-index='1']").addClass("active")
@@ -221,7 +234,7 @@
       if(settings.pagination == true) $(".onepage-pagination li a" + "[data-index='1']").addClass("active");
     }
     if(settings.pagination == true)  {
-      $(".onepage-pagination li a").click(function (){
+      $(".onepage-pagination a").click(function (){
         var page_index = $(this).data("index");
         if (!$(this).hasClass("active")) {
           current = $(settings.sectionContainer + ".active")

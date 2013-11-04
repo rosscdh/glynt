@@ -23,7 +23,7 @@ body, .onepage-wrapper, html {
   height: 100%;
 }
 
-.onepage-pagination {
+.onepage-pagination-style {
   position: absolute;
   right: 10px;
   top: 50%;
@@ -32,18 +32,18 @@ body, .onepage-wrapper, html {
   margin: 0;
   padding: 0;
 }
-.onepage-pagination li {
+.onepage-pagination-style li {
   padding: 0;
   text-align: center;
 }
-.onepage-pagination li a{
+.onepage-pagination-style li a{
   padding: 10px;
   width: 4px;
   height: 4px;
   display: block;
   
 }
-.onepage-pagination li a:before{
+.onepage-pagination-style li a:before{
   content: '';
   position: absolute;
   width: 4px;
@@ -54,7 +54,7 @@ body, .onepage-wrapper, html {
   -moz-border-radius: 10px;
 }
 
-.onepage-pagination li a.active:before{
+.onepage-pagination-style li a.active:before{
   width: 10px;
   height: 10px;
   background: none;

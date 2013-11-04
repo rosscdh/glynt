@@ -4984,14 +4984,10 @@ body {
   .modal-dialog {
     left: 50%;
     right: auto;
-    width: 560px;
+    width: 650px;
     margin-left: -280px;
-    padding-top: 30px;
+    padding-top: 50px;
     padding-bottom: 30px;
-  }
-  .modal-content {
-    -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
   }
 }
 .tooltip {
@@ -6563,8 +6559,8 @@ td.hidden-lg {
   background-color: #42d0e5;
 }
 body.homepage header.navbar {
-  background-color: rgba(0, 0, 0, 0.2);
-  border-bottom-color: #6a7247;
+  background-color: rgba(0, 0, 0, 0.15);
+  border-bottom: none;
   transition: background-color 0.6s ease;
 }
 body.homepage.viewing-page-2 header.navbar,
@@ -6586,12 +6582,29 @@ body.homepage .navbar-nav li a,
 body.homepage .navbar {
   background-color: transparent;
   color: white;
+  font-size: 14px;
+  padding-left: 8px;
+}
+body.homepage .navbar-nav li a {
+  opacity: 0.6;
+  transition: opacity 0.6s ease;
+}
+body.homepage .navbar-nav li a.active {
+  opacity: 1;
 }
 body.homepage h2 {
-  font-size: 43px;
+  font-size: 35px;
 }
 body.homepage h3 {
   font-size: 21px;
+}
+body.homepage .btn-home {
+  background-color: transparent;
+  color: white;
+  border-color: white;
+  font-size: 16px;
+  font-weight: normal;
+  font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
 }
 body.homepage section .container {
   margin-top: 1em;
@@ -6600,16 +6613,17 @@ body.homepage .btn-huge {
   border-width: 2px;
   font-size: 15px;
   padding: 8px 26px;
+  text-shadow: none;
 }
 body.homepage section#top {
-  background-image: url(../../img/home-2/top2.png);
+  background-image: url(../../img/home-2/top2.jpg);
   background-size: cover;
   background-repeat: no-repeat;
   position: relative;
 }
 body.homepage section#top .strap {
   max-width: 140px;
-  margin-top: 30%;
+  margin-top: 24%;
   margin-bottom: 15px;
 }
 body.homepage section#top h1,
@@ -6617,23 +6631,30 @@ body.homepage section#top h2 {
   color: #FFF;
 }
 body.homepage section#top h1 {
-  font-size: 42px;
+  font-size: 35px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-shadow: -1px 1px 2px #4a442e;
 }
 body.homepage section#top h2 {
-  font-size: 19px;
+  font-size: 23px;
   line-height: 1.3em;
+  margin-bottom: 30px;
 }
 body.homepage section#top .inner {
   position: relative;
   height: 100%;
 }
+body.homepage section#top .da {
+  width: 30px;
+  opacity: 0.8;
+}
 body.homepage section#top .bar {
   color: #e9e9e9;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.4);
   text-align: left;
   position: absolute;
   bottom: 0;
-  padding: 15px 0px 15px 0px;
+  padding: 0px 0px 15px 0px;
   width: 100%;
   height: 65px;
   overflow: hidden;
@@ -6641,108 +6662,24 @@ body.homepage section#top .bar {
   transition: height 1.2s, background-color 0.5s;
   transform-origin: top;
 }
+body.homepage section#top .bar h3 {
+  font-size: 21px;
+  color: white;
+  margin-top: 0px;
+}
+body.homepage section#top .bar p {
+  font-size: 14px;
+  opacity: 0.1;
+}
 body.homepage section#top .bar:hover {
   height: 180px;
+  color: #ccc;
   transition: height 1.2s;
   transform-origin: top;
   background-color: rgba(0, 0, 0, 0.6);
 }
 body.homepage section#top .bar:hover p {
   opacity: 0.9;
-}
-body.homepage section#top .bar p {
-  font-size: 16px;
-  opacity: 0.1;
-}
-body.homepage section#better-solution {
-  font-size: 15px;
-  color: #757c7e;
-}
-body.homepage section#better-solution h4 {
-  font-size: 27px;
-  color: #56d66c;
-}
-body.homepage section#veteran-lawyers {
-  background-color: #f9f9f9;
-  border-top: 1px solid #e5e5e5;
-  border-bottom: 1px solid #e5e5e5;
-  background-image: url('../../img/home-2/lawyer-back.jpg');
-  background-repeat: none;
-  background-position: center center;
-  background-size: cover;
-}
-body.homepage section#veteran-lawyers h1,
-body.homepage section#veteran-lawyers h2,
-body.homepage section#veteran-lawyers h3 {
-  color: white;
-}
-body.homepage section#veteran-lawyers .img-circle {
-  max-width: 80%;
-  border: 4px solid #ecebeb;
-}
-body.homepage section#veteran-lawyers h3 {
-  margin-bottom: 5px;
-}
-body.homepage section#veteran-lawyers h4 {
-  margin-top: 0px;
-  font-size: 15px;
-}
-body.homepage section#pricing {
-  background-color: #42d0e5;
-}
-body.homepage section#pricing h3 span {
-  border-bottom: 1px dotted white;
-  font-style: italic;
-}
-body.homepage section#pricing * {
-  color: white;
-}
-body.homepage section#pricing .sub-text {
-  line-height: 1.6em;
-  opacity: 0.8;
-  font-size: 16px;
-}
-body.homepage section#pricing h2 {
-  font-size: 25px;
-  margin-bottom: 0px;
-  margin-top: 45px;
-}
-body.homepage section#pricing span.big {
-  font-size: 62px;
-  font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
-}
-body.homepage section#pricing span.small {
-  font-size: 23px;
-  opacity: 0.7;
-}
-body.homepage section#pricing .btn {
-  background-color: transparent;
-  color: white;
-  border-color: white;
-  font-size: 20px;
-}
-body.homepage section#get-started {
-  background-color: #fcd423;
-}
-body.homepage section#get-started h2 {
-  font-size: 30px;
-}
-body.homepage section#get-started .jump-block {
-  padding: 20px 10px 30px 10px;
-  border: 1px solid #fcd423;
-  margin-top: 15px;
-}
-body.homepage section#get-started .jump-block:hover {
-  border: 1px solid #fde477;
-  background-color: #fcd839;
-}
-body.homepage section#get-started * {
-  color: #222;
-}
-body.homepage section#features {
-  background-color: #f9f9f9;
-  border-top: 1px solid #e5e5e5;
-  border-bottom: 1px solid #e5e5e5;
 }
 body.homepage section#co-pilot {
   background-color: #f57f76;
@@ -6758,7 +6695,9 @@ body.homepage section#co-pilot .step-block {
   margin-right: 20px;
   margin-top: 50px;
   position: relative;
-  height: 330px;
+}
+body.homepage section#co-pilot .step-block h1 {
+  font-size: 35px;
 }
 body.homepage section#co-pilot .step-block div.number {
   background-color: #555555;
@@ -6806,6 +6745,163 @@ body.homepage section#co-pilot .step-block li.active {
 body.homepage section#co-pilot .step-block li.active.signed {
   color: #70df7e;
   margin-top: 20px;
+}
+body.homepage section#better-solution {
+  font-size: 15px;
+  color: #757c7e;
+}
+body.homepage section#better-solution h4 {
+  font-size: 27px;
+  color: #56d66c;
+}
+body.homepage section#veteran-lawyers {
+  background-color: #f9f9f9;
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
+  background-image: url('../../img/home-2/lawyer-back.jpg');
+  background-repeat: none;
+  background-position: center center;
+  background-size: cover;
+}
+body.homepage section#veteran-lawyers h1,
+body.homepage section#veteran-lawyers h2,
+body.homepage section#veteran-lawyers h3 {
+  color: white;
+}
+body.homepage section#veteran-lawyers .img-circle {
+  max-width: 80%;
+  border: 4px solid #ecebeb;
+}
+body.homepage section#veteran-lawyers h3 {
+  margin-bottom: 5px;
+}
+body.homepage section#veteran-lawyers h4 {
+  margin-top: 0px;
+  font-size: 15px;
+}
+body.homepage section#pricing {
+  background-color: #42d0e5;
+}
+body.homepage section#pricing h3 span {
+  border-bottom: 1px dotted white;
+  font-style: italic;
+}
+body.homepage section#pricing * {
+  color: white;
+  text-align: center;
+}
+body.homepage section#pricing .sub-text {
+  line-height: 1.6em;
+  opacity: 0.8;
+  font-size: 13px;
+}
+body.homepage section#pricing h2 {
+  font-size: 25px;
+  margin-bottom: 0px;
+  margin-top: 15px;
+}
+body.homepage section#pricing span.big {
+  font-size: 25px;
+  font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
+  text-align: center;
+}
+body.homepage section#pricing span.small {
+  font-size: 16px;
+  opacity: 0.7;
+  text-align: center;
+}
+body.homepage section#get-started {
+  background-color: #fcd423;
+}
+body.homepage section#get-started h2 {
+  font-size: 30px;
+}
+body.homepage section#get-started .jump-block {
+  padding: 20px 10px 30px 10px;
+  border: 1px solid #fcd423;
+  margin-top: 15px;
+}
+body.homepage section#get-started .jump-block:hover {
+  border: 1px solid #fde477;
+  background-color: #fcd839;
+}
+body.homepage section#get-started * {
+  color: #222;
+}
+body.homepage section#deal-visibility {
+  background-color: #f9f9f9;
+  background-image: url('../../img/home-2/product-features.png');
+  background-repeat: none;
+  position: relative;
+  background-position: center center;
+  background-size: cover;
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
+}
+body.homepage section#deal-visibility .bar {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 5px 0px 20px 0px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+body.homepage section#deal-visibility * {
+  color: white;
+}
+body.homepage section#deal-visibility .row.feature {
+  color: white;
+}
+body.homepage section#deal-visibility .row.feature h3 {
+  margin: 15px 0px 5px 0px;
+  color: white;
+}
+body.homepage section#deal-visibility .row.feature p {
+  color: #ccc;
+}
+@media (min-width: 768px) {
+  body.homepage section {
+    padding-top: 100px;
+  }
+  body.homepage section#pricing h2 {
+    margin-top: 35px;
+  }
+  body.homepage section#pricing span.big {
+    font-size: 40px;
+  }
+  body.homepage section#pricing span.small {
+    font-size: 25px;
+  }
+}
+@media (min-width: 992px) {
+  body.homepage section {
+    padding-top: 100px;
+  }
+  body.homepage .modal-dialog {
+    padding-top: 80px;
+    width: 750px;
+    margin-left: -375px;
+  }
+  body.homepage .modal-dialog iframe {
+    height: 417px;
+  }
+  body.homepage section#top h1 {
+    font-size: 42px;
+  }
+  body.homepage section#co-pilot .step-block {
+    height: 335px;
+  }
+  body.homepage section#co-pilot .step-block h1 {
+    font-size: 42px;
+  }
+  body.homepage section#pricing .sub-text {
+    font-size: 18px;
+  }
+}
+@media (min-width: 1200px) {
+  body.homepage section#co-pilot .wrap {
+    padding-right: 90px;
+    padding-left: 90px;
+  }
 }
 ul#checklist-categories li {
   position: relative;
