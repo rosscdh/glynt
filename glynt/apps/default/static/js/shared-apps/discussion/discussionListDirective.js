@@ -29,13 +29,6 @@ angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster
 			$scope.maxPages = 100;
 			$scope.descriptionTextLimit = 200;
 			$scope.orderByDate = true;
-
-			if( $attrs.pageLimit ) {
-				$scope.pageLimit = parseInt($attrs.pageLimit, 10);
-				$scope.page = $attrs.page || 0;
-				$scope.starting = $scope.page * $scope.pageLimit;
-				$scope.maxPages = parseInt($scope.working.discussions.length / $scope.pageLimit, 10) -1;
-			}
 			
 			if($attrs.orderByDate) {
 				$scope.orderByDate = $attrs.orderByDate==="false"?false:true;
@@ -44,6 +37,15 @@ angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster
 			if($attrs.descriptionTextLimit) {
 				$scope.descriptionTextLimit = parseInt($attrs.descriptionTextLimit,10);
 			}
+
+			$scope.calculatePagination = function() {
+				if( $attrs.pageLimit ) {
+					$scope.pageLimit = parseInt($attrs.pageLimit, 10);
+					$scope.page = $attrs.page || 0;
+					$scope.starting = $scope.page * $scope.pageLimit;
+					$scope.maxPages = Math.max(parseInt($scope.working.discussions.length / $scope.pageLimit, 10) -1,0);
+				}
+			};
 
 			/**
 			 * Page through discussions by page size
@@ -108,6 +110,8 @@ angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster
 				if( data.length>0 && $attrs.pageLimit ) {
 					$scope.paging = true;
 				}
+
+				$scope.calculatePagination();
 			};
 
 			/**
