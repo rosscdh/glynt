@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 from django.conf import settings
+from celery.task import task
 
 import pusher
 import json
@@ -16,6 +17,17 @@ if PUSHER_KEY is None:
     raise Exception("You must specify a PUSHER_KEY in your local_settings.py")
 if PUSHER_SECRET is None:
     raise Exception("You must specify a PUSHER_SECRET in your local_settings.py")
+
+
+if not settings.IS_TESTING:
+    PUSHER_CLIENT = pusher.Pusher(app_id=PUSHER_APP_ID, key=PUSHER_KEY, secret=PUSHER_SECRET)
+else:
+    PUSHER_CLIENT = None
+
+@task()
+def _send(channel, event, data):
+    if PUSHER_CLIENT is not None:
+        PUSHER_CLIENT[channel].trigger(event, data)
 
 
 class PusherPublisherService(object):
@@ -36,8 +48,6 @@ class PusherPublisherService(object):
 
         logger.debug('Initialized PusherPublisherService with {data}'.format(data=json.dumps(self.data)))
 
-        if not settings.IS_TESTING:
-            self.pusher = pusher.Pusher(app_id=PUSHER_APP_ID, key=PUSHER_KEY, secret=PUSHER_SECRET)
 
     def process(self, **kwargs):
         if not settings.IS_TESTING:
@@ -54,4 +64,9 @@ class PusherPublisherService(object):
                     'channel': channel,
                 })
 
-                self.pusher[channel].trigger(self.event, self.data)
+                try:
+                    _send.delay(channel=channel, event=self.event, data=self.data)
+                except Exception as e:
+                    # call normally
+                    logger.error('PusherPublisherService _send.delay could not be called (celery): %s' % e)
+                    _send(channel=channel, event=self.event, data=self.data)

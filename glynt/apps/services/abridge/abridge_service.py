@@ -3,6 +3,8 @@ from django.contrib.humanize.templatetags.humanize import naturaltime
 from abridge.services import AbridgeService
 from abridge.services import CardService
 
+from celery.task import task
+
 from bunch import Bunch
 
 import datetime
@@ -11,12 +13,22 @@ import logging
 logger = logging.getLogger('django.request')
 
 
+@task()
+def _send(user, check_user, event):
+    abridge = AbridgeService(user=user, check_user=check_user)
+    abridge.create_event(content_group=event.content_group,
+                         content=event.content,
+                         user=event.user,
+                         **event.data)
+
+
 class LawPalAbridgeService(object):
     """
     Service to use when sending abridge events
     to the abridge service
     """
     user = None
+    check_user = False
     abridge = None
     content_group = None
     events = []
@@ -25,9 +37,10 @@ class LawPalAbridgeService(object):
         self.user = user
         self.events = []
         self.content_group = kwargs.get('content_group', 'General')
+        self.check_user = kwargs.get('check_user', False)
 
-        self.abridge = AbridgeService(user=user,
-                                      check_user=kwargs.get('check_user', False))
+        # self.abridge = AbridgeService(user=user,
+        #                               check_user=kwargs.get('check_user', False))
 
         logger.debug('Initialized LawPalAbridgeService')
 
@@ -90,7 +103,10 @@ class LawPalAbridgeService(object):
 
                 logger.debug('content_group: {content_group} user: {user}'.format(content_group=e.content_group, user=e.user.email))
 
-                self.abridge.create_event(content_group=e.content_group,
-                                          content=e.content,
-                                          user=e.user,
-                                          **e.data)
+                try:
+                    _send.delay(user=self.user, check_user=self.check_user, event=e)
+                except Exception as e:
+                    # call normally
+                    logger.error('LawPalAbridgeService _send.delay could not be called (celery): %s' % e)
+                    _send(user=self.user, check_user=self.check_user, event=e)
+
