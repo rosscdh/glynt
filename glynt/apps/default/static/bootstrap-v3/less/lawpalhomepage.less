@@ -1,10 +1,13 @@
 //
 // LawPal Homepage
 // --------------------------------------------------
+@light-grey-border-color: #f1f1f1;
 
 .text-primary {
   color: @brand-primary;
 }
+
+.no-pad { padding: 0 !important; margin: 0 !important; }
 
 // Top Page and Scroll down for more bit
 #wrap {
@@ -71,7 +74,7 @@
   		}
   	}
     .pricing {
-      background-color:#f1f1f1;
+      background-color:@light-grey-border-color;
       .price {
         background-color:white;
         padding:30px 18px;
@@ -435,6 +438,69 @@ table.lawyer-list.active {
   border: 0;
 }
 
+.dashboard-view {
+  [class^="engagement-"], [class*=" engagement-"] {
+      padding: 6px 12px;
+  }
+
+  .engagement-engaged { 
+    .text-success;
+  }
+  .engagement-proposed { .text-warning; }
+
+
+  .widget {
+    h3 {
+      border-bottom: 1px solid @light-grey-border-color;
+      padding-bottom: 8px;
+    }
+    &.project {
+      em { font-style: normal; .text-muted; font-size: 0.85em; }
+      .client .vcard {
+        display: table-cell;
+        width: 108px;
+        background-color: @light-grey-border-color; 
+        padding-top: 0.7em; 
+        padding-bottom: 0.2em;
+        height: 8em;
+        text-align: center;
+        vertical-align: middle;
+        img { width: 48px; height: 48px; }
+        h5 { float: none; margin: 0.7em 0 0 0; font-size: 1em; font-weight: bold; }
+      }
+      .col-9 { padding-left: 0; }
+      .discussion-list table { margin-bottom: 0; }
+      .discussion-item { height: 8em; }
+      em button {
+        padding: 0 3px;
+      }
+      .progress { margin-bottom: 0; }
+      padding-bottom: 0;
+    }
+  }
+
+  .project-primary-action {
+    .btn {
+      height: 8em;
+      h1,h2,h3 { color: white;}
+      padding-top: 0.7em; padding-bottom: 0.2em; 
+      span.label { font-size: 1em; }
+    }
+  }
+
+  .col-3 .col-lg-2 { padding:0; margin:0; width: 20%; }
+
+  .btn-open { .btn-info; }
+  .btn-pending { .btn-warning; }
+  .btn-awaiting_feedback_from_user { .btn-danger; }
+  .btn-closed { .btn-success; }
+  .btn-8em { height: 8em; text-align: center; background-color: @light-grey-border-color; padding-top: 3.5em; padding-bottom: 3.5em; }
+}
+
+.btn-link {
+  &[disabled="disabled"] { .text-muted; }
+}
+
 .empty {
   .empty-message {
     margin: 0 auto 20px;
@@ -745,6 +811,25 @@ section.checklist-category {
   tr.byme-false {
     .comment { font-weight: bold; }
   } 
+  td.vcard-column {
+    width: 50px;
+  }
+  td.comment-column {
+    div.comment {
+      min-height: 4em;
+    }
+    p { 
+      margin-bottom: 0; 
+      &.discussion-comment { font-size: 0.9em; } 
+    }
+  }
+  td.more-column {
+    width: 70px;
+    vertical-align: middle;
+  }
+}
+
+.discussion-item {
   td.status-column {
     width: 44px;
     text-align: center;
@@ -754,19 +839,6 @@ section.checklist-category {
 
     i { font-size: 24px; top: 22px; }
     small { font-size: 10px; padding: 7px 0 !important; width: 24px; text-align: center; }
-  }
-  td.vcard-column {
-    width: 50px;
-  }
-  td.comment-column {
-    div.comment {
-      min-height: 4em;
-    }
-    p { margin-bottom: 0; }
-  }
-  td.more-column {
-    width: 70px;
-    vertical-align: middle;
   }
 }
 
@@ -875,4 +947,18 @@ button.vcard {
   z-index: 1029;
   vertical-align: middle;
   button { margin: 16px 0 0 10px;}
+}
+
+/* Progress bars */
+.progress .bar {
+  height:100%;
+  float:left;
+  &.bar-info { background-color: @brand-info; }
+  &.bar-warning { background-color: @brand-warning; }
+  &.bar-danger { background-color: @brand-danger; }
+  &.bar-success { background-color: @brand-success; }
+}
+
+h5.text-info {
+  color: @brand-info;
 }

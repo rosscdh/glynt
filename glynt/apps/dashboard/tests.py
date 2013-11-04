@@ -4,16 +4,15 @@
 """
 from django.core.urlresolvers import reverse
 
-from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin, glynt_mock_http_requests
+from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin
 from glynt.apps.project.models import Project, ProjectLawyer
-
 
 from model_mommy import mommy
 
 import os
 
 
-class DashboardLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
+class DashboardLawyerTest(BaseLawyerCustomerProjectCaseMixin):
     test_path = os.path.dirname(__file__)
 
     def setUp(self):
@@ -25,17 +24,22 @@ class DashboardLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
         resp = self.client.get(self.url)
         self.assertEqual(resp.status_code, 302)
 
-    def test_dashboard_access(self):
+    def test_dashboard_access_js(self):
         self.client.login(username=self.lawyer_user.username, password=self.password)
 
         resp = self.client.get(self.url)
 
         self.assertEqual(resp.status_code, 200)
-        self.assertTrue('project' in resp.context)
-        self.assertEqual(type(resp.context['project']), Project)
 
-        self.assertTrue('counts' in resp.context)
-        self.assertEqual(type(resp.context['counts']), dict)
+        self.assertTrue('project' in resp.context_data)
+        self.assertEqual(type(resp.context_data['project']), Project)
+
+        self.assertTrue('counts' in resp.context_data)
+        self.assertEqual(type(resp.context_data['counts']), dict)
+
+        #import pdb;pdb.set_trace()
+
+        self.assertTrue(self.load_casper_file(js_file='dashboard_access.js', test_label='Test the Dashboard Access for a Lawyer', url=self.url))
 
     def test_lawyer_dashboard_js(self):
         """
@@ -48,7 +52,6 @@ class DashboardLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
         self.project_lawyer_join.save(update_fields=['status'])
 
         self.assertTrue(self.load_casper_file(js_file='dashboard.js', test_label='Test the Dashboard View for a Lawyer', url=self.url))
-        # from nose.tools import set_trace; set_trace()
 
 
 class ChecklistLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):

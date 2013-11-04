@@ -7808,6 +7808,11 @@ td.hidden-lg {
   color: #42d0e5;
 }
 
+.no-pad {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
 #wrap .splash {
   max-height: 500px;
   padding: 28% 0 0% 0px;
@@ -8324,6 +8329,235 @@ table.lawyer-list.active {
   border: 0;
 }
 
+.dashboard-view [class^="engagement-"],
+.dashboard-view [class*=" engagement-"] {
+  padding: 6px 12px;
+}
+
+.dashboard-view .engagement-engaged {
+  color: #468847;
+}
+
+.dashboard-view .engagement-proposed {
+  color: #f0ad4e;
+}
+
+.dashboard-view .widget h3 {
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.dashboard-view .widget.project {
+  padding-bottom: 0;
+}
+
+.dashboard-view .widget.project em {
+  font-size: 0.85em;
+  font-style: normal;
+  color: #bfbfbf;
+}
+
+.dashboard-view .widget.project .client .vcard {
+  display: table-cell;
+  width: 108px;
+  height: 8em;
+  padding-top: 0.7em;
+  padding-bottom: 0.2em;
+  text-align: center;
+  vertical-align: middle;
+  background-color: #f1f1f1;
+}
+
+.dashboard-view .widget.project .client .vcard img {
+  width: 48px;
+  height: 48px;
+}
+
+.dashboard-view .widget.project .client .vcard h5 {
+  float: none;
+  margin: 0.7em 0 0 0;
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.dashboard-view .widget.project .col-9 {
+  padding-left: 0;
+}
+
+.dashboard-view .widget.project .discussion-list table {
+  margin-bottom: 0;
+}
+
+.dashboard-view .widget.project .discussion-item {
+  height: 8em;
+}
+
+.dashboard-view .widget.project em button {
+  padding: 0 3px;
+}
+
+.dashboard-view .widget.project .progress {
+  margin-bottom: 0;
+}
+
+.dashboard-view .project-primary-action .btn {
+  height: 8em;
+  padding-top: 0.7em;
+  padding-bottom: 0.2em;
+}
+
+.dashboard-view .project-primary-action .btn h1,
+.dashboard-view .project-primary-action .btn h2,
+.dashboard-view .project-primary-action .btn h3 {
+  color: white;
+}
+
+.dashboard-view .project-primary-action .btn span.label {
+  font-size: 1em;
+}
+
+.dashboard-view .col-3 .col-lg-2 {
+  width: 20%;
+  padding: 0;
+  margin: 0;
+}
+
+.dashboard-view .btn-open {
+  color: #ffffff;
+  background-color: #5bc0de;
+  border-color: #5bc0de;
+}
+
+.dashboard-view .btn-open:hover,
+.dashboard-view .btn-open:focus,
+.dashboard-view .btn-open:active,
+.dashboard-view .btn-open.active {
+  color: #ffffff;
+  background-color: #46b8da;
+  border-color: #31b0d5;
+}
+
+.dashboard-view .btn-open.disabled:hover,
+.dashboard-view .btn-open[disabled]:hover,
+fieldset[disabled] .dashboard-view .btn-open:hover,
+.dashboard-view .btn-open.disabled:focus,
+.dashboard-view .btn-open[disabled]:focus,
+fieldset[disabled] .dashboard-view .btn-open:focus,
+.dashboard-view .btn-open.disabled:active,
+.dashboard-view .btn-open[disabled]:active,
+fieldset[disabled] .dashboard-view .btn-open:active,
+.dashboard-view .btn-open.disabled.active,
+.dashboard-view .btn-open[disabled].active,
+fieldset[disabled] .dashboard-view .btn-open.active {
+  background-color: #5bc0de;
+  border-color: #5bc0de;
+}
+
+.dashboard-view .btn-pending {
+  color: #ffffff;
+  background-color: #f0ad4e;
+  border-color: #f0ad4e;
+}
+
+.dashboard-view .btn-pending:hover,
+.dashboard-view .btn-pending:focus,
+.dashboard-view .btn-pending:active,
+.dashboard-view .btn-pending.active {
+  color: #ffffff;
+  background-color: #eea236;
+  border-color: #ec971f;
+}
+
+.dashboard-view .btn-pending.disabled:hover,
+.dashboard-view .btn-pending[disabled]:hover,
+fieldset[disabled] .dashboard-view .btn-pending:hover,
+.dashboard-view .btn-pending.disabled:focus,
+.dashboard-view .btn-pending[disabled]:focus,
+fieldset[disabled] .dashboard-view .btn-pending:focus,
+.dashboard-view .btn-pending.disabled:active,
+.dashboard-view .btn-pending[disabled]:active,
+fieldset[disabled] .dashboard-view .btn-pending:active,
+.dashboard-view .btn-pending.disabled.active,
+.dashboard-view .btn-pending[disabled].active,
+fieldset[disabled] .dashboard-view .btn-pending.active {
+  background-color: #f0ad4e;
+  border-color: #f0ad4e;
+}
+
+.dashboard-view .btn-awaiting_feedback_from_user {
+  color: #ffffff;
+  background-color: #d9534f;
+  border-color: #d9534f;
+}
+
+.dashboard-view .btn-awaiting_feedback_from_user:hover,
+.dashboard-view .btn-awaiting_feedback_from_user:focus,
+.dashboard-view .btn-awaiting_feedback_from_user:active,
+.dashboard-view .btn-awaiting_feedback_from_user.active {
+  color: #ffffff;
+  background-color: #d43f3a;
+  border-color: #c9302c;
+}
+
+.dashboard-view .btn-awaiting_feedback_from_user.disabled:hover,
+.dashboard-view .btn-awaiting_feedback_from_user[disabled]:hover,
+fieldset[disabled] .dashboard-view .btn-awaiting_feedback_from_user:hover,
+.dashboard-view .btn-awaiting_feedback_from_user.disabled:focus,
+.dashboard-view .btn-awaiting_feedback_from_user[disabled]:focus,
+fieldset[disabled] .dashboard-view .btn-awaiting_feedback_from_user:focus,
+.dashboard-view .btn-awaiting_feedback_from_user.disabled:active,
+.dashboard-view .btn-awaiting_feedback_from_user[disabled]:active,
+fieldset[disabled] .dashboard-view .btn-awaiting_feedback_from_user:active,
+.dashboard-view .btn-awaiting_feedback_from_user.disabled.active,
+.dashboard-view .btn-awaiting_feedback_from_user[disabled].active,
+fieldset[disabled] .dashboard-view .btn-awaiting_feedback_from_user.active {
+  background-color: #d9534f;
+  border-color: #d9534f;
+}
+
+.dashboard-view .btn-closed {
+  color: #ffffff;
+  background-color: #6bdb7e;
+  border-color: #31c94b;
+}
+
+.dashboard-view .btn-closed:hover,
+.dashboard-view .btn-closed:focus,
+.dashboard-view .btn-closed:active,
+.dashboard-view .btn-closed.active {
+  color: #ffffff;
+  background-color: #56d66c;
+  border-color: #27a03b;
+}
+
+.dashboard-view .btn-closed.disabled:hover,
+.dashboard-view .btn-closed[disabled]:hover,
+fieldset[disabled] .dashboard-view .btn-closed:hover,
+.dashboard-view .btn-closed.disabled:focus,
+.dashboard-view .btn-closed[disabled]:focus,
+fieldset[disabled] .dashboard-view .btn-closed:focus,
+.dashboard-view .btn-closed.disabled:active,
+.dashboard-view .btn-closed[disabled]:active,
+fieldset[disabled] .dashboard-view .btn-closed:active,
+.dashboard-view .btn-closed.disabled.active,
+.dashboard-view .btn-closed[disabled].active,
+fieldset[disabled] .dashboard-view .btn-closed.active {
+  background-color: #6bdb7e;
+  border-color: #31c94b;
+}
+
+.dashboard-view .btn-8em {
+  height: 8em;
+  padding-top: 3.5em;
+  padding-bottom: 3.5em;
+  text-align: center;
+  background-color: #f1f1f1;
+}
+
+.btn-link[disabled="disabled"] {
+  color: #bfbfbf;
+}
+
 .empty .empty-message {
   position: relative;
   width: 50%;
@@ -8686,26 +8920,6 @@ section.checklist-category {
   font-weight: bold;
 }
 
-.discussion-list td.status-column {
-  width: 44px;
-  padding: 10px 5px;
-  color: #FFF;
-  text-align: center;
-  background-color: #5bc0de !important;
-}
-
-.discussion-list td.status-column i {
-  top: 22px;
-  font-size: 24px;
-}
-
-.discussion-list td.status-column small {
-  width: 24px;
-  padding: 7px 0 !important;
-  font-size: 10px;
-  text-align: center;
-}
-
 .discussion-list td.vcard-column {
   width: 50px;
 }
@@ -8718,9 +8932,33 @@ section.checklist-category {
   margin-bottom: 0;
 }
 
+.discussion-list td.comment-column p.discussion-comment {
+  font-size: 0.9em;
+}
+
 .discussion-list td.more-column {
   width: 70px;
   vertical-align: middle;
+}
+
+.discussion-item td.status-column {
+  width: 44px;
+  padding: 10px 5px;
+  color: #FFF;
+  text-align: center;
+  background-color: #5bc0de !important;
+}
+
+.discussion-item td.status-column i {
+  top: 22px;
+  font-size: 24px;
+}
+
+.discussion-item td.status-column small {
+  width: 24px;
+  padding: 7px 0 !important;
+  font-size: 10px;
+  text-align: center;
 }
 
 td.vcard-column,
@@ -8902,6 +9140,33 @@ button.vcard {
 
 .full-dialog-toolbar button {
   margin: 16px 0 0 10px;
+}
+
+/* Progress bars */
+
+.progress .bar {
+  float: left;
+  height: 100%;
+}
+
+.progress .bar.bar-info {
+  background-color: #5bc0de;
+}
+
+.progress .bar.bar-warning {
+  background-color: #f0ad4e;
+}
+
+.progress .bar.bar-danger {
+  background-color: #d9534f;
+}
+
+.progress .bar.bar-success {
+  background-color: #6bdb7e;
+}
+
+h5.text-info {
+  color: #5bc0de;
 }
 
 .navbar {

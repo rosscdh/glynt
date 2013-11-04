@@ -32,6 +32,28 @@ class ProjectViewSet(ModelViewSet):
     serializer_class = ProjectSerializer
     lookup_field = 'uuid'
 
+    def get_lawyer_queryset(self):
+        """
+        get projects assigned to this lawyer
+        """
+        qs = super(ProjectViewSet, self).get_queryset()
+        return qs.filter(pk__in=[p.project.pk for p in self.request.user.lawyer_profile.projectlawyer_set.all()])
+
+    def get_customer_queryset(self):
+        """
+        Filter by the current user
+        """
+        qs = super(ProjectViewSet, self).get_queryset()
+        return qs.filter(participants__in=[self.request.user])
+
+    def get_queryset(self):
+        """
+        get the appropriate queryset
+        """
+        if self.request.user.profile.is_lawyer:
+            return self.get_lawyer_queryset()
+        else:
+            return self.get_customer_queryset()
 
 class TeamListView(RetrieveUpdateAPIView):
     """
