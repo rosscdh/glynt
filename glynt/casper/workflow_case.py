@@ -21,6 +21,8 @@ import mock
 import time
 import httpretty
 
+BASE_TEST_PATH = os.path.dirname(__file__)
+
 
 class DjangoTestClientWithPATCH(Client):
     """
@@ -146,7 +148,7 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
     https://github.com/dobarkod/django-casper/
     """
     fixtures = ['test_cities', 'transact.json']
-    test_path = os.path.dirname(__file__)
+    test_pdf_path = '{test_path}/test.pdf'.format(test_path=BASE_TEST_PATH)
 
     def tearDown(self, *args, **kwargs):
         time.sleep(1)
@@ -197,7 +199,7 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
 
         self.todo = mommy.make('todo.ToDo', status=TODO_STATUS.open, project=self.project, user=self.lawyer_user, category='General', name="My Todo")
         
-        file_name = '{test_path}/test.pdf'.format(test_path=self.test_path)
+        file_name = self.test_pdf_path
         self.attachment = mommy.make('todo.Attachment', attachment=File(open(file_name, 'rb'), "test.pdf"), project=self.project, todo=self.todo, uploaded_by=self.customer_user)
 
 
