@@ -2,12 +2,4 @@
 
 <!-- Branding Header -->
 <tr><td class="small-height" height="40" width="100%" style="font-size: 0; line-height: 0;">&nbsp;</td></tr>
-<tr>
-    <td align="center" valign="top" width="100%">
-        <a href="{% current_site_domain %}" class="logo">
-            <img alt="LawPal" src="{% ABSOLUTE_STATIC_URL %}img/logo.png" border="0" height="25" width="25" />
-        </a>
-    </td>
-</tr>
-<tr><td class="small-height" height="40" width="100%" style="font-size: 0; line-height: 0;">&nbsp;</td></tr>
 <!-- End Branding Header -->

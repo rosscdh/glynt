@@ -1,5 +1,13 @@
+{% load glynt_helpers staticfiles %}
 <!-- Copyright & Legal -->
 <tr><td height="20" width="100%" style="font-size: 0; line-height: 0;">&nbsp;</td></tr>
+<tr>
+    <td align="center" valign="top" width="100%">
+        <a href="{% current_site_domain %}" class="logo">
+            <img alt="LawPal" src="{% ABSOLUTE_STATIC_URL %}img/logo.png" border="0" height="25" width="25" />
+        </a>
+    </td>
+</tr>
 <tr>
     <td class="footer" align="center" style="padding: 0 10px;">
         <p style="color: #999999; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 1.35em; margin: 0; padding: 0; text-shadow: 0 1px 0 #FFFFFF;">&copy; 2013 LawPal, Inc.</p>
