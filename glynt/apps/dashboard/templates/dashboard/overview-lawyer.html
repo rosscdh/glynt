@@ -54,8 +54,8 @@
                                     <em>Making decision</em>
                                 </div>
                                 <div class="col-9">
-                                    <em>Discussion <span ng-show="project.discussions.length>0">1/{[{project.discussions.length}]}</span></em>
-                                    <table class="table no-pad"  ng-show="project.discussions.length==0">
+                                    <em>Discussion</em>
+                                    <table class="table no-pad">
                                         <tr class="discussion-item">
                                             <td class="status-column"><i class="icon icon-comment nest"> <small class="nested text-primary ng-binding" ng-bind="discussion.original.count"></small></i></td>
                                             <td class="no-pad"><a href="/projects/{[{project.uuid}]}/{{ user.username }}/project-contact/" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-block btn-link btn-8em">Discussion&nbsp; <span class="badge" ng-bind="project.proposed_discussions"></span></a></td>
