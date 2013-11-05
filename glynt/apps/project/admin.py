@@ -18,7 +18,8 @@ from django.views.decorators.csrf import csrf_protect
 from bunch import Bunch
 from templated_email import send_templated_mail
 
-from glynt.apps.project.models import Project, ProjectLawyer
+from .models import Project, ProjectLawyer
+from .forms import AdminMatchingEmailCustomContentForm
 
 import logging
 logger = logging.getLogger('lawpal.project')
@@ -33,9 +34,13 @@ class ProjectLawyerInline(admin.TabularInline):
 
 class ProjectAdmin(admin.ModelAdmin):
     inlines = [ProjectLawyerInline]
+
     list_display = ('__unicode__', 'date_created', 'date_modified', 'uuid')
+
     list_filter = ['status', 'transactions']
+
     search_fields = ('company', 'customer', 'lawyers', 'transactions', 'uuid')
+
     send_matches_confirmation_template = None
 
     def get_queryset(self, request):
@@ -62,13 +67,16 @@ class ProjectAdmin(admin.ModelAdmin):
 
         return my_urls + urls
 
-    def send_matches(self, request, obj, client, lawyers):
+    def send_matches(self, request, obj, client, lawyers, form):
         """
         Sent the matches email.
         """
         logger.info('Sending project matches email')
 
         recipient = '"{name}" <{email}>'.format(name=client.get_full_name(), email=client.email)
+
+        intro_content = '\r\n'.join(['<h2 style="color: #6c797c !important; font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5em; margin: 0 0 25px; padding: 0;">{para}</h2>'.format(para=para) for para in form.cleaned_data.get('intro', '').split("\r\n") if para.strip() != ''])
+
         email = Bunch(
             template_name='project_matches',
             from_email='"LawPal ({company})" <noreply@lawpal.com>'.format(company=obj.company),
@@ -77,6 +85,7 @@ class ProjectAdmin(admin.ModelAdmin):
             context={
                 'lawyers': lawyers,
                 'to_name': client.first_name,
+                'intro_content': intro_content,
                 'url': reverse('dashboard:overview'),
             }
         )
@@ -143,13 +152,17 @@ class ProjectAdmin(admin.ModelAdmin):
 
         client = obj.customer.user
         lawyers = obj.lawyers.all()
+        form = AdminMatchingEmailCustomContentForm()
 
         if request.POST:  # The user has already confirmed.
-            obj_display = force_text(obj)
-            self.log_send_matches(request, obj, obj_display, lawyers)
-            self.send_matches(request, obj, client, lawyers)
+            form = AdminMatchingEmailCustomContentForm(request.POST)
 
-            return self.response_send_matches(request, obj_display)
+            if form.is_valid():
+                obj_display = force_text(obj)
+                self.log_send_matches(request, obj, obj_display, lawyers)
+                self.send_matches(request, obj, client, lawyers, form)
+
+                return self.response_send_matches(request, obj_display)
 
         object_name = force_text(opts.verbose_name)
 
@@ -157,6 +170,7 @@ class ProjectAdmin(admin.ModelAdmin):
         context = dict(
             title=title,
             object_name=object_name,
+            form=form,
             object=obj,
             client=client,
             lawyers=lawyers,

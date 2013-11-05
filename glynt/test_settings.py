@@ -10,20 +10,16 @@ import logging
 logging.disable(logging.CRITICAL)
 
 # Custom test runner for this project
-if sys.argv[1:2][0] == 'test':
-    TEST_RUNNER = 'glynt.test_runner.GlyntAppTestRunner'
-
-elif sys.argv[1:2][0] == 'jenkins':
-    TEST_RUNNER = 'glynt.test_runner.GlyntAppJenkinsRunner'
-
+TEST_RUNNER = 'glynt.test_runner.GlyntAppTestRunner'
 
 PROJECT_ENVIRONMENT = 'test'
 
 INSTALLED_APPS = INSTALLED_APPS + (
     'casper',
-    'django_jenkins',
+    'colortools',
 )
 
+DEFAULT_FILE_STORAGE = 'inmemorystorage.InMemoryStorage'
 SOUTH_TESTS_MIGRATE = False
 SKIP_SOUTH_TESTS = True
 
@@ -42,4 +38,23 @@ def FPFileFieldGenerator():
 MOMMY_CUSTOM_FIELDS_GEN = {
     'autoslug.fields.AutoSlugField': AutoSlugFieldGenerator,
     'django_filepicker.models.FPFileField': FPFileFieldGenerator,
+}
+
+
+#
+# Abridge Integration
+#
+ABRIDGE_ENABLED = True  # disabled by default
+
+ABRIDGE_API_URL = 'http://abridge.local.dev/'
+ABRIDGE_PROJECT = 'lawpal-digest'
+
+ABRIDGE_ACCESS_KEY_ID = '12345'
+ABRIDGE_SECRET_ACCESS_KEY = 'abcdefghijklmnopqrstuvwxyz12345678910'
+ABRIDGE_USERNAME = 'test'
+ABRIDGE_PASSWORD = 'test'
+
+
+HAYSTACK_CONNECTIONS = {
+    'default': {}
 }

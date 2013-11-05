@@ -9,6 +9,8 @@ from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.http import Http404
 
+from notifications.models import Notification
+
 from glynt.apps.utils import AjaxableResponseMixin
 
 from glynt.apps.project.models import Project, ProjectLawyer
@@ -95,11 +97,27 @@ class LawyerContactProjectView(ProjectView):
     """
     template_name = 'project/lawyer_contact.html'
 
+    def mark_notifications(self, project_lawyer_join):
+        """
+        if the user has notifications then remove them here as weve seen them
+        """
+        objects = Notification.objects.filter(recipient=self.request.user,
+                                    target_object_id=project_lawyer_join.project.pk,
+                                    target_content_type=project_lawyer_join.project.content_type())  \
+
+        if self.request.user.profile.is_customer:
+            #delete only the comments specific to the lawyer being viewd
+            objects = objects.filter(actor_object_id=project_lawyer_join.lawyer.user.pk,)
+
+        objects.delete()
+
     def get_context_data(self, **kwargs):
         context = super(LawyerContactProjectView, self).get_context_data(**kwargs)
 
         lawyer = get_object_or_404(Lawyer.objects.prefetch_related('user'), user__username=self.kwargs.get('lawyer'))
         project_lawyer_join = ProjectLawyer.objects.get(project=self.object, lawyer=lawyer)
+
+        self.mark_notifications(project_lawyer_join=project_lawyer_join)
 
         context.update({
             'PROJECT_LAWYER_STATUS': PROJECT_LAWYER_STATUS,

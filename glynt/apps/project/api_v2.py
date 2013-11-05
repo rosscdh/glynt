@@ -1,20 +1,25 @@
 # -*- coding: UTF-8 -*-
-from django.shortcuts import get_object_or_404
-from django.core.exceptions import PermissionDenied
-from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
+from django.utils.encoding import smart_unicode
+from django.http import HttpResponseNotAllowed, HttpResponseBadRequest
 
+from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.parsers import JSONParser
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.exceptions import ParseError
+from rest_framework.generics import (RetrieveAPIView, ListCreateAPIView,
+                                     RetrieveUpdateAPIView)
+
 
 from threadedcomments.models import ThreadedComment
 
-from . import PROJECT_CONTENT_TYPE
 from .models import Project, ProjectLawyer
 from .serializers import (ProjectSerializer, TeamSerializer,
-                          DiscussionSerializer, )
+                          DiscussionSerializer, DiscussionThreadSerializer,)
 
+import StringIO
 import logging
 logger = logging.getLogger('django.request')
 
@@ -27,6 +32,28 @@ class ProjectViewSet(ModelViewSet):
     serializer_class = ProjectSerializer
     lookup_field = 'uuid'
 
+    def get_lawyer_queryset(self):
+        """
+        get projects assigned to this lawyer
+        """
+        qs = super(ProjectViewSet, self).get_queryset()
+        return qs.filter(pk__in=[p.project.pk for p in self.request.user.lawyer_profile.projectlawyer_set.all()])
+
+    def get_customer_queryset(self):
+        """
+        Filter by the current user
+        """
+        qs = super(ProjectViewSet, self).get_queryset()
+        return qs.filter(participants__in=[self.request.user])
+
+    def get_queryset(self):
+        """
+        get the appropriate queryset
+        """
+        if self.request.user.profile.is_lawyer:
+            return self.get_lawyer_queryset()
+        else:
+            return self.get_customer_queryset()
 
 class TeamListView(RetrieveUpdateAPIView):
     """
@@ -40,8 +67,15 @@ class TeamListView(RetrieveUpdateAPIView):
     serializer_class = TeamSerializer
     lookup_field = 'uuid'
 
+    def __init__(self, *args, **kwargs):
+        super(TeamListView, self).__init__(*args, **kwargs)
+        # full reset
+        self.lawyers = []
+        self.customers = []
+        self.participants = []
+
     def put(self, request, **kwargs):
-        raise PermissionDenied
+        return HttpResponseNotAllowed('PUT not allowed')
 
     def patch(self, request, **kwargs):
         """
@@ -49,10 +83,14 @@ class TeamListView(RetrieveUpdateAPIView):
         we then calculate the user type and update the appropriate field
         on the project
         """
-        user_ids = request.DATA
+        project_team = request.DATA
+        if type(project_team) not in [dict] or project_team.get('team', False) is False:
+            return HttpResponseBadRequest('You must PATCH a dict in the following form into this view e.g. PATCH:{"team": [74, 3, 22]}')
+
+        user_ids = project_team['team']
 
         if type(user_ids) not in [list] or len(user_ids) is 0:
-            raise ValidationError('You must PATCH a list into this view e.g. PATCH:[74,3,22]')
+            return HttpResponseBadRequest('You must PATCH a dict in the following form into this view e.g. PATCH:{"team": [74, 3, 22]}')
         
         self.project = self.get_object()
 
@@ -61,15 +99,9 @@ class TeamListView(RetrieveUpdateAPIView):
 
         self.save_all()
 
-        serializer = self.get_serializer()
+        serializer = self.get_serializer(self.project)
 
-        return Response(data=serializer.get_team(obj=self.project), status=202)
-
-    def set_lawyer(self, lawyer_profile):
-        self.lawyers.append(lawyer_profile)
-
-    def set_customer(self, customer_profile):
-        self.customers.append(customer_profile)
+        return Response(data=serializer.data, status=202)
 
     def set_participant(self, user):
         self.participants.append(user)
@@ -80,6 +112,12 @@ class TeamListView(RetrieveUpdateAPIView):
         elif user.profile.is_customer is True:
             self.set_customer(customer_profile=user.customer_profile)
 
+    def set_lawyer(self, lawyer_profile):
+        self.lawyers.append(lawyer_profile)
+
+    def set_customer(self, customer_profile):
+        self.customers.append(customer_profile)
+
     def save_all(self):
         """
         save all our bits
@@ -87,6 +125,9 @@ class TeamListView(RetrieveUpdateAPIView):
         self.save_lawyers()
         self.save_customer()
         self.save_participants()
+
+        # Save the changes made to the participants and lawyers
+        self.project.save()
 
     def save_lawyers(self):
         if len(self.lawyers) > 0:
@@ -107,12 +148,12 @@ class TeamListView(RetrieveUpdateAPIView):
             for lawyer in self.lawyers:
                 if lawyer not in project_lawyers:
                     #project.lawyers.add(lawyer) # CANT USE ADD due to custom through table
-                    # ProjectLawyer.objects.get_or_create(project=project, lawyer=lawyer, status=ProjectLawyer.LAWYER_STATUS.potential)  # removed temporarily until we talk about status
-                    ProjectLawyer.objects.get_or_create(project=project, lawyer=lawyer, status=ProjectLawyer.LAWYER_STATUS.assigned)
+                    # ProjectLawyer.objects.get_or_create(project=project, lawyer=lawyer, status=ProjectLawyer._LAWYER_STATUS.potential)  # removed temporarily until we talk about status
+                    ProjectLawyer.objects.get_or_create(project=project, lawyer=lawyer, status=ProjectLawyer._LAWYER_STATUS.assigned)
 
     def save_customer(self):
         """
-        customer never changes
+        customer never changes @NOTE this may change in the future thus the interface
         """
         pass
 
@@ -144,13 +185,12 @@ class TeamListView(RetrieveUpdateAPIView):
                     logger.debug('Adding participant: %s' % participant)
 
 
-
 class DiscussionListView(ListCreateAPIView):
     """
     Endpoint that shows discussion threads
     django_comments & threaded_comments & fluent_comments
     """
-    queryset = ThreadedComment.objects.all()
+    queryset = ThreadedComment.objects.select_related('user', 'tagged_items__tag').all().order_by('-id')
     serializer_class = DiscussionSerializer
 
     def get_queryset(self):
@@ -158,10 +198,89 @@ class DiscussionListView(ListCreateAPIView):
         """
         project_uuid = self.kwargs.get('uuid')
         project = get_object_or_404(Project, uuid=project_uuid)
+        #
+        # @BUSINESS RULE: /discussion/ shoudl only return the top level parents
+        # but include the last child object if present
+        #
+        return self.queryset.filter(content_type=Project.content_type(),
+                                    object_pk=project.pk,
+                                    parent_id=None)
 
-        return self.queryset.filter(content_type=PROJECT_CONTENT_TYPE,
-                                    object_pk=project.pk)
 
-
-class DiscussionDetailView(RetrieveUpdateDestroyAPIView, DiscussionListView):
+class DiscussionDetailView(RetrieveAPIView):
+    queryset = ThreadedComment.objects.select_related('user', 'tagged_items__tag').all().order_by('-id')
+    serializer_class = DiscussionThreadSerializer
     lookup_field = 'pk'
+
+    def get_queryset(self):
+        parent_pk = self.kwargs.get('pk')
+        project_uuid = self.kwargs.get('uuid')
+        get_object_or_404(Project, uuid=project_uuid)  # ensure that we have the project
+        #
+        # @BUSINESS RULE: /discussion/:pk/ should return the parent
+        # as well as a the children as a "thread": []
+        #
+        return self.queryset.filter(pk=parent_pk)
+
+
+class DiscussionTagView(APIView):
+    """
+    Discussion tags have their own endpoint as they are patched
+    in using django-taggit. and need to be handled in a specific manner
+    """
+    queryset = ThreadedComment.objects.select_related('user', 'tagged_items__tag').all().order_by('-id')
+
+    def get_params(self):
+        """
+        extract out the pk and uuid params from kwargs
+        also test that the project is valid
+        """
+        parent_pk = self.kwargs.get('pk')
+        project_uuid = self.kwargs.get('uuid')
+        get_object_or_404(Project, uuid=project_uuid)  # ensure that we have the project
+        return (parent_pk, project_uuid)
+
+    def get_queryset(self):
+        parent_pk, project_uuid = self.get_params()
+        return self.queryset.get(pk=parent_pk).tags
+
+    def response(self, status):
+        qs = self.get_queryset()
+        return Response([tag.name for tag in qs.all()], status=status)
+
+    def decode_from_body(self, data):
+        stream = StringIO.StringIO(data.encode("utf-8"))
+        posted_tags = JSONParser().parse(stream)
+
+        if type(posted_tags) not in [list]:
+            raise ParseError(detail='Must post a list of at least 1 tag ["tag number 1"]')
+
+        posted_tags = [smart_unicode(tag) for tag in posted_tags]  # decode to unicode
+
+        return posted_tags
+
+    def get(self, request, **kwargs):
+        return self.response(status=200)
+
+    def post(self, request, **kwargs):
+        posted_tags = self.decode_from_body(data=request.POST.get("_content"))
+
+        qs = self.get_queryset()
+        qs.add(*posted_tags)
+
+        return self.response(status=201)
+
+    def delete(self, request, **kwargs):
+        """
+        DELETE is handled by passing in a /tags/:tag/ value as django does not
+        provide access to DELETE body (not supported generally)
+        """
+        posted_tag = kwargs.get('tag', None)
+
+        if posted_tag in [None, '']:
+            raise ParseError(detail='Must include a tag in the url i.e. /api/v2/project/:project_uuid/discussion/:discussion_pk/tags/:tag/')
+
+        qs = self.get_queryset()
+        qs.remove(posted_tag)
+
+        return self.response(status=202)

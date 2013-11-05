@@ -10,7 +10,7 @@
     <tr>
         <td class="small-width" align="left" width="40" style="display: block;">&nbsp;</td>
         <td align="center">
-            <h1 style="color: #22282b; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 28px; font-weight: normal; letter-spacing: -1px; line-height: 1.6em; margin: 0; padding: 0;">Hi {{ to_name }}</h1>
+            <h1 style="color: #22282b; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 28px; font-weight: normal; letter-spacing: -1px; line-height: 1.6em; margin: 0; padding: 0;">Feedback Requested</h1>
             <h2 style="color: #6c797c !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5em; margin: 0 0 25px; padding: 0;">{{ actor }} has requested feedback on {{ object }} for {{ project }}</h2>
         </td>
         <td class="small-width" align="left" width="40" style="display: block;">&nbsp;</td>
@@ -18,7 +18,7 @@
     <!-- Action Button -->
     <tr>
         <td align="center" colspan="3" width="100%">
-            <a href="{% current_site_domain %}{{ url }}" target="_blank" class="action-btn" style="background-color: #6bdb7e; border-color: #6bdb7e; border-style: solid; border-width: 14px 48px; color: #ffffff; display: inline-block; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: normal; margin: 4px 0; text-decoration: none; white-space: nowrap;">See item</a>
+            <a href="{% current_site_domain %}{{ url }}" target="_blank" class="action-btn" style="background-color: #6bdb7e; border-color: #6bdb7e; border-style: solid; border-width: 14px 48px; color: #ffffff; display: inline-block; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: normal; margin: 4px 0; text-decoration: none; white-space: nowrap;">View and Respond</a>
         </td>
     </tr>
     <!-- End Action Button -->
@@ -30,5 +30,5 @@
 {% block plain_body %}
 {{ actor }} has requested feedback on {{ object }} for {{ project }}
 
-See item: {% current_site_domain %}{{ url }}
+View and Respond: {% current_site_domain %}{{ url }}
 {% endblock %}

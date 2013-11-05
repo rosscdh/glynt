@@ -5,7 +5,7 @@ import sys
 PROJECT_ENVIRONMENT = 'prod'
 
 IS_TESTING = False
-for test_app in ['jenkins','testserver','test']:
+for test_app in ['testserver','test']:
     if test_app in sys.argv[1:2]:
         IS_TESTING = True
 
@@ -105,10 +105,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'glynt.middleware.LawpalSocialAuthExceptionMiddleware',
-    'glynt.middleware.EnsureUserHasCompanyMiddleware',
+#    'glynt.middleware.EnsureUserHasCompanyMiddleware',  # removed as company is no longer required
     'glynt.middleware.LawpalCurrentProjectsMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'pagination.middleware.PaginationMiddleware',
     'django_filepicker.middleware.URLFileMapperMiddleware',
 )
 
@@ -125,7 +124,7 @@ AUTHENTICATION_BACKENDS = (
     'social_auth.backends.contrib.angel.AngelBackend',
     'social_auth.backends.contrib.linkedin.LinkedinBackend',
     'social_auth.backends.google.GoogleOAuth2Backend',
-    #'glynt.backends.EmailOrUsernameBackend',
+    'glynt.backends.EmailOrUsernameBackend',
     #'userena.backends.UserenaAuthenticationBackend',
     #'guardian.backends.ObjectPermissionBackend',
     'django.contrib.auth.backends.ModelBackend',
@@ -253,6 +252,15 @@ HELPER_APPS = (
     # Notications
     'notifications',
 
+    # Abridge mailout
+    'abridge',
+
+    # tags
+    'taggit',
+
+    # user switcher
+    'impersonate',
+
     # Object rules and permissions
     'rulez',
 
@@ -305,7 +313,7 @@ FLUENT_COMMENTS_USE_EMAIL_NOTIFICATION = False # We handle our own email notific
 NOTIFY_USE_JSONFIELD = True
 
 
-LOGIN_URL          = '/'
+LOGIN_URL          = '/start/'
 LOGIN_REDIRECT_URL = '/logged-in/'
 LOGIN_ERROR_URL    = '/login-error/'
 
@@ -380,6 +388,7 @@ SOCIAL_AUTH_UUID_LENGTH = 3 # greater than 0 otherwise it defaults to 3
 SOCIAL_AUTH_BACKEND_ERROR_URL = '/'
 SOCIAL_AUTH_PROTECTED_USER_FIELDS = ('first_name', 'last_name', 'full_name', 'email',)
 SOCIAL_AUTH_PIPELINE = (
+    #'glynt.apps.client.pipeline.ensure_mutually_exclusive_userclass',
     'social_auth.backends.pipeline.social.social_auth_user',
     #'social_auth.backends.pipeline.associate.associate_by_email', # removed as we no longer need to provision poeple coming from preview.
     'glynt.apps.client.pipeline.get_username',
@@ -430,6 +439,12 @@ TEMPLATED_EMAIL_TEMPLATE_DIR = 'email/'
 TEMPLATED_EMAIL_FILE_EXTENSION = 'email'
 
 CRISPY_TEMPLATE_PACK = 'crispy/bootstrap3'
+
+
+#
+# Abridge Integration
+#
+ABRIDGE_ENABLED = False  # disabled by default
 
 
 LOGGING = {
@@ -490,6 +505,7 @@ REST_FRAMEWORK = {
         'rest_framework.serializers.HyperlinkedModelSerializer',
 
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
     ),
 
     'DEFAULT_FILTER_BACKENDS': (
@@ -498,7 +514,8 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+        #'rest_framework.permissions.AllowAny',
+        'glynt.apps.api.v2_permissions.GlyntObjectPermission',
     ],
     'PAGINATE_BY': 10,
 }

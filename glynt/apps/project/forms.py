@@ -12,6 +12,19 @@ from .models import Project
 from public.forms import ContactForm
 
 
+def _default_intro_text():
+    return "The following lawyers are interested in working with you. \r\
+\r\
+At this stage we recommend speaking with one or more of the lawyers below. Once you are happy to proceed with a particular lawyer, you can engage them from your Project Overview.\r\
+\r\
+If you have any questions, please contact your project manager Yael Citro at yael@lawpal.com or (415) 691 6069."
+
+
+@parsleyfy
+class AdminMatchingEmailCustomContentForm(forms.Form):
+    intro = forms.CharField(label='Introductory Content', initial=_default_intro_text(), help_text='Your intro text', required=True, widget=forms.Textarea)
+
+
 @parsleyfy
 class ContactUsForm(ContactForm):
     """

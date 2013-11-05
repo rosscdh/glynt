@@ -158,7 +158,11 @@ class BuilderWizardView(NamedUrlSessionWizardView):
         msg = _('Your project has been created.')
         messages.info(self.request, msg)
 
+        # send first order here is importnat
+        # as we need to handle edit projet vs create new
+        is_new = True if hasattr(self.project.data, 'profile_is_complete') is False else False
+        PROJECT_CREATED.send(sender=self, instance=self.project, created=is_new)
+        # this event will set the profile_is_complete setting
         PROJECT_PROFILE_IS_COMPLETE.send(sender=self, instance=self.project)
-        PROJECT_CREATED.send(sender=self, instance=self.project, created=self.project.pk is None)
 
         return HttpResponseRedirect(reverse('dashboard:overview'))

@@ -4,8 +4,12 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from django.shortcuts import redirect
 
-from views import PublicHomepageView, ContactUsView, \
-                    UserClassSessionRedirectView, UserClassLoggedInRedirectView
+from glynt.apps.default.views import ManualLoginView
+
+from views import (PublicHomepageView, ContactUsView,
+                    UserClassSessionRedirectView, 
+                    UserClassLoggedInRedirectView,
+                    CustomerStartView, LawyerStartView)
 
 urlpatterns = patterns('',
     # about
@@ -27,14 +31,20 @@ urlpatterns = patterns('',
     url(r'^for-lawyers/$', TemplateView.as_view(template_name='public/for-lawyers.html'), name='for-lawyers'),
 
     # Start
-    url(r'^start/$', TemplateView.as_view(template_name='public/start.html'), name='start'),
-    url(r'^start/lawyer/$', TemplateView.as_view(template_name='public/start-lawyer.html'), name='start-lawyer'),
+    url(r'^start/$', CustomerStartView.as_view(), name='start'),
+    url(r'^start/lawyer/$', LawyerStartView.as_view(), name='start-lawyer'),
 
     # Social Auth session setter for user class
     url(r'^auth-redirect/(?P<user_class_name>.+)/(?P<login_type>.+)/$', UserClassSessionRedirectView.as_view(), name='auth_user_class_redirect'),
     # Social Auth Logged-in redirect to user type homepage
     url(r'^logged-in/$', UserClassLoggedInRedirectView.as_view(), name='auth_user_class_logged_in_redirect'),
     url(r'^login-error/$', TemplateView.as_view(template_name='public/login-error.html'), name='login_error'),
+
+    url(r'^sorry-you-are-a-lawyer/$', TemplateView.as_view(template_name='public/sorry_are_lawyer.html'), name='sorry_are_lawyer'),
+    url(r'^sorry-you-are-a-customer/$', TemplateView.as_view(template_name='public/sorry_are_customer.html'), name='sorry_are_customer'),
+
+    # manual login
+    url(r'^l/$', ManualLoginView.as_view(), name='login'),
 
     # home
     url(r'^$', PublicHomepageView.as_view(), name='homepage'),

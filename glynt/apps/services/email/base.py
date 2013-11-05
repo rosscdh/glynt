@@ -1,22 +1,24 @@
 # -*- coding: UTF-8 -*-
 from django.contrib.auth.models import User
+from django.db.models.query import QuerySet
 from django.conf import settings
 from django import template
 
-
 from templated_email import send_templated_mail
 
-admin_name, admin_email = settings.ADMINS[0]
+from glynt.apps.services.abridge import SendEmailAsAbridgeEventMixin
 
-from bunch import Bunch
-
+import os
 import itertools
+from bunch import Bunch
 
 import logging
 logger = logging.getLogger('lawpal.services')
 
+admin_name, admin_email = settings.ADMINS[0]
 
-class BaseEmailService(object):
+
+class BaseEmailService(SendEmailAsAbridgeEventMixin):
     """
     Base Email Service
     Provides template and basic sending properties
@@ -35,7 +37,8 @@ class BaseEmailService(object):
 
     whitelist_actions = ['*']
 
-    def __init__(self, **kwargs):
+    def __init__(self, *args, **kwargs):
+
         self._subject = kwargs.get('subject', self._subject)
         self._message = kwargs.get('message', self._message)
         self.from_name = kwargs.get('from_name', admin_name)
@@ -56,7 +59,7 @@ class BaseEmailService(object):
 
         if self.recipients:
             """ extract list of recipients name, email from the passed in recipients """
-            assert type(self.recipients) in [list, tuple, itertools.chain]
+            assert type(self.recipients) in [list, tuple, QuerySet, itertools.chain]
 
             recipients = []
 
@@ -82,6 +85,8 @@ class BaseEmailService(object):
 
         logger.info('Initialized BaseEmailService with context: {context}'.format(context=self.context))
 
+        super(BaseEmailService, self).__init__(*args, **kwargs)
+
     def _templatize_context(self, target, **kwargs):
         t = template.Template(target)
         c = template.Context(kwargs)
@@ -102,8 +107,18 @@ class BaseEmailService(object):
     def can_send(self):
         return '*' in self.whitelist_actions or self.verb in self.whitelist_actions
 
+    @property
+    def full_abridge_template_path(self):
+        """
+        work around for working with templated_email which does not require full
+        path passed in but rather ugly parts thereof
+        """
+        email_template = os.path.basename(self.email_template)
+        return 'abridge/cards/{email_template}.html'.format(email_template=email_template)
+
     def send(self, **kwargs):
         if self.can_send:
+
             logger.debug('Can Send Email {verb}'.format(verb=self.verb))
 
             self._subject = kwargs.get('subject', self._subject)
@@ -113,26 +128,32 @@ class BaseEmailService(object):
             # merge kwargs into context
             self.context.update(kwargs)
 
-            # Loop over the recipients list
-            for to_name, to_email in self.recipients:
+            # in case of Abridge service exception
+            if self.abridge_send(context=self.context,
+                                 recipients=self.recipients,
+                                 template_name=self.full_abridge_template_path) is False:
 
-                self.context.update({
-                    'to_name': to_name,
-                    'to_email': to_email,
-                })
-                # Update subject
-                self.context.update({
-                    'subject': self.subject,
-                    'message': self.message,
-                })
+                # Loop over the recipients list
+                for to_name, to_email in self.recipients:
 
-                logger.info('Sending Email to: {to} email_template: {email_template} with context: {context}'.format(to=self.to_email, email_template=self.email_template, context=self.context))
+                    self.context.update({
+                        'to_name': to_name,
+                        'to_email': to_email,
+                    })
+                    # Update subject
+                    self.context.update({
+                        'subject': self.subject,
+                        'message': self.message,
+                    })
 
-                email = Bunch(template_name=self.email_template,
-                              template_prefix=self.base_email_template_location,
-                              from_email='{from_name} via LawPal <{from_email}>'.format(from_name=self.from_name, from_email=self.from_email),
-                              recipient_list=[to_email],
-                              bcc=['founders@lawpal.com'] if settings.DEBUG is False else [],  # only bcc us in on live mails
-                              context=self.context)
+                    logger.info('Sending Email to: {to} email_template: {email_template} with context: {context}'.format(to=self.to_email, email_template=self.email_template, context=self.context))
 
-                send_templated_mail(**email)
+                    # ensure that the user is notified via the standard email method
+                    email = Bunch(template_name=self.email_template,
+                                  template_prefix=self.base_email_template_location,
+                                  from_email='{from_name} via LawPal <{from_email}>'.format(from_name=self.from_name, from_email=self.from_email),
+                                  recipient_list=[to_email],
+                                  bcc=['founders@lawpal.com'] if settings.DEBUG is False else [],  # only bcc us in on live mails
+                                  context=self.context)
+
+                    send_templated_mail(**email)

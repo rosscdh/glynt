@@ -23,7 +23,9 @@ class EnsureCompanyService(object):
 
     def add_customer(self, customer=None):
         if self.customer or customer:
+
             customer = customer if customer else self.customer
+
             if not self.company:
                 raise Exception('Company has not yet been defined for service, need to call .process()')
 
@@ -34,7 +36,7 @@ class EnsureCompanyService(object):
         self.company, is_new = Company.objects.get_or_create(name=self.company_name)
         logger.info("Processing startup %s (is_new: %s)" % (self.company, is_new,))
 
-        self.add_customer(self.customer)
+        self.add_customer(customer=self.customer)
 
         if self.slug or is_new:
             self.company.slug = self.slug if self.slug else slugify(self.company_name)

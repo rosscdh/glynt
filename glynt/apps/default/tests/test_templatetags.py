@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django import template
 from django.utils import unittest
+from django.test import TestCase
 from django.test.utils import override_settings
 
 from model_mommy import mommy
@@ -10,13 +11,16 @@ from glynt.tests import TemplateRendererMixin
 
 from django.contrib.auth.models import AnonymousUser
 
-from glynt.apps.default.templatetags.glynt_helpers import (colorize_acronym,
+from glynt.apps.default.templatetags.glynt_helpers import (ABSOLUTE_STATIC_URL,
+                                                           colorize_acronym,
                                                            pusher_js,
                                                            moment_js,
                                                            intercom_script,)
 
 
-class TestTemplateTags(unittest.TestCase):
+class TestTemplateTags(TestCase):
+    fixtures = ['sites']
+
     def test_current_date_format(self):
         pass
 
@@ -28,6 +32,10 @@ class TestTemplateTags(unittest.TestCase):
 
     def test_comment_form(self):
         pass
+
+    @override_settings(SITE_ID=4)
+    def test_ABSOLUTE_STATIC_URL(self):
+        self.assertEqual(ABSOLUTE_STATIC_URL(), 'https://www.lawpal.com/static/')
 
     def test_colorize_acronym(self):
         assert colorize_acronym('monkey') == 'c5'
@@ -111,7 +119,7 @@ class TestTemplateTag_Intercom(unittest.TestCase):
         self.assertTrue(result.get('intercomio_userhash') is None)
         self.assertTrue(result.get('show_widget') is False)
 
-    @override_settings(PROJECT_ENVIRONMENT='test')
+    @override_settings(PROJECT_ENVIRONMENT='prod')
     def test_not_authenticated_shows_but_no_hash(self):
         self.assertFalse(self.loggedout_user.is_authenticated())
 
@@ -120,7 +128,7 @@ class TestTemplateTag_Intercom(unittest.TestCase):
         self.assertTrue(result.get('intercomio_userhash') is None)
         self.assertTrue(result.get('show_widget') is False)
 
-    @override_settings(PROJECT_ENVIRONMENT='test')
+    @override_settings(PROJECT_ENVIRONMENT='prod')
     def test_is_authenticated_and_shows_hash(self):
         self.assertTrue(self.user.is_authenticated())
 
@@ -130,7 +138,7 @@ class TestTemplateTag_Intercom(unittest.TestCase):
         self.assertTrue(result.get('show_widget') is True)
 
 
-    @override_settings(PROJECT_ENVIRONMENT='test')
+    @override_settings(PROJECT_ENVIRONMENT='prod')
     def test_presence(self):
         intercom_result = intercom_script(self.context)
         result = self.render_template(
@@ -140,6 +148,7 @@ class TestTemplateTag_Intercom(unittest.TestCase):
         )
 
         self.assertTrue(intercom_result.get('show_widget') is True)
+
         assert 'user_hash:' in result
         assert 'user_id:' in result
         assert 'name:' in result

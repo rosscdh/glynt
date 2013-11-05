@@ -6,9 +6,9 @@ todo attachments when the time comes
 """
 import os
 from django.db import models
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 
-from glynt.apps.project.models import Project
+# from glynt.apps.project.models import Project
 
 from django_filepicker.models import FPFileField
 
@@ -34,8 +34,8 @@ class ToDo(NumAttachmentsMixin, models.Model):
     """
     TODO_STATUS_CHOICES = TODO_STATUS
 
-    user = models.ForeignKey(User, blank=True, null=True)
-    project = models.ForeignKey(Project, blank=True, null=True)
+    user = models.ForeignKey('auth.User', blank=True, null=True)
+    project = models.ForeignKey('project.Project', blank=True, null=True)
     name = models.CharField(max_length=128)
     slug = models.SlugField() # inherited from the .yml list based on project_id and other mixins
     category = models.CharField(max_length=128, db_index=True)
@@ -61,10 +61,13 @@ class ToDo(NumAttachmentsMixin, models.Model):
         return u'{name}'.format(name=unicode(self.name))
 
     def can_read(self, user):
-        return True if user in self.project.notification_recipients() else False
+        return self.project.can_read(user=user)
 
     def can_edit(self, user):
-        return True if user in self.project.notification_recipients() else False
+        return self.project.can_edit(user=user)
+
+    def can_delete(self, user):
+        return self.project.can_delete(user=user)
 
     @property
     def pusher_id(self):
@@ -93,6 +96,7 @@ class ToDo(NumAttachmentsMixin, models.Model):
 
 registry.register("can_read", ToDo)
 registry.register("can_edit", ToDo)
+registry.register("can_delete", ToDo)
 
 
 class Attachment(models.Model):
@@ -100,11 +104,11 @@ class Attachment(models.Model):
     Files that can be attached to our todo items
     """
     uuid = models.CharField(max_length=255, blank=True, null=True, db_index=True)
-    uploaded_by = models.ForeignKey(User, related_name='atatchments_uploaded')
-    deleted_by = models.ForeignKey(User, blank=True, null=True, related_name='atatchments_deleted')
+    uploaded_by = models.ForeignKey('auth.User', related_name='atatchments_uploaded')
+    deleted_by = models.ForeignKey('auth.User', blank=True, null=True, related_name='atatchments_deleted')
     attachment = FPFileField(upload_to=_attachment_upload_file, additional_params=None)
-    project = models.ForeignKey(Project, related_name='attachments')
-    todo = models.ForeignKey(ToDo, blank=True, null=True, related_name='attachments')
+    project = models.ForeignKey('project.Project', related_name='attachments')
+    todo = models.ForeignKey('todo.ToDo', blank=True, null=True, related_name='attachments')
     data = JSONField(default={})
     date_created = models.DateTimeField(auto_now=False, auto_now_add=True, db_index=True)
 
@@ -113,6 +117,15 @@ class Attachment(models.Model):
 
     def __unicode__(self):
         return u'{filename} {mimetype} ({size})'.format(filename=self.filename, mimetype=self.mimetype, size=0)
+
+    def can_read(self, user):
+        return self.project.can_read(user=user)
+
+    def can_edit(self, user):
+        return self.project.can_edit(user=user)
+
+    def can_delete(self, user):
+        return self.project.can_delete(user=user)
 
     @property
     def pusher_id(self):
@@ -145,6 +158,10 @@ class Attachment(models.Model):
     def get_url(self):
         return self.attachment.name
 
+registry.register("can_read", Attachment)
+registry.register("can_edit", Attachment)
+registry.register("can_delete", Attachment)
+
 
 class FeedbackRequest(models.Model):
     """ Feedback Request is used to associate requests for feedback 
@@ -152,9 +169,9 @@ class FeedbackRequest(models.Model):
     a response from a user on an attachment """
     FEEDBACK_STATUS_CHOICES = FEEDBACK_STATUS
 
-    attachment = models.ForeignKey(Attachment)
-    assigned_by = models.ForeignKey(User, related_name='requestedfeedback')
-    assigned_to = models.ManyToManyField(User, related_name='feedbackrequested')
+    attachment = models.ForeignKey('todo.Attachment')
+    assigned_by = models.ForeignKey('auth.User', related_name='requestedfeedback')
+    assigned_to = models.ManyToManyField('auth.User', related_name='feedbackrequested')
     comment = models.CharField(max_length=255)
     status = models.IntegerField(choices=FEEDBACK_STATUS.get_choices(), default=FEEDBACK_STATUS.open, db_index=True)
     data = JSONField(default={})
@@ -179,15 +196,3 @@ class FeedbackRequest(models.Model):
         except IndexError:
             return {}
 
-
-"""
-import signals
-"""
-from .signals import (on_attachment_created, on_attachment_deleted,
-                      on_comment_created,
-                      feedbackrequest_created,
-                      feedbackrequest_status_change,
-                      projectlawyer_assigned,
-                      projectlawyer_deleted,
-                      todo_item_status_change,
-                      on_action_created)

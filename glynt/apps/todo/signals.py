@@ -7,6 +7,8 @@ from django.contrib.admin.models import LogEntry
 
 from threadedcomments.models import ThreadedComment
 
+from notifications import notify
+
 from glynt.apps.utils import generate_unique_slug
 
 from glynt.apps.todo import TODO_STATUS, TODO_STATUS_ACTION, FEEDBACK_STATUS
@@ -108,16 +110,20 @@ def on_attachment_deleted(sender, **kwargs):
     """
     Handle Deletions of attachments
     """
+    is_new = kwargs.get('created', False)
+    attachment = kwargs.get('instance', None)
+
     if not isinstance(sender, LogEntry):
-        is_new = kwargs.get('created', False)
-        attachment = kwargs.get('instance', None)
-        todo = attachment.todo
 
         if attachment:
-            delete_attachment(is_new=is_new, attachment=attachment, **kwargs)
+            try:
+                todo = attachment.todo
+                # decrement num_attachments
+                todo.num_attachments_minus()  # increment the attachment count
+            except:
+                logger.info('todo does not exist for on_attachment_deleted')
 
-            # decrement num_attachments
-            todo.num_attachments_minus()  # increment the attachment count
+            delete_attachment(is_new=is_new, attachment=attachment, **kwargs)
 
             try:
                 verb = '{name} deleted attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project)
@@ -142,11 +148,14 @@ Comment Events
 def on_comment_created(sender, **kwargs):
     """
     Handle Creation of attachments
+    @TODO: This needs to be abstracted!
+    @CODESMELL
     """
     if not isinstance(sender, LogEntry):
         send = False
         is_new = kwargs.get('created', False)
         comment = kwargs.get('instance')
+        extra = {}
 
         if comment and is_new:
             content_object_type = type(comment.content_object)
@@ -168,12 +177,24 @@ def on_comment_created(sender, **kwargs):
                 target = project = comment.content_object
                 event = 'project.comment.created'
                 verb = '{name} commented on the {project} project'.format(name=comment.user.get_full_name(), project=project)
+                extra.update({
+                    'url': comment.absolute_deeplink_url()  # append url to the comment deeplink
+                })
 
             elif content_object_type == ProjectLawyer:
                 send = True
                 target = comment_target = comment.content_object
                 event = 'project.lawyer_engage.comment.created'
                 verb = '{name} commented on the Lawyer Engagement conversation for {project}'.format(name=comment.user.get_full_name(), project=comment_target.project)
+
+                # notify the lawyer (used for discussion counts)
+                if comment.user.profile.is_customer:
+                    recipient = comment.content_object.lawyer.user
+                else:
+                    recipient = comment.content_object.project.customer.user
+                # send notification
+                notify.send(comment.user, recipient=recipient, verb=u'added to discussion', action_object=comment_target.project,
+                    description=comment.comment, target=comment_target.project, project_action='added_discussion_item', project_pk=comment_target.project.pk, creating_user_pk=comment.user.pk)
 
         if send is True:
             logger.debug('send action: {event} {verb} content: {content}'.format(event=event, verb=verb, content=comment.comment))
@@ -182,7 +203,8 @@ def on_comment_created(sender, **kwargs):
                         action_object=comment,
                         target=target,
                         content=comment.comment,
-                        event=event)
+                        event=event,
+                        **extra)
 
 """
 Feedback Request Change Events
@@ -261,7 +283,7 @@ def projectlawyer_assigned(sender, **kwargs):
     """
     instance = kwargs.get('instance')
 
-    if instance.status == ProjectLawyer.LAWYER_STATUS.assigned:
+    if instance.status == ProjectLawyer._LAWYER_STATUS.assigned:
         logger.info('Assigned Lawyer: {lawyer} to Project: {project}'.format(lawyer=instance.lawyer, project=instance.project))
         instance.project.todo_set.filter(user=None).update(user=instance.lawyer.user)
 
@@ -311,12 +333,15 @@ def todo_item_status_change(sender, **kwargs):
     instance = kwargs.get('instance')
 
     if instance.pk is None:
+
         # ensure the slug is present
         if instance.slug in [None, '']:
             instance.slug = generate_unique_slug(instance=instance)
+
             # @BUSINESSRULE ensure we have a sort_position
             if not instance.sort_position:
                 instance.sort_position = instance.project.todo_set.all().count() + 1
+
             # @BUSINESSRULE ensure we have a sort_position_by_cat
             if not instance.sort_position_by_cat:
                 instance.sort_position_by_cat = instance.sort_position
@@ -400,22 +425,23 @@ def on_action_created(sender, **kwargs):
                 logger.debug('action.target is a Project object')
                 project = target
                 recipients = project.notification_recipients()
-                url = project.get_absolute_url()
+                url = action.data.get('url', project.get_absolute_url())
 
             elif target_type == ProjectLawyer:
                 logger.debug('action.target is a ProjectLawyer object')
                 project = target.project
                 recipients = target.notification_recipients()
-                url = project.get_absolute_url() # @TODO need to change this to be the actual engagement element link and write a js trigger to show the modal
+                url = action.data.get('url', project.get_absolute_url()) # @TODO need to change this to be the actual engagement element link and write a js trigger to show the modal
 
             elif target_type == ToDo:
                 logger.debug('action.target is a ToDo object')
                 project = action.target.project
                 recipients = project.notification_recipients()
-                url = project.get_absolute_url()
+                url = action.data.get('url', target.get_absolute_url())  # get the todos absolute url
 
             if recipients:
                 logger.debug('recipients: {recipients}'.format(recipients=recipients))
+
                 email = NewActionEmailService(
                     verb=event,
                     from_name=user_name,

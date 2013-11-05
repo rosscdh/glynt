@@ -1,13 +1,14 @@
 # -*- coding: UTF-8 -*-
 from django.core.urlresolvers import reverse
 
-from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin
+from glynt.casper import BaseLawyerCustomerProjectCaseMixin, glynt_mock_http_requests
 from glynt.apps.transact.models import Transaction
 
 import os
+from model_mommy import mommy
 
 
-class CustomerSelectTransactionTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
+class CustomerSelectTransactionTest(BaseLawyerCustomerProjectCaseMixin):
     test_path = os.path.dirname(__file__)
 
     def test_customer_transact_select_js(self):
@@ -20,17 +21,15 @@ class CustomerSelectTransactionTest(BaseLawyerCustomerProjectCaseMixin, PyQueryM
         self.assertTrue(self.load_casper_file(js_file='customer-transact-select.js', test_label='Test a Customer can select transactions', url=url))
 
 
-class CustomerCreateProjectTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
+class CustomerCreateProjectTest(BaseLawyerCustomerProjectCaseMixin):
     test_path = os.path.dirname(__file__)
 
+    @glynt_mock_http_requests
     def setUp(self):
         super(CustomerCreateProjectTest, self).setUp()
-        # Remove the base
-        self.project.transactions.clear()
-        self.project.transactions.add(Transaction.objects.get(slug='CS'))
-        self.project.attachments.all().delete()
-        self.project.todo_set.all().delete()
-        self.project_lawyer_join.delete()
+        # re-create the project but without the associated todos and attachments
+        # causes issues with httprettynot mocking out the crocdoc delete calls
+        self.project = mommy.make('project.project', customer=self.customer, company=self.company, lawyers=(self.lawyer,), transactions=(Transaction.objects.get(slug='CS'),))
 
     def test_customer_incorporation_form_js(self):
         """

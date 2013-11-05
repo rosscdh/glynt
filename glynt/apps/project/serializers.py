@@ -1,17 +1,16 @@
 # -*- coding: UTF-8 -*-
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 
 from rest_framework import serializers
 
 from .models import Project, ProjectLawyer
-from threadedcomments.models import ThreadedComment
-
+from glynt.apps.todo.views import ToDoCountMixin
 from glynt.apps.customer.serializers import UserSerializer
 
+from threadedcomments.models import ThreadedComment
+
 import re
-import itertools
 
 UUID4HEX_LONG = re.compile('[0-9a-f]{32}\Z', re.I)
 UUID4HEX_SHORT = re.compile('[0-9a-f]{11}\Z', re.I)
@@ -49,24 +48,21 @@ class ProjectSerializer(serializers.ModelSerializer):
     company = serializers.SerializerMethodField('get_company')
     transactions = serializers.SerializerMethodField('get_transactions')
     lawyers = serializers.SerializerMethodField('get_lawyers')
+    counts = serializers.SerializerMethodField('get_counts')
 
     status = serializers.SerializerMethodField('get_status')
 
     class Meta:
         model = Project
         queryset = Project.objects.prefetch_related('customer', 'customer__user', 'company', 'transactions', 'lawyers', 'lawyers__user').all()
-        fields = ('uuid', 'name', 'customer', 'company',
-                  'transactions', 'lawyers',
+        fields = ('id', 'uuid', 'name', 'customer', 'company',
+                  'transactions', 'lawyers', 'counts',
                   'status',)
 
     def get_customer(self, obj):
         if obj is not None:
             user = obj.customer.user
-            return {
-                'pk': user.pk,
-                'full_name': user.get_full_name(),
-                'photo': user.profile.get_mugshot_url(),
-            }
+            return UserSerializer(user).data
 
     def get_company(self, obj):
         if obj is not None:
@@ -76,18 +72,35 @@ class ProjectSerializer(serializers.ModelSerializer):
             }
 
     def get_lawyers(self, obj):
+        result = []
         if obj is not None:
-            return [{
-                        'pk': lawyer.pk,
-                        'user_pk': lawyer.user.pk,
-                        'full_name': lawyer.user.get_full_name(),
-                        'photo': lawyer.profile_photo,
-                        'url': lawyer.get_absolute_url(),
-                    } for lawyer in obj.lawyers.all()]
+            for join in ProjectLawyer.objects.filter(project=obj):
+                lawyer = join.lawyer
+                lawyer_user = join.lawyer.user
+                result.append({
+                            'pk': lawyer.pk,
+                            'user_pk': lawyer_user.pk,
+                            'username': lawyer_user.username,
+                            'full_name': lawyer_user.get_full_name(),
+                            'status': {
+                                'id': join.status,
+                                'name': join.display_status,
+                            },
+                            'photo': lawyer.profile_photo,
+                            'url': lawyer.get_absolute_url(),
+                        })
+        return result
 
     def get_transactions(self, obj):
         if obj is not None:
             return [{'type': t.slug, 'name': t.title} for t in obj.transactions.all()]
+
+    def get_counts(self, obj):
+        if obj is not None:
+            todomixin = ToDoCountMixin()
+            todomixin.request = self.context.get("request", None)
+
+            return todomixin.todo_counts(qs_objects=obj.todo_set, project=obj).get("counts")
 
     def get_status(self, obj):
         if obj is not None:
@@ -111,9 +124,9 @@ class TeamSerializer(serializers.Serializer):
 
             # append potential lawyers as they are not naturally provided
             # by project.notification_recipients
-            potential_lawyers = ProjectLawyer.objects.potential(project=obj)
-            if potential_lawyers:
-                participants += [join.lawyer.user for join in potential_lawyers]
+            # potential_lawyers = ProjectLawyer.objects.potential(project=obj)
+            # if potential_lawyers:
+            #     participants += [join.lawyer.user for join in potential_lawyers]
 
             for u in participants:
                 yield UserSerializer(u).data
@@ -131,15 +144,18 @@ class DiscussionSerializer(GetContentObjectByTypeAndPkMixin, serializers.ModelSe
     title = serializers.CharField(required=False)
     comment = serializers.CharField()
 
+    tags = serializers.IntegerField(source='tags.all', required=False)
     meta = serializers.SerializerMethodField('get_meta')
+    last_child = serializers.SerializerMethodField('get_last_child')
 
     class Meta:
         model = ThreadedComment
-        queryset = ThreadedComment.objects.prefetch_related('user').all().order_by('-id')
+        queryset = ThreadedComment.objects.select_related('user', 'tagged_items__tag').all().order_by('-id')
 
         fields = ('id', 'object_pk', 'title', 'comment', 'user',
-                  'content_type_id', 'parent_id', 'last_child',
-                  'meta', 'site_id')
+                  'content_type_id', 'parent_id',
+                  'tags', 'site_id',
+                  'last_child', 'meta',)
 
 
     def validate_object_pk(self, attrs, source):
@@ -173,3 +189,23 @@ class DiscussionSerializer(GetContentObjectByTypeAndPkMixin, serializers.ModelSe
                             'photo': user.profile.get_mugshot_url()
                         }
             }
+
+    def get_last_child(self, obj):
+        if obj is not None and obj.last_child is not None:
+            return DiscussionSerializer(obj.last_child).data
+        else:
+            return None
+
+
+class DiscussionThreadSerializer(DiscussionSerializer):
+    thread = serializers.SerializerMethodField('get_thread')
+
+    class Meta(DiscussionSerializer.Meta):
+        fields = ('id', 'object_pk', 'title', 'comment', 'user',
+                  'content_type_id', 'parent_id',
+                  'tags', 'site_id',
+                  'meta', 'thread',)
+
+    def get_thread(self, obj):
+        for comment in obj.children.all():
+            yield DiscussionSerializer(comment).data    

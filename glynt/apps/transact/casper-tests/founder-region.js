@@ -22,7 +22,7 @@ helper.scenario(casper.cli.options.url,
         this.test.assertElementCount('div.founder-group', 3);
         this.test.assertElementCount('button.delete-cloned-region', 2);
 
-        this.echo(this.getHTML())
+        //this.echo(this.getHTML())
     }
 );
 

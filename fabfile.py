@@ -626,3 +626,5 @@ def deploy(is_predeploy='False',full='False',db='False',search='False'):
     relink()
     assets()
     clean_start()
+    conclude()
+

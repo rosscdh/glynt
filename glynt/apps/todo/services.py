@@ -4,15 +4,17 @@ Service that abstract the various creation processes todos
 """
 from django.conf import settings
 
-from . import TODO_STATUS, FEEDBACK_STATUS
+from glynt.apps.services.pusher import PusherPublisherService
 
 from boto.s3.connection import S3Connection
 
-import logging
-logger = logging.getLogger('lawpal.services')
+from . import TODO_STATUS, FEEDBACK_STATUS
 
 import crocodoc
 import requests
+import logging
+logger = logging.getLogger('lawpal.services')
+
 
 FILEPICKER_API_KEY = getattr(settings, 'FILEPICKER_API_KEY', None)
 if FILEPICKER_API_KEY is None:
@@ -54,9 +56,11 @@ class CrocdocAttachmentService(object):
         if it has not already been uploaded (i.e. we have a crocdoc uuid in the json data)
         """
         if self.attachment.crocdoc_uuid is None:
+
             try:
                 uuid = self.upload_document()
                 logger.info('CrocdocAttachmentService.uuid: {uuid}'.format(uuid=uuid))
+
             except Exception as e:
                 logger.error('CrocdocAttachmentService.uuid: Failed to Generate uuid')
                 raise e
@@ -75,7 +79,7 @@ class CrocdocAttachmentService(object):
 
     def session_key(self, **kwargs):
         if self.session is None:
-            self.session = crocodoc.session.create(self.uuid, **kwargs)
+            self.session = crocodoc.session.create(self.uuid, **kwargs) if not settings.IS_TESTING else '123-123-123'
         return self.session
 
     def upload_document(self):
@@ -84,7 +88,7 @@ class CrocdocAttachmentService(object):
         return crocodoc.document.upload(url=url)
 
     def view_url(self):
-        url = 'https://crocodoc.com/view/{session_key}'.format(session_key=self.session_key())
+        url = 'https://crocodoc.com/view/{session_key}'.format(session_key=self.session_key()) if not settings.IS_TESTING else 'http://example.com'
         logger.info('provide crocdoc view_url: {url}'.format(url=url))
         return url
 
@@ -157,15 +161,30 @@ class ToDoStatusService(ToDoStatusRulesetMixin):
     """
     Service to update the ToDo status based on events
     """
+    status = None
+    new_status = None
+
     def __init__(self, todo_item, status=None, *args, **kwargs):
         self.todo_item = todo_item
-        self.status = status
+        self.status = self.todo_item.status if status is None else status
+
+    def pusher_event(self):
+            pusher = PusherPublisherService(channel=[self.todo_item.pusher_id,
+                                                     self.todo_item.project.pusher_id], 
+                                            event='todo.status_change')
+            info_object = {
+                'old_status': {'id': self.status, 'name': self.todo_item.TODO_STATUS_CHOICES.get_desc_by_value(self.status)},
+                'new_status': {'id': self.new_status, 'name': self.todo_item.TODO_STATUS_CHOICES.get_desc_by_value(self.new_status)},
+            }
+            pusher.process(**info_object)
 
     def process(self, **kwargs):
-        status = self.todo_status()
-        if status != self.todo_item.status:
-            self.todo_item.status = status
+        self.new_status = self.todo_status()
+        if self.new_status != self.todo_item.status:
+            self.todo_item.status = self.new_status
             self.todo_item.save(update_fields=['status'])
+            self.pusher_event()
+
 
 
 class ToDoAttachmentFeedbackRequestStatusService(ToDoStatusRulesetMixin):

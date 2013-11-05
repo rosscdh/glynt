@@ -5,6 +5,7 @@ from django.views.generic.base import RedirectView
 from django.views.generic.edit import FormView
 from django.views.generic import TemplateView
 from django.core.urlresolvers import reverse
+from django.contrib.auth import logout
 
 import json
 
@@ -75,13 +76,16 @@ class UserClassLoggedInRedirectView(RedirectView):
     def get_redirect_url(self, **kwargs):
         """ if the user has already signed up and has set a password then continue normally
         otherwise show them the form """
-        if self.request.user.password == '!':
-            url = reverse('client:confirm_signup', kwargs={'slug': self.request.user.username})
+        #
+        # @BUSINESSRULE Removed password test, as we dont actually use password (yet)
+        #
+        #if self.request.user.password == '!':
+        #    url = reverse('client:confirm_signup', kwargs={'slug': self.request.user.username})
+        #else:
+        if self.request.user.is_authenticated() and self.request.user.profile.is_customer:
+            url = CustomerLoginLogic(user=self.request.user).url
         else:
-            if self.request.user.is_authenticated() and self.request.user.profile.is_customer:
-                url = CustomerLoginLogic(user=self.request.user).url
-            else:
-                url = reverse('public:homepage')
+            url = reverse('public:homepage')
 
         return url
 
@@ -120,3 +124,40 @@ class ContactUsView(AjaxableResponseMixin, FormView):
             messages.success(self.request, message)
 
             return super(ContactUsView, self).form_valid(form)
+
+
+class LogUserOutMixin(object):
+    """
+    Mixin that will log the current user out
+    and continue showing the view as an non authenticated user
+    """
+    def dispatch(self, request, *args, **kwargs):
+        """
+        If the user is logged in log them out
+        """
+        if request.user.is_authenticated() is True:
+            logout(request)
+
+        return super(LogUserOutMixin, self).dispatch(request, *args, **kwargs)
+
+
+class SaveNextUrlInSessionMixin(object):
+    """
+    A mixin that will save a ?next=/path/to/next/page
+    url in the session
+    """
+    def get(self, request, *args, **kwargs):
+        next = request.GET.get('next', None)
+
+        if next is not None:
+            self.request.session['next'] = next
+
+        return super(SaveNextUrlInSessionMixin, self).get(request, *args, **kwargs)
+
+
+class CustomerStartView(LogUserOutMixin, SaveNextUrlInSessionMixin, TemplateView):
+    template_name='public/start.html'
+
+
+class LawyerStartView(LogUserOutMixin, TemplateView):
+    template_name='public/start-lawyer.html'

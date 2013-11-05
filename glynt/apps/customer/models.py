@@ -26,7 +26,7 @@ class Customer(models.Model):
     summary = models.CharField(max_length=255)
     bio = models.TextField()
     data = JSONField(default={})
-    photo = models.ImageField(upload_to=_customer_upload_photo)
+    photo = models.ImageField(upload_to=_customer_upload_photo, blank=True)
 
     def __unicode__(self):
         return u'%s' % (self.user.get_full_name(),)
@@ -43,13 +43,17 @@ class Customer(models.Model):
         return self.user.profile.get_mugshot_url()
 
     @property
+    def phone(self):
+        return self.data.get('phone', '')
+
+    @property
     def companies(self):
         return self.user.companies.all()
 
     @property
     def primary_company(self):
         try:
-            return self.companies[0]
-        except IndexError:
+            return self.user.companies.get(name=self.data.get('company_name'))
+        except Company.DoesNotExist:
             # not found so return an empty instance
             return Company()

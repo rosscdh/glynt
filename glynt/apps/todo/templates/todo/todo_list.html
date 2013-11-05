@@ -34,11 +34,11 @@
                                 </a>
                             </li>
                             {% if is_lawyer %}
-                            <li>
-                                <button type="button" class="btn btn-link pull-right create-item create-category" ng-click="createCategory( category.info )">
-                                    <i class="glyphicon glyphicon-plus-sign" data-tooltip="Create new category" tooltip-position="right"></i>
-                                </button>
-                            </li>
+                                <li>
+                                    <button type="button" class="btn btn-link create-category" ng-click="createCategory( category.info )">
+                                        <i class="glyphicon glyphicon-plus-sign"></i> Create new category
+                                    </button>
+                                </li>
                             {% endif %}
                         </ul>
                     </div>
@@ -64,7 +64,7 @@
                                         <tr ng-repeat="item in category.items | filter: { is_deleted: model.showDeletedItems }" class="item state-{[{getItemStatus(item)}]} {[{pendingFeedback(item)}]}" ng-controller="checklistItemCtrl">
                                             <!-- Checklist item status //-->
                                             <td class="item-status" ng-click="viewItem( item )">
-                                                <i class="icon-state-{[{getItemStatus(item)}]}"></i>
+                                                <i class="icon-state-{[{getItemStatus(item)}]}" data-tooltip="{[{getItemDisplayStatus(item)}]}"></i>
                                             </td>
                                             <td class="item-info" checklist-item-link ng-click="viewItem( item )"></td>
                                             <td class="item-details" checklist-item-details></td>
@@ -107,6 +107,7 @@
        },
         "user": {
             'pk': {{ user.pk|default:'null'|jsonify }},
+            'email': {{ user.email|default:'null'|jsonify }},
             'username': '{{ user.username }}',
             'full_name': '{{ user.get_full_name }}',
             'is_authenticated': {{ user.is_authenticated|jsonify }},

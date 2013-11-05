@@ -22,10 +22,6 @@ class EnsureCustomerService(object):
         self.photo = kwargs.pop('photo', None)
         self.data = kwargs
 
-    def user_info(self):
-        self.data['first_name'] = self.data.get('first_name', self.user.first_name)
-        self.data['last_name'] = self.data.get('last_name', self.user.last_name)
-
     def update_user_profile(self):
         # update the is_customer attribute
         profile = self.user.profile
@@ -47,8 +43,6 @@ class EnsureCustomerService(object):
         self.customer, is_new = Customer.objects.get_or_create(user=self.user)
         logger.info("Processing customer %s (is_new: %s)" % (self.user.get_full_name(), is_new,))
 
-        self.user_info()
-
         if self.summary:
             self.customer.summary = self.summary
 
@@ -56,7 +50,7 @@ class EnsureCustomerService(object):
             self.customer.bio = self.bio
 
         if self.data:
-            self.customer.data = self.data
+            self.customer.data.update(self.data)
 
         if self.photo:
             # pop so it does not get serialized
