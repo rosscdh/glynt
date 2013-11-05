@@ -17,10 +17,13 @@ body.homepage {
     color:white;
 
   }
-  &.viewing-page-2 header.navbar, &.viewing-page-3 header.navbar, &.viewing-page-4 header.navbar, &.viewing-page-5 header.navbar, &.viewing-page-6 header.navbar   {
+  &.viewing-page-2 header.navbar, &.viewing-page-3 header.navbar, &.viewing-page-4 header.navbar, &.viewing-page-5 header.navbar   {
       background-color:transparent;
       border-bottom:none;
   } 
+ &.viewing-page-6 header.navbar {
+ background-color: #666;
+ }  
   &.viewing-page-7 header.navbar {
     background-color:transparent;
     border-bottom:none;
@@ -308,16 +311,24 @@ body.homepage {
         font-size:16px;
       }
     }
-
-    // collab discuss progress sync  sign  lock
-
   }
   section#about-us {
-    background-color:#fefefe;
+    background-color:#fafafa;
     padding-top:30px;
+    .contact {
+      background-color: #666;
+      h1 {
+        font-size:40px;
+        color:white;
+        padding: 25px 0px 33px 0px;
+        a {
+          color:white;
+        }
+      }
+    }
     h2 {
       font-size:33px;
-      margin-top:40px;
+      margin-top:25px;
       text-align:left;
       color:#bbb;
     }

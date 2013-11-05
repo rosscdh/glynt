@@ -6628,10 +6628,12 @@ body.homepage .navbar-nav > .active > a:focus {
 body.homepage.viewing-page-2 header.navbar,
 body.homepage.viewing-page-3 header.navbar,
 body.homepage.viewing-page-4 header.navbar,
-body.homepage.viewing-page-5 header.navbar,
-body.homepage.viewing-page-6 header.navbar {
+body.homepage.viewing-page-5 header.navbar {
   background-color: transparent;
   border-bottom: none;
+}
+body.homepage.viewing-page-6 header.navbar {
+  background-color: #666;
 }
 body.homepage.viewing-page-7 header.navbar {
   background-color: transparent;
@@ -6920,12 +6922,23 @@ body.homepage section#deal-visibility .row.feature p {
   font-size: 16px;
 }
 body.homepage section#about-us {
-  background-color: #fefefe;
+  background-color: #fafafa;
   padding-top: 30px;
+}
+body.homepage section#about-us .contact {
+  background-color: #666;
+}
+body.homepage section#about-us .contact h1 {
+  font-size: 40px;
+  color: white;
+  padding: 25px 0px 33px 0px;
+}
+body.homepage section#about-us .contact h1 a {
+  color: white;
 }
 body.homepage section#about-us h2 {
   font-size: 33px;
-  margin-top: 40px;
+  margin-top: 25px;
   text-align: left;
   color: #bbb;
 }
