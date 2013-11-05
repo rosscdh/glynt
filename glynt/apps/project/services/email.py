@@ -10,7 +10,7 @@ from bunch import Bunch
 import logging
 logger = logging.getLogger('lawpal.services')
 
-site_email = settings.DEFAULT_FROM_EMAIL
+SITE_EMAIL = settings.DEFAULT_FROM_EMAIL
 
 
 class SendProjectEmailsService(object):
@@ -71,7 +71,7 @@ class SendProjectEmailsService(object):
         send_templated_mail(
             template_name=self.mail_template_name,
             template_prefix="email/",
-            from_email=site_email,
+            from_email=SITE_EMAIL,
             recipient_list=self.recipient_list,
             context=self.context
         )

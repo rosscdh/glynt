@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from templated_email import send_templated_mail
 
 admin_name, admin_email = settings.ADMINS[0]
+SITE_EMAIL = settings.DEFAULT_FROM_EMAIL
 
 import logging
 logger = logging.getLogger('lawpal.services')
@@ -48,7 +49,7 @@ class InviteToJoinService(object):
         send_templated_mail(
                 template_name = self.email_template,
                 template_prefix = "invite/email/",
-                from_email = '{from_name} via LawPal <{admin_email}>'.format(from_name=self.from_name, admin_email=admin_email),
+                from_email = SITE_EMAIL,
                 recipient_list = [self.to_email],
                 bcc = ['founders@lawpal.com'],
                 context = self.context,
