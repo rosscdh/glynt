@@ -7,6 +7,7 @@ The recievers are handled here. But must be connected in the project.models due 
 signals are imported a number of the imports in this file will cause circular imports
 """
 from django.dispatch import receiver
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import pre_save, post_save, pre_delete
 
 from notifications import notify
@@ -85,11 +86,20 @@ def on_save_ensure_user_in_participants(sender, **kwargs):
     if user not in project.participants.all():
         project.participants.add(user)
 
+
 @receiver(pre_save, sender=Project, dispatch_uid='project.on_save_ensure_data_aggregates')
 def on_save_ensure_data_aggregates(sender, **kwargs):
     project = kwargs.get('instance')
     # ensure we have the company name always
-    project.data['company_name'] = project.company.name
+    try:
+        project.data['company_name'] = project.company.name
+    except ObjectDoesNotExist:
+        project.data['company_name'] = None
+
+    # set the project name
+    project.data['project_name'] = project.project_name()
+
+    # @TODO append the project counts here, excluding the respective user count
 
 
 @receiver(pre_save, sender=ProjectLawyer, dispatch_uid='project.lawyer_assigned')
