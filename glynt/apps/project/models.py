@@ -21,7 +21,7 @@ class Project(ProjectCategoriesMixin, ProjectRulezMixin, models.Model):
 
     uuid = UUIDField(auto=True, db_index=True)
     customer = models.ForeignKey('customer.Customer')
-    company = models.ForeignKey('company.Company')
+    company = models.ForeignKey('company.Company', blank=True, null=True)
     transactions = models.ManyToManyField('transact.Transaction')
     lawyers = models.ManyToManyField('lawyer.Lawyer', blank=True, through='project.ProjectLawyer')
     participants = models.ManyToManyField('auth.User', blank=True)
