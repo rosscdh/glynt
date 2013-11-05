@@ -10,19 +10,31 @@ from django.core.urlresolvers import reverse
 from glynt.apps.project.models import Project
 from glynt.apps.project import PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE
 
-from glynt.apps.transact.views.intake import (FORMS as INTAKE_FORMS,)
-from glynt.apps.transact.views.intake import CS_FORMS, SF_FORMS, CS_SF_FORMS
+from glynt.apps.transact.views.intake import *
 
 from bunch import Bunch
 
 import json
 
 TX_OPTIONS = {
-    'INTAKE': {'forms': INTAKE_FORMS, 'templates': [], 'data_provider': Bunch({})},
-    'CS': {'forms': CS_FORMS, 'templates': [], 'data_provider': Bunch({})},
-    'SF': {'forms': SF_FORMS, 'templates': [], 'data_provider': Bunch({})},
-    'ES': {'forms': SF_FORMS, 'templates': [], 'data_provider': Bunch({})},
-    'CS_SF_ES': {'forms': CS_SF_FORMS, 'templates': [], 'data_provider': Bunch({})},
+    # 'INTAKE': {'forms': INTAKE_FORMS, 'templates': [], 'data_provider': Bunch({})},
+
+    # Basic transactions
+    'INC': { 'forms': INC_FORMS, 'templates': [], 'data_provider': Bunch({}) },
+    'FIN': { 'forms': FIN_FORMS, 'templates': [], 'data_provider': Bunch({}) },
+    'IP':  { 'forms': IP_FORMS,  'templates': [], 'data_provider': Bunch({}) },
+    'IMM': { 'forms': IMM_FORMS, 'templates': [], 'data_provider': Bunch({}) },
+    'EMP': { 'forms': EMP_FORMS, 'templates': [], 'data_provider': Bunch({}) },
+    'NDA': { 'forms': NDA_FORMS, 'templates': [], 'data_provider': Bunch({}) },
+    'PRI': { 'forms': PRI_FORMS, 'templates': [], 'data_provider': Bunch({}) },
+    'OTH': { 'forms': OTH_FORMS, 'templates': [], 'data_provider': Bunch({}) },
+
+    # Fixed fee transactions
+    'CS':  { 'forms': CS_FORMS,  'templates': [], 'data_provider': Bunch({}) },
+    'SF':  { 'forms': SF_FORMS,  'templates': [], 'data_provider': Bunch({}) },
+    'ES':  { 'forms': ES_FORMS,  'templates': [], 'data_provider': Bunch({}) },
+
+    # 'CS_SF_ES': {'forms': CS_SF_FORMS, 'templates': [], 'data_provider': Bunch({})},
 }
 
 
@@ -68,11 +80,11 @@ class BuilderWizardView(NamedUrlSessionWizardView):
         if type(tx_range) == str:
             tx_range = [tx_range]
 
-        """
-        @BUSINESSRULE if we have a multiple selected it must be the combined transaction form
-        """
-        if len(tx_range) > 1:
-            tx_range = ['CS_SF_ES']
+        # """
+        # @BUSINESSRULE if we have a multiple selected it must be the combined transaction form
+        # """
+        # if len(tx_range) > 1:
+            # tx_range = ['CS_SF_ES']
 
         for tx in tx_range:
             tx_options_keys = TX_OPTIONS.keys()

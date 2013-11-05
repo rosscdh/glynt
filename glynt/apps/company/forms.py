@@ -12,6 +12,30 @@ from glynt.apps.company import OPTION_PLAN_STATUS_CHOICES
 
 
 @parsleyfy
+class GenericIntakeForm(BuilderBaseForm):
+    """
+    The Generic Intake Form
+    This form only appears if they have not been given a fixed fee transaction.
+
+    """
+    page_title = 'Some general information'
+    page_description = 'Just a bit of information'
+    data_bag = 'glynt.apps.project.bunches.ProjectIntakeBunch'
+
+    details = forms.CharField(label=_('Details'), required=True, widget=forms.Textarea)
+
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Fieldset(
+                'About your Project',
+                'details',
+            )
+        )
+        super(GenericIntakeForm, self).__init__(*args, **kwargs)
+
+
+@parsleyfy
 class CompanyProfileForm(BuilderBaseForm):
     """
     The Company Setup Form
