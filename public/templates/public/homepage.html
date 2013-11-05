@@ -1,6 +1,8 @@
-{% extends 'base.html' %}{% load url from future %}
+{% extends 'base.html' %}{% load url from future %}{% load cache i18n project_tags %}
 {% block page_title %}LawPal - A better attorney-client relationship{% endblock %}
 {% block bodyclass %}homepage{% endblock %}
+{% block bodyextra %}{% endblock %}
+
 {% block css %}{% endblock %}
 {% block extrahead %}
     <meta name="description" content="LawPal - A better attorney-client relationship">
@@ -17,7 +19,10 @@
                 <span class="icon-bar"></span>
             </button>
             <ul class="onepage-pagination list-unstyled">
-            <li class=""><a href="#1" data-index="1"  class="navbar-brand"><img src="{{ STATIC_URL }}img/logo-nav-white-on-dark.png" alt="LawPal" title="LawPal"></a></li>
+                <li class="">
+                    <a href="#1" data-index="1"  class="navbar-brand">
+                        <img src="{{ STATIC_URL }}img/logo-nav-white-on-dark.png" alt="LawPal" title="LawPal"></a>
+                </li>
             </ul>
         </div>
         <nav class="collapse nav-collapse navbar-collapse" role="navigation" id="navbar">
@@ -29,16 +34,19 @@
                     <a data-index="3" href="#3" class="">Features</a>
                 </li>
                 <li title="Our Lawyers">
-                    <a data-index="4" href="#4" class="">Our Lawyers</a>
+                    <a data-index="4" href="#4" class="">Lawyers</a>
                 </li>
                 <li title="Pricing">
                     <a data-index="5" href="#5" class="">Pricing</a>
                 </li>
-                <li title="Get Started">
-                    <a data-index="6" href="#6" class="">Get Started</a>
+                <li title="About">
+                    <a data-index="6" href="#6" class="">About</a>
+                </li>
+                <li title="Sign up">
+                    <a href="#signup-modal" class="" data-toggle="modal" onclick="_gaq.push(['_trackEvent', 'Nav', 'Action', 'Sign In']);">{% trans 'Get Started' %}</a>
                 </li>
                 <li title="Sign In">
-                    <a data-index="7" href="#7" class="">Sign In</a>
+                    <a href="#signin-modal" class="" data-toggle="modal" onclick="_gaq.push(['_trackEvent', 'Nav', 'Action', 'Sign In']);">{% trans 'Sign in' %}</a>
                 </li>
             </ul>
         </nav>
@@ -56,9 +64,8 @@
             <div class="inner">
                 <div class="row">
                     <div class="col-sm-6 col-12 col-lg-5">     
-<!--                         <img src="{{ STATIC_URL }}img/home-2/top-logo.png" class="strap">
- -->                        <h1>Transparent legal solutions for your startup. </h1>
-                        <h2>Work easily with a veteran startup lawyer to accurately, affordably and efficiently reach your goals. </h2>
+                        <h1>Transparent legal solutions for your startup. </h1>
+                        <h2>Work easily with a veteran startup lawyer to efficiently, accurately, and affordably reach your goals. </h2>
                         <a href="#" class="btn btn-clear-border btn-home btn-huge" id="play-video">Watch the Video</a>
                     </div>
                 </div>
@@ -75,7 +82,7 @@
                         </div>
                         <div class="col-lg-4 col-4">
                             <h3>Trust Your Co-Pilot</h3>
-                            <p>Navigate your way with our veteran startup lawyers experienced in your legal needs at any stage.</p>
+                            <p>Work with our network of veteran startup lawyers experienced in your legal needs at any stage.</p>
                              <a data-index="4" href="#4"><img src="{{STATIC_URL}}img/home-2/down-arrow.png" class="da"></a>
                         </div>
                         <div class="col-lg-4 col-4">
@@ -92,6 +99,9 @@
     <section id="co-pilot">
         <div class="container">
             <div class="row">
+                <h1 class="text-center">How LawPal works.</h1>
+                <h3>Choose your legal project and a veteran startup lawyer to work with on our platform. </h3>                    
+                
                 <div class="col-lg-12">
                     <div class="row wrap">
                         <div class="col-sm-4">
@@ -147,8 +157,11 @@
                     </div>
                     <br />
                     <br />
-                    <h1 class="text-center">Your Lawyer. Your Co-Pilot.</h1>
-                    <h3>From idea to exit, our lawyers are here to help you along your journey. </h3>                    
+                    <div class="text-center">
+                        <br />
+                        <a href="#signup-modal" data-toggle="modal" class="btn btn-clear-border btn-home btn-huge">Get Started</a>
+                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -160,10 +173,15 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="text-right">Know where your deal is.</h1>
+                    <h1 class="text-right">See legal different.</h1>
                     <div class="row">
-                        <div class="col-sm-6 col-push-6 text-right">
+                        <div class="col-sm-5 col-push-7 text-right">
                             <h3 class="softer text-right">Complete transparency of your legal workflow and the right set of tools to keep your startup and your Lawpal legal team moving forward quickly.</h3>
+                            <div class="onepage-pagination">
+                                <br />
+                                <a href="#signup-modal" data-toggle="modal"  class="btn btn-clear-border btn-home btn-huge">Get Started</a>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -214,19 +232,17 @@
             <div class="row">
                 <div class="col-sm-6 col-10">
                     <br />
-                    <br />
-                    <br />
-                    <br />
-                    <h1 class="">Veteran Startup Lawyers</h1>
-                    <h3 class="softer">Experienced specialist startup lawyers to meet your needs.</h3>
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <h3 class="softer">LawPal Attorneys have worked at top firms</h3>
+                  
+              
+                    <h1 class="">Your Lawyer. <br />Your Co-Pilot.</h1>
+                    <h3 class="softer">Work with a lawyer instead of against the clock and get your legal projects done efficiently and accurately. Our network of veteran startup lawyers have worked at:</h3>
                     <img src="{{STATIC_URL}}img/home-2/lawyer-firms.png">
+                    <br /> 
+                    <div class="onepage-pagination">
+                        <br />
+                        <a  href="#signup-modal" data-toggle="modal"  class="btn btn-clear-border btn-home btn-huge">Get Started</a>
+                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -236,34 +252,35 @@
     <section id="pricing">
         <div class="container">
             <div class="row">
-                <div class="col-12">
+                <div class="col-10 col-push-1">
                     <br />
                     <br />
                     <br />
                     <h1 class="text-center">Predictable pricing.</h1>
                     <br />
-                    <p class="text-center sub-text">
-                         When raising your seed round, every dollar counts. <br />
+                    <h3 class="text-center">
+                         When raising your seed round, every dollar counts.
                         Getting an invoice for $15,000 in legal fees hurts. With LawPal, you get
                         the benefits of engaging an experienced startup lawyer
-                        without writing a blank check for an unknown amount of billable hours.
-                    </p>
+                        without writing a blank check for an unknown amount of billable hours. We aim to give you fixed pricing whenever possible.
+                    
+                    </h3>
                     <div class="row">
-                        <div class="col-sm-4 col-12">
-                            <h2>Company Formation.</h2>
-                            <span class="small">from</span> <span class="big">$950</span>
+                        <div class="col-sm-4 col-offset-2 col-12">
+                            <h2>Company Formation</h2>
+                            <span class="small"></span> <span class="big">$950</span>
                         </div>
                         <div class="col-sm-4 col-12">
-                            <h2>Bridge/Note Financing.</h2>
+                            <h2>Bridge/Note Financing</h2>
                             <span class="big">$2,500</span>
                         </div>
-                        <div class="col-sm-4 col-12">
-                            <h2>Anything Else.</h2>
-                            <span class="small">from</span> <span class="big">$Quote</span>
-                        </div>
+                    
                         <div class="col-12 text-center link onepage-pagination">
                             <br />
-                            <a data-index="6" href="#6" class="btn btn-clear-border btn-home btn-huge">Get Started</a>
+                            <br />
+                            <br />
+                            <br />
+                            <a href="#signup-modal" data-toggle="modal" class="btn btn-clear-border btn-home btn-huge">Get Started</a>
                         </div>
                     </div>
                     <br />
@@ -274,38 +291,62 @@
     </section>
 
     <!--Get started-->
-    <section id="get-started">
+    <section id="about-us">
         <div class="container">
-            <div class="row" id="better-solution">
-                <div class="col-lg-10 col-offset-1">
-                    <br />
-                    <h1 class="text-center">Get Started with LawPal</h1>
-                    <h3 class="softer text-center">Where are you with your startup?</h3>
-                    <br />
-                    <h2 class="text-center">Select your Stage</h2>
+            <div class="row">
+
+
+
+                <div class="col-lg-8 col-push-2">
+                    <h2 class="">About LawPal</h2>
+                    <p>Every dollar counts.  When you raise a $250,000 or $500,000 seed round, getting an invoice for $15,000 in legal fees (or in our case $34,764.33) hurts no matter when you have to pay it. That's one less developer working for several months. Imagine what a developer can build in three months. </p>
                     <div class="row">
-                        <div class="col-4 text-center">
-                            <div class="jump-block">
-                                <img src="{{STATIC_URL}}img/home-2/7-b1.png">
-                                <h3>Ideas stage</h3>
-                                <p>You’re exploring startup ideas or talking to potential cofounders about starting something.</p>
+                        <div class="col-6 col-push-3">
+                            <h2 class="">The Team</h2>
+                            <div class="row investors-team">
+                                <div class="col-4">
+                                    <div class="media">
+                                      <a class="pull-left" href="#">
+                                        <img src="{{ STATIC_URL }}img/alex-face.jpg" class="img-circle" style="width:95px">
+                                      </a>
+                                      <div class="media-body">
+                                        <h3 class="media-heading">Alex Halliday</h4>
+                                      </div>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <img src="{{ STATIC_URL }}img/yael-face.jpg" class="img-circle" style="width:95px">
+                                    <h3 class="media-heading">Yael Citro</h4>
+                                </div>      
+                                <div class="col-4">
+                                    <img src="{{ STATIC_URL }}img/ross-face.jpg" class="img-circle" style="width:95px">
+                                    <h3 class="media-heading">Ross CDH</h4>
+                                </div>      
                             </div>
-                        </div>
-                        <div class="col-4 text-center">
-                            <div class="jump-block">
-                                <img src="{{STATIC_URL}}img/home-2/7-b2.png">
-                                <h3>Ready to form a company</h3>
-                                <p>You are ready to form a company and get started! You may have seed financing lined up as well.</p>
-                            </div>
-                        </div>
-                        <div class="col-4 text-center">
-                            <div class="jump-block">
-                                <img src="{{STATIC_URL}}img/home-2/7-b3.png">
-                                <h3>Up and running!</h3>
-                                <p>Your company is formed and you are up and running. You may be exploring new funding rounds or IP.</p>
+                            <div class="col-6 col-push-3">
+                                <div class="row">
+                                    <h2 class="">Investors</h2>
+                                    <div class="investors-team">
+                                        <div class="col-4">
+                                            <img src="{{ STATIC_URL }}img/home-2/investors/ff.jpg" class="inv">
+                                            <h4 class="media-heading">FF Angel</h4>
+                                        </div>
+                                        <div class="col-4">
+                                            <img src="{{ STATIC_URL }}img/home-2/investors/spark.gif" class="inv">
+                                            <h4 class="media-heading">Sparklabs Global</h4>
+                                        </div>      
+                                        <div class="col-4">
+                                            <img src="{{ STATIC_URL }}img/home-2/investors/veddis-logo.jpg" class="inv">
+                                            <h4 class="media-heading">Veddis Ventures</h4>
+                                        </div>      
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="col-lg-8">
+                    <h2 class="">Contact</h2>
                 </div>
             </div>
         </div>
@@ -327,8 +368,6 @@
         </div>
     </div>
 </div>
-
-
 
 <script type="text/javascript" src="{{ STATIC_URL }}js/scroll/jquery.onepage-scroll.js"></script>
 <link href="{{ STATIC_URL }}js/scroll/onepage-scroll.css" rel="stylesheet">

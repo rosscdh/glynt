@@ -4198,6 +4198,62 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
   padding: 3px 14px 3px 8px;
   border: 0px;
 }
+#signup-modal h1,
+#signup-modal h2 {
+  color: white;
+}
+#signup-modal h1 {
+  margin-bottom: 30px;
+  margin-top: 20%;
+  font-size: 40px;
+}
+#signup-modal h2 {
+  font-size: 22px;
+}
+#signup-modal ol li {
+  font-size: 20px;
+  color: #666;
+  line-height: 30px;
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+#signup-modal ol li.first {
+  color: #fff;
+  font-size: 22px;
+  line-height: 46px;
+}
+#signup-modal ol li.first div {
+  border: 2px solid #fff;
+  color: #fff;
+  width: 40px;
+  line-height: 36px;
+  height: 40px;
+  font-size: 20px;
+  margin-top: 3px;
+  margin-left: 0px;
+}
+#signup-modal ol li div {
+  width: 30px;
+  height: 30px;
+  border-radius: 30px;
+  border: 2px solid #666;
+  color: #666;
+  text-align: center;
+  line-height: 26px;
+  float: left;
+  margin-right: 10px;
+  font-size: 16px;
+  margin-left: 5px;
+}
+#signup-modal ol li .btn-clear-border {
+  background-color: transparent;
+  border-color: white;
+  color: white;
+  margin-left: 20px;
+  padding-right: 19px;
+  font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
+  font-weight: normal;
+}
 .navbar {
   position: relative;
   margin-bottom: 20px;
@@ -4921,8 +4977,8 @@ body {
   filter: alpha(opacity=0);
 }
 .modal-backdrop.fade.in {
-  opacity: 0.5;
-  filter: alpha(opacity=50);
+  opacity: 0.75;
+  filter: alpha(opacity=75);
 }
 .modal-header {
   padding: 15px;
@@ -6563,6 +6619,12 @@ body.homepage header.navbar {
   border-bottom: none;
   transition: background-color 0.6s ease;
 }
+body.homepage .navbar-nav > .active > a,
+body.homepage .navbar-nav > .active > a:hover,
+body.homepage .navbar-nav > .active > a:focus {
+  background-color: transparent;
+  color: white;
+}
 body.homepage.viewing-page-2 header.navbar,
 body.homepage.viewing-page-3 header.navbar,
 body.homepage.viewing-page-4 header.navbar,
@@ -6597,6 +6659,7 @@ body.homepage h2 {
 }
 body.homepage h3 {
   font-size: 21px;
+  line-height: 1.3em;
 }
 body.homepage .btn-home {
   background-color: transparent;
@@ -6611,7 +6674,7 @@ body.homepage section .container {
 }
 body.homepage .btn-huge {
   border-width: 2px;
-  font-size: 15px;
+  font-size: 19px;
   padding: 8px 26px;
   text-shadow: none;
 }
@@ -6663,12 +6726,12 @@ body.homepage section#top .bar {
   transform-origin: top;
 }
 body.homepage section#top .bar h3 {
-  font-size: 21px;
+  font-size: 24px;
   color: white;
   margin-top: 0px;
 }
 body.homepage section#top .bar p {
-  font-size: 14px;
+  font-size: 17px;
   opacity: 0.1;
 }
 body.homepage section#top .bar:hover {
@@ -6756,8 +6819,6 @@ body.homepage section#better-solution h4 {
 }
 body.homepage section#veteran-lawyers {
   background-color: #f9f9f9;
-  border-top: 1px solid #e5e5e5;
-  border-bottom: 1px solid #e5e5e5;
   background-image: url('../../img/home-2/lawyer-back.jpg');
   background-repeat: none;
   background-position: center center;
@@ -6782,10 +6843,6 @@ body.homepage section#veteran-lawyers h4 {
 body.homepage section#pricing {
   background-color: #42d0e5;
 }
-body.homepage section#pricing h3 span {
-  border-bottom: 1px dotted white;
-  font-style: italic;
-}
 body.homepage section#pricing * {
   color: white;
   text-align: center;
@@ -6799,6 +6856,9 @@ body.homepage section#pricing h2 {
   font-size: 25px;
   margin-bottom: 0px;
   margin-top: 15px;
+}
+body.homepage section#pricing h3 {
+  font-size: 18px;
 }
 body.homepage section#pricing span.big {
   font-size: 25px;
@@ -6836,10 +6896,9 @@ body.homepage section#deal-visibility {
   background-position: center center;
   background-size: cover;
   border-top: 1px solid #e5e5e5;
-  border-bottom: 1px solid #e5e5e5;
 }
 body.homepage section#deal-visibility .bar {
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.45);
   padding: 5px 0px 20px 0px;
   position: absolute;
   bottom: 0;
@@ -6852,11 +6911,42 @@ body.homepage section#deal-visibility .row.feature {
   color: white;
 }
 body.homepage section#deal-visibility .row.feature h3 {
-  margin: 15px 0px 5px 0px;
+  margin: 12px 0px 3px 0px;
   color: white;
+  font-size: 24px;
 }
 body.homepage section#deal-visibility .row.feature p {
-  color: #ccc;
+  color: #aaa;
+  font-size: 16px;
+}
+body.homepage section#about-us {
+  background-color: #fefefe;
+  padding-top: 30px;
+}
+body.homepage section#about-us h2 {
+  font-size: 33px;
+  margin-top: 40px;
+  text-align: left;
+  color: #bbb;
+}
+body.homepage section#about-us .investors-team {
+  text-align: center;
+}
+body.homepage section#about-us .investors-team h4 {
+  font-size: 13px;
+  color: #666;
+  text-align: center;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+body.homepage section#about-us .investors-team h3 {
+  font-size: 16px;
+}
+body.homepage section#about-us .investors-team img {
+  margin-bottom: 10px;
+}
+body.homepage section#about-us .investors-team img.inv {
+  height: 60px;
+  opacity: 0.6;
 }
 @media (min-width: 768px) {
   body.homepage section {
@@ -6866,13 +6956,16 @@ body.homepage section#deal-visibility .row.feature p {
     margin-top: 35px;
   }
   body.homepage section#pricing span.big {
-    font-size: 40px;
+    font-size: 55px;
   }
   body.homepage section#pricing span.small {
-    font-size: 25px;
+    font-size: 33px;
   }
 }
 @media (min-width: 992px) {
+  body.homepage h1 {
+    font-size: 55px;
+  }
   body.homepage section {
     padding-top: 100px;
   }
@@ -7339,8 +7432,8 @@ table.lawyer-list.active {
   margin-top: 15px;
 }
 .modal-backdrop {
-  opacity: 0.5;
-  filter: alpha(opacity=50);
+  opacity: 0.9;
+  filter: alpha(opacity=90);
 }
 .item-nav-controls i.glyphicon,
 .list-group-item-heading i.glyphicon {

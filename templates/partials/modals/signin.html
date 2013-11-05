@@ -8,3 +8,20 @@
         </div>
     </div>
 </div>
+
+<div class="modal animated fadeInDown" id="signup-modal" role="dialog">
+    <div class="modal-dialog">
+        <div class="startup">
+            <h1>Get Started with LawPal</h1>
+            <h2></h2>
+            <ol class="list-unstyled">
+            	<li class="first"><div>1</div> Create your account   
+					<a href="{% url "public:auth_user_class_redirect" user_class_name="customer" login_type="google-oauth2" %}" class="btn btn-clear-border"><img src="{{ STATIC_URL }}img/google-32.png">Sign in with Google</a>
+            	</li>
+            	<li><div>2</div> Define your project</li>
+            	<li><div>3</div> Choose your attorney</li>
+            	<li><div>4</div> Get it done. Right</li>
+            </ol>
+        </div>
+    </div>
+</div>
