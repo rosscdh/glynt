@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}{% load url from future %}{% load glynt_helpers crispy_forms_tags project_tags comments fluent_comments_tags jsonify %}
 
 {% block page_title %}Overview &mdash; {% project_name project %}{% endblock %}
@@ -67,22 +68,7 @@
                     </div>
                 </div>
 
-                <!--
-                <div class="form-group">
-                    <button class="btn btn-info btn-small" ng-click="openManageTeamDialog()">Manage team</button>
-                </div>
-                //-->
-
-                <div class="widget project-checklist-progress-widget">
-                    <h3>
-                        Transaction checklist
-                        <a href="{% url 'dashboard:checklist' uuid=project.uuid %}" class="btn btn-small btn-info pull-right">View checklist</a>
-                    </h3>
-
-                    <!--<progress percent="project.checklist.percentageStack" auto-type="true"></progress>//-->
-                    <div project-progress-bar counts="data.project.checklist.counts"></div>
-                </div>
-
+                
                 <div class="callout callout-success empty">
                     <div class="empty-message empty-message-ok">
                         <h4>Your transaction profile is complete.</h4>
@@ -91,11 +77,10 @@
                 </div>
             </div>
             <div class="col col-lg-7">
-                <!--
                 <div class="widget checklist">
                     <a href="{% url 'dashboard:checklist' uuid=project.uuid %}"><h3>Checklist</h3></a>
                     <div class="row">
-                        <div class="col col-2 text-center">
+                        <div class="col col-2  col-offset-1 text-center">
                             <h1>
                                 <a href="{% url 'dashboard:checklist' uuid=project.uuid %}#new" class="text-muted">{{ counts.new }}</a>
                             </h1>
@@ -136,21 +121,17 @@
                             </a>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-10 col-offset-1">
+                            <div class="project-progress-bar" data-counts="data.project.counts" data-show="'new,open,pending,feedback,closed'" data-show-legend="false"></div>
+                        </div>
+                    </div>
                 </div>
-<<<<<<< HEAD
-                //-->
-                {% if project.has_lawyer %}
-                <div class="widget discuss">
-                    <h3>Project Discussion</h3>
-                    {% render_comment_form for project %}
-                    {% render_comment_list for project %}
-=======
 
                 <div class="widget discussion">
                     <section class="{[{tag}]}-list" ng-repeat="tag in data.discussionCategories">
                         <div class="discussion-list" data-discussion="data.discussions" data-tag="tag" data-title="'Discussions and Issues'"></div>
                     </section>
->>>>>>> master
                 </div>
             </div>
         </div>
@@ -202,27 +183,6 @@
 </script>
 
 <script type="text/javascript" src="{{ STATIC_URL }}dashboard/angularjs-projectCtrl.js"></script>
-<<<<<<< HEAD
-<script type="text/javascript" src="{{ STATIC_URL }}dashboard/angularjs-progressBarDirective.js"></script>
-
-<script type="text/javascript">
-var LawPal = {
-        "project": function() {
-            return {
-                "name": "Fantastic startup",
-                "uuid": "{{ project.uuid }}",
-                "content_type_id": {{ project.content_type_id|default:None|jsonify }},
-                "checklist": {
-                    "counts": {
-                        "new": {{ counts.new }},
-                        "open": {{ counts.open }},
-                        "awaiting": {{ counts.awaiting_feedback_from_user }},
-                        "closed": {{ counts.closed }}
-                    },
-                    "data": []
-                }
-            }
-=======
 <script type="text/javascript" src="{{ STATIC_URL }}dashboard/angularjs-userDirectives.js"></script>
 
 <script type="text/javascript">
@@ -238,7 +198,6 @@ var LawPal = {
             'username': '{{ user.username }}',
             'full_name': '{{ user.get_full_name }}',
             'is_authenticated': {{ user.is_authenticated|jsonify }}
->>>>>>> master
         }
 };
 </script>

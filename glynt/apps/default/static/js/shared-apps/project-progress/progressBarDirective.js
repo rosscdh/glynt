@@ -8,7 +8,7 @@ angular.module('lawpal').directive('projectProgressBar', function () {
 		"restrict": "AC",
 		"template":
 			'<progress percent=\"percentages\" auto-type=\"true\">{[{percentages|json}]}</progress>'+
-			'<div class="row">'+
+			'<div class="row" ng-show="showLegend">'+
 				'<h5 class="text-info col-lg-3">{[{counts.new}]} New</h5>'+
 				'<h5 class="text-warning col-lg-3">{[{counts.open}]} Open</h5>'+
 				'<h5 class="text-danger col-lg-3">{[{counts.awaiting}]} Pending</h5>'+
@@ -16,7 +16,8 @@ angular.module('lawpal').directive('projectProgressBar', function () {
 				'</div>',
 		"scope": {
 			"counts": "=counts",
-			"show": "=show"
+			"show": "=show",
+			'showLegend': "=showLegend"
 		},
 		"link": function (scope, iElement, iAttrs) {
 			console.log("link", scope.counts);
@@ -33,14 +34,14 @@ angular.module('lawpal').directive('projectProgressBar', function () {
 				var show = ($attrs.show || "new,open,pending,closed").replace(/'/g,'').split(",");
 
 				if( !counts.awaiting ) {
-					counts.awaiting = counts.awaiting_feedback_from_user || 0;
+					counts.awaiting = counts.awaiting || counts.awaiting_feedback_from_user || 0;
 				}
 
-				var total = $scope.counts.total || counts.new + counts.open + counts.awaiting + counts.closed;
+				var total = counts.total || counts.new + counts.open + counts.awaiting + counts.closed;
 
 				var result = [];
 				if( show.indexOf("new")>=0 ) {
-					result.push( { "value": (100*counts.new/total), "type": "info", "label": "new" } );
+					result.push( { "value": (100*counts.new/total), "type": "muted", "label": "new" } );
 				}
 
 				if( show.indexOf("open")>=0 ) {

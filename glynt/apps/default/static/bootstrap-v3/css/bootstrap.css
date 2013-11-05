@@ -9165,6 +9165,10 @@ button.vcard {
   background-color: #6bdb7e;
 }
 
+.progress .bar.muted {
+  background-color: #bfbfbf;
+}
+
 h5.text-info {
   color: #5bc0de;
 }
