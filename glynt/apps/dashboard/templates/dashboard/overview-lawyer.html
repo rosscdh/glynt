@@ -73,9 +73,44 @@
                 </div>
 
             </div>
+        </div> <!-- col-12 //-->
+
+        <div class="col-12" ng-show="data.projects.length==0">
+            <div class="col-12">
+                <div class="alert alert-warning">
+                    <p>Currently you have no assigned projects.</p>
+                    <p>If you have not done so already, let your account manager know you are looking to engage potential clients on LawPal.</p>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="widget account-attorney">
+                    <h3>Contact LawPal Account Manager</h3>
+                    <div class="row">
+                        <div class="col-12">
+                            <p>Let your account manager know you are avilable for projects.</p>
+                            <img src="{{STATIC_URL}}img/yael-contact-face.jpg" class="img-circle pull-left" style="width:40px; padding-right :8px;padding-top:6px;">
+                            <h4>Yael Citro <small class="pull-right"><a href="mailto:xw4ux8lx@incoming.intercom.io" class="btn btn-info btn-small intercom" style="margin-top:-4px">Contact Yael</a></small>  <small>Co-Founder at LawPal </small></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="widget account-attorney">
+                    <h3><i class="icon icon-user text-muted"></i> Update your profile</h3>
+                    <div class="row">
+                        <div class="col-12">
+                            <a href="{% url 'lawyer:setup_profile' %}" class="btn btn-info btn-small intercom pull-right" style="margin-top:-4px">Edit profile</a>
+                            <p>{{ user.get_full_name }}, while you have a few moments have a look over your LawPal profile. Keeping your profile up-to-date will help potential clients choose you.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
-    <div class="row">
+    <div class="row" ng-show="data.projects.length!=0">
         <div class="col-12">
            <small class="text-muted">Key: <i class="icon icon-circle text-muted" tooltip="New"></i> <i class="icon icon-circle text-primary" tooltip="Open"></i> <i class="icon icon-circle text-danger" tooltip="Requires your feedback"></i> <i class="icon icon-circle text-warning" tooltip="Feedback required"></i> <i class="icon icon-circle text-success" tooltip="Closed"></i> </small> 
         </div>
