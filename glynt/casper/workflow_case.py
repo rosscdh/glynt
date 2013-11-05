@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.test import LiveServerTestCase
+from django.core.files import File
+from django.core.files.storage import FileSystemStorage
 from django.test.client import Client, FakePayload, MULTIPART_CONTENT
-from urlparse import urlparse
 
+from urlparse import urlparse
 from functools import wraps
 
 from model_mommy import mommy
@@ -13,7 +15,9 @@ from glynt.apps.todo import TODO_STATUS
 from glynt.apps.transact.models import Transaction
 from glynt.apps.project import PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE
 
+import os
 import re
+import mock
 import time
 import httpretty
 
@@ -142,10 +146,12 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
     https://github.com/dobarkod/django-casper/
     """
     fixtures = ['test_cities', 'transact.json']
+    test_path = os.path.dirname(__file__)
 
     def tearDown(self, *args, **kwargs):
         time.sleep(1)
 
+    @mock.patch('django_filepicker.models.FPFileField', FileSystemStorage)
     def setUp(self):
         super(BaseLawyerCustomerProjectCaseMixin, self).setUp()
 
@@ -190,7 +196,10 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
         self.project_lawyer_join.save(update_fields=['status'])
 
         self.todo = mommy.make('todo.ToDo', status=TODO_STATUS.open, project=self.project, user=self.lawyer_user, category='General', name="My Todo")
-        self.attachment = mommy.make('todo.Attachment', project=self.project, todo=self.todo, uploaded_by=self.customer_user)
+        
+        file_name = '{test_path}/test.pdf'.format(test_path=self.test_path)
+        self.attachment = mommy.make('todo.Attachment', attachment=File(open(file_name, 'rb'), "test.pdf"), project=self.project, todo=self.todo, uploaded_by=self.customer_user)
+
 
     def make_user(self, **kwargs):
         tmp_user = mommy.make('auth.User', **kwargs)
