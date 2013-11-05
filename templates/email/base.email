@@ -37,8 +37,8 @@
                     border-right: 0 !important;
                 }
                 .viewport .logo img {
-                    height: 50px !important;
-                    width: 50px !important;
+                    height: 25px !important;
+                    width: 25px !important;
                 }
                 .viewport h1 {
                     font-size: 18px !important;
