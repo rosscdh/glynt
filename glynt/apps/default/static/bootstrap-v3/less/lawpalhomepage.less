@@ -1,3 +1,5 @@
+
+
 //
 // LawPal Homepage
 // --------------------------------------------------
@@ -10,150 +12,531 @@
 .no-pad { padding: 0 !important; margin: 0 !important; }
 
 // Top Page and Scroll down for more bit
-#wrap {
-	.splash {
-	    background:url('../../img/background-lawyers.jpg') center bottom no-repeat;
-      background-position: 50% 50%;	    background-size: cover;
-	    padding:28% 0px 0% 0px;
-      margin-top:-10px;
-	    color:@gray-darker;
-	    border-top:1px solid @gray-lighter;
-	    border-bottom:1px solid @gray-lighter;
-	    max-height: 500px;
-      overflow:hidden;
-      .inner-wrap {
-        background-color:rgba(0,0,0,0.45);
-        margin-left:-500px;
-        margin-right:-500px;
-        padding:10px 0px 25px 0px
-      }
-	    h1 {
-	    	color:white;
-	    	font-size:ceil(@font-size-base * 2.0);
-	    }
-	    h3 {
-	    	color:white;
-	      	font-size:ceil(@font-size-base * 1.25);
-	    }
-	    a.btn-huge {
-	    	font-weight:normal;
-	    	font-family:@headings-font-family;
-	    	font-size:20px;
-	    	padding: 10px 25px 10px 25px;
-	    	margin-top:5px;
-        margin-left:10px;
-        margin-right:10px;
-      }
-      .main {
-        min-height:200px;
-      }
-  	}
-    .scroll, .telephone {
-  		padding:10px 0px 5px 0;
-  		font-size: @font-size-base * 1.1;
-  		font-weight:normal;
-  		font-family:@headings-font-family;
-  	}
-    .scroll {
-      background:url('../../img/down-chev.png') center 60px no-repeat;
+body.homepage {
+  header.navbar {
+    background-color:  rgba(0,0,0,0.15);
+    border-bottom:none;;
+    transition: background-color 0.6s ease;
+  }
+  .navbar-nav > .active > a, .navbar-nav > .active > a:hover, .navbar-nav > .active > a:focus {
+    background-color:transparent;
+    color:white;
+  }
+  &.viewing-page-2 header.navbar, &.viewing-page-5 header.navbar   {
+      background-color:transparent;
+      border-bottom:none;
+  } 
+  &.viewing-page-7 header.navbar {
+    background-color:transparent;
+    border-bottom:none;
+    a {
+      color: #222;
     }
-    .telephone {
-      color: lighten(@gray,20%);
+  }
+  .navbar-nav li a, .navbar {
+    background-color:transparent;
+    color:white;
+    font-size:14px;
+    padding-left:8px;
+  }
+  .navbar-nav li a {
+    opacity:0.6;
+    transition: opacity 0.6s ease;
+  }
+  .navbar-nav li a.active {
+    opacity:1
+  }
+  h2 {
+    font-size: 35px;
+  }
+  h3 {
+    font-size: 20px;
+    line-height:1.3em;
+  }
+  .btn-home {
+    background-color:transparent;
+    color:white;
+    border-color:white;
+    font-size:16px;
+    font-weight:normal;
+    font-family:@headings-font-family;
+  }
+  section {
+    padding-top:45px;
+  }
+  section .container{
+    margin-top:1em;
+  }
+  .btn-huge {
+    border-width:2px;
+    font-size:19px;
+    padding: 8px 26px;
+    text-shadow: none;
+  }
+  section#top {
+    background-image:url(../../img/home-2/top2.jpg);
+    background-size:cover;
+    background-repeat:no-repeat;
+    position:relative;
+    .strap {
+      max-width:140px;
+      margin-top: 24%;
+      margin-bottom:15px;
     }
-    .intro {
-  		h1 {
-	    	font-size:ceil(@font-size-base * 2);
-	    	margin-bottom:0px;
-	    	text-align:center;
-  		}
-  		h2 {
-  			color: lighten(@gray, 20%);
-  			font-size: ceil(@font-size-base * 1.4);
- 	    	margin-top:10px;
-	    	text-align:center;
-  		}
-  	}
-    .pricing {
-      background-color:@light-grey-border-color;
-      .price {
-        background-color:white;
-        padding:30px 18px;
-      }
+    h1, h2 {
+      color:#FFF;
     }
-  	.feature-block {
-      margin-bottom:25px;
+    h1 {
+      font-size:35px;
+      font-family: @font-family-sans-serif;
+      text-shadow: -1px 1px 2px #4a442e;
 
-  		h3 {
-  			color: @brand-primary;
-  			font-size: ceil(@font-size-base * 1.25);
-  		}
-  		p {
-  			color: lighten(@gray, 20%);
-  		}
-      &.frame {
-        border-left: 2px solid lighten(@brand-primary, 30%);
-        padding-left: 15px;
-        margin-left:10px;
-
+    }
+    h2 {
+      font-size:23px;
+      line-height: 1.3em;
+      margin-bottom:30px;
+    }
+    .inner {
+      position:relative;
+      height:100%;
+    }
+    .da {
+      width:30px;
+      opacity:0.8;
+    }
+    .bar {
+      color:#e9e9e9;
+      background-color:  rgba(0,0,0,0.4);
+      text-align:left;
+      position:absolute;
+      bottom:0;
+      padding:0px 0px 15px 0px;
+      width:100%;
+      height: 65px;
+      overflow: hidden;
+      font-size: 22px;
+      transition: height 1.2s, background-color 0.5s;
+      transform-origin: top;
+      h3 {
+        font-size:24px;
+        color:white;
+        margin-top:0px;
+      }  
+      p {
+        font-size:17px;
+        opacity:0.1;
       }
-  	}
-  	.quote {
-  		background-color:@brand-primary;
-  		color:white;
-  		margin:50px 0px 25px 0px;
-  		padding:31px 0px 30px 0px;
-  		h1,h2 {
-        margin:0px 0px 10px 0px;
-        small {
-          opacity:0.6;
+      &:hover{
+        height:180px;
+        color: #ccc;
+        transition: height 1.2s;
+        transform-origin: top;
+        background-color:  rgba(0,0,0,0.6);
+        p {
+          opacity:0.9;
         }
       }
-      * {
-        color:white;
+    }
+  }
+  section#co-pilot {
+    background-color:#f57f76;
+    text-align:center;
+    color:white;
+    h1 {
+      margin-top:-20px;
+    }
+    h1, h3 {
+      color: white;
+    }
+    .step-block {
+      background-color:white;
+      margin-right:20px;
+      margin-top:50px;
+      position:relative;
+      h1 {
+        font-size:35px;
       }
-  	}
-    .call-to-action {
-      background-color:@brand-success;
-      padding:20px 20px 30px 20px;
+      div.number {
+        background-color:@gray;
+        color:white;
+        width:46px;
+        height:46px;
+        border-radius:30px;
+        line-height:46px;
+        font-size: 20px;
+        position:absolute;
+        top:-30px;
+        left:50%;
+        margin-left:-23px;
+      }
+      // Right Chevron between blocks
+      div.right {
+        position:absolute;
+        right:-38px;
+        top:45%;
+        width:30px;
+        height:30px;
+        background:url('../../img/home-2/chevron-right-white.png') no-repeat center center;
+      }
+      h2 {
+        font-size:22px;
+        padding-top:15px;
+        font-family:@font-family-sans-serif;
+      }
+      h3 {
+        font-size:16px;
+        color:lighten(@gray, 20%);
+        margin-bottom:20px;
+      }
+      // Tick box list
+      ul li {
+        font-size: 16px;
+        padding:4px 0px 10px 35px;
+        color:lighten(@gray, 30%);
+        text-align:left;
+      }
+      li.active {
+          background-image:url('../../img/home-2/tick.png');
+          background-repeat:no-repeat;
+          background-position:top 20px;
+          color:lighten(@gray, 10%);
+      }
+      li.active.signed {
+        color: #70df7e;
+        margin-top:20px;
+      }
+    }
+  }
+  section#better-solution {
+    font-size: 15px;
+    color: #757c7e;
+    h4 {
+      font-size: 27px;
+      color: darken(@brand-success, 5%);
+    }
+  }
+  section#veteran-lawyers {
+    background-color: #f9f9f9;
+    background-image:url('../../img/home-2/lawyer-back.jpg');
+    background-repeat: none;
+    background-position:center center;
+    background-size:cover;
+    h1, h2, h3 {
       color:white;
-      margin-top:15px;
+    }
+    .img-circle {
+      max-width:80%;
+      border:4px solid #ecebeb;
+    }
+    h3 {
+      margin-bottom:5px;
+    }
+    h4 {
+      margin-top:0px;
+      font-size:15px;
+    }
+  }
+  section#pricing {
+    padding-top:25px;
+    background-color:@brand-primary;
+    * {
+      color:white;
+      text-align:center;
+    }
+    .sub-text {
+      line-height:1.6em;
+      opacity:0.8;
+      font-size:13px;
+    }
+    h2 {
+      font-size:25px;
+      margin-bottom:0px;
+    }
+    h3 {
+      font-size:17px;
+    }
+    div.desc {
+      padding:15px;
+      min-height:130px;
+    }
+    span.big {
+      font-size:25px;
+      font-family:@headings-font-family;
+      text-align:center;
+    }
+    span.small {
+      font-size:16px;
+      opacity:0.7;
+      text-align:center;
+    }
+   .step-block {
+      background-color:white;
+      margin-right:20px;
+      margin-top:10px;
+      position:relative;
+      padding: 1px 0px 10px 0px;
+      border:1px solid darken(@brand-primary, 15%);
       * {
-        color:white;
+        color:darken(@brand-primary, 15%);
+      }
+      ul li {
+        margin-top:5px;
       }
     }
-    .attorney-feature {
-      margin-top:0px;
+  }
+  section#get-started {
+    background-color:#fcd423;
+    h2 {
+      font-size:30px;
     }
+    .jump-block {
+      padding:20px 10px 30px 10px;
+      border:1px solid #fcd423;
+      margin-top:15px;
+    }
+    .jump-block:hover {
+      border:1px solid #fde477;
+      background-color:#fcd839;
+    }
+    * { 
+     color:#222;
+    }
+  }
+  section#deal-visibility {
+    background-color:#f9f9f9;
+    background-image:url('../../img/home-2/product-features.png');
+    background-repeat: none;
+    position:relative;
+    background-position:center center;
+    background-size:cover;    
+    border-top:1px solid #e5e5e5;
+    .bar {
+      background:rgba(0,0,0,0.45);
+      padding:5px 0px 20px 0px;
+      position:absolute;
+      bottom:0;
+      width:100%;
+    }
+    * {
+      color:white;
+    }
+    .row.feature {
+      color:white;
+      h3 {
+        margin: 12px 0px 3px 0px;
+        color:white;
+        font-size:17px;
+      }
+      p {
+        color:#aaa;
+        font-size:16px;
+      }
+    }
+  }
+  section#about-us {
+    padding-top:0px;
+    position:relative;
+    footer {
+      position:absolute;
+      bottom:0;
+      width:100%;
+      margin-left:0px;
+    }
+    .about-lawpal {
+      font-size:15px;
+      font-family:@headings-font-family;
+      color: #999;
+    }
+    .contact {
+      background:url('../../img/home-2/about-back.jpg') 0 -100px;
+      background-size:cover;
+      height:28%;
+      border-top:1px solid grey;
+      h1 {
+        font-size:40px;
+        color:white;
+        padding: 25px 0px 33px 0px;
+        a {
+          color:white;
+        }
+      }
+    }
+    h2 {
+      font-size:18px;
+      margin-top:25px;
+      text-align:left;
+      color:#666;
+      font-family:@font-family-sans-serif;
+    }
+    .investors-team
+    {
+      text-align:center;
+      h4 {
+        font-size:13px;
+        color: #999;
+        text-align:center;
+        font-family:@font-family-sans-serif;
+      }
+      h3 {
+        font-size:13px;
+      }
+      img {
+         margin-bottom:10px;
+      }
+      img.inv {
+        height: 60px;
+        opacity:0.6;
+        margin-top:8px;
+      }
+    }
+  }
 }
 
 
-@media screen and (min-width: 768px) {
-	.homepage #wrap {
-		.splash {
-		    padding:230px 0px 0% 0px;
-		    h1 {
-		    	font-size:ceil(@font-size-base * 4);
-		    }
-		    h3 {
-		      	font-size:ceil(@font-size-base * 2);
-		    }
-		}
-		.intro {
-	  		h1 {
-		    	font-size:ceil(@font-size-base * 2.9);
-		    }
-		    h2 {
-	  			font-size: ceil(@font-size-base * 1.8);
-	  		}
-		}
-		.feature-block {
-  			h3 {
-  				color: @brand-primary;
-  				font-size: ceil(@font-size-base * 1.5);
-  			}
-  		}
-	}
+// Tablets and up
+@media (min-width: @screen-tablet) {
+  body.homepage {
+    section {
+      padding-top:60px;
+    }
+    section#pricing {
+      padding-top:65px;
+      h3  {
+      }
+      .sub-text {
+      }
+      h2 {
+      }
+      span.big {
+        font-size:55px;
+      }
+      span.small {
+        font-size:33px;
+      }
+      .step-block {
+          padding: 10px 0px 20px 0px;
+          margin-top:30px;
+      }
+
+    }
+    section#deal-visibility {
+      .row.feature {
+        h3 {
+          font-size:24px;
+        }
+      }
+    }
+    section#about-us {
+      .about-lawpal {
+        font-size:22px;
+      }
+      footer#footer {
+        margin-left:0px;
+      }
+    }
+  }
+
+} 
+// Medium and large device columns (desktop and up)
+@media (min-width: @screen-desktop) {
+  body.homepage {
+    section {
+      padding-top:100px;
+    }
+    h1 {
+      font-size:55px;
+    }
+    section {
+      padding-top:100px;
+    }
+    .modal-dialog {
+      padding-top:80px;
+      width:750px;
+      margin-left:-375px;
+      iframe {
+        height:417px;
+      }
+    }
+    section#top {
+      h1 {
+        font-size: 42px;
+      }
+      h2 {
+      }
+      h3 {
+      }
+    }
+    section#co-pilot {
+      .step-block {
+        height:335px;
+        h1 {
+          font-size:42px;
+        }
+      }
+    }
+    section#pricing {
+      padding-top:90px;
+      .sub-text {
+        font-size:18px;
+      }
+    
+
+    }
+    section#about-us {
+      .about-lawpal {
+        font-size:22px;
+      }
+      footer#footer {
+        margin-left:0px;
+      }
+    }
+  }
 }
+@media (min-width: @screen-large-desktop) {
+  body.homepage {
+    section#co-pilot {
+      .wrap {
+        padding-right:90px;
+        padding-left:90px;
+      }
+    }
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+// Other Stuff
+// --------------------------------------------------
+
+
 
 ul#checklist-categories {
   li {
@@ -683,7 +1066,7 @@ table.lawyer-list.active {
 }
 
 .modal-backdrop {
-  .opacity(.5);
+  .opacity(.9);
 }
 
 .item-nav-controls i.glyphicon,

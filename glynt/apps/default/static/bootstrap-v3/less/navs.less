@@ -263,56 +263,81 @@
 
 /* Signin Modal
 -------------------------------------------------- */
-#signin-modal {
-  background-color: transparent;
-  outline-width: 0px;
-  border-radius: 0px;
-}
-#signin-modal h3, #signin-modal h4 {
-  color:white;
-  padding:10px 30px 10px 30px;
-}
-#signin-modal .startup div, #signin-modal .lawyer div {
-  background: url('/static/img/coffee-tie.png') no-repeat;
-  width:70px;
-  height:104px;
-  margin:0 auto;
-  margin-bottom: 10px;
-}
-#signin-modal .lawyer div {
-  background-position: 0px -105px;
-}
-#signin-modal .startup, #signin-modal .lawyer {
-  padding-bottom:20px;
-}
-#signin-modal .startup {
-  max-width:350px;
-  width:100%;
-  margin:0 auto;
-  background-color:@brand-primary-alt;
-  text-align: center;
-  padding-top:5px;
-}
-#signin-modal .startup .btn {
-  background-color: darken(@brand-primary-alt, 8%);
-  margin-top:7px;
-  padding:3px 14px 3px 8px;
-  border:0px;
-  width:90%;
 
-}
-#signin-modal .lawyer {
-  width:240px;
-  float:right;
-  background-color:@brand-primary;
-  text-align: center;
-  margin-right:20px;
-}
-#signin-modal .lawyer .btn {
-  background-color: darken(@brand-primary, 8%);
-  margin-top:7px;
-  padding:3px 14px 3px 8px;
-  border:0px;
-}
 
+
+#signup-modal,#signin-modal {
+  color:#999;
+  a.lnk {
+    color:#999;
+    text-decoration:underline;
+  }
+  hr {
+    border-color:#999;
+  }
+  h1, h2{
+    color:white;
+  }
+  h1 {
+    margin-bottom:30px;
+    margin-top:20%;
+    font-size:40px;
+  }
+  h2 {
+    font-size:22px;
+  }
+  ol li {
+    font-size:20px;
+    color:#666;
+    line-height:30px;
+    margin-top:10px;
+    margin-bottom:15px;
+    &.first {
+      color:#fff;
+      font-size:22px;
+      line-height:46px;
+      margin-bottom:35px;
+      div {
+        border:2px solid #fff;
+        color:#fff;
+        width:40px;
+        line-height:36px;
+        height:40px;
+        font-size:20px;
+        margin-top:3px;
+        margin-left:0px;
+      }
+      .btn {
+        margin-left:50px;
+      }
+    }
+    div {
+      width:30px;
+      height:30px;
+      border-radius:30px;
+      border:2px solid #999;
+      color:#888;
+      text-align:center;
+      line-height:26px;
+      float:left;
+      margin-right:10px;
+      font-size:16px;
+      margin-left:5px;
+        .btn-clear-border {
+          margin-left:20px;
+
+        }
+    }
+  }
+
+  .btn-clear-border {
+    background-color:transparent;
+    border-color:white;
+    color: white;
+    margin-left:0px;
+    padding-right: 19px;
+    font-family:@headings-font-family;
+    font-weight:normal;
+  }
+}
 

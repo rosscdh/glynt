@@ -79,6 +79,16 @@
 .btn-clear {
   .btn-pseudo-states(@btn-clear-color, @btn-clear-bg, @btn-clear-border);
 }
+// Clear but with border
+.btn-clear-border{
+  .btn-pseudo-states(@btn-info-bg, white, @btn-info-bg);
+}
+.btn-clear-border.active{
+  background-color:@btn-info-bg;
+  color:white;
+  -webkit-box-shadow: none;
+  box-shadow:none;
+}
 
 // Link buttons
 // -------------------------
