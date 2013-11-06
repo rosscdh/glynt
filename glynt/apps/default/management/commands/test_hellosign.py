@@ -66,6 +66,6 @@ class Command(BaseCommand):
         }
         req = HelloSign()
         req.url = "/embedded/sign_url/{signature_id}".format(signature_id=signature_id)
-        resp = req.get(auth=AUTHENTICATION)
+        resp = req.get(auth=AUTHENTICATION, headers={'accept': 'application/json'})
 
         import pdb;pdb.set_trace()
