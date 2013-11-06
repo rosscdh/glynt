@@ -207,7 +207,7 @@ def get_sha1():
   return local('git rev-parse --short --verify HEAD', capture=True)
 
 @task
-def db_backup(db='abridge_production'):
+def db_backup(db='lawpal_production'):
     db_backup_name = '%s.bak' % db
     sudo('pg_dump --no-owner --no-acl -Fc %s > /tmp/%s' % (db, db_backup_name,), user='postgres')
     local('scp -i %s %s@%s:/tmp/%s /tmp/' % (env.key_filename, env.user, env.host, db_backup_name,))
