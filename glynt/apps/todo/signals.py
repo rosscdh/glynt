@@ -148,11 +148,14 @@ Comment Events
 def on_comment_created(sender, **kwargs):
     """
     Handle Creation of attachments
+    @TODO: This needs to be abstracted!
+    @CODESMELL
     """
     if not isinstance(sender, LogEntry):
         send = False
         is_new = kwargs.get('created', False)
         comment = kwargs.get('instance')
+        extra = {}
 
         if comment and is_new:
             content_object_type = type(comment.content_object)
@@ -174,6 +177,9 @@ def on_comment_created(sender, **kwargs):
                 target = project = comment.content_object
                 event = 'project.comment.created'
                 verb = '{name} commented on the {project} project'.format(name=comment.user.get_full_name(), project=project)
+                extra.update({
+                    'url': comment.absolute_deeplink_url()  # append url to the comment deeplink
+                })
 
             elif content_object_type == ProjectLawyer:
                 send = True
@@ -197,7 +203,8 @@ def on_comment_created(sender, **kwargs):
                         action_object=comment,
                         target=target,
                         content=comment.comment,
-                        event=event)
+                        event=event,
+                        **extra)
 
 """
 Feedback Request Change Events
@@ -418,19 +425,19 @@ def on_action_created(sender, **kwargs):
                 logger.debug('action.target is a Project object')
                 project = target
                 recipients = project.notification_recipients()
-                url = project.get_absolute_url()
+                url = action.data.get('url', project.get_absolute_url())
 
             elif target_type == ProjectLawyer:
                 logger.debug('action.target is a ProjectLawyer object')
                 project = target.project
                 recipients = target.notification_recipients()
-                url = project.get_absolute_url() # @TODO need to change this to be the actual engagement element link and write a js trigger to show the modal
+                url = action.data.get('url', project.get_absolute_url()) # @TODO need to change this to be the actual engagement element link and write a js trigger to show the modal
 
             elif target_type == ToDo:
                 logger.debug('action.target is a ToDo object')
                 project = action.target.project
                 recipients = project.notification_recipients()
-                url = target.get_absolute_url()  # get the todos absolute url
+                url = action.data.get('url', target.get_absolute_url())  # get the todos absolute url
 
             if recipients:
                 logger.debug('recipients: {recipients}'.format(recipients=recipients))

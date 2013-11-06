@@ -85,6 +85,12 @@ def on_save_ensure_user_in_participants(sender, **kwargs):
     if user not in project.participants.all():
         project.participants.add(user)
 
+@receiver(pre_save, sender=Project, dispatch_uid='project.on_save_ensure_data_aggregates')
+def on_save_ensure_data_aggregates(sender, **kwargs):
+    project = kwargs.get('instance')
+    # ensure we have the company name always
+    project.data['company_name'] = project.company.name
+
 
 @receiver(pre_save, sender=ProjectLawyer, dispatch_uid='project.lawyer_assigned')
 def on_lawyer_assigned(sender, **kwargs):

@@ -1,19 +1,25 @@
 # -*- coding: UTF-8 -*-
-from django.shortcuts import get_object_or_404
-from django.http import HttpResponseNotAllowed, HttpResponseBadRequest
-from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
+from django.utils.encoding import smart_unicode
+from django.http import HttpResponseNotAllowed, HttpResponseBadRequest
 
+from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.parsers import JSONParser
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.exceptions import ParseError
+from rest_framework.generics import (RetrieveAPIView, ListCreateAPIView,
+                                     RetrieveUpdateAPIView)
+
 
 from threadedcomments.models import ThreadedComment
 
 from .models import Project, ProjectLawyer
 from .serializers import (ProjectSerializer, TeamSerializer,
-                          DiscussionSerializer, )
+                          DiscussionSerializer, DiscussionThreadSerializer,)
 
+import StringIO
 import logging
 logger = logging.getLogger('django.request')
 
@@ -26,6 +32,28 @@ class ProjectViewSet(ModelViewSet):
     serializer_class = ProjectSerializer
     lookup_field = 'uuid'
 
+    def get_lawyer_queryset(self):
+        """
+        get projects assigned to this lawyer
+        """
+        qs = super(ProjectViewSet, self).get_queryset()
+        return qs.filter(pk__in=[p.project.pk for p in self.request.user.lawyer_profile.projectlawyer_set.all()])
+
+    def get_customer_queryset(self):
+        """
+        Filter by the current user
+        """
+        qs = super(ProjectViewSet, self).get_queryset()
+        return qs.filter(participants__in=[self.request.user])
+
+    def get_queryset(self):
+        """
+        get the appropriate queryset
+        """
+        if self.request.user.profile.is_lawyer:
+            return self.get_lawyer_queryset()
+        else:
+            return self.get_customer_queryset()
 
 class TeamListView(RetrieveUpdateAPIView):
     """
@@ -162,7 +190,7 @@ class DiscussionListView(ListCreateAPIView):
     Endpoint that shows discussion threads
     django_comments & threaded_comments & fluent_comments
     """
-    queryset = ThreadedComment.objects.all()
+    queryset = ThreadedComment.objects.select_related('user', 'tagged_items__tag').all().order_by('-id')
     serializer_class = DiscussionSerializer
 
     def get_queryset(self):
@@ -170,10 +198,89 @@ class DiscussionListView(ListCreateAPIView):
         """
         project_uuid = self.kwargs.get('uuid')
         project = get_object_or_404(Project, uuid=project_uuid)
-
+        #
+        # @BUSINESS RULE: /discussion/ shoudl only return the top level parents
+        # but include the last child object if present
+        #
         return self.queryset.filter(content_type=Project.content_type(),
-                                    object_pk=project.pk)
+                                    object_pk=project.pk,
+                                    parent_id=None)
 
 
-class DiscussionDetailView(RetrieveUpdateDestroyAPIView, DiscussionListView):
+class DiscussionDetailView(RetrieveAPIView):
+    queryset = ThreadedComment.objects.select_related('user', 'tagged_items__tag').all().order_by('-id')
+    serializer_class = DiscussionThreadSerializer
     lookup_field = 'pk'
+
+    def get_queryset(self):
+        parent_pk = self.kwargs.get('pk')
+        project_uuid = self.kwargs.get('uuid')
+        get_object_or_404(Project, uuid=project_uuid)  # ensure that we have the project
+        #
+        # @BUSINESS RULE: /discussion/:pk/ should return the parent
+        # as well as a the children as a "thread": []
+        #
+        return self.queryset.filter(pk=parent_pk)
+
+
+class DiscussionTagView(APIView):
+    """
+    Discussion tags have their own endpoint as they are patched
+    in using django-taggit. and need to be handled in a specific manner
+    """
+    queryset = ThreadedComment.objects.select_related('user', 'tagged_items__tag').all().order_by('-id')
+
+    def get_params(self):
+        """
+        extract out the pk and uuid params from kwargs
+        also test that the project is valid
+        """
+        parent_pk = self.kwargs.get('pk')
+        project_uuid = self.kwargs.get('uuid')
+        get_object_or_404(Project, uuid=project_uuid)  # ensure that we have the project
+        return (parent_pk, project_uuid)
+
+    def get_queryset(self):
+        parent_pk, project_uuid = self.get_params()
+        return self.queryset.get(pk=parent_pk).tags
+
+    def response(self, status):
+        qs = self.get_queryset()
+        return Response([tag.name for tag in qs.all()], status=status)
+
+    def decode_from_body(self, data):
+        stream = StringIO.StringIO(data.encode("utf-8"))
+        posted_tags = JSONParser().parse(stream)
+
+        if type(posted_tags) not in [list]:
+            raise ParseError(detail='Must post a list of at least 1 tag ["tag number 1"]')
+
+        posted_tags = [smart_unicode(tag) for tag in posted_tags]  # decode to unicode
+
+        return posted_tags
+
+    def get(self, request, **kwargs):
+        return self.response(status=200)
+
+    def post(self, request, **kwargs):
+        posted_tags = self.decode_from_body(data=request.POST.get("_content"))
+
+        qs = self.get_queryset()
+        qs.add(*posted_tags)
+
+        return self.response(status=201)
+
+    def delete(self, request, **kwargs):
+        """
+        DELETE is handled by passing in a /tags/:tag/ value as django does not
+        provide access to DELETE body (not supported generally)
+        """
+        posted_tag = kwargs.get('tag', None)
+
+        if posted_tag in [None, '']:
+            raise ParseError(detail='Must include a tag in the url i.e. /api/v2/project/:project_uuid/discussion/:discussion_pk/tags/:tag/')
+
+        qs = self.get_queryset()
+        qs.remove(posted_tag)
+
+        return self.response(status=202)

@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.db.models.query import QuerySet
 from model_mommy import mommy
 
-from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin
+from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin, glynt_mock_http_requests
 from glynt.apps.lawyer.models import Lawyer
 from glynt.apps.project.models import Project
 from glynt.apps.project import PROJECT_STATUS, PROJECT_LAWYER_STATUS
@@ -19,6 +19,7 @@ class EnsureProjectsAreAvailableInContextOnAllPagesTest(BaseLawyerCustomerProjec
     """
     Test a random set of urls for the presence of the projects and projects objects
     """
+    @glynt_mock_http_requests
     def setUp(self):
         super(EnsureProjectsAreAvailableInContextOnAllPagesTest, self).setUp()
 
@@ -32,20 +33,44 @@ class EnsureProjectsAreAvailableInContextOnAllPagesTest(BaseLawyerCustomerProjec
         #self.auth_urls = self.urls + [
         self.auth_urls = [
             reverse('dashboard:overview'),
-            reverse('dashboard:checklist', kwargs={'uuid': self.project.uuid}),
             reverse('dashboard:project', kwargs={'uuid': self.project.uuid}),
+            reverse('dashboard:checklist', kwargs={'uuid': self.project.uuid}),
         ]
+
+    def check_standard_request_context(self, request, expected_project_type=Project, expected_projects_type=[QuerySet, list], expected_count=1):
+        """
+        The v2ApiClientMixin makes use of the restframework ApiClient
+        which modifies the response (only in testing) ever so slightly
+        """
+        self.assertTrue(hasattr(request, 'project'))
+        self.assertTrue(type(request.project) == expected_project_type)
+
+        self.assertTrue(hasattr(request, 'projects'))
+        self.assertTrue(type(request.projects) in expected_projects_type)
+        self.assertEqual(len(request.projects), expected_count)
+
+    def check_nonstandard_request_context(self, request, expected_project_type=Project, expected_projects_type=[QuerySet, list], expected_count=1):
+        """
+        The v2ApiClientMixin makes use of the restframework ApiClient
+        which modifies the response (only in testing) ever so slightly
+        """
+        self.assertTrue('project' in request)
+        self.assertTrue(type(request['project']) == expected_project_type)
+
+        self.assertTrue('projects' in request)
+        self.assertTrue(type(request['projects']) in expected_projects_type)
+        self.assertEqual(len(request['projects']), expected_count)
 
     def test_projects_are_never_available_to_unauthorised_users(self):
         for u in self.urls:
             resp = self.client.get(u)
-            request = resp.context['request']
 
-            self.assertTrue(hasattr(request, 'project'))
-            self.assertTrue(request.project is None)
-            
-            self.assertTrue(type(request.projects) is list)
-            self.assertEqual(len(request.projects), 0)
+            if resp.context is not None:
+                request = resp.context['request']
+                self.check_standard_request_context(request=request, expected_project_type=type(None), expected_projects_type=[list], expected_count=0)
+            else:
+                request = resp.context_data
+                self.check_nonstandard_request_context(request=request, expected_project_type=type(None), expected_projects_type=[list], expected_count=0)
 
     def test_projects_are_always_available_to_lawyer_user(self):
         """
@@ -56,14 +81,13 @@ class EnsureProjectsAreAvailableInContextOnAllPagesTest(BaseLawyerCustomerProjec
 
         for u in self.auth_urls:
             resp = self.client.get(u)
-            request = resp.context['request']
 
-            self.assertTrue(hasattr(request, 'project'))
-            self.assertTrue(type(request.project) == Project)
-
-            self.assertTrue(hasattr(request, 'projects'))
-            self.assertTrue(type(request.projects) is list)
-            self.assertEqual(len(request.projects), 1)
+            if resp.context is not None:
+                request = resp.context['request']
+                self.check_standard_request_context(request=request)
+            else:
+                request = resp.context_data
+                self.check_nonstandard_request_context(request=request)
 
     def test_projects_are_always_available_customer(self):
         """
@@ -72,14 +96,13 @@ class EnsureProjectsAreAvailableInContextOnAllPagesTest(BaseLawyerCustomerProjec
 
         for u in self.auth_urls:
             resp = self.client.get(u)
-            request = resp.context['request']
 
-            self.assertTrue(hasattr(request, 'project'))
-            self.assertTrue(type(request.project) == Project)
-
-            self.assertTrue(hasattr(request, 'projects'))
-            self.assertTrue(type(request.projects) is QuerySet)
-            self.assertEqual(len(request.projects), 1)
+            if resp.context is not None:
+                request = resp.context['request']
+                self.check_standard_request_context(request=request)
+            else:
+                request = resp.context_data
+                self.check_nonstandard_request_context(request=request)
 
 
 class ProjectModelMethodsTest(TestCase):

@@ -24,11 +24,11 @@ class LawyerNavDropDownTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
         self.client.login(username=self.lawyer_user.username, password=self.password)
         resp = self.client.get(reverse('dashboard:overview'))
 
-        self.assertTrue(len(resp.context['request'].projects) == 1)
-        self.assertTrue(resp.context['request'].projects == [self.project])
+        self.assertTrue(len(resp.context_data['projects']) == 1)
+        self.assertTrue(resp.context_data['projects'] == [self.project])
 
-        self.assertTrue(type(resp.context['request'].project) == Project)
-        self.assertTrue(resp.context['request'].project == self.project)
+        self.assertTrue(type(resp.context_data['project']) == Project)
+        self.assertTrue(resp.context_data['project'] == self.project)
 
         c = self.pq(resp.content)
         self.assertEqual(len(c('ul#project-set')), 1) # we see navigation project-set list

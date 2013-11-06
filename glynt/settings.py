@@ -105,7 +105,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'glynt.middleware.LawpalSocialAuthExceptionMiddleware',
-    'glynt.middleware.EnsureUserHasCompanyMiddleware',
+    'glynt.middleware.EnsureUserHasCompanyMiddleware',  # removed as company is no longer required
     'glynt.middleware.LawpalCurrentProjectsMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_filepicker.middleware.URLFileMapperMiddleware',
@@ -255,7 +255,8 @@ HELPER_APPS = (
     # Abridge mailout
     'abridge',
 
-    # feature switcher
+    # tags
+    'taggit',
 
     # user switcher
     'impersonate',
@@ -387,7 +388,7 @@ SOCIAL_AUTH_UUID_LENGTH = 3 # greater than 0 otherwise it defaults to 3
 SOCIAL_AUTH_BACKEND_ERROR_URL = '/'
 SOCIAL_AUTH_PROTECTED_USER_FIELDS = ('first_name', 'last_name', 'full_name', 'email',)
 SOCIAL_AUTH_PIPELINE = (
-    'glynt.apps.client.pipeline.ensure_mutually_exclusive_userclass',
+    #'glynt.apps.client.pipeline.ensure_mutually_exclusive_userclass',
     'social_auth.backends.pipeline.social.social_auth_user',
     #'social_auth.backends.pipeline.associate.associate_by_email', # removed as we no longer need to provision poeple coming from preview.
     'glynt.apps.client.pipeline.get_username',

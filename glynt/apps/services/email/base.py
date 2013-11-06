@@ -1,8 +1,8 @@
 # -*- coding: UTF-8 -*-
-from django.contrib.auth.models import User
-from django.db.models.query import QuerySet
 from django.conf import settings
 from django import template
+from django.contrib.auth.models import User
+from django.db.models.query import QuerySet
 
 from templated_email import send_templated_mail
 
@@ -16,6 +16,7 @@ import logging
 logger = logging.getLogger('lawpal.services')
 
 admin_name, admin_email = settings.ADMINS[0]
+SITE_EMAIL = settings.DEFAULT_FROM_EMAIL
 
 
 class BaseEmailService(SendEmailAsAbridgeEventMixin):
@@ -151,7 +152,7 @@ class BaseEmailService(SendEmailAsAbridgeEventMixin):
                     # ensure that the user is notified via the standard email method
                     email = Bunch(template_name=self.email_template,
                                   template_prefix=self.base_email_template_location,
-                                  from_email='{from_name} via LawPal <{from_email}>'.format(from_name=self.from_name, from_email=self.from_email),
+                                  from_email=SITE_EMAIL,
                                   recipient_list=[to_email],
                                   bcc=['founders@lawpal.com'] if settings.DEBUG is False else [],  # only bcc us in on live mails
                                   context=self.context)
