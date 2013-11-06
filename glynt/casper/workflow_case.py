@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.test import LiveServerTestCase
+from django.core.files import File
+from django.core.files.storage import FileSystemStorage
 from django.test.client import Client, FakePayload, MULTIPART_CONTENT
-from urlparse import urlparse
 
+from urlparse import urlparse
 from functools import wraps
 
 from model_mommy import mommy
@@ -13,9 +15,16 @@ from glynt.apps.todo import TODO_STATUS
 from glynt.apps.transact.models import Transaction
 from glynt.apps.project import PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE
 
+import os
 import re
+import mock
 import time
 import httpretty
+
+BASE_TEST_PATH = os.path.dirname(__file__)
+
+TEST_PDF_PATH = '{test_path}/test.pdf'.format(test_path=BASE_TEST_PATH)
+TEST_PDF_FILE = File(open(TEST_PDF_PATH, 'rb'), "test.pdf")
 
 
 class DjangoTestClientWithPATCH(Client):
@@ -146,6 +155,7 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
     def tearDown(self, *args, **kwargs):
         time.sleep(1)
 
+    @mock.patch('django_filepicker.models.FPFileField', FileSystemStorage)
     def setUp(self):
         super(BaseLawyerCustomerProjectCaseMixin, self).setUp()
 
@@ -190,7 +200,9 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
         self.project_lawyer_join.save(update_fields=['status'])
 
         self.todo = mommy.make('todo.ToDo', status=TODO_STATUS.open, project=self.project, user=self.lawyer_user, category='General', name="My Todo")
-        self.attachment = mommy.make('todo.Attachment', project=self.project, todo=self.todo, uploaded_by=self.customer_user)
+
+        self.attachment = mommy.make('todo.Attachment', attachment=TEST_PDF_FILE, project=self.project, todo=self.todo, uploaded_by=self.customer_user)
+
 
     def make_user(self, **kwargs):
         tmp_user = mommy.make('auth.User', **kwargs)

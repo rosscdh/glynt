@@ -79,7 +79,7 @@ class CrocdocAttachmentService(object):
 
     def session_key(self, **kwargs):
         if self.session is None:
-            self.session = crocodoc.session.create(self.uuid, **kwargs) if not settings.IS_TESTING else '123-123-123'
+            self.session = '123-123-123' if settings.PROJECT_ENVIRONMENT == 'test' else crocodoc.session.create(self.uuid, **kwargs)
         return self.session
 
     def upload_document(self):
@@ -88,7 +88,7 @@ class CrocdocAttachmentService(object):
         return crocodoc.document.upload(url=url)
 
     def view_url(self):
-        url = 'https://crocodoc.com/view/{session_key}'.format(session_key=self.session_key()) if not settings.IS_TESTING else 'http://example.com'
+        url = 'http://example.com' if settings.PROJECT_ENVIRONMENT == 'test' else 'https://crocodoc.com/view/{session_key}'.format(session_key=self.session_key())
         logger.info('provide crocdoc view_url: {url}'.format(url=url))
         return url
 

@@ -6,8 +6,8 @@ todo attachments when the time comes
 """
 import os
 from django.db import models
-# from django.contrib.auth.models import User
 
+# from django.contrib.auth.models import User
 # from glynt.apps.project.models import Project
 
 from django_filepicker.models import FPFileField
@@ -25,7 +25,7 @@ from hurry.filesize import size
 
 def _attachment_upload_file(instance, filename):
     _, ext = os.path.splitext(filename)
-    return '{project_uuid}/attachments/{slug}{ext}'.format(project_uuid=instance.project.uuid, slug=instance.slug, ext=ext)
+    return '{project_uuid}/attachments/{slug}{ext}'.format(project_uuid=instance.project.uuid, slug=instance.pk, ext=ext)
 
 
 class ToDo(NumAttachmentsMixin, models.Model):
@@ -196,3 +196,16 @@ class FeedbackRequest(models.Model):
         except IndexError:
             return {}
 
+
+"""
+import signals
+"""
+from .signals import (on_attachment_created,
+                      on_attachment_deleted,
+                      on_comment_created,
+                      feedbackrequest_created,
+                      feedbackrequest_status_change,
+                      projectlawyer_assigned,
+                      projectlawyer_deleted,
+                      todo_item_status_change,
+                      on_action_created,)

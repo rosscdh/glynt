@@ -19,7 +19,6 @@ INSTALLED_APPS = INSTALLED_APPS + (
     'colortools',
 )
 
-DEFAULT_FILE_STORAGE = 'inmemorystorage.InMemoryStorage'
 SOUTH_TESTS_MIGRATE = False
 SKIP_SOUTH_TESTS = True
 
