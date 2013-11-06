@@ -2,11 +2,13 @@
 {% block page_title %}LawPal - A better attorney-client relationship{% endblock %}
 {% block bodyclass %}homepage{% endblock %}
 {% block bodyextra %}{% endblock %}
+{% block wrapbodytop %}{% endblock %}
+{% block wrapbodybottom %}{% endblock %}
 
 {% block css %}{% endblock %}
 {% block extrahead %}
-    <meta name="description" content="LawPal - A better attorney-client relationship">
-    <meta name="keywords" content="incorporation, seed financing, convertible notes, venture capital, acquisition, angel investing">
+<meta name="description" content="LawPal - A better attorney-client relationship">
+<meta name="keywords" content="incorporation, seed financing, convertible notes, venture capital, acquisition, angel investing">
 {% endblock %}
 
 {% block navbar %}   
@@ -77,17 +79,17 @@
                     <div class="row onepage-pagination ">
                         <div class="col-lg-4 col-4">
                             <h3>Enjoy Legal Ease</h3>
-                            <p>Get complete visibility of your legal workflow and streamline your legal projects at every stage.</p>
+                            <p>Get complete visibility of your legal workflow and streamline your legal projects</p>
                             <a data-index="2" href="#2"><img src="{{STATIC_URL}}img/home-2/down-arrow.png" class="da"></a>
                         </div>
                         <div class="col-lg-4 col-4">
                             <h3>Trust Your Co-Pilot</h3>
-                            <p>Work with our network of veteran startup lawyers experienced in your legal needs at any stage.</p>
+                            <p>Work with our network of veteran startup lawyers experienced in your legal needs</p>
                              <a data-index="4" href="#4"><img src="{{STATIC_URL}}img/home-2/down-arrow.png" class="da"></a>
                         </div>
                         <div class="col-lg-4 col-4">
                             <h3>Fixed Legal Fees</h3>
-                            <p>Expect predictable pricing for legal services from incorporation to financing and beyond.</p>
+                            <p>Expect predictable pricing for legal services from incorporation to financing and beyond</p>
                              <a data-index="5" href="#5"><img src="{{STATIC_URL}}img/home-2/down-arrow.png" class="da"></a>
                         </div>
                     </div>
@@ -155,9 +157,9 @@
                             </div>                           
                         </div>
                     </div>
-                    <br />
-                    <br />
+
                     <div class="text-center">
+                        <br />
                         <br />
                         <a href="#signup-modal" data-toggle="modal" class="btn btn-clear-border btn-home btn-huge">Get Started</a>
                     </div>
@@ -168,8 +170,6 @@
     </section>
     <!--Featres-->
     <section id="deal-visibility">
-        <br />
-        <br />
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -193,32 +193,32 @@
                     <div class="col-4 collab">
                         <div></div>
                         <h3>Team Collaboration</h3>
-                        <p>Choose what team members can contribute to your project at any time.</p>
+                        <p class="hidden-sm">Choose what team members can contribute to your project at any time.</p>
                     </div>
                     <div class="col-4 discuss">
                         <div></div>
                         <h3>Centralized Discussions</h3>
-                        <p>Keep your team messaging on each topic communicated in one place.</p>
+                        <p class="hidden-sm">Keep your team messaging on each topic communicated in one place.</p>
                     </div>
                     <div class="col-4 progress-vis">
                         <div></div>
                         <h3>Progress Visibility</h3>
-                        <p>See the status of every project and always know who's court the ball is in.</p>
+                        <p class="hidden-sm">See the status of every project and always know who's court the ball is in.</p>
                     </div>
                     <div class="col-4 sync">
                         <div></div>
                         <h3>Cloud Sync and Storage</h3>
-                        <p>Work knowing your documents are saved and retrievable from any device.</p>
+                        <p class="hidden-sm">Work knowing your documents are saved and retrievable from any device.</p>
                     </div>
                     <div class="col-4 sign">
                         <div></div>
                         <h3>Annotation and Signing</h3>
-                        <p>Easily update and sign your documents through our editing platform.</p>
+                        <p class="hidden-sm">Easily update and sign your documents through our editing platform.</p>
                     </div>
                     <div class="col-4 lock">
                         <div></div>
                         <h3>Bank-Grade Security</h3>
-                        <p>Know your projects are kept private with our secure server infrastructure.</p>
+                        <p class="hidden-sm">Know your projects are kept private with our secure server infrastructure.</p>
                     </div>
                 </div>
     
@@ -232,17 +232,14 @@
             <div class="row">
                 <div class="col-sm-6 col-10">
                     <br />
-                  
-              
                     <h1 class="">Your Lawyer. <br />Your Co-Pilot.</h1>
-                    <h3 class="softer">Work with a lawyer instead of against the clock and get your legal projects done efficiently and accurately. Our network of veteran startup lawyers have worked at:</h3>
+                    <h3 class="softer">Work with a lawyer to get your legal projects done efficiently and accurately. Our network of veteran startup lawyers have worked at:</h3>
                     <img src="{{STATIC_URL}}img/home-2/lawyer-firms.png">
                     <br /> 
                     <div class="onepage-pagination">
                         <br />
                         <a  href="#signup-modal" data-toggle="modal"  class="btn btn-clear-border btn-home btn-huge">Get Started</a>
                     </div>
-                    
                 </div>
             </div>
         </div>
@@ -252,32 +249,42 @@
     <section id="pricing">
         <div class="container">
             <div class="row">
-                <div class="col-10 col-push-1">
-                    <br />
-                    <br />
-                    <br />
-                    <h1 class="text-center">Predictable pricing.</h1>
-                    <br />
+                <div class="col-12 ">
+                    <h1 class="text-center">With a lawyer, not against the clock.</h1>
                     <h3 class="text-center">
-                         When raising your seed round, every dollar counts.
-                        Getting an invoice for $15,000 in legal fees hurts. With LawPal, you get
-                        the benefits of engaging an experienced startup lawyer
-                        without writing a blank check for an unknown amount of billable hours. We aim to give you fixed pricing whenever possible.
-                    
+                         Work with an experienced startup lawyer at an affordable and predictable price whenever possible. 
+                         <br /> 
+                         An example of of our services:
                     </h3>
                     <div class="row">
-                        <div class="col-sm-4 col-offset-2 col-12">
-                            <h2>Company Formation</h2>
-                            <span class="small"></span> <span class="big">$950</span>
+                        <div class="col-sm-6 col-lg-4 col-offset-2 col-12">
+                            <div class="step-block">
+                                <h2>Company Formation</h2>
+                                <span class="small"></span> <span class="big">$950</span>
+                                <ul class="list-unstyled  hidden-sm">
+                                    <li>Incorporation Documents</li>
+                                    <li>Founders Documents</li>
+                                    <li>Directors Agreements</li>
+                                    <li>Cap Table</li>
+                                    <li>Stock Ledger</li>
+                                </ul>
+                            </div>
                         </div>
-                        <div class="col-sm-4 col-12">
-                            <h2>Bridge/Note Financing</h2>
-                            <span class="big">$2,500</span>
+                        <div class="col-sm-6 col-lg-4 col-12">
+                            <div class="step-block">
+                                <h2>Bridge/Note Financing</h2>
+                                <span class="big">$2,500</span>
+                                <ul class="list-unstyled hidden-sm">
+                                    <li>Incorporation Documents</li>
+                                    <li>Founders Documents</li>
+                                    <li>Directors Agreements</li>
+                                    <li>Cap Table</li>
+                                    <li>Stock Ledger</li>
+                                </ul>
+                            </div>
                         </div>
                     
                         <div class="col-12 text-center link onepage-pagination">
-                            <br />
-                            <br />
                             <br />
                             <br />
                             <a href="#signup-modal" data-toggle="modal" class="btn btn-clear-border btn-home btn-huge">Get Started</a>
@@ -296,32 +303,29 @@
             <div class="container">
                 <div class="row">
                     <div class=" col-lg-12 text-center">
-                        <h1><a href="#signup-modal" data-toggle="modal">Ready to get going?</a> or Have a Question?</h1>
                     </div>
                 </div>
             </div>
         </div>
         <div class="container">
             <div class="row">
-                <div class="col-lg-8 col-push-2">
-                    <br />
-                    <br />
-                    <br />
-                    <img src="{{STATIC_URL}}img/logo-foot.png" width="100">
-                    <h2 class="">About LawPal</h2>
-                    <p>Every dollar counts.  When you raise a $250,000 or $500,000 seed round, getting an invoice for $15,000 in legal fees (or in our case $34,764.33) hurts no matter when you have to pay it. That's one less developer working for several months. Imagine what a developer can build in three months. </p>
+                <div class="col-lg-10 col-offset-1">
+                    <div class="text-rigjht" style="margin-top:-80px;margin-bottom:55px;">
+                        <a href="mailto:founders@lawpal.com" class="btn btn-clear-border btn-home btn-huge">Contact Us</a>
+                        <br />
+                    </div>
+                    <div class="about-lawpal">
+                        <h2 class="">About LawPal</h2>
+                        <p>As a startup, every dollar counts and getting an invoice for $15,000 in legal fees hurts no matter when you have to pay it. We wanted startups to have a way to connect with an experienced lawyer they could trust, at a fair and predictable price, and always know the status of their legal projects. So we started LawPal. </p>
+                    </div>
                     <div class="row">
-                        <div class="col-5">
+                        <div class="col-sm-5">
                             <h2 class="">The Team</h2>
                             <div class="row investors-team">
                                 <div class="col-4">
                                     <div class="media">
-                                      <a class="pull-left" href="#">
-                                        <img src="{{ STATIC_URL }}img/alex-face.jpg" class="img-circle" style="width:95px">
-                                      </a>
-                                      <div class="media-body">
-                                        <h3 class="media-heading">Alex Halliday</h4>
-                                      </div>
+                                    <img src="{{ STATIC_URL }}img/alex-face.jpg" class="img-circle" style="width:95px">
+                                    <h3 class="media-heading">Alex Halliday</h4>
                                     </div>
                                 </div>
                                 <div class="col-4">
@@ -334,8 +338,8 @@
                                 </div>      
                             </div>
                         </div>
-                        <div class="col-5 col-offset-1">
-                            <div class="row">
+                        <div class="col-sm-5 col-push-1">
+                            <div class="row hidden-sm">
                                 <h2 class="">Investors</h2>
                                 <div class="investors-team">
                                     <div class="col-4">
@@ -357,11 +361,37 @@
                 </div>
             </div>
         </div>
+        <footer id="footer" role="contentinfo">
+            <div class="container">
+                <div class="row copyright">
+                    <div class="col col-lg-8">
+                        <ul class="list-inline no-decoration">
+                            <li><a href="http://blog.lawpal.com/" target="_BLANK">LawPal Blog</a></li>
+                            <li><a href="{% url 'public:terms' %}">Terms and Conditions</a></li>
+                            <li><a href="{% url 'public:privacy' %}">Privacy Policy</a></li>
+                            <li><a href="{% url 'public:disclaimer' %}">Disclaimer</a></li>
+                            <li><a href="{% url 'public:contact_us' %}" data-toggle="modal" class="contact-us">Contact Us</a></li>
+                        </ul>
+                    </div>
+                    <div class="col col-lg-4">
+                        <ul class="list-inline no-decoration pull-right">
+                            <li><a href="//facebook.com/lawpalhq"><i class="icon-facebook"></i></a></li>
+                            <li><a href="//twitter.com/lawpalhq"><i class="icon-twitter"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <p>{% now "Y" %} &middot; {{ PROJECT_NAME }} Inc</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
     </section>
 <!--Love for LawPal-->
 </div>
 
-<!--Dialog for Homepage Video-->
+<!--MODAL for Homepage Video-->
 
 <div id="videoModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel" aria-hidden="true">
     <div class="modal-dialog">

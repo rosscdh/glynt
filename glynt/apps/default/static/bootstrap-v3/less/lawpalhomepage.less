@@ -15,15 +15,11 @@ body.homepage {
   .navbar-nav > .active > a, .navbar-nav > .active > a:hover, .navbar-nav > .active > a:focus {
     background-color:transparent;
     color:white;
-
   }
-  &.viewing-page-2 header.navbar, &.viewing-page-3 header.navbar, &.viewing-page-4 header.navbar, &.viewing-page-5 header.navbar   {
+  &.viewing-page-2 header.navbar, &.viewing-page-5 header.navbar   {
       background-color:transparent;
       border-bottom:none;
   } 
- &.viewing-page-6 header.navbar {
- background-color: #666;
- }  
   &.viewing-page-7 header.navbar {
     background-color:transparent;
     border-bottom:none;
@@ -37,13 +33,10 @@ body.homepage {
     font-size:14px;
     padding-left:8px;
   }
-
   .navbar-nav li a {
     opacity:0.6;
     transition: opacity 0.6s ease;
-
   }
-
   .navbar-nav li a.active {
     opacity:1
   }
@@ -51,7 +44,7 @@ body.homepage {
     font-size: 35px;
   }
   h3 {
-    font-size: 21px;
+    font-size: 16px;
     line-height:1.3em;
   }
   .btn-home {
@@ -61,6 +54,9 @@ body.homepage {
     font-size:16px;
     font-weight:normal;
     font-family:@headings-font-family;
+  }
+  section {
+    padding-top:45px;
   }
   section .container{
     margin-top:1em;
@@ -139,9 +135,11 @@ body.homepage {
   }
   section#co-pilot {
     background-color:#f57f76;
-
     text-align:center;
     color:white;
+    h1 {
+      margin-top:-20px;
+    }
     h1, h3 {
       color: white;
     }
@@ -234,6 +232,7 @@ body.homepage {
     }
   }
   section#pricing {
+    padding-top:25px;
     background-color:@brand-primary;
     * {
       color:white;
@@ -247,10 +246,9 @@ body.homepage {
     h2 {
       font-size:25px;
       margin-bottom:0px;
-      margin-top:15px;
     }
     h3 {
-      font-size:18px;
+      font-size:17px;
     }
     span.big {
       font-size:25px;
@@ -261,6 +259,20 @@ body.homepage {
       font-size:16px;
       opacity:0.7;
       text-align:center;
+    }
+   .step-block {
+      background-color:white;
+      margin-right:20px;
+      margin-top:10px;
+      position:relative;
+      padding: 1px 0px 10px 0px;
+      border:1px solid darken(@brand-primary, 15%);
+      * {
+        color:darken(@brand-primary, 15%);
+      }
+      ul li {
+        margin-top:5px;
+      }
     }
   }
   section#get-started {
@@ -304,7 +316,7 @@ body.homepage {
       h3 {
         margin: 12px 0px 3px 0px;
         color:white;
-        font-size:24px;
+        font-size:17px;
       }
       p {
         color:#aaa;
@@ -313,10 +325,24 @@ body.homepage {
     }
   }
   section#about-us {
-    background-color:#fafafa;
-    padding-top:30px;
+    padding-top:0px;
+    position:relative;
+    footer {
+      position:absolute;
+      bottom:0;
+      width:100%;
+      margin-left:0px;
+    }
+    .about-lawpal {
+      font-size:15px;
+      font-family:@headings-font-family;
+      color: #999;
+    }
     .contact {
-      background-color: #666;
+      background:url('../../img/home-2/about-back.jpg') top;
+      background-size:cover;
+      height:28%;
+      border-top:1px solid grey;
       h1 {
         font-size:40px;
         color:white;
@@ -327,22 +353,23 @@ body.homepage {
       }
     }
     h2 {
-      font-size:33px;
+      font-size:18px;
       margin-top:25px;
       text-align:left;
-      color:#bbb;
+      color:#666;
+      font-family:@font-family-sans-serif;
     }
     .investors-team
     {
       text-align:center;
       h4 {
         font-size:13px;
-        color: #666;
+        color: #999;
         text-align:center;
         font-family:@font-family-sans-serif;
       }
       h3 {
-        font-size:16px;
+        font-size:13px;
       }
       img {
          margin-bottom:10px;
@@ -350,6 +377,7 @@ body.homepage {
       img.inv {
         height: 60px;
         opacity:0.6;
+        margin-top:8px;
       }
     }
   }
@@ -362,15 +390,15 @@ body.homepage {
 @media (min-width: @screen-tablet) {
   body.homepage {
     section {
-      padding-top:100px;
+      padding-top:60px;
     }
     section#pricing {
-      h3 span {
+      padding-top:65px;
+      h3  {
       }
       .sub-text {
       }
       h2 {
-        margin-top:35px;
       }
       span.big {
         font-size:55px;
@@ -378,12 +406,35 @@ body.homepage {
       span.small {
         font-size:33px;
       }
+      .step-block {
+          padding: 10px 0px 20px 0px;
+          margin-top:30px;
+      }
+    }
+    section#deal-visibility {
+      .row.feature {
+        h3 {
+          font-size:24px;
+        }
+      }
+    }
+    section#about-us {
+      .about-lawpal {
+        font-size:22px;
+      }
+      footer#footer {
+        margin-left:0px;
+      }
     }
   }
+
 } 
 // Medium and large device columns (desktop and up)
 @media (min-width: @screen-desktop) {
   body.homepage {
+    section {
+      padding-top:100px;
+    }
     h1 {
       font-size:55px;
     }
@@ -416,11 +467,21 @@ body.homepage {
       }
     }
     section#pricing {
+      padding-top:90px;
       .sub-text {
         font-size:18px;
       }
-    }
+    
 
+    }
+    section#about-us {
+      .about-lawpal {
+        font-size:22px;
+      }
+      footer#footer {
+        margin-left:0px;
+      }
+    }
   }
 }
 @media (min-width: @screen-large-desktop) {
