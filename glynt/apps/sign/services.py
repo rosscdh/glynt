@@ -96,7 +96,8 @@ class HelloSignWebhookService(object):
     def __init__(self, payload=payload, *args, **kwargs):
         self.user = kwargs.get('user')
         self.payload = json.loads(payload)
-        self.items = [Bunch(**i) for i in self.payload]
+
+        self.items = [Bunch(**self.payload)]
 
     @property
     def class_map(self):
@@ -118,15 +119,12 @@ class HelloSignWebhookService(object):
     def process(self):
         page = None
         for c, i in enumerate(self.items):
-            #print '{num}: Item: {i}'.format(num=c, i=i)
-            event = i.get('event')
-            event_type = i.get('type')
-            if i.get('page') is not None:
-                page = i.get('page')
+            event = i.event
+            event_type = event.get('event_type')
 
-            logger.info("{event} is of type {event_type} on page: {page}".format(event_type=event_type, event=event, page=page))
+            logger.info("Hellosign event: {event_date} is of type {event_type}".format(event_type=event_type, event_date=event.get('event_time',None)))
 
-            i = self.get_class()(**i)
+            i = self.get_class(event=event_type)(**i)
 
             if i is not None and hasattr(i, 'process'):
                 i.process()

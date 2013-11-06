@@ -21,7 +21,11 @@ class HelloSignEventView(JSONResponseMixin, View):
         return self.render_json_response(context_dict)
 
     def post(self, request, *args, **kwargs):
-        logger.info('Recieved POST Event: %s' % request.POST)
+        logger.info('Recieved POST Event: %s' % request.body)
+
+        service = HelloSignWebhookService(payload=request.body)
+        service.process()
+
         context_dict = {
             'message': 'POST recieved',
         }
