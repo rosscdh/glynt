@@ -35,7 +35,24 @@ class Command(BaseCommand):
             'file[0]': open('/Users/rosscdh/Projects/lawpal/glynt/glynt/casper/test.pdf')
         }
         #resp = requests.post('https://api.hellosign.com/v3/signature_request/create_embedded', auth=AUTHENTICATION, data=data, files=files)
-        resp = HelloSign().signature_request.create_embedded.post(auth=AUTHENTICATION, data=data, files=files)
-        print resp.json()
+        #resp = HelloSign().signature_request.create_embedded.post(auth=AUTHENTICATION, data=data, files=files)
+        #print resp.json()
+        # returns
+        #{u'signature_request': {u'test_mode': True, u'cc_email_addresses': [], u'title': u'First test document', u'signature_request_id': u'666689eee9c9b3a639eb2cb550a02e0dcea7f07d', u'original_title': u'First test document', u'requester_email_address': u'founders@lawpal.com', u'details_url': u'https://www.hellosign.com/home/manage?locate=666689eee9c9b3a639eb2cb550a02e0dcea7f07d', u'signing_url': u'https://www.hellosign.com/editor/sign?guid=666689eee9c9b3a639eb2cb550a02e0dcea7f07d', u'has_error': False, u'signatures': [{u'signed_at': None, u'status_code': u'awaiting_signature', u'last_viewed_at': None, u'signer_email_address': u'ross@lawpal.com', u'signer_name': u'Ross C', u'last_reminded_at': None, u'signature_id': u'fd6d39525f3ef3da3069d038d3f9e1df', u'order': None}], u'response_data': [], u'message': u'Yay working?', u'is_complete': False, u'custom_fields': [], u'subject': u'First test document'}}
+        
+        # Get the signature url
+        data = {
+            'test_mode': 1,
+            'client_id': CLIENT_ID,
+        }
+        #resp = HelloSign().embedded.sign_url.fd6d39525f3ef3da3069d038d3f9e1df.get(auth=AUTHENTICATION, params=data)
+        signature_id = 'fd6d39525f3ef3da3069d038d3f9e1df'
+        # req = HelloSign().embedded.sign_url
+        # req._resources.append(signature_id)  # manually append the dynamic url attribute
+        # resp = req.get(auth=AUTHENTICATION)
+
+        req = HelloSign()
+        req.url = "/embedded/sign_url/{signature_id}".format(signature_id=signature_id)
+        resp = req.get(auth=AUTHENTICATION)
 
         import pdb;pdb.set_trace()
