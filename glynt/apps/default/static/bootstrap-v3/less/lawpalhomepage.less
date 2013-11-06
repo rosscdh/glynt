@@ -250,6 +250,10 @@ body.homepage {
     h3 {
       font-size:17px;
     }
+    div.desc {
+      padding:15px;
+      min-height:130px;
+    }
     span.big {
       font-size:25px;
       font-family:@headings-font-family;
@@ -339,7 +343,7 @@ body.homepage {
       color: #999;
     }
     .contact {
-      background:url('../../img/home-2/about-back.jpg') top;
+      background:url('../../img/home-2/about-back.jpg') 0 -100px;
       background-size:cover;
       height:28%;
       border-top:1px solid grey;
@@ -384,8 +388,6 @@ body.homepage {
 }
 
 
-
-
 // Tablets and up
 @media (min-width: @screen-tablet) {
   body.homepage {
@@ -410,6 +412,7 @@ body.homepage {
           padding: 10px 0px 20px 0px;
           margin-top:30px;
       }
+
     }
     section#deal-visibility {
       .row.feature {

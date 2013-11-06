@@ -4145,84 +4145,52 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
 }
 /* Signin Modal
 -------------------------------------------------- */
+#signup-modal,
 #signin-modal {
-  background-color: transparent;
-  outline-width: 0px;
-  border-radius: 0px;
+  color: #999;
 }
-#signin-modal h3,
-#signin-modal h4 {
-  color: white;
-  padding: 10px 30px 10px 30px;
+#signup-modal a.lnk,
+#signin-modal a.lnk {
+  color: #999;
+  text-decoration: underline;
 }
-#signin-modal .startup div,
-#signin-modal .lawyer div {
-  background: url('/static/img/coffee-tie.png') no-repeat;
-  width: 70px;
-  height: 104px;
-  margin: 0 auto;
-  margin-bottom: 10px;
-}
-#signin-modal .lawyer div {
-  background-position: 0px -105px;
-}
-#signin-modal .startup,
-#signin-modal .lawyer {
-  padding-bottom: 20px;
-}
-#signin-modal .startup {
-  max-width: 350px;
-  width: 100%;
-  margin: 0 auto;
-  background-color: #f88172;
-  text-align: center;
-  padding-top: 5px;
-}
-#signin-modal .startup .btn {
-  background-color: #f65e4b;
-  margin-top: 7px;
-  padding: 3px 14px 3px 8px;
-  border: 0px;
-  width: 90%;
-}
-#signin-modal .lawyer {
-  width: 240px;
-  float: right;
-  background-color: #42d0e5;
-  text-align: center;
-  margin-right: 20px;
-}
-#signin-modal .lawyer .btn {
-  background-color: #1fc7df;
-  margin-top: 7px;
-  padding: 3px 14px 3px 8px;
-  border: 0px;
+#signup-modal hr,
+#signin-modal hr {
+  border-color: #999;
 }
 #signup-modal h1,
-#signup-modal h2 {
+#signin-modal h1,
+#signup-modal h2,
+#signin-modal h2 {
   color: white;
 }
-#signup-modal h1 {
+#signup-modal h1,
+#signin-modal h1 {
   margin-bottom: 30px;
   margin-top: 20%;
   font-size: 40px;
 }
-#signup-modal h2 {
+#signup-modal h2,
+#signin-modal h2 {
   font-size: 22px;
 }
-#signup-modal ol li {
+#signup-modal ol li,
+#signin-modal ol li {
   font-size: 20px;
   color: #666;
   line-height: 30px;
   margin-top: 10px;
   margin-bottom: 15px;
 }
-#signup-modal ol li.first {
+#signup-modal ol li.first,
+#signin-modal ol li.first {
   color: #fff;
   font-size: 22px;
   line-height: 46px;
+  margin-bottom: 35px;
 }
-#signup-modal ol li.first div {
+#signup-modal ol li.first div,
+#signin-modal ol li.first div {
   border: 2px solid #fff;
   color: #fff;
   width: 40px;
@@ -4232,12 +4200,17 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
   margin-top: 3px;
   margin-left: 0px;
 }
-#signup-modal ol li div {
+#signup-modal ol li.first .btn,
+#signin-modal ol li.first .btn {
+  margin-left: 50px;
+}
+#signup-modal ol li div,
+#signin-modal ol li div {
   width: 30px;
   height: 30px;
   border-radius: 30px;
-  border: 2px solid #666;
-  color: #666;
+  border: 2px solid #999;
+  color: #888;
   text-align: center;
   line-height: 26px;
   float: left;
@@ -4245,11 +4218,16 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
   font-size: 16px;
   margin-left: 5px;
 }
-#signup-modal ol li .btn-clear-border {
+#signup-modal ol li div .btn-clear-border,
+#signin-modal ol li div .btn-clear-border {
+  margin-left: 20px;
+}
+#signup-modal .btn-clear-border,
+#signin-modal .btn-clear-border {
   background-color: transparent;
   border-color: white;
   color: white;
-  margin-left: 20px;
+  margin-left: 0px;
   padding-right: 19px;
   font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
   font-weight: normal;
@@ -6626,14 +6604,9 @@ body.homepage .navbar-nav > .active > a:focus {
   color: white;
 }
 body.homepage.viewing-page-2 header.navbar,
-body.homepage.viewing-page-3 header.navbar,
-body.homepage.viewing-page-4 header.navbar,
 body.homepage.viewing-page-5 header.navbar {
   background-color: transparent;
   border-bottom: none;
-}
-body.homepage.viewing-page-6 header.navbar {
-  background-color: #666;
 }
 body.homepage.viewing-page-7 header.navbar {
   background-color: transparent;
@@ -6660,7 +6633,7 @@ body.homepage h2 {
   font-size: 35px;
 }
 body.homepage h3 {
-  font-size: 21px;
+  font-size: 16px;
   line-height: 1.3em;
 }
 body.homepage .btn-home {
@@ -6670,6 +6643,9 @@ body.homepage .btn-home {
   font-size: 16px;
   font-weight: normal;
   font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
+}
+body.homepage section {
+  padding-top: 45px;
 }
 body.homepage section .container {
   margin-top: 1em;
@@ -6750,6 +6726,9 @@ body.homepage section#co-pilot {
   background-color: #f57f76;
   text-align: center;
   color: white;
+}
+body.homepage section#co-pilot h1 {
+  margin-top: -20px;
 }
 body.homepage section#co-pilot h1,
 body.homepage section#co-pilot h3 {
@@ -6843,6 +6822,7 @@ body.homepage section#veteran-lawyers h4 {
   font-size: 15px;
 }
 body.homepage section#pricing {
+  padding-top: 25px;
   background-color: #42d0e5;
 }
 body.homepage section#pricing * {
@@ -6857,10 +6837,13 @@ body.homepage section#pricing .sub-text {
 body.homepage section#pricing h2 {
   font-size: 25px;
   margin-bottom: 0px;
-  margin-top: 15px;
 }
 body.homepage section#pricing h3 {
-  font-size: 18px;
+  font-size: 17px;
+}
+body.homepage section#pricing div.desc {
+  padding: 15px;
+  min-height: 130px;
 }
 body.homepage section#pricing span.big {
   font-size: 25px;
@@ -6871,6 +6854,20 @@ body.homepage section#pricing span.small {
   font-size: 16px;
   opacity: 0.7;
   text-align: center;
+}
+body.homepage section#pricing .step-block {
+  background-color: white;
+  margin-right: 20px;
+  margin-top: 10px;
+  position: relative;
+  padding: 1px 0px 10px 0px;
+  border: 1px solid #1aabc0;
+}
+body.homepage section#pricing .step-block * {
+  color: #1aabc0;
+}
+body.homepage section#pricing .step-block ul li {
+  margin-top: 5px;
 }
 body.homepage section#get-started {
   background-color: #fcd423;
@@ -6915,18 +6912,32 @@ body.homepage section#deal-visibility .row.feature {
 body.homepage section#deal-visibility .row.feature h3 {
   margin: 12px 0px 3px 0px;
   color: white;
-  font-size: 24px;
+  font-size: 17px;
 }
 body.homepage section#deal-visibility .row.feature p {
   color: #aaa;
   font-size: 16px;
 }
 body.homepage section#about-us {
-  background-color: #fafafa;
-  padding-top: 30px;
+  padding-top: 0px;
+  position: relative;
+}
+body.homepage section#about-us footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  margin-left: 0px;
+}
+body.homepage section#about-us .about-lawpal {
+  font-size: 15px;
+  font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
+  color: #999;
 }
 body.homepage section#about-us .contact {
-  background-color: #666;
+  background: url('../../img/home-2/about-back.jpg') 0 -100px;
+  background-size: cover;
+  height: 28%;
+  border-top: 1px solid grey;
 }
 body.homepage section#about-us .contact h1 {
   font-size: 40px;
@@ -6937,22 +6948,23 @@ body.homepage section#about-us .contact h1 a {
   color: white;
 }
 body.homepage section#about-us h2 {
-  font-size: 33px;
+  font-size: 18px;
   margin-top: 25px;
   text-align: left;
-  color: #bbb;
+  color: #666;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 body.homepage section#about-us .investors-team {
   text-align: center;
 }
 body.homepage section#about-us .investors-team h4 {
   font-size: 13px;
-  color: #666;
+  color: #999;
   text-align: center;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 body.homepage section#about-us .investors-team h3 {
-  font-size: 16px;
+  font-size: 13px;
 }
 body.homepage section#about-us .investors-team img {
   margin-bottom: 10px;
@@ -6960,13 +6972,14 @@ body.homepage section#about-us .investors-team img {
 body.homepage section#about-us .investors-team img.inv {
   height: 60px;
   opacity: 0.6;
+  margin-top: 8px;
 }
 @media (min-width: 768px) {
   body.homepage section {
-    padding-top: 100px;
+    padding-top: 60px;
   }
-  body.homepage section#pricing h2 {
-    margin-top: 35px;
+  body.homepage section#pricing {
+    padding-top: 65px;
   }
   body.homepage section#pricing span.big {
     font-size: 55px;
@@ -6974,8 +6987,24 @@ body.homepage section#about-us .investors-team img.inv {
   body.homepage section#pricing span.small {
     font-size: 33px;
   }
+  body.homepage section#pricing .step-block {
+    padding: 10px 0px 20px 0px;
+    margin-top: 30px;
+  }
+  body.homepage section#deal-visibility .row.feature h3 {
+    font-size: 24px;
+  }
+  body.homepage section#about-us .about-lawpal {
+    font-size: 22px;
+  }
+  body.homepage section#about-us footer#footer {
+    margin-left: 0px;
+  }
 }
 @media (min-width: 992px) {
+  body.homepage section {
+    padding-top: 100px;
+  }
   body.homepage h1 {
     font-size: 55px;
   }
@@ -6999,8 +7028,17 @@ body.homepage section#about-us .investors-team img.inv {
   body.homepage section#co-pilot .step-block h1 {
     font-size: 42px;
   }
+  body.homepage section#pricing {
+    padding-top: 90px;
+  }
   body.homepage section#pricing .sub-text {
     font-size: 18px;
+  }
+  body.homepage section#about-us .about-lawpal {
+    font-size: 22px;
+  }
+  body.homepage section#about-us footer#footer {
+    margin-left: 0px;
   }
 }
 @media (min-width: 1200px) {
