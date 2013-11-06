@@ -26,8 +26,8 @@
                             <span ng-bind="project.currentUserEngagement"></span>
                         </span>
                         <span>
-                            <a class="btn btn-link pull-right" ng-href="{% url 'dashboard:overview' %}{[{project.uuid}]}/" ng-show="project.currentUserEngagement=='Engaged'">View</a>
-                            <h3 ng-bind="project.company.name"></h3>
+                            <a class="btn btn-link pull-right" ng-href="{% url 'dashboard:overview' %}{[{project.uuid}]}/" ng-show="project.currentUserEngagement=='Engaged'">View Project</a>
+                            <a ng-href="{% url 'dashboard:overview' %}{[{project.uuid}]}/"><h3 ng-bind="project.company.name"></h3></a>
                             <div class="row">
                                 <div class="col-3">
                                     <em>Action required</em>
@@ -101,7 +101,7 @@
                     <h3><i class="icon icon-user text-muted"></i> Update your profile</h3>
                     <div class="row">
                         <div class="col-12">
-                            <a href="{% url 'lawyer:setup_profile' %}" class="btn btn-info btn-small intercom pull-right" style="margin-top:-4px">Edit profile</a>
+                            <a href="{% url 'lawyer:setup_profile' %}" class="btn btn-info btn-small pull-right" style="margin-top:-4px">Edit profile</a>
                             <p>{{ user.get_full_name }}, while you have a few moments have a look over your LawPal profile. Keeping your profile up-to-date will help potential clients choose you.</p>
                         </div>
                     </div>

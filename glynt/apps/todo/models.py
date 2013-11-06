@@ -4,7 +4,6 @@ App to enable founders to have a set of todo items per transaction type
 considering using https://github.com/bartTC/django-attachments for the
 todo attachments when the time comes
 """
-import os
 from django.db import models
 
 # from django.contrib.auth.models import User
@@ -24,6 +23,7 @@ from hurry.filesize import size
 
 
 def _attachment_upload_file(instance, filename):
+    import os
     _, ext = os.path.splitext(filename)
     return '{project_uuid}/attachments/{slug}{ext}'.format(project_uuid=instance.project.uuid, slug=instance.pk, ext=ext)
 
@@ -196,3 +196,16 @@ class FeedbackRequest(models.Model):
         except IndexError:
             return {}
 
+
+"""
+import signals
+"""
+from .signals import (on_attachment_created,
+                      on_attachment_deleted,
+                      on_comment_created,
+                      feedbackrequest_created,
+                      feedbackrequest_status_change,
+                      projectlawyer_assigned,
+                      projectlawyer_deleted,
+                      todo_item_status_change,
+                      on_action_created,)
