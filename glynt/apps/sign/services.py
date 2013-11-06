@@ -128,5 +128,5 @@ class HelloSignWebhookService(object):
 
             i = self.get_class()(**i)
 
-            if is not None and hasattr(i, 'process'):
+            if i is not None and hasattr(i, 'process'):
                 i.process()
