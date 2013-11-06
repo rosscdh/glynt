@@ -1,28 +1,28 @@
 # -*- coding: utf-8 -*-
-from django.http import HttpResponse
-from django.views.generic.base import View
-from django.shortcuts import render_to_response
-from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import View
+from braces.views import JSONResponseMixin
+
+from .services import HelloSignWebhookService
 
 import logging
 logger = logging.getLogger('django.request')
 
 
-class HelloSignEventView(View):
+class HelloSignEventView(JSONResponseMixin, View):
     template_name='sign/hellosign_event.html'
-
-    @csrf_exempt
-    def dispatch(self, *args, **kwargs):
-        if self.request.method == 'POST':
-            return self.post(request=self.request, **kwargs)
-        else:
-            return self.get(request=self.request, **kwargs)
-
+    json_dumps_kwargs = {'indent': 3}
 
     def get(self, request, *args, **kwargs):
         logger.info('Recieved GET Event: %s' % request.GET)
-        return render_to_response(self.template_name, {})
+
+        context_dict = {
+            'message': 'Please POST to this endpoint',
+        }
+        return self.render_json_response(context_dict)
 
     def post(self, request, *args, **kwargs):
         logger.info('Recieved POST Event: %s' % request.POST)
-        return render_to_response(self.template_name, {})
+        context_dict = {
+            'message': 'POST recieved',
+        }
+        return self.render_json_response(context_dict)
