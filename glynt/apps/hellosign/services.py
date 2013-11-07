@@ -36,12 +36,10 @@ class HelloSignService(object):
     TEST_MODE = HELLOSIGN_TEST_MODE
 
     auth = None
-    resp = None
     form = None
 
     def __init__(self, **kwargs):
         self.auth = None
-        self.resp = None
         self.form = None
 
         self.api = HelloSign()
@@ -72,7 +70,7 @@ class HelloSignService(object):
         self.form = form  # set as global form
 
         if form.is_valid() is False:
-            return form.errors
+            raise Exception(str(form.errors))
         else:
             data = {
                 'test_mode': self.TEST_MODE,
@@ -87,12 +85,15 @@ class HelloSignService(object):
             # update with file paths
             files.update(self.files_data(files=form.documents()))
 
-            self.resp = self.api.signature_request.create_embedded.post(auth=self.AUTHENTICATION, data=data, files=files)
-            return self.resp
+            return self.api.signature_request.create_embedded.post(auth=self.AUTHENTICATION, data=data, files=files)
 
-    def save(self):
+    def save(self, json_data):
         if self.form is not None:
-            self.form.save()
+
+            if json_data is not None and type(json_data) is dict:
+
+                self.form.instance.signature_request_id = json_data['signature_request_id']
+                self.form.save()
 
     def update_doc_for_signing(self, signature_request_id):
         signature = Signature.objects.get(signature_request_id=signature_request_id)
