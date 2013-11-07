@@ -1,23 +1,17 @@
 {% extends 'base-slim.html' %}
 
-{% block page_title %}Sorry, an error occurred.{% endblock %}
+{% block page_title %}500 An error occurred{% endblock %}
 
 {% block prebody %}
 <div id="hero">
 	<div class="container">
 		<!-- starts carousel -->
-		<div class="row">
+		<div class="jumbotron">
 			<div class="span12">
-				<h1>Sorry an error occurred with your last request. This has been sent to our development team.</h1>
-				<br>
+				<h1><b>500:</b> An internal error occurred.</h1>
+				<p>Sorry an error occurred with your last request</p>
 			</div>
 		</div>
 	</div>
 </div>
-{% endblock %}
-
-{% block body %}
-<!-- <div class="row-fluid">
-	Not to worry, our technicians have been informed.
-</div> -->
 {% endblock %}

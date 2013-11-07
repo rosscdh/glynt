@@ -1,4 +1,4 @@
-{% extends 'layout/base.html' %}
+{% extends 'base-slim.html' %}
 
 {% block page_title %}404 Page does not exist{% endblock %}
 
@@ -6,18 +6,12 @@
 <div id="hero">
 	<div class="container">
 		<!-- starts carousel -->
-		<div class="row">
+		<div class="jumbotron">
 			<div class="span12">
-				<h1>404. That page does not exist.</h1>
-				<br>
+				<h1><b>404:</b> Page does not exist</h1>
+				<p>Could be a problem with the link, or did you mis-type the address?</p>
 			</div>
 		</div>
 	</div>
 </div>
-{% endblock %}
-
-{% block body %}
-<!-- <div class="row-fluid">
-	Not to worry, our technicians have been informed.
-</div> -->
 {% endblock %}
