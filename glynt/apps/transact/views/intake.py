@@ -1,31 +1,26 @@
 # -*- coding: UTF-8 -*-
 from glynt.apps.company.forms import (CompanyProfileForm,
                                       CompanyAndFinancingProfileForm,
+                                      CompanyProfileAndIntakeForm,
+                                      CompanyFinancingProfileAndIntakeForm,
                                       FinancingProfileForm,
-                                      GenericIntakeForm,
+                                      FinancingProfileAndIntakeForm,
+                                      IntakeForm,
                                      )
 
 # from glynt.apps.transact.forms import BasicInformationForm, CorporateAgentsForm, \
 #     InitialDirectorsForm, GeneralCapitalizationForm, CustomersForm, StockPlansForm, AboutCompanyBusinessForm, \
 #     IntellectualPropertyForm, EmployeesConsultantsForm
 
-# INTAKE_FORMS = [("company_profile", CompanyProfileForm), ]
 
-# Basic transactions
-INC_FORMS = [("generic_intake", GenericIntakeForm), ]
-FIN_FORMS = [("generic_intake", GenericIntakeForm), ]
-IP_FORMS  = [("generic_intake", GenericIntakeForm), ]
-IMM_FORMS = [("generic_intake", GenericIntakeForm), ]
-EMP_FORMS = [("generic_intake", GenericIntakeForm), ]
-NDA_FORMS = [("generic_intake", GenericIntakeForm), ]
-PRI_FORMS = [("generic_intake", GenericIntakeForm), ]
-OTH_FORMS = [("generic_intake", GenericIntakeForm), ]
-
-# Fixed fee transactions
-CS_FORMS = [("company_profile", CompanyProfileForm), ]
-SF_FORMS = [("company_profile", FinancingProfileForm), ]
-ES_FORMS = [("company_profile", FinancingProfileForm), ]
-# CS_SF_FORMS = [("company_profile", CompanyAndFinancingProfileForm), ]
+# Transaction forms
+INTAKE_FORMS = [("generic_intake", IntakeForm), ]
+INC_FORMS = [("company_profile", CompanyProfileForm), ]
+FIN_FORMS = [("company_profile", FinancingProfileForm), ] 
+INC_FIN_FORMS = [("company_profile", CompanyAndFinancingProfileForm), ]
+INC_INTAKE_FORMS = [("company_profile", CompanyProfileAndIntakeForm), ]
+FIN_INTAKE_FORMS = [("company_profile", FinancingProfileAndIntakeForm), ]
+INC_FIN_INTAKE_FORMS = [("company_profile", CompanyFinancingProfileAndIntakeForm), ]
 
 
 # """
