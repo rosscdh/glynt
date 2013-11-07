@@ -14,6 +14,7 @@ class SignatureForm(forms.ModelForm):
 
     class Meta:
         model = Signature
+        exclude = ('data',)
 
     def __init__(self, user, *args, **kwargs):
         self.user = user

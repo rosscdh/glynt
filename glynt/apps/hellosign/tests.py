@@ -14,7 +14,11 @@ from .services import HelloSignService
 
 
 class HelloSignServiceTest(TestCase):
-
+    """
+    Test the flow of the Hellosign send for signature
+    Mockout the actual requests
+    Use the provided SignatureForm + HelloSignService flow
+    """
     def setUp(self):
         super(HelloSignServiceTest, self).setUp()
 
@@ -29,8 +33,6 @@ class HelloSignServiceTest(TestCase):
         self.EXPECTED_SIGNATURES = [{u'signed_at': None, u'status_code': u'awaiting_signature', u'last_viewed_at': None, u'signer_email_address': s.email, u'signer_name': s.get_full_name(), u'last_reminded_at': None, u'signature_id': u'fd6d39525f3ef3da3069d038d3f9e1df', u'order': None} for s in self.SIGNATORIES]
 
     def test_send_doc_for_signing(self):
-        """
-        """
         # Setup constants for use in the mock
         REQUESTED_BY = self.REQUESTED_BY
         SIGNATORIES = self.SIGNATORIES
@@ -60,6 +62,7 @@ class HelloSignServiceTest(TestCase):
                     return {u'signature_request': {u'test_mode': True, u'cc_email_addresses': [], u'title': kwargs.get('subject'), u'signature_request_id': EXPECTED_SIGNATURE_REQUEST_ID, u'original_title': kwargs.get('subject'), u'requester_email_address': u'founders@lawpal.com', u'details_url': u'https://www.hellosign.com/home/manage?locate=%s' % EXPECTED_DOC_UUID, u'signing_url': u'https://www.hellosign.com/editor/sign?guid=%s' % EXPECTED_DOC_UUID, u'has_error': False, u'signatures': EXPECTED_SIGNATURES, u'response_data': [], u'message': kwargs.get('message'), u'is_complete': False, u'custom_fields': [], u'subject': kwargs.get('subject')}}
             return Request()
 
+        # mock out the post event
         with mock.patch('hellosign.HelloSign.post', hellosign_post):
             initial = {
                 'subject': 'Hi there, I\'d like to invite you to sign this document',
@@ -67,7 +70,6 @@ class HelloSignServiceTest(TestCase):
                 'requested_by': self.REQUESTED_BY.pk,
                 'signatories': [s.pk for s in self.SIGNATORIES],
                 'project': self.PROJECT.pk,
-                'data': {},
                 'signature_request_id': None,
                 'is_complete': False,
             }
