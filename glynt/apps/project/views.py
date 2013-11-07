@@ -41,12 +41,17 @@ class CreateProjectView(FormView):
 
         return context
 
-    def save(self, transaction_types):
+    def save(self, intake_data, transaction_types):
         customer = self.request.user.customer_profile
         company = customer.primary_company
         transactions = Transaction.objects.filter(slug__in=transaction_types)
 
-        project_service = EnsureProjectService(customer=customer, company=company, transactions=transactions)
+        project_service = EnsureProjectService(
+            customer=customer,
+            company=company,
+            intake_data=intake_data,
+            transactions=transactions,
+        )
         project_service.process()
 
         self.project = project_service.project
@@ -57,6 +62,7 @@ class CreateProjectView(FormView):
         """
         If the form is valid, redirect to the supplied URL.
         """
+        intake_data = form.cleaned_data.get('intake_data', '')
         transaction_types = form.cleaned_data.get('transaction_type', '').split(',')
 
         if transaction_types is False:
@@ -64,7 +70,7 @@ class CreateProjectView(FormView):
             messages.error(self.request, _('Sorry, but we could not determine which transaction type you selected. Please try again.'))
             self.success_url = reverse('project:create')
 
-        project = self.save(transaction_types=transaction_types)
+        project = self.save(intake_data=intake_data, transaction_types=transaction_types)
 
         self.success_url = reverse('transact:builder', kwargs={'project_uuid': project.uuid, 'tx_range': ','.join(transaction_types), 'step': 1})
 

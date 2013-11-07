@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import json
+
 from django import dispatch
 from glynt.apps.project.models import Project
 
@@ -22,6 +24,7 @@ class EnsureProjectService(object):
         self.data = kwargs
 
         self.lawyers = kwargs.get('lawyers', [])
+        self.intake_data = json.loads(kwargs.get('intake_data', []))
 
     def process_transactions(self):
         logger.info('Processing Project Transactions')
@@ -47,6 +50,7 @@ class EnsureProjectService(object):
             except:
                 self.project = Project.objects.create(customer=self.customer, company=self.company)
                 self.project.data['company_name'] = self.company.name
+                self.project.data['intake_data'] = self.intake_data
                 self.project.save()
                 self.is_new = True
                 logger.debug('Project created')

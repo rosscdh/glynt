@@ -12,7 +12,8 @@ $(window).on('load', function() {
       'privacy-and-terms':        'PRI'
     };
     var $form  = $('form#transaction-form');
-    var $input = $form.find('#id_transaction_type');
+    var $intakeData = $form.find('#id_intake_data');
+    var $transactionType = $form.find('#id_transaction_type');
 
     var transactions = [];
     $(data['selection']['services']).each(function() {
@@ -22,7 +23,9 @@ $(window).on('load', function() {
         transactions.push(lookup[this]);
       };
     });
-    $input.val(transactions);
+    $transactionType.val(transactions);
+
+    $intakeData.val(JSON.stringify(data));
 
     $form.submit();
   });

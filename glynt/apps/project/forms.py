@@ -55,6 +55,7 @@ class ContactUsForm(ContactForm):
 
 
 class CreateProjectForm(forms.Form):
+    intake_data = forms.CharField(widget=forms.HiddenInput)
     transaction_type = forms.CharField(widget=forms.HiddenInput)
 
 
