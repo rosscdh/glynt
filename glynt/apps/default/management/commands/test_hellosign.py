@@ -28,13 +28,15 @@ class Command(BaseCommand):
         
     def oauth_authorize(self):
         # Authorize Url # https://www.hellosign.com/oauth/authorize?response_type=code&client_id=9bc892af173754698e3fa30dedee3826&state=02a263f8
-        # resp = requests.get('https://api.hellosign.com/oauth/authorize', params={'response_type': 'code', 'client_id': '9bc892af173754698e3fa30dedee3826', 'state': '02a263f8'})  # Raw
-        data = {
-                    'response_type': 'code',
-                    'client_id': CLIENT_ID,
-                    'state': '02a263f8'
-                }
-        resp = HelloSign().oauth.authorize.get(auth=AUTHENTICATION, params=data)
+        resp = requests.get('https://api.hellosign.com/oauth/authorize', params={'response_type': 'code', 'client_id': '9bc892af173754698e3fa30dedee3826', 'state': '02a263f8'})  # Raw
+        # req = HelloSign()
+        # req.base_uri = 'https://www.hellosign.com/oauth/authorize'
+        # data = {
+        #             'response_type': 'code',
+        #             'client_id': CLIENT_ID,
+        #             'state': '02a263f8'
+        #         }
+        # resp = req.oauth.authorize.get(auth=AUTHENTICATION, **data)
         import pdb;pdb.set_trace()
 
     def upload_doc_for_signing(self):
