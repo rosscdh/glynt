@@ -11,14 +11,17 @@ $(window).on('load', function() {
       'other':                    'OTH',
       'privacy-and-terms':        'PRI'
     };
+    var selections = JSON.parse(data['selection']);
+    var services = JSON.parse(data['services'] || '{}');
+
     var $form  = $('form#transaction-form');
     var $intakeData = $form.find('#id_intake_data');
     var $transactionType = $form.find('#id_transaction_type');
 
     var transactions = [];
-    $(data['selection']['services']).each(function() {
-      if (data['services'] && data['services'][this]) {
-        transactions.push(data['services'][this]);
+    $(selections['services']).each(function() {
+      if (services[this]) {
+        transactions.push(services[this]);
       } else {
         transactions.push(lookup[this]);
       };

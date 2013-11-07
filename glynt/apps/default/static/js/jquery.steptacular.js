@@ -9,15 +9,17 @@
     this.options        = $.extend({}, Steptacular.DEFAULTS, options);
     this.$active        = null;
     this.scenes         = $([]);
-    this.storage        = {};
+    this.storage        = window.localStorage;
     this.transitioning  = null;
+
+    this.$element.addClass('stage');
 
     this.$element.on('click', this.options.selector.buttons, $.proxy(this.click, this));
     this.$element.on('submit', this.options.selector.forms, $.proxy(this.submit, this));
-    this.$active = this.$element.find(this.options.selector.slides).first();
-    this.$active.addClass('active');
+    
+    this.start();
 
-    this.$element.addClass('stage');
+    $(window).on('popstate', $.proxy(this.popstate, this));
   };
 
   Steptacular.DEFAULTS = {
@@ -35,11 +37,7 @@
     var scene   = $form.data('scene');
     // var stage   = this.$active.data('stage');
     var stage   = $form.data('stage');
-    var storage = self.storage[stage] || {};
-
-    if (stage == 'selection') {
-      self.scenes = [ this.$active ];
-    };
+    var storage = JSON.parse(self.storage[stage] || '{}');
 
     $form.find('input, textarea, select').each(function() {
       var $el = $(this);
@@ -47,11 +45,14 @@
       // persist the data
       if ($el.is('[type=checkbox]')) {
         if ($el.is(':checked')) {
-          storage[$el.attr('name')] = storage[$el.attr('name')] || [];
+          if (!storage[$el.attr('name')]) {
+            storage[$el.attr('name')] = [];
+          };
+
           storage[$el.attr('name')].push($el.val());
         };
       } else if ($el.is(['type=radio'])) {
-        alert('radio');
+        // console.log('radio');
       } else if ($el.is('[type=submit]')) {
         if ($el.attr('id') == $form.data('trigger')) {
           storage[scene] = $el.data('value');
@@ -71,7 +72,7 @@
       };
     });
 
-    self.storage[stage] = storage;
+    self.storage[stage] = JSON.stringify(storage);
   };
 
   Steptacular.prototype.getActiveIndex = function() {
@@ -87,7 +88,31 @@
     return activeIndex;
   };
 
-  Steptacular.prototype.to = function() {};
+  Steptacular.prototype.getSceneIndexFromId = function(id) {
+    var self = this;
+
+    var activeIndex = null;
+    $(this.scenes).each(function(index, scene) {
+      if (id == scene.attr('id')) {
+        activeIndex = index;
+      };
+    });
+
+    return activeIndex;
+  };
+
+  Steptacular.prototype.to = function(pos) {
+    var activeIndex = this.getActiveIndex();
+
+    if (pos > (this.scenes.length - 1) || pos < 0) return;
+
+    if (activeIndex == pos) return;
+
+    var url = window.location.pathname + '#!/' + $scene.attr('id');
+    window.history.pushState({}, null, url);
+
+    return this.show(pos > activeIndex ? 'next' : 'prev', $(this.scenes[pos]));
+  };
 
   Steptacular.prototype.next = function() {
     if (this.transitioning) return;
@@ -96,6 +121,9 @@
     var $scene = this.scenes[pos];
 
     if ($scene) {
+      var url = window.location.pathname + '#!/' + $scene.attr('id');
+      window.history.pushState({}, null, url);
+
       return this.show('next', $scene);
     } else {
       return this.finish();
@@ -109,6 +137,9 @@
     var $scene = this.scenes[pos];
 
     if ($scene) {
+      var url = window.location.pathname + '#!/' + $scene.attr('id');
+      window.history.pushState({}, null, url);
+
       return this.show('prev', $scene);
     } else {
       return this.start();
@@ -125,7 +156,8 @@
     this.$active.removeClass('active');
     this.$active = null;
 
-    window.location.hash = '#' + $next.attr('id');
+    var percentage = '-' + parseFloat($next.index() * 100) + '%'
+    this.$element.css('transform', 'translate3d(' + percentage + ', 0, 0)');
 
     this.$active = $next;
     this.$active.addClass('active');
@@ -134,7 +166,17 @@
     return this;
   };
 
-  Steptacular.prototype.start = function() {};
+  Steptacular.prototype.start = function() {
+    this.$active = this.$element.find(this.options.selector.slides).first();
+    this.$active.addClass('active');
+    this.scenes.push(this.$active);
+
+    var hash = '#!/' + this.$active.attr('id');
+    if (window.location.hash != hash) {
+      var url = window.location.pathname + hash;
+      window.location.href = url;
+    };
+  };
 
   Steptacular.prototype.finish = function() {
     this.$active.removeClass('active');
@@ -148,6 +190,19 @@
     var $form = $el.closest(this.options.selector.forms);
 
     $form.data('trigger', $el.attr('id'));
+  };
+
+  Steptacular.prototype.popstate = function(e) {
+    var scene = window.location.hash.replace('#!/', '');
+
+    var activeIndex = this.getActiveIndex();
+    var pos = this.getSceneIndexFromId(scene);
+
+    if (pos > (this.scenes.length - 1) || pos < 0) return;
+
+    if (activeIndex == pos) return;
+
+    return this.show(pos > activeIndex ? 'next' : 'prev', $(this.scenes[pos]));
   };
 
   Steptacular.prototype.submit = function(e) {
@@ -171,6 +226,10 @@
     });
 
     if (isValid) {
+      if (stage == 'selection') {
+        self.storage['selection'] = JSON.stringify({});
+      };
+
       self.process($form);
 
       if (stage == 'selection') {
