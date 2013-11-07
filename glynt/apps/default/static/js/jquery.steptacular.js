@@ -110,6 +110,7 @@
 
     var url = window.location.pathname + '#!/' + $scene.attr('id');
     window.history.pushState({}, null, url);
+    _gaq.push(['_trackPageview', url]);
 
     return this.show(pos > activeIndex ? 'next' : 'prev', $(this.scenes[pos]));
   };
@@ -123,6 +124,7 @@
     if ($scene) {
       var url = window.location.pathname + '#!/' + $scene.attr('id');
       window.history.pushState({}, null, url);
+      _gaq.push(['_trackPageview', url]);
 
       return this.show('next', $scene);
     } else {
@@ -139,6 +141,7 @@
     if ($scene) {
       var url = window.location.pathname + '#!/' + $scene.attr('id');
       window.history.pushState({}, null, url);
+      _gaq.push(['_trackPageview', url]);
 
       return this.show('prev', $scene);
     } else {
