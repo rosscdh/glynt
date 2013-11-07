@@ -170,9 +170,6 @@ class SaveNextUrlInSessionMixin(object):
 class CustomerStartView(LogUserOutMixin, SaveNextUrlInSessionMixin, TemplateView):
     template_name = 'public/start.html'
 
-    def get(self, request, *args, **kwargs):
-        assert False
-
 
 class LawyerStartView(LogUserOutMixin, TemplateView):
     template_name = 'public/start-lawyer.html'
