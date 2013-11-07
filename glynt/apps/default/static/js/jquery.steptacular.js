@@ -15,6 +15,7 @@
     this.$element.on('click', this.options.selector.buttons, $.proxy(this.click, this));
     this.$element.on('submit', this.options.selector.forms, $.proxy(this.submit, this));
     this.$active = this.$element.find(this.options.selector.slides).first();
+    this.$active.addClass('active');
 
     this.$element.addClass('stage');
   };
@@ -121,11 +122,13 @@
 
     this.transitioning = true;
 
+    this.$active.removeClass('active');
     this.$active = null;
 
     window.location.hash = '#' + $next.attr('id');
 
     this.$active = $next;
+    this.$active.addClass('active');
     this.transitioning = false;
 
     return this;
@@ -134,6 +137,8 @@
   Steptacular.prototype.start = function() {};
 
   Steptacular.prototype.finish = function() {
+    this.$active.removeClass('active');
+
     var e = $.Event('finish.lp.steptacular', { formData: this.storage });
     this.$element.trigger(e);
   };

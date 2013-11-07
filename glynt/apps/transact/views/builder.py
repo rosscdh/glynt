@@ -75,7 +75,7 @@ class BuilderWizardView(NamedUrlSessionWizardView):
         Simple but long-winded logic to work out which form to display to the user
         """
         # have they selected incorporation?
-        if 'INC' in tx_range or 'CS' in tx_range or 'CS+' in tx_range:
+        if 'INC' in tx_range or 'CS' in tx_range or 'CSP' in tx_range:
             # do they have financing as well
             if 'FIN' in tx_range or 'SF' in tx_range or 'ES' in tx_range:
                 # is it only incorporation and financing
