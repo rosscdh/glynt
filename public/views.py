@@ -7,8 +7,6 @@ from django.views.generic import TemplateView
 from django.core.urlresolvers import reverse
 from django.contrib.auth import logout
 
-import json
-
 from public.forms import ContactForm
 from public.tasks import send_contactus_email
 from glynt.apps.customer.views import CustomerLoginLogic
@@ -116,7 +114,7 @@ class ContactUsView(AjaxableResponseMixin, FormView):
         Returns an instance of the form to be used in this view.
         """
         kwargs = self.get_form_kwargs()
-        kwargs.update({'request': self.request}) # add the request to the form
+        kwargs.update({'request': self.request})  # add the request to the form
         return form_class(**kwargs)
 
     def get_context_data(self, **kwargs):
@@ -133,7 +131,7 @@ class ContactUsView(AjaxableResponseMixin, FormView):
         message = "Message sent, thanks!"
 
         if self.request.is_ajax():
-            return self.render_to_json_response({ 'message': message, 'status': 200 })
+            return self.render_to_json_response({'message': message, 'status': 200})
         else:
             messages.success(self.request, message)
 
@@ -170,8 +168,11 @@ class SaveNextUrlInSessionMixin(object):
 
 
 class CustomerStartView(LogUserOutMixin, SaveNextUrlInSessionMixin, TemplateView):
-    template_name='public/start.html'
+    template_name = 'public/start.html'
+
+    def get(self, request, *args, **kwargs):
+        assert False
 
 
 class LawyerStartView(LogUserOutMixin, TemplateView):
-    template_name='public/start-lawyer.html'
+    template_name = 'public/start-lawyer.html'
