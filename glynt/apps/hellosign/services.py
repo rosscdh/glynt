@@ -1,14 +1,102 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
 from django.contrib.auth.models import User
 
 from glynt.apps.todo.models import Attachment
 
 from bunch import Bunch
 from actstream import action
+# import from django-hellosign
+from hellosign import HelloSign
 
 import json
 import logging
 logger = logging.getLogger('lawpal.services')
+
+from .models import Signature
+
+HELLOSIGN_AUTHENTICATION = getattr(settings, 'HELLOSIGN_AUTHENTICATION', None)
+HELLOSIGN_CLIENT_ID = getattr(settings, 'HELLOSIGN_CLIENT_ID', None)
+HELLOSIGN_CLIENT_SECRET = getattr(settings, 'HELLOSIGN_CLIENT_SECRET', None)
+HELLOSIGN_TEST_MODE = getattr(settings, 'HELLOSIGN_TEST_MODE', 1)
+
+assert HELLOSIGN_AUTHENTICATION is not None, 'you must specify a HELLOSIGN_CLIENT_ID in settings.py'
+assert HELLOSIGN_CLIENT_ID is not None, 'you must specify a HELLOSIGN_CLIENT_ID in settings.py'
+assert HELLOSIGN_CLIENT_SECRET is not None, 'you must specify a CLIENT_SECRET in settings.py'
+
+
+class HelloSignService(object):
+    """
+    service that communicates with hellosign
+    and provides access to the functionality required
+    """
+    AUTHENTICATION = HELLOSIGN_AUTHENTICATION
+    CLIENT_ID = HELLOSIGN_CLIENT_ID
+    CLIENT_SECRET = HELLOSIGN_CLIENT_SECRET
+    TEST_MODE = HELLOSIGN_TEST_MODE
+
+    auth = None
+    resp = None
+    form = None
+
+    def __init__(self, **kwargs):
+        self.auth = None
+        self.resp = None
+        self.form = None
+
+        self.api = HelloSign()
+
+    def signers_data(self, signers):
+        data = {}
+
+        for i, signer in enumerate(signers):
+            name, email = signer
+            name_key, email_key = ('signers[{i}][name]'.format(i=i), 'signers[{i}][email_address]'.format(i=i),)
+
+            data[name_key] = name
+            data[email_key] = email
+
+        return data
+
+    def files_data(self, files):
+        data = {}
+        for i, file_path in enumerate(files):
+            key = 'file[{i}]'.format(i=i)
+            data[key] = file_path
+        return data
+
+    def send_doc_for_signing(self, form):
+        """
+        form: valid form object
+        """
+        self.form = form  # set as global form
+
+        if form.is_valid() is False:
+            return form.errors
+        else:
+            data = {
+                'test_mode': self.TEST_MODE,
+                'client_id': self.CLIENT_ID,
+                'subject': form.cleaned_data['subject'],
+                'message': form.cleaned_data['message'],
+            }
+            # update with signer names
+            data.update(self.signers_data(signers=form.signatories()))
+
+            files = {}
+            # update with file paths
+            files.update(self.files_data(files=form.documents()))
+
+            self.resp = self.api.signature_request.create_embedded.post(auth=self.AUTHENTICATION, data=data, files=files)
+            return self.resp
+
+    def save(self):
+        if self.form is not None:
+            self.form.save()
+
+    def update_doc_for_signing(self, signature_request_id):
+        signature = Signature.objects.get(signature_request_id=signature_request_id)
+        pass
 
 
 class HelloSignBaseEvent(Bunch):
