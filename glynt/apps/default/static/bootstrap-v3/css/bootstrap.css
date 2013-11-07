@@ -4146,36 +4146,67 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
 /* Signin Modal
 -------------------------------------------------- */
 #signup-modal,
-#signin-modal {
+#signin-modal,
+#lawyer-signup-modal {
   color: #999;
 }
 #signup-modal a.lnk,
-#signin-modal a.lnk {
+#signin-modal a.lnk,
+#lawyer-signup-modal a.lnk {
   color: #999;
   text-decoration: underline;
 }
 #signup-modal hr,
-#signin-modal hr {
-  border-color: #999;
+#signin-modal hr,
+#lawyer-signup-modal hr {
+  border-color: #222;
 }
 #signup-modal h1,
 #signin-modal h1,
+#lawyer-signup-modal h1,
 #signup-modal h2,
-#signin-modal h2 {
+#signin-modal h2,
+#lawyer-signup-modal h2 {
   color: white;
 }
 #signup-modal h1,
-#signin-modal h1 {
+#signin-modal h1,
+#lawyer-signup-modal h1 {
   margin-bottom: 30px;
   margin-top: 20%;
   font-size: 40px;
 }
 #signup-modal h2,
-#signin-modal h2 {
-  font-size: 22px;
+#signin-modal h2,
+#lawyer-signup-modal h2 {
+  font-size: 16px;
+  margin-bottom: 10px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+#signup-modal .attorney,
+#signin-modal .attorney,
+#lawyer-signup-modal .attorney,
+#signup-modal .btn.attorney.btn-clear-border,
+#signin-modal .btn.attorney.btn-clear-border,
+#lawyer-signup-modal .btn.attorney.btn-clear-border {
+  color: #666;
+  border-color: #666;
+}
+#signup-modal .btn.attorney.btn-clear-border,
+#signin-modal .btn.attorney.btn-clear-border,
+#lawyer-signup-modal .btn.attorney.btn-clear-border {
+  padding-left: 19px;
+}
+#signup-modal .close,
+#signin-modal .close,
+#lawyer-signup-modal .close {
+  color: white;
+  opacity: 0.8;
+  text-shadow: none;
 }
 #signup-modal ol li,
-#signin-modal ol li {
+#signin-modal ol li,
+#lawyer-signup-modal ol li {
   font-size: 20px;
   color: #666;
   line-height: 30px;
@@ -4183,14 +4214,16 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
   margin-bottom: 15px;
 }
 #signup-modal ol li.first,
-#signin-modal ol li.first {
+#signin-modal ol li.first,
+#lawyer-signup-modal ol li.first {
   color: #fff;
   font-size: 22px;
   line-height: 46px;
   margin-bottom: 35px;
 }
 #signup-modal ol li.first div,
-#signin-modal ol li.first div {
+#signin-modal ol li.first div,
+#lawyer-signup-modal ol li.first div {
   border: 2px solid #fff;
   color: #fff;
   width: 40px;
@@ -4201,11 +4234,13 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
   margin-left: 0px;
 }
 #signup-modal ol li.first .btn,
-#signin-modal ol li.first .btn {
+#signin-modal ol li.first .btn,
+#lawyer-signup-modal ol li.first .btn {
   margin-left: 50px;
 }
 #signup-modal ol li div,
-#signin-modal ol li div {
+#signin-modal ol li div,
+#lawyer-signup-modal ol li div {
   width: 30px;
   height: 30px;
   border-radius: 30px;
@@ -4219,11 +4254,13 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
   margin-left: 5px;
 }
 #signup-modal ol li div .btn-clear-border,
-#signin-modal ol li div .btn-clear-border {
+#signin-modal ol li div .btn-clear-border,
+#lawyer-signup-modal ol li div .btn-clear-border {
   margin-left: 20px;
 }
 #signup-modal .btn-clear-border,
-#signin-modal .btn-clear-border {
+#signin-modal .btn-clear-border,
+#lawyer-signup-modal .btn-clear-border {
   background-color: transparent;
   border-color: white;
   color: white;
@@ -6629,11 +6666,14 @@ body.homepage .navbar-nav li a {
 body.homepage .navbar-nav li a.active {
   opacity: 1;
 }
+body.homepage h1 {
+  font-size: 30px;
+}
 body.homepage h2 {
   font-size: 35px;
 }
 body.homepage h3 {
-  font-size: 20px;
+  font-size: 16px;
   line-height: 1.3em;
 }
 body.homepage .btn-home {
@@ -6645,7 +6685,7 @@ body.homepage .btn-home {
   font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
 }
 body.homepage section {
-  padding-top: 45px;
+  padding-top: 65px;
 }
 body.homepage section .container {
   margin-top: 1em;
@@ -6737,24 +6777,11 @@ body.homepage section#co-pilot h3 {
 body.homepage section#co-pilot .step-block {
   background-color: white;
   margin-right: 20px;
-  margin-top: 50px;
+  margin-top: 20px;
   position: relative;
 }
 body.homepage section#co-pilot .step-block h1 {
   font-size: 35px;
-}
-body.homepage section#co-pilot .step-block div.number {
-  background-color: #555555;
-  color: white;
-  width: 46px;
-  height: 46px;
-  border-radius: 30px;
-  line-height: 46px;
-  font-size: 20px;
-  position: absolute;
-  top: -30px;
-  left: 50%;
-  margin-left: -23px;
 }
 body.homepage section#co-pilot .step-block div.right {
   position: absolute;
@@ -6766,11 +6793,12 @@ body.homepage section#co-pilot .step-block div.right {
 }
 body.homepage section#co-pilot .step-block h2 {
   font-size: 22px;
-  padding-top: 15px;
+  margin-top: 0px;
+  padding-top: 0px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 body.homepage section#co-pilot .step-block h3 {
-  font-size: 16px;
+  font-size: 14px;
   color: #888888;
   margin-bottom: 20px;
 }
@@ -6835,11 +6863,12 @@ body.homepage section#pricing .sub-text {
   font-size: 13px;
 }
 body.homepage section#pricing h2 {
-  font-size: 25px;
+  font-size: 18px;
   margin-bottom: 0px;
+  margin-top: 10px;
 }
 body.homepage section#pricing h3 {
-  font-size: 17px;
+  font-size: 18px;
 }
 body.homepage section#pricing div.desc {
   padding: 15px;
@@ -6854,6 +6883,9 @@ body.homepage section#pricing span.small {
   font-size: 16px;
   opacity: 0.7;
   text-align: center;
+}
+body.homepage section#pricing .btn {
+  margin-top: 10px;
 }
 body.homepage section#pricing .step-block {
   background-color: white;
@@ -6978,6 +7010,9 @@ body.homepage section#about-us .investors-team img.inv {
   body.homepage section {
     padding-top: 60px;
   }
+  body.homepage h3 {
+    font-size: 22px;
+  }
   body.homepage section#pricing {
     padding-top: 65px;
   }
@@ -6987,12 +7022,38 @@ body.homepage section#about-us .investors-team img.inv {
   body.homepage section#pricing span.small {
     font-size: 33px;
   }
-  body.homepage section#pricing .step-block {
-    padding: 10px 0px 20px 0px;
-    margin-top: 30px;
+  body.homepage section#pricing .btn-home {
+    margin-top: 25px;
+    margin-left: -15px;
   }
   body.homepage section#deal-visibility .row.feature h3 {
     font-size: 24px;
+  }
+  body.homepage section#co-pilot .step-block {
+    margin-top: 50px;
+    padding: 10px 0px 20px 0px;
+    margin-top: 30px;
+  }
+  body.homepage section#co-pilot .step-block h3 {
+    font-size: 17px;
+  }
+  body.homepage section#co-pilot .step-block h2 {
+    padding-top: 15px;
+    margin-top: 10px;
+  }
+  body.homepage section#co-pilot .step-block div.number {
+    background-color: #555555;
+    color: white;
+    width: 46px;
+    height: 46px;
+    border-radius: 30px;
+    line-height: 46px;
+    font-size: 20px;
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    margin-left: -23px;
+    display: block;
   }
   body.homepage section#about-us .about-lawpal {
     font-size: 22px;

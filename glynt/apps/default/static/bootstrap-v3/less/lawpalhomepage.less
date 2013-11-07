@@ -40,11 +40,14 @@ body.homepage {
   .navbar-nav li a.active {
     opacity:1
   }
+  h1 {
+    font-size: 30px;
+  }
   h2 {
     font-size: 35px;
   }
   h3 {
-    font-size: 20px;
+    font-size: 16px;
     line-height:1.3em;
   }
   .btn-home {
@@ -56,7 +59,7 @@ body.homepage {
     font-family:@headings-font-family;
   }
   section {
-    padding-top:45px;
+    padding-top:65px;
   }
   section .container{
     margin-top:1em;
@@ -146,23 +149,12 @@ body.homepage {
     .step-block {
       background-color:white;
       margin-right:20px;
-      margin-top:50px;
+      margin-top:20px;
       position:relative;
       h1 {
         font-size:35px;
       }
       div.number {
-        background-color:@gray;
-        color:white;
-        width:46px;
-        height:46px;
-        border-radius:30px;
-        line-height:46px;
-        font-size: 20px;
-        position:absolute;
-        top:-30px;
-        left:50%;
-        margin-left:-23px;
       }
       // Right Chevron between blocks
       div.right {
@@ -175,11 +167,12 @@ body.homepage {
       }
       h2 {
         font-size:22px;
-        padding-top:15px;
+        margin-top:0px;
+        padding-top:0px;
         font-family:@font-family-sans-serif;
       }
       h3 {
-        font-size:16px;
+        font-size:14px;
         color:lighten(@gray, 20%);
         margin-bottom:20px;
       }
@@ -244,11 +237,12 @@ body.homepage {
       font-size:13px;
     }
     h2 {
-      font-size:25px;
+      font-size:18px;
       margin-bottom:0px;
+      margin-top:10px;
     }
     h3 {
-      font-size:17px;
+      font-size:18px;
     }
     div.desc {
       padding:15px;
@@ -263,6 +257,9 @@ body.homepage {
       font-size:16px;
       opacity:0.7;
       text-align:center;
+    }
+    .btn {
+      margin-top:10px;
     }
    .step-block {
       background-color:white;
@@ -388,116 +385,148 @@ body.homepage {
 }
 
 
-// Tablets and up
-@media (min-width: @screen-tablet) {
-  body.homepage {
-    section {
-      padding-top:60px;
-    }
-    section#pricing {
-      padding-top:65px;
-      h3  {
-      }
-      .sub-text {
-      }
-      h2 {
-      }
-      span.big {
-        font-size:55px;
-      }
-      span.small {
-        font-size:33px;
-      }
-      .step-block {
-          padding: 10px 0px 20px 0px;
-          margin-top:30px;
-      }
+                    // Tablets and up
+                    @media (min-width: @screen-tablet) {
+                      body.homepage {
+                        section {
+                          padding-top:60px;
+                        }
+                        h3 {
+                            font-size: 22px;
 
-    }
-    section#deal-visibility {
-      .row.feature {
-        h3 {
-          font-size:24px;
-        }
-      }
-    }
-    section#about-us {
-      .about-lawpal {
-        font-size:22px;
-      }
-      footer#footer {
-        margin-left:0px;
-      }
-    }
-  }
+                        }
+                        section#pricing {
+                          padding-top:65px;
+                          h3  {
+                          }
+                          .sub-text {
+                          }
+                          h2 {
+                          }
+                          span.big {
+                            font-size:55px;
+                          }
+                          span.small {
+                            font-size:33px;
+                          }
+                          .btn-home {
+                            margin-top:25px;
+                            margin-left:-15px;
+                          }
+                        }
+                        section#deal-visibility {
+                          .row.feature {
+                            h3 {
+                              font-size:24px;
+                            }
+                          }
+                        }
 
-} 
-// Medium and large device columns (desktop and up)
-@media (min-width: @screen-desktop) {
-  body.homepage {
-    section {
-      padding-top:100px;
-    }
-    h1 {
-      font-size:55px;
-    }
-    section {
-      padding-top:100px;
-    }
-    .modal-dialog {
-      padding-top:80px;
-      width:750px;
-      margin-left:-375px;
-      iframe {
-        height:417px;
-      }
-    }
-    section#top {
-      h1 {
-        font-size: 42px;
-      }
-      h2 {
-      }
-      h3 {
-      }
-    }
-    section#co-pilot {
-      .step-block {
-        height:335px;
-        h1 {
-          font-size:42px;
-        }
-      }
-    }
-    section#pricing {
-      padding-top:90px;
-      .sub-text {
-        font-size:18px;
-      }
-    
+                        section#co-pilot {
+                          .step-block {
+                            margin-top:50px;
+                            h3 {
+                              font-size:17px;
+                            }
+                            h2 {
+                              padding-top:15px;
+                              margin-top:10px;
+                            }
+                            padding: 10px 0px 20px 0px;
+                            margin-top:30px;
+                            div.number {
+                              background-color:@gray;
+                              color:white;
+                              width:46px;
+                              height:46px;
+                              border-radius:30px;
+                              line-height:46px;
+                              font-size: 20px;
+                              position:absolute;
+                              top:-30px;
+                              left:50%;
+                              margin-left:-23px;
+                              display:block;
+                            }
+                          }
+                        }
+                        section#about-us {
+                          .about-lawpal {
+                            font-size:22px;
+                          }
+                          footer#footer {
+                            margin-left:0px;
+                          }
+                        }
+                      }
 
-    }
-    section#about-us {
-      .about-lawpal {
-        font-size:22px;
-      }
-      footer#footer {
-        margin-left:0px;
-      }
-    }
-  }
-}
-@media (min-width: @screen-large-desktop) {
-  body.homepage {
-    section#co-pilot {
-      .wrap {
-        padding-right:90px;
-        padding-left:90px;
-      }
-    }
-  }
+                    } 
+                    // Medium and large device columns (desktop and up)
+                    @media (min-width: @screen-desktop) {
+                      body.homepage {
+                        section {
+                          padding-top:100px;
+                        }
+                        h1 {
+                          font-size:55px;
+                        }
+                        section {
+                          padding-top:100px;
+                        }
+                        .modal-dialog {
+                          padding-top:80px;
+                          width:750px;
+                          margin-left:-375px;
+                          iframe {
+                            height:417px;
+                          }
+                        }
+                        section#top {
+                          h1 {
+                            font-size: 42px;
+                          }
+                          h2 {
+                          }
+                          h3 {
+                          }
+                        }
+                        section#co-pilot {
+                          .step-block {
+                            height:335px;
+                            h1 {
+                              font-size:42px;
+                            }
+                          }
+                        }
+                        section#pricing {
+                          padding-top:90px;
+                          .sub-text {
+                            font-size:18px;
+                          }
+                        
 
-}
+                        }
+                        section#about-us {
+                          .about-lawpal {
+                            font-size:22px;
+                          }
+                          footer#footer {
+                            margin-left:0px;
+                          }
+                        }
+                      }
+                    }
+                    @media (min-width: @screen-large-desktop) {
+                      body.homepage {
+                        section#co-pilot {
+                          .wrap {
+                            padding-right:90px;
+                            padding-left:90px;
+                          }
+                        }
+                      }
+
+                    }
 
 
 
