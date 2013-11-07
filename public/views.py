@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib import messages
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponsePermanentRedirect, Http404
 from django.views.generic.base import RedirectView
 from django.views.generic.edit import FormView
 from django.views.generic import TemplateView
@@ -39,7 +39,7 @@ class PublicHomepageView(TemplateView):
                 #
                 # Redirect to the dashbaord if we are a lawyer and are logged in
                 #
-                return HttpResponseRedirect(reverse('dashboard:overview'))
+                return HttpResponsePermanentRedirect(reverse('dashboard:overview'))
 
         return super(PublicHomepageView, self).dispatch(request, *args, **kwargs)
 
