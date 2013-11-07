@@ -168,7 +168,12 @@
     if (isValid) {
       self.process($form);
 
-      if (stage == 'qualification') {
+      if (stage == 'selection') {
+        var isValid = $form.parsley('isValid');
+        if (isValid) {
+          this.next();
+        }
+      } else if (stage == 'qualification') {
         var qualifies = $form.parsley('isValid');
         if (qualifies) {
           this.next();
