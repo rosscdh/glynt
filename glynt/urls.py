@@ -42,7 +42,7 @@ urlpatterns = patterns('',
     # Crocdoc Webhook Callbacks
     url('^crocdoc/', include('glynt.apps.crocdoc.urls', namespace='crocdoc')),
     # HelloSign Webhook Callbacks
-    url('^sign/', include('glynt.apps.sign.urls', namespace='sign')),
+    url('^sign/', include('glynt.apps.hellosign.urls', namespace='sign')),
 
     # Customers
     url(r'^customers/', include('glynt.apps.customer.urls', namespace='customer')),

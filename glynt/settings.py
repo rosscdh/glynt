@@ -207,8 +207,8 @@ PROJECT_APPS = (
     'glynt.apps.graph',
     # Crocdoc Helper
     'glynt.apps.crocdoc',
-    # HelloSign Helper
-    'glynt.apps.sign',
+    # HelloSign App
+    'glynt.apps.hellosign',
 )
 
 HELPER_APPS = (
