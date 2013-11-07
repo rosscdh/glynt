@@ -152,9 +152,6 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
     """
     fixtures = ['test_cities', 'transact.json']
 
-    def tearDown(self, *args, **kwargs):
-        time.sleep(1)
-
     @mock.patch('django_filepicker.models.FPFileField', FileSystemStorage)
     def setUp(self):
         super(BaseLawyerCustomerProjectCaseMixin, self).setUp()

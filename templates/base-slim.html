@@ -1,6 +1,32 @@
-{% load i18n templatetag_handlebars glynt_helpers thumbnail compress %}{% load url from future %}
-{% block css %}{% endblock %}
-{% block js %}{% endblock %}
+{% load i18n templatetag_handlebars glynt_helpers thumbnail compress %}{% load url from future %}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{% block page_title %}{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}{% endblock %}"/>
+    <meta name="keywords" content="{% block meta_keywords %}{% endblock %}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-{% block prebody %}{% endblock %}
-{% block body %}{% endblock %}
+    <link href="{{ STATIC_URL }}bootstrap-v3/css/bootstrap.css?1" rel="stylesheet">
+
+    <link href="{{ STATIC_URL }}css/theme/animate.css" rel="stylesheet">
+    {% block css %}{% endblock %}
+
+    {% block extrahead %}{% endblock %}
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    {% block head_js %}{% endblock %}
+</head>
+<body data-spy="scroll" data-target="#navbar-nav" class="{% block bodyclass %}{% endblock %}" ng-app="lawpal" {% block bodyextra %}style="padding-top:69px;"{% endblock %}>
+    {% block js %}{% endblock %}
+    {% block prebody %}{% endblock %}
+    {% block body %}{% endblock %}
+    <div class="container">
+        <div class="pull-right"><a href="/" class="navbar-brand"><img src="{{ STATIC_URL }}img/logo-nav-white.png" alt="LawPal" title="LawPal"></a></div>
+    </div>
+</body>
+</html>
