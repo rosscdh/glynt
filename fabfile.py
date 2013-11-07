@@ -450,11 +450,12 @@ def relink():
 
 @task
 def clean_start():
+    stop_service()
     clean_pyc()
     clear_cache()
-    restart_service()
     clean_pyc()
-    precompile_pyc()
+    #precompile_pyc()
+    start_service()
     clean_zip()
 
 @task
@@ -626,3 +627,5 @@ def deploy(is_predeploy='False',full='False',db='False',search='False'):
     relink()
     assets()
     clean_start()
+    conclude()
+

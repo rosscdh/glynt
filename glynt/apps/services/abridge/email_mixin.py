@@ -117,6 +117,8 @@ class SendEmailAsAbridgeEventMixin(object):
             # Try to send the event
             try:
                 for to_name, to_email in recipients:
+                    logger.info('Abridge:send {recipient} template: {template}'.format(recipient=to_email, template=template_name))
+
                     # add the notification event
                     self.abridge_service.add_event(content=context.get('content'),
                                                    user=Bunch(email=to_email, first_name='', last_name=''),

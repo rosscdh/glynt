@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 from django.contrib import messages
-from django.http import Http404
+from django.http import HttpResponseRedirect, Http404
 from django.views.generic.base import RedirectView
 from django.views.generic.edit import FormView
 from django.views.generic import TemplateView
 from django.core.urlresolvers import reverse
 from django.contrib.auth import logout
-
-import json
 
 from public.forms import ContactForm
 from public.tasks import send_contactus_email
@@ -20,25 +18,38 @@ logger = logging.getLogger('django.request')
 
 
 class PublicHomepageView(TemplateView):
+    """
+    if not logged in
+        Show the primary public homepage
+    if logged in
+        and a customer
+            show the customer welcome.html
+        if a lawyer
+            retirect to the dashboard:overview
+    """
     template_name = 'public/homepage.html'
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated():
+
             if request.user.profile.is_customer:
                 return CustomerLoginLogic(user=request.user).redirect()
+
+            elif request.user.profile.is_lawyer:
+                #
+                # Redirect to the dashbaord if we are a lawyer and are logged in
+                #
+                return HttpResponseRedirect(reverse('dashboard:overview'))
 
         return super(PublicHomepageView, self).dispatch(request, *args, **kwargs)
 
     def get_template_names(self):
         # get from session
         user_class_name = self.request.session.get('user_class_name', 'lawyer')
-
         template_name = self.template_name
-        if self.request.user.is_authenticated():
-            # we are logged in.. redirect based on the user_class_name
-            if user_class_name == 'lawyer':
-                template_name = 'lawyer/welcome.html'
 
+        if self.request.user.is_authenticated():
+            # we are logged in.. show template based on the user_class_name
             if user_class_name == 'customer':
                 template_name = 'customer/welcome.html'
 
@@ -85,7 +96,8 @@ class UserClassLoggedInRedirectView(RedirectView):
         if self.request.user.is_authenticated() and self.request.user.profile.is_customer:
             url = CustomerLoginLogic(user=self.request.user).url
         else:
-            url = reverse('public:homepage')
+            # lawyers
+            url = reverse('dashboard:overview')
 
         return url
 
@@ -102,7 +114,7 @@ class ContactUsView(AjaxableResponseMixin, FormView):
         Returns an instance of the form to be used in this view.
         """
         kwargs = self.get_form_kwargs()
-        kwargs.update({'request': self.request}) # add the request to the form
+        kwargs.update({'request': self.request})  # add the request to the form
         return form_class(**kwargs)
 
     def get_context_data(self, **kwargs):
@@ -119,7 +131,7 @@ class ContactUsView(AjaxableResponseMixin, FormView):
         message = "Message sent, thanks!"
 
         if self.request.is_ajax():
-            return self.render_to_json_response({ 'message': message, 'status': 200 })
+            return self.render_to_json_response({'message': message, 'status': 200})
         else:
             messages.success(self.request, message)
 
@@ -156,8 +168,8 @@ class SaveNextUrlInSessionMixin(object):
 
 
 class CustomerStartView(LogUserOutMixin, SaveNextUrlInSessionMixin, TemplateView):
-    template_name='public/start.html'
+    template_name = 'public/start.html'
 
 
 class LawyerStartView(LogUserOutMixin, TemplateView):
-    template_name='public/start-lawyer.html'
+    template_name = 'public/start-lawyer.html'

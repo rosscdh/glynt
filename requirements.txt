@@ -31,7 +31,7 @@ django-templated-email
 
 # Api
 # tastypie is being depreciated for rest framework
-django-tastypie>=0.9.15
+-e git+https://github.com/rosscdh/django-tastypie.git@fix-username-assumption#egg=django-tastypie
 djangorestframework
 -e git+https://github.com/alex/django-filter.git#egg=django-filter
 django-taggit
@@ -120,6 +120,8 @@ mock
 -e git+https://github.com/vandersonmota/model_mommy.git#egg=model_mommy
 -e git+git://github.com/neubloc/django-colortools#egg=django-colortools
 pyquery
+# in mem storage for files helps speed up tests
+django-inmemorystorage
 
 # Abridge integration
 -e git+https://github.com/rosscdh/django-abridge.git#egg=django-abridge

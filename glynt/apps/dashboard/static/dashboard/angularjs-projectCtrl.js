@@ -7,7 +7,6 @@ angular.module("lawpal").controller( "ProjectCtrl", [ "$scope", "lawPalService",
 	function( $scope, lawPalService, lawPalUrls, $location, $anchorScroll, angularPusher, toaster, $modal ) {
 	"use strict";
 	// Load project details
-	$scope.project = {};
 	$scope.data = {
 		"project": {},
 		"users": [],
@@ -43,9 +42,12 @@ angular.module("lawpal").controller( "ProjectCtrl", [ "$scope", "lawPalService",
 		}
 	);
 
+	/**
+	 * Show profile dialog
+	 * @param  {Object} user User object
+	 */
 	$scope.contactUser = function( user ) {
-			//window.location.href = "mailto://" + user.email, "email_window";
-			$scope.openProfileDialog( user );
+		$scope.openProfileDialog( user );
 	};
 
 	/**
@@ -63,6 +65,9 @@ angular.module("lawpal").controller( "ProjectCtrl", [ "$scope", "lawPalService",
 		);
 	};
 
+	/**
+	 * Load discussions for the current project
+	 */
 	$scope.loadDiscussions = function() {
 		lawPalService.discussionList().then(
 			function success( results ) {
@@ -96,14 +101,27 @@ angular.module("lawpal").controller( "ProjectCtrl", [ "$scope", "lawPalService",
 		);
 	};
 
+	/**
+	 * Get current user object
+	 * @return {Object} User
+	 */
 	$scope.currentUser = function() {
 		return lawPalService.getCurrentUser();
 	};
 
+	/**
+	 * Given a user_pk is that the pk of the current user?
+	 * @param  {Number}  upk User PK
+	 * @return {Boolean}     true if pk represents the current user
+	 */
 	$scope.isCurrentUser = function( upk ) {
 		return lawPalService.getCurrentUser().pk===upk;
 	};
 
+	/**
+	 * Display user details
+	 * @param  {Object} user user object
+	 */
 	$scope.openProfileDialog = function( user ) {
 		// profileDialogCtrl
 		var modalInstance = $modal.open({
@@ -126,11 +144,3 @@ angular.module("lawpal").controller( "ProjectCtrl", [ "$scope", "lawPalService",
 	};
 
 }]);
-/*
-angular.module('lawpal').run(["$templateCache", function($templateCache) {
-	'use strict';
-	$templateCache.put("template/lawpal/project/manageTeam.html",
-		''
-	);
-}]);
-*/

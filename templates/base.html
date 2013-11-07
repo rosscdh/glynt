@@ -1,6 +1,4 @@
-{% load i18n templatetag_handlebars glynt_helpers thumbnail compress glynt_helpers %}{% load url from future %}
-
-<!DOCTYPE html>
+{% load i18n templatetag_handlebars glynt_helpers thumbnail compress glynt_helpers %}{% load url from future %}<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -9,8 +7,9 @@
     <meta name="keywords" content="{% block meta_keywords %}{% endblock %}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link href="{{ STATIC_URL }}bootstrap-v3/css/bootstrap.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}bootstrap-v3/css/bootstrap.css?1" rel="stylesheet">
 
+    <link href="{{ STATIC_URL }}css/theme/animate.css" rel="stylesheet">
     {% block css %}{% endblock %}
 
     {% block extrahead %}{% endblock %}
@@ -22,12 +21,13 @@
 
     {% block head_js %}{% endblock %}
 </head>
-<body data-spy="scroll" data-target=".subnav" class="{% block bodyclass %}{% endblock %}" style="padding-top: 69px;" ng-app="lawpal">
+<body data-spy="scroll" data-target="#navbar-nav" class="{% block bodyclass %}{% endblock %}" ng-app="lawpal" {% block bodyextra %}style="padding-top:69px;"{% endblock %}>
 
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.plugin.fluent_comments.js"></script>
-    <div id="wrap">
+    {% block wrapbodytop %}<div id="wrap">{% endblock %}
+
         <!-- Nav -->
         {% block navbar %}{% include 'partials/nav.html' %}{% endblock %}
 
@@ -45,8 +45,7 @@
                 {% block body %}{% endblock %}
             </div>
         </main>
-    </div>
-
+    {% block wrapbodybottom %}</div>{% endblock %}
     <!-- Footer -->
     {% block footer %}{% include 'partials/footer.html' %}{% endblock %}
 
@@ -73,7 +72,7 @@
     <script type="text/javascript" src="{{ STATIC_URL }}handlebars-helpers.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/lawpal.modal.js"></script>
 
-    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/angular.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/angular.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/angular-resource.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/ui-bootstrap-tpls-0.6.0.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/angularjs-toaster.js"></script>
@@ -92,6 +91,7 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/filters/iconStatusFilter.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/filters/timeAgoFilter.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/filters/plainTextToParagraphs.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/filters/startFromFilter.js"></script>
 
     <script type="text/javascript" src="{{ STATIC_URL }}js/shared-apps/discussion/discussionItemService.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/shared-apps/discussion/newDiscussionDialogCtrl.js"></script>
@@ -105,8 +105,12 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/shared-apps/profile/profileDialogTemplate.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/shared-apps/profile/manageTeamCtrl.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/shared-apps/profile/manageTeamTemplate.js"></script>
+
+    <script type="text/javascript" src="{{ STATIC_URL }}js/shared-apps/project-progress/progressGridDirective.js"></script>
+    
     <script type="text/javascript">{% profile_card_js %}</script>
 {% endcompress %}
+    <script type="text/javascript" src="{{ STATIC_URL }}js/shared-apps/project-progress/progressBarDirective.js"></script>
 
 {% pusher_js %}
 {% handlebars_messages %}

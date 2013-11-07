@@ -10,7 +10,6 @@
     <tr>
         <td class="small-width" align="left" width="40" style="display: block;">&nbsp;</td>
         <td>
-            <h1 style="color: #22282b !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 28px; font-weight: normal; letter-spacing: -1px; line-height: 1.6em; margin: 0; padding: 0;">Hi {{ to_name }}</h1>
             {{ intro_content }}
         </td>
         <td class="small-width" align="left" width="40" style="display: block;">&nbsp;</td>

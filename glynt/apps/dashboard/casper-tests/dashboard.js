@@ -4,27 +4,82 @@ var helper = require(casper.cli.options.casper_helper_js_path);
 
 helper.scenario(casper.cli.options.url,
     function() {
+        // Test existance of core elements
         //this.echo(this.debugHTML())
-        this.test.assertHttpStatus(200);
-        this.test.assertTitle('Overview')
+        //this.test.assertHttpStatus(200);
+        this.test.assertTitle('Overview');
         this.test.assertSelectorHasText('h1', 'Your LawPal Projects', 'Header Text on Page');
-        
-        this.test.assertExists('table#lawyer-projects')
-        this.test.assertSelectorHasText('table#lawyer-projects th:nth-child(1)', 'Company')
-        this.test.assertSelectorHasText('table#lawyer-projects th:nth-child(2)', 'Client Contact')
-        this.test.assertSelectorHasText('table#lawyer-projects th:nth-child(3)', 'Status')
 
-        this.test.assertElementCount('table#lawyer-projects tr.project-list-item', 1)
-        this.test.assertElementCount('table#lawyer-projects tr.project-list-item td', 5)
-        
-        this.test.assertExists('table#lawyer-projects tr.project-list-item td:nth-child(2) div.profile-card[data-template="small"][data-username="customer"]')
+        // Widget exists
+        casper.waitForSelector(".widget.project",
+            function success() {
+                this.test.assertExists(".widget.project");
+                // Need to test for company name
+            },
+            function fail() {
+                this.test.assertExists(".widget.project");
+        });
 
-        /**
-        * Test the row properties for the proposed lawyer
-        */
-        this.test.assertSelectorHasText('table#lawyer-projects tr.project-list-item td:nth-child(3) a[data-toggle="modal"][data-target="#overview-modal"][data-is_ajax="true"]', 'Discuss')
-        this.test.assertSelectorHasText('table#lawyer-projects tr.project-list-item td:nth-child(4) strong', 'Proposed')
-        this.test.assertSelectorHasText('table#lawyer-projects tr.project-list-item td:nth-child(5) small', 'You have been proposed to this client. Awaiting client decision. Press the Discuss link to send a message directly to them.')
+        // Widget heading
+        casper.waitForSelector(".widget.project h3",
+            function success() {
+                this.test.assertExists(".widget.project h3");
+                // Test for company name
+                this.test.assertSelectorHasText('.widget.project h3', 'Test Company');
+            },
+            function fail() {
+                this.test.assertExists(".widget.project h3");
+        });
+
+        // Proposed state
+        casper.waitForSelector(".widget .engagement-proposed",
+            function success() {
+                this.test.assertExists(".widget .engagement-proposed");
+                this.test.assertSelectorHasText('.widget .engagement-proposed', 'Proposed');
+            },
+            function fail() {
+                this.test.assertExists(".widget .engagement-proposed");
+        });
+    },
+    function () {
+        // Displays customer name
+        casper.waitForSelector(".project-proposed .user-mini-widget h5",
+            function success() {
+                this.test.assertExists(".project-proposed .user-mini-widget h5");
+                this.test.assertSelectorHasText('.project-proposed .user-mini-widget h5', 'Customer A');
+            },
+            function fail() {
+                this.test.assertExists(".project-proposed .user-mini-widget h5");
+        });
+
+        // Displays client caption
+        casper.waitForSelector(".project-proposed .client",
+            function success() {
+                this.test.assertExists(".project-proposed .client");
+                this.test.assertSelectorHasText('.project-proposed .client', 'Client');
+            },
+            function fail() {
+                this.test.assertExists(".project-proposed .user-mini-widget h5");
+        });
+
+        // Displays discussion modal
+        casper.waitForSelector(".project a[data-toggle='modal']",
+            function success() {
+                this.click(".project a[data-toggle='modal']");
+            },
+            function fail() {
+                this.test.assertExists(".project a[data-toggle='modal']");
+        });
+
+        // Close modal
+        casper.waitForSelector("#overview-modal .close",
+            function success() {
+                this.test.assertExists("#overview-modal .close");
+                this.click("#overview-modal .close");
+            },
+            function fail() {
+                this.test.assertExists("#overview-modal .close");
+        });
     }
 );
 
