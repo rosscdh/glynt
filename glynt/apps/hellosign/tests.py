@@ -32,6 +32,15 @@ class HelloSignServiceTest(TestCase):
 
         self.EXPECTED_SIGNATURES = [{u'signed_at': None, u'status_code': u'awaiting_signature', u'last_viewed_at': None, u'signer_email_address': s.email, u'signer_name': s.get_full_name(), u'last_reminded_at': None, u'signature_id': u'fd6d39525f3ef3da3069d038d3f9e1df', u'order': None} for s in self.SIGNATORIES]
 
+    def tearDown(self):
+        """
+        remove the junk data
+        """
+        super(HelloSignServiceTest, self).tearDown()
+        for u in [self.REQUESTED_BY] + self.SIGNATORIES:
+            u.delete()
+        self.PROJECT.delete()
+
     def test_send_doc_for_signing(self):
         # Setup constants for use in the mock
         REQUESTED_BY = self.REQUESTED_BY
