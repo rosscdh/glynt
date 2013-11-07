@@ -25,14 +25,15 @@ class IntakeForm(BuilderBaseForm):
     details = forms.CharField(label=_('Details'), required=True, widget=forms.Textarea)
 
     def __init__(self, *args, **kwargs):
+        super(IntakeForm, self).__init__(*args, **kwargs)
+
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Fieldset(
                 'About your Project',
                 'details',
             )
-        )
-        super(IntakeForm, self).__init__(*args, **kwargs)
+        )        
 
 
 @parsleyfy
@@ -65,6 +66,8 @@ class CompanyProfileForm(BuilderBaseForm):
     ip_university_affiliation = forms.BooleanField(label=_('Someone involved in the creation of IP was affiliated with a university at the time'), required=False, initial=False)
 
     def __init__(self, *args, **kwargs):
+        super(CompanyProfileForm, self).__init__(*args, **kwargs)
+
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Fieldset(
@@ -93,7 +96,6 @@ class CompanyProfileForm(BuilderBaseForm):
                 'ip_university_affiliation',
             )
         )
-        super(CompanyProfileForm, self).__init__(*args, **kwargs)
 
 
 @parsleyfy
@@ -130,6 +132,8 @@ class FinancingProfileForm(BuilderBaseForm):
 
 
     def __init__(self, *args, **kwargs):
+        super(FinancingProfileForm, self).__init__(*args, **kwargs)
+
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Fieldset(
@@ -166,7 +170,6 @@ class FinancingProfileForm(BuilderBaseForm):
                 'doc_exists_stock_option_plan'
             )
         )
-        super(FinancingProfileForm, self).__init__(*args, **kwargs)
 
 
 @parsleyfy
@@ -232,6 +235,8 @@ class CompanyProfileAndIntakeForm(CrispyExFieldsetFieldRemovalMixin, CompanyProf
     data_bag = 'glynt.apps.project.bunches.ProjectIntakeBunch'
 
     def __init__(self, *args, **kwargs):
+        super(CompanyProfileAndIntakeForm, self).__init__(*args, **kwargs)
+
         self.helper = FormHelper()
 
         self.helper.layout = Layout(
@@ -266,7 +271,7 @@ class CompanyProfileAndIntakeForm(CrispyExFieldsetFieldRemovalMixin, CompanyProf
                 'ip_university_affiliation',
             ),
         )
-        super(CompanyProfileAndIntakeForm, self).__init__(*args, **kwargs)
+
         # remove duplicate repeated fields
         self.unify_fields()
 
@@ -282,6 +287,8 @@ class FinancingProfileAndIntakeForm(CrispyExFieldsetFieldRemovalMixin, Financing
     data_bag = 'glynt.apps.project.bunches.ProjectIntakeBunch'
 
     def __init__(self, *args, **kwargs):
+        super(FinancingProfileAndIntakeForm, self).__init__(*args, **kwargs)
+
         self.helper = FormHelper()
 
         self.helper.layout = Layout(
@@ -305,7 +312,7 @@ class FinancingProfileAndIntakeForm(CrispyExFieldsetFieldRemovalMixin, Financing
                 'num_investor_states',
             ),
         )
-        super(FinancingProfileAndIntakeForm, self).__init__(*args, **kwargs)
+
         # remove duplicate repeated fields
         self.unify_fields()
 
@@ -321,6 +328,8 @@ class CompanyFinancingProfileAndIntakeForm(CrispyExFieldsetFieldRemovalMixin, Co
     data_bag = 'glynt.apps.project.bunches.ProjectIntakeBunch'
 
     def __init__(self, *args, **kwargs):
+        super(CompanyFinancingProfileAndIntakeForm, self).__init__(*args, **kwargs)
+
         self.helper = FormHelper()
 
         self.helper.layout = Layout(
@@ -361,6 +370,6 @@ class CompanyFinancingProfileAndIntakeForm(CrispyExFieldsetFieldRemovalMixin, Co
                 'ip_university_affiliation',
             ),
         )
-        super(CompanyFinancingProfileAndIntakeForm, self).__init__(*args, **kwargs)
+
         # remove duplicate repeated fields
         self.unify_fields()
