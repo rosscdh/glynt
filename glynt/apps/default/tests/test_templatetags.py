@@ -60,8 +60,8 @@ class TestPusherJavascript(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
     @override_settings(PROJECT_ENVIRONMENT='live')
     def test_pusher_js_production(self):
         css_selector = 'script#pusher-live-script'
+        self.resp = self.client.get('/', follow=True) # follow the redirects
 
-        self.resp = self.client.get('/')
         c = self.pq(self.resp.content)
         css_object = c(css_selector)
 
@@ -71,14 +71,19 @@ class TestPusherJavascript(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
     @override_settings(PROJECT_ENVIRONMENT='test')
     def test_pusher_js_test(self):
         css_selector = 'script#pusher-test-env-mock-script'
+        self.resp = self.client.get('/', follow=True) # follow the redirects
 
-        self.resp = self.client.get('/')
         c = self.pq(self.resp.content)
         css_object = c(css_selector)
 
         self.assertTrue(len(css_object) == 1)
         self.assertEqual('/static/js/angularjs/mocks/PusherMock.js', css_object.attr['src'])
 
+
+class TestPusherJavascriptForCustomer(TestPusherJavascript):
+    def setUp(self):
+        super(TestPusherJavascriptForCustomer, self).setUp()
+        self.client.login(username=self.customer_user.username, password=self.password)
 
 
 class TestTemplateTag_ShowLoadingModal(unittest.TestCase):
