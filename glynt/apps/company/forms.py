@@ -186,6 +186,8 @@ class CompanyAndFinancingProfileForm(CrispyExFieldsetFieldRemovalMixin, CompanyP
     data_bag = 'glynt.apps.project.bunches.ProjectIntakeBunch'
 
     def __init__(self, *args, **kwargs):
+        super(CompanyAndFinancingProfileForm, self).__init__(*args, **kwargs)
+
         self.helper = FormHelper()
 
         self.helper.layout = Layout(
@@ -223,7 +225,7 @@ class CompanyAndFinancingProfileForm(CrispyExFieldsetFieldRemovalMixin, CompanyP
             )
         )
 
-        super(CompanyAndFinancingProfileForm, self).__init__(*args, **kwargs)
+        
         # remove duplicate repeated fields
         self.unify_fields()
 
@@ -239,9 +241,9 @@ class CompanyProfileAndIntakeForm(CrispyExFieldsetFieldRemovalMixin, CompanyProf
     data_bag = 'glynt.apps.project.bunches.ProjectIntakeBunch'
 
     def __init__(self, *args, **kwargs):
-        super(CompanyProfileAndIntakeForm, self).__init__(*args, **kwargs)
-
         self.helper = FormHelper()
+
+        super(CompanyProfileAndIntakeForm, self).__init__(*args, **kwargs)
 
         self.helper.layout = Layout(
             Fieldset(
@@ -291,9 +293,9 @@ class FinancingProfileAndIntakeForm(CrispyExFieldsetFieldRemovalMixin, Financing
     data_bag = 'glynt.apps.project.bunches.ProjectIntakeBunch'
 
     def __init__(self, *args, **kwargs):
-        super(FinancingProfileAndIntakeForm, self).__init__(*args, **kwargs)
-
         self.helper = FormHelper()
+
+        super(FinancingProfileAndIntakeForm, self).__init__(*args, **kwargs)
 
         self.helper.layout = Layout(
             Fieldset(
@@ -332,9 +334,9 @@ class CompanyFinancingProfileAndIntakeForm(CrispyExFieldsetFieldRemovalMixin, Co
     data_bag = 'glynt.apps.project.bunches.ProjectIntakeBunch'
 
     def __init__(self, *args, **kwargs):
-        super(CompanyFinancingProfileAndIntakeForm, self).__init__(*args, **kwargs)
-
         self.helper = FormHelper()
+
+        super(CompanyFinancingProfileAndIntakeForm, self).__init__(*args, **kwargs)
 
         self.helper.layout = Layout(
             Fieldset(
