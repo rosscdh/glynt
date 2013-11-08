@@ -4150,6 +4150,41 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
 #lawyer-signup-modal {
   color: #999;
 }
+#signup-modal .startup,
+#signin-modal .startup,
+#lawyer-signup-modal .startup {
+  margin: 0px 10px 0px 10px;
+  min-height: 202px;
+  padding-top: 25px;
+}
+#signup-modal .startup.new,
+#signin-modal .startup.new,
+#lawyer-signup-modal .startup.new {
+  text-align: center;
+  opacity: 0.7;
+  padding-top: 15px;
+  transition: opacity 0.3s;
+}
+#signup-modal .startup.new h1,
+#signin-modal .startup.new h1,
+#lawyer-signup-modal .startup.new h1 {
+  text-align: center;
+}
+#signup-modal .startup.new h2,
+#signin-modal .startup.new h2,
+#lawyer-signup-modal .startup.new h2 {
+  margin-bottom: 20px;
+}
+#signup-modal .startup.new .btn,
+#signin-modal .startup.new .btn,
+#lawyer-signup-modal .startup.new .btn {
+  width: 160px;
+}
+#signup-modal .startup:hover,
+#signin-modal .startup:hover,
+#lawyer-signup-modal .startup:hover {
+  opacity: 1;
+}
 #signup-modal a.lnk,
 #signin-modal a.lnk,
 #lawyer-signup-modal a.lnk {
@@ -4167,35 +4202,21 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
 #signup-modal h2,
 #signin-modal h2,
 #lawyer-signup-modal h2 {
-  color: white;
+  color: #ccc;
 }
 #signup-modal h1,
 #signin-modal h1,
 #lawyer-signup-modal h1 {
-  margin-bottom: 30px;
-  margin-top: 20%;
-  font-size: 40px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  font-size: 37px;
 }
 #signup-modal h2,
 #signin-modal h2,
 #lawyer-signup-modal h2 {
-  font-size: 16px;
+  font-size: 24px;
   margin-bottom: 10px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-#signup-modal .attorney,
-#signin-modal .attorney,
-#lawyer-signup-modal .attorney,
-#signup-modal .btn.attorney.btn-clear-border,
-#signin-modal .btn.attorney.btn-clear-border,
-#lawyer-signup-modal .btn.attorney.btn-clear-border {
-  color: #666;
-  border-color: #666;
-}
-#signup-modal .btn.attorney.btn-clear-border,
-#signin-modal .btn.attorney.btn-clear-border,
-#lawyer-signup-modal .btn.attorney.btn-clear-border {
-  padding-left: 19px;
 }
 #signup-modal .close,
 #signin-modal .close,
@@ -4265,7 +4286,6 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
   border-color: white;
   color: white;
   margin-left: 0px;
-  padding-right: 19px;
   font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
   font-weight: normal;
 }
@@ -6874,9 +6894,6 @@ body.homepage section#pricing h2 {
   margin-bottom: 0px;
   margin-top: 10px;
 }
-body.homepage section#pricing h3 {
-  font-size: 18px;
-}
 body.homepage section#pricing div.desc {
   padding: 15px;
   min-height: 130px;
@@ -7081,8 +7098,8 @@ body.homepage section#about-us .investors-team img.inv {
   }
   body.homepage .modal-dialog {
     padding-top: 80px;
-    width: 750px;
-    margin-left: -375px;
+    width: 500px;
+    margin-left: -250px;
   }
   body.homepage .modal-dialog iframe {
     height: 417px;

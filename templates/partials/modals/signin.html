@@ -1,14 +1,27 @@
 <div class="modal animated fadeInDown" id="signin-modal" role="dialog">
     <div class="modal-dialog">
-        <div class="startup">
-            <h1>Sign in to LawPal <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></h1> 
-            <a href="{% url "public:auth_user_class_redirect" user_class_name="customer" login_type="google-oauth2" %}" class="btn btn-clear-border"><img src="{{ STATIC_URL }}img/google-32.png">Sign in with Google</a>
-            <br />
-            <br />
-            Forgotten your login details? <a href="mailto:support@lawpal.com" class="lnk">Contact Support</a>. 
-            <hr />
-            <h2 class="attorney">Are you a LawPal participating attorney?</h2>
-            <a href="/start/lawyer" class="btn btn-clear-border attorney">Attorney Sign In</a>
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1>Sign in to LawPal</h1>
+            </div>
+            <div class="col-6">
+                <div class="startup new">
+                    <h2>Startup</h2> 
+                    <a href="{% url "public:auth_user_class_redirect" user_class_name="customer" login_type="google-oauth2" %}" class="btn btn-clear-border btn-huge">Sign In</a>
+                    <br />
+                    <br /> 
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="startup new">
+                    <h2>Attorney</h2> 
+                    <a href="{% url "public:auth_user_class_redirect" user_class_name="lawyer" login_type="linkedin" %}" class="btn btn-clear-border btn-huge">Sign In</a>
+                </div>
+            </div>
+            <div class="col-12 text-center">
+                <hr />
+                Forgotten your login details? <a href="mailto:support@lawpal.com" class="lnk">Contact Support</a>.
+            </div>
         </div>
     </div>
 </div>
