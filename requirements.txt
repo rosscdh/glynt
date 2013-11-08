@@ -1,10 +1,9 @@
 # Drivers
-#python-memcached # only in production
-#psycopg2 # required for production postgres db
-
+python-memcached
+psycopg2 # database drivers
 
 # Django
-Django>=1.5.4
+Django==1.5.5 # frozen at 1.5.5 as 1.6 has substantial changes
 django-cities-light
 
 # easydict lookups with dot notation
