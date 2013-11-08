@@ -4,58 +4,64 @@
 {% block title %}{% trans "Confirm your Account" %}{% endblock %}
 {% block wrapclass %}{% endblock %}
 {% block prebody %}
-<div class="megatron">
-    <div class="container">
-        <h2><i class="glyphicon glyphicon-user" style="padding:27px 28px 22px 28px"></i></h2>
-        <h1>Welcome to LawPal</h1>
-        <h3>Let's create your account.</h3>
-    </div>
-</div>
-<div class="form-wrap">
-    <div class="container">
-      <div class="col col-lg-10 col-offset-1">
-         {{ form.non_field_errors }}
-         <form id="lawyer-signin-details" data-validate="parsley" class="form-horizontal" autocomplete="off"
-                action="{% url 'client:confirm_signup' slug=request.user.username %}" method="post">{% csrf_token %}
-                <div class="row">
-                    <div class="col col-lg-6">
-                        {{ form.first_name|as_crispy_field }}
-                    </div>
-                    <div class="col col-lg-6">
-                        {{ form.last_name|as_crispy_field }}
-                    </div>
-                </div>
-                <hr>
-                <div class="row">
-                    <div class="col col-lg-6">
-                      {{ form.company_name|as_crispy_field }}
-                    </div>
-                </div>
-                <hr>
-                <div class="row">
-                    <div class="col col-lg-6">
-                      {{ form.email|as_crispy_field }}
-                    </div>
-                    <div class="col col-lg-6">
-                      {{ form.phone|as_crispy_field }}
-                    </div>
-                </div>
-                <hr>
-                 <div class="row">
-                     <div class="col col-lg-6 col-offset-8">
-                         {{ form.agree_tandc|as_crispy_field }}
-                      </div>
-                  </div>
-
-                   <div class="row">
-                       <div class="col col-lg-12">
-                          <button id="lawyer-signin-details-submit" type="submit" class=" btn btn-success btn-large pull-right">{% trans "Continue" %}</button>
-                          {{ form.username }}
-                      </div>
-                  </div>
-          </form>
+<div class="page-header big">
+      <div class="container">
+          <div class="row">
+              <div class="col-10">
+                  <h1>Welcome to LawPal</h1>
+              </div>
+          </div>
       </div>
+</div>
+{% include 'client/partials/onboarding.html' with step='signup' %}
+<br />
+<br />
+<div class="">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-10">
+           {{ form.non_field_errors }}
+           <form id="lawyer-signin-details" data-validate="parsley" class="form-horizontal" autocomplete="off"
+                  action="{% url 'client:confirm_signup' slug=request.user.username %}" method="post">{% csrf_token %}
+                  <div class="row">
+                      <div class="col-lg-6">
+                          {{ form.first_name|as_crispy_field }}
+                      </div>
+                      <div class="col-lg-6">
+                          {{ form.last_name|as_crispy_field }}
+                      </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                      <div class="col-lg-6">
+                        {{ form.company_name|as_crispy_field }}
+                      </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                      <div class="col-lg-6">
+                        {{ form.email|as_crispy_field }}
+                      </div>
+                      <div class="col-lg-6">
+                        {{ form.phone|as_crispy_field }}
+                      </div>
+                  </div>
+                  <hr>
+                   <div class="row">
+                       <div class="col-lg-6 col-offset-7">
+                           {{ form.agree_tandc|as_crispy_field }}
+                        </div>
+                    </div>
+
+                     <div class="row">
+                         <div class="col-lg-12">
+                            <button id="lawyer-signin-details-submit" type="submit" class=" btn btn-success btn-large pull-right">{% trans "Continue" %}</button>
+                            {{ form.username }}
+                        </div>
+                    </div>
+            </form>
+        </div>
     </div>
 </div>
-
+</div>
 {% endblock %}

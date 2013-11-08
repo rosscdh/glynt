@@ -54,7 +54,10 @@
   border-bottom: 1px solid @gray-lighter;
   background-color: @brand-primary;
   .clearfix();
-
+  &.big {
+    padding-top: @line-height-computed * 1.5;
+    padding-bottom: ((@line-height-computed / 2) - 1) * 1.5;
+  }
   h1 {
     color: white;
     font-size: ceil(@font-size-base * 2.25);
@@ -146,7 +149,7 @@
 
 html,
 body {
-  min-width: 1024px;
+/* min-width: 1024px; */
   overflow-x: hidden;
   /*.transition(opacity 400ms);*/
 }
