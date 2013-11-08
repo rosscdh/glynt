@@ -1,14 +1,18 @@
 # -*- coding: UTF-8 -*-
 from django.db import models
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from glynt.apps.company.models import Company
 
 from jsonfield import JSONField
+from storages.backends.s3boto import S3BotoStorage
 
 import os
 import logging
 logger = logging.getLogger('django.request')
+
+USERENA_MUGSHOT_DEFAULT = getattr(settings, 'USERENA_MUGSHOT_DEFAULT', None)
 
 
 def _customer_upload_photo(instance, filename):
@@ -26,7 +30,7 @@ class Customer(models.Model):
     summary = models.CharField(max_length=255)
     bio = models.TextField()
     data = JSONField(default={})
-    photo = models.ImageField(upload_to=_customer_upload_photo, blank=True)
+    photo = models.ImageField(upload_to=_customer_upload_photo, blank=True, storage=S3BotoStorage())
 
     def __unicode__(self):
         return u'%s' % (self.user.get_full_name(),)
@@ -40,7 +44,10 @@ class Customer(models.Model):
 
     @property
     def profile_photo(self):
-        return self.user.profile.get_mugshot_url()
+        try:
+            return self.photo.url
+        except:
+            return self.user.profile.profile_data.get('picture', )
 
     @property
     def phone(self):

@@ -3,7 +3,8 @@ import os
 from django.contrib.auth.models import User
 import json
 
-from models import Lawyer
+from .models import Lawyer, _lawyer_upload_photo
+
 from glynt.apps.firm.services import EnsureFirmService
 from tasks import send_profile_setup_email
 
@@ -34,9 +35,9 @@ class EnsureLawyerService(object):
 
     def update_user(self):
         fields_to_update = {}
-        fields_to_update.update(first_name = self.data.get('first_name', None))
-        fields_to_update.update(last_name = self.data.get('last_name', None))
-        fields_to_update.update(email = self.data.get('email', None))
+        fields_to_update.update(first_name=self.data.get('first_name', None))
+        fields_to_update.update(last_name=self.data.get('last_name', None))
+        fields_to_update.update(email=self.data.get('email', None))
 
         # remove empty items
         fields_to_update = [(k,v) for k,v in fields_to_update.items() if v is not None]
@@ -77,8 +78,13 @@ class EnsureLawyerService(object):
             logger.info('New photo for %s' % self.lawyer)
             photo_file = os.path.basename(photo.file.path)# get base name
             try:
-                self.lawyer.photo.save(photo_file, photo.file)
-                self.lawyer.user.profile.mugshot.save(photo_file, photo.file)
+                # move from ajax_uploads to the model desired path
+                new_path = _lawyer_upload_photo(instance=self.lawyer, filename=photo_file)
+                photo.file.storage.save(new_path, photo.file)  # save to new path
+                # will now upload to s3
+                self.lawyer.photo.save(name=photo_file, content=photo.file)
+                # and update the mugshot
+                #self.lawyer.user.profile.mugshot.save(name=photo_file, content=photo.file)
                 logger.info('Saved new photo %s for %s' % (photo.file, self.lawyer))
             except Exception as e:
                 logger.error('Could not save user photo %s for %s: %s' % (photo.file, self.lawyer, e))

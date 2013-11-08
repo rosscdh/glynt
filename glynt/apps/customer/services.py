@@ -2,7 +2,7 @@
 import os
 
 try:
-    from glynt.apps.customer.models import Customer
+    from glynt.apps.customer.models import Customer, _customer_upload_photo
 except ImportError:
     # Customer appears to already be in sys.modules
     pass
@@ -32,12 +32,16 @@ class EnsureCustomerService(object):
         if photo and self.customer.photo != photo:  # only if its not the same image
             logger.info('New photo for %s' % self.customer)
             photo_file = os.path.basename(self.photo.file.name)  # get base name
-            try:
-                self.customer.photo.save(photo_file, photo.file)
-                self.customer.user.profile.mugshot.save(photo_file, photo.file)
-                logger.info('Saved new photo %s for %s' % (photo.file, self.customer))
-            except Exception as e:
-                logger.error('Could not save user photo %s for %s: %s' % (photo.file, self.customer, e))
+            # try:
+            # move from ajax_uploads to the model desired path
+            new_path = _customer_upload_photo(instance=self.customer, filename=photo_file)
+            photo.file.storage.save(new_path, photo.file)  # save to new path
+            # will now upload to s3
+            self.customer.photo.save(name=photo_file, content=photo.file)
+            self.customer.user.profile.mugshot.save(name=photo_file, content=photo.file)
+            logger.info('Saved new photo %s for %s' % (photo.file, self.customer))
+            # except Exception as e:
+            #     logger.error('Could not save user photo %s for %s: %s' % (photo.file, self.customer, e))
 
     def process(self):
         self.customer, is_new = Customer.objects.get_or_create(user=self.user)
