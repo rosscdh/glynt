@@ -335,7 +335,6 @@ AWS_SECRET_ACCESS_KEY = '0RZVc8eDHBLSpAxcbnbm1jMJy3oJT2zu6eQTeLDM'
 AWS_QUERYSTRING_AUTH = False # to stop 304 not happening and boto appending our info to the querystring
 # see http://developer.yahoo.com/performance/rules.html#expires
 AWS_HEADERS = {
-    'Expires': 'Thu, 15 Apr 2020 20:00:00 GMT',
     'Cache-Control': 'max-age=86400',
 }
 
