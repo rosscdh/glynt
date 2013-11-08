@@ -37,8 +37,8 @@
                     border-right: 0 !important;
                 }
                 .viewport .logo img {
-                    height: 50px !important;
-                    width: 50px !important;
+                    height: 25px !important;
+                    width: 25px !important;
                 }
                 .viewport h1 {
                     font-size: 18px !important;
@@ -57,16 +57,16 @@
     </head>
     <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" style="background-color: #edf0ef;">
         <center>
-            <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#edf0ef">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#edf0ef">
                 <tr>
-                    <td align="center" valign="top">
-                        <table class="viewport" align="center" border="0" cellpadding="0" cellspacing="0" width="600">
+                    <td valign="top">
+                        <table class="viewport" border="0" cellpadding="0" cellspacing="0" width="600">
                             {% include 'email/partials/header-html.email' %}
 
                             <!-- Content Section -->
                             <tr>
                                 <td align="left" valign="top" width="100%">
-                                    <table class="rounded" align="center" bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-top: 1px solid #eae9e9; border-bottom: 1px solid #b2b1b1; border-left: 1px solid #d4d2d3; border-right: 1px solid #d4d2d3; padding: 0;">
+                                    <table class="rounded" bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-top: 1px solid #eae9e9; border-bottom: 1px solid #b2b1b1; border-left: 1px solid #d4d2d3; border-right: 1px solid #d4d2d3; padding: 0;">
                                         {% block content %}{% endblock %}
                                     </table>
                                 </td>

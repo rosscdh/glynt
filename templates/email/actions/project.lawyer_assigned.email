@@ -11,7 +11,7 @@
         <td class="small-width" align="left" width="40" style="display: block;">&nbsp;</td>
         <td align="center">
             <h1 style="color: #22282b; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 28px; font-weight: normal; letter-spacing: -1px; line-height: 1.6em; margin: 0; padding: 0;">Congratulations {{ to_name }}</h1>
-            <h2 style="color: #6c797c !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5em; margin: 0 0 25px; padding: 0;">You have been selected by {{ actor }} ({{ company }}) to work on their {{ project.transaction_types }}.</h2>
+            <h2 style="color: #6c797c !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5em; margin: 0 0 25px; padding: 0;">You have been selected by {{ actor.get_full_name }} ({{ company }}) to work on their {{ project.transaction_types }}.</h2>
         </td>
         <td class="small-width" align="left" width="40" style="display: block;">&nbsp;</td>
     </tr>
@@ -28,7 +28,7 @@
 {% endblock %}
 
 {% block plain_body %}
-Congratulations! You have been selected by {{ actor }} ({{ company }}) to work on their {{ project.transaction_types }}.
+Congratulations! You have been selected by {{ actor.get_full_name }} ({{ company }}) to work on their {{ project.transaction_types }}.
 
 See project: {% current_site_domain %}{{ url }}
 {% endblock %}

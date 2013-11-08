@@ -6,9 +6,9 @@ todo attachments when the time comes
 """
 import os
 from django.db import models
-from django.contrib.auth.models import User
 
-from glynt.apps.project.models import Project
+# from django.contrib.auth.models import User
+# from glynt.apps.project.models import Project
 
 from django_filepicker.models import FPFileField
 
@@ -25,7 +25,7 @@ from hurry.filesize import size
 
 def _attachment_upload_file(instance, filename):
     _, ext = os.path.splitext(filename)
-    return '{project_uuid}/attachments/{slug}{ext}'.format(project_uuid=instance.project.uuid, slug=instance.slug, ext=ext)
+    return '{project_uuid}/attachments/{slug}{ext}'.format(project_uuid=instance.project.uuid, slug=instance.pk, ext=ext)
 
 
 class ToDo(NumAttachmentsMixin, models.Model):
@@ -34,8 +34,8 @@ class ToDo(NumAttachmentsMixin, models.Model):
     """
     TODO_STATUS_CHOICES = TODO_STATUS
 
-    user = models.ForeignKey(User, blank=True, null=True)
-    project = models.ForeignKey(Project, blank=True, null=True)
+    user = models.ForeignKey('auth.User', blank=True, null=True)
+    project = models.ForeignKey('project.Project', blank=True, null=True)
     name = models.CharField(max_length=128)
     slug = models.SlugField() # inherited from the .yml list based on project_id and other mixins
     category = models.CharField(max_length=128, db_index=True)
@@ -104,11 +104,11 @@ class Attachment(models.Model):
     Files that can be attached to our todo items
     """
     uuid = models.CharField(max_length=255, blank=True, null=True, db_index=True)
-    uploaded_by = models.ForeignKey(User, related_name='atatchments_uploaded')
-    deleted_by = models.ForeignKey(User, blank=True, null=True, related_name='atatchments_deleted')
+    uploaded_by = models.ForeignKey('auth.User', related_name='atatchments_uploaded')
+    deleted_by = models.ForeignKey('auth.User', blank=True, null=True, related_name='atatchments_deleted')
     attachment = FPFileField(upload_to=_attachment_upload_file, additional_params=None)
-    project = models.ForeignKey(Project, related_name='attachments')
-    todo = models.ForeignKey(ToDo, blank=True, null=True, related_name='attachments')
+    project = models.ForeignKey('project.Project', related_name='attachments')
+    todo = models.ForeignKey('todo.ToDo', blank=True, null=True, related_name='attachments')
     data = JSONField(default={})
     date_created = models.DateTimeField(auto_now=False, auto_now_add=True, db_index=True)
 
@@ -169,9 +169,9 @@ class FeedbackRequest(models.Model):
     a response from a user on an attachment """
     FEEDBACK_STATUS_CHOICES = FEEDBACK_STATUS
 
-    attachment = models.ForeignKey(Attachment)
-    assigned_by = models.ForeignKey(User, related_name='requestedfeedback')
-    assigned_to = models.ManyToManyField(User, related_name='feedbackrequested')
+    attachment = models.ForeignKey('todo.Attachment')
+    assigned_by = models.ForeignKey('auth.User', related_name='requestedfeedback')
+    assigned_to = models.ManyToManyField('auth.User', related_name='feedbackrequested')
     comment = models.CharField(max_length=255)
     status = models.IntegerField(choices=FEEDBACK_STATUS.get_choices(), default=FEEDBACK_STATUS.open, db_index=True)
     data = JSONField(default={})
@@ -200,11 +200,12 @@ class FeedbackRequest(models.Model):
 """
 import signals
 """
-from .signals import (on_attachment_created, on_attachment_deleted,
+from .signals import (on_attachment_created,
+                      on_attachment_deleted,
                       on_comment_created,
                       feedbackrequest_created,
                       feedbackrequest_status_change,
                       projectlawyer_assigned,
                       projectlawyer_deleted,
                       todo_item_status_change,
-                      on_action_created)
+                      on_action_created,)

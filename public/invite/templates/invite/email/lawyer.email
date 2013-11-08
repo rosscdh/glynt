@@ -3,8 +3,6 @@
 {% block subject %}Invitation from {{ from_name }}{% endblock %}
 
 {% block plain %}
-Hi there,
-
 Today, I'm inviting you to create your profile on the LawPal preview beta!
 
 Being listed on LawPal will allow new funded startups who are seeking outside counsel to find you. 

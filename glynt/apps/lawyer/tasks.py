@@ -12,7 +12,7 @@ import logging
 logger = logging.getLogger('lawpal.services')
 
 
-site_email = settings.DEFAULT_FROM_EMAIL
+SITE_EMAIL = settings.DEFAULT_FROM_EMAIL
 
 
 @task()
@@ -37,7 +37,7 @@ def send_profile_setup_email(**kwargs):
         send_templated_mail(
             template_name = 'lawyer/profile_setup_confirm',
             template_prefix = "email/",
-            from_email = site_email,
+            from_email = SITE_EMAIL,
             recipient_list = [to_email],
             bcc = [e for n,e in settings.MANAGERS],
             context = kwargs

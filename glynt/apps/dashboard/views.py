@@ -9,10 +9,13 @@ from glynt.apps.rulez import RulezMixin
 from glynt.apps.project.models import Project
 from glynt.apps.project.bunches import ProjectIntakeFormIsCompleteBunch
 from glynt.apps.project import PROJECT_LAWYER_STATUS
+from glynt.apps.project.api_v2 import ProjectViewSet
+
 from glynt.apps.todo.views import ToDoCountMixin
+from glynt.apps.api.views import v2ApiClientMixin
 
 
-class DashboardView(RulezMixin, ToDoCountMixin, TemplateView):
+class DashboardView(RulezMixin, ToDoCountMixin, v2ApiClientMixin, TemplateView):
     """
     @TODO clean this mess up
     This view is used by both the customer and the lawyer (eek)
@@ -53,6 +56,20 @@ class DashboardView(RulezMixin, ToDoCountMixin, TemplateView):
             })
 
         return qs_filter
+
+    def get_projects(self):
+        """
+        wrapper to allow easy access to the "projects" in this request
+        and no the lawyer_project join used for the lawyer
+        """
+        if self.request.user.profile.is_lawyer:
+            #
+            # cant rely on the middleware.LawpalCurrentProjectsMiddleware as it does not show pending
+            # projects
+            #
+            return [p.project for p in self.request.user.lawyer_profile.projectlawyer_set.all()]
+        else:
+            return self.request.projects
 
     def lawyer_context(self):
         return Bunch({
@@ -114,7 +131,11 @@ class DashboardView(RulezMixin, ToDoCountMixin, TemplateView):
 
         kwargs.update({
             'PROJECT_LAWYER_STATUS': PROJECT_LAWYER_STATUS,
-            'projects': self.request.projects,
+            'projects': self.get_projects(),
+            'json': {
+                'projects': self.api_query(request=self.request, url='/api/v2/project/').api_resp_as_json(),
+                'discussions': [self.api_query(request=self.request, url='/api/v2/project/{uuid}/discussion/'.format(uuid=p.uuid)).api_resp_as_json() for p in self.get_projects()],
+            }
         })
 
         return kwargs

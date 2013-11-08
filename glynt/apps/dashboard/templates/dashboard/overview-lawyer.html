@@ -1,4 +1,4 @@
-{% extends 'base.html' %}{% load url from future %}{% load glynt_helpers crispy_forms_tags project_tags %}
+{% extends 'base.html' %}{% load url from future %}{% load glynt_helpers crispy_forms_tags project_tags jsonify %}
 
 {% block page_title %}Overview{% endblock %}
 
@@ -13,70 +13,140 @@
 {% endblock %}
 
 {% block body %}
-<div class="container dashboard-view">
+{% csrf_token %}
+<div class="container dashboard-view" ng-controller="projectsOverviewCtrl">
     <div class="row">
         <div class="col-12">
-            <table id="lawyer-projects" class="table table-bordered">
-                <thead>
-                <tr>
-                    <th>Company</th>
-                    <th class="" colspan="2">Client Contact</th>
-                    <th class="text-center">Status</th>
-                    <th>Note</th>
-                </tr>
-                </thead>
-                <tbody>
-            {% for p in project_lawyer_joins %}
-                {% with p.project as project %}
-                <tr class="project-list-item {{ p.display_status|lower }}">
-                        {% if PROJECT_LAWYER_STATUS.assigned == p.status %}
-                            <td>  
-                                <h4>{{ project.company }}</h4>
-                            </td>
-                            <td> 
-                                <div class="profile-card" data-template="small" data-username="{{ project.customer.user.username }}">&nbsp;</div>
-                            </td>
-                            <td><a href="{{ project.get_absolute_url }}" class="text-success btn btn-success">View Project</a></td>
-                            <td class="text-center text-success"> 
-                                 <strong>{{ p.display_status }}</strong>
-                            </td>
-                            <td>
-                                <small>You have been assigned to this project.</small>
-                            </td>
-                        {% elif PROJECT_LAWYER_STATUS.rejected == p.status %}
-                            <td class="" colspan="5">
-                                <span class="text-muted">{{ project.company }} - {{ p.display_status }} (Client selected another attorney)</span>
-                            </td>
-                        {% elif PROJECT_LAWYER_STATUS.potential == p.status %}
-                            <td>  
-                                <h4>{{ project.company }}</h4>
-                            </td>
-                            <td> 
-                                <div class="profile-card" data-template="small" data-username="{{ project.customer.user.username }}">&nbsp;</div>
-                            </td>
-                            <td class="text-left">
-                                <a href="{% url 'project:project_contact' slug=project.uuid lawyer=user.username %}" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-primary btn-lg">Discuss&nbsp;<span class="badge">{% discussion_notification_count project_lawyer_join=p %}</span></a>
-                            </td>
-                            <td class="text-center text-warning"> 
-                                 <strong>{{ p.display_status }}</strong>
-                            </td>
-                            <td>
-                                <small>You have been proposed to this client. Awaiting client decision. Press the Discuss link to send a message directly to them.</small>
-                            </td>
-                        {% endif %}
-                </tr>
-                {% endwith %}
-            {% empty %}
-                <tr><td colspan="5" class="text-center"><h3 class="softer"><small><i class="glyphicon glyphicon-time "></i></small> Your introductions and active projects will appear here shortly. </h3></td></tr>
-            {% endfor %}
-                </tbody>
-            </table>
-            <br />
-            <hr />
-            <h4>Have a question? <a href="mailto:xw4ux8lx@incoming.intercom.io" class="intercom">Contact the LawPal Team</a>.</h4> 
+            <div class="col-lg-6" ng-repeat="project in data.projects">
+                <div ng-switch="project.currentUserEngagement">
+            
+                    <div class="widget project clearfix project-engaged" ng-switch-when="Engaged">
+                        <span class="pull-right engagement-{[{project.currentUserEngagement|lowercase}]}">
+                            <i class="icon icon-ok"></i>
+                            <span ng-bind="project.currentUserEngagement"></span>
+                        </span>
+                        <span>
+                            <a class="btn btn-link pull-right" ng-href="{% url 'dashboard:overview' %}{[{project.uuid}]}/" ng-show="project.currentUserEngagement=='Engaged'">View</a>
+                            <h3 ng-bind="project.company.name"></h3>
+                            <div class="row">
+                                <div class="col-3">
+                                    <em>Action required</em>
+                                    <div class="project-primary-action" data-counts="project.counts" data-project-uuid="project.uuid" data-base-url="'{% url 'dashboard:overview' %}'"></div>
+                                    <em>{[{project.counts.closed}]} of {[{project.counts.total}]} Complete</em>
+                                </div>
+                                <div class="col-9">
+                                    <div class="discussion-list" data-discussion="project.discussions" data-tag="'discussion'" data-page-limit="1" data-project-uuid="project.uuid" data-description-text-limit="100" order-by-date="false"></div>
+                                </div>
+                            </div>
+                        </span>
+                    </div>
+
+                    <div class="widget project clearfix project-proposed" ng-switch-default>
+                        <span class="pull-right engagement-{[{project.currentUserEngagement|lowercase}]}">
+                            <span ng-bind="project.currentUserEngagement"></span>
+                        </span>
+                        <span>
+                            <h3 ng-bind="project.company.name"></h3>
+                            <div class="row">
+                                <div class="col-3 client">
+                                    <em>Client</em>
+                                    <div class="widget-content user-mini-widget" data-user="project.customer"></div>
+                                    <em>Making decision</em>
+                                </div>
+                                <div class="col-9">
+                                    <em>Discussion</em>
+                                    <table class="table no-pad">
+                                        <tr class="discussion-item">
+                                            <td class="status-column"><i class="icon icon-comment nest"> <small class="nested text-primary ng-binding" ng-bind="discussion.original.count"></small></i></td>
+                                            <td class="no-pad"><a href="/projects/{[{project.uuid}]}/{{ user.username }}/project-contact/" data-toggle="modal" data-target="#overview-modal" data-is_ajax="true" class="btn btn-block btn-link btn-8em">Discussion&nbsp; <span class="badge" ng-bind="project.proposed_discussions"></span></a></td>
+                                        </tr>
+                                    </table>
+
+                                    <div class="discussion-list clearfix" ng-show="project.discussions.length>0" data-discussion="project.discussions" data-tag="'discussion'" data-page-limit="1" data-project-uuid="project.uuid" data-description-text-limit="80" order-by-date="false"></div>
+
+                                    <em>Press the Discuss link to send a message directly to them.</em>
+                                </div>
+                            </div>
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+        </div> <!-- col-12 //-->
+
+        <div class="col-12" ng-show="data.projects.length==0">
+            <div class="col-12">
+                <div class="alert alert-warning">
+                    <p>Currently you have no assigned projects.</p>
+                    <p>If you have not done so already, let your account manager know you are looking to engage potential clients on LawPal.</p>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="widget account-attorney">
+                    <h3>Contact LawPal Account Manager</h3>
+                    <div class="row">
+                        <div class="col-12">
+                            <p>Let your account manager know you are avilable for projects.</p>
+                            <img src="{{STATIC_URL}}img/yael-contact-face.jpg" class="img-circle pull-left" style="width:40px; padding-right :8px;padding-top:6px;">
+                            <h4>Yael Citro <small class="pull-right"><a href="mailto:xw4ux8lx@incoming.intercom.io" class="btn btn-info btn-small intercom" style="margin-top:-4px">Contact Yael</a></small>  <small>Co-Founder at LawPal </small></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="widget account-attorney">
+                    <h3><i class="icon icon-user text-muted"></i> Update your profile</h3>
+                    <div class="row">
+                        <div class="col-12">
+                            <a href="{% url 'lawyer:setup_profile' %}" class="btn btn-info btn-small pull-right" style="margin-top:-4px">Edit profile</a>
+                            <p>{{ user.get_full_name }}, while you have a few moments have a look over your LawPal profile. Keeping your profile up-to-date will help potential clients choose you.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
-</div>
-
+    <div class="row" ng-show="data.projects.length!=0">
+        <div class="col-12">
+           <small class="text-muted">Key: <i class="icon icon-circle text-muted" tooltip="New"></i> <i class="icon icon-circle text-primary" tooltip="Open"></i> <i class="icon icon-circle text-danger" tooltip="Requires your feedback"></i> <i class="icon icon-circle text-warning" tooltip="Feedback required"></i> <i class="icon icon-circle text-success" tooltip="Closed"></i> </small> 
+        </div>
+    </div>
+<div class="discussion-viewer"></div>
+<toaster-container toaster-options="{'time-out': 3000}"></toaster-container>
 {% include 'dashboard/modals/overview-modal.html' %}
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="{{ STATIC_URL }}dashboard/angularjs-projectOverviewCtrl.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}dashboard/angularjs-userDirectives.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}dashboard/primaryAction/primaryActionDirective.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}dashboard/primaryAction/primaryActionTemplate.js"></script>
+<script language="javaScript">
+    LawPal =  {
+        "user": {
+            'pk': {{ user.pk|default:'null'|jsonify }},
+            'username': '{{ user.username }}',
+            'full_name': '{{ user.get_full_name }}',
+            'is_authenticated': {{ user.is_authenticated|jsonify }}
+        },
+        'overview': {{ json|jsonify }},
+        'project': {
+            'content_type_id': {{ project.content_type_id|default:None|jsonify }}
+        },
+        'proposed_discussions': {
+            {% for p in project_lawyer_joins %}
+                {% with p.project as project %}
+                        {% if PROJECT_LAWYER_STATUS.assigned == p.status %}
+                        {% elif PROJECT_LAWYER_STATUS.potential == p.status %}
+                            '{{ project.pk }}' : {% discussion_notification_count project_lawyer_join=p %} 
+                        {% endif %}
+                {% endwith %}
+            {% endfor %}
+        }
+    }
+</script>
 {% endblock %}

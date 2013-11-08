@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.test import LiveServerTestCase
+from django.core.files import File
+from django.core.files.storage import FileSystemStorage
 from django.test.client import Client, FakePayload, MULTIPART_CONTENT
-from urlparse import urlparse
 
+from urlparse import urlparse
 from functools import wraps
 
 from model_mommy import mommy
@@ -13,9 +15,16 @@ from glynt.apps.todo import TODO_STATUS
 from glynt.apps.transact.models import Transaction
 from glynt.apps.project import PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE
 
+import os
 import re
+import mock
 import time
 import httpretty
+
+BASE_TEST_PATH = os.path.dirname(__file__)
+
+TEST_PDF_PATH = '{test_path}/test.pdf'.format(test_path=BASE_TEST_PATH)
+TEST_PDF_FILE = File(open(TEST_PDF_PATH, 'rb'), "test.pdf")
 
 
 class DjangoTestClientWithPATCH(Client):
@@ -47,6 +56,22 @@ def glynt_mock_http_requests(view_func):
     """
     @httpretty.activate
     def _decorator(request, *args, **kwargs):
+        httpretty.register_uri(httpretty.GET, re.compile("http://127.0.0.1/(.+)"),
+                       body='{"success": true}',
+                       status=200)
+        # httpretty.register_uri(httpretty.POST, re.compile("(.+)"),
+        #                body='{"success": true}',
+        #                status=200)
+        # httpretty.register_uri(httpretty.PUT, re.compile("(.+)"),
+        #                body='{"success": true}',
+        #                status=200)
+        # httpretty.register_uri(httpretty.PATCH, re.compile("(.+)"),
+        #                body='{"success": true}',
+        #                status=200)
+        # httpretty.register_uri(httpretty.DELETE, re.compile("(.+)"),
+        #                body='{"success": true}',
+        #                status=200)
+
         #
         # Abridge
         #
@@ -54,6 +79,22 @@ def glynt_mock_http_requests(view_func):
                        body='{"success": true}',
                        status=200)
         httpretty.register_uri(httpretty.GET, re.compile("http://abridge.local.dev/(.+)"),
+                       body='{"success": true}',
+                       status=200)
+
+        #
+        # Intercom & misc
+        #
+        httpretty.register_uri(httpretty.GET, re.compile("https://api.intercom.io/(.+)"),
+                       body='{"success": true}',
+                       status=200)
+        httpretty.register_uri(httpretty.GET, re.compile("http://www.google-analytics.com/ga.js"),
+                       body='{"success": true}',
+                       status=200)
+        #
+        # Pusher.com? @TODO are these called at all
+        #
+        httpretty.register_uri(httpretty.GET, re.compile("https://api.pusherapp.com/(.+)"),
                        body='{"success": true}',
                        status=200)
 
@@ -112,8 +153,9 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
     fixtures = ['test_cities', 'transact.json']
 
     def tearDown(self, *args, **kwargs):
-        time.sleep(0.5)
+        time.sleep(1)
 
+    @mock.patch('django_filepicker.models.FPFileField', FileSystemStorage)
     def setUp(self):
         super(BaseLawyerCustomerProjectCaseMixin, self).setUp()
 
@@ -158,7 +200,9 @@ class BaseLawyerCustomerProjectCaseMixin(BaseCasperJs):
         self.project_lawyer_join.save(update_fields=['status'])
 
         self.todo = mommy.make('todo.ToDo', status=TODO_STATUS.open, project=self.project, user=self.lawyer_user, category='General', name="My Todo")
-        self.attachment = mommy.make('todo.Attachment', project=self.project, todo=self.todo, uploaded_by=self.customer_user)
+
+        self.attachment = mommy.make('todo.Attachment', attachment=TEST_PDF_FILE, project=self.project, todo=self.todo, uploaded_by=self.customer_user)
+
 
     def make_user(self, **kwargs):
         tmp_user = mommy.make('auth.User', **kwargs)

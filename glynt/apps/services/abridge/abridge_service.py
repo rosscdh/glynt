@@ -43,8 +43,7 @@ class LawPalAbridgeService(object):
             'natural_event_date': naturaltime(date),
         })
 
-        card_service = CardService(content=content,
-                                   **kwargs)
+        card_service = CardService(content=content, **kwargs)
 
         logger.debug('Successfully appended card to event.kwargs')
 
@@ -76,7 +75,8 @@ class LawPalAbridgeService(object):
             'data': kwargs
         })
 
-        self.events.append(event)
+        self.events.append(event)  # add teh event to be sent
+
         logger.debug('Added event {content_group}'.format(content_group=content_group))
 
     def send(self):
