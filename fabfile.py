@@ -408,9 +408,9 @@ def chores():
     sudo('aptitude --assume-yes install libgeos-dev')
 
     sudo('easy_install pip')
-    sudo('pip install virtualenv virtualenvwrapper pillow')
+    sudo('pip install virtualenv pillow')
 
-    put('conf/.bash_profile', '~/.bash_profile')
+    #put('conf/.bash_profile', '~/.bash_profile')
 
 
 def env_run(cmd):
@@ -445,7 +445,8 @@ def relink():
     if not env.is_predeploy:
         if files.exists('%s/%s' % (version_path, env.SHA1_FILENAME)): # check the sha1 dir exists
             #if files.exists(project_path, use_sudo=True): # unlink the glynt dir
-            virtualenv('unlink %s' % project_path)
+            if files.exists('%s/%s' % (env.remote_project_path, env.project)): # check the current glynt dir exists
+                virtualenv('unlink %s' % project_path)
             virtualenv('ln -s %s/%s %s' % (version_path, env.SHA1_FILENAME, project_path,)) # relink
 
 @task
@@ -620,9 +621,6 @@ def deploy(is_predeploy='False',full='False',db='False',search='False'):
 
     if full:
         requirements()
-    if full or db:
-        syncdb()
-        #migrate()
 
     relink()
     assets()
