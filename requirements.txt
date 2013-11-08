@@ -36,7 +36,7 @@ djangorestframework
 -e git+https://github.com/alex/django-filter.git#egg=django-filter
 django-taggit
 
-
+django-storages # for custom storage engines
 django-crispy-forms
 django-pagination
 django-endless-pagination

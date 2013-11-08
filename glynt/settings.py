@@ -216,6 +216,7 @@ HELPER_APPS = (
     'django_extensions',
     'templatetag_handlebars',
     'django_markdown',
+    'storages',
 
     'crispy_forms',
     'django_markup',
@@ -293,8 +294,6 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 USE_ELASTICSEARCH = True
-
-
 
 # Primary installed apps goes here
 # we do this so that we only test our apps
