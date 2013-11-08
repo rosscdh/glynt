@@ -332,6 +332,7 @@ BROKER_CONNECTION_MAX_RETRIES = 2
 # AWS
 AWS_ACCESS_KEY_ID = 'AKIAI36HOWMVHPU4I3HA'
 AWS_SECRET_ACCESS_KEY = '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'
+AWS_QUERYSTRING_AUTH = False # to stop 304 not happening and boto appending our info to the querystring
 # see http://developer.yahoo.com/performance/rules.html#expires
 AWS_HEADERS = {
     'Expires': 'Thu, 15 Apr 2020 20:00:00 GMT',
