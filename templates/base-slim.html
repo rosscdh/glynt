@@ -23,10 +23,24 @@
 </head>
 <body data-spy="scroll" data-target="#navbar-nav" class="{% block bodyclass %}{% endblock %}" ng-app="lawpal" {% block bodyextra %}style="padding-top:69px;"{% endblock %}>
     {% block js %}{% endblock %}
+
+    <header class="navbar navbar-fixed-top" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="/" class="navbar-brand"><img src="{{ STATIC_URL }}img/logo-nav-white.png" alt="LawPal" title="LawPal"></a>
+            </div>
+        </div>
+    </header>
+
     {% block prebody %}{% endblock %}
     {% block body %}{% endblock %}
     <div class="container">
-        <div class="pull-right"><a href="/" class="navbar-brand"><img src="{{ STATIC_URL }}img/logo-nav-white.png" alt="LawPal" title="LawPal"></a></div>
+        <a href="/">Return Home</a>
     </div>
 </body>
 </html>
