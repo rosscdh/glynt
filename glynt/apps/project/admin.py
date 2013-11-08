@@ -24,6 +24,8 @@ from .forms import AdminMatchingEmailCustomContentForm
 import logging
 logger = logging.getLogger('lawpal.project')
 
+SITE_EMAIL = settings.DEFAULT_FROM_EMAIL
+
 csrf_protect_m = method_decorator(csrf_protect)
 
 
@@ -79,7 +81,7 @@ class ProjectAdmin(admin.ModelAdmin):
 
         email = Bunch(
             template_name='project_matches',
-            from_email='"LawPal ({company})" <noreply@lawpal.com>'.format(company=obj.company),
+            from_email=SITE_EMAIL,
             recipient_list=[recipient],
             bcc=['founders@lawpal.com'],
             context={

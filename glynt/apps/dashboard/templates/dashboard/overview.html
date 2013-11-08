@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}{% load url from future %}{% load glynt_helpers crispy_forms_tags project_tags comments fluent_comments_tags jsonify %}
 
 {% block page_title %}Overview &mdash; {% project_name project %}{% endblock %}
@@ -79,7 +80,7 @@
                 <div class="widget checklist">
                     <a href="{% url 'dashboard:checklist' uuid=project.uuid %}"><h3>Checklist</h3></a>
                     <div class="row">
-                        <div class="col col-2 text-center">
+                        <div class="col col-2  col-offset-1 text-center">
                             <h1>
                                 <a href="{% url 'dashboard:checklist' uuid=project.uuid %}#new" class="text-muted">{{ counts.new }}</a>
                             </h1>
@@ -118,6 +119,11 @@
                             <a href="{% url 'dashboard:checklist' uuid=project.uuid %}#closed">
                                 <small class="softer">Closed</small>
                             </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-10 col-offset-1">
+                            <div class="project-progress-bar" data-counts="data.project.counts" data-show="'new,open,pending,feedback,closed'" data-show-legend="false"></div>
                         </div>
                     </div>
                 </div>

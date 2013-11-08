@@ -7,7 +7,6 @@ angular.module("lawpal").controller( "ProjectCtrl", [ "$scope", "lawPalService",
 	function( $scope, lawPalService, lawPalUrls, $location, $anchorScroll, angularPusher, toaster, $modal ) {
 	"use strict";
 	// Load project details
-	$scope.project = {};
 	$scope.data = {
 		"project": {},
 		"users": [],
