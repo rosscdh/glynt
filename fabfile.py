@@ -207,13 +207,13 @@ def get_sha1():
   return local('git rev-parse --short --verify HEAD', capture=True)
 
 @task
-def db_backup(db='abridge_production'):
+def db_backup(db='lawpal_production'):
     db_backup_name = '%s.bak' % db
     sudo('pg_dump --no-owner --no-acl -Fc %s > /tmp/%s' % (db, db_backup_name,), user='postgres')
     local('scp -i %s %s@%s:/tmp/%s /tmp/' % (env.key_filename, env.user, env.host, db_backup_name,))
 
 @task
-def db_restore(db='abridge_production', db_file=None):
+def db_restore(db='lawpal_production', db_file=None):
     with settings(warn_only=True): # only warning as we will often have errors importing
         if db_file is None:
             db_file = '/tmp/%s.bak' % db
@@ -408,9 +408,9 @@ def chores():
     sudo('aptitude --assume-yes install libgeos-dev')
 
     sudo('easy_install pip')
-    sudo('pip install virtualenv virtualenvwrapper pillow')
+    sudo('pip install virtualenv pillow')
 
-    put('conf/.bash_profile', '~/.bash_profile')
+    #put('conf/.bash_profile', '~/.bash_profile')
 
 
 def env_run(cmd):
@@ -445,7 +445,8 @@ def relink():
     if not env.is_predeploy:
         if files.exists('%s/%s' % (version_path, env.SHA1_FILENAME)): # check the sha1 dir exists
             #if files.exists(project_path, use_sudo=True): # unlink the glynt dir
-            virtualenv('unlink %s' % project_path)
+            if files.exists('%s/%s' % (env.remote_project_path, env.project)): # check the current glynt dir exists
+                virtualenv('unlink %s' % project_path)
             virtualenv('ln -s %s/%s %s' % (version_path, env.SHA1_FILENAME, project_path,)) # relink
 
 @task
@@ -620,9 +621,6 @@ def deploy(is_predeploy='False',full='False',db='False',search='False'):
 
     if full:
         requirements()
-    if full or db:
-        syncdb()
-        #migrate()
 
     relink()
     assets()

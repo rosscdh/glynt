@@ -55,7 +55,7 @@ class VisibleProjectsService(object):
                 if hasattr(projects, 'get'):
                     try:
                         project = projects.get(uuid=self.current_key)
-                    except Project.DoesNotExist:
+                    except:
                         # fix for the crazy nonsensical bug of Sep2013 that was first production killer
                         # if you are creating projects and someone deletes your project
                         # you are still left with that session which causes havok

@@ -26,8 +26,8 @@
                             <span ng-bind="project.currentUserEngagement"></span>
                         </span>
                         <span>
-                            <a class="btn btn-link pull-right" ng-href="{% url 'dashboard:overview' %}{[{project.uuid}]}/" ng-show="project.currentUserEngagement=='Engaged'">View</a>
-                            <h3 ng-bind="project.company.name"></h3>
+                            <a class="btn btn-link pull-right" ng-href="{% url 'dashboard:overview' %}{[{project.uuid}]}/" ng-show="project.currentUserEngagement=='Engaged'">View Project</a>
+                            <a ng-href="{% url 'dashboard:overview' %}{[{project.uuid}]}/"><h3 ng-bind="project.company.name"></h3></a>
                             <div class="row">
                                 <div class="col-3">
                                     <em>Action required</em>
