@@ -1,4 +1,5 @@
 $(window).on('load', function() {
+
   $('[data-ride="steptacular"]').on('finish.lp.steptacular', function(e) {
     var data   = e.formData;
     var lookup = {
@@ -12,16 +13,16 @@ $(window).on('load', function() {
       'privacy-and-terms':        'PRI'
     };
     var selections = JSON.parse(data['selection']);
-    var services = JSON.parse(data['services'] || '{}');
 
     var $form  = $('form#transaction-form');
     var $intakeData = $form.find('#id_intake_data');
     var $transactionType = $form.find('#id_transaction_type');
 
+    var service = null;
     var transactions = [];
     $(selections['services']).each(function() {
-      if (services[this]) {
-        transactions.push(services[this]);
+      if (data['services-' + this]) {
+        transactions.push(JSON.parse(data['services-' + this]));
       } else {
         transactions.push(lookup[this]);
       };
@@ -32,4 +33,5 @@ $(window).on('load', function() {
 
     $form.submit();
   });
+
 });

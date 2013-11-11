@@ -37,7 +37,9 @@
     var scene   = $form.data('scene');
     // var stage   = this.$active.data('stage');
     var stage   = $form.data('stage');
-    var storage = JSON.parse(self.storage[stage] || '{}');
+
+    var key     = stage + (scene ? '-' + scene : '');
+    var storage = {};
 
     $form.find('input, textarea, select').each(function() {
       var $el = $(this);
@@ -55,7 +57,7 @@
         // console.log('radio');
       } else if ($el.is('[type=submit]')) {
         if ($el.attr('id') == $form.data('trigger')) {
-          storage[scene] = $el.data('value');
+          storage = $el.data('value');
         };
       } else {
         storage[$el.attr('name')] = $el.val();
@@ -72,7 +74,7 @@
       };
     });
 
-    self.storage[stage] = JSON.stringify(storage);
+    self.storage[key] = JSON.stringify(storage);
   };
 
   Steptacular.prototype.getActiveIndex = function() {
@@ -108,10 +110,6 @@
 
     if (activeIndex == pos) return;
 
-    var url = window.location.pathname + '#!/' + $scene.attr('id');
-    window.history.pushState({}, null, url);
-    _gaq.push(['_trackPageview', url]);
-
     return this.show(pos > activeIndex ? 'next' : 'prev', $(this.scenes[pos]));
   };
 
@@ -122,10 +120,6 @@
     var $scene = this.scenes[pos];
 
     if ($scene) {
-      var url = window.location.pathname + '#!/' + $scene.attr('id');
-      window.history.pushState({}, null, url);
-      _gaq.push(['_trackPageview', url]);
-
       return this.show('next', $scene);
     } else {
       return this.finish();
@@ -139,10 +133,6 @@
     var $scene = this.scenes[pos];
 
     if ($scene) {
-      var url = window.location.pathname + '#!/' + $scene.attr('id');
-      window.history.pushState({}, null, url);
-      _gaq.push(['_trackPageview', url]);
-
       return this.show('prev', $scene);
     } else {
       return this.start();
@@ -158,6 +148,10 @@
 
     this.$active.removeClass('active');
     this.$active = null;
+
+    var url = window.location.pathname + '#!/' + $next.attr('id');
+    window.history.pushState({}, null, url);
+    _gaq.push(['_trackPageview', url]);
 
     var percentage = '-' + parseFloat($next.index() * 100) + '%'
     this.$element.css('transform', 'translate3d(' + percentage + ', 0, 0)');
@@ -229,28 +223,16 @@
     });
 
     if (isValid) {
-      if (stage == 'selection') {
-        self.storage['selection'] = JSON.stringify({});
-      };
-
       self.process($form);
 
-      if (stage == 'selection') {
-        var isValid = $form.parsley('isValid');
-        if (isValid) {
-          this.next();
-        }
-      } else if (stage == 'qualification') {
-        var qualifies = $form.parsley('isValid');
-        if (qualifies) {
-          this.next();
-        } else {
+      var isQualified = $form.parsley('isValid');
+      if (isQualified) {
+        this.next();
+      } else {
+        if (stage == 'qualification') {
           this.finish();
         };
-      } else {
-        this.next();
       };
-
       $form.parsley('destroy');
     };
   };
