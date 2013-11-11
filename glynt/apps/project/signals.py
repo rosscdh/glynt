@@ -93,12 +93,13 @@ def on_save_ensure_data_aggregates(sender, **kwargs):
     save = False
 
     if 'company_name' not in project.data:
-        save = True
-        # ensure we have the company name always
-        try:
-            project.data['company_name'] = project.company.name
-        except ObjectDoesNotExist:
-            project.data['company_name'] = None
+        if project.company is not None:
+            save = True
+            # ensure we have the company name always
+            try:
+                project.data['company_name'] = project.company.name
+            except ObjectDoesNotExist:
+                project.data['company_name'] = None
 
     if 'project_name' not in project.data:
         save = True
