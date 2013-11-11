@@ -23,7 +23,8 @@
             <ul class="onepage-pagination list-unstyled">
                 <li class="">
                     <a href="#1" data-index="1"  class="navbar-brand">
-                        <img src="{{ STATIC_URL }}img/logo-nav-white-on-dark.png" alt="LawPal" title="LawPal"></a>
+                        <img src="{{ STATIC_URL }}img/logo-nav-white-on-dark.png" alt="LawPal" title="LawPal">
+                    </a>
                 </li>
             </ul>
         </div>
@@ -57,10 +58,7 @@
 {% endblock %}
 
 {% block prebody %}
-<!--A better legal solution for startups-->
-<style>
-</style>
-<div class="main" data-spy="scroll" data-target="#navbar" id="content">
+<div class="main">
     <section id="top">
         <div class="container">
             <div class="inner">
@@ -80,17 +78,17 @@
                         <div class="col-lg-4 col-4">
                             <h3>Enjoy Legal Ease</h3>
                             <p>Get complete visibility of your legal workflow and streamline your legal projects</p>
-                            <a data-index="2" href="#2"><img src="{{STATIC_URL}}img/home-2/down-arrow.png" class="da"></a>
+                            <a data-index="2" href="#2"><img src="/static/img/home-2/down-arrow.png" class="da"></a>
                         </div>
                         <div class="col-lg-4 col-4">
                             <h3>Trust Your Co-Pilot</h3>
                             <p>Work with our network of veteran startup lawyers experienced in your legal needs</p>
-                             <a data-index="4" href="#4"><img src="{{STATIC_URL}}img/home-2/down-arrow.png" class="da"></a>
+                             <a data-index="4" href="#4"><img src="/static/img/home-2/down-arrow.png" class="da"></a>
                         </div>
                         <div class="col-lg-4 col-4">
                             <h3>Fixed Legal Fees</h3>
                             <p>Expect predictable pricing for legal services from incorporation to financing and beyond</p>
-                             <a data-index="5" href="#5"><img src="{{STATIC_URL}}img/home-2/down-arrow.png" class="da"></a>
+                             <a data-index="5" href="#5"><img src="/static/img/home-2/down-arrow.png" class="da"></a>
                         </div>
                     </div>
                 </div>
@@ -259,7 +257,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-6 col-lg-4 col-offset-2 col-12">
+                        <div class="col-sm-6 col-lg-5 col-offset-1 col-12">
                             <div class="step-block">
                                 <h2>Company Formation</h2>
                                 <span class="small"></span> <span class="big">$950</span>
@@ -268,7 +266,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6 col-lg-4 col-12">
+                        <div class="col-sm-6 col-lg-5 col-12">
                             <div class="step-block">
                                 <h2>Bridge/Note Financing</h2>
                                 <span class="big">$2,500</span>
@@ -281,8 +279,7 @@
                         </div>
                     
                         <div class="col-12 text-center link onepage-pagination">
-                            <br />
-                            <br />
+
                             <a href="#signup-modal" data-toggle="modal" class="btn btn-clear-border btn-home btn-huge">Get Started</a>
                         </div>
                     </div>
@@ -314,7 +311,7 @@
                         <h2 class="">About LawPal</h2>
                         <p>As a startup, every dollar counts and getting an invoice for $15,000 in legal fees hurts no matter when you have to pay it. We wanted startups to have a way to connect with an experienced lawyer they could trust, at a fair and predictable price, and always know the status of their legal projects. So we started LawPal. </p>
                     </div>
-                    <div class="row">
+                    <div class="row hidden-sm">
                         <div class="col-sm-5">
                             <h2 class="">Our Team</h2>
                             <div class="row investors-team">
@@ -330,7 +327,7 @@
                                 </div>      
                                 <div class="col-4">
                                     <img src="{{ STATIC_URL }}img/ross-face.jpg" class="img-circle" style="width:95px">
-                                    <h3 class="media-heading">Ross C-dH</h4>
+                                    <h3 class="media-heading">Ross Crawford-d'Heureuse</h4>
                                 </div>      
                             </div>
                         </div>
@@ -381,6 +378,7 @@
 <!--Love for LawPal-->
 </div>
 
+<!-- Modal Time -->
 <!--MODAL for Homepage Video-->
 
 <div id="videoModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel" aria-hidden="true">
@@ -395,25 +393,29 @@
         </div>
     </div>
 </div>
-
 <script type="text/javascript" src="{{ STATIC_URL }}js/scroll/jquery.onepage-scroll.js"></script>
-<link href="{{ STATIC_URL }}js/scroll/onepage-scroll.css" rel="stylesheet">
+<link href="{{ STATIC_URL }}js/scroll/onepage-scroll.css" rel="stylesheet"  id="onepage-styles">
 <link href="{{ STATIC_URL }}css/theme/animate.css" rel="stylesheet">
 
 <script>
-$(".main").onepage_scroll({
-   sectionContainer: "section", // sectionContainer accepts any kind of selector in case you don't want to use section
-   animationTime: 600, // AnimationTime let you define how long each section takes to animate
-   pagination: true, // You can either show or hide the pagination. Toggle true for show, false for hide.
-   updateURL: true // Toggle this true if you want the URL to be updated automatically when the user scroll to each page.
 
-});
-
+if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+    //small screen, load other JS files
+    $("section").unwrap();        //the script has been added to the DOM, you can now use it's code
+    $("section").height('600px');
+    $("#onepage-styles").attr("disabled", "disabled");
+} else {
+    $(".main").onepage_scroll({
+       sectionContainer: "section", // sectionContainer accepts any kind of selector in case you don't want to use section
+       animationTime: 600, // AnimationTime let you define how long each section takes to animate
+       pagination: true, // You can either show or hide the pagination. Toggle true for show, false for hide.
+       updateURL: true // Toggle this true if you want the URL to be updated automatically when the user scroll to each page.
+    });
+}
 $(function() {
     $('[data-spy="scroll"]').each(function () {
         var $spy = $(this).scrollspy('refresh')
     });
-
 });
 $('#play-video').click(function () {
     var src = '//www.youtube.com/v/V0IXvhgjNBo&amp;autoplay=1';
@@ -423,9 +425,8 @@ $('#play-video').click(function () {
 $('#videoModal').on('hidden.bs.modal', function () {
     $('#videoModal iframe').removeAttr('src');
 });
-
 </script>
-
+{% block footer %}{% endblock %}
 {% endblock %}
 
 {% block body %}

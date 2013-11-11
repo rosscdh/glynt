@@ -4146,36 +4146,88 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
 /* Signin Modal
 -------------------------------------------------- */
 #signup-modal,
-#signin-modal {
+#signin-modal,
+#lawyer-signup-modal {
   color: #999;
 }
+#signup-modal .startup,
+#signin-modal .startup,
+#lawyer-signup-modal .startup {
+  margin: 0px 10px 0px 10px;
+  min-height: 202px;
+  padding-top: 25px;
+}
+#signup-modal .startup.new,
+#signin-modal .startup.new,
+#lawyer-signup-modal .startup.new {
+  text-align: center;
+  opacity: 0.7;
+  padding-top: 15px;
+  transition: opacity 0.3s;
+}
+#signup-modal .startup.new h1,
+#signin-modal .startup.new h1,
+#lawyer-signup-modal .startup.new h1 {
+  text-align: center;
+}
+#signup-modal .startup.new h2,
+#signin-modal .startup.new h2,
+#lawyer-signup-modal .startup.new h2 {
+  margin-bottom: 20px;
+}
+#signup-modal .startup.new .btn,
+#signin-modal .startup.new .btn,
+#lawyer-signup-modal .startup.new .btn {
+  width: 160px;
+}
+#signup-modal .startup:hover,
+#signin-modal .startup:hover,
+#lawyer-signup-modal .startup:hover {
+  opacity: 1;
+}
 #signup-modal a.lnk,
-#signin-modal a.lnk {
+#signin-modal a.lnk,
+#lawyer-signup-modal a.lnk {
   color: #999;
   text-decoration: underline;
 }
 #signup-modal hr,
-#signin-modal hr {
-  border-color: #999;
+#signin-modal hr,
+#lawyer-signup-modal hr {
+  border-color: #222;
 }
 #signup-modal h1,
 #signin-modal h1,
+#lawyer-signup-modal h1,
 #signup-modal h2,
-#signin-modal h2 {
-  color: white;
+#signin-modal h2,
+#lawyer-signup-modal h2 {
+  color: #ccc;
 }
 #signup-modal h1,
-#signin-modal h1 {
-  margin-bottom: 30px;
-  margin-top: 20%;
-  font-size: 40px;
+#signin-modal h1,
+#lawyer-signup-modal h1 {
+  margin-bottom: 20px;
+  margin-top: 10px;
+  font-size: 37px;
 }
 #signup-modal h2,
-#signin-modal h2 {
-  font-size: 22px;
+#signin-modal h2,
+#lawyer-signup-modal h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+#signup-modal .close,
+#signin-modal .close,
+#lawyer-signup-modal .close {
+  color: white;
+  opacity: 0.8;
+  text-shadow: none;
 }
 #signup-modal ol li,
-#signin-modal ol li {
+#signin-modal ol li,
+#lawyer-signup-modal ol li {
   font-size: 20px;
   color: #666;
   line-height: 30px;
@@ -4183,14 +4235,16 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
   margin-bottom: 15px;
 }
 #signup-modal ol li.first,
-#signin-modal ol li.first {
+#signin-modal ol li.first,
+#lawyer-signup-modal ol li.first {
   color: #fff;
   font-size: 22px;
   line-height: 46px;
   margin-bottom: 35px;
 }
 #signup-modal ol li.first div,
-#signin-modal ol li.first div {
+#signin-modal ol li.first div,
+#lawyer-signup-modal ol li.first div {
   border: 2px solid #fff;
   color: #fff;
   width: 40px;
@@ -4201,11 +4255,13 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
   margin-left: 0px;
 }
 #signup-modal ol li.first .btn,
-#signin-modal ol li.first .btn {
+#signin-modal ol li.first .btn,
+#lawyer-signup-modal ol li.first .btn {
   margin-left: 50px;
 }
 #signup-modal ol li div,
-#signin-modal ol li div {
+#signin-modal ol li div,
+#lawyer-signup-modal ol li div {
   width: 30px;
   height: 30px;
   border-radius: 30px;
@@ -4219,16 +4275,17 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
   margin-left: 5px;
 }
 #signup-modal ol li div .btn-clear-border,
-#signin-modal ol li div .btn-clear-border {
+#signin-modal ol li div .btn-clear-border,
+#lawyer-signup-modal ol li div .btn-clear-border {
   margin-left: 20px;
 }
 #signup-modal .btn-clear-border,
-#signin-modal .btn-clear-border {
+#signin-modal .btn-clear-border,
+#lawyer-signup-modal .btn-clear-border {
   background-color: transparent;
   border-color: white;
   color: white;
   margin-left: 0px;
-  padding-right: 19px;
   font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
   font-weight: normal;
 }
@@ -6592,6 +6649,13 @@ td.hidden-lg {
   color: #ffffff;
   background-color: #42d0e5;
 }
+.text-primary {
+  color: #42d0e5;
+}
+.no-pad {
+  padding: 0 !important;
+  margin: 0 !important;
+}
 body.homepage header.navbar {
   background-color: rgba(0, 0, 0, 0.15);
   border-bottom: none;
@@ -6629,11 +6693,14 @@ body.homepage .navbar-nav li a {
 body.homepage .navbar-nav li a.active {
   opacity: 1;
 }
+body.homepage h1 {
+  font-size: 30px;
+}
 body.homepage h2 {
   font-size: 35px;
 }
 body.homepage h3 {
-  font-size: 20px;
+  font-size: 16px;
   line-height: 1.3em;
 }
 body.homepage .btn-home {
@@ -6645,7 +6712,7 @@ body.homepage .btn-home {
   font-family: "HelveticaNeueLight", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", 'TeXGyreHerosRegular', "Helvetica", "Tahoma", "Geneva", "Arial", sans-serif;
 }
 body.homepage section {
-  padding-top: 45px;
+  padding-top: 65px;
 }
 body.homepage section .container {
   margin-top: 1em;
@@ -6737,24 +6804,11 @@ body.homepage section#co-pilot h3 {
 body.homepage section#co-pilot .step-block {
   background-color: white;
   margin-right: 20px;
-  margin-top: 50px;
+  margin-top: 20px;
   position: relative;
 }
 body.homepage section#co-pilot .step-block h1 {
   font-size: 35px;
-}
-body.homepage section#co-pilot .step-block div.number {
-  background-color: #555555;
-  color: white;
-  width: 46px;
-  height: 46px;
-  border-radius: 30px;
-  line-height: 46px;
-  font-size: 20px;
-  position: absolute;
-  top: -30px;
-  left: 50%;
-  margin-left: -23px;
 }
 body.homepage section#co-pilot .step-block div.right {
   position: absolute;
@@ -6766,11 +6820,12 @@ body.homepage section#co-pilot .step-block div.right {
 }
 body.homepage section#co-pilot .step-block h2 {
   font-size: 22px;
-  padding-top: 15px;
+  margin-top: 0px;
+  padding-top: 0px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 body.homepage section#co-pilot .step-block h3 {
-  font-size: 16px;
+  font-size: 14px;
   color: #888888;
   margin-bottom: 20px;
 }
@@ -6835,11 +6890,9 @@ body.homepage section#pricing .sub-text {
   font-size: 13px;
 }
 body.homepage section#pricing h2 {
-  font-size: 25px;
+  font-size: 18px;
   margin-bottom: 0px;
-}
-body.homepage section#pricing h3 {
-  font-size: 17px;
+  margin-top: 10px;
 }
 body.homepage section#pricing div.desc {
   padding: 15px;
@@ -6854,6 +6907,9 @@ body.homepage section#pricing span.small {
   font-size: 16px;
   opacity: 0.7;
   text-align: center;
+}
+body.homepage section#pricing .btn {
+  margin-top: 10px;
 }
 body.homepage section#pricing .step-block {
   background-color: white;
@@ -6978,6 +7034,9 @@ body.homepage section#about-us .investors-team img.inv {
   body.homepage section {
     padding-top: 60px;
   }
+  body.homepage h3 {
+    font-size: 22px;
+  }
   body.homepage section#pricing {
     padding-top: 65px;
   }
@@ -6987,12 +7046,38 @@ body.homepage section#about-us .investors-team img.inv {
   body.homepage section#pricing span.small {
     font-size: 33px;
   }
-  body.homepage section#pricing .step-block {
-    padding: 10px 0px 20px 0px;
-    margin-top: 30px;
+  body.homepage section#pricing .btn-home {
+    margin-top: 25px;
+    margin-left: -15px;
   }
   body.homepage section#deal-visibility .row.feature h3 {
     font-size: 24px;
+  }
+  body.homepage section#co-pilot .step-block {
+    margin-top: 50px;
+    padding: 10px 0px 20px 0px;
+    margin-top: 30px;
+  }
+  body.homepage section#co-pilot .step-block h3 {
+    font-size: 17px;
+  }
+  body.homepage section#co-pilot .step-block h2 {
+    padding-top: 15px;
+    margin-top: 10px;
+  }
+  body.homepage section#co-pilot .step-block div.number {
+    background-color: #555555;
+    color: white;
+    width: 46px;
+    height: 46px;
+    border-radius: 30px;
+    line-height: 46px;
+    font-size: 20px;
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    margin-left: -23px;
+    display: block;
   }
   body.homepage section#about-us .about-lawpal {
     font-size: 22px;
@@ -7013,8 +7098,8 @@ body.homepage section#about-us .investors-team img.inv {
   }
   body.homepage .modal-dialog {
     padding-top: 80px;
-    width: 750px;
-    margin-left: -375px;
+    width: 500px;
+    margin-left: -250px;
   }
   body.homepage .modal-dialog iframe {
     height: 417px;
@@ -7335,6 +7420,203 @@ table.lawyer-list.active {
 .checklist-view .page-header {
   border: 0;
 }
+.dashboard-view [class^="engagement-"],
+.dashboard-view [class*=" engagement-"] {
+  padding: 6px 12px;
+}
+.dashboard-view .engagement-engaged {
+  color: #468847;
+}
+.dashboard-view .engagement-proposed {
+  color: #f0ad4e;
+}
+.dashboard-view .widget h3 {
+  border-bottom: 1px solid #f1f1f1;
+  padding-bottom: 8px;
+}
+.dashboard-view .widget.project {
+  padding-bottom: 0;
+}
+.dashboard-view .widget.project em {
+  font-style: normal;
+  color: #bfbfbf;
+  font-size: 0.85em;
+}
+.dashboard-view .widget.project .client .vcard {
+  display: table-cell;
+  width: 108px;
+  background-color: #f1f1f1;
+  padding-top: 0.7em;
+  padding-bottom: 0.2em;
+  height: 8em;
+  text-align: center;
+  vertical-align: middle;
+}
+.dashboard-view .widget.project .client .vcard img {
+  width: 48px;
+  height: 48px;
+}
+.dashboard-view .widget.project .client .vcard h5 {
+  float: none;
+  margin: 0.7em 0 0 0;
+  font-size: 1em;
+  font-weight: bold;
+}
+.dashboard-view .widget.project .col-9 {
+  padding-left: 0;
+}
+.dashboard-view .widget.project .discussion-list table {
+  margin-bottom: 0;
+}
+.dashboard-view .widget.project .discussion-item {
+  height: 8em;
+}
+.dashboard-view .widget.project em button {
+  padding: 0 3px;
+}
+.dashboard-view .widget.project .progress {
+  margin-bottom: 0;
+}
+.dashboard-view .project-primary-action .btn {
+  height: 8em;
+  padding-top: 0.7em;
+  padding-bottom: 0.2em;
+}
+.dashboard-view .project-primary-action .btn h1,
+.dashboard-view .project-primary-action .btn h2,
+.dashboard-view .project-primary-action .btn h3 {
+  color: white;
+}
+.dashboard-view .project-primary-action .btn span.label {
+  font-size: 1em;
+}
+.dashboard-view .col-3 .col-lg-2 {
+  padding: 0;
+  margin: 0;
+  width: 20%;
+}
+.dashboard-view .btn-open {
+  color: #ffffff;
+  background-color: #5bc0de;
+  border-color: #5bc0de;
+}
+.dashboard-view .btn-open:hover,
+.dashboard-view .btn-open:focus,
+.dashboard-view .btn-open:active,
+.dashboard-view .btn-open.active {
+  background-color: #46b8da;
+  border-color: #31b0d5;
+  color: #ffffff;
+}
+.dashboard-view .btn-open.disabled:hover,
+.dashboard-view .btn-open[disabled]:hover,
+fieldset[disabled] .dashboard-view .btn-open:hover,
+.dashboard-view .btn-open.disabled:focus,
+.dashboard-view .btn-open[disabled]:focus,
+fieldset[disabled] .dashboard-view .btn-open:focus,
+.dashboard-view .btn-open.disabled:active,
+.dashboard-view .btn-open[disabled]:active,
+fieldset[disabled] .dashboard-view .btn-open:active,
+.dashboard-view .btn-open.disabled.active,
+.dashboard-view .btn-open[disabled].active,
+fieldset[disabled] .dashboard-view .btn-open.active {
+  background-color: #5bc0de;
+  border-color: #5bc0de;
+}
+.dashboard-view .btn-pending {
+  color: #ffffff;
+  background-color: #f0ad4e;
+  border-color: #f0ad4e;
+}
+.dashboard-view .btn-pending:hover,
+.dashboard-view .btn-pending:focus,
+.dashboard-view .btn-pending:active,
+.dashboard-view .btn-pending.active {
+  background-color: #eea236;
+  border-color: #ec971f;
+  color: #ffffff;
+}
+.dashboard-view .btn-pending.disabled:hover,
+.dashboard-view .btn-pending[disabled]:hover,
+fieldset[disabled] .dashboard-view .btn-pending:hover,
+.dashboard-view .btn-pending.disabled:focus,
+.dashboard-view .btn-pending[disabled]:focus,
+fieldset[disabled] .dashboard-view .btn-pending:focus,
+.dashboard-view .btn-pending.disabled:active,
+.dashboard-view .btn-pending[disabled]:active,
+fieldset[disabled] .dashboard-view .btn-pending:active,
+.dashboard-view .btn-pending.disabled.active,
+.dashboard-view .btn-pending[disabled].active,
+fieldset[disabled] .dashboard-view .btn-pending.active {
+  background-color: #f0ad4e;
+  border-color: #f0ad4e;
+}
+.dashboard-view .btn-awaiting_feedback_from_user {
+  color: #ffffff;
+  background-color: #d9534f;
+  border-color: #d9534f;
+}
+.dashboard-view .btn-awaiting_feedback_from_user:hover,
+.dashboard-view .btn-awaiting_feedback_from_user:focus,
+.dashboard-view .btn-awaiting_feedback_from_user:active,
+.dashboard-view .btn-awaiting_feedback_from_user.active {
+  background-color: #d43f3a;
+  border-color: #c9302c;
+  color: #ffffff;
+}
+.dashboard-view .btn-awaiting_feedback_from_user.disabled:hover,
+.dashboard-view .btn-awaiting_feedback_from_user[disabled]:hover,
+fieldset[disabled] .dashboard-view .btn-awaiting_feedback_from_user:hover,
+.dashboard-view .btn-awaiting_feedback_from_user.disabled:focus,
+.dashboard-view .btn-awaiting_feedback_from_user[disabled]:focus,
+fieldset[disabled] .dashboard-view .btn-awaiting_feedback_from_user:focus,
+.dashboard-view .btn-awaiting_feedback_from_user.disabled:active,
+.dashboard-view .btn-awaiting_feedback_from_user[disabled]:active,
+fieldset[disabled] .dashboard-view .btn-awaiting_feedback_from_user:active,
+.dashboard-view .btn-awaiting_feedback_from_user.disabled.active,
+.dashboard-view .btn-awaiting_feedback_from_user[disabled].active,
+fieldset[disabled] .dashboard-view .btn-awaiting_feedback_from_user.active {
+  background-color: #d9534f;
+  border-color: #d9534f;
+}
+.dashboard-view .btn-closed {
+  color: #ffffff;
+  background-color: #6bdb7e;
+  border-color: #31c94b;
+}
+.dashboard-view .btn-closed:hover,
+.dashboard-view .btn-closed:focus,
+.dashboard-view .btn-closed:active,
+.dashboard-view .btn-closed.active {
+  background-color: #56d66c;
+  border-color: #27a03b;
+  color: #ffffff;
+}
+.dashboard-view .btn-closed.disabled:hover,
+.dashboard-view .btn-closed[disabled]:hover,
+fieldset[disabled] .dashboard-view .btn-closed:hover,
+.dashboard-view .btn-closed.disabled:focus,
+.dashboard-view .btn-closed[disabled]:focus,
+fieldset[disabled] .dashboard-view .btn-closed:focus,
+.dashboard-view .btn-closed.disabled:active,
+.dashboard-view .btn-closed[disabled]:active,
+fieldset[disabled] .dashboard-view .btn-closed:active,
+.dashboard-view .btn-closed.disabled.active,
+.dashboard-view .btn-closed[disabled].active,
+fieldset[disabled] .dashboard-view .btn-closed.active {
+  background-color: #6bdb7e;
+  border-color: #31c94b;
+}
+.dashboard-view .btn-8em {
+  height: 8em;
+  text-align: center;
+  background-color: #f1f1f1;
+  padding-top: 3.5em;
+  padding-bottom: 3.5em;
+}
+.btn-link[disabled="disabled"] {
+  color: #bfbfbf;
+}
 .empty .empty-message {
   margin: 0 auto 20px;
   position: relative;
@@ -7463,16 +7745,13 @@ table.lawyer-list.active {
   position: static;
 }
 @media screen and (min-width: 768px) {
-  {
-    /* The new/reply to discussion dialog is woder than other dialogs */
-  
-  }
   .sidebar {
     display: block;
   }
+  /* The new/reply to discussion dialog is woder than other dialogs */
   .discussion-modal {
-    left: 45%;
     width: 50%;
+    left: 45%;
   }
   .discussion-modal form {
     max-width: 100%;
@@ -7559,12 +7838,7 @@ section.checklist-category {
 .item-list li {
   padding: 10px 0;
 }
-<<<<<<< HEAD
-=======
-
 /* Generic profile display styles */
-
->>>>>>> master
 .vcard {
   position: relative;
   margin-bottom: 10px;
@@ -7589,9 +7863,6 @@ section.checklist-category {
 .vcard.remove {
   opacity: 0.5;
 }
-<<<<<<< HEAD
-=======
-
 .vcard a.icon-envelope {
   position: absolute;
   top: 1em;
@@ -7599,120 +7870,94 @@ section.checklist-category {
   color: #FFF;
   opacity: 0.5;
 }
-
 .vcard:hover a.icon-envelope {
   opacity: 0.75;
 }
-
 /* User profile (mini) */
-
 .user-mini-profile h3.fn,
 .user-mini-profile h5.fn {
   display: block;
   float: left;
 }
-
 /* dashboard discussion/issues list */
-
 .widget.discussion h3,
 .widget.issue h3 {
   margin-bottom: 0;
   border-bottom: 0;
 }
-
 .widget.discussion td.actions-column button,
 .widget.issue td.actions-column button {
   width: 90px;
 }
-
 .issue-list td.status-column {
   width: 44px;
-  color: #FFF;
   text-align: center;
   background-color: #f0ad4e !important;
+  color: #FFF;
 }
-
 .issue-list td.column-subject {
   width: 25%;
 }
-
 .issue-list td.vcard-column {
   width: 30%;
 }
-
 .issue-list td.actions-column {
   width: 200px;
 }
-
 .discussion-list button.widget-title-button {
   margin-top: 0;
 }
-
 .discussion-list tr.byme-false .comment {
   font-weight: bold;
 }
-
 .discussion-list td.vcard-column {
   width: 50px;
 }
-
 .discussion-list td.comment-column div.comment {
   min-height: 4em;
 }
-
 .discussion-list td.comment-column p {
   margin-bottom: 0;
 }
-
 .discussion-list td.comment-column p.discussion-comment {
   font-size: 0.9em;
 }
-
 .discussion-list td.more-column {
   width: 70px;
   vertical-align: middle;
 }
-
 .discussion-item td.status-column {
   width: 44px;
-  padding: 10px 5px;
-  color: #FFF;
   text-align: center;
   background-color: #5bc0de !important;
+  color: #FFF;
+  padding: 10px 5px;
 }
-
 .discussion-item td.status-column i {
-  top: 22px;
   font-size: 24px;
+  top: 22px;
 }
-
 .discussion-item td.status-column small {
-  width: 24px;
-  padding: 7px 0 !important;
   font-size: 10px;
+  padding: 7px 0 !important;
+  width: 24px;
   text-align: center;
 }
-
 td.vcard-column,
 .vcard {
   white-space: nowrap;
 }
-
 td.vcard-column .vcard,
 .vcard .vcard {
   margin: 0;
 }
-
 td.vcard-column .time,
 .vcard .time {
   clear: both;
   white-space: nowrap;
   /*padding-left: 37px;*/
-
 }
-
 td.vcard-column.role-client h2,
->>>>>>> master
 .vcard.role-client h2,
 td.vcard-column.role-client h3,
 .vcard.role-client h3,
@@ -7722,11 +7967,7 @@ td.vcard-column.role-client h5,
 .vcard.role-client h5 {
   color: #42d0e5;
 }
-<<<<<<< HEAD
-=======
-
 td.vcard-column.role-lawyer h2,
->>>>>>> master
 .vcard.role-lawyer h2,
 td.vcard-column.role-account-manager h2,
 .vcard.role-account-manager h2,
@@ -7744,38 +7985,30 @@ td.vcard-column.role-account-manager h5,
 .vcard.role-account-manager h5 {
   color: #f88172;
 }
-<<<<<<< HEAD
-=======
-
 td.vcard-column img.photo {
   float: left;
   max-width: 48px;
   max-height: 48px;
-  margin-right: 0;
+  margin-right: 0px;
 }
-
 .fn img.photo {
   float: left;
   max-width: 28px;
   max-height: 28px;
   margin-right: 10px;
 }
-
 .fn-sm img.photo {
   float: left;
   max-width: 28px;
   max-height: 28px;
   margin-right: 10px;
 }
-
 .fn-lg img.photo {
   float: left;
   max-width: 48px;
   max-height: 48px;
-  margin-right: 0;
+  margin-right: 0px;
 }
-
->>>>>>> master
 button.vcard {
   margin-top: 0;
   margin-bottom: 5px;
@@ -7794,48 +8027,41 @@ button.vcard {
 .widget-title-button {
   margin: 0.7em 0 0 0;
 }
-<<<<<<< HEAD
-=======
-
 .nest {
   position: relative;
 }
-
 .nested {
   position: absolute;
-  top: 0;
   left: 0;
+  top: 0;
 }
-
 .clickable {
   cursor: pointer;
 }
-
 .animate-slide-up {
-  position: absolute;
-  bottom: 0;
-  left: 0;
   height: 0;
   overflow: hidden;
+  position: absolute;
+  left: 0;
+  bottom: 0;
 }
-
 .full-dialog-underlay,
 .full-dialog {
   z-index: 1029;
 }
-
 .full-dialog-underlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
   height: 100%;
+  width: 100%;
   background-color: #fbfbfb;
-  -webkit-box-shadow: inset 0 75px 5px 0px rgba(0, 0, 0, 0.08);
-     -moz-box-shadow: inset 0 75px 5px 0px rgba(0, 0, 0, 0.08);
-          box-shadow: inset 0 75px 5px 0px rgba(0, 0, 0, 0.08);
-}
+  /* Top shadow */
 
+  -webkit-box-shadow: inset 0px 75px 5px 0px rgba(0, 0, 0, 0.08);
+  -moz-box-shadow: inset 0px 75px 5px 0px rgba(0, 0, 0, 0.08);
+  box-shadow: inset 0px 75px 5px 0px rgba(0, 0, 0, 0.08);
+}
 .full-dialog {
   position: absolute;
   top: 0;
@@ -7843,75 +8069,61 @@ button.vcard {
   width: 100%;
   min-height: 100%;
 }
-
 .full-dialog .full-dialog-content {
+  margin-top: 70px;
   padding-top: 10px;
   padding-bottom: 80px;
-  margin-top: 70px;
 }
-
 .full-dialog .vcard .user-photo {
   margin-right: 10px;
 }
-
 .full-dialog .vcard .fn {
   font-weight: bold;
 }
-
 .full-dialog textarea {
   margin-bottom: 0.5em;
 }
-
 .full-dialog-toolbar {
   position: fixed;
   bottom: 0;
   left: 0;
-  z-index: 1029;
   width: 100%;
   height: 60px;
-  vertical-align: middle;
   background-color: #fdfdfd;
-  -webkit-box-shadow: 0 -5px 5px rgba(0, 0, 0, 0.08);
-     -moz-box-shadow: 0 -5px 5px rgba(0, 0, 0, 0.08);
-          box-shadow: 0 -5px 5px rgba(0, 0, 0, 0.08);
-}
+  /* Shadow on toolbar */
 
+  -webkit-box-shadow: 0px -5px 5px rgba(0, 0, 0, 0.08);
+  -moz-box-shadow: 0px -5px 5px rgba(0, 0, 0, 0.08);
+  box-shadow: 0px -5px 5px rgba(0, 0, 0, 0.08);
+  z-index: 1029;
+  vertical-align: middle;
+}
 .full-dialog-toolbar button {
   margin: 16px 0 0 10px;
 }
-
 /* Progress bars */
-
 .progress .bar {
-  float: left;
   height: 100%;
+  float: left;
 }
-
 .progress .bar.bar-info {
   background-color: #5bc0de;
 }
-
 .progress .bar.bar-warning {
   background-color: #f0ad4e;
 }
-
 .progress .bar.bar-danger {
   background-color: #d9534f;
 }
-
 .progress .bar.bar-success {
   background-color: #6bdb7e;
 }
-
 .progress .bar.muted {
   background-color: #bfbfbf;
 }
-
 h5.text-info {
   color: #5bc0de;
 }
-
->>>>>>> master
 .navbar {
   margin-bottom: 0;
 }

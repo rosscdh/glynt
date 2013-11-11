@@ -266,25 +266,55 @@
 
 
 
-#signup-modal,#signin-modal {
+#signup-modal,#signin-modal,#lawyer-signup-modal {
   color:#999;
+  .startup {
+    margin:0px 10px 0px 10px;      
+    min-height:202px;
+    padding-top:25px;
+    &.new {
+      text-align:center;
+      opacity:0.7;
+      padding-top:15px;
+      transition: opacity 0.3s;
+      h1 {
+        text-align:center;
+      }
+      h2 {
+        margin-bottom:20px;
+      }
+      .btn {
+        width: 160px;
+      }
+    }
+  }
+  .startup:hover {
+    opacity:1;
+  }
   a.lnk {
     color:#999;
     text-decoration:underline;
   }
   hr {
-    border-color:#999;
+    border-color:#222;
   }
   h1, h2{
-    color:white;
+    color:#ccc;
   }
   h1 {
-    margin-bottom:30px;
-    margin-top:20%;
-    font-size:40px;
+    margin-bottom:20px;
+    margin-top:10px;
+    font-size:37px;
   }
   h2 {
-    font-size:22px;
+    font-size:24px;
+    margin-bottom:10px;
+    font-family:@font-family-sans-serif;
+  }
+  .close {
+    color:white;
+    opacity:0.8;
+    text-shadow:none;
   }
   ol li {
     font-size:20px;
@@ -329,13 +359,11 @@
         }
     }
   }
-
   .btn-clear-border {
     background-color:transparent;
     border-color:white;
     color: white;
     margin-left:0px;
-    padding-right: 19px;
     font-family:@headings-font-family;
     font-weight:normal;
   }
