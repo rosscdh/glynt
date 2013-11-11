@@ -12,6 +12,7 @@ from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin
 
 class TransactionBuilderTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
     test_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    maxDiff = 100000  # must be large to test large json strings
 
     def test_form_builder(self):
         self.client.login(username=self.customer_user.username, password=self.password)
@@ -53,7 +54,7 @@ class TransactionBuilderTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
         css = self.pq(resp.content)
         form_object = css('form#builder-form')
 
-        expected_form_json_data = json.loads('{"ip_otherthan_founder": true, "num_officers": "22", "description": "My Description", "option_plan_status": "1", "num_employees": "2", "founder_email": "ross@lawpal.com", "num_consultants": "1", "target_states_and_countries": "California", "incubator": "FoundersDen", "num_option_holders": "0", "ip_university_affiliation": true, "company_name": "Test Company", "founder_name": "Ross Crawford", "founders": {"founder_name": {"id": "founder_name", "val": "Ross Crawford", "name": "founder_name"}, "founder_email": {"id": "founder_email", "val": "ross@lawpal.com", "name": "founder_email"}}, "ip_nolonger_affiliated": true, "current_status": "1", "profile_website": "http://angel.com/lawpal", "profile_is_complete": true}')
+        expected_form_json_data = json.loads('{"ip_otherthan_founder": true, "num_officers": "22", "description": "My Description", "option_plan_status": "1", "num_employees": "2", "founder_email": "ross@lawpal.com", "num_consultants": "1", "target_states_and_countries": "California", "incubator": "FoundersDen", "num_option_holders": "0", "ip_university_affiliation": true, "company_name": "Test Company", "founder_name": "Ross Crawford", "founders": {"founder_name": {"id": "founder_name", "val": "Ross Crawford", "name": "founder_name"}, "founder_email": {"id": "founder_email", "val": "ross@lawpal.com", "name": "founder_email"}}, "ip_nolonger_affiliated": true, "current_status": "1", "profile_website": "http://angel.com/lawpal", "project_name": "Project for Customer A", "profile_is_complete": true}')
         have_checked = []
 
         # loop over inputs
@@ -70,7 +71,7 @@ class TransactionBuilderTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
                         field_value = json.loads(field.value)
                         expected_value = expected_form_json_data
 
-                    self.assertEqual(field_value, expected_value)
+                    self.assertEqual(expected_value, field_value)
                     # add to checked (radio items)
                     have_checked.append(field.name)
 
