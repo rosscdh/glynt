@@ -36,7 +36,7 @@ class CustomerProfileSetupForm(forms.Form):
     hidden_photo = forms.CharField(required=False, widget=forms.HiddenInput) # transports the id
 
     # company
-    company_name = forms.CharField(label="Company Name", help_text="", widget=forms.TextInput(attrs={'placeholder': 'Acme Inc'}))
+    company_name = forms.CharField(required=False, label="Company Name", help_text="", widget=forms.TextInput(attrs={'placeholder': 'Acme Inc'}))
     website = forms.URLField(required=False, label="URL", help_text="", widget=forms.TextInput(attrs={'placeholder': 'http://acmeco.com'}))
     twitter = forms.CharField(required=False, label="Twitter", help_text="", widget=forms.TextInput(attrs={}))
     summary = forms.CharField(required=False, label="Summary", widget=forms.Textarea(attrs={'placeholder': 'A brief description of your company', 'data-rangelength': '[0,1024]', 'rows': '2'}))
