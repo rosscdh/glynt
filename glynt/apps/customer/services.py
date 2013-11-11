@@ -30,8 +30,6 @@ class EnsureCustomerService(object):
         fields_to_update.update(last_name = self.data.get('last_name', None))
         fields_to_update.update(email = self.data.get('email', None))
 
-        print fields_to_update
-
         # remove empty items
         fields_to_update = [(k,v) for k,v in fields_to_update.items() if v is not None]
 
