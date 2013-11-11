@@ -1,6 +1,8 @@
 # -*- coding: UTF-8 -*-
 import os
 
+from django.contrib.auth.models import User
+
 try:
     from glynt.apps.customer.models import Customer
 except ImportError:
@@ -22,6 +24,21 @@ class EnsureCustomerService(object):
         self.photo = kwargs.pop('photo', None)
         self.data = kwargs
 
+    def update_user(self):
+        fields_to_update = {}
+        fields_to_update.update(first_name = self.data.get('first_name', None))
+        fields_to_update.update(last_name = self.data.get('last_name', None))
+        fields_to_update.update(email = self.data.get('email', None))
+
+        print fields_to_update
+
+        # remove empty items
+        fields_to_update = [(k,v) for k,v in fields_to_update.items() if v is not None]
+
+        # update the user only if changes happened
+        # this avoides superflous saves, and also uses update and not the heavy save method
+        User.objects.filter(pk=self.user.pk).update(**dict(fields_to_update))
+
     def update_user_profile(self):
         # update the is_customer attribute
         profile = self.user.profile
@@ -40,6 +57,8 @@ class EnsureCustomerService(object):
                 logger.error('Could not save user photo %s for %s: %s' % (photo.file, self.customer, e))
 
     def process(self):
+        self.update_user()
+        self.update_user_profile()
         self.customer, is_new = Customer.objects.get_or_create(user=self.user)
         logger.info("Processing customer %s (is_new: %s)" % (self.user.get_full_name(), is_new,))
 
