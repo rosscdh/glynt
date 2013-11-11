@@ -51,8 +51,9 @@ class Project(ProjectCategoriesMixin, ProjectRulezMixin, models.Model):
         return str(self.uuid)
 
     def project_name(self):
-        return u'Project for {customer} {transactions}'.format(customer=self.customer.user.get_full_name(),
-                                                   transactions=', '.join(self.transaction_types))
+        return u'Project for {customer} {transactions}'.format(customer=self.customer.user.get_full_name(), \
+                                                               transactions=', '.join(self.transaction_types)) \
+                                                       .strip()
 
     @property
     def primary_lawyer(self):
