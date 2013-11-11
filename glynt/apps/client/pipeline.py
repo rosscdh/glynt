@@ -129,7 +129,6 @@ def get_username(details, user=None,
 #             current_user_class_name = None
 
 #         # oh dear class trying to log in as the opposite class
-#         #import pdb;pdb.set_trace()
 #         if current_user_class_name == opposite_user_classname:
 
 #             if opposite_user_classname == 'customer':

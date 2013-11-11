@@ -37,8 +37,6 @@ class DashboardLawyerTest(BaseLawyerCustomerProjectCaseMixin):
         self.assertTrue('counts' in resp.context_data)
         self.assertEqual(type(resp.context_data['counts']), dict)
 
-        #import pdb;pdb.set_trace()
-
         self.assertTrue(self.load_casper_file(js_file='dashboard_access.js', test_label='Test the Dashboard Access for a Lawyer', url=self.url))
 
     def test_lawyer_dashboard_js(self):
