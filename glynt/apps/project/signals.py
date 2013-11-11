@@ -87,20 +87,27 @@ def on_save_ensure_user_in_participants(sender, **kwargs):
         project.participants.add(user)
 
 
-@receiver(pre_save, sender=Project, dispatch_uid='project.on_save_ensure_data_aggregates')
+@receiver(post_save, sender=Project, dispatch_uid='project.on_save_ensure_data_aggregates')
 def on_save_ensure_data_aggregates(sender, **kwargs):
     project = kwargs.get('instance')
-    # ensure we have the company name always
-    try:
-        project.data['company_name'] = project.company.name
-    except ObjectDoesNotExist:
-        project.data['company_name'] = None
+    save = False
 
-    # set the project name
-    project.data['project_name'] = project.project_name()
+    if 'company_name' not in project.data:
+        save = True
+        # ensure we have the company name always
+        try:
+            project.data['company_name'] = project.company.name
+        except ObjectDoesNotExist:
+            project.data['company_name'] = None
 
-    # @TODO append the project counts here, excluding the respective user count
+    if 'project_name' not in project.data:
+        save = True
+        # set the project name
+        project.data['project_name'] = project.project_name()
 
+        # @TODO append the project counts here, excluding the respective user count
+        if save is True:
+            project.save(update_fields=['data'])
 
 @receiver(pre_save, sender=ProjectLawyer, dispatch_uid='project.lawyer_assigned')
 def on_lawyer_assigned(sender, **kwargs):
