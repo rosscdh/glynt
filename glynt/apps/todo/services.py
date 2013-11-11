@@ -94,7 +94,12 @@ class CrocdocAttachmentService(object):
 
     def remove(self):
         # delete from crocdoc based on uuid
-        deleted = crocodoc.document.delete(self.attachment.crocdoc_uuid)
+        try:
+            deleted = crocodoc.document.delete(self.attachment.crocdoc_uuid)
+        except Exception as e:
+            deleted = False
+            logger.error('Crocdoc delete error: %s' % e)
+
         if deleted:
             logger.info('Deleted crocdoc file: {pk} - {uuid}'.format(pk=self.attachment.pk, uuid=self.attachment.crocdoc_uuid))
         else:
