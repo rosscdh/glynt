@@ -40,9 +40,11 @@ class EnsureLawyerService(object):
 
         # remove empty items
         fields_to_update = [(k,v) for k,v in fields_to_update.items() if v is not None]
+
         # update the user only if changes happened
         # this avoides superflous saves, and also uses update and not the heavy save method
-        User.objects.filter(pk=self.user.pk).update(**dict(fields_to_update))
+        if fields_to_update:
+            User.objects.filter(pk=self.user.pk).update(**dict(fields_to_update))
 
         # Update the password if present in the form
         # being present in the form means that this is a new user

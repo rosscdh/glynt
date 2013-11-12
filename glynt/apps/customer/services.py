@@ -35,7 +35,8 @@ class EnsureCustomerService(object):
 
         # update the user only if changes happened
         # this avoides superflous saves, and also uses update and not the heavy save method
-        User.objects.filter(pk=self.user.pk).update(**dict(fields_to_update))
+        if fields_to_update:
+            User.objects.filter(pk=self.user.pk).update(**dict(fields_to_update))
 
     def update_user_profile(self):
         # update the is_customer attribute
