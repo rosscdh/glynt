@@ -80,6 +80,9 @@ class ChangeUserDetailsMixin(object):
     user = None
 
     def update_user(self):
+        if not self.user:
+            raise Exception('No User was provided for this object')
+
         fields_to_update = []
 
         if self.data.get('first_name', None) is not None:
