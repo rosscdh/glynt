@@ -5,13 +5,14 @@ import json
 
 from models import Lawyer
 from glynt.apps.firm.services import EnsureFirmService
+from glynt.mixins import ChangeUserDetailsMixin
 from tasks import send_profile_setup_email
 
 import logging
 logger = logging.getLogger('lawpal.services')
 
 
-class EnsureLawyerService(object):
+class EnsureLawyerService(ChangeUserDetailsMixin):
     """ Setup a Lawyer and his related Firm and Office """
     lawyer = None
     firm = None
@@ -32,24 +33,8 @@ class EnsureLawyerService(object):
 
         self.data = kwargs
 
-    def update_user(self):
-        fields_to_update = []
-
-        if self.data.get('first_name', None) is not None:
-            self.user.first_name = self.data.get('first_name')
-            fields_to_update.append('first_name')
-
-        if self.data.get('last_name', None) is not None:
-            self.user.last_name = self.data.get('last_name')
-            fields_to_update.append('last_name')
-
-        if self.data.get('email', None) is not None:
-            self.user.email = self.data.get('email')
-            fields_to_update.append('email')
-
-        # update the user only if changes happened
-        if len(fields_to_update) > 0:
-            self.user.save(update_fields=fields_to_update)
+    def update_user(self, *args, **kwargs):
+        super(EnsureLawyerService, self).update_user(*args, **kwargs)
 
         # Update the password if present in the form
         # being present in the form means that this is a new user

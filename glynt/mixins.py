@@ -72,3 +72,28 @@ class ModelFormConfirmChangePasswordMixin(forms.ModelForm):
             raise exceptions.ValidationError(_('The Password entered for the "%s" field is not correct' % (self.fields['current_password'].label,)))
 
         return current_password
+
+
+class ChangeUserDetailsMixin(object):
+    """ Mixin used to change the users' details"""
+    data = []
+    user = None
+
+    def update_user(self):
+        fields_to_update = []
+
+        if self.data.get('first_name', None) is not None:
+            self.user.first_name = self.data.get('first_name')
+            fields_to_update.append('first_name')
+
+        if self.data.get('last_name', None) is not None:
+            self.user.last_name = self.data.get('last_name')
+            fields_to_update.append('last_name')
+
+        if self.data.get('email', None) is not None:
+            self.user.email = self.data.get('email')
+            fields_to_update.append('email')
+
+        # update the user only if changes happened
+        if len(fields_to_update) > 0:
+            self.user.save(update_fields=fields_to_update)

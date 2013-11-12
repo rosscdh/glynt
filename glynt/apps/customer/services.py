@@ -3,6 +3,8 @@ import os
 
 from django.contrib.auth.models import User
 
+from glynt.mixins import ChangeUserDetailsMixin
+
 try:
     from glynt.apps.customer.models import Customer
 except ImportError:
@@ -13,7 +15,7 @@ import logging
 logger = logging.getLogger('lawpal.services')
 
 
-class EnsureCustomerService(object):
+class EnsureCustomerService(ChangeUserDetailsMixin):
     """ Set up a startup customer """
     customer = None
 
@@ -23,25 +25,6 @@ class EnsureCustomerService(object):
         self.bio = kwargs.pop('bio', None)
         self.photo = kwargs.pop('photo', None)
         self.data = kwargs
-
-    def update_user(self):
-        fields_to_update = []
-
-        if self.data.get('first_name', None) is not None:
-            self.user.first_name = self.data.get('first_name')
-            fields_to_update.append('first_name')
-
-        if self.data.get('last_name', None) is not None:
-            self.user.last_name = self.data.get('last_name')
-            fields_to_update.append('last_name')
-
-        if self.data.get('email', None) is not None:
-            self.user.email = self.data.get('email')
-            fields_to_update.append('email')
-
-        # update the user only if changes happened
-        if len(fields_to_update) > 0:
-            self.user.save(update_fields=fields_to_update)
 
     def update_user_profile(self):
         # update the is_customer attribute
