@@ -33,18 +33,23 @@ class EnsureLawyerService(object):
         self.data = kwargs
 
     def update_user(self):
-        fields_to_update = {}
-        fields_to_update.update(first_name = self.data.get('first_name', None))
-        fields_to_update.update(last_name = self.data.get('last_name', None))
-        fields_to_update.update(email = self.data.get('email', None))
+        fields_to_update = []
 
-        # remove empty items
-        fields_to_update = [(k,v) for k,v in fields_to_update.items() if v is not None]
+        if self.data.get('first_name', None) is not None:
+            self.user.first_name = self.data.get('first_name')
+            fields_to_update.append('first_name')
+
+        if self.data.get('last_name', None) is not None:
+            self.user.last_name = self.data.get('last_name')
+            fields_to_update.append('last_name')
+
+        if self.data.get('email', None) is not None:
+            self.user.email = self.data.get('email')
+            fields_to_update.append('email')
 
         # update the user only if changes happened
-        # this avoides superflous saves, and also uses update and not the heavy save method
-        if fields_to_update:
-            User.objects.filter(pk=self.user.pk).update(**dict(fields_to_update))
+        if len(fields_to_update) > 0:
+            self.user.save(update_fields=fields_to_update)
 
         # Update the password if present in the form
         # being present in the form means that this is a new user
