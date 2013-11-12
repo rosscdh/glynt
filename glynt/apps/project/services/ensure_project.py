@@ -23,6 +23,19 @@ class EnsureProjectService(object):
 
         self.lawyers = kwargs.get('lawyers', [])
 
+        self.company_is_new(company=self.company)
+
+    def company_is_new(self, company):
+        """
+        Create a new company if it does not exist
+        """
+        if self.company.pk is None:
+            # is a new company
+            if self.company.name in [None, '']:
+                # give it a name because we dont require the company name anymore
+                self.company.name = 'Unnamed company for: %s' % self.customer.user.get_full_name()
+            self.company.save()
+
     def process_transactions(self):
         logger.info('Processing Project Transactions')
         if len(self.transactions) > 0:

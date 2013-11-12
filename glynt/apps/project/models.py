@@ -21,7 +21,7 @@ class Project(ProjectCategoriesMixin, ProjectRulezMixin, models.Model):
 
     uuid = UUIDField(auto=True, db_index=True)
     customer = models.ForeignKey('customer.Customer')
-    company = models.ForeignKey('company.Company')
+    company = models.ForeignKey('company.Company', blank=True, null=True)
     transactions = models.ManyToManyField('transact.Transaction')
     lawyers = models.ManyToManyField('lawyer.Lawyer', blank=True, through='project.ProjectLawyer')
     participants = models.ManyToManyField('auth.User', blank=True)
@@ -33,7 +33,7 @@ class Project(ProjectCategoriesMixin, ProjectRulezMixin, models.Model):
     objects = DefaultProjectManager()
 
     def __unicode__(self):
-        return u'Project for {company_name}'.format(company_name=self.data.get('company_name', ''))
+        return self.data.get('project_name', self.project_name())
 
     @staticmethod
     def content_type():
@@ -49,6 +49,11 @@ class Project(ProjectCategoriesMixin, ProjectRulezMixin, models.Model):
     @property
     def pusher_id(self):
         return str(self.uuid)
+
+    def project_name(self):
+        return u'Project for {customer} {transactions}'.format(customer=self.customer.user.get_full_name(), \
+                                                               transactions=', '.join(self.transaction_types)) \
+                                                       .strip()
 
     @property
     def primary_lawyer(self):

@@ -21,7 +21,7 @@ class ConfirmLoginDetailsForm(forms.ModelForm):
     """
     first_name = forms.CharField(max_length=24, widget=forms.TextInput(attrs={'placeholder': 'John'}))
     last_name = forms.CharField(max_length=24, widget=forms.TextInput(attrs={'placeholder': 'Doemann'}))
-    company_name = forms.CharField(label="Company", help_text='', widget=forms.TextInput(attrs={'placeholder': 'Acme Inc'}))
+    company_name = forms.CharField(label="Company", required=False, help_text='', widget=forms.TextInput(attrs={'placeholder': 'Acme Inc'}))
     email = forms.EmailField(widget=forms.TextInput(attrs={'placeholder': 'john.doemann@example.com'}))
     phone = forms.CharField(label="Phone number", widget=forms.TextInput(attrs={'data-type': 'phone', 'autocomplete': 'off'}))
     agree_tandc = forms.BooleanField(label='I agree to the <a target="_BLANK" href="{url}">Terms &amp; Conditions</a>', help_text='')

@@ -24,11 +24,16 @@ def transactions(context, transaction):
 @register.simple_tag(takes_context=True)
 def transpose_company_data(context, value):
     user = context.get('user')
+    t = template.Template(value)
+
     if user:
         try:
             company = user.companies.all()[0]
+            data = company.__dict__
         except IndexError:
             company = None
-    t = template.Template(value)
-    c = template.Context(company.__dict__)
+            data = {}
+
+    c = template.Context(data)
+
     return t.render(c)

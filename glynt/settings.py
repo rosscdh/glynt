@@ -105,7 +105,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'glynt.middleware.LawpalSocialAuthExceptionMiddleware',
-    'glynt.middleware.EnsureUserHasCompanyMiddleware',  # removed as company is no longer required
     'glynt.middleware.LawpalCurrentProjectsMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_filepicker.middleware.URLFileMapperMiddleware',
