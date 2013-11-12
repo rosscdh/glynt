@@ -3,7 +3,7 @@ import os
 
 from django.contrib.auth.models import User
 
-from glynt.mixins import ChangeUserDetailsMixin
+from glynt.apps.default.mixins import ChangeUserDetailsMixin
 
 try:
     from glynt.apps.customer.models import Customer

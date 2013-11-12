@@ -5,7 +5,7 @@ import json
 
 from models import Lawyer
 from glynt.apps.firm.services import EnsureFirmService
-from glynt.mixins import ChangeUserDetailsMixin
+from glynt.apps.default.mixins import ChangeUserDetailsMixin
 from tasks import send_profile_setup_email
 
 import logging
