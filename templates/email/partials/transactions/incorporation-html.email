@@ -30,11 +30,11 @@
     </li>
     <li style="margin-left: 0;">
         {% if project_data.option_plan_status == '1' %}
-            <p style="font-size: 14px;">We already have an option plan in place</p>
+            <p style="font-size: 14px;">&#10004; We already have an option plan in place</p>
         {% elif project_data.option_plan_status == '2' %}
-            <p style="font-size: 14px;">We would like to implement an option plan</p>
+            <p style="font-size: 14px;">&#10004; We would like to implement an option plan</p>
         {% elif project_data.option_plan_status == '3' %}
-            <p style="font-size: 14px;">We do not need an option at this time</p>
+            <p style="font-size: 14px;">&#10004; We do not need an option at this time</p>
         {% endif %}
     </li>
     <li style="margin-left: 0;">
@@ -42,17 +42,17 @@
     </li>
     {% if project_data.ip_nolonger_affiliated %}
         <li style="margin-left: 0;">
-            <p style="font-size: 14px;">Someone involved in the creation of IP is no longer affiliated with the Company</p>
+            <p style="font-size: 14px;">&#10004; Someone involved in the creation of IP is no longer affiliated with the Company</p>
         </li>
     {% endif %}
     {% if project_data.ip_otherthan_founder %}
         <li style="margin-left: 0;">
-            <p style="font-size: 14px;">Someone other than the founders listed was involved in the creation of IP</p>
+            <p style="font-size: 14px;">&#10004; Someone other than the founders listed was involved in the creation of IP</p>
         </li>
     {% endif %}
     {% if project_data.ip_university_affiliation %}
         <li style="margin-left: 0;">
-            <p style="font-size: 14px;">Someone involved in the creation of IP was affiliated with a university at the time</p>
+            <p style="font-size: 14px;">&#10004; Someone involved in the creation of IP was affiliated with a university at the time</p>
         </li>
     {% endif %}
 </ul>
