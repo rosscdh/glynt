@@ -22,6 +22,9 @@ import time
 import inspect
 import httpretty
 
+import logging
+logger = logging.getLogger('django.test')
+
 BASE_TEST_PATH = os.path.dirname(__file__)
 
 TEST_PDF_PATH = '{test_path}/test.pdf'.format(test_path=BASE_TEST_PATH)
@@ -58,7 +61,7 @@ def for_all_methods(decorator):
     def decorate(cls):
         for mthd in [name for name, mthd in inspect.getmembers(cls, predicate=inspect.ismethod) if '_test' in name or 'test_' in name or name == 'setUp']: # there's propably a better way to do this
             if callable(getattr(cls, mthd)):
-                print("applying decorator to %s.%s" % (cls.__name__, mthd))
+                logger.info("Applying HTTP Mock to %s.%s" % (cls.__name__, mthd))
                 setattr(cls, mthd, decorator(getattr(cls, mthd)))
         return cls
     return decorate

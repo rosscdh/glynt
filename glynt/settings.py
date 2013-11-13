@@ -490,6 +490,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
+        'django.test': {
+            'handlers': ['console', 'logfile'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
         'lawpal': {
             'handlers': ['console', 'logfile'],
             'level': 'DEBUG',
