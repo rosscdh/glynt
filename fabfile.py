@@ -626,4 +626,3 @@ def deploy(is_predeploy='False',full='False',db='False',search='False'):
     assets()
     clean_start()
     conclude()
-

@@ -3,7 +3,7 @@
  * @author <a href="mailtolee.j.sinclair@gmail.com">Lee Sinclair</a>
  * Date: 2 Sept 2013
  */
-angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource', '$http', function ($q, $timeout, $resource, $http) { /* Load the LawPal local interface */
+angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource', '$http', 'multiProgressService', function ($q, $timeout, $resource, $http, multiProgressService) { /* Load the LawPal local interface */
 	'use strict';
 	var lawPalInterface = LawPal;
 	var userType = 'is_customer';
@@ -268,8 +268,8 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 
 			if( details && details.category ) {
 				$http.post(url, details, {
-					'headers': { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-					'transformRequest': transformToFormData
+					"headers": { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+					"transformRequest": transformToFormData
 				}).success(function(response) {
 					//do stuff with response
 					if( response && response.instance && response.instance.category ) {
@@ -311,18 +311,19 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 		 * @param  {Array} categories array of categories (with nested checklist items)
 		 * @return {Function}			promise
 		 */
-		'updateChecklistItemOrder': function( categories ) {
+		'updateChecklistItemOrder': function( items ) {
 			var projectId = this.getProjectUuid();
 			var options = { 'id': projectId };
 			var data = { 'slugs': [] };
 			var deferred = $q.defer();
 
-			angular.forEach( categories, function( item ) {
-				var items = item.items;
-				for( var i=0; i<items.length; i++ ) {
-					data.slugs.push( items[i].slug );
-				}
+			angular.forEach( items, function( item ) {
+				//var items = item.items;
+				//for( var i=0; i<items.length; i++ ) {
+					data.slugs.push( item.slug );
+				//}
 			});
+			debugger;
 
 			checkListItemResources.reorder.save(options, data.slugs, function (results) { /* Success */
 					deferred.resolve(results);
@@ -549,6 +550,47 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 				deferred.reject(results);
 			});
 
+			return deferred.promise;
+		},
+
+		"attachFileChecklistItem": function( item, file ) {
+			var deferred = $q.defer();
+			var lawPalUrl = "/api/v1/attachment";
+			var data = {
+				"project": this.getProjectId(),
+				"todo": item.id,
+				"uploaded_by": { "pk": this.getCurrentUser().pk }
+			};
+
+			var fileProgressHandle = multiProgressService.push( { "label": file.name, "percent": 0, "type": "info" } );
+
+			filepicker.setKey('A4Ly2eCpkR72XZVBKwJ06z');
+			filepicker.store(file,
+				function success(new_inkblob){
+					//console.log(JSON.stringify(new_inkblob));
+					data.attachment = new_inkblob.url.toString();
+					data.data = { "fpfile": new_inkblob };
+					fileProgressHandle.type = "success";
+					fileProgressHandle.label = "Processing: " + fileProgressHandle.label;
+					
+					if ( new_inkblob && new_inkblob.url ) {
+						$http.post( lawPalUrl, data).then( function success( response ){
+							multiProgressService.remove( fileProgressHandle );
+							deferred.resolve(response);
+						}, function error( err ) {
+							fileProgressHandle.type = "danger";
+							deferred.reject( err );
+						});
+					}
+				},
+				function error( fpError ) {
+					deferred.reject(fpError);
+				},
+				function progress( fpProgress ) {
+					multiProgressService.updateProgress( fileProgressHandle, fpProgress);
+				}
+			);
+			
 			return deferred.promise;
 		},
 

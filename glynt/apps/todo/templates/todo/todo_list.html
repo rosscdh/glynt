@@ -14,43 +14,12 @@
 
 {% block body %}
     {% csrf_token %}
+    
     <!-- start: AngularJS: checklist controller //-->
-    <toaster-container toaster-options="{'time-out': 3000}"></toaster-container>
     <div class="container checklist-view" ng-controller="checklistCtrl" ng-init="initalise( { 'project': { 'uuid': '{{ project.uuid }}' }, 'pusher': { 'key':'{{ PUSHER_KEY }}', 'channel':'{{ project.pusher_id }}' } } )">
         <div class="row">
-            <div class="col col-lg-3">
-                <div class="sidebar" data-spy="affix" data-offset-top="80">
-                    <div class="subnav">
-                        <!-- {% if is_lawyer %}ui-sortable="config.categorySort" ng-model="categories"{% endif %} //-->
-                        <ul id="checklist-categories" class="nav nav-pills nav-stacked" {% if is_lawyer %}ui-sortable="config.categorySort" ng-model="categories"{% endif %}>
-                            <li ng-repeat="category in categories" ng-class="{'active':$first}" class="reveal-child">
-                                <a href="#{[{category.info.slug}]}" class="category-{[{category.info.slug}]}">
-                                    <span ng-bind-html-unsafe="category.info.label"></span>
-                                    <span class="num_assigned_to_user badge assigned pull-right" ng-bind="assignedPerCategory(category.info)" xng-bind="category.numAssigned"></span>
-                                    {% if is_lawyer %}
-                                    <i class="glyphicon glyphicon-remove text-danger pull-right category-remove reveal-me" ng-show="assignedPerCategory(category.info)==0" ng-click="removeCategory(category)"></i>
-                                    <i class="icon icon-move"></i>
-                                    {% endif %}
-                                </a>
-                            </li>
-                            {% if is_lawyer %}
-                                <li>
-                                    <button type="button" class="btn btn-link create-category" ng-click="createCategory( category.info )">
-                                        <i class="glyphicon glyphicon-plus-sign"></i> Create new category
-                                    </button>
-                                </li>
-                            {% endif %}
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col col-lg-9">
-                <div id="list-items">
-
-                        <section ng-repeat="category in categories">
-                            <div id="{[{category.info.slug}]}" class="checklist-header clearfix">
-                                <h4 class="pull-left" ng-bind-html-unsafe="category.info.label"></h4>
+            <div class="col col-lg-12">
+                    <div id="list-items">
 
                                 {% if is_lawyer %}
                                 <!-- Add new checklist item //-->
@@ -60,14 +29,51 @@
                                 {% endif %}
 
                                 <table class="table table-striped checklist">
-                                    <tbody {% if is_lawyer %}ui-sortable="config.itemSort" ng-model="category.items"{% endif %}>
-                                        <tr ng-repeat="item in category.items | filter: { is_deleted: model.showDeletedItems }" class="item state-{[{getItemStatus(item)}]} {[{pendingFeedback(item)}]}" ng-controller="checklistItemCtrl">
+                                    <tr>
+                                        <th class="item-info">Name</th>
+                                        <th class="item-details">Attachments</th>
+                                        <th class="item-status">Status</th>
+                                        <th class="item-category">
+                                            <div class="btn-group">
+                                              <button type="button" class="btn btn-heading" data-toggle="dropdown">
+                                                <span ng-bind="model.filters.category.buttonLabel"></span> <i class="icon-caret-down pull-right"></i>
+                                              </button>
+                                              <ul class="dropdown-menu" role="menu">
+                                                <li>
+                                                    <a href="#{[{category.slug}]}" class="category-{[{category.slug}]}" ng-click="categoryFilter(null)">
+                                                        All categories
+                                                    </a>
+                                                </li>
+                                                <li ng-repeat="category in model.categories" class="reveal-child">
+                                                    <a href="#{[{category.slug}]}" class="category-{[{category.slug}]}" ng-click="categoryFilter(category)">
+                                                        <span ng-bind-html-unsafe="category.label"></span>
+                                                        <span class="num_assigned_to_user badge assigned pull-right" ng-bind="assignedPerCategory(category)" xng-bind="category.numAssigned"></span>
+                                                    </a>
+                                                </li>
+                                                {% if is_lawyer %}
+                                                <li>
+                                                    <button type="button" class="btn btn-link create-category" ng-click="createCategory( category.info )">
+                                                        <i class="glyphicon glyphicon-plus-sign"></i> Create new category
+                                                    </button>
+                                                </li>
+                                                {% endif %}
+                                              </ul>
+                                            </div>
+
+                                        </th>
+                                        {% if is_lawyer %}
+                                        <th class="item-meta">Actions</th>
+                                        {% endif %}
+                                    </tr>
+                                    <tbody {% if is_lawyer %}ui-sortable="config.itemSort" ng-model="model.checklist"{% endif %}>
+                                        <tr ng-repeat="item in model.checklist | category: model.filters.category.label" class="item state-{[{getItemStatus(item)}]} {[{pendingFeedback(item)}]}" ng-controller="checklistItemCtrl" ng-file-drop="onFileSelect($files);">
                                             <!-- Checklist item status //-->
+                                            <td class="item-info" checklist-item-link ng-click="viewItem( item )"></td>
+                                            <td class="item-details" checklist-item-details></td>
                                             <td class="item-status" ng-click="viewItem( item )">
                                                 <i class="icon-state-{[{getItemStatus(item)}]}" data-tooltip="{[{getItemDisplayStatus(item)}]}"></i>
                                             </td>
-                                            <td class="item-info" checklist-item-link ng-click="viewItem( item )"></td>
-                                            <td class="item-details" checklist-item-details></td>
+                                            <td ng-bind="item.category"></td>
                                             {% if is_lawyer %}
                                             <!-- Checklist item actions //-->
                                             <td class="item-meta" checklist-item-actions></td>
@@ -75,19 +81,20 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                            </div>
-                        </section>
-
                 </div>
         </div>
+    </div>  
+        <toaster-container toaster-options="{'time-out': 3000}"></toaster-container>
+        <div position="bottom" class="multi-progress"></div>
     </div>
     <!-- end: AngularJS: checklist controller //-->
 {% endblock %}
 
 {% block js %}
     <!--<script src="{{ STATIC_URL }}js/jquery.hotkeys-0.8.js"></script>-->
-    <script src="{{ STATIC_URL }}todo/jquery.plugin.filter_status.js"></script>
-    <script src="{{ STATIC_URL }}todo/jquery.plugin.edit_label.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}todo/jquery.plugin.filter_status.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}todo/jquery.plugin.edit_label.js"></script>
+    <script type="text/javascript" src="//api.filepicker.io/v1/filepicker.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}todo/angularjs.checklistCtrl.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}todo/angularjs.checklistItemCtrl.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}todo/angularjs.checklistItemDirective.js"></script>

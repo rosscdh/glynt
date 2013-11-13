@@ -626,6 +626,19 @@ table.checklist {
     span.badge { margin-left: -8px; margin-top:10px; font-size: 10px; background-color: @brand-primary; /*padding: 1px 5px 3px;*/}
   }
 
+  .item-category {
+    width: 250px;
+    padding:0;
+    .btn-group { width: 100%; }
+    .btn { 
+      background-color: transparent; color: #333; width:100%; text-align: left; 
+      &:active {
+        -webkit-box-shadow: none;
+        box-shadow: none;
+      }
+    }
+  }
+
   tr.item {
     &.state-new {
       &:hover {
@@ -690,6 +703,22 @@ table.checklist {
     }
   }
 }
+
+.on-file-drop-show { display: none; }
+
+/* File drag and drop behaviour */
+.dragover {
+  opacity: 0.9;
+  border-top: 2px dashed @gray-light !important;
+  border-bottom: 2px dashed @gray-light !important;
+  .on-file-drop-show { display: block; color: @link-color; }
+  .on-file-drop-hide { display: none; }
+  /*
+  .item-details, .item-meta { display: none !important; }
+  .item-drop-area { display: table-cell; width: 280px; }
+  */
+}
+
 
 /* Hide delete and edit buttons while dragging */
 .ui-sortable-helper {
@@ -1374,4 +1403,23 @@ button.vcard {
 
 h5.text-info {
   color: @brand-info;
+}
+
+.multi-progress-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #212526;
+  z-index:1028;
+}
+
+.multi-progress-bar {
+  width: 20%;
+  float: left;
+  .progress { margin-bottom: 0px; }
+}
+
+.progress-container {
+  padding: 0.5em;
 }
