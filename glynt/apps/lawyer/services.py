@@ -76,10 +76,16 @@ class EnsureLawyerService(ChangeUserDetailsMixin):
                 # move from ajax_uploads to the model desired path
                 new_path = _lawyer_upload_photo(instance=self.lawyer, filename=photo_file)
                 photo.file.storage.save(new_path, photo.file)  # save to new path
+                # delete current
+                try:
+                    self.lawyer.photo.delete()
+                except Exception as e:
+                    logger.info('Could not delete photo %s' % self.customer.photo)
+
                 # will now upload to s3
                 self.lawyer.photo.save(name=photo_file, content=photo.file)
-                # and update the mugshot
-                #self.lawyer.user.profile.mugshot.save(name=photo_file, content=photo.file)
+                self.lawyer.save(update_fields=['photo'])
+
                 logger.info('Saved new photo %s for %s' % (photo.file, self.lawyer))
             except Exception as e:
                 logger.error('Could not save user photo %s for %s: %s' % (photo.file, self.lawyer, e))

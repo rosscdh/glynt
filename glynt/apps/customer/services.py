@@ -1,8 +1,4 @@
 # -*- coding: UTF-8 -*-
-import os
-
-from django.contrib.auth.models import User
-
 from glynt.apps.default.mixins import ChangeUserDetailsMixin
 
 from cicu.models import UploadedFile
@@ -13,6 +9,7 @@ except ImportError:
     # Customer appears to already be in sys.modules
     pass
 
+import os
 import logging
 logger = logging.getLogger('lawpal.services')
 
@@ -39,12 +36,21 @@ class EnsureCustomerService(ChangeUserDetailsMixin):
             logger.info('New photo for %s' % self.customer)
             photo_file = os.path.basename(self.photo.file.name)  # get base name
             # try:
+            # delete current
+            try:
+                self.customer.photo.delete()
+            except Exception as e:
+                logger.error('Could not delete photo %s' % self.customer.photo)
+
             # move from ajax_uploads to the model desired path
             new_path = _customer_upload_photo(instance=self.customer, filename=photo_file)
             photo.file.storage.save(new_path, photo.file)  # save to new path
+
             # will now upload to s3
             self.customer.photo.save(name=photo_file, content=photo.file)
-            self.customer.user.profile.mugshot.save(name=photo_file, content=photo.file)
+            self.customer.save(update_fields=['photo'])
+
+            #self.customer.user.profile.save(update_fields=['mugshot'])
             logger.info('Saved new photo %s for %s' % (photo.file, self.customer))
             # except Exception as e:
             #     logger.error('Could not save user photo %s for %s: %s' % (photo.file, self.customer, e))
