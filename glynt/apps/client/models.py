@@ -38,15 +38,17 @@ class ClientProfile(UserenaBaseProfile):
         return profile
 
     def get_mugshot_url(self):
-        p = super(ClientProfile, self).get_mugshot_url()
         pic = None
 
         if self.is_lawyer:
-            pic = self.profile_data.get('linkedin_photo_url', None) or self.profile_data.get('facebook_photo_url', None)
+            pic = self.user.lawyer_profile.profile_photo
         if self.is_customer:
-            pic = self.profile_data.get('picture', None)
+            pic = self.user.customer_profile.profile_photo
 
-        return pic if pic is not None else p
+        if pic is not None:
+            return pic
+        else:
+            return super(ClientProfile, self).get_mugshot_url()
 
     @property
     def phone(self):

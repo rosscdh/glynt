@@ -2,13 +2,13 @@
 """
 @TODO set test descriptor
 """
-from django.core.urlresolvers import reverse
-from django.test.client import RequestFactory
-
 import os
 import json
 
-from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin
+from django.core.urlresolvers import reverse
+from django.test.client import RequestFactory
+
+from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin, for_all_methods, glynt_mock_http_requests
 
 from glynt.apps.company.forms import (CompanyProfileForm,
                                       CompanyAndFinancingProfileForm,
@@ -20,6 +20,7 @@ from glynt.apps.company.forms import (CompanyProfileForm,
                                      )
 
 
+@for_all_methods(glynt_mock_http_requests)
 class TransactionBuilderTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
     test_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 

@@ -6,13 +6,10 @@ from django.core.urlresolvers import reverse
 from django.db.models.query import QuerySet
 from model_mommy import mommy
 
-from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin, glynt_mock_http_requests
+from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin, for_all_methods, glynt_mock_http_requests
 from glynt.apps.lawyer.models import Lawyer
 from glynt.apps.project.models import Project
 from glynt.apps.project import PROJECT_STATUS, PROJECT_LAWYER_STATUS
-
-import itertools
-import os
 
 
 class EnsureProjectsAreAvailableInContextOnAllPagesTest(BaseLawyerCustomerProjectCaseMixin):

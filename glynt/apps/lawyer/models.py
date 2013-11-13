@@ -1,23 +1,27 @@
 # -*- coding: UTF-8 -*-
-from django.conf import settings
 from django.db import models
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+from django.template.defaultfilters import slugify
+
+from glynt.apps.utils import get_namedtuple_choices
+from .managers import LawyerManager
+from .transaction_packages import TransactionPackageBunch
 
 from jsonfield import JSONField
-from glynt.apps.utils import get_namedtuple_choices
-
-from managers import LawyerManager
-from transaction_packages import TransactionPackageBunch
+from storages.backends.s3boto import S3BotoStorage
 
 import os
 import logging
 logger = logging.getLogger('django.request')
 
+USERENA_MUGSHOT_DEFAULT = getattr(settings, 'USERENA_MUGSHOT_DEFAULT', None)
+
 
 def _lawyer_upload_photo(instance, filename):
     _, ext = os.path.splitext(filename)
-    return 'lawyer/%s%s' % (instance.user.username, ext)
+    return 'lawyer/%s-%s%s' % (instance.user.username, slugify(filename), ext)
 
 
 class Lawyer(models.Model):
@@ -45,7 +49,7 @@ class Lawyer(models.Model):
     summary = models.CharField(max_length=255)
     bio = models.TextField()
     data = JSONField(default={})
-    photo = models.ImageField(upload_to=_lawyer_upload_photo, blank=True)
+    photo = models.ImageField(upload_to=_lawyer_upload_photo, blank=True, storage=S3BotoStorage())
     is_active = models.BooleanField(default=False, db_index=True)
 
     objects = LawyerManager()
@@ -57,8 +61,8 @@ class Lawyer(models.Model):
         """ leverage python to get the attr if its not already part of the model structure
         getatt is only called at 'finally' once all other lookup types have failed """
         if attr_name not in self.data:
-            raise AttributeError, attr_name
-        return self.data.get(attr_name, None) 
+            raise AttributeError(attr_name)
+        return self.data.get(attr_name, None)
 
     def get_absolute_url(self):
         return reverse('lawyer:profile', kwargs={'slug': self.user.username})
@@ -86,11 +90,7 @@ class Lawyer(models.Model):
         try:
             return self.photo.url
         except:
-            try:
-                return self.user.profile.profile_data.get('linkedin_photo_url', None) or self.user.profile.get_mugshot_url()
-            except:
-                return getattr(settings, 'USERENA_MUGSHOT_DEFAULT', '') # must return string here if no mugshot default
-
+            return self.user.profile.profile_data.get('linkedin_photo_url', USERENA_MUGSHOT_DEFAULT)
 
     def username(self):
         return self.user.username
@@ -110,7 +110,7 @@ class Lawyer(models.Model):
 
     @property
     def profile_status(self):
-        return u'%s' % ('live' if self.is_active == True else 'pending activation and will appear live shortly.')
+        return u'%s' % ('live' if self.is_active is True else 'pending activation and will appear live shortly.')
 
     @property
     def phone(self):
@@ -131,7 +131,6 @@ class Lawyer(models.Model):
     @property
     def fee_packages(self):
         return TransactionPackageBunch(data=self.data)
-
 
     @property
     def companies_advised(self):

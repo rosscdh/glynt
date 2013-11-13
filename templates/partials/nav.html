@@ -47,25 +47,23 @@
                         {% endif %}
                     {% endif %}
                     <li><a href="mailto:xw4ux8lx@incoming.intercom.io" class="intercom">{% trans 'Help' %}</a></li>
-                    {% cache 300 user_nav user.pk %}
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <span>{{ user.get_full_name }}</span>
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                {% if user.profile.is_lawyer %}
-                                    <li><a href="{% url 'dashboard:overview' %}">{% trans 'View Projects' %}</a></li>
-                                    <li><a href="{% url 'lawyer:profile' slug=user.username %}">{% trans 'View Profile' %}</a></li>
-                                    <li><a href="{% url 'lawyer:setup_profile' %}">{% trans 'Setup Profile' %}</a></li>
-                                    <li class="divider"></li>
-                                {% else %}
-                                    <li><a href="{% url 'customer:setup_profile' %}">{% trans 'Settings' %}</a></li>
-                                {% endif %}
-                                <li><a href="{% url 'logout' %}">{% trans 'Sign out' %}</a></li>
-                            </ul>
-                        </li>
-                    {% endcache %}
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <span>{{ user.get_full_name }}</span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            {% if user.profile.is_lawyer %}
+                                <li><a href="{% url 'dashboard:overview' %}">{% trans 'View Projects' %}</a></li>
+                                <li><a href="{% url 'lawyer:profile' slug=user.username %}">{% trans 'View Profile' %}</a></li>
+                                <li><a href="{% url 'lawyer:setup_profile' %}">{% trans 'Setup Profile' %}</a></li>
+                                <li class="divider"></li>
+                            {% else %}
+                                <li><a href="{% url 'customer:setup_profile' %}">{% trans 'Settings' %}</a></li>
+                            {% endif %}
+                            <li><a href="{% url 'logout' %}">{% trans 'Sign out' %}</a></li>
+                        </ul>
+                    </li>
                 {% else %}
                     <li><a href="{% url 'public:must-reads' %}">{% trans 'LawPal Pulse' %}</a></li>
                     <li><a href="{% url 'public:why-lawpal' %}">{% trans "Why We're Better" %}</a></li>

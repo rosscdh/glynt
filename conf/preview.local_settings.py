@@ -53,7 +53,9 @@ SESSION_COOKIE_SECURE = True
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 
 
-AWS_FILESTORE_BUCKET = 'preview.lawpal.com'
+# set the buck name: please note Name MUST NOT have . in it (SSL)
+AWS_STORAGE_BUCKET_NAME = AWS_FILESTORE_BUCKET = 'preview-lawpal-com'
+
 FILEPICKER_API_KEY = 'A4Ly2eCpkR72XZVBKwJ06z'
 CROCDOC_API_KEY = 'GT9FRcpXVs61rgauSjCIzb3Y'
 
