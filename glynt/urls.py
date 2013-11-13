@@ -7,9 +7,11 @@ from django.views.generic.base import RedirectView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib import admin
 
-from glynt.apps.api.v1 import V1_INTERNAL_API
-
 admin.autodiscover()
+
+def _v1_api():
+    from glynt.apps.api.v1 import V1_INTERNAL_API
+    return V1_INTERNAL_API.urls
 
 
 urlpatterns = patterns('',
@@ -22,7 +24,7 @@ urlpatterns = patterns('',
     # v2 rest_framework
     url(r'^api/v2/', include('glynt.apps.api.v2', namespace='api_v2')),
     # v1 (tastypie to be depreciated)
-    url(r'^api/', include(V1_INTERNAL_API.urls, namespace='api')),
+    url(r'^api/', include(_v1_api(), namespace='api')),
 
     # image upload and crop
     url(r'^ajax-upload/', include('cicu.urls')),

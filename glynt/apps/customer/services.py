@@ -1,6 +1,10 @@
 # -*- coding: UTF-8 -*-
 import os
 
+from django.contrib.auth.models import User
+
+from glynt.apps.default.mixins import ChangeUserDetailsMixin
+
 try:
     from glynt.apps.customer.models import Customer, _customer_upload_photo
 except ImportError:
@@ -11,7 +15,7 @@ import logging
 logger = logging.getLogger('lawpal.services')
 
 
-class EnsureCustomerService(object):
+class EnsureCustomerService(ChangeUserDetailsMixin):
     """ Set up a startup customer """
     customer = None
 
@@ -44,6 +48,8 @@ class EnsureCustomerService(object):
             #     logger.error('Could not save user photo %s for %s: %s' % (photo.file, self.customer, e))
 
     def process(self):
+        self.update_user()
+        self.update_user_profile()
         self.customer, is_new = Customer.objects.get_or_create(user=self.user)
         logger.info("Processing customer %s (is_new: %s)" % (self.user.get_full_name(), is_new,))
 

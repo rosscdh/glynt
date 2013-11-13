@@ -19,7 +19,11 @@ import os
 import re
 import mock
 import time
+import inspect
 import httpretty
+
+import logging
+logger = logging.getLogger('django.test')
 
 BASE_TEST_PATH = os.path.dirname(__file__)
 
@@ -49,29 +53,27 @@ class DjangoTestClientWithPATCH(Client):
         return self.request(**r)
 
 
+def for_all_methods(decorator):
+    """
+    Method to wrap all methods within a decorated class
+    with another decorator
+    """
+    def decorate(cls):
+        for mthd in [name for name, mthd in inspect.getmembers(cls, predicate=inspect.ismethod) if '_test' in name or 'test_' in name or name == 'setUp']: # there's propably a better way to do this
+            if callable(getattr(cls, mthd)):
+                logger.info("Applying HTTP Mock to %s.%s" % (cls.__name__, mthd))
+                setattr(cls, mthd, decorator(getattr(cls, mthd)))
+        return cls
+    return decorate
+
+
+@httpretty.activate
 def glynt_mock_http_requests(view_func):
     """
     A generic decorator to be called on all methods that do somethign with
     external apis
     """
-    @httpretty.activate
     def _decorator(request, *args, **kwargs):
-        httpretty.register_uri(httpretty.GET, re.compile("http://127.0.0.1/(.+)"),
-                       body='{"success": true}',
-                       status=200)
-        # httpretty.register_uri(httpretty.POST, re.compile("(.+)"),
-        #                body='{"success": true}',
-        #                status=200)
-        # httpretty.register_uri(httpretty.PUT, re.compile("(.+)"),
-        #                body='{"success": true}',
-        #                status=200)
-        # httpretty.register_uri(httpretty.PATCH, re.compile("(.+)"),
-        #                body='{"success": true}',
-        #                status=200)
-        # httpretty.register_uri(httpretty.DELETE, re.compile("(.+)"),
-        #                body='{"success": true}',
-        #                status=200)
-
         #
         # Abridge
         #
@@ -127,7 +129,6 @@ def glynt_mock_http_requests(view_func):
                        body='This is a document',
                        status=200)
 
-        #time.sleep(2)
         # maybe do something before the view_func call
         response = view_func(request, *args, **kwargs)
         # maybe do something after the view_func call
