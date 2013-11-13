@@ -333,10 +333,11 @@ BROKER_CONNECTION_MAX_RETRIES = 2
 AWS_ACCESS_KEY_ID = 'AKIAIRFGFTRB4LRLWC3A'
 AWS_SECRET_ACCESS_KEY = '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'
 AWS_QUERYSTRING_AUTH = False # to stop 304 not happening and boto appending our info to the querystring
+AWS_PRELOAD_METADATA = True
 # see http://developer.yahoo.com/performance/rules.html#expires
 AWS_HEADERS = {
-    'Cache-Control': 'max-age=86400',
-    'If-None-Match': '*',
+    'Cache-Control': 'max-age=300',
+    'x-amz-acl': 'public-read',
 }
 
 USERENA_USE_MESSAGES = True
