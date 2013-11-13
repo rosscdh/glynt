@@ -12,7 +12,7 @@ $(window).on('load', function() {
       'other':                    'OTH',
       'privacy-and-terms':        'PRI'
     };
-    var selections = JSON.parse(data['selection']);
+    var selections = data['selection'];
 
     var $form  = $('form#transaction-form');
     var $intakeData = $form.find('#id_intake_data');
@@ -21,8 +21,8 @@ $(window).on('load', function() {
     var service = null;
     var transactions = [];
     $(selections['services']).each(function() {
-      if (data['services-' + this]) {
-        transactions.push(JSON.parse(data['services-' + this]));
+      if (data[this + '-services']) {
+        transactions.push(data[this + '-services']);
       } else {
         transactions.push(lookup[this]);
       };

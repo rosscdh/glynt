@@ -7,19 +7,17 @@
     this.$element       = $(element).is('body') ? $(window) : $(element);
     this.$body          = $('body');
     this.options        = $.extend({}, Steptacular.DEFAULTS, options);
+    this.storage        = $.sessionStorage;
+
     this.$active        = null;
-    this.scenes         = $([]);
-    this.storage        = window.localStorage;
+    this.data           = null;
+    this.progress       = null;
+    this.scenes         = null;
+    this.$slides        = null;
     this.transitioning  = null;
 
-    this.$element.addClass('stage');
-
-    this.$element.on('click', this.options.selector.buttons, $.proxy(this.click, this));
-    this.$element.on('submit', this.options.selector.forms, $.proxy(this.submit, this));
-    
-    this.start();
-
-    $(window).on('popstate', $.proxy(this.popstate, this));
+    this.refresh();
+    this.init();
   };
 
   Steptacular.DEFAULTS = {
@@ -30,59 +28,106 @@
     }
   };
 
+  Steptacular.prototype.init = function() {
+    var hash = window.location.hash.replace('#!/', '');
+    if (hash) {
+      this.to(hash);
+    } else {
+      this.start();
+    };
+
+    this.$element.addClass('stage');
+
+    this.$element.on('click', this.options.selector.buttons, $.proxy(this.click, this));
+    this.$element.on('submit', this.options.selector.forms, $.proxy(this.submit, this));
+
+    $(window).on('popstate', $.proxy(this.popstate, this));
+  };
+
+  Steptacular.prototype.refresh = function() {
+    var self      = this;
+
+    this.data     = {};
+    if (this.storage.getItem('data')) {
+      this.data   = JSON.parse(this.storage.getItem('data'));
+    };
+
+    this.$slides  = $([]);
+    this.$element
+      .find(this.options.selector.slides)
+      .each(function() {
+        self.$slides.push(this);
+      });
+
+    this.scenes   = [];
+    if (this.storage.getItem('scenes')) {
+      this.scenes = $(JSON.parse(this.storage.getItem('scenes')));
+    } else {
+      this.scenes.push(this.$slides.first().attr('id'));
+    };
+
+    this.progress = this.storage.getItem('progress');
+  };
+
   Steptacular.prototype.process = function(form) {
     var self    = this;
     var $form   = $(form);
-    // var scene   = this.$active.data('scene');
-    var scene   = $form.data('scene');
-    // var stage   = this.$active.data('stage');
-    var stage   = $form.data('stage');
+    var key     = this.$active.attr('id');
+    var stage   = this.$active.data('stage');
 
-    var key     = stage + (scene ? '-' + scene : '');
-    var storage = {};
-
+    var data    = {};
     $form.find('input, textarea, select').each(function() {
       var $el = $(this);
 
       // persist the data
       if ($el.is('[type=checkbox]')) {
         if ($el.is(':checked')) {
-          if (!storage[$el.attr('name')]) {
-            storage[$el.attr('name')] = [];
+          if (!data[$el.attr('name')]) {
+            data[$el.attr('name')] = [];
           };
 
-          storage[$el.attr('name')].push($el.val());
+          data[$el.attr('name')].push($el.val());
         };
       } else if ($el.is(['type=radio'])) {
         // console.log('radio');
       } else if ($el.is('[type=submit]')) {
         if ($el.attr('id') == $form.data('trigger')) {
-          storage = $el.data('value');
+          data = $el.data('value');
         };
       } else {
-        storage[$el.attr('name')] = $el.val();
-      };
-
-      // handle the selection of scenes
-      if (stage == 'selection') {
-        if ($el.data('needs-stage') && $el.is(':checked')) {
-          $($el.data('needs-stage').split(',')).each(function() {
-            var selector = '[data-scene="' + $el.val() + '"][data-stage="' + this + '"]';
-            self.scenes.push(self.$element.find(selector));
-          });
-        };
+        data[$el.attr('name')] = $el.val();
       };
     });
 
-    self.storage[key] = JSON.stringify(storage);
+    this.data[key] = data;
+    this.storage.setItem('data', JSON.stringify(this.data));
+
+    // handle the selection of scenes
+    if (stage == 'selection') {
+      var scenes = [this.$active.attr('id')];
+      $form.find('input[type="checkbox"][data-needs-stage]:checked').each(function() {
+        var $el = $(this);
+
+        $($el.data('needs-stage').split(',')).each(function() {
+          var selector = '[data-scene="' + $el.val() + '"][data-stage="' + this + '"]';
+          var $element = self.$element.find(selector);
+
+          scenes.push($element.attr('id'));
+        });
+      });
+
+      this.storage.setItem('scenes', JSON.stringify(scenes));
+    };
+
+    this.refresh();
   };
 
   Steptacular.prototype.getActiveIndex = function() {
-    var self = this;
+    var active = (this.$active) ? this.$active.attr('id') : null;
 
     var activeIndex = null;
     $(this.scenes).each(function(index, scene) {
-      if (self.$active == scene) {
+      if (active == scene) {
         activeIndex = index;
       };
     });
@@ -90,37 +135,55 @@
     return activeIndex;
   };
 
-  Steptacular.prototype.getSceneIndexFromId = function(id) {
+  Steptacular.prototype.getSceneIndex = function(id) {
     var self = this;
 
-    var activeIndex = null;
+    var sceneIndex = null;
     $(this.scenes).each(function(index, scene) {
-      if (id == scene.attr('id')) {
-        activeIndex = index;
+      if (id == scene) {
+        sceneIndex = index;
       };
     });
 
-    return activeIndex;
+    return sceneIndex;
   };
 
-  Steptacular.prototype.to = function(pos) {
+  Steptacular.prototype.getSlide = function(scene) {
+    var self = this;
+
+    var slide = null;
+    this.$slides.each(function() {
+      var $el = $(this);
+      if (scene == $el.attr('id')) {
+        slide = $el;
+      };
+    });
+
+    return slide;
+  };
+
+  Steptacular.prototype.to = function(scene) {
     var activeIndex = this.getActiveIndex();
+    var pos         = this.getSceneIndex(scene);
+    var progress    = this.getSceneIndex(this.progress);
 
     if (pos > (this.scenes.length - 1) || pos < 0) return;
 
     if (activeIndex == pos) return;
 
-    return this.show(pos > activeIndex ? 'next' : 'prev', $(this.scenes[pos]));
+    if (pos > progress) return this.start();
+
+    return this.show(pos > activeIndex ? 'next' : 'prev', this.scenes[pos]);
   };
 
   Steptacular.prototype.next = function() {
     if (this.transitioning) return;
 
     var pos = this.getActiveIndex() + 1;
-    var $scene = this.scenes[pos];
+    var scene = this.scenes[pos];
 
-    if ($scene) {
-      return this.show('next', $scene);
+    if (scene) {
+      return this.show('next', scene);
     } else {
       return this.finish();
     };
@@ -130,55 +193,67 @@
     if (this.transitioning) return;
 
     var pos = this.getActiveIndex() - 1;
-    var $scene = this.scenes[pos];
+    var scene = this.scenes[pos];
 
-    if ($scene) {
-      return this.show('prev', $scene);
+    if (scene) {
+      return this.show('prev', scene);
     } else {
       return this.start();
     };
   };
 
-  Steptacular.prototype.show = function(type, next) {
+  Steptacular.prototype.show = function(type, scene) {
     if (this.transitioning) return;
 
-    var $next = next || $active[type]();
+    var $next = this.getSlide(scene);
 
     this.transitioning = true;
 
-    this.$active.removeClass('active');
-    this.$active = null;
+    if (this.$active) {
+      this.$active.removeClass('active');
+      this.$active = null;
+    };
 
     var url = window.location.pathname + '#!/' + $next.attr('id');
     window.history.pushState({}, null, url);
     _gaq.push(['_trackPageview', url]);
 
-    var percentage = '-' + parseFloat($next.index() * 100) + '%'
+    if (this.getSceneIndex(scene) > this.getSceneIndex(this.progress)) {
+      this.storage.setItem('progress', scene);
+      this.refresh();
+    };
+
+    var percentage = '-' + parseFloat($next.index() * 100) + '%';
     this.$element.css('transform', 'translate3d(' + percentage + ', 0, 0)');
 
     this.$active = $next;
     this.$active.addClass('active');
+
     this.transitioning = false;
 
     return this;
   };
 
   Steptacular.prototype.start = function() {
-    this.$active = this.$element.find(this.options.selector.slides).first();
-    this.$active.addClass('active');
-    this.scenes.push(this.$active);
-
-    var hash = '#!/' + this.$active.attr('id');
-    if (window.location.hash != hash) {
-      var url = window.location.pathname + hash;
-      window.location.href = url;
-    };
+    return this.to(this.scenes[0]);
   };
 
-  Steptacular.prototype.finish = function() {
-    this.$active.removeClass('active');
+  Steptacular.prototype.finish = function(isQualified) {
+    var self        = this;
+    var isQualified = isQualified || true;
+    var pos         = this.getSceneIndex(this.$active.attr('id'));
 
-    var e = $.Event('finish.lp.steptacular', { formData: this.storage });
+    var data = {};
+    $(this.scenes).each(function(index, scene) {
+      if (index <= pos) {
+        data[scene] = self.data[scene];
+      };
+    });
+
+    this.$active.removeClass('active');
+    this.storage.clear();
+
+    var e = $.Event('finish.lp.steptacular', { formData: data, isQualified: isQualified });
     this.$element.trigger(e);
   };
 
@@ -190,23 +265,12 @@
   };
 
   Steptacular.prototype.popstate = function(e) {
-    var scene = window.location.hash.replace('#!/', '');
-
-    var activeIndex = this.getActiveIndex();
-    var pos = this.getSceneIndexFromId(scene);
-
-    if (pos > (this.scenes.length - 1) || pos < 0) return;
-
-    if (activeIndex == pos) return;
-
-    return this.show(pos > activeIndex ? 'next' : 'prev', $(this.scenes[pos]));
+    return this.to(window.location.hash.replace('#!/', ''));
   };
 
   Steptacular.prototype.submit = function(e) {
-    var self  = this;
     var $form = $(e.target);
-    // var stage = this.$active.data('stage');
-    var stage = $form.data('stage');
+    var stage = this.$active.data('stage');
 
     e.preventDefault();
     e.stopPropagation();
@@ -223,14 +287,14 @@
     });
 
     if (isValid) {
-      self.process($form);
+      this.process($form);
 
       var isQualified = $form.parsley('isValid');
       if (isQualified) {
         this.next();
       } else {
         if (stage == 'qualification') {
-          this.finish();
+          this.finish(false);
         };
       };
       $form.parsley('destroy');
