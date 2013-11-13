@@ -65,8 +65,8 @@
                                         <th class="item-meta table-header">Actions</th>
                                         {% endif %}
                                     </tr>
-                                    <tbody {% if is_lawyer %}ui-sortable="config.itemSort" ng-model="model.checklist"{% endif %}>
-                                        <tr ng-repeat="item in model.checklist | category: model.filters.category.label | filter: { is_deleted: model.showDeletedItems }" class="item state-{[{getItemStatus(item)}]} {[{pendingFeedback(item)}]}" ng-controller="checklistItemCtrl" ng-file-drop="onFileSelect($files);">
+                                    <tbody {% if is_lawyer %}ui-sortable="config.itemSort" ng-model="model.workingChecklist"{% endif %}>
+                                        <tr ng-repeat="item in model.workingChecklist" class="item state-{[{getItemStatus(item)}]} {[{pendingFeedback(item)}]}" ng-controller="checklistItemCtrl" ng-file-drop="onFileSelect($files);">
                                             <!-- Checklist item status //-->
                                             <td class="item-info" checklist-item-link ng-click="viewItem( item )"></td>
                                             <td class="item-details" checklist-item-details></td>
@@ -83,6 +83,7 @@
                                 </table>
                 </div>
         </div>
+
     </div>  
         <toaster-container toaster-options="{'time-out': 3000}"></toaster-container>
         <div position="bottom" class="multi-progress"></div>

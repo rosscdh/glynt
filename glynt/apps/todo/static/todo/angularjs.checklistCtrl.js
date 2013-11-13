@@ -24,18 +24,21 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		$scope.model = {
 			'project': { 'uuid': null }, // 
 			'categories': [],
-			'filters': { 
+			'filters': {
+				'on': false,
 				'category': {
 					'label': null,
 					'buttonLabel': 'Category'
 				} 
 			},
 			'checklist': [], // from API: Contains all checklist items
+			'workingChecklist': [],
 			/*'data': [],	// Working copy of the data*/
 			'feedbackRequests': [],
 			'alerts': [], // Used to display alerts at the top of the page
 			'usertype': lawPalService.getUserType(), // is_lawyer, is_customer
-			'showDeletedItems': false // If true deleted items are displayed also
+			'showDeletedItems': false, // If true deleted items are displayed also
+			'ignoreChecklistUpdate': false
 		};
 
 		$scope.categories = [];
@@ -46,6 +49,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 				'axis': 'y'
 			 },
 			'itemSort': {
+				'filtered': false,
 				'axis': 'y',
 				'updatePending': false
 			 }
@@ -75,9 +79,30 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		};
 
 		$scope.categoryFilter = function( category ) {
+			var checklist = $scope.model.checklist;
+			//debugger;
 			if( typeof(category)!=='undefined') {
-				$scope.model.filters.category = category || {};
+				// Get button label
 				$scope.model.filters.category.buttonLabel = category?category.label:'Category';
+				// If a category has been provided, then filter the working checklist
+				if( category ) {
+					$scope.model.workingChecklist = [];
+					// filter checklist checklist
+					for(var i=0;i<checklist.length;i++) {
+						if(checklist[i].category===category.label && checklist[i].is_deleted!==true) {
+							$scope.model.workingChecklist.push( checklist[i] );
+						}
+					}
+					// Ignore this change to the working checklist
+					$scope.model.filters.on = true;
+				} else {
+					// Reset to full checklist
+					$scope.model.workingChecklist = checklist;
+					$scope.model.filters.on = false;
+				}
+
+				$scope.model.ignoreChecklistUpdate = true;
+				
 			} else {
 				return $scope.model.filters.category;
 			}
@@ -230,7 +255,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		/**
 		 * Given a label find the working category JSON object
 		 * @param  {String} label category label
-		 * @return {Object}	   category object
+		 * @return {Object}		category object
 		 */
 		$scope.findCategoryByLabel = function( label ) {
 			var categories = $scope.categories;
@@ -250,7 +275,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		/**
 		 * Given a label find index of a category
 		 * @param  {String} label category label
-		 * @return {Number}	   index of category object
+		 * @return {Number}		index of category object
 		 */
 		$scope.findCategoryIndex = function( label ) {
 			var categories = $scope.categories;
@@ -317,7 +342,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		/**
 		 * Returns true if a specific checklist item
 		 * @param  {Object}  item JSON checklist item
-		 * @return {Boolean}	  true if has assigned items
+		 * @return {Boolean}		true if has assigned items
 		 */
 		$scope.isChecklistItemAssigned = function( item ) {
 			var assigned = false;
@@ -374,7 +399,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		/**
 		 * Locate a specific item in the checklist
 		 * @param  {Object} item JSON object representing a checklist item
-		 * @return {Number}	  Index in the array or -1
+		 * @return {Number}		Index in the array or -1
 		 */
 		$scope.findItemIndex = function( item ) {
 			var list = $scope.model.checklist;
@@ -389,7 +414,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		/**
 		 * Locate a specific item in the checklist
 		 * @param  {Object} item JSON object representing a checklist item
-		 * @return {Number}	  Index in the array or -1
+		 * @return {Number}		Index in the array or -1
 		 */
 		$scope.itemBySlug = function( slug ) {
 			var list = $scope.model.checklist;
@@ -445,7 +470,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		/**
 		 * Return a list of checlist items for a specific category
 		 * @param  {Object} category JSON category object
-		 * @return {Array}		  an array of checklist items assigned to a specific category
+		 * @return {Array}			an array of checklist items assigned to a specific category
 		 */
 		$scope.checklistItemsByCategory = function( category ) {
 			var items = [], checkListItems = $scope.model.checklist;
@@ -486,20 +511,45 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 			}
 		}, true);
 
-		$scope.$watch('model.checklist', function( nv, ov ){
-			var nv_items = [], ov_items = [];
-			// Find out if the order of items has been changed
-			for(var i=0;i<ov.length;i++) {
-				nv_items = nv_items.union( nv[i] );
-				ov_items = ov_items.union( ov[i] );
-			}
+		$scope.$watch('model.workingChecklist', function( nv, ov ){
+			
+			if(!$scope.model.ignoreChecklistUpdate) {
+				var nv_items = [], ov_items = [];
+				// Find out if the order of items has been changed
+				for(var i=0;i<ov.length;i++) {
+					nv_items = nv_items.union( nv[i] );
+					ov_items = ov_items.union( ov[i] );
+				}
 
-			var hasChanged_Items = ov_items.some( function( item, idx ){ 
-				return item.slug!=nv_items[idx].slug; 
-			} );
-			if(hasChanged_Items) {
-				// Save order change
-				$scope.saveItemOrder();
+				var hasChanged_Items = ov_items.some( function( item, idx ){ 
+					return item.slug!=nv_items[idx].slug; 
+				} );
+				if(hasChanged_Items) {
+					// Save order change
+					if($scope.model.filters.on) {
+						// If filtered then re-organise the original list
+						sortInList( $scope.model.checklist,  $scope.model.workingChecklist);
+					}
+					$scope.saveItemOrder();
+				}
+			}
+			$scope.model.ignoreChecklistUpdate = false;
+
+			function findOriginalIndex( original, category, starting ) {
+				for(var j=starting;j<original.length;j++) {
+					if( original[j].category === category) { return j; }
+				}
+				return -1;
+			}
+			function sortInList( original, sorted ) {
+				var availableSpot = 0;
+				for(var i=0;i<sorted.length;i++) {
+					availableSpot = findOriginalIndex( original, sorted[i].category, availableSpot);
+					if(availableSpot>=0){
+						original[availableSpot]=sorted[i];
+						availableSpot = availableSpot+1;
+					}
+				}
 			}
 		}, true);
 
@@ -531,7 +581,10 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		$scope.saveItemOrder = function( /*evt, uiItem*/ ) {
 			var items = $scope.model.checklist;
 
-			debugger;
+			// Is there a filter?
+			if( $scope.model.filters.category.label !== null ) {
+				//debugger;
+			}
 
 			lawPalService.updateChecklistItemOrder( items ).then(
 				function( /*results*/ ) { /* Success */
@@ -551,6 +604,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 			lawPalService.getChecklist( 'sort_position_by_cat' ).then(
 				function( results ) { /* Success */
 					$scope.model.checklist = results;
+					$scope.model.workingChecklist = results;
 					//$scope.mergeChecklistCategories();
 				}
 			);

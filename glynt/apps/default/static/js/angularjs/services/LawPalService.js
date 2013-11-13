@@ -323,7 +323,6 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 					data.slugs.push( item.slug );
 				//}
 			});
-			debugger;
 
 			checkListItemResources.reorder.save(options, data.slugs, function (results) { /* Success */
 					deferred.resolve(results);
