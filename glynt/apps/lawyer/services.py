@@ -66,7 +66,7 @@ class EnsureLawyerService(ChangeUserDetailsMixin):
             self.perform_update()
 
     def save_photo(self, photo):
-        if photo and self.lawyer.photo != photo: # only if its not the same image
+        if photo and self.lawyer.photo.url != photo: # only if its not the same image
             logger.info('New photo for %s' % self.lawyer)
             photo_file = os.path.basename(photo.file.path)# get base name
             try:

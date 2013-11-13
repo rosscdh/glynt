@@ -33,7 +33,7 @@ class EnsureCustomerService(ChangeUserDetailsMixin):
         profile.save(update_fields=['profile_data'])
 
     def save_photo(self, photo):
-        if photo and self.customer.photo != photo:  # only if its not the same image
+        if photo and self.customer.photo.url != photo:  # only if its not the same image
             logger.info('New photo for %s' % self.customer)
             photo_file = os.path.basename(self.photo.file.name)  # get base name
             # try:
