@@ -3,6 +3,8 @@ from django.db import models
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+from django.template.defaultfilters import slugify
+
 from glynt.apps.company.models import Company
 
 from jsonfield import JSONField
@@ -17,7 +19,7 @@ USERENA_MUGSHOT_DEFAULT = getattr(settings, 'USERENA_MUGSHOT_DEFAULT', None)
 
 def _customer_upload_photo(instance, filename):
     _, ext = os.path.splitext(filename)
-    return 'customer/%s%s' % (instance.user.username, ext)
+    return 'customer/%s-%s%s' % (instance.user.username, slugify(filename), ext)
 
 
 class Customer(models.Model):

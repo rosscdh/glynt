@@ -3,6 +3,7 @@ from django.db import models
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+from django.template.defaultfilters import slugify
 
 from glynt.apps.utils import get_namedtuple_choices
 from .managers import LawyerManager
@@ -20,7 +21,7 @@ USERENA_MUGSHOT_DEFAULT = getattr(settings, 'USERENA_MUGSHOT_DEFAULT', None)
 
 def _lawyer_upload_photo(instance, filename):
     _, ext = os.path.splitext(filename)
-    return 'lawyer/%s%s' % (instance.user.username, ext)
+    return 'lawyer/%s-%s%s' % (instance.user.username, slugify(filename), ext)
 
 
 class Lawyer(models.Model):
