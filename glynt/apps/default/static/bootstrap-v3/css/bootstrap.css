@@ -8517,13 +8517,32 @@ ul#checklist-categories i.icon-move {
   cursor: move;
 }
 
+tr.table-header {
+  background-color: #f5f5f5;
+}
+
+button.table-header {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.table-header {
+  font-size: 18px;
+  font-weight: normal;
+  color: #333333;
+}
+
+.table-header.icon {
+  line-height: 18px;
+}
+
 table.checklist {
   margin-bottom: 0;
   border-bottom: 1px solid #dddddd;
 }
 
 table.checklist .item-status {
-  width: 60px;
+  width: 70px;
   text-align: center;
   vertical-align: middle;
 }
@@ -8536,12 +8555,13 @@ table.checklist .item-status [class*=" icon-"] {
 }
 
 table.checklist .item-info {
-  padding-left: 0;
   cursor: pointer;
+  /*padding-left: 0;*/
+
 }
 
 table.checklist .item-info h4 {
-  font-size: 16px;
+  font-size: 14px;
 }
 
 table.checklist .item-info h4 a {
@@ -8581,6 +8601,11 @@ table.checklist .item-details .item-move {
 table.checklist .item-meta .item-move,
 table.checklist .item-details .item-move {
   cursor: move;
+}
+
+table.checklist .item-category {
+  color: #333333;
+  vertical-align: middle;
 }
 
 table.checklist .item-details .btn span.badge {

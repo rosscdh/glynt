@@ -166,7 +166,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 		 */
 		$scope.createItem = function( category ) {
 			// open dialog
-			var url = lawPalUrls.checklistItemCreateFormUrl( $scope.model.project.uuid, category.label );
+			var url = lawPalUrls.checklistItemCreateFormUrl( $scope.model.project.uuid, category.label || 'General' );
 			
 			// Open edit form + dialog
 			lawPalDialog.open( "Create item", url, {} ).then(

@@ -23,19 +23,19 @@
 
                                 {% if is_lawyer %}
                                 <!-- Add new checklist item //-->
-                                <button type="button" class="btn btn-link pull-right create-item" title="Create new item" data-tooltip="Create new checklist item" ng-click="createItem( category.info )">
-                                        <i class="glyphicon glyphicon-plus-sign"></i>
+                                <button type="button" class="btn btn-link pull-right create-item" title="Create new item" data-tooltip="Create new checklist item" ng-click="createItem( model.filters.category )">
+                                        <i class="glyphicon glyphicon-plus-sign"></i> New checklist item
                                 </button>
                                 {% endif %}
 
-                                <table class="table table-striped checklist">
-                                    <tr>
-                                        <th class="item-info">Name</th>
-                                        <th class="item-details">Attachments</th>
-                                        <th class="item-status">Status</th>
+                                <table class="table checklist">
+                                    <tr class="table-header">
+                                        <th class="item-info table-header">Name</th>
+                                        <th class="item-details table-header">Attachments</th>
+                                        <th class="item-status table-header">Status</th>
                                         <th class="item-category">
                                             <div class="btn-group">
-                                              <button type="button" class="btn btn-heading" data-toggle="dropdown">
+                                              <button type="button" class="btn table-header" data-toggle="dropdown">
                                                 <span ng-bind="model.filters.category.buttonLabel"></span> <i class="icon-caret-down pull-right"></i>
                                               </button>
                                               <ul class="dropdown-menu" role="menu">
@@ -62,18 +62,18 @@
 
                                         </th>
                                         {% if is_lawyer %}
-                                        <th class="item-meta">Actions</th>
+                                        <th class="item-meta table-header">Actions</th>
                                         {% endif %}
                                     </tr>
                                     <tbody {% if is_lawyer %}ui-sortable="config.itemSort" ng-model="model.checklist"{% endif %}>
-                                        <tr ng-repeat="item in model.checklist | category: model.filters.category.label" class="item state-{[{getItemStatus(item)}]} {[{pendingFeedback(item)}]}" ng-controller="checklistItemCtrl" ng-file-drop="onFileSelect($files);">
+                                        <tr ng-repeat="item in model.checklist | category: model.filters.category.label | filter: { is_deleted: model.showDeletedItems }" class="item state-{[{getItemStatus(item)}]} {[{pendingFeedback(item)}]}" ng-controller="checklistItemCtrl" ng-file-drop="onFileSelect($files);">
                                             <!-- Checklist item status //-->
                                             <td class="item-info" checklist-item-link ng-click="viewItem( item )"></td>
                                             <td class="item-details" checklist-item-details></td>
                                             <td class="item-status" ng-click="viewItem( item )">
                                                 <i class="icon-state-{[{getItemStatus(item)}]}" data-tooltip="{[{getItemDisplayStatus(item)}]}"></i>
                                             </td>
-                                            <td ng-bind="item.category"></td>
+                                            <td class="item-category" ng-bind="item.category"></td>
                                             {% if is_lawyer %}
                                             <!-- Checklist item actions //-->
                                             <td class="item-meta" checklist-item-actions></td>
