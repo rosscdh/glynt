@@ -336,6 +336,7 @@ AWS_QUERYSTRING_AUTH = False # to stop 304 not happening and boto appending our 
 # see http://developer.yahoo.com/performance/rules.html#expires
 AWS_HEADERS = {
     'Cache-Control': 'max-age=86400',
+    'If-None-Match': '*',
 }
 
 USERENA_USE_MESSAGES = True
