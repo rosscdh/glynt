@@ -7,7 +7,10 @@ from .models import Lawyer, _lawyer_upload_photo
 
 from glynt.apps.firm.services import EnsureFirmService
 from glynt.apps.default.mixins import ChangeUserDetailsMixin
-from tasks import send_profile_setup_email
+
+from .tasks import send_profile_setup_email
+
+from cicu.models import UploadedFile
 
 import logging
 logger = logging.getLogger('lawpal.services')
@@ -66,7 +69,7 @@ class EnsureLawyerService(ChangeUserDetailsMixin):
             self.perform_update()
 
     def save_photo(self, photo):
-        if photo and self.lawyer.photo.url != photo: # only if its not the same image
+        if type(photo) == UploadedFile: # only if it is an uploaded CICU image
             logger.info('New photo for %s' % self.lawyer)
             photo_file = os.path.basename(photo.file.path)# get base name
             try:

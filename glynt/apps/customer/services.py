@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 
 from glynt.apps.default.mixins import ChangeUserDetailsMixin
 
+from cicu.models import UploadedFile
+
 try:
     from glynt.apps.customer.models import Customer, _customer_upload_photo
 except ImportError:
@@ -33,7 +35,7 @@ class EnsureCustomerService(ChangeUserDetailsMixin):
         profile.save(update_fields=['profile_data'])
 
     def save_photo(self, photo):
-        if photo and self.customer.photo.url != photo:  # only if its not the same image
+        if type(photo) == UploadedFile: # only if it is an uploaded CICU image
             logger.info('New photo for %s' % self.customer)
             photo_file = os.path.basename(self.photo.file.name)  # get base name
             # try:
