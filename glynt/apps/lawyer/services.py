@@ -80,7 +80,7 @@ class EnsureLawyerService(ChangeUserDetailsMixin):
                 try:
                     self.lawyer.photo.delete()
                 except Exception as e:
-                    logger.info('Could not delete photo %s' % self.customer.photo)
+                    logger.info('Could not delete photo %s' % self.lawyer.photo)
 
                 # will now upload to s3
                 self.lawyer.photo.save(name=photo_file, content=photo.file)
