@@ -16,7 +16,7 @@ class Signature(models.Model):
 
     @property
     def subject(self):
-        return self.data.get('subject', None)
+        return self.data.get('subject')
 
     @subject.setter
     def subject(self, value):
@@ -24,8 +24,16 @@ class Signature(models.Model):
 
     @property
     def message(self):
-        return self.data.get('message', None)
+        return self.data.get('message')
 
     @message.setter
     def message(self, value):
         self.data['message'] = value
+
+    @property
+    def details_url(self):
+        return self.data.get('details_url')
+
+    @property
+    def signing_url(self):
+        return self.data.get('signing_url')
