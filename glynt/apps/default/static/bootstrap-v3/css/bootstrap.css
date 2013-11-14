@@ -8555,13 +8555,9 @@ table.checklist .item-status [class*=" icon-"] {
 }
 
 table.checklist .item-info {
-  cursor: pointer;
-  /*padding-left: 0;*/
-
-}
-
-table.checklist .item-info h4 {
   font-size: 14px;
+  vertical-align: middle;
+  cursor: pointer;
 }
 
 table.checklist .item-info h4 a {
@@ -8636,6 +8632,10 @@ table.checklist .item-category .btn:active {
           box-shadow: none;
 }
 
+table.checklist tr.item.state-new td.item-info {
+  color: #333333;
+}
+
 table.checklist tr.item.state-new:hover .item-delete {
   display: inline;
 }
@@ -8656,10 +8656,18 @@ table.checklist tr.item.state-open {
 
 }
 
+table.checklist tr.item.state-open td.item-info {
+  color: #333333;
+}
+
 table.checklist tr.item.state-pending {
   color: #bfbfbf;
   /*td a { color: @gray-light; }*/
 
+}
+
+table.checklist tr.item.state-pending td.item-info {
+  color: #333333;
 }
 
 table.checklist tr.item.state-resolved {
@@ -9789,6 +9797,174 @@ h5.text-info {
 
 .progress-container {
   padding: 0.5em;
+}
+
+/* Flexy layout */
+
+.flexy-layout {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.flexy-layout > .block {
+  display: inline-block;
+  float: left;
+  overflow: hidden;
+}
+
+.flexy-layout.flexy-layout-column > .block {
+  height: 100%;
+}
+
+.flexy-layout.flexy-layout-row > .block {
+  width: 100%;
+}
+
+.block.splitter {
+  position: relative;
+  overflow: visible;
+}
+
+.flexy-layout.flexy-layout-column > .splitter {
+  width: 5px;
+}
+
+.flexy-layout.flexy-layout-row > .splitter {
+  height: 5px;
+}
+
+.flexy-layout.flexy-layout-column > .splitter > .ghost {
+  cursor: col-resize;
+}
+
+.flexy-layout.flexy-layout-row > .splitter > .ghost {
+  cursor: row-resize;
+}
+
+.ghost {
+  position: relative;
+  z-index: 99;
+  display: inline-block;
+  float: left;
+  width: 100%;
+  height: 100%;
+}
+
+.block-content {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+/* Extra classes */
+
+.block {
+  min-height: 500px;
+  transition: all 0.2s;
+}
+
+.splitter {
+  background: orange;
+}
+
+.ghost {
+  background: orange;
+  opacity: 0.5;
+}
+
+.handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 9;
+  width: 35px;
+  height: 100%;
+  padding-top: 178px;
+  overflow: visible;
+  text-align: left;
+  cursor: pointer;
+}
+
+.handle span {
+  z-index: 9999;
+  padding: 5px;
+  background: white;
+  border: 1px solid #d4d4d4;
+  border-right-width: 0;
+}
+
+.handle span.collapse {
+  transform: rotate(360deg);
+  transition: all 0.4s;
+}
+
+.handle span:hover {
+  color: #167fdd;
+  border-color: #167fdd;
+  box-shadow: 0px 0px 4px 0px #167fdd;
+  transition: all 0.3s ease-in-out;
+}
+
+.options-container {
+  position: relative;
+}
+
+.collapsable-content {
+  padding-right: 10px;
+  padding-left: 40px;
+}
+
+footer {
+  position: relative;
+}
+
+.options-container {
+  position: absolute;
+  top: 33px;
+  background-color: #f5f5f5;
+}
+
+.options-container .item-container {
+  min-width: 315px;
+  padding-right: 10px;
+  padding-left: 40px;
+}
+
+table.checklist tr .below-sidebar {
+  background: -moz-linear-gradient(left, rgba(0, 0, 0, 0.01) 0, rgba(0, 0, 0, 0.01) 97%, rgba(0, 0, 0, 0.15) 100%);
+  /* FF3.6+ */
+
+  background: -webkit-gradient(linear, left top, right top, color-stop(0, rgba(0, 0, 0, 0.01)), color-stop(97%, rgba(0, 0, 0, 0.01)), color-stop(100%, rgba(0, 0, 0, 0.15)));
+  /* Chrome,Safari4+ */
+
+  background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.01) 0, rgba(0, 0, 0, 0.01) 97%, rgba(0, 0, 0, 0.15) 100%);
+  /* Chrome10+,Safari5.1+ */
+
+  background: -o-linear-gradient(left, rgba(0, 0, 0, 0.01) 0, rgba(0, 0, 0, 0.01) 97%, rgba(0, 0, 0, 0.15) 100%);
+  /* Opera 11.10+ */
+
+  background: -ms-linear-gradient(left, rgba(0, 0, 0, 0.01) 0, rgba(0, 0, 0, 0.01) 97%, rgba(0, 0, 0, 0.15) 100%);
+  /* IE10+ */
+
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.01) 0, rgba(0, 0, 0, 0.01) 97%, rgba(0, 0, 0, 0.15) 100%);
+  /* W3C */
+
+}
+
+table.checklist tr.selected-true {
+  background-color: #f5f5f5;
+}
+
+table.checklist tr.selected-true .below-sidebar {
+  background: transparent;
 }
 
 .navbar {

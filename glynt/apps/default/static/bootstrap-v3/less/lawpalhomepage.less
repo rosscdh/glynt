@@ -598,8 +598,10 @@ table.checklist {
   .item-info {
   	cursor: pointer;
     /*padding-left: 0;*/
+    font-size: 14px;
+    vertical-align: middle;
     h4 {
-      font-size: 14px;
+      
       a {
         color: @brand-info;
         font-weight: bold;
@@ -651,6 +653,7 @@ table.checklist {
 
   tr.item {
     &.state-new {
+      td.item-info { color: @text-color; }
       &:hover {
         .item-delete {
           display:inline;
@@ -667,10 +670,12 @@ table.checklist {
       /*td a { color: @gray-light; }*/
     }
     &.state-open {
+      td.item-info { color: @text-color; }
       color: @gray-light;
       /*td a { color: @gray-light; }*/
     }
     &.state-pending {
+      td.item-info { color: @text-color; }
       color: @gray-light;
        /*td a { color: @gray-light; }*/
     }
@@ -1432,4 +1437,29 @@ h5.text-info {
 
 .progress-container {
   padding: 0.5em;
+}
+
+/* Flexy layout */
+@import "../../js/shared-apps/layout/flexy-layout-base.less";
+footer { position: relative; }
+.options-container {
+  background-color: @panel-heading-bg;
+  position: absolute;
+  top:33px;
+}
+.options-container .item-container { min-width: 315px; padding-left: 40px; padding-right: 10px; }
+table.checklist tr .below-sidebar {
+  background: -moz-linear-gradient(left, rgba(0,0,0,0.01) 0%, rgba(0,0,0,0.01) 97%, rgba(0,0,0,0.15) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(0,0,0,0.01)), color-stop(97%,rgba(0,0,0,0.01)), color-stop(100%,rgba(0,0,0,0.15))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(left, rgba(0,0,0,0.01) 0%,rgba(0,0,0,0.01) 97%,rgba(0,0,0,0.15) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(left, rgba(0,0,0,0.01) 0%,rgba(0,0,0,0.01) 97%,rgba(0,0,0,0.15) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(left, rgba(0,0,0,0.01) 0%,rgba(0,0,0,0.01) 97%,rgba(0,0,0,0.15) 100%); /* IE10+ */
+  background: linear-gradient(to right, rgba(0,0,0,0.01) 0%,rgba(0,0,0,0.01) 97%,rgba(0,0,0,0.15) 100%); /* W3C */
+}
+
+table.checklist tr.selected-true {
+  background-color: @panel-heading-bg;
+  .below-sidebar { 
+    background: transparent;
+  }
 }

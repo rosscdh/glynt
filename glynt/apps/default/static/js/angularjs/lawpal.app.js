@@ -1,4 +1,4 @@
-var lawPalApp = angular.module('lawpal', [ 'ngResource', 'ui.bootstrap', 'Pusher', 'toaster', 'ui.sortable', 'angularFileUpload', 'multi-progress-bar' ]);
+var lawPalApp = angular.module('lawpal', [ 'ngResource', 'ui.bootstrap', 'Pusher', 'toaster', 'ui.sortable', 'angularFileUpload', 'multi-progress-bar', 'flexyLayout' ]);
 
 // Filter for categories
 lawPalApp.filter( 'checkListCategoryFilter', function(){

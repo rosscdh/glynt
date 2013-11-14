@@ -3,8 +3,8 @@
  * @author <a href="mailtolee.j.sinclair@gmail.com">Lee Sinclair</a>
  * Date: 2 Sept 2013
  */
-angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService', 'lawPalUrls', 'lawPalDialog', 'deleteCategoryConfirmDialog', '$location', '$anchorScroll', 'angularPusher', 'toaster',
-	function( $scope, lawPalService, lawPalUrls, lawPalDialog, deleteCategoryConfirmDialog, $location, $anchorScroll, angularPusher, toaster ) {
+angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', '$rootScope', 'lawPalService', 'lawPalUrls', 'lawPalDialog', 'deleteCategoryConfirmDialog', '$location', '$anchorScroll', 'angularPusher', 'toaster',
+	function( $scope, $rootScope, lawPalService, lawPalUrls, lawPalDialog, deleteCategoryConfirmDialog, $location, $anchorScroll, angularPusher, toaster ) {
 		'use strict';
 		$scope.loadStatus = 0;
 
@@ -83,21 +83,24 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 			//debugger;
 			if( typeof(category)!=='undefined') {
 				// Get button label
+				$scope.model.filters.category = category || {};
 				$scope.model.filters.category.buttonLabel = category?category.label:'Category';
 				// If a category has been provided, then filter the working checklist
 				if( category ) {
-					$scope.model.workingChecklist = [];
+					var workingChecklist = [];
 					// filter checklist checklist
 					for(var i=0;i<checklist.length;i++) {
-						if(checklist[i].category===category.label && checklist[i].is_deleted!==true) {
-							$scope.model.workingChecklist.push( checklist[i] );
+						if(checklist[i].category===category.label) {
+							workingChecklist.push( checklist[i] );
 						}
 					}
+					$scope.model.workingChecklist = $scope.getUndeleted(workingChecklist);
 					// Ignore this change to the working checklist
 					$scope.model.filters.on = true;
 				} else {
 					// Reset to full checklist
-					$scope.model.workingChecklist = checklist;
+					$scope.model.workingChecklist = $scope.getUndeleted(checklist);
+					//$scope.model.workingChecklist = checklist;
 					$scope.model.filters.on = false;
 				}
 
@@ -106,6 +109,30 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 			} else {
 				return $scope.model.filters.category;
 			}
+		};
+
+		$scope.updateWorkingList = function() {
+			var checklist = $scope.model.checklist;
+			if($scope.model.filters.on) {
+				if($scope.model.filters.category.label) {
+					$scope.categoryFilter($scope.model.filters.category);
+				} else {
+					$scope.model.workingChecklist = $scope.getUndeleted(checklist);
+				}
+			} else {
+				$scope.model.workingChecklist = $scope.getUndeleted(checklist);
+			}
+		};
+
+		$scope.getUndeleted = function( checklist ) {
+			var workingChecklist = [];
+			for(var i=0;i<checklist.length;i++) {
+				if( checklist[i].is_deleted!==true) {
+					workingChecklist.push( checklist[i] );
+				}
+			}
+
+			return workingChecklist;
 		};
 		/**
 		 * Create new checklist category, opens a dialog asking for a category name
@@ -230,6 +257,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 							{
 								$scope.addItemToChecklist( newItem );
 							}
+						$scope.updateWorkingList();
 					},
 					function( /*details*/ ) { /* Error */
 						$scope.addAlert( "Unable to updated item", "warning", "Error!" );
@@ -394,6 +422,8 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 			if( item ) {
 				item.is_deleted = true;
 			}
+			$rootScope.$broadcast('close-sidebar', 1);
+			$scope.updateWorkingList();
 		};
 
 		/**
@@ -522,7 +552,15 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 				}
 
 				var hasChanged_Items = ov_items.some( function( item, idx ){ 
-					return item.slug!=nv_items[idx].slug; 
+					debugger;
+					if(!nv_items[idx]) {
+						return false;
+					} else {
+						if(item.slug!==nv_items[idx].slug) {
+							debugger;
+						}
+						return item.slug!==nv_items[idx].slug;
+					}
 				} );
 				if(hasChanged_Items) {
 					// Save order change
@@ -603,8 +641,9 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 			// Load initial checklist items
 			lawPalService.getChecklist( 'sort_position_by_cat' ).then(
 				function( results ) { /* Success */
+					
 					$scope.model.checklist = results;
-					$scope.model.workingChecklist = results;
+					$scope.model.workingChecklist = $scope.getUndeleted(results);
 					//$scope.mergeChecklistCategories();
 				}
 			);
@@ -640,6 +679,14 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', 'lawPalService
 					$scope.$apply();
 				}
 			}
+		};
+
+		$scope.selectChecklistItem = function( item, index ) {
+			for(var i=0;i<$scope.model.checklist.length;i++) {
+				$scope.model.checklist[i].selected = false;
+			}
+			item.selected = true;
+			$rootScope.$broadcast('open-sidebar', index);
 		};
 
 		/**

@@ -19,7 +19,10 @@
     <div class="container checklist-view" ng-controller="checklistCtrl" ng-init="initalise( { 'project': { 'uuid': '{{ project.uuid }}' }, 'pusher': { 'key':'{{ PUSHER_KEY }}', 'channel':'{{ project.pusher_id }}' } } )">
         <div class="row">
             <div class="col col-lg-12">
-                    <div id="list-items">
+                <flexy-layout class="main-layout">
+                    <block-container>
+                        <!-- TODO list //-->
+                        <div id="list-items">
 
                                 {% if is_lawyer %}
                                 <!-- Add new checklist item //-->
@@ -62,26 +65,45 @@
 
                                         </th>
                                         {% if is_lawyer %}
-                                        <th class="item-meta table-header">Actions</th>
+                                        <!--<th class="item-meta table-header">Actions</th>//-->
                                         {% endif %}
                                     </tr>
                                     <tbody {% if is_lawyer %}ui-sortable="config.itemSort" ng-model="model.workingChecklist"{% endif %}>
-                                        <tr ng-repeat="item in model.workingChecklist" class="item state-{[{getItemStatus(item)}]} {[{pendingFeedback(item)}]}" ng-controller="checklistItemCtrl" ng-file-drop="onFileSelect($files);">
+                                        <tr ng-repeat="item in model.workingChecklist" class="item state-{[{getItemStatus(item)}]} {[{pendingFeedback(item)}]} selected-{[{item.selected}]}" ng-controller="checklistItemCtrl" ng-file-drop="onFileSelect($files);">
                                             <!-- Checklist item status //-->
-                                            <td class="item-info" checklist-item-link ng-click="viewItem( item )"></td>
+                                            <td class="item-info" ng-click="selectChecklistItem( item, 1 )" ng-bind="item.name"></td>
                                             <td class="item-details" checklist-item-details></td>
                                             <td class="item-status" ng-click="viewItem( item )">
                                                 <i class="icon-state-{[{getItemStatus(item)}]}" data-tooltip="{[{getItemDisplayStatus(item)}]}"></i>
                                             </td>
-                                            <td class="item-category" ng-bind="item.category"></td>
+                                            <td class="item-category below-sidebar" ng-bind="item.category"></td>
                                             {% if is_lawyer %}
                                             <!-- Checklist item actions //-->
-                                            <td class="item-meta" checklist-item-actions></td>
+                                            <!--<td class="item-meta below-sidebar" checklist-item-actions></td>//-->
                                             {% endif %}
                                         </tr>
                                     </tbody>
                                 </table>
-                </div>
+                        </div>
+                        <!-- TODO: end //-->
+                    </block-container>
+                    <block-container init="35" class="options-container ng-cloak" max-width="350">
+                        <div ng-repeat="item in model.workingChecklist | filter: { 'selected': true }" ng-controller="checklistItemCtrl" class="item-container">
+                            <h4 class="item-info" checklist-item-link></h4>
+                            {% if is_lawyer %}
+                            <!-- Checklist item actions //-->
+                            <div class="item-meta" checklist-item-actions data-show-label="true" data-show-move="false"></div>
+                            {% endif %}
+                            <button ng-click="viewItem( item )" class="btn btn-primary">Open</button>
+                            <h5>Attachments</h5>
+                            <ul>
+                                <li>Filename</li>
+                            </ul>
+                            <h5>Discussion</h5>
+                        </div>
+                        <collapse class="handle" index="1" collapsed="true"></collapse>
+                    </block-container>
+                </flexy-layout>
         </div>
 
     </div>  
