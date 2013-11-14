@@ -1,8 +1,6 @@
 """
 """
-from django.db import transaction
 from django.test import TestCase
-from hellosign import HelloSign
 
 from model_mommy import mommy
 import mock
@@ -23,8 +21,8 @@ class HelloSignServiceTest(TestCase):
         super(HelloSignServiceTest, self).setUp()
 
         self.subject = HelloSignService()
-        self.REQUESTED_BY = mommy.make('auth.User',  email='test+requestor@lawpal.com')
-        self.SIGNATORIES = [mommy.make('auth.User', email='test+signatory_%d@lawpal.com' % i) for i in range(2,5)]
+        self.REQUESTED_BY = mommy.make('auth.User', email='test+requestor@lawpal.com')
+        self.SIGNATORIES = [mommy.make('auth.User', email='test+signatory_%d@lawpal.com' % i) for i in range(2, 5)]
         self.PROJECT = mommy.make('project.Project')
 
         self.EXPECTED_SIGNATURE_REQUEST_ID = '123456789-987654321'
@@ -44,8 +42,6 @@ class HelloSignServiceTest(TestCase):
     def test_send_doc_for_signing(self):
         # Setup constants for use in the mock
         REQUESTED_BY = self.REQUESTED_BY
-        SIGNATORIES = self.SIGNATORIES
-        PROJECT = self.PROJECT
 
         EXPECTED_SIGNATURE_REQUEST_ID = self.EXPECTED_SIGNATURE_REQUEST_ID
         EXPECTED_DOC_UUID = self.EXPECTED_DOC_UUID
@@ -93,4 +89,3 @@ class HelloSignServiceTest(TestCase):
             self.assertTrue(signature is not None)
             self.assertEqual(signature.details_url, 'https://www.hellosign.com/home/manage?locate=777666555444333222111000')
             self.assertEqual(signature.signing_url, 'https://www.hellosign.com/editor/sign?guid=777666555444333222111000')
-            

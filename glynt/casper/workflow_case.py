@@ -111,7 +111,11 @@ def glynt_mock_http_requests(view_func):
         #
 
         #
-        # LinkedIn
+        # HelloSign - are specific to the tests
+        #
+
+        #
+        # LinkedIn - are mostly specific to the tests
         #
         httpretty.register_uri(httpretty.GET, re.compile(r"http(s)?://api.linkedin.com/v1/people/(.*)"),
                        body='{}',
