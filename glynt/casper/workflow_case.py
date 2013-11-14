@@ -113,8 +113,8 @@ def glynt_mock_http_requests(view_func):
         #
         # LinkedIn
         #
-        httpretty.register_uri(httpretty.GET, re.compile("https://api.linkedin.com/v1/people/(\d+)/picture-urls"),
-                       body='{"values": ["http://m.c.lnkd.licdn.com/mpr/mpr/shrink_200_200/p/1/000/257/1d4/1ce69af.jpg"]}',
+        httpretty.register_uri(httpretty.GET, re.compile(r"http(s)?://api.linkedin.com/v1/people/(.*)"),
+                       body='{}',
                        status=200)
 
         #
