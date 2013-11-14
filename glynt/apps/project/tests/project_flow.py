@@ -1,16 +1,14 @@
 # -*- coding: UTF-8 -*-
 from django.core.urlresolvers import reverse
 
-from glynt.casper import BaseLawyerCustomerProjectCaseMixin, glynt_mock_http_requests
+from glynt.casper import BaseLawyerCustomerProjectCaseMixin, for_all_methods, glynt_mock_http_requests
 from glynt.apps.transact.models import Transaction
 
-import os
 from model_mommy import mommy
 
 
+@for_all_methods(glynt_mock_http_requests)
 class CustomerSelectTransactionTest(BaseLawyerCustomerProjectCaseMixin):
-    test_path = os.path.dirname(__file__)
-
     def test_customer_transact_select_js(self):
         """
         Test that the Customer has a list of transaction types to select from
@@ -21,10 +19,8 @@ class CustomerSelectTransactionTest(BaseLawyerCustomerProjectCaseMixin):
         self.assertTrue(self.load_casper_file(js_file='customer-transact-select.js', test_label='Test a Customer can select transactions', url=url))
 
 
+@for_all_methods(glynt_mock_http_requests)
 class CustomerCreateProjectTest(BaseLawyerCustomerProjectCaseMixin):
-    test_path = os.path.dirname(__file__)
-
-    @glynt_mock_http_requests
     def setUp(self):
         super(CustomerCreateProjectTest, self).setUp()
         # re-create the project but without the associated todos and attachments

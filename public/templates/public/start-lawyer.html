@@ -5,22 +5,34 @@
 
 
 {% block prebody %}
-<div id="hero">
-    <div class="container text-center">
-    <h1>Welcome</h1>
-    <h2>The future of the profession starts here.</h2>
+    <div class="page-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1>Attorney Sign In</h1>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h3>Sign in to LawPal using your LinkedIn account.</h3>
+                <p>If you are new to LawPal, please sign in and create an account. We are currently accepting applications to join our network of participating attorneys.</p>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block body %}
 <div class="container">
     <div class="row">
-        <br />
-        <div class="startup text-center">
-            <a href="{% url "public:auth_user_class_redirect" user_class_name="lawyer" login_type="linkedin" %}" class="btn btn-primary"><img src="{{ STATIC_URL }}img/linkedin-32.png"> Sign in with LinkedIn</a>
+        <div class="col-12">
+            <br />
+            <div class="startup">
+                <a href="{% url "public:auth_user_class_redirect" user_class_name="lawyer" login_type="linkedin" %}" class="btn btn-primary"><img src="{{ STATIC_URL }}img/linkedin-32.png"> Sign in with LinkedIn</a>
+            </div>
         </div>
-
     </div>
 </div>
 {% endblock %}

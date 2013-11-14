@@ -1,26 +1,46 @@
-{% extends 'email/base.email' %}{% load glynt_helpers %}
+{% extends 'email/base.email' %}
+{% load glynt_helpers %}
 
-{% block subject %}A Firm has been Created on {% current_site_domain %}{% endblock %}
+{% block subject_line %}A new firm has been created on LawPal{% endblock %}
 
 {% block content %}
     <tr>
-        <td align="left" colspan="3" height="40" width="100%" style="font-size: 0; line-height: 0;">
-        <h2>A Firm has been Created on {% current_site_domain %}</h2>
-        <ul>
-        <li><b>Name:</b> {{ firm.name }}</li>
-        <li><b>Id:</b> {{ firm.pk }}</li>
-        <ul>
-
-        <h4>Please validate it.</h4>
+        <td align="left" colspan="3" height="40" width="100%" style="font-size: 0; line-height: 0;">&nbsp;</td>
+    </tr>
+    <tr>
+        <td class="small-width" align="left" width="40" style="display: block;">&nbsp;</td>
+        <td>
+            <h1 style="color: #22282b !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 28px; font-weight: normal; letter-spacing: -1px; line-height: 1.6em; margin: 0; padding: 0;">A new firm has been created on LawPal!</h1>
+            <h2 style="color: #6c797c !important; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.5em; padding: 0;"><strong>Firm Information</strong>:</h2>
+            <ul style="color: #6c797c !important;">
+                <li style="margin-left: 0;">
+                    <p style="font-size: 14px;"><span style="color: #999999;">Name:</span> {{ firm }}</p>
+                </li>
+                <li style="margin-left: 0;">
+                    <p style="font-size: 14px;"><span style="color: #999999;">ID:</span> {{ firm.pk }}</p>
+                </li>
+            </ul>
         </td>
+        <td class="small-width" align="left" width="40" style="display: block;">&nbsp;</td>
+    </tr>
+    {% comment %}
+    <!-- Action Button -->
+    <tr>
+        <td align="center" colspan="3" width="100%">
+            <a href="{% current_site_domain %}" target="_blank" class="action-btn" style="background-color: #6bdb7e; border-color: #6bdb7e; border-style: solid; border-width: 14px 48px; color: #ffffff; display: inline-block; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: normal; margin: 4px 0; text-decoration: none; white-space: nowrap;">See firm</a>
+        </td>
+    </tr>
+    <!-- End Action Button -->
+    {% endcomment %}
+    <tr>
+        <td align="left" colspan="3" height="40" width="100%" style="font-size: 0; line-height: 0;">&nbsp;</td>
     </tr>
 {% endblock %}
 
 {% block plain_body %}
+A new firm has been created on LawPal.
 
-A Firm has been Created on {% current_site_domain %}
-
-Name: {{ firm.name }}
+Name: {{ firm }}
 Id: {{ firm.pk }}
 
 Please validate it.

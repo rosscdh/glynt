@@ -218,6 +218,7 @@ HELPER_APPS = (
     'django_extensions',
     'templatetag_handlebars',
     'django_markdown',
+    'storages',
 
     'crispy_forms',
     'django_markup',
@@ -296,8 +297,6 @@ HAYSTACK_CONNECTIONS = {
 }
 USE_ELASTICSEARCH = True
 
-
-
 # Primary installed apps goes here
 # we do this so that we only test our apps
 # the other apps will/can be tested seperately
@@ -333,9 +332,15 @@ BROKER_POOL_LIMIT = 1 # Very importnat for heroku, stops a max + 1 event
 BROKER_CONNECTION_MAX_RETRIES = 2
 
 # AWS
-AWS_ACCESS_KEY_ID = 'AKIAI36HOWMVHPU4I3HA'
-AWS_SECRET_ACCESS_KEY = '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'
-
+AWS_ACCESS_KEY_ID = 'AKIAIRFGFTRB4LRLWC3A'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_QUERYSTRING_AUTH = False # to stop 304 not happening and boto appending our info to the querystring
+AWS_PRELOAD_METADATA = True
+# see http://developer.yahoo.com/performance/rules.html#expires
+AWS_HEADERS = {
+    'Cache-Control': 'max-age=300',
+    'x-amz-acl': 'public-read',
+}
 
 USERENA_USE_MESSAGES = True
 USERENA_LOGIN_AFTER_ACTIVATION = True # Enable beta style signup (manual activation)
@@ -477,17 +482,17 @@ LOGGING = {
         }
     },
     'loggers': {
-        'django.test': {
-            'handlers': ['console'],
-            'level': 'INFO',
-            'propagate': True,
-        },
         'django.request': {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
             'propagate': True,
         },
         'django.request': {
+            'handlers': ['console', 'logfile'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.test': {
             'handlers': ['console', 'logfile'],
             'level': 'DEBUG',
             'propagate': True,

@@ -185,18 +185,6 @@ helper.scenario(casper.cli.options.url,
             function fail() {
                 this.test.assertExists(".form-discussion [type='submit']");
         });        
-    },
-    function() {
-        // Submit response
-        casper.waitForSelector(".discussion-item .discussion-title",
-            function success() {
-                // Subject
-                this.test.assertExists(".discussion-item .discussion-title");
-                this.test.assertSelectorHasText('.discussion-item .discussion-comment', 'Test response A');
-            },
-            function fail() {
-                this.test.assertExists(".discussion-item .discussion-title");
-        });
     }
 );
 

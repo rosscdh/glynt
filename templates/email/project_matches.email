@@ -9,19 +9,19 @@
     </tr>
     <tr>
         <td class="small-width" align="left" width="40" style="display: block;">&nbsp;</td>
-        <td>
+        <td id="intro_content">
             {{ intro_content }}
         </td>
         <td class="small-width" align="left" width="40" style="display: block;">&nbsp;</td>
     </tr>
     <tr>
         <td colspan="3">
-            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-top: 1px solid #cad1cf;">
+            <table id="lawyers" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-top: 1px solid #cad1cf;">
                 {% for lawyer in lawyers %}
                     <tr>
                         <td class="list-cell small-width" width="20" style="background: {% cycle '#f8f9f9' '#fff' %}; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">&nbsp;</td>
                         <td class="list-cell avatar-cell" valign="top" width="74" style="background: {% cycle '#f8f9f9' '#fff' %}; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">
-                            <img class="avatar" alt="{{ lawyer.user.get_full_name }}" height="64" src="{% current_site_domain %}{{ lawyer.profile_photo }}" style="display: block;" width="64">
+                            <img class="avatar" alt="{{ lawyer.user.get_full_name }}" height="64" src="{% full_url_thumb lawyer.profile_photo %}" style="display: block;" width="64">
                         </td>
                         <td class="list-cell" valign="middle" style="background: {% cycle '#f8f9f9' '#fff' %}; border-bottom: 1px solid #e4e7e6; padding: 20px 0;">
                             <div>

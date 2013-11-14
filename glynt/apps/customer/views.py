@@ -88,7 +88,7 @@ class CustomerProfileSetupView(CustomerRequiredViewMixin, FormView):
             'email': user.email,
             'phone': self.customer.phone,
 
-            'photo': self.customer.photo,
+            'photo': self.customer.profile_photo,
 
             'company_name': startup,
             'website': startup.website,

@@ -3,15 +3,20 @@ import os
 from django.contrib.auth.models import User
 import json
 
-from models import Lawyer
+from .models import Lawyer, _lawyer_upload_photo
+
 from glynt.apps.firm.services import EnsureFirmService
-from tasks import send_profile_setup_email
+from glynt.apps.default.mixins import ChangeUserDetailsMixin
+
+from .tasks import send_profile_setup_email
+
+from cicu.models import UploadedFile
 
 import logging
 logger = logging.getLogger('lawpal.services')
 
 
-class EnsureLawyerService(object):
+class EnsureLawyerService(ChangeUserDetailsMixin):
     """ Setup a Lawyer and his related Firm and Office """
     lawyer = None
     firm = None
@@ -32,17 +37,8 @@ class EnsureLawyerService(object):
 
         self.data = kwargs
 
-    def update_user(self):
-        fields_to_update = {}
-        fields_to_update.update(first_name = self.data.get('first_name', None))
-        fields_to_update.update(last_name = self.data.get('last_name', None))
-        fields_to_update.update(email = self.data.get('email', None))
-
-        # remove empty items
-        fields_to_update = [(k,v) for k,v in fields_to_update.items() if v is not None]
-        # update the user only if changes happened
-        # this avoides superflous saves, and also uses update and not the heavy save method
-        User.objects.filter(pk=self.user.pk).update(**dict(fields_to_update))
+    def update_user(self, *args, **kwargs):
+        super(EnsureLawyerService, self).update_user(*args, **kwargs)
 
         # Update the password if present in the form
         # being present in the form means that this is a new user
@@ -73,12 +69,23 @@ class EnsureLawyerService(object):
             self.perform_update()
 
     def save_photo(self, photo):
-        if photo and self.lawyer.photo != photo: # only if its not the same image
+        if type(photo) == UploadedFile: # only if it is an uploaded CICU image
             logger.info('New photo for %s' % self.lawyer)
             photo_file = os.path.basename(photo.file.path)# get base name
             try:
-                self.lawyer.photo.save(photo_file, photo.file)
-                self.lawyer.user.profile.mugshot.save(photo_file, photo.file)
+                # move from ajax_uploads to the model desired path
+                new_path = _lawyer_upload_photo(instance=self.lawyer, filename=photo_file)
+                photo.file.storage.save(new_path, photo.file)  # save to new path
+                # delete current
+                try:
+                    self.lawyer.photo.delete()
+                except Exception as e:
+                    logger.info('Could not delete photo %s' % self.lawyer.photo)
+
+                # will now upload to s3
+                self.lawyer.photo.save(name=photo_file, content=photo.file)
+                self.lawyer.save(update_fields=['photo'])
+
                 logger.info('Saved new photo %s for %s' % (photo.file, self.lawyer))
             except Exception as e:
                 logger.error('Could not save user photo %s for %s: %s' % (photo.file, self.lawyer, e))

@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
 """
 """
-from glynt.casper import BaseLawyerCustomerProjectCaseMixin
+from glynt.casper import BaseLawyerCustomerProjectCaseMixin, for_all_methods, glynt_mock_http_requests
 from django.core.urlresolvers import reverse
 
-import os
 
-
+@for_all_methods(glynt_mock_http_requests)
 class ChecklistLawyerDetailControlsTest(BaseLawyerCustomerProjectCaseMixin):
-    test_path = os.path.dirname(__file__)
-
     def test_lawyer_detail_controls_js(self):
         self.client.login(username=self.lawyer_user.username, password=self.password)
 
