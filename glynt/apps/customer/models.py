@@ -14,7 +14,7 @@ import os
 import logging
 logger = logging.getLogger('django.request')
 
-USERENA_MUGSHOT_DEFAULT = getattr(settings, 'USERENA_MUGSHOT_DEFAULT', None)
+USERENA_MUGSHOT_DEFAULT = getattr(settings, 'USERENA_MUGSHOT_DEFAULT', 'http://placehold.it/50x50')
 
 
 def _customer_upload_photo(instance, filename):
@@ -49,7 +49,7 @@ class Customer(models.Model):
         try:
             return self.photo.url
         except:
-            return self.user.profile.profile_data.get('picture', )
+            return self.user.profile.profile_data.get('picture', USERENA_MUGSHOT_DEFAULT)
 
     @property
     def phone(self):
