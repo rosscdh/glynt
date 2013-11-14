@@ -1464,29 +1464,60 @@ select#company-founders          { width: 50px; }
 select#company-founders-location { width: 250px; }
 
 
-.order-form {
-  .checkbox {
-    padding-left: 60px;
-    
-    input[type=checkbox] {
-      display: none;
-    }
+// Intake Flow Checkboxes
+// -------------------------
+
+.radio,
+.checkbox {
+  padding-left: 60px;
+  vertical-align: middle;
+  label {
+    cursor: pointer;
+    display: inline;
   }
-  .icon {
+}
+.radio input[type="radio"],
+.radio-inline input[type="radio"],
+.checkbox input[type="checkbox"],
+.checkbox-inline input[type="checkbox"] {
+  display: none;
+}
+.radio-inline,
+.checkbox-inline {
+  cursor: pointer;
+  display: inline-block;
+  line-height: 1;
+  margin-top: 0;
+  padding-left: 50px;
+  vertical-align: middle;
+}
+.radio-inline + .radio-inline,
+.checkbox-inline + .checkbox-inline {
+  margin-top: 0;
+  margin-left: 60px;
+}
+.radio label,
+.radio-inline,
+.checkbox label,
+.checkbox-inline {
+  &:before {
+    .icon-FontAwesome();
     color: @gray-lighter;
+    content: @check-empty;
+    display: inline-block;
     float: left;
     font-size: 48px;
     margin-left: -60px;
+    speak: none;
   }
-  .icon-checkbox {
-    &:before { content: @check-empty; }
+  &.checked:before {
+    color: @brand-success;
+    content: @check;
   }
-  .checked {
-    .icon {
-      color: @brand-success;
-    }
-    .icon-checkbox {
-      &:before { content: @check; }
-    }
+}
+.radio-inline,
+.checkbox-inline {
+  &:before {
+    margin-left: -50px;
   }
 }

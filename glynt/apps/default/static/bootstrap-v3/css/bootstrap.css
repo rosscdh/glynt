@@ -8261,26 +8261,64 @@ select#company-founders {
 select#company-founders-location {
   width: 250px;
 }
-.order-form .checkbox {
+.radio,
+.checkbox {
   padding-left: 60px;
+  vertical-align: middle;
 }
-.order-form .checkbox input[type=checkbox] {
+.radio label,
+.checkbox label {
+  cursor: pointer;
+  display: inline;
+}
+.radio input[type="radio"],
+.radio-inline input[type="radio"],
+.checkbox input[type="checkbox"],
+.checkbox-inline input[type="checkbox"] {
   display: none;
 }
-.order-form .icon {
+.radio-inline,
+.checkbox-inline {
+  cursor: pointer;
+  display: inline-block;
+  line-height: 1;
+  margin-top: 0;
+  padding-left: 50px;
+  vertical-align: middle;
+}
+.radio-inline + .radio-inline,
+.checkbox-inline + .checkbox-inline {
+  margin-top: 0;
+  margin-left: 60px;
+}
+.radio label:before,
+.radio-inline:before,
+.checkbox label:before,
+.checkbox-inline:before {
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: inherit;
+  -webkit-font-smoothing: antialiased;
+  *margin-right: .3em;
   color: #eeeeee;
+  content: "\f096";
+  display: inline-block;
   float: left;
   font-size: 48px;
   margin-left: -60px;
+  speak: none;
 }
-.order-form .icon-checkbox:before {
-  content: "\f096";
-}
-.order-form .checked .icon {
+.radio label.checked:before,
+.radio-inline.checked:before,
+.checkbox label.checked:before,
+.checkbox-inline.checked:before {
   color: #6bdb7e;
-}
-.order-form .checked .icon-checkbox:before {
   content: "\f046";
+}
+.radio-inline:before,
+.checkbox-inline:before {
+  margin-left: -50px;
 }
 .navbar {
   margin-bottom: 0;

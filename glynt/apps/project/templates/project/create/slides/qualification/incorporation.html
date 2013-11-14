@@ -1,5 +1,7 @@
 <section id="qualification-incorporation" class="slide" data-scene="incorporation" data-stage="qualification">
     <div class="slide-content">
+        {% include 'client/partials/onboarding.html' with step='order' %}
+
         <div class="masthead">
             <div class="container">
                 <h1>Just a few questions about your company</h1>
@@ -9,7 +11,7 @@
 
         <div class="content">
             <div class="container">
-                <form class="form-inline" role="form" data-stage="qualification">
+                <form class="form-inline intake-form" role="form">
                     <div class="row">
                         <div class="col-lg-7">
                             <h3>How many founders and where are they based?</h3>
@@ -43,11 +45,14 @@
                         </div>
                         <div class="col-lg-5" style="margin-top: 20px;">
                             <div class="form-group text-right">
-                                <select id="company-incorporated" name="company_incorporated" class="form-control" data-regexp="no" required>
-                                    <option value=""></option>
-                                    <option value="yes">Yes, the company is already incorporated</option>
-                                    <option value="no">No, the company is not incorporated</option>
-                                </select>
+                                <label class="radio-inline">
+                                    <input type="radio" name="company_incorporated" value="yes" data-regexp="no" required>
+                                    <h3>Yes</h3>
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="company_incorporated" value="no" data-regexp="no" required>
+                                    <h3>No</h3>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -59,18 +64,21 @@
                         </div>
                         <div class="col-lg-5" style="margin-top: 20px;">
                             <div class="form-group text-right">
-                                <select id="company-paperwork" name="company_paperwork" class="form-control" data-regexp="no" required>
-                                    <option value=""></option>
-                                    <option value="yes">Yes, there is some pre-existing paperwork and/or agreements</option>
-                                    <option value="no">No, there is no paperwork and/or agreements</option>
-                                </select>
+                                <label class="radio-inline">
+                                    <input type="radio" name="company_paperwork" value="yes" data-regexp="no" required>
+                                    <h3>Yes</h3>
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="company_paperwork" value="no" data-regexp="no" required>
+                                    <h3>No</h3>
+                                </label>
                             </div>
                         </div>
                     </div>
 
                     <div class="row">
                         <p class="text-center">
-                            <button type="submit" class="btn btn-success btn-huge">Next Step »</button>
+                            <button type="submit" class="btn btn-primary btn-huge">Next Step »</button>
                         </p>
                     </div>
                 </form>

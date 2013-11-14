@@ -34,15 +34,21 @@ $(window).on('load', function() {
     $form.submit();
   });
 
-  $('form.order-form input[type=checkbox]').on('change', function() {
+  $('input[type=checkbox], input[type=radio]').on('change', function() {
     var $el    = $(this);
     var $label = $el.closest('label');
+
+    if ($el.attr('type') == 'radio') {
+      $('input[name="' + $el.attr('name') + '"]').each(function() {
+        $(this).closest('label').removeClass('checked');
+      });
+    };
 
     if ($el.is(':checked')) {
       $label.addClass('checked');
     } else {
       $label.removeClass('checked');
     };
-  })
+  });
 
 });

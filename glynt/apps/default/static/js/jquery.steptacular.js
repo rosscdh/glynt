@@ -75,12 +75,12 @@
     var key     = this.$active.attr('id');
     var stage   = this.$active.data('stage');
 
+    // persist the data
     var data    = {};
     $form.find('input, textarea, select').each(function() {
       var $el = $(this);
 
-      // persist the data
-      if ($el.is('[type=checkbox]')) {
+      if ($el.is(':checkbox')) {
         if ($el.is(':checked')) {
           if (!data[$el.attr('name')]) {
             data[$el.attr('name')] = [];
@@ -88,8 +88,10 @@
 
           data[$el.attr('name')].push($el.val());
         };
-      } else if ($el.is(['type=radio'])) {
-        // console.log('radio');
+      } else if ($el.is(':radio')) {
+        if ($el.is(':checked')) {
+          data[$el.attr('name')] = $el.val();
+        };
       } else if ($el.is('[type=submit]')) {
         if ($el.attr('id') == $form.data('trigger')) {
           data = $el.data('value');
@@ -120,6 +122,42 @@
     };
 
     this.refresh();
+  };
+
+  Steptacular.prototype.isValid = function(form) {
+    var self    = this;
+    var $form   = form;
+
+    var requiredFields = [];
+    $form.find('[required]').each(function() {
+      requiredFields.push($(this).attr('name'));
+    });
+    $.unique(requiredFields);
+
+    var isValid = true;
+    $(requiredFields).each(function() {
+      var $el      = $('[name="' + this + '"]');
+      var siblings = 'input[name="' + $el.attr('name') + '"]';
+      var value    = '';
+
+      if ($el.is(':radio')) {
+        value = $(siblings + ':checked').val() || '';
+      } else if ($el.is(':checkbox')) {
+        var values = [];
+        $(siblings + ':checked').each(function() {
+          values.push($(this).val());
+        });
+        value = values.join(',');
+      } else {
+        value = $el.val();
+      };
+
+      if (value.replace(/^\s+/g, '').replace(/\s+$/g, '').length == 0) {
+        isValid = false;
+      };
+    });
+
+    return isValid;
   };
 
   Steptacular.prototype.getActiveIndex = function() {
@@ -275,17 +313,7 @@
     e.preventDefault();
     e.stopPropagation();
 
-    var isValid = true;
-    $form.find('[required]').each(function() {
-      var val = $(this).val();
-      if (val.replace(/^\s+/g, '').replace(/\s+$/g, '').length > 0) {
-        return true;
-      } else {
-        isValid = false;
-        return false;
-      };
-    });
-
+    var isValid = this.isValid($form);
     if (isValid) {
       this.process($form);
 
