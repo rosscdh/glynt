@@ -93,6 +93,7 @@ class HelloSignService(object):
             if json_data is not None and type(json_data) is dict:
 
                 self.form.instance.signature_request_id = json_data['signature_request_id']
+                self.form.instance.data = json_data
                 self.form.save()
 
     def update_doc_for_signing(self, signature_request_id):
