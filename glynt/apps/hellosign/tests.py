@@ -83,10 +83,14 @@ class HelloSignServiceTest(TestCase):
                 'is_complete': False,
             }
             form = SignatureForm(user=REQUESTED_BY, data=initial)
+
             resp = self.subject.send_doc_for_signing(form=form)
-            self.subject.save(json_data=resp.json().get('signature_request'))
+
+            self.subject.save(json_data=resp.json().get('signature_request'))  # saves the signature_request as flat data!
 
             signature = Signature.objects.get(signature_request_id=EXPECTED_SIGNATURE_REQUEST_ID)
 
             self.assertTrue(signature is not None)
+            self.assertEqual(signature.details_url, 'https://www.hellosign.com/home/manage?locate=777666555444333222111000')
+            self.assertEqual(signature.signing_url, 'https://www.hellosign.com/editor/sign?guid=777666555444333222111000')
             
