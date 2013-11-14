@@ -8261,6 +8261,27 @@ select#company-founders {
 select#company-founders-location {
   width: 250px;
 }
+.order-form .checkbox {
+  padding-left: 60px;
+}
+.order-form .checkbox input[type=checkbox] {
+  display: none;
+}
+.order-form .icon {
+  color: #eeeeee;
+  float: left;
+  font-size: 48px;
+  margin-left: -60px;
+}
+.order-form .icon-checkbox:before {
+  content: "\f096";
+}
+.order-form .checked .icon {
+  color: #6bdb7e;
+}
+.order-form .checked .icon-checkbox:before {
+  content: "\f046";
+}
 .navbar {
   margin-bottom: 0;
 }
@@ -8338,7 +8359,7 @@ select#company-founders-location {
   color: #fff;
 }
 .masthead {
-  background-color: #6bdb7e;
+  background-color: #42d0e5;
   border-bottom: 1px solid #eeeeee;
   color: #ffffff;
   font-size: 19px;

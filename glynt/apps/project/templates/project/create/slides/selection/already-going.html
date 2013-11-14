@@ -1,5 +1,7 @@
 <section id="selection" class="slide" data-stage="selection">
     <div class="slide-content">
+        {% include 'client/partials/onboarding.html' with step='order' %}
+
         <div class="masthead">
             <div class="container">
                 <h1>What are you looking for?</h1>
@@ -9,13 +11,13 @@
 
         <div class="content">
             <div class="container">
-                <form role="form">
+                <form role="form" class="order-form">
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="checkbox">
                                 <label>
-                                    <!-- data-fixed-fee="true" data-intake-form="true" data-needs-qualification="true" -->
-                                    <input type="checkbox" name="services[]" value="incorporation" data-mincheck="1">
+                                    <input type="checkbox" name="services" value="incorporation" data-mincheck="1" data-needs-stage="qualification,services">
+                                    <span class="icon icon-checkbox"></span>
                                     <h4>Incorporation</h4>
                                     <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
                                 </label>
@@ -24,8 +26,8 @@
                         <div class="col-lg-6">
                             <div class="checkbox">
                                 <label>
-                                    <!-- data-fixed-fee="true" data-intake-form="financing" -->
-                                    <input type="checkbox" name="services[]" value="financing" data-mincheck="1">
+                                    <input type="checkbox" name="services" value="financing" data-mincheck="1" data-needs-stage="services">
+                                    <span class="icon icon-checkbox"></span>
                                     <h4>Financing</h4>
                                     <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
                                 </label>
@@ -36,7 +38,8 @@
                         <div class="col-lg-6">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" name="services[]" value="intellectual-property" data-mincheck="1">
+                                    <input type="checkbox" name="services" value="intellectual-property" data-mincheck="1">
+                                    <span class="icon icon-checkbox"></span>
                                     <h4>Intellectual Property</h4>
                                     <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
                                 </label>
@@ -45,7 +48,8 @@
                         <div class="col-lg-6">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" name="services[]" value="immigration" data-mincheck="1">
+                                    <input type="checkbox" name="services" value="immigration" data-mincheck="1">
+                                    <span class="icon icon-checkbox"></span>
                                     <h4>Immigration</h4>
                                     <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
                                 </label>
@@ -56,7 +60,8 @@
                         <div class="col-lg-6">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" name="services[]" value="employees" data-mincheck="1">
+                                    <input type="checkbox" name="services" value="employees" data-mincheck="1">
+                                    <span class="icon icon-checkbox"></span>
                                     <h4>Employees</h4>
                                     <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
                                 </label>
@@ -65,7 +70,8 @@
                         <div class="col-lg-6">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" name="services[]" value="non-disclosure-agreement" data-mincheck="1">
+                                    <input type="checkbox" name="services" value="non-disclosure-agreement" data-mincheck="1">
+                                    <span class="icon icon-checkbox"></span>
                                     <h4>Non-Disclosure Agreement</h4>
                                     <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
                                 </label>
@@ -76,7 +82,8 @@
                         <div class="col-lg-6">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" name="services[]" value="privacy-and-terms" data-mincheck="1">
+                                    <input type="checkbox" name="services" value="privacy-and-terms" data-mincheck="1">
+                                    <span class="icon icon-checkbox"></span>
                                     <h4>Privacy &amp; Terms</h4>
                                     <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
                                 </label>
@@ -85,7 +92,8 @@
                         <div class="col-lg-6">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" name="services[]" value="other" data-mincheck="1">
+                                    <input type="checkbox" name="services" value="other" data-mincheck="1">
+                                    <span class="icon icon-checkbox"></span>
                                     <h4>Other</h4>
                                     <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
                                 </label>
@@ -95,7 +103,6 @@
 
                     <div class="row">
                         <p class="text-center">
-                            <input type="hidden" value="blah">
                             <button type="submit" class="btn btn-success btn-huge">Next Step »</button>
                         </p>
                     </div>

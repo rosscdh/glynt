@@ -34,4 +34,15 @@ $(window).on('load', function() {
     $form.submit();
   });
 
+  $('form.order-form input[type=checkbox]').on('change', function() {
+    var $el    = $(this);
+    var $label = $el.closest('label');
+
+    if ($el.is(':checked')) {
+      $label.addClass('checked');
+    } else {
+      $label.removeClass('checked');
+    };
+  })
+
 });

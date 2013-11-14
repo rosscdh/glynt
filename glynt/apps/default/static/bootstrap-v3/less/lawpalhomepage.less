@@ -1462,3 +1462,31 @@ h5.text-info {
 
 select#company-founders          { width: 50px; }
 select#company-founders-location { width: 250px; }
+
+
+.order-form {
+  .checkbox {
+    padding-left: 60px;
+    
+    input[type=checkbox] {
+      display: none;
+    }
+  }
+  .icon {
+    color: @gray-lighter;
+    float: left;
+    font-size: 48px;
+    margin-left: -60px;
+  }
+  .icon-checkbox {
+    &:before { content: @check-empty; }
+  }
+  .checked {
+    .icon {
+      color: @brand-success;
+    }
+    .icon-checkbox {
+      &:before { content: @check; }
+    }
+  }
+}

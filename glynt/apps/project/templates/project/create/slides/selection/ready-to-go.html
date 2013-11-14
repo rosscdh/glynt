@@ -1,15 +1,14 @@
 <section id="selection" class="slide" data-stage="selection">
-    <div class="scene-content">
-        <div class="page-header big">
-              <div class="container">
-                  <div class="row">
-                      <div class="col-10">
-                          <h1>What do you need?</h1>
-                      </div>
-                  </div>
-              </div>
-        </div>
+    <div class="slide-content">
         {% include 'client/partials/onboarding.html' with step='order' %}
+
+        <div class="masthead">
+            <div class="container">
+                <h1>What are you looking for?</h1>
+                <p>Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper.</p>
+            </div>
+        </div>
+
         <div class="content">
             <div class="container">
                 <form role="form" class="order-form">
@@ -18,10 +17,7 @@
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="services" value="incorporation" data-mincheck="1" data-needs-stage="qualification,services">
-                                        <div class="order-checkbox">
-                                            <input type="checkbox" value="1" id="checkboxFourInput" name="" />
-                                            <label for="checkboxFourInput"></label>
-                                        </div>
+                                    <span class="icon icon-checkbox"></span>
                                     <h4>Incorporation</h4>
                                     <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
                                 </label>
@@ -31,6 +27,7 @@
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="services" value="financing" data-mincheck="1" data-needs-stage="services">
+                                    <span class="icon icon-checkbox"></span>
                                     <h4>Financing</h4>
                                     <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
                                 </label>
@@ -42,6 +39,7 @@
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="services" value="intellectual-property" data-mincheck="1">
+                                    <span class="icon icon-checkbox"></span>
                                     <h4>Intellectual Property</h4>
                                     <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
                                 </label>
@@ -51,6 +49,7 @@
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="services" value="immigration" data-mincheck="1">
+                                    <span class="icon icon-checkbox"></span>
                                     <h4>Immigration</h4>
                                     <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
                                 </label>
@@ -62,6 +61,7 @@
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="services" value="employees" data-mincheck="1">
+                                    <span class="icon icon-checkbox"></span>
                                     <h4>Employees</h4>
                                     <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
                                 </label>
@@ -71,6 +71,7 @@
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="services" value="non-disclosure-agreement" data-mincheck="1">
+                                    <span class="icon icon-checkbox"></span>
                                     <h4>Non-Disclosure Agreement</h4>
                                     <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
                                 </label>
@@ -82,6 +83,7 @@
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="services" value="privacy-and-terms" data-mincheck="1">
+                                    <span class="icon icon-checkbox"></span>
                                     <h4>Privacy &amp; Terms</h4>
                                     <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
                                 </label>
@@ -91,6 +93,7 @@
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="services" value="other" data-mincheck="1">
+                                    <span class="icon icon-checkbox"></span>
                                     <h4>Other</h4>
                                     <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
                                 </label>
