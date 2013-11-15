@@ -49,14 +49,14 @@
     "model": "transact.transaction",
     "fields": {
       "price": "3000",
-      "description": "The pro package",
+      "description": "The standard incorporation package for startups includes providing advice to founders and preparing set-up documents for the company. Your lawyer will advise you on appropriate initial capitalization, vesting schedules and employee incentives. If applicable, your lawyer will also qualify the company to transact business in California and handle all securities laws filings.",
       "data": {
         "checklist_bunches": [
           "IncorporationBunch"
         ]
       },
       "slug": "CSP",
-      "title": "Pro Company Incorporation"
+      "title": "Company Incorporation, Formation and Setup (& Extras)"
     }
   },
   {

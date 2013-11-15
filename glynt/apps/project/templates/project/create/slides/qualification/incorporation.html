@@ -23,7 +23,7 @@
                                         <span class="bind-value">1</span>
                                         <span class="bind-desc">founder</span>
                                     </h4>
-                                    <input type="text" id="company-founders" name="company_founders" data-max="3" data-slider-min="1" data-slider-max="10" data-slider-step="1" data-slider-tooltip="hide" data-toggle="slider" data-slider-value="1" required>
+                                    <input type="text" id="company-founders" name="company_founders" value="1" data-slider-min="1" data-slider-max="10" data-slider-step="1" data-slider-tooltip="hide" data-toggle="slider" data-max="3">
                                 </label>
                             </div>
                         </div>
@@ -39,19 +39,19 @@
                                 <div>
                                     <label class="radio-inline">
                                         <input type="radio" name="company_founders_location" value="inside" data-regexp="inside" required>
-                                        <h4>Inside the United States</h4>
+                                        <h4>Everyone inside the United States</h4>
                                     </label>
                                 </div>
                                 <div>
                                     <label class="radio-inline">
                                         <input type="radio" name="company_founders_location" value="outside" data-regexp="inside" required>
-                                        <h4>Outside the United States</h4>
+                                        <h4>Everyone outside the United States</h4>
                                     </label>
                                 </div>
                                 <div>
                                     <label class="radio-inline">
-                                        <input type="radio" name="company_founders_location" value="outside" data-regexp="inside" required>
-                                        <h4>Both inside and outside the US</h4>
+                                        <input type="radio" name="company_founders_location" value="mixed" data-regexp="inside" required>
+                                        <h4>Some inside and some outside the US</h4>
                                     </label>
                                 </div>
                             </div>
@@ -98,7 +98,7 @@
 
                     <div class="row">
                         <p class="text-center">
-                            <button type="submit" class="btn btn-default btn-huge">Next Step »</button>
+                            <button type="submit" class="btn btn-success btn-huge">Next Step »</button>
                         </p>
                     </div>
                 </form>

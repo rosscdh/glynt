@@ -57,7 +57,7 @@ $(window).on('load', function() {
   // Sliders
   $('[data-toggle="slider"]').each(function() {
     var $slider = $(this);
-    $slider.slider($slider.data());
+    $slider.slider($.extend($slider.data(), { 'value': $slider.val() }));
   });
 
   $('input#company-founders').on('slide', function(e) {

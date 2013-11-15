@@ -2,16 +2,17 @@
 
 <section id="financing-services" class="slide" data-scene="financing" data-stage="services">
     <div class="slide-content">
+        {% include 'client/partials/onboarding.html' with step='order' %}
+
         <div class="masthead">
             <div class="container">
                 <h1>Financing Services</h1>
-                <p>Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper.</p>
             </div>
         </div>
 
         <div class="content">
             <div class="container">
-                <form role="form" data-scene="financing" data-stage="services">
+                <form class="form-pretty" role="form">
                     {% transactions transaction='SF' %}
                     {% transactions transaction='ES' %}
                 </form>

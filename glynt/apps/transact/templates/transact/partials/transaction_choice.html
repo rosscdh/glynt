@@ -7,11 +7,12 @@
             <p>{{ t.description }}</p>
         </div>
         <div class="col-lg-4" style="margin-top: 20px;">
-            <div class="form-group text-center">
+            <div class="form-group text-right">
                 <input type="submit" id="submit-btn-{{ t.slug }}" class="btn btn-success btn-huge" value="Next Step »" data-value="{{ t.slug }}">
             </div>
         </div>
     </div>
+    <hr>
 {% empty %}
     <p class="no-records">No transactions available.</p>
 {% endfor %}

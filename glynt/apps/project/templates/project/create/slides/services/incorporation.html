@@ -2,16 +2,17 @@
 
 <section id="incorporation-services" class="slide" data-scene="incorporation" data-stage="services">
     <div class="slide-content">
+        {% include 'client/partials/onboarding.html' with step='order' %}
+
         <div class="masthead">
             <div class="container">
-                <h1>Incorporation Services</h1>
-                <p>Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper.</p>
+                <h1>Available packages</h1>
             </div>
         </div>
 
         <div class="content">
             <div class="container">
-                <form role="form" data-scene="incorporation" data-stage="services">
+                <form class="form-pretty" role="form">
                     {% transactions transaction='CS' %}
                     {% transactions transaction='CSP' %}
                 </form>
