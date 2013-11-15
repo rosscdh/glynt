@@ -6,14 +6,16 @@
  * @param  {Object} lawPalService 	List of methods used to acccess the LawPAl API
  * @param  {Object} $q				Promise library
  */
-angular.module('lawpal').controller( 'manageTeamDialogCtrl', [ '$scope', '$modalInstance', 'team', 'lawPalService', '$q', 'toaster',
-	function ($scope, $modalInstance, team, lawPalService, $q, toaster) {
+angular.module('lawpal').controller( 'manageTeamDialogCtrl', [ '$scope', '$modalInstance', 'team', 'process', 'lawPalService', '$q', 'toaster',
+	function ($scope, $modalInstance, team, process, lawPalService, $q, toaster) {
+		'use strict';
 		$scope.revert = [];
 		$scope.emailSearchStr = null;
 		$scope.team = team;
 		$scope.emailSearchResults = [];
 		$scope.selectedEmail = null;
 		$scope.searchingEmail = "";
+		$scope.processType = process; // 'manage' team or 'sign'
 
 		$scope.searchAttrs = {
 			"selectedEmail": null,
@@ -51,6 +53,10 @@ angular.module('lawpal').controller( 'manageTeamDialogCtrl', [ '$scope', '$modal
 		 */
 		$scope.emailSearchClass = function( searchStatus ) {
 			return searchStatus?"icon-refresh icon-spin":"icon-plus";
+		};
+
+		$scope.toggleSign = function( user ) {
+			user.is_signing = user.is_signing===true?false:true;
 		};
 
 		/**

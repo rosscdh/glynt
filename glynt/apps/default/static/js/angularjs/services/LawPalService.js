@@ -3,7 +3,7 @@
  * @author <a href="mailtolee.j.sinclair@gmail.com">Lee Sinclair</a>
  * Date: 2 Sept 2013
  */
-angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource', '$http', function ($q, $timeout, $resource, $http) { /* Load the LawPal local interface */
+angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource', '$http', '$rootScope', function ($q, $timeout, $resource, $http, $rootScope) { /* Load the LawPal local interface */
 	'use strict';
 	var lawPalInterface = LawPal;
 	var userType = 'is_customer';
@@ -29,7 +29,11 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 		'reorder': $resource('/api/v1/project/:id/checklist/sort/?format=json', {},
 			/* This is done to ensure the content type of PATCH is sent through */
 			{ 'save': { 'method': 'PATCH', headers: { 'Content-Type': 'application/json' }, 'isArray': true }
-		})
+			}),
+		'doc': $resource('/api/v1/project/:uuid/document/:documentId/requestsign?format=json', {},
+			/* This is done to ensure the content type of PATCH is sent through */
+			{ 'requestSign': { 'method': 'POST', headers: { 'Content-Type': 'application/json' }, 'isArray': true }
+			})
 	};
 
 	var checkListCategories = {
@@ -738,6 +742,29 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 			);
 
 			return deferred.promise;
+		},
+
+		'assignSignees': function( documentId, signees ) {
+			var deferred = $q.defer();
+			var projectUuid = this.getProjectUuid();
+			var options = { 'uuid': projectUuid, 'documentId': documentId };
+			var userIds = signees.map( function(user){
+				return user.pk;
+			});
+			checkListItemResources.doc.requestSign( options, userIds,
+				function success( result ) {
+					deferred.resolve(result);
+				},
+				function error( err ) {
+					deferred.reject(err);
+				}
+			);
+			return deferred.promise;
+		},
+
+		'selectSignees': function( documentId ) {
+			$rootScope.$broadcast( 'signDocument', documentId );
+			//alert("test " + documentId);
 		}
 	};
 

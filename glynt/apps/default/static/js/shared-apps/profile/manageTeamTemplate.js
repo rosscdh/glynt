@@ -20,12 +20,20 @@ angular.module('lawpal').run(["$templateCache", function($templateCache) {
 		'						<h5 class="fn">{[{user.full_name}]}<span ng-show="user.is_authenticated"> (you)</span></h5>\n'+
 		'						<h6 class="company"><a href="/profile/{[{user.company.slug}]}">{[{user.company.name}]}</a></h6>\n'+
 		'					</div>\n'+
-		'					<div class="col col-lg-4 details">\n'+
+		'					<div class="col col-lg-4 details" ng-show="processType==\'manage\'">\n'+
 		'						<p class="action pull-right" ng-show="canRemove(user)">\n'+
 		'							<a href="javascript:;" ng-click="removeUser(user)" ng-show="!user.is_deleted" class="remove-link"><i class="icon icon-remove text-danger"></i> Remove</a>\n'+
 		'							<a href="javascript:;" ng-click="removeUser(user)" ng-show="user.is_deleted" class="undo-remove-link"><i class="icon icon-undo"></i> Undo remove</a>\n'+
 		'						</p>\n'+
 		'					</div>\n'+
+
+		'					<div class="col col-lg-4 details" ng-show="processType==\'sign\'">\n'+
+		'						<p class="action pull-right">\n'+
+		'							<a href="javascript:;" ng-click="toggleSign(user)" ng-show="!user.is_signing"><i class="icon icon-pencil"></i> Needs to sign</a>\n'+
+		'							<a href="javascript:;" ng-click="toggleSign(user)" ng-show="user.is_signing"><i class="icon icon-undo"></i> No need to sign</a>\n'+
+		'						</p>\n'+
+		'					</div>\n'+
+
 		'				</div>\n'+
 		'\n'+
 		'			</div><!-- row //-->\n'+

@@ -89,6 +89,9 @@ angular.module("lawpal").controller( "ProjectCtrl", [ "$scope", "lawPalService",
 			"resolve": {
 				"team": function () {
 					return $scope.data.users;
+				},
+				"process": function() {
+					return 'manage';
 				}
 			}
 		});
@@ -96,8 +99,7 @@ angular.module("lawpal").controller( "ProjectCtrl", [ "$scope", "lawPalService",
 		modalInstance.result.then(
 			function ok( updatedTeam ) {
 				$scope.updateTeam( updatedTeam );
-			}, function cancel() {
-			}
+			}, function cancel() { }
 		);
 	};
 

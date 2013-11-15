@@ -3,7 +3,8 @@
  * @author <a href="mailtolee.j.sinclair@gmail.com">Lee Sinclair</a>
  * Date: 3 Sept 2013
  */
-angular.module('lawpal').controller( 'checklistItemCtrl', [ '$scope', 'lawPalService', 'lawPalUrls', 'lawPalDialog', '$location', function( $scope, lawPalService, lawPalUrls, lawPalDialog, $location ) {
+angular.module('lawpal').controller( 'checklistItemCtrl', [ '$scope', 'lawPalService', 'lawPalUrls', 'lawPalDialog', '$location', "$modal", function( $scope, lawPalService, lawPalUrls, lawPalDialog, $location, $modal ) {
+	'use strict';
 	/**
 	 * Removes an item from the checklist
 	 * @param  {Object} item JSON object representing a checklist item
@@ -110,4 +111,60 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [ '$scope', 'lawPalSer
 			}
 		);
 	};
+
+	/**
+	 * Incepts the process of showing a modal to select team members
+	 * @param  {Number} documentId      Document ID from the DB
+	 * @param  {Array} possibleSignees Team member sof the project
+	 */
+	$scope.findSignees = function( documentId, possibleSignees ) {
+		var modalInstance = $modal.open({
+			"windowClass": "modal modal-show",
+			"templateUrl": "template/lawpal/project/manageTeam.html",
+			"controller": "manageTeamDialogCtrl",
+			"resolve": {
+				"team": function () {
+					return possibleSignees;
+				},
+				"process": function() {
+					return 'sign';
+				}
+			}
+		});
+		// Show dialog
+		modalInstance.result.then(
+			function ok( updatedTeam ) {
+				var signees = [];
+				if( updatedTeam && angular.isArray(updatedTeam) ) {
+					// @ROSS Call 'lawPalService.updateProjectTeam(updatedTeam)' if you want to add people to the project if they have been added to the dialog
+					signees = updatedTeam.filter( function(user){
+						return user.is_signing;
+					});
+					lawPalService.assignSignees( documentId, signees );
+				}
+			}, function cancel() {
+			}
+		);
+	};
+
+	// Recieves message to display document
+	// @TODO remove once this feature is merge into the single view
+	$scope.$on( 'signDocument', function( ev, documentId ){
+		// Load project team members
+		lawPalService.currentProject().then(
+			function success( project ) {
+				var users = project.users;
+				// Load ful user details
+				lawPalService.usernameSearch( users ).then(
+					function success() {
+						$scope.findSignees(documentId, users);
+					},
+					function error() {
+						$scope.findSignees(documentId, users);
+					}
+				);
+			}
+		);
+		
+	});
 }]);

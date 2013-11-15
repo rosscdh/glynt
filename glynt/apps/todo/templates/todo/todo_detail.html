@@ -24,7 +24,7 @@
 {% endblock %}
 
 {% block body %}
-    <div class="row">
+    <div class="row" ng-controller="checklistItemCtrl">
         <div class="col col-lg-12">
             <div class="row">
                 <div class="col col-lg-4 sidebar">
@@ -392,7 +392,24 @@ HandleAttachment = function HandleAttachment(event) {
 }
 
 </script>
-
+<script type="text/javascript" src="{{ STATIC_URL }}todo/angularjs.checklistItemCtrl.js"></script>
+<script language="javaScript">
+    var LawPal =  {
+        "user": {
+            'pk': {{ user.pk|default:'null'|jsonify }},
+            'username': '{{ user.username }}',
+            'full_name': '{{ user.get_full_name }}',
+            'is_authenticated': {{ user.is_authenticated|jsonify }},
+            "is_lawyer": {{ is_lawyer|jsonify }}
+        },
+        'project': {
+            "id": {{ project.id }},
+            "uuid": "{{ project.uuid }}",
+            'content_type_id': {{ project.content_type_id|default:None|jsonify }}
+        }
+    };
+</script>
+<toaster-container toaster-options="{'time-out': 3000}"></toaster-container>
 
 {% tplhandlebars "tpl-attachment" %}
 <!-- give the <a> a class of pending-feedback if the current user has needs to give feedback -->
