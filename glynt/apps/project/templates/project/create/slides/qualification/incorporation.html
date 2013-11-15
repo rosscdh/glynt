@@ -4,36 +4,56 @@
 
         <div class="masthead">
             <div class="container">
-                <h1>Just a few questions about your company</h1>
-                <p>Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper.</p>
+                <h1>Just a few questions</h1>
             </div>
         </div>
 
         <div class="content">
             <div class="container">
-                <form class="form-inline intake-form" role="form">
+                <form class="form-inline form-pretty" role="form">
                     <div class="row">
                         <div class="col-lg-7">
-                            <h3>How many founders and where are they based?</h3>
+                            <h3>How many founders?</h3>
                             <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
                         </div>
-                        <div class="col-lg-5" style="margin-top: 20px;">
+                        <div class="col-lg-5">
                             <div class="form-group text-right">
-                                <select id="company-founders" name="company_founders" class="form-control" data-max="3" required>
-                                    <option value=""></option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5+">5+</option>
-                                </select>
-                                <span>founder(s) located</span>
-                                <select id="company-founders-location" name="company_founders_location" class="form-control" data-regexp="inside" required>
-                                    <option></option>
-                                    <option value="inside">inside the United States</option>
-                                    <option value="outside">outside the United States</option>
-                                    <option value="mixed">both inside and outside the U.S.</option>
-                                </select>
+                                <label class="text-center">
+                                    <h4 id="company-founders-bind" data-single="founder" data-plural="founders">
+                                        <span class="bind-value">1</span>
+                                        <span class="bind-desc">founder</span>
+                                    </h4>
+                                    <input type="text" id="company-founders" name="company_founders" data-max="3" data-slider-min="1" data-slider-max="10" data-slider-step="1" data-slider-tooltip="hide" data-toggle="slider" data-slider-value="1" required>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <h3>Where are they based?</h3>
+                            <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                        </div>
+                        <div class="col-lg-4 col-offset-1">
+                            <div class="form-group text-left">
+                                <div>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="company_founders_location" value="inside" data-regexp="inside" required>
+                                        <h4>Inside the United States</h4>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="company_founders_location" value="outside" data-regexp="inside" required>
+                                        <h4>Outside the United States</h4>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="company_founders_location" value="outside" data-regexp="inside" required>
+                                        <h4>Both inside and outside the US</h4>
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -43,15 +63,15 @@
                             <h3>Has the company been incorporated?</h3>
                             <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
                         </div>
-                        <div class="col-lg-5" style="margin-top: 20px;">
-                            <div class="form-group text-right">
+                        <div class="col-lg-4 col-offset-1" style="margin-top: 20px;">
+                            <div class="form-group text-left">
                                 <label class="radio-inline">
                                     <input type="radio" name="company_incorporated" value="yes" data-regexp="no" required>
-                                    <h3>Yes</h3>
+                                    <h4>Yes</h4>
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="company_incorporated" value="no" data-regexp="no" required>
-                                    <h3>No</h3>
+                                    <h4>No</h4>
                                 </label>
                             </div>
                         </div>
@@ -62,15 +82,15 @@
                             <h3>Is there any paperwork?</h3>
                             <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
                         </div>
-                        <div class="col-lg-5" style="margin-top: 20px;">
-                            <div class="form-group text-right">
+                        <div class="col-lg-4 col-offset-1" style="margin-top: 20px;">
+                            <div class="form-group text-left">
                                 <label class="radio-inline">
                                     <input type="radio" name="company_paperwork" value="yes" data-regexp="no" required>
-                                    <h3>Yes</h3>
+                                    <h4>Yes</h4>
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="company_paperwork" value="no" data-regexp="no" required>
-                                    <h3>No</h3>
+                                    <h4>No</h4>
                                 </label>
                             </div>
                         </div>
@@ -78,7 +98,7 @@
 
                     <div class="row">
                         <p class="text-center">
-                            <button type="submit" class="btn btn-primary btn-huge">Next Step »</button>
+                            <button type="submit" class="btn btn-default btn-huge">Next Step »</button>
                         </p>
                     </div>
                 </form>

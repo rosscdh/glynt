@@ -36,6 +36,7 @@ $(window).on('load', function() {
     $form.submit();
   });
 
+  // make these a bit more explicit
   $('input[type=checkbox], input[type=radio]').on('change', function() {
     var $el    = $(this);
     var $label = $el.closest('label');
@@ -51,6 +52,19 @@ $(window).on('load', function() {
     } else {
       $label.removeClass('checked');
     };
+  });
+
+  // Sliders
+  $('[data-toggle="slider"]').each(function() {
+    var $slider = $(this);
+    $slider.slider($slider.data());
+  });
+
+  $('input#company-founders').on('slide', function(e) {
+    var $el = $('#company-founders-bind');
+
+    $el.find('.bind-value').html(e.value);
+    $el.find('.bind-desc').html($el.data(e.value == 1 ? 'single' : 'plural'));
   });
 
 });
