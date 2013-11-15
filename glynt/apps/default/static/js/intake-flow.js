@@ -3,8 +3,10 @@ $(window).on('load', function() {
   $('[data-ride="steptacular"]').on('finish.lp.steptacular', function(e) {
     var data   = e.formData;
     var lookup = {
+      'corporate-cleanup':        'CLE',
       'employees':                'EMP',
       'financing':                'FIN',
+      'founder-issues':           'FOU',
       'immigration':              'IMM',
       'incorporation':            'INC',
       'intellectual-property':    'IP',

@@ -69,7 +69,7 @@
         "checklist_bunches": []
       },
       "slug": "INC",
-      "title": "Incorporation"
+      "title": "Incorporation & Set-up"
     }
   },
   {
@@ -121,7 +121,7 @@
         "checklist_bunches": []
       },
       "slug": "EMP",
-      "title": "Employees"
+      "title": "Hiring/Employees"
     }
   },
   {
@@ -147,7 +147,7 @@
         "checklist_bunches": []
       },
       "slug": "PRI",
-      "title": "Privacy and Terms"
+      "title": "Privacy & Terms"
     }
   },
   {
@@ -161,6 +161,32 @@
       },
       "slug": "OTH",
       "title": "Other"
+    }
+  },
+  {
+    "pk": 13,
+    "model": "transact.transaction",
+    "fields": {
+      "price": "0",
+      "description": "...",
+      "data": {
+        "checklist_bunches": []
+      },
+      "slug": "FOU",
+      "title": "Founder Issues"
+    }
+  },
+  {
+    "pk": 14,
+    "model": "transact.transaction",
+    "fields": {
+      "price": "0",
+      "description": "...",
+      "data": {
+        "checklist_bunches": []
+      },
+      "slug": "CLE",
+      "title": "Corporate Clean-up"
     }
   }
 ]
