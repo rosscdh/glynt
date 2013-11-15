@@ -7220,49 +7220,6 @@ body.homepage section#about-us .investors-team img.inv {
 #progress-bar .progress-inner ul.begin li.e div {
   background-color: #66d675;
 }
-/**
-.order-form {
-    input[type=checkbox] {
-      visibility: hidden;
-    }
-  .order-checkbox {
-    width: 40px;
-    height: 40px;
-    background: #ddd;
-    margin: 20px 90px;
-    border-radius: 100%;
-    position: relative;
-    -webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
-    -moz-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
-    box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
-  }
-
-  .order-checkbox label {
-    display: block;
-    width: 30px;
-    height: 30px;
-    border-radius: 100px;
-    -webkit-transition: all .3s ease;
-    -moz-transition: all .3s ease;
-    -o-transition: all .3s ease;
-    -ms-transition: all .3s ease;
-    transition: all .3s ease;
-    cursor: pointer;
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    z-index: 1;
-    background: #333;
-    margin:0px 0px 0px 0px;
-    -webkit-box-shadow:inset 0px 1px 3px rgba(0,0,0,0.5);
-    -moz-box-shadow:inset 0px 1px 3px rgba(0,0,0,0.5);
-    box-shadow:inset 0px 1px 3px rgba(0,0,0,0.5);
-  }
-  .order-checkbox input[type=checkbox]:checked + label {
-    background: #26ca28;
-  }
-}
-**/
 ul#checklist-categories li {
   position: relative;
 }
@@ -8255,70 +8212,17 @@ button.vcard {
 h5.text-info {
   color: #5bc0de;
 }
-select#company-founders {
-  width: 50px;
+#selection {
+  left: 0%;
 }
-select#company-founders-location {
-  width: 250px;
+#qualification {
+  left: 100%;
 }
-.radio,
-.checkbox {
-  padding-left: 60px;
-  vertical-align: middle;
+#incorporation-services {
+  left: 200%;
 }
-.radio label,
-.checkbox label {
-  cursor: pointer;
-  display: inline;
-}
-.radio input[type="radio"],
-.radio-inline input[type="radio"],
-.checkbox input[type="checkbox"],
-.checkbox-inline input[type="checkbox"] {
-  display: none;
-}
-.radio-inline,
-.checkbox-inline {
-  cursor: pointer;
-  display: inline-block;
-  line-height: 1;
-  margin-top: 0;
-  padding-left: 50px;
-  vertical-align: middle;
-}
-.radio-inline + .radio-inline,
-.checkbox-inline + .checkbox-inline {
-  margin-top: 0;
-  margin-left: 60px;
-}
-.radio label:before,
-.radio-inline:before,
-.checkbox label:before,
-.checkbox-inline:before {
-  font-family: FontAwesome;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: inherit;
-  -webkit-font-smoothing: antialiased;
-  *margin-right: .3em;
-  color: #eeeeee;
-  content: "\f096";
-  display: inline-block;
-  float: left;
-  font-size: 48px;
-  margin-left: -60px;
-  speak: none;
-}
-.radio label.checked:before,
-.radio-inline.checked:before,
-.checkbox label.checked:before,
-.checkbox-inline.checked:before {
-  color: #6bdb7e;
-  content: "\f046";
-}
-.radio-inline:before,
-.checkbox-inline:before {
-  margin-left: -50px;
+#financing-services {
+  left: 300%;
 }
 .navbar {
   margin-bottom: 0;
@@ -8485,17 +8389,149 @@ html,
   width: 100%;
   z-index: 1;
 }
-#selection {
-  left: 0%;
+.form-pretty .radio,
+.form-pretty .checkbox {
+  padding-left: 60px;
+  vertical-align: middle;
 }
-#qualification {
-  left: 100%;
+.form-pretty .radio label,
+.form-pretty .checkbox label {
+  cursor: pointer;
+  display: inline;
 }
-#incorporation-services {
-  left: 200%;
+.form-pretty .radio input[type="radio"],
+.form-pretty .radio-inline input[type="radio"],
+.form-pretty .checkbox input[type="checkbox"],
+.form-pretty .checkbox-inline input[type="checkbox"] {
+  display: none;
 }
-#financing-services {
-  left: 300%;
+.form-pretty .radio-inline,
+.form-pretty .checkbox-inline {
+  cursor: pointer;
+  display: inline-block;
+  line-height: 1;
+  margin-top: 0;
+  padding-left: 50px;
+  vertical-align: middle;
+}
+.form-pretty .radio-inline + .radio-inline,
+.form-pretty .checkbox-inline + .checkbox-inline {
+  margin-top: 0;
+  margin-left: 60px;
+}
+.form-pretty .radio label:before,
+.form-pretty .radio-inline:before,
+.form-pretty .checkbox label:before,
+.form-pretty .checkbox-inline:before {
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: inherit;
+  -webkit-font-smoothing: antialiased;
+  *margin-right: .3em;
+  color: #eeeeee;
+  content: "\f096";
+  display: inline-block;
+  float: left;
+  font-size: 48px;
+  margin-left: -60px;
+  speak: none;
+}
+.form-pretty .radio label.checked:before,
+.form-pretty .radio-inline.checked:before,
+.form-pretty .checkbox label.checked:before,
+.form-pretty .checkbox-inline.checked:before {
+  color: #6bdb7e;
+  content: "\f046";
+}
+.form-pretty .radio-inline:before,
+.form-pretty .checkbox-inline:before {
+  margin-left: -50px;
+}
+.form-pretty .slider {
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+}
+.form-pretty .slider input {
+  display: none;
+}
+.form-pretty .slider .slider-handle {
+  background: #f88172;
+  border: 0;
+  border-radius: 6px;
+  position: absolute;
+}
+.form-pretty .slider .slider-selection {
+  background-color: #eeeeee;
+  border-radius: 6px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  position: absolute;
+}
+.form-pretty .slider .slider-track {
+  background-color: #eeeeee;
+  border-radius: 6px;
+  cursor: pointer;
+  position: absolute;
+}
+.form-pretty .slider .tooltip-inner {
+  white-space: nowrap;
+}
+.form-pretty .slider.slider-horizontal {
+  height: 30px;
+  width: 210px;
+}
+.form-pretty .slider.slider-horizontal .slider-handle {
+  height: 30px;
+  margin-left: -5px;
+  margin-top: -10px;
+  width: 10px;
+}
+.form-pretty .slider.slider-horizontal .slider-selection {
+  bottom: 0;
+  height: 100%;
+  top: 0;
+}
+.form-pretty .slider.slider-horizontal .slider-track {
+  height: 10px;
+  left: 0;
+  margin-top: -5px;
+  top: 50%;
+  width: 100%;
+}
+.form-pretty .slider.slider-vertical {
+  height: 210px;
+  width: 30px;
+}
+.form-pretty .slider.slider-vertical .slider-handle {
+  height: 10px;
+  margin-left: -10px;
+  margin-top: -5px;
+  width: 30px;
+}
+.form-pretty .slider.slider-vertical .slider-selection {
+  bottom: 0;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+.form-pretty .slider.slider-vertical .slider-track {
+  height: 100%;
+  left: 50%;
+  margin-left: -5px;
+  top: 0;
+  width: 10px;
+}
+.form-pretty .slider.slider-disabled .slider-handle {
+  background-color: red;
+}
+.form-pretty .slider.slider-disabled .slider-selection {
+  background-color: yellow;
+}
+.form-pretty .slider.slider-disabled .slider-track {
+  background-color: blue;
 }
 .toast-error {
   background-color: #bd362f;

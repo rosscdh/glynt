@@ -590,56 +590,6 @@ body.homepage {
   }
 }
 
-/**
-.order-form {
-    input[type=checkbox] {
-      visibility: hidden;
-    }
-  .order-checkbox {
-    width: 40px;
-    height: 40px;
-    background: #ddd;
-    margin: 20px 90px;
-    border-radius: 100%;
-    position: relative;
-    -webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
-    -moz-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
-    box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
-  }
-
-  .order-checkbox label {
-    display: block;
-    width: 30px;
-    height: 30px;
-    border-radius: 100px;
-    -webkit-transition: all .3s ease;
-    -moz-transition: all .3s ease;
-    -o-transition: all .3s ease;
-    -ms-transition: all .3s ease;
-    transition: all .3s ease;
-    cursor: pointer;
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    z-index: 1;
-    background: #333;
-    margin:0px 0px 0px 0px;
-    -webkit-box-shadow:inset 0px 1px 3px rgba(0,0,0,0.5);
-    -moz-box-shadow:inset 0px 1px 3px rgba(0,0,0,0.5);
-    box-shadow:inset 0px 1px 3px rgba(0,0,0,0.5);
-  }
-  .order-checkbox input[type=checkbox]:checked + label {
-    background: #26ca28;
-  }
-}
-**/
-
-
-
-
-
-
-
 
 //
 // Other Stuff
@@ -1460,64 +1410,8 @@ h5.text-info {
 // Intake Flow
 // -------------------------
 
-select#company-founders          { width: 50px; }
-select#company-founders-location { width: 250px; }
-
-
-// Intake Flow Checkboxes
-// -------------------------
-
-.radio,
-.checkbox {
-  padding-left: 60px;
-  vertical-align: middle;
-  label {
-    cursor: pointer;
-    display: inline;
-  }
-}
-.radio input[type="radio"],
-.radio-inline input[type="radio"],
-.checkbox input[type="checkbox"],
-.checkbox-inline input[type="checkbox"] {
-  display: none;
-}
-.radio-inline,
-.checkbox-inline {
-  cursor: pointer;
-  display: inline-block;
-  line-height: 1;
-  margin-top: 0;
-  padding-left: 50px;
-  vertical-align: middle;
-}
-.radio-inline + .radio-inline,
-.checkbox-inline + .checkbox-inline {
-  margin-top: 0;
-  margin-left: 60px;
-}
-.radio label,
-.radio-inline,
-.checkbox label,
-.checkbox-inline {
-  &:before {
-    .icon-FontAwesome();
-    color: @gray-lighter;
-    content: @check-empty;
-    display: inline-block;
-    float: left;
-    font-size: 48px;
-    margin-left: -60px;
-    speak: none;
-  }
-  &.checked:before {
-    color: @brand-success;
-    content: @check;
-  }
-}
-.radio-inline,
-.checkbox-inline {
-  &:before {
-    margin-left: -50px;
-  }
-}
+// Scene order
+#selection              { left: 0%; }
+#qualification          { left: 100% };
+#incorporation-services { left: 200% };
+#financing-services     { left: 300% };
