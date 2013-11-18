@@ -250,7 +250,7 @@ html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.428571429;
   color: #333333;
@@ -417,7 +417,7 @@ h5,
 h6 {
   margin-top: 10px;
   margin-bottom: 10px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 h1,
 .h1 {
@@ -4226,7 +4226,7 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
 #lawyer-signup-modal h2 {
   font-size: 24px;
   margin-bottom: 10px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 #signup-modal .close,
 #signin-modal .close,
@@ -6750,7 +6750,7 @@ body.homepage section#top h2 {
 }
 body.homepage section#top h1 {
   font-size: 35px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
   text-shadow: -1px 1px 2px #4a442e;
 }
 body.homepage section#top h2 {
@@ -6832,7 +6832,7 @@ body.homepage section#co-pilot .step-block h2 {
   font-size: 22px;
   margin-top: 0px;
   padding-top: 0px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 body.homepage section#co-pilot .step-block h3 {
   font-size: 14px;
@@ -7018,7 +7018,7 @@ body.homepage section#about-us h2 {
   margin-top: 25px;
   text-align: left;
   color: #666;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 body.homepage section#about-us .investors-team {
   text-align: center;
@@ -7027,7 +7027,7 @@ body.homepage section#about-us .investors-team h4 {
   font-size: 13px;
   color: #999;
   text-align: center;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 body.homepage section#about-us .investors-team h3 {
   font-size: 13px;
@@ -8314,7 +8314,7 @@ h5.text-info {
 }
 .masthead h1 {
   color: inherit;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 500;
   line-height: 1.1;
   margin: 0;
