@@ -1,11 +1,11 @@
 """
 Test the various graph services
 """
-
+from django.test import TestCase
 from django.test.utils import override_settings
 
+import re
 import httpretty
-import mocktest
 
 from glynt.apps.graph.services import LinkedinProfileService
 
@@ -13,7 +13,7 @@ import logging
 logger = logging.getLogger('django.request')
 
 
-class LinkedinProfileServiceTest(mocktest.TestCase):
+class LinkedinProfileServiceTest(TestCase):
     """ Test the linkedin Profile services
     used to acquire the linkedin users profile information and photo"""
     @override_settings(LINKEDIN_CONSUMER_KEY='key', LINKEDIN_CONSUMER_SECRET='secret')
@@ -37,10 +37,13 @@ class LinkedinProfileServiceTest(mocktest.TestCase):
     def test_200_response(self):
         # note, that linkedin returns camelCasedAttrbiutes for json responses
         # we hack them to be more pythonic
+        httpretty.register_uri(httpretty.GET, re.compile(r"http(s)?://api.linkedin.com/v1/people/(\d+)/picture-urls(.*)"),
+                               body='{}',
+                               status=200)
         httpretty.register_uri(httpretty.GET, self.expected_url,
                                status=201,
                                body='{\n  "industry": "Internet",\n  "summary": "Summary here",\n  "currentStatus": "Monkies Rule",\n  "pictureUrl": "http://m3.licdn.com/mpr/mprx/0_G13Ym4CgyRCZ1zBI8AbDmUKpYsFZAnBIhqz3mU3DTM1ea-8wmzAthRviK-bbtlnFiri8Tp1jqBka"\n}')
-        
+
         response = self.subject.profile
 
         self.assertEqual(response.keys(), self.expected_profile_keys)
@@ -57,19 +60,22 @@ class LinkedinProfileServiceTest(mocktest.TestCase):
         then we need to cater to that """
         # note, that linkedin returns camelCasedAttrbiutes for json responses
         # we hack them to be more pythonic
+        httpretty.register_uri(httpretty.GET, re.compile(r"http(s)?://api.linkedin.com/v1/people/(\d*)/picture-urls(.*)"),
+                               body='{}',
+                               status=200)
         httpretty.register_uri(httpretty.GET, self.expected_url,
                                status=201,
                                body='{\n  "industry": "Internet"}')
-        
+
         response = self.subject.profile
 
         self.assertEqual(response.keys(), self.expected_profile_keys)
 
         self.assertTrue(response.get('photo_url') is None)
         self.assertTrue(response.get('industry') == 'Internet')
-        self.assertTrue(response.get('summary')  is None)
-        self.assertTrue(response.get('bio')  is None)
-        self.assertTrue(response.get('status')  is None)
+        self.assertTrue(response.get('summary') is None)
+        self.assertTrue(response.get('bio') is None)
+        self.assertTrue(response.get('status') is None)
 
     @httpretty.activate
     def test_mangled_response(self):
@@ -77,16 +83,19 @@ class LinkedinProfileServiceTest(mocktest.TestCase):
         then we need to cater to that """
         # note, that linkedin returns camelCasedAttrbiutes for json responses
         # we hack them to be more pythonic
+        httpretty.register_uri(httpretty.GET, re.compile(r"http(s)?://api.linkedin.com/v1/people/(\d+)/picture-urls(.*)"),
+                               body='{}',
+                               status=200)
         httpretty.register_uri(httpretty.GET, self.expected_url,
                                status=201,
-                               body="{\n  'industry': ')") # note the mangeld json
-        
+                               body="{\n  'industry': ')")  # note the mangeld json
+
         response = self.subject.profile
 
         self.assertEqual(response.keys(), self.expected_profile_keys)
 
         self.assertTrue(response.get('photo_url') is None)
         self.assertTrue(response.get('industry') is None)
-        self.assertTrue(response.get('summary')  is None)
-        self.assertTrue(response.get('bio')  is None)
-        self.assertTrue(response.get('status')  is None)
+        self.assertTrue(response.get('summary') is None)
+        self.assertTrue(response.get('bio') is None)
+        self.assertTrue(response.get('status') is None)

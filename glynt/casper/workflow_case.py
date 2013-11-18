@@ -111,6 +111,13 @@ def glynt_mock_http_requests(view_func):
         #
 
         #
+        # LinkedIn
+        #
+        httpretty.register_uri(httpretty.GET, re.compile(r"http(s)?://api.linkedin.com/v1/people/(.*)"),
+                       body='{}',
+                       status=200)
+
+        #
         # Crocdoc
         #
         httpretty.register_uri(httpretty.POST, "https://crocodoc.com/api/v2/session/create",
