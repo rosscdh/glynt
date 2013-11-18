@@ -552,7 +552,6 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', '$rootScope', 
 				}
 
 				var hasChanged_Items = ov_items.some( function( item, idx ){ 
-					debugger;
 					if(!nv_items[idx]) {
 						return false;
 					} else {
@@ -682,11 +681,28 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', '$rootScope', 
 		};
 
 		$scope.selectChecklistItem = function( item, index ) {
+			console.log( item );
 			for(var i=0;i<$scope.model.checklist.length;i++) {
 				$scope.model.checklist[i].selected = false;
 			}
 			item.selected = true;
+			$scope.loadAttachments( item );
+			console.log( item );
 			$rootScope.$broadcast('open-sidebar', index);
+		};
+
+		$scope.loadAttachments = function( item ) {
+			lawPalService.getCheckListItemAttachments( item ).then(
+				function success( attachments ) {
+					if( attachments && attachments.objects ) {
+						item.attachments = attachments.objects;
+					}
+				},
+				function error( err ) {
+					console.log( err );
+				}
+			);
+
 		};
 
 		/**

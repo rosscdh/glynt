@@ -95,11 +95,26 @@
                             <div class="item-meta" checklist-item-actions data-show-label="true" data-show-move="false"></div>
                             {% endif %}
                             <button ng-click="viewItem( item )" class="btn btn-primary">Open</button>
+                            <hr />
+
                             <h5>Attachments</h5>
-                            <ul>
-                                <li>Filename</li>
+                            <ul class="nav nav-pills nav-stacked">
+                                <li ng-repeat="attachment in item.attachments">
+                                    <a href="#"><i class="icon icon-file"></i> <span ng-bind="attachment.data.fpfile.filename"></span></a>
+                                </li>
                             </ul>
+                            <hr />
+
                             <h5>Discussion</h5>
+                            <form ng-submit="addComment()">
+                                <div class="form-group">
+                                    <label class="sr-only hideme">Comment</label>
+                                    <textarea ng-model="comment" class="comment" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-primary pull-right">Comment</button>
+                                </div>
+                            </form>
                         </div>
                         <collapse class="handle" index="1" collapsed="true"></collapse>
                     </block-container>

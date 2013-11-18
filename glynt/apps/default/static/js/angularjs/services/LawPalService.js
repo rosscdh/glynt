@@ -29,7 +29,11 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		'reorder': $resource('/api/v1/project/:id/checklist/sort/?format=json', {},
 			/* This is done to ensure the content type of PATCH is sent through */
 			{ 'save': { 'method': 'PATCH', headers: { 'Content-Type': 'application/json' }, 'isArray': true }
-		})
+			}),
+		'attachments':
+			$resource('/api/v1/attachment', {},
+				{ 'list': { 'method': 'GET', headers: { 'Content-Type': 'application/json' } }
+			})
 	};
 
 	var checkListCategories = {
@@ -777,6 +781,22 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 					deferred.reject(err);
 				}
 			);
+
+			return deferred.promise;
+		},
+
+		'getCheckListItemAttachments': function( item ) {
+			var itemId = item.id;
+			var deferred = $q.defer();
+			var options = {
+				'todo': itemId
+			};
+
+			checkListItemResources.attachments.list(options, function (results) { /* Success */
+				deferred.resolve(results);
+			}, function (results) { /* Error */
+				deferred.reject(results);
+			});
 
 			return deferred.promise;
 		}
