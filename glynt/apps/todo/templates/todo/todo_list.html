@@ -103,7 +103,8 @@
                                     <a href="#"><i class="icon icon-file"></i> <span ng-bind="attachment.data.fpfile.filename"></span></a>
                                 </li>
                             </ul>
-                            <button class="btn btn-default" ng-file-drop="onFileSelect($files);" ng-click="uploadSelector()">Upload attachments</button>
+                            <div class="drop-pane" ng-file-drop="onFileSelect($files);">Drop files here</div>
+                            <button class="btn btn-default btn-block" ng-file-drop="onFileSelect($files);" ng-click="uploadSelector()">Upload attachments</button>
                             <hr />
 
                             <h5>Discussion</h5>
