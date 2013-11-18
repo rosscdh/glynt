@@ -557,6 +557,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		},
 
 		"attachFileChecklistItem": function( item, file ) {
+			var self = this;
 			var deferred = $q.defer();
 			var lawPalUrl = "/api/v1/attachment";
 			var data = {
@@ -571,18 +572,19 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			filepicker.store(file,
 				function success(new_inkblob){
 					//console.log(JSON.stringify(new_inkblob));
-					data.attachment = new_inkblob.url.toString();
-					data.data = { "fpfile": new_inkblob };
+					
 					fileProgressHandle.type = "success";
 					fileProgressHandle.label = "Processing: " + fileProgressHandle.label;
 					
 					if ( new_inkblob && new_inkblob.url ) {
-						$http.post( lawPalUrl, data).then( function success( response ){
-							multiProgressService.remove( fileProgressHandle );
-							deferred.resolve(response);
-						}, function error( err ) {
-							fileProgressHandle.type = "danger";
-							deferred.reject( err );
+						self.localUpload( new_inkblob, data , function( err, response ){
+							if(!err) {
+								multiProgressService.remove( fileProgressHandle );
+								deferred.resolve(response);
+							} else {
+								fileProgressHandle.type = "danger";
+								deferred.reject( err );
+							}
 						});
 					}
 				},
@@ -595,6 +597,20 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			);
 			
 			return deferred.promise;
+		},
+
+		'localUpload': function( new_inkblob, data, callback ) {
+			data.attachment = new_inkblob.url.toString();
+			data.data = { "fpfile": new_inkblob };
+
+			console.log("data", data);
+
+			var lawPalUrl = "/api/v1/attachment";
+			$http.post( lawPalUrl, data).then( function success( response ){
+					callback( null, response );
+				}, function error( err ) {
+					callback( err );
+				});
 		},
 
 		/**

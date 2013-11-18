@@ -103,6 +103,7 @@
                                     <a href="#"><i class="icon icon-file"></i> <span ng-bind="attachment.data.fpfile.filename"></span></a>
                                 </li>
                             </ul>
+                            <button class="btn btn-default" ng-file-drop="onFileSelect($files);" ng-click="uploadSelector()">Upload attachments</button>
                             <hr />
 
                             <h5>Discussion</h5>
@@ -125,6 +126,8 @@
         <toaster-container toaster-options="{'time-out': 3000}"></toaster-container>
         <div position="bottom" class="multi-progress"></div>
     </div>
+
+
     <!-- end: AngularJS: checklist controller //-->
 {% endblock %}
 

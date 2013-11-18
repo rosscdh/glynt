@@ -113,6 +113,35 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [
 			);
 		};
 
+		$scope.uploadSelector = function() {
+			var data = {
+				"project": lawPalService.getProjectId(),
+				"todo": $scope.item.id,
+				"uploaded_by": { "pk": lawPalService.getCurrentUser().pk }
+			};
+			filepicker.setKey('A4Ly2eCpkR72XZVBKwJ06z');
+			filepicker.pickMultiple({
+				'mimetypes': ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.ms-powerpoint', 'application/vnd.ms-excel'],
+				'container': 'modal',
+				'services':['BOX','COMPUTER','DROPBOX','GITHUB','GOOGLE_DRIVE','GMAIL','URL','FTP','WEBDAV'],
+				'multiple': true
+			  },
+			  function(InkBlob){
+				console.log(JSON.stringify(InkBlob));
+				if( InkBlob && angular.isArray(InkBlob) ) {
+					angular.forEach( InkBlob, function( ib ){
+						lawPalService.localUpload( ib, data, function( err, response ) {
+							console.log("error", err, response );
+						});
+					});
+				}
+			  },
+			  function(FPError){
+				console.log(FPError.toString());
+			  }
+			);
+		};
+
 		$scope.onFileSelect = function( files ) {
 			var allowedTypes = [ "application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.ms-powerpoint", "application/vnd.ms-excel" ];
 			files.each( function( file ){
@@ -140,11 +169,19 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [
 		 * @param  {Object} data Data from the update event
 		 */
 		$scope.$on("todo.attachment.created", function( e, data ){
+			$scope.item.attachments = $scope.item.attachments || [];
 			//console.log("data:", data.todo, "item:",$scope.item.name, data.instance.name == $scope.item.name);
-			if( typeof(data)==="object" && data.instance && data.todo == $scope.item.name ) {
+			//debugger;
+			if( typeof(data)==="object" && data.instance && data.todo == $scope.item.name && !data.processed ) {
+				data.processed = true;
+				console.log("incrementing", $scope.item.slug, data.instance.slug );
 				$scope.item.num_attachments = $scope.item.num_attachments?$scope.item.num_attachments+1:1;
 				toaster.pop("success", data.todo || "Attachment", "attached: " + data.attachment );
 				$scope.$apply();
+
+				$scope.reloadHandle = setTimeout( function(){
+					$scope.loadAttachments( $scope.item );
+				}, 2000);
 			}
 		});
 }]);
