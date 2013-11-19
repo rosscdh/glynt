@@ -8,6 +8,7 @@ from glynt.apps.customer.api_v2 import (UserViewSet,)
 from glynt.apps.project.api_v2 import (ProjectViewSet, DiscussionListView,
                                        TeamListView, DiscussionDetailView,
                                        DiscussionTagView, )
+from glynt.apps.todo.api_v2 import (AttachmentViewSet)
 
 
 # Setup routers
@@ -22,6 +23,9 @@ urlpatterns = patterns('',
     url(r'^project/(?P<uuid>.+)/discussion/$',
                                               DiscussionListView.as_view(),
                                               name='project_discussion'),
+    url(r'^project/(?P<uuid>.+)/todo/(?P<slug>.+)/attachment/$',
+                                              AttachmentViewSet.as_view(actions={'get': 'list'}),
+                                              name='project_todo_attachment'),
     url(r'^project/(?P<uuid>.+)/discussion/(?P<pk>\d+)/tags((\/(?P<tag>.+))?)/$',
                                               DiscussionTagView.as_view(),
                                               name='project_discussion_tags'),
