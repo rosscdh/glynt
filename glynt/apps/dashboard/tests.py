@@ -4,7 +4,7 @@
 """
 from django.core.urlresolvers import reverse
 
-from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin
+from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin, for_all_methods, glynt_mock_http_requests
 from glynt.apps.project.models import Project, ProjectLawyer
 
 from model_mommy import mommy
@@ -12,9 +12,8 @@ from model_mommy import mommy
 import os
 
 
+@for_all_methods(glynt_mock_http_requests)
 class DashboardLawyerTest(BaseLawyerCustomerProjectCaseMixin):
-    test_path = os.path.dirname(__file__)
-
     def setUp(self):
         super(DashboardLawyerTest, self).setUp()
 
@@ -37,8 +36,6 @@ class DashboardLawyerTest(BaseLawyerCustomerProjectCaseMixin):
         self.assertTrue('counts' in resp.context_data)
         self.assertEqual(type(resp.context_data['counts']), dict)
 
-        #import pdb;pdb.set_trace()
-
         self.assertTrue(self.load_casper_file(js_file='dashboard_access.js', test_label='Test the Dashboard Access for a Lawyer', url=self.url))
 
     def test_lawyer_dashboard_js(self):
@@ -54,9 +51,8 @@ class DashboardLawyerTest(BaseLawyerCustomerProjectCaseMixin):
         self.assertTrue(self.load_casper_file(js_file='dashboard.js', test_label='Test the Dashboard View for a Lawyer', url=self.url))
 
 
+@for_all_methods(glynt_mock_http_requests)
 class ChecklistLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
-    test_path = os.path.dirname(__file__)
-
     def test_checklist_access_anonymous(self):
         resp = self.client.get(reverse('dashboard:checklist', kwargs={'uuid': self.project.uuid}))
         self.assertEqual(resp.status_code, 302)

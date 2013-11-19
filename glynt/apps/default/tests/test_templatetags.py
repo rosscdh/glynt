@@ -13,6 +13,7 @@ from django.contrib.auth.models import AnonymousUser
 
 from glynt.apps.default.templatetags.glynt_helpers import (ABSOLUTE_STATIC_URL,
                                                            colorize_acronym,
+                                                           full_url_thumb,
                                                            pusher_js,
                                                            moment_js,
                                                            intercom_script,)
@@ -32,6 +33,27 @@ class TestTemplateTags(TestCase):
 
     def test_comment_form(self):
         pass
+
+    @override_settings(SITE_ID=4)
+    def test_full_url_thumb(self):
+        """
+        helper meant to combine urls with our site url if not netloc is present
+        or if a full url is passed in simply return that
+        """
+        local = full_url_thumb('/static/monkey.png')
+        self.assertEqual(local, 'https://www.lawpal.com/static/monkey.png')
+
+        http = full_url_thumb('http://exmaple.com/static/monkey.png')
+        self.assertEqual(http, 'http://exmaple.com/static/monkey.png')
+
+        https = full_url_thumb('https://exmaple.com/static/monkey.png')
+        self.assertEqual(https, 'https://exmaple.com/static/monkey.png')
+
+    @override_settings(SITE_ID=1)
+    def test_full_url_thumb_another_site(self):
+        local = full_url_thumb('/static/monkey.png')
+        self.assertEqual(local, 'http://local.weareml.com:8000/static/monkey.png')
+
 
     @override_settings(SITE_ID=4)
     def test_ABSOLUTE_STATIC_URL(self):

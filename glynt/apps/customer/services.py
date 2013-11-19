@@ -1,16 +1,15 @@
 # -*- coding: UTF-8 -*-
-import os
-
-from django.contrib.auth.models import User
-
 from glynt.apps.default.mixins import ChangeUserDetailsMixin
 
+from cicu.models import UploadedFile
+
 try:
-    from glynt.apps.customer.models import Customer
+    from glynt.apps.customer.models import Customer, _customer_upload_photo
 except ImportError:
     # Customer appears to already be in sys.modules
     pass
 
+import os
 import logging
 logger = logging.getLogger('lawpal.services')
 
@@ -33,15 +32,28 @@ class EnsureCustomerService(ChangeUserDetailsMixin):
         profile.save(update_fields=['profile_data'])
 
     def save_photo(self, photo):
-        if photo and self.customer.photo != photo:  # only if its not the same image
+        if type(photo) == UploadedFile: # only if it is an uploaded CICU image
             logger.info('New photo for %s' % self.customer)
             photo_file = os.path.basename(self.photo.file.name)  # get base name
+            # try:
+            # delete current
             try:
-                self.customer.photo.save(photo_file, photo.file)
-                self.customer.user.profile.mugshot.save(photo_file, photo.file)
-                logger.info('Saved new photo %s for %s' % (photo.file, self.customer))
+                self.customer.photo.delete()
             except Exception as e:
-                logger.error('Could not save user photo %s for %s: %s' % (photo.file, self.customer, e))
+                logger.error('Could not delete photo %s' % self.customer.photo)
+
+            # move from ajax_uploads to the model desired path
+            new_path = _customer_upload_photo(instance=self.customer, filename=photo_file)
+            photo.file.storage.save(new_path, photo.file)  # save to new path
+
+            # will now upload to s3
+            self.customer.photo.save(name=photo_file, content=photo.file)
+            self.customer.save(update_fields=['photo'])
+
+            #self.customer.user.profile.save(update_fields=['mugshot'])
+            logger.info('Saved new photo %s for %s' % (photo.file, self.customer))
+            # except Exception as e:
+            #     logger.error('Could not save user photo %s for %s: %s' % (photo.file, self.customer, e))
 
     def process(self):
         self.update_user()

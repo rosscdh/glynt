@@ -484,35 +484,21 @@ legend {
 <script type="text/javascript">
 'use strict';
 
-function preparePhotoPreview(element) {
+function preparePhotoPreview(element, data) {
     var element = $('.cropped-imag-preview');
-    var cookie_data = $.parseJSON($.cookie('lawyer_profile_photo-{{ user.pk }}'));
+    var cookie_data = $.parseJSON($.cookie('lawyer_profile_photo-{{ customer.pk }}'));
 
-    $.each(element.find('img'), function(i,img){
-        img = $(img)
-        var src = img.attr('src');
-        var photo_id = null;
-
-        /**
-        * Stores the photo ID in a field
-        */
-        if (cookie_data && cookie_data.id !== undefined) {
-            photo_id = cookie_data.id;
-            $('#id_hidden_photo').val(photo_id);
-            //src = cookie_data.path;
-        }
-        if (src) {
-            $('#photo-preview').attr('src', src)
-        }
-
-        img.hide();
-    })
+    // hide the ugl image preview
+    $('.cropped-imag-preview img').hide();
+    if ( data ) {
+        $('#photo-preview').attr('src', data.path);
+    }
 }
 
 function photoCrop(element, data) {
     $('#id_hidden_photo').val(data.id);// id to be sent
     $.cookie('lawyer_profile_photo-{{ user.pk }}', JSON.stringify({'id': data.id, 'path': data.path}));
-    preparePhotoPreview(element);
+    preparePhotoPreview(element, data);
 }
 
 $(document).ready(function(){

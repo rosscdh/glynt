@@ -4,12 +4,13 @@
 """
 from django.core.urlresolvers import reverse
 
+from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin, for_all_methods, glynt_mock_http_requests
+
 import os
 import json
 
-from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin
 
-
+@for_all_methods(glynt_mock_http_requests)
 class TransactionBuilderTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
     test_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 

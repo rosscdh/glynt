@@ -3,10 +3,14 @@ import os
 from django.contrib.auth.models import User
 import json
 
-from models import Lawyer
+from .models import Lawyer, _lawyer_upload_photo
+
 from glynt.apps.firm.services import EnsureFirmService
 from glynt.apps.default.mixins import ChangeUserDetailsMixin
-from tasks import send_profile_setup_email
+
+from .tasks import send_profile_setup_email
+
+from cicu.models import UploadedFile
 
 import logging
 logger = logging.getLogger('lawpal.services')
@@ -65,12 +69,23 @@ class EnsureLawyerService(ChangeUserDetailsMixin):
             self.perform_update()
 
     def save_photo(self, photo):
-        if photo and self.lawyer.photo != photo: # only if its not the same image
+        if type(photo) == UploadedFile: # only if it is an uploaded CICU image
             logger.info('New photo for %s' % self.lawyer)
             photo_file = os.path.basename(photo.file.path)# get base name
             try:
-                self.lawyer.photo.save(photo_file, photo.file)
-                self.lawyer.user.profile.mugshot.save(photo_file, photo.file)
+                # move from ajax_uploads to the model desired path
+                new_path = _lawyer_upload_photo(instance=self.lawyer, filename=photo_file)
+                photo.file.storage.save(new_path, photo.file)  # save to new path
+                # delete current
+                try:
+                    self.lawyer.photo.delete()
+                except Exception as e:
+                    logger.info('Could not delete photo %s' % self.lawyer.photo)
+
+                # will now upload to s3
+                self.lawyer.photo.save(name=photo_file, content=photo.file)
+                self.lawyer.save(update_fields=['photo'])
+
                 logger.info('Saved new photo %s for %s' % (photo.file, self.lawyer))
             except Exception as e:
                 logger.error('Could not save user photo %s for %s: %s' % (photo.file, self.lawyer, e))
