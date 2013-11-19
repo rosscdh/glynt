@@ -40,7 +40,7 @@ crocodoc.api_token = CROCDOC_API_KEY
 
 class CrocdocAttachmentService(object):
     """
-    Service to manage uploading and general attribs of corcdoc attachments
+    Service to manage uploading and general attribs of crocdoc attachments
     """
     attachment = None
     session = None
@@ -79,7 +79,11 @@ class CrocdocAttachmentService(object):
 
     def session_key(self, **kwargs):
         if self.session is None:
-            self.session = '123-123-123' if settings.PROJECT_ENVIRONMENT == 'test' else crocodoc.session.create(self.uuid, **kwargs)
+            try:
+                self.session = '123-123-123' if settings.PROJECT_ENVIRONMENT == 'test' else crocodoc.session.create(self.uuid, **kwargs)
+            except crocodoc.CrocodocError as e:
+                logger.error('Crocdoc Error: %s' % e)
+                self.session = None
         return self.session
 
     def upload_document(self):
@@ -88,8 +92,22 @@ class CrocdocAttachmentService(object):
         return crocodoc.document.upload(url=url)
 
     def view_url(self):
-        url = 'http://example.com' if settings.PROJECT_ENVIRONMENT == 'test' else 'https://crocodoc.com/view/{session_key}'.format(session_key=self.session_key())
-        logger.info('provide crocdoc view_url: {url}'.format(url=url))
+        url = None
+
+        if self.attachment.crocdoc_uuid is None:
+            logger.info('No attachment present for todo.attachment: {pk}'.format(pk=self.attachment.pk))
+
+        else:
+
+            session_key = self.session_key()
+
+            if session_key is None:
+                logger.error('Crocdoc session could not be set')
+
+            else:
+                url = 'http://example.com' if settings.PROJECT_ENVIRONMENT == 'test' else 'https://crocodoc.com/view/{session_key}'.format(session_key=session_key)
+                logger.info('provide crocdoc view_url: {url}'.format(url=url))
+
         return url
 
     def remove(self):
