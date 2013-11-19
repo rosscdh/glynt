@@ -105,9 +105,8 @@ boto # required for AWS-SQS
 # Dev
 Werkzeug
 django-debug-toolbar==0.11.0
-#-e git+https://github.com/django-debug-toolbar/django-debug-toolbar.git#egg=django-debug-toolbar
--e git+https://github.com/playfire/django-debug-toolbar-user-panel.git#egg=django-debug-toolbar-user-panel
--e git+https://github.com/orf/django-debug-toolbar-template-timings.git#egg=django-debug-toolbar-template-timings
+django-debug-toolbar-user-panel==1.0.1
+django-debug-toolbar-template-timings==0.5.3
 django-clear-cache
 
 # Testing
