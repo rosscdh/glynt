@@ -85,17 +85,16 @@ class CrocdocAttachmentService(object):
         else:
             return self.attachment.crocdoc_uuid
 
-    def session_key(self, user=None):
+    def session_key(self, user):
         crocdoc_params = self.crocdoc_params.copy()
 
         # append the user info to the dict
-        if user is not None:
-            crocdoc_params.update({
-                "user": {
-                    "name": user.get_full_name(),
-                    "id": user.pk
-                }
-            })
+        crocdoc_params.update({
+            "user": {
+                "name": user.get_full_name(),
+                "id": user.pk
+            }
+        })
 
         if self.session is None:
             try:
@@ -110,15 +109,14 @@ class CrocdocAttachmentService(object):
         logger.info('Upload file to crocdoc: {url}'.format(url=url))
         return crocodoc.document.upload(url=url)
 
-    def view_url(self):
+    def view_url(self, user):
         url = None
 
         if self.attachment.crocdoc_uuid is None:
             logger.info('No attachment present for todo.attachment: {pk}'.format(pk=self.attachment.pk))
 
         else:
-
-            session_key = self.session_key()
+            session_key = self.session_key(user=user)  # required the user for crocdoc permissions
 
             if session_key is None:
                 logger.error('Crocdoc session could not be set')
