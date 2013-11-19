@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+from django.core.urlresolvers import reverse
 from rest_framework import serializers
 
 from .services import CrocdocAttachmentService
@@ -40,7 +41,7 @@ class AttachmentSerializer(serializers.ModelSerializer):
         return _user_dict(user=user)
 
     def get_crocdoc_url(self, obj):
-        return '@TODO return local crocdoc url here'
+        return reverse('todo:attachment', kwargs={'pk': obj.pk})
 
     def get_filepicker_url(self, obj):
         return obj.inkfilepicker_url
