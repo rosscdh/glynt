@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 from django.shortcuts import get_object_or_404
+from django.core.exceptions import PermissionDenied
 
 from rest_framework.viewsets import ModelViewSet
 
@@ -21,3 +22,15 @@ class AttachmentViewSet(ModelViewSet):
         todo = get_object_or_404(ToDo, slug=self.kwargs.get('slug'))
 
         return self.queryset.filter(project=project, todo=todo)
+
+    def create(self, request):
+        raise PermissionDenied
+
+    def update(self, request, pk=None):
+        raise PermissionDenied
+
+    def partial_update(self, request, pk=None):
+        raise PermissionDenied
+
+    def destroy(self, request, pk=None):
+        raise PermissionDenied
