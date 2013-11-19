@@ -613,6 +613,44 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 				});
 		},
 
+		'deleteAttachment': function( attachment ) {
+			var deferred = $q.defer();
+			var id = attachment.id;
+			var url = '/api/v1/attachment/' + id;
+			var details = {
+				'deleted_by': { 'pk': this.getCurrentUser().pk }
+			};
+			$http.delete(url, details, {
+				"headers": { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+			}).success(function(response) {
+				deferred.resolve(response);
+			}).error(function(err){
+				deferred.reject(err);
+			});
+
+			return deferred.promise;
+		},
+
+		'feedbackRequest': function( attachment ) {
+			var deferred = $q.defer();
+			var id = attachment.id;
+			var url = '/api/v1/attachment/' + id;
+			var details = {
+				'assigned_by': { 'pk': this.getCurrentUser().pk },
+				'assigned_to': [ { 'pk': 44 } ],
+				'attachment': { 'pk': id }
+			};
+			$http.delete(url, details, {
+				"headers": { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+			}).success(function(response) {
+				deferred.resolve(response);
+			}).error(function(err){
+				deferred.reject(err);
+			});
+
+			return deferred.promise;
+		},
+
 		/**
 		 * Get current project ID if available
 		 * @return {Number} project Id

@@ -32,6 +32,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', '$rootScope', 
 				} 
 			},
 			'checklist': [], // from API: Contains all checklist items
+			'selectedAttachments': [],
 			'workingChecklist': [],
 			/*'data': [],	// Working copy of the data*/
 			'feedbackRequests': [],
@@ -698,6 +699,9 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', '$rootScope', 
 					if( attachments && attachments.results ) {
 						//adjustScollPos($(".options-container .item-container"));
 						$rootScope.$broadcast('adjust-sidebar');
+						for(var i=0;i<attachments.results.length;i++) {
+							attachments.results[i].is_deleted = attachments.results[i].is_deleted?true:false;
+						}
 						item.attachments = attachments.results;
 						item.loadingAttachments = false;
 					}

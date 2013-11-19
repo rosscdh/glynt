@@ -14,7 +14,6 @@
 
 {% block body %}
     {% csrf_token %}
-    
     <!-- start: AngularJS: checklist controller //-->
     <div class="container checklist-view" ng-controller="checklistCtrl" ng-init="initalise( { 'project': { 'uuid': '{{ project.uuid }}' }, 'pusher': { 'key':'{{ PUSHER_KEY }}', 'channel':'{{ project.pusher_id }}' } } )">
         <div class="row">
@@ -100,8 +99,8 @@
                             <h5>Attachments</h5>
                             <span ng-show="item.loadingAttachments" class="text-muted"><i class="icon icon-spinner icon-spin"></i> Loading attachments</span>
                             <ul class="nav nav-pills nav-stacked">
-                                <li ng-repeat="attachment in item.attachments">
-                                    <a href="#"><i class="icon icon-file"></i> <span ng-bind="attachment.filename"></span></a>
+                                <li ng-repeat="attachment in item.attachments | filter: { is_deleted: false }">
+                                    <a href="#" ng-click="viewAttachment(attachment)"><i class="icon icon-file text-muted"></i> <span ng-bind="attachment.filename"></span></a>
                                 </li>
                             </ul>
                             <div class="drop-pane" ng-file-drop="onFileSelect($files);" ng-click="uploadSelector()">Drop files here</div>
@@ -127,8 +126,30 @@
     </div>  
         <toaster-container toaster-options="{'time-out': 3000}"></toaster-container>
         <div position="bottom" class="multi-progress"></div>
-    </div>
 
+        <div class="full-dialog-container ng-cloak">
+            <div ng-repeat="attachment in model.selectedAttachments" ng-controller="attachmentCtrl">
+                <div class="full-dialog-underlay"></div>
+                <div class="full-dialog">
+                    <div class="container full-dialog-content">
+                        
+                        <div class="row">
+                            <div class="col-lg-7">
+                                <h3><i class="icon icon-file text-muted"></i> <span ng-bind="attachment.filename"></span></h3>
+                            </div>
+                            <div class="col-lg-5">
+                                <button class="btn btn-link pull-right" ng-click="close()">&times; Return to checklist</button>
+                                <button class="btn btn-primary pull-right">Get feedback</button>
+                                <button class="btn btn-default pull-right" ng-click="delete( attachment )" ng-disabled="deleting"><i class="icon icon-spinner icon-spin" ng-show="deleting"></i> Delete</button>
+                            </div>
+                        </div>
+                        
+                        <iframe style="width:100%; height: {[{attachment.pageHeight}]}px" ng-src="{[{attachment.crocdoc_url}]}" frameborder="0"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- end: AngularJS: checklist controller //-->
 {% endblock %}
@@ -141,6 +162,7 @@
     <script type="text/javascript" src="{{ STATIC_URL }}todo/angularjs.checklistCtrl.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}todo/angularjs.checklistItemCtrl.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}todo/angularjs.checklistItemDirective.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}todo/angularjs.attachmentCtrl.js"></script>
 
     <script>
     /**
