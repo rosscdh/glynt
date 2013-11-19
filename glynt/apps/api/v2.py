@@ -8,7 +8,7 @@ from glynt.apps.customer.api_v2 import (UserViewSet,)
 from glynt.apps.project.api_v2 import (ProjectViewSet, DiscussionListView,
                                        TeamListView, DiscussionDetailView,
                                        DiscussionTagView, )
-from glynt.apps.todo.api_v2 import (AttachmentViewSet)
+from glynt.apps.todo.api_v2 import (AttachmentViewSet, ToDoDiscussionDetailView)
 
 
 # Setup routers
@@ -16,16 +16,27 @@ router = routers.DefaultRouter()
 
 
 # setup Custom urls
-urlpatterns = patterns('',
+project_team_urlpatterns = patterns('',
     url(r'^project/(?P<uuid>.+)/team/$',
                                               TeamListView.as_view(),
                                               name='project_team'),
-    url(r'^project/(?P<uuid>.+)/discussion/$',
-                                              DiscussionListView.as_view(),
-                                              name='project_discussion'),
+)
+
+project_todo_urlpatterns = patterns('',
     url(r'^project/(?P<uuid>.+)/todo/(?P<slug>.+)/attachment/$',
                                               AttachmentViewSet.as_view(actions={'get': 'list'}),
                                               name='project_todo_attachment'),
+    url(r'^project/(?P<uuid>.+)/todo/(?P<slug>.+)/discussion/((\/(?P<parent_pk>\d+))?)$',
+                                              ToDoDiscussionDetailView.as_view(actions={'get': 'list'}),
+                                              name='project_todo_discussion'),
+)
+
+project_discussion_urlpatterns = patterns('',
+
+    url(r'^project/(?P<uuid>.+)/discussion/$',
+                                              DiscussionListView.as_view(),
+                                              name='project_discussion'),
+
     url(r'^project/(?P<uuid>.+)/discussion/(?P<pk>\d+)/tags((\/(?P<tag>.+))?)/$',
                                               DiscussionTagView.as_view(),
                                               name='project_discussion_tags'),
@@ -39,6 +50,8 @@ urlpatterns = patterns('',
 router.register(r'project', ProjectViewSet)
 router.register(r'user', UserViewSet)
 
+
+urlpatterns = project_team_urlpatterns + project_todo_urlpatterns + project_discussion_urlpatterns
 
 # Main urlpatterns used by django
 urlpatterns += router.urls
