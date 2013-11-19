@@ -23,7 +23,7 @@ helper.scenario(casper.cli.options.url,
         casper.test.comment('Test all the javascript HTML elements are present');
 
         this.test.assertTextExists('Your Company Profile');
-        this.test.assertTextExists('Enter some basic details about your company');
+        // this.test.assertTextExists('Enter some basic details about your company');
 
         // fieldset legends
         this.test.assertTextExists('Founding Team');
