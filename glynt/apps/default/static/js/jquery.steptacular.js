@@ -281,6 +281,10 @@
     var isQualified = isQualified || true;
     var pos         = this.getSceneIndex(this.$active.attr('id'));
 
+    var $form            = $('form#transaction-form');
+    var $intakeData      = $form.find('#id_intake_data');
+    var $transactionType = $form.find('#id_transaction_type');
+
     var data = {};
     $(this.scenes).each(function(index, scene) {
       if (index <= pos) {
@@ -291,8 +295,34 @@
     this.$active.removeClass('active');
     this.storage.clear();
 
-    var e = $.Event('finish.lp.steptacular', { formData: data, isQualified: isQualified });
-    this.$element.trigger(e);
+    var lookup = {
+      'corporate-cleanup':        'CLE',
+      'employees':                'EMP',
+      'financing':                'FIN',
+      'founder-issues':           'FOU',
+      'immigration':              'IMM',
+      'incorporation':            'INC',
+      'intellectual-property':    'IP',
+      'non-disclosure-agreement': 'NDA',
+      'other':                    'OTH',
+      'privacy-and-terms':        'PRI'
+    };
+    var selections = data['selection'];
+
+    var service = null;
+    var transactions = [];
+    $(selections['services']).each(function() {
+      if (data[this + '-services']) {
+        transactions.push(data[this + '-services']);
+      } else {
+        transactions.push(lookup[this]);
+      };
+    });
+    $transactionType.val(transactions);
+
+    $intakeData.val(JSON.stringify(data));
+
+    $form.submit();
   };
 
   Steptacular.prototype.click = function(e) {

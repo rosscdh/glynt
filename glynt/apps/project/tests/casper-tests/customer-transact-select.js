@@ -9,7 +9,21 @@ var helper = require(casper.cli.options.casper_helper_js_path);
  */
 helper.scenario(casper.cli.options.url,
     function () {
+        this.waitFor(function waitForJQuery() {
+            return this.evaluate(function() {
+                return typeof(window.$) !== 'undefined';
+            });
+        });
+        this.waitFor(function check() {
+            return this.evaluate(function() {
+                return document.querySelectorAll('.slide.active').length == 1;
+            });
+        });
+    },
+    function () {
         this.test.comment('Test the selection page');
+
+        this.test.assertExists('.slide[data-stage="selection"].active');
 
         // test validation
         this.click('.slide.active button[type="submit"]');
@@ -19,10 +33,11 @@ helper.scenario(casper.cli.options.url,
         this.click('input[name="services"][value="financing"]');
         this.click('input[name="services"][value="intellectual-property"]');
         this.click('.slide.active button[type="submit"]');
-        this.test.assertExists('.slide[data-scene="incorporation"][data-stage="qualification"].active');
     },
     function () {
         this.test.comment('Test the qualification page');
+
+        this.test.assertExists('.slide[data-scene="incorporation"][data-stage="qualification"].active');
 
         // test validation
         this.click('.slide.active button[type="submit"]');
@@ -33,26 +48,33 @@ helper.scenario(casper.cli.options.url,
             'company_founders_location': 'inside',
             'company_incorporated': 'no',
             'company_paperwork': 'no'
-        }, true);
-        this.test.assertExists('.slide[data-scene="incorporation"][data-stage="services"].active');
+        });
+
+        this.click('.slide.active button[type="submit"]');
     },
     function () {
-        this.test.comment('Test the services page');
+        this.test.comment('Test the incorporation services page');
 
-        // test we're on the right page
         this.test.assertExists('.slide[data-scene="incorporation"][data-stage="services"].active');
         this.test.assertExists('.slide.active input[type="submit"]#submit-btn-CS');
         this.test.assertExists('.slide.active input[type="submit"]#submit-btn-CSP');
 
         this.click('.slide.active input[type="submit"]#submit-btn-CS');
+    },
+    function () {
+        this.test.comment('Test the financing services page');
+
         this.test.assertExists('.slide[data-scene="financing"][data-stage="services"].active');
         this.test.assertExists('.slide.active input[type="submit"]#submit-btn-SF');
         this.test.assertExists('.slide.active input[type="submit"]#submit-btn-ES');
 
         this.click('.slide.active input[type="submit"]#submit-btn-ES');
+    },
+    function () {
+        this.test.comment('Test the redirect after project creation');
 
-        this.waitForUrl(/transact\/build/, function success() {
-            this.test.assertUrlMatch(/CS,ES,IP/);
+        this.waitForUrl(/dashboard/, function success() {
+            this.test.assertUrlMatch(/dashboard/);
         });
     }
 );
@@ -62,7 +84,16 @@ helper.scenario(casper.cli.options.url,
  */
 helper.scenario(casper.cli.options.url,
     function () {
+        this.waitFor(function check() {
+            return this.evaluate(function() {
+                return document.querySelectorAll('.slide.active').length == 1;
+            });
+        });
+    },
+    function () {
         this.test.comment('Test the selection page');
+
+        this.test.assertExists('.slide[data-stage="selection"].active');
 
         // test validation
         this.click('.slide.active button[type="submit"]');
@@ -72,10 +103,11 @@ helper.scenario(casper.cli.options.url,
         this.click('input[name="services"][value="financing"]');
         this.click('input[name="services"][value="intellectual-property"]');
         this.click('.slide.active button[type="submit"]');
-        this.test.assertExists('.slide[data-scene="incorporation"][data-stage="qualification"].active');
     },
     function () {
         this.test.comment('Test the qualification page');
+
+        this.test.assertExists('.slide[data-scene="incorporation"][data-stage="qualification"].active');
 
         // test validation
         this.click('.slide.active button[type="submit"]');
@@ -86,10 +118,15 @@ helper.scenario(casper.cli.options.url,
             'company_founders_location': 'outside',
             'company_incorporated': 'yes',
             'company_paperwork': 'yes'
-        }, true);
+        });
 
-        this.waitForUrl(/transact\/build/, function success() {
-            this.test.assertUrlMatch(/INC,FIN,IP/);
+        this.click('.slide.active button[type="submit"]');
+    },
+    function () {
+        this.test.comment('Test the redirect after project creation');
+
+        this.waitForUrl(/dashboard/, function success() {
+            this.test.assertUrlMatch(/dashboard/);
         });
     }
 );
