@@ -15,6 +15,7 @@ def _user_dict(user):
 
 
 class AttachmentSerializer(serializers.ModelSerializer):
+    filename = serializers.SerializerMethodField('get_filename')
     uploaded_by = serializers.SerializerMethodField('get_uploaded_by')
     deleted_by = serializers.SerializerMethodField('get_deleted_by')
     crocdoc_url = serializers.SerializerMethodField('get_crocdoc_url')
@@ -23,8 +24,11 @@ class AttachmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attachment
         queryset = Attachment.objects.all()
-        fields = ('id', 'uuid', 'uploaded_by', 'deleted_by', 'project', 'todo',
+        fields = ('id', 'uuid', 'filename', 'uploaded_by', 'deleted_by', 'project', 'todo',
                   'crocdoc_url', 'filepicker_url', 'date_created')
+
+    def get_filename(self, obj):
+        return obj.filename
 
     def get_uploaded_by(self, obj):
         user = obj.uploaded_by
