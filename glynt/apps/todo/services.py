@@ -99,7 +99,7 @@ class CrocdocAttachmentService(object):
             })
 
             try:
-                self.session = '123-123-123' if settings.PROJECT_ENVIRONMENT == 'test' else crocodoc.session.create(self.uuid, **crocdoc_params)
+                self.session = crocodoc.session.create(self.uuid, **crocdoc_params)
 
             except crocodoc.CrocodocError as e:
                 logger.error('Crocdoc Error: %s' % e)
@@ -125,7 +125,7 @@ class CrocdocAttachmentService(object):
                 logger.error('Crocdoc session could not be set')
 
             else:
-                url = 'http://example.com' if settings.PROJECT_ENVIRONMENT == 'test' else 'https://crocodoc.com/view/{session_key}'.format(session_key=session_key)
+                url = 'https://crocodoc.com/view/{session_key}'.format(session_key=session_key)
                 logger.info('provide crocdoc view_url: {url}'.format(url=url))
 
         return url
