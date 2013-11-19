@@ -194,20 +194,8 @@ class CrocdocAttachmentSessionContextMixin(View):
         context = super(CrocdocAttachmentSessionContextMixin, self).get_context_data(**kwargs)
         service = CrocdocAttachmentService(attachment=self.object)
 
-        crocdoc_params = {
-                "user": { "name": self.request.user.get_full_name(), 
-                "id": self.request.user.pk
-            }, 
-            "sidebar": 'auto', 
-            "editable": True, 
-            "admin": False, 
-            "downloadable": True, 
-            "copyprotected": False, 
-            "demo": False
-        }
-
         context.update({
-            'session_key': service.session_key(**crocdoc_params),
+            'session_key': service.session_key(user=self.request.user),
             'uuid': service.uuid,
             'view_url': service.view_url(),
         })
