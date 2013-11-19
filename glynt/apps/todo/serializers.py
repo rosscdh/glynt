@@ -40,7 +40,7 @@ class AttachmentSerializer(serializers.ModelSerializer):
 
     def get_crocdoc_url(self, obj):
         service = CrocdocAttachmentService(attachment=obj)
-        return service.view_url
+        return service.view_url(user=self.context['request'].user)
 
     def get_filepicker_url(self, obj):
         return obj.inkfilepicker_url
