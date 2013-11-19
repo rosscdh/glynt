@@ -163,6 +163,14 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [
 			});
 		};
 
+		$scope.viewAttachment = function( attachment ) {
+			console.log( attachment );
+			//$("#crocodoc").attr("src", attachment.crocdoc_url);
+			$scope.model.selectedAttachments = [];
+			attachment.pageHeight = $(window).height() - 150;
+			$scope.model.selectedAttachments.push(attachment);
+		};
+
 		/**
 		 * Recieves messages that an attachment has been added
 		 * @param  {Event} e	Broadcast event

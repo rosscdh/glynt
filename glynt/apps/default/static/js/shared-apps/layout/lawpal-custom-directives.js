@@ -60,7 +60,6 @@ angular.module('lawpal').directive('collapse', function () {
 			});
 
 			function adjustScollPos( element ) {
-                console.log('adjusting');
 				var d = element;
 				if(scope.isCollapsed===false) {
 					var c = $(window).scrollTop() - 50;
