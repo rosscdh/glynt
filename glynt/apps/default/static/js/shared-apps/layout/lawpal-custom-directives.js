@@ -53,18 +53,22 @@ angular.module('lawpal').directive('collapse', function () {
 
             var scrollerTopMargin = $(".options-container").offset().top;
 			$(window).scroll(function(){
-			    var c = $(window).scrollTop() - 50;
-			    var d = $(".options-container .item-container");
-                var wd = $(".options-container .item-container").height() + 50 - $(window).height();
-                var top = 50;
-			    if (c > scrollerTopMargin) {
-                    top = -Math.abs(wd)-50;
-			        d.css({ 'position': "fixed", 'top': top + "px"   });
-			    }
-			    else if (c <= scrollerTopMargin) 
-			    {
-			        d.css({ 'position': "absolute", 'top': ""   });
-			    }
+                var d = $(".options-container .item-container");
+                if(scope.isCollapsed===false) {
+    			    var c = $(window).scrollTop() - 50;
+                    var wd = $(".options-container .item-container").height() + 50 - $(window).height();
+                    var top = 50;
+    			    if (c > scrollerTopMargin) {
+                        top = -Math.abs(wd)-50;
+    			        d.css({ 'position': "fixed", 'top': top + "px"   });
+    			    }
+    			    else if (c <= scrollerTopMargin) 
+    			    {
+    			        d.css({ 'position': "absolute", 'top': ""   });
+    			    }
+                } else {
+                    d.css({ 'position': "relative", 'top': ""   });
+                }
 			});
             
         }
