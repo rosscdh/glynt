@@ -9938,9 +9938,18 @@ footer {
 }
 
 .options-container .item-container {
+  max-width: 350px;
   min-width: 315px;
   padding-right: 10px;
   padding-left: 40px;
+}
+
+.options-container .item-container .drop-pane {
+  width: 290px;
+}
+
+.options-container .item-container .btn-block {
+  width: 290px;
 }
 
 table.checklist tr .below-sidebar {

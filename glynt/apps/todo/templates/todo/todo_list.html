@@ -98,6 +98,7 @@
                             <hr />
 
                             <h5>Attachments</h5>
+                            <span ng-show="item.loadingAttachments" class="text-muted"><i class="icon icon-spinner icon-spin"></i> Loading attachments</span>
                             <ul class="nav nav-pills nav-stacked">
                                 <li ng-repeat="attachment in item.attachments">
                                     <a href="#"><i class="icon icon-file"></i> <span ng-bind="attachment.filename"></span></a>

@@ -692,14 +692,19 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', '$rootScope', 
 		};
 
 		$scope.loadAttachments = function( item ) {
+			item.loadingAttachments = true;
 			lawPalService.getCheckListItemAttachments( item ).then(
 				function success( attachments ) {
 					if( attachments && attachments.results ) {
+						//adjustScollPos($(".options-container .item-container"));
+						$rootScope.$broadcast('adjust-sidebar');
 						item.attachments = attachments.results;
+						item.loadingAttachments = false;
 					}
 				},
 				function error( err ) {
 					console.log( err );
+					item.loadingAttachments = false;
 				}
 			);
 
