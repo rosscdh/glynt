@@ -31,7 +31,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			{ 'save': { 'method': 'PATCH', headers: { 'Content-Type': 'application/json' }, 'isArray': true }
 			}),
 		'attachments':
-			$resource('/api/v1/attachment', {},
+			$resource('/api/v2/project/:uuid/todo/:slug/attachment/?format=json', {},
 				{ 'list': { 'method': 'GET', headers: { 'Content-Type': 'application/json' } }
 			})
 	};
@@ -802,10 +802,12 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		},
 
 		'getCheckListItemAttachments': function( item ) {
-			var itemId = item.id;
+			var itemSlug = item.slug;
+			var projectUuid = this.getProjectUuid();
 			var deferred = $q.defer();
 			var options = {
-				'todo': itemId
+				'uuid': projectUuid,
+				'slug': itemSlug
 			};
 
 			checkListItemResources.attachments.list(options, function (results) { /* Success */

@@ -694,8 +694,8 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', '$rootScope', 
 		$scope.loadAttachments = function( item ) {
 			lawPalService.getCheckListItemAttachments( item ).then(
 				function success( attachments ) {
-					if( attachments && attachments.objects ) {
-						item.attachments = attachments.objects;
+					if( attachments && attachments.results ) {
+						item.attachments = attachments.results;
 					}
 				},
 				function error( err ) {
