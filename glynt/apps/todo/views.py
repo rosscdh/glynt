@@ -197,7 +197,7 @@ class CrocdocAttachmentSessionContextMixin(View):
         context.update({
             'session_key': service.session_key(user=self.request.user),
             'uuid': service.uuid,
-            'view_url': service.view_url(),
+            'view_url': service.view_url(user=self.request.user),
         })
         return context
 
