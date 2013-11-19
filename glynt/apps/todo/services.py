@@ -8,7 +8,7 @@ from glynt.apps.services.pusher import PusherPublisherService
 
 from boto.s3.connection import S3Connection
 
-from . import TODO_STATUS, FEEDBACK_STATUS
+from . import TODO_STATUS
 
 import crocodoc
 import requests
@@ -77,10 +77,23 @@ class CrocdocAttachmentService(object):
         else:
             return self.attachment.crocdoc_uuid
 
-    def session_key(self, **kwargs):
+    def session_key(self, user):
+        crocdoc_params = {
+            "user": {
+                "name": user.get_full_name(),
+                "id": user.pk
+            },
+            "sidebar": 'auto',
+            "editable": True,
+            "admin": False, 
+            "downloadable": True,
+            "copyprotected": False,
+            "demo": False
+        }
+
         if self.session is None:
             try:
-                self.session = '123-123-123' if settings.PROJECT_ENVIRONMENT == 'test' else crocodoc.session.create(self.uuid, **kwargs)
+                self.session = '123-123-123' if settings.PROJECT_ENVIRONMENT == 'test' else crocodoc.session.create(self.uuid, **crocdoc_params)
             except crocodoc.CrocodocError as e:
                 logger.error('Crocdoc Error: %s' % e)
                 self.session = None
@@ -188,7 +201,7 @@ class ToDoStatusService(ToDoStatusRulesetMixin):
 
     def pusher_event(self):
             pusher = PusherPublisherService(channel=[self.todo_item.pusher_id,
-                                                     self.todo_item.project.pusher_id], 
+                                                     self.todo_item.project.pusher_id],
                                             event='todo.status_change')
             info_object = {
                 'old_status': {'id': self.status, 'name': self.todo_item.TODO_STATUS_CHOICES.get_desc_by_value(self.status)},
@@ -202,7 +215,6 @@ class ToDoStatusService(ToDoStatusRulesetMixin):
             self.todo_item.status = self.new_status
             self.todo_item.save(update_fields=['status'])
             self.pusher_event()
-
 
 
 class ToDoAttachmentFeedbackRequestStatusService(ToDoStatusRulesetMixin):
