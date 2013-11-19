@@ -56,6 +56,7 @@ class CrocdocAttachmentService(object):
     def __init__(self, attachment, *args, **kwargs):
         logger.info('Init CrocdocAttachmentService.__init__ for attachment: {pk}'.format(pk=attachment.pk))
         self.attachment = attachment
+        self.session = None
 
     @property
     def uuid(self):
@@ -86,22 +87,24 @@ class CrocdocAttachmentService(object):
             return self.attachment.crocdoc_uuid
 
     def session_key(self, user):
-        crocdoc_params = self.crocdoc_params.copy()
-
-        # append the user info to the dict
-        crocdoc_params.update({
-            "user": {
-                "name": user.get_full_name(),
-                "id": user.pk
-            }
-        })
-
         if self.session is None:
+            crocdoc_params = self.crocdoc_params.copy()
+
+            # append the user info to the dict
+            crocdoc_params.update({
+                "user": {
+                    "name": user.get_full_name(),
+                    "id": user.pk
+                }
+            })
+
             try:
                 self.session = '123-123-123' if settings.PROJECT_ENVIRONMENT == 'test' else crocodoc.session.create(self.uuid, **crocdoc_params)
+
             except crocodoc.CrocodocError as e:
                 logger.error('Crocdoc Error: %s' % e)
                 self.session = None
+
         return self.session
 
     def upload_document(self):
