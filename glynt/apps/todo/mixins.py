@@ -2,6 +2,37 @@
 """
 Mixins that relate to the ToDo app
 """
+from django.views.generic import View
+
+
+class ProjectOppositeUserMixin(object):
+    """
+    Mixin to provide access to the view "object"'s project opposite_user
+    """
+
+    @property
+    def opposite_user(self):
+        try:
+            return self.object.project.get_primary_lawyer().user if self.request.user.profile.is_customer else self.object.project.customer.user
+        except AttributeError:
+            return None
+
+
+class CrocdocAttachmentSessionContextMixin(View):
+    """
+    Mixin to provide crocdoc session viewability
+    """
+    def get_context_data(self, **kwargs):
+        context = super(CrocdocAttachmentSessionContextMixin, self).get_context_data(**kwargs)
+        service = CrocdocAttachmentService(attachment=self.object)
+
+        context.update({
+            'session_key': service.session_key(user=self.request.user),
+            'uuid': service.uuid,
+            'view_url': service.view_url(user=self.request.user),
+        })
+        return context
+
 
 class NumAttachmentsMixin(object):
     """
