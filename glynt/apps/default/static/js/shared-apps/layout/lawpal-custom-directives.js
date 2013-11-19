@@ -64,16 +64,20 @@ angular.module('lawpal').directive('collapse', function () {
 				var d = element;
 				if(scope.isCollapsed===false) {
 					var c = $(window).scrollTop() - 50;
-					var wd = d.height() + 50 - $(window).height();
+                    var w = $(window).height();
+                    var dh = $(document).height();
+					var wd = d.height() + 50 - w;
+                    var eh = d.innerHeight() - 400;
 					var top = 50;
-					if (c > scrollerTopMargin) {
-						top = -Math.abs(wd)-50;
-						d.css({ 'position': "fixed", 'top': top + "px"   });
-					}
-					else if (c <= scrollerTopMargin) 
-					{
-						d.css({ 'position': "absolute", 'top': ""   });
-					}
+                    var scrollerInc = (scrollerTopMargin+50)/dh;
+
+					if( c > scrollerTopMargin) {
+                        var diff = ((eh/dh) * c);
+                        console.log("wd",w,eh, eh/dh, (c-scrollerTopMargin), diff);
+                        d.css({ 'position': "fixed", 'top': -diff + "px"   });
+                    } else {
+                        d.css({ 'position': "relative", 'top': ""   });
+                    }
 				} else {
 					d.css({ 'position': "relative", 'top': ""   });
 				}
@@ -81,6 +85,7 @@ angular.module('lawpal').directive('collapse', function () {
 			
 
 			var scrollerTopMargin = $(".options-container").offset().top;
+
 			$(window).scroll(function(){
 				adjustScollPos($(".options-container .item-container"));
 			});			
