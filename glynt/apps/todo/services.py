@@ -44,6 +44,14 @@ class CrocdocAttachmentService(object):
     """
     attachment = None
     session = None
+    crocdoc_params = {
+        "sidebar": 'auto',      # yes|no|auto
+        "editable": True,       # True|False
+        "admin": False,         # True|False
+        "downloadable": True,   # True|False
+        "copyprotected": False, # True|False
+        "demo": False           # True|False
+    }
 
     def __init__(self, attachment, *args, **kwargs):
         logger.info('Init CrocdocAttachmentService.__init__ for attachment: {pk}'.format(pk=attachment.pk))
@@ -77,19 +85,17 @@ class CrocdocAttachmentService(object):
         else:
             return self.attachment.crocdoc_uuid
 
-    def session_key(self, user):
-        crocdoc_params = {
-            "user": {
-                "name": user.get_full_name(),
-                "id": user.pk
-            },
-            "sidebar": 'auto',
-            "editable": True,
-            "admin": False, 
-            "downloadable": True,
-            "copyprotected": False,
-            "demo": False
-        }
+    def session_key(self, user=None):
+        crocdoc_params = self.crocdoc_params.copy()
+
+        # append the user info to the dict
+        if user is not None:
+            crocdoc_params.update({
+                "user": {
+                    "name": user.get_full_name(),
+                    "id": user.pk
+                }
+            })
 
         if self.session is None:
             try:
