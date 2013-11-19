@@ -133,12 +133,20 @@ class BaseToDoDetailMixin(RulezMixin, SingleObjectMixin):
 class ToDoDetailView(DetailView, BaseToDoDetailMixin):
     template_name = 'todo/todo_detail.html'
 
+    @property
+    def opposite_user(self):
+        try:
+            return self.object.project.get_primary_lawyer().user if self.request.user.profile.is_customer else self.object.project.customer.user
+        except AttributeError:
+            return None
+
     def get_context_data(self, **kwargs):
         context = super(ToDoDetailView, self).get_context_data(**kwargs)
         context.update({
             'TODO_STATUS': TODO_STATUS,
             'attachment_form': AttachmentForm(initial={'project': self.project.pk, 'todo': self.object.pk}),
             'back_and_forth': self.navigation_items,
+            'opposite_user': self.opposite_user
         })
         return context
 
