@@ -50,6 +50,19 @@ class AttachmentSerializer(serializers.ModelSerializer):
 
 
 class FeedbackRequestSerializer(serializers.ModelSerializer):
+    assigned_by = serializers.SerializerMethodField('get_assigned_by')
+    assigned_to = serializers.SerializerMethodField('get_assigned_to')
+
     class Meta:
         model = FeedbackRequest
+        queryset = FeedbackRequest.objects.prefetch_related().select_related().all()
         exclude = ('data',)
+
+    def get_assigned_by(self, obj):
+        if obj is not None:
+            user = obj.assigned_by
+            return _user_dict(user=user)
+
+    def get_assigned_to(self, obj):
+        if obj is not None:
+            return [_user_dict(user=user) for user in obj.assigned_to.all()]
