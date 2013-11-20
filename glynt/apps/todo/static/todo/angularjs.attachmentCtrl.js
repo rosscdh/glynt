@@ -56,7 +56,23 @@ angular.module('lawpal').controller( 'attachmentCtrl', [
 		};
 
 		$scope.getFeedbackAction = function( attachment, comment, isResponse ) {
-			lawPalService.feedbackRequest( attachment, comment, isResponse ).then(
+			var feedbackItem = isResponse?$scope.attachModel.feedbackItem:null;
+			var status = isResponse?0:3;
+			lawPalService.feedbackRequest( attachment, comment, feedbackItem ).then(
+				function success( /*response*/ ) {
+					//console.log( 'response', response );
+					toaster.pop("success", "Feedback sent");
+				},
+				function error( /*err*/ ) {
+					//console.log( 'error', err );
+					toaster.pop("error", "Unable to send feedback");
+				}
+			);
+		};
+
+		$scope.cancelRequest = function( attachment, comment ) {
+			var feedbackItem = $scope.attachModel.feedbackItem;
+			lawPalService.feedbackRequest( attachment, comment, feedbackItem, 4 ).then(
 				function success( /*response*/ ) {
 					//console.log( 'response', response );
 					toaster.pop("success", "Feedback sent");

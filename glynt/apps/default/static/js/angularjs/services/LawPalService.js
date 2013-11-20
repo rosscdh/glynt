@@ -43,7 +43,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			{
 				'new': { 'method': 'POST', headers: { 'Content-Type': 'application/json' } },
 				'status': { 'method': 'GET', headers: { 'Content-Type': 'application/json' } },
-				'update': { 'method': 'PUT', headers: { 'Content-Type': 'application/json' } }
+				'update': { 'method': 'PATCH', headers: { 'Content-Type': 'application/json' } }
 			}
 		)
 	};
@@ -644,7 +644,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			return deferred.promise;
 		},
 
-		'feedbackRequest': function( attachment, comment, isResponse ) {
+		'feedbackRequest': function( attachment, comment, respondTo, status ) {
 			var deferred = $q.defer();
 			var id = attachment.id;
 			var projectId = this.getProjectUuid();
@@ -657,11 +657,11 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 				'assigned_by': this.getCurrentUser().pk + '',
 				'assigned_to': [ oppositeUser.pk ],
 				'attachment': id,
-				'status': 0,
+				'status': status|0,
 				'comment': comment
 			};
-			if( isResponse ) {
-				options.id = 1;
+			if( respondTo ) {
+				options.id = respondTo.id;
 				// Responding to feedback
 				checkFeedbackResources.request.update( options, details,
 					function success( response ) {
