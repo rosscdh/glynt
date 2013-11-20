@@ -30,7 +30,7 @@ project_todo_urlpatterns = patterns('',
     url(r'^project/(?P<uuid>.+)/todo/(?P<slug>.+)/discussion/((\/(?P<parent_pk>\d+))?)$',
                                               ToDoDiscussionDetailView.as_view(actions={'get': 'list'}),
                                               name='project_todo_discussion'),
-    url(r'^project/(?P<uuid>.+)/todo/(?P<slug>.+)/feedback_request/$',
+    url(r'^project/(?P<uuid>.+)/todo/(?P<slug>.+)/feedback_request((\/(?P<pk>\d+))?)$',
                                               ToDoFeedbackRequestView.as_view(actions={'get': 'list', 'post': 'create', 'patch': 'update', 'delete': 'destroy'}),
                                               name='project_todo_feedbackrequest'),
 )
