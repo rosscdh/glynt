@@ -35,7 +35,6 @@ class CrocdocAttachmentSessionContextMixin(View):
         self.crocdoc_service = None
         super(CrocdocAttachmentSessionContextMixin, self).__init__(*args, **kwargs)
 
-    @property
     def crocdoc(self):
         if self.crocdoc_service is None:
             self.crocdoc_service = CrocdocAttachmentService(attachment=self.object)
