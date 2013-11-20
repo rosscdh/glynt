@@ -8,7 +8,8 @@ from glynt.apps.customer.api_v2 import (UserViewSet,)
 from glynt.apps.project.api_v2 import (ProjectViewSet, DiscussionListView,
                                        TeamListView, DiscussionDetailView,
                                        DiscussionTagView, )
-from glynt.apps.todo.api_v2 import (AttachmentViewSet, ToDoDiscussionDetailView)
+from glynt.apps.todo.api_v2 import (AttachmentViewSet, ToDoDiscussionDetailView,
+                                    ToDoFeedbackRequestView)
 
 
 # Setup routers
@@ -29,6 +30,9 @@ project_todo_urlpatterns = patterns('',
     url(r'^project/(?P<uuid>.+)/todo/(?P<slug>.+)/discussion/((\/(?P<parent_pk>\d+))?)$',
                                               ToDoDiscussionDetailView.as_view(actions={'get': 'list'}),
                                               name='project_todo_discussion'),
+    url(r'^project/(?P<uuid>.+)/todo/(?P<slug>.+)/feedback_request/$',
+                                              ToDoFeedbackRequestView.as_view(actions={'get': 'list', 'post': 'create', 'patch': 'update', 'delete': 'destroy'}),
+                                              name='project_todo_feedbackrequest'),
 )
 
 project_discussion_urlpatterns = patterns('',

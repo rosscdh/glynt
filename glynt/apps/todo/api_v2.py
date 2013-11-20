@@ -9,8 +9,8 @@ from threadedcomments.models import ThreadedComment
 from glynt.apps.project.models import Project
 from glynt.apps.project.serializers import (DiscussionThreadSerializer,)
 
-from .serializers import AttachmentSerializer
-from .models import ToDo, Attachment
+from .serializers import AttachmentSerializer, FeedbackRequestSerializer
+from .models import ToDo, Attachment, FeedbackRequest
 
 
 class AttachmentViewSet(ModelViewSet):
@@ -53,3 +53,8 @@ class ToDoDiscussionDetailView(ModelViewSet):
         # as well as a the children as a "thread": []
         #
         return self.queryset.filter(pk=parent_pk)
+
+
+class ToDoFeedbackRequestView(ModelViewSet):
+    queryset = FeedbackRequest.objects.open()
+    serializer_class = FeedbackRequestSerializer
