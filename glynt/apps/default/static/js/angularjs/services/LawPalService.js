@@ -646,18 +646,20 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		'feedbackRequest': function( attachment, comment ) {
 			var deferred = $q.defer();
 			var id = attachment.id;
+			var projectId = this.getProjectUuid();
+			var options = { 'uuid': projectId, 'slug': attachment.todo_slug };
 			//http://local.weareml.com:8000/api/v1/feedback_request
 			//var url = '/api/v1/feedback_request';// + id;
 			var oppositeUser = this.getOppositeUser();
 			
 			var details = {
-				'assigned_by': { 'pk': this.getCurrentUser().pk+'' },
-				'assigned_to': [ { 'pk': oppositeUser.pk+'' } ],
-				'attachment': { 'pk': id + '' },
+				'assigned_by': this.getCurrentUser().pk + '',
+				'assigned_to': [ oppositeUser.pk ],
+				'attachment': id,
 				'status': 0,
 				'comment': comment
 			};
-			checkFeedbackResources.request.new( {}, details,
+			checkFeedbackResources.request.new( options, details,
 				function success( response ) {
 					deferred.resolve(response);
 				},

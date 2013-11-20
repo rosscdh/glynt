@@ -701,6 +701,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', '$rootScope', 
 						$rootScope.$broadcast('adjust-sidebar');
 						for(var i=0;i<attachments.results.length;i++) {
 							attachments.results[i].is_deleted = attachments.results[i].is_deleted?true:false;
+							attachments.results[i].todo_slug = item.slug;
 						}
 						item.attachments = attachments.results;
 						item.loadingAttachments = false;

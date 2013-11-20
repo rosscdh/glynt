@@ -47,9 +47,7 @@ angular.module('lawpal').controller( 'attachmentCtrl', [
 					$scope.getFeedbackAction( attachment, data.comment );
 				}
 			);
-		};
-
-		
+		};		
 
 		$scope.getFeedbackAction = function( attachment, comment ) {
 			lawPalService.feedbackRequest( attachment, comment ).then(
