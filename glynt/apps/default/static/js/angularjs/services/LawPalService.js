@@ -38,7 +38,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 
 	/* Define API interfaces for check list items */
 	var checkFeedbackResources = {
-		'request': $resource('/api/v1/feedback_request/?format=json', {},
+		'request': $resource( '/api/v2/project/:uuid/todo/:slug/feedback_request/?format=json' /* '/api/v1/feedback_request/?format=json'*/, {},
 			/* This is done to ensure the content type of PATCH is sent through */
 			{
 				'new': { 'method': 'POST', headers: { 'Content-Type': 'application/json' } },
