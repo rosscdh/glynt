@@ -643,7 +643,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			return deferred.promise;
 		},
 
-		'feedbackRequest': function( attachment ) {
+		'feedbackRequest': function( attachment, comment ) {
 			var deferred = $q.defer();
 			var id = attachment.id;
 			//http://local.weareml.com:8000/api/v1/feedback_request
@@ -651,11 +651,11 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			var oppositeUser = this.getOppositeUser();
 			
 			var details = {
-				'assigned_by': { 'pk': this.getCurrentUser().pk },
-				'assigned_to': [ { 'pk': oppositeUser.pk } ],
-				'attachment': { 'pk': id },
+				'assigned_by': { 'pk': this.getCurrentUser().pk+'' },
+				'assigned_to': [ { 'pk': oppositeUser.pk+'' } ],
+				'attachment': { 'pk': id + '' },
 				'status': 0,
-				'comment': ''
+				'comment': comment
 			};
 			checkFeedbackResources.request.new( {}, details,
 				function success( response ) {
