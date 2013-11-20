@@ -4,6 +4,8 @@ Mixins that relate to the ToDo app
 """
 from django.views.generic import View
 
+from .services import CrocdocAttachmentService
+
 
 class ProjectOppositeUserMixin(object):
     """
@@ -12,8 +14,14 @@ class ProjectOppositeUserMixin(object):
 
     @property
     def opposite_user(self):
+
+        project = self.object if hasattr(self, 'object') and self.object.__class__.__name__ == 'Project' else None
+
+        if project is None:
+            project = self.project if hasattr(self, 'project') else None
+
         try:
-            return self.object.project.get_primary_lawyer().user if self.request.user.profile.is_customer else self.object.project.customer.user
+            return project.get_primary_lawyer().user if self.request.user.profile.is_customer else project.customer.user
         except AttributeError:
             return None
 
