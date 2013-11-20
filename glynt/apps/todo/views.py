@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
-from django.views.generic import ListView, UpdateView, DetailView
+from django.views.generic import ListView, UpdateView, DetailView, RedirectView
 from django.views.generic.edit import ModelFormMixin
 from django.views.generic.detail import SingleObjectMixin
 
@@ -212,3 +212,14 @@ class AttachmentView(CrocdocAttachmentSessionContextMixin, ProjectOppositeUserMi
         })
 
         return context
+
+
+class AttachmentRedirectView(CrocdocAttachmentSessionContextMixin, RedirectView, DetailView):
+    """
+    View that redirects to the crocdoc document view
+    """
+    model = Attachment
+
+    def get_redirect_url(self, **kwargs):
+        self.object = self.get_object()
+        return self.crocdoc_url
