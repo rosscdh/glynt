@@ -36,6 +36,17 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			})
 	};
 
+	/* Define API interfaces for check list items */
+	var checkFeedbackResources = {
+		'request': $resource('/api/v1/feedback_request/?format=json', {},
+			/* This is done to ensure the content type of PATCH is sent through */
+			{
+				'new': { 'method': 'POST', headers: { 'Content-Type': 'application/json' } },
+				'update': { 'method': 'PATCH', headers: { 'Content-Type': 'application/json' } }
+			}
+		)
+	};
+
 	var checkListCategories = {
 		'reorder': $resource('/api/v1/project/:id/checklist/categories/sort/?format=json', {},
 			/* This is done to ensure the content type of PATCH is sent through */
@@ -583,6 +594,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 								deferred.resolve(response);
 							} else {
 								fileProgressHandle.type = "danger";
+								fileProgressHandle.label = "Unable to upload: " + file.name;
 								deferred.reject( err );
 							}
 						});
@@ -634,19 +646,25 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		'feedbackRequest': function( attachment ) {
 			var deferred = $q.defer();
 			var id = attachment.id;
-			var url = '/api/v1/attachment/' + id;
+			//http://local.weareml.com:8000/api/v1/feedback_request
+			//var url = '/api/v1/feedback_request';// + id;
+			var oppositeUser = this.getOppositeUser();
+			
 			var details = {
 				'assigned_by': { 'pk': this.getCurrentUser().pk },
-				'assigned_to': [ { 'pk': 44 } ],
-				'attachment': { 'pk': id }
+				'assigned_to': [ { 'pk': oppositeUser.pk } ],
+				'attachment': { 'pk': id },
+				'status': 0,
+				'comment': ''
 			};
-			$http.delete(url, details, {
-				"headers": { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
-			}).success(function(response) {
-				deferred.resolve(response);
-			}).error(function(err){
-				deferred.reject(err);
-			});
+			checkFeedbackResources.request.new( {}, details,
+				function success( response ) {
+					deferred.resolve(response);
+				},
+				function error( err ) {
+					deferred.reject(err);
+				}
+			);
 
 			return deferred.promise;
 		},
@@ -684,6 +702,14 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		 */
 		'getCurrentUser': function() {
 			return (LawPal.user && LawPal.user.is_authenticated?LawPal.user:null);
+		},
+
+		/**
+		 * Retruns the opposite user to the current user
+		 * @return {Object} { 'username', 'pk' }
+		 */
+		'getOppositeUser': function() {
+			return (LawPal.user && LawPal.user.opposite_user?LawPal.user.opposite_user:{'username':null,'pk':null});
 		},
 
 		/**

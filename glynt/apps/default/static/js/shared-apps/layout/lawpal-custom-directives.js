@@ -72,7 +72,6 @@ angular.module('lawpal').directive('collapse', function () {
 
 					if( c > scrollerTopMargin) {
                         var diff = ((eh/dh) * c);
-                        console.log("wd",w,eh, eh/dh, (c-scrollerTopMargin), diff);
                         d.css({ 'position': "fixed", 'top': -diff + "px"   });
                     } else {
                         d.css({ 'position': "relative", 'top': ""   });

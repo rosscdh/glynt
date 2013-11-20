@@ -143,7 +143,7 @@
                             </div>
                             <div class="col-lg-5">
                                 <button class="btn btn-link pull-right" ng-click="close()">&times; Return to checklist</button>
-                                <button class="btn btn-primary pull-right" ng-disabled="deleting">Get feedback</button>
+                                <button class="btn btn-primary pull-right" ng-disabled="deleting" ng-click="getFeedback( attachment )">Get feedback</button>
                                 <button class="btn btn-default pull-right" ng-click="delete( attachment )" ng-disabled="deleting"><i class="icon icon-spinner icon-spin" ng-show="deleting"></i> Delete</button>
                             </div>
                         </div>
@@ -187,6 +187,10 @@
             'username': '{{ user.username }}',
             'full_name': '{{ user.get_full_name }}',
             'is_authenticated': {{ user.is_authenticated|jsonify }},
+            'opposite_user': {
+                'username': {{ opposite_user.username|jsonify }},
+                'pk': {{ opposite_user.pk|jsonify }}
+            }
         },
         /**
         * Primary list of the checklist items
