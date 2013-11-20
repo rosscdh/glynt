@@ -20,6 +20,11 @@ logger = logging.getLogger('django.request')
 
 
 class ToDoCountMixin(object):
+    """
+    Mixin to provide the counts for a project object
+    Has to be in the views.py as putting it in mixins.py causes a circular import
+    and i dont want to load FeedbackRequest every time the method is called
+    """
     def todo_counts(self, qs_objects, project=None, **kwargs):
         project = project if project is not None else self.project
 
@@ -45,7 +50,7 @@ class ToDoCountMixin(object):
         return counts
 
 
-class ProjectToDoView(RulezMixin, ToDoCountMixin, ListView):
+class ProjectToDoView(RulezMixin, ToDoCountMixin, ProjectOppositeUserMixin, ListView):
     model = ToDo
     paginate_by = 1  # 10
 
@@ -85,7 +90,8 @@ class ProjectToDoView(RulezMixin, ToDoCountMixin, ListView):
             'feedback_requests': self.feedback_requests,
             'is_lawyer': user_profile.is_lawyer,
             'is_customer': user_profile.is_customer,
-            'checklist_categories': [{'label': c, 'slug': slugify(c) } for c in self.checklist_service.categories]
+            'checklist_categories': [{'label': c, 'slug': slugify(c) } for c in self.checklist_service.categories],
+            'opposite_user': self.opposite_user
         })
         # append counts
         context.update(self.todo_counts(qs_objects=self.model.objects))
