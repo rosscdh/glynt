@@ -31,8 +31,12 @@ class CrocdocAttachmentSessionContextMixin(View):
     Mixin to provide crocdoc session viewability
     """
     crocdoc_service = None
+    def __init__(self, *args, **kwargs):
+        self.crocdoc_service = None
+        super(CrocdocAttachmentSessionContextMixin, self).__init__(*args, **kwargs)
 
-    def init_crocdoc(self):
+    @property
+    def crocdoc(self):
         if self.crocdoc_service is None:
             self.crocdoc_service = CrocdocAttachmentService(attachment=self.object)
         return self.crocdoc_service
@@ -44,11 +48,10 @@ class CrocdocAttachmentSessionContextMixin(View):
 
     def get_context_data(self, **kwargs):
         context = super(CrocdocAttachmentSessionContextMixin, self).get_context_data(**kwargs)
-        self.init_crocdoc()
         context.update({
-            'session_key': self.crocdoc_service.session_key(user=self.request.user),
-            'uuid': self.crocdoc_service.uuid,
+            'session_key': self.crocdoc().session_key(user=self.request.user),
             'view_url': self.crocdoc_url,
+            'uuid': self.crocdoc_service.uuid,
         })
         return context
 
