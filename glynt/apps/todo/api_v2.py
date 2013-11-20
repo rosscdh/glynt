@@ -66,7 +66,7 @@ class ToDoFeedbackRequestView(ModelViewSet):
             filters.update({"pk": pk})
 
         project = get_object_or_404(Project, uuid=self.kwargs.get('uuid'))  # ensure that we have the project
-        todo = get_object_or_404(ToDo, slug=self.kwargs.get('slug'))  # ensure we have the slug
+        todo = get_object_or_404(ToDo.objects.filter(project=project), slug=self.kwargs.get('slug'))  # ensure we have the slug
 
         if todo is not None:
             filters.update({"attachment__in": todo.attachments.all()})
