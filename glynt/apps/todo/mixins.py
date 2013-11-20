@@ -32,15 +32,19 @@ class CrocdocAttachmentSessionContextMixin(View):
     """
     crocdoc_service = None
 
-    @property
-    def crocdoc_url(self):
+    def init_crocdoc(self):
         if self.crocdoc_service is None:
             self.crocdoc_service = CrocdocAttachmentService(attachment=self.object)
+        return self.crocdoc_service
+
+    @property
+    def crocdoc_url(self):
+        self.init_crocdoc()
         return self.crocdoc_service.view_url(user=self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super(CrocdocAttachmentSessionContextMixin, self).get_context_data(**kwargs)
-
+        self.init_crocdoc()
         context.update({
             'session_key': self.crocdoc_service.session_key(user=self.request.user),
             'uuid': self.crocdoc_service.uuid,
