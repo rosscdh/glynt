@@ -40,14 +40,29 @@ class EnsureProjectService(object):
 
     def process(self):
         logger.debug('Processing Project')
+        # set to None
+        self.project = None
 
         if self.customer and self.company:
-            try:
-                self.project = Project.objects.get(customer=self.customer, company=self.company)
-                self.is_new = False
-                logger.debug('Project exists')
 
-            except:
+            try:
+                for project in Project.objects.filter(customer=self.customer, company=self.company):
+
+                    # if we find the same set of transactions for this project
+                    # then it already exists so use it
+                    if project.transactions.all() == self.transactions:
+                        # the transactions dont match so raise an error and recreate it
+                        self.project = project
+                        self.is_new = False
+                        break
+                    logger.debug('Project exists')
+
+                # project has not been set therefor this is a new project
+                if self.project is None:
+                    raise Project.DoesNotExist
+
+            except Project.DoesNotExist:
+                # this project is new
                 self.project = Project.objects.create(customer=self.customer, company=self.company)
                 self.project.data['company_name'] = self.company.name
                 self.project.data['intake_data'] = self.intake_data
