@@ -7,29 +7,35 @@ angular.module('lawpal').controller( 'attachmentCtrl', [
 	'$scope', 'lawPalService', 'lawPalUrls', 'lawPalDialog', '$location', 'toaster', '$modal',
 	function( $scope, lawPalService, lawPalUrls, lawPalDialog, $location, toaster, $modal ) {
 		'use strict';
-		$scope.deleting = false;
+		$scope.attachModel = {
+			'loading': true,
+			'deleting': false,
+			'feedback': [],
+			'feedbackItem': {},
+			'has_feedback': false
+		};
 
 		$scope.close = function() {
 			$scope.model.selectedAttachments=[];
 		};
 
 		$scope.delete = function( attachment ) {
-			$scope.deleting = true;
+			$scope.attachModel.deleting = true;
 			lawPalService.deleteAttachment( attachment ).then(
 				function() {
 					toaster.pop('success', 'attachment deleted');
 					$scope.close();
 					$scope.attachment.is_deleted = true;
-					$scope.deleting = false;
+					$scope.attachModel.deleting = false;
 				},
 				function error(/*err*/) {
 					toaster.pop('error', 'unable to delete attachment');
-					$scope.deleting = false;
+					$scope.attachModel.deleting = false;
 				}
 			);
 		};
 
-		$scope.getFeedback = function( attachment ) {
+		$scope.getFeedback = function( attachment, isResponse ) {
 			var modalInstance = $modal.open({
 				"windowClass": "modal modal-show",
 				"templateUrl": "template/lawpal/attachment/feedback.html",
@@ -44,19 +50,38 @@ angular.module('lawpal').controller( 'attachmentCtrl', [
 
 			modalInstance.result.then(
 				function( data ) {
-					$scope.getFeedbackAction( attachment, data.comment );
+					$scope.getFeedbackAction( attachment, data.comment, isResponse );
 				}
 			);
-		};		
+		};
 
-		$scope.getFeedbackAction = function( attachment, comment ) {
-			lawPalService.feedbackRequest( attachment, comment ).then(
+		$scope.getFeedbackAction = function( attachment, comment, isResponse ) {
+			lawPalService.feedbackRequest( attachment, comment, isResponse ).then(
+				function success( /*response*/ ) {
+					//console.log( 'response', response );
+					toaster.pop("success", "Feedback sent");
+				},
+				function error( /*err*/ ) {
+					//console.log( 'error', err );
+					toaster.pop("error", "Unable to send feedback");
+				}
+			);
+		};
+
+		$scope.getFeedbackStatus = function( attachment ) {
+			lawPalService.feedbackStatus( attachment ).then(
 				function success( response ) {
 					console.log( 'response', response );
+					if( response.results && response.results.length>0 ) {
+						$scope.attachModel.has_feedback = true;
+						$scope.attachModel.feedbackItem = response.results[response.results.length-1];
+					}
 				},
 				function error( err ) {
 					console.log( 'error', err );
 				}
 			);
 		};
+
+		$scope.getFeedbackStatus( $scope.attachment );
 }]);

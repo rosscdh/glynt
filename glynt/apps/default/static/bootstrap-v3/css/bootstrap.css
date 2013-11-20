@@ -10000,12 +10000,9 @@ table.checklist tr.selected-true .below-sidebar {
 }
 
 .full-dialog iframe {
-  background: -webkit-gradient(linear, left top, right top, color-stop(0, rgba(0, 0, 0, 0.01)), color-stop(97%, rgba(0, 0, 0, 0.01)), color-stop(100%, rgba(0, 0, 0, 0.15)));
-  /* Chrome,Safari4+ */
-
-  background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.01) 0, rgba(0, 0, 0, 0.01) 97%, rgba(0, 0, 0, 0.15) 100%);
-  /* Chrome10+,Safari5.1+ */
-
+  background-image: url('/static/img/spinner.gif');
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .navbar {

@@ -4,7 +4,7 @@ angular.module('lawpal').run(["$templateCache", function($templateCache) {
 		'	<div class="modal-dialog">\n'+
 		'		<div class="modal-content">\n'+
 		'			<div class="modal-header">\n'+
-		'				<h3>Request feedback</h3>\n'+
+		'				<h3>Feedback</h3>\n'+
 		'			</div>\n'+
 		'			<form class="form-discussion" ng-submit="ok()">\n'+
 		'				<div class="modal-body">\n'+

@@ -38,11 +38,12 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 
 	/* Define API interfaces for check list items */
 	var checkFeedbackResources = {
-		'request': $resource( '/api/v2/project/:uuid/todo/:slug/feedback_request/?format=json' /* '/api/v1/feedback_request/?format=json'*/, {},
+		'request': $resource( '/api/v2/project/:uuid/todo/:slug/feedback_request/:id/?format=json' /* '/api/v1/feedback_request/?format=json'*/, {},
 			/* This is done to ensure the content type of PATCH is sent through */
 			{
 				'new': { 'method': 'POST', headers: { 'Content-Type': 'application/json' } },
-				'update': { 'method': 'PATCH', headers: { 'Content-Type': 'application/json' } }
+				'status': { 'method': 'GET', headers: { 'Content-Type': 'application/json' } },
+				'update': { 'method': 'PUT', headers: { 'Content-Type': 'application/json' } }
 			}
 		)
 	};
@@ -643,7 +644,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			return deferred.promise;
 		},
 
-		'feedbackRequest': function( attachment, comment ) {
+		'feedbackRequest': function( attachment, comment, isResponse ) {
 			var deferred = $q.defer();
 			var id = attachment.id;
 			var projectId = this.getProjectUuid();
@@ -659,9 +660,57 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 				'status': 0,
 				'comment': comment
 			};
-			checkFeedbackResources.request.new( options, details,
+			if( isResponse ) {
+				options.id = 1;
+				// Responding to feedback
+				checkFeedbackResources.request.update( options, details,
+					function success( response ) {
+						deferred.resolve(response);
+					},
+					function error( err ) {
+						deferred.reject(err);
+					}
+				);
+			} else {
+				// Requesting feedback
+				checkFeedbackResources.request.new( options, details,
+					function success( response ) {
+						deferred.resolve(response);
+					},
+					function error( err ) {
+						deferred.reject(err);
+					}
+				);
+			}
+			
+
+			return deferred.promise;
+		},
+
+		'feedbackStatus': function( attachment ) {
+			var deferred = $q.defer();
+			var id = attachment.id;
+			var projectId = this.getProjectUuid();
+			var options = { 'uuid': projectId, 'slug': attachment.todo_slug };
+			var feedback = [];
+			var currentUser = this.getCurrentUser().pk;
+
+			checkFeedbackResources.request.status( options,
 				function success( response ) {
-					deferred.resolve(response);
+					if( response && response.results ) {
+						for(var i=0;i<response.results.length;i++) {
+							response.results[i].by_current_user = (response.results[i].assigned_by===currentUser );
+							response.results[i].assigned_to_current_user = (response.results[i].assigned_to.indexOf(currentUser)>=0);
+							if(response.results[i].attachment === id ) {
+								feedback.push(response.results[i]);
+							}
+						}
+						response.results = feedback;
+						response.count = feedback.length;
+						deferred.resolve(response);
+					} else {
+						deferred.resolve(response);
+					}
 				},
 				function error( err ) {
 					deferred.reject(err);

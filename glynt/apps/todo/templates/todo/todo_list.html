@@ -143,8 +143,10 @@
                             </div>
                             <div class="col-lg-5">
                                 <button class="btn btn-link pull-right" ng-click="close()">&times; Return to checklist</button>
-                                <button class="btn btn-primary pull-right" ng-disabled="deleting" ng-click="getFeedback( attachment )">Get feedback</button>
-                                <button class="btn btn-default pull-right" ng-click="delete( attachment )" ng-disabled="deleting"><i class="icon icon-spinner icon-spin" ng-show="deleting"></i> Delete</button>
+                                <button class="btn btn-primary pull-right" ng-disabled="attachModel.deleting" ng-click="getFeedback( attachment, true )" ng-show="attachModel.feedbackItem.assigned_to_current_user">Respond</button>
+                                <button class="btn btn-primary pull-right" ng-disabled="attachModel.deleting" ng-click="getFeedback( attachment, true )" ng-show="attachModel.feedbackItem.by_current_user">Cancel Request</button>
+                                <button class="btn btn-primary pull-right" ng-disabled="attachModel.deleting" ng-click="getFeedback( attachment, false )" ng-show="!attachModel.has_feedback">Get feedback</button>
+                                <button class="btn btn-default pull-right" ng-click="delete( attachment )" ng-disabled="attachModel.deleting"><i class="icon icon-spinner icon-spin" ng-show="attachModel.deleting"></i> Delete</button>
                             </div>
                         </div>
                         
