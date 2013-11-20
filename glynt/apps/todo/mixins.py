@@ -6,6 +6,9 @@ from django.views.generic import View
 
 from .services import CrocdocAttachmentService
 
+import logging
+logger = logging.getLogger('django.request')
+
 
 class ProjectOppositeUserMixin(object):
     """
@@ -42,10 +45,14 @@ class CrocdocAttachmentSessionContextMixin(View):
 
     @property
     def crocdoc_url(self):
-        return self.crocdoc().view_url(user=self.request.user)
+        url = self.crocdoc().view_url(user=self.request.user)
+        if url is None:
+            logger.error('Could not get crocdoc url user: %s' % self.request.user)
+        return url
 
     def get_context_data(self, **kwargs):
         context = super(CrocdocAttachmentSessionContextMixin, self).get_context_data(**kwargs)
+
         context.update({
             'session_key': self.crocdoc().session_key(user=self.request.user),
             'view_url': self.crocdoc_url,
