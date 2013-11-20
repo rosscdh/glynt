@@ -41,7 +41,7 @@ class AttachmentSerializer(serializers.ModelSerializer):
         return _user_dict(user=user)
 
     def get_crocdoc_url(self, obj):
-        return reverse('todo:attachment', kwargs={'pk': obj.pk})
+        return reverse('todo:crocdoc_302', kwargs={'pk': obj.pk})
 
     def get_filepicker_url(self, obj):
         return obj.inkfilepicker_url
