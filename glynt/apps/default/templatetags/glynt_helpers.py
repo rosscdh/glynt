@@ -4,9 +4,10 @@ from django import template
 
 from glynt.apps.utils import CURRENT_SITE
 
+import time
 import hmac
 import hashlib
-import time
+import urlparse
 
 register = template.Library()
 
@@ -36,6 +37,21 @@ def ABSOLUTE_STATIC_URL(path=None):
                                               path=path)
     return url
 ABSOLUTE_STATIC_URL.is_safe = True
+
+@register.simple_tag
+def full_url_thumb(src):
+    """
+    tag used to return src with our full url applied or if already a full url
+    then just that
+    """
+    url = urlparse.urlparse(src)
+
+    if url.netloc in [None, '']:
+        # ensure we have http or https
+        domain = CURRENT_SITE().domain if 'http' in CURRENT_SITE().domain else 'http://%s' % CURRENT_SITE().domain  # assume http
+        return urlparse.urljoin(domain, src)
+    else:
+        return url.geturl()
 
 
 @register.filter

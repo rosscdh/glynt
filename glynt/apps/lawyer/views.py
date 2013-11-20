@@ -119,7 +119,7 @@ class LawyerProfileSetupView(LawyerRequiredViewMixin, FormView):
             'if_i_wasnt_a_lawyer': lawyer.data.get('if_i_wasnt_a_lawyer', None),
             'companies_advised': json.dumps(companies_advised),
 
-            'photo': lawyer.photo,
+            'photo': lawyer.profile_photo,
             'twitter': lawyer.data.get('twitter',''),
 
             'linkedin': lawyer.data.get('linkedin',''),

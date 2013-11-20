@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
-from django.views.generic import View, ListView, UpdateView, DetailView
+from django.views.generic import ListView, UpdateView, DetailView
 from django.views.generic.edit import ModelFormMixin
 from django.views.generic.detail import SingleObjectMixin
 
@@ -10,10 +10,10 @@ from glynt.apps.project.services.project_checklist import ProjectCheckListServic
 from glynt.apps.project.models import Project
 
 
-from glynt.apps.todo import TODO_STATUS, FEEDBACK_STATUS
-from glynt.apps.todo.forms import CustomerToDoForm, AttachmentForm, FeedbackRequestForm
-from glynt.apps.todo.models import ToDo, Attachment, FeedbackRequest
-from glynt.apps.todo.services import CrocdocAttachmentService
+from . import TODO_STATUS, FEEDBACK_STATUS
+from .forms import CustomerToDoForm, AttachmentForm, FeedbackRequestForm
+from .models import ToDo, Attachment, FeedbackRequest
+from .mixins import CrocdocAttachmentSessionContextMixin, ProjectOppositeUserMixin
 
 import logging
 logger = logging.getLogger('django.request')
@@ -37,7 +37,6 @@ class ToDoCountMixin(object):
                     'pending': qs_objects.pending(project=project, **kwargs).count(),
                     'awaiting_feedback_from_user': awaiting_feedback_from_user,
                     'closed': qs_objects.closed(project=project, **kwargs).count(),
-
                     'total': 0,
                     }
                 }
@@ -130,7 +129,7 @@ class BaseToDoDetailMixin(RulezMixin, SingleObjectMixin):
         return obj
 
 
-class ToDoDetailView(DetailView, BaseToDoDetailMixin):
+class ToDoDetailView(DetailView, ProjectOppositeUserMixin, BaseToDoDetailMixin):
     template_name = 'todo/todo_detail.html'
 
     def get_context_data(self, **kwargs):
@@ -139,6 +138,7 @@ class ToDoDetailView(DetailView, BaseToDoDetailMixin):
             'TODO_STATUS': TODO_STATUS,
             'attachment_form': AttachmentForm(initial={'project': self.project.pk, 'todo': self.object.pk}),
             'back_and_forth': self.navigation_items,
+            'opposite_user': self.opposite_user
         })
         return context
 
@@ -189,29 +189,10 @@ class ToDoCreateView(ToDoEditView):
 """
 Attachment Views
 """
-class CrocdocAttachmentSessionContextMixin(View):
-    def get_context_data(self, **kwargs):
-        context = super(CrocdocAttachmentSessionContextMixin, self).get_context_data(**kwargs)
-        service = CrocdocAttachmentService(attachment=self.object)
 
-        context.update({
-            'session_key': service.session_key(user=self.request.user),
-            'uuid': service.uuid,
-            'view_url': service.view_url(user=self.request.user),
-        })
-        return context
-
-
-class AttachmentView(CrocdocAttachmentSessionContextMixin, DetailView):
+class AttachmentView(CrocdocAttachmentSessionContextMixin, ProjectOppositeUserMixin, DetailView):
     template_name = 'todo/attachment.html'
     model = Attachment
-
-    @property
-    def opposite_user(self):
-        try:
-            return self.object.project.get_primary_lawyer().user if self.request.user.profile.is_customer else self.object.project.customer.user
-        except AttributeError:
-            return None
 
     def get_context_data(self, **kwargs):
         context = super(AttachmentView, self).get_context_data(**kwargs)

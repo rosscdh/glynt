@@ -6,13 +6,10 @@ from django.core.urlresolvers import reverse
 from django.db.models.query import QuerySet
 from model_mommy import mommy
 
-from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin, glynt_mock_http_requests
+from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin, for_all_methods, glynt_mock_http_requests
 from glynt.apps.lawyer.models import Lawyer
 from glynt.apps.project.models import Project
 from glynt.apps.project import PROJECT_STATUS, PROJECT_LAWYER_STATUS
-
-import itertools
-import os
 
 
 class EnsureProjectsAreAvailableInContextOnAllPagesTest(BaseLawyerCustomerProjectCaseMixin):
@@ -175,9 +172,8 @@ class ProjectModelMethodsTest(TestCase):
     #     self.assertEqual(self.project_with_lawyer.is_open, False)
 
 
+@for_all_methods(glynt_mock_http_requests)
 class ContactUsModalTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
-    test_path = os.path.dirname(__file__)
-
     def test_contact_us_modal_js(self):
         self.client.login(username=self.customer_user.username, password=self.password)
 

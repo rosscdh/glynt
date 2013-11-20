@@ -1,16 +1,11 @@
 # -*- coding: UTF-8 -*-
 from django.core.urlresolvers import reverse
 
-from glynt.casper import BaseLawyerCustomerProjectCaseMixin
-from glynt.apps.transact.models import Transaction
-from model_mommy import mommy
-
-import os
+from glynt.casper import BaseLawyerCustomerProjectCaseMixin, for_all_methods, glynt_mock_http_requests
 
 
+@for_all_methods(glynt_mock_http_requests)
 class LawyerProjectDiscussionTest(BaseLawyerCustomerProjectCaseMixin):
-    test_path = os.path.dirname(__file__)
-
     def test_lawyer_discussion_js(self):
         """
         Test the team management interface

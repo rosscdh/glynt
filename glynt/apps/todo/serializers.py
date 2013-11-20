@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+from django.core.urlresolvers import reverse
 from rest_framework import serializers
 
 from .services import CrocdocAttachmentService
@@ -24,8 +25,9 @@ class AttachmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attachment
         queryset = Attachment.objects.all()
-        fields = ('id', 'uuid', 'filename', 'uploaded_by', 'deleted_by', 'project', 'todo',
-                  'crocdoc_url', 'filepicker_url', 'date_created')
+        fields = ('id', 'uuid', 'filename', 'uploaded_by', 'deleted_by', 
+                  'project', 'todo', 'crocdoc_url', 'filepicker_url',
+                  'date_created')
 
     def get_filename(self, obj):
         return obj.filename
@@ -39,8 +41,7 @@ class AttachmentSerializer(serializers.ModelSerializer):
         return _user_dict(user=user)
 
     def get_crocdoc_url(self, obj):
-        service = CrocdocAttachmentService(attachment=obj)
-        return service.view_url(user=self.context['request'].user)
+        return reverse('todo:attachment', kwargs={'pk': obj.pk})
 
     def get_filepicker_url(self, obj):
         return obj.inkfilepicker_url

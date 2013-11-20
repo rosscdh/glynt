@@ -1,18 +1,15 @@
 # -*- coding: utf-8 -*-
 """
 """
-from glynt.casper import BaseLawyerCustomerProjectCaseMixin
-from glynt.apps.todo.models import FeedbackRequest
+from glynt.casper import BaseLawyerCustomerProjectCaseMixin, for_all_methods, glynt_mock_http_requests
 from glynt.apps.todo import TODO_STATUS, FEEDBACK_STATUS
 from model_mommy import mommy
 
-import os
 import httpretty
 
-#from nose.tools import set_trace; set_trace()
-class FeedbackRequestManagerTest(BaseLawyerCustomerProjectCaseMixin):
-    test_path = os.path.dirname(__file__)
 
+@for_all_methods(glynt_mock_http_requests)
+class FeedbackRequestManagerTest(BaseLawyerCustomerProjectCaseMixin):
     def setUp(self):
         super(FeedbackRequestManagerTest, self).setUp()
 
@@ -21,7 +18,6 @@ class FeedbackRequestManagerTest(BaseLawyerCustomerProjectCaseMixin):
 
         self.feedback_request = mommy.make('todo.FeedbackRequest', status=FEEDBACK_STATUS.open, attachment=self.attachment, assigned_by=self.customer_user, assigned_to=(self.lawyer_user,), comment='What are your thoughts on this test file with ümlauts')
 
-    @httpretty.activate
     def test_close_todo_sets_feedbackrequest_to_canceled(self):
         """
         When the todo item gets closed
