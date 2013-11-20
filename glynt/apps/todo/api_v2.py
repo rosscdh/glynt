@@ -45,14 +45,21 @@ class ToDoDiscussionDetailView(ModelViewSet):
     lookup_field = 'pk'
 
     def get_queryset(self):
+        filters = {}
+
         parent_pk = self.kwargs.get('parent_pk')
-        get_object_or_404(Project, uuid=self.kwargs.get('uuid'))  # ensure that we have the project
-        get_object_or_404(ToDo, slug=self.kwargs.get('slug'))  # ensure we have the slug
+        if parent_pk is not None:
+            filters.update({"parent_pk": parent_pk})
+
+        project = get_object_or_404(Project, uuid=self.kwargs.get('uuid'))  # ensure that we have the project
+        todo = get_object_or_404(ToDo.objects.filter(project=project), slug=self.kwargs.get('slug'))  # ensure we have the slug
+        if todo is not None:
+            filters.update({"object_pk": todo.pk ,'content_type_id': todo.content_type_id})
         #
         # @BUSINESS RULE: /discussion/:pk/ should return the parent
         # as well as a the children as a "thread": []
         #
-        return self.queryset.filter(pk=parent_pk)
+        return self.queryset.filter(**filters)
 
 
 class ToDoFeedbackRequestView(ModelViewSet):
@@ -61,12 +68,13 @@ class ToDoFeedbackRequestView(ModelViewSet):
 
     def get_queryset(self):
         filters = {}
+
         pk = self.kwargs.get('pk')
         if pk is not None:
             filters.update({"pk": pk})
 
         project = get_object_or_404(Project, uuid=self.kwargs.get('uuid'))  # ensure that we have the project
-        todo = get_object_or_404(ToDo, slug=self.kwargs.get('slug'))  # ensure we have the slug
+        todo = get_object_or_404(ToDo.objects.filter(project=project), slug=self.kwargs.get('slug'))  # ensure we have the slug
 
         if todo is not None:
             filters.update({"attachment__in": todo.attachments.all()})

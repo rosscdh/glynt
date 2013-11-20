@@ -5,11 +5,12 @@ considering using https://github.com/bartTC/django-attachments for the
 todo attachments when the time comes
 """
 from django.db import models
-
+from django.contrib.contenttypes.models import ContentType
 # from django.contrib.auth.models import User
 # from glynt.apps.project.models import Project
 
 from django_filepicker.models import FPFileField
+
 
 from glynt.apps.todo import TODO_STATUS, FEEDBACK_STATUS
 from glynt.apps.todo.managers import (DefaultToDoManager,
@@ -59,6 +60,17 @@ class ToDo(NumAttachmentsMixin, models.Model):
 
     def __unicode__(self):
         return u'{name}'.format(name=unicode(self.name))
+
+    @staticmethod
+    def content_type():
+        """
+        Static method used to access the content type of projects
+        """
+        return ContentType.objects.get_for_model(ToDo)
+
+    @property
+    def content_type_id(self):
+        return ToDo.content_type().pk
 
     def can_read(self, user):
         return self.project.can_read(user=user)

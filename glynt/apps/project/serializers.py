@@ -207,5 +207,6 @@ class DiscussionThreadSerializer(DiscussionSerializer):
                   'meta', 'thread',)
 
     def get_thread(self, obj):
-        for comment in obj.children.all():
-            yield DiscussionSerializer(comment).data    
+        if obj is not None:
+            for comment in obj.children.all():
+                yield DiscussionSerializer(comment).data    
