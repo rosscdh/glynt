@@ -14,6 +14,10 @@
 
 {% block body %}
     {% csrf_token %}
+<!-- 
+    {{ opposite_user }}
+    @lee: NB when a project has no lawyer assigned to it (active lawyer) then this will be None
+-->
     <!-- start: AngularJS: checklist controller //-->
     <div class="container checklist-view" ng-controller="checklistCtrl" ng-init="initalise( { 'project': { 'uuid': '{{ project.uuid }}' }, 'pusher': { 'key':'{{ PUSHER_KEY }}', 'channel':'{{ project.pusher_id }}' } } )">
         <div class="row">
