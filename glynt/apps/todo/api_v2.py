@@ -56,5 +56,5 @@ class ToDoDiscussionDetailView(ModelViewSet):
 
 
 class ToDoFeedbackRequestView(ModelViewSet):
-    queryset = FeedbackRequest.objects.open()
+    queryset = FeedbackRequest.objects.prefetch_related().all()
     serializer_class = FeedbackRequestSerializer
