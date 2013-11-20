@@ -142,7 +142,7 @@
                 {% with p.project as project %}
                         {% if PROJECT_LAWYER_STATUS.assigned == p.status %}
                         {% elif PROJECT_LAWYER_STATUS.potential == p.status %}
-                            '{{ project.pk }}' : {% discussion_notification_count project_lawyer_join=p %} 
+                            '{{ project.pk }}' : {% discussion_notification_count project_lawyer_join=p %} {% if not forloop.last %},{% endif %}
                         {% endif %}
                 {% endwith %}
             {% endfor %}
