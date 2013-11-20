@@ -89,8 +89,11 @@ angular.module('lawpal').controller( 'attachmentCtrl', [
 				function success( response ) {
 					console.log( 'response', response );
 					if( response.results && response.results.length>0 ) {
-						$scope.attachModel.has_feedback = true;
-						$scope.attachModel.feedbackItem = response.results[response.results.length-1];
+						var currentFeedbackItem = response.results[0];
+						if(currentFeedbackItem.status<4) {
+							$scope.attachModel.has_feedback = true;
+							$scope.attachModel.feedbackItem = currentFeedbackItem;
+						}
 					}
 				},
 				function error( err ) {

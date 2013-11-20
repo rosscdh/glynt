@@ -113,6 +113,18 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [
 			);
 		};
 
+		$scope.setStatusClosed = function( ) {
+			var item = $scope.item;
+			lawPalService.closeChecklistItem(item).then(
+				function success() {
+					console.log('Closed', response);
+				},
+				function error() {
+					console.log('Error');
+				}
+			);
+		};
+
 		$scope.uploadSelector = function() {
 			var data = {
 				"project": lawPalService.getProjectId(),

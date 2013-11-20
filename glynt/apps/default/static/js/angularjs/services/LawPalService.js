@@ -33,8 +33,14 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		'attachments':
 			$resource('/api/v2/project/:uuid/todo/:slug/attachment/?format=json', {},
 				{ 'list': { 'method': 'GET', headers: { 'Content-Type': 'application/json' } }
+			}),
+		'close':
+			$resource('/api/v1/todo/:id/?format=json', {},
+				{ 'todo': { 'method': 'PATCH', headers: { 'Content-Type': 'application/json' } }
 			})
 	};
+
+	///todo/bad1748083f24cf7aa8f548346a8b9d3/ebZdSs9Mig4oWXeXVXrHrL/
 
 	/* Define API interfaces for check list items */
 	var checkFeedbackResources = {
@@ -568,6 +574,28 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			return deferred.promise;
 		},
 
+		'closeChecklistItem': function( item ) {
+			var deferred = $q.defer();
+			var options = {
+				"uuid": this.getProjectUuid(),
+				"slug": item.slug,
+				"id": item.id
+			};
+			var data = {
+				'status': 4
+			};
+			checkListItemResources.close.todo( options, data,
+				function success(response) {
+					deferred.resolve(response);
+				},
+				function error(err) {
+					deferred.reject(err);
+				}
+			);
+			// 
+			return deferred.promise;
+		},
+
 		"attachFileChecklistItem": function( item, file ) {
 			var self = this;
 			var deferred = $q.defer();
@@ -658,7 +686,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 				'assigned_to': [ oppositeUser.pk ],
 				'attachment': id,
 				'status': status|0,
-				'comment': comment
+				'comment': comment||'Changed status'
 			};
 			if( respondTo ) {
 				options.id = respondTo.id;
@@ -687,21 +715,23 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			return deferred.promise;
 		},
 
-		'feedbackStatus': function( attachment ) {
+		'feedbackStatus': function( options ) {
 			var deferred = $q.defer();
-			var id = attachment.id;
+			var attachmentId = options.id;
 			var projectId = this.getProjectUuid();
-			var options = { 'uuid': projectId, 'slug': attachment.todo_slug };
+			var options = { 'uuid': projectId, 'slug': options.todo_slug };
 			var feedback = [];
 			var currentUser = this.getCurrentUser().pk;
 
 			checkFeedbackResources.request.status( options,
 				function success( response ) {
 					if( response && response.results ) {
+						// Filter results for the specific attachment
 						for(var i=0;i<response.results.length;i++) {
 							response.results[i].by_current_user = (response.results[i].assigned_by===currentUser );
 							response.results[i].assigned_to_current_user = (response.results[i].assigned_to.indexOf(currentUser)>=0);
-							if(response.results[i].attachment === id ) {
+
+							if( !attachmentId || response.results[i].attachment === attachmentId ) {
 								feedback.push(response.results[i]);
 							}
 						}

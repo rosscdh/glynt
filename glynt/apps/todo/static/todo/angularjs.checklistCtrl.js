@@ -681,6 +681,11 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', '$rootScope', 
 			}
 		};
 
+		/**
+		 * Starts the process of viewing an item in the sidebar
+		 * @param  {Object} item  Checklist item
+		 * @param  {Number} index The layout area to slide into view
+		 */
 		$scope.selectChecklistItem = function( item, index ) {
 			console.log( item );
 			for(var i=0;i<$scope.model.checklist.length;i++) {
@@ -688,7 +693,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', '$rootScope', 
 			}
 			item.selected = true;
 			$scope.loadAttachments( item );
-			console.log( item );
+			$scope.getFeedbackStatus( item );
 			$rootScope.$broadcast('open-sidebar', index);
 		};
 
@@ -712,7 +717,51 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', '$rootScope', 
 					item.loadingAttachments = false;
 				}
 			);
+		};
 
+		$scope.getFeedbackStatus = function( item ) {
+			var options = {
+				'id': null, /* attachment ID */
+				'todo_slug': item.slug
+			};
+
+			clearFeedbackRequired();
+
+			lawPalService.feedbackStatus( options ).then(
+				function success( response ) {
+					var feedbackItem, attachment;
+					if( response.results && response.results.length>0 ) {
+						var feedbackItems = response.results;
+						for(var i=0;i<feedbackItems.length;i++) {
+							feedbackItem = feedbackItems[i];
+							if(feedbackItem.status<4 && feedbackItem.assigned_to_current_user ) {
+								attachment = findAttachment(feedbackItem);
+								if(attachment) {
+									attachment.feedbackRequired = true;
+								}
+							}
+						}
+					}
+				},
+				function error( err ) {
+					console.log( 'error', err );
+				}
+			);
+
+			function findAttachment( feebackItem ) {
+				for(var j=0;j<item.attachments.length;j++) {
+					if(item.attachments[j].id===feebackItem.attachment) {
+						return item.attachments[j];
+					}
+				}
+				return null;
+			}
+
+			function clearFeedbackRequired(  ) {
+				for(var j=0;j<item.attachments;j++) {
+					item.attachments[j].feedbackRequired = false;
+				}
+			}
 		};
 
 		/**

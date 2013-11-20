@@ -96,15 +96,20 @@
                             {% if is_lawyer %}
                             <!-- Checklist item actions //-->
                             <div class="item-meta" checklist-item-actions data-show-label="true" data-show-move="false"></div>
+                            <button ng-click="setStatusClosed( item )" class="btn btn-default">Close</button>
                             {% endif %}
-                            <button ng-click="viewItem( item )" class="btn btn-primary">Open</button>
+                            <!--<button ng-click="viewItem( item )" class="btn btn-primary">Open</button>//-->
                             <hr />
 
                             <h5>Attachments</h5>
                             <span ng-show="item.loadingAttachments" class="text-muted"><i class="icon icon-spinner icon-spin"></i> Loading attachments</span>
                             <ul class="nav nav-pills nav-stacked">
                                 <li ng-repeat="attachment in item.attachments | filter: { is_deleted: false }">
-                                    <a href="#" ng-click="viewAttachment(attachment)"><i class="icon icon-file text-muted"></i> <span ng-bind="attachment.filename"></span></a>
+                                    <a href="#" ng-click="viewAttachment(attachment)">
+                                        <i class="icon icon-file text-muted" ng-show="!attachment.feedbackRequired"></i>
+                                        <i class="icon icon-file text-danger" ng-show="attachment.feedbackRequired"></i>
+                                        <span ng-bind="attachment.filename"></span> 
+                                    </a>
                                 </li>
                             </ul>
                             <div class="drop-pane" ng-file-drop="onFileSelect($files);" ng-click="uploadSelector()">Drop files here</div>
@@ -138,15 +143,20 @@
                     <div class="container full-dialog-content">
                         
                         <div class="row">
-                            <div class="col-lg-7">
+                            <div class="col-lg-5">
                                 <h3><i class="icon icon-file text-muted"></i> <span ng-bind="attachment.filename"></span></h3>
                             </div>
-                            <div class="col-lg-5">
+                            <div class="col-lg-3">
+                                <div class="alert alert-warning" ng-show="attachModel.feedbackItem.assigned_to_current_user">Feedback</div>
+                            </div>
+                            <div class="col-lg-4">
                                 <button class="btn btn-link pull-right" ng-click="close()">&times; Return to checklist</button>
                                 <button class="btn btn-primary pull-right" ng-disabled="attachModel.deleting" ng-click="getFeedback( attachment, true )" ng-show="attachModel.feedbackItem.assigned_to_current_user">Respond</button>
-                                <button class="btn btn-primary pull-right" ng-disabled="attachModel.deleting" ng-click="getFeedback( attachment, true )" ng-show="attachModel.feedbackItem.by_current_user">Cancel Request</button>
+                                <button class="btn btn-primary pull-right" ng-disabled="attachModel.deleting" ng-click="cancelRequest( attachment )" ng-show="attachModel.feedbackItem.by_current_user">Cancel Request</button>
                                 <button class="btn btn-primary pull-right" ng-disabled="attachModel.deleting" ng-click="getFeedback( attachment, false )" ng-show="!attachModel.has_feedback">Get feedback</button>
+                                {% if is_lawyer %}
                                 <button class="btn btn-default pull-right" ng-click="delete( attachment )" ng-disabled="attachModel.deleting"><i class="icon icon-spinner icon-spin" ng-show="attachModel.deleting"></i> Delete</button>
+                                {% endif %}
                             </div>
                         </div>
                         
