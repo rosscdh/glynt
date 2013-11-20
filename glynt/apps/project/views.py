@@ -72,7 +72,7 @@ class CreateProjectView(FormView):
 
         project = self.save(intake_data=intake_data, transaction_types=transaction_types)
 
-        self.success_url = reverse('dashboard:overview')
+        self.success_url = reverse('dashboard:project', kwargs={'uuid': project.uuid})
 
         return super(CreateProjectView, self).form_valid(form)
 
