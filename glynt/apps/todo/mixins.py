@@ -43,8 +43,7 @@ class CrocdocAttachmentSessionContextMixin(View):
 
     @property
     def crocdoc_url(self):
-        self.init_crocdoc()
-        return self.crocdoc_service.view_url(user=self.request.user)
+        return self.crocdoc().view_url(user=self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super(CrocdocAttachmentSessionContextMixin, self).get_context_data(**kwargs)
