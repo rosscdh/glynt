@@ -785,6 +785,14 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		},
 
 		/**
+		 * Returns the content type ID for the todo content type
+		 * @return {Number} Project content type ID
+		 */
+		'todoContentTypeId': function() {
+				return LawPal.content_type_id || 15;
+		},
+
+		/**
 		 * Get current user
 		 * @return {Object} Current user
 		 */
@@ -1002,6 +1010,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			var itemSlug = item.slug;
 			var projectUuid = this.getProjectUuid();
 			var currentUser = this.getCurrentUser();
+			var todo_content_type_id = this.todoContentTypeId();
 
 			var options = {
 				'uuid': projectUuid,
@@ -1011,12 +1020,12 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			var data = {
 				'title': '',
 				'comment': comment,
-				'user': currentUser,
-				'content_type_id': 2,
-				'parent_id': item.id
+				'user': currentUser.pk,
+				'content_type_id': todo_content_type_id,
+				'object_pk': item.id
 			};
 
-			checkListItemResources.discussion.list( options, data,
+			checkListItemResources.discussion.create( options, data,
 				function success( response ) {
 					deferred.resolve(response);
 				},

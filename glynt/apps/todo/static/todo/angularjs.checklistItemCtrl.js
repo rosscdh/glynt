@@ -8,7 +8,8 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [
 	function( $scope, lawPalService, lawPalUrls, lawPalDialog, $location, toaster, multiProgressService ) {
 		'use strict';
 		$scope.message = {
-			'comment': ''
+			'comment': '',
+			'sending': false
 		};
 		/**
 		 * Removes an item from the checklist
@@ -190,13 +191,8 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [
 			if( item ) {
 				lawPalService.checkListItemDiscussionAdd( item, comment ).then(
 					function success( response ) {
-						//
-						//item.discussion = discussion;
 						console.log( response );
-						if(!item.discussion.results) {
-							item.discussion.results=[];
-						}
-						item.discussion.results.push(response);
+						$scope.message.comment = '';
 					},
 					function error( err ) {
 						console.error(err);
@@ -204,6 +200,32 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [
 				);
 			}
 		};
+
+		$scope.$on("todo.comment.created", function(e, data){
+			//var todoItem = data.instance;
+			if( data.instance.id === $scope.item.id ) {
+				if(!$scope.item.discussion) {
+					$scope.item.discussion = { 'results': [] };
+				}
+				if(!$scope.item.discussion.results) {
+					$scope.item.discussion.results=[];
+				}
+
+				var comment = data.content;
+				var discussion = $scope.item.discussion.results;
+				
+				// This function can be called twice because the controller displays multiple instances of the checklistitem on the page
+				var hasComment = discussion.some( function( message ){
+					return message.comment === comment;
+				});
+
+				if(!hasComment) {
+					$scope.item.discussion.results.unshift({
+						'comment': data.content
+					});
+				}
+			}
+		});
 
 		/**
 		 * Recieves messages that an attachment has been added
@@ -213,7 +235,6 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [
 		$scope.$on("todo.attachment.created", function( e, data ){
 			$scope.item.attachments = $scope.item.attachments || [];
 			//console.log("data:", data.todo, "item:",$scope.item.name, data.instance.name == $scope.item.name);
-			//debugger;
 			if( typeof(data)==="object" && data.todo == $scope.item.name && !data.processed ) {
 				data.processed = true;
 				//console.log("incrementing", $scope.item.slug, data.slug );
