@@ -30,7 +30,7 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 			/* This is done to ensure the content type of PATCH is sent through */
 			{ 'save': { 'method': 'PATCH', headers: { 'Content-Type': 'application/json' }, 'isArray': true }
 			}),
-		'doc': $resource('/api/v1/project/:uuid/document/:documentId/requestsign?format=json', {},
+		'doc': $resource('/api/v1/project/:uuid/document/:documentId/sign/', {},
 			/* This is done to ensure the content type of PATCH is sent through */
 			{ 'requestSign': { 'method': 'POST', headers: { 'Content-Type': 'application/json' }, 'isArray': true }
 			})
