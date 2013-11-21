@@ -1,4 +1,4 @@
-{% extends 'base-slim.html' %}
+{% extends 'base-slim.html' %}{% load url from future %}
 
 {% block page_title %}403 Forbidden{% endblock %}
 
@@ -9,9 +9,17 @@
 		<div class="jumbotron">
 			<div class="span12">
 				<h1><b>403:</b> Forbidden</h1>
-				<p>It appears you have tired to access an element you do not have permissions for.</p>
+                {% if user.is_authenticated %}
+                    <p>The account you are logged in with "{{ user.email }}" does not have access to this project item.</p>
+                {% else %}
+                    <p>You need to log in</p>
+                {% endif %}
 			</div>
 		</div>
+        {% if user.is_authenticated %}
+            <p>If you have another account at LawPal try <a href="{% url 'logout' %}">logging out</a> and then logging in with your other account.</p>
+            <p>or you can <a href="mailto:xw4ux8lx@incoming.intercom.io" class="intercom">contact support</a></p>
+        {% endif %}
 	</div>
 </div>
 {% endblock %}
