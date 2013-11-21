@@ -204,7 +204,6 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [
 		$scope.$on("todo.comment.created", function(e, data){
 			//var todoItem = data.instance;
 			if( data.instance.id === $scope.item.id ) {
-				debugger;
 				if(!$scope.item.discussion) {
 					$scope.item.discussion = { 'results': [] };
 				}
@@ -236,7 +235,6 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [
 		$scope.$on("todo.attachment.created", function( e, data ){
 			$scope.item.attachments = $scope.item.attachments || [];
 			//console.log("data:", data.todo, "item:",$scope.item.name, data.instance.name == $scope.item.name);
-			//debugger;
 			if( typeof(data)==="object" && data.todo == $scope.item.name && !data.processed ) {
 				data.processed = true;
 				//console.log("incrementing", $scope.item.slug, data.slug );
