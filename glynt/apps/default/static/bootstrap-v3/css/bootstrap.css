@@ -9932,6 +9932,10 @@ footer {
   position: relative;
 }
 
+.block-content {
+  padding-bottom: 40px;
+}
+
 .options-container {
   position: absolute;
   top: 0;

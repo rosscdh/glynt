@@ -70,9 +70,15 @@ angular.module('lawpal').directive('collapse', function () {
 					var top = 20;
                     var scrollerInc = (scrollerTopMargin+20)/dh;
 
-					if( c > scrollerTopMargin) {
+					if( c > scrollerTopMargin && c <= (dh - w - 100)) {
                         var diff = ((eh/dh) * c);
                         d.css({ 'position': "fixed", 'top': -diff + "px"   });
+                    } else if( c > (dh - w - 100) && c <= (dh - w - 50) ) {
+                    	var diff = ((eh/dh) * c * 1.15);
+                    	d.css({ 'position': "fixed", 'top': -diff + "px"   });
+                   	} else if( c > (dh - w - 60) ) {
+                    	var diff = ((eh/dh) * c * 1.3);
+                    	d.css({ 'position': "fixed", 'top': -diff + "px"   });
                     } else {
                         d.css({ 'position': "relative", 'top': ""   });
                     }

@@ -12,7 +12,7 @@ angular.module('lawpal').run(["$templateCache", function($templateCache) {
 		'					<div class="form-group">\n'+
 		'						<textarea ng-model="data.comment" class="form-control" placeholder="Enter a feedback request comment"></textarea>\n'+
 		'					</div>\n'+
-		'                   <div class="checkbox" ng-show="currentUser.is_lawyer"><label> <input type="checkbox" ng-model="data.complete" /> Flag as completed</label></div>\n'+
+		'                   <div class="checkbox" ng-show="currentUser.is_lawyer"><label> <input type="checkbox" ng-model="data.complete" /> Flag as complete</label></div>\n'+
 		'				</div>\n'+
 		'				<div class="modal-footer">\n'+
 		'					<button class="btn btn-default" ng-click="cancel()">Cancel</button>\n'+
