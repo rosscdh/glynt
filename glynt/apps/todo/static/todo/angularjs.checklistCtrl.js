@@ -469,20 +469,6 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', '$rootScope', 
 				}
 			);
 		};
-		/*
-		$scope.mergeChecklistCategories = function() {
-			var categories, checklist;
-			$scope.loadStatus++;
-			if( $scope.loadStatus === 2) {
-				categories = $scope.model.categories;
-				checklist = $scope.model.checkListItems;
-				
-				angular.forEach( categories, function( item, index ) {
-					$scope.insertCategory( item, $scope.checklistItemsByCategory( item ) );
-				});
-			}
-		};
-		*/
 
 		/**
 		 * Insert category into working array of categories, this might occur when a response is received from the API notifing that a new category has been inserted
@@ -556,9 +542,6 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', '$rootScope', 
 					if(!nv_items[idx]) {
 						return false;
 					} else {
-						if(item.slug!==nv_items[idx].slug) {
-							debugger;
-						}
 						return item.slug!==nv_items[idx].slug;
 					}
 				} );
@@ -694,9 +677,14 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', '$rootScope', 
 			$scope.loadAttachments( item );
 			$scope.getFeedbackStatus( item );
 			$scope.getCheckListItemDiscussion( item );
+			//$scope.getCheckListItemActivity( item );
 			$rootScope.$broadcast('open-sidebar', index);
 		};
 
+		/**
+		 * Request and update checklist item dicussion
+		 * @param  {Object} item checklist item
+		 */
 		$scope.getCheckListItemDiscussion = function( item ) {
 			if( item ) {
 				lawPalService.checkListItemDiscussionList( item ).then(
@@ -710,6 +698,22 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', '$rootScope', 
 				);
 			}
 		};
+
+		$scope.getCheckListItemActivity = function( item ) {
+			if( item ) {
+				lawPalService.checkListItemActivityList( item ).then(
+					function success( discussion ) {
+						//
+						item.activity = discussion;
+					},
+					function error( err ) {
+						console.error(err);
+					}
+				);
+			}
+		};
+
+		//checkListItemActivityList
 
 		//checkListItemDiscussionList
 

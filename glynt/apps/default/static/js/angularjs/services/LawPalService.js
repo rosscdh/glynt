@@ -44,6 +44,12 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 					'list': { 'method': 'GET', headers: { 'Content-Type': 'application/json' } },
 					'create': { 'method': 'POST', headers: { 'Content-Type': 'application/json' } }
 				}
+			),
+		'activity':
+			$resource('/api/v2/project/:uuid/todo/:slug/activity/?format=json', {},
+				{ 
+					'list': { 'method': 'GET', headers: { 'Content-Type': 'application/json' } }
+				}
 			)
 	};
 
@@ -984,6 +990,32 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			return deferred.promise;
 		},
 
+		'checkListItemActivityList': function( item ) {
+			var deferred = $q.defer();
+			var itemSlug = item.slug;
+			var projectUuid = this.getProjectUuid();
+
+			var options = {
+				'uuid': projectUuid,
+				'slug': itemSlug
+			};
+
+			checkListItemResources.activity.list( options,
+				function success( response ) {
+					deferred.resolve(response);
+				},
+				function error( err ) {
+					deferred.reject(err);
+				}
+			);
+			return deferred.promise;
+		},
+
+		/**
+		 * Request checklist item discussion
+		 * @param  {Object} item Checklist item object
+		 * @return {Function}      promise
+		 */
 		'checkListItemDiscussionList': function( item ) {
 			var deferred = $q.defer();
 			var itemSlug = item.slug;
