@@ -97,3 +97,16 @@ class NumAttachmentsMixin(object):
         if num_attachments > 0:
             num_attachments -= 1
             self.num_attachments = num_attachments
+
+
+class ToDoActivityMixin(object):
+    """
+    A Mixin to collect the todo and its related items "action" objects
+    1. todo items (and by association their attachments, 
+       attachments comments is setup to comment on the todo item and not the attachment itself)
+    """
+    def activity_stream(self, **kwargs):
+        from actstream.models import Action
+        return Action.objects.prefetch_related('actor').filter(target_object_id=self.pk,
+                                     target_content_type=self.content_type(), **kwargs)
+
