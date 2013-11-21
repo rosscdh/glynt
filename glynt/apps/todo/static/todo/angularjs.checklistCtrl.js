@@ -687,15 +687,31 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', '$rootScope', 
 		 * @param  {Number} index The layout area to slide into view
 		 */
 		$scope.selectChecklistItem = function( item, index ) {
-			console.log( item );
 			for(var i=0;i<$scope.model.checklist.length;i++) {
 				$scope.model.checklist[i].selected = false;
 			}
 			item.selected = true;
 			$scope.loadAttachments( item );
 			$scope.getFeedbackStatus( item );
+			$scope.getCheckListItemDiscussion( item );
 			$rootScope.$broadcast('open-sidebar', index);
 		};
+
+		$scope.getCheckListItemDiscussion = function( item ) {
+			if( item ) {
+				lawPalService.checkListItemDiscussionList( item ).then(
+					function success( discussion ) {
+						//
+						item.discussion = discussion;
+					},
+					function error( err ) {
+						console.error(err);
+					}
+				);
+			}
+		};
+
+		//checkListItemDiscussionList
 
 		$scope.loadAttachments = function( item ) {
 			item.loadingAttachments = true;

@@ -576,11 +576,6 @@ ul#checklist-categories {
   i.icon-move { position: absolute; right: 45px; top: 12px; cursor: move; display: none; }
 }
 
-tr.table-header { background-color: @panel-heading-bg; }
-button.table-header { padding-left: 0; padding-right: 0; }
-.table-header { font-size: 18px; font-weight: normal; color: @text-color; }
-.table-header.icon { line-height: 18px; }
-
 table.checklist {
   border-bottom: 1px solid #dddddd;
   margin-bottom: 0;
@@ -718,6 +713,11 @@ table.checklist {
     }
   }
 }
+
+tr.table-header { background-color: @panel-heading-bg; }
+button.table-header { padding-left: 0; padding-right: 0; }
+.table-header, tr.table-header .item-info { font-size: 18px; font-weight: normal; color: @text-color; }
+.table-header.icon { line-height: 18px; }
 
 .on-file-drop-show { display: none; }
 
@@ -1450,7 +1450,7 @@ footer { position: relative; }
 .options-container {
   background-color: @panel-heading-bg;
   position: absolute;
-  top:33px;
+  top:0px;
 }
 .options-container .item-container {
   min-width: 315px; padding-left: 40px; padding-right: 10px; max-width: 350px;

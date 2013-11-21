@@ -37,10 +37,17 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 		'close':
 			$resource('/api/v1/todo/:id/?format=json', {},
 				{ 'todo': { 'method': 'PATCH', headers: { 'Content-Type': 'application/json' } }
-			})
+			}),
+		'discussion':
+			$resource('/api/v2/project/:uuid/todo/:slug/discussion/?format=json', {},
+				{ 
+					'list': { 'method': 'GET', headers: { 'Content-Type': 'application/json' } },
+					'create': { 'method': 'POST', headers: { 'Content-Type': 'application/json' } }
+				}
+			)
 	};
 
-	///todo/bad1748083f24cf7aa8f548346a8b9d3/ebZdSs9Mig4oWXeXVXrHrL/
+	////api/v2/project/bad1748083f24cf7aa8f548346a8b9d3/todo/sK5WkVewDuKeBDiBjJd2Bh/discussion/
 
 	/* Define API interfaces for check list items */
 	var checkFeedbackResources = {
@@ -946,6 +953,11 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			return deferred.promise;
 		},
 
+		/**
+		 * Retrieves a list of attachments for a specific checklist item
+		 * @param  {Object} item TODO/checklist item
+		 * @return {Function}      promise
+		 */
 		'getCheckListItemAttachments': function( item ) {
 			var itemSlug = item.slug;
 			var projectUuid = this.getProjectUuid();
@@ -961,6 +973,57 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 				deferred.reject(results);
 			});
 
+			return deferred.promise;
+		},
+
+		'checkListItemDiscussionList': function( item ) {
+			var deferred = $q.defer();
+			var itemSlug = item.slug;
+			var projectUuid = this.getProjectUuid();
+
+			var options = {
+				'uuid': projectUuid,
+				'slug': itemSlug
+			};
+
+			checkListItemResources.discussion.list( options,
+				function success( response ) {
+					deferred.resolve(response);
+				},
+				function error( err ) {
+					deferred.reject(err);
+				}
+			);
+			return deferred.promise;
+		},
+
+		'checkListItemDiscussionAdd': function( item, comment ) {
+			var deferred = $q.defer();
+			var itemSlug = item.slug;
+			var projectUuid = this.getProjectUuid();
+			var currentUser = this.getCurrentUser();
+
+			var options = {
+				'uuid': projectUuid,
+				'slug': itemSlug
+			};
+
+			var data = {
+				'title': '',
+				'comment': comment,
+				'user': currentUser,
+				'content_type_id': 2,
+				'parent_id': item.id
+			};
+
+			checkListItemResources.discussion.list( options, data,
+				function success( response ) {
+					deferred.resolve(response);
+				},
+				function error( err ) {
+					deferred.reject(err);
+				}
+			);
 			return deferred.promise;
 		}
 	};

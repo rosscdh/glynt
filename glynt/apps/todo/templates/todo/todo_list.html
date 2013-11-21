@@ -26,17 +26,17 @@
                     <block-container>
                         <!-- TODO list //-->
                         <div id="list-items">
-
-                                {% if is_lawyer %}
-                                <!-- Add new checklist item //-->
-                                <button type="button" class="btn btn-link pull-right create-item" title="Create new item" data-tooltip="Create new checklist item" ng-click="createItem( model.filters.category )">
-                                        <i class="glyphicon glyphicon-plus-sign"></i> New checklist item
-                                </button>
-                                {% endif %}
-
                                 <table class="table checklist">
                                     <tr class="table-header">
-                                        <th class="item-info table-header">Name</th>
+                                        <th class="item-info table-header">
+                                            Name
+                                            {% if is_lawyer %}
+                                            <!-- Add new checklist item //-->
+                                            <button type="button" class="btn btn-link create-item pull-right" title="Create new item" data-tooltip="Create new checklist item" ng-click="createItem( model.filters.category )">
+                                                    <i class="glyphicon glyphicon-plus-sign"></i> New checklist item
+                                            </button>
+                                            {% endif %}
+                                        </th>
                                         <th class="item-details table-header">Attachments</th>
                                         <th class="item-status table-header">Status</th>
                                         <th class="item-category">
@@ -117,13 +117,17 @@
                             <hr />
 
                             <h5>Discussion</h5>
-                            <form ng-submit="addComment()">
+                            <div ng-repeat="message in item.discussion.results">
+                                <!--<div class="discussion-list" data-discussion="item.discussion.results" data-tag="tag" data-title="'Discussion'" data-respond-allowed="false" data-show-status="false"></div>//-->
+                                <p ng-bind="message.comment"></p>
+                            </div>
+                            <form ng-submit="addComment(item)" class="clearfix">
                                 <div class="form-group">
                                     <label class="sr-only hideme">Comment</label>
                                     <textarea ng-model="comment" class="comment" required></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <button class="btn btn-primary pull-right">Comment</button>
+                                    <button class="btn btn-primary pull-right" ng-click="addComment(itemitem)">Comment</button>
                                 </div>
                             </form>
                         </div>
@@ -205,6 +209,7 @@
             "uuid": "{{ project.uuid }}",
             "content_type_id": {{ project.content_type_id|default:None|jsonify }},
        },
+       "content_type_id": {{ todo.content_type_id|default:None|jsonify }},
         "user": {
             'pk': {{ user.pk|default:'null'|jsonify }},
             'email': {{ user.email|default:'null'|jsonify }},

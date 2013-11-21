@@ -22,6 +22,17 @@ angular.module('lawpal').directive('discussionList', [ 'lawPalService', 'toaster
 				"loading": true
 			};
 
+			$scope.respondAllowed = true;
+			$scope.showStatus = true;
+
+			if($attrs.respondAllowed==='false') {
+				$scope.respondAllowed = false;
+			}
+
+			if($attrs.showStatus==='false') {
+				$scope.showStatus = false;
+			}
+
 			$scope.pageLimit = 100;
 			$scope.page = 0;
 			$scope.starting = 0;

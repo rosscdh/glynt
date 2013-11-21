@@ -6,6 +6,10 @@
 angular.module('lawpal').controller( 'checklistItemCtrl', [ 
 	'$scope', 'lawPalService', 'lawPalUrls', 'lawPalDialog', '$location', 'toaster', 'multiProgressService',
 	function( $scope, lawPalService, lawPalUrls, lawPalDialog, $location, toaster, multiProgressService ) {
+		'use strict';
+		$scope.message = {
+			'comment': ''
+		};
 		/**
 		 * Removes an item from the checklist
 		 * @param  {Object} item JSON object representing a checklist item
@@ -84,8 +88,9 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [
 		$scope.viewItem = function() {
 			var item = $scope.item;
 			var url = lawPalUrls.checklistItemDetailUrl( $scope.model.project.uuid, item, true );
-			if( url )
+			if( url ) {
 				window.location.href = url;
+			}
 		};
 
 		/**
@@ -178,6 +183,26 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [
 			$scope.model.selectedAttachments = [];
 			attachment.pageHeight = $(window).height() - 150;
 			$scope.model.selectedAttachments.push(attachment);
+		};
+
+		$scope.addComment = function( item ) {
+			var comment = $scope.message.comment;
+			if( item ) {
+				lawPalService.checkListItemDiscussionAdd( item, comment ).then(
+					function success( response ) {
+						//
+						//item.discussion = discussion;
+						console.log( response );
+						if(!item.discussion.results) {
+							item.discussion.results=[];
+						}
+						item.discussion.results.push(response);
+					},
+					function error( err ) {
+						console.error(err);
+					}
+				);
+			}
 		};
 
 		/**

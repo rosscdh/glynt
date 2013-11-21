@@ -62,13 +62,13 @@ angular.module('lawpal').directive('collapse', function () {
 			function adjustScollPos( element ) {
 				var d = element;
 				if(scope.isCollapsed===false) {
-					var c = $(window).scrollTop() - 50;
+					var c = $(window).scrollTop() - 20;
                     var w = $(window).height();
                     var dh = $(document).height();
-					var wd = d.height() + 50 - w;
+					var wd = d.height() + 20 - w;
                     var eh = d.innerHeight() - 400;
-					var top = 50;
-                    var scrollerInc = (scrollerTopMargin+50)/dh;
+					var top = 20;
+                    var scrollerInc = (scrollerTopMargin+20)/dh;
 
 					if( c > scrollerTopMargin) {
                         var diff = ((eh/dh) * c);
