@@ -600,7 +600,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', '$rootScope', 
 		 * @param  {uiItem} uiItem DOM node
 		 */
 		$scope.saveItemOrder = function( /*evt, uiItem*/ ) {
-			var items = $scope.model.checklist;
+			var items = $scope.model.workingChecklist;
 
 			// Is there a filter?
 			if( $scope.model.filters.category.label !== null ) {
@@ -676,7 +676,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', '$rootScope', 
 			item.selected = true;
 			$scope.loadAttachments( item );
 			$scope.getFeedbackStatus( item );
-			$scope.getCheckListItemDiscussion( item );
+			//$scope.getCheckListItemDiscussion( item );
 			$scope.getCheckListItemActivity( item );
 			$rootScope.$broadcast('open-sidebar', index);
 		};
