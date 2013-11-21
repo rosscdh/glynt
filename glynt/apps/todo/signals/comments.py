@@ -11,6 +11,8 @@ from threadedcomments.models import ThreadedComment
 
 from glynt.apps.todo.services import ToDoStatusService
 
+from glynt.apps.todo.signals import get_todo_info_object
+
 import logging
 logger = logging.getLogger('django.request')
 
@@ -43,6 +45,9 @@ def on_comment_created(sender, **kwargs):
                 # update the ToDo Status as its been interacted with
                 todostatus_service = ToDoStatusService(todo_item=todo)
                 todostatus_service.process()
+
+                # append the todo instance object
+                extra.update(get_todo_info_object(todo=todo))
 
             elif content_object_type == 'Project':
                 send = True

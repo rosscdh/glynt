@@ -6,12 +6,15 @@ from django.dispatch import receiver
 from django.db.models.signals import pre_save, post_save
 
 from actstream import action
+
 from glynt.apps.todo.models import ToDo
 from glynt.apps.todo.models import FeedbackRequest
 from glynt.apps.utils import generate_unique_slug
 from glynt.apps.services.pusher import PusherPublisherService
 
 from glynt.apps.todo import TODO_STATUS, TODO_STATUS_ACTION
+
+from glynt.apps.todo.signals import get_todo_info_object
 
 import logging
 logger = logging.getLogger('django.request')
@@ -37,22 +40,6 @@ def is_sort_order_update(**kwargs):
         # Do absolutely nothing
         return True
     return False
-
-
-def get_todo_info_object(todo):
-    return {
-        'instance': {
-            'pk': todo.pk,
-            'slug': todo.slug,
-            'name': todo.name,
-            'category': todo.category,
-            'project': {'pk': todo.project.pk},
-            'display_status': todo.display_status,
-            'status': todo.status,
-            'is_deleted': todo.is_deleted,
-            'uri': todo.get_absolute_url(),
-        }
-    }
 
 
 @receiver(post_save, sender=ToDo, dispatch_uid='todo.item_crud')
