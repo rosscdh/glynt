@@ -113,6 +113,7 @@ class ProjectCheckListService(UserFeedbackRequestMixin, ToDoItemsFromYamlMixin,
             item.sort_position = current_length + i
             item.sort_position_by_cat = i
             item.item_hash_num = self.item_hash_num(item) # ties in with model.item_hash_num()
+            item.content_type_id = i.content_type_id
             # updated with various kwargs passed in
             item.update(kwargs)
 
