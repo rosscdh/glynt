@@ -10,9 +10,9 @@ angular.module('lawpal').run(["$templateCache", function($templateCache) {
 		'				<div class="modal-body">\n'+
 		'                   <blockquote ng-show="feedbackItem.comment"><span ng-bind="feedbackItem.comment"></span><small><cite ng-bind="oppositeUser.full_name"></cite></small></blockquote>\n'+
 		'					<div class="form-group">\n'+
-		'						<textarea ng-model="data.comment" class="form-control" placeholder="Enter a feedback request comment"></textarea>\n'+
+		'						<textarea ng-model="data.comment" class="form-control" placeholder="Enter a feedback request comment" maxlength="254"></textarea>\n'+
 		'					</div>\n'+
-		'                   <div class="checkbox" ng-show="currentUser.is_lawyer"><label> <input type="checkbox" ng-model="data.complete" /> Flag as complete</label></div>\n'+
+		'                   <div class="checkbox" ng-show="allowClose"><label> <input type="checkbox" ng-model="data.complete" /> Flag as complete</label></div>\n'+
 		'				</div>\n'+
 		'				<div class="modal-footer">\n'+
 		'					<button class="btn btn-default" ng-click="cancel()">Cancel</button>\n'+

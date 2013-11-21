@@ -9,10 +9,11 @@ angular.module('lawpal').controller( 'feedbackRequestCtrl', [ '$scope', '$modalI
 		$scope.feedbackItem = feedbackItem;
 		$scope.oppositeUser = lawPalService.getOppositeUser();
 		$scope.currentUser = lawPalService.getCurrentUser();
+		$scope.allowClose = $scope.currentUser.is_lawyer && $scope.feedbackItem;
 
 		$scope.data = {
 			"comment": null,
-			"complete": false
+			"complete": false,
 		};
 
 		/**

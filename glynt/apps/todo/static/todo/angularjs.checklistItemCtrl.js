@@ -205,9 +205,11 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [
 		};
 
 		$scope.$on("todo.comment.created", function(e, data){
-			debugger;
 			//var todoItem = data.instance;
 			if( data.instance.id === $scope.item.id ) {
+				//
+				$scope.getCheckListItemActivity( $scope.item );
+				/*
 				if(!$scope.item.discussion) {
 					$scope.item.discussion = { 'results': [] };
 				}
@@ -228,6 +230,7 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [
 						'comment': data.content
 					});
 				}
+				*/
 			}
 		});
 

@@ -15,7 +15,7 @@
 {% block body %}
 {% csrf_token %}
 <div class="container dashboard-view" ng-controller="projectsOverviewCtrl">
-    <div class="row">
+    <div class="row ng-cloak">
         <div class="col-12">
             <div class="col-lg-6" ng-repeat="project in data.projects">
                 <div ng-switch="project.currentUserEngagement">

@@ -116,15 +116,58 @@
                             <button class="btn btn-default btn-block" ng-file-drop="onFileSelect($files);" ng-click="uploadSelector()">Upload attachments</button>
                             <hr />
 
-                            <h5>Discussion</h5>
-                            <div ng-repeat="message in item.discussion.results">
+                            <h5>Activity</h5>
+                            <div class="row activity-stream" ng-repeat="activity in item.activity.results | limitTo: 15">
+                                <div class="col-lg-2 text-center">
+                                    <img tooltip="{[{activity.actor.full_name}]}" ng-src="{[{activity.actor.photo}]}" width="48" height="48" />
+                                    <small><cite ng-bind="activity.actor.full_name | firstLetters"></cite></small>
+                                </div>
+                                <div class="col-lg-10">
+                                    <div ng-switch="activity.data.event" tooltip="{[{activity.verb}]}">
+                                        <!--<div class="discussion-list" data-discussion="item.discussion.results" data-tag="tag" data-title="'Discussion'" data-respond-allowed="false" data-show-status="false"></div>//-->
+                                        <span class="content" ng-switch-when="feedbackrequest.opened">
+                                            {[{activity.data.content}]}
+                                            <br /><i class="icon icon-file text-muted"></i> <small ng-bind="activity.data.attachment" class="text-muted"></small>
+                                            <br /><i class="icon icon-reply-all text-muted"></i> <small ng-bind="activity.timestamp | date:'medium'" class="text-muted"></small>
+                                        </span>
+
+                                        <span class="content" ng-switch-when="feedbackrequest.cancelled">
+                                            {[{activity.data.content}]}
+                                            <br /><i class="icon icon-file text-muted"></i> <small ng-bind="activity.data.attachment" class="text-muted"></small>
+                                            <br /><i class="icon icon-remove text-muted"></i> <small ng-bind="activity.timestamp | date:'medium'" class="text-muted"></small>
+                                        </span>
+
+                                        <span class="content" ng-switch-when="todo.status_change">
+                                            {[{activity.data.event_action}]}
+                                            <br /><i class="icon icon-adjust text-muted"></i> <small ng-bind="activity.timestamp | date:'medium'" class="text-muted"></small>
+                                        </span>
+
+                                        <span class="content" ng-switch-when="todo.comment.created">
+                                            {[{activity.data.content}]}
+                                            <br /><i class="icon icon-comment text-muted"></i> <small ng-bind="activity.timestamp | date:'medium'" class="text-muted"></small>
+                                        </span>
+
+                                        <span class="content" ng-switch-when="todo.attachment.created">
+                                            {[{activity.data.attachment}]}
+                                            <br /><i class="icon icon-upload text-muted"></i> <small ng-bind="activity.timestamp | date:'medium'" class="text-muted"></small>
+                                        </span>
+
+                                        <span class="content" ng-switch-default>
+                                            {[{activity.data.content}]}
+                                            <br /><i class="icon icon-comment text-muted"></i> <small ng-bind="activity.timestamp | date:'medium'" class="text-muted"></small>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div ng-repeat="message in item.discussion.xresults">
                                 <!--<div class="discussion-list" data-discussion="item.discussion.results" data-tag="tag" data-title="'Discussion'" data-respond-allowed="false" data-show-status="false"></div>//-->
                                 <p ng-bind="message.comment"></p>
                             </div>
                             <form ng-submit="addComment(item)" class="clearfix">
                                 <div class="form-group">
                                     <label class="sr-only hideme">Comment</label>
-                                    <textarea ng-model="message.comment" class="comment" required></textarea>
+                                    <textarea ng-model="message.comment" class="comment" required maxlength="254"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <button class="btn btn-primary pull-right" ng-disabled="message.sending"><i class="icon icon-spinner icon-spin" ng-show="message.sending"></i> Comment</button>

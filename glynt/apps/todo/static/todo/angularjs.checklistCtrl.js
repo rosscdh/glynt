@@ -677,7 +677,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', '$rootScope', 
 			$scope.loadAttachments( item );
 			$scope.getFeedbackStatus( item );
 			$scope.getCheckListItemDiscussion( item );
-			//$scope.getCheckListItemActivity( item );
+			$scope.getCheckListItemActivity( item );
 			$rootScope.$broadcast('open-sidebar', index);
 		};
 

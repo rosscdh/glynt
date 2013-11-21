@@ -1002,6 +1002,11 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 
 			checkListItemResources.activity.list( options,
 				function success( response ) {
+					if( response && response.results ) {
+						for(var i=0;i<response.results.length;i++) {
+							response.results[i].milliseconds = new Date(response.results[i].timestamp).getTime();
+						}
+					}
 					deferred.resolve(response);
 				},
 				function error( err ) {

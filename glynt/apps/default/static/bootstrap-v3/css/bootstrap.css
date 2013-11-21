@@ -9932,10 +9932,6 @@ footer {
   position: relative;
 }
 
-.block-content {
-  padding-bottom: 40px;
-}
-
 .options-container {
   position: absolute;
   top: 0;
@@ -10012,6 +10008,10 @@ table.checklist tr.selected-true .below-sidebar {
   background-image: url('/static/img/spinner.gif');
   background-position: center;
   background-repeat: no-repeat;
+}
+
+.activity-stream .content {
+  font-size: 14px;
 }
 
 .navbar {
