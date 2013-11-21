@@ -42,7 +42,7 @@
                                         <th class="item-category">
                                             <div class="btn-group">
                                               <button type="button" class="btn table-header" data-toggle="dropdown">
-                                                <span ng-bind="model.filters.category.buttonLabel"></span> <i class="icon-caret-down pull-right"></i>
+                                                <span ng-bind="model.filters.category.buttonLabel" class="pull-left"></span> <i class="icon-caret-down pull-right"></i>
                                               </button>
                                               <ul class="dropdown-menu" role="menu">
                                                 <li>
@@ -107,7 +107,7 @@
                                 <li ng-repeat="attachment in item.attachments | filter: { is_deleted: false }">
                                     <a href="#" ng-click="viewAttachment(attachment)">
                                         <i class="icon icon-file text-muted" ng-show="!attachment.feedbackRequired"></i>
-                                        <i class="icon icon-file text-danger" ng-show="attachment.feedbackRequired"></i>
+                                        <i class="icon icon-comment text-danger" ng-show="attachment.feedbackRequired"></i>
                                         <span ng-bind="attachment.filename"></span> 
                                     </a>
                                 </li>
@@ -143,19 +143,29 @@
                     <div class="container full-dialog-content">
                         
                         <div class="row">
+                            <div class="col-lg-4">
+                                <h4><i class="icon icon-file text-muted"></i> <span ng-bind="attachment.filename"></span></h4>
+                            </div>
                             <div class="col-lg-5">
-                                <h3><i class="icon icon-file text-muted"></i> <span ng-bind="attachment.filename"></span></h3>
+                                <div class="alert alert-info" ng-show="!attachment.has_feedback">
+                                     <button class="btn btn-primary pull-right" ng-disabled="attachModel.deleting" ng-click="getFeedback( attachment, false )" style="margin: -7px -30px;">Get feedback</button>
+                                    No active feedback requests
+                                </div>
+                                <div class="alert alert-warning" ng-show="attachment.feedbackItem.assigned_to_current_user">
+                                    <button class="btn btn-primary pull-right" ng-disabled="attachModel.deleting" ng-click="getFeedback( attachment, true )" style="margin: -7px -30px;">Respond now</button>
+                                    <!--Feedback requested//-->
+                                    <a href="#" ng-bind="attachment.feedbackItem.comment | characters: 40" class="text-warning" ng-click="getFeedback( attachment, true )"></a>
+                                </div>
+                                <div class="alert alert-warning" ng-show="attachment.feedbackItem.by_current_user">
+                                    <button class="btn btn-primary pull-right" ng-disabled="attachModel.deleting" ng-click="cancelRequest( attachment )" ng-show="attachment.feedbackItem.by_current_user" style="margin: -7px -30px;">Cancel Request</button>
+                                    You have requested feedback
+                                </div>
                             </div>
                             <div class="col-lg-3">
-                                <div class="alert alert-warning" ng-show="attachModel.feedbackItem.assigned_to_current_user">Feedback</div>
-                            </div>
-                            <div class="col-lg-4">
-                                <button class="btn btn-link pull-right" ng-click="close()">&times; Return to checklist</button>
-                                <button class="btn btn-primary pull-right" ng-disabled="attachModel.deleting" ng-click="getFeedback( attachment, true )" ng-show="attachModel.feedbackItem.assigned_to_current_user">Respond</button>
-                                <button class="btn btn-primary pull-right" ng-disabled="attachModel.deleting" ng-click="cancelRequest( attachment )" ng-show="attachModel.feedbackItem.by_current_user">Cancel Request</button>
-                                <button class="btn btn-primary pull-right" ng-disabled="attachModel.deleting" ng-click="getFeedback( attachment, false )" ng-show="!attachModel.has_feedback">Get feedback</button>
+                                <button class="btn btn-link pull-right text-muted" ng-click="close()">&times;</button>
+                                
                                 {% if is_lawyer %}
-                                <button class="btn btn-default pull-right" ng-click="delete( attachment )" ng-disabled="attachModel.deleting"><i class="icon icon-spinner icon-spin" ng-show="attachModel.deleting"></i> Delete</button>
+                                <button class="btn btn-default pull-right" ng-click="delete( attachment )" ng-disabled="attachModel.deleting"><i class="icon icon-spinner icon-spin" ng-show="attachModel.deleting"></i> Delete Attachment</button>
                                 {% endif %}
                             </div>
                         </div>
@@ -201,8 +211,10 @@
             'username': '{{ user.username }}',
             'full_name': '{{ user.get_full_name }}',
             'is_authenticated': {{ user.is_authenticated|jsonify }},
+            'is_lawyer': {{ is_lawyer|jsonify }},
             'opposite_user': {
                 'username': {{ opposite_user.username|jsonify }},
+                'full_name': {{ opposite_user.get_full_name|jsonify }},
                 'pk': {{ opposite_user.pk|jsonify }}
             }
         },

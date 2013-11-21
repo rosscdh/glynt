@@ -36,6 +36,7 @@ angular.module('lawpal').controller( 'attachmentCtrl', [
 		};
 
 		$scope.getFeedback = function( attachment, isResponse ) {
+			var feedbackItem = $scope.attachment.feedbackItem;
 			var modalInstance = $modal.open({
 				"windowClass": "modal modal-show",
 				"templateUrl": "template/lawpal/attachment/feedback.html",
@@ -44,21 +45,27 @@ angular.module('lawpal').controller( 'attachmentCtrl', [
 				"resolve": {
 					"attachment": function(){
 						return attachment;
+					},
+					'feedbackItem': function(){
+						return feedbackItem;
 					}
 				}
 			});
 
 			modalInstance.result.then(
 				function( data ) {
-					$scope.getFeedbackAction( attachment, data.comment, isResponse );
+					$scope.getFeedbackAction( attachment, data, isResponse );
 				}
 			);
 		};
 
-		$scope.getFeedbackAction = function( attachment, comment, isResponse ) {
-			var feedbackItem = isResponse?$scope.attachModel.feedbackItem:null;
-			var status = isResponse?0:3;
-			lawPalService.feedbackRequest( attachment, comment, feedbackItem ).then(
+		$scope.getFeedbackAction = function( attachment, feedbackData, isResponse ) {
+			var feedbackItem = isResponse?$scope.attachment.feedbackItem:null;
+			var comment = feedbackData.comment;
+			var status = 0; /*isResponse?3:0;*/ // Set status to 3 is this is a reply
+			status = feedbackData.complete?4:status; // if completed set status to 4
+
+			lawPalService.feedbackRequest( attachment, comment, feedbackItem, status ).then(
 				function success( /*response*/ ) {
 					//console.log( 'response', response );
 					toaster.pop("success", "Feedback sent");
@@ -71,7 +78,7 @@ angular.module('lawpal').controller( 'attachmentCtrl', [
 		};
 
 		$scope.cancelRequest = function( attachment, comment ) {
-			var feedbackItem = $scope.attachModel.feedbackItem;
+			var feedbackItem = $scope.attachment.feedbackItem;
 			lawPalService.feedbackRequest( attachment, comment, feedbackItem, 4 ).then(
 				function success( /*response*/ ) {
 					//console.log( 'response', response );
@@ -91,8 +98,8 @@ angular.module('lawpal').controller( 'attachmentCtrl', [
 					if( response.results && response.results.length>0 ) {
 						var currentFeedbackItem = response.results[0];
 						if(currentFeedbackItem.status<4) {
-							$scope.attachModel.has_feedback = true;
-							$scope.attachModel.feedbackItem = currentFeedbackItem;
+							$scope.attachment.has_feedback = true;
+							$scope.attachment.feedbackItem = currentFeedbackItem;
 						}
 					}
 				},
@@ -102,5 +109,7 @@ angular.module('lawpal').controller( 'attachmentCtrl', [
 			);
 		};
 
-		$scope.getFeedbackStatus( $scope.attachment );
+		//$scope.getFeedbackStatus( $scope.attachment );
+
+		
 }]);

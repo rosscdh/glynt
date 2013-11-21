@@ -9973,6 +9973,10 @@ table.checklist tr .below-sidebar {
 
 }
 
+table.checklist .dropdown-menu {
+  font-size: 14px;
+}
+
 table.checklist tr.selected-true {
   background-color: #f5f5f5;
 }

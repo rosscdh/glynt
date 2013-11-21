@@ -106,9 +106,9 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [
 						$scope.saveItem( item );
 					}
 				},
-				function(result) { /* Error */
+				function(/*result*/) { /* Error */
 					/* Update model */
-					console.error(result);
+					//console.error(result);
 				}
 			);
 		};
@@ -117,10 +117,10 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [
 			var item = $scope.item;
 			lawPalService.closeChecklistItem(item).then(
 				function success() {
-					console.log('Closed', response);
+					//console.log('Closed', response);
 				},
 				function error() {
-					console.log('Error');
+					//console.log('Error');
 				}
 			);
 		};
@@ -139,11 +139,10 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [
 				'multiple': true
 			  },
 			  function(InkBlob){
-				console.log(JSON.stringify(InkBlob));
 				if( InkBlob && angular.isArray(InkBlob) ) {
 					angular.forEach( InkBlob, function( ib ){
-						lawPalService.localUpload( ib, data, function( err, response ) {
-							console.log("error", err, response );
+						lawPalService.localUpload( ib, data, function(/* err, response*/ ) {
+							/*console.log("error", err, response );*/
 						});
 					});
 				}
@@ -165,7 +164,6 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [
 							/* Wait for Pusher confirmation */
 						},
 						function error(err) {
-							console.log(err);
 							toaster.pop("error", "Unable to upload file", file.name );
 						}
 					);
@@ -176,7 +174,6 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [
 		};
 
 		$scope.viewAttachment = function( attachment ) {
-			console.log( attachment );
 			//$("#crocodoc").attr("src", attachment.crocdoc_url);
 			$scope.model.selectedAttachments = [];
 			attachment.pageHeight = $(window).height() - 150;
@@ -194,7 +191,7 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [
 			//debugger;
 			if( typeof(data)==="object" && data.todo == $scope.item.name && !data.processed ) {
 				data.processed = true;
-				console.log("incrementing", $scope.item.slug, data.slug );
+				//console.log("incrementing", $scope.item.slug, data.slug );
 				$scope.item.num_attachments = $scope.item.num_attachments?$scope.item.num_attachments+1:1;
 				toaster.pop("success", data.todo || "Attachment", "attached: " + data.attachment );
 				$scope.$apply();
@@ -204,4 +201,82 @@ angular.module('lawpal').controller( 'checklistItemCtrl', [
 				}, 2000);
 			}
 		});
+
+		$scope.$on("feedbackrequest.opened", function( e, data ) {
+			//data.assigned;
+			$scope.updateFeedbackStatus( data );
+		});
+
+		$scope.$on("feedbackrequest.cancelled", function( e, data ) {
+			//data.assigned;
+			$scope.updateFeedbackStatus( data );
+		});
+
+		$scope.$on("todo.status_change", function( e, data ) {
+			//data.assigned;
+			$scope.updateFeedbackStatus( data, true );
+		});
+
+		$scope.updateFeedbackStatus = function( data, cancel ) {
+			var item = $scope.item;
+			var attachments = $scope.item.attachments;
+			var attachment;
+			var feedbackItem;
+			// Is the message for this todo item
+			if( data.instance.slug === $scope.item.slug ) {
+				// Does the filename  match the event data			
+
+					//console.log( data, $scope.attachment );
+					attachment = findAttachment( attachments, data.attachment );
+					if( attachment) {
+						// Update status
+						lawPalService.feedbackStatus( attachment ).then(
+							function success( response ) {
+								if(response.results) {
+									for(var i=0;i<response.results.length;i++) {
+										feedbackItem = response.results[i];
+							
+										if(feedbackItem.status<4 && feedbackItem.assigned_to_current_user ) {
+											//attachment = findAttachment(feedbackItem);
+											if(attachment) {
+												attachment.feedbackRequired = true;
+												attachment.has_feedback = true;
+												attachment.feedbackItem = feedbackItem;
+											}
+										} else if (feedbackItem.status<4) {
+											if(attachment) {
+												attachment.has_feedback = true;
+												attachment.feedbackRequired = false;
+												attachment.feedbackItem = feedbackItem;
+											}
+										}
+									}
+								}
+							},
+							function error(/*err*/) {
+
+							}
+						);
+
+						if( cancel ) {
+							attachment.feedbackRequired = false;
+							attachment.has_feedback = false;
+							attachment.feedbackItem = {};
+						}
+					}
+			}
+		};
+
+		function findAttachment( attachments, fileName ) {
+			if(attachments) {
+				for(var j=0;j<attachments.length;j++) {
+					if(attachments[j].filename===fileName) {
+						return attachments[j];
+					}
+				}
+			}
+			
+			return null;
+		}
+
 }]);

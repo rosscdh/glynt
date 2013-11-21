@@ -726,6 +726,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', '$rootScope', 
 			};
 
 			clearFeedbackRequired();
+			window.item = item;
 
 			lawPalService.feedbackStatus( options ).then(
 				function success( response ) {
@@ -734,10 +735,20 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', '$rootScope', 
 						var feedbackItems = response.results;
 						for(var i=0;i<feedbackItems.length;i++) {
 							feedbackItem = feedbackItems[i];
+							
 							if(feedbackItem.status<4 && feedbackItem.assigned_to_current_user ) {
 								attachment = findAttachment(feedbackItem);
 								if(attachment) {
 									attachment.feedbackRequired = true;
+									attachment.has_feedback = true;
+									attachment.feedbackItem = feedbackItem;
+								}
+							} else if (feedbackItem.status<4) {
+								attachment = findAttachment(feedbackItem);
+								if(attachment) {
+									attachment.has_feedback = true;
+									attachment.feedbackRequired = false;
+									attachment.feedbackItem = feedbackItem;
 								}
 							}
 						}
@@ -749,12 +760,14 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', '$rootScope', 
 			);
 
 			function findAttachment( feebackItem ) {
-				for(var j=0;j<item.attachments.length;j++) {
-					if(item.attachments[j].id===feebackItem.attachment) {
-						return item.attachments[j];
+				if( item ) {
+					for(var j=0;j<item.attachments.length;j++) {
+						if(item.attachments[j].id===feebackItem.attachment) {
+							return item.attachments[j];
+						}
 					}
+					return null;
 				}
-				return null;
 			}
 
 			function clearFeedbackRequired(  ) {
