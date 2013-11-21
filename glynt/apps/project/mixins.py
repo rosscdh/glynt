@@ -4,6 +4,8 @@ Mixins that relate to the Project app
 """
 from collections import OrderedDict
 
+from glynt.apps.todo.models import ToDo
+
 
 class ProjectRulezMixin(object):
     """
@@ -68,3 +70,20 @@ class ProjectCategoriesMixin(object):
 
         # select set and update is_deleted
         self.todo_set.filter(category__in=delete_categories).update(is_deleted=True)
+
+
+class ProjectActivityMixin(object):
+    """
+    A Mixin to collect the project and its related items "action" objects
+    1. project
+    2. todo items (and by association their attachments, 
+       attachments comments is setup to comment on the todo item and not the attachment itself)
+    """
+    def activity_stream(self, **kwargs):
+        from actstream.models import Action
+        # return the combined queryset of the selection for the current project actions
+        # as well as the todo items related to the project
+        return Action.objects.prefetch_related('actor').filter(target_object_id=self.pk,
+                                     target_content_type=self.content_type(), **kwargs) | \
+                Action.objects.prefetch_related('actor').filter(target_object_id__in=[p[0] for p in self.todo_set.all().values_list('pk')],
+                                     target_content_type=ToDo.content_type(), **kwargs)
