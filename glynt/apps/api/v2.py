@@ -8,7 +8,8 @@ from glynt.apps.customer.api_v2 import (UserViewSet,)
 from glynt.apps.project.api_v2 import (ProjectViewSet, DiscussionListView,
                                        TeamListView, DiscussionDetailView,
                                        DiscussionTagView, ProjectActivityView,)
-from glynt.apps.todo.api_v2 import (AttachmentViewSet, ToDoDiscussionDetailView,
+from glynt.apps.todo.api_v2 import (AttachmentViewSet, ToDoActivityView,
+                                    ToDoDiscussionDetailView,
                                     ToDoFeedbackRequestView)
 
 
@@ -28,6 +29,9 @@ project_urlpatterns = patterns('',
 )
 
 project_todo_urlpatterns = patterns('',
+    url(r'^project/(?P<uuid>.+)/todo/(?P<slug>.+)/activity/$',
+                                              ToDoActivityView.as_view(actions={'get': 'list'}),
+                                              name='project_todo_activity'),
     url(r'^project/(?P<uuid>.+)/todo/(?P<slug>.+)/attachment/$',
                                               AttachmentViewSet.as_view(actions={'get': 'list'}),
                                               name='project_todo_attachment'),
@@ -59,7 +63,7 @@ router.register(r'project', ProjectViewSet)
 router.register(r'user', UserViewSet)
 
 
-urlpatterns = project_urlpatterns + project_todo_urlpatterns + project_discussion_urlpatterns
+urlpatterns = project_todo_urlpatterns + project_discussion_urlpatterns + project_urlpatterns
 
 # Main urlpatterns used by django
 urlpatterns += router.urls

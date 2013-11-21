@@ -45,6 +45,12 @@ class ToDoActivityView(ModelViewSet):
     queryset = Action.objects.prefetch_related().all()
     serializer_class = ProjectActivitySerializer
 
+    def get_queryset(self):
+        project = get_object_or_404(Project, uuid=self.kwargs.get('uuid'))  # ensure that we have the project
+        todo = get_object_or_404(ToDo, project=project, slug=self.kwargs.get('slug'))  # ensure that we have the project
+
+        return todo.activity_stream()
+
 
 class ToDoDiscussionDetailView(ModelViewSet):
     queryset = ThreadedComment.objects.select_related('user', 'tagged_items__tag').all().order_by('-id')
