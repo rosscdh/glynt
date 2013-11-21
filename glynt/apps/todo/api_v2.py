@@ -2,12 +2,14 @@
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import PermissionDenied
 
+from actstream.models import Action
 from rest_framework.viewsets import ModelViewSet
 
 from threadedcomments.models import ThreadedComment
 
 from glynt.apps.project.models import Project
-from glynt.apps.project.serializers import (DiscussionThreadSerializer,)
+from glynt.apps.project.serializers import (DiscussionThreadSerializer,
+                                            ProjectActivitySerializer,)
 
 from .serializers import AttachmentSerializer, FeedbackRequestSerializer
 from .models import ToDo, Attachment, FeedbackRequest
@@ -37,6 +39,11 @@ class AttachmentViewSet(ModelViewSet):
 
     def destroy(self, request, pk=None):
         raise PermissionDenied
+
+
+class ToDoActivityView(ModelViewSet):
+    queryset = Action.objects.prefetch_related().all()
+    serializer_class = ProjectActivitySerializer
 
 
 class ToDoDiscussionDetailView(ModelViewSet):

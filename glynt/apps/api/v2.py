@@ -7,7 +7,7 @@ from glynt.apps.customer.api_v2 import (UserViewSet,)
 
 from glynt.apps.project.api_v2 import (ProjectViewSet, DiscussionListView,
                                        TeamListView, DiscussionDetailView,
-                                       DiscussionTagView, )
+                                       DiscussionTagView, ProjectActivityView,)
 from glynt.apps.todo.api_v2 import (AttachmentViewSet, ToDoDiscussionDetailView,
                                     ToDoFeedbackRequestView)
 
@@ -17,7 +17,11 @@ router = routers.DefaultRouter()
 
 
 # setup Custom urls
-project_team_urlpatterns = patterns('',
+project_urlpatterns = patterns('',
+    url(r'^project/(?P<uuid>.+)/activity/$',
+                                              ProjectActivityView.as_view(),
+                                              name='project_activity'),
+
     url(r'^project/(?P<uuid>.+)/team/$',
                                               TeamListView.as_view(),
                                               name='project_team'),
@@ -55,7 +59,7 @@ router.register(r'project', ProjectViewSet)
 router.register(r'user', UserViewSet)
 
 
-urlpatterns = project_team_urlpatterns + project_todo_urlpatterns + project_discussion_urlpatterns
+urlpatterns = project_urlpatterns + project_todo_urlpatterns + project_discussion_urlpatterns
 
 # Main urlpatterns used by django
 urlpatterns += router.urls

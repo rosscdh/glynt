@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 
 from rest_framework import serializers
+from actstream.models import Action
 
 from .models import Project, ProjectLawyer
 from glynt.apps.todo.views import ToDoCountMixin
@@ -130,6 +131,28 @@ class TeamSerializer(serializers.Serializer):
 
             for u in participants:
                 yield UserSerializer(u).data
+
+
+class ProjectActivitySerializer(serializers.ModelSerializer):
+    url = serializers.SerializerMethodField('get_url')
+    actor = serializers.SerializerMethodField('get_actor')
+
+    class Meta:
+        model = Action
+        queryset = Action.objects.all().order_by('-id')
+        fields = ('id', 'url', 'verb', 'description', 'timestamp', 'actor', 'data')
+
+    def get_url(self, obj):
+        return getattr(obj.target, 'get_absolute_url', None)
+
+    def get_actor(self, obj):
+        user = obj.actor
+        return {
+                    'pk': user.pk,
+                    'username': user.username,
+                    'full_name': user.get_full_name(),
+                    'photo': user.profile.get_mugshot_url()
+                }
 
 
 class DiscussionSerializer(GetContentObjectByTypeAndPkMixin, serializers.ModelSerializer):
