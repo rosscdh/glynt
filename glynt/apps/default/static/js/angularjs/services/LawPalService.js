@@ -3,7 +3,7 @@
  * @author <a href="mailtolee.j.sinclair@gmail.com">Lee Sinclair</a>
  * Date: 2 Sept 2013
  */
-angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource', '$http', 'multiProgressService', function ($q, $timeout, $resource, $http, multiProgressService) { /* Load the LawPal local interface */
+angular.module('lawpal').factory("lawPalService", ['$q', '$rootScope', '$timeout', '$resource', '$http', 'multiProgressService', function ($q, $rootScope, $timeout, $resource, $http, multiProgressService) { /* Load the LawPal local interface */
 	'use strict';
 	var lawPalInterface = LawPal;
 	var userType = 'is_customer';
@@ -30,8 +30,7 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 			/* This is done to ensure the content type of PATCH is sent through */
 			{ 'save': { 'method': 'PATCH', headers: { 'Content-Type': 'application/json' }, 'isArray': true }
 			}),
-		'doc': $resource('/api/v1/project/:uuid/document/:documentId/sign/', {},
-			/* This is done to ensure the content type of PATCH is sent through */
+		'doc': $resource('/api/v2/project/:uuid/document/:documentId/sign/', {},
 			{ 'requestSign': { 'method': 'POST', headers: { 'Content-Type': 'application/json' }, 'isArray': true }
 			}),
 		'attachments':
