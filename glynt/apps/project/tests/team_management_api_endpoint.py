@@ -79,14 +79,14 @@ class ProjectTeamManagementApiEndpointTest(BaseLawyerCustomerProjectCaseMixin):
         # test team item 0 keys (customer)
         for t in json_response['team']:
             # test keys are correct
-            self.assertEqual([u'username', u'first_name', u'last_name', u'is_customer', u'photo', u'email', u'is_lawyer', u'full_name', u'id'], t.keys())
+            self.assertEqual([u'username', u'is_customer', u'photo', u'email', u'is_lawyer', u'full_name', u'id'], t.keys())
 
             # test for values
             if t.get('is_customer') is True:
-                self.assertEqual([u'customer', u'Customer', u'A', True, u'/static/img/default_avatar.png', u'customer+test@lawpal.com', False, u'Customer A', self.customer_user.pk], t.values())
+                self.assertEqual([u'customer', True, u'/static/img/default_avatar.png', u'customer+test@lawpal.com', False, u'Customer A', self.customer_user.pk], t.values())
 
             elif t.get('is_lawyer') is True:
-                self.assertEqual([u'lawyer', u'Lawyer', u'A', False, u'/static/img/default_avatar.png', u'lawyer+test@lawpal.com', True, u'Lawyer A', self.lawyer_user.pk], t.values())        
+                self.assertEqual([u'lawyer', False, u'/static/img/default_avatar.png', u'lawyer+test@lawpal.com', True, u'Lawyer A', self.lawyer_user.pk], t.values())        
 
     def test_invalid_PATCH_object(self):
         resp = self.client.patch(path=self.url, data=self.invalid_patch_object(team_ids=[1, 2, 3, 4, 5]), content_type='application/json')
@@ -120,8 +120,8 @@ class ProjectTeamManagementApiEndpointTest(BaseLawyerCustomerProjectCaseMixin):
         # test item 2 keys (participant)
         team = json_response['team'][2]
 
-        self.assertEqual([u'username', u'first_name', u'last_name', u'is_customer', u'photo', u'email', u'is_lawyer', u'full_name', u'id'], team.keys())
-        self.assertEqual([u'some-random-monkey', u'Some', u'RandomMonkey', False, u'/static/img/default_avatar.png', u'invited-participant@lawpal.com', False, u'Some RandomMonkey', new_user.pk], team.values())
+        self.assertEqual([u'username', u'is_customer', u'photo', u'email', u'is_lawyer', u'full_name', u'id'], team.keys())
+        self.assertEqual([u'some-random-monkey', False, u'/static/img/default_avatar.png', u'invited-participant@lawpal.com', False, u'Some RandomMonkey', new_user.pk], team.values())
 
         # test participant removal
         team = [i['id'] for i in json_response['team']]

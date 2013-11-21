@@ -6,14 +6,16 @@ from django_extensions.db.fields import CreationDateTimeField, ModificationDateT
 from uuidfield import UUIDField
 from jsonfield import JSONField
 
-from glynt.apps.project import PROJECT_STATUS, PROJECT_LAWYER_STATUS
-from glynt.apps.project.managers import DefaultProjectManager, ProjectLawyerManager
-from glynt.apps.project.mixins import ProjectCategoriesMixin, ProjectRulezMixin
+from . import PROJECT_STATUS, PROJECT_LAWYER_STATUS
+from .managers import DefaultProjectManager, ProjectLawyerManager
+from .mixins import (ProjectCategoriesMixin,
+                     ProjectRulezMixin,
+                     ProjectActivityMixin)
 
 from rulez import registry as rulez_registry
 
 
-class Project(ProjectCategoriesMixin, ProjectRulezMixin, models.Model):
+class Project(ProjectCategoriesMixin, ProjectRulezMixin, ProjectActivityMixin, models.Model):
     """ Base Project object
     Stores initial project details
     """

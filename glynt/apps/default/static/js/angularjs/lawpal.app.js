@@ -1,4 +1,4 @@
-var lawPalApp = angular.module('lawpal', [ 'ngResource', 'ui.bootstrap', 'Pusher', 'toaster', 'ui.sortable' ]);
+var lawPalApp = angular.module('lawpal', [ 'ngResource', 'ui.bootstrap', 'Pusher', 'toaster', 'ui.sortable', 'angularFileUpload', 'multi-progress-bar', 'flexyLayout' ]);
 
 // Filter for categories
 lawPalApp.filter( 'checkListCategoryFilter', function(){
@@ -46,6 +46,25 @@ lawPalApp.filter('openStatus', function () {
 					return item.status <= statusLevel;
 				}
 			);
+		}
+		return filtered;
+	};
+});
+
+lawPalApp.filter('category', function () {
+	'use strict';
+	return function ( items, catLabel ) {
+		var filtered = [];
+		if( angular.isArray(items) ) {
+			if(catLabel) {
+				filtered = items.filter(
+					function(item) {
+						return item.category === catLabel;
+					}
+				);
+			} else {
+				filtered = items;
+			}
 		}
 		return filtered;
 	};

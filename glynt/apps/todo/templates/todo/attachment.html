@@ -55,7 +55,11 @@
 </div>
 
 <br />
-<iframe id="crocdoc-viewer-iframe" src="{{ view_url }}" width="100%" height="550px" frameborder="none" style="margin-top:5px;"></iframe>
+{% if view_url %}
+    <iframe id="crocdoc-viewer-iframe" src="{{ view_url }}" width="100%" height="550px" frameborder="none" style="margin-top:5px;"></iframe>
+{% else %}
+    <p>Sorry you dont have permission to view this document</p>
+{% endif %}
 
 <script type="text/javascript">
 $(document).ready(function () {

@@ -14,83 +14,231 @@
 
 {% block body %}
     {% csrf_token %}
+<!-- 
+    {{ opposite_user }}
+    @lee: NB when a project has no lawyer assigned to it (active lawyer) then this will be None
+-->
     <!-- start: AngularJS: checklist controller //-->
-    <toaster-container toaster-options="{'time-out': 3000}"></toaster-container>
     <div class="container checklist-view" ng-controller="checklistCtrl" ng-init="initalise( { 'project': { 'uuid': '{{ project.uuid }}' }, 'pusher': { 'key':'{{ PUSHER_KEY }}', 'channel':'{{ project.pusher_id }}' } } )">
         <div class="row">
-            <div class="col col-lg-3">
-                <div class="sidebar" data-spy="affix" data-offset-top="80">
-                    <div class="subnav">
-                        <!-- {% if is_lawyer %}ui-sortable="config.categorySort" ng-model="categories"{% endif %} //-->
-                        <ul id="checklist-categories" class="nav nav-pills nav-stacked" {% if is_lawyer %}ui-sortable="config.categorySort" ng-model="categories"{% endif %}>
-                            <li ng-repeat="category in categories" ng-class="{'active':$first}" class="reveal-child">
-                                <a href="#{[{category.info.slug}]}" class="category-{[{category.info.slug}]}">
-                                    <span ng-bind-html-unsafe="category.info.label"></span>
-                                    <span class="num_assigned_to_user badge assigned pull-right" ng-bind="assignedPerCategory(category.info)" xng-bind="category.numAssigned"></span>
-                                    {% if is_lawyer %}
-                                    <i class="glyphicon glyphicon-remove text-danger pull-right category-remove reveal-me" ng-show="assignedPerCategory(category.info)==0" ng-click="removeCategory(category)"></i>
-                                    <i class="icon icon-move"></i>
-                                    {% endif %}
-                                </a>
-                            </li>
-                            {% if is_lawyer %}
-                                <li>
-                                    <button type="button" class="btn btn-link create-category" ng-click="createCategory( category.info )">
-                                        <i class="glyphicon glyphicon-plus-sign"></i> Create new category
-                                    </button>
-                                </li>
-                            {% endif %}
-                        </ul>
-                    </div>
-                </div>
-            </div>
+            <div class="col col-lg-12">
+                <flexy-layout class="main-layout">
+                    <block-container>
+                        <!-- TODO list //-->
+                        <div id="list-items">
+                                <table class="table checklist">
+                                    <tr class="table-header">
+                                        <th class="item-info table-header">
+                                            Name
+                                            {% if is_lawyer %}
+                                            <!-- Add new checklist item //-->
+                                            <button type="button" class="btn btn-link create-item pull-right" title="Create new item" data-tooltip="Create new checklist item" ng-click="createItem( model.filters.category )">
+                                                    <i class="glyphicon glyphicon-plus-sign"></i> New checklist item
+                                            </button>
+                                            {% endif %}
+                                        </th>
+                                        <th class="item-details table-header">Attachments</th>
+                                        <th class="item-status table-header">Status</th>
+                                        <th class="item-category">
+                                            <div class="btn-group">
+                                              <button type="button" class="btn table-header" data-toggle="dropdown">
+                                                <span ng-bind="model.filters.category.buttonLabel" class="pull-left"></span> <i class="icon-caret-down pull-right"></i>
+                                              </button>
+                                              <ul class="dropdown-menu" role="menu">
+                                                <li>
+                                                    <a href="#{[{category.slug}]}" class="category-{[{category.slug}]}" ng-click="categoryFilter(null)">
+                                                        All categories
+                                                    </a>
+                                                </li>
+                                                <li ng-repeat="category in model.categories" class="reveal-child">
+                                                    <a href="#{[{category.slug}]}" class="category-{[{category.slug}]}" ng-click="categoryFilter(category)">
+                                                        <span ng-bind-html-unsafe="category.label"></span>
+                                                        <span class="num_assigned_to_user badge assigned pull-right" ng-bind="assignedPerCategory(category)" xng-bind="category.numAssigned"></span>
+                                                    </a>
+                                                </li>
+                                                {% if is_lawyer %}
+                                                <li>
+                                                    <button type="button" class="btn btn-link create-category" ng-click="createCategory( category.info )">
+                                                        <i class="glyphicon glyphicon-plus-sign"></i> Create new category
+                                                    </button>
+                                                </li>
+                                                {% endif %}
+                                              </ul>
+                                            </div>
 
-            <div class="col col-lg-9">
-                <div id="list-items">
-
-                        <section ng-repeat="category in categories">
-                            <div id="{[{category.info.slug}]}" class="checklist-header clearfix">
-                                <h4 class="pull-left" ng-bind-html-unsafe="category.info.label"></h4>
-
-                                {% if is_lawyer %}
-                                <!-- Add new checklist item //-->
-                                <button type="button" class="btn btn-link pull-right create-item" title="Create new item" data-tooltip="Create new checklist item" ng-click="createItem( category.info )">
-                                        <i class="glyphicon glyphicon-plus-sign"></i>
-                                </button>
-                                {% endif %}
-
-                                <table class="table table-striped checklist">
-                                    <tbody {% if is_lawyer %}ui-sortable="config.itemSort" ng-model="category.items"{% endif %}>
-                                        <tr ng-repeat="item in category.items | filter: { is_deleted: model.showDeletedItems }" class="item state-{[{getItemStatus(item)}]} {[{pendingFeedback(item)}]}" ng-controller="checklistItemCtrl">
+                                        </th>
+                                        {% if is_lawyer %}
+                                        <!--<th class="item-meta table-header">Actions</th>//-->
+                                        {% endif %}
+                                    </tr>
+                                    <tbody {% if is_lawyer %}ui-sortable="config.itemSort" ng-model="model.workingChecklist"{% endif %}>
+                                        <tr ng-repeat="item in model.workingChecklist" class="item state-{[{getItemStatus(item)}]} {[{pendingFeedback(item)}]} selected-{[{item.selected}]}" ng-controller="checklistItemCtrl" ng-file-drop="onFileSelect($files);">
                                             <!-- Checklist item status //-->
+                                            <td class="item-info" ng-click="selectChecklistItem( item, 1 )" ng-bind="item.name"></td>
+                                            <td class="item-details" checklist-item-details></td>
                                             <td class="item-status" ng-click="viewItem( item )">
                                                 <i class="icon-state-{[{getItemStatus(item)}]}" data-tooltip="{[{getItemDisplayStatus(item)}]}"></i>
                                             </td>
-                                            <td class="item-info" checklist-item-link ng-click="viewItem( item )"></td>
-                                            <td class="item-details" checklist-item-details></td>
+                                            <td class="item-category below-sidebar" ng-bind="item.category"></td>
                                             {% if is_lawyer %}
                                             <!-- Checklist item actions //-->
-                                            <td class="item-meta" checklist-item-actions></td>
+                                            <!--<td class="item-meta below-sidebar" checklist-item-actions></td>//-->
                                             {% endif %}
                                         </tr>
                                     </tbody>
                                 </table>
-                            </div>
-                        </section>
+                        </div>
+                        <!-- TODO: end //-->
+                    </block-container>
+                    <block-container init="35" class="options-container ng-cloak" max-width="350">
+                        <div ng-repeat="item in model.workingChecklist | filter: { 'selected': true }" ng-controller="checklistItemCtrl" class="item-container">
+                            <h4 class="item-info" checklist-item-link></h4>
+                            {% if is_lawyer %}
+                            <!-- Checklist item actions //-->
+                            <div class="item-meta" checklist-item-actions data-show-label="true" data-show-move="false"></div>
+                            <button ng-click="setStatusClosed( item )" class="btn btn-default" ng-show="item.status<4">Close item</button>
+                            {% endif %}
+                            <!--<button ng-click="viewItem( item )" class="btn btn-primary">Open</button>//-->
+                            <hr />
 
+                            <h5>Attachments</h5>
+                            <span ng-show="item.loadingAttachments" class="text-muted"><i class="icon icon-spinner icon-spin"></i> Loading attachments</span>
+                            <ul class="nav nav-pills nav-stacked">
+                                <li ng-repeat="attachment in item.attachments | filter: { is_deleted: false }">
+                                    <a href="#" ng-click="viewAttachment(attachment)">
+                                        <i class="icon icon-file text-muted" ng-show="!attachment.feedbackRequired"></i>
+                                        <i class="icon icon-comment text-danger" ng-show="attachment.feedbackRequired"></i>
+                                        <span ng-bind="attachment.filename"></span> 
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="drop-pane" ng-file-drop="onFileSelect($files);" ng-click="uploadSelector()">Drop files here</div>
+                            <button class="btn btn-default btn-block" ng-file-drop="onFileSelect($files);" ng-click="uploadSelector()">Upload attachments</button>
+                            <hr />
+
+                            <h5>Activity</h5>
+                            <div class="row activity-stream" ng-repeat="activity in item.activity.results | limitTo: 15">
+                                <div class="col-lg-2 text-center">
+                                    <img tooltip="{[{activity.actor.full_name}]}" ng-src="{[{activity.actor.photo}]}" width="48" height="48" />
+                                    <small><cite ng-bind="activity.actor.full_name | firstLetters"></cite></small>
+                                </div>
+                                <div class="col-lg-10">
+                                    <div ng-switch="activity.data.event" tooltip="{[{activity.verb}]}">
+                                        <!--<div class="discussion-list" data-discussion="item.discussion.results" data-tag="tag" data-title="'Discussion'" data-respond-allowed="false" data-show-status="false"></div>//-->
+                                        <span class="content" ng-switch-when="feedbackrequest.opened">
+                                            {[{activity.data.content}]}
+                                            <br /><i class="icon icon-file text-muted"></i> <small ng-bind="activity.data.attachment" class="text-muted"></small>
+                                            <br /><i class="icon icon-reply-all text-muted"></i> <small ng-bind="activity.timestamp | date:'medium'" class="text-muted"></small>
+                                        </span>
+
+                                        <span class="content" ng-switch-when="feedbackrequest.cancelled">
+                                            {[{activity.data.content}]}
+                                            <br /><i class="icon icon-file text-muted"></i> <small ng-bind="activity.data.attachment" class="text-muted"></small>
+                                            <br /><i class="icon icon-remove text-muted"></i> <small ng-bind="activity.timestamp | date:'medium'" class="text-muted"></small>
+                                        </span>
+
+                                        <span class="content" ng-switch-when="todo.status_change">
+                                            {[{activity.data.event_action}]}
+                                            <br /><i class="icon icon-adjust text-muted"></i> <small ng-bind="activity.timestamp | date:'medium'" class="text-muted"></small>
+                                        </span>
+
+                                        <span class="content" ng-switch-when="todo.comment.created">
+                                            {[{activity.data.content}]}
+                                            <br /><i class="icon icon-comment text-muted"></i> <small ng-bind="activity.timestamp | date:'medium'" class="text-muted"></small>
+                                        </span>
+
+                                        <span class="content" ng-switch-when="todo.attachment.created">
+                                            {[{activity.data.attachment}]}
+                                            <br /><i class="icon icon-upload text-muted"></i> <small ng-bind="activity.timestamp | date:'medium'" class="text-muted"></small>
+                                        </span>
+
+                                        <span class="content" ng-switch-default>
+                                            {[{activity.data.content}]}
+                                            <br /><i class="icon icon-comment text-muted"></i> <small ng-bind="activity.timestamp | date:'medium'" class="text-muted"></small>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div ng-repeat="message in item.discussion.xresults">
+                                <!--<div class="discussion-list" data-discussion="item.discussion.results" data-tag="tag" data-title="'Discussion'" data-respond-allowed="false" data-show-status="false"></div>//-->
+                                <p ng-bind="message.comment"></p>
+                            </div>
+                            <form ng-submit="addComment(item)" class="clearfix">
+                                <div class="form-group">
+                                    <label class="sr-only hideme">Comment</label>
+                                    <textarea ng-model="message.comment" class="comment" required maxlength="254"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-primary pull-right" ng-disabled="message.sending"><i class="icon icon-spinner icon-spin" ng-show="message.sending"></i> Comment</button>
+                                </div>
+                            </form>
+                            <p>&nbsp;</p><p>&nbsp;</p>
+                        </div>
+                        <collapse class="handle" index="1" collapsed="true"></collapse>
+                    </block-container>
+                </flexy-layout>
+        </div>
+
+    </div>  
+        <toaster-container toaster-options="{'time-out': 3000}"></toaster-container>
+        <div position="bottom" class="multi-progress"></div>
+
+        <div class="full-dialog-container ng-cloak">
+            <div ng-repeat="attachment in model.selectedAttachments" ng-controller="attachmentCtrl">
+                <div class="full-dialog-underlay"></div>
+                <div class="full-dialog">
+                    <div class="container full-dialog-content">
+                        
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <h4><i class="icon icon-file text-muted"></i> <span ng-bind="attachment.filename"></span></h4>
+                            </div>
+                            <div class="col-lg-5">
+                                <div class="alert alert-info" ng-show="!attachment.has_feedback">
+                                     <button class="btn btn-primary pull-right" ng-disabled="attachModel.deleting" ng-click="getFeedback( attachment, false )" style="margin: -7px -30px;">Get feedback</button>
+                                    No active feedback requests
+                                </div>
+                                <div class="alert alert-warning" ng-show="attachment.feedbackItem.assigned_to_current_user">
+                                    <button class="btn btn-primary pull-right" ng-disabled="attachModel.deleting" ng-click="getFeedback( attachment, true )" style="margin: -7px -30px;">Respond now</button>
+                                    <!--Feedback requested//-->
+                                    <a href="#" ng-bind="attachment.feedbackItem.comment | characters: 40" class="text-warning" ng-click="getFeedback( attachment, true )"></a>
+                                </div>
+                                <div class="alert alert-warning" ng-show="attachment.feedbackItem.by_current_user">
+                                    <button class="btn btn-primary pull-right" ng-disabled="attachModel.deleting" ng-click="cancelRequest( attachment )" ng-show="attachment.feedbackItem.by_current_user" style="margin: -7px -30px;">Cancel Request</button>
+                                    You have requested feedback
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <button class="btn btn-link pull-right text-muted" ng-click="close()">&times;</button>
+                                
+                                {% if is_lawyer %}
+                                <button class="btn btn-default pull-right" ng-click="delete( attachment )" ng-disabled="attachModel.deleting"><i class="icon icon-spinner icon-spin" ng-show="attachModel.deleting"></i> Delete Attachment</button>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <iframe style="width:100%; height: {[{attachment.pageHeight}]}px" ng-src="{[{attachment.crocdoc_url}]}" frameborder="0"></iframe>
+                    </div>
                 </div>
+            </div>
         </div>
     </div>
+
     <!-- end: AngularJS: checklist controller //-->
 {% endblock %}
 
 {% block js %}
     <!--<script src="{{ STATIC_URL }}js/jquery.hotkeys-0.8.js"></script>-->
-    <script src="{{ STATIC_URL }}todo/jquery.plugin.filter_status.js"></script>
-    <script src="{{ STATIC_URL }}todo/jquery.plugin.edit_label.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}todo/jquery.plugin.filter_status.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}todo/jquery.plugin.edit_label.js"></script>
+    <script type="text/javascript" src="//api.filepicker.io/v1/filepicker.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}todo/angularjs.checklistCtrl.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}todo/angularjs.checklistItemCtrl.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}todo/angularjs.checklistItemDirective.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}todo/angularjs.attachmentCtrl.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}todo/angularjs.feedbackRequestCtrl.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}todo/angularjs.feedbackRequestTemplate.js"></script>
 
     <script>
     /**
@@ -105,12 +253,19 @@
             "uuid": "{{ project.uuid }}",
             "content_type_id": {{ project.content_type_id|default:None|jsonify }},
        },
+       "content_type_id": {{ todo_content_type_id|default:None|jsonify }},
         "user": {
             'pk': {{ user.pk|default:'null'|jsonify }},
             'email': {{ user.email|default:'null'|jsonify }},
             'username': '{{ user.username }}',
             'full_name': '{{ user.get_full_name }}',
             'is_authenticated': {{ user.is_authenticated|jsonify }},
+            'is_lawyer': {{ is_lawyer|jsonify }},
+            'opposite_user': {
+                'username': {{ opposite_user.username|jsonify }},
+                'full_name': {{ opposite_user.get_full_name|jsonify }},
+                'pk': {{ opposite_user.pk|jsonify }}
+            }
         },
         /**
         * Primary list of the checklist items

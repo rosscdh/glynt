@@ -582,7 +582,7 @@ table.checklist {
   .item-status {
     text-align: center;
     vertical-align: middle;
-    width: 60px;
+    width: 70px;
     [class^="icon-"],
     [class*=" icon-"] {
       cursor: pointer;
@@ -592,9 +592,11 @@ table.checklist {
   }
   .item-info {
   	cursor: pointer;
-    padding-left: 0;
+    /*padding-left: 0;*/
+    font-size: 14px;
+    vertical-align: middle;
     h4 {
-      font-size: 16px;
+      
       a {
         color: @brand-info;
         font-weight: bold;
@@ -622,12 +624,31 @@ table.checklist {
     .item-move { cursor: move; }
   }
 
+  .item-category {
+    color: @text-color;
+    vertical-align: middle;
+  }
+
   .item-details .btn {
     span.badge { margin-left: -8px; margin-top:10px; font-size: 10px; background-color: @brand-primary; /*padding: 1px 5px 3px;*/}
   }
 
+  .item-category {
+    width: 250px;
+    padding:0;
+    .btn-group { width: 100%; }
+    .btn { 
+      background-color: transparent; color: #333; width:100%; text-align: left; 
+      &:active {
+        -webkit-box-shadow: none;
+        box-shadow: none;
+      }
+    }
+  }
+
   tr.item {
     &.state-new {
+      td.item-info { color: @text-color; }
       &:hover {
         .item-delete {
           display:inline;
@@ -644,10 +665,12 @@ table.checklist {
       /*td a { color: @gray-light; }*/
     }
     &.state-open {
+      td.item-info { color: @text-color; }
       color: @gray-light;
       /*td a { color: @gray-light; }*/
     }
     &.state-pending {
+      td.item-info { color: @text-color; }
       color: @gray-light;
        /*td a { color: @gray-light; }*/
     }
@@ -690,6 +713,27 @@ table.checklist {
     }
   }
 }
+
+tr.table-header { background-color: @panel-heading-bg; }
+button.table-header { padding-left: 0; padding-right: 0; }
+.table-header, tr.table-header .item-info { font-size: 18px; font-weight: normal; color: @text-color; }
+.table-header.icon { line-height: 18px; }
+
+.on-file-drop-show { display: none; }
+
+/* File drag and drop behaviour */
+.dragover {
+  opacity: 0.9;
+  border-top: 2px dashed @gray-light !important;
+  border-bottom: 2px dashed @gray-light !important;
+  .on-file-drop-show { display: block; color: @link-color; }
+  .on-file-drop-hide { display: none; }
+  /*
+  .item-details, .item-meta { display: none !important; }
+  .item-drop-area { display: table-cell; width: 280px; }
+  */
+}
+
 
 /* Hide delete and edit buttons while dragging */
 .ui-sortable-helper {
@@ -1216,6 +1260,11 @@ section.checklist-category {
   }
 }
 
+textarea.comment {
+  height: 60px;
+  margin-bottom: 10px;
+}
+
 .discussion-list {
   button.widget-title-button {
     margin-top:0;
@@ -1323,9 +1372,9 @@ button.vcard {
   width: 100%;
   background-color: #fbfbfb;
   /* Top shadow */
-  -webkit-box-shadow: inset 0px 75px 5px 0px rgba(0,0,0,0.08);
-  -moz-box-shadow: inset 0px 75px 5px 0px rgba(0,0,0,0.08);
-  box-shadow: inset 0px 75px 5px 0px rgba(0,0,0,0.08);
+  -webkit-box-shadow: inset 0px 57px 5px 0px rgba(0,0,0,0.08);
+  -moz-box-shadow: inset 0px 57px 5px 0px rgba(0,0,0,0.08);
+  box-shadow: inset 0px 57px 5px 0px rgba(0,0,0,0.08);
 }
 
 .full-dialog {
@@ -1375,3 +1424,81 @@ button.vcard {
 h5.text-info {
   color: @brand-info;
 }
+
+.multi-progress-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #212526;
+  z-index:1028;
+}
+
+.multi-progress-bar {
+  width: 20%;
+  float: left;
+  .progress { margin-bottom: 0px; }
+}
+
+.progress-container {
+  padding: 0.5em;
+}
+
+/* Flexy layout */
+@import "../../js/shared-apps/layout/flexy-layout-base.less";
+footer { position: relative; }
+.options-container {
+  background-color: @panel-heading-bg;
+  position: absolute;
+  top:0px;
+}
+.options-container .item-container {
+  min-width: 315px; padding-left: 40px; padding-right: 10px; max-width: 350px;
+  .drop-pane { width: 290px; }
+  .btn-block { width: 290px; }
+}
+table.checklist tr .below-sidebar {
+  background: -moz-linear-gradient(left, rgba(0,0,0,0.01) 0%, rgba(0,0,0,0.01) 97%, rgba(0,0,0,0.15) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(0,0,0,0.01)), color-stop(97%,rgba(0,0,0,0.01)), color-stop(100%,rgba(0,0,0,0.15))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(left, rgba(0,0,0,0.01) 0%,rgba(0,0,0,0.01) 97%,rgba(0,0,0,0.15) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(left, rgba(0,0,0,0.01) 0%,rgba(0,0,0,0.01) 97%,rgba(0,0,0,0.15) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(left, rgba(0,0,0,0.01) 0%,rgba(0,0,0,0.01) 97%,rgba(0,0,0,0.15) 100%); /* IE10+ */
+  background: linear-gradient(to right, rgba(0,0,0,0.01) 0%,rgba(0,0,0,0.01) 97%,rgba(0,0,0,0.15) 100%); /* W3C */
+}
+
+table.checklist .dropdown-menu {
+  font-size: 14px;
+}
+
+table.checklist tr.selected-true {
+  background-color: @panel-heading-bg;
+  .below-sidebar { 
+    background: transparent;
+  }
+}
+
+.drop-pane {
+border: 1px dashed rgb(170, 170, 170);
+display: block;
+margin: 0;
+border-top-left-radius: 3px;
+border-top-right-radius: 3px;
+border-bottom-right-radius: 3px;
+border-bottom-left-radius: 3px;
+background-color: rgb(243, 243, 243);
+color: rgb(51, 51, 51);
+font-size: 14px;
+padding: 1.5em 0;
+vertical-align: middle;
+cursor: pointer;
+overflow: hidden;
+text-align: center;
+}
+
+.full-dialog iframe {
+  background-image: url('/static/img/spinner.gif');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.activity-stream .content { font-size: 14px; }

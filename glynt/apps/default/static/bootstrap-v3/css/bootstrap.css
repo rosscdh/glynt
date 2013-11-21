@@ -8523,7 +8523,7 @@ table.checklist {
 }
 
 table.checklist .item-status {
-  width: 60px;
+  width: 70px;
   text-align: center;
   vertical-align: middle;
 }
@@ -8536,12 +8536,9 @@ table.checklist .item-status [class*=" icon-"] {
 }
 
 table.checklist .item-info {
-  padding-left: 0;
+  font-size: 14px;
+  vertical-align: middle;
   cursor: pointer;
-}
-
-table.checklist .item-info h4 {
-  font-size: 16px;
 }
 
 table.checklist .item-info h4 a {
@@ -8583,11 +8580,41 @@ table.checklist .item-details .item-move {
   cursor: move;
 }
 
+table.checklist .item-category {
+  color: #333333;
+  vertical-align: middle;
+}
+
 table.checklist .item-details .btn span.badge {
   margin-top: 10px;
   margin-left: -8px;
   font-size: 10px;
   background-color: #42d0e5;
+}
+
+table.checklist .item-category {
+  width: 250px;
+  padding: 0;
+}
+
+table.checklist .item-category .btn-group {
+  width: 100%;
+}
+
+table.checklist .item-category .btn {
+  width: 100%;
+  color: #333;
+  text-align: left;
+  background-color: transparent;
+}
+
+table.checklist .item-category .btn:active {
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+table.checklist tr.item.state-new td.item-info {
+  color: #333333;
 }
 
 table.checklist tr.item.state-new:hover .item-delete {
@@ -8610,10 +8637,18 @@ table.checklist tr.item.state-open {
 
 }
 
+table.checklist tr.item.state-open td.item-info {
+  color: #333333;
+}
+
 table.checklist tr.item.state-pending {
   color: #bfbfbf;
   /*td a { color: @gray-light; }*/
 
+}
+
+table.checklist tr.item.state-pending td.item-info {
+  color: #333333;
 }
 
 table.checklist tr.item.state-resolved {
@@ -8658,6 +8693,47 @@ table.checklist tr.item.state-pending.assigned-to-user td a {
 table.checklist tr.item.state-pending.assigned-to-user td [class^="icon-"]:before,
 table.checklist tr.item.state-pending.assigned-to-user td [class*=" icon-"]:before {
   content: "\f059";
+}
+
+tr.table-header {
+  background-color: #f5f5f5;
+}
+
+button.table-header {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.table-header,
+tr.table-header .item-info {
+  font-size: 18px;
+  font-weight: normal;
+  color: #333333;
+}
+
+.table-header.icon {
+  line-height: 18px;
+}
+
+.on-file-drop-show {
+  display: none;
+}
+
+/* File drag and drop behaviour */
+
+.dragover {
+  border-top: 2px dashed #bfbfbf !important;
+  border-bottom: 2px dashed #bfbfbf !important;
+  opacity: 0.9;
+}
+
+.dragover .on-file-drop-show {
+  display: block;
+  color: #2ccae2;
+}
+
+.dragover .on-file-drop-hide {
+  display: none;
 }
 
 /* Hide delete and edit buttons while dragging */
@@ -9441,6 +9517,11 @@ section.checklist-category {
   width: 200px;
 }
 
+textarea.comment {
+  height: 60px;
+  margin-bottom: 10px;
+}
+
 .discussion-list button.widget-title-button {
   margin-top: 0;
 }
@@ -9622,9 +9703,9 @@ button.vcard {
   width: 100%;
   height: 100%;
   background-color: #fbfbfb;
-  -webkit-box-shadow: inset 0 75px 5px 0px rgba(0, 0, 0, 0.08);
-     -moz-box-shadow: inset 0 75px 5px 0px rgba(0, 0, 0, 0.08);
-          box-shadow: inset 0 75px 5px 0px rgba(0, 0, 0, 0.08);
+  -webkit-box-shadow: inset 0 57px 5px 0px rgba(0, 0, 0, 0.08);
+     -moz-box-shadow: inset 0 57px 5px 0px rgba(0, 0, 0, 0.08);
+          box-shadow: inset 0 57px 5px 0px rgba(0, 0, 0, 0.08);
 }
 
 .full-dialog {
@@ -9700,6 +9781,237 @@ button.vcard {
 
 h5.text-info {
   color: #5bc0de;
+}
+
+.multi-progress-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 1028;
+  width: 100%;
+  background-color: #212526;
+}
+
+.multi-progress-bar {
+  float: left;
+  width: 20%;
+}
+
+.multi-progress-bar .progress {
+  margin-bottom: 0;
+}
+
+.progress-container {
+  padding: 0.5em;
+}
+
+/* Flexy layout */
+
+.flexy-layout {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.flexy-layout > .block {
+  display: inline-block;
+  float: left;
+  overflow: hidden;
+}
+
+.flexy-layout.flexy-layout-column > .block {
+  height: 100%;
+}
+
+.flexy-layout.flexy-layout-row > .block {
+  width: 100%;
+}
+
+.block.splitter {
+  position: relative;
+  overflow: visible;
+}
+
+.flexy-layout.flexy-layout-column > .splitter {
+  width: 5px;
+}
+
+.flexy-layout.flexy-layout-row > .splitter {
+  height: 5px;
+}
+
+.flexy-layout.flexy-layout-column > .splitter > .ghost {
+  cursor: col-resize;
+}
+
+.flexy-layout.flexy-layout-row > .splitter > .ghost {
+  cursor: row-resize;
+}
+
+.ghost {
+  position: relative;
+  z-index: 99;
+  display: inline-block;
+  float: left;
+  width: 100%;
+  height: 100%;
+}
+
+.block-content {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+/* Extra classes */
+
+.block {
+  min-height: 500px;
+  transition: all 0.2s;
+}
+
+.splitter {
+  background: orange;
+}
+
+.ghost {
+  background: orange;
+  opacity: 0.5;
+}
+
+.handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 9;
+  width: 35px;
+  height: 100%;
+  padding-top: 178px;
+  overflow: visible;
+  text-align: left;
+  cursor: pointer;
+}
+
+.handle span {
+  z-index: 9999;
+  padding: 5px;
+  background: white;
+  border: 1px solid #d4d4d4;
+  border-right-width: 0;
+}
+
+.handle span.collapse {
+  transform: rotate(360deg);
+  transition: all 0.4s;
+}
+
+.handle span:hover {
+  color: #167fdd;
+  border-color: #167fdd;
+  box-shadow: 0px 0px 4px 0px #167fdd;
+  transition: all 0.3s ease-in-out;
+}
+
+.options-container {
+  position: relative;
+}
+
+.collapsable-content {
+  padding-right: 10px;
+  padding-left: 40px;
+}
+
+footer {
+  position: relative;
+}
+
+.options-container {
+  position: absolute;
+  top: 0;
+  background-color: #f5f5f5;
+}
+
+.options-container .item-container {
+  max-width: 350px;
+  min-width: 315px;
+  padding-right: 10px;
+  padding-left: 40px;
+}
+
+.options-container .item-container .drop-pane {
+  width: 290px;
+}
+
+.options-container .item-container .btn-block {
+  width: 290px;
+}
+
+table.checklist tr .below-sidebar {
+  background: -moz-linear-gradient(left, rgba(0, 0, 0, 0.01) 0, rgba(0, 0, 0, 0.01) 97%, rgba(0, 0, 0, 0.15) 100%);
+  /* FF3.6+ */
+
+  background: -webkit-gradient(linear, left top, right top, color-stop(0, rgba(0, 0, 0, 0.01)), color-stop(97%, rgba(0, 0, 0, 0.01)), color-stop(100%, rgba(0, 0, 0, 0.15)));
+  /* Chrome,Safari4+ */
+
+  background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.01) 0, rgba(0, 0, 0, 0.01) 97%, rgba(0, 0, 0, 0.15) 100%);
+  /* Chrome10+,Safari5.1+ */
+
+  background: -o-linear-gradient(left, rgba(0, 0, 0, 0.01) 0, rgba(0, 0, 0, 0.01) 97%, rgba(0, 0, 0, 0.15) 100%);
+  /* Opera 11.10+ */
+
+  background: -ms-linear-gradient(left, rgba(0, 0, 0, 0.01) 0, rgba(0, 0, 0, 0.01) 97%, rgba(0, 0, 0, 0.15) 100%);
+  /* IE10+ */
+
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.01) 0, rgba(0, 0, 0, 0.01) 97%, rgba(0, 0, 0, 0.15) 100%);
+  /* W3C */
+
+}
+
+table.checklist .dropdown-menu {
+  font-size: 14px;
+}
+
+table.checklist tr.selected-true {
+  background-color: #f5f5f5;
+}
+
+table.checklist tr.selected-true .below-sidebar {
+  background: transparent;
+}
+
+.drop-pane {
+  display: block;
+  padding: 1.5em 0;
+  margin: 0;
+  overflow: hidden;
+  font-size: 14px;
+  color: #333333;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  background-color: #f3f3f3;
+  border: 1px dashed #aaaaaa;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+}
+
+.full-dialog iframe {
+  background-image: url('/static/img/spinner.gif');
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.activity-stream .content {
+  font-size: 14px;
 }
 
 .navbar {

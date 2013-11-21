@@ -15,8 +15,8 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         queryset = User.objects.select_related('profile').all()
 
-        fields = ('id', 'username', 'email', 'last_name', 'full_name',
-            'first_name', 'photo', 'is_lawyer', 'is_customer')
+        fields = ('id', 'username', 'email', 'full_name',
+            'photo', 'is_lawyer', 'is_customer')
 
 
 class CustomerSerializer(serializers.ModelSerializer):

@@ -45,7 +45,8 @@ class PusherPublisherService(object):
             if 'event' not in kwargs:
                 kwargs.update({'event': self.event})
 
-            self.data.update(kwargs)
+            #self.data.update(kwargs)
+            self.data = kwargs.copy()
 
             for channel in self.channels:
                 logger.debug('Sending pusher event on #{channel}'.format(channel=channel))

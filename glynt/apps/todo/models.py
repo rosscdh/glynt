@@ -5,16 +5,17 @@ considering using https://github.com/bartTC/django-attachments for the
 todo attachments when the time comes
 """
 from django.db import models
-
+from django.contrib.contenttypes.models import ContentType
 # from django.contrib.auth.models import User
 # from glynt.apps.project.models import Project
 
 from django_filepicker.models import FPFileField
 
+
 from glynt.apps.todo import TODO_STATUS, FEEDBACK_STATUS
 from glynt.apps.todo.managers import (DefaultToDoManager,
                                       DefaultFeedbackRequestManager)
-from .mixins import NumAttachmentsMixin
+from .mixins import NumAttachmentsMixin, ToDoActivityMixin
 
 from rulez import registry
 
@@ -28,7 +29,7 @@ def _attachment_upload_file(instance, filename):
     return '{project_uuid}/attachments/{slug}{ext}'.format(project_uuid=instance.project.uuid, slug=instance.pk, ext=ext)
 
 
-class ToDo(NumAttachmentsMixin, models.Model):
+class ToDo(NumAttachmentsMixin, ToDoActivityMixin, models.Model):
     """
     ToDo Items that are associated with a project
     """
@@ -59,6 +60,17 @@ class ToDo(NumAttachmentsMixin, models.Model):
 
     def __unicode__(self):
         return u'{name}'.format(name=unicode(self.name))
+
+    @staticmethod
+    def content_type():
+        """
+        Static method used to access the content type of projects
+        """
+        return ContentType.objects.get_for_model(ToDo)
+
+    @property
+    def content_type_id(self):
+        return ToDo.content_type().pk
 
     def can_read(self, user):
         return self.project.can_read(user=user)
@@ -184,6 +196,15 @@ class FeedbackRequest(models.Model):
 
     def __unicode__(self):
         return u'{display_status} by: {assigned_by}'.format(display_status=self.display_status, assigned_by=self.assigned_by.get_full_name())
+
+    def can_read(self, user):
+        return self.attachment.project.can_read(user=user)
+
+    def can_edit(self, user):
+        return self.attachment.project.can_edit(user=user)
+
+    def can_delete(self, user):
+        return self.attachment.project.can_delete(user=user)
 
     @property
     def display_status(self):

@@ -1,0 +1,119 @@
+.flexy-layout {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+
+.flexy-layout > .block {
+    display: inline-block;
+    float: left;
+    overflow: hidden;
+}
+
+.flexy-layout.flexy-layout-column > .block {
+    height: 100%;
+}
+
+.flexy-layout.flexy-layout-row > .block {
+    width: 100%;
+}
+
+.block.splitter {
+    position: relative;
+    overflow: visible;
+}
+
+.flexy-layout.flexy-layout-column > .splitter{
+    width: 5px;
+}
+
+.flexy-layout.flexy-layout-row > .splitter{
+    height: 5px;
+}
+
+.flexy-layout.flexy-layout-column > .splitter > .ghost{
+    cursor: col-resize;
+}
+
+.flexy-layout.flexy-layout-row > .splitter > .ghost{
+    cursor: row-resize;
+}
+
+.ghost {
+    float: left;
+    position: relative;
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    z-index: 99;
+}
+
+.block-content {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+/* Extra classes */
+.block {
+    transition: all 0.2s;
+    min-height: 500px;
+}
+.splitter{
+    background: orange;
+}
+
+.ghost {
+    background: orange;
+    opacity: 0.5;
+}
+
+.handle {
+    padding-top: 178px;
+    text-align: left;
+    cursor: pointer;
+    height: 100%;
+    width: 35px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 9;
+    overflow: visible;
+}
+
+.handle span {
+    background: white;
+    border: 1px solid rgb(212, 212, 212);
+    border-right-width: 0;
+    padding: 5px;
+    z-index: 9999;
+}
+
+.handle span.collapse {
+    transform: rotate(360deg);
+    transition: all 0.4s;
+}
+
+.handle span:hover {
+    box-shadow: 0px 0px 4px 0px rgb(22, 127, 221);
+    border-color: rgb(22, 127, 221);
+    color: rgb(22, 127, 221);
+    transition: all 0.3s ease-in-out;
+}
+
+.options-container {
+    position: relative;
+}
+
+.collapsable-content {
+    padding-left: 40px;
+    padding-right: 10px;
+}

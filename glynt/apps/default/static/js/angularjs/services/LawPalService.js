@@ -3,7 +3,7 @@
  * @author <a href="mailtolee.j.sinclair@gmail.com">Lee Sinclair</a>
  * Date: 2 Sept 2013
  */
-angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource', '$http', '$rootScope', function ($q, $timeout, $resource, $http, $rootScope) { /* Load the LawPal local interface */
+angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource', '$http', 'multiProgressService', function ($q, $timeout, $resource, $http, multiProgressService) { /* Load the LawPal local interface */
 	'use strict';
 	var lawPalInterface = LawPal;
 	var userType = 'is_customer';
@@ -33,7 +33,42 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 		'doc': $resource('/api/v1/project/:uuid/document/:documentId/sign/', {},
 			/* This is done to ensure the content type of PATCH is sent through */
 			{ 'requestSign': { 'method': 'POST', headers: { 'Content-Type': 'application/json' }, 'isArray': true }
-			})
+			}),
+		'attachments':
+			$resource('/api/v2/project/:uuid/todo/:slug/attachment/?format=json', {},
+				{ 'list': { 'method': 'GET', headers: { 'Content-Type': 'application/json' } }
+			}),
+		'close':
+			$resource('/api/v1/todo/:id/?format=json', {},
+				{ 'todo': { 'method': 'PATCH', headers: { 'Content-Type': 'application/json' } }
+			}),
+		'discussion':
+			$resource('/api/v2/project/:uuid/todo/:slug/discussion/?format=json', {},
+				{ 
+					'list': { 'method': 'GET', headers: { 'Content-Type': 'application/json' } },
+					'create': { 'method': 'POST', headers: { 'Content-Type': 'application/json' } }
+				}
+			),
+		'activity':
+			$resource('/api/v2/project/:uuid/todo/:slug/activity/?format=json', {},
+				{ 
+					'list': { 'method': 'GET', headers: { 'Content-Type': 'application/json' } }
+				}
+			)
+	};
+
+	////api/v2/project/bad1748083f24cf7aa8f548346a8b9d3/todo/sK5WkVewDuKeBDiBjJd2Bh/discussion/
+
+	/* Define API interfaces for check list items */
+	var checkFeedbackResources = {
+		'request': $resource( '/api/v2/project/:uuid/todo/:slug/feedback_request/:id/?format=json' /* '/api/v1/feedback_request/?format=json'*/, {},
+			/* This is done to ensure the content type of PATCH is sent through */
+			{
+				'new': { 'method': 'POST', headers: { 'Content-Type': 'application/json' } },
+				'status': { 'method': 'GET', headers: { 'Content-Type': 'application/json' } },
+				'update': { 'method': 'PATCH', headers: { 'Content-Type': 'application/json' } }
+			}
+		)
 	};
 
 	var checkListCategories = {
@@ -272,8 +307,8 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 
 			if( details && details.category ) {
 				$http.post(url, details, {
-					'headers': { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-					'transformRequest': transformToFormData
+					"headers": { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+					"transformRequest": transformToFormData
 				}).success(function(response) {
 					//do stuff with response
 					if( response && response.instance && response.instance.category ) {
@@ -315,17 +350,17 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 		 * @param  {Array} categories array of categories (with nested checklist items)
 		 * @return {Function}			promise
 		 */
-		'updateChecklistItemOrder': function( categories ) {
+		'updateChecklistItemOrder': function( items ) {
 			var projectId = this.getProjectUuid();
 			var options = { 'id': projectId };
 			var data = { 'slugs': [] };
 			var deferred = $q.defer();
 
-			angular.forEach( categories, function( item ) {
-				var items = item.items;
-				for( var i=0; i<items.length; i++ ) {
-					data.slugs.push( items[i].slug );
-				}
+			angular.forEach( items, function( item ) {
+				//var items = item.items;
+				//for( var i=0; i<items.length; i++ ) {
+					data.slugs.push( item.slug );
+				//}
 			});
 
 			checkListItemResources.reorder.save(options, data.slugs, function (results) { /* Success */
@@ -556,6 +591,182 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 			return deferred.promise;
 		},
 
+		'closeChecklistItem': function( item ) {
+			var deferred = $q.defer();
+			var options = {
+				"uuid": this.getProjectUuid(),
+				"slug": item.slug,
+				"id": item.id
+			};
+			var data = {
+				'status': 4
+			};
+			checkListItemResources.close.todo( options, data,
+				function success(response) {
+					deferred.resolve(response);
+				},
+				function error(err) {
+					deferred.reject(err);
+				}
+			);
+			// 
+			return deferred.promise;
+		},
+
+		"attachFileChecklistItem": function( item, file ) {
+			var self = this;
+			var deferred = $q.defer();
+			var lawPalUrl = "/api/v1/attachment";
+			var data = {
+				"project": this.getProjectId(),
+				"todo": item.id,
+				"uploaded_by": { "pk": this.getCurrentUser().pk }
+			};
+
+			var fileProgressHandle = multiProgressService.push( { "label": file.name, "percent": 0, "type": "info" } );
+
+			filepicker.setKey('A4Ly2eCpkR72XZVBKwJ06z');
+			filepicker.store(file,
+				function success(new_inkblob){
+					//console.log(JSON.stringify(new_inkblob));
+					
+					fileProgressHandle.type = "success";
+					fileProgressHandle.label = "Processing: " + fileProgressHandle.label;
+					
+					if ( new_inkblob && new_inkblob.url ) {
+						self.localUpload( new_inkblob, data , function( err, response ){
+							if(!err) {
+								multiProgressService.remove( fileProgressHandle );
+								deferred.resolve(response);
+							} else {
+								fileProgressHandle.type = "danger";
+								fileProgressHandle.label = "Unable to upload: " + file.name;
+								deferred.reject( err );
+							}
+						});
+					}
+				},
+				function error( fpError ) {
+					deferred.reject(fpError);
+				},
+				function progress( fpProgress ) {
+					multiProgressService.updateProgress( fileProgressHandle, fpProgress);
+				}
+			);
+			
+			return deferred.promise;
+		},
+
+		'localUpload': function( new_inkblob, data, callback ) {
+			data.attachment = new_inkblob.url.toString();
+			data.data = { "fpfile": new_inkblob };
+
+			console.log("data", data);
+
+			var lawPalUrl = "/api/v1/attachment";
+			$http.post( lawPalUrl, data).then( function success( response ){
+					callback( null, response );
+				}, function error( err ) {
+					callback( err );
+				});
+		},
+
+		'deleteAttachment': function( attachment ) {
+			var deferred = $q.defer();
+			var id = attachment.id;
+			var url = '/api/v1/attachment/' + id;
+			var details = {
+				'deleted_by': { 'pk': this.getCurrentUser().pk }
+			};
+			$http.delete(url, details, {
+				"headers": { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}
+			}).success(function(response) {
+				deferred.resolve(response);
+			}).error(function(err){
+				deferred.reject(err);
+			});
+
+			return deferred.promise;
+		},
+
+		'feedbackRequest': function( attachment, comment, respondTo, status ) {
+			var deferred = $q.defer();
+			var id = attachment.id;
+			var projectId = this.getProjectUuid();
+			var options = { 'uuid': projectId, 'slug': attachment.todo_slug };
+			//http://local.weareml.com:8000/api/v1/feedback_request
+			//var url = '/api/v1/feedback_request';// + id;
+			var oppositeUser = this.getOppositeUser();
+			
+			var details = {
+				'assigned_by': this.getCurrentUser().pk + '',
+				'assigned_to': [ oppositeUser.pk ],
+				'attachment': id,
+				'status': status|0,
+				'comment': comment||'Changed status'
+			};
+			if( respondTo ) {
+				options.id = respondTo.id;
+				// Responding to feedback
+				checkFeedbackResources.request.update( options, details,
+					function success( response ) {
+						deferred.resolve(response);
+					},
+					function error( err ) {
+						deferred.reject(err);
+					}
+				);
+			} else {
+				// Requesting feedback
+				checkFeedbackResources.request.new( options, details,
+					function success( response ) {
+						deferred.resolve(response);
+					},
+					function error( err ) {
+						deferred.reject(err);
+					}
+				);
+			}
+			
+
+			return deferred.promise;
+		},
+
+		'feedbackStatus': function( options ) {
+			var deferred = $q.defer();
+			var attachmentId = options.id;
+			var projectId = this.getProjectUuid();
+			var options = { 'uuid': projectId, 'slug': options.todo_slug };
+			var feedback = [];
+			var currentUser = this.getCurrentUser().pk;
+
+			checkFeedbackResources.request.status( options,
+				function success( response ) {
+					if( response && response.results ) {
+						// Filter results for the specific attachment
+						for(var i=0;i<response.results.length;i++) {
+							response.results[i].by_current_user = (response.results[i].assigned_by===currentUser );
+							response.results[i].assigned_to_current_user = (response.results[i].assigned_to.indexOf(currentUser)>=0);
+
+							if( !attachmentId || response.results[i].attachment === attachmentId ) {
+								feedback.push(response.results[i]);
+							}
+						}
+						response.results = feedback;
+						response.count = feedback.length;
+						deferred.resolve(response);
+					} else {
+						deferred.resolve(response);
+					}
+				},
+				function error( err ) {
+					deferred.reject(err);
+				}
+			);
+
+			return deferred.promise;
+		},
+
 		/**
 		 * Get current project ID if available
 		 * @return {Number} project Id
@@ -584,11 +795,27 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 		},
 
 		/**
+		 * Returns the content type ID for the todo content type
+		 * @return {Number} Project content type ID
+		 */
+		'todoContentTypeId': function() {
+				return LawPal.content_type_id || 15;
+		},
+
+		/**
 		 * Get current user
 		 * @return {Object} Current user
 		 */
 		'getCurrentUser': function() {
 			return (LawPal.user && LawPal.user.is_authenticated?LawPal.user:null);
+		},
+
+		/**
+		 * Retruns the opposite user to the current user
+		 * @return {Object} { 'username', 'pk' }
+		 */
+		'getOppositeUser': function() {
+			return (LawPal.user && LawPal.user.opposite_user?LawPal.user.opposite_user:{'username':null,'pk':null});
 		},
 
 		/**
@@ -761,7 +988,109 @@ angular.module('lawpal').factory('lawPalService', ['$q', '$timeout', '$resource'
 			);
 			return deferred.promise;
 		},
+		/**
+		 * Retrieves a list of attachments for a specific checklist item
+		 * @param  {Object} item TODO/checklist item
+		 * @return {Function}      promise
+		 */
+		'getCheckListItemAttachments': function( item ) {
+			var itemSlug = item.slug;
+			var projectUuid = this.getProjectUuid();
+			var deferred = $q.defer();
+			var options = {
+				'uuid': projectUuid,
+				'slug': itemSlug
+			};
 
+			checkListItemResources.attachments.list(options, function (results) { /* Success */
+				deferred.resolve(results);
+			}, function (results) { /* Error */
+				deferred.reject(results);
+			});
+
+			return deferred.promise;
+		},
+
+		'checkListItemActivityList': function( item ) {
+			var deferred = $q.defer();
+			var itemSlug = item.slug;
+			var projectUuid = this.getProjectUuid();
+
+			var options = {
+				'uuid': projectUuid,
+				'slug': itemSlug
+			};
+
+			checkListItemResources.activity.list( options,
+				function success( response ) {
+					if( response && response.results ) {
+						for(var i=0;i<response.results.length;i++) {
+							response.results[i].milliseconds = new Date(response.results[i].timestamp).getTime();
+						}
+					}
+					deferred.resolve(response);
+				},
+				function error( err ) {
+					deferred.reject(err);
+				}
+			);
+			return deferred.promise;
+		},
+
+		/**
+		 * Request checklist item discussion
+		 * @param  {Object} item Checklist item object
+		 * @return {Function}      promise
+		 */
+		'checkListItemDiscussionList': function( item ) {
+			var deferred = $q.defer();
+			var itemSlug = item.slug;
+			var projectUuid = this.getProjectUuid();
+
+			var options = {
+				'uuid': projectUuid,
+				'slug': itemSlug
+			};
+
+			checkListItemResources.discussion.list( options,
+				function success( response ) {
+					deferred.resolve(response);
+				},
+				function error( err ) {
+					deferred.reject(err);
+				}
+			);
+			return deferred.promise;
+		},
+		'checkListItemDiscussionAdd': function( item, comment ) {
+			var deferred = $q.defer();
+			var itemSlug = item.slug;
+			var projectUuid = this.getProjectUuid();
+			var currentUser = this.getCurrentUser();
+			var todo_content_type_id = this.todoContentTypeId();
+			var options = {
+				'uuid': projectUuid,
+				'slug': itemSlug
+			};
+
+			var data = {
+				'title': '',
+				'comment': comment,
+				'user': currentUser.pk,
+				'content_type_id': todo_content_type_id,
+				'object_pk': item.id
+			};
+
+			checkListItemResources.discussion.create( options, data,
+				function success( response ) {
+					deferred.resolve(response);
+				},
+				function error( err ) {
+					deferred.reject(err);
+				}
+			);
+			return deferred.promise;
+		},
 		'selectSignees': function( documentId ) {
 			$rootScope.$broadcast( 'signDocument', documentId );
 			//alert("test " + documentId);

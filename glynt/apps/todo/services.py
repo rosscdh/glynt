@@ -40,14 +40,23 @@ crocodoc.api_token = CROCDOC_API_KEY
 
 class CrocdocAttachmentService(object):
     """
-    Service to manage uploading and general attribs of corcdoc attachments
+    Service to manage uploading and general attribs of crocdoc attachments
     """
     attachment = None
     session = None
+    crocdoc_params = {
+        "sidebar": 'auto',      # yes|no|auto
+        "editable": True,       # True|False
+        "admin": False,         # True|False
+        "downloadable": True,   # True|False
+        "copyprotected": False, # True|False
+        "demo": False           # True|False
+    }
 
     def __init__(self, attachment, *args, **kwargs):
         logger.info('Init CrocdocAttachmentService.__init__ for attachment: {pk}'.format(pk=attachment.pk))
         self.attachment = attachment
+        self.session = None
 
     @property
     def uuid(self):
@@ -78,21 +87,24 @@ class CrocdocAttachmentService(object):
             return self.attachment.crocdoc_uuid
 
     def session_key(self, user):
-        crocdoc_params = {
-            "user": {
-                "name": user.get_full_name(),
-                "id": user.pk
-            },
-            "sidebar": 'auto',
-            "editable": True,
-            "admin": False, 
-            "downloadable": True,
-            "copyprotected": False,
-            "demo": False
-        }
-
         if self.session is None:
-            self.session = '123-123-123' if settings.PROJECT_ENVIRONMENT == 'test' else crocodoc.session.create(self.uuid, **crocdoc_params)
+            crocdoc_params = self.crocdoc_params.copy()
+
+            # append the user info to the dict
+            crocdoc_params.update({
+                "user": {
+                    "name": user.get_full_name(),
+                    "id": user.pk
+                }
+            })
+
+            try:
+                self.session = crocodoc.session.create(self.uuid, **crocdoc_params)
+
+            except crocodoc.CrocodocError as e:
+                logger.error('Crocdoc Error: %s' % e)
+                self.session = None
+
         return self.session
 
     def upload_document(self):
@@ -101,8 +113,21 @@ class CrocdocAttachmentService(object):
         return crocodoc.document.upload(url=url)
 
     def view_url(self, user):
-        url = 'http://example.com' if settings.PROJECT_ENVIRONMENT == 'test' else 'https://crocodoc.com/view/{session_key}'.format(session_key=self.session_key(user=user))
-        logger.info('provide crocdoc view_url: {url}'.format(url=url))
+        url = None
+
+        if self.attachment.crocdoc_uuid is None:
+            logger.info('No attachment present for todo.attachment: {pk}'.format(pk=self.attachment.pk))
+
+        else:
+            session_key = self.session_key(user=user)  # required the user for crocdoc permissions
+
+            if session_key is None:
+                logger.error('Crocdoc session could not be set')
+
+            else:
+                url = 'https://crocodoc.com/view/{session_key}'.format(session_key=session_key)
+                logger.info('provide crocdoc view_url: {url}'.format(url=url))
+
         return url
 
     def remove(self):

@@ -9,15 +9,16 @@ from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.exceptions import ParseError
-from rest_framework.generics import (RetrieveAPIView, ListCreateAPIView,
-                                     RetrieveUpdateAPIView)
+from rest_framework.generics import (ListAPIView, RetrieveAPIView,
+                                     ListCreateAPIView, RetrieveUpdateAPIView)
 
 
 from threadedcomments.models import ThreadedComment
 
 from .models import Project, ProjectLawyer
-from .serializers import (ProjectSerializer, TeamSerializer,
-                          DiscussionSerializer, DiscussionThreadSerializer,)
+from .serializers import (ProjectSerializer, ProjectActivitySerializer,
+                          TeamSerializer, DiscussionSerializer,
+                          DiscussionThreadSerializer,)
 
 import StringIO
 import logging
@@ -55,6 +56,21 @@ class ProjectViewSet(ModelViewSet):
         else:
             return self.get_customer_queryset()
 
+
+class ProjectActivityView(ListAPIView):
+    """
+    View fro seeing the activity relating to a project
+    """
+    queryset = None
+    serializer_class = ProjectActivitySerializer
+
+    def get_queryset(self):
+        project_uuid = self.kwargs.get('uuid')
+        project = get_object_or_404(Project, uuid=project_uuid)  # ensure that we have the project
+
+        return project.activity_stream()
+
+
 class TeamListView(RetrieveUpdateAPIView):
     """
     Endpoint that shows team for a project
@@ -91,7 +107,7 @@ class TeamListView(RetrieveUpdateAPIView):
 
         if type(user_ids) not in [list] or len(user_ids) is 0:
             return HttpResponseBadRequest('You must PATCH a dict in the following form into this view e.g. PATCH:{"team": [74, 3, 22]}')
-        
+
         self.project = self.get_object()
 
         for u in User.objects.filter(pk__in=user_ids):

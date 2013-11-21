@@ -72,7 +72,11 @@
     <script type="text/javascript" src="{{ STATIC_URL }}handlebars-helpers.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/lawpal.modal.js"></script>
 
-    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/angular.js"></script>
+    
+
+    <script type="text/javascript">{% profile_card_js %}</script>
+{% endcompress %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/angular.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/angular-resource.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/ui-bootstrap-tpls-0.6.0.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/lib/angularjs-toaster.js"></script>
@@ -84,6 +88,9 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/services/LawPalUrls.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/services/PusherService.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/services/LawPalDialog.js"></script>
+
+    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/directives/angular-file-dnd.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/directives/multi-progress-bar.js"></script>    
 
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/filters/truncateFilter.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/angularjs/filters/firstLettersFilter.js"></script>
@@ -105,15 +112,14 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/shared-apps/profile/profileDialogTemplate.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/shared-apps/profile/manageTeamCtrl.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/shared-apps/profile/manageTeamTemplate.js"></script>
-
     <script type="text/javascript" src="{{ STATIC_URL }}js/shared-apps/project-progress/progressGridDirective.js"></script>
-    
-    <script type="text/javascript">{% profile_card_js %}</script>
-{% endcompress %}
     <script type="text/javascript" src="{{ STATIC_URL }}js/shared-apps/project-progress/progressBarDirective.js"></script>
 
 {% pusher_js %}
 {% handlebars_messages %}
+
+<script type="text/javascript" src="{{ STATIC_URL }}js/shared-apps/layout/flexy-layout.min.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}js/shared-apps/layout/lawpal-custom-directives.js"></script>
 
 <script type="text/javascript" src="{{ STATIC_URL }}js/moment/moment.min.js"></script>
 {% moment_js %}
