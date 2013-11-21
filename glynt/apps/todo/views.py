@@ -91,7 +91,8 @@ class ProjectToDoView(RulezMixin, ToDoCountMixin, ProjectOppositeUserMixin, List
             'is_lawyer': user_profile.is_lawyer,
             'is_customer': user_profile.is_customer,
             'checklist_categories': [{'label': c, 'slug': slugify(c) } for c in self.checklist_service.categories],
-            'opposite_user': self.opposite_user
+            'opposite_user': self.opposite_user,
+            'todo_content_type_id': ToDo.content_type().pk,
         })
         # append counts
         context.update(self.todo_counts(qs_objects=self.model.objects))

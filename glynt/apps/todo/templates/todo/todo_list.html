@@ -209,7 +209,7 @@
             "uuid": "{{ project.uuid }}",
             "content_type_id": {{ project.content_type_id|default:None|jsonify }},
        },
-       "content_type_id": {{ todo.content_type_id|default:None|jsonify }},
+       "content_type_id": {{ todo_content_type_id|default:None|jsonify }},
         "user": {
             'pk': {{ user.pk|default:'null'|jsonify }},
             'email': {{ user.email|default:'null'|jsonify }},
