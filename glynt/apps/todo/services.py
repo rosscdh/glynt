@@ -100,8 +100,8 @@ class CrocdocAttachmentService(object):
         logger.info('Upload file to crocdoc: {url}'.format(url=url))
         return crocodoc.document.upload(url=url)
 
-    def view_url(self):
-        url = 'http://example.com' if settings.PROJECT_ENVIRONMENT == 'test' else 'https://crocodoc.com/view/{session_key}'.format(session_key=self.session_key())
+    def view_url(self, user):
+        url = 'http://example.com' if settings.PROJECT_ENVIRONMENT == 'test' else 'https://crocodoc.com/view/{session_key}'.format(session_key=self.session_key(user=user))
         logger.info('provide crocdoc view_url: {url}'.format(url=url))
         return url
 
