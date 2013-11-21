@@ -96,7 +96,7 @@
                             {% if is_lawyer %}
                             <!-- Checklist item actions //-->
                             <div class="item-meta" checklist-item-actions data-show-label="true" data-show-move="false"></div>
-                            <button ng-click="setStatusClosed( item )" class="btn btn-default">Close item</button>
+                            <button ng-click="setStatusClosed( item )" class="btn btn-default" ng-show="item.status<4">Close item</button>
                             {% endif %}
                             <!--<button ng-click="viewItem( item )" class="btn btn-primary">Open</button>//-->
                             <hr />
