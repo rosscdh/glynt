@@ -5,7 +5,7 @@
 angular.module('lawpal').run(["$templateCache", function($templateCache) {
 	'use strict';
 	$templateCache.put("template/lawpal/discussion/list.html",
-		'<button class="btn btn-link btn-small pull-right widget-title-button" ng-click="new(null)" ng-show="title">\n'+
+		'<button class="btn btn-link btn-small pull-right widget-title-button" ng-click="new(null)" ng-show="title && respondAllowed">\n'+
 		'	<i class="icon icon-plus"></i>\n'+
 		'		&nbsp;New\n'+
 		'</button>\n'+
@@ -20,7 +20,7 @@ angular.module('lawpal').run(["$templateCache", function($templateCache) {
 		'<p ng-show="working.discussions.length==0"><button class="btn btn-link start-discussion" ng-click="new(null)">Start a discussion</button></p>\n'+
 		'<table class="table table-striped">\n'+
 		'	<tr ng-repeat="discussion in working.discussions | startFrom: starting | limitTo: pageLimit" class="byme-{[{byMe(discussion.latest.meta.user.pk)}]} discussion-item"  ng-click="displayDiscussion( $event, discussion)">\n'+
-		'		<td class="status-column clickable">\n'+
+		'		<td class="status-column clickable" ng-show="showStatus">\n'+
 		'			<i class="icon icon-comment nest">\n'+
 		'				<small class="nested text-primary" ng-bind="discussion.original.count">1</small>\n'+
 		'			</i>\n'+
@@ -38,7 +38,7 @@ angular.module('lawpal').run(["$templateCache", function($templateCache) {
 		'			    <p class="discussion-comment" ng-bind="discussion.latest.comment | characters:descriptionTextLimit"></p>\n'+
 		'			</div>\n'+
 		'		</td>\n'+
-		'		<td class="more-column clickable" tooltip="Respond now" tooltip-append-to-body="true" ng-click="reply( $event, discussion.original)">\n'+
+		'		<td class="more-column clickable" tooltip="Respond now" tooltip-append-to-body="true" ng-click="reply( $event, discussion.original)" ng-show="respondAllowed">\n'+
 		'			<button type="button" class="btn btn-link btn-small pull-right btn-respond">\n'+
 		'				<i class="icon icon-reply"></i><br /> Respond\n'+
 		'			</button>\n'+

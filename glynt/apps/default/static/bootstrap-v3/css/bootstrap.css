@@ -8517,25 +8517,6 @@ ul#checklist-categories i.icon-move {
   cursor: move;
 }
 
-tr.table-header {
-  background-color: #f5f5f5;
-}
-
-button.table-header {
-  padding-right: 0;
-  padding-left: 0;
-}
-
-.table-header {
-  font-size: 18px;
-  font-weight: normal;
-  color: #333333;
-}
-
-.table-header.icon {
-  line-height: 18px;
-}
-
 table.checklist {
   margin-bottom: 0;
   border-bottom: 1px solid #dddddd;
@@ -8712,6 +8693,26 @@ table.checklist tr.item.state-pending.assigned-to-user td a {
 table.checklist tr.item.state-pending.assigned-to-user td [class^="icon-"]:before,
 table.checklist tr.item.state-pending.assigned-to-user td [class*=" icon-"]:before {
   content: "\f059";
+}
+
+tr.table-header {
+  background-color: #f5f5f5;
+}
+
+button.table-header {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.table-header,
+tr.table-header .item-info {
+  font-size: 18px;
+  font-weight: normal;
+  color: #333333;
+}
+
+.table-header.icon {
+  line-height: 18px;
 }
 
 .on-file-drop-show {
@@ -9933,7 +9934,7 @@ footer {
 
 .options-container {
   position: absolute;
-  top: 33px;
+  top: 0;
   background-color: #f5f5f5;
 }
 
