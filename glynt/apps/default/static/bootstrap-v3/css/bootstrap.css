@@ -8530,7 +8530,7 @@ table.checklist .item-status {
 
 table.checklist .item-status [class^="icon-"],
 table.checklist .item-status [class*=" icon-"] {
-  font-size: 36px;
+  font-size: 18px;
   line-height: 1.1;
   cursor: pointer;
 }
@@ -8566,6 +8566,11 @@ table.checklist .item-details a {
 table.checklist .item-meta a:hover,
 table.checklist .item-details a:hover {
   text-decoration: none;
+}
+
+table.checklist .item-meta .glyphicon-file,
+table.checklist .item-details .glyphicon-file {
+  color: #bfbfbf;
 }
 
 table.checklist .item-meta .item-delete,
@@ -9954,22 +9959,22 @@ footer {
 }
 
 table.checklist tr .below-sidebar {
-  background: -moz-linear-gradient(left, rgba(0, 0, 0, 0.01) 0, rgba(0, 0, 0, 0.01) 97%, rgba(0, 0, 0, 0.15) 100%);
+  background: -moz-linear-gradient(left, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 97%, rgba(0, 0, 0, 0.15) 100%);
   /* FF3.6+ */
 
-  background: -webkit-gradient(linear, left top, right top, color-stop(0, rgba(0, 0, 0, 0.01)), color-stop(97%, rgba(0, 0, 0, 0.01)), color-stop(100%, rgba(0, 0, 0, 0.15)));
+  background: -webkit-gradient(linear, left top, right top, color-stop(0, rgba(0, 0, 0, 0)), color-stop(97%, rgba(0, 0, 0, 0)), color-stop(100%, rgba(0, 0, 0, 0.15)));
   /* Chrome,Safari4+ */
 
-  background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.01) 0, rgba(0, 0, 0, 0.01) 97%, rgba(0, 0, 0, 0.15) 100%);
+  background: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.01) 0, rgba(0, 0, 0, 0) 97%, rgba(0, 0, 0, 0.15) 100%);
   /* Chrome10+,Safari5.1+ */
 
-  background: -o-linear-gradient(left, rgba(0, 0, 0, 0.01) 0, rgba(0, 0, 0, 0.01) 97%, rgba(0, 0, 0, 0.15) 100%);
+  background: -o-linear-gradient(left, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 97%, rgba(0, 0, 0, 0.15) 100%);
   /* Opera 11.10+ */
 
-  background: -ms-linear-gradient(left, rgba(0, 0, 0, 0.01) 0, rgba(0, 0, 0, 0.01) 97%, rgba(0, 0, 0, 0.15) 100%);
+  background: -ms-linear-gradient(left, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 97%, rgba(0, 0, 0, 0.15) 100%);
   /* IE10+ */
 
-  background: linear-gradient(to right, rgba(0, 0, 0, 0.01) 0, rgba(0, 0, 0, 0.01) 97%, rgba(0, 0, 0, 0.15) 100%);
+  background: linear-gradient(to right, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0) 97%, rgba(0, 0, 0, 0.15) 100%);
   /* W3C */
 
 }

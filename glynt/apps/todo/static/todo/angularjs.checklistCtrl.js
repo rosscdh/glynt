@@ -127,13 +127,27 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', '$rootScope', 
 
 		$scope.getUndeleted = function( checklist ) {
 			var workingChecklist = [];
+			var categoryOrderCheckList = [], category, filtered = [];
+
 			for(var i=0;i<checklist.length;i++) {
 				if( checklist[i].is_deleted!==true) {
 					workingChecklist.push( checklist[i] );
 				}
 			}
 
-			return workingChecklist;
+			// Sort by category
+			var categories = $scope.model.categories;
+			for(var j=0;j<categories.length;j++) {
+				category = categories[j];
+				filtered = workingChecklist.filter( function(item){
+					return item.category === category.label;
+				});
+				for(var k=0;k<filtered.length;k++) {
+					categoryOrderCheckList.push( filtered[k]);
+				}
+			}
+
+			return categoryOrderCheckList;
 		};
 		/**
 		 * Create new checklist category, opens a dialog asking for a category name
@@ -529,7 +543,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', '$rootScope', 
 		}, true);
 
 		$scope.$watch('model.workingChecklist', function( nv, ov ){
-			
+			//window.workingChecklist = $scope.model.workingChecklist;
 			if(!$scope.model.ignoreChecklistUpdate) {
 				var nv_items = [], ov_items = [];
 				// Find out if the order of items has been changed
@@ -538,7 +552,7 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', '$rootScope', 
 					ov_items = ov_items.union( ov[i] );
 				}
 
-				var hasChanged_Items = ov_items.some( function( item, idx ){ 
+				var hasChanged_Items = ov_items.some( function( item, idx ){
 					if(!nv_items[idx]) {
 						return false;
 					} else {
@@ -550,10 +564,20 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', '$rootScope', 
 					if($scope.model.filters.on) {
 						// If filtered then re-organise the original list
 						sortInList( $scope.model.checklist,  $scope.model.workingChecklist);
+						$scope.saveItemOrder();
+						$scope.model.ignoreChecklistUpdate = false;
+					} else {
+						// TODO: Possible category change
+						// TODO: Find odd ones out
+						// refresh order
+						var workingList = angular.copy($scope.model.workingChecklist);
+						$scope.model.workingChecklist = $scope.getUndeleted(workingList);
+						$scope.saveItemOrder();
 					}
-					$scope.saveItemOrder();
+					
 				}
 			}
+			
 			$scope.model.ignoreChecklistUpdate = false;
 
 			function findOriginalIndex( original, category, starting ) {
@@ -602,19 +626,23 @@ angular.module('lawpal').controller( 'checklistCtrl', [ '$scope', '$rootScope', 
 		$scope.saveItemOrder = function( /*evt, uiItem*/ ) {
 			var items = $scope.model.workingChecklist;
 
-			// Is there a filter?
-			if( $scope.model.filters.category.label !== null ) {
-				//debugger;
-			}
+			if(!$scope.lastSaveOrderTime || new Date().getTime() > ($scope.lastSaveOrderTime + 1000) ) {
+				$scope.lastSaveOrderTime = new Date().getTime();
 
-			lawPalService.updateChecklistItemOrder( items ).then(
-				function( /*results*/ ) { /* Success */
-					$scope.addAlert( "Items re-ordered", "success", "Update complete" );
-				},
-				function( /*details*/ ) { /* Error */
-					$scope.addAlert( "Unable to save order of items", "warning", "Error!" );
+				// Is there a filter?
+				if( $scope.model.filters.category.label !== null ) {
+					//debugger;
 				}
-			);
+
+				lawPalService.updateChecklistItemOrder( items ).then(
+					function( /*results*/ ) { /* Success */
+						$scope.addAlert( "Items re-ordered", "success", "Update complete" );
+					},
+					function( /*details*/ ) { /* Error */
+						$scope.addAlert( "Unable to save order of items", "warning", "Error!" );
+					}
+				);
+			}
 		};
 
 		/**
