@@ -76,7 +76,7 @@
                                             <!-- Checklist item status //-->
                                             <td class="item-info" ng-click="selectChecklistItem( item, 1 )" ng-bind="item.name"></td>
                                             <td class="item-details" checklist-item-details></td>
-                                            <td class="item-status" ng-click="viewItem( item )">
+                                            <td class="item-status" ng-click="selectChecklistItem( item, 1 )">
                                                 <i class="icon-state-{[{getItemStatus(item)}]}" data-tooltip="{[{getItemDisplayStatus(item)}]}"></i>
                                             </td>
                                             <td class="item-category below-sidebar" ng-bind="item.category"></td>
@@ -103,7 +103,7 @@
 
                             <h5>Attachments</h5>
                             <span ng-show="item.loadingAttachments" class="text-muted"><i class="icon icon-spinner icon-spin"></i> Loading attachments</span>
-                            <ul class="nav nav-pills nav-stacked">
+                            <ul class="nav nav-pills nav-stacked attachment-list">
                                 <li ng-repeat="attachment in item.attachments | filter: { is_deleted: false }">
                                     <a href="#" ng-click="viewAttachment(attachment)">
                                         <i class="icon icon-file text-muted" ng-show="!attachment.feedbackRequired"></i>
@@ -113,7 +113,7 @@
                                 </li>
                             </ul>
                             <div class="drop-pane" ng-file-drop="onFileSelect($files);" ng-click="uploadSelector()">Drop files here</div>
-                            <button class="btn btn-default btn-block" ng-file-drop="onFileSelect($files);" ng-click="uploadSelector()">Upload attachments</button>
+                            <button class="btn btn-default btn-block upload-button" ng-file-drop="onFileSelect($files);" ng-click="uploadSelector()">Upload attachments</button>
                             <hr />
 
                             <h5>Activity</h5>
@@ -160,10 +160,6 @@
                                 </div>
                             </div>
 
-                            <div ng-repeat="message in item.discussion.xresults">
-                                <!--<div class="discussion-list" data-discussion="item.discussion.results" data-tag="tag" data-title="'Discussion'" data-respond-allowed="false" data-show-status="false"></div>//-->
-                                <p ng-bind="message.comment"></p>
-                            </div>
                             <form ng-submit="addComment(item)" class="clearfix">
                                 <div class="form-group">
                                     <label class="sr-only hideme">Comment</label>
@@ -196,24 +192,24 @@
                             </div>
                             <div class="col-lg-5">
                                 <div class="alert alert-info" ng-show="!attachment.has_feedback">
-                                     <button class="btn btn-primary pull-right" ng-disabled="attachModel.deleting" ng-click="getFeedback( attachment, false )" style="margin: -7px -30px;">Get feedback</button>
+                                     <button class="btn btn-primary pull-right get-feedback" ng-disabled="attachModel.deleting" ng-click="getFeedback( attachment, false )" style="margin: -7px -30px;">Get feedback</button>
                                     No active feedback requests
                                 </div>
                                 <div class="alert alert-warning" ng-show="attachment.feedbackItem.assigned_to_current_user">
-                                    <button class="btn btn-primary pull-right" ng-disabled="attachModel.deleting" ng-click="getFeedback( attachment, true )" style="margin: -7px -30px;">Respond now</button>
+                                    <button class="btn btn-primary pull-right respond-now" ng-disabled="attachModel.deleting" ng-click="getFeedback( attachment, true )" style="margin: -7px -30px;">Respond now</button>
                                     <!--Feedback requested//-->
                                     <a href="#" ng-bind="attachment.feedbackItem.comment | characters: 40" class="text-warning" ng-click="getFeedback( attachment, true )"></a>
                                 </div>
                                 <div class="alert alert-warning" ng-show="attachment.feedbackItem.by_current_user">
-                                    <button class="btn btn-primary pull-right" ng-disabled="attachModel.deleting" ng-click="cancelRequest( attachment )" ng-show="attachment.feedbackItem.by_current_user" style="margin: -7px -30px;">Cancel Request</button>
+                                    <button class="btn btn-primary pull-right cancel-feedback" ng-disabled="attachModel.deleting" ng-click="cancelRequest( attachment )" ng-show="attachment.feedbackItem.by_current_user" style="margin: -7px -30px;">Cancel Request</button>
                                     You have requested feedback
                                 </div>
                             </div>
                             <div class="col-lg-3">
-                                <button class="btn btn-link pull-right text-muted" ng-click="close()">&times;</button>
+                                <button class="btn btn-link pull-right text-muted close-button" ng-click="close()">&times;</button>
                                 
                                 {% if is_lawyer %}
-                                <button class="btn btn-default pull-right" ng-click="delete( attachment )" ng-disabled="attachModel.deleting"><i class="icon icon-spinner icon-spin" ng-show="attachModel.deleting"></i> Delete Attachment</button>
+                                <button class="btn btn-default pull-right delete-attachment-button" ng-click="delete( attachment )" ng-disabled="attachModel.deleting"><i class="icon icon-spinner icon-spin" ng-show="attachModel.deleting"></i> Delete Attachment</button>
                                 {% endif %}
                             </div>
                         </div>

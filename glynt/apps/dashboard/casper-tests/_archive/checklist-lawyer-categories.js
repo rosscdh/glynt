@@ -30,17 +30,18 @@ helper.scenario(casper.cli.options.url,
         );
     },
     function() {
+        'use strict';
         /* Add category */
         casper.test.comment('Add category');
-        casper.waitForSelector("button.create-category", 
+        casper.waitForSelector("button.create-category",
             function success() {
                 casper.test.comment('Click create button');
                 this.click('button.create-category');
                 // Wait for form...
-                casper.waitForSelector("input#id_category", 
+                casper.waitForSelector("input#id_category",
                     function success(){
                         // Fill in form fields
-                        casper.test.comment('Fill in category form')
+                        casper.test.comment('Fill in category form');
                         this.fill('div.modal form', {
                             'category': "Test category name"
                         }, true);
@@ -49,7 +50,7 @@ helper.scenario(casper.cli.options.url,
                         //this.click('div.modal input[type=submit]');
 
                         casper.test.comment('Test for success');
-                        casper.waitForText("Test category name"/* ".toast-title"*/, 
+                        casper.waitForText("Test category name"/* ".toast-title"*/,
                             function success(){
                                 this.test.assertSelectorHasText('.toast-title', 'Success');
                             }

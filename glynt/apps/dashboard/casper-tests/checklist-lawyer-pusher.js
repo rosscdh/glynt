@@ -49,12 +49,33 @@ helper.scenario(casper.cli.options.url,
         //this.test.assertTextExists('Pushed checklist item: edited');
     },
     function() {
+        'use strict';
+        /* Open checklist item */
+        casper.waitForSelector('.checklist .item:first-child td:first-child',
+            function success() {
+                this.test.assertExists('.checklist .item:first-child td:first-child');
+                this.click('.checklist .item:first-child td:first-child');
+            },
+            function fail() {
+                this.test.assertExists('.checklist .item:first-child td:first-child');
+        });
+    },
+    function() {
+        'use strict';
         // Text messages
         casper.viewport(2048, 1024);
         
         //helper.snapshotPage.call(this,0);
-        casper.test.comment('Test displaying messages')
-        this.click('a.item-edit');
+        casper.test.comment('Test displaying messages');
+
+        casper.waitForSelector(".options-container .glyphicon.glyphicon-pencil",
+            function success() {
+                this.test.assertExists(".options-container .glyphicon.glyphicon-pencil");
+                this.click(".options-container .glyphicon.glyphicon-pencil");
+            },
+            function fail() {
+                this.test.assertExists(".options-container .glyphicon.glyphicon-pencil");
+        });
 
         casper.waitForText('Edit item', function() {
             //helper.snapshotPage.call(this,1);
@@ -69,7 +90,7 @@ helper.scenario(casper.cli.options.url,
             //this.click('div.modal input[type=submit]');
 
             casper.waitForText('Modified item name', function(){
-                casper.test.comment('Wait for toaster')
+                casper.test.comment('Wait for toaster');
                 casper.waitForText('Saving changes', function(){
                     this.test.assertTextExists('Saving changes');
                 });

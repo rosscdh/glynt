@@ -65,8 +65,8 @@ class ChecklistLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
 
         c = self.pq(resp.content)
 
-        self.assertEqual(len(c('ul#checklist-categories')), 1) # we have 1 checklist-categories ul
-        self.assertTrue(len(c('ul#checklist-categories li')) > 0) # we have 1 or more checklist-categories ul li elements
+        self.assertEqual(len(c('.item-category ul')), 1) # we have 1 checklist-categories ul
+        self.assertTrue(len(c('.item-category ul li')) > 0) # we have 1 or more checklist-categories ul li elements
         self.assertTrue(len(c('button.create-item')) > 0) # we have 1 or more add item buttons
 
         self.assertTrue(len(c('tr.item')) >= 1) # we have 1 or more add item buttons
@@ -78,8 +78,11 @@ class ChecklistLawyerTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
         mommy.make('todo.FeedbackRequest', attachment=self.attachment, assigned_by=self.customer_user, assigned_to=(self.lawyer_user,), comment='What are your thoughts on this test file with ümlauts')
 
         url = reverse('dashboard:checklist', kwargs={'uuid': self.project.uuid})
-        self.assertTrue(self.load_casper_file(js_file='checklist-lawyer.js', test_label='Test the Checklist View for a Lawyer', url=url))
-        self.assertTrue(self.load_casper_file(js_file='checklist-lawyer-categories.js', test_label='Test the Checklist View ability to move Categories', url=url))
-        self.assertTrue(self.load_casper_file(js_file='checklist-lawyer-attachments.js', test_label='Test the Checklist View attachment counts', url=url))
+        #import pdb;pdb.set_trace() 
+        self.assertTrue(self.load_casper_file(js_file='checklist-lawyer-controls.js', test_label='Test the Checklist Controls for a Lawyer', url=url))
+        self.assertTrue(self.load_casper_file(js_file='checklist-lawyer-attachments.js', test_label='Test the Checklist Controls for a Lawyer', url=url))
+        #self.assertTrue(self.load_casper_file(js_file='checklist-lawyer.js', test_label='Test the Checklist View for a Lawyer', url=url))
+        #self.assertTrue(self.load_casper_file(js_file='checklist-lawyer-categories.js', test_label='Test the Checklist View ability to move Categories', url=url))
+        #self.assertTrue(self.load_casper_file(js_file='checklist-lawyer-attachments.js', test_label='Test the Checklist View attachment counts', url=url))
         self.assertTrue(self.load_casper_file(js_file='checklist-lawyer-pusher.js', test_label='Test the Checklist View pusher events', url=url))
 
