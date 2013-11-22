@@ -48,7 +48,7 @@
 	 * @param  {DOM} $element             DOM object of element within which this controller sits
 	 * @param  {Object} multiProgressService Single point of reference to addand remove progress bars across controllers and views
 	 */
-	multiWidgetsModule.controller('multiProgressCtrl', [ '$scope', '$attrs', '$element', 'multiProgressService', function( $scope, $attrs, $element, multiProgressService ) {
+	multiWidgetsModule.controller('multiProgressCtrl', [ '$scope', '$attrs', '$element', 'multiProgressService', 'lawPalService', '$modal', 'toaster', function( $scope, $attrs, $element, multiProgressService, lawPalService, $modal, toaster ) {
 		$scope.progressBars = multiProgressService.getProgressStates();
 		$scope.$watch( 'progressBars', function(){
 			if($scope.progressBars.length===0) {
@@ -57,6 +57,53 @@
 				$($element).css('display','block');
 			}
 		}, true);
+
+		$scope.remove = function( details ){
+			multiProgressService.remove( details );
+		};
+
+		$scope.getFeedback = function( details ) {
+			var attachment = details.fileRef;
+			var feedbackItem = null;
+			var modalInstance = $modal.open({
+				"windowClass": "modal modal-show",
+				"templateUrl": "template/lawpal/attachment/feedback.html",
+				"controller": "feedbackRequestCtrl",
+				"animate": false,
+				"resolve": {
+					"attachment": function(){
+						return attachment;
+					},
+					'feedbackItem': function(){
+						return feedbackItem;
+					}
+				}
+			});
+
+			modalInstance.result.then(
+				function( data ) {
+					$scope.getFeedbackAction( attachment, data, details );
+				}
+			);
+		};
+
+		$scope.getFeedbackAction = function( attachment, feedbackData, details ) {
+			var feedbackItem = null;
+			var comment = feedbackData.comment;
+			var status = 0; /*isResponse?3:0;*/ // Set status to 3 is this is a reply
+
+			lawPalService.feedbackRequest( attachment, comment, feedbackItem, status ).then(
+				function success( /*response*/ ) {
+					//console.log( 'response', response );
+					toaster.pop("success", "Feedback sent");
+					$scope.remove( details );
+				},
+				function error( /*err*/ ) {
+					//console.log( 'error', err );
+					toaster.pop("error", "Unable to send feedback");
+				}
+			);
+		};
 		
 	}]);
 
@@ -100,6 +147,7 @@
 			 */
 			'push': function( details ) {
 				details.id = new Date().getTime(); // add a unique ID so that this specific progress bar can be located again
+				details.uploadState = 0;
 				progressStates.push( details );
 				return progressStates[progressStates.length-1];
 			},
@@ -116,6 +164,20 @@
 
 				if( index )
 					progressStates.splice(i,1);
+			},
+
+			'attachFileRef': function( details, todoItem, fileDetails ) {
+				details.fileRef=fileDetails;
+				details.todo = todoItem;
+				return details;
+			},
+			/**
+			 * Removes progress bar from array
+			 * @param  {Object} details the progress bar to remove
+			 */
+			'next': function( details ) {
+				//details.label = details.label.replace('Processing: ','');
+				details.uploadState++;
 			}
 		};
 	}]);
@@ -127,10 +189,19 @@
 	multiWidgetsModule.run(["$templateCache", function($templateCache) {
 		$templateCache.put("template/progress/multi-progress.html",
 		'<div class="multi-progress-container">\n' +
-		'    <div ng-repeat="bar in progressBars" progress-bar ng-model="bar" class="multi-progress-bar"></div>\n' +
+		'    <span ng-repeat="bar in progressBars">\n' +
+		'       <div progress-bar ng-model="bar" class="multi-progress-bar" ng-show="bar.uploadState==0"></div>\n' +
+		'       <div class="uploadAction" ng-show="bar.uploadState==1" style="width:270px; background-color: #2ccae2;">\n' +
+		'           <span class="filename" ng-bind="bar.label | characters: 20"></span>\n' +
+		'           <button class="close" ng-click="remove(bar)">&times;</button>\n' +
+		'           <button class="feedback btn btn-primary btn-small" ng-click="getFeedback(bar)">Get feedback</button>\n' +
+		'       </div>\n' +
+		'    </span>\n' +
 		'</div>\n'+
 		'');
 	}]);
+
+	//getFeedback
 
 	/**
 	 * HTML template for a single progress bar

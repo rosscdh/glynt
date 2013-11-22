@@ -627,12 +627,14 @@ angular.module('lawpal').factory("lawPalService", ['$q', '$timeout', '$resource'
 					//console.log(JSON.stringify(new_inkblob));
 					
 					fileProgressHandle.type = "success";
-					fileProgressHandle.label = "Processing: " + fileProgressHandle.label;
+					//fileProgressHandle.label = "Processing: " + fileProgressHandle.label;
 					
 					if ( new_inkblob && new_inkblob.url ) {
 						self.localUpload( new_inkblob, data , function( err, response ){
 							if(!err) {
-								multiProgressService.remove( fileProgressHandle );
+								response.data.todo_slug = item.slug;
+								multiProgressService.attachFileRef( fileProgressHandle, item, response.data );
+								multiProgressService.next( fileProgressHandle );
 								deferred.resolve(response);
 							} else {
 								fileProgressHandle.type = "danger";

@@ -10019,6 +10019,37 @@ table.checklist tr.selected-true .below-sidebar {
   font-size: 14px;
 }
 
+.uploadAction {
+  float: left;
+  width: 270px;
+  max-height: 29px;
+  margin-right: 10px;
+  font-size: 12px;
+  color: #FFF;
+  background-color: #2ccae2;
+}
+
+.uploadAction .filename {
+  display: inline-block;
+  float: left;
+  width: 120px;
+  padding-left: 10px;
+  margin: 7px 10px 0 10px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.uploadAction button.feedback {
+  float: right;
+  width: 100px;
+}
+
+.uploadAction .close {
+  padding: 0.25em;
+  color: #FFF;
+  opacity: 0.5;
+}
+
 .navbar {
   margin-bottom: 0;
 }
