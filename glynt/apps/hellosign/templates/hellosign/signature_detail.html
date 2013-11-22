@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+{{ SIGNATURE_URL }}
+
+{{ DETAILS_URL }}
+test
+
+{% endblock %}
+
+{% block js %}
+<script src=" https://s3.amazonaws.com/cdn.hellofax.com/js/embedded.js"></script>
+<script>
+$(document).ready(function() {
+    HelloSign.init('{{ HELLOSIGN_CLIENT_ID }}');
+    HelloSign.open({
+        url: "{{ SIGNATURE_URL }}",                           // Signature url your fetched via the API on your server
+        //redirectUrl: "http://my.site.com/redirect",     // (optional) Where to go after the user signed
+        allowCancel: true,                              // (optional) Whether to allow the user to cancel i.e. close the iFrame without signing (default is true)
+        messageListener: function(data) {          // (optional) Called whenever the iFrame is messaging your page
+            /*  do something */ 
+            console.log(data)
+        }    
+    });
+});
+</script>
+{% endblock %}

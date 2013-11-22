@@ -12,6 +12,7 @@ from glynt.apps.todo.api_v2 import (AttachmentViewSet, ToDoActivityView,
                                     ToDoDiscussionDetailView,
                                     ToDoFeedbackRequestView)
 
+from glynt.apps.hellosign.urls import api_router as hellosign_api_router
 
 # Setup routers
 router = routers.DefaultRouter()
@@ -66,4 +67,4 @@ router.register(r'user', UserViewSet)
 urlpatterns = project_todo_urlpatterns + project_discussion_urlpatterns + project_urlpatterns
 
 # Main urlpatterns used by django
-urlpatterns += router.urls
+urlpatterns += router.urls + hellosign_api_router.urls

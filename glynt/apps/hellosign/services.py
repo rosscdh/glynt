@@ -1,14 +1,19 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.files.base import ContentFile
+from django.core.files.storage import FileSystemStorage
 
 from glynt.apps.todo.models import Attachment
 
 from bunch import Bunch
 from actstream import action
+
 # import from django-hellosign
 from hellosign import HelloSign
+import crocodoc as crocdoc
 
+import os
 import json
 import logging
 logger = logging.getLogger('lawpal.services')
@@ -24,6 +29,12 @@ assert HELLOSIGN_AUTHENTICATION is not None, 'you must specify a HELLOSIGN_CLIEN
 assert HELLOSIGN_CLIENT_ID is not None, 'you must specify a HELLOSIGN_CLIENT_ID in settings.py'
 assert HELLOSIGN_CLIENT_SECRET is not None, 'you must specify a CLIENT_SECRET in settings.py'
 
+CROCDOC_API_KEY = getattr(settings, 'CROCDOC_API_KEY', None)
+if CROCDOC_API_KEY is None:
+    raise Exception("You must specify a CROCDOC_API_KEY in your local_settings.py")
+
+crocdoc.api_token = CROCDOC_API_KEY
+
 
 class HelloSignService(object):
     """
@@ -37,10 +48,13 @@ class HelloSignService(object):
 
     auth = None
     form = None
+    files = {}
 
     def __init__(self, **kwargs):
+
         self.auth = None
         self.form = None
+        files = {}
 
         self.api = HelloSign()
 
@@ -48,7 +62,7 @@ class HelloSignService(object):
         data = {}
 
         for i, signer in enumerate(signers):
-            name, email = signer
+            name, email = (signer.get_full_name(), signer.email)
             name_key, email_key = ('signers[{i}][name]'.format(i=i), 'signers[{i}][email_address]'.format(i=i),)
 
             data[name_key] = name
@@ -58,9 +72,21 @@ class HelloSignService(object):
 
     def files_data(self, files):
         data = {}
-        for i, file_path in enumerate(files):
-            key = 'file[{i}]'.format(i=i)
-            data[key] = file_path
+
+        for i, file_item in enumerate(files):
+            # doanload from crocdoc and store locally
+            storage = FileSystemStorage()
+            crocdoc_uuid = file_item.crocdoc_uuid
+            # download from crocdoc
+            crocdoc_file = crocdoc.download.document(crocdoc_uuid, pdf=True, annotated=False, user_filter=None)
+            # store the file and get name
+            stored_file = storage.save(name='sign/{name}.pdf'.format(name=crocdoc_uuid), content=ContentFile(crocdoc_file))
+            # get full path so that we can send that off to hellosign
+            file_path = '{base}/{file_path}'.format(base=storage.location, file_path=stored_file)
+
+            key = 'file[{i}]'.format(i=i)  # crappy php/curl style names
+            data[key] = file_path  # save path in key
+
         return data
 
     def send_doc_for_signing(self, form):
@@ -69,7 +95,7 @@ class HelloSignService(object):
         """
         self.form = form  # set as global form
 
-        if form.is_valid() is False:
+        if form.is_valid() is not True:
             raise Exception(str(form.errors))
         else:
             data = {
@@ -79,22 +105,31 @@ class HelloSignService(object):
                 'message': form.cleaned_data['message'],
             }
             # update with signer names
-            data.update(self.signers_data(signers=form.signatories()))
+            data.update(self.signers_data(signers=form.cleaned_data.get('signatories', [])))
 
-            files = {}
+            self.files = {}
             # update with file paths
-            files.update(self.files_data(files=form.documents()))
+            self.files.update(self.files_data(files=[form.cleaned_data.get('document')]))
 
-            return self.api.signature_request.create_embedded.post(auth=self.AUTHENTICATION, data=data, files=files)
+            return self.api.signature_request.create_embedded.post(auth=self.AUTHENTICATION, data=data, files=self.files)
+
+    def cleanup(self):
+        for filepath in self.files.values():
+            os.remove(filepath)
+        self.files = {}
 
     def save(self, json_data):
         if self.form is not None:
-
-            if json_data is not None and type(json_data) is dict:
+            if type(json_data) is dict:
 
                 self.form.instance.signature_request_id = json_data['signature_request_id']
-                self.form.instance.data = json_data
+                self.form.instance.data.update(json_data)
                 self.form.save()
+
+    def process(self, form):
+        resp = self.send_doc_for_signing(form=form)
+        self.save(json_data=resp.json().get('signature_request'))  # saves the signature_request as flat data!
+        self.cleanup();
 
     def update_doc_for_signing(self, signature_request_id):
         signature = Signature.objects.get(signature_request_id=signature_request_id)
@@ -123,16 +158,9 @@ class HelloSignBaseEvent(Bunch):
     def user(self):
         """ HelloSign provides userid as string(pk,user_name)"""
         if self._user is None:
-            pk, full_name = self.owner.split(',')
-            pk = int(pk)
-            self._user = User.objects.get(pk=pk)
+            full_name, email = self.owner.split(',')
+            self._user = User.objects.get(email=email)
         return self._user
-
-    @property
-    def attachment(self):
-        if self._attachment is None:
-            self._attachment = Attachment.objects.get(uuid=self.doc)
-        return self._attachment
 
     @property
     def verb(self):
@@ -145,10 +173,9 @@ class HelloSignBaseEvent(Bunch):
         try:
             action.send(self.user, 
                         verb=self.verb,
-                        action_object=self.attachment, 
-                        target=self.attachment.todo,
-                        attachment_name=self.attachment.filename,
-                        **self.toDict())
+                        action_object=self.doc,
+                        target=self.doc.todo,
+                        attachment_name=self.doc.filename)
         except Exception as e:
             logger.error('There was an exception with the HelloSignWebhookService: {error}'.format(error=e))
 
@@ -182,12 +209,29 @@ class HelloSignFileError(HelloSignBaseEvent):
 
 class HelloSignWebhookService(object):
     payload = None
+    _user = None
+    _doc = None
+    signature = None
+    items = []
 
     def __init__(self, payload=payload, *args, **kwargs):
-        self.user = kwargs.get('user')
+        self._user = None
+        self.signature = None
         self.payload = json.loads(payload)
+        
+        if 'signature_request' in self.payload:
+            signature_request_id = self.payload['signature_request']['signature_request_id']
 
-        self.items = [Bunch(**self.payload)]
+            try:
+                self.signature = Signature.objects.get(signature_request_id=signature_request_id)
+                self._user = self.signature.requested_by
+                self._doc = self.signature.document
+
+            except Signature.DoesNotExist as e:
+                self.signature = None
+                logger.critical('HelloSign Signature does not exist: %s' % signature_request_id)
+
+            self.items = [Bunch(**self.payload)]
 
     @property
     def class_map(self):
@@ -208,13 +252,17 @@ class HelloSignWebhookService(object):
 
     def process(self):
         page = None
-        for c, i in enumerate(self.items):
-            event = i.event
-            event_type = event.get('event_type')
+        if self.signature is not None and self._user is not None:
 
-            logger.info("Hellosign event: {event_date} is of type {event_type}".format(event_type=event_type, event_date=event.get('event_time',None)))
+            for c, i in enumerate(self.items):
+                event = i.event
+                event_type = event.get('event_type')
 
-            i = self.get_class(event=event_type)(**i)
+                logger.info("Hellosign event: {event_date} is of type {event_type}".format(event_type=event_type, event_date=event.get('event_time',None)))
 
-            if i is not None and hasattr(i, 'process'):
-                i.process()
+                i._user = self._user # set out owner to that of the file
+                i.doc = self._doc
+                i = self.get_class(event=event_type)(**i)
+
+                if i is not None and hasattr(i, 'process'):
+                    i.process()

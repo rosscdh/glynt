@@ -19,9 +19,3 @@ class SignatureForm(forms.ModelForm):
     def __init__(self, user, *args, **kwargs):
         self.user = user
         super(SignatureForm, self).__init__(*args, **kwargs)
-
-    def signatories(self):
-        return [('ross', 'ross@lawpal.com'),]
-
-    def documents(self):
-        return []
