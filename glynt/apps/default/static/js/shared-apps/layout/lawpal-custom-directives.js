@@ -20,6 +20,15 @@ angular.module('lawpal').directive('collapse', function () {
 				scope.isCollapsed = scope.isCollapsed !== true;
 			};
 
+			scope.open = function() {
+				ctrl.toggleLockBlock(index, false);
+				scope.isCollapsed = false;
+                setTimeout( function(){
+                	scope.$apply();
+                    adjustScollPos($(".options-container .item-container"));
+                },100);
+			};
+
 			scope.$watch('isCollapsed', function (newValue, oldValue) {
 				if (newValue !== oldValue) {
 					var newLength = newValue === true ? minWidth - element.parent()[0].offsetWidth : maxWidth - element.parent()[0].offsetWidth;
@@ -38,13 +47,22 @@ angular.module('lawpal').directive('collapse', function () {
 			});
 
 			scope.$on('open-sidebar', function( evt, idx ) {
-				if( idx === index ) {
-					ctrl.toggleLockBlock(index, false);
-					scope.isCollapsed = false;
-                    setTimeout( function(){
-                        adjustScollPos($(".options-container .item-container"));
-                    },100);
-					
+				if(scope.isCollapsed === false) {
+					if( idx === index ) {
+						ctrl.toggleLockBlock(index, false);
+						scope.isCollapsed = true;
+						setTimeout(
+							function() {
+								scope.open();
+							},
+							1000
+						);
+					}
+				} else {
+					if( idx === index ) {
+						scope.open();
+						
+					}
 				}
 			});
 
