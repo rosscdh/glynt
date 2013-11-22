@@ -123,8 +123,10 @@
                                     </a>
                                 </li>
                             </ul>
+                            {% if is_lawyer %}
                             <div class="drop-pane" ng-file-drop="onFileSelect($files);" ng-click="uploadSelector()">Drop files here</div>
                             <button class="btn btn-default btn-block upload-button" ng-file-drop="onFileSelect($files);" ng-click="uploadSelector()">Upload attachments</button>
+                            {% endif %}
                             <hr />
 
                             <h4>Activity</h4>
