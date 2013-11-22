@@ -103,7 +103,7 @@
                             <hr />
 
                             <h4>Attachments</h4>
-                            <p>Your feedback required</p>
+                            <p ng-show="pendingFeedback(item)">Your feedback required</p>
                             <ul class="nav nav-pills nav-stacked attachment-list">
                                 <li ng-repeat="attachment in item.attachments | filter: { is_deleted: false, feedbackRequired:true }">
                                     <a href="#" ng-click="viewAttachment(attachment)">
@@ -113,7 +113,7 @@
                                 </li>
                             </ul>
 
-                            <p>All attachments</p>
+                            <p ng-show="pendingFeedback(item)">All attachments</p>
                             <span ng-show="item.loadingAttachments" class="text-muted"><i class="icon icon-spinner icon-spin"></i> Loading attachments</span>
                             <ul class="nav nav-pills nav-stacked attachment-list">
                                 <li ng-repeat="attachment in item.attachments | filter: { is_deleted: false }">
