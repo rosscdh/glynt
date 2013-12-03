@@ -111,7 +111,6 @@ MIDDLEWARE_CLASSES = (
     'django_filepicker.middleware.URLFileMapperMiddleware',
 )
 
-
 ROOT_URLCONF = 'glynt.urls'
 
 # Needed for AngularJS

@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from parsley.decorators import parsleyfy
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Fieldset, Div
+from crispy_forms.layout import Layout, Submit
 
 from glynt.apps.transact import BuilderBaseForm, CrispyExFieldsetFieldRemovalMixin
 from glynt.apps.company import COMPANY_STATUS_CHOICES
