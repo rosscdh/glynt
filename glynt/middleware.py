@@ -25,7 +25,7 @@ class EnsureUserHasCompanyMiddleware(object):
                     signup_url = reverse('client:confirm_signup', kwargs={'slug': request.user.username})
                     logout_url = reverse('logout')
 
-                    if request.get_full_path() not in [signup_url, logout_url]:
+                    if request.get_full_path() not in [signup_url, logout_url, reverse('public:terms'), reverse('public:privacy'), reverse('public:disclaimer')]:
                         return redirect(signup_url)
         return None
 
