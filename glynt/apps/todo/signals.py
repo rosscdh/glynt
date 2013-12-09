@@ -197,7 +197,7 @@ def on_comment_created(sender, **kwargs):
                     description=comment.comment, target=comment_target.project, project_action='added_discussion_item', project_pk=comment_target.project.pk, creating_user_pk=comment.user.pk)
 
         if send is True:
-            logger.debug('send action: {event} {verb} content: {content}'.format(event=event, verb=verb, content=comment.comment))
+            logger.debug('send action: %s %s content: %s' % event, verb, comment.comment)
             action.send(comment.user,
                         verb=verb,
                         action_object=comment,
@@ -345,7 +345,7 @@ def todo_item_status_change(sender, **kwargs):
             # @BUSINESSRULE ensure we have a sort_position_by_cat
             if not instance.sort_position_by_cat:
                 instance.sort_position_by_cat = instance.sort_position
-                
+
     else:
 
         if instance.user is not None:
