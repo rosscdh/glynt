@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-import signals
+import ToDo signals here beacuse of problems with signals system
+and certian email services @TODO sort out the email services
 """
 from glynt.apps.todo.signals import (on_attachment_created,
                       on_attachment_deleted,
