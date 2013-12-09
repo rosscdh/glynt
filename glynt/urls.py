@@ -9,6 +9,8 @@ from django.contrib import admin
 
 admin.autodiscover()
 
+handler500 = 'glynt.apps.default.views.handler500'
+
 def _v1_api():
     from glynt.apps.api.v1 import V1_INTERNAL_API
     return V1_INTERNAL_API.urls
