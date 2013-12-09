@@ -195,3 +195,8 @@ class FeedbackRequest(models.Model):
             return self.assigned_to.all()[0]
         except IndexError:
             return {}
+
+
+"""
+import signals are now done in apps.default.models
+"""

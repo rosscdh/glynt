@@ -19,9 +19,6 @@ from glynt.apps.todo.services import (CrocdocAttachmentService, ToDoStatusServic
                                       ToDoAttachmentFeedbackRequestStatusService)
 from glynt.apps.project.models import Project, ProjectLawyer
 
-from glynt.apps.services.email import NewActionEmailService
-from glynt.apps.services.pusher import PusherPublisherService
-
 from actstream import action
 from actstream.models import Action
 
@@ -305,6 +302,8 @@ def projectlawyer_deleted(sender, **kwargs):
 
 @receiver(post_save, sender=ToDo, dispatch_uid='todo.item_crud')
 def todo_item_crud(sender, **kwargs):
+    from glynt.apps.services.pusher import PusherPublisherService
+
     is_new = kwargs.get('created', False)
     instance = kwargs.get('instance')
 
@@ -386,6 +385,9 @@ def on_action_created(sender, **kwargs):
     Handle Creation of attachments
     """
     if not isinstance(sender, LogEntry):
+        from glynt.apps.services.email import NewActionEmailService
+        from glynt.apps.services.pusher import PusherPublisherService
+
         is_new = kwargs.get('created', False)
         action = kwargs.get('instance')
         target = action.target
