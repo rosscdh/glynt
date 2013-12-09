@@ -93,7 +93,7 @@ def on_attachment_created(sender, **kwargs):
             # increment the attachment count
             todo.num_attachments_plus()
 
-            verb = '{name} uploaded an attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project)
+            verb = u'{name} uploaded an attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project).encode('utf-8')
             action.send(attachment.uploaded_by,
                         verb=verb,
                         action_object=attachment,
@@ -126,7 +126,7 @@ def on_attachment_deleted(sender, **kwargs):
             delete_attachment(is_new=is_new, attachment=attachment, **kwargs)
 
             try:
-                verb = '{name} deleted attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project)
+                verb = u'{name} deleted attachment: "{filename}" on the checklist item {todo} for {project}'.format(name=attachment.uploaded_by.get_full_name(), filename=attachment.filename, todo=attachment.todo, project=attachment.project).encode('utf-8')
                 action.send(attachment.uploaded_by,
                             verb=verb,
                             action_object=attachment,
@@ -166,7 +166,7 @@ def on_comment_created(sender, **kwargs):
                 send = True
                 target = todo = comment.content_object
                 event = 'todo.comment.created'
-                verb = '{name} commented on checklist item {todo} for {project}'.format(name=comment.user.get_full_name(), project=todo.project, todo=todo.name)
+                verb = u'{name} commented on checklist item {todo} for {project}'.format(name=comment.user.get_full_name(), project=todo.project, todo=todo.name).encode('utf-8')
 
                 # update the ToDo Status as its been interacted with
                 todostatus_service = ToDoStatusService(todo_item=todo)
@@ -176,7 +176,7 @@ def on_comment_created(sender, **kwargs):
                 send = True
                 target = project = comment.content_object
                 event = 'project.comment.created'
-                verb = '{name} commented on the {project} project'.format(name=comment.user.get_full_name(), project=project)
+                verb = u'{name} commented on the {project} project'.format(name=comment.user.get_full_name(), project=project).encode('utf-8')
                 extra.update({
                     'url': comment.absolute_deeplink_url()  # append url to the comment deeplink
                 })
@@ -185,7 +185,7 @@ def on_comment_created(sender, **kwargs):
                 send = True
                 target = comment_target = comment.content_object
                 event = 'project.lawyer_engage.comment.created'
-                verb = '{name} commented on the Lawyer Engagement conversation for {project}'.format(name=comment.user.get_full_name(), project=comment_target.project)
+                verb = u'{name} commented on the Lawyer Engagement conversation for {project}'.format(name=comment.user.get_full_name(), project=comment_target.project).encode('utf-8')
 
                 # notify the lawyer (used for discussion counts)
                 if comment.user.profile.is_customer:
@@ -197,7 +197,7 @@ def on_comment_created(sender, **kwargs):
                     description=comment.comment, target=comment_target.project, project_action='added_discussion_item', project_pk=comment_target.project.pk, creating_user_pk=comment.user.pk)
 
         if send is True:
-            logger.debug('send action: %s %s content: %s' % event, verb, comment.comment)
+            logger.debug(u'send action: {event} {verb} content: {content}'.format(event=event, verb=verb, content=comment.comment).encode('utf-8'))
             action.send(comment.user,
                         verb=verb,
                         action_object=comment,
@@ -224,7 +224,7 @@ def feedbackrequest_created(sender, **kwargs):
 
         if feedbackrequest and feedbackrequest.status == FEEDBACK_STATUS.open:
             assigned_to = feedbackrequest.primary_assigned_to.get_full_name()
-            verb = '{assigned_by} requested feedback from {assigned_to} on checklist item {todo} for {project}'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), assigned_to=assigned_to, todo=feedbackrequest.attachment.todo, project=feedbackrequest.attachment.project)
+            verb = u'{assigned_by} requested feedback from {assigned_to} on checklist item {todo} for {project}'.format(assigned_by=feedbackrequest.assigned_by.get_full_name(), assigned_to=assigned_to, todo=feedbackrequest.attachment.todo, project=feedbackrequest.attachment.project).encode('utf-8')
             action.send(feedbackrequest.assigned_by,
                         verb=verb,
                         action_object=feedbackrequest.attachment,
