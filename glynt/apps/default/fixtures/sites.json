@@ -1,7 +1,7 @@
 [
     {
         "fields": {
-            "domain": "https://www.lawpal.com", 
+            "domain": "https://clients.lawpal.com", 
             "name": "Prod Lawpal.com"
         }, 
         "model": "sites.site", 
