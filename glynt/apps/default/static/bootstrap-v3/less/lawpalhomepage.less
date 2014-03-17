@@ -535,29 +535,60 @@ body.homepage {
 
 
 
+//
+// Onboarding Process
+// --------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#progress-bar {
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #ededed;
+  position:relative;
+  height:108px;
+  margin-top:-20px;
+  .bar-wrap {
+    top:0;
+    padding-top:64px;
+    width:100%;
+  }
+  .bar-inner {
+    background-color:#eaeaea;
+    border-color:1px solid #eaeaea;
+    height:14px;
+    width:100%;
+    border-radius:60px;
+  }
+  .progress-wrap {
+    position:absolute;
+    top:0;
+    padding-top:24px;
+    width:100%;
+  }
+  .progress-inner {
+    width:100%;
+    ul li {
+      width:19.5%;
+      text-align:center;
+      color: #ccc;
+      font-size:13px;
+      padding-right:0px;
+    }
+    ul li div {
+      height: 30px;
+      width:30px;
+      background-color:#eee;
+      position: relative;
+      top:10px;
+      margin: 0 auto;
+      border-radius:20px;
+    }
+    ul.signup li.a, ul.order li.a, ul.order li.b, ul.concierge li.a, ul.concierge li.b, ul.concierge li.c, ul.attorney li.a, ul.attorney li.b, ul.attorney li.c, ul.attorney li.d, ul.begin li.a, ul.begin li.b, ul.begin li.c, ul.begin li.d, ul.begin li.e { 
+        color: #444;
+        div {
+          background-color:#66d675;
+        }
+    }
+  }
+}
 
 
 //
@@ -1375,3 +1406,12 @@ button.vcard {
 h5.text-info {
   color: @brand-info;
 }
+
+// Intake Flow
+// -------------------------
+
+// Scene order
+#selection              { left: 0%; }
+#qualification          { left: 100% };
+#incorporation-services { left: 200% };
+#financing-services     { left: 300% };

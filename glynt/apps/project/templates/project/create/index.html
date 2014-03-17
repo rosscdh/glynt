@@ -1,0 +1,16 @@
+{% extends 'base-slides.html' %}
+
+{% block page_title %}What do you need?{% endblock %}
+
+{% block scenes %}
+    <!-- Selection -->
+    {% include 'project/create/slides/selection/ready-to-go.html' %}
+    {# {% include 'project/create/slides/selection/already-going.html' %} #}
+
+    <!-- Qualification -->
+    {% include 'project/create/slides/qualification/incorporation.html' %}
+
+    <!-- Services -->
+    {% include 'project/create/slides/services/incorporation.html' %}
+    {% include 'project/create/slides/services/financing.html' %}
+{% endblock %}

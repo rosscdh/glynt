@@ -1,0 +1,109 @@
+<section id="qualification-incorporation" class="slide" data-scene="incorporation" data-stage="qualification">
+    <div class="slide-content">
+        {% include 'client/partials/onboarding.html' with step='order' %}
+
+        <div class="masthead">
+            <div class="container">
+                {% include 'client/partials/steps.html' with count=4 step=2 %}
+                <h1>Just a few questions</h1>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="container">
+                <form class="form-inline form-pretty" role="form">
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <h3>How many founders?</h3>
+                            <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="form-group text-right">
+                                <label class="text-center">
+                                    <h4 id="company-founders-bind" data-single="founder" data-plural="founders">
+                                        <span class="bind-value">1</span>
+                                        <span class="bind-desc">founder</span>
+                                    </h4>
+                                    <input type="text" id="company-founders" name="company_founders" value="1" data-slider-min="1" data-slider-max="10" data-slider-step="1" data-slider-tooltip="hide" data-toggle="slider" data-max="3">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <h3>Where are they based?</h3>
+                            <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                        </div>
+                        <div class="col-lg-4 col-offset-1">
+                            <div class="form-group text-left">
+                                <div>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="company_founders_location" value="inside" data-regexp="inside" required>
+                                        <h4>Everyone inside the United States</h4>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="company_founders_location" value="outside" data-regexp="inside" required>
+                                        <h4>Everyone outside the United States</h4>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="company_founders_location" value="mixed" data-regexp="inside" required>
+                                        <h4>Some inside and some outside the US</h4>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <h3>Has the company been incorporated?</h3>
+                            <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                        </div>
+                        <div class="col-lg-4 col-offset-1" style="margin-top: 20px;">
+                            <div class="form-group text-left">
+                                <label class="radio-inline">
+                                    <input type="radio" name="company_incorporated" value="yes" data-regexp="no" required>
+                                    <h4>Yes</h4>
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="company_incorporated" value="no" data-regexp="no" required>
+                                    <h4>No</h4>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <h3>Is there any paperwork?</h3>
+                            <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                        </div>
+                        <div class="col-lg-4 col-offset-1" style="margin-top: 20px;">
+                            <div class="form-group text-left">
+                                <label class="radio-inline">
+                                    <input type="radio" name="company_paperwork" value="yes" data-regexp="no" required>
+                                    <h4>Yes</h4>
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="company_paperwork" value="no" data-regexp="no" required>
+                                    <h4>No</h4>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <p class="text-center">
+                            <button type="submit" class="btn btn-success btn-huge">Next Step »</button>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

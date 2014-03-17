@@ -1,0 +1,23 @@
+{% load transaction_tags %}
+
+<section id="incorporation-services" class="slide" data-scene="incorporation" data-stage="services">
+    <div class="slide-content">
+        {% include 'client/partials/onboarding.html' with step='order' %}
+
+        <div class="masthead">
+            <div class="container">
+                {% include 'client/partials/steps.html' with count=4 step=3 %}
+                <h1>Available packages</h1>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="container">
+                <form class="form-pretty" role="form">
+                    {% transactions transaction='CS' %}
+                    {% transactions transaction='CSP' %}
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

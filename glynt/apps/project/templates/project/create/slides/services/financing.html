@@ -1,0 +1,23 @@
+{% load transaction_tags %}
+
+<section id="financing-services" class="slide" data-scene="financing" data-stage="services">
+    <div class="slide-content">
+        {% include 'client/partials/onboarding.html' with step='order' %}
+
+        <div class="masthead">
+            <div class="container">
+                {% include 'client/partials/steps.html' with count=4 step=4 %}
+                <h1>Financing Services</h1>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="container">
+                <form class="form-pretty" role="form">
+                    {% transactions transaction='SF' %}
+                    {% transactions transaction='ES' %}
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

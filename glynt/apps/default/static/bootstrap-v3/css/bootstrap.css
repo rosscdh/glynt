@@ -250,7 +250,7 @@ html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.428571429;
   color: #333333;
@@ -417,7 +417,7 @@ h5,
 h6 {
   margin-top: 10px;
   margin-bottom: 10px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 h1,
 .h1 {
@@ -1184,7 +1184,6 @@ form {
 }
 .form-wrap {
   background-color: #fbfbfb;
-  padding: 20px 0px;
 }
 fieldset {
   padding: 0;
@@ -1207,10 +1206,13 @@ legend {
 label {
   display: inline-block;
   margin-bottom: 3px;
-  margin-top: 5px;
+  margin-top: 15px;
   font-weight: bold;
   font-size: 14px;
   color: #555555;
+}
+.form-wrap hr {
+  margin: 5px 0px 5px 0px;
 }
 select,
 textarea,
@@ -1697,6 +1699,14 @@ textarea.parsley-error:focus {
 }
 .label {
   margin-top: 0px;
+}
+@media (min-width: 768px) {
+  label {
+    margin-top: 5px;
+  }
+  .form-wrap hr {
+    margin: 15px 0px 15px 0px;
+  }
 }
 @media (min-width: 992px) {
   .form-horizontal .control-label {
@@ -4216,7 +4226,7 @@ fieldset[disabled] .nav > li > a.btn.btn-success.active {
 #lawyer-signup-modal h2 {
   font-size: 24px;
   margin-bottom: 10px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 #signup-modal .close,
 #signin-modal .close,
@@ -6740,7 +6750,7 @@ body.homepage section#top h2 {
 }
 body.homepage section#top h1 {
   font-size: 35px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
   text-shadow: -1px 1px 2px #4a442e;
 }
 body.homepage section#top h2 {
@@ -6822,7 +6832,7 @@ body.homepage section#co-pilot .step-block h2 {
   font-size: 22px;
   margin-top: 0px;
   padding-top: 0px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 body.homepage section#co-pilot .step-block h3 {
   font-size: 14px;
@@ -7008,7 +7018,7 @@ body.homepage section#about-us h2 {
   margin-top: 25px;
   text-align: left;
   color: #666;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 body.homepage section#about-us .investors-team {
   text-align: center;
@@ -7017,7 +7027,7 @@ body.homepage section#about-us .investors-team h4 {
   font-size: 13px;
   color: #999;
   text-align: center;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 body.homepage section#about-us .investors-team h3 {
   font-size: 13px;
@@ -7131,6 +7141,84 @@ body.homepage section#about-us .investors-team img.inv {
     padding-right: 90px;
     padding-left: 90px;
   }
+}
+#progress-bar {
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #ededed;
+  position: relative;
+  height: 108px;
+  margin-top: -20px;
+}
+#progress-bar .bar-wrap {
+  top: 0;
+  padding-top: 64px;
+  width: 100%;
+}
+#progress-bar .bar-inner {
+  background-color: #eaeaea;
+  border-color: 1px solid #eaeaea;
+  height: 14px;
+  width: 100%;
+  border-radius: 60px;
+}
+#progress-bar .progress-wrap {
+  position: absolute;
+  top: 0;
+  padding-top: 24px;
+  width: 100%;
+}
+#progress-bar .progress-inner {
+  width: 100%;
+}
+#progress-bar .progress-inner ul li {
+  width: 19.5%;
+  text-align: center;
+  color: #ccc;
+  font-size: 13px;
+  padding-right: 0px;
+}
+#progress-bar .progress-inner ul li div {
+  height: 30px;
+  width: 30px;
+  background-color: #eee;
+  position: relative;
+  top: 10px;
+  margin: 0 auto;
+  border-radius: 20px;
+}
+#progress-bar .progress-inner ul.signup li.a,
+#progress-bar .progress-inner ul.order li.a,
+#progress-bar .progress-inner ul.order li.b,
+#progress-bar .progress-inner ul.concierge li.a,
+#progress-bar .progress-inner ul.concierge li.b,
+#progress-bar .progress-inner ul.concierge li.c,
+#progress-bar .progress-inner ul.attorney li.a,
+#progress-bar .progress-inner ul.attorney li.b,
+#progress-bar .progress-inner ul.attorney li.c,
+#progress-bar .progress-inner ul.attorney li.d,
+#progress-bar .progress-inner ul.begin li.a,
+#progress-bar .progress-inner ul.begin li.b,
+#progress-bar .progress-inner ul.begin li.c,
+#progress-bar .progress-inner ul.begin li.d,
+#progress-bar .progress-inner ul.begin li.e {
+  color: #444;
+}
+#progress-bar .progress-inner ul.signup li.a div,
+#progress-bar .progress-inner ul.order li.a div,
+#progress-bar .progress-inner ul.order li.b div,
+#progress-bar .progress-inner ul.concierge li.a div,
+#progress-bar .progress-inner ul.concierge li.b div,
+#progress-bar .progress-inner ul.concierge li.c div,
+#progress-bar .progress-inner ul.attorney li.a div,
+#progress-bar .progress-inner ul.attorney li.b div,
+#progress-bar .progress-inner ul.attorney li.c div,
+#progress-bar .progress-inner ul.attorney li.d div,
+#progress-bar .progress-inner ul.begin li.a div,
+#progress-bar .progress-inner ul.begin li.b div,
+#progress-bar .progress-inner ul.begin li.c div,
+#progress-bar .progress-inner ul.begin li.d div,
+#progress-bar .progress-inner ul.begin li.e div {
+  background-color: #66d675;
 }
 ul#checklist-categories li {
   position: relative;
@@ -8124,6 +8212,18 @@ button.vcard {
 h5.text-info {
   color: #5bc0de;
 }
+#selection {
+  left: 0%;
+}
+#qualification {
+  left: 100%;
+}
+#incorporation-services {
+  left: 200%;
+}
+#financing-services {
+  left: 300%;
+}
 .navbar {
   margin-bottom: 0;
 }
@@ -8163,6 +8263,10 @@ h5.text-info {
 .page-header:after {
   clear: both;
 }
+.page-header.big {
+  padding-top: 30px;
+  padding-bottom: 13.5px;
+}
 .page-header h1 {
   color: white;
   font-size: 32px;
@@ -8195,6 +8299,277 @@ h5.text-info {
 }
 .breadcrumb > li > a {
   color: #fff;
+}
+.masthead {
+  background-color: #42d0e5;
+  border-bottom: 1px solid #eeeeee;
+  color: #ffffff;
+  font-size: 19px;
+  font-weight: 200;
+  line-height: 2.1428571435;
+  margin-bottom: 30px;
+  padding: 30px;
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+}
+.masthead h1 {
+  color: inherit;
+  font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  line-height: 1.1;
+  margin: 0;
+}
+.masthead p {
+  font-weight: 300;
+  line-height: 1.4;
+  margin: 0;
+}
+.masthead .container {
+  position: relative;
+}
+@media (min-width: 768px) {
+  .masthead {
+    text-align: left;
+  }
+}
+html,
+body {
+  /* min-width: 1024px; */
+
+  overflow-x: hidden;
+  /*.transition(opacity 400ms);*/
+
+}
+body {
+  bottom: 0;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+  *zoom: 1;
+}
+html,
+.stage {
+  display: block;
+  height: 100%;
+  padding: 0;
+  position: static;
+  width: 100%;
+  *zoom: 1;
+}
+.stage {
+  position: relative;
+  z-index: 10;
+  /*.transition(all .6s ease-in-out);*/
+
+}
+.slide {
+  display: block;
+  height: 100%;
+  left: 100%;
+  min-width: 980px;
+  overflow: hidden;
+  overflow-y: scroll;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 19;
+  *zoom: 1;
+  /*-webkit-transform: translateZ(0);*/
+
+}
+.slide-content {
+  display: block;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+.form-pretty .radio,
+.form-pretty .checkbox {
+  padding-left: 60px;
+  vertical-align: middle;
+}
+.form-pretty .radio label,
+.form-pretty .checkbox label {
+  cursor: pointer;
+  display: inline;
+}
+.form-pretty .radio input[type="radio"],
+.form-pretty .radio-inline input[type="radio"],
+.form-pretty .checkbox input[type="checkbox"],
+.form-pretty .checkbox-inline input[type="checkbox"] {
+  display: none;
+}
+.form-pretty .radio-inline,
+.form-pretty .checkbox-inline {
+  cursor: pointer;
+  display: inline-block;
+  line-height: 1;
+  margin-top: 0;
+  padding-left: 50px;
+  vertical-align: middle;
+}
+.form-pretty .radio-inline + .radio-inline,
+.form-pretty .checkbox-inline + .checkbox-inline {
+  margin-top: 0;
+  margin-left: 60px;
+}
+.form-pretty .radio label:before,
+.form-pretty .radio-inline:before,
+.form-pretty .checkbox label:before,
+.form-pretty .checkbox-inline:before {
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: inherit;
+  -webkit-font-smoothing: antialiased;
+  *margin-right: .3em;
+  color: #eeeeee;
+  content: "\f096";
+  display: inline-block;
+  float: left;
+  font-size: 48px;
+  margin-left: -60px;
+  speak: none;
+}
+.form-pretty .radio label.checked:before,
+.form-pretty .radio-inline.checked:before,
+.form-pretty .checkbox label.checked:before,
+.form-pretty .checkbox-inline.checked:before {
+  color: #6bdb7e;
+  content: "\f046";
+}
+.form-pretty .radio-inline:before,
+.form-pretty .checkbox-inline:before {
+  margin-left: -50px;
+}
+.form-pretty .slider {
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+}
+.form-pretty .slider input {
+  display: none;
+}
+.form-pretty .slider .slider-handle {
+  background: #f88172;
+  border: 0;
+  border-radius: 6px;
+  position: absolute;
+}
+.form-pretty .slider .slider-selection {
+  background-color: #eeeeee;
+  border-radius: 6px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  position: absolute;
+}
+.form-pretty .slider .slider-track {
+  background-color: #eeeeee;
+  border-radius: 6px;
+  cursor: pointer;
+  position: absolute;
+}
+.form-pretty .slider .tooltip-inner {
+  white-space: nowrap;
+}
+.form-pretty .slider.slider-horizontal {
+  height: 30px;
+  width: 210px;
+}
+.form-pretty .slider.slider-horizontal .slider-handle {
+  height: 30px;
+  margin-left: -5px;
+  margin-top: -10px;
+  width: 10px;
+}
+.form-pretty .slider.slider-horizontal .slider-selection {
+  bottom: 0;
+  height: 100%;
+  top: 0;
+}
+.form-pretty .slider.slider-horizontal .slider-track {
+  height: 10px;
+  left: 0;
+  margin-top: -5px;
+  top: 50%;
+  width: 100%;
+}
+.form-pretty .slider.slider-vertical {
+  height: 210px;
+  width: 30px;
+}
+.form-pretty .slider.slider-vertical .slider-handle {
+  height: 10px;
+  margin-left: -10px;
+  margin-top: -5px;
+  width: 30px;
+}
+.form-pretty .slider.slider-vertical .slider-selection {
+  bottom: 0;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+.form-pretty .slider.slider-vertical .slider-track {
+  height: 100%;
+  left: 50%;
+  margin-left: -5px;
+  top: 0;
+  width: 10px;
+}
+.form-pretty .slider.slider-disabled .slider-handle {
+  background-color: red;
+}
+.form-pretty .slider.slider-disabled .slider-selection {
+  background-color: yellow;
+}
+.form-pretty .slider.slider-disabled .slider-track {
+  background-color: blue;
+}
+.steps .step {
+  background-color: white;
+  border-radius: 45px;
+  color: #42d0e5;
+  display: inline-block;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+  text-align: center;
+  vertical-align: middle;
+}
+.steps .step b {
+  display: inline-block;
+  width: 40px;
+}
+.steps .step.viewed {
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+.steps .step.checked b {
+  content: "\f058";
+}
+.steps .seperator {
+  background-color: white;
+  border: 2px solid white;
+  border-radius: 15px;
+  display: inline-block;
+  height: 5px;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+  padding: 5px;
+  text-align: center;
+  vertical-align: middle;
+  width: 5px;
+}
+.steps .seperator.filled {
+  opacity: 1;
+  filter: alpha(opacity=100);
 }
 .toast-error {
   background-color: #bd362f;

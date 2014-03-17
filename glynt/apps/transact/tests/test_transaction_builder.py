@@ -2,17 +2,32 @@
 """
 @TODO set test descriptor
 """
+import os
+import json
+
 from django.core.urlresolvers import reverse
+from django.test.client import RequestFactory
 
 from glynt.casper import BaseLawyerCustomerProjectCaseMixin, PyQueryMixin, for_all_methods, glynt_mock_http_requests
 
-import os
-import json
+from glynt.apps.company.forms import (CompanyProfileForm,
+                                      CompanyAndFinancingProfileForm,
+                                      CompanyProfileAndIntakeForm,
+                                      CompanyFinancingProfileAndIntakeForm,
+                                      FinancingProfileForm,
+                                      FinancingProfileAndIntakeForm,
+                                      IntakeForm,
+                                     )
 
 
 @for_all_methods(glynt_mock_http_requests)
 class TransactionBuilderTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
     test_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+    def setUp(self):
+        super(TransactionBuilderTest, self).setUp()
+
+        self.factory = RequestFactory()
 
     def test_form_builder(self):
         self.client.login(username=self.customer_user.username, password=self.password)
@@ -75,8 +90,121 @@ class TransactionBuilderTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
                     # add to checked (radio items)
                     have_checked.append(field.name)
 
+    """
+    Incorporation form
+    """
+    def test_form_builder_incorporation(self):
+        self.client.login(username=self.customer_user.username, password=self.password)
+
+        url = reverse('transact:builder', kwargs={ 'project_uuid': self.project.uuid, 'tx_range': 'INC', 'step': 1 })
+
+        request = self.factory.get(url)
+        request.project = self.project
+
+        form = CompanyProfileForm(request=request)
+
+        response = self.client.get(url)
+        self.assertEqual(response.context['form'].fields.keys(), form.fields.keys());
+
+    """
+    Incorporation and Financing form
+    """
+    def test_form_builder_incorporation_and_financing(self):
+        self.client.login(username=self.customer_user.username, password=self.password)
+
+        url = reverse('transact:builder', kwargs={ 'project_uuid': self.project.uuid, 'tx_range': 'INC,FIN', 'step': 1 })
+
+        request = self.factory.get(url)
+        request.project = self.project
+
+        form = CompanyAndFinancingProfileForm(request=request)
+
+        response = self.client.get(url)
+        self.assertEqual(response.context['form'].fields.keys(), form.fields.keys());
+
+    """
+    Incorporation, Financing and Intake form
+    """
+    def test_form_builder_incorporation_financing_and_intake(self):
+        self.client.login(username=self.customer_user.username, password=self.password)
+
+        url = reverse('transact:builder', kwargs={ 'project_uuid': self.project.uuid, 'tx_range': 'INC,FIN,NDA', 'step': 1 })
+
+        request = self.factory.get(url)
+        request.project = self.project
+
+        form = CompanyFinancingProfileAndIntakeForm(request=request)
+
+        response = self.client.get(url)
+        self.assertEqual(response.context['form'].fields.keys(), form.fields.keys());
+
+    """
+    Incorporation and Intake form
+    """
+    def test_form_builder_incorporation_and_intake(self):
+        self.client.login(username=self.customer_user.username, password=self.password)
+
+        url = reverse('transact:builder', kwargs={ 'project_uuid': self.project.uuid, 'tx_range': 'INC,NDA', 'step': 1 })
+
+        request = self.factory.get(url)
+        request.project = self.project
+
+        form = CompanyProfileAndIntakeForm(request=request)
+
+        response = self.client.get(url)
+        self.assertEqual(response.context['form'].fields.keys(), form.fields.keys());
+
+    """
+    Financing form
+    """
+    def test_form_builder_financing(self):
+        self.client.login(username=self.customer_user.username, password=self.password)
+
+        url = reverse('transact:builder', kwargs={ 'project_uuid': self.project.uuid, 'tx_range': 'FIN', 'step': 1 })
+
+        request = self.factory.get(url)
+        request.project = self.project
+
+        form = FinancingProfileForm(request=request)
+
+        response = self.client.get(url)
+        self.assertEqual(response.context['form'].fields.keys(), form.fields.keys());
+
+    """
+    Financing and Intake form
+    """
+    def test_form_builder_financing_and_intake(self):
+        self.client.login(username=self.customer_user.username, password=self.password)
+
+        url = reverse('transact:builder', kwargs={ 'project_uuid': self.project.uuid, 'tx_range': 'FIN,NDA', 'step': 1 })
+
+        request = self.factory.get(url)
+        request.project = self.project
+
+        form = FinancingProfileAndIntakeForm(request=request)
+
+        response = self.client.get(url)
+        self.assertEqual(response.context['form'].fields.keys(), form.fields.keys());
+
+    """
+    Intake form
+    """
+    def test_form_builder_intake(self):
+        self.client.login(username=self.customer_user.username, password=self.password)
+
+        url = reverse('transact:builder', kwargs={ 'project_uuid': self.project.uuid, 'tx_range': 'NDA', 'step': 1 })
+
+        request = self.factory.get(url)
+        request.project = self.project
+
+        form = IntakeForm(request=request)
+
+        response = self.client.get(url)
+        self.assertEqual(response.context['form'].fields.keys(), form.fields.keys());
+
     def test_form_builder_js(self):
         self.client.login(username=self.customer_user.username, password=self.password)
+
         url = reverse('transact:builder', kwargs={ 'project_uuid': self.project.uuid, 'tx_range': 'CS', 'step': 1 })
         self.assertTrue(self.load_casper_file(js_file='transact-builder-form.js', test_label='Test the form completes successfully', url=url))
 

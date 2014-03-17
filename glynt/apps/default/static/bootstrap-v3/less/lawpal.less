@@ -16,6 +16,17 @@
 @breadcrumb-color:            lighten(@brand-primary, 30%);
 @breadcrumb-active-color:     #fff;
 
+// Masthead
+@masthead-bg:                     @brand-primary;
+@masthead-border-color:           @gray-lighter;
+@masthead-color:                  #fff;
+@masthead-heading-font-family:    @font-family-base;
+@masthead-heading-font-weight:    500;
+@masthead-heading-color:          inherit;
+@masthead-heading-line-height:    1.1;
+@masthead-font-size:              ceil(@font-size-base * 1.3);
+@masthead-padding:                30px;
+
 
 //
 // Navbars
@@ -43,7 +54,10 @@
   border-bottom: 1px solid @gray-lighter;
   background-color: @brand-primary;
   .clearfix();
-
+  &.big {
+    padding-top: @line-height-computed * 1.5;
+    padding-bottom: ((@line-height-computed / 2) - 1) * 1.5;
+  }
   h1 {
     color: white;
     font-size: ceil(@font-size-base * 2.25);
@@ -87,5 +101,313 @@
 
   > li > a {
     color: #fff;
+  }
+}
+
+
+//
+// Masthead
+// --------------------------------------------------
+
+.masthead {
+  background-color: @masthead-bg;
+  border-bottom: 1px solid @masthead-border-color;
+  color: @masthead-color;
+  font-size: @masthead-font-size;
+  font-weight: 200;
+  line-height: (@line-height-base * 1.5);
+  margin-bottom: @masthead-padding;
+  padding: @masthead-padding;
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .15);
+
+  h1 {
+    color: @masthead-heading-color;
+    font-family: @masthead-heading-font-family;
+    font-weight: @masthead-heading-font-weight;
+    line-height: @masthead-heading-line-height;
+    margin: 0;
+  }
+  p {
+    font-weight: 300;
+    line-height: 1.4;
+    margin: 0;
+  }
+  .container {
+    position: relative;
+  }
+
+  @media (min-width: @screen-small) {
+    text-align: left;
+  }
+}
+
+
+//
+// Stage
+// --------------------------------------------------
+
+html,
+body {
+/* min-width: 1024px; */
+  overflow-x: hidden;
+  /*.transition(opacity 400ms);*/
+}
+
+body {
+  bottom: 0;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+  *zoom: 1;
+}
+
+html,
+.stage {
+  display: block;
+  height: 100%;
+  padding: 0;
+  position: static;
+  width: 100%;
+  *zoom: 1;
+}
+
+.stage {
+  position: relative;
+  z-index: 10;
+  /*.transition(all .6s ease-in-out);*/
+}
+
+
+//
+// Slides
+// --------------------------------------------------
+
+.slide {
+  display: block;
+  height: 100%;
+  left: 100%;
+  min-width: 980px;
+  overflow: hidden;
+    overflow-y: scroll;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 19;
+  *zoom: 1;
+  /*-webkit-transform: translateZ(0);*/
+}
+
+.slide-content {
+  display: block;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+
+//
+// Pretty Forms
+// --------------------------------------------------
+
+
+// Checkboxes & Radio buttons
+// -------------------------
+
+.form-pretty {
+  .radio,
+  .checkbox {
+    padding-left: 60px;
+    vertical-align: middle;
+    label {
+      cursor: pointer;
+      display: inline;
+    }
+  }
+  .radio input[type="radio"],
+  .radio-inline input[type="radio"],
+  .checkbox input[type="checkbox"],
+  .checkbox-inline input[type="checkbox"] {
+    display: none;
+  }
+  .radio-inline,
+  .checkbox-inline {
+    cursor: pointer;
+    display: inline-block;
+    line-height: 1;
+    margin-top: 0;
+    padding-left: 50px;
+    vertical-align: middle;
+  }
+  .radio-inline + .radio-inline,
+  .checkbox-inline + .checkbox-inline {
+    margin-top: 0;
+    margin-left: 60px;
+  }
+  .radio label,
+  .radio-inline,
+  .checkbox label,
+  .checkbox-inline {
+    &:before {
+      .icon-FontAwesome();
+      color: @gray-lighter;
+      content: @check-empty;
+      display: inline-block;
+      float: left;
+      font-size: 48px;
+      margin-left: -60px;
+      speak: none;
+    }
+    &.checked:before {
+      color: @brand-success;
+      content: @check;
+    }
+  }
+  .radio-inline,
+  .checkbox-inline {
+    &:before {
+      margin-left: -50px;
+    }
+  }
+}
+
+
+// Slider
+// -------------------------
+
+.form-pretty {
+  .slider {
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+
+    input {
+      display: none;
+    }
+    .slider-handle {
+      background: @brand-primary-alt;
+      border: 0;
+      border-radius: 6px;
+      position: absolute;
+    }
+    .slider-selection {
+      background-color: @gray-lighter;
+      border-radius: 6px;
+      .box-sizing(border-box);
+      position: absolute;
+    }
+    .slider-track {
+      background-color: @gray-lighter;
+      border-radius: 6px;
+      cursor: pointer;
+      position: absolute;
+    }
+    .tooltip-inner {
+      white-space: nowrap;
+    }
+    &.slider-horizontal {
+      height: 30px;
+      width: 210px;
+      .slider-handle {
+        height: 30px;
+        margin-left: -5px;
+        margin-top: -10px;
+        width: 10px;
+      }
+      .slider-selection {
+        bottom: 0;
+        height: 100%;
+        top: 0;
+      }
+      .slider-track {
+        height: 10px;
+        left: 0;
+        margin-top: -5px;
+        top: 50%;
+        width: 100%;
+      }
+    }
+    &.slider-vertical {
+      height: 210px;
+      width: 30px;
+      .slider-handle {
+        height: 10px;
+        margin-left: -10px;
+        margin-top: -5px;
+        width: 30px;
+      }
+      .slider-selection {
+        bottom: 0;
+        left: 0;
+        top: 0;
+        width: 100%;
+      }
+      .slider-track {
+        height: 100%;
+        left: 50%;
+        margin-left: -5px;
+        top: 0;
+        width: 10px;
+      }
+    }
+    &.slider-disabled {
+      .slider-handle {
+        background-color: red;
+      }
+      .slider-selection {
+        background-color: yellow;
+      }
+      .slider-track {
+        background-color: blue;
+      }
+    }
+  }
+}
+
+
+//
+// Steps
+// --------------------------------------------------
+
+.steps {
+  .step {
+    background-color: white;
+    border-radius: 45px;
+    color: @brand-primary;
+    display: inline-block;
+    .opacity(0.5);
+    text-align: center;
+    vertical-align: middle;
+    b {
+      display: inline-block;
+      width: 40px;
+    }
+    &.viewed {
+      .opacity(1);
+    }
+    &.checked b {
+      content: @ok-sign;
+    }
+  }
+  .seperator {
+    background-color: white;
+    border: 2px solid white;
+    border-radius: 15px;
+    display: inline-block;
+    height: 5px;
+    .opacity(0.5);
+    padding: 5px;
+    text-align: center;
+    vertical-align: middle;
+    width: 5px;
+    &.filled {
+      .opacity(1);
+    }
   }
 }

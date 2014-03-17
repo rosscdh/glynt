@@ -43,5 +43,150 @@
       "slug": "SF",
       "title": "Seed Financing : Convertible Note"
     }
+  },
+  {
+    "pk": 4,
+    "model": "transact.transaction",
+    "fields": {
+      "price": "3000",
+      "description": "The standard incorporation package for startups includes providing advice to founders and preparing set-up documents for the company. Your lawyer will advise you on appropriate initial capitalization, vesting schedules and employee incentives. If applicable, your lawyer will also qualify the company to transact business in California and handle all securities laws filings.",
+      "data": {
+        "checklist_bunches": [
+          "IncorporationBunch"
+        ]
+      },
+      "slug": "CSP",
+      "title": "Company Incorporation, Formation and Setup (& Extras)"
+    }
+  },
+  {
+    "pk": 5,
+    "model": "transact.transaction",
+    "fields": {
+      "price": "0",
+      "description": "...",
+      "data": {
+        "checklist_bunches": []
+      },
+      "slug": "INC",
+      "title": "Incorporation & Set-up"
+    }
+  },
+  {
+    "pk": 6,
+    "model": "transact.transaction",
+    "fields": {
+      "price": "0",
+      "description": "...",
+      "data": {
+        "checklist_bunches": []
+      },
+      "slug": "FIN",
+      "title": "Financing"
+    }
+  },
+  {
+    "pk": 7,
+    "model": "transact.transaction",
+    "fields": {
+      "price": "0",
+      "description": "...",
+      "data": {
+        "checklist_bunches": []
+      },
+      "slug": "IP",
+      "title": "Intellectual Property"
+    }
+  },
+  {
+    "pk": 8,
+    "model": "transact.transaction",
+    "fields": {
+      "price": "0",
+      "description": "...",
+      "data": {
+        "checklist_bunches": []
+      },
+      "slug": "IMM",
+      "title": "Immigration"
+    }
+  },
+  {
+    "pk": 9,
+    "model": "transact.transaction",
+    "fields": {
+      "price": "0",
+      "description": "...",
+      "data": {
+        "checklist_bunches": []
+      },
+      "slug": "EMP",
+      "title": "Hiring/Employees"
+    }
+  },
+  {
+    "pk": 10,
+    "model": "transact.transaction",
+    "fields": {
+      "price": "0",
+      "description": "...",
+      "data": {
+        "checklist_bunches": []
+      },
+      "slug": "NDA",
+      "title": "Non-Disclosure Agreement"
+    }
+  },
+  {
+    "pk": 11,
+    "model": "transact.transaction",
+    "fields": {
+      "price": "0",
+      "description": "...",
+      "data": {
+        "checklist_bunches": []
+      },
+      "slug": "PRI",
+      "title": "Privacy & Terms"
+    }
+  },
+  {
+    "pk": 12,
+    "model": "transact.transaction",
+    "fields": {
+      "price": "0",
+      "description": "...",
+      "data": {
+        "checklist_bunches": []
+      },
+      "slug": "OTH",
+      "title": "Other"
+    }
+  },
+  {
+    "pk": 13,
+    "model": "transact.transaction",
+    "fields": {
+      "price": "0",
+      "description": "...",
+      "data": {
+        "checklist_bunches": []
+      },
+      "slug": "FOU",
+      "title": "Founder Issues"
+    }
+  },
+  {
+    "pk": 14,
+    "model": "transact.transaction",
+    "fields": {
+      "price": "0",
+      "description": "...",
+      "data": {
+        "checklist_bunches": []
+      },
+      "slug": "CLE",
+      "title": "Corporate Clean-up"
+    }
   }
 ]

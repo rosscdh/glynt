@@ -10,19 +10,21 @@ from django.core.urlresolvers import reverse
 from glynt.apps.project.models import Project
 from glynt.apps.project import PROJECT_CREATED, PROJECT_PROFILE_IS_COMPLETE
 
-from glynt.apps.transact.views.intake import (FORMS as INTAKE_FORMS,)
-from glynt.apps.transact.views.intake import CS_FORMS, SF_FORMS, CS_SF_FORMS
+from glynt.apps.transact.views.intake import *
 
 from bunch import Bunch
 
 import json
 
 TX_OPTIONS = {
-    'INTAKE': {'forms': INTAKE_FORMS, 'templates': [], 'data_provider': Bunch({})},
-    'CS': {'forms': CS_FORMS, 'templates': [], 'data_provider': Bunch({})},
-    'SF': {'forms': SF_FORMS, 'templates': [], 'data_provider': Bunch({})},
-    'ES': {'forms': SF_FORMS, 'templates': [], 'data_provider': Bunch({})},
-    'CS_SF_ES': {'forms': CS_SF_FORMS, 'templates': [], 'data_provider': Bunch({})},
+    'INC':     { 'forms': INC_FORMS, 'templates': [], 'data_provider': Bunch({}) },
+    'FIN':     { 'forms': FIN_FORMS, 'templates': [], 'data_provider': Bunch({}) },
+    'INC_FIN': { 'forms': INC_FIN_FORMS, 'templates': [], 'data-provider': Bunch({}) },
+
+    'INTAKE':         { 'forms': INTAKE_FORMS, 'templates': [], 'data_provider': Bunch({}) },
+    'INC_INTAKE':     { 'forms': INC_INTAKE_FORMS, 'templates': [], 'data_provider': Bunch({}) },
+    'FIN_INTAKE':     { 'forms': FIN_INTAKE_FORMS, 'templates': [], 'data_provider': Bunch({}) },
+    'INC_FIN_INTAKE': { 'forms': INC_FIN_INTAKE_FORMS, 'templates': [], 'data-provider': Bunch({}) },
 }
 
 
@@ -69,12 +71,35 @@ class BuilderWizardView(NamedUrlSessionWizardView):
             tx_range = [tx_range]
 
         """
-        @BUSINESSRULE if we have a multiple selected it must be the combined transaction form
+        @BUSINESSRULE
+        Simple but long-winded logic to work out which form to display to the user
         """
-        if len(tx_range) > 1:
-            tx_range = ['CS_SF_ES']
+        # have they selected incorporation?
+        if 'INC' in tx_range or 'CS' in tx_range or 'CSP' in tx_range:
+            # do they have financing as well
+            if 'FIN' in tx_range or 'SF' in tx_range or 'ES' in tx_range:
+                # is it only incorporation and financing
+                if len(tx_range) is 2:
+                    tx_forms = ['INC_FIN']
+                else:
+                    tx_forms = ['INC_FIN_INTAKE']
+            else:
+                # is it only incorporation
+                if len(tx_range) is 1:
+                    tx_forms = ['INC']
+                else:
+                    tx_forms = ['INC_INTAKE']
+        # have they selected financing?
+        elif 'FIN' in tx_range or 'SF' in tx_range or 'ES' in tx_range:
+            # is it only financing
+            if len(tx_range) is 1:
+                tx_forms = ['FIN']
+            else:
+                tx_forms = ['FIN_INTAKE']
+        else:
+            tx_forms = ['INTAKE']
 
-        for tx in tx_range:
+        for tx in tx_forms:
             tx_options_keys = TX_OPTIONS.keys()
 
             if tx in tx_options_keys:

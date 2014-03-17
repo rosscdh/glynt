@@ -1,0 +1,25 @@
+{% load glynt_helpers %}
+
+<div class="steps pull-right">
+    {% for i in count|num_range %}
+        {% if step == forloop.counter %}
+            <span class="step viewed"><b>{{ forloop.counter }}</b></span>
+        {% elif step > forloop.counter %}
+            <span class="step viewed checked"><b class="icon icon-ok"></b></span>
+        {% else %}
+            <span class="step"><b>{{ forloop.counter }}</b></span>
+        {% endif %}
+
+        {% if not forloop.last %}
+            {% if step > forloop.counter %}
+                <span class="seperator filled"></span>
+                <span class="seperator filled"></span>
+                <span class="seperator filled"></span>
+            {% else %}
+                <span class="seperator"></span>
+                <span class="seperator"></span>
+                <span class="seperator"></span>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</div>

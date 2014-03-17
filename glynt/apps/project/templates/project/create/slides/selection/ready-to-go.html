@@ -1,0 +1,115 @@
+<section id="selection" class="slide" data-stage="selection">
+    <div class="slide-content">
+        {% include 'client/partials/onboarding.html' with step='order' %}
+
+        <div class="masthead">
+            <div class="container">
+                {% include 'client/partials/steps.html' with count=4 step=1 %}
+                <h1>What do you need?</h1>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="container">
+                <form class="form-pretty" role="form">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="services" value="incorporation" data-mincheck="1" data-needs-stage="qualification,services">
+                                    <h4>Incorporation &amp; Set-up</h4>
+                                    <p>Your lawyer will help advise you and prepare standard documents in connection with the incorporation and initial setup for your company.</p>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="services" value="financing" data-mincheck="1" data-needs-stage="services">
+                                    <h4>Financing</h4>
+                                    <p>Your lawyer will help advise you, prepare and negotiate documents for closing your financing.</p>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="services" value="founder-issues" data-mincheck="1">
+                                    <h4>Founder Issues</h4>
+                                    <p>Taking on a co-founder? Redistributing the equity? Divorcing your co-founder? Your lawyer will help advise you, prepare and negotiate the documentation.</p>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="services" value="intellectual-property" data-mincheck="1">
+                                    <h4>Intellectual Property</h4>
+                                    <p>Your lawyer will assist you in developing and implementing strategies to develop, protect, enforce and commercialize your intellectual property.</p>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="services" value="immigration" data-mincheck="1">
+                                    <h4>Immigration</h4>
+                                    <p>Your lawyer will handle every aspect of the immigration process for you, your employees and potential recruits.</p>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="services" value="employees" data-mincheck="1">
+                                    <h4>Hiring/Employees</h4>
+                                    <p>Your lawyer will advise you, and prepare and negotiate all documents in connection with any employment related issues.</p>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="services" value="non-disclosure-agreement" data-mincheck="1">
+                                    <h4>Non-Disclosure Agreement</h4>
+                                    <p>Your lawyer will advise you and prepare a form of Non-Disclosure Agreement to use with third-parties to protect your confidential and proprietary information.</p>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="services" value="privacy-and-terms" data-mincheck="1">
+                                    <h4>Privacy &amp; Terms</h4>
+                                    <p>Your lawyer will advise you and prepare a Privacy Policy and the Terms &amp; Conditions for your company's website.</p>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="services" value="other" data-mincheck="1">
+                                    <h4>I don't even know what I need</h4>
+                                    <p>That's fine too. Talk to one of our customer representatives and we'll get you started.</p>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-lg-6" style="margin-top: 20px;">
+                            <p class="text-right">
+                                <button type="submit" class="btn btn-success btn-huge">Next Step »</button>
+                            </p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

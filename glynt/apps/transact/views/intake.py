@@ -1,15 +1,26 @@
 # -*- coding: UTF-8 -*-
-from glynt.apps.company.forms import (CompanyProfileForm, FinancingProfileForm, CompanyAndFinancingProfileForm,)
+from glynt.apps.company.forms import (CompanyProfileForm,
+                                      CompanyAndFinancingProfileForm,
+                                      CompanyProfileAndIntakeForm,
+                                      CompanyFinancingProfileAndIntakeForm,
+                                      FinancingProfileForm,
+                                      FinancingProfileAndIntakeForm,
+                                      IntakeForm,
+                                     )
 
 # from glynt.apps.transact.forms import BasicInformationForm, CorporateAgentsForm, \
 #     InitialDirectorsForm, GeneralCapitalizationForm, CustomersForm, StockPlansForm, AboutCompanyBusinessForm, \
 #     IntellectualPropertyForm, EmployeesConsultantsForm
 
-FORMS = [("company_profile", CompanyProfileForm), ]
 
-CS_FORMS = [("company_profile", CompanyProfileForm), ]
-SF_FORMS = [("company_profile", FinancingProfileForm), ]
-CS_SF_FORMS = [("company_profile", CompanyAndFinancingProfileForm), ]
+# Transaction forms
+INTAKE_FORMS = [("generic_intake", IntakeForm), ]
+INC_FORMS = [("company_profile", CompanyProfileForm), ]
+FIN_FORMS = [("company_profile", FinancingProfileForm), ] 
+INC_FIN_FORMS = [("company_profile", CompanyAndFinancingProfileForm), ]
+INC_INTAKE_FORMS = [("company_profile", CompanyProfileAndIntakeForm), ]
+FIN_INTAKE_FORMS = [("company_profile", FinancingProfileAndIntakeForm), ]
+INC_FIN_INTAKE_FORMS = [("company_profile", CompanyFinancingProfileAndIntakeForm), ]
 
 
 # """

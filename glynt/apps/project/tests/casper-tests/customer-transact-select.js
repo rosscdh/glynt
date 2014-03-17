@@ -5,98 +5,130 @@ casper.test.comment(casper.cli.options.test_label);
 var helper = require(casper.cli.options.casper_helper_js_path);
 
 /**
-* Test for the Checklist Url like: /dashboard/10a601ce31c24133939f3eced7376097/checklist/
-*/
+ * Test the qualified intake form
+ */
 helper.scenario(casper.cli.options.url,
     function () {
-        /* Basic page title test */
-        casper.test.comment('Test Page General Access and Title');
-        this.test.assertHttpStatus(200);
-        this.test.assertEqual(this.getTitle(), 'Select a Transaction')
-        // --
+        this.waitFor(function waitForJQuery() {
+            return this.evaluate(function() {
+                return typeof(window.$) !== 'undefined';
+            });
+        });
+        this.waitFor(function check() {
+            return this.evaluate(function() {
+                return document.querySelectorAll('.slide.active').length == 1;
+            });
+        });
     },
     function () {
-        casper.test.comment('Test Page for appropriate HTML containers')
+        this.test.comment('Test the selection page');
 
-        // we have the primary container that contains the packages
-        this.test.assertExists('div.container.packages-view')
+        this.test.assertExists('.slide[data-stage="selection"].active');
 
-        /**
-        * Test we have 3 data-transactions available
-        * but only 1 callout-info - 3 transaction and 1 contact us
-        */
-        this.test.assertElementCount('div.transaction-choice[data-transaction]', 3)
-        this.test.assertElementCount('div.transaction-choice[data-transaction] button.btn', 3)
-        this.test.assertElementCount('div#custom-package.callout-info', 1)
+        // test validation
+        this.click('.slide.active button[type="submit"]');
+        this.test.assertExists('.slide[data-stage="selection"].active');
 
-        /**
-        * Inspect the contact us div
-        */
-        this.test.assertSelectorHasText('div#custom-package.callout-info h4', 'Need something else?')
-        this.test.assertSelectorHasText('div#custom-package.callout-info p:nth-child(3)', 'Just give us the details and we will get back to you ASAP.')
-        this.test.assertExists('div#custom-package.callout-info button.custom-package-button i.icon-envelope')
-        this.test.assertSelectorHasText('div#custom-package.callout-info button#contact-us-btn.custom-package-button', 'Contact us')
-
-        // check for the modal settings
-        this.getElementAttribute('div#custom-package.callout-info button.custom-package-button[data-toggle]', 'modal')
-        this.getElementAttribute('div#custom-package.callout-info button.custom-package-button[data-target]', '#custom-package-modal')
-
-        // has the modal div
-        this.test.assertExists('div#custom-package-modal')
-        // has the form
-        this.test.assertExists('div#custom-package-modal form#contact-us-form')
-        // has appropriate form fields
-        this.test.assertExists('div#custom-package-modal form#contact-us-form input#id_name')
-        this.test.assertExists('div#custom-package-modal form#contact-us-form input#id_email[type=hidden]')
-        this.test.assertExists('div#custom-package-modal form#contact-us-form textarea#id_message')
-
-        // and the fields have values
-        var form_values = this.getFormValues('form#contact-us-form');
-        this.test.assertNotEquals(form_values.name, '') // must have a value
-        this.test.assertNotEquals(form_values.email, '') // must have a value
-        this.test.assertEquals(form_values.message, '') // must NOT have a value
-        // test actual values
-        this.test.assertEquals('Customer A', form_values.name);
-        this.test.assertEquals('customer+test@lawpal.com', form_values.email);
-
-        // submit button
-        this.test.assertExists('div#custom-package-modal .modal-footer input.btn.btn-primary')
-        this.getElementAttribute('div#custom-package-modal .modal-footer input.btn.btn-primary[value]', 'Send')
+        this.click('input[name="services"][value="incorporation"]');
+        this.click('input[name="services"][value="financing"]');
+        this.click('input[name="services"][value="intellectual-property"]');
+        this.click('.slide.active button[type="submit"]');
     },
     function () {
-        casper.test.comment('Test Transaction Types')
+        this.test.comment('Test the qualification page');
 
-        this.test.assertExists('button#CS-select');
-        this.test.assertSelectorHasText('button#CS-select', 'Add package')
+        this.test.assertExists('.slide[data-scene="incorporation"][data-stage="qualification"].active');
 
-        this.test.assertExists('button#SF-select');
-        this.test.assertSelectorHasText('button#SF-select', 'Add package')
+        // test validation
+        this.click('.slide.active button[type="submit"]');
+        this.test.assertExists('.slide[data-scene="incorporation"][data-stage="qualification"].active');
 
-        this.test.assertExists('button#ES-select');
-        this.test.assertSelectorHasText('button#ES-select', 'Add package')
+        this.fill('.slide[data-scene="incorporation"][data-stage="qualification"] form', {
+            'company_founders': 3,
+            'company_founders_location': 'inside',
+            'company_incorporated': 'no',
+            'company_paperwork': 'no'
+        });
+
+        this.click('.slide.active button[type="submit"]');
     },
     function () {
-        casper.test.comment('Test Selection matrix of transactions')
-        // select incorporation and 1 other of the Seed Financing
-        this.click('button#CS-select')
-        // is set to active
-        this.test.assertExists('button#CS-select.active');
+        this.test.comment('Test the incorporation services page');
 
-        this.click('button#SF-select')
-        // is set to active
-        this.test.assertExists('button#SF-select.active');
+        this.test.assertExists('.slide[data-scene="incorporation"][data-stage="services"].active');
+        this.test.assertExists('.slide.active input[type="submit"]#submit-btn-CS');
+        this.test.assertExists('.slide.active input[type="submit"]#submit-btn-CSP');
 
-        this.click('button#ES-select')
-        // is set to active
-        this.test.assertExists('button#ES-select.active');
-        // but the original SF-select.active is REMOVED
-        this.test.assertNotExists('button#SF-select.active');
+        this.click('.slide.active input[type="submit"]#submit-btn-CS');
+    },
+    function () {
+        this.test.comment('Test the financing services page');
 
-        this.click('button#SF-select')
-        // is set to active
-        this.test.assertExists('button#SF-select.active');
-        // but the original SF-select.active is REMOVED
-        this.test.assertNotExists('button#ES-select.active');
+        this.test.assertExists('.slide[data-scene="financing"][data-stage="services"].active');
+        this.test.assertExists('.slide.active input[type="submit"]#submit-btn-SF');
+        this.test.assertExists('.slide.active input[type="submit"]#submit-btn-ES');
+
+        this.click('.slide.active input[type="submit"]#submit-btn-ES');
+    },
+    function () {
+        this.test.comment('Test the redirect after project creation');
+
+        this.waitForUrl(/dashboard/, function success() {
+            this.test.assertUrlMatch(/dashboard/);
+        });
     }
 );
+
+/**
+ * Test the unqualified intake form
+ */
+helper.scenario(casper.cli.options.url,
+    function () {
+        this.waitFor(function check() {
+            return this.evaluate(function() {
+                return document.querySelectorAll('.slide.active').length == 1;
+            });
+        });
+    },
+    function () {
+        this.test.comment('Test the selection page');
+
+        this.test.assertExists('.slide[data-stage="selection"].active');
+
+        // test validation
+        this.click('.slide.active button[type="submit"]');
+        this.test.assertExists('.slide[data-stage="selection"].active');
+
+        this.click('input[name="services"][value="incorporation"]');
+        this.click('input[name="services"][value="financing"]');
+        this.click('input[name="services"][value="intellectual-property"]');
+        this.click('.slide.active button[type="submit"]');
+    },
+    function () {
+        this.test.comment('Test the qualification page');
+
+        this.test.assertExists('.slide[data-scene="incorporation"][data-stage="qualification"].active');
+
+        // test validation
+        this.click('.slide.active button[type="submit"]');
+        this.test.assertExists('.slide[data-scene="incorporation"][data-stage="qualification"].active');
+
+        this.fill('.slide[data-scene="incorporation"][data-stage="qualification"] form', {
+            'company_founders': 4,
+            'company_founders_location': 'outside',
+            'company_incorporated': 'yes',
+            'company_paperwork': 'yes'
+        });
+
+        this.click('.slide.active button[type="submit"]');
+    },
+    function () {
+        this.test.comment('Test the redirect after project creation');
+
+        this.waitForUrl(/dashboard/, function success() {
+            this.test.assertUrlMatch(/dashboard/);
+        });
+    }
+);
+
 helper.run();

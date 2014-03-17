@@ -234,3 +234,7 @@ def as_percentage_of(part, whole):
         return "%d%%" % (float(part) / float(whole) * 100)
     except (ValueError, ZeroDivisionError):
         return ""
+
+@register.filter
+def num_range(val):
+    return range(val)

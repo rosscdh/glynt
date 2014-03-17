@@ -170,12 +170,3 @@ class ProjectModelMethodsTest(TestCase):
     # def test_project_status_to_open(self):
     #     self.project_with_lawyer.open(self.user)
     #     self.assertEqual(self.project_with_lawyer.is_open, False)
-
-
-@for_all_methods(glynt_mock_http_requests)
-class ContactUsModalTest(BaseLawyerCustomerProjectCaseMixin, PyQueryMixin):
-    def test_contact_us_modal_js(self):
-        self.client.login(username=self.customer_user.username, password=self.password)
-
-        url = reverse('project:create')
-        self.assertTrue(self.load_casper_file(js_file='contact-us-modal.js', test_label='Test the Contact Us modal', url=url))

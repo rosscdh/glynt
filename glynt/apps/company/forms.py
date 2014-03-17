@@ -12,6 +12,32 @@ from glynt.apps.company import OPTION_PLAN_STATUS_CHOICES
 
 
 @parsleyfy
+class IntakeForm(BuilderBaseForm):
+    """
+    The Generic Intake Form
+    This form only appears if they have not been given a fixed fee transaction.
+
+    """
+    page_title = 'Intake Questions'
+    page_description = 'Just a bit of information'
+    data_bag = 'glynt.apps.project.bunches.ProjectIntakeBunch'
+
+    details = forms.CharField(label=_('Details'), required=True, widget=forms.Textarea)
+
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+
+        self.helper.layout = Layout(
+            Fieldset(
+                'About your Project',
+                'details',
+            )
+        )
+
+        super(IntakeForm, self).__init__(*args, **kwargs)
+
+
+@parsleyfy
 class CompanyProfileForm(BuilderBaseForm):
     """
     The Company Setup Form
@@ -42,6 +68,7 @@ class CompanyProfileForm(BuilderBaseForm):
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
+
         self.helper.layout = Layout(
             Fieldset(
                 'Founding Team',
@@ -69,6 +96,7 @@ class CompanyProfileForm(BuilderBaseForm):
                 'ip_university_affiliation',
             )
         )
+
         super(CompanyProfileForm, self).__init__(*args, **kwargs)
 
 
@@ -107,6 +135,7 @@ class FinancingProfileForm(BuilderBaseForm):
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
+
         self.helper.layout = Layout(
             Fieldset(
                 'Founding Team',
@@ -142,6 +171,7 @@ class FinancingProfileForm(BuilderBaseForm):
                 'doc_exists_stock_option_plan'
             )
         )
+
         super(FinancingProfileForm, self).__init__(*args, **kwargs)
 
 
@@ -156,6 +186,8 @@ class CompanyAndFinancingProfileForm(CrispyExFieldsetFieldRemovalMixin, CompanyP
     data_bag = 'glynt.apps.project.bunches.ProjectIntakeBunch'
 
     def __init__(self, *args, **kwargs):
+        super(CompanyAndFinancingProfileForm, self).__init__(*args, **kwargs)
+
         self.helper = FormHelper()
 
         self.helper.layout = Layout(
@@ -192,6 +224,158 @@ class CompanyAndFinancingProfileForm(CrispyExFieldsetFieldRemovalMixin, CompanyP
                 'ip_university_affiliation',
             )
         )
-        super(CompanyAndFinancingProfileForm, self).__init__(*args, **kwargs)
+
+        
+        # remove duplicate repeated fields
+        self.unify_fields()
+
+
+@parsleyfy
+class CompanyProfileAndIntakeForm(CrispyExFieldsetFieldRemovalMixin, CompanyProfileForm, IntakeForm):
+    """
+    The Setup AND Financing Form (both selected)
+    Basically we are combining the two forms and only showing the following fields. Not sure how to code this. 
+    """
+    page_title = 'Company and Intake Questions'
+    page_description = 'Enter some basic details about your company and other intake questions'
+    data_bag = 'glynt.apps.project.bunches.ProjectIntakeBunch'
+
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+
+        super(CompanyProfileAndIntakeForm, self).__init__(*args, **kwargs)
+
+        self.helper.layout = Layout(
+            Fieldset(
+                'Founding Team',
+                Div(
+                    'founder_name',
+                    'founder_email',
+                    **{'class': 'founder-group clearfix'}
+                ),
+                **{'data-region-clone': 'true', 'data-region-name': 'founders', 'class': 'founder-block clearfix'}
+            ),
+            Fieldset(
+                'About your Project',
+                'details',
+            ),
+            Fieldset(
+                'About your Startup',
+                'already_incorp',
+                'incubator',
+                'current_status',
+                'profile_website',
+                'description',
+                'target_states_and_countries',
+                'num_officers',
+                'num_employees',
+                'num_consultants',
+                'option_plan_status',
+                'num_option_holders',
+                'ip_nolonger_affiliated',
+                'ip_otherthan_founder',
+                'ip_university_affiliation',
+            ),
+        )
+
+        # remove duplicate repeated fields
+        self.unify_fields()
+
+
+@parsleyfy
+class FinancingProfileAndIntakeForm(CrispyExFieldsetFieldRemovalMixin, FinancingProfileForm, IntakeForm):
+    """
+    The Financing Form (both selected)
+    Basically we are combining the two forms and only showing the following fields. Not sure how to code this. 
+    """
+    page_title = 'Financing and Intake Questions'
+    page_description = 'Enter some basic details about your company and other intake questions'
+    data_bag = 'glynt.apps.project.bunches.ProjectIntakeBunch'
+
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+
+        super(FinancingProfileAndIntakeForm, self).__init__(*args, **kwargs)
+
+        self.helper.layout = Layout(
+            Fieldset(
+                'Founding Team',
+                Div(
+                    'founder_name',
+                    'founder_email',
+                    **{'class': 'founder-group clearfix'}
+                ),
+                **{'data-region-clone': 'true', 'data-region-name': 'founders', 'class': 'founder-block clearfix'}
+            ),
+            Fieldset(
+                'About your Project',
+                'details',
+            ),
+            Fieldset(
+                'About Your Round',
+                'investment_terms',
+                'num_investors',
+                'num_investor_states',
+            ),
+        )
+
+        # remove duplicate repeated fields
+        self.unify_fields()
+
+
+@parsleyfy
+class CompanyFinancingProfileAndIntakeForm(CrispyExFieldsetFieldRemovalMixin, CompanyProfileForm, FinancingProfileForm, IntakeForm):
+    """
+    The Setup, Financing and Intake Form (both selected)
+    Basically we are combining the two forms and only showing the following fields. Not sure how to code this. 
+    """
+    page_title = 'Company, Financing and Intake Questions'
+    page_description = 'Enter some basic details about your company and your finance round requirements'
+    data_bag = 'glynt.apps.project.bunches.ProjectIntakeBunch'
+
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+
+        super(CompanyFinancingProfileAndIntakeForm, self).__init__(*args, **kwargs)
+
+        self.helper.layout = Layout(
+            Fieldset(
+                'Founding Team',
+                Div(
+                    'founder_name',
+                    'founder_email',
+                    **{'class': 'founder-group clearfix'}
+                ),
+                **{'data-region-clone': 'true', 'data-region-name': 'founders', 'class': 'founder-block clearfix'}
+            ),
+            Fieldset(
+                'About your Project',
+                'details',
+            ),
+            Fieldset(
+                'About Your Round',
+                'investment_terms',
+                'num_investors',
+                'num_investor_states',
+            ),
+            Fieldset(
+                'About your Startup',
+                'already_incorp',
+                'incubator',
+                'current_status',
+                'profile_website',
+                'description',
+                'target_states_and_countries',
+                'num_officers',
+                'num_employees',
+                'num_consultants',
+                'option_plan_status',
+                'num_option_holders',
+                'ip_nolonger_affiliated',
+                'ip_otherthan_founder',
+                'ip_university_affiliation',
+            ),
+        )
+
         # remove duplicate repeated fields
         self.unify_fields()

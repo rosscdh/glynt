@@ -11,14 +11,12 @@ form {
 }
 .form-wrap {
   background-color: lighten(@gray-lighter, 5%);
-  padding:20px 0px;
 }
 fieldset {
   padding: 0;
   margin: 0;
   border: 0;
 }
-
 legend {
   display: block;
   width: 100%;
@@ -32,16 +30,17 @@ legend {
   text-transform:normal;
   font-weight:normal;
 }
-
 label {
   display: inline-block;
   margin-bottom: 3px;
-  margin-top: 5px;
+  margin-top: 15px;
   font-weight:bold;
   font-size: @font-size-base;
   color:@gray;
 }
-
+.form-wrap hr {
+  margin: 5px 0px 5px 0px;
+}
 // Form controls
 // -------------------------
 
@@ -470,6 +469,17 @@ input.parsley-error, textarea.parsley-error, input.parsley-error:focus, textarea
     margin-top:0px;
   }
 // Only right aline form labels here when the columns stop stacking
+@media (min-width: @screen-small) {
+    label {
+      margin-top:5px;
+    }
+  .form-wrap {
+    hr {
+      margin:15px 0px 15px 0px;
+    }
+  }
+}
+
 @media (min-width: 992px) {
   .form-horizontal .control-label {
     text-align: right;

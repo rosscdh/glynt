@@ -1,4 +1,6 @@
-{% extends 'base.html' %}{% load crispy_forms_tags company_tags transaction_tags jsonify %}
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags company_tags jsonify glynt_helpers transaction_tags %}
 
 {% block page_title %}{% transpose_company_data page_title %}{% endblock %}
 
@@ -7,66 +9,51 @@
 {% endblock %}
 
 {% block css %}
-    <link href="{{ STATIC_URL }}css/theme/transaction.css" rel="stylesheet" charset="utf-8"/>
+    <link href="{{ STATIC_URL }}css/theme/transaction.css" rel="stylesheet" charset="utf-8">
 {% endblock %}
 
+{% block prebody %}
+    <div class="masthead">
+        <div class="container">
+            {% if wizard.steps.count > 1 %}
+                {% include 'client/partials/steps.html' with count=wizard.steps.count step=wizard.steps.index|add:1 %}
+            {% endif %}
+            {% if page_title %}<h1>{% transpose_company_data page_title %}</h1>{% endif %}
+        </div>
+    </div>
+{% endblock %}
 
 {% block body %}
-<div class="jumbotron-header">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-10 col-offset-1">
-                {% if wizard.steps.count > 1 %}
-                    <div class="row">
-                        <div class="col-lg-6">
-                            {% for s in wizard.steps.all %}
-                                 <a href="{% url 'transact:builder' project_uuid=project.uuid tx_range=tx_range step=s %}" class="btn btn-info">{{ s }}</a>
+    <div class="form-wrap">
+        <div class="container">
+            <div class="row">
+                <div class="col col-lg-10 col-offset-1">
+                    <form id="builder-form" data-validate="parsley" action="." method="POST" class="form-horizontal">
+                        {{ wizard.management_form }}
+
+                        {{ wizard.form.errors }}
+
+                        {% if wizard.form.forms %}
+                            {{ wizard.form.management_form }}
+                            {% for form in wizard.form.forms %}
+                                {% crispy form form.helper %}
                             {% endfor %}
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="progress progress-striped intake-progress">
-                                <div class="bar" style="width: {{ wizard.steps.index|as_percentage_of:wizard.steps.count }};"></div>
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
-                {% if page_title %}<h2 class="alt">{% transpose_company_data page_title %}</h2>{% endif %}
-                {% if page_description %}<p class="softer">{{ page_description }}</a>{% endif %}
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="form-wrap">
-    <div class="container">
-        <div class="row">
-            <div class="col col-lg-10 col-offset-1">
-                <form id="builder-form" data-validate="parsley" action="." method="POST" class="form-horizontal">
-                    {{ wizard.management_form }}
-
-                    {{ wizard.form.errors }}
-
-                    {% if wizard.form.forms %}
-                        {{ wizard.form.management_form }}
-                        {% for form in wizard.form.forms %}
-                            {% crispy form form.helper %}
-                        {% endfor %}
-                    {% else %}
-                        {% if wizard.form.helper %}
-                            {% crispy wizard.form wizard.form.helper %}
                         {% else %}
-                            {% crispy wizard.form %}
+                            {% if wizard.form.helper %}
+                                {% crispy wizard.form wizard.form.helper %}
+                            {% else %}
+                                {% crispy wizard.form %}
+                            {% endif %}
                         {% endif %}
-                    {% endif %}
-                    <br />
-                    <div class="col col-lg-6 col-offset-5">
-                         <button type="submit" id="submit-builder" class="btn btn-success btn-large">Continue</button>
-                    </div>
-                </form>
+                        <br />
+                        <div class="col col-lg-6 col-offset-5">
+                             <button type="submit" id="submit-builder" class="btn btn-success btn-large">Continue</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}
 
 {% block js %}
